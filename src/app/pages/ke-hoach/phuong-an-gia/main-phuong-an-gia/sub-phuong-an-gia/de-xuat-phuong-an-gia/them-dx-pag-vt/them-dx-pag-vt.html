@@ -195,7 +195,7 @@
   <nz-tabset nzType="card">
     <nz-tab [nzTitle]="'Thông tin chung'">
       <nz-card class="mt16 p-lr16 card-table pd-10">
-        <nz-table nzBordered [nzData]="pagTtChungs" [nzFrontPagination]="false" [nzShowPagination]="false">
+        <nz-table nzBordered [nzData]="pagTtChungs" [nzFrontPagination]="false" [nzShowPagination]="false" class="wrap">
           <thead>
           <tr>
             <th class="text-center" nzWidth="45px">STT</th>
@@ -204,15 +204,16 @@
             <th class="text-center">Tiêu chuẩn, quy chuẩn</th>
             <th class="text-center" >Số lượng</th>
             <th class="text-center" >Đơn vị tính</th>
-            <th class="text-center" nzWidth="100px" *ngIf="type=='GCT' && (formData.value.loaiGia == 'LG03')">VAT</th>
-            <th class="text-center"  *ngIf="type=='GCT'">{{formData.value.loaiGia == 'LG03' ? 'Đơn giá tối đa của BTC chưa VAT (đồng)' : 'Đơn giá tối thiểu của BTC chưa VAT (đồng)'}}</th>
+            <th class="text-center" nzWidth="100px" *ngIf="type=='GCT' && (formData.value.loaiGia == 'LG03')">VAT (%)</th>
+            <th class="text-center"  *ngIf="type=='GCT' && formData.value.loaiGia == 'LG03'">Đơn giá tối đa của BTC <br>   chưa VAT (đồng)</th>
+            <th class="text-center"  *ngIf="type=='GCT' && formData.value.loaiGia != 'LG03'">Đơn giá tối thiểu của BTC <br>  chưa VAT (đồng)'</th>
             <th class="text-center"
                 *ngIf="type=='GCT' && (formData.value.loaiGia == 'LG03')">Đơn giá
-              tối đa của BTC có VAT (đồng)
+              tối đa của BTC <br> có VAT (đồng)
             </th>
-            <th class="text-center" >Đơn giá đề nghị chưa VAT (đồng)</th>
+            <th class="text-center" >Đơn giá đề nghị <br> chưa VAT (đồng)</th>
             <th class="text-center"
-                *ngIf="(formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG01')">Đơn giá đề nghị có VAT
+                *ngIf="(formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG01')">Đơn giá đề nghị <br> có VAT
               (đồng)
             </th>
             <th class="text-center" nzWidth="100px" *ngIf="!isView">Hành động</th>
@@ -265,8 +266,11 @@
                 </nz-input-number>
               </nz-input-group>
             </td>
-            <td *ngIf="(formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG01')" class="text-right">
+            <td *ngIf="((formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG01')) && type == 'GMTDBTT'" class="text-right">
               {{ formData.value.vat ? (rowItemTtc.giaDn + rowItemTtc.giaDn * formData.value.vat | number : '1.0-1' : 'vi-VN') : 0   }}
+            </td>
+            <td *ngIf="((formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG01')) && type == 'GCT'" class="text-right">
+              {{rowItemTtc.vat ? (rowItemTtc.giaDn + rowItemTtc.giaDn * rowItemTtc.vat | number : '1.0-1' : 'vi-VN') : 0   }}
             </td>
             <td style="text-align: center;" *ngIf="!isView">
               <a >
@@ -285,7 +289,7 @@
               <td>{{ data.tchuanCluong }}</td>
               <td class="text-right">{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
               <td>{{ data.donViTinh }}</td>
-              <td class="text-right" *ngIf="type=='GCT' && (formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG01')">{{ data.vat * 100 + '%' }}</td>
+              <td class="text-right" *ngIf="type=='GCT' && (formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG01')">{{ data.vat * 100}}</td>
               <td class="text-right" *ngIf="type=='GCT'">{{data.giaQdBtc | number : '1.0-1' : 'vi_VN'}}</td>
               <td  class="text-right"*ngIf="type=='GCT' && (formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG01')">{{data.giaQdBtcVat | number : '1.0-1' : 'vi_VN'}}</td>
               <td class="text-right">{{ data.giaDn | number : '1.0-1' : 'vi_VN'  }}</td>
@@ -303,29 +307,14 @@
             <ng-template #editTemplate>
               <td></td>
               <td>{{dataEdit[idx].data.tenLoaiVthh}}</td>
-              <td>
-                <nz-select (ngModelChange)="onChangeCloaiVthh($event)" [(ngModel)]="dataEdit[idx].data.cloaiVthh"
-                           name="cloaiVthh" [nzDisabled]="isView" nzAllowClear="true">
-                  <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
-                  </nz-option>
-                </nz-select>
-              </td>
-              <td>
-                <nz-input-group>
-                  <input type="text" name="tchuanCluong" [(ngModel)]="dataEdit[idx].data.tchuanCluong" readonly
-                         nz-input/>
-                </nz-input-group>
-              </td>
+              <td>{{dataEdit[idx].data.tenCloaiVthh}}</td>
+              <td>{{dataEdit[idx].data.tchuanCluong}}</td>
               <td>
                 <nz-input-group>
                   <input type="text" name="soLuong" [(ngModel)]="dataEdit[idx].data.soLuong" nz-input/>
                 </nz-input-group>
               </td>
-              <td>
-                <nz-input-group>
-                  <input nz-input type="text" name="donViTinh" [(ngModel)]="dataEdit[idx].data.donViTinh" readonly>
-                </nz-input-group>
-              </td>
+              <td>{{dataEdit[idx].data.donViTinh}}</td>
               <td *ngIf="type=='GCT' && (formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG01')">
                 {{dataEdit[idx].data.vat}}
               </td>

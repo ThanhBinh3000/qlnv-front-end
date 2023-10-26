@@ -23,7 +23,9 @@ export class DialogPagQdBtcComponent implements OnInit {
   loaiGia: any;
   dataTableToTrinh: any[] = [];
   dataTableToTrinhView: any[] = [];
-  dataTablleDxCs: any[] = [];
+  dataTableDxVt: any[] = [];
+  dataTableDxCsVt: any[] = [];
+  dataTableDxVtView: any[] = [];
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
   formData: FormGroup;
@@ -55,7 +57,11 @@ export class DialogPagQdBtcComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadDsToTrinh();
+    if (this.pagType && this.pagType == 'LT') {
+      this.loadDsToTrinh();
+    } else {
+      this.loadDsDxPagVT();
+    }
     this.loadDsVthh();
     this.loadDsLoaiGia();
   }
@@ -106,15 +112,7 @@ export class DialogPagQdBtcComponent implements OnInit {
   }
 
   luu() {
-    if (this.formData.value.loaiQd == '01' && this.pagType == 'LT') {
-      this.helperService.markFormGroupTouched(this.formData);
-      if (this.formData.invalid) {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
-        this.spinner.hide()
-        return;
-      }
-    }
-    if ((this.formData.value.loaiQd == '01' && this.pagType == 'LT') || this.pagType == 'VT') {
+    if (this.pagType == 'VT') {
       this.dataResponse = {
         data: null,
         listDx: this.listData,
@@ -133,14 +131,6 @@ export class DialogPagQdBtcComponent implements OnInit {
 
   async loadDsToTrinh() {
     this.spinner.show();
-    if (this.formData.value.loaiQd == '01' && this.pagType == 'LT') {
-      this.helperService.markFormGroupTouched(this.formData);
-      if (this.formData.invalid) {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
-        this.spinner.hide()
-        return;
-      }
-    }
     try {
       let body = {
         namKh: this.namKeHoach,
@@ -163,7 +153,33 @@ export class DialogPagQdBtcComponent implements OnInit {
     }
   }
 
-  updateDataCheckbox(idx: number, data: any, event: any) {
+  async loadDsDxPagVT() {
+    this.spinner.show();
+    try {
+      let body = {
+        namKh: this.namKeHoach,
+        type: this.type,
+        pagType: this.pagType,
+        loaiVthh: this.formData.value.loaiVthh,
+        cloaiVthh: this.formData.value.cloaiVthh,
+        loaiGia: this.loaiGia,
+        loaiDeXuat : "00"
+      }
+      let res = await this.tongHopPhuongAnGiaService.loadToTrinhDeXuat(body);
+      if (res.msg = MESSAGE.SUCCESS) {
+        this.dataTableDxCsVt  =res.data;
+        if (this.dataTableDxCsVt && this.dataTableDxCsVt.length > 0) {
+          this.dataTableDxVtView = this.dataTableDxCsVt.filter(item => item.lanDeXuat == 1);
+        }
+      }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+    updateDataCheckbox(idx: number, data: any, event: any) {
     if (event == true) {
       this.listData.push(data);
     } else {
@@ -174,6 +190,9 @@ export class DialogPagQdBtcComponent implements OnInit {
   changLoaiQd(event) {
     if (event && this.pagType == 'LT') {
       this.dataTableToTrinhView = this.dataTableToTrinh.filter(item => item.kieuTongHop == event);
+    }
+    if (event && this.pagType == 'VT') {
+      this.dataTableDxVtView =this.dataTableDxCsVt.filter(item => item.lanDeXuat > 1);
     }
   }
 }
