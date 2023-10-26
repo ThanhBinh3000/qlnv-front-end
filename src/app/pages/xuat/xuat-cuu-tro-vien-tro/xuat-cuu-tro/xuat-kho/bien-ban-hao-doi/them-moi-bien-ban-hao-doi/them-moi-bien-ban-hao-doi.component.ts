@@ -349,7 +349,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
       tenNganKho: bienBan.tenNganKho,
       maLoKho: bienBan.maLoKho,
       tenLoKho: bienBan.tenLoKho,
-      soPhieuKnCl: bienBan.soPhieu,
+      soPhieuKnCl: bienBan.soPhieuKnCl,
       loaiVthh: bienBan.loaiVthh,
       cloaiVthh: bienBan.cloaiVthh,
       tenLoaiVthh: bienBan.tenLoaiVthh,

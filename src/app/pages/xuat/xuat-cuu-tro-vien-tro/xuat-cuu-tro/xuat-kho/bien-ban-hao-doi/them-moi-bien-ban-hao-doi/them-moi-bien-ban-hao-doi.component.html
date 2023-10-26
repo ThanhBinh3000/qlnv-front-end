@@ -262,7 +262,7 @@
           <thead>
             <tr>
               <th>STT</th>
-              <th>Phiếu kiểm nghiệm chất lượng</th>
+              <!-- <th>Phiếu kiểm nghiệm chất lượng</th> -->
               <th>Phiếu xuất kho</th>
               <th>Bảng kê cân hàng</th>
               <th>Ngày xuất kho</th>
@@ -273,8 +273,8 @@
             <ng-container *ngFor="let item of basicTable.data, let i = index;">
               <tr>
                 <td>{{i + 1}}</td>
-                <td><a *ngIf="item.soPhieuKnCl" nz-button nzType="link"
-                    (click)="openPhieuKnClModal(item.idPhieuKnCl)">{{item.soPhieuKnCl}}</a> </td>
+                <!-- <td><a *ngIf="item.soPhieuKnCl" nz-button nzType="link"
+                    (click)="openPhieuKnClModal(item.idPhieuKnCl)">{{item.soPhieuKnCl}}</a> </td> -->
                 <td><a *ngIf="item.soPhieuXuatKho" nz-button nzType="link"
                     (click)="openPhieuXkModal(item.idPhieuXuatKho)">{{item.soPhieuXuatKho}}</a></td>
                 <td><a *ngIf="item.soBkCanHang" nz-button nzType="link"
