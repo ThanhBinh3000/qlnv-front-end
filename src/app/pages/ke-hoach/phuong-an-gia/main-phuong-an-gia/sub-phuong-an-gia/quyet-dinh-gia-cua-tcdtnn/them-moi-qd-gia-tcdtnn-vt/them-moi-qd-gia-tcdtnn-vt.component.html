@@ -101,7 +101,7 @@
             </nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input nz-input readonly formControlName="soQdCanDc"/>
+                <input nz-input readonly formControlName="soQdDc"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -198,8 +198,6 @@
         {{ data.vat ? (data.giaQdTcdt * data.vat + data.giaQdTcdt | number : '1.0-1' : 'vi_VN') : ''}}
 
       </td>
-      <td class="text-right"
-          *ngIf="!(formData.value.loaiGia == 'LG03' ) && (formData.value.loaiDeXuat == '00')"></td>
       <td class="text-right" *ngIf="!(formData.value.loaiDeXuat == '00')">
         <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="data.giaQdDcTcdt" [nzMin]="0"
                          [nzFormatter]="globals.formatter"
@@ -210,8 +208,6 @@
         {{ data.vat ? (data.giaQdDcTcdt * data.vat + data.giaQdDcTcdt | number : '1.0-1' : 'vi_VN') : ''}}
 
       </td>
-      <td class="text-right"
-          *ngIf="!(formData.value.loaiGia == 'LG03' ) && !(formData.value.loaiDeXuat == '00')"></td>
     </tr>
     </tbody>
   </nz-table>
