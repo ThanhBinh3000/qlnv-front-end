@@ -49,7 +49,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="4" *ngIf="!loaiVthh.startsWith('02')">
+            <div nz-col [nzSpan]="4" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
@@ -60,7 +60,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="13" *ngIf="!loaiVthh.startsWith('02')">
+            <div nz-col [nzSpan]="13" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
@@ -71,7 +71,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="8" *ngIf="loaiVthh.startsWith('02')">
+            <div nz-col [nzSpan]="8" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -83,7 +83,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="9" *ngIf="loaiVthh.startsWith('02')">
+            <div nz-col [nzSpan]="9" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
                 <nz-form-control>

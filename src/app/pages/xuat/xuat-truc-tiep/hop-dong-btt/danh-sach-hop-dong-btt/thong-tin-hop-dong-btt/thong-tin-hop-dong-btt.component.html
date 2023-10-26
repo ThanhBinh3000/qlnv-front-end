@@ -612,19 +612,19 @@
           <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered>
             <thead>
             <tr>
-              <th nzWidth="30px" class="text-center"></th>
-              <th nzWidth="150px" class="text-center wrap">Chi cục</th>
-              <th nzWidth="150px" class="text-center wrap">Địa điểm xuất kho</th>
-              <th nzWidth="150px" class="text-center wrap">Điểm kho</th>
-              <th nzWidth="300px" class="text-center wrap">Lô kho</th>
-              <th nzWidth="100px" class="text-center wrap">Mã ĐVTS</th>
-              <th nzWidth="100px" class="text-center wrap">SL xuất bán TT đề xuất</th>
-              <th nzWidth="100px" class="text-center wrap">SL xuất bán TT ký hợp đồng</th>
-              <th nzWidth="100px" class="text-center wrap">ĐVT</th>
-              <th nzWidth="100px" class="text-center wrap">Đơn giá cụ thể được duyệt không VAT (đ/kg)</th>
-              <th nzWidth="100px" class="text-center wrap">Đơn giá đề xuất theo KH không VAT (đ/kg)</th>
-              <th nzWidth="100px" class="text-center wrap">Đơn giá ký hợp đồng không VAT (đ/kg)</th>
-              <th nzWidth="100px" class="text-center wrap">Thành tiền (đ)</th>
+              <th class="text-center" nzWidth="50px"></th>
+              <th class="text-left wrap" nzWidth="150px">Chi cục</th>
+              <th class="text-left wrap" nzWidth="150px">Địa điểm xuất kho</th>
+              <th class="text-left wrap" nzWidth="150px">Điểm kho</th>
+              <th class="text-left wrap" nzWidth="300px">Lô kho</th>
+              <th class="text-center wrap" nzWidth="100px">Mã ĐVTS</th>
+              <th class="text-right wrap" nzWidth="100px">SL xuất bán TT đề xuất</th>
+              <th class="text-right wrap" nzWidth="100px">SL xuất bán TT ký hợp đồng</th>
+              <th class="text-left wrap" nzWidth="100px">ĐVT</th>
+              <th class="text-right wrap" nzWidth="100px">Đơn giá cụ thể được duyệt không VAT (đ/kg)</th>
+              <th class="text-right wrap" nzWidth="100px">Đơn giá đề xuất theo KH không VAT (đ/kg)</th>
+              <th class="text-right wrap" nzWidth="100px">Đơn giá ký hợp đồng không VAT (đ/kg)</th>
+              <th class="text-right wrap" nzWidth="100px">Thành tiền (đ)</th>
             </tr>
             </thead>
             <tbody>
@@ -647,11 +647,11 @@
                   <td class="text-left">{{ children.diaDiemKho }}</td>
                   <td class="text-left">{{ children.tenDiemKho }}</td>
                   <td
-                    class="text-left">{{ (children.tenLoKho ? children.tenLoKho + ' - ' : '') + children.tenNganKho }}</td>
+                    class="text-left">{{ (children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") + (children.tenNhaKho ? children.tenNhaKho : "") }}</td>
                   <td class="text-center">{{ children.maDviTsan }}</td>
                   <td class="text-right">{{ children.soLuongDeXuat|number:globals.numberFormat:globals.locale }}</td>
                   <td class="text-right">{{ children.soLuongKyHd|number:globals.numberFormat:globals.locale }}</td>
-                  <td class="text-center">{{ children.donViTinh }}</td>
+                  <td class="text-left">{{ children.donViTinh }}</td>
                   <td class="text-right">{{ children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
                   <td class="text-right">{{ children.donGiaDeXuat|number:globals.numberFormat:globals.locale }}</td>
                   <td class="text-right">{{ children.donGiaKyHd|number:globals.numberFormat:globals.locale }}</td>
@@ -660,8 +660,8 @@
               </ng-container>
             </ng-container>
             </tbody>
-            <tfoot *ngIf="dataTable.length > 0">
-            <ng-container>
+            <ng-container *ngIf="dataTable.length > 0">
+              <tfoot>
               <tr>
                 <td></td>
                 <td></td>
@@ -679,8 +679,8 @@
                 <td></td>
                 <td></td>
               </tr>
+              </tfoot>
             </ng-container>
-            </tfoot>
           </nz-table>
         </nz-collapse-panel>
       </nz-collapse>
@@ -1297,13 +1297,14 @@
                     [nzShowPagination]="false">
             <thead>
             <tr>
-              <th nzWidth="30px" class="text-center"></th>
-              <th nzWidth="300px" class="text-center wrap">Địa điểm xuất kho</th>
-              <th nzWidth="300px" class="text-center wrap">Điểm kho</th>
-              <th nzWidth="100px" class="text-center wrap">Mã ĐVTS</th>
-              <th nzWidth="100px" class="text-center wrap">SL xuất bán trực tiếp</th>
-              <th nzWidth="100px" class="text-center wrap">ĐVT</th>
-              <th nzWidth="100px" class="text-center wrap">Thành tiền</th>
+              <th class="text-center" nzWidth="50px"></th>
+              <th class="text-left wrap" nzWidth="300px">Địa điểm xuất kho</th>
+              <th class="text-left wrap" nzWidth="150px">Điểm kho</th>
+              <th class="text-left wrap" nzWidth="150px">Lô kho</th>
+              <th class="text-center wrap" nzWidth="100px">Mã ĐVTS</th>
+              <th class="text-right wrap" nzWidth="100px">SL xuất bán trực tiếp</th>
+              <th class="text-left wrap" nzWidth="100px">ĐVT</th>
+              <th class="text-right wrap" nzWidth="100px">Thành tiền</th>
             </tr>
             </thead>
             <tbody>
@@ -1311,14 +1312,16 @@
               <td class="text-center">{{ idx + 1 }}</td>
               <td class="text-left">{{data.diaDiemKho}}</td>
               <td class="text-left">{{data.tenDiemKho}}</td>
+              <td
+                class="text-left">{{ (data.tenLoKho ? data.tenLoKho + " - " : "") + (data.tenNganKho ? data.tenNganKho + " - " : "") + (data.tenNhaKho ? data.tenNhaKho : "") }}</td>
               <td class="text-center">{{data.maDviTsan}}</td>
               <td class="text-right">{{data.soLuongKyHd|number:globals.numberFormat:globals.locale }}</td>
-              <td class="text-center">{{data.donViTinh}}</td>
+              <td class="text-left">{{data.donViTinh}}</td>
               <td class="text-right">{{data.thanhTien|number:globals.numberFormat:globals.locale }}</td>
             </tr>
             </tbody>
-            <tfoot *ngIf="dataTable.length > 0">
-            <ng-container>
+            <ng-container *ngIf="dataTable.length > 0">
+              <tfoot>
               <tr>
                 <td></td>
                 <td></td>
@@ -1329,8 +1332,8 @@
                 <td></td>
                 <td></td>
               </tr>
+              </tfoot>
             </ng-container>
-            </tfoot>
           </nz-table>
         </nz-collapse-panel>
       </nz-collapse>

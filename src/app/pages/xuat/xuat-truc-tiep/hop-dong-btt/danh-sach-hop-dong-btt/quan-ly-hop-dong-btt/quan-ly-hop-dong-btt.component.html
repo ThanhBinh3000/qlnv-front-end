@@ -230,9 +230,9 @@
             <th class="text-right"> Số lượng (Kg)</th>
             <th class="text-right"> Đơn giá</th>
             <th class="text-right"> Thành tiền đã bao gồm thuế VAT (đ)</th>
-            <th class="text-center"> Trạng thái HĐ</th>
+            <th class="text-left"> Trạng thái HĐ</th>
             <th class="text-left"> Số QĐ giao NV XH</th>
-            <th class="text-center"> Trạng thái XH</th>
+            <th class="text-left"> Trạng thái XH</th>
             <th class="text-center"> Hành động</th>
           </tr>
           </thead>
@@ -247,10 +247,10 @@
             <td class="text-right">{{data.soLuong|number:globals.numberFormat:globals.locale }}</td>
             <td class="text-right">{{data.dongia|number:globals.numberFormat:globals.locale }}</td>
             <td class="text-right">{{data.thanhTien|number:globals.numberFormat:globals.locale }}</td>
-            <td class="text-center">{{data.tenTrangThai}}</td>
+            <td class="text-left">{{data.tenTrangThai}}</td>
             <td class="text-left"><a *ngIf="data.soQdNv && data.idQdNv" nz-button nzType="link"
                                      (click)="openModal(data.idQdNv)">{{ data.soQdNv }}</a></td>
-            <td class="text-center">{{data.tenTrangThaiXh}}</td>
+            <td class="text-left">{{data.tenTrangThaiXh}}</td>
             <td class="text-center">
               <a *ngIf="data.trangThai == STATUS.DA_KY"
                  (click)="redirectHopDong(data.id, true, true) ">

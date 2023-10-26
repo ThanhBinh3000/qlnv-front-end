@@ -49,11 +49,11 @@
       <div nz-col [nzSpan]="22">
       </div>
       <div nz-col [nzSpan]="2">
-        <nz-form-item>
+        <nz-form-item *ngIf="formData.value.donViTinh">
           <nz-form-label [nzNoColon]="true">
           </nz-form-label>
           <nz-form-control nz-col [nzSpan]="24">
-            <span class="text-green"> Đơn vị :{{formData.value.donViTinh}} </span>
+            <span style="color: red"> Đơn vị : {{ formData.value.donViTinh }} </span>
           </nz-form-control>
         </nz-form-item>
       </div>
@@ -64,20 +64,20 @@
   <nz-table nzBordered class="pd-10 overflow-auto" [nzData]="listOfData">
     <thead>
     <tr>
-      <th nzWidth="150px" class="text-center wrap"> Điểm kho</th>
-      <th nzWidth="150px" class="text-center wrap"> Nhà kho</th>
-      <th nzWidth="150px" class="text-center wrap"> Ngăn kho</th>
-      <th nzWidth="150px" class="text-center wrap"> Lô Kho</th>
-      <th nzWidth="100px" class="text-center wrap"> Chủng loại hàng hóa</th>
+      <th nzWidth="150px" class="text-left wrap"> Điểm kho</th>
+      <th nzWidth="150px" class="text-left wrap"> Nhà kho</th>
+      <th nzWidth="150px" class="text-left wrap"> Ngăn kho</th>
+      <th nzWidth="150px" class="text-left wrap"> Lô Kho</th>
+      <th nzWidth="100px" class="text-left wrap"> Chủng loại hàng hóa</th>
       <th nzWidth="150px" class="text-center wrap"> Mã đơn vị tài sản</th>
-      <th nzWidth="100px" class="text-center wrap"> Tồn kho</th>
-      <th nzWidth="100px" class="text-center wrap"> SL xuất bán TT đề xuất</th>
+      <th nzWidth="100px" class="text-right wrap"> Tồn kho</th>
+      <th nzWidth="100px" class="text-right wrap"> SL xuất bán TT đề xuất</th>
       <th nzWidth="100px"
-          class="text-center wrap">{{typeLoaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Đơn giá đề xuất (đ)' : 'Đơn giá đề xuất (đ/kg)'}}</th>
+          class="text-right wrap">{{typeLoaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Đơn giá đề xuất (đ)' : 'Đơn giá đề xuất (đ/kg)'}}</th>
       <th nzWidth="100px"
-          class="text-center wrap">{{typeLoaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Đơn giá được duyệt(đ)' : 'Đơn giá được duyệt(đ/kg)'}}</th>
-      <th nzWidth="100px" class="text-center wrap"> Thành tiền đề xuất (đ)</th>
-      <th nzWidth="100px" class="text-center wrap"> Thành tiền được duyệt (đ)</th>
+          class="text-right wrap">{{typeLoaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Đơn giá được duyệt(đ)' : 'Đơn giá được duyệt(đ/kg)'}}</th>
+      <th nzWidth="100px" class="text-right wrap"> Thành tiền đề xuất (đ)</th>
+      <th nzWidth="100px" class="text-right wrap"> Thành tiền được duyệt (đ)</th>
       <th nzWidth="70px" class="text-center"> Hành động</th>
     </tr>
     <tr>
@@ -140,18 +140,19 @@
     <tbody>
     <tr *ngFor="let data of listOfData, let idx = index" class="editable-row">
       <ng-container *ngIf="(editCache && editCache[idx] && !editCache[idx].edit); else editTemplate ">
-        <td>{{ data.tenDiemKho }}</td>
-        <td>{{ data.tenNhaKho }}</td>
-        <td>{{ data.tenNganKho }}</td>
-        <td>{{ data.tenLoKho }}</td>
-        <td>{{ data.tenCloaiVthh }}</td>
-        <td>{{ data.maDviTsan }}</td>
-        <td>{{ data.tonKho == 0 ? null : data.tonKho|number:globals.numberFormat:globals.locale }}</td>
-        <td>{{ data.soLuongDeXuat|number:globals.numberFormat:globals.locale }}</td>
-        <td>{{ data.donGiaDeXuat|number:globals.numberFormat:globals.locale }}</td>
-        <td>{{ data.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
-        <td>{{ data.thanhTienDeXuat|number:globals.numberFormat:globals.locale }}</td>
-        <td>{{ data.thanhTienDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
+        <td class="text-left">{{ data.tenDiemKho }}</td>
+        <td class="text-left">{{ data.tenNhaKho }}</td>
+        <td class="text-left">{{ data.tenNganKho }}</td>
+        <td class="text-left">{{ data.tenLoKho }}</td>
+        <td class="text-left">{{ data.tenCloaiVthh }}</td>
+        <td class="text-center">{{ data.maDviTsan }}</td>
+        <td
+          class="text-right">{{ data.tonKho == 0 ? null : data.tonKho|number:globals.numberFormat:globals.locale }}</td>
+        <td class="text-right">{{ data.soLuongDeXuat|number:globals.numberFormat:globals.locale }}</td>
+        <td class="text-right">{{ data.donGiaDeXuat|number:globals.numberFormat:globals.locale }}</td>
+        <td class="text-right">{{ data.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
+        <td class="text-right">{{ data.thanhTienDeXuat|number:globals.numberFormat:globals.locale }}</td>
+        <td class="text-right">{{ data.thanhTienDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
         <td class="text-center">
           <a (click)="startEdit(idx)">
             <i class="fa fa-pencil" title="Sửa"></i>
@@ -223,12 +224,10 @@
     </tbody>
     <tfoot>
     <tr *ngIf="listOfData.length > 0">
-      <th colspan="6" class="first-last-row-table background-last-row text-left"> Cộng</th>
+      <th colspan="6" class="text-right bold"> Cộng</th>
       <th
-        class="background-last-row text-left">  {{ calcTong('tonKho') == 0 ? null : calcTong('tonKho')|number:globals.numberFormat:globals.locale }}
-      </th>
-      <th
-        class="background-last-row text-left"> {{ calcTong('soLuongDeXuat')|number:globals.numberFormat:globals.locale }}</th>
+        class="text-right bold">  {{ calcTong('tonKho') == 0 ? null : calcTong('tonKho')|number:globals.numberFormat:globals.locale }}</th>
+      <th class="text-right bold"> {{ calcTong('soLuongDeXuat')|number:globals.numberFormat:globals.locale }}</th>
       <th colspan="5"></th>
     </tr>
     </tfoot>
