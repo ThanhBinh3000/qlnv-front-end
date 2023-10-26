@@ -163,7 +163,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     if (!id) return;
     const data = await this.detail(id);
     if (!data) return;
-    const {soDxuat, tgianDkienTu, tgianDkienDen, children, loaiVthh} = data;
+    const {soDxuat, tgianDkienTu, tgianDkienDen, children} = data;
     this.formData.patchValue({
       soDxuat: soDxuat?.split('/')[0],
       thoiGianDuKien: tgianDkienTu && tgianDkienDen ? [tgianDkienTu, tgianDkienDen] : null
@@ -313,17 +313,18 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     ]);
   }
 
-  async getGiaToiThieu(event?) {
+  async getGiaToiThieu() {
     const {namKh, loaiVthh, cloaiVthh} = this.formData.value;
     const body = {
       namKeHoach: namKh,
       loaiVthh: loaiVthh,
       cloaiVthh: cloaiVthh,
       loaiGia: "LG02",
-      maDvi: this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? '0101' : this.userInfo.MA_DVI,
+      maDvi: this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? this.formData.value.maDvi.substring(0, 4) : this.userInfo.MA_DVI,
       trangThai: STATUS.BAN_HANH
     };
     const res = await this.quyetDinhGiaCuaBtcService.getQdGiaLastestBtc(body);
+    console.log(res, 999)
     if (res.msg !== MESSAGE.SUCCESS || !res.data || res.data.length === 0) {
       return;
     }
@@ -389,7 +390,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
           dataChiTieu: this.dataChiTieu,
           dataDonGiaDuocDuyet: this.dataDonGiaDuocDuyet,
           loaiVthh: loaiVthhValue,
-          typeLoaiVthh : this.loaiVthh,
+          typeLoaiVthh: this.loaiVthh,
           cloaiVthh: cloaiVthhValue,
           tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
           khoanTienDatTruoc: khoanTienDatTruoc,
