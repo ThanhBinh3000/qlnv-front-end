@@ -1,13 +1,13 @@
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import Cleave from 'cleave.js';
 import * as XLSX from 'xlsx';
-import {environment} from 'src/environments/environment';
-import {ResponseData} from '../interfaces/response';
-import {MESSAGE} from "../constants/message";
-import {NzNotificationService} from "ng-zorro-antd/notification";
+import { environment } from 'src/environments/environment';
+import { ResponseData } from '../interfaces/response';
+import { MESSAGE } from "../constants/message";
+import { NzNotificationService } from "ng-zorro-antd/notification";
 
 declare var vgcapluginObject: any;
 
@@ -55,7 +55,7 @@ export class HelperService {
 
   dateValidator = (control: FormControl): { [s: string]: boolean } => {
     if (control.value && !moment(control.value, 'DD/MM/YYYY', true).isValid()) {
-      return {invalid: true};
+      return { invalid: true };
     }
     return;
   };
@@ -139,6 +139,15 @@ export class HelperService {
       const control = formGroup.controls[controlsKey];
       if (control.validator) {
         control.setValidators(Validators.required);
+      }
+    }
+  }
+  bidingDataInFormGroupAndIgnore(formGroup: FormGroup, dataBinding: any, ignoreField: Array<string>) {
+    if (dataBinding) {
+      for (const name in dataBinding) {
+        if (formGroup.controls.hasOwnProperty(name) && !ignoreField.includes(name)) {
+          formGroup.controls[name].setValue(dataBinding[name]);
+        }
       }
     }
   }

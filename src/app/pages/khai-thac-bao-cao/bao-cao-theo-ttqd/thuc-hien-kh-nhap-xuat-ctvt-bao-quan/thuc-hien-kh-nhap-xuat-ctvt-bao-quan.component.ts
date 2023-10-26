@@ -35,20 +35,27 @@ export class ThucHienKhNhapXuatCtvtBaoQuanComponent extends Base2Component imple
   listCloaiVthh: any[] = [];
   rows: any[] = [];
   listQuy = [];
+  quyData = [
+    {text: 'Quý I', value: 1},
+    {text: 'Quý II', value: 2},
+    {text: 'Quý III', value: 3},
+    {text: 'Quý IV', value: 4},
+  ];
+
   constructor(httpClient: HttpClient,
-    storageService: StorageService,
-    notification: NzNotificationService,
-    spinner: NgxSpinnerService,
-    modal: NzModalService,
-    private thongTu1452013Service: ThongTu1452013Service,
-    public userService: UserService,
-    private donViService: DonviService,
-    private danhMucService: DanhMucService,
-    public globals: Globals) {
+              storageService: StorageService,
+              notification: NzNotificationService,
+              spinner: NgxSpinnerService,
+              modal: NzModalService,
+              private thongTu1452013Service: ThongTu1452013Service,
+              public userService: UserService,
+              private donViService: DonviService,
+              private danhMucService: DanhMucService,
+              public globals: Globals) {
     super(httpClient, storageService, notification, spinner, modal, thongTu1452013Service);
     this.formData = this.fb.group(
       {
-        nam: [dayjs().get("year"), [Validators.required]],
+        nam: [, [Validators.required]],
         quy: [],
         maCuc: [],
         maChiCuc: [],
@@ -59,6 +66,19 @@ export class ThucHienKhNhapXuatCtvtBaoQuanComponent extends Base2Component imple
         stk: [],
       }
     );
+    this.formData.controls['nam'].valueChanges.subscribe((namValue) => {
+      const month = dayjs().get("month");
+      this.listQuy = [];
+      for (let i = 0; i <= Math.floor(month / 3); i++) {
+        if (i >= 1) {
+          this.listQuy.push(this.quyData[i - 1]);
+        }
+      }
+      console.log(this.quyData, "quyData")
+      if (namValue < dayjs().get('year')) {
+        this.listQuy = this.quyData
+      }
+    });
   }
 
   // listQuy: any[] = [
@@ -78,18 +98,7 @@ export class ThucHienKhNhapXuatCtvtBaoQuanComponent extends Base2Component imple
           text: dayjs().get("year") - i
         });
       }
-      const quyData = [
-        { text: 'Quý I', value: 1 },
-        { text: 'Quý II', value: 2 },
-        { text: 'Quý III', value: 3 },
-        { text: 'Quý IV', value: 4 },
-      ];
-      const month = dayjs().get("month");
-      for (let i = 0; i <= Math.floor(month / 3); i++) {
-        if(i>=1){
-          this.listQuy.push(quyData[i-1]);
-        }
-      }
+      this.formData.controls['nam'].setValue(dayjs().get("year"))
       await Promise.all([
         this.loadDsDonVi(),
         this.loadDsVthh()
