@@ -61,7 +61,6 @@ export class ThongTu1452013Component implements OnInit {
           this.listQuy.push(this.quyData[i - 1]);
         }
       }
-      console.log(this.quyData, "quyData")
       if (namValue < dayjs().get('year')) {
         this.listQuy = this.quyData
       }

@@ -15,7 +15,7 @@ import {
 import {HopdongService} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/hopdong.service";
 import {MESSAGE} from "../../../../../../constants/message";
 import {CurrencyMaskInputMode} from "ngx-currency";
-import {STATUS} from "../../../../../../constants/status";
+import {CHUC_NANG, STATUS} from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-thong-tin-hop-dong',
@@ -265,4 +265,6 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
   themMoiHopDong() {
 
   }
+
+  protected readonly CHUC_NANG = CHUC_NANG;
 }
