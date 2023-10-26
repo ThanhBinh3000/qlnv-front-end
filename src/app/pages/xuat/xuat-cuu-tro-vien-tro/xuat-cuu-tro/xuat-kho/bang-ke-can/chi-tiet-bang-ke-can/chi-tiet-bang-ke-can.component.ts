@@ -35,6 +35,7 @@ import {
 import { PhieuXuatKhoService } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service";
 import { BangKeCanCtvtService } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BangKeCanCtvt.service";
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
+import { HelperService } from 'src/app/services/helper.service';
 
 
 @Component({
@@ -49,6 +50,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
+  helperService: HelperService
   fileDinhKem: any[] = [];
   userLogin: UserLogin;
   listChiCuc: any[] = [];
@@ -263,7 +265,9 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
       await this.bangKeCanCtvtService.getDetail(idInput)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            this.formData.patchValue(res.data);
+            // this.formData.patchValue(res.data);
+            this.helperService.bidingDataInFormGroupAndIgnore(this.formData, res.data, ['tongTrongLuongBaoBi']);
+            this.formData.controls['tongTrongLuongBaoBi'].setValue(res.data.tongTrongLuongBaoBi, { emitEvent: false })
           }
         })
         .catch((e) => {
@@ -680,7 +684,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
-        console.log(JSON.stringify(data))
         this.formData.patchValue({
           idPhieuXuatKho: data.id,
           soPhieuXuatKho: data.soPhieuXuatKho,
@@ -729,7 +732,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     this.formData.patchValue({
       tongTrongLuongHang: tongTrongLuongHang,
     });
-
   }
 
   convertTienTobangChu(tien: number) {

@@ -390,16 +390,20 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
         s.tenTrangThai = tenTrangThai;
       }
     });
-    if (trangThai === STATUS.DA_HOAN_THANH && this.formData.value.dataDtl.some(f => !f.tenNganKho)) {
+    // if (trangThai === STATUS.DA_HOAN_THANH && this.formData.value.dataDtl.some(f => !f.tenNganKho)) {
+    //   return this.notification.error(MESSAGE.ERROR, "Bạn chưa hoàn thành phân bổ.")
+    // }
+    if (trangThai === STATUS.BAN_HANH && this.formData.value.dataDtl.filter(s => s.maDvi.match(this.userInfo.MA_DVI + ".*")).some(f => !f.tenNganKho)) {
       return this.notification.error(MESSAGE.ERROR, "Bạn chưa hoàn thành phân bổ.")
     }
     let body = {
       ...this.formData.value,
       soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null
     }
-    const data = await this.createUpdate(body);
+    const data = await this.createUpdate(body, null, true);
     if (data) {
-      this.formData.patchValue({ trangThaiXh: data.trangThai })
+      this.formData.patchValue({ trangThaiXh: data.trangThai });
+      this.notification.success(MESSAGE.SUCCESS, 'Hoàn thành phân bổ thành công.')
     }
     await this.buildTableView();
   }
