@@ -244,7 +244,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
   }
 
   calculateXepLoai() {
-    if (this.formData.value.tongDiem) {
+    if (this.formData.value.tongDiem >= 0) {
       let tongDiem = this.formData.value.tongDiem;
       if (tongDiem < 60) {
         this.formData.patchValue({
