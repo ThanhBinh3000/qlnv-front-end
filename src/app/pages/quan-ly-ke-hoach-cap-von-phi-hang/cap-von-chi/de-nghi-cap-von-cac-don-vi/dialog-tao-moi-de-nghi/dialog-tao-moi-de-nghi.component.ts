@@ -62,7 +62,8 @@ export class DialogTaoMoiDeNghiComponent implements OnInit {
             } else {
                 this.loaiDns = Cvnc.LOAI_DE_NGHI.filter(e => e.id != Cvnc.THOC);
             }
-            this.response.soQdChiTieu = null;
+            // this.response.soQdChiTieu = null;
+            this.getSoQdHopDong();
         }
     }
 
@@ -213,6 +214,34 @@ export class DialogTaoMoiDeNghiComponent implements OnInit {
         }
         this.spinner.show();
         this.capVonNguonChiService.soQdChiTieu(request).toPromise().then(
+            data => {
+                if (data.statusCode == 0) {
+                    this.lstQuyetDinh = data.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                    this.response.canCuVeGia = null;
+                }
+            },
+            err => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                this.response.canCuVeGia = null;
+            }
+        )
+        this.spinner.hide();
+    }
+
+    getSoQdHopDong() {
+        if (!this.response.namDnghi) {
+            this.notification.warning(MESSAGE.WARNING, 'Vui lòng nhập năm');
+            this.response.canCuVeGia = null;
+        }
+        const request = {
+            namKhoach: this.response.namDnghi,
+            // maDvi: this.userInfo?.MA_DVI,
+            maLoai: this.response.maLoai,
+        }
+        this.spinner.show();
+        this.capVonNguonChiService.danhSachHopDong(request).toPromise().then(
             data => {
                 if (data.statusCode == 0) {
                     this.lstQuyetDinh = data.data;
