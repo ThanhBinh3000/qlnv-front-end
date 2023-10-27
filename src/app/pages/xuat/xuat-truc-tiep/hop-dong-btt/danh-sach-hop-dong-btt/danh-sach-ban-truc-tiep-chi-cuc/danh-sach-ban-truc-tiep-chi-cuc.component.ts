@@ -25,6 +25,8 @@ export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implement
   isAddNew: boolean;
   listTrangThaiHd: any = [];
   listTrangThaiXh: any = [];
+  idQdPd: number = 0;
+  isViewQdPd: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -133,6 +135,19 @@ export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implement
         this.spinner.hide();
       }
     );
+  }
+
+  openModal(id: number) {
+    this.updateQdPd(id, true)
+  }
+
+  closeModal() {
+    this.updateQdPd(null, false)
+  }
+
+  private updateQdPd(id: number | null, isView: boolean) {
+    this.idQdPd = id;
+    this.isViewQdPd = isView;
   }
 
   isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {

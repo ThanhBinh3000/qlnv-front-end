@@ -200,20 +200,27 @@
           <td class="text-left">{{ data.nam }}</td>
           <td class="text-left">{{ data.soQdNv }}</td>
           <td class="text-left">{{ data.ngayKy|date:'dd/MM/YYYY' }}</td>
-          <td class="text-left"><a *ngIf="data.soHopDong && data.idHopDong" nz-button nzType="link"
-                                   (click)="openModal(data.idHopDong, 'hopDong')">
-            {{ data.soHopDong }}</a></td>
+          <td class="text-left">
+            <a *ngIf="data.soHopDong && data.idHopDong" (click)="openModal(data.idHopDong, 'hopDong')"
+               style="color: blue">{{ data.soHopDong }}
+            </a>
+          </td>
           <td class="text-left" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">{{ data.tenLoaiVthh }}</td>
           <td class="text-left">{{ data.tenCloaiVthh }}</td>
           <td class="text-left">{{ data.tgianGiaoHang|date:'dd/MM/YYYY' }}</td>
-          <td class="text-left"
-              style="max-width: 300px; min-width: 250px;  white-space: break-spaces;">{{data.trichYeu}}</td>
-          <td class="text-left"><a *ngIf="data.bienBanTinhKho && data.idTinhKho" nz-button nzType="link"
-                                   (click)="openModal(data.idTinhKho, 'tinhKho')">
-            {{ data.bienBanTinhKho }}</a></td>
-          <td class="text-left"><a *ngIf="data.bienBanHaoDoi && data.idHaoDoi" nz-button nzType="link"
-                                   (click)="openModal(data.idHaoDoi, 'haoDoi')">
-            {{ data.bienBanHaoDoi }}</a></td>
+          <td class="text-left" style="max-width: 300px; min-width: 250px;  white-space: break-spaces;">
+            {{data.trichYeu}}
+          </td>
+          <td class="text-left">
+            <a *ngIf="data.bienBanTinhKho && data.idTinhKho" (click)="openModal(data.idTinhKho, 'tinhKho')"
+               style="color: blue">{{ data.bienBanTinhKho }}
+            </a>
+          </td>
+          <td class="text-left">
+            <a *ngIf="data.bienBanHaoDoi && data.idHaoDoi" (click)="openModal(data.idHaoDoi, 'haoDoi')"
+               style="color: blue">{{ data.bienBanHaoDoi }}
+            </a>
+          </td>
           <td class="text-left">{{ data.tenTrangThai }}</td>
           <td class="text-left">{{ data.tenTrangThaiXh }}</td>
           <td class="text-center">

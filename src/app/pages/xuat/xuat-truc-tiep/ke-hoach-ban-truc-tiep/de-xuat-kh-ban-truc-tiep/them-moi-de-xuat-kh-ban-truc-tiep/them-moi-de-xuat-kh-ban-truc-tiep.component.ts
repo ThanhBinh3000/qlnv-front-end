@@ -375,7 +375,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
           dataChiTieu: this.dataChiTieu,
           dataDonGiaDuocDuyet: this.dataDonGiaDuocDuyet,
           loaiVthh: loaiVthhValue,
-          typeLoaiVthh : this.loaiVthh,
+          typeLoaiVthh: this.loaiVthh,
           cloaiVthh: cloaiVthhValue,
           tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
           namKh: this.formData.get('namKh').value,
@@ -575,14 +575,13 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     this.formData.controls["trichYeu"].setValidators([Validators.required]);
     this.formData.controls["ngayTao"].setValidators([Validators.required]);
     this.formData.controls["soQdCtieu"].setValidators([Validators.required]);
-    this.formData.controls["moTaHangHoa"].setValidators([Validators.required]);
     this.formData.controls["thoiGianDuKien"].setValidators([Validators.required]);
     this.formData.controls["tgianTtoan"].setValidators([Validators.required]);
     this.formData.controls["pthucTtoan"].setValidators([Validators.required]);
     this.formData.controls["tgianGnhan"].setValidators([Validators.required]);
     this.formData.controls["thongBao"].setValidators([Validators.required]);
     this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
-    if (!LOAI_HANG_DTQG.VAT_TU) {
+    if (this.loaiVthh !== LOAI_HANG_DTQG.VAT_TU) {
       this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
     }
   }

@@ -510,7 +510,10 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   }
 
   isDisabledQD() {
-    return this.formData.value.id != null;
+    if (this.formData.value.id || this.formData.value.idThHdr) {
+      return true;
+    }
+    return false;
   }
 
   setValidator() {
