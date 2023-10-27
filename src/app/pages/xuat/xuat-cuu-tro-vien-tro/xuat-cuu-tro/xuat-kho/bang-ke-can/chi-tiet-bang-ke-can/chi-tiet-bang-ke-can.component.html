@@ -19,7 +19,7 @@
       <button
         *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BKCH_DUYET_LDCCUC')"
         type="button" class="btn btn-sub"
-        (click)="approve(idInput,STATUS.DA_DUYET_LDCC,'Bạn có muốn duyệt quyết định này', MESSAGE.PHE_DUYET_SUCCESS)">
+        (click)="approve(idInput,STATUS.DA_DUYET_LDCC,'Bạn có muốn duyệt quyết định này', null,  MESSAGE.PHE_DUYET_SUCCESS)">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>

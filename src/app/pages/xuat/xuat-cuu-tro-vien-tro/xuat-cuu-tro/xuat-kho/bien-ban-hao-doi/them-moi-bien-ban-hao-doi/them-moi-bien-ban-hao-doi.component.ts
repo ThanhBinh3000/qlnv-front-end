@@ -380,26 +380,30 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
   pheDuyet() {
     let trangThai = '';
     let msg = '';
+    let MSG = '';
     switch (this.formData.value.trangThai) {
       case STATUS.TU_CHOI_LDCC:
       case STATUS.TU_CHOI_KTVBQ:
       case STATUS.DU_THAO: {
         trangThai = STATUS.CHO_DUYET_KTVBQ;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
+        MSG = MESSAGE.GUI_DUYET_SUCCESS;
         break;
       }
       case STATUS.CHO_DUYET_KTVBQ: {
         trangThai = STATUS.CHO_DUYET_LDCC;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
+        MSG = MESSAGE.GUI_DUYET_SUCCESS
         break;
       }
       case STATUS.CHO_DUYET_LDCC: {
         trangThai = STATUS.DA_DUYET_LDCC;
-        msg = MESSAGE.GUI_DUYET_CONFIRM;
+        msg = MESSAGE.PHE_DUYET_CONFIRM;
+        MSG = MESSAGE.PHE_DUYET_SUCCESS
         break;
       }
     }
-    this.approve(this.idInput, trangThai, msg);
+    this.approve(this.idInput, trangThai, msg, null, MSG);
   }
 
   tuChoi() {

@@ -357,8 +357,8 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     } else {
       this.formDataDtl.patchValue({
         idVirtual: uuidv4(),
-        loaiVthh: LOAI_HANG_DTQG.GAO,
-        tenLoaiVthh: TEN_LOAI_VTHH.GAO,
+        loaiVthh: this.formData.value.loaiVthh,
+        tenLoaiVthh: this.formData.value.tenLoaiVthh,
       });
     }
     this.modalChiTiet = true;
