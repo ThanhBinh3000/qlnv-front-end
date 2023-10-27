@@ -20,7 +20,7 @@
             type="button" class="btn btn-sub xanh-nhat"
             (click)="approve(idInput,STATUS.BAN_HANH,'Bạn có muốn ban hành quyết định này')">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
-      <span> Ban hành </span>
+      <span> Duyệt </span>
     </button>
     <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP) && isView
                && (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_QDKQDG_DUYET_TP') : userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_QDKQDG_DUYET_TP'))"
@@ -250,36 +250,33 @@
           <thead>
           <tr>
             <th nzWidth="30px"></th>
-            <th nzWidth="150px" class="text-center wrap"> Chi cục</th>
-            <th nzWidth="150px" class="text-center wrap"> Điểm kho</th>
-            <th nzWidth="150px" class="text-center wrap"> Lô kho</th>
+            <th nzWidth="150px" class="text-left wrap"> Chi cục</th>
+            <th nzWidth="150px" class="text-left wrap"> Điểm kho</th>
+            <th nzWidth="150px" class="text-left wrap"> Lô kho</th>
             <th nzWidth="100px" class="text-center wrap"> Mã ĐVTS</th>
-            <th nzWidth="120px" class="text-center wrap"> SL bán đấu giá</th>
-            <th nzWidth="50px" class="text-center wrap"> ĐVT</th>
-            <th nzWidth="120px" class="text-center wrap"> Đơn giá chưa VAT (đ)</th>
-            <th nzWidth="120px" class="text-center wrap"> Giá khởi điểm (đ)</th>
-            <th nzWidth="120px" class="text-center wrap"> Số tiền đặt trước (đ)</th>
-            <th nzWidth="100px" class="text-center wrap">Đơn giá trúng ĐG (đ)</th>
-            <th nzWidth="120px" class="text-center wrap">Thành tiền (đ)</th>
-            <th nzWidth="200px" class="text-center wrap">Tổ chức/cá nhân trúng đấu giá</th>
+            <th nzWidth="120px" class="text-right wrap"> SL bán đấu giá</th>
+            <th nzWidth="50px" class="text-left wrap"> ĐVT</th>
+            <th nzWidth="120px" class="text-right wrap"> Đơn giá chưa VAT (đ)</th>
+            <th nzWidth="120px" class="text-right wrap"> Giá khởi điểm (đ)</th>
+            <th nzWidth="120px" class="text-right wrap"> Số tiền đặt trước (đ)</th>
+            <th nzWidth="100px" class="text-right wrap"> Đơn giá trúng ĐG (đ)</th>
+            <th nzWidth="120px" class="text-right wrap"> Thành tiền (đ)</th>
+            <th nzWidth="200px" class="text-left wrap"> Tổ chức/cá nhân trúng đấu giá</th>
           </tr>
           </thead>
           <tbody>
           <ng-container *ngFor="let item of dataTable , let i = index">
             <tr>
               <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-              <td>{{item.tenDvi}}</td>
+              <td class="text-left">{{item.tenDvi}}</td>
               <td></td>
               <td></td>
               <td></td>
-              <td
-                style="color: black ;font-weight: bold;"> {{item.tongSoLuong|number:globals.numberFormat:globals.locale }}</td>
+              <td class="text-right bold">{{item.tongSoLuong|number:globals.numberFormat:globals.locale }}</td>
               <td></td>
               <td></td>
-              <td
-                style="color: black ;font-weight: bold;"> {{item.tongGiaKhoiDiem|number:globals.numberFormat:globals.locale }}</td>
-              <td
-                style="color: black ;font-weight: bold;"> {{item.tongTienDatTruoc|number:globals.numberFormat:globals.locale }}</td>
+              <td class="text-right bold">{{item.tongGiaKhoiDiem|number:globals.numberFormat:globals.locale }}</td>
+              <td class="text-right bold">{{item.tongTienDatTruoc|number:globals.numberFormat:globals.locale }}</td>
               <td></td>
               <td></td>
               <td></td>
@@ -288,18 +285,19 @@
               <tr *ngFor="let children of item.children, let x = index">
                 <td></td>
                 <td></td>
-                <td>{{children.tenDiemKho}}</td>
-                <td> {{children.tenLoKho == null ? children.tenNganKho : children.tenLoKho }},
-                  {{children.tenNhaKho}} </td>
-                <td>{{children.maDviTsan}}</td>
-                <td>{{children.soLuongDeXuat|number:globals.numberFormat:globals.locale }}</td>
-                <td>{{children.donViTinh}} </td>
-                <td>{{children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
-                <td>{{children.donGiaDeXuat|number:globals.numberFormat:globals.locale }}</td>
-                <td>{{children.soTienDatTruoc|number:globals.numberFormat:globals.locale }}</td>
-                <td>{{children.donGiaTraGia|number:globals.numberFormat:globals.locale }}</td>
-                <td>{{children.thanhTien|number:globals.numberFormat:globals.locale }}</td>
-                <td>{{children.toChucCaNhan}}</td>
+                <td class="text-left">{{children.tenDiemKho}}</td>
+                <td
+                  class="text-left">{{(children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") +
+                (children.tenNhaKho ? children.tenNhaKho : "")}} </td>
+                <td class="text-center">{{children.maDviTsan}}</td>
+                <td class="text-right">{{children.soLuongDeXuat|number:globals.numberFormat:globals.locale }}</td>
+                <td class="text-left">{{children.donViTinh}} </td>
+                <td class="text-right">{{children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
+                <td class="text-right">{{children.donGiaDeXuat|number:globals.numberFormat:globals.locale }}</td>
+                <td class="text-right">{{children.soTienDatTruoc|number:globals.numberFormat:globals.locale }}</td>
+                <td class="text-right">{{children.donGiaTraGia|number:globals.numberFormat:globals.locale }}</td>
+                <td class="text-right">{{children.thanhTien|number:globals.numberFormat:globals.locale }}</td>
+                <td class="text-left">{{children.toChucCaNhan}}</td>
               </tr>
             </ng-container>
           </ng-container>
@@ -351,4 +349,3 @@
     </button>
   </div>
 </nz-modal>
-

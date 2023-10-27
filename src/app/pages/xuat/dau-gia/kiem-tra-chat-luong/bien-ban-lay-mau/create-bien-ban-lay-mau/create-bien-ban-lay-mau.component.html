@@ -291,15 +291,15 @@
         <nz-table class="nowrap pd-10" #basicTable [nzData]="dataTable" nzBordered>
           <thead>
           <tr>
-            <th class="text-center" nzWidth="50px">STT</th>
-            <th>Họ và tên</th>
-            <th nzWidth="1000px">Đại diện</th>
-            <th *ngIf="!isView" nzWidth="100px"></th>
+            <th nzWidth="50px" class="text-center wrap">STT</th>
+            <th nzWidth="500px" class="text-left wrap">Họ và tên</th>
+            <th nzWidth="1000px" class="text-left wrap">Đại diện</th>
+            <th nzWidth="70px" class="text-center wrap" *ngIf="!isView"></th>
           </tr>
           <tr *ngIf="!isView">
             <th></th>
-            <th><input nz-input [(ngModel)]="daiDienRow.ten"/></th>
-            <th>
+            <th class="text-left"><input nz-input [(ngModel)]="daiDienRow.ten"/></th>
+            <th class="text-left">
               <nz-select [(ngModel)]="daiDienRow.loai">
                 <nz-option nzValue="Đại diện Cục Dự trữ Nhà nước" nzLabel="Đại diện Cục Dự trữ Nhà nước"></nz-option>
                 <nz-option nzValue="Đại diện Chi cục Dự trữ Nhà nước"
@@ -307,7 +307,7 @@
                 <nz-option nzValue="Đại diện đơn vị cung cấp" nzLabel="Đại diện đơn vị cung cấp"></nz-option>
               </nz-select>
             </th>
-            <th>
+            <th class="text-center">
               <a (click)="saveDataTable()">
                 <i class="fa fa-plus"></i>
               </a>
@@ -321,9 +321,9 @@
           <tr *ngFor="let data of dataTable;let i = index">
             <ng-container *ngIf="!data.edit">
               <td class="text-center">{{i + 1}}</td>
-              <td>{{data.ten}}</td>
-              <td>{{data.loai}}</td>
-              <td *ngIf="!isView">
+              <td class="text-left">{{data.ten}}</td>
+              <td class="text-left">{{data.loai}}</td>
+              <td class="text-center" *ngIf="!isView">
                 <a (click)="startDataTable(data)">
                   <i class="fa fa-edit"></i>
                 </a>
@@ -336,8 +336,8 @@
             </ng-container>
             <ng-container *ngIf="data.edit && !isView">
               <td class="text-center">{{i + 1}}</td>
-              <td><input nz-input [(ngModel)]="data.ten"/></td>
-              <td>
+              <td class="text-left"><input nz-input [(ngModel)]="data.ten"/></td>
+              <td class="text-left">
                 <nz-select [(ngModel)]="data.loai">
                   <nz-option nzValue="Đại diện Cục Dự trữ Nhà nước" nzLabel="Đại diện Cục Dự trữ Nhà nước"></nz-option>
                   <nz-option nzValue="Đại diện Chi cục Dự trữ Nhà nước"
@@ -345,7 +345,7 @@
                   <nz-option nzValue="Đại diện đơn vị cung cấp" nzLabel="Đại diện đơn vị cung cấp"></nz-option>
                 </nz-select>
               </td>
-              <td>
+              <td class="text-center">
                 <a>
                   <i class="fa fa-save" nz-popconfirm nz-button
                      nzPopconfirmTitle="Bạn có chắc muốn lưu thay đổi ?"

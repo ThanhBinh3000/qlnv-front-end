@@ -46,7 +46,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
   listPhuongThucThanhToan: any[] = [];
   dataChiTieu: any;
   maHauTo: any;
-  giaToiDa: any;
+  giaToiDa: number;
   listVatTuCha: any[] = [];
   listVatTu = [];
   dataDonGiaDuocDuyet: any;
@@ -401,7 +401,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
   }
 
   validateGiaGiaToiDa() {
-    const isGiaToiDaValid = this.giaToiDa !== null;
+    const isGiaToiDaValid = this.giaToiDa !== null && this.giaToiDa !== 0 && this.giaToiDa !== undefined;
     if (!isGiaToiDaValid) {
       this.notification.error(MESSAGE.ERROR, 'Bạn cần lập và trình duyệt phương án giá mua tối đa, giá bán tối thiểu trước. Chỉ sau khi có giá bán tối thiểu bạn mới thêm được danh mục đơn vị tài sản BDG vì giá bán đề xuất ở đây nhập vào phải >= giá bán tối thiểu');
     }

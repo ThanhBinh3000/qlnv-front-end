@@ -1,3 +1,4 @@
+import { BangKeCanHangService } from './../../../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/nhapkho/BangKeCanHang.service';
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
@@ -23,7 +24,8 @@ import { Validators } from '@angular/forms';
 import {
   PhieuKiemNghiemChatLuongService
 } from "src/app/services/qlnv-hang/xuat-hang/chung/kiem-tra-chat-luong/PhieuKiemNghiemChatLuong.service";
-import { uniqBy } from 'lodash'
+import { uniqBy } from 'lodash';
+import { BangKeCanCtvtService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BangKeCanCtvt.service';
 @Component({
   selector: 'app-them-moi-phieu-xuat-kho',
   templateUrl: './them-moi-phieu-xuat-kho.component.html',
@@ -33,6 +35,8 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   @Input() loaiVthh: string;
   @Input() idInput: number;
   @Input() isView: boolean;
+  @Input() isViewOnModal: boolean;
+  @Input() loaiXuat: string;
   @Output()
   showListEvent = new EventEmitter<any>();
   listSoQuyetDinh: any[] = [];
@@ -58,6 +62,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     private quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
     public phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
     private phieuXuatKhoService: PhieuXuatKhoService,
+    private bangKeCanCtvtService: BangKeCanCtvtService
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoService);
 
@@ -96,6 +101,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         diaChi: [],
         thoiGianGiaoNhan: [],
         soBangKeCh: [],
+        idBangKeCh: [],
         maSo: [],
         donViTinh: [],
         theoChungTu: [],
@@ -176,7 +182,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         soPhieuXuatKho: `${id}/${this.formData.get('nam').value}/${this.maPhieu}`,
         ngayTaoPhieu: dayjs().format('YYYY-MM-DD'),
         ngayXuatKho: dayjs().format('YYYY-MM-DD'),
-        type: "XUAT_CTVT",
+        type: this.loaiXuat,
         // loaiVthh: this.loaiVthh
       });
     }
@@ -316,7 +322,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       let body = {
         trangThai: STATUS.DA_DUYET_LDC,
         loaiVthh: this.loaiVthh,
-        type: 'CTVT',
+        type: this.loaiXuat,
       }
       let res = await this.phieuKiemNghiemChatLuongService.search(body)
       const list = res.data.content.map(f => ({ ...f, tenNganLo: f.tenLoKho ? `${f.tenLoKho}-${f.tenNganKho}` : f.tenNganKho }));
@@ -387,7 +393,15 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       }
     });
   }
-
+  async getDetailBkch() {
+    const { idBangKeCh } = this.formData.value;
+    if (!idBangKeCh) return;
+    const res = await this.bangKeCanCtvtService.getDetail(idBangKeCh);
+    if (res.msg === MESSAGE.SUCCESS) {
+      return res.data.trangThai === STATUS.DA_DUYET_LDCC
+    }
+    return;
+  }
   async save() {
     this.formData.disable()
     let body = this.formData.value;
@@ -398,6 +412,12 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   async luuGuiDuyet() {
     this.formData.controls["soBangKeCh"].setValidators(Validators.required);
     this.formData.controls["soBangKeCh"].updateValueAndValidity();
+    if (this.formData.valid) {
+      const trangThaiLdccDuyet = await this.getDetailBkch();
+      if (!trangThaiLdccDuyet) {
+        return this.notification.error(MESSAGE.ERROR, `${this.loaiVthh === '02' ? 'Bảng kê xuất vật tư' : 'Bảng kê cân hàng'} của phiếu xuất chưa được duyệt`)
+      }
+    };
     await this.saveAndSend(this.formData.value, STATUS.CHO_DUYET_LDCC, 'Bạn có muốn lưu và gửi duyệt ?', 'Bạn đã lưu và gửi duyệt thành công!');
   }
   pheDuyet() {

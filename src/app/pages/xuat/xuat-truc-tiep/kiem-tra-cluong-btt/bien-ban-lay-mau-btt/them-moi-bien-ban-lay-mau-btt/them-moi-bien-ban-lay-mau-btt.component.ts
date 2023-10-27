@@ -452,7 +452,7 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
           maLoKho: item.maLoKho,
         }))
       );
-      this.listDiaDiemXuat =  this.listDiaDiemXuat.filter(item => {
+      this.listDiaDiemXuat = this.listDiaDiemXuat.filter(item => {
         const key = JSON.stringify({
           maDiemKho: item.maDiemKho,
           maNhaKho: item.maNhaKho,
@@ -559,6 +559,10 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
   }
 
   async openDialogKho() {
+    const formattedDataKho = this.listDiaDiemXuat.map(item => ({
+      soLuong: item.soLuong.toLocaleString(),
+      ...item
+    }))
     const modalQD = this.modal.create({
       nzTitle: 'DANH SÁCH ĐỊA ĐIỂM XUẤT HÀNG',
       nzContent: DialogTableSelectionComponent,
@@ -567,9 +571,9 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
-        dataTable: this.listDiaDiemXuat,
-        dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho'],
-        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho']
+        dataTable: formattedDataKho,
+        dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho', 'Số lượng'],
+        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho', 'soLuong']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {

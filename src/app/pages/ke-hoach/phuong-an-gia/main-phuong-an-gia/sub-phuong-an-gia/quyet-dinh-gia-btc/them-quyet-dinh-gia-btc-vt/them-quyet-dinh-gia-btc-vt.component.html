@@ -131,6 +131,16 @@
             </div>
           </nz-form-item>
         </div>
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              Căn cứ pháp lý
+            </nz-form-label>
+            <div class="list-file">
+              <file-list [data]="canCuPhapLys"></file-list>
+            </div>
+          </nz-form-item>
+        </div>
       </div>
     </form>
   </nz-card>
@@ -168,8 +178,8 @@
       <th class="text-center">Có VAT</th>
       <th class="text-center">Chưa VAT</th>
       <th class="text-center">Có VAT</th>
-      <th class="text-center" *ngIf="!(formData.value.loaiDeXuat == '00')">Chưa VAT</th>
-      <th class="text-center" *ngIf="!(formData.value.loaiDeXuat == '00')">Có VAT</th>
+      <th class="text-center" *ngIf="formData.value.loaiDeXuat != '00'">Chưa VAT</th>
+      <th class="text-center" *ngIf="formData.value.loaiDeXuat != '00'">Có VAT</th>
     </tr>
     </thead>
     <tbody>
@@ -190,14 +200,11 @@
         </nz-input-number>
       </td>
       <td class="text-right"
-          *ngIf="!(formData.value.loaiDeXuat == '00')">{{data.giaQdBtc | number : '1.0-1' : 'vi_VN'}}</td>
+          *ngIf="formData.value.loaiDeXuat != '00'">{{data.giaQdBtc | number : '1.0-1' : 'vi_VN'}}</td>
       <td class="text-right"
-          *ngIf="(formData.value.loaiGia == 'LG01' )">
+          *ngIf="(formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03' )">
         {{ data.vat ? (data.giaQdBtc * data.vat + data.giaQdBtc | number : '1.0-1' : 'vi_VN') : ''}}
-
       </td>
-      <td class="text-right"
-          *ngIf="!(formData.value.loaiGia == 'LG01' ) && (formData.value.loaiDeXuat == '00')"></td>
       <td class="text-right" *ngIf="!(formData.value.loaiDeXuat == '00')">
         <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="data.giaQdDcBtc" [nzMin]="0"
                          [nzFormatter]="globals.formatter"
@@ -208,8 +215,6 @@
         {{ data.vat ? (data.giaQdDcBtc * data.vat + data.giaQdDcBtc | number : '1.0-1' : 'vi_VN') : ''}}
 
       </td>
-      <td class="text-right"
-          *ngIf="!(formData.value.loaiGia == 'LG01' ) && !(formData.value.loaiDeXuat == '00')"></td>
     </tr>
     </tbody>
   </nz-table>
@@ -227,7 +232,7 @@
       <th class="text-center" >Giá đề xuất của TCDT</th>
       <th class="text-center" nzWidth="150px"
           > {{formData.value.loaiDeXuat == '00' ? 'Giá QĐ của BTC' : 'Giá trước điều chỉnh của BTC' }}</th>
-      <th nzWidth="150px" class="text-center"  *ngIf="!(formData.value.loaiDeXuat == '00')">Đơn giá sau điều chỉnh</th>
+      <th nzWidth="150px" class="text-center"  *ngIf="formData.value.loaiDeXuat != '00'">Đơn giá sau điều chỉnh</th>
     </tr>
     </thead>
     <tbody>
@@ -247,8 +252,8 @@
         </nz-input-number>
       </td>
       <td class="text-right"
-          *ngIf="!(formData.value.loaiDeXuat == '00')">{{data.giaQdBtc | number : '1.0-1' : 'vi_VN'}}</td>
-      <td class="text-right" *ngIf="!(formData.value.loaiDeXuat == '00')">
+          *ngIf="formData.value.loaiDeXuat != '00'">{{data.giaQdBtc | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-right" *ngIf="formData.value.loaiDeXuat != '00'">
         <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="data.giaQdDcBtc" [nzMin]="0"
                          [nzFormatter]="globals.formatter"
                          [nzParser]="globals.parser">

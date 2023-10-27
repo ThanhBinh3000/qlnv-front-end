@@ -112,6 +112,7 @@ export class BienBanHaoDoiBttComponent extends Base2Component implements OnInit 
             idVirtual: lv2IdVirtual,
             tenLoKho: group[0].tenLoKho || "",
             tenNganKho: group[0].tenNganKho || "",
+            tenNhaKho: group[0].tenNhaKho || "",
             soBbHaoDoi: key || "",
             ngayLapBienBan: group[0].ngayLapBienBan || "",
             idBbTinhKho: group[0].idBbTinhKho || "",

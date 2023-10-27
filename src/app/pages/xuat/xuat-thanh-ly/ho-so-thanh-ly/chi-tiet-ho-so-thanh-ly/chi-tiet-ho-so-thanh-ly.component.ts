@@ -13,6 +13,7 @@ import { Validators } from "@angular/forms";
 import { Base3Component } from 'src/app/components/base3/base3.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
+import {MESSAGE} from "../../../../../constants/message";
 
 @Component({
   selector: 'app-chi-tiet-ho-so-thanh-ly',
@@ -95,7 +96,7 @@ export class ChiTietHoSoThanhLyComponent extends Base3Component implements OnIni
   }
 
   save(isGuiDuyet?) {
-    this.spinner.show();
+    // this.spinner.show();
     let body = this.formData.value;
     body.fileDinhKemReq = this.fileDinhKem;
     body.fileCanCuReq = this.fileCanCu;
@@ -106,24 +107,60 @@ export class ChiTietHoSoThanhLyComponent extends Base3Component implements OnIni
       })
     })
     body.children = children;
+
     if (this.formData.value.soHoSo) {
       body.soHoSo = this.formData.value.soHoSo + this.symbol
     }
-    this.createUpdate(body).then((res) => {
-      if (res) {
-        if (isGuiDuyet) {
-          this.id = res.id;
-          this.formData.patchValue({
-            id : res.id,
-            trangThai: res.trangThai,
-            tenTrangThai: res.tenTrangThai
-          })
-          this.pheDuyet();
-        } else {
-          this.redirectDefault();
-        }
+    let validateDataTable = true;
+    if(isGuiDuyet){
+      if(this.userService.isCuc()){
+        body.children.forEach(item => {
+          console.log(item);
+          if(item.donGiaDk == null || item.donGiaDk == 0){
+            this.notification.error(MESSAGE.ERROR, "Vui lòng điền đơn giá thanh lý dự kiến tại " + item.tenNhaKho + " - "  + item.tenNganKho + " - " + item.tenLoKho);
+            validateDataTable = false;
+            return;
+          }
+          if(item.ketQua == null){
+            this.notification.error(MESSAGE.ERROR, "Vui lòng điền kết quả đánh giá chất lượng tại " + item.tenNhaKho + " - "  + item.tenNganKho + " - " + item.tenLoKho);
+            validateDataTable = false;
+            return;
+          }
+        });
       }
-    })
+      if(this.userService.isTongCuc()){
+        body.children.forEach(item => {
+          console.log(item);
+          if(item.slDaDuyet == null || item.slDaDuyet == 0){
+            this.notification.error(MESSAGE.ERROR, "Vui lòng điền số lượng phê duyệt tại " + item.tenNhaKho + " - "  + item.tenNganKho + " - " + item.tenLoKho);
+            validateDataTable = false;
+            return;
+          }
+          if(item.donGiaPd == null || item.donGiaPd == 0){
+            this.notification.error(MESSAGE.ERROR, "Vui lòng điền đơn giá thanh lý phê duyệt tại " + item.tenNhaKho + " - "  + item.tenNganKho + " - " + item.tenLoKho);
+            validateDataTable = false;
+            return;
+          }
+        });
+      }
+    }
+    if(validateDataTable){
+      this.createUpdate(body).then((res) => {
+        if (res) {
+          if (isGuiDuyet) {
+            this.id = res.id;
+            this.formData.patchValue({
+              id : res.id,
+              trangThai: res.trangThai,
+              tenTrangThai: res.tenTrangThai
+            })
+            this.pheDuyet();
+          } else {
+            this.redirectDefault();
+          }
+        }
+      })
+    }
   }
 
   openDialogDanhSach() {

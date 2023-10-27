@@ -258,6 +258,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   async findCanCuByYear(year: number, chiTieuKhNam?) {
+    debugger;
     this.spinner.show();
     try {
       if (chiTieuKhNam) {
@@ -379,6 +380,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           if (res.msg == MESSAGE.SUCCESS) {
             let data = res.data;
             if (data) {
+              // console.log(data.khVatTuNhap.filter(item =>item.maDvi =='010115'),'datadatadata');
               //Load data của phương án giao chỉ tiêu cho QĐ giao chỉ tiêu
               this.loadDataPhuongAn(data);
               //Gán số công văn bản ghi phương án vào căn cứ, chiTieuId là id của bản ghi phương án.
@@ -1099,6 +1101,10 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   loadDataPhuongAn(data) {
+    this.thongTinChiTieuKeHoachNam.khLuongThuc = [];
+    this.thongTinChiTieuKeHoachNam.khMuoiDuTru = [];
+    this.thongTinChiTieuKeHoachNam.khVatTuNhap = [];
+    this.thongTinChiTieuKeHoachNam.khVatTuXuat = [];
     if (data) {
       this.thongTinChiTieuKeHoachNam.khLuongThuc = data.khLuongThuc;
       this.thongTinChiTieuKeHoachNam.khMuoiDuTru = data.khMuoiDuTru;

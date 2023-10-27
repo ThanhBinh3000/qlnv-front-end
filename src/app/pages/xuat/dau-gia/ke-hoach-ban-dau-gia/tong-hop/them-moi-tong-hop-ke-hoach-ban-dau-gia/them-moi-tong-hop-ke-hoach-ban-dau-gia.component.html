@@ -49,7 +49,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="4" *ngIf="!loaiVthh.startsWith('02')">
+            <div nz-col [nzSpan]="4" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
@@ -60,7 +60,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="13" *ngIf="!loaiVthh.startsWith('02')">
+            <div nz-col [nzSpan]="13" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
@@ -71,7 +71,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="8" *ngIf="loaiVthh.startsWith('02')">
+            <div nz-col [nzSpan]="8" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -83,7 +83,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="9" *ngIf="loaiVthh.startsWith('02')">
+            <div nz-col [nzSpan]="9" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
                 <nz-form-control>
@@ -188,7 +188,7 @@
             <th nzWidth="150px" class="text-right wrap"> Thành tiền Cục đề xuất (đ)</th>
             <th nzWidth="150px" class="text-right wrap"> % Khoản tiền đặt trước (đ)</th>
             <th nzWidth="150px" class="text-right wrap"> Khoản tiền đặt trước đề xuất (đ)</th>
-            <th nzWidth="100px" class="text-center wrap"> Trạng thái</th>
+            <th nzWidth="100px" class="text-left wrap"> Trạng thái</th>
           </tr>
           </thead>
           <tbody>
@@ -205,7 +205,7 @@
             <td class="text-right">{{ data.tongTienKhoiDiemDx|number:globals.numberFormat:globals.locale }}</td>
             <td class="text-right">{{ data.khoanTienDatTruoc|number:globals.numberFormat:globals.locale }}</td>
             <td class="text-right">{{ data.tongTienDatTruocDx|number:globals.numberFormat:globals.locale }}</td>
-            <td class="text-center">{{ data.tenTrangThai }}</td>
+            <td class="text-left">{{ data.tenTrangThai }}</td>
           </tr>
           </tbody>
         </nz-table>

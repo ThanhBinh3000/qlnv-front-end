@@ -1,10 +1,11 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
-  <div class="btn-group">
+  <div class="btn-group" *ngIf="!isViewOnModal">
     <button type="button" class="btn btn-sub" (click)="goBack()">
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button type="button" class="btn btn-sub" (click)="xemTruoc(idInput,loaiVthh=='02'?templateNameVt:templateName)">
+    <button type="button" class="btn btn-sub" (click)="xemTruoc(idInput,loaiVthh=='02'?templateNameVt:templateName)"
+      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_IN')">
       <i class="icon htvbdh_totrinh"></i>
       <span> In/Xem trước </span>
     </button>
@@ -58,7 +59,7 @@
               Năm kế hoạch
             </nz-form-label>
             <nz-form-control nz-col>
-              <nz-select formControlName="nam" [nzDisabled]="true">
+              <nz-select formControlName="nam" [nzDisabled]="isView">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
                 </nz-option>
               </nz-select>

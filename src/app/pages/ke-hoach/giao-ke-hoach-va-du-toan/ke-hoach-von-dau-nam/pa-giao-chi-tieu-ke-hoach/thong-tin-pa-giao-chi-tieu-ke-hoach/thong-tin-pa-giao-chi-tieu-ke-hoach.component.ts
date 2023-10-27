@@ -266,7 +266,7 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
             }
           }
         } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR);
+          this.notification.warning(MESSAGE.WARNING, 'Không tìm thấy quyết định giao chỉ tiêu của Tổng Cục DTNN.');
         }
       }
     } else {
@@ -298,7 +298,7 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
             }
           }
         } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR);
+          this.notification.warning(MESSAGE.WARNING, 'Không tìm thấy quyết định giao chỉ tiêu cuủa Tổng Cục DTNN.');
         }
       }
       if (this.userService.isTongCuc()) {

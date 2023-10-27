@@ -162,7 +162,8 @@ export class MangLuoiKhoComponent implements OnInit {
       isKhoiTao: [false],
       dviReq: [null],
       loaiHangHoa: [],
-      kieuHang: [""]
+      kieuHang: [""],
+      idDmDonVi: []
     });
   }
 
@@ -457,6 +458,7 @@ export class MangLuoiKhoComponent implements OnInit {
   }
 
   bindingDataDetail(dataNode) {
+    debugger
     if (this.levelNode != 1) {
       this.convertDataChild(dataNode);
       this.loaiHangHoa = {
@@ -505,6 +507,7 @@ export class MangLuoiKhoComponent implements OnInit {
         loaiHangHoa: dataNode.loaiHangHoa,
         kieuHang: dataNode.kieuHang,
         diaChi: dataNode.diaChi ?? '',
+        idDmDonVi: dataNode.idDmDonVi ?? '',
       });
       if (this.levelNode == 7) {
         this.detailDonVi.patchValue({
@@ -652,7 +655,7 @@ export class MangLuoiKhoComponent implements OnInit {
   }
 
   update() {
-    console.log(this.detailDonVi,'this.detailDonVithis.detailDonVithis.detailDonVi')
+    console.log(this.detailDonVi, 'this.detailDonVithis.detailDonVithis.detailDonVi')
     this.helperService.markFormGroupTouched(this.detailDonVi);
     if (this.detailDonVi.invalid) {
       return;
@@ -679,7 +682,7 @@ export class MangLuoiKhoComponent implements OnInit {
         let dviReq = {
           "diaChi": this.detailDonVi.value.diaChi,
           "fax": this.detailDonVi.value.fax,
-          "id": this.detailDonVi.value.id,
+          "id": this.detailDonVi.value.idDmDonVi,
           "maDvi": this.detailDonVi.value.maDvi,
           "maDviCha": this.detailDonVi.value.maDviCha,
           "maKhqlh": this.detailDonVi.value.maKhqlh,
@@ -691,8 +694,8 @@ export class MangLuoiKhoComponent implements OnInit {
           "sdt": this.detailDonVi.value.sdt,
           "tenDvi": this.levelNode == 4 ? this.detailDonVi.value.tenDiemkho : this.levelNode == 5 ? this.detailDonVi.value.tenNhakho : this.levelNode == 6 ? this.detailDonVi.value.tenNgankho : this.detailDonVi.value.tenNganlo,
           "tenVietTat": this.detailDonVi.value.tenVietTat,
-          "trangThai": this.detailDonVi.value.trangThai,
-          "type": this.detailDonVi.value.type
+          // "trangThai": this.detailDonVi.value.trangThai,
+          "type": this.levelNode < 4 ? 'DV' : 'MLK'
         };
         body.trangThai = this.detailDonVi.get("trangThai").value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
         body.dviReq = dviReq;
@@ -793,7 +796,7 @@ export class MangLuoiKhoComponent implements OnInit {
     let dviReq = {
       "diaChi": this.detailDonVi.value.diaChi,
       "fax": this.detailDonVi.value.fax,
-      "id": this.detailDonVi.value.id,
+      "id": this.detailDonVi.value.idDmDonVi,
       "maDvi": this.detailDonVi.value.maDvi,
       "maDviCha": this.detailDonVi.value.maDviCha,
       "maKhqlh": this.detailDonVi.value.maKhqlh,
@@ -805,8 +808,8 @@ export class MangLuoiKhoComponent implements OnInit {
       "sdt": this.detailDonVi.value.sdt,
       "tenDvi": this.levelNode == 4 ? this.detailDonVi.value.tenDiemkho : this.levelNode == 5 ? this.detailDonVi.value.tenNhakho : this.levelNode == 6 ? this.detailDonVi.value.tenNgankho : this.detailDonVi.value.tenNganlo,
       "tenVietTat": this.detailDonVi.value.tenVietTat,
-      "trangThai": this.detailDonVi.value.trangThai,
-      "type": this.detailDonVi.value.type
+      // "trangThai": this.detailDonVi.value.trangThai,
+      "type": this.levelNode < 4 ? 'DV' : 'MLK'
     };
     this.detailDonVi.value.dviReq = dviReq;
     const modalQD = this.modals.create({

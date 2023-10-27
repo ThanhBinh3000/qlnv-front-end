@@ -60,6 +60,7 @@ export class KetChuyenComponent extends Base3Component implements OnInit {
     })
     await this.search();
     this.buildTableView();
+    await this.getData();
   }
 
   async getData() {
@@ -91,7 +92,6 @@ export class KetChuyenComponent extends Base3Component implements OnInit {
   }
 
   save(){
-
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',

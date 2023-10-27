@@ -35,6 +35,7 @@ import {
 import { PhieuXuatKhoService } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service";
 import { BangKeCanCtvtService } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BangKeCanCtvt.service";
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
+import { HelperService } from 'src/app/services/helper.service';
 
 
 @Component({
@@ -46,8 +47,11 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   @Input() loaiVthh: string;
   @Input() idInput: number;
   @Input() isView: boolean;
+  @Input() isViewOnModal: boolean;
+  @Input() loaiXuat: string;
   @Output()
   showListEvent = new EventEmitter<any>();
+  helperService: HelperService
   fileDinhKem: any[] = [];
   userLogin: UserLogin;
   listChiCuc: any[] = [];
@@ -262,7 +266,9 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
       await this.bangKeCanCtvtService.getDetail(idInput)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            this.formData.patchValue(res.data);
+            // this.formData.patchValue(res.data);
+            this.helperService.bidingDataInFormGroupAndIgnore(this.formData, res.data, ['tongTrongLuongBaoBi']);
+            this.formData.controls['tongTrongLuongBaoBi'].setValue(res.data.tongTrongLuongBaoBi, { emitEvent: false })
           }
         })
         .catch((e) => {
@@ -278,7 +284,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         maDvi: this.userInfo.MA_DVI,
         tenDvi: this.userInfo.TEN_DVI,
         maQhns: this.userInfo.DON_VI.maQhns,
-        type: "XUAT_CTVT",
+        type: this.loaiXuat,
         thuKho: this.userInfo.TEN_DAY_DU,
         // loaiVthh: this.loaiVthh,
       })
@@ -638,7 +644,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         let body = {
           // trangThai: STATUS.DA_DUYET_LDCC,
           trangThai: STATUS.DU_THAO,
-          type: "XUAT_CTVT",
+          type: this.loaiXuat,
           loaiVthh: this.loaiVthh,
         }
         let res = await this.phieuXuatKhoService.search(body)
@@ -679,7 +685,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
-        console.log(JSON.stringify(data))
         this.formData.patchValue({
           idPhieuXuatKho: data.id,
           soPhieuXuatKho: data.soPhieuXuatKho,
@@ -728,7 +733,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     this.formData.patchValue({
       tongTrongLuongHang: tongTrongLuongHang,
     });
-
   }
 
   convertTienTobangChu(tien: number) {

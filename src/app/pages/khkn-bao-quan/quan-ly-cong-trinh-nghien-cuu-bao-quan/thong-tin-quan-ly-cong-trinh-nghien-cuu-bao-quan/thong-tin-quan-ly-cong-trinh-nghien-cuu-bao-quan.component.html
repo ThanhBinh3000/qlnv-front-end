@@ -2,8 +2,7 @@
   <div class='header header-green-background'>
     <div class='header-text'>
       <div class='title-chi-tieu'>
-        <span [ngClass]="formData.value.trangThai == '03' ? 'status-xanh' : 'status-do'">
-          {{ formData.value.tenTrangThai }}
+        <span>
         </span>
         <span>Công trình nghiên cứu</span>
       </div>
@@ -270,14 +269,6 @@
         </form>
       </nz-collapse-panel>
     </nz-collapse>
-    <!--    <div class='header header-green-background mg-t-16'>-->
-    <!--      <div class='header-text'>-->
-    <!--        <div class='title-chi-tieu'>-->
-    <!--          <span></span>-->
-    <!--          <span>Tiến độ thực hiện</span>-->
-    <!--        </div>-->
-    <!--      </div>-->
-    <!--    </div>-->
     <nz-collapse>
       <nz-collapse-panel [nzActive]='true' nzHeader='TIẾN ĐỘ THỰC HIỆN'
                          class='mg-t-10'>
@@ -600,14 +591,12 @@
                   Điều kiện bị xem xét thanh lý
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]='error'>
-                  <nz-select [nzDisabled]='isDisable()' formControlName='dkThanhLy'>
-                    <nz-option *ngFor='let item of listDkThanhLy' [nzValue]='item.ma' [nzLabel]='item.giaTri'>
-                    </nz-option>
+                  <nz-select [nzDisabled]='isDisable()' nzMode='tags' nzPlaceHolder='Chọn điều kiện' nzAllowClear
+                             formControlName='dkThanhLy'>
+                    <nz-option *ngFor='let option of listDkThanhLy' [nzValue]='option.giaTri'
+                               [nzLabel]='option.giaTri'></nz-option>
                   </nz-select>
                 </nz-form-control>
-                <!--                <nz-form-control [nzErrorTip]='error'>-->
-                <!--                  <input nz-input [readonly]='isDisable()' formControlName='dkThanhLy' />-->
-                <!--                </nz-form-control>-->
               </nz-form-item>
             </div>
             <div nz-col nzSpan='24'>
@@ -616,7 +605,7 @@
                   Hồ sơ thanh lý nhiệm vụ KHCN
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]='error'>
-                  <textarea nz-input [readonly]='isDisable()' formControlName='dkThanhLy'></textarea>
+                  <textarea nz-input [readonly]='isDisable()' formControlName='hsThanhLy'></textarea>
                 </nz-form-control>
               </nz-form-item>
             </div>

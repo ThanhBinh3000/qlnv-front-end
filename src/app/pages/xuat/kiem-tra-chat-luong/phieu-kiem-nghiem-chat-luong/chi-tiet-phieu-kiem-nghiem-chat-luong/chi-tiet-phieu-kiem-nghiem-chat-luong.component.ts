@@ -126,7 +126,8 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       ngayLapPhieu: [dayjs().format("YYYY-MM-DD")],
       thuKho: [],
       hinhThucBaoQuan: [new Array()],
-      tenNganLoKho: []
+      tenNganLoKho: [],
+      ketLuanCuoi: []
     });
   }
 

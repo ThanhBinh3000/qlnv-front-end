@@ -149,16 +149,18 @@
               [nzShowPagination]="false">
       <thead>
       <tr>
-        <th class="text-center"></th>
-        <th nzWidth="80px" class="text-left wrap"> Chi cục</th>
+        <th nzWidth="50px" class="text-center wrap"></th>
+        <th nzWidth="150px" class="text-left wrap"> Chi cục</th>
         <th nzWidth="150px" class="text-left wrap"> Điểm kho</th>
-        <th nzWidth="150px" class="text-left wrap"> Lô kho</th>
-        <th nzWidth="90px" class="text-left wrap"> Mã ĐVTS</th>
-        <th nzWidth="80px" class="text-right wrap">{{loaiVthhCache === LOAI_HANG_DTQG.VAT_TU ? 'SL xuất bán TT đề xuất' : 'SL xuất bán TT đề xuất (Kg)'}}</th>
-        <th class="text-left"> ĐVT</th>
-        <th nzWidth="80px" class="text-right wrap">{{loaiVthhCache === LOAI_HANG_DTQG.VAT_TU ? 'Đơn giá được duyệt (đ)' : 'Đơn giá được duyệt (đ/kg)'}}</th>
-        <th nzWidth="80px" class="text-right wrap"> Thành tiền (đ)</th>
-        <th class="text-center" *ngIf="!isView"> Hành động</th>
+        <th nzWidth="300px" class="text-left wrap"> Lô kho</th>
+        <th nzWidth="100px" class="text-center wrap"> Mã ĐVTS</th>
+        <th nzWidth="100px"
+            class="text-right wrap">{{loaiVthhCache === LOAI_HANG_DTQG.VAT_TU ? 'SL xuất bán TT đề xuất' : 'SL xuất bán TT đề xuất (Kg)'}}</th>
+        <th nzWidth="100px" class="text-left wrap"> ĐVT</th>
+        <th nzWidth="100px"
+            class="text-right wrap">{{loaiVthhCache === LOAI_HANG_DTQG.VAT_TU ? 'Đơn giá được duyệt (đ)' : 'Đơn giá được duyệt (đ/kg)'}}</th>
+        <th nzWidth="100px" class="text-right wrap"> Thành tiền (đ)</th>
+        <th nzWidth="70px" class="text-center wrap" *ngIf="!isView"> Hành động</th>
       </tr>
       </thead>
       <tbody>
@@ -166,8 +168,7 @@
         <tr>
           <td [nzExpand]="expandSet.has(idx)" (nzExpandChange)="onExpandChange(idx, $event)"></td>
           <td class="text-left" colspan="4">{{ data.tenDvi }}</td>
-          <td class="text-right"
-              style="color: black; font-weight: bold">{{ data.soLuongChiCuc|number:globals.numberFormat:globals.locale }}</td>
+          <td class="text-right bold">{{ data.soLuongChiCuc|number:globals.numberFormat:globals.locale }}</td>
           <td></td>
           <td></td>
           <td></td>
@@ -175,9 +176,6 @@
             <a (click)="themMoiBangPhanLoTaiSan(data, idx)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <!--            <a (click)="deleteRow(idx)">-->
-            <!--              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
-            <!--            </a>-->
           </td>
         </tr>
         <ng-container *ngIf="expandSet.has(idx)">
@@ -185,14 +183,15 @@
             <td></td>
             <td></td>
             <td class="text-left">{{ children.tenDiemKho}}</td>
-            <td class="text-left">{{ children.tenLoKho == null ? children.tenNganKho : children.tenLoKho }}
-              , {{ children.tenNhaKho }}</td>
-            <td class="text-left">{{ children.maDviTsan}}</td>
+            <td
+              class="text-left">{{(children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") +
+            (children.tenNhaKho ? children.tenNhaKho : "")}}</td>
+            <td class="text-center">{{ children.maDviTsan}}</td>
             <td class="text-right">{{ children.soLuongDeXuat|number:globals.numberFormat:globals.locale }}</td>
             <td class="text-left">{{ children.donViTinh}}</td>
             <td class="text-right">{{ children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
             <td class="text-right">{{ children.thanhTienDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
-            <td *ngIf="!isView"></td>
+            <td class="text-center" *ngIf="!isView"></td>
           </tr>
         </ng-container>
       </ng-container>

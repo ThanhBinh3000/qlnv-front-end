@@ -18,6 +18,7 @@ import {
 import {saveAs} from "file-saver";
 import printJS from "print-js";
 import { cloneDeep } from 'lodash';
+import {DialogPagQdTcdtnnComponent} from "../dialog-pag-qd-tcdtnn/dialog-pag-qd-tcdtnn.component";
 
 @Component({
   selector: 'app-them-moi-qd-gia-tcdtnn-vt',
@@ -45,6 +46,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
   maQd: string;
   dataTable: any[] = [];
   fileDinhKem: any[] = [];
+  canCuPhapLys: any[] = [];
   pdfSrc: any;
   excelSrc: any;
   pdfBlob: any;
@@ -80,7 +82,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
         loaiVthh: [null],
         cloaiVthh: [],
         tchuanCluong: [null],
-        soQdCanDc: [null],
+        soQdDc: [null],
         loaiDeXuat: ['00'],
       }
     );
@@ -115,9 +117,12 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
         trangThai: data.trangThai,
         ghiChu: data.ghiChu,
         soDeXuat: data.soToTrinh,
-        soToTrinh: data.soToTrinh
+        soQdDc: data.soQdDc,
+        soToTrinh: data.soToTrinh,
+        loaiDeXuat : data.loaiDeXuat
       });
       this.fileDinhKem = data.fileDinhKems;
+      this.canCuPhapLys = data.canCuPhapLys;
       this.arrThongTinGia = data.thongTinGiaVt
     }
   }
@@ -183,7 +188,11 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
       if (this.formData.value.loaiGia == 'LG03') {
         this.arrThongTinGia.forEach(item => {
           if (item.vat) {
-            item.giaQdTcdtVat = item.giaQdTcdt + item.giaQdTcdt * item.vat
+            if (this.formData.value.loaiDeXuat == '00') {
+              item.giaQdTcdtVat = item.giaQdTcdt + item.giaQdTcdt * item.vat
+            } else {
+              item.giaQdDcTcdtVat = item.giaQdDcTcdt + item.giaQdDcTcdt * item.vat
+            }
           }
         })
       }
@@ -194,6 +203,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
     body.pagType = this.pagType;
     body.thongTinGiaVt = this.arrThongTinGia;
     body.fileDinhKemReq = this.fileDinhKem;
+    body.canCuPhapLys = this.canCuPhapLys;
     let res;
     if (this.idInput > 0) {
       res = await this.quyetDinhGiaTCDTNNService.update(body);
@@ -238,7 +248,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
     if (!this.isView && this.formData.value.loaiGia != null) {
       let modalQD = this.modal.create({
         nzTitle: 'CHỌN SỐ TỜ TRÌNH HỒ SƠ PHƯƠNG ÁN GIÁ HOẶC SỐ TỜ TRÌNH ĐỀ XUẤT ĐIỀU CHỈNH GIÁ',
-        nzContent: DialogPagQdBtcComponent,
+        nzContent: DialogPagQdTcdtnnComponent,
         nzMaskClosable: false,
         nzClosable: false,
         nzWidth: '1200px',
@@ -257,11 +267,18 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
             listId: thRes && thRes.length > 0 ? thRes.map(item => item.id) : []
           }
           this.formData.patchValue({
-            soToTrinh : thRes && thRes.length > 0 ? thRes.map(item=> item.soDeXuat).toString() : []
+            soToTrinh : thRes && thRes.length > 0 ? thRes.map(item=> item.soDeXuat).toString() : [],
+            soQdDc : thRes && thRes.length > 0 ? thRes.map(item=> item.soDeXuatDc).toString() : [],
+            loaiDeXuat: data.formData.loaiQd,
           })
           this.tongHopData(body);
         }
       });
+    }  else {
+      if (!this.isView) {
+        this.notification.warning(MESSAGE.WARNING, 'Vui lòng chọn loại giá!');
+        return;
+      }
     }
   }
 

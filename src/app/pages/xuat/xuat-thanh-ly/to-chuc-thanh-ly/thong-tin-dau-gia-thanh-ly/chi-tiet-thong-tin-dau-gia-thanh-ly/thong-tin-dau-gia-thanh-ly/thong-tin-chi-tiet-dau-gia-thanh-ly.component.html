@@ -839,12 +839,14 @@
                                 : 'vi_VN'}} </td>
                               <td>
                                 <nz-input-number
+                                  [nzMin]="1"
                                   [nzDisabled]="isDisabled() || isDisable() || formData.value.ketQua == 0"
                                   [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
                                   [(ngModel)]="chiCuc.soLanTraGia"></nz-input-number>
                               </td>
                               <td>
                                 <nz-input-number
+                                  [nzMin]="1"
                                   [nzDisabled]="isDisabled() || isDisable() || formData.value.ketQua == 0"
                                   [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
                                   [(ngModel)]="chiCuc.donGiaCaoNhat"

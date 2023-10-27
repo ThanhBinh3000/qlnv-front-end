@@ -49,7 +49,7 @@ export class KhLuanPhienDoiHangComponent extends Base2Component implements OnIni
     this.formData = this.fb.group(
       {
         nam: [dayjs().get("year"), [Validators.required]],
-        namKh:null,
+        namKh:[, [Validators.required]],
         maCuc: null,
         maChiCuc: null,
         loaiVthh: null,
@@ -122,6 +122,10 @@ export class KhLuanPhienDoiHangComponent extends Base2Component implements OnIni
   async preView() {
     try {
       this.spinner.show();
+      this.helperService.markFormGroupTouched(this.formData);
+      if (this.formData.invalid) {
+        return;
+      }
       if (this.formData.value.thoiGianSx) {
         this.formData.value.thoiGianSxTu = dayjs(this.formData.value.thoiGianSx[0]).format("YYYY-MM-DD");
         this.formData.value.thoiGianSxDen = dayjs(this.formData.value.thoiGianSx[1]).format("YYYY-MM-DD");

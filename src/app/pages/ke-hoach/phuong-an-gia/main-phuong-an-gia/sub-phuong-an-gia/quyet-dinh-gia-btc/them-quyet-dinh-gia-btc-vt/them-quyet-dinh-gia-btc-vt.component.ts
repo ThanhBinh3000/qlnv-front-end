@@ -44,6 +44,7 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
   maQd: string;
   dataTable: any[] = [];
   fileDinhKem: any[] = [];
+  canCuPhapLys: any[] = [];
   pdfSrc: any;
   excelSrc: any;
   pdfBlob: any;
@@ -115,8 +116,10 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
         ghiChu: data.ghiChu,
         soToTrinh: data.soToTrinh,
         soQdDc: data.soQdDc,
+        loaiDeXuat : data.loaiDeXuat
       });
       this.fileDinhKem = data.fileDinhKems;
+      this.canCuPhapLys = data.canCuPhapLys;
     }
   }
 
@@ -180,8 +183,13 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       return;
     }
       this.arrThongTinGia.forEach(item => {
-        item.giaQdBtcVat = item.vat ? item.giaQdBtc * item.vat + item.giaQdBtc : null;
-        item.giaQdDcBtcVat = item.vat && item.giaQdDcBtc ?  item.giaQdDcBtc * item.vat + item.giaQdDcBtc : null;
+        if (item.vat) {
+          if (this.formData.value.loaiDeXuat == '00') {
+            item.giaQdBtcVat = item.giaQdBtc + item.giaQdBtc * item.vat
+          } else {
+            item.giaQdDcBtcVat = item.giaQdDcBtc + item.giaQdDcBtc * item.vat
+          }
+        }
       })
 
     let body = this.formData.value;
@@ -190,6 +198,7 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
     body.pagType = this.pagType;
     body.thongTinGiaVt = this.arrThongTinGia
     body.fileDinhKemReq = this.fileDinhKem;
+    body.canCuPhapLys = this.canCuPhapLys;
       let res;
       if (this.idInput > 0) {
         res = await this.quyetDinhGiaCuaBtcService.update(body);
@@ -279,12 +288,14 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
         },
       });
       modalQD.afterClose.subscribe((data) => {
+        console.log(data,111)
         if (data && data.listDx && data.listDx.length> 0 ) {
             let thRes = data.listDx;
           if (thRes && thRes.length > 0) {
             this.formData.patchValue({
               soToTrinh : thRes && thRes.length > 0 ? thRes.map(item=> item.soDeXuat).toString() : "",
               soQdDc: thRes && thRes.length > 0 ? thRes.map(item=> item.soDeXuatDc).toString() : [],
+              loaiDeXuat: data.formData.loaiQd,
             })
           }
             let body = {

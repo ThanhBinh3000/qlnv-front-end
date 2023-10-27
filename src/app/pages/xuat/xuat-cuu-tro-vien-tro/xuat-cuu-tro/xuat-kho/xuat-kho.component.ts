@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { Globals } from 'src/app/shared/globals';
@@ -9,6 +9,7 @@ import { Globals } from 'src/app/shared/globals';
   styleUrls: ['./xuat-kho.component.scss']
 })
 export class XuatKhoComponent implements OnInit {
+  @Input() loaiXuat: string;
   tabs: any[] = [];
   loaiVthhSelected: string;
   constructor(

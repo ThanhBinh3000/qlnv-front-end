@@ -38,6 +38,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
   dataTable: any[] = [];
   dataTableView: any[] = [];
   fileDinhKem: any[] = [];
+  canCuPhapLys: any[] = [];
   STATUS = STATUS;
   expandSet = new Set<number>();
   pdfSrc: any;
@@ -130,6 +131,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
         soQdDc: data.soQdDc
       });
       this.fileDinhKem = data.fileDinhKems;
+      this.canCuPhapLys = data.canCuPhapLys;
       this.dataTable = data.thongTinGiaLt;
       this.buildTreePagCt();
     }
@@ -214,6 +216,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
     body.pagType = this.pagType;
     body.thongTinGiaLt = this.dataTable
     body.fileDinhKemReq = this.fileDinhKem;
+    body.canCuPhapLys = this.canCuPhapLys;
     let res;
     if (this.idInput > 0) {
       res = await this.quyetDinhGiaCuaBtcService.update(body);
@@ -356,6 +359,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
         if (item.children && item.children.length > 0) {
           let itemClonePr = cloneDeep(item);
           itemClonePr.giaQdBtc = null;
+          itemClonePr.giaQdDcBtc = null;
           itemClonePr.stt = index + 1;
           arr.push(itemClonePr)
           item.children.forEach(child => {

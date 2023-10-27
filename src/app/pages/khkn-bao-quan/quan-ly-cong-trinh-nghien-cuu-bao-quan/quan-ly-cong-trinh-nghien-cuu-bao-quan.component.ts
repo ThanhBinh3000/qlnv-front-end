@@ -147,7 +147,6 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
     let res = await this.danhMucService.danhMucChungGetAll('TRANG_THAI_CTNC');
     if (res.msg == MESSAGE.SUCCESS) {
       this.listTrangThai = res.data;
-      console.log(this.listTrangThai);
     }
   }
 
@@ -192,7 +191,6 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
   async search() {
     this.spinner.show();
     try {
-      console.log(this.searchFilter.thoiGianThucHien, 'this.searchFilter.thoiGianThucHienthis.searchFilter.thoiGianThucHien');
       let body = {
         maDeTai: this.searchFilter.maDeTai,
         tenDeTai: this.searchFilter.tenDeTai,
@@ -363,7 +361,6 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach((item) => {
-        console.log(item.checked, 'hh');
         if (item.checked) {
           dataDelete.push(item.id);
         }
