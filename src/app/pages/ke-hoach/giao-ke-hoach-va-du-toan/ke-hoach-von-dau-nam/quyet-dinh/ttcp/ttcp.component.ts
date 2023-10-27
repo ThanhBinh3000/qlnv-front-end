@@ -413,7 +413,7 @@ export class TtcpComponent implements OnInit {
           }
           return result;
         }, []);
-        this.listBoNganh = cloneDeep(mergedItems);
+        this.listBoNganh = cloneDeep(mergedItems.filter(item => item.tongSo));
         this.namDataSelect = res.data.namQd;
         this.rowSelected = id;
       }
