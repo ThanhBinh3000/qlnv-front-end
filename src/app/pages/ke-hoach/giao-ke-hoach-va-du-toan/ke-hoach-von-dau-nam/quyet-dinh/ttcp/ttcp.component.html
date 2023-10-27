@@ -114,8 +114,8 @@
               </div>
               <div class='content' *ngFor='let data of listBoNganh'>
                 <div class='content-item'>
-                  <div class='first'>{{data.tenBoNganh}}</div>
-                  <div class='second'>{{data.tongTien | number : '1.0-1' : 'vi_VN'}}</div>
+                  <div class='first'>{{data.tenBn}}</div>
+                  <div class='second'>{{data.tongSo | number : '1.0-1' : 'vi_VN'}}</div>
                 </div>
               </div>
               <div class='footer' *ngIf='listBoNganh.length > 0'>
