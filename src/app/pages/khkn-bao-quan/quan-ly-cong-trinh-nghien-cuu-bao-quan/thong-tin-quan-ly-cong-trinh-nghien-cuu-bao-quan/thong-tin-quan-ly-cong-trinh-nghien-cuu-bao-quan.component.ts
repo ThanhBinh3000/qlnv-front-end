@@ -100,13 +100,13 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
       chucVu: [''],
       email: [null],
       sdt: [null],
-      dviPhoiHop: [''],
-      dviChuTri: ['', [Validators.required]],
-      dviThucHien: ['', [Validators.required]],
-      tenDviThucHien: [''],
-      tenDviChuTri: [''],
-      nguonVon: ['', [Validators.required]],
-      soQdPd: [''],
+      dviPhoiHop: [null],
+      dviChuTri: [null, [Validators.required]],
+      dviThucHien: [null, [Validators.required]],
+      tenDviThucHien: [null],
+      tenDviChuTri: [null],
+      nguonVon: [null, [Validators.required]],
+      soQdPd: [null],
       suCanThiet: [null],
       mucTieu: [null],
       phamVi: [null],
@@ -115,14 +115,14 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
       tongChiPhi: [null, [Validators.required]],
       phuongPhap: [null],
       noiDung: [null],
-      ngayNghiemThu: [''],
-      diaDiem: [''],
-      danhGia: [''],
-      tongDiem: [''],
-      xepLoai: [''],
-      dkThanhLy: [''],
-      hsThanhLy: [''],
-      tnCnNvKhcn: [''],
+      ngayNghiemThu: [null],
+      diaDiem: [null],
+      danhGia: [null],
+      tongDiem: [null],
+      xepLoai: [null],
+      dkThanhLy: [null],
+      hsThanhLy: [null],
+      tnCnNvKhcn: [null],
     });
   }
 
@@ -153,6 +153,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
       this.trangThaiSave = data.trangThai;
+      data.dkThanhLy = data.dkThanhLy.split(",");
       this.helperService.bidingDataInFormGroup(this.formData, data);
       this.formData.patchValue({
         ngayKy: data.ngayKyTu && data.ngayKyDen ? [data.ngayKyTu, data.ngayKyDen] : null,
@@ -304,6 +305,9 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
     body.fileTienDoTh = this.fileTienDoTh;
     body.fileNghiemThu = this.fileNghiemThu;
     body.fileThanhLy = this.fileThanhLy;
+    if (body.dkThanhLy && body.dkThanhLy.length > 0) {
+      body.dkThanhLy = body.dkThanhLy.toString();
+    }
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.khCnCongTrinhNghienCuu.update(body);
