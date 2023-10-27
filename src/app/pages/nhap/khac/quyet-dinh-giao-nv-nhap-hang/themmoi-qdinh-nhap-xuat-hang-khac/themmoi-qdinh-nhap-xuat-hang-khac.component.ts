@@ -13,7 +13,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { DATEPICKER_CONFIG, LEVEL_USER } from 'src/app/constants/config';
+import {DATEPICKER_CONFIG, LEVEL_USER, LOAI_HINH_NHAP_XUAT} from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { DetailQuyetDinhNhapXuat, QuyetDinhNhapXuat, ThongTinDiaDiemNhap } from 'src/app/models/QuyetDinhNhapXuat';
@@ -99,6 +99,7 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent extends Base2Component implem
   listNganKho: any[] = [];
   listNganLo: any[] = [];
   listCanCu: any[] = [];
+  loaiHinhNhapXuat = LOAI_HINH_NHAP_XUAT;
 
   constructor(
     httpClient: HttpClient,
@@ -882,4 +883,5 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent extends Base2Component implem
     }
   }
 
+  protected readonly LOAI_HINH_NHAP_XUAT = LOAI_HINH_NHAP_XUAT;
 }
