@@ -117,8 +117,8 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
       nzFooter: null,
       nzComponentParams: {
         dataTable: listQdPdKhlcnt,
-        dataHeader: ["Số quyết định", "Số quyết định điều chỉnh", "Loại hàng DTQG"],
-        dataColumn: ["soQd", "soQdDc", "tenLoaiVthh"]
+        dataHeader: ["Số quyết định", "Số quyết định điều chỉnh", "Loại hàng DTQG", "Chủng loại hàng DTQG"],
+        dataColumn: ["soQd", "soQdDc", "tenLoaiVthh", "tenCloaiVthh"]
       }
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -144,6 +144,7 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
               tgianMthau: chiCuc.tgianMthau,
             })
             this.listOfData = chiCuc.children
+            this.tinhTongMucDtDx()
           }
         })
       }
@@ -285,13 +286,14 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
         tgianBdauTchuc: data.tgianBdauTchuc
       });
       data.qdKhlcntHdr.children.forEach(cuc => {
-        if (cuc.maDvi == this.userInfo.MA_DVI) {
+        if (cuc.maDvi == data.maDvi) {
           this.formData.patchValue({
             tenDuAn: cuc.dxuatKhLcntHdr?.tenDuAn,
             tchuanCluong: cuc.dxuatKhLcntHdr?.tchuanCluong,
             quy: cuc.dxuatKhLcntHdr?.quy,
           });
           this.listOfData = cuc.children
+          this.tinhTongMucDtDx()
         }
       })
       this.listCcPhapLy = data.listCcPhapLy;
@@ -300,5 +302,34 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
 
   async onChangeNamKh() {
     this.initListQuy();
+  }
+
+  tinhTongMucDtDx () {
+    let tongMucDt: number = 0;
+    let tongMucDtDx: number = 0;
+    let tongSlChiTieu: number = 0;
+    let tongSl: number = 0;
+    this.listOfData.forEach((item) => {
+      let thanhTien: number = 0;
+      let thanhTienDx: number = 0;
+      item.children.forEach(i => {
+        tongMucDt = tongMucDt + (i.soLuong * i.donGia *1000);
+        tongMucDtDx = tongMucDtDx + (i.soLuong * i.donGiaTamTinh * 1000);
+        thanhTien = thanhTien + (i.soLuong * i.donGia *1000);
+        thanhTienDx = thanhTienDx + (i.soLuong * i.donGiaTamTinh * 1000);
+        tongSl += i.soLuong
+        tongSlChiTieu += i.soLuongChiTieu
+      })
+      item.thanhTien = thanhTien;
+      item.thanhTienDx = thanhTienDx;
+    });
+    this.formData.patchValue({
+      tongMucDtLamTron: parseFloat((tongMucDt/1000000000).toFixed(2)),
+      tongMucDtDxLamTron: parseFloat((tongMucDtDx/1000000000).toFixed(2)),
+      tongMucDt: tongMucDt,
+      tongMucDtDx: tongMucDtDx,
+      tongSlChiTieu: tongSlChiTieu,
+      soLuong: tongSl,
+    });
   }
 }
