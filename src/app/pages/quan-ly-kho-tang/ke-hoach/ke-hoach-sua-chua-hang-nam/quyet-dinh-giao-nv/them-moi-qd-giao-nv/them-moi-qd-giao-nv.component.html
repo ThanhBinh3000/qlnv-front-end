@@ -1,0 +1,476 @@
+<div class="bg-trang">
+  <div class="header header-green-background">
+    <div class="header-text">
+      <div class="title-chi-tieu">
+      <span
+        [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+        {{ formData.value.tenTrangThai }}
+      </span>
+        <span>Quyết định giao nhiệm vụ BTC</span>
+      </div>
+    </div>
+    <div class="btn-group">
+      <button type="button" class="btn btn-sub ml-2" (click)="goBack()">
+        <i class="fa fa-arrow-left"></i>
+        <span>Quay lại</span>
+      </button>
+      <button
+        *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDBTC_THEM')"
+        type="button"
+        class="btn btn-sub ml-2"
+        (click)="save(true)">
+        <i class="icon htvbdh_tcdt_guiduyet"></i>
+        <span>Ban hành</span>
+      </button>
+      <button type="button" class="btn btn-sub xanh ml-2"
+              *ngIf=" (formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU) && userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDBTC_THEM')"
+              (click)="save(false)">
+        <i class="icon htvbdh_tcdt_save"></i>
+        <span>Lưu</span>
+      </button>
+    </div>
+  </div>
+  <nz-card class="mt16 flex-card p-lr16">
+    <nz-collapse>
+      <nz-collapse-panel [nzHeader]="'THÔNG TIN CHUNG'" [nzActive]="true">
+        <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
+          <div nz-row [nzGutter]="24">
+            <div nz-col nzSpan="3">
+              <nz-form-item class="form-item">
+                <nz-form-label [nzNoColon]="true" nzRequired> Năm kế hoạch
+                </nz-form-label>
+                <nz-form-control [nzErrorTip]='error'>
+                  <nz-select nzAllowClear formControlName="nam">
+                    <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="4">
+              <nz-form-item class="form-item">
+                <nz-form-label [nzNoColon]="true" nzRequired> Số QĐ của BTC
+                </nz-form-label>
+                <nz-form-control [nzErrorTip]='error'>
+                  <nz-input-group nzAddOnAfter="{{symbol}}">
+                    <input nz-input formControlName="soQdGiaoNv" [readonly]="isViewDetail"/>
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="3">
+              <nz-form-item class="form-item">
+                <nz-form-label [nzNoColon]="true" nzRequired> Ngày ký QĐ của BTC</nz-form-label>
+                <nz-form-control [nzErrorTip]='error'>
+                  <nz-date-picker [nzDisabled]="isViewDetail" formControlName="ngayKy"
+                                  nzFormat="dd/MM/yyyy"></nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="3">
+              <nz-form-item class="form-item">
+                <nz-form-label [nzNoColon]="true" nzRequired> Ngày hiệu lực</nz-form-label>
+                <nz-form-control [nzErrorTip]='error'>
+                  <nz-date-picker [nzDisabled]="isViewDetail" formControlName="ngayHluc"
+                                  nzFormat="dd/MM/yyyy"></nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="11">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true" nzRequired>Số tờ trình TCDT gửi BTC
+                </nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonMaTongHop()">
+                    <input [readonly]="true" nz-input formControlName="soTt" readonly="true"/>
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="24">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true" >Trích yếu</nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-input-group>
+                    <input [readonly]="isViewDetail" nz-input formControlName="trichYeu"/>
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="24">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Căn cứ pháp lý
+                </nz-form-label>
+                <div class="list-file">
+                  <file-list [data]="fileCanCu" [isViewDetail]="isViewDetail"></file-list>
+                </div>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="24">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Tài liệu đính kèm
+                </nz-form-label>
+                <div class="list-file">
+                  <file-list [data]="fileDinhKem" [isViewDetail]="isViewDetail"></file-list>
+                </div>
+              </nz-form-item>
+            </div>
+          </div>
+        </form>
+      </nz-collapse-panel>
+    </nz-collapse>
+    <nz-collapse>
+      <nz-collapse-panel [nzHeader]="'DANH MỤC SỬA CHỮA'" [nzActive]="true">
+        <nz-table #basicTable nzBordered class="nowrap pd-10" [nzFrontPagination]="false" [nzShowPagination]="false"
+                  [nzData]="dataTable">
+          <thead>
+          <tr>
+            <th nzWidth="45px">STT</th>
+            <th nzWidth="130px">Tên tài sản/công trình</th>
+            <th nzWidth="130px">Quyết định của cấp có thẩm quyền (nếu có)</th>
+            <th nzWidth="90px">Tiêu chuẩn định mức kinh tế - kỹ thuật sửa chữa</th>
+            <th>Thời gian sửa chữa gần nhất</th>
+            <th nzWidth="80px">Lý do, mục tiêu, khối lượng sửa chữa</th>
+            <th nzWidth="80px">KH vốn TCDT đề xuất</th>
+            <th nzWidth="80px">Dự toán BTC duyệt</th>
+            <th nzWidth="80px">Thời gian thực hiện</th>
+            <th nzWidth="130px">Ghi chú</th>
+          </tr>
+          </thead>
+          <tbody>
+
+          <tr *ngFor="let data of dataTable; let i = index">
+            <td nzWidth="45px">{{i+1}}</td>
+            <td>{{ data.nam }}</td>
+            <td>{{ data.soQd }}</td>
+            <td>{{ data.trichYeu  }}</td>
+            <td>{{ data.ngayKy }}</td>
+            <td>{{ data.ngayHluc }}</td>
+            <td>{{ data.tenTrangThai }}</td>
+          </tr>
+          </tbody>
+        </nz-table>
+      </nz-collapse-panel>
+    </nz-collapse>
+  </nz-card>
+<!--  <nz-collapse>-->
+<!--    <nz-collapse-panel [nzHeader]="'PHƯƠNG ÁN CỦA TỔNG CỤC DTNN'" [nzActive]="true">-->
+<!--      <nz-card class="mg-t-10 flex-card p-lr16">-->
+<!--        <nz-collapse class="pd-15" *ngIf="tablePaTcDuoi && tablePaTcDuoi.length > 0">-->
+<!--          <nz-collapse-panel [nzHeader]="'Dự án/công trình dưới 15 tỷ đồng'" [nzActive]="true">-->
+<!--            <div>-->
+<!--    <span class="text-right">-->
+<!--      <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Đồng</h2>-->
+<!--    </span>-->
+<!--            </div>-->
+<!--            <nz-table nzBordered class="pd-10"-->
+<!--                      [nzFrontPagination]="false" [nzShowPagination]="false"-->
+<!--                      [nzScroll]="tablePaTcDuoi && tablePaTcDuoi.length > 0 ? { x: '2500px' } : null">-->
+<!--              <thead>-->
+<!--              <tr>-->
+<!--                <th class="text-center" nzWidth="45px">STT</th>-->
+<!--                <th class="text-center">Cục DTNN KV</th>-->
+<!--                <th class="text-center">Chi Cục</th>-->
+<!--                <th class="text-center">Khối dự án/công trình</th>-->
+<!--                <th class="text-center">Tên công trình</th>-->
+<!--                <th class="text-center">Địa điểm</th>-->
+<!--                <th class="text-center">Loại công trình</th>-->
+<!--                <th class="text-center">Chi cục</th>-->
+<!--                <th class="text-center">Điểm kho</th>-->
+<!--                <th class="text-center">Thời gian thực hiện</th>-->
+<!--                <th class="text-center">Nguồn vốn</th>-->
+<!--                <th class="text-center">Thời gian sửa chữa <br> gần đây nhất</th>-->
+<!--                <th class="text-center">Tổng mức đầu tư (khái <br> toán/dự toán) (đ)</th>-->
+<!--                <th class="text-center">Giá trị quyết <br> toán được <br> duyệt (đ)</th>-->
+<!--                <th class="text-center">Lũy kế cấp vốn <br> đến thời điểm <br> hiện tại</th>-->
+<!--                <th class="text-center">Kế hoạch vốn <br> năm hiện tại (đ)</th>-->
+<!--                <th class="text-center">Ghi chú</th>-->
+<!--              </tr>-->
+<!--              </thead>-->
+<!--              <tbody>-->
+<!--              <ng-container *ngFor="let data of tablePaTcDuoi , let idx = index">-->
+<!--                <tr>-->
+<!--                  <td [nzExpand]="expandSet.has(data.idVirtual)"-->
+<!--                      (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>-->
+<!--                  <td class="font-weight-bold">{{data.tenCuc}}</td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                </tr>-->
+<!--                <ng-container *ngIf="expandSet.has(data.idVirtual)">-->
+<!--                  <ng-container *ngFor="let item of data.dataChild, let y = index">-->
+<!--                    <tr>-->
+<!--                      <td></td>-->
+<!--                      <td></td>-->
+<!--                      <td [nzExpand]="expandSet.has(item.idVirtual)"-->
+<!--                          (nzExpandChange)="onExpandChange(item.idVirtual, $event)">{{item.tenChiCuc}}</td>-->
+<!--                      <td></td>-->
+<!--                      <td></td>-->
+<!--                      <td></td>-->
+<!--                      <td></td>-->
+<!--                      <td></td>-->
+<!--                      <td></td>-->
+<!--                      <td></td>-->
+<!--                      <td></td>-->
+<!--                      <td></td>-->
+<!--                      <td></td>-->
+<!--                      <td></td>-->
+<!--                      <td></td>-->
+<!--                      <td></td>-->
+<!--                      <td></td>-->
+<!--                    </tr>-->
+<!--                    <ng-container *ngIf="expandSet.has(item.idVirtual)">-->
+<!--                      <ng-container *ngFor="let child of item.dataChild, let y1 = index">-->
+<!--                        <tr>-->
+<!--                          <td></td>-->
+<!--                          <td></td>-->
+<!--                          <td></td>-->
+<!--                          <td [nzExpand]="expandSet.has(child.idVirtual)"-->
+<!--                              (nzExpandChange)="onExpandChange(child.idVirtual, $event)">{{child.tenKhoi}}</td>-->
+<!--                          <td></td>-->
+<!--                          <td></td>-->
+<!--                          <td></td>-->
+<!--                          <td></td>-->
+<!--                          <td></td>-->
+<!--                          <td></td>-->
+<!--                          <td></td>-->
+<!--                          <td></td>-->
+<!--                          <td></td>-->
+<!--                          <td></td>-->
+<!--                          <td></td>-->
+<!--                          <td></td>-->
+<!--                          <td></td>-->
+<!--                        </tr>-->
+<!--                        <ng-container *ngIf="expandSet.has(child.idVirtual)">-->
+<!--                          <ng-container *ngFor="let child1 of child.dataChild, let y1 = index">-->
+<!--                            <tr>-->
+<!--                              <td></td>-->
+<!--                              <td></td>-->
+<!--                              <td></td>-->
+<!--                              <td class="text-right font-weight-bold">{{y1 + 1}}</td>-->
+<!--                              <td>{{child1.tenCongTrinh}}</td>-->
+<!--                              <td>{{child1.diaDiem}}</td>-->
+<!--                              <td>{{child1.tenLoaiCongTrinh}}</td>-->
+<!--                              <td>{{child1.tenChiCuc}}</td>-->
+<!--                              <td>{{child1.tenDiemKho}}</td>-->
+<!--                              <td class="text-center">{{ child1.tgThucHien + ' - ' + child1.tgHoanThanh }}</td>-->
+<!--                              <td>{{ child1.tenNguonVon }}</td>-->
+<!--                              <td>{{ child1.tgSuaChua }}</td>-->
+<!--                              <td class="text-right">{{ child1.tmdt | number : '1.0-1' : 'vi_VN' }}</td>-->
+<!--                              <td class="text-right">{{ child1.giaTriPd | number : '1.0-1' : 'vi_VN' }}</td>-->
+<!--                              <td class="text-right">{{ child1.luyKeVon | number : '1.0-1' : 'vi_VN' }}</td>-->
+<!--                              <td class="text-right">{{ child1.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>-->
+<!--                              <td>{{ child1.ghiChu }}</td>-->
+<!--                            </tr>-->
+<!--                          </ng-container>-->
+<!--                        </ng-container>-->
+<!--                      </ng-container>-->
+<!--                    </ng-container>-->
+<!--                  </ng-container>-->
+<!--                </ng-container>-->
+<!--              </ng-container>-->
+<!--              </tbody>-->
+<!--              <tfoot>-->
+<!--              <tr>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td class="font-weight-bold" style="color: blue">Tổng</td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td class="font-weight-bold text-right"-->
+<!--                    style="color: blue">{{sumSoLuong(null, 'tmdt') | number : '1.0-1' : 'vi_VN'}}</td>-->
+<!--                <td class="font-weight-bold text-right"-->
+<!--                    style="color: blue">{{sumSoLuong(null, 'giaTriPd') | number : '1.0-1' : 'vi_VN'}}</td>-->
+<!--                <td class="font-weight-bold text-right"-->
+<!--                    style="color: blue">{{sumSoLuong(null, 'luyKeVon') | number : '1.0-1' : 'vi_VN'}}</td>-->
+<!--                <td class="font-weight-bold text-right"-->
+<!--                    style="color: blue">{{sumSoLuong(null, 'vonDauTu') | number : '1.0-1' : 'vi_VN'}}</td>-->
+<!--                <td></td>-->
+<!--              </tr>-->
+<!--              </tfoot>-->
+<!--            </nz-table>-->
+<!--          </nz-collapse-panel>-->
+<!--        </nz-collapse>-->
+<!--        <nz-collapse class="pd-15" *ngIf="tablePaTcTren && tablePaTcTren.length > 0 ">-->
+<!--          <nz-collapse-panel [nzHeader]="'Dự án/công trình trên 15 tỷ đồng'" [nzActive]="true">-->
+<!--            <div>-->
+<!--    <span class="text-right">-->
+<!--      <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Đồng</h2>-->
+<!--    </span>-->
+<!--            </div>-->
+<!--            <nz-table nzBordered class="pd-10"-->
+<!--                      [nzFrontPagination]="false" [nzShowPagination]="false"-->
+<!--                      [nzScroll]=" tablePaTcTren && tablePaTcTren.length > 0 ? { x: '2500px' } : null">-->
+<!--              <thead>-->
+<!--              <tr>-->
+<!--                <th class="text-center" nzWidth="45px">STT</th>-->
+<!--                <th class="text-center">Cục DTNN KV</th>-->
+<!--                <th class="text-center">Chi Cục</th>-->
+<!--                <th class="text-center">Khối dự án/công trình</th>-->
+<!--                <th class="text-center">Tên công trình</th>-->
+<!--                <th class="text-center">Địa điểm</th>-->
+<!--                <th class="text-center">Loại công trình</th>-->
+<!--                <th class="text-center">Chi cục</th>-->
+<!--                <th class="text-center">Điểm kho</th>-->
+<!--                <th class="text-center">Thời gian thực hiện</th>-->
+<!--                <th class="text-center">Nguồn vốn</th>-->
+<!--                <th class="text-center">Thời gian sửa chữa <br> gần đây nhất</th>-->
+<!--                <th class="text-center">Tổng mức đầu tư (khái <br> toán/dự toán) (đ)</th>-->
+<!--                <th class="text-center">Giá trị quyết <br> toán được <br> duyệt (đ)</th>-->
+<!--                <th class="text-center">Lũy kế cấp vốn <br> đến thời điểm <br> hiện tại</th>-->
+<!--                <th class="text-center">Kế hoạch vốn <br> năm hiện tại (đ)</th>-->
+<!--                <th class="text-center">Ghi chú</th>-->
+<!--              </tr>-->
+<!--              </thead>-->
+<!--              <tbody>-->
+<!--              <ng-container *ngFor="let data of tablePaTcTren , let idx = index">-->
+<!--                <tr>-->
+<!--                  <td [nzExpand]="expandSet.has(data.idVirtual)"-->
+<!--                      (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>-->
+<!--                  <td class="font-weight-bold">{{data.tenCuc}}</td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                </tr>-->
+<!--                <ng-container *ngIf="expandSet.has(data.idVirtual)">-->
+<!--                  <ng-container *ngFor="let item of data.dataChild, let y = index">-->
+<!--                    <tr>-->
+<!--                      <td></td>-->
+<!--                      <td></td>-->
+<!--                      <td [nzExpand]="expandSet.has(item.idVirtual)"-->
+<!--                          (nzExpandChange)="onExpandChange(item.idVirtual, $event)">{{item.tenChiCuc}}</td>-->
+<!--                      <td></td>-->
+<!--                      <td></td>-->
+<!--                      <td></td>-->
+<!--                      <td></td>-->
+<!--                      <td></td>-->
+<!--                      <td></td>-->
+<!--                      <td></td>-->
+<!--                      <td></td>-->
+<!--                      <td></td>-->
+<!--                      <td></td>-->
+<!--                      <td></td>-->
+<!--                      <td></td>-->
+<!--                      <td></td>-->
+<!--                      <td></td>-->
+<!--                    </tr>-->
+<!--                    <ng-container *ngIf="expandSet.has(item.idVirtual)">-->
+<!--                      <ng-container *ngFor="let child of item.dataChild, let y1 = index">-->
+<!--                        <tr>-->
+<!--                          <td></td>-->
+<!--                          <td></td>-->
+<!--                          <td></td>-->
+<!--                          <td [nzExpand]="expandSet.has(child.idVirtual)"-->
+<!--                              (nzExpandChange)="onExpandChange(child.idVirtual, $event)">{{child.tenKhoi}}</td>-->
+<!--                          <td></td>-->
+<!--                          <td></td>-->
+<!--                          <td></td>-->
+<!--                          <td></td>-->
+<!--                          <td></td>-->
+<!--                          <td></td>-->
+<!--                          <td></td>-->
+<!--                          <td></td>-->
+<!--                          <td></td>-->
+<!--                          <td></td>-->
+<!--                          <td></td>-->
+<!--                          <td></td>-->
+<!--                          <td></td>-->
+<!--                        </tr>-->
+<!--                        <ng-container *ngIf="expandSet.has(child.idVirtual)">-->
+<!--                          <ng-container *ngFor="let child1 of child.dataChild, let y1 = index">-->
+<!--                            <tr>-->
+<!--                              <td></td>-->
+<!--                              <td></td>-->
+<!--                              <td></td>-->
+<!--                              <td class="text-right font-weight-bold">{{y1 + 1}}</td>-->
+<!--                              <td>{{child1.tenCongTrinh}}</td>-->
+<!--                              <td>{{child1.diaDiem}}</td>-->
+<!--                              <td>{{child1.tenLoaiCongTrinh}}</td>-->
+<!--                              <td>{{child1.tenChiCuc}}</td>-->
+<!--                              <td>{{child1.tenDiemKho}}</td>-->
+<!--                              <td class="text-center">{{ child1.tgThucHien + ' - ' + child1.tgHoanThanh }}</td>-->
+<!--                              <td>{{ child1.tenNguonVon }}</td>-->
+<!--                              <td>{{ child1.tgSuaChua }}</td>-->
+<!--                              <td class="text-right">{{ child1.tmdt | number : '1.0-1' : 'vi_VN' }}</td>-->
+<!--                              <td class="text-right">{{ child1.giaTriPd | number : '1.0-1' : 'vi_VN' }}</td>-->
+<!--                              <td class="text-right">{{ child1.luyKeVon | number : '1.0-1' : 'vi_VN' }}</td>-->
+<!--                              <td class="text-right">{{ child1.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>-->
+<!--                              <td>{{ child1.ghiChu }}</td>-->
+<!--                            </tr>-->
+<!--                          </ng-container>-->
+<!--                        </ng-container>-->
+<!--                      </ng-container>-->
+<!--                    </ng-container>-->
+<!--                  </ng-container>-->
+<!--                </ng-container>-->
+<!--              </ng-container>-->
+<!--              </tbody>-->
+<!--              <tfoot>-->
+<!--              <tr>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td class="font-weight-bold" style="color: blue">Tổng</td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--&lt;!&ndash;                <td class="font-weight-bold text-right"&ndash;&gt;-->
+<!--&lt;!&ndash;                    style="color: blue">{{sumSoLuong(null, 'tmdt') | number : '1.0-1' : 'vi_VN'}}</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                <td class="font-weight-bold text-right"&ndash;&gt;-->
+<!--&lt;!&ndash;                    style="color: blue">{{sumSoLuong(null, 'giaTriPd') | number : '1.0-1' : 'vi_VN'}}</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                <td class="font-weight-bold text-right"&ndash;&gt;-->
+<!--&lt;!&ndash;                    style="color: blue">{{sumSoLuong(null, 'luyKeVon') | number : '1.0-1' : 'vi_VN'}}</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                <td class="font-weight-bold text-right"&ndash;&gt;-->
+<!--&lt;!&ndash;                    style="color: blue">{{sumSoLuong(null, 'vonDauTu') | number : '1.0-1' : 'vi_VN'}}</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                <td></td>&ndash;&gt;-->
+<!--              </tr>-->
+<!--              </tfoot>-->
+<!--            </nz-table>-->
+<!--          </nz-collapse-panel>-->
+<!--        </nz-collapse>-->
+<!--      </nz-card>-->
+<!--    </nz-collapse-panel>-->
+<!--  </nz-collapse>-->
+</div>
+
+<ng-template #error let-control>
+  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+  </ng-container>
+</ng-template>

@@ -23,7 +23,7 @@
           <nz-form-label nzRequired nzNoColon="true">Tên công trình</nz-form-label>
           <nz-select [nzDisabled]="type == 'sua'" nzAllowClear [(ngModel)]="item.maCongTrinh"
                      (ngModelChange)="changeDmucDuAn($event)">
-            <nz-option *ngFor="let item of listDmScLon" [nzLabel]="item.tenCongTrinh" [nzValue]="item.maCongTrinh">
+            <nz-option *ngFor="let x of listDmScLon" [nzLabel]="x.tenCongTrinh" [nzValue]="x.maCongTrinh">
             </nz-option>
           </nz-select>
         </nz-form-item>
