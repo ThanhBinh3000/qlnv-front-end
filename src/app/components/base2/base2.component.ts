@@ -37,6 +37,7 @@ export class Base2Component implements OnInit {
   // Const
   listNam: any[] = [];
   fileDinhKem: any[] = []
+  fileCanCu: any[] = []
   canCuPhapLy: any[] = []
   STATUS = STATUS
 
