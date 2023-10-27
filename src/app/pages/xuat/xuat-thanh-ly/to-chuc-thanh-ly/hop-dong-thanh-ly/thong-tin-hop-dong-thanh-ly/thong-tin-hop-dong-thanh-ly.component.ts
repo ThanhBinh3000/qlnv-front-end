@@ -84,9 +84,9 @@ export class ThongTinHopDongThanhLyComponent extends Base3Component implements O
         soHd: ['',[Validators.required]],
         tenHd: ['',[Validators.required]],
         ngayHieuLuc: ['',[Validators.required]],
-        ghiChuNgayHluc: ['',[Validators.required]],
+        ghiChuNgayHluc: ['',],
         loaiHdong: ['',[Validators.required]],
-        ghiChuLoaiHdong: ['',[Validators.required]],
+        ghiChuLoaiHdong: ['',],
         tgianThienHd: ['',[Validators.required]],
         tgianBhanh: ['',[Validators.required]],
         diaChiBenBan: [''],
@@ -144,9 +144,11 @@ export class ThongTinHopDongThanhLyComponent extends Base3Component implements O
   }
 
   initForm() {
+    console.log(this.userInfo);
     this.formData.patchValue({
       maDvi: this.userInfo.MA_DVI ?? null,
       tenDvi: this.userInfo.TEN_DVI ?? null,
+      diaChiBenBan: this.userInfo.DON_VI.diaChi ?? null,
       trangThai: STATUS.DU_THAO,
       tenTrangThai: 'Dự thảo',
     })
