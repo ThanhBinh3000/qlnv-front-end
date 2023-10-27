@@ -307,7 +307,6 @@
     </nz-collapse>
   </nz-card>
 
-
   <ng-template #error let-control>
     <app-template-error #error [control]="control"></app-template-error>
   </ng-template>
@@ -357,7 +356,7 @@
           </tr>
         </tbody>
       </nz-table>
-      <form nzLayout="vertical" nz-form [formGroup]="formData">
+      <!-- <form nzLayout="vertical" nz-form [formGroup]="formData">
         <div nz-col [nzSpan]="24">
           <nz-form-item>
             <nz-form-label class="text-bold">Nhận xét kết luận</nz-form-label>
@@ -365,6 +364,34 @@
               <textarea rows="3" class="search__input" nz-input formControlName="ketQua"></textarea>
             </nz-form-control>
           </nz-form-item>
+        </div>
+      </form> -->
+    </nz-collapse-panel>
+  </nz-collapse>
+  <nz-collapse nzAccordion>
+    <nz-collapse-panel [nzHeader]="'Nhận xét kết luận'" [nzActive]="true">
+      <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
+        <div nz-row [nzGutter]="24" style="margin-top: 16px">
+          <div nz-col nzSpan="22">
+            <nz-form-item>
+              <!-- <nz-form-label [nzNoColon]="true">
+                Nhận xét
+              </nz-form-label> -->
+              <nz-form-control>
+                <textarea rows="3" placeholder="Nhập nội dung" class="search__input" nz-input formControlName="ketLuan"
+                  [disabled]="isView"></textarea>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="2">
+            <nz-form-item>
+              <!-- <nz-form-label [nzNoColon]="true">
+              </nz-form-label> -->
+              <nz-form-control>
+                <label nz-checkbox formControlName="ketLuanCuoi">Đạt</label>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
         </div>
       </form>
     </nz-collapse-panel>

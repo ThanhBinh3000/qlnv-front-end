@@ -46,10 +46,11 @@ export class QuyetDinhGnvComponent extends Base2Component implements OnInit {
     { ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành' }
   ];
   idQdPd: number = 0;
-  openQdPd = false;
+  openQdPd: boolean = false;
   id: number = 0;
-  openQdGnv = false;
-
+  openQdGnv: boolean = false;
+  idQdXc: number = 0;
+  openQdXc: boolean = false;
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
@@ -154,7 +155,7 @@ export class QuyetDinhGnvComponent extends Base2Component implements OnInit {
 
   }
 
-  openQdPdModal(id: any) {
+  openQdPdModal(id: number) {
     this.idQdPd = id;
     this.openQdPd = true;
   }
@@ -163,7 +164,14 @@ export class QuyetDinhGnvComponent extends Base2Component implements OnInit {
     this.idQdPd = null;
     this.openQdPd = false;
   }
-
+  openQdXCModal(id: number) {
+    this.idQdXc = id;
+    this.openQdXc = true;
+  }
+  closeQdXCModal() {
+    this.idQdXc = null;
+    this.openQdXc = false;
+  }
   openQdGnvModal(id: any) {
     this.id = id;
     this.openQdGnv = true;

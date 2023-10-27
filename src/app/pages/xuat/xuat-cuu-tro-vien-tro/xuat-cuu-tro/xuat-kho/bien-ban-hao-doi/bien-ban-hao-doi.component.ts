@@ -30,7 +30,7 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
   loaiVthh: string;
   @Input()
   loaiVthhCache: string;
-
+  @Input() loaiXuat: string
   CHUC_NANG = CHUC_NANG;
   public vldTrangThai: CuuTroVienTroComponent;
 
@@ -175,7 +175,7 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
     await this.spinner.show()
     this.formData.patchValue({
       // loaiVthh: this.loaiVthh,
-      type: "XUAT_CTVT"
+      type: this.loaiXuat
     });
     await super.search(roles);
     this.buildTableView();

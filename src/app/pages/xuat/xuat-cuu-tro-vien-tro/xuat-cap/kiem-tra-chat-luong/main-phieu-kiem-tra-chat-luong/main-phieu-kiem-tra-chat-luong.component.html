@@ -9,7 +9,10 @@
     </ul>
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
-    <app-xc-phieu-kiem-nghiem-chat-luong [loaiVthh]="loaiVthh"></app-xc-phieu-kiem-nghiem-chat-luong>
+    <app-phieu-kiem-nghiem-chat-luong [loaiVthh]="loaiVthh" [loaiXuat]="'XC'"
+        [inputService]="phieuKiemNghiemChatLuongService" [inputServiceGnv]="quyetDinhGiaoNvCuuTroService"
+        [inputServiceBbLayMau]="bienBanLayMauService" [maQuyen]="maQuyenPKNCL">
+    </app-phieu-kiem-nghiem-chat-luong>
 </ng-container>
 <ng-container *ngIf="tabSelected == 1">
     <app-phieu-kiem-tra-chat-luong [loaiVthh]="loaiVthh"></app-phieu-kiem-tra-chat-luong>

@@ -48,7 +48,7 @@ export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit
     this.formData = this.fb.group(
       {
         nam: [dayjs().get("year"), [Validators.required]],
-        namKh: [],
+        namKh: [, [Validators.required]],
         maCuc: [],
         maChiCuc: [],
         loaiVthh: '',
@@ -109,6 +109,10 @@ export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit
   async preView() {
     try {
       this.spinner.show();
+      this.helperService.markFormGroupTouched(this.formData);
+      if (this.formData.invalid) {
+        return;
+      }
       this.setListCondition();
       let body = this.formData.value;
       body.typeFile = "pdf";

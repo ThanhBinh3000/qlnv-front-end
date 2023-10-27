@@ -2,8 +2,7 @@
   <div class='header header-green-background'>
     <div class='header-text'>
       <div class='title-chi-tieu'>
-        <span [ngClass]="formData.value.trangThai == '03' ? 'status-xanh' : 'status-do'">
-          {{ formData.value.tenTrangThai }}
+        <span>
         </span>
         <span>Công trình nghiên cứu</span>
       </div>
@@ -616,7 +615,7 @@
                   Hồ sơ thanh lý nhiệm vụ KHCN
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]='error'>
-                  <textarea nz-input [readonly]='isDisable()' formControlName='dkThanhLy'></textarea>
+                  <textarea nz-input [readonly]='isDisable()' formControlName='hsThanhLy'></textarea>
                 </nz-form-control>
               </nz-form-item>
             </div>

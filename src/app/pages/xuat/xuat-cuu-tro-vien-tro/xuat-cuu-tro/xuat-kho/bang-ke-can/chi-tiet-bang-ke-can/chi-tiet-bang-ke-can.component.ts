@@ -48,6 +48,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   @Input() idInput: number;
   @Input() isView: boolean;
   @Input() isViewOnModal: boolean;
+  @Input() loaiXuat: string;
   @Output()
   showListEvent = new EventEmitter<any>();
   helperService: HelperService
@@ -283,7 +284,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         maDvi: this.userInfo.MA_DVI,
         tenDvi: this.userInfo.TEN_DVI,
         maQhns: this.userInfo.DON_VI.maQhns,
-        type: "XUAT_CTVT",
+        type: this.loaiXuat,
         thuKho: this.userInfo.TEN_DAY_DU,
         // loaiVthh: this.loaiVthh,
       })
@@ -643,7 +644,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         let body = {
           // trangThai: STATUS.DA_DUYET_LDCC,
           trangThai: STATUS.DU_THAO,
-          type: "XUAT_CTVT",
+          type: this.loaiXuat,
           loaiVthh: this.loaiVthh,
         }
         let res = await this.phieuXuatKhoService.search(body)
