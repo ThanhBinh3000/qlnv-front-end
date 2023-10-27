@@ -52,6 +52,7 @@ import { CuuTroVienTroRoutingModule } from "../xuat-cuu-tro/cuu-tro-vien-tro-rou
 import { ChiTietBangKeCanComponent } from "./xuat-kho/bang-ke-can/chi-tiet-bang-ke-can/chi-tiet-bang-ke-can.component";
 import { CuuTroVienTroModule } from "../xuat-cuu-tro/cuu-tro-vien-tro.module";
 import { CuuTroVienTroComponent } from "../xuat-cuu-tro/cuu-tro-vien-tro.component";
+import { XuatModule } from "../../xuat.module";
 
 
 @NgModule({
@@ -126,6 +127,7 @@ import { CuuTroVienTroComponent } from "../xuat-cuu-tro/cuu-tro-vien-tro.compone
     NzPipesModule,
     CuuTroVienTroRoutingModule,
     CuuTroVienTroModule,
+    XuatModule,
   ],
   providers: [CuuTroVienTroComponent]
 })
