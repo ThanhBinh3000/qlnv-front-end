@@ -287,6 +287,7 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
     }
   }
   async openDialogSoQuyetDinhDCSN() {
+    if (this.isView) return
     await this.getDanhsachQuyetDinh();
     const modalQD = this.modal.create({
       nzTitle: 'DANH SÁCH QUYẾT ĐỊNH XUẤT ĐIỀU CHUYỂN SÁP NHẬP',
