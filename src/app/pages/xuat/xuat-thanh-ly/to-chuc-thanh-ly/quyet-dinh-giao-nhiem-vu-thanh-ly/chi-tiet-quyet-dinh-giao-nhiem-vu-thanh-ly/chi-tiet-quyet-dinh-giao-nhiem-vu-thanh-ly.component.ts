@@ -200,7 +200,7 @@ export class ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent extends Base3Component 
         })
         this.pheDuyet();
       } else {
-        this.goBack()
+        this.redirectDefault()
       }
     }
   }

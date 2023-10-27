@@ -88,7 +88,7 @@ export class ThongTinHopDongThanhLyComponent extends Base3Component implements O
         loaiHdong: ['',[Validators.required]],
         ghiChuLoaiHdong: ['',],
         tgianThienHd: ['',[Validators.required]],
-        tgianBhanh: ['',[Validators.required]],
+        tgianBhanh: [''],
         diaChiBenBan: [''],
         mstBenBan: [''],
         daiDienBenBan: [''],
@@ -175,7 +175,9 @@ export class ThongTinHopDongThanhLyComponent extends Base3Component implements O
     this.formData.patchValue({
       soHd: data?.soHd?.split('/')[0],
     });
-    await this.onChangeKqBdg(data.idQdKqTl);
+    if(data.idQdKqTl){
+      await this.onChangeKqBdg(data.idQdKqTl);
+    }
     this.maDviTsan(data.toChucCaNhan);
     this.selectMaDviTsan(data.listMaDviTsan);
   }
@@ -238,6 +240,7 @@ export class ThongTinHopDongThanhLyComponent extends Base3Component implements O
 
   async onChangeKqBdg(id) {
     if (id > 0) {
+      this.spinner.show()
       await this.quyetDinhPheDuyetKetQuaService.getDetail(id)
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
@@ -293,9 +296,9 @@ export class ThongTinHopDongThanhLyComponent extends Base3Component implements O
                   this.listToChucTrungDg.push(body);
                 }
               });
-              console.log(this.listToChucTrungDg)
             }
           }
+          this.spinner.hide()
         })
     }
   }
