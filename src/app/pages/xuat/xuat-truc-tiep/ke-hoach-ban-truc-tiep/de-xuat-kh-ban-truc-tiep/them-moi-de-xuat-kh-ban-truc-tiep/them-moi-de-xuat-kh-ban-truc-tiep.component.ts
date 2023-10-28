@@ -155,7 +155,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     if (!id) return;
     const data = await this.detail(id);
     if (!data) return;
-    const {soDxuat, tgianDkienTu, tgianDkienDen, children, loaiVthh} = data;
+    const {soDxuat, tgianDkienTu, tgianDkienDen, children} = data;
     this.formData.patchValue({
       soDxuat: soDxuat?.split('/')[0],
       thoiGianDuKien: tgianDkienTu && tgianDkienDen ? [tgianDkienTu, tgianDkienDen] : null
@@ -184,14 +184,20 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
 
   async loadDsVthh() {
     const res = await this.danhMucService.loadDanhMucHangHoa().toPromise();
-    if (res.msg !== MESSAGE.SUCCESS || !res.data) return;
+    if (res.msg !== MESSAGE.SUCCESS || !res.data) {
+      return;
+    }
     let tenLoaiVthh = null;
     if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
       const loaiVthhItem = res.data.find(item => item.children?.some(child => child.ma === this.loaiVthh));
-      if (loaiVthhItem) tenLoaiVthh = loaiVthhItem.children.find(child => child.ma === this.loaiVthh)?.ten;
+      if (loaiVthhItem) {
+        tenLoaiVthh = loaiVthhItem.children.find(child => child.ma === this.loaiVthh)?.ten;
+      }
     } else if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.MUOI)) {
       const muoiItem = res.data.find(item => item.ma === this.loaiVthh);
-      if (muoiItem) tenLoaiVthh = muoiItem.ten;
+      if (muoiItem) {
+        tenLoaiVthh = muoiItem.ten;
+      }
     }
     this.formData.patchValue({
       tenLoaiVthh: tenLoaiVthh,
@@ -272,7 +278,9 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     const listCloaiVthh = uniqueVatTu.filter(item => item.maVatTu != null && item.tenVatTu != null)
     if (listCloaiVthh.length > 0) {
       this.listVatTu = listCloaiVthh;
-      this.formData.patchValue({donViTinh: filteredVatTu[0].donViTinh});
+      this.formData.patchValue({
+        donViTinh: filteredVatTu[0].donViTinh
+      });
     } else {
       const res = await this.danhMucService.loadDanhMucHangHoa().toPromise();
       if (res.msg !== MESSAGE.SUCCESS || !res.data) {
@@ -285,7 +293,9 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
           maVatTu: item.ma,
           tenVatTu: item.title
         }));
-        this.formData.patchValue({donViTinh: selectedData?.children[0].maDviTinh});
+        this.formData.patchValue({
+          donViTinh: selectedData?.children[0].maDviTinh
+        });
       }
     }
   }
@@ -364,7 +374,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     }
     if (this.validateGiaGiaToiDa()) {
       const modalGT = this.modal.create({
-        nzTitle: 'THÊM ĐỊA ĐIỂM GIAO NHẬN HÀNG',
+        nzTitle: '',
         nzContent: DialogThemMoiXuatBanTrucTiepComponent,
         nzMaskClosable: false,
         nzClosable: false,
@@ -435,7 +445,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
         donGiaDuocDuyet = donGiaMap.get(item.maDvi);
       }
       item.children.forEach((child) => {
-        child.donGiaDuocDuyet = donGiaDuocDuyet || null;
+        child.donGiaDuocDuyet = donGiaDuocDuyet || 0;
         child.thanhTienDuocDuyet = (donGiaDuocDuyet || 0) * child.soLuongDeXuat;
       })
       item.thanhTienCuc = item.children.map(child => child.thanhTienDeXuat).reduce((prev, cur) => prev + cur, 0);

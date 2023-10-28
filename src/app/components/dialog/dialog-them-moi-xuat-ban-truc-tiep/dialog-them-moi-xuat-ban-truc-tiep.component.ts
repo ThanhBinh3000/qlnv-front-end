@@ -15,6 +15,7 @@ import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {
   DeXuatKhBanTrucTiepService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/de-xuat-kh-ban-truc-tiep.service';
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
   selector: 'app-dialog-them-moi-xuat-ban-truc-tiep',
@@ -46,6 +47,19 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
   listDiemKho: any[] = [];
   listNganKho: any[] = [];
   listLoKho: any[] = []
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "right",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
 
   constructor(
     private _modalRef: NzModalRef,
@@ -451,7 +465,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, "Tổng số lượng đã vượt quá số lượng chỉ tiêu. Xin vui lòng nhập lại");
       return false;
     } else if (donGiaDeXuat < this.giaToiDa) {
-      this.notification.error(MESSAGE.ERROR, `Đơn giá đề xuất phải lớn hơn hoặc bằng giá bán tối thiểu (${this.giaToiDa} đ)`);
+      this.notification.error(MESSAGE.ERROR, `Đơn giá đề xuất phải lớn hơn hoặc bằng giá bán tối thiểu (${this.giaToiDa.toLocaleString()} đ)`);
       return false;
     } else {
       return true;
@@ -504,7 +518,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, "Tổng số lượng đã vượt quá chỉ tiêu. Xin vui lòng nhập lại.");
       return false;
     } else if (this.editCache[index].data.donGiaDeXuat < this.giaToiDa) {
-      this.notification.error(MESSAGE.ERROR, `Đơn giá đề xuất phải lớn hơn hoặc bằng giá bán tối thiểu (${this.giaToiDa} đ)`);
+      this.notification.error(MESSAGE.ERROR, `Đơn giá đề xuất phải lớn hơn hoặc bằng giá bán tối thiểu (${this.giaToiDa.toLocaleString()} đ)`);
       return false;
     } else {
       return true;
