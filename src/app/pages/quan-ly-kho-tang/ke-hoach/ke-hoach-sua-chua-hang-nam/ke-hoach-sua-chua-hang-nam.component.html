@@ -6,6 +6,9 @@
     <li nz-menu-item [nzSelected]="tabSelected == 'qdtcdt'" (click)="selectTab('qdtcdt')" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_TH')">
       Tổng hợp phương án sửa chữa lớn hàng năm
     </li>
+    <li nz-menu-item [nzSelected]="tabSelected == 'qdgiaonv'" (click)="selectTab('qdgiaonv')" *ngIf="userService.isTongCuc()">
+      Quyết định giao nhiệm vụ
+    </li>
     <li nz-menu-item [nzSelected]="tabSelected == 'qdbtc'" (click)="selectTab('qdbtc')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDBTC')" >
       Quyết định PD KH sửa chữa lớn hàng năm của BTC
     </li>
@@ -18,7 +21,10 @@
   <app-de-xuat-kh-sc-lon></app-de-xuat-kh-sc-lon>
 </ng-container>
 <ng-container *ngIf="tabSelected == 'qdtcdt'">
-<app-quyet-dinh-sc-lon-tcdt (tabFocus)="selectData($event)"></app-quyet-dinh-sc-lon-tcdt>
+  <app-tong-hop-sc-lon (tabFocus)="selectData($event)"></app-tong-hop-sc-lon>
+</ng-container>
+<ng-container *ngIf="tabSelected == 'qdgiaonv'">
+  <app-quyet-dinh-giao-nv></app-quyet-dinh-giao-nv>
 </ng-container>
 <ng-container *ngIf="tabSelected == 'qdbtc'">
   <app-quyet-dinh-sc-lon-btc [dataTongHop]="dataObject" (removeData)="removeData()"></app-quyet-dinh-sc-lon-btc>

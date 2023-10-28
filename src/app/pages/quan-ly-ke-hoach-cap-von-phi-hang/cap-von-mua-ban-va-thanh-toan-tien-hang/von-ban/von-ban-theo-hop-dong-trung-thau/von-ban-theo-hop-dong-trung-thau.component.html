@@ -65,6 +65,7 @@
                             <th scope="col">Năm</th>
                             <th scope="col">Đợt</th>
                             <th scope="col">Căn cứ về giá</th>
+                            <th scope="col">Quyết định</th>
                             <th scope="col">Loại mặt hàng</th>
                             <th scope="col">Ngày tạo</th>
                             <th scope="col">Ngày trình duyệt</th>
@@ -86,6 +87,9 @@
                             </td>
                             <td>
                                 {{ Vb.priceBasisName(baoCao.canCuVeGia) }}
+                            </td>
+                            <td>
+                                {{ baoCao.quyetDinh }}
                             </td>
                             <td>
                                 {{ Cvmb.suggestionName(baoCao.loaiDnghi)}}

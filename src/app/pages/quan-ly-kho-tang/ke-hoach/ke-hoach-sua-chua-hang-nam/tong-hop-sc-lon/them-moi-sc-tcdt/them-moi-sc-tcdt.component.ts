@@ -481,7 +481,6 @@ export class ThemMoiScTcdtComponent implements OnInit {
         prev += cur[row];
         return prev;
       }, 0);
-      console.log(sl, 55)
     }
     return sl;
   }

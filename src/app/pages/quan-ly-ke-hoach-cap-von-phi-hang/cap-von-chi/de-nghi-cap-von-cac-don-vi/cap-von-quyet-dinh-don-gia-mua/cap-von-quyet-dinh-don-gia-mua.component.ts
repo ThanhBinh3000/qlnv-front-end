@@ -232,10 +232,10 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
 
     async submitReport() {
         // kiểm tra file cong văn đã được thêm hoặc upload thành công chưa
-        if (!this.baoCao.congVan?.fileUrl) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-            return;
-        }
+        // if (!this.baoCao.congVan?.fileUrl) {
+        //     this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+        //     return;
+        // }
         this.modal.confirm({
             nzClosable: false,
             nzTitle: 'Xác nhận',
@@ -321,18 +321,18 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
             request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.baoCao.maDvi + '/' + this.baoCao.maDnghi));
         }
         //upload file công văn
-        const file: any = this.fileDetail;
-        if (file) {
-            if (file.size > Utils.FILE_SIZE) {
-                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
-                return;
-            } else {
-                request.congVan = {
-                    ...await this.quanLyVonPhiService.upFile(file, this.baoCao.maDvi + '/' + this.baoCao.maDnghi),
-                    fileName: this.baoCao.congVan.fileName,
-                }
-            }
-        }
+        // const file: any = this.fileDetail;
+        // if (file) {
+        //     if (file.size > Utils.FILE_SIZE) {
+        //         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+        //         return;
+        //     } else {
+        //         request.congVan = {
+        //             ...await this.quanLyVonPhiService.upFile(file, this.baoCao.maDvi + '/' + this.baoCao.maDnghi),
+        //             fileName: this.baoCao.congVan.fileName,
+        //         }
+        //     }
+        // }
 
         // nếu chưa có id thì tạo mới báo cáo, ngược lại update
         if (!this.baoCao.id) {

@@ -14,9 +14,10 @@ import {Router} from "@angular/router";
 import {
   KtKhSuaChuaBtcService
 } from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/kh-sc-lon-btc/kt-kh-sua-chua-btc.service";
+import dayjs from "dayjs";
 
 @Component({
-  selector: 'app-quyet-dinh-sc-lon-tcdt',
+  selector: 'app-tong-hop-sc-lon',
   templateUrl: './quyet-dinh-sc-lon-tcdt.component.html',
   styleUrls: ['./quyet-dinh-sc-lon-tcdt.component.scss']
 })
@@ -54,7 +55,7 @@ export class QuyetDinhScLonTcdtComponent extends Base2Component implements OnIni
     this.formData = this.fb.group({
       maDvi: [''],
       capDvi: [''],
-      namKeHoach: [''],
+      namKeHoach: [dayjs().get('year')],
       maTongHop: [''],
       noiDung: [''],
       ngayTongHopTu: [''],
@@ -88,7 +89,8 @@ export class QuyetDinhScLonTcdtComponent extends Base2Component implements OnIni
   async filter() {
     this.formData.patchValue({
       maDvi: this.userInfo.MA_DVI,
-      capDvi: this.userInfo.CAP_DVI
+      capDvi: this.userInfo.CAP_DVI,
+      namKeHoach : dayjs().get('year')
     })
     await this.search();
   }
