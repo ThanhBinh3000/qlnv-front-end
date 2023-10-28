@@ -1,23 +1,23 @@
-import { saveAs } from 'file-saver';
-import { Component, Input, OnInit } from '@angular/core';
+import {saveAs} from 'file-saver';
+import {Component, Input, OnInit} from '@angular/core';
 import dayjs from 'dayjs';
-import { cloneDeep } from 'lodash';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
+import {cloneDeep} from 'lodash';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
 import {
   LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT,
 } from 'src/app/constants/config';
-import { DANH_MUC_LEVEL } from 'src/app/pages/luu-kho/luu-kho.constant';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DeXuatKeHoachBanDauGiaService } from 'src/app/services/deXuatKeHoachBanDauGia.service';
-import { UserService } from 'src/app/services/user.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { isEmpty } from 'lodash';
-import { Globals } from 'src/app/shared/globals';
-import { ThongTriDuyetYCapPhiService } from 'src/app/services/ke-hoach/von-phi/thongTriDuyetYCapPhi.service';
-import { STATUS } from "../../../../constants/status";
+import {DANH_MUC_LEVEL} from 'src/app/pages/luu-kho/luu-kho.constant';
+import {MESSAGE} from 'src/app/constants/message';
+import {UserLogin} from 'src/app/models/userlogin';
+import {DeXuatKeHoachBanDauGiaService} from 'src/app/services/deXuatKeHoachBanDauGia.service';
+import {UserService} from 'src/app/services/user.service';
+import {DonviService} from 'src/app/services/donvi.service';
+import {isEmpty} from 'lodash';
+import {Globals} from 'src/app/shared/globals';
+import {ThongTriDuyetYCapPhiService} from 'src/app/services/ke-hoach/von-phi/thongTriDuyetYCapPhi.service';
+import {STATUS} from "../../../../constants/status";
 
 @Component({
   selector: 'app-thong-tri-duyet-y-du-toan',
@@ -82,10 +82,10 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
 
   isView = false;
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ' },
-    { ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt - LĐ Vụ' },
-    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LĐ Vụ' },
+    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
+    {ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ'},
+    {ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt - LĐ Vụ'},
+    {ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LĐ Vụ'},
   ];
 
   async ngOnInit() {
@@ -147,8 +147,8 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      "tuNgay": this.searchFilter.ngayKyTu ? dayjs(this.searchFilter.ngayKyTu).format('YYYY-MM-DD') : null,
-      "denNgay": this.searchFilter.ngayKyDen ? dayjs(this.searchFilter.ngayKyDen).format('YYYY-MM-DD') : null,
+      "tuNgay": this.searchFilter.ngayKyTu  ? dayjs(this.searchFilter.ngayKyTu).format('YYYY-MM-DD') : null,
+      "denNgay": this.searchFilter.ngayKyDen  ? dayjs(this.searchFilter.ngayKyDen).format('YYYY-MM-DD') : null,
       "nam": this.searchFilter.namKh,
       "soThongTri": this.searchFilter.soThongChi,
       "lyDoChi": this.searchFilter.lyDoChi,
@@ -279,8 +279,8 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "tuNgay": this.searchFilter.ngayKyTu ? dayjs(this.searchFilter.ngayKyTu).format('YYYY-MM-DD') : null,
-          "denNgay": this.searchFilter.ngayKyDen ? dayjs(this.searchFilter.ngayKyDen).format('YYYY-MM-DD') : null,
+          "tuNgay": this.searchFilter.ngayKyTu  ? dayjs(this.searchFilter.ngayKyTu).format('YYYY-MM-DD') : null,
+          "denNgay": this.searchFilter.ngayKyDen  ? dayjs(this.searchFilter.ngayKyDen).format('YYYY-MM-DD') : null,
           "nam": this.searchFilter.namKh,
           "soThongTri": this.searchFilter.soThongChi,
           "lyDoChi": this.searchFilter.lyDoChi,
@@ -401,4 +401,5 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
     }
     return result;
   }
+
 }

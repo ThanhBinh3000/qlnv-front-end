@@ -79,9 +79,10 @@
                 [nzIndeterminate]="indeterminate"></label>
             </th>
             <th width="30px">STT</th>
-            <th>Năm kế hoạch</th>
-            <th>Số công văn/tờ trình</th>
-            <th>Số QĐ PD KHLCNT</th>
+            <th>Năm KH</th>
+            <th>Số công văn/đề xuất</th>
+            <th>Số QĐ PD/ĐC KHLCNT</th>
+            <th>Lần điều chỉnh</th>
             <th>Số QĐ PD KQLCNT</th>
             <th>Ngày QĐ PD KQLCNT</th>
             <th>Tổng số gói thầu</th>
@@ -90,7 +91,7 @@
             <th>Thời gian thực hiện dự án</th>
             <th>Phương thức LCNT</th>
             <th *ngIf="loaiVthh.startsWith('02')">Loại hàng DTQG</th>
-            <th *ngIf="!loaiVthh.startsWith('02')">Chủng loại hàng DTQG</th>
+            <th *ngIf="!loaiVthh.startsWith('02')">Chủng loại hàng</th>
             <th>Trạng thái</th>
             <th width="90px">Hành động</th>
           </tr>
@@ -115,6 +116,12 @@
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
                   (input)="filterInTable('soQd',filterTable.soQd)" size="small" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.lanDieuChinh"
+                       (input)="filterInTable('lanDieuChinh',filterTable.lanDieuChinh)" size="small" />
               </nz-input-group>
             </th>
             <th>
@@ -203,12 +210,10 @@
                 {{ data.soDxuat ? data.soDxuat : data.soTrHdr }}
               </a>
             </td>
-            <td>
-              <a style="color: blue; font-weight: bold;"
-                (click)="openQdKqKhlcntModal(data.hhQdKhlcntHdr ? data.hhQdKhlcntHdr.id : data.id)">
-                {{ data.hhQdKhlcntHdr ? data.hhQdKhlcntHdr.soQd : data.soQd }}
-              </a>
-            </td>
+            <td *ngIf="loaiVthh.startsWith('02')"><a style="color: blue">{{ data.dieuChinh ? data.soQdDc :data.soQd}}</a></td>
+            <td *ngIf="loaiVthh.startsWith('02')">{{ data.dchinhDxKhLcntHdr?.lanDieuChinh}}</td>
+            <td *ngIf="!loaiVthh.startsWith('02')"><a style="color: blue">{{ data.soQd }}</a></td>
+            <td *ngIf="!loaiVthh.startsWith('02')">{{ data.lanDieuChinh }}</td>
             <td>
               <a style="color: blue; font-weight: bold;"
                 (click)="data.hhQdPduyetKqlcntHdr ? openQdPdKqKhlcntModal(data.hhQdPduyetKqlcntHdr.id) : openQdPdKqKhlcntModal(null, data.soQdPdKqLcnt)">
@@ -223,10 +228,8 @@
               | date: 'dd/MM/YYYY' }}</td>
             <td *ngIf="loaiVthh.startsWith('02')">{{ data.tgianThien }}</td>
             <td>{{ data.dxuatKhLcntHdr?.tenPthucLcnt}}</td>
-            <td *ngIf="loaiVthh.startsWith('02')">{{ data.hhQdKhlcntHdr?.tenLoaiVthh ? data.hhQdKhlcntHdr?.tenLoaiVthh :
-              data.tenLoaiVthh }}</td>
-            <td *ngIf="!loaiVthh.startsWith('02')">{{ data.hhQdKhlcntHdr?.tenCloaiVthh ?
-              data.hhQdKhlcntHdr?.tenCloaiVthh : data.tenCloaiVthh}}</td>
+            <td *ngIf="loaiVthh.startsWith('02')">{{ data.hhQdKhlcntHdr?.tenLoaiVthh ? data.hhQdKhlcntHdr?.tenLoaiVthh : data.tenLoaiVthh }}</td>
+            <td *ngIf="!loaiVthh.startsWith('02')">{{ data.hhQdKhlcntHdr?.tenCloaiVthh ? data.hhQdKhlcntHdr?.tenCloaiVthh : data.tenCloaiVthh}}</td>
             <td>{{ loaiVthh.startsWith('02') ? data.tenTrangThaiDt : data.tenTrangThai }}</td>
             <td class="text-left">
               <!--              <a *ngIf="loaiVthh.startsWith('02') ? ( (data.trangThaiDt == STATUS.HOAN_THANH_CAP_NHAT || data.trangThaiDt == STATUS.CHUA_CAP_NHAT || data.trangThaiDt == STATUS.DANG_CAP_NHAT) && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_XEM')) : ( data.trangThai == STATUS.HOAN_THANH_CAP_NHAT || data.trangThai == STATUS.CHUA_CAP_NHAT || data.trangThai == STATUS.DANG_CAP_NHAT ) && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_XEM')"-->
@@ -242,7 +245,7 @@
                 <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
               <a *ngIf="loaiVthh.startsWith('02') ? (data.trangThaiDt == STATUS.CHUA_CAP_NHAT || data.trangThaiDt == STATUS.DANG_CAP_NHAT) && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_TTDT_SUA') : ( (data.trangThai == STATUS.CHUA_CAP_NHAT || data.trangThai == STATUS.DANG_CAP_NHAT) && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_SUA'))"
-                (click)="redirectToChiTiet(data, !loaiVthh.startsWith('02') ? 'NHDTQG_PTDT_TCKHLCNT_LT_TTDT_SUA' : 'NHDTQG_PTDT_TCKHLCNT_VT_TTDT_SUA')">
+                 (click)="redirectToChiTiet(data, !loaiVthh.startsWith('02') ? 'NHDTQG_PTDT_TCKHLCNT_LT_TTDT_SUA' : 'NHDTQG_PTDT_TCKHLCNT_VT_TTDT_SUA')">
                 <i class="icon htvbdh_soanthao"></i>
               </a>
             </td>
@@ -275,8 +278,9 @@
   </app-themmoi-thongtin-dauthau>
 </ng-container>
 <ng-container *ngIf="isDetailVt">
-  <app-themmoi-thongtin-dauthau-vt [isView]="isView" [idInput]="selectedId" [loaiVthh]="loaiVthh"
-    (showListEvent)="showList()">
+  <app-themmoi-thongtin-dauthau-vt
+    [isView]="isView" [idInput]="selectedId" [loaiVthh]="loaiVthh"
+                                (showListEvent)="showList()">
   </app-themmoi-thongtin-dauthau-vt>
 </ng-container>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openDxKhlcnt" (nzOnCancel)="closeDxKhlcntModal()">

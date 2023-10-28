@@ -37,6 +37,7 @@ export class Base2Component implements OnInit {
   // Const
   listNam: any[] = [];
   fileDinhKem: any[] = []
+  fileCanCu: any[] = []
   canCuPhapLy: any[] = []
   STATUS = STATUS
 
@@ -246,7 +247,7 @@ export class Base2Component implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == this.STATUS.DU_THAO) {
+          if (item.trangThai == this.STATUS.DU_THAO || item.trangThai == this.STATUS.DANG_NHAP_DU_LIEU ) {
             item.checked = true;
           }
         });
@@ -440,7 +441,7 @@ export class Base2Component implements OnInit {
 
   // Approve
   async approve(id: number, trangThai: string, msg: string, roles?: any, msgSuccess?: string) {
-    if (!this.checkPermission(roles)) {
+    if (roles && !this.checkPermission(roles)) {
       return
     }
     this.modal.confirm({

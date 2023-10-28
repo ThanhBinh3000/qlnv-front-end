@@ -5,7 +5,7 @@
         <nz-form-item>
           <nz-form-control>
             <nz-input-group>
-              <input nz-input [(ngModel)]="item.tenCongViec" />
+              <input nz-input [(ngModel)]="item.tenCongViec"/>
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
@@ -13,7 +13,7 @@
       <div nz-col [nzSpan]="1">
         <nz-form-item>
           <nz-form-control (click)="themMoiCongViec()">
-            <div class="btn-plus">
+            <div class="btn-plus" >
               <i class="icon htvbdh_dau-cong"></i>
             </div>
           </nz-form-control>
@@ -25,7 +25,7 @@
         <nz-form-item>
           <nz-form-control>
             <nz-input-group>
-              <input [readonly]="true" nz-input [(ngModel)]="data.tenCongViec" />
+              <input [readonly]="true" nz-input [(ngModel)]="data.tenCongViec"/>
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
@@ -33,12 +33,12 @@
     </div>
   </nz-card>
   <nz-card nzTitle="TÊN CÔNG TÁC/HẠNG MỤC CÔNG VIỆC TRONG HỢP ĐỒNG">
-    <div nz-row [nzGutter]="24" *ngFor="let item of tableCongViec, let idx = index">
+    <div  nz-row [nzGutter]="24" *ngFor="let item of tableCongViec, let idx = index">
       <div nz-col nzSpan="22" class="mg-t-10">
         <nz-form-item>
           <nz-form-control>
             <nz-input-group [nzSuffix]="suffixIconButton">
-              <input nz-input disabled [(ngModel)]="item.tenCongViec" />
+              <input nz-input disabled [(ngModel)]="item.tenCongViec"/>
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>

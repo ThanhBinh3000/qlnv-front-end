@@ -42,6 +42,17 @@ export class VonPhiHangCuaBoNganhComponent implements OnInit {
     trangThai: '',
     trangThaiPdBtc: '',
   };
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ' },
+    { ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt - LĐ Vụ' },
+    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LĐ Vụ' },
+  ];
+  listTrangThaiBtc: any[] = [
+    { ma: this.STATUS.CHODUYET_BTC, giaTri: 'Chờ Duyệt - BTC' },
+    { ma: this.STATUS.DADUYET_BTC, giaTri: 'Đã duyệt - BTC' },
+    { ma: this.STATUS.TUCHOI_BTC, giaTri: 'Từ chối - BTC' },
+  ];
 
   constructor(
     private readonly fb: FormBuilder,
@@ -172,22 +183,32 @@ export class VonPhiHangCuaBoNganhComponent implements OnInit {
     });
   }
 
-  filterInTable(key: string, value: string) {
+  // Tìm kiếm trong bảng
+  filterInTable(key: string, value: string, date: boolean) {
     if (value && value != '') {
       this.dataTable = [];
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
-        this.dataTableAll.forEach((item) => {
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-            temp.push(item);
-          }
-        });
+        if (date) {
+          this.dataTableAll.forEach((item) => {
+            if (item[key] && item[key].toString().toLowerCase().indexOf(dayjs(value).format('YYYY-MM-DD')) != -1 ) {
+              temp.push(item);
+            }
+          });
+        } else {
+          this.dataTableAll.forEach((item) => {
+            if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+              temp.push(item);
+            }
+          });
+        }
       }
       this.dataTable = [...this.dataTable, ...temp];
     } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
+
 
   async changePageIndex(event) {
     this.spinner.show();
@@ -226,6 +247,7 @@ export class VonPhiHangCuaBoNganhComponent implements OnInit {
         let body = this.formData.value;
         body.ngayNhapTu = body.ngayCapNhat[0];
         body.ngayNhapDen = body.ngayCapNhat[1];
+        body.loai = '00';
         this.vonPhiService
           .export(body)
           .subscribe((blob) =>

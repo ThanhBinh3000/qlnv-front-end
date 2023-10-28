@@ -114,7 +114,7 @@
                 <nz-form-label nzRequired [nzNoColon]="true"> Số QĐ cần điều chỉnh</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialog()">
-                    <input [readonly]="true" nz-input formControlName="soQdPd" readonly/>
+                    <input [readonly]="true" nz-input formControlName="soQdCanDc" readonly/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -295,13 +295,12 @@
               <th class="text-center" [width]="30"> STT</th>
               <th class="text-left"> Cục DTNN KV</th>
               <th class="text-left"> Địa chỉ</th>
-              <th class="text-left"> Số kế hoạch/tờ trình</th>
+              <th class="text-left"> Số công văn/tờ trình</th>
               <th class="text-left"> Ngày ký</th>
               <th class="text-left"> Trích yếu</th>
               <th class="text-left"> Tên dự án</th>
-              <th class="text-right"> Số lượng</th>
+              <th class="text-right">{{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Số lượng' : 'Số lượng (Kg)'}}</th>
               <th class="text-right"> Tổng tiền đã gồm thuế (đồng)</th>
-
             </tr>
             </thead>
             <tbody>
@@ -315,7 +314,7 @@
               <td class="text-left">{{ data.trichYeu }}</td>
               <td class="text-left">{{ data.tenDuAn }}</td>
               <td class="text-right">{{ data.tongSoLuong|number:globals.numberFormat:globals.locale }}</td>
-              <td class="text-right">{{ data.tongTien|number:globals.numberFormat:globals.locale }}</td>
+              <td class="text-right">{{ data.thanhTien|number:globals.numberFormat:globals.locale }}</td>
             </tr>
             </tbody>
           </nz-table>
@@ -324,7 +323,8 @@
               <nz-card class="mg-t-10 flex-card p-lr16 bg-trang">
                 <app-thong-tin-chi-tiet-dieu-chinh [title]="'Nội dung quyết định cần điều chỉnh'"
                                                    [dataInput]="dataInputCache"
-                                                   [isView]="true" [isCache]="true">
+                                                   [isView]="true" [isCache]="true"
+                                                   [loaiVthhCache]="loaiVthh">
                 </app-thong-tin-chi-tiet-dieu-chinh>
               </nz-card>
             </div>
@@ -332,6 +332,7 @@
               <nz-card class="mg-t-10 flex-card p-lr16 bg-trang">
                 <app-thong-tin-chi-tiet-dieu-chinh [title]="'Quyết định điều chỉnh'" [dataInput]="dataInput"
                                                    [isView]="formData.value.trangThai === STATUS.DA_LAP ? false : true"
+                                                   [loaiVthhCache]="loaiVthh"
                                                    (countChanged)="receiveDataFromChild($event)">
                 </app-thong-tin-chi-tiet-dieu-chinh>
               </nz-card>

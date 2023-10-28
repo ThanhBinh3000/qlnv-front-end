@@ -128,14 +128,14 @@
                                     (click)="redirectToChiTiet(false, 0,item.id)">
                                     <i class="fa fa-plus"></i>
                                 </a>
-                                <!--                                <a *ngIf="item.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_THEM')"-->
-                                <!--                                    (click)="redirectToChiTiet(false, item.id)">-->
-                                <!--                                    <i class="fa fa-pencil" title="Sửa"></i>-->
-                                <!--                                </a>-->
-                                <!--                                <a *ngIf="item.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_XOA')"-->
-                                <!--                                    (click)="xoaItem(item)">-->
-                                <!--                                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
-                                <!--                                </a>-->
+<!--                                <a *ngIf="item.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_THEM')"-->
+<!--                                    (click)="redirectToChiTiet(false, item.id)">-->
+<!--                                    <i class="fa fa-pencil" title="Sửa"></i>-->
+<!--                                </a>-->
+<!--                                <a *ngIf="item.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_XOA')"-->
+<!--                                    (click)="xoaItem(item)">-->
+<!--                                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
+<!--                                </a>-->
                             </td>
                         </tr>
                         <ng-container *ngIf="expandSet.has(i)">
@@ -170,7 +170,8 @@
                                         <td></td>
                                         <td>{{dataBb.tenTrangThai}}</td>
                                         <td nzRight>
-                                            <a *ngIf="hienThiXem(dataBb)" (click)="redirectToChiTiet(true, dataBb.id)">
+                                            <a *ngIf="hienThiXem(dataBb)"
+                                                (click)="redirectToChiTiet(true, dataBb.id)">
                                                 <i class="fa fa-eye" title="Xem chi tiết"></i>
                                             </a>
                                             <a *ngIf="(dataBb.trangThai == STATUS.DU_THAO
@@ -180,12 +181,12 @@
                                                 (click)="redirectToChiTiet(false, dataBb.id)">
                                                 <i class="fa fa-pencil" title="Sửa"></i>
                                             </a>
-                                            <a *ngIf="(userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_DUYET_THUKHO') && dataBb.trangThai == STATUS.CHO_DUYET_TK)
+                                          <a *ngIf="(userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_DUYET_THUKHO') && dataBb.trangThai == STATUS.CHO_DUYET_TK)
                                       || (userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_DUYET_KETOAN') && dataBb.trangThai == STATUS.CHO_DUYET_KT)
                                       || (userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_DUYET_LDCCUC') && dataBb.trangThai == STATUS.CHO_DUYET_LDCC) "
-                                                (click)="redirectToChiTiet(true, dataBb.id)">
-                                                <i class="icon htvbdh_tcdt_pheduyet"></i>
-                                            </a>
+                                             (click)="redirectToChiTiet(true, dataBb.id)">
+                                            <i class="icon htvbdh_tcdt_pheduyet"></i>
+                                          </a>
                                             <a *ngIf="dataBb.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_XOA')"
                                                 (click)="xoaItem(dataBb)">
                                                 <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>

@@ -1,10 +1,10 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { Globals } from "../../../../../../../shared/globals";
-import { NgxSpinnerService } from "ngx-spinner";
-import { HelperService } from "../../../../../../../services/helper.service";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { NzNotificationService } from "ng-zorro-antd/notification";
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {Globals} from "../../../../../../../shared/globals";
+import {NgxSpinnerService} from "ngx-spinner";
+import {HelperService} from "../../../../../../../services/helper.service";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {NzNotificationService} from "ng-zorro-antd/notification";
 import {
   DialogThemDiaDiemPhanLoComponent
 } from "../../../../../../../components/dialog/dialog-them-dia-diem-phan-lo/dialog-them-dia-diem-phan-lo.component";
@@ -12,6 +12,7 @@ import {
   QuyetDinhGiaTCDTNNService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
 import dayjs from "dayjs";
+import {LOAI_HANG_DTQG} from "../../../../../../../constants/config";
 
 @Component({
   selector: 'app-thong-tin-dieu-chinh',
@@ -23,7 +24,9 @@ export class ThongTinDieuChinhComponent implements OnChanges {
   @Input() dataInput;
   @Input() isView;
   @Input() isCache;
+  @Input() loaiVthhCache;
   @Output() countChanged: EventEmitter<any> = new EventEmitter();
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   formData: FormGroup
   dataTable: any[] = [];
 
@@ -90,6 +93,7 @@ export class ThongTinDieuChinhComponent implements OnChanges {
         dataEdit: data,
         loaiVthh: this.dataInput.loaiVthh,
         cloaiVthh: this.dataInput.cloaiVthh,
+        typeLoaiVthh: this.loaiVthhCache
       },
     });
     modalGT.afterClose.subscribe(async (updatedData) => {

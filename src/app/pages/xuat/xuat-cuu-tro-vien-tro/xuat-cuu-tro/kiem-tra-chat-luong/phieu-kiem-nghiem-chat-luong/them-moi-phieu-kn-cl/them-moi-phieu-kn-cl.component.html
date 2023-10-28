@@ -1,34 +1,34 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
-  <div class="btn-group">
-    <button type="button" class="btn btn-sub" (click)="goBack()">
-      <i class="fa fa-arrow-left"></i>
-      <span>Quay lại</span>
-    </button>
-    <button type="button" class="btn btn-sub" (click)="xemTruoc(idInput,loaiVthh=='02'?templateNameVt:templateName)">
-      <i class="icon htvbdh_totrinh"></i>
-      <span> In/Xem trước </span>
-    </button>
-    <button class="btn btn-sub xanh-nhat" type="button"
-      *ngIf=" this.userService.isCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDC"
-      (click)="save(true)">
-      <i class="icon htvbdh_tcdt_guiduyet"></i>
-      <span>Lưu và gửi duyệt</span>
-    </button>
-    <button type="button" class="btn btn-sub do" (click)="tuChoi()"
-      *ngIf="  (this.userService.isCuc() && formData.value.trangThai == STATUS.CHO_DUYET_LDC   && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_KTCL_LT_PKNCL_DUYET_LDCUC'))
+    <div class="btn-group">
+        <button type="button" class="btn btn-sub" (click)="goBack()">
+            <i class="fa fa-arrow-left"></i>
+            <span>Quay lại</span>
+        </button>
+      <button type="button" class="btn btn-sub" (click)="xemTruoc(idInput,loaiVthh=='02'?templateNameVt:templateName)">
+        <i class="icon htvbdh_totrinh"></i>
+        <span> In/Xem trước </span>
+      </button>
+        <button class="btn btn-sub xanh-nhat" type="button"
+            *ngIf=" this.userService.isCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDC"
+            (click)="save(true)">
+            <i class="icon htvbdh_tcdt_guiduyet"></i>
+            <span>Lưu và gửi duyệt</span>
+        </button>
+        <button type="button" class="btn btn-sub do" (click)="tuChoi()"
+            *ngIf="  (this.userService.isCuc() && formData.value.trangThai == STATUS.CHO_DUYET_LDC   && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_KTCL_LT_PKNCL_DUYET_LDCUC'))
         ||(this.userService.isCuc() && formData.value.trangThai == STATUS.CHO_DUYET_TP   && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_DUYET_TP'))">
       <i class='icon htvbdh_tcdt_tuchoi do'></i>
       <span>Từ chối</span>
     </button>
     <button class='btn btn-sub xanh-nhat' (click)='pheDuyet()'
-      *ngIf="  (this.userService.isCuc() && formData.value.trangThai == STATUS.CHO_DUYET_LDC   && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_KTCL_LT_PKNCL_DUYET_LDCUC'))
+            *ngIf="  (this.userService.isCuc() && formData.value.trangThai == STATUS.CHO_DUYET_LDC   && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_KTCL_LT_PKNCL_DUYET_LDCUC'))
         ||(this.userService.isCuc() && formData.value.trangThai == STATUS.CHO_DUYET_TP   && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_DUYET_TP'))">
       <i class='icon htvbdh_tcdt_pheduyet '></i>
       <span>Duyệt</span>
     </button>
     <button class='btn btn-sub xanh'
-      *ngIf=' this.userService.isCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDC'
-      (click)='save(false)'>
+            *ngIf=' this.userService.isCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDC'
+            (click)='save(false)'>
       <i class='icon  htvbdh_tcdt_save'></i>
       <span>Lưu</span>
     </button>
@@ -38,16 +38,16 @@
   <div class='header header-green-background'>
     <div class='header-text'>
       <div class='title-chi-tieu'>
-        <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC ? 'status-xanh' : 'status-do'">
-          {{ formData.value.tenTrangThai }}
-        </span>
+                <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC ? 'status-xanh' : 'status-do'">
+                    {{ formData.value.tenTrangThai }}
+                </span>
         <span>Phiếu kiểm nghiệm chất lượng hàng DTQG</span>
       </div>
     </div>
   </div>
 
   <nz-alert class='mg-t-10' *ngIf='formData.value.trangThai == STATUS.TU_CHOI_LDCC ' nzShowIcon nzType='error'
-    nzMessage='Lý do từ chối' nzDescription='{{formData.value.lyDoTuChoi}}'>
+            nzMessage='Lý do từ chối' nzDescription='{{formData.value.lyDoTuChoi}}'>
   </nz-alert>
 
   <nz-card class='mt16 flex-card p-lr16'>
@@ -63,7 +63,8 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]='error'>
                   <nz-select formControlName='nam' nzDisabled>
-                    <nz-option *ngFor='let p of listNam' [nzValue]='p.value' [nzLabel]='p.text'></nz-option>
+                    <nz-option *ngFor='let p of listNam' [nzValue]='p.value'
+                               [nzLabel]='p.text'></nz-option>
                   </nz-select>
                 </nz-form-control>
               </nz-form-item>
@@ -204,7 +205,7 @@
                 <nz-form-control [nzErrorTip]='error'>
                   <nz-select formControlName='hinhThucBq' [nzDisabled]='isView'>
                     <nz-option *ngFor='let item of listHinhThucBaoQuan' [nzValue]='item.maHthuc'
-                      [nzLabel]='item.tenHthuc'>
+                               [nzLabel]='item.tenHthuc'>
                     </nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -225,7 +226,8 @@
                   Ngày kiểm nghiệm mẫu
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]='error'>
-                  <nz-date-picker nzFormat='dd/MM/YYYY' formControlName='ngayKnMau' [nzDisabled]='isView'>
+                  <nz-date-picker nzFormat='dd/MM/YYYY' formControlName='ngayKnMau'
+                                  [nzDisabled]='isView'>
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -251,7 +253,7 @@
             <div class='title-chi-tieu'>
               <span></span>
               <span>Kết quả đánh giá cảm quan : (Về màu sắc, mùi, vị, tạp chất, đánh bóng, sinh vật
-                hại)</span>
+                                hại)</span>
             </div>
           </div>
         </div>
@@ -259,8 +261,8 @@
           <div class='search__body' nz-row [nzGutter]='[18, 6]'>
             <div nz-col nzSpan='24'>
               <nz-form-item>
-                <textarea rows='3' nz-input placeholder='Nhập nội dung' [readonly]='isView'
-                  [ngClass]="isView ? 'disable' : ''" formControlName='ketLuan'></textarea>
+                                <textarea rows='3' nz-input placeholder='Nhập nội dung' [readonly]='isView'
+                                          [ngClass]="isView ? 'disable' : ''" formControlName='ketLuan'></textarea>
               </nz-form-item>
             </div>
           </div>
@@ -274,52 +276,52 @@
           </div>
         </div>
         <nz-card class='mg-t-16 flex-card p-lr16 table-card'>
-          <nz-table class='pd-10' #basicTable class='nowrap' [nzFrontPagination]='false' [nzShowPagination]='false'
-            [nzData]='dataTableChiTieu'>
+          <nz-table class='pd-10' #basicTable class='nowrap' [nzFrontPagination]='false'
+                    [nzShowPagination]='false' [nzData]='dataTableChiTieu'>
             <thead>
-              <tr>
-                <th width='30px'>STT</th>
-                <th>Chỉ tiêu chất lượng</th>
-                <th width='60px'>Chỉ số chất lượng theo QCVN 14:2020/BTC</th>
-                <th width='400px'>Kết quả phân tích</th>
-                <th>Phương pháp</th>
-                <th width='60px' *ngIf='!(isDisabled() || isView)'>
-                  Hành động
-                </th>
-              </tr>
+            <tr>
+              <th width='30px'>STT</th>
+              <th>Chỉ tiêu chất lượng</th>
+              <th width='60px'>Chỉ số chất lượng theo QCVN 14:2020/BTC</th>
+              <th width='400px'>Kết quả phân tích</th>
+              <th>Phương pháp</th>
+              <th width='60px' *ngIf='!(isDisabled() || isView)'>
+                Hành động
+              </th>
+            </tr>
             </thead>
             <tbody>
-              <tr *ngFor='let data of basicTable.data; let i = index'>
-                <ng-container *ngIf='!data.edit; else editTemplate'>
-                  <td class='text-center'>{{i + 1}}</td>
-                  <td>{{data.tenTchuan}}</td>
-                  <td>{{data.chiSoXuat}}</td>
-                  <td>{{data.ketQuaPt}}</td>
-                  <td>{{data.phuongPhap}}</td>
-                  <td *ngIf='!(isDisabled() || isView)'>
-                    <a (click)='editRow(i)'>
-                      <i class='fa fa-pencil' title='Sửa'></i>
-                    </a>
-                  </td>
-                </ng-container>
-                <ng-template #editTemplate>
-                  <td></td>
-                  <td>{{data.tenTchuan}}</td>
-                  <td>{{data.chiSoXuat}}</td>
-                  <td>
-                    <input type='text' nz-input class='w-400' [(ngModel)]='data.ketQuaPt' />
-                  </td>
-                  <td>{{data.phuongPhap}}</td>
-                  <td>
-                    <a (click)='saveEdit(i)' class='save'>
-                      <i class='fa fa-save'></i>
-                    </a>
-                    <a (click)='cancelEdit(i)'>
-                      <i class='fa fa-times do'></i>
-                    </a>
-                  </td>
-                </ng-template>
-              </tr>
+            <tr *ngFor='let data of basicTable.data; let i = index'>
+              <ng-container *ngIf='!data.edit; else editTemplate'>
+                <td class='text-center'>{{i + 1}}</td>
+                <td>{{data.tenTchuan}}</td>
+                <td>{{data.chiSoXuat}}</td>
+                <td>{{data.ketQuaPt}}</td>
+                <td>{{data.phuongPhap}}</td>
+                <td *ngIf='!(isDisabled() || isView)'>
+                  <a (click)='editRow(i)'>
+                    <i class='fa fa-pencil' title='Sửa'></i>
+                  </a>
+                </td>
+              </ng-container>
+              <ng-template #editTemplate>
+                <td></td>
+                <td>{{data.tenTchuan}}</td>
+                <td>{{data.chiSoXuat}}</td>
+                <td>
+                  <input type='text' nz-input class='w-400' [(ngModel)]='data.ketQuaPt' />
+                </td>
+                <td>{{data.phuongPhap}}</td>
+                <td>
+                  <a (click)='saveEdit(i)' class='save'>
+                    <i class='fa fa-save'></i>
+                  </a>
+                  <a (click)='cancelEdit(i)'>
+                    <i class='fa fa-times do'></i>
+                  </a>
+                </td>
+              </ng-template>
+            </tr>
             </tbody>
           </nz-table>
         </nz-card>
@@ -335,8 +337,8 @@
           <div class='search__body' nz-row [nzGutter]='[18, 6]'>
             <div nz-col nzSpan='24'>
               <nz-form-item>
-                <textarea rows='3' nz-input placeholder='Nhập nội dung' [readonly]='isView'
-                  [ngClass]="isView ? 'disable' : ''" formControlName='noiDung'></textarea>
+                                <textarea rows='3' nz-input placeholder='Nhập nội dung' [readonly]='isView'
+                                          [ngClass]="isView ? 'disable' : ''" formControlName='noiDung'></textarea>
               </nz-form-item>
             </div>
           </div>
@@ -349,21 +351,24 @@
   <app-template-error #error [control]='control'></app-template-error>
 </ng-template>
 
-<nz-modal [(nzVisible)]="showDlgPreview" nzWidth="70%" (nzOnCancel)="closeDlg()">
+<nz-modal [(nzVisible)]="showDlgPreview"  nzWidth="70%"
+          (nzOnCancel)="closeDlg()">
   <div *nzModalContent class="modal__content">
     <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
   </div>
   <div *nzModalFooter>
-    <button nz-button (click)="printPreview()" class="modal__button--save">
+    <button nz-button (click)="printPreview()"
+            class="modal__button--save">
       <i class="icon htvbdh_printer"></i>
       In
     </button>
-    <button nz-button (click)="downloadPdf(loaiVthh=='02' ? templateNameVt : templateName)" class="modal__button--save">
+    <button nz-button (click)="downloadPdf(loaiVthh=='02' ? templateNameVt : templateName)"
+            class="modal__button--save">
       <i class="icon htvbdh_file-pdf"></i>
       Xuất .pdf
     </button>
     <button nz-button (click)="downloadWord(loaiVthh=='02' ? templateNameVt : templateName)"
-      class="modal__button--save">
+            class="modal__button--save">
       <i class="icon htvbdh_file-word"></i>
       Xuất .docx
     </button>
@@ -373,3 +378,4 @@
     </button>
   </div>
 </nz-modal>
+

@@ -1,3 +1,17 @@
+.bg-selected {
+  background-color: #d8dcfe !important;
+  color: red !important;
+}
+
+.ghichu_tab {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: flex-start;
+  height: 26px;
+  color: red;
+}
+
 // ::ng-deep {
 //   .chi-tiet {
 //     .menu-lv3 {

@@ -1,17 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Base2Component } from "../../../../../components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { DanhMucService } from "../../../../../services/danhmuc.service";
+import {Component, Input, OnInit} from '@angular/core';
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {DanhMucService} from "../../../../../services/danhmuc.service";
 import {
   QdPdKetQuaBanDauGiaService
 } from "../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service";
-import { MESSAGE } from "../../../../../constants/message";
-import { LOAI_HANG_DTQG } from "../../../../../constants/config";
-import { STATUS } from "../../../../../constants/status";
+import {MESSAGE} from "../../../../../constants/message";
+import {LOAI_HANG_DTQG} from "../../../../../constants/config";
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-danh-sach-quyet-dinh-phe-duyet-ket-qua',
@@ -212,18 +212,18 @@ export class DanhSachQuyetDinhPheDuyetKetQuaComponent extends Base2Component imp
       case 'XEM':
         return (
           this.userService.isAccessPermisson(permissions.XEM) && ((this.userService.isAccessPermisson(permissions.THEM) &&
-            [
-              this.STATUS.CHO_DUYET_TP,
-              this.STATUS.CHO_DUYET_LDC,
-              this.STATUS.CHO_DUYET_LDC,
-              this.STATUS.BAN_HANH,
-            ].includes(data.trangThai)) ||
+              [
+                this.STATUS.CHO_DUYET_TP,
+                this.STATUS.CHO_DUYET_LDC,
+                this.STATUS.CHO_DUYET_LDC,
+                this.STATUS.BAN_HANH,
+              ].includes(data.trangThai)) ||
             (!this.userService.isAccessPermisson(permissions.THEM) && [
-              this.STATUS.DU_THAO,
-              this.STATUS.TU_CHOI_TP,
-              this.STATUS.TU_CHOI_LDC,
-              this.STATUS.BAN_HANH
-            ].includes(data.trangThai) ||
+                this.STATUS.DU_THAO,
+                this.STATUS.TU_CHOI_TP,
+                this.STATUS.TU_CHOI_LDC,
+                this.STATUS.BAN_HANH
+              ].includes(data.trangThai) ||
               (data.trangThai === this.STATUS.CHO_DUYET_TP &&
                 !this.userService.isAccessPermisson(permissions.DUYET_TP)) ||
               (data.trangThai === this.STATUS.CHO_DUYET_LDC &&

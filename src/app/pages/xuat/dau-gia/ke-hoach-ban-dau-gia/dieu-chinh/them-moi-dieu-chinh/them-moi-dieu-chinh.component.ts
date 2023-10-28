@@ -1,11 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Base2Component } from "../../../../../../components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { DanhMucService } from "../../../../../../services/danhmuc.service";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {
   QuyetDinhPdKhBdgService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service";
@@ -13,13 +13,14 @@ import {
   QuyetDinhDchinhKhBdgService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/dieuchinh-kehoach/quyetDinhDchinhKhBdg.service";
 import * as dayjs from "dayjs";
-import { Validators } from "@angular/forms";
-import { STATUS } from "../../../../../../constants/status";
-import { MESSAGE } from "../../../../../../constants/message";
-import { FileDinhKem } from "../../../../../../models/FileDinhKem";
+import {Validators} from "@angular/forms";
+import {STATUS} from "../../../../../../constants/status";
+import {MESSAGE} from "../../../../../../constants/message";
+import {FileDinhKem} from "../../../../../../models/FileDinhKem";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-them-moi-dieu-chinh',
@@ -33,6 +34,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
   @Input() dataTongHop: any;
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   maConVan: any;
   maHauTo: any;
   danhSachQdPdKeHoach: any[] = [];
@@ -65,6 +67,8 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       ngayKyQd: [''],
       soQdCc: [''],
       soQdDc: [''],
+      soQdCanDc: [''],
+      idDcGoc: [],
       ngayKyDc: [''],
       ngayHlucDc: [''],
       noiDungDieuChinh: [''],
@@ -124,7 +128,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       console.error('Không tìm thấy dữ liệu');
       return;
     }
-    const { soCongVan, soQdDc, children } = data;
+    const {soCongVan, soQdDc, children} = data;
     this.formData.patchValue({
       soCongVan: soCongVan?.split('/')[0],
       soQdDc: soQdDc?.split('/')[0],
@@ -147,10 +151,17 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       if (res && res.msg === MESSAGE.SUCCESS) {
         const soQdPdSet = new Set(this.danhSachDieuChinh.map(item => item.soQdPd));
         this.danhSachQdPdKeHoach = res.data.content.filter(item => !soQdPdSet.has(item.soQdPd));
-      } else if (res && res.msg) {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      } else {
-        this.notification.error(MESSAGE.ERROR, 'Unknown error occurred.');
+        this.danhSachQdPdKeHoach.push(...this.danhSachDieuChinh);
+        this.danhSachQdPdKeHoach = this.danhSachQdPdKeHoach.map(item => ({
+          soQd: item.soQdDc || item.soQdPd,
+          ngayKy: item.ngayKyDc || item.ngayKyQd,
+          ...item
+        }));
+        const idGocSet = new Set(this.danhSachDieuChinh.map(item => item.idDcGoc));
+        this.danhSachQdPdKeHoach = this.danhSachQdPdKeHoach.filter(item => !idGocSet.has(item.id))
+        this.danhSachQdPdKeHoach.forEach(item => {
+          item.children = item.children.filter(item => item.idQdPdKqBdg === null && item.soQdPdKqBdg === null)
+        })
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH BÁN ĐẤU GIÁ',
@@ -160,14 +171,14 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
         nzWidth: '900px',
         nzFooter: null,
         nzComponentParams: {
-          dataTable: this.danhSachQdPdKeHoach.filter(item => item.maDvi === this.userInfo.MA_DVI),
-          dataHeader: ['Số quyết định phê duyệt', 'Ngày ký quyết định', 'Loại hàng hóa'],
-          dataColumn: ['soQdPd', 'ngayKyQd', 'tenLoaiVthh']
+          dataTable: this.danhSachQdPdKeHoach.filter(item => item.children.length > 0),
+          dataHeader: ['Số quyết định cần điều chỉnh', 'Ngày ký quyết định cần điều chỉnh', 'Loại hàng hóa'],
+          dataColumn: ['soQd', 'ngayKy', 'tenLoaiVthh']
         },
       });
       modalQD.afterClose.subscribe(async (data) => {
         if (data) {
-          await this.onChange(data.id);
+          await this.onChange(data);
         }
       });
     } catch (e) {
@@ -177,19 +188,22 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     }
   }
 
-  async onChange(id) {
-    if (id <= 0) return;
+  async onChange(datasearch) {
+    if (datasearch.id <= 0) return;
     try {
       await this.spinner.show();
-      const res = await this.quyetDinhPdKhBdgService.getDetail(id)
+      const service = datasearch.soQdDc ? this.quyetDinhDchinhKhBdgService : this.quyetDinhPdKhBdgService;
+      const res = await service.getDetail(datasearch.id);
       if (res.msg !== MESSAGE.SUCCESS || !res.data) {
         return;
       }
       const data = res.data
       this.formData.patchValue({
-        idQdPd: data.id,
+        idQdPd: datasearch.soQdDc ? data.idQdPd : datasearch.id,
+        soQdCanDc: datasearch.soQdDc ? data.soQdDc : data.soQdPd,
         soQdPd: data.soQdPd,
         ngayKyQd: data.ngayKyQd,
+        idDcGoc: datasearch.soQdDc ? data.id : '',
         soQdCc: data.soQdCc,
         loaiHinhNx: data.loaiHinhNx,
         tenLoaiHinhNx: data.tenLoaiHinhNx,
@@ -203,10 +217,14 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
         tchuanCluong: data.tchuanCluong,
         slDviTsan: data.slDviTsan,
       })
-      if (data.children && data.children.length > 0) {
-        this.dataTable = data.children
+      this.dataTable = data.children.filter(item => item.idQdPdKqBdg === null && item.soQdPdKqBdg === null)
+      if (this.dataTable && this.dataTable.length > 0) {
         await this.showFirstRow(event, 0);
       }
+      this.danhSachDieuChinh = this.danhSachDieuChinh.filter(item => item.soQdPd === data.soQdPd);
+      this.formData.patchValue({
+        lanDieuChinh: this.danhSachDieuChinh.length + 1
+      });
     } catch (e) {
       console.error('Error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -223,14 +241,15 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       trangThai: STATUS.BAN_HANH,
     }
     const res = await this.quyetDinhDchinhKhBdgService.search(body)
-    if (res.msg == MESSAGE.SUCCESS) {
-      const data = res.data
-      if (data && data.content && data.content.length > 0) {
-        this.danhSachDieuChinh = data.content
-      }
-    } else {
+    if (res.msg !== MESSAGE.SUCCESS) {
       this.notification.error(MESSAGE.ERROR, res.msg);
+      return;
     }
+    const data = res.data.content;
+    if (!data || data.length === 0) {
+      return;
+    }
+    this.danhSachDieuChinh = data
   }
 
   resetIds(data) {
@@ -307,8 +326,10 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       this.selected = true
     }
     this.dataInput = this.dataTable[index];
-    if (this.formData.value.idQdPd) {
-      const res = await this.quyetDinhPdKhBdgService.getDetail(this.formData.value.idQdPd);
+    const id = this.formData.value.idDcGoc || this.formData.value.idQdPd;
+    if (id) {
+      const service = this.formData.value.idDcGoc ? this.quyetDinhDchinhKhBdgService : this.quyetDinhPdKhBdgService;
+      const res = await service.getDetail(id);
       if (res.msg === MESSAGE.SUCCESS && res.data) {
         const data = res.data;
         this.dataInputCache = data.children.find(item => item.soDxuat === this.dataTable[index].soDxuat) ?? null;

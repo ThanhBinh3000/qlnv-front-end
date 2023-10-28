@@ -157,6 +157,7 @@ export class ThongTinTonghopComponent implements OnInit {
             'ngayTongHop': data.ngayTongHop,
             'maToTrinh': data.maToTrinh,
             'noiDung': data.noiDung,
+            'lyDoTuChoi': data.lyDoTuChoi,
             // nameFilePhuongAn: data.fileDinhKem.fileName,
             khDnCapVonIds: data.ct1s.map(s => s.khDnCapVonId),
           });
@@ -570,7 +571,7 @@ export class ThongTinTonghopComponent implements OnInit {
         if (res.data && res.data.length > 0) {
           let data = res.data;
           this.listThongTinChiTiet = data;
-          this.khDnCapVonIds = data.map(item => item.id).filter(function (el) {
+          this.khDnCapVonIds = data.map(item => item.id).filter(function(el) {
             return el != null;
           });
           this.formData.patchValue({ khDnCapVonIds: this.khDnCapVonIds });

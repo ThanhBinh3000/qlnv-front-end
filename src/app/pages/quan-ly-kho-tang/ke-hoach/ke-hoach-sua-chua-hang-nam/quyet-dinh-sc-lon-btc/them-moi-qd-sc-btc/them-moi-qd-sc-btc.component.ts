@@ -1,26 +1,25 @@
-import { chain, cloneDeep } from "lodash";
-import { Component, Input, OnInit } from "@angular/core";
-import { Validators } from "@angular/forms";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { Base2Component } from "../../../../../../components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../../services/storage.service";
-import { MESSAGE } from "../../../../../../constants/message";
+import {chain, cloneDeep} from "lodash";
+import {Component, Input, OnInit} from "@angular/core";
+import {Validators} from "@angular/forms";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../../services/storage.service";
+import {MESSAGE} from "../../../../../../constants/message";
 import {
   KtKhSuaChuaBtcService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/kh-sc-lon-btc/kt-kh-sua-chua-btc.service";
-import dayjs from "dayjs";
-import { DialogQdScBtcComponent } from "./dialog-qd-sc-btc/dialog-qd-sc-btc.component";
-import { STATUS } from "../../../../../../constants/status";
+import {DialogQdScBtcComponent} from "./dialog-qd-sc-btc/dialog-qd-sc-btc.component";
+import {STATUS} from "../../../../../../constants/status";
 import {
   DeXuatScLonService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/de-xuat-sc-lon.service";
 import {
   TongHopDxScLonService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/tong-hop-dx-sc-lon.service";
-import { v4 as uuidv4 } from "uuid";
+import {v4 as uuidv4} from "uuid";
 import {
   DialogDxScLonComponent
 } from "../../de-xuat-kh-sc-lon/them-moi-sc-lon/dialog-dx-sc-lon/dialog-dx-sc-lon.component";
@@ -35,6 +34,7 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
   @Input() isViewDetail: boolean;
   @Input() typeHangHoa: string;
   @Input() idInput: number;
+  @Input() idTongHop: number;
   maQd: string;
   dsCuc: any[] = [];
   dsChiCuc: any[] = [];
@@ -47,6 +47,7 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
   listDxCuc: any[] = [];
   listTongHop: any[] = [];
   dataTableReq: any[] = [];
+  listDx: any;
 
   constructor(
     private httpClient: HttpClient,
@@ -65,12 +66,13 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       maDvi: [null],
       tenDvi: [null],
       soQuyetDinh: [null, Validators.required],
-      namKeHoach: [dayjs().get("year"), Validators.required],
-      trichYeu: [null],
+      namKeHoach: [null, Validators.required],
+      trichYeu: [null, Validators.required],
       ngayKy: [null, Validators.required],
       ngayTrinhBtc: [null, Validators.required],
       maTh: [null],
-      soTt: [null],
+      noiDung: [null],
+      soTt: [null, Validators.required],
       trangThai: ["78"],
       tenTrangThai: ["Đang nhập dữ liệu"],
       type: ["00"]
@@ -85,8 +87,11 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       if (this.idInput > 0) {
         await this.getDataDetail(this.idInput);
       } else {
-        this.loadDxCuc();
-        this.loadListTh();
+        await this.loadDxCuc();
+        await this.loadListTh();
+        if (this.idTongHop && this.idTongHop > 0) {
+          await this.changSoTh(this.idTongHop);
+        }
       }
     } catch (e) {
       console.log("error: ", e);
@@ -133,7 +138,7 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
     this.spinner.show();
     try {
       let body = {
-        "namKeHoach": this.formData.value.namKeHoach,
+        // "namKeHoach" : this.formData.value.namKeHoach,
         "paggingReq": {
           "limit": 999,
           "page": 0
@@ -182,6 +187,11 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
             this.dataTableDuoi = cloneDeep(this.tablePaTcDuoi);
           }
         }
+        if (this.idTongHop && this.idTongHop > 0) {
+          this.formData.patchValue({
+            soTt: res.data.soQuyetDinh
+          });
+        }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -200,12 +210,12 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
               let rs1 = chain(v)
                 .groupBy("tenKhoi")
                 .map((v1, k1) => {
-                  return {
-                    idVirtual: uuidv4(),
-                    tenKhoi: k1,
-                    dataChild: v1
-                  };
-                }
+                    return {
+                      idVirtual: uuidv4(),
+                      tenKhoi: k1,
+                      dataChild: v1
+                    };
+                  }
                 ).value();
               return {
                 idVirtual: uuidv4(),
@@ -224,7 +234,6 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
   }
 
 
-
   async getDataDetail(id) {
     if (id > 0) {
       let res = await this.qdScBtcService.getDetail(id);
@@ -236,11 +245,17 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       });
       this.fileDinhKem = data.fileDinhKems;
       this.canCuPhapLy = data.canCuPhapLys;
-      this.dataTableReq = data.chiTiets;
-      let listDx = data.chiTietDxs;
-      if (listDx && listDx.length > 0) {
-        this.tablePaTcTren = this.convertListData(listDx?.filter(item => item.tmdt > 15000000000));
-        this.tablePaTcDuoi = this.convertListData(listDx?.filter(item => item.tmdt <= 15000000000));
+      if(this.userService.isTongCuc()){
+        this.dataTableReq = data.chiTiets;
+        this.listDx = data.chiTietDxs;
+      }else {
+        this.dataTableReq = data.chiTiets?.filter(f=>f.maDvi==this.userInfo.MA_DVI);
+        this.listDx = data.chiTietDxs?.filter(f=>f.maDvi==this.userInfo.MA_DVI);
+      }
+
+      if (this.listDx && this.listDx.length > 0) {
+        this.tablePaTcTren = this.convertListData(this.listDx?.filter(item => item.tmdt > 15000000000));
+        this.tablePaTcDuoi = this.convertListData(this.listDx?.filter(item => item.tmdt <= 15000000000));
       }
       this.dataTableTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 15000000000));
       this.dataTableDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 15000000000));
@@ -260,7 +275,6 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
     body.fileDinhKems = this.fileDinhKem;
     body.canCuPhapLys = this.canCuPhapLy;
     body.chiTiets = this.dataTableReq;
-    console.log(this.dataTableReq, 222)
     let data = await this.createUpdate(body);
     if (data) {
       if (isOther) {
@@ -315,25 +329,46 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
 
   sumSoLuong(data: any, row: string, type?: any) {
     let sl = 0;
-    if (!type) {
-      if (data && data.dataChild && data.dataChild.length > 0) {
-        const sum = data.dataChild.reduce((prev, cur) => {
-          prev += cur[row];
-          return prev;
-        }, 0);
-        sl = sum;
+    if (this.formData.value.id) {
+      if(type){
+        if (this.dataTableReq && this.dataTableReq.length > 0) {
+          let arr = this.dataTableReq.filter(item => type == 'tren' ? item.tmdt > 15000000000 : item.tmdt <= 15000000000);
+          let sum = 0;
+          arr.forEach(item => {
+            sum += item[row]
+          });
+          sl = sum;
+        }
+      }else {
+        if (this.listDx && this.listDx.length > 0) {
+          let sum = 0;
+          this.listDx.forEach(item => {
+            if (item.tmdt > 15000000000) {
+              sum += item[row];
+            } else {
+              sum += item[row];
+            }
+          });
+          sl = sum;
+        }
+
       }
     } else {
-      if (this.dataTable && this.dataTable.length > 0) {
+      if (this.dataTableReq && this.dataTableReq.length > 0) {
         let sum = 0;
-        this.dataTable.forEach(item => {
-          sum += this.sumSoLuong(item, row);
+        this.dataTableReq.forEach(item => {
+          if (item.tmdt > 15000000000) {
+            sum += item[row];
+          } else {
+            sum += item[row];
+          }
         });
         sl = sum;
       }
     }
     return sl;
   }
+
 
   themMoiItem(data: any, tmdt: string, type: string, idx: number, list?: any) {
     let modalQD = this.modal.create({
@@ -342,7 +377,7 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: "1200px",
-      nzStyle: { top: "100px" },
+      nzStyle: {top: "100px"},
       nzFooter: null,
       nzComponentParams: {
         dataTable: list && list.dataChild ? list.dataChild : [],
@@ -389,7 +424,7 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
             this.dataTableDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 15000000000));
           }
         } catch (e) {
-          ; console.log("error", e);
+          ;console.log("error", e);
         }
       }
     });

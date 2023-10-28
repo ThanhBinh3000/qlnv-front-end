@@ -1,22 +1,24 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Base2Component } from "../../../../../components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { QlDinhMucPhiService } from "../../../../../services/qlnv-kho/QlDinhMucPhi.service";
-import { FormGroup, Validators } from "@angular/forms";
-import { DinhMucPhiNxBq } from "../../../../../models/DinhMucPhi";
-import { MESSAGE } from "../../../../../constants/message";
-import { DanhMucDinhMucService } from "../../../../../services/danh-muc-dinh-muc.service";
-import { DanhMucService } from "../../../../../services/danhmuc.service";
-import { DonviService } from "../../../../../services/donvi.service";
+import { Base2Component } from '../../../../../components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from '../../../../../services/storage.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { QlDinhMucPhiService } from '../../../../../services/qlnv-kho/QlDinhMucPhi.service';
+import { FormGroup, Validators } from '@angular/forms';
+import { DinhMucPhiNxBq } from '../../../../../models/DinhMucPhi';
+import { MESSAGE } from '../../../../../constants/message';
+import { DanhMucDinhMucService } from '../../../../../services/danh-muc-dinh-muc.service';
+import { DanhMucService } from '../../../../../services/danhmuc.service';
+import { DonviService } from '../../../../../services/donvi.service';
+import { AMOUNT_NO_DECIMAL, AMOUNT_ONE_DECIMAL } from '../../../../../Utility/utils';
+import { STATUS } from '../../../../../constants/status';
 
 @Component({
   selector: 'app-thong-tin-dinh-muc-phi-nhap-xuat-bao-quan',
   templateUrl: './thong-tin-dinh-muc-phi-nhap-xuat-bao-quan.component.html',
-  styleUrls: ['./thong-tin-dinh-muc-phi-nhap-xuat-bao-quan.component.scss']
+  styleUrls: ['./thong-tin-dinh-muc-phi-nhap-xuat-bao-quan.component.scss'],
 })
 export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component implements OnInit {
   formData: FormGroup;
@@ -41,13 +43,14 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     trangThai: '',
     trangThaiPdBtc: '',
   };
-  listDonVi: any[] = []
-  listDonViPreview: any[] = []
+  listDonVi: any[] = [];
+  listDonViPreview: any[] = [];
   listDmDinhMuc: any[] = [];
   listHangHoa: any[] = [];
   listLoaiDinhMuc: any[] = [];
   listLoaiBaoQuan: any[] = [];
-  listTongDinhMucTongCucPhan: any[] = []
+  listTongDinhMucTongCucPhan: any[] = [];
+  amount = AMOUNT_NO_DECIMAL;
 
   constructor(
     httpClient: HttpClient,
@@ -60,13 +63,13 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     private danhMucDinhMucService: DanhMucDinhMucService,
     private danhMucService: DanhMucService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, qlDinhMucPhiService)
-    super.ngOnInit()
+    super(httpClient, storageService, notification, spinner, modal, qlDinhMucPhiService);
+    super.ngOnInit();
     this.formData = this.fb.group({
       id: [''],
       soQd: ['', [Validators.required]],
-      trangThai: ['00'],
-      tenTrangThai: ['Dự thảo'],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
+      tenTrangThai: ['Đang nhập dữ liệu'],
       ngayKy: ['', [Validators.required]],
       ngayHieuLuc: ['', [Validators.required]],
       ngayHetHieuLuc: [''],
@@ -74,7 +77,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       loai: ['00'],
       trichYeu: ['', [Validators.required]],
       listQlDinhMucPhis: [null],
-      fileDinhKems: [null]
+      fileDinhKems: [null],
     });
     this.filterTable = {};
   }
@@ -113,7 +116,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
           this.dataTableDetail = data.listQlDinhMucPhis;
           this.dataTableDetail.forEach(item => {
             item.apDungTaiStr = this.getStrTenDonVi(item.apDungTai);
-          })
+          });
           this.updateEditCache();
         }
       } else {
@@ -129,13 +132,35 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
 
   }
 
+  async saveAndSend(status: string, msg: string, msgSuccess?: string) {
+    try {
+      if (this.dataTableDetail.length <= 0) {
+        this.notification.error(MESSAGE.ERROR, 'Bạn chưa nhập chi tiết định mức phí nhập xuất bảo quản.');
+        return;
+      }
+      this.helperService.markFormGroupTouched(this.formData);
+      if (this.formData.invalid) {
+        return;
+      }
+      if (this.fileDinhKem && this.fileDinhKem.length > 0) {
+        this.formData.value.fileDinhKems = this.fileDinhKem;
+      }
+      this.formData.value.listQlDinhMucPhis = this.dataTableDetail;
+      this.formData.value.capDvi = this.capDvi;
+      this.formData.value.maDvi = this.userInfo.MA_DVI;
+      await super.saveAndSend(this.formData.value, status, msg, msgSuccess);
+    } catch (error) {
+      console.error('Lỗi khi lưu và gửi dữ liệu:', error);
+    }
+  }
+
 
   async save() {
     if (this.dataTableDetail.length <= 0) {
-      this.notification.error(MESSAGE.ERROR, "Bạn chưa nhập chi tiết định mức phí nhập xuất bảo quản.");
+      this.notification.error(MESSAGE.ERROR, 'Bạn chưa nhập chi tiết định mức phí nhập xuất bảo quản.');
       return;
     }
-    this.helperService.markFormGroupTouched(this.formData)
+    this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       return;
     }
@@ -145,9 +170,10 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     this.formData.value.listQlDinhMucPhis = this.dataTableDetail;
     this.formData.value.capDvi = this.capDvi;
     this.formData.value.maDvi = this.userInfo.MA_DVI;
-    let res = await this.createUpdate(this.formData.value)
+    let res = await this.createUpdate(this.formData.value);
     if (res) {
-      this.goBack();
+      this.idInput = res.id;
+      this.formData.patchValue({ id: res.id });
     }
   }
 
@@ -171,7 +197,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       paggingReq: {
         limit: 10000,
         page: 0,
-      }
+      },
     };
     let res;
     if (this.capDvi == 1) {
@@ -293,7 +319,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
 
   async getTongDinhMucTongCucPhan() {
     this.listTongDinhMucTongCucPhan = [];
-    let body = { trangThai: "29", loai: "00", capDvi: 1, maDvi: this.userInfo.MA_DVI };
+    let body = { trangThai: STATUS.BAN_HANH, loai: '00', capDvi: 1, maDvi: this.userInfo.MA_DVI };
     let res = await this.qlDinhMucPhiService.layDanhSachTongDinhMucTongCucPhan(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listTongDinhMucTongCucPhan = res.data;
@@ -307,9 +333,9 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     let msgRequired = '';
     //validator
     if (!this.rowItem.tenDinhMuc) {
-      msgRequired = "Tên định mức không được để trống";
+      msgRequired = 'Tên định mức không được để trống';
     } else if (!this.rowItem.maDinhMuc) {
-      msgRequired = "Mã định mức không được để trống";
+      msgRequired = 'Mã định mức không được để trống';
     }
     if (msgRequired) {
       this.notification.error(MESSAGE.ERROR, msgRequired);
@@ -317,7 +343,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       return;
     }
     if (this.checkExitsData(this.rowItem, this.dataTableDetail)) {
-      this.notification.error(MESSAGE.ERROR, "Dữ liệu trùng lặp, đề nghị nhập lại.");
+      this.notification.error(MESSAGE.ERROR, 'Dữ liệu trùng lặp, đề nghị nhập lại.');
       this.spinner.hide();
       return;
     }
@@ -339,19 +365,19 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
           rs = true;
           return;
         }
-      })
+      });
     }
     return rs;
   }
 
   getStrTenDonVi(strMaDonVi) {
-    let str = "";
+    let str = '';
     if (strMaDonVi) {
-      let arrMaDvi = strMaDonVi.split(",");
+      let arrMaDvi = strMaDonVi.split(',');
       arrMaDvi.forEach((item) => {
         this.listDonViPreview.forEach(donvi => {
           if (item == donvi.maDvi) {
-            str = str + donvi.tenDvi + ",";
+            str = str + donvi.tenDvi + ',';
           }
         });
       });
@@ -389,7 +415,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
   cancelEdit(stt: number): void {
     this.dataEdit[stt] = {
       data: { ...this.dataTableDetail[stt] },
-      edit: false
+      edit: false,
     };
   }
 
@@ -397,9 +423,9 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     let msgRequired = '';
     //validator
     if (!this.dataEdit[idx].data.tenDinhMuc) {
-      msgRequired = "Tên định mức không được để trống";
+      msgRequired = 'Tên định mức không được để trống';
     } else if (!this.dataEdit[idx].data.maDinhMuc) {
-      msgRequired = "Mã định mức không được để trống";
+      msgRequired = 'Mã định mức không được để trống';
     }
     if (msgRequired) {
       this.notification.error(MESSAGE.ERROR, msgRequired);
@@ -434,4 +460,6 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
   maxValueInput(): number {
     return 1000;
   }
+
+  protected readonly AMOUNT_ONE_DECIMAL = AMOUNT_ONE_DECIMAL;
 }

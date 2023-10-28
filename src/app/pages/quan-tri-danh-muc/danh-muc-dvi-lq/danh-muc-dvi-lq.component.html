@@ -59,15 +59,15 @@
     <div class="group-button">
       <h3> DANH SÁCH DANH MỤC ĐƠN VỊ LIÊN QUAN</h3>
       <div class="buttons">
-        <button (click)="delete('multi')" type="button" class="btn btn-sub btn-xoa">
+        <button (click)="delete('multi')" type="button" class="btn btn-sub btn-xoa" *ngIf="userService.isAccessPermisson('QTDM_DM_DVI_LIENQUAN_XOA')">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="exportData()">
+        <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="userService.isAccessPermisson('QTDM_DM_DVI_LIENQUAN_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="themMoi(null)">
+        <button type="button" class="btn btn-main" (click)="themMoi(null)" *ngIf="userService.isAccessPermisson('QTDM_DM_DVI_LIENQUAN_THEM')">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -119,10 +119,10 @@
           <td class="text-center">{{data.ngayTao | date : 'dd/MM/YYYY'}}</td>
           <td class="text-center">{{data.tenTrangThai}}</td>
           <td class="text-left" nzRight>
-            <a (click)="themMoi(data.id)">
+            <a (click)="themMoi(data.id)" *ngIf="userService.isAccessPermisson('QTDM_DM_DVI_LIENQUAN_THEM')">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a (click)="delete('single', data)">
+            <a (click)="delete('single', data)" *ngIf="userService.isAccessPermisson('QTDM_DM_DVI_LIENQUAN_XOA')">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>

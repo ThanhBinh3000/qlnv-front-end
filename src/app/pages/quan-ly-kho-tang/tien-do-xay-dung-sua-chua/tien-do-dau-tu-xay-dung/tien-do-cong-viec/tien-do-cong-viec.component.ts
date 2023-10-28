@@ -1,23 +1,24 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { MESSAGE } from "../../../../../constants/message";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { FormGroup } from '@angular/forms';
-import { HopdongService } from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/hopdong.service";
-import { chain } from "lodash";
-import { v4 as uuidv4 } from "uuid";
-import { AMOUNT_NO_DECIMAL } from "../../../../../Utility/utils";
-import { STATUS } from "../../../../../constants/status";
-import { Base2Component } from "../../../../../components/base2/base2.component";
+import {Component, Input, OnInit} from '@angular/core';
+import {MESSAGE} from "../../../../../constants/message";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {FormGroup} from '@angular/forms';
+import {HopdongService} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/hopdong.service";
+import {chain} from "lodash";
+import {v4 as uuidv4} from "uuid";
+import {AMOUNT_NO_DECIMAL} from "../../../../../Utility/utils";
+import {STATUS} from "../../../../../constants/status";
+import {Base2Component} from "../../../../../components/base2/base2.component";
 import { cloneDeep } from 'lodash';
 import {
   TienDoCongViecService
 } from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/tien-do-cong-viec.service";
-import { ThongTinTienDoCongViecComponent } from "./thong-tin-tien-do-cong-viec/thong-tin-tien-do-cong-viec.component";
+import {ThongTinTienDoCongViecComponent} from "./thong-tin-tien-do-cong-viec/thong-tin-tien-do-cong-viec.component";
 import { saveAs } from 'file-saver';
+import {FileDinhKem} from "../../../../../models/FileDinhKem";
 @Component({
   selector: 'app-tien-do-cong-viec',
   templateUrl: './tien-do-cong-viec.component.html',
@@ -31,18 +32,18 @@ export class TienDoCongViecComponent extends Base2Component implements OnInit {
   dataTable: any[] = [];
   dataTableReq: any[] = [];
   dataKlcv: any[] = [];
-  formData: FormGroup;
+  formData : FormGroup;
   AMOUNT = AMOUNT_NO_DECIMAL;
   STATUS = STATUS;
   rowItemCha: TienDoXayDungCt = new TienDoXayDungCt();
-  itemHopDong: any;
+  itemHopDong : any;
   listTrangThai: any[] = [
-    { ma: 'Quý I', giaTri: 'Quý I' },
-    { ma: 'Quý II', giaTri: 'Quý II' },
-    { ma: 'Quý III', giaTri: 'Quý III' },
-    { ma: 'Quý IV', giaTri: 'Quý IV' },
+    {ma: 'Quý I', giaTri: 'Quý I'},
+    {ma: 'Quý II', giaTri: 'Quý II'},
+    {ma: 'Quý III', giaTri: 'Quý III'},
+    {ma: 'Quý IV', giaTri: 'Quý IV'},
   ];
-
+  fileDinhKems: any[]=[];
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
@@ -56,8 +57,8 @@ export class TienDoCongViecComponent extends Base2Component implements OnInit {
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [null],
-      tenTrangThai: ['Chưa thực hiện'],
-      soQd: [null]
+      tenTrangThai : ['Chưa thực hiện'],
+      soQd : [null]
     })
   }
 
@@ -105,7 +106,7 @@ export class TienDoCongViecComponent extends Base2Component implements OnInit {
     }
   }
 
-  async loadCtCvHopDong(id: number) {
+  async loadCtCvHopDong(id : number) {
     this.spinner.show();
     try {
       let res = await this.hopdongService.getDetail(id);
@@ -127,7 +128,7 @@ export class TienDoCongViecComponent extends Base2Component implements OnInit {
     }
   }
 
-  async getDetailTienDo(id: number) {
+  async getDetailTienDo(id : number) {
     this.spinner.show();
     try {
       let res = await this.tienDoCongViecService.getDetail(id);
@@ -135,6 +136,7 @@ export class TienDoCongViecComponent extends Base2Component implements OnInit {
         if (res.data) {
           const data = res.data;
           this.dataTableReq = cloneDeep(data);
+          this.fileDinhKems= Array.isArray(data.fileDinhKems)? cloneDeep(data.fileDinhKems): [];
           this.convertListToTree()
           this.expandAll();
         }
@@ -165,31 +167,31 @@ export class TienDoCongViecComponent extends Base2Component implements OnInit {
   }
 
   themMoiItem(data: any, idx: number, list?: any) {
-    let modalQD = this.modal.create({
-      nzTitle: "THÊM TÊN CÔNG TÁC/HẠNG MỤC CÔNG VIỆC",
-      nzContent: ThongTinTienDoCongViecComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: "1000px",
-      nzStyle: { top: "200px" },
-      nzFooter: null,
-      nzComponentParams: {
-        dataTable: list.dataChild && list.dataChild.length > 0 ? list.dataChild : this.dataKlcv,
-        dataInput: data,
-      }
-    });
-    modalQD.afterClose.subscribe(async (listData) => {
-      if (listData && listData.length > 0) {
-        if (!data.dataChild) {
-          data.dataChild = [];
+      let modalQD = this.modal.create({
+        nzTitle: "THÊM TÊN CÔNG TÁC/HẠNG MỤC CÔNG VIỆC",
+        nzContent: ThongTinTienDoCongViecComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: "1000px",
+        nzStyle: { top: "200px" },
+        nzFooter: null,
+        nzComponentParams: {
+          dataTable: list.dataChild && list.dataChild.length > 0 ? list.dataChild : this.dataKlcv,
+          dataInput: data,
         }
-        if (!data.idVirtual) {
-          data.idVirtual = uuidv4();
+      });
+      modalQD.afterClose.subscribe(async (listData) => {
+        if (listData && listData.length > 0) {
+          if (!data.dataChild) {
+            data.dataChild = [];
+          }
+          if (!data.idVirtual) {
+            data.idVirtual = uuidv4();
+          }
+          data.dataChild = [...data.dataChild, listData].flat();
+          this.expandAll();
         }
-        data.dataChild = [...data.dataChild, listData].flat();
-        this.expandAll();
-      }
-    })
+      })
   }
 
 
@@ -270,9 +272,9 @@ export class TienDoCongViecComponent extends Base2Component implements OnInit {
 
   convertListToTree() {
     this.dataTable = chain(this.dataTableReq).groupBy("quy")
-      .map((value, key) => ({ quy: key, dataChild: value, idVirtual: uuidv4() }))
+      .map((value, key) => ({ quy: key, dataChild: value, idVirtual : uuidv4() }))
       .value();
-    console.log(this.dataTable, "this.dataTable")
+    console.log(this.dataTable,"this.dataTable")
   }
 
   sumSoLuong(data: any, row: string, type?: any) {
@@ -301,7 +303,7 @@ export class TienDoCongViecComponent extends Base2Component implements OnInit {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn hoàn thành hợp đồng?',
+      nzContent: 'Bạn có chắc chắn muốn hoàn thành Tiến độ công việc?',
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,
@@ -351,7 +353,8 @@ export class TienDoCongViecComponent extends Base2Component implements OnInit {
           let itemGoiThau = this.listHopDong.filter(item => item.selected == true)
           let body = {
             idGoiThau: itemGoiThau[0]?.id,
-            listKtTdxdTiendoCongviec: this.dataTableReq
+            listKtTdxdTiendoCongviec: this.dataTableReq,
+            fileDinhKems: this.fileDinhKems
           };
           let res = await this.tienDoCongViecService.create(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -376,33 +379,33 @@ export class TienDoCongViecComponent extends Base2Component implements OnInit {
     }
   }
   editRow(index: number) {
-    this.dataTable.forEach(f => {
-      f.dataChild[index].edit = true
+    this.dataTable.forEach(f=>{
+      f.dataChild[index].edit= true
     })
   }
   cancelEdit(index: number): void {
-    this.dataTable.forEach(f => {
-      f.dataChild[index].edit = false
+    this.dataTable.forEach(f=>{
+      f.dataChild[index].edit= false
     })
   }
 
   saveEdit(index: number): void {
-    this.dataTable.forEach(f => {
-      f.dataChild[index].edit = false
+    this.dataTable.forEach(f=>{
+      f.dataChild[index].edit= false
     })
   }
 
   deleteRow(data: any) {
-    this.dataTable.forEach(f => {
-      f.dataChild = f.dataChild.filter(x => x.id != data.id);
+    this.dataTable.forEach(f=>{
+      f.dataChild=f.dataChild.filter(x => x.id != data.id);
     })
   }
   exportData(fileName?: string) {
     if (this.itemHopDong) {
       this.spinner.show();
       try {
-        let body = {
-          "idGoiThau": this.itemHopDong.id
+        let body={
+          "idGoiThau":this.itemHopDong.id
         }
         this.service
           .export(body)
@@ -436,6 +439,6 @@ export class TienDoXayDungCt {
   quy: string;
   thang: string;
   tenCongViec: string;
-  idVirtual: any;
-  loai: string;
+  idVirtual : any;
+  loai : string;
 }

@@ -10,13 +10,14 @@ import { cloneDeep } from 'lodash';
 import { QuyetDinhTtcpService } from 'src/app/services/quyetDinhTtcp.service';
 import { saveAs } from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { QuyetDinhUbtvqhMuaBuBoSungService } from "../../../../../../services/quyet-dinh-ubtvqh-mua-bu-bo-sung.service";
-import { MuaBuBoSungTtcpServiceService } from "../../../../../../services/mua-bu-bo-sung-ttcp-service.service";
-import {STATUS} from "../../../../../../constants/status";
+import { QuyetDinhUbtvqhMuaBuBoSungService } from '../../../../../../services/quyet-dinh-ubtvqh-mua-bu-bo-sung.service';
+import { MuaBuBoSungTtcpServiceService } from '../../../../../../services/mua-bu-bo-sung-ttcp-service.service';
+import { STATUS } from '../../../../../../constants/status';
+
 @Component({
   selector: 'app-ttcp-muabu',
   templateUrl: './ttcp-muabu.component.html',
-  styleUrls: ['./ttcp-muabu.component.scss']
+  styleUrls: ['./ttcp-muabu.component.scss'],
 })
 export class TtcpMuabuComponent implements OnInit {
 
@@ -53,8 +54,8 @@ export class TtcpMuabuComponent implements OnInit {
   dataTable: any[] = [];
   dataTableAll: any[] = [];
   namDataSelect: number;
-  listBoNganh: any[]= [];
-  STATUS= STATUS;
+  listBoNganh: any[] = [];
+  STATUS = STATUS;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -76,11 +77,12 @@ export class TtcpMuabuComponent implements OnInit {
     this.loadDsNam();
     this.search();
   }
+
   async getDetailRow(id) {
     if (id) {
       let res = await this.qdTtcp.getDetail(id);
       this.listBoNganh = res.data.listBoNganh;
-      this.namDataSelect = res.data.namQd
+      this.namDataSelect = res.data.namQd;
     }
   }
 
@@ -96,8 +98,8 @@ export class TtcpMuabuComponent implements OnInit {
 
   loadDsNam() {
     let thisYear = dayjs().get('year');
-    for (let i = -3; i < 23; i++) {
-      this.dsNam.push((thisYear - i).toString());
+    for (let i =  -3; i <= 5; i++) {
+      this.dsNam.push((thisYear + i).toString());
     }
   }
 
@@ -116,7 +118,7 @@ export class TtcpMuabuComponent implements OnInit {
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1,
-    }
+    };
     let res = await this.qdTtcp.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -126,7 +128,7 @@ export class TtcpMuabuComponent implements OnInit {
         this.dataTable.forEach((item) => {
           item.checked = false;
         });
-        this.getDetailRow(this.dataTable[0].id)
+        this.getDetailRow(this.dataTable[0].id);
       }
       this.dataTableAll = cloneDeep(this.dataTable);
 
@@ -143,7 +145,7 @@ export class TtcpMuabuComponent implements OnInit {
     let dataDelete = [];
     if (this.setOfCheckedId && this.setOfCheckedId.size > 0) {
       this.setOfCheckedId.forEach((id) => {
-          dataDelete.push(id);
+        dataDelete.push(id);
       });
     }
     if (dataDelete && dataDelete.length > 0) {
@@ -175,9 +177,8 @@ export class TtcpMuabuComponent implements OnInit {
           }
         },
       });
-    }
-    else {
-      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    } else {
+      this.notification.error(MESSAGE.ERROR, 'Không có dữ liệu phù hợp để xóa.');
     }
   }
 
@@ -207,23 +208,23 @@ export class TtcpMuabuComponent implements OnInit {
   themMoi() {
     this.idSelected = null;
     if (this.isViewDetail == true) {
-      this.isViewDetail = !this.isViewDetail
+      this.isViewDetail = !this.isViewDetail;
     }
     this.isAddNew = true;
   }
 
   async onClose() {
     this.isAddNew = false;
-    await this.search()
+    await this.search();
 
   }
 
   onAllChecked(checked) {
     this.dataTable.forEach((item) => {
-      if (item.trangThai == '00') {
+      if (item.trangThai == STATUS.DANG_NHAP_DU_LIEU) {
         this.updateCheckedSet(item.id, checked);
       }
-    })
+    });
     this.refreshCheckedStatus();
   }
 
@@ -324,13 +325,12 @@ export class TtcpMuabuComponent implements OnInit {
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
           if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-            temp.push(item)
+            temp.push(item);
           }
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
@@ -343,6 +343,6 @@ export class TtcpMuabuComponent implements OnInit {
       trichYeu: '',
       taiLieuDinhKem: '',
       trangThai: '',
-    }
+    };
   }
 }

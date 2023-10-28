@@ -142,4 +142,13 @@ export class HelperService {
       }
     }
   }
+  bidingDataInFormGroupAndIgnore(formGroup: FormGroup, dataBinding: any, ignoreField: Array<string>) {
+    if (dataBinding) {
+      for (const name in dataBinding) {
+        if (formGroup.controls.hasOwnProperty(name) && !ignoreField.includes(name)) {
+          formGroup.controls[name].setValue(dataBinding[name]);
+        }
+      }
+    }
+  }
 }

@@ -2,17 +2,17 @@ import { Component, Input, OnInit } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { QlDinhMucPhiService } from "../../../../services/qlnv-kho/QlDinhMucPhi.service";
-import { Base2Component } from "../../../../components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../services/storage.service";
+import { QlDinhMucPhiService } from '../../../../services/qlnv-kho/QlDinhMucPhi.service';
+import { Base2Component } from '../../../../components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from '../../../../services/storage.service';
 
 ;
 
 @Component({
   selector: 'app-dinh-muc-phi-nhap-xuat-bao-quan',
   templateUrl: './dinh-muc-phi-nhap-xuat-bao-quan.component.html',
-  styleUrls: ['./dinh-muc-phi-nhap-xuat-bao-quan.component.scss']
+  styleUrls: ['./dinh-muc-phi-nhap-xuat-bao-quan.component.scss'],
 })
 export class DinhMucPhiNhapXuatBaoQuanComponent extends Base2Component implements OnInit {
   @Input() capDvi: number = 1;
@@ -26,10 +26,10 @@ export class DinhMucPhiNhapXuatBaoQuanComponent extends Base2Component implement
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    qlDinhMucPhiService: QlDinhMucPhiService
+    qlDinhMucPhiService: QlDinhMucPhiService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, qlDinhMucPhiService)
-    super.ngOnInit()
+    super(httpClient, storageService, notification, spinner, modal, qlDinhMucPhiService);
+    super.ngOnInit();
     this.filterTable = {};
   }
 
@@ -52,10 +52,20 @@ export class DinhMucPhiNhapXuatBaoQuanComponent extends Base2Component implement
       this.formData.value.ngayKyDen = this.formData.value.ngayKy[1];
     }
     if (this.formData.value.ngayHieuLuc && this.formData.value.ngayHieuLuc.length > 0) {
-      this.formData.value.ngayHieuLucTu = this.formData.value.ngayHieuLuc[0]
-      this.formData.value.ngayHieuLucDen = this.formData.value.ngayHieuLuc[1]
+      this.formData.value.ngayHieuLucTu = this.formData.value.ngayHieuLuc[0];
+      this.formData.value.ngayHieuLucDen = this.formData.value.ngayHieuLuc[1];
     }
     this.formData.value.capDvi = this.capDvi;
+    this.search();
+  }
+
+  clearForm() {
+    this.formData.reset();
+    this.formData.value.capDvi = this.capDvi;
+    this.formData.patchValue({
+      capDvi: this.capDvi,
+      loai: '00',
+    });
     this.search();
   }
 
@@ -68,4 +78,5 @@ export class DinhMucPhiNhapXuatBaoQuanComponent extends Base2Component implement
   checkRolesTemplate(): boolean {
     return (this.capDvi == Number(this.userInfo.CAP_DVI));
   }
+
 }

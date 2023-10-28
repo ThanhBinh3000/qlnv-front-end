@@ -3,32 +3,32 @@ import {
   Input,
   OnInit, Output
 } from '@angular/core';
-import { Validators } from '@angular/forms';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
+import {Validators} from '@angular/forms';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
 import {
   BienBanLayMauXhService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/bienBanLayMauXh.service';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
 import dayjs from 'dayjs';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { BBLM_LOAI_DOI_TUONG, STATUS } from 'src/app/constants/status';
+import {BBLM_LOAI_DOI_TUONG, STATUS} from 'src/app/constants/status';
 import {
   QuyetDinhGiaoNvXuatHangService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service';
-import { FileDinhKem } from "../../../../../../models/CuuTro";
-import { v4 as uuidv4 } from 'uuid';
-import { KhCnQuyChuanKyThuat } from "../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
-import { PREVIEW } from "../../../../../../constants/fileType";
+import {FileDinhKem} from "../../../../../../models/CuuTro";
+import {v4 as uuidv4} from 'uuid';
+import {KhCnQuyChuanKyThuat} from "../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
+import {PREVIEW} from "../../../../../../constants/fileType";
 import printJS from "print-js";
-import { LOAI_HANG_DTQG } from 'src/app/constants/config';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-create-bien-ban-lay-mau',
@@ -60,7 +60,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private quyetDinhGiaoNhiemVuXuatHangService: QuyetDinhGiaoNvXuatHangService,
+    private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService,
     private bienBanLayMauXhService: BienBanLayMauXhService,
     private danhMucService: DanhMucService,
     private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
@@ -223,7 +223,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
         nam: this.formData.value.nam,
         trangThai: STATUS.BAN_HANH
       }
-      const res = await this.quyetDinhGiaoNhiemVuXuatHangService.search(body)
+      const res = await this.quyetDinhGiaoNvXuatHangService.search(body)
       if (res && res.msg === MESSAGE.SUCCESS) {
         this.dataQuyetDinh = res.data.content.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI));
       } else if (res && res.msg) {
@@ -276,7 +276,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
     if (id <= 0) return;
     try {
       await this.spinner.show();
-      const res = await this.quyetDinhGiaoNhiemVuXuatHangService.getDetail(id);
+      const res = await this.quyetDinhGiaoNvXuatHangService.getDetail(id);
       if (res.msg !== MESSAGE.SUCCESS || !res.data) {
         return;
       }
@@ -329,6 +329,10 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
   }
 
   async openDialogKho() {
+    const formattedDataKho = this.listDiaDiemXuat.map(item => ({
+      soLuong: item.soLuong.toLocaleString(),
+      ...item
+    }))
     const modalQD = this.modal.create({
       nzTitle: 'DANH SÁCH ĐỊA ĐIỂM XUẤT HÀNG',
       nzContent: DialogTableSelectionComponent,
@@ -337,9 +341,9 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
-        dataTable: this.listDiaDiemXuat,
-        dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho'],
-        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho']
+        dataTable: formattedDataKho,
+        dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho', 'Số lượng'],
+        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho', 'soLuong']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -363,7 +367,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
   }
 
   async saveDataTable() {
-    const { ten, loai } = this.daiDienRow;
+    const {ten, loai} = this.daiDienRow;
     if (ten && loai) {
       this.daiDienRow.type = BBLM_LOAI_DOI_TUONG.NGUOI_LIEN_QUAN;
       this.daiDienRow.idVirtual = uuidv4();
@@ -484,7 +488,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
   }
 
   async saveChildren() {
-    const { phuongPhapLayMau, chiTieuChatLuong } = this.formData.value;
+    const {phuongPhapLayMau, chiTieuChatLuong} = this.formData.value;
     const filter = phuongPhapLayMau.concat(chiTieuChatLuong, this.dataTable).map(s => ({
       ten: s.label ? s.label : s.ten,
       loai: s.loai,
@@ -520,31 +524,44 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
   }
 
   printPreview() {
-    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 
   setValidator() {
-    this.formData.controls["soQdNv"].setValidators([Validators.required]);
-    this.formData.controls["tenDiemKho"].setValidators([Validators.required]);
-    this.formData.controls["tenNhaKho"].setValidators([Validators.required]);
-    this.formData.controls["tenNganKho"].setValidators([Validators.required]);
-    this.formData.controls["tenNganLoKho"].setValidators([Validators.required]);
+    const requiredFields = [
+      "soBbLayMau",
+      "soQdNv",
+      "tenDiemKho",
+      "tenNhaKho",
+      "tenNganKho",
+      "tenNganLoKho",
+    ];
+    requiredFields.forEach(fieldName => {
+      this.formData.controls[fieldName].setValidators([Validators.required]);
+      this.formData.controls[fieldName].updateValueAndValidity();
+    });
   }
 
   setValidForm() {
-    this.formData.controls["loaiBienBan"].setValidators([Validators.required]);
-    this.formData.controls["tenDvi"].setValidators([Validators.required]);
-    this.formData.controls["maQhNs"].setValidators([Validators.required]);
-    this.formData.controls["soBbLayMau"].setValidators([Validators.required]);
-    this.formData.controls["ngayLayMau"].setValidators([Validators.required]);
-    this.formData.controls["soHopDong"].setValidators([Validators.required]);
-    this.formData.controls["ngayKyHopDong"].setValidators([Validators.required]);
-    this.formData.controls["toChucCaNhan"].setValidators([Validators.required]);
-    this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
-    this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
-    this.formData.controls["truongBpKtbq"].setValidators([Validators.required]);
-    this.formData.controls["donViKnghiem"].setValidators([Validators.required]);
-    this.formData.controls["diaDiemLayMau"].setValidators([Validators.required]);
-    this.formData.controls["soLuongKiemTra"].setValidators([Validators.required]);
+    const requiredFields = [
+      "loaiBienBan",
+      "nam",
+      "tenDvi",
+      "maQhNs",
+      "ngayLayMau",
+      "soHopDong",
+      "ngayKyHopDong",
+      "toChucCaNhan",
+      "tenLoaiVthh",
+      "tenCloaiVthh",
+      "tenKtvBaoQuan",
+      "truongBpKtbq",
+      "donViKnghiem",
+      "soLuongKiemTra",
+    ];
+    requiredFields.forEach(fieldName => {
+      this.formData.controls[fieldName].setValidators([Validators.required]);
+      this.formData.controls[fieldName].updateValueAndValidity();
+    });
   }
 }

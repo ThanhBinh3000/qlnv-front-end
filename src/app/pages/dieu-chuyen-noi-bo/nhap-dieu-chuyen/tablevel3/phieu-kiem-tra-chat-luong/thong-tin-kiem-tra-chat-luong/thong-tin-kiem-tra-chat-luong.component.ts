@@ -237,6 +237,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
     await this.spinner.hide();
   }
 
+
   async getPPKTCL() {
     let data = await this.dmService.danhMucChungGetAll("PP_KIEM_TRA_CL");
     this.ppKtrCL = data.data;

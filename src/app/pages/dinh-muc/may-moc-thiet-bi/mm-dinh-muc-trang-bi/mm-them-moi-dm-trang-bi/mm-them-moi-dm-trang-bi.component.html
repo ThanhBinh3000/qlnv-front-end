@@ -14,7 +14,7 @@
         <span>Quay lại</span>
       </button>
       <button type="button" class="btn btn-info ml-2" (click)="banHanh(formData.value.id,STATUS.BAN_HANH)"
-              *ngIf="formData.value.trangThai == STATUS.DU_THAO && formData.value.id > 0">
+              *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && formData.value.id > 0">
         <i class="icon htvbdh_chuyenvanthu"></i>
         <span>Ban hành</span>
       </button>
@@ -167,9 +167,8 @@
           <td>{{data.tenTaiSan}}</td>
           <td>{{data.donViTinh}}</td>
           <td>{{data.slVpCucKv}} </td>
-          <td>{{data.slChiCuc}}
-             {{data.klChiCuc ? data.klChiCuc + ' / tấn lương thực' : ''}}  {{data.tenLoaiHinh ? '( ' + data.tenLoaiHinh + ')' : ''}}</td>
-          <td>{{data.donGiaTd}}</td>
+          <td>{{data.slChiCuc ? data.slChiCuc : ''}}/{{data.klChiCuc ? data.klChiCuc + ' tấn lương thực' : ''}}  {{data.tenLoaiHinh ? ' ('+ data.tenLoaiHinh + ')' : ''}}</td>
+          <td class="text-right">{{data.donGiaTd | number : '1.0-1' : 'vi_VN'}}</td>
           <td>{{data.ghiChu}}</td>
           <td class="text-center" *ngIf="!isViewDetail">
             <a (click)="editRow(idx)">

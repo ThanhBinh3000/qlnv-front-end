@@ -64,13 +64,11 @@
             <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             <span>Xóa</span>
           </button>
-          <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_EXP')" type="button" class="btn btn-sub"
-            (click)="exportDataTC()">
+          <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_EXP')" type="button" class="btn btn-sub" (click)="exportDataTC()">
             <i class="icon htvbdh_chuyen-xu-ly"></i>
             <span>Xuất file</span>
           </button>
-          <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_THEM')" type="button"
-            class="btn btn-main ml-2" (click)="redirectDetail(0,false)">
+          <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_THEM')" type="button" class="btn btn-main ml-2" (click)="redirectDetail(0,false)">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>
@@ -138,7 +136,8 @@
                     <td></td>
                     <td></td>
                     <td>
-                      <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_THEM')" (click)="add(row2)">
+                      <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_THEM') || userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNK_THEM')"
+                         (click)="add(row2)">
                         <i class="icon htvbdh_dau-cong"></i>
                       </a>
                     </td>
@@ -160,20 +159,16 @@
                         <td class="bold">{{row3.ngayGiamDinh|date: "dd/MM/yyyy"}}</td>
                         <td class="bold">{{row3.tenTrangThai || ""}}</td>
                         <td>
-                          <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_XEM')"
-                            (click)="redirectDetail(row3.id, true)">
+                          <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_XEM')" (click)="redirectDetail(row3.id, true)">
                             <i class="fa fa-eye" title="Xem chi tiết"></i>
                           </a>
-                          <a *ngIf="(row3.trangThai == STATUS.DU_THAO || row3.trangThai == STATUS.TU_CHOI_LDCC) && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_THEM')"
-                            (click)="redirectDetail(row3.id, false)">
+                          <a *ngIf="(row3.trangThai == STATUS.DU_THAO || row3.trangThai == STATUS.TU_CHOI_LDCC) && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_THEM')" (click)="redirectDetail(row3.id, false)">
                             <i class="fa fa-pencil" title="Sửa"></i>
                           </a>
-                          <a *ngIf="row3.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_DUYET')"
-                            (click)="redirectDetail(row3.id, false)">
+                          <a *ngIf="row3.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_DUYET')" (click)="redirectDetail(row3.id, false)">
                             <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
                           </a>
-                          <a *ngIf="row3.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_XOA')"
-                            (click)="xoa(row3)">
+                          <a *ngIf="row3.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_XOA')" (click)="xoa(row3)">
                             <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                           </a>
                         </td>

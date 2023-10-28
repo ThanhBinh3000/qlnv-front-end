@@ -180,16 +180,19 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
       };
       await this.loadQdNvXuatHang();
       const res = await this.chaoGiaMuaLeUyQuyenService.search(body);
-      if (res.msg !== MESSAGE.SUCCESS) {
-        throw new Error('Error retrieving data: ' + res.msg);
+      if (res && res.msg === MESSAGE.SUCCESS) {
+        const data = res.data.content;
+        const set = new Set(this.loadQuyetDinhKetQua.map(item => item.idChaoGia));
+        this.dataThongTinChaoGia = data.filter(item => !set.has(item.id));
+        this.dataThongTinChaoGia = this.dataThongTinChaoGia.map(item => {
+          item.soQd = item.soQdDc !== null ? item.soQdDc : item.soQdPd;
+          return item;
+        });
+      } else if (res && res.msg) {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Unknown error occurred.');
       }
-      const data = res.data.content;
-      const set = new Set(this.loadQuyetDinhKetQua.map(item => item.idChaoGia));
-      this.dataThongTinChaoGia = data.filter(item => !set.has(item.id));
-      this.dataThongTinChaoGia = this.dataThongTinChaoGia.map(item => {
-        item.soQd = item.soQdDc !== null ? item.soQdDc : item.soQdPd;
-        return item;
-      });
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH THÔNG TIN CHÀO GIÁ',
         nzContent: DialogTableSelectionComponent,
@@ -217,44 +220,37 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
   }
 
   async loadQdNvXuatHang() {
-    try {
-      const body = {
-        namKh: this.formData.value.namKh,
-        loaiVthh: this.loaiVthh,
-      };
-      const res = await this.qdPdKetQuaBttService.search(body);
-      if (res.msg === MESSAGE.SUCCESS) {
-        const data = res.data;
-        if (data && data.content && data.content.length > 0) {
-          this.loadQuyetDinhKetQua = data.content;
-        }
-      } else {
-        throw new Error('Error loading data: ' + res.msg);
-      }
-    } catch (error) {
-      console.error('Error during loadQdNvXuatHang:', error);
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    let body = {
+      namKh: this.formData.value.namKh,
+      loaiVthh: this.loaiVthh,
+    };
+    const res = await this.qdPdKetQuaBttService.search(body);
+    if (res.msg !== MESSAGE.SUCCESS) {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+      return;
     }
+    const data = res.data.content;
+    if (!data || data.length === 0) {
+      return;
+    }
+    this.loadQuyetDinhKetQua = data
   }
 
   async onChangeTtin(id) {
-    await this.spinner.show();
     if (id <= 0) {
-      await this.spinner.hide();
       return;
     }
     try {
+      await this.spinner.show();
       const res = await this.chaoGiaMuaLeUyQuyenService.getDetail(id);
-      if (res.msg !== MESSAGE.SUCCESS) {
-        this.spinner.hide();
-        this.notification.error(MESSAGE.ERROR, res.msg);
+      if (res.msg !== MESSAGE.SUCCESS || !res.data) {
         return;
       }
       const data = res.data;
       this.formData.patchValue({
         idQdPd: data.xhQdDchinhKhBttHdr ? data.xhQdDchinhKhBttHdr.idQdPd : data.idHdr,
         soQdPd: data.soQdPd,
-        idQdDc: data.xhQdDchinhKhBttHdr ? data.idHdr : '',
+        idQdDc: data.xhQdDchinhKhBttHdr ? data.idHdr : null,
         soQdDc: data.soQdDc,
         idChaoGia: data.id,
         tenDvi: data.tenDvi,
@@ -283,7 +279,7 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
           item.id = null;
           item.children.forEach((child) => {
             child.id = null;
-            tongGiaTriHdong += child.thanhTien;
+            tongGiaTriHdong += child.thanhTienDuocDuyet;
             child.children.forEach((s) => {
               s.id = null;
               if (s.fileDinhKems) {
@@ -329,21 +325,23 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
       });
   }
 
-  async selectRow($event, item) {
+  async selectRow($event, dataChildren) {
     await this.spinner.show();
-    if ($event.type == 'click') {
-      this.selected = false
-      $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
-      $event.target.parentElement.classList.add('selectedRow');
-      this.listOfData = item.children;
-      this.showFromTT = true;
-      await this.spinner.hide();
-    } else {
-      this.selected = true
-      this.listOfData = item[0].children;
-      this.showFromTT = true;
-      await this.spinner.hide();
+    const isClickEvent = $event.type === 'click';
+    this.selected = !isClickEvent;
+    const selectedRow = isClickEvent
+      ? $event.target.parentElement.parentElement?.querySelector('.selectedRow')
+      : null;
+    if (selectedRow) {
+      selectedRow.classList.remove('selectedRow');
     }
+    if ($event.target.parentElement) {
+      $event.target.parentElement.classList.add('selectedRow');
+    }
+    const selectedItem = isClickEvent ? dataChildren : dataChildren[0];
+    this.listOfData = selectedItem.children;
+    this.showFromTT = true;
+    await this.spinner.hide();
   }
 
   isDisabledQD() {
@@ -388,19 +386,24 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
 
 
   setValidForm() {
-    this.formData.controls["namKh"].setValidators([Validators.required]);
-    this.formData.controls["tenDvi"].setValidators([Validators.required]);
-    this.formData.controls["soQdKq"].setValidators([Validators.required]);
-    this.formData.controls["ngayKy"].setValidators([Validators.required]);
-    this.formData.controls["ngayHluc"].setValidators([Validators.required]);
-    this.formData.controls["loaiHinhNx"].setValidators([Validators.required]);
-    this.formData.controls["trichYeu"].setValidators([Validators.required]);
-    this.formData.controls["diaDiemChaoGia"].setValidators([Validators.required]);
-    this.formData.controls["ngayMkho"].setValidators([Validators.required]);
-    this.formData.controls["ngayKthuc"].setValidators([Validators.required]);
-    this.formData.controls["loaiVthh"].setValidators([Validators.required]);
-    this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
-    this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
-    this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
+    const fieldsToValidate = [
+      "namKh",
+      "tenDvi",
+      "soQdKq",
+      "ngayKy",
+      "ngayHluc",
+      "loaiHinhNx",
+      "trichYeu",
+      "diaDiemChaoGia",
+      "ngayMkho",
+      "ngayKthuc",
+      "loaiVthh",
+      "tenLoaiVthh",
+      "cloaiVthh",
+      "tenCloaiVthh",
+    ];
+    fieldsToValidate.forEach(field => {
+      this.formData.controls[field].setValidators([Validators.required]);
+    });
   }
 }

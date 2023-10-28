@@ -63,7 +63,7 @@
   <div class="group-button">
     <h3 class="text-uppercase">Quản lý thông tin đấu giá</h3>
     <div class="buttons">
-      <button type="button" class="btn btn-sub" (click)="exportData('XHDTQG_XTL_QDTL_EXP')">
+      <button type="button" class="btn btn-sub" (click)="exportData()">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
@@ -81,7 +81,6 @@
         <th nzWidth="80px"> Tổng số ĐV tài sản</th>
         <th nzWidth="80px"> Tổng số ĐV tài sản ĐG thành công</th>
         <th nzWidth="80px"> Tổng số ĐV tài sản ĐG không thành công</th>
-        <th nzWidth="80px"> Chủng loại hàng</th>
         <th nzWidth="100px"> Trạng thái thực hiện</th>
         <th nzWidth="80px"> Kết quả đấu giá</th>
         <th nzWidth="55px"> Hành động</th>
@@ -132,12 +131,6 @@
           </nz-input-group>
         </th>
         <th>
-          <nz-input-group>
-            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soTtr"
-                   (input)="filterInTable('soTtr',filterTable.soTtr)" size="small" />
-          </nz-input-group>
-        </th>
-        <th>
           <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
                      (ngModelChange)="filterInTable('trangThai',filterTable.trangThai)">
             <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
@@ -153,20 +146,19 @@
         <td>{{data.soQd}}</td>
         <td>{{data.ngayKy | date : 'dd/MM/yyyy' }}</td>
         <td>{{data.soHoSo}}</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>{{data.tenCloaiVthh}}</td>
+        <td>{{data.tongDviTsan}}</td>
+        <td>{{data.tongDviTsanThanhCong}}</td>
+        <td>{{data.tongDviTsanKhongThanhCong}}</td>
         <td>{{data.tenTrangThaiDg}}</td>
-        <td>{{data.ketQua}}</td>
+        <td>{{data.tongDviTsanThanhCong}}/{{data.tongDviTsan}}</td>
         <td>
           <a (click)="redirectDetail(data.id)">
             <span class="icon htvbdh_eye"></span>
           </a>
-          <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="redirectDetail(data.id,'XHDTQG_XTL_QDTL_THEM')">
+          <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="redirectDetail(data.id)">
             <span class="fa fa-pencil"></span>
           </a>
-          <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data,'XHDTQG_XTL_QDTL_XOA')">
+          <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data)">
             <i class="fa fa-trash-o do"></i>
           </a>
         </td>

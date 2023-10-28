@@ -1,0 +1,17 @@
+::ng-deep .ant-collapse-content>.ant-collapse-content-box .ant-table-wrapper {
+    margin-right: 0px;
+    margin-left: 0px;
+    border-radius: 0 !important;
+    max-width: unset;
+    padding-top: 16px;
+}
+
+::ng-deep .ant-checkbox-group {
+    display: inline-grid;
+    grid-template-columns: auto auto auto;
+}
+
+::ng-deep .ant-checkbox-group.grid-1 {
+    display: grid;
+    grid-template-columns: 1fr
+}

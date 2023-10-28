@@ -13,7 +13,8 @@ import { Validators } from "@angular/forms";
 import { MESSAGE } from "../../../../constants/message";
 import { Base2Component } from "../../../../components/base2/base2.component";
 import { saveAs } from "file-saver";
-import { ThongTu1302018Service } from "../../../../services/bao-cao/ThongTu1302018.service";
+import {ThongTu1302018Service} from "../../../../services/bao-cao/ThongTu1302018.service";
+import {NumberToRoman} from "../../../../shared/commonFunction";
 
 @Component({
   selector: 'app-sl-gia-tri-hang-dtqg-xuat-vien-tro-trong-ky',
@@ -34,30 +35,36 @@ export class SlGiaTriHangDtqgXuatVienTroTrongKyComponent extends Base2Component 
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
   rows: any[] = [];
+  maCuc: any;
+  maChiCuc: any;
+  listLoaiKyBc: any[] = [];
+  listKyBc: any[] = [];
   dsLoaiBc: any[] = [
-    { text: 'Báo cáo Quý', value: 1 },
-    { text: 'Báo cáo Năm', value: 2 }
+    {text: 'Báo cáo Quý', value: 1},
+    {text: 'Báo cáo Năm', value: 2}
   ]
 
   constructor(httpClient: HttpClient,
-    storageService: StorageService,
-    notification: NzNotificationService,
-    spinner: NgxSpinnerService,
-    modal: NzModalService,
-    private thongTu1302018Service: ThongTu1302018Service,
-    public userService: UserService,
-    private donViService: DonviService,
-    private danhMucService: DanhMucService,
-    public globals: Globals) {
+              storageService: StorageService,
+              notification: NzNotificationService,
+              spinner: NgxSpinnerService,
+              modal: NzModalService,
+              private thongTu1302018Service: ThongTu1302018Service,
+              private danhMucSv: DanhMucService,
+              public userService: UserService,
+              private donViService: DonviService,
+              private danhMucService: DanhMucService,
+              public globals: Globals) {
     super(httpClient, storageService, notification, spinner, modal, thongTu1302018Service);
     this.formData = this.fb.group(
       {
         nam: [dayjs().get("year"), [Validators.required]],
-        quy: null,
+        quy: [null, [Validators.required]],
         bieuSo: null,
         dviBaoCao: null,
         dviNhanBaoCao: null,
         loaiBc: null,
+        loaiKyBc: ['02', [Validators.required]],
       }
     );
   }
@@ -73,7 +80,9 @@ export class SlGiaTriHangDtqgXuatVienTroTrongKyComponent extends Base2Component 
       }
       await Promise.all([
         this.loadDsDonVi(),
-        this.loadDsVthh()
+        this.loadDsVthh(),
+        this.loadDsKyBc(),
+        this.changLoaiKyBc('02')
       ]);
     } catch (e) {
       console.log("error: ", e);
@@ -81,6 +90,49 @@ export class SlGiaTriHangDtqgXuatVienTroTrongKyComponent extends Base2Component 
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
     await this.spinner.hide();
+  }
+
+  async loadDsKyBc() {
+    let res = await this.danhMucSv.danhMucChungGetAll("KY_BAO_CAO");
+    if (res.msg == MESSAGE.SUCCESS) {
+      console.log(res, "3333")
+      this.listLoaiKyBc = res.data.filter(x => x.ma !== '01' && x.ma !== '04');
+      if (this.listLoaiKyBc && this.listLoaiKyBc.length > 0) {
+        this.listLoaiKyBc.sort((a, b) => (a.ma - b.ma))
+      }
+    }
+  }
+
+  async changLoaiKyBc(event: any) {
+    if (event) {
+      this.listKyBc = [];
+      switch (event) {
+        case '02': {
+          // this.formData.controls["quy"].setValidators([Validators.required])
+          for (let i = 1; i <= 4; i++) {
+            let item = {
+              ma: 'Quý ' + NumberToRoman(i),
+              giaTri: i
+            }
+            this.listKyBc = [...this.listKyBc, item].flat();
+          }
+          break;
+        }
+        case '03': {
+          this.clearRequired();
+          console.log(this.formData)
+          break;
+        }
+      }
+    }
+  }
+
+  clearRequired(){
+    this.formData.patchValue({
+      quy: null
+    })
+    this.formData.controls["quy"].clearValidators()
+    this.formData.controls["quy"].updateValueAndValidity();
   }
 
   downloadPdf() {
@@ -94,6 +146,13 @@ export class SlGiaTriHangDtqgXuatVienTroTrongKyComponent extends Base2Component 
   async preView() {
     try {
       this.spinner.show();
+      if(this.formData.invalid){
+        this.notification.error(
+          MESSAGE.ERROR,
+          'Nhập đủ các trường bắt buộc.',
+        );
+        return;
+      }
       if (this.formData.value.thoiGianSx) {
         this.formData.value.thoiGianSxTu = dayjs(this.formData.value.thoiGianSx[0]).format("YYYY-MM-DD");
         this.formData.value.thoiGianSxDen = dayjs(this.formData.value.thoiGianSx[1]).format("YYYY-MM-DD");
@@ -107,7 +166,9 @@ export class SlGiaTriHangDtqgXuatVienTroTrongKyComponent extends Base2Component 
       body.fileName = "bc_sl_gtri_hang_dtqg_xuat_vt_trong_ky_130.jrxml";
       body.tenBaoCao = "Báo cáo số lượng và giá trị hàng dự trữ quốc gia xuất viện trợ trong kỳ TT 130";
       body.trangThai = "01";
-      // body.loaiNhapXuat = "-1";
+      body.loaiNhapXuat = "-1";
+      body.maCuc = this.maCuc;
+      body.maChiCuc = this.maChiCuc;
       await this.thongTu1302018Service.bcSlGtriHangDtqgXuatVtTrongKy(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
@@ -128,7 +189,9 @@ export class SlGiaTriHangDtqgXuatVienTroTrongKyComponent extends Base2Component 
       body.fileName = "bc_sl_gtri_hang_dtqg_xuat_vt_trong_ky_130.jrxml";
       body.tenBaoCao = "Báo cáo số lượng và giá trị hàng dự trữ quốc gia xuất viện trợ trong kỳ TT 130";
       body.trangThai = "01";
-      // body.loaiNhapXuat = "-1";
+      body.loaiNhapXuat = "-1";
+      body.maCuc = this.maCuc;
+      body.maChiCuc = this.maChiCuc;
       await this.thongTu1302018Service.bcSlGtriHangDtqgXuatVtTrongKy(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
@@ -195,11 +258,19 @@ export class SlGiaTriHangDtqgXuatVienTroTrongKyComponent extends Base2Component 
   changeCloaiVthh(event) {
 
   }
-  addRow() {
+  addRow () {
     this.rows.push({})
   }
 
   deleteRow(index: number) {
     this.rows.splice(index, 1)
+  }
+
+  clearFilter() {
+    this.formData.patchValue({
+      quy: null,
+    })
+    this.maCuc = null;
+    this.maChiCuc = null;
   }
 }

@@ -14,7 +14,7 @@
         </div>
         <div nz-col nzSpan="5">
           <nz-form-control>
-            <nz-form-label>Mã danh sách cần SC</nz-form-label>
+            <nz-form-label>Mã danh sách cần TL</nz-form-label>
             <nz-form-item>
               <input nz-input formControlName="maSc" />
             </nz-form-item>
@@ -86,8 +86,8 @@
           <th>Năm KH</th>
           <th>Mã danh sách cần TL</th>
           <th>Chi cục DTNN</th>
-          <th>Loại hàng</th>
-          <th>Chủng loại</th>
+          <th>Loại hàng hóa</th>
+          <th>Chủng loại hàng hóa</th>
           <th>Điểm kho</th>
           <th>Nhà/Ngăn/Lô kho</th>
           <th>Ngày nhập kho</th>
@@ -171,15 +171,12 @@
                   <td>{{data.xhTlDanhSachHdr.tenLoaiVthh}}</td>
                   <td>{{data.xhTlDanhSachHdr.tenCloaiVthh}}</td>
                   <td>{{data.xhTlDanhSachHdr.tenDiemKho}}</td>
-                  <td>
-                    {{data.xhTlDanhSachHdr.tenNhaKho}}/{{data.xhTlDanhSachHdr.tenNganKho}}/{{data.xhTlDanhSachHdr.tenLoKho}}
-                  </td>
+                  <td>{{data.xhTlDanhSachHdr.tenNhaKho}}/{{data.xhTlDanhSachHdr.tenNganKho}}/{{data.xhTlDanhSachHdr.tenLoKho}}</td>
                   <td>{{data.xhTlDanhSachHdr.ngayNhapKho | date : 'dd/MM/yyyy'}}</td>
                   <td>{{data.xhTlDanhSachHdr.slHienTai | number : '1.0-1' : 'vi_VN' }}</td>
                   <td>{{data.xhTlDanhSachHdr.slDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
                   <td>{{data.xhTlDanhSachHdr.slDaDuyet | number : '1.0-1' : 'vi_VN' }}</td>
-                  <td>{{data.xhTlDanhSachHdr.slDeXuat - data.xhTlDanhSachHdr.slDaDuyet | number : '1.0-1' : 'vi_VN' }}
-                  </td>
+                  <td>{{data.xhTlDanhSachHdr.slDeXuat - data.xhTlDanhSachHdr.slDaDuyet | number : '1.0-1' : 'vi_VN' }}</td>
                   <td>{{data.xhTlDanhSachHdr.donViTinh }}</td>
                   <td>{{data.xhTlDanhSachHdr.ngayDeXuat | date : 'dd/MM/yyyy'}}</td>
                   <td>{{data.xhTlDanhSachHdr.lyDo}}</td>

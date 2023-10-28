@@ -117,7 +117,7 @@ export class ThongTinBienBanNhapDayKhoComponent extends Base2Component implement
       soBb: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
 
     })
-    if (this.data && !this.idInput) {
+    if(this.data && !this.idInput){
       console.log(this.data, "data")
       this.formData.patchValue({
         soQdPdNk: this.data.soQdPdNk,

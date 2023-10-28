@@ -12,15 +12,15 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { HoSoKyThuatService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/hoSoKyThuat.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 import { UserService } from 'src/app/services/user.service';
-import { HSKT_LOAI_DOI_TUONG, LOAI_BIEN_BAN, STATUS } from 'src/app/constants/status';
+import {HSKT_LOAI_DOI_TUONG, LOAI_BIEN_BAN, STATUS} from 'src/app/constants/status';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { QuanLyBienBanLayMauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyBienBanLayMau.service';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
-import { FileDinhKem } from "../../../../../../models/FileDinhKem";
-import { saveAs } from 'file-saver';
-import { v4 as uuidv4 } from "uuid";
+import {FileDinhKem} from "../../../../../../models/FileDinhKem";
+import {saveAs} from 'file-saver';
+import {v4 as uuidv4} from "uuid";
 @Component({
   selector: 'app-them-moi-ho-so-ky-thuat',
   templateUrl: './them-moi-ho-so-ky-thuat.component.html',
@@ -97,7 +97,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
   ];
   previewName: string = 'ho_so_ky_thuat';
   hoSoRow: any = {};
-  hoSoRowEdit: any[] = [];
+  hoSoRowEdit:any[] = [];
   viewTableHoSo: any[] = [];
   constructor(
     httpClient: HttpClient,
@@ -435,7 +435,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
     }
   }
 
-  async getNameFileEdit(i: number, event?: any) {
+  async getNameFileEdit(i:number, event?: any) {
     const element = event.currentTarget as HTMLInputElement;
     const fileList: FileList | null = element.files;
     if (fileList) {

@@ -1,19 +1,19 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import {
-  KeHoachLuongThucComponent
-} from "../dialog-chi-tiet-ke-hoach-giao-bo-nganh/ke-hoach-luong-thuc/ke-hoach-luong-thuc.component";
-import {NzModalRef} from "ng-zorro-antd/modal";
-import {DanhMucService} from "../../../services/danhmuc.service";
-import {Globals} from "../../../shared/globals";
-import {MESSAGE} from "../../../constants/message";
-import {MuaBuComponent} from "./mua-bu/mua-bu.component";
-import {DonviService} from "../../../services/donvi.service";
-import {AMOUNT_THREE_DECIMAL} from "../../../Utility/utils";
+  KeHoachLuongThucComponent,
+} from '../dialog-chi-tiet-ke-hoach-giao-bo-nganh/ke-hoach-luong-thuc/ke-hoach-luong-thuc.component';
+import { NzModalRef } from 'ng-zorro-antd/modal';
+import { DanhMucService } from '../../../services/danhmuc.service';
+import { Globals } from '../../../shared/globals';
+import { MESSAGE } from '../../../constants/message';
+import { MuaBuComponent } from './mua-bu/mua-bu.component';
+import { DonviService } from '../../../services/donvi.service';
+import { AMOUNT_THREE_DECIMAL } from '../../../Utility/utils';
 
 @Component({
   selector: 'app-dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung',
   templateUrl: './dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung.component.html',
-  styleUrls: ['./dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung.component.scss']
+  styleUrls: ['./dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung.component.scss'],
 })
 export class DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent implements OnInit {
 
@@ -30,8 +30,8 @@ export class DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent implement
     ttMuaBu: null,
     ttMuaBsung: null,
     muaBuList: [],
-    muaBsungList: []
-  }
+    muaBsungList: [],
+  };
   dsBoNganh: any[];
   dsHangHoa: any[];
   dataEdit: any;
@@ -41,15 +41,15 @@ export class DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent implement
     private readonly _modalRef: NzModalRef,
     private danhMucService: DanhMucService,
     private donviService: DonviService,
-    public globals: Globals
+    public globals: Globals,
   ) {
   }
 
   async ngOnInit() {
-    this.bindingData(this.dataEdit)
+    this.bindingData(this.dataEdit);
     await Promise.all([
       this.getListBoNganh(),
-      this.loadDanhMucHang()
+      this.loadDanhMucHang(),
     ]);
   }
 
@@ -60,32 +60,34 @@ export class DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent implement
   }
 
   onChangeBoNganh(event) {
-    const boNganh = this.dsBoNganh.find(item => item.maDvi == event)
+    this.dsHangHoa = [];
+    const boNganh = this.dsBoNganh.find(item => item.maDvi == event);
     if (boNganh) {
       this.keHoach.tenBoNganh = boNganh.tenDvi;
     }
     //fix btc = tcdt
     if (event == '01') {
-      event = '0101'
+      event = '0101';
     }
     this.danhMucService.getDanhMucHangDvql({
-      "dviQly": event
+      'dviQly': event,
     }).subscribe((hangHoa) => {
       if (hangHoa.msg == MESSAGE.SUCCESS) {
         if (event == '0101') {
           const dataVatTu = hangHoa.data.filter(it => (it.ma == '02' || it.ma == '04' || it.ma == '0101' || it.ma == '0102'));
           dataVatTu.forEach(item => {
-            if (item.ma == "02") {
-              this.dsHangHoa = [...this.dsHangHoa, ...item.child]
+            if (item.ma == '02') {
+              this.dsHangHoa = [...this.dsHangHoa, ...item.child];
             } else {
-              this.dsHangHoa = [...this.dsHangHoa, item]
+              this.dsHangHoa = [...this.dsHangHoa, item];
             }
           });
         } else {
           this.dsHangHoa = hangHoa.data.filter(item => item.cap == 2);
+          console.log(this.dsHangHoa,'this.dsHangHoa');
         }
       }
-    })
+    });
   }
 
   async getListBoNganh() {
@@ -109,6 +111,7 @@ export class DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent implement
     if (this.validateData()) {
       this.keHoach.tongTien = this.keHoach.ttMuaBsung + this.keHoach.ttMuaBu;
       this._modalRef.close(this.keHoach);
+      console.log(this.keHoach,'this.keHoachthis.keHoach');
     }
   }
 

@@ -1,12 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NzModalService } from "ng-zorro-antd/modal";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { MESSAGE } from "src/app/constants/message";
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { ThongtinDaugiaComponent } from './thongtin-daugia/thongtin-daugia.component';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {NzModalService} from "ng-zorro-antd/modal";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {MESSAGE} from "src/app/constants/message";
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {ThongtinDaugiaComponent} from './thongtin-daugia/thongtin-daugia.component';
 import {
   QuyetDinhPdKhBdgService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
@@ -14,9 +14,9 @@ import {
   ThongTinDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
 import dayjs from 'dayjs';
-import { cloneDeep } from 'lodash';
-import { PREVIEW } from "src/app/constants/fileType";
-import { formatNumber } from "@angular/common";
+import {cloneDeep} from 'lodash';
+import {PREVIEW} from "src/app/constants/fileType";
+import {formatNumber} from "@angular/common";
 import {
   QuyetDinhDchinhKhBdgService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/dieuchinh-kehoach/quyetDinhDchinhKhBdg.service";
@@ -136,7 +136,9 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
         tenDvi: data.tenDvi,
         khoanTienDatTruoc: data.khoanTienDatTruoc,
         khoanTienDatTruocHienThi: data.khoanTienDatTruoc + '%',
-        tgianDauGia: ['Từ ' + dayjs(data.tgianDkienTu).format('DD/MM/YYYY') + ' Đến ' + dayjs(data.tgianDkienDen).format('DD/MM/YYYY')],
+        tgianDauGia: this.isValidDate(data.tgianDkienTu) && this.isValidDate(data.tgianDkienDen)
+          ? [`Từ ${dayjs(data.tgianDkienTu).format('DD/MM/YYYY')} Đến ${dayjs(data.tgianDkienDen).format('DD/MM/YYYY')}`]
+          : [],
         tgianTtoan: data.tgianTtoan,
         tenPthucTtoan: data.tenPthucTtoan,
         tgianGnhan: data.tgianGnhan,
@@ -158,6 +160,10 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     } finally {
       await this.spinner.hide();
     }
+  }
+
+  isValidDate(dateString: string): boolean {
+    return dayjs(dateString).isValid();
   }
 
   async calculatorTable(data) {
@@ -252,7 +258,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
       nzClosable: false,
       nzWidth: '2000px',
       nzFooter: null,
-      nzBodyStyle: { 'overflow-y': 'auto' },
+      nzBodyStyle: {'overflow-y': 'auto'},
       nzComponentParams: {
         isView: isView,
         dataDetail: this.formData.value,
@@ -277,7 +283,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
       nzOnOk: async () => {
         await this.spinner.show();
         try {
-          const body = { id: data.id };
+          const body = {id: data.id};
           await this.thongTinDauGiaService.delete(body);
           await this.loadDetail(this.idInput);
         } catch (error) {

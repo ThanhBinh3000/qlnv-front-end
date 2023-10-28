@@ -1,11 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Base2Component } from "../../../../../../components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { DanhMucService } from "../../../../../../services/danhmuc.service";
+import {Component, Input, OnInit} from '@angular/core';
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {
   QdPdKetQuaBanDauGiaService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service";
@@ -16,17 +16,17 @@ import {
   QuyetDinhPdKhBdgService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service";
 import * as dayjs from "dayjs";
-import { Validators } from "@angular/forms";
-import { STATUS } from "../../../../../../constants/status";
-import { MESSAGE } from "../../../../../../constants/message";
+import {Validators} from "@angular/forms";
+import {STATUS} from "../../../../../../constants/status";
+import {MESSAGE} from "../../../../../../constants/message";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import { cloneDeep } from 'lodash';
-import { PREVIEW } from "../../../../../../constants/fileType";
-import { saveAs } from 'file-saver';
-import { FileDinhKem } from "../../../../../../models/CuuTro";
-import { LOAI_HANG_DTQG } from 'src/app/constants/config';
+import {cloneDeep} from 'lodash';
+import {PREVIEW} from "../../../../../../constants/fileType";
+import {saveAs} from 'file-saver';
+import {FileDinhKem} from "../../../../../../models/CuuTro";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-them-moi-quyet-dinh-phe-duyet-ket-qua',
@@ -315,14 +315,15 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
       maDvi: this.userInfo.MA_DVI,
     }
     let res = await this.qdPdKetQuaBanDauGiaService.search(body)
-    if (res.msg == MESSAGE.SUCCESS) {
-      const data = res.data
-      if (data && data.content && data.content.length > 0) {
-        this.loadDsQuyetDinhKq = data.content
-      }
-    } else {
+    if (res.msg !== MESSAGE.SUCCESS) {
       this.notification.error(MESSAGE.ERROR, res.msg);
+      return;
     }
+    const data = res.data.content;
+    if (!data || data.length === 0) {
+      return;
+    }
+    this.loadDsQuyetDinhKq = data
   }
 
   setValidForm() {

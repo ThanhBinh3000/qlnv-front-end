@@ -17,9 +17,9 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import dayjs from 'dayjs';
 import { StorageService } from 'src/app/services/storage.service';
-import { convertIdToLoaiVthh, convertIdToTenLoaiVthh, convertTrangThai } from "../../../../../../shared/commonFunction";
+import {convertIdToLoaiVthh, convertIdToTenLoaiVthh, convertTrangThai} from "../../../../../../shared/commonFunction";
 import { saveAs } from "file-saver";
-import { PREVIEW } from "../../../../../../constants/fileType";
+import {PREVIEW} from "../../../../../../constants/fileType";
 import printJS from "print-js";
 
 @Component({
@@ -102,6 +102,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
       soQdCc: [''],
       kieuNx: [''],
       loaiHinhNx: [''],
+      maTh: [],
     })
 
   }
@@ -122,7 +123,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
     }
   }
 
-  convertTenVthh() {
+  convertTenVthh(){
     let data = convertIdToTenLoaiVthh(this.loaiVthh);
     this.formTraCuu.get('tenLoaiVthh').setValue(data)
     this.formTraCuu.get('loaiVthh').setValue(this.loaiVthh)
@@ -203,10 +204,10 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
       let res = await this.tongHopDeXuatKHLCNTService.deXuatCuc(body);
       if (res.msg == MESSAGE.SUCCESS && res.data && res.data.hhDxKhLcntThopDtlList.length > 0) {
         const dataDetail = res.data
-        let idTh = await this.userService.getId("HH_DX_KHLCNT_THOP_HDR_SEQ");
+        let maTh = await this.userService.getId("HH_DX_KHLCNT_THOP_HDR_SEQ");
         this.helperService.bidingDataInFormGroup(this.formData, dataDetail)
         this.formData.patchValue({
-          id: idTh,
+          maTh: maTh,
           ngayTao: dayjs().format("YYYY-MM-DD"),
         })
         this.dataTableDanhSachDX = dataDetail.hhDxKhLcntThopDtlList;
@@ -333,8 +334,8 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
   closeDlg() {
     this.showDlgPreview = false;
   }
-  printPreview() {
-    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
+  printPreview(){
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 }
 

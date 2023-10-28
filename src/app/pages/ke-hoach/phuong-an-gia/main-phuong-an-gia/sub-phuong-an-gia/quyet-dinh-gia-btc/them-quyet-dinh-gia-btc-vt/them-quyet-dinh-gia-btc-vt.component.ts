@@ -14,6 +14,9 @@ import {QuyetDinhGiaCuaBtcService} from "src/app/services/ke-hoach/phuong-an-gia
 import {DanhMucService} from "src/app/services/danhmuc.service";
 import {TongHopPhuongAnGiaService} from "src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
 import {DialogPagQdBtcComponent} from "../dialog-pag-qd-btc/dialog-pag-qd-btc.component";
+import printJS from "print-js";
+import {saveAs} from "file-saver";
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: "app-them-quyet-dinh-gia-btc-vt",
@@ -41,7 +44,13 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
   maQd: string;
   dataTable: any[] = [];
   fileDinhKem: any[] = [];
-
+  canCuPhapLys: any[] = [];
+  pdfSrc: any;
+  excelSrc: any;
+  pdfBlob: any;
+  excelBlob: any;
+  printSrc: any
+  showDlgPreview = false;
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
@@ -70,7 +79,7 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
         trangThai: ["00"],
         ghiChu: [null],
         thongTinGia: [null],
-        soQdCanDc: [null],
+        soQdDc: [null],
         loaiDeXuat: ['00'],
       }
     );
@@ -105,9 +114,12 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
         trichYeu: data.trichYeu,
         trangThai: data.trangThai,
         ghiChu: data.ghiChu,
-        soToTrinh: data.soToTrinh
+        soToTrinh: data.soToTrinh,
+        soQdDc: data.soQdDc,
+        loaiDeXuat : data.loaiDeXuat
       });
       this.fileDinhKem = data.fileDinhKems;
+      this.canCuPhapLys = data.canCuPhapLys;
     }
   }
 
@@ -171,8 +183,13 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       return;
     }
       this.arrThongTinGia.forEach(item => {
-        item.giaQdBtcVat = item.vat ? item.giaQdBtc * item.vat + item.giaQdBtc : null;
-        item.giaQdDcBtcVat = item.vat && item.giaQdDcBtc ?  item.giaQdDcBtc * item.vat + item.giaQdDcBtc : null;
+        if (item.vat) {
+          if (this.formData.value.loaiDeXuat == '00') {
+            item.giaQdBtcVat = item.giaQdBtc + item.giaQdBtc * item.vat
+          } else {
+            item.giaQdDcBtcVat = item.giaQdDcBtc + item.giaQdDcBtc * item.vat
+          }
+        }
       })
 
     let body = this.formData.value;
@@ -181,6 +198,7 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
     body.pagType = this.pagType;
     body.thongTinGiaVt = this.arrThongTinGia
     body.fileDinhKemReq = this.fileDinhKem;
+    body.canCuPhapLys = this.canCuPhapLys;
       let res;
       if (this.idInput > 0) {
         res = await this.quyetDinhGiaCuaBtcService.update(body);
@@ -270,17 +288,27 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
         },
       });
       modalQD.afterClose.subscribe((data) => {
-        if (data) {
+        console.log(data,111)
+        if (data && data.listDx && data.listDx.length> 0 ) {
             let thRes = data.listDx;
+          if (thRes && thRes.length > 0) {
+            this.formData.patchValue({
+              soToTrinh : thRes && thRes.length > 0 ? thRes.map(item=> item.soDeXuat).toString() : "",
+              soQdDc: thRes && thRes.length > 0 ? thRes.map(item=> item.soDeXuatDc).toString() : [],
+              loaiDeXuat: data.formData.loaiQd,
+            })
+          }
             let body = {
               listId : thRes && thRes.length > 0 ? thRes.map(item=> item.id) : []
             }
-          this.formData.patchValue({
-            soToTrinh : thRes && thRes.length > 0 ? thRes.map(item=> item.soDeXuat).toString() : []
-          })
             this.tongHopData(body);
         }
       });
+    } else {
+      if (!this.isView) {
+        this.notification.warning(MESSAGE.WARNING, 'Vui lòng chọn loại giá!');
+        return;
+      }
     }
   }
 
@@ -303,6 +331,64 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       await this.spinner.hide();
     }
   }
+
+  async previewQdGia() {
+    try {
+      this.spinner.show();
+      let body = cloneDeep(this.formData.value);
+      body.typeFile = "pdf";
+      body.trangThai = "01";
+      body.listDto = this.arrThongTinGia;
+      body.pagType = this.pagType;
+      body.type = this.type;
+      body.ngayHieuLuc = this.formData.value.ngayHieuLuc ? dayjs(this.formData.value.ngayHieuLuc).format("DD/MM/YYYY") : "";
+      await this.quyetDinhGiaCuaBtcService.previewQdGia(body).then(async s => {
+        this.pdfBlob = s;
+        this.pdfSrc = await new Response(s).arrayBuffer();
+      });
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  async downloadExcel() {
+    try {
+      this.spinner.show();
+      let body = cloneDeep(this.formData.value);
+      body.typeFile = "xlsx";
+      body.trangThai = "01";
+      body.listDto = this.arrThongTinGia;
+      body.pagType = this.pagType;
+      body.type = this.type;
+      body.ngayHieuLuc = this.formData.value.ngayHieuLuc ? dayjs(this.formData.value.ngayHieuLuc).format("DD/MM/YYYY") : "";
+      await this.quyetDinhGiaCuaBtcService.previewQdGia(body).then(async s => {
+        this.excelBlob = s;
+        this.excelSrc = await new Response(s).arrayBuffer();
+        saveAs(this.excelBlob, "quyet_dinh_gia_btc.xlsx");
+      });
+      this.showDlgPreview = true
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  async downloadPdf() {
+    saveAs(this.pdfBlob, 'quyet_dinh_gia_btc.pdf');
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+
+  printPreview() {
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
+  }
+
 
 }
 

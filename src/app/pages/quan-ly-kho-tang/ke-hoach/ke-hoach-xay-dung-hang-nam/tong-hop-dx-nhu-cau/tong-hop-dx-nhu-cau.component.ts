@@ -1,8 +1,8 @@
 
 import {
-  Component,
+  Component, EventEmitter,
   Input,
-  OnInit,
+  OnInit, Output,
 } from '@angular/core';
 import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
@@ -36,7 +36,7 @@ export class TongHopDxNhuCauComponent implements OnInit {
   listNam: any[] = [];
   listLoaiDuAn: any[] = [];
   STATUS = STATUS
-
+  @Output() tabFocus: EventEmitter<number> = new EventEmitter<number>();
   searchFilter = {
     namKeHoach : '',
     maTongHop: '',
@@ -70,6 +70,7 @@ export class TongHopDxNhuCauComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   userInfo: UserLogin;
+  openChiTiet: boolean;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -95,6 +96,9 @@ export class TongHopDxNhuCauComponent implements OnInit {
     if (!this.userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_TH')) {
       this.router.navigateByUrl('/error/401')
     }
+    // if(check){
+    //   this.openQdPheDuyet()
+    // }
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
@@ -377,5 +381,23 @@ export class TongHopDxNhuCauComponent implements OnInit {
       result = dayjs(event).format('DD/MM/YYYY').toString()
     }
     return result;
+  }
+
+  openChiTietModal(id: number) {
+    this.selectedId = id;
+    this.openChiTiet = true;
+  }
+
+  closeChiTietModal() {
+    this.selectedId = null;
+    this.openChiTiet = false;
+  }
+  receivedTab(tab) {
+    if (tab) {
+      this.emitTab(tab);
+    }
+  }
+  emitTab(tab) {
+    this.tabFocus.emit(tab);
   }
 }

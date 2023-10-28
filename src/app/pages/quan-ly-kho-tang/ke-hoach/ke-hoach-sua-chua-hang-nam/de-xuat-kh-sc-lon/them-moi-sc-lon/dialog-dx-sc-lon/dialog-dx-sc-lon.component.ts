@@ -24,7 +24,7 @@ export class DialogDxScLonComponent implements OnInit {
   @Input() sum: number;
   @Input() dataTable: any;
   @Input() page: string;
-  @Input() isQd: boolean = false;
+  @Input()isQd: boolean = false;
   item: KhSuaChuaLonDtl = new KhSuaChuaLonDtl();
   listDmScLon: any[] = [];
   listLoaiDuAn: any[] = [];
@@ -83,9 +83,9 @@ export class DialogDxScLonComponent implements OnInit {
       msgRequired = "Không được để trống danh mục sửa chữa lớn";
     } else if (!item.loaiCongTrinh) {
       msgRequired = "Không được để trống loại công trình";
-    } else if (!item.nguonVon) {
+    }else if (!item.nguonVon) {
       msgRequired = "Không được để trống nguồn vốn";
-    } else if (!item.vonDauTu) {
+    }else if (!item.vonDauTu) {
       msgRequired = "Không được để trống kế hoạch vốn đầu tư";
     }
     return msgRequired;
@@ -107,12 +107,12 @@ export class DialogDxScLonComponent implements OnInit {
 
   async getAllDmKho() {
     let body = {
-      "maDvi": this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+      "maDvi" : this.userService.isCuc() ? this.userInfo.MA_DVI  :null,
       "paggingReq": {
         limit: 999999,
         page: 0
       },
-      "type": '00'
+      "type" : '00'
     };
     let res = await this.dmSuaChuaService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -120,6 +120,7 @@ export class DialogDxScLonComponent implements OnInit {
       if (this.type == 'them' && this.listDmScLon && this.listDmScLon.length > 0 && !this.isQd) {
         this.listDmScLon = this.listDmScLon.filter(item => (item.trangThai == STATUS.CHUA_THUC_HIEN) && item.khoi == this.dataInput.khoi && (this.page == 'tren' ? item.tmdt > 15000000000 : item.tmdt <= 15000000000));
       }
+      console.log(this.listDmScLon);
     }
   }
 

@@ -1,17 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { chain, cloneDeep } from 'lodash';
-import { NzSelectSizeType } from "ng-zorro-antd/select";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {chain, cloneDeep} from 'lodash';
+import {NzSelectSizeType} from "ng-zorro-antd/select";
 import dayjs from "dayjs";
-import { Validators } from "@angular/forms";
-import { isArray } from "rxjs/internal-compatibility";
-import { Base2Component } from "../../../../../../../components/base2/base2.component";
-import { CHUC_NANG, STATUS } from "../../../../../../../constants/status";
-import { StorageService } from "../../../../../../../services/storage.service";
-import { MESSAGE } from "../../../../../../../constants/message";
+import {Validators} from "@angular/forms";
+import {isArray} from "rxjs/internal-compatibility";
+import {Base2Component} from "../../../../../../../components/base2/base2.component";
+import {CHUC_NANG, STATUS} from "../../../../../../../constants/status";
+import {StorageService} from "../../../../../../../services/storage.service";
+import {MESSAGE} from "../../../../../../../constants/message";
 import {
   BaoCaoKdmVtTbTrongThoiGianBaoHanh
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/BaoCaoKdmVtTbTrongThoiGianBaoHanh.service";
@@ -25,8 +25,8 @@ import * as uuid from "uuid";
 import {
   PhieuKtclVtTbTrongThoiGianBaoHanhService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/PhieuKtclVtTbTrongThoiGianBaoHanh.service";
-import { DonviService } from "../../../../../../../services/donvi.service";
-import { FileDinhKem } from "../../../../../../../models/FileDinhKem";
+import {DonviService} from "../../../../../../../services/donvi.service";
+import {FileDinhKem} from "../../../../../../../models/FileDinhKem";
 
 @Component({
   selector: 'app-thong-tin-bao-cao-ket-qua-kiem-dinh-vt-tb',
@@ -54,8 +54,8 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
   itemSelected: any;
   dataTableChiTieu: any[] = [];
   LIST_DANH_GIA: any[] = [
-    { value: 0, label: "Không đạt" },
-    { value: 1, label: "Đạt" }
+    {value: 0, label: "Không đạt"},
+    {value: 1, label: "Đạt"}
   ]
   dataPhieuKncl: any;
   maBc: string;
@@ -157,7 +157,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
   }
 
   async loadDviNhan(event) {
-    let res = await this.donviService.getDonVi({ str: event });
+    let res = await this.donviService.getDonVi({str: event});
     if (res.msg == MESSAGE.SUCCESS) {
       this.dviNhan = res.data;
     }
@@ -323,7 +323,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
   }
 
   handleOk(data) {
-    console.log(data, "data")
+    console.log(data,"data")
     this.isViewModel = false;
     if (data) {
       if (this.formData.value.loaiCanCu == "PHIEU_KTCL") {
@@ -342,7 +342,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
         this.listSoQuyetDinh = this.listSoQuyetDinh.filter(f => f.checked);
         this.dataTable = this.listSoQuyetDinh.map(m => {
           return m.qdGiaonvXhDtl
-            .map(dtl => ({ ...dtl, soQuyetDinh: m.soQuyetDinh, soLanLm: m.soLanLm, trangThaiXh: m.trangThaiXh }));
+            .map(dtl => ({...dtl, soQuyetDinh: m.soQuyetDinh, soLanLm: m.soLanLm, trangThaiXh: m.trangThaiXh}));
         }).flat();
 
         this.formData.patchValue({

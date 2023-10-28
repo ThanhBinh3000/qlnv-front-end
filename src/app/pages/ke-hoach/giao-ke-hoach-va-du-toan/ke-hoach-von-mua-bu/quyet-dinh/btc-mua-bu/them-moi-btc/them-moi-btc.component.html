@@ -5,13 +5,13 @@
       <span>Quay lại</span>
     </button>
     <button
-      *ngIf="(formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && !isView) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_THEM')"
+      *ngIf="(formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && !isView) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_BTC_BANHANH')"
       type='button' class='btn btn-sub' (click)='save(true)'>
       <i class='icon htvbdh_chuyenvanthu'></i>
       <span>Ban hành</span>
     </button>
     <button *ngIf='formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && !isView' type='button'
-      class='btn btn-sub xanh' (click)='save()'>
+            class='btn btn-sub xanh' (click)='save()'>
       <i class='icon htvbdh_luu'></i>
       <span>Lưu</span>
     </button>
@@ -34,7 +34,7 @@
       <div nz-row [nzGutter]='24'>
         <div nz-col [nzSpan]='3'>
           <nz-form-item class='form-item'>
-            <nz-form-label nzFor='nam-qd' nzRequired>Năm Quyết Định</nz-form-label>
+            <nz-form-label nzFor='nam-qd' nzRequired>Năm kế hoạch</nz-form-label>
             <nz-form-control [nzErrorTip]='error'>
               <nz-select formControlName='namQd' [nzDisabled]='isView' (ngModelChange)='onChangeNamQd($event)'>
                 <nz-option *ngFor='let p of dsNam' [nzValue]='p.value' [nzLabel]='p.text'>
@@ -48,12 +48,12 @@
         </div>
         <div nz-col [nzSpan]='4'>
           <nz-form-item class='form-item'>
-            <nz-form-label [nzNoColon]='true' nzFor='so-qd' nzRequired>Số Quyết Định</nz-form-label>
+            <nz-form-label [nzNoColon]='true' nzFor='so-qd' nzRequired>Số quyết Định</nz-form-label>
             <nz-form-control [nzErrorTip]='error'>
               <nz-input-group nzAddOnAfter='{{maQd}}' id='so-qd'>
                 <!--                <input nz-input formControlName='soQd' [readOnly]='isView' />-->
                 <nz-input-number [nzSize]="'small'" [nzMin]='0' [nzMax]='globals.prop.MAX_INPUT' nz-input
-                  formControlName='soQd' [nzDisabled]='isView'></nz-input-number>
+                                 formControlName='soQd' [nzDisabled]='isView'></nz-input-number>
               </nz-input-group>
               <ng-template #error let-control>
                 <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
@@ -63,7 +63,7 @@
         </div>
         <div nz-col [nzSpan]='5'>
           <nz-form-item class='form-item'>
-            <nz-form-label [nzNoColon]='true' nzFor='ngay-qd' nzRequired>Ngày Quyết Định</nz-form-label>
+            <nz-form-label [nzNoColon]='true' nzFor='ngay-qd' nzRequired>Ngày quyết Định</nz-form-label>
             <nz-form-control [nzErrorTip]='error'>
               <nz-date-picker [nzDisabled]='isView' formControlName='ngayQd' nzFormat='dd/MM/yyyy'>
               </nz-date-picker>
@@ -89,10 +89,10 @@
         </div>
         <div nz-col [nzSpan]='24'>
           <nz-form-item class='form-item'>
-            <nz-form-label [nzNoColon]='true' nzFor='ngay-qd'>Trích yếu</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]='true' nzFor='ngay-qd'>Trích yếu</nz-form-label>
             <nz-form-control>
               <textarea rows='3' formControlName='trichYeu' class='search__input' nz-input placeholder='Nhập text'
-                [readonly]='isView'></textarea>
+                        [readonly]='isView'></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -119,37 +119,37 @@
   </div>
 
   <nz-card class='mt-2px flex-card data-table card-border-content table-card'>
-    <nz-table [nzData]='dataTable' [nzFrontPagination]='false' [nzShowPagination]='false'>
+    <nz-table [nzData]='dataTable' [nzFrontPagination]='false' [nzShowPagination]='false' nzBordered>
       <thead>
-        <tr>
-          <th class='text-center' style='width: 3%;'>STT</th>
-          <th style='width: 45%;'>Bộ</th>
-          <th style='width: 10%;'>Tổng</th>
-          <th style='width: 12%;'>Kế hoạch mua bù</th>
-          <th style='width: 12%;'>Kế hoạch mua bổ sung</th>
-          <th style='width: 8%;'>Hành động</th>
-        </tr>
+      <tr>
+        <th class='text-center' style='width: 3%;'>STT</th>
+        <th style='width: 45%;'>Bộ</th>
+        <th style='width: 10%;'>Tổng</th>
+        <th style='width: 12%;'>Kế hoạch mua bù</th>
+        <th style='width: 12%;'>Kế hoạch mua bổ sung</th>
+        <th style='width: 8%;'>Hành động</th>
+      </tr>
       </thead>
       <tbody>
-        <tr *ngFor='let data of dataTable; let idx = index'>
-          <td class='text-center'>{{ idx + 1 }}</td>
-          <td>{{ data.tenBoNganh }}</td>
-          <td>{{ data.tongTien | number: '1.0-3': 'vi_VN' }}</td>
-          <td>{{data.ttMuaBu | number: '1.0-3': 'vi_VN' }}</td>
-          <td>{{data.ttMuaBsung | number: '1.0-3': 'vi_VN' }}</td>
-          <td style='text-align: left; white-space: nowrap;'>
-            <a *ngIf='formData.value.trangThai != STATUS.DANG_NHAP_DU_LIEU' (click)='themKeHoach(data, idx,true)'>
-              <i class='fa fa-eye' title='Xem chi tiết'></i>
-            </a>
-            <a *ngIf='formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && !isView'
-              (click)='themKeHoach(data, idx,false)'>
-              <i class='fa fa-pencil' title='Sửa'></i>
-            </a>
-            <a *ngIf='formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && !isView' (click)='xoaItem(idx)'>
-              <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
-            </a>
-          </td>
-        </tr>
+      <tr *ngFor='let data of dataTable; let idx = index'>
+        <td class='text-center'>{{ idx + 1 }}</td>
+        <td>{{ data.tenBoNganh }}</td>
+        <td>{{ data.tongTien | number: '1.0-3': 'vi_VN' }}</td>
+        <td>{{data.ttMuaBu | number: '1.0-3': 'vi_VN' }}</td>
+        <td>{{data.ttMuaBsung | number: '1.0-3': 'vi_VN' }}</td>
+        <td style='text-align: left; white-space: nowrap;'>
+          <a *ngIf='formData.value.trangThai != STATUS.DANG_NHAP_DU_LIEU' (click)='themKeHoach(data, idx,true)'>
+            <i class='fa fa-eye' title='Xem chi tiết'></i>
+          </a>
+          <a *ngIf='formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && !isView'
+             (click)='themKeHoach(data, idx,false)'>
+            <i class='fa fa-pencil' title='Sửa'></i>
+          </a>
+          <a *ngIf='formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && !isView' (click)='xoaItem(idx)'>
+            <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
+          </a>
+        </td>
+      </tr>
       </tbody>
     </nz-table>
   </nz-card>

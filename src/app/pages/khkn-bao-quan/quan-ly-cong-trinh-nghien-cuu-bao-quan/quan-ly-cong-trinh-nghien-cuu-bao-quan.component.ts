@@ -15,11 +15,12 @@ import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { KhCnCongTrinhNghienCuu } from 'src/app/services/kh-cn-bao-quan/khCnCongTrinhNghienCuu';
-import { STATUS } from 'src/app/constants/status';
+import { STATUS, TRANG_THAI_CTNC } from 'src/app/constants/status';
+
 @Component({
   selector: 'app-quan-ly-cong-trinh-nghien-cuu-bao-quan',
   templateUrl: './quan-ly-cong-trinh-nghien-cuu-bao-quan.component.html',
-  styleUrls: ['./quan-ly-cong-trinh-nghien-cuu-bao-quan.component.scss']
+  styleUrls: ['./quan-ly-cong-trinh-nghien-cuu-bao-quan.component.scss'],
 })
 export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
 
@@ -31,19 +32,21 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
     tenDeTai: '',
     capDeTai: '',
     trangThai: '',
-    thoiGian: '',
-
+    thoiGianThucHien: '',
+    thoiGianHoanThanh: '',
   };
 
   filterTable: any = {
     maDeTai: '',
     tenDeTai: '',
     capDeTai: '',
+    tenDviChuTri: '',
+    chuNhiem: '',
     ngayKyTu: '',
     ngayKyDen: '',
     tenTrangThai: '',
   };
-  listCapDt: any[] = []
+  listCapDt: any[] = [];
   optionsDonVi: any[] = [];
   options: any[] = [];
   inputDonVi: string = '';
@@ -69,12 +72,9 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
   allChecked = false;
   indeterminate = false;
   tenCapDt: any[] = [];
-  STATUS = STATUS
-  listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
-    { ma: this.STATUS.DA_NGHIEM_THU, giaTri: 'Đã nghiệm thu' }
-  ];
+  STATUS = STATUS;
+  STATUS_KHCN = TRANG_THAI_CTNC;
+  listTrangThai: any[] = [];
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -86,7 +86,8 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
     public globals: Globals,
     private danhMucService: DanhMucService,
     private khCnCongTrinhNghienCuu: KhCnCongTrinhNghienCuu,
-  ) { }
+  ) {
+  }
 
   async ngOnInit() {
     // if (!this.userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ')) {
@@ -111,6 +112,7 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
       await this.getListCapDt();
       await this.search();
       await this.loaiVTHHGetAll();
+      await this.getListTrangThai();
 
       this.spinner.hide();
     } catch (e) {
@@ -125,12 +127,13 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       if (!this.typeVthh) {
         this.listHangHoa = res.data;
-      }
-      else {
+      } else {
         this.listHangHoa = res.data?.filter(x => x.ma == this.typeVthh);
-      };
+      }
+      ;
     }
   }
+
   async getListCapDt() {
     this.listCapDt = [];
     let res = await this.danhMucService.danhMucChungGetAll('CAP_DE_TAI');
@@ -138,6 +141,15 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
       this.listCapDt = res.data;
     }
   }
+
+  async getListTrangThai() {
+    this.listTrangThai = [];
+    let res = await this.danhMucService.danhMucChungGetAll('TRANG_THAI_CTNC');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listTrangThai = res.data;
+    }
+  }
+
   onChangeCapDeTai(capDetai) {
     // const tt = this.listCapDt.filter(s => s.ma == capDetai);
     // if (tt.length > 0) {
@@ -178,23 +190,28 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
 
   async search() {
     this.spinner.show();
-    console.log(this.searchFilter.thoiGian);
     try {
       let body = {
         maDeTai: this.searchFilter.maDeTai,
         tenDeTai: this.searchFilter.tenDeTai,
         capDeTai: this.searchFilter.capDeTai,
         trangThai: this.searchFilter.trangThai,
-        thoiGianTu: this.searchFilter.thoiGian
-          ? dayjs(this.searchFilter.thoiGian[0]).startOf('month')
+        thoiGianThTu: (this.searchFilter.thoiGianThucHien && this.searchFilter.thoiGianThucHien.length > 0)
+          ? dayjs(this.searchFilter.thoiGianThucHien[0]).startOf('month')
           : null,
-        thoiGianDen: this.searchFilter.thoiGian
-          ? dayjs(this.searchFilter.thoiGian[1]).endOf('month')
+        thoiGianThDen: (this.searchFilter.thoiGianThucHien && this.searchFilter.thoiGianThucHien.length > 0)
+          ? dayjs(this.searchFilter.thoiGianThucHien[1]).endOf('month')
+          : null,
+        thoiGianHtTu: (this.searchFilter.thoiGianHoanThanh && this.searchFilter.thoiGianHoanThanh.length > 0)
+          ? dayjs(this.searchFilter.thoiGianHoanThanh[0]).startOf('month')
+          : null,
+        thoiGianHtDen: (this.searchFilter.thoiGianHoanThanh && this.searchFilter.thoiGianHoanThanh.length > 0)
+          ? dayjs(this.searchFilter.thoiGianHoanThanh[1]).endOf('month')
           : null,
         paggingReq: {
           limit: this.pageSize,
           page: this.page - 1,
-        }
+        },
       };
       let res = await this.khCnCongTrinhNghienCuu.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -206,7 +223,7 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
             const tt = this.listCapDt.find(s => s.ma == item.capDeTai);
             if (tt) {
               this.tenCapDt = tt.giaTri;
-              Object.assign(item, { tenCapDt: this.tenCapDt })
+              Object.assign(item, { tenCapDt: this.tenCapDt });
             }
           });
         }
@@ -219,7 +236,7 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
       }
       this.spinner.hide();
     } catch (e) {
-      console.log(e)
+      console.log(e);
       this.spinner.hide();
     }
 
@@ -231,8 +248,8 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
       tenDeTai: '',
       capDeTai: '',
       trangThai: '',
-      thoiGian: '',
-
+      thoiGianThucHien: '',
+      thoiGianHoanThanh: '',
     };
     this.search();
   }
@@ -263,7 +280,6 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-
 
 
   convertTrangThai(status: string) {
@@ -345,7 +361,6 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach((item) => {
-        console.log(item.checked, "hh");
         if (item.checked) {
           dataDelete.push(item.id);
         }
@@ -378,9 +393,8 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
           }
         },
       });
-    }
-    else {
-      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    } else {
+      this.notification.error(MESSAGE.ERROR, 'Không có dữ liệu phù hợp để xóa.');
     }
   }
 
@@ -392,19 +406,17 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
         this.dataTableAll.forEach((item) => {
           if (['ngayKyTu', 'ngayKyDen'].includes(key)) {
             if (item[key] && dayjs(item[key]).format('MM/YYYY').indexOf(value.toString()) != -1) {
-              temp.push(item)
+              temp.push(item);
             }
-          }
-          else {
-            if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
-              temp.push(item)
+          } else {
+            if (item[key] && item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
+              temp.push(item);
             }
           }
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
@@ -419,7 +431,7 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
       phuongThucDauGia: '',
       loaiHangHoa: '',
       namKeHoach: '',
-    }
+    };
   }
 
   print() {
@@ -428,7 +440,7 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
   convertDateToString(event: any): string {
     let result = '';
     if (event) {
-      result = dayjs(event).format('MM/YYYY').toString()
+      result = dayjs(event).format('MM/YYYY').toString();
     }
     return result;
   }

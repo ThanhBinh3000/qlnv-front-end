@@ -22,7 +22,7 @@ export class MmQdMuaSamComponent extends Base2Component implements OnInit {
   isDetail: boolean = false;
 
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.DANG_NHAP_DU_LIEU, giaTri: 'Đang nhập dữ liệu' },
     { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
     { ma: this.STATUS.TU_CHOI_LDTC, giaTri: 'Từ chối LĐ - Tổng cục' },
     { ma: this.STATUS.CHO_DUYET_LDTC, giaTri: 'Chờ duyệt - LĐ Tổng cục' },

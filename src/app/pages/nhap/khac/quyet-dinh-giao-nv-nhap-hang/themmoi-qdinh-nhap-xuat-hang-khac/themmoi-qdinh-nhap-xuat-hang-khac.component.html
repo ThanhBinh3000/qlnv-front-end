@@ -163,8 +163,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Số lượng</nz-form-label>
             <nz-form-control>
-              <nz-input-number [nzFormatter]="globals.formatter" nzDisabled [ngModel]="sumSlNhap"
-                [ngModelOptions]="{standalone: true}" [nzSize]="'small'"></nz-input-number>
+              <nz-input-number [nzFormatter]="globals.formatter" nzDisabled formControlName="tongSlNhap" [nzSize]="'small'"></nz-input-number>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -302,7 +301,12 @@
                         <td>{{nganLo.tenNganLoKho}}</td>
                         <td>{{nganLo.tenCloaiVthh}}</td>
                         <td>{{nganLo.slTonKho | number : '1.0-1' : 'vi_VN'}}</td>
-                        <td>{{nganLo.slDoiThua | number : '1.0-1' : 'vi_VN'}}</td>
+                        <td class="text-right" *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.DOI_THUA">{{nganLo.slDoiThua | number : '1.0-1' : 'vi_VN'}}</td>
+                        <td class="text-right" *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_TANG_SO_LUONG_SAU_KK">{{nganLo.slTonKhoThucTe - nganLo.slTonKho | number : '1.0-1' : 'vi_VN'}}</td>
+                        <td class="text-right" *ngIf="formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_DO_BOI_THUONG
+                        || formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_DO_TAI_NHAP
+                        || formData.value.loaiHinhNx == loaiHinhNhapXuat.NHAP_KHAC ">{{nganLo.slNhap | number : '1.0-1' : 'vi_VN'}}</td>
+<!--                        <td>{{(nganLo.slTonKhoThucTe - nganLo.slTonKho) | number : '1.0-1' : 'vi_VN'}}</td>-->
                         <td>{{nganLo.soBbNDayKho}}</td>
                         <td>{{convertTrangThai(nganLo.trangThai)}}</td>
                       </tr>

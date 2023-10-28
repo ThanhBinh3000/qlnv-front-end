@@ -27,7 +27,7 @@ import { STATUS } from 'src/app/constants/status';
 import { chain, cloneDeep } from 'lodash';
 import { v4 as uuidv4 } from "uuid";
 import { PREVIEW } from "../../../../../../constants/fileType";
-import { TEN_LOAI_VTHH } from "src/app/constants/config";
+import { LOAI_HANG_DTQG, TEN_LOAI_VTHH } from "src/app/constants/config";
 
 @Component({
   selector: 'app-chi-tiet-tong-hop',
@@ -130,7 +130,7 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
         noiDungThop: ['', [Validators.required]],
         loaiNhapXuat: [''],
         kieuNhapXuat: [''],
-        loaiVthh: [''],
+        loaiVthh: [LOAI_HANG_DTQG.GAO],
         cloaiVthh: [''],
         tenVthh: [TEN_LOAI_VTHH.GAO, [Validators.required]],
         trangThai: [STATUS.DU_THAO],
@@ -284,6 +284,9 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
   }
 
   async save() {
+    if (!Array.isArray(this.formData.value.deXuatCuuTro) || this.formData.value.deXuatCuuTro.length <= 0) {
+      return this.notification.error(MESSAGE.ERROR, "Thông tin chi tiết đề xuất cứu trợ, viện trợ của các đơn vị không tồn tại")
+    }
     await this.helperService.ignoreRequiredForm(this.formData);
     let body = this.formData.value;
     body.kieuNhapXuat = 'Xuất không thu tiền';
@@ -518,6 +521,15 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
   }
 
   async changeVthh($event: any) {
+    if ($event == TEN_LOAI_VTHH.THOC) {
+      this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.THOC, donViTinh: "kg", deXuatCuuTro: [] });
+    } else if ($event == TEN_LOAI_VTHH.GAO) {
+      this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.GAO, donViTinh: "kg", deXuatCuuTro: [] });
+    } else if ($event == TEN_LOAI_VTHH.MUOI) {
+      this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.MUOI, donViTinh: "kg", deXuatCuuTro: [] });
+    } else {
+      this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.VAT_TU, donViTinh: null, deXuatCuuTro: [] });
+    };
     this.phuongAnHdrView = [];
     this.phuongAnView = [];
     this.tongSoLuongDx = 0;

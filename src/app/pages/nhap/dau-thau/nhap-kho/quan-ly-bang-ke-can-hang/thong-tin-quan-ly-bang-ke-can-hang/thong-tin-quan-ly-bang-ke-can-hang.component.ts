@@ -29,7 +29,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import {
   QuanLyNghiemThuKeLotService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyNghiemThuKeLot.service";
-import { cloneDeep } from 'lodash';
+import {cloneDeep} from 'lodash';
 @Component({
   selector: 'thong-tin-quan-ly-bang-ke-can-hang',
   templateUrl: './thong-tin-quan-ly-bang-ke-can-hang.component.html',
@@ -374,8 +374,8 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
 
   addRow() {
     // if (this.validateDataRow()) {
-    this.dataTable = [...this.dataTable, this.rowItem];
-    this.rowItem = {};
+      this.dataTable = [...this.dataTable, this.rowItem];
+      this.rowItem = {};
     // }
   }
 

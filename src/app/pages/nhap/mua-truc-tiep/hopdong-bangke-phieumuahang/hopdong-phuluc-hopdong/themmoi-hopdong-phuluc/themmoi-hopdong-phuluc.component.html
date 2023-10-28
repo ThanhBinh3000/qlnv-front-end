@@ -54,8 +54,7 @@
               </div>
               <div nz-col [nzSpan]="4" *ngIf="userService.isChiCuc()">
                 <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ QĐ PD KH mua trực tiếp được ủy
-                    quyền</nz-form-label>
+                  <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ QĐ PD KH mua trực tiếp được ủy quyền</nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQdKh()">
                       <input nz-input [readonly]="true" formControlName="soQdKh" />
@@ -144,8 +143,7 @@
               </div>
               <div nz-col [nzSpan]="3">
                 <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true" nzTooltipTitle="Ngày hiệu lực">Ngày hiệu
-                    lực</nz-form-label>
+                  <nz-form-label nzRequired [nzNoColon]="true" nzTooltipTitle="Ngày hiệu lực">Ngày hiệu lực</nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-date-picker [nzDisabled]="isDisabled()" nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày hiệu lực"
                       formControlName="ngayHluc">
@@ -365,22 +363,19 @@
               <div nz-col [nzSpan]="6">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true">Tên đơn vị mua hàng</nz-form-label>
-                  <input nz-input [readonly]="!userService.isChiCuc()" placeholder="Tên đơn vị thực hiện"
-                    formControlName="tenDviBan" />
+                  <input nz-input [readonly]="!userService.isChiCuc()" placeholder="Tên đơn vị thực hiện" formControlName="tenDviBan" />
                 </nz-form-item>
               </div>
               <div nz-col [nzSpan]="12">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Địa chỉ</nz-form-label>
-                  <input nz-input [readonly]="!userService.isChiCuc()" placeholder="Địa chỉ"
-                    formControlName="diaChiDviBan" />
+                  <input nz-input [readonly]="!userService.isChiCuc()" placeholder="Địa chỉ" formControlName="diaChiDviBan" />
                 </nz-form-item>
               </div>
               <div nz-col [nzSpan]="6">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Mã số thuế </nz-form-label>
-                  <input nz-input [readonly]="!userService.isChiCuc()" placeholder="Mã số thuế"
-                    formControlName="mstDviBan" />
+                  <input nz-input [readonly]="!userService.isChiCuc()" placeholder="Mã số thuế" formControlName="mstDviBan" />
                 </nz-form-item>
               </div>
               <div nz-col [nzSpan]="6">
@@ -548,7 +543,7 @@
 
               <div nz-col [nzSpan]="5">
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> SL xuất bán TT theo QĐ phê duyệt KH bán trực tiếp
+                  <nz-form-label [nzNoColon]="true"> SL nhập TT theo QĐ phê duyệt KH mua trực tiếp
                     chưa ký HĐ
                   </nz-form-label>
                   <nz-form-control nz-col [nzSpan]="24">
@@ -601,8 +596,7 @@
                     <td>{{children.tenDiemKho}}</td>
                     <td>{{children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                     <td *ngIf="isDisabled()">{{children.soLuongHd | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td *ngIf="!isDisabled()"><input nz-input placeholder="Số lượng HĐ"
-                        [(ngModel)]="children.soLuongHd" /></td>
+                    <td *ngIf="!isDisabled()"><input nz-input placeholder="Số lượng HĐ" [(ngModel)]="children.soLuongHd" /></td>
                     <td>{{children.soLuongHd * children.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN'}}
                     </td>
                   </tr>
@@ -617,75 +611,75 @@
         <nz-collapse-panel [nzHeader]="'ĐỊA ĐIỂM CUNG CẤP HÀNG HÓA'" [nzActive]="true">
           <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered>
             <thead>
-              <tr>
-                <th width="60px" class="text-center"></th>
-                <th nzWidth="150px" class="text-center wrap">Chi cục</th>
-                <th nzWidth="150px" class="text-center wrap">SL theo chỉ tiêu KH năm</th>
-                <th nzWidth="100px" class="text-center wrap">SL theo Kh năm đã được duyệt</th>
-                <th nzWidth="100px" class="text-center wrap">Điểm kho</th>
-                <th nzWidth="100px" class="text-center wrap">Nhà kho</th>
-                <th nzWidth="100px" class="text-center wrap">Ngăn kho</th>
-                <th nzWidth="100px" class="text-center wrap">Lô kho</th>
-                <th nzWidth="100px" class="text-center wrap">SL mua trực tiếp (tấn)</th>
-                <th nzWidth="100px" class="text-center wrap">Đơn giá có VAT (đ/kg)</th>
-                <th nzWidth="100px" class="text-center wrap">Thành tiền (đ)</th>
-                <th nzWidth="100px" class="text-center wrap">Bằng chữ</th>
-                <th nzWidth="100px" class="text-center wrap">Hành động</th>
-              </tr>
+            <tr>
+              <th width="60px" class="text-center"></th>
+              <th nzWidth="150px" class="text-center wrap">Chi cục</th>
+              <th nzWidth="150px" class="text-center wrap">SL theo chỉ tiêu KH năm</th>
+              <th nzWidth="100px" class="text-center wrap">SL theo Kh năm đã được duyệt</th>
+              <th nzWidth="100px" class="text-center wrap">Điểm kho</th>
+              <th nzWidth="100px" class="text-center wrap">Nhà kho</th>
+              <th nzWidth="100px" class="text-center wrap">Ngăn kho</th>
+              <th nzWidth="100px" class="text-center wrap">Lô kho</th>
+              <th nzWidth="100px" class="text-center wrap">SL mua trực tiếp (tấn)</th>
+              <th nzWidth="100px" class="text-center wrap">Đơn giá có VAT (đ/kg)</th>
+              <th nzWidth="100px" class="text-center wrap">Thành tiền (đ)</th>
+              <th nzWidth="100px" class="text-center wrap">Bằng chữ</th>
+              <th nzWidth="100px" class="text-center wrap">Hành động</th>
+            </tr>
             </thead>
             <tbody>
-              <ng-container *ngFor="let item of dataTable , let i = index">
+            <ng-container *ngFor="let item of dataTable , let i = index">
+              <tr>
+                <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+                <td>{{item.tenDvi}}</td>
+                <td>{{item.soLuongGiao}}</td>
+                <td>{{item.soLuong}}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <ng-container *ngFor="let children of item.children, let y = index">
                 <tr>
-                  <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-                  <td>{{item.tenDvi}}</td>
-                  <td>{{item.soLuongGiao}}</td>
-                  <td>{{item.soLuong}}</td>
                   <td></td>
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td></td>
-                  <td></td>
+                  <td>{{children.tenDiemKho}}</td>
+                  <td>{{children.tenNhaKho}}</td>
+                  <td>{{children.tenNganKho}}</td>
+                  <td>{{children.tenLoKho}}</td>
+                  <td>{{children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td>{{children.soLuong * children.donGia * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
                   <td></td>
                   <td></td>
                   <td></td>
                 </tr>
-                <ng-container *ngFor="let children of item.children, let y = index">
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>{{children.tenDiemKho}}</td>
-                    <td>{{children.tenNhaKho}}</td>
-                    <td>{{children.tenNganKho}}</td>
-                    <td>{{children.tenLoKho}}</td>
-                    <td>{{children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{children.soLuong * children.donGia * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <!--                <ng-container *ngFor="let diaDiem of item.children, let k = index">-->
-                  <!--                  <tr>-->
-                  <!--                    <td></td>-->
-                  <!--                    <td></td>-->
-                  <!--                    <td></td>-->
-                  <!--                    <td></td>-->
-                  <!--                    <td></td>-->
-                  <!--                    <td>{{diaDiem.tenNhaKho}}</td>-->
-                  <!--                    <td>{{diaDiem.tenNganKho}}</td>-->
-                  <!--                    <td>{{diaDiem.tenLoKho}}</td>-->
-                  <!--                    <td>{{children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>-->
-                  <!--                    <td>{{children.soLuong * children.donGia * 1000 | number : '1.0-1' : 'vi_VN'}}-->
-                  <!--                    </td>-->
-                  <!--                    <td></td>-->
-                  <!--                    <td></td>-->
-                  <!--                    <td></td>-->
-                  <!--                  </tr>-->
-                  <!--                </ng-container>-->
-                </ng-container>
+<!--                <ng-container *ngFor="let diaDiem of item.children, let k = index">-->
+<!--                  <tr>-->
+<!--                    <td></td>-->
+<!--                    <td></td>-->
+<!--                    <td></td>-->
+<!--                    <td></td>-->
+<!--                    <td></td>-->
+<!--                    <td>{{diaDiem.tenNhaKho}}</td>-->
+<!--                    <td>{{diaDiem.tenNganKho}}</td>-->
+<!--                    <td>{{diaDiem.tenLoKho}}</td>-->
+<!--                    <td>{{children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>-->
+<!--                    <td>{{children.soLuong * children.donGia * 1000 | number : '1.0-1' : 'vi_VN'}}-->
+<!--                    </td>-->
+<!--                    <td></td>-->
+<!--                    <td></td>-->
+<!--                    <td></td>-->
+<!--                  </tr>-->
+<!--                </ng-container>-->
               </ng-container>
+            </ng-container>
             </tbody>
           </nz-table>
         </nz-collapse-panel>

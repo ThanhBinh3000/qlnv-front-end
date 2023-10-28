@@ -1,90 +1,52 @@
-.file-list {
-    width: 50%;
-    overflow: unset;
+::ng-deep .ant-checkbox-group {
+  display: inline-grid;
+  grid-template-columns: auto auto auto;
 }
 
+.direction-column {
+  display: flex;
+  flex-direction: column !important;
+  flex-wrap: wrap;
+}
+
+.custom-div nz-form-label[nzNoColon="true"][nzRequired]::before {
+  font-weight: bold;
+  font-size: 1.2em;
+  color: black;
+}
 ::ng-deep {
-    .header-file {
-        display: flex;
-        gap: 10px;
+  .custom-div::before {
+    position: absolute;
+    content: "";
+    top: 15px;
+    left: 0;
+    bottom: 0;
+    right: 12px;
+    background-color: rgba(240, 240, 240, 0.7);
+    opacity: 0.7;
+  }
+  .custom-div {
+    .bg-label {
+      label {
+        position: relative;
+        width: 100%;
+        opacity: 0.7;
+        padding: 10px;
+        font-size: 14px;
+        font-weight: bold;
+        color: black;
+      }
     }
-
-    .header-file,
-    .body-file {
-        .ant-input-group-addon {
-            position: relative;
-
-            .input-file {
-                left: 0;
-                position: absolute;
-                width: 100%;
-                opacity: 0;
-                top: -2px;
-            }
-        }
-    }
+  }
 }
 
-.icon-plus,
-.icon-download,
-.icon-edit,
-.icon-empty {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #F8F9FA;
-    border: 1px solid #C4C9CC;
-    font-size: 12px;
-    cursor: pointer;
-    padding: 0px 7px;
-}
-
-.icon-download {
-    padding: 4px 7px;
-}
-
-.icon-xoa {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #FFF3F3;
-    border: 1px solid #FF4D4F;
-    font-size: 12px;
-    cursor: pointer;
-    padding: 0px 8px;
-}
-
-.body-file {
-    margin-top: 10px;
-    display: flex;
-    gap: 10px;
-
-    .ten-file {
-        font-size: 13px;
-        color: #2196F3;
-    }
-
-    .stt-file {
-        width: 10%;
-    }
-
-    .content-text {
-        width: 51%;
-    }
-
-    .content-data {
-        width: 91%;
-    }
-
-    .name-file {
-        width: 50%;
-    }
-}
-
-::ng-deep {
-    .list-file {
-        .ant-input-group-addon:last-child {
-            padding: 0px 8px !important;
-        }
-    }
+.custom-div .bg-label::before {
+  content: "| ";
+  font-weight: bold;
+  font-size: 1.6em;
+  color: black;
+  position: absolute;
+  top: 50%;
+  left: 4px;
+  transform: translateY(-35%);
 }

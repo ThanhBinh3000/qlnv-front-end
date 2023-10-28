@@ -3,35 +3,29 @@
     <div nz-col nzspan="4">
       <ul nz-menu nzMode="inline" style="max-width: 300px">
         <li nz-submenu nzOpen="true" nzTitle="&nbsp;&nbsp;&nbsp;Báo cáo theo thông tư 145/2013/TT-BTC"
-          *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145')">
+            *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145')">
           <ul>
-            <li nz-menu-item (click)="selectTab(0)"
-              *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHTHNXHDTQG')">
+            <li nz-menu-item (click)="selectTab(0)" *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHTHNXHDTQG')">
               <span nz-icon nzType="fund"></span>
               <span>KH tổng hợp nhập, xuất hàng DTQG</span>
             </li>
-            <li nz-menu-item (click)="selectTab(1)"
-              *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHTHDTQG')">
+            <li nz-menu-item (click)="selectTab(1)" *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHTHDTQG')">
               <span nz-icon nzType="fund"></span>
               <span>KH tăng hàng DTQG</span>
             </li>
-            <li nz-menu-item (click)="selectTab(2)"
-              *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHGHDTQG')">
+            <li nz-menu-item (click)="selectTab(2)" *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHGHDTQG')">
               <span nz-icon nzType="fund"></span>
               <span>KH giảm hàng DTQG</span>
             </li>
-            <li nz-menu-item (click)="selectTab(3)"
-              *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHLPDHDTQG')">
+            <li nz-menu-item (click)="selectTab(3)" *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHLPDHDTQG')">
               <span nz-icon nzType="fund"></span>
               <span>KH luân phiên đổi hàng DTQG</span>
             </li>
-            <li nz-menu-item (click)="selectTab(4)"
-              *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHNXCTVTHDTQG')">
+            <li nz-menu-item (click)="selectTab(4)" *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHNXCTVTHDTQG')">
               <span nz-icon nzType="fund"></span>
               <span>Thực hiện KH hoạch nhập, xuất, cứu trợ, viện trợ, bảo quản hàng DTQG</span>
             </li>
-            <li nz-menu-item (click)="selectTab(5)"
-              *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_NXTHDTQG')">
+            <li nz-menu-item (click)="selectTab(5)" *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_NXTHDTQG')">
               <span nz-icon nzType="fund"></span>
               <span>Nhập, xuất, tồn kho hàng DTQG</span>
             </li>
@@ -39,8 +33,7 @@
             <!--              <span nz-icon nzType="fund"></span>-->
             <!--              <span>Nhập dữ liệu chi tiết nhập, xuất, tồn kho hàng DTQG</span>-->
             <!--            </li>-->
-            <li nz-menu-item (click)="selectTab(6)"
-              *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_CTNXTHDTQG')">
+            <li nz-menu-item (click)="selectTab(6)" *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_CTNXTHDTQG')">
               <span nz-icon nzType="fund"></span>
               <span>Chi tiết nhập, xuất, tồn kho hàng DTQG</span>
             </li>
@@ -48,60 +41,47 @@
         </li>
       </ul>
       <ul nz-menu nzMode="inline" style="max-width: 300px">
-        <li nz-submenu nzTitle="&nbsp;&nbsp;&nbsp;Báo cáo theo thông tư 130/2018/TT-BTC"
-          *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130')">
+        <li nz-submenu nzTitle="&nbsp;&nbsp;&nbsp;Báo cáo theo thông tư 130/2018/TT-BTC" *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130')">
           <ul>
-            <li nz-menu-item (click)="selectTab(8)"
-              *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_NHTDTQG')">
+            <li nz-menu-item (click)="selectTab(8)" *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_NHTDTQG')">
               <span nz-icon nzType="fund"></span>
               <span>Nguồn hình thành DTQG</span>
             </li>
-            <li nz-menu-item (click)="selectTab(9)"
-              *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_TCMHDTQG')">
+            <li nz-menu-item (click)="selectTab(9)" *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_TCMHDTQG')">
               <span nz-icon nzType="fund"></span>
               <span>Tổng chi cho mua hàng DTQG trong kỳ</span>
             </li>
-            <li nz-menu-item (click)="selectTab(10)"
-              *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_KHMHDTQG')">
+            <li nz-menu-item (click)="selectTab(10)" *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_KHMHDTQG')">
               <span nz-icon nzType="fund"></span>
               <span>KH mua hàng DTQG</span>
             </li>
-            <li nz-menu-item (click)="selectTab(11)"
-              *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_SLGTHDTQG')">
+            <li nz-menu-item (click)="selectTab(11)" *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_SLGTHDTQG')">
               <span nz-icon nzType="fund"></span>
               <span>Số lượng và giá trị hàng DTQG</span>
             </li>
-            <li nz-menu-item (click)="selectTab(12)"
-              *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_SLGTHDTQGN')">
+            <li nz-menu-item (click)="selectTab(12)" *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_SLGTHDTQGN')">
               <span nz-icon nzType="fund"></span>
               <span>Số lượng và giá trị hàng DTQG nhập trong kỳ</span>
             </li>
-            <li nz-menu-item (click)="selectTab(13)"
-              *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_SLGTHDTQGX')">
+            <li nz-menu-item (click)="selectTab(13)" *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_SLGTHDTQGX')">
               <span nz-icon nzType="fund"></span>
               <span>Số lượng và giá trị hàng DTQG xuất trong kỳ</span>
             </li>
-            <li nz-menu-item (click)="selectTab(14)"
-              *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_SLGTHDTQGXC')">
+            <li nz-menu-item (click)="selectTab(14)" *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_SLGTHDTQGXC')">
               <span nz-icon nzType="fund"></span>
               <span>Số lượng và giá trị hàng DTQG xuất cấp không thu tiền trong kỳ</span>
             </li>
-            <li nz-menu-item (click)="selectTab(15)"
-              *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_SLGTHDTQGXCTVT')">
+            <li nz-menu-item (click)="selectTab(15)" *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_SLGTHDTQGXCTVT')">
               <span nz-icon nzType="fund"></span>
-              <span>Số lượng và giá trị hàng DTQG xuất cấp cứu trợ, hỗ trợ, phục vụ quốc phòng, an ninh và nhiệm vụ khác
-                trong kỳ</span>
+              <span>Số lượng và giá trị hàng DTQG xuất cấp cứu trợ, hỗ trợ, phục vụ quốc phòng, an ninh và nhiệm vụ khác trong kỳ</span>
             </li>
-            <li nz-menu-item (click)="selectTab(16)"
-              *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_SLGTHDTQGXVT')">
+            <li nz-menu-item (click)="selectTab(16)" *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_SLGTHDTQGXVT')">
               <span nz-icon nzType="fund"></span>
               <span>Số lượng và giá trị hàng DTQG xuất viện trợ trong kỳ</span>
             </li>
-            <li nz-menu-item (click)="selectTab(17)"
-              *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_TNSDHDTQG')">
+            <li nz-menu-item (click)="selectTab(17)" *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_TNSDHDTQG')">
               <span nz-icon nzType="fund"></span>
-              <span>Tiếp nhận, sử dụng hàng DTQG xuất cứu trợ, quốc phòng, an ninh và nhiệm vụ khác được giao trong
-                kỳ</span>
+              <span>Tiếp nhận, sử dụng hàng DTQG xuất cứu trợ, quốc phòng, an ninh và nhiệm vụ khác được giao trong kỳ</span>
             </li>
           </ul>
         </li>

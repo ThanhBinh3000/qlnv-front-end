@@ -13,6 +13,7 @@ import {
   DialogThemMoiXuatBanTrucTiepComponent
 } from "../../../../../../../components/dialog/dialog-them-moi-xuat-ban-truc-tiep/dialog-them-moi-xuat-ban-truc-tiep.component";
 import dayjs from "dayjs";
+import {LOAI_HANG_DTQG} from "../../../../../../../constants/config";
 
 @Component({
   selector: 'app-thong-tin-chi-tiet-dieu-chinh',
@@ -24,7 +25,9 @@ export class ThongTinChiTietDieuChinhComponent implements OnChanges {
   @Input() dataInput;
   @Input() isView;
   @Input() isCache;
+  @Input() loaiVthhCache;
   @Output() countChanged: EventEmitter<any> = new EventEmitter();
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   formData: FormGroup
   dataTable: any[] = [];
 
@@ -52,7 +55,7 @@ export class ThongTinChiTietDieuChinhComponent implements OnChanges {
       pthucGnhan: [''],
       thongBao: [],
       tongSoLuong: [],
-      tongTien: [],
+      thanhTien: [],
       donViTinh: [''],
     });
   }
@@ -88,6 +91,9 @@ export class ThongTinChiTietDieuChinhComponent implements OnChanges {
       nzFooter: null,
       nzComponentParams: {
         dataEdit: data,
+        loaiVthh: this.dataInput.loaiVthh,
+        cloaiVthh: this.dataInput.cloaiVthh,
+        typeLoaiVthh: this.loaiVthhCache
       },
     });
     modalGT.afterClose.subscribe(async (updatedData) => {
@@ -122,12 +128,16 @@ export class ThongTinChiTietDieuChinhComponent implements OnChanges {
 
   calculatorTable() {
     this.dataTable.forEach(item => {
-      item.soLuongChiCuc = item.children.reduce((acc, child) => acc + child.soLuongDeXuat, 0);
-      item.tienChiCuc = item.children.reduce((acc, child) => acc + child.thanhTien, 0);
+      item.tienChiCuc = 0;
+      item.children.forEach(child => {
+        child.thanhTienDuocDuyet = child.donGiaDuocDuyet * child.soLuongDeXuat;
+        child.thanhTienDeXuat = child.soLuongDeXuat * child.donGiaDeXuat;
+      });
+      item.tienChiCuc = item.children.map(child => child.thanhTienDuocDuyet).reduce((prev, cur) => prev + cur, 0);
     });
     this.formData.patchValue({
       tongSoLuong: this.dataTable.reduce((acc, item) => acc + item.soLuongChiCuc, 0),
-      tongTien: this.dataTable.reduce((prev, cur) => prev + cur.tienChiCuc, 0),
+      thanhTien: this.dataTable.reduce((prev, cur) => prev + cur.tienChiCuc, 0),
     });
   }
 

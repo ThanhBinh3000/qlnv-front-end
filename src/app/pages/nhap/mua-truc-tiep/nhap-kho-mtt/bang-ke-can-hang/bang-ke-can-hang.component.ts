@@ -103,7 +103,7 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
     let body = {
       trangThai: this.STATUS.BAN_HANH,
       tuNgayNkho: this.tuNgayNkho != null ? dayjs(this.tuNgayNkho).format('YYYY-MM-DD') + " 00:00:00" : null,
-      denNgayNkho: this.denNgayNkho != null ? dayjs(this.denNgayNkho).format('YYYY-MM-DD') + " 23:59:59" : null,
+      denNgayNkho: this.denNgayNkho != null ? dayjs(this.denNgayNkho).format('YYYY-MM-DD') + " 23:59:59": null,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1
@@ -266,7 +266,7 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
             ? dayjs(this.searchFilter.ngayNkho[1]).format('YYYY-MM-DD')
             : null,
           tuNgayNkho: this.tuNgayNkho != null ? dayjs(this.tuNgayNkho).format('YYYY-MM-DD') + " 00:00:00" : null,
-          denNgayNkho: this.denNgayNkho != null ? dayjs(this.denNgayNkho).format('YYYY-MM-DD') + " 23:59:59" : null,
+          denNgayNkho: this.denNgayNkho != null ? dayjs(this.denNgayNkho).format('YYYY-MM-DD') + " 23:59:59": null,
           namKh: this.searchFilter.namKh,
           soQuyetDinhNhap: this.searchFilter.soQuyetDinhNhap,
           soBangKeCanHang: this.searchFilter.soBangKeCanHang,

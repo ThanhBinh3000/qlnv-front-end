@@ -3,8 +3,7 @@
     <div class='header header-green-background mg-t-10'>
       <div class='header-text'>
         <div class='title-chi-tieu'>
-          <span class='text-uppercase font-weight-bold'>Tổng hợp báo cáo số lượng, chất lượng máy móc thiết bị chuyên
-            dụng</span>
+          <span class='text-uppercase font-weight-bold'>Tổng hợp báo cáo số lượng, chất lượng máy móc thiết bị chuyên dụng</span>
         </div>
       </div>
     </div>
@@ -48,12 +47,12 @@
     </nz-card>
     <div class='cangiua group-button-search'>
       <button type='button' class='search__button--clear' (click)='clearFilter()'
-        *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_EXP1')">
+              *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_EXP1')">
         <i class='icon  htvbdh_nhap-lai1'></i>
         <span>Xóa điều kiện</span>
       </button>
       <button type='button' class='search__button--search' (click)='preView()'
-        *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_EXP1')">
+              *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_EXP1')">
         <i class='icon htvbdh_chuyen-xu-ly'></i>
         <span>Kết xuất báo cáo</span>
       </button>

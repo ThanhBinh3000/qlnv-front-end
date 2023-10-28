@@ -53,13 +53,12 @@ export class PhuongAnDieuChinhCtkhComponent extends Base2Component implements On
       cap: [],
     })
     this.filterTable = {
-      nam: '',
-      soQdinh: '',
-      ngayKyQdinh: '',
-      tenLoaiDc: '',
-      tenLoaiQdinh: '',
+      namKeHoach: '',
+      soCongVan: '',
+      ngayKy: '',
       trichYeu: '',
-      soDxuat: '',
+      soQuyetDinhGiaoNamTruoc: '',
+      soQuyetDinhDcCuaC: '',
       tenTrangThai: '',
     };
   }
@@ -219,20 +218,18 @@ export class PhuongAnDieuChinhCtkhComponent extends Base2Component implements On
       this.spinner.show();
       try {
 
+        if (this.formData.value.ngayKyTu) {
+          this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayDuyetTcTu).format('YYYY-MM-DD')
+        }
+        if (this.formData.value.ngayKyDen) {
+          this.formData.value.ngayKyDen = dayjs(this.formData.value.ngayKyDen).format('YYYY-MM-DD')
+        }
         let body = this.formData.value;
-        debugger
-        if (this.formData.value.ngayDuyetTc) {
-          body.ngayDuyetTcTu = body.ngayDuyetTc[0];
-          body.ngayDuyetTcDen = body.ngayDuyetTc[1];
-        }
-        if (this.formData.value.ngayHieuLuc) {
-          body.ngayHieuLucTu = body.ngayHieuLuc[0];
-          body.ngayHieuLucDen = body.ngayHieuLuc[1];
-        }
+
         this.phuongAnDieuChinhCTKHService
-          .export(body)
+          .exportlist(body)
           .subscribe((blob) =>
-            saveAs(blob, 'quyet-dinh-dieu-chuyen-cuc.xlsx'),
+            saveAs(blob, 'phuong-an-dieu-chinh-chi-tieu-kh.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {

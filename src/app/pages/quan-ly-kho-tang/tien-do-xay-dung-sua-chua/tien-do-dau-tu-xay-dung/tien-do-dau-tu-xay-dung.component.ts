@@ -1,31 +1,31 @@
-import { Component, OnInit } from '@angular/core';
-import { Base2Component } from "../../../../components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { chain } from "lodash";
-import { v4 as uuidv4 } from "uuid";
+import {Component, OnInit} from '@angular/core';
+import {Base2Component} from "../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {chain} from "lodash";
+import {v4 as uuidv4} from "uuid";
 import {
   QuyetdinhpheduyetduandtxdService
 } from "../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetduandtxd.service";
-import { KtQdXdHangNamService } from "../../../../services/kt-qd-xd-hang-nam.service";
-import { DANH_MUC_LEVEL } from "../../../luu-kho/luu-kho.constant";
-import { DonviService } from "../../../../services/donvi.service";
-import { MESSAGE } from "../../../../constants/message";
+import {KtQdXdHangNamService} from "../../../../services/kt-qd-xd-hang-nam.service";
+import {DANH_MUC_LEVEL} from "../../../luu-kho/luu-kho.constant";
+import {DonviService} from "../../../../services/donvi.service";
+import {MESSAGE} from "../../../../constants/message";
 import {
   QuyetdinhpheduyetTktcTdtService
 } from "../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetTktcTdt.service";
-import { STATUS } from "../../../../constants/status";
+import {STATUS} from "../../../../constants/status";
 import {
   QuyetdinhpheduyetKhlcntService
 } from "../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKhlcnt.service";
 import {
   QuyetdinhpheduyetKqLcntService
 } from "../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKqLcnt.service";
-import { HopdongService } from "../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/hopdong.service";
-import { Router } from "@angular/router";
+import {HopdongService} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/hopdong.service";
+import {Router} from "@angular/router";
 import {
   BienBanNghiemThuDtxdService
 } from "../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/bien-ban-nghiem-thu-dtxd.service";
@@ -37,9 +37,9 @@ import {
 })
 export class TienDoDauTuXayDungComponent extends Base2Component implements OnInit {
   listTrangThai: any[] = [
-    { ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện' },
-    { ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
-    { ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành' },
+    {ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện'},
+    {ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện'},
+    {ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành'},
   ];
   danhSachChiCuc: any[] = [];
   dataTable: any[] = [];
@@ -192,7 +192,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
       let res = await this.quyetdinhpheduyetduandtxdService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.itemQdPdDaDtxd = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
-        console.log(this.itemQdPdDaDtxd, "this.itemQdPdDaDtxd")
+        console.log(this.itemQdPdDaDtxd,"this.itemQdPdDaDtxd")
         //Check tiếp quyết định phê duyệt bản vẽ
         if (this.itemQdPdDaDtxd) {
           await this.loadItemQdPdTktcTdt(this.itemQdPdDaDtxd);
@@ -300,10 +300,10 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
   async loadItemDsGoiThau() {
     if (this.itemHopDong.length > 0) {
       let body = {
-        "namKh": this.itemSelected && this.itemSelected.namKeHoach ? this.itemSelected.namKeHoach : null,
+        "namKh": this.itemSelected &&  this.itemSelected.namKeHoach ? this.itemSelected.namKeHoach : null,
         "idDuAn": this.itemSelected && this.itemSelected.id ? this.itemSelected.id : null,
-        "idQdPdKhLcnt": this.itemQdPdKhLcnt && this.itemQdPdKhLcnt.id ? this.itemQdPdKhLcnt.id : null,
-        "idQdPdDaDtxd": this.itemQdPdDaDtxd && this.itemQdPdDaDtxd.id ? this.itemQdPdDaDtxd.id : null,
+        "idQdPdKhLcnt": this.itemQdPdKhLcnt &&  this.itemQdPdKhLcnt.id ? this.itemQdPdKhLcnt.id : null,
+        "idQdPdDaDtxd": this.itemQdPdDaDtxd &&  this.itemQdPdDaDtxd.id ? this.itemQdPdDaDtxd.id : null,
       }
       let res = await this.hopdongService.detailQdPdKhLcnt(body);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -327,11 +327,11 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
   async loadBbNghiemThu() {
     if (this.itemHopDong.length > 0) {
       let body = {
-        namKh: this.itemSelected && this.itemSelected.namKeHoach ? this.itemSelected.namKeHoach : null,
+        namKh: this.itemSelected&&  this.itemSelected.namKeHoach ? this.itemSelected.namKeHoach : null,
         maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
         idDuAn: this.idSelected && this.itemSelected.id ? this.itemSelected.id : null,
-        loai: "00",
-        paggingReq: {
+        loai : "00",
+        paggingReq : {
           limit: 999,
           page: 0
         }
@@ -361,22 +361,22 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
           let rs = chain(value)
             .groupBy("namKeHoach")
             .map((v, k) => {
-              let rs1 = chain(v)
-                .groupBy("tenChiCuc")
-                .map((v1, k1) => {
-                  return {
-                    idVirtual: uuidv4(),
-                    tenChiCuc: k1,
-                    dataChild: v1
-                  };
-                }
-                ).value();
-              return {
-                idVirtual: uuidv4(),
-                namKeHoach: k,
-                dataChild: rs1
-              };
-            }
+                let rs1 = chain(v)
+                  .groupBy("tenChiCuc")
+                  .map((v1, k1) => {
+                      return {
+                        idVirtual: uuidv4(),
+                        tenChiCuc: k1,
+                        dataChild: v1
+                      };
+                    }
+                  ).value();
+                return {
+                  idVirtual: uuidv4(),
+                  namKeHoach: k,
+                  dataChild: rs1
+                };
+              }
             ).value();
           return {
             idVirtual: uuidv4(),

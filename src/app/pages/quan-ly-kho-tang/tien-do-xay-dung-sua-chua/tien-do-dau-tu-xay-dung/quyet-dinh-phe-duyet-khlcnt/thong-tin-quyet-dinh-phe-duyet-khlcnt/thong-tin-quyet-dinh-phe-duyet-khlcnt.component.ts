@@ -276,7 +276,7 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
       let res = await this.quyetdinhpheduyetKhlcntService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
-          const data = res.data;
+          const  data= res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.formData.patchValue({
             soQd: data.soQd ? data.soQd.split('/')[0] : null,

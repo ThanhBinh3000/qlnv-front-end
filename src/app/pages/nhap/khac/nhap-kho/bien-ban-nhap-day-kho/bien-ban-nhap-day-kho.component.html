@@ -194,8 +194,7 @@
                         <td class="bold">{{row3.tenTrangThai || ""}}</td>
                         <td>
 
-                          <a *ngIf="!row3.soBbNhapDayKho && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_THEM')"
-                            (click)="add(row2)">
+                          <a *ngIf="!row3.soBbNhapDayKho && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_THEM')" (click)="add(row2)">
                             <i class="icon htvbdh_dau-cong"></i>
                           </a>
 
@@ -208,11 +207,10 @@
                             <i class="fa fa-pencil" title="Sửa"></i>
                           </a>
                           <a *ngIf="(row3.trangThai == STATUS.CHO_DUYET_KTVBQ && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_DUYET_KTVBQ')) || (row3.trangThai == STATUS.CHO_DUYET_KT && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_DUYET_KETOAN')) || (row3.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_DUYET_LDCCUC'))"
-                            (click)="redirectDetail(row3, true)">
+                             (click)="redirectDetail(row3, true)">
                             <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
                           </a>
-                          <a *ngIf="row3.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_XOA')"
-                            (click)="xoa(row3)">
+                          <a *ngIf="row3.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_XOA')" (click)="xoa(row3)">
                             <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                           </a>
                         </td>

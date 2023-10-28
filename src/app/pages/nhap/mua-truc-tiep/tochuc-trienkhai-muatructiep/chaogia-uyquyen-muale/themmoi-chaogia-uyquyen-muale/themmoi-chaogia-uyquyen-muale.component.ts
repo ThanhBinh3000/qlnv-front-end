@@ -13,8 +13,8 @@ import { saveAs } from 'file-saver';
 import { STATUS } from 'src/app/constants/status';
 import { QuyetDinhPheDuyetKeHoachMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ke-hoach-mtt.service';
 import { ChaogiaUyquyenMualeService } from 'src/app/services/chaogia-uyquyen-muale.service';
-import { AddDiemKho, ChiTietThongTinChaoGia } from 'src/app/models/DeXuatKeHoachMuaTrucTiep';
-import { DonviService } from "../../../../../../services/donvi.service";
+import {AddDiemKho, ChiTietThongTinChaoGia} from 'src/app/models/DeXuatKeHoachMuaTrucTiep';
+import {DonviService} from "../../../../../../services/donvi.service";
 
 
 @Component({
@@ -43,7 +43,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
   listDiemKho: any[] = [];
   listChiCuc: any[] = [];
   selected: boolean = false;
-  previewName: string = 'mtt_thong_tin_chao_gia';
+  previewName : string = 'mtt_thong_tin_chao_gia';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -51,7 +51,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private quyetDinhPheDuyetKeHoachMTTService: QuyetDinhPheDuyetKeHoachMTTService,
-    private donViService: DonviService,
+    private donViService : DonviService,
     private chaogiaUyquyenMualeService: ChaogiaUyquyenMualeService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, chaogiaUyquyenMualeService);
@@ -61,6 +61,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
         idQdDtl: [],
         namKh: [dayjs().get("year"), [Validators.required]],
         soQd: ['', [Validators.required]],
+        soQdDc: [''],
         maDvi: [''],
         tenDvi: ['', [Validators.required]],
         pthucMuaTrucTiep: [''],
@@ -118,6 +119,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
           this.formData.patchValue({
             idQdDtl: id,
             soQd: dataDtl.hhQdPheduyetKhMttHdr.soQd,
+            soQdDc: dataDtl.hhQdPheduyetKhMttHdr.soQdDc,
             trangThai: dataDtl.trangThai,
             tenTrangThai: dataDtl.tenTrangThai,
             tenCloaiVthh: dataDtl.hhQdPheduyetKhMttHdr.tenCloaiVthh,
@@ -138,7 +140,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
           // })
           console.log(this.danhSachCtiet)
           this.calcTong();
-          this.showDetail(event, this.danhSachCtiet[0]);
+          this.showDetail(event,this.danhSachCtiet[0]);
         })
         .catch((e) => {
           console.log('error: ', e);
@@ -171,19 +173,20 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     console.log(data, 123)
     this.rowItem.donGiaVat = data.donGiaVat
     this.donGiaRow = data.donGiaVat
-    if (this.listChiCuc.length > 0) {
+    if(this.listChiCuc.length > 0){
       this.listDiemKho = this.listChiCuc.find(x => x.maDvi == data.maDvi).children.filter(y => y.type == 'MLK').filter(k => k.maDvi.includes(data.children.filter(i => i.maDiemKho == k.maDvi)))
     }
     this.idRowSelect = data.id;
     this.dataTable = data.listChaoGia
+    console.log(this.dataTable, "datatable")
     this.updateEditCache()
     this.updateEditCacheDk()
     await this.spinner.hide();
   }
 
-  addDiemKho(index: any, diemKho: any) {
+  addDiemKho(index: any, diemKho: any){
     console.log("diemKho", diemKho)
-    if (this.validateDiemKho(index, diemKho)) {
+    if(this.validateDiemKho(index, diemKho)){
       return;
     }
     this.danhSachCtiet[index].children.push(diemKho)
@@ -193,7 +196,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     this.updateEditCacheDk()
   }
 
-  updateListDiemKho(index: any, diemKho: any) {
+  updateListDiemKho(index: any, diemKho: any){
     this.listDiemKho = this.listChiCuc.find(x => x.maDvi == this.danhSachCtiet[index].maDvi).children.filter(y => y.type == 'MLK').filter(k => k.maDvi.includes(this.danhSachCtiet[index].children.filter(i => i.maDiemKho == k.maDvi)))
   }
 
@@ -203,20 +206,20 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
       sum += Number.parseInt(this.danhSachCtiet[index].children[i].soLuong)
     }
     sum += Number.parseInt(diemKho.soLuong)
-    if (sum > Number.parseInt(this.danhSachCtiet[index].tongSoLuong)) {
+    if(sum > Number.parseInt(this.danhSachCtiet[index].tongSoLuong)){
       this.notification.error(MESSAGE.ERROR, MESSAGE.ADD_DIEM_KHO_ERROR);
       return true;
     }
     return false;
   }
 
-  handleChangeDiemKho(dataTable: any, diemKho: any) {
+  handleChangeDiemKho(dataTable: any, diemKho: any){
     diemKho.idDiaDiem = dataTable.id
     diemKho.donGiaVat = dataTable.donGiaVat
     diemKho.tenDiemKho = this.listDiemKho.find(x => x.maDvi == diemKho.maDiemKho).tenDvi
   }
 
-  showDsChaoGia(id: any) {
+  showDsChaoGia(id: any){
 
   }
 
@@ -289,7 +292,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
       let res = await this.chaogiaUyquyenMualeService.create(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-        if (isHoanThanh) {
+        if(isHoanThanh){
           await this.hoanThanhCapNhat()
         }
         await this.loadDetail(this.idInput)
@@ -390,7 +393,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
   }
 
   saveEditDk(index1: number, index2: number): void {
-    if (this.validateDiemKho(index1, index2)) {
+    if(this.validateDiemKho(index1, index2)){
       return;
     }
     Object.assign(this.danhSachCtiet[index1], this.diemKhoEdit[index1].data);

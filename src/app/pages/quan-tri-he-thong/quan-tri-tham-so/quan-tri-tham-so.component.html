@@ -15,86 +15,86 @@
             </button>
           </div>
         </div>
-        <nz-table class="nowrap pd-10" [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false"
-          nzBordered>
+        <nz-table class="nowrap pd-10" [nzData]="dataTable" [nzFrontPagination]="false"
+                  [nzShowPagination]="false" nzBordered>
           <thead>
-            <tr>
-              <th class="text-center" nzWidth="45px">STT</th>
-              <th class="text-center" nzWidth="200px">Mã tham số</th>
-              <th class="text-center" nzWidth="200px">Tên tham số</th>
-              <th class="text-center" nzWidth="200px">Giá trị</th>
-              <th class="text-center">Mô tả</th>
-              <th class="text-center" nzWidth="150px">Áp dụng từ ngày</th>
-              <th class="text-center" nzWidth="150px">Áp dụng đến ngày</th>
-              <th class="text-center" nzWidth="120px">Trạng thái</th>
-              <th class="text-center" nzWidth="120px">Hành động</th>
-            </tr>
-            <tr class="search-table">
-              <th></th>
-              <th>
-                <nz-input-group>
-                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ma"
-                    (input)="filterInTable('ma',filterTable.ma)" size="small" />
-                </nz-input-group>
-              </th>
-              <th>
-                <nz-input-group>
-                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ten"
-                    (input)="filterInTable('ten',filterTable.ten)" size="small" />
-                </nz-input-group>
-                <ng-template #suffixTemplateInfo>
-                  <i nz-icon nzType="calendar"></i>
-                </ng-template>
-              </th>
-              <th>
-                <nz-input-group>
-                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.giaTri"
-                    (input)="filterInTable('giaTri',filterTable.giaTri)" size="small" />
-                </nz-input-group>
-              </th>
-              <th>
-                <nz-input-group>
-                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.moTa"
-                    (input)="filterInTable('moTa',filterTable.moTa)" size="small" />
-                </nz-input-group>
-              </th>
-              <th>
-                <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tuNgay"
-                    (input)="filterInTable('tuNgay',filterTable.tuNgay)" size="small" />
-                </nz-input-group>
-              </th>
-              <th>
-                <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.denNgay"
-                    (input)="filterInTable('denNgay',filterTable.denNgay)" size="small" />
-                </nz-input-group>
-              </th>
-              <th>
-                <nz-input-group>
-                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
-                    (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
-                </nz-input-group>
-              </th>
-              <th></th>
-            </tr>
+          <tr>
+            <th class="text-center" nzWidth="45px">STT</th>
+            <th class="text-center" nzWidth="200px">Mã tham số</th>
+            <th class="text-center" nzWidth="200px">Tên tham số</th>
+            <th class="text-center" nzWidth="200px">Giá trị</th>
+            <th class="text-center">Mô tả</th>
+            <th class="text-center" nzWidth="150px">Áp dụng từ ngày</th>
+            <th class="text-center" nzWidth="150px">Áp dụng đến ngày</th>
+            <th class="text-center" nzWidth="120px">Trạng thái</th>
+            <th class="text-center" nzWidth="120px">Hành động</th>
+          </tr>
+          <tr class="search-table">
+            <th></th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ma"
+                       (input)="filterInTable('ma',filterTable.ma)" size="small"/>
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ten"
+                       (input)="filterInTable('ten',filterTable.ten)" size="small"/>
+              </nz-input-group>
+              <ng-template #suffixTemplateInfo>
+                <i nz-icon nzType="calendar"></i>
+              </ng-template>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.giaTri"
+                       (input)="filterInTable('giaTri',filterTable.giaTri)" size="small"/>
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.moTa"
+                       (input)="filterInTable('moTa',filterTable.moTa)" size="small"/>
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tuNgay"
+                       (input)="filterInTable('tuNgay',filterTable.tuNgay)" size="small"/>
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.denNgay"
+                       (input)="filterInTable('denNgay',filterTable.denNgay)" size="small"/>
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
+                       (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small"/>
+              </nz-input-group>
+            </th>
+            <th></th>
+          </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let data of dataTable; let i = index">
-              <td>{{(page - 1) * pageSize + i + 1}}</td>
-              <td>{{ data.ma }}</td>
-              <td>{{ data.ten }}</td>
-              <td>{{ data.giaTri }}</td>
-              <td>{{data.moTa}}</td>
-              <td>{{ data.tuNgay | date: 'dd/MM/YYYY' }}</td>
-              <td>{{ data.denNgay | date: 'dd/MM/YYYY' }}</td>
-              <td>{{ data.trangThai }}</td>
-              <td class="text-center">
-                <a (click)="themMoi(data)">
-                  <i class="fa fa-pencil" title="Sửa"></i>
-                </a>
-              </td>
-            </tr>
+          <tr *ngFor="let data of dataTable; let i = index">
+            <td>{{(page - 1) * pageSize + i + 1}}</td>
+            <td>{{ data.ma }}</td>
+            <td>{{ data.ten }}</td>
+            <td>{{ data.giaTri }}</td>
+            <td>{{data.moTa}}</td>
+            <td>{{ data.tuNgay | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.denNgay | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.trangThai }}</td>
+            <td class="text-center">
+              <a (click)="themMoi(data)">
+                <i class="fa fa-pencil" title="Sửa"></i>
+              </a>
+            </td>
+          </tr>
           </tbody>
         </nz-table>
         <div class="tab-content tab-menu" id="myTabContent">
@@ -104,8 +104,9 @@
             <div class="canphai">
               <!-- begin phân trang  -->
               <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
-                [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
-                (nzPageSizeChange)="changePageSize($event)">
+                             [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+                             (nzPageIndexChange)="changePageIndex($event)"
+                             (nzPageSizeChange)="changePageSize($event)">
                 <ng-template #rangeTemplate let-range="range" let-total>
                   {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
                 </ng-template>

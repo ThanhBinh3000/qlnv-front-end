@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {NzModalRef} from 'ng-zorro-antd/modal';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {
@@ -17,23 +17,27 @@ import {Globals} from "../../../../../../../shared/globals";
   styleUrls: ['./dialog-pag-qd-btc.component.scss']
 })
 export class DialogPagQdBtcComponent implements OnInit {
-  type: string;
-  pagType : string;
-  namKeHoach: any;
+  @Input()type: string;
+  @Input() pagType: string;
+  @Input() namKeHoach: any;
   loaiGia: any;
   dataTableToTrinh: any[] = [];
-  dataTablleDxCs: any[] = [];
+  dataTableToTrinhView: any[] = [];
+  dataTableDxVt: any[] = [];
+  dataTableDxCsVt: any[] = [];
+  dataTableDxVtView: any[] = [];
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
   formData: FormGroup;
   fb: FormBuilder = new FormBuilder();
-  listData : any[] = [];
-  dsLoaiGia : any[] = [];
-  dataResponse : {
-    "data" : any,
-    "listDx" : any[],
-    "formData" : any,
+  listData: any[] = [];
+  dsLoaiGia: any[] = [];
+  dataResponse: {
+    "data": any,
+    "listDx": any[],
+    "formData": any,
   }
+
   constructor(
     private _modalRef: NzModalRef,
     private helperService: HelperService,
@@ -48,12 +52,16 @@ export class DialogPagQdBtcComponent implements OnInit {
       cloaiVthh: [null, Validators.required],
       loaiGia: [null, Validators.required],
       loaiQd: ['00'],
-      listDeXuat : [[]]
+      listDeXuat: [[]]
     });
   }
 
   ngOnInit(): void {
-    this.loadDsToTrinh();
+    if (this.pagType && this.pagType == 'LT') {
+      this.loadDsToTrinh();
+    } else {
+      this.loadDsDxPagVT();
+    }
     this.loadDsVthh();
     this.loadDsLoaiGia();
   }
@@ -70,9 +78,9 @@ export class DialogPagQdBtcComponent implements OnInit {
     this.dsLoaiGia = [];
     let res = await this.danhMucService.danhMucChungGetAll('LOAI_GIA');
     if (res.msg == MESSAGE.SUCCESS) {
-        this.dsLoaiGia = res.data.filter(item =>
-          item.ma == 'LG01' || item.ma == 'LG02'
-        );
+      this.dsLoaiGia = res.data.filter(item =>
+        item.ma == 'LG01' || item.ma == 'LG02'
+      );
     }
   }
 
@@ -96,19 +104,19 @@ export class DialogPagQdBtcComponent implements OnInit {
 
   handleOk(item: any) {
     this.dataResponse = {
-      data : item,
-      listDx : [],
-      formData : this.formData.value
+      data: item,
+      listDx: [],
+      formData: this.formData.value
     }
     this._modalRef.close(this.dataResponse);
   }
 
   luu() {
-    if ((this.formData.value.loaiQd == '01' && this.pagType == 'LT') || this.pagType == 'VT' ) {
+    if (this.pagType == 'VT') {
       this.dataResponse = {
-        data : null,
-        listDx : this.listData,
-        formData : this.formData.value,
+        data: null,
+        listDx: this.listData,
+        formData: this.formData.value,
       }
       this._modalRef.close(this.dataResponse);
     } else {
@@ -123,30 +131,45 @@ export class DialogPagQdBtcComponent implements OnInit {
 
   async loadDsToTrinh() {
     this.spinner.show();
-    if (this.formData.value.loaiQd == '01' && this.pagType == 'LT') {
-      this.helperService.markFormGroupTouched(this.formData);
-      if (this.formData.invalid) {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
-        this.spinner.hide()
-        return;
-      }
-    }
     try {
       let body = {
         namKh: this.namKeHoach,
         type: this.type,
         loaiVthh: this.formData.value.loaiVthh,
         cloaiVthh: this.formData.value.cloaiVthh,
-        loaiDeXuat: this.formData.value.loaiQd,
+        loaiDeXuat: this.pagType == 'LT' ? '00' : this.formData.value.loaiQd,
         loaiGia: this.pagType == 'LT' ? this.formData.value.loaiGia : this.loaiGia,
-        pagType : this.pagType
+        pagType: this.pagType
       }
       let res = await this.tongHopPhuongAnGiaService.loadToTrinhDeXuat(body);
       if (res.msg = MESSAGE.SUCCESS) {
-        if (this.formData.value.loaiQd == '00' && this.pagType == 'LT') {
-          this.dataTableToTrinh = res.data;
-        } else {
-          this.dataTablleDxCs = res.data;
+        this.dataTableToTrinh = res.data;
+        this.dataTableToTrinhView = this.dataTableToTrinh.filter(item => item.kieuTongHop == this.formData.value.loaiQd);
+      }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  async loadDsDxPagVT() {
+    this.spinner.show();
+    try {
+      let body = {
+        namKh: this.namKeHoach,
+        type: this.type,
+        pagType: this.pagType,
+        loaiVthh: this.formData.value.loaiVthh,
+        cloaiVthh: this.formData.value.cloaiVthh,
+        loaiGia: this.loaiGia,
+        loaiDeXuat : "00"
+      }
+      let res = await this.tongHopPhuongAnGiaService.loadToTrinhDeXuat(body);
+      if (res.msg = MESSAGE.SUCCESS) {
+        this.dataTableDxCsVt  =res.data;
+        if (this.dataTableDxCsVt && this.dataTableDxCsVt.length > 0) {
+          this.dataTableDxVtView = this.dataTableDxCsVt.filter(item => item.lanDeXuat == 1);
         }
       }
     } catch (e) {
@@ -156,11 +179,24 @@ export class DialogPagQdBtcComponent implements OnInit {
     }
   }
 
-  updateDataCheckbox(idx : number, data: any, event : any) {
-      if (event == true ) {
-        this.listData.push(data);
+    updateDataCheckbox(idx: number, data: any, event: any) {
+    if (event == true) {
+      this.listData.push(data);
+    } else {
+      this.listData.splice(idx, 1);
+    }
+  }
+
+  changLoaiQd(event) {
+    if (event && this.pagType == 'LT') {
+      this.dataTableToTrinhView = this.dataTableToTrinh.filter(item => item.kieuTongHop == event);
+    }
+    if (event && this.pagType == 'VT') {
+      if (event == '00') {
+        this.dataTableDxVtView =this.dataTableDxCsVt.filter(item => item.lanDeXuat == 1);
       } else {
-        this.listData.splice(idx, 1);
+        this.dataTableDxVtView =this.dataTableDxCsVt.filter(item => item.lanDeXuat > 1);
       }
     }
+  }
 }

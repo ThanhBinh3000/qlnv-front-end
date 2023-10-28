@@ -9,20 +9,20 @@ import { NzModalService } from "ng-zorro-antd/modal";
 import dayjs from 'dayjs';
 import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service';
 import { DatePipe } from '@angular/common';
-import { DanhMucService } from "../../../../../../services/danhmuc.service";
-import { Globals } from "../../../../../../shared/globals";
-import { MESSAGE } from "../../../../../../constants/message";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
+import {Globals} from "../../../../../../shared/globals";
+import {MESSAGE} from "../../../../../../constants/message";
 import {
   DialogThemMoiVatTuComponent
 } from "../../../../../../components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component";
-import { DANH_MUC_LEVEL } from "../../../../../luu-kho/luu-kho.constant";
-import { UserService } from "../../../../../../services/user.service";
-import { UserLogin } from "../../../../../../models/userlogin";
-import { DonviService } from "../../../../../../services/donvi.service";
-import { OldResponseData } from "../../../../../../interfaces/response";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { MangLuoiKhoService } from "../../../../../../services/qlnv-kho/mangLuoiKho.service";
-import { LOAI_HINH_NHAP_XUAT } from "../../../../../../constants/config";
+import {DANH_MUC_LEVEL} from "../../../../../luu-kho/luu-kho.constant";
+import {UserService} from "../../../../../../services/user.service";
+import {UserLogin} from "../../../../../../models/userlogin";
+import {DonviService} from "../../../../../../services/donvi.service";
+import {OldResponseData} from "../../../../../../interfaces/response";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {MangLuoiKhoService} from "../../../../../../services/qlnv-kho/mangLuoiKho.service";
+import {LOAI_HINH_NHAP_XUAT} from "../../../../../../constants/config";
 
 
 @Component({
@@ -253,7 +253,7 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     // this.sumThanhTien()
   }
 
-  tinhTongSlVaThanhTien() {
+  tinhTongSlVaThanhTien (){
     let tongSl = 0;
     let tongThanhTien = 0;
     this.listOfData.forEach(i => {
@@ -334,7 +334,7 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     if (this.listLoKho.length > 0) {
       this.listLoKho = this.listLoKho.filter(i => i.type != "PB");
     }
-    if (this.rowThemMoi.maLoKho) {
+    if(this.rowThemMoi.maLoKho){
       await this.loadThongTinNganLoKho(this.rowThemMoi.maLoKho, DANH_MUC_LEVEL.LO_KHO);
     } else {
       await this.loadThongTinNganLoKho(this.rowThemMoi.maNganKho, DANH_MUC_LEVEL.NGAN_KHO);
@@ -363,16 +363,16 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
 
   deleteRow(ma: string, data: any) {
     if (ma == 'cuc' && data.maCuc) {
-      this.listOfData = this.listOfData.filter(i => i.maCuc != data.maCuc)
+      this.listOfData = this.listOfData.filter(i=> i.maCuc != data.maCuc)
     }
     if (ma == 'chiCuc' && data.maChiCuc) {
-      this.listOfData = this.listOfData.filter(i => i.maChiCuc != data.maChiCuc)
+      this.listOfData = this.listOfData.filter(i=> i.maChiCuc != data.maChiCuc)
     }
     if (ma == 'diemKho' && data.maDiemKho) {
-      this.listOfData = this.listOfData.filter(i => i.maDiemKho != data.maDiemKho)
+      this.listOfData = this.listOfData.filter(i=> i.maDiemKho != data.maDiemKho)
     }
     if (ma == 'nhaKho' && data.maNhaKho) {
-      this.listOfData = this.listOfData.filter(i => i.maNhaKho != data.maNhaKho)
+      this.listOfData = this.listOfData.filter(i=> i.maNhaKho != data.maNhaKho)
     }
     this.convertListDataLuongThuc();
   }

@@ -8,11 +8,14 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import dayjs from 'dayjs';
 import { UserLogin } from 'src/app/models/userlogin';
 import { MESSAGE } from 'src/app/constants/message';
-import { chain } from 'lodash';
+import { chain, groupBy } from 'lodash';
 import * as uuid from "uuid";
 import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
 import { CHUC_NANG } from 'src/app/constants/status';
 import { CuuTroVienTroComponent } from '../../cuu-tro-vien-tro.component';
+import { QuyetDinhGiaoNvCuuTroService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service';
+import { PhieuKiemNghiemChatLuongService } from './../../../../../../services/qlnv-hang/xuat-hang/chung/kiem-tra-chat-luong/PhieuKiemNghiemChatLuong.service';
+import { BienBanLayMauService } from 'src/app/services/qlnv-hang/xuat-hang/chung/xuat-kho/PhieuXuatKho.service';
 
 @Component({
   selector: 'app-phieu-xuat-kho',
@@ -25,6 +28,7 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
   loaiVthh: string;
   @Input()
   loaiVthhCache: string;
+  @Input() loaiXuat: string;
   CHUC_NANG = CHUC_NANG;
   public vldTrangThai: CuuTroVienTroComponent;
 
@@ -36,6 +40,9 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
     modal: NzModalService,
     private cuuTroVienTroComponent: CuuTroVienTroComponent,
     private phieuXuatKhoService: PhieuXuatKhoService,
+    public phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
+    public quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
+    public bienBanLayMauService: BienBanLayMauService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoService);
     this.vldTrangThai = this.cuuTroVienTroComponent;
@@ -75,6 +82,8 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
   expandSetString = new Set<string>();
   idPhieuKnCl: number = 0;
   openPhieuKnCl = false;
+  openQdGnv: boolean;
+  idQdGnv: number;
   disabledStartNgayXk = (startValue: Date): boolean => {
     if (startValue && this.formData.value.ngayXuatKhoDen) {
       return startValue.getTime() >= this.formData.value.ngayXuatKhoDen.getTime();
@@ -102,8 +111,8 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
 
   async search(roles?): Promise<void> {
     this.formData.patchValue({
-      // loaiVthh: this.loaiVthh,
-      type: "XUAT_CTVT"
+      loaiVthh: this.loaiVthh,
+      type: this.loaiXuat
     });
     await super.search(roles);
     this.buildTableView();
@@ -139,32 +148,49 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
   }
 
   buildTableView() {
-    let dataView = chain(this.dataTable)
+    const newData = this.dataTable.map(f => ({ ...f, maNganLoKho: f.maLoKho ? `${f.maLoKho}${f.maNganKho}` : f.maNganKho }))
+    const dataView = chain(newData)
       .groupBy("soQdGiaoNvXh")
       .map((value, key) => {
-        let quyetDinh = value.find(f => f.soQdGiaoNvXh === key)
-        let rs = chain(value)
-          .groupBy("tenDiemKho")
+        const quyetDinh = value.find(f => f.soQdGiaoNvXh === key)
+        const rs = chain(value)
+          .groupBy("maDiemKho")
           .map((v, k) => {
-            let diaDiem = v.find(s => s.tenDiemKho === k)
+            const diaDiem = v.find(s => s.maDiemKho === k);
+            const rs1 = chain(v).groupBy("maNganLoKho").map((v1, k1) => {
+              const nganLoKho = v1.find(f => f.maNganLoKho == k1);
+              if (!nganLoKho) return;
+              return {
+                idVirtual: uuid.v4(),
+                tenLoKho: nganLoKho.tenLoKho,
+                tenNganKho: nganLoKho.tenNganKho,
+                tenNhaKho: nganLoKho.tenNhaKho,
+                soPhieuKnCl: nganLoKho.soPhieuKnCl,
+                idPhieuKnCl: nganLoKho.idPhieuKnCl,
+                ngayKn: nganLoKho.ngayKn,
+                childData: v1
+              }
+            }).value().filter(f => !!f)
+            if (!diaDiem) return;
             return {
               idVirtual: uuid.v4(),
-              tenDiemKho: k != "null" ? k : '',
-              tenLoKho: diaDiem ? diaDiem.tenLoKho : null,
-              childData: v
+              tenDiemKho: diaDiem.tenDiemKho,
+              childData: rs1
             }
           }
-          ).value();
-        let nam = quyetDinh ? quyetDinh.nam : null;
-        let ngayQdGiaoNvXh = quyetDinh ? quyetDinh.ngayQdGiaoNvXh : null;
+          ).value().filter(f => !!f);
+        if (!quyetDinh) return;
+        const nam = quyetDinh ? quyetDinh.nam : null;
+        const ngayQdGiaoNvXh = quyetDinh ? quyetDinh.ngayQdGiaoNvXh : null;
         return {
           idVirtual: uuid.v4(),
           soQdGiaoNvXh: key != "null" ? key : '',
+          idQdGiaoNvXh: quyetDinh ? quyetDinh.idQdGiaoNvXh : null,
           nam: nam,
           ngayQdGiaoNvXh: ngayQdGiaoNvXh,
           childData: rs
         };
-      }).value();
+      }).value().filter(f => !!f);
     this.children = dataView
     this.expandAll()
 
@@ -201,10 +227,18 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
     this.idPhieuKnCl = null;
     this.openPhieuKnCl = false;
   }
-
+  openQdGnvModal(id: number): void {
+    this.idQdGnv = id;
+    this.openQdGnv = true;
+  }
+  closeQdGnvModal() {
+    this.idQdGnv = null;
+    this.openQdGnv = false;
+  }
   async showList() {
     this.isDetail = false;
     await this.search();
   }
+
 }
 

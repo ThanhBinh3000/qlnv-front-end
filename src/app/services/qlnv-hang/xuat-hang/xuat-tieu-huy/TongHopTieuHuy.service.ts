@@ -8,14 +8,14 @@ import { OldResponseData } from "src/app/interfaces/response";
   providedIn: 'root'
 })
 export class TongHopTieuHuyService extends BaseService {
-  GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'xuat-hang/xuat-tieu-huy/tong-hop', '');
+    super(httpClient, 'xuat-hang/xuat-tieu-huy/tong-hop', '/qlnv-hang');
   }
 
   getDsTaoHoSo(body) {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ds-tong-hop-tao-hs`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
+
 }

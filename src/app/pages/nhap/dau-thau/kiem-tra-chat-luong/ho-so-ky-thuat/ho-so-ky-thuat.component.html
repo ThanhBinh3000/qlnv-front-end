@@ -5,8 +5,7 @@
         <div nz-col nzSpan="2">
           <label class="search__label">Số hồ sơ kỹ thuật</label>
           <nz-input-group>
-            <input [(ngModel)]="searchFilter.soHoSoKyThuat" nz-input nzSize="small" placeholder="Nhập số HSKT"
-              appNumberOnly />
+            <input [(ngModel)]="searchFilter.soHoSoKyThuat" nz-input nzSize="small" placeholder="Nhập số HSKT" appNumberOnly />
           </nz-input-group>
         </div>
         <div nz-col nzSpan="4">
@@ -14,29 +13,26 @@
           <div nz-row [nzGutter]="24">
             <div nz-col nzSpan="12" class="cus-start-date">
               <nz-date-picker [nzDisabledDate]="disabledStartDate" nzFormat="dd/MM/yyyy" [(ngModel)]="tuNgayTao"
-                nzPlaceHolder="Ngày bắt đầu">
+                              nzPlaceHolder="Ngày bắt đầu">
               </nz-date-picker>
             </div>
             <div nz-col nzSpan="12" class="cus-end-date">
               <nz-date-picker [nzDisabledDate]="disabledEndDate" nzFormat="dd/MM/yyyy" [(ngModel)]="denNgayTao"
-                nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                              nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
             </div>
           </div>
         </div>
         <div nz-col nzSpan="6">
           <label class="search__label">Số biên bản kiểm tra ngoại quan</label>
-          <input class="search__input" placeholder="Nhập số BB kiểm tra ngoại quan" nz-input
-            [(ngModel)]="searchFilter.soBbKtraNgoaiQuan" />
+          <input class="search__input" placeholder="Nhập số BB kiểm tra ngoại quan" nz-input [(ngModel)]="searchFilter.soBbKtraNgoaiQuan" />
         </div>
         <div nz-col nzSpan="6">
           <label class="search__label">Số biên bản vận hành</label>
-          <input class="search__input" placeholder="Nhập số BB vận hành" nz-input
-            [(ngModel)]="searchFilter.soBbKtraVanHanh" />
+          <input class="search__input" placeholder="Nhập số BB vận hành" nz-input [(ngModel)]="searchFilter.soBbKtraVanHanh" />
         </div>
         <div nz-col nzSpan="6">
           <label class="search__label">Số biên bản kiểm tra hồ sơ kỹ thuật</label>
-          <input class="search__input" placeholder="Nhập số BB kiểm tra HSKT" nz-input
-            [(ngModel)]="searchFilter.soBbKtraHskt" />
+          <input class="search__input" placeholder="Nhập số BB kiểm tra HSKT" nz-input [(ngModel)]="searchFilter.soBbKtraHskt" />
         </div>
       </div>
       <div class="cangiua group-button-search">
@@ -176,7 +172,8 @@
             <td>{{data.soBbKthskt}}</td>
             <td>{{data.tenTrangThai}}</td>
             <td>
-              <a *ngIf="hienThiXem(data)" (click)="redirectToChiTiet(true, data.id)">
+              <a *ngIf="hienThiXem(data)"
+                (click)="redirectToChiTiet(true, data.id)">
                 <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
               <a *ngIf="(data.trangThai == STATUS.DU_THAO
@@ -186,9 +183,9 @@
                 (click)="redirectToChiTiet(false, data.id)">
                 <i class="fa fa-pencil" title="Sửa"></i>
               </a>
-              <a *ngIf="(userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_HSKT_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
+              <a  *ngIf="(userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_HSKT_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
 || (userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_HSKT_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC)"
-                (click)="redirectToChiTiet(true, data.id)">
+                  (click)="redirectToChiTiet(true, data.id)">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
               </a>
               <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_HSKT_XOA')"

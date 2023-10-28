@@ -1,24 +1,24 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { Globals } from "../../../../../../../shared/globals";
-import { DanhMucService } from "../../../../../../../services/danhmuc.service";
-import { NgxSpinnerService } from 'ngx-spinner';
-import { HelperService } from 'src/app/services/helper.service';
-import { NzModalService } from "ng-zorro-antd/modal";
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {Globals} from "../../../../../../../shared/globals";
+import {DanhMucService} from "../../../../../../../services/danhmuc.service";
+import {NgxSpinnerService} from 'ngx-spinner';
+import {HelperService} from 'src/app/services/helper.service';
+import {NzModalService} from "ng-zorro-antd/modal";
 import {
   DeXuatKhBanDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
 import {
   DialogThemDiaDiemPhanLoComponent
 } from 'src/app/components/dialog/dialog-them-dia-diem-phan-lo/dialog-them-dia-diem-phan-lo.component';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
 import dayjs from 'dayjs';
-import { STATUS } from "../../../../../../../constants/status";
-import { MESSAGE } from "../../../../../../../constants/message";
+import {STATUS} from "../../../../../../../constants/status";
+import {MESSAGE} from "../../../../../../../constants/message";
 import {
   QuyetDinhGiaTCDTNNService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
-import { LOAI_HANG_DTQG } from "../../../../../../../constants/config";
+import {LOAI_HANG_DTQG} from "../../../../../../../constants/config";
 
 @Component({
   selector: 'app-thongtin-dexuat-khbdg',
@@ -33,6 +33,7 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
   @Input() isCache: boolean = false;
   @Input() loaiVthhCache;
   @Output() countChanged: EventEmitter<any> = new EventEmitter();
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   formData: FormGroup
   dataTable: any[] = [];
   dataDonGiaDuocDuyet: any;
@@ -112,6 +113,7 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
         dataEdit: data,
         loaiVthh: this.dataInput.loaiVthh,
         cloaiVthh: this.dataInput.cloaiVthh,
+        typeLoaiVthh: this.loaiVthhCache,
       },
     });
     modalGT.afterClose.subscribe(async (updatedData) => {

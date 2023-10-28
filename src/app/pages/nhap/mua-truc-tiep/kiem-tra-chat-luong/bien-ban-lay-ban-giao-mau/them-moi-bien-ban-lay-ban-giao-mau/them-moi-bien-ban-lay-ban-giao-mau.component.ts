@@ -18,7 +18,7 @@ import { DialogTuChoiComponent } from './../../../../../../components/dialog/dia
 import { PhuongPhapLayMau } from './../../../../../../models/PhuongPhapLayMau';
 import { isEmpty } from 'lodash';
 import { MttBienBanLayMauService } from './../../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/MttBienBanLayMauService.service';
-import { FILETYPE } from "../../../../../../constants/fileType";
+import {FILETYPE} from "../../../../../../constants/fileType";
 
 @Component({
   selector: 'app-them-moi-bien-ban-lay-ban-giao-mau',
@@ -573,7 +573,7 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
               checked: false
             }
             ppLayMauOptions.push(option);
-            if (this.formData.value.ppLayMau != null) {
+            if(this.formData.value.ppLayMau != null){
               ppLayMauOptions.find(x => x.value == this.formData.value.ppLayMau) ? ppLayMauOptions.find(x => x.value == this.formData.value.ppLayMau).checked = true : ppLayMauOptions;
             }
             console.log(ppLayMauOptions)
@@ -591,9 +591,9 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
   }
 
   handleChange(selectedValues: any): void {
-    if (selectedValues != undefined) {
+    if(selectedValues != undefined){
       console.log('Các giá trị đã chọn:', selectedValues);
-      if (selectedValues.checked == true) {
+      if(selectedValues.checked == true){
         this.formData.patchValue({
           ppLayMau: selectedValues.value
         })
