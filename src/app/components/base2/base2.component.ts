@@ -559,7 +559,7 @@ export class Base2Component implements OnInit {
       nzOnOk: async () => {
         await this.spinner.show();
         try {
-          this.helperService.markFormGroupTouched(this.formData);
+          this.helperService.markFormGroupTouched(this.formData, ignoreFields);
           if (this.formData.invalid) {
             return;
           }
