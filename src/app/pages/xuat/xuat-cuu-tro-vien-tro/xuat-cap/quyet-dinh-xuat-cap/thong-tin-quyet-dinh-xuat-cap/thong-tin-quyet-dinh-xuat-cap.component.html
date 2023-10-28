@@ -449,30 +449,33 @@
                 <nz-table #tblPhuongAnViewCache [nzData]="phuongAnView" class="nowrap table-chi-tiet" nzBordered>
                   <thead>
                     <tr>
-                      <th style="width: 35px">STT</th>
-                      <th>Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
-                      <th>Nhu cầu cứu trợ</th>
-                      <th>SL gạo phê duyệt <br /> giao Cục xuất cứu trợ</th>
-                      <th>SL gạo cần chuyển cấp thóc</th>
+                      <th style="width: 35px" class="text-center">STT</th>
+                      <th class="text-center">Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
+                      <th class="text-center">Nhu cầu cứu trợ</th>
+                      <th class="text-center">SL gạo phê duyệt <br /> giao Cục xuất cứu trợ</th>
+                      <th class="text-center">SL gạo cần chuyển cấp thóc</th>
                     </tr>
                   </thead>
                   <tbody>
                     <ng-container *ngFor="let item of tblPhuongAnViewCache.data, let i = index;">
                       <tr>
-                        <td>{{i+1}}</td>
+                        <td class="text-center">{{i+1}}</td>
                         <td>{{item.noiDungDx}}</td>
-                        <td>{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
-                        <td style="height: 31.5px">{{item.soLuong|number:globals.numberFormat:globals.locale}}
+                        <td class="text-right">{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}
                         </td>
-                        <td>{{item.soLuongXc|number:globals.numberFormat:globals.locale}}</td>
+                        <td class="text-right" style="height: 31.5px">
+                          {{item.soLuong|number:globals.numberFormat:globals.locale}}
+                        </td>
+                        <td class="text-right">{{item.soLuongXc|number:globals.numberFormat:globals.locale}}</td>
                       </tr>
                     </ng-container>
                     <tr>
                       <td></td>
                       <td class="text-blue">Tổng</td>
-                      <td class="text-blue">{{tongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
-                      <td class="text-blue">{{tongSoLuong|number:globals.numberFormat:globals.locale}}</td>
-                      <td class="text-blue">{{tongSlXuatCap|number:globals.numberFormat:globals.locale}}</td>
+                      <td class="text-blue text-right">{{tongNhuCauXuat|number:globals.numberFormat:globals.locale}}
+                      </td>
+                      <td class="text-blue text-right">{{tongSoLuong|number:globals.numberFormat:globals.locale}}</td>
+                      <td class="text-blue text-right">{{tongSlXuatCap|number:globals.numberFormat:globals.locale}}</td>
                     </tr>
                   </tbody>
                 </nz-table>
@@ -563,29 +566,29 @@
               <nz-table #tblPhuongAnView [nzData]="phuongAnView" class="nowrap table-chi-tiet" nzBordered>
                 <thead>
                   <tr>
-                    <th style="width: 35px">STT</th>
-                    <th>Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
+                    <th style="width: 35px" class="text-center">STT</th>
+                    <th class="text-center">Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
                     <!-- <th>SL gạo phê duyệt <br />giao Cục xuất cứu trợ</th> -->
-                    <th>Nhu cầu cứu trợ</th>
-                    <th>SL gạo được chuyển xuất cấp thóc</th>
+                    <th class="text-center">Nhu cầu cứu trợ</th>
+                    <th class="text-center">SL gạo được chuyển xuất cấp thóc</th>
                   </tr>
                 </thead>
                 <tbody>
                   <ng-container *ngFor="let item of tblPhuongAnView.data, let i = index;">
                     <tr>
-                      <td>{{i+1}}</td>
+                      <td class="text-center">{{i+1}}</td>
                       <td>{{item.noiDungDx}}</td>
                       <!-- <td>{{item.soLuong|number:globals.numberFormat:globals.locale}}</td> -->
-                      <td>{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
-                      <td>{{item.soLuongXc|number:globals.numberFormat:globals.locale}}</td>
+                      <td class="text-right">{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
+                      <td class="text-right">{{item.soLuongXc|number:globals.numberFormat:globals.locale}}</td>
                     </tr>
                   </ng-container>
                   <tr>
                     <td></td>
                     <td class="text-blue">Tổng</td>
                     <!-- <td class="text-blue">{{tongSoLuong|number:globals.numberFormat:globals.locale}}</td> -->
-                    <td class="text-blue">{{tongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
-                    <td class="text-blue">{{tongSlXuatCap|number:globals.numberFormat:globals.locale}}</td>
+                    <td class="text-blue text-right">{{tongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
+                    <td class="text-blue text-right">{{tongSlXuatCap|number:globals.numberFormat:globals.locale}}</td>
                   </tr>
                 </tbody>
               </nz-table>
