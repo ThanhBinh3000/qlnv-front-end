@@ -57,10 +57,11 @@
                             <th scope="col">Năm</th>
                             <th scope="col">Số lần</th>
                             <th scope="col">Căn cứ về giá</th>
+                            <th scope="col">Số quyết định chỉ tiêu</th>
                             <th scope="col">Loại đề nghị</th>
                             <th scope="col">Ngày tạo</th>
-                            <th scope="col">Số công văn</th>
-                            <th scope="col">Ngày công văn</th>
+                            <!-- <th scope="col">Số công văn</th>
+                            <th scope="col">Ngày công văn</th> -->
                             <th scope="col">Ngày trình duyệt</th>
                             <th scope="col">Ngày duyệt</th>
                             <th scope="col">Ngày phê duyệt</th>
@@ -81,12 +82,15 @@
                                 {{ Cvnc.priceBasisName(baoCao.canCuVeGia) }}
                             </td>
                             <td>
+                                {{ baoCao.soQdChiTieu }}
+                            </td>
+                            <td>
                                 {{ Cvnc.suggestionName(baoCao.loaiDnghi)}}
                             </td>
                             <td>
                                 {{ Utils.fmtDate(baoCao.ngayTao) }}
                             </td>
-                            <td>
+                            <!-- <td>
                                 <nz-upload *ngIf="status.save" [nzBeforeUpload]="beforeUploadCV">
                                     <button nz-button>
                                         <i nz-icon nzType="upload"></i>
@@ -97,7 +101,7 @@
                                     <span>{{baoCao.congVan?.fileName}}</span>
                                 </div>
                             </td>
-                            <td>{{ Utils.fmtDate(baoCao.ngayCongVan) }}</td>
+                            <td>{{ Utils.fmtDate(baoCao.ngayCongVan) }}</td> -->
                             <td>
                                 {{ Utils.fmtDate(baoCao.ngayTrinh) }}
                             </td>

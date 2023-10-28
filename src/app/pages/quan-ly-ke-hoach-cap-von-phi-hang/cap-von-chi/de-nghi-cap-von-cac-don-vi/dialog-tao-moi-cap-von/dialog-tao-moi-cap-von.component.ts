@@ -178,43 +178,68 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
 
     //neu la de nghi theo don gia mua can lay ra so quyet dinh chi tieu;
     getSoQdChiTieu() {
+        let request
         if (!this.response.namDnghi) {
             this.notification.warning(MESSAGE.WARNING, 'Vui lòng nhập năm');
             this.response.canCuVeGia = null;
         }
         if (this.response.canCuVeGia == Cvnc.HOP_DONG) {
-            this.response.soQdChiTieu = null;
-            return;
-        }
-        const request = {
-            namKHoach: this.response.namDnghi,
-            maDvi: this.userInfo?.MA_DVI,
-            maLoai: this.response.maLoai,
-        }
-        this.spinner.show();
-        this.capVonNguonChiService.soQdChiTieu(request).toPromise().then(
-            data => {
-                if (data.statusCode == 0) {
-                    this.lstQuyetDinh = data.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
+            // this.response.soQdChiTieu = null;
+            // return;
+            request = {
+                namKhoach: this.response.namDnghi,
+                // maDvi: this.userInfo?.MA_DVI,
+                maLoai: this.response.maLoai,
+            }
+            this.spinner.show();
+            this.capVonNguonChiService.danhSachHopDong(request).toPromise().then(
+                data => {
+                    if (data.statusCode == 0) {
+                        this.lstQuyetDinh = data.data;
+                    } else {
+                        this.notification.error(MESSAGE.ERROR, data?.msg);
+                        this.response.canCuVeGia = null;
+                    }
+                },
+                err => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                     this.response.canCuVeGia = null;
                 }
-            },
-            err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-                this.response.canCuVeGia = null;
+            )
+            this.spinner.hide();
+        } else {
+            request = {
+                namKHoach: this.response.namDnghi,
+                maDvi: this.userInfo?.MA_DVI,
+                maLoai: this.response.maLoai,
             }
-        )
-        this.spinner.hide();
+            this.spinner.show();
+            this.capVonNguonChiService.soQdChiTieu(request).toPromise().then(
+                data => {
+                    if (data.statusCode == 0) {
+                        this.lstQuyetDinh = data.data;
+                    } else {
+                        this.notification.error(MESSAGE.ERROR, data?.msg);
+                        this.response.canCuVeGia = null;
+                    }
+                },
+                err => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                    this.response.canCuVeGia = null;
+                }
+            )
+            this.spinner.hide();
+        }
     }
 
     async getContractData() {
         const request = {
-            namKHoach: this.response.namDnghi,
+            // namKHoach: this.response.namDnghi,
             maDvi: this.userInfo.MA_DVI,
             loaiVthh: null,
             maLoai: '3',
+            soQd: this.response.soQdChiTieu,
+
         }
         switch (this.response.loaiDnghi) {
             case Cvnc.THOC:
@@ -241,29 +266,33 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
                         tenDvi: this.userInfo?.TEN_DVI,
                     }))
                     data.data.forEach(item => {
-                        if (this.response.lstCtiets.findIndex(e => e.qdPheDuyet == item.soQd) == -1) {
+                        if (this.response.lstCtiets.findIndex(e => e.qdPheDuyet == item.soQdPduyet) == -1) {
                             const temp: CapVon = new CapVon({
                                 id: uuid.v4() + 'FE',
                                 maDvi: this.userInfo.MA_DVI,
                                 tenDvi: this.userInfo?.TEN_DVI,
                                 tenKhachHang: item.tenKhachHang,
-                                qdPheDuyet: item.soQd,
+                                qdPheDuyet: item.soQdPduyet,
+                                slKeHoach: item.slKeHoach,
                             })
                             this.response.lstCtiets = Table.addChild(unitId, temp, this.response.lstCtiets);
                         }
-                        const temp: CapVon = new CapVon({
-                            id: uuid.v4() + 'FE',
-                            qdPheDuyet: item.tenGoiThau + '/' + item.soHopDong,
-                            slKeHoach: item.slKeHoach,
-                            slHopDong: item.slHopDong,
-                            donGia: item.donGia,
-                            gtHopDong: Operator.mul(item.slHopDong, item.donGia),
-                        })
-                        const index = this.response.lstCtiets.findIndex(e => e.qdPheDuyet == item.soQd);
-                        this.response.lstCtiets = Table.addChild(this.response.lstCtiets[index].id, temp, this.response.lstCtiets);
-                        this.response.lstCtiets[index].slKeHoach = Operator.sum([this.response.lstCtiets[index].slKeHoach, temp.slKeHoach]);
-                        this.response.lstCtiets[index].slHopDong = Operator.sum([this.response.lstCtiets[index].slHopDong, temp.slHopDong]);
-                        this.response.lstCtiets[index].gtHopDong = Operator.sum([this.response.lstCtiets[index].gtHopDong, temp.gtHopDong]);
+                        item.dsHopDong.forEach(element => {
+                            const temp: CapVon = new CapVon({
+                                id: uuid.v4() + 'FE',
+                                qdPheDuyet: element.tenGoiThau + '/' + element.soHopDong,
+                                slKeHoach: element.slKeHoach,
+                                slHopDong: element.slHopDong,
+                                donGia: element.donGia,
+                                gtHopDong: Operator.mul(element.slHopDong, element.donGia),
+                            })
+                            const index = this.response.lstCtiets.findIndex(e => e.qdPheDuyet == item.soQdPduyet);
+                            this.response.lstCtiets = Table.addChild(this.response.lstCtiets[index].id, temp, this.response.lstCtiets);
+                            this.response.lstCtiets[index].slKeHoach = Operator.sum([this.response.lstCtiets[index].slKeHoach, temp.slKeHoach]);
+                            this.response.lstCtiets[index].slHopDong = Operator.sum([this.response.lstCtiets[index].slHopDong, temp.slHopDong]);
+                            this.response.lstCtiets[index].gtHopDong = Operator.sum([this.response.lstCtiets[index].gtHopDong, temp.gtHopDong]);
+                        });
+
                     })
                 } else {
                     this.notification.warning(MESSAGE.WARNING, data?.msg);
