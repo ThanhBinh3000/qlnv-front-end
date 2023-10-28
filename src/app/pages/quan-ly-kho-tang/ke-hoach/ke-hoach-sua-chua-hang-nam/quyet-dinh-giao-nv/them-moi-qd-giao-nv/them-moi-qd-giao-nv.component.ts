@@ -20,6 +20,7 @@ import {
   DialogTableCheckBoxComponent
 } from "../../../../../../components/dialog/dialog-table-check-box/dialog-table-check-box.component";
 import {MESSAGE} from "../../../../../../constants/message";
+import dayjs from "dayjs";
 
 @Component({
   selector: 'app-them-moi-qd-giao-nv',
@@ -45,11 +46,10 @@ export class ThemMoiQdGiaoNvComponent extends Base2Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, qdScBtcService);
     this.formData = this.fb.group({
       id : [],
-      nam : [],
+      namKeHoach : [dayjs().get('year')],
       soQdGiaoNv : [null,[Validators.required]],
       ngayKy : [null,[Validators.required]],
       ngayHluc : [null,[Validators.required]],
-      idTtr : [null,[Validators.required]],
       soTtr : [null,[Validators.required]],
       trichYeu : [null,[Validators.required]],
       trangThai : [STATUS.DANG_NHAP_DU_LIEU],
@@ -67,17 +67,16 @@ export class ThemMoiQdGiaoNvComponent extends Base2Component implements OnInit {
       return;
     }
     let body = this.formData.value;
-    body.maDvi = this.userInfo.MA_DVI;
-    // body.soQuyetDinh = body.soQuyetDinh + this.maQd;
     body.fileDinhKems = this.fileDinhKem;
     body.canCuPhapLys = this.canCuPhapLy;
-    // body.chiTiets = this.dataTableReq;
-    let data = await this.createUpdate(body);
-    if (data) {
-      if (isOther) {
-        this.approve(data.id, this.STATUS.BAN_HANH, "Bạn có muốn ban hành?");
-      }
-    }
+    body.children = this.dataTable;
+    console.log(body)
+    // let data = await this.createUpdate(body);
+    // if (data) {
+    //   if (isOther) {
+    //     this.approve(data.id, this.STATUS.BAN_HANH, "Bạn có muốn ban hành?");
+    //   }
+    // }
   }
 
   chonMaTongHop(){
@@ -104,19 +103,22 @@ export class ThemMoiQdGiaoNvComponent extends Base2Component implements OnInit {
             const dataCheck = res.data.filter( item => item.checked == true);
             if(dataCheck){
               this.spinner.show();
-              await dataCheck.forEach(async item => {
-                await this.tongHopDxScLon.getDetail(item.id).then((dtlTh)=>{
-                  console.log(dtlTh.data);
-                    if(dtlTh.data){
-                      if(dtlTh.data.chiTiets){
-                        dtlTh.data.chiTiets.forEach( dtl => {
-                          this.dataTable.push(dtl);
+              let listToTrinh = [];
+              for (const item of dataCheck) {
+                 await this.tongHopDxScLon.getDetail(item.id).then((dtlTh)=>{
+                   listToTrinh.push(dtlTh.data.maToTrinh);
+                   if(dtlTh.data){
+                     if(dtlTh.data.chiTiets){
+                       dtlTh.data.chiTiets.forEach( dtl => {
+                         this.dataTable.push(dtl);
                         })
                       }
                     }
                 })
-              });
-              console.log(this.dataTable);
+              }
+              this.formData.patchValue({
+                soTtr : listToTrinh.join(',')
+              })
               this.spinner.hide();
             }
           }

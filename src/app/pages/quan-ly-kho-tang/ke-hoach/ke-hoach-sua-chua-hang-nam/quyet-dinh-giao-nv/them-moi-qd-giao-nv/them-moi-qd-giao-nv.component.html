@@ -15,7 +15,7 @@
         <span>Quay lại</span>
       </button>
       <button
-        *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDBTC_THEM')"
+        *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isTongCuc()"
         type="button"
         class="btn btn-sub ml-2"
         (click)="save(true)">
@@ -23,7 +23,7 @@
         <span>Ban hành</span>
       </button>
       <button type="button" class="btn btn-sub xanh ml-2"
-              *ngIf=" (formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU) && userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDBTC_THEM')"
+              *ngIf=" (formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU) && userService.isTongCuc()"
               (click)="save(false)">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
@@ -40,7 +40,7 @@
                 <nz-form-label [nzNoColon]="true" nzRequired> Năm kế hoạch
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]='error'>
-                  <nz-select nzAllowClear formControlName="nam">
+                  <nz-select nzAllowClear formControlName="namKeHoach">
                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -81,14 +81,14 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonMaTongHop()">
-                    <input [readonly]="true" nz-input formControlName="soTt" readonly="true"/>
+                    <input [readonly]="true" nz-input formControlName="soTtr" readonly="true"/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="24">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true" >Trích yếu</nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true" >Trích yếu</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
                     <input [readonly]="isViewDetail" nz-input formControlName="trichYeu"/>
@@ -142,12 +142,17 @@
 
           <tr *ngFor="let data of dataTable; let i = index">
             <td nzWidth="45px">{{i+1}}</td>
-            <td>{{ data.nam }}</td>
+            <td>{{ data.tenCongTrinh }}</td>
             <td>{{ data.soQd }}</td>
-            <td>{{ data.trichYeu  }}</td>
-            <td>{{ data.ngayKy }}</td>
-            <td>{{ data.ngayHluc }}</td>
-            <td>{{ data.tenTrangThai }}</td>
+            <td>{{ data.tieuChuan  }}</td>
+            <td>{{ data.tgThucHien + ' - ' + data.tgHoanThanh }}</td>
+            <td>{{ data.lyDo }}</td>
+            <td>{{ data.giaTriPd | number : '1.0-1' : 'vi_VN' }}</td>
+            <td><nz-input-number [nzSize]="'small'"  [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                 nz-input [(ngModel)]="data.donGiaDk" [nzMin]="1" ></nz-input-number>
+            </td>
+            <td>{{data.namKh}}</td>
+            <td><input nz-input [(ngModel)]="data.ghiChu"  /></td>
           </tr>
           </tbody>
         </nz-table>
