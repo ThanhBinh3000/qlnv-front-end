@@ -270,8 +270,10 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
     //   this.formData.controls["ngayKetThuc"].setValidators(Validators.required);
     //   this.formData.controls["mucDichXuat"].setValidators(Validators.required);
     // }
-    this.helperService.markFormGroupTouched(this.formData);
-    if (!this.formData.valid) return;
+    if (this.formData.value.xuatCap) {
+      const soLuongXuatCap = this.formData.value.quyetDinhPdDtl.reduce((sum, cur) => sum += cur.soLuongXc);
+      this.formData.patchValue({ soLuongXuatCap })
+    }
     if (!this.formData.value.quyetDinhPdDtl || this.formData.value.quyetDinhPdDtl.length <= 0) {
       return this.notification.error(MESSAGE.ERROR, "Thông tin chi tiết đề xuất cứu trợ, viện trợ của các đơn vị không tồn tại.")
     }
@@ -285,6 +287,10 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   }
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
+    if (this.formData.value.xuatCap) {
+      const soLuongXuatCap = this.formData.value.quyetDinhPdDtl.reduce((sum, cur) => sum += cur.soLuongXc);
+      this.formData.patchValue({ soLuongXuatCap })
+    }
     let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd + this.maHauTo }
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
   }

@@ -132,6 +132,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
         id: [],
         idDx: [],
         idQdPdDtl: [],
+        idDonViNhan: [],
         soLuongDx: [],
         soLuongGiao: [],
         loaiNhapXuat: [],
@@ -511,12 +512,16 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     if (this.formData.value.type !== "XC") {
       this.formData.value.dataDtl.forEach(s => {
         if (s.tenDiemKho) {
-          s.tenDiaDiem = (s.tenDiemKho ? s.tenDiemKho + ' - ' : '') +
+          s.tenDiaDiem = this.formData.value.loaiVthh !== LOAI_HANG_DTQG.VAT_TU ? (s.tenDiemKho ? s.tenDiemKho + ' - ' : '') +
             (s.tenNhaKho ? s.tenNhaKho + ' - ' : '') +
             (s.tenNganKho ? s.tenNganKho + ' - ' : '') +
-            (s.tenLoKho ?? '');
+            (s.tenLoKho ? s.tenLoKho + ' - ' : '') + (s.tenLoaiVthh ? s.tenLoaiVthh : '') +
+            (s.tenCloaiVthh ? ' - ' + s.tenCloaiVthh : '') : (s.tenDiemKho ? s.tenDiemKho + ' - ' : '') +
+            (s.tenNhaKho ? s.tenNhaKho + ' - ' : '') +
+            (s.tenNganKho ? s.tenNganKho : '') +
+          (s.tenLoKho ? ' - ' + s.tenLoKho : '');
         }
-        s.tenHang = this.formData.value.tenVthh !== LOAI_HANG_DTQG.VAT_TU ? s.tenLoaiVthh : s.tenCloaiVthh ? s.tenLoaiVthh + " - " + s.tenCloaiVthh : s.tenLoaiVthh;
+        s.tenHang = this.formData.value.loaiVthh !== LOAI_HANG_DTQG.VAT_TU ? s.tenLoaiVthh : s.tenCloaiVthh ? s.tenLoaiVthh + " - " + s.tenCloaiVthh : s.tenLoaiVthh;
         s.noiDungDxTheoDx = `${s.noiDungDx}-${s.idDx}`;
       });
       let data = this.formData.value.dataDtl;
@@ -571,10 +576,14 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     } else if (this.formData.value.paXuatGaoChuyenXc) {
       this.formData.value.dataDtl.forEach(s => {
         if (s.tenDiemKho) {
-          s.tenDiaDiem = (s.tenDiemKho ? s.tenDiemKho + ' - ' : '') +
+          s.tenDiaDiem = this.formData.value.loaiVthh !== LOAI_HANG_DTQG.VAT_TU ? (s.tenDiemKho ? s.tenDiemKho + ' - ' : '') +
             (s.tenNhaKho ? s.tenNhaKho + ' - ' : '') +
             (s.tenNganKho ? s.tenNganKho + ' - ' : '') +
-            (s.tenLoKho ?? '');
+            (s.tenLoKho ? s.tenLoKho + ' - ' : '') + (s.tenLoaiVthh ? s.tenLoaiVthh : '') +
+            (s.tenCloaiVthh ? ' - ' + s.tenCloaiVthh : '') : (s.tenDiemKho ? s.tenDiemKho + ' - ' : '') +
+            (s.tenNhaKho ? s.tenNhaKho + ' - ' : '') +
+            (s.tenNganKho ? s.tenNganKho : '') +
+          (s.tenLoKho ? ' - ' + s.tenLoKho : '');
         }
         s.tenHang = s.tenCloaiVthh ? s.tenLoaiVthh + " - " + s.tenCloaiVthh : s.tenLoaiVthh;
         s.noiDungDxTheoDx = `${s.noiDungDx}-${s.idDx}`;
@@ -619,10 +628,14 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     } else {
       this.formData.value.dataDtl.forEach(s => {
         if (s.tenDiemKho) {
-          s.tenDiaDiem = (s.tenDiemKho ? s.tenDiemKho + ' - ' : '') +
+          s.tenDiaDiem = this.formData.value.loaiVthh !== LOAI_HANG_DTQG.VAT_TU ? (s.tenDiemKho ? s.tenDiemKho + ' - ' : '') +
             (s.tenNhaKho ? s.tenNhaKho + ' - ' : '') +
             (s.tenNganKho ? s.tenNganKho + ' - ' : '') +
-            (s.tenLoKho ?? '');
+            (s.tenLoKho ? s.tenLoKho + ' - ' : '') + (s.tenLoaiVthh ? s.tenLoaiVthh : '') +
+            (s.tenCloaiVthh ? ' - ' + s.tenCloaiVthh : '') : (s.tenDiemKho ? s.tenDiemKho + ' - ' : '') +
+            (s.tenNhaKho ? s.tenNhaKho + ' - ' : '') +
+            (s.tenNganKho ? s.tenNganKho : '') +
+          (s.tenLoKho ? ' - ' + s.tenLoKho : '');
         }
         s.tenHang = s.tenCloaiVthh ? s.tenLoaiVthh + " - " + s.tenCloaiVthh : s.tenLoaiVthh;
         s.noiDungDxTheoDx = `${s.noiDungDx}-${s.idDx}`;
@@ -701,6 +714,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           mId: edit ? data.mId : uuidv4(),
 
           idDx: data.idDx,
+          idDonViNhan: data.idDonViNhan,
           loaiNhapXuat: data.loaiNhapXuat,
           kieuNhapXuat: data.kieuNhapXuat,
           mucDichXuat: data.mucDichXuat,
@@ -726,6 +740,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
             mId: edit ? data.mId : uuidv4(),
 
             idDx: data.idDx,
+            idDonViNhan: data.idDonViNhan,
             loaiNhapXuat: data.loaiNhapXuat,
             kieuNhapXuat: data.kieuNhapXuat,
             mucDichXuat: data.mucDichXuat,
@@ -758,6 +773,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
             mId: edit ? data.mId : uuidv4(),
 
             idDx: data.idDx,
+            idDonViNhan: data.idDonViNhan,
             loaiNhapXuat: data.loaiNhapXuat,
             kieuNhapXuat: data.kieuNhapXuat,
             mucDichXuat: data.mucDichXuat,
@@ -788,6 +804,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           mId: edit ? data.mId : uuidv4(),
 
           idDx: data.idDx,
+          idDonViNhan: data.idDonViNhan,
           loaiNhapXuat: data.loaiNhapXuat,
           kieuNhapXuat: data.kieuNhapXuat,
           mucDichXuat: data.mucDichXuat,
