@@ -92,9 +92,9 @@
                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"
                 style="width: 35px"></td>
             <td class="text-left">
-              <a *ngIf="item.soQdNv && item.idQdNv" nz-button nzType="link"
-                 (click)="openModal(item.idQdNv, 'QdNv')">
-                {{ item.soQdNv }}</a>
+              <a *ngIf="item.soQdNv && item.idQdNv" (click)="openModal(item.idQdNv, 'QdNv')"
+                 style="color: blue">{{ item.soQdNv }}
+              </a>
             </td>
             <td class="text-left bold">{{item.namKh}}</td>
             <td class="text-left bold">{{item.ngayKyQdNv|date: 'dd/MM/YYYY'}}</td>
@@ -138,9 +138,10 @@
                     <td
                       class="text-left bold">{{ (lv2.tenLoKho ? lv2.tenLoKho + " - " : "") + (lv2.tenNganKho ? lv2.tenNganKho + " - " : "") + (lv2.tenNhaKho ? lv2.tenNhaKho : "") }}</td>
                     <td class="text-left">
-                      <a *ngIf="lv2.soPhieuKiemNghiem && lv2.idPhieuKiemNghiem" nz-button nzType="link"
-                         (click)="openModal(lv2.idPhieuKiemNghiem, 'kiemNghiem')">
-                        {{ lv2.soPhieuKiemNghiem }}</a>
+                      <a *ngIf="lv2.soPhieuKiemNghiem && lv2.idPhieuKiemNghiem"
+                         (click)="openModal(lv2.idPhieuKiemNghiem, 'kiemNghiem')"
+                         style="color: blue">{{ lv2.soPhieuKiemNghiem }}
+                      </a>
                     </td>
                     <td class="text-left bold">{{ lv2.ngayKiemNghiemMau|date:'dd/MM/YYYY' }}</td>
                     <td></td>
@@ -169,9 +170,10 @@
                         <td></td>
                         <td class="text-left bold">{{lv3.soPhieuXuatKho}}</td>
                         <td class="text-left">
-                          <a *ngIf="lv3.soBangKeHang && lv3.idBangKeHang" nz-button nzType="link"
-                             (click)="openModal(lv3.idBangKeHang, 'bangKe')">
-                            {{ lv3.soBangKeHang }}</a>
+                          <a *ngIf="lv3.soBangKeHang && lv3.idBangKeHang"
+                             (click)="openModal(lv3.idBangKeHang, 'bangKe')"
+                             style="color: blue">{{ lv3.soBangKeHang }}
+                          </a>
                         </td>
                         <td class="text-left">{{lv3.ngayLapPhieu|date:'dd/MM/YYYY'}}</td>
                         <td class="text-left">{{lv3.tenTrangThai}}</td>

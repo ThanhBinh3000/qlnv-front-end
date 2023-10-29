@@ -278,14 +278,14 @@
           <tr *ngFor="let data of dataTable;let i = index">
             <td class="text-center">{{ i + 1}}</td>
             <td class="text-left">
-              <a *ngIf="data.soPhieuXuatKho && data.idPhieuXuatKho" nz-button nzType="link"
-                 (click)="openModal(data.idPhieuXuatKho, 'xuatKho')">
-                {{ data.soPhieuXuatKho }}</a>
+              <a *ngIf="data.soPhieuXuatKho && data.idPhieuXuatKho" (click)="openModal(data.idPhieuXuatKho, 'xuatKho')"
+                 style="color: blue">{{ data.soPhieuXuatKho }}
+              </a>
             </td>
             <td class="text-left">
-              <a *ngIf="data.soBangKeHang && data.idBangKeHang" nz-button nzType="link"
-                 (click)="openModal(data.idBangKeHang, 'bangKe')">
-                {{ data.soBangKeHang }}</a>
+              <a *ngIf="data.soBangKeHang && data.idBangKeHang" (click)="openModal(data.idBangKeHang, 'bangKe')"
+                 style="color: blue">{{ data.soBangKeHang }}
+              </a>
             </td>
             <td class="text-left">{{ data.ngayXuatKho|date: 'dd/MM/YYYY' }}</td>
             <td class="text-left">{{ data.soLuongXuat|number:globals.numberFormat:globals.locale }} </td>
