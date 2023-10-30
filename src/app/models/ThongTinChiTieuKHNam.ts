@@ -12,7 +12,6 @@ export class ThongTinChiTieuKeHoachNam {
   tenTrangThai: string;
   trangThai: string = STATUS.DANG_NHAP_DU_LIEU;
   trichYeu: string;
-  tenDvi: string;
   loai:string;
   khLuongThuc: Array<KeHoachLuongThuc> = [];
   khMuoiDuTru: Array<KeHoachMuoi> = [];
