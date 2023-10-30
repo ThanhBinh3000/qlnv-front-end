@@ -46,6 +46,7 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
   dataTableReq: any[] = [];
   expandSet = new Set<number>();
   listToTrinh: any[] = [];
+  listQdBtc: any[] = [];
   dsCuc: any[] = [];
   dsChiCuc: any[] = [];
   rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
@@ -75,6 +76,10 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
   ) {
     this.formData = this.fb.group({
       id: [null],
+      loaiLan: ['1'],
+      soLanDieuChinh: [],
+      soQdCanDieuChinh: [],
+      qdCanDieuChinhId: [],
       namKeHoach: [dayjs().get('year')],
       soQuyetDinh: [null],
       ngayTrinhBtc: [null],
@@ -97,6 +102,13 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
       this.listToTrinh = result.data;
     }
   }
+  async getListQdBtc() {
+    let body ={};
+    let result = await this.quyetDinhService.danhSach(body);
+    if (result.msg == MESSAGE.SUCCESS) {
+      this.listQdBtc = result.data;
+    }
+  }
 
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
@@ -114,6 +126,10 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
       const data = res.data;
       this.formData.patchValue({
         id: data.id,
+        loaiLan: data.loaiLan,
+        soLanDieuChinh: data.soLanDieuChinh,
+        soQdCanDieuChinh: data.soQdCanDieuChinh,
+        qdCanDieuChinhId: data.qdCanDieuChinhId,
         phuongAnTc: data.phuongAnTc,
         soQuyetDinh: data.soQuyetDinh ? data.soQuyetDinh.split('/')[0] : null,
         ngayTrinhBtc: data.ngayTrinhBtc,
@@ -125,6 +141,7 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
         loaiDuAn: data.loaiDuAn,
         trangThai: data.trangThai,
         tenTrangThai: data.tenTrangThai,
+        noiDung: data.noiDung
       });
       this.fileDinhKems = data.fileDinhKems;
       this.canCuPhapLys = data.canCuPhapLys;
@@ -299,6 +316,39 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
       this.formData.patchValue({
         phuongAnTc: res.data.soQuyetDinh,
       });
+    }
+  }
+  async loadDsChiTietQdCanDieuChinh(id: number) {
+    if (id > 0) {
+      let res = await this.quyetDinhService.getDetail(id);
+      const data = res.data;
+      this.formData.patchValue({
+        phuongAnTc: data.phuongAnTc,
+        soQdCanDieuChinh: data.soQuyetDinh ? data.soQuyetDinh.split('/')[0] : null,
+        qdCanDieuChinhId: id,
+        soLanDieuChinh: data.soLanDieuChinh ? data.soLanDieuChinh : 1,
+        ngayTrinhBtc: data.ngayTrinhBtc,
+        trichYeu: data.trichYeu,
+        namBatDau: data.namBatDau,
+        namKetThuc: data.namKetThuc,
+        loaiDuAn: data.loaiDuAn,
+        noiDung: data.noiDung
+      });
+      this.fileDinhKems = data.fileDinhKems;
+      this.canCuPhapLys = data.canCuPhapLys;
+      let listDx = data.ctRes;
+      if (listDx) {
+        listDx.ctietList.forEach(item =>{
+          item.isDieuChinh = false;
+        });
+        this.dataTableReq = listDx.ctietList;
+        this.dataTable = this.convertListData(this.dataTableReq);
+        this.expandAll(this.dataTable);
+        // this.listDx = listDx.dtlList;
+        // if (this.listDx && this.listDx.length > 0) {
+        //   this.selectRow(this.listDx[0]);
+        // }
+      }
     }
   }
 
@@ -478,11 +528,50 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
     });
     modalQD.afterClose.subscribe(async (detail) => {
       if (detail && list) {
+        if(this.formData.value.loaiLan == '2'){
+          detail.isDieuChinh = true;
+        }
         Object.assign(list[idx], detail);
       }
     });
   }
 
+  checkDisableLoaiLan() {
+    if(this.formData.value.soQdCanDieuChinh || this.formData.value.id){
+      return true;
+    }
+    return false;
+  }
+
+  changeLoaiLan($event: any) {
+
+  }
+
+  async openDialogQdCanDieuChinh() {
+    if (!this.isViewDetail) {
+      await this.getListQdBtc();
+      const modal = this.modal.create({
+        nzTitle: 'Danh sách Quyết định BTC',
+        nzContent: DialogQdXdTrungHanComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          type: 'QDBTC',
+          dsPhuongAn: this.listQdBtc,
+        },
+      });
+      modal.afterClose.subscribe(async (data) => {
+        if (data) {
+          this.formData.patchValue({
+            phuongAnTc: data.soQuyetDinh,
+          });
+          await this.loadDsChiTietQdCanDieuChinh(data.id);
+        }
+      });
+    }
+  }
 }
 
 
