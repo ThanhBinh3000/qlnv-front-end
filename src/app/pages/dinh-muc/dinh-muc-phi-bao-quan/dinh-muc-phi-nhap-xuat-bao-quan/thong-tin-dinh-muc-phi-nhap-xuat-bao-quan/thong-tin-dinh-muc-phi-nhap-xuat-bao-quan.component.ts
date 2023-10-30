@@ -26,6 +26,7 @@ export interface TreeNodeInterface {
   tenLoaiVthh?: string;
   cloaiVthh?: string;
   tenCloaiVthh?: string;
+  loaiDinhMuc?:string;
   apDungTai?: any[];
   apDungTaiStr?: string;
   donViTinh?: string;
@@ -130,6 +131,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       tenDinhMuc: [, [Validators.required]],
       loaiVthh: [, [Validators.required]],
       tenLoaiVthh: [, [Validators.required]],
+      loaiDinhMuc: [, [Validators.required]],
       apDungTai: [, [Validators.required]],
       apDungTaiStr: [, [Validators.required]],
       donViTinh: [, [Validators.required]],
@@ -153,13 +155,13 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     try {
       await this.getAllLoaiDinhMuc();
       await this.loaiVTHHGetAll();
-      await this.loadDmDinhMuc();
       await this.loadDonVi();
       await this.getTongDinhMucTongCucPhan();
       await this.loadAllDonViTheoCap();
       if (this.idInput > 0) {
-        this.detail(this.idInput);
+        await this.detail(this.idInput);
       }
+      await this.loadDmDinhMuc();
       this.updateEditCacheTqd();
       this.spinner.hide();
     } catch (e) {
@@ -182,11 +184,13 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
           this.dataTableDetailTqd.forEach(item => {
             item.apDungTaiStr = this.getStrTenDonVi(item.apDungTai);
           });
-          this.dataTableDetailKtqd = data.listQlDinhMucPhisKtqd;
-          this.dataTableDetailKtqd.forEach(item => {
+          this.dataListDetailKtqd = data.listQlDinhMucPhisKtqd;
+          this.dataListDetailKtqd.forEach(item => {
             item.apDungTaiStr = this.getStrTenDonVi(item.apDungTai);
           });
           this.updateEditCacheTqd();
+          this.buildDataTableDetailKtqd();
+          this.updateEditCacheKtqd();
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -203,7 +207,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
 
   async saveAndSend(status: string, msg: string, msgSuccess?: string) {
     try {
-      if (this.dataTableDetailTqd.length <= 0 || this.dataTableDetailKtqd.length <= 0) {
+      if (this.dataTableDetailTqd.length <= 0 && this.dataTableDetailKtqd.length <= 0) {
         this.notification.error(MESSAGE.ERROR, 'Bạn chưa nhập chi tiết định mức phí nhập xuất bảo quản.');
         return;
       }
@@ -226,7 +230,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
 
 
   async save() {
-    if (this.dataTableDetailTqd.length <= 0) {
+    if (this.dataTableDetailTqd.length <= 0 && this.dataTableDetailKtqd.length <= 0) {
       this.notification.error(MESSAGE.ERROR, 'Bạn chưa nhập chi tiết định mức phí nhập xuất bảo quản.');
       return;
     }
@@ -272,7 +276,6 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       },
     };
     let res;
-    this.listDmDinhMuc = [];
     if (this.capDvi == 1) {
       res = await this.danhMucDinhMucService.searchDsChuaSuDung(body);
     } else {
@@ -280,9 +283,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     }
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.content && res.data.content.length > 0) {
-        for (let item of res.data.content) {
-          this.listDmDinhMuc.push(item);
-        }
+        this.listDmDinhMuc = res.data.content;
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -712,6 +713,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       tenLoaiVthh: undefined,
       cloaiVthh: undefined,
       tenCloaiVthh: undefined,
+      loaiDinhMuc: undefined,
       thanhToanTheoVnd: undefined,
       tyGia: undefined,
       thanhToanTheoUsd: undefined,
