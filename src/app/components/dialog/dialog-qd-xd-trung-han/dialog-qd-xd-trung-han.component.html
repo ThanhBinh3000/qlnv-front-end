@@ -6,6 +6,7 @@
       <th *ngIf="type == 'QDTX'">Số tờ trình của Tổng cục</th>
       <th *ngIf="type == 'QDTH'">Số quyết định Tổng cục</th>
       <th *ngIf="type == 'DXNC'">Số quyết định trung hạn</th>
+      <th *ngIf="type == 'QDBTC'">Số quyết định BTC</th>
       <th [width]="35" class=" text-center">Chọn</th>
     </tr>
     </thead>
@@ -15,6 +16,7 @@
       <td *ngIf="type == 'QDTX'"  >{{ data.soQuyetDinh}}</td>
       <td *ngIf="type == 'QDTH'"  >{{ data.soQuyetDinh}}</td>
       <td *ngIf="type == 'DXNC'"  >{{ data.soQuyetDinh}}</td>
+      <td *ngIf="type == 'QDBTC'"  >{{ data.soQuyetDinh}}</td>
       <td  class="text-center">
         <a (click)="handleOk(data)">
           <i class="icon htvbdh_dau-cong"></i>
