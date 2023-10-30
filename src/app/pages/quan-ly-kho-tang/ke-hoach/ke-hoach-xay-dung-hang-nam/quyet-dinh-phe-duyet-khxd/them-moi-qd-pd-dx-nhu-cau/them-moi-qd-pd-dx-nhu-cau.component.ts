@@ -103,7 +103,9 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
     }
   }
   async getListQdBtc() {
-    let body ={};
+    let body ={
+      trangThai:"29"
+    };
     let result = await this.quyetDinhService.danhSach(body);
     if (result.msg == MESSAGE.SUCCESS) {
       this.listQdBtc = result.data;
@@ -327,10 +329,7 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
         soQdCanDieuChinh: data.soQuyetDinh ? data.soQuyetDinh.split('/')[0] : null,
         qdCanDieuChinhId: id,
         soLanDieuChinh: data.soLanDieuChinh ? data.soLanDieuChinh : 1,
-        ngayTrinhBtc: data.ngayTrinhBtc,
         trichYeu: data.trichYeu,
-        namBatDau: data.namBatDau,
-        namKetThuc: data.namKetThuc,
         loaiDuAn: data.loaiDuAn,
         noiDung: data.noiDung
       });
@@ -339,6 +338,7 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
       let listDx = data.ctRes;
       if (listDx) {
         listDx.ctietList.forEach(item =>{
+          item.id = undefined;
           item.isDieuChinh = false;
         });
         this.dataTableReq = listDx.ctietList;
