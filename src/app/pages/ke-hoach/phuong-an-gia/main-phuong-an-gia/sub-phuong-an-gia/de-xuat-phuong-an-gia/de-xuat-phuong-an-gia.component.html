@@ -118,7 +118,7 @@
           <span>Thêm</span>
         </button>
         <button type="button" class="btn btn-main" (click)="redirectToTongHopEmit()" *ngIf="(( this.type == this.typeConst.GIA_MUA_TOI_DA && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_TONGHOP_TONGHOP'))
-      || ( this.type == this.typeConst.GIA_CU_THE  && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_TONGHOP_TONGHOP'))) && userService.isTongCuc()">
+      || ( this.type == this.typeConst.GIA_CU_THE  && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_TONGHOP_TONGHOP'))) && userService.isTongCuc() && pagType == 'LT'">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Tổng hợp</span>
         </button>
