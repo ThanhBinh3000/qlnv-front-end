@@ -979,4 +979,12 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     this.updateEditCacheKtqd();
     this.closeDlgAddEdit();
   }
+
+  viewRow(item: TreeNodeInterface, level: number) {
+    this.openDlgAddEdit();
+    this.formDataDtl.patchValue({
+      ...item,
+      level
+    });
+  }
 }
