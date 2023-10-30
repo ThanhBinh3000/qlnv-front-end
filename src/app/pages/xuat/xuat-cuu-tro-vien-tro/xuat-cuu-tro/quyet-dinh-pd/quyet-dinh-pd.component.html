@@ -73,8 +73,9 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3 class="text-uppercase">{{formData.value.type == 'XC' ? 'DANH SÁCH PHƯƠNG ÁN XUẤT CỨU TRỢ, VIỆN TRỢ GẠO ĐƯỢC
-        DUYỆT CHUYỂN SANG XUẤT CẤP' : 'Danh sách quyết định phê duyệt phương án xuất viện trợ cứu trợ'}}
+      <h3 class="text-uppercase">
+        {{formData.value.type == 'XC' ? 'DANH SÁCH PHƯƠNG ÁN XUẤT CỨU TRỢ, VIỆN TRỢ GẠO ĐƯỢC DUYỆT CHUYỂN SANG XUẤT CẤP'
+        : 'Danh sách quyết định phê duyệt phương án xuất viện trợ cứu trợ'}}
       </h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteMulti()"
@@ -106,19 +107,75 @@
                 [nzIndeterminate]="indeterminate"></label>
             </th>
             <th width="60px" class="text-center">STT</th>
-            <th width="">Số quyết định</th>
-            <th width="">Ngày ký quyết định</th>
-            <th width="">Mã tổng hợp</th>
-            <th width="">Ngày tổng hợp</th>
-            <th width="">Số công văn/đề xuất</th>
-            <th width="">Ngày đề xuất</th>
-            <th width="">Loại hàng hóa</th>
-            <!--          <th width="" class="text-center">Tổng SL đề xuất <br> cứu trợ, viện trợ (kg)</th>-->
-            <!--          <th width="" class="text-center">Tổng SL xuất kho <br> cứu trợ, viện trợ (kg)</th>-->
-            <!--          <th width="" class="text-center">SL xuất CT, VT <br> chuyển sang xuất cấp (kg)</th>-->
-            <th width="">Trích yếu</th>
-            <th width="">Trạng thái</th>
-            <th width="90px">Hành động</th>
+            <th class="text-center">Số quyết định</th>
+            <th class="text-center">Ngày ký quyết định</th>
+            <th class="text-center">Mã tổng hợp</th>
+            <th class="text-center">Ngày tổng hợp</th>
+            <th class="text-center">Số công văn/đề xuất</th>
+            <th class="text-center">Ngày đề xuất</th>
+            <th class="text-center">Loại hàng hóa</th>
+            <!--          <th class="text-center" class="text-center">Tổng SL đề xuất <br> cứu trợ, viện trợ (kg)</th>-->
+            <!--          <th class="text-center" class="text-center">Tổng SL xuất kho <br> cứu trợ, viện trợ (kg)</th>-->
+            <!--          <th class="text-center" class="text-center">SL xuất CT, VT <br> chuyển sang xuất cấp (kg)</th>-->
+            <th class="text-center">Trích yếu</th>
+            <th class="text-center">Trạng thái</th>
+            <th width="90px" class="text-center">Hành động</th>
+          </tr>
+          <tr class="search-table">
+            <th></th>
+            <th></th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBbQd"
+                  (input)="filterInTable('soBbQd',filterTable.soBbQd)" size="small" />
+              </nz-input-group>
+            </th>
+            <th><nz-input-group>
+                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="" [(ngModel)]="filterTable.ngayKy"
+                  (ngModelChange)="filterInTable('ngayKy', convertDateToString(filterTable.ngayKy))">
+                </nz-date-picker>
+              </nz-input-group></th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.idTongHop"
+                  (input)="filterInTable('idTongHop',filterTable.idTongHop)" size="small" />
+              </nz-input-group>
+            </th>
+            <th><nz-input-group>
+                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="" [(ngModel)]="filterTable.ngayThop"
+                  (ngModelChange)="filterInTable('ngayThop', convertDateToString(filterTable.ngayThop), 'date')">
+                </nz-date-picker>
+              </nz-input-group></th>
+            <th><nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soDx"
+                  (input)="filterInTable('soDx',filterTable.soDx)" size="small" />
+              </nz-input-group></th>
+            <th><nz-input-group>
+                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="" [(ngModel)]="filterTable.ngayDx"
+                  (ngModelChange)="filterInTable('ngayDx', convertDateToString(filterTable.ngayDx))">
+                </nz-date-picker>
+              </nz-input-group></th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenVthh"
+                  (input)="filterInTable('tenVthh',filterTable.tenVthh)" size="small" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
+                  (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <nz-select nzAllowClear [(ngModel)]="filterTable.trangThai"
+                  (ngModelChange)="filterInTable('trangThai',filterTable.trangThai)">
+                  <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+                </nz-select>
+              </nz-input-group>
+            </th>
+            <th></th>
           </tr>
         </thead>
         <tbody>

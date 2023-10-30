@@ -180,13 +180,19 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
     }
   }
 
-  async save() {
+  async save(isTaoQuyetDinh?) {
     try {
       await this.helperService.ignoreRequiredForm(this.formData);
-      this.formData.controls["noiDungThop"].setValidators([Validators.required])
+      this.formData.controls["noiDungThop"].setValidators([Validators.required]);
       const body = this.formData.value;
-      await this.createUpdate(body);
+      const data = await this.createUpdate(body);
       await this.helperService.restoreRequiredForm(this.formData);
+      if (data.id) {
+        if (isTaoQuyetDinh) {
+          this.formData.controls["noiDungThop"].setValidators([Validators.required]);
+          this.taoQdinh();
+        }
+      }
     } catch (error) {
       console.error('Error in save:', error);
     }

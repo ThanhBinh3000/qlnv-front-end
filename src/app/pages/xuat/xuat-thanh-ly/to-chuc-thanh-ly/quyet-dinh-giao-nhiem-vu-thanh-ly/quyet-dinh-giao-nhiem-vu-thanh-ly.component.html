@@ -174,10 +174,6 @@
             (click)="redirectDetail(data.id)">
             <i class="fa fa-pencil" title="Sửa"></i>
           </a>
-          <a *ngIf="(data.trangThai == STATUS.CHO_DUYET_TP || data.trangThai == STATUS.CHO_DUYET_LDC )"
-             (click)="redirectDetail(data.id)">
-            <i class="icon htvbdh_tcdt_pheduyet"></i>
-          </a>
           <a
             *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_XOA')"
             (click)="delete(data)">

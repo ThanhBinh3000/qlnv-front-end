@@ -75,6 +75,7 @@ export class QuyetDinhPdDx {
 })
 export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements OnInit {
   @Input() isView: boolean;
+  @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
   formDataDtl: FormGroup;
   maHauTo: any;
@@ -189,6 +190,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
         edit: []
       });
     this.formData.controls["paXuatGaoChuyenXc"].valueChanges.subscribe((value) => {
+      console.log("value", value,)
       if (value) {
         this.formData.patchValue({
           tenVthh: TEN_LOAI_VTHH.GAO,
@@ -207,7 +209,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
       this.phuongAnView = [];
       this.loaiNhapXuat = '';
       this.kieuNhapXuat = '';
-      this.formData.patchValue({ idDx: "", qdPaXuatCap: "", qdPaXuatCapId: "", quyetDinhPdDtl: [], ngayKetThuc: "" });
+      this.formData.patchValue({ idDx: "", qdPaXuatCapId: "", quyetDinhPdDtl: [], ngayKetThuc: "" });
       this.tinhTong();
     })
   }
@@ -246,7 +248,8 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
               this.maHauTo = '/' + res.data.soBbQd?.split("/")[1];
               res.data.soBbQd = res.data.soBbQd?.split("/")[0];
             }
-            this.formData.patchValue(res.data);
+            // this.formData.patchValue(res.data);
+            this.helperService.bidingDataInFormGroupAndNotTrigger(this.formData, res.data, ['paXuatGaoChuyenXc']);
             this.formData.value.quyetDinhPdDtl.forEach(s => s.idVirtual = uuidv4());
             if (this.formData.value.paXuatGaoChuyenXc) {
               await this.buildTableViewChuyenXc();
@@ -305,15 +308,11 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
   }
   async save() {
     await this.helperService.ignoreRequiredForm(this.formData);
-    if (!this.formData.value.paXuatGaoChuyenXc) {
-      const soLuongXuatCap = this.formData.value.quyetDinhPdDtl.reduce((sum, cur) => sum += cur.soLuong ? cur.soLuong : 0, 0);
-      this.formData.patchValue({ soLuongXuatCap })
-    }
     let body = {
       ...this.formData.value,
       soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null
     }
-    await this.createUpdate(body);
+    await this.createUpdate(body, null, null, ['paXuatGaoChuyenXc']);
     await this.helperService.restoreRequiredForm(this.formData);
   }
 
@@ -323,7 +322,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
       trangThai = STATUS.CHO_DUYET_LDV;
     }
     let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd + this.maHauTo }
-    await super.saveAndSend(body, trangThai, msg, msgSuccess);
+    await super.saveAndSend(body, trangThai, msg, msgSuccess, ['paXuatGaoChuyenXc']);
   }
 
   expandAll() {
@@ -356,8 +355,8 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     } else {
       this.formDataDtl.patchValue({
         idVirtual: uuidv4(),
-        loaiVthh: LOAI_HANG_DTQG.GAO,
-        tenLoaiVthh: TEN_LOAI_VTHH.GAO,
+        loaiVthh: this.formData.value.loaiVthh,
+        tenLoaiVthh: this.formData.value.tenLoaiVthh,
       });
     }
     this.modalChiTiet = true;
@@ -669,12 +668,11 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
             // delete data.trichYeu;
             // delete data.quyetDinhPdDtl;
             const idDx = data.id;
-            const paXuatGaoChuyenXc = true;
             const qdPaXuatCap = detail.soBbQd;
             const qdPaXuatCapId = detail.id;
 
             // this.formData.patchValue(data);
-            this.formData.patchValue({ idDx, paXuatGaoChuyenXc, qdPaXuatCap, qdPaXuatCapId, quyetDinhPdDtl: detail.quyetDinhPdDtl, ngayKetThuc: detail.ngayKetThuc });
+            this.formData.patchValue({ idDx, qdPaXuatCap, qdPaXuatCapId, quyetDinhPdDtl: detail.quyetDinhPdDtl, ngayKetThuc: detail.ngayKetThuc });
             this.formData.value.quyetDinhPdDtl.forEach(s => delete s.id);
             // await this.buildTableView();
             await this.buildTableViewChuyenXc();

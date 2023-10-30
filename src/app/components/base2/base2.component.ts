@@ -37,6 +37,7 @@ export class Base2Component implements OnInit {
   // Const
   listNam: any[] = [];
   fileDinhKem: any[] = []
+  fileCanCu: any[] = []
   canCuPhapLy: any[] = []
   STATUS = STATUS
 
@@ -246,7 +247,7 @@ export class Base2Component implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == this.STATUS.DU_THAO || item.trangThai == this.STATUS.DANG_NHAP_DU_LIEU ) {
+          if (item.trangThai == this.STATUS.DU_THAO || item.trangThai == this.STATUS.DANG_NHAP_DU_LIEU) {
             item.checked = true;
           }
         });
@@ -373,13 +374,13 @@ export class Base2Component implements OnInit {
   }
 
   // Save
-  async createUpdate(body, roles?: any, isHideMessage?: boolean) {
+  async createUpdate(body, roles?: any, isHideMessage?: boolean, ignoreFields?: Array<string>) {
     if (!this.checkPermission(roles)) {
       return
     }
     await this.spinner.show();
     try {
-      this.helperService.markFormGroupTouched(this.formData);
+      this.helperService.markFormGroupTouched(this.formData, ignoreFields);
       if (this.formData.invalid) {
         return;
       }
@@ -546,7 +547,7 @@ export class Base2Component implements OnInit {
   }
 
   // Approve
-  async saveAndSend(body: any, trangThai: string, msg: string, msgSuccess?: string) {
+  async saveAndSend(body: any, trangThai: string, msg: string, msgSuccess?: string, ignoreFields?: Array<string>) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -558,7 +559,7 @@ export class Base2Component implements OnInit {
       nzOnOk: async () => {
         await this.spinner.show();
         try {
-          this.helperService.markFormGroupTouched(this.formData);
+          this.helperService.markFormGroupTouched(this.formData, ignoreFields);
           if (this.formData.invalid) {
             return;
           }

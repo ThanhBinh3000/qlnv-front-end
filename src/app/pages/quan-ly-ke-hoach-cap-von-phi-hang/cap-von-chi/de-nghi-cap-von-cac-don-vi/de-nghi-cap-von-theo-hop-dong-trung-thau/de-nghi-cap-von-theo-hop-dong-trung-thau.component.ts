@@ -252,10 +252,10 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
     }
 
     async submitReport() {
-        if (!this.baoCao.congVan?.fileUrl) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-            return;
-        }
+        // if (!this.baoCao.congVan?.fileUrl) {
+        //     this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+        //     return;
+        // }
         this.modal.confirm({
             nzClosable: false,
             nzTitle: 'Xác nhận',
@@ -330,19 +330,19 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
             request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.baoCao.maDvi + '/' + this.baoCao.maDnghi));
         }
 
-        //get file cong van url
-        const file: any = this.fileDetail;
-        if (file) {
-            if (file.size > Utils.FILE_SIZE) {
-                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
-                return;
-            } else {
-                request.congVan = {
-                    ...await this.quanLyVonPhiService.upFile(file, this.baoCao.maDvi + '/' + this.baoCao.maDnghi),
-                    fileName: this.baoCao.congVan.fileName,
-                }
-            }
-        }
+        // //get file cong van url
+        // const file: any = this.fileDetail;
+        // if (file) {
+        //     if (file.size > Utils.FILE_SIZE) {
+        //         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+        //         return;
+        //     } else {
+        //         request.congVan = {
+        //             ...await this.quanLyVonPhiService.upFile(file, this.baoCao.maDvi + '/' + this.baoCao.maDnghi),
+        //             fileName: this.baoCao.congVan.fileName,
+        //         }
+        //     }
+        // }
 
         if (!this.baoCao.id) {
             this.CapVonNguonChiService.taoMoiDeNghi(request).toPromise().then(

@@ -144,13 +144,13 @@
         <td class="text-center">{{(page - 1) * pageSize + idx + 1}}</td>
         <td class="text-left">{{ data.soQdKq }}</td>
         <td class="text-left">{{ data.ngayKy|date:'dd/MM/YYYY' }}</td>
-        <td class="text-left"
-            style="max-width: 300px; min-width: 250px;  white-space: break-spaces;">{{data.trichYeu}}</td>
+        <td class="text-left" style="max-width: 300px; min-width: 250px;  white-space: break-spaces;">
+          {{data.trichYeu}}
+        </td>
         <td class="text-left">{{ data.tenDvi }}</td>
         <td class="text-left">
-          <a *ngIf="data.soQdPd && data.idQdPd" nz-button nzType="link"
-             (click)="openModalQdPdKh(data.idQdPd)">
-            {{data.soQdPd}}
+          <a *ngIf="data.soQdPd && data.idQdPd" (click)="openModalQdPdKh(data.idQdPd)"
+             style="color: blue">{{data.soQdPd}}
           </a>
         </td>
         <td class="text-left">{{ data.tenLoaiVthh }}</td>

@@ -68,15 +68,15 @@ export class DialogAddVatTuComponent implements OnInit {
                     if (this.data && this.data.length > 2) {
                         item.child = item.child.filter(item => item.ma == this.data);
                     }
-                    if (this.obj.tab == "dieu chinh") {
-                        if (this.isCaseSpecial) {
-                            item.child.forEach(item => {
-                                if (item.ma.startsWith("02")) {
-                                    item.child = [];
-                                }
-                            })
-                        }
-                    }
+                    // if (this.obj.tab == "dieu chinh") {
+                    //     if (this.isCaseSpecial) {
+                    //         item.child.forEach(item => {
+                    //             if (item.ma.startsWith("02")) {
+                    //                 item.child = [];
+                    //             }
+                    //         })
+                    //     }
+                    // }
                     this.mapOfExpandedData[item.id] = this.convertTreeToList(item);
                 });
             }

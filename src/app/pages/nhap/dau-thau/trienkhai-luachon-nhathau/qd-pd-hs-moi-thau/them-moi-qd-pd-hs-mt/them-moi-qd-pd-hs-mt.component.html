@@ -4,13 +4,13 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
-      <!--      *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU &&  userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_HSMT_BANHANH') && !isView" >-->
+    <button type="button" class="btn btn-sub xanh-nhat" (click)="save(true)"
+            *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU &&  userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_HSMT_BANHANH') && !isView" >
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>
-    <button type="button" class="btn btn-main" (click)="save()">
-      <!--      *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_HSMT_SUA') && !isView">-->
+    <button type="button" class="btn btn-main" (click)="save()"
+            *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_HSMT_SUA') && !isView">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
@@ -220,17 +220,15 @@
           <thead>
           <tr>
             <th class="text-center" nzWidth="40px" nzLeft></th>
-            <th class="text-center multi-line" nzWidth="100px" nzLeft>Tên gói thầu</th>
-            <th class="text-center multi-line" nzWidth="100px" nzLeft>Chi cục DTNN</th>
-            <th class="text-center multi-line" nzWidth="100px" nzLeft>Điểm kho</th>
-            <th class="text-center multi-line" nzWidth="100px">Chỉ tiêu kế hoạch đuợc giao<br/>(Tấn)</th>
-            <th class="text-center multi-line" nzWidth="100px">Số đã thực hiện<br/>(Tấn)</th>
-            <th class="text-center multi-line" nzWidth="100px">Số đề xuất (Tấn)</th>
-            <th class="text-center multi-line" nzWidth="100px">Đơn giá đề xuất có VAT (đ/kg)</th>
-            <th class="text-center multi-line" nzWidth="100px">Thành tiền tạm tính <br/>theo giá đề xuất (đ)</th>
-            <th class="text-center multi-line" nzWidth="130px">Đơn giá được duyệt <br/>có VAT (đ/kg)</th>
-            <th class="text-center multi-line" nzWidth="180px">Thành tiền theo đơn giá <br/>được duyệt có VAT (đ)</th>
-            <th class="text-center multi-line" nzWidth="180px">Tiền bão lãnh <br/>dự thầu (đ)</th>
+            <th class="text-center multi-line" nzWidth="150px" nzLeft>Tên gói thầu</th>
+            <th class="text-center multi-line" nzWidth="180px" nzLeft>Chi cục DTNN</th>
+            <th class="text-center multi-line" nzWidth="180px" nzLeft>Điểm kho</th>
+            <th class="text-center multi-line" nzWidth="130px">Chỉ tiêu kế hoạch<br/> đuợc giao</th>
+            <th class="text-center multi-line" nzWidth="150px">Số đã thực hiện<br/>(Tấn)</th>
+            <th class="text-center multi-line" nzWidth="150px">Số đề xuất (Tấn)</th>
+            <th class="text-center multi-line" nzWidth="100px">Đơn vị tính</th>
+            <th class="text-center multi-line" nzWidth="150px">Đơn giá cụ thể <br/>có VAT được duyệt (đ/kg)</th>
+            <th class="text-center multi-line" nzWidth="180px">Thành tiền theo đơn giá cụ thể <br/>có VAT được duyệt (đ)</th>
           </tr>
           </thead>
           <tbody>
@@ -243,11 +241,9 @@
               <td></td>
               <td></td>
               <td class="text-right blue-text bold-700">{{item.soLuong | number : '1.0-99' : 'vi_VN'}}</td>
-              <td class="text-left"></td>
-              <td class="text-right">{{item.thanhTienDx | number : '1.0-99' : 'vi_VN'}}</td>
+              <td class="text-left">Tấn</td>
               <td class="text-right"></td>
               <td class="text-right">{{item.thanhTien | number : '1.0-99' : 'vi_VN'}}</td>
-              <td class="text-right bold-700">{{ item.thanhTienDx * formData.value.gtriDthau / 100 | number : '1.0-99' : 'vi_VN'}}</td>
             </tr>
             <ng-container *ngIf="expandSet.has(i)">
               <ng-container *ngFor="let chiCuc of item.children, let y = index">
@@ -259,11 +255,9 @@
                   <td class="text-right red-text">{{chiCuc.soLuongTheoChiTieu | number : '1.0-99' : 'vi_VN'}}</td>
                   <td class="text-right red-text">{{chiCuc.soLuongDaMua | number : '1.0-99' : 'vi_VN'}}</td>
                   <td class="text-right blue-text">{{chiCuc.soLuong | number : '1.0-99' : 'vi_VN'}}</td>
-                  <td class="text-right">{{chiCuc.donGiaTamTinh | number : '1.0-99' : 'vi_VN'}}</td>
-                  <td class="text-right">{{ chiCuc.soLuong * chiCuc.donGiaTamTinh *1000| number :'1.0-99' : 'vi_VN' }}</td>
+                  <td class="text-left">Tấn</td>
                   <td class="text-right">{{chiCuc.donGia | number : '1.0-99' : 'vi_VN'}}</td>
                   <td class="text-right">{{ chiCuc.soLuong * chiCuc.donGia *1000| number :'1.0-99' : 'vi_VN' }}</td>
-                  <td class="text-right">{{ chiCuc.soLuong * chiCuc.donGiaTamTinh *1000 * formData.value.gtriDthau / 100| number :'1.0-99' : 'vi_VN' }}</td>
                 </tr>
                 <ng-container *ngIf="expandSet2.has(y)">
                   <ng-container *ngFor="let diemKho of chiCuc.children, let z = index">
@@ -275,11 +269,9 @@
                       <td></td>
                       <td></td>
                       <td class="text-right blue-text">{{diemKho.soLuong | number : '1.0-99' : 'vi_VN'}}</td>
-                      <td class="text-right">{{chiCuc.donGiaTamTinh | number : '1.0-99' : 'vi_VN'}}</td>
-                      <td class="text-right">{{diemKho.soLuong * chiCuc.donGiaTamTinh * 1000 | number : '1.0-99' : 'vi_VN'}}</td>
+                      <td class="text-left">Tấn</td>
                       <td class="text-right">{{chiCuc.donGia | number : '1.0-99' : 'vi_VN'}}</td>
                       <td class="text-right">{{diemKho.soLuong * chiCuc.donGia * 1000 | number: '1.0-99' : 'vi_VN'}}</td>
-                      <td class="text-right">{{ diemKho.soLuong * chiCuc.donGiaTamTinh *1000 * formData.value.gtriDthau / 100| number :'1.0-99' : 'vi_VN' }}</td>
                     </tr>
                   </ng-container>
                 </ng-container>

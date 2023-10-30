@@ -15,6 +15,7 @@ import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {
   DeXuatKhBanDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
   selector: 'app-dialog-them-dia-diem-phan-lo',
@@ -47,6 +48,19 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   listDiemKho: any[] = [];
   listNganKho: any[] = [];
   listLoKho: any[] = []
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "right",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
 
   constructor(
     private _modalRef: NzModalRef,
@@ -454,7 +468,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, "Tổng số lượng đã vượt quá số lượng chỉ tiêu. Xin vui lòng nhập lại");
       return false;
     } else if (donGiaDeXuat < this.giaToiDa) {
-      this.notification.error(MESSAGE.ERROR, `Đơn giá đề xuất phải lớn hơn hoặc bằng giá bán tối thiểu (${this.giaToiDa} đ)`);
+      this.notification.error(MESSAGE.ERROR, `Đơn giá đề xuất phải lớn hơn hoặc bằng giá bán tối thiểu (${this.giaToiDa.toLocaleString()} đ)`);
       return false;
     } else {
       return true;
@@ -507,7 +521,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, "Tổng số lượng đã vượt quá chỉ tiêu. Xin vui lòng nhập lại.");
       return false;
     } else if (this.editCache[index].data.donGiaDeXuat < this.giaToiDa) {
-      this.notification.error(MESSAGE.ERROR, `Đơn giá đề xuất phải lớn hơn hoặc bằng giá bán tối thiểu (${this.giaToiDa} đ)`);
+      this.notification.error(MESSAGE.ERROR, `Đơn giá đề xuất phải lớn hơn hoặc bằng giá bán tối thiểu (${this.giaToiDa.toLocaleString()} đ)`);
       return false;
     } else {
       return true;

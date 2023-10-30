@@ -156,19 +156,21 @@
         <tr *ngFor="let data of basicTable.data; let i = index">
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td class="text-left">
-            <a *ngIf="data.soQdPd && data.xhQdDchinhKhBttHdr ? data.xhQdDchinhKhBttHdr.idQdPd : data.idHdr" nz-button
-               nzType="link"
-               (click)="openModal((data.xhQdDchinhKhBttHdr ? data.xhQdDchinhKhBttHdr.idQdPd : data.idHdr), 'QdKh')">
-              {{ data.soQdPd }}</a>
+            <a *ngIf="data.soQdPd && data.xhQdDchinhKhBttHdr ? data.xhQdDchinhKhBttHdr.idQdPd : data.idHdr"
+               (click)="openModal((data.xhQdDchinhKhBttHdr ? data.xhQdDchinhKhBttHdr.idQdPd : data.idHdr), 'QdKh')"
+               style="color: blue">{{ data.soQdPd }}
+            </a>
           </td>
           <td class="text-left">
-            <a *ngIf="data.soQdDc && data.xhQdDchinhKhBttHdr ? data.idHdr : null" nz-button nzType="link"
-               (click)="openModal((data.xhQdDchinhKhBttHdr ? data.idHdr : null), 'QdDc')">
-              {{ data.soQdDc }}</a>
+            <a *ngIf="data.soQdDc && data.xhQdDchinhKhBttHdr ? data.idHdr : null"
+               (click)="openModal((data.xhQdDchinhKhBttHdr ? data.idHdr : null), 'QdDc')"
+               style="color: blue">{{ data.soQdDc }}
+            </a>
           </td>
           <td class="text-left">
-            <a *ngIf="data.soDxuat && data.idDxHdr" nz-button nzType="link" (click)="openModal(data.idDxHdr, 'DxKh')">
-              {{ data.soDxuat }}</a>
+            <a *ngIf="data.soDxuat && data.idDxHdr" (click)="openModal(data.idDxHdr, 'DxKh')"
+               style="color: blue">{{ data.soDxuat }}
+            </a>
           </td>
           <td class="text-left" *ngIf="userService.isTongCuc()">{{ data.tenDvi }}</td>
           <td class="text-left">
@@ -176,9 +178,9 @@
           </td>
           <td class="text-left">{{ data.ngayNhanCgia | date: 'dd/MM/YYYY' }}</td>
           <td class="text-left">
-            <a *ngIf="data.soQdKq && data.idQdKq" nz-button nzType="link"
-               (click)="openModal(data.idQdKq, 'QdKq')">
-              {{ data.soQdKq }}</a>
+            <a *ngIf="data.soQdKq && data.idQdKq" (click)="openModal(data.idQdKq, 'QdKq')"
+               style="color: blue">{{ data.soQdKq }}
+            </a>
           </td>
           <td class="text-left">{{ data.tenLoaiVthh }}</td>
           <td class="text-left">{{ data.tenCloaiVthh }}</td>

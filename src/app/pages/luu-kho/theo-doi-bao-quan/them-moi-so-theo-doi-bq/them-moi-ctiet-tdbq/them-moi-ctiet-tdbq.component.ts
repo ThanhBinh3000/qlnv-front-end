@@ -105,9 +105,9 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
       if (res.msg == MESSAGE.SUCCESS) {
         console.log(this.formData.value.loaiVthh);
         if (this.formData.value.loaiVthh?.startsWith('02')) {
-          this.listBpxl = res.data.filter(item => item.phanLoai == 'VT');
+          this.listBpxl = res.data.filter(item => item.phanLoai.includes('VT'));
         } else {
-          this.listBpxl = res.data.filter(item => item.phanLoai == 'LT');
+          this.listBpxl = res.data.filter(item => item.phanLoai.includes('LT'));
         }
       }
     });

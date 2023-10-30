@@ -182,16 +182,18 @@
           <td class="text-left">{{ data.namKh }}</td>
           <td class="text-left">{{ data.soQdPd }}</td>
           <td class="text-left">{{ data.ngayKyQd|date:'dd/MM/YYYY' }}</td>
-          <td class="text-left"
-              style="max-width: 300px; min-width: 250px;  white-space: break-spaces;">{{ data.trichYeu }}</td>
+          <td class="text-left" style="max-width: 300px; min-width: 250px;  white-space: break-spaces;">
+            {{ data.trichYeu }}
+          </td>
           <td class="text-left">
-            <a *ngIf="data.soTrHdr && data.idTrHdr" nz-button nzType="link"
-               (click)="openModal(data.idTrHdr, 'DxKh')">
-              {{ data.soTrHdr }}</a>
+            <a *ngIf="data.soTrHdr && data.idTrHdr" (click)="openModal(data.idTrHdr, 'DxKh')"
+               style="color: blue">{{ data.soTrHdr }}
+            </a>
           </td>
           <td class="text-center">
-            <a *ngIf="data.idThHdr" nz-button nzType="link" (click)="openModal(data.idThHdr, 'Thop')">
-              {{ data.idThHdr }}</a>
+            <a *ngIf="data.idThHdr" (click)="openModal(data.idThHdr, 'Thop')"
+               style="color: blue">{{ data.idThHdr }}
+            </a>
           </td>
           <td class="text-left" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">{{ data.tenLoaiVthh }}</td>
           <td class="text-left">{{ data.tenCloaiVthh }}</td>

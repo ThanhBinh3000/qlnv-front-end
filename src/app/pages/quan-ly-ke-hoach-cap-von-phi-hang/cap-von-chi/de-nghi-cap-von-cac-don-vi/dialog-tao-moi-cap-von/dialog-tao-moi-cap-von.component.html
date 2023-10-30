@@ -16,12 +16,26 @@
                 </nz-option>
             </nz-select>
         </div>
-        <div *ngIf="response.canCuVeGia == Cvnc.DON_GIA" nz-col nzSpan="6">
+        <!-- <div *ngIf="response.canCuVeGia == Cvnc.DON_GIA " nz-col nzSpan="6">
             <label class="search__label">Quyết định chỉ tiêu</label>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn quyết định" [(ngModel)]="response.soQdChiTieu"
                 [class]="response.soQdChiTieu ?'' : 'input-error-validate'">
                 <nz-option *ngFor="let item of lstQuyetDinh" [nzValue]="item.soQd" [nzLabel]="item.soQd">
                 </nz-option>
+            </nz-select>
+        </div> -->
+        <div nz-col nzSpan="6">
+            <label class="search__label">Quyết định chỉ tiêu</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn quyết định" [(ngModel)]="response.soQdChiTieu"
+                [class]="response.soQdChiTieu ?'' : 'input-error-validate'">
+                <ng-container *ngIf="response.canCuVeGia == Cvnc.HOP_DONG ; else dropDonGia">
+                    <nz-option *ngFor="let item of lstQuyetDinh" [nzValue]="item" [nzLabel]="item">
+                    </nz-option>
+                </ng-container>
+                <ng-template #dropDonGia>
+                    <nz-option *ngFor="let item of lstQuyetDinh" [nzValue]="item.soQd" [nzLabel]="item.soQd">
+                    </nz-option>
+                </ng-template>
             </nz-select>
         </div>
         <div nz-col nzSpan="6">

@@ -165,7 +165,7 @@
               <td>{{ data.soQuyetDinhGiaoNamTruoc }}</td>
               <td>{{ data.soQuyetDinhDcCuaC }}</td>
               <td>{{ data.tenTrangThai }}</td>
-              <td class="text-center">
+              <td class="text-center" *ngIf="isTongCuc()">
                 <a *ngIf="data.trangThai === STATUS.CHO_DUYET_LDV" (click)="redirectDetail(data.id, true)">
                   <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
                 </a>
@@ -179,6 +179,11 @@
                 </a>
                 <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="xoa(data, '')">
                   <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                </a>
+              </td>
+              <td class="text-center" *ngIf="isCuc()">
+                <a (click)="redirectDetail(data.id, true)">
+                  <i class="fa fa-eye" title="Xem chi tiết"></i>
                 </a>
               </td>
             </tr>

@@ -132,6 +132,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
         id: [],
         idDx: [],
         idQdPdDtl: [],
+        idDonViNhan: [],
         soLuongDx: [],
         soLuongGiao: [],
         loaiNhapXuat: [],
@@ -402,8 +403,8 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     }
     const data = await this.createUpdate(body, null, true);
     if (data) {
-      this.formData.patchValue({ trangThaiXh: data.trangThai });
-      this.notification.success(MESSAGE.SUCCESS, 'Hoàn thành phân bổ thành công.')
+      this.formData.patchValue({ trangThaiXh: trangThai });
+      this.notification.success(MESSAGE.SUCCESS, trangThai === STATUS.DA_HOAN_THANH ? 'Hoàn thành phân bổ thành công.' : MESSAGE.UPDATE_SUCCESS)
     }
     await this.buildTableView();
   }
@@ -511,12 +512,16 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     if (this.formData.value.type !== "XC") {
       this.formData.value.dataDtl.forEach(s => {
         if (s.tenDiemKho) {
-          s.tenDiaDiem = (s.tenDiemKho ? s.tenDiemKho + ' - ' : '') +
+          s.tenDiaDiem = this.formData.value.loaiVthh !== LOAI_HANG_DTQG.VAT_TU ? (s.tenDiemKho ? s.tenDiemKho + ' - ' : '') +
             (s.tenNhaKho ? s.tenNhaKho + ' - ' : '') +
             (s.tenNganKho ? s.tenNganKho + ' - ' : '') +
-            (s.tenLoKho ?? '');
+            (s.tenLoKho ? s.tenLoKho + ' - ' : '') + (s.tenLoaiVthh ? s.tenLoaiVthh : '') +
+            (s.tenCloaiVthh ? ' - ' + s.tenCloaiVthh : '') : (s.tenDiemKho ? s.tenDiemKho + ' - ' : '') +
+            (s.tenNhaKho ? s.tenNhaKho + ' - ' : '') +
+            (s.tenNganKho ? s.tenNganKho : '') +
+          (s.tenLoKho ? ' - ' + s.tenLoKho : '');
         }
-        s.tenHang = this.formData.value.tenVthh !== LOAI_HANG_DTQG.VAT_TU ? s.tenLoaiVthh : s.tenCloaiVthh ? s.tenLoaiVthh + " - " + s.tenCloaiVthh : s.tenLoaiVthh;
+        s.tenHang = this.formData.value.loaiVthh !== LOAI_HANG_DTQG.VAT_TU ? s.tenLoaiVthh : s.tenCloaiVthh ? s.tenLoaiVthh + " - " + s.tenCloaiVthh : s.tenLoaiVthh;
         s.noiDungDxTheoDx = `${s.noiDungDx}-${s.idDx}`;
       });
       let data = this.formData.value.dataDtl;
@@ -571,10 +576,14 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     } else if (this.formData.value.paXuatGaoChuyenXc) {
       this.formData.value.dataDtl.forEach(s => {
         if (s.tenDiemKho) {
-          s.tenDiaDiem = (s.tenDiemKho ? s.tenDiemKho + ' - ' : '') +
+          s.tenDiaDiem = this.formData.value.loaiVthh !== LOAI_HANG_DTQG.VAT_TU ? (s.tenDiemKho ? s.tenDiemKho + ' - ' : '') +
             (s.tenNhaKho ? s.tenNhaKho + ' - ' : '') +
             (s.tenNganKho ? s.tenNganKho + ' - ' : '') +
-            (s.tenLoKho ?? '');
+            (s.tenLoKho ? s.tenLoKho + ' - ' : '') + (s.tenLoaiVthh ? s.tenLoaiVthh : '') +
+            (s.tenCloaiVthh ? ' - ' + s.tenCloaiVthh : '') : (s.tenDiemKho ? s.tenDiemKho + ' - ' : '') +
+            (s.tenNhaKho ? s.tenNhaKho + ' - ' : '') +
+            (s.tenNganKho ? s.tenNganKho : '') +
+          (s.tenLoKho ? ' - ' + s.tenLoKho : '');
         }
         s.tenHang = s.tenCloaiVthh ? s.tenLoaiVthh + " - " + s.tenCloaiVthh : s.tenLoaiVthh;
         s.noiDungDxTheoDx = `${s.noiDungDx}-${s.idDx}`;
@@ -619,10 +628,14 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     } else {
       this.formData.value.dataDtl.forEach(s => {
         if (s.tenDiemKho) {
-          s.tenDiaDiem = (s.tenDiemKho ? s.tenDiemKho + ' - ' : '') +
+          s.tenDiaDiem = this.formData.value.loaiVthh !== LOAI_HANG_DTQG.VAT_TU ? (s.tenDiemKho ? s.tenDiemKho + ' - ' : '') +
             (s.tenNhaKho ? s.tenNhaKho + ' - ' : '') +
             (s.tenNganKho ? s.tenNganKho + ' - ' : '') +
-            (s.tenLoKho ?? '');
+            (s.tenLoKho ? s.tenLoKho + ' - ' : '') + (s.tenLoaiVthh ? s.tenLoaiVthh : '') +
+            (s.tenCloaiVthh ? ' - ' + s.tenCloaiVthh : '') : (s.tenDiemKho ? s.tenDiemKho + ' - ' : '') +
+            (s.tenNhaKho ? s.tenNhaKho + ' - ' : '') +
+            (s.tenNganKho ? s.tenNganKho : '') +
+          (s.tenLoKho ? ' - ' + s.tenLoKho : '');
         }
         s.tenHang = s.tenCloaiVthh ? s.tenLoaiVthh + " - " + s.tenCloaiVthh : s.tenLoaiVthh;
         s.noiDungDxTheoDx = `${s.noiDungDx}-${s.idDx}`;
@@ -701,6 +714,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           mId: edit ? data.mId : uuidv4(),
 
           idDx: data.idDx,
+          idDonViNhan: data.idDonViNhan,
           loaiNhapXuat: data.loaiNhapXuat,
           kieuNhapXuat: data.kieuNhapXuat,
           mucDichXuat: data.mucDichXuat,
@@ -726,6 +740,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
             mId: edit ? data.mId : uuidv4(),
 
             idDx: data.idDx,
+            idDonViNhan: data.idDonViNhan,
             loaiNhapXuat: data.loaiNhapXuat,
             kieuNhapXuat: data.kieuNhapXuat,
             mucDichXuat: data.mucDichXuat,
@@ -758,6 +773,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
             mId: edit ? data.mId : uuidv4(),
 
             idDx: data.idDx,
+            idDonViNhan: data.idDonViNhan,
             loaiNhapXuat: data.loaiNhapXuat,
             kieuNhapXuat: data.kieuNhapXuat,
             mucDichXuat: data.mucDichXuat,
@@ -788,6 +804,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           mId: edit ? data.mId : uuidv4(),
 
           idDx: data.idDx,
+          idDonViNhan: data.idDonViNhan,
           loaiNhapXuat: data.loaiNhapXuat,
           kieuNhapXuat: data.kieuNhapXuat,
           mucDichXuat: data.mucDichXuat,
@@ -810,11 +827,14 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   }
 
   async themPaXuatCapThoc(data: any, level?: number) {
+    const isEdit = data.childData.length >= 1 ? false : true
     this.formDataDtl.patchValue({
-      ...data, mId: uuidv4(), slThocDeXayXat: 0, slGaoThuHoiSauXayXat: 0, tyLeThuHoiSauXayXat: 0,
-      loaiVthh: level === 2 ? LOAI_HANG_DTQG.THOC : data.loaiVthh,
-      cloaiVthh: level === 2 ? null : data.cloaiVthh,
-      maDvi: null
+      ...data, mId: isEdit ? data.mId : uuidv4(), slThocDeXayXat: 0, slGaoThuHoiSauXayXat: 0, tyLeThuHoiSauXayXat: 0,
+      loaiVthh: level === 1 || level === 2 ? LOAI_HANG_DTQG.THOC : data.loaiVthh,
+      cloaiVthh: level === 1 || level === 2 ? null : data.cloaiVthh,
+      maDvi: null,
+      id: isEdit ? data.id : null,
+      edit: isEdit
     });
     this.listDonVi.forEach(s => {
       // s.disable = this.formData.value.dataDtl.some(s1 => s1.maDvi.match("^" + s.maDvi)) && !(s.maDvi === data.maDvi && editRow);
@@ -1002,6 +1022,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     let soLuongDx = this.formDataDtl.value.soLuongDx;
     let tonKhoDvi = this.formDataDtl.value.tonKhoDvi;
     let tonKhoCloaiVthh = this.formDataDtl.value.tonKhoCloaiVthh;
+    this.resetValidatorDataDtl();
     if (maDvi) {
       const body = {
         maDvi, maVthh: cloaiVthh ? cloaiVthh : loaiVthh
@@ -1033,8 +1054,8 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               this.formDataDtl.controls['slThocDeXayXat'].updateValueAndValidity();
               this.formDataDtl.controls['slGaoThuHoiSauXayXat'].updateValueAndValidity();
             } else {
-              this.formDataDtl.controls['slGaoThuHoiSauXayXat'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, tonKhoCloaiVthh))]);
-              this.formDataDtl.controls['slGaoThuHoiSauXayXat'].updateValueAndValidity();
+              this.formDataDtl.controls['slThocDeXayXat'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, tonKhoCloaiVthh))]);
+              this.formDataDtl.controls['slThocDeXayXat'].updateValueAndValidity();
             }
           }
         }
@@ -1050,6 +1071,16 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
         this.formDataDtl.controls['slGaoThuHoiSauXayXat'].updateValueAndValidity();
       }
     }
+  }
+  resetValidatorDataDtl() {
+    this.formDataDtl.controls['soLuongGiao'].clearValidators();
+    this.formDataDtl.controls['soLuong'].clearValidators();
+    this.formDataDtl.controls['slThocDeXayXat'].clearValidators();
+    this.formDataDtl.controls['slGaoThuHoiSauXayXat'].clearValidators();
+    this.formDataDtl.controls['soLuongGiao'].updateValueAndValidity();
+    this.formDataDtl.controls['soLuong'].updateValueAndValidity();
+    this.formDataDtl.controls['slThocDeXayXat'].updateValueAndValidity();
+    this.formDataDtl.controls['slGaoThuHoiSauXayXat'].updateValueAndValidity();
   }
   isVthhGao() {
     if (this.formData.value.tenVthh === "Gạo tẻ") {

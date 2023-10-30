@@ -227,9 +227,10 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
 
       this.thongTinChiTieuKeHoachNam.cap = this.userInfo.CAP_DVI;
       this.thongTinChiTieuKeHoachNam.trangThai = STATUS.DU_THAO;
-      await this.getDSDXDC(this.yearNow)
-      await this.findCanCuByYear(this.yearNow);
+
     }
+
+    await this.findCanCuByYear(this.yearNow);
 
   }
 
@@ -280,6 +281,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
     if (this.isViewDetail || !values) return
     const dsDX = this.dsDeXuatCuc.filter(item => values.includes(item.soDeXuat));
     if (dsDX.length > 0) {
+
       this.dsKeHoachLuongThucClone = cloneDeep(this.dsKeHoachLuongThuc)
       this.dsMuoiClone = cloneDeep(this.dsMuoi)
       this.dataVatTuNhap = cloneDeep(this.dsVatTuNhap)
@@ -444,12 +446,12 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
       trangThai: STATUS.DA_DUYET_LDC
     }
 
-    let res = await this.deXuatDieuChinhCTKHService.search(body)
+    let res = await this.deXuatDieuChinhCTKHService.danhSachDX(body)
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data
       if (data) {
-        this.dsDeXuatCuc = data.content.filter((item) => item.trangThai == STATUS.DA_DUYET_LDC)
-        this.listDeXuat = data.content.map((dx) => dx.soDeXuat)
+        this.dsDeXuatCuc = data.content.filter((item) => item.trangThai === STATUS.DA_DUYET_LDC)
+        this.listDeXuat = this.dsDeXuatCuc.map((dx) => dx.soDeXuat)
         console.log("listDeXuat", this.listDeXuat)
       }
     } else {
@@ -469,11 +471,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
         let data = res.data
 
         if (data) {
-          this.dataQdTCDTGiaoCuc = {};
-          this.formData.patchValue({
-            soQuyetDinhGiaoNamTruoc: data.soQuyetDinh,
-            quyetDinhGiaoNamTruocId: data.id
-          });
+
           // Lấy kế hoạch tổng cục giao cho cục đang login
           let dataLuongThuc = data.khLuongThuc;
           const ntnThoc = dataLuongThuc.reduce((prev, cur) => prev + cur.ntnThoc, 0)
@@ -487,29 +485,9 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
           const xuatTrongNamMuoi = dataMuoi.reduce((prev, cur) => prev + cur.xuatTrongNamMuoi, 0)
           const tonKhoCuoiNam = dataMuoi.reduce((prev, cur) => prev + cur.tonKhoCuoiNam, 0)
 
-          // this.dataQdTCDTGiaoCuc = {
-          //   "ltThocMua": ntnThoc,
-          //   "ltGaoMua": ntnGao,
-          //   "ltThocXuat": xtnTongThoc,
-          //   "ltGaoXuat": xtnTongGao,
-          //   tonKhoDauNammuoi: tonKhoDauNam,
-          //   nhapTrongNamMuoi: nhapTrongNam,
-          //   xuatTrongNamMuoi: xuatTrongNamMuoi,
-          //   tonKhoCuoiNamMuoi: tonKhoCuoiNam,
-          // }
 
-          this.formData.patchValue({
-            slThocNhap: ntnThoc,
-            slGaoNhap: ntnGao,
-            slTongXuatThoc: xtnTongThoc,
-            slTongXuatGao: xtnTongGao,
-            slTonKhoDauNam: tonKhoDauNam,
-            slNhapTrongNam: nhapTrongNam,
-            slXuatTrongNam: xuatTrongNamMuoi,
-            slTonKhoCuoiNam: tonKhoCuoiNam
-          })
 
-          this.dsKeHoachLuongThucClone = dataLuongThuc.map((khlt) => {
+          const dsLT = dataLuongThuc.map((khlt) => {
 
             // gạo tồn
             const tkdnGao = this.listNamKH.map((nkh) => {
@@ -609,13 +587,9 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
               tkcnThoc
             }
           })
+          this.dsKeHoachLuongThuc = dsLT
 
-          this.dsKeHoachLuongThuc = this.dsKeHoachLuongThucClone
-          this.dsKeHoachLuongThucClone = cloneDeep(this.dsKeHoachLuongThucClone)
-          console.log("this.dsKeHoachLuongThucClone", this.dsKeHoachLuongThucClone)
-          this.sumRowDetailLuongThuc();
-
-          this.dsMuoiClone = dataMuoi.map((khmuoi) => {
+          const dsMuoi = dataMuoi.map((khmuoi) => {
             return {
               donViTinh: khmuoi.donViTinh,
               maDvi: khmuoi.maDonVi,
@@ -627,29 +601,55 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
               tonKhoDauNam: khmuoi.tonKhoCuoiNam,
             }
           })
-          this.dsMuoi = this.dsMuoiClone
-          this.dsMuoiClone = cloneDeep(this.dsMuoiClone)
-          this.sumRowDetailMuoi()
+          this.dsMuoi = dsMuoi
 
-          const khVatTuNhap = data.khVatTuNhap
-          const khVatTuXuat = data.khVatTuXuat
-
-          this.dataVatTuNhap = khVatTuNhap.map((vattu) => {
+          const khVatTuNhap = data.khVatTuNhap.map((vattu) => {
             return {
               ...vattu,
               id: undefined,
               loai: "NHAP",
             }
           })
-          this.dataVatTuXuat = khVatTuXuat.map((vattu) => {
+          const khVatTuXuat = data.khVatTuXuat.map((vattu) => {
             return {
               ...vattu,
               id: undefined,
               loai: "XUAT",
             }
           })
-          this.dsVatTuNhap = this.dataVatTuNhap
-          this.dsVatTuXuat = this.dataVatTuXuat
+          this.dsVatTuNhap = khVatTuNhap
+          this.dsVatTuXuat = khVatTuXuat
+
+          if (this.id) return
+
+          this.formData.patchValue({
+            soQuyetDinhGiaoNamTruoc: data.soQuyetDinh,
+            quyetDinhGiaoNamTruocId: data.id
+          });
+
+          this.formData.patchValue({
+            slThocNhap: ntnThoc,
+            slGaoNhap: ntnGao,
+            slTongXuatThoc: xtnTongThoc,
+            slTongXuatGao: xtnTongGao,
+            slTonKhoDauNam: tonKhoDauNam,
+            slNhapTrongNam: nhapTrongNam,
+            slXuatTrongNam: xuatTrongNamMuoi,
+            slTonKhoCuoiNam: tonKhoCuoiNam
+          })
+
+
+          this.dsKeHoachLuongThucClone = dsLT
+          this.dsKeHoachLuongThucClone = cloneDeep(this.dsKeHoachLuongThucClone)
+          this.sumRowDetailLuongThuc();
+
+          this.dsMuoiClone = dsMuoi
+          this.dsMuoiClone = cloneDeep(this.dsMuoiClone)
+          this.sumRowDetailMuoi()
+
+
+          this.dataVatTuNhap = khVatTuNhap
+          this.dataVatTuXuat = khVatTuXuat
           this.dataVatTuNhap = cloneDeep(this.dataVatTuNhap)
           this.dataVatTuXuat = cloneDeep(this.dataVatTuXuat)
 
@@ -657,7 +657,6 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
           this.convertListDataVatTuXuat(this.dataVatTuXuat);
           this.expandAll(this.dataVatTuNhapTree);
           this.expandAllVatTuXuat(this.dataVatTuXuatTree);
-          console.log('dataQdTCDTGiaoCuc', this.dataQdTCDTGiaoCuc)
         }
       } else {
         this.notification.error(MESSAGE.ERROR, "Chưa có QĐ giao chỉ tiêu KH năm của Tổng Cục")
@@ -746,235 +745,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
 
 
 
-  themMoi(data?: any) {
-    if (this.tabSelected == TAB_SELECTED.luongThuc) {
-      const modalLuongThuc = this.modal.create({
-        nzTitle: 'Thông tin lương thực',
-        nzContent: DialogThongTinLuongThucComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '900px',
-        nzFooter: null,
-        nzComponentParams: {
-          keHoachLuongThuc: data,
-          yearNow: this.yearNow,
-        },
-      });
-      modalLuongThuc.afterClose.subscribe((luongThuc) => {
-        if (luongThuc) {
-          this.keHoachLuongThucDialog = new KeHoachLuongThuc();
-          this.keHoachLuongThucDialog.tenDonvi = luongThuc.value.tenDonvi;
-          this.keHoachLuongThucDialog.maDonVi = luongThuc.value.maDonVi;
-          this.keHoachLuongThucDialog.tkdnTongSoQuyThoc =
-            +luongThuc.value.tkdnTongSoQuyThoc;
-          this.keHoachLuongThucDialog.tkdnTongThoc =
-            +luongThuc.value.tkdnThocSoLuong1 +
-            +luongThuc.value.tkdnThocSoLuong2 +
-            +luongThuc.value.tkdnThocSoLuong3;
-          const tkdnThoc1 = {
-            id: null,
-            nam: this.yearNow - 1,
-            soLuong: +luongThuc.value.tkdnThocSoLuong1,
-            vatTuId: null,
-          };
-          const tkdnThoc2 = {
-            id: null,
-            nam: this.yearNow - 2,
-            soLuong: +luongThuc.value.tkdnThocSoLuong2,
-            vatTuId: null,
-          };
-          const tkdnThoc3 = {
-            id: null,
-            nam: this.yearNow - 3,
-            soLuong: +luongThuc.value.tkdnThocSoLuong3,
-            vatTuId: null,
-          };
-          this.keHoachLuongThucDialog.tkdnThoc = [
-            tkdnThoc1,
-            tkdnThoc2,
-            tkdnThoc3,
-          ];
-          this.keHoachLuongThucDialog.tkdnTongGao =
-            +luongThuc.value.tkdnGaoSoLuong1 + +luongThuc.value.tkdnGaoSoLuong2;
-          const tkdnGao1 = {
-            id: null,
-            nam: this.yearNow - 1,
-            soLuong: +luongThuc.value.tkdnGaoSoLuong1,
-            vatTuId: null,
-          };
-          const tkdnGao2 = {
-            id: null,
-            nam: this.yearNow - 2,
-            soLuong: +luongThuc.value.tkdnGaoSoLuong2,
-            vatTuId: null,
-          };
-          const tkdnGao3 = {
-            id: null,
-            nam: this.yearNow - 3,
-            soLuong: +luongThuc.value.tkdnGaoSoLuong3,
-            vatTuId: null,
-          };
-          this.keHoachLuongThucDialog.tkdnGao = [tkdnGao1, tkdnGao2, tkdnGao3];
-          this.keHoachLuongThucDialog.ntnTongSoQuyThoc =
-            +luongThuc.value.ntnTongSoQuyThoc;
-          this.keHoachLuongThucDialog.ntnThoc = +luongThuc.value.ntnThoc;
-          this.keHoachLuongThucDialog.ntnGao = +luongThuc.value.ntnGao;
-          this.keHoachLuongThucDialog.xtnTongSoQuyThoc =
-            +luongThuc.value.xtnTongSoQuyThoc;
-          this.keHoachLuongThucDialog.xtnTongThoc =
-            +luongThuc.value.xtnThocSoLuong1 +
-            +luongThuc.value.xtnThocSoLuong2 +
-            +luongThuc.value.xtnThocSoLuong3;
-          const xtnThoc1 = {
-            id: null,
-            nam: this.yearNow - 1,
-            soLuong: +luongThuc.value.xtnThocSoLuong1,
-            vatTuId: null,
-          };
-          const xtnThoc2 = {
-            id: null,
-            nam: this.yearNow - 2,
-            soLuong: +luongThuc.value.xtnThocSoLuong2,
-            vatTuId: null,
-          };
-          const xtnThoc3 = {
-            id: null,
-            nam: this.yearNow - 3,
-            soLuong: +luongThuc.value.xtnThocSoLuong3,
-            vatTuId: null,
-          };
-          this.keHoachLuongThucDialog.xtnThoc = [xtnThoc1, xtnThoc2, xtnThoc3];
-          this.keHoachLuongThucDialog.xtnTongGao =
-            +luongThuc.value.xtnGaoSoLuong1 + +luongThuc.value.xtnGaoSoLuong2 + +luongThuc.value.xtnGaoSoLuong3;
-          const xtnGao1 = {
-            id: null,
-            nam: this.yearNow - 1,
-            soLuong: +luongThuc.value.xtnGaoSoLuong1,
-            vatTuId: null,
-          };
-          const xtnGao2 = {
-            id: null,
-            nam: this.yearNow - 2,
-            soLuong: +luongThuc.value.xtnGaoSoLuong2,
-            vatTuId: null,
-          };
-          const xtnGao3 = {
-            id: null,
-            nam: this.yearNow - 3,
-            soLuong: +luongThuc.value.xtnGaoSoLuong3,
-            vatTuId: null,
-          };
-          this.keHoachLuongThucDialog.xtnGao = [xtnGao1, xtnGao2, xtnGao3];
-          this.keHoachLuongThucDialog.tkcnTongSoQuyThoc =
-            +luongThuc.value.tkcnTongSoQuyThoc;
-          this.keHoachLuongThucDialog.tkcnTongThoc =
-            +luongThuc.value.tkcnTongThoc;
-          this.keHoachLuongThucDialog.tkcnTongGao =
-            +luongThuc.value.tkcnTongGao;
-          this.keHoachLuongThucDialog.stt =
-            this.thongTinChiTieuKeHoachNam.khLuongThuc?.length + 1;
-          this.keHoachLuongThucDialog.donViId = luongThuc.value.donViId;
-          this.keHoachLuongThucDialog.khGaoId = luongThuc.value.khGaoId;
-          this.keHoachLuongThucDialog.khThocId = luongThuc.value.khThocId;
-          this.keHoachLuongThucDialog.donViTinh = luongThuc.value.donViTinh;
-          this.checkDataExistLuongThuc(this.keHoachLuongThucDialog);
-        }
-      });
-    } else if (this.tabSelected == TAB_SELECTED.vatTu) {
-      const modalVatTu = this.modal.create({
-        nzTitle: 'Thông tin vật tư trong năm',
-        nzContent: DialogThemThongTinVatTuTrongNamComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '900px',
-        nzFooter: null,
-        nzComponentParams: {
-          yearNow: this.yearNow,
-        },
-      });
-      modalVatTu.afterClose.subscribe((vatTu) => {
-        if (vatTu) {
-          this.keHoachVatTuDialog = new KeHoachVatTu();
-          this.keHoachVatTuDialog.tenDonVi = vatTu.value.tenDonVi;
-          this.keHoachVatTuDialog.maDvi = vatTu.value.maDonVi;
-          this.keHoachVatTuDialog.donViId = vatTu.value.donViId;
-          this.keHoachVatTuDialog.donViTinh = vatTu.value.donViTinh;
-          this.keHoachVatTuDialog.stt =
-            this.thongTinChiTieuKeHoachNam.khVatTu?.length + 1;
-          this.keHoachVatTuDialog.vatTuThietBi = [];
-          this.checkDataExistVatTu(this.keHoachVatTuDialog);
-        }
-      });
-    } else if (this.tabSelected == TAB_SELECTED.muoi) {
-      const modalMuoi = this.modal.create({
-        nzTitle: 'Thông tin muối',
-        nzContent: DialogThemThongTinMuoiComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '900px',
-        nzFooter: null,
-        nzComponentParams: {
-          thongTinMuoi: data,
-          yearNow: this.yearNow,
-        },
-      });
-      modalMuoi.afterClose.subscribe((muoi) => {
-        if (muoi) {
-          this.keHoachMuoiDialog = new KeHoachMuoi();
-          this.keHoachMuoiDialog.maDonVi = muoi.value.maDonVi;
-          this.keHoachMuoiDialog.ntnTongSoMuoi = muoi.value.ntnTongSo;
-          this.keHoachMuoiDialog.tenDonVi = muoi.value.tenDonVi;
-          this.keHoachMuoiDialog.tkcnTongSoMuoi = +muoi.value.tkcnTongSo;
-          this.keHoachMuoiDialog.donViTinh = muoi.value.donViTinh;
-          const tkdnMuoi1 = {
-            id: null,
-            nam: this.yearNow - 1,
-            soLuong: +muoi.value.tkdnSoLuong1,
-            vatTuId: null,
-          };
-          const tkdnMuoi2 = {
-            id: null,
-            nam: this.yearNow - 2,
-            soLuong: +muoi.value.tkdnSoLuong2,
-            vatTuId: null,
-          };
-          const tkdnMuoi3 = {
-            id: null,
-            nam: this.yearNow - 3,
-            soLuong: +muoi.value.tkdnSoLuong3,
-            vatTuId: null,
-          };
-          // this.keHoachMuoiDialog.tkdnMuoi = [tkdnMuoi1, tkdnMuoi2, tkdnMuoi3];
-          this.keHoachMuoiDialog.tkdnTongSoMuoi = +muoi.value.tkdnTongSo;
-          const xtnMuoi1 = {
-            id: null,
-            nam: this.yearNow - 1,
-            soLuong: +muoi.value.xtnSoLuong1,
-            vatTuId: null,
-          };
-          const xtnMuoi2 = {
-            id: null,
-            nam: this.yearNow - 2,
-            soLuong: +muoi.value.xtnSoLuong2,
-            vatTuId: null,
-          };
-          const xtnMuoi3 = {
-            id: null,
-            nam: this.yearNow - 3,
-            soLuong: +muoi.value.xtnSoLuong3,
-            vatTuId: null,
-          };
-          // this.keHoachMuoiDialog.xtnMuoi = [xtnMuoi1, xtnMuoi2, xtnMuoi3];
-          this.keHoachMuoiDialog.xtnTongSoMuoi = +muoi.value.xtnTongSo;
-          this.keHoachMuoiDialog.stt =
-            this.thongTinChiTieuKeHoachNam.khMuoiDuTru?.length + 1;
-          this.keHoachMuoiDialog.donViId = muoi.value.donViId;
-          this.keHoachMuoiDialog.id = muoi.value.id;
-          this.checkDataExistMuoi(this.keHoachMuoiDialog);
-        }
-      });
-    }
-  }
+
 
   disableSelect() {
     if (this.thongTinChiTieuKeHoachNam.id) {
@@ -1893,6 +1664,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
       this.yearNow = this.formData.get('namKeHoach').value;
       this.listNamKH = [(this.yearNow - 3), (this.yearNow - 2), (this.yearNow - 1)]
       await this.getDSDXDC(this.yearNow)
+      console.log("await this.findCanCuByYear(this.yearNow);", "selectNam")
       await this.findCanCuByYear(this.yearNow);
     }
   }
@@ -1914,23 +1686,30 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
   }
 
   cancelEdit(index: number): void {
-    // this.dsKeHoachLuongThucClone = cloneDeep(
-    //   this.thongTinChiTieuKeHoachNam.khLuongThuc,
-    // );
     this.dsKeHoachLuongThucClone[index].isEdit = false;
     this.cdr.detectChanges();
   }
 
   saveEdit(i: number): void {
+    const newData = this.dsKeHoachLuongThucClone[i]
+    const newDataString = `${newData.ntnThoc[0].soLuong}${newData.ntnGao[0].soLuong}` +
+      `${newData.xtnThoc[0].soLuong}${newData.xtnThoc[1].soLuong}${newData.xtnThoc[2].soLuong}` +
+      `${newData.xtnGao[0].soLuong}${newData.xtnGao[1].soLuong}${newData.xtnGao[2].soLuong}`
+    const oldData = this.dsKeHoachLuongThuc[i]
+    const oldDataString = `${oldData.ntnThoc[0].soLuong}${oldData.ntnGao[0].soLuong}` +
+      `${oldData.xtnThoc[0].soLuong}${oldData.xtnThoc[1].soLuong}${oldData.xtnThoc[2].soLuong}` +
+      `${oldData.xtnGao[0].soLuong}${oldData.xtnGao[1].soLuong}${oldData.xtnGao[2].soLuong}`
+
+    console.log("this.dsKeHoachLuongThucClone[index]", newDataString)
+    console.log("this.dsKeHoachLuongThuc[index]", oldDataString)
+
+    if (newDataString !== oldDataString) {
+      this.dsKeHoachLuongThucClone[i].thayDoi = true
+    } else
+      this.dsKeHoachLuongThucClone[i].thayDoi = false
+
     this.dsKeHoachLuongThucClone[i].isEdit = false;
-    this.dsKeHoachLuongThucClone[i].thayDoi = true
-    // this.dsKeHoachLuongThucClone[i].tkcnTongGao = this.dsKeHoachLuongThucClone[i].tkdnTongGao + (this.dsKeHoachLuongThucClone[i].ntnGao) - this.dsKeHoachLuongThucClone[i].xtnTongGao;
-    // this.dsKeHoachLuongThucClone[i].tkcnTongThoc = this.dsKeHoachLuongThucClone[i].tkdnTongThoc + (this.dsKeHoachLuongThucClone[i].ntnThoc) - this.dsKeHoachLuongThucClone[i].xtnTongThoc;
-    // this.dsKeHoachLuongThucClone[i].tkcnTongSoQuyThoc = (this.dsKeHoachLuongThucClone[i].tkcnTongGao * 2) + this.dsKeHoachLuongThucClone[i].tkcnTongThoc;
-    // Object.assign(
-    //   this.thongTinChiTieuKeHoachNam.khLuongThuc[i],
-    //   this.dsKeHoachLuongThucClone[i],
-    // );
+
     this.dsKeHoachLuongThucClone = cloneDeep(this.dsKeHoachLuongThucClone)
     this.sumRowDetailLuongThuc();
     this.cdr.detectChanges();
@@ -2097,6 +1876,18 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
         checkFlag = false
         return
       }
+
+      const thayDoiLT = this.dsKeHoachLuongThucClone.find((item) => item.thayDoi == true)
+      const thayDoiM = this.dsMuoiClone.find((item) => item.thayDoi == true)
+      const thayDoiVTN = this.dataVatTuNhap.find((item) => item.thayDoi == true)
+      const thayDoiVTX = this.dataVatTuXuat.find((item) => item.thayDoi == true)
+
+      if (!thayDoiLT && !thayDoiM && !thayDoiVTN && !thayDoiVTX && isGuiDuyet) {
+        this.notification.error(MESSAGE.ERROR, "Bạn chưa điều chỉnh thông tin chỉ tiêu kế hoạch");
+        checkFlag = false
+        return
+      }
+
       // if (action == 'add') {
       //   totalNtnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0) + this.keHoachLuongThucCreate.ntnThoc;
       //   totalNtnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0) + this.keHoachLuongThucCreate.ntnGao;
@@ -2239,12 +2030,25 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
   }
 
   saveEditMuoi(i: number) {
+    delete this.dsMuoiClone[i].isEdit
+    delete this.dsMuoiClone[i].thayDoi
+
+    const newData = this.dsMuoiClone[i]
+    const newDataString = `${newData.soLuongNhap}${newData.soLuongXuat}${newData.tonKhoCuoiNam}${newData.tonKhoDauNam}`
+
+    const oldData = this.dsMuoi[i]
+    const oldDataString = `${oldData.soLuongNhap}${oldData.soLuongXuat}${oldData.tonKhoCuoiNam}${oldData.tonKhoDauNam}`
+
+    console.log("this.dsMuoiClone[i]", this.dsMuoiClone[i])
+    console.log("this.dsMuoi[i]", this.dsMuoi[i])
+
+
+    if (newDataString !== oldDataString) {
+      this.dsMuoiClone[i].thayDoi = true
+    } else
+      this.dsMuoiClone[i].thayDoi = false
+
     this.dsMuoiClone[i].isEdit = false;
-    this.dsMuoiClone[i].thayDoi = true
-    // Object.assign(
-    //   this.thongTinChiTieuKeHoachNam.khMuoiDuTru[i],
-    //   this.dsMuoiClone[i],
-    // );
     this.sumRowDetailMuoi();
     this.cdr.detectChanges();
   }
