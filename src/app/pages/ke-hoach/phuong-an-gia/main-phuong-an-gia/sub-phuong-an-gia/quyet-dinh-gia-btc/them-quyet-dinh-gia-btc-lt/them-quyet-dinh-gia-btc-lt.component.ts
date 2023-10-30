@@ -272,7 +272,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
               // Sử dụng trường "type" làm key trong Set để kiểm tra sự trùng lặp
               if (!uniqueSoDeXuat.has(record.soDx)) {
                 // Nếu trường "type" chưa tồn tại trong Set, thêm giá trị "soDeXuat" vào Set
-                uniqueSoDeXuat.add(record.soQdBtc.toString());
+                uniqueSoDeXuat.add(record.soQdBtc ? record.soQdBtc.toString() : "");
               }
             }
             const uniqueSoDeXuatArray = Array.from(uniqueSoDeXuat);
@@ -379,6 +379,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       body.type = this.type;
       body.ngayHieuLuc = this.formData.value.ngayHieuLuc ? dayjs(this.formData.value.ngayHieuLuc).format("DD/MM/YYYY") : "";
       await this.quyetDinhGiaCuaBtcService.previewQdGia(body).then(async s => {
+        this.printSrc = s;
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
