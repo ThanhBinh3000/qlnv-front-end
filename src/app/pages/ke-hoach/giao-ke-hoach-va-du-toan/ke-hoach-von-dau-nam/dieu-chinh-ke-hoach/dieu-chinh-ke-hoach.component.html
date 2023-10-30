@@ -1,15 +1,12 @@
 <nz-affix [nzOffsetTop]='98' class='level2'>
   <ul nz-menu nzMode='horizontal'>
-    <li [nzSelected]="tabSelected=='DXDC'" *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT')"
-      nz-menu-item nzSelected (click)="selectTab('DXDC')">
+    <li [nzSelected]="tabSelected=='DXDC'" nz-menu-item nzSelected (click)="selectTab('DXDC')">
       Đề xuất điều chỉnh chỉ tiêu kế hoạch
     </li>
-    <li [nzSelected]="tabSelected=='PADC'" *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT')"
-      nz-menu-item (click)="selectTab('PADC')">
+    <li [nzSelected]="tabSelected=='PADC'" nz-menu-item (click)="selectTab('PADC')">
       Phương án điều chỉnh chỉ tiêu kế hoạch
     </li>
-    <li *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC')" nz-menu-item
-      (click)="selectTab('QDDC')" [nzSelected]="tabSelected=='QDDC'">
+    <li nz-menu-item (click)="selectTab('QDDC')" [nzSelected]="tabSelected=='QDDC'">
       Quyết định điều chỉnh chỉ tiêu kế hoạch
     </li>
   </ul>
