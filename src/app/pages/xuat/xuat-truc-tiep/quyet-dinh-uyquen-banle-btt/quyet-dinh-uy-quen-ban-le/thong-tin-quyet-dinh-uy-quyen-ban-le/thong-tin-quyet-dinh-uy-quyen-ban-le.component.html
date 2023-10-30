@@ -96,13 +96,9 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Phương thức bán trực tiếp
-            </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="pthucBanTrucTiep" nzDisabled>
-                <nz-option *ngFor="let p of listPthucBanTt" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-                </nz-option>
-              </nz-select>
+            <nz-form-label [nzNoColon]="true"> Phương thức bán trực tiếp</nz-form-label>
+            <nz-form-control nz-col>
+              <input nz-input formControlName="pthucBanTrucTiep" readonly/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -163,48 +159,62 @@
         </div>
       </div>
     </form>
-    <nz-card class="mt16 flex-card p-lr16">
-      <nz-table class="pd-10" nzBordered [nzData]="listOfData" [nzFrontPagination]="false"
-                [nzShowPagination]="false">
-        <thead>
+  </nz-card>
+  <nz-card class="mg-t-16 flex-card p-lr16">
+    <nz-table [nzData]="listOfData" class="nowrap pd-10" nzBordered [nzFrontPagination]="false"
+              [nzShowPagination]="false">
+      <thead>
+      <tr>
+        <th nzWidth="50px" class="text-center wrap"> STT</th>
+        <th class="text-left">
+          <span style='color: red;'>*</span> Điểm kho
+        </th>
+        <th class="text-left"> Địa chỉ</th>
+        <th class="text-left"> Lô kho</th>
+        <th class="text-left"> Chủng loại hàng DTQG</th>
+        <th class="text-left"> Đơn vị tính</th>
+        <th class="text-center"> Tồn Kho</th>
+        <th class="text-center">
+          <span style='color: red;'>*</span> Số lượng
+        </th>
+        <th class="text-center">
+          <span style='color: red;'>*</span> Đơn giá chưa VAT (đồng)
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let data of listOfData, let i = index">
         <tr>
-          <th class="text-center" nzWidth="50px"></th>
-          <th class="text-left"><span style='color: red;'>*</span> Điểm kho</th>
-          <th class="text-left"> Địa chỉ</th>
-          <th class="text-left"> Lô kho</th>
-          <th class="text-left"> Chủng loại hàng DTQG</th>
-          <th class="text-left"> Đơn vị tính</th>
-          <th class="text-right"> Tồn Kho</th>
-          <th class="text-right"><span style='color: red;'>*</span> Số lượng</th>
-          <th class="text-right"><span style='color: red;'>*</span> Đơn giá chưa VAT (đồng)</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let data of listOfData; let i = index">
           <td class="text-center"> {{ i + 1 }}</td>
           <td class="text-left"> {{data.tenDiemKho}}</td>
           <td class="text-left"> {{data.diaDiemKho}}</td>
-          <td
-            class="text-left">{{ (data.tenLoKho ? data.tenLoKho + " - " : "") + (data.tenNganKho ? data.tenNganKho + " - " : "") + (data.tenNhaKho ? data.tenNhaKho : "") }}</td>
+          <td class="text-left">
+            {{ (data.tenLoKho ? data.tenLoKho + " - " : "") + (data.tenNganKho ? data.tenNganKho + " - " : "") + (data.tenNhaKho ? data.tenNhaKho : "") }}
+          </td>
           <td class="text-left"> {{data.tenCloaiVthh}}</td>
           <td class="text-left"> {{data.donViTinh}}</td>
           <td class="text-right"> {{data.tonKho|number:globals.numberFormat:globals.locale}}</td>
           <td class="text-right"> {{data.soLuongDeXuat|number:globals.numberFormat:globals.locale}}</td>
           <td class="text-right"> {{data.donGiaDeXuat|number:globals.numberFormat:globals.locale}}</td>
         </tr>
-        </tbody>
-        <ng-container *ngIf="listOfData.length > 0">
-          <tfoot>
-          <tr>
-            <th></th>
-            <th class="text-right bold" colspan="6"> Cộng</th>
-            <th class="text-right bold"> {{ calcTong('soLuongDeXuat')|number:globals.numberFormat:globals.locale}}</th>
-            <th></th>
-          </tr>
-          </tfoot>
-        </ng-container>
-      </nz-table>
-    </nz-card>
+      </ng-container>
+      </tbody>
+      <ng-container *ngIf="listOfData.length > 0">
+        <tfoot>
+        <tr>
+          <th></th>
+          <th class="text-left bold">Cộng</th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th class="text-right bold"> {{ calcTong('soLuongDeXuat')|number:globals.numberFormat:globals.locale}}</th>
+          <th></th>
+        </tr>
+        </tfoot>
+      </ng-container>
+    </nz-table>
   </nz-card>
 </div>
 <ng-template #error let-control>

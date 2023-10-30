@@ -62,10 +62,10 @@
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
       <nz-table #basicTable nzBordered class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
-                [nzShowPagination]="false">
+                [nzShowPagination]="false" nzBordered>
         <thead>
         <tr>
-          <th class="text-center" nzWidth="50px"> STT</th>
+          <th nzWidth="50px" class="text-center wrap"> STT</th>
           <th class="text-left"> Số QĐ phê duyệt KH bán trực tiếp</th>
           <th class="text-left"> Số QĐ điều chỉnh KH bán trực tiếp</th>
           <th class="text-left"> Số đề xuất KH bán trực tiếp</th>

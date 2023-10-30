@@ -10,7 +10,6 @@ import {DonviService} from 'src/app/services/donvi.service';
 import {
   ChaoGiaMuaLeUyQuyenService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service';
-import {cloneDeep} from 'lodash';
 
 @Component({
   selector: 'app-quyet-dinh-uy-quen-ban-le',
@@ -24,7 +23,6 @@ export class QuyetDinhUyQuenBanLeComponent extends Base2Component implements OnI
   isViewQdPdKh: boolean = false;
   idDxKh: number = 0;
   isViewDxKh: boolean = false;
-
   listTrangThai: any[] = [
     {ma: this.STATUS.BAN_HANH, giaTri: 'Ban Hành'},
   ];
