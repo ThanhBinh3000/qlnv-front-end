@@ -206,7 +206,7 @@
             </div>
             <div nz-col [nzSpan]="13">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"></nz-form-label>
+                <nz-form-label [nzNoColon]="true" class="hidden-label"> Thời gian giao nhận ghi chú</nz-form-label>
                 <nz-form-control nz-col>
                   <nz-input-group>
                     <input nz-input formControlName="tgianGnhanGhiChu" readonly/>
@@ -221,8 +221,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error" nz-col>
                   <div class="list-file" nz-col>
-                    <file-list [data]="formData.value.fileCanCu" [isViewDetail]="isView">
-                    </file-list>
+                    <file-list [data]="formData.value.fileCanCu" [isViewDetail]="isView"></file-list>
                   </div>
                 </nz-form-control>
               </nz-form-item>
@@ -234,8 +233,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error" nz-col>
                   <div class="list-file" nz-col>
-                    <file-list [data]="formData.value.fileDinhKem" [isViewDetail]="isView">
-                    </file-list>
+                    <file-list [data]="formData.value.fileDinhKem" [isViewDetail]="isView"></file-list>
                   </div>
                 </nz-form-control>
               </nz-form-item>
@@ -246,22 +244,23 @@
     </nz-collapse>
     <nz-collapse>
       <nz-collapse-panel nzActive="true" nzHeader="THÔNG TIN QUYẾT ĐỊNH PHÊ DUYỆT KẾT QUẢ BÁN ĐẤU GIÁ">
-        <nz-table class="pd-10 " [nzScroll]="{ x: '1400px' }" nzBordered [nzData]="dataTable">
+        <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered [nzFrontPagination]="false"
+                  [nzShowPagination]="false">
           <thead>
           <tr>
-            <th nzWidth="30px"></th>
-            <th nzWidth="150px" class="text-left wrap"> Chi cục</th>
-            <th nzWidth="150px" class="text-left wrap"> Điểm kho</th>
-            <th nzWidth="150px" class="text-left wrap"> Lô kho</th>
-            <th nzWidth="100px" class="text-center wrap"> Mã ĐVTS</th>
-            <th nzWidth="120px" class="text-right wrap"> SL bán đấu giá</th>
-            <th nzWidth="50px" class="text-left wrap"> ĐVT</th>
-            <th nzWidth="120px" class="text-right wrap"> Đơn giá chưa VAT (đ)</th>
-            <th nzWidth="120px" class="text-right wrap"> Giá khởi điểm (đ)</th>
-            <th nzWidth="120px" class="text-right wrap"> Số tiền đặt trước (đ)</th>
-            <th nzWidth="100px" class="text-right wrap"> Đơn giá trúng ĐG (đ)</th>
-            <th nzWidth="120px" class="text-right wrap"> Thành tiền (đ)</th>
-            <th nzWidth="200px" class="text-left wrap"> Tổ chức/cá nhân trúng đấu giá</th>
+            <th nzWidth="50px" class="text-center wrap"> STT</th>
+            <th class="text-left"> Chi cục</th>
+            <th class="text-left"> Điểm kho</th>
+            <th class="text-left"> Lô kho</th>
+            <th class="text-left"> Mã ĐVTS</th>
+            <th class="text-center"> SL bán đấu giá</th>
+            <th class="text-left"> ĐVT</th>
+            <th class="text-center"> Đơn giá chưa VAT (đ)</th>
+            <th class="text-center"> Giá khởi điểm (đ)</th>
+            <th class="text-center"> Số tiền đặt trước (đ)</th>
+            <th class="text-center"> Đơn giá trúng ĐG (đ)</th>
+            <th class="text-center"> Thành tiền (đ)</th>
+            <th class="text-left"> Tổ chức/cá nhân trúng đấu giá</th>
           </tr>
           </thead>
           <tbody>
@@ -275,7 +274,7 @@
               <td class="text-right bold">{{item.tongSoLuong|number:globals.numberFormat:globals.locale }}</td>
               <td></td>
               <td></td>
-              <td class="text-right bold">{{item.tongGiaKhoiDiem|number:globals.numberFormat:globals.locale }}</td>
+              <td></td>
               <td class="text-right bold">{{item.tongTienDatTruoc|number:globals.numberFormat:globals.locale }}</td>
               <td></td>
               <td></td>
@@ -286,10 +285,10 @@
                 <td></td>
                 <td></td>
                 <td class="text-left">{{children.tenDiemKho}}</td>
-                <td
-                  class="text-left">{{(children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") +
-                (children.tenNhaKho ? children.tenNhaKho : "")}} </td>
-                <td class="text-center">{{children.maDviTsan}}</td>
+                <td class="text-left">
+                  {{(children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") + (children.tenNhaKho ? children.tenNhaKho : "")}}
+                </td>
+                <td class="text-left">{{children.maDviTsan}}</td>
                 <td class="text-right">{{children.soLuongDeXuat|number:globals.numberFormat:globals.locale }}</td>
                 <td class="text-left">{{children.donViTinh}} </td>
                 <td class="text-right">{{children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
@@ -308,9 +307,7 @@
     <form nzLayout="vertical" nz-form [formGroup]="formData">
       <div nz-col nzSpan="24">
         <nz-form-item class="form-item display-block">
-          <nz-form-label [nzNoColon]="true">
-            Ghi chú
-          </nz-form-label>
+          <nz-form-label [nzNoColon]="true"> Ghi chú</nz-form-label>
           <nz-form-control>
             <textarea [readonly]="isView" nz-input [rows]="3" formControlName="ghiChu"></textarea>
           </nz-form-control>
