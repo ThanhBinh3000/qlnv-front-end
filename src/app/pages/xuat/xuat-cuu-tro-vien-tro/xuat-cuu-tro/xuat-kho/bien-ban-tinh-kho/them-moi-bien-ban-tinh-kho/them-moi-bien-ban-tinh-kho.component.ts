@@ -236,10 +236,10 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       ngayQdGiaoNvXh: data.ngayKy,
     });
     data.dataDtl.forEach(s => {
-      s.maDiemKho = s.maDvi.substring(0, 10);
-      s.maNhaKho = s.maDvi.substring(0, 12);
-      s.maNganKho = s.maDvi.substring(0, 14);
-      s.maLoKho = s.maDvi.substring(0, 16);
+      s.maDiemKho = s.maDvi.length >= 10 ? s.maDvi.substring(0, 10) : null;
+      s.maNhaKho = s.maDvi.length >= 12 ? s.maDvi.substring(0, 12) : null;
+      s.maNganKho = s.maDvi.length >= 14 ? s.maDvi.substring(0, 14) : null;
+      s.maLoKho = s.maDvi.length >= 16 ? s.maDvi.substring(0, 16) : null;
     });
     let dataChiCuc = data.dataDtl.filter(item => item.tenChiCuc == this.userInfo.TEN_DVI && item.trangThai === STATUS.DA_HOAN_THANH);
     if (dataChiCuc) {
@@ -297,7 +297,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       const list = res.data.content;
       this.listPhieuXuatKho = list.filter(item => ((item.maLoKho === data.maLoKho && item.maNganKho === data.maNganKho) && item.soBangKeCh !== null));
       this.formData.patchValue({
-        ngayBatDauXuat: this.dataTable[this.dataTable.length - 1].ngayXuatKho,
+        ngayBatDauXuat: this.dataTable[this.dataTable.length - 1]?.ngayXuatKho,
         soPhieuKnCl: this.listPhieuXuatKho[0]?.soPhieuKnCl,
         idPhieuKnCl: this.listPhieuXuatKho[0]?.idPhieuKnCl,
         ngayKn: this.listPhieuXuatKho[0]?.ngayKn
