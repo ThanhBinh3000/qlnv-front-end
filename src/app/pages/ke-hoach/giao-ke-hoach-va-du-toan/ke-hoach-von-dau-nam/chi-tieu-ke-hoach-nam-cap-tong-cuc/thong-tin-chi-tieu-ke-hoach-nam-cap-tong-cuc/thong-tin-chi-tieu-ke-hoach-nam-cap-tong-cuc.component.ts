@@ -3507,11 +3507,15 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.spinner.show();
       if (type === 'MUOI') {
         this.subTab = 'MUOI';
+        console.log(this.thongTinChiTieuKeHoachNam,"this.thongTinChiTieuKeHoachNam")
         let body = {
-          'typeFile': 'pdf',
-          'nam': this.thongTinChiTieuKeHoachNam.namKeHoach,
-          'idHdr': this.thongTinChiTieuKeHoachNam.id,
-          'fileName': 'xemtruoc_chi_tieu_kh_muoi.jrxml',
+          soQd: this.thongTinChiTieuKeHoachNam.soQuyetDinh,
+          ngayQd: this.thongTinChiTieuKeHoachNam.ngayKy,
+          tenDvi: this.thongTinChiTieuKeHoachNam.tenDvi,
+          typeFile: "pdf",
+          nam: this.thongTinChiTieuKeHoachNam.namKeHoach,
+          idHdr: this.thongTinChiTieuKeHoachNam.id,
+          fileName: "xemtruoc_chi_tieu_kh_muoi.jrxml",
         };
         await this.chiTieuKeHoachNamService.xemTruocCtKhNamMuoi(body).then(async s => {
           this.pdfBlob = s;
@@ -3533,6 +3537,9 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       } else if (type === 'VT') {
         this.subTab = 'VT-' + (this.subTabVatTu == 0 ? 'NHAP' : 'XUAT');
         await this.chiTieuKeHoachNamService.xemTruocCtKhNamVatTu({
+          soQd: this.thongTinChiTieuKeHoachNam.soQuyetDinh,
+          ngayQd: dayjs(this.thongTinChiTieuKeHoachNam.ngayKy,'YYYY-MM-DD').format('DD-MM-YYYY'),
+          tenDvi: this.thongTinChiTieuKeHoachNam.tenDvi,
           typeFile: 'pdf',
           nam: this.thongTinChiTieuKeHoachNam.namKeHoach,
           idHdr: this.thongTinChiTieuKeHoachNam.id,

@@ -305,6 +305,34 @@ export class ThongTinQuyetDinhPheDuyetKhlcntSclComponent extends  Base2Component
     }
   }
 
+  xoa() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let res = await this.quyetdinhpheduyetKhlcntService.delete({id: this.idInput});
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+            this.showListEvent.emit();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+        } catch (e) {
+          console.log('error: ', e);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        } finally {
+          this.spinner.hide();
+        }
+      },
+    });
+  }
   // async loadQdPdDaĐtxd() {
   //   this.spinner.show();
   //   try {
