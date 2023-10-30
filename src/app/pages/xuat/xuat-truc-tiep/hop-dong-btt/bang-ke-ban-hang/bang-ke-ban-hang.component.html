@@ -189,9 +189,9 @@
           <td>{{ data.namKh }}</td>
           <td>{{ data.soBangKe }}</td>
           <td>
-            <a *ngIf="data.soQdNv && data.idQdNv" nz-button nzType="link"
-               (click)="openModalQdNv(data.idQdNv)">
-              {{ data.soQdNv }}</a>
+            <a *ngIf="data.soQdNv && data.idQdNv" (click)="openModalQdNv(data.idQdNv)"
+               style="color: blue">{{ data.soQdNv }}
+            </a>
           </td>
           <td>{{ data.tenBenMua }}</td>
           <td>{{ data.diaChiBenMua }}</td>

@@ -100,11 +100,11 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       pthucGnhan: [''],
       thongBao: [''],
       khoanTienDatTruoc: [],
-      tongSoLuong: [0],
-      tongTienKhoiDiemDx: [0],
-      tongTienGiaKdTheoDgiaDd: [0],
-      tongTienDatTruocDx: [0],
-      tongKhoanTienDtTheoDgiaDd: [0],
+      tongSoLuong: [],
+      tongTienKhoiDiemDx: [],
+      tongTienGiaKdTheoDgiaDd: [],
+      tongTienDatTruocDx: [],
+      tongKhoanTienDtTheoDgiaDd: [],
       ghiChu: [''],
       trangThai: [''],
       tenTrangThai: [''],
@@ -192,14 +192,20 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
 
   async loadDsVthh() {
     const res = await this.danhMucService.loadDanhMucHangHoa().toPromise();
-    if (res.msg !== MESSAGE.SUCCESS || !res.data) return;
+    if (res.msg !== MESSAGE.SUCCESS || !res.data) {
+      return;
+    }
     let tenLoaiVthh = null;
     if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
       const loaiVthhItem = res.data.find(item => item.children?.some(child => child.ma === this.loaiVthh));
-      if (loaiVthhItem) tenLoaiVthh = loaiVthhItem.children.find(child => child.ma === this.loaiVthh)?.ten;
+      if (loaiVthhItem) {
+        tenLoaiVthh = loaiVthhItem.children.find(child => child.ma === this.loaiVthh)?.ten;
+      }
     } else if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.MUOI)) {
       const muoiItem = res.data.find(item => item.ma === this.loaiVthh);
-      if (muoiItem) tenLoaiVthh = muoiItem.ten;
+      if (muoiItem) {
+        tenLoaiVthh = muoiItem.ten;
+      }
     }
     this.formData.patchValue({
       tenLoaiVthh: tenLoaiVthh,
@@ -281,7 +287,9 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     const listCloaiVthh = uniqueVatTu.filter(item => item.maVatTu != null && item.tenVatTu != null)
     if (listCloaiVthh.length > 0) {
       this.listVatTu = listCloaiVthh;
-      this.formData.patchValue({donViTinh: filteredVatTu[0].donViTinh});
+      this.formData.patchValue({
+        donViTinh: filteredVatTu[0].donViTinh
+      });
     } else {
       const res = await this.danhMucService.loadDanhMucHangHoa().toPromise();
       if (res.msg !== MESSAGE.SUCCESS || !res.data) {
@@ -294,7 +302,9 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
           maVatTu: item.ma,
           tenVatTu: item.title
         }));
-        this.formData.patchValue({donViTinh: selectedData?.children[0].maDviTinh});
+        this.formData.patchValue({
+          donViTinh: selectedData?.children[0].maDviTinh
+        });
       }
     }
   }
@@ -378,7 +388,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     }
     if (this.validateGiaGiaToiDa()) {
       const modalGT = this.modal.create({
-        nzTitle: 'THÊM ĐỊA ĐIỂM GIAO NHẬN HÀNG',
+        nzTitle: '',
         nzContent: DialogThemDiaDiemPhanLoComponent,
         nzMaskClosable: false,
         nzClosable: false,
@@ -418,7 +428,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   validateGiaGiaToiDa() {
     const isGiaToiDaValid = this.giaToiDa !== null && this.giaToiDa !== 0 && this.giaToiDa !== undefined;
     if (!isGiaToiDaValid) {
-      this.notification.error(MESSAGE.ERROR, 'Bạn cần lập và trình duyệt phương án giá mua tối đa, giá bán tối thiểu trước. Chỉ sau khi có giá bán tối thiểu bạn mới thêm được danh mục đơn vị tài sản BDG vì giá bán đề xuất ở đây nhập vào phải >= giá bán tối thiểu');
+      this.notification.error(MESSAGE.ERROR, 'Bạn cần lập và trình duyệt phương án giá mua tối đa, giá bán tối thiểu trước. Chỉ sau khi có giá bán tối thiểu bạn mới thêm được danh mục đơn vị tài sản BDG vì giá bán đề xuất ở đây nhập vào phải lớn hơn hoặc bằng giá bán tối thiểu');
     }
     return isGiaToiDaValid;
   }
@@ -453,7 +463,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
         donGiaDuocDuyet = donGiaMap.get(item.maDvi);
       }
       item.children.forEach((child) => {
-        child.donGiaDuocDuyet = donGiaDuocDuyet || null;
+        child.donGiaDuocDuyet = donGiaDuocDuyet || 0;
         child.giaKhoiDiemDd = child.soLuongDeXuat * (donGiaDuocDuyet || 0);
         child.soTienDtruocDd = child.soLuongDeXuat * (donGiaDuocDuyet || 0) * this.formData.value.khoanTienDatTruoc / 100;
       });
@@ -600,14 +610,13 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     this.formData.controls["trichYeu"].setValidators([Validators.required]);
     this.formData.controls["ngayTao"].setValidators([Validators.required]);
     this.formData.controls["soQdCtieu"].setValidators([Validators.required]);
-    this.formData.controls["moTaHangHoa"].setValidators([Validators.required]);
     this.formData.controls["thoiGianDuKien"].setValidators([Validators.required]);
     this.formData.controls["tgianTtoan"].setValidators([Validators.required]);
     this.formData.controls["pthucTtoan"].setValidators([Validators.required]);
     this.formData.controls["tgianGnhan"].setValidators([Validators.required]);
     this.formData.controls["thongBao"].setValidators([Validators.required]);
     this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
-    if (!LOAI_HANG_DTQG.VAT_TU) {
+    if (this.loaiVthh !== LOAI_HANG_DTQG.VAT_TU) {
       this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
     }
   }

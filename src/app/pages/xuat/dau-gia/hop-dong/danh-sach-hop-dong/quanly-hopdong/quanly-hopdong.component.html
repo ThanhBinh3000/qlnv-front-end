@@ -212,8 +212,11 @@
             <td class="text-right">{{ data.soLuong|number:globals.numberFormat:globals.locale }} </td>
             <td class="text-right">{{ data.thanhTien|number:globals.numberFormat:globals.locale }} </td>
             <td class="text-left">{{ data.tenTrangThai}}</td>
-            <td class="text-left"><a *ngIf="data.soQdNv && data.idQdNv" nz-button nzType="link"
-                                     (click)="openModal(data.idQdNv)">{{ data.soQdNv }}</a></td>
+            <td class="text-left">
+              <a *ngIf="data.soQdNv && data.idQdNv" (click)="openModal(data.idQdNv)"
+                 style="color: blue">{{ data.soQdNv }}
+              </a>
+            </td>
             <td class="text-left">{{ data.tenTrangThaiXh}}</td>
             <td class="text-center">
               <a *ngIf="data.trangThai == STATUS.DA_KY"

@@ -197,27 +197,31 @@
         <td class="text-left">{{ data.nam }}</td>
         <td class="text-left">{{ data.soQdKq }}</td>
         <td class="text-left">{{ data.ngayKy|date: 'dd/MM/YYYY' }}</td>
-        <td class="text-left"
-            style="max-width: 300px; min-width: 250px;  white-space: break-spaces;">{{data.trichYeu}}</td>
+        <td class="text-left" style="max-width: 300px; min-width: 250px;  white-space: break-spaces;">
+          {{data.trichYeu}}
+        </td>
         <td class="text-left"></td>
         <td class="text-left">
-          <a *ngIf="data.soQdPd && data.idQdPd" nz-button nzType="link" (click)="openModal(data.idQdPd, 'QdPd')">
-            {{ data.soQdPd }}</a>
+          <a *ngIf="data.soQdPd && data.idQdPd" (click)="openModal(data.idQdPd, 'QdPd')"
+             style="color: blue">{{ data.soQdPd }}
+          </a>
         </td>
         <td class="text-left">
-          <a *ngIf="data.maThongBao && data.idThongBao" nz-button nzType="link"
-             (click)="openModal(data.idThongBao, 'MaThongBao')">
-            {{ data.maThongBao }}</a>
+          <a *ngIf="data.maThongBao && data.idThongBao" (click)="openModal(data.idThongBao, 'MaThongBao')"
+             style="color: blue">{{ data.maThongBao }}
+          </a>
         </td>
-        <td class="text-left"
-            style="max-width: 250px; min-width: 200px;  white-space: break-spaces;">{{data.tenHinhThucDauGia}}</td>
-        <td class="text-left"
-            style="max-width: 250px; min-width: 200px;  white-space: break-spaces;">{{data.tenPhuongThucDauGia}}</td>
+        <td class="text-left" style="max-width: 250px; min-width: 200px;  white-space: break-spaces;">
+          {{data.tenHinhThucDauGia}}
+        </td>
+        <td class="text-left" style="max-width: 250px; min-width: 200px;  white-space: break-spaces;">
+          {{data.tenPhuongThucDauGia}}
+        </td>
         <td>{{ data.soTbKhongThanh }}</td>
         <td class="text-left">
-          <a *ngIf="data.soBienBan && data.idThongBao" nz-button nzType="link"
-             (click)="openModal(data.idThongBao, 'MaThongBao')">
-            {{ data.soBienBan }}</a>
+          <a *ngIf="data.soBienBan && data.idThongBao" (click)="openModal(data.idThongBao, 'MaThongBao')"
+             style="color: blue">{{ data.soBienBan }}
+          </a>
         </td>
         <td class="text-left">{{ data.tenTrangThai }}</td>
         <td class="text-center">

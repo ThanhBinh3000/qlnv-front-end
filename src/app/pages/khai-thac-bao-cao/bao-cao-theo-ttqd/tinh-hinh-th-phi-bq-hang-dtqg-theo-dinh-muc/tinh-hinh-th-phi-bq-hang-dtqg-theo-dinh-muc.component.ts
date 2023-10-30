@@ -96,10 +96,6 @@ export class TinhHinhThPhiBqHangDtqgTheoDinhMucComponent extends Base2Component 
   async preView() {
     try {
       this.spinner.show();
-      if (this.formData.value.thoiGianSx) {
-        this.formData.value.thoiGianSxTu = dayjs(this.formData.value.thoiGianSx[0]).format("YYYY-MM-DD");
-        this.formData.value.thoiGianSxDen = dayjs(this.formData.value.thoiGianSx[1]).format("YYYY-MM-DD");
-      }
       let body = this.formData.value;
       body.typeFile = "pdf";
       body.fileName = "bc_tinh_hinh_th_phi_bao_quan_hang_dtqg_theo_dinh_muc_130.jrxml";
@@ -153,19 +149,24 @@ export class TinhHinhThPhiBqHangDtqgTheoDinhMucComponent extends Base2Component 
     }
   }
 
-  async changeCuc(event: any) {
-    if (event) {
-      let body = {
-        trangThai: "01",
-        maDviCha: event,
-        type: "DV"
-      };
-      let res = await this.donViService.getDonViTheoMaCha(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        this.listChiCuc = res.data;
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
+  clearFilter() {
+    this.formData.patchValue({
+      nam: dayjs().get("year"),
+    })
+    if (this.userService.isTongCuc()) {
+      this.formData.patchValue({
+        listMaCuc: null,
+      })
+    } else if (this.userService.isCuc()) {
+      this.formData.patchValue({
+        listMaChiCuc: null,
+        listMaCuc: [this.userInfo.MA_DVI],
+      })
+    } else if (this.userService.isChiCuc()) {
+      this.formData.patchValue({
+        listMaChiCuc: [this.userInfo.MA_DVI],
+        listMaCuc: [this.userInfo.MA_DVI.substring(0,6)]
+      })
     }
   }
 }

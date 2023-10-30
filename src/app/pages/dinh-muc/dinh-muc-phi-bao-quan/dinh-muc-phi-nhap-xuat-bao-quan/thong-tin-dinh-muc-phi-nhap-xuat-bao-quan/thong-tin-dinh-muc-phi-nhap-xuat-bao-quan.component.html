@@ -5,7 +5,8 @@
         <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
           {{ formData.value.tenTrangThai }}
         </span>
-        <span class='text-uppercase'>Định mức phí nhập xuất bảo quản {{capDvi == 1 ? 'được cấp có thẩm quyền' : 'cục'}} giao</span>
+        <span class='text-uppercase'>Định mức phí nhập xuất bảo quản {{capDvi == 1 ? 'được cấp có thẩm quyền' : 'cục'}}
+          giao</span>
       </div>
     </div>
     <nz-alert *ngIf='formData.value.trangThai == STATUS.TU_CHOI_LDV ' nzShowIcon nzType='error'
@@ -39,12 +40,28 @@
   </div>
   <nz-card class='mg-t-16 flex-card p-lr16 mt-5'>
     <form nz-form nzLayout='vertical' [formGroup]='formData'>
+      <div nz-col [nzSpan]="12" class="loaiVthh-group">
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-radio-group [nzDisabled]="checkDisableNhomDinhMuc()" nzSize="small" class="rdo-input grid-4"
+                            nzName="radiogroup" formControlName="nhomDinhMuc"
+                            (ngModelChange)="changeNhomDinhMuc($event)">
+              <nz-form-item>
+                <label nz-radio nzValue="1">Theo quy định</label>
+              </nz-form-item>
+              <nz-form-item>
+                <label nz-radio nzValue="2">Không theo quy định</label>
+              </nz-form-item>
+            </nz-radio-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
       <div nz-row [nzGutter]='[24]'>
         <div nz-col nzSpan='4'>
           <nz-form-item>
             <nz-form-control [nzErrorTip]='error'>
               <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Số văn bản</nz-form-label>
-              <input nz-input formControlName='soQd' [readonly]='isViewDetail' />
+              <input nz-input formControlName='soQd' [readonly]='isViewDetail'/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -52,7 +69,7 @@
           <nz-form-item>
             <nz-form-control [nzErrorTip]='error'>
               <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Trích yếu</nz-form-label>
-              <input nz-input formControlName='trichYeu' [readonly]='isViewDetail' />
+              <input nz-input formControlName='trichYeu' [readonly]='isViewDetail'/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -102,9 +119,10 @@
     </ng-template>
   </nz-card>
   <div style='height: 30px'></div>
-  <nz-card class='mt-2px flex-card data-table card-border-content table-card'>
+  <nz-card class='mt-2px flex-card data-table card-border-content table-card'
+           *ngIf="this.formData.value.nhomDinhMuc === '1'">
     <nz-table #basicTable [nzFrontPagination]='false' [nzShowPagination]='false'
-              [nzData]='dataTableDetail' [nzScroll]="{ x: '1600px' }"
+              [nzData]='dataTableDetailTqd' [nzScroll]="{ x: '1600px' }"
               nzBordered>
       <thead>
       <tr>
@@ -113,13 +131,13 @@
         <th rowspan='3' width='400px'>Tên định mức</th>
         <th rowspan='3' width='200px'>Áp dụng tại {{capDvi == 1 ? 'cục' : 'chi cục'}}</th>
         <th rowspan='3' [nzWidth]="'150px'">Đơn vị tính</th>
-        <th rowspan='3' width='150px' *ngIf='capDvi == 2'>Tổng định mức theo <br /> QĐ của TCDT</th>
+        <th rowspan='3' width='150px' *ngIf='capDvi == 2'>Tổng định mức theo <br/> QĐ của TCDT</th>
         <th rowspan='3' width='150px'>Tổng định mức</th>
-        <th rowspan='3' width='150px' *ngIf='capDvi == 2'>Tổng định mức chi <br /> tại Cục DTNN KV</th>
+        <th rowspan='3' width='150px' *ngIf='capDvi == 2'>Tổng định mức chi <br/> tại Cục DTNN KV</th>
         <th colspan='5' width='680px'>Mức chi giao văn phòng {{capDvi == 1 ? 'Tổng cục' : 'cục'}}</th>
         <th colspan='5'
             width='680px'>{{capDvi == 1 ? 'Mức chi giao cục DTNN KV' : 'Mức chi giao Chi cục DTNN trực thuộc'}}</th>
-        <th rowspan='3' width='200px' *ngIf='capDvi == 2'>Tổng cục điều hành <br /> (Nghiệp vụ chuyên môn)</th>
+        <th rowspan='3' width='200px' *ngIf='capDvi == 2'>Tổng cục điều hành <br/> (Nghiệp vụ chuyên môn)</th>
         <th rowspan='3' width='100px' *ngIf='!isViewDetail'>Hành động</th>
       </tr>
       <tr>
@@ -176,29 +194,29 @@
           </nz-select>
         </th>
         <th>
-          <input type='text' [disabled]='true' [(ngModel)]='rowItem.donViTinh' nz-input />
+          <input type='text' [disabled]='true' [(ngModel)]='rowItem.donViTinh' nz-input/>
         </th>
         <th *ngIf='capDvi == 2'>
           <input type='text' [disabled]='true'
                  [(ngModel)]='rowItem.tongDinhMucTc'
-                 nz-input />
+                 nz-input/>
         </th>
         <th>
           <input type='text' [disabled]='true'
                  [(ngModel)]='rowItem.nvChuyenMonTc + rowItem.ttCaNhanTc + rowItem.tcDieuHanhTc + rowItem.nvChuyenMonKv + rowItem.ttCaNhanKv + rowItem.tcDieuHanhKv + rowItem.tcTongCucDieuHanhKv'
-                 nz-input />
+                 nz-input/>
         </th>
         <th *ngIf='capDvi == 2'>
           <input type='text' [disabled]='true'
                  [(ngModel)]='rowItem.nvChuyenMonTc + rowItem.ttCaNhanTc  + rowItem.nvChuyenMonKv + rowItem.ttCaNhanKv'
-                 nz-input />
+                 nz-input/>
         </th>
         <th>
           <input type='text' [disabled]='true'
-                 [(ngModel)]='rowItem.nvChuyenMonTc + rowItem.ttCaNhanTc + rowItem.tcDieuHanhTc' nz-input />
+                 [(ngModel)]='rowItem.nvChuyenMonTc + rowItem.ttCaNhanTc + rowItem.tcDieuHanhTc' nz-input/>
         </th>
         <th>
-          <input type='text' [disabled]='true' [(ngModel)]='rowItem.nvChuyenMonTc + rowItem.ttCaNhanTc' nz-input />
+          <input type='text' [disabled]='true' [(ngModel)]='rowItem.nvChuyenMonTc + rowItem.ttCaNhanTc' nz-input/>
         </th>
         <th *ngIf='capDvi == 1'>
           <input class='money-input' currencyMask [options]='amount'
@@ -282,7 +300,7 @@
           />
         </th>
         <th class='text-center' *ngIf='!isViewDetail'>
-          <a (click)='addDetailDinhMuc()' [ngClass]="{'isDisabled' : !isAddDetail}">
+          <a (click)='addDetailDinhMucTqd()' [ngClass]="{'isDisabled' : !isAddDetail}">
             <i class='icon htvbdh_dau-cong'></i>
           </a>
           <a>
@@ -292,7 +310,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor='let data of dataTableDetail; let idx = index'>
+      <tr *ngFor='let data of dataTableDetailTqd; let idx = index'>
         <ng-container *ngIf='(dataEdit && dataEdit[idx] && !dataEdit[idx].edit); else editTemplate'>
           <td class='text-center'>{{idx + 1}}</td>
           <td>
@@ -319,10 +337,10 @@
           <td class='text-right'>{{data.tcDieuHanhKv | number : '1.0-1' : 'vi_VN'}}</td>
           <td class='text-right' *ngIf='capDvi == 2'>{{data.tcTongCucDieuHanhKv | number : '1.0-1' : 'vi_VN'}}</td>
           <td *ngIf='!isViewDetail'>
-            <a (click)='editRow(idx)'>
+            <a (click)='editRowTqd(idx)'>
               <i class='fa fa-pencil' title='Sửa'></i>
             </a>
-            <a (click)='deleteItem(idx)'>
+            <a (click)='deleteItemTqd(idx)'>
               <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
             </a>
           </td>
@@ -360,7 +378,7 @@
             {{dataEdit[idx].data.apDungTai ? dataEdit[idx].data.apDungTai : 'Tất cả '}}
           </td>
           <td>
-            <input type='text' [disabled]='true' [(ngModel)]='dataEdit[idx].data.donViTinh' nz-input />
+            <input type='text' [disabled]='true' [(ngModel)]='dataEdit[idx].data.donViTinh' nz-input/>
           </td>
           <td *ngIf='capDvi == 2'>
             <input class='money-input' currencyMask [options]='amount' [readOnly]='true'
@@ -506,4 +524,341 @@
       </div>
     </div>
   </nz-card>
+  <nz-card class='mt-2px flex-card data-table card-border-content table-card'
+           *ngIf="this.formData.value.nhomDinhMuc === '2'">
+    <nz-table #expandTable [nzFrontPagination]='false' [nzShowPagination]='false'
+              [nzData]='dataTableDetailKtqd' [nzScroll]="{ x: '1600px' }"
+              nzBordered>
+      <thead>
+      <tr>
+        <th rowspan='2' width='40px'>STT</th>
+        <th rowspan='2' width='200px'>Mã định mức</th>
+        <th rowspan='2' width='400px'>Tên định mức</th>
+        <th rowspan='2' width='300px'>Loại hàng/Chủng loại hàng DTQG</th>
+        <th rowspan='2' width='200px'>Áp dụng tại {{capDvi == 1 ? 'cục' : 'chi cục'}}</th>
+        <th rowspan='2' width='100px'>Đơn vị tính</th>
+        <th rowspan='2' width='150px'>Số lượng</th>
+        <th rowspan='2' width='200px'>Chi phí theo định mức (đ)</th>
+        <th rowspan='1' colspan='2' width='500px'>Chi phí không theo định mức</th>
+        <th rowspan='1' colspan='3' width='750'>Chi phí không theo định mức với trường hợp xuất viện trợ</th>
+        <th rowspan='2' width='120px'>Hành động</th>
+      </tr>
+      <tr>
+        <th rowspan='1' width='250px'>Chi phí nhập tối đa</th>
+        <th rowspan='1' width='250px'>Chi phí xuất tối đa</th>
+        <th rowspan='1' width='250px'>Thanh toán theo VNĐ (đ)</th>
+        <th rowspan='1' width='250px'>Tỷ giá (đ)</th>
+        <th rowspan='1' width='250px'>Thanh toán theo USD</th>
+      </tr>
+      <tr>
+        <th></th>
+        <th>
+          <nz-select [(ngModel)]='rowItem.maDinhMuc' [nzDisabled]='isViewDetail' (ngModelChange)="changeDm('ma')"
+                     nzAllowClear='true'>
+            <nz-option *ngFor='let p of listDmDinhMuc' [nzValue]='p.maDinhMuc' [nzLabel]='p.maDinhMuc'>
+            </nz-option>
+            <ng-template #error let-control>
+              <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+              </ng-container>
+            </ng-template>
+          </nz-select>
+        </th>
+        <th>
+          <nz-select [(ngModel)]='rowItem.tenDinhMuc' [nzDisabled]='isViewDetail' (ngModelChange)="changeDm('ten')"
+                     (ngModelChange)='updateAllChecked()' nzAllowClear='true'>
+            <nz-option *ngFor='let p of listDmDinhMuc' [nzValue]='p.tenDinhMuc' [nzLabel]='p.tenDinhMuc'
+            >
+            </nz-option>
+            <ng-template #error let-control>
+              <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+              </ng-container>
+            </ng-template>
+          </nz-select>
+        </th>
+        <th>
+          <input *ngIf="rowItem.tenCloaiVthh" type='text' [disabled]='true' [(ngModel)]='rowItem.tenCloaiVthh' nz-input/>
+          <input *ngIf="!rowItem.tenCloaiVthh" type='text' [disabled]='true' [(ngModel)]='rowItem.tenLoaiVthh' nz-input/>
+        </th>
+        <th>
+          <nz-select
+            nzMode='multiple'
+            style='width:180px'
+            nzPlaceHolder='Chọn đơn vị áp dụng'
+            nzAllowClear
+            [(ngModel)]=rowItem.apDungTai>
+            <nz-option [nzLabel]="'Tất cả'" [nzValue]="''"></nz-option>
+            <nz-option *ngFor='let option of listDonVi' [nzValue]='option.maDvi'
+                       [nzLabel]='option.tenDvi'></nz-option>
+          </nz-select>
+        </th>
+        <th>
+          <input type='text' [disabled]='true' [(ngModel)]='rowItem.donViTinh' nz-input/>
+        </th>
+        <th>
+          <input type='number'
+                 [(ngModel)]='rowItem.soLuong'
+                 nz-input/>
+        </th>
+        <th>
+          <input type='money-input' currencyMask [options]='amount'
+                 [(ngModel)]='rowItem.chiPhiTheoDinhMuc' nz-input/>
+        </th>
+        <th>
+          <input type='money-input' currencyMask [options]='amount' [disabled]="true"
+                 [(ngModel)]='rowItem.chiPhiNhapToiDa' nz-input/>
+        </th>
+        <th>
+          <input class='money-input' currencyMask [options]='amount' [disabled]="true"
+                 [(ngModel)]='rowItem.chiPhiXuatToiDa'
+          />
+        </th>
+        <th>
+          <input class='money-input' currencyMask [options]='amount'
+                 (ngModelChange)="tinhTyGiaVndUsd($event)"
+                 [(ngModel)]='rowItem.thanhToanTheoVnd'
+                 nz-input
+          />
+        </th>
+        <th>
+          <input class='money-input' currencyMask [options]='amount'
+                 (ngModelChange)="tinhTyGia($event)"
+                 [(ngModel)]='rowItem.tyGia'
+                 nz-input
+          />
+        </th>
+        <th>
+          <nz-input-number
+            [(ngModel)]="rowItem.thanhToanTheoUsd"
+            [nzStep]="1"
+            (ngModelChange)="tinhTyGiaUsdVnd($event)"
+            [nzFormatter]="formatterDollar"
+            [nzParser]="parserDollar"
+          ></nz-input-number>
+        </th>
+        <th class='text-center'>
+          <a (click)='addDetailDinhMucKtqd()' [ngClass]="{'isDisabled' : !isAddDetail}">
+            <i class='icon htvbdh_dau-cong'></i>
+          </a>
+          <a>
+            <i class='fa fa-refresh'></i>
+          </a>
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let data of expandTable.data; let idx = index">
+        <ng-container *ngFor="let item of mapOfExpandedData[data.uuid]">
+          <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
+            <td class='text-center' *ngIf="item.level == 0"
+                [nzIndentSize]="item.level! * 20"
+                [nzShowExpand]="!!item.children"
+                [(nzExpand)]="item.expand"
+                (nzExpandChange)="collapse(mapOfExpandedData[data.uuid], item, $event)">
+            </td>
+            <td *ngIf="item.level == 0">{{item.maDinhMuc}}</td>
+            <td *ngIf="item.level != 0"></td>
+            <td class='text-center' *ngIf="item.level != 0" [nzIndentSize]="item.level! * 20"
+                [nzShowExpand]="!!item.children"
+                [(nzExpand)]="item.expand"
+                (nzExpandChange)="collapse(mapOfExpandedData[data.uuid], item, $event)">
+              {{item.maDinhMuc}}
+            </td>
+            <td>{{item.tenDinhMuc}}</td>
+            <td>{{item.tenLoaiVthh}}</td>
+            <td>{{item.apDungTaiStr}}</td>
+            <td>{{item.donViTinh}}</td>
+            <td class='text-right'>{{item.soLuong}}</td>
+            <td class='text-right'>{{item.chiPhiTheoDinhMuc}}</td>
+            <td class='text-right'>{{item.chiPhiNhapToiDa}}</td>
+            <td class='text-right'>{{item.chiPhiXuatToiDa}}</td>
+            <td class='text-right'>{{item.thanhToanTheoVnd}}</td>
+            <td class='text-right'>{{item.tyGia}}</td>
+            <td class='text-right'>{{item.thanhToanTheoUsd}}</td>
+            <td>
+              <a *ngIf="item.level < 2" (click)='addRow(item,item.level +1)'>
+                <i class='fa fa-plus' title='Thêm'></i>
+              </a>
+              <a (click)='editRowKtqd(item,item.level)'>
+                <i class='fa fa-pencil' title='Sửa'></i>
+              </a>
+              <a *ngIf="item.children.length ==0" (click)='deleteItemKtqd(item,item.level)'>
+                <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
+              </a>
+            </td>
+          </tr>
+        </ng-container>
+      </ng-container>
+
+      </tbody>
+    </nz-table>
+    <div class='tab-content tab-menu'>
+      <div class='tab-pane fade show active justify-content-between'>
+        <div class='trai'></div>
+        <div class='canphai'>
+          <!-- begin phân trang  -->
+          <nz-pagination class='pagination-card' [nzPageIndex]='page' [nzTotal]='totalRecord'
+                         nzShowSizeChanger
+                         [nzPageSize]='pageSize' [nzShowTotal]='rangeTemplate'
+                         (nzPageIndexChange)='changePageIndex($event)'
+                         (nzPageSizeChange)='changePageSize($event)'>
+            <ng-template #rangeTemplate let-range='range' let-total>
+              {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
+            </ng-template>
+          </nz-pagination>
+          <!-- end phân trang  -->
+        </div>
+      </div>
+    </div>
+  </nz-card>
+
+
+  <nz-modal [(nzVisible)]="showDlgAddEdit" nzTitle="THÊM ĐỊNH MỨC PHÍ NHẬP,XUẤT BẢO QUẢN" nzWidth="50%">
+    <div *nzModalContent class="modal__content">
+      <form nz-form nzLayout='vertical' [formGroup]='formDataDtl'>
+        <div nz-row [nzGutter]='[24]'>
+          <div nz-col nzSpan='4'>
+            <nz-form-item>
+              <nz-form-control [nzErrorTip]='error'>
+                <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Mã định mức</nz-form-label>
+                <nz-select formControlName='maDinhMuc' [nzDisabled]='isViewDetail'
+                           (ngModelChange)="changeMaDinhMuc($event, 'ma')"
+                           nzAllowClear='true'>
+                  <nz-option *ngFor='let p of listDmDinhMuc' [nzValue]='p.maDinhMuc' [nzLabel]='p.maDinhMuc'>
+                  </nz-option>
+                  <ng-template #error let-control>
+                    <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                    </ng-container>
+                  </ng-template>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+
+          </div>
+          <div nz-col nzSpan='10'>
+            <nz-form-item>
+              <nz-form-control [nzErrorTip]='error'>
+                <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Tên định mức</nz-form-label>
+                <input nz-input formControlName='tenDinhMuc' [readonly]='true'/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan='10'>
+            <nz-form-item>
+              <nz-form-control [nzErrorTip]='error'>
+                <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Loại hàng/ Chủng loại hàng DTQG
+                </nz-form-label>
+                <input *ngIf="formDataDtl.value.tenCloaiVthh" nz-input formControlName='tenCloaiVthh' [readonly]='true'/>
+                <input *ngIf="!formDataDtl.value.tenCloaiVthh" nz-input formControlName='tenLoaiVthh' [readonly]='true'/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]='24' class='mg-t-16 flex-card p-lr16 mt-5'>
+            <nz-form-item>
+              <nz-form-control [nzErrorTip]='error'>
+                <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Đơn vị áp dụng</nz-form-label>
+                <input *ngIf="formDataDtl.value.level != 0" nz-input type='text' formControlName='apDungTaiStr' [readonly]='true'/>
+                <nz-select
+                  *ngIf="formDataDtl.value.level == 0"
+                  nzMode='multiple'
+                  nzPlaceHolder='Chọn đơn vị áp dụng'
+                  nzAllowClear
+                  formControlName='apDungTai'>
+                  <nz-option [nzLabel]="'Tất cả'" [nzValue]="''"></nz-option>
+                  <nz-option *ngFor='let option of listDonVi' [nzValue]='option.maDvi'
+                             [nzLabel]='option.tenDvi'></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]='12' class='mg-t-16 flex-card p-lr16 mt-5' *ngIf="formDataDtl.value.level == 0">
+            <nz-form-item>
+              <nz-form-control [nzErrorTip]='error'>
+                <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Số lượng</nz-form-label>
+                <input nz-input type='number' formControlName='soLuong' [readonly]='isViewDetail'/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]='12' class='mg-t-16 flex-card p-lr16 mt-5' *ngIf="formDataDtl.value.level == 0">
+            <nz-form-item>
+              <nz-form-control [nzErrorTip]='error'>
+                <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Chi phí theo định mức (đồng)</nz-form-label>
+                <input nz-input formControlName='chiPhiTheoDinhMuc' [readonly]='isViewDetail'/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan='24' class='mg-t-16 flex-card p-lr16 mt-5'>
+            <h3>Chi phí không theo định mức (đồng)</h3>
+          </div>
+          <div nz-col nzSpan='12'>
+            <nz-form-item>
+              <nz-form-control [nzErrorTip]='error'>
+                <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Chi phí nhập tối đa
+                </nz-form-label>
+                <input *ngIf="formDataDtl.value.level != 0" nz-input formControlName='chiPhiNhapToiDa' [readonly]='isViewDetail'/>
+                <input *ngIf="formDataDtl.value.level == 0" nz-input formControlName='chiPhiNhapToiDa' [readonly]='true'/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan='12' >
+            <nz-form-item>
+              <nz-form-control [nzErrorTip]='error'>
+                <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Chi phí xuất tối đa
+                </nz-form-label>
+                <input *ngIf="formDataDtl.value.level != 0" nz-input formControlName='chiPhiXuatToiDa' [readonly]='isViewDetail'/>
+                <input *ngIf="formDataDtl.value.level == 0" nz-input formControlName='chiPhiXuatToiDa' [readonly]='true'/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan='24' class='mg-t-16 flex-card p-lr16 mt-5'>
+            <h3>Chi phí không theo định mức với trường hợp xuất viện trợ</h3>
+          </div>
+          <div nz-col nzSpan='10'>
+            <nz-form-item>
+              <nz-form-control [nzErrorTip]='error'>
+                <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Thanh toán theo VND (đồng)
+                </nz-form-label>
+                <input nz-input formControlName='thanhToanTheoVnd' [readonly]='isViewDetail' (change)="changeTinhTyGiaVndUsd($event)"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan='7'>
+            <nz-form-item>
+              <nz-form-control [nzErrorTip]='error'>
+                <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Tỷ giá (đồng)
+                </nz-form-label>
+                <input nz-input formControlName='tyGia' [readonly]='isViewDetail' (change)="changeTinhTyGia($event)"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan='7'>
+            <nz-form-item>
+              <nz-form-control [nzErrorTip]='error'>
+                <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Thanh toán theo USD
+                </nz-form-label>
+                <nz-input-number
+                  (change)="changeTinhTyGiaUsdVnd($event)"
+                  nz-input formControlName='thanhToanTheoUsd'
+                  [nzStep]="1"
+                  [nzDisabled]='isViewDetail'
+                  (ngModelChange)="tinhTyGiaUsdVnd($event)"
+                  [nzFormatter]="formatterDollar"
+                  [nzParser]="parserDollar"
+                ></nz-input-number>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div *nzModalFooter>
+      <button nz-button (click)="saveAddEdit()" class="modal__button--save">
+        <i class="icon htvbdh_luu"></i>
+        Lưu
+      </button>
+      <button nz-button (click)="closeDlgAddEdit()" class="modal__button--cancel">
+        <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+        Đóng
+      </button>
+    </div>
+  </nz-modal>
 </div>

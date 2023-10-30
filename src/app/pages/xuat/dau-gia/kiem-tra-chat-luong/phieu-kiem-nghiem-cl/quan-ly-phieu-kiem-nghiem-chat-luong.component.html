@@ -101,9 +101,9 @@
                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"
                 style="width: 35px"></td>
             <td lass="text-left">
-              <a *ngIf="item.soQdNv && item.idQdNv" nz-button nzType="link"
-                 (click)="openModal(item.idQdNv, 'QdNv')">
-                {{ item.soQdNv }}</a>
+              <a *ngIf="item.soQdNv && item.idQdNv" (click)="openModal(item.idQdNv, 'QdNv')"
+                 style="color: blue">{{ item.soQdNv }}
+              </a>
             </td>
             <td class="text-left bold">{{item.nam}}</td>
             <td class="text-left bold">{{item.ngayKyQdNv|date: 'dd/MM/YYYY'}}</td>
@@ -151,15 +151,15 @@
                     <td class="text-left bold">{{ lv2.soPhieuKiemNghiem }}</td>
                     <td class="text-left">{{ lv2.ngayKiemNghiemMau|date: 'dd/MM/YYYY' }}</td>
                     <td class="text-left">
-                      <a *ngIf="lv2.soBbLayMau && lv2.idBbLayMau" nz-button nzType="link"
-                         (click)="openModal(lv2.idBbLayMau, 'layMau')">
-                        {{ lv2.soBbLayMau }}</a>
+                      <a *ngIf="lv2.soBbLayMau && lv2.idBbLayMau" (click)="openModal(lv2.idBbLayMau, 'layMau')"
+                         style="color: blue">{{ lv2.soBbLayMau }}
+                      </a>
                     </td>
                     <td class="text-left">{{ lv2.ngayLayMau|date: 'dd/MM/YYYY' }}</td>
                     <td class="text-left">
-                      <a *ngIf="lv2.soBbTinhKho && lv2.idTinhKho" nz-button nzType="link"
-                         (click)="openModal(lv2.idTinhKho, 'tinhKho')">
-                        {{ lv2.soBbTinhKho }}</a>
+                      <a *ngIf="lv2.soBbTinhKho && lv2.idTinhKho" (click)="openModal(lv2.idTinhKho, 'tinhKho')"
+                         style="color: blue">{{ lv2.soBbTinhKho }}
+                      </a>
                     </td>
                     <td class="text-left">{{ lv2.ngayLapTinhKho }}</td>
                     <td class="text-left">{{ lv2.tenTrangThai }}</td>

@@ -20,7 +20,7 @@
             type="button" class="btn btn-sub xanh-nhat"
             (click)="approve(idInput,STATUS.BAN_HANH,'Bạn có muốn ban hành quyết định này')">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
-      <span> Ban hành </span>
+      <span> Duyệt </span>
     </button>
     <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP) && isView
                && (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_QDKQDG_DUYET_TP') : userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_QDKQDG_DUYET_TP'))"

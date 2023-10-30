@@ -153,7 +153,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
       this.trangThaiSave = data.trangThai;
-      data.dkThanhLy = data.dkThanhLy.split(",");
+      data.dkThanhLy = data.dkThanhLy ? data.dkThanhLy.split(',') : [];
       this.helperService.bidingDataInFormGroup(this.formData, data);
       this.formData.patchValue({
         ngayKy: data.ngayKyTu && data.ngayKyDen ? [data.ngayKyTu, data.ngayKyDen] : null,
@@ -233,6 +233,10 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
     let res = await this.donviService.layTatCaDonViByLevel(2);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listDonVi = res.data;
+      this.listDonVi.forEach(item => {
+        item.fullname = item.key + ' - ' + item.title;
+      });
+      console.log(this.listDonVi, 'this.listDonVi');
     }
   }
 
@@ -575,7 +579,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
     if (val) {
       if (val == '02') {
         if (this.listDonVi && !this.listDonVi.find(item => item.key == '0101')) {
-          this.listDonVi.push({ key: '0101', title: 'Tổng cục DTNN' });
+          this.listDonVi.push({ key: '0101', title: 'Tổng cục DTNN', fullname: '0101 - Tổng cục DTNN' });
         }
         this.formData.patchValue({
           dviChuTri: '0101',

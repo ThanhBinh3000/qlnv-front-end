@@ -90,9 +90,9 @@
                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"
                 style="width: 35px"></td>
             <td class="text-left">
-              <a *ngIf="item.soQdNv && item.idQdNv" nz-button nzType="link"
-                 (click)="openModal(item.idQdNv, 'QdNv')">
-                {{ item.soQdNv }}</a>
+              <a *ngIf="item.soQdNv && item.idQdNv" (click)="openModal(item.idQdNv, 'QdNv')"
+                 style="color: blue">{{ item.soQdNv }}
+              </a>
             </td>
             <td class="text-left bold">{{item.nam}}</td>
             <td class="text-left bold">{{item.ngayKyQdNv|date: 'dd/MM/YYYY'}}</td>
@@ -138,15 +138,15 @@
                     <td class="text-left bold">{{ lv2.soBbLayMau }}</td>
                     <td class="text-left">{{ lv2.ngayLayMau|date:'dd/MM/YYYY' }}</td>
                     <td class="text-left">
-                      <a *ngIf="lv2.soBbTinhKho && lv2.idTinhKho" nz-button nzType="link"
-                         (click)="openModal(lv2.idTinhKho, 'tinhKho')">
-                        {{ lv2.soBbTinhKho }}</a>
+                      <a *ngIf="lv2.soBbTinhKho && lv2.idTinhKho" (click)="openModal(lv2.idTinhKho, 'tinhKho')"
+                         style="color: blue">{{ lv2.soBbTinhKho }}
+                      </a>
                     </td>
                     <td class="text-left">{{ lv2.ngayXuatDocKho }}</td>
                     <td class="text-left">
-                      <a *ngIf="lv2.soBbHaoDoi && lv2.idHaoDoi" nz-button nzType="link"
-                         (click)="openModal(lv2.idHaoDoi, 'haoDoi')">
-                        {{ lv2.soBbHaoDoi }}</a>
+                      <a *ngIf="lv2.soBbHaoDoi && lv2.idHaoDoi" (click)="openModal(lv2.idHaoDoi, 'haoDoi')"
+                         style="color: blue">{{ lv2.soBbHaoDoi }}
+                      </a>
                     </td>
                     <td class="text-left">{{ lv2.tenTrangThai }}</td>
                     <td class="text-center">
