@@ -27,7 +27,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="12">
+          <div nz-col [nzSpan]="8">
             <nz-form-item class="form-item">
               <nz-form-label nzFor="trich-yeu">Nội dung tổng hợp</nz-form-label>
               <nz-form-control>
@@ -45,6 +45,17 @@
                   <nz-range-picker formControlName="ngayKy" zFormat="dd/MM/yyyy">
                   </nz-range-picker>
                 </nz-form-control>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="4">
+            <nz-form-item class="form-item">
+              <nz-form-label nzFor="loai-hh">Loại đề xuất PAG</nz-form-label>
+              <nz-form-control>
+                <nz-select formControlName="kieuTongHop">
+                  <nz-option *ngFor="let p of listKieuTongHop" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                  </nz-option>
+                </nz-select>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -102,6 +113,7 @@
           <th class="text-center" style="width: 7%;">Loại giá</th>
           <th class="text-center" style="width: 9%;">Trạng thái tổng hợp</th>
           <th class="text-center" style="width: 9%;">Mã tờ trình</th>
+          <th class="text-center" style="width: 9%;">Loại đề xuất PAG</th>
           <th class="text-center" style="width: 7%;">Trạng thái tờ trình</th>
           <th class="text-center" width="width: 5%;">Hành động</th>
         </tr>
@@ -179,6 +191,14 @@
           </th>
           <th>
             <nz-input-group>
+              <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.kieuTongHop"
+                         (ngModelChange)="filterInTable('kieuTongHop',filterTable.kieuTongHop)">
+                <nz-option *ngFor="let p of listKieuTongHop" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+              </nz-select>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
               <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
                          (ngModelChange)="filterInTable('trangThai',filterTable.trangThai)">
                 <nz-option *ngFor="let p of listTrangThaiTt" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
@@ -204,6 +224,7 @@
           <td>{{ data.tenLoaiGia }}</td>
           <td>{{ data.tenTrangThaiTh }}</td>
           <td><a class="link" (click)="viewDetail(data.id, true,false)">{{ data.soToTrinh }}</a></td>
+          <td>{{ data && data.kieuTongHop == '00' ? 'Đề xuất PAG lần đầu' : 'Đề xuất PAG điều chỉnh' }}</td>
           <td>{{ data.soToTrinh ? data.tenTrangThaiTt : '' }}</td>
           <td>
             <a (click)="viewDetail(data.id, true,true)" *ngIf="(!(data.trangThaiTt == STATUS.TU_CHOI_LDV)) && (( this.type == this.typeConst.GIA_MUA_TOI_DA && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_TONGHOP_XEM'))
