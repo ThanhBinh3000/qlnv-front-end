@@ -134,7 +134,7 @@ export class ThongTinQuyetDinhPheDuyetKhlcntSclComponent extends  Base2Component
         idDuAn: this.itemDuAn.id,
         soQdPdBcKtkt: this.itemQdPdBcKtkt.soQd,
         idQdPdBcKtkt: this.itemQdPdBcKtkt.id,
-        tenLoaiCongTrinh: this.itemDuAn.tenLoaiCongTrinh,
+        tenLoaiCongTrinh: this.itemQdPdBcKtkt.tenLoaiCongTrinh,
         tongMucDt: this.itemQdPdBcKtkt.giaTriDt,
         nguonVonDt: this.itemQdPdBcKtkt.nguonVonDt,
         chuDauTu: this.itemQdPdBcKtkt.chuDauTu,

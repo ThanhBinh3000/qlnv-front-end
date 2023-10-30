@@ -157,15 +157,33 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
     this.buildTreePagCt();
   }
 
+   checkGiaTcdt() {
+    let rs = false;
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach(it => {
+        if (!it.giaQdTcdt || it.giaQdTcdt == 0) {
+          rs = true;
+          return;
+        }
+      });
+    }
+    return rs;
+  }
+
   async save(isGuiDuyet?) {
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.FORM_REQUIRED_ERROR)
       this.spinner.hide();
       return;
     }
-    this.convertTreeToList();
+    await this.convertTreeToList();
+    if (this.checkGiaTcdt()) {
+      this.notification.warning(MESSAGE.WARNING, "Vui lòng không để trống giá đề xuất của Tổng Cục!")
+      this.spinner.hide();
+      return;
+    }
     let body = this.formData.value;
     body.type = this.type;
     body.soToTrinh = body.soToTrinh + this.maSuffix;
@@ -320,7 +338,7 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
     }
   }
 
-  convertTreeToList() {
+  async convertTreeToList() {
     if (this.dataTableView && this.dataTableView.length > 0) {
       this.dataTable = [];
       this.dataTableView.forEach(item => {
