@@ -397,7 +397,7 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
       this.rowItemParent.thueVat = this.rowItemParent.giaTri ? (this.rowItemParent.giaTri * 10) / 100 : this.rowItemParent.giaTri;
       this.rowItemParent.chiPhiSauThue = this.rowItemParent.thueVat + this.rowItemParent.giaTri;
       this.rowItemParent.expand = true;
-      this.tongGiaTri = this.rowItemParent.giaTri + cloneDeep(this.dataTable).reduce((a, b) => a += b.giaTri, 0)
+      this.tongGiaTri = this.rowItemParent.chiPhiSauThue + cloneDeep(this.dataTable).reduce((a, b) => a += b.chiPhiSauThue, 0)
       if (this.tongGiaTri > this.formData.value.vonNsTw) {
         this.notification.warning(MESSAGE.WARNING, "TMĐT không được lớn hơn TMĐT vốn NSTW");
         return;
@@ -583,22 +583,16 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
           }
       } else {
           this.dataTreeTable.forEach(i => {
-            console.log(itemChild.chiMucCha, 1)
-            console.log(i.chiMuc, 2)
             if (itemChild.chiMucCha == i.chiMuc) {
               tongGtLv2 = itemChild.giaTri + i.children.reduce((a, b) => a += b.giaTri, 0)
-              console.log(tongGtLv2, i.giaTri, 3)
               if (tongGtLv2 > i.giaTri) {
                 limit = true;
               }
             }
             if (i.children && i.children.length > 0) {
               i.children.forEach(f => {
-                console.log(itemChild.chiMucCha, 4)
-                console.log(f.chiMuc, 5)
                 if (itemChild.chiMucCha == f.chiMuc) {
                   tongGtLv3 = itemChild.giaTri + f.children.reduce((a, b) => a += b.giaTri, 0)
-                  console.log(tongGtLv3, f.giaTri, 6)
                   if (tongGtLv3 > f.giaTri) {
                     limit = true;
                   }

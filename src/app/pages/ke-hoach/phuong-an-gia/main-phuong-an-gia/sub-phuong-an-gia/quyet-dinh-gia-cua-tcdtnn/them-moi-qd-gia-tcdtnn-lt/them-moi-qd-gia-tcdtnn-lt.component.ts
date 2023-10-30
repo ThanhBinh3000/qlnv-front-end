@@ -331,10 +331,12 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
               this.dataTable = chiTietToTrinh && chiTietToTrinh.pagChiTiets ? chiTietToTrinh.pagChiTiets : [];
               const uniqueSoDeXuat = new Set<string>();
               for (const record of this.dataTable) {
+                record.giaQdTcdt =  record.giaQdTcdtCu;
+                record.giaQdTcdtVat =  record.giaQdTcdtCuVat;
                 // Sử dụng trường "type" làm key trong Set để kiểm tra sự trùng lặp
-                if (!uniqueSoDeXuat.has(record.soDx)) {
+                if (!uniqueSoDeXuat.has(record.soQdTcdt)) {
                   // Nếu trường "type" chưa tồn tại trong Set, thêm giá trị "soDeXuat" vào Set
-                  uniqueSoDeXuat.add(record.soDx.toString());
+                  uniqueSoDeXuat.add(record.soQdTcdt.toString());
                 }
               }
               const uniqueSoDeXuatArray = Array.from(uniqueSoDeXuat);

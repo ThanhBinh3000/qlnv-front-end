@@ -208,13 +208,13 @@
           <td>
             <a (click)="viewDetail(data.id, true,true)" *ngIf="(!(data.trangThaiTt == STATUS.TU_CHOI_LDV)) && (( this.type == this.typeConst.GIA_MUA_TOI_DA && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_TONGHOP_XEM'))
       || ( this.type == this.typeConst.GIA_CU_THE  && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_TONGHOP_XEM')))">
-              <i class="fa fa-eye" title="Xem chi tiết"></i>
+              <i class="fa fa-eye" title="Xem chi tiết bản tổng hợp"></i>
             </a>
             <a
               *ngIf="(data.trangThaiTh == STATUS.CHUA_TAO_TT || data.trangThaiTt == STATUS.TU_CHOI_LDV || data.trangThaiTt == STATUS.DU_THAO) && (( this.type == this.typeConst.GIA_MUA_TOI_DA && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_TONGHOP_TONGHOP'))
       || ( this.type == this.typeConst.GIA_CU_THE  && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_TONGHOP_TONGHOP')))"
               (click)="viewDetail(data.id, false,false)">
-              <i class="icon htvbdh_tcdt_tao-ttrinh"></i>
+              <i class="icon htvbdh_tcdt_tao-ttrinh" title="Xem tờ trình HS PAG" ></i>
             </a>
             <a *ngIf="data.trangThaiTh == STATUS.CHUA_TAO_TT  && (( this.type == this.typeConst.GIA_MUA_TOI_DA && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_TONGHOP_XOA'))
       || ( this.type == this.typeConst.GIA_CU_THE  && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_TONGHOP_XOA'))) " (click)="xoaItem(data)">

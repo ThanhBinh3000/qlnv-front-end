@@ -396,11 +396,55 @@
                       <td class="text-right"></td>
                       <td class="text-right">{{dtGoiThau.thanhTien | number: '1.0-99' : 'vi_VN'}}</td>
                       <td>{{dtGoiThau.tenNhaThau}}</td>
-                      <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? dtGoiThau.donGiaNhaThau : null) | number : '1.0-1' : 'vi_VN'}}</td>
-                      <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? dtGoiThau.soLuong * dtGoiThau.donGiaNhaThau * 1000 : null) | number:'1.0-1' : 'vi_VN' }}</td>
-                      <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? abs(dtGoiThau.donGiaNhaThau - dtGoiThau.donGiaTamTinh) * dtGoiThau.soLuong * 1000 : null) | number: '1.0-1' : 'vi_VN' }} </td>
+                      <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? dtGoiThau.donGiaNhaThau : null) | number : '1.0-99' : 'vi_VN'}}</td>
+                      <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? dtGoiThau.soLuong * dtGoiThau.donGiaNhaThau * 1000 : null) | number:'1.0-99' : 'vi_VN' }}</td>
+                      <td class="text-right">{{calcTongChenhLech(i) | number:'1.0-99' : 'vi_VN'}}</td>
                       <td>{{dtGoiThau.tenTrangThaiDt}}</td>
                     </tr>
+                    <ng-container *ngIf="expandSet.has(i)">
+                      <ng-container *ngFor="let chiCuc of dtGoiThau.children , let y = index">
+                        <tr>
+                          <td></td>
+                          <td [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>
+                          <td>{{chiCuc.tenDvi}}</td>
+                          <td></td>
+                          <td></td>
+                          <td class="text-right red-text">{{chiCuc.soLuongTheoChiTieu| number : '1.0-99' : 'vi_VN'}}</td>
+                          <td class="text-center">Tấn</td>
+                          <td class="text-right blue-text bold-700">{{ chiCuc.soLuong | number : '1.0-99' : 'vi_VN' }}</td>
+                          <td class="text-right">{{chiCuc.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+                          <td class="text-right bold-700">{{ chiCuc.soLuong * chiCuc.donGia *1000| number :'1.0-99' : 'vi_VN' }}</td>
+                          <td></td>
+                          <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? dtGoiThau.donGiaNhaThau : null) | number : '1.0-99' : 'vi_VN'}}</td>
+                          <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? chiCuc.soLuong * dtGoiThau.donGiaNhaThau * 1000 : null) | number:'1.0-99' : 'vi_VN' }}</td>
+                          <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? abs(dtGoiThau.donGiaNhaThau - chiCuc.donGia) * chiCuc.soLuong * 1000 : null) | number: '1.0-99' : 'vi_VN' }} </td>
+                          <td></td>
+                          <td *ngIf="isShowFromKq"></td>
+                        </tr>
+                        <ng-container *ngIf="expandSet2.has(y)">
+                          <ng-container *ngFor="let diemKho of chiCuc.children, let z = index">
+                            <tr>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td>{{diemKho.tenDvi}}</td>
+                              <td>{{diemKho.diaDiemNhap}}</td>
+                              <td></td>
+                              <td class="text-center">Tấn</td>
+                              <td class="text-right blue-text">{{diemKho.soLuong | number : '1.0-99' : 'vi_VN'}}</td>
+                              <td class="text-right">{{chiCuc.donGia | number : '1.0-99' : 'vi_VN'}}</td>
+                              <td class="text-right">{{diemKho.soLuong * chiCuc.donGia * 1000 | number : '1.0-99' : 'vi_VN'}}</td>
+                              <td></td>
+                              <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? dtGoiThau.donGiaNhaThau : null) | number : '1.0-99' : 'vi_VN'}}</td>
+                              <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? diemKho.soLuong * dtGoiThau.donGiaNhaThau * 1000 : null) | number:'1.0-99' : 'vi_VN' }}</td>
+                              <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? abs(dtGoiThau.donGiaNhaThau - chiCuc.donGia) * diemKho.soLuong * 1000 : null) | number: '1.0-99' : 'vi_VN' }} </td>
+                              <td></td>
+                              <td *ngIf="isShowFromKq"></td>
+                            </tr>
+                          </ng-container>
+                        </ng-container>
+                      </ng-container>
+                    </ng-container>
                   </ng-container>
                   <ng-template #kqTemplate>
                     <tr (click)="showDetail($event,dtGoiThau)"
@@ -419,7 +463,7 @@
                           <td>{{dtGoiThau.kqlcntDtl?.tenNhaThau}}</td>
                           <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? dtGoiThau.kqlcntDtl?.donGiaVat : null) | number : '1.0-99' : 'vi_VN'}}</td>
                           <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? dtGoiThau.soLuong * dtGoiThau.kqlcntDtl?.donGiaVat * 1000 : null) | number:'1.0-99' : 'vi_VN' }}</td>
-                          <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? abs(dtGoiThau.kqlcntDtl?.donGiaVat - dtGoiThau.donGiaTamTinh) * dtGoiThau.soLuong * 1000 : null) | number: '1.0-1' : 'vi_VN' }} </td>
+                        <td class="text-right">{{calcTongChenhLech(i) | number:'1.0-99' : 'vi_VN'}}</td>
                           <td>{{dtGoiThau.kqlcntDtl?.tenTrangThai}}</td>
                           <td *ngIf="isShowFromKq && isKqDaBh">
                             <a (click)="startEditRowNt(i)">
@@ -436,8 +480,8 @@
                           <td></td>
                           <td></td>
                           <td class="text-right">{{dtGoiThau.soLuong | number : '1.0-99' : 'vi_VN'}}</td>
-                          <td class="text-right">{{dtGoiThau.donGiaTamTinh | number : '1.0-99' : 'vi_VN'}}</td>
-                          <td class="text-right">{{(dtGoiThau.soLuong * dtGoiThau.donGiaTamTinh * 1000) | number: '1.0-99' : 'vi_VN'}}</td>
+                          <td class="text-right"></td>
+                          <td class="text-right">{{dtGoiThau.thanhTien | number: '1.0-99' : 'vi_VN'}}</td>
                           <td>
                             <nz-select [(ngModel)]=itemRowQd[i].idNhaThau>
                               <nz-option *ngFor="let p of listNthauNopHs" [nzValue]="p.id"
@@ -462,49 +506,51 @@
                           </td>
                       </ng-template>
                     </tr>
-                  </ng-template>
-                  <ng-container *ngIf="expandSet.has(i)">
-                  <ng-container *ngFor="let chiCuc of dtGoiThau.children , let y = index">
-                    <tr>
-                      <td></td>
-                      <td [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>
-                      <td>{{chiCuc.tenDvi}}</td>
-                      <td></td>
-                      <td></td>
-                      <td class="text-right red-text">{{chiCuc.soLuongTheoChiTieu| number : '1.0-99' : 'vi_VN'}}</td>
-                      <td class="text-center">Tấn</td>
-                      <td class="text-right blue-text bold-700">{{ chiCuc.soLuong | number : '1.0-99' : 'vi_VN' }}</td>
-                      <td class="text-right">{{chiCuc.donGia | number : '1.0-1' : 'vi_VN'}}</td>
-                      <td class="text-right bold-700">{{ chiCuc.soLuong * chiCuc.donGia *1000| number :'1.0-99' : 'vi_VN' }}</td>
-                      <td></td>
-                      <td class="text-right">{{(chiCuc.donGiaNhaThau ? chiCuc.donGiaNhaThau : null) | number : '1.0-99' : 'vi_VN'}}</td>
-                      <td class="text-right">{{(chiCuc.donGiaNhaThau ? chiCuc.soLuong * chiCuc.donGiaNhaThau * 1000 : null) | number:'1.0-99' : 'vi_VN' }}</td>
-                      <td class="text-right">{{(chiCuc.donGiaNhaThau ? abs(chiCuc.donGiaNhaThau - chiCuc.donGia) * chiCuc.soLuong * 1000 : null) | number: '1.0-99' : 'vi_VN' }} </td>
-                      <td></td>
-                    </tr>
-                    <ng-container *ngIf="expandSet2.has(y)">
-                      <ng-container *ngFor="let diemKho of chiCuc.children, let z = index">
+                    <ng-container *ngIf="expandSet.has(i)">
+                      <ng-container *ngFor="let chiCuc of dtGoiThau.children , let y = index">
                         <tr>
                           <td></td>
+                          <td [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>
+                          <td>{{chiCuc.tenDvi}}</td>
                           <td></td>
                           <td></td>
-                          <td>{{diemKho.tenDvi}}</td>
-                          <td>{{diemKho.diaDiemNhap}}</td>
-                          <td></td>
+                          <td class="text-right red-text">{{chiCuc.soLuongTheoChiTieu| number : '1.0-99' : 'vi_VN'}}</td>
                           <td class="text-center">Tấn</td>
-                          <td class="text-right blue-text">{{diemKho.soLuong | number : '1.0-99' : 'vi_VN'}}</td>
-                          <td class="text-right">{{chiCuc.donGia | number : '1.0-99' : 'vi_VN'}}</td>
-                          <td class="text-right">{{diemKho.soLuong * chiCuc.donGia * 1000 | number : '1.0-99' : 'vi_VN'}}</td>
+                          <td class="text-right blue-text bold-700">{{ chiCuc.soLuong | number : '1.0-99' : 'vi_VN' }}</td>
+                          <td class="text-right">{{chiCuc.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+                          <td class="text-right bold-700">{{ chiCuc.soLuong * chiCuc.donGia *1000| number :'1.0-99' : 'vi_VN' }}</td>
                           <td></td>
-                          <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? dtGoiThau.donGiaNhaThau : null) | number : '1.0-99' : 'vi_VN'}}</td>
-                          <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? diemKho.soLuong * dtGoiThau.donGiaNhaThau * 1000 : null) | number:'1.0-99' : 'vi_VN' }}</td>
-                          <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? abs(dtGoiThau.donGiaNhaThau - dtGoiThau.donGia) * diemKho.soLuong * 1000 : null) | number: '1.0-99' : 'vi_VN' }} </td>
+                          <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? dtGoiThau.kqlcntDtl?.donGiaVat : null) | number : '1.0-99' : 'vi_VN'}}</td>
+                          <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? chiCuc.soLuong * dtGoiThau.kqlcntDtl?.donGiaVat * 1000 : null) | number:'1.0-99' : 'vi_VN' }}</td>
+                          <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? abs(dtGoiThau.kqlcntDtl?.donGiaVat - chiCuc.donGia) * chiCuc.soLuong * 1000 : null) | number: '1.0-99' : 'vi_VN' }} </td>
                           <td></td>
+                          <td *ngIf="isShowFromKq"></td>
                         </tr>
+                        <ng-container *ngIf="expandSet2.has(y)">
+                          <ng-container *ngFor="let diemKho of chiCuc.children, let z = index">
+                            <tr>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td>{{diemKho.tenDvi}}</td>
+                              <td>{{diemKho.diaDiemNhap}}</td>
+                              <td></td>
+                              <td class="text-center">Tấn</td>
+                              <td class="text-right blue-text">{{diemKho.soLuong | number : '1.0-99' : 'vi_VN'}}</td>
+                              <td class="text-right">{{chiCuc.donGia | number : '1.0-99' : 'vi_VN'}}</td>
+                              <td class="text-right">{{diemKho.soLuong * chiCuc.donGia * 1000 | number : '1.0-99' : 'vi_VN'}}</td>
+                              <td></td>
+                              <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? dtGoiThau.kqlcntDtl?.donGiaVat : null) | number : '1.0-99' : 'vi_VN'}}</td>
+                              <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? diemKho.soLuong * dtGoiThau.kqlcntDtl?.donGiaVat * 1000 : null) | number:'1.0-99' : 'vi_VN' }}</td>
+                              <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? abs(dtGoiThau.kqlcntDtl?.donGiaVat - chiCuc.donGia) * diemKho.soLuong * 1000 : null) | number: '1.0-99' : 'vi_VN' }} </td>
+                              <td></td>
+                              <td *ngIf="isShowFromKq"></td>
+                            </tr>
+                          </ng-container>
+                        </ng-container>
                       </ng-container>
                     </ng-container>
-                  </ng-container>
-                  </ng-container>
+                  </ng-template>
                 </ng-container>
                 <tr *ngIf="listOfData.length > 0">
                   <td></td>

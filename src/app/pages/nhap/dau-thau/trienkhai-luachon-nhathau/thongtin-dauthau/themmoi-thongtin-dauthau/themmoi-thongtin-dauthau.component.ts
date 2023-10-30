@@ -763,7 +763,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       let sum = 0
       this.listOfData.forEach(item => {
         const sumChild = item.children.reduce((prev, cur) => {
-          prev += cur.soLuong * item.donGiaTamTinh;
+          prev += cur.soLuong * item.donGia;
           return prev;
         }, 0);
         sum += sumChild;
@@ -782,6 +782,26 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         }, 0);
         sum += sumChild;
       })
+      return sum * 1000;
+    }
+  }
+
+  calcTongChenhLech(i) {
+    if (this.listOfData) {
+      let sum = 0
+        if (this.isShowFromKq) {
+          const sumChild = this.listOfData[i].children.reduce((prev, cur) => {
+            prev += cur.soLuong * this.abs(this.listOfData[i].kqlcntDtl?.donGiaVat - cur.donGia);
+            return prev;
+          }, 0);
+          sum += sumChild;
+        } else {
+          const sumChild = this.listOfData[i].children.reduce((prev, cur) => {
+            prev += cur.soLuong * this.abs(this.listOfData[i].donGiaNhaThau - cur.donGia);
+            return prev;
+          }, 0);
+          sum += sumChild;
+        }
       return sum * 1000;
     }
   }

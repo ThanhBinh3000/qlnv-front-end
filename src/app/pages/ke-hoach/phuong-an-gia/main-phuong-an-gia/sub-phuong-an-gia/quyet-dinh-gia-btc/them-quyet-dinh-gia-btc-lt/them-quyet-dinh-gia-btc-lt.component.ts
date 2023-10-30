@@ -267,10 +267,12 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
             this.dataTable = chiTietToTrinh && chiTietToTrinh.pagChiTiets ? chiTietToTrinh.pagChiTiets : [];
             const uniqueSoDeXuat = new Set<string>();
             for (const record of this.dataTable) {
+              record.giaQdBtc =  record.giaQdBtcCu;
+              record.giaQdBtcVat =  record.giaQdBtcCuVat;
               // Sử dụng trường "type" làm key trong Set để kiểm tra sự trùng lặp
               if (!uniqueSoDeXuat.has(record.soDx)) {
                 // Nếu trường "type" chưa tồn tại trong Set, thêm giá trị "soDeXuat" vào Set
-                uniqueSoDeXuat.add(record.soDx.toString());
+                uniqueSoDeXuat.add(record.soQdBtc.toString());
               }
             }
             const uniqueSoDeXuatArray = Array.from(uniqueSoDeXuat);
