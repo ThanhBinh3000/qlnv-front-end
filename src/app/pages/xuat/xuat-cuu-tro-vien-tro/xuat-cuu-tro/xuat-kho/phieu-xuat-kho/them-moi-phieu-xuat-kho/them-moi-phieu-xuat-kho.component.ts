@@ -269,10 +269,10 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       // mucDichXuat: data.mucDichXuat
     });
     data.dataDtl.forEach(s => {
-      s.maDiemKho = s.maDvi.substring(0, 10);
-      s.maNhaKho = s.maDvi.substring(0, 12);
-      s.maNganKho = s.maDvi.substring(0, 14);
-      s.maLoKho = s.maDvi.substring(0, 16);
+      s.maDiemKho = s.maDvi.length >= 10 ? s.maDvi.substring(0, 10) : null;
+      s.maNhaKho = s.maDvi.length >= 12 ? s.maDvi.substring(0, 12) : null;
+      s.maNganKho = s.maDvi.length >= 14 ? s.maDvi.substring(0, 14) : null;
+      s.maLoKho = s.maDvi.length >= 16 ? s.maDvi.substring(0, 16) : null;
     });
     let dataChiCuc = data.dataDtl.filter(item => item.tenChiCuc == this.userInfo.TEN_DVI && item.trangThai === STATUS.DA_HOAN_THANH);
     if (dataChiCuc) {

@@ -675,13 +675,16 @@
             <td class='text-right'>{{item.tyGia}}</td>
             <td class='text-right'>{{item.thanhToanTheoUsd}}</td>
             <td>
-              <a *ngIf="item.level < 2" (click)='addRow(item,item.level +1)'>
+              <a *ngIf="isViewDetail" (click)='viewRow(item,item.level)'>
+                <i class='fa fa-eye' title='Xem'></i>
+              </a>
+              <a *ngIf="item.level < 2 && !isViewDetail" (click)='addRow(item,item.level +1)'>
                 <i class='fa fa-plus' title='Thêm'></i>
               </a>
-              <a (click)='editRowKtqd(item,item.level)'>
+              <a *ngIf='!isViewDetail' (click)='editRowKtqd(item,item.level)'>
                 <i class='fa fa-pencil' title='Sửa'></i>
               </a>
-              <a *ngIf="item.children.length ==0" (click)='deleteItemKtqd(item,item.level)'>
+              <a *ngIf="item.children.length ==0 && !isViewDetail" (click)='deleteItemKtqd(item,item.level)'>
                 <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
               </a>
             </td>

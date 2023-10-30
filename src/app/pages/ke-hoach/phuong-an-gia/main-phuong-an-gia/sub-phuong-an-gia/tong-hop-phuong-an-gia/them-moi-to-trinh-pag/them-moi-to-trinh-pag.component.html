@@ -4,7 +4,7 @@
       <div class="header-text">
         <div class="title-chi-tieu">
      <span
-       [ngClass]="formData.value.trangThaiTt == STATUS.DA_DUYET_LDV ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+       [ngClass]="formData.value.trangThaiTt == STATUS.DA_DUYET_LDV || formData.value.trangThaiTt == STATUS.DA_BAN_HANH_QD ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
                         {{ formData.value.tenTrangThaiTt }}
                     </span>
           <span>TỜ TRÌNH HỒ SƠ PHƯƠNG ÁN GIÁ</span>
@@ -77,7 +77,7 @@
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzFor="ngay-qd">Trích yếu</nz-form-label>
             <nz-form-control>
-              <textarea formControlName="trichYeu" rows="3" class="search__input" nz-input></textarea>
+              <textarea formControlName="trichYeu" rows="3" class="search__input" nz-input [readOnly]="isView"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>

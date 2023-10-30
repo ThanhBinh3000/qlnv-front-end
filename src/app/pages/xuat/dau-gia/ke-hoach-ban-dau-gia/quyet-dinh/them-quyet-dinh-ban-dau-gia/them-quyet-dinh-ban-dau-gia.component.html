@@ -225,11 +225,11 @@
           </div>
         </form>
         <nz-card class="mg-t-10 flex-card p-lr16 card-table">
-          <nz-table class="pd-10" nzBordered [nzData]="danhsachDx" [nzFrontPagination]="false"
+          <nz-table [nzData]="danhsachDx" class="nowrap pd-10" nzBordered [nzFrontPagination]="false"
                     [nzShowPagination]="false">
             <thead>
             <tr>
-              <th class="text-center" [width]="30"> STT</th>
+              <th nzWidth="50px" class="text-center wrap"> STT</th>
               <th class="text-left"> Cục DTNN KV</th>
               <th class="text-left"> Địa chỉ</th>
               <th class="text-left"> Số công văn/tờ trình</th>
@@ -237,23 +237,31 @@
               <th class="text-left"> Ngày duyệt KH</th>
               <th class="text-left"> Trích yếu</th>
               <th class="text-center"> Số ĐV tài sản</th>
-              <th
-                class="text-right">{{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Tổng SL xuất bán' : 'Tổng SL xuất bán (Kg)'}}</th>
+              <th class="text-center">Tổng SL xuất bán
+                {{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? '' : '(kg)'}}
+              </th>
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let data of danhsachDx ;let i = index" [ngClass]="{'bg-selected': i == 0 && this.selected}"
-                (click)="showDetail($event,i)">
-              <td class="text-center">{{i + 1}} </td>
-              <td class="text-left">{{ data.tenDvi }}</td>
-              <td class="text-left">{{ data.diaChi }}</td>
-              <td class="text-left">{{ data.soDxuat }}</td>
-              <td class="text-left">{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
-              <td class="text-left">{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
-              <td class="text-left">{{ data.trichYeu }}</td>
-              <td class="text-center">{{ data.slDviTsan }}</td>
-              <td class="text-right">{{ data.tongSoLuong|number:globals.numberFormat:globals.locale }}</td>
-            </tr>
+            <ng-container *ngFor="let data of danhsachDx, let i = index">
+              <tr [ngClass]="{'bg-selected': i == 0 && this.selected}" (click)="showDetail($event,i)">
+                <td class="text-center">{{i + 1}} </td>
+                <td class="text-left" style="max-width: 250px; min-width: 200px;  white-space: break-spaces;">
+                  {{ data.tenDvi }}
+                </td>
+                <td class="text-left" style="max-width: 250px; min-width: 200px;  white-space: break-spaces;">
+                  {{ data.diaChi }}
+                </td>
+                <td class="text-left">{{ data.soDxuat }}</td>
+                <td class="text-left">{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
+                <td class="text-left">{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
+                <td class="text-left" style="max-width: 250px; min-width: 200px;  white-space: break-spaces;">
+                  {{ data.trichYeu }}
+                </td>
+                <td class="text-center">{{ data.slDviTsan }}</td>
+                <td class="text-right">{{ data.tongSoLuong|number:globals.numberFormat:globals.locale }}</td>
+              </tr>
+            </ng-container>
             </tbody>
           </nz-table>
           <div nz-row [nzGutter]="24">
@@ -268,7 +276,8 @@
             <div nz-col [nzSpan]="12">
               <nz-card class="mg-t-10 flex-card p-lr16 bg-trang">
                 <app-thongtin-dexuat-khbdg [title]="'Quyết định của TCDTNN'" [dataInput]="dataInput"
-                                           [isView]="formData.value.trangThai == STATUS.BAN_HANH"
+                                           [isView]="false"
+                                           [trangThaiQd]="formData.value.trangThai == STATUS.BAN_HANH"
                                            [loaiVthhCache]="loaiVthh"
                                            (countChanged)="receiveDataFromChild($event)">
                 </app-thongtin-dexuat-khbdg>

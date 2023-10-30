@@ -26,6 +26,7 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
   @Input() dataInput;
   @Input() isView;
   @Input() isCache: boolean = false;
+  @Input() trangThaiQd;
   @Input() isTongHop;
   @Input() loaiVthhCache;
   @Output() countChanged: EventEmitter<any> = new EventEmitter();
@@ -89,7 +90,7 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
 
   async themMoiBangPhanLoTaiSan(data?: any, index?: number) {
     const modalGT = this.modal.create({
-      nzTitle: 'THÊM ĐỊA ĐIỂM GIAO NHẬN HÀNG',
+      nzTitle: '',
       nzContent: DialogThemMoiXuatBanTrucTiepComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -99,14 +100,14 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
         dataEdit: data,
         loaiVthh: this.dataInput.loaiVthh,
         cloaiVthh: this.dataInput.cloaiVthh,
-        typeLoaiVthh: this.loaiVthhCache
+        typeLoaiVthh: this.loaiVthhCache,
+        donViTinh: this.dataInput.donViTinh,
       },
     });
     modalGT.afterClose.subscribe(async (updatedData) => {
       if (updatedData && index >= 0) {
         this.dataTable[index] = updatedData;
         await this.calculatorTable();
-        await this.sendDataToParent();
       }
     });
   }
@@ -151,6 +152,7 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
         thanhTien: this.dataTable.reduce((prev, cur) => prev + cur.tienChiCuc, 0),
       });
     }
+    await this.sendDataToParent();
   }
 
   async onChangeThoiGian(event) {

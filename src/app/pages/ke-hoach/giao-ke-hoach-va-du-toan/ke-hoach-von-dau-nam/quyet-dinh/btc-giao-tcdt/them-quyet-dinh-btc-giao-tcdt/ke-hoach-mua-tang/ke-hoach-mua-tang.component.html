@@ -28,10 +28,10 @@
         <td>{{data.tenCloaiVthh}}</td>
         <td class='font-weight-bold'>{{data.dviTinh}}</td>
         <ng-container *ngIf='!data.dataChild || data.dataChild.length == 0'>
-          <td class='font-weight-bold text-right'>{{data.soLuong  | number : '1.0-1' : 'vi_VN'}}</td>
-          <td class='font-weight-bold text-right'>{{data.soLuongDuToan  | number : '1.0-1' : 'vi_VN'}}</td>
-          <td class='font-weight-bold text-right'>{{data.donGia  | number : '1.0-1' : 'vi_VN'}}</td>
-          <td class='font-weight-bold text-right'>{{data.tongTien | number: '1.0-1' : 'vi_VN'}}</td>
+          <td class='font-weight-bold text-right'>{{data.soLuong  | number : '1.0-3' : 'vi_VN'}}</td>
+          <td class='font-weight-bold text-right'>{{data.soLuongDuToan  | number : '1.0-3' : 'vi_VN'}}</td>
+          <td class='font-weight-bold text-right'>{{data.donGia  | number : '1.0-3' : 'vi_VN'}}</td>
+          <td class='font-weight-bold text-right'>{{data.tongTien | number: '1.0-3' : 'vi_VN'}}</td>
         </ng-container>
         <ng-container *ngIf='data.dataChild && data.dataChild.length > 0'>
           <td class='font-weight-bold text-right'>{{sumSoLuong(data, 'soLuong') | number : '1.0-1' : 'vi_VN'}}</td>
@@ -39,7 +39,7 @@
           <!--          <td class="font-weight-bold">{{sumSoLuong(data, 'donGia') | number : '1.0-1' : 'vi_VN'}}</td>-->
           <td class='font-weight-bold text-right'></td>
           <td
-            class='font-weight-bold font-weight-bold text-danger text-right'>{{sumSoLuong(data, 'tongTien') | number : '1.0-1' : 'vi_VN'}}</td>
+            class='font-weight-bold font-weight-bold text-danger text-right'>{{sumSoLuong(data, 'tongTien') | number : '1.0-3' : 'vi_VN'}}</td>
         </ng-container>
         <td class='font-weight-bold text-left' nzRight *ngIf='isView'>
           <a *ngIf='!data.dataChild || data.dataChild.length == 0' (click)="themMoiMuaTang(data, 'sua', idx)">
@@ -58,15 +58,15 @@
           <td></td>
           <td>{{item.tenCloaiVthh}}</td>
           <td>{{item.dviTinh}}</td>
-          <td class='text-right'>{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right'>{{item.soLuong | number : '1.0-3' : 'vi_VN'}}</td>
           <td class='text-right'>
-            {{item.soLuongDuToan | number : '1.0-1' : 'vi_VN'}}
+            {{item.soLuongDuToan | number : '1.0-3' : 'vi_VN'}}
           </td>
           <td class='text-right'>
-            {{item.donGia | number : '1.0-1' : 'vi_VN'}}
+            {{item.donGia | number : '1.0-3' : 'vi_VN'}}
           </td>
           <td class='text-danger text-right'>
-            {{item.tongTien | number : '1.0-1' : 'vi_VN'}}
+            {{item.tongTien | number : '1.0-3' : 'vi_VN'}}
           </td>
           <td class='text-left' nzRight *ngIf='isView'>
             <a (click)="themMoiMuaTang(item, 'sua', y, dataTable[idx])">
@@ -90,7 +90,7 @@
       <th class='text-right'>Tổng dự toán</th>
       <th></th>
       <th></th>
-      <th class='text-right'>{{dataDuToanSumByDataTable | number : '1.0-1' : 'vi_VN'}}</th>
+      <th class='text-right'>{{dataDuToanSumByDataTable | number : '1.0-3' : 'vi_VN'}}</th>
       <th></th>
     </tr>
     <tr class='text-blue'>
@@ -102,7 +102,7 @@
       <th class='text-right'>Tổng TTCP giao</th>
       <th></th>
       <th></th>
-      <th class='text-right'>{{dataQdTtcpGiaoBn | number : '1.0-1' : 'vi_VN'}}</th>
+      <th class='text-right'>{{dataQdTtcpGiaoBn | number : '1.0-3' : 'vi_VN'}}</th>
       <th></th>
     </tr>
     </tfoot>

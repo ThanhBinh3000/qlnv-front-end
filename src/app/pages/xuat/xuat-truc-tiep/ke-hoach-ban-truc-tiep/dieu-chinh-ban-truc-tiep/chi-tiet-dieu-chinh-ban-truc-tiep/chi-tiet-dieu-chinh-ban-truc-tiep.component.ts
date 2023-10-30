@@ -335,7 +335,6 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
         this.dataInputCache = data.children.find(item => item.soDxuat === this.dataTable[index].soDxuat) ?? null;
       }
     }
-    await this.spinner.hide();
   }
 
   async receiveDataFromChild(data: any) {
@@ -373,6 +372,3 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
     });
   }
 }
-
-
-

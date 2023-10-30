@@ -27,6 +27,7 @@ import {PREVIEW} from "src/app/constants/fileType";
 import {saveAs} from 'file-saver';
 import {QuyetDinhGiaTCDTNNService} from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+
 @Component({
   selector: 'app-them-quyet-dinh-ban-dau-gia',
   templateUrl: './them-quyet-dinh-ban-dau-gia.component.html',
@@ -321,7 +322,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   }
 
   async getDataChiTieu() {
-    const namKhValue = +this.formData.get('nam').value;
+    const namKhValue = +this.formData.get('namKh').value;
     try {
       const res2 = await this.chiTieuKeHoachNamCapTongCucService.canCuCucQd(namKhValue);
       this.formData.patchValue({
@@ -433,7 +434,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   index = 0;
 
   async showDetail($event, index: number) {
-    await this.spinner.show();
     if ($event.type === 'click') {
       const selectedRow = $event.target.parentElement;
       const previouslySelectedRow = selectedRow.parentElement.querySelector('.selectedRow');
@@ -452,7 +452,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       const res = await this.deXuatKhBanDauGiaService.getDetail(idDx);
       this.dataInputCache = res.data;
     }
-    await this.spinner.hide();
   }
 
   async receiveDataFromChild(data: any) {
