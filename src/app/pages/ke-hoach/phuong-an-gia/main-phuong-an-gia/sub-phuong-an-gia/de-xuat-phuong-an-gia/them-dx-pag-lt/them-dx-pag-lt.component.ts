@@ -42,6 +42,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   @Input() idInput: number;
   @Output('onClose') onClose = new EventEmitter<any>();
   @Input() type: string;
+  isDieuChinh: boolean = true;
 
   amount = AMOUNT;
   rowItemTtc: ThongTinChungPag = new ThongTinChungPag();
@@ -316,7 +317,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       if (event.startsWith("04")) {
         this.listCtieuKeHoach = this.dataChiTieu && this.dataChiTieu.khMuoiDuTru && this.dataChiTieu.khMuoiDuTru.length > 0 ? this.dataChiTieu.khMuoiDuTru : [];
       }
-      if (this.listCtieuKeHoach && this.listCtieuKeHoach.length > 0) {
+      if (this.listCtieuKeHoach && this.listCtieuKeHoach.length > 0 && this.isDieuChinh) {
         if (this.pagTtChungs && this.pagTtChungs.length > 0) {
           this.pagTtChungs.forEach((pagTtChung, index) => {
             pagTtChung.soLuong = 0
@@ -740,6 +741,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       })
       modalQD.afterClose.subscribe(async (data) => {
         if (data) {
+          this.isDieuChinh = false;
           await this.bindingDataQd(data.id);
         }
       });
@@ -782,15 +784,15 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   }
 
   async loadDsChiCuc() {
-    if (!this.idInput) {
+    if (!this.idInput && this.isDieuChinh) {
       let res = await this.donViService.layTatCaDonViByLevel(3);
       if (res && res.data) {
         this.dsChiCuc = res.data;
         this.dsChiCuc = this.dsChiCuc.filter(item => item.type != "PB" && item.maDvi.startsWith(this.userInfo.MA_DVI));
         this.pagTtChungs = [];
         this.dsChiCuc.forEach(item => {
-          this.rowItemTtc.maChiCuc = item.maDvi;
-          this.rowItemTtc.tenChiCuc = item.tenDvi;
+          this.rowItemTtc.maChiCuc = item?.maDvi;
+          this.rowItemTtc.tenChiCuc = item?.tenDvi;
           this.pagTtChungs.push(this.rowItemTtc);
           this.rowItemTtc = new ThongTinChungPag();
         })
