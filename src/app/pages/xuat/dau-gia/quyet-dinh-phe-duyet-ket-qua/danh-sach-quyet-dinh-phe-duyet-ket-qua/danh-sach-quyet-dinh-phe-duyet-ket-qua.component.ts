@@ -11,7 +11,6 @@ import {
 } from "../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service";
 import {MESSAGE} from "../../../../../constants/message";
 import {LOAI_HANG_DTQG} from "../../../../../constants/config";
-import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-danh-sach-quyet-dinh-phe-duyet-ket-qua',
