@@ -182,6 +182,10 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
           this.dataTableDetailTqd.forEach(item => {
             item.apDungTaiStr = this.getStrTenDonVi(item.apDungTai);
           });
+          this.dataTableDetailKtqd = data.listQlDinhMucPhisKtqd;
+          this.dataTableDetailKtqd.forEach(item => {
+            item.apDungTaiStr = this.getStrTenDonVi(item.apDungTai);
+          });
           this.updateEditCacheTqd();
         }
       } else {
@@ -473,6 +477,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       } else {
         this.rowItem.apDungTaiStr = this.getStrTenDonVi(apDungTai);
       }
+      this.rowItem.apDungTai = this.rowItem.apDungTai ? this.rowItem.apDungTai.toString() : null;
     }
     this.dataListDetailKtqd = [...this.dataListDetailKtqd, this.rowItem];
     this.rowItem = {};
