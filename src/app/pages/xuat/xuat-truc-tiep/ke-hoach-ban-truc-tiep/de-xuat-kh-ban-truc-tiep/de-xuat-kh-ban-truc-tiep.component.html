@@ -243,22 +243,30 @@
           <td class="text-left">{{ data.soDxuat }}</td>
           <td class="text-left">{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
           <td class="text-left">{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
-          <td class="text-left"><a *ngIf="data.soQdPd && data.idSoQdPd" nz-button nzType="link"
-                                   (click)="openModal('QdPd',data.idSoQdPd)">{{data.soQdPd}}</a></td>
+          <td class="text-left">
+            <a *ngIf="data.soQdPd && data.idSoQdPd" (click)="openModal('QdPd',data.idSoQdPd)"
+               style="color: blue">{{data.soQdPd}}
+            </a>
+          </td>
           <td class="text-left">{{ data.ngayKyQd | date: 'dd/MM/YYYY' }}</td>
-          <td class="text-left"
-              style="max-width: 300px; min-width: 250px;  white-space: break-spaces;">{{data.trichYeu}}</td>
+          <td class="text-left" style="max-width: 300px; min-width: 250px;  white-space: break-spaces;">
+            {{data.trichYeu}}
+          </td>
           <td class="text-left">{{ data.tenLoaiVthh }}</td>
           <td class="text-left">{{ data.tenCloaiVthh }}</td>
           <td class="text-center">{{ data.slDviTsan }}</td>
           <td class="text-center">{{ data.slHdDaKy }}</td>
           <td class="text-left">
-            <a *ngIf="data.soQdCtieu && data.idSoQdCtieu" nz-button nzType="link"
-               (click)="openModal('ChiTieu',data.idSoQdCtieu)">{{data.soQdCtieu}}</a></td>
+            <a *ngIf="data.soQdCtieu && data.idSoQdCtieu" (click)="openModal('ChiTieu',data.idSoQdCtieu)"
+               style="color: blue">{{data.soQdCtieu}}
+            </a>
+          </td>
           <td class="text-left">{{ data.tenTrangThai }}</td>
           <td class="text-center" *ngIf="userService.isTongCuc()">
             <span *ngIf="!data.idThop">{{ data.tenTrangThaiTh }}</span>
-            <a *ngIf="data.idThop" nz-button nzType="link" (click)="openModal('Th',data.idThop)">{{ data.idThop }}</a>
+            <a *ngIf="data.idThop" (click)="openModal('Th',data.idThop)"
+               style="color: blue">{{ data.idThop }}
+            </a>
           </td>
           <td class="text-center">
             <a *ngIf="isActionAllowed('XEM', data)" (click)="redirectDetail(data.id, true)">

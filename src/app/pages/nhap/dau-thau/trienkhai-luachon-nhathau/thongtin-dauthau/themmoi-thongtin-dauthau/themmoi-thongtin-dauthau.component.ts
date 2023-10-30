@@ -283,6 +283,13 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         tenTrangThai: data.tenTrangThai
       })
       this.listOfData = data.children;
+      this.listOfData.forEach(i => {
+        let tongThanhTien = 0;
+        i.children.forEach(y => {
+          tongThanhTien += y.soLuong * y.donGia
+        })
+        i.thanhTien = tongThanhTien * 1000
+      })
       this.showDetail(event, this.listOfData[0])
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -572,8 +579,22 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       nzCancelText: 'Không',
       nzOkDanger: true,
       nzWidth: 310,
-      nzOnOk: () => {
-        this.listNthauNopHs.splice(i, 1)
+      nzOnOk: async() => {
+        this.spinner.show();
+        try {
+          let res = await this.thongTinDauThauService.delete({ id: i });
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+            await this.getDetail()
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
       },
     });
   }
@@ -742,7 +763,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       let sum = 0
       this.listOfData.forEach(item => {
         const sumChild = item.children.reduce((prev, cur) => {
-          prev += cur.soLuong * item.donGiaTamTinh;
+          prev += cur.soLuong * item.donGia;
           return prev;
         }, 0);
         sum += sumChild;
@@ -761,6 +782,26 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         }, 0);
         sum += sumChild;
       })
+      return sum * 1000;
+    }
+  }
+
+  calcTongChenhLech(i) {
+    if (this.listOfData) {
+      let sum = 0
+        if (this.isShowFromKq) {
+          const sumChild = this.listOfData[i].children.reduce((prev, cur) => {
+            prev += cur.soLuong * this.abs(this.listOfData[i].kqlcntDtl?.donGiaVat - cur.donGia);
+            return prev;
+          }, 0);
+          sum += sumChild;
+        } else {
+          const sumChild = this.listOfData[i].children.reduce((prev, cur) => {
+            prev += cur.soLuong * this.abs(this.listOfData[i].donGiaNhaThau - cur.donGia);
+            return prev;
+          }, 0);
+          sum += sumChild;
+        }
       return sum * 1000;
     }
   }

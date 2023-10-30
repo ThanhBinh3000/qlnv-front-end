@@ -303,6 +303,10 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
       }
       if (this.userService.isTongCuc()) {
         this.dataQdCanCu = {};
+        this.formData.patchValue({
+          canCu: null,
+          idCanCu: null,
+        });
         if (this.formData.get('loaiCanCu').value == 'TTCP') {
           let res = await this.quyetDinhTtcpService.chiTietTheoNam(year);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -315,8 +319,14 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
                 idCanCu: data.id,
               });
             }
+          }else{
+            this.notification.warning(MESSAGE.WARNING, res.msg);
           }
         } else if (this.formData.get('loaiCanCu').value == 'BTC') {
+          this.formData.patchValue({
+            canCu: null,
+            idCanCu: null,
+          });
           let res = await this.chiTieuKeHoachNamService.canCuBTCGiaoTCDT(year);
           if (res.msg == MESSAGE.SUCCESS) {
             let data = res.data;
@@ -333,6 +343,8 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
                 idCanCu: data.id,
               });
             }
+          }else{
+            this.notification.warning(MESSAGE.WARNING, res.msg);
           }
         }
       }
@@ -2056,7 +2068,7 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
     this.sumTotalKhDuTruLuongThuc.xtnTongGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnTongGao, 0);
     this.sumTotalKhDuTruLuongThuc.xtnGao_nam1 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnGao[0].soLuong, 0);
     this.sumTotalKhDuTruLuongThuc.xtnGao_nam2 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnGao[1].soLuong, 0);
-    this.sumTotalKhDuTruLuongThuc.xtnGao_nam3 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnGao[2]?.soLuong ? b.xtnGao[2].soLuong : 0, 0);
+    this.sumTotalKhDuTruLuongThuc.xtnGao_nam3 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +(b.xtnGao[2]?.soLuong??0), 0);
     this.sumTotalKhDuTruLuongThuc.tkcnTongSoQuyThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkcnTongSoQuyThoc, 0);
     this.sumTotalKhDuTruLuongThuc.tkcnTongThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkcnTongThoc, 0);
     this.sumTotalKhDuTruLuongThuc.tkcnTongGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkcnTongGao, 0);

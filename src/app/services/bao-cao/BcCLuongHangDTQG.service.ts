@@ -25,6 +25,7 @@ export class BcCLuongHangDTQGService extends BaseService {
 
   baoCaoCongTacBqHangDtqg(body) {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bccl-ct-bq-hangdtqg`;
+    // const url = `http://localhost:3333/${this.table}/bccl-ct-bq-hangdtqg`;
     return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
   }
 

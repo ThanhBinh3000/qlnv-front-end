@@ -128,9 +128,9 @@
                   Đơn vị chủ trì
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]='error'>
-                  <nz-select [nzDisabled]='isDisable() || this.formData.get("capDeTai").value == "02" '
+                  <nz-select nzShowSearch nzAllowClear [nzDisabled]='isDisable() || this.formData.get("capDeTai").value == "02" '
                              formControlName='dviChuTri'>
-                    <nz-option *ngFor='let item of listDonVi' [nzValue]='item.key' [nzLabel]='item.title'>
+                    <nz-option *ngFor='let item of listDonVi' [nzValue]='item.key' [nzLabel]='item.fullname'>
                     </nz-option>
                   </nz-select>
                   <!--              <input nz-input [readonly]='isDisable()' formControlName='dviChuTri' />-->
@@ -144,8 +144,8 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]='error'>
                   <!--              <input nz-input [readonly]='isDisable()' formControlName='dviThucHien' />-->
-                  <nz-select [nzDisabled]='isDisable()' formControlName='dviThucHien'>
-                    <nz-option *ngFor='let item of listDonVi' [nzValue]='item.key' [nzLabel]='item.title'>
+                  <nz-select nzShowSearch nzAllowClear [nzDisabled]='isDisable()' formControlName='dviThucHien'>
+                    <nz-option *ngFor='let item of listDonVi' [nzValue]='item.key' [nzLabel]='item.fullname'>
                     </nz-option>
                   </nz-select>
                 </nz-form-control>

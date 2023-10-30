@@ -25,6 +25,7 @@ import { QuyetDinhDieuChuyenService } from 'src/app/services/qlnv-kho/dieu-chuye
 import { DieuChuyenKhoService } from 'src/app/services/qlnv-kho/dieu-chuyen-sap-nhap-kho/dieu-chuyen-kho.service';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { TreeSelectSapNhapComponent } from '../tree-select/tree-select.component';
+import { CurrencyMaskInputMode } from 'ngx-currency';
 
 @Component({
   selector: 'app-thong-tin-dieu-chuyen-kho-sap-nhap',
@@ -79,6 +80,20 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
 
   nzActiveDCH: boolean = true
   nzActiveCCDC: boolean = true
+
+  AMOUNT = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "left",
+    nullable: true,
+    min: 0,
+    max: 100000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
 
   constructor(httpClient: HttpClient,
     storageService: StorageService,
@@ -290,6 +305,7 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
           const dataDetail = res.data;
           if (dataDetail) {
             this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
+            this.getDataDefault(dataDetail.soQuyetDinhId)
             this.dataTableHang = Array.isArray(dataDetail.dieuChuyenKhoHangDtl) ? dataDetail.dieuChuyenKhoHangDtl.map(f => ({
               ...f, title: this.renderTitle(f),
               groupBy: this.formData.value.loai === 'SN_DIEM_KHO' ? `${f.maChiCucDi}-${f.maDiemKhoDi}-${f.maChiCucDen}-${f.maDiemKhoDen}` :
@@ -314,6 +330,64 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       });
   }
+
+  async getDataDefault(soQuyetDinhId) {
+    let dataQdDc = [];
+    let body = {
+      trangThai: "02",
+      paggingReq: {
+        limit: this.globals.prop.MAX_INTERGER,
+        page: 0
+      },
+      maDvi: this.userInfo.MA_DVI
+    }
+    let res = await this.danhMucDuyetKhoService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      dataQdDc = Array.isArray(res.data?.content) ? res.data.content : [];
+    }
+    const dataChose: any = dataQdDc.find((qd) => qd.soQuyetDinhId == soQuyetDinhId)
+    if (dataChose) {
+      let listChiCucDi = []
+      Array.isArray(dataChose.duyetDanhMucKhoDtl) && dataChose.duyetDanhMucKhoDtl.forEach(f => {
+        if (!listChiCucDi.find(item => item.maChiCucDi === f.maChiCucDi && item.maDiemKhoDi === f.maDiemKhoDi && item.maDiemKhoDen === f.maDiemKhoDen)) {
+          listChiCucDi.push({ maCucDi: f.maCucDi, tenCucDi: f.tenCucDi, maCucDen: f.maCucDen, tenCucDen: f.tenCucDen, maChiCucDi: f.maChiCucDi, tenChiCucDi: f.tenChiCucDi, maChiCucDen: f.maChiCucDen, maDiemKhoDi: f.maDiemKhoDi, tenDiemKhoDi: f.tenDiemKhoDi, tenDiemKhoDen: f.tenDiemKhoDen, maDiemKhoDen: f.maDiemKhoDen })
+        }
+      });
+      if (listChiCucDi.length > 0) {
+        // let datas = await Promise.all(listChiCucDi.map(f => this.dieuChuyenKhoService.chiTietHang({ ...f })));
+        let datasDieuChuyen = [];
+
+        if (this.formData.value.loai) {
+          await Promise.all(listChiCucDi.map(f => this.dieuChuyenKhoService.chiTietHangSapNhapDiemKho({ ...f }).then(res => {
+            if (res.msg === MESSAGE.SUCCESS) {
+              const resData = Array.isArray(res.data) ? res.data.map(item => ({ ...item, maCucDi: f.maCucDi, tenCucDi: f.tenCucDi, maCucDen: f.maCucDen, tenCucDen: f.tenCucDen, maChiCucDi: f.maChiCucDi, tenChiCucDi: f.tenChiCucDi, maDiemKhoDi: f.maDiemKhoDi, tenDiemKhoDi: f.tenDiemKhoDi })) : [];
+              datasDieuChuyen = [...datasDieuChuyen, ...resData]
+            }
+          })));
+          if (datasDieuChuyen.length > 0) {
+            this.dataTableHangDefault = Array.isArray(datasDieuChuyen) ? datasDieuChuyen.map(f => ({
+              ...f, groupBy: `${f.maChiCucDi}-${f.maDiemKhoDi}-${f.maChiCucDen}-${f.maDiemKhoDen}`
+            })) : [];
+
+          }
+        }
+        if (this.formData.value.loai === "SN_CHI_CUC") {
+          let dataCCDC = [];
+          await Promise.all(listChiCucDi.map(f => this.dieuChuyenKhoService.chiTietCCDC({ ...f }).then(res => {
+            if (res.msg === MESSAGE.SUCCESS) {
+              const resData = Array.isArray(res.data) ? res.data.map(item => ({ ...item, maCucDi: f.maCucDi, tenCucDi: f.tenCucDi, maCucDen: f.maCucDen, tenCucDen: f.tenCucDen, maChiCucDi: f.maChiCucDi, tenChiCucDi: f.tenChiCucDi, maDiemKhoDi: f.maDiemKhoDi, tenDiemKhoDi: f.tenDiemKhoDi })) : [];
+              dataCCDC = [...dataCCDC, ...resData]
+            }
+          })));
+          if (dataCCDC.length > 0) {
+            this.dataTableChiCucDefault = Array.isArray(dataCCDC) ? dataCCDC.map(f => ({ ...f, groupBy: `${f.maChiCucDi}-${f.maChiCucDen}` })) : []
+          }
+        }
+
+      }
+    }
+  }
+
   buildView(key1: string, key2: string) {
     this[key2] = chain(this[key1]).groupBy("groupBy").map((s, k) => {
       const groupBy = s.find(f => f.groupBy === k);
@@ -386,13 +460,11 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
               }
             })));
             if (datasDieuChuyen.length > 0) {
-
-              this.dataTableHang = Array.isArray(datasDieuChuyen) ? datasDieuChuyen.map(f => ({
+              const dsHang = Array.isArray(datasDieuChuyen) ? datasDieuChuyen.map(f => ({
                 ...f, groupBy: `${f.maChiCucDi}-${f.maDiemKhoDi}-${f.maChiCucDen}-${f.maDiemKhoDen}`
               })) : [];
-              this.dataTableHangDefault = Array.isArray(datasDieuChuyen) ? datasDieuChuyen.map(f => ({
-                ...f, groupBy: `${f.maChiCucDi}-${f.maDiemKhoDi}-${f.maChiCucDen}-${f.maDiemKhoDen}`
-              })) : [];
+              this.dataTableHangDefault = dsHang
+              this.dataTableHang = dsHang
               this.buildView("dataTableHang", "dataViewHang");
             }
           }
@@ -405,8 +477,9 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
               }
             })));
             if (dataCCDC.length > 0) {
-              this.dataTableChiCuc = Array.isArray(dataCCDC) ? dataCCDC.map(f => ({ ...f, groupBy: `${f.maChiCucDi}-${f.maChiCucDen}` })) : []
-              this.dataTableChiCucDefault = Array.isArray(dataCCDC) ? dataCCDC.map(f => ({ ...f, groupBy: `${f.maChiCucDi}-${f.maChiCucDen}` })) : []
+              const dsCC = Array.isArray(dataCCDC) ? dataCCDC.map(f => ({ ...f, groupBy: `${f.maChiCucDi}-${f.maChiCucDen}` })) : []
+              this.dataTableChiCucDefault = dsCC
+              this.dataTableChiCuc = dsCC
               this.buildView("dataTableChiCuc", "dataViewChiCuc")
             }
           }

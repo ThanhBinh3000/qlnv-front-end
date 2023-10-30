@@ -172,6 +172,48 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
     };
     // this.formData.controls['ngayHluc'].valueChanges.subscribe((value) => {
     // })
+    this.formData.controls['type'].valueChanges.pipe().subscribe((value) => {
+      this.formData.patchValue({ quyetDinhPdDtl: [], loaiNhapXuat: '', kieuNhapXuat: '', idTongHop: '', maTongHop: '', ngayThop: '', idDx: '', soDx: '', ngayDx: '', xuatCap: false, soLuongXuatCap: '' });
+      this.quyetDinhPdDtlCache = [];
+      this.tongSoLuongDx = 0;
+      this.tongSoLuongChuyenCapThocDx = 0;
+      this.mucDichXuat = "";
+      this.ngayKetThuc = "";
+      this.tongSoLuong = 0;
+      this.tongSoLuongChuyenCapThoc = 0;
+      this.loaiNhapXuat = "";
+      this.kieuNhapXuat = "";
+      this.phuongAnHdrView = [];
+      this.phuongAnHdrViewCache = [];
+      this.phuongAnView = [];
+      this.phuongAnViewCache = [];
+    });
+    this.formData.controls['tenVthh'].valueChanges.pipe().subscribe((value) => {
+      console.log(this.formData)
+      if (value == TEN_LOAI_VTHH.THOC) {
+        this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.THOC, donViTinh: "kg" });
+      } else if (value == TEN_LOAI_VTHH.GAO) {
+        this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.GAO, donViTinh: "kg" });
+      } else if (value == TEN_LOAI_VTHH.MUOI) {
+        this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.MUOI, donViTinh: "kg" });
+      } else {
+        this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.VAT_TU, donViTinh: null });
+      };
+      this.formData.patchValue({ quyetDinhPdDtl: [], loaiNhapXuat: '', kieuNhapXuat: '', idTongHop: '', maTongHop: '', ngayThop: '', idDx: '', soDx: '', ngayDx: '', xuatCap: false, soLuongXuatCap: '' });
+      this.quyetDinhPdDtlCache = [];
+      this.tongSoLuongDx = 0;
+      this.tongSoLuongChuyenCapThocDx = 0;
+      this.mucDichXuat = "";
+      this.ngayKetThuc = "";
+      this.tongSoLuong = 0;
+      this.tongSoLuongChuyenCapThoc = 0;
+      this.loaiNhapXuat = "";
+      this.kieuNhapXuat = "";
+      this.phuongAnHdrView = [];
+      this.phuongAnHdrViewCache = [];
+      this.phuongAnView = [];
+      this.phuongAnViewCache = [];
+    })
   }
 
   async ngOnInit() {
@@ -208,7 +250,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               res.data.soBbQd = res.data.soBbQd?.split("/")[0];
             }
             res.data.quyetDinhPdDtl.forEach(s => s.idVirtual = uuidv4());
-            this.formData.patchValue(res.data);
+            this.helperService.bidingDataInFormGroupAndNotTrigger(this.formData, res.data, ['type', 'tenVthh']);
 
             //get cache
             if (this.formData.value.type == 'TTr') {
@@ -270,8 +312,10 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
     //   this.formData.controls["ngayKetThuc"].setValidators(Validators.required);
     //   this.formData.controls["mucDichXuat"].setValidators(Validators.required);
     // }
-    this.helperService.markFormGroupTouched(this.formData);
-    if (!this.formData.valid) return;
+    if (this.formData.value.xuatCap) {
+      const soLuongXuatCap = this.formData.value.quyetDinhPdDtl.reduce((sum, cur) => sum += cur.soLuongXc);
+      this.formData.patchValue({ soLuongXuatCap })
+    }
     if (!this.formData.value.quyetDinhPdDtl || this.formData.value.quyetDinhPdDtl.length <= 0) {
       return this.notification.error(MESSAGE.ERROR, "Thông tin chi tiết đề xuất cứu trợ, viện trợ của các đơn vị không tồn tại.")
     }
@@ -279,14 +323,18 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       ...this.formData.value,
       soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null
     }
-    await this.createUpdate(body);
+    await this.createUpdate(body, null, null, ['tenVthh', 'type']);
     // this.formData.controls["ngayKetThuc"].setValidators(Validators.required);
     // this.formData.controls["mucDichXuat"].setValidators(Validators.required);
   }
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
+    if (this.formData.value.xuatCap) {
+      const soLuongXuatCap = this.formData.value.quyetDinhPdDtl.reduce((sum, cur) => sum += cur.soLuongXc);
+      this.formData.patchValue({ soLuongXuatCap })
+    }
     let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd + this.maHauTo }
-    await super.saveAndSend(body, trangThai, msg, msgSuccess);
+    await super.saveAndSend(body, trangThai, msg, msgSuccess, ['tenVthh', 'type']);
   }
 
   async openDialogTh() {
@@ -366,9 +414,9 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
     if (this.formData.get('type').value != 'TTr' || this.isView) {
       return
     }
-    await this.spinner.show();
     // Get data tờ trình
     try {
+      await this.spinner.show();
       let res = await this.deXuatPhuongAnCuuTroService.search({
         trangThaiList: [STATUS.DA_DUYET_LDV, STATUS.DA_DUYET_LDC, STATUS.DA_TAO_CBV],
         maTongHop: null,
@@ -446,31 +494,31 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       await this.spinner.hide();
     }
   }
-  changeVthh($event) {
-    if ($event == TEN_LOAI_VTHH.THOC) {
-      this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.THOC, donViTinh: "kg" });
-    } else if ($event == TEN_LOAI_VTHH.GAO) {
-      this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.GAO, donViTinh: "kg" });
-    } else if ($event == TEN_LOAI_VTHH.MUOI) {
-      this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.MUOI, donViTinh: "kg" });
-    } else {
-      this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.VAT_TU, donViTinh: null });
-    };
-    this.formData.patchValue({ quyetDinhPdDtl: [], loaiNhapXuat: '', kieuNhapXuat: '' });
-    this.quyetDinhPdDtlCache = [];
-    this.tongSoLuongDx = 0;
-    this.tongSoLuongChuyenCapThocDx = 0;
-    this.mucDichXuat = "";
-    this.ngayKetThuc = "";
-    this.tongSoLuong = 0;
-    this.tongSoLuongChuyenCapThoc = 0;
-    this.loaiNhapXuat = "";
-    this.kieuNhapXuat = "";
-    this.phuongAnHdrView = [];
-    this.phuongAnHdrViewCache = [];
-    this.phuongAnView = [];
-    this.phuongAnViewCache = [];
-  }
+  // changeVthh($event) {
+  //   if ($event == TEN_LOAI_VTHH.THOC) {
+  //     this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.THOC, donViTinh: "kg" });
+  //   } else if ($event == TEN_LOAI_VTHH.GAO) {
+  //     this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.GAO, donViTinh: "kg" });
+  //   } else if ($event == TEN_LOAI_VTHH.MUOI) {
+  //     this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.MUOI, donViTinh: "kg" });
+  //   } else {
+  //     this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.VAT_TU, donViTinh: null });
+  //   };
+  //   this.formData.patchValue({ quyetDinhPdDtl: [], loaiNhapXuat: '', kieuNhapXuat: '' });
+  //   this.quyetDinhPdDtlCache = [];
+  //   this.tongSoLuongDx = 0;
+  //   this.tongSoLuongChuyenCapThocDx = 0;
+  //   this.mucDichXuat = "";
+  //   this.ngayKetThuc = "";
+  //   this.tongSoLuong = 0;
+  //   this.tongSoLuongChuyenCapThoc = 0;
+  //   this.loaiNhapXuat = "";
+  //   this.kieuNhapXuat = "";
+  //   this.phuongAnHdrView = [];
+  //   this.phuongAnHdrViewCache = [];
+  //   this.phuongAnView = [];
+  //   this.phuongAnViewCache = [];
+  // }
   async buildTableView() {
     if (this.formData.value.type === "TH") {
 

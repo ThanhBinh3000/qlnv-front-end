@@ -10,7 +10,7 @@
     </button>
     <button *ngIf="formData.value.trangThai == STATUS.CHUA_TAO_QD"
             type="button" class="btn btn-sub xanh-nhat"
-            (click)="taoQdinh()">
+            (click)="save(true)">
       <i class="icon htvbdh_tcdt_tao-qd"></i>
       <span> Tạo quyết định </span>
     </button>
@@ -171,43 +171,52 @@
         </form>
       </nz-collapse-panel>
     </nz-collapse>
-    <nz-collapse nzAccordion>
+    <nz-collapse nzAccordion class="pd-10">
       <nz-collapse-panel [nzHeader]="'THÔNG TIN CHI TIẾT ĐỀ XUẤT CỦA CÁC CỤC DTNN KV'" [nzActive]="true">
-        <nz-table class="pd-10" nzBordered [nzData]="formData.value.children" [nzFrontPagination]="false"
+        <nz-table [nzData]="formData.value.children" class="nowrap pd-10" nzBordered [nzFrontPagination]="false"
                   [nzShowPagination]="false">
           <thead>
           <tr>
-            <th nzWidth="50px" class="text-center"> STT</th>
-            <th nzWidth="250px" class="text-left wrap"> Cục DTNN KV</th>
-            <th nzWidth="150px" class="text-left wrap"> Số công văn/tờ trình</th>
-            <th nzWidth="100px" class="text-left wrap"> Ngày ký</th>
-            <th nzWidth="250px" class="text-left wrap"> Trích yếu</th>
-            <th nzWidth="70px" class="text-center wrap"> SL đơn vị tài sản</th>
-            <th nzWidth="100px"
-                class="text-right wrap">{{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Tổng SL xuất bán đề xuất' : 'Tổng SL xuất bán đề xuất (Kg)'}}</th>
-            <th nzWidth="150px" class="text-right wrap"> Thành tiền Cục đề xuất (đ)</th>
-            <th nzWidth="150px" class="text-right wrap"> % Khoản tiền đặt trước (đ)</th>
-            <th nzWidth="150px" class="text-right wrap"> Khoản tiền đặt trước đề xuất (đ)</th>
-            <th nzWidth="100px" class="text-left wrap"> Trạng thái</th>
+            <th nzWidth="50px" class="text-center wrap"> STT</th>
+            <th class="text-left"> Cục DTNN KV</th>
+            <th class="text-left"> Số công văn/tờ trình</th>
+            <th class="text-left"> Ngày ký</th>
+            <th class="text-left"> Trích yếu</th>
+            <th class="text-center"> SL đơn vị tài sản</th>
+            <th class="text-center">Tổng SL xuất bán đề xuất
+              {{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? '' : '(đ/kg)'}}
+            </th>
+            <th class="text-center"> Thành tiền Cục đề xuất (đ)</th>
+            <th class="text-center"> % Khoản tiền đặt trước (đ)</th>
+            <th class="text-center"> Khoản tiền đặt trước đề xuất (đ)</th>
+            <th class="text-left"> Trạng thái</th>
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let data of formData.value.children;let i = index"
-              [ngClass]="{'bg-selected': i == 0 && this.selected}"
-              (click)="showDetail($event,data.idDxHdr)">
-            <td class="text-center">{{i + 1}} </td>
-            <td class="text-left">{{ data.tenDvi }}</td>
-            <td class="text-left">{{ data.soDxuat }}</td>
-            <td class="text-left">{{ data.ngayPduyet|date:'dd/MM/YYYY' }}</td>
-            <td class="text-left">{{ data.trichYeu }}</td>
-            <td class="text-center">{{ data.slDviTsan }}</td>
-            <td class="text-right">{{ data.tongSoLuong|number:globals.numberFormat:globals.locale }}</td>
-            <td class="text-right">{{ data.tongTienKhoiDiemDx|number:globals.numberFormat:globals.locale }}</td>
-            <td class="text-right">{{ data.khoanTienDatTruoc|number:globals.numberFormat:globals.locale }}</td>
-            <td class="text-right">{{ data.tongTienDatTruocDx|number:globals.numberFormat:globals.locale }}</td>
-            <td class="text-left">{{ data.tenTrangThai }}</td>
-          </tr>
+          <ng-container *ngFor="let data of formData.value.children, let i = index">
+            <tr [ngClass]="{'bg-selected': i == 0 && this.selected}" (click)="showDetail($event,data.idDxHdr)">
+              <td class="text-center">{{i + 1}} </td>
+              <td class="text-left" style="max-width: 250px; min-width: 200px;  white-space: break-spaces;">
+                {{ data.tenDvi }}
+              </td>
+              <td class="text-left">{{ data.soDxuat }}</td>
+              <td class="text-left">{{ data.ngayPduyet|date:'dd/MM/YYYY' }}</td>
+              <td class="text-left">
+                <ng-container *ngIf="data.trichYeu.length > 20; else shortDescription">{{ data.trichYeu | slice:0:20 }}
+                  ...
+                </ng-container>
+                <ng-template #shortDescription>{{ data.trichYeu }}</ng-template>
+              </td>
+              <td class="text-center">{{ data.slDviTsan }}</td>
+              <td class="text-right">{{ data.tongSoLuong|number:globals.numberFormat:globals.locale }}</td>
+              <td class="text-right">{{ data.tongTienKhoiDiemDx|number:globals.numberFormat:globals.locale }}</td>
+              <td class="text-right">{{ data.khoanTienDatTruoc|number:globals.numberFormat:globals.locale }}</td>
+              <td class="text-right">{{ data.tongTienDatTruocDx|number:globals.numberFormat:globals.locale }}</td>
+              <td class="text-left">{{ data.tenTrangThai }}</td>
+            </tr>
+          </ng-container>
           </tbody>
+
         </nz-table>
       </nz-collapse-panel>
     </nz-collapse>

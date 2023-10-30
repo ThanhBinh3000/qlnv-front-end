@@ -25,6 +25,10 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
   isAddNew: boolean;
   listTrangThaiHd: any = [];
   listTrangThaiXh: any = [];
+  idQdPd: number = 0;
+  isViewQdPd: boolean = false;
+  idQdKq: number = 0;
+  isViewQdKq: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -134,6 +138,36 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
         this.spinner.hide();
       }
     );
+  }
+
+  openModal(id: number, modalType: string) {
+    switch (modalType) {
+      case 'pheDuyet':
+        this.idQdPd = id;
+        this.isViewQdPd = true;
+        break;
+      case 'ketQua':
+        this.idQdKq = id;
+        this.isViewQdKq = true;
+        break;
+      default:
+        break;
+    }
+  }
+
+  closeModal(modalType: string) {
+    switch (modalType) {
+      case 'pheDuyet':
+        this.idQdPd = null;
+        this.isViewQdPd = false;
+        break;
+      case 'ketQua':
+        this.idQdKq = null;
+        this.isViewQdKq = false;
+        break;
+      default:
+        break;
+    }
   }
 
   isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {

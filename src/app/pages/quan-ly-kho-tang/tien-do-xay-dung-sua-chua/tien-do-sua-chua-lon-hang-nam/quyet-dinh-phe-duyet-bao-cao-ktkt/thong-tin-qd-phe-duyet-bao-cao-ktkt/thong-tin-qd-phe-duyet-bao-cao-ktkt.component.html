@@ -15,6 +15,12 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
+        <button type="button" class="btn btn-sub btn-xoa"
+                (click)="delete(this.formData.value)" *ngIf="idInput > 0 && formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU
+                && userService.isCuc && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDBCKTKT_XOA')">
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+          <span>Xóa</span>
+        </button>
         <button class="btn btn-sub xanh-nhat ml-2" (click)="save(true)"
                 *ngIf="(formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU) && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDBCKTKT_THEM')">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
@@ -83,7 +89,7 @@
             <div nz-col nzSpan="4">
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Số QĐ PD KH SCL hàng năm của
+                  <nz-form-label  [nzNoColon]="true" class="label-color-kh">Số QĐ PD KH SCL hàng năm của
                     BTC/TCDT
                   </nz-form-label>
                   <input nz-input formControlName="soQdPdKhScl" [readonly]="true"/>
@@ -113,7 +119,7 @@
             <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Loại công trình
+                  <nz-form-label  [nzNoColon]="true" class="label-color-kh">Loại công trình
                   </nz-form-label>
                   <input nz-input formControlName="tenLoaiCongTrinh" [readonly]="true"/>
                 </nz-form-control>
@@ -121,8 +127,8 @@
             </div>
             <div nz-col nzSpan="6">
               <nz-form-item>
-                <nz-form-control nzRequired [nzErrorTip]="error">
-                  <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Tên công trình</nz-form-label>
+                <nz-form-control  [nzErrorTip]="error">
+                  <nz-form-label  [nzNoColon]="true" class="label-color-kh">Tên công trình</nz-form-label>
                   <input nz-input formControlName="tenCongTrinh" [readonly]="true"/>
                 </nz-form-control>
               </nz-form-item>
@@ -192,7 +198,7 @@
             <div nz-col nzSpan="12">
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-form-label [nzNoColon]="true" nzRequired class="label-color-kh">Tiêu chuẩn định mức kinh tế - kỹ
+                  <nz-form-label [nzNoColon]="true"  class="label-color-kh">Tiêu chuẩn định mức kinh tế - kỹ
                     thuật sửa chữa
                   </nz-form-label>
                   <textarea formControlName="tieuChuanDm" rows="3" nz-input placeholder="Nhập text"
@@ -203,7 +209,7 @@
             <div nz-col nzSpan="12">
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-form-label [nzNoColon]="true" nzRequired class="label-color-kh"> Loại, cấp công trình (Mô tả chi
+                  <nz-form-label [nzNoColon]="true"  class="label-color-kh"> Loại, cấp công trình (Mô tả chi
                     tiết)
                   </nz-form-label>
                   <textarea formControlName="loaiCapCt" rows="3" nz-input placeholder="Nhập text"
@@ -214,7 +220,7 @@
             <div nz-col nzSpan="12">
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-form-label [nzNoColon]="true" nzRequired class="label-color-kh"> Quy mô, chỉ tiêu kỹ thuật và giải
+                  <nz-form-label [nzNoColon]="true"  class="label-color-kh"> Quy mô, chỉ tiêu kỹ thuật và giải
                     pháp thiết kế chủ yếu của công trình
                   </nz-form-label>
                   <textarea formControlName="quyMo" rows="3" nz-input placeholder="Nhập text"
@@ -224,7 +230,7 @@
             <div nz-col nzSpan="12">
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-form-label [nzNoColon]="true" nzRequired class="label-color-kh">Các nội dung khác</nz-form-label>
+                  <nz-form-label [nzNoColon]="true"  class="label-color-kh">Các nội dung khác</nz-form-label>
                   <textarea formControlName="noiDungKhac" rows="3" nz-input placeholder="Nhập text"
                             [readonly]="isViewDetail"></textarea></nz-form-control>
               </nz-form-item>

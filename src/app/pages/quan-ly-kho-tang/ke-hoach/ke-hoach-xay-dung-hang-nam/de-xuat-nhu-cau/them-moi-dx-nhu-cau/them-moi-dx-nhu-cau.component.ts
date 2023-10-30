@@ -441,5 +441,12 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
       this.convertListToTree();
     }
   }
+
+  checkCbVu() {
+    if(this.formData.value.trangThai == STATUS.DA_DUYET_LDC && this.userService.isTongCuc()){
+      return true;
+    }
+    return false;
+  }
 }
 

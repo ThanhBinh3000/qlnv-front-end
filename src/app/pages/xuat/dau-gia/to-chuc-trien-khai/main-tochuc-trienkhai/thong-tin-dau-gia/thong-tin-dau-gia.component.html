@@ -182,25 +182,26 @@
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td class="text-left">{{ data.nam }}</td>
           <td class="text-left">
-            <a *ngIf="data.soQdPd && data.xhQdDchinhKhBdgHdr ? data.xhQdDchinhKhBdgHdr.idQdPd : data.idHdr" nz-button
-               nzType="link"
-               (click)="openModal((data.xhQdDchinhKhBdgHdr ? data.xhQdDchinhKhBdgHdr.idQdPd : data.idHdr), 'QdPdKh')">
-              {{ data.soQdPd }}</a>
+            <a *ngIf="data.soQdPd && data.xhQdDchinhKhBdgHdr ? data.xhQdDchinhKhBdgHdr.idQdPd : data.idHdr"
+               (click)="openModal((data.xhQdDchinhKhBdgHdr ? data.xhQdDchinhKhBdgHdr.idQdPd : data.idHdr), 'QdPdKh')"
+               style="color: blue">{{ data.soQdPd }}
+            </a>
           </td>
           <td class="text-left">
-            <a *ngIf="data.soQdDc && data.xhQdDchinhKhBdgHdr ? data.idHdr : null" nz-button nzType="link"
-               (click)="openModal((data.xhQdDchinhKhBdgHdr ? data.idHdr : null), 'QdPdDc')">
-              {{ data.soQdDc }}</a>
+            <a *ngIf="data.soQdDc && data.xhQdDchinhKhBdgHdr ? data.idHdr : null"
+               (click)="openModal((data.xhQdDchinhKhBdgHdr ? data.idHdr : null), 'QdPdDc')"
+               style="color: blue">{{ data.soQdDc }}
+            </a>
           </td>
           <td class="text-left">
-            <a *ngIf="data.soQdPdKqBdg && data.idQdPdKqBdg" nz-button nzType="link"
-               (click)="openModal(data.idQdPdKqBdg, 'KqBdg')">
-              {{ data.soQdPdKqBdg }}</a>
+            <a *ngIf="data.soQdPdKqBdg && data.idQdPdKqBdg" (click)="openModal(data.idQdPdKqBdg, 'KqBdg')"
+               style="color: blue">{{ data.soQdPdKqBdg }}
+            </a>
           </td>
           <td class="text-left">
-            <a *ngIf="data.soDxuat && data.idDxHdr" nz-button nzType="link" (click)="openModal(data.idDxHdr, 'DxBdg')">
-              {{ data.soDxuat }}</a>
-
+            <a *ngIf="data.soDxuat && data.idDxHdr" (click)="openModal(data.idDxHdr, 'DxBdg')"
+               style="color: blue">{{ data.soDxuat }}
+            </a>
           </td>
           <td class="text-left">{{ data.ngayKyQdPdKqBdg }}</td>
           <td class="text-center">{{ data.slDviTsan }}</td>

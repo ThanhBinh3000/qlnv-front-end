@@ -260,7 +260,7 @@
           <thead>
             <tr>
               <th></th>
-              <th style="width: 35px"></th>
+              <th style="width: 35px">STT</th>
               <th>Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
               <th>Loại/Chủng loại hàng DTQG</th>
               <th>SL giao<br />Cục thực hiện</th>
@@ -280,8 +280,9 @@
             <ng-container *ngFor="let item of tblData.data, let i = index;">
               <tr>
                 <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
-                  [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
-                <td>{{i + 1}}</td>
+                  [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"
+                  class="text-center"></td>
+                <td class="text-center">{{i + 1}}</td>
                 <td>{{ item.noiDungDx }}</td>
                 <td></td>
                 <td class="text-right bold">{{item.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
@@ -316,7 +317,7 @@
                       <td>
                         <ng-container *ngIf="userService.isCuc() && lv1.soLuongDx > lv1.soLuongGiao">
                           <a>
-                            <i class="fa fa-plus" (click)="themPhuongAn(lv1,1)"></i>
+                            <i class="fa fa-plus" title="Thêm" (click)="themPhuongAn(lv1,1)"></i>
                           </a>
                         </ng-container>
                       </td>
@@ -338,16 +339,16 @@
                         <td class="text-right bold">{{lv2.soLuong|number:globals.numberFormat:globals.locale}}</td>
                         <td>{{lv2.tenTrangThai}}</td>
                         <ng-container *ngIf="showAction()">
-                          <td>
+                          <td class="text-center">
                             <a *ngIf="userService.isCuc()">
-                              <i class="fa fa-pencil" (click)="themPhuongAn(lv2,2, true)"></i>
+                              <i class="fa fa-pencil" title="Sửa" (click)="themPhuongAn(lv2,2, true)"></i>
                             </a>
                             <a *ngIf="userService.isChiCuc() && lv2.soLuongGiao > lv2.soLuong">
-                              <i class="fa fa-plus" (click)="themPhuongAn(lv2,2)"></i>
+                              <i class="fa fa-plus" title="Thêm" (click)="themPhuongAn(lv2,2)"></i>
                             </a>
 
                             <a *ngIf="userService.isCuc()">
-                              <i class="fa fa-trash-o do" *ngIf="!isView" nz-popconfirm nz-button
+                              <i class="fa fa-trash-o do" title="Xóa bản ghi" *ngIf="!isView" nz-popconfirm nz-button
                                 nzPopconfirmTitle="Bạn có chắc muốn xóa ?" (nzOnConfirm)="xoaPhuongAn(lv2,lv1,2)"></i>
                             </a>
                           </td>
@@ -370,13 +371,13 @@
                             <td class="text-right">{{lv3.soLuong|number:globals.numberFormat:globals.locale}}</td>
                             <td></td>
                             <ng-container *ngIf="showAction()">
-                              <td>
+                              <td class="text-center">
                                 <ng-container *ngIf="userService.isChiCuc()">
                                   <a>
-                                    <i class="fa fa-pencil" (click)="themPhuongAn(lv3,3, true)"></i>
+                                    <i class="fa fa-pencil" title="Sửa" (click)="themPhuongAn(lv3,3, true)"></i>
                                   </a>
                                   <a>
-                                    <i class="fa fa-trash-o do" nz-popconfirm nz-button
+                                    <i class="fa fa-trash-o do" title="Thêm" nz-popconfirm nz-button
                                       nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
                                       (nzOnConfirm)="xoaPhuongAn(lv3,lv2,3)"></i>
                                   </a>
@@ -402,7 +403,7 @@
           <thead>
             <tr>
               <th></th>
-              <th style="width: 35px"></th>
+              <th style="width: 35px">STT</th>
               <th>Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
               <th>SL giao<br />Cục thực hiện</th>
               <th>Chi cục DTNN</th>
@@ -423,8 +424,9 @@
               <ng-container *ngFor="let item of tblData.data, let i = index;">
                 <tr>
                   <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
-                    [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
-                  <td>{{i + 1}}</td>
+                    [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"
+                    class="text-center"></td>
+                  <td class="text-center">{{i + 1}}</td>
                   <td>{{ item.noiDungDx }}</td>
                   <td class="text-right bold">{{item.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
                   <td></td>
@@ -438,9 +440,9 @@
                   <td></td>
                   <td></td>
                   <ng-container *ngIf="showAction()">
-                    <td>
+                    <td class="text-center">
                       <a *ngIf="userService.isCuc()">
-                        <i class="fa fa-plus" (click)="themPaXuatCapThoc(item, 1)"></i>
+                        <i class="fa fa-plus" title="Thêm" (click)="themPaXuatCapThoc(item, 1)"></i>
                       </a>
                     </td>
                   </ng-container>
@@ -463,17 +465,17 @@
                       </td>
                       <td class="text-right bold">{{lv1.slThocDeXayXat|number:globals.numberFormat:globals.locale}}</td>
                       <ng-container *ngIf="showAction()">
-                        <td>
+                        <td class="text-center">
                           <a *ngIf="userService.isCuc()">
-                            <i class="fa fa-pencil" (click)="suaPaXuatCapThoc(lv1)"></i>
+                            <i class="fa fa-pencil" title="Sửa" (click)="suaPaXuatCapThoc(lv1)"></i>
                           </a>
                           <a
                             *ngIf="userService.isChiCuc() && (!lv1.slGaoThuHoiSauXayXat || lv1.soLuongGiao > lv1.slGaoThuHoiSauXayXat)">
-                            <i class="fa fa-plus" (click)="themPaXuatCapThoc(lv1, 2)"></i>
+                            <i class="fa fa-plus" title="Thêm" (click)="themPaXuatCapThoc(lv1, 2)"></i>
                           </a>
 
                           <a *ngIf="userService.isCuc()">
-                            <i class="fa fa-trash-o do" *ngIf="!isView" nz-popconfirm nz-button
+                            <i class="fa fa-trash-o do" title="Xóa bản ghi" *ngIf="!isView" nz-popconfirm nz-button
                               nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
                               (nzOnConfirm)="xoaPaXuatCapThoc(lv1,item, 2)"></i>
                           </a>
@@ -498,13 +500,13 @@
                           </td>
                           <td class="text-right">{{lv2.slThocDeXayXat|number:globals.numberFormat:globals.locale}}</td>
                           <ng-container *ngIf="showAction()">
-                            <td>
+                            <td class="text-center">
                               <ng-container *ngIf="userService.isChiCuc()">
                                 <a>
-                                  <i class="fa fa-pencil" (click)="suaPaXuatCapThoc(lv2, 3)"></i>
+                                  <i class="fa fa-pencil" title="Sửa" (click)="suaPaXuatCapThoc(lv2, 3)"></i>
                                 </a>
                                 <a>
-                                  <i class="fa fa-trash-o do" nz-popconfirm nz-button
+                                  <i class="fa fa-trash-o do" title="Xóa bản ghi" nz-popconfirm nz-button
                                     nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
                                     (nzOnConfirm)="xoaPaXuatCapThoc(lv2, lv1, 3)"></i>
                                 </a>
@@ -523,8 +525,9 @@
               <ng-container *ngFor="let item of tblData.data, let i = index;">
                 <tr>
                   <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
-                    [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
-                  <td>{{i + 1}}</td>
+                    [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"
+                    class="text-center"></td>
+                  <td class="text-center">{{i + 1}}</td>
                   <td class="bold">{{ item.noiDungDx }}</td>
                   <td class="text-right bold">{{item.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
                   <td></td>
@@ -536,9 +539,9 @@
                   <td></td>
                   <td></td>
                   <ng-container *ngIf="showAction()">
-                    <td>
+                    <td class="text-center">
                       <a *ngIf="userService.isCuc()">
-                        <i class="fa fa-plus" (click)="themPaXuatCapThoc(item)"></i>
+                        <i class="fa fa-plus" title="Thêm" (click)="themPaXuatCapThoc(item)"></i>
                       </a>
                     </td>
                   </ng-container>
@@ -560,17 +563,17 @@
                       </td>
                       <td class="text-right">{{lv1.slThocDeXayXat|number:globals.numberFormat:globals.locale}}</td>
                       <ng-container *ngIf="showAction()">
-                        <td>
+                        <td class="text-center">
                           <a *ngIf="userService.isCuc()">
-                            <i class="fa fa-pencil" (click)="suaPaXuatCapThoc(lv1)"></i>
+                            <i class="fa fa-pencil" title="Sửa" (click)="suaPaXuatCapThoc(lv1)"></i>
                           </a>
                           <a
                             *ngIf="userService.isChiCuc() && (!lv1.slThocDeXayXat || lv1.soLuongGiao > lv1.slThocDeXayXat)">
-                            <i class="fa fa-plus" (click)="themPaXuatCapThoc(lv1, 2)"></i>
+                            <i class="fa fa-plus" title="Thêm" (click)="themPaXuatCapThoc(lv1, 2)"></i>
                           </a>
 
                           <a *ngIf="userService.isCuc()">
-                            <i class="fa fa-trash-o do" *ngIf="!isView" nz-popconfirm nz-button
+                            <i class="fa fa-trash-o do" title="Xóa bản ghi" *ngIf="!isView" nz-popconfirm nz-button
                               nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
                               (nzOnConfirm)="xoaPaXuatCapThoc(lv1,item, 2)"></i>
                           </a>
@@ -598,10 +601,10 @@
                             <td>
                               <ng-container *ngIf="userService.isChiCuc()">
                                 <a>
-                                  <i class="fa fa-pencil" (click)="suaPaXuatCapThoc(lv2, 3)"></i>
+                                  <i class="fa fa-pencil" title="Sửa" (click)="suaPaXuatCapThoc(lv2, 3)"></i>
                                 </a>
                                 <a>
-                                  <i class="fa fa-trash-o do" nz-popconfirm nz-button
+                                  <i class="fa fa-trash-o do" title="Xóa bản ghi" nz-popconfirm nz-button
                                     nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
                                     (nzOnConfirm)="xoaPaXuatCapThoc(lv2, lv1, 3)"></i>
                                 </a>

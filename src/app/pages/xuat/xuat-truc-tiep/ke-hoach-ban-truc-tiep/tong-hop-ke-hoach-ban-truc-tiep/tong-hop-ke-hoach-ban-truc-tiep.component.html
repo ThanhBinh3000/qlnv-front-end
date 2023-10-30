@@ -167,12 +167,13 @@
           <td class="text-left">{{ data.namKh }}</td>
           <td class="text-center">{{ data.id }}</td>
           <td class="text-left">{{ data.ngayThop | date: 'dd/MM/YYYY' }}</td>
-          <td class="text-left"
-              style="max-width: 300px; min-width: 250px;  white-space: break-spaces;">{{ data.noiDungThop }}</td>
+          <td class="text-left" style="max-width: 300px; min-width: 250px;  white-space: break-spaces;">
+            {{ data.noiDungThop }}
+          </td>
           <td class="text-left">
-            <a *ngIf="data.soQdPd && data.idSoQdPd" nz-button nzType="link"
-               (click)="openModalQdPd(data.idSoQdPd)">{{
-              data.soQdPd}}</a>
+            <a *ngIf="data.soQdPd && data.idSoQdPd" (click)="openModalQdPd(data.idSoQdPd)"
+               style="color: blue">{{data.soQdPd}}
+            </a>
           </td>
           <td class="text-left" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">{{ data.tenLoaiVthh }}</td>
           <td class="text-left">{{ data.tenCloaiVthh }}</td>

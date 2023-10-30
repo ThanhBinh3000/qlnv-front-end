@@ -171,28 +171,31 @@
         <tr *ngFor="let data of basicTable.data; let i = index">
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td class="text-left">
-            <a *ngIf="data.soQdPd && data.xhQdDchinhKhBttHdr ? data.xhQdDchinhKhBttHdr.idQdPd : data.idHdr" nz-button
-               nzType="link"
-               (click)="openModal((data.xhQdDchinhKhBttHdr ? data.xhQdDchinhKhBttHdr.idQdPd : data.idHdr), 'QdKh')">
-              {{ data.soQdPd }}</a>
+            <a *ngIf="data.soQdPd && data.xhQdDchinhKhBttHdr ? data.xhQdDchinhKhBttHdr.idQdPd : data.idHdr"
+               (click)="openModal((data.xhQdDchinhKhBttHdr ? data.xhQdDchinhKhBttHdr.idQdPd : data.idHdr), 'QdKh')"
+               style="color: blue">{{ data.soQdPd }}
+            </a>
           </td>
           <td class="text-left">
-            <a *ngIf="data.soDxuat && data.idDxHdr" nz-button nzType="link" (click)="openModal(data.idDxHdr, 'DxKh')">
-              {{ data.soDxuat }}</a>
+            <a *ngIf="data.soDxuat && data.idDxHdr" (click)="openModal(data.idDxHdr, 'DxKh')"
+               style="color: blue">{{ data.soDxuat }}
+            </a>
           </td>
           <td class="text-left">{{ data.namKh }}</td>
           <td class="text-left">{{ data.ngayPduyet|date: 'dd/MM/YYYY' }}</td>
           <td class="text-left">{{ data.ngayNhanCgia|date: 'dd/MM/YYYY'}}</td>
-          <td class="text-left"
-              style="max-width: 300px; min-width: 250px;  white-space: break-spaces;">{{data.trichYeu}}</td>
+          <td class="text-left" style="max-width: 300px; min-width: 250px;  white-space: break-spaces;">
+            {{data.trichYeu}}
+          </td>
           <td class="text-left">{{ data.tenLoaiVthh}}</td>
           <td class="text-left">{{ data.tenCloaiVthh}}</td>
           <td class="text-right">{{ data.tongSoLuong|number:globals.numberFormat:globals.locale}}</td>
           <td class="text-left">
             {{{'02': 'Ủy quyền', '03': 'Bán lẻ'}[data.pthucBanTrucTiep] || null}}
           </td>
-          <td
-            class="text-left">{{ data.xhQdDchinhKhBttHdr ? data.xhQdDchinhKhBttHdr?.tenTrangThai : data.xhQdPdKhBttHdr?.tenTrangThai}}</td>
+          <td class="text-left">
+            {{ data.xhQdDchinhKhBttHdr ? data.xhQdDchinhKhBttHdr?.tenTrangThai : data.xhQdPdKhBttHdr?.tenTrangThai}}
+          </td>
           <td class="text-center">
             <a (click)="redirectDetail(data.id,true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>

@@ -589,18 +589,18 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         let dataChiCuc = [];
         if (dataRes.data.noiDungCuuTro) {
           dataRes.data.noiDungCuuTro.forEach(s => {
-            s.maDiemKho = s.maDvi.substring(0, 10);
-            s.maNhaKho = s.maDvi.substring(0, 12);
-            s.maNganKho = s.maDvi.substring(0, 14);
-            s.maLoKho = s.maDvi.substring(0, 16);
+            s.maDiemKho = s.maDvi.length >= 10 ? s.maDvi.substring(0, 10) : null;
+            s.maNhaKho = s.maDvi.length >= 12 ? s.maDvi.substring(0, 12) : null;
+            s.maNganKho = s.maDvi.length >= 14 ? s.maDvi.substring(0, 14) : null;
+            s.maLoKho = s.maDvi.length >= 16 ? s.maDvi.substring(0, 16) : null;
           });
           dataChiCuc = dataRes.data.noiDungCuuTro.filter(item => item.maDvi && item.maDvi.slice(0, 8) == this.userInfo.MA_DVI);
         } else if (dataRes.data.dataDtl) {
           dataRes.data.dataDtl.forEach(s => {
-            s.maDiemKho = s.maDvi.substring(0, 10);
-            s.maNhaKho = s.maDvi.substring(0, 12);
-            s.maNganKho = s.maDvi.substring(0, 14);
-            s.maLoKho = s.maDvi.substring(0, 16);
+            s.maDiemKho = s.maDvi.length >= 10 ? s.maDvi.substring(0, 10) : null;
+            s.maNhaKho = s.maDvi.length >= 12 ? s.maDvi.substring(0, 12) : null;
+            s.maNganKho = s.maDvi.length >= 14 ? s.maDvi.substring(0, 14) : null;
+            s.maLoKho = s.maDvi.length >= 16 ? s.maDvi.substring(0, 16) : null;
           });
           dataChiCuc = dataRes.data.dataDtl.filter(item => item.maDvi && item.maDvi.slice(0, 8) == this.userInfo.MA_DVI);
         }

@@ -1,19 +1,19 @@
 <nz-affix [nzOffsetTop]="98" class="level2">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected  (click)="selectTab(0)" *ngIf="checkRoleDxpag()">
+    <li nz-menu-item [nzSelected]="tabSelected == 0"  (click)="selectTab(0)" *ngIf="checkRoleDxpag()" >
       Đề xuất phương án giá
     </li>
-    <li nz-menu-item (click)="selectTab(1)"
+    <li nz-menu-item (click)="selectTab(1)" [nzSelected]="tabSelected == 1"
         *ngIf="((userService.isTongCuc() && loaiVthh == 'LT' && type == typeConst.GIA_MUA_TOI_DA && userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_TONGHOP'))
             || (userService.isTongCuc() && loaiVthh == 'LT' && type == typeConst.GIA_CU_THE && userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_TONGHOP'))
             )">
       Tổng hợp phương án giá
     </li>
-    <li nz-menu-item (click)="selectTab(2)" *ngIf="(type == typeConst.GIA_MUA_TOI_DA && loaiVthh == 'LT' && userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_QD'))
+    <li nz-menu-item [nzSelected]="tabSelected == 3" (click)="selectTab(2)" *ngIf="(type == typeConst.GIA_MUA_TOI_DA && loaiVthh == 'LT' && userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_QD'))
           || (userService.isTongCuc() && type == typeConst.GIA_MUA_TOI_DA && loaiVthh == 'VT' && userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_MTDBTT_QD'))" >
       Quyết định giá/điều chỉnh giá của BTC
     </li>
-    <li nz-menu-item (click)="selectTab(3)" *ngIf="(loaiVthh == 'LT'&& type == typeConst.GIA_CU_THE && userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_QDTC'))
+    <li nz-menu-item [nzSelected]="tabSelected == 4" (click)="selectTab(3)" *ngIf="(loaiVthh == 'LT'&& type == typeConst.GIA_CU_THE && userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_QDTC'))
 || (loaiVthh == 'VT'&& type == typeConst.GIA_CU_THE && userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_QDTC'))
 ">
       Quyết định giá/điều chỉnh giá của TCDTNN
@@ -21,10 +21,10 @@
   </ul>
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
-  <app-de-xuat-phuong-an-gia [type]="type" [pagType]="loaiVthh"></app-de-xuat-phuong-an-gia>
+  <app-de-xuat-phuong-an-gia [type]="type" [pagType]="loaiVthh" (redirectToTongHop)="chuyenTrangTc()"></app-de-xuat-phuong-an-gia>
 </ng-container>
 <ng-container *ngIf="tabSelected == 1">
-  <app-tong-hop-phuong-an-gia [type]="type" [pagType]="loaiVthh"></app-tong-hop-phuong-an-gia>
+  <app-tong-hop-phuong-an-gia [isChuyenTrang]="chuyenTrang" (chuyenTrangEmit)="backChuyenTrang()"  [type]="type" [pagType]="loaiVthh"></app-tong-hop-phuong-an-gia>
 </ng-container>
 <ng-container *ngIf="tabSelected == 2">
   <app-quyet-dinh-gia-btc [type]="type" [pagType]="loaiVthh"></app-quyet-dinh-gia-btc>

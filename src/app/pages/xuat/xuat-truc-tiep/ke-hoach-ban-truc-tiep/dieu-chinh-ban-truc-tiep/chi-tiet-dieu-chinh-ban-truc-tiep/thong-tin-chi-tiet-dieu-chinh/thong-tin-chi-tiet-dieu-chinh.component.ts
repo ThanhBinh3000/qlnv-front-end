@@ -25,6 +25,7 @@ export class ThongTinChiTietDieuChinhComponent implements OnChanges {
   @Input() dataInput;
   @Input() isView;
   @Input() isCache;
+  @Input() trangThaiDc;
   @Input() loaiVthhCache;
   @Output() countChanged: EventEmitter<any> = new EventEmitter();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
@@ -83,7 +84,7 @@ export class ThongTinChiTietDieuChinhComponent implements OnChanges {
 
   themMoiBangPhanLoTaiSan(data?: any, index?: number) {
     const modalGT = this.modal.create({
-      nzTitle: 'Thêm địa điểm giao nhận hàng',
+      nzTitle: '',
       nzContent: DialogThemMoiXuatBanTrucTiepComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -93,14 +94,14 @@ export class ThongTinChiTietDieuChinhComponent implements OnChanges {
         dataEdit: data,
         loaiVthh: this.dataInput.loaiVthh,
         cloaiVthh: this.dataInput.cloaiVthh,
-        typeLoaiVthh: this.loaiVthhCache
+        typeLoaiVthh: this.loaiVthhCache,
+        donViTinh: this.dataInput.donViTinh,
       },
     });
     modalGT.afterClose.subscribe(async (updatedData) => {
       if (updatedData && index >= 0) {
         this.dataTable[index] = updatedData;
         await this.calculatorTable();
-        await this.sendDataToParent();
       }
     });
   }
@@ -126,7 +127,7 @@ export class ThongTinChiTietDieuChinhComponent implements OnChanges {
     });
   }
 
-  calculatorTable() {
+  async calculatorTable() {
     this.dataTable.forEach(item => {
       item.tienChiCuc = 0;
       item.children.forEach(child => {
@@ -139,6 +140,7 @@ export class ThongTinChiTietDieuChinhComponent implements OnChanges {
       tongSoLuong: this.dataTable.reduce((acc, item) => acc + item.soLuongChiCuc, 0),
       thanhTien: this.dataTable.reduce((prev, cur) => prev + cur.tienChiCuc, 0),
     });
+    await this.sendDataToParent();
   }
 
   expandSet = new Set<number>();

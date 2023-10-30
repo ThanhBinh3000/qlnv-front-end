@@ -186,7 +186,7 @@
                 <td>{{i + 1}}</td>
                 <td>{{item.tenDvi}}</td>
                 <td>{{item.soDx}}</td>
-                <td>{{item.ngayKyDx|date:globals.dateFormat}}</td>
+                <td class="text-center">{{item.ngayKyDx|date:globals.dateFormat}}</td>
                 <td>{{item.mucDichXuat}}</td>
               </tr>
             </ng-container>
@@ -300,22 +300,25 @@
               <ng-container *ngIf="!isVthhVatuThietBi()">
                 <ng-container *ngFor="let item of tblData.data, let i = index;">
                   <tr>
-                    <td>{{i+1}}</td>
+                    <td class="text-center">{{i+1}}</td>
                     <td>{{item.noiDungDx}}</td>
-                    <td>{{item.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
+                    <td class="text-right">{{item.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
                     <ng-container *ngIf="isVthhGao()">
-                      <td>{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
-                      <td>{{item.soLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}</td>
+                      <td class="text-right">{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
+                      <td class="text-right">{{item.soLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}
+                      </td>
                     </ng-container>
                   </tr>
                 </ng-container>
                 <tr>
                   <td></td>
                   <td class="text-blue uppercase text-right">Tổng</td>
-                  <td class="text-blue">{{tongSoLuongDx|number:globals.numberFormat:globals.locale}}</td>
+                  <td class="text-blue text-right">{{tongSoLuongDx|number:globals.numberFormat:globals.locale}}</td>
                   <ng-container *ngIf="isVthhGao()">
-                    <td class="text-blue">{{tongSoLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
-                    <td class="text-blue">{{tongSoLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}</td>
+                    <td class="text-blue text-right">
+                      {{tongSoLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
+                    <td class="text-blue text-right">
+                      {{tongSoLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}</td>
                   </ng-container>
                 </tr>
               </ng-container>
@@ -344,8 +347,8 @@
                         <td class="bold">{{lv1.tenLoaiVthh}}</td>
                         <td></td>
                         <td class="bold">{{lv1.donViTinh}}</td>
-                        <td class="bold">{{lv1.tonKho|number:globals.numberFormat:globals.locale}}</td>
-                        <td class="bold">{{lv1.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
+                        <td class="bold text-right">{{lv1.tonKho|number:globals.numberFormat:globals.locale}}</td>
+                        <td class="bold text-right">{{lv1.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
                       </tr>
                       <ng-container *ngIf="expandSetString.has(item.idVirtual)">
                         <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
@@ -357,14 +360,15 @@
                             <ng-container *ngIf="lv2.tenCloaiVthh">
                               <td>{{lv2.tenCloaiVthh}}</td>
                               <td>{{lv2.donViTinh}}</td>
-                              <td>{{lv2.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</td>
+                              <td class="text-right">{{lv2.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}
+                              </td>
                             </ng-container>
                             <ng-container *ngIf="!lv2.tenCloaiVthh">
                               <td></td>
                               <td></td>
                               <td></td>
                             </ng-container>
-                            <td>{{lv2.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
+                            <td class="text-right">{{lv2.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
                           </tr>
                         </ng-container>
                       </ng-container>
