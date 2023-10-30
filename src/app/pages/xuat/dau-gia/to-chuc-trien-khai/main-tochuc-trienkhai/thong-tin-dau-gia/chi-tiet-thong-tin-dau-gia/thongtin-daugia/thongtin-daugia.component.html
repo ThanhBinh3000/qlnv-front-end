@@ -433,15 +433,15 @@
                     <div class="group-button">
                       <h3>Khách mời chứng kiến</h3>
                     </div>
-                    <nz-table nzBordered [nzData]="dataNguoiTgia" [nzFrontPagination]="false" [nzShowPagination]="false"
-                              class="nowrap pd-10">
+                    <nz-table [nzData]="dataNguoiTgia" class="nowrap pd-10" nzBordered [nzFrontPagination]="false"
+                              [nzShowPagination]="false">
                       <thead>
                       <tr>
-                        <th class="text-center" nzWidth="50px"> STT</th>
+                        <th nzWidth="50px" class="text-center wrap">STT</th>
                         <th class="text-left">Họ và tên</th>
                         <th class="text-left">Chức vụ</th>
                         <th class="text-left">Nơi công tác</th>
-                        <th class="text-center" nzWidth="70px" *ngIf="!isView">Hành động</th>
+                        <th nzWidth="100px" class="text-center wrap" *ngIf="!isView"> Hành động</th>
                       </tr>
                       <tr *ngIf="!isView">
                         <th></th>
@@ -494,15 +494,15 @@
                     <div class="group-button">
                       <h3>Đấu giá viên</h3>
                     </div>
-                    <nz-table nzBordered [nzData]="dataNguoiTgia" [nzFrontPagination]="false" [nzShowPagination]="false"
-                              class="nowrap pd-10">
+                    <nz-table [nzData]="dataNguoiTgia" class="nowrap pd-10" nzBordered [nzFrontPagination]="false"
+                              [nzShowPagination]="false">
                       <thead>
                       <tr>
-                        <th class="text-center" nzWidth="50px"> STT</th>
+                        <th nzWidth="50px" class="text-center wrap">STT</th>
                         <th class="text-left">Họ và tên</th>
                         <th class="text-left">Chức vụ</th>
                         <th class="text-left">Nơi công tác</th>
-                        <th class="text-center" nzWidth="70px" *ngIf="!isView">Hành động</th>
+                        <th nzWidth="100px" class="text-center wrap" *ngIf="!isView"> Hành động</th>
                       </tr>
                       <tr *ngIf="!isView">
                         <th></th>
@@ -555,15 +555,15 @@
                     <div class="group-button">
                       <h3>Tổ chức/ cá nhân tham giá đấu giá</h3>
                     </div>
-                    <nz-table nzBordered [nzData]="dataNguoiTgia" [nzFrontPagination]="false" [nzShowPagination]="false"
-                              class="nowrap pd-10">
+                    <nz-table [nzData]="dataNguoiTgia" class="nowrap pd-10" nzBordered [nzFrontPagination]="false"
+                              [nzShowPagination]="false">
                       <thead>
                       <tr>
-                        <th class="text-center" nzWidth="50px"> STT</th>
+                        <th nzWidth="50px" class="text-center wrap">STT</th>
                         <th class="text-left">Họ và tên/Tên tổ chức</th>
                         <th class="text-left">Mã số thuế/CMTND/CCCD/Hộ chiếu</th>
                         <th class="text-left">Địa chỉ</th>
-                        <th class="text-center" nzWidth="70px" *ngIf="!isView">Hành động</th>
+                        <th nzWidth="100px" class="text-center wrap" *ngIf="!isView"> Hành động</th>
                       </tr>
                       <tr *ngIf="!isView">
                         <th></th>
@@ -619,28 +619,29 @@
                   <nz-collapse-panel [nzHeader]="'SỐ LƯỢNG, ĐỊA ĐIỂM XUẤT BÁN (NƠI ĐANG BẢO QUẢN VÀ QUẢN LÝ TÀI SẢN)'"
                                      [nzActive]="true">
                     <br>
-                    <nz-table class="nowrap pd-10" [nzScroll]="{ x: '1400px' }" [nzFrontPagination]="false"
-                              [nzShowPagination]="false" [nzData]="dataTable" nzBordered>
+                    <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered [nzFrontPagination]="false"
+                              [nzShowPagination]="false">
                       <thead>
                       <tr>
                         <th nzWidth="50px" class="text-center wrap"></th>
-                        <th nzWidth="300px" class="text-left wrap"> Chi cục</th>
-                        <th nzWidth="150px" class="text-left wrap"> Điểm kho</th>
-                        <th nzWidth="300px" class="text-left wrap"> Lô kho</th>
-                        <th nzWidth="100px" class="text-center wrap"> Mã ĐVTS</th>
-                        <th nzWidth="120px" class="text-right wrap"> SL bán đấu giá</th>
-                        <th nzWidth="50px" class="text-left wrap"> ĐVT</th>
-                        <th nzWidth="120px" class="text-right wrap"> Đơn giá chưa VAT(đ)</th>
-                        <th nzWidth="120px" class="text-right wrap"> Giá khởi điểm (đ)</th>
-                        <th nzWidth="120px" class="text-right wrap"> Số tiền đặt trước (đ)</th>
-                        <th nzWidth="120px" class="text-center wrap"><span style='color: red;'>*</span> Số lần trả giá
+                        <th class="text-left"> Chi cục</th>
+                        <th class="text-left"> Điểm kho</th>
+                        <th class="text-left"> Lô kho</th>
+                        <th class="text-left"> Mã ĐVTS</th>
+                        <th class="text-center"> SL bán đấu giá</th>
+                        <th class="text-left"> ĐVT</th>
+                        <th class="text-center"> Đơn giá chưa VAT(đ)</th>
+                        <th class="text-center"> Giá khởi điểm (đ)</th>
+                        <th class="text-center"> Số tiền đặt trước (đ)</th>
+                        <th class="text-left">
+                          <span style='color: red;'>*</span> Số lần trả giá
                         </th>
-                        <th nzWidth="150px" class="text-right wrap"><span style='color: red;'>*</span> Đơn giá cao nhất
-                          (đ)
+                        <th class="text-center">
+                          <span style='color: red;'>*</span> Đơn giá cao nhất (đ)
                         </th>
-                        <th nzWidth="120px" class="text-right wrap"> Thành tiền (đ)</th>
-                        <th nzWidth="200px" class="text-left wrap"><span style='color: red;'>*</span> Tổ chức/cá nhân
-                          trúng đấu giá
+                        <th class="text-center"> Thành tiền (đ)</th>
+                        <th class="text-left">
+                          <span style='color: red;'>*</span> Tổ chức/cá nhân trúng đấu giá
                         </th>
                       </tr>
                       </thead>
@@ -653,12 +654,14 @@
                           <td></td>
                           <td></td>
                           <td
-                            class="text-right bold"> {{item.soLuongXuatBan|number:globals.numberFormat:globals.locale }}</td>
+                            class="text-right bold"> {{item.soLuongXuatBan|number:globals.numberFormat:globals.locale }}
+                          </td>
                           <td></td>
                           <td></td>
                           <td></td>
                           <td
-                            class="text-right bold"> {{item.tienDatTruoc|number:globals.numberFormat:globals.locale }}</td>
+                            class="text-right bold"> {{item.tienDatTruoc|number:globals.numberFormat:globals.locale }}
+                          </td>
                           <td></td>
                           <td></td>
                           <td></td>
@@ -668,35 +671,37 @@
                           <tr *ngFor="let children of item.children, let y = index">
                             <td></td>
                             <td></td>
-                            <td class="text-left"> {{children.tenDiemKho}} </td>
-                            <td
-                              class="text-left"> {{(children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") +
-                            (children.tenNhaKho ? children.tenNhaKho : "")}} </td>
-                            <td class="text-center"> {{children.maDviTsan}} </td>
-                            <td
-                              class="text-right"> {{children.soLuongDeXuat|number:globals.numberFormat:globals.locale }}</td>
-                            <td class="text-left"> {{children.donViTinh}} </td>
-                            <td
-                              class="text-right"> {{children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
-                            <td
-                              class="text-right"> {{children.donGiaDeXuat|number:globals.numberFormat:globals.locale }}</td>
-                            <td
-                              class="text-right"> {{children.soTienDatTruoc|number:globals.numberFormat:globals.locale }}</td>
-                            <td>
-                              <nz-input-number [nzDisabled]="isView || formData.value.ketQua == 0"
-                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
-                                               [(ngModel)]="children.soLanTraGia">
-                              </nz-input-number>
-                            </td>
-                            <td>
-                              <nz-input-number [nzDisabled]="isView || formData.value.ketQua == 0"
-                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
-                                               [(ngModel)]="children.donGiaTraGia">
-                              </nz-input-number>
-                            </td>
-                            <td
-                              class="text-right">{{ children.soLuongDeXuat * children.donGiaTraGia|number:globals.numberFormat:globals.locale }}</td>
+                            <td class="text-left">{{children.tenDiemKho}}</td>
                             <td class="text-left">
+                              {{(children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") + (children.tenNhaKho ? children.tenNhaKho : "")}}
+                            </td>
+                            <td class="text-left">{{children.maDviTsan}}</td>
+                            <td class="text-right">
+                              {{children.soLuongDeXuat|number:globals.numberFormat:globals.locale }}
+                            </td>
+                            <td class="text-left">{{children.donViTinh}}</td>
+                            <td class="text-right">
+                              {{children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}
+                            </td>
+                            <td class="text-right">
+                              {{children.donGiaDeXuat|number:globals.numberFormat:globals.locale }}
+                            </td>
+                            <td class="text-right">
+                              {{children.soTienDatTruoc|number:globals.numberFormat:globals.locale }}
+                            </td>
+                            <td class="text-left">
+                              <input nz-input type="number" [(ngModel)]="children.soLanTraGia"
+                                     [readonly]="isView || formData.value.ketQua == 0"/>
+                            </td>
+                            <td>
+                              <input class="money-input bold" currencyMask [options]="amount" [min]="0"
+                                     [(ngModel)]="children.donGiaTraGia"
+                                     [readonly]="isView || formData.value.ketQua == 0"/>
+                            </td>
+                            <td class="text-right">
+                              {{ children.soLuongDeXuat * children.donGiaTraGia|number:globals.numberFormat:globals.locale }}
+                            </td>
+                            <td class="text-left bold">
                               <nz-select [nzDisabled]="isView || formData.value.ketQua == 0"
                                          [(ngModel)]="children.toChucCaNhan" (ngModelChange)="changeNTG(i, y)">
                                 <nz-option *ngFor="let data of findTableName('NTG')?.dataChild"
@@ -713,20 +718,20 @@
                 </nz-collapse>
                 <nz-collapse nzAccordion *ngIf="formData.value.ketQua == 0">
                   <nz-collapse-panel [nzHeader]="'THÔNG TIN TÀI SẢN BÁN ĐẤU GIÁ'" [nzActive]="true">
-                    <nz-table class="nowrap pd-10" [nzScroll]="{ x: '1400px' }" [nzFrontPagination]="false"
-                              [nzShowPagination]="false" [nzData]="dataTable" nzBordered>
+                    <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered [nzFrontPagination]="false"
+                              [nzShowPagination]="false">
                       <thead>
                       <tr>
                         <th nzWidth="50px" class="text-center wrap"></th>
-                        <th nzWidth="300px" class="text-left wrap"> Chi cục</th>
-                        <th nzWidth="150px" class="text-left wrap"> Điểm kho</th>
-                        <th nzWidth="150px" class="text-left wrap"> Lô kho</th>
-                        <th nzWidth="100px" class="text-center wrap"> Mã đơn vị tài sản</th>
-                        <th nzWidth="120px" class="text-right wrap"> Số lượng</th>
-                        <th nzWidth="50px" class="text-left wrap"> Đơn vị tính</th>
-                        <th nzWidth="120px" class="text-left wrap"> Đơn giá chưa VAT (đồng)</th>
-                        <th nzWidth="120px" class="text-left wrap"> Giá khởi điểm (đồng)</th>
-                        <th nzWidth="120px" class="text-left wrap"> Số tiền đặt trước (đồng)</th>
+                        <th class="text-left"> Chi cục</th>
+                        <th class="text-left"> Điểm kho</th>
+                        <th class="text-left"> Lô kho</th>
+                        <th class="text-left"> Mã đơn vị tài sản</th>
+                        <th class="text-center"> Số lượng</th>
+                        <th class="text-left"> Đơn vị tính</th>
+                        <th class="text-center"> Đơn giá chưa VAT (đồng)</th>
+                        <th class="text-center"> Giá khởi điểm (đồng)</th>
+                        <th class="text-center"> Số tiền đặt trước (đồng)</th>
                       </tr>
                       </thead>
                       <tbody>
@@ -737,32 +742,38 @@
                           <td></td>
                           <td></td>
                           <td></td>
-                          <td
-                            class="text-right bold"> {{item.soLuongXuatBan|number:globals.numberFormat:globals.locale }} </td>
+                          <td class="text-right bold">
+                            {{item.soLuongXuatBan|number:globals.numberFormat:globals.locale }}
+                          </td>
                           <td></td>
                           <td></td>
                           <td></td>
-                          <td
-                            class="text-right bold"> {{item.tienDatTruoc|number:globals.numberFormat:globals.locale }} </td>
+                          <td class="text-right bold">
+                            {{item.tienDatTruoc|number:globals.numberFormat:globals.locale }}
+                          </td>
                         </tr>
                         <ng-container *ngIf="expandSet.has(i)">
                           <tr *ngFor="let children of item.children, let y = index">
                             <td></td>
                             <td></td>
-                            <td class="text-left"> {{children.tenDiemKho}} </td>
-                            <td
-                              class="text-left"> {{(children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") +
-                            (children.tenNhaKho ? children.tenNhaKho : "")}} </td>
-                            <td class="text-center"> {{children.maDviTsan}} </td>
-                            <td
-                              class="text-right"> {{children.soLuongDeXuat|number:globals.numberFormat:globals.locale }} </td>
-                            <td class="text-left"> {{children.donViTinh}} </td>
-                            <td
-                              class="text-right"> {{children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }} </td>
-                            <td
-                              class="text-right"> {{children.donGiaDeXuat|number:globals.numberFormat:globals.locale }} </td>
-                            <td
-                              class="text-right"> {{children.soTienDatTruoc|number:globals.numberFormat:globals.locale }} </td>
+                            <td class="text-left">{{children.tenDiemKho}} </td>
+                            <td class="text-left">
+                              {{(children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") + (children.tenNhaKho ? children.tenNhaKho : "")}}
+                            </td>
+                            <td class="text-left"> {{children.maDviTsan}} </td>
+                            <td class="text-right">
+                              {{children.soLuongDeXuat|number:globals.numberFormat:globals.locale }}
+                            </td>
+                            <td class="text-left">{{children.donViTinh}} </td>
+                            <td class="text-right">
+                              {{children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}
+                            </td>
+                            <td class="text-right">
+                              {{children.donGiaDeXuat|number:globals.numberFormat:globals.locale }}
+                            </td>
+                            <td class="text-right">
+                              {{children.soTienDatTruoc|number:globals.numberFormat:globals.locale }}
+                            </td>
                           </tr>
                         </ng-container>
                       </ng-container>
