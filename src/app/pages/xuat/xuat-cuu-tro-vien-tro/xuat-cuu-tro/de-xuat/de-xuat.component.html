@@ -222,7 +222,7 @@
             <td>{{ data.idThop }}</td>
             <!-- <td>{{ data.tenTrangThaiQd }}</td>
             <td>{{ data.soQdPd }}</td> -->
-            <td class="text-left" *ngIf="this.userService.isTongCuc()">
+            <td class="text-center" *ngIf="this.userService.isTongCuc()">
               <a (click)="redirectDetail(data.id, true)" *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM) &&
                 !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_THEM_VU')) &&
                 userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_XEM')">
@@ -241,7 +241,7 @@
                 <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
-            <td class="text-left" *ngIf="this.userService.isCuc()">
+            <td class="text-center" *ngIf="this.userService.isCuc()">
               <a (click)="redirectDetail(data.id, true)" *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM) &&
                 !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_THEM_CUC'))&&
                 !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_TP)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_DUYET_TP'))&&

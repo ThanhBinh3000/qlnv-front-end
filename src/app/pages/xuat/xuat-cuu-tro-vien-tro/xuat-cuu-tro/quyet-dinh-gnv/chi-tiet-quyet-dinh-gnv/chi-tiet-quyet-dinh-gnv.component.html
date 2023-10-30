@@ -339,7 +339,7 @@
                         <td class="text-right bold">{{lv2.soLuong|number:globals.numberFormat:globals.locale}}</td>
                         <td>{{lv2.tenTrangThai}}</td>
                         <ng-container *ngIf="showAction()">
-                          <td class="text-left">
+                          <td class="text-center">
                             <a *ngIf="userService.isCuc()">
                               <i class="fa fa-pencil" title="Sửa" (click)="themPhuongAn(lv2,2, true)"></i>
                             </a>
@@ -371,7 +371,7 @@
                             <td class="text-right">{{lv3.soLuong|number:globals.numberFormat:globals.locale}}</td>
                             <td></td>
                             <ng-container *ngIf="showAction()">
-                              <td class="text-left">
+                              <td class="text-center">
                                 <ng-container *ngIf="userService.isChiCuc()">
                                   <a>
                                     <i class="fa fa-pencil" title="Sửa" (click)="themPhuongAn(lv3,3, true)"></i>
@@ -440,7 +440,7 @@
                   <td></td>
                   <td></td>
                   <ng-container *ngIf="showAction()">
-                    <td class="text-left">
+                    <td class="text-center">
                       <a *ngIf="userService.isCuc()">
                         <i class="fa fa-plus" title="Thêm" (click)="themPaXuatCapThoc(item, 1)"></i>
                       </a>
@@ -465,7 +465,7 @@
                       </td>
                       <td class="text-right bold">{{lv1.slThocDeXayXat|number:globals.numberFormat:globals.locale}}</td>
                       <ng-container *ngIf="showAction()">
-                        <td class="text-left">
+                        <td class="text-center">
                           <a *ngIf="userService.isCuc()">
                             <i class="fa fa-pencil" title="Sửa" (click)="suaPaXuatCapThoc(lv1)"></i>
                           </a>
@@ -500,7 +500,7 @@
                           </td>
                           <td class="text-right">{{lv2.slThocDeXayXat|number:globals.numberFormat:globals.locale}}</td>
                           <ng-container *ngIf="showAction()">
-                            <td class="text-left">
+                            <td class="text-center">
                               <ng-container *ngIf="userService.isChiCuc()">
                                 <a>
                                   <i class="fa fa-pencil" title="Sửa" (click)="suaPaXuatCapThoc(lv2, 3)"></i>
@@ -539,7 +539,7 @@
                   <td></td>
                   <td></td>
                   <ng-container *ngIf="showAction()">
-                    <td class="text-left">
+                    <td class="text-center">
                       <a *ngIf="userService.isCuc()">
                         <i class="fa fa-plus" title="Thêm" (click)="themPaXuatCapThoc(item)"></i>
                       </a>
@@ -563,7 +563,7 @@
                       </td>
                       <td class="text-right">{{lv1.slThocDeXayXat|number:globals.numberFormat:globals.locale}}</td>
                       <ng-container *ngIf="showAction()">
-                        <td class="text-left">
+                        <td class="text-center">
                           <a *ngIf="userService.isCuc()">
                             <i class="fa fa-pencil" title="Sửa" (click)="suaPaXuatCapThoc(lv1)"></i>
                           </a>
