@@ -32,6 +32,7 @@ import {
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
+import dayjs from "dayjs";
 
 @Component({
   selector: "app-them-moi-qd-sc-btc",
@@ -72,7 +73,7 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
     this.formData = this.fb.group({
       id: [null],
       soQuyetDinh: [null, Validators.required],
-      namKeHoach: [null, Validators.required],
+      namKeHoach: [dayjs().get('year'), Validators.required],
       trichYeu: [null, Validators.required],
       ngayKy: [null, Validators.required],
       soQdGiaoNv: [null, Validators.required],
@@ -184,24 +185,6 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
     }
   }
 
-  xoaItem(index: number) {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: "Xác nhận",
-      nzContent: "Bạn có chắc chắn muốn xóa?",
-      nzOkText: "Đồng ý",
-      nzCancelText: "Không",
-      nzOkDanger: true,
-      nzWidth: 400,
-      nzOnOk: async () => {
-        try {
-          this.dataTable.splice(index, 1);
-        } catch (e) {
-          console.log("error", e);
-        }
-      }
-    });
-  }
 
   chonMaTongHop() {
     this.khScQdGiaoNvService.getListTaoBtcTcdt({trangThai : STATUS.BAN_HANH}).then((res)=>{
@@ -232,12 +215,15 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
                   idQdGiaoNv : res.id
                 })
                 qdGiaoNv.data.children.forEach( item => {
-                  let body = item.ktKhDxSuaChuaLonCtiet;
-                  body.idDxSc = body.id;
-                  body.ghiChu = item.ghiChu;
-                  body.duToanBtcDuyet = item.duToanBtcDuyet;
-                  body.keHoachVon = item.duToanBtcDuyet;
-                  this.dataTable.push(body);
+                  console.log(item);
+                  if(item.phanLoai == 'TREN15TY'){
+                    let body = item.ktKhDxSuaChuaLonCtiet;
+                    body.idDxSc = body.id;
+                    body.ghiChu = item.ghiChu;
+                    body.duToanBtcDuyet = item.duToanBtcDuyet;
+                    body.keHoachVon = item.duToanBtcDuyet;
+                    this.dataTable.push(body);
+                  }
                 })
                 console.log(this.dataTable);
                 this.spinner.hide();

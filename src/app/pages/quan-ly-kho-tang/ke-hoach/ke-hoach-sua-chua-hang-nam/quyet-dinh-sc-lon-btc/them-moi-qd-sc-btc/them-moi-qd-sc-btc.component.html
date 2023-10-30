@@ -149,7 +149,7 @@
               <td>{{ data.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
               <td><nz-input-number [nzSize]="'small'"  [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                                    nz-input [(ngModel)]="data.keHoachVon" [nzMin]="1" ></nz-input-number>
-              <td><input nz-input [(ngModel)]="data.ghiChu" /></td>
+              <td>{{ data.ghiChu }}</td>
             </tr>
           </tbody>
         </nz-table>
