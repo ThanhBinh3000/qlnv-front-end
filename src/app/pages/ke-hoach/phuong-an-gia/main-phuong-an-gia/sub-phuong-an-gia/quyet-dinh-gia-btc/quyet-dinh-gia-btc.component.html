@@ -117,6 +117,7 @@
             <th class="text-center" >Trích yếu</th>
             <th class="text-center" nzWidth="150px" >Loại giá</th>
             <th class="text-center" nzWidth="150px" >Loại hàng DTQG</th>
+            <th class="text-center" nzWidth="150px">Số quyết định cần điều chỉnh</th>
             <th class="text-center" nzWidth="120px" >Trạng thái</th>
             <th class="text-center" nzWidth="100px" >Hành động</th>
           </tr>
@@ -151,7 +152,12 @@
                   (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
               </nz-input-group>
             </th>
-
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiGia"
+                       (input)="filterInTable('tenLoaiGia',filterTable.tenLoaiGia)" size="small" />
+              </nz-input-group>
+            </th>
             <th>
               <nz-input-group >
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
@@ -160,8 +166,8 @@
             </th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiGia"
-                  (input)="filterInTable('tenLoaiGia',filterTable.tenLoaiGia)" size="small" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdDc"
+                       (input)="filterInTable('tenLoaiGia',filterTable.tenLoaiGia)" size="small" />
               </nz-input-group>
             </th>
             <th>
@@ -188,6 +194,7 @@
             <td>{{ data.trichYeu }}</td>
             <td>{{ data.tenLoaiGia }}</td>
             <td>{{ data.tenLoaiVthh }}</td>
+            <td>{{ data.soQdDc }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td>
               <a (click)="viewDetail(data.id, true,data.trangThai)"

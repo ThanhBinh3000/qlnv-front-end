@@ -105,6 +105,7 @@
           <th class="text-center" style="width: 8%;">Loại giá</th>
           <th class="text-center" style="width: 10%;">Loại hàng DTQG</th>
           <th class="text-center" style="width: 10%;">Chủng loại hàng DTQG</th>
+          <th class="text-center" style="width: 8%;">Số quyết định cần điều chỉnh</th>
           <th class="text-center" style="width: 9%;">Trạng thái</th>
           <th class="text-center" width="width: 5%;">Hành động</th>
         </tr>
@@ -163,6 +164,12 @@
           </th>
           <th>
             <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdDc"
+                     (input)="filterInTable('soQdDc',filterTable.soQdDc)" size="small"/>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
               <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
                          (ngModelChange)="filterInTable('trangThai',filterTable.trangThai)">
                 <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
@@ -186,6 +193,7 @@
           <td>{{ data.tenLoaiGia }}</td>
           <td>{{ data.tenLoaiVthh }}</td>
           <td>{{ data.tenCloaiVthh }}</td>
+          <td>{{ data.soQdDc }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>
             <a (click)="viewDetail(data.id, true)" *ngIf="((this.pagType == 'LT' && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_QDTC_XEM'))

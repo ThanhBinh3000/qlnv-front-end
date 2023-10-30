@@ -46,13 +46,17 @@ export class ThongTinChungPag {
   giaDnVat?: number;
   giaQdBtc: number;
   giaQdBtcVat : number;
+  giaQdBtcCu: number;
+  giaQdBtcCuVat : number;
   giaQdDcBtc: number;
   giaQdDcBtcVat : number;
-  giaQdTcdt : number;
-  giaQdTcdtVat : number;
+  giaQdTcdtCu : number;
+  giaQdTcdtCuVat : number;
   giaQdDcTcdt : number;
   giaQdDcTcdtVat : number;
   vat : number;
+  soQdBtc: string;
+  soQdTcdt: string;
 }
 
 export class PhuongPhapXacDinhGia {
