@@ -214,8 +214,8 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     this.formData.patchValue({
       tenDvi: res.data.tenDvi,
       diaChi: res.data.diaChi,
-      soLuongKhDaDuyet: soLuongDaLenKh.data,
-      soLuongChiTieu: soLuongChiTieu,
+      soLuongKhDaDuyet: soLuongDaLenKh.data ? soLuongDaLenKh.data : this.formData.value.soLuongKhDaDuyet,
+      soLuongChiTieu: soLuongChiTieu ? soLuongChiTieu : this.formData.value.soLuongChiTieu,
     });
     if (isSlChiTieu) {
       await this.loadDsDiemKho(event);

@@ -438,7 +438,6 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   index = 0;
 
   async showDetail($event, index) {
-    await this.spinner.show();
     if ($event.type === 'click') {
       const selectedRow = $event.target.parentElement;
       const previouslySelectedRow = selectedRow.parentElement.querySelector('.selectedRow');
@@ -457,7 +456,6 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       const res = await this.deXuatKhBanTrucTiepService.getDetail(idDx);
       this.dataInputCache = res.data;
     }
-    await this.spinner.hide();
   }
 
   async receiveDataFromChild(data: any) {

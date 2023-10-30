@@ -198,8 +198,8 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
     }
   }
 
-  async showFirstRow($event, data: any) {
-    await this.showDetail($event, data);
+  async showFirstRow($event, idDxKh: number) {
+    await this.showDetail($event, idDxKh);
   }
 
   disabledNgayDuyetTu = (startValue: Date): boolean => {
@@ -247,13 +247,14 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
 
   async loadDsVthh() {
     const res = await this.danhMucService.loadDanhMucHangHoa().toPromise();
-    if (res.msg === MESSAGE.SUCCESS) {
-      const data = res.data.find(item => item.ma === this.loaiVthh);
-      this.listVatTuCha = data?.children || [];
-      if (this.formData.value.loaiVthh) {
-        const chungLoai = this.listVatTuCha.find(item => item.ma === this.formData.value.loaiVthh);
-        this.listVatTu = chungLoai?.children || [];
-      }
+    if (res.msg !== MESSAGE.SUCCESS || !res.data) {
+      return;
+    }
+    const data = res.data.find(item => item.ma === this.loaiVthh);
+    this.listVatTuCha = data?.children || [];
+    if (this.formData.value.loaiVthh) {
+      const chungLoai = this.listVatTuCha.find(item => item.ma === this.formData.value.loaiVthh);
+      this.listVatTu = chungLoai?.children || [];
     }
   }
 
@@ -270,26 +271,27 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
 
   async loadDsTenVthh() {
     const res = await this.danhMucService.loadDanhMucHangHoa().toPromise();
-    if (res.msg !== MESSAGE.SUCCESS) return;
+    if (res.msg !== MESSAGE.SUCCESS || !res.data) {
+      return;
+    }
     if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
-      const tenLoaiVthh = res.data
-        .flatMap(item => item.children || [])
-        .find(s => s.ma === this.loaiVthh)?.ten;
-      this.formTraCuu.patchValue({tenLoaiVthh});
+      this.formTraCuu.patchValue({
+        tenLoaiVthh: res.data.flatMap(item => item.children || []).find(s => s.ma === this.loaiVthh)?.ten
+      });
     } else if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.MUOI)) {
-      const tenLoaiVthh = res.data.find(s => s.ma === this.loaiVthh)?.ten;
-      this.formTraCuu.patchValue({tenLoaiVthh});
+      this.formTraCuu.patchValue({
+        tenLoaiVthh: res.data.find(s => s.ma === this.loaiVthh)?.ten
+      });
     }
   }
 
   setValidator() {
-    if (!this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
-      this.formTraCuu.controls["loaiVthh"].setValidators([Validators.required])
-      this.formTraCuu.controls["tenLoaiVthh"].setValidators([Validators.required])
-      this.formTraCuu.controls["cloaiVthh"].setValidators([Validators.required])
-      this.formTraCuu.controls["tenCloaiVthh"].setValidators([Validators.required])
+    this.formTraCuu.controls["loaiVthh"].setValidators([Validators.required]);
+    if (this.loaiVthh !== LOAI_HANG_DTQG.VAT_TU) {
+      this.formTraCuu.controls["tenLoaiVthh"].setValidators([Validators.required]);
+      this.formTraCuu.controls["cloaiVthh"].setValidators([Validators.required]);
+      this.formTraCuu.controls["tenCloaiVthh"].setValidators([Validators.required]);
     } else {
-      this.formTraCuu.controls["loaiVthh"].setValidators([Validators.required])
       this.formTraCuu.controls["tenLoaiVthh"].clearValidators();
       this.formTraCuu.controls["cloaiVthh"].clearValidators();
       this.formTraCuu.controls["tenCloaiVthh"].clearValidators();
@@ -317,17 +319,18 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
 
   idRowSelect: number;
 
-  async showDetail($event, id: number) {
-    await this.spinner.show();
-    if ($event.type == 'click') {
-      this.selected = false
-      $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
-      $event.target.parentElement.classList.add('selectedRow')
+  async showDetail($event, idDxKh: number) {
+    if ($event.type === 'click') {
+      this.selected = false;
+      const selectedRow = $event.target.parentElement.parentElement.querySelector('.selectedRow');
+      if (selectedRow) {
+        selectedRow.classList.remove('selectedRow');
+      }
+      $event.target.parentElement.classList.add('selectedRow');
     } else {
-      this.selected = true
+      this.selected = true;
     }
-    this.idRowSelect = id;
-    await this.spinner.hide();
+    this.idRowSelect = idDxKh;
   }
 
   async preview(id) {
@@ -362,7 +365,4 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
     printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 }
-
-
-
 
