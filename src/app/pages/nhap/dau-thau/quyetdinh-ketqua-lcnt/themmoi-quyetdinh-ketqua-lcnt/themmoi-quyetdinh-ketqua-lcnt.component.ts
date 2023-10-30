@@ -202,16 +202,16 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
       body.fileDinhKems = this.danhSachFileDinhKem;
       body.listCcPhapLy = this.danhSachFileCanCuPL;
       let detail = [];
-      // this.thongTinDauThau.listOfData.forEach(item => {
-      //   let dtl = {
-      //     idGoiThau: item.id,
-      //     idNhaThau: item.kqlcntDtl?.idNhaThau,
-      //     donGiaVat: item.kqlcntDtl?.donGiaVat,
-      //     trangThai: item.kqlcntDtl?.trangThai,
-      //     tenNhaThau: item.kqlcntDtl?.tenNhaThau
-      //   }
-      //   detail.push(dtl)
-      // })
+      this.thongTinDauThau.listOfData.forEach(item => {
+        let dtl = {
+          idGoiThau: item.id,
+          idNhaThau: item.kqlcntDtl?.idNhaThau,
+          donGiaVat: item.kqlcntDtl?.donGiaVat,
+          trangThai: item.kqlcntDtl?.trangThai,
+          tenNhaThau: item.kqlcntDtl?.tenNhaThau
+        }
+        detail.push(dtl)
+      })
       body.detailList = detail;
     }
 
