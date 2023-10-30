@@ -203,7 +203,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
 
   async saveAndSend(status: string, msg: string, msgSuccess?: string) {
     try {
-      if (this.dataTableDetailTqd.length <= 0) {
+      if (this.dataTableDetailTqd.length <= 0 || this.dataTableDetailKtqd.length <= 0) {
         this.notification.error(MESSAGE.ERROR, 'Bạn chưa nhập chi tiết định mức phí nhập xuất bảo quản.');
         return;
       }
