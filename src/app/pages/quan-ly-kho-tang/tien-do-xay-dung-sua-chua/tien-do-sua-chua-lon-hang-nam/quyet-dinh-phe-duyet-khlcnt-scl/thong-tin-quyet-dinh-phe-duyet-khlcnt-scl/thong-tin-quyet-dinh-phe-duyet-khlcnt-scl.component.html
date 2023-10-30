@@ -14,6 +14,12 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
+      <button type="button" class="btn btn-sub btn-xoa"
+              (click)="delete(this.formData.value)" *ngIf="idInput > 0 && formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU
+                && userService.isCuc && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKHLCNT_XOA')">
+        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+        <span>Xóa</span>
+      </button>
       <button class="btn btn-sub xanh-nhat ml-2" (click)="save(true)"
               *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKHLCNT_THEM') ">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
@@ -174,7 +180,7 @@
                 <nz-form-label [nzNoColon]="true" class="label-color-kh"> Phần công việc đã thực hiện (đ)
                 </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24">
-                  <span class="text-green" nzDisabled>{{formData.value.tienCvDaTh | number : '1.0-1' : 'vi-VN'}}}}</span>
+                  <span class="text-green" nzDisabled>{{formData.value.tienCvDaTh | number : '1.0-1' : 'vi-VN'}}</span>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -269,7 +275,7 @@
               <td>{{i + 1}} </td>
               <td>{{data.noiDung }}</td>
               <td>{{data.donViTh }}</td>
-              <td class="text-right">{{data.giaTri  | number}}</td>
+              <td class="text-right">{{data.giaTri  | number : '1.0-1' : 'vi_VN'}}</td>
               <td>{{data.vanBanPd }}</td>
               <td class="text-center">
                 <a *ngIf="!isViewDetail" (click)="editDataCongViecDaTh(i)">
@@ -312,7 +318,7 @@
             <td class="text-right font-weight-bold"></td>
             <td class="text-left font-weight-bold">Tổng giá trị</td>
             <td class="text-right font-weight-bold"></td>
-            <td class="text-right font-weight-bold">{{sumCT1('giaTri') | number}}</td>
+            <td class="text-right font-weight-bold">{{sumCT1('giaTri') | number : '1.0-1' : 'vi_VN'}}</td>
             <td class="text-right font-weight-bold"></td>
             <td class="text-right font-weight-bold"></td>
           </tr>
@@ -364,7 +370,7 @@
               <td>{{i + 1}} </td>
               <td>{{data.noiDung }}</td>
               <td>{{data.donViTh }}</td>
-              <td class="text-right">{{data.giaTri  | number}}</td>
+              <td class="text-right">{{data.giaTri  | number : '1.0-1' : 'vi_VN'}}</td>
               <td class="text-center">
                 <a *ngIf="!isViewDetail" (click)="editDataCongViecKad(i)">
                   <i class="fa fa-pencil" title="Sửa"></i>
@@ -403,7 +409,7 @@
             <td class="text-right font-weight-bold"></td>
             <td class="text-left font-weight-bold">Tổng giá trị</td>
             <td class="text-right font-weight-bold"></td>
-            <td class="text-right font-weight-bold">{{sumCT2('giaTri') | number}}</td>
+            <td class="text-right font-weight-bold">{{sumCT2('giaTri') | number : '1.0-1' : 'vi_VN'}}</td>
             <td class="text-right font-weight-bold"></td>
           </tr>
           </tfoot>
@@ -510,7 +516,7 @@
               *ngIf="(dataCongViecKhEdit && dataCongViecKhEdit[i] && !dataCongViecKhEdit[i].edit) ; else editTemplate ">
               <td>{{i + 1}} </td>
               <td>{{data.noiDung }}</td>
-              <td class="text-right">{{data.giaTri  | number}}</td>
+              <td class="text-right">{{data.giaTri  | number : '1.0-1' : 'vi_VN'}}</td>
               <td>{{data.tenNguonVon}}</td>
               <td>{{data.tenHinhThucLcnt}}</td>
               <td>{{data.tenPhuongThucLcnt}}</td>
@@ -608,7 +614,7 @@
           <tr>
             <td class="text-right font-weight-bold"></td>
             <td class="text-left font-weight-bold">Tổng giá trị</td>
-            <td class="text-right font-weight-bold">{{sumCT3('giaTri') | number}}</td>
+            <td class="text-right font-weight-bold">{{sumCT3('giaTri') | number : '1.0-1' : 'vi_VN'}}</td>
             <td class="text-right font-weight-bold"></td>
             <td class="text-right font-weight-bold"></td>
             <td class="text-right font-weight-bold"></td>

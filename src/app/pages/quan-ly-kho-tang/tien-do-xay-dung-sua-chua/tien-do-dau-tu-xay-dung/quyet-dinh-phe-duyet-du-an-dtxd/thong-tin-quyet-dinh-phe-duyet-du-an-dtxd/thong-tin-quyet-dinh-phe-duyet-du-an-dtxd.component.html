@@ -453,9 +453,9 @@
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
   </ng-container>
 </ng-template>
-<nz-modal [nzWidth]="'50%'" [(nzVisible)]="isVisiblePopTongMucDauTu" nzTitle="The first Modal"
-          (nzOnCancel)="handleCancel()"
-          (nzOnOk)="handleOk()" nzTitle="Thêm chi tiết tổng mức đầu tư.">
+<nz-modal [nzWidth]="'50%'" [(nzVisible)]="isVisiblePopTongMucDauTu"
+          (nzOnCancel)="handleCancel()" [nzFooter]="modalFooter" [nzClosable]="false"
+          (nzOnOk)="handleOk()" nzTitle="Chi tiết tổng mức đầu tư.">
   <ng-container *nzModalContent>
     <form nz-form nzLayout="vertical" [formGroup]="formDataDetail">
       <nz-card class="pd-2">
@@ -494,4 +494,8 @@
       </nz-card>
     </form>
   </ng-container>
+  <ng-template #modalFooter>
+    <button nz-button (click)="handleCancel()">Hủy</button>
+    <button nz-button class="btn btn-main" (click)="handleOk()">Đồng ý</button>
+  </ng-template>
 </nz-modal>
