@@ -31,6 +31,7 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
   @Input() dataInput;
   @Input() isView;
   @Input() isCache: boolean = false;
+  @Input() trangThaiQd;
   @Input() loaiVthhCache;
   @Output() countChanged: EventEmitter<any> = new EventEmitter();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
@@ -103,7 +104,7 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
 
   async themMoiBangPhanLoTaiSan(data?: any, index?: number) {
     const modalGT = this.modal.create({
-      nzTitle: 'Thêm địa điểm giao nhận hàng',
+      nzTitle: '',
       nzContent: DialogThemDiaDiemPhanLoComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -114,13 +115,13 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
         loaiVthh: this.dataInput.loaiVthh,
         cloaiVthh: this.dataInput.cloaiVthh,
         typeLoaiVthh: this.loaiVthhCache,
+        donViTinh: this.dataInput.donViTinh,
       },
     });
     modalGT.afterClose.subscribe(async (updatedData) => {
       if (updatedData && index >= 0) {
         this.dataTable[index] = updatedData;
         await this.calculatorTable();
-        await this.sendDataToParent();
       }
     });
   }
@@ -168,6 +169,7 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
       tongTienDatTruoc: this.dataTable.reduce((acc, item) => acc + item.tongTienDtruocDd, 0),
       tongSoLuong: this.dataTable.reduce((acc, item) => acc + item.tongSlXuatBanDx, 0),
     });
+    await this.sendDataToParent();
   }
 
   async onChangeThoiGian(event) {

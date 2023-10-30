@@ -216,8 +216,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     this.formData.patchValue({
       tenDvi: res.data.tenDvi,
       diaChi: res.data.diaChi,
-      tongSlKeHoachDd: soLuongDaLenKh.data,
-      slChiTieu: slChiTieu,
+      tongSlKeHoachDd: soLuongDaLenKh.data ? soLuongDaLenKh.data : this.formData.value.tongSlKeHoachDd,
+      slChiTieu: slChiTieu ? slChiTieu : this.formData.value.slChiTieu,
     });
     if (isSlChiTieu) {
       await this.loadDsDiemKho(event);
