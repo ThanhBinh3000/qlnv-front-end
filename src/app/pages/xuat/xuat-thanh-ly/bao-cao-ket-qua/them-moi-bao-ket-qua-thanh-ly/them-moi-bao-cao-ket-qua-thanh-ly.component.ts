@@ -54,9 +54,9 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base3Component implemen
       ngayBaoCao: [null],
       soQd: [null, [Validators.required]],
       idQd: [null, [Validators.required]],
-      ngayQd : [null,[Validators.required]],
+      ngayQd : [null],
       noiDung: [null, [Validators.required]],
-      lyDoTuChoi: [null, [Validators.required]],
+      lyDoTuChoi: [null],
     })
     this.symbol = '/' + this.userInfo.DON_VI.tenVietTat + '-KH&QLHDT';
 

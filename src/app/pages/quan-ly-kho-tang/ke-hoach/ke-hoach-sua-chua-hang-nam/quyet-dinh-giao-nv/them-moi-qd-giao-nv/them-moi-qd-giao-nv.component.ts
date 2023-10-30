@@ -21,6 +21,9 @@ import {
 } from "../../../../../../components/dialog/dialog-table-check-box/dialog-table-check-box.component";
 import {MESSAGE} from "../../../../../../constants/message";
 import dayjs from "dayjs";
+import {
+  KhScQdGiaoNvService
+} from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/khScQdGiaoNv.service";
 
 @Component({
   selector: 'app-them-moi-qd-giao-nv',
@@ -40,10 +43,10 @@ export class ThemMoiQdGiaoNvComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private qdScBtcService: KtKhSuaChuaBtcService,
+    private _service : KhScQdGiaoNvService,
     private tongHopDxScLon: TongHopDxScLonService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, qdScBtcService);
+    super(httpClient, storageService, notification, spinner, modal, _service);
     this.formData = this.fb.group({
       id : [],
       namKeHoach : [dayjs().get('year')],
@@ -58,25 +61,38 @@ export class ThemMoiQdGiaoNvComponent extends Base2Component implements OnInit {
   }
 
   ngOnInit(): void {
+    if(this.idInput){
+      this.detail(this.idInput).then((res)=>{
+        this.formData.patchValue({
+          soQdGiaoNv : res.soQdGiaoNv.split("/")[0]
+        })
+        this.dataTable = res.children;
+        this.dataTable.forEach(item => {
+          item.tenCongTrinh = item.ktKhDxSuaChuaLonCtiet.tenCongTrinh;
+          item.soQd = item.ktKhDxSuaChuaLonCtiet.soQd;
+          item.tieuChuan = item.ktKhDxSuaChuaLonCtiet.tieuChuan;
+          item.tgThucHien = item.ktKhDxSuaChuaLonCtiet.tgThucHien;
+          item.tgHoanThanh = item.ktKhDxSuaChuaLonCtiet.tgHoanThanh;
+          item.lyDo = item.ktKhDxSuaChuaLonCtiet.lyDo;
+          item.giaTriPd = item.ktKhDxSuaChuaLonCtiet.giaTriPd;
+          item.namKh = item.ktKhDxSuaChuaLonCtiet.namKh;
+        })
+      })
+    }
   }
 
   async save(isOther: boolean) {
-    this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      this.spinner.hide();
-      return;
-    }
     let body = this.formData.value;
+    body.soQdGiaoNv = this.formData.value.soQdGiaoNv + this.symbol;
     body.fileDinhKems = this.fileDinhKem;
     body.canCuPhapLys = this.canCuPhapLy;
     body.children = this.dataTable;
-    console.log(body)
-    // let data = await this.createUpdate(body);
-    // if (data) {
-    //   if (isOther) {
-    //     this.approve(data.id, this.STATUS.BAN_HANH, "Bạn có muốn ban hành?");
-    //   }
-    // }
+    let data = await this.createUpdate(body);
+    if (data) {
+      if (isOther) {
+        this.approve(data.id, this.STATUS.BAN_HANH, "Bạn có muốn ban hành?");
+      }
+    }
   }
 
   chonMaTongHop(){
@@ -108,8 +124,10 @@ export class ThemMoiQdGiaoNvComponent extends Base2Component implements OnInit {
                  await this.tongHopDxScLon.getDetail(item.id).then((dtlTh)=>{
                    listToTrinh.push(dtlTh.data.maToTrinh);
                    if(dtlTh.data){
-                     if(dtlTh.data.chiTiets){
-                       dtlTh.data.chiTiets.forEach( dtl => {
+                     if(dtlTh.data.chiTietDxs){
+                       dtlTh.data.chiTietDxs.forEach( dtl => {
+                         dtl.idDxSc = dtl.id
+                         dtl.idThSc = dtl.idTh
                          this.dataTable.push(dtl);
                         })
                       }
