@@ -108,7 +108,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-sub xanh" *ngIf="( type == typeConst.GIA_MUA_TOI_DA && pagType == 'LT'  && (userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_DEXUAT_THEM'))
+        <button type="button" class="btn btn-sub xanh" *ngIf="((this.pagType == 'LT' && userService.isCuc()) || (this.pagType == 'VT' && userService.isTongCuc()) ) && ( type == typeConst.GIA_MUA_TOI_DA && pagType == 'LT'  && (userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_DEXUAT_THEM'))
                 || ( type == typeConst.GIA_CU_THE && pagType == 'LT'  && userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_DEXUAT_THEM'))
                 || ( type == typeConst.GIA_MUA_TOI_DA && pagType == 'VT'  && userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_MTDBTT_DEXUAT_THEM'))
                 || ( type == typeConst.GIA_CU_THE && pagType == 'VT'  && userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_DEXUAT_THEM'))
@@ -116,6 +116,11 @@
                 (click)="viewDetail(0,false)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
+        </button>
+        <button type="button" class="btn btn-main" (click)="redirectToTongHopEmit()" *ngIf="(( this.type == this.typeConst.GIA_MUA_TOI_DA && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_TONGHOP_TONGHOP'))
+      || ( this.type == this.typeConst.GIA_CU_THE  && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_TONGHOP_TONGHOP'))) && userService.isTongCuc()">
+          <i class="icon htvbdh_dau-cong"></i>
+          <span>Tổng hợp</span>
         </button>
       </div>
     </div>
