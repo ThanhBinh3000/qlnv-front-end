@@ -39,6 +39,7 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
   rowItemCha: TienDoXayDungCt = new TienDoXayDungCt();
   itemHopDong : any;
   listThang: any[] = [];
+  fileDinhKems: any[]=[];
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
@@ -144,6 +145,7 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
         if (res.data) {
           const data = res.data;
           this.dataTableReq = cloneDeep(data);
+          this.fileDinhKems= Array.isArray(data.fileDinhKems)? cloneDeep(data.fileDinhKems): [];
           this.convertListToTree()
           this.expandAll();
         }
@@ -359,7 +361,8 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
           let itemGoiThau = this.listHopDong.filter(item => item.selected == true)
           let body = {
             idGoiThau: itemGoiThau[0]?.id,
-            listKtTdscTiendoCongviec: this.dataTableReq
+            listKtTdscTiendoCongviec: this.dataTableReq,
+            fileDinhKems: this.fileDinhKems
           };
           let res = await this.tienDoCongViecService.create(body);
           if (res.msg == MESSAGE.SUCCESS) {
