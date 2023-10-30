@@ -77,16 +77,16 @@
             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                    [nzIndeterminate]="indeterminate"></label>
           </th>
-          <th class="text-center" nzWidth="50px"> STT</th>
+          <th nzWidth="50px" class="text-center wrap"> STT</th>
           <th class="text-left">Năm KH</th>
           <th class="text-left">QĐ PD KHBTT</th>
           <th class="text-left">QĐ PD KQ chào giá</th>
           <th class="text-center">SL HĐ cần ký</th>
           <th class="text-center">SL HĐ đã ký</th>
           <th class="text-left">Thời hạn xuất kho</th>
-          <th class="text-left">Loại hàng DTQG</th>
+          <th class="text-left" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">Loại hàng DTQG</th>
           <th class="text-left">Chủng loại hàng DTQG</th>
-          <th class="text-right">Tổng giá trị hợp đồng</th>
+          <th class="text-center">Tổng giá trị hợp đồng</th>
           <th class="text-left">Trạng thái ký HĐ</th>
           <th class="text-left">Trạng thái XH</th>
           <th class="text-center">Hành động</th>
@@ -135,7 +135,7 @@
               </nz-date-picker>
             </nz-input-group>
           </th>
-          <th>
+          <th *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
                      (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small"/>
@@ -196,7 +196,7 @@
           <td class="text-center">{{ data.slHdChuaKy }}</td>
           <td class="text-center">{{ data.slHdDaKy }}</td>
           <td class="text-left">{{ data.ngayMkho|date: 'dd/MM/YYYY' }}</td>
-          <td class="text-left">{{ data.tenLoaiVthh }}</td>
+          <td class="text-left" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">{{ data.tenLoaiVthh }}</td>
           <td class="text-left">{{ data.tenCloaiVthh }}</td>
           <td class="text-right">{{ data.tongGiaTriHdong|number:globals.numberFormat:globals.locale}}</td>
           <td class="text-left">{{ data.tenTrangThaiHd }}</td>
