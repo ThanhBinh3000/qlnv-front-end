@@ -397,7 +397,7 @@
                         {{item.soLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}</td>
                     </ng-container>
                     <ng-container *ngIf="!isView">
-                      <td class="text-left">
+                      <td class="text-center">
                         <a>
                           <i class="fa fa-plus" title="Thêm" *ngIf="!isView" (click)="themPhuongAn(item,3)"></i>
                         </a>
@@ -430,7 +430,7 @@
                           </td>
                         </ng-container>
                         <ng-container *ngIf="!isView">
-                          <td class="text-left">
+                          <td class="text-center">
                             <a>
                               <i class="fa fa-pencil" title="Sửa" *ngIf="!isView" (click)="themPhuongAn(lv1,2)"></i>
                             </a>
@@ -460,7 +460,7 @@
                       </td>
                     </ng-container>
                     <ng-container *ngIf="!isView">
-                      <td class="text-left">
+                      <td class="text-center">
                         <a>
                           <i class="fa fa-pencil" title="Sửa" *ngIf="!isView" (click)="themPhuongAn(item,2)"></i>
                         </a>
@@ -525,7 +525,7 @@
                     <td></td>
                     <td></td>
                     <ng-container *ngIf="!isView">
-                      <td class="text-left">
+                      <td class="text-center">
                         <a>
                           <i class="fa fa-plus" title="Thêm" *ngIf="!isView" (click)="themPhuongAn(item,0)"></i>
                         </a>
@@ -551,7 +551,7 @@
                         <td class="text-right">{{lv1.tonKhoLoaiVthh |number:globals.numberFormat:globals.locale}}</td>
                         <td class="text-right">{{lv1.soLuong |number:globals.numberFormat:globals.locale}}</td>
                         <ng-container *ngIf="!isView">
-                          <td class="text-left">
+                          <td class="text-center">
                             <a>
                               <i class="fa fa-plus" title="Thêm" *ngIf="!isView" (click)="themPhuongAn(lv1,5)"></i>
                             </a>
@@ -608,7 +608,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td class="text-left">
+                    <td class="text-center">
                       <!-- <a>
                           <i class="fa fa-pencil" *ngIf="!isView" (click)="themPhuongAn(item,0)"></i> 
                         </a> -->
@@ -629,7 +629,7 @@
                         <td></td>
                         <td class="text-right">{{lv1.soLuong |number:globals.numberFormat:globals.locale}}</td>
                         <td></td>
-                        <td class="text-left">
+                        <td class="text-center">
                           <a>
                             <i class="fa fa-plus" title="Thêm" *ngIf="!isView" (click)="themPhuongAn(lv1,5)"></i>
                           </a>
@@ -649,7 +649,7 @@
                             <td>{{lv2.tenCloaiVthh}}</td>
                             <td class="text-rigth">{{lv2.soLuong |number:globals.numberFormat:globals.locale}}</td>
                             <td>{{lv2.donViTinh}}</td>
-                            <td class="text-left">
+                            <td class="text-center">
                               <a>
                                 <i class="fa fa-pencil" title="Sửa" *ngIf="!isView" (click)="themPhuongAn(lv2,2)"></i>
                               </a>

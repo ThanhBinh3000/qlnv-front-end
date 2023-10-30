@@ -116,7 +116,7 @@
             <nz-form-item>
               <nz-form-control [nzErrorTip]="error">
                 <nz-radio-group [nzDisabled]="formData.value.id" nzSize="small" class="rdo-input grid-4"
-                  nzName="radiogroup" formControlName="tenVthh" (ngModelChange)="changeVthh($event)">
+                  nzName="radiogroup" formControlName="tenVthh">
                   <nz-form-item>
                     <label nz-radio nzValue="Gạo tẻ">Gạo tẻ</label>
                   </nz-form-item>
@@ -270,9 +270,9 @@
                 <td>{{item.tenDvi}}</td>
                 <!--            <td><a nz-button nzType="link" (click)="openDxPaModal(item.idDx)"> {{item.soDx}}</a></td>-->
                 <td>{{item.soDx}}</td>
-                <td>{{item.ngayKyDx}}</td>
+                <td class="text-center">{{item.ngayKyDx | date: globals.dateFormat}}</td>
                 <td>{{item.trichYeuDx}}</td>
-                <td>{{item.soLuong|number:globals.numberFormat:globals.locale}}</td>
+                <td class="text-right">{{item.soLuong|number:globals.numberFormat:globals.locale}}</td>
               </tr>
             </ng-container>
           </tbody>
@@ -355,10 +355,13 @@
                           <th colspan="3">Chủng loại hàng DTQG</th>
                         </ng-container>
                         <th colspan="2">Cục DTNN KV</th>
-                        <th rowspan="2">SL xuất cứu trợ đề xuất</th>
                         <ng-container *ngIf="isVthhGao()">
                           <th rowspan="2">Nhu cầu cứu trợ</th>
-                          <th rowspan="2">SL gạo cần chuyển xuất cấp thóc</th>
+                        </ng-container>
+                        <th rowspan="2">SL xuất cứu trợ đề xuất</th>
+                        <ng-container *ngIf="isVthhGao()">
+                          <!-- <th rowspan="2">Nhu cầu cứu trợ</th> -->
+                          <th rowspan="2">SL gạo cần chuyển<br />xuất cấp thóc</th>
                         </ng-container>
                       </tr>
                       <tr>
@@ -377,17 +380,23 @@
                           <tr>
                             <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                               [nzExpand]="expandSetStringCache.has(item.idVirtual)" nzShowExpand="true"
-                              style="width: 35px">
+                              style="width: 35px" class="text-center">
                             </td>
-                            <td>{{i+1}}</td>
+                            <td class="text-center">{{i+1}}</td>
                             <td class="bold">{{item.noiDungDx}}</td>
                             <td></td>
                             <td></td>
-                            <td class="bold">{{item.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
                             <ng-container *ngIf="isVthhGao()">
-                              <td class="bold">{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}
+                              <td class="bold text-right">
+                                {{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}
                               </td>
-                              <td class="bold">{{item.soLuongXc|number:globals.numberFormat:globals.locale}}
+                            </ng-container>
+                            <td class="bold text-right">{{item.soLuongDx|number:globals.numberFormat:globals.locale}}
+                            </td>
+                            <ng-container *ngIf="isVthhGao()">
+                              <!-- <td class="bold">{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}
+                              </td> -->
+                              <td class="bold text-right">{{item.soLuongXc|number:globals.numberFormat:globals.locale}}
                               </td>
                             </ng-container>
                           </tr>
@@ -398,14 +407,20 @@
                                 <td></td>
                                 <td></td>
                                 <td>{{lv1.tenDvi}}</td>
-                                <td>{{lv1.tonKhoLoaiVthh ||
+                                <td class="text-right">{{lv1.tonKhoLoaiVthh ||
                                   lv1.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}
                                 </td>
-                                <td style="height: 31.5px">{{lv1.soLuongDx|number:globals.numberFormat:globals.locale}}
+                                <ng-container *ngIf="isVthhGao()">
+                                  <td class="text-right">
+                                    {{lv1.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
+                                </ng-container>
+                                <td style="height: 31.5px" class="text-right">
+                                  {{lv1.soLuongDx|number:globals.numberFormat:globals.locale}}
                                 </td>
                                 <ng-container *ngIf="isVthhGao()">
-                                  <td>{{lv1.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
-                                  <td>{{lv1.soLuongXc|number:globals.numberFormat:globals.locale}}</td>
+                                  <!-- <td>{{lv1.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td> -->
+                                  <td class="text-right">{{lv1.soLuongXc|number:globals.numberFormat:globals.locale}}
+                                  </td>
                                 </ng-container>
                               </tr>
                             </ng-container>
@@ -417,9 +432,9 @@
                           <tr>
                             <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                               [nzExpand]="expandSetStringCache.has(item.idVirtual)" nzShowExpand="true"
-                              style="width: 35px">
+                              style="width: 35px" class="text-center">
                             </td>
-                            <td>{{i + 1}}</td>
+                            <td class="text-center">{{i + 1}}</td>
                             <td>{{ item.noiDungDx }}</td>
                             <td></td>
                             <td></td>
@@ -438,11 +453,14 @@
                                 <td>{{lv1.tenLoaiVthh}}</td>
                                 <td></td>
                                 <td></td>
-                                <td><strong>{{lv1.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</strong>
+                                <td class="text-right">
+                                  <strong>{{lv1.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</strong>
                                 </td>
                                 <td></td>
                                 <td></td>
-                                <td><strong>{{lv1.soLuongDx|number:globals.numberFormat:globals.locale}}</strong></td>
+                                <td class="text-right">
+                                  <strong>{{lv1.soLuongDx|number:globals.numberFormat:globals.locale}}</strong>
+                                </td>
                               </tr>
                               <ng-container *ngIf="expandSetStringCache.has(item.idVirtual)">
                                 <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
@@ -453,11 +471,12 @@
                                     <td></td>
                                     <td>{{lv2.tenCloaiVthh}}</td>
                                     <td>{{lv2.donViTinh}}</td>
-                                    <td>{{lv2.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</td>
+                                    <td class="text-right">
+                                      {{lv2.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</td>
                                     <td>{{lv2.tenDvi}}</td>
-                                    <td>{{lv2.tonKhoLoaiVthh ||
+                                    <td class="text-right">{{lv2.tonKhoLoaiVthh ||
                                       lv2.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</td>
-                                    <td style="height: 31.5px">
+                                    <td style="height: 31.5px" class="text-right">
                                       {{lv2.soLuongDx|number:globals.numberFormat:globals.locale}}
                                     </td>
                                   </tr>
@@ -537,10 +556,13 @@
                         <th colspan="3">Chủng loại hàng DTQG</th>
                       </ng-container>
                       <th colspan="2">Cục DTNN KV</th>
-                      <th rowspan="2">SL xuất cứu trợ giao Cục thực hiện</th>
                       <ng-container *ngIf="isVthhGao()">
                         <th rowspan="2">Nhu cầu cứu trợ</th>
-                        <th rowspan="2">SL gạo cần chuyển xuất cấp thóc</th>
+                      </ng-container>
+                      <th rowspan="2">SL xuất cứu trợ giao Cục thực hiện</th>
+                      <ng-container *ngIf="isVthhGao()">
+                        <!-- <th rowspan="2">Nhu cầu cứu trợ</th> -->
+                        <th rowspan="2">SL gạo cần chuyển<br />xuất cấp thóc</th>
                       </ng-container>
                     </tr>
                     <tr>
@@ -558,17 +580,23 @@
                       <ng-container *ngFor="let item of tblPhuongAnView.data, let i = index;">
                         <tr>
                           <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
-                            [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px">
+                            [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"
+                            class="text-center">
                           </td>
-                          <td>{{i+1}}</td>
+                          <td class="text-center">{{i+1}}</td>
                           <td class="bold">{{item.noiDungDx}}</td>
                           <td></td>
                           <td></td>
-                          <td class="bold">{{item.soLuong|number:globals.numberFormat:globals.locale}}</td>
                           <ng-container *ngIf="isVthhGao()">
-                            <td class="bold">{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}
+                            <td class="bold text-right">
+                              {{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}
                             </td>
-                            <td class="bold">{{item.soLuongXc|number:globals.numberFormat:globals.locale}}
+                          </ng-container>
+                          <td class="bold text-right">{{item.soLuong|number:globals.numberFormat:globals.locale}}</td>
+                          <ng-container *ngIf="isVthhGao()">
+                            <!-- <td class="bold">{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}
+                            </td> -->
+                            <td class="bold text-right">{{item.soLuongXc|number:globals.numberFormat:globals.locale}}
                             </td>
                           </ng-container>
                         </tr>
@@ -579,15 +607,19 @@
                               <td></td>
                               <td></td>
                               <td>{{lv1.tenDvi}}</td>
-                              <td>{{lv1.tonKhoLoaiVthh ||
+                              <td class="text-right">{{lv1.tonKhoLoaiVthh ||
                                 lv1.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}
                               </td>
                               <!-- <td>{{lv1.soLuongDx|number:globals.numberFormat:globals.locale}}</td> -->
+                              <ng-container *ngIf="isVthhGao()">
+                                <td class="text-right">
+                                  {{lv1.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
+                              </ng-container>
                               <td><nz-input-number nzSize="small" (ngModelChange)="tinhXuatCap(lv1,$event, false, item)"
                                   [(ngModel)]="lv1.soLuong" [nzDisabled]="isView"></nz-input-number></td>
                               <ng-container *ngIf="isVthhGao()">
-                                <td>{{lv1.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
-                                <td>{{lv1.soLuongXc|number:globals.numberFormat:globals.locale}}</td>
+                                <!-- <td>{{lv1.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td> -->
+                                <td class="text-right">{{lv1.soLuongXc|number:globals.numberFormat:globals.locale}}</td>
                               </ng-container>
                             </tr>
                           </ng-container>
@@ -598,9 +630,10 @@
                       <ng-container *ngFor="let item of tblPhuongAnView.data, let i = index;">
                         <tr>
                           <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
-                            [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px">
+                            [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"
+                            class="text-center">
                           </td>
-                          <td>{{i + 1}}</td>
+                          <td class="text-center">{{i + 1}}</td>
                           <td>{{ item.noiDungDx }}</td>
                           <td></td>
                           <td></td>
@@ -619,11 +652,14 @@
                               <td>{{lv1.tenLoaiVthh}}</td>
                               <td></td>
                               <td></td>
-                              <td><strong>{{lv1.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</strong>
+                              <td class="text-right">
+                                <strong>{{lv1.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</strong>
                               </td>
                               <td></td>
                               <td></td>
-                              <td><strong>{{lv1.soLuong|number:globals.numberFormat:globals.locale}}</strong></td>
+                              <td class="text-right">
+                                <strong>{{lv1.soLuong|number:globals.numberFormat:globals.locale}}</strong>
+                              </td>
                             </tr>
                             <ng-container *ngIf="expandSetString.has(item.idVirtual)">
                               <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
@@ -634,13 +670,14 @@
                                   <td></td>
                                   <td>{{lv2.tenCloaiVthh}}</td>
                                   <td>{{lv2.donViTinh}}</td>
-                                  <td>{{lv2.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</td>
+                                  <td class="text-right">
+                                    {{lv2.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</td>
                                   <!--                              <td>-->
                                   <!--                                <nz-input-number nzSize="small" [(ngModel)]="lv2.soLuong"></nz-input-number>-->
                                   <!--                              </td>-->
                                   <!--                              <td></td>-->
                                   <td>{{lv2.tenDvi}}</td>
-                                  <td>{{lv2.tonKhoLoaiVthh ||
+                                  <td class="text-right">{{lv2.tonKhoLoaiVthh ||
                                     lv2.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}
                                   </td>
                                   <td>
@@ -767,10 +804,13 @@
                           <th>Chủng loại hàng DTQG</th>
                           <th>ĐVT</th>
                         </ng-container>
-                        <th>SL giao cứu trợ đề xuất</th>
                         <ng-container *ngIf="isVthhGao()">
                           <th>Nhu cầu cứu trợ</th>
-                          <th>SL gạo cần chuyển cấp thóc</th>
+                        </ng-container>
+                        <th>SL giao cứu trợ đề xuất</th>
+                        <ng-container *ngIf="isVthhGao()">
+                          <!-- <th>Nhu cầu cứu trợ</th> -->
+                          <th>SL gạo cần chuyển<br />xuất cấp thóc</th>
                         </ng-container>
                       </tr>
                     </thead>
@@ -778,13 +818,18 @@
                       <ng-container *ngIf="!isVthhVatuThietBi()">
                         <ng-container *ngFor="let item of tblPhuongAnViewCache.data, let i = index;">
                           <tr>
-                            <td>{{i+1}}</td>
+                            <td class="text-center">{{i+1}}</td>
                             <td>{{item.noiDungDx}}</td>
-                            <td style="height: 31.5px">{{item.soLuongDx|number:globals.numberFormat:globals.locale}}
+                            <ng-container *ngIf="isVthhGao()">
+                              <td class="text-right">
+                                {{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
+                            </ng-container>
+                            <td style="height: 31.5px" class="text-right">
+                              {{item.soLuongDx|number:globals.numberFormat:globals.locale}}
                             </td>
                             <ng-container *ngIf="isVthhGao()">
-                              <td>{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
-                              <td>{{item.soLuongXc|number:globals.numberFormat:globals.locale}}</td>
+                              <!-- <td>{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td> -->
+                              <td class="text-right">{{item.soLuongXc|number:globals.numberFormat:globals.locale}}</td>
                             </ng-container>
                           </tr>
                         </ng-container>
@@ -794,9 +839,9 @@
                           <tr>
                             <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                               [nzExpand]="expandSetStringCache.has(item.idVirtual)" nzShowExpand="true"
-                              style="width: 35px">
+                              style="width: 35px" class="text-center">
                             </td>
-                            <td>{{i + 1}}</td>
+                            <td class="text-center">{{i + 1}}</td>
                             <td>{{ item.noiDungDx }}</td>
                             <td></td>
                             <td></td>
@@ -812,7 +857,9 @@
                                 <td>{{lv1.tenLoaiVthh}}</td>
                                 <td></td>
                                 <td></td>
-                                <td><strong>{{lv1.soLuongDx|number:globals.numberFormat:globals.locale}}</strong></td>
+                                <td class="text-right">
+                                  <strong>{{lv1.soLuongDx|number:globals.numberFormat:globals.locale}}</strong>
+                                </td>
                               </tr>
                               <ng-container *ngIf="expandSetStringCache.has(item.idVirtual)">
                                 <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
@@ -823,7 +870,7 @@
                                     <td></td>
                                     <td>{{lv2.tenCloaiVthh}}</td>
                                     <td>{{lv2.donViTinh}}</td>
-                                    <td style="height: 31.5px">
+                                    <td style="height: 31.5px" class="text-right">
                                       {{lv2.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
                                     <!-- <td style="height: 31.5px">
                                       {{lv2.soLuong|number:globals.numberFormat:globals.locale}}
@@ -925,10 +972,13 @@
                         <th>Chủng loại hàng DTQG</th>
                         <th>ĐVT</th>
                       </ng-container>
-                      <th>SL phê duyệt giao Cục xuất cứu trợ</th>
                       <ng-container *ngIf="isVthhGao()">
                         <th>Nhu cầu cứu trợ</th>
-                        <th>SL gạo cần chuyển xuất cấp thóc</th>
+                      </ng-container>
+                      <th>SL phê duyệt giao<br />Cục xuất cứu trợ</th>
+                      <ng-container *ngIf="isVthhGao()">
+                        <!-- <th>Nhu cầu cứu trợ</th> -->
+                        <th>SL gạo cần chuyển<br>xuất cấp thóc</th>
                       </ng-container>
                     </tr>
                   </thead>
@@ -936,13 +986,17 @@
                     <ng-container *ngIf="!isVthhVatuThietBi()">
                       <ng-container *ngFor="let item of tblPhuongAnView.data, let i = index;">
                         <tr>
-                          <td>{{i+1}}</td>
+                          <td class="text-center">{{i+1}}</td>
                           <td>{{item.noiDungDx}}</td>
+                          <ng-container *ngIf="isVthhGao()">
+                            <td class="text-right">{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}
+                            </td>
+                          </ng-container>
                           <td><nz-input-number nzSize="small" (ngModelChange)="tinhXuatCap(item,$event, false, null)"
                               [(ngModel)]="item.soLuong" [nzDisabled]="isView"></nz-input-number></td>
                           <ng-container *ngIf="isVthhGao()">
-                            <td>{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
-                            <td>{{item.soLuongXc|number:globals.numberFormat:globals.locale}}</td>
+                            <!-- <td>{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td> -->
+                            <td class="text-right">{{item.soLuongXc|number:globals.numberFormat:globals.locale}}</td>
                           </ng-container>
                         </tr>
                       </ng-container>
@@ -951,9 +1005,10 @@
                       <ng-container *ngFor="let item of tblPhuongAnView.data, let i = index;">
                         <tr>
                           <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
-                            [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px">
+                            [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"
+                            class="text-center">
                           </td>
-                          <td>{{i + 1}}</td>
+                          <td class="text-center">{{i + 1}}</td>
                           <td>{{ item.noiDungDx }}</td>
                           <td></td>
                           <td></td>
@@ -969,7 +1024,9 @@
                               <td>{{lv1.tenLoaiVthh}}</td>
                               <td></td>
                               <td></td>
-                              <td><strong>{{lv1.soLuong|number:globals.numberFormat:globals.locale}}</strong></td>
+                              <td class="text-right">
+                                <strong>{{lv1.soLuong|number:globals.numberFormat:globals.locale}}</strong>
+                              </td>
                             </tr>
                             <ng-container *ngIf="expandSetString.has(item.idVirtual)">
                               <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">

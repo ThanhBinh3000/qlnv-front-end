@@ -197,7 +197,7 @@
             <!--          <td>{{ data.soLuongXuatCap |number:globals.numberFormat:globals.locale}}</td>-->
             <td>{{ data.trichYeu }}</td>
             <td>{{ data.tenTrangThai }}</td>
-            <td class="text-left">
+            <td class="text-center">
               <a *ngIf="(!userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_XEM'))
               || (userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_XEM') && (data.trangThai !== STATUS.DANG_NHAP_DU_LIEU))"
                 (click)="redirectDetail(data.id, true)">

@@ -159,7 +159,7 @@
             <td class="text-center">{{ data.ngayKiQuyetDinh | date: globals.dateFormat }}</td>
             <td>{{ data.noiDungThop }}</td>
             <td>{{ data.tenTrangThai }}</td>
-            <td class="text-left">
+            <td class="text-center">
               <a (click)="redirectDetail(data.id, true)" *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM) &&
                 !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_THPA_THEM'))&&
                 !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDV)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_THPA_DUYET'))&&

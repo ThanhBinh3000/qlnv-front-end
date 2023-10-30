@@ -337,7 +337,18 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent extends Base2Component implem
   }
 
   calculatorSl(){
-    const total = this.dataTable.reduce((acc, item) => acc + (item.slTonKhoThucTe - item.slTonKho), 0);
+    let total = 0;
+    if(this.formData.value.loaiHinhNx == this.loaiHinhNhapXuat.DOI_THUA){
+      total = this.dataTable.reduce((acc, item) => acc + item.slDoiThua, 0);
+    }
+    if(this.formData.value.loaiHinhNx == this.loaiHinhNhapXuat.NHAP_TANG_SO_LUONG_SAU_KK){
+      total = this.dataTable.reduce((acc, item) => acc + (item.slTonKhoThucTe - item.slTonKho), 0);
+    }
+    if(this.formData.value.loaiHinhNx == this.loaiHinhNhapXuat.NHAP_DO_BOI_THUONG
+      || this.formData.value.loaiHinhNx == this.loaiHinhNhapXuat.NHAP_DO_TAI_NHAP
+      || this.formData.value.loaiHinhNx == this.loaiHinhNhapXuat.NHAP_KHAC){
+      total = this.dataTable.reduce((acc, item) => acc + item.slNhap, 0);
+    }
     this.formData.get('tongSlNhap').setValue(total);
   }
 
