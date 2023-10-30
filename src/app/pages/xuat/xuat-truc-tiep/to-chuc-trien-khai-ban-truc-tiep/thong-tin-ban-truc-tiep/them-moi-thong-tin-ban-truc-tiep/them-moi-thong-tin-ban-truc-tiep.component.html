@@ -216,25 +216,28 @@
     </nz-collapse>
     <nz-collapse *ngIf="formData.value.pthucBanTrucTiep === TRUC_TIEP.CHAO_GIA">
       <nz-collapse-panel nzActive="true" nzHeader="CHI TIẾT THÔNG TIN CHÀO GIÁ">
-        <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered>
+        <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered [nzFrontPagination]="false"
+                  [nzShowPagination]="false">
           <thead>
           <tr>
-            <th class="text-center" nzWidth="50px"></th>
+            <th nzWidth="50px" class="text-center wrap"> STT</th>
             <th class="text-left"> Chi cục</th>
             <th class="text-left"> Điểm kho</th>
-            <th class="text-left"> Lô kho</th>
-            <th class="text-center"> Mã ĐVTS</th>
-            <th class="text-right"> SL xuất bán TT đề xuất</th>
+            <th class="text-left"> Ngăn/Lô kho</th>
+            <th class="text-left"> Mã ĐVTS</th>
+            <th class="text-center"> SL phê duyệt</th>
             <th class="text-left"> ĐVT</th>
-            <th class="text-right"> Đơn giá được duyệt(đ/kg)</th>
-            <th class="text-right"> Thành tiền (đ)</th>
+            <th class="text-center"> Đơn giá được <br>duyệt
+              {{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? '(đ)' : '(đ/kg)'}}
+            </th>
+            <th class="text-center"> Thành tiền <br>(đ)</th>
           </tr>
           </thead>
           <tbody>
           <ng-container *ngFor="let item of dataTable , let i = index">
             <tr>
               <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-              <td class="text-left" colspan="4">{{item.tenDvi}}</td>
+              <td class="text-left bold" colspan="4">{{item.tenDvi}}</td>
               <td class="text-right bold">{{item.soLuongChiCuc|number:globals.numberFormat:globals.locale}}</td>
               <td></td>
               <td></td>
@@ -242,14 +245,14 @@
             </tr>
             <ng-container *ngIf="expandSet.has(i)">
               <tr *ngFor="let children of item.children, let y = index"
-                  [ngClass]="{'bg-selected': y == 0 && this.selected}"
-                  (click)="selectRow($event,children)">
+                  [ngClass]="{'bg-selected': y == 0 && this.selected}" (click)="selectRow($event,children)">
                 <td></td>
                 <td></td>
                 <td class="text-left">{{ children.tenDiemKho}}</td>
-                <td
-                  class="text-left">{{ (children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") + (children.tenNhaKho ? children.tenNhaKho : "") }}</td>
-                <td class="text-center">{{ children.maDviTsan}}</td>
+                <td class="text-left">
+                  {{ (children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") + (children.tenNhaKho ? children.tenNhaKho : "") }}
+                </td>
+                <td class="text-left">{{ children.maDviTsan}}</td>
                 <td class="text-right">{{ children.soLuongDeXuat|number:globals.numberFormat:globals.locale}}</td>
                 <td class="text-left">{{ children.donViTinh}}</td>
                 <td class="text-right">{{ children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale}}</td>
@@ -259,47 +262,61 @@
           </ng-container>
           </tbody>
         </nz-table>
-        <nz-table nzBordered [nzData]="listOfData" [nzFrontPagination]="false" [nzShowPagination]="false"
-                  class="nowrap pd-10" *ngIf="showFromTT">
+        <h5>Danh sách các bảng chào giá</h5>
+        <nz-table [nzData]="listOfData" class="nowrap pd-10" nzBordered [nzFrontPagination]="false"
+                  [nzShowPagination]="false" *ngIf="showFromTT">
           <thead>
           <tr>
-            <th class="text-center" nzWidth="50px"></th>
+            <th nzWidth="50px" class="text-center wrap"> STT</th>
             <th class="text-left"> Tên cá nhân/tổ chức</th>
             <th class="text-left"> MST</th>
             <th class="text-left"> Địa chỉ</th>
             <th class="text-left"> Số điện thoại</th>
             <th class="text-left"> Ngày chào giá</th>
-            <th class="text-right"> Số lượng (Kg)</th>
-            <th class="text-right"> Đơn giá chưa bao gồm thuế (đ)</th>
-            <th class="text-right"> Thành tiền (đ)</th>
-            <th class="text-center"> File đính kèm</th>
+            <th class="text-center"> Số lượng
+              {{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? '' : '(kg)'}}
+            </th>
+            <th class="text-center"> Đơn giá không có VAT
+              {{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? '(đ)' : '(đ/kg)'}}
+            </th>
+            <th class="text-right"> Thành tiền không VAT (đ)</th>
+            <th class="text-left"> File đính kèm</th>
             <th class="text-center"> Lựa chọn</th>
-            <th class="text-center"> Hành động</th>
+            <th nzWidth="100px" class="text-center wrap"> Hành động</th>
           </tr>
           <tr *ngIf="!isView">
             <th class="text-center"></th>
-            <th><input nz-input [(ngModel)]="rowItem.tochucCanhan"/></th>
-            <th><input nz-input [(ngModel)]="rowItem.mst"/></th>
-            <th><input nz-input [(ngModel)]="rowItem.diaDiemChaoGia"/></th>
-            <th><input nz-input [(ngModel)]="rowItem.sdt"/></th>
-            <th>
+            <th class="text-left">
+              <input nz-input [(ngModel)]="rowItem.tochucCanhan"/>
+            </th>
+            <th class="text-left">
+              <input nz-input [(ngModel)]="rowItem.mst"/>
+            </th>
+            <th class="text-left">
+              <input nz-input [(ngModel)]="rowItem.diaDiemChaoGia"/>
+            </th>
+            <th class="text-left">
+              <input nz-input [(ngModel)]="rowItem.sdt"/>
+            </th>
+            <th class="text-left">
               <nz-input-group>
-                <nz-date-picker [(ngModel)]="rowItem.ngayChaoGia" nzFormat="dd/MM/yyyy">
+                <nz-date-picker
+                  [(ngModel)]="rowItem.ngayChaoGia" nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
               </nz-input-group>
             </th>
             <th>
-              <nz-input-number nz-input [nzSize]="'small'" [(ngModel)]="rowItem.soLuong"
-                               (ngModelChange)="onChangeThanhTien()"
-                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+              <input class="money-input" currencyMask [options]="amount" [min]="0"
+                     [(ngModel)]="rowItem.soLuong" (ngModelChange)="onChangeThanhTien()"/>
             </th>
             <th>
-              <nz-input-number nz-input [nzSize]="'small'" [(ngModel)]="rowItem.donGia"
-                               (ngModelChange)="onChangeThanhTien()"
-                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+              <input class="money-input" currencyMask [options]="amount" [min]="0"
+                     [(ngModel)]="rowItem.donGia" (ngModelChange)="onChangeThanhTien()"/>
             </th>
-            <th>{{ rowItem.thanhTien|number:globals.numberFormat:globals.locale}}</th>
-            <th>
+            <th class="text-right">
+              {{rowItem.thanhTien|number:globals.numberFormat:globals.locale}}
+            </th>
+            <th class="text-left">
               <nz-form-control>
                 <nz-input-group nzSize="large" [nzAddOnAfter]="suffixIcon">
                   <input placeholder="Chọn file" [(ngModel)]="rowItem.fileDinhKems.fileName"
@@ -311,9 +328,8 @@
                 </ng-template>
               </nz-form-control>
             </th>
-            <th>
-              <label nz-checkbox [(ngModel)]="rowItem.luaChon">
-              </label>
+            <th class="text-center">
+              <label nz-checkbox [(ngModel)]="rowItem.luaChon"></label>
             </th>
             <th class="text-center">
               <a (click)="addRow()" [class.disabled]="!rowItem">
@@ -327,8 +343,7 @@
           </thead>
           <tbody>
           <tr *ngFor="let data of listOfData; let idx = index">
-            <ng-container
-              *ngIf="(dataEdit && dataEdit[idx] && !dataEdit[idx].edit); else editTemplate ">
+            <ng-container *ngIf="(dataEdit && dataEdit[idx] && !dataEdit[idx].edit); else editTemplate ">
               <td class="text-center">{{idx + 1}}</td>
               <td class="text-left">{{ data.tochucCanhan }}</td>
               <td class="text-left">{{ data.mst }}</td>
@@ -338,9 +353,11 @@
               <td class="text-right">{{ data.soLuong|number:globals.numberFormat:globals.locale}}</td>
               <td class="text-right">{{ data.donGia|number:globals.numberFormat:globals.locale}}</td>
               <td class="text-right">{{ data.thanhTien|number:globals.numberFormat:globals.locale}}</td>
-              <td class="text-center">{{ data.fileDinhKems?.fileName }}</td>
-              <td class="text-center"><label nz-checkbox [(ngModel)]="data.luaChon"
-                                             [nzDisabled]="isDisabledLuaChon(true)"></label>
+              <td class="text-left">{{ data.fileDinhKems?.fileName }}</td>
+              <td class="text-center">
+                <label nz-checkbox
+                       [(ngModel)]="data.luaChon" [nzDisabled]="isDisabledLuaChon(true)">
+                </label>
               </td>
               <td class="text-center">
                 <a (click)="downloadFile(data.fileDinhKems)">
@@ -360,39 +377,37 @@
             </ng-container>
             <ng-template #editTemplate>
               <td class="text-center">{{idx + 1}} </td>
-              <td>
+              <td class="text-left">
                 <input type="text" [(ngModel)]="dataEdit[idx].data.tochucCanhan" nz-input/>
               </td>
-              <td>
+              <td class="text-left">
                 <input type="text" [(ngModel)]="dataEdit[idx].data.mst" nz-input/>
               </td>
-              <td>
+              <td class="text-left">
                 <input type="text" [(ngModel)]="dataEdit[idx].data.diaDiemChaoGia" nz-input/>
               </td>
-              <td>
+              <td class="text-left">
                 <input type="text" [(ngModel)]="dataEdit[idx].data.sdt" nz-input/>
               </td>
-              <td>
+              <td class="text-left">
                 <nz-input-group>
-                  <nz-date-picker [(ngModel)]="dataEdit[idx].data.ngayChaoGia"
-                                  nzFormat="dd/MM/yyyy">
+                  <nz-date-picker
+                    [(ngModel)]="dataEdit[idx].data.ngayChaoGia" nzFormat="dd/MM/yyyy">
                   </nz-date-picker>
                 </nz-input-group>
               </td>
               <td>
-                <nz-input-number nz-input [nzSize]="'small'"
-                                 [(ngModel)]="dataEdit[idx].data.soLuong" (ngModelChange)="onChangeThanhTienEdit(idx)"
-                                 [nzFormatter]="globals.formatter"
-                                 [nzParser]="globals.parser"></nz-input-number>
+                <input class="money-input" currencyMask [options]="amount" [min]="0"
+                       [(ngModel)]="dataEdit[idx].data.soLuong" (ngModelChange)="onChangeThanhTienEdit(idx)"/>
               </td>
               <td>
-                <nz-input-number nz-input [nzSize]="'small'"
-                                 [(ngModel)]="dataEdit[idx].data.donGia" (ngModelChange)="onChangeThanhTienEdit(idx)"
-                                 [nzFormatter]="globals.formatter"
-                                 [nzParser]="globals.parser"></nz-input-number>
+                <input class="money-input" currencyMask [options]="amount" [min]="0"
+                       [(ngModel)]="dataEdit[idx].data.donGia" (ngModelChange)="onChangeThanhTienEdit(idx)"/>
               </td>
-              <td>{{ dataEdit[idx].data.thanhTien|number:globals.numberFormat:globals.locale}}</td>
-              <td>
+              <td class="text-right">
+                {{dataEdit[idx].data.thanhTien|number:globals.numberFormat:globals.locale}}
+              </td>
+              <td class="text-left">
                 <nz-form-control>
                   <nz-input-group nzSize="large" [nzAddOnAfter]="suffixIcon">
                     <input placeholder="Chọn file"
@@ -407,7 +422,8 @@
                   </ng-template>
                 </nz-form-control>
               </td>
-              <th><label nz-checkbox [(ngModel)]="dataEdit[idx].data.luaChon"></label>
+              <th class="text-center">
+                <label nz-checkbox [(ngModel)]="dataEdit[idx].data.luaChon"></label>
               </th>
               <td class="text-center">
                 <a (click)="downloadFile(dataEdit[idx].data.fileDinhKems)">

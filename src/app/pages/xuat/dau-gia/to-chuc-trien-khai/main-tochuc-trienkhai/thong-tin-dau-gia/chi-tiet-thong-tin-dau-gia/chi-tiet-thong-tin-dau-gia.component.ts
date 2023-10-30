@@ -227,7 +227,6 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
   }
 
   async showDetail($event, data: any) {
-    await this.spinner.show();
     if ($event.type === 'click') {
       this.selected = false;
       const selectedRow = $event.target.parentElement.parentElement.querySelector('.selectedRow');
@@ -239,7 +238,6 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
       this.selected = true;
     }
     this.dataThongTin = data;
-    await this.spinner.hide();
   }
 
   async themMoiPhienDauGia($event, isView: boolean, data?: any) {
