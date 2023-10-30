@@ -21,6 +21,9 @@ import {Base3Component} from "../../../../../components/base3/base3.component";
 import {
   QuyetDinhThanhLyService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/QuyetDinhThanhLyService.service";
+import {
+  BaoCaoKqThanhLyService
+} from "../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/BaoCaoKqThanhLy.service";
 
 @Component({
   selector: 'app-them-moi-bao-cao-ket-qua-thanh-ly',
@@ -38,7 +41,7 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base3Component implemen
     modal: NzModalService,
     route: ActivatedRoute,
     router: Router,
-    private _service: ThongBaoKqThanhLyService,
+    private _service: BaoCaoKqThanhLyService,
     private quyetDinhThanhLyService: QuyetDinhThanhLyService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, _service);
