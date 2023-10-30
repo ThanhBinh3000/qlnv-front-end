@@ -4,7 +4,7 @@
       <div class="header-text">
         <div class="title-chi-tieu">
      <span
-       [ngClass]="formData.value.trangThaiTt == STATUS.DA_DUYET_LDV ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+       [ngClass]="formData.value.trangThaiTt == STATUS.DA_DUYET_LDV || formData.value.trangThaiTt == STATUS.DA_BAN_HANH_QD ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
                         {{ formData.value.tenTrangThaiTt }}
                     </span>
           <span>TỜ TRÌNH HỒ SƠ PHƯƠNG ÁN GIÁ</span>
