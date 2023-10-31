@@ -336,7 +336,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
                 // Sử dụng trường "type" làm key trong Set để kiểm tra sự trùng lặp
                 if (!uniqueSoDeXuat.has(record.soQdTcdt)) {
                   // Nếu trường "type" chưa tồn tại trong Set, thêm giá trị "soDeXuat" vào Set
-                  uniqueSoDeXuat.add(record.soQdTcdt.toString());
+                  uniqueSoDeXuat.add(record.soQdTcdt ? record.soQdTcdt.toString() : "");
                 }
               }
               const uniqueSoDeXuatArray = Array.from(uniqueSoDeXuat);

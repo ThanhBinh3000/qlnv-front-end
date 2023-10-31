@@ -9,10 +9,16 @@
     </div>
   </div>
   <div class="btn-group">
-    <!--      <button type="button" class="btn btn-sm ml-2" (click)="goBack()">-->
-    <!--        <i class="fa fa-arrow-left"></i>-->
-    <!--        <span>Quay lại</span>-->
-    <!--      </button>-->
+          <button type="button" class="btn btn-sm ml-2" *ngIf="!idInput" (click)="goBack()">
+            <i class="fa fa-arrow-left"></i>
+            <span>Quay lại</span>
+          </button>
+    <button type="button" class="btn btn-sub btn-xoa"
+            (click)="xoa()" *ngIf="idInput > 0 && formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU
+                && userService.isCuc && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKQLCNT_XOA')">
+      <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+      <span>Xóa</span>
+    </button>
     <button class="btn btn-sub xanh-nhat ml-2" (click)="save(true)"
             *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKQLCNT_THEM')">
       <i class="icon htvbdh_tcdt_pheduyet"></i>

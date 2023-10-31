@@ -16,7 +16,7 @@
           <span>Quay lại</span>
         </button>
         <button type="button" class="btn btn-sub btn-xoa"
-                (click)="delete(this.formData.value)" *ngIf="idInput > 0 && formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU
+                (click)="xoa()" *ngIf="idInput > 0 && formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU
                 && userService.isCuc && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDBCKTKT_XOA')">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
