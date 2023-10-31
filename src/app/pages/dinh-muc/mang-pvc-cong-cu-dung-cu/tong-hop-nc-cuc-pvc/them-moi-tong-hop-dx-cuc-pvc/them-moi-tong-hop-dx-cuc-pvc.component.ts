@@ -122,7 +122,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
           }
           item.id = null;
           item.ghiChu = null;
-          idVirtual:uuidv4();
+          idVirtual: uuidv4();
         });
         this.convertListData();
       }
@@ -175,6 +175,8 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
   }
 
   async save() {
+    // console.log("dataTable", this.dataTable);
+    // return
     this.formData.patchValue({
       namKeHoach: this.formDataTongHop.value.namKeHoach,
     });
@@ -229,11 +231,11 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
   async pheDuyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.CHO_DUYET_LDTC : {
+      case STATUS.CHO_DUYET_LDTC: {
         trangThai = STATUS.DA_DUYET_LDTC;
         break;
       }
-      case STATUS.DU_THAO : {
+      case STATUS.DU_THAO: {
         trangThai = STATUS.CHO_DUYET_LDTC;
         break;
       }
@@ -244,7 +246,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
   async tuChoi() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.CHO_DUYET_LDTC : {
+      case STATUS.CHO_DUYET_LDTC: {
         trangThai = STATUS.TU_CHOI_LDTC;
       }
     }
@@ -254,7 +256,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
   convertListData() {
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable = chain(this.dataTable).groupBy('tenCcdc')
-        .map((value, key) => ({ tenCcdc: key, dataChild: value, idVirtual: uuidv4() }),
+        .map((value, key) => ({ tenCcdc: key, dataChild: value, donGia: value[0].donGia, idVirtual: uuidv4() }),
         ).value();
     }
     console.log(this.dataTable, 'this.dataTable this.dataTable this.dataTable ');
@@ -266,7 +268,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
     this.dataTable.forEach(item => {
       if (item.dataChild && item.dataChild.length > 0) {
         item.dataChild.forEach(data => {
-          arr.push(data);
+          arr.push({ ...data, donGia: item.donGia });
         });
       }
     });

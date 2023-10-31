@@ -326,7 +326,6 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
   }
 
   async selectRow($event, dataChildren) {
-    await this.spinner.show();
     const isClickEvent = $event.type === 'click';
     this.selected = !isClickEvent;
     const selectedRow = isClickEvent
@@ -341,7 +340,6 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
     const selectedItem = isClickEvent ? dataChildren : dataChildren[0];
     this.listOfData = selectedItem.children;
     this.showFromTT = true;
-    await this.spinner.hide();
   }
 
   isDisabledQD() {

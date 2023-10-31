@@ -31,6 +31,8 @@ export class ThongTu1452013Component implements OnInit {
     {text: 'Quý III', value: 3},
     {text: 'Quý IV', value: 4},
   ];
+  selectedValue = 1;
+
   constructor(private spinner: NgxSpinnerService,
               private notification: NzNotificationService,
               private thongTu1452013Service: ThongTu1452013Service,
@@ -44,7 +46,7 @@ export class ThongTu1452013Component implements OnInit {
     this.formData = this.fb.group(
       {
         nam: [, [Validators.required]],
-        quy: [],
+        quy: [,[Validators.required]],
         maCuc: [],
         maChiCuc: [],
         loaiVthh: [],

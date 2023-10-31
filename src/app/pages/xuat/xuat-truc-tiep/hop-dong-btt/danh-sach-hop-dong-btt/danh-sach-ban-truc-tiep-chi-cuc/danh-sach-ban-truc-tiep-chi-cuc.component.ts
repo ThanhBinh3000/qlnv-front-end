@@ -11,7 +11,7 @@ import {
   ChaoGiaMuaLeUyQuyenService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service";
 import {saveAs} from 'file-saver';
-import {LOAI_HANG_DTQG} from "../../../../../../constants/config";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-danh-sach-ban-truc-tiep-chi-cuc',

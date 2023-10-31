@@ -78,9 +78,9 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base3Component implemen
     if (this.id) {
       await this.detail(this.id).then((res) => {
         if (res) {
-          let soThongBao = res.soThongBao.split('/')[0];
+          let soBaoCao = res.soBaoCao.split('/')[0];
           this.formData.patchValue({
-            soThongBao: soThongBao,
+            soBaoCao: soBaoCao,
           })
           this.getDetailQuyetDinh(res.idQd);
         }
@@ -136,6 +136,7 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base3Component implemen
         this.formData.patchValue({
           soQd: dataHs.soQd,
           idQd: dataHs.id,
+          ngayQd : dataHs.ngayKy
         })
       }
     });
@@ -150,8 +151,8 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base3Component implemen
     this.spinner.show();
     let body = this.formData.value;
     body.fileDinhKemReq = this.fileDinhKem;
-    if (this.formData.value.soQd) {
-      body.soQd = this.formData.value.soQd + this.symbol
+    if (this.formData.value.soBaoCao) {
+      body.soBaoCao = this.formData.value.soBaoCao + this.symbol
     }
     this.createUpdate(body).then((res) => {
       if (res) {
