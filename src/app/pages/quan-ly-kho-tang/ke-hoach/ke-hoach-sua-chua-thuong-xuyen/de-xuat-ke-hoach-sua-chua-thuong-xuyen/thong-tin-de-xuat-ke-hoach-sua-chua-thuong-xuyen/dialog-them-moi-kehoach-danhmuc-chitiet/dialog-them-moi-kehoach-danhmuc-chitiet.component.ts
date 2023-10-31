@@ -28,6 +28,7 @@ export class DialogThemMoiKehoachDanhmucChitietComponent extends Base2Component 
   @Input() dataTable: any
   @Input() dataHeader: any
   @Input() listDmSuaChua: any[]
+  @Input() typeKh: any
   listNguonKinhPhi: any[] = [];
   listLoaiNhuCauDx: any[] = [];
   radioValue: string = '01';
@@ -102,6 +103,12 @@ export class DialogThemMoiKehoachDanhmucChitietComponent extends Base2Component 
       tgSuaChua: [null],
       tgThucHien: [null],
       giaTriCtScHienTai: [null, Validators.required],
+      tongMucDtuCvien: [null],
+      tongMucDtuLdVu: [null],
+      tongMucDtuLdTc: [null],
+      khVonCvien: [null],
+      khVonLdVu: [null],
+      khVonLdTc: [null],
     });
   }
 
