@@ -153,7 +153,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
     this.onClose.emit();
   }
 
-  banHanh() {
+  async banHanh() {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: "Xác nhận",
@@ -227,12 +227,13 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       res = await this.quyetDinhGiaCuaBtcService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
+      this.idInput = res.data.id;
       if (isBanHanh) {
         this.formData.patchValue({
           id: res.data.id,
           trangThai: res.data.trangThai
         })
-        this.banHanh();
+       await this.banHanh();
       }
       if (!isBanHanh) {
         if (this.idInput > 0) {
