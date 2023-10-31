@@ -37,7 +37,7 @@
               <nz-form-item class="form-item">
                 <nz-form-control [nzErrorTip]="error">
                   <nz-radio-group formControlName="loai" [nzDisabled]="isViewDetail"
-                                  (ngModelChange)="changeLoai($event)">
+                                  (ngModelChange)="changeLoai($event,true)">
                     <label nz-radio nzValue="00">QĐ của TCDT giao kế hoạch danh mục</label>
                     <label nz-radio nzValue="01">Thông báo của TCDT</label>
                   </nz-radio-group>
@@ -51,8 +51,7 @@
               <div nz-col nzSpan="24">
                 <nz-form-item class="form-item">
                   <nz-form-control [nzErrorTip]="error">
-                    <nz-radio-group formControlName="kieu" [nzDisabled]="isViewDetail"
-                                    (ngModelChange)="changeLoai($event)">
+                    <nz-radio-group formControlName="kieu" [nzDisabled]="isViewDetail">
                       <label nz-radio nzValue="LD">Lần đầu</label>
                       <label nz-radio nzValue="DC">Điều chỉnh</label>
                     </nz-radio-group>
@@ -64,7 +63,7 @@
                   <nz-form-label [nzNoColon]="true" nzRequired> Năm kế hoạch
                   </nz-form-label>
                   <nz-form-control>
-                    <nz-select nzAllowClear formControlName="namKeHoach" (ngModelChange)="changeNamKh($event)">
+                    <nz-select nzAllowClear formControlName="namKeHoach" >
                       <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                     </nz-select>
                   </nz-form-control>
@@ -73,7 +72,7 @@
               <div nz-col nzSpan="3">
                 <nz-form-item class="form-item">
                   <nz-form-label [nzNoColon]="true"
-                                 nzRequired> {{formData.value.loai == '00' ? 'Số thông báo' : 'Số quyết định'}}
+                                 nzRequired> Số quyết định
                   </nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-input-group nzAddOnAfter="{{formData.value.loai == '00' ? maQdTcdt : maQdBtc}}">
@@ -82,7 +81,7 @@
                   </nz-form-control>
                 </nz-form-item>
               </div>
-              <div nz-col nzSpan="6">
+              <div nz-col nzSpan="3">
                 <nz-form-item class="form-item">
                   <nz-form-label [nzNoColon]="true" nzRequired> Ngày ký</nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
@@ -90,9 +89,9 @@
                   </nz-form-control>
                 </nz-form-item>
               </div>
-              <div nz-col nzSpan="6">
+              <div nz-col nzSpan="9">
                 <nz-form-item class="form-item">
-                  <nz-form-label [nzNoColon]="true"> Trích yếu
+                  <nz-form-label nzRequired [nzNoColon]="true"> Trích yếu
                   </nz-form-label>
                   <nz-form-control>
                     <nz-input-group>
@@ -101,22 +100,12 @@
                   </nz-form-control>
                 </nz-form-item>
               </div>
-              <div nz-col nzSpan="6" *ngIf="formData.value.loai == '00'">
+              <div nz-col nzSpan="6" >
                 <nz-form-item class="form-item">
                   <nz-form-label [nzNoColon]="true" nzRequired>Căn cứ trên QĐ giao NV của BTC</nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
-                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonMaTongHop()">
-                      <input [readonly]="true" nz-input formControlName="soTt" readonly="true"/>
-                    </nz-input-group>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-              <div nz-col nzSpan="6" *ngIf="formData.value.loai == '01'">
-                <nz-form-item class="form-item">
-                  <nz-form-label [nzNoColon]="true" nzRequired>Số QĐ của BTC</nz-form-label>
-                  <nz-form-control [nzErrorTip]="error">
-                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonMaTongHop()">
-                      <input [readonly]="true" nz-input formControlName="qdBtc" readonly="true"/>
+                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonQdGiaoNv()">
+                      <input [readonly]="true" nz-input formControlName="soQdGiaoNv" readonly="true"/>
                     </nz-input-group>
                   </nz-form-control>
                 </nz-form-item>
@@ -131,15 +120,6 @@
                       <label nz-radio nzValue="00"> <= 15 tỷ </label>
                       <label nz-radio nzValue="01"> > 15 tỷ </label>
                     </nz-radio-group>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-              <div nz-col nzSpan="24">
-                <nz-form-item>
-                  <nz-form-label [nzNoColon]="true">Nội dung quyết định</nz-form-label>
-                  <nz-form-control>
-                   <textarea id="trichYeu" formControlName="noiDung" rows="3" class="search__input" nz-input
-                             [readonly]="isViewDetail"></textarea>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -164,28 +144,16 @@
                 </nz-form-item>
               </div>
             </div>
-
           </nz-card>
           <!-- Thông báo của TCDT-->
           <div *ngIf="formData.value.loai == '01'">
             <div nz-row [nzGutter]="24">
-              <div nz-col nzSpan="24">
-                <nz-form-item class="form-item">
-                  <nz-form-control [nzErrorTip]="error">
-                    <nz-radio-group formControlName="kieu" [nzDisabled]="isViewDetail"
-                                    (ngModelChange)="changeLoai($event)">
-                      <label nz-radio nzValue="LD">Lần đầu</label>
-                      <label nz-radio nzValue="DC">Điều chỉnh</label>
-                    </nz-radio-group>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
               <div nz-col nzSpan="3">
                 <nz-form-item class="form-item">
                   <nz-form-label [nzNoColon]="true" nzRequired> Năm kế hoạch
                   </nz-form-label>
                   <nz-form-control>
-                    <nz-select nzAllowClear formControlName="namKeHoach" (ngModelChange)="changeNamKh($event)">
+                    <nz-select nzAllowClear formControlName="namKeHoach" >
                       <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                     </nz-select>
                   </nz-form-control>
@@ -194,7 +162,7 @@
               <div nz-col nzSpan="3">
                 <nz-form-item class="form-item">
                   <nz-form-label [nzNoColon]="true"
-                                 nzRequired> {{formData.value.loai == '00' ? 'Số thông báo' : 'Số quyết định'}}
+                                 nzRequired> Số thông báo
                   </nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-input-group nzAddOnAfter="{{formData.value.loai == '00' ? maQdTcdt : maQdBtc}}">
@@ -203,7 +171,7 @@
                   </nz-form-control>
                 </nz-form-item>
               </div>
-              <div nz-col nzSpan="6">
+              <div nz-col nzSpan="3">
                 <nz-form-item class="form-item">
                   <nz-form-label [nzNoColon]="true" nzRequired> Ngày ký</nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
@@ -211,7 +179,7 @@
                   </nz-form-control>
                 </nz-form-item>
               </div>
-              <div nz-col nzSpan="6">
+              <div nz-col nzSpan="9">
                 <nz-form-item class="form-item">
                   <nz-form-label [nzNoColon]="true"> Trích yếu
                   </nz-form-label>
@@ -222,22 +190,13 @@
                   </nz-form-control>
                 </nz-form-item>
               </div>
-              <div nz-col nzSpan="6" *ngIf="formData.value.loai == '00'">
-                <nz-form-item class="form-item">
-                  <nz-form-label [nzNoColon]="true" nzRequired>Căn cứ trên QĐ giao NV của BTC</nz-form-label>
-                  <nz-form-control [nzErrorTip]="error">
-                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonMaTongHop()">
-                      <input [readonly]="true" nz-input formControlName="soTt" readonly="true"/>
-                    </nz-input-group>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-              <div nz-col nzSpan="6" *ngIf="formData.value.loai == '01'">
+
+              <div nz-col nzSpan="6" >
                 <nz-form-item class="form-item">
                   <nz-form-label [nzNoColon]="true" nzRequired>Số QĐ của BTC</nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
-                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonMaTongHop()">
-                      <input [readonly]="true" nz-input formControlName="qdBtc" readonly="true"/>
+                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonQdBtc()">
+                      <input [readonly]="true" nz-input formControlName="soQdBtc" readonly="true"/>
                     </nz-input-group>
                   </nz-form-control>
                 </nz-form-item>
@@ -252,15 +211,6 @@
                       <label nz-radio nzValue="00"> <= 15 tỷ </label>
                       <label nz-radio nzValue="01"> > 15 tỷ </label>
                     </nz-radio-group>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-              <div nz-col nzSpan="24">
-                <nz-form-item>
-                  <nz-form-label [nzNoColon]="true">Nội dung quyết định</nz-form-label>
-                  <nz-form-control>
-                   <textarea id="trichYeu" formControlName="noiDung" rows="3" class="search__input" nz-input
-                             [readonly]="isViewDetail"></textarea>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -288,6 +238,8 @@
           </div>
         </form>
       </nz-collapse-panel>
+    </nz-collapse>
+    <nz-collapse>
       <nz-collapse-panel [nzHeader]="formData.value.loai == '00' ? 'Quyết định của Tổng cục dữ trự' : 'Thông báo của Tổng cục dữ trự'" [nzActive]="true">
         <nz-table #basicTable nzBordered class="nowrap pd-10" [nzFrontPagination]="false" [nzShowPagination]="false"
                   [nzData]="dataTable">
@@ -323,17 +275,15 @@
             <td>{{ data.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>
             <td>{{ data.giaTriPd | number : '1.0-1' : 'vi_VN' }}</td>
             <td>{{ data.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
-            <td>
-              <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                               nz-input [(ngModel)]="data.keHoachVon" [nzMin]="1"></nz-input-number>
+            <td *ngIf="formData.value.loai == '00'" ><nz-input-number [nzSize]="'small'"  [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                 nz-input [(ngModel)]="data.keHoachVon" [nzMin]="1" ></nz-input-number>
+            <td *ngIf="formData.value.loai == '01'">{{ data.keHoachVon | number : '1.0-1' : 'vi_VN' }}</td>
             <td>{{ data.ghiChu }}</td>
           </tr>
           </tbody>
         </nz-table>
       </nz-collapse-panel>
     </nz-collapse>
-
-
   </nz-card>
 </div>
 
