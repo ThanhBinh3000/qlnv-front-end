@@ -85,6 +85,8 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   dtMuaLuongThuc: number = 0;
   dtMuaVatTu: number = 0;
   dtMuaMuoi: number = 0;
+  dtMuaVatCn: number = 0;
+  tongTable1: number = 0;
   yearCurrentView: number = 0;
   showDlgPreview = false;
   pdfSrc: any;
@@ -373,19 +375,24 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
 
   sumAllDataTable() {
     let ttVatTu = 0;
+    let ttVatTuCn = 0;
     let ttMuoi = 0;
     this.muaTangList.forEach(item => {
       if (item && item.dataChild && item.dataChild.length > 0) {
         item.dataChild.forEach(child => {
-          if (!child.loaiVthh.startsWith('04')) {
+          if (!child.loaiVthh.startsWith('04') && !child.loaiVthh.startsWith('03')) {
             ttVatTu += child.tongTien ? child.tongTien : 0;
+          }else if(child.loaiVthh.startsWith('03')){
+            ttVatTu +=  child.tongTien ? child.tongTien : 0;
           } else {
             ttMuoi += child.tongTien ? child.tongTien : 0;
           }
         });
       } else {
-        if (!item.loaiVthh.startsWith('04')) {
+        if (!item.loaiVthh.startsWith('04') && !item.loaiVthh.startsWith('03')) {
           ttVatTu += item.tongTien ? item.tongTien : 0;
+        }else if(item.loaiVthh.startsWith('03')){
+          ttVatTuCn +=  item.tongTien ? item.tongTien : 0;
         } else {
           ttMuoi += item.tongTien ? item.tongTien : 0;
         }
@@ -393,6 +400,8 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     });
     this.dtMuaVatTu = ttVatTu;
     this.dtMuaMuoi = ttMuoi;
+    this.dtMuaVatCn = ttVatTuCn;
+    this.tongTable1 =  this.dtMuaVatTu+  this.dtMuaMuoi+  this.dtMuaVatCn + (this.keHoachNhapXuat.nhapCtMua ? (this.keHoachNhapXuat.tienMuaThoc + this.keHoachNhapXuat.tienMuaGaoXcht + this.keHoachNhapXuat.tienMuaGaoLpdh) : (this.keHoachNhapXuat.tienMuaThoc + this.keHoachNhapXuat.tongTienMuaGao));
   }
 
   templateName = 'danh-sach-quyet-dinh-cua-bo-tai-chinh-giao-tong-cuc-du-tru';
