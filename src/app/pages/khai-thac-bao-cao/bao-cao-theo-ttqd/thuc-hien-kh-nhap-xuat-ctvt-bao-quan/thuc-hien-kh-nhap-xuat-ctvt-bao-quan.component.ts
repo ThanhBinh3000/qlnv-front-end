@@ -67,17 +67,16 @@ export class ThucHienKhNhapXuatCtvtBaoQuanComponent extends Base2Component imple
       }
     );
     this.formData.controls['nam'].valueChanges.subscribe((namValue) => {
-      this.listQuy = this.quyData
-      // const month = dayjs().get("month");
-      // this.listQuy = [];
-      // for (let i = 0; i <= Math.floor(month / 3); i++) {
-      //   if (i >= 1) {
-      //     this.listQuy.push(this.quyData[i - 1]);
-      //   }
-      // }
-      // if (namValue < dayjs().get('year')) {
-      //   this.listQuy = this.quyData
-      // }
+      const month = dayjs().get("month");
+      this.listQuy = [];
+      for (let i = 0; i <= Math.floor(month / 3); i++) {
+        if (i >= 1) {
+          this.listQuy.push(this.quyData[i - 1]);
+        }
+      }
+      if (namValue < dayjs().get('year')) {
+        this.listQuy = this.quyData
+      }
     });
   }
 
