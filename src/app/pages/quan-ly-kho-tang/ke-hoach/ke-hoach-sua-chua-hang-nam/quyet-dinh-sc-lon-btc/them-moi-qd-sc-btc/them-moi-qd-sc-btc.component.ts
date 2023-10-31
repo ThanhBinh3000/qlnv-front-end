@@ -187,7 +187,7 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
                 })
                 qdGiaoNv.data.children.forEach( item => {
                   console.log(item);
-                  if(item.phanLoai == 'TREN15TY'){
+                  if(item.phanLoai == 'TREN15TY' && item.idQd == null){
                     let body = item.ktKhDxSuaChuaLonCtiet;
                     body.idDxSc = body.id;
                     body.ghiChu = item.ghiChu;
