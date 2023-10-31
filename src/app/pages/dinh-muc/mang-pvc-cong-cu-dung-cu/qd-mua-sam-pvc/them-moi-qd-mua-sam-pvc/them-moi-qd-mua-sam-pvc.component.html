@@ -207,9 +207,9 @@
         <tr>
           <th rowspan="2" width="40px">STT</th>
           <th rowspan="2" width="150px">Tên CCDC</th>
-          <th rowspan="2" width="200px">Mô tả</th>
-          <th rowspan="2" width="100px">Đơn vị tính</th>
-          <th colspan="2" width="200px">SL lương thực nhập <br /> theo chỉ tiêu KH</th>
+          <th rowspan="2" width="200px" nzAlign="center">Mô tả</th>
+          <th rowspan="2" width="100px" nzAlign="center">Đơn vị tính</th>
+          <th colspan="2" width="200px" nzAlign="center">SL lương thực nhập <br /> theo chỉ tiêu KH</th>
           <th rowspan="2" width="150px" nzAlign="center">SL sử dụng được <br /> tại thời điểm để xuất <br /> (3)</th>
           <th rowspan="2" width="150px" nzAlign="center">SL sẽ nhập thêm từ <br /> năm trước <br /> (4)</th>
           <th rowspan="2" width="200px" nzAlign="center">SL đã sử dụng một lần thu hồi <br /> tái sử dụng được <br />
@@ -217,10 +217,10 @@
           <th rowspan="2" width="150px" nzAlign="center">Tổng <br /> (6) = (3) + (4) + (5)</th>
           <th rowspan="2" width="150px" nzAlign="center">SL định mức theo <br /> chỉ tiêu KH năm <br /> (7)</th>
           <th rowspan="2" width="150px" nzAlign="center">Nhu cầu trang bị <br /> đề xuất <br /> (8)= (7) - (6)</th>
-          <th colspan="3" width="300px">Số lượng trang bị cho đơn vị</th>
-          <th rowspan="2" width="150px">Số m2/1 cuộn <br /> (nếu cần quy đổi)</th>
-          <th rowspan="2" width="150px">Quy đổi thành cuộn</th>
-          <th rowspan="2" width="200px">Ghi chú</th>
+          <th colspan="3" width="300px" nzAlign="center">Số lượng trang bị cho đơn vị</th>
+          <th rowspan="2" width="150px" nzAlign="center">Số m2/1 cuộn <br /> (nếu cần quy đổi)</th>
+          <th rowspan="2" width="150px" nzAlign="center">Quy đổi thành cuộn</th>
+          <th rowspan="2" width="200px" nzAlign="center">Ghi chú</th>
         </tr>
         <tr>
           <th width="100px">Gạo tẻ (1)</th>
@@ -297,7 +297,11 @@
 
             </td> -->
               <td>
-                <input class='money-input' currencyMask [options]='amount' [min]='0' [(ngModel)]='item.soLuong' />
+                <!-- <input class='money-input' currencyMask [options]='amount' [min]='0' [(ngModel)]='item.soLuong' /> -->
+                <nz-input-number [(ngModel)]='item.soLuong' [nzMin]="35" [nzMax]="999999999" [nzStep]="1"
+                  [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                  (ngModelChange)="changeSlQuyDoi($event, item)">
+                </nz-input-number>
 
               </td>
               <td>
@@ -308,12 +312,15 @@
                 <!-- {{data.donGia * item.soLuong | number: '1.0-1': 'vi_VN' }} -->
               </td>
               <td>
-                <input class='money-input' currencyMask [options]='amount' [min]='0' [(ngModel)]='item.slMetQuyCuon'
-                  (ngModelChange)="changeSlQuyDoi($event, item)" />
-
+                <!-- <input class='money-input' currencyMask [options]='amount' [min]='35' [(ngModel)]='item.slMetQuyCuon'
+                  (ngModelChange)="changeSlQuyDoi($event, item)" /> -->
+                <nz-input-number [(ngModel)]='item.slMetQuyCuon' [nzMin]="35" [nzMax]="999999999" [nzStep]="1"
+                  [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                  (ngModelChange)="changeSlQuyDoi($event, item)">
+                </nz-input-number>
               </td>
               <td class='text-right'>
-                {{item.slCuon | number: '1.0-1': 'vi_VN' }}
+                {{item.slCuon | number: '1.0-2': 'vi_VN' }}
               </td>
               <td><input type='text' nz-input [(ngModel)]='item.ghiChu'></td>
             </tr>
