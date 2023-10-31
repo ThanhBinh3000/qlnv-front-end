@@ -208,7 +208,21 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
 
   changeSlQuyDoi(event: number, item: any) {
     if (event) {
-      item.slCuon = item.soLuong / event;
+      let cuon = item.soLuong / event;
+      if (cuon.toString().includes(".")) {
+        let cut = cuon.toString().split(".")
+        let cuon0 = Number(cut[0])
+        let check = cuon0 + 0.35
+        if (check > cuon) {
+          item.slCuon = cuon0
+        } else {
+          item.slCuon = cuon0 + 1
+        }
+
+      } else {
+        item.slCuon = cuon
+      }
+
     }
   }
 

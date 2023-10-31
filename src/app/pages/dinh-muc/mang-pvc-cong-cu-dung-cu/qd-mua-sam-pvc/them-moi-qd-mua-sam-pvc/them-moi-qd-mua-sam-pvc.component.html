@@ -308,12 +308,15 @@
                 <!-- {{data.donGia * item.soLuong | number: '1.0-1': 'vi_VN' }} -->
               </td>
               <td>
-                <input class='money-input' currencyMask [options]='amount' [min]='0' [(ngModel)]='item.slMetQuyCuon'
-                  (ngModelChange)="changeSlQuyDoi($event, item)" />
-
+                <!-- <input class='money-input' currencyMask [options]='amount' [min]='35' [(ngModel)]='item.slMetQuyCuon'
+                  (ngModelChange)="changeSlQuyDoi($event, item)" /> -->
+                <nz-input-number [(ngModel)]='item.slMetQuyCuon' [nzMin]="35" [nzMax]="999999999" [nzStep]="1"
+                  [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                  (ngModelChange)="changeSlQuyDoi($event, item)">
+                </nz-input-number>
               </td>
               <td class='text-right'>
-                {{item.slCuon | number: '1.0-1': 'vi_VN' }}
+                {{item.slCuon | number: '1.0-2': 'vi_VN' }}
               </td>
               <td><input type='text' nz-input [(ngModel)]='item.ghiChu'></td>
             </tr>
