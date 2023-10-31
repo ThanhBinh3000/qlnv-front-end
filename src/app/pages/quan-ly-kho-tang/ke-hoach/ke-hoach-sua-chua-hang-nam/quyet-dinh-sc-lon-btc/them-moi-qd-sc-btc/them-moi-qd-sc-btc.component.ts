@@ -11,11 +11,7 @@ import {MESSAGE} from "../../../../../../constants/message";
 import {
   KtKhSuaChuaBtcService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/kh-sc-lon-btc/kt-kh-sua-chua-btc.service";
-import {DialogQdScBtcComponent} from "./dialog-qd-sc-btc/dialog-qd-sc-btc.component";
 import {STATUS} from "../../../../../../constants/status";
-import {
-  DeXuatScLonService
-} from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/de-xuat-sc-lon.service";
 import {
   TongHopDxScLonService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/tong-hop-dx-sc-lon.service";
@@ -23,9 +19,6 @@ import {v4 as uuidv4} from "uuid";
 import {
   DialogDxScLonComponent
 } from "../../de-xuat-kh-sc-lon/them-moi-sc-lon/dialog-dx-sc-lon/dialog-dx-sc-lon.component";
-import {
-  DialogTableCheckBoxComponent
-} from "../../../../../../components/dialog/dialog-table-check-box/dialog-table-check-box.component";
 import {
   KhScQdGiaoNvService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/khScQdGiaoNv.service";
@@ -46,18 +39,6 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
   @Input() idInput: number;
   @Input() idTongHop: number;
   maQd: string;
-  dsCuc: any[] = [];
-  dsChiCuc: any[] = [];
-  tablePaTcTren: any[] = [];
-  tablePaTcDuoi: any[] = [];
-  dataTableTren: any[] = [];
-  dataTableDuoi: any[] = [];
-  dataEdit: any;
-  listLoaiDuAn: any[] = [];
-  listDxCuc: any[] = [];
-  listTongHop: any[] = [];
-  dataTableReq: any[] = [];
-  listDx: any;
 
   constructor(
     private httpClient: HttpClient,
@@ -65,10 +46,10 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private qdScBtcService: KtKhSuaChuaBtcService,
+    private _service: KtKhSuaChuaBtcService,
     private khScQdGiaoNvService: KhScQdGiaoNvService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, qdScBtcService);
+    super(httpClient, storageService, notification, spinner, modal, _service);
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [null],
@@ -80,7 +61,7 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       idQdGiaoNv: [null, Validators.required],
       trangThai: [STATUS.DANG_NHAP_DU_LIEU],
       tenTrangThai: ["Đang nhập dữ liệu"],
-      loai: ["BTC"]
+      type: ["00"]
     });
   }
 
@@ -144,29 +125,19 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
 
   async getDataDetail(id) {
     if (id > 0) {
-      let res = await this.qdScBtcService.getDetail(id);
-      const data = res.data;
-      this.maQd = data.soQuyetDinh ? "/" + data.soQuyetDinh.split("/")[1] : null,
-        this.helperService.bidingDataInFormGroup(this.formData, data);
-      this.formData.patchValue({
-        soQuyetDinh: data.soQuyetDinh ? data.soQuyetDinh.split("/")[0] : ""
+      await this.detail(id).then((res)=>{
+        console.log(res);
+        this.formData.patchValue({
+          soQuyetDinh : res.soQuyetDinh.split('/')[0]
+        })
+        res.children.forEach((item)=>{
+          let data = item.ktKhDxSuaChuaLonCtiet;
+          data.keHoachVon = item.keHoachVon;
+          data.idDxSc = item.idDxSc;
+          data.phanLoai = item.phanLoai
+          this.dataTable.push(data);
+        })
       });
-      this.fileDinhKem = data.fileDinhKems;
-      this.canCuPhapLy = data.canCuPhapLys;
-      if(this.userService.isTongCuc()){
-        this.dataTableReq = data.chiTiets;
-        this.listDx = data.chiTietDxs;
-      }else {
-        this.dataTableReq = data.chiTiets?.filter(f=>f.maDvi==this.userInfo.MA_DVI);
-        this.listDx = data.chiTietDxs?.filter(f=>f.maDvi==this.userInfo.MA_DVI);
-      }
-
-      if (this.listDx && this.listDx.length > 0) {
-        this.tablePaTcTren = this.convertListData(this.listDx?.filter(item => item.tmdt > 15000000000));
-        this.tablePaTcDuoi = this.convertListData(this.listDx?.filter(item => item.tmdt <= 15000000000));
-      }
-      this.dataTableTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 15000000000));
-      this.dataTableDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 15000000000));
     }
   }
 
@@ -222,6 +193,7 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
                     body.ghiChu = item.ghiChu;
                     body.duToanBtcDuyet = item.duToanBtcDuyet;
                     body.keHoachVon = item.duToanBtcDuyet;
+                    body.phanLoai = item.phanLoai;
                     this.dataTable.push(body);
                   }
                 })
@@ -234,109 +206,6 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
         });
       }
     })
-  }
-
-  sumSoLuong(data: any, row: string, type?: any) {
-    let sl = 0;
-    if (this.formData.value.id) {
-      if(type){
-        if (this.dataTableReq && this.dataTableReq.length > 0) {
-          let arr = this.dataTableReq.filter(item => type == 'tren' ? item.tmdt > 15000000000 : item.tmdt <= 15000000000);
-          let sum = 0;
-          arr.forEach(item => {
-            sum += item[row]
-          });
-          sl = sum;
-        }
-      }else {
-        if (this.listDx && this.listDx.length > 0) {
-          let sum = 0;
-          this.listDx.forEach(item => {
-            if (item.tmdt > 15000000000) {
-              sum += item[row];
-            } else {
-              sum += item[row];
-            }
-          });
-          sl = sum;
-        }
-
-      }
-    } else {
-      if (this.dataTableReq && this.dataTableReq.length > 0) {
-        let sum = 0;
-        this.dataTableReq.forEach(item => {
-          if (item.tmdt > 15000000000) {
-            sum += item[row];
-          } else {
-            sum += item[row];
-          }
-        });
-        sl = sum;
-      }
-    }
-    return sl;
-  }
-
-
-  themMoiItem(data: any, tmdt: string, type: string, idx: number, list?: any) {
-    let modalQD = this.modal.create({
-      nzTitle: "ĐỀ XUẤT KẾ HOẠCH SỬA CHỮA LỚN HÀNG NĂM",
-      nzContent: DialogDxScLonComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: "1200px",
-      nzStyle: {top: "100px"},
-      nzFooter: null,
-      nzComponentParams: {
-        dataTable: list && list.dataChild ? list.dataChild : [],
-        dataInput: data,
-        type: type,
-        page: tmdt,
-        isQd: true
-      }
-    });
-    modalQD.afterClose.subscribe(async (detail) => {
-      if (detail) {
-        if (!data.dataChild) {
-          data.dataChild = [];
-        }
-        if (!data.idVirtual) {
-          data.idVirtual = uuidv4();
-        }
-        if (type == "them") {
-          data.dataChild.push(detail);
-        } else {
-          if (list) {
-            Object.assign(list.dataChild[idx], detail);
-          }
-        }
-      }
-    });
-  }
-
-  deleteItem(id) {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: "Xác nhận",
-      nzContent: "Bạn có chắc chắn muốn xóa?",
-      nzOkText: "Đồng ý",
-      nzCancelText: "Không",
-      nzOkDanger: true,
-      nzWidth: 400,
-      nzOnOk: async () => {
-        try {
-          const idx = this.dataTableReq.findIndex(it => it.id == id);
-          if (idx) {
-            this.dataTableReq.splice(idx, 1);
-            this.dataTableTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 15000000000));
-            this.dataTableDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 15000000000));
-          }
-        } catch (e) {
-          ;console.log("error", e);
-        }
-      }
-    });
   }
 
 }

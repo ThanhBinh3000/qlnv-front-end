@@ -423,6 +423,7 @@ export class Base2Component implements OnInit {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.fileDinhKem = data.fileDinhKem
+          this.fileCanCu = data.fileCanCu
           return data;
         }
       } else {

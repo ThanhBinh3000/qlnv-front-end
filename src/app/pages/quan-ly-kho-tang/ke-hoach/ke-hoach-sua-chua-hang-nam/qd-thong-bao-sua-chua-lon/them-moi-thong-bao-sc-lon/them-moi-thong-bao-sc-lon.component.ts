@@ -47,10 +47,10 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private qdScBtcService: KtKhSuaChuaBtcService,
+    private _service: KtKhSuaChuaBtcService,
     private tongHopDxScLon: TongHopDxScLonService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, qdScBtcService);
+    super(httpClient, storageService, notification, spinner, modal, _service);
     super.ngOnInit()
     this.formData = this.fb.group({
       id: [null],
@@ -66,7 +66,8 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
       trangThai: [STATUS.DANG_NHAP_DU_LIEU],
       tenTrangThai: ["ĐANG NHẬP DỮ LIỆU"],
       type: ['01'],
-      loai: ['00']
+      loai: ['00'],
+      kieu : ['LD'],
     });
   }
 
@@ -101,7 +102,7 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
         "maDvi" : this.userInfo.MA_DVI,
         "namKeHoach": this.formData.value.namKeHoach
       }
-      let res = await this.qdScBtcService.search(body);
+      let res = await this._service.search(body);
       console.log(res, "ress")
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
@@ -167,7 +168,7 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
       if (this.formData.value.loai == '00') {
         res = await this.tongHopDxScLon.getDetail(event)
       } else {
-        res = await this.qdScBtcService.getDetail(event);
+        res = await this._service.getDetail(event);
       }
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
@@ -186,7 +187,7 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
 
   async getDataDetail(id) {
     if (id > 0) {
-      let res = await this.qdScBtcService.getDetail(id);
+      let res = await this._service.getDetail(id);
       const data = res.data;
       this.helperService.bidingDataInFormGroup(this.formData, data);
       if (data.soTt){
