@@ -483,7 +483,7 @@
                           <td class="text-right"></td>
                           <td class="text-right">{{dtGoiThau.thanhTien | number: '1.0-99' : 'vi_VN'}}</td>
                           <td>
-                            <nz-select [(ngModel)]=itemRowQd[i].idNhaThau>
+                            <nz-select [(ngModel)]=itemRowQd[i].idNhaThau (ngModelChange)="selectNhaThau(i, $event)">
                               <nz-option *ngFor="let p of listNthauNopHs" [nzValue]="p.id"
                                          [nzLabel]="p.tenNhaThau"></nz-option>
                             </nz-select>

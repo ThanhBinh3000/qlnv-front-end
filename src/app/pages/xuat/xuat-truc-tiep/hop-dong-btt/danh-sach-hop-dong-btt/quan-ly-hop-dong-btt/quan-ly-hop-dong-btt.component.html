@@ -136,7 +136,7 @@
               </div>
               <div nz-col [nzSpan]="24">
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
+                  <nz-form-label [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
                   <nz-form-control>
                     <input nz-input formControlName="tenLoaiVthh" readonly
                            style="color: blue ;font-weight: bold;"/>
@@ -149,7 +149,7 @@
             <div nz-row [nzGutter]="24" class="label-50 mg-t-10 border-right">
               <div nz-col [nzSpan]="24">
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
+                  <nz-form-label [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
                   <nz-form-control>
                     <input nz-input formControlName="tenCloaiVthh" readonly
                            style="color: blue ;font-weight: bold;"/>
@@ -227,63 +227,68 @@
             <th class="text-left"> Tên hợp đồng</th>
             <th class="text-left"> Ngày ký hợp đồng</th>
             <th class="text-left"> Đơn vị cung cấp được chọn</th>
-            <th class="text-right"> Số lượng (Kg)</th>
-            <th class="text-right"> Đơn giá</th>
-            <th class="text-right"> Thành tiền đã bao gồm thuế VAT (đ)</th>
+            <th class="text-center"> Số lượng
+              {{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? '' : '(kg)'}}
+            </th>
+            <th class="text-center"> Đơn giá</th>
+            <th class="text-center"> Thành tiền đã bao gồm thuế VAT (đ)</th>
             <th class="text-left"> Trạng thái HĐ</th>
             <th class="text-left"> Số QĐ giao NV XH</th>
             <th class="text-left"> Trạng thái XH</th>
-            <th class="text-center"> Hành động</th>
+            <th class="text-center" nzWidth="70px"> Hành động</th>
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let data of dataTable;let i = index"
-              [ngClass]="{'bg-selected': i == 0 && this.selected}" (click)="showDetail($event,data.id)">
-            <td class="text-center">{{ i + 1}}</td>
-            <td class="text-left">{{data.soHopDong}}</td>
-            <td class="text-left">{{data.tenHopDong}}</td>
-            <td class="text-left">{{data.ngayKyHopDong|date: 'dd/MM/YYYY' }}</td>
-            <td class="text-left">{{data.tenBenMua }}</td>
-            <td class="text-right">{{data.soLuong|number:globals.numberFormat:globals.locale }}</td>
-            <td class="text-right">{{data.dongia|number:globals.numberFormat:globals.locale }}</td>
-            <td class="text-right">{{data.thanhTien|number:globals.numberFormat:globals.locale }}</td>
-            <td class="text-left">{{data.tenTrangThai}}</td>
-            <td class="text-left">
-              <a *ngIf="data.soQdNv && data.idQdNv" (click)="openModal(data.idQdNv)"
-                 style="color: blue">{{ data.soQdNv }}
-              </a>
-            </td>
-            <td class="text-left">{{data.tenTrangThaiXh}}</td>
-            <td class="text-center">
-              <a *ngIf="data.trangThai == STATUS.DA_KY"
-                 (click)="redirectHopDong(data.id, true, true) ">
-                <i class="fa fa-eye" title="Xem chi tiết"></i>
-              </a>
-              <a *ngIf="data.trangThai == STATUS.DU_THAO && !userService.isTongCuc()"
-                 (click)="redirectHopDong(data.id, false, true) ">
-                <i class="fa fa-pencil" title="Sửa"></i>
-              </a>
-              <a *ngIf="data.trangThai == STATUS.DU_THAO && !userService.isTongCuc()"
-                 (click)="deleteHd(data)">
-                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-              </a>
-            </td>
-          </tr>
+          <ng-container *ngFor="let data of dataTable;let i = index">
+            <tr [ngClass]="{'bg-selected': i == 0 && this.selected}" (click)="showDetail($event,data.id)">
+              <td class="text-center">{{ i + 1}}</td>
+              <td class="text-left">{{data.soHopDong}}</td>
+              <td class="text-left">{{data.tenHopDong}}</td>
+              <td class="text-left">{{data.ngayKyHopDong|date: 'dd/MM/YYYY' }}</td>
+              <td class="text-left">{{data.tenBenMua }}</td>
+              <td class="text-right">{{data.soLuong|number:globals.numberFormat:globals.locale }}</td>
+              <td class="text-right">{{data.dongia|number:globals.numberFormat:globals.locale }}</td>
+              <td class="text-right">{{data.thanhTien|number:globals.numberFormat:globals.locale }}</td>
+              <td class="text-left">{{data.tenTrangThai}}</td>
+              <td class="text-left">
+                <a *ngIf="data.soQdNv && data.idQdNv" (click)="openModal(data.idQdNv)"
+                   style="color: blue">{{ data.soQdNv }}
+                </a>
+              </td>
+              <td class="text-left">{{data.tenTrangThaiXh}}</td>
+              <td class="text-center">
+                <a *ngIf="data.trangThai == STATUS.DA_KY"
+                   (click)="redirectHopDong(data.id, true, true) ">
+                  <i class="fa fa-eye" title="Xem chi tiết"></i>
+                </a>
+                <a *ngIf="data.trangThai == STATUS.DU_THAO && !userService.isTongCuc()"
+                   (click)="redirectHopDong(data.id, false, true) ">
+                  <i class="fa fa-pencil" title="Sửa"></i>
+                </a>
+                <a *ngIf="data.trangThai == STATUS.DU_THAO && !userService.isTongCuc()"
+                   (click)="deleteHd(data)">
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                </a>
+              </td>
+            </tr>
+          </ng-container>
           </tbody>
-          <tfoot *ngIf="dataTable.length > 0">
-          <tr>
-            <th colspan="5" class="text-right bold text-blue"> Tổng</th>
-            <th
-              class="text-right bold text-blue"> {{ calcTong('soLuong')|number:globals.numberFormat:globals.locale }}</th>
-            <th></th>
-            <th
-              class="text-right bold text-blue"> {{ calcTong('thanhTien')|number:globals.numberFormat:globals.locale }}</th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th *ngIf="!userService.isTongCuc()"></th>
-          </tr>
-          </tfoot>
+          <ng-container *ngIf="dataTable.length > 0">
+            <tfoot>
+            <tr>
+              <th colspan="5" class="text-right bold text-blue"> Tổng</th>
+              <th
+                class="text-right bold text-blue"> {{ calcTong('soLuong')|number:globals.numberFormat:globals.locale }}</th>
+              <th></th>
+              <th
+                class="text-right bold text-blue"> {{ calcTong('thanhTien')|number:globals.numberFormat:globals.locale }}</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th *ngIf="!userService.isTongCuc()"></th>
+            </tr>
+            </tfoot>
+          </ng-container>
         </nz-table>
       </nz-card>
       <app-thong-tin-hop-dong-btt *ngIf="idHopDong" [idInput]="idInput" [loaiVthh]="loaiVthh" [idHopDong]="idHopDong"
