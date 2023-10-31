@@ -846,4 +846,12 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       })
     }
   }
+
+  selectNhaThau(i, event) {
+    this.listNthauNopHs.forEach(item => {
+      if (item.id == event) {
+        this.itemRowQd[i].donGiaVat = item.donGia
+      }
+    })
+  }
 }
