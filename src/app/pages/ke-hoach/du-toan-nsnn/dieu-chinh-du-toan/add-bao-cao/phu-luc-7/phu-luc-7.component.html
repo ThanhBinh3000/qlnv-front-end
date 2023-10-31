@@ -298,7 +298,15 @@
 												[options]="Op.amount" />
 										</td>
 										<td>
-											{{Op.fmtVal(editCache[data.id].data.tdiemBcaoChiPhiTaiCuaKho)}}
+											<!-- {{Op.fmtVal(editCache[data.id].data.tdiemBcaoChiPhiTaiCuaKho)}} -->
+											<ng-container *ngIf="data.dmucChiPhiTaiCuaKho; else nhap1">
+												{{ Op.fmtVal(editCache[data.id].data.tdiemBcaoChiPhiTaiCuaKho) }}
+											</ng-container>
+											<ng-template #nhap1>
+												<input class="money-input" currencyMask [options]="Op.amount"
+													[(ngModel)]="editCache[data.id].data.tdiemBcaoChiPhiTaiCuaKho"
+													(ngModelChange)="changeModel(editCache[data.id].data.id)" />
+											</ng-template>
 										</td>
 										<td>
 											{{Op.fmtVal(editCache[data.id].data.tdiemBcaoChiPhiNgoaiCuaKho)}}
@@ -318,7 +326,15 @@
 												[options]="Op.amount" />
 										</td>
 										<td>
-											{{Op.fmtVal(editCache[data.id].data.dkienThienChiPhiTaiCuaKho)}}
+											<!-- {{Op.fmtVal(editCache[data.id].data.dkienThienChiPhiTaiCuaKho)}} -->
+											<ng-container *ngIf="data.dmucChiPhiTaiCuaKho; else nhap1">
+												{{ Op.fmtVal(editCache[data.id].data.dkienThienChiPhiTaiCuaKho) }}
+											</ng-container>
+											<ng-template #nhap1>
+												<input class="money-input" currencyMask [options]="Op.amount"
+													[(ngModel)]="editCache[data.id].data.dkienThienChiPhiTaiCuaKho"
+													(ngModelChange)="changeModel(editCache[data.id].data.id)" />
+											</ng-template>
 										</td>
 										<td>
 											{{Op.fmtVal(editCache[data.id].data.dkienThienChiPhiNgoaiCuaKho)}}

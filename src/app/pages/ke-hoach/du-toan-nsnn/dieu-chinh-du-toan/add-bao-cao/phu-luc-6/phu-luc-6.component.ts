@@ -189,9 +189,11 @@ export class PhuLuc6Component implements OnInit {
             }
             item.sluongThienDmuc = dinhMuc?.tongDmuc;
             item.maDviTinh = dinhMuc?.donViTinh;
-            item.sluongThienTtien = Operator.mul(item.sluongThienDmuc, item.sluongThienCong);
-            item.dtoanDchinh = item.sluongThienTtien - item.dtoanGiaoLke;
-            item.dtoanVuTvqtDnghi = item.sluongThienTtien - item.dtoanGiaoLke;
+            if (item.sluongThienDmuc) {
+                item.sluongThienTtien = Operator.mul(item.sluongThienDmuc, item.sluongThienCong);
+                item.dtoanDchinh = Operator.sum([item.sluongThienTtien, - item.dtoanGiaoLke]);
+                item.dtoanVuTvqtDnghi = Operator.sum([item.sluongThienTtien, - item.dtoanGiaoLke]);
+            }
         })
         // }
         if (!this.lstCtietBcao[0]?.stt) {
