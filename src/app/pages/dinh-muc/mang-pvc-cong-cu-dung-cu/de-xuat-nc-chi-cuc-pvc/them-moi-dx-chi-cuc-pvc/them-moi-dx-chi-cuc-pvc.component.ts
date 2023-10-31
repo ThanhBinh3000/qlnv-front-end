@@ -46,7 +46,7 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
       soCv: [null, Validators.required],
       ngayKy: [null, Validators.required],
       namKeHoach: [dayjs().get('year'), Validators.required],
-      soQdGiaoCt: [null],
+      soQdGiaoCt: [null, Validators.required],
       trichYeu: [null],
       ghiChu: [null],
       trangThai: ['00'],
@@ -128,7 +128,7 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
   async pheDuyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.DA_KY : {
+      case STATUS.DA_KY: {
         trangThai = STATUS.DADUYET_CB_CUC;
       }
     }
@@ -136,6 +136,9 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
   }
 
   async saveAndSend(status: string, msg: string, msgSuccess?: string) {
+    if (this.listCtieuKh.length <= 0) {
+      this.formData.controls["soQdGiaoCt"].clearValidators();
+    }
     try {
       if (this.dataTable.length <= 0) {
         this.notification.error(MESSAGE.ERROR, 'Bạn chưa nhập chi tiết đề xuất');
@@ -152,7 +155,7 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
       this.formData.value.maDvi = this.userInfo.MA_DVI;
       this.formData.value.capDvi = this.userInfo.CAP_DVI;
       this.formData.value.soCv = this.formData.value.soCv + this.maQd;
-      await super.saveAndSend( this.formData.value, status, msg, msgSuccess);
+      await super.saveAndSend(this.formData.value, status, msg, msgSuccess);
     } catch (error) {
       console.error("Lỗi khi lưu và gửi dữ liệu:", error);
     }
@@ -260,6 +263,9 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
   }
 
   async save() {
+    if (this.listCtieuKh.length <= 0) {
+      this.formData.controls["soQdGiaoCt"].clearValidators();
+    }
     if (this.dataTable.length <= 0) {
       this.notification.error(MESSAGE.ERROR, 'Bạn chưa nhập chi tiết đề xuất');
       return;
@@ -316,10 +322,11 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
           this.listCtieuKh = [];
           this.listCtieuKh.push(res.data);
         }
-      } else {
-        this.notification.warning(MESSAGE.WARNING, 'Chưa có chỉ tiêu KH năm Cục giao, bạn vẫn có thể đề xuất nhu cầu nếu muốn!');
-        return;
       }
+      // else {
+      //   this.notification.warning(MESSAGE.WARNING, 'Chưa có chỉ tiêu KH năm Cục giao, bạn vẫn có thể đề xuất nhu cầu nếu muốn!');
+      //   return;
+      // }
     }
   }
 
@@ -331,7 +338,7 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
 
   changeSlTieuChuan(event: number) {
     if (event) {
-      this.rowItem.nhuCauTb = event - (this.rowItem.slHienCo + this.rowItem.slNhapThem);
+      this.rowItem.nhuCauTb = event - (this.rowItem.slHienCo + this.rowItem.slNhapThem + this.rowItem.slThuHoiTaiSuDung);
     }
   }
 }
@@ -348,8 +355,11 @@ export class PvcDxChiCucCtiet {
   maCcdc: string;
   moTaCcdc: string;
   donViTinh: string;
+  slChiTieuGao: number = 0;
+  slChiTieuThoc: number = 0;
   slHienCo: number = 0;
   slNhapThem: number = 0;
+  slThuHoiTaiSuDung: number = 0;
   slTieuChuan: number = 0;
   nhuCauTb: number = 0;
   ghiChu: number;
