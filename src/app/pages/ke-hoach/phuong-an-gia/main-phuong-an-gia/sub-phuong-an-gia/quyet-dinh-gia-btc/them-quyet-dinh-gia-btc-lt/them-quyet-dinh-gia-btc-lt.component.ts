@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from "@angular/core";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import dayjs from "dayjs";
 import {NzModalService} from "ng-zorro-antd/modal";
@@ -19,6 +19,8 @@ import {v4 as uuidv4} from "uuid";
 import {saveAs} from "file-saver";
 import printJS from "print-js";
 import { cloneDeep } from 'lodash';
+import {PdfViewerComponent} from "ng2-pdf-viewer";
+import {style} from "@angular/animations";
 
 @Component({
   selector: "app-them-quyet-dinh-gia-btc-lt",
@@ -26,6 +28,7 @@ import { cloneDeep } from 'lodash';
   styleUrls: ["./them-quyet-dinh-gia-btc-lt.component.scss"]
 })
 export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
+  @ViewChild('pdfViewer') pdfViewer: PdfViewerComponent;
   @Input("type") type: string;
   @Input("pagType") pagType: string;
   @Input("isView") isView: boolean;
@@ -433,7 +436,12 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
   }
 
   printPreview() {
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
+    const blobUrl = URL.createObjectURL(this.pdfBlob);
+    printJS({
+      printable: blobUrl,
+      type: 'pdf',
+      base64: false
+    })
   }
 
 }
