@@ -820,6 +820,18 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     await this.onChangeLoaiVthh(this.formData.value.loaiVthh);
     this.loadDsDxCanSua()
   }
+
+  calcTong(field: string) {
+    if (this.pagTtChungs && this.pagTtChungs.length > 0) {
+      const sum = this.pagTtChungs.reduce((prev, cur) => {
+        prev += cur[field];
+        return prev;
+      }, 0);
+      return sum;
+    }
+  }
 }
+
+
 
 
