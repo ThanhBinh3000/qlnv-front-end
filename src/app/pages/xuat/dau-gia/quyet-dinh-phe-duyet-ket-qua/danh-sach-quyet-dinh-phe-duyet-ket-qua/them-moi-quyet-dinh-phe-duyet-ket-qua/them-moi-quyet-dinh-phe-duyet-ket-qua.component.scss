@@ -1,0 +1,6 @@
+::ng-deep {
+  .hidden-label > label {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
