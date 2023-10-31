@@ -42,6 +42,7 @@ export class CtNhapXuatTonKhoHangDtqgComponent extends Base2Component implements
     {text: 'Quý III', value: 3},
     {text: 'Quý IV', value: 4},
   ];
+  selectedValue = 1;
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,

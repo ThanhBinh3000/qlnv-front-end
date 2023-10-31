@@ -41,7 +41,7 @@ export class ThucHienKhNhapXuatCtvtBaoQuanComponent extends Base2Component imple
     {text: 'Quý III', value: 3},
     {text: 'Quý IV', value: 4},
   ];
-
+  selectedValue = 1;
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,

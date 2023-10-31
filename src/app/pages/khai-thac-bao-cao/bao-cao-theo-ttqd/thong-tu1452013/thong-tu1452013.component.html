@@ -12,7 +12,7 @@
               <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Năm báo cáo
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-select formControlName="nam">
+                <nz-select formControlName="nam" >
                   <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -20,9 +20,9 @@
           </div>
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Quý
+              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Quý
               </nz-form-label>
-              <nz-select formControlName="quy">
+              <nz-select formControlName="quy" [(ngModel)]="selectedValue">
                 <nz-option *ngFor="let p of listQuy" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </nz-form-item>
@@ -45,7 +45,7 @@
 </div>
 
 <!--popup preview-->
-<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="Kết xuất báo cáo" nzWidth="100%" (nzOnCancel)="closeDlg()">
+<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="Khai thác báo cáo" nzWidth="100%" (nzOnCancel)="closeDlg()">
   <div *nzModalContent class="modal__content">
     <pdf-viewer [src]="pdfSrc" [original-size]="false" [render-text]="true" style="width: 100%; height: 600px;">
     </pdf-viewer>
