@@ -334,6 +334,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
     if (pag.msg == MESSAGE.SUCCESS && pag.data.length > 0) {
       const data = pag.data[0];
+      console.log(data, 'aaa')
       let donGiaVatQd = 0;
       if (data != null && data.giaQdDcTcdtVat != null && data.giaQdDcTcdtVat > 0) {
         donGiaVatQd = data.giaQdDcTcdtVat

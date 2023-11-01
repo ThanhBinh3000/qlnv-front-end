@@ -30,18 +30,18 @@
             </div>
           </div>
         </div>
-        <div *ngIf="!loaiVthh.startsWith('02')" nz-col nzSpan="4">
-          <label class="search__label"> Loại hàng DTQG </label>
-          <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
-            <input class="search__input" [readonly]="true" nz-input [(ngModel)]="searchFilter.tenVthh" />
-          </nz-input-group>
-        </div>
 <!--        <div *ngIf="!loaiVthh.startsWith('02')" nz-col nzSpan="4">-->
-<!--          <label class="search__label"> Chủng loại hàng DTQG</label>-->
+<!--          <label class="search__label"> Loại hàng DTQG </label>-->
 <!--          <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">-->
-<!--            <input class="search__input" [readonly]="true" nz-input [(ngModel)]="searchFilter.tenCloaiVthh" />-->
+<!--            <input class="search__input" [readonly]="true" nz-input [(ngModel)]="searchFilter.tenVthh" />-->
 <!--          </nz-input-group>-->
 <!--        </div>-->
+        <div *ngIf="!loaiVthh.startsWith('02')" nz-col nzSpan="4">
+          <label class="search__label"> Chủng loại hàng DTQG</label>
+          <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
+            <input class="search__input" [readonly]="true" nz-input [(ngModel)]="searchFilter.tenCloaiVthh" />
+          </nz-input-group>
+        </div>
         <div nz-col nzSpan="6">
           <label class="search__label">Trích yếu</label>
           <input class="search__input" nz-input [(ngModel)]="searchFilter.trichYeu" />
