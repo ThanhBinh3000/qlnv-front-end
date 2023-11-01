@@ -15,7 +15,7 @@
           <span>Quay lại</span>
         </button>
         <button *ngIf="formData.value.trangThai == '00' && this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_QDTC_BANHANH')" type="button" class="btn btn-sub ml-2"
-                (click)="banHanh()">
+                (click)="save(true)">
           <i class="icon htvbdh_chuyenvanthu"></i>
           <span>Ban hành</span>
         </button>
