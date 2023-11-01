@@ -201,6 +201,8 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.map(item => {
           item.tonKho = item.children.reduce((total, child) => total + child.tonKho, 0);
+          item.tenTrangThai = data.tenTrangThaiXh
+          item.trangThai = data.trangThaiXh
         })
       }
     } catch (e) {
