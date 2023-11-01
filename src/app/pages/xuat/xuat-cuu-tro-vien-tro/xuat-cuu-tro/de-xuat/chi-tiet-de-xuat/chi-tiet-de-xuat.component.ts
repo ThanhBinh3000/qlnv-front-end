@@ -128,7 +128,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         noiDung: ['', [Validators.required]],
         loaiVthh: ['', [Validators.required]],
         cloaiVthh: [''],
-        maDvi: [''],
+        maDvi: ['', [Validators.required]],
         tonKhoDvi: [''],
         tonKhoLoaiVthh: [''],
         tonKhoCloaiVthh: [''],
