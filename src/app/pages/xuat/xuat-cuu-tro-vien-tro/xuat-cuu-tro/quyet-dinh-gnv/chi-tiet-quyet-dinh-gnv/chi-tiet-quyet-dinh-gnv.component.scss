@@ -12,8 +12,6 @@
   display: inline-block;
 }
 
-// td,
-// th {
-//   max-width: 200px;
-//   white-space: break-spaces !important;
-// }
+.white-space-break tbody tr td {
+  white-space: break-spaces !important;
+}

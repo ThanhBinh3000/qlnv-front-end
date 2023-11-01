@@ -4,18 +4,19 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button type="button" class="btn btn-sub" (click)="xemTruocPd(idSelected)">
+    <button type="button" class="btn btn-sub" (click)="xemTruocPd(formData.value.id)">
       <i class="icon htvbdh_totrinh"></i>
       <span> In/Xem trước </span>
     </button>
     <ng-container *ngIf="userService.isCuc()">
-      <button (click)="reject(idSelected,STATUS.TU_CHOI_LDC)"
+      <button (click)="reject(formData.value.id,STATUS.TU_CHOI_LDC)"
         *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
         class="btn btn-sub" type="button">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span>Từ chối</span>
       </button>
-      <button (click)="approve(idSelected,STATUS.BAN_HANH,'Bạn có muốn duyệt quyết định này')"
+      <button
+        (click)="approve(formData.value.id,STATUS.BAN_HANH,'Bạn có muốn duyệt quyết định này', null, MESSAGE.PHE_DUYET_SUCCESS)"
         *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
         class="btn btn-sub" type="button">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
@@ -24,13 +25,14 @@
       <!--    end cap ld cuc-->
       <!--    cap truong phong-->
 
-      <button (click)="reject(idSelected,STATUS.TU_CHOI_TP)"
+      <button (click)="reject(formData.value.id,STATUS.TU_CHOI_TP)"
         *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP)"
         class="btn btn-sub" type="button">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span>Từ chối</span>
       </button>
-      <button (click)="approve(idSelected,STATUS.CHO_DUYET_LDC,'Bạn có muốn duyệt quyết định này')"
+      <button
+        (click)="approve(formData.value.id,STATUS.CHO_DUYET_LDC,'Bạn có muốn duyệt quyết định này', null, MESSAGE.DUYET_SUCCESS)"
         *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP)"
         class="btn btn-sub" type="button">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
@@ -256,12 +258,12 @@
     <!--    CHI TIET PA TONG CUC #1-->
     <ng-container *ngIf="formData.value.type !=='XC'">
       <div class="mt-16">
-        <nz-table #tblData [nzData]="phuongAnView" class="nowrap table-chi-tiet" nzBordered>
+        <nz-table #tblData [nzData]="phuongAnView" class="nowrap table-chi-tiet white-space-break" nzBordered>
           <thead>
             <tr>
               <th></th>
               <th style="width: 35px">STT</th>
-              <th>Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
+              <th>Địa phương/cơ quan/<br />đơn vị nhận cứu trợ</th>
               <th>Loại/Chủng loại hàng DTQG</th>
               <th>SL giao<br />Cục thực hiện</th>
               <th>Chi cục DTNN</th>
@@ -399,12 +401,12 @@
     </ng-container>
     <ng-container *ngIf="formData.value.type === 'XC'">
       <div class="mt-16">
-        <nz-table #tblData [nzData]="phuongAnView" class="nowrap table-chi-tiet" nzBordered>
+        <nz-table #tblData [nzData]="phuongAnView" class="nowrap table-chi-tiet white-space-break" nzBordered>
           <thead>
             <tr>
               <th></th>
               <th style="width: 35px">STT</th>
-              <th>Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
+              <th>Địa phương/cơ quan/<br />đơn vị nhận cứu trợ</th>
               <th>SL giao<br />Cục thực hiện</th>
               <th>Chi cục DTNN</th>
               <th>SL giao chi cục</th>

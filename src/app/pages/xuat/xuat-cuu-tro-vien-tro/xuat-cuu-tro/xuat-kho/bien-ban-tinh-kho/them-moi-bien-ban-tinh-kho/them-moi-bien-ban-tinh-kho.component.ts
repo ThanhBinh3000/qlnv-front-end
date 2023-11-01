@@ -315,7 +315,8 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   }
 
   async save() {
-    this.formData.disable()
+    this.helperService.ignoreRequiredForm(this.formData);
+    this.formData.controls['soBbTinhKho'].setValidators(Validators.required)
     let body = this.formData.value;
     body.fileDinhKems = this.fileDinhKems;
     body.listPhieuXuatKho = this.dataTable;
@@ -323,7 +324,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       s.id = null;
     })
     await this.createUpdate(body);
-    this.formData.enable();
+    this.helperService.restoreRequiredForm(this.formData)
   }
 
   pheDuyet() {
@@ -359,7 +360,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         break;
       }
     }
-    this.approve(this.idInput, trangThai, msg, null, MSG);
+    this.approve(this.formData.value.id, trangThai, msg, null, MSG);
   }
 
   tuChoi() {
@@ -378,7 +379,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         break;
       }
     }
-    this.reject(this.idInput, trangThai)
+    this.reject(this.formData.value.id, trangThai)
   }
 
   isDisabled() {
@@ -408,7 +409,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         tongSlXuat: sum,
         slConLai: this.formData.value.tongSlNhap - sum,
       })
-      return sum;
+      return sum ? sum : '';
 
     }
   }

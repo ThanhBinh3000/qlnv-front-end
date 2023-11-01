@@ -354,7 +354,12 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
       item.selected = true;
       let currentCuc = this.phuongAnHdrView.find(s => s.idVirtual == item.idVirtual);
       this.phuongAnView = currentCuc?.childData;
-      this.tongSoLuongDx = Array.isArray(this.phuongAnView) ? this.phuongAnView.reduce((sum, cur) => sum += cur.soLuongDx ? cur.soLuongDx : 0, 0) : 0;
+      // this.tongSoLuongDx = Array.isArray(this.phuongAnView) ? this.phuongAnView.reduce((sum, cur) => sum += cur.soLuongDx ? cur.soLuongDx : 0, 0) : 0;
+      if (this.formData.value.tenVthh === TEN_LOAI_VTHH.GAO) {
+        this.tongSoLuongDx = Array.isArray(this.phuongAnView) ? this.phuongAnView.reduce((sum, cur) => sum += cur.soLuongNhuCauXuat ? cur.soLuongNhuCauXuat : 0, 0) : 0;
+      } else {
+        this.tongSoLuongDx = Array.isArray(this.phuongAnView) ? this.phuongAnView.reduce((sum, cur) => sum += cur.soLuongDx ? cur.soLuongDx : 0, 0) : 0;
+      }
       this.tongSoLuongChuyenCapThoc = Array.isArray(this.phuongAnView) ? this.phuongAnView.reduce((sum, cur) => sum += cur.soLuongChuyenCapThoc ? cur.soLuongChuyenCapThoc : 0, 0) : 0;
       this.tongSoLuongNhuCauXuat = Array.isArray(this.phuongAnView) ? this.phuongAnView.reduce((sum, cur) => sum += cur.soLuongNhuCauXuat ? cur.soLuongNhuCauXuat : 0, 0) : 0;
       this.mucDichXuat = currentCuc?.mucDichXuat ? currentCuc.mucDichXuat : "";
