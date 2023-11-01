@@ -39,6 +39,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   @Input() isShowFromKq: boolean;
   @Input() isView: boolean;
   @Input() isKqDaBh: boolean;
+  @Input() titleThongTinChung: string = 'THÔNG TIN CHUNG';
   reportTemplate: any = {
     typeFile: "",
     fileName: "thong_tin_dau_thau_lt.docx",
@@ -413,6 +414,18 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
 
   pipe = new DatePipe('en-US');
   async save() {
+    for (const data of this.listOfData) {{
+      let res = await this.thongTinDauThauService.getDetailThongTin(data.id, this.loaiVthh);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data == null || res.data.length == 0) {
+          this.notification.error(MESSAGE.ERROR, data.goiThau + ' chưa cập nhật danh sách nhà thầu.');
+          return;
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Lấy danh sách nhà thầu nộp hồ sơ thất bại.');
+        return;
+      }
+    }}
     await this.spinner.show();
     this.pheDuyet()
     await this.spinner.hide()
