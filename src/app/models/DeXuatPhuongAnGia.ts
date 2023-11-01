@@ -20,6 +20,7 @@ export class ThongTinKhaoSatGia {
   tieuChuanCl: string;
   tenCloaiVthh: string;
   vat: number = 0;
+  soLuong: number;
   donGia: number;
   donGiaVat: number;
   thoiHanBaoGia: string;

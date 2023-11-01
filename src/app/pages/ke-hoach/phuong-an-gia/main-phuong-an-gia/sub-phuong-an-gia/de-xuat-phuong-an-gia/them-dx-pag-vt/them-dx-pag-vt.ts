@@ -441,7 +441,12 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       } else {
         this.rowItemPpxdg.tongChiPhi = this.rowItemPpxdg.giaVonNk + this.rowItemPpxdg.chiPhiChung
       }
-      this.rowItemPpxdg.tenCloaiVthh = this.listVthh.find(s => s.ma = this.rowItemPpxdg.cloaiVthh).ten;
+      console.log(this.rowItemPpxdg,111)
+      let itemCloaiVthh = this.listCloaiVthh.find(s => s.ma == this.rowItemPpxdg.cloaiVthh);
+      if (itemCloaiVthh) {
+        console.log(itemCloaiVthh,222)
+        this.rowItemPpxdg.tenCloaiVthh = itemCloaiVthh.ten;
+      }
       this.pagPpXacDinhGias = [...this.pagPpXacDinhGias, this.rowItemPpxdg];
       this.rowItemPpxdg = new PhuongPhapXacDinhGia();
       this.updateEditCache(page)
