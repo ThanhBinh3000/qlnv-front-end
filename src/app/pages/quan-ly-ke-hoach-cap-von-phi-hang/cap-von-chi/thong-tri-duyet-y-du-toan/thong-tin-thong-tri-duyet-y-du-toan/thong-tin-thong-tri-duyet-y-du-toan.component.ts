@@ -480,7 +480,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         let item = {
           'dvCungCapHang': 'Tổng cục dự trữ nhà nước',
           'nganHang': null,
-          'id': 'BTC',
+          'id': 9999,
           'soTaiKhoan': null,
           'maHopDong': '',
         };
