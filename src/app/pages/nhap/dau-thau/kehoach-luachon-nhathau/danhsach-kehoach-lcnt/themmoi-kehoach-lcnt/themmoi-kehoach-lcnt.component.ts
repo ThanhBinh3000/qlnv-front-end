@@ -728,6 +728,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     this.formData.controls["nguonVon"].setValidators([Validators.required]);
     this.formData.controls["tgianNhang"].setValidators([Validators.required]);
     this.formData.controls["tgianThien"].setValidators([Validators.required]);
+    this.formData.controls["giaBanHoSo"].setValidators([Validators.required]);
   }
 
   clearValidatorLuuDuThao() {

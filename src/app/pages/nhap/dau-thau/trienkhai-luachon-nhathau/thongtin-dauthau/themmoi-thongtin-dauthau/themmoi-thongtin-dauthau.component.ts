@@ -26,6 +26,7 @@ import {
 import {PREVIEW} from "../../../../../../constants/fileType";
 import { saveAs } from "file-saver";
 import printJS from "print-js";
+import {CurrencyMaskInputMode} from "ngx-currency";
 @Component({
   selector: 'app-themmoi-thongtin-dauthau',
   templateUrl: './themmoi-thongtin-dauthau.component.html',
@@ -151,7 +152,19 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       text: 'Hủy thầu'
     }
   ];
-
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "left",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
   userInfo: UserLogin;
   datePickerConfig = DATEPICKER_CONFIG;
 
@@ -284,13 +297,15 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         tenTrangThai: data.tenTrangThai
       })
       this.listOfData = data.children;
-      this.listOfData.forEach(i => {
+      for (let i = 0; i < this.listOfData.length; i++) {
         let tongThanhTien = 0;
-        i.children.forEach(y => {
-          tongThanhTien += y.soLuong * y.donGia
-        })
-        i.thanhTien = tongThanhTien * 1000
-      })
+        for (let j = 0; j < this.listOfData[i].children.length; j++) {
+          tongThanhTien += this.listOfData[i].children[j].soLuong * this.listOfData[i].children[j].donGia
+          this.expandSet2.add(j)
+        }
+        this.listOfData[i].thanhTien = tongThanhTien * 1000
+        this.expandSet.add(i)
+      }
       this.showDetail(event, this.listOfData[0])
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -525,6 +540,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     })
     this.fileDinhKems = dataGoiThau.fileDinhKems
     let res = await this.thongTinDauThauService.getDetailThongTin(this.idGoiThau, this.loaiVthh);
+    this.itemRow = {};
     this.itemRow.soLuong = dataGoiThau.soLuong
     if (res.msg == MESSAGE.SUCCESS) {
       this.listNthauNopHs = res.data;
@@ -727,7 +743,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   }
 
   abs(value: number): number {
-    return Math.abs(value);
+    return parseFloat(Math.abs(value).toFixed(2));
   }
 
   async preview() {
@@ -804,7 +820,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       let sum = 0
         if (this.isShowFromKq) {
           const sumChild = this.listOfData[i].children.reduce((prev, cur) => {
-            prev += cur.soLuong * this.abs(this.listOfData[i].kqlcntDtl?.donGiaVat - cur.donGia);
+            prev += cur.soLuong * parseFloat(this.abs(this.listOfData[i].kqlcntDtl?.donGiaVat - cur.donGia).toFixed(2));
             return prev;
           }, 0);
           sum += sumChild;
