@@ -226,6 +226,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
           this.initForm();
           this.changeMaTongHop();
           this.changeDonVi();
+          console.log(this.itemThongTri.dviThuHuong,'this.itemThongTri.dviThuHuong');
           this.formData.patchValue({
             dviThuHuong: Number(this.itemThongTri.dviThuHuong),
           });
@@ -479,7 +480,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         let item = {
           'dvCungCapHang': 'Tổng cục dự trữ nhà nước',
           'nganHang': null,
-          'id': '9999',
+          'id': 9999,
           'soTaiKhoan': null,
           'maHopDong': '',
         };
