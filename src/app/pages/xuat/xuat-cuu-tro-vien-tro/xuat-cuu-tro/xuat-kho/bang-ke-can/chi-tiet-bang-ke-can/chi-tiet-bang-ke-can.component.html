@@ -377,7 +377,7 @@
       <nz-table #phanBo class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="formData.value.bangKeDtl">
         <thead>
           <tr>
-            <th style="width: 35px">STT</th>
+            <th style="width: 35px" class="text-center">STT</th>
             <th>Số serial/mã sản phẩm</th>
             <th>Số lượng</th>
             <th style="width: 100px">Hành động</th>
@@ -410,7 +410,7 @@
             <ng-container *ngIf="!formData.value.bangKeDtl[i]?.isEdit; else editTemplate">
               <td>{{i + 1}}</td>
               <td>{{item.soSerial}}</td>
-              <td>{{item.soLuong|number: '1.0-1' : 'vi_VN'}}</td>
+              <td class="text-right">{{item.soLuong|number: '1.0-1' : 'vi_VN'}}</td>
               <td>
                 <a (click)="editRow(i)" *ngIf="!isView">
                   <i class="fa fa-pencil" title="Sửa"></i>
@@ -439,15 +439,13 @@
               </td>
             </ng-template>
           </tr>
-        </tbody>
-        <tfoot>
           <tr>
             <td></td>
             <td>Tổng</td>
-            <td>{{tongSl|number: '1.0-1' : 'vi_VN'}}</td>
+            <td class="text-right">{{tongSl|number: '1.0-1' : 'vi_VN'}}</td>
             <td></td>
           </tr>
-        </tfoot>
+        </tbody>
       </nz-table>
     </nz-card>
   </nz-card>
