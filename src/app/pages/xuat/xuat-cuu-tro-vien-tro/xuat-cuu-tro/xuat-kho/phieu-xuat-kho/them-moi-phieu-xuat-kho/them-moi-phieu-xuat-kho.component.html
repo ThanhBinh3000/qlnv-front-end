@@ -242,7 +242,7 @@
         <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nzRequired>
-              Số bảng kê cân hàng
+              {{ loaiVthh === '02'? 'Số bảng kê xuất vật tư': 'Số bảng kê cân hàng'}}
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
