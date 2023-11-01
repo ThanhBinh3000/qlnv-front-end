@@ -11,7 +11,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { chain, groupBy } from 'lodash';
 import * as uuid from "uuid";
 import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
-import { CHUC_NANG } from 'src/app/constants/status';
+import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { CuuTroVienTroComponent } from '../../cuu-tro-vien-tro.component';
 import { QuyetDinhGiaoNvCuuTroService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service';
 import { PhieuKiemNghiemChatLuongService } from './../../../../../../services/qlnv-hang/xuat-hang/chung/kiem-tra-chat-luong/PhieuKiemNghiemChatLuong.service';
@@ -239,6 +239,23 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
     this.isDetail = false;
     await this.search();
   }
-
+  checkRoleExport() {
+    return this.userService.isAccessPermisson("XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_EXP");
+  }
+  checkRoleAdd(): boolean {
+    return this.userService.isAccessPermisson("XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_THEM") && this.userService.isChiCuc();
+  }
+  checkRoleView(trangThai: STATUS, idBangKeCh: number): boolean {
+    return !this.checkRoleEdit(trangThai) && !this.checkRoleApprove(trangThai) && !this.checkRoleDelete(trangThai, idBangKeCh) && this.userService.isAccessPermisson("XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_XEM")
+  }
+  checkRoleEdit(trangThai: STATUS): boolean {
+    return [STATUS.DU_THAO, STATUS.TU_CHOI_LDCC].includes(trangThai) && this.userService.isAccessPermisson("XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_THEM") && this.userService.isChiCuc();
+  }
+  checkRoleApprove(trangThai: STATUS): boolean {
+    return trangThai === STATUS.CHO_DUYET_LDCC && this.userService.isAccessPermisson("XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_DUYET") && this.userService.isChiCuc();
+  }
+  checkRoleDelete(trangThai: STATUS, idBangKeCh: number): boolean {
+    return trangThai === STATUS.DU_THAO && !idBangKeCh && this.userService.isAccessPermisson("XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_XOA") && this.userService.isChiCuc();
+  }
 }
 

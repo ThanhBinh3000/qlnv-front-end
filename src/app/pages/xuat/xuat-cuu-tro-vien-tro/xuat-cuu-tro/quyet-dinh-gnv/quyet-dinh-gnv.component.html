@@ -57,8 +57,7 @@
     <div class="group-button">
       <h3> DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ XUẤT HÀNG CỨU TRỢ, VIỆN TRỢ</h3>
       <div class="buttons">
-        <button *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_XOA')" type="button"
-          class="btn btn-sub btn-xoa" (click)="deleteMulti()">
+        <button *ngIf="checkRoleXoaDs()" type="button" class="btn btn-sub btn-xoa" (click)="deleteMulti()">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
@@ -72,8 +71,7 @@
                   <i class="icon htvbdh_soanthao"></i>
                   <span>Tạo quyết định</span>
                 </button>-->
-        <button type="button" class="btn btn-main" (click)="redirectDetail(null, false)"
-          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_THEM')">
+        <button type="button" class="btn btn-main" (click)="redirectDetail(null, false)" *ngIf="checkRoleAdd()">
           <i class="icon htvbdh_soanthao"></i>
           <span>Tạo quyết định</span>
         </button>
@@ -234,7 +232,7 @@
                 <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <a *ngIf="checkRoleApprove(data.trangThai)" (click)="redirectDetail(data.id, true)">
-                <i class="icon htvbdh_tcdt_pheduyet"></i>
+                <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
               </a>
               <a *ngIf="checkRoleXoa(data.trangThai)" (click)="delete(data)">
                 <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>

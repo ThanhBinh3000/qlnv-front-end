@@ -4,7 +4,8 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button type="button" class="btn btn-sub" (click)="xemTruoc(idInput,templateName)" *ngIf="checkRolePreview()">
+    <button type="button" class="btn btn-sub" (click)="xemTruoc(formData.value.id,templateName)"
+      *ngIf="checkRolePreview()">
       <i class="icon htvbdh_totrinh"></i>
       <span> In/Xem trước </span>
     </button>
@@ -213,7 +214,7 @@
           [nzShowPagination]="false">
           <thead>
             <tr>
-              <th>STT</th>
+              <th width="35px">STT</th>
               <th>Phiếu xuất kho</th>
               <th>Bảng kê cân hàng</th>
               <th>Ngày xuất kho</th>
@@ -223,13 +224,13 @@
           <tbody>
             <ng-container *ngFor="let item of basicTable.data, let i = index;">
               <tr>
-                <td>{{i + 1}}</td>
+                <td class="text-center">{{i + 1}}</td>
                 <td><a *ngIf="item.soPhieuXuatKho" nz-button nzType="link"
                     (click)="openPhieuXkModal(item.idPhieuXuatKho)">{{item.soPhieuXuatKho}}</a></td>
                 <td><a *ngIf="item.soBkCanHang" nz-button nzType="link"
                     (click)="openBangKeModal(item.idBkCanHang)">{{item.soBkCanHang}}</a></td>
-                <td>{{item.ngayXuatKho | date: 'dd/MM/YYYY' }}</td>
-                <td>{{item.slXuat |number:'1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right">{{item.ngayXuatKho | date: 'dd/MM/YYYY' }}</td>
+                <td class="text-right">{{item.slXuat |number:'1.0-1' : 'vi_VN'}}</td>
               </tr>
             </ng-container>
           </tbody>
@@ -297,7 +298,7 @@
                 [ngModel]="calcTong() > 0 ? calcTong() : ''" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1"
                 [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" readonly>
               </nz-input-number> -->
-              <span class="bold" style="color: #001CFF">{{calcTong() > 0 ? calcTong() : ''|number:'1.0-1' : 'vi_VN'}}
+              <span class="bold" style="color: #001CFF">{{calcTong()|number:'1.0-1' : 'vi_VN'}}
                 {{formData.value.donViTinh}}</span>
             </nz-form-control>
           </nz-form-item>

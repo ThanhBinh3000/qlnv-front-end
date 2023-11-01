@@ -142,7 +142,9 @@
               Trích yếu
             </nz-form-label>
             <nz-form-control>
-              <input nz-input formControlName="trichYeu" [readonly]="isView" />
+              <!-- <input nz-input formControlName="trichYeu" [readonly]="isView" /> -->
+              <textarea rows="3" class="search__input" nz-input formControlName="trichYeu"
+                [readOnly]="isView"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>

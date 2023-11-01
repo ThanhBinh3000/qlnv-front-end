@@ -34,8 +34,7 @@ export class ThucHienKhNhapXuatCtvtBaoQuanComponent extends Base2Component imple
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
   rows: any[] = [];
-  listQuy = [];
-  quyData = [
+  listQuy = [
     {text: 'Quý I', value: 1},
     {text: 'Quý II', value: 2},
     {text: 'Quý III', value: 3},
@@ -66,28 +65,19 @@ export class ThucHienKhNhapXuatCtvtBaoQuanComponent extends Base2Component imple
         stk: [],
       }
     );
-    this.formData.controls['nam'].valueChanges.subscribe((namValue) => {
-      this.listQuy = this.quyData
-      // const month = dayjs().get("month");
-      // this.listQuy = [];
-      // for (let i = 0; i <= Math.floor(month / 3); i++) {
-      //   if (i >= 1) {
-      //     this.listQuy.push(this.quyData[i - 1]);
-      //   }
-      // }
-      // if (namValue < dayjs().get('year')) {
-      //   this.listQuy = this.quyData
-      // }
-    });
+    // this.formData.controls['nam'].valueChanges.subscribe((namValue) => {
+    //   const month = dayjs().get("month");
+    //   this.listQuy = [];
+    //   for (let i = 0; i <= Math.floor(month / 3); i++) {
+    //     if (i >= 1) {
+    //       this.listQuy.push(this.quyData[i - 1]);
+    //     }
+    //   }
+    //   if (namValue < dayjs().get('year')) {
+    //     this.listQuy = this.quyData
+    //   }
+    // });
   }
-
-  // listQuy: any[] = [
-  //   {
-  //     text: dayjs().get("month") >= 10 ? 'Quý IV' : (dayjs().get("month") >= 7 ? 'Quý III' : (dayjs().get("month") >= 4 ? 'Quý II' : 'Quý I')),
-  //     value: dayjs().get("month") >= 10 ? 4 : (dayjs().get("month") >= 7 ? 3 : (dayjs().get("month") >= 4 ? 2 : 1)),
-  //   },
-  // ];
-
 
   async ngOnInit() {
     await this.spinner.show();

@@ -67,8 +67,8 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
       ngayKyDc: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
       ngayHluc: ['', [Validators.required]],
       trichYeu: [''],
-      trangThai: [STATUS.DU_THAO],
-      tenTrangThai: ['Dự thảo'],
+      trangThai: [STATUS.DA_LAP],
+      tenTrangThai: ['Đã lập'],
       ldoTchoi: [''],
       loaiVthh: [''],
       tenLoaiVthh: [''],
@@ -78,6 +78,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
       tenDvi: [''],
       diaChiDvi: [''],
       soDxuat: [''],
+      soLanDieuChinh: [''],
 
     });
   }
@@ -109,7 +110,8 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
   datePickerConfig = DATEPICKER_CONFIG;
   datePipe = new DatePipe('en-US');
   dtl: any[] = [];
-  fileDinhKem: Array<FileDinhKem> = [];
+  fileDinhKems: any[] = [];
+  canCuPhapLy: any[] = [];
   mthh: any = [];
   selectedId: number = 0;
   isDetail: boolean = false;
@@ -216,6 +218,8 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
           ngayKyQdGoc: data.ngayKyQdGoc,
 
         });
+        this.fileDinhKems = data.fileDinhKems;
+        this.canCuPhapLy = data.canCuPhapLy;
         this.danhsachDxMtt = data.hhDcQdPduyetKhmttDxList;
         this.danhsachDxMttCache = cloneDeep(this.danhsachDxMtt)
         await this.showFirstRow(event, this.danhsachDxMtt[0]);
@@ -235,9 +239,9 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
       maDvi: null,
       lastest: null
     };
-    let res = await this.quyetDinhPheDuyetKeHoachMTTService.search(body);
+    let res = await this.quyetDinhPheDuyetKeHoachMTTService.searchDsTaoQdDc(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listQdGoc = res.data.content
+      this.listQdGoc = res.data
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -381,7 +385,8 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     body.hhDcQdPduyetKhmttDxList = this.danhsachDxMtt;
     body.ngayKyDc = this.datePipe.transform(body.ngayKyDc, 'yyyy-MM-dd');
     body.ngayHluc = this.datePipe.transform(body.ngayHluc, 'yyyy-MM-dd');
-    body.fileDinhKems = this.fileDinhKem;
+    body.fileDinhkems = this.fileDinhKems;
+    body.canCuPhapLy = this.canCuPhapLy;
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.dieuChinhQuyetDinhPdKhmttService.update(body);
@@ -411,7 +416,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     let mesg = ''
 
     switch (this.formData.get('trangThai').value) {
-      case STATUS.DU_THAO: {
+      case STATUS.DA_LAP: {
         trangThai = STATUS.CHO_DUYET_LDV;
         mesg = 'Bạn có muốn gửi duyệt ?'
         break;
@@ -480,6 +485,17 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
       this.dataChiTieu = res2.data;
     }
   }
+
+  setNewTableData($event) {
+    debugger
+    this.danhsachDxMtt.forEach(item => {
+      item.children = $event.filter(x => x.maDvi.includes(item.maDvi));
+      // item.tongSoLuong = item.children.reduce((acc, data) => acc + data.tongSoLuong, 0)
+      // item.tongTienGomThue = item.children.reduce((acc, data) => acc + data.tongThanhTien, 0)
+    })
+    console.log(this.danhsachDxMtt)
+  }
+
   // async getDataChiTieu() {
   //   let res2 =
   //     await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(

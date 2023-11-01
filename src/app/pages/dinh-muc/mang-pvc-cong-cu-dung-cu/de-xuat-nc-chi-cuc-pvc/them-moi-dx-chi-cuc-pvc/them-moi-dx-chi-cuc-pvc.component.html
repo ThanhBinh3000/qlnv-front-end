@@ -394,7 +394,7 @@
 
           </th>
           <th>
-            <input type="text" [(ngModel)]="dataEdit[idx].data.ghiChu" nz-input />
+            <input type="text" [(ngModel)]="dataEdit[idx].data.ghiChu" nz-input [readOnly]="isView" />
           </th>
           <td class="text-center" *ngIf="!isView">
             <a class="save" (click)="saveDinhMuc(idx)">
