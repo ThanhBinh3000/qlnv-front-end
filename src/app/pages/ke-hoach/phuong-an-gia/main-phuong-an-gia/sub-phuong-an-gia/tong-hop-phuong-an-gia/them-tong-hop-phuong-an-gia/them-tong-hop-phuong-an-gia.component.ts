@@ -454,6 +454,17 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       saveAs(this.wordSrc, "tong_hop_phuong_an_gia_gmtdbtt.docx");
     }
   }
+
+  calcTong(tenDvi: string) {
+    if (this.dataTable && this.dataTable.length > 0) {
+      let arr = this.dataTable.filter(item => item.tenDvi == tenDvi)
+      const sum = arr.reduce((prev, cur) => {
+        prev += cur.soLuong;
+        return prev;
+      }, 0);
+      return sum;
+    }
+  }
 }
 
 

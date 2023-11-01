@@ -112,10 +112,10 @@
           <th class="text-center" style="width: 9%;">Năm kế hoạch</th>
           <th class="text-center" style="width: 9%;">Số quyết định</th>
           <th class="text-center" style="width: 9%;">Ngày ký</th>
-          <th class="text-center" style="width: 25%;">Trích yếu</th>
+          <th class="text-center" >Trích yếu</th>
           <th class="text-center" style="width: 8%;">Loại giá</th>
-          <th class="text-center" style="width: 10%;">Loại hàng DTQG</th>
-          <th class="text-center" style="width: 10%;">Chủng loại hàng DTQG</th>
+          <th class="text-center" style="width: 10%;" *ngIf="pagType == 'LT'">Loại hàng DTQG</th>
+          <th class="text-center" style="width: 10%;" *ngIf="pagType == 'LT'">Chủng loại hàng DTQG</th>
           <th class="text-center" style="width: 8%;">Số quyết định cần điều chỉnh</th>
           <th class="text-center" style="width: 9%;">Trạng thái</th>
           <th class="text-center" width="width: 5%;">Hành động</th>
@@ -161,13 +161,13 @@
                      (input)="filterInTable('tenLoaiGia',filterTable.tenLoaiGia)" size="small"/>
             </nz-input-group>
           </th>
-          <th>
+          <th *ngIf="pagType == 'LT'">
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
                      (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small"/>
             </nz-input-group>
           </th>
-          <th>
+          <th *ngIf="pagType == 'LT'">
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenCloaiVthh"
                      (input)="filterInTable('tenCloaiVthh',filterTable.tenCloaiVthh)" size="small"/>
@@ -202,8 +202,8 @@
           <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.tenLoaiGia }}</td>
-          <td>{{ data.tenLoaiVthh }}</td>
-          <td>{{ data.tenCloaiVthh }}</td>
+          <td *ngIf="pagType == 'LT'">{{ data.tenLoaiVthh }}</td>
+          <td *ngIf="pagType == 'LT'">{{ data.tenCloaiVthh }}</td>
           <td>{{ data.soQdDc }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>

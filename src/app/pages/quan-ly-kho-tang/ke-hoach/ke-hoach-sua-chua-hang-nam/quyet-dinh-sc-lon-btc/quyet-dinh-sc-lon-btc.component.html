@@ -81,8 +81,9 @@
           <th class="text-center" nzWidth="100px">Năm KH</th>
           <th class="text-center" nzWidth="150px">Số quyết định</th>
           <th class="text-center" nzWidth="120px">Ngày ký QĐ của BTC</th>
+          <th class="text-center" nzWidth="120px"> Lần điều chỉnh </th>
           <th class="text-center" nzWidth="">Trích yếu</th>
-          <th class="text-center" nzWidth="120px">Số tờ trình</th>
+          <th class="text-center" nzWidth="120px">Số QĐ giao NV của BTC </th>
           <th class="text-center" nzWidth="120px">Trạng thái</th>
           <th class="text-center" nzWidth="150px">Hành động</th>
         </tr>
@@ -107,6 +108,12 @@
                                [(ngModel)]="filterTable.ngayTao"
                                (ngModelChange)="filterInTable('ngayTao', convertDateToString(filterTable.ngayTao))"
               ></nz-date-picker>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
+                     (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small"/>
             </nz-input-group>
           </th>
           <th>
@@ -142,11 +149,12 @@
           <td>{{ data.namKeHoach }}</td>
           <td>{{ data.soQuyetDinh }}</td>
           <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.lanDieuChinh }}</td>
           <td>{{ data.trichYeu }}</td>
-          <td>{{ data.soTt }}</td>
+          <td>{{ data.soQdGiaoNv }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
-            <a (click)="redirectToChiTiet(data.id,true)" *ngIf="data.trangThai == STATUS.BAN_HANH && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDBTC_XEM')">
+            <a (click)="redirectToChiTiet(data.id,true)" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDBTC_XEM')">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a

@@ -433,6 +433,8 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
                       case this.yearNow - 2:
                         item.tkdnThoc[1].soLuong +=
                           tonKho.duDau;
+                        item.xtnThoc[1].soLuong +=
+                          tonKho.duDau;
                         break;
                       case this.yearNow - 3:
                         item.tkdnThoc[0].soLuong +=
@@ -445,6 +447,8 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
                     switch (tonKho.nam) {
                       case this.yearNow - 1:
                         item.tkdnGao[2].soLuong +=
+                          tonKho.duDau;
+                        item.xtnGao[2].soLuong +=
                           tonKho.duDau;
                         break;
                       case this.yearNow - 2:

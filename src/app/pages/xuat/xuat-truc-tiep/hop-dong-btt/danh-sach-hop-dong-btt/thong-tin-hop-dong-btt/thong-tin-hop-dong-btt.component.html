@@ -528,8 +528,9 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Số lượng bán TT</nz-form-label>
                   <nz-form-control nz-col>
-                        <span
-                          style="color: blue">{{formData.value.soLuong|number:globals.numberFormat:globals.locale}}</span>
+                    <span style="color: blue" *ngIf="formData.value.soLuong">
+                      {{ formData.value.soLuong | number:globals.numberFormat:globals.locale }}
+                    </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -562,8 +563,10 @@
                   <nz-form-label [nzNoColon]="true"> Tổng SL xuất bán TT theo QĐ phê duyệt KH bán trực tiếp
                   </nz-form-label>
                   <nz-form-control nz-col>
-                        <span
-                          style="color: blue">{{formData.value.slXuatBanQdPd|number:globals.numberFormat:globals.locale}} {{formData.value.donViTinh}}</span>
+                    <span style="color: blue" *ngIf="formData.value.slXuatBanQdPd">
+                      {{ formData.value.slXuatBanQdPd | number:globals.numberFormat:globals.locale }}
+                      ({{formData.value.donViTinh}})
+                    </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -572,18 +575,22 @@
                   <nz-form-label [nzNoColon]="true"> Tổng SL xuất bán TT theo QĐ phê duyệt KH bán trực tiếp đã ký HĐ
                   </nz-form-label>
                   <nz-form-control nz-col>
-                        <span
-                          style="color: blue">{{formData.value.slXuatBanKyHdong|number:globals.numberFormat:globals.locale}} {{formData.value.donViTinh}}</span>
+                    <span style="color: blue" *ngIf="formData.value.slXuatBanKyHdong">
+                      {{ formData.value.slXuatBanKyHdong | number:globals.numberFormat:globals.locale }}
+                      ({{formData.value.donViTinh}})
+                    </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
               <div nz-col [nzSpan]="12">
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> SL xuất bán TT theo QĐ phê duyệt Kh bán trực tiếp chưa ký HĐ
+                  <nz-form-label [nzNoColon]="true"> L xuất bán TT theo QĐ phê duyệt Kh bán trực tiếp chưa ký HĐ
                   </nz-form-label>
                   <nz-form-control nz-col>
-                        <span
-                          style="color: red">{{formData.value.slXuatBanChuaKyHdong|number:globals.numberFormat:globals.locale}} {{formData.value.donViTinh}}</span>
+                    <span style="color: red" *ngIf="formData.value.slXuatBanChuaKyHdong">
+                      {{ formData.value.slXuatBanChuaKyHdong | number:globals.numberFormat:globals.locale }}
+                      ({{formData.value.donViTinh}})
+                    </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -608,23 +615,30 @@
         </nz-collapse-panel>
       </nz-collapse>
       <nz-collapse nzAccordion>
-        <nz-collapse-panel [nzHeader]="'ĐỊA ĐIỂM GIAO, NHẬN HÀNG'" [nzActive]="true">
-          <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered>
+        <nz-collapse-panel [nzHeader]="'ĐỊA ĐIỂM CUNG CẤP HÀNG DTQG'" [nzActive]="true">
+          <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered [nzFrontPagination]="false"
+                    [nzShowPagination]="false">
             <thead>
             <tr>
-              <th class="text-center" nzWidth="50px"></th>
-              <th class="text-left wrap" nzWidth="150px">Chi cục</th>
-              <th class="text-left wrap" nzWidth="150px">Địa điểm xuất kho</th>
-              <th class="text-left wrap" nzWidth="150px">Điểm kho</th>
-              <th class="text-left wrap" nzWidth="300px">Lô kho</th>
-              <th class="text-center wrap" nzWidth="100px">Mã ĐVTS</th>
-              <th class="text-right wrap" nzWidth="100px">SL xuất bán TT đề xuất</th>
-              <th class="text-right wrap" nzWidth="100px">SL xuất bán TT ký hợp đồng</th>
-              <th class="text-left wrap" nzWidth="100px">ĐVT</th>
-              <th class="text-right wrap" nzWidth="100px">Đơn giá cụ thể được duyệt không VAT (đ/kg)</th>
-              <th class="text-right wrap" nzWidth="100px">Đơn giá đề xuất theo KH không VAT (đ/kg)</th>
-              <th class="text-right wrap" nzWidth="100px">Đơn giá ký hợp đồng không VAT (đ/kg)</th>
-              <th class="text-right wrap" nzWidth="100px">Thành tiền (đ)</th>
+              <th nzWidth="50px" class="text-center wrap"></th>
+              <th class="text-left">Chi cục</th>
+              <th class="text-left">Địa điểm xuất kho</th>
+              <th class="text-left">Điểm kho</th>
+              <th class="text-left">Lô kho</th>
+              <th class="text-left">Mã ĐVTS</th>
+              <th class="text-center">SL xuất bán <br>TT đề xuất</th>
+              <th class="text-center">SL xuất bán <br>TT ký hợp đồng</th>
+              <th class="text-left">ĐVT</th>
+              <th class="text-center">Đơn giá cụ thể được <br>duyệt không VAT
+                {{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? '(đ)' : '(đ/kg)'}}
+              </th>
+              <th class="text-center">Đơn giá đề xuất theo KH <br>không VAT
+                {{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? '(đ)' : '(đ/kg)'}}
+              </th>
+              <th class="text-center">Đơn giá ký hợp đồng <br>không VAT
+                {{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? '(đ)' : '(đ/kg)'}}
+              </th>
+              <th class="text-center">Thành tiền ký <br>hợp đồng (đ)</th>
             </tr>
             </thead>
             <tbody>
@@ -646,9 +660,10 @@
                   <td></td>
                   <td class="text-left">{{ children.diaDiemKho }}</td>
                   <td class="text-left">{{ children.tenDiemKho }}</td>
-                  <td
-                    class="text-left">{{ (children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") + (children.tenNhaKho ? children.tenNhaKho : "") }}</td>
-                  <td class="text-center">{{ children.maDviTsan }}</td>
+                  <td class="text-left">
+                    {{ (children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") + (children.tenNhaKho ? children.tenNhaKho : "") }}
+                  </td>
+                  <td class="text-left">{{ children.maDviTsan }}</td>
                   <td class="text-right">{{ children.soLuongDeXuat|number:globals.numberFormat:globals.locale }}</td>
                   <td class="text-right">{{ children.soLuongKyHd|number:globals.numberFormat:globals.locale }}</td>
                   <td class="text-left">{{ children.donViTinh }}</td>
@@ -670,9 +685,11 @@
                 <td></td>
                 <td></td>
                 <td
-                  class="text-right bold text-blue"> {{ calcTong('soLuongXuatBan')|number:globals.numberFormat:globals.locale }}</td>
+                  class="text-right bold text-blue"> {{ calcTong('soLuongXuatBan')|number:globals.numberFormat:globals.locale }}
+                </td>
                 <td
-                  class="text-right bold text-blue"> {{ calcTong('soLuongKyHopDong')|number:globals.numberFormat:globals.locale }}</td>
+                  class="text-right bold text-blue"> {{ calcTong('soLuongKyHopDong')|number:globals.numberFormat:globals.locale }}
+                </td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -1214,8 +1231,9 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Số lượng</nz-form-label>
                   <nz-form-control nz-col>
-                    <span
-                      style="color: blue">{{formData.value.soLuong|number:globals.numberFormat:globals.locale}}</span>
+                    <span style="color: blue" *ngIf="formData.value.soLuong">
+                      {{ formData.value.soLuong | number:globals.numberFormat:globals.locale }}
+                    </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -1256,8 +1274,10 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> SL xuất TT ủy quyền cho Chi cục theo QĐ PD KH BTT</nz-form-label>
                   <nz-form-control nz-col>
-                    <span
-                      style="color: blue">{{formData.value.slXuatBanQdPd|number:globals.numberFormat:globals.locale}} {{formData.value.donViTinh}}</span>
+                    <span style="color: blue" *ngIf="formData.value.slXuatBanQdPd">
+                      {{ formData.value.slXuatBanQdPd | number:globals.numberFormat:globals.locale }}
+                      ({{formData.value.donViTinh}})
+                    </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -1265,8 +1285,10 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> SL xuất TT ủy quyền cho Chi cục chưa được ký HĐ</nz-form-label>
                   <nz-form-control nz-col>
-                    <span
-                      style="color: red">{{formData.value.slXuatBanChuaKyHdong|number:globals.numberFormat:globals.locale}} {{formData.value.donViTinh}}</span>
+                    <span style="color: red" *ngIf="formData.value.slXuatBanChuaKyHdong">
+                      {{ formData.value.slXuatBanChuaKyHdong | number:globals.numberFormat:globals.locale }}
+                      ({{formData.value.donViTinh}})
+                    </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -1293,18 +1315,18 @@
       </nz-collapse>
       <nz-collapse nzAccordion>
         <nz-collapse-panel [nzHeader]="'ĐỊA ĐIỂM GIAO, NHẬN HÀNG'" [nzActive]="true">
-          <nz-table class="pd-10" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
+          <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered [nzFrontPagination]="false"
                     [nzShowPagination]="false">
             <thead>
             <tr>
-              <th class="text-center" nzWidth="50px"></th>
-              <th class="text-left wrap" nzWidth="300px">Địa điểm xuất kho</th>
-              <th class="text-left wrap" nzWidth="150px">Điểm kho</th>
-              <th class="text-left wrap" nzWidth="150px">Lô kho</th>
-              <th class="text-center wrap" nzWidth="100px">Mã ĐVTS</th>
-              <th class="text-right wrap" nzWidth="100px">SL xuất bán trực tiếp</th>
-              <th class="text-left wrap" nzWidth="100px">ĐVT</th>
-              <th class="text-right wrap" nzWidth="100px">Thành tiền</th>
+              <th nzWidth="50px" class="text-center wrap"> STT</th>
+              <th class="text-left">Địa điểm xuất kho</th>
+              <th class="text-left">Điểm kho</th>
+              <th class="text-left">Lô kho</th>
+              <th class="text-left">Mã ĐVTS</th>
+              <th class="text-center">SL xuất bán trực tiếp</th>
+              <th class="text-left">ĐVT</th>
+              <th class="text-center">Thành tiền</th>
             </tr>
             </thead>
             <tbody>
@@ -1312,9 +1334,10 @@
               <td class="text-center">{{ idx + 1 }}</td>
               <td class="text-left">{{data.diaDiemKho}}</td>
               <td class="text-left">{{data.tenDiemKho}}</td>
-              <td
-                class="text-left">{{ (data.tenLoKho ? data.tenLoKho + " - " : "") + (data.tenNganKho ? data.tenNganKho + " - " : "") + (data.tenNhaKho ? data.tenNhaKho : "") }}</td>
-              <td class="text-center">{{data.maDviTsan}}</td>
+              <td class="text-left">
+                {{ (data.tenLoKho ? data.tenLoKho + " - " : "") + (data.tenNganKho ? data.tenNganKho + " - " : "") + (data.tenNhaKho ? data.tenNhaKho : "") }}
+              </td>
+              <td class="text-left">{{data.maDviTsan}}</td>
               <td class="text-right">{{data.soLuongKyHd|number:globals.numberFormat:globals.locale }}</td>
               <td class="text-left">{{data.donViTinh}}</td>
               <td class="text-right">{{data.thanhTien|number:globals.numberFormat:globals.locale }}</td>
@@ -1327,8 +1350,10 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
                 <td
-                  class="text-right bold text-blue"> {{ calcTong('soLuongKyHd')|number:globals.numberFormat:globals.locale }}</td>
+                  class="text-right bold text-blue"> {{ calcTong('soLuongKyHd')|number:globals.numberFormat:globals.locale }}
+                </td>
                 <td></td>
                 <td></td>
               </tr>
