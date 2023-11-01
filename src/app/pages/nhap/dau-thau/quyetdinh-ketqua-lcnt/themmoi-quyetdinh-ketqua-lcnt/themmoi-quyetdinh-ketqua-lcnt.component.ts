@@ -212,7 +212,8 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
           idNhaThau: item.kqlcntDtl?.idNhaThau,
           donGiaVat: item.kqlcntDtl?.donGiaVat,
           trangThai: item.kqlcntDtl?.trangThai,
-          tenNhaThau: item.kqlcntDtl?.tenNhaThau
+          tenNhaThau: item.kqlcntDtl?.tenNhaThau,
+          dienGiaiNhaThau: item.kqlcntDtl?.dienGiaiNhaThau
         }
         detail.push(dtl)
         if (item.kqlcntDtl?.trangThai == null) {
@@ -232,8 +233,9 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
       res = await this.quyetDinhPheDuyetKetQuaLCNTService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
+      this.idInput = res.data.id;
+      this.formData.get('id').setValue(res.data.id);
       if (isBanHanh) {
-        this.idInput = res.data.id;
         this.pheDuyet();
       } else {
         if (this.formData.get('id').value) {

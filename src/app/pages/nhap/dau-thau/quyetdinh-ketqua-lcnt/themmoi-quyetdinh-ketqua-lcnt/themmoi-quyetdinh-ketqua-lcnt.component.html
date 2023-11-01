@@ -115,7 +115,7 @@
             <div nz-col [nzSpan]="24">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  File đính kèm quyết định đã ký
+                  File đính kèm QĐ phê duyệt kết quả LCNT đã ký và đóng dấu
                 </nz-form-label>
                 <div class="list-file">
                   <file-list [isViewDetail]="formData.value.trangThai != STATUS.DANG_NHAP_DU_LIEU && !isViewDetail" [data]="danhSachFileDinhKem"></file-list>
@@ -140,6 +140,7 @@
   <app-themmoi-thongtin-dauthau *ngIf="formData.value.soQdPdKhlcnt && !loaiVthh.startsWith('02')" [isShowFromKq]="true"
                                 [isKqDaBh]="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"
                                 [idInput]="formData.value.idQdPdKhlcntDtl"
+                                [titleThongTinChung]="'KẾT QUẢ LỰA CHỌN NHÀ THẦU'"
                                 [loaiVthh]="loaiVthh" #thongtindt>
   </app-themmoi-thongtin-dauthau>
   <nz-card class="mg-t-16 flex-card p-lr16" *ngIf="formData.value.soQdPdKhlcnt && loaiVthh.startsWith('02')">

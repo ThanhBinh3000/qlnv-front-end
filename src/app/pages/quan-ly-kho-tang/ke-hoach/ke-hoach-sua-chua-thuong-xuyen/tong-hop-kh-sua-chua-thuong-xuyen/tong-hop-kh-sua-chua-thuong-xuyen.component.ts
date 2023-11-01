@@ -22,6 +22,7 @@ export class TongHopKhSuaChuaThuongXuyenComponent extends Base2Component impleme
   selectedId: number = 0;
   isViewDetail: boolean;
   isDetail: boolean = false;
+  isApprove: boolean = false;
   listTrangThai: any[] = [
     {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
     {ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt lãnh đạo vụ'},
@@ -72,9 +73,10 @@ export class TongHopKhSuaChuaThuongXuyenComponent extends Base2Component impleme
     this.search();
   }
 
-  redirectToChiTiet(id: number, isView?: boolean) {
+  redirectToChiTiet(id: number, isView?: boolean, isApprove?: boolean) {
     this.selectedId = id;
     this.isDetail = true;
+    this.isApprove = isApprove
     this.isViewDetail = isView ?? false;
   }
   openQdPdModal(id: number) {

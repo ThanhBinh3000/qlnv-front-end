@@ -79,10 +79,10 @@
             <th>Số KH/tờ trình</th>
             <th *ngIf="userService.isTongCuc() && !loaiVthh.startsWith('02')">Mã tổng hợp</th>
             <th *ngIf="userService.isCuc() || userService.isTongCuc()" class="text-center" style="width: 12%;">Loại hàng
-              hóa</th>
+              DTQG</th>
             <th *ngIf="(userService.isCuc() || userService.isTongCuc())  && !loaiVthh.startsWith('02')"
               class="text-center" style="width: 12%;">Chủng
-              loại hàng hóa</th>
+              loại hàng DTQG</th>
             <th class="text-center" style="width: 8%;">Tổng số gói thầu</th>
             <th class="text-center" style="width: 8%;">Số gói thầu đã trúng</th>
             <th class="text-center" style="width: 8%;">SL HĐ đã ký</th>

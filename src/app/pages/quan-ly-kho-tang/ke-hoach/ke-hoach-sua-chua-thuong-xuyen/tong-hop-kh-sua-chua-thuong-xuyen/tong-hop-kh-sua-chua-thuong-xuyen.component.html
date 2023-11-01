@@ -190,7 +190,7 @@
             </a>
             <a *ngIf="(userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_TH_DUYETLDV') && data.trangThai == STATUS.CHO_DUYET_LDV)
             || (userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_TH_DUYETLCTC') && data.trangThai == STATUS.CHO_DUYET_LDTC) "
-               (click)="redirectToChiTiet(data.id, true)"> <i class="icon htvbdh_tcdt_pheduyet"></i> </a>
+               (click)="redirectToChiTiet(data.id, true, true)"> <i class="icon htvbdh_tcdt_pheduyet"></i> </a>
             <a *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_TH_XOA') && userService.isTongCuc() && data.trangThai == STATUS.DU_THAO " (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
@@ -221,6 +221,7 @@
 <ng-template #templateThemmoi>
   <app-thong-tin-tong-hop-kh-sua-chua-thuong-xuyen [id]="selectedId" (showListEvent)="showList()"
                                                         [isViewDetail]="isViewDetail"
+                                                        [isApprove]="isApprove"
                                                         [idInput]="selectedId"></app-thong-tin-tong-hop-kh-sua-chua-thuong-xuyen>
 </ng-template>
 
