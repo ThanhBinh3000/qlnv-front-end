@@ -10,7 +10,7 @@ import {
   QdPdKetQuaBttService
 } from "../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service";
 import {MESSAGE} from "../../../../../constants/message";
-import {LOAI_HANG_DTQG} from "../../../../../constants/config";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-quyet-dinh-chao-gia',

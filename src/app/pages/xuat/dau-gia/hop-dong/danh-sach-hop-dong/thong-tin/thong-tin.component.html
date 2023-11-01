@@ -570,10 +570,9 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Thành tiền</nz-form-label>
                   <nz-form-control nz-col>
-                     <span style="color: blue">
-                       {{ formData.value.thanhTien | number:globals.numberFormat:globals.locale }}
-                       {{ formData.value.thanhTien != null ? '(đ)' : '' }}
-                     </span>
+                    <span style="color: blue" *ngIf="formData.value.thanhTien">
+                      {{ formData.value.thanhTien | number:globals.numberFormat:globals.locale }} (đ)
+                    </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -613,19 +612,19 @@
       </nz-collapse>
       <nz-collapse nzAccordion>
         <nz-collapse-panel [nzHeader]="'ĐỊA ĐIỂM CUNG CẤP HÀNG DTQG'" [nzActive]="true">
-          <nz-table class="pd-10" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
+          <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered [nzFrontPagination]="false"
                     [nzShowPagination]="false">
             <thead>
             <tr>
-              <th class="text-center"></th>
+              <th nzWidth="50px" class="text-center wrap"></th>
               <th class="text-left">Chi cục DTNN</th>
               <th class="text-left">Địa điểm xuất kho</th>
               <th class="text-left">Điểm kho</th>
               <th class="text-left">Ngăn/Lô kho</th>
-              <th class="text-right">SL xuất bán đấu giá</th>
-              <th class="text-center">Mã ĐVTS</th>
-              <th class="text-right">Đơn giá không VAT (đ)</th>
-              <th class="text-right">Thành tiền (đ)</th>
+              <th class="text-center">SL xuất bán đấu giá</th>
+              <th class="text-left">Mã ĐVTS</th>
+              <th class="text-center">Đơn giá không VAT (đ)</th>
+              <th class="text-center">Thành tiền (đ)</th>
             </tr>
             </thead>
             <tbody>
@@ -647,19 +646,19 @@
                   <td></td>
                   <td class="text-left">{{ children.diaDiemKho }}</td>
                   <td class="text-left">{{ children.tenDiemKho }}</td>
-                  <td
-                    class="text-left">{{(children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") +
-                  (children.tenNhaKho ? children.tenNhaKho : "")}}</td>
+                  <td class="text-left">
+                    {{(children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") + (children.tenNhaKho ? children.tenNhaKho : "")}}
+                  </td>
                   <td class="text-right">{{ children.soLuong|number:globals.numberFormat:globals.locale }}</td>
-                  <td class="text-center">{{ children.maDviTsan }}</td>
+                  <td class="text-left">{{ children.maDviTsan }}</td>
                   <td class="text-right">{{ children.donGiaTraGia|number:globals.numberFormat:globals.locale }}</td>
                   <td class="text-right">{{ children.thanhTien|number:globals.numberFormat:globals.locale }}</td>
                 </tr>
               </ng-container>
             </ng-container>
             </tbody>
-            <tfoot *ngIf="dataTable.length > 0">
-            <ng-container>
+            <ng-container *ngIf="dataTable.length > 0">
+              <tfoot>
               <tr>
                 <td colspan="5"></td>
                 <td
@@ -669,8 +668,8 @@
                 <td
                   class="text-right bold text-blue">{{formData.value.thanhTien|number:globals.numberFormat:globals.locale}}</td>
               </tr>
+              </tfoot>
             </ng-container>
-            </tfoot>
           </nz-table>
         </nz-collapse-panel>
       </nz-collapse>

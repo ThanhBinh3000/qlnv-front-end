@@ -145,7 +145,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
     this.onClose.emit();
   }
 
-  banHanh() {
+  async banHanh() {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: "Xác nhận",
@@ -158,7 +158,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            id: this.idInput,
+            id: this.formData.value.id,
             lyDoTuChoi: null,
             trangThai: STATUS.BAN_HANH
           };
@@ -230,6 +230,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
       res = await this.quyetDinhGiaTCDTNNService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
+      this.idInput = res.data.id;
       if (isBanHanh) {
         this.formData.patchValue({
           id: res.data.id,
@@ -336,7 +337,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
                 // Sử dụng trường "type" làm key trong Set để kiểm tra sự trùng lặp
                 if (!uniqueSoDeXuat.has(record.soQdTcdt)) {
                   // Nếu trường "type" chưa tồn tại trong Set, thêm giá trị "soDeXuat" vào Set
-                  uniqueSoDeXuat.add(record.soQdTcdt.toString());
+                  uniqueSoDeXuat.add(record.soQdTcdt ? record.soQdTcdt.toString() : "");
                 }
               }
               const uniqueSoDeXuatArray = Array.from(uniqueSoDeXuat);
@@ -438,7 +439,12 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
   }
 
   printPreview() {
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
+    const blobUrl = URL.createObjectURL(this.pdfBlob);
+    printJS({
+      printable: blobUrl,
+      type: 'pdf',
+      base64: false
+    })
   }
 
 

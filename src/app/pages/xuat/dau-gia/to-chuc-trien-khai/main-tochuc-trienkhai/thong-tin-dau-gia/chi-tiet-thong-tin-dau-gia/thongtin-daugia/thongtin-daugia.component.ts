@@ -19,6 +19,7 @@ import {STATUS} from 'src/app/constants/status';
 import {FileDinhKem} from "../../../../../../../../models/DeXuatKeHoachuaChonNhaThau";
 import {Validators} from "@angular/forms";
 import _ from 'lodash';
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
   selector: 'app-thongtin-daugia',
@@ -39,6 +40,19 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
   listHinhThucBDG: any[] = [];
   listPhuongThucBDG: any[] = [];
   listHinhThucLucChonToChucBDG: any[] = [];
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "right",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
 
   constructor(
     httpClient: HttpClient,

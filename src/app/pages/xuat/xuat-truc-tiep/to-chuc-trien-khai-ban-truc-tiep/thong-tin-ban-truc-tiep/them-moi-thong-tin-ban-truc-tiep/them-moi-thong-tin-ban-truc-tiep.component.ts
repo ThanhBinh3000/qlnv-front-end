@@ -18,6 +18,7 @@ import {PREVIEW} from "../../../../../../constants/fileType";
 import printJS from "print-js";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {THONG_TIN_BAN_TRUC_TIEP} from "../../../../../../constants/status";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
   selector: 'app-them-moi-thong-tin-ban-truc-tiep',
@@ -40,6 +41,19 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   idDviDtl: number;
   fileUyQuyen: any[] = [];
   fileBanLe: any[] = [];
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "right",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
 
   constructor(
     httpClient: HttpClient,
@@ -109,9 +123,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       await this.spinner.show();
       if (id <= 0) return;
       const res = await this.chaoGiaMuaLeUyQuyenService.getDetail(id);
-      if (res.msg !== MESSAGE.SUCCESS) {
-        console.error('Failed to fetch data:', res.msg);
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      if (res.msg !== MESSAGE.SUCCESS || !res.data) {
         return;
       }
       const data = res.data;

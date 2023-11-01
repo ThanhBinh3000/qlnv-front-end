@@ -12,7 +12,7 @@ export class DieuChinhKeHoachComponent implements OnInit {
   selectedId: number = 0;
   isView: boolean = false;
   deXuatId: number = 0;
-  tabSelected = 'DXDC';
+  tabSelected = 'DCCTKH';
 
   constructor(
     public userService: UserService,

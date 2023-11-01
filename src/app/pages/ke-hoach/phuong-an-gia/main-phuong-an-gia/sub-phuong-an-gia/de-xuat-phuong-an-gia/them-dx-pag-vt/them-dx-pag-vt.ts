@@ -302,6 +302,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     this.pagTtChungs = data.pagTtChungs;
     this.pagTtChungs.forEach(item => {
       item.id = null;
+      this.onChangeCloaiVthh(item.cloaiVthh, item)
     })
     this.updateEditCache('ttc')
   }
@@ -573,7 +574,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     }
   }
 
-  async onChangeCloaiVthh(event) {
+  async onChangeCloaiVthh(event, item?: any) {
     this.rowItemTtc.giaQdBtc = null;
     this.rowItemTtc.giaQdBtcVat = null;
     this.rowItemTtc.tchuanCluong = null;
@@ -597,11 +598,32 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       let res = await this.quyetDinhGiaCuaBtcService.getQdGiaVattu(body);
       if (res.msg == MESSAGE.SUCCESS) {
         let qdBtc = res.data
-        if (qdBtc) {
-          this.rowItemTtc.giaQdBtc = qdBtc.giaQdBtc;
-          this.rowItemTtc.giaQdBtcVat = qdBtc.giaQdBtcVat;
-          this.rowItemTtc.tchuanCluong = qdBtc.tchuanCluong;
-          this.rowItemTtc.vat = qdBtc.vat;
+        if (qdBtc ) {
+          if (item) {
+            if (qdBtc.giaQdDcBtc && qdBtc.giaQdDcBtc > 0) {
+              item.giaQdBtc = qdBtc.giaQdDcBtc;
+              item.giaQdBtcVat = qdBtc.giaQdDcBtcVat;
+              item.tchuanCluong = qdBtc.tchuanCluong;
+              item.vat = qdBtc.vat;
+            } else {
+              item.giaQdBtc = qdBtc.giaQdBtc;
+              item.giaQdBtcVat = qdBtc.giaQdBtcVat;
+              item.tchuanCluong = qdBtc.tchuanCluong;
+              item.vat = qdBtc.vat;
+            }
+          } else {
+            if (qdBtc.giaQdDcBtc && qdBtc.giaQdDcBtc > 0) {
+              this.rowItemTtc.giaQdBtc = qdBtc.giaQdDcBtc;
+              this.rowItemTtc.giaQdBtcVat = qdBtc.giaQdDcBtcVat;
+              this.rowItemTtc.tchuanCluong = qdBtc.tchuanCluong;
+              this.rowItemTtc.vat = qdBtc.vat;
+            } else {
+              this.rowItemTtc.giaQdBtc = qdBtc.giaQdBtc;
+              this.rowItemTtc.giaQdBtcVat = qdBtc.giaQdBtcVat;
+              this.rowItemTtc.tchuanCluong = qdBtc.tchuanCluong;
+              this.rowItemTtc.vat = qdBtc.vat;
+            }
+          }
         }
       } else {
         this.notification.warning(MESSAGE.WARNING, 'Không tìm thấy giá BTC cho loại hàng này')

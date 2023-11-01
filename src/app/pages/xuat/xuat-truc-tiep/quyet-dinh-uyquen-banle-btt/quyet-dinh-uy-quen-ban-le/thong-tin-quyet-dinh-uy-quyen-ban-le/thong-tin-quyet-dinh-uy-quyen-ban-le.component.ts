@@ -31,7 +31,6 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
   listOfData: any[] = [];
   fileUyQuyen: any[] = [];
   fileBanLe: any[] = [];
-  listPthucBanTt: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -72,7 +71,6 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
       if (this.idInput) {
         await Promise.all([
           this.loadDetail(this.idInput),
-          this.loadDataComboBox(),
         ]);
       }
     } catch (e) {
@@ -83,26 +81,13 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
     }
   }
 
-  async loadDataComboBox() {
-    this.listPthucBanTt = [
-      {
-        ma: THONG_TIN_BAN_TRUC_TIEP.UY_QUYEN,
-        giaTri: 'Ủy quyền',
-      },
-      {
-        ma: THONG_TIN_BAN_TRUC_TIEP.BAN_LE,
-        giaTri: 'Bán lẻ',
-      },
-    ];
-  }
-
   async loadDetail(id: number) {
     if (id <= 0) {
       return;
     }
     try {
       const res = await this.chaoGiaMuaLeUyQuyenService.getDetail(id);
-      if (!res.data) {
+      if (res.msg !== MESSAGE.SUCCESS || !res.data) {
         return;
       }
       const data = res.data;
@@ -121,7 +106,7 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
         ngayHluc: data.xhQdPdKhBttHdr ? data.xhQdPdKhBttHdr.ngayHluc : data.xhQdDchinhKhBttHdr.ngayHlucDc,
         loaiVthh: data.loaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
-        pthucBanTrucTiep: data.pthucBanTrucTiep,
+        pthucBanTrucTiep: data.pthucBanTrucTiep === THONG_TIN_BAN_TRUC_TIEP.UY_QUYEN ? 'Ủy quyền' : 'Bán lẻ',
         trichYeu: data.xhQdPdKhBttHdr ? data.xhQdPdKhBttHdr.trichYeu : data.xhQdDchinhKhBttHdr.trichYeu,
         thoiGianDeXuatBtt: this.isValidDate(data.tgianDkienTu) && this.isValidDate(data.tgianDkienDen)
           ? [data.tgianDkienTu, data.tgianDkienDen] : [],
@@ -149,6 +134,9 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
     };
     try {
       const res = await this.donViService.getAll(body);
+      if (res.msg !== MESSAGE.SUCCESS || !res.data) {
+        return;
+      }
       const dataDk = res.data.find(item => item.maDvi === dataCha.maDiemKho);
       if (dataDk) {
         dataCha.diaChi = dataDk.diaChi;

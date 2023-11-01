@@ -267,27 +267,30 @@
     </nz-collapse-panel>
   </nz-collapse>
   <nz-collapse>
-    <nz-collapse-panel nzActive="true" nzHeader="QUYẾT ĐỊNH LỰA CHỌN THÔNG TIN CHÀO GIÁ">
+    <nz-collapse-panel nzActive="true" nzHeader="QUYẾT ĐỊNH LỰA CHỌN CHÀO GIÁ">
       <nz-card class="mg-t-16 flex-card p-lr16">
-        <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered>
+        <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered [nzFrontPagination]="false"
+                  [nzShowPagination]="false">
           <thead>
           <tr>
-            <th class="text-center" nzWidth="50px"></th>
-            <th class="text-left"> Chi cục</th>
+            <th nzWidth="50px" class="text-center wrap"> STT</th>
+            <th class="text-left"> Chi cục DTNN</th>
             <th class="text-left"> Điểm kho</th>
             <th class="text-left"> Lô kho</th>
-            <th class="text-center"> Mã ĐVTS</th>
-            <th class="text-right"> SL xuất bán TT đề xuất</th>
+            <th class="text-left"> Mã ĐVTS</th>
+            <th class="text-center"> SL xuất bán <br>TT đề xuất</th>
             <th class="text-left"> ĐVT</th>
-            <th class="text-right"> Đơn giá được duyệt(đ/kg)</th>
-            <th class="text-right"> Thành tiền (đ)</th>
+            <th class="text-center"> Đơn giá được <br>duyệt
+              {{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? '(đ)' : '(đ/kg)'}}
+            </th>
+            <th class="text-center"> Thành tiền <br>(đ)</th>
           </tr>
           </thead>
           <tbody>
           <ng-container *ngFor="let item of dataTable , let i = index">
             <tr>
               <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-              <td colspan="4">{{item.tenDvi}}</td>
+              <td class="text-left bold" colspan="4">{{item.tenDvi}}</td>
               <td class="text-right bold">{{item.soLuongChiCuc|number:globals.numberFormat:globals.locale}}</td>
               <td></td>
               <td></td>
@@ -295,14 +298,14 @@
             </tr>
             <ng-container *ngIf="expandSet.has(i)">
               <tr *ngFor="let children of item.children, let y = index"
-                  [ngClass]="{'bg-selected': y == 0 && this.selected}"
-                  (click)="selectRow($event,children)">
+                  [ngClass]="{'bg-selected': y == 0 && this.selected}" (click)="selectRow($event,children)">
                 <td></td>
                 <td></td>
                 <td class="text-left">{{ children.tenDiemKho}}</td>
-                <td
-                  class="text-left">{{ (children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") + (children.tenNhaKho ? children.tenNhaKho : "") }}</td>
-                <td class="text-center">{{ children.maDviTsan}}</td>
+                <td class="text-left">
+                  {{ (children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") + (children.tenNhaKho ? children.tenNhaKho : "") }}
+                </td>
+                <td class="text-left">{{ children.maDviTsan}}</td>
                 <td class="text-right">{{ children.soLuongDeXuat|number:globals.numberFormat:globals.locale}}</td>
                 <td class="text-left">{{ children.donViTinh}}</td>
                 <td class="text-right">{{ children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale}}</td>
@@ -312,22 +315,25 @@
           </ng-container>
           </tbody>
         </nz-table>
+        <h5>Danh sách chào giá được chọn</h5>
         <nz-table class="nowrap pd-10" nzBordered [nzData]="listOfData" [nzFrontPagination]="false"
                   [nzShowPagination]="false" *ngIf="showFromTT">
           <thead>
           <tr>
-            <th class="text-center" nzWidth="50px"></th>
+            <th nzWidth="50px" class="text-center wrap"> STT</th>
             <th class="text-left">Tên cá nhân/tổ chức</th>
             <th class="text-left">MST</th>
             <th class="text-left">Địa chỉ</th>
             <th class="text-left">Số điện thoại</th>
             <th class="text-left">Ngày chào giá</th>
-            <th class="text-right">Số lượng (Kg)</th>
-            <th class="text-right">Đơn giá chưa bao gồm thuế (VNĐ)</th>
-            <th class="text-right">Thành tiền</th>
-            <th class="text-center">File đính kèm</th>
+            <th class="text-center"> Số lượng
+              {{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? '' : '(kg)'}}
+            </th>
+            <th class="text-center">Đơn giá không có VAT (đ)</th>
+            <th class="text-center">Thành tiền</th>
+            <th class="text-left">File đính kèm</th>
             <th class="text-center">Lựa chọn</th>
-            <th class="text-center">Hành động</th>
+            <th nzWidth="100px" class="text-center wrap"> Hành động</th>
           </tr>
           </thead>
           <tbody>
@@ -342,7 +348,7 @@
               <td class="text-right">{{data.soLuong|number:globals.numberFormat:globals.locale}}</td>
               <td class="text-right">{{data.donGia|number:globals.numberFormat:globals.locale}}</td>
               <td class="text-right">{{data.thanhTien|number:globals.numberFormat:globals.locale}}</td>
-              <td class="text-center">{{data.fileDinhKems?.fileName }}</td>
+              <td class="text-left">{{data.fileDinhKems?.fileName }}</td>
               <td class="text-center"><label nz-checkbox [(ngModel)]="data.luaChon"
                                              [nzDisabled]="isDisabledLuaChon(true)"></label>
               </td>
@@ -365,7 +371,7 @@
               <td class="text-right">{{data.soLuong|number:globals.numberFormat:globals.locale}}</td>
               <td class="text-right">{{data.donGia|number:globals.numberFormat:globals.locale}}</td>
               <td class="text-right">{{data.thanhTien|number:globals.numberFormat:globals.locale}}</td>
-              <td class="text-center">{{data.fileDinhKems?.fileName }}</td>
+              <td class="text-left">{{data.fileDinhKems?.fileName }}</td>
               <td class="text-center">
                 <label nz-checkbox [(ngModel)]="data.luaChon"></label>
               </td>
@@ -397,9 +403,7 @@
           </div>
           <div nz-col [nzSpan]="24">
             <nz-form-item class="form-item display-block">
-              <nz-form-label [nzNoColon]="true">
-                Ghi chú
-              </nz-form-label>
+              <nz-form-label [nzNoColon]="true"> Ghi chú</nz-form-label>
               <nz-form-control>
                 <textarea [readonly]="isView" nz-input [rows]="3" formControlName="ghiChu"></textarea>
               </nz-form-control>

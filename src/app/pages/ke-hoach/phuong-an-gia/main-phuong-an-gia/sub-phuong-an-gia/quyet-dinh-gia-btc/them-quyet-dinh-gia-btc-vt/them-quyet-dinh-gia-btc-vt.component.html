@@ -228,7 +228,6 @@
       <th class="text-center" >Tiêu chuẩn, quy chuẩn</th>
       <th class="text-center" >Số lượng</th>
       <th class="text-center" >Đơn vị tính</th>
-      <th class="text-center" >VAT (%)</th>
       <th class="text-center" >Giá đề xuất của TCDT</th>
       <th class="text-center" nzWidth="150px"
           > {{formData.value.loaiDeXuat == '00' ? 'Giá QĐ của BTC' : 'Giá trước điều chỉnh của BTC' }}</th>
@@ -243,7 +242,6 @@
       <td>{{ data.tchuanCluong }}</td>
       <td class="text-right">{{ data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
       <td>{{ data.donViTinh }}</td>
-      <td class="text-right">{{ data.vat ? data.vat * 100 : '' }}</td>
       <td class="text-right">{{ data.giaDn | number : '1.0-1' : 'vi_VN' }}</td>
       <td class="text-right" *ngIf="(formData.value.loaiDeXuat == '00')">
         <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="data.giaQdBtc" [nzMin]="0"

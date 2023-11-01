@@ -506,4 +506,11 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
     }
     this.expandAll();
   }
+
+  checkCbVu() {
+    if(this.formData.value.trangThai == STATUS.DA_DUYET_LDC && this.userService.isTongCuc()){
+      return true;
+    }
+    return false;
+  }
 }

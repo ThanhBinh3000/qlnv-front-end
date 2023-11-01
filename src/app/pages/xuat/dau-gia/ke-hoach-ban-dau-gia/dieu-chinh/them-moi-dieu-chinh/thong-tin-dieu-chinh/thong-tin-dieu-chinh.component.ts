@@ -23,6 +23,7 @@ export class ThongTinDieuChinhComponent implements OnChanges {
   @Input() title;
   @Input() dataInput;
   @Input() isView;
+  @Input() trangThaiDc;
   @Input() isCache;
   @Input() loaiVthhCache;
   @Output() countChanged: EventEmitter<any> = new EventEmitter();
@@ -56,7 +57,7 @@ export class ThongTinDieuChinhComponent implements OnChanges {
       tongSoLuong: [null],
       tongTienKhoiDiem: [null],
       tongTienDatTruoc: [null],
-      donViTinh: [''],
+      donViTinh: [null],
     })
   }
 
@@ -83,7 +84,7 @@ export class ThongTinDieuChinhComponent implements OnChanges {
 
   async themMoiBangPhanLoTaiSan(data?: any, index?: number) {
     const modalGT = this.modal.create({
-      nzTitle: 'Thêm địa điểm giao nhận hàng',
+      nzTitle: '',
       nzContent: DialogThemDiaDiemPhanLoComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -93,14 +94,14 @@ export class ThongTinDieuChinhComponent implements OnChanges {
         dataEdit: data,
         loaiVthh: this.dataInput.loaiVthh,
         cloaiVthh: this.dataInput.cloaiVthh,
-        typeLoaiVthh: this.loaiVthhCache
+        typeLoaiVthh: this.loaiVthhCache,
+        donViTinh: this.dataInput.donViTinh,
       },
     });
     modalGT.afterClose.subscribe(async (updatedData) => {
       if (updatedData && index >= 0) {
         this.dataTable[index] = updatedData;
         await this.calculatorTable();
-        await this.sendDataToParent();
       }
     });
   }
@@ -140,6 +141,7 @@ export class ThongTinDieuChinhComponent implements OnChanges {
       tongTienDatTruoc: this.dataTable.reduce((acc, item) => acc + item.tongTienDtruocDd, 0),
       tongSoLuong: this.dataTable.reduce((acc, item) => acc + item.tongSlXuatBanDx, 0),
     });
+    await this.sendDataToParent();
   }
 
   expandSet = new Set<number>();

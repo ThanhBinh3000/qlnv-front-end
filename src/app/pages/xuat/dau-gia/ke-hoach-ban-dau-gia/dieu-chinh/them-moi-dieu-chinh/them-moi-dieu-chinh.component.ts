@@ -335,7 +335,6 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
         this.dataInputCache = data.children.find(item => item.soDxuat === this.dataTable[index].soDxuat) ?? null;
       }
     }
-    await this.spinner.hide();
   }
 
   async receiveDataFromChild(data: any) {

@@ -260,7 +260,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
           loaiGia: this.formData.value.loaiGia,
         },
       });
-      modalQD.afterClose.subscribe((data) => {
+      modalQD.afterClose.subscribe(async (data) => {
         if (data) {
           let thRes = data.listDx;
           let body = {
@@ -268,10 +268,9 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
           }
           this.formData.patchValue({
             soToTrinh : thRes && thRes.length > 0 ? thRes.map(item=> item.soDeXuat).toString() : [],
-            soQdDc : thRes && thRes.length > 0 ? thRes.map(item=> item.soDeXuatDc).toString() : [],
             loaiDeXuat: data.formData.loaiQd,
           })
-          this.tongHopData(body);
+          await this.tongHopData(body);
         }
       });
     }  else {
@@ -289,12 +288,26 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         let dataTongHop = res.data;
         if (dataTongHop && dataTongHop.length > 0) {
-          this.arrThongTinGia = dataTongHop
-        }
+          const uniqueSoDeXuat = new Set<string>();
+          for (const record of dataTongHop) {
+            record.giaQdTcdt =  record.giaQdTcdtCu;
+            record.giaQdTcdtVat =  record.giaQdTcdtCuVat;
+            // Sử dụng trường "type" làm key trong Set để kiểm tra sự trùng lặp
+            if (!uniqueSoDeXuat.has(record.soQdTcdt)) {
+              // Nếu trường "type" chưa tồn tại trong Set, thêm giá trị "soDeXuat" vào Set
+              uniqueSoDeXuat.add(record.soQdTcdt ? record.soQdTcdt.toString() : "");
+            }
+          }
+          const uniqueSoDeXuatArray = Array.from(uniqueSoDeXuat);
+          this.formData.patchValue({
+            soQdDc : uniqueSoDeXuatArray && this.formData.value.loaiDeXuat == '01' ? uniqueSoDeXuatArray.join(', ') : ""
+          })
+          this.arrThongTinGia = cloneDeep(dataTongHop);
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
       this.spinner.hide();
+    }
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
@@ -356,7 +369,12 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
   }
 
   printPreview() {
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
+    const blobUrl = URL.createObjectURL(this.pdfBlob);
+    printJS({
+      printable: blobUrl,
+      type: 'pdf',
+      base64: false
+    })
   }
 
 

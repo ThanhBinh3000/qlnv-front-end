@@ -15,7 +15,7 @@ import {Router} from "@angular/router";
 import {MESSAGE} from "../../../../../constants/message";
 import { saveAs } from 'file-saver';
 import {
-  HhScQdGiaoNvService
+   KhScQdGiaoNvService
 } from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/khScQdGiaoNv.service";
 
 @Component({
@@ -48,7 +48,7 @@ export class QuyetDinhGiaoNvComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private _service: HhScQdGiaoNvService,
+    private _service: KhScQdGiaoNvService,
     private router: Router,
   ) {
     super(httpClient, storageService, notification, spinner, modal, _service)
