@@ -217,6 +217,11 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       this.spinner.hide();
       return;
     }
+    if (this.validateGiaBTc()) {
+      this.notification.warning(MESSAGE.WARNING, "Không tìm thấy quyết định của BTC cho loại hàng hóa!")
+      this.spinner.hide();
+      return;
+    }
     let body = this.formData.value;
     body.fileDinhKemReq = this.fileDinhKem;
     body.type = this.type;
@@ -237,6 +242,19 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     }
 
     this.spinner.hide();
+  }
+
+  validateGiaBTc() {
+      let rs = false;
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach(it => {
+          if (! it.giaQdBtc || it.giaQdBtc == 0) {
+            rs = true;
+            return;
+          }
+        });
+      }
+      return rs;
   }
 
   async loadDsVthh() {
