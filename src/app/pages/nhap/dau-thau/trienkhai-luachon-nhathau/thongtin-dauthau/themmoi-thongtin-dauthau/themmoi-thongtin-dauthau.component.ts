@@ -253,21 +253,29 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       let tongMucDtTrung = 0
       let tongMucDt = 0
       let slGthauTrung  = 0
-      data.children.forEach(item => {
-        tongMucDt += item.soLuong * item.donGiaTamTinh
-        if (item.trangThaiDt == STATUS.THANH_CONG) {
+      this.listOfData = data.children;
+      for (let i = 0; i < this.listOfData.length; i++) {
+        if ( this.listOfData[i].trangThaiDt == STATUS.THANH_CONG) {
           slGthauTrung += 1
-          tongMucDtTrung += item.soLuong * item.donGiaNhaThau
+          tongMucDtTrung +=  this.listOfData[i].soLuong *  this.listOfData[i].donGiaNhaThau
         }
-      })
+        let tongThanhTien = 0;
+        for (let j = 0; j < this.listOfData[i].children.length; j++) {
+          tongThanhTien += this.listOfData[i].children[j].soLuong * this.listOfData[i].children[j].donGia
+          tongMucDt += this.listOfData[i].children[j].soLuong * this.listOfData[i].children[j].donGia
+          this.expandSet2.add(j)
+        }
+        this.listOfData[i].thanhTien = tongThanhTien * 1000
+        this.expandSet.add(i)
+      }
       this.formData.patchValue({
         namKhoach: data.hhQdKhlcntHdr?.namKhoach,
         soQdPdKhlcnt: data.hhQdKhlcntHdr?.soQd,
         soQdPdKqLcnt: data.soQdPdKqLcnt,
         tenDuAn: data.tenDuAn,
         tenDvi: data.tenDvi,
-        tongMucDt: tongMucDt,
-        tongMucDtGoiTrung: tongMucDtTrung,
+        tongMucDt: tongMucDt * 1000,
+        tongMucDtGoiTrung: tongMucDtTrung * 1000,
         tenNguonVon: data.dxuatKhLcntHdr?.tenNguonVon,
         tenHthucLcnt: data.dxuatKhLcntHdr?.tenHthucLcnt,
         tenPthucLcnt: data.dxuatKhLcntHdr?.tenPthucLcnt,
@@ -296,16 +304,6 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         trangThai: data.trangThai,
         tenTrangThai: data.tenTrangThai
       })
-      this.listOfData = data.children;
-      for (let i = 0; i < this.listOfData.length; i++) {
-        let tongThanhTien = 0;
-        for (let j = 0; j < this.listOfData[i].children.length; j++) {
-          tongThanhTien += this.listOfData[i].children[j].soLuong * this.listOfData[i].children[j].donGia
-          this.expandSet2.add(j)
-        }
-        this.listOfData[i].thanhTien = tongThanhTien * 1000
-        this.expandSet.add(i)
-      }
       this.showDetail(event, this.listOfData[0])
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -820,7 +818,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       let sum = 0
         if (this.isShowFromKq) {
           const sumChild = this.listOfData[i].children.reduce((prev, cur) => {
-            prev += cur.soLuong * parseFloat(this.abs(this.listOfData[i].kqlcntDtl?.donGiaVat - cur.donGia).toFixed(2));
+            prev += cur.soLuong * this.abs(this.listOfData[i].kqlcntDtl?.donGiaVat - cur.donGia)
             return prev;
           }, 0);
           sum += sumChild;

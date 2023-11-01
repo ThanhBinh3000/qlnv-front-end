@@ -169,7 +169,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       tongMucDtLamTron: [null],
       tongMucDtDx: [null, [Validators.required]],
       tongMucDtDxLamTron: [null, [Validators.required]],
-      nguonVon: ['NGV01', [Validators.required]],
+      nguonVon: ['NV_NSNN', [Validators.required]],
       dienGiai: [''],
       tgianNhang: [null, [Validators.required]],
       tgianThien: [null, [Validators.required]],
