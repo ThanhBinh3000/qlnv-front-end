@@ -268,7 +268,10 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
           if (res.msg == MESSAGE.SUCCESS) {
             // this.formData.patchValue(res.data);
             this.helperService.bidingDataInFormGroupAndIgnore(this.formData, res.data, ['tongTrongLuongBaoBi']);
-            this.formData.controls['tongTrongLuongBaoBi'].setValue(res.data.tongTrongLuongBaoBi, { emitEvent: false })
+            this.formData.controls['tongTrongLuongBaoBi'].setValue(res.data.tongTrongLuongBaoBi, { emitEvent: false });
+            if (this.loaiVthh === '02') {
+              this.tinhTong()
+            }
           }
         })
         .catch((e) => {
