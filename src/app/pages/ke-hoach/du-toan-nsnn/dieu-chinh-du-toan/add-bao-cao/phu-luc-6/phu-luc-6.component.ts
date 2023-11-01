@@ -201,8 +201,10 @@ export class PhuLuc6Component implements OnInit {
         }
 
         this.lstCtietBcao.forEach(item => {
-            item.sluongThienTtien = Operator.mul(item.sluongThienDmuc, item.sluongThienCong);
-            item.dtoanDchinh = item.sluongThienTtien - item.dtoanGiaoLke;
+            if (item.sluongThienDmuc) {
+                item.sluongThienTtien = Operator.mul(item.sluongThienDmuc, item.sluongThienCong);
+                item.dtoanDchinh = item.sluongThienTtien - item.dtoanGiaoLke;
+            }
         })
 
         this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);

@@ -327,10 +327,10 @@
 										</td>
 										<td>
 											<!-- {{Op.fmtVal(editCache[data.id].data.dkienThienChiPhiTaiCuaKho)}} -->
-											<ng-container *ngIf="data.dmucChiPhiTaiCuaKho; else nhap1">
+											<ng-container *ngIf="data.dmucChiPhiTaiCuaKho; else nhap2">
 												{{ Op.fmtVal(editCache[data.id].data.dkienThienChiPhiTaiCuaKho) }}
 											</ng-container>
-											<ng-template #nhap1>
+											<ng-template #nhap2>
 												<input class="money-input" currencyMask [options]="Op.amount"
 													[(ngModel)]="editCache[data.id].data.dkienThienChiPhiTaiCuaKho"
 													(ngModelChange)="changeModel(editCache[data.id].data.id)" />

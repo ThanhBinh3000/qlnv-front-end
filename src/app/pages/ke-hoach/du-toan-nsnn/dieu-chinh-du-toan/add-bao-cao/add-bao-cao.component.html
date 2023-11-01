@@ -269,6 +269,7 @@
                                     <th scope="col" nzWidth="30%">Đơn vị lập</th>
                                     <th scope="col" nzWidth="12%">Mã báo cáo</th>
                                     <th scope="col" nzWidth="12%">Năm báo cáo</th>
+                                    <th scope="col" nzWidth="12%">Đợt báo cáo</th>
                                     <th scope="col" nzWidth="12%">Ngày trình duyệt <br /> (Ngày đơn vị cấp dưới
                                         gửi báo cáo)</th>
                                     <th scope="col" nzWidth="12%">Ngày duyệt <br />(Ngày đơn vị cấp trên duyệt báo
@@ -286,6 +287,9 @@
                                         {{ data.maBcao }}
                                     </td>
                                     <td>{{ data.namBcao }}</td>
+                                    <td>
+                                        {{ data.dotBcao }}
+                                    </td>
                                     <td>{{ Utils.fmtDate(data.ngayDuyet) }}</td>
                                     <td>{{ Utils.fmtDate(data.ngayPheDuyet) }}</td>
                                     <td>{{ Status.reportStatusName(data.trangThai) }}</td>

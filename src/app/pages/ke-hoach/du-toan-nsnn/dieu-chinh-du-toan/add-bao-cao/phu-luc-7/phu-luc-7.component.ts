@@ -257,17 +257,18 @@ export class PhuLuc7Component implements OnInit {
             this.lstCtietBcao.forEach(item => {
                 const dinhMuc = this.dsDinhMuc.find(e => (!e.cloaiVthh && e.loaiVthh == item.dmucHang) || e.cloaiVthh == item.dmucHang);
                 item.dmucChiPhiTaiCuaKho = dinhMuc?.tongDmuc;
+                if (item.dmucChiPhiTaiCuaKho) {
+                    item.dkienThienChiPhiTaiCuaKho = Operator.mul(item.dmucChiPhiTaiCuaKho, item.dkienThienLuong);
+                    // item.dkienThienChiPhiNgoaiCuaKho = Operator.mul(item.binhQuanChiPhiNgoaiCuaKho, item.dkienThienLuong);
+                    item.dkienThienChiPhiTongCong = Operator.sum([item.dkienThienChiPhiTaiCuaKho, item.dkienThienChiPhiNgoaiCuaKho])
 
-                item.dkienThienChiPhiTaiCuaKho = Operator.mul(item.dmucChiPhiTaiCuaKho, item.dkienThienLuong);
-                // item.dkienThienChiPhiNgoaiCuaKho = Operator.mul(item.binhQuanChiPhiNgoaiCuaKho, item.dkienThienLuong);
-                item.dkienThienChiPhiTongCong = Operator.sum([item.dkienThienChiPhiTaiCuaKho, item.dkienThienChiPhiNgoaiCuaKho])
+                    item.tdiemBcaoChiPhiTaiCuaKho = Operator.mul(item.tdiemBcaoLuong, item.dmucChiPhiTaiCuaKho)
+                    // item.tdiemBcaoChiPhiNgoaiCuaKho = Operator.mul(item.binhQuanChiPhiNgoaiCuaKho, item.tdiemBcaoLuong)
+                    item.tdiemBcaoChiPhiTongCong = Operator.sum([item.tdiemBcaoChiPhiTaiCuaKho, item.tdiemBcaoChiPhiNgoaiCuaKho])
 
-                item.tdiemBcaoChiPhiTaiCuaKho = Operator.mul(item.tdiemBcaoLuong, item.dmucChiPhiTaiCuaKho)
-                // item.tdiemBcaoChiPhiNgoaiCuaKho = Operator.mul(item.binhQuanChiPhiNgoaiCuaKho, item.tdiemBcaoLuong)
-                item.tdiemBcaoChiPhiTongCong = Operator.sum([item.tdiemBcaoChiPhiTaiCuaKho, item.tdiemBcaoChiPhiNgoaiCuaKho])
-
-                item.ncauDtoan = Operator.sum([item.tdiemBcaoChiPhiTongCong, item.dkienThienChiPhiTongCong])
-                item.dtoanDnghiDchinh = Operator.sum([item.ncauDtoan, - item.dtoanLkeDaGiao])
+                    item.ncauDtoan = Operator.sum([item.tdiemBcaoChiPhiTongCong, item.dkienThienChiPhiTongCong])
+                    item.dtoanDnghiDchinh = Operator.sum([item.ncauDtoan, - item.dtoanLkeDaGiao])
+                }
             })
             this.sum1()
         } else {
@@ -277,16 +278,18 @@ export class PhuLuc7Component implements OnInit {
                     // item.tenHang = dinhMuc?.tenDinhMuc;
                     item.dmucChiPhiTaiCuaKho = dinhMuc?.tongDmuc;
                     // item.donViTinh = dinhMuc?.donViTinh;
-                    item.dkienThienChiPhiTaiCuaKho = Operator.mul(item.dmucChiPhiTaiCuaKho, item.dkienThienLuong);
-                    item.dkienThienChiPhiNgoaiCuaKho = Operator.mul(item.binhQuanChiPhiNgoaiCuaKho, item.dkienThienLuong);
-                    item.dkienThienChiPhiTongCong = Operator.sum([item.dkienThienChiPhiTaiCuaKho, item.dkienThienChiPhiNgoaiCuaKho])
+                    if (item.dmucChiPhiTaiCuaKho) {
+                        item.dkienThienChiPhiTaiCuaKho = Operator.mul(item.dmucChiPhiTaiCuaKho, item.dkienThienLuong);
+                        item.dkienThienChiPhiNgoaiCuaKho = Operator.mul(item.binhQuanChiPhiNgoaiCuaKho, item.dkienThienLuong);
+                        item.dkienThienChiPhiTongCong = Operator.sum([item.dkienThienChiPhiTaiCuaKho, item.dkienThienChiPhiNgoaiCuaKho])
 
-                    item.tdiemBcaoChiPhiTaiCuaKho = Operator.mul(item.tdiemBcaoLuong, item.dmucChiPhiTaiCuaKho)
-                    item.tdiemBcaoChiPhiNgoaiCuaKho = Operator.mul(item.binhQuanChiPhiNgoaiCuaKho, item.tdiemBcaoLuong)
-                    item.tdiemBcaoChiPhiTongCong = Operator.sum([item.tdiemBcaoChiPhiTaiCuaKho, item.tdiemBcaoChiPhiNgoaiCuaKho])
+                        item.tdiemBcaoChiPhiTaiCuaKho = Operator.mul(item.tdiemBcaoLuong, item.dmucChiPhiTaiCuaKho)
+                        item.tdiemBcaoChiPhiNgoaiCuaKho = Operator.mul(item.binhQuanChiPhiNgoaiCuaKho, item.tdiemBcaoLuong)
+                        item.tdiemBcaoChiPhiTongCong = Operator.sum([item.tdiemBcaoChiPhiTaiCuaKho, item.tdiemBcaoChiPhiNgoaiCuaKho])
 
-                    item.ncauDtoan = Operator.sum([item.tdiemBcaoChiPhiTongCong, item.dkienThienChiPhiTongCong])
-                    item.dtoanDnghiDchinh = Operator.sum([item.ncauDtoan, - item.dtoanLkeDaGiao])
+                        item.ncauDtoan = Operator.sum([item.tdiemBcaoChiPhiTongCong, item.dkienThienChiPhiTongCong])
+                        item.dtoanDnghiDchinh = Operator.sum([item.ncauDtoan, - item.dtoanLkeDaGiao])
+                    }
                 }
                 this.sum1()
             })
