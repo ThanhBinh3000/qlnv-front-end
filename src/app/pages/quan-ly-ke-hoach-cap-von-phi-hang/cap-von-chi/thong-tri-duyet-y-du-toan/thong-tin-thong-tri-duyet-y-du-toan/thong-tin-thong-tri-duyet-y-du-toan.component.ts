@@ -273,6 +273,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             // this.back();
           } else {
+            console.log(res.data,'res.datares.datares.data');
             this.guiDuyet(res.data.id);
           }
         } else {
@@ -479,12 +480,11 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         let item = {
           'dvCungCapHang': 'Tổng cục dự trữ nhà nước',
           'nganHang': null,
-          'id': '9999',
+          'id': 9999,
           'soTaiKhoan': null,
           'maHopDong': '',
         };
         this.listDviThuHuong.push(item);
-        console.log();
         this.formData.patchValue({
           'dviThuHuong': this.listDviThuHuong[0].id,
           'tenLoaiTien': 'VNĐ',

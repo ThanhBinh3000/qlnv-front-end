@@ -207,7 +207,7 @@ export class QuyetDinhGnvComponent extends Base2Component implements OnInit {
 
   }
   checkRoleXoaDs(): boolean {
-    if (this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_XOA')) {
+    if (this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_XOA') && this.userService.isCuc()) {
       return true
     }
     return false

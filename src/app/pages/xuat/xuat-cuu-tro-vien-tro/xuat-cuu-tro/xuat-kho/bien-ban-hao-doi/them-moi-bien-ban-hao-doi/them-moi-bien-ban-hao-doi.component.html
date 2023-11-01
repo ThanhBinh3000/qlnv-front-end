@@ -4,7 +4,8 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button type="button" class="btn btn-sub" (click)="xemTruoc(idInput,templateName)" *ngIf="checkRolePreview()">
+    <button type="button" class="btn btn-sub" (click)="xemTruoc(formData.value.id,templateName)"
+      *ngIf="checkRolePreview()">
       <i class="icon htvbdh_totrinh"></i>
       <span> In/Xem trước </span>
     </button>

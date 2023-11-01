@@ -190,7 +190,7 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
       nzWidth: 310,
       nzOnOk: async () => {
         this.nzActiveCCDC = true
-        this.dataTableChiCuc = this.dataTableChiCucDefault
+        this.dataTableChiCuc = cloneDeep(this.dataTableChiCucDefault);
         this.buildView("dataTableChiCuc", "dataViewChiCuc")
       },
       nzOnCancel: async () => {
@@ -478,8 +478,8 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
             })));
             if (dataCCDC.length > 0) {
               const dsCC = Array.isArray(dataCCDC) ? dataCCDC.map(f => ({ ...f, groupBy: `${f.maChiCucDi}-${f.maChiCucDen}` })) : []
-              this.dataTableChiCucDefault = dsCC
-              this.dataTableChiCuc = dsCC
+              this.dataTableChiCucDefault = cloneDeep(dsCC)
+              this.dataTableChiCuc = cloneDeep(dsCC)
               this.buildView("dataTableChiCuc", "dataViewChiCuc")
             }
           }

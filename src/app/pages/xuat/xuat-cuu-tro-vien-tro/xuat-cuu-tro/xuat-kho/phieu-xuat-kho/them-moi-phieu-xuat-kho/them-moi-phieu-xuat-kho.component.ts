@@ -338,7 +338,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       this.formData.patchValue({
         idPhieuKnCl: data.id,
         soPhieuKnCl: data.soBbQd,
-        ktvBaoQuan: data.ktvBaoQuan,
+        ktvBaoQuan: data.dviKiemNghiem,
         ngayKn: data.ngayKiemNghiem,
         loaiVthh: data.loaiVthh,
         cloaiVthh: data.cloaiVthh,
@@ -381,7 +381,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         this.formData.patchValue({
           idPhieuKnCl: data.id,
           soPhieuKnCl: data.soBbQd,
-          ktvBaoQuan: data.ktvBaoQuan,
+          ktvBaoQuan: data.dviKiemNghiem,
           ngayKn: data.ngayKiemNghiem,
           loaiVthh: data.loaiVthh,
           cloaiVthh: data.cloaiVthh,
@@ -403,15 +403,15 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     return;
   }
   async save() {
-    this.formData.disable()
+    this.helperService.ignoreRequiredForm(this.formData);
+    this.formData.controls['soPhieuXuatKho'].setValidators(Validators.required);
     let body = this.formData.value;
     body.fileDinhKems = this.fileDinhKems;
     let rs = await this.createUpdate(body);
-    this.formData.enable();
+    this.helperService.restoreRequiredForm(this.formData)
   }
   async luuGuiDuyet() {
     this.formData.controls["soBangKeCh"].setValidators(Validators.required);
-    this.formData.controls["soBangKeCh"].updateValueAndValidity();
     if (this.formData.valid) {
       const trangThaiLdccDuyet = await this.getDetailBkch();
       if (!trangThaiLdccDuyet) {
@@ -439,7 +439,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         break;
       }
     }
-    this.approve(this.idInput, trangThai, msg);
+    this.approve(this.formData.value.id, trangThai, msg);
   }
 
   tuChoi() {
@@ -450,7 +450,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         break;
       }
     }
-    this.reject(this.idInput, trangThai)
+    this.reject(this.formData.value.id, trangThai)
   }
 
   isDisabled() {
