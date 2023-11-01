@@ -206,8 +206,28 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
     return sl;
   }
 
+  changeSl(event: number, item: any) {
+    if (event && item.slMetQuyCuon) {
+      let cuon = event / item.slMetQuyCuon;
+      if (cuon.toString().includes(".")) {
+        let cut = cuon.toString().split(".")
+        let cuon0 = Number(cut[0])
+        let check = cuon0 + 0.35
+        if (check > cuon) {
+          item.slCuon = cuon0
+        } else {
+          item.slCuon = cuon0 + 1
+        }
+
+      } else {
+        item.slCuon = cuon
+      }
+
+    } else item.slCuon = undefined
+  }
+
   changeSlQuyDoi(event: number, item: any) {
-    if (event) {
+    if (event && item.soLuong) {
       let cuon = item.soLuong / event;
       if (cuon.toString().includes(".")) {
         let cut = cuon.toString().split(".")
@@ -223,7 +243,7 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
         item.slCuon = cuon
       }
 
-    }
+    } else item.slCuon = undefined
   }
 
   convertListData() {
