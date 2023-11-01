@@ -338,7 +338,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       this.formData.patchValue({
         idPhieuKnCl: data.id,
         soPhieuKnCl: data.soBbQd,
-        ktvBaoQuan: data.ktvBaoQuan,
+        ktvBaoQuan: data.dviKiemNghiem,
         ngayKn: data.ngayKiemNghiem,
         loaiVthh: data.loaiVthh,
         cloaiVthh: data.cloaiVthh,
@@ -381,7 +381,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         this.formData.patchValue({
           idPhieuKnCl: data.id,
           soPhieuKnCl: data.soBbQd,
-          ktvBaoQuan: data.ktvBaoQuan,
+          ktvBaoQuan: data.dviKiemNghiem,
           ngayKn: data.ngayKiemNghiem,
           loaiVthh: data.loaiVthh,
           cloaiVthh: data.cloaiVthh,
