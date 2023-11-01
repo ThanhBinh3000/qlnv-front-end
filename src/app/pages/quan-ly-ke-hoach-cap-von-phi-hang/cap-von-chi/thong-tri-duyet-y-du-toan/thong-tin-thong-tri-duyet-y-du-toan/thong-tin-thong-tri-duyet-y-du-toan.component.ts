@@ -123,7 +123,6 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   }
 
   initForm() {
-    console.log(this.itemThongTri, 'this.itemThongTrithis.itemThongTrithis.itemThongTri');
     this.formData = this.fb.group({
       id: [this.itemThongTri ? this.itemThongTri.id : null, []],
       nam: [this.itemThongTri ? this.itemThongTri.nam : null, [Validators.required]],
@@ -488,6 +487,8 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         this.listDviThuHuong.push(item);
         this.formData.patchValue({
           'dviThuHuong': this.listDviThuHuong[0].id,
+          'tenLoaiTien': 'VNĐ',
+          'loaiTien': '01'
         });
       } else {
         let res = await this.deNghiCapPhiBoNganhService.dsThuHuong({
