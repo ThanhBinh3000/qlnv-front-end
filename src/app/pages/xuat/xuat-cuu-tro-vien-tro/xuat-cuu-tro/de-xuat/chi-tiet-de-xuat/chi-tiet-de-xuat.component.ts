@@ -147,8 +147,8 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       });
     this.formData.controls['deXuatPhuongAn'].valueChanges.subscribe(value => {
       const { tongSoLuongDeXuat, tongSoLuongXuatCap, tongSoLuongNhuCauXuat } = Array.isArray(value) ? value.reduce((obj, cur) => {
-        // obj.tongSoLuongDeXuat += cur.soLuong ? +cur.soLuong : 0;
-        obj.tongSoLuongDeXuat += this.formData.value.tenVthh === TEN_LOAI_VTHH.GAO ? (cur.soLuongNhuCauXuat ? cur.soLuongNhuCauXuat : 0) : (cur.soLuong ? +cur.soLuong : 0)
+        obj.tongSoLuongDeXuat += cur.soLuong ? +cur.soLuong : 0;
+        // obj.tongSoLuongDeXuat += this.formData.value.tenVthh === TEN_LOAI_VTHH.GAO ? (cur.soLuongNhuCauXuat ? cur.soLuongNhuCauXuat : 0) : (cur.soLuong ? +cur.soLuong : 0)
         obj.tongSoLuongXuatCap += cur.soLuongChuyenCapThoc ? +cur.soLuongChuyenCapThoc : 0;
         obj.tongSoLuongNhuCauXuat += cur.soLuongNhuCauXuat ? cur.soLuongNhuCauXuat : 0
         return obj;
@@ -208,7 +208,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
               this.maHauTo = '/' + res.data.soDx?.split("/")[1];
               res.data.soDx = res.data.soDx?.split("/")[0];
             }
-            this.formData.patchValue({ ...res.data, maDviDx: res.data.maDvi.slice(0, -2) });
+            this.formData.patchValue({ ...res.data, tenDvi: res.data.tenDvi ? res.data.tenDvi : res.data.tenDviDx, maDviDx: res.data.maDvi.slice(0, -2) });
             if (!this.isVthhVatuThietBi()) {
               this.formData.patchValue({ donViTinh: "kg" })
             }
@@ -241,6 +241,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
 
   async save() {
     await this.helperService.ignoreRequiredForm(this.formData);
+    this.formData.controls['soDx'].setValidators(Validators.required)
     let body = {
       ...this.formData.value,
       deXuatPhuongAn: cloneDeep(this.formData.value.deXuatPhuongAn).map(f => ({

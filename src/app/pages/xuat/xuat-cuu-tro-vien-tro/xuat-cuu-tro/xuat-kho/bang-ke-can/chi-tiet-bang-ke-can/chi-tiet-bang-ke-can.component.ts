@@ -449,26 +449,11 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   }
 
   async save() {
-    this.formData.disable()
+    this.helperService.ignoreRequiredForm(this.formData);
+    this.formData.controls['soBangKe'].setValidators(Validators.required);
     let body = this.formData.value;
-    let res;
-    if (body.id && body.id > 0) {
-      res = await this.bangKeCanCtvtService.update(body);
-    } else {
-      res = await this.bangKeCanCtvtService.create(body);
-    }
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (this.formData.get('id').value) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-      } else {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-        this.formData.patchValue({ id: res.data.id })
-      }
-      this.formData.enable();
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-    this.formData.enable();
+    await this.createUpdate(body);
+    this.helperService.restoreRequiredForm(this.formData);
   }
 
   async flattenTree(tree) {

@@ -306,14 +306,10 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   }
 
   async save() {
-    // await this.helperService.ignoreRequiredForm(this.formData);
-    // this.formData.controls.soQdGnv.setValidators([Validators.required]);
-    // if (this.formData.value.type !== "TH") {
-    //   this.formData.controls["ngayKetThuc"].setValidators(Validators.required);
-    //   this.formData.controls["mucDichXuat"].setValidators(Validators.required);
-    // }
+    await this.helperService.ignoreRequiredForm(this.formData);
+    this.formData.controls['soBbQd'].setValidators(Validators.required)
     if (this.formData.value.xuatCap) {
-      const soLuongXuatCap = this.formData.value.quyetDinhPdDtl.reduce((sum, cur) => sum += cur.soLuongXc);
+      const soLuongXuatCap = this.formData.value.quyetDinhPdDtl.reduce((sum, cur) => sum += cur.soLuongXc, 0);
       this.formData.patchValue({ soLuongXuatCap })
     }
     if (!this.formData.value.quyetDinhPdDtl || this.formData.value.quyetDinhPdDtl.length <= 0) {
@@ -324,13 +320,12 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null
     }
     await this.createUpdate(body, null, null, ['tenVthh', 'type']);
-    // this.formData.controls["ngayKetThuc"].setValidators(Validators.required);
-    // this.formData.controls["mucDichXuat"].setValidators(Validators.required);
+    this.helperService.restoreRequiredForm(this.formData)
   }
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
     if (this.formData.value.xuatCap) {
-      const soLuongXuatCap = this.formData.value.quyetDinhPdDtl.reduce((sum, cur) => sum += cur.soLuongXc);
+      const soLuongXuatCap = this.formData.value.quyetDinhPdDtl.reduce((sum, cur) => sum += cur.soLuongXc, 0);
       this.formData.patchValue({ soLuongXuatCap })
     }
     let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd + this.maHauTo }

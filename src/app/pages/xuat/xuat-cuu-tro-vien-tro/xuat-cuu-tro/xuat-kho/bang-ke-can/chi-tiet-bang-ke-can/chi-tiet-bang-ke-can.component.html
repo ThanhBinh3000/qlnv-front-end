@@ -4,7 +4,8 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button type="button" class="btn btn-sub" (click)="xemTruoc(idInput,loaiVthh=='02'?templateNameVt:templateName)"
+    <button type="button" class="btn btn-sub"
+      (click)="xemTruoc(formData.value.id,loaiVthh=='02'?templateNameVt:templateName)"
       *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BKCH_IN')">
       <i class="icon htvbdh_totrinh"></i>
       <span> In/Xem trước </span>
@@ -12,14 +13,14 @@
     <ng-container *ngIf="userService.isChiCuc">
       <button
         *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BKCH_DUYET_LDCCUC')"
-        type="button" class="btn btn-sub" (click)="reject(idInput,STATUS.TU_CHOI_LDCC)">
+        type="button" class="btn btn-sub" (click)="reject(formData.value.id,STATUS.TU_CHOI_LDCC)">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span>Từ chối</span>
       </button>
       <button
         *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BKCH_DUYET_LDCCUC')"
         type="button" class="btn btn-sub"
-        (click)="approve(idInput,STATUS.DA_DUYET_LDCC,'Bạn có muốn duyệt quyết định này', null,  MESSAGE.PHE_DUYET_SUCCESS)">
+        (click)="approve(formData.value.id,STATUS.DA_DUYET_LDCC,'Bạn có muốn duyệt quyết định này', null,  MESSAGE.PHE_DUYET_SUCCESS)">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
@@ -287,10 +288,10 @@
 
           <tr *ngFor="let item of formData.value.bangKeDtl, let i = index">
             <ng-container *ngIf="!formData.value.bangKeDtl[i]?.isEdit; else editTemplate">
-              <td>{{i + 1}}</td>
+              <td class="text-center">{{i + 1}}</td>
               <td>{{item.maCan}}</td>
-              <td>{{item.trongLuongBaoBi|number: '1.0-1' : 'vi_VN'}}</td>
-              <td>{{item.trongLuongCaBi|number: '1.0-1' : 'vi_VN'}}</td>
+              <td class="text-right">{{item.trongLuongBaoBi|number: '1.0-1' : 'vi_VN'}}</td>
+              <td class="text-right">{{item.trongLuongCaBi|number: '1.0-1' : 'vi_VN'}}</td>
               <td>
                 <a (click)="editRow(i)" *ngIf="!isView">
                   <i class="fa fa-pencil" title="Sửa"></i>
