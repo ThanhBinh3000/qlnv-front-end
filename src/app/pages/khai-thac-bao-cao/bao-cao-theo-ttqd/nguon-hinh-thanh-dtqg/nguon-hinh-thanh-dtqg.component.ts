@@ -167,6 +167,19 @@ export class NguonHinhThanhDtqgComponent extends Base2Component implements OnIni
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
+      // const reader = new FileReader();
+      // var base64Data
+      // reader.onload = await function(event) {
+      //   if (typeof event.target.result === "string") {
+      //     base64Data = event.target.result.split(',')[1];
+      //   }  // Lấy phần dữ liệu sau dấu phẩy
+      //   console.log(base64Data); // In ra dạng Base64
+      //   this.printSrc = base64Data;
+      // };
+      // reader.readAsDataURL(this.pdfBlob);
+      // if(base64Data != undefined){
+      //   console.log(base64Data, 11111)
+      // }
       this.showDlgPreview = true;
     } catch (e) {
       console.log(e);

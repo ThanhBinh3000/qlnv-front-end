@@ -224,6 +224,9 @@
           <a *ngIf="!isView" (click)="themMoiBangPhanLoTaiSan(item,i)">
             <i class="fa fa-pencil" title="Sửa"></i>
           </a>
+          <a *ngIf="!isView" (click)="deleteRow(i)">
+            <i class="fa fa-trash-o do" title="Xóa"></i>
+          </a>
         </td>
       </tr>
       <ng-container *ngFor="let data of item.children , let i = index">
