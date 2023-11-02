@@ -247,7 +247,7 @@
               <nz-input-number [(ngModel)]='item.nhuCauTb' [nzSize]="'small'" [nzDisabled]='isView'
                 [nzFormatter]='globals.formatter' [nzParser]='globals.parser'></nz-input-number>
             </td>
-            <td><input nz-input [(ngModel)]='item.ghiChu'></td>
+            <td><input nz-input [(ngModel)]='item.ghiChu' [readOnly]="isView"></td>
           </tr>
         </ng-container>
       </ng-container>
@@ -262,7 +262,7 @@
               Tài liệu đính kèm
             </nz-form-label>
             <div class='list-file'>
-              <file-list [data]='fileDinhKem'></file-list>
+              <file-list [data]='fileDinhKem' [isViewDetail]="isView" [disabled]="isView"></file-list>
             </div>
           </nz-form-item>
         </div>

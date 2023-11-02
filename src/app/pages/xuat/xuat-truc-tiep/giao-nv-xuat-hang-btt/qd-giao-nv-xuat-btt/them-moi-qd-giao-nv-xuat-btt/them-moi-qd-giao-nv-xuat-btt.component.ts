@@ -163,13 +163,18 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
       return;
     }
     const data = await this.detail(id);
+    if (!data) {
+      console.error('Không tìm thấy dữ liệu');
+      return;
+    }
+    const {soQdNv, children} = data;
     this.formData.patchValue({
-      soQdNv: data.soQdNv?.split('/')[0] || null,
+      soQdNv: soQdNv?.split('/')[0] || null,
     });
     if (data.idChaoGia) {
       await this.onChangeThongTin(data.idChaoGia);
     }
-    this.dataTable = data.children || [];
+    this.dataTable = this.userService.isChiCuc() ? children.filter(item => item.maDvi === this.userInfo.MA_DVI) : children
   }
 
   async openDialogHopDong() {

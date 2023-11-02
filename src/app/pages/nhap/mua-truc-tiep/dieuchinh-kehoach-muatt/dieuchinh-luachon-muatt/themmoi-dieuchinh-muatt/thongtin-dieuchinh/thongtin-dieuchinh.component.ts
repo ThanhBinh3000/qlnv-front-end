@@ -34,6 +34,8 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
   @Output() dataChild = new EventEmitter<any>();
   @Output() data = new EventEmitter<any>();
   @Output() objectChange = new EventEmitter<number>();
+  @Output()
+  dataTableChange = new EventEmitter<any>();
   @Input() isCache: boolean = false;
   @Input() dataChiTieu;
   formData: FormGroup
@@ -292,6 +294,32 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
       this.formData.get('tgianKthuc').setValue(value);
     }
     this.objectChange.emit(this.formData.value)
+  }
+
+  deleteRow(i: number) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.dataTable = this.dataTable.filter((item, index) => index != i);
+          this.emitDataTable()
+          this.calculatorTable();
+          console.log(this.dataTable)
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
+  }
+
+  emitDataTable() {
+    this.dataTableChange.emit(this.dataTable);
   }
 
 }

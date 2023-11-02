@@ -102,7 +102,7 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
         soQdNv: soQdNvKey || "",
         nam: firstRowInGroup.nam || "",
         idQdNv: firstRowInGroup.idQdNv || "",
-        ngayKyQdNv: firstRowInGroup.ngayKyQdNv || "",
+        tgianGiaoHang: firstRowInGroup.tgianGiaoHang || "",
         childData,
       };
     }).value();
