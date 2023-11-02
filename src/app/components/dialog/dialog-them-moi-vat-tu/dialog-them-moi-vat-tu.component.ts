@@ -297,6 +297,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
 
 
   async onChangeChiCuc(event) {
+    debugger
     let body = {
       maDvi: event,
       type: this.listType
@@ -323,6 +324,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         this.listDiemKho.push(item);
       }
     }
+    console.log(res, 'aaa')
     let bodyPag = {
       namKeHoach: this.namKhoach,
       loaiVthh: this.loaiVthh,
