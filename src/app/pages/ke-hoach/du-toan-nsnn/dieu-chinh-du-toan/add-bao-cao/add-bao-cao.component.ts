@@ -186,8 +186,6 @@ export class AddBaoCaoComponent implements OnInit {
         if (this.baoCao.id) {
             await this.getDetailReport();
         } else {
-            console.log(this.data);
-
             this.baoCao = this.data.baoCao;
         }
         const isSynthetic = this.baoCao.lstDviTrucThuoc && this.baoCao.lstDviTrucThuoc.length != 0;
@@ -285,7 +283,6 @@ export class AddBaoCaoComponent implements OnInit {
                             item.tenDm = tenDm1.join('');
                         }
                     })
-                    console.log(this.baoCao.lstDchinh);
                     const lstLink = this.baoCao.lstDchinh.filter(e => e.maLoai !== "pl01TH")
                     this.isLink = lstLink.every(e => e.trangThai == "1")
                     this.listFile = [];
