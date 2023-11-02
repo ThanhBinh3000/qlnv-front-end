@@ -1,5 +1,6 @@
 <app-cap-nhat-thong-tin-dau-thau-sctx [id]="selectedId" (showListEvent)="showList()"
                                       [isViewDetail]="isViewDetail"
+                                      (dataItemTtdt)="receivedData($event)"
                                       [itemDuAn]="itemDuAn"
                                       *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_TTDT_XEM')"
                                       [idInput]="selectedId">

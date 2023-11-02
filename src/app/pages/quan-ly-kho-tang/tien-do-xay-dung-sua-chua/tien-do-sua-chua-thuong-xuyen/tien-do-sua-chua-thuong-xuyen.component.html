@@ -280,11 +280,11 @@
           </app-quyet-dinh-phe-duyet-khlcnt-sctx>
         </ng-container>
         <ng-container *ngIf="tabSelected == '03'">
-          <app-cap-nhat-thong-tin-dau-thau-sctx [idInput]="itemQdPdKhLcnt.id" [itemDuAn]="itemSelected"
-                                                (dataItemTtdt)="receivedData($event,'04')"></app-cap-nhat-thong-tin-dau-thau-sctx>
+          <app-cap-nhat-thong-tin-dau-thau-sctx [idInput]="itemQdPdKhLcnt.id" (dataItemTtdt)="receivedData($event,'03')"  [itemDuAn]="itemSelected">
+          </app-cap-nhat-thong-tin-dau-thau-sctx>
         </ng-container>
         <ng-container *ngIf="tabSelected == '04'">
-          <app-quyet-dinh-phe-duyet-kqlcnt-sctx [itemTtdt]="itemTtdt"
+          <app-quyet-dinh-phe-duyet-kqlcnt-sctx [itemTtdt]="itemTtdt" (dataItemKqLcnt)="receivedData($event,'04')"
                                                 [itemDuAn]="itemSelected"></app-quyet-dinh-phe-duyet-kqlcnt-sctx>
         </ng-container>
         <ng-container *ngIf="tabSelected == '05'">
