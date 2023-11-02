@@ -33,10 +33,15 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
     ttXuatGiam: null,
     ltGaoTon: null,
     ltThocTon: null,
+    ghiChuLt :null,
     muaTangList: [],
+    ghiChuMuaTang :null,
     xuatGiamList: [],
+    ghiChuXuatGiam :null,
     xuatBanList: [],
+    ghiChuXuatBan :null,
     luanPhienList: [],
+    ghiChuLuanPhien :null,
   };
   dataTable: any[] = [];
   dsBoNganh: any[];

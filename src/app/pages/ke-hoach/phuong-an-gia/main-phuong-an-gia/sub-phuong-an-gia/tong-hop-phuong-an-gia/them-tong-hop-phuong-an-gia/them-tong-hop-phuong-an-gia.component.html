@@ -90,7 +90,7 @@
           </div>
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true"> Cục DTNNKV</nz-form-label>
+              <nz-form-label nzRequired [nzNoColon]="true"> Cục DTNNKV</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                 <nz-select [(ngModel)]="listCucSelected" [nzDisabled]="idInput > 0" [nzMaxTagCount]="3"
                            [nzMaxTagPlaceholder]="tagPlaceHolder"
@@ -100,6 +100,7 @@
                              [nzValue]="item.maDvi">
                   </nz-option>
                 </nz-select>
+                <ng-template #tagPlaceHolder let-selectedList>và {{ selectedList.length }} Cục DTNNKV nữa</ng-template>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -502,6 +503,3 @@
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
   </ng-container>
 </ng-template>
-
-<ng-template #tagPlaceHolder let-selectedList>và {{ selectedList.length }} Cục DTNNKV nữa</ng-template>
-

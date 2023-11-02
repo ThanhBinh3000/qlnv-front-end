@@ -76,6 +76,9 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
       type: ['01'],
       loai: ['00'],
       kieu : ['LD'],
+      soQdGoc : [],
+      idQdGoc : [],
+      lanDc : []
     });
   }
 
@@ -211,8 +214,7 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
     return arr;
   }
 
-  changeLoai(event: any,check?) {
-    console.log(event,check);
+  changeLoai(event: any) {
     if (event) {
       this.formData.patchValue({
         soQdGiaoNv: null,
@@ -236,7 +238,11 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
   }
 
   chonQdGiaoNv  () {
-    this.khScQdGiaoNvService.getListTaoBtcTcdt({trangThai : STATUS.BAN_HANH}).then((res)=>{
+    let body = {
+      trangThai : STATUS.BAN_HANH,
+      type : "01"
+    }
+    this.khScQdGiaoNvService.getListTaoBtcTcdt(body).then((res)=>{
       this.spinner.hide();
       if (res.msg == MESSAGE.SUCCESS) {
         let modalQD = this.modal.create({
