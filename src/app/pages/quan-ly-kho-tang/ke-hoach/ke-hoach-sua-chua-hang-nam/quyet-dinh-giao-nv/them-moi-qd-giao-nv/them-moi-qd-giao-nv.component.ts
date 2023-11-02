@@ -24,6 +24,9 @@ import dayjs from "dayjs";
 import {
   KhScQdGiaoNvService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/khScQdGiaoNv.service";
+import {
+  DialogTableSelectionComponent
+} from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 
 @Component({
   selector: 'app-them-moi-qd-giao-nv',
@@ -57,6 +60,10 @@ export class ThemMoiQdGiaoNvComponent extends Base2Component implements OnInit {
       trichYeu : [null,[Validators.required]],
       trangThai : [STATUS.DANG_NHAP_DU_LIEU],
       tenTrangThai : ['Đang nhập dữ liệu'],
+      soQdGoc : [],
+      idQdGoc : [],
+      lanDc : [],
+      kieu : ['LD']
     })
   }
 
@@ -78,6 +85,8 @@ export class ThemMoiQdGiaoNvComponent extends Base2Component implements OnInit {
           item.namKh = item.ktKhDxSuaChuaLonCtiet.namKh;
         })
       })
+    }else{
+      this.changeKieu(this.formData.value.kieu)
     }
   }
 
@@ -145,6 +154,97 @@ export class ThemMoiQdGiaoNvComponent extends Base2Component implements OnInit {
     })
   }
 
+  chonSoQdGiaoNv(){
+    this.spinner.show();
+    this._service.getListTaoDc({trangThai : STATUS.BAN_HANH}).then((res)=>{
+      this.spinner.hide();
+      if (res.msg == MESSAGE.SUCCESS) {
+        let modalQD = this.modal.create({
+          nzTitle: "SỐ TỜ TRÌNH TCDT GỬI BTC",
+          nzContent: DialogTableSelectionComponent,
+          nzMaskClosable: false,
+          nzClosable: false,
+          nzWidth: "700px",
+          nzFooter: null,
+          nzComponentParams: {
+            dataTable : res.data,
+            dataColumn : ['soQdGiaoNv'],
+            dataHeader : ['Số quyết định giao nhiệm vụ gốc'],
+          }
+        });
+        modalQD.afterClose.subscribe(async (res) => {
+          if (res) {
+              await this._service.getDetail(res.id).then((dtlTh)=>{
+                console.log(dtlTh.data);
+                if(dtlTh.data){
+                  if(dtlTh.data){
+                    this.formData.patchValue({
+                      soQdGoc : dtlTh.data.soQdGiaoNv,
+                      idQdGoc : dtlTh.data.id,
+                      lanDc : dtlTh.data.listDieuChinh.length + 1
+                    });
+                    if(dtlTh.data.listDieuChinh != null && dtlTh.data.listDieuChinh.length == 0){
+                      this.dataTable = dtlTh.data.children;
+                      this.dataTable.forEach(item => {
+                        item.tenCongTrinh = item.ktKhDxSuaChuaLonCtiet.tenCongTrinh;
+                        item.soQd = item.ktKhDxSuaChuaLonCtiet.soQd;
+                        item.tieuChuan = item.ktKhDxSuaChuaLonCtiet.tieuChuan;
+                        item.tgThucHien = item.ktKhDxSuaChuaLonCtiet.tgThucHien;
+                        item.tgHoanThanh = item.ktKhDxSuaChuaLonCtiet.tgHoanThanh;
+                        item.lyDo = item.ktKhDxSuaChuaLonCtiet.lyDo;
+                        item.giaTriPd = item.ktKhDxSuaChuaLonCtiet.giaTriPd;
+                        item.namKh = item.ktKhDxSuaChuaLonCtiet.namKh;
+                      })
+                    }else{
+                      // Gét lastest DC đã ordet trên BE
+                      const dataLastestDC = dtlTh.data.listDieuChinh[0];
+                      console.log(dataLastestDC)
+                      this._service.getDetail(dataLastestDC.id).then((dataLastestDc)=>{
+                        const data = dataLastestDc.data
+                        this.dataTable = data.children;
+                        this.dataTable.forEach(item => {
+                          item.tenCongTrinh = item.ktKhDxSuaChuaLonCtiet.tenCongTrinh;
+                          item.soQd = item.ktKhDxSuaChuaLonCtiet.soQd;
+                          item.tieuChuan = item.ktKhDxSuaChuaLonCtiet.tieuChuan;
+                          item.tgThucHien = item.ktKhDxSuaChuaLonCtiet.tgThucHien;
+                          item.tgHoanThanh = item.ktKhDxSuaChuaLonCtiet.tgHoanThanh;
+                          item.lyDo = item.ktKhDxSuaChuaLonCtiet.lyDo;
+                          item.giaTriPd = item.ktKhDxSuaChuaLonCtiet.giaTriPd;
+                          item.namKh = item.ktKhDxSuaChuaLonCtiet.namKh;
+                        })
+                      });
+                    }
+                  }
+                }
+              })
+              this.spinner.hide();
+            }
+        });
+      }
+    })
+  }
 
+  changeKieu(event: any) {
+    if (event) {
+      this.formData.patchValue({
+        soQdGiaoNv: null,
+        idQdGiaoNv: null,
+        soQdBtc: null,
+        idQdBtc: null,
+      })
+      if (event == 'LD') {
+        this.formData.controls['soTtr'].setValidators([Validators.required]);
+        this.formData.controls['soQdGoc'].clearValidators();
+        this.formData.controls['idQdGoc'].clearValidators();
+        this.formData.controls['lanDc'].clearValidators();
+      } else {
+        this.formData.controls['soTtr'].clearValidators();
+        this.formData.controls['soQdGoc'].setValidators([Validators.required]);
+        this.formData.controls['idQdGoc'].setValidators([Validators.required]);
+        this.formData.controls['lanDc'].setValidators([Validators.required]);
+      }
+      this.dataTable = [];
+    }
+  }
 
 }

@@ -37,7 +37,7 @@
               <nz-form-item class="form-item">
                 <nz-form-control [nzErrorTip]="error">
                   <nz-radio-group formControlName="loai" [nzDisabled]="isViewDetail"
-                                  (ngModelChange)="changeLoai($event,true)">
+                                  (ngModelChange)="changeLoai($event)">
                     <label nz-radio nzValue="00">QĐ của TCDT giao kế hoạch danh mục</label>
                     <label nz-radio nzValue="01">Thông báo của TCDT</label>
                   </nz-radio-group>

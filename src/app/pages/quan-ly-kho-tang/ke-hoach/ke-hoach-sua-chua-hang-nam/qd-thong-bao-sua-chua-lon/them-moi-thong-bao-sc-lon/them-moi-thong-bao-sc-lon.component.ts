@@ -211,8 +211,7 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
     return arr;
   }
 
-  changeLoai(event: any,check?) {
-    console.log(event,check);
+  changeLoai(event: any) {
     if (event) {
       this.formData.patchValue({
         soQdGiaoNv: null,
