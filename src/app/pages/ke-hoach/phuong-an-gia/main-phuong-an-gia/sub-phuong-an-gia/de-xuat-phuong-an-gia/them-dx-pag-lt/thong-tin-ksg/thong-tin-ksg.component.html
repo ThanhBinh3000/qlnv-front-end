@@ -7,6 +7,7 @@
     <th *ngIf="isTabNdKhac" class="text-center"> Thông tin tham khảo</th>
     <th *ngIf="!isTabNdKhac" class="text-center">Chủng loại hàng DTQG - Tiêu chuẩn, quy chuẩn</th>
     <th *ngIf="!isTabNdKhac && !isApDung " class="text-center">Chi cục</th>
+    <th class="text-center">Số lượng</th>
     <th class="text-center">Đơn giá chưa VAT (đồng/kg)</th>
     <th *ngIf="isVat" class="text-center">Đơn giá có VAT (đồng/kg)</th>
     <th *ngIf="isTabNdKhac" class="text-center">Chỉ số CPI</th>
@@ -50,6 +51,12 @@
           </nz-option>
         </nz-select>
       </nz-input-group>
+    </th>
+    <th>
+      <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="rowItem.soLuong"
+                       [nzFormatter]="globals.formatter"
+                       [nzParser]="globals.parser">
+      </nz-input-number>
     </th>
     <th>
       <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="rowItem.donGia"
@@ -103,6 +110,7 @@
         <td *ngIf="isTabNdKhac">{{ data.ttThamKhao }}</td>
         <td *ngIf="!isTabNdKhac">{{ data.cloaiVthh }}</td>
         <td *ngIf="!isTabNdKhac && !isApDung">{{ data.tenChiCuc }}</td>
+        <td class="text-right">{{data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
         <td class="text-right">{{data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
         <td class="text-right" *ngIf="isVat">{{data.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
         <td *ngIf="!isTabNdKhac">{{data.thoiHanBaoGia }}</td>
@@ -137,6 +145,11 @@
         </td>
         <td *ngIf="!isTabNdKhac && !isApDung">
           <input type="text" [(ngModel)]="dataEdit[idx].data.tenChiCuc" readonly nz-input/>
+        </td>
+        <td>
+          <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.soLuong" [nzFormatter]="globals.formatter"
+                           [nzParser]="globals.parser">
+          </nz-input-number>
         </td>
         <td>
           <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.donGia" [nzFormatter]="globals.formatter"

@@ -24,8 +24,7 @@ export class ThongTu1452013Component implements OnInit {
   showDlgPreview = false;
   listNam: any[] = [];
   formData: FormGroup;
-  listQuy = [];
-  quyData = [
+  listQuy = [
     {text: 'Quý I', value: 1},
     {text: 'Quý II', value: 2},
     {text: 'Quý III', value: 3},
@@ -55,18 +54,18 @@ export class ThongTu1452013Component implements OnInit {
         tenCloaiVthh: [],
       }
     );
-    this.formData.controls['nam'].valueChanges.subscribe((namValue) => {
-      const month = dayjs().get("month");
-      this.listQuy = [];
-      for (let i = 0; i <= Math.floor(month / 3); i++) {
-        if (i >= 1) {
-          this.listQuy.push(this.quyData[i - 1]);
-        }
-      }
-      if (namValue < dayjs().get('year')) {
-        this.listQuy = this.quyData
-      }
-    });
+    // this.formData.controls['nam'].valueChanges.subscribe((namValue) => {
+    //   const month = dayjs().get("month");
+    //   this.listQuy = [];
+    //   for (let i = 0; i <= Math.floor(month / 3); i++) {
+    //     if (i >= 1) {
+    //       this.listQuy.push(this.quyData[i - 1]);
+    //     }
+    //   }
+    //   if (namValue < dayjs().get('year')) {
+    //     this.listQuy = this.quyData
+    //   }
+    // });
   }
 
   ngOnInit(): void {

@@ -220,15 +220,14 @@ export class QuanlyHopdongComponent implements OnInit {
       soQdPdKhlcnt: data.qdKhlcntDtl?.hhQdKhlcntHdr?.soQd,
       soQdPdKqLcnt: data.qdKhlcntDtl?.soQdPdKqLcnt,
       tenDuAn: data.qdKhlcntDtl?.tenDuAn,
-      tenLoaiHdong: data.qdKhlcntDtl?.hhQdKhlcntHdr?.tenLoaiHdong,
+      tenLoaiHdong: data.qdKhlcntDtl?.dxuatKhLcntHdr?.tenLoaiHdong,
       tenDvi: data.tenDvi,
-      tenNguonVon: data.qdKhlcntDtl?.hhQdKhlcntHdr?.tenNguonVon,
+      tenNguonVon: data.qdKhlcntDtl?.dxuatKhLcntHdr?.tenNguonVon,
       soGthau: data.qdKhlcntDtl?.soGthau,
       tenLoaiVthh: data.qdKhlcntDtl?.hhQdKhlcntHdr?.tenLoaiVthh,
       tenCloaiVthh: data.qdKhlcntDtl?.hhQdKhlcntHdr?.tenCloaiVthh,
-      vat: 5,
+      vat: data.qdKhlcntDtl?.dxuatKhLcntHdr?.thueVat,
       soGthauTrung: data.qdKhlcntDtl?.soGthauTrung,
-      soGthauTruot: data.qdKhlcntDtl?.soGthauTruot,
       tenTrangThaiHd: data.tenTrangThaiHd,
       trangThaiHd: data.trangThaiHd,
     });
@@ -261,8 +260,9 @@ export class QuanlyHopdongComponent implements OnInit {
       })
       this.formData.patchValue({
         soHdDaKy: soHdDaKy,
-        soLuongNhapKh: soLuong,
-        tongMucDtGoiTrung: tongMucDtGoiTrung
+        soLuongNhapKh: data.qdKhlcntDtl?.soLuong,
+        tongMucDtGoiTrung: tongMucDtGoiTrung,
+        soGthauTruot: this.formData.get('soGthau').value - this.formData.get('soGthauTrung').value,
       })
     };
     if (this.dataTable.length > 0 && this.dataTable[0].hopDong != undefined) {

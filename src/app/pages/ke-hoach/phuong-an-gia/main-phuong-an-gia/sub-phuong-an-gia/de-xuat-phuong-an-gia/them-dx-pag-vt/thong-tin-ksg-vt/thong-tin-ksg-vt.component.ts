@@ -131,7 +131,7 @@ export class ThongTinKsgVtComponent implements OnInit, OnChanges {
   required(item: ThongTinKhaoSatGia) {
     let msgRequired = "";
     //validator
-    if (!item.cloaiVthh && !this.isTabNdKhac) {
+    if ((!item.cloaiVthh && this.listCloaiVthh.length > 0) && !this.isTabNdKhac) {
       msgRequired = "Không được để trống chủng loại hàng hóa";
     } else if (!item.donGia) {
       msgRequired = "Không được để trống đơn giá";

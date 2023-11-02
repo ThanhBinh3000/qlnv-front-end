@@ -29,14 +29,8 @@
     </div>
     <!-- START THÔNG TIN CHUNG -->
     <nz-card class="mg-t-16 flex-card p-lr16 ">
-        <div class="header header-green-background mg-t-16">
-            <div class="header-text">
-                <div class="title-chi-tieu">
-                    <span></span>
-                    <span>Thông tin chung</span>
-                </div>
-            </div>
-        </div>
+      <nz-collapse nzAccordion>
+        <nz-collapse-panel [nzHeader]="titleThongTinChung" [nzActive]="true">
         <form nzLayout="horizontal" [formGroup]="formData" nz-form>
             <div nz-row [nzGutter]="24">
                 <div nz-col nzSpan="8">
@@ -332,6 +326,8 @@
                 </div>
             </div>
         </form>
+        </nz-collapse-panel>
+      </nz-collapse>
     </nz-card>
     <!-- END THÔNG TIN CHUNG -->
 
@@ -367,7 +363,8 @@
                   <th rowspan="2">ĐVT</th>
                   <th colspan="3">Kế hoạch đấu thầu</th>
                   <th colspan="4">Kết quả đấu thầu</th>
-                  <th rowspan="4">Trạng thái đấu thầu</th>
+                  <th rowspan="2">Trạng thái đấu thầu</th>
+                  <th rowspan="2">Diễn giải/Lý do</th>
                   <th rowspan="2" style="width: 5%;" *ngIf="isShowFromKq && isKqDaBh">Hành động</th>
                 </tr>
                     <tr>
@@ -400,6 +397,7 @@
                       <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? dtGoiThau.soLuong * dtGoiThau.donGiaNhaThau * 1000 : null) | number:'1.0-99' : 'vi_VN' }}</td>
                       <td class="text-right">{{calcTongChenhLech(i) | number:'1.0-99' : 'vi_VN'}}</td>
                       <td>{{dtGoiThau.tenTrangThaiDt}}</td>
+                      <td>{{dtGoiThau.dienGiaiNhaThau}}</td>
                     </tr>
                     <ng-container *ngIf="expandSet.has(i)">
                       <ng-container *ngFor="let chiCuc of dtGoiThau.children , let y = index">
@@ -412,12 +410,13 @@
                           <td class="text-right red-text">{{chiCuc.soLuongTheoChiTieu| number : '1.0-99' : 'vi_VN'}}</td>
                           <td class="text-center">Tấn</td>
                           <td class="text-right blue-text bold-700">{{ chiCuc.soLuong | number : '1.0-99' : 'vi_VN' }}</td>
-                          <td class="text-right">{{chiCuc.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+                          <td class="text-right">{{chiCuc.donGia | number : '1.0-99' : 'vi_VN'}}</td>
                           <td class="text-right bold-700">{{ chiCuc.soLuong * chiCuc.donGia *1000| number :'1.0-99' : 'vi_VN' }}</td>
                           <td></td>
                           <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? dtGoiThau.donGiaNhaThau : null) | number : '1.0-99' : 'vi_VN'}}</td>
                           <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? chiCuc.soLuong * dtGoiThau.donGiaNhaThau * 1000 : null) | number:'1.0-99' : 'vi_VN' }}</td>
                           <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? abs(dtGoiThau.donGiaNhaThau - chiCuc.donGia) * chiCuc.soLuong * 1000 : null) | number: '1.0-99' : 'vi_VN' }} </td>
+                          <td></td>
                           <td></td>
                           <td *ngIf="isShowFromKq"></td>
                         </tr>
@@ -438,6 +437,7 @@
                               <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? dtGoiThau.donGiaNhaThau : null) | number : '1.0-99' : 'vi_VN'}}</td>
                               <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? diemKho.soLuong * dtGoiThau.donGiaNhaThau * 1000 : null) | number:'1.0-99' : 'vi_VN' }}</td>
                               <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? abs(dtGoiThau.donGiaNhaThau - chiCuc.donGia) * diemKho.soLuong * 1000 : null) | number: '1.0-99' : 'vi_VN' }} </td>
+                              <td></td>
                               <td></td>
                               <td *ngIf="isShowFromKq"></td>
                             </tr>
@@ -465,6 +465,7 @@
                           <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? dtGoiThau.soLuong * dtGoiThau.kqlcntDtl?.donGiaVat * 1000 : null) | number:'1.0-99' : 'vi_VN' }}</td>
                         <td class="text-right">{{calcTongChenhLech(i) | number:'1.0-99' : 'vi_VN'}}</td>
                           <td>{{dtGoiThau.kqlcntDtl?.tenTrangThai}}</td>
+                          <td>{{dtGoiThau.kqlcntDtl?.dienGiaiNhaThau}}</td>
                           <td *ngIf="isShowFromKq && isKqDaBh">
                             <a (click)="startEditRowNt(i)">
                               <i class=" fa fa-pencil" title="Sửa bản ghi"></i>
@@ -488,7 +489,7 @@
                                          [nzLabel]="p.tenNhaThau"></nz-option>
                             </nz-select>
                           </td>
-                          <td><input nz-input [(ngModel)]="itemRowQd[i].donGiaVat"></td>
+                          <td><input nz-input class="money-input" currencyMask [options]="amount" [(ngModel)]="itemRowQd[i].donGiaVat"></td>
                           <td></td>
                           <td></td>
                           <td>
@@ -496,6 +497,7 @@
                               <nz-option *ngFor="let p of dsTrangThai" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                             </nz-select>
                           </td>
+                          <td><input nz-input [(ngModel)]="itemRowQd[i].dienGiaiNhaThau"></td>
                           <td *ngIf="isShowFromKq">
                             <a (click)="saveEditRowNt(i)" class="save">
                               <i class="icon htvbdh_tcdt_save"></i>
@@ -524,6 +526,7 @@
                           <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? chiCuc.soLuong * dtGoiThau.kqlcntDtl?.donGiaVat * 1000 : null) | number:'1.0-99' : 'vi_VN' }}</td>
                           <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? abs(dtGoiThau.kqlcntDtl?.donGiaVat - chiCuc.donGia) * chiCuc.soLuong * 1000 : null) | number: '1.0-99' : 'vi_VN' }} </td>
                           <td></td>
+                          <td></td>
                           <td *ngIf="isShowFromKq"></td>
                         </tr>
                         <ng-container *ngIf="expandSet2.has(y)">
@@ -543,6 +546,7 @@
                               <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? dtGoiThau.kqlcntDtl?.donGiaVat : null) | number : '1.0-99' : 'vi_VN'}}</td>
                               <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? diemKho.soLuong * dtGoiThau.kqlcntDtl?.donGiaVat * 1000 : null) | number:'1.0-99' : 'vi_VN' }}</td>
                               <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? abs(dtGoiThau.kqlcntDtl?.donGiaVat - chiCuc.donGia) * diemKho.soLuong * 1000 : null) | number: '1.0-99' : 'vi_VN' }} </td>
+                              <td></td>
                               <td></td>
                               <td *ngIf="isShowFromKq"></td>
                             </tr>
@@ -567,7 +571,9 @@
                   <td></td>
                   <td class="text-right blue-text bold-700">{{ calcTongThanhTienKq() | number : '1.0-1' : 'vi_VN' }}</td>
                   <td></td>
-                  <td>
+                  <td></td>
+                  <td></td>
+                  <td *ngIf="isShowFromKq"></td>
                 </tr>
                 </tbody>
             </nz-table>
@@ -598,10 +604,19 @@
                   </nz-auto-option>
                 </nz-autocomplete>
               </td>
-              <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow.donGia"/></td>
-              <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow.mst"/></td>
+              <td><input nz-input class="money-input" currencyMask [options]="amount" [readonly]="isView" [(ngModel)]="itemRow.donGia"/></td>
+              <td>
+                <nz-input-number
+                  [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
+                  [nzStep]="1" [nzDisabled]="isView" [(ngModel)]="itemRow.mst">
+                </nz-input-number>
+              </td>
               <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow.diaChi"/></td>
-              <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow.sdt"/></td>
+              <td>
+                <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
+                         [nzStep]="1"  [nzDisabled]="isView" [(ngModel)]="itemRow.sdt">
+                </nz-input-number>
+              </td>
               <td *ngIf="!isShowFromKq && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isView">
                 <a (click)="addRow()">
                   <i class="fa fa-plus" title="Thêm bản ghi"></i>
@@ -632,10 +647,20 @@
               <ng-template #editTemplate>
                 <td class="text-center">{{i + 1}}</td>
                 <td><input type="text" nz-input [(ngModel)]="itemRowUpdate.tenNhaThau"/></td>
-                <td><input nz-input [(ngModel)]="itemRowUpdate.donGia"/></td>
-                <td><input nz-input [(ngModel)]="itemRowUpdate.mst"/></td>
+                <td><input nz-input class="money-input" currencyMask [options]="amount" [(ngModel)]="itemRowUpdate.donGia"/></td>
+                <td>
+                  <nz-input-number
+                    [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
+                    [nzStep]="1" [(ngModel)]="itemRowUpdate.mst">
+                  </nz-input-number>
+                </td>
                 <td><input nz-input [(ngModel)]="itemRowUpdate.diaChi"/></td>
-                <td><input nz-input [(ngModel)]="itemRowUpdate.sdt"/></td>
+                <td>
+                  <nz-input-number
+                    [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
+                    [nzStep]="1" [(ngModel)]="itemRowUpdate.sdt">
+                  </nz-input-number>
+                </td>
                 <td class="text-center" *ngIf="!isShowFromKq && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isView">
                   <a
                     (click)="saveEdit(itemRowUpdate,i)" class="save">

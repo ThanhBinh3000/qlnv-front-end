@@ -4,7 +4,8 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button type="button" class="btn btn-sub" (click)="xemTruoc(idInput,loaiVthh=='02'?templateNameVt:templateName)"
+    <button type="button" class="btn btn-sub"
+      (click)="xemTruoc(formData.value.id,loaiVthh=='02'?templateNameVt:templateName)"
       *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_IN')">
       <i class="icon htvbdh_totrinh"></i>
       <span> In/Xem trước </span>
@@ -241,7 +242,7 @@
         <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nzRequired>
-              Số bảng kê cân hàng
+              {{ loaiVthh === '02'? 'Số bảng kê xuất vật tư': 'Số bảng kê cân hàng'}}
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
@@ -280,8 +281,7 @@
               Thời gian giao, nhận hàng
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker formControlName="thoiGianGiaoNhan" nzFormat="HH:mm dd/MM/yyyy"
-                [nzShowTime]="{ nzFormat: 'HH:mm' }" [nzDisabled]="isView">
+              <nz-date-picker formControlName="thoiGianGiaoNhan" nzFormat="dd/MM/yyyy" [nzDisabled]="isView">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -501,8 +501,12 @@
               <td>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input formControlName="theoChungTu"
-                      [readonly]="isView || (!formData.value.tenCloaiVthh && !formData.value.tenLoaiVthh)" />
+                    <!-- <input nz-input formControlName="theoChungTu"
+                      [readonly]="isView || (!formData.value.tenCloaiVthh && !formData.value.tenLoaiVthh)" /> -->
+                    <nz-input-number nz-input [nzSize]="'small'" formControlName="theoChungTu"
+                      [nzDisabled]="isView || (!formData.value.tenCloaiVthh && !formData.value.tenLoaiVthh)"
+                      [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                    </nz-input-number>
                   </nz-input-group>
                 </nz-form-control>
               </td>

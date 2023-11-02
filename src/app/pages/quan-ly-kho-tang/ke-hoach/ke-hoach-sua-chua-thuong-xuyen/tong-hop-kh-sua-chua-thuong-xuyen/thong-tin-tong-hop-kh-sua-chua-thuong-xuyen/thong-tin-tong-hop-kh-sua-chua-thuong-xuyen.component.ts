@@ -41,6 +41,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
   @Input() isViewQd: boolean;
   @Input() typeHangHoa: string;
   @Input() idInput: number;
+  @Input() isApprove: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
   expandSet = new Set<number>();
@@ -102,6 +103,9 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
   }
 
   async ngOnInit() {
+    console.log(this.isTongHop, "isTongHop")
+    console.log(this.isViewDetail, "isViewDetail")
+    console.log(this.isViewQd, "isViewQd")
     this.userInfo = this.userService.getUserLogin();
     this.maTt = "/TTr-TCDT";
     this.soQd = "/QĐ-TCDT";
@@ -463,7 +467,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
   }
 
   updateItemDetail(data: any, type: string, idx: number, list?: any) {
-    if (!this.isViewDetail) {
+    if (!this.isViewDetail || (this.isViewDetail && this.formData.value.trangThai == STATUS.CHO_DUYET_LDV) || (this.isViewDetail && this.formData.value.trangThai == STATUS.CHO_DUYET_LDTC)) {
       let modalQD = this.modal.create({
         nzTitle: "Chỉnh sửa kế hoạch, danh mục chi tiết",
         nzContent: DialogThemMoiKehoachDanhmucChitietComponent,
@@ -475,6 +479,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
           dataTable: list && list.dataChild ? list.dataChild : [],
           dataInput: data,
           type: type,
+          typeKh: 'TH',
           listDmSuaChua: this.listDmSuaChua,
           dataHeader: this.formData.value,
         }

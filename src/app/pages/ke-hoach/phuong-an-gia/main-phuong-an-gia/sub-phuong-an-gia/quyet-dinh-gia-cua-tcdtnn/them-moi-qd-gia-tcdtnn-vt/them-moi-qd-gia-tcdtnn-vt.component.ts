@@ -369,7 +369,12 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
   }
 
   printPreview() {
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
+    const blobUrl = URL.createObjectURL(this.pdfBlob);
+    printJS({
+      printable: blobUrl,
+      type: 'pdf',
+      base64: false
+    })
   }
 
 

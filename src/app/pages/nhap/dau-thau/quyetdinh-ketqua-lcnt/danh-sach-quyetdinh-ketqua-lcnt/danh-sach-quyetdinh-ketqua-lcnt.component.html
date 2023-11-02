@@ -1,23 +1,23 @@
 <ng-container *ngIf="!isDetail">
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
-      <div nz-row [nzGutter]="32">
+      <div nz-row [nzGutter]="24">
         <div nz-col nzSpan="2">
-          <label> Năm kế hoạch </label>
+          <label class="search__label"> Năm kế hoạch </label>
           <nz-select [(ngModel)]="searchFilter.namKhoach">
             <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
           </nz-select>
         </div>
         <div nz-col nzSpan="4">
-          <label>Số QĐ PD KHLCNT</label>
-          <input nz-input [(ngModel)]="searchFilter.soQdPdKhlcnt" />
+          <label class="search__label">Số QĐ PD KHLCNT</label>
+          <input class="search__input" nz-input [(ngModel)]="searchFilter.soQdPdKhlcnt" />
         </div>
         <div nz-col nzSpan="4">
-          <label>Số QĐ PD KQLCNT</label>
-          <input nz-input [(ngModel)]="searchFilter.soQdPdKqlcnt" />
+          <label class="search__label">Số QĐ PD KQLCNT</label>
+          <input nz-input class="search__input" [(ngModel)]="searchFilter.soQdPdKqlcnt" />
         </div>
         <div nz-col nzSpan="4">
-          <label>Ngày ký QĐ PD KQLCNT</label>
+          <label class="search__label">Ngày ký QĐ PD KQLCNT</label>
           <div nz-row [nzGutter]="24">
             <div nz-col nzSpan="12" class="cus-start-date">
               <nz-date-picker [nzDisabledDate]="disabledTuNgayKy" nzFormat="dd/MM/yyyy" [(ngModel)]="tuNgayQd"
@@ -30,21 +30,21 @@
             </div>
           </div>
         </div>
+<!--        <div *ngIf="!loaiVthh.startsWith('02')" nz-col nzSpan="4">-->
+<!--          <label class="search__label"> Loại hàng DTQG </label>-->
+<!--          <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">-->
+<!--            <input class="search__input" [readonly]="true" nz-input [(ngModel)]="searchFilter.tenVthh" />-->
+<!--          </nz-input-group>-->
+<!--        </div>-->
         <div *ngIf="!loaiVthh.startsWith('02')" nz-col nzSpan="4">
-          <label> Loại hàng DTQG </label>
+          <label class="search__label"> Chủng loại hàng DTQG</label>
           <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
-            <input [readonly]="true" nz-input [(ngModel)]="searchFilter.tenVthh" readonly="true" />
+            <input class="search__input" [readonly]="true" nz-input [(ngModel)]="searchFilter.tenCloaiVthh" />
           </nz-input-group>
         </div>
-        <div *ngIf="!loaiVthh.startsWith('02')" nz-col nzSpan="4">
-          <label> Chủng loại hàng DTQG</label>
-          <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
-            <input [readonly]="true" nz-input [(ngModel)]="searchFilter.tenCloaiVthh" readonly="true" />
-          </nz-input-group>
-        </div>
-        <div nz-col nzSpan="10" *ngIf="userService.isTongCuc()">
-          <label>Trích yếu</label>
-          <input nz-input [(ngModel)]="searchFilter.trichYeu" />
+        <div nz-col nzSpan="6">
+          <label class="search__label">Trích yếu</label>
+          <input class="search__input" nz-input [(ngModel)]="searchFilter.trichYeu" />
         </div>
       </div>
       <div class="cangiua group-button-search">
