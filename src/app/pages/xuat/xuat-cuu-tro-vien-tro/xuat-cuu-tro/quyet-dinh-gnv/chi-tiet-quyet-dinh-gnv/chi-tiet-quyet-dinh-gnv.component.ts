@@ -446,6 +446,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
 
 
   async openDialogQdPd() {
+    console.log("type", this.formData.value.type, this.loaiXuat)
     try {
       await this.spinner.show();
       let res;
