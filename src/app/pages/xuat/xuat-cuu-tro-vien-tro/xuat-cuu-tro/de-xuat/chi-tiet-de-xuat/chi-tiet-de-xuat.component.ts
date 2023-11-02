@@ -33,6 +33,7 @@ import { MangLuoiKhoService } from 'src/app/services/qlnv-kho/mangLuoiKho.servic
 })
 export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
   @Input() isView: boolean;
+  @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
   formDataDtl: FormGroup;
   maHauTo: any;

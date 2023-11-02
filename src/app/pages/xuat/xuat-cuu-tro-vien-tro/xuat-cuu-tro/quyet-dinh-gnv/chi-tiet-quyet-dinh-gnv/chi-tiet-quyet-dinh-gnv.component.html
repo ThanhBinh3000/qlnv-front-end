@@ -1,5 +1,5 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
-  <div class="btn-group" *ngIf="!isViewOnModal">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix" *ngIf="!isViewOnModal">
+  <div class="btn-group">
     <button (click)="quayLai()" class="btn btn-sub" type="button">
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
@@ -319,7 +319,7 @@
                       <td>
                         <ng-container *ngIf="userService.isCuc() && lv1.soLuongDx > lv1.soLuongGiao">
                           <a>
-                            <i class="fa fa-plus" title="Thêm" (click)="themPhuongAn(lv1,1)"></i>
+                            <i class="fa fa-plus" title="Thêm" (click)="themPhuongAn(lv1,1, false, item)"></i>
                           </a>
                         </ng-container>
                       </td>
@@ -343,10 +343,10 @@
                         <ng-container *ngIf="showAction()">
                           <td class="text-center">
                             <a *ngIf="userService.isCuc()">
-                              <i class="fa fa-pencil" title="Sửa" (click)="themPhuongAn(lv2,2, true)"></i>
+                              <i class="fa fa-pencil" title="Sửa" (click)="themPhuongAn(lv2,2, true, lv1)"></i>
                             </a>
                             <a *ngIf="userService.isChiCuc() && lv2.soLuongGiao > lv2.soLuong">
-                              <i class="fa fa-plus" title="Thêm" (click)="themPhuongAn(lv2,2)"></i>
+                              <i class="fa fa-plus" title="Thêm" (click)="themPhuongAn(lv2,2, false, lv1)"></i>
                             </a>
 
                             <a *ngIf="userService.isCuc()">
@@ -376,7 +376,7 @@
                               <td class="text-center">
                                 <ng-container *ngIf="userService.isChiCuc()">
                                   <a>
-                                    <i class="fa fa-pencil" title="Sửa" (click)="themPhuongAn(lv3,3, true)"></i>
+                                    <i class="fa fa-pencil" title="Sửa" (click)="themPhuongAn(lv3,3, true, lv2)"></i>
                                   </a>
                                   <a>
                                     <i class="fa fa-trash-o do" title="Thêm" nz-popconfirm nz-button
@@ -443,8 +443,8 @@
                   <td></td>
                   <ng-container *ngIf="showAction()">
                     <td class="text-center">
-                      <a *ngIf="userService.isCuc()">
-                        <i class="fa fa-plus" title="Thêm" (click)="themPaXuatCapThoc(item, 1)"></i>
+                      <a *ngIf="userService.isCuc() && item.soLuongDx > item.soLuongGiao">
+                        <i class="fa fa-plus" title="Thêm" (click)="themPaXuatCapThoc(item, 1, null)"></i>
                       </a>
                     </td>
                   </ng-container>
@@ -469,11 +469,11 @@
                       <ng-container *ngIf="showAction()">
                         <td class="text-center">
                           <a *ngIf="userService.isCuc()">
-                            <i class="fa fa-pencil" title="Sửa" (click)="suaPaXuatCapThoc(lv1)"></i>
+                            <i class="fa fa-pencil" title="Sửa" (click)="suaPaXuatCapThoc(lv1, 2, item)"></i>
                           </a>
                           <a
                             *ngIf="userService.isChiCuc() && (!lv1.slGaoThuHoiSauXayXat || lv1.soLuongGiao > lv1.slGaoThuHoiSauXayXat)">
-                            <i class="fa fa-plus" title="Thêm" (click)="themPaXuatCapThoc(lv1, 2)"></i>
+                            <i class="fa fa-plus" title="Thêm" (click)="themPaXuatCapThoc(lv1, 2, item)"></i>
                           </a>
 
                           <a *ngIf="userService.isCuc()">
@@ -505,7 +505,7 @@
                             <td class="text-center">
                               <ng-container *ngIf="userService.isChiCuc()">
                                 <a>
-                                  <i class="fa fa-pencil" title="Sửa" (click)="suaPaXuatCapThoc(lv2, 3)"></i>
+                                  <i class="fa fa-pencil" title="Sửa" (click)="suaPaXuatCapThoc(lv2, 3, lv1)"></i>
                                 </a>
                                 <a>
                                   <i class="fa fa-trash-o do" title="Xóa bản ghi" nz-popconfirm nz-button
@@ -543,7 +543,7 @@
                   <ng-container *ngIf="showAction()">
                     <td class="text-center">
                       <a *ngIf="userService.isCuc()">
-                        <i class="fa fa-plus" title="Thêm" (click)="themPaXuatCapThoc(item)"></i>
+                        <i class="fa fa-plus" title="Thêm" (click)="themPaXuatCapThoc(item, 1, null)"></i>
                       </a>
                     </td>
                   </ng-container>
@@ -567,11 +567,11 @@
                       <ng-container *ngIf="showAction()">
                         <td class="text-center">
                           <a *ngIf="userService.isCuc()">
-                            <i class="fa fa-pencil" title="Sửa" (click)="suaPaXuatCapThoc(lv1)"></i>
+                            <i class="fa fa-pencil" title="Sửa" (click)="suaPaXuatCapThoc(lv1, 2, item)"></i>
                           </a>
                           <a
                             *ngIf="userService.isChiCuc() && (!lv1.slThocDeXayXat || lv1.soLuongGiao > lv1.slThocDeXayXat)">
-                            <i class="fa fa-plus" title="Thêm" (click)="themPaXuatCapThoc(lv1, 2)"></i>
+                            <i class="fa fa-plus" title="Thêm" (click)="themPaXuatCapThoc(lv1, 2, item)"></i>
                           </a>
 
                           <a *ngIf="userService.isCuc()">
@@ -603,7 +603,7 @@
                             <td>
                               <ng-container *ngIf="userService.isChiCuc()">
                                 <a>
-                                  <i class="fa fa-pencil" title="Sửa" (click)="suaPaXuatCapThoc(lv2, 3)"></i>
+                                  <i class="fa fa-pencil" title="Sửa" (click)="suaPaXuatCapThoc(lv2, 3, lv1)"></i>
                                 </a>
                                 <a>
                                   <i class="fa fa-trash-o do" title="Xóa bản ghi" nz-popconfirm nz-button

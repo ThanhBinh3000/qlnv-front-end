@@ -731,4 +731,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     let rs = convertTienTobangChu(tien);
     return rs.charAt(0).toUpperCase() + rs.slice(1);
   }
+  showAction() {
+    return !this.isView
+  }
 }
