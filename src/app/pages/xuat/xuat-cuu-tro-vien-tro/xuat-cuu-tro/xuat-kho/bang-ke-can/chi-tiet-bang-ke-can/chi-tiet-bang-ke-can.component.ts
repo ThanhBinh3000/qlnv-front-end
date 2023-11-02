@@ -154,7 +154,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         nlqDiaChi: [''],
         thoiGianGiaoNhan: [''],
         tongTrongLuong: [''],
-        tongTrongLuongBaoBi: ['', [Validators.required]],
+        tongTrongLuongBaoBi: [''],
         tongTrongLuongHang: [''],
         ngayGduyet: [''],
         nguoiGduyetId: [''],
@@ -268,7 +268,10 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
           if (res.msg == MESSAGE.SUCCESS) {
             // this.formData.patchValue(res.data);
             this.helperService.bidingDataInFormGroupAndIgnore(this.formData, res.data, ['tongTrongLuongBaoBi']);
-            this.formData.controls['tongTrongLuongBaoBi'].setValue(res.data.tongTrongLuongBaoBi, { emitEvent: false })
+            this.formData.controls['tongTrongLuongBaoBi'].setValue(res.data.tongTrongLuongBaoBi, { emitEvent: false });
+            if (this.loaiVthh === '02') {
+              this.tinhTong()
+            }
           }
         })
         .catch((e) => {
@@ -702,14 +705,18 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
 
   async tinhTong() {
     const dtl = cloneDeep(this.formData.value.bangKeDtl);
-    const tongTrongLuongCaBi = dtl.reduce((prev, cur) => prev + cur.trongLuongCaBi, 0);
-    const tongTrongLuongBaoBi = this.formData.value.tongTrongLuongBaoBi || 0;
-    const tongTrongLuongHang = tongTrongLuongCaBi - tongTrongLuongBaoBi;
-    this.formData.patchValue({
-      tongTrongLuong: tongTrongLuongCaBi,
-      bangKeDtl: this.formData.value.bangKeDtl,
-      tongTrongLuongHang,
-    });
+    if (this.loaiVthh == '02') {
+      this.tongSl = dtl.reduce((prev, cur) => prev + cur.soLuong, 0);
+    } else {
+      const tongTrongLuongCaBi = dtl.reduce((prev, cur) => prev + cur.trongLuongCaBi, 0);
+      const tongTrongLuongBaoBi = this.formData.value.tongTrongLuongBaoBi || 0;
+      const tongTrongLuongHang = tongTrongLuongCaBi - tongTrongLuongBaoBi;
+      this.formData.patchValue({
+        tongTrongLuong: tongTrongLuongCaBi,
+        bangKeDtl: this.formData.value.bangKeDtl,
+        tongTrongLuongHang,
+      });
+    }
   }
   async trongLuongTruBi() {
     const tongTrongLuong = this.formData.value.tongTrongLuong || 0;

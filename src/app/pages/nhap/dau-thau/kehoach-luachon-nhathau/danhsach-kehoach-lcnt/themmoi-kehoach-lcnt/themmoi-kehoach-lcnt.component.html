@@ -584,7 +584,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">Nguồn vốn</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="nguonVon" [nzDisabled]="isView">
+              <nz-select formControlName="nguonVon" [nzDisabled]="isView" nzAllowClear>
                 <nz-option *ngFor="let p of listNguonVon" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>

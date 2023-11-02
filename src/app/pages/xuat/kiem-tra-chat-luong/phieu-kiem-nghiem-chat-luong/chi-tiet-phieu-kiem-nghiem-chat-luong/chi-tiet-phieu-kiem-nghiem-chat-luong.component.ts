@@ -499,7 +499,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
           this.formData.patchValue({
             idBbLayMau: data.id,
             soBbLayMau: data.soBbQd,
-            ngayBbLayMau: data.ngayTao,
+            ngayBbLayMau: data.ngayBbLayMau,
             maDiaDiem: data.maDiaDiem,
             loaiVthh: data.loaiVthh,
             cloaiVthh: data.cloaiVthh,
