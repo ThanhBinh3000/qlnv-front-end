@@ -86,7 +86,9 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Số DV tài sản đấu giá thành công</nz-form-label>
                   <nz-form-control>
-                    <input style="color: blue" nz-input formControlName="slDviTsanThanhCong" readonly/>
+                    <span *ngIf="formData.value.slDviTsanThanhCong">
+                      <input style="color: blue" nz-input formControlName="slDviTsanThanhCong" readonly/>
+                    </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -94,7 +96,9 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Số DV tài sản đấu giá không thành</nz-form-label>
                   <nz-form-control>
-                    <input style="color: red" nz-input formControlName="slDviTsanKhongThanh" readonly/>
+                    <span *ngIf="formData.value.slDviTsanKhongThanh">
+                      <input style="color: blue" nz-input formControlName="slDviTsanKhongThanh" readonly/>
+                    </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
