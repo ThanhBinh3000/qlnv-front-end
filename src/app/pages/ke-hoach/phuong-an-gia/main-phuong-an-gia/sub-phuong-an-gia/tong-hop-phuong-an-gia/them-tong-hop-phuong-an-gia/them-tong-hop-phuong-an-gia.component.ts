@@ -217,7 +217,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-    if (this.validateGiaBTc()) {
+    if (this.validateGiaBTc() && this.type == 'GCT') {
       this.notification.warning(MESSAGE.WARNING, "Không tìm thấy quyết định của BTC cho loại hàng hóa!")
       this.spinner.hide();
       return;
