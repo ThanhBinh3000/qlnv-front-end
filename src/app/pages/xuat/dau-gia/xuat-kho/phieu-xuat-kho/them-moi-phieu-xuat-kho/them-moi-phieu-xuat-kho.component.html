@@ -126,9 +126,9 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Số QĐ giao NV xuất hàng</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialog()">
-                <input [readonly]="true" nz-input formControlName="soQdNv" (ngModelChange)="changeSoQdNv($event)"
-                       readonly/>
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? null : openDialog()">
+                <input [readonly]="true" nz-input formControlName="soQdNv"
+                       (ngModelChange)="changeSoQdNv($event)" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -187,9 +187,9 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Số phiếu kiểm nghiệm chất lượng</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogKnghiemCluong()">
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? null : openDialogKnghiemCluong()">
                 <input [readonly]="true" nz-input formControlName="soPhieuKiemNghiem"
-                       readonly/>
+                       (ngModelChange)="changePhieuKnghiem($event)" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -337,22 +337,22 @@
     </form>
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
       <nz-card class="mg-t-16 flex-card p-lr16 table-card">
-        <nz-table nzBordered class="pd-10" [nzData]="dataTable" class="nowrap" [nzFrontPagination]="false"
+        <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered [nzFrontPagination]="false"
                   [nzShowPagination]="false">
           <thead>
           <tr>
-            <th rowSpan="2" class="text-center">STT (A)</th>
-            <th rowSpan="2" class="text-left">Tên, nhãn hiệu, quy cách phẩm chất hàng hóa (B)</th>
-            <th rowSpan="2" class="text-left">Mã số (C)</th>
-            <th rowSpan="2" class="text-left">Đơn vị tính (D)</th>
+            <th rowSpan="2" nzWidth="50px" class="text-center wrap">STT <br>(A)</th>
+            <th rowSpan="2" class="text-center">Tên, nhãn hiệu, quy cách phẩm chất hàng hóa <br>(B)</th>
+            <th rowSpan="2" class="text-center">Mã số <br>(C)</th>
+            <th rowSpan="2" class="text-center">Đơn vị tính <br>(D)</th>
             <th colSpan="2" class="text-center">Số lượng</th>
-            <th rowSpan="2" class="text-right">Đơn giá (3)</th>
-            <th rowSpan="2" class="text-right">Thành tiền (4) = (2) x (3)</th>
-            <th rowSpan="2" class="text-center" *ngIf="!isView">Hành động</th>
+            <th rowSpan="2" class="text-center">Đơn giá <br>(3)</th>
+            <th rowSpan="2" class="text-center">Thành tiền <br>(4) = (2) x (3)</th>
+            <th rowSpan="2" nzWidth="100px" class="text-center wrap" *ngIf="!isView">Hành động</th>
           </tr>
           <tr>
-            <th class="text-right">Theo chứng từ (1)</th>
-            <th class="text-right">Thực Xuất (2)</th>
+            <th class="text-center">Theo chứng từ <br>(1)</th>
+            <th class="text-center">Thực Xuất <br>(2)</th>
           </tr>
           <tr></tr>
           </thead>
@@ -361,32 +361,16 @@
             <td class="text-center">1</td>
             <td class="text-left">{{formData.value.tenCloaiVthh}}</td>
             <td class="text-right">
-              <nz-form-item>
-                <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group>
-                    <nz-input-number nz-input [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                     [nzParser]="globals.parser" formControlName="maSo" [nzDisabled]="isView">
-                    </nz-input-number>
-                  </nz-input-group>
-                </nz-form-control>
-              </nz-form-item>
+              <input nz-input formControlName="maSo" [readonly]="isView"/>
             </td>
             <td class="text-left">{{formData.value.donViTinh}}</td>
-            <td class="text-right">
-              <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-input-number formControlName="theoChungTu" nz-input [nzMin]=""
-                                 [nzStep]="1" [nzSize]="'small'"
-                                 [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
-                </nz-input-number>
-              </nz-form-control>
+            <td>
+              <input class="money-input" currencyMask [options]="amount" [min]="0"
+                     formControlName="theoChungTu" readonly/>
             </td>
-            <td class="text-right">
-              <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-input-number formControlName="thucXuat" (ngModelChange)="onChangeTien($event)" nz-input [nzMin]=""
-                                 [nzStep]="1" [nzSize]="'small'"
-                                 [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
-                </nz-input-number>
-              </nz-form-control>
+            <td>
+              <input class="money-input" currencyMask [options]="amount" [min]="0"
+                     formControlName="thucXuat" (ngModelChange)="onChangeTien($event)" [readonly]="isView"/>
             </td>
             <td class="text-right">{{formData.value.donGia|number:globals.numberFormat:globals.locale}}</td>
             <td class="text-right">{{formData.value.thanhTien|number:globals.numberFormat:globals.locale}}</td>
