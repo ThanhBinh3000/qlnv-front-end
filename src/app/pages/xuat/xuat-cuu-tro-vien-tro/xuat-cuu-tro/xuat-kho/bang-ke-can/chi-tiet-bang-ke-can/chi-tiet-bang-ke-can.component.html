@@ -1,5 +1,5 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
-  <div class="btn-group" *ngIf="!isViewOnModal">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix" *ngIf="!isViewOnModal">
+  <div class="btn-group">
     <button type="button" class="btn btn-sub" (click)="quayLai()">
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
@@ -394,7 +394,7 @@
                 [(ngModel)]="bangKeDtlCreate.soLuong">
               </nz-input-number>
             </th>
-            <th>
+            <th *ngIf="showAction()">
               <a (click)="addRow()" *ngIf="!isView">
                 <i class="icon htvbdh_dau-cong"></i>
               </a>
@@ -411,7 +411,7 @@
               <td>{{i + 1}}</td>
               <td>{{item.soSerial}}</td>
               <td class="text-right">{{item.soLuong|number: '1.0-1' : 'vi_VN'}}</td>
-              <td>
+              <td *ngIf="showAction()">
                 <a (click)="editRow(i)" *ngIf="!isView">
                   <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
@@ -441,8 +441,8 @@
           </tr>
           <tr>
             <td></td>
-            <td>Tổng</td>
-            <td class="text-right">{{tongSl|number: '1.0-1' : 'vi_VN'}}</td>
+            <td class="bold">Tổng</td>
+            <td class="text-right bold">{{tongSl|number: '1.0-1' : 'vi_VN'}}</td>
             <td></td>
           </tr>
         </tbody>

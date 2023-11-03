@@ -263,7 +263,8 @@
 </ng-container>
 <ng-template #templateThemmoi>
   <div class="chi-tiet">
-    <app-chi-tiet-quyet-dinh-gnv [idSelected]="idSelected" (showListEvent)="showList()" [isView]="isView">
+    <app-chi-tiet-quyet-dinh-gnv [idSelected]="idSelected" (showListEvent)="showList()" [isView]="isView"
+      [loaiXuat]="loaiXuat">
     </app-chi-tiet-quyet-dinh-gnv>
   </div>
 </ng-template>
@@ -285,7 +286,8 @@
 
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openQdGnv" (nzOnCancel)="closeQdGnvModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-chi-tiet-quyet-dinh-gnv [idSelected]="id" (showListEvent)="showList()" [isView]="true" [isViewOnModal]="true">
+    <app-chi-tiet-quyet-dinh-gnv [idSelected]="id" (showListEvent)="showList()" [isView]="true" [isViewOnModal]="true"
+      [loaiXuat]="loaiXuat">
     </app-chi-tiet-quyet-dinh-gnv>
   </ng-container>
   <div *nzModalFooter>
