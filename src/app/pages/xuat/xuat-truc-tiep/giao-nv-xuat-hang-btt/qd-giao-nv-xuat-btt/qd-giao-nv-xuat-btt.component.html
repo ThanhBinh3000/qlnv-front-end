@@ -95,6 +95,7 @@
           <th class="text-left"> Số quyết định</th>
           <th class="text-left"> Ngày quyết định</th>
           <th class="text-left"> Số hợp đồng</th>
+          <th class="text-left"> Số bảng kê bán lẻ</th>
           <th class="text-left"> Loại hàng DTQG</th>
           <th class="text-left"> Chủng loại hàng DTQG</th>
           <th class="text-left"> Thời hạn giao nhận hàng</th>
@@ -132,8 +133,14 @@
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soHd"
-                     (input)="filterInTable('soHd',filterTable.soHd)" size="small"/>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soHopDong"
+                     (input)="filterInTable('soHopDong',filterTable.soHopDong)" size="small"/>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBangKeBanLe"
+                     (input)="filterInTable('soBangKeBanLe',filterTable.soBangKeBanLe)" size="small"/>
             </nz-input-group>
           </th>
           <th>
@@ -205,8 +212,13 @@
           <td class="text-left">{{ data.soQdNv }}</td>
           <td class="text-left">{{ data.ngayKyQdNv|date: 'dd/MM/YYYY' }}</td>
           <td class="text-left">
-            <a *ngIf="data.soHopDong && data.idHopDong" (click)="openModal(data.idHopDong, 'hopDong')"
+            <a *ngIf="data.soHopDong" (click)="openModal(data.idHopDong, 'hopDong')"
                style="color: blue">{{ data.soHopDong }}
+            </a>
+          </td>
+          <td class="text-left">
+            <a *ngIf="data.soBangKeBanLe"
+               style="color: blue">{{ data.soBangKeBanLe }}
             </a>
           </td>
           <td class="text-left">{{ data.tenLoaiVthh }}</td>

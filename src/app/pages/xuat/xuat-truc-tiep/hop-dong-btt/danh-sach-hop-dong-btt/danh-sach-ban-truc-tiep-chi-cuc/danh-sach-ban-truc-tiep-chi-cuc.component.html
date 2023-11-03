@@ -176,8 +176,12 @@
                style="color: blue">{{ data.soQdPd }}
             </a>
           </td>
-          <td class="text-center">{{ data.slHdChuaKy }}</td>
-          <td class="text-center">{{ data.slHdDaKy }}</td>
+          <td class="text-center">
+            <span *ngIf="data.slHdChuaKy">{{ data.slHdChuaKy}}</span>
+          </td>
+          <td class="text-center">
+            <span *ngIf="data.slHdDaKy">{{ data.slHdDaKy}}</span>
+          </td>
           <td class="text-left">{{ data.ngayMkho | date: 'dd/MM/YYYY' }}</td>
           <td class="text-left" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">{{ data.tenLoaiVthh }}</td>
           <td class="text-left">{{ data.tenCloaiVthh }}</td>

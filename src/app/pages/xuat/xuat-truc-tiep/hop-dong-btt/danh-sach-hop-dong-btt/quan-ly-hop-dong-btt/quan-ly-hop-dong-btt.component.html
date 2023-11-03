@@ -116,10 +116,12 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất bán TT đã ký HĐ</nz-form-label>
                   <nz-form-control>
-                    <nz-input-number [nzSize]="'small'" formControlName="tongSlDaKyHdong"
-                                     [nzFormatter]="formatterSoLuong" [nzParser]="globals.parser" nzDisabled
-                                     class="blue-bold">
-                    </nz-input-number>
+                      <span *ngIf="formData.value.tongSlDaKyHdong">
+                        <nz-input-number [nzSize]="'small'" formControlName="tongSlDaKyHdong"
+                                         [nzFormatter]="formatterSoLuong" [nzParser]="globals.parser" nzDisabled
+                                         class="blue-bold">
+                        </nz-input-number>
+                      </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -127,10 +129,12 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất bán TT chưa Ký HĐ</nz-form-label>
                   <nz-form-control>
-                    <nz-input-number [nzSize]="'small'" formControlName="tongSlChuaKyHdong"
-                                     [nzFormatter]="formatterSoLuong" [nzParser]="globals.parser" nzDisabled
-                                     class="red-bold">
-                    </nz-input-number>
+                    <span *ngIf="formData.value.tongSlChuaKyHdong">
+                      <nz-input-number [nzSize]="'small'" formControlName="tongSlChuaKyHdong"
+                                       [nzFormatter]="formatterSoLuong" [nzParser]="globals.parser" nzDisabled
+                                       class="red-bold">
+                      </nz-input-number>
+                    </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>

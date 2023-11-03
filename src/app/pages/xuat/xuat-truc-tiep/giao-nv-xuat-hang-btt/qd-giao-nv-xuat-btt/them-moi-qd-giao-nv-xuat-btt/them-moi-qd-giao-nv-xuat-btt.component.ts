@@ -167,9 +167,10 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
       console.error('Không tìm thấy dữ liệu');
       return;
     }
-    const {soQdNv, children} = data;
+    const {soQdNv, soHopDong, idChaoGia, children} = data;
     this.formData.patchValue({
       soQdNv: soQdNv?.split('/')[0] || null,
+      soHopDong: idChaoGia ? null : soHopDong
     });
     if (data.idChaoGia) {
       await this.onChangeThongTin(data.idChaoGia);
@@ -204,7 +205,7 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
         nzWidth: '900px',
         nzFooter: null,
         nzComponentParams: {
-          dataTable: this.dsHdongBanTrucTiep,
+          dataTable: this.dsHdongBanTrucTiep.filter(item => item.idQdNv === null && item.soQdNv === null),
           dataHeader: ['Số hợp đồng', 'Tên hợp đồng', 'Loại hàng hóa'],
           dataColumn: ['soHopDong', 'tenHopDong', 'tenLoaiVthh']
         },
@@ -308,6 +309,7 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
       if (res.msg === MESSAGE.SUCCESS) {
         this.dsThongTinChaoGia = res.data.content.map(item => ({
           soQd: item.soQdDc || item.soQdPd,
+          phuongThuc: item.pthucBanTrucTiep === THONG_TIN_BAN_TRUC_TIEP.UY_QUYEN ? 'Ủy quyền' : 'Bán lẻ',
           ...item
         }));
       } else {
@@ -322,8 +324,8 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
         nzFooter: null,
         nzComponentParams: {
           dataTable: this.dsThongTinChaoGia,
-          dataHeader: ['Số QĐ phê duyệt/điều chỉnh KH BTT', 'Số đề xuất KH BTT', 'Loại hàng hóa'],
-          dataColumn: ['soQd', 'soDxuat', 'tenLoaiVthh']
+          dataHeader: ['Số QĐ phê duyệt/điều chỉnh KH BTT', 'Số đề xuất KH BTT', 'Loại hàng hóa', 'Phương thức bán trực tiếp'],
+          dataColumn: ['soQd', 'soDxuat', 'tenLoaiVthh', 'phuongThuc']
         },
       });
       modalQD.afterClose.subscribe(async (data) => {
