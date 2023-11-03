@@ -194,7 +194,9 @@ export class PhuLuc03Component implements OnInit {
                 item.tenDanhMuc = dinhMuc?.tenDinhMuc;
                 item.namDtCphiTaiCkhoDm = dinhMuc?.tongDmuc;
                 item.maDviTinh = dinhMuc?.donViTinh;
-                item.namDtCphiTaiCkhoTt = Operator.mul(item.namDtCphiTaiCkhoDm, item.namDtCphiTaiCkhoSl);
+                if (item.namDtCphiTaiCkhoDm) {
+                    item.namDtCphiTaiCkhoTt = Operator.mul(item.namDtCphiTaiCkhoDm, item.namDtCphiTaiCkhoSl);
+                }
             }
         })
 
@@ -204,8 +206,10 @@ export class PhuLuc03Component implements OnInit {
                 const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc || e.loaiVthh == item.danhMuc);
                 // item.namDtCphiNgoaiCkhoBq = 0;
                 item.namDtCphiTaiCkhoDm = dinhMuc?.tongDmuc;
-                item.namDtCphiTaiCkhoTt = Operator.mul(item.namDtCphiTaiCkhoDm, item.namDtCphiTaiCkhoSl);
-                item.namDtTcong = Operator.sum([item.namDtCphiTaiCkhoTt, item.namDtCphiNgoaiCkhoTt])
+                if (item.namDtCphiTaiCkhoDm) {
+                    item.namDtCphiTaiCkhoTt = Operator.mul(item.namDtCphiTaiCkhoDm, item.namDtCphiTaiCkhoSl);
+                    item.namDtTcong = Operator.sum([item.namDtCphiTaiCkhoTt, item.namDtCphiNgoaiCkhoTt])
+                }
             })
             this.sum1()
         }
