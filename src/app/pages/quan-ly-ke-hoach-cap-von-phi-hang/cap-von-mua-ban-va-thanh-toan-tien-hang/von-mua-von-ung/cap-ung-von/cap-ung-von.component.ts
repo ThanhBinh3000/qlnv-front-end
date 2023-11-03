@@ -12,7 +12,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { BtnStatus, CapUng, Cvmb, Report } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 
 @Component({
     selector: 'app-cap-ung-von',
@@ -427,7 +427,7 @@ export class CapUngVonComponent implements OnInit {
                         row[field] = Utils.fmtDate(item[field]);
                         break;
                     default:
-                        row[field] = item[field];
+                        row[field] = Utils.getValue(item[field]);
                         break;
                 }
             })
@@ -443,6 +443,12 @@ export class CapUngVonComponent implements OnInit {
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        //Thêm khung viền cho bảng
+        for (const cell in worksheet) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheet[cell].s = Table.borderStyle;
+        }
+
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         XLSX.writeFile(workbook, this.baoCao.maCapUng + '.xlsx');
     }

@@ -12,7 +12,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { BtnStatus, Cvmb, Report, TienThua } from '../../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import { Tab } from '../../von-mua-von-ung.constant';
 
 @Component({
@@ -327,7 +327,7 @@ export class TongHopTienThuaComponent implements OnInit {
         const filterData = this.lstCtiets.map((item, index) => {
             const row: any = {};
             fieldOrder.forEach(field => {
-                row[field] = field == 'stt' ? (index + 1) : item[field];
+                row[field] = field == 'stt' ? (index + 1) : Utils.getValue(item[field]);
             })
             return row;
         })
@@ -340,6 +340,12 @@ export class TongHopTienThuaComponent implements OnInit {
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        //Thêm khung viền cho bảng
+        for (const cell in worksheet) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheet[cell].s = Table.borderStyle;
+        }
+
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         XLSX.writeFile(workbook, this.baoCao.maCapUng + '.xlsx');
     }

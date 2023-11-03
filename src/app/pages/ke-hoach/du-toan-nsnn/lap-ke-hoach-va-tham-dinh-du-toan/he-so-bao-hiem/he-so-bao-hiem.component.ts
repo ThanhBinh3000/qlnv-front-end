@@ -12,7 +12,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { BtnStatus, CoeffIns, Insurance } from '../lap-ke-hoach-va-tham-dinh-du-toan.constant';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 
 @Component({
     selector: 'app-he-so-bao-hiem',
@@ -401,6 +401,12 @@ export class HeSoBaoHiemComponent implements OnInit {
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        //Thêm khung viền cho bảng
+        for (const cell in worksheet) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheet[cell].s = Table.borderStyle;
+        }
+
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         XLSX.writeFile(workbook, 'HSBH_' + this.baoCao.nam.toString() + '.xlsx');
     }

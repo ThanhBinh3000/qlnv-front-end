@@ -13,7 +13,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { BtnStatus, CapVon, Cvnc, Doc, Report } from '../de-nghi-cap-von-cac-don-vi.constant';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 
 @Component({
     selector: 'app-de-nghi-cap-von-quyet-dinh-don-gia-mua',
@@ -417,7 +417,7 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
         const filterData = this.lstCtiets.map(item => {
             const row: any = {};
             fieldOrder.forEach(field => {
-                row[field] = field == 'stt' ? this.getIndex(item) : item[field];
+                row[field] = field == 'stt' ? this.getIndex(item) : Utils.getValue(item[field]);
             })
             return row;
         })
@@ -430,6 +430,12 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
         filterData.unshift(cal);
         const worksheetHD = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheetHD, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        //Thêm khung viền cho bảng
+        for (const cell in worksheetHD) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheetHD[cell].s = Table.borderStyle;
+        }
+
         XLSX.utils.book_append_sheet(workbook, worksheetHD, 'Đề nghị cấp vốn');
         XLSX.writeFile(workbook, this.baoCao.maDnghi + '.xlsx');
     }
