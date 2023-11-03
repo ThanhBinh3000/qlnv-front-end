@@ -421,7 +421,7 @@
                     <nz-form-label [nzNoColon]="true">Tổng SL gạo phê duyệt giao Cục xuất</nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
                       <span style="color: red;">
-                        <strong>{{tongSlXuatCap|number:globals.numberFormat:globals.locale}} kg</strong>
+                        <strong>{{tongSoLuong|number:globals.numberFormat:globals.locale}} kg</strong>
                       </span>
                     </nz-form-control>
                   </nz-form-item>
@@ -431,7 +431,7 @@
                     <nz-form-label [nzNoColon]="true">SL gạo cần chuyển xuất cấp thóc</nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
                       <span style="color: #001CFF">
-                        <strong>{{tongSoLuong|number:globals.numberFormat:globals.locale}} kg</strong>
+                        <strong>{{tongSlXuatCap|number:globals.numberFormat:globals.locale}} kg</strong>
                       </span>
                     </nz-form-control>
                   </nz-form-item>
@@ -473,11 +473,14 @@
                     </ng-container>
                     <tr>
                       <td></td>
-                      <td class="text-blue">Tổng</td>
-                      <td class="text-blue text-right">{{tongNhuCauXuat|number:globals.numberFormat:globals.locale}}
+                      <td class="text-blue bold">Tổng</td>
+                      <td class="text-blue text-right bold">
+                        {{tongNhuCauXuat|number:globals.numberFormat:globals.locale}}
                       </td>
-                      <td class="text-blue text-right">{{tongSoLuong|number:globals.numberFormat:globals.locale}}</td>
-                      <td class="text-blue text-right">{{tongSlXuatCap|number:globals.numberFormat:globals.locale}}</td>
+                      <td class="text-blue text-right bold">{{tongSoLuong|number:globals.numberFormat:globals.locale}}
+                      </td>
+                      <td class="text-blue text-right bold">{{tongSlXuatCap|number:globals.numberFormat:globals.locale}}
+                      </td>
                     </tr>
                   </tbody>
                 </nz-table>

@@ -12,15 +12,17 @@ import { ChiTietBienBanLayMauComponent } from './kiem-tra-chat-luong/bien-ban-la
 import { PhieuKiemNghiemChatLuongComponent } from './kiem-tra-chat-luong/phieu-kiem-nghiem-chat-luong/phieu-kiem-nghiem-chat-luong.component';
 import { ChiTietPhieuKiemNghiemChatLuongComponent } from './kiem-tra-chat-luong/phieu-kiem-nghiem-chat-luong/chi-tiet-phieu-kiem-nghiem-chat-luong/chi-tiet-phieu-kiem-nghiem-chat-luong.component';
 import { ChiTietQuyetDinhGnvComponent } from './xuat-cuu-tro-vien-tro/xuat-cuu-tro/quyet-dinh-gnv/chi-tiet-quyet-dinh-gnv/chi-tiet-quyet-dinh-gnv.component';
+import { ThongTinQuyetDinhXuatCapComponent } from './xuat-cuu-tro-vien-tro/xuat-cap/quyet-dinh-xuat-cap/thong-tin-quyet-dinh-xuat-cap/thong-tin-quyet-dinh-xuat-cap.component';
 
 @NgModule({
-  declarations: [XuatComponent, XuatTieuHuyComponent, ChiTietQuyetDinhGnvComponent, BienBanLayMauComponent, ChiTietBienBanLayMauComponent, PhieuKiemNghiemChatLuongComponent, ChiTietPhieuKiemNghiemChatLuongComponent],
+  declarations: [XuatComponent, XuatTieuHuyComponent, ChiTietQuyetDinhGnvComponent, BienBanLayMauComponent, ChiTietBienBanLayMauComponent, PhieuKiemNghiemChatLuongComponent, ChiTietPhieuKiemNghiemChatLuongComponent, ThongTinQuyetDinhXuatCapComponent],
   imports: [CommonModule, XuatRoutingModule, ComponentsModule, MainModule, XuatTieuHuyModule],
   exports: [
     BienBanLayMauComponent,
     PhieuKiemNghiemChatLuongComponent,
     ChiTietQuyetDinhGnvComponent,
-    ChiTietPhieuKiemNghiemChatLuongComponent
+    ChiTietPhieuKiemNghiemChatLuongComponent,
+    ThongTinQuyetDinhXuatCapComponent
   ]
 })
 export class XuatModule { }

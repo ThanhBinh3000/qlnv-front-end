@@ -175,7 +175,7 @@
         <ng-container *ngIf="formData.value.type === 'XC'">
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">Số lượng</nz-form-label>
+              <nz-form-label nzRequired [nzNoColon]="true">Số lượng gạo cần thu được sau xay xát thóc</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24">
                 <nz-input-number formControlName="soLuong" [nzMin]="0" [nzMax]="999999999999" [nzStep]="1"
                   [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="true">
@@ -407,7 +407,10 @@
               <th></th>
               <th style="width: 35px">STT</th>
               <th>Địa phương/cơ quan/<br />đơn vị nhận cứu trợ</th>
-              <th>SL giao<br />Cục thực hiện</th>
+              <th *ngIf="formData.value.type === 'XC' && !formData.value.paXuatGaoChuyenXc">SL thóc giao<br />Cục thực
+                hiện</th>
+              <th *ngIf="formData.value.type === 'XC' && formData.value.paXuatGaoChuyenXc">SL gạo sau xay xát<br />giao
+                Cục thực hiện</th>
               <th>Chi cục DTNN</th>
               <th>SL giao chi cục</th>
               <th>Địa điểm xuất</th>
@@ -709,7 +712,8 @@
                     </nz-select>
                   </div>
                   <div nz-col [nzSpan]="8">
-                    <p style="font-size: 13px;font-weight: 500">Tồn kho: <span
+                    <p style="font-size: 13px;font-weight: 500">
+                      {{formData.value.paXuatGaoChuyenXc? 'Tồn kho thóc': 'Tồn kho:' }}<span
                         style="color: #001CFF">{{formDataDtl.value.tonKhoDvi|number:globals.numberFormat:globals.locale}}</span>
                     </p>
                   </div>
@@ -726,7 +730,10 @@
             </nz-form-item>
           </ng-container>
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Tổng số lượng giao Chi cục</nz-form-label>
+            <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">
+              {{ formData.value.type ==='XC' && formData.value.paXuatGaoChuyenXc ? 'Tổng số lượng gạo giao Chi cục':
+              'Tổng số lượng giao Chi cục'}}
+            </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-number formControlName="soLuongGiao" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
                 [nzDisabled]="!userService.isCuc()" [nzSize]="'small'" [nzFormatter]="globals.formatter"
