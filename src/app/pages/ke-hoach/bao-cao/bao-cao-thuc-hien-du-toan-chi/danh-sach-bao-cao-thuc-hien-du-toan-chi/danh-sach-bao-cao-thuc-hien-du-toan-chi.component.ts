@@ -47,13 +47,13 @@ export class DanhSachBaoCaoThucHienDuToanChiComponent implements OnInit {
 		this.userInfo = this.userService.getUserLogin();
 		this.spinner.show();
 		//khoi tao gia tri mac dinh
-		const date = new Date();
-		this.searchFilter.ngayTaoDen = date.toDateString();
-		this.searchFilter.namBcao = date.getFullYear();
-		this.searchFilter.thangBcao = date.getMonth();
-		date.setMonth(date.getMonth() - 1);
-		this.searchFilter.ngayTaoTu = date.toDateString();
-		this.searchFilter.maLoaiBcao = Dtc.BC_DINH_KY;
+		// const date = new Date();
+		// this.searchFilter.ngayTaoDen = date.toDateString();
+		// this.searchFilter.namBcao = date.getFullYear();
+		// this.searchFilter.thangBcao = date.getMonth();
+		// date.setMonth(date.getMonth() - 1);
+		// this.searchFilter.ngayTaoTu = date.toDateString();
+		// this.searchFilter.maLoaiBcao = Dtc.BC_DINH_KY;
 		//check quyen va cac nut chuc nang
 		this.statusNewReport = this.userService.isAccessPermisson(Roles.DTC.ADD_REPORT);
 		this.statusDelete = this.userService.isAccessPermisson(Roles.DTC.DEL_REPORT) || this.userService.isAccessPermisson(Roles.DTC.DEL_SYNTH_REPORT);
