@@ -1,15 +1,14 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { cloneDeep } from 'lodash';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Roles, Status, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
-import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
+import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNguonChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { NzModalService } from 'ng-zorro-antd/modal';
 import { Cvnc, Search } from '../de-nghi-cap-von-cac-don-vi.constant';
-import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNguonChi.service';
 import { DialogTongHopCapVonComponent } from '../dialog-tong-hop-cap-von/dialog-tong-hop-cap-von.component';
 // import { DialogTaoMoiCapVonComponent } from '../dialog-tao-moi-cap-von/dialog-tao-moi-cap-von.component';
 
@@ -51,10 +50,10 @@ export class DanhSachDeNghiCapVonTuDvcdComponent implements OnInit {
         this.userInfo = this.userService.getUserLogin();
         this.spinner.show();
         //khoi tao gia tri mac dinh
-        this.searchFilter.ngayTaoDen = new Date();
-        const newDate = new Date();
-        newDate.setMonth(newDate.getMonth() - 1);
-        this.searchFilter.ngayTaoTu = newDate;
+        // this.searchFilter.ngayTaoDen = new Date();
+        // const newDate = new Date();
+        // newDate.setMonth(newDate.getMonth() - 1);
+        // this.searchFilter.ngayTaoTu = newDate;
         this.searchFilter.maDvi = this.userInfo?.MA_DVI;
         const request = {
             maDviCha: this.userInfo.MA_DVI,

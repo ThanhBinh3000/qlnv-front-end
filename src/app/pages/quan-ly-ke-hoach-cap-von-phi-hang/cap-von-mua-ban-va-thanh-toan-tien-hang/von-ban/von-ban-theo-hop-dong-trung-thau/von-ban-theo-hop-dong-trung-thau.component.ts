@@ -11,7 +11,7 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import { BtnStatus, Cvmb, Report, ThanhToan } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 import { Tab, Vb } from '../von-ban.constant';
 
@@ -488,7 +488,7 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
         const filterHD = this.lstCtiets.filter(e => e.level > (this.capDvi == 1 ? 1 : 0)).map(item => {
             const row: any = {};
             fieldHD.forEach(field => {
-                row[field] = item[field];
+                row[field] = Utils.getValue(item[field]);
             })
             return row;
         })
@@ -502,6 +502,12 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
         const workbook = XLSX.utils.book_new();
         const worksheetHD = Table.initExcel(head);
         XLSX.utils.sheet_add_json(worksheetHD, filterHD, { skipHeader: true, origin: Table.coo(head[0].l, head[0].b + 1) })
+        //Thêm khung viền cho bảng
+        for (const cell in worksheetHD) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheetHD[cell].s = Table.borderStyle;
+        }
+
         XLSX.utils.book_append_sheet(workbook, worksheetHD, 'Hợp đồng');
 
         let header = [];
@@ -539,7 +545,7 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
             filterData = this.lstCtiets.filter(e => e.level < 2).map(item => {
                 const row: any = {};
                 fieldOrder.forEach(field => {
-                    row[field] = field == 'uncNgay' ? Utils.fmtDate(item[field]) : item[field];
+                    row[field] = field == 'uncNgay' ? Utils.fmtDate(item[field]) : Utils.getValue(item[field]);
                 })
                 return row;
             })
@@ -582,7 +588,7 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
             filterData = this.lstCtiets.filter(e => e.level < 1).map(item => {
                 const row: any = {};
                 fieldOrder.forEach(field => {
-                    row[field] = item[field];
+                    row[field] = Utils.getValue(item[field]);
                 })
                 return row;
             })
@@ -596,6 +602,12 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
         }
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        //Thêm khung viền cho bảng
+        for (const cell in worksheet) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheet[cell].s = Table.borderStyle;
+        }
+
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Vốn bán');
         XLSX.writeFile(workbook, this.baoCao.maCapUng + '.xlsx');
     }

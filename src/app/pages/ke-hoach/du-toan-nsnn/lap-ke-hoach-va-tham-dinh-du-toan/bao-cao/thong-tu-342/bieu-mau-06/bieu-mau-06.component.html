@@ -35,7 +35,7 @@
                                 <th scope="colgroup" colspan="3" rowspan="2">
                                     Tổng số
                                 </th>
-                                <th scope="colgroup" colspan="{{lstDvi.length * 3}}">
+                                <th scope="colgroup" *ngIf="lstDvi.length > 0" colspan="{{lstDvi.length * 3}}">
                                     Chi tiết đơn vị báo cáo
                                 </th>
                             </tr>

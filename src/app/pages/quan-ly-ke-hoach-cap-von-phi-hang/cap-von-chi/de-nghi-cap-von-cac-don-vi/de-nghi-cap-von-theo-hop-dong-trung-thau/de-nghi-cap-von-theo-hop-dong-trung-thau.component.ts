@@ -13,7 +13,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { BtnStatus, CapVon, Cvnc, Doc, Report } from '../de-nghi-cap-von-cac-don-vi.constant';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 
 @Component({
     selector: 'app-de-nghi-cap-von-theo-hop-dong-trung-thau',
@@ -485,7 +485,7 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
         const filterDataHD = this.lstCtiets.filter(e => e.level > (this.isSynth ? 1 : 0)).map(item => {
             const row: any = {};
             fieldHD.forEach(field => {
-                row[field] = item[field];
+                row[field] = Utils.getValue(item[field]);
             })
             return row;
         })
@@ -497,6 +497,12 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
         filterDataHD.unshift(calHd);
         const worksheetHD = Table.initExcel(headerHD);
         XLSX.utils.sheet_add_json(worksheetHD, filterDataHD, { skipHeader: true, origin: Table.coo(headerHD[0].l, headerHD[0].b + 1) })
+        //Thêm khung viền cho bảng
+        for (const cell in worksheetHD) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheetHD[cell].s = Table.borderStyle;
+        }
+
         XLSX.utils.book_append_sheet(workbook, worksheetHD, 'Hợp đồng');
         // export sheet cap von
         let header = [];
@@ -558,7 +564,7 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
         const filterData = this.lstCtiets.filter(e => e.level < (this.isSynth ? 2 : 1)).map(item => {
             const row: any = {};
             fieldOrder.forEach(field => {
-                row[field] = item[field];
+                row[field] = Utils.getValue(item[field]);
             })
             return row;
         })
@@ -570,6 +576,12 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
         filterData.unshift(cal);
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        //Thêm khung viền cho bảng
+        for (const cell in worksheet) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheet[cell].s = Table.borderStyle;
+        }
+
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Đề nghị cấp vốn');
         XLSX.writeFile(workbook, this.baoCao.maDnghi + '.xlsx');
     }

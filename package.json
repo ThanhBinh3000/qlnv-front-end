@@ -42,6 +42,7 @@
     "tslib": "^2.1.0",
     "vn-num2words": "^1.0.4",
     "xlsx": "^0.18.3",
+    "xlsx-js-style": "^1.0.0",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {

@@ -13,7 +13,7 @@ import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { BtnStatus, Cvmb, Report, ThanhToan } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 import { Tab, Vb } from '../von-ban.constant';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 
 @Component({
     selector: 'app-von-ban-theo-don-gia-mua',
@@ -493,7 +493,7 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
                             row[field] = Utils.fmtDate(item[field]);
                             break;
                         default:
-                            row[field] = item[field];
+                            row[field] = Utils.getValue(item[field]);
                             break;
                     }
                 })
@@ -535,7 +535,7 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
             filterData = this.lstCtiets.map(item => {
                 const row: any = {};
                 fieldOrder.forEach(field => {
-                    row[field] = field == 'stt' ? this.getIndex(item) : item[field];
+                    row[field] = field == 'stt' ? this.getIndex(item) : Utils.getValue(item[field]);
                 })
                 return row;
             })
@@ -550,6 +550,12 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        //Thêm khung viền cho bảng
+        for (const cell in worksheet) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheet[cell].s = Table.borderStyle;
+        }
+
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         XLSX.writeFile(workbook, this.baoCao.maCapUng + '.xlsx');
     }

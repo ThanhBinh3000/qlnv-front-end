@@ -14,7 +14,7 @@ import { BaoCaoThucHienVonPhiService } from 'src/app/services/quan-ly-von-phi/ba
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import { BtnStatus, Doc, Form, Para, Vp } from '../../bao-cao-thuc-hien-von-phi.constant';
 
 export class ItemData {
@@ -966,20 +966,26 @@ export class BaoCao04aComponent implements OnInit {
         this.lstCtietBcao.forEach((item, index) => {
             const row = 6 + index;
             header.push({ t: row, b: row, l: 0, r: 0, val: item.index() })
-            header.push({ t: row, b: row, l: 1, r: 1, val: item.tenNdungChi })
+            header.push({ t: row, b: row, l: 1, r: 1, val: Utils.getValue(item.tenNdungChi) })
             if (item.maNdungChi != '0.1') {
-                header.push({ t: row, b: row, l: 2, r: 2, val: item.trongDotTcong })
-                header.push({ t: row, b: row, l: 3 + num, r: 3 + num, val: item.luyKeTcong })
-                header.push({ t: row, b: row, l: 4 + 2 * num, r: 4 + 2 * num, val: item.ghiChu })
+                header.push({ t: row, b: row, l: 2, r: 2, val: Utils.getValue(item.trongDotTcong) })
+                header.push({ t: row, b: row, l: 3 + num, r: 3 + num, val: Utils.getValue(item.luyKeTcong) })
+                header.push({ t: row, b: row, l: 4 + 2 * num, r: 4 + 2 * num, val: Utils.getValue(item.ghiChu) })
                 this.lstCol.forEach((e, ind) => {
                     const sl = item.listCtiet.find(d => d.maVtu == e.maVtu && d.loaiDm == e.loaiDm);
-                    header.push({ t: row, b: row, l: 3 + ind, r: 3 + ind, val: sl.gtri })
-                    header.push({ t: row, b: row, l: 4 + ind + num, r: 4 + ind + num, val: sl.lkGtri })
+                    header.push({ t: row, b: row, l: 3 + ind, r: 3 + ind, val: Utils.getValue(sl.gtri) })
+                    header.push({ t: row, b: row, l: 4 + ind + num, r: 4 + ind + num, val: Utils.getValue(sl.lkGtri) })
                 })
             }
         })
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
+        //Thêm khung viền cho bảng
+        for (const cell in worksheet) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheet[cell].s = Table.borderStyle;
+        }
+
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         XLSX.writeFile(workbook, this.para.excel);
     }

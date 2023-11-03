@@ -9,7 +9,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.constant';
 
 export class ThuChi {
@@ -319,19 +319,25 @@ export class BieuMau06Component implements OnInit {
         this.lstCtietBcao.forEach((item, index) => {
             const row = headerBot + index + 1;
             header.push({ t: row, b: row, l: 0, r: 0, val: item.getIndex() })
-            header.push({ t: row, b: row, l: 1, r: 1, val: item.tenChiTieu })
-            header.push({ t: row, b: row, l: 2, r: 2, val: item.uocThNam })
-            header.push({ t: row, b: row, l: 3, r: 3, val: item.namKh })
-            header.push({ t: row, b: row, l: 4, r: 4, val: item.thamDinh })
+            header.push({ t: row, b: row, l: 1, r: 1, val: Utils.getValue(item.tenChiTieu) })
+            header.push({ t: row, b: row, l: 2, r: 2, val: Utils.getValue(item.uocThNam) })
+            header.push({ t: row, b: row, l: 3, r: 3, val: Utils.getValue(item.namKh) })
+            header.push({ t: row, b: row, l: 4, r: 4, val: Utils.getValue(item.thamDinh) })
             item.lstDvi.forEach((e, ind) => {
                 const col = 4 + ind * 3;
-                header.push({ t: row, b: row, l: col + 1, r: col + 1, val: e.uocThNam })
-                header.push({ t: row, b: row, l: col + 2, r: col + 2, val: e.namKh })
-                header.push({ t: row, b: row, l: col + 3, r: col + 3, val: e.thamDinh })
+                header.push({ t: row, b: row, l: col + 1, r: col + 1, val: Utils.getValue(e.uocThNam) })
+                header.push({ t: row, b: row, l: col + 2, r: col + 2, val: Utils.getValue(e.namKh) })
+                header.push({ t: row, b: row, l: col + 3, r: col + 3, val: Utils.getValue(e.thamDinh) })
             })
         })
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
+        //Thêm khung viền cho bảng
+        for (const cell in worksheet) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheet[cell].s = Table.borderStyle;
+        }
+
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         XLSX.writeFile(workbook, this.dataInfo.maBcao + '_TT342_06.xlsx');
     }
