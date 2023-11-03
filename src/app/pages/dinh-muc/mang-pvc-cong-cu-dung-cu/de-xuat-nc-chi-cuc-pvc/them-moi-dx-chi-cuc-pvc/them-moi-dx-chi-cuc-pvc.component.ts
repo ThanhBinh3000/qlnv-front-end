@@ -342,7 +342,7 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
     }
   }
 
-  checkCbVu() {
+  checkCbCuc() {
     if(this.formData.value.trangThai == STATUS.DA_DUYET_LDC && this.userService.isTongCuc()){
       return true;
     }

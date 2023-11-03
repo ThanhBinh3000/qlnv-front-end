@@ -442,7 +442,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     }
   }
 
-  checkCbCuc() {
+  checkCbVu() {
     if(this.formData.value.trangThai == STATUS.DA_DUYET_LDC && this.userService.isCuc()){
       return true;
     }
