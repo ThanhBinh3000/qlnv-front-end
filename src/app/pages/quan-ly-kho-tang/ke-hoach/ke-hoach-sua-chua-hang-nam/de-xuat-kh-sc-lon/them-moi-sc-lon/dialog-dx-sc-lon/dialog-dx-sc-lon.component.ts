@@ -25,7 +25,6 @@ export class DialogDxScLonComponent implements OnInit {
   @Input() dataTable: any;
   @Input() page: string;
   @Input()isQd: boolean = false;
-
   @Input() nam: number;
   item: KhSuaChuaLonDtl = new KhSuaChuaLonDtl();
   listDmScLon: any[] = [];
