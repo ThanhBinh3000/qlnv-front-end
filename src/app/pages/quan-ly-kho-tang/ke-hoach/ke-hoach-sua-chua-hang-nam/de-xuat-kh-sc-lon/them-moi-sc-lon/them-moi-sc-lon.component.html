@@ -35,7 +35,7 @@
                  userService.isTongCuc())" type="button" class="btn btn-sub ml-2"
         (click)="duyet()">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
-        <span>Duyệt</span>
+        <span>{{ userService.isTongCuc() ? 'Tiếp nhận' : 'Duyệt' }}</span>
       </button>
       <button type="button" class="btn btn-sub xanh ml-2"
               *ngIf=" userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_DX_THEM') && ((formData.value.trangThai == STATUS.DU_THAO  ||formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP  || formData.value.trangThai == STATUS.TU_CHOI_CBV ) && userService.isCuc())"
