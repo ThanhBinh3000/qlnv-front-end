@@ -210,9 +210,9 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
         this.selectedItems = firstCheckedItem.ma;
       }
       await this.loadDanhSachCtieuCluong();
-      if (data.pthucBanTrucTiep !== THONG_TIN_BAN_TRUC_TIEP.UY_QUYEN) {
+      if (data.pthucBanTrucTiep !== THONG_TIN_BAN_TRUC_TIEP.UY_QUYEN && !this.isView) {
         await this.onChange(data.idQdNv)
-      } else if (data.pthucBanTrucTiep === THONG_TIN_BAN_TRUC_TIEP.UY_QUYEN) {
+      } else if (data.pthucBanTrucTiep === THONG_TIN_BAN_TRUC_TIEP.UY_QUYEN && !this.isView) {
         await this.onChangeHopDong(data.idHopDong)
       }
     }
@@ -294,7 +294,7 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
         idQdNv: data.id,
         soQdNv: data.soQdNv,
         ngayKyQdNv: data.ngayKyQdNv,
-        idQdNvDtl: dataChiCuc.id,
+        idQdNvDtl: dataChiCuc ? dataChiCuc.id : null,
         tgianGiaoNhan: data.tgianGiaoNhan,
         idHopDong: data.pthucBanTrucTiep === THONG_TIN_BAN_TRUC_TIEP.CHAO_GIA ? data.idHopDong : null,
         soHopDong: data.pthucBanTrucTiep === THONG_TIN_BAN_TRUC_TIEP.CHAO_GIA ? data.soHopDong : null,
@@ -312,7 +312,9 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
       })
       await this.loadDanhSachLayMau(data.soQdNv)
       if (data.pthucBanTrucTiep && data.pthucBanTrucTiep !== THONG_TIN_BAN_TRUC_TIEP.UY_QUYEN) {
-        this.listDiaDiemXuat = dataChiCuc?.children
+        if (dataChiCuc && dataChiCuc.children && dataChiCuc.children.length > 0) {
+          this.listDiaDiemXuat = dataChiCuc.children
+        }
       }
     } catch (e) {
       console.error('Error: ', e);

@@ -205,7 +205,9 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
         this.selectedItems = firstCheckedItem.ma;
       }
       await this.loadDanhSachCtieuCluong();
-      await this.onChange(data.idQdNv)
+      if (!this.isView) {
+        await this.onChange(data.idQdNv)
+      }
     }
   }
 
@@ -279,7 +281,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
         idQdNv: data.id,
         soQdNv: data.soQdNv,
         ngayKyQdNv: data.ngayKy,
-        idQdNvDtl: dataChiCuc.id,
+        idQdNvDtl: dataChiCuc ? dataChiCuc.id : null,
         tgianGiaoHang: data.tgianGiaoHang,
         idHopDong: data.idHopDong,
         soHopDong: data.soHopDong,
@@ -295,7 +297,9 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
         donViTinh: data.donViTinh,
       });
       await this.loadDanhSachLayMau(data.soQdNv)
-      this.listDiaDiemXuat = dataChiCuc?.children
+      if (dataChiCuc && dataChiCuc.children && dataChiCuc.children.length > 0) {
+        this.listDiaDiemXuat = dataChiCuc.children
+      }
     } catch (e) {
       console.error('Error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -324,7 +328,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
 
   async openDialogKho() {
     const formattedDataKho = this.listDiaDiemXuat.map(item => ({
-      soLuong: item.soLuong.toLocaleString(),
+      soLuongXuat: item.soLuong.toLocaleString(),
       ...item
     }))
     const modalQD = this.modal.create({
@@ -337,7 +341,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
       nzComponentParams: {
         dataTable: formattedDataKho,
         dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho', 'Số lượng'],
-        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho', 'soLuong']
+        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho', 'soLuongXuat']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {

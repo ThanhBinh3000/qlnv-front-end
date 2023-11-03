@@ -17,7 +17,7 @@ import {
 import {
   QdPheDuyetBaoCaoKtktService
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qd-phe-duyet-bao-cao-ktkt.service";
-
+import { cloneDeep} from "lodash";
 @Component({
   selector: 'app-thong-tin-qd-phe-duyet-bao-cao-ktkt-sctx',
   templateUrl: './thong-tin-qd-phe-duyet-bao-cao-ktkt-sctx.component.html',
@@ -45,7 +45,7 @@ export class ThongTinQdPheDuyetBaoCaoKtktSctxComponent extends Base2Component im
   listFileDinhKem: any[] = [];
   listFile: any[] = [];
   AMOUNT = AMOUNT_NO_DECIMAL;
-
+  tongGiaTri:number;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -307,6 +307,11 @@ export class ThongTinQdPheDuyetBaoCaoKtktSctxComponent extends Base2Component im
       }
       this.rowItemParent.idVirtual = uuid.v4();
       this.rowItemParent.expand = true;
+      this.tongGiaTri = this.rowItemParent.giaTri + cloneDeep(this.dataTable).reduce((a, b) => a += b.giaTri, 0)
+      if (this.tongGiaTri > this.formData.value.giaTriDt) {
+        this.notification.warning(MESSAGE.WARNING, "Tổng dự toán sửa chưa công trình không được lớn hơn TMĐT");
+        return;
+      }
       this.dataTable = [...this.dataTable, this.rowItemParent];
       this.dataTreeTable = this.dataTable;
       this.rowItemParent = new DuToanXayDung();
@@ -450,15 +455,49 @@ export class ThongTinQdPheDuyetBaoCaoKtktSctxComponent extends Base2Component im
         });
       } else {
         itemChild.expand = true;
-        let itemCheck = this.dataTable.find(it => it.idVirtual == itemChild.idVirtual);
+        let limit = false;
+        let tongGtLv2 = 0;
+        let tongGtLv3 = 0;
+        //check add hay edit
+        let dataTableCopy = [...this.dataTable];
+        let itemCheck = dataTableCopy.find(it => it.idVirtual === itemChild.idVirtual);
         if (itemCheck) {
-          this.dataTable = this.dataTable.map(obj => {
-            if (obj.idVirtual == itemChild.idVirtual) {
-              return itemChild;
-            }
-            return obj;
-          });
+          let giaTriGoc = itemCheck.giaTri;
+
+          if (itemChild.giaTri > giaTriGoc) {
+            this.notification.warning(MESSAGE.WARNING, "Giá trị chi tiết lớn hơn giá trị đã nhập");
+            return;
+          }
+          // Tìm chỉ mục của itemCheck trong bản sao và thay thế nó bằng itemChild
+          const index = dataTableCopy.indexOf(itemCheck);
+          if (index !== -1) {
+            dataTableCopy[index] = itemChild;
+            this.dataTable = dataTableCopy; // Gán trở lại giá trị của this.dataTable
+          }
         } else {
+          itemChild.expand = true;
+          this.dataTreeTable.forEach(i => {
+            if (itemChild.chiMucCha == i.chiMuc) {
+              tongGtLv2 = itemChild.giaTri + i.children.reduce((a, b) => a += b.giaTri, 0)
+              if (tongGtLv2 > i.giaTri) {
+                limit = true;
+              }
+            }
+            if (i.children && i.children.length > 0) {
+              i.children.forEach(f => {
+                if (itemChild.chiMucCha == f.chiMuc) {
+                  tongGtLv3 = itemChild.giaTri + f.children.reduce((a, b) => a += b.giaTri, 0)
+                  if (tongGtLv3 > f.giaTri) {
+                    limit = true;
+                  }
+                }
+              })
+            }
+          })
+          if (limit) {
+            this.notification.warning(MESSAGE.WARNING, "Giá trị chi tiết lớn hơn giá trị đã nhập");
+            return;
+          }
           this.dataTable = [...this.dataTable, itemChild];
         }
       }

@@ -97,8 +97,8 @@
         </td>
         <td></td>
         <td></td>
-        <td>{{thongTinCuc.soLuongTheoChiTieu}}</td>
-        <td>{{thongTinCuc.soLuongDaMua}}</td>
+        <td class="text-right">{{thongTinCuc.soLuongTheoChiTieu}}</td>
+        <td class="text-right">{{thongTinCuc.soLuongDaMua}}</td>
         <td>
           <nz-input-number [(ngModel)]="thongTinCuc.soLuong" class="text-right" nz-input [nzMin]="1" [nzStep]="1"
                            [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
@@ -121,10 +121,10 @@
             <td>{{ dataCuc.tenDvi }}</td>
             <td></td>
             <td></td>
-            <td>{{ dataCuc.soLuongTheoChiTieu }}</td>
-            <td>{{ dataCuc.soLuongDaMua}}</td>
-            <td>{{ dataCuc.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
-            <td>{{ dataCuc.soLuong * formGoiThau.value.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
+            <td class="text-right">{{ dataCuc.soLuongTheoChiTieu }}</td>
+            <td class="text-right">{{ dataCuc.soLuongDaMua}}</td>
+            <td class="text-right">{{ dataCuc.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
+            <td class="text-right">{{ dataCuc.soLuong * formGoiThau.value.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
             <td class="text-left">
               <a (click)="editRowCuc(i)">
                 <i class="fa fa-pencil" title="Sửa"></i>
@@ -139,15 +139,15 @@
             <td>{{ dataCuc.tenDvi }}</td>
             <td></td>
             <td></td>
-            <td>{{ dataCuc.soLuongTheoChiTieu }}</td>
-            <td>{{ dataCuc.soLuongDaMua}}</td>
+            <td class="text-right">{{ dataCuc.soLuongTheoChiTieu }}</td>
+            <td class="text-right">{{ dataCuc.soLuongDaMua}}</td>
 
             <td>
               <nz-input-number [(ngModel)]="thongTinCucEdit[i]" class="text-right" nz-input [nzMin]="1" [nzStep]="1"
                                [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
               </nz-input-number>
             </td>
-            <td>{{ thongTinCucEdit[i] * formGoiThau.value.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
+            <td class="text-right">{{ thongTinCucEdit[i] * formGoiThau.value.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
             <td>
               <a (click)="saveEditCuc(i)" class="save">
                 <i class="fa fa-save"></i>
