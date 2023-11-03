@@ -22,7 +22,7 @@ import {
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { Base2Component } from "src/app/components/base2/base2.component";
 import { v4 as uuidv4 } from "uuid";
-import { chain, cloneDeep } from 'lodash';
+import { chain, cloneDeep, includes, uniqBy } from 'lodash';
 import {
   QuyetDinhGiaoNvCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service";
@@ -370,9 +370,17 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     this.showListEvent.emit();
   }
   checkHoanTatPhanBo() {
-    const tongSoLuong = this.formData.value.paXuatGaoChuyenXc ? this.formData.value.soLuong : this.formData.value.dataDtl.filter(f => f.maDvi === this.userInfo.MA_DVI).reduce((sum, cur) => sum += cur.soLuongDx ? cur.soLuongDx : 0, 0)
-    const tongSoLuongGiao = this.formData.value.dataDtl.filter(f => f.maDvi === this.userInfo.MA_DVI).reduce((sum, cur) => sum += cur.soLuongGiao ? cur.soLuongGiao : 0, 0);
-    const tongSoLuongPb = this.formData.value.dataDtl.filter(f => f.maDvi === this.userInfo.MA_DVI).reduce((sum, cur) => sum += cur.soLuong ? cur.soLuong : 0, 0);
+    const tongSoLuong = this.formData.value.soLuong;
+    const dataDtl = this.formData.value.dataDtl.filter(f => f.maDvi && f.maDvi.includes(this.userInfo.MA_DVI)).map(f => ({ ...f, noiDungDxTenChiCuc: `${f.noiDungDx}-${f.tenChiCuc}` }));
+    const tongSoLuongPb = dataDtl.reduce((sum, cur) => {
+      if (this.formData.value.type === 'XC' && this.formData.value.paXuatGaoChuyenXc) {
+        sum += cur.slGaoThuHoiSauXayXat ? cur.slGaoThuHoiSauXayXat : 0
+      } else {
+        sum += cur.soLuong ? cur.soLuong : 0;
+      }
+      return sum;
+    }, 0);
+    const tongSoLuongGiao = uniqBy(dataDtl, 'noiDungDxTenChiCuc').reduce((sum, cur) => sum += cur.soLuongGiao ? cur.soLuongGiao : 0, 0);
     if (this.userService.isCuc()) {
       if (tongSoLuong === tongSoLuongGiao || this.formData.value.type === 'XC' && !this.formData.value.paXuatGaoChuyenXc) {
         return true;
@@ -380,7 +388,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       this.notification.error(MESSAGE.ERROR, "Bạn chưa hoàn thành phân bổ.");
       return;
     } else if (this.userService.isChiCuc()) {
-      if (tongSoLuong === tongSoLuongPb) {
+      if (tongSoLuongGiao === tongSoLuongPb) {
         return true
       }
       this.notification.error(MESSAGE.ERROR, "Bạn chưa hoàn thành phân bổ.");
@@ -538,7 +546,15 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
                 delete s.id;
               });
             }
-            const soLuong = detail.quyetDinhPdDtl.filter(f => f.maDvi === this.userInfo.MA_DVI).reduce((sum, cur) => sum += cur.soLuongXc ? cur.soLuongXc : 0, 0);
+            const soLuong = detail.quyetDinhPdDtl.filter(f => f.maDvi === this.userInfo.MA_DVI).reduce((sum, cur) => {
+
+              if (detail.paXuatGaoChuyenXc) {
+                sum += cur.soLuongXc ? cur.soLuongXc : 0
+              } else {
+                sum += cur.soLuong ? cur.soLuong : 0
+              }
+              return sum
+            }, 0);
             // const thoiGianGiaoNhan = detail.type === "TH" ? detail.quyetDinhPdDtl.find(f => f.maDvi === this.userInfo.MA_DVI) ? detail.quyetDinhPdDtl.find(f => f.maDvi === this.userInfo.MA_DVI).ngayKetThuc : null : detail.ngayKetThuc;
             this.formData.patchValue({
               idQdPd: detail.id,
@@ -552,7 +568,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               loaiVthh: this.formData.value.type === 'XC' ? LOAI_HANG_DTQG.THOC : detail.loaiVthh,
               tenLoaiVthh: this.formData.value.type === 'XC' ? TEN_LOAI_VTHH.THOC : detail.tenLoaiVthh,
               // thoiGianGiaoNhan,
-              soLuong: this.formData.value.type === 'XC' ? soLuong : '',
+              soLuong,
               paXuatGaoChuyenXc: detail.paXuatGaoChuyenXc
 
             });
