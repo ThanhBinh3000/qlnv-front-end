@@ -309,9 +309,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
     body.fileTienDoTh = this.fileTienDoTh;
     body.fileNghiemThu = this.fileNghiemThu;
     body.fileThanhLy = this.fileThanhLy;
-    if (body.dkThanhLy && body.dkThanhLy.length > 0) {
-      body.dkThanhLy = body.dkThanhLy.toString();
-    }
+    body.dkThanhLy = (body.dkThanhLy && body.dkThanhLy.length > 0) ? body.dkThanhLy.toString() : null;
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.khCnCongTrinhNghienCuu.update(body);
