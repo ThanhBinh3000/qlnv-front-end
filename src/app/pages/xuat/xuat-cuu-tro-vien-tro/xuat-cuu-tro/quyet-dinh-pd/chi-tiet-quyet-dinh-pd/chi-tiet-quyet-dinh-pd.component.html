@@ -1,11 +1,11 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
-  <div class="btn-group" *ngIf="!isViewOnModal">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix" *ngIf="!isViewOnModal">
+  <div class="btn-group">
     <button type="button" class="btn btn-sub" (click)="quayLai()">
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
     <button type="button" class="btn btn-sub"
-      (click)="xemTruocPd(idSelected,loaiVthh =='02'?templateNameVt:templateName,phuongAnHdrView)">
+      (click)="xemTruocPd(formData.value.id,loaiVthh =='02'?templateNameVt:templateName,phuongAnHdrView)">
       <i class="icon htvbdh_totrinh"></i>
       <span> In/Xem trước </span>
     </button>
@@ -303,9 +303,9 @@
               </div>
               <form nzLayout="vertical" nz-form [formGroup]="formData">
                 <div nz-row [nzGutter]="24">
-                  <div nz-col [nzSpan]="3">
+                  <div nz-col>
                     <nz-form-item>
-                      <nz-form-label [nzNoColon]="true">Tổng số lượng đề xuất cứu trợ</nz-form-label>
+                      <nz-form-label [nzNoColon]="true">Tổng số lượng<br />đề xuất cứu trợ</nz-form-label>
                       <nz-form-control nz-col [nzSpan]="24">
                         <span
                           style="color: #001CFF"><strong>{{tongSoLuongDx|number:globals.numberFormat:globals.locale}}
@@ -349,7 +349,7 @@
                       <tr>
                         <th rowspan="2" style="width: 35px"></th>
                         <th rowspan="2" style="width: 35px">STT</th>
-                        <th rowspan="2">Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
+                        <th rowspan="2">Địa phương/cơ quan/<br />đơn vị nhận cứu trợ</th>
                         <ng-container *ngIf="isVthhVatuThietBi()">
                           <th rowspan="2">Loại hàng DTQG</th>
                           <th colspan="3">Chủng loại hàng DTQG</th>
@@ -358,7 +358,7 @@
                         <ng-container *ngIf="isVthhGao()">
                           <th rowspan="2">Nhu cầu cứu trợ</th>
                         </ng-container>
-                        <th rowspan="2">SL xuất cứu trợ đề xuất</th>
+                        <th rowspan="2">SL xuất cứu<br />trợ đề xuất</th>
                         <ng-container *ngIf="isVthhGao()">
                           <!-- <th rowspan="2">Nhu cầu cứu trợ</th> -->
                           <th rowspan="2">SL gạo cần chuyển<br />xuất cấp thóc</th>
@@ -507,7 +507,7 @@
               <div nz-row [nzGutter]="24">
                 <div nz-col>
                   <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">Tổng số lượng đề xuất cứu trợ</nz-form-label>
+                    <nz-form-label [nzNoColon]="true">Tổng SL xuất cứu trợ<br />giao cục thực hiện</nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
                       <span style="color: #001CFF"><strong>{{tongSoLuong|number:globals.numberFormat:globals.locale}}
                           {{formData.value.donViTinh? formData.value.donViTinh : ""}}</strong></span>
@@ -550,7 +550,7 @@
                     <tr>
                       <th rowspan="2" style="width: 35px"></th>
                       <th rowspan="2" style="width: 35px">STT</th>
-                      <th rowspan="2">Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
+                      <th rowspan="2">Địa phương/cơ quan/<br />đơn vị nhận cứu trợ</th>
                       <ng-container *ngIf="isVthhVatuThietBi()">
                         <th rowspan="2">Loại hàng DTQG</th>
                         <th colspan="3">Chủng loại hàng DTQG</th>
@@ -559,7 +559,7 @@
                       <ng-container *ngIf="isVthhGao()">
                         <th rowspan="2">Nhu cầu cứu trợ</th>
                       </ng-container>
-                      <th rowspan="2">SL xuất cứu trợ giao Cục thực hiện</th>
+                      <th rowspan="2">SL xuất cứu trợ<br />giao Cục thực hiện</th>
                       <ng-container *ngIf="isVthhGao()">
                         <!-- <th rowspan="2">Nhu cầu cứu trợ</th> -->
                         <th rowspan="2">SL gạo cần chuyển<br />xuất cấp thóc</th>
@@ -726,9 +726,9 @@
               </div>
               <form nzLayout="vertical" nz-form [formGroup]="formData">
                 <div nz-row [nzGutter]="24">
-                  <div nz-col [nzSpan]="3">
+                  <div nz-col>
                     <nz-form-item>
-                      <nz-form-label [nzNoColon]="true">Tổng số lượng đề xuất cứu trợ</nz-form-label>
+                      <nz-form-label [nzNoColon]="true">Tổng số lượng<br />đề xuất cứu trợ</nz-form-label>
                       <nz-form-control nz-col [nzSpan]="24">
                         <span
                           style="color: #001CFF"><strong>{{tongSoLuongDx|number:globals.numberFormat:globals.locale}}
@@ -798,7 +798,7 @@
                           <th style="width: 35px"></th>
                         </ng-container>
                         <th style="width: 35px">STT</th>
-                        <th>Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
+                        <th>Địa phương/cơ quan/<br />đơn vị nhận cứu trợ</th>
                         <ng-container *ngIf="isVthhVatuThietBi()">
                           <th>Loại hàng DTQG</th>
                           <th>Chủng loại hàng DTQG</th>
@@ -807,7 +807,7 @@
                         <ng-container *ngIf="isVthhGao()">
                           <th>Nhu cầu cứu trợ</th>
                         </ng-container>
-                        <th>SL giao cứu trợ đề xuất</th>
+                        <th>SL cứu trợ đề xuất</th>
                         <ng-container *ngIf="isVthhGao()">
                           <!-- <th>Nhu cầu cứu trợ</th> -->
                           <th>SL gạo cần chuyển<br />xuất cấp thóc</th>
@@ -904,7 +904,7 @@
                 <ng-container *ngIf="!isVthhVatuThietBi()">
                   <div nz-col>
                     <nz-form-item>
-                      <nz-form-label [nzNoColon]="true">Tổng số lượng đề xuất cứu trợ</nz-form-label>
+                      <nz-form-label [nzNoColon]="true">Tổng SL phê duyệt<br />giao Cục xuất cứu trợ</nz-form-label>
                       <nz-form-control nz-col [nzSpan]="24">
                         <span style="color: #001CFF"><strong>{{tongSoLuong|number:globals.numberFormat:globals.locale}}
                             {{formData.value.donViTinh? formData.value.donViTinh : ""}}</strong></span>
@@ -966,7 +966,7 @@
                         <th style="width: 35px"></th>
                       </ng-container>
                       <th style="width: 35px">STT</th>
-                      <th>Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
+                      <th>Địa phương/cơ quan/<br />đơn vị nhận cứu trợ</th>
                       <ng-container *ngIf="isVthhVatuThietBi()">
                         <th>Loại hàng DTQG</th>
                         <th>Chủng loại hàng DTQG</th>

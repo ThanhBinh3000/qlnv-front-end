@@ -362,6 +362,14 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
             tkdnGao.soLuong = tkdnGao.soLuong ? (tkdnGao.soLuong / 1000) : 0;
           });
         }
+        if (item.xtnThoc && item.xtnGao.length > 0) {
+          item.xtnThoc.forEach(xtnThoc => {
+            xtnThoc.soLuong = xtnThoc.soLuong ? (xtnThoc.soLuong / 1000) : 0;
+          });
+          item.xtnGao.forEach(xtnGao => {
+            xtnGao.soLuong = xtnGao.soLuong ? (xtnGao.soLuong / 1000) : 0;
+          });
+        }
         item.tkdnTongThoc = (item.tkdnThoc.reduce((a, b) => a + b.soLuong, 0));
         item.tkdnTongGao = item.tkdnGao.reduce((a, b) => a + +b.soLuong, 0);
         item.tkdnTongSoQuyThoc = item.tkdnTongThoc + item.tkdnTongGao * 2;
@@ -433,6 +441,8 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
                       case this.yearNow - 2:
                         item.tkdnThoc[1].soLuong +=
                           tonKho.duDau;
+                        item.xtnThoc[1].soLuong +=
+                          tonKho.duDau;
                         break;
                       case this.yearNow - 3:
                         item.tkdnThoc[0].soLuong +=
@@ -445,6 +455,8 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
                     switch (tonKho.nam) {
                       case this.yearNow - 1:
                         item.tkdnGao[2].soLuong +=
+                          tonKho.duDau;
+                        item.xtnGao[2].soLuong +=
                           tonKho.duDau;
                         break;
                       case this.yearNow - 2:

@@ -16,7 +16,7 @@ import {TongHopPhuongAnGiaService} from "src/app/services/ke-hoach/phuong-an-gia
 import {DialogPagQdBtcComponent} from "../dialog-pag-qd-btc/dialog-pag-qd-btc.component";
 import printJS from "print-js";
 import {saveAs} from "file-saver";
-import { cloneDeep } from 'lodash';
+import {cloneDeep} from 'lodash';
 
 @Component({
   selector: "app-them-quyet-dinh-gia-btc-vt",
@@ -51,6 +51,7 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
   excelBlob: any;
   printSrc: any
   showDlgPreview = false;
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
@@ -87,12 +88,12 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
 
   async ngOnInit() {
     this.spinner.show();
-      this.userInfo = this.userService.getUserLogin(),
+    this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
       this.loadDsLoaiGia(),
       this.loadDsVthh(),
       this.maQd = "/QĐ-BTC",
-    await this.getDataDetail(this.idInput),
+      await this.getDataDetail(this.idInput),
       this.spinner.hide();
   }
 
@@ -116,7 +117,7 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
         ghiChu: data.ghiChu,
         soToTrinh: data.soToTrinh,
         soQdDc: data.soQdDc,
-        loaiDeXuat : data.loaiDeXuat
+        loaiDeXuat: data.loaiDeXuat
       });
       this.fileDinhKem = data.fileDinhKems;
       this.canCuPhapLys = data.canCuPhapLys;
@@ -182,15 +183,15 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-      this.arrThongTinGia.forEach(item => {
-        if (item.vat) {
-          if (this.formData.value.loaiDeXuat == '00') {
-            item.giaQdBtcVat = item.giaQdBtc + item.giaQdBtc * item.vat
-          } else {
-            item.giaQdDcBtcVat = item.giaQdDcBtc + item.giaQdDcBtc * item.vat
-          }
+    this.arrThongTinGia.forEach(item => {
+      if (item.vat) {
+        if (this.formData.value.loaiDeXuat == '00') {
+          item.giaQdBtcVat = item.giaQdBtc + item.giaQdBtc * item.vat
+        } else {
+          item.giaQdDcBtcVat = item.giaQdDcBtc + item.giaQdDcBtc * item.vat
         }
-      })
+      }
+    })
 
     let body = this.formData.value;
     body.soQd = body.soQd + this.maQd;
@@ -199,32 +200,32 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
     body.thongTinGiaVt = this.arrThongTinGia
     body.fileDinhKemReq = this.fileDinhKem;
     body.canCuPhapLys = this.canCuPhapLys;
-      let res;
-      if (this.idInput > 0) {
-        res = await this.quyetDinhGiaCuaBtcService.update(body);
+    let res;
+    if (this.idInput > 0) {
+      res = await this.quyetDinhGiaCuaBtcService.update(body);
+    } else {
+      res = await this.quyetDinhGiaCuaBtcService.create(body);
+    }
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (isBanHanh) {
+        this.formData.patchValue({
+          id: res.data.id,
+          trangThai: res.data.trangThai
+        })
+        this.banHanh();
       } else {
-        res = await this.quyetDinhGiaCuaBtcService.create(body);
-      }
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (isBanHanh) {
-          this.formData.patchValue({
-            id: res.data.id,
-            trangThai: res.data.trangThai
-          })
-          this.banHanh();
-        } else {
-          if (!isBanHanh) {
-            if (this.idInput > 0) {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            } else {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            }
+        if (!isBanHanh) {
+          if (this.idInput > 0) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+          } else {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
           }
-          this.quayLai();
         }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
+        this.quayLai();
       }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
     this.spinner.hide();
   }
 
@@ -281,27 +282,27 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
         nzWidth: '1200px',
         nzFooter: null,
         nzComponentParams: {
-          pagType : this.pagType,
+          pagType: this.pagType,
           type: this.type,
           namKeHoach: this.formData.value.namKeHoach,
-          loaiGia : this.formData.value.loaiGia
+          loaiGia: this.formData.value.loaiGia
         },
       });
       modalQD.afterClose.subscribe((data) => {
-        console.log(data,111)
-        if (data && data.listDx && data.listDx.length> 0 ) {
-            let thRes = data.listDx;
+        console.log(data, 111)
+        if (data && data.listDx && data.listDx.length > 0) {
+          let thRes = data.listDx;
           if (thRes && thRes.length > 0) {
             this.formData.patchValue({
-              soToTrinh : thRes && thRes.length > 0 ? thRes.map(item=> item.soDeXuat).toString() : "",
-              soQdDc: thRes && thRes.length > 0 ? thRes.map(item=> item.soDeXuatDc).toString() : [],
+              soToTrinh: thRes && thRes.length > 0 ? thRes.map(item => item.soDeXuat).toString() : "",
+              soQdDc: thRes && thRes.length > 0 ? thRes.map(item => item.soDeXuatDc).toString() : [],
               loaiDeXuat: data.formData.loaiQd,
             })
           }
-            let body = {
-              listId : thRes && thRes.length > 0 ? thRes.map(item=> item.id) : []
-            }
-            this.tongHopData(body);
+          let body = {
+            listId: thRes && thRes.length > 0 ? thRes.map(item => item.id) : []
+          }
+          this.tongHopData(body);
         }
       });
     } else {
@@ -319,12 +320,26 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         let dataTongHop = res.data;
         if (dataTongHop && dataTongHop.length > 0) {
-          this.arrThongTinGia = dataTongHop
+          const uniqueSoDeXuat = new Set<string>();
+          for (const record of dataTongHop) {
+            record.giaQdBtc = record.giaQdBtcCu;
+            record.giaQdBtcVat = record.giaQdBtcCuVat;
+            // Sử dụng trường "type" làm key trong Set để kiểm tra sự trùng lặp
+            if (!uniqueSoDeXuat.has(record.soQdBtc)) {
+              // Nếu trường "type" chưa tồn tại trong Set, thêm giá trị "soDeXuat" vào Set
+              uniqueSoDeXuat.add(record.soQdBtc ? record.soQdBtc.toString() : "");
+            }
+          }
+          const uniqueSoDeXuatArray = Array.from(uniqueSoDeXuat);
+          this.formData.patchValue({
+            soQdDc: uniqueSoDeXuatArray && this.formData.value.loaiDeXuat == '01' ? uniqueSoDeXuatArray.join(', ') : ""
+          })
+          this.arrThongTinGia = cloneDeep(dataTongHop);
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
         }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
+        this.spinner.hide();
       }
-      this.spinner.hide();
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
@@ -386,7 +401,12 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
   }
 
   printPreview() {
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
+    const blobUrl = URL.createObjectURL(this.pdfBlob);
+    printJS({
+      printable: blobUrl,
+      type: 'pdf',
+      base64: false
+    })
   }
 
 

@@ -30,6 +30,7 @@ import {
 import _ from 'lodash';
 import {PREVIEW} from "../../../../../../constants/fileType";
 import printJS from "print-js";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-thong-tin-hop-dong-btt',
@@ -45,6 +46,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   @Input() isQuanLy: boolean;
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   listLoaiHopDong: any[] = [];
   dataTablePhuLuc: any[] = [];
   maHopDongSuffix: string = '';

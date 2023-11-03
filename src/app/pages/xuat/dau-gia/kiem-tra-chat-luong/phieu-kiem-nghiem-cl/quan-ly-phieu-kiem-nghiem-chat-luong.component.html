@@ -76,7 +76,7 @@
                 [nzShowPagination]="false" nzBordered>
         <thead>
         <tr>
-          <th class="text-center" nzWidth="50px"> STT</th>
+          <th nzWidth="50px" class="text-center wrap"></th>
           <th></th>
           <th class="text-left"> Số QĐ giao NVXH</th>
           <th class="text-left"> Năm KH</th>
@@ -106,7 +106,7 @@
               </a>
             </td>
             <td class="text-left bold">{{item.nam}}</td>
-            <td class="text-left bold">{{item.ngayKyQdNv|date: 'dd/MM/YYYY'}}</td>
+            <td class="text-left bold">{{item.tgianGiaoHang|date: 'dd/MM/YYYY'}}</td>
             <td></td>
             <td></td>
             <td></td>

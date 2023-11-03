@@ -6,6 +6,7 @@
     <th *ngIf="isTableKetQua && !isTabNdKhac" class="text-center"> Đơn vị báo giá, khảo sát giá</th>
     <th *ngIf="isTabNdKhac" class="text-center"> Thông tin tham khảo</th>
     <th *ngIf="!isTabNdKhac" class="text-center">Chủng loại hàng DTQG - Tiêu chuẩn, quy chuẩn</th>
+    <th class="text-center">Số lượng</th>
     <th class="text-center">Đơn giá chưa VAT (đồng/kg)</th>
     <th *ngIf="isVat" class="text-center">Đơn giá có VAT (đồng/kg)</th>
     <th *ngIf="isTabNdKhac" class="text-center">Chỉ số CPI</th>
@@ -32,6 +33,12 @@
         <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of listCloaiVthh">
         </nz-option>
       </nz-select>
+    </th>
+    <th>
+      <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="rowItem.soLuong"
+                       [nzFormatter]="globals.formatter"
+                       [nzParser]="globals.parser">
+      </nz-input-number>
     </th>
     <th>
       <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="rowItem.donGia"
@@ -95,9 +102,10 @@
       <td *ngIf="isTableKetQua && !isTabNdKhac">{{ data.tenDviBaoGia }}</td>
       <td *ngIf="!isTableKetQua && !isTabNdKhac">{{ data.tenDviThamDinh }}</td>
       <td *ngIf="isTabNdKhac">{{ data.ttThamKhao }}</td>
-      <td *ngIf="!isTabNdKhac">{{ data.tenCloaiVthh + (data.tieuChuanCl ? '; ' + data.tieuChuanCl : '' )}}</td>
-      <td>{{data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
-      <td *ngIf="isVat">{{data.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
+      <td *ngIf="!isTabNdKhac">{{ (data.tenCloaiVthh ? data.tenCloaiVthh : '' ) + (data.tieuChuanCl ? '; ' + data.tieuChuanCl : '' )}}</td>
+      <td class="text-right">{{data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
+      <td class="text-right">{{data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
+      <td class="text-right" *ngIf="isVat">{{data.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
       <td *ngIf="!isTabNdKhac">{{data.thoiHanBaoGia }}</td>
       <td *ngIf="isTabNdKhac">{{data.chiSoCpi }}</td>
       <td>{{data.fileDinhKem?.fileName }}</td>
@@ -127,6 +135,11 @@
       </td>
       <td *ngIf="!isTabNdKhac">
         <input type="text" [(ngModel)]="dataEdit[idx].data.cloaiVthh" nz-input/>
+      </td>
+      <td>
+        <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.soLuong" [nzFormatter]="globals.formatter"
+                         [nzParser]="globals.parser">
+        </nz-input-number>
       </td>
       <td>
         <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.donGia" [nzFormatter]="globals.formatter"

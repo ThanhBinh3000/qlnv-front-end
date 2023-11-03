@@ -297,6 +297,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
 
 
   async onChangeChiCuc(event) {
+    debugger
     let body = {
       maDvi: event,
       type: this.listType
@@ -323,6 +324,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         this.listDiemKho.push(item);
       }
     }
+    console.log(res, 'aaa')
     let bodyPag = {
       namKeHoach: this.namKhoach,
       loaiVthh: this.loaiVthh,
@@ -334,6 +336,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
     if (pag.msg == MESSAGE.SUCCESS && pag.data.length > 0) {
       const data = pag.data[0];
+      console.log(data, 'aaa')
       let donGiaVatQd = 0;
       if (data != null && data.giaQdDcTcdtVat != null && data.giaQdDcTcdtVat > 0) {
         donGiaVatQd = data.giaQdDcTcdtVat

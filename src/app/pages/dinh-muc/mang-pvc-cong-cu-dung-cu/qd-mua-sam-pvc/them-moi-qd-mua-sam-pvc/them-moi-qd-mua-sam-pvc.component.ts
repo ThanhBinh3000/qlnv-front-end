@@ -206,10 +206,50 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
     return sl;
   }
 
+  changeSl(event: number, item: any) {
+    if (event && item.slMetQuyCuon) {
+      let cuon = event / item.slMetQuyCuon;
+      if (cuon.toString().includes(".")) {
+        let cut = cuon.toString().split(".")
+        let cuon0 = Number(cut[0])
+        let check = cuon0 + 0.35
+        if (check > cuon) {
+          item.slCuon = cuon0
+        } else {
+          item.slCuon = cuon0 + 1
+        }
+
+      } else {
+        item.slCuon = cuon
+      }
+
+    } else item.slCuon = undefined
+  }
+
+  changeSlQuyDoi(event: number, item: any) {
+    if (event && item.soLuong) {
+      let cuon = item.soLuong / event;
+      if (cuon.toString().includes(".")) {
+        let cut = cuon.toString().split(".")
+        let cuon0 = Number(cut[0])
+        let check = cuon0 + 0.35
+        if (check > cuon) {
+          item.slCuon = cuon0
+        } else {
+          item.slCuon = cuon0 + 1
+        }
+
+      } else {
+        item.slCuon = cuon
+      }
+
+    } else item.slCuon = undefined
+  }
+
   convertListData() {
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable = chain(this.dataTable).groupBy('tenCcdc')
-        .map((value, key) => ({ tenCcdc: key, dataChild: value, idVirtual: uuidv4() }),
+        .map((value, key) => ({ tenCcdc: key, dataChild: value, donGia: value[0].donGia || value[0].donGiaTd, idVirtual: uuidv4() }),
         ).value();
     }
     this.expandAll();
@@ -220,7 +260,7 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
     this.dataTable.forEach(item => {
       if (item.dataChild && item.dataChild.length > 0) {
         item.dataChild.forEach(data => {
-          arr.push(data);
+          arr.push({ ...data, donGia: item.donGia });
         });
       }
     });
@@ -277,12 +317,12 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
   async pheDuyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.DANG_NHAP_DU_LIEU :
-      case STATUS.TU_CHOI_LDTC : {
+      case STATUS.DANG_NHAP_DU_LIEU:
+      case STATUS.TU_CHOI_LDTC: {
         trangThai = STATUS.CHO_DUYET_LDTC;
         break;
       }
-      case STATUS.CHO_DUYET_LDTC : {
+      case STATUS.CHO_DUYET_LDTC: {
         trangThai = STATUS.BAN_HANH;
       }
     }

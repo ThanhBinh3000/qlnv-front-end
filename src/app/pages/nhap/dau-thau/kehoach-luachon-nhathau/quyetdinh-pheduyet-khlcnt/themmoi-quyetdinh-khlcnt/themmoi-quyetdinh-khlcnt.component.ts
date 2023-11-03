@@ -630,7 +630,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listToTrinh,
-        dataHeader: ['Số tờ trình đề xuất', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
+        dataHeader: ['Số tờ trình đề xuất', 'Loại hàng DTQG', 'Chủng loại hàng DTQG'],
         dataColumn: ['soDxuat', 'tenLoaiVthh', 'tenCloaiVthh']
       },
     });

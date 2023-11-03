@@ -31,7 +31,7 @@ import { DANH_MUC_LEVEL } from "src/app/pages/luu-kho/luu-kho.constant";
 import { NzTreeSelectComponent } from "ng-zorro-antd/tree-select";
 import { QuanLyHangTrongKhoService } from "src/app/services/quanLyHangTrongKho.service";
 import { PREVIEW } from 'src/app/constants/fileType';
-import { LOAI_HANG_DTQG } from 'src/app/constants/config';
+import { LOAI_HANG_DTQG, TEN_LOAI_VTHH } from 'src/app/constants/config';
 import { AMOUNT_TWO_DECIMAL } from 'src/app/Utility/utils';
 
 @Component({
@@ -44,6 +44,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   @Input() isView: boolean;
   @Input() loaiXuat: any;
   @Input() isViewOnModal: boolean;
+  MESSAGE = MESSAGE;
   formDataDtl: FormGroup;
   modalChiTiet: boolean = false;
   listDiaDanh: any[] = [];
@@ -165,6 +166,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
         slThocDeXayXat: [0],
         tyLeThuHoiSauXayXat: [0, [Validators.min(0), Validators.max(100)]],
         soLuongXc: [0],
+        slConLaiGiao: [0]
         // 2 trường slThocDeXayXatGiaoCuc và slThocDeXayXatGiaoChiCuc không dùng nữa và thay thế bằng các trường tương ứng soLuongDx và soLuongGiao đề đồng bộ dữ liệu
         // slThocDeXayXatGiaoCuc: [0],
         // slThocDeXayXatGiaoChiCuc: [0]
@@ -258,6 +260,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
         trangThai: STATUS.DU_THAO,
         tenTrangThai: 'Dự thảo',
         tenDvi: this.userInfo.TEN_DVI,
+        maDvi: this.userInfo.MA_DVI
       });
     }
   }
@@ -368,9 +371,8 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   }
 
   async save() {
-    // await this.helperService.ignoreRequiredForm(this.formData);
-    this.helperService.markFormGroupTouched(this.formData);
-    // this.formData.controls.soQdGnv.setValidators([Validators.required]);
+    await this.helperService.ignoreRequiredForm(this.formData);
+    this.formData.controls.soBbQd.setValidators([Validators.required]);
     let body = {
       ...this.formData.value,
       soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null
@@ -394,19 +396,53 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     // if (trangThai === STATUS.DA_HOAN_THANH && this.formData.value.dataDtl.some(f => !f.tenNganKho)) {
     //   return this.notification.error(MESSAGE.ERROR, "Bạn chưa hoàn thành phân bổ.")
     // }
-    if (trangThai === STATUS.BAN_HANH && this.formData.value.dataDtl.filter(s => s.maDvi.match(this.userInfo.MA_DVI + ".*")).some(f => !f.tenNganKho)) {
+    if (this.formData.value.trangThai === STATUS.BAN_HANH && this.formData.value.dataDtl.filter(s => s.maDvi.match(this.userInfo.MA_DVI + ".*")).some(f => !f.tenNganKho)) {
       return this.notification.error(MESSAGE.ERROR, "Bạn chưa hoàn thành phân bổ.")
     }
-    let body = {
-      ...this.formData.value,
-      soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null
+    if (trangThai === STATUS.DA_HOAN_THANH) {
+
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: "Bạn có muốn hoàn thành phân bổ?.",
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 350,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let body = {
+              ...this.formData.value,
+              soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null
+            }
+            const data = await this.createUpdate(body, null, true);
+            if (data) {
+              this.formData.patchValue({ trangThaiXh: trangThai });
+              this.notification.success(MESSAGE.SUCCESS, 'Hoàn thành phân bổ thành công.')
+            }
+            await this.buildTableView();
+          } catch (e) {
+            console.log('error: ', e);
+            this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
+          }
+        },
+      });
+    } else {
+      let body = {
+        ...this.formData.value,
+        soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null
+      }
+      const data = await this.createUpdate(body, null, true);
+      if (data) {
+        this.formData.patchValue({ trangThaiXh: trangThai });
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS)
+      }
+      await this.buildTableView();
     }
-    const data = await this.createUpdate(body, null, true);
-    if (data) {
-      this.formData.patchValue({ trangThaiXh: trangThai });
-      this.notification.success(MESSAGE.SUCCESS, trangThai === STATUS.DA_HOAN_THANH ? 'Hoàn thành phân bổ thành công.' : MESSAGE.UPDATE_SUCCESS)
-    }
-    await this.buildTableView();
   }
 
 
@@ -486,13 +522,14 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               soQdPd: detail.soBbQd,
               loaiNhapXuat: detail.loaiNhapXuat,
               kieuNhapXuat: detail.kieuNhapXuat,
-              tenVthh: detail.tenVthh,
+              // tenVthh: detail.tenVthh,
               dataDtl: detail.quyetDinhPdDtl,
-              type: detail.type,
-              loaiVthh: detail.loaiVthh,
-              tenLoaiVthh: detail.tenLoaiVthh,
+              type: this.formData.value.type === 'XC' ? 'XC' : detail.type,
+              tenVthh: this.formData.value.type === 'XC' ? TEN_LOAI_VTHH.THOC : detail.tenVthh,
+              loaiVthh: this.formData.value.type === 'XC' ? LOAI_HANG_DTQG.THOC : detail.loaiVthh,
+              tenLoaiVthh: this.formData.value.type === 'XC' ? TEN_LOAI_VTHH.THOC : detail.tenLoaiVthh,
               // thoiGianGiaoNhan,
-              soLuong,
+              soLuong: detail.paXuatGaoChuyenXc ? '' : soLuong,
               paXuatGaoChuyenXc: detail.paXuatGaoChuyenXc
 
             });
@@ -601,24 +638,37 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
             .map((v1, k1) => {
               let tenChiCucRow = v1.find(s => k1 && s.tenChiCuc === k1);
               if (!tenChiCucRow) return;
-              let slGaoThuHoiSauXayXat = v1.reduce((prev, next) => prev + next.slGaoThuHoiSauXayXat, 0);
-              let slThocDeXayXat = v1.reduce((prev, next) => prev + next.slThocDeXayXat, 0);
+              // let slGaoThuHoiSauXayXat = v1.reduce((prev, next) => prev + next.slGaoThuHoiSauXayXat, 0);
+              // let slThocDeXayXat = v1.reduce((prev, next) => prev + next.slThocDeXayXat, 0);
+              const { slGaoThuHoiSauXayXat, slThocDeXayXat } = v1.reduce((obj, cur) => {
+                obj.slGaoThuHoiSauXayXat += cur.slGaoThuHoiSauXayXat;
+                obj.slThocDeXayXat += cur.slThocDeXayXat;
+                return obj;
+              }, { slGaoThuHoiSauXayXat: 0, slThocDeXayXat: 0 });
               return {
                 ...tenChiCucRow,
                 idVirtual: uuidv4(),
                 slGaoThuHoiSauXayXat,
                 slThocDeXayXat,
+                soLuong: slThocDeXayXat,
                 tenTrangThai: tenChiCucRow.tenTrangThai || 'Đang thực hiện',
                 childData: v1.filter(f => !!f.tenDiaDiem),
               }
             }).value().filter(f => !!f);
           if (!noiDungDxRow) return;
           // const soLuongDx = rs.reduce((sum, cur) => sum += cur.soLuongDx, 0);
-          let slGaoThuHoiSauXayXat = rs.reduce((prev, next) => prev + next.slGaoThuHoiSauXayXat, 0);
-          let slThocDeXayXat = rs.reduce((prev, next) => prev + next.slThocDeXayXat, 0);
+          // let slGaoThuHoiSauXayXat = rs.reduce((prev, next) => prev + next.slGaoThuHoiSauXayXat, 0);
+          // let slThocDeXayXat = rs.reduce((prev, next) => prev + next.slThocDeXayXat, 0);
+          const { soLuongGiao, slGaoThuHoiSauXayXat, slThocDeXayXat } = rs.reduce((obj, cur) => {
+            obj.soLuongGiao += cur.soLuongGiao;
+            obj.slGaoThuHoiSauXayXat += cur.slGaoThuHoiSauXayXat;
+            obj.slThocDeXayXat += cur.slThocDeXayXat;
+            return obj;
+          }, { soLuongGiao: 0, slGaoThuHoiSauXayXat: 0, slThocDeXayXat: 0 });
           return {
             ...noiDungDxRow,
             idVirtual: uuidv4(),
+            soLuongGiao,
             slGaoThuHoiSauXayXat,
             slThocDeXayXat: slThocDeXayXat,
             childData: rs,
@@ -689,7 +739,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     }
   }
 
-  async themPhuongAn(data?: any, level?: any, editRow?: boolean) {
+  async themPhuongAn(data?: any, level?: any, editRow?: boolean, parentData?: any) {
     this.formDataDtl.reset();
     if (data) {
       let edit = editRow;
@@ -702,51 +752,76 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           edit = true
         }
         this.formDataDtl.patchValue({
-          noiDungDx: data.noiDungDx,
-          tenHang: data.tenHang,
-          loaiVthh: data.loaiVthh,
-          cloaiVthh: data.cloaiVthh,
-          soLuongDx: data.soLuongDx,
-          // tonKhoCloaiVthh: data.tonKhoCloaiVthh,
-          donViTinh: data.donViTinh,
-          idQdPdDtl: data.idQdPdDtl,
+          // noiDungDx: data.noiDungDx,
+          // tenHang: data.tenHang,
+          // loaiVthh: data.loaiVthh,
+          // cloaiVthh: data.cloaiVthh,
+          // soLuongDx: data.soLuongDx,
+          // // tonKhoCloaiVthh: data.tonKhoCloaiVthh,
+          // donViTinh: data.donViTinh,
+          // idQdPdDtl: data.idQdPdDtl,
+          // edit,
+          // mId: edit ? data.mId : uuidv4(),
+
+          // idDx: data.idDx,
+          // idDonViNhan: data.idDonViNhan,
+          // loaiNhapXuat: data.loaiNhapXuat,
+          // kieuNhapXuat: data.kieuNhapXuat,
+          // mucDichXuat: data.mucDichXuat,
+
+          // tonKhoCloaiVthh: data.tonKhoCloaiVthh || 0,
+          // tonKhoDvi: data.tonKhoDvi || 0
+          ...data,
+          tenCuc: data.tenDvi,
           edit,
           mId: edit ? data.mId : uuidv4(),
-
-          idDx: data.idDx,
-          idDonViNhan: data.idDonViNhan,
-          loaiNhapXuat: data.loaiNhapXuat,
-          kieuNhapXuat: data.kieuNhapXuat,
-          mucDichXuat: data.mucDichXuat,
-
           tonKhoCloaiVthh: data.tonKhoCloaiVthh || 0,
-          tonKhoDvi: data.tonKhoDvi || 0
+          tonKhoDvi: data.tonKhoDvi || 0,
+          id: null,
+          tenDvi: '',
+          maDvi: null,
+          tenChiCuc: '',
+          tenDiemKho: '',
+          tenNhaKho: '',
+          tenNganKho: '',
+          tenLoKho: '',
+          soLuongGiao: 0,
+          soLuong: 0,
+          slConLaiGiao: this.checkSlConLaiGiao(data, level, editRow, parentData)
+
         });
       } else if (level == 2) {
         if (edit) {
           this.formDataDtl.patchValue({
-            noiDungDx: data.noiDungDx,
-            loaiVthh: data.loaiVthh,
-            tenHang: data.tenHang,
-            cloaiVthh: data.cloaiVthh,
-            soLuongDx: data.soLuongDx,
-            // tonKhoCloaiVthh: data.tonKhoCloaiVthh,
-            donViTinh: data.donViTinh,
-            tenChiCuc: data.tenChiCuc,
-            soLuongGiao: data.soLuongGiao,
-            maDvi: data.maDvi,
-            idQdPdDtl: data.idQdPdDtl,
+            // noiDungDx: data.noiDungDx,
+            // loaiVthh: data.loaiVthh,
+            // tenHang: data.tenHang,
+            // cloaiVthh: data.cloaiVthh,
+            // soLuongDx: data.soLuongDx,
+            // // tonKhoCloaiVthh: data.tonKhoCloaiVthh,
+            // donViTinh: data.donViTinh,
+            // tenChiCuc: data.tenChiCuc,
+            // soLuongGiao: data.soLuongGiao,
+            // maDvi: data.maDvi,
+            // idQdPdDtl: data.idQdPdDtl,
+            // edit,
+            // mId: edit ? data.mId : uuidv4(),
+
+            // idDx: data.idDx,
+            // idDonViNhan: data.idDonViNhan,
+            // loaiNhapXuat: data.loaiNhapXuat,
+            // kieuNhapXuat: data.kieuNhapXuat,
+            // mucDichXuat: data.mucDichXuat,
+
+            // tonKhoCloaiVthh: data.tonKhoCloaiVthh || 0,
+            // tonKhoDvi: data.tonKhoDvi || 0
+
+            ...data,
             edit,
             mId: edit ? data.mId : uuidv4(),
-
-            idDx: data.idDx,
-            idDonViNhan: data.idDonViNhan,
-            loaiNhapXuat: data.loaiNhapXuat,
-            kieuNhapXuat: data.kieuNhapXuat,
-            mucDichXuat: data.mucDichXuat,
-
             tonKhoCloaiVthh: data.tonKhoCloaiVthh || 0,
-            tonKhoDvi: data.tonKhoDvi || 0
+            tonKhoDvi: data.tonKhoDvi || 0,
+            slConLaiGiao: this.checkSlConLaiGiao(data, level, editRow, parentData)
           });
           this.kiemTraTonKho();
         } else {
@@ -759,58 +834,85 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
             edit = true
           }
           this.formDataDtl.patchValue({
-            noiDungDx: data.noiDungDx,
-            tenHang: data.tenHang,
-            loaiVthh: data.loaiVthh,
-            cloaiVthh: data.cloaiVthh,
-            soLuongDx: data.soLuongDx,
-            // tonKhoCloaiVthh: data.tonKhoCloaiVthh,
-            donViTinh: data.donViTinh,
-            tenChiCuc: data.tenChiCuc,
-            soLuongGiao: data.soLuongGiao,
-            idQdPdDtl: data.idQdPdDtl,
+            // noiDungDx: data.noiDungDx,
+            // tenHang: data.tenHang,
+            // loaiVthh: data.loaiVthh,
+            // cloaiVthh: data.cloaiVthh,
+            // soLuongDx: data.soLuongDx,
+            // // tonKhoCloaiVthh: data.tonKhoCloaiVthh,
+            // donViTinh: data.donViTinh,
+            // tenChiCuc: data.tenChiCuc,
+            // soLuongGiao: data.soLuongGiao,
+            // idQdPdDtl: data.idQdPdDtl,
+            // edit,
+            // mId: edit ? data.mId : uuidv4(),
+
+            // idDx: data.idDx,
+            // idDonViNhan: data.idDonViNhan,
+            // loaiNhapXuat: data.loaiNhapXuat,
+            // kieuNhapXuat: data.kieuNhapXuat,
+            // mucDichXuat: data.mucDichXuat,
+
+            // tonKhoCloaiVthh: data.tonKhoCloaiVthh || 0,
+            // tonKhoDvi: data.tonKhoDvi || 0
+            ...data,
             edit,
             mId: edit ? data.mId : uuidv4(),
-
-            idDx: data.idDx,
-            idDonViNhan: data.idDonViNhan,
-            loaiNhapXuat: data.loaiNhapXuat,
-            kieuNhapXuat: data.kieuNhapXuat,
-            mucDichXuat: data.mucDichXuat,
-
             tonKhoCloaiVthh: data.tonKhoCloaiVthh || 0,
-            tonKhoDvi: data.tonKhoDvi || 0
+            tonKhoDvi: data.tonKhoDvi || 0,
+            id: null,
+            tenDvi: '',
+            maDvi: null,
+            tenDiemKho: '',
+            tenNhaKho: '',
+            tenNganKho: '',
+            tenLoKho: '',
+            soLuong: 0,
+            slConLaiGiao: this.checkSlConLaiGiao(data, level, editRow, parentData)
           });
         }
       } else if (level === 3) {
         this.formDataDtl.patchValue({
-          noiDungDx: data.noiDungDx,
-          loaiVthh: data.loaiVthh,
-          tenHang: data.tenHang,
-          cloaiVthh: data.cloaiVthh,
-          soLuongDx: data.soLuongDx,
-          // tonKhoCloaiVthh: data.tonKhoCloaiVthh,
-          donViTinh: data.donViTinh,
-          tenChiCuc: data.tenChiCuc,
-          soLuongGiao: data.soLuongGiao,
-          idQdPdDtl: data.idQdPdDtl,
-          soLuong: data.soLuong,
-          tenDiemKho: data.tenDiemKho,
-          tenNhaKho: data.tenNhaKho,
-          tenNganKho: data.tenNganKho,
-          tenLoKho: data.tenLoKho,
-          maDvi: data.maDvi,
+          // noiDungDx: data.noiDungDx,
+          // loaiVthh: data.loaiVthh,
+          // tenHang: data.tenHang,
+          // cloaiVthh: data.cloaiVthh,
+          // soLuongDx: data.soLuongDx,
+          // // tonKhoCloaiVthh: data.tonKhoCloaiVthh,
+          // donViTinh: data.donViTinh,
+          // tenChiCuc: data.tenChiCuc,
+          // soLuongGiao: data.soLuongGiao,
+          // idQdPdDtl: data.idQdPdDtl,
+          // soLuong: data.soLuong,
+          // tenDiemKho: data.tenDiemKho,
+          // tenNhaKho: data.tenNhaKho,
+          // tenNganKho: data.tenNganKho,
+          // tenLoKho: data.tenLoKho,
+          // maDvi: data.maDvi,
+          // edit,
+          // mId: edit ? data.mId : uuidv4(),
+
+          // idDx: data.idDx,
+          // idDonViNhan: data.idDonViNhan,
+          // loaiNhapXuat: data.loaiNhapXuat,
+          // kieuNhapXuat: data.kieuNhapXuat,
+          // mucDichXuat: data.mucDichXuat,
+
+          // tonKhoCloaiVthh: data.tonKhoCloaiVthh || 0,
+          // tonKhoDvi: data.tonKhoDvi || 0
+          ...data,
           edit,
           mId: edit ? data.mId : uuidv4(),
-
-          idDx: data.idDx,
-          idDonViNhan: data.idDonViNhan,
-          loaiNhapXuat: data.loaiNhapXuat,
-          kieuNhapXuat: data.kieuNhapXuat,
-          mucDichXuat: data.mucDichXuat,
-
           tonKhoCloaiVthh: data.tonKhoCloaiVthh || 0,
-          tonKhoDvi: data.tonKhoDvi || 0
+          tonKhoDvi: data.tonKhoDvi || 0,
+          tenDvi: edit ? data.tenDvi : '',
+          maDvi: edit ? data.maDvi : null,
+          tenDiemKho: edit ? data.tenDiemKho : '',
+          tenNhaKho: edit ? data.tenNhaKho : '',
+          tenNganKho: edit ? data.tenNganKho : '',
+          tenLoKho: edit ? data.tenLoKho : '',
+          soLuong: edit ? data.soLuong : 0,
+          slConLaiGiao: this.checkSlConLaiGiao(data, level, editRow, parentData)
         });
         this.selectedNode = data.maDvi;
         this.kiemTraTonKho();
@@ -825,16 +927,37 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     await this.loadDsDiemKho(this.userInfo.MA_DVI, this.formDataDtl.value.loaiVthh, this.formDataDtl.value.cloaiVthh);
     this.modalChiTiet = true;
   }
-
-  async themPaXuatCapThoc(data: any, level?: number) {
+  checkSlConLaiGiao(data: any, level: number, edit: boolean, parentData: any) {
+    let result = 0;
+    const soLuongDx = data.soLuongDx || 0;
+    const soLuongGiao = data.soLuongGiao || 0;
+    const soLuong = data.soLuong || 0;
+    if (level === 1) {
+      result = soLuongDx - soLuongGiao;
+    }
+    else if (level === 2 && !edit) {
+      result = soLuongGiao - soLuong
+    }
+    else if (level === 2 && edit) {
+      result = parentData.soLuongDx - parentData.soLuongGiao + soLuongGiao
+    } else {
+      result = parentData.soLuongGiao - parentData.soLuong + soLuong
+    }
+    console.log("result", result)
+    return result
+  }
+  async themPaXuatCapThoc(data: any, level?: number, parentData?: any) {
     const isEdit = data.childData.length >= 1 ? false : true
     this.formDataDtl.patchValue({
       ...data, mId: isEdit ? data.mId : uuidv4(), slThocDeXayXat: 0, slGaoThuHoiSauXayXat: 0, tyLeThuHoiSauXayXat: 0,
-      loaiVthh: level === 1 || level === 2 ? LOAI_HANG_DTQG.THOC : data.loaiVthh,
-      cloaiVthh: level === 1 || level === 2 ? null : data.cloaiVthh,
+      tenCuc: level === 1 ? data.tenDvi : data.tenCuc,
       maDvi: null,
+      tenChiCuc: '',
       id: isEdit ? data.id : null,
-      edit: isEdit
+      edit: isEdit,
+      soLuongGiao: level === 1 ? 0 : data.soLuongGiao,
+      soLuong: 0,
+      slConLaiGiao: this.checkSlConLaiGiao(data, level, false, parentData)
     });
     this.listDonVi.forEach(s => {
       // s.disable = this.formData.value.dataDtl.some(s1 => s1.maDvi.match("^" + s.maDvi)) && !(s.maDvi === data.maDvi && editRow);
@@ -845,9 +968,9 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     await this.loadDsDiemKho(this.userInfo.MA_DVI, this.formDataDtl.value.loaiVthh, this.formDataDtl.value.cloaiVthh);
     this.modalChiTiet = true;
   }
-  async suaPaXuatCapThoc(data: any, level?: number) {
+  async suaPaXuatCapThoc(data: any, level?: number, parentData?: any) {
     // this.formDataDtl.patchValue({ ...data, edit: true });
-    this.bidingDataInFormGroupAndIgnore(this.formDataDtl, { ...data, edit: true }, ['tyLeThuHoiSauXayXat', 'slThocDeXayXat', 'slGaoThuHoiSauXayXat']);
+    this.bidingDataInFormGroupAndIgnore(this.formDataDtl, { ...data, edit: true, slConLaiGiao: this.checkSlConLaiGiao(data, level, true, parentData) }, ['tyLeThuHoiSauXayXat', 'slThocDeXayXat', 'slGaoThuHoiSauXayXat']);
     this.formDataDtl.controls['tyLeThuHoiSauXayXat'].setValue(data.tyLeThuHoiSauXayXat, { emitEvent: false });
     this.formDataDtl.controls['slThocDeXayXat'].setValue(data.slThocDeXayXat, { emitEvent: false });
     this.formDataDtl.controls['slGaoThuHoiSauXayXat'].setValue(data.slGaoThuHoiSauXayXat, { emitEvent: false });
@@ -861,7 +984,6 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     await this.changeLoaiVthh(this.formDataDtl.value.loaiVthh);
     await this.loadDsDiemKho(this.userInfo.MA_DVI, this.formDataDtl.value.loaiVthh, this.formDataDtl.value.cloaiVthh);
     this.modalChiTiet = true;
-    console.log("this.formDataDtl.value", this.formDataDtl.value)
   }
   async xoaPaXuatCapThoc(data: any, parent: any, lv) {
     if (parent.childData.length > 1) {
@@ -925,7 +1047,12 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     } else {
       dataDtl.push(row);
     };
-    this.formData.patchValue({ dataDtl })
+    if (this.formData.value.type === 'XC') {
+      const soLuong = dataDtl.reduce((sum, cur) => sum += cur.soLuong, 0)
+      this.formData.patchValue({ dataDtl, soLuong })
+    } else {
+      this.formData.patchValue({ dataDtl })
+    }
     await this.buildTableView();
     await this.huyPhuongAn();
   }
@@ -1020,8 +1147,11 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     let cloaiVthh = this.formDataDtl.value.cloaiVthh;
     let soLuongGiao = this.formDataDtl.value.soLuongGiao;
     let soLuongDx = this.formDataDtl.value.soLuongDx;
+    let slConLaiGiao = this.formDataDtl.value.slConLaiGiao;
     let tonKhoDvi = this.formDataDtl.value.tonKhoDvi;
     let tonKhoCloaiVthh = this.formDataDtl.value.tonKhoCloaiVthh;
+    let tenDvi = Array.isArray(this.listDonVi) && this.listDonVi.find(f => f.maDvi === maDvi) ? this.listDonVi.find(f => f.maDvi === maDvi).tenDvi : null;
+    this.formDataDtl.patchValue({ tenDvi: tenDvi })
     this.resetValidatorDataDtl();
     if (maDvi) {
       const body = {
@@ -1040,21 +1170,25 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           tonKhoDvi, tonKhoCloaiVthh
         })
         if (this.userService.isCuc()) {
-          this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, tonKhoDvi))]);
+          if (this.formData.value.type === "XC" && this.formData.value.paXuatGaoChuyenXc) {
+            this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, slConLaiGiao))]);
+          } else {
+            this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, tonKhoDvi, slConLaiGiao))]);
+          }
           this.formDataDtl.controls['soLuongGiao'].updateValueAndValidity();
         }
         if (this.userService.isChiCuc()) {
           if (this.formData.value.type !== "XC") {
-            this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, tonKhoCloaiVthh))]);
+            this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, tonKhoCloaiVthh, slConLaiGiao))]);
             this.formDataDtl.controls['soLuong'].updateValueAndValidity();
           } else {
             if (this.formData.value.paXuatGaoChuyenXc) {
               this.formDataDtl.controls['slThocDeXayXat'].setValidators([Validators.required, Validators.min(1), Validators.max(tonKhoCloaiVthh)]);
-              this.formDataDtl.controls['slGaoThuHoiSauXayXat'].setValidators([Validators.required, Validators.min(1), Validators.max(soLuongGiao)]);
+              this.formDataDtl.controls['slGaoThuHoiSauXayXat'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, slConLaiGiao))]);
               this.formDataDtl.controls['slThocDeXayXat'].updateValueAndValidity();
               this.formDataDtl.controls['slGaoThuHoiSauXayXat'].updateValueAndValidity();
             } else {
-              this.formDataDtl.controls['slThocDeXayXat'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, tonKhoCloaiVthh))]);
+              this.formDataDtl.controls['slThocDeXayXat'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongGiao, tonKhoCloaiVthh, slConLaiGiao))]);
               this.formDataDtl.controls['slThocDeXayXat'].updateValueAndValidity();
             }
           }

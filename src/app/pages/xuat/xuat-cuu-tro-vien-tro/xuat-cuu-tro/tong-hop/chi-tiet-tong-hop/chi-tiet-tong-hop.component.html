@@ -1,24 +1,24 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix" *ngIf="!isQuyetDinh">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix" *ngIf="!isQuyetDinh && !isViewOnModal">
   <div class="btn-group">
     <button type="button" class="btn btn-sub" (click)="quayLai()">
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
     <button type="button" class="btn btn-sub"
-      (click)="xemTruocTh(idSelected,loaiVthhInput =='02'?templateNameVt:templateName,phuongAnHdrView)">
+      (click)="xemTruocTh(formData.value.id,loaiVthhInput =='02'?templateNameVt:templateName,phuongAnHdrView)">
       <i class="icon htvbdh_totrinh"></i>
       <span> In/Xem trước </span>
     </button>
     <ng-container *ngIf="userService.isTongCuc()">
       <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV
     && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_THPA_DUYET')" type="button" class="btn btn-sub"
-        (click)="reject(idSelected,STATUS.TU_CHOI_LDV)">
+        (click)="reject(formData.value.id,STATUS.TU_CHOI_LDV)">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span>Từ chối</span>
       </button>
       <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV
     && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_THPA_DUYET')" type="button" class="btn btn-sub"
-        (click)="approve(idSelected,STATUS.DA_DUYET_LDV,'Bạn có muốn duyệt bản tổng hợp này này')">
+        (click)="approve(formData.value.id,STATUS.DA_DUYET_LDV,'Bạn có muốn duyệt bản tổng hợp này này')">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
@@ -289,9 +289,12 @@
                   <th>ĐVT</th>
                   <th>Tồn kho</th>
                 </ng-container>
-                <th>Số lượng cứu trợ đề xuất</th>
                 <ng-container *ngIf="isVthhGao()">
                   <th>Nhu cầu cứu trợ</th>
+                </ng-container>
+                <th>Số lượng cứu trợ đề xuất</th>
+                <ng-container *ngIf="isVthhGao()">
+                  <!-- <th>Nhu cầu cứu trợ</th> -->
                   <th>Số lượng gạo cần chuyển cấp xuất thóc</th>
                 </ng-container>
               </tr>
@@ -302,9 +305,12 @@
                   <tr>
                     <td class="text-center">{{i+1}}</td>
                     <td>{{item.noiDungDx}}</td>
-                    <td class="text-right">{{item.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
                     <ng-container *ngIf="isVthhGao()">
                       <td class="text-right">{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
+                    </ng-container>
+                    <td class="text-right">{{item.soLuongDx|number:globals.numberFormat:globals.locale}}</td>
+                    <ng-container *ngIf="isVthhGao()">
+                      <!-- <td class="text-right">{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td> -->
                       <td class="text-right">{{item.soLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}
                       </td>
                     </ng-container>
@@ -313,10 +319,14 @@
                 <tr>
                   <td></td>
                   <td class="text-blue uppercase text-right">Tổng</td>
-                  <td class="text-blue text-right">{{tongSoLuongDx|number:globals.numberFormat:globals.locale}}</td>
                   <ng-container *ngIf="isVthhGao()">
                     <td class="text-blue text-right">
                       {{tongSoLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
+                  </ng-container>
+                  <td class="text-blue text-right">{{tongSoLuongDx|number:globals.numberFormat:globals.locale}}</td>
+                  <ng-container *ngIf="isVthhGao()">
+                    <!-- <td class="text-blue text-right">
+                      {{tongSoLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td> -->
                     <td class="text-blue text-right">
                       {{tongSoLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}</td>
                   </ng-container>

@@ -124,7 +124,7 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Số QĐ giao NV xuất hàng</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQdNv()">
+                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? null : openDialogQdNv()">
                     <input [readonly]="true" nz-input formControlName="soQdNv" (ngModelChange)="changeSoQdNv($event)"
                            readonly/>
                   </nz-input-group>
@@ -155,7 +155,7 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Số BB lấy mẫu/bàn giao mẫu</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogBbLayMau()">
+                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? null : openDialogBbLayMau()">
                     <input [readonly]="true" nz-input formControlName="soBbLayMau"
                            (ngModelChange)="changeBbLayMau($event)" readonly/>
                   </nz-input-group>
@@ -311,33 +311,44 @@
   <nz-card class="mg-t-16 flex-card p-lr16">
     <nz-collapse>
       <nz-collapse-panel nzActive="true" nzHeader="KẾT QUẢ PHÂN TÍCH CHỈ TIÊU CHẤT LƯỢNG">
-        <nz-table class="nowrap pd-10" [nzData]="dataTable" nzBordered>
+        <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered [nzFrontPagination]="false"
+                  [nzShowPagination]="false">
           <thead>
           <tr>
-            <th class="text-center" nzWidth="50px">STT</th>
-            <th><span style='color: red;'>*</span> Chỉ tiêu chất lượng</th>
-            <th>Chỉ số chất lượng theo QCVN 14:2020/BTC</th>
-            <th><span style='color: red;'>*</span> Kết quả phân tích</th>
-            <th><span style='color: red;'>*</span> Phương pháp kiểm tra chất lượng</th>
-            <th><span style='color: red;'>*</span> Đánh giá</th>
+            <th nzWidth="50px" class="text-center wrap"> STT</th>
+            <th class="text-left">
+              <span style='color: red;'>*</span> Chỉ tiêu chất lượng
+            </th>
+            <th class="text-left">Chỉ số chất lượng theo QCVN 14:2020/BTC</th>
+            <th class="text-left">
+              <span style='color: red;'>*</span> Kết quả phân tích
+            </th>
+            <th class="text-left">
+              <span style='color: red;'>*</span> Phương pháp kiểm tra chất lượng
+            </th>
+            <th class="text-left">
+              <span style='color: red;'>*</span> Đánh giá
+            </th>
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let data of dataTable;let i = index">
-            <ng-container *ngIf="!data.edit">
+          <ng-container *ngFor="let data of dataTable;let i = index">
+            <tr *ngIf="!data.edit">
               <td class="text-center">{{ i + 1 }}</td>
-              <td>{{ data.tenChiTieu }}</td>
-              <td>{{ data.mucYeuCauXuat }}</td>
-              <td><input nz-input [disabled]="isView" [(ngModel)]="data.ketQua"/></td>
-              <td>{{ data.phuongPhapXd }}</td>
-              <td>
+              <td class="text-left">{{ data.tenChiTieu }}</td>
+              <td class="text-left">{{ data.mucYeuCauXuat }}</td>
+              <td class="text-left">
+                <input nz-input [disabled]="isView" [(ngModel)]="data.ketQua"/>
+              </td>
+              <td class="text-left">{{ data.phuongPhapXd }}</td>
+              <td class="text-left">
                 <nz-select [disabled]="isView" [(ngModel)]="data.danhGia">
                   <nz-option nzValue="Đạt" nzLabel="Đạt"></nz-option>
                   <nz-option nzValue="Không đạt" nzLabel="Không đạt"></nz-option>
                 </nz-select>
               </td>
-            </ng-container>
-          </tr>
+            </tr>
+          </ng-container>
           </tbody>
         </nz-table>
         <form nzLayout="vertical" nz-form [formGroup]="formData">

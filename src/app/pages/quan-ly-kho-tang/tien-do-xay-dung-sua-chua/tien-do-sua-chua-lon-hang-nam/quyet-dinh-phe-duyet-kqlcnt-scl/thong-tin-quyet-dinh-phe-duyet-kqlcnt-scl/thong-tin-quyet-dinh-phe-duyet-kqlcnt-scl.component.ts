@@ -53,7 +53,7 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
     max: 100000000000,
     inputMode: CurrencyMaskInputMode.NATURAL,
   }
-
+  @Output() dataItemKqLcnt = new EventEmitter<object>();
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -243,6 +243,7 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
                   trangThai: STATUS.BAN_HANH,
                   tenTrangThai: "Ban hành",
                 })
+                this.emitDataKqLcnt(res1.data);
                 this.isViewDetail = true;
                 this.spinner.hide();
               } else {
@@ -331,5 +332,7 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
   //       });
   //   }
   // }
-
+  emitDataKqLcnt(data) {
+    this.dataItemKqLcnt.emit(data);
+  }
 }

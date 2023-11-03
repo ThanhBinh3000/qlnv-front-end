@@ -96,6 +96,7 @@
     <app-thong-tin-quyet-dinh-phe-duyet-kqlcnt-sctx [id]="selectedId" (showListEvent)="showList()"
                                                     [isViewDetail]="isViewDetail"
                                                     [itemQdPdKhLcnt]="itemTtdt"
+                                                    (dataItemKqLcnt)="receivedData($event)"
                                                     *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_QDPDKQLCNT_XEM')"
                                                     [idInput]="selectedId">
     </app-thong-tin-quyet-dinh-phe-duyet-kqlcnt-sctx>

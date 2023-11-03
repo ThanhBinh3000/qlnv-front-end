@@ -18,4 +18,10 @@ export class KhScQdGiaoNvService extends BaseService {
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
+  getListTaoDc(body){
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/kt-kh-sc-lon/quyet-dinh-giao-nv/ds-tao-dc`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
+
 }

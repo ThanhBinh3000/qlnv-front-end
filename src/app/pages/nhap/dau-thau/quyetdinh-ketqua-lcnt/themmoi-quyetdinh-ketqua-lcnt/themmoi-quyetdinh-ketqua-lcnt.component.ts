@@ -178,6 +178,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
     if (this.formData.value.soQd) {
       body.soQd = this.formData.value.soQd + this.maQd;
     }
+    let duocBanHanh = true;
     if (this.loaiVthh.startsWith('02')) {
       body.fileDinhKems = this.danhSachFileDinhKem;
       body.listCcPhapLy = this.danhSachFileCanCuPL;
@@ -196,6 +197,9 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
           tenNhaThau: item.kqlcntDtl?.tenNhaThau
         }
         detail.push(dtl)
+        if (item.kqlcntDtl?.trangThai == null) {
+          duocBanHanh = false
+        }
       })
       body.detailList = detail;
     } else {
@@ -208,13 +212,20 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
           idNhaThau: item.kqlcntDtl?.idNhaThau,
           donGiaVat: item.kqlcntDtl?.donGiaVat,
           trangThai: item.kqlcntDtl?.trangThai,
-          tenNhaThau: item.kqlcntDtl?.tenNhaThau
+          tenNhaThau: item.kqlcntDtl?.tenNhaThau,
+          dienGiaiNhaThau: item.kqlcntDtl?.dienGiaiNhaThau
         }
         detail.push(dtl)
+        if (item.kqlcntDtl?.trangThai == null) {
+          duocBanHanh = false
+        }
       })
       body.detailList = detail;
     }
-
+    if (isBanHanh && !duocBanHanh) {
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng cập nhật kết quả đấu thầu cho các gói thầu.');
+      return;
+    }
     let res;
     if (this.formData.get('id').value > 0) {
       res = await this.quyetDinhPheDuyetKetQuaLCNTService.update(body);
@@ -222,8 +233,9 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
       res = await this.quyetDinhPheDuyetKetQuaLCNTService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
+      this.idInput = res.data.id;
+      this.formData.get('id').setValue(res.data.id);
       if (isBanHanh) {
-        this.idInput = res.data.id;
         this.pheDuyet();
       } else {
         if (this.formData.get('id').value) {
@@ -344,7 +356,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
       }
     });
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách số quyết định kế hoạch lựa chọn nhà thầu',
+      nzTitle: 'DANH SÁCH SỐ QUYẾT ĐỊNH KẾ HOẠCH LỰA CHỌN NHÀ THẦU',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -352,8 +364,8 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listQdPdKhlcnt,
-        dataHeader: ['Số Đề Xuất KHLCNT', 'Số QĐ PD KHLCNT', 'Loại hàng DTQG', 'Chủng loại hàng DTQG', 'Tổng số gói thầu', 'Số gói thầu trúng', 'Số gói thầu trượt'],
-        dataColumn: ['soDxuat', 'soQdPdKhlcnt', 'tenLoaiVthh', 'tenCloaiVthh', 'soGthau', 'soGthauTrung', 'soGthauTruot']
+        dataHeader: ['Số Đề Xuất KHLCNT', 'Số QĐ PD KHLCNT', 'Số QĐ điều chỉnh KHLCNT', 'Loại hàng DTQG', 'Chủng loại hàng DTQG', 'Tổng số gói thầu'],
+        dataColumn: ['soDxuat', 'soQdPdKhlcnt', 'soQdDc', 'tenLoaiVthh', 'tenCloaiVthh', 'soGthau']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {

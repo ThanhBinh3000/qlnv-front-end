@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix" *ngIf="!isViewOnModal">
   <div class="btn-group">
     <button type="button" class="btn btn-sub" (click)="quayLai()">
       <i class="fa fa-arrow-left"></i>
@@ -142,7 +142,9 @@
               Trích yếu
             </nz-form-label>
             <nz-form-control>
-              <input nz-input formControlName="trichYeu" [readonly]="isView" />
+              <!-- <input nz-input formControlName="trichYeu" [readonly]="isView" /> -->
+              <textarea rows="3" class="search__input" nz-input formControlName="trichYeu"
+                [readOnly]="isView"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>

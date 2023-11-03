@@ -79,23 +79,24 @@
                 [nzShowPagination]="false">
         <thead>
         <tr>
-          <th nzWidth="50px" class="text-center wrap"> STT</th>
-          <th nzWidth="100px" class="text-left wrap"> Năm KH</th>
-          <th nzWidth="150px" class="text-left wrap"> QĐ PD KHBĐG</th>
-          <th nzWidth="150px" class="text-left wrap"> QĐ PD KQBĐG</th>
-          <th nzWidth="100px" class="text-center wrap"> Tổng số ĐV tài sản</th>
-          <th nzWidth="100px" class="text-center wrap"> Tổng số ĐVTS ĐG thành công</th>
-          <th nzWidth="100px" class="text-center wrap"> SL HĐ đã ký</th>
-          <th nzWidth="150px" class="text-left wrap"> Thời hạn thanh toán</th>
-          <th nzWidth="150px" class="text-left wrap"> Loại hàng DTQG</th>
-          <th nzWidth="150px" class="text-left wrap"> Chủng loại hàng DTQG</th>
-          <th nzWidth="150px" class="text-left wrap"> ĐV thực hiện</th>
-          <th nzWidth="150px"
-              class="text-right wrap">{{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Tổng SL xuất bán' : 'Tổng SL xuất bán (Kg)'}}</th>
-          <th nzWidth="150px" class="text-right wrap"> Thành tiền (đ)</th>
-          <th nzWidth="150px" class="text-left wrap"> Trạng thái HĐ</th>
-          <th nzWidth="150px" class="text-left wrap"> Trạng thái XH</th>
-          <th nzWidth="70px" class="text-center wrap"> Hành động</th>
+          <th class="text-center wrap" nzWidth="50px "> STT</th>
+          <th class="text-left"> Năm KH</th>
+          <th class="text-left"> QĐ PD KHBĐG</th>
+          <th class="text-left"> QĐ PD KQBĐG</th>
+          <th class="text-center"> Tổng số <br>ĐV tài sản</th>
+          <th class="text-center"> Số ĐVTS <br>ĐG thành công</th>
+          <th class="text-center"> SL HĐ <br>đã ký</th>
+          <th class="text-center"> Thời hạn <br>thanh toán</th>
+          <th class="text-left" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU"> Loại hàng DTQG</th>
+          <th class="text-left"> Chủng loại hàng DTQG</th>
+          <th class="text-left"> ĐV thực hiện</th>
+          <th class="text-center">Tổng SL <br>xuất bán
+            {{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? '' : '(kg)'}}
+          </th>
+          <th class="text-center"> Thành tiền (đ)</th>
+          <th class="text-left"> Trạng thái HĐ</th>
+          <th class="text-left"> Trạng thái XH</th>
+          <th class="text-center"> Hành động</th>
         </tr>
         <tr class="search-table">
           <th></th>
@@ -146,7 +147,7 @@
               </nz-date-picker>
             </nz-input-group>
           </th>
-          <th>
+          <th *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
                      (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small"/>
@@ -213,7 +214,7 @@
           <td class="text-center">{{ data.slDviTsanThanhCong }}</td>
           <td class="text-center">{{ data.slHopDongDaKy }}</td>
           <td class="text-left">{{ data.ngayKy|date: 'dd/MM/YYYY' }}</td>
-          <td class="text-left">{{ data.tenLoaiVthh }}</td>
+          <td class="text-left" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">{{ data.tenLoaiVthh }}</td>
           <td class="text-left">{{ data.tenCloaiVthh }}</td>
           <td class="text-left">{{ data.tenDvi }}</td>
           <td class="text-right">{{ data.tongSlXuat|number:globals.numberFormat:globals.locale }}</td>

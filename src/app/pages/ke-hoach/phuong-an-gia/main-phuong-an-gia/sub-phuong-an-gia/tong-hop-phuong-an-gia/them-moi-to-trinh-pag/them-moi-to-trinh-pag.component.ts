@@ -366,4 +366,19 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
     this.idSelected = null;
     this.isViewModal = false;
   }
+
+
+  calcTong(tenDvi: string) {
+    let sum = 0
+    if (this.dataTableView && this.dataTableView.length > 0) {
+      let item = this.dataTableView.find(item => item.tenDvi == tenDvi);
+      if (item && item.children && item.children.length>0) {
+         sum = item.children.reduce((prev, cur) => {
+          prev += cur.soLuong;
+          return prev;
+        }, 0);
+      }
+      return sum;
+    }
+  }
 }

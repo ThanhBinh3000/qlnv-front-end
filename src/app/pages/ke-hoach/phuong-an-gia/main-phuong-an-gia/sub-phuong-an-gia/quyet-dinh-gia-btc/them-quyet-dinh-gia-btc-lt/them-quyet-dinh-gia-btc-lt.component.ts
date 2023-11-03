@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from "@angular/core";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import dayjs from "dayjs";
 import {NzModalService} from "ng-zorro-antd/modal";
@@ -19,6 +19,8 @@ import {v4 as uuidv4} from "uuid";
 import {saveAs} from "file-saver";
 import printJS from "print-js";
 import { cloneDeep } from 'lodash';
+import {PdfViewerComponent} from "ng2-pdf-viewer";
+import {style} from "@angular/animations";
 
 @Component({
   selector: "app-them-quyet-dinh-gia-btc-lt",
@@ -26,6 +28,7 @@ import { cloneDeep } from 'lodash';
   styleUrls: ["./them-quyet-dinh-gia-btc-lt.component.scss"]
 })
 export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
+  @ViewChild('pdfViewer') pdfViewer: PdfViewerComponent;
   @Input("type") type: string;
   @Input("pagType") pagType: string;
   @Input("isView") isView: boolean;
@@ -150,7 +153,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
     this.onClose.emit();
   }
 
-  banHanh() {
+  async banHanh() {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: "Xác nhận",
@@ -224,12 +227,13 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       res = await this.quyetDinhGiaCuaBtcService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
+      this.idInput = res.data.id;
       if (isBanHanh) {
         this.formData.patchValue({
           id: res.data.id,
           trangThai: res.data.trangThai
         })
-        this.banHanh();
+       await this.banHanh();
       }
       if (!isBanHanh) {
         if (this.idInput > 0) {
@@ -272,7 +276,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
               // Sử dụng trường "type" làm key trong Set để kiểm tra sự trùng lặp
               if (!uniqueSoDeXuat.has(record.soDx)) {
                 // Nếu trường "type" chưa tồn tại trong Set, thêm giá trị "soDeXuat" vào Set
-                uniqueSoDeXuat.add(record.soQdBtc.toString());
+                uniqueSoDeXuat.add(record.soQdBtc ? record.soQdBtc.toString() : "");
               }
             }
             const uniqueSoDeXuatArray = Array.from(uniqueSoDeXuat);
@@ -379,6 +383,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       body.type = this.type;
       body.ngayHieuLuc = this.formData.value.ngayHieuLuc ? dayjs(this.formData.value.ngayHieuLuc).format("DD/MM/YYYY") : "";
       await this.quyetDinhGiaCuaBtcService.previewQdGia(body).then(async s => {
+        this.printSrc = s;
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
@@ -432,7 +437,12 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
   }
 
   printPreview() {
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
+    const blobUrl = URL.createObjectURL(this.pdfBlob);
+    printJS({
+      printable: blobUrl,
+      type: 'pdf',
+      base64: false
+    })
   }
 
 }

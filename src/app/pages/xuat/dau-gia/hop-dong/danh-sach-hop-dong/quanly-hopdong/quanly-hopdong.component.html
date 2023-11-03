@@ -86,7 +86,9 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Số DV tài sản đấu giá thành công</nz-form-label>
                   <nz-form-control>
-                    <input style="color: blue" nz-input formControlName="slDviTsanThanhCong" readonly/>
+                    <span *ngIf="formData.value.slDviTsanThanhCong">
+                      <input style="color: blue" nz-input formControlName="slDviTsanThanhCong" readonly/>
+                    </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -94,7 +96,9 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Số DV tài sản đấu giá không thành</nz-form-label>
                   <nz-form-control>
-                    <input style="color: red" nz-input formControlName="slDviTsanKhongThanh" readonly/>
+                    <span *ngIf="formData.value.slDviTsanKhongThanh">
+                      <input style="color: blue" nz-input formControlName="slDviTsanKhongThanh" readonly/>
+                    </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -172,7 +176,7 @@
         <div class="header-text">
           <div class="title-chi-tieu">
             <span></span>
-            <span>Danh sách hợp đồng</span>
+            <span>DANH SÁCH HỢP ĐỒNG</span>
           </div>
         </div>
         <div class="buttons" *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH
@@ -186,16 +190,18 @@
         </div>
       </div>
       <nz-card class="flex-card p-lr16 card-table">
-        <nz-table class="pd-10" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
+        <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered [nzFrontPagination]="false"
                   [nzShowPagination]="false">
           <thead>
           <tr>
-            <th class="text-center" nzWidth="50px"> STT</th>
+            <th class="text-center wrap" nzWidth="50px "> STT</th>
             <th class="text-left"> Số hợp đồng</th>
             <th class="text-left"> Tên hợp đồng</th>
             <th class="text-left"> Ngày ký hợp đồng</th>
-            <th class="text-right"> {{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Số lượng' : 'Số lượng (kg)'}}</th>
-            <th class="text-right"> Giá trị (đ)</th>
+            <th class="text-center"> Số lượng
+              {{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? '' : '(kg)'}}
+            </th>
+            <th class="text-center"> Giá trị (đ)</th>
             <th class="text-left"> Trạng thái HĐ</th>
             <th class="text-left"> Số QĐ giao NV XH</th>
             <th class="text-left"> Trạng thái XH</th>
@@ -203,36 +209,39 @@
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let data of dataTable;let i = index"
-              [ngClass]="{'bg-selected': i == 0 && this.selected}" (click)="showDetail($event,data.id)">
-            <td class="text-center">{{ i + 1}}</td>
-            <td class="text-left">{{ data.soHopDong}}</td>
-            <td class="text-left">{{ data.tenHopDong}}</td>
-            <td class="text-left">{{ data.ngayKyHopDong|date: 'dd/MM/YYYY' }}</td>
-            <td class="text-right">{{ data.soLuong|number:globals.numberFormat:globals.locale }} </td>
-            <td class="text-right">{{ data.thanhTien|number:globals.numberFormat:globals.locale }} </td>
-            <td class="text-left">{{ data.tenTrangThai}}</td>
-            <td class="text-left">
-              <a *ngIf="data.soQdNv && data.idQdNv" (click)="openModal(data.idQdNv)"
-                 style="color: blue">{{ data.soQdNv }}
-              </a>
-            </td>
-            <td class="text-left">{{ data.tenTrangThaiXh}}</td>
-            <td class="text-center">
-              <a *ngIf="data.trangThai == STATUS.DA_KY"
-                 (click)="redirectHopDong(data.id, true, true) ">
-                <i class="fa fa-eye" title="Xem"></i>
-              </a>
-              <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()"
-                 (click)="redirectHopDong(data.id, false, true) ">
-                <i class="fa fa-pencil" title="Sửa"></i>
-              </a>
-              <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()"
-                 (click)="deleteHd(data)">
-                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-              </a>
-            </td>
-          </tr>
+          <ng-container *ngFor="let data of dataTable;let i = index">
+            <tr [ngClass]="{'bg-selected': i == 0 && this.selected}" (click)="showDetail($event,data.id)">
+              <td class="text-center">{{ i + 1}}</td>
+              <td class="text-left">{{ data.soHopDong}}</td>
+              <td class="text-left" style="max-width: 200px; min-width: 150px;  white-space: break-spaces;">
+                {{ data.tenHopDong}}
+              </td>
+              <td class="text-left">{{ data.ngayKyHopDong|date: 'dd/MM/YYYY' }}</td>
+              <td class="text-right">{{ data.soLuong|number:globals.numberFormat:globals.locale }} </td>
+              <td class="text-right">{{ data.thanhTien|number:globals.numberFormat:globals.locale }} </td>
+              <td class="text-left">{{ data.tenTrangThai}}</td>
+              <td class="text-left">
+                <a *ngIf="data.soQdNv && data.idQdNv" (click)="openModal(data.idQdNv)"
+                   style="color: blue">{{ data.soQdNv }}
+                </a>
+              </td>
+              <td class="text-left">{{ data.tenTrangThaiXh}}</td>
+              <td class="text-center">
+                <a *ngIf="data.trangThai == STATUS.DA_KY"
+                   (click)="redirectHopDong(data.id, true, true) ">
+                  <i class="fa fa-eye" title="Xem"></i>
+                </a>
+                <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()"
+                   (click)="redirectHopDong(data.id, false, true) ">
+                  <i class="fa fa-pencil" title="Sửa"></i>
+                </a>
+                <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()"
+                   (click)="deleteHd(data)">
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                </a>
+              </td>
+            </tr>
+          </ng-container>
           </tbody>
           <ng-container *ngIf="dataTable.length > 0">
             <tfoot>
