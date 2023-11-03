@@ -102,7 +102,7 @@
       <td *ngIf="isTableKetQua && !isTabNdKhac">{{ data.tenDviBaoGia }}</td>
       <td *ngIf="!isTableKetQua && !isTabNdKhac">{{ data.tenDviThamDinh }}</td>
       <td *ngIf="isTabNdKhac">{{ data.ttThamKhao }}</td>
-      <td *ngIf="!isTabNdKhac">{{ data.tenCloaiVthh + (data.tieuChuanCl ? '; ' + data.tieuChuanCl : '' )}}</td>
+      <td *ngIf="!isTabNdKhac">{{ (data.tenCloaiVthh ? data.tenCloaiVthh : '' ) + (data.tieuChuanCl ? '; ' + data.tieuChuanCl : '' )}}</td>
       <td class="text-right">{{data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
       <td class="text-right">{{data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
       <td class="text-right" *ngIf="isVat">{{data.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
