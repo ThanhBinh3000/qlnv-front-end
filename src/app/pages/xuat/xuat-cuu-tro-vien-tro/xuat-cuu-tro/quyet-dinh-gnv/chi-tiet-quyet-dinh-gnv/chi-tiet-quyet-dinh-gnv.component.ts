@@ -369,10 +369,31 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   quayLai() {
     this.showListEvent.emit();
   }
-
+  checkHoanTatPhanBo() {
+    const tongSoLuong = this.formData.value.paXuatGaoChuyenXc ? this.formData.value.soLuong : this.formData.value.dataDtl.filter(f => f.maDvi === this.userInfo.MA_DVI).reduce((sum, cur) => sum += cur.soLuongDx ? cur.soLuongDx : 0, 0)
+    const tongSoLuongGiao = this.formData.value.dataDtl.filter(f => f.maDvi === this.userInfo.MA_DVI).reduce((sum, cur) => sum += cur.soLuongGiao ? cur.soLuongGiao : 0, 0);
+    const tongSoLuongPb = this.formData.value.dataDtl.filter(f => f.maDvi === this.userInfo.MA_DVI).reduce((sum, cur) => sum += cur.soLuong ? cur.soLuong : 0, 0);
+    if (this.userService.isCuc()) {
+      if (tongSoLuong === tongSoLuongGiao || this.formData.value.type === 'XC' && !this.formData.value.paXuatGaoChuyenXc) {
+        return true;
+      }
+      this.notification.error(MESSAGE.ERROR, "Bạn chưa hoàn thành phân bổ.");
+      return;
+    } else if (this.userService.isChiCuc()) {
+      if (tongSoLuong === tongSoLuongPb) {
+        return true
+      }
+      this.notification.error(MESSAGE.ERROR, "Bạn chưa hoàn thành phân bổ.");
+      return;
+    } else {
+      this.notification.error(MESSAGE.ERROR, "Bạn không có nhiệm vụ phân bổ.");
+      return;
+    }
+  }
   async save() {
     await this.helperService.ignoreRequiredForm(this.formData);
     this.formData.controls.soBbQd.setValidators([Validators.required]);
+    if (!this.checkHoanTatPhanBo()) return;
     let body = {
       ...this.formData.value,
       soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null
@@ -382,6 +403,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   }
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
+    if (!this.checkHoanTatPhanBo()) return;
     let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd + this.maHauTo }
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
   }
@@ -399,6 +421,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     if (this.formData.value.trangThai === STATUS.BAN_HANH && this.formData.value.dataDtl.filter(s => s.maDvi.match(this.userInfo.MA_DVI + ".*")).some(f => !f.tenNganKho)) {
       return this.notification.error(MESSAGE.ERROR, "Bạn chưa hoàn thành phân bổ.")
     }
+    if (!this.checkHoanTatPhanBo()) return;
     if (trangThai === STATUS.DA_HOAN_THANH) {
 
       this.modal.confirm({
@@ -529,7 +552,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               loaiVthh: this.formData.value.type === 'XC' ? LOAI_HANG_DTQG.THOC : detail.loaiVthh,
               tenLoaiVthh: this.formData.value.type === 'XC' ? TEN_LOAI_VTHH.THOC : detail.tenLoaiVthh,
               // thoiGianGiaoNhan,
-              soLuong: detail.paXuatGaoChuyenXc ? '' : soLuong,
+              soLuong: this.formData.value.type === 'XC' ? soLuong : '',
               paXuatGaoChuyenXc: detail.paXuatGaoChuyenXc
 
             });
@@ -775,8 +798,6 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           tenCuc: data.tenDvi,
           edit,
           mId: edit ? data.mId : uuidv4(),
-          tonKhoCloaiVthh: data.tonKhoCloaiVthh || 0,
-          tonKhoDvi: data.tonKhoDvi || 0,
           id: null,
           tenDvi: '',
           maDvi: null,
@@ -787,7 +808,9 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           tenLoKho: '',
           soLuongGiao: 0,
           soLuong: 0,
-          slConLaiGiao: this.checkSlConLaiGiao(data, level, editRow, parentData)
+          slConLaiGiao: this.checkSlConLaiGiao(data, level, editRow, parentData),
+          tonKhoCloaiVthh: 0,
+          tonKhoDvi: 0
 
         });
       } else if (level == 2) {
@@ -858,8 +881,8 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
             ...data,
             edit,
             mId: edit ? data.mId : uuidv4(),
-            tonKhoCloaiVthh: data.tonKhoCloaiVthh || 0,
-            tonKhoDvi: data.tonKhoDvi || 0,
+            tonKhoCloaiVthh: 0,
+            tonKhoDvi: 0,
             id: null,
             tenDvi: '',
             maDvi: null,
@@ -932,16 +955,45 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     const soLuongDx = data.soLuongDx || 0;
     const soLuongGiao = data.soLuongGiao || 0;
     const soLuong = data.soLuong || 0;
-    if (level === 1) {
-      result = soLuongDx - soLuongGiao;
+    const slGaoThuHoiSauXayXat = data.slGaoThuHoiSauXayXat || 0;
+    const slThocDeXayXat = data.slThocDeXayXat || 0;
+    if (this.formData.value.type !== 'XC') {
+      if (level === 1) {
+        result = soLuongDx - soLuongGiao;
+      }
+      else if (level === 2 && !edit) {
+        result = soLuongGiao - soLuong
+      }
+      else if (level === 2 && edit) {
+        result = parentData.soLuongDx - parentData.soLuongGiao + soLuongGiao
+      } else {
+        result = parentData.soLuongGiao - parentData.soLuong + soLuong
+      }
+    } else if (this.formData.value.type === 'XC' && !this.formData.value.paXuatGaoChuyenXc) {
+      if (level === 1) {
+        result = soLuongDx - soLuongGiao;
+      }
+      else if (level === 2 && !edit) {
+        result = soLuongGiao - slThocDeXayXat
+      }
+      else if (level === 2 && edit) {
+        result = parentData.soLuongDx - parentData.soLuongGiao + soLuongGiao
+      } else {
+        result = parentData.soLuongGiao - parentData.soLuong + slThocDeXayXat
+      }
     }
-    else if (level === 2 && !edit) {
-      result = soLuongGiao - soLuong
-    }
-    else if (level === 2 && edit) {
-      result = parentData.soLuongDx - parentData.soLuongGiao + soLuongGiao
-    } else {
-      result = parentData.soLuongGiao - parentData.soLuong + soLuong
+    else if (this.formData.value.paXuatGaoChuyenXc) {
+      if (level === 1) {
+        result = soLuongDx - soLuongGiao;
+      }
+      else if (level === 2 && !edit) {
+        result = soLuongGiao - slGaoThuHoiSauXayXat
+      }
+      else if (level === 2 && edit) {
+        result = parentData.soLuongDx - parentData.soLuongGiao + soLuongGiao
+      } else {
+        result = parentData.soLuongGiao - parentData.soLuong + slGaoThuHoiSauXayXat
+      }
     }
     console.log("result", result)
     return result
@@ -951,13 +1003,17 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     this.formDataDtl.patchValue({
       ...data, mId: isEdit ? data.mId : uuidv4(), slThocDeXayXat: 0, slGaoThuHoiSauXayXat: 0, tyLeThuHoiSauXayXat: 0,
       tenCuc: level === 1 ? data.tenDvi : data.tenCuc,
+      //Ở cấp cục giao Gạo nên loai Vthh là gạo, cấp chi cục loại Vthh hàng hóa là Thóc 
+      loaiVthh: level === 2 ? LOAI_HANG_DTQG.THOC : data.loaiVthh,
       maDvi: null,
-      tenChiCuc: '',
+      tenChiCuc: level === 1 ? '' : data.tenChiCuc,
       id: isEdit ? data.id : null,
       edit: isEdit,
       soLuongGiao: level === 1 ? 0 : data.soLuongGiao,
       soLuong: 0,
-      slConLaiGiao: this.checkSlConLaiGiao(data, level, false, parentData)
+      slConLaiGiao: this.checkSlConLaiGiao(data, level, false, parentData),
+      tonKhoCloaiVthh: 0,
+      tonKhoDvi: 0,
     });
     this.listDonVi.forEach(s => {
       // s.disable = this.formData.value.dataDtl.some(s1 => s1.maDvi.match("^" + s.maDvi)) && !(s.maDvi === data.maDvi && editRow);
@@ -1047,12 +1103,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     } else {
       dataDtl.push(row);
     };
-    if (this.formData.value.type === 'XC') {
-      const soLuong = dataDtl.reduce((sum, cur) => sum += cur.soLuong, 0)
-      this.formData.patchValue({ dataDtl, soLuong })
-    } else {
-      this.formData.patchValue({ dataDtl })
-    }
+    this.formData.patchValue({ dataDtl })
     await this.buildTableView();
     await this.huyPhuongAn();
   }
@@ -1143,7 +1194,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
 
   async kiemTraTonKho() {
     let maDvi = this.formDataDtl.value.maDvi;
-    let loaiVthh = this.formDataDtl.value.loaiVthh;
+    let loaiVthh = this.formData.value.type === "XC" && this.formData.value.paXuatGaoChuyenXc && this.userService.isCuc() ? LOAI_HANG_DTQG.THOC : this.formDataDtl.value.loaiVthh;
     let cloaiVthh = this.formDataDtl.value.cloaiVthh;
     let soLuongGiao = this.formDataDtl.value.soLuongGiao;
     let soLuongDx = this.formDataDtl.value.soLuongDx;
