@@ -341,6 +341,13 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
       this.rowItem.nhuCauTb = event - (this.rowItem.slHienCo + this.rowItem.slNhapThem + this.rowItem.slThuHoiTaiSuDung);
     }
   }
+
+  checkCbCuc() {
+    if(this.formData.value.trangThai == STATUS.DA_DUYET_LDC && this.userService.isTongCuc()){
+      return true;
+    }
+    return false;
+  }
 }
 
 export class PvcDxChiCucCtiet {

@@ -6,9 +6,6 @@ import {NzNotificationService} from "ng-zorro-antd/notification";
 import {Base2Component} from "../../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../../services/storage.service";
-import {
-  QuyetdinhpheduyetKhlcntService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKhlcnt.service";
 import {MESSAGE} from "../../../../../../constants/message";
 import {CurrencyMaskInputMode} from "ngx-currency";
 import {

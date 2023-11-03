@@ -1225,34 +1225,6 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     }
   }
 
-  calcTongChiTieu() {
-    if (this.listOfData) {
-      let sum = 0
-      this.listOfData.forEach(item => {
-        const sumChild = item.children.reduce((prev, cur) => {
-          prev += cur.soLuongTheoChiTieu;
-          return prev;
-        }, 0);
-        sum += sumChild;
-      })
-      return sum;
-    }
-  }
-
-  calcTongDaThucHien() {
-    if (this.listOfData) {
-      let sum = 0
-      this.listOfData.forEach(item => {
-        const sumChild = item.children.reduce((prev, cur) => {
-          prev += cur.soLuongDaMua;
-          return prev;
-        }, 0);
-        sum += sumChild;
-      })
-      return sum;
-    }
-  }
-
   calcTongSl() {
     if (this.listOfData) {
       let sum = 0
