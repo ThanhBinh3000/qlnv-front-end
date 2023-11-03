@@ -452,7 +452,6 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
 
   clearData() {
     this.rowItem = new TienDoThucHien();
-    this.dataTable = [];
   }
 
   emitDataTable() {
@@ -461,8 +460,6 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
 
   //Nghiệm thu
   themMoiItem1() {
-
-
     if (!this.dataTable1) {
       this.dataTable1 = [];
     }
@@ -485,7 +482,6 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
 
   clearData1() {
     this.rowItem1 = new NghiemThuThanhLy();
-    this.dataTable1 = [];
   }
 
   sortTableId1() {
