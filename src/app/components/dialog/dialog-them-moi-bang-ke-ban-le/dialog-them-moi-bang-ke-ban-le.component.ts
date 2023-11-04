@@ -18,6 +18,7 @@ import {
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
 import {Validators} from '@angular/forms';
 import {MESSAGE} from 'src/app/constants/message';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-dialog-them-moi-bang-ke-ban-le',
@@ -30,6 +31,7 @@ export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements
   @Input() isView: boolean;
   loadBangKeBanLe: any[] = [];
   listNhiemVuXh: any[] = [];
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
 
   constructor(
     httpClient: HttpClient,
@@ -128,7 +130,6 @@ export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements
       };
       const res = await this.quyetDinhNvXuatBttService.search(body);
       if (res.msg === MESSAGE.SUCCESS) {
-
         const set = new Set(this.loadBangKeBanLe.map(item => item.soQdNv));
         this.listNhiemVuXh = res.data.content.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI)).filter(item => !set.has(item.soQdNv));
       } else {
@@ -171,16 +172,16 @@ export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements
           idQdNv: data.id,
           soQdNv: data.soQdNv,
           ngayKyQdNv: data.ngayKyQdNv,
-          slXuatBanQdPd: data.soLuong,
           loaiVthh: data.loaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
         });
-        const childWithDonGia = data.children.find(item => item.children.length > 0);
+        const childWithDonGia = data.children.find(item => item.children.length > 0 && item.maDvi === this.userInfo.MA_DVI);
         if (childWithDonGia) {
           this.formData.patchValue({
-            donGia: childWithDonGia.children[0].donGia || null
+            donGia: childWithDonGia.children[0].donGia || null,
+            slXuatBanQdPd: childWithDonGia.soLuong || null,
           });
         }
       }
@@ -193,10 +194,12 @@ export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements
   }
 
   async changeSoLuong(event) {
-    this.formData.patchValue({
-      soLuongConLai: this.formData.value.slXuatBanQdPd - event,
-      thanhTien: this.formData.value.donGia * event
-    });
+    if (event) {
+      this.formData.patchValue({
+        soLuongConLai: this.formData.value.slXuatBanQdPd - event,
+        thanhTien: this.formData.value.donGia * event
+      });
+    }
   }
 
   async save() {

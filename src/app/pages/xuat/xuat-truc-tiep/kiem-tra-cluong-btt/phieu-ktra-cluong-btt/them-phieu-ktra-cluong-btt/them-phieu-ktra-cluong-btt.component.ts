@@ -187,7 +187,7 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
       return;
     }
     this.maTuSinh = this.idInput;
-    this.dataTable = this.userService.isChiCuc() ? data.children.filter(item => item.maDvi === this.userInfo.MA_DVI) : data.children;
+    this.dataTable = data.children;
     if (!this.isView) {
       await this.onChangeQdNv(data.idQdNv)
     }

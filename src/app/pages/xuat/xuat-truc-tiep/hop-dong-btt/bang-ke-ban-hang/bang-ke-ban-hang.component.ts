@@ -59,6 +59,7 @@ export class BangKeBanHangComponent extends Base2Component implements OnInit {
       thanhTien: '',
     };
   }
+
   async ngOnInit() {
     try {
       await this.spinner.show();
@@ -91,7 +92,7 @@ export class BangKeBanHangComponent extends Base2Component implements OnInit {
         nzContent: DialogThemMoiBangKeBanLeComponent,
         nzMaskClosable: false,
         nzClosable: false,
-        nzStyle: { top: '200px' },
+        nzStyle: {top: '200px'},
         nzWidth: '1500px',
         nzFooter: null,
         nzComponentParams: {
@@ -111,7 +112,7 @@ export class BangKeBanHangComponent extends Base2Component implements OnInit {
     } catch (error) {
       console.error('Error:', error);
     } finally {
-      this.search();
+      await this.search();
     }
   }
 

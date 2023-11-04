@@ -78,7 +78,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       idQdPdDtl: [],
       trichYeuTbao: [''],
       tenToChuc: [''],
-      sdtToChuc: [''],
+      sdtToChuc: ['', [this.validatePhoneNumber]],
       diaChiToChuc: [''],
       taiKhoanToChuc: [''],
       soHd: [''],
@@ -531,6 +531,14 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       row.toChucCaNhan = null;
       return false;
     }
+  }
+
+  validatePhoneNumber(control: any) {
+    const phoneNumber = control.value;
+    if (!phoneNumber || phoneNumber[0] !== '0' || !/^[0-9]+$/.test(phoneNumber)) {
+      return {invalidPhoneNumber: true};
+    }
+    return null;
   }
 
   setValidForm() {

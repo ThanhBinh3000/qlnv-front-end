@@ -31,6 +31,10 @@ import {PREVIEW} from "../../../../../../constants/fileType";
 import printJS from "print-js";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {FileDinhKem} from "../../../../../../models/CuuTro";
+import {
+  BbNghiemThuBaoQuanService
+} from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
   selector: 'app-bdg-chi-tiet-bang-ke-can',
@@ -49,8 +53,22 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   maHauTo: any;
   flagInit: Boolean = false;
   dataQuyetDinh: any[] = [];
+  listPhieuXuatKho: any[] = [];
   listDiaDiemXuat: any[] = [];
   loadDanhSachBangKeCan: any[] = [];
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "left",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
 
   constructor(
     httpClient: HttpClient,
@@ -64,6 +82,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     private quyetDinhGiaoNhiemVuXuatHangService: QuyetDinhGiaoNvXuatHangService,
     private phieuXuatKhoService: PhieuXuatKhoService,
     private bangKeCanService: BangKeCanService,
+    private bbNghiemThuBaoQuanService: BbNghiemThuBaoQuanService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bangKeCanService);
     this.formData = this.fb.group(
@@ -77,9 +96,11 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         idQdNv: [],
         soQdNv: [''],
         ngayKyQdNv: [''],
+        idQdNvDtl: [],
         idHopDong: [],
         soHopDong: [''],
         ngayKyHopDong: [''],
+        idKho: [],
         maDiemKho: [''],
         diaDiemKho: [''],
         maNhaKho: [''],
@@ -161,6 +182,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
       tenThuKho: this.userInfo.TEN_DAY_DU,
       trangThai: STATUS.DU_THAO,
       tenTrangThai: 'Dự Thảo',
+      tongTrongLuongCaBi: 0,
     })
   }
 
@@ -179,7 +201,11 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
       console.error('Không tìm thấy dữ liệu');
       return;
     }
+    this.maTuSinh = this.idInput;
     this.dataTable = data.children
+    if (!this.isView) {
+      await this.onChange(data.idQdNv)
+    }
   }
 
   async openDialog() {
@@ -193,10 +219,8 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
       const res = await this.quyetDinhGiaoNhiemVuXuatHangService.search(body)
       if (res && res.msg === MESSAGE.SUCCESS) {
         this.dataQuyetDinh = res.data.content.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI));
-      } else if (res && res.msg) {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       } else {
-        this.notification.error(MESSAGE.ERROR, 'Unknown error occurred.');
+        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ XUẤT HÀNG',
@@ -223,23 +247,30 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     }
   }
 
-  changeSoQdNv(event) {
+  async changeSoQdNv(event) {
     if (this.flagInit && event && event !== this.formData.value.soQdNv) {
       this.formData.patchValue({
+        idQdNvDtl: null,
+        idHopDong: null,
+        soHopDong: null,
+        ngayKyHopDong: null,
+        idKho: null,
         maDiemKho: null,
-        diaDiemKho: null,
         tenDiemKho: null,
+        diaDiemKho: null,
         maNhaKho: null,
         tenNhaKho: null,
         maNganKho: null,
         tenNganKho: null,
         maLoKho: null,
-        tenLoKho: null,
         tenNganLoKho: null,
         loaiHinhKho: null,
         idPhieuXuatKho: null,
         soPhieuXuatKho: null,
         ngayXuatKho: null,
+        idPhieuKiemNghiem: null,
+        soPhieuKiemNghiem: null,
+        ngayKiemNghiemMau: null,
         tenNguoiGiao: null,
         cmtNguoiGiao: null,
         congTyNguoiGiao: null,
@@ -254,13 +285,19 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         tongTrongLuongBi: null,
         tongTrongLuongCaBi: null,
         tongTrongTruBi: null,
+        loaiHinhNx: null,
+        kieuNhapXuat: null,
+        soLuong: null,
+        donGia: null,
       });
       this.dataTable = [];
     }
   }
 
   async onChange(id) {
-    if (id <= 0) return;
+    if (id <= 0) {
+      return;
+    }
     try {
       await this.spinner.show();
       const res = await this.quyetDinhGiaoNhiemVuXuatHangService.getDetail(id);
@@ -281,7 +318,9 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
       });
       await this.loadBangKeCanHang(data.soQdNv)
       const dataChiCuc = data.children.find(item => item.maDvi === this.userInfo.MA_DVI);
-      this.listDiaDiemXuat = dataChiCuc?.children
+      if (dataChiCuc && dataChiCuc.children && dataChiCuc.children.length > 0) {
+        this.listDiaDiemXuat = dataChiCuc.children
+      }
     } catch (e) {
       console.error('Error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -325,6 +364,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
+          idKho: data.id,
           maDiemKho: data.maDiemKho,
           tenDiemKho: data.tenDiemKho,
           diaDiemKho: data.diaDiemKho,
@@ -336,17 +376,20 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
           tenLoKho: data.tenLoKho,
           tenNganLoKho: data.tenLoKho ? data.tenLoKho + ' - ' + data.tenNganKho : data.tenNganKho
         });
-        await this.loadDanhDachPhieuXuatKho(data);
+        await this.loadLoaiHinhKho(data);
       }
     });
   }
 
-  changeKho(event) {
+  async changeKho(event) {
     if (this.flagInit && event && event !== this.formData.value.maLoKho && this.formData.value.maNganKho) {
       this.formData.patchValue({
         idPhieuXuatKho: null,
         soPhieuXuatKho: null,
         ngayXuatKho: null,
+        idPhieuKiemNghiem: null,
+        soPhieuKiemNghiem: null,
+        ngayKiemNghiemMau: null,
         tenNguoiGiao: null,
         cmtNguoiGiao: null,
         congTyNguoiGiao: null,
@@ -361,61 +404,140 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         tongTrongLuongBi: null,
         tongTrongLuongCaBi: null,
         tongTrongTruBi: null,
+        loaiHinhNx: null,
+        kieuNhapXuat: null,
+        soLuong: null,
+        donGia: null,
       })
       this.dataTable = [];
     }
   }
 
-  async loadDanhDachPhieuXuatKho(kho) {
-    let body = {
-      loaiVthh: this.loaiVthh,
-      nam: this.formData.value.nam,
-      trangThai: STATUS.DU_THAO,
-      soQdNv: this.formData.value.soQdNv,
+  async loadLoaiHinhKho(kho) {
+    if (!kho) {
+      return
     }
-    const res = await this.phieuXuatKhoService.search(body)
-    if (res.msg !== MESSAGE.SUCCESS) {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+    let maKho = kho.maLoKho || kho.maNganKho
+    let res = await this.bbNghiemThuBaoQuanService.getDataKho(maKho);
+    if (res.msg !== MESSAGE.SUCCESS || !res.data) {
       return;
     }
-    const data = res.data.content;
-    if (!data || data.length === 0) {
-      return;
-    }
-    const filterConditions = {
-      maDiemKho: kho.maDiemKho,
-      maNhaKho: kho.maNhaKho,
-      maNganKho: kho.maNganKho,
-      maLoKho: kho.maLoKho,
-    };
-    const filteredData = data.filter(item =>
-      Object.keys(filterConditions).every(key =>
-        item[key] === filterConditions[key]
-      )
-    );
-    if (filteredData.length > 0) {
-      const firstItem = filteredData.find(item => !this.loadDanhSachBangKeCan.some(loadItem => loadItem.soPhieuXuatKho === item.soPhieuXuatKho));
-      this.formData.patchValue({
-        idPhieuXuatKho: firstItem.id,
-        soPhieuXuatKho: firstItem.soPhieuXuatKho,
-        ngayXuatKho: firstItem.ngayLapPhieu,
-        tenNguoiGiao: firstItem.tenNguoiGiao,
-        cmtNguoiGiao: firstItem.cmtNguoiGiao,
-        congTyNguoiGiao: firstItem.congTyNguoiGiao,
-        diaChiNguoiGiao: firstItem.diaChiNguoiGiao,
-        thoiGianGiaoNhan: firstItem.thoiGianGiaoNhan,
-        loaiVthh: firstItem.loaiVthh,
-        tenLoaiVthh: firstItem.tenLoaiVthh,
-        cloaiVthh: firstItem.cloaiVthh,
-        tenCloaiVthh: firstItem.tenCloaiVthh,
-        tenHangHoa: firstItem.tenHangHoa,
-        soLuong: firstItem.thucXuat,
-        donGia: firstItem.donGia,
-        donViTinh: firstItem.donViTinh,
-        idPhieuKiemNghiem: firstItem.idPhieuKiemNghiem,
-        soPhieuKiemNghiem: firstItem.soPhieuKiemNghiem,
-        ngayKiemNghiemMau: firstItem.ngayKiemNghiemMau,
+    this.formData.patchValue({
+      loaiHinhKho: res.data.lhKho
+    });
+  }
+
+  async openDialogPhieuXuatKho() {
+    try {
+      await this.spinner.show();
+      let body = {
+        loaiVthh: this.loaiVthh,
+        nam: this.formData.value.nam,
+        trangThai: STATUS.DU_THAO,
+        soQdNv: this.formData.value.soQdNv,
+      }
+      const res = await this.phieuXuatKhoService.search(body)
+      if (res && res.msg === MESSAGE.SUCCESS) {
+        const phieuXuatKhoSet = new Set(this.loadDanhSachBangKeCan.map(item => item.soPhieuXuatKho));
+        this.listPhieuXuatKho = res.data.content.filter(item => !phieuXuatKhoSet.has(item.soPhieuXuatKho))
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+      const formattedDataPhieuXuatKho = this.listPhieuXuatKho.map(item => ({
+        soLuongXuat: item.thucXuat.toLocaleString(),
+        ...item
+      }))
+      const modalQD = this.modal.create({
+        nzTitle: 'PHIẾU XUẤT KHO HÀNG DTQG',
+        nzContent: DialogTableSelectionComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          dataTable: formattedDataPhieuXuatKho.filter(item => item.idKho === this.formData.value.idKho),
+          dataHeader: ['Số Phiếu xuất kho', 'Ngày Lập Phiếu', 'Loại hàng hóa', 'Số lượng xuất kho'],
+          dataColumn: ['soPhieuXuatKho', 'ngayLapPhieu', 'tenLoaiVthh', 'soLuongXuat']
+        },
       });
+      modalQD.afterClose.subscribe(async (data) => {
+        if (data) {
+          await this.onChangePhieuXuatKho(data.id);
+        }
+      });
+    } catch (e) {
+      console.error('Error: ', e);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
+  async changePhieuXuatKho(event) {
+    if (this.flagInit && event && event !== this.formData.value.soPhieuXuatKho) {
+      this.formData.patchValue({
+        idPhieuKiemNghiem: null,
+        soPhieuKiemNghiem: null,
+        ngayKiemNghiemMau: null,
+        tenNguoiGiao: null,
+        cmtNguoiGiao: null,
+        congTyNguoiGiao: null,
+        diaChiNguoiGiao: null,
+        thoiGianGiaoNhan: null,
+        loaiVthh: null,
+        tenLoaiVthh: null,
+        cloaiVthh: null,
+        tenCloaiVthh: null,
+        tenHangHoa: null,
+        donViTinh: null,
+        tongTrongLuongBi: null,
+        tongTrongLuongCaBi: null,
+        tongTrongTruBi: null,
+        loaiHinhNx: null,
+        kieuNhapXuat: null,
+        soLuong: null,
+        donGia: null,
+      })
+      this.dataTable = [];
+    }
+  }
+
+  async onChangePhieuXuatKho(id) {
+    if (id <= 0) {
+      return;
+    }
+    try {
+      const res = await this.phieuXuatKhoService.getDetail(id);
+      if (res.msg !== MESSAGE.SUCCESS || !res.data) {
+        return;
+      }
+      const data = res.data
+      this.formData.patchValue({
+        idQdNvDtl: data.idQdNvDtl,
+        idPhieuXuatKho: data.id,
+        soPhieuXuatKho: data.soPhieuXuatKho,
+        ngayXuatKho: data.ngayLapPhieu,
+        tenNguoiGiao: data.tenNguoiGiao,
+        cmtNguoiGiao: data.cmtNguoiGiao,
+        congTyNguoiGiao: data.congTyNguoiGiao,
+        diaChiNguoiGiao: data.diaChiNguoiGiao,
+        thoiGianGiaoNhan: data.thoiGianGiaoNhan,
+        loaiVthh: data.loaiVthh,
+        tenLoaiVthh: data.tenLoaiVthh,
+        cloaiVthh: data.cloaiVthh,
+        tenCloaiVthh: data.tenCloaiVthh,
+        tenHangHoa: data.tenHangHoa,
+        soLuong: data.thucXuat,
+        donGia: data.donGia,
+        donViTinh: data.donViTinh,
+        idPhieuKiemNghiem: data.idPhieuKiemNghiem,
+        soPhieuKiemNghiem: data.soPhieuKiemNghiem,
+        ngayKiemNghiemMau: data.ngayKiemNghiemMau,
+      })
+    } catch (e) {
+      console.error('Error: ', e);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
   }
 
