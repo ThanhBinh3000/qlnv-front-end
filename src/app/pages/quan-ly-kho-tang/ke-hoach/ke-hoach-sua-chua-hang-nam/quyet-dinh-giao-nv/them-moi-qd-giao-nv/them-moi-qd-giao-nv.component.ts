@@ -133,8 +133,8 @@ export class ThemMoiQdGiaoNvComponent extends Base2Component implements OnInit {
                  await this.tongHopDxScLon.getDetail(item.id).then((dtlTh)=>{
                    listToTrinh.push(dtlTh.data.maToTrinh);
                    if(dtlTh.data){
-                     if(dtlTh.data.chiTietDxs){
-                       dtlTh.data.chiTietDxs.forEach( dtl => {
+                     if(dtlTh.data.children){
+                       dtlTh.data.children.forEach( dtl => {
                          dtl.idDxSc = dtl.id
                          dtl.idThSc = dtl.idTh
                          this.dataTable.push(dtl);
