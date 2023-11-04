@@ -299,7 +299,7 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
       });
       if ([THONG_TIN_BAN_TRUC_TIEP.CHAO_GIA, THONG_TIN_BAN_TRUC_TIEP.BAN_LE].includes(data.pthucBanTrucTiep)) {
         data.children.forEach(item => {
-          if (data.pthucBanTrucTiep === THONG_TIN_BAN_TRUC_TIEP.CHAO_GIA) {
+          if ([THONG_TIN_BAN_TRUC_TIEP.CHAO_GIA].includes(data.pthucBanTrucTiep)) {
             this.formData.patchValue({
               soLuongHopDong: item.soLuong
             });
@@ -449,7 +449,7 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
         }
       }
     }
-    if (data.pthucBanTrucTiep === THONG_TIN_BAN_TRUC_TIEP.UY_QUYEN) {
+    if ([THONG_TIN_BAN_TRUC_TIEP.UY_QUYEN].includes(data.pthucBanTrucTiep)) {
       const resHd = await this.hopDongBttService.getDetail(data.idHopDong)
       if (resHd.msg !== MESSAGE.SUCCESS || !resHd.data) {
         return;
@@ -463,7 +463,7 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
         });
       }
     }
-    if (data.pthucBanTrucTiep === THONG_TIN_BAN_TRUC_TIEP.BAN_LE) {
+    if ([THONG_TIN_BAN_TRUC_TIEP.BAN_LE].includes(data.pthucBanTrucTiep)) {
       const resBL = await this.bangKeBttService.getDetail(data.idBangKeBanLe)
       if (resBL.msg !== MESSAGE.SUCCESS || !resBL.data) {
         return;

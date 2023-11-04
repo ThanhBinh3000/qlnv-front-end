@@ -55,7 +55,7 @@ export class BangCanKeHangBttComponent extends Base2Component implements OnInit 
     this.filterTable = {
       soQdNv: '',
       namKh: '',
-      ngayKyQdNv: '',
+      tgianGiaoNhan: '',
       tenDiemKho: '',
       tenNganKho: '',
       tenLoKho: '',
@@ -124,7 +124,7 @@ export class BangCanKeHangBttComponent extends Base2Component implements OnInit 
         soQdNv: soQdNvKey,
         namKh: firstRowInGroup.namKh || "",
         idQdNv: firstRowInGroup.idQdNv || "",
-        ngayKyQdNv: firstRowInGroup.ngayKyQdNv || "",
+        tgianGiaoNhan: firstRowInGroup.tgianGiaoNhan || "",
         childData,
       };
     }).value();
