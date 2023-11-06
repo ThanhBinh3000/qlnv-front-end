@@ -38,7 +38,8 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Số lượng phải xuất theo QĐ (kg)
+            <nz-form-label [nzNoColon]="true"> Số lượng phải xuất theo
+              QĐ {{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? '' : '(kg)'}}
             </nz-form-label>
             <nz-form-control nz-col>
                     <span
@@ -48,7 +49,8 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Số lượng bán trực tiếp còn lại (kg)
+            <nz-form-label [nzNoColon]="true"> Số lượng bán trực tiếp còn
+              lại {{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? '' : '(kg)'}}
             </nz-form-label>
             <nz-form-control nz-col>
                     <span
@@ -115,11 +117,13 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Số lượng bán trực tiếp (kg)</nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Số lượng bán trực
+              tiếp {{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? '' : '(kg)'}}</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-input-number formControlName="soLuong" (ngModelChange)="changeSoLuong($event)" [nzMin]="1"
-                               [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+              <nz-input-number type="text" nz-input [nzSize]="'small'" formControlName="soLuong"
+                               (ngModelChange)="changeSoLuong($event)"
+                               [nzDisabled]="isView" [nzMin]="0" [nzMax]="formData.value.slXuatBanQdPd"
+                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
               </nz-input-number>
             </nz-form-control>
           </nz-form-item>
@@ -127,9 +131,9 @@
         <div nz-col [nzSpan]="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Đơn giá (đ)</nz-form-label>
-            <nz-input-number formControlName="donGia" [nzMin]="1"
-                             [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+            <nz-input-number type="text" nz-input [nzSize]="'small'" formControlName="donGia"
+                             [nzDisabled]="isView" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
+                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
             </nz-input-number>
           </nz-form-item>
         </div>

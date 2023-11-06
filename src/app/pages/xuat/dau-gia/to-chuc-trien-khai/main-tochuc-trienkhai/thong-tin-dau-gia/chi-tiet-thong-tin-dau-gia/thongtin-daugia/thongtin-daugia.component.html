@@ -67,9 +67,10 @@
                       </div>
                       <div nz-col [nzSpan]="6">
                         <nz-form-item>
-                          <nz-form-label [nzNoColon]="true"> Điện thoại</nz-form-label>
-                          <nz-form-control nz-col>
-                            <input nz-input type="number" formControlName="sdtToChuc" [readonly]="isView"/>
+                          <nz-form-label nzRequired [nzNoColon]="true"> Điện thoại</nz-form-label>
+                          <nz-form-control nz-col
+                                           [nzErrorTip]="formData.get('sdtToChuc').hasError('invalidPhoneNumber') ? 'Số điện thoại không hợp lệ' : ''">
+                            <input nz-input formControlName="sdtToChuc" [readonly]="isView"/>
                           </nz-form-control>
                         </nz-form-item>
                       </div>

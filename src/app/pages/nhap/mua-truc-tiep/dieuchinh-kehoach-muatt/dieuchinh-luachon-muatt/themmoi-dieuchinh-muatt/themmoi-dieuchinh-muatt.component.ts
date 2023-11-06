@@ -79,6 +79,14 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
       diaChiDvi: [''],
       soDxuat: [''],
       soLanDieuChinh: [''],
+      soQdCc: [''],
+      idSoQdCc: [''],
+      soToTrinh: [''],
+      ngayTaoCv: [''],
+      loaiHinhNx: [''],
+      tenLoaiHinhNx: [''],
+      kieuNx: [''],
+      tenKieuNx: [''],
 
     });
   }
@@ -112,12 +120,15 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
   dtl: any[] = [];
   fileDinhKems: any[] = [];
   canCuPhapLy: any[] = [];
+  cvanToTrinh: any[] = [];
   mthh: any = [];
+  maTt: string;
   selectedId: number = 0;
   isDetail: boolean = false;
   async ngOnInit() {
     this.spinner.show();
     try {
+      this.maTt = "/TTr-TCDT";
       this.userInfo = this.userService.getUserLogin();
       this.soQdDc = "/" + this.userInfo.MA_QD
       for (let i = -3; i < 23; i++) {
@@ -216,10 +227,16 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
           soQdGoc: data.soQdGoc,
           ldoTchoi: data.ldoTchoi,
           ngayKyQdGoc: data.ngayKyQdGoc,
+          soLanDieuChinh: data.soLanDieuChinh,
+          soQdCc: data.soQdCc,
+          idSoQdCc: data.idSoQdCc,
+          soToTrinh: data.soToTrinh,
+          ngayTaoCv: data.ngayTaoCv,
 
         });
         this.fileDinhKems = data.fileDinhKems;
         this.canCuPhapLy = data.canCuPhapLy;
+        this.cvanToTrinh = data.cvanToTrinh;
         this.danhsachDxMtt = data.hhDcQdPduyetKhmttDxList;
         this.danhsachDxMttCache = cloneDeep(this.danhsachDxMtt)
         await this.showFirstRow(event, this.danhsachDxMtt[0]);
@@ -274,6 +291,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     this.spinner.show();
     if ($event) {
       let res = await this.quyetDinhPheDuyetKeHoachMTTService.getDetail($event);
+      console.log(res,5555)
       let qdGoc = this.listQdGoc.filter(item => item.id == $event)
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
@@ -293,6 +311,9 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           moTaHangHoa: data.mthh,
+          soLanDieuChinh: data.soLanDieuChinh,
+          soQdCc: data.soQdCc,
+          idSoQdCc: data.idSoQdCc,
           namKh: data.namKh
 
         })
@@ -334,6 +355,12 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
         await this.getDataChiTieu(res.data.idSoQdCc);
       }
       this.dataInputCache = res.data.children.find(x => x.maDvi == data.maDvi)
+      data.tongSoLuong = 0;
+      data.tongMucDt = 0;
+      data.children.forEach(item =>{
+        data.tongSoLuong += item.tongSoLuong;
+        data.tongMucDt += item.tongSoLuong * item.donGiaVat * 1000;
+      })
     }
     await this.spinner.hide();
   }
@@ -387,6 +414,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     body.ngayHluc = this.datePipe.transform(body.ngayHluc, 'yyyy-MM-dd');
     body.fileDinhkems = this.fileDinhKems;
     body.canCuPhapLy = this.canCuPhapLy;
+    body.cvanToTrinh = this.cvanToTrinh;
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.dieuChinhQuyetDinhPdKhmttService.update(body);
@@ -490,10 +518,10 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     debugger
     this.danhsachDxMtt.forEach(item => {
       item.children = $event.filter(x => x.maDvi.includes(item.maDvi));
-      // item.tongSoLuong = item.children.reduce((acc, data) => acc + data.tongSoLuong, 0)
-      // item.tongTienGomThue = item.children.reduce((acc, data) => acc + data.tongThanhTien, 0)
+      item.tongSoLuong = item.children.reduce((acc, data) => acc + data.tongSoLuong, 0)
+      item.tongMucDt = item.children.reduce((acc, data) => acc + data.tongThanhTien, 0)
     })
-    console.log(this.danhsachDxMtt)
+    console.log(this.danhsachDxMtt, 9999)
   }
 
   // async getDataChiTieu() {
