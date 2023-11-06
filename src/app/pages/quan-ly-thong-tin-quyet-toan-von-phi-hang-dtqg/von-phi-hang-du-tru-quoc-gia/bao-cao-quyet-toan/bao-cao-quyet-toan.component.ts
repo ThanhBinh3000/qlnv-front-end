@@ -32,6 +32,7 @@ export class BaoCaoQuyetToanComponent implements OnInit {
         maBcao: null,
         maPhanBcao: '1',
         namQtoan: null,
+        quyQtoan: null,
         ngayTaoDen: null,
         ngayTaoTu: null,
         paggingReq: {
@@ -58,6 +59,24 @@ export class BaoCaoQuyetToanComponent implements OnInit {
     danhSachBaoCao: any[] = [];
     danhSachBaoCaoAll: any[] = [];
     trangThais: any[] = Status.TRANG_THAI_FULL;
+    lstQuy: any[] = [
+        {
+            val: 1,
+            ten: "quý 1"
+        },
+        {
+            val: 2,
+            ten: "quý 2"
+        },
+        {
+            val: 3,
+            ten: "quý 3"
+        },
+        {
+            val: 4,
+            ten: "quý 4"
+        }
+    ];
     //phan trang
     totalElements = 0;
     totalPages = 0;
