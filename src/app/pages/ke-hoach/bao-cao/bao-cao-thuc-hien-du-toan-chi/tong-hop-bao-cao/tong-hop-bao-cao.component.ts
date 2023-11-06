@@ -82,6 +82,7 @@ export class TongHopBaoCaoComponent implements OnInit {
                 res.data.content.forEach(e => {
                     this.dataTable.push({
                         ...e,
+                        thangBcao: e.maLoaiBcao == Dtc.BC_CA_NAM ? null : e.thangBcao,
                     })
                 })
                 this.dataTableAll = cloneDeep(this.dataTable);

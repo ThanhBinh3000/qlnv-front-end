@@ -14,12 +14,14 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from "uuid";
 import * as XLSX from 'xlsx-js-style';
 import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.constant';
+import { DialogChonLoaiBaoQuanComponent } from '../../dialog-chon-loai-bao-quan/dialog-chon-loai-bao-quan.component';
 
 export class ItemData {
 	id: string;
 	stt: string;
 	level: number;
 	maDanhMuc: string;
+	maDinhMuc: string;
 	tenDanhMuc: string;
 	dviTinh: string;
 	thNamTruoc: number;
@@ -128,6 +130,7 @@ export class PhuLuc02Component implements OnInit {
 	lstCtietBcao: ItemData[] = [];
 	lstVatTuFull: any[] = [];
 	dsDinhMuc: any[] = [];
+	dsBaoQuan: any[] = [];
 	scrollX: string;
 	//trang thai cac nut
 	status: BtnStatus = new BtnStatus();
@@ -186,6 +189,10 @@ export class PhuLuc02Component implements OnInit {
 			if (category) {
 				this.linhVucChis = category.data;
 			}
+			const baoquan = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_BAO_QUAN');
+			if (baoquan) {
+				this.dsBaoQuan = baoquan.data;
+			}
 			this.scrollX = Table.tableWidth(350, 10, 1, 110);
 		} else {
 			if (this.status.editAppVal) {
@@ -214,7 +221,7 @@ export class PhuLuc02Component implements OnInit {
 		await this.getDinhMuc();
 		this.lstCtietBcao.forEach(item => {
 			if (!item.tenDanhMuc) {
-				const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maDanhMuc || e.loaiVthh == item.maDanhMuc);
+				const dinhMuc = this.dsDinhMuc.find(e => (e.cloaiVthh == item.maDanhMuc || e.loaiVthh == item.maDanhMuc) && e.maDinhMuc == item.maDinhMuc);
 				item.tenDanhMuc = dinhMuc?.tenDinhMuc;
 				item.dmucTaiKho = dinhMuc?.tongDmuc;
 				item.dviTinh = dinhMuc?.donViTinh;
@@ -483,11 +490,11 @@ export class PhuLuc02Component implements OnInit {
 		});
 		modalTuChoi.afterClose.subscribe(async (data) => {
 			if (data) {
-				const dm = this.dsDinhMuc.find(e => e.cloaiVthh == data.ma || e.loaiVthh == data.ma);
-				if (this.lstCtietBcao.findIndex(e => e.maDanhMuc == data.ma) == -1) {
-					let stt: any;
-					const index = this.lstCtietBcao.findIndex(e => e.maDanhMuc == '0.2');
-					if (data.ma.startsWith('02')) {
+				let stt: any;
+				const index = this.lstCtietBcao.findIndex(e => e.maDanhMuc == '0.2');
+				if (data.ma.startsWith('02')) {
+					const dm = this.dsDinhMuc.find(e => e.cloaiVthh == data.ma || e.loaiVthh == data.ma);
+					if (this.lstCtietBcao.findIndex(e => e.maDanhMuc == data.ma) == -1) {
 						stt = '0.2.' + (this.lstCtietBcao.length - index).toString();
 						//them vat tu moi vao bang
 						this.lstCtietBcao.push(new ItemData({
@@ -495,6 +502,7 @@ export class PhuLuc02Component implements OnInit {
 							stt: stt,
 							maDanhMuc: data.ma,
 							tenDanhMuc: data.ten,
+							maDinhMuc: dm?.maDinhMuc,
 							dviTinh: dm?.donViTinh,
 							dmucTaiKho: dm?.tongDmuc,
 							level: 1,
@@ -506,13 +514,34 @@ export class PhuLuc02Component implements OnInit {
 						})
 						this.getTotal()
 						this.updateEditCache();
-					} else {
+					}
+				} else if (data.ma.startsWith('01')) {
+					let loaiBaoQuan: any;
+					if (data.ma.startsWith('0101')) {
+						const modalBaoQuan = this.modal.create({
+							nzTitle: 'Danh sách loại bảo quản',
+							nzContent: DialogChonLoaiBaoQuanComponent,
+							nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
+							nzMaskClosable: false,
+							nzClosable: false,
+							nzWidth: '500px',
+							nzFooter: null,
+							nzComponentParams: {
+								dsBaoQuan: this.dsBaoQuan,
+							},
+						});
+						await modalBaoQuan.afterClose.toPromise().then(async (res) => {
+							if (res) { loaiBaoQuan = res; }
+						})
+					}
+					const dm = this.dsDinhMuc.find(e => (e.cloaiVthh == data.ma || e.loaiVthh == data.ma) && (!loaiBaoQuan || e.loaiBaoQuan == loaiBaoQuan.ma));
+					if (this.lstCtietBcao.findIndex(e => e.maDanhMuc == data.ma && (!dm || e.maDinhMuc == dm?.maDinhMuc)) == -1) {
 						stt = '0.1.' + index.toString();
 						this.lstCtietBcao.splice(index, 0, new ItemData({
 							id: uuid.v4() + 'FE',
 							stt: stt,
 							maDanhMuc: data.ma,
-							tenDanhMuc: data.ten,
+							tenDanhMuc: data.ten + (loaiBaoQuan ? (' (' + loaiBaoQuan.giaTri + ')') : ''),
 							dviTinh: dm?.donViTinh,
 							dmucTaiKho: dm?.tongDmuc,
 							level: 1,
@@ -526,7 +555,6 @@ export class PhuLuc02Component implements OnInit {
 						this.getTotal()
 						this.updateEditCache();
 					}
-
 				}
 			}
 		});
