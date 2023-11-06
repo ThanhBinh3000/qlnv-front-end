@@ -91,17 +91,32 @@ export class ThemMoiQdGiaoNvComponent extends Base2Component implements OnInit {
   }
 
   async save(isOther: boolean) {
-    let body = this.formData.value;
-    body.soQdGiaoNv = this.formData.value.soQdGiaoNv + this.symbol;
-    body.fileDinhKems = this.fileDinhKem;
-    body.canCuPhapLys = this.canCuPhapLy;
-    body.children = this.dataTable;
-    let data = await this.createUpdate(body);
-    if (data) {
-      if (isOther) {
-        this.approve(data.id, this.STATUS.BAN_HANH, "Bạn có muốn ban hành?");
+    if(this.validateTable()){
+      let body = this.formData.value;
+      body.soQdGiaoNv = this.formData.value.soQdGiaoNv + this.symbol;
+      body.fileDinhKems = this.fileDinhKem;
+      body.canCuPhapLys = this.canCuPhapLy;
+      body.children = this.dataTable;
+      let data = await this.createUpdate(body);
+      if (data) {
+        if (isOther) {
+          this.approve(data.id, this.STATUS.BAN_HANH, "Bạn có muốn ban hành?");
+        }
       }
     }
+  }
+
+  validateTable(){
+    let rs = true;
+    this.dataTable.forEach( item => {
+      console.log(item);
+      if(item.duToanBtcDuyet <= 0){
+        rs = false;
+        this.notification.info(MESSAGE.ERROR,"Dự toán BTC duyệt của " + item.tenCongTrinh +" phải lớn hơn 0 ")
+        return
+      }
+    });
+    return rs
   }
 
   chonMaTongHop(){
@@ -137,6 +152,7 @@ export class ThemMoiQdGiaoNvComponent extends Base2Component implements OnInit {
                        dtlTh.data.children.forEach( dtl => {
                          dtl.idDxSc = dtl.id
                          dtl.idThSc = dtl.idTh
+                         dtl.duToanBtcDuyet = 0;
                          this.dataTable.push(dtl);
                         })
                       }
