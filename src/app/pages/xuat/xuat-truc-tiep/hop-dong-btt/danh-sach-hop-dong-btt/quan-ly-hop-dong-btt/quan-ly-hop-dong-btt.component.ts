@@ -98,7 +98,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     try {
       const res = await this.qdPdKetQuaBttService.getDetail(this.idInput);
       if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-        throw new Error('Response error');
+        return;
       }
       const data = res.data;
       await this.loadDanhDachHopDong();
@@ -128,7 +128,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
         tongSlDaKyHdong: tongSlDaKyHdong,
         tongSlChuaKyHdong: tongSlChuaKyHdong,
       });
-      this.dataTable = data.listHopDongBtt;
+      this.dataTable = data.listHopDongBtt.filter(item => item.maDvi === this.userInfo.MA_DVI);
       if (this.dataTable && this.dataTable.length > 0) {
         this.showFirstRow(event, this.dataTable[0].id);
       }
@@ -144,11 +144,11 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     try {
       const res = await this.chaoGiaMuaLeUyQuyenService.getDetail(this.idInput);
       if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-        throw new Error('Response error');
+        return;
       }
       const data = res.data;
       await this.loadDanhDachHopDong();
-      const formDataValues = {
+      this.formData.patchValue({
         namKh: data.namKh,
         soQdPd: data.soQdPd,
         loaiVthh: data.loaiVthh,
@@ -163,7 +163,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
         vat: '5 %',
         trangThaiHd: data.trangThaiHd,
         tenTrangThaiHd: data.tenTrangThaiHd,
-      };
+      });
       const filteredItems = this.loadDanhSachHdongDaKy.filter(item => item.idChaoGia === data.id);
       const tongSlDaKyHdong = filteredItems.reduce((acc, item) => acc + item.soLuong, 0);
       const tongSlChuaKyHdong = data.tongSoLuong - tongSlDaKyHdong;
@@ -171,8 +171,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
         tongSlDaKyHdong: tongSlDaKyHdong,
         tongSlChuaKyHdong: tongSlChuaKyHdong,
       });
-      this.formData.patchValue(formDataValues);
-      this.dataTable = data.listHopDongBtt;
+      this.dataTable = data.listHopDongBtt.filter(item => item.maDvi === this.userInfo.MA_DVI);
       if (this.dataTable && this.dataTable.length > 0) {
         this.showFirstRow(event, this.dataTable[0].id);
       }
