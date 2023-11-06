@@ -972,6 +972,7 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
           });
         }
       });
+      // console.log(this.dataVatTuNhapTree,'this.dataVatTuNhapTreethis.dataVatTuNhapTreethis.dataVatTuNhapTree');
     }
   }
 
