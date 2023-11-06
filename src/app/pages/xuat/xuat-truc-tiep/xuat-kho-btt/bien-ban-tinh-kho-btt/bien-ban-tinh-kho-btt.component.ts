@@ -59,7 +59,7 @@ export class BienBanTinhKhoBttComponent extends Base2Component implements OnInit
     this.filterTable = {
       soQdNv: '',
       nam: '',
-      ngayKyQdNv: '',
+      tgianGiaoNhan: '',
       tenDiemKho: '',
       tenNganKho: '',
       tenLoKho: '',
@@ -133,7 +133,7 @@ export class BienBanTinhKhoBttComponent extends Base2Component implements OnInit
         soQdNv: soQdNvKey,
         namKh: firstRowInGroup.namKh || "",
         idQdNv: firstRowInGroup.idQdNv || "",
-        ngayKyQdNv: firstRowInGroup.ngayKyQdNv || "",
+        tgianGiaoNhan: firstRowInGroup.tgianGiaoNhan || "",
         childData,
       };
     }).value();

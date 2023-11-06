@@ -1,56 +1,59 @@
-<nz-affix class='menu-lv2 dieu-chinh-button' [nzOffsetTop]='43' *ngIf='!isViewOnModal'>
-  <div class='tab-content tab-menu' id='myTabContent'>
-    <div class='d-flex justify-content-between header-tab' id='banhanh'>
-      <div class='trai'>
-      </div>
-      <div class='canphai phai'>
-        <button type='button' class='btn btn-sub' *ngIf='showListEvent.observers.length>0'
-                (click)='redirectChiTieuKeHoachNam()'>
-          <i class='fa fa-arrow-left'></i>
-          <span>Quay lại</span>
-        </button>
-        <button class='btn btn-outline-grey btn-sm waves-effect waves-light' (click)='guiDuyet()'
-                *ngIf='(thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO || thongTinChiTieuKeHoachNam.trangThai ==  STATUS.TU_CHOI_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDC || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV) && !isViewDetail'>
-          <i class='icon htvbdh_tcdt_guiduyet'></i>
-          <span>Lưu và gửi duyệt</span>
-        </button>
-        <!--        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="taoQuyetDinh()"-->
-        <!--                *ngIf="thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDC ||thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDV  ">-->
-        <!--          <i class="icon htvbdh_chuyenvanthu"></i>-->
-        <!--          <span>Tạo quyết định</span>-->
-        <!--        </button>-->
-        <button class='btn btn-outline-grey btn-sm waves-effect waves-light'
-                *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && ( userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_PA_CUCGIAO_DUYET_TP')  || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_PA_CUCGIAO_DUYET_LDC'))"
-                (click)='pheDuyet()'>
-          <i class='icon htvbdh_tcdt_pheduyet'></i>
-          <span>Duyệt</span>
-        </button>
-        <button class='btn btn-outline-grey btn-sm waves-effect waves-light'
-                *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_PA_TCGIAO_DUYET_LDVU')"
-                (click)='pheDuyet()'>
-          <i class='icon htvbdh_tcdt_pheduyet'></i>
-          <span>Duyệt</span>
-        </button>
-        <a class='btn btn-outline-danger btn-sm waves-effect waves-light' (click)='tuChoi()'
-           *ngIf="(!userService.isTongCuc() &&  thongTinChiTieuKeHoachNam.trangThai ==  STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_PA_CUCGIAO_DUYET_TP') || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_PA_CUCGIAO_DUYET_LDC'))">
-          <i class='icon htvbdh_tcdt_tuchoi'></i>
-          <span>Từ chối</span>
-        </a>
-        <a class='btn btn-outline-danger btn-sm waves-effect waves-light' (click)='tuChoi()'
-           *ngIf="(userService.isTongCuc() && thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV ) && ( userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_PA_TCGIAO_DUYET_LDVU') )">
-          <i class='icon htvbdh_tcdt_tuchoi'></i>
-          <span>Từ chối</span>
-        </a>
-        <button class='btn btn-main btn-sm waves-effect waves-light' (click)='save(false)'
-                *ngIf='!this.isViewDetail && (thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDC || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_TP)'>
-          <i class='icon htvbdh_tcdt_save'></i>
-          <span>Lưu</span>
-        </button>
+<div class='bg-trang'>
+  <nz-affix class='menu-lv2 dieu-chinh-button' [nzOffsetTop]='43' *ngIf='!isViewOnModal'>
+    <div class='tab-content tab-menu' id='myTabContent'>
+      <div class='d-flex justify-content-between header-tab' id='banhanh'>
+        <div class='trai'>
+        </div>
+        <div class='canphai phai'>
+          <button type='button' class='btn btn-sub' *ngIf='showListEvent.observers.length>0'
+                  (click)='redirectChiTieuKeHoachNam()'>
+            <i class='fa fa-arrow-left'></i>
+            <span>Quay lại</span>
+          </button>
+          <button class='btn btn-outline-grey btn-sm waves-effect waves-light' (click)='guiDuyet()'
+                  *ngIf='(thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO || thongTinChiTieuKeHoachNam.trangThai ==  STATUS.TU_CHOI_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDC || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV) && !isViewDetail'>
+            <i class='icon htvbdh_tcdt_guiduyet'></i>
+            <span>Lưu và gửi duyệt</span>
+          </button>
+          <!--        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="taoQuyetDinh()"-->
+          <!--                *ngIf="thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDC ||thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDV  ">-->
+          <!--          <i class="icon htvbdh_chuyenvanthu"></i>-->
+          <!--          <span>Tạo quyết định</span>-->
+          <!--        </button>-->
+          <button class='btn btn-outline-grey btn-sm waves-effect waves-light'
+                  *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && ( userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_PA_CUCGIAO_DUYET_TP')  || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_PA_CUCGIAO_DUYET_LDC'))"
+                  (click)='pheDuyet()'>
+            <i class='icon htvbdh_tcdt_pheduyet'></i>
+            <span>Duyệt</span>
+          </button>
+          <button class='btn btn-outline-grey btn-sm waves-effect waves-light'
+                  *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_PA_TCGIAO_DUYET_LDVU')"
+                  (click)='pheDuyet()'>
+            <i class='icon htvbdh_tcdt_pheduyet'></i>
+            <span>Duyệt</span>
+          </button>
+          <a class='btn btn-outline-danger btn-sm waves-effect waves-light' (click)='tuChoi()'
+             *ngIf="(!userService.isTongCuc() &&  thongTinChiTieuKeHoachNam.trangThai ==  STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_PA_CUCGIAO_DUYET_TP') || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_PA_CUCGIAO_DUYET_LDC'))">
+            <i class='icon htvbdh_tcdt_tuchoi'></i>
+            <span>Từ chối</span>
+          </a>
+          <a class='btn btn-outline-danger btn-sm waves-effect waves-light' (click)='tuChoi()'
+             *ngIf="(userService.isTongCuc() && thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV ) && ( userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_PA_TCGIAO_DUYET_LDVU') )">
+            <i class='icon htvbdh_tcdt_tuchoi'></i>
+            <span>Từ chối</span>
+          </a>
+          <button class='btn btn-main btn-sm waves-effect waves-light' (click)='save(false)'
+                  *ngIf='!this.isViewDetail && (thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDC || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_TP)'>
+            <i class='icon htvbdh_tcdt_save'></i>
+            <span>Lưu</span>
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-</nz-affix>
-<div class='bg-trang'>
+  </nz-affix>
+  <nz-alert *ngIf='thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV  || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDC' nzShowIcon nzType='error' class='mg-t-10'
+            nzMessage='Lý do từ chối' nzDescription='{{thongTinChiTieuKeHoachNam.lyDoTuChoi}}'>
+  </nz-alert>
   <nz-card class='mt16 flex-card p-lr16'>
     <div class='header'>
       <div class='header-text'>

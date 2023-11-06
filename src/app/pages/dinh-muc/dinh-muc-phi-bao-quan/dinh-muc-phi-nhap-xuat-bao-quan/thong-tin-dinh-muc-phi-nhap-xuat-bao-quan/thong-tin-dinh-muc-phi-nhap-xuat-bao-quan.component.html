@@ -667,13 +667,13 @@
             <td>{{item.tenLoaiVthh}}</td>
             <td>{{item.apDungTaiStr}}</td>
             <td>{{item.donViTinh}}</td>
-            <td class='text-right'>{{item.soLuong}}</td>
-            <td class='text-right'>{{item.chiPhiTheoDinhMuc}}</td>
-            <td class='text-right'>{{item.chiPhiNhapToiDa}}</td>
-            <td class='text-right'>{{item.chiPhiXuatToiDa}}</td>
-            <td class='text-right'>{{item.thanhToanTheoVnd}}</td>
-            <td class='text-right'>{{item.tyGia}}</td>
-            <td class='text-right'>{{item.thanhToanTheoUsd}}</td>
+            <td class='text-right'>{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{item.chiPhiTheoDinhMuc | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{item.chiPhiNhapToiDa | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{item.chiPhiXuatToiDa | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{item.thanhToanTheoVnd | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{item.tyGia | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{item.thanhToanTheoUsd | number : '1.0-1' : 'vi_VN'}}</td>
             <td>
               <a *ngIf="isViewDetail" (click)='viewRow(item,item.level)'>
                 <i class='fa fa-eye' title='Xem'></i>
@@ -715,7 +715,7 @@
   </nz-card>
 
 
-  <nz-modal [(nzVisible)]="showDlgAddEdit" nzTitle="THÊM ĐỊNH MỨC PHÍ NHẬP,XUẤT BẢO QUẢN" nzWidth="50%">
+  <nz-modal [(nzVisible)]="showDlgAddEdit" nzTitle="THÊM ĐỊNH MỨC PHÍ NHẬP, XUẤT, BẢO QUẢN" nzWidth="50%">
     <div *nzModalContent class="modal__content">
       <form nz-form nzLayout='vertical' [formGroup]='formDataDtl'>
         <div nz-row [nzGutter]='[24]'>

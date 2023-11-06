@@ -306,7 +306,7 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
         this.listCtieuKh.push(res.data)
       }
     } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+      this.notification.warning(MESSAGE.WARNING, res.msg);
       return;
     }
   }

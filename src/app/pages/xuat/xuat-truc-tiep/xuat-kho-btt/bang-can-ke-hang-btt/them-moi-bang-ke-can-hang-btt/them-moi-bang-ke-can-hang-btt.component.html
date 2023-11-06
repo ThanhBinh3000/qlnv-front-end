@@ -106,9 +106,9 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Số QĐ giao NV xuất hàng</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialog()">
-                <input [readonly]="true" nz-input formControlName="soQdNv" (ngModelChange)="changeSoQdNv($event)"
-                       readonly/>
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? null : openDialog()">
+                <input [readonly]="true" nz-input formControlName="soQdNv"
+                       (ngModelChange)="changeSoQdNv($event)" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -117,7 +117,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Ngăn/Lô kho</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogKho()">
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? null : openDialogKho()">
                 <input nz-input formControlName="tenNganLoKho" (ngModelChange)="changeKho($event)" readonly/>
               </nz-input-group>
             </nz-form-control>
@@ -127,7 +127,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Nhà kho</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogKho()">
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? null : openDialogKho()">
                 <input nz-input formControlName="tenNhaKho" (ngModelChange)="changeKho($event)" readonly/>
               </nz-input-group>
             </nz-form-control>
@@ -137,7 +137,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Điểm kho</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogKho()">
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? null : openDialogKho()">
                 <input nz-input formControlName="tenDiemKho" (ngModelChange)="changeKho($event)" readonly/>
               </nz-input-group>
             </nz-form-control>
@@ -191,8 +191,9 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Số phiếu xuất kho</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open">
-                <input [readonly]="true" nz-input formControlName="soPhieuXuatKho" readonly/>
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? null : openDialogPhieuXuatKho()">
+                <input [readonly]="true" nz-input formControlName="soPhieuXuatKho"
+                       (ngModelChange)="changePhieuXuatKho($event)" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -258,7 +259,9 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Số hợp đồng</nz-form-label>
             <nz-form-control nz-col>
-              <span style="color: blue">{{formData.value.soHopDong}}</span>
+              <span style="color: blue" *ngIf="formData.value.soHopDong">
+                {{formData.value.soHopDong}}
+              </span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -266,7 +269,9 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Ngày ký hợp đồng</nz-form-label>
             <nz-form-control nz-col>
-              <span>{{ formData.value.ngayKyHopDong|date: 'dd/MM/YYYY' }}</span>
+              <span *ngIf="formData.value.ngayKyHopDong">
+                {{formData.value.ngayKyHopDong|date: 'dd/MM/YYYY'}}
+              </span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -274,8 +279,9 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Số lượng theo hợp đồng</nz-form-label>
             <nz-form-control nz-col>
-                    <span
-                      style="color: blue">{{formData.value.soLuongHopDong|number:globals.numberFormat:globals.locale}} {{formData.value.donViTinh}}</span>
+              <span style="color: blue" *ngIf="formData.value.soLuongHopDong">
+                {{formData.value.soLuongHopDong|number:globals.numberFormat:globals.locale}} {{formData.value.donViTinh}}
+              </span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -283,7 +289,9 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Số bảng kê bảng kê bán lẻ</nz-form-label>
             <nz-form-control nz-col>
-              <span style="color: blue">{{formData.value.soBangKeBanLe}}</span>
+              <span style="color: blue" *ngIf="formData.value.soBangKeBanLe">
+                {{formData.value.soBangKeBanLe}}
+              </span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -291,7 +299,9 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Ngày tạo bảng kê bán lẻ</nz-form-label>
             <nz-form-control nz-col>
-              <span>{{ formData.value.ngayTaoBkeBanLe|date: 'dd/MM/YYYY' }}</span>
+              <span *ngIf="formData.value.ngayTaoBkeBanLe">
+                {{formData.value.ngayTaoBkeBanLe|date: 'dd/MM/YYYY'}}
+              </span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -299,36 +309,41 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Số lượng theo bảng kê bảng kê bán lẻ</nz-form-label>
             <nz-form-control nz-col>
-              <span
-                style="color: blue">{{formData.value.soLuongBkeBanLe|number:globals.numberFormat:globals.locale}} {{formData.value.donViTinh}}</span>
+              <span style="color: blue" *ngIf="formData.value.soLuongBkeBanLe">
+                {{formData.value.soLuongBkeBanLe|number:globals.numberFormat:globals.locale}} {{formData.value.donViTinh}}
+              </span>
             </nz-form-control>
           </nz-form-item>
         </div>
       </div>
     </form>
     <nz-card class="mg-t-16 flex-card p-lr16 table-card">
-      <nz-table nzBordered class="pd-10" [nzData]="dataTable" class="nowrap" [nzFrontPagination]="false"
+      <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered [nzFrontPagination]="false"
                 [nzShowPagination]="false">
         <thead>
         <tr>
-          <th class="text-center" nzWidth="50px"> STT</th>
-          <th
-            class="text-center">{{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Số serial/mã sản phẩm (1)' : 'Mã cân (A)'}}</th>
-          <th class="text-center" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">Số bao bì (1)</th>
-          <th
-            class="text-center">{{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Số lượng (2)' : 'Trọng lượng cả bao bì (2)'}}</th>
-          <th class="text-center" nzWidth="100px" *ngIf="!isView">Hành động</th>
+          <th nzWidth="50px" class="text-center wrap">STT</th>
+          <th class="text-center" style="white-space: pre-line">
+            {{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Số serial/mã sản phẩm\n(1)' : 'Mã cân\n(A)'}}
+          </th>
+          <th class="text-center" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">Số bao bì <br>(1)</th>
+          <th class="text-center" style="white-space: pre-line">
+            {{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? 'Số lượng\n(2)' : 'Trọng lượng cả bao bì (kg)\n(2)'}}
+          </th>
+          <th nzWidth="100px" class="text-center wrap" *ngIf="!isView"> Hành động</th>
         </tr>
         <tr *ngIf="!isView">
           <th class="text-center"></th>
-          <th><input nz-input [(ngModel)]="rowItem.maCan"/></th>
+          <th>
+            <input nz-input [(ngModel)]="rowItem.maCan"/>
+          </th>
           <th *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">
-            <nz-input-number nz-input [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                             [nzParser]="globals.parser" [(ngModel)]="rowItem.soBaoBi"></nz-input-number>
+            <input class="money-input" currencyMask [options]="amount" [min]="0"
+                   [(ngModel)]="rowItem.soBaoBi"/>
           </th>
           <th>
-            <nz-input-number nz-input [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                             [nzParser]="globals.parser" [(ngModel)]="rowItem.trongLuongCaBi"></nz-input-number>
+            <input class="money-input" currencyMask [options]="amount" [min]="0"
+                   [(ngModel)]="rowItem.trongLuongCaBi"/>
           </th>
           <th class="text-center">
             <a (click)="addRow()">
@@ -344,10 +359,11 @@
         <tr *ngFor="let data of dataTable; let idx = index">
           <ng-container *ngIf="(dataEdit && dataEdit[idx] && !dataEdit[idx].edit); else editTemplate ">
             <td class="text-center">{{idx + 1}}</td>
-            <td class="text-center">{{data.maCan}}</td>
-            <td class="text-center"
-                *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">{{data.soBaoBi|number:globals.numberFormat:globals.locale}}</td>
-            <td class="text-center">{{data.trongLuongCaBi|number:globals.numberFormat:globals.locale}}</td>
+            <td class="text-left">{{data.maCan}}</td>
+            <td class="text-left"
+                *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">{{data.soBaoBi|number:globals.numberFormat:globals.locale}}
+            </td>
+            <td class="text-left">{{data.trongLuongCaBi|number:globals.numberFormat:globals.locale}}</td>
             <td class="text-center" *ngIf="!isView">
               <a (click)="startEdit(idx)">
                 <i class=" fa fa-pencil"></i>
@@ -361,14 +377,12 @@
             <td class="text-center">{{idx + 1}} </td>
             <td><input nz-input [(ngModel)]="dataEdit[idx].data.maCan"/></td>
             <td *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">
-              <nz-input-number nz-input [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                               [nzParser]="globals.parser"
-                               [(ngModel)]="dataEdit[idx].data.soBaoBi"></nz-input-number>
+              <input class="money-input" currencyMask [options]="amount" [min]="0"
+                     [(ngModel)]="dataEdit[idx].data.soBaoBi"/>
             </td>
             <td>
-              <nz-input-number nz-input [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                               [nzParser]="globals.parser"
-                               [(ngModel)]="dataEdit[idx].data.trongLuongCaBi"></nz-input-number>
+              <input class="money-input" currencyMask [options]="amount" [min]="0"
+                     [(ngModel)]="dataEdit[idx].data.trongLuongCaBi"/>
             </td>
             <td class="text-center" *ngIf="!isView">
               <a (click)="saveEdit(idx)" class="save">
@@ -381,27 +395,31 @@
           </ng-template>
         </tr>
         </tbody>
-        <tfoot *ngIf="dataTable.length > 0">
-        <tr>
-          <td [attr.colspan]="loaiVthh !== LOAI_HANG_DTQG.VAT_TU ? 3 : 2" class="text-right"
-              style="color: blue; font-weight: bold;">TỔNG
-          </td>
-          <td
-            style="color: blue ;font-weight: bold;">{{ calcTong('trongLuongCaBi')|number:globals.numberFormat:globals.locale }}</td>
-          <td *ngIf="!isView"></td>
-        </tr>
-        </tfoot>
+        <ng-container *ngIf="dataTable.length > 0">
+          <tfoot>
+          <tr>
+            <td [attr.colspan]="loaiVthh !== LOAI_HANG_DTQG.VAT_TU ? 3 : 2" class="text-right bold text-blue">
+              TỔNG
+            </td>
+            <td class="text-left bold text-blue">
+              {{ calcTong('trongLuongCaBi')|number:globals.numberFormat:globals.locale }}
+            </td>
+            <td *ngIf="!isView"></td>
+          </tr>
+          </tfoot>
+        </ng-container>
       </nz-table>
     </nz-card>
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
       <div nz-row [nzGutter]="[18, 6]" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">
         <div nz-col [nzSpan]="12">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Tổng trọng lượng bao bì (kg)</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Tổng trọng lượng bao bì (kg)</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-input-number formControlName="tongTrongLuongBi" (ngModelChange)="changeTong($event)" nz-input
-                               [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
-                               [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isView">
+              <nz-input-number type="text" nz-input [nzSize]="'small'" formControlName="tongTrongLuongBi"
+                               (ngModelChange)="changeTong($event)" [nzDisabled]="isView" [nzMin]="0"
+                               [nzMax]="formData.value.tongTrongLuongCaBi" [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser">
               </nz-input-number>
             </nz-form-control>
           </nz-form-item>
@@ -410,8 +428,9 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tổng trọng lượng kể cả bao bì (Kg)</nz-form-label>
             <nz-form-control nz-col>
-              <span
-                style="color: blue">{{formData.value.tongTrongLuongCaBi|number:globals.numberFormat:globals.locale}}</span>
+            <span style="color: blue" *ngIf="formData.value.tongTrongLuongCaBi">
+              {{formData.value.tongTrongLuongCaBi|number:globals.numberFormat:globals.locale}}
+            </span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -419,8 +438,9 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tổng trọng lượng hàng đã trừ bì (Kg) (viết bằng số)</nz-form-label>
             <nz-form-control nz-col>
-              <span
-                style="color: blue">{{formData.value.tongTrongTruBi|number:globals.numberFormat:globals.locale}}</span>
+               <span style="color: blue" *ngIf="formData.value.tongTrongTruBi">
+                {{formData.value.tongTrongTruBi|number:globals.numberFormat:globals.locale}}
+               </span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -428,7 +448,9 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tổng trọng lượng hàng đã trừ bì (kg) (viết bằng chữ)</nz-form-label>
             <nz-form-control nz-col>
-              <span style="color: blue">{{ convertTienTobangChu(formData.value.tongTrongTruBi) }}</span>
+              <span style="color: blue" *ngIf="formData.value.tongTrongTruBi">
+               {{ convertTienTobangChu(formData.value.tongTrongTruBi) }}
+              </span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -438,8 +460,9 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất (viết bằng số)</nz-form-label>
             <nz-form-control nz-col>
-              <span
-                style="color: blue">{{formData.value.tongTrongLuongCaBi|number:globals.numberFormat:globals.locale}} {{formData.value.donViTinh}}</span>
+               <span style="color: blue" *ngIf="formData.value.tongTrongLuongCaBi">
+                {{formData.value.tongTrongLuongCaBi|number:globals.numberFormat:globals.locale}} {{formData.value.donViTinh}}
+               </span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -447,7 +470,9 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất (viết bằng chữ)</nz-form-label>
             <nz-form-control nz-col>
-              <span style="color: blue">{{ convertTienTobangChu(formData.value.tongTrongLuongCaBi) }}</span>
+               <span style="color: blue" *ngIf="formData.value.tongTrongLuongCaBi">
+                 {{ convertTienTobangChu(formData.value.tongTrongLuongCaBi)}}
+               </span>
             </nz-form-control>
           </nz-form-item>
         </div>

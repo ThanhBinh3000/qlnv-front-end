@@ -68,7 +68,7 @@
                 [nzShowPagination]="false" nzBordered>
         <thead>
         <tr>
-          <th class="text-center" nzWidth="50px"> STT</th>
+          <th nzWidth="50px" class="text-center wrap"></th>
           <th></th>
           <th class="text-left"> Số QĐ giao NVXH</th>
           <th class="text-left"> Năm KH</th>
@@ -93,11 +93,11 @@
                 style="width: 35px"></td>
             <td class="text-left">
               <a *ngIf="item.soQdNv && item.idQdNv" (click)="openModal(item.idQdNv, 'QdNv')"
-                 style="color: blue">{{ item.soQdNv }}
+                 style="color: blue; font-weight: bold">{{ item.soQdNv }}
               </a>
             </td>
             <td class="text-left bold">{{item.namKh}}</td>
-            <td class="text-left bold">{{item.ngayKyQdNv|date: 'dd/MM/YYYY'}}</td>
+            <td class="text-left bold">{{item.tgianGiaoNhan|date: 'dd/MM/YYYY'}}</td>
             <td></td>
             <td></td>
             <td></td>
@@ -140,7 +140,7 @@
                     <td class="text-left">
                       <a *ngIf="lv2.soPhieuKiemNghiem && lv2.idPhieuKiemNghiem"
                          (click)="openModal(lv2.idPhieuKiemNghiem, 'kiemNghiem')"
-                         style="color: blue">{{ lv2.soPhieuKiemNghiem }}
+                         style="color: blue; font-weight: bold">{{ lv2.soPhieuKiemNghiem }}
                       </a>
                     </td>
                     <td class="text-left bold">{{ lv2.ngayKiemNghiemMau|date:'dd/MM/YYYY' }}</td>

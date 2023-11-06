@@ -63,15 +63,18 @@
       <div class="group-button">
         <h3 class="text-uppercase">Danh sách đề xuất điều chỉnh chỉ tiêu kế hoạch năm</h3>
         <div class="buttons">
-          <button type="button" class="btn btn-do" (click)="xoaMulti()" *ngIf="isCuc()">
+          <button type="button" class="btn btn-do" (click)="xoaMulti()"
+            *ngIf="isCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_XOA')">
             <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             <span>Xóa</span>
           </button>
-          <button type="button" class="btn btn-sub" (click)="exportDataCuc()">
+          <button type="button" class="btn btn-sub" (click)="exportDataCuc()"
+            *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_EXP')">
             <i class="icon htvbdh_chuyen-xu-ly"></i>
             <span>Xuất file</span>
           </button>
-          <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)" *ngIf="isCuc()">
+          <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)"
+            *ngIf="isCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_THEM')">
             <i class="icon htvbdh_tcdt_tao-qd"></i>
             <span>Thêm</span>
           </button>
@@ -183,23 +186,26 @@
               <!-- <td>{{ data.tenTrangThai }}</td> -->
               <td>{{ data.soQuyetDinhDcTuChoi }}</td>
               <td class="text-center" *ngIf="isCuc()">
-                <a *ngIf="data.trangThai === STATUS.CHO_DUYET_TP || data.trangThai === STATUS.CHO_DUYET_LDC"
+                <a *ngIf="(data.trangThai === STATUS.CHO_DUYET_TP && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_DUYET_TP')) || (data.trangThai === STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_DUYET_LDCUC'))"
                   (click)="redirectDetail(data.id, true)">
                   <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
                 </a>
-                <a *ngIf="data.trangThai === STATUS.DA_DUYET_LDC" (click)="redirectDetail(data.id, true)">
+                <a *ngIf="data.trangThai === STATUS.DA_DUYET_LDC && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_XEM')"
+                  (click)="redirectDetail(data.id, true)">
                   <i class="fa fa-eye" title="Xem chi tiết"></i>
                 </a>
-                <a *ngIf="((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC) && isCuc())"
+                <a *ngIf="((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC) && isCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_THEM'))"
                   (click)="redirectDetail(data.id, false)">
                   <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
-                <a *ngIf="data.trangThai == STATUS.DU_THAO && isCuc()" (click)="xoa(data,'')">
+                <a *ngIf="data.trangThai == STATUS.DU_THAO && isCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_XOA')"
+                  (click)="xoa(data,'')">
                   <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
               <td class="text-center" *ngIf="isTongCuc()">
-                <a (click)="redirectDetail(data.id, true)">
+                <a (click)="redirectDetail(data.id, true)"
+                  *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_XEM')">
                   <i class="fa fa-eye" title="Xem chi tiết"></i>
                 </a>
               </td>

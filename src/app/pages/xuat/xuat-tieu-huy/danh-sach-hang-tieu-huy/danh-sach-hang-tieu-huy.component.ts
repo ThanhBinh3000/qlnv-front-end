@@ -15,6 +15,10 @@ import {XuatTieuHuyComponent} from "../xuat-tieu-huy.component";
 import {DanhSachTieuHuyService} from "../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/DanhSachTieuHuy.service";
 import {Base3Component} from "../../../../components/base3/base3.component";
 import {ActivatedRoute, Router} from "@angular/router";
+import {
+  ChiTietDanhSachSuaChuaComponent
+} from "../../../sua-chua/danh-sach-sua-chua/chi-tiet-danh-sach-sua-chua/chi-tiet-danh-sach-sua-chua.component";
+import {ChiTietDsThComponent} from "./chi-tiet-ds-th/chi-tiet-ds-th.component";
 
 @Component({
   selector: 'app-danh-sach-hang-tieu-huy',
@@ -215,5 +219,23 @@ export class DanhSachHangTieuHuyComponent extends Base3Component implements OnIn
   openTongHop() {
     this.tongHop = !this.tongHop;
     this.emitTab(1);
+  }
+
+  showDetail(data) {
+    if (data) {
+      const modalGT = this.modal.create({
+        nzTitle: 'Thông tin hàng DTQG cần tiêu hủy',
+        nzContent: ChiTietDsThComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          data: data
+        },
+      });
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.ACCESS_DENIED);
+    }
   }
 }

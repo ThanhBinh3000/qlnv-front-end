@@ -41,6 +41,10 @@ const routes: Routes = [
         path: 'tong-hop',
         component: TongHopTieuHuyComponent
       },
+      {
+        path: 'tong-hop/chi-tiet/:id',
+        component: TongHopTieuHuyComponent
+      },
       // Region Trình Thẩm Định
       {
         path: 'trinh-tham-dinh',

@@ -115,7 +115,7 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
       ngayKy: [dayjs().format("YYYY-MM-DD"), [Validators.required]],
       loai: [],
       tenLoai: [],
-      trichYeu: [],
+      trichYeu: [, [Validators.required]],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: [this.ObTrangThai[STATUS.DU_THAO]],
       lyDoTuChoi: []

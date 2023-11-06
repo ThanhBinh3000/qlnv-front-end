@@ -125,7 +125,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Ngày lập BB tịnh hho</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Ngày lập BB tịnh kho</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayLapBienBan"
                               (ngModelChange)="onNgayLapBb($event)" [nzDisabled]="isView">
@@ -137,9 +137,9 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Số QĐ giao NV xuất hàng</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialog()">
-                <input [readonly]="true" nz-input formControlName="soQdNv" (ngModelChange)="changeSoQdNv($event)"
-                       readonly/>
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? null : openDialog()">
+                <input [readonly]="true" nz-input formControlName="soQdNv"
+                       (ngModelChange)="changeSoQdNv($event)" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -165,8 +165,9 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Ngăn/Lô kho</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogKho()">
-                <input nz-input formControlName="tenNganLoKho" readonly/>
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? null : openDialogKho()">
+                <input nz-input formControlName="tenNganLoKho"
+                       (ngModelChange)="changeKho($event)" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -175,8 +176,9 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Nhà kho</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogKho()">
-                <input nz-input formControlName="tenNhaKho" readonly/>
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? null : openDialogKho()">
+                <input nz-input formControlName="tenNhaKho"
+                       (ngModelChange)="changeKho($event)" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -185,8 +187,9 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Điểm kho</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogKho()">
-                <input nz-input formControlName="tenDiemKho" readonly/>
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? null : openDialogKho()">
+                <input nz-input formControlName="tenDiemKho"
+                       (ngModelChange)="changeKho($event)" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -231,7 +234,9 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Đơn vị tính</nz-form-label>
             <nz-form-control nz-col>
-              <span style="color: blue">{{formData.value.donViTinh}}</span>
+              <span style="color: blue" *ngIf="formData.value.donViTinh">
+                {{formData.value.donViTinh}}
+              </span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -247,11 +252,11 @@
       <br>
       <span style="color: black"> Thông tin bảng kê cân hàng và phiếu xuất kho </span>
       <nz-card class="mg-t-16 flex-card p-lr16 table-card">
-        <nz-table nzBordered class="pd-10" [nzData]="dataTable" class="nowrap" [nzFrontPagination]="false"
+        <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered [nzFrontPagination]="false"
                   [nzShowPagination]="false">
           <thead>
           <tr>
-            <th class="text-center" nzWidth="50px"> STT</th>
+            <th nzWidth="50px" class="text-center wrap">STT</th>
             <th class="text-left"> Phiếu xuất kho</th>
             <th class="text-left"> Bảng kê cân hàng</th>
             <th class="text-left"> Ngày xuất kho</th>
@@ -275,13 +280,16 @@
             <td class="text-left">{{ data.soLuongXuat|number:globals.numberFormat:globals.locale }} </td>
           </tr>
           </tbody>
-          <tfoot *ngIf="dataTable.length > 0">
-          <tr>
-            <th style="color: blue" class="text-right" colspan="4"> Tổng</th>
-            <th style="color: blue"
-                class="text-left"> {{ calcTong('soLuongXuat')|number:globals.numberFormat:globals.locale }}</th>
-          </tr>
-          </tfoot>
+          <ng-container *ngIf="dataTable.length > 0">
+            <tfoot>
+            <tr>
+              <th class="text-right text-blue" colspan="4"> Tổng</th>
+              <th class="text-left ext-blue">
+                {{ calcTong('soLuongXuat')|number:globals.numberFormat:globals.locale }}
+              </th>
+            </tr>
+            </tfoot>
+          </ng-container>
         </nz-table>
       </nz-card>
     </form>
@@ -309,8 +317,9 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tổng số lượng nhập</nz-form-label>
             <nz-form-control nz-col>
-                    <span
-                      style="color: blue">{{ formData.value.tongSlNhap|number:globals.numberFormat:globals.locale }} {{formData.value.donViTinh}}</span>
+              <span style="color: blue" *ngIf="formData.value.tongSlNhap">
+                {{formData.value.tongSlNhap|number:globals.numberFormat:globals.locale}} {{formData.value.donViTinh}}
+              </span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -318,8 +327,9 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tổng SL xuất theo QĐ giao NV xuất hàng</nz-form-label>
             <nz-form-control nz-col>
-                    <span
-                      style="color: blue">{{ formData.value.tongSlXuat|number:globals.numberFormat:globals.locale }} {{formData.value.donViTinh}}</span>
+              <span style="color: blue" *ngIf="formData.value.tongSlXuat">
+                {{formData.value.tongSlXuat|number:globals.numberFormat:globals.locale}} {{formData.value.donViTinh}}
+              </span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -327,8 +337,9 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> SL còn lại theo sổ sách</nz-form-label>
             <nz-form-control nz-col>
-                    <span
-                      style="color: blue">{{ formData.value.slConLai|number:globals.numberFormat:globals.locale }} {{formData.value.donViTinh}}</span>
+              <span style="color: blue" *ngIf="formData.value.slConLai">
+                {{formData.value.slConLai|number:globals.numberFormat:globals.locale}} {{formData.value.donViTinh}}
+              </span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -351,10 +362,14 @@
             <nz-form-label [nzNoColon]="true">SL chênh lệch giữa thực tế và sổ sách</nz-form-label>
             <div nz-row>
               <div nz-col [nzSpan]="12" style="color: gray"> Thừa <br>
-                <span style="color: blue">{{ formData.value.slThua|number:globals.numberFormat:globals.locale }}</span>
+                <span style="color: blue" *ngIf="formData.value.slThua">
+                  {{formData.value.slThua|number:globals.numberFormat:globals.locale}}
+                </span>
               </div>
               <div nz-col [nzSpan]="12" style="color: gray"> Thiếu <br>
-                <span style="color: blue">{{ formData.value.slThieu|number:globals.numberFormat:globals.locale }}</span>
+                <span style="color: blue" *ngIf="formData.value.slThieu">
+                  {{formData.value.slThieu|number:globals.numberFormat:globals.locale}}
+                </span>
               </div>
             </div>
           </nz-form-item>
@@ -428,7 +443,6 @@
         </div>
       </div>
     </form>
-
   </nz-card>
 </div>
 <ng-template #error let-control>

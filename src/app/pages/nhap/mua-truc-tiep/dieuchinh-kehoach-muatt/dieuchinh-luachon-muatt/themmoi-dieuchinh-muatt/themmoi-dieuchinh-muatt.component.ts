@@ -60,12 +60,12 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     this.formData = this.fb.group({
       id: [null],
       namKh: [dayjs().get('year'), Validators.required],
-      soQdDc: ['', [Validators.required]],
+      soQdDc: [''],
       idQdGoc: ['', Validators.required],
       soQdGoc: ['', [Validators.required]],
       ngayKyQdGoc: [''],
       ngayKyDc: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
-      ngayHluc: ['', [Validators.required]],
+      ngayHluc: [''],
       trichYeu: [''],
       trangThai: [STATUS.DA_LAP],
       tenTrangThai: ['Đã lập'],
@@ -79,6 +79,14 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
       diaChiDvi: [''],
       soDxuat: [''],
       soLanDieuChinh: [''],
+      soQdCc: [''],
+      idSoQdCc: [''],
+      soToTrinh: [''],
+      ngayTaoCv: [''],
+      loaiHinhNx: [''],
+      tenLoaiHinhNx: [''],
+      kieuNx: [''],
+      tenKieuNx: [''],
 
     });
   }
@@ -112,12 +120,15 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
   dtl: any[] = [];
   fileDinhKems: any[] = [];
   canCuPhapLy: any[] = [];
+  cvanToTrinh: any[] = [];
   mthh: any = [];
+  maTt: string;
   selectedId: number = 0;
   isDetail: boolean = false;
   async ngOnInit() {
     this.spinner.show();
     try {
+      this.maTt = "/TTr-TCDT";
       this.userInfo = this.userService.getUserLogin();
       this.soQdDc = "/" + this.userInfo.MA_QD
       for (let i = -3; i < 23; i++) {
@@ -166,10 +177,10 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
               body.trangThai = STATUS.TU_CHOI_LDV;
               break;
             }
-            case STATUS.DA_DUYET_LDV: {
-              body.trangThai = STATUS.TU_CHOI_LDV;
-              break;
-            }
+            // case STATUS.DA_DUYET_LDV: {
+            //   body.trangThai = STATUS.TU_CHOI_LDV;
+            //   break;
+            // }
           }
           const res = await this.dieuChinhQuyetDinhPdKhmttService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -195,7 +206,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
         const data = res.data;
         this.formData.patchValue({
           id: data.id,
-          soQdDc: data.soQdDc.split("/")[0],
+          soQdDc: data.soQdDc.split("/")[0] != "" ? data.soQdDc.split("/")[0] : this.soQdDc,
           ngayKyDc: data.ngayKyDc,
           ngayHluc: data.ngayHluc,
           loaiVthh: data.loaiVthh,
@@ -216,10 +227,16 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
           soQdGoc: data.soQdGoc,
           ldoTchoi: data.ldoTchoi,
           ngayKyQdGoc: data.ngayKyQdGoc,
+          soLanDieuChinh: data.soLanDieuChinh,
+          soQdCc: data.soQdCc,
+          idSoQdCc: data.idSoQdCc,
+          soToTrinh: data.soToTrinh,
+          ngayTaoCv: data.ngayTaoCv,
 
         });
         this.fileDinhKems = data.fileDinhKems;
         this.canCuPhapLy = data.canCuPhapLy;
+        this.cvanToTrinh = data.cvanToTrinh;
         this.danhsachDxMtt = data.hhDcQdPduyetKhmttDxList;
         this.danhsachDxMttCache = cloneDeep(this.danhsachDxMtt)
         await this.showFirstRow(event, this.danhsachDxMtt[0]);
@@ -274,6 +291,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     this.spinner.show();
     if ($event) {
       let res = await this.quyetDinhPheDuyetKeHoachMTTService.getDetail($event);
+      console.log(res,5555)
       let qdGoc = this.listQdGoc.filter(item => item.id == $event)
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
@@ -293,6 +311,9 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           moTaHangHoa: data.mthh,
+          soLanDieuChinh: data.soLanDieuChinh,
+          soQdCc: data.soQdCc,
+          idSoQdCc: data.idSoQdCc,
           namKh: data.namKh
 
         })
@@ -334,6 +355,12 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
         await this.getDataChiTieu(res.data.idSoQdCc);
       }
       this.dataInputCache = res.data.children.find(x => x.maDvi == data.maDvi)
+      data.tongSoLuong = 0;
+      data.tongMucDt = 0;
+      data.children.forEach(item =>{
+        data.tongSoLuong += item.tongSoLuong;
+        data.tongMucDt += item.tongSoLuong * item.donGiaVat * 1000;
+      })
     }
     await this.spinner.hide();
   }
@@ -375,40 +402,63 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
 
 
   async save(isGuiDuyet?) {
-    this.helperService.markFormGroupTouched(this.formData);
+    await this.helperService.markFormGroupTouched(this.formData);
+    this.clearValidatorLuuDuThao()
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
       return;
     }
     let body = this.formData.value;
-    body.soQdDc = body.soQdDc + this.soQdDc;
     body.hhDcQdPduyetKhmttDxList = this.danhsachDxMtt;
     body.ngayKyDc = this.datePipe.transform(body.ngayKyDc, 'yyyy-MM-dd');
     body.ngayHluc = this.datePipe.transform(body.ngayHluc, 'yyyy-MM-dd');
     body.fileDinhkems = this.fileDinhKems;
     body.canCuPhapLy = this.canCuPhapLy;
+    body.cvanToTrinh = this.cvanToTrinh;
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.dieuChinhQuyetDinhPdKhmttService.update(body);
     } else {
+      body.soQdDc = body.soQdDc + this.soQdDc;
       res = await this.dieuChinhQuyetDinhPdKhmttService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
       if (isGuiDuyet) {
+        this.setValidator();
+        await this.helperService.markFormGroupTouched(this.formData);
+        if (this.formData.invalid) {
+          return;
+        }
         this.idInput = res.data.id;
-        this.guiDuyet();
+        await this.guiDuyet();
       } else {
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          this.quayLai()
+          this.helperService.bidingDataInFormGroup(this.formData, res.data);
+          // this.quayLai()
         } else {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-          this.quayLai()
+          this.helperService.bidingDataInFormGroup(this.formData, res.data);
+          // this.quayLai()
         }
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+  }
+
+  clearValidatorLuuDuThao() {
+    this.formData.controls["soToTrinh"].clearValidators();
+    this.formData.controls["ngayTaoCv"].clearValidators();
+    this.formData.controls["soQdDc"].clearValidators();
+    this.formData.controls["ngayHluc"].clearValidators();
+  }
+
+  setValidator() {
+    this.formData.controls["soToTrinh"].setValidators([Validators.required]);
+    this.formData.controls["ngayTaoCv"].setValidators([Validators.required]);
+    this.formData.controls["soQdDc"].setValidators([Validators.required]);
+    this.formData.controls["ngayHluc"].setValidators([Validators.required]);
   }
 
   async guiDuyet() {
@@ -426,14 +476,14 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
         mesg = 'Bạn có muốn gửi duyệt ?'
         break;
       }
+      // case STATUS.CHO_DUYET_LDV: {
+      //   trangThai = STATUS.DA_DUYET_LDV;
+      //   mesg = 'Bạn có muốn gửi duyệt ?'
+      //   break;
+      // }
       case STATUS.CHO_DUYET_LDV: {
-        trangThai = STATUS.DA_DUYET_LDV;
-        mesg = 'Bạn có muốn gửi duyệt ?'
-        break;
-      }
-      case STATUS.DA_DUYET_LDV: {
         trangThai = STATUS.BAN_HANH
-        mesg = 'Bạn có muốn gửi duyệt ?'
+        mesg = 'Bạn có muốn ban hành ?'
         break;
       }
     }
@@ -470,7 +520,6 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     });
   }
   public onChangesData(_event) {
-    console.log("change")
     this.dataOnChanges.splice(0, 1, _event);
 
   }
@@ -480,7 +529,6 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
 
   async getDataChiTieu(id: any) {
     let res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachNam(id);
-    console.log("123", res2)
     if (res2.msg == MESSAGE.SUCCESS) {
       this.dataChiTieu = res2.data;
     }
@@ -490,10 +538,20 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     debugger
     this.danhsachDxMtt.forEach(item => {
       item.children = $event.filter(x => x.maDvi.includes(item.maDvi));
-      // item.tongSoLuong = item.children.reduce((acc, data) => acc + data.tongSoLuong, 0)
-      // item.tongTienGomThue = item.children.reduce((acc, data) => acc + data.tongThanhTien, 0)
+      item.tongSoLuong = item.children.reduce((acc, data) => acc + data.tongSoLuong, 0)
+      item.tongMucDt = item.children.reduce((acc, data) => acc + data.tongThanhTien, 0)
     })
-    console.log(this.danhsachDxMtt)
+  }
+
+  objectChange($event){
+    this.danhsachDxMtt.forEach(item => {
+      if($event.maDvi == item.maDvi){
+        item.tgianKthuc = $event.tgianKthuc
+        item.tgianMkho = $event.tgianMkho
+        item.tenDvi = $event.tenDvi
+        item.ghiChu = $event.ghiChu
+      }
+    })
   }
 
   // async getDataChiTieu() {

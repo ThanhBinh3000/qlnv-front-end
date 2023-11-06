@@ -209,6 +209,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         fileUyQuyen: this.fileUyQuyen,
         fileBanLe: this.fileBanLe,
       };
+      body.id = 0;
       await super.saveAndSend(body, trangThai, msg, msgSuccess);
     } catch (e) {
       console.error('Error: ', e);

@@ -288,4 +288,93 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
       }
     })
   }
+
+  conSoQdDc(){
+    this.spinner.show();
+    let body = {
+      trangThai : STATUS.BAN_HANH,
+      type : '01',
+      loai : '00'
+    }
+    this._service.getListTaoDc(body).then((res)=>{
+      this.spinner.hide();
+      if (res.msg == MESSAGE.SUCCESS) {
+        let modalQD = this.modal.create({
+          nzTitle: "SỐ QUYẾT ĐỊNH PHÊ DUYỆT BTC",
+          nzContent: DialogTableSelectionComponent,
+          nzMaskClosable: false,
+          nzClosable: false,
+          nzWidth: "700px",
+          nzFooter: null,
+          nzComponentParams: {
+            dataTable : res.data,
+            dataColumn : ['soQuyetDinh'],
+            dataHeader : ['Số quyết định của BTC'],
+          }
+        });
+        modalQD.afterClose.subscribe(async (res) => {
+          if (res) {
+            await this._service.getDetail(res.id).then((dtlTh)=>{
+              console.log(dtlTh.data);
+              if(dtlTh.data){
+                if(dtlTh.data){
+                  this.formData.patchValue({
+                    soQdGoc : res.soQuyetDinh,
+                    idQdGoc : dtlTh.data.id,
+                    lanDc : dtlTh.data.listDieuChinh.length + 1
+                  });
+                  if(dtlTh.data.listDieuChinh != null && dtlTh.data.listDieuChinh.length == 0){
+                    this.dataTable = dtlTh.data.children;
+                    this.dataTable.forEach(item => {
+                      item.tenCongTrinh = item.ktKhDxSuaChuaLonCtiet.tenCongTrinh;
+                      item.soQd = item.ktKhDxSuaChuaLonCtiet.soQd;
+                      item.tieuChuan = item.ktKhDxSuaChuaLonCtiet.tieuChuan;
+                      item.tgThucHien = item.ktKhDxSuaChuaLonCtiet.tgThucHien;
+                      item.tgHoanThanh = item.ktKhDxSuaChuaLonCtiet.tgHoanThanh;
+                      item.lyDo = item.ktKhDxSuaChuaLonCtiet.lyDo;
+                      item.giaTriPd = item.ktKhDxSuaChuaLonCtiet.giaTriPd;
+                      item.namKh = item.ktKhDxSuaChuaLonCtiet.namKh;
+                    })
+                  }else{
+                    // Gét lastest DC đã ordet trên BE
+                    const dataLastestDC = dtlTh.data.listDieuChinh[0];
+                    this._service.getDetail(dataLastestDC.id).then((dataLastestDc)=>{
+                      const data = dataLastestDc.data
+                      console.log(data);
+                      this.dataTable = data.children;
+                      this.dataTable.forEach(item => {
+                        item.tenCuc = item.ktKhDxSuaChuaLonCtiet.tenCuc;
+                        item.tenChiCuc = item.ktKhDxSuaChuaLonCtiet.tenChiCuc;
+                        item.tenKhoi = item.ktKhDxSuaChuaLonCtiet.tenKhoi;
+                        item.tenDiemKho = item.ktKhDxSuaChuaLonCtiet.tenDiemKho;
+                        item.tenCongTrinh = item.ktKhDxSuaChuaLonCtiet.tenCongTrinh;
+                        item.soQd = item.ktKhDxSuaChuaLonCtiet.soQd;
+                        item.tieuChuan = item.ktKhDxSuaChuaLonCtiet.tieuChuan;
+                        item.tgThucHien = item.ktKhDxSuaChuaLonCtiet.tgThucHien;
+                        item.tgHoanThanh = item.ktKhDxSuaChuaLonCtiet.tgHoanThanh;
+                        item.lyDo = item.ktKhDxSuaChuaLonCtiet.lyDo;
+                        item.giaTriPd = item.ktKhDxSuaChuaLonCtiet.giaTriPd;
+                        item.namKh = item.ktKhDxSuaChuaLonCtiet.namKh;
+                        item.ncKhTongSo = item.ktKhDxSuaChuaLonCtiet.ncKhTongSo;
+                        item.vonDauTuTcdt = item.ktKhDxSuaChuaLonCtiet.vonDauTuTcdt;
+                        item.tenCongTrinh = item.ktKhDxSuaChuaLonCtiet.tenCongTrinh;
+                        item.soQd = item.ktKhDxSuaChuaLonCtiet.soQd;
+                        item.tieuChuan = item.ktKhDxSuaChuaLonCtiet.tieuChuan;
+                        item.tgThucHien = item.ktKhDxSuaChuaLonCtiet.tgThucHien;
+                        item.tgHoanThanh = item.ktKhDxSuaChuaLonCtiet.tgHoanThanh;
+                        item.lyDo = item.ktKhDxSuaChuaLonCtiet.lyDo;
+                        item.giaTriPd = item.ktKhDxSuaChuaLonCtiet.giaTriPd;
+                        item.namKh = item.ktKhDxSuaChuaLonCtiet.namKh;
+                      })
+                    });
+                  }
+                }
+              }
+            })
+            this.spinner.hide();
+          }
+        });
+      }
+    })
+  }
 }

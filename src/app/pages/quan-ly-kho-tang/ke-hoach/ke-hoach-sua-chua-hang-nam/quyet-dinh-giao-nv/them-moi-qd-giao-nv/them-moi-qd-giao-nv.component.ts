@@ -91,17 +91,32 @@ export class ThemMoiQdGiaoNvComponent extends Base2Component implements OnInit {
   }
 
   async save(isOther: boolean) {
-    let body = this.formData.value;
-    body.soQdGiaoNv = this.formData.value.soQdGiaoNv + this.symbol;
-    body.fileDinhKems = this.fileDinhKem;
-    body.canCuPhapLys = this.canCuPhapLy;
-    body.children = this.dataTable;
-    let data = await this.createUpdate(body);
-    if (data) {
-      if (isOther) {
-        this.approve(data.id, this.STATUS.BAN_HANH, "Bạn có muốn ban hành?");
+    if(this.validateTable()){
+      let body = this.formData.value;
+      body.soQdGiaoNv = this.formData.value.soQdGiaoNv + this.symbol;
+      body.fileDinhKems = this.fileDinhKem;
+      body.canCuPhapLys = this.canCuPhapLy;
+      body.children = this.dataTable;
+      let data = await this.createUpdate(body);
+      if (data) {
+        if (isOther) {
+          this.approve(data.id, this.STATUS.BAN_HANH, "Bạn có muốn ban hành?");
+        }
       }
     }
+  }
+
+  validateTable(){
+    let rs = true;
+    this.dataTable.forEach( item => {
+      console.log(item);
+      if(item.duToanBtcDuyet <= 0){
+        rs = false;
+        this.notification.info(MESSAGE.ERROR,"Dự toán BTC duyệt của " + item.tenCongTrinh +" phải lớn hơn 0 ")
+        return
+      }
+    });
+    return rs
   }
 
   chonMaTongHop(){
@@ -133,10 +148,11 @@ export class ThemMoiQdGiaoNvComponent extends Base2Component implements OnInit {
                  await this.tongHopDxScLon.getDetail(item.id).then((dtlTh)=>{
                    listToTrinh.push(dtlTh.data.maToTrinh);
                    if(dtlTh.data){
-                     if(dtlTh.data.chiTietDxs){
-                       dtlTh.data.chiTietDxs.forEach( dtl => {
+                     if(dtlTh.data.children){
+                       dtlTh.data.children.forEach( dtl => {
                          dtl.idDxSc = dtl.id
                          dtl.idThSc = dtl.idTh
+                         dtl.duToanBtcDuyet = 0;
                          this.dataTable.push(dtl);
                         })
                       }
@@ -179,7 +195,7 @@ export class ThemMoiQdGiaoNvComponent extends Base2Component implements OnInit {
                 if(dtlTh.data){
                   if(dtlTh.data){
                     this.formData.patchValue({
-                      soQdGoc : dtlTh.data.soQdGiaoNv,
+                      soQdGoc : res.soQdGiaoNv,
                       idQdGoc : dtlTh.data.id,
                       lanDc : dtlTh.data.listDieuChinh.length + 1
                     });
@@ -211,6 +227,7 @@ export class ThemMoiQdGiaoNvComponent extends Base2Component implements OnInit {
                           item.lyDo = item.ktKhDxSuaChuaLonCtiet.lyDo;
                           item.giaTriPd = item.ktKhDxSuaChuaLonCtiet.giaTriPd;
                           item.namKh = item.ktKhDxSuaChuaLonCtiet.namKh;
+                          item.vonDauTuTcdt = item.ktKhDxSuaChuaLonCtiet.vonDauTuTcdt;
                         })
                       });
                     }

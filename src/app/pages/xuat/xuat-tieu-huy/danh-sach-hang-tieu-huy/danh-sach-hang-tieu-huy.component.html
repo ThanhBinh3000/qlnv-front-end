@@ -179,12 +179,12 @@
                         <td>{{lv2.ngayDeXuat|date:globals.dateFormat}}</td>
                         <td>{{lv2.ngayTongHop|date:globals.dateFormat}}</td>
                         <td>{{lv2.tenTrangThai}}</td>
-                        <td>{{lv2.maTongHop}}</td>
+                        <td><a style="color: #001CFF;" (click)="redirectUrl('xuat/xuat-tieu-huy/tong-hop/chi-tiet/'+lv2.idTongHop)">{{ lv2.maTongHop}}</a>
                         <td>{{lv2.lyDo}}</td>
                         <td class="text-left">
-                          <!--<a *ngIf="data.trangThaiId !== STATUS.DU_THAO" (click)="detail(data, true)">
+                          <a (click)="showDetail(lv2)">
                             <i class="fa fa-eye" title="Xem chi tiết"></i>
-                          </a>-->
+                          </a>
                         </td>
                       </tr>
                     </ng-container>

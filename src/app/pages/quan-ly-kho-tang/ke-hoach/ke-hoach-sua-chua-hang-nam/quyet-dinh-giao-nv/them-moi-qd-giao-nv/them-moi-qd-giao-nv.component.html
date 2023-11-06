@@ -183,7 +183,7 @@
               <td>{{ data.tieuChuan  }}</td>
               <td>{{ data.tgThucHien + ' - ' + data.tgHoanThanh }}</td>
               <td>{{ data.lyDo }}</td>
-              <td>{{ data.giaTriPd | number : '1.0-1' : 'vi_VN' }}</td>
+              <td>{{ data.vonDauTuTcdt | number : '1.0-1' : 'vi_VN' }}</td>
               <td><nz-input-number [nzSize]="'small'"  [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                                    nz-input [(ngModel)]="data.duToanBtcDuyet" [nzMin]="1" ></nz-input-number>
               </td>

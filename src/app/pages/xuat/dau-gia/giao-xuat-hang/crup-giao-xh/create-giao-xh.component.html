@@ -187,7 +187,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="1">
+            <div nz-col [nzSpan]="2">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Đơn vị tính</nz-form-label>
                 <nz-form-control nz-col>
@@ -195,7 +195,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="3">
+            <div nz-col [nzSpan]="2">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Thời gian giao nhận hàng</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
@@ -212,7 +212,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="8">
+            <div nz-col [nzSpan]="10">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Trưởng phòng KH&QLHDT</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
@@ -220,7 +220,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="8">
+            <div nz-col [nzSpan]="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Lãnh đạo Cục</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
@@ -307,7 +307,7 @@
                 <td class="text-right">{{ children.tonKho|number:globals.numberFormat:globals.locale }}</td>
                 <td class="text-right">{{ children.soLuong|number:globals.numberFormat:globals.locale }}</td>
                 <td class="text-left">{{ children.soBbTinhKho}}</td>
-                <td class="text-left">{{ children.ngayLapBbTinhKho}}</td>
+                <td class="text-left">{{ children.ngayLapBbTinhKho| date: 'dd/MM/YYYY'}}</td>
                 <td></td>
               </tr>
             </ng-container>
