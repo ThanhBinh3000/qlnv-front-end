@@ -189,8 +189,8 @@
             <a
               *ngIf="data.trangThai == STATUS.DA_HOAN_THANH
               ||((loaiVthh === LOAI_HANG_DTQG.VAT_TU ?
-                userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_TBBTT_XEM') &&
-               !userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_TBBTT_SUA') :
+                userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_TBBTT_XEM') &&
+               !userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_TBBTT_SUA') :
                 userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_TBBTT_XEM') &&
                !userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_TBBTT_SUA'))&&
                 (data.trangThai == STATUS.DANG_THUC_HIEN || data.trangThai == STATUS.DA_HOAN_THANH))"
@@ -199,7 +199,7 @@
             </a>
             <a *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ?
                data.trangThai != STATUS.DA_HOAN_THANH &&
-                userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_TBBTT_SUA'):
+                userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_TBBTT_SUA'):
                data.trangThai != STATUS.DA_HOAN_THANH &&
                 userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_TBBTT_SUA')"
                (click)="redirectDetail(data.id,false)">
