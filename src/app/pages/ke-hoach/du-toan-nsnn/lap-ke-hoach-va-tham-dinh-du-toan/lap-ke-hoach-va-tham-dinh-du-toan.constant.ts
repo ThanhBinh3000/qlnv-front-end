@@ -214,6 +214,8 @@ export class Doc {
     fileName: string;
     fileSize: number;
     fileUrl: number;
+    noiDung: string;
+    isEdit: boolean = false;
 }
 
 export class Form {
@@ -255,7 +257,7 @@ export class Report {
     lan: number;
     lstBcaoDviTrucThuocs: any[];
     lstLapThamDinhs: Form[];
-    lstFiles: any[];
+    lstFiles: Doc[];
     ngayTao: any;
     nguoiTao: string;
     maBcao: string;
@@ -272,7 +274,7 @@ export class Report {
     lyDoTuChoi: string;
     // giaoSoTranChiId: string;
     thuyetMinh: string;
-    fileDinhKems: any[] = [];
+    fileDinhKems: Doc[] = [];
     listIdDeleteFiles: string[] = [];
     tongHopTuIds: any[] = [];
     lichSu: History[] = [];

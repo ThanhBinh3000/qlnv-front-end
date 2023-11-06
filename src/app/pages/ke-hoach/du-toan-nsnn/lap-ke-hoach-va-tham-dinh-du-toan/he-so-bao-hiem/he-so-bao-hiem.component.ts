@@ -242,6 +242,11 @@ export class HeSoBaoHiemComponent implements OnInit {
 
     // luu
     async save() {
+        if (this.baoCao.lstFiles.some(e => e.isEdit)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_SAVE_FILE);
+            return;
+        }
+
         if (this.listFile.some(item => item.size > Utils.FILE_SIZE)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
@@ -254,9 +259,12 @@ export class HeSoBaoHiemComponent implements OnInit {
         const baoCaoTemp = JSON.parse(JSON.stringify(this.baoCao));
 
         baoCaoTemp.fileDinhKems = [];
-        for (const iterator of this.listFile) {
-            baoCaoTemp.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.baoCao.maDvi + '/' + this.baoCao.maBaoHiem));
+        for (let iterator of this.listFile) {
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.baoCao.lstFiles.find(e => e.id == id)?.noiDung;
+            baoCaoTemp.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.baoCao.maDvi + '/' + this.baoCao.maBaoHiem, noiDung));
         }
+        baoCaoTemp.fileDinhKems = baoCaoTemp.fileDinhKems.concat(this.baoCao.lstFiles.filter(e => typeof e.id == 'number'))
 
         // replace nhung ban ghi dc them moi id thanh null
         baoCaoTemp.lstCtiets.forEach(item => {

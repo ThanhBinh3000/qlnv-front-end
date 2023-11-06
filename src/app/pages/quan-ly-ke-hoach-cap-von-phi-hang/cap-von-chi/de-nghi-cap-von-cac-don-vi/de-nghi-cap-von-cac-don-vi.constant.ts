@@ -97,6 +97,8 @@ export class Doc {
     fileName: string;
     fileSize: number;
     fileUrl: number;
+    noiDung: string;
+    isEdit: boolean = false;
 }
 
 export class Report {
@@ -124,9 +126,9 @@ export class Report {
     maDviTien: string = '1';
     lyDoTuChoi: string;
     thuyetMinh: string;
-    lstFiles: any[] = [];
+    lstFiles: Doc[] = [];
     lstCtiets: any[] = [];
-    fileDinhKems: any[] = [];
+    fileDinhKems: Doc[] = [];
     listIdDeleteFiles: string[] = [];
 }
 
