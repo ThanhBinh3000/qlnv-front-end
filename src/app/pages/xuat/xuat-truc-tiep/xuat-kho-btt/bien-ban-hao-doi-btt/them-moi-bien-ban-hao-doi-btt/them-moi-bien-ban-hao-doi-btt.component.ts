@@ -69,16 +69,20 @@ export class ThemMoiBienBanHaoDoiBttComponent extends Base2Component implements 
       idQdNv: [],
       soQdNv: [''],
       ngayKyQdNv: [''],
+      idQdNvDtl: [],
       idBbTinhKho: [],
       soBbTinhKho: [''],
       ngayLapBbTinhKho: [''],
       idPhieuKiemNghiem: [],
       soPhieuKiemNghiem: [''],
       ngayKiemNghiemMau: [''],
+      idKho: [],
       maDiemKho: [''],
       maNhaKho: [''],
       maNganKho: [''],
       maLoKho: [''],
+      loaiHinhhKho: [''],
+      loaiHinhKho: [''],
       tgianGiaoNhan: [''],
       loaiVthh: [''],
       cloaiVthh: [''],
@@ -185,7 +189,11 @@ export class ThemMoiBienBanHaoDoiBttComponent extends Base2Component implements 
       console.error('Không tìm thấy dữ liệu');
       return;
     }
+    this.maTuSinh = this.idInput;
     this.dataTable = data.children
+    if (!this.isView) {
+      await this.onChange(data.idQdNv)
+    }
   }
 
   async openDialog() {
@@ -199,10 +207,8 @@ export class ThemMoiBienBanHaoDoiBttComponent extends Base2Component implements 
       const res = await this.quyetDinhNvXuatBttService.search(body)
       if (res && res.msg === MESSAGE.SUCCESS) {
         this.danhSachQuyetDinh = res.data.content.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI));
-      } else if (res && res.msg) {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       } else {
-        this.notification.error(MESSAGE.ERROR, 'Unknown error occurred.');
+        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ XUẤT HÀNG',
@@ -232,33 +238,28 @@ export class ThemMoiBienBanHaoDoiBttComponent extends Base2Component implements 
   changeSoQdNv(event) {
     if (this.flagInit && event && event !== this.formData.value.soQdNv) {
       this.formData.patchValue({
+        idQdNvDtl: null,
         idBbTinhKho: null,
         soBbTinhKho: null,
         ngayLapBbTinhKho: null,
         idPhieuKiemNghiem: null,
         soPhieuKiemNghiem: null,
         ngayKiemNghiemMau: null,
+        idKho: null,
         maDiemKho: null,
-        tenDiemKho: null,
         maNhaKho: null,
-        tenNhaKho: null,
         maNganKho: null,
-        tenNganKho: null,
         maLoKho: null,
-        tenLoKho: null,
-        tenNganLoKho: null,
+        loaiHinhKho: null,
         tgianGiaoNhan: null,
         loaiVthh: null,
-        tenLoaiVthh: null,
         cloaiVthh: null,
-        tenCloaiVthh: null,
         tenHangHoa: null,
         donViTinh: null,
         loaiHinhNx: null,
         kieuNx: null,
         ngayBatDauXuat: null,
         ngayKetThucXuat: null,
-        pthucBanTrucTiep: null,
         idHopDong: null,
         soHopDong: null,
         ngayKyHopDong: null,
@@ -268,10 +269,19 @@ export class ThemMoiBienBanHaoDoiBttComponent extends Base2Component implements 
         ngayTaoBkeBanLe: null,
         soLuongBkeBanLe: null,
         tongSlNhap: null,
+        thoiGianKthucNhap: null,
         tongSlXuat: null,
         thoiGianKthucXuat: null,
         slHaoThucTe: null,
         tileHaoThucTe: null,
+        slHaoVuotMuc: null,
+        tileHaoVuotMuc: null,
+        slHaoThanhLy: null,
+        tileHaoThanhLy: null,
+        slHaoDuoiMuc: null,
+        tileHaoDuoiMuc: null,
+        dinhMucHaoHut: null,
+        slHaoTheoDinhMuc: null,
       })
       this.dataTable = [];
     }
@@ -291,24 +301,9 @@ export class ThemMoiBienBanHaoDoiBttComponent extends Base2Component implements 
         idQdNv: data.id,
         soQdNv: data.soQdNv,
         ngayKyQdNv: data.ngayKy,
+        loaiVthh: data.loaiVthh,
       });
       await this.loadDanhSachHaoDoi(data.soQdNv)
-      const resTK = await this.bienBanTinhKhoBttService.search({
-        namKh: data.namKh,
-        soQdNv: data.soQdNv,
-        loaiVthh: data.loaiVthh,
-        trangThai: STATUS.DA_DUYET_LDCC,
-      })
-      if (resTK.msg !== MESSAGE.SUCCESS) {
-        this.notification.error(MESSAGE.ERROR, resTK.msg);
-        return;
-      }
-      const dataTK = resTK.data.content;
-      if (!dataTK || dataTK.length === 0) {
-        return;
-      }
-      const setSoBbTinhKho = new Set(this.danhSachHaoDoi.map(item => item.soBbTinhKho));
-      this.danhSachTinhKho = dataTK.filter(item => !setSoBbTinhKho.has(item.soBbTinhKho))
     } catch (e) {
       console.error('Error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -319,7 +314,7 @@ export class ThemMoiBienBanHaoDoiBttComponent extends Base2Component implements 
 
   async loadDanhSachHaoDoi(event) {
     let body = {
-      nam: this.formData.value.nam,
+      namKh: this.formData.value.namKh,
       loaiVthh: this.loaiVthh,
       soQdNv: event
     }
@@ -335,25 +330,93 @@ export class ThemMoiBienBanHaoDoiBttComponent extends Base2Component implements 
     this.danhSachHaoDoi = data;
   }
 
-  openDialogTinhKho() {
-    const modalQD = this.modal.create({
-      nzTitle: 'DANH SÁCH BIÊN BẢN TỊNH KHO',
-      nzContent: DialogTableSelectionComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {
-        dataTable: this.danhSachTinhKho.filter(item => item.maDvi === this.userInfo.MA_DVI),
-        dataHeader: ['Số biên bản tịnh kho', 'Ngày lập biên bản', 'Loại vật tư hàng háo'],
-        dataColumn: ['soBbTinhKho', 'ngayLapBienBan', 'tenLoaiVthh'],
-      },
-    });
-    modalQD.afterClose.subscribe(async (data) => {
-      if (data) {
-        await this.onChangeBienBanTinhKho(data.id);
+  async openDialogTinhKho() {
+    try {
+      await this.spinner.show();
+      let body = {
+        namKh: this.formData.value.namKh,
+        soQdNv: this.formData.value.soQdNv,
+        loaiVthh: this.formData.value.loaiVthh,
+        trangThai: STATUS.DA_DUYET_LDCC,
       }
-    });
+      const res = await this.bienBanTinhKhoBttService.search(body)
+      if (res && res.msg === MESSAGE.SUCCESS) {
+        const tinhKhoSet = new Set(this.danhSachHaoDoi.map(item => item.soBbTinhKho));
+        this.danhSachTinhKho = res.data.content.filter(item => !tinhKhoSet.has(item.soBbTinhKho))
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+      const modalQD = this.modal.create({
+        nzTitle: 'DANH SÁCH BIÊN BẢN TỊNH KHO',
+        nzContent: DialogTableSelectionComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          dataTable: this.danhSachTinhKho.filter(item => item.maDvi === this.userInfo.MA_DVI),
+          dataHeader: ['Số biên bản tịnh kho', 'Ngày lập biên bản', 'Loại vật tư hàng háo'],
+          dataColumn: ['soBbTinhKho', 'ngayLapBienBan', 'tenLoaiVthh'],
+        },
+      });
+      modalQD.afterClose.subscribe(async (data) => {
+        if (data) {
+          await this.onChangeBienBanTinhKho(data.id);
+        }
+      });
+    } catch (e) {
+      console.error('Error: ', e);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
+  async changeBbTinhKho(event) {
+    if (this.flagInit && event && event !== this.formData.value.soBbTinhKho) {
+      this.formData.patchValue({
+        idPhieuKiemNghiem: null,
+        soPhieuKiemNghiem: null,
+        ngayKiemNghiemMau: null,
+        idKho: null,
+        maDiemKho: null,
+        maNhaKho: null,
+        maNganKho: null,
+        maLoKho: null,
+        loaiHinhKho: null,
+        tgianGiaoNhan: null,
+        loaiVthh: null,
+        cloaiVthh: null,
+        tenHangHoa: null,
+        donViTinh: null,
+        loaiHinhNx: null,
+        kieuNx: null,
+        ngayBatDauXuat: null,
+        ngayKetThucXuat: null,
+        idHopDong: null,
+        soHopDong: null,
+        ngayKyHopDong: null,
+        soLuongHopDong: null,
+        idBangKeBanLe: null,
+        soBangKeBanLe: null,
+        ngayTaoBkeBanLe: null,
+        soLuongBkeBanLe: null,
+        tongSlNhap: null,
+        thoiGianKthucNhap: null,
+        tongSlXuat: null,
+        thoiGianKthucXuat: null,
+        slHaoThucTe: null,
+        tileHaoThucTe: null,
+        slHaoVuotMuc: null,
+        tileHaoVuotMuc: null,
+        slHaoThanhLy: null,
+        tileHaoThanhLy: null,
+        slHaoDuoiMuc: null,
+        tileHaoDuoiMuc: null,
+        dinhMucHaoHut: null,
+        slHaoTheoDinhMuc: null,
+      })
+      this.dataTable = [];
+    }
   }
 
   async onChangeBienBanTinhKho(id) {
@@ -369,6 +432,8 @@ export class ThemMoiBienBanHaoDoiBttComponent extends Base2Component implements 
       const slHaoThucTe = tongSlNhap - tongSlXuat;
       const tileHaoThucTe = (slHaoThucTe / tongSlNhap) * 100;
       this.formData.patchValue({
+        idKho: data.idKho,
+        idQdNvDtl: data.idQdNvDtl,
         idBbTinhKho: data.id,
         soBbTinhKho: data.soBbTinhKho,
         ngayLapBbTinhKho: data.ngayLapBienBan,
@@ -384,6 +449,7 @@ export class ThemMoiBienBanHaoDoiBttComponent extends Base2Component implements 
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
         tenNganLoKho: data.tenLoKho ? data.tenLoKho + ' - ' + data.tenNganKho : data.tenNganKho,
+        loaiHinhhKho: data.loaiHinhhKho,
         tgianGiaoNhan: data.tgianGiaoNhan,
         loaiVthh: data.loaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,

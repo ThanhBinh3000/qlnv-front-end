@@ -298,11 +298,10 @@
               <th class="text-left"> Số công văn/tờ trình</th>
               <th class="text-left"> Ngày ký</th>
               <th class="text-left"> Trích yếu</th>
-              <th class="text-left"> Tên dự án</th>
               <th class="text-center">Số lượng
                 {{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? '' : '(kg)'}}
               </th>
-              <th class="text-center"> Tổng tiền đã gồm thuế (đồng)</th>
+              <th class="text-center"> Tổng tiền không gồm thuế (đồng)</th>
             </tr>
             </thead>
             <tbody>
@@ -320,7 +319,6 @@
                 <td class="text-left" style="max-width: 250px; min-width: 200px;  white-space: break-spaces;">
                   {{ data.trichYeu }}
                 </td>
-                <td class="text-left">{{ data.tenDuAn }}</td>
                 <td class="text-right">{{ data.tongSoLuong|number:globals.numberFormat:globals.locale }}</td>
                 <td class="text-right">{{ data.thanhTien|number:globals.numberFormat:globals.locale }}</td>
               </tr>
