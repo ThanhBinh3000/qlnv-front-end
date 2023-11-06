@@ -3517,7 +3517,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         console.log(this.thongTinChiTieuKeHoachNam,"this.thongTinChiTieuKeHoachNam")
         let body = {
           soQd: this.thongTinChiTieuKeHoachNam.soQuyetDinh,
-          ngayQd: this.thongTinChiTieuKeHoachNam.ngayKy,
+          ngayQd: dayjs(this.thongTinChiTieuKeHoachNam.ngayKy,'YYYY-MM-DD').format('DD-MM-YYYY'),
           tenDvi: this.thongTinChiTieuKeHoachNam.tenDvi,
           typeFile: "pdf",
           nam: this.thongTinChiTieuKeHoachNam.namKeHoach,
