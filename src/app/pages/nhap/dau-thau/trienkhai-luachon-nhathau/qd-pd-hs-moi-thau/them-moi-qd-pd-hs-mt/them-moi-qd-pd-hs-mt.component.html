@@ -5,12 +5,12 @@
       <span>Quay lại</span>
     </button>
     <button type="button" class="btn btn-sub xanh-nhat" (click)="save(true)"
-            *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU &&  userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_HSMT_BANHANH') && !isView" >
+            *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU &&  userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_HSMT_BANHANH') && !isView" >
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>
     <button type="button" class="btn btn-main" (click)="save()"
-            *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_HSMT_SUA') && !isView">
+            *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_HSMT_SUA') && !isView">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>

@@ -18,6 +18,7 @@ import {
 import {
   QuyetDinhPheDuyetKeHoachLCNTService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service";
+import {DatePipe} from "@angular/common";
 
 @Component({
   selector: 'app-them-moi-qd-pd-hs-mt-vt',
@@ -66,6 +67,8 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
       tchuanCluong: [""],
       quy: [""],
       tgianBdauTchuc: [""],
+      tgianDthauTime: [],
+      tgianMthauTime: [],
     })
   }
 
@@ -128,6 +131,10 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
           tchuanCluong: data.dxKhlcntHdr?.tchuanCluong,
           quy: data.dxKhlcntHdr.quy,
           tgianBdauTchuc: data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.tgianBdauTchuc : data.tgianBdauTchuc,
+          gianDthauTime: data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.tgianDthauTime: data.tgianDthauTime,
+          tgianDthau: data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.tgianDthau: data.tgianDthau,
+          tgianMthauTime: data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.tgianMthauTime: data.tgianMthauTime,
+          tgianMthau: data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.tgianMthau: data.tgianMthau,
         })
         this.listOfData = data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.dsGthau : data.dsGthau;
       }
@@ -136,44 +143,79 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
 
   async save(isGuiDuyet?) {
     await this.spinner.show();
-    // this.setValidator(isGuiDuyet);
-    // this.helperService.markFormGroupTouched(this.formData);
-    // if (this.formData.invalid) {
-    //   await this.spinner.hide();
-    //   return;
-    // }
+    this.setValidator(isGuiDuyet);
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      await this.spinner.hide();
+      return;
+    }
+    let pipe = new DatePipe('en-US');
+    if (this.formData.value.tgianMthau != null) {
+      if (this.formData.value.tgianMthauTime != null) {
+        this.formData.value.tgianMthau = pipe.transform(this.formData.value.tgianMthau, 'yyyy-MM-dd') + " " + pipe.transform(this.formData.value.tgianMthauTime, 'HH:mm') + ":00"
+      } else {
+        this.formData.value.tgianMthau = pipe.transform(this.formData.value.tgianMthau, 'yyyy-MM-dd')  + " 00:00:00"
+      }
+    }
+    if (this.formData.value.tgianDthau != null) {
+      if (this.formData.value.tgianDthauTime != null) {
+        this.formData.value.tgianDthau =  pipe.transform(this.formData.value.tgianDthau, 'yyyy-MM-dd') + " " + pipe.transform(this.formData.value.tgianDthauTime, 'HH:mm') + ":00"
+      } else {
+        this.formData.value.tgianDthau =  pipe.transform(this.formData.value.tgianDthau, 'yyyy-MM-dd') + " 23:59:59"
+      }
+    }
     let body = this.formData.value;
     if (this.formData.value.soQd) {
       body.soQd = this.formData.value.soQd + "/" + this.maQd;
     }
     body.listCcPhapLy = this.listCcPhapLy;
+    body.tgianMthauTime = pipe.transform(body.tgianMthauTime, 'yyyy-MM-dd HH:mm')
+    body.tgianDthauTime = pipe.transform(body.tgianDthauTime, 'yyyy-MM-dd HH:mm')
     let res = null;
-    if (this.formData.get("id").value) {
-      res = await this.quyetDinhPheDuyetHsmtService.update(body);
-    } else {
-      res = await this.quyetDinhPheDuyetHsmtService.create(body);
-    }
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (isGuiDuyet) {
-        this.formData.get("id").setValue(res.data.id);
-        this.guiDuyet();
-      } else {
-        if (this.formData.get("id").value) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-        } else {
-          this.formData.get("id").setValue(res.data.id);
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-        }
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
+    // if (this.formData.get("id").value) {
+    //   res = await this.quyetDinhPheDuyetHsmtService.update(body);
+    // } else {
+    //   res = await this.quyetDinhPheDuyetHsmtService.create(body);
+    // }
+    // if (res.msg == MESSAGE.SUCCESS) {
+    //   if (isGuiDuyet) {
+    //     this.formData.get("id").setValue(res.data.id);
+    //     this.guiDuyet();
+    //   } else {
+    //     if (this.formData.get("id").value) {
+    //       this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+    //     } else {
+    //       this.formData.get("id").setValue(res.data.id);
+    //       this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+    //     }
+    //   }
+    // } else {
+    //   this.notification.error(MESSAGE.ERROR, res.msg);
+    // }
     await this.spinner.hide();
   }
 
   setValidator(isGuiDuyet?) {
-    if (!isGuiDuyet) {
-      this.formData.controls["nam"].clearValidators();
+    if (isGuiDuyet) {
+      this.formData.controls["namKhoach"].setValidators([Validators.required]);
+      this.formData.controls["soQd"].setValidators([Validators.required]);
+      this.formData.controls["ngayQd"].setValidators([Validators.required]);
+      this.formData.controls["ngayHluc"].setValidators([Validators.required]);
+      this.formData.controls["soQdPdKhlcnt"].setValidators([Validators.required]);
+      this.formData.controls["trichYeu"].setValidators([Validators.required]);
+      this.formData.controls["noiDungQd"].setValidators([Validators.required]);
+      this.formData.controls["tenDuAn"].setValidators([Validators.required]);
+      this.formData.controls["quy"].setValidators([Validators.required]);
+      this.formData.controls["tgianMthau"].setValidators([Validators.required]);
+      this.formData.controls["tgianDthau"].setValidators([Validators.required]);
+    } else {
+      Object.keys(this.formData.controls).forEach(key => {
+        const control = this.formData.controls[key];
+        control.clearValidators();
+        control.updateValueAndValidity();
+      });
+      this.formData.updateValueAndValidity();
+      this.formData.controls["soQdPdKhlcnt"].setValidators([Validators.required]);
     }
   }
 

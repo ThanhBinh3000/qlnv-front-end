@@ -42,9 +42,9 @@ import {
 import {addDays, differenceInCalendarDays} from 'date-fns'
 import {PREVIEW} from "../../../../../../constants/fileType";
 import printJS from "print-js";
-import {AMOUNT_ONE_DECIMAL} from "../../../../../../Utility/utils";
 import {CurrencyMaskInputMode} from "ngx-currency";
-
+import {DanhSachGoiThau} from "../../../../../../models/DeXuatKeHoachuaChonNhaThau";
+import { cloneDeep } from 'lodash';
 interface DonviLienQuanModel {
     id: number;
     tenDvi: string;
@@ -131,6 +131,10 @@ export class ThongTinComponent implements OnInit, OnChanges {
     max: 1000000000000,
     inputMode: CurrencyMaskInputMode.NATURAL,
   }
+  rowItem: any[] = [];
+  rowItemEdit: any[] = [];
+  listDiemKho: any[] = [];
+  listType = ["MLK", "DV"]
     constructor(
         private router: Router,
         private fb: FormBuilder,
@@ -255,7 +259,6 @@ export class ThongTinComponent implements OnInit, OnChanges {
         await Promise.all([
             this.loadDataComboBox(),
             this.onChangeNam(),
-            this.loadListNguoiDaiDien(),
         ]);
         if (this.id) {
             // Đã có onchange
@@ -312,34 +315,54 @@ export class ThongTinComponent implements OnInit, OnChanges {
         this.maHopDongSuffix = `/${namKh}/HĐMB`;
     }
 
-    async loadChiTiet(id) {
-        if (id > 0) {
-            let res = await this.hopDongService.getDetail(id);
-            if (res.msg == MESSAGE.SUCCESS) {
-                if (res.data) {
-                    const detail = res.data;
-                    this.helperService.bidingDataInFormGroup(this.formData, detail);
-                    this.formData.patchValue({
-                        maHdong: detail.soHd?.split('/')[0]
-                    });
-                  if (!this.loaiVthh.startsWith('02')) {
-                    this.formData.patchValue({
-                      donViTinh: 'tấn',
-                    })
-                  }
-                    this.idGoiThau = detail.idGoiThau;
-                    this.listFileDinhKem = detail.listFileDinhKem;
-                    this.listCcPhapLy = detail.listCcPhapLy;
-                    this.dataTable = detail.details;
-                    this.dataPl = detail.hhPhuLucHdongList;
-                    this.onChangeHluc();
-                  if (this.dataBinding) {
-                    await this.bindingDataKqLcnt(this.dataBinding.id);
-                  }
-                }
+  async loadChiTiet(id) {
+    if (id > 0) {
+      let res = await this.hopDongService.getDetail(id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          const detail = res.data;
+          this.helperService.bidingDataInFormGroup(this.formData, detail);
+          this.formData.patchValue({
+            maHdong: detail.soHd?.split('/')[0]
+          });
+          if (!this.loaiVthh.startsWith('02')) {
+            this.formData.patchValue({
+              donViTinh: 'tấn',
+            })
+          }
+          this.idGoiThau = detail.idGoiThau;
+          this.listFileDinhKem = detail.listFileDinhKem;
+          this.listCcPhapLy = detail.listCcPhapLy;
+          this.dataTable = detail.details;
+          for (let i = 0; i < this.dataTable.length; i++) {
+            let body = {
+              maDvi: this.dataTable[i].maDvi,
+              type: this.listType
             }
+            const res = await this.donViService.layTatCaByMaDvi(body);
+            if (res.msg == MESSAGE.SUCCESS) {
+              const listDiemKho = [];
+              for (let j = 0; j < res.data[0].children.length; j++) {
+                const item = {
+                  'maDvi': res.data[0].children[j].maDvi,
+                  'tenDvi': res.data[0].children[j].tenDvi,
+                  'diaDiemNhap': res.data[0].children[j].diaChi,
+                };
+                listDiemKho.push(item);
+              }
+              this.listDiemKho[i] = [...listDiemKho];
+              this.rowItem.push(new DanhSachGoiThau())
+            }
+          }
+          this.dataPl = detail.hhPhuLucHdongList;
+          this.onChangeHluc();
+          if (this.dataBinding) {
+            await this.bindingDataKqLcnt(this.dataBinding.id);
+          }
         }
+      }
     }
+  }
 
     async loaiHopDongGetAll() {
         this.listLoaiHopDong = [];
@@ -613,6 +636,26 @@ export class ThongTinComponent implements OnInit, OnChanges {
                       item.donGiaVat = data.donGiaNhaThau
                     })
                   } else {
+                    for (let i = 0; i < data.children.length; i++) {
+                      let body = {
+                        maDvi: data.children[i].maDvi,
+                        type: this.listType
+                      }
+                      const res = await this.donViService.layTatCaByMaDvi(body);
+                      if (res.msg == MESSAGE.SUCCESS) {
+                        const listDiemKho = [];
+                        for (let j = 0; j < res.data[0].children.length; j++) {
+                          const item = {
+                            'maDvi': res.data[0].children[j].maDvi,
+                            'tenDvi': res.data[0].children[j].tenDvi,
+                            'diaDiemNhap': res.data[0].children[j].diaChi,
+                          };
+                          listDiemKho.push(item);
+                        }
+                        this.listDiemKho[i] = [...listDiemKho];
+                        this.rowItem.push(new DanhSachGoiThau())
+                      }
+                    }
                     this.dataTable.push(data);
                   }
                   this.formData.patchValue({
@@ -759,6 +802,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
     async ngOnChanges(changes: SimpleChanges) {
         if (changes) {
             await this.spinner.show();
+            await this.loadListNguoiDaiDien();
             await this.loadChiTiet(this.id);
             await this.spinner.hide()
         }
@@ -957,5 +1001,66 @@ export class ThongTinComponent implements OnInit, OnChanges {
   }
   printPreview() {
     printJS({ printable: this.printSrc, type: 'pdf', base64: true })
+  }
+
+  themDiaDiemNhap(y) {
+    if (this.rowItem[y].soLuong <= 0) {
+      this.notification.error(MESSAGE.ERROR, "Số lượng phân bổ không được để trống.")
+      return false;
+    }
+    let soLuong = 0;
+    this.dataTable[0].children[y].children.forEach(item => {
+      soLuong += item.soLuong
+    })
+    if (soLuong + this.rowItem[y].soLuong > this.dataTable[0].children[y].soLuong ) {
+      this.notification.error(MESSAGE.ERROR, "Số lượng đã vượt quá chỉ tiêu.")
+      return false;
+    }
+    let diemKho = this.listDiemKho[y].find(x => x.maDvi == this.rowItem[y].maDvi);
+    this.rowItem[y].maDvi = diemKho.maDvi;
+    this.rowItem[y].tenDvi = diemKho.tenDvi;
+    this.rowItem[y].diaDiemNhap = diemKho.diaDiemNhap;
+    this.dataTable[0].children[y].children = [...this.dataTable[0].children[y].children, this.rowItem[y]]
+    this.rowItem[y] = new DanhSachGoiThau();
+  }
+
+  clearDiaDiemNhap(y) {
+    this.rowItem[y] = new DanhSachGoiThau();
+  }
+
+  editRow(y, z) {
+    this.dataTable[0].children[y].children.forEach(i => {
+      i.edit = false;
+    })
+    this.dataTable[0].children[y].children[z].edit = true
+    this.rowItemEdit[z] = cloneDeep(this.dataTable[0].children[y].children[z])
+  }
+
+  xoaDiaDiemNhap(y, z) {
+    this.dataTable[0].children[y].children.splice(z, 1);
+  }
+
+  saveEdit(y, z) {
+    let soLuong = 0;
+    let data = cloneDeep(this.dataTable[0].children[y].children);
+    data.splice(z, 1)
+    data.forEach(i => {
+      soLuong += i.soLuong;
+    })
+    if (soLuong + this.rowItemEdit[z].soLuong  > this.dataTable[0].children[y].soLuong) {
+      this.notification.error(MESSAGE.ERROR, "Số lượng đã vượt quá chỉ tiêu.")
+      return false;
+    }
+    let diemKho = this.listDiemKho[y].find(x => x.maDvi == this.rowItemEdit[z].maDvi);
+    this.rowItemEdit[z].maDvi = diemKho.maDvi;
+    this.rowItemEdit[z].tenDvi = diemKho.tenDvi;
+    this.rowItemEdit[z].diaDiemNhap = diemKho.diaDiemNhap;
+    this.dataTable[0].children[y].children[z] = cloneDeep(this.rowItemEdit[z])
+    this.dataTable[0].children[y].children[z].edit = false
+    this.rowItemEdit[z] = new DanhSachGoiThau();
+  }
+  cancelEdit(y, z) {
+    this.dataTable[0].children[y].children[z].edit = false
+    this.rowItemEdit[z] = new DanhSachGoiThau();
   }
 }
