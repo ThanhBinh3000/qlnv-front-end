@@ -101,8 +101,8 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
   tongSoLuongChuyenCapThoc: number = 0;
   tongSoLuongNhuCauXuat: number = 0;
   tongSoLuongDx: number = 0;
-  mucDichXuat: string;
   ngayKetThuc: string;
+  listMucDichXuat: any[];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -130,6 +130,7 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
         noiDungThop: ['', [Validators.required]],
         loaiNhapXuat: [''],
         kieuNhapXuat: [''],
+        mucDichXuat: [, [Validators.required]],
         loaiVthh: [LOAI_HANG_DTQG.GAO],
         cloaiVthh: [''],
         tenVthh: [TEN_LOAI_VTHH.GAO, [Validators.required]],
@@ -171,6 +172,7 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
         // this.loadDsKieuNhapXuat(),
         this.loadDsVthh(),
         this.loadDsDonVi(),
+        this.loadDsMucDichXuat()
       ])
       await this.loadDetail(this.idSelected);
     } catch (e) {
@@ -179,7 +181,13 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
       await this.spinner.hide();
     }
   }
-
+  async loadDsMucDichXuat() {
+    this.listMucDichXuat = [];
+    let res = await this.danhMucService.danhMucChungGetAll('MUC_DICH_CT_VT');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listMucDichXuat = res.data;
+    }
+  }
   async loadDsLoaiHinhNhapXuat() {
     let res = await this.danhMucService.danhMucChungGetAll("LOAI_HINH_NHAP_XUAT");
     if (res.msg == MESSAGE.SUCCESS) {
@@ -237,7 +245,7 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
   }
 
   async summary() {
-    await this.helperService.ignoreRequiredForm(this.formData, ['nam', 'tenVthh']);
+    await this.helperService.ignoreRequiredForm(this.formData, ['nam', 'tenVthh', 'mucDichXuat']);
     await this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin.');
@@ -250,6 +258,7 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
           trangThaiList: [STATUS.DA_DUYET_LDC],
           nam: this.formData.value.nam,
           tenVthh: this.formData.value.tenVthh,
+          mucDichXuat: this.formData.value.mucDichXuat
         }
         await this.tongHopPhuongAnCuuTroService.tonghop(body).then(async res => {
           if (res.msg == MESSAGE.SUCCESS) {
@@ -281,6 +290,15 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
       )
         ;
     }
+  }
+  handleChaneMucDichXuat() {
+    this.formData.patchValue({ deXuatCuuTro: [] });
+    this.phuongAnHdrView = [];
+    this.phuongAnView = [];
+    this.tongSoLuongDx = 0;
+    this.tongSoLuongNhuCauXuat = 0;
+    this.tongSoLuongChuyenCapThoc = 0;
+    this.ngayKetThuc = '';
   }
 
   async save() {
@@ -362,7 +380,6 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
       }
       this.tongSoLuongChuyenCapThoc = Array.isArray(this.phuongAnView) ? this.phuongAnView.reduce((sum, cur) => sum += cur.soLuongChuyenCapThoc ? cur.soLuongChuyenCapThoc : 0, 0) : 0;
       this.tongSoLuongNhuCauXuat = Array.isArray(this.phuongAnView) ? this.phuongAnView.reduce((sum, cur) => sum += cur.soLuongNhuCauXuat ? cur.soLuongNhuCauXuat : 0, 0) : 0;
-      this.mucDichXuat = currentCuc?.mucDichXuat ? currentCuc.mucDichXuat : "";
       this.ngayKetThuc = currentCuc?.ngayKetThuc ? currentCuc.ngayKetThuc : ""
     }
   }
@@ -540,7 +557,6 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
     this.tongSoLuongDx = 0;
     this.tongSoLuongNhuCauXuat = 0;
     this.tongSoLuongChuyenCapThoc = 0;
-    this.mucDichXuat = '';
     this.ngayKetThuc = '';
 
   }

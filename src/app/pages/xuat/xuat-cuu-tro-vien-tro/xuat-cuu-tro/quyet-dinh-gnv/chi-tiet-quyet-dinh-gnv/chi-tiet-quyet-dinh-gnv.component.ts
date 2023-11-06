@@ -113,7 +113,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       nguoiPduyetId: [],
       loaiNhapXuat: [],
       kieuNhapXuat: [],
-      mucDichXuat: [],
+      mucDichXuat: [, [Validators.required]],
       tenDvi: [, [Validators.required]],
       tenLoaiVthh: [],
       tenCloaiVthh: [],
@@ -511,8 +511,8 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           nzFooter: null,
           nzComponentParams: {
             dataTable: res.data,
-            dataHeader: ['Số quyết định', 'Ngày phê duyệt', 'Trích yếu'],
-            dataColumn: ['soBbQd', 'ngayPduyet', 'trichYeu']
+            dataHeader: ['Số quyết định', 'Ngày phê duyệt', 'Mục đích xuất'],
+            dataColumn: ['soBbQd', 'ngayPduyet', 'mucDichXuat']
           },
         });
         modalQD.afterClose.subscribe(async (data) => {
@@ -561,6 +561,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               soQdPd: detail.soBbQd,
               loaiNhapXuat: detail.loaiNhapXuat,
               kieuNhapXuat: detail.kieuNhapXuat,
+              mucDichXuat: detail.mucDichXuat,
               // tenVthh: detail.tenVthh,
               dataDtl: detail.quyetDinhPdDtl,
               type: this.formData.value.type === 'XC' ? 'XC' : detail.type,

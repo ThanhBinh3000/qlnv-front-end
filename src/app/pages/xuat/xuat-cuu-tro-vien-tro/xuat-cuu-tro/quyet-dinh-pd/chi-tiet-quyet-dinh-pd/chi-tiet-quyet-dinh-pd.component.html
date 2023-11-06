@@ -152,7 +152,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="6">
+          <div nz-col [nzSpan]="4">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
               <nz-form-control>
@@ -160,7 +160,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="6">
+          <div nz-col [nzSpan]="4">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất</nz-form-label>
               <nz-form-control>
@@ -169,7 +169,7 @@
             </nz-form-item>
           </div>
           <ng-container *ngIf="!isVthhVatuThietBi()">
-            <div nz-col [nzSpan]="6">
+            <div nz-col [nzSpan]="4">
               <nz-form-item class="form-item">
                 <nz-form-label [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24">
@@ -180,12 +180,34 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="6">
+            <div nz-col [nzSpan]="4">
               <nz-form-item class="form-item">
                 <nz-form-label nzRequired [nzNoColon]="true"> ĐVT</nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24">
                   <nz-input-group>
                     <input [readonly]="true" nz-input formControlName="donViTinh" />
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="8">
+              <nz-form-item class="form-item">
+                <nz-form-label nzRequired [nzNoColon]="true"> Mục đích xuất</nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                  <nz-input-group>
+                    <input [readonly]="true" nz-input formControlName="mucDichXuat" />
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="isVthhVatuThietBi()">
+            <div nz-col [nzSpan]="16">
+              <nz-form-item class="form-item">
+                <nz-form-label nzRequired [nzNoColon]="true"> Mục đích xuất</nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                  <nz-input-group>
+                    <input [readonly]="true" nz-input formControlName="mucDichXuat" />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -320,14 +342,6 @@
                         <span
                           style="color: red;"><strong>{{tongSoLuongChuyenCapThocDx|number:globals.numberFormat:globals.locale}}
                             {{formData.value.donViTinh? formData.value.donViTinh : ""}}</strong></span>
-                      </nz-form-control>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col>
-                    <nz-form-item>
-                      <nz-form-label [nzNoColon]="true">Mục đích xuất</nz-form-label>
-                      <nz-form-control nz-col [nzSpan]="24">
-                        <span style="color: #001CFF"><strong>{{mucDichXuat}}</strong></span>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
@@ -521,14 +535,6 @@
                       <span
                         style="color: red;"><strong>{{tongSoLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}
                           {{formData.value.donViTinh? formData.value.donViTinh : ""}}</strong></span>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col>
-                  <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">Mục đích xuất</nz-form-label>
-                    <nz-form-control nz-col [nzSpan]="24">
-                      <span style="color: #001CFF"><strong>{{mucDichXuat}}</strong></span>
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -764,14 +770,6 @@
                   </div> -->
                   <div nz-col>
                     <nz-form-item>
-                      <nz-form-label [nzNoColon]="true">Mục đích xuất</nz-form-label>
-                      <nz-form-control nz-col [nzSpan]="24">
-                        <span style="color: #001CFF"><strong>{{mucDichXuat}}</strong></span>
-                      </nz-form-control>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col>
-                    <nz-form-item>
                       <nz-form-label [nzNoColon]="true">Thời gian thực hiện<br />xuất cứu trợ, viện trợ đến
                         ngày</nz-form-label>
                       <nz-form-control nz-col [nzSpan]="24">
@@ -938,14 +936,6 @@
                     </nz-form-control>
                   </nz-form-item>
                 </div> -->
-                <div nz-col>
-                  <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">Mục đích xuất</nz-form-label>
-                    <nz-form-control nz-col [nzSpan]="24">
-                      <span style="color: #001CFF"><strong>{{mucDichXuat}}</strong></span>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
                 <div nz-col>
                   <nz-form-item>
                     <nz-form-label [nzNoColon]="true">Thời gian thực hiện<br />xuất cứu trợ, viện trợ đến
