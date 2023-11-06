@@ -15,7 +15,7 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_QD_THEM')
+      <button *ngIf="userService.isTongCuc() && this.formData.value.loaiTmdt == 'DUOI15TY'  && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_QD_THEM')
          && formData.value.trangThai == STATUS.DA_DUYET_LDTC && !hidden" type="button" class="btn btn-main ml-2"
               (click)="openQdPheDuyet(formData.value.id, false)">
         <i class="icon htvbdh_soanthao"></i>
