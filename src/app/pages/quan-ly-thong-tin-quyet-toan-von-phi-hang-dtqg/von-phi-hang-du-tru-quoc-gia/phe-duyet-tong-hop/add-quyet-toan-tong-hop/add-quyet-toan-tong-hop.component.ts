@@ -1619,6 +1619,10 @@ export class AddQuyetToanTongHopComponent implements OnInit {
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        for (const cell in worksheet) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheet[cell].s = Table.borderStyle;
+        }
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         let excelName = "TH_BC_QTVP_DTQG";
         excelName = excelName + '_BCQTVP_DTQG.xlsx'

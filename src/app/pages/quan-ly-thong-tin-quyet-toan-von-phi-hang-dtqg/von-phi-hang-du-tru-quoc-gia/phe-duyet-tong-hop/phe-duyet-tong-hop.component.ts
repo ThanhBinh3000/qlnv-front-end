@@ -45,6 +45,7 @@ export class PheDuyetTongHopComponent implements OnInit {
         loaiTimKiem: "1",
         maPhanBcao: '1',
         namQtoan: null,
+        quyQtoan: null,
         ngayTaoDen: null,
         ngayTaoTu: null,
         paggingReq: {
@@ -95,6 +96,24 @@ export class PheDuyetTongHopComponent implements OnInit {
     isAddNew = false;
     idSelected: string;
     isStatus: string;
+    lstQuy: any[] = [
+        {
+            val: 1,
+            ten: "quý 1"
+        },
+        {
+            val: 2,
+            ten: "quý 2"
+        },
+        {
+            val: 3,
+            ten: "quý 3"
+        },
+        {
+            val: 4,
+            ten: "quý 4"
+        }
+    ];
     constructor(
         private quanLyVonPhiService: QuanLyVonPhiService,
         private quyetToanVonPhiService: QuyetToanVonPhiService,
