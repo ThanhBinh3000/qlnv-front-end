@@ -51,7 +51,7 @@
       </div>
     </div>
   </nz-affix>
-  <nz-alert *ngIf='thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV ' nzShowIcon nzType='error' class='mg-t-10'
+  <nz-alert *ngIf='thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV  || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDC' nzShowIcon nzType='error' class='mg-t-10'
             nzMessage='Lý do từ chối' nzDescription='{{thongTinChiTieuKeHoachNam.lyDoTuChoi}}'>
   </nz-alert>
   <nz-card class='mt16 flex-card p-lr16'>
