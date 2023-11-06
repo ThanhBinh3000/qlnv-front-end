@@ -188,9 +188,9 @@
             <td>{{ data.soBbQd }}</td>
             <td>{{ data.ngayKy |date:globals.dateFormat}}</td>
             <td><a nz-button nzType="link" (click)="openThModal(data.idTongHop)"> {{data.idTongHop}}</a></td>
-            <td>{{ data.ngayThop |date:globals.dateFormat}}</td>
+            <td class="text-center">{{ data.ngayThop |date:globals.dateFormat}}</td>
             <td><a nz-button nzType="link" (click)="openDxPaModal(data.idDx)"> {{data.soDx}}</a></td>
-            <td>{{ data.ngayDx |date:globals.dateFormat}}</td>
+            <td class="text-center">{{ data.ngayDx |date:globals.dateFormat}}</td>
             <td>{{ data.tenVthh }}</td>
             <!--          <td>{{ data.tongSoLuongDx |number:globals.numberFormat:globals.locale }}</td>-->
             <!--          <td>{{ data.tongSoLuong |number:globals.numberFormat:globals.locale }}</td>-->

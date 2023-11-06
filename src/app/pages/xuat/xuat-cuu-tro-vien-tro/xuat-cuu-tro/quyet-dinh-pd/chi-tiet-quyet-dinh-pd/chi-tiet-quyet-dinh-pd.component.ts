@@ -97,7 +97,6 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   maHauTo: any;
   templateName = "Quyết định phê duyệt phương án";
   templateNameVt = "Quyết định phê duyệt phương án vật tư";
-  mucDichXuat: string;
   tongSoLuongChuyenCapThoc: number = 0;
   tongSoLuongChuyenCapThocDx: number = 0;
   tongSlQd: number = 0;
@@ -177,7 +176,6 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       this.quyetDinhPdDtlCache = [];
       this.tongSoLuongDx = 0;
       this.tongSoLuongChuyenCapThocDx = 0;
-      this.mucDichXuat = "";
       this.ngayKetThuc = "";
       this.tongSoLuong = 0;
       this.tongSoLuongChuyenCapThoc = 0;
@@ -203,7 +201,6 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       this.quyetDinhPdDtlCache = [];
       this.tongSoLuongDx = 0;
       this.tongSoLuongChuyenCapThocDx = 0;
-      this.mucDichXuat = "";
       this.ngayKetThuc = "";
       this.tongSoLuong = 0;
       this.tongSoLuongChuyenCapThoc = 0;
@@ -274,7 +271,6 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               // this.loaiNhapXuat = detail.loaiNhapXuat;
               // this.kieuNhapXuat = detail.kieuNhapXuat;
               // this.mucDichXuat = detail.mucDichXuat
-              this.mucDichXuat = detail.mucDichXuat;
               this.ngayKetThuc = detail.ngayKetThuc;
             } else {
               let res = await this.tongHopPhuongAnCuuTroService.getDetail(this.formData.value.idTongHop);
@@ -474,7 +470,6 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
             this.bidingDataInFormGroupAndIgnore(this.formData, data, ['tenVthh', 'quyetDinhPdDtl']);
             this.loaiNhapXuat = detail.loaiNhapXuat;
             this.kieuNhapXuat = detail.kieuNhapXuat;
-            this.mucDichXuat = detail.mucDichXuat;
             this.ngayKetThuc = detail.ngayKetThuc;
             await this.buildTableView();
             // await this.selectRow(this.phuongAnHdrViewCache[0]);
@@ -881,7 +876,6 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       this.phuongAnViewCache = this.phuongAnHdrViewCache[findCacheIndex]?.childData ? this.phuongAnHdrViewCache[findCacheIndex].childData : [];
       this.loaiNhapXuat = this.phuongAnHdrView[findndex]?.loaiNhapXuat;
       this.kieuNhapXuat = this.phuongAnHdrView[findndex]?.kieuNhapXuat;
-      this.mucDichXuat = this.phuongAnHdrView[findndex]?.mucDichXuat;
       this.ngayKetThuc = this.phuongAnHdrView[findndex]?.ngayKetThuc;
       await this.tinhTong();
     }

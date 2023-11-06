@@ -85,7 +85,17 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="16">
+        <div nz-col [nzSpan]="8">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true">Mục đích xuất</nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+              <nz-select formControlName="mucDichXuat" [nzDisabled]="isView" (ngModelChange)="handleChaneMucDichXuat()">
+                <nz-option *ngFor="let p of listMucDichXuat" [nzValue]="p.giaTri" [nzLabel]="p.giaTri"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="10">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
             </nz-form-label>
@@ -177,7 +187,7 @@
               <th>Đơn vị đề xuất</th>
               <th>Số công văn / tờ trình</th>
               <th>Ngày ký</th>
-              <th>Mục đích xuất</th>
+              <!-- <th>Mục đích xuất</th> -->
             </tr>
           </thead>
           <tbody>
@@ -187,7 +197,7 @@
                 <td>{{item.tenDvi}}</td>
                 <td>{{item.soDx}}</td>
                 <td class="text-center">{{item.ngayKyDx|date:globals.dateFormat}}</td>
-                <td>{{item.mucDichXuat}}</td>
+                <!-- <td>{{item.mucDichXuat}}</td> -->
               </tr>
             </ng-container>
           </tbody>
@@ -239,7 +249,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="2">
+          <div nz-col [nzSpan]="3">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true">Loại hình nhập xuất</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24">
@@ -247,19 +257,11 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="2">
+          <div nz-col [nzSpan]="3">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true">Kiểu nhập xuất</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24">
                 <span style="color: #001CFF"><strong>{{formData.value.kieuNhapXuat}}</strong></span>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div nz-col>
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="true">Mục đích xuất</nz-form-label>
-              <nz-form-control nz-col [nzSpan]="24">
-                <span style="color: #001CFF"><strong>{{mucDichXuat}}</strong></span>
               </nz-form-control>
             </nz-form-item>
           </div>
