@@ -70,8 +70,8 @@
                         <th class="text-center" style="width: 10%;">Ngày ký QĐ điều chỉnh</th>
                         <th class="text-center" style="width: 10%;">Số quyết định gốc</th>
                         <th class="text-center" style="width: 30%;">Trích yếu</th>
-                        <th class="text-center" style="width: 7%;">Loại hàng hóa</th>
-                        <th class="text-center" style="width: 7%;">Chủng loại hàng hóa</th>
+                        <th class="text-center" style="width: 7%;">Loại hàng DTQG</th>
+                        <th class="text-center" style="width: 7%;">Chủng loại hàng DTQG</th>
                         <th class="text-center" style="width: 7%;">Trạng thái</th>
                         <th width="90px">Hành động</th>
                     </tr>
@@ -155,12 +155,17 @@
                                 *ngIf="data.trangThai != STATUS.DA_LAP && userService.isAccessPermisson('NHDTQG_PTMTT_DCKHMTT_XEM')">
                                 <i class="fa fa-eye" title="Xem chi tiết"></i>
                             </a>
-                            <a *ngIf="(data.trangThai == STATUS.DA_LAP || data.trangThai == globals.prop.NHAP_TU_CHOI_LDC)
+                            <a *ngIf="(data.trangThai == STATUS.DA_LAP || data.trangThai == STATUS.TU_CHOI_LDV)
                              && userService.isTongCuc()
-                             && userService.isAccessPermisson('NHDTQG_PTMTT_DCKHMTT_XEM')"
+                             && userService.isAccessPermisson('NHDTQG_PTMTT_DCKHMTT_THEM')"
                                 (click)="redirectToChiTiet(false,data.id)">
                                 <i class="fa fa-pencil" title="Sửa"></i>
                             </a>
+                          <a *ngIf="(data.trangThai == STATUS.CHO_DUYET_LDV)
+                             && userService.isAccessPermisson('NHDTQG_PTMTT_DCKHMTT_DUYET_LDVU')"
+                             (click)="redirectToChiTiet(true,data.id)">
+                            <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
+                          </a>
                             <a *ngIf="data.trangThai == STATUS.DA_LAP && userService.isTongCuc()
                              && userService.isAccessPermisson('NHDTQG_PTMTT_DCKHMTT_XOA')" (click)="xoaItem(data)">
                                 <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
