@@ -4,7 +4,7 @@ import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {MESSAGE} from 'src/app/constants/message';
-import {STATUS, TRUC_TIEP} from "../../../../../../constants/status";
+import {STATUS, THONG_TIN_BAN_TRUC_TIEP, TRUC_TIEP} from "../../../../../../constants/status";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
@@ -21,14 +21,13 @@ import {
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {PREVIEW} from "../../../../../../constants/fileType";
 import printJS from "print-js";
-import {QuanLyHangTrongKhoService} from "../../../../../../services/quanLyHangTrongKho.service";
-import {
-  BangCanKeHangBttService
-} from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/xuat-kho-btt/bang-can-ke-hang-btt.service";
-import {
-  PhieuKtraCluongBttService
-} from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/phieu-ktra-cluong-btt.service";
 import {FileDinhKem} from "../../../../../../models/FileDinhKem";
+import {
+  HopDongBttService
+} from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service";
+import {
+  PhieuXuatKhoBttService
+} from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/xuat-kho-btt/phieu-xuat-kho-btt.service";
 
 @Component({
   selector: 'app-them-moi-bien-ban-tinh-kho',
@@ -60,11 +59,10 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
     private bienBanTinhKhoBttService: BienBanTinhKhoBttService,
     private quyetDinhNvXuatBttService: QuyetDinhNvXuatBttService,
-    private bangCanKeHangBttService: BangCanKeHangBttService,
-    private phieuKtraCluongBttService: PhieuKtraCluongBttService,
+    private hopDongBttService: HopDongBttService,
+    private phieuXuatKhoBttService: PhieuXuatKhoBttService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanTinhKhoBttService);
     this.formData = this.fb.group({
@@ -77,15 +75,19 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       idQdNv: [''],
       soQdNv: [''],
       ngayKyQdNv: [''],
+      idQdNvDtl: [],
+      idKho: [],
       maDiemKho: [''],
       diaDiemKho: [''],
       maNhaKho: [''],
       maNganKho: [''],
       maLoKho: [''],
+      loaiHinhKho: [''],
       loaiVthh: [''],
       cloaiVthh: [''],
       tenHangHoa: [''],
       donViTinh: [''],
+      hinhThucBaoQuan: [''],
       ngayBatDauXuat: [''],
       ngayKetThucXuat: [''],
       idPhieuKiemNghiem: [''],
@@ -184,6 +186,10 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       return;
     }
     this.dataTable = data.children
+    this.dataTable = data.children
+    if (!this.isView) {
+      await this.onChange(data.idQdNv)
+    }
   }
 
   async openDialog() {
@@ -197,10 +203,8 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       const res = await this.quyetDinhNvXuatBttService.search(body)
       if (res && res.msg === MESSAGE.SUCCESS) {
         this.danhSachQuyetDinh = res.data.content.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI));
-      } else if (res && res.msg) {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       } else {
-        this.notification.error(MESSAGE.ERROR, 'Unknown error occurred.');
+        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ XUẤT HÀNG',
@@ -230,6 +234,8 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   changeSoQdNv(event) {
     if (this.flagInit && event && event !== this.formData.value.soQdNv) {
       this.formData.patchValue({
+        idQdNvDtl: null,
+        idKho: null,
         maDiemKho: null,
         tenDiemKho: null,
         maNhaKho: null,
@@ -239,9 +245,6 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         maLoKho: null,
         tenLoKho: null,
         tenNganLoKho: null,
-        idPhieuKiemNghiem: null,
-        soPhieuKiemNghiem: null,
-        ngayKiemNghiemMau: null,
         loaiVthh: null,
         tenLoaiVthh: null,
         cloaiVthh: null,
@@ -249,9 +252,9 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         tenHangHoa: null,
         donViTinh: null,
         ngayBatDauXuat: null,
-        tongSlXuat: null,
-        phanLoai: null,
-        pthucBanTrucTiep: null,
+        idPhieuKiemNghiem: null,
+        soPhieuKiemNghiem: null,
+        ngayKiemNghiemMau: null,
         idHopDong: null,
         soHopDong: null,
         ngayKyHopDong: null,
@@ -261,10 +264,14 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         ngayTaoBkeBanLe: null,
         soLuongBkeBanLe: null,
         tongSlNhap: null,
+        tongSlXuat: null,
         slConLai: null,
+        slThucTe: null,
         slThua: null,
         slThieu: null,
-        slThucTe: null,
+        loaiHinhNx: null,
+        kieuNx: null,
+        tgianGiaoNhan: null,
       });
       this.dataTable = [];
     }
@@ -284,10 +291,38 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         idQdNv: data.id,
         soQdNv: data.soQdNv,
         ngayKyQdNv: data.ngayKyQdNv,
+        loaiHinhNx: data.loaiHinhNx,
+        kieuNx: data.kieuNx,
+        pthucBanTrucTiep: data.pthucBanTrucTiep,
       });
       await this.loadDanhSachTinhKho(data.soQdNv)
-      const dataChiCuc = data.children.find(item => item.maDvi === this.userInfo.MA_DVI);
-      this.listDiaDiemXuat = dataChiCuc?.children
+      if ([THONG_TIN_BAN_TRUC_TIEP.CHAO_GIA, THONG_TIN_BAN_TRUC_TIEP.BAN_LE].includes(data.pthucBanTrucTiep)) {
+        const dataChiCuc = data.children.find(item => item.maDvi === this.userInfo.MA_DVI);
+        if (dataChiCuc && dataChiCuc.children && dataChiCuc.children.length > 0) {
+          const idKhoSet = new Set(this.listDanhSachTinhKho.map(item => item.idKho));
+          this.listDiaDiemXuat = dataChiCuc.children.filter(item => !idKhoSet.has(item.id))
+        }
+      }
+      if ([THONG_TIN_BAN_TRUC_TIEP.UY_QUYEN].includes(data.pthucBanTrucTiep)) {
+        this.listDiaDiemXuat = [];
+        let body = {
+          loaiVthh: this.loaiVthh,
+          soQdNv: data.soQdNv,
+          namHd: this.formData.value.namKh,
+          trangThai: STATUS.DA_KY
+        }
+        const resHd = await this.hopDongBttService.search(body)
+        if (resHd.msg === MESSAGE.SUCCESS && resHd.data.content) {
+          const dataHopDong = resHd.data.content.filter(item => item.idQdNv === data.id && item.maDvi === this.userInfo.MA_DVI);
+          if (dataHopDong) {
+            const xhHopDongBttDviLists = dataHopDong.map((item) => item.xhHopDongBttDviList);
+            const flattenedXhHopDongBttDviLists = xhHopDongBttDviLists.flat();
+            this.listDiaDiemXuat.push(...flattenedXhHopDongBttDviLists);
+            const idKhoSet = new Set(this.listDanhSachTinhKho.map(item => item.idKho));
+            this.listDiaDiemXuat = this.listDiaDiemXuat.filter(item => !idKhoSet.has(item.id))
+          }
+        }
+      }
     } catch (e) {
       console.error('Error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -331,6 +366,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
+          idKho: data.id,
           maDiemKho: data.maDiemKho,
           tenDiemKho: data.tenDiemKho,
           maNhaKho: data.maNhaKho,
@@ -339,19 +375,17 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
           tenNganKho: data.tenNganKho,
           maLoKho: data.maLoKho,
           tenLoKho: data.tenLoKho,
-          tenNganLoKho: data.tenLoKho ? data.tenLoKho + ' - ' + data.tenNganKho : data.tenNganKho
+          tenNganLoKho: data.tenLoKho ? data.tenLoKho + ' - ' + data.tenNganKho : data.tenNganKho,
+          tongSlNhap: data.tonKho || 0,
         });
-        await this.loadDanhSachBangKeCanHang(data);
+        await this.loadDanhSachPhieuXuatKho();
       }
     });
   }
 
-  changeKho(event) {
+  async changeKho(event) {
     if (this.flagInit && event && event !== this.formData.value.maLoKho && this.formData.value.maNganKho) {
       this.formData.patchValue({
-        idPhieuKiemNghiem: null,
-        soPhieuKiemNghiem: null,
-        ngayKiemNghiemMau: null,
         loaiVthh: null,
         tenLoaiVthh: null,
         cloaiVthh: null,
@@ -359,9 +393,9 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         tenHangHoa: null,
         donViTinh: null,
         ngayBatDauXuat: null,
-        tongSlXuat: null,
-        phanLoai: null,
-        pthucBanTrucTiep: null,
+        idPhieuKiemNghiem: null,
+        soPhieuKiemNghiem: null,
+        ngayKiemNghiemMau: null,
         idHopDong: null,
         soHopDong: null,
         ngayKyHopDong: null,
@@ -371,24 +405,25 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         ngayTaoBkeBanLe: null,
         soLuongBkeBanLe: null,
         tongSlNhap: null,
+        tongSlXuat: null,
         slConLai: null,
+        slThucTe: null,
         slThua: null,
         slThieu: null,
-        slThucTe: null,
+        tgianGiaoNhan: null,
       })
       this.dataTable = [];
     }
   }
 
-  async loadDanhSachBangKeCanHang(kho) {
-    const {maDiemKho, maNhaKho, maNganKho, maLoKho} = kho;
+  async loadDanhSachPhieuXuatKho() {
     let body = {
       loaiVthh: this.loaiVthh,
       namKh: this.formData.value.namKh,
       trangThai: STATUS.DA_DUYET_LDCC,
       soQdNv: this.formData.value.soQdNv,
     }
-    const res = await this.bangCanKeHangBttService.search(body)
+    const res = await this.phieuXuatKhoBttService.search(body)
     if (res.msg !== MESSAGE.SUCCESS) {
       this.notification.error(MESSAGE.ERROR, res.msg);
       return;
@@ -397,68 +432,46 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     if (!data || data.length === 0) {
       return;
     }
-    const filterConditions = data.filter(item =>
-      item.maDiemKho === maDiemKho &&
-      item.maNhaKho === maNhaKho &&
-      item.maNganKho === maNganKho &&
-      item.maLoKho === maLoKho
-    );
+    const filterConditions = data.filter(item => item.idKho === this.formData.value.idKho && item.idQdNv === this.formData.value.idQdNv);
     if (filterConditions.length > 0) {
-      this.dataTable = filterConditions.map(item => ({
-        idPhieuXuatKho: item.idPhieuXuatKho,
-        soPhieuXuatKho: item.soPhieuXuatKho,
-        ngayXuatKho: item.ngayXuatKho,
-        idBangKeHang: item.id,
-        soBangKeHang: item.soBangKeHang,
-        soLuongXuat: item.tongTrongLuongCaBi,
-      }));
-      await this.loadPhieuKiemNghiem(filterConditions);
-    }
-  }
-
-  async loadPhieuKiemNghiem(filterConditions) {
-    const first = filterConditions[0]
-    if (first.idPhieuKiemNghiem <= 0) return;
-    try {
-      await this.spinner.show();
-      const res = await this.phieuKtraCluongBttService.getDetail(first.idPhieuKiemNghiem);
-      if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-        return;
-      }
-      const data = res.data;
+      const tongSlXuat = filterConditions.reduce((prev, cur) => prev + cur.thucXuat, 0);
       this.formData.patchValue({
-        idPhieuKiemNghiem: data.id,
-        soPhieuKiemNghiem: data.soPhieuKiemNghiem,
-        ngayKiemNghiemMau: data.ngayKiemNghiemMau,
-        loaiVthh: data.loaiVthh,
-        tenLoaiVthh: data.tenLoaiVthh,
-        cloaiVthh: data.cloaiVthh,
-        tenCloaiVthh: data.tenCloaiVthh,
-        tenHangHoa: data.tenHangHoa,
-        donViTinh: data.donViTinh,
-        ngayBatDauXuat: first.ngayXuatKho,
+        idQdNvDtl: filterConditions[0].idQdNvDtl,
+        idPhieuKiemNghiem: filterConditions[0].id,
+        soPhieuKiemNghiem: filterConditions[0].soPhieuKiemNghiem,
+        ngayKiemNghiemMau: filterConditions[0].ngayKiemNghiemMau,
+        tgianGiaoNhan: filterConditions[0].tgianGiaoNhan,
+        loaiVthh: filterConditions[0].loaiVthh,
+        tenLoaiVthh: filterConditions[0].tenLoaiVthh,
+        cloaiVthh: filterConditions[0].cloaiVthh,
+        tenCloaiVthh: filterConditions[0].tenCloaiVthh,
+        tenHangHoa: filterConditions[0].tenHangHoa,
+        donViTinh: filterConditions[0].donViTinh,
+        loaiHinhKho: filterConditions[0].loaiHinhKho,
+        hinhThucBaoQuan: filterConditions[0].hinhThucBaoQuan,
+        tenHinhThucBaoQuan: filterConditions[0].tenHinhThucBaoQuan,
+        ngayBatDauXuat: filterConditions[0].ngayLapPhieu,
         ngayKetThucXuat: this.formData.value.ngayLapBienBan,
-        tongSlXuat: this.dataTable.reduce((total, child) => total + child.soLuongXuat, 0),
-        tgianGiaoNhan: data.tgianGiaoNhan,
-        loaiHinhNx: data.loaiHinhNx,
-        kieuNx: data.kieuNx,
-        phanLoai: data.phanLoai,
-        pthucBanTrucTiep: data.pthucBanTrucTiep,
-        idHopDong: data.phanLoai === TRUC_TIEP.HOP_DONG ? data.idHopDong : null,
-        soHopDong: data.phanLoai === TRUC_TIEP.HOP_DONG ? data.soHopDong : null,
-        ngayKyHopDong: data.phanLoai === TRUC_TIEP.HOP_DONG ? data.ngayKyHopDong : null,
-        soLuongHopDong: data.phanLoai == TRUC_TIEP.HOP_DONG ? data.soLuongHopDong : null,
-        idBangKeBanLe: data.phanLoai === TRUC_TIEP.BAN_LE ? data.idBangKeBanLe : null,
-        soBangKeBanLe: data.phanLoai === TRUC_TIEP.BAN_LE ? data.soBangKeBanLe : null,
-        ngayTaoBkeBanLe: data.phanLoai === TRUC_TIEP.BAN_LE ? data.ngayTaoBkeBanLe : null,
-        soLuongBkeBanLe: data.phanLoai === TRUC_TIEP.BAN_LE ? data.soLuongBkeBanLe : null,
+        tongSlXuat: tongSlXuat,
+        slConLai: this.formData.value.tongSlNhap - tongSlXuat,
+        phanLoai: filterConditions[0].phanLoai,
+        idHopDong: filterConditions[0].phanLoai === TRUC_TIEP.HOP_DONG ? filterConditions[0].idHopDong : null,
+        soHopDong: filterConditions[0].phanLoai === TRUC_TIEP.HOP_DONG ? filterConditions[0].soHopDong : null,
+        ngayKyHopDong: filterConditions[0].phanLoai === TRUC_TIEP.HOP_DONG ? filterConditions[0].ngayKyHopDong : null,
+        soLuongHopDong: filterConditions[0].phanLoai == TRUC_TIEP.HOP_DONG ? filterConditions[0].soLuongHopDong : null,
+        idBangKeBanLe: filterConditions[0].phanLoai === TRUC_TIEP.BAN_LE ? filterConditions[0].idBangKeBanLe : null,
+        soBangKeBanLe: filterConditions[0].phanLoai === TRUC_TIEP.BAN_LE ? filterConditions[0].soBangKeBanLe : null,
+        ngayTaoBkeBanLe: filterConditions[0].phanLoai === TRUC_TIEP.BAN_LE ? filterConditions[0].ngayTaoBkeBanLe : null,
+        soLuongBkeBanLe: filterConditions[0].phanLoai === TRUC_TIEP.BAN_LE ? filterConditions[0].soLuongBkeBanLe : null,
       });
-      await this.tonKho();
-    } catch (e) {
-      console.error('Error: ', e);
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    } finally {
-      await this.spinner.hide();
+      this.dataTable = filterConditions.map(item => ({
+        idPhieuXuatKho: item.id,
+        soPhieuXuatKho: item.soPhieuXuatKho,
+        ngayXuatKho: item.ngayLapPhieu,
+        idBangKeHang: item.idBangKeHang,
+        soBangKeHang: item.soBangKeHang,
+        soLuongXuat: item.thucXuat,
+      }));
     }
   }
 
@@ -470,41 +483,13 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     }
   }
 
-  async tonKho() {
-    const maDvi = this.formData.value.maLoKho ? this.formData.value.maLoKho : this.formData.value.maNganKho
-    const loaiVthh = this.formData.value.loaiVthh
-    const cloaiVthh = this.formData.value.cloaiVthh
-    const body = {
-      maDvi: maDvi,
-      loaiVthh: this.loaiVthh === LOAI_HANG_DTQG.MUOI ? cloaiVthh : loaiVthh,
-      ...(this.loaiVthh === LOAI_HANG_DTQG.MUOI ? {} : {cloaiVthh: cloaiVthh}),
-    };
-    try {
-      const res = await this.quanLyHangTrongKhoService.getTrangThaiHt(body);
-      if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-        return;
-      }
-      const tongSlNhap = res.data.reduce((prev, cur) => prev + cur.slHienThoi, 0);
-      const tongSlXuat = this.formData.value.tongSlXuat || 0;
-      this.formData.patchValue({
-        tongSlNhap: tongSlNhap,
-        slConLai: tongSlNhap - tongSlXuat
-      });
-    } catch (e) {
-      console.error('Error: ', e);
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    } finally {
-      await this.spinner.hide();
-    }
-  }
-
   async onChangeSlChenhLech(event) {
     if (!event) return;
     const slConLai = this.formData.value.slConLai || 0;
     const slChenhLech = event - slConLai
     this.formData.patchValue({
       slThua: slChenhLech > 0 ? slChenhLech : null,
-      slThieu: slChenhLech < 0 ? slChenhLech : null
+      slThieu: slChenhLech < 0 ? slChenhLech * (-1) : null
     });
   }
 

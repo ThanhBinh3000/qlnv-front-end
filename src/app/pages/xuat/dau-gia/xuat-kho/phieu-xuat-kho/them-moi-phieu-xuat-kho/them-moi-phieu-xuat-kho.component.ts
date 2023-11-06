@@ -28,6 +28,9 @@ import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {PREVIEW} from "../../../../../../constants/fileType";
 import printJS from "print-js";
 import {CurrencyMaskInputMode} from "ngx-currency";
+import {
+  BbNghiemThuBaoQuanService
+} from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
 
 @Component({
   selector: 'app-bdg-them-moi-phieu-xuat-kho',
@@ -72,6 +75,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     private quyetDinhGiaoNhiemVuXuatHangService: QuyetDinhGiaoNvXuatHangService,
     private xhPhieuKnghiemCluongService: XhPhieuKnghiemCluongService,
     private phieuXuatKhoService: PhieuXuatKhoService,
+    private bbNghiemThuBaoQuanService: BbNghiemThuBaoQuanService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoService);
     this.formData = this.fb.group(
@@ -103,6 +107,8 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         maNhaKho: [''],
         maNganKho: [''],
         maLoKho: [''],
+        loaiHinhKho: [''],
+        hinhThucBaoQuan: [''],
         loaiVthh: [''],
         cloaiVthh: [''],
         tenHangHoa: [''],
@@ -263,6 +269,8 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         maLoKho: null,
         tenLoKho: null,
         tenNganLoKho: null,
+        hinhThucBaoQuan: null,
+        loaiHinhKho: null,
         loaiVthh: null,
         tenLoaiVthh: null,
         cloaiVthh: null,
@@ -362,6 +370,8 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         maLoKho: null,
         tenLoKho: null,
         tenNganLoKho: null,
+        loaiHinhKho: null,
+        hinhThucBaoQuan: null,
         loaiVthh: null,
         tenLoaiVthh: null,
         cloaiVthh: null,
@@ -410,7 +420,9 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         tenKtvBaoQuan: data.tenNguoiKiemNghiem,
         thoiGianGiaoNhan: data.tgianGiaoHang,
         donViTinh: data.donViTinh,
+        hinhThucBaoQuan: data.hinhThucBaoQuan,
       });
+      await this.loadLoaiHinhKho(data);
       if (this.dataTable && this.dataTable.length > 0) {
         let soLuongDonGia = this.dataTable.find(item => item.id === data.idKho);
         if (soLuongDonGia) {
@@ -420,12 +432,27 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
           });
         }
       }
+
     } catch (e) {
       console.error('Error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
     }
+  }
+
+  async loadLoaiHinhKho(kho) {
+    if (!kho) {
+      return
+    }
+    let maKho = kho.maLoKho || kho.maNganKho
+    let res = await this.bbNghiemThuBaoQuanService.getDataKho(maKho);
+    if (res.msg !== MESSAGE.SUCCESS || !res.data) {
+      return;
+    }
+    this.formData.patchValue({
+      loaiHinhKho: res.data.lhKho
+    });
   }
 
   onChangeTien(event) {

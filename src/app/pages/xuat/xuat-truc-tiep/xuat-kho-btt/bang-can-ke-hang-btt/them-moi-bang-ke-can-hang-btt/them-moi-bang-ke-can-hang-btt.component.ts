@@ -32,9 +32,6 @@ import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {FileDinhKem} from "../../../../../../models/CuuTro";
 import {chiTietBangKeCanHangBdg} from "../../../../../../models/KeHoachBanDauGia";
 import {CurrencyMaskInputMode} from "ngx-currency";
-import {
-  BbNghiemThuBaoQuanService
-} from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
 
 @Component({
   selector: 'app-them-moi-bang-ke-can-hang-btt',
@@ -77,7 +74,6 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private bbNghiemThuBaoQuanService: BbNghiemThuBaoQuanService,
     private donViService: DonviService,
     private phieuXuatKhoBttService: PhieuXuatKhoBttService,
     private quyetDinhNvXuatBttService: QuyetDinhNvXuatBttService,
@@ -407,7 +403,6 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
           tenLoKho: data.tenLoKho,
           tenNganLoKho: data.tenLoKho ? data.tenLoKho + ' - ' + data.tenNganKho : data.tenNganKho
         });
-        await this.loadLoaiHinhKho(data);
         await this.loadDiaDiemKhoForItem(data);
       }
     });
@@ -443,20 +438,6 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
       })
       this.dataTable = [];
     }
-  }
-
-  async loadLoaiHinhKho(kho) {
-    if (!kho) {
-      return
-    }
-    let maKho = kho.maLoKho || kho.maNganKho
-    let res = await this.bbNghiemThuBaoQuanService.getDataKho(maKho);
-    if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-      return;
-    }
-    this.formData.patchValue({
-      loaiHinhKho: res.data.lhKho
-    });
   }
 
   async loadDiaDiemKhoForItem(item) {
@@ -572,6 +553,7 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
         idPhieuKiemNghiem: data.idPhieuKiemNghiem,
         soPhieuKiemNghiem: data.soPhieuKiemNghiem,
         ngayKiemNghiemMau: data.ngayKiemNghiemMau,
+        loaiHinhKho: data.loaiHinhKho,
         phanLoai: data.phanLoai,
         idHopDong: data.phanLoai === TRUC_TIEP.HOP_DONG ? data.idHopDong : null,
         soHopDong: data.phanLoai === TRUC_TIEP.HOP_DONG ? data.soHopDong : null,
