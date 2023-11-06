@@ -91,7 +91,11 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     }
     return `$ 0`
   };
-  parserDollar = (value: string): string => value.replace('$ ', '');
+  parserDollar = (value: string): string =>{
+    let valueNum = value.replace('$ ', '');
+    let num = Number(valueNum);
+    return num.toFixed(2);
+  }
 
   constructor(
     httpClient: HttpClient,
