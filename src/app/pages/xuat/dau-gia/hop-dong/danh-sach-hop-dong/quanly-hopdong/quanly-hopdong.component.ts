@@ -91,10 +91,10 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
       await this.spinner.show();
       const res = await this.qdPdKetQuaBanDauGiaService.getDetail(id);
       if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-        throw new Error('Không tìm thấy dữ liệu');
+        return;
       }
       const data = res.data;
-      const formDataValues = {
+      this.formData.patchValue({
         nam: data.nam,
         soQdKq: data.soQdKq,
         soQdPd: data.soQdPd,
@@ -111,10 +111,9 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
         tenKieuNhapXuat: data.tenKieuNhapXuat,
         trangThaiHd: data.trangThaiHd,
         tenTrangThaiHd: data.tenTrangThaiHd,
-      };
-      this.formData.patchValue(formDataValues);
+      });
       await this.loadDsVthh();
-      this.dataTable = data.listHopDong;
+      this.dataTable = data.listHopDong.filter(item => item.maDvi === this.userInfo.MA_DVI);
       if (this.dataTable && this.dataTable.length > 0) {
         await this.showFirstRow(event, this.dataTable[0].id);
       }
@@ -128,9 +127,10 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
 
   async loadDsVthh() {
     const res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
-    if (res.msg === MESSAGE.SUCCESS) {
-      this.listHangHoaAll = res.data;
+    if (res.msg !== MESSAGE.SUCCESS || !res.data) {
+      return;
     }
+    this.listHangHoaAll = res.data;
   }
 
   async showFirstRow($event, id: any) {

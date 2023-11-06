@@ -480,10 +480,10 @@
         </div>
         <div nz-col [nzSpan]="3" *ngIf="!this.loaiVthhInput.startsWith('02')">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Giá bán hồ sơ (đ/bộ)
+            <nz-form-label [nzNoColon]="true"> Giá bán hồ sơ (đ/bộ)
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input
+              <input nz-input [readonly]="isView"
                      formControlName="giaBanHoSo" class="money-input" currencyMask [options]="amount">
             </nz-form-control>
           </nz-form-item>

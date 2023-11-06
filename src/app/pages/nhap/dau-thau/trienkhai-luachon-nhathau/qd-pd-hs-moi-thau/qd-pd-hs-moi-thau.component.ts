@@ -27,12 +27,14 @@ export class QdPdHsMoiThauComponent implements OnInit {
   isView: boolean = false;
   listNam: any[] = [];
   listLoaiVthh: any[] = [];
+  listCloaiVthh: any[] = [];
   STATUS = STATUS;
   searchFilter = {
     soQdPdHsmt: '',
     namKhoach: '',
     soQdPdKhlcnt: '',
     loaiVthh: '',
+    cloaiVthh: '',
     trichYeu: ''
   };
   filterTable: any = {
@@ -97,6 +99,7 @@ export class QdPdHsMoiThauComponent implements OnInit {
       let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
       if (res.msg == MESSAGE.SUCCESS) {
         this.listLoaiVthh = res.data?.filter((x) => (x.ma.length == 4 && x.ma.startsWith('02')));
+        this.listCloaiVthh = res.data?.filter((x) => (x.ma.length == 6 && x.ma.startsWith(this.loaiVthh)));
       }
       this.searchFilter.loaiVthh = this.loaiVthh;
       await this.search();
@@ -138,7 +141,8 @@ export class QdPdHsMoiThauComponent implements OnInit {
       soQd: this.searchFilter.soQdPdHsmt,
       soQdPdKhlcnt: this.searchFilter.soQdPdKhlcnt,
       loaiVthh: this.searchFilter.loaiVthh,
-      namKh: this.searchFilter.namKhoach,
+      cloaiVthh: this.searchFilter.cloaiVthh,
+      namKhoach: this.searchFilter.namKhoach,
       trichYeu: this.searchFilter.trichYeu,
       maDvi: null,
       paggingReq: {
@@ -201,7 +205,7 @@ export class QdPdHsMoiThauComponent implements OnInit {
     this.searchFilter.soQdPdHsmt = null;
     this.searchFilter.soQdPdKhlcnt = null;
     this.searchFilter.trichYeu = null;
-    this.searchFilter.loaiVthh = null;
+    this.searchFilter.cloaiVthh = null;
     this.tuNgayKy = null;
     this.denNgayKy  = null;
     this.search();

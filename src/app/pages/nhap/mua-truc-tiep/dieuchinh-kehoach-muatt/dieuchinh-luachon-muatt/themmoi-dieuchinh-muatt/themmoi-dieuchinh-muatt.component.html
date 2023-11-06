@@ -5,24 +5,24 @@
             <span>Quay lại</span>
         </button>
         <button
-            *ngIf="(formData.value.trangThai == STATUS.DA_LAP || formData.value.trangThai == STATUS.TU_CHOI_LDV) && userService.isTongCuc()"
+            *ngIf="(formData.value.trangThai == STATUS.DA_LAP || formData.value.trangThai == STATUS.TU_CHOI_LDV) && userService.isAccessPermisson('NHDTQG_PTMTT_DCKHMTT_THEM') && userService.isTongCuc()"
             class="btn btn-sub xanh-nhat" (click)="save(true)">
             <span>Lưu và gửi duyệt</span>
         </button>
         <button
-            *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV|| formData.value.trangThai == STATUS.DA_DUYET_LDV && userService.isTongCuc()"
+            *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isAccessPermisson('NHDTQG_PTMTT_DCKHMTT_DUYET_LDVU')) && userService.isTongCuc()"
             type="button" class="btn btn-sub do" (click)="tuChoi()">
             <i class="icon htvbdh_tcdt_tuchoi"></i>
             <span>Từ chối</span>
         </button>
         <button
-            *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.DA_DUYET_LDV && userService.isTongCuc()"
+            *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isAccessPermisson('NHDTQG_PTMTT_DCKHMTT_DUYET_LDVU')) && userService.isTongCuc()"
             type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
             <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>
         </button>
         <button
-            *ngIf="(formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.DA_LAP )  && userService.isTongCuc()"
+            *ngIf="(formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.DA_LAP ) && userService.isAccessPermisson('NHDTQG_PTMTT_DCKHMTT_THEM') && userService.isTongCuc()"
             class="btn btn-main btn-sm waves-effect waves-light" (click)="save()">
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>
@@ -302,7 +302,7 @@
                         >
                             <td style="width: 35px">{{i + 1}}</td>
                             <td>{{ data.tenDvi }}</td>
-                            <td>{{ data.diaChiDvi }}</td>
+                            <td>{{ data.diaChi }}</td>
                             <td>{{ data.soDxuat }}/TC</td>
                             <td>{{ data.ngayPduyet }}</td>
                             <td>{{ data.trichYeu }}</td>
@@ -328,7 +328,7 @@
                     <nz-card class="mg-t-10 flex-card p-lr16 ">
                         <app-thongtin-dieuchinh [title]="'Nội dung Quyết định điều chỉnh'" [dataInput]="dataInput"
                             [isCache]="false" [isView]="formData.value.trangThai != STATUS.DA_LAP"
-                            (data)="onChangesData($event)" (dataChild)="onChangesDataChild($event)" [dataChiTieu]="this.dataChiTieu" (dataTableChange)="setNewTableData($event)">
+                            (data)="onChangesData($event)" (dataChild)="onChangesDataChild($event)" [dataChiTieu]="this.dataChiTieu" (dataTableChange)="setNewTableData($event)" (objectChange)="objectChange($event)">
                         </app-thongtin-dieuchinh>
                     </nz-card>
                 </div>

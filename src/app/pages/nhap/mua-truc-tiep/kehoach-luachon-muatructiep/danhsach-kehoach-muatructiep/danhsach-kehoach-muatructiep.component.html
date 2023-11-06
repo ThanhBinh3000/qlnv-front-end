@@ -263,7 +263,7 @@
                                 *ngIf="checkQuyenXem(data.trangThai)">
                                 <i class="fa fa-eye" title="Xem chi tiết"></i>
                             </a>
-                            <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_THEM')"
+                            <a *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC) && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_THEM')"
                                 (click)="xemChiTiet(data.id, false,'NHDTQG_PTMTT_KHMTT_LT_DEXUAT_THEM')">
                                 <i class="fa fa-pencil" title="Sửa"></i>
                             </a>

@@ -31,9 +31,6 @@ import {PREVIEW} from "../../../../../../constants/fileType";
 import printJS from "print-js";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {FileDinhKem} from "../../../../../../models/CuuTro";
-import {
-  BbNghiemThuBaoQuanService
-} from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
 import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
@@ -82,7 +79,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     private quyetDinhGiaoNhiemVuXuatHangService: QuyetDinhGiaoNvXuatHangService,
     private phieuXuatKhoService: PhieuXuatKhoService,
     private bangKeCanService: BangKeCanService,
-    private bbNghiemThuBaoQuanService: BbNghiemThuBaoQuanService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bangKeCanService);
     this.formData = this.fb.group(
@@ -376,7 +372,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
           tenLoKho: data.tenLoKho,
           tenNganLoKho: data.tenLoKho ? data.tenLoKho + ' - ' + data.tenNganKho : data.tenNganKho
         });
-        await this.loadLoaiHinhKho(data);
       }
     });
   }
@@ -411,20 +406,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
       })
       this.dataTable = [];
     }
-  }
-
-  async loadLoaiHinhKho(kho) {
-    if (!kho) {
-      return
-    }
-    let maKho = kho.maLoKho || kho.maNganKho
-    let res = await this.bbNghiemThuBaoQuanService.getDataKho(maKho);
-    if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-      return;
-    }
-    this.formData.patchValue({
-      loaiHinhKho: res.data.lhKho
-    });
   }
 
   async openDialogPhieuXuatKho() {
@@ -532,6 +513,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         idPhieuKiemNghiem: data.idPhieuKiemNghiem,
         soPhieuKiemNghiem: data.soPhieuKiemNghiem,
         ngayKiemNghiemMau: data.ngayKiemNghiemMau,
+        loaiHinhKho: data.loaiHinhKho,
       })
     } catch (e) {
       console.error('Error: ', e);

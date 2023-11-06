@@ -120,7 +120,7 @@
         <th class="text-left"> Điểm kho</th>
         <th class="text-left"> Ngăn/Lô kho</th>
         <th class="text-left"> Số BB tịnh kho</th>
-        <th class="text-left"> Ngày lập BB tịnh kho</th>
+        <th class="text-center"> Ngày lập <br>BB tịnh kho</th>
         <th class="text-left"> Số phiếu KNCL</th>
         <th class="text-left"> Số bảng kê</th>
         <th class="text-left"> Số phiếu xuất kho</th>
@@ -138,11 +138,11 @@
               style="width: 35px"></td>
           <td class="text-left">
             <a *ngIf="item.soQdNv && item.idQdNv" (click)="openModal(item.idQdNv, 'QdNv')"
-               style="color: blue">{{ item.soQdNv }}
+               style="color: blue; font-weight: bold">{{ item.soQdNv }}
             </a>
           </td>
           <td class="text-left bold">{{item.nam}}</td>
-          <td class="text-left bold">{{item.ngayKyQdNv|date: 'dd/MM/YYYY'}}</td>
+          <td class="text-left bold">{{item.thoiGianGiaoNhan|date: 'dd/MM/YYYY'}}</td>
           <td></td>
           <td></td>
           <td></td>

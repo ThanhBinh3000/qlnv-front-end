@@ -48,6 +48,8 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
   STATUS: STATUS;
   tgianMkhoChange: Date | null = null;
   tgianKthucChange: Date | null = null;
+  ghiChuChange: any;
+  tenDviChange: any;
   dataTable: any[] = [];
   constructor(
     private fb: FormBuilder,
@@ -115,6 +117,8 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
         this.helperService.bidingDataInFormGroup(this.formData, this.dataInput);
         this.tgianMkhoChange = this.dataInput.tgianMkho
         this.tgianKthucChange = this.dataInput.tgianKthuc
+        this.ghiChuChange = this.dataInput.ghiChu
+        this.tenDviChange = this.dataInput.tenDvi
         await this.getPag(this.dataInput);
         this.dataTable = this.dataInput.children
         this.calculatorTable();
@@ -290,11 +294,13 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
     return convertTienTobangChu(tien);
   }
 
-  onDateChanged(value: any, type: any) {
+  onChangedValue(value: any, type: any) {
     if (type == 'tgianMkho') {
       this.formData.get('tgianMkho').setValue(value);
     } else if (type == 'tgianKthuc') {
       this.formData.get('tgianKthuc').setValue(value);
+    } else if (type == 'ghiChu') {
+      this.formData.get('ghiChu').setValue(value);
     }
     this.objectChange.emit(this.formData.value)
   }

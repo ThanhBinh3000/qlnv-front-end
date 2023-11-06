@@ -29,6 +29,9 @@ import printJS from "print-js";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {FileDinhKem} from "../../../../../../models/FileDinhKem";
 import {CurrencyMaskInputMode} from "ngx-currency";
+import {
+  BbNghiemThuBaoQuanService
+} from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
 
 @Component({
   selector: 'app-them-moi-phieu-xuat-kho-btt',
@@ -75,6 +78,7 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
     private quyetDinhNvXuatBttService: QuyetDinhNvXuatBttService,
     private phieuKtraCluongBttService: PhieuKtraCluongBttService,
     private bangKeBttService: BangKeBttService,
+    private bbNghiemThuBaoQuanService: BbNghiemThuBaoQuanService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoBttService);
     this.formData = this.fb.group({
@@ -98,6 +102,8 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
       maNhaKho: [''],
       maNganKho: [''],
       maLoKho: [''],
+      loaiHinhKho: [''],
+      hinhThucBaoQuan: [''],
       loaiHinhNx: [''],
       kieuNx: [''],
       loaiVthh: [''],
@@ -262,6 +268,8 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
         maLoKho: null,
         tenLoKho: null,
         tenNganLoKho: null,
+        hinhThucBaoQuan: null,
+        loaiHinhKho: null,
         loaiHinhNx: null,
         tenLoaiHinhNx: null,
         kieuNx: null,
@@ -364,6 +372,8 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
         maLoKho: null,
         tenLoKho: null,
         tenNganLoKho: null,
+        loaiHinhKho: null,
+        hinhThucBaoQuan: null,
         loaiHinhNx: null,
         tenLoaiHinhNx: null,
         kieuNx: null,
@@ -419,6 +429,7 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
         idKtvBaoQuan: data.idKtvBaoQuan,
         tenKtvBaoQuan: data.tenKtvBaoQuan,
         tgianGiaoNhan: data.tgianGiaoNhan,
+        hinhThucBaoQuan: data.hinhThucBaoQuan,
         phanLoai: data.phanLoai,
         pthucBanTrucTiep: data.pthucBanTrucTiep,
         idHopDong: data.phanLoai === TRUC_TIEP.HOP_DONG ? data.idHopDong : null,
@@ -428,6 +439,7 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
         soBangKeBanLe: data.phanLoai === TRUC_TIEP.BAN_LE ? data.soBangKeBanLe : null,
         ngayTaoBkeBanLe: data.phanLoai === TRUC_TIEP.BAN_LE ? data.ngayTaoBkeBanLe : null,
       })
+      await this.loadLoaiHinhKho(data);
       await this.onchangeSoLuongDonGia(data);
     } catch (e) {
       console.error('Error: ', e);
@@ -435,6 +447,20 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
     } finally {
       await this.spinner.hide();
     }
+  }
+
+  async loadLoaiHinhKho(kho) {
+    if (!kho) {
+      return
+    }
+    let maKho = kho.maLoKho || kho.maNganKho
+    let res = await this.bbNghiemThuBaoQuanService.getDataKho(maKho);
+    if (res.msg !== MESSAGE.SUCCESS || !res.data) {
+      return;
+    }
+    this.formData.patchValue({
+      loaiHinhKho: res.data.lhKho
+    });
   }
 
   async onchangeSoLuongDonGia(data) {

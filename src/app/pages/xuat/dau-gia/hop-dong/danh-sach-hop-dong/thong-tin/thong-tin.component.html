@@ -77,7 +77,7 @@
               <div nz-col [nzSpan]="3">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Ngày ký QĐ phê duyệt kết quả BĐG</nz-form-label>
-                  <nz-form-control nz-col [nzErrorTip]="error">
+                  <nz-form-control nz-col>
                     <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayKyQdKq" nzDisabled>
                     </nz-date-picker>
                   </nz-form-control>
@@ -120,7 +120,7 @@
               <div nz-col [nzSpan]="3">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Thời hạn xuất kho trước ngày</nz-form-label>
-                  <nz-form-control nz-col [nzErrorTip]="error">
+                  <nz-form-control nz-col>
                     <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="tgianXuatKho" nzDisabled>
                     </nz-date-picker>
                   </nz-form-control>
@@ -195,7 +195,7 @@
               <div nz-col [nzSpan]="3">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Thời gian thực hiện HĐ (ngày)</nz-form-label>
-                  <nz-form-control nz-col [nzErrorTip]="error">
+                  <nz-form-control nz-col>
                     <nz-input-number formControlName="tgianThienHdongNgay"
                                      (ngModelChange)="ChangeNgay($event, 'TH')" nz-input [nzMin]="0"
                                      [nzMax]="globals.prop.MAX_INPUT"
@@ -215,7 +215,7 @@
               <div nz-col>
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true" class="hidden-label">Thời gian thực hiện hợp đồng</nz-form-label>
-                  <nz-form-control nz-col [nzErrorTip]="error">
+                  <nz-form-control nz-col>
                     <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="tgianThienHdong" nzDisabled>
                     </nz-date-picker>
                   </nz-form-control>
@@ -304,9 +304,8 @@
                   <div nz-col [nzSpan]="24">
                     <nz-form-item class="form-item display-block">
                       <nz-form-label [nzNoColon]="true"> Ghi chú</nz-form-label>
-                      <nz-form-control nz-col [nzErrorTip]="error">
-                            <textarea nz-input [rows]="3" formControlName="ghiChuBaoDam"
-                                      [readonly]="isView"></textarea>
+                      <nz-form-control nz-col>
+                        <textarea nz-input [rows]="3" formControlName="ghiChuBaoDam" [readonly]="isView"></textarea>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
@@ -354,7 +353,7 @@
               <div nz-col [nzSpan]="6">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Tên đơn vị DTNN</nz-form-label>
-                  <nz-form-control nz-col [nzErrorTip]="error">
+                  <nz-form-control nz-col>
                     <input nz-input formControlName="tenDvi" readonly/>
                   </nz-form-control>
                 </nz-form-item>
@@ -403,7 +402,7 @@
               <div nz-col [nzSpan]="6">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Fax</nz-form-label>
-                  <nz-form-control nz-col [nzErrorTip]="error">
+                  <nz-form-control nz-col>
                     <input nz-input formControlName="faxBenBan" [readonly]="isView"/>
                   </nz-form-control>
                 </nz-form-item>
@@ -426,8 +425,8 @@
               </div>
               <div nz-col [nzSpan]="6">
                 <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true"> Thông tin giấy ủy quyền</nz-form-label>
-                  <nz-form-control nz-col [nzErrorTip]="error">
+                  <nz-form-label [nzNoColon]="true"> Thông tin giấy ủy quyền</nz-form-label>
+                  <nz-form-control nz-col>
                     <input nz-input formControlName="giayUyQuyen" [readonly]="isView"/>
                   </nz-form-control>
                 </nz-form-item>
@@ -443,7 +442,7 @@
               <div nz-col [nzSpan]="6">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Tên đơn vị mua hàng</nz-form-label>
-                  <nz-form-control nz-col [nzErrorTip]="error">
+                  <nz-form-control nz-col>
                     <input nz-input formControlName="tenDviBenMua" readonly/>
                   </nz-form-control>
                 </nz-form-item>
@@ -451,7 +450,7 @@
               <div nz-col [nzSpan]="12">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Địa chỉ</nz-form-label>
-                  <nz-form-control nz-col [nzErrorTip]="error">
+                  <nz-form-control nz-col>
                     <input nz-input formControlName="diaChiBenMua" readonly/>
                   </nz-form-control>
                 </nz-form-item>
@@ -459,7 +458,7 @@
               <div nz-col [nzSpan]="6">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Mã số thuế</nz-form-label>
-                  <nz-form-control nz-col [nzErrorTip]="error">
+                  <nz-form-control nz-col>
                     <input nz-input formControlName="mstBenMua" readonly/>
                   </nz-form-control>
                 </nz-form-item>
@@ -492,7 +491,7 @@
               <div nz-col [nzSpan]="6">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Fax</nz-form-label>
-                  <nz-form-control nz-col [nzErrorTip]="error">
+                  <nz-form-control nz-col>
                     <input nz-input formControlName="faxBenMua" [readonly]="isView"/>
                   </nz-form-control>
                 </nz-form-item>
@@ -603,7 +602,7 @@
               <div nz-col [nzSpan]="12">
                 <nz-form-item class="form-item display-block">
                   <nz-form-label [nzNoColon]="true"> Ghi chú</nz-form-label>
-                  <nz-form-control nz-col [nzErrorTip]="error">
+                  <nz-form-control nz-col>
                     <textarea nz-input [rows]="3" formControlName="ghiChu" [readonly]="isView"></textarea>
                   </nz-form-control>
                 </nz-form-item>

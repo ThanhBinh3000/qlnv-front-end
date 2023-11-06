@@ -281,7 +281,7 @@
                   <div nz-col [nzSpan]="24">
                     <nz-form-item class="form-item display-block">
                       <nz-form-label [nzNoColon]="true"> Ghi chú</nz-form-label>
-                      <nz-form-control nz-col [nzErrorTip]="error">
+                      <nz-form-control nz-col>
                         <textarea nz-input [rows]="3" formControlName="ghiChuBaoDam" [readonly]="isView"></textarea>
                       </nz-form-control>
                     </nz-form-item>
@@ -607,7 +607,7 @@
               <div nz-col [nzSpan]="12">
                 <nz-form-item class="form-item display-block">
                   <nz-form-label [nzNoColon]="true"> Ghi chú</nz-form-label>
-                  <nz-form-control nz-col [nzErrorTip]="error">
+                  <nz-form-control nz-col>
                     <textarea nz-input [rows]="3" formControlName="ghiChu" [readonly]="isView"></textarea>
                   </nz-form-control>
                 </nz-form-item>
@@ -980,7 +980,7 @@
                   <div nz-col [nzSpan]="24">
                     <nz-form-item class="form-item display-block">
                       <nz-form-label [nzNoColon]="true"> Ghi chú</nz-form-label>
-                      <nz-form-control nz-col [nzErrorTip]="error">
+                      <nz-form-control nz-col>
                         <textarea nz-input [rows]="3" formControlName="ghiChuBaoDam" [readonly]="isView"></textarea>
                       </nz-form-control>
                     </nz-form-item>
@@ -1074,7 +1074,7 @@
               </div>
               <div nz-col [nzSpan]="6">
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Fax</nz-form-label>
+                  <nz-form-label nzRequired [nzNoColon]="true"> Fax</nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
                     <input nz-input formControlName="faxBenBan" [readonly]="isView"/>
                   </nz-form-control>
@@ -1098,7 +1098,7 @@
               </div>
               <div nz-col [nzSpan]="12">
                 <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true"> Thông tin giấy ủy quyền</nz-form-label>
+                  <nz-form-label [nzNoColon]="true"> Thông tin giấy ủy quyền</nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
                     <input nz-input formControlName="giayUyQuyen" [readonly]="isView"/>
                   </nz-form-control>
@@ -1138,7 +1138,7 @@
               </div>
               <div nz-col [nzSpan]="6">
                 <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true"> Tên người đại diện ký hợp đồng</nz-form-label>
+                  <nz-form-label [nzNoColon]="true"> Tên người đại diện ký hợp đồng</nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
                     <input nz-input formControlName="tenNguoiDdienMua" [readonly]="isView"/>
                   </nz-form-control>
@@ -1146,7 +1146,7 @@
               </div>
               <div nz-col [nzSpan]="6">
                 <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true"> Chức vụ</nz-form-label>
+                  <nz-form-label [nzNoColon]="true"> Chức vụ</nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
                     <input nz-input formControlName="chucVuBenMua" [readonly]="isView"/>
                   </nz-form-control>
@@ -1154,7 +1154,7 @@
               </div>
               <div nz-col [nzSpan]="6">
                 <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true"> Số điện thoại</nz-form-label>
+                  <nz-form-label [nzNoColon]="true"> Số điện thoại</nz-form-label>
                   <nz-form-control nz-col
                                    [nzErrorTip]="formData.get('sdtBenMua').hasError('invalidPhoneNumber') ? 'Số điện thoại không hợp lệ' : ''">
                     <input nz-input formControlName="sdtBenMua" [readonly]="isView"/>
@@ -1179,7 +1179,7 @@
               </div>
               <div nz-col [nzSpan]="18">
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Mở tại</nz-form-label>
+                  <nz-form-label nzRequired [nzNoColon]="true"> Mở tại</nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
                     <input nz-input formControlName="moTaiBenMua" [readonly]="isView"/>
                   </nz-form-control>
@@ -1308,7 +1308,7 @@
               <div nz-col [nzSpan]="12">
                 <nz-form-item class="form-item display-block">
                   <nz-form-label [nzNoColon]="true"> Ghi chú</nz-form-label>
-                  <nz-form-control nz-col [nzErrorTip]="error">
+                  <nz-form-control nz-col>
                     <textarea nz-input [rows]="3" formControlName="ghiChu" [readonly]="isView"></textarea>
                   </nz-form-control>
                 </nz-form-item>
