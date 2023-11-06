@@ -100,12 +100,38 @@
                   </nz-form-control>
                 </nz-form-item>
               </div>
-              <div nz-col nzSpan="6" >
+              <div nz-col nzSpan="6" *ngIf="formData.value.kieu == 'LD'">
                 <nz-form-item class="form-item">
                   <nz-form-label [nzNoColon]="true" nzRequired>Căn cứ trên QĐ giao NV của BTC</nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonQdGiaoNv()">
                       <input [readonly]="true" nz-input formControlName="soQdGiaoNv" readonly="true"/>
+                    </nz-input-group>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="4" *ngIf="formData.value.kieu == 'DC'">
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true" nzRequired>Số QĐ giao NV cần điều chỉnh
+                  </nz-form-label>
+                  <nz-form-control [nzErrorTip]="error">
+                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="conSoQdDc()">
+                      <input [readonly]="true" nz-input formControlName="soQdGoc" readonly="true"/>
+                    </nz-input-group>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="2" *ngIf="formData.value.kieu == 'DC'">
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true" nzRequired>Lần điều chỉnh
+                  </nz-form-label>
+                  <nz-form-control [nzErrorTip]="error">
+                    <nz-input-group nzAddOnAfterIcon="folder-open">
+                      <nz-input-number [nzDisabled]="true" formControlName="lanDc"
+                                       [nzMin]="1"
+                                       [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                                       [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                      </nz-input-number>
                     </nz-input-group>
                   </nz-form-control>
                 </nz-form-item>

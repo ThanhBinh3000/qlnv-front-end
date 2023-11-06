@@ -195,7 +195,7 @@ export class ThemMoiQdGiaoNvComponent extends Base2Component implements OnInit {
                 if(dtlTh.data){
                   if(dtlTh.data){
                     this.formData.patchValue({
-                      soQdGoc : dtlTh.data.soQdGiaoNv,
+                      soQdGoc : res.soQdGiaoNv,
                       idQdGoc : dtlTh.data.id,
                       lanDc : dtlTh.data.listDieuChinh.length + 1
                     });
@@ -227,6 +227,7 @@ export class ThemMoiQdGiaoNvComponent extends Base2Component implements OnInit {
                           item.lyDo = item.ktKhDxSuaChuaLonCtiet.lyDo;
                           item.giaTriPd = item.ktKhDxSuaChuaLonCtiet.giaTriPd;
                           item.namKh = item.ktKhDxSuaChuaLonCtiet.namKh;
+                          item.vonDauTuTcdt = item.ktKhDxSuaChuaLonCtiet.vonDauTuTcdt;
                         })
                       });
                     }

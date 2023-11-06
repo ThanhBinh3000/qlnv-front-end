@@ -245,7 +245,7 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
               if(dtlTh.data){
                 if(dtlTh.data){
                   this.formData.patchValue({
-                    soQdGoc : dtlTh.data.soQuyetDinh,
+                    soQdGoc : res.soQuyetDinh,
                     idQdGoc : dtlTh.data.id,
                     lanDc : dtlTh.data.listDieuChinh.length + 1
                   });
@@ -269,6 +269,10 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
                       const data = dataLastestDc.data
                       this.dataTable = data.children;
                       this.dataTable.forEach(item => {
+                        item.tenCuc = item.ktKhDxSuaChuaLonCtiet.tenCuc;
+                        item.tenChiCuc = item.ktKhDxSuaChuaLonCtiet.tenChiCuc;
+                        item.tenKhoi = item.ktKhDxSuaChuaLonCtiet.tenKhoi;
+                        item.tenDiemKho = item.ktKhDxSuaChuaLonCtiet.tenDiemKho;
                         item.tenCongTrinh = item.ktKhDxSuaChuaLonCtiet.tenCongTrinh;
                         item.soQd = item.ktKhDxSuaChuaLonCtiet.soQd;
                         item.tieuChuan = item.ktKhDxSuaChuaLonCtiet.tieuChuan;
@@ -277,6 +281,8 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
                         item.lyDo = item.ktKhDxSuaChuaLonCtiet.lyDo;
                         item.giaTriPd = item.ktKhDxSuaChuaLonCtiet.giaTriPd;
                         item.namKh = item.ktKhDxSuaChuaLonCtiet.namKh;
+                        item.ncKhTongSo = item.ktKhDxSuaChuaLonCtiet.ncKhTongSo;
+                        item.vonDauTuTcdt = item.ktKhDxSuaChuaLonCtiet.vonDauTuTcdt;
                       })
                     });
                   }
