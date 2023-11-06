@@ -81,6 +81,7 @@ export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
                 res.data.content.forEach(item => {
                     this.dataTable.push({
                         ...item,
+                        thangBcao: item.maLoaiBcao == Dtc.BC_CA_NAM ? null : item.thangBcao,
                         congVan: JSON.parse(item.congVan),
                     })
                 })

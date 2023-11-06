@@ -11,7 +11,7 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { BtnStatus, Cvmb, Report, TienThua } from '../../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
+import { BtnStatus, Cvmb, Doc, Report, TienThua } from '../../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 import * as XLSX from 'xlsx-js-style';
 import { Tab } from '../../von-mua-von-ung.constant';
 
@@ -58,6 +58,7 @@ export class TongHopTienThuaComponent implements OnInit {
         this.fileList.forEach((file: any) => {
             const id = file?.lastModified.toString();
             this.baoCao.lstFiles.push({
+                ... new Doc(),
                 id: id,
                 fileName: file?.name
             });
@@ -238,6 +239,11 @@ export class TongHopTienThuaComponent implements OnInit {
 
     // luu
     async save() {
+        if (this.baoCao.lstFiles.some(e => e.isEdit)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_SAVE_FILE);
+            return;
+        }
+
         if (this.listFile.some(file => file.size > Utils.FILE_SIZE)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
@@ -251,8 +257,11 @@ export class TongHopTienThuaComponent implements OnInit {
         request.lstCtiets = lstCtietTemp;
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.baoCao.maDvi + '/' + this.baoCao.maCapUng));
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.baoCao.lstFiles.find(e => e.id == id)?.noiDung;
+            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.baoCao.maDvi + '/' + this.baoCao.maCapUng, noiDung));
         }
+        request.fileDinhKems = request.fileDinhKems.concat(this.baoCao.lstFiles.filter(e => typeof e.id == 'number'))
 
         if (!this.baoCao.id) {
             this.capVonMuaBanTtthService.themMoiVonMuaBan(request).toPromise().then(

@@ -206,6 +206,11 @@ export class TongHopComponent implements OnInit {
 
     // luu
     async save(trangThai: string, lyDoTuChoi: string) {
+        if (this.formDetail.lstFiles.some(e => e.isEdit)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_SAVE_FILE);
+            return;
+        }
+
         if (this.lstCtietBcao.some(e => e.tong > Utils.MONEY_LIMIT)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
             return;
@@ -231,8 +236,11 @@ export class TongHopComponent implements OnInit {
 
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path));
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.formDetail.lstFiles.find(e => e.id == id)?.noiDung;
+            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path, noiDung));
         }
+        request.fileDinhKems = request.fileDinhKems.concat(this.formDetail.lstFiles.filter(e => typeof e.id == 'number'))
 
         request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
         request.trangThai = trangThai;

@@ -16,6 +16,7 @@ import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import * as XLSX from 'xlsx-js-style';
 import { BtnStatus, Doc, Form, Para, Vp } from '../../bao-cao-thuc-hien-von-phi.constant';
+import { BC_DOT } from '../../../bao-cao.constant';
 
 export class ItemData {
     id: string;
@@ -106,7 +107,7 @@ export class ItemData {
         this.trongDotTcong = Operator.sum([this.trongDotTcong, Operator.mul(coe, data.trongDotTcong)]);
         this.luyKeTcong = Operator.sum([this.luyKeTcong, Operator.mul(coe, data.luyKeTcong)]);
         this.listCtiet.forEach(item => {
-            const gtri = data.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiDm == item.loaiDm);
+            const gtri = data.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiDm == item.loaiDm && (!item.loaiBquan || e.loaiBquan == item.loaiBquan));
             item.gtri = Operator.sum([item.gtri, Operator.mul(coe, gtri.gtri)]);
             item.lkGtri = Operator.sum([item.lkGtri, Operator.mul(coe, gtri.lkGtri)]);
         })
@@ -135,6 +136,7 @@ export class Materials {
     maVtu: string;
     tenVtu: string;
     loaiDm: string;
+    loaiBquan: string;
     gtri: number;
     lkGtri: number;
 }
@@ -161,6 +163,7 @@ export class BaoCao04aComponent implements OnInit {
     //danh muc
     lstCtietBcao: ItemData[] = [];
     noiDungChis: any[] = [];
+    dsBaoQuan: any[] = [];
     dinhMucs: any = {
         '01': [],
         '02': [],
@@ -227,6 +230,10 @@ export class BaoCao04aComponent implements OnInit {
         if (this.status.save) {
             await this.getListNdung();
             await this.getDinhMuc();
+            const baoquan = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_BAO_QUAN');
+            if (baoquan) {
+                this.dsBaoQuan = baoquan.data;
+            }
         }
         this.luyKes = this.dataInfo.luyKes?.lstCtietBcaos;
         // nếu là báo cáo văn phòng thì lấy ra các dòng số lượng của nó
@@ -289,6 +296,14 @@ export class BaoCao04aComponent implements OnInit {
                 }
                 if (parseInt(a.maVtu, 10) < parseInt(b.maVtu, 10)) {
                     return -1
+                }
+                if (a.loaiBquan && b.loaiBquan) {
+                    if (parseInt(a.loaiBquan, 10) > parseInt(b.loaiBquan, 10)) {
+                        return 1
+                    }
+                    if (parseInt(a.loaiBquan, 10) < parseInt(b.loaiBquan, 10)) {
+                        return -1
+                    }
                 }
                 if (a.loaiDm == 'LDM') {
                     return -1
@@ -438,6 +453,11 @@ export class BaoCao04aComponent implements OnInit {
             return;
         }
 
+        if (this.formDetail.lstFiles.some(e => e.isEdit)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_SAVE_FILE);
+            return;
+        }
+
         if (this.lstCtietBcao.some(e => e.upperBound())) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
             return;
@@ -456,8 +476,11 @@ export class BaoCao04aComponent implements OnInit {
         const request = JSON.parse(JSON.stringify(this.formDetail));
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path));
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.formDetail.lstFiles.find(e => e.id == id)?.noiDung;
+            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path, noiDung));
         }
+        request.fileDinhKems = request.fileDinhKems.concat(this.formDetail.lstFiles.filter(e => typeof e.id == 'number'))
         request.lstCtietBcaos = lstCtietBcaoTemp;
         request.trangThai = trangThai;
         //call service cap nhat phu luc
@@ -633,8 +656,8 @@ export class BaoCao04aComponent implements OnInit {
         const index = this.lstCtietBcao.findIndex(e => e.maNdungChi == maNdungChi);
         if (index && index != -1) {
             this.lstCtietBcao[index].listCtiet.forEach(item => {
-                const gtri = sl.find(e => e.maVtu == item.maVtu && e.loaiDm == item.loaiDm).gtri;
-                const dm = this.dinhMucs[item.loaiDm].find(e => e.cloaiVthh == item.maVtu || e.loaiVthh == item.maVtu);
+                const gtri = sl.find(e => e.maVtu == item.maVtu && e.loaiDm == item.loaiDm && (!item.loaiBquan || e.loaiBquan == item.loaiBquan)).gtri;
+                const dm = this.dinhMucs[item.loaiDm].find(e => (e.cloaiVthh == item.maVtu || e.loaiVthh == item.maVtu) && (!item.loaiBquan || e.loaiBaoQuan == item.loaiBquan));
                 if (dm) {
                     item.gtri = keyVp ? Operator.mul(gtri, this.getDmValue(dm[keyDvi], dm[keyVp])) : Operator.mul(gtri, dm[keyDvi]);
                 }
@@ -787,13 +810,30 @@ export class BaoCao04aComponent implements OnInit {
                 }
                 if (this.dataInfo.maLoai != Vp.BM_05) {
                     obj.loaiDm = this.para.loaiDm;
-                    this.lstCol.push(obj);
-                    this.lstCtietBcao.forEach(item => {
-                        item.listCtiet.push({
-                            ...obj,
-                            id: uuid.v4() + 'FE',
+                    if (res.ma.startsWith('0101')) {
+                        this.dsBaoQuan.forEach(bq => {
+                            const objBq: Materials = {
+                                ...obj,
+                                tenVtu: obj.tenVtu + ' - ' + bq.giaTri,
+                                loaiBquan: bq.ma,
+                            }
+                            this.lstCol.push(objBq)
+                            this.lstCtietBcao.forEach(item => {
+                                item.listCtiet.push({
+                                    ...objBq,
+                                    id: uuid.v4() + 'FE',
+                                })
+                            })
                         })
-                    })
+                    } else {
+                        this.lstCol.push(obj);
+                        this.lstCtietBcao.forEach(item => {
+                            item.listCtiet.push({
+                                ...obj,
+                                id: uuid.v4() + 'FE',
+                            })
+                        })
+                    }
                 } else {
                     if (res.ma.startsWith('01')) {
                         const objLDM: Materials = {
@@ -806,18 +846,45 @@ export class BaoCao04aComponent implements OnInit {
                             tenVtu: obj.tenVtu + ' - LDBS',
                             loaiDm: 'LDBS',
                         }
-                        this.lstCol.push(objLDM);
-                        this.lstCol.push(objLDBS);
-                        this.lstCtietBcao.forEach(item => {
-                            item.listCtiet.push({
-                                ...objLDM,
-                                id: uuid.v4() + 'FE',
+                        if (res.ma.startsWith('0101')) {
+                            this.dsBaoQuan.forEach(bq => {
+                                const objLdmBq: Materials = {
+                                    ...objLDM,
+                                    tenVtu: objLDM.tenVtu + ' - ' + bq.giaTri,
+                                    loaiBquan: bq.ma,
+                                }
+                                const objLdbsBq: Materials = {
+                                    ...objLDBS,
+                                    tenVtu: objLDBS.tenVtu + ' - ' + bq.giaTri,
+                                    loaiBquan: bq.ma,
+                                }
+                                this.lstCol.push(objLdmBq)
+                                this.lstCol.push(objLdbsBq)
+                                this.lstCtietBcao.forEach(item => {
+                                    item.listCtiet.push({
+                                        ...objLdmBq,
+                                        id: uuid.v4() + 'FE',
+                                    })
+                                    item.listCtiet.push({
+                                        ...objLdbsBq,
+                                        id: uuid.v4() + 'FE',
+                                    })
+                                })
                             })
-                            item.listCtiet.push({
-                                ...objLDBS,
-                                id: uuid.v4() + 'FE',
+                        } else {
+                            this.lstCol.push(objLDM);
+                            this.lstCol.push(objLDBS);
+                            this.lstCtietBcao.forEach(item => {
+                                item.listCtiet.push({
+                                    ...objLDM,
+                                    id: uuid.v4() + 'FE',
+                                })
+                                item.listCtiet.push({
+                                    ...objLDBS,
+                                    id: uuid.v4() + 'FE',
+                                })
                             })
-                        })
+                        }
                     } else {
                         obj.loaiDm = 'LD';
                         this.lstCol.push(obj);
