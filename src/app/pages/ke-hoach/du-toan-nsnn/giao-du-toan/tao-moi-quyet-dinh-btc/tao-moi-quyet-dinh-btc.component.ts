@@ -1036,6 +1036,10 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
 
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
+        for (const cell in worksheet) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheet[cell].s = Table.borderStyle;
+        }
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         let excelName = this.maPa;
         excelName = excelName + '_GSTC_QDBTC.xlsx'

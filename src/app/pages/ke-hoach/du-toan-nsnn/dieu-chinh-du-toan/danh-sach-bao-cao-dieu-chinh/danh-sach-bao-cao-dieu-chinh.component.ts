@@ -164,8 +164,10 @@ export class DanhSachBaoCaoDieuChinhComponent implements OnInit {
             maDvi: this.searchFilter.donViTao,
             dotBcao: this.searchFilter.dotBcao,
             namBcao: this.searchFilter.nam,
-            ngayTaoDen: Utils.fmtDate(this.searchFilter.denNgay),
-            ngayTaoTu: Utils.fmtDate(this.searchFilter.tuNgay),
+            // ngayTaoDen: Utils.fmtDate(this.searchFilter.denNgay),
+            // ngayTaoTu: Utils.fmtDate(this.searchFilter.tuNgay),
+            ngayTaoDen: "",
+            ngayTaoTu: "",
             paggingReq: {
                 limit: this.pages.size,
                 page: this.pages.page,
