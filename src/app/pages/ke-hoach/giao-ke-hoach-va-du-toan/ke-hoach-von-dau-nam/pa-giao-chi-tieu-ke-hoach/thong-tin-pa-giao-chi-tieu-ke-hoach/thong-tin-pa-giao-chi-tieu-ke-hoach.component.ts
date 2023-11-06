@@ -1588,6 +1588,8 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
     //convert to flat object
     this.thongTinChiTieuKeHoachNamInput.khVatTuNhap = this.dataVatTuNhap;
     this.thongTinChiTieuKeHoachNamInput.khVatTuXuat = this.dataVatTuXuat;
+    //xử lý data nhập xuất vật tư, nếu đơn vị nào đó đã đươợc thêm 1 loại hàng hóa thì xóa dòng trống đi.
+    // let dataVtNhap = this.thongTinChiTieuKeHoachNamInput.khVatTuNhap.filter()
     if (this.thongTinChiTieuKeHoachNam.id > 0) {
       this.chiTieuKeHoachNamService
         .chinhSuaChiTieuKeHoach(this.thongTinChiTieuKeHoachNamInput)
