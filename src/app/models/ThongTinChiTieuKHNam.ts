@@ -29,6 +29,7 @@ export class ThongTinChiTieuKeHoachNam {
   qdGocId: number;
   soQdGoc: string;
   chiTieuId: number;
+  lyDoTuChoi:string;
   constructor(
     fileDinhKemReqs: Array<FileDinhKem> = [],
   ) {

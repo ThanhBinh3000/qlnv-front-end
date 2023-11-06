@@ -95,14 +95,18 @@ export class ThemMoiBtcComponent implements OnInit {
       this.formData.patchValue({
         id: data.id,
         namQd: data.namQd,
-        soQdTtcp: data.soQdTtcp,
+        // soQdTtcp: data.soQdTtcp,
         ngayQd: data.ngayQd,
         soQd: data.soQd.split('/')[0],
         trangThai: data.trangThai,
         trichYeu: data.trichYeu,
       });
+      this.onChangeNamQd(this.formData.get('namQd').value, data);
       this.dataTable = data.listBoNganh;
       this.taiLieuDinhKemList = data.fileDinhkems;
+      this.formData.patchValue({
+        soQdTtcp: data.soQdTtcp,
+      });
     } else {
       this.onChangeNamQd(this.formData.get('namQd').value);
     }
@@ -258,7 +262,7 @@ export class ThemMoiBtcComponent implements OnInit {
     this.formData.get('listBoNganh').setValue(this.dataTable);
   }
 
-  async onChangeNamQd(namQd) {
+  async onChangeNamQd(namQd, dataQdBtc?) {
     this.formData.get('soQdTtcp').setValue(null);
     let body = {
       namQd: namQd,
@@ -266,9 +270,14 @@ export class ThemMoiBtcComponent implements OnInit {
     };
     let res = await this.quyetDinhTtcpMuBuBoSung.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      const data = res.data.content.filter(item => !item.soQdBtc);
+      let data = [];
+      if (dataQdBtc) {
+        data = res.data.content;
+      } else {
+        data = res.data.content.filter(item => !item.soQdBtc);
+      }
       this.listTtcp = data;
-      if (this.listTtcp && this.listTtcp.length > 0) {
+      if (this.listTtcp && this.listTtcp.length > 0 && !dataQdBtc) {
         this.formData.patchValue({
           soQdTtcp: this.listTtcp[0].soQd,
         });
