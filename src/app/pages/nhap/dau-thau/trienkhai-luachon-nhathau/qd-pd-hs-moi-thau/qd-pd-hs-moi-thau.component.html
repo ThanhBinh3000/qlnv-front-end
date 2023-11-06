@@ -30,10 +30,16 @@
           <label class="search__label">Số QĐ PD KHLCNT</label>
           <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.soQdPdKhlcnt" />
         </div>
-        <div nz-col nzSpan="4">
+        <div nz-col nzSpan="4" *ngIf="loaiVthh.startsWith('02')">
           <label class="search__label"> Loại hàng DTQG </label>
           <nz-select [(ngModel)]="searchFilter.loaiVthh">
             <nz-option *ngFor="let p of listLoaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
+          </nz-select>
+        </div>
+        <div nz-col nzSpan="4" *ngIf="!loaiVthh.startsWith('02')">
+          <label class="search__label"> Chủng loại hàng DTQG </label>
+          <nz-select [(ngModel)]="searchFilter.cloaiVthh">
+            <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
           </nz-select>
         </div>
         <div nz-col nzSpan="6">
