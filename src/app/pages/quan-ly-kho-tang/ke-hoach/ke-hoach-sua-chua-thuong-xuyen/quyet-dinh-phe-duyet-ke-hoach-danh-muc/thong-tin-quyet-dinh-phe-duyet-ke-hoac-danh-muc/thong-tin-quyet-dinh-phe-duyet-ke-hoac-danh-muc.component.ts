@@ -265,6 +265,7 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
   async openDialogToTrinh() {
     await this.loadDsToTrinh();
     if (!this.isViewDetail) {
+      console.log(this.listToTrinh, 123)
       const modal = this.modal.create({
         nzTitle: 'Danh sách Phương án của Tổng cục',
         nzContent: DialogQdXdTrungHanComponent,
@@ -300,6 +301,7 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
       });
       this.dataTable = this.convertListData(this.dataTableReq);
       this.expandAll(this.dataTable);
+      console.log(this.dataTable)
     }
   }
 

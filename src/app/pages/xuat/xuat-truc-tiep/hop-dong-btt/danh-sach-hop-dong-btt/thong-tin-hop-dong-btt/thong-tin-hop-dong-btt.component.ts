@@ -112,7 +112,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         mstBenBan: [''],
         tenNguoiDaiDien: [''],
         chucVuBenBan: [''],
-        sdtBenBan: [''],
+        sdtBenBan: ['', [this.validatePhoneNumber]],
         faxBenBan: [''],
         stkBenBan: [''],
         moTaiBenBan: [''],
@@ -123,7 +123,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         mstBenMua: [''],
         tenNguoiDdienMua: [''],
         chucVuBenMua: [''],
-        sdtBenMua: [''],
+        sdtBenMua: ['', [this.validatePhoneNumber]],
         faxBenMua: [''],
         stkBenMua: [''],
         moTaiBenMua: [''],
@@ -151,7 +151,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         tenCloaiVthh: [''],
         fileCanCu: [new Array<FileDinhKem>()],
         fileDinhKem: [new Array<FileDinhKem>()],
-        listMaDviTsan: [null, [Validators.required]],
+        listMaDviTsan: [null],
       }
     );
   }
@@ -243,31 +243,39 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   }
 
   async save() {
-    await this.helperService.ignoreRequiredForm(this.formData);
-    this.setValidator();
-    const {soHopDong, tgianGiaoNhan} = this.formData.value;
-    const body = {
-      ...this.formData.value,
-      soHopDong: soHopDong ? soHopDong + this.maHopDongSuffix : null,
-      tgianGiaoNhanTu: tgianGiaoNhan ? dayjs(tgianGiaoNhan[0]).format('YYYY-MM-DD') : null,
-      tgianGiaoNhanDen: tgianGiaoNhan ? dayjs(tgianGiaoNhan[1]).format('YYYY-MM-DD') : null,
-      [this.userService.isCuc() ? 'children' : 'xhHopDongBttDviList']: this.dataTable,
-    };
-    await this.createUpdate(body);
-    await this.helperService.restoreRequiredForm(this.formData);
+    try {
+      await this.helperService.ignoreRequiredForm(this.formData);
+      this.setValidator();
+      const {soHopDong, tgianGiaoNhan} = this.formData.value;
+      const body = {
+        ...this.formData.value,
+        soHopDong: soHopDong ? soHopDong + this.maHopDongSuffix : null,
+        tgianGiaoNhanTu: tgianGiaoNhan ? dayjs(tgianGiaoNhan[0]).format('YYYY-MM-DD') : null,
+        tgianGiaoNhanDen: tgianGiaoNhan ? dayjs(tgianGiaoNhan[1]).format('YYYY-MM-DD') : null,
+        [this.userService.isCuc() ? 'children' : 'xhHopDongBttDviList']: this.dataTable,
+      };
+      await this.createUpdate(body);
+      await this.helperService.restoreRequiredForm(this.formData);
+    } catch (error) {
+      console.error("Lỗi khi lưu dữ liệu:", error);
+    }
   }
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
-    this.setValidForm();
-    const {soHopDong, tgianGiaoNhan} = this.formData.value;
-    const body = {
-      ...this.formData.value,
-      soHopDong: soHopDong ? soHopDong + this.maHopDongSuffix : null,
-      tgianGiaoNhanTu: tgianGiaoNhan ? dayjs(tgianGiaoNhan[0]).format('YYYY-MM-DD') : null,
-      tgianGiaoNhanDen: tgianGiaoNhan ? dayjs(tgianGiaoNhan[1]).format('YYYY-MM-DD') : null,
-      [this.userService.isCuc() ? 'children' : 'xhHopDongBttDviList']: this.dataTable,
-    };
-    await super.saveAndSend(body, trangThai, msg, msgSuccess);
+    try {
+      this.setValidForm();
+      const {soHopDong, tgianGiaoNhan} = this.formData.value;
+      const body = {
+        ...this.formData.value,
+        soHopDong: soHopDong ? soHopDong + this.maHopDongSuffix : null,
+        tgianGiaoNhanTu: tgianGiaoNhan ? dayjs(tgianGiaoNhan[0]).format('YYYY-MM-DD') : null,
+        tgianGiaoNhanDen: tgianGiaoNhan ? dayjs(tgianGiaoNhan[1]).format('YYYY-MM-DD') : null,
+        [this.userService.isCuc() ? 'children' : 'xhHopDongBttDviList']: this.dataTable,
+      };
+      await super.saveAndSend(body, trangThai, msg, msgSuccess);
+    } catch (error) {
+      console.error("Lỗi khi lưu và gửi dữ liệu:", error);
+    }
   }
 
   async openDialogChaoGia() {
@@ -320,11 +328,11 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         )
       );
       await Promise.all([
-        this.loadDanhDachHopDong(),
+        this.loadDanhDachHopDong(data),
         this.setListDviTsanCuc(data.children),
       ]);
       this.formData.patchValue({
-        namKh: data.namKh,
+        namHd: data.namKh,
         loaiHinhNx: data.loaiHinhNx,
         tenLoaiHinhNx: data.tenLoaiHinhNx,
         kieuNx: data.kieuNx,
@@ -583,10 +591,10 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         return;
       }
       const data = res.data;
-      await this.loadDanhDachHopDong();
+      await this.loadDanhDachHopDong(data);
       const loaiVthhItem = this.listHangHoaAll.find(s => s.ma == data.loaiVthh);
       const formDataPatchValue = {
-        namKh: data.namKh,
+        namHd: data.namKh,
         idChaoGia: data.id,
         idQdPd: data.idHdr,
         soQdPd: data.soQdPd,
@@ -623,7 +631,12 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         return;
       }
       const dataQdNv = resQdNv.data;
-      await this.setListMaDviTsanChiCuc(dataQdNv.children);
+      if (dataQdNv.children && dataQdNv.children.length > 0) {
+        const foundItem = dataQdNv.children.find(item => item.maDvi === this.userInfo.MA_DVI);
+        if (foundItem) {
+          await this.setListMaDviTsanChiCuc([foundItem]);
+        }
+      }
     } catch (e) {
       console.error('error:', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -660,10 +673,13 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     }
   }
 
-  async loadDanhDachHopDong() {
+  async loadDanhDachHopDong(dsData) {
+    if (!dsData) {
+      return;
+    }
     const body = {
       loaiVthh: this.loaiVthh,
-      namHd: this.formData.value.namHd,
+      namHd: dsData.namKh,
     };
     const res = await this.hopDongBttService.search(body);
     if (res.msg !== MESSAGE.SUCCESS) {
@@ -675,6 +691,14 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       return;
     }
     this.loadDanhSachHdong = data;
+  }
+
+  validatePhoneNumber(control: any) {
+    const phoneNumber = control.value;
+    if (!phoneNumber || phoneNumber[0] !== '0' || !/^[0-9]+$/.test(phoneNumber)) {
+      return {invalidPhoneNumber: true};
+    }
+    return null;
   }
 
   async deletePhuLuc(data) {
@@ -760,6 +784,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     }
     this.formData.controls["soQdPd"].setValidators([Validators.required]);
     this.formData.controls["soHopDong"].setValidators([Validators.required]);
+    this.formData.controls["listMaDviTsan"].setValidators([Validators.required]);
   }
 
   setValidForm() {
@@ -767,7 +792,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     this.formData.controls["tenLoaiHinhNx"].setValidators([Validators.required]);
     this.formData.controls["tenKieuNx"].setValidators([Validators.required]);
     this.formData.controls["thoiHanXuatKho"].setValidators([Validators.required]);
-    this.formData.controls["listMaDviTsan"].setValidators([Validators.required]);
     this.formData.controls["tenHopDong"].setValidators([Validators.required]);
     this.formData.controls["ngayKyHopDong"].setValidators([Validators.required]);
     this.formData.controls["ngayHlucHopDong"].setValidators([Validators.required]);

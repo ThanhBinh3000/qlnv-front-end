@@ -74,6 +74,7 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
       idQdNv: [],
       soQdNv: [''],
       ngayKyQdNv: [''],
+      idQdNvDtl: [],
       idHopDong: [],
       soHopDong: [''],
       ngayKyHopDong: [''],
@@ -84,10 +85,12 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
       idBbLayMau: [],
       soBbLayMau: [''],
       ngayLayMau: [''],
+      idKho: [],
       maDiemKho: [''],
       maNhaKho: [''],
       maNganKho: [''],
       maLoKho: [''],
+      soLuong: [],
       loaiVthh: [''],
       cloaiVthh: [''],
       tenHangHoa: [''],
@@ -183,7 +186,11 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
       console.error('Không tìm thấy dữ liệu');
       return;
     }
+    this.maTuSinh = this.idInput;
     this.dataTable = data.children;
+    if (!this.isView) {
+      await this.onChangeQdNv(data.idQdNv)
+    }
   }
 
   async openDialogQdNv() {
@@ -197,10 +204,8 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
       const res = await this.quyetDinhNvXuatBttService.search(body)
       if (res && res.msg === MESSAGE.SUCCESS) {
         this.danhSachQuyetDinh = res.data.content.filter(item => item.maDvi === this.userInfo.MA_DVI);
-      } else if (res && res.msg) {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       } else {
-        this.notification.error(MESSAGE.ERROR, 'Unknown error occurred.');
+        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ XUẤT HÀNG',
@@ -248,7 +253,6 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
         tenHangHoa: null,
         donViTinh: null,
         pthucBanTrucTiep: null,
-        phanLoai: null,
         maDiemKho: null,
         tenDiemKho: null,
         maNhaKho: null,
@@ -278,9 +282,7 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
         idQdNv: data.id,
         soQdNv: data.soQdNv,
         ngayKyQdNv: data.ngayKyQdNv,
-        tgianGiaoNhan: data.tgianGiaoNhan,
       });
-      await this.loadDanhSachKiemNghiemCluong(data.soQdNv);
       const resLM = await this.bienBanLayMauBttService.search({
         namKh: data.namKh,
         soQdNv: data.soQdNv,
@@ -295,6 +297,7 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
         return;
       }
       this.danhSachBbLayMau = dataLM
+      await this.loadDanhSachKiemNghiemCluong(data.soQdNv);
     } catch (e) {
       console.error('Error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -361,6 +364,8 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
       }
       const data = res.data;
       this.formData.patchValue({
+        idQdNvDtl: data.idQdNvDtl,
+        tgianGiaoNhan: data.tgianGiaoNhan,
         idBbLayMau: data.id,
         soBbLayMau: data.soBbLayMau,
         ngayLayMau: data.ngayLayMau,
@@ -380,6 +385,7 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
         donViTinh: data.donViTinh,
         pthucBanTrucTiep: data.pthucBanTrucTiep,
         phanLoai: data.phanLoai,
+        idKho: data.idKho,
         maDiemKho: data.maDiemKho,
         tenDiemKho: data.tenDiemKho,
         maNhaKho: data.maNhaKho,
@@ -388,10 +394,13 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
         tenNganKho: data.tenNganKho,
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
+        idThuKho: data.idThuKho,
+        tenThuKho: data.tenThuKho,
+        soLuong: data.soLuong,
         maDviCon: data.maDvi,
         tenNganLoKho: data.tenLoKho ? data.tenLoKho + ' - ' + data.tenNganKho : data.tenNganKho
       });
-      if (this.formData.value.cloaiVthh) {
+      if (this.formData.value.cloaiVthh && this.idInput === 0) {
         await this.loadDsQcTheoCloaiVthh()
       }
     } catch (e) {
@@ -404,17 +413,20 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
 
   async loadDsQcTheoCloaiVthh() {
     try {
+      await this.spinner.show();
       const res = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(this.formData.value.cloaiVthh);
-      if (res.msg === MESSAGE.SUCCESS) {
-        this.dataTable = res.data || [];
-        this.dataTable.forEach(element => {
-          element.edit = false;
-        });
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
+      if (res.msg !== MESSAGE.SUCCESS || !res.data) {
+        return;
       }
-    } catch (err) {
-      this.notification.error(MESSAGE.ERROR, err.msg);
+      this.dataTable = res.data || [];
+      this.dataTable.forEach(element => {
+        element.edit = false;
+      });
+    } catch (e) {
+      console.error('Error: ', e);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
   }
 

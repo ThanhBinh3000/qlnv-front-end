@@ -309,9 +309,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
     body.fileTienDoTh = this.fileTienDoTh;
     body.fileNghiemThu = this.fileNghiemThu;
     body.fileThanhLy = this.fileThanhLy;
-    if (body.dkThanhLy && body.dkThanhLy.length > 0) {
-      body.dkThanhLy = body.dkThanhLy.toString();
-    }
+    body.dkThanhLy = (body.dkThanhLy && body.dkThanhLy.length > 0) ? body.dkThanhLy.toString() : null;
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.khCnCongTrinhNghienCuu.update(body);
@@ -452,7 +450,6 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
 
   clearData() {
     this.rowItem = new TienDoThucHien();
-    this.dataTable = [];
   }
 
   emitDataTable() {
@@ -461,8 +458,6 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
 
   //Nghiệm thu
   themMoiItem1() {
-
-
     if (!this.dataTable1) {
       this.dataTable1 = [];
     }
@@ -485,7 +480,6 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
 
   clearData1() {
     this.rowItem1 = new NghiemThuThanhLy();
-    this.dataTable1 = [];
   }
 
   sortTableId1() {

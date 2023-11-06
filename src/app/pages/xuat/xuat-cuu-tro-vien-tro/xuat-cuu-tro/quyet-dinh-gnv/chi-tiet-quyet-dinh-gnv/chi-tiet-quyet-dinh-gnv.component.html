@@ -1,5 +1,5 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
-  <div class="btn-group" *ngIf="!isViewOnModal">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix" *ngIf="!isViewOnModal">
+  <div class="btn-group">
     <button (click)="quayLai()" class="btn btn-sub" type="button">
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
@@ -175,7 +175,7 @@
         <ng-container *ngIf="formData.value.type === 'XC'">
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true">Số lượng</nz-form-label>
+              <nz-form-label nzRequired [nzNoColon]="true">Số lượng gạo cần thu được sau xay xát thóc</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24">
                 <nz-input-number formControlName="soLuong" [nzMin]="0" [nzMax]="999999999999" [nzStep]="1"
                   [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="true">
@@ -319,7 +319,7 @@
                       <td>
                         <ng-container *ngIf="userService.isCuc() && lv1.soLuongDx > lv1.soLuongGiao">
                           <a>
-                            <i class="fa fa-plus" title="Thêm" (click)="themPhuongAn(lv1,1)"></i>
+                            <i class="fa fa-plus" title="Thêm" (click)="themPhuongAn(lv1,1, false, item)"></i>
                           </a>
                         </ng-container>
                       </td>
@@ -343,10 +343,10 @@
                         <ng-container *ngIf="showAction()">
                           <td class="text-center">
                             <a *ngIf="userService.isCuc()">
-                              <i class="fa fa-pencil" title="Sửa" (click)="themPhuongAn(lv2,2, true)"></i>
+                              <i class="fa fa-pencil" title="Sửa" (click)="themPhuongAn(lv2,2, true, lv1)"></i>
                             </a>
                             <a *ngIf="userService.isChiCuc() && lv2.soLuongGiao > lv2.soLuong">
-                              <i class="fa fa-plus" title="Thêm" (click)="themPhuongAn(lv2,2)"></i>
+                              <i class="fa fa-plus" title="Thêm" (click)="themPhuongAn(lv2,2, false, lv1)"></i>
                             </a>
 
                             <a *ngIf="userService.isCuc()">
@@ -376,7 +376,7 @@
                               <td class="text-center">
                                 <ng-container *ngIf="userService.isChiCuc()">
                                   <a>
-                                    <i class="fa fa-pencil" title="Sửa" (click)="themPhuongAn(lv3,3, true)"></i>
+                                    <i class="fa fa-pencil" title="Sửa" (click)="themPhuongAn(lv3,3, true, lv2)"></i>
                                   </a>
                                   <a>
                                     <i class="fa fa-trash-o do" title="Thêm" nz-popconfirm nz-button
@@ -407,7 +407,10 @@
               <th></th>
               <th style="width: 35px">STT</th>
               <th>Địa phương/cơ quan/<br />đơn vị nhận cứu trợ</th>
-              <th>SL giao<br />Cục thực hiện</th>
+              <th *ngIf="formData.value.type === 'XC' && !formData.value.paXuatGaoChuyenXc">SL thóc giao<br />Cục thực
+                hiện</th>
+              <th *ngIf="formData.value.type === 'XC' && formData.value.paXuatGaoChuyenXc">SL gạo sau xay xát<br />giao
+                Cục thực hiện</th>
               <th>Chi cục DTNN</th>
               <th>SL giao chi cục</th>
               <th>Địa điểm xuất</th>
@@ -443,8 +446,8 @@
                   <td></td>
                   <ng-container *ngIf="showAction()">
                     <td class="text-center">
-                      <a *ngIf="userService.isCuc()">
-                        <i class="fa fa-plus" title="Thêm" (click)="themPaXuatCapThoc(item, 1)"></i>
+                      <a *ngIf="userService.isCuc() && item.soLuongDx > item.soLuongGiao">
+                        <i class="fa fa-plus" title="Thêm" (click)="themPaXuatCapThoc(item, 1, null)"></i>
                       </a>
                     </td>
                   </ng-container>
@@ -460,7 +463,8 @@
                       <td class="text-right">{{lv1.soLuongGiao|number:globals.numberFormat:globals.locale}}</td>
                       <td></td>
                       <td></td>
-                      <td class="text-right bold">{{lv1.tonKhoDvi|number:globals.numberFormat:globals.locale}}</td>
+                      <!-- <td class="text-right bold">{{lv1.tonKhoDvi|number:globals.numberFormat:globals.locale}}</td> -->
+                      <td></td>
                       <td></td>
                       <td class="text-right bold">
                         {{lv1.slGaoThuHoiSauXayXat|number:globals.numberFormat:globals.locale}}
@@ -469,11 +473,11 @@
                       <ng-container *ngIf="showAction()">
                         <td class="text-center">
                           <a *ngIf="userService.isCuc()">
-                            <i class="fa fa-pencil" title="Sửa" (click)="suaPaXuatCapThoc(lv1)"></i>
+                            <i class="fa fa-pencil" title="Sửa" (click)="suaPaXuatCapThoc(lv1, 2, item)"></i>
                           </a>
                           <a
                             *ngIf="userService.isChiCuc() && (!lv1.slGaoThuHoiSauXayXat || lv1.soLuongGiao > lv1.slGaoThuHoiSauXayXat)">
-                            <i class="fa fa-plus" title="Thêm" (click)="themPaXuatCapThoc(lv1, 2)"></i>
+                            <i class="fa fa-plus" title="Thêm" (click)="themPaXuatCapThoc(lv1, 2, item)"></i>
                           </a>
 
                           <a *ngIf="userService.isCuc()">
@@ -505,7 +509,7 @@
                             <td class="text-center">
                               <ng-container *ngIf="userService.isChiCuc()">
                                 <a>
-                                  <i class="fa fa-pencil" title="Sửa" (click)="suaPaXuatCapThoc(lv2, 3)"></i>
+                                  <i class="fa fa-pencil" title="Sửa" (click)="suaPaXuatCapThoc(lv2, 3, lv1)"></i>
                                 </a>
                                 <a>
                                   <i class="fa fa-trash-o do" title="Xóa bản ghi" nz-popconfirm nz-button
@@ -543,7 +547,7 @@
                   <ng-container *ngIf="showAction()">
                     <td class="text-center">
                       <a *ngIf="userService.isCuc()">
-                        <i class="fa fa-plus" title="Thêm" (click)="themPaXuatCapThoc(item)"></i>
+                        <i class="fa fa-plus" title="Thêm" (click)="themPaXuatCapThoc(item, 1, null)"></i>
                       </a>
                     </td>
                   </ng-container>
@@ -567,11 +571,11 @@
                       <ng-container *ngIf="showAction()">
                         <td class="text-center">
                           <a *ngIf="userService.isCuc()">
-                            <i class="fa fa-pencil" title="Sửa" (click)="suaPaXuatCapThoc(lv1)"></i>
+                            <i class="fa fa-pencil" title="Sửa" (click)="suaPaXuatCapThoc(lv1, 2, item)"></i>
                           </a>
                           <a
                             *ngIf="userService.isChiCuc() && (!lv1.slThocDeXayXat || lv1.soLuongGiao > lv1.slThocDeXayXat)">
-                            <i class="fa fa-plus" title="Thêm" (click)="themPaXuatCapThoc(lv1, 2)"></i>
+                            <i class="fa fa-plus" title="Thêm" (click)="themPaXuatCapThoc(lv1, 2, item)"></i>
                           </a>
 
                           <a *ngIf="userService.isCuc()">
@@ -603,7 +607,7 @@
                             <td>
                               <ng-container *ngIf="userService.isChiCuc()">
                                 <a>
-                                  <i class="fa fa-pencil" title="Sửa" (click)="suaPaXuatCapThoc(lv2, 3)"></i>
+                                  <i class="fa fa-pencil" title="Sửa" (click)="suaPaXuatCapThoc(lv2, 3, lv1)"></i>
                                 </a>
                                 <a>
                                   <i class="fa fa-trash-o do" title="Xóa bản ghi" nz-popconfirm nz-button
@@ -709,7 +713,8 @@
                     </nz-select>
                   </div>
                   <div nz-col [nzSpan]="8">
-                    <p style="font-size: 13px;font-weight: 500">Tồn kho: <span
+                    <p style="font-size: 13px;font-weight: 500">
+                      {{formData.value.paXuatGaoChuyenXc? 'Tồn kho thóc': 'Tồn kho:' }}<span
                         style="color: #001CFF">{{formDataDtl.value.tonKhoDvi|number:globals.numberFormat:globals.locale}}</span>
                     </p>
                   </div>
@@ -726,7 +731,10 @@
             </nz-form-item>
           </ng-container>
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Tổng số lượng giao Chi cục</nz-form-label>
+            <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">
+              {{ formData.value.type ==='XC' && formData.value.paXuatGaoChuyenXc ? 'Tổng số lượng gạo giao Chi cục':
+              'Tổng số lượng giao Chi cục'}}
+            </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-number formControlName="soLuongGiao" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
                 [nzDisabled]="!userService.isCuc()" [nzSize]="'small'" [nzFormatter]="globals.formatter"

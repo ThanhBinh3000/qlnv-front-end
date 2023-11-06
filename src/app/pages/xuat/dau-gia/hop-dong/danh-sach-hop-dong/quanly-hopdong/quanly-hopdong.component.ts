@@ -174,14 +174,12 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
   }
 
   async pheDuyet() {
-    await this.spinner.show();
     const dataFilter = this.dataTable.find(item => item.trangThai === this.STATUS.DU_THAO);
     if (dataFilter) {
       this.notification.error(MESSAGE.ERROR, `Không thể hoàn thành thực hiện, hợp đồng số ${dataFilter.soHopDong} đang chưa ký`);
     } else {
       await this.approve(this.idInput, STATUS.DA_HOAN_THANH, "Bạn có muốn hoàn thành thực hiện hợp đồng ?");
     }
-    await this.spinner.hide();
   }
 
 

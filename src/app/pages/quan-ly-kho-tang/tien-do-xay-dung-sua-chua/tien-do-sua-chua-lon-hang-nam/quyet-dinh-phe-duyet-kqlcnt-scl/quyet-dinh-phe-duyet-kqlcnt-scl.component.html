@@ -91,6 +91,7 @@
                                                    [isViewDetail]="isViewDetail"
                                                    [itemQdPdKhLcnt]="itemTtdt"
                                                    [itemDuAn]="itemDuAn"
+                                                   (dataItemKqLcnt)="receivedData($event)"
                                                    *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKQLCNT_XEM')"
                                                    [idInput]="selectedId">
 

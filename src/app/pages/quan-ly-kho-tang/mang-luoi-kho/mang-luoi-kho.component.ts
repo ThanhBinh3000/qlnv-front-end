@@ -343,11 +343,13 @@ export class MangLuoiKhoComponent implements OnInit {
         if (type) {
           this.isEditData = true;
           this.nodeSelected = event.origin;
+          this.nodeSelected.maDvi = this.nodeSelected.key;
           this.levelNode = this.nodeSelected.capDvi;
           this.getDetailMlkByKey(event);
         } else {
           this.isEditData = true;
           this.nodeSelected = event.node.origin;
+          this.nodeSelected.maDvi = this.nodeSelected.key;
           this.levelNode = this.nodeSelected.capDvi;
           this.getDetailMlkByKey(event.node);
         }
@@ -458,7 +460,6 @@ export class MangLuoiKhoComponent implements OnInit {
   }
 
   bindingDataDetail(dataNode) {
-    debugger
     if (this.levelNode != 1) {
       this.convertDataChild(dataNode);
       this.loaiHangHoa = {

@@ -102,6 +102,7 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
       soLuongCtieu: [],
       soLuongKhDd: [],
       soLuong: [],
+      tenNguonVon: [],
       thanhTien: [],
       hhDcQdPduyetKhmttSlddList: [],
     });
@@ -115,7 +116,6 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
         this.tgianMkhoChange = this.dataInput.tgianMkho
         this.tgianKthucChange = this.dataInput.tgianKthuc
         await this.getPag(this.dataInput);
-        console.log(this.dataInput, "datainput")
         this.dataTable = this.dataInput.children
         this.calculatorTable();
       } else {
@@ -201,7 +201,6 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
       loaiGia: 'LG03'
     }
     let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
-    console.log("pag", pag)
     if (pag.msg === MESSAGE.SUCCESS) {
       if (pag.data) {
         let giaCuThe = 0;
@@ -225,7 +224,6 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
 
 
   themMoiBangPhanLoTaiSan(data?: any, index?: number) {
-    console.log(this.formData, "formData")
     const modalGT = this.modal.create({
       nzTitle: 'Thêm địa điểm nhập kho',
       nzContent: DialogThemMoiKeHoachMuaTrucTiepComponent,
@@ -254,7 +252,6 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
         // if (!this.validateAddDiaDiem(data)) {
         //   return
         // }
-        console.log(data, "popup")
         this.dataTable.push(data);
       }
       this.calculatorTable();
@@ -265,14 +262,20 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
     let tongMucDt: number = 0;
     let tongSoLuong: number = 0;
     this.dataTable.forEach((item) => {
-      let soLuongChiCuc = 0;
-      item.children.forEach(child => {
-        soLuongChiCuc += child.soLuong;
-        tongSoLuong += child.soLuong;
-        tongMucDt += child.soLuong * child.donGia * 1000
-      })
-      item.soLuong = soLuongChiCuc;
+      if(item.children.length > 0){
+        let soLuongChiCuc = 0;
+        item.children.forEach(child => {
+          soLuongChiCuc += child.soLuong;
+          tongSoLuong += child.soLuong;
+          tongMucDt += child.soLuong * child.donGia * 1000
+        })
+        item.soLuong = soLuongChiCuc;
+      }else{
+        tongSoLuong += item.tongSoLuong;
+        tongMucDt += item.tongSoLuong * item.donGiaVat * 1000;
+      }
     });
+    console.log("1")
     this.formData.patchValue({
       tongSoLuong: tongSoLuong,
       tongMucDt: tongMucDt,
@@ -310,7 +313,6 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
           this.dataTable = this.dataTable.filter((item, index) => index != i);
           this.emitDataTable()
           this.calculatorTable();
-          console.log(this.dataTable)
         } catch (e) {
           console.log('error', e);
         }

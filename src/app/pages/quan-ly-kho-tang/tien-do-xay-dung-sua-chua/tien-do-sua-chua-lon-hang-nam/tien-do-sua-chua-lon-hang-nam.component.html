@@ -284,7 +284,7 @@
           </app-cap-nhat-thong-tin-dau-thau-scl>
         </ng-container>
         <ng-container *ngIf="tabSelected == '04'">
-          <app-quyet-dinh-phe-duyet-kqlcnt-scl [itemTtdt]="itemTtdt"
+          <app-quyet-dinh-phe-duyet-kqlcnt-scl [itemTtdt]="itemTtdt" (dataItemKqLcnt)="receivedData($event,'04')"
                                                [itemDuAn]="itemSelected" >
           </app-quyet-dinh-phe-duyet-kqlcnt-scl>
         </ng-container>

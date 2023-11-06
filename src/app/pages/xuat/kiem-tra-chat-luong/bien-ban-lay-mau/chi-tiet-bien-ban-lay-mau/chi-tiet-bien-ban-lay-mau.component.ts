@@ -42,6 +42,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
   @Input() inputData: any;
   @Input() isView: any = false;
   @Input() loaiChon: string;
+  @Input() isViewOnModal: boolean;
   radioValue: any;
   listFileDinhKem: any;
   canCu: any;

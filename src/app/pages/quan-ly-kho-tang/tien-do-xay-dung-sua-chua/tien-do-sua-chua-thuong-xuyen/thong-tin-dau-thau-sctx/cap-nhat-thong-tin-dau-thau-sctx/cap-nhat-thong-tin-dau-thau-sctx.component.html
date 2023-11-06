@@ -152,7 +152,7 @@
               <td class="text-right">{{item.giaTri | number : '1.0-1' : 'vi_VN'}}</td>
               <td >{{item.nhaThauTrung}}</td>
               <td class="text-right">{{item.giaTrungThau | number : '1.0-1' : 'vi_VN'}}</td>
-              <td class="text-right">{{ item.giaTri - item.giaTrungThau | number : '1.0-1' : 'vi_VN'}}</td>
+              <td class="text-right">{{(item.giaTrungThau > 0  ? (item.giaTri - item.giaTrungThau):'') | number : '1.0-1' : 'vi_VN'}}</td>
               <td>{{item.tenTrangThai}}</td>
               <td>{{item.soQdPdKqlcnt}}</td>
             </tr>
@@ -202,7 +202,9 @@
             *ngIf="formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT">
             <th></th>
             <th><input nz-input [readonly]=isViewDetail [(ngModel)]="rowItemNtNopHs.tenNhaThau"/></th>
-            <th><input nz-input [readonly]="isViewDetail" [(ngModel)]="rowItemNtNopHs.maSoThue"/></th>
+            <th>
+              <nz-input-number [nzSize]="'small'"  [nzDisabled]="isViewDetail" [(ngModel)]="rowItemNtNopHs.maSoThue"></nz-input-number>
+            </th>
             <th><input nz-input [readonly]="isViewDetail" [(ngModel)]="rowItemNtNopHs.diaChi"/></th>
             <th><input nz-input [readonly]="isViewDetail" [(ngModel)]="rowItemNtNopHs.soDienThoai"/></th>
             <th>

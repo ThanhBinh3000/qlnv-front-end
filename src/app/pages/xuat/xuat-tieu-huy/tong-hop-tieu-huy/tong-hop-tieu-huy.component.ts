@@ -52,9 +52,13 @@ export class TongHopTieuHuyComponent extends Base3Component implements OnInit {
   async ngOnInit() {
     await this.spinner.show();
     await Promise.all([
+      this.getId(),
       this.search(),
     ])
     this.buildTableView()
+    if(this.id){
+      this.showDetail(this.id);
+    }
     await this.spinner.hide();
 
   }
@@ -95,7 +99,7 @@ export class TongHopTieuHuyComponent extends Base3Component implements OnInit {
   showDetail(idTh) {
     if (idTh) {
       const modalGT = this.modal.create({
-        nzTitle: 'TỔNG HỢP DANH SÁCH CẦN TIÊU HỦY',
+        nzTitle: 'BẢNG TỔNG HỢP HÀNG CẦN TIÊU HỦY',
         nzContent: ChitietThThComponent,
         nzMaskClosable: false,
         nzClosable: false,

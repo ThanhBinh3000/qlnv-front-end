@@ -1,12 +1,14 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { MESSAGE } from 'src/app/constants/message';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { PhieuKtraCluongBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/phieu-ktra-cluong-btt.service';
+import {Component, OnInit, Input} from '@angular/core';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {MESSAGE} from 'src/app/constants/message';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {
+  PhieuKtraCluongBttService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/phieu-ktra-cluong-btt.service';
 import _ from 'lodash';
 import * as uuid from "uuid";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
@@ -28,6 +30,7 @@ export class PhieuKtraCluongBttComponent extends Base2Component implements OnIni
   isViewLayMau: boolean = false;
   idTinhKho: number = 0;
   isViewTinhKho: boolean = false;
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -38,7 +41,7 @@ export class PhieuKtraCluongBttComponent extends Base2Component implements OnIni
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuKtraCluongBttService);
     this.formData = this.fb.group({
-      nam: null,
+      namKh: null,
       soQdNv: null,
       soPhieuKiemNghiem: null,
       ngayKiemNghiemMauTu: null,
@@ -102,7 +105,7 @@ export class PhieuKtraCluongBttComponent extends Base2Component implements OnIni
         soQdNv: soQdNvKey || "",
         namKh: firstRowInGroup.namKh || "",
         idQdNv: firstRowInGroup.idQdNv || "",
-        ngayKyQdNv: firstRowInGroup.ngayKyQdNv || "",
+        tgianGiaoNhan: firstRowInGroup.tgianGiaoNhan || "",
         childData,
       };
     }).value();

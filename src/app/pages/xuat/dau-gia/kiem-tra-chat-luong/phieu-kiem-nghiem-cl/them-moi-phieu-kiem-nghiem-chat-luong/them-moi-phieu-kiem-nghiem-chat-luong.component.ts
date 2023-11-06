@@ -73,17 +73,21 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       idQdNv: [],
       soQdNv: [''],
       ngayKyQdNv: [''],
+      idQdNvDtl: [],
+      tgianGiaoHang: [''],
       idHopDong: [],
       soHopDong: [''],
       ngayKyHopDong: [''],
       idBbLayMau: [],
       soBbLayMau: [''],
       ngayLayMau: [''],
+      idKho: [],
       maDiemKho: [''],
       diaDiemKho: [''],
       maNhaKho: [''],
       maNganKho: [''],
       maLoKho: [''],
+      soLuong: [],
       maDviCon: [''],
       loaiHinhNx: [''],
       kieuNhapXuat: [''],
@@ -179,7 +183,11 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       console.error('Không tìm thấy dữ liệu');
       return;
     }
+    this.maTuSinh = this.idInput;
     this.dataTable = data.children;
+    if (!this.isView) {
+      await this.onChangeQdNv(data.idQdNv)
+    }
   }
 
   async openDialogQdNv() {
@@ -190,13 +198,11 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         nam: this.formData.value.nam,
         trangThai: STATUS.BAN_HANH
       }
-      const resQd = await this.quyetDinhGiaoNhiemVuXuatHangService.search(body)
-      if (resQd && resQd.msg === MESSAGE.SUCCESS) {
-        this.danhSachQuyetDinh = resQd.data.content.filter(item => item.maDvi === this.userInfo.MA_DVI);
-      } else if (resQd && resQd.msg) {
-        this.notification.error(MESSAGE.ERROR, resQd.msg);
+      const res = await this.quyetDinhGiaoNhiemVuXuatHangService.search(body)
+      if (res && res.msg === MESSAGE.SUCCESS) {
+        this.danhSachQuyetDinh = res.data.content.filter(item => item.maDvi === this.userInfo.MA_DVI);
       } else {
-        this.notification.error(MESSAGE.ERROR, 'Unknown error occurred.');
+        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ XUẤT HÀNG',
@@ -214,20 +220,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       modalQD.afterClose.subscribe(async (data) => {
         if (data) {
           await this.onChangeQdNv(data.id);
-          const resBb = await this.bienBanLayMauXhService.search({
-            nam: data.nam,
-            soQdNv: data.soQdNv,
-            loaiVthh: data.loaiVthh
-          })
-          if (resBb.msg !== MESSAGE.SUCCESS) {
-            this.notification.error(MESSAGE.ERROR, resBb.msg);
-            return;
-          }
-          const dataBb = resBb.data.content;
-          if (!dataBb || dataBb.length === 0) {
-            return;
-          }
-          this.danhSachBbLayMau = dataBb
         }
       });
     } catch (e) {
@@ -285,6 +277,20 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         ngayKyQdNv: data.ngayKy,
         nam: data.nam,
       });
+      const resLM = await this.bienBanLayMauXhService.search({
+        nam: data.nam,
+        soQdNv: data.soQdNv,
+        loaiVthh: data.loaiVthh
+      })
+      if (resLM.msg !== MESSAGE.SUCCESS) {
+        this.notification.error(MESSAGE.ERROR, resLM.msg);
+        return;
+      }
+      const dataLM = resLM.data.content;
+      if (!dataLM || dataLM.length === 0) {
+        return;
+      }
+      this.danhSachBbLayMau = dataLM
       await this.loadDanhSachKiemNghiemCluong(data.soQdNv);
     } catch (e) {
       console.error('Error: ', e);
@@ -331,6 +337,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       }
       const data = res.data;
       this.formData.patchValue({
+        idQdNvDtl: data.idQdNvDtl,
+        tgianGiaoHang: data.tgianGiaoHang,
         idBbLayMau: data.id,
         soBbLayMau: data.soBbLayMau,
         ngayLayMau: data.ngayLayMau,
@@ -345,6 +353,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         tenCloaiVthh: data.tenCloaiVthh,
         tenHangHoa: data.tenHangHoa,
         donViTinh: data.donViTinh,
+        idKho: data.idKho,
         maDiemKho: data.maDiemKho,
         tenDiemKho: data.tenDiemKho,
         diaDiemKho: data.diaDiemKho,
@@ -354,10 +363,13 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         tenNganKho: data.tenNganKho,
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
+        idThuKho: data.idThuKho,
+        tenThuKho: data.tenThuKho,
+        soLuong: data.soLuong,
         maDviCon: data.maDvi,
         tenNganLoKho: data.tenLoKho ? data.tenLoKho + ' - ' + data.tenNganKho : data.tenNganKho
       });
-      if (this.formData.value.cloaiVthh) {
+      if (this.formData.value.cloaiVthh && this.idInput === 0) {
         await this.loadDsQcTheoCloaiVthh()
       }
     } catch (e) {
@@ -370,17 +382,20 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
 
   async loadDsQcTheoCloaiVthh() {
     try {
+      await this.spinner.show();
       const res = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(this.formData.value.cloaiVthh);
-      if (res.msg === MESSAGE.SUCCESS) {
-        this.dataTable = res.data || [];
-        this.dataTable.forEach(element => {
-          element.edit = false;
-        });
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
+      if (res.msg !== MESSAGE.SUCCESS || !res.data) {
+        return;
       }
-    } catch (err) {
-      this.notification.error(MESSAGE.ERROR, err.msg);
+      this.dataTable = res.data || [];
+      this.dataTable.forEach(element => {
+        element.edit = false;
+      });
+    } catch (e) {
+      console.error('Error: ', e);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
   }
 

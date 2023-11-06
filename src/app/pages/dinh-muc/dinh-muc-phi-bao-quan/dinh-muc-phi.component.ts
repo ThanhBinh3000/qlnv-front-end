@@ -16,6 +16,7 @@ export class DinhMucPhiComponent implements OnInit {
   constructor(
     public globals: Globals,
     public userService: UserService,
+    public router: Router,
   ) {
   }
   tabSelected = '01';
@@ -29,6 +30,9 @@ export class DinhMucPhiComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (!this.userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.selectTab(this.tabSelected);
   }
 }

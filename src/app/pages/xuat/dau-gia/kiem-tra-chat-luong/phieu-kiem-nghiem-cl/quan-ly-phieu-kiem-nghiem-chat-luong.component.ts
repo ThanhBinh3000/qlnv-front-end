@@ -105,7 +105,7 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
         soQdNv: soQdNvKey || "",
         nam: firstRowInGroup.nam || "",
         idQdNv: firstRowInGroup.idQdNv || "",
-        ngayKyQdNv: firstRowInGroup.ngayKyQdNv || "",
+        tgianGiaoHang: firstRowInGroup.tgianGiaoHang || "",
         childData,
       };
     }).value();
