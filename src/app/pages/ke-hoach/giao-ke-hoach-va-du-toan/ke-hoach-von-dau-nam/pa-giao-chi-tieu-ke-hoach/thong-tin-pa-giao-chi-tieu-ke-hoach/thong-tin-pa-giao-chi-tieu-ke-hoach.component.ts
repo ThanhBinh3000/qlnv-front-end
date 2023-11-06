@@ -437,6 +437,8 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
                       case this.yearNow - 1:
                         item.tkdnThoc[2].soLuong +=
                           tonKho.duDau;
+                        item.xtnThoc[2].soLuong +=
+                          tonKho.duDau;
                         break;
                       case this.yearNow - 2:
                         item.tkdnThoc[1].soLuong +=
