@@ -60,12 +60,12 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     this.formData = this.fb.group({
       id: [null],
       namKh: [dayjs().get('year'), Validators.required],
-      soQdDc: ['', [Validators.required]],
+      soQdDc: [''],
       idQdGoc: ['', Validators.required],
       soQdGoc: ['', [Validators.required]],
       ngayKyQdGoc: [''],
       ngayKyDc: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
-      ngayHluc: ['', [Validators.required]],
+      ngayHluc: [''],
       trichYeu: [''],
       trangThai: [STATUS.DA_LAP],
       tenTrangThai: ['Đã lập'],
@@ -177,10 +177,10 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
               body.trangThai = STATUS.TU_CHOI_LDV;
               break;
             }
-            case STATUS.DA_DUYET_LDV: {
-              body.trangThai = STATUS.TU_CHOI_LDV;
-              break;
-            }
+            // case STATUS.DA_DUYET_LDV: {
+            //   body.trangThai = STATUS.TU_CHOI_LDV;
+            //   break;
+            // }
           }
           const res = await this.dieuChinhQuyetDinhPdKhmttService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -206,7 +206,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
         const data = res.data;
         this.formData.patchValue({
           id: data.id,
-          soQdDc: data.soQdDc.split("/")[0],
+          soQdDc: data.soQdDc.split("/")[0] != "" ? data.soQdDc.split("/")[0] : this.soQdDc,
           ngayKyDc: data.ngayKyDc,
           ngayHluc: data.ngayHluc,
           loaiVthh: data.loaiVthh,
@@ -402,13 +402,13 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
 
 
   async save(isGuiDuyet?) {
-    this.helperService.markFormGroupTouched(this.formData);
+    await this.helperService.markFormGroupTouched(this.formData);
+    this.clearValidatorLuuDuThao()
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
       return;
     }
     let body = this.formData.value;
-    body.soQdDc = body.soQdDc + this.soQdDc;
     body.hhDcQdPduyetKhmttDxList = this.danhsachDxMtt;
     body.ngayKyDc = this.datePipe.transform(body.ngayKyDc, 'yyyy-MM-dd');
     body.ngayHluc = this.datePipe.transform(body.ngayHluc, 'yyyy-MM-dd');
@@ -419,24 +419,46 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     if (this.formData.get('id').value) {
       res = await this.dieuChinhQuyetDinhPdKhmttService.update(body);
     } else {
+      body.soQdDc = body.soQdDc + this.soQdDc;
       res = await this.dieuChinhQuyetDinhPdKhmttService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
       if (isGuiDuyet) {
+        this.setValidator();
+        await this.helperService.markFormGroupTouched(this.formData);
+        if (this.formData.invalid) {
+          return;
+        }
         this.idInput = res.data.id;
-        this.guiDuyet();
+        await this.guiDuyet();
       } else {
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          this.quayLai()
+          this.helperService.bidingDataInFormGroup(this.formData, res.data);
+          // this.quayLai()
         } else {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-          this.quayLai()
+          this.helperService.bidingDataInFormGroup(this.formData, res.data);
+          // this.quayLai()
         }
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+  }
+
+  clearValidatorLuuDuThao() {
+    this.formData.controls["soToTrinh"].clearValidators();
+    this.formData.controls["ngayTaoCv"].clearValidators();
+    this.formData.controls["soQdDc"].clearValidators();
+    this.formData.controls["ngayHluc"].clearValidators();
+  }
+
+  setValidator() {
+    this.formData.controls["soToTrinh"].setValidators([Validators.required]);
+    this.formData.controls["ngayTaoCv"].setValidators([Validators.required]);
+    this.formData.controls["soQdDc"].setValidators([Validators.required]);
+    this.formData.controls["ngayHluc"].setValidators([Validators.required]);
   }
 
   async guiDuyet() {
@@ -454,14 +476,14 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
         mesg = 'Bạn có muốn gửi duyệt ?'
         break;
       }
+      // case STATUS.CHO_DUYET_LDV: {
+      //   trangThai = STATUS.DA_DUYET_LDV;
+      //   mesg = 'Bạn có muốn gửi duyệt ?'
+      //   break;
+      // }
       case STATUS.CHO_DUYET_LDV: {
-        trangThai = STATUS.DA_DUYET_LDV;
-        mesg = 'Bạn có muốn gửi duyệt ?'
-        break;
-      }
-      case STATUS.DA_DUYET_LDV: {
         trangThai = STATUS.BAN_HANH
-        mesg = 'Bạn có muốn gửi duyệt ?'
+        mesg = 'Bạn có muốn ban hành ?'
         break;
       }
     }
@@ -498,7 +520,6 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     });
   }
   public onChangesData(_event) {
-    console.log("change")
     this.dataOnChanges.splice(0, 1, _event);
 
   }
@@ -508,7 +529,6 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
 
   async getDataChiTieu(id: any) {
     let res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachNam(id);
-    console.log("123", res2)
     if (res2.msg == MESSAGE.SUCCESS) {
       this.dataChiTieu = res2.data;
     }
@@ -521,7 +541,17 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
       item.tongSoLuong = item.children.reduce((acc, data) => acc + data.tongSoLuong, 0)
       item.tongMucDt = item.children.reduce((acc, data) => acc + data.tongThanhTien, 0)
     })
-    console.log(this.danhsachDxMtt, 9999)
+  }
+
+  objectChange($event){
+    this.danhsachDxMtt.forEach(item => {
+      if($event.maDvi == item.maDvi){
+        item.tgianKthuc = $event.tgianKthuc
+        item.tgianMkho = $event.tgianMkho
+        item.tenDvi = $event.tenDvi
+        item.ghiChu = $event.ghiChu
+      }
+    })
   }
 
   // async getDataChiTieu() {

@@ -101,7 +101,7 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
                 <nz-date-picker [(ngModel)]="tgianMkhoChange" [ngModelOptions]="{standalone: true}" nzFormat="dd/MM/yyyy"
-                                [nzDisabled]="isView" (ngModelChange)="onDateChanged($event, 'tgianMkho')"></nz-date-picker>
+                                [nzDisabled]="isView" (ngModelChange)="onChangedValue($event, 'tgianMkho')"></nz-date-picker>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -112,16 +112,16 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
                 <nz-date-picker [(ngModel)]="tgianKthucChange" [ngModelOptions]="{standalone: true}" nzFormat="dd/MM/yyyy"
-                                [nzDisabled]="isView" (ngModelChange)="onDateChanged($event, 'tgianKthuc')"></nz-date-picker>
+                                [nzDisabled]="isView" (ngModelChange)="onChangedValue($event, 'tgianKthuc')"></nz-date-picker>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> ghi chú </nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Ghi chú </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <textarea nz-input formControlName="ghiChu" [readonly]="isView"></textarea>
+              <textarea nz-input [(ngModel)]="ghiChuChange" [ngModelOptions]="{standalone: true}" (ngModelChange)="onChangedValue($event, 'ghiChu')" [readonly]="isView"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -130,7 +130,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Tên chủ đầu tư</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input [readonly]="isView" formControlName="tenDvi" />
+                <input nz-input [readonly]="isView" [(ngModel)]="tenDviChange" [ngModelOptions]="{standalone: true}" (ngModelChange)="onChangedValue($event, 'tenDvi')" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
