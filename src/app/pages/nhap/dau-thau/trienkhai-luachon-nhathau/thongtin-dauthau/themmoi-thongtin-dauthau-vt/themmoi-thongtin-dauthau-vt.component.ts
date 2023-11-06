@@ -16,6 +16,8 @@ import { cloneDeep } from 'lodash';
 import { formatDate } from "@angular/common";
 import { PREVIEW } from "../../../../../../constants/fileType";
 import { saveAs } from "file-saver";
+import {CurrencyMaskInputMode} from "ngx-currency";
+import {STATUS} from "../../../../../../constants/status";
 @Component({
   selector: 'app-themmoi-thongtin-dauthau-vt',
   templateUrl: './themmoi-thongtin-dauthau-vt.component.html',
@@ -38,6 +40,21 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
   idGoiThau: number = 0;
   isDieuChinh: boolean = false;
   previewName: string = "thong_tin_dau_thau_vt";
+  listNhaThau: any[] = [];
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "left",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  };
+  fileDinhKems: any[] = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -74,10 +91,18 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
       trangThaiDt: [''],
       tenTrangThaiDt: [''],
       tongGiaTriGthau: [''],
+      tgianTrinhKqTcg: [''],
+      tgianTrinhTtd: [''],
+      ghiChuTtdt: [''],
     })
   }
 
-  ngOnInit(): void {
+  async ngOnInit(){
+    this.listNhaThau = [];
+    let resNt = await this.thongTinDauThauService.getDanhSachNhaThau();
+    if (resNt.msg == MESSAGE.SUCCESS) {
+      this.listNhaThau = resNt.data;
+    }
     this.dsTrangThai = [
       {
         value: this.STATUS.THANH_CONG,
@@ -207,6 +232,12 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
     if (this.isDieuChinh) {
       type = "DC"
     }
+    this.formData.patchValue({
+      tgianTrinhKqTcg: dataGoiThau.tgianTrinhKqTcg,
+      tgianTrinhTtd: dataGoiThau.tgianTrinhTtd,
+      ghiChuTtdt: dataGoiThau.ghiChuTtdt,
+    })
+    this.fileDinhKems = dataGoiThau.fileDinhKems
     let res = await this.thongTinDauThauService.getDetailThongTinVt(this.idGoiThau, this.loaiVthh, type);
     this.itemRow.soLuong = dataGoiThau.soLuong
     if (res.msg == MESSAGE.SUCCESS) {
@@ -376,5 +407,52 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
       this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
       this.showDlgPreview = true;
     });
+  }
+
+  changeNhaThau(event?: any) {
+    if (event.nzValue != '') {
+      this.listNhaThau.forEach(item => {
+        if (item.tenNhaThau == event.nzValue) {
+          this.itemRow.donGia = item.donGia
+          this.itemRow.mst = item.mst
+          this.itemRow.diaChi = item.diaChi
+          this.itemRow.sdt = item.sdt
+        }
+      })
+    }
+  }
+
+  selectNhaThau(i, event) {
+    this.listNthauNopHs.forEach(item => {
+      if (item.id == event) {
+        this.itemRowQd[i].donGiaVat = item.donGia
+      }
+    })
+  }
+
+  async saveGoiThauPopup() {
+    await this.spinner.show();
+    let type = "GOC";
+    if (this.isDieuChinh) {
+      type = "DC"
+    }
+    let body = {
+      idGoiThau: this.idGoiThau,
+      ghiChuTtdt: this.formData.value.ghiChuTtdt,
+      tgianTrinhKqTcg: this.formData.value.tgianTrinhKqTcg,
+      tgianTrinhTtd: this.formData.value.tgianTrinhTtd,
+      fileDinhKems: this.fileDinhKems,
+      type: type
+    }
+    let res = await this.thongTinDauThauService.updateGoiThau(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+    if (this.listNthauNopHs.length > 0) {
+      await this.saveGt();
+    }
+    await this.spinner.hide()
   }
 }

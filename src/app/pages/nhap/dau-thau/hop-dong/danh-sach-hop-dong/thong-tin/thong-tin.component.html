@@ -968,11 +968,12 @@
                 <thead>
                 <tr>
                   <th style="width: 2%;"></th>
-                  <th>Chi cục</th>
-                  <th>Điểm kho</th>
-                  <th>Địa điểm nhập kho</th>
-                  <th>Số lượng</th>
-                  <th>Thành tiền</th>
+                  <th style="width: 20%;" class="text-center">Chi cục</th>
+                  <th style="width: 20%;" class="text-center">Điểm kho</th>
+                  <th style="width: 20%;" class="text-center">Địa điểm nhập kho</th>
+                  <th style="width: 14%;" class="text-center">Số lượng</th>
+                  <th style="width: 14%;" class="text-center">Thành tiền</th>
+                  <th style="width: 10%;" class="text-center" *ngIf="!isDisableForm()">Hành động</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -986,9 +987,38 @@
                       <td class="text-right text-bold">{{chiCuc.soLuong * formData.value.donGia | number :
                         '1.0-1' :
                         'vi_VN'}}</td>
+                      <td *ngIf="!isDisableForm()"></td>
                     </tr>
                     <ng-container *ngIf="expandSet.has(y)">
-                      <tr *ngFor="let diemKho of chiCuc.children, let y = index">
+                      <tr *ngIf="!isDisableForm()">
+                        <td></td>
+                        <td></td>
+                        <td>
+                          <nz-select [(ngModel)]="rowItem[y].maDvi">
+                            <nz-option *ngFor="let item of listDiemKho[y]" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+                            </nz-option>
+                          </nz-select>
+                        </td>
+                        <td></td>
+                        <td  class="text-right">
+                          <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzSize]="'small'"
+                                           [(ngModel)]="rowItem[y].soLuong" [nzMin]="0">
+                          </nz-input-number>
+                        </td>
+                        <td class="text-right text-bold">{{rowItem[y].soLuong * formData.value.donGia | number :
+                          '1.0-1' :
+                          'vi_VN'}}</td>
+                        <td *ngIf="!isDisableForm()">
+                          <a (click)="themDiaDiemNhap(y)">
+                            <i class="icon htvbdh_dau-cong xanhla"></i>
+                          </a>
+                          <a (click)="clearDiaDiemNhap(y)">
+                            <i  class="fa fa-refresh"></i>
+                          </a>
+                        </td>
+                      </tr>
+                      <tr *ngFor="let diemKho of chiCuc.children, let z = index">
+                        <ng-container *ngIf="!diemKho.edit; else editTemp">
                         <td></td>
                         <td></td>
                         <td>{{diemKho.tenDvi}}</td>
@@ -997,6 +1027,42 @@
                         <td class="text-right">{{diemKho.soLuong * formData.value.donGia  | number : '1.0-1' :
                           'vi_VN'}}
                         </td>
+                        <td *ngIf="!isDisableForm()">
+                          <a (click)="editRow(y, z)">
+                            <i  class="fa fa-pencil" title="Sửa"></i>
+                          </a>
+                          <a (click)="xoaDiaDiemNhap(y,z)">
+                            <i  class="fa fa-trash-o do"></i>
+                          </a>
+                        </td>
+                        </ng-container>
+                        <ng-template #editTemp>
+                          <td></td>
+                          <td></td>
+                          <td>
+                            <nz-select [(ngModel)]="rowItemEdit[z].maDvi">
+                              <nz-option *ngFor="let item of listDiemKho[y]" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+                              </nz-option>
+                            </nz-select>
+                          </td>
+                          <td></td>
+                          <td  class="text-right">
+                            <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzSize]="'small'"
+                                             [(ngModel)]="rowItemEdit[z].soLuong" [nzMin]="0">
+                            </nz-input-number>
+                          </td>
+                          <td class="text-right text-bold">{{rowItemEdit[z].soLuong * formData.value.donGia | number :
+                            '1.0-1' :
+                            'vi_VN'}}</td>
+                          <td *ngIf="!isDisableForm()">
+                            <a (click)="saveEdit(y, z)">
+                              <i class="fa fa-save"></i>
+                            </a>
+                            <a (click)="cancelEdit(y, z)">
+                              <i  class="fa fa-times do"></i>
+                            </a>
+                          </td>
+                        </ng-template>
                       </tr>
                     </ng-container>
                   </ng-container>
@@ -1010,7 +1076,7 @@
                   <td class="text-right blue-text">{{ calcTongThanhTien() | number :
                     '1.0-1' :
                     'vi_VN'}}</td>
-                  <td></td>
+                  <td *ngIf="!isDisableForm()"></td>
                 </tr>
                 </tbody>
               </nz-table>
