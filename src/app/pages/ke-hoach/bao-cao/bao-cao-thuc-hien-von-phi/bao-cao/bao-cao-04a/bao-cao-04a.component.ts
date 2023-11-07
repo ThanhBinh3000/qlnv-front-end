@@ -1018,6 +1018,7 @@ export class BaoCao04aComponent implements OnInit {
             { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
             { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
             { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+            { t: 3, b: 3, l: 0, r: 4, val: 'Trạng thái báo cáo: ' + this.dataInfo.tenTrangThai },
             { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
             { t: 4, b: 5, l: 1, r: 1, val: 'Nội dung chi' },
             { t: 4, b: 4, l: 2, r: 2 + num, val: 'Chi tiết theo từng mặt hàng trong đợt' },
