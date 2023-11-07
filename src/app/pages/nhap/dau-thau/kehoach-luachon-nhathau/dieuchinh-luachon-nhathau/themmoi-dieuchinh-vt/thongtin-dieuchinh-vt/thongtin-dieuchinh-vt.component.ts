@@ -131,6 +131,7 @@ export class ThongtinDieuchinhVtComponent extends Base2Component implements OnIn
         this.dsDxChange.emit(this.listOfData);
         await this.getDataChiTieu();
         this.initListQuy();
+        this.tinhTongMucDauTu();
       }
     }
     await this.spinner.hide()
@@ -240,6 +241,7 @@ export class ThongtinDieuchinhVtComponent extends Base2Component implements OnIn
 
   deleteRow(i: number): void {
     this.listOfData = this.listOfData.filter((d, index) => index !== i);
+   this.tinhTongMucDauTu();
     this.helperService.setIndexArray(this.listOfData);
   }
 
@@ -269,5 +271,15 @@ export class ThongtinDieuchinhVtComponent extends Base2Component implements OnIn
       });
       return sum;
     }
+  }
+
+  tinhTongMucDauTu () {
+    let tongMucDt: number = 0;
+    this.listOfData.forEach((item) => {
+      tongMucDt = tongMucDt + (item.soLuong * item.donGiaVat / 1000000000);
+    });
+    this.formData.patchValue({
+      tongMucDt: parseFloat(tongMucDt.toFixed(2)),
+    });
   }
 }
