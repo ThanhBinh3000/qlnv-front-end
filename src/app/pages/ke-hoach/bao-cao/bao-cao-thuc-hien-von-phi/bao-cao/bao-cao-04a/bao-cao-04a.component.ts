@@ -299,10 +299,10 @@ export class BaoCao04aComponent implements OnInit {
                 }
                 if (a.loaiBquan && b.loaiBquan) {
                     if (parseInt(a.loaiBquan, 10) > parseInt(b.loaiBquan, 10)) {
-                        return 1
+                        return -1
                     }
                     if (parseInt(a.loaiBquan, 10) < parseInt(b.loaiBquan, 10)) {
-                        return -1
+                        return 1
                     }
                 }
                 if (a.loaiDm == 'LDM') {
@@ -667,6 +667,11 @@ export class BaoCao04aComponent implements OnInit {
         }
     }
 
+    isExistDm(data: Materials) {
+        const dm = this.dinhMucs[data.loaiDm].find(e => (e.cloaiVthh == data.maVtu || e.loaiVthh == data.maVtu) && (!data.loaiBquan || e.loaiBaoQuan == data.loaiBquan));
+        return dm ? true : false;
+    }
+
     tinhDinhMuc(data: ItemData) {
         if (!data) { return; }
         this.tinhCtietDm(this.para.nvChuyenMon, data.listCtiet, 'nvChuyenMonDviTt', 'nvChuyenMonVp');
@@ -990,9 +995,9 @@ export class BaoCao04aComponent implements OnInit {
     }
 
     checkEdit(item: ItemData) {
-        if (item.maNdungChi.startsWith('0.1.3')) {
-            return false;
-        }
+        // if (item.maNdungChi.startsWith('0.1.3')) {
+        //     return false;
+        // }
         if (item.maNdungChi.startsWith('0.1.5') && item.level < 3) {
             return false;
         }
