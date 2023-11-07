@@ -142,10 +142,6 @@ export class Status {
       tenDm: 'Từ chối phê duyệt',
     },
     {
-      id: Status.TT_06,
-      tenDm: 'Phê duyệt',
-    },
-    {
       id: Status.TT_07,
       tenDm: 'Phê duyệt',
     },
