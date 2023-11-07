@@ -179,24 +179,19 @@
             </div>
             <div nz-col [nzSpan]="24" *ngIf="formData.value.pthucBanTrucTiep === TRUC_TIEP.UY_QUYEN">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true">
-                  File đính kèm QĐ ủy quyền (nếu
-                  có)
+                <nz-form-label nzRequired [nzNoColon]="true"> File đính kèm QĐ ủy quyền (nếu có)
                 </nz-form-label>
                 <div class="list-file">
-                  <file-list [disabled]="isView" [isCanCuPL]="true"
-                             [data]="fileUyQuyen"></file-list>
+                  <file-list [data]="fileUyQuyen" [isViewDetail]="isView"></file-list>
                 </div>
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="24" *ngIf="formData.value.pthucBanTrucTiep === TRUC_TIEP.BAN_LE">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true">
-                  File đính kèm QĐ giao chi cục bán lẻ (nếu có)
+                <nz-form-label nzRequired [nzNoColon]="true">File đính kèm QĐ giao chi cục bán lẻ (nếu có)
                 </nz-form-label>
                 <div class="list-file">
-                  <file-list [disabled]="isView" [isCanCuPL]="true"
-                             [data]="fileBanLe"></file-list>
+                  <file-list [data]="fileBanLe" [isViewDetail]="isView"></file-list>
                 </div>
               </nz-form-item>
             </div>

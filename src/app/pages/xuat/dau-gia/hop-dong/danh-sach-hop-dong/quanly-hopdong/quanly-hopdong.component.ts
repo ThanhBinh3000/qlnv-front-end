@@ -131,6 +131,8 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
       return;
     }
     this.listHangHoaAll = res.data;
+    const donViTinh = this.listHangHoaAll.find(s => s.ma == this.loaiVthh)?.maDviTinh;
+    this.formData.patchValue({donViTinh: donViTinh})
   }
 
   async showFirstRow($event, id: any) {
@@ -213,17 +215,17 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
     return this.dataTable.reduce((sum, cur) => sum + (cur[column] || 0), 0);
   }
 
-  formatterTien = (value: number) => {
-    const donViTien = '(đ)';
-    const formattedValue = value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
-    return `${formattedValue} ${donViTien}`;
-  }
-
-  formatterSoLuong = (value: number) => {
-    const donViTinh = this.listHangHoaAll.find(s => s.ma == this.loaiVthh)?.maDviTinh;
-    const formattedValue = value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
-    return `${formattedValue} ${donViTinh == undefined ? '' : donViTinh}`;
-  }
+  // formatterTien = (value: number) => {
+  //   const donViTien = '(đ)';
+  //   const formattedValue = value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
+  //   return `${formattedValue} ${donViTien}`;
+  // }
+  //
+  // formatterSoLuong = (value: number) => {
+  //   const donViTinh = this.listHangHoaAll.find(s => s.ma == this.loaiVthh)?.maDviTinh;
+  //   const formattedValue = value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
+  //   return `${formattedValue} ${donViTinh == undefined ? '' : donViTinh}`;
+  // }
 
   openModal(id: number) {
     this.idQdNv = id;

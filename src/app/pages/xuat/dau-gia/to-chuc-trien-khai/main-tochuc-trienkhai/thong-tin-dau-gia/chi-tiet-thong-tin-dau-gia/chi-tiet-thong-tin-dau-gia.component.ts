@@ -294,18 +294,17 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     });
   }
 
-
-  formatterTien = (value: number) => {
-    const donViTien = '(đ)';
-    const formattedValue = value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
-    return `${formattedValue} ${donViTien}`;
-  }
-
-  formatterSoLuong = (value: number) => {
-    const donViTinh = this.formData.value.donViTinh;
-    const formattedValue = value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
-    return `${formattedValue} ${donViTinh}`;
-  }
+  // formatterTien = (value: number) => {
+  //   const donViTien = '(đ)';
+  //   const formattedValue = value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
+  //   return `${formattedValue} ${donViTien}`;
+  // }
+  //
+  // formatterSoLuong = (value: number) => {
+  //   const donViTinh = this.formData.value.donViTinh;
+  //   const formattedValue = value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
+  //   return `${formattedValue} ${donViTinh}`;
+  // }
 
   async preview() {
     const data = [];
