@@ -191,6 +191,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         fileUyQuyen: this.fileUyQuyen,
         fileBanLe: this.fileBanLe,
       };
+      body.id = 0;
       await this.createUpdate(body);
     } catch (e) {
       console.error('Error: ', e);
