@@ -108,7 +108,7 @@
                 <td class="text-left">{{ data.trangThaiDuyet }}</td>
                 <td>
                   <a
-                    *ngIf="data.trangThai !=  STATUS.DANG_NHAP_DU_LIEU && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_QD_TCGIAO_XEM')"
+                    *ngIf="data.trangThai !=  STATUS.TU_CHOI_LDV && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_QD_TCGIAO_XEM')"
                     (click)="redirectThongTinChiTieuKeHoachNam(data.id, true)">
                     <i class=" icon htvbdh_eye"></i>
                   </a>
