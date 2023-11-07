@@ -120,7 +120,6 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
 
   async ngOnInit() {
     this.spinner.show();
-    this.maTrinh = '/' + this.userInfo.MA_TR;
     if (this.idInput > 0) {
       // await this.getDetail(this.idInput);
     } else {
@@ -170,6 +169,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
         this.formData.patchValue({
           soDxuat: data.soDxuat?.split('/')[0],
         })
+        this.maTrinh = "/" + data.soDxuat?.split('/')[1]
         this.dataTable = data.children;
         console.log(this.dataTable)
         this.fileDinhKem = data.fileDinhKems;
@@ -180,6 +180,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
   }
 
   initForm() {
+    this.maTrinh = '/' + this.userInfo.MA_TR;
     this.formData.patchValue({
       tenDvi: this.userInfo.TEN_DVI,
       maDvi: this.userInfo.MA_DVI,
@@ -270,7 +271,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
       return;
     }
     const modalGT = this.modal.create({
-      nzTitle: 'Thêm địa điểm nhập kho',
+      nzTitle: 'THÊM ĐỊA ĐIỂM NHẬP KHO',
       nzContent: DialogThemMoiKeHoachMuaTrucTiepComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -290,6 +291,10 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
       if (!data) {
         return;
       }
+      console.log(data, 999)
+      this.formData.patchValue({
+        thueGtgt: data.thueVat
+      })
       if (index >= 0) {
         this.dataTable[index] = data;
       } else {
@@ -334,7 +339,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
     });
   }
 
-  deleteRow(i: number) {
+  deleteRow(i: number, y?: number) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -345,7 +350,11 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
       nzWidth: 400,
       nzOnOk: async () => {
         try {
-          this.dataTable = this.dataTable.filter((item, index) => index != i);
+          if(y != undefined){
+            this.dataTable[i].children = this.dataTable.find((res, index) => index == i).children.filter((item, index) => index != y);
+          }else{
+            this.dataTable = this.dataTable.filter((item, index) => index != i);
+          }
           this.calculatorTable();
         } catch (e) {
           console.log('error', e);
@@ -360,6 +369,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
     if (this.formData.invalid) {
       return;
     }
+    let body = this.formData.value;
     if (isGuiDuyet) {
       if (this.dataTable.length == 0) {
         this.notification.error(
@@ -367,10 +377,11 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
           'Danh sách số lượng địa điểm không được để trống',
         );
         return;
+      }else{
+        body.ngayPduyet = new Date();
       }
     }
     let pipe = new DatePipe('en-US');
-    let body = this.formData.value;
     if (this.formData.get('soDxuat').value) {
       body.soDxuat = this.formData.get('soDxuat').value + this.maTrinh;
     }
