@@ -85,7 +85,7 @@
         </div>
       </form>
       <div class='cangiua group-button-search'>
-        <button nz-button class='search__button--clear' (click)='clearForm()'>
+        <button nz-button class='search__button--clear' (click)="clearForm({maBn: this.userInfo.MA_DVI.startsWith('01') ? null : this.userInfo.MA_DVI})">
           <i class='icon  htvbdh_nhap-lai1'></i>
           Xóa điều kiện
         </button>
@@ -119,7 +119,7 @@
       </div>
     </div>
     <nz-card class='mt-2px flex-card data-table card-border-content table-card'>
-      <nz-table #basicTable nzBordered [nzData]='dataTable' class='table-chi-tiet'
+      <nz-table #basicTable nzBordered [nzData]='dataTable' class='table-chi-tiet' [nzFrontPagination]='false' [nzShowPagination]='false'
                 [nzScroll]="{ x: '1700px' }">
         <thead>
         <tr>
