@@ -153,12 +153,12 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
 
   async save(isGuiDuyet?) {
     await this.spinner.show();
-    // this.setValidator(isGuiDuyet);
-    // this.helperService.markFormGroupTouched(this.formData);
-    // if (this.formData.invalid) {
-    //   await this.spinner.hide();
-    //   return;
-    // }
+    this.setValidator(isGuiDuyet);
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      await this.spinner.hide();
+      return;
+    }
     let pipe = new DatePipe('en-US');
     if (this.formData.value.tgianMthau != null) {
       if (this.formData.value.tgianMthauTime != null) {
@@ -206,8 +206,26 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
   }
 
   setValidator(isGuiDuyet?) {
-    if (!isGuiDuyet) {
-      this.formData.controls["nam"].clearValidators();
+    if (isGuiDuyet) {
+      this.formData.controls["namKhoach"].setValidators([Validators.required]);
+      this.formData.controls["soQd"].setValidators([Validators.required]);
+      this.formData.controls["ngayQd"].setValidators([Validators.required]);
+      this.formData.controls["ngayHluc"].setValidators([Validators.required]);
+      this.formData.controls["soQdPdKhlcnt"].setValidators([Validators.required]);
+      this.formData.controls["trichYeu"].setValidators([Validators.required]);
+      this.formData.controls["noiDungQd"].setValidators([Validators.required]);
+      this.formData.controls["tenDuAn"].setValidators([Validators.required]);
+      this.formData.controls["quy"].setValidators([Validators.required]);
+      this.formData.controls["tgianMthau"].setValidators([Validators.required]);
+      this.formData.controls["tgianDthau"].setValidators([Validators.required]);
+    } else {
+      Object.keys(this.formData.controls).forEach(key => {
+        const control = this.formData.controls[key];
+        control.clearValidators();
+        control.updateValueAndValidity();
+      });
+      this.formData.updateValueAndValidity();
+      this.formData.controls["soQdPdKhlcnt"].setValidators([Validators.required]);
     }
   }
 
