@@ -387,6 +387,7 @@ export class ThanhToanTheoHopDongComponent implements OnInit {
         const header = [
             { t: 0, b: 5, l: 0, r: 22, val: null },
             { t: 0, b: 0, l: 0, r: 8, val: "Thanh toán cho khách hàng theo hợp đồng trúng thầu" },
+            { t: 1, b: 1, l: 0, r: 4, val: 'Trạng thái báo cáo: ' + Status.reportStatusName(this.baoCao.trangThai) },
             { t: 4, b: 5, l: 0, r: 0, val: 'Tên khách hàng' },
             { t: 4, b: 5, l: 1, r: 1, val: 'Quyết định phê duyệt kết quả lựa chọn nhà thầu / Hợp đồng' },
             { t: 4, b: 4, l: 2, r: 4, val: 'Số lượng' },

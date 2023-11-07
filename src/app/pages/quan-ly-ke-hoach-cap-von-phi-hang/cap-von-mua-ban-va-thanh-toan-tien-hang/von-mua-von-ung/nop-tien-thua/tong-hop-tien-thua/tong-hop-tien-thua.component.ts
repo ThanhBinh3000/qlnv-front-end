@@ -322,6 +322,7 @@ export class TongHopTienThuaComponent implements OnInit {
         const header = [
             { t: 0, b: 6, l: 0, r: 5, val: null },
             { t: 0, b: 0, l: 0, r: 8, val: 'Tổng hợp tiền thừa từ Đơn vị cấp dưới' },
+            { t: 1, b: 1, l: 0, r: 4, val: 'Trạng thái báo cáo: ' + Status.reportStatusName(this.baoCao.trangThai, this.isParent) },
             { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
             { t: 4, b: 5, l: 1, r: 1, val: 'Đơn vị cấp dưới' },
             { t: 4, b: 4, l: 2, r: 4, val: 'Tổng nhận từ Đơn vị cấp dưới đến thời điểm này' },

@@ -550,6 +550,7 @@ export class BaoCaoComponent implements OnInit {
             tieuDe: bieuMau.tieuDe,
             tenPl: bieuMau.tenPhuLuc,
             congVan: this.baoCao.congVan?.fileName ? Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi) : '',
+            tenTrangThai: Status.reportStatusName(this.baoCao.trangThai, this.isParent),
             luyKes: this.luyKes.find(e => e.maLoai == bieuMau.maLoai),
         }
         Object.assign(dataInfo.status, this.status);

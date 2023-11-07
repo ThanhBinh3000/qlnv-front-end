@@ -92,7 +92,7 @@
                     <th scope="col">Ngày trình duyệt</th>
                     <th scope="col">Ngày duyệt</th>
                     <th scope="col">Ngày phê duyệt</th>
-                    <th scope="col" *ngIf="searchFilter.maLoai == Cvmb.TIEN_THUA">
+                    <th scope="col" *ngIf="searchFilter.maLoai == Cvmb.TIEN_THUA && !userService.isTongCuc()">
                         Ngày tiếp nhận</th>
                     <th scope="col">Trạng thái</th>
                     <th scope="col" style="width: 90px;">Hành động</th>
@@ -137,7 +137,7 @@
                     <td>
                         {{ Utils.fmtDate(data.ngayPheDuyet) }}
                     </td>
-                    <td *ngIf="searchFilter.maLoai == Cvmb.TIEN_THUA">
+                    <td *ngIf="searchFilter.maLoai == Cvmb.TIEN_THUA  && !userService.isTongCuc()">
                         {{ Utils.fmtDate(data.ngayTraKq) }}
                     </td>
                     <td>

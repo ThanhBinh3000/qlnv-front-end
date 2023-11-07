@@ -405,6 +405,7 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
             { t: 0, b: 5, l: 0, r: 11, val: null },
             { t: 0, b: 0, l: 0, r: 8, val: "Đề nghị cấp vốn" },
             { t: 1, b: 1, l: 0, r: 8, val: congVan },
+            { t: 2, b: 2, l: 0, r: 4, val: 'Trạng thái báo cáo: ' + Status.reportStatusName(this.baoCao.trangThai, this.isParent) },
             { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
             { t: 4, b: 5, l: 1, r: 1, val: 'Đơn vị' },
             { t: 4, b: 4, l: 2, r: 3, val: 'Số lượng' },

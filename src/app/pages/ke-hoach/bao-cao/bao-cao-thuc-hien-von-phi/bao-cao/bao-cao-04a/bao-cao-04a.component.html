@@ -129,9 +129,15 @@
                                     </td>
                                     <ng-container *ngFor="let kv of editCache[data.id].data.listCtiet">
                                         <td>
-                                            <input class="money-input" currencyMask [options]="Op.amount"
-                                                [(ngModel)]="kv.gtri"
-                                                (ngModelChange)="editCache[data.id].data.changeModel(luyKes)" />
+                                            <ng-container
+                                                *ngIf="data.maNdungChi.startsWith('0.1.3')  && isExistDm(kv); else editDm">
+                                                {{ fmtVal(kv.gtri, data) }}
+                                            </ng-container>
+                                            <ng-template #editDm>
+                                                <input class="money-input" currencyMask [options]="Op.amount"
+                                                    [(ngModel)]="kv.gtri"
+                                                    (ngModelChange)="editCache[data.id].data.changeModel(luyKes)" />
+                                            </ng-template>
                                         </td>
                                     </ng-container>
                                     <td>

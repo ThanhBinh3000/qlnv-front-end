@@ -476,6 +476,7 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
         const head = [
             { t: 0, b: 5, l: 0, r: 12, val: null },
             { t: 0, b: 0, l: 0, r: 8, val: "Hợp đồng vốn bán nộp lên đơn vị cấp trên" },
+            { t: 1, b: 1, l: 0, r: 4, val: 'Trạng thái báo cáo: ' + Status.reportStatusName(this.baoCao.trangThai, this.isParent) },
             { t: 4, b: 5, l: 0, r: 0, val: 'Đơn vị' },
             { t: 4, b: 5, l: 1, r: 1, val: 'Tên khách hàng' },
             { t: 4, b: 5, l: 2, r: 2, val: 'Quyết định phê duyệt kết quả lựa chọn nhà thầu / Hợp đồng' },
@@ -525,6 +526,7 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
             header = [
                 { t: 0, b: 5, l: 0, r: 18, val: null },
                 { t: 0, b: 0, l: 0, r: 8, val: "Vốn bán nộp lên đơn vị cấp trên" },
+                { t: 1, b: 1, l: 0, r: 4, val: 'Trạng thái báo cáo: ' + Status.reportStatusName(this.baoCao.trangThai, this.isParent) },
                 { t: 4, b: 5, l: 0, r: 0, val: 'Đơn vị' },
                 { t: 4, b: 4, l: 1, r: 3, val: 'Số lượng' },
                 { t: 5, b: 5, l: 1, r: 1, val: 'Kế hoạch' },
@@ -569,6 +571,7 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
             header = [
                 { t: 0, b: 5, l: 0, r: 17, val: null },
                 { t: 0, b: 0, l: 0, r: 8, val: "Vốn bán nộp lên đơn vị cấp trên" },
+                { t: 1, b: 1, l: 0, r: 4, val: 'Trạng thái báo cáo: ' + Status.reportStatusName(this.baoCao.trangThai, this.isParent) },
                 { t: 4, b: 5, l: 0, r: 0, val: 'Đơn vị' },
                 { t: 4, b: 4, l: 1, r: 3, val: 'Số lượng' },
                 { t: 5, b: 5, l: 1, r: 1, val: 'Kế hoạch' },
