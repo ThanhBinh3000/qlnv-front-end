@@ -9,9 +9,6 @@ import {MESSAGE} from "../../../../../../constants/message";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {
-  MmThongTinNcChiCuc
-} from "../../../../may-moc-thiet-bi/de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc.component";
-import {
   PvcDxChiCucCtiet
 } from "../../../de-xuat-nc-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc.component";
 import {AMOUNT} from "../../../../../../Utility/utils";
@@ -22,9 +19,10 @@ import {AMOUNT} from "../../../../../../Utility/utils";
   styleUrls: ['./thong-tin-phan-bo-ct-pvc.component.scss']
 })
 export class ThongTinPhanBoCtPvcComponent  implements OnInit {
-  @Input() dataInput: any
-  @Input() type: string
-  @Input() sum: number
+  @Input() listData: any[];
+  @Input() dataInput: any;
+  @Input() type: string;
+  @Input() sum: number;
   item: PvcDxChiCucCtiet = new PvcDxChiCucCtiet();
   listChiCuc: any[] = []
   userInfo: UserLogin
@@ -41,8 +39,8 @@ export class ThongTinPhanBoCtPvcComponent  implements OnInit {
   }
 
   async ngOnInit() {
+    console.log(this.listData,1111)
     this.userInfo = this.userService.getUserLogin();
-    console.log(this.dataInput)
     this.addDetail();
     await this.loadDsChiCuc();
 
@@ -83,12 +81,12 @@ export class ThongTinPhanBoCtPvcComponent  implements OnInit {
   handleOk() {
     let msgRequired = this.required(this.item);
     if (msgRequired) {
-      this.notification.error(MESSAGE.ERROR, msgRequired);
+      this.notification.warning(MESSAGE.WARNING, msgRequired);
       this.spinner.hide();
       return;
     }
-    if (this.item.soLuong > this.sum){
-      this.notification.error(MESSAGE.ERROR, 'Số lượng vượt quá số lượng được phân bổ!');
+    if ((this.item.soLuong > this.sum && this.type == 'them') || (this.item.soLuong > (this.sum + this.dataInput.soLuong)) && this.type == 'sua'){
+      this.notification.warning(MESSAGE.WARNING, 'Số lượng vượt quá số lượng được phân bổ!');
       this.spinner.hide();
       return;
     }
@@ -107,6 +105,12 @@ export class ThongTinPhanBoCtPvcComponent  implements OnInit {
       msgRequired = "Đơn vị Chi cục, VP Cục không được để trống!";
     } else if (!item.soLuong) {
       msgRequired = "Số lượng không được để trống";
+    } else {
+      let dataCheck = this.listData.find(it => it.maDvi == item.maDvi );
+      if (this.type == 'them') {
+        if (dataCheck)
+          msgRequired = "Chi cục này đã được phân bổ hàng hóa!";
+      }
     }
     return msgRequired;
   }
