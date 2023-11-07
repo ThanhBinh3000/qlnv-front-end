@@ -7,7 +7,7 @@
             <nz-form-item class='form-item'>
               <nz-form-label nzFor='nam-qd'>Bộ/Ngành</nz-form-label>
               <nz-form-control>
-                <nz-select formControlName='maBn' [nzDisabled]='isDisableByBoNganh()' nzAllowClear nzShowSearch>
+                <nz-select formControlName='maBn' [nzDisabled]='isDisableByBoNganh()' (ngModelChange)="changeBoNganh($event)" nzAllowClear nzShowSearch>
                   <nz-option *ngFor='let option of dsBoNganh' [nzLabel]='option.tenDvi' [nzValue]='option.maDvi'>
                   </nz-option>
                 </nz-select>
@@ -34,8 +34,8 @@
             <nz-form-item class='form-item'>
               <nz-form-label nzFor='nam-qd'>Loại hàng hóa</nz-form-label>
               <nz-form-control>
-                <nz-select formControlName='loaiVthh'>
-                  <nz-option *ngFor='let option of listOfOption' [nzLabel]='option.title' [nzValue]='option.key'>
+                <nz-select formControlName='loaiVthh' nzAllowClear nzShowSearch>
+                  <nz-option *ngFor='let option of listOfOption' [nzLabel]='option.tenHangHoa' [nzValue]='option.maHangHoa'>
                   </nz-option>
                 </nz-select>
               </nz-form-control>

@@ -14,6 +14,7 @@ import {FormGroup, Validators} from '@angular/forms';
 import {MESSAGE} from '../../../../constants/message';
 import {DanhMucCongCuDungCuService} from '../../../../services/danh-muc-cong-cu-dung-cu.service';
 import {STATUS} from '../../../../constants/status';
+import dayjs from "dayjs";
 
 @Component({
   selector: 'app-thong-tin-dinh-muc-trang-bi-cong-cu-dung-cu',
@@ -68,7 +69,6 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
 
 
   async ngOnInit() {
-    debugger
     this.dataTableDetail = [];
     this.spinner.show();
     try {
@@ -121,10 +121,6 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
     this.goBack();
   }
 
-  banHanh(id, trangThai) {
-    this.approve(id, trangThai, 'Bạn có chắc chắn muốn ban hành?');
-  }
-
   ngungHieuLuc(id, trangThai) {
     this.approve(id, trangThai, 'Bạn có chắc chắn muốn ban ngừng hiệu lực văn bản này?');
   }
@@ -171,6 +167,31 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
       this.listDonVi = res.data.filter(item => item.type !== 'PB');
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
+    try {
+      if (this.dataTableDetail.length <= 0) {
+        this.notification.error(MESSAGE.ERROR, 'Bạn chưa nhập chi tiết định mức phí công cụ dụng cụ.');
+        return;
+      }
+      this.helperService.markFormGroupTouched(this.formData);
+      if (this.formData.invalid) {
+        return;
+      }
+      if (this.fileDinhKem && this.fileDinhKem.length > 0) {
+        this.formData.value.fileDinhKems = this.fileDinhKem;
+      }
+      this.dataTableDetail.forEach(item => {
+        item.loaiHhBq = item.loaiHhBq ? item.loaiHhBq.toString() : null;
+        item.apDungTai = item.apDungTai ? item.apDungTai.toString() : null;
+        item.dmBaoQuan = item.dmBaoQuan ? item.dmBaoQuan.toString() : null;
+      });
+      this.formData.value.listQlDinhMucPhiCcdc = this.dataTableDetail;
+      await super.saveAndSend(this.formData.value, trangThai, msg, msgSuccess);
+    } catch (error) {
+      console.error("Lỗi khi lưu và gửi dữ liệu:", error);
     }
   }
 

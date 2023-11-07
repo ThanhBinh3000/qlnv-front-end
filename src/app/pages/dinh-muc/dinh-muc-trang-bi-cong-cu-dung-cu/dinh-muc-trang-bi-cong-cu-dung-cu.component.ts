@@ -67,4 +67,12 @@ export class DinhMucTrangBiCongCuDungCuComponent extends Base2Component implemen
     this.isDetail = true;
     this.isViewDetail = isView ?? false;
   }
+
+  async xoaDieuKien() {
+    this.formData.reset();
+    this.formData.patchValue({
+      loai : '01'
+    })
+    await this.search();
+  }
 }
