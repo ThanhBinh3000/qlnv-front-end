@@ -336,7 +336,41 @@ export class QdPdHsMoiThauComponent implements OnInit {
   }
 
   exportData() {
-    this.notification.error(MESSAGE.ERROR, "Chức năng chưa phát triển.");
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = {
+          tuNgayKy: this.tuNgayKy != null ? dayjs(this.tuNgayKy).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denNgayKy: this.denNgayKy != null ? dayjs(this.denNgayKy).format('YYYY-MM-DD') + " 23:59:59" : null,
+          soQd: this.searchFilter.soQdPdHsmt,
+          soQdPdKhlcnt: this.searchFilter.soQdPdKhlcnt,
+          loaiVthh: this.searchFilter.loaiVthh,
+          cloaiVthh: this.searchFilter.cloaiVthh,
+          namKhoach: this.searchFilter.namKhoach,
+          trichYeu: this.searchFilter.trichYeu,
+          maDvi: null,
+          paggingReq: {
+            limit: this.pageSize,
+            page: this.page - 1,
+          },
+        };
+        if (this.userService.isCuc()) {
+          body.maDvi = this.userInfo.MA_DVI
+        }
+        this.quyetDinhPheDuyetHsmtService
+          .export(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-quyet-dinh-pd-hsmt.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 
   themMoi() {

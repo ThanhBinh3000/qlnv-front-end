@@ -334,9 +334,9 @@ export class ThongTinComponent implements OnInit, OnChanges {
           this.listFileDinhKem = detail.listFileDinhKem;
           this.listCcPhapLy = detail.listCcPhapLy;
           this.dataTable = detail.details;
-          for (let i = 0; i < this.dataTable.length; i++) {
+          for (let i = 0; i < this.dataTable[0].children.length; i++) {
             let body = {
-              maDvi: this.dataTable[i].maDvi,
+              maDvi: this.dataTable[0].children[i].maDvi,
               type: this.listType
             }
             const res = await this.donViService.layTatCaByMaDvi(body);
