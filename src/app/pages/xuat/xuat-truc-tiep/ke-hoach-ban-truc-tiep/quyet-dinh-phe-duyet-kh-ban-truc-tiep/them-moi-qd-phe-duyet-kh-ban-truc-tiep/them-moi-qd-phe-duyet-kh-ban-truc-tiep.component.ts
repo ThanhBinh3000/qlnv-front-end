@@ -139,8 +139,10 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   }
 
   async bindingDataTongHop(dataTongHop?) {
-    if (!dataTongHop) return;
-    if (dataTongHop.trangThai == STATUS.CHUA_TAO_QD) {
+    if (!dataTongHop) {
+      return;
+    }
+    if (dataTongHop.trangThai == STATUS.CHUA_TAO_QD && dataTongHop.idSoQdPd === null) {
       this.formData.patchValue({
         cloaiVthh: dataTongHop.cloaiVthh,
         tenCloaiVthh: dataTongHop.tenCloaiVthh,
@@ -150,7 +152,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
         phanLoai: 'TH',
       });
       await this.onChangeIdThHdr(this.formData.value.idThHdr);
-    } else {
+    } else if (dataTongHop.idSoQdPd !== null) {
       await this.loadDetail(dataTongHop.idSoQdPd);
       this.isView = dataTongHop.trangThai == STATUS.DA_BAN_HANH_QD;
     }
