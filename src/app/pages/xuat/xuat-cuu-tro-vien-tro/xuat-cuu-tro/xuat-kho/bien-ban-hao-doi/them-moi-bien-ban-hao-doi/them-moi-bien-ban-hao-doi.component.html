@@ -1,10 +1,11 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
-  <div class="btn-group" *ngIf="!isViewOnModal">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix" *ngIf="!isViewOnModal">
+  <div class="btn-group">
     <button type="button" class="btn btn-sub" (click)="goBack()">
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button type="button" class="btn btn-sub" (click)="xemTruoc(idInput,templateName)" *ngIf="checkRolePreview()">
+    <button type="button" class="btn btn-sub" (click)="xemTruoc(formData.value.id,templateName)"
+      *ngIf="checkRolePreview()">
       <i class="icon htvbdh_totrinh"></i>
       <span> In/Xem trước </span>
     </button>

@@ -66,7 +66,7 @@
                 [nzShowPagination]="false" nzBordered>
         <thead>
         <tr>
-          <th class="text-center" nzWidth="50px"> STT</th>
+          <th nzWidth="50px" class="text-center wrap"></th>
           <th></th>
           <th class="text-left"> Số QĐ giao NVXH</th>
           <th class="text-left"> Năm KH</th>
@@ -91,11 +91,11 @@
                 style="width: 35px"></td>
             <td class="text-left">
               <a *ngIf="item.soQdNv && item.idQdNv" (click)="openModal(item.idQdNv, 'QdNv')"
-                 style="color: blue">{{ item.soQdNv }}
+                 style="color: blue; font-weight: bold">{{ item.soQdNv }}
               </a>
             </td>
             <td class="text-left bold">{{item.nam}}</td>
-            <td class="text-left bold">{{item.ngayKyQdNv|date: 'dd/MM/YYYY'}}</td>
+            <td class="text-left bold">{{item.tgianGiaoHang|date: 'dd/MM/YYYY'}}</td>
             <td></td>
             <td></td>
             <td></td>
@@ -133,8 +133,9 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td
-                      class="text-left">{{ (lv2.tenLoKho ? lv2.tenLoKho + " - " : "") + (lv2.tenNganKho ? lv2.tenNganKho + " - " : "") + (lv2.tenNhaKho ? lv2.tenNhaKho : "") }}</td>
+                    <td class="text-left">
+                      {{ (lv2.tenLoKho ? lv2.tenLoKho + " - " : "") + (lv2.tenNganKho ? lv2.tenNganKho + " - " : "") + (lv2.tenNhaKho ? lv2.tenNhaKho : "") }}
+                    </td>
                     <td class="text-left bold">{{ lv2.soBbLayMau }}</td>
                     <td class="text-left">{{ lv2.ngayLayMau|date:'dd/MM/YYYY' }}</td>
                     <td class="text-left">

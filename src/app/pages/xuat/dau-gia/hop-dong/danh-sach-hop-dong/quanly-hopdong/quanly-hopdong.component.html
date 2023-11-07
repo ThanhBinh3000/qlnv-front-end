@@ -42,7 +42,9 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Năm kế hoạch</nz-form-label>
                   <nz-form-control>
-                    <input nz-input formControlName="nam" readonly/>
+                      <span *ngIf="formData.value.nam">
+                        <input nz-input formControlName="nam" readonly/>
+                      </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -50,7 +52,9 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Số QĐ phê duyệt KH BĐG</nz-form-label>
                   <nz-form-control>
-                    <input nz-input formControlName="soQdPd" readonly/>
+                      <span *ngIf="formData.value.soQdPd">
+                        <input nz-input formControlName="soQdPd" readonly/>
+                      </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -58,7 +62,9 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Số QĐ phê duyệt KQ BĐG</nz-form-label>
                   <nz-form-control>
-                    <input nz-input formControlName="soQdKq" readonly/>
+                      <span *ngIf="formData.value.soQdKq">
+                        <input nz-input formControlName="soQdKq" readonly/>
+                      </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -66,7 +72,9 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Đơn vị thực hiện</nz-form-label>
                   <nz-form-control>
-                    <input nz-input formControlName="tenDvi" readonly/>
+                      <span *ngIf="formData.value.tenDvi">
+                        <input nz-input formControlName="tenDvi" readonly/>
+                      </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -74,7 +82,9 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Tổng số DVT tài sản</nz-form-label>
                   <nz-form-control>
-                    <input nz-input formControlName="tongDviTsan" readonly/>
+                      <span *ngIf="formData.value.tongDviTsan">
+                        <input nz-input formControlName="tongDviTsan" readonly/>
+                      </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -86,7 +96,9 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Số DV tài sản đấu giá thành công</nz-form-label>
                   <nz-form-control>
-                    <input style="color: blue" nz-input formControlName="slDviTsanThanhCong" readonly/>
+                      <span *ngIf="formData.value.slDviTsanThanhCong">
+                        <input nz-input class="text-blue bold" formControlName="slDviTsanThanhCong" readonly/>
+                      </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -94,7 +106,9 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Số DV tài sản đấu giá không thành</nz-form-label>
                   <nz-form-control>
-                    <input style="color: red" nz-input formControlName="slDviTsanKhongThanh" readonly/>
+                      <span *ngIf="formData.value.slDviTsanKhongThanh">
+                        <input nz-input class="text-blue bold" formControlName="slDviTsanKhongThanh" readonly/>
+                      </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -102,25 +116,31 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Tổng SL xuất bán</nz-form-label>
                   <nz-form-control>
-                    <nz-input-number formControlName="tongSlXuat" [nzFormatter]="formatterSoLuong"
-                                     [nzParser]="globals.parser" nzDisabled class="blue-text">
-                    </nz-input-number>
+                      <span *ngIf="formData.value.tongSlXuat">
+                       <input nz-input class="text-blue bold"
+                              [value]="(formData.value.tongSlXuat | number:globals.numberFormat:globals.locale) + ' (' + formData.value.donViTinh + ')'"
+                              readonly/>
+                      </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
-              <div nz-col nzSpan="24">
+              <div nz-col [nzSpan]="24">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
                   <nz-form-control>
-                    <input style="color: blue" nz-input formControlName="tenLoaiVthh" readonly/>
+                      <span *ngIf="formData.value.tenLoaiVthh">
+                        <input class="text-blue bold" nz-input formControlName="tenLoaiVthh" readonly/>
+                      </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
-              <div nz-col nzSpan="24">
+              <div nz-col [nzSpan]="24">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
                   <nz-form-control>
-                    <input style="color: blue" nz-input formControlName="tenCloaiVthh" readonly/>
+                      <span *ngIf="formData.value.tenCloaiVthh">
+                        <input class="text-blue bold" nz-input formControlName="tenCloaiVthh" readonly/>
+                      </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -132,7 +152,9 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> % thuế VAT</nz-form-label>
                   <nz-form-control>
-                    <input style="color: blue" nz-input formControlName="vat" readonly/>
+                      <span *ngIf="formData.value.vat">
+                        <input class="text-blue bold" nz-input formControlName="vat" readonly/>
+                      </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -140,9 +162,11 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Thành tiền</nz-form-label>
                   <nz-form-control>
-                    <nz-input-number formControlName="thanhTien" [nzFormatter]="formatterTien"
-                                     [nzParser]="globals.parser" nzDisabled class="blue-text">
-                    </nz-input-number>
+                      <span *ngIf="formData.value.thanhTien">
+                        <input nz-input class="text-blue bold"
+                               [value]="(formData.value.thanhTien | number:globals.numberFormat:globals.locale) + ' (đ)'"
+                               readonly/>
+                      </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -150,7 +174,9 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
                   <nz-form-control>
-                    <input nz-input formControlName="tenLoaiHinhNx" readonly/>
+                      <span *ngIf="formData.value.tenLoaiHinhNx">
+                        <input nz-input formControlName="tenLoaiHinhNx" readonly/>
+                      </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -158,7 +184,9 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất</nz-form-label>
                   <nz-form-control>
-                    <input nz-input formControlName="tenKieuNhapXuat" readonly/>
+                      <span *ngIf="formData.value.tenKieuNhapXuat">
+                        <input nz-input formControlName="tenKieuNhapXuat" readonly/>
+                      </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -201,7 +229,7 @@
             <th class="text-left"> Trạng thái HĐ</th>
             <th class="text-left"> Số QĐ giao NV XH</th>
             <th class="text-left"> Trạng thái XH</th>
-            <th class="text-center"> Hành động</th>
+            <th class="text-center wrap" nzWidth="100px"> Hành động</th>
           </tr>
           </thead>
           <tbody>

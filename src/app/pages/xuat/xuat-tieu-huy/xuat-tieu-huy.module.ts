@@ -23,6 +23,7 @@ import {
 } from "./bao-cao-ket-qua-tieu-huy/them-moi-bao-ket-qua-tieu-huy/them-moi-bao-cao-ket-qua-tieu-huy.component";
 import { ThemmoiThThComponent } from './tong-hop-tieu-huy/themmoi-th-th/themmoi-th-th.component';
 import { ChitietThThComponent } from './tong-hop-tieu-huy/chitiet-th-th/chitiet-th-th.component';
+import { ChiTietDsThComponent } from './danh-sach-hang-tieu-huy/chi-tiet-ds-th/chi-tiet-ds-th.component';
 
 
 
@@ -40,6 +41,7 @@ import { ChitietThThComponent } from './tong-hop-tieu-huy/chitiet-th-th/chitiet-
     ThemMoiBaoCaoKetQuaTieuHuyComponent,
     ThemmoiThThComponent,
     ChitietThThComponent,
+    ChiTietDsThComponent,
   ],
   imports: [
     CommonModule,

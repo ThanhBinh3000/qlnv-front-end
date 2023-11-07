@@ -24,6 +24,7 @@ import { QuanLyHangTrongKhoService } from "src/app/services/quanLyHangTrongKho.s
 import { LOAI_HANG_DTQG, TEN_LOAI_VTHH } from "src/app/constants/config";
 import { PREVIEW } from 'src/app/constants/fileType';
 import { MangLuoiKhoService } from 'src/app/services/qlnv-kho/mangLuoiKho.service';
+import { DataService } from 'src/app/services/data.service';
 
 
 @Component({
@@ -33,7 +34,9 @@ import { MangLuoiKhoService } from 'src/app/services/qlnv-kho/mangLuoiKho.servic
 })
 export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
   @Input() isView: boolean;
+  @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
+  @Output() taoQuyetDinh = new EventEmitter<any>();
   formDataDtl: FormGroup;
   maHauTo: any;
   STATUS = STATUS;
@@ -63,7 +66,9 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
     private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
     private mangLuoiKhoService: MangLuoiKhoService,
-    private cdr: ChangeDetectorRef,) {
+    private cdr: ChangeDetectorRef,
+    private dataService: DataService
+  ) {
 
     super(httpClient, storageService, notification, spinner, modal, deXuatPhuongAnCuuTroService);
     for (let i = -3; i < 23; i++) {
@@ -128,7 +133,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         noiDung: ['', [Validators.required]],
         loaiVthh: ['', [Validators.required]],
         cloaiVthh: [''],
-        maDvi: [''],
+        maDvi: ['', [Validators.required]],
         tonKhoDvi: [''],
         tonKhoLoaiVthh: [''],
         tonKhoCloaiVthh: [''],
@@ -147,8 +152,8 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       });
     this.formData.controls['deXuatPhuongAn'].valueChanges.subscribe(value => {
       const { tongSoLuongDeXuat, tongSoLuongXuatCap, tongSoLuongNhuCauXuat } = Array.isArray(value) ? value.reduce((obj, cur) => {
-        // obj.tongSoLuongDeXuat += cur.soLuong ? +cur.soLuong : 0;
-        obj.tongSoLuongDeXuat += this.formData.value.tenVthh === TEN_LOAI_VTHH.GAO ? (cur.soLuongNhuCauXuat ? cur.soLuongNhuCauXuat : 0) : (cur.soLuong ? +cur.soLuong : 0)
+        obj.tongSoLuongDeXuat += cur.soLuong ? +cur.soLuong : 0;
+        // obj.tongSoLuongDeXuat += this.formData.value.tenVthh === TEN_LOAI_VTHH.GAO ? (cur.soLuongNhuCauXuat ? cur.soLuongNhuCauXuat : 0) : (cur.soLuong ? +cur.soLuong : 0)
         obj.tongSoLuongXuatCap += cur.soLuongChuyenCapThoc ? +cur.soLuongChuyenCapThoc : 0;
         obj.tongSoLuongNhuCauXuat += cur.soLuongNhuCauXuat ? cur.soLuongNhuCauXuat : 0
         return obj;
@@ -208,7 +213,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
               this.maHauTo = '/' + res.data.soDx?.split("/")[1];
               res.data.soDx = res.data.soDx?.split("/")[0];
             }
-            this.formData.patchValue({ ...res.data, maDviDx: res.data.maDvi.slice(0, -2) });
+            this.formData.patchValue({ ...res.data, tenDvi: res.data.tenDvi ? res.data.tenDvi : res.data.tenDviDx, maDviDx: res.data.maDvi.slice(0, -2) });
             if (!this.isVthhVatuThietBi()) {
               this.formData.patchValue({ donViTinh: "kg" })
             }
@@ -241,6 +246,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
 
   async save() {
     await this.helperService.ignoreRequiredForm(this.formData);
+    this.formData.controls['soDx'].setValidators(Validators.required)
     let body = {
       ...this.formData.value,
       deXuatPhuongAn: cloneDeep(this.formData.value.deXuatPhuongAn).map(f => ({
@@ -691,5 +697,14 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
       }
     });
+  }
+  taoQuyetDinhPdPa() {
+    const dataSend = {
+      ...this.formData.value,
+      type: "TTr",
+      isTaoQdPdPa: true
+    }
+    this.dataService.changeData(dataSend);
+    this.taoQuyetDinh.emit(2);
   }
 }

@@ -16,6 +16,7 @@ import {
   QuyetDinhUbtvqhMuaBuBoSungService,
 } from '../../../../../../../services/quyet-dinh-ubtvqh-mua-bu-bo-sung.service';
 import { STATUS } from '../../../../../../../constants/status';
+import { DanhMucService } from '../../../../../../../services/danhmuc.service';
 
 @Component({
   selector: 'app-them-moi-ubtvqh',
@@ -36,6 +37,7 @@ export class ThemMoiUbtvqhComponent implements OnInit {
   // maQd: string
   userInfo: UserLogin;
   dataTable: any[] = [];
+  listKinhPhiBs: any[] = [];
   STATUS = STATUS;
 
   constructor(
@@ -45,6 +47,7 @@ export class ThemMoiUbtvqhComponent implements OnInit {
     private quyetDinhUbtvqhMuBuBoSung: QuyetDinhUbtvqhMuaBuBoSungService,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
+    private danhMucService: DanhMucService,
     public userService: UserService,
     private helperService: HelperService,
   ) {
@@ -55,6 +58,7 @@ export class ThemMoiUbtvqhComponent implements OnInit {
         ngayQd: [null, [Validators.required]],
         namQd: [dayjs().get('year'), [Validators.required]],
         trichYeu: [null],
+        nguonKpBs : [null],
         trangThai: [STATUS.DANG_NHAP_DU_LIEU],
         listBoNganh: [],
       },
@@ -66,6 +70,7 @@ export class ThemMoiUbtvqhComponent implements OnInit {
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
+      this.getListKinhPhiBs(),
       this.getDataDetail(this.idInput),
     ]);
     this.spinner.hide();
@@ -80,11 +85,11 @@ export class ThemMoiUbtvqhComponent implements OnInit {
         namQd: data.namQd,
         ngayQd: data.ngayQd,
         soQd: data.soQd,
+        nguonKpBs: data.nguonKpBs,
         trangThai: data.trangThai,
         trichYeu: data.trichYeu,
       });
       this.dataTable = data.listBoNganh;
-      console.log(this.dataTable, 'this.dataTablethis.dataTable');
       this.taiLieuDinhKemList = data.fileDinhkems;
     }
   }
@@ -97,6 +102,15 @@ export class ThemMoiUbtvqhComponent implements OnInit {
         text: dayjs().get('year') + i,
       });
     }
+  }
+
+  async getListKinhPhiBs() {
+    this.listKinhPhiBs = [];
+    let res = await this.danhMucService.danhMucChungGetAll('NGUON_KINH_PHI_BS');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listKinhPhiBs = res.data;
+    }
+    console.log(this.listKinhPhiBs,'this.listKinhPhiBs');
   }
 
   deleteTaiLieuDinhKemTag(data: any) {

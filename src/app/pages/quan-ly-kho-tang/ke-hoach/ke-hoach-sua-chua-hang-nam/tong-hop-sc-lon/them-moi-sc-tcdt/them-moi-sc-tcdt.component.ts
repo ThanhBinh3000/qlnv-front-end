@@ -40,20 +40,13 @@ export class ThemMoiScTcdtComponent implements OnInit {
   expandSet = new Set<number>();
   userInfo: UserLogin;
   formData: FormGroup;
-  dataTableTren: any[] = [];
-  dataTableDuoi: any[] = [];
-  dataTableReq: any[] = [];
-  dataTableDxReq: any[] = [];
-  dataTableDxTren: any[] = [];
-  dataTableDxDuoi: any[] = [];
-  dataTableDxAll: any[] = [];
-  dsCuc: any[] = [];
-  dsChiCuc: any[] = [];
+  dataTable: any[] = [];
+  dataTableExpand: any[] = [];
+
   isTongHop: boolean = false;
   listNam: any[] = [];
-  fileDinhKems: any[] = [];
-  canCuPhapLys: any[] = [];
-  listLoaiDuAn: any[] = [];
+  fileDinhKem: any[] = [];
+  fileCanCu: any[] = [];
   STATUS = STATUS;
   maTt: string;
   soQd: string;
@@ -80,7 +73,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
       id: [null],
       ngayTaoTt: [dayjs().format('YYYY-MM-DD')],
       tgTongHop: [null],
-      namKeHoach: [null],
+      namKeHoach: [dayjs().get('year')],
       noiDung: [null],
       maToTrinh: [null],
       soQuyetDinh: [null],
@@ -100,7 +93,6 @@ export class ThemMoiScTcdtComponent implements OnInit {
     }
     this.loadDsNam();
     await this.getDataDetail(this.idInput);
-    await this.getAllLoaiDuAn();
   }
 
   loadDsNam() {
@@ -112,11 +104,9 @@ export class ThemMoiScTcdtComponent implements OnInit {
     }
   }
 
-  async getAllLoaiDuAn() {
-    let res = await this.danhMucService.danhMucChungGetAll("LOAI_DU_AN_KT");
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listLoaiDuAn = res.data;
-    }
+  onExpandChange(item: any, checked: boolean): void {
+    console.log(item,checked);
+    item.expandSet = checked
   }
 
   async getDataDetail(id) {
@@ -143,18 +133,11 @@ export class ThemMoiScTcdtComponent implements OnInit {
           tgTongHop: data.tgTongHop,
           loaiTmdt: data.loaiTmdt
         });
-      this.fileDinhKems = data.fileDinhKems;
-      this.canCuPhapLys = data.canCuPhapLys;
+      this.fileDinhKem = data.fileDinhKem;
+      this.fileCanCu = data.fileCanCu;
 
-      this.dataTableReq = data.chiTiets;
-      this.resultDx = data.chiTietDxs
-      if (this.resultDx && this.resultDx.length > 0) {
-        this.dataTableDxDuoi = this.convertListData(this.resultDx?.filter(item => item.tmdt <= 15000000000));
-        this.dataTableDxTren = this.convertListData(this.resultDx?.filter(item => item.tmdt > 15000000000));
-      }
-      this.dataTableTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 15000000000));
-      this.dataTableDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 15000000000));
-
+      this.dataTable = data.children;
+      this.buildDataTable();
       let body = {
         maDvi: this.userInfo.MA_DVI,
         soTt: data.soQuyetDinh,
@@ -190,9 +173,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
 
   async save(isGuiDuyet?) {
     this.spinner.show();
-    if (isGuiDuyet) {
-      this.setValidators();
-    }
+    this.setValidators();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
@@ -203,11 +184,9 @@ export class ThemMoiScTcdtComponent implements OnInit {
     body.tgTongHop = body.tgTongHop ? dayjs(body.tgTongHop) : null;
     body.maToTrinh = body.maToTrinh ? body.maToTrinh + this.maTt : this.maTt;
     body.soQuyetDinh = body.soQuyetDinh ? body.soQuyetDinh + this.soQd : this.soQd;
-    body.ctiets = this.dataTableReq;
-    body.ctietsDx = this.dataTableDxReq;
-    body.fileDinhKems = this.fileDinhKems;
-    body.canCuPhapLys = this.canCuPhapLys;
-    body.maDvi = this.userInfo.MA_DVI;
+    body.children = this.dataTable;
+    body.fileDinhKemReq = this.fileDinhKem;
+    body.fileCanCuReq = this.fileCanCu;
     let res;
     if (this.idInput > 0) {
       res = await this.tongHopDxScLon.update(body);
@@ -359,21 +338,16 @@ export class ThemMoiScTcdtComponent implements OnInit {
       "loaiTmdt": this.formData.value.loaiTmdt
     };
     let res = await this.tongHopDxScLon.tongHop(body);
+    console.log(res);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.dataTableReq = [];
-      this.dataTableTren = [];
-      this.dataTableDuoi = [];
-      this.dataTableDxTren = [];
-      this.dataTableDxDuoi = [];
       let list = res.data;
       if (list && list.listDxCuc.length > 0) {
         this.isTongHop = true;
-        this.dataTableReq = list.listDxCuc;
-        this.dataTableDxReq = cloneDeep(this.dataTableReq);
-        this.dataTableDxDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 15000000000));
-        this.dataTableDxTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 15000000000));
-        this.dataTableTren = cloneDeep(this.dataTableDxTren);
-        this.dataTableDuoi = cloneDeep(this.dataTableDxDuoi);
+        this.dataTable = res.data.listDxCuc;
+        this.dataTable.forEach( item => {
+          item.vonDauTuTcdt = item.vonDauTu;
+        })
+        await this.buildDataTable();
       } else {
         this.notification.error(MESSAGE.ERROR, "Không tìm thấy dữ liệu!");
         this.isTongHop = false;
@@ -387,6 +361,37 @@ export class ThemMoiScTcdtComponent implements OnInit {
     this.spinner.hide();
   }
 
+  async buildDataTable(){
+    this.dataTableExpand = await chain(this.dataTable).groupBy("tenCuc").map((value, key) => {
+        let rs = chain(value)
+          .groupBy("tenChiCuc")
+          .map((v, k) => {
+            let rs1 = chain(v)
+              .groupBy("tenKhoi")
+              .map((v1, k1) => {
+                  return {
+                    tenKhoi: k1,
+                    expandSet : true,
+                    children: v1
+                  };
+                }
+              ).value();
+            return {
+              tenChiCuc: k,
+              children: rs1,
+              expandSet : true,
+            };
+          }).value();
+        return {
+          tenCuc: key,
+          children: rs,
+          expandSet : true,
+        };
+      }).value();
+    console.log(this.dataTableExpand)
+    console.log(this.dataTable)
+  }
+
   expandAll(table: any[]) {
     if (table && table.length > 0) {
       table.forEach(s => {
@@ -397,15 +402,6 @@ export class ThemMoiScTcdtComponent implements OnInit {
           });
         }
       });
-    }
-  }
-
-
-  onExpandChange(id: number, checked: boolean): void {
-    if (checked) {
-      this.expandSet.add(id);
-    } else {
-      this.expandSet.delete(id);
     }
   }
 
@@ -447,127 +443,52 @@ export class ThemMoiScTcdtComponent implements OnInit {
 
   sumSoLuong(data: any, row: string, type?: any) {
     let sl = 0;
-    let dataTable;
-    if (this.formData.value.id) {
-      if (type) {
-        if (data == 'tren') {
-          dataTable = this.resultDx?.filter(item => item.tmdt > 15000000000);
-        } else {
-          dataTable = this.resultDx?.filter(item => item.tmdt <= 15000000000);
-        }
-      } else {
-        if (data == 'tren') {
-          dataTable = this.dataTableReq?.filter(item => item.tmdt > 15000000000);
-        } else {
-          dataTable = this.dataTableReq?.filter(item => item.tmdt <= 15000000000)
-        }
-      }
-    }else {
-      if (data == 'tren') {
-        dataTable = this.dataTableReq?.filter(item => item.tmdt > 15000000000);
-      } else {
-        dataTable = this.dataTableReq?.filter(item => item.tmdt <= 15000000000)
-      }
-    }
-    if (dataTable) {
-      const filteredData = dataTable.filter(item => {
-        if (data == 'tren') {
-          return item.tmdt > 15000000000;
-        } else {
-          return item.tmdt <= 15000000000;
-        }
-      });
-      sl = filteredData.reduce((prev, cur) => {
-        prev += cur[row];
-        return prev;
-      }, 0);
-    }
+    // let dataTable;
+    // if (this.formData.value.id) {
+    //   if (type) {
+    //     if (data == 'tren') {
+    //       dataTable = this.resultDx?.filter(item => item.tmdt > 15000000000);
+    //     } else {
+    //       dataTable = this.resultDx?.filter(item => item.tmdt <= 15000000000);
+    //     }
+    //   } else {
+    //     if (data == 'tren') {
+    //       dataTable = this.dataTableReq?.filter(item => item.tmdt > 15000000000);
+    //     } else {
+    //       dataTable = this.dataTableReq?.filter(item => item.tmdt <= 15000000000)
+    //     }
+    //   }
+    // }else {
+    //   if (data == 'tren') {
+    //     dataTable = this.dataTableReq?.filter(item => item.tmdt > 15000000000);
+    //   } else {
+    //     dataTable = this.dataTableReq?.filter(item => item.tmdt <= 15000000000)
+    //   }
+    // }
+    // if (dataTable) {
+    //   const filteredData = dataTable.filter(item => {
+    //     if (data == 'tren') {
+    //       return item.tmdt > 15000000000;
+    //     } else {
+    //       return item.tmdt <= 15000000000;
+    //     }
+    //   });
+    //   sl = filteredData.reduce((prev, cur) => {
+    //     prev += cur[row];
+    //     return prev;
+    //   }, 0);
+    // }
     return sl;
   }
 
-
-  deleteRow(item: any) {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: "Xác nhận",
-      nzContent: "Bạn có chắc chắn muốn xóa?",
-      nzOkText: "Đồng ý",
-      nzCancelText: "Không",
-      nzOkDanger: true,
-      nzWidth: 400,
-      nzOnOk: async () => {
-        try {
-          let result = this.dataTableReq.filter(data => data.id == item.id);
-          if (result && result.length > 0) {
-            let idx = this.dataTableReq.indexOf(result[0]);
-            this.dataTableReq.splice(idx, 1);
-            this.notification.success(MESSAGE.SUCCESS, "Xóa thành công");
-          } else {
-            this.notification.error(MESSAGE.ERROR, "Xóa thất bại");
-          }
-        } catch (e) {
-          console.log("error", e);
-        }
-      }
-    });
-  }
-
-  themMoiItem(data: any, tmdt: string, type: string, idx: number, list?: any) {
-    let modalQD = this.modal.create({
-      nzTitle: "CHI TIẾT DANH MỤC SỬA CHỮA LỚN",
-      nzContent: DialogDxScLonComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: "1200px",
-      nzStyle: {top: "100px"},
-      nzFooter: null,
-      nzComponentParams: {
-        dataTable: list && list.dataChild ? list.dataChild : [],
-        dataInput: data,
-        type: type,
-        page: tmdt
-      }
-    });
-    modalQD.afterClose.subscribe(async (detail) => {
-      if (detail) {
-        if (!data.dataChild) {
-          data.dataChild = [];
-        }
-        if (!data.idVirtual) {
-          data.idVirtual = uuidv4();
-        }
-        if (type == "them") {
-          data.dataChild.push(detail);
-        } else {
-          if (list) {
-            Object.assign(list.dataChild[idx], detail);
-          }
-        }
-      }
-    });
-  }
-
-  deleteItem(index: any, y: any, table: any[]) {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: "Xác nhận",
-      nzContent: "Bạn có chắc chắn muốn xóa?",
-      nzOkText: "Đồng ý",
-      nzCancelText: "Không",
-      nzOkDanger: true,
-      nzWidth: 400,
-      nzOnOk: async () => {
-        try {
-          if (table && table.length > 0 && table[index]) {
-            if (table[index] && table[index].dataChild && table[index].dataChild[y]) {
-              table[index].dataChild.splice(y, 1);
-            }
-          }
-        } catch (e) {
-          console.log("error", e);
-        }
-      }
-    });
+  calcTong(columnName) {
+    if (this.dataTable) {
+      const sum = this.dataTable.reduce((prev, cur) => {
+        prev += cur[columnName];
+        return prev;
+      }, 0);
+      return sum;
+    }
   }
 
   emitTab(tab) {

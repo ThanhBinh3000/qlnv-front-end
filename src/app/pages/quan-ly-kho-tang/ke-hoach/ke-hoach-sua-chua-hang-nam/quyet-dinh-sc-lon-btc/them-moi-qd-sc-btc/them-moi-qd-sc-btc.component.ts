@@ -61,7 +61,11 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       idQdGiaoNv: [null, Validators.required],
       trangThai: [STATUS.DANG_NHAP_DU_LIEU],
       tenTrangThai: ["Đang nhập dữ liệu"],
-      type: ["00"]
+      type: ["00"],
+      kieu : ["LD"],
+      soQdGoc : [],
+      idQdGoc : [],
+      lanDc : []
     });
   }
 
@@ -157,8 +161,12 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
   }
 
 
-  chonMaTongHop() {
-    this.khScQdGiaoNvService.getListTaoBtcTcdt({trangThai : STATUS.BAN_HANH}).then((res)=>{
+  chonSoQdGiaoNv() {
+    let body = {
+      trangThai : STATUS.BAN_HANH,
+      type : "00"
+    }
+    this.khScQdGiaoNvService.getListTaoBtcTcdt(body).then((res)=>{
       this.spinner.hide();
       if (res.msg == MESSAGE.SUCCESS) {
         let modalQD = this.modal.create({
@@ -206,6 +214,109 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
         });
       }
     })
+  }
+
+  conSoQdDc(){
+    this.spinner.show();
+    let body = {
+      trangThai : STATUS.BAN_HANH,
+      type : '00'
+    }
+    this._service.getListTaoDc(body).then((res)=>{
+      this.spinner.hide();
+      if (res.msg == MESSAGE.SUCCESS) {
+        let modalQD = this.modal.create({
+          nzTitle: "SỐ QUYẾT ĐỊNH PHÊ DUYỆT BTC",
+          nzContent: DialogTableSelectionComponent,
+          nzMaskClosable: false,
+          nzClosable: false,
+          nzWidth: "700px",
+          nzFooter: null,
+          nzComponentParams: {
+            dataTable : res.data,
+            dataColumn : ['soQuyetDinh'],
+            dataHeader : ['Số quyết định của BTC'],
+          }
+        });
+        modalQD.afterClose.subscribe(async (res) => {
+          if (res) {
+            await this._service.getDetail(res.id).then((dtlTh)=>{
+              console.log(dtlTh.data);
+              if(dtlTh.data){
+                if(dtlTh.data){
+                  this.formData.patchValue({
+                    soQdGoc : res.soQuyetDinh,
+                    idQdGoc : dtlTh.data.id,
+                    lanDc : dtlTh.data.listDieuChinh.length + 1
+                  });
+                  if(dtlTh.data.listDieuChinh != null && dtlTh.data.listDieuChinh.length == 0){
+                    this.dataTable = dtlTh.data.children;
+                    this.dataTable.forEach(item => {
+                      item.tenCongTrinh = item.ktKhDxSuaChuaLonCtiet.tenCongTrinh;
+                      item.soQd = item.ktKhDxSuaChuaLonCtiet.soQd;
+                      item.tieuChuan = item.ktKhDxSuaChuaLonCtiet.tieuChuan;
+                      item.tgThucHien = item.ktKhDxSuaChuaLonCtiet.tgThucHien;
+                      item.tgHoanThanh = item.ktKhDxSuaChuaLonCtiet.tgHoanThanh;
+                      item.lyDo = item.ktKhDxSuaChuaLonCtiet.lyDo;
+                      item.giaTriPd = item.ktKhDxSuaChuaLonCtiet.giaTriPd;
+                      item.namKh = item.ktKhDxSuaChuaLonCtiet.namKh;
+                    })
+                  }else{
+                    // Gét lastest DC đã ordet trên BE
+                    const dataLastestDC = dtlTh.data.listDieuChinh[0];
+                    console.log(dataLastestDC)
+                    this._service.getDetail(dataLastestDC.id).then((dataLastestDc)=>{
+                      const data = dataLastestDc.data
+                      this.dataTable = data.children;
+                      this.dataTable.forEach(item => {
+                        item.tenCuc = item.ktKhDxSuaChuaLonCtiet.tenCuc;
+                        item.tenChiCuc = item.ktKhDxSuaChuaLonCtiet.tenChiCuc;
+                        item.tenKhoi = item.ktKhDxSuaChuaLonCtiet.tenKhoi;
+                        item.tenDiemKho = item.ktKhDxSuaChuaLonCtiet.tenDiemKho;
+                        item.tenCongTrinh = item.ktKhDxSuaChuaLonCtiet.tenCongTrinh;
+                        item.soQd = item.ktKhDxSuaChuaLonCtiet.soQd;
+                        item.tieuChuan = item.ktKhDxSuaChuaLonCtiet.tieuChuan;
+                        item.tgThucHien = item.ktKhDxSuaChuaLonCtiet.tgThucHien;
+                        item.tgHoanThanh = item.ktKhDxSuaChuaLonCtiet.tgHoanThanh;
+                        item.lyDo = item.ktKhDxSuaChuaLonCtiet.lyDo;
+                        item.giaTriPd = item.ktKhDxSuaChuaLonCtiet.giaTriPd;
+                        item.namKh = item.ktKhDxSuaChuaLonCtiet.namKh;
+                        item.ncKhTongSo = item.ktKhDxSuaChuaLonCtiet.ncKhTongSo;
+                        item.vonDauTuTcdt = item.ktKhDxSuaChuaLonCtiet.vonDauTuTcdt;
+                      })
+                    });
+                  }
+                }
+              }
+            })
+            this.spinner.hide();
+          }
+        });
+      }
+    })
+  }
+
+  changeKieu(event: any) {
+    if (event) {
+      // this.formData.patchValue({
+      //   soQdGiaoNv: null,
+      //   idQdGiaoNv: null,
+      //   soQdBtc: null,
+      //   idQdBtc: null,
+      // })
+      // if (event == 'LD') {
+      //   this.formData.controls['soTtr'].setValidators([Validators.required]);
+      //   this.formData.controls['soQdGoc'].clearValidators();
+      //   this.formData.controls['idQdGoc'].clearValidators();
+      //   this.formData.controls['lanDc'].clearValidators();
+      // } else {
+      //   this.formData.controls['soTtr'].clearValidators();
+      //   this.formData.controls['soQdGoc'].setValidators([Validators.required]);
+      //   this.formData.controls['idQdGoc'].setValidators([Validators.required]);
+      //   this.formData.controls['lanDc'].setValidators([Validators.required]);
+      // }
+    }
+    this.dataTable = [];
   }
 
 }

@@ -27,12 +27,14 @@ export class QdPdHsMoiThauComponent implements OnInit {
   isView: boolean = false;
   listNam: any[] = [];
   listLoaiVthh: any[] = [];
+  listCloaiVthh: any[] = [];
   STATUS = STATUS;
   searchFilter = {
     soQdPdHsmt: '',
     namKhoach: '',
     soQdPdKhlcnt: '',
     loaiVthh: '',
+    cloaiVthh: '',
     trichYeu: ''
   };
   filterTable: any = {
@@ -97,6 +99,7 @@ export class QdPdHsMoiThauComponent implements OnInit {
       let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
       if (res.msg == MESSAGE.SUCCESS) {
         this.listLoaiVthh = res.data?.filter((x) => (x.ma.length == 4 && x.ma.startsWith('02')));
+        this.listCloaiVthh = res.data?.filter((x) => (x.ma.length == 6 && x.ma.startsWith(this.loaiVthh)));
       }
       this.searchFilter.loaiVthh = this.loaiVthh;
       await this.search();
@@ -138,7 +141,8 @@ export class QdPdHsMoiThauComponent implements OnInit {
       soQd: this.searchFilter.soQdPdHsmt,
       soQdPdKhlcnt: this.searchFilter.soQdPdKhlcnt,
       loaiVthh: this.searchFilter.loaiVthh,
-      namKh: this.searchFilter.namKhoach,
+      cloaiVthh: this.searchFilter.cloaiVthh,
+      namKhoach: this.searchFilter.namKhoach,
       trichYeu: this.searchFilter.trichYeu,
       maDvi: null,
       paggingReq: {
@@ -201,7 +205,7 @@ export class QdPdHsMoiThauComponent implements OnInit {
     this.searchFilter.soQdPdHsmt = null;
     this.searchFilter.soQdPdKhlcnt = null;
     this.searchFilter.trichYeu = null;
-    this.searchFilter.loaiVthh = null;
+    this.searchFilter.cloaiVthh = null;
     this.tuNgayKy = null;
     this.denNgayKy  = null;
     this.search();
@@ -332,7 +336,41 @@ export class QdPdHsMoiThauComponent implements OnInit {
   }
 
   exportData() {
-    this.notification.error(MESSAGE.ERROR, "Chức năng chưa phát triển.");
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = {
+          tuNgayKy: this.tuNgayKy != null ? dayjs(this.tuNgayKy).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denNgayKy: this.denNgayKy != null ? dayjs(this.denNgayKy).format('YYYY-MM-DD') + " 23:59:59" : null,
+          soQd: this.searchFilter.soQdPdHsmt,
+          soQdPdKhlcnt: this.searchFilter.soQdPdKhlcnt,
+          loaiVthh: this.searchFilter.loaiVthh,
+          cloaiVthh: this.searchFilter.cloaiVthh,
+          namKhoach: this.searchFilter.namKhoach,
+          trichYeu: this.searchFilter.trichYeu,
+          maDvi: null,
+          paggingReq: {
+            limit: this.pageSize,
+            page: this.page - 1,
+          },
+        };
+        if (this.userService.isCuc()) {
+          body.maDvi = this.userInfo.MA_DVI
+        }
+        this.quyetDinhPheDuyetHsmtService
+          .export(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-quyet-dinh-pd-hsmt.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 
   themMoi() {

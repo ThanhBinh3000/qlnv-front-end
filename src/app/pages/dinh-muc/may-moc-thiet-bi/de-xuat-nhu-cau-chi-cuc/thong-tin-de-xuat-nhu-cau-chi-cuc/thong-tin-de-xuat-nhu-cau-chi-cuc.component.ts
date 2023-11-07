@@ -48,7 +48,7 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
       klLtBaoQuan: [0, Validators.required],
       klLtNhap: [0, Validators.required],
       klLtXuat: [0, Validators.required],
-      trichYeu: [null,],
+      trichYeu: [null, Validators.required],
       trangThai: ['00'],
       trangThaiTh: [],
       tenTrangThai: ['Dự thảo'],
@@ -244,6 +244,28 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
     });
   }
 
+  async saveAndSend(status: string, msg: string, msgSuccess?: string) {
+    try {
+      if (this.dataTable.length <= 0) {
+        this.notification.error(MESSAGE.ERROR, "Bạn chưa nhập chi tiết đề xuất");
+        return;
+      }
+      this.helperService.markFormGroupTouched(this.formData)
+      if (this.formData.invalid) {
+        return;
+      }
+      if (this.fileDinhKem && this.fileDinhKem.length > 0) {
+        this.formData.value.fileDinhKems = this.fileDinhKem;
+      }
+      this.formData.value.listQlDinhMucDxTbmmTbcdDtl = this.dataTable;
+      this.formData.value.maDvi = this.userInfo.MA_DVI;
+      this.formData.value.capDvi = this.userInfo.CAP_DVI;
+      await super.saveAndSend(this.formData.value, status, msg, msgSuccess);
+    } catch (error) {
+      console.error("Lỗi khi lưu và gửi dữ liệu:", error);
+    }
+  }
+
   async save() {
     if (this.dataTable.length <= 0) {
       this.notification.error(MESSAGE.ERROR, "Bạn chưa nhập chi tiết đề xuất");
@@ -299,15 +321,17 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
   }
 
   async changeNamKh(event) {
-    let res = await this.dxChiCucService.getCtieuKhoach(event);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data) {
-        this.listCtieuKh = []
-        this.listCtieuKh.push(res.data)
+    if (event && !this.isView) {
+      let res = await this.dxChiCucService.getCtieuKhoach(event);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.listCtieuKh = []
+          this.listCtieuKh.push(res.data)
+        }
+      } else {
+        this.notification.warning(MESSAGE.WARNING, res.msg);
+        return;
       }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-      return;
     }
   }
 

@@ -7,8 +7,8 @@
                     <nz-form-control>
                         <nz-select formControlName="maDvi" (ngModelChange)="changeChiCuc($event)"
                             [nzDisabled]='selectedChiCuc'>
-                            <nz-option *ngFor="let p of listChiCuc" [nzValue]="p.maDvi"
-                                [nzLabel]="p.tenDvi"></nz-option>
+                            <nz-option *ngFor="let p of listChiCuc" [nzValue]="p.maDonVi"
+                                [nzLabel]="p.tenDonvi"></nz-option>
                         </nz-select>
                     </nz-form-control>
                 </nz-form-item>
@@ -63,7 +63,7 @@
 <!--                        [nzPrecisionMode]="customPrecisionFn"-->
 <!--                        nzPlaceHolder="Đơn giá đề xuất"-->
 <!--                      ></nz-input-number>-->
-                      <input [readonly]="!userService.isCuc()" class="money-input"  currencyMask formControlName="donGia"  [options]="amount"/>
+                      <input [readonly]="!userService.isCuc()" class="money-input" (blur)="calTongThanhTien()" currencyMask formControlName="donGia"  [options]="amount"/>
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -87,7 +87,7 @@
             </div>
             <div *ngIf="userService.isTongCuc()" nz-col [nzSpan]="6">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> SL nhập phê duyệt (kg)</nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true"> SL nhập phê duyệt (tấn)</nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                   <nz-input-number
                     formControlName="tongSoLuong"
@@ -98,16 +98,6 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-<!--            <div *ngIf="userService.isCuc()" nz-col [nzSpan]="6">-->
-<!--              <nz-form-item>-->
-<!--                <nz-form-label [nzNoColon]="true"> Tổng SL trình phê duyệt </nz-form-label>-->
-<!--                <nz-form-control nz-col [nzSpan]="24">-->
-<!--                                    <span class="text-green">{{formData.value.tongSoLuong }}-->
-<!--                                      (Tấn)</span>-->
-<!--                </nz-form-control>-->
-<!--              </nz-form-item>-->
-<!--            </div>-->
-
             <div *ngIf="userService.isCuc()" nz-col [nzSpan]="6">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Tổng SL trình phê duyệt </nz-form-label>

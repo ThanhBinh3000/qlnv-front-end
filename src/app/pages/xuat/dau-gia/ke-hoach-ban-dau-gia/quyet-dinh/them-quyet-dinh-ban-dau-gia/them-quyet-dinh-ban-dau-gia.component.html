@@ -113,23 +113,17 @@
             </div>
             <div nz-col [nzSpan]="24">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true">
-                  Căn cứ pháp lý
-                </nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Căn cứ pháp lý</nz-form-label>
                 <div class="list-file">
-                  <file-list [disabled]="isView" [isCanCuPL]="true"
-                             [data]="canCuPhapLy"></file-list>
+                  <file-list [data]="canCuPhapLy" [isCanCuPL]="true" [isViewDetail]="isView"></file-list>
                 </div>
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="24">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true">
-                  File đính kèm QĐ đã ban hành
-                </nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true"> File đính kèm QĐ đã ban hành</nz-form-label>
                 <div class="list-file">
-                  <file-list [disabled]="isView" [isCanCuPL]="true"
-                             [data]="fileDinhKem"></file-list>
+                  <file-list [data]="fileDinhKem" [isViewDetail]="isView"></file-list>
                 </div>
               </nz-form-item>
             </div>

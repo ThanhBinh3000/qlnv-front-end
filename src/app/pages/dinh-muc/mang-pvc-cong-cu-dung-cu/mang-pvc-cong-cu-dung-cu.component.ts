@@ -23,6 +23,9 @@ export class MangPvcCongCuDungCuComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (!this.userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC')) {
+      this.router.navigateByUrl('/error/401')
+    }
     if (this.userService.isChiCuc()) {
       this.tabSelected = 'dexuatnhucau';
     }

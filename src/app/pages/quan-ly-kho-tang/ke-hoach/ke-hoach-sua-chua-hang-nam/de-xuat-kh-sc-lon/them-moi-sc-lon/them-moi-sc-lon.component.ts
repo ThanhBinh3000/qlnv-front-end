@@ -302,7 +302,8 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
         dataInput: data,
         type: type,
         page: tmdt,
-        isQd : true
+        isQd : true,
+        nam : this.formData.value.namKeHoach
       }
     });
     modalQD.afterClose.subscribe(async (detail) => {

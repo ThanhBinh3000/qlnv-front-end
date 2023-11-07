@@ -270,7 +270,8 @@
           <td class='font-weight-bold text-right'>{{sumSoLuong('soLuong', data.tenCcdc) | number: '1.0-1': 'vi_VN'}}
           </td>
           <td class='font-weight-bold text-right'>
-            <input class='money-input' currencyMask [options]='amount' [min]='0' [(ngModel)]='data.donGia' />
+            <input class='money-input' currencyMask [options]='amount' [min]='0' [(ngModel)]='data.donGia'
+              [readOnly]="isView" />
           </td>
           <td class='font-weight-bold text-right'>{{sumSoLuong('soLuong', data.tenCcdc) * data.donGia | number: '1.0-1':
             'vi_VN'}}
@@ -297,7 +298,8 @@
 
             </td> -->
             <td>
-              <input class='money-input' currencyMask [options]='amount' [min]='0' [(ngModel)]='item.soLuong' />
+              <input class='money-input' currencyMask [options]='amount' [min]='0' [(ngModel)]='item.soLuong'
+                [readOnly]="isView" />
 
             </td>
             <td>
@@ -307,7 +309,7 @@
             <td class='text-right'>
               <!-- {{data.donGia * item.soLuong | number: '1.0-1': 'vi_VN' }} -->
             </td>
-            <td><input type='text' nz-input [(ngModel)]='item.ghiChu'></td>
+            <td><input type='text' nz-input [(ngModel)]='item.ghiChu' [readOnly]="isView"></td>
           </tr>
         </ng-container>
       </ng-container>
@@ -331,7 +333,7 @@
         <nz-form-item>
           <nz-form-label nz-col [nzSpan]='24' [nzNoColon]='true'>Ghi chú</nz-form-label>
           <nz-form-control nz-col [nzSpan]='24'>
-            <textarea rows='3' class='search__input' formControlName='ghiChu' nz-input></textarea>
+            <textarea rows='3' [readOnly]="isView" class='search__input' formControlName='ghiChu' nz-input></textarea>
           </nz-form-control>
         </nz-form-item>
       </div>

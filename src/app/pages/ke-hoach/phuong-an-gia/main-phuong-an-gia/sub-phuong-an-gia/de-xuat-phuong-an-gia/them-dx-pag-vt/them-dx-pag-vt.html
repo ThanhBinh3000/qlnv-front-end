@@ -499,7 +499,7 @@
             <tr>
               <td></td>
               <td>
-                <nz-select [(ngModel)]="rowItemPpxdg.cloaiVthh" name="cloaiVthh" [nzDisabled]="isView"
+                <nz-select [(ngModel)]="rowItemPpxdg.cloaiVthh" [nzDisabled]="isView"
                            nzAllowClear="true">
                   <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
                   </nz-option>
@@ -538,7 +538,7 @@
                   <i *ngIf="!isView" class="fa fa-plus" (click)="themDataTable('ppxdg')"></i>
                 </a>
                 <a *ngIf="(formData.value.trangThai == '00' || formData.value.trangThai == '03') && (!isView)">
-                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                  <i class="icon  htvbdh_nhap-lai1 "></i>
                 </a>
               </td>
             </tr>
@@ -546,28 +546,23 @@
               <ng-container *ngIf="!dataEditPp[idx].edit; else editTemplate1">
                 <td>{{ idx + 1 }}</td>
                 <td>{{data.tenCloaiVthh}}</td>
-                <td>{{ data.giaVonNk }}</td>
-                <td>{{ data.chiPhiChung }}</td>
-                <td *ngIf="formData.value.loaiHangXdg == 'XDG_LH02'">{{ data.chiPhiPhanBo }}</td>
-                <td>{{ data.tongChiPhi }}</td>
+                <td class="text-right">{{ data.giaVonNk | number: '1.0-1':'vi_VN' }}</td>
+                <td class="text-right">{{ data.chiPhiChung | number: '1.0-1':'vi_VN' }}</td>
+                <td class="text-right" *ngIf="formData.value.loaiHangXdg == 'XDG_LH02'">{{ data.chiPhiPhanBo | number: '1.0-1':'vi_VN' }}</td>
+                <td class="text-right">{{ data.tongChiPhi | number: '1.0-1':'vi_VN' }}</td>
                 <td style="text-align: center;">
                   <a *ngIf="!isView">
                     <i class=" fa fa-pencil" (click)="startEdit(idx, 'ppxdg')"></i>
                   </a>
                   <a *ngIf="(formData.value.trangThai == '00' || formData.value.trangThai == '03') && (!isView)">
-                    <i class="icon  htvbdh_nhap-lai1 "></i>
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
               </ng-container>
               <ng-template #editTemplate1>
                 <td></td>
                 <td>
-                  <nz-select [(ngModel)]="dataEditPp[idx].data.cloaiVthh"
-                             (ngModelChange)="onChangeCloaiVthh($event)" name="cloaiVthh" [nzDisabled]="isView"
-                             nzAllowClear="true">
-                    <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
-                    </nz-option>
-                  </nz-select>
+                  {{dataEditPp[idx].data.tenCloaiVthh}}
                 </td>
                 <td>
                   <nz-input-group>

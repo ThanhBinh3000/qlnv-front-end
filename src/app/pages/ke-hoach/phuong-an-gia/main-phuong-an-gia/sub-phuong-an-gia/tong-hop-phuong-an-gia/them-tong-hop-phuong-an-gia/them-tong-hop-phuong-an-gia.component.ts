@@ -115,7 +115,6 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         loaiVthh: [null, [Validators.required]],
         cloaiVthh: [null, [Validators.required]],
         loaiGia: [null, [Validators.required]],
-        maDvis: [[]],
         ngayDxTu: [null],
         ngayDxDen: [null],
         loai: ['00'],
@@ -217,6 +216,11 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       this.spinner.hide();
       return;
     }
+    if (this.validateGiaBTc() && this.type == 'GCT') {
+      this.notification.warning(MESSAGE.WARNING, "Không tìm thấy quyết định của BTC cho loại hàng hóa!")
+      this.spinner.hide();
+      return;
+    }
     let body = this.formData.value;
     body.fileDinhKemReq = this.fileDinhKem;
     body.type = this.type;
@@ -237,6 +241,19 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     }
 
     this.spinner.hide();
+  }
+
+  validateGiaBTc() {
+      let rs = false;
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach(it => {
+          if (! it.giaQdBtc || it.giaQdBtc == 0) {
+            rs = true;
+            return;
+          }
+        });
+      }
+      return rs;
   }
 
   async loadDsVthh() {
@@ -275,13 +292,18 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       this.spinner.show();
       this.helperService.markFormGroupTouched(this.formTraCuu);
       if (this.formTraCuu.invalid) {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
+        this.notification.warning(MESSAGE.WARNING, MESSAGE.FORM_REQUIRED_ERROR);
         this.spinner.hide();
         return;
       }
+      if (this.listCucSelected.length == 0) {
+          this.notification.warning(MESSAGE.WARNING,'Chưa nhập danh sách Cục DTNNKV');
+          this.spinner.hide();
+          return;
+      }
       let body = this.formTraCuu.value;
       body.type = this.type;
-      body.maDvis = this.listCucSelected && this.listCucSelected.length > 0 ? this.listCucSelected.toString() : "";
+      body.maDvis = this.listCucSelected && this.listCucSelected.length > 0 ? this.listCucSelected.toString() : null;
       let res = await this.tongHopPhuongAnGiaService.tongHop(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.isTongHop = true;

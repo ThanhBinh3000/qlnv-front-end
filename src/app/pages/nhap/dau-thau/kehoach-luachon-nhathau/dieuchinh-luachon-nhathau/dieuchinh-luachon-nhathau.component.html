@@ -81,14 +81,15 @@
           <th class="text-center" style="width: 7%;">Năm kế hoạch</th>
           <th class="text-center" style="width: 10%;">Số QĐ điều chỉnh KH LCNT</th>
           <th class="text-center" style="width: 7%;">Ngày ký QĐ điều chỉnh</th>
-          <th class="text-center" style="width: 15%;">Số quyết định gốc</th>
+          <th class="text-center" style="width: 15%;">Số QĐ cần điều chỉnh</th>
+          <th class="text-center" style="width: 15%;">Số công văn/tờ trình</th>
           <th class="text-center" style="width: 30%;">Trích yếu</th>
           <th class="text-center" style="width: 7%;">Loại hàng DTQG</th>
           <th class="text-center" style="width: 7%;" *ngIf="!loaiVthh.startsWith('02')">Chủng loại hàng DTQG</th>
           <th class="text-center" style="width: 7%;">Tổng số gói thầu</th>
           <th class="text-center" style="width: 7%;">Số gói thầu đã trúng</th>
           <th class="text-center" style="width: 7%;">SL HĐ đã ký</th>
-          <th class="text-center" style="width: 7%;">Thời gian thực hiện dự án</th>
+          <th class="text-center" style="width: 7%;" *ngIf="loaiVthh.startsWith('02')">Thời gian thực hiện dự án</th>
           <th class="text-center" style="width: 7%;">Trạng thái</th>
           <th width="90px">Hành động</th>
         </tr>
@@ -118,6 +119,12 @@
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdGoc"
                      (input)="filterInTable('soQdGoc',filterTable.soQdGoc)" size="small" />
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soTtrDc"
+                     (input)="filterInTable('soTtrDc',filterTable.soTtrDc)" size="small" />
             </nz-input-group>
           </th>
           <th>
@@ -158,8 +165,8 @@
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tgianNhapKho"
-                     (input)="filterInTable('tgianNhapKho',filterTable.tgianNhapKho)" size="small" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tgianThien"
+                     (input)="filterInTable('soHdKy',filterTable.tgianThien)" size="small" />
             </nz-input-group>
           </th>
           <th>
@@ -184,13 +191,14 @@
           <td>{{ data.soQdDc }}</td>
           <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.soQdGoc }}</td>
+          <td>{{ data.soTtrDc }}</td>
           <td>{{data.trichYeu}}</td>
           <td>{{data.tenLoaiVthh}}</td>
           <td *ngIf="!loaiVthh.startsWith('02')">{{data.tenCloaiVthh}}</td>
           <td>{{data.soGoiThau}}</td>
           <td>{{data.gthauTrung}}</td>
           <td>{{data.soHdKy}}</td>
-          <td>{{data.tgianNhapKho}}</td>
+          <td *ngIf="loaiVthh.startsWith('02')">{{data.tgianThien}}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
             <a *ngIf="hienThiXem(data)"

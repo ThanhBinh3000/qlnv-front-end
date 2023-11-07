@@ -91,10 +91,10 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
       await this.spinner.show();
       const res = await this.qdPdKetQuaBanDauGiaService.getDetail(id);
       if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-        throw new Error('Không tìm thấy dữ liệu');
+        return;
       }
       const data = res.data;
-      const formDataValues = {
+      this.formData.patchValue({
         nam: data.nam,
         soQdKq: data.soQdKq,
         soQdPd: data.soQdPd,
@@ -111,10 +111,9 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
         tenKieuNhapXuat: data.tenKieuNhapXuat,
         trangThaiHd: data.trangThaiHd,
         tenTrangThaiHd: data.tenTrangThaiHd,
-      };
-      this.formData.patchValue(formDataValues);
+      });
       await this.loadDsVthh();
-      this.dataTable = data.listHopDong;
+      this.dataTable = data.listHopDong.filter(item => item.maDvi === this.userInfo.MA_DVI);
       if (this.dataTable && this.dataTable.length > 0) {
         await this.showFirstRow(event, this.dataTable[0].id);
       }
@@ -128,9 +127,12 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
 
   async loadDsVthh() {
     const res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
-    if (res.msg === MESSAGE.SUCCESS) {
-      this.listHangHoaAll = res.data;
+    if (res.msg !== MESSAGE.SUCCESS || !res.data) {
+      return;
     }
+    this.listHangHoaAll = res.data;
+    const donViTinh = this.listHangHoaAll.find(s => s.ma == this.loaiVthh)?.maDviTinh;
+    this.formData.patchValue({donViTinh: donViTinh})
   }
 
   async showFirstRow($event, id: any) {
@@ -174,14 +176,12 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
   }
 
   async pheDuyet() {
-    await this.spinner.show();
     const dataFilter = this.dataTable.find(item => item.trangThai === this.STATUS.DU_THAO);
     if (dataFilter) {
       this.notification.error(MESSAGE.ERROR, `Không thể hoàn thành thực hiện, hợp đồng số ${dataFilter.soHopDong} đang chưa ký`);
     } else {
       await this.approve(this.idInput, STATUS.DA_HOAN_THANH, "Bạn có muốn hoàn thành thực hiện hợp đồng ?");
     }
-    await this.spinner.hide();
   }
 
 
@@ -215,17 +215,17 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
     return this.dataTable.reduce((sum, cur) => sum + (cur[column] || 0), 0);
   }
 
-  formatterTien = (value: number) => {
-    const donViTien = '(đ)';
-    const formattedValue = value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
-    return `${formattedValue} ${donViTien}`;
-  }
-
-  formatterSoLuong = (value: number) => {
-    const donViTinh = this.listHangHoaAll.find(s => s.ma == this.loaiVthh)?.maDviTinh;
-    const formattedValue = value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
-    return `${formattedValue} ${donViTinh == undefined ? '' : donViTinh}`;
-  }
+  // formatterTien = (value: number) => {
+  //   const donViTien = '(đ)';
+  //   const formattedValue = value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
+  //   return `${formattedValue} ${donViTien}`;
+  // }
+  //
+  // formatterSoLuong = (value: number) => {
+  //   const donViTinh = this.listHangHoaAll.find(s => s.ma == this.loaiVthh)?.maDviTinh;
+  //   const formattedValue = value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
+  //   return `${formattedValue} ${donViTinh == undefined ? '' : donViTinh}`;
+  // }
 
   openModal(id: number) {
     this.idQdNv = id;

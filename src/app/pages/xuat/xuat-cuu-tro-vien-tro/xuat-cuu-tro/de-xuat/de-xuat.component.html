@@ -232,9 +232,9 @@
                 (click)="redirectDetail(data.id, false)">
                 <i class="fa fa-pencil" title="Sửa"></i>
               </a>
-              <a *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.TAO_QD)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_THEM') && !data.soQdPd && !data.maThop"
-                (click)="taoQuyetDinh(data)">
-                <i class="icon htvbdh_soanthao" title="Duyệt"></i>
+              <a *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.TAO_QD) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_THEM') && !data.soQdPd"
+                (click)="taoQuyetDinhPdPa(data)">
+                <i class="icon htvbdh_soanthao" title="Tạo quyết định"></i>
               </a>
               <a *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_XOA')"
                 (click)="delete(data)">

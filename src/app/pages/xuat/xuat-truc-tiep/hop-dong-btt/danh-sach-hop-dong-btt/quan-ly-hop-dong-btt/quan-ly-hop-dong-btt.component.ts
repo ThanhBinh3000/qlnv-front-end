@@ -37,6 +37,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
   loadDanhSachHdongDaKy: any[] = [];
   idQdNv: number = 0;
   isViewQdNv: boolean = false;
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -97,7 +98,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     try {
       const res = await this.qdPdKetQuaBttService.getDetail(this.idInput);
       if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-        throw new Error('Response error');
+        return;
       }
       const data = res.data;
       await this.loadDanhDachHopDong();
@@ -127,7 +128,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
         tongSlDaKyHdong: tongSlDaKyHdong,
         tongSlChuaKyHdong: tongSlChuaKyHdong,
       });
-      this.dataTable = data.listHopDongBtt;
+      this.dataTable = data.listHopDongBtt.filter(item => item.maDvi === this.userInfo.MA_DVI);
       if (this.dataTable && this.dataTable.length > 0) {
         this.showFirstRow(event, this.dataTable[0].id);
       }
@@ -143,11 +144,11 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     try {
       const res = await this.chaoGiaMuaLeUyQuyenService.getDetail(this.idInput);
       if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-        throw new Error('Response error');
+        return;
       }
       const data = res.data;
       await this.loadDanhDachHopDong();
-      const formDataValues = {
+      this.formData.patchValue({
         namKh: data.namKh,
         soQdPd: data.soQdPd,
         loaiVthh: data.loaiVthh,
@@ -162,16 +163,17 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
         vat: '5 %',
         trangThaiHd: data.trangThaiHd,
         tenTrangThaiHd: data.tenTrangThaiHd,
-      };
+      });
+      const dataChildren = data.children.find(item => item.maDvi === this.userInfo.MA_DVI);
+      this.formData.patchValue({tenDvi: dataChildren.tenDvi})
       const filteredItems = this.loadDanhSachHdongDaKy.filter(item => item.idChaoGia === data.id);
       const tongSlDaKyHdong = filteredItems.reduce((acc, item) => acc + item.soLuong, 0);
       const tongSlChuaKyHdong = data.tongSoLuong - tongSlDaKyHdong;
       this.formData.patchValue({
-        tongSlDaKyHdong:tongSlDaKyHdong,
+        tongSlDaKyHdong: tongSlDaKyHdong,
         tongSlChuaKyHdong: tongSlChuaKyHdong,
       });
-      this.formData.patchValue(formDataValues);
-      this.dataTable = data.listHopDongBtt;
+      this.dataTable = data.listHopDongBtt.filter(item => item.maDvi === this.userInfo.MA_DVI);
       if (this.dataTable && this.dataTable.length > 0) {
         this.showFirstRow(event, this.dataTable[0].id);
       }
@@ -246,7 +248,6 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
   }
 
   async guiDuyetCuc() {
-    await this.spinner.show();
     if (!this.validateData()) {
       await this.spinner.hide();
       return;
@@ -283,7 +284,6 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
   }
 
   async guiDuyetChiCuc() {
-    await this.spinner.show();
     if (!this.validateData()) {
       await this.spinner.hide();
       return;
@@ -364,17 +364,17 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     return this.dataTable.reduce((sum, cur) => sum + (cur[column] || 0), 0);
   }
 
-  formatterTien = (value: number) => {
-    const donViTien = '(đ)';
-    const formattedValue = value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
-    return `${formattedValue} ${donViTien}`;
-  }
-
-  formatterSoLuong = (value: number) => {
-    const donViTinh = this.formData.value.donViTinh? this.formData.value.donViTinh : ''
-    const formattedValue = value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
-    return `${formattedValue} ${donViTinh}`;
-  }
+  // formatterTien = (value: number) => {
+  //   const donViTien = '(đ)';
+  //   const formattedValue = value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
+  //   return `${formattedValue} ${donViTien}`;
+  // }
+  //
+  // formatterSoLuong = (value: number) => {
+  //   const donViTinh = this.formData.value.donViTinh ? this.formData.value.donViTinh : ''
+  //   const formattedValue = value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
+  //   return `${formattedValue} ${donViTinh}`;
+  // }
 
   openModal(id: number) {
     this.idQdNv = id;

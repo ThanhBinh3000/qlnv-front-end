@@ -6,7 +6,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {FormGroup, Validators} from "@angular/forms";
 import {Base2Component} from "../../../../../components/base2/base2.component";
-import { chain } from 'lodash';
+import {chain} from 'lodash';
 import * as uuid from "uuid";
 import {v4 as uuidv4} from 'uuid';
 import {
@@ -25,12 +25,13 @@ import {STATUS} from "../../../../../constants/status";
 export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
-  @Input()   listDxChiCuc : any[] = [];
+  @Input() listDxChiCuc: any[] = [];
   isTongHop: boolean = false;
   rowItem: MmThongTinNcChiCuc = new MmThongTinNcChiCuc();
   dataEdit: { [key: string]: { edit: boolean; data: MmThongTinNcChiCuc } } = {};
-  formDataTongHop : FormGroup
+  formDataTongHop: FormGroup
   expandSet = new Set<number>();
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -42,26 +43,26 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, dxChiCucService)
     super.ngOnInit()
     this.formData = this.fb.group({
-      id : [null],
-      maDvi : [null],
-      namKeHoach : [dayjs().get('year')],
-      soCv : [null, Validators.required],
+      id: [null],
+      maDvi: [null],
+      namKeHoach: [dayjs().get('year')],
+      soCv: [null, Validators.required],
       klLtBaoQuan: [null],
       klLtNhap: [null],
       klLtXuat: [null],
-      trichYeu : [null, Validators.required],
-      ngayKy : [null, Validators.required],
-      trangThai : ['00'],
+      trichYeu: [null, Validators.required],
+      ngayKy: [null, Validators.required],
+      trangThai: ['00'],
       trangThaiTh: [],
-      tenTrangThai : ['Dự thảo'],
-      fileDinhKems : [null],
-      lyDoTuChoi : [null],
-      listQlDinhMucDxTbmmTbcdDtl : [null],
+      tenTrangThai: ['Dự thảo'],
+      fileDinhKems: [null],
+      lyDoTuChoi: [null],
+      listQlDinhMucDxTbmmTbcdDtl: [null],
     });
     this.formDataTongHop = this.fb.group({
-      namKeHoach : [dayjs().get('year'), Validators.required],
-      ngayDx : [null],
-      listSoCv : [null]
+      namKeHoach: [dayjs().get('year'), Validators.required],
+      ngayDx: [null],
+      listSoCv: [null]
     });
   }
 
@@ -98,8 +99,8 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     } else {
       body.listSoCv = body.listSoCv.toString();
     }
-    body.ngayDxTu = body.ngayDx ? body.ngayDx[0]: null
-    body.ngayDxDen = body.ngayDx ? body.ngayDx[1]: null
+    body.ngayDxTu = body.ngayDx ? body.ngayDx[0] : null
+    body.ngayDxDen = body.ngayDx ? body.ngayDx[1] : null
     body.trangThai = STATUS.DADUYET_CB_CUC;
     body.trangThaiTh = STATUS.CHUA_TONG_HOP;
     body.MA_DVI = this.userInfo.MA_DVI;
@@ -108,10 +109,10 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
       let detail = res.data;
       if (detail && detail.listQlDinhMucDxTbmmTbcdDtl) {
         this.formData.patchValue({
-          namKeHoach : this.formDataTongHop.value.namKeHoach,
-          klLtBaoQuan : detail.klLtBaoQuan,
-          klLtNhap : detail.klLtNhap,
-          klLtXuat : detail.klLtXuat
+          namKeHoach: this.formDataTongHop.value.namKeHoach,
+          klLtBaoQuan: detail.klLtBaoQuan,
+          klLtNhap: detail.klLtNhap,
+          klLtXuat: detail.klLtXuat
         })
         this.dataTable = detail.listQlDinhMucDxTbmmTbcdDtl
         this.dataTable.forEach(item => {
@@ -136,14 +137,14 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     }
   }
 
-  async loadSlThuaThieu(item : MmThongTinNcChiCuc) {
+  async loadSlThuaThieu(item: MmThongTinNcChiCuc) {
     if ((item.slTieuChuan - item.slNhapThem - item.slHienCo) >= 0) {
       item.chenhLechThieu = item.slTieuChuan - item.slNhapThem - item.slHienCo
     } else {
       item.chenhLechThieu = 0
     }
-    if (( item.slNhapThem + item.slHienCo - item.slTieuChuan) >= 0) {
-      item.chenhLechThua = item.slNhapThem + item.slHienCo -item.slTieuChuan
+    if ((item.slNhapThem + item.slHienCo - item.slTieuChuan) >= 0) {
+      item.chenhLechThua = item.slNhapThem + item.slHienCo - item.slTieuChuan
     } else {
       item.chenhLechThua = 0
     }
@@ -179,9 +180,31 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     }
   }
 
+  async saveAndSend(status: string, msg: string, msgSuccess?: string) {
+    try {
+      this.formData.patchValue({
+        namKeHoach: this.formDataTongHop.value.namKeHoach
+      })
+      this.helperService.markFormGroupTouched(this.formData)
+      if (this.formData.invalid) {
+        return;
+      }
+      if (this.fileDinhKem && this.fileDinhKem.length > 0) {
+        this.formData.value.fileDinhKems = this.fileDinhKem;
+      }
+      this.conVertTreToList();
+      this.formData.value.listQlDinhMucDxTbmmTbcdDtl = this.dataTable;
+      this.formData.value.maDvi = this.userInfo.MA_DVI;
+      this.formData.value.capDvi = this.userInfo.CAP_DVI;
+      await super.saveAndSend(this.formData.value, status, msg, msgSuccess);
+    } catch (error) {
+      console.error("Lỗi khi lưu và gửi dữ liệu:", error);
+    }
+  }
+
   async save() {
     this.formData.patchValue({
-      namKeHoach : this.formDataTongHop.value.namKeHoach
+      namKeHoach: this.formDataTongHop.value.namKeHoach
     })
     this.helperService.markFormGroupTouched(this.formData)
     if (this.formData.invalid) {
@@ -197,7 +220,7 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     let res = await this.createUpdate(this.formData.value)
     if (res) {
       this.goBack();
-    }   else {
+    } else {
       this.convertListData()
     }
   }
@@ -245,18 +268,22 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
 
   convertListData() {
     if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTable = chain(this.dataTable).groupBy('tenTaiSan').map((value, key) => ({ tenTaiSan: key, dataChild: value, idVirtual: uuidv4(),})
+      this.dataTable = chain(this.dataTable).groupBy('tenTaiSan').map((value, key) => ({
+          tenTaiSan: key,
+          dataChild: value,
+          idVirtual: uuidv4(),
+        })
       ).value()
     }
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach(item => {
-          if (item && item.dataChild && item.dataChild.length > 0) {
-            item.dataChild.forEach(data => {
-              this.loadSlThuaThieu(data)
-              item.donViTinh = data.donViTinh
-              item.donGiaTd = data.donGiaTd
-            })
-          }
+        if (item && item.dataChild && item.dataChild.length > 0) {
+          item.dataChild.forEach(data => {
+            this.loadSlThuaThieu(data)
+            item.donViTinh = data.donViTinh
+            item.donGiaTd = data.donGiaTd
+          })
+        }
       })
     }
     this.expandAll();
@@ -276,7 +303,7 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     console.log(this.dataTable)
   }
 
-  sumSoLuong(data : any) {
+  sumSoLuong(data: any) {
     let sl = 0;
     if (data && data.dataChild && data.dataChild.length > 0) {
       data.dataChild.forEach(item => {
@@ -299,7 +326,6 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     }
     return check;
   }
-
 
 
   expandAll() {

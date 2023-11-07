@@ -74,7 +74,7 @@ import { XuatModule } from "../../xuat.module";
     ThongTinQuyetDinhPhuongAnComponent,
 
     QuyetDinhXuatCapComponent,
-    ThongTinQuyetDinhXuatCapComponent,
+    // ThongTinQuyetDinhXuatCapComponent,
 
     MainXuatKhoComponent,
     PhieuXuatKhoComponent,
@@ -106,7 +106,7 @@ import { XuatModule } from "../../xuat.module";
     ThongTinQuyetDinhPhuongAnComponent,
 
     QuyetDinhXuatCapComponent,
-    ThongTinQuyetDinhXuatCapComponent,
+    // ThongTinQuyetDinhXuatCapComponent,
 
     MainXuatKhoComponent,
     PhieuXuatKhoComponent,

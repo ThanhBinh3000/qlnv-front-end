@@ -103,7 +103,6 @@ export class DieuchinhLuachonNhathauComponent extends Base2Component implements 
         limit: this.pageSize,
         page: this.page - 1
       }
-      console.log(body)
       let res = await this.dieuChinhQuyetDinhPdKhlcntService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;

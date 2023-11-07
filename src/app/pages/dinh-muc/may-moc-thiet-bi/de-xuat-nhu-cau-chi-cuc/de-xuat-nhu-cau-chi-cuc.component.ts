@@ -74,8 +74,8 @@ export class DeXuatNhuCauChiCucComponent extends Base2Component implements OnIni
       })
     }
     this.formData.patchValue({
-      maDvi : this.userService.isChiCuc()  ? this.userInfo.MA_DVI : null,
-      capDvi : this.userService.isChiCuc() ? this.userInfo.CAP_DVI : (Number(this.userInfo.CAP_DVI) + 1).toString()
+      maDvi : this.userInfo.MA_DVI,
+      capDvi : 3
     })
     await this.search();
   }
@@ -90,8 +90,8 @@ export class DeXuatNhuCauChiCucComponent extends Base2Component implements OnIni
   async clearForm() {
     this.formData.reset();
     this.formData.patchValue({
-      maDvi : this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
-      capDvi : this.userService.isChiCuc() ? this.userInfo.CAP_DVI : (Number(this.userInfo.CAP_DVI) + 1).toString()
+      maDvi : this.userInfo.MA_DVI,
+      capDvi : 3
     })
     await this.search();
   }

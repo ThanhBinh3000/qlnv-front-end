@@ -47,7 +47,7 @@
       <h2>{{formData.value.tenDanhSach + ' - ' + formData.value.maDanhSach}}</h2>
     </div>
     <div class="d-flex justify-content-center">
-      <p>Thời gian tổng hợp: {{formData.value.ngayTao}}</p>
+      <p>Thời gian tổng hợp: {{formData.value.ngayTao | date : 'dd/MM/yyyy HH:mm:ss' }}</p>
     </div>
     <div class="d-flex justify-content-center">
       <div style="width: fit-content;border-style: none none dotted none">

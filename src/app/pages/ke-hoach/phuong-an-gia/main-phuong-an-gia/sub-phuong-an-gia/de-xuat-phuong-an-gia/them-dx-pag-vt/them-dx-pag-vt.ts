@@ -441,7 +441,12 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       } else {
         this.rowItemPpxdg.tongChiPhi = this.rowItemPpxdg.giaVonNk + this.rowItemPpxdg.chiPhiChung
       }
-      this.rowItemPpxdg.tenCloaiVthh = this.listVthh.find(s => s.ma = this.rowItemPpxdg.cloaiVthh).ten;
+      console.log(this.rowItemPpxdg,111)
+      let itemCloaiVthh = this.listCloaiVthh.find(s => s.ma == this.rowItemPpxdg.cloaiVthh);
+      if (itemCloaiVthh) {
+        console.log(itemCloaiVthh,222)
+        this.rowItemPpxdg.tenCloaiVthh = itemCloaiVthh.ten;
+      }
       this.pagPpXacDinhGias = [...this.pagPpXacDinhGias, this.rowItemPpxdg];
       this.rowItemPpxdg = new PhuongPhapXacDinhGia();
       this.updateEditCache(page)
@@ -575,59 +580,60 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   }
 
   async onChangeCloaiVthh(event, item?: any) {
-    this.rowItemTtc.giaQdBtc = null;
-    this.rowItemTtc.giaQdBtcVat = null;
-    this.rowItemTtc.tchuanCluong = null;
-    this.rowItemTtc.donViTinh = null;
-    this.rowItemTtc.vat = null;
-    let list = this.listCloaiVthh.filter(item => item.ma == event)
-    this.rowItemTtc.tenCloaiVthh = list && list.length > 0 ? list[0].ten : ''
-    this.rowItemTtc.donViTinh = list && list.length > 0 ? list[0].maDviTinh : ''
-    this.rowItemTtc.tchuanCluong = list && list.length > 0 ? list[0].tieuChuanCl : ''
-    if (this.type == 'GCT') {
-      if (!this.formData.value.loaiGia) {
-        this.notification.warning(MESSAGE.WARNING, 'Vui lòng chọn loại giá')
-        return;
+    if (event) {
+      this.rowItemTtc.giaQdBtc = null;
+      this.rowItemTtc.giaQdBtcVat = null;
+      this.rowItemTtc.tchuanCluong = null;
+      this.rowItemTtc.donViTinh = null;
+      this.rowItemTtc.vat = null;
+      let list = this.listCloaiVthh.filter(item => item.ma == event);
+      this.rowItemTtc.tenCloaiVthh = list && list.length > 0 ? list[0].ten : ''
+      this.rowItemTtc.donViTinh = list && list.length > 0 ? list[0].maDviTinh : ''
+      let resp = await this.danhMucService.getDetail(event);
+      if (resp.msg == MESSAGE.SUCCESS) {
+        this.rowItemTtc.tchuanCluong = resp.data && resp.data.tieuChuanCl ? resp.data.tieuChuanCl : ""
       }
-      let body = {
-        namKeHoach: this.formData.value.namKeHoach,
-        loaiGia: this.formData.value.loaiGia == 'LG03' ? 'LG01' : 'LG02',
-        loaiVthh: this.formData.value.loaiVthh,
-        cloaiVthh: event
-      }
-      let res = await this.quyetDinhGiaCuaBtcService.getQdGiaVattu(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        let qdBtc = res.data
-        if (qdBtc ) {
-          if (item) {
-            if (qdBtc.giaQdDcBtc && qdBtc.giaQdDcBtc > 0) {
-              item.giaQdBtc = qdBtc.giaQdDcBtc;
-              item.giaQdBtcVat = qdBtc.giaQdDcBtcVat;
-              item.tchuanCluong = qdBtc.tchuanCluong;
-              item.vat = qdBtc.vat;
+      if (this.type == 'GCT') {
+        if (!this.formData.value.loaiGia) {
+          this.notification.warning(MESSAGE.WARNING, 'Vui lòng chọn loại giá')
+          return;
+        }
+        let body = {
+          namKeHoach: this.formData.value.namKeHoach,
+          loaiGia: this.formData.value.loaiGia == 'LG03' ? 'LG01' : 'LG02',
+          loaiVthh: this.formData.value.loaiVthh,
+          cloaiVthh: event
+        }
+        let res = await this.quyetDinhGiaCuaBtcService.getQdGiaVattu(body);
+        if (res.msg == MESSAGE.SUCCESS) {
+          let qdBtc = res.data
+          if (qdBtc ) {
+            if (item) {
+              if (qdBtc.giaQdDcBtc && qdBtc.giaQdDcBtc > 0) {
+                item.giaQdBtc = qdBtc.giaQdDcBtc;
+                item.giaQdBtcVat = qdBtc.giaQdDcBtcVat;
+                item.vat = qdBtc.vat;
+              } else {
+                item.giaQdBtc = qdBtc.giaQdBtc;
+                item.giaQdBtcVat = qdBtc.giaQdBtcVat;
+                item.vat = qdBtc.vat;
+              }
             } else {
-              item.giaQdBtc = qdBtc.giaQdBtc;
-              item.giaQdBtcVat = qdBtc.giaQdBtcVat;
-              item.tchuanCluong = qdBtc.tchuanCluong;
-              item.vat = qdBtc.vat;
-            }
-          } else {
-            if (qdBtc.giaQdDcBtc && qdBtc.giaQdDcBtc > 0) {
-              this.rowItemTtc.giaQdBtc = qdBtc.giaQdDcBtc;
-              this.rowItemTtc.giaQdBtcVat = qdBtc.giaQdDcBtcVat;
-              this.rowItemTtc.tchuanCluong = qdBtc.tchuanCluong;
-              this.rowItemTtc.vat = qdBtc.vat;
-            } else {
-              this.rowItemTtc.giaQdBtc = qdBtc.giaQdBtc;
-              this.rowItemTtc.giaQdBtcVat = qdBtc.giaQdBtcVat;
-              this.rowItemTtc.tchuanCluong = qdBtc.tchuanCluong;
-              this.rowItemTtc.vat = qdBtc.vat;
+              if (qdBtc.giaQdDcBtc && qdBtc.giaQdDcBtc > 0) {
+                this.rowItemTtc.giaQdBtc = qdBtc.giaQdDcBtc;
+                this.rowItemTtc.giaQdBtcVat = qdBtc.giaQdDcBtcVat;
+                this.rowItemTtc.vat = qdBtc.vat;
+              } else {
+                this.rowItemTtc.giaQdBtc = qdBtc.giaQdBtc;
+                this.rowItemTtc.giaQdBtcVat = qdBtc.giaQdBtcVat;
+                this.rowItemTtc.vat = qdBtc.vat;
+              }
             }
           }
+        } else {
+          this.notification.warning(MESSAGE.WARNING, 'Không tìm thấy giá BTC cho loại hàng này')
+          return;
         }
-      } else {
-        this.notification.warning(MESSAGE.WARNING, 'Không tìm thấy giá BTC cho loại hàng này')
-        return;
       }
     }
   }

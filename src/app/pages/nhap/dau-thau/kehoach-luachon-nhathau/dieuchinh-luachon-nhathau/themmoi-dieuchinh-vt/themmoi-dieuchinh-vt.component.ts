@@ -196,6 +196,12 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
           soQdDc: data.soQdDc?.split("/")[0],
           soTtrDc: data.soTtrDc?.split("/")[0]
         });
+        if (data.soQdDc != null) {
+          this.maQd = "/" + data.soQdDc?.split("/")[1]
+        }
+        if (data.soTtrDc != null) {
+          this.maTrinh = "/" + data.soTtrDc?.split("/")[1]
+        }
         this.dataLoadDetail = data.dsGthau;
         this.fileDinhKems = data.fileDinhKems;
         this.listCcPhapLy = data.listCcPhapLy;
@@ -313,11 +319,11 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
       vat: childBody.vat,
     });
     let body = this.formData.value;
-    if (this.formData.value.soQd) {
-      body.soQdDc = this.formData.value.soQdDc + "/" + this.maQd;
+    if (this.formData.value.soQdDc) {
+      body.soQdDc = this.formData.value.soQdDc + this.maQd;
     }
     if (this.formData.value.soTtrDc) {
-      body.soTtrDc = this.formData.value.soTtrDc + "/" + this.maTrinh;
+      body.soTtrDc = this.formData.value.soTtrDc + this.maTrinh;
     }
     body.dsGoiThau = this.dataInput.dsGoiThau;
     body.fileDinhKems = this.fileDinhKems;

@@ -169,7 +169,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       tongMucDtLamTron: [null],
       tongMucDtDx: [null, [Validators.required]],
       tongMucDtDxLamTron: [null, [Validators.required]],
-      nguonVon: ['NGV01', [Validators.required]],
+      nguonVon: ['NV_NSNN', [Validators.required]],
       dienGiai: [''],
       tgianNhang: [null, [Validators.required]],
       tgianThien: [null, [Validators.required]],
@@ -1221,34 +1221,6 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       return false
     } else {
       return true
-    }
-  }
-
-  calcTongChiTieu() {
-    if (this.listOfData) {
-      let sum = 0
-      this.listOfData.forEach(item => {
-        const sumChild = item.children.reduce((prev, cur) => {
-          prev += cur.soLuongTheoChiTieu;
-          return prev;
-        }, 0);
-        sum += sumChild;
-      })
-      return sum;
-    }
-  }
-
-  calcTongDaThucHien() {
-    if (this.listOfData) {
-      let sum = 0
-      this.listOfData.forEach(item => {
-        const sumChild = item.children.reduce((prev, cur) => {
-          prev += cur.soLuongDaMua;
-          return prev;
-        }, 0);
-        sum += sumChild;
-      })
-      return sum;
     }
   }
 

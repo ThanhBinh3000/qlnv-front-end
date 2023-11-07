@@ -42,6 +42,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
   @Input() inputData: any;
   @Input() isView: any = false;
   @Input() loaiChon: string;
+  @Input() isViewOnModal: boolean;
   radioValue: any;
   listFileDinhKem: any;
   canCu: any;
@@ -392,8 +393,8 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.dsQdGnv,
-        dataHeader: ['Số quyết định xuất hàng', 'Ngày ký'],
-        dataColumn: ['soBbQd', 'ngayKy'],
+        dataHeader: ['Số quyết định xuất hàng', 'Ngày ký', 'Mục đích xuất'],
+        dataColumn: ['soBbQd', 'ngayKy', 'mucDichXuat'],
       },
     });
     modalQD.afterClose.subscribe(async (data) => {

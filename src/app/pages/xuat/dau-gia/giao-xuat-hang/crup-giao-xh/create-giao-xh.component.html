@@ -187,7 +187,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="1">
+            <div nz-col [nzSpan]="2">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Đơn vị tính</nz-form-label>
                 <nz-form-control nz-col>
@@ -195,7 +195,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="3">
+            <div nz-col [nzSpan]="2">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Thời gian giao nhận hàng</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
@@ -212,7 +212,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="8">
+            <div nz-col [nzSpan]="10">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Trưởng phòng KH&QLHDT</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
@@ -220,7 +220,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="8">
+            <div nz-col [nzSpan]="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Lãnh đạo Cục</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
@@ -241,8 +241,7 @@
                 <nz-form-label [nzNoColon]="true"> Căn cứ pháp lý</nz-form-label>
                 <nz-form-control [nzErrorTip]="error" nz-col>
                   <div class="list-file" nz-col>
-                    <file-list [data]="formData.value.fileCanCu" [isViewDetail]="isView">
-                    </file-list>
+                    <file-list [data]="formData.value.fileCanCu" [isCanCuPL]='true' [isViewDetail]="isView"></file-list>
                   </div>
                 </nz-form-control>
               </nz-form-item>
@@ -253,8 +252,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error" nz-col>
                   <div class="list-file" nz-col>
-                    <file-list [data]="formData.value.fileDinhKem" [isViewDetail]="isView">
-                    </file-list>
+                    <file-list [data]="formData.value.fileDinhKem" [isViewDetail]="isView"></file-list>
                   </div>
                 </nz-form-control>
               </nz-form-item>
@@ -265,18 +263,20 @@
     </nz-collapse>
     <nz-collapse nzAccordion>
       <nz-collapse-panel [nzHeader]="'ĐỊA ĐIỂM CUNG CẤP HÀNG DTQG'" [nzActive]="true">
-        <nz-table class="pd-10" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
+        <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered [nzFrontPagination]="false"
                   [nzShowPagination]="false">
           <thead>
           <tr>
-            <th class="text-center"></th>
+            <th nzWidth="50px" class="text-center wrap"></th>
             <th class="text-left"> Chi cục DTNN</th>
             <th class="text-left"> Điểm kho</th>
-            <th class="text-left"> Nhà kho</th>
             <th class="text-left"> Ngăn/Lô kho</th>
-            <th class="text-center"> Mã ĐVTS</th>
-            <th class="text-right"> Tồn kho</th>
-            <th class="text-right"> Số lượng xuất</th>
+            <th class="text-left"> Mã ĐVTS</th>
+            <th class="text-center"> Tồn kho</th>
+            <th class="text-center"> Số lượng xuất</th>
+            <th class="text-left"> Số biên bản tịnh kho</th>
+            <th class="text-left"> Ngày lập BB tịnh kho</th>
+            <th class="text-left"> Trạng thái XH</th>
           </tr>
           </thead>
           <tbody>
@@ -287,22 +287,26 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td class="text-right bold">{{ data.tonKho|number:globals.numberFormat:globals.locale }}</td>
               <td class="text-right bold">{{ data.soLuongXuatBan|number:globals.numberFormat:globals.locale }}</td>
+              <td></td>
+              <td></td>
+              <td class="text-left">{{ data.tenTrangThai}}</td>
             </tr>
             <ng-container *ngIf="expandSet.has(idx)">
               <tr *ngFor="let children of data.children, let i = index">
                 <td></td>
                 <td></td>
                 <td class="text-left">{{ children.tenDiemKho }}</td>
-                <td class="text-left">{{ children.tenNhaKho }}</td>
-                <td
-                  class="text-left">{{(children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") +
-                (children.tenNhaKho ? children.tenNhaKho : "")}}</td>
-                <td class="text-center">{{ children.maDviTsan }}</td>
+                <td class="text-left">
+                  {{(children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") + (children.tenNhaKho ? children.tenNhaKho : "")}}
+                </td>
+                <td class="text-left">{{ children.maDviTsan }}</td>
                 <td class="text-right">{{ children.tonKho|number:globals.numberFormat:globals.locale }}</td>
                 <td class="text-right">{{ children.soLuong|number:globals.numberFormat:globals.locale }}</td>
+                <td class="text-left">{{ children.soBbTinhKho}}</td>
+                <td class="text-left">{{ children.ngayLapBbTinhKho| date: 'dd/MM/YYYY'}}</td>
+                <td></td>
               </tr>
             </ng-container>
           </ng-container>
@@ -310,11 +314,17 @@
           <ng-container *ngIf="dataTable.length > 0">
             <tfoot>
             <tr>
-              <td colspan="6"></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td class="text-right text-blue">TỔNG SỐ</td>
+              <th class="text-right text-blue">{{calcTong('tonKho')|number:globals.numberFormat:globals.locale}}</th>
               <th
-                class="text-right bold text-blue">{{ calcTong('tonKho')|number:globals.numberFormat:globals.locale }}</th>
-              <th
-                class="text-right bold text-blue">{{ calcTong('soLuongXuatBan')|number:globals.numberFormat:globals.locale }}</th>
+                class="text-right text-blue">{{calcTong('soLuongXuatBan')|number:globals.numberFormat:globals.locale}}</th>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             </tfoot>
           </ng-container>

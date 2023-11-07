@@ -3327,8 +3327,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
 
   async themSuaVatTu(data: any, type: string, tab: string, isRoot, sttDonVi: any, donViId?: number) {
-    console.log(donViId, 'donViIddonViId');
-    console.log(data, 'datadatadata');
     const modalGT = this.modal.create({
       nzTitle: tab == 'NHAP' ? 'CHỈ TIÊU NHẬP VẬT TƯ, THIẾT BỊ' : 'CHỈ TIÊU XUẤT VẬT TƯ, THIẾT BỊ ',
       nzContent: ThemSuaKeHoachVatTuComponent,
@@ -3354,7 +3352,14 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         if (tab == 'NHAP') {
           //NHAP
           if (type == 'them') {
-            this.dataVatTuNhap.push(item);
+            let countByDv = this.dataVatTuNhap.filter(it => it.maDvi == item.maDvi).length;
+            if(countByDv  > 0){
+              this.dataVatTuNhap.push(item);
+            }else{
+              let indexOldItem = this.dataVatTuNhap.findIndex(it => it.maDvi == item.maDvi);
+              this.dataVatTuNhap.splice(indexOldItem,1,item);
+            }
+            // this.dataVatTuNhap.push(item);
           } else {
             let index = -1;
             if (isRoot) {
@@ -3386,7 +3391,14 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         } else {
           //XUATTTTTTTTTTT
           if (type == 'them') {
-            this.dataVatTuXuat.push(item);
+            let countByDv = this.dataVatTuXuat.filter(it => it.maDvi == item.maDvi).length;
+            if(countByDv  > 0){
+              this.dataVatTuXuat.push(item);
+            }else{
+              let indexOldItem = this.dataVatTuXuat.findIndex(it => it.maDvi == item.maDvi);
+              this.dataVatTuXuat.splice(indexOldItem,1,item);
+            }
+            // this.dataVatTuXuat.push(item);
           } else {
             let index = -1;
             if (isRoot) {
@@ -3517,7 +3529,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         console.log(this.thongTinChiTieuKeHoachNam,"this.thongTinChiTieuKeHoachNam")
         let body = {
           soQd: this.thongTinChiTieuKeHoachNam.soQuyetDinh,
-          ngayQd: this.thongTinChiTieuKeHoachNam.ngayKy,
+          ngayQd: dayjs(this.thongTinChiTieuKeHoachNam.ngayKy,'YYYY-MM-DD').format('DD-MM-YYYY'),
           tenDvi: this.thongTinChiTieuKeHoachNam.tenDvi,
           typeFile: "pdf",
           nam: this.thongTinChiTieuKeHoachNam.namKeHoach,

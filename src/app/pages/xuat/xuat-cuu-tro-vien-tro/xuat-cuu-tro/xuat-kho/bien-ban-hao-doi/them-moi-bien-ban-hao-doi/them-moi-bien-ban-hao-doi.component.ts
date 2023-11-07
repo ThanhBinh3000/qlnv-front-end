@@ -368,13 +368,13 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
 
 
   async save() {
-    this.formData.disable()
+    this.helperService.ignoreRequiredForm(this.formData);
+    this.formData.controls['soBbHaoDoi'].setValidators(Validators.required);
     let body = this.formData.value;
-    console.log(body, 555);
     body.fileDinhKems = this.fileDinhKems;
     body.listPhieuXuatKho = this.dataTable;
     await this.createUpdate(body);
-    this.formData.enable();
+    this.helperService.restoreRequiredForm(this.formData)
   }
 
   pheDuyet() {
@@ -403,7 +403,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         break;
       }
     }
-    this.approve(this.idInput, trangThai, msg, null, MSG);
+    this.approve(this.formData.value.id, trangThai, msg, null, MSG);
   }
 
   tuChoi() {
@@ -418,7 +418,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         break;
       }
     }
-    this.reject(this.idInput, trangThai)
+    this.reject(this.formData.value.id, trangThai)
   }
 
   isDisabled() {

@@ -276,28 +276,29 @@
       </nz-collapse-panel>
     </nz-collapse>
     <nz-collapse nzAccordion>
-      <nz-collapse-panel nzHeader="DANH SÁCH CÁC GÓI THẦU" [nzActive]="true">
+      <nz-collapse-panel nzHeader="DANH SÁCH CÁC GÓI THẦU" [nzActive]="true" [nzExtra]="themMoiGt">
         <nz-table [nzData]="danhsachDx" class="nowrap" nzBordered>
           <thead>
           <tr>
-            <th rowspan="2" style="width: 2%;">STT</th>
-            <th rowspan="2">Tên gói thầu</th>
-            <th rowspan="2">Chủng loại hàng DTQG</th>
-            <th rowspan="2">Cục DTNN KV</th>
-            <th colspan="4">Kế hoạch đấu thầu</th>
-            <th colspan="4">Kết quả đấu thầu</th>
-            <th rowspan="2" style="width: 5%;">Trạng thái đấu thầu</th>
-            <th rowspan="2" style="width: 5%;" *ngIf="isShowFromKq && isKqDaBh">Hành động</th>
+            <th rowspan="2" style="width: 2%;" class="text-center">STT</th>
+            <th rowspan="2" class="text-center">Tên gói thầu</th>
+            <th rowspan="2" class="text-center">Chủng loại hàng DTQG</th>
+            <th rowspan="2" class="text-center">Cục DTNN KV</th>
+            <th colspan="4" class="text-center">Kế hoạch đấu thầu</th>
+            <th colspan="4" class="text-center">Kết quả đấu thầu</th>
+            <th rowspan="2" style="width: 5%;" class="text-center">Trạng thái đấu thầu</th>
+            <th rowspan="2" class="text-center">Diễn giải/Lý do</th>
+            <th rowspan="2" class="text-center" style="width: 5%;" *ngIf="isShowFromKq && isKqDaBh">Hành động</th>
           </tr>
           <tr>
-            <th>Số đấu thầu theo QĐ</th>
-            <th>ĐVT</th>
-            <th>Đơn giá cụ thể<br/>có VAT được duyệt (đ)</th>
-            <th>Thành tiền<br/>(giá gói thầu) (đ)</th>
-            <th>Nhà thầu<br/>trúng thầu</th>
-            <th>Đơn giá<br/>có VAT (đ)</th>
-            <th>Thành tiền (đ)</th>
-            <th>Chênh lệch với giá gốc</th>
+            <th class="text-center">Số đấu thầu theo QĐ</th>
+            <th class="text-center">ĐVT</th>
+            <th class="text-center">Đơn giá cụ thể<br/>có VAT được duyệt (đ)</th>
+            <th class="text-center">Thành tiền<br/>(giá gói thầu) (đ)</th>
+            <th class="text-center">Nhà thầu<br/>trúng thầu</th>
+            <th class="text-center">Đơn giá<br/>có VAT (đ)</th>
+            <th class="text-center">Thành tiền (đ)</th>
+            <th class="text-center">Chênh lệch với giá gói</th>
           </tr>
           </thead>
           <tbody>
@@ -317,6 +318,7 @@
                 <td class="text-right">{{item.donGiaNhaThau * item.soLuong | number: '1.0-1' : 'vi_VN'}}</td>
                 <td class="text-right">{{item.donGiaNhaThau?((item.soLuong * item.donGiaVat) - (item.donGiaNhaThau * item.soLuong) | number: '1.0-1' : 'vi_VN'): ''}}</td>
                 <td>{{item.tenTrangThaiDt}}</td>
+                <td>{{item.dienGiaiNhaThau}}</td>
               </tr>
             </ng-container>
             <ng-template #kqTemplate>
@@ -335,6 +337,7 @@
                   <td class="text-right">{{item.kqlcntDtl?.donGiaVat * item.soLuong | number : '1.0-1': 'vi_VN'}}</td>
                   <td class="text-right">{{item.kqlcntDtl?.donGiaVat?((item.soLuong * item.donGiaVat) - (item.kqlcntDtl?.donGiaVat * item.soLuong)  | number : '1.0-1': 'vi_VN'): ''}}</td>
                   <td>{{item.kqlcntDtl?.tenTrangThai}}</td>
+                  <td>{{item.kqlcntDtl?.dienGiaiNhaThau}}</td>
                   <td *ngIf="isShowFromKq && isKqDaBh">
                     <a (click)="startEditRowNt(i)">
                       <i class=" fa fa-pencil" title="Sửa bản ghi"></i>
@@ -351,7 +354,7 @@
                   <td class="text-right">{{item.donGiaVat | number : '1.0-1': 'vi_VN'}}</td>
                   <td class="text-right">{{item.soLuong * item.donGiaVat | number: '1.0-1' : 'vi_VN'}}
                   <td>
-                    <nz-select [(ngModel)]=itemRowQd[i].idNhaThau>
+                    <nz-select [(ngModel)]=itemRowQd[i].idNhaThau (ngModelChange)="selectNhaThau(i, $event)">
                       <nz-option *ngFor="let p of listNthauNopHs" [nzValue]="p.id"
                                  [nzLabel]="p.tenNhaThau"></nz-option>
                     </nz-select>
@@ -364,6 +367,7 @@
                       <nz-option *ngFor="let p of dsTrangThai" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                     </nz-select>
                   </td>
+                  <td><input nz-input [(ngModel)]="itemRowQd[i].dienGiaiNhaThau"></td>
                   <td *ngIf="isShowFromKq">
                     <a (click)="saveEditRowNt(i)" class="save">
                       <i class="icon htvbdh_tcdt_save"></i>
@@ -390,6 +394,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
                 <td *ngIf="isShowFromKq && isKqDaBh"></td>
               </tr>
             </ng-container>
@@ -406,6 +411,7 @@
             <td></td>
             <td></td>
             <td class="text-right blue-text">{{ calcTongThanhTienKq() | number : '1.0-1' :'vi_VN'}}</td>
+            <td></td>
             <td></td>
             <td></td>
             <td *ngIf="isShowFromKq && isKqDaBh"></td>
@@ -433,11 +439,26 @@
           <tbody>
           <tr *ngIf="formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT">
             <td></td>
-            <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow.tenNhaThau"/></td>
-            <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow.donGia"/></td>
-            <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow.mst"/></td>
+            <td>
+              <input nz-input [readonly]="isView" [nzAutocomplete]="auto" [(ngModel)]="itemRow.tenNhaThau"/>
+              <nz-autocomplete #auto (selectionChange)="changeNhaThau($event)">
+                <nz-auto-option *ngFor="let option of listNhaThau" [nzValue]="option.tenNhaThau">{{ option.tenNhaThau }}
+                </nz-auto-option>
+              </nz-autocomplete>
+            </td>
+            <td><input nz-input class="money-input" currencyMask [options]="amount" [readonly]="isView" [(ngModel)]="itemRow.donGia"/></td>
+            <td>
+              <nz-input-number
+                [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
+                [nzStep]="1" [nzDisabled]="isView" [(ngModel)]="itemRow.mst">
+              </nz-input-number>
+            </td>
             <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow.diaChi"/></td>
-            <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow.sdt"/></td>
+            <td>
+              <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
+                               [nzStep]="1"  [nzDisabled]="isView" [(ngModel)]="itemRow.sdt">
+              </nz-input-number>
+            </td>
             <td *ngIf="!isShowFromKq">
               <a (click)="addRow()">
                 <i class="fa fa-plus" title="Thêm bản ghi"></i>
@@ -469,9 +490,19 @@
               <td class="text-center">{{i + 1}}</td>
               <td><input type="text" nz-input [(ngModel)]="itemRowUpdate.tenNhaThau"/></td>
               <td><input nz-input [(ngModel)]="itemRowUpdate.donGia"/></td>
-              <td><input nz-input [(ngModel)]="itemRowUpdate.mst"/></td>
+              <td>
+                <nz-input-number
+                  [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
+                  [nzStep]="1" [(ngModel)]="itemRowUpdate.mst">
+                </nz-input-number>
+              </td>
               <td><input nz-input [(ngModel)]="itemRowUpdate.diaChi"/></td>
-              <td><input nz-input [(ngModel)]="itemRowUpdate.sdt"/></td>
+              <td>
+                <nz-input-number
+                  [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
+                  [nzStep]="1" [(ngModel)]="itemRowUpdate.sdt">
+                </nz-input-number>
+              </td>
               <td class="text-center">
                 <a
                   *ngIf="formData.value.trangThaiDt == STATUS.CHUA_CAP_NHAT || formData.value.trangThaiDt == STATUS.DANG_CAP_NHAT"
@@ -490,6 +521,54 @@
         </nz-table>
       </nz-collapse-panel>
     </nz-collapse>
+    <form nzLayout="vertical" nz-form [formGroup]="formData">
+      <div nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Thời gian trình kết quả tổ chuyên gia</nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24">
+              <nz-date-picker
+                [nzDisabled]="isShowFromKq || formData.value.trangThaiDt == STATUS.HOAN_THANH_CAP_NHAT || isView"
+                formControlName="tgianTrinhKqTcg" nzFormat="dd/MM/yyyy">
+              </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Thời gian tổ thậm định trình</nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24">
+              <nz-date-picker
+                [nzDisabled]="isShowFromKq || formData.value.trangThaiDt == STATUS.HOAN_THANH_CAP_NHAT || isView"
+                formControlName="tgianTrinhTtd" nzFormat="dd/MM/yyyy">
+              </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              Tài liệu đính kèm
+            </nz-form-label>
+            <div class="list-file">
+              <file-list
+                [isViewDetail]="isShowFromKq || formData.value.trangThaiDt == STATUS.HOAN_THANH_CAP_NHAT || isView"
+                [data]="fileDinhKems"></file-list>
+            </div>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Ghi chú</nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24">
+                <textarea
+                  [readonly]="isShowFromKq || formData.value.trangThaiDt == STATUS.HOAN_THANH_CAP_NHAT || isView"
+                  rows="3" nz-input formControlName="ghiChuTtdt"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
   </nz-card>
 </div>
 <nz-modal [(nzVisible)]="showDlgPreview" nzTitle="THÔNG TIN ĐẤU THẦU" nzWidth="100%"
@@ -519,3 +598,11 @@
     </button>
   </div>
 </nz-modal>
+<ng-template #themMoiGt>
+  <button
+    *ngIf="idGoiThau > 0 && !isShowFromKq && formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT && !isView"
+    type="button" class="btn btn-sub xanh" (click)="saveGoiThauPopup()">
+    <i class="icon htvbdh_tcdt_save"></i>
+    <span>Lưu</span>
+  </button>
+</ng-template>
