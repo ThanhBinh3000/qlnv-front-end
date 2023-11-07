@@ -1,4 +1,4 @@
-<div *ngIf="!isDetail" class="luong-thuc__danh-sach">
+<div *ngIf="!isDetail">
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
@@ -211,12 +211,12 @@
             <td>{{ data.nam }}</td>
             <td>{{ data.loaiNhapXuat }}</td>
             <td>{{ data.soDx}}</td>
-            <td>{{ data.tenDviDx }}</td>
+            <td class="break">{{ data.tenDviDx }}</td>
             <td class="text-center">{{ data.ngayDx | date: globals.dateFormat }}</td>
             <td class="text-center">{{ data.ngayPduyet| date: globals.dateFormat }}</td>
-            <td>{{ data.tenVthh }}</td>
+            <td class="break">{{ data.tenVthh }}</td>
             <!--          <td>{{ data.tongSoLuong| number: globals.numberFormat:globals.locale}}</td>-->
-            <td>{{ data.trichYeu }}</td>
+            <td class="break">{{ data.trichYeu }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td>{{ data.tenTrangThaiTh }}</td>
             <td>{{ data.idThop }}</td>
