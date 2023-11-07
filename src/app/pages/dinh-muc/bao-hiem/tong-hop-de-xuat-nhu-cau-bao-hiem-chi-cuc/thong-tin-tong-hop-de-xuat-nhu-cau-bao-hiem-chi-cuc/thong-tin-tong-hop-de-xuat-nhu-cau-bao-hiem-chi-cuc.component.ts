@@ -185,6 +185,32 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
     }
   }
 
+  async saveAndSend(status: string, msg: string, msgSuccess?: string) {
+    try {
+      this.formData.patchValue({
+        namKeHoach: this.formDataTongHop.value.namKeHoach,
+        giaTriDx: this.sumslKho('giaTriBhDx', null, 'tong')
+      })
+      this.helperService.markFormGroupTouched(this.formData)
+      if (this.formData.invalid) {
+        return;
+      }
+      if (this.fileDinhKem && this.fileDinhKem.length > 0) {
+        this.formData.value.fileDinhKems = this.fileDinhKem;
+      }
+      this.conVertTreToList();
+      this.convertListHangDtqg();
+      this.formData.value.listQlDinhMucDxBhKhoChua = this.dataTable;
+      this.formData.value.listQlDinhMucDxBhHdtqg = this.tableHangDtqg;
+      this.formData.value.maDvi = this.userInfo.MA_DVI;
+      this.formData.value.capDvi = this.userInfo.CAP_DVI;
+      this.formData.value.soCv = this.formData.value.soCv + this.maCv
+      await super.saveAndSend( this.formData.value, status, msg, msgSuccess);
+    } catch (error) {
+      console.error("Lỗi khi lưu và gửi dữ liệu:", error);
+    }
+  }
+
   async save() {
     this.formData.patchValue({
       namKeHoach: this.formDataTongHop.value.namKeHoach,

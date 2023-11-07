@@ -135,8 +135,10 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   }
 
   async bindingDataTongHop(dataTongHop?) {
-    if (!dataTongHop) return;
-    if (dataTongHop.trangThai == STATUS.CHUA_TAO_QD) {
+    if (!dataTongHop) {
+      return;
+    }
+    if (dataTongHop.trangThai == STATUS.CHUA_TAO_QD && dataTongHop.idQdPd === null) {
       this.formData.patchValue({
         cloaiVthh: dataTongHop.cloaiVthh,
         tenCloaiVthh: dataTongHop.tenCloaiVthh,
@@ -146,7 +148,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
         phanLoai: 'TH',
       })
       await this.onChangeIdThHdr(this.formData.value.idThHdr);
-    } else {
+    } else if (dataTongHop.idQdPd !== null) {
       await this.loadDetail(dataTongHop.idQdPd);
       this.isView = dataTongHop.trangThai === STATUS.DA_BAN_HANH_QD;
     }

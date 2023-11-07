@@ -145,17 +145,45 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
   }
 
 
-  async loadLoaiHangHoa() {
-    let ds = [];
+  // async loadLoaiHangHoa() {
+  //   let ds = [];
+  //   try {
+  //     let hangHoa = await this.danhMucService.loadDanhMucHangHoa().toPromise();
+  //     if (hangHoa) {
+  //       if (hangHoa.msg == MESSAGE.SUCCESS) {
+  //         hangHoa.data.forEach(element => {
+  //           ds = [...ds, element.children];
+  //           ds = ds.flat();
+  //           this.listOfOption = ds;
+  //         });
+  //       }
+  //     }
+  //   } catch (error) {
+  //     this.spinner.hide();
+  //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+  //   }
+  // }
+
+  async loadLoaiHangHoa(maBn?) {
     try {
-      let hangHoa = await this.danhMucService.loadDanhMucHangHoa().toPromise();
+      let hangHoa: any;
+      if (this.userInfo.MA_DVI == '0101') {
+        hangHoa = await this.danhMucService.getDanhMucHangHoaDvql({
+          'maDvi': maBn ? (maBn == '01' ? '0101' : maBn) : this.userInfo.MA_DVI,
+        }).toPromise();
+      } else {
+        hangHoa = await this.danhMucService.getDanhMucHangHoaDvql({
+          'maDvi': maBn ? (maBn == '01' ? '0101' : maBn) : this.userInfo.MA_DVI.substring(0, 2),
+        }).toPromise();
+      }
       if (hangHoa) {
         if (hangHoa.msg == MESSAGE.SUCCESS) {
-          hangHoa.data.forEach(element => {
-            ds = [...ds, element.children];
-            ds = ds.flat();
-            this.listOfOption = ds;
-          });
+          let ds = hangHoa.data.filter(element => {
+              return element.maHangHoa.length == 4;
+            },
+          );
+          ds = ds.flat();
+          this.listOfOption = ds;
         }
       }
     } catch (error) {
@@ -222,5 +250,11 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
       result = dayjs(event).format('DD/MM/YYYY').toString();
     }
     return result;
+  }
+
+  changeBoNganh(event: any) {
+    if (event) {
+      this.loadLoaiHangHoa(event);
+    }
   }
 }

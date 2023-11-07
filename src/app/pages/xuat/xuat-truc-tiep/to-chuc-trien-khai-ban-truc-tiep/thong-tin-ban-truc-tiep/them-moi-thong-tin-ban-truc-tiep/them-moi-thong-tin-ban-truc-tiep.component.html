@@ -14,7 +14,7 @@
     <ng-container>
       <button
         *ngIf="(formData.value.trangThai != STATUS.DA_HOAN_THANH) && !isView
-        && (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_TBBTT_SUA') : userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_TBBTT_SUA'))"
+        && (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_TBBTT_SUA') : userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_TBBTT_SUA'))"
         type="button" class="btn btn-sub xanh-nhat"
         (click)="saveAndSend(STATUS.DA_HOAN_THANH, 'Bạn có muốn hoàn thành cập nhập ?','Bạn đã hoàn thành cập nhập thành công!')">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
@@ -22,7 +22,7 @@
       </button>
       <button
         *ngIf="(formData.value.trangThai != STATUS.DA_HOAN_THANH) && !isView
-        && (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_TBBTT_SUA') : userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_TBBTT_SUA'))"
+        && (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_TBBTT_SUA') : userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_TBBTT_SUA'))"
         type="button" class="btn btn-main btn-sm waves-effect waves-light"
         (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>

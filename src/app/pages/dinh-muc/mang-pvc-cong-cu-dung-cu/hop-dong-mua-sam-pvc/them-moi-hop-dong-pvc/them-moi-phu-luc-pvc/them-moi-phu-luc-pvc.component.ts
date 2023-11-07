@@ -153,6 +153,7 @@ export class ThemMoiPhuLucPvcComponent extends Base2Component implements OnInit 
     if (data && !isGuiDuyet) {
       this.goBackHdr(true)
     }
+    this.buildDiaDiemTc();
   }
 
   onExpandStringChange(id: string, checked: boolean): void {
