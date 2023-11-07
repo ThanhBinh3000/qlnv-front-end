@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ThongTinQuyetDinh } from '../../../../models/DeXuatKeHoachuaChonNhaThau';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
-import {AMOUNT_NO_DECIMAL, AMOUNT_ONE_DECIMAL, AMOUNT_THREE_DECIMAL} from '../../../../Utility/utils';
+import { AMOUNT_NO_DECIMAL, AMOUNT_ONE_DECIMAL, AMOUNT_THREE_DECIMAL } from '../../../../Utility/utils';
 import { MESSAGE } from '../../../../constants/message';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 
@@ -162,7 +162,7 @@ export class MuaBuComponent implements OnInit {
       const loaiVthh = this.dsHangHoa.find(item => item.ma == event);
       if (loaiVthh) {
         this.rowItem.tenVthh = loaiVthh.ten;
-        this.rowItem.dviTinh = loaiVthh.maDviTinh;
+        this.rowItem.dviTinh = loaiVthh.loaiHang == 'LT' ? 'Tấn' : loaiVthh.maDviTinh;
         this.dsChungLoaiHangHoa = loaiVthh.child;
       }
     }
@@ -179,7 +179,7 @@ export class MuaBuComponent implements OnInit {
       const cloaiVthh = this.dsChungLoaiHangHoa.find(item => item.ma == event);
       if (cloaiVthh) {
         this.rowItem.tenCloaiVthh = cloaiVthh.ten;
-        this.rowItem.dviTinh = cloaiVthh.maDviTinh;
+        this.rowItem.dviTinh = cloaiVthh.loaiHang == 'LT' ? 'Tấn' :  cloaiVthh.maDviTinh;
       }
     }
   }

@@ -538,17 +538,17 @@
               <th></th>
               <th class='first-last-row-table background-last-row'> Chỉ tiêu của {{formData.value.loaiCanCu}} </th>
               <th
-                class='text-right text-btc '> {{(dataQdCanCu ? dataQdCanCu.ltThocMua : 0)|  number: '1.0-1': 'vi_VN'}}</th>
+                class='text-right text-btc '> {{(dataQdCanCu ? dataQdCanCu.ltThocMua : 0)|  number: '1.0-3': 'vi_VN'}}</th>
               <th
-                class='text-right text-btc '> {{(dataQdCanCu ? dataQdCanCu.ltGaoMua : 0) |  number: '1.0-1': 'vi_VN'}}</th>
-              <th></th>
-              <th
-                class='text-right text-btc '>  {{(dataQdCanCu ? dataQdCanCu.ltThocXuat : 0)|  number: '1.0-1': 'vi_VN' }}</th>
-              <th></th>
-              <th></th>
+                class='text-right text-btc '> {{(dataQdCanCu ? dataQdCanCu.ltGaoMua : 0) |  number: '1.0-3': 'vi_VN'}}</th>
               <th></th>
               <th
-                class='text-right text-btc '>  {{(dataQdCanCu ? dataQdCanCu.ltGaoXuat : 0) |  number: '1.0-1': 'vi_VN'}}</th>
+                class='text-right text-btc '>  {{(dataQdCanCu ? dataQdCanCu.ltThocXuat : 0)|  number: '1.0-3': 'vi_VN' }}</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th
+                class='text-right text-btc '>  {{(dataQdCanCu ? dataQdCanCu.ltGaoXuat : 0) |  number: '1.0-3': 'vi_VN'}}</th>
               <th></th>
               <th></th>
               <th></th>
@@ -571,17 +571,17 @@
               <th></th>
               <th class='first-last-row-table background-last-row'> Chỉ tiêu của TCDT</th>
               <th
-                class='text-right text-btc '> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltThocMua : 0)|  number: '1.0-1': 'vi_VN'}}</th>
+                class='text-right text-btc '> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltThocMua : 0)|  number: '1.0-3': 'vi_VN'}}</th>
               <th
-                class='text-right text-btc '> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltGaoMua : 0) |  number: '1.0-1': 'vi_VN'}}</th>
-              <th></th>
-              <th
-                class='text-right text-btc '>  {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltThocXuat : 0)|  number: '1.0-1' : 'vi_VN'}}</th>
-              <th></th>
-              <th></th>
+                class='text-right text-btc '> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltGaoMua : 0) |  number: '1.0-3': 'vi_VN'}}</th>
               <th></th>
               <th
-                class='text-right text-btc '>  {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltGaoXuat : 0) |  number: '1.0-1': 'vi_VN'}}</th>
+                class='text-right text-btc '>  {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltThocXuat : 0)|  number: '1.0-3' : 'vi_VN'}}</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th
+                class='text-right text-btc '>  {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltGaoXuat : 0) |  number: '1.0-3': 'vi_VN'}}</th>
               <th></th>
               <th></th>
               <th></th>
@@ -624,7 +624,7 @@
                 <td class='text-right'>{{dataMuoi.nhapTrongNam | number: '1.0-1': 'vi_VN'}}</td>
                 <td class='text-right'>{{dataMuoi.xuatTrongNamMuoi | number: '1.0-1': 'vi_VN'}}</td>
                 <td
-                  class='text-right'>{{(dataMuoi.tonKhoDauNam + dataMuoi.nhapTrongNam - dataMuoi.xuatTrongNamMuoi) | number: '1.0-1': 'vi_VN'}}</td>
+                  class='text-right'>{{(dataMuoi.tonKhoDauNam + dataMuoi.nhapTrongNam - dataMuoi.xuatTrongNamMuoi) | number: '1.0-3': 'vi_VN'}}</td>
                 <td *ngIf='!this.isViewDetail' class='text-center' nzRight>
                   <a (click)='startEditMuoi(i)'>
                     <i class='fa fa-pencil' title='Sửa'></i>
@@ -649,7 +649,7 @@
                          [(ngModel)]='dsMuoiClone[i].xuatTrongNamMuoi' />
                 </td>
                 <td
-                  class='text-right'>{{(dataMuoi.tonKhoDauNam + dsMuoiClone[i].nhapTrongNam - dsMuoiClone[i].xuatTrongNamMuoi) |  number: '1.0-1': 'vi_VN'}}</td>
+                  class='text-right'>{{(dataMuoi.tonKhoDauNam + dsMuoiClone[i].nhapTrongNam - dsMuoiClone[i].xuatTrongNamMuoi) |  number: '1.0-3': 'vi_VN'}}</td>
                 <td *ngIf='!this.isViewDetail' class='text-center' nzRight>
                   <a (click)='saveEditMuoi(i)' class='save'>
                     <i class='fa fa-save'></i>
