@@ -2299,7 +2299,14 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
         if (tab == 'NHAP') {
           //NHAP
           if (type == 'them') {
-            this.dataVatTuNhap.push(item);
+            let countByDv = this.dataVatTuNhap.filter(it => it.maDvi == item.maDvi).length;
+            if(countByDv  > 0){
+              this.dataVatTuNhap.push(item);
+            }else{
+              let indexOldItem = this.dataVatTuNhap.findIndex(it => it.maDvi == item.maDvi);
+              this.dataVatTuNhap.splice(indexOldItem,1,item);
+            }
+            // this.dataVatTuNhap.push(item);
           } else {
             let index = -1;
             if (isRoot) {
@@ -2331,7 +2338,13 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
         } else {
           //XUATTTTTTTTTTT
           if (type == 'them') {
-            this.dataVatTuXuat.push(item);
+            let countByDv = this.dataVatTuXuat.filter(it => it.maDvi == item.maDvi).length;
+            if(countByDv  > 0){
+              this.dataVatTuXuat.push(item);
+            }else{
+              let indexOldItem = this.dataVatTuXuat.findIndex(it => it.maDvi == item.maDvi);
+              this.dataVatTuXuat.splice(indexOldItem,1,item);
+            }
           } else {
             let index = -1;
             if (isRoot) {
