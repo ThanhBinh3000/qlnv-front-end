@@ -814,7 +814,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     this.formData.controls["mstBenBan"].setValidators([Validators.required]);
     this.formData.controls["tenNguoiDaiDien"].setValidators([Validators.required]);
     this.formData.controls["chucVuBenBan"].setValidators([Validators.required]);
-    this.formData.controls["sdtBenBan"].setValidators([Validators.required]);
     this.formData.controls["faxBenBan"].setValidators([Validators.required]);
     this.formData.controls["stkBenBan"].setValidators([Validators.required]);
     this.formData.controls["moTaiBenBan"].setValidators([Validators.required]);

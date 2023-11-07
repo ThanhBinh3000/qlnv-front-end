@@ -214,9 +214,10 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   }
 
   async loadDetail(id: number) {
-    if (!id) return;
+    if (!id) {
+      return;
+    }
     const data = await this.detail(id);
-    if (!data) return;
     const {soQdPd, children} = data;
     this.formData.patchValue({
       soQdPd: soQdPd?.split('/')[0] || null,
@@ -243,10 +244,8 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       const res = await this.tongHopDeXuatKeHoachBanDauGiaService.search(body);
       if (res && res.msg === MESSAGE.SUCCESS) {
         this.listDanhSachTongHop = res.data.content;
-      } else if (res && res.msg) {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       } else {
-        this.notification.error(MESSAGE.ERROR, 'Unknown error occurred.');
+        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH TỔNG HỢP ĐỀ XUẤT BÁN ĐẤU GIÁ',
@@ -274,13 +273,14 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   }
 
   async onChangeIdThHdr(idTh) {
-    if (idTh <= 0) return;
+    if (idTh <= 0) {
+      return;
+    }
     this.danhsachDx = [];
     try {
       await this.spinner.show();
       const res = await this.tongHopDeXuatKeHoachBanDauGiaService.getDetail(idTh);
       if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình lấy dữ liệu.');
         return;
       }
       const data = res.data;
@@ -300,7 +300,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       for (const item of data.children) {
         const resDx = await this.deXuatKhBanDauGiaService.getDetail(item.idDxHdr);
         if (resDx.msg !== MESSAGE.SUCCESS || !resDx.data) {
-          this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình lấy dữ liệu.');
           return;
         }
         const dataDx = resDx.data
@@ -354,10 +353,8 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       let res = await this.deXuatKhBanDauGiaService.search(body);
       if (res && res.msg === MESSAGE.SUCCESS) {
         this.listToTrinh = res.data.content;
-      } else if (res && res.msg) {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       } else {
-        this.notification.error(MESSAGE.ERROR, 'Unknown error occurred.');
+        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH ĐỀ XUẤT KẾ HOẠCH BÁN ĐẤU GIÁ',
@@ -385,13 +382,14 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   }
 
   async onChangeIdTrHdr(idDx) {
-    if (idDx <= 0) return;
+    if (idDx <= 0) {
+      return;
+    }
     this.danhsachDx = [];
     try {
       await this.spinner.show();
       const res = await this.deXuatKhBanDauGiaService.getDetail(idDx);
       if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình lấy dữ liệu.');
         return;
       }
       const data = res.data;

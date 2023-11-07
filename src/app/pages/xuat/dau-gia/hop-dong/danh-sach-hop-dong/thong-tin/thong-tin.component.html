@@ -315,8 +315,7 @@
                 <nz-form-item class="form-item display-block">
                   <nz-form-label nzRequired [nzNoColon]="true"> Điều kiện và thời hạn thanh toán</nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
-                            <textarea nz-input [rows]="8" formControlName="dieuKien"
-                                      [readonly]="isView"></textarea>
+                    <textarea nz-input [rows]="8" formControlName="dieuKien" [readonly]="isView"></textarea>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -325,7 +324,7 @@
                   <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ pháp lý</nz-form-label>
                   <nz-form-control [nzErrorTip]="error" nz-col>
                     <div class="list-file" nz-col>
-                      <file-list [data]="formData.value.fileCanCu" [isViewDetail]="isView">
+                      <file-list [data]="formData.value.fileCanCu" [isCanCuPL]='true' [isViewDetail]="isView">
                       </file-list>
                     </div>
                   </nz-form-control>

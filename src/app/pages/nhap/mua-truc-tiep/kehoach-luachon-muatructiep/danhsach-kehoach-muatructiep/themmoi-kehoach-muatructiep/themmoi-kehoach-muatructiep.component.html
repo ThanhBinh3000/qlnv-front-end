@@ -157,7 +157,7 @@
                                 <nz-form-label nzRequired [nzNoColon]="true"> Ngày duyệt kế hoạch </nz-form-label>
                                 <nz-form-control nz-col>
                                     <nz-input-group>
-                                        <nz-date-picker formControlName="ngayPduyet" nzFormat="dd/MM/yyyy" [nzDisabled]="isDisable()">
+                                        <nz-date-picker formControlName="ngayPduyet" nzFormat="dd/MM/yyyy" [nzDisabled]="true">
                                         </nz-date-picker>
                                     </nz-input-group>
                                 </nz-form-control>
@@ -482,8 +482,8 @@
                                 <tr *ngFor="let children of item.children, let y = index">
                                     <td></td>
                                     <td></td>
-<!--                                    <td>{{children.tenDiemKho}}</td>-->
-                                    <td class="text-left">{{children.diaDiemNhap}}</td>
+                                    <td>{{children.tenDiemKho}}</td>
+<!--                                    <td class="text-left">{{children.diaDiemNhap}}</td>-->
                                     <td></td>
                                     <td></td>
                                     <td class="text-right">{{children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
@@ -496,7 +496,7 @@
                                         <a *ngIf="!isDisable()" (click)="themMoiBangPhanLoTaiSan($event,item,i)">
                                             <i class="fa fa-pencil" title="Sửa"></i>
                                         </a>
-                                        <a *ngIf="!isDisable()" (click)="deleteRow(i)">
+                                        <a *ngIf="!isDisable()" (click)="deleteRow(i, y)">
                                             <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                                         </a>
                                     </td>
@@ -509,11 +509,11 @@
                             <th colspan="3" class="text-blue">Tổng</th>
                             <th></th>
                             <th></th>
-                            <th class="text-blue text-right">{{calcTongSoLuong()|number: '1.0-1'}}</th>
+                            <th class="text-blue text-right">{{calcTongSoLuong()|number: '1.0-1': 'vi_VN'}}</th>
                             <th></th>
-                            <th class="text-blue text-right">{{calcTongThanhTienDeXuat()|number: '1.0-1'}}</th>
+                            <th class="text-blue text-right">{{calcTongThanhTienDeXuat()|number: '1.0-1': 'vi_VN'}}</th>
                             <th></th>
-                            <th class="text-blue text-right">{{calcTongThanhTien()|number: '1.0-1'}}</th>
+                            <th class="text-blue text-right">{{calcTongThanhTien()|number: '1.0-1': 'vi_VN'}}</th>
                             <th></th>
                         </tr>
                     </tfoot>

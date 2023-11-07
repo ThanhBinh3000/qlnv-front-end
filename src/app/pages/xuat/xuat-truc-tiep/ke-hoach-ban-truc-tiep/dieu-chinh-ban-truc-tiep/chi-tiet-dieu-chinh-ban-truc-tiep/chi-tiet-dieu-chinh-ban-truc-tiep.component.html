@@ -152,8 +152,7 @@
                 <nz-form-label [nzNoColon]="true"> File đính kèm tờ trình/công văn phương án điều chỉnh</nz-form-label>
                 <nz-form-control [nzErrorTip]="error" nz-col>
                   <div class="list-file" nz-col>
-                    <file-list [data]="formData.value.fileToTrinh" [isViewDetail]="isView">
-                    </file-list>
+                    <file-list [data]="formData.value.fileToTrinh" [isViewDetail]="isView"></file-list>
                   </div>
                 </nz-form-control>
               </nz-form-item>
@@ -194,8 +193,7 @@
                 <nz-form-label [nzNoColon]="true"> Căn cứ pháp lý</nz-form-label>
                 <nz-form-control [nzErrorTip]="error" nz-col>
                   <div class="list-file" nz-col>
-                    <file-list [data]="formData.value.fileCanCu" [isViewDetail]="isView">
-                    </file-list>
+                    <file-list [data]="formData.value.fileCanCu" [isCanCuPL]='true' [isViewDetail]="isView"></file-list>
                   </div>
                 </nz-form-control>
               </nz-form-item>
@@ -205,8 +203,7 @@
                 <nz-form-label [nzNoColon]="true"> File đính kèm quyết định điều chỉnh đã ký và đóng dấu</nz-form-label>
                 <nz-form-control [nzErrorTip]="error" nz-col>
                   <div class="list-file" nz-col>
-                    <file-list [data]="formData.value.fileDinhKem" [isViewDetail]="isView">
-                    </file-list>
+                    <file-list [data]="formData.value.fileDinhKem" [isViewDetail]="isView"></file-list>
                   </div>
                 </nz-form-control>
               </nz-form-item>

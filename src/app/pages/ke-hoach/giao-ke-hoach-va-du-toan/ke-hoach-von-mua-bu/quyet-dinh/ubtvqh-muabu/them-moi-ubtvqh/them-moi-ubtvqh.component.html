@@ -72,6 +72,17 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-col [nzSpan]='4'>
+          <nz-form-item>
+            <nz-form-label>Nguồn kinh phí bổ sung</nz-form-label>
+            <nz-form-control [nzErrorTip]='error'>
+              <nz-select formControlName='nguonKpBs' [nzDisabled]='isView'>
+                <nz-option *ngFor='let p of listKinhPhiBs' [nzValue]='p.ma' [nzLabel]='p.giaTri'>
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
         <div nz-col [nzSpan]='24'>
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]='true' nzFor='ngay-qd'>Trích yếu</nz-form-label>
