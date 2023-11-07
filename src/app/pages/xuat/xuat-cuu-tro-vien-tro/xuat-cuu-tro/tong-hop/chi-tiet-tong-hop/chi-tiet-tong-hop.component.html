@@ -22,7 +22,11 @@
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
-
+      <button type="button" class="btn btn-sub xanh" (click)="taoQuyetDinhPdPa()"
+        *ngIf="formData.value.trangThai == STATUS.DA_DUYET_LDV && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_THEM')&& !formData.value.soQdPd && userService.isTongCuc()">
+        <i class="icon htvbdh_dau-cong"></i>
+        <span>Tạo quyết định</span>
+      </button>
       <button *ngIf="formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV"
         type="button" class="btn btn-sub"
         (click)="saveAndSend(STATUS.CHO_DUYET_LDV,'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
