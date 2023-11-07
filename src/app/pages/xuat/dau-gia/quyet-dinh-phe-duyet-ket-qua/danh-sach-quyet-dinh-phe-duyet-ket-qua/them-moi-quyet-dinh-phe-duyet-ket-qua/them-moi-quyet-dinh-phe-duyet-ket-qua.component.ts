@@ -203,10 +203,8 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
       if (res && res.msg === MESSAGE.SUCCESS) {
         const maThongBaoSet = new Set(this.loadDsQuyetDinhKq.map(item => item.maThongBao));
         this.dataMaThongBao = res.data.content.filter(item => !maThongBaoSet.has(item.maThongBao));
-      } else if (res && res.msg) {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       } else {
-        this.notification.error(MESSAGE.ERROR, 'Unknown error occurred.');
+        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH THÔNG BÁO BÁN ĐẤU GIÁ',
@@ -266,7 +264,7 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
         tenLoaiVthh: data.tenLoaiVthh,
         cloaiVthh: data.cloaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
-        moTaHangHoa: dataQd.xhQdPdKhBdg ? dataQd.xhQdPdKhBdg.moTaHangHoa : dataQd.xhQdDchinhKhBdgHdr.moTaHangHoa,
+        moTaHangHoa: data.moTaHangHoa,
         phuongThucGiaoNhan: dataQd.pthucGnhan,
         tgianGiaoNhanNgay: dataQd.tgianGnhan,
         tgianGnhanGhiChu: dataQd.tgianGnhanGhiChu,

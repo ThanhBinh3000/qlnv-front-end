@@ -52,6 +52,11 @@
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Hoàn thành</span>
     </button>
+    <button type="button" class="btn btn-sub xanh" (click)="taoQuyetDinhPdPa()"
+      *ngIf="formData.value.trangThai == STATUS.DA_TAO_CBV && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_THEM')&& !formData.value.soQdPd && userService.isTongCuc()">
+      <i class="icon htvbdh_dau-cong"></i>
+      <span>Tạo quyết định</span>
+    </button>
     <button
       *ngIf="formData.value.trangThai == STATUS.DA_TAO_CBV && userService.isTongCuc() && !formData.value.idQdPd && !formData.value.idThop"
       type="button" class="btn btn-sub"

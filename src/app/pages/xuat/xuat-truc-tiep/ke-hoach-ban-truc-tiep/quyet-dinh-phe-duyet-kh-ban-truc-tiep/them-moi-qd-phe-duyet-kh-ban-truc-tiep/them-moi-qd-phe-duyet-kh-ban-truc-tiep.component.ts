@@ -139,8 +139,10 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   }
 
   async bindingDataTongHop(dataTongHop?) {
-    if (!dataTongHop) return;
-    if (dataTongHop.trangThai == STATUS.CHUA_TAO_QD) {
+    if (!dataTongHop) {
+      return;
+    }
+    if (dataTongHop.trangThai == STATUS.CHUA_TAO_QD && dataTongHop.idSoQdPd === null) {
       this.formData.patchValue({
         cloaiVthh: dataTongHop.cloaiVthh,
         tenCloaiVthh: dataTongHop.tenCloaiVthh,
@@ -150,7 +152,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
         phanLoai: 'TH',
       });
       await this.onChangeIdThHdr(this.formData.value.idThHdr);
-    } else {
+    } else if (dataTongHop.idSoQdPd !== null) {
       await this.loadDetail(dataTongHop.idSoQdPd);
       this.isView = dataTongHop.trangThai == STATUS.DA_BAN_HANH_QD;
     }
@@ -216,9 +218,10 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   }
 
   async loadDetail(id: number) {
-    if (!id) return;
+    if (!id) {
+      return;
+    }
     const data = await this.detail(id);
-    if (!data) return;
     const {soQdPd, namKh, children} = data;
     this.formData.patchValue({
       soQdPd: soQdPd?.split('/')[0] || null,
@@ -245,10 +248,8 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       const res = await this.tongHopKhBanTrucTiepService.search(body);
       if (res && res.msg === MESSAGE.SUCCESS) {
         this.listDanhSachTongHop = res.data.content;
-      } else if (res && res.msg) {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       } else {
-        this.notification.error(MESSAGE.ERROR, 'Unknown error occurred.');
+        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH TỔNG HỢP KẾ HOẠCH BÁN TRỰC TIẾP',
@@ -276,13 +277,14 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   }
 
   async onChangeIdThHdr(idTh) {
-    if (idTh <= 0) return;
+    if (idTh <= 0) {
+      return;
+    }
     this.danhsachDx = [];
     try {
       await this.spinner.show();
       const res = await this.tongHopKhBanTrucTiepService.getDetail(idTh);
       if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình lấy dữ liệu.');
         return;
       }
       const data = res.data;
@@ -302,7 +304,6 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       for (const item of data.children) {
         const resDx = await this.deXuatKhBanTrucTiepService.getDetail(item.idDxHdr);
         if (resDx.msg !== MESSAGE.SUCCESS || !resDx.data) {
-          this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình lấy dữ liệu.');
           return;
         }
         const dataDx = resDx.data
@@ -356,10 +357,8 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       const res = await this.deXuatKhBanTrucTiepService.search(body);
       if (res && res.msg === MESSAGE.SUCCESS) {
         this.listToTrinh = res.data.content;
-      } else if (res && res.msg) {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       } else {
-        this.notification.error(MESSAGE.ERROR, 'Unknown error occurred.');
+        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH ĐỀ XUẤT KẾ HOẠCH BÁN TRỰC TIẾP',
@@ -387,13 +386,14 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   }
 
   async onChangeIdTrHdr(idDx) {
-    if (idDx <= 0) return;
+    if (idDx <= 0) {
+      return;
+    }
     this.danhsachDx = [];
     try {
       await this.spinner.show();
       const res = await this.deXuatKhBanTrucTiepService.getDetail(idDx);
       if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình lấy dữ liệu.');
         return;
       }
       const data = res.data;

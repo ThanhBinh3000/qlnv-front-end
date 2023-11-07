@@ -111,12 +111,12 @@ export class ThemMoiTtPhanBoPvcComponent extends Base2Component implements OnIni
   async save() {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.FORM_REQUIRED_ERROR)
       this.spinner.hide();
       return;
     }
     if (this.checkTableHhSave(this.dataTable)) {
-      this.notification.error(MESSAGE.ERROR, 'Chưa phân bổ hết hàng hóa!!!')
+      this.notification.warning(MESSAGE.WARNING, 'Vui lòng phân bổ hết hàng hóa')
       this.spinner.hide();
       return;
     }
@@ -138,7 +138,7 @@ export class ThemMoiTtPhanBoPvcComponent extends Base2Component implements OnIni
     let check = false
     if (dataTable && dataTable.length > 0) {
       dataTable.forEach(item => {
-        if (!item.dataChild) {
+        if (!item.dataChild || this.sumSlPb(item) > 0) {
           check = true
         }
       })
@@ -257,8 +257,8 @@ export class ThemMoiTtPhanBoPvcComponent extends Base2Component implements OnIni
     let slChild = 0
     let result = 0;
     if (item.dataChild && item.dataChild.length > 0 ) {
-      item.dataChild.forEach(item => {
-        slChild = slChild + item.soLuong ? item.soLuong : 0
+      item.dataChild.forEach(it => {
+        slChild +=  it.soLuong ? it.soLuong : 0
       })
     }
     result = slPb - slChild
@@ -294,6 +294,14 @@ export class ThemMoiTtPhanBoPvcComponent extends Base2Component implements OnIni
 
   openModalCt(data : any, type :string, idx : number, list?:any) {
     if (!this.isView ) {
+      let arr = [];
+      this.dataTable.forEach(item => {
+        if (item.dataChild && item.dataChild.length > 0) {
+          item.dataChild.forEach(data => {
+            arr.push(data)
+          })
+        }
+      })
       let modalQD = this.modal.create({
         nzTitle: type == 'them' ? 'Thêm mới chi tiết thông tin phân bổ' : 'Chỉnh sửa chi tiết thông tin phân bổ',
         nzContent: ThongTinPhanBoCtPvcComponent,
@@ -305,7 +313,8 @@ export class ThemMoiTtPhanBoPvcComponent extends Base2Component implements OnIni
         nzComponentParams: {
           dataInput : data,
           type : type,
-          sum : this.sumSlPb(list)
+          sum : this.sumSlPb(list),
+          listData: arr
         },
       });
       modalQD.afterClose.subscribe(async (detail) => {

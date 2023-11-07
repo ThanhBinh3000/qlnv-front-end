@@ -244,7 +244,7 @@
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
   <app-chi-tiet-quyet-dinh-pd [idSelected]="idSelected" [isView]="isView" [dataInit]="dataInit" [loaiVthh]="loaiVthh"
-    (showListEvent)="showList()">
+    (showListEvent)="showList()" (removeDataInit)="removeDataInit()">
   </app-chi-tiet-quyet-dinh-pd>
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openDxPa" (nzOnCancel)="closeDxPaModal()">

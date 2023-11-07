@@ -7,7 +7,7 @@
             <nz-form-item class='form-item'>
               <nz-form-label nzFor='nam-qd'>Bộ/Ngành</nz-form-label>
               <nz-form-control>
-                <nz-select formControlName='maBn' [nzDisabled]='isDisableByBoNganh()' nzAllowClear nzShowSearch>
+                <nz-select formControlName='maBn' [nzDisabled]='isDisableByBoNganh()' (ngModelChange)="changeBoNganh($event)" nzAllowClear nzShowSearch>
                   <nz-option *ngFor='let option of dsBoNganh' [nzLabel]='option.tenDvi' [nzValue]='option.maDvi'>
                   </nz-option>
                 </nz-select>
@@ -34,8 +34,8 @@
             <nz-form-item class='form-item'>
               <nz-form-label nzFor='nam-qd'>Loại hàng hóa</nz-form-label>
               <nz-form-control>
-                <nz-select formControlName='loaiVthh'>
-                  <nz-option *ngFor='let option of listOfOption' [nzLabel]='option.title' [nzValue]='option.key'>
+                <nz-select formControlName='loaiVthh' nzAllowClear nzShowSearch>
+                  <nz-option *ngFor='let option of listOfOption' [nzLabel]='option.tenHangHoa' [nzValue]='option.maHangHoa'>
                   </nz-option>
                 </nz-select>
               </nz-form-control>
@@ -85,7 +85,7 @@
         </div>
       </form>
       <div class='cangiua group-button-search'>
-        <button nz-button class='search__button--clear' (click)='clearForm()'>
+        <button nz-button class='search__button--clear' (click)="clearForm({maBn: this.userInfo.MA_DVI.startsWith('01') ? null : this.userInfo.MA_DVI})">
           <i class='icon  htvbdh_nhap-lai1'></i>
           Xóa điều kiện
         </button>
@@ -119,7 +119,7 @@
       </div>
     </div>
     <nz-card class='mt-2px flex-card data-table card-border-content table-card'>
-      <nz-table #basicTable nzBordered [nzData]='dataTable' class='table-chi-tiet'
+      <nz-table #basicTable nzBordered [nzData]='dataTable' class='table-chi-tiet' [nzFrontPagination]='false' [nzShowPagination]='false'
                 [nzScroll]="{ x: '1700px' }">
         <thead>
         <tr>

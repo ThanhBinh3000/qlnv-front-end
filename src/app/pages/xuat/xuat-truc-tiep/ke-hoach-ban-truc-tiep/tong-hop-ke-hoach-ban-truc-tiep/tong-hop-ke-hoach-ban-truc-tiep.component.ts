@@ -160,8 +160,8 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
     this.isViewQdPd = isView;
   }
 
-  isActionAllowed(data): boolean {
-    return this.userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_TONGHOP_XEM') &&
-      (data.trangThai !== STATUS.CHUA_TAO_QD || !this.userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_TONGHOP_TONGHOP'));
-  }
+  // isActionAllowed(data): boolean {
+  //   return this.userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_TONGHOP_XEM') &&
+  //     (data.trangThai !== STATUS.CHUA_TAO_QD || !this.userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_TONGHOP_TONGHOP'));
+  // }
 }

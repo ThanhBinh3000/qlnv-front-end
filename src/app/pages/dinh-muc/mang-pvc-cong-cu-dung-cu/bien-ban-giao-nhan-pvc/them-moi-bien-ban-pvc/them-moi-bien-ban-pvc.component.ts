@@ -234,7 +234,7 @@ export class ThemMoiBienBanPvcComponent extends Base2Component implements OnInit
         nzContent: DialogPvcBbGiaoNhanComponent,
         nzMaskClosable: false,
         nzClosable: false,
-        nzWidth: '700px',
+        nzWidth: '1000px',
         nzFooter: null,
         nzComponentParams: {
           dataTable: this.listHopDong,
@@ -263,18 +263,18 @@ export class ThemMoiBienBanPvcComponent extends Base2Component implements OnInit
           this.formData.patchValue({
             benGiaoHang: data.banTenDvi
           })
-          this.listHangHoa = data.listQlDinhMucPvcHdLoaiHh;
-          const ddNh : any[] = data.listQlDinhMucPvcHdDiaDiemNh;
-          if (this.listHangHoa && this.listHangHoa.length > 0) {
-            this.listHangHoa.forEach(item => {
-              item.id = null;
-              if (ddNh && ddNh.length > 0) {
-                let detailDdnh = ddNh.find(data => data.maDvi == this.userInfo.MA_DVI);
-                if (detailDdnh) {
-                  item.soLuong  = detailDdnh.soLuong
-                }
-              }
-            })
+          let listDdnh : any[] = data?.listQlDinhMucPvcHdDiaDiemNh;
+          if (listDdnh && listDdnh.length > 0) {
+            listDdnh = listDdnh.filter(dd => dd.maDvi == this.userInfo.MA_DVI);
+            let listHh = listDdnh.map(item => item.maTaiSan);
+            this.listHangHoa = data.listQlDinhMucPvcHdLoaiHh;
+            if (this.listHangHoa && this.listHangHoa.length > 0) {
+              this.listHangHoa = this.listHangHoa.filter(it => listHh.includes(it.maHangHoa));
+              this.listHangHoa.forEach(item => {
+                item.id = null;
+                item.soLuong = 0
+              })
+            }
           }
         }
       } else {

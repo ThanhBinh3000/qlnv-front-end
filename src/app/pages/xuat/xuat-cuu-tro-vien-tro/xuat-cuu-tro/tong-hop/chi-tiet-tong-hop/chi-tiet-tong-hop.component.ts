@@ -1,3 +1,4 @@
+import { DataService } from 'src/app/services/data.service';
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Base2Component } from "src/app/components/base2/base2.component";
 import { FormGroup, Validators } from "@angular/forms";
@@ -41,6 +42,7 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
   @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
+  @Output() taoQuyetDinh = new EventEmitter<any>();
   @Input() id: number;
 
   maTongHop: string;
@@ -117,6 +119,7 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
     private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
     private tongHopPhuongAnCuuTroService: TongHopPhuongAnCuuTroService,
     private cdr: ChangeDetectorRef,
+    private dataService: DataService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopPhuongAnCuuTroService);
     this.formData = this.fb.group(
@@ -340,14 +343,14 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
     this.isVisibleTuChoiDialog = true;
   }
 
-  taoQuyetDinh() {
-    /*let elem = document.getElementById('mainTongCuc');
-    let tabActive = elem.getElementsByClassName('ant-menu-item')[1];
-    tabActive.classList.remove('ant-menu-item-selected')
-    let setActive = elem.getElementsByClassName('ant-menu-item')[2];
-    setActive.classList.add('ant-menu-item-selected');*/
-    this.isQuyetDinh = true;
-  }
+  // taoQuyetDinh() {
+  //   /*let elem = document.getElementById('mainTongCuc');
+  //   let tabActive = elem.getElementsByClassName('ant-menu-item')[1];
+  //   tabActive.classList.remove('ant-menu-item-selected')
+  //   let setActive = elem.getElementsByClassName('ant-menu-item')[2];
+  //   setActive.classList.add('ant-menu-item-selected');*/
+  //   this.isQuyetDinh = true;
+  // }
 
   expandAll() {
     this.phuongAnHdrView.forEach(s => {
@@ -560,7 +563,15 @@ export class ChiTietTongHopComponent extends Base2Component implements OnInit {
     this.ngayKetThuc = '';
 
   }
-
+  taoQuyetDinhPdPa() {
+    const dataSend = {
+      ...this.formData.value,
+      type: "TH",
+      isTaoQdPdPa: true
+    }
+    this.dataService.changeData(dataSend);
+    this.taoQuyetDinh.emit(2);
+  }
   async xemTruocTh(id, tenBaoCao, children) {
     await this.tongHopPhuongAnCuuTroService.preview({
       tenBaoCao: tenBaoCao + '.docx',

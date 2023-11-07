@@ -958,7 +958,7 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
         };
       }).value();
       this.dataVatTuNhapTree.forEach(item => {
-        if (item && item.dataChild && item.dataChild.length > 0 && (!item.dataChild[0].maVatTuCha || item.dataChild[0].maVatTuCha == 'null')) {
+        if (item && item.dataChild &&  item.dataChild.length > 0 && (!item.dataChild[0].maVatTuCha || item.dataChild[0].maVatTuCha == 'null') ) {
           item.dataChild.shift();
         }
         if (item.dataChild && item.dataChild.length > 0) {
@@ -969,10 +969,13 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
               child.donViTinh = child.dataChild[0].donViTinh;
               child.dataChild.shift();
             }
+            // if (child && child.dataChild && child.dataChild.length ==  0 && child.maVatTuCha == 'null') {
+            //   console.log(child,'childchild');
+            //   child.dataChild.shift();
+            // }
           });
         }
       });
-      // console.log(this.dataVatTuNhapTree,'this.dataVatTuNhapTreethis.dataVatTuNhapTreethis.dataVatTuNhapTree');
     }
   }
 
@@ -2226,7 +2229,7 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
 
   checkTrangThaiRecord(): boolean {
     return (
-      this.thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV || this.thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC || this.thongTinChiTieuKeHoachNam.trangThai == STATUS.BAN_HANH
+      this.thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV || this.thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC || this.thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDC || this.thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDV
     );
   }
 
@@ -2296,7 +2299,14 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
         if (tab == 'NHAP') {
           //NHAP
           if (type == 'them') {
-            this.dataVatTuNhap.push(item);
+            let countByDv = this.dataVatTuNhap.filter(it => it.maDvi == item.maDvi).length;
+            if(countByDv  > 0){
+              this.dataVatTuNhap.push(item);
+            }else{
+              let indexOldItem = this.dataVatTuNhap.findIndex(it => it.maDvi == item.maDvi);
+              this.dataVatTuNhap.splice(indexOldItem,1,item);
+            }
+            // this.dataVatTuNhap.push(item);
           } else {
             let index = -1;
             if (isRoot) {
@@ -2328,7 +2338,13 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
         } else {
           //XUATTTTTTTTTTT
           if (type == 'them') {
-            this.dataVatTuXuat.push(item);
+            let countByDv = this.dataVatTuXuat.filter(it => it.maDvi == item.maDvi).length;
+            if(countByDv  > 0){
+              this.dataVatTuXuat.push(item);
+            }else{
+              let indexOldItem = this.dataVatTuXuat.findIndex(it => it.maDvi == item.maDvi);
+              this.dataVatTuXuat.splice(indexOldItem,1,item);
+            }
           } else {
             let index = -1;
             if (isRoot) {

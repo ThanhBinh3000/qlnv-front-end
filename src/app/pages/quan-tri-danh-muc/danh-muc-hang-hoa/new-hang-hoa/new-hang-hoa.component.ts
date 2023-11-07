@@ -59,6 +59,7 @@ export class NewHangHoaComponent implements OnInit {
       trangThai: [true],
       kyHieu: [null],
       maDviTinh: [null],
+      isLoai: [false],
     })
   }
 
