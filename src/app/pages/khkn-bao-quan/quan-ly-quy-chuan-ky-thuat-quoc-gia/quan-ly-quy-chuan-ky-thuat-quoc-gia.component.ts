@@ -84,7 +84,7 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
       tenLoaiVthh: null,
       tenCloaiVthh: null,
       maDvi: [null],
-      maBn: [],
+      maBn: [null],
     });
     this.filterTable = {
       soVanBan: '',
@@ -255,6 +255,8 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
   changeBoNganh(event: any) {
     if (event) {
       this.loadLoaiHangHoa(event);
+    } else {
+      this.listOfOption = [];
     }
   }
 }

@@ -257,7 +257,10 @@
                                [nzParser]="globals.parser"></nz-input-number>
             </td>
             <td>
-              <input [ngModelOptions]="{standalone: true}" readonly type="text" nz-input [(ngModel)]="rowItem.donGia"/>
+              <nz-input-number [ngModelOptions]="{standalone: true}" [(ngModel)]="rowItem.donGia" [nzSize]="'small'"
+                               [nzFormatter]="globals.formatter"
+                               [nzMin]="0" nzDisabled
+                               [nzParser]="globals.parser"></nz-input-number>
             </td>
             <td>
               <nz-input-number nzDisabled [ngModelOptions]="{standalone: true}" [(ngModel)]="rowItem.donGia * rowItem.soLuong "

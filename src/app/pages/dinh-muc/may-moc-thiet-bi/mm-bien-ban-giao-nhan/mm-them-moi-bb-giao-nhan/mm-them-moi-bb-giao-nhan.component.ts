@@ -225,7 +225,7 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
         nzContent: DialogMmBbGiaoNhanComponent,
         nzMaskClosable: false,
         nzClosable: false,
-        nzWidth: '700px',
+        nzWidth: '1000px',
         nzFooter: null,
         nzComponentParams: {
           dataTable: this.listHopDong,
@@ -263,6 +263,7 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
               this.listHangHoa = this.listHangHoa.filter(it => listHh.includes(it.maHangHoa));
               this.listHangHoa.forEach(item => {
                 item.id = null;
+                item.soLuong = 0
               })
             }
           }
