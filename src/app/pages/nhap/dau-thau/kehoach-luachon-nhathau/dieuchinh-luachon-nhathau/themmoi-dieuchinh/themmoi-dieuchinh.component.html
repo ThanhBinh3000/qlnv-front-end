@@ -53,7 +53,11 @@
                 <nz-form-label [nzNoColon]="true" nzRequired>Năm kế hoạch</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-select formControlName="nam" nzAllowClear
-                             [nzDisabled]="formData.value.trangThai !== STATUS.DA_LAP && formData.value.trangThai !== STATUS.CHO_DUYET_LDC && formData.value.trangThai !== ''">
+                             [nzDisabled]="formData.value.trangThai !==STATUS.DA_LAP
+                                     && formData.value.trangThai !==STATUS.CHO_DUYET_LDC
+                                     && formData.value.trangThai !==STATUS.TU_CHOI_LDV
+                                     && formData.value.trangThai !== ''
+                                     && !isViewDetail">
                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
                     </nz-option>
                   </nz-select>
@@ -65,10 +69,14 @@
                 <nz-form-label [nzNoColon]="true" nzRequired> Số công văn/tờ trình
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfter="{{maQd}}">
+                  <nz-input-group nzAddOnAfter="{{maTrinh}}">
                     <nz-input-number formControlName="soTtrDc" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
                                      [nzSize]="'small'"
-                                     [nzDisabled]="formData.value.trangThai !==STATUS.DA_LAP && formData.value.trangThai !==STATUS.CHO_DUYET_LDC && formData.value.trangThai !== ''">
+                                     [nzDisabled]="formData.value.trangThai !==STATUS.DA_LAP
+                                     && formData.value.trangThai !==STATUS.CHO_DUYET_LDC
+                                     && formData.value.trangThai !==STATUS.TU_CHOI_LDV
+                                     && formData.value.trangThai !== ''
+                                     && !isViewDetail">
                     </nz-input-number>
                   </nz-input-group>
                 </nz-form-control>
@@ -79,7 +87,11 @@
                 <nz-form-label [nzNoColon]="true" nzRequired> Ngày tạo công văn/tờ trình</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-date-picker formControlName="ngayQd" nzFormat="dd/MM/yyyy"
-                                  [nzDisabled]="formData.value.trangThai !==STATUS.DA_LAP && formData.value.trangThai !==STATUS.CHO_DUYET_LDC">
+                                  [nzDisabled]="formData.value.trangThai !==STATUS.DA_LAP
+                                     && formData.value.trangThai !==STATUS.CHO_DUYET_LDC
+                                     && formData.value.trangThai !==STATUS.TU_CHOI_LDV
+                                     && formData.value.trangThai !== ''
+                                     && !isViewDetail">
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -89,8 +101,12 @@
                 <nz-form-label [nzNoColon]="true"> Trích yếu</nz-form-label>
                 <nz-form-control>
                   <input
-                    [readonly]="formData.value.trangThai !==STATUS.DA_LAP && formData.value.trangThai !==STATUS.CHO_DUYET_LDC"
-                    nz-input formControlName="trichYeu" readonly="true"/>
+                    [readonly]="formData.value.trangThai !==STATUS.DA_LAP
+                                     && formData.value.trangThai !==STATUS.CHO_DUYET_LDC
+                                     && formData.value.trangThai !==STATUS.TU_CHOI_LDV
+                                     && formData.value.trangThai !== ''
+                                     && !isViewDetail"
+                    nz-input formControlName="trichYeu"/>
                 </nz-form-control>
               </nz-form-item>
             </div>

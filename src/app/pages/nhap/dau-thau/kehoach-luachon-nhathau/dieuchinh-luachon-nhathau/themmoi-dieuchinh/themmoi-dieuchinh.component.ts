@@ -218,6 +218,12 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
           soQdDc: data.soQdDc?.split("/")[0],
           soTtrDc: data.soTtrDc?.split("/")[0]
         })
+        if (data.soQdDc != null) {
+          this.maQd = "/" + data.soQdDc?.split("/")[1]
+        }
+        if (data.soTtrDc != null) {
+          this.maTrinh = "/" + data.soTtrDc?.split("/")[1]
+        }
         this.danhsachDx = cloneDeep(data.children);
         let res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(data.idQdGoc);
         if (res.msg == MESSAGE.SUCCESS) {
@@ -321,6 +327,11 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     // Vật tư
     switch (this.formData.get("trangThai").value) {
       case STATUS.DA_LAP: {
+        trangThai = STATUS.CHO_DUYET_LDV;
+        mesg = "Bạn có chắc chắn muốn gửi duyệt?";
+        break;
+      }
+      case STATUS.TU_CHOI_LDV: {
         trangThai = STATUS.CHO_DUYET_LDV;
         mesg = "Bạn có chắc chắn muốn gửi duyệt?";
         break;
@@ -456,11 +467,11 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       return;
     }
     let body = { ...this.formData.value };
-    if (this.formData.value.soQd) {
-      body.soQdDc = this.formData.value.soQdDc + "/" + this.maQd;
+    if (this.formData.value.soQdDc) {
+      body.soQdDc = this.formData.value.soQdDc + this.maQd;
     }
     if (this.formData.value.soTtrDc) {
-      body.soTtrDc = this.formData.value.soTtrDc + "/" + this.maTrinh;
+      body.soTtrDc = this.formData.value.soTtrDc + this.maTrinh;
     }
     let pipe = new DatePipe('en-US');
     if (this.thongtinDieuchinhComponent.formData.value.tgianMthauTime != null) {
