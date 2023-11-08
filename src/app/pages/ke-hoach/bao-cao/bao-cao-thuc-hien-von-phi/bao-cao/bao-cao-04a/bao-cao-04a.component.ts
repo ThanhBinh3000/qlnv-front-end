@@ -165,8 +165,10 @@ export class BaoCao04aComponent implements OnInit {
     noiDungChis: any[] = [];
     dsBaoQuan: any[] = [];
     dinhMucs: any = {
+        'all': [],
         '01': [],
         '02': [],
+        '03': [],
         'LD': [],
         'LDM': [],
         'LDBS': [],
@@ -401,6 +403,7 @@ export class BaoCao04aComponent implements OnInit {
         await this.baoCaoThucHienVonPhiService.getDinhMuc(request).toPromise().then(
             res => {
                 if (res.statusCode == 0) {
+                    this.dinhMucs['all'] = res.data;
                     if (this.dataInfo.maLoai != Vp.BM_05) {
                         this.dinhMucs[this.para.loaiDm] = res.data;
                     } else {
@@ -813,94 +816,131 @@ export class BaoCao04aComponent implements OnInit {
                     maVtu: res.ma,
                     tenVtu: res.ten + ' (' + res.maDviTinh + ')',
                 }
-                if (this.dataInfo.maLoai != Vp.BM_05) {
-                    obj.loaiDm = this.para.loaiDm;
-                    if (res.ma.startsWith('0101')) {
-                        this.dsBaoQuan.forEach(bq => {
-                            const objBq: Materials = {
-                                ...obj,
-                                tenVtu: obj.tenVtu + ' - ' + bq.giaTri,
-                                loaiBquan: bq.ma,
-                            }
-                            this.lstCol.push(objBq)
-                            this.lstCtietBcao.forEach(item => {
-                                item.listCtiet.push({
-                                    ...objBq,
-                                    id: uuid.v4() + 'FE',
-                                })
-                            })
-                        })
-                    } else {
-                        this.lstCol.push(obj);
-                        this.lstCtietBcao.forEach(item => {
-                            item.listCtiet.push({
-                                ...obj,
-                                id: uuid.v4() + 'FE',
-                            })
-                        })
-                    }
-                } else {
+                let lstDm = this.dinhMucs['all'].filter(e => e.loaiVthh == res.ma || e.cloaiVthh == res.ma);
+                if (this.dataInfo.maLoai == Vp.BM_05) {
                     if (res.ma.startsWith('01')) {
-                        const objLDM: Materials = {
-                            ...obj,
-                            tenVtu: obj.tenVtu + ' - LDM',
-                            loaiDm: 'LDM',
-                        }
-                        const objLDBS: Materials = {
-                            ...obj,
-                            tenVtu: obj.tenVtu + ' - LDBS',
-                            loaiDm: 'LDBS',
-                        }
-                        if (res.ma.startsWith('0101')) {
-                            this.dsBaoQuan.forEach(bq => {
-                                const objLdmBq: Materials = {
-                                    ...objLDM,
-                                    tenVtu: objLDM.tenVtu + ' - ' + bq.giaTri,
-                                    loaiBquan: bq.ma,
-                                }
-                                const objLdbsBq: Materials = {
-                                    ...objLDBS,
-                                    tenVtu: objLDBS.tenVtu + ' - ' + bq.giaTri,
-                                    loaiBquan: bq.ma,
-                                }
-                                this.lstCol.push(objLdmBq)
-                                this.lstCol.push(objLdbsBq)
-                                this.lstCtietBcao.forEach(item => {
-                                    item.listCtiet.push({
-                                        ...objLdmBq,
-                                        id: uuid.v4() + 'FE',
-                                    })
-                                    item.listCtiet.push({
-                                        ...objLdbsBq,
-                                        id: uuid.v4() + 'FE',
-                                    })
-                                })
-                            })
-                        } else {
-                            this.lstCol.push(objLDM);
-                            this.lstCol.push(objLDBS);
-                            this.lstCtietBcao.forEach(item => {
-                                item.listCtiet.push({
-                                    ...objLDM,
-                                    id: uuid.v4() + 'FE',
-                                })
-                                item.listCtiet.push({
-                                    ...objLDBS,
-                                    id: uuid.v4() + 'FE',
-                                })
-                            })
-                        }
+                        lstDm = lstDm.filter(e => e.htBaoQuan == 'LDM' || e.htBaoQuan == 'LDBS');
                     } else {
-                        obj.loaiDm = 'LD';
-                        this.lstCol.push(obj);
-                        this.lstCtietBcao.forEach(item => {
-                            item.listCtiet.push({
-                                ...obj,
-                                id: uuid.v4() + 'FE',
-                            })
-                        })
+                        lstDm = lstDm.filter(e => e.htBaoQuan == 'LD');
                     }
                 }
+                if (!lstDm || lstDm.length == 0) {
+                    obj.loaiDm = this.dataInfo.maLoai == Vp.BM_05 ? '03' : this.para.loaiDm;
+                    this.lstCol.push(obj)
+                    this.lstCtietBcao.forEach(item => {
+                        item.listCtiet.push({
+                            ...obj,
+                            id: uuid.v4() + 'FE',
+                        })
+                    })
+                } else {
+                    lstDm.forEach(item => {
+                        const objTemp: Materials = {
+                            ...obj,
+                            loaiDm: item.loaiDinhMuc == '03' ? item.htBaoQuan : this.para.loaiDm,
+                            tenVtu: obj.tenVtu + (item.htBaoQuan ? ' - ' + item.htBaoQuan : ''),
+                            loaiBquan: (item.loaiBaoQuan ? item.loaiBaoQuan : null),
+                        }
+                        if (objTemp.loaiBquan) {
+                            objTemp.tenVtu += ' - ' + this.dsBaoQuan.find(e => e.ma == objTemp.loaiBquan)?.giaTri;
+                        }
+                        this.lstCol.push(objTemp)
+                        this.lstCtietBcao.forEach(item => {
+                            item.listCtiet.push({
+                                ...objTemp,
+                                id: uuid.v4() + 'FE',
+                            })
+                        })
+                    })
+                }
+                // if (this.dataInfo.maLoai != Vp.BM_05) {
+                //     obj.loaiDm = this.para.loaiDm;
+                //     if (res.ma.startsWith('0101')) {
+                //         this.dsBaoQuan.forEach(bq => {
+                //             const objBq: Materials = {
+                //                 ...obj,
+                //                 tenVtu: obj.tenVtu + ' - ' + bq.giaTri,
+                //                 loaiBquan: bq.ma,
+                //             }
+                //             this.lstCol.push(objBq)
+                //             this.lstCtietBcao.forEach(item => {
+                //                 item.listCtiet.push({
+                //                     ...objBq,
+                //                     id: uuid.v4() + 'FE',
+                //                 })
+                //             })
+                //         })
+                //     } else {
+                //         this.lstCol.push(obj);
+                //         this.lstCtietBcao.forEach(item => {
+                //             item.listCtiet.push({
+                //                 ...obj,
+                //                 id: uuid.v4() + 'FE',
+                //             })
+                //         })
+                //     }
+                // } else {
+                //     if (res.ma.startsWith('01')) {
+                //         const objLDM: Materials = {
+                //             ...obj,
+                //             tenVtu: obj.tenVtu + ' - LDM',
+                //             loaiDm: 'LDM',
+                //         }
+                //         const objLDBS: Materials = {
+                //             ...obj,
+                //             tenVtu: obj.tenVtu + ' - LDBS',
+                //             loaiDm: 'LDBS',
+                //         }
+                //         if (res.ma.startsWith('0101')) {
+                //             this.dsBaoQuan.forEach(bq => {
+                //                 const objLdmBq: Materials = {
+                //                     ...objLDM,
+                //                     tenVtu: objLDM.tenVtu + ' - ' + bq.giaTri,
+                //                     loaiBquan: bq.ma,
+                //                 }
+                //                 const objLdbsBq: Materials = {
+                //                     ...objLDBS,
+                //                     tenVtu: objLDBS.tenVtu + ' - ' + bq.giaTri,
+                //                     loaiBquan: bq.ma,
+                //                 }
+                //                 this.lstCol.push(objLdmBq)
+                //                 this.lstCol.push(objLdbsBq)
+                //                 this.lstCtietBcao.forEach(item => {
+                //                     item.listCtiet.push({
+                //                         ...objLdmBq,
+                //                         id: uuid.v4() + 'FE',
+                //                     })
+                //                     item.listCtiet.push({
+                //                         ...objLdbsBq,
+                //                         id: uuid.v4() + 'FE',
+                //                     })
+                //                 })
+                //             })
+                //         } else {
+                //             this.lstCol.push(objLDM);
+                //             this.lstCol.push(objLDBS);
+                //             this.lstCtietBcao.forEach(item => {
+                //                 item.listCtiet.push({
+                //                     ...objLDM,
+                //                     id: uuid.v4() + 'FE',
+                //                 })
+                //                 item.listCtiet.push({
+                //                     ...objLDBS,
+                //                     id: uuid.v4() + 'FE',
+                //                 })
+                //             })
+                //         }
+                //     } else {
+                //         obj.loaiDm = 'LD';
+                //         this.lstCol.push(obj);
+                //         this.lstCtietBcao.forEach(item => {
+                //             item.listCtiet.push({
+                //                 ...obj,
+                //                 id: uuid.v4() + 'FE',
+                //             })
+                //         })
+                //     }
+                // }
                 this.setWidth();
                 this.updateEditCache();
             }
