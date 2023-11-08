@@ -7,7 +7,7 @@
           <span>Nhật ký hệ thống (tất cả)</span>
         </div>
         <div nz-col [nzSpan]="2">
-          <nz-switch formControlName="all" (ngModelChange)="onAll($event)"></nz-switch>
+          <nz-switch formControlName="writeLogAll" (ngModelChange)="onAll($event)"></nz-switch>
         </div>
         <div nz-col [nzSpan]="8">
 
@@ -19,7 +19,7 @@
           <span>Nhật ký thời điểm đăng nhập hệ thống</span>
         </div>
         <div nz-col [nzSpan]="2">
-          <nz-switch formControlName="login" (ngModelChange)="onChange()"></nz-switch>
+          <nz-switch formControlName="writeLogLogin" (ngModelChange)="onChange()"></nz-switch>
         </div>
         <div nz-col [nzSpan]="8">
 
@@ -31,7 +31,7 @@
           <span>Nhật ký thời điểm đăng xuất hệ thống</span>
         </div>
         <div nz-col [nzSpan]="2">
-          <nz-switch formControlName="logout" (ngModelChange)="onChange()"></nz-switch>
+          <nz-switch formControlName="writeLogLogout" (ngModelChange)="onChange()"></nz-switch>
         </div>
         <div nz-col [nzSpan]="8">
 
@@ -43,7 +43,7 @@
           <span>Nhật ký truy cập và sử dụng chức năng <br /> hệ thống của người dùng</span>
         </div>
         <div nz-col [nzSpan]="2">
-          <nz-switch formControlName="access" (ngModelChange)="onChange()"></nz-switch>
+          <nz-switch formControlName="writeLogUserActivity" (ngModelChange)="onChange()"></nz-switch>
         </div>
         <div nz-col [nzSpan]="8">
 
