@@ -23,7 +23,7 @@
       <span>Từ chối</span>
     </button>
     <button
-      *ngIf='(formData.get("trangThai").value == STATUS.DU_THAO || formData.get("trangThai").value == STATUS.TU_CHOI_LDTC || formData.get("trangThai").value == STATUS.TU_CHOI_LDV) && !isView && userService.isAccessPermisson("VONPHIHANG_PHICHINGVU_THONGTRI_THEM")'
+      *ngIf='!isView && userService.isAccessPermisson("VONPHIHANG_PHICHINGVU_THONGTRI_THEM")'
       (click)='save(false)'
             class='btn btn-main btn-sm waves-effect waves-light' [disabled]='!formData.valid'>
       <i class='icon htvbdh_tcdt_save'></i>
