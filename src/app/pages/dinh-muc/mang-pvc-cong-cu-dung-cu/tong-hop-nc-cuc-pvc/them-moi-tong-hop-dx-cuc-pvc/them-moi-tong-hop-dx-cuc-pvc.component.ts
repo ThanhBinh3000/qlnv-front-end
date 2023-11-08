@@ -164,14 +164,14 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
   }
 
   async getCtieuKhTc(event) {
-    let res = await this.dxChiCucService.getCtieuKhTc({
-      namKeHoach: event,
-    });
-    if (res.data) {
-      this.formData.patchValue({
-        soQdGiaoCt: res.data.soQuyetDinh,
-      });
-    }
+    // let res = await this.dxChiCucService.getCtieuKhTc({
+    //   namKeHoach: event,
+    // });
+    // if (res.data) {
+    //   this.formData.patchValue({
+    //     soQdGiaoCt: res.data.soQuyetDinh,
+    //   });
+    // }
   }
 
   async save() {
