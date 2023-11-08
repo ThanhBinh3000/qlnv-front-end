@@ -143,11 +143,11 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
   dataVatTuNhapTree: any[] = [];
   dataVatTuXuat: any[] = [];
   dataVatTuXuatTree: any[] = [];
-  expandSetVatTuNhap = new Set<string>();
   arrayDonVi: any[] = [];
   dataQdCanCu: any;
   dataQdTCDTGiaoCuc: any;
-  expandSet = new Set<number>();
+  expandSetNhap = new Set<string>();
+  expandSetXuat = new Set<string>();
   AMOUNT = {
     allowZero: true,
     allowNegative: false,
@@ -972,10 +972,6 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
               child.donViTinh = child.dataChild[0].donViTinh;
               child.dataChild.shift();
             }
-            // if (child && child.dataChild && child.dataChild.length ==  0 && child.maVatTuCha == 'null') {
-            //   console.log(child,'childchild');
-            //   child.dataChild.shift();
-            // }
           });
         }
       });
@@ -1044,11 +1040,12 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
 
   expandAll(table: any[]) {
     if (table && table.length > 0) {
+      console.log(table,'tabletabletable');
       table.forEach(s => {
-        this.expandSet.add(s.idVirtual);
+        this.expandSetNhap.add(s.idVirtual);
         if (s.dataChild && s.dataChild.length > 0) {
           s.dataChild.forEach(item => {
-            this.expandSet.add(item.idVirtual);
+            this.expandSetNhap.add(item.idVirtual);
           });
         }
       });
@@ -1058,13 +1055,13 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
   expandAllVatTuXuat(table: any[]) {
     if (table && table.length > 0) {
       table.forEach(s => {
-        this.expandSet.add(s.idVirtual);
+        this.expandSetXuat.add(s.idVirtual);
         if (s.dataChild && s.dataChild.length > 0) {
           s.dataChild.forEach(item => {
-            this.expandSet.add(item.idVirtual);
+            this.expandSetXuat.add(item.idVirtual);
             if (item.dataChild && item.dataChild.length > 0) {
               item.dataChild.forEach(item1 => {
-                this.expandSet.add(item1.idVirtual);
+                this.expandSetXuat.add(item1.idVirtual);
               });
             }
           });
@@ -1073,26 +1070,26 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
     }
   }
 
-  convertKhVatTuList(khVatTus: Array<KeHoachVatTu>) {
-    const khVatTuList = new Array<KeHoachVatTu>();
-    let khVatTu = khVatTus;
-    for (let i = 0; i < khVatTu.length; i++) {
-      for (let j = 0; j < khVatTu[i].vatTuThietBi.length; j++) {
-        const vatTuTemp = new KeHoachVatTu();
-        vatTuTemp.donViId = khVatTu[i].donViId;
-        vatTuTemp.maDvi = khVatTu[i].maDonVi;
-        vatTuTemp.stt = khVatTu[i].stt;
-        vatTuTemp.tenDonVi = khVatTu[i].tenDonVi;
-        vatTuTemp.vatTuThietBi[0] = khVatTu[i].vatTuThietBi[j];
-        khVatTuList.push(vatTuTemp);
-      }
-    }
-    khVatTuList.forEach((vt, i) => {
-      vt.stt = i + 1;
-      vt.isEdit = false;
-    });
-    this.thongTinChiTieuKeHoachNam.khVatTu = khVatTuList;
-  }
+  // convertKhVatTuList(khVatTus: Array<KeHoachVatTu>) {
+  //   const khVatTuList = new Array<KeHoachVatTu>();
+  //   let khVatTu = khVatTus;
+  //   for (let i = 0; i < khVatTu.length; i++) {
+  //     for (let j = 0; j < khVatTu[i].vatTuThietBi.length; j++) {
+  //       const vatTuTemp = new KeHoachVatTu();
+  //       vatTuTemp.donViId = khVatTu[i].donViId;
+  //       vatTuTemp.maDvi = khVatTu[i].maDonVi;
+  //       vatTuTemp.stt = khVatTu[i].stt;
+  //       vatTuTemp.tenDonVi = khVatTu[i].tenDonVi;
+  //       vatTuTemp.vatTuThietBi[0] = khVatTu[i].vatTuThietBi[j];
+  //       khVatTuList.push(vatTuTemp);
+  //     }
+  //   }
+  //   khVatTuList.forEach((vt, i) => {
+  //     vt.stt = i + 1;
+  //     vt.isEdit = false;
+  //   });
+  //   this.thongTinChiTieuKeHoachNam.khVatTu = khVatTuList;
+  // }
 
   ngAfterViewChecked(): void {
     const table = document.getElementsByTagName('table');
@@ -2268,11 +2265,23 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
   }
 
   //vat tu moi
-  onExpandChange(id: string, checked: boolean): void {
+  onExpandChangeNhap(id: string, checked: boolean): void {
+    console.log(id,'idididid');
+    console.log(checked,'checkedchecked');
     if (checked) {
-      this.expandSetVatTuNhap.add(id);
+      this.expandSetNhap.add(id);
     } else {
-      this.expandSetVatTuNhap.delete(id);
+      this.expandSetNhap.delete(id);
+    }
+  }
+
+  onExpandChangeXuat(id: string, checked: boolean): void {
+    console.log(id,'idididid');
+    console.log(checked,'checkedchecked');
+    if (checked) {
+      this.expandSetXuat.add(id);
+    } else {
+      this.expandSetXuat.delete(id);
     }
   }
 

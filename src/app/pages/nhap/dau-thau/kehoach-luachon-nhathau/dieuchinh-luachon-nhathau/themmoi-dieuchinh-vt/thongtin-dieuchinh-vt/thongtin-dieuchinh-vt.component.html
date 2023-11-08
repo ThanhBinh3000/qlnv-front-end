@@ -56,7 +56,7 @@
           <div nz-col [nzSpan]="6">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Thời gian thực hiện dự án (ngày)</nz-form-label>
-              <nz-form-control nz-col [nzSpan]="24">
+              <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                 <nz-input-number formControlName="tgianThien" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
                                  [nzStep]="1" [nzSize]="'small'"
                                  [nzDisabled]="isView">

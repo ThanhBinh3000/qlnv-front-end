@@ -69,14 +69,10 @@
         <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
-              <nz-form-label [nzNoColon]="true" [nzRequired]="listCtieuKh.length > 0" class="label-color-kh">Số quyết
+              <nz-form-label [nzNoColon]="true" class="label-color-kh">Số quyết
                 định giao chỉ tiêu của Cục
               </nz-form-label>
-              <nz-select nzAllowClear (ngModelChange)="changeSoQdGiaoCt($event)" formControlName="soQdGiaoCt"
-                [nzDisabled]="isView">
-                <nz-option *ngFor="let p of listCtieuKh" [nzValue]="p.soQuyetDinh"
-                  [nzLabel]="p.soQuyetDinh"></nz-option>
-              </nz-select>
+              <input nz-input formControlName="soQdGiaoCt" [readonly]="true" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -271,7 +267,7 @@
       <tr *ngIf="!isView">
         <th></th>
         <th>
-          <nz-select [(ngModel)]="rowItem.maCcdc" [nzDisabled]="isView" (ngModelChange)="changeDm($event)"
+          <nz-select [(ngModel)]="rowItem.maCcdc" [nzDisabled]="isView" (ngModelChange)="changeDm($event)" nzShowSearch
             nzAllowClear="true">
             <nz-option *ngFor="let p of listCcdc" [nzValue]="p.maCcdc" [nzLabel]="p.tenCcdc">
             </nz-option>

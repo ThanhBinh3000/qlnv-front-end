@@ -12,7 +12,7 @@
         <nz-form-item>
           <nz-form-control [nzErrorTip]="error">
             <nz-form-label nzRequired nzNoColon="true">Tên hàng</nz-form-label>
-            <nz-select nzAllowClear [nzDisabled]="!isRoot"
+            <nz-select nzAllowClear nzShowSearch [nzDisabled]="!isRoot"
                        formControlName="maVatTuCha"
                        (ngModelChange)="onChangeLoaiVthh($event)">
               <nz-option nzValue="{{item.maHang}}" nzLabel="{{item.ten}}" *ngFor="let item of dataVatTuChaShow">
@@ -25,7 +25,7 @@
         <nz-form-item>
           <nz-form-control [nzErrorTip]="error">
             <nz-form-label nzNoColon="true">Chủng loại hàng hóa</nz-form-label>
-            <nz-select formControlName="maVatTu" [nzDisabled]="!isRoot && tab =='XUAT' && formItem.value.maVatTu"
+            <nz-select formControlName="maVatTu" nzShowSearch [nzDisabled]="!isRoot && tab =='XUAT' && formItem.value.maVatTu"
                        nzAllowClear
                        (ngModelChange)="onChangeCloaiVthh($event)">
               <nz-option nzValue="{{item.maHang}}" nzLabel="{{item.ten}}" *ngFor="let item of dataVatTuConShow">

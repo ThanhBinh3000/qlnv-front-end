@@ -357,20 +357,26 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       body.soQd = this.formData.value.soQd + "/" + this.maQd;
     }
     let pipe = new DatePipe('en-US');
-    if (this.thongtinDexuatComponent.formData.value.tgianMthauTime != null) {
-      this.danhsachDx[this.index].tgianMthau = pipe.transform(this.thongtinDexuatComponent.formData.value.tgianMthau, 'yyyy-MM-dd') + " " + pipe.transform(this.thongtinDexuatComponent.formData.value.tgianMthauTime, 'HH:mm') + ":00"
-    } else {
-      this.danhsachDx[this.index].tgianMthau = pipe.transform(this.thongtinDexuatComponent.formData.value.tgianMthau, 'yyyy-MM-dd')  + " 00:00:00"
+    if (this.thongtinDexuatComponent.formData.value.tgianMthau != null) {
+      if (this.thongtinDexuatComponent.formData.value.tgianMthauTime != null) {
+        this.danhsachDx[this.index].tgianMthau = pipe.transform(this.thongtinDexuatComponent.formData.value.tgianMthau, 'yyyy-MM-dd') + " " + pipe.transform(this.thongtinDexuatComponent.formData.value.tgianMthauTime, 'HH:mm') + ":00"
+      } else {
+        this.danhsachDx[this.index].tgianMthau = pipe.transform(this.thongtinDexuatComponent.formData.value.tgianMthau, 'yyyy-MM-dd')  + " 00:00:00"
+      }
     }
-    if (this.thongtinDexuatComponent.formData.value.tgianDthauTime != null) {
-      this.danhsachDx[this.index].tgianDthau =  pipe.transform(this.thongtinDexuatComponent.formData.value.tgianDthau, 'yyyy-MM-dd') + " " + pipe.transform(this.thongtinDexuatComponent.formData.value.tgianDthauTime, 'HH:mm') + ":00"
-    } else {
-      this.danhsachDx[this.index].tgianDthau =  pipe.transform(this.thongtinDexuatComponent.formData.value.tgianDthau, 'yyyy-MM-dd') + " 23:59:59"
+    if (this.thongtinDexuatComponent.formData.value.tgianDthau != null) {
+      if (this.thongtinDexuatComponent.formData.value.tgianDthauTime != null) {
+        this.danhsachDx[this.index].tgianDthau =  pipe.transform(this.thongtinDexuatComponent.formData.value.tgianDthau, 'yyyy-MM-dd') + " " + pipe.transform(this.thongtinDexuatComponent.formData.value.tgianDthauTime, 'HH:mm') + ":00"
+      } else {
+        this.danhsachDx[this.index].tgianDthau =  pipe.transform(this.thongtinDexuatComponent.formData.value.tgianDthau, 'yyyy-MM-dd') + " 23:59:59"
+      }
     }
-    if (this.thongtinDexuatComponent.formData.value.tgianMoHoSoTime != null) {
-      this.danhsachDx[this.index].tgianMoHoSo = pipe.transform(this.thongtinDexuatComponent.formData.value.tgianMoHoSo, 'yyyy-MM-dd') + " " + pipe.transform(this.thongtinDexuatComponent.formData.value.tgianMoHoSoTime, 'HH:mm') + ":00"
-    } else {
-      this.danhsachDx[this.index].tgianMoHoSo =   pipe.transform(this.thongtinDexuatComponent.formData.value.tgianMoHoSo, 'yyyy-MM-dd') + " 23:59:59"
+    if (this.thongtinDexuatComponent.formData.value.tgianMoHoSo != null) {
+      if (this.thongtinDexuatComponent.formData.value.tgianMoHoSoTime != null) {
+        this.danhsachDx[this.index].tgianMoHoSo = pipe.transform(this.thongtinDexuatComponent.formData.value.tgianMoHoSo, 'yyyy-MM-dd') + " " + pipe.transform(this.thongtinDexuatComponent.formData.value.tgianMoHoSoTime, 'HH:mm') + ":00"
+      } else {
+        this.danhsachDx[this.index].tgianMoHoSo =   pipe.transform(this.thongtinDexuatComponent.formData.value.tgianMoHoSo, 'yyyy-MM-dd') + " 23:59:59"
+      }
     }
     this.danhsachDx[this.index].tgianBdauTchuc = this.thongtinDexuatComponent.formData.value.tgianBdauTchuc
     this.danhsachDx[this.index].tgianNhang = this.thongtinDexuatComponent.formData.value.tgianNhang

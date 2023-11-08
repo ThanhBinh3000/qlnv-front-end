@@ -55,7 +55,7 @@ export class FileListComponent implements OnInit {
         file: event.target.files[0] as File,
         time: new Date().getTime(),
       };
-      const folder = new Date().getFullYear() + '/' + (new Date().getMonth() + 1);
+      const folder = new Date().getFullYear() + '/' + (new Date().getMonth() + 1) + '/' + this.getCurrentWeek();
       this.uploadFileService
         .uploadFile(itemFile.file, itemFile.name, folder)
         .then((resUpload) => {
@@ -96,6 +96,14 @@ export class FileListComponent implements OnInit {
 
   clearAdd() {
     this.fileAdd = new FileDinhKem();
+  }
+
+  getCurrentWeek(): number {
+    const currentDate = new Date();
+    const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const daysSinceFirstDay = (currentDate.getDate() - 1);
+    const weekOfMonth = Math.ceil((daysSinceFirstDay + firstDayOfMonth.getDay() + 1) / 7);
+    return weekOfMonth;
   }
 
   downloadFile(item: FileDinhKem) {

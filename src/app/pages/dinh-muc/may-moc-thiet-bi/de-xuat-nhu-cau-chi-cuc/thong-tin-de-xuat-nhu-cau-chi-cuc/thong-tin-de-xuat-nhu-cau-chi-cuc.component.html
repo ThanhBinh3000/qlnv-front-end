@@ -56,29 +56,21 @@
         </div>
         <div nz-col nzSpan="4">
           <nz-form-item>
-            <nz-form-control [nzErrorTip]="error">
+            <nz-form-control [nzErrorTip]="error" >
               <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Số công văn</nz-form-label>
-              <input nz-input formControlName="soCv" [readonly]="isView"/>
+              <nz-input-group [nzAddOnAfter]="maQd">
+                <input nz-input formControlName="soCv" [readonly]="isView"/>
+              </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="4" *ngIf="!isView">
+        <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
-              <nz-form-label  [nzNoColon]="true" class="label-color-kh">Số quyết định giao chỉ tiêu của Cục
+              <nz-form-label [nzNoColon]="true" class="label-color-kh">Số quyết
+                định giao chỉ tiêu của Cục
               </nz-form-label>
-              <nz-select nzAllowClear (ngModelChange)="changeSoQdGiaoCt($event)" formControlName="soQdGiaoCt">
-                <nz-option *ngFor="let p of listCtieuKh" [nzValue]="p.soQuyetDinh" [nzLabel]="p.soQuyetDinh"></nz-option>
-              </nz-select>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col nzSpan="4" *ngIf="isView">
-          <nz-form-item>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-form-label  [nzNoColon]="true" class="label-color-kh">Số quyết định giao chỉ tiêu của Cục
-              </nz-form-label>
-              <input nz-input formControlName="soQdGiaoCt" [readonly]="true"/>
+              <input nz-input formControlName="soQdGiaoCt" [readonly]="true" />
             </nz-form-control>
           </nz-form-item>
         </div>

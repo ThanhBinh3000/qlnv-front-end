@@ -40,32 +40,38 @@ export class CauHinhHeThongComponent extends Base2Component implements OnInit {
   ) {
     super(httpClient, storageService, notification, spinner, modal, quanLyHangTrongKhoService);
     this.formData = this.fb.group({
-      all: [false, [Validators.required]],
-      login: [false, [Validators.required]],
-      logout: [false, [Validators.required]],
-      access: [false, [Validators.required]],
+      writeLogAll: [false, [Validators.required]],
+      writeLogLogin: [false, [Validators.required]],
+      writeLogLogout: [false, [Validators.required]],
+      writeLogUserActivity: [false, [Validators.required]],
     }
     );
   }
 
   ngOnInit(): void {
-    // this.formData.patchValue({ ...this.data, startDate: moment(this.data.startDate, 'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD'), endDate: moment(this.data.endDate, 'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD') })
+    if (this.data) {
+      this.formData.patchValue({
+        writeLogAll: this.data.writeLogAll,
+        writeLogLogin: this.data.writeLogLogin,
+        writeLogLogout: this.data.writeLogLogout,
+        writeLogUserActivity: this.data.writeLogUserActivity,
+      })
+    }
   }
 
   onAll(all) {
-    console.log("onAll", all, this.formData.value.all)
     if (all) {
       this.formData.patchValue({
-        login: true,
-        logout: true,
-        access: true,
+        writeLogLogin: true,
+        writeLogLogout: true,
+        writeLogUserActivity: true,
       })
     } else {
-      if (this.formData.value.login && this.formData.value.logout && this.formData.value.access) {
+      if (this.formData.value.writeLogLogin && this.formData.value.writeLogLogout && this.formData.value.writeLogUserActivity) {
         this.formData.patchValue({
-          login: false,
-          logout: false,
-          access: false,
+          writeLogLogin: false,
+          writeLogLogout: false,
+          writeLogUserActivity: false,
         })
       }
     }
@@ -73,17 +79,17 @@ export class CauHinhHeThongComponent extends Base2Component implements OnInit {
 
   onChange() {
     setTimeout(() => {
-      if (this.formData.value.login && this.formData.value.logout && this.formData.value.access) {
-        if (!this.formData.value.all) {
+      if (this.formData.value.writeLogLogin && this.formData.value.writeLogLogout && this.formData.value.writeLogUserActivity) {
+        if (!this.formData.value.writeLogAll) {
           this.formData.patchValue({
-            all: true
+            writeLogAll: true
           })
         }
         return
       } else {
-        if (this.formData.value.all) {
+        if (this.formData.value.writeLogAll) {
           this.formData.patchValue({
-            all: false
+            writeLogAll: false
           })
         }
         return
@@ -94,13 +100,9 @@ export class CauHinhHeThongComponent extends Base2Component implements OnInit {
 
 
   handleOk(item: any) {
-    console.log("handleOk", this.formData.value)
     this.helperService.markFormGroupTouched(this.formData);
     if (!this.formData.valid) return
-    this._modalRef.close({
-      ...item,
-      isUpdate: !!this.data
-    });
+    this._modalRef.close(item);
   }
 
   onCancel() {

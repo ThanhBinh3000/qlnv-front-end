@@ -274,12 +274,6 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     this.spinner.hide();
   }
 
-  xoaKeHoach() {
-  }
-
-  themKeHoach() {
-  }
-
   tongGiaTri: number = 0;
 
   onChangeBoNganh($event) {
