@@ -721,8 +721,8 @@
                 <ng-container *ngFor='let data of dataVatTuNhapTree , let idx = index'>
                   <tr>
                     <td class='bg-parent1'>{{idx + 1}}</td>
-                    <td class='bg-parent1' [nzExpand]='expandSet.has(data.idVirtual)'
-                        (nzExpandChange)='onExpandChange(data.idVirtual, $event)'>{{data.tenDvi}}</td>
+                    <td class='bg-parent1' [nzExpand]='expandSetNhap.has(data.idVirtual)'
+                        (nzExpandChange)='onExpandChangeNhap(data.idVirtual, $event)'>{{data.tenDvi}}</td>
                     <td class='bg-parent1'></td>
                     <td class='bg-parent1'></td>
                     <td class='bg-parent1'></td>
@@ -737,12 +737,14 @@
                       </a>
                     </td>
                   </tr>
-                  <ng-container *ngIf='expandSet.has(data.idVirtual)'>
+                  <ng-container *ngIf='expandSetNhap.has(data.idVirtual)'>
                     <ng-container *ngFor='let item of data.dataChild, let y = index'>
                       <tr>
                         <td></td>
                         <td></td>
-                        <td class='font-weight-bold bg-parent2 text-center'>{{item.maVatTuCha}}</td>
+                        <td class='font-weight-bold bg-parent2 text-center'
+                            [nzExpand]='expandSetNhap.has(item.idVirtual)'
+                            (nzExpandChange)='onExpandChangeNhap(item.idVirtual, $event)'>{{item.maVatTuCha}}</td>
                         <td class='font-weight-bold bg-parent2 text-center'>{{item.kyHieu}}</td>
                         <td class='font-weight-bold bg-parent2'>{{item.tenVatTuCha}}</td>
                         <td class='bg-parent2'></td>
@@ -783,7 +785,7 @@
                         </td>
                       </tr>
                       <ng-container
-                        *ngIf='expandSet.has(item.idVirtual) && item.dataChild && item.dataChild.length > 0 && item.dataChild[0].tenVatTu'>
+                        *ngIf='expandSetNhap.has(item.idVirtual) && item.dataChild && item.dataChild.length > 0 && item.dataChild[0].tenVatTu'>
                         <ng-container *ngFor='let itemLoaiHang of item.dataChild, let y1 = index'>
                           <tr>
                             <td></td>
@@ -838,8 +840,8 @@
                 <ng-container *ngFor='let data of dataVatTuXuatTree , let idx = index'>
                   <tr>
                     <td class='bg-parent1'>{{idx + 1}}</td>
-                    <td class='bg-parent1' [nzExpand]='expandSet.has(data.idVirtual)'
-                        (nzExpandChange)='onExpandChange(data.idVirtual, $event)'>{{data.tenDvi}}</td>
+                    <td class='bg-parent1' [nzExpand]='expandSetXuat.has(data.idVirtual)'
+                        (nzExpandChange)='onExpandChangeXuat(data.idVirtual, $event)'>{{data.tenDvi}}</td>
                     <td class='bg-parent1'></td>
                     <td class='bg-parent1'></td>
                     <td class='bg-parent1'></td>
@@ -853,12 +855,14 @@
                       </a>
                     </td>
                   </tr>
-                  <ng-container *ngIf='expandSet.has(data.idVirtual)'>
+                  <ng-container *ngIf='expandSetXuat.has(data.idVirtual)'>
                     <ng-container *ngFor='let item of data.dataChild, let y = index'>
                       <tr>
                         <td></td>
                         <td></td>
-                        <td class='font-weight-bold bg-parent2'>{{item.maVatTuCha}}</td>
+                        <td class='font-weight-bold bg-parent2'
+                            [nzExpand]='expandSetXuat.has(item.idVirtual)'
+                            (nzExpandChange)='onExpandChangeXuat(item.idVirtual, $event)'>{{item.maVatTuCha}}</td>
                         <td class='font-weight-bold bg-parent2 text-center'>{{item.kyHieu}}</td>
                         <td class='font-weight-bold bg-parent2'>{{item.tenVatTuCha}}</td>
                         <td class='font-weight-bold bg-parent2'></td>
@@ -886,7 +890,7 @@
                         </td>
                       </tr>
                       <ng-container
-                        *ngIf='expandSet.has(item.idVirtual) && item.dataChild && item.dataChild.length > 0'>
+                        *ngIf='expandSetXuat.has(item.idVirtual) && item.dataChild && item.dataChild.length > 0'>
                         <ng-container *ngFor='let itemLoaiHang of item.dataChild, let y1 = index'>
                           <tr>
                             <td></td>
@@ -915,7 +919,7 @@
                               </a>
                             </td>
                           </tr>
-                          <ng-container *ngIf='expandSet.has(itemLoaiHang.idVirtual)'>
+                          <ng-container *ngIf='expandSetXuat.has(itemLoaiHang.idVirtual)'>
                             <ng-container *ngFor='let itemDetail of itemLoaiHang.dataChild, let y2 = index'>
                               <tr>
                                 <td></td>
