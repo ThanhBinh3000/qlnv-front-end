@@ -767,11 +767,13 @@
             <nz-form-control [nzErrorTip]="error">
               <div nz-row [nzGutter]="48">
                 <div nz-col [nzSpan]="16">
-                  <nz-input-number formControlName="soLuongNhuCauXuat" [nzMax]="999999999999" [nzStep]="1"
+                  <!-- <nz-input-number formControlName="soLuongNhuCauXuat" [nzMax]="999999999999" [nzStep]="1"
                     nzPlaceHolder="Nhập số lượng" [nzDisabled]="isView"
                     (ngModelChange)="soLuongNhuCauXuatChange($event)" [nzSize]="'small'"
                     [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-                  </nz-input-number>
+                  </nz-input-number> -->
+                  <input currencyMask class="money-input" formControlName="soLuongNhuCauXuat"
+                    (ngModelChange)="soLuongNhuCauXuatChange($event)" [readOnly]="isView" [options]="amount1" />
                 </div>
                 <div nz-col [nzSpan]="8">
                   <p style="font-size: 13px;font-weight: 500">Đơn vị tính:
@@ -787,11 +789,13 @@
             <nz-form-control [nzErrorTip]="error">
               <div nz-row [nzGutter]="48">
                 <div nz-col [nzSpan]="16">
-                  <nz-input-number formControlName="soLuong" [nzMax]="999999999999" [nzStep]="1"
+                  <!-- <nz-input-number formControlName="soLuong" [nzMax]="999999999999" [nzStep]="1"
                     nzPlaceHolder="Nhập số lượng" (ngModelChange)="soLuongNhuCauXuatChange($event)"
                     [nzDisabled]="isView" [nzSize]="'small'" [nzFormatter]="globals.formatter"
                     [nzParser]="globals.parser">
-                  </nz-input-number>
+                  </nz-input-number> -->
+                  <input currencyMask class="money-input" formControlName="soLuong"
+                    (ngModelChange)="soLuongNhuCauXuatChange($event)" [readOnly]="isView" [options]="amount1" />
                 </div>
                 <div nz-col [nzSpan]="8">
                   <p style="font-size: 13px;font-weight: 500">Đơn vị tính:

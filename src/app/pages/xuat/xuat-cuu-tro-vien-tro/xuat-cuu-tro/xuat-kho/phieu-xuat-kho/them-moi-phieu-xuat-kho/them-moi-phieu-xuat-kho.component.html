@@ -503,10 +503,13 @@
                   <nz-input-group>
                     <!-- <input nz-input formControlName="theoChungTu"
                       [readonly]="isView || (!formData.value.tenCloaiVthh && !formData.value.tenLoaiVthh)" /> -->
-                    <nz-input-number nz-input [nzSize]="'small'" formControlName="theoChungTu"
+                    <!-- <nz-input-number nz-input [nzSize]="'small'" formControlName="theoChungTu"
                       [nzDisabled]="isView || (!formData.value.tenCloaiVthh && !formData.value.tenLoaiVthh)"
                       [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-                    </nz-input-number>
+                    </nz-input-number> -->
+                    <input currencyMask class="money-input" formControlName="theoChungTu"
+                      [readOnly]="isView || (!formData.value.tenCloaiVthh && !formData.value.tenLoaiVthh)"
+                      [options]="amount1" />
                   </nz-input-group>
                 </nz-form-control>
               </td>
@@ -516,10 +519,13 @@
                     <!-- <nz-input-number nz-input [nzSize]="'small'" formControlName="thucXuat" [nzDisabled]="isView"
                       [nzFormatter]="globals.formatter" [nzParser]="globals.parser" (input)="calculateSum()">
                     </nz-input-number> -->
-                    <nz-input-number nz-input [nzSize]="'small'" formControlName="thucXuat"
+                    <!-- <nz-input-number nz-input [nzSize]="'small'" formControlName="thucXuat"
                       [nzDisabled]="isView || (!formData.value.tenCloaiVthh && !formData.value.tenLoaiVthh)"
                       [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-                    </nz-input-number>
+                    </nz-input-number> -->
+                    <input currencyMask class="money-input" formControlName="thucXuat"
+                      [readOnly]="isView || (!formData.value.tenCloaiVthh && !formData.value.tenLoaiVthh)"
+                      [options]="amount1" />
                   </nz-input-group>
                 </nz-form-control>
               </td>
