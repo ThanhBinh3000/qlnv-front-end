@@ -1,14 +1,15 @@
-import {Component, OnInit} from '@angular/core';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {Base2Component} from "../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {saveAs} from 'file-saver';
-import {StorageService} from "../../../services/storage.service";
-import {UserActivityService} from "../../../services/user-activity.service";
-import {PAGE_SIZE_DEFAULT} from "../../../constants/config";
-import {MESSAGE} from "../../../constants/message";
+import { Component, OnInit } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { Base2Component } from "../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { saveAs } from 'file-saver';
+import { StorageService } from "../../../services/storage.service";
+import { UserActivityService } from "../../../services/user-activity.service";
+import { PAGE_SIZE_DEFAULT } from "../../../constants/config";
+import { MESSAGE } from "../../../constants/message";
+import { CauHinhHeThongComponent } from './cau-hinh-he-thong/cau-hinh-he-thong.component';
 
 
 @Component({
@@ -19,14 +20,14 @@ import {MESSAGE} from "../../../constants/message";
 
 export class KiemSoatQuyenTruyCapComponent extends Base2Component implements OnInit {
 
-  listSystem: any[] = [{"code": "hang", "ten": "Quản lý hàng"}, {
+  listSystem: any[] = [{ "code": "hang", "ten": "Quản lý hàng" }, {
     "code": "khoach",
     "ten": "Quản lý kế hoạch"
-  }, {"code": "kho", "ten": "Quản lý kho"}, {"code": "luukho", "ten": "Quản lý lưu kho"}, {
+  }, { "code": "kho", "ten": "Quản lý kho" }, { "code": "luukho", "ten": "Quản lý lưu kho" }, {
     "code": "security",
     "ten": "Quản lý đăng nhập"
   }];
-  pageSize: number = 100;
+  pageSize: number = 10;
 
   constructor(
     httpClient: HttpClient,
@@ -81,6 +82,25 @@ export class KiemSoatQuyenTruyCapComponent extends Base2Component implements OnI
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
+  }
+
+  cauhinhhethong() {
+    const modalQD = this.modal.create({
+      nzTitle: 'CẤU HÌNH NHẬT KÝ HỆ THỐNG',
+      nzContent: CauHinhHeThongComponent,
+      nzMaskClosable: false,
+      nzClosable: true,
+      nzWidth: '800px',
+      nzFooter: null,
+      nzComponentParams: {
+        // data: row
+      },
+    });
+    modalQD.afterClose.subscribe(async (data) => {
+      if (!data) return
+
+
+    });
   }
 }
 
