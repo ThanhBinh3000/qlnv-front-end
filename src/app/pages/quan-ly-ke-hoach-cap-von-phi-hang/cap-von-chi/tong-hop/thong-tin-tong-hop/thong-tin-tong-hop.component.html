@@ -205,7 +205,7 @@
           <td class='text-right'>{{ data.kinhPhiDaCap | number : '1.0-1' : 'vi_VN' }}</td>
           <td class='text-right'>{{ data.ycCapThemNt | number : '1.0-1' : 'vi_VN'}}</td>
           <td class='text-right'>{{ data.ycCapThem | number : '1.0-1' : 'vi_VN' }}</td>
-          <td class='text-left'>
+          <td class='text-center'>
             <a *ngIf="!data.isSum && data.maBn != 'BTC'" (click)='goToDetail(data, true)'>
               <i class='fa fa-eye' title='Xem chi tiết'></i>
             </a>

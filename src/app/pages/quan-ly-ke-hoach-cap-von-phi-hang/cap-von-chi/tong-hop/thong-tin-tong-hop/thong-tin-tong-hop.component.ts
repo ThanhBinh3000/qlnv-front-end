@@ -597,7 +597,7 @@ export class ThongTinTonghopComponent implements OnInit {
   }
 
   goToDetail(data?: any, isView?: boolean) {
-    this.selectedId = data.id;
+    this.selectedId = this.idInput ? data.khDnCapVonId :  data.id;
     this.isDetail = true;
     this.isView = isView;
   }
