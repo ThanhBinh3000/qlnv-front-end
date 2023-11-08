@@ -10,6 +10,7 @@ import { UserActivityService } from "../../../services/user-activity.service";
 import { PAGE_SIZE_DEFAULT } from "../../../constants/config";
 import { MESSAGE } from "../../../constants/message";
 import { CauHinhHeThongComponent } from './cau-hinh-he-thong/cau-hinh-he-thong.component';
+import { UserActivitySettingService } from 'src/app/services/user-activity-setting.service';
 
 
 @Component({
@@ -35,7 +36,8 @@ export class KiemSoatQuyenTruyCapComponent extends Base2Component implements OnI
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private UserActivityService: UserActivityService
+    private UserActivityService: UserActivityService,
+    private userActivitySettingService: UserActivitySettingService
   ) {
     super(httpClient, storageService, notification, spinner, modal, UserActivityService);
     super.ngOnInit()
@@ -46,8 +48,9 @@ export class KiemSoatQuyenTruyCapComponent extends Base2Component implements OnI
       ngayHd: [''],
       tuNgay: [''],
       denNgay: [''],
+      tabName: [''],
     });
-    this.search();
+    // this.search();
     this.filterTable = {};
   }
 
@@ -61,6 +64,15 @@ export class KiemSoatQuyenTruyCapComponent extends Base2Component implements OnI
       this.formData.value.tuNgay = this.formData.value.ngayHd[0];
       this.formData.value.denNgay = this.formData.value.ngayHd[1];
     }
+    this.search();
+  }
+
+  selectTab(name) {
+    if (this.formData.value.ngayHd && this.formData.value.ngayHd.length > 0) {
+      this.formData.value.tuNgay = this.formData.value.ngayHd[0];
+      this.formData.value.denNgay = this.formData.value.ngayHd[1];
+    }
+    this.formData.value.tabName = name
     this.search();
   }
 
@@ -84,7 +96,13 @@ export class KiemSoatQuyenTruyCapComponent extends Base2Component implements OnI
     }
   }
 
-  cauhinhhethong() {
+  async cauhinhhethong() {
+    let res = await this.userActivitySettingService.getCauHinhHeThong({});
+    let data = {}
+    if (res.msg == MESSAGE.SUCCESS) {
+      console.log(res.data)
+      data = res.data
+    }
     const modalQD = this.modal.create({
       nzTitle: 'CẤU HÌNH NHẬT KÝ HỆ THỐNG',
       nzContent: CauHinhHeThongComponent,
@@ -93,14 +111,28 @@ export class KiemSoatQuyenTruyCapComponent extends Base2Component implements OnI
       nzWidth: '800px',
       nzFooter: null,
       nzComponentParams: {
-        // data: row
+        data: data
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (!data) return
-
+      this.save(data)
 
     });
+  }
+
+  async save(data) {
+    await this.spinner.show();
+    try {
+      let res = await this.userActivitySettingService.cauHinhHeThong(data);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+      }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
   }
 }
 
