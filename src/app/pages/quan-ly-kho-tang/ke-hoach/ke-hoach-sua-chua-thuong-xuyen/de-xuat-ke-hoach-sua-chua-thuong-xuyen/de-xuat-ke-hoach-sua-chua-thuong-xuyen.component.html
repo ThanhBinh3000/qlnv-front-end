@@ -154,10 +154,7 @@
           <td>{{ data.maTongHop ? data.maTongHop : 'Bản ghi chưa tổng hợp'}}</td>
           <td class="text-left" *ngIf="userService.isCuc">
             <a
-              *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_DX_XEM') && !((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDV) && data.nguoiTaoId == userInfo.ID)
-              &&!((userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_DX_DUYETTP') && data.trangThai == STATUS.CHO_DUYET_TP))
-              &&!((userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_DX_DUYETLDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC))
-              &&!((userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_DX_DUYETCBVU') && data.trangThai == STATUS.DA_DUYET_LDC))"
+              *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_DX_XEM') && !((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDV) && data.nguoiTaoId == userInfo.ID)"
               (click)="redirectToChiTiet(data.id, true)">
               <i class=" icon htvbdh_eye" title="Xem"></i>
             </a>
