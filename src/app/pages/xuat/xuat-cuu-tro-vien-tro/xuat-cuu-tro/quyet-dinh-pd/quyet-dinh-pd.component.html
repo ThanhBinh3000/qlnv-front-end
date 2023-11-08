@@ -191,11 +191,11 @@
             <td class="text-center">{{ data.ngayThop |date:globals.dateFormat}}</td>
             <td><a nz-button nzType="link" (click)="openDxPaModal(data.idDx)"> {{data.soDx}}</a></td>
             <td class="text-center">{{ data.ngayDx |date:globals.dateFormat}}</td>
-            <td>{{ data.tenVthh }}</td>
+            <td class="break">{{ data.tenVthh }}</td>
             <!--          <td>{{ data.tongSoLuongDx |number:globals.numberFormat:globals.locale }}</td>-->
             <!--          <td>{{ data.tongSoLuong |number:globals.numberFormat:globals.locale }}</td>-->
             <!--          <td>{{ data.soLuongXuatCap |number:globals.numberFormat:globals.locale}}</td>-->
-            <td>{{ data.trichYeu }}</td>
+            <td class="break">{{ data.trichYeu }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-center">
               <a *ngIf="(!userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_XEM'))
