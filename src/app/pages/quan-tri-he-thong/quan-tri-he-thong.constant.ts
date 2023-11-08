@@ -42,7 +42,7 @@ export const NHAP_ROUTE_LIST = [
   {
     id: 4,
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'Kiểm soát truy cập',
+    title: 'Cấu hình & Kiểm soát truy cập',
     url: `/${NHAP_MAIN_ROUTE}/kiem-soat-truy-cap`,
     dropdown: 'kiem-soat-truy-cap',
     idHover: 'kiem-soat-truy-cap',
