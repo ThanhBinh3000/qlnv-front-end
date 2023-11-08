@@ -243,6 +243,7 @@ export class ThongTinTonghopComponent implements OnInit {
         if (res.msg == MESSAGE.SUCCESS) {
           this.detail.id = res.data.id
           this.idInput = res.data.id;
+          await this.loadChiTiet(this.idInput);
           if (!isGuiDuyet) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
           } else {
