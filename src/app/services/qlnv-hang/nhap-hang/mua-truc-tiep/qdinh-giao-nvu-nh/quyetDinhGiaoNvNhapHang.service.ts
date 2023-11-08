@@ -8,7 +8,7 @@ import {BaseLocalService} from "../../../../base-local.service";
 @Injectable({
     providedIn: 'root',
 })
-export class QuyetDinhGiaoNvNhapHangService extends BaseLocalService {
+export class QuyetDinhGiaoNvNhapHangService extends BaseService {
     GATEWAY = '';
 
     constructor(public httpClient: HttpClient) {
@@ -16,7 +16,7 @@ export class QuyetDinhGiaoNvNhapHangService extends BaseLocalService {
     }
 
     updateDdiemNhap(body: any): Promise<any> {
-        const url = `${environment.SERVICE_API_LOCAL}${this.GATEWAY}/${this.table}/cap-nhat-ddiem-nhap`;
+        const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/cap-nhat-ddiem-nhap`;
         return this.httpClient.post<any>(url, body).toPromise();
     }
 
