@@ -18,9 +18,6 @@ import {StorageService} from 'src/app/services/storage.service';
 import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {STATUS} from 'src/app/constants/status';
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
-import {PREVIEW} from "src/app/constants/fileType";
-import {saveAs} from 'file-saver';
-import printJS from "print-js";
 
 @Component({
   selector: 'app-them-moi-tong-hop-ke-hoach-ban-dau-gia',
@@ -43,10 +40,8 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
   selected: boolean = false;
   listVatTuCha: any[] = [];
   listVatTu: any[] = [];
-  showDlgPreview = false;
-  pdfBlob: any;
-  pdfSrc: any;
-  wordSrc: any;
+  templateNameVt = "Tổng hợp kế hoạch bán đấu giá vật tư";
+  templateNameLt = "Tổng hợp kế hoạch bán đấu giá lương thực";
 
   constructor(
     httpClient: HttpClient,
@@ -326,37 +321,5 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
       this.selected = true;
     }
     this.idRowSelect = idDxKh;
-  }
-
-  async preview(id) {
-    await this.tongHopDeXuatKeHoachBanDauGiaService.preview({
-      tenBaoCao: 'tong-hop-ke-hoach-bdg',
-      id: id
-    }).then(async res => {
-      if (res.data) {
-        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
-        this.printSrc = res.data.pdfSrc;
-        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
-        this.showDlgPreview = true;
-      } else {
-        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
-      }
-    });
-  }
-
-  downloadPdf() {
-    saveAs(this.pdfSrc, "tong-hop-ke-hoach-bdg.pdf");
-  }
-
-  downloadWord() {
-    saveAs(this.wordSrc, "tong-hop-ke-hoach-bdg.docx");
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
-  }
-
-  printPreview() {
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 }
