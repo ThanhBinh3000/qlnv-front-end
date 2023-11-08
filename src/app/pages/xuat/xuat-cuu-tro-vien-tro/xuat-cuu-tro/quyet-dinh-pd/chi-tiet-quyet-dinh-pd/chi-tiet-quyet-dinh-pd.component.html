@@ -621,8 +621,13 @@
                                 <td class="text-right">
                                   {{lv1.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
                               </ng-container>
-                              <td><nz-input-number nzSize="small" (ngModelChange)="tinhXuatCap(lv1,$event, false, item)"
-                                  [(ngModel)]="lv1.soLuong" [nzDisabled]="isView"></nz-input-number></td>
+                              <td>
+                                <!-- <nz-input-number nzSize="small" (ngModelChange)="tinhXuatCap(lv1,$event, false, item)"
+                                  [(ngModel)]="lv1.soLuong" [nzDisabled]="isView"></nz-input-number> -->
+                                <input currencyMask class="money-input"
+                                  (ngModelChange)="tinhXuatCap(lv1,$event, false, item)" [(ngModel)]="lv1.soLuong"
+                                  [readOnly]="isView" [options]="amount1" />
+                              </td>
                               <ng-container *ngIf="isVthhGao()">
                                 <!-- <td>{{lv1.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td> -->
                                 <td class="text-right">{{lv1.soLuongXc|number:globals.numberFormat:globals.locale}}</td>
@@ -687,9 +692,12 @@
                                     lv2.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}
                                   </td>
                                   <td>
-                                    <nz-input-number nzSize="small"
+                                    <!-- <nz-input-number nzSize="small"
                                       (ngModelChange)="tinhTongVthh(lv2,$event, lv1, item)" [(ngModel)]="lv2.soLuong"
-                                      [nzDisabled]="isView"></nz-input-number>
+                                      [nzDisabled]="isView"></nz-input-number> -->
+                                    <input currencyMask class="money-input"
+                                      (ngModelChange)="tinhTongVthh(lv2,$event, lv1, item)" [(ngModel)]="lv2.soLuong"
+                                      [readOnly]="isView" [options]="amount1" />
 
                                   </td>
                                 </tr>
@@ -982,8 +990,13 @@
                             <td class="text-right">{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}
                             </td>
                           </ng-container>
-                          <td><nz-input-number nzSize="small" (ngModelChange)="tinhXuatCap(item,$event, false, null)"
-                              [(ngModel)]="item.soLuong" [nzDisabled]="isView"></nz-input-number></td>
+                          <td>
+                            <!-- <nz-input-number nzSize="small" (ngModelChange)="tinhXuatCap(item,$event, false, null)"
+                              [(ngModel)]="item.soLuong" [nzDisabled]="isView"></nz-input-number> -->
+                            <input currencyMask class="money-input"
+                              (ngModelChange)="tinhXuatCap(item,$event, false, null)" [(ngModel)]="item.soLuong"
+                              [readOnly]="isView" [options]="amount1" />
+                          </td>
                           <ng-container *ngIf="isVthhGao()">
                             <!-- <td>{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td> -->
                             <td class="text-right">{{item.soLuongXc|number:globals.numberFormat:globals.locale}}</td>
@@ -1035,9 +1048,12 @@
 
                                   </td> -->
                                   <td>
-                                    <nz-input-number nzSize="small" [(ngModel)]="lv2.soLuong"
+                                    <!-- <nz-input-number nzSize="small" [(ngModel)]="lv2.soLuong"
                                       (ngModelChange)="tinhTongVthh(lv2, $event, lv1, item)"
-                                      [nzDisabled]="isView"></nz-input-number>
+                                      [nzDisabled]="isView"></nz-input-number> -->
+                                    <input currencyMask class="money-input" [(ngModel)]="lv2.soLuong"
+                                      (ngModelChange)="tinhTongVthh(lv2, $event, lv1, item)" [options]="amount1"
+                                      [readOnly]="isView" />
 
                                   </td>
                                   <!-- <td> {{lv2.soLuongXc|number:globals.numberFormat:globals.locale}}</td> -->

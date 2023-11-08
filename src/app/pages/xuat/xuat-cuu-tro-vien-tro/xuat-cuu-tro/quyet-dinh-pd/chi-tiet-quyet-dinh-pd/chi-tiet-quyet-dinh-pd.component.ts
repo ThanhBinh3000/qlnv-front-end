@@ -31,6 +31,7 @@ import {
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { PREVIEW } from "../../../../../../constants/fileType";
 import { LOAI_HANG_DTQG, TEN_LOAI_VTHH } from 'src/app/constants/config';
+import { AMOUNT_ONE_DECIMAL } from 'src/app/Utility/utils';
 
 @Component({
   selector: 'app-chi-tiet-quyet-dinh-pd',
@@ -106,6 +107,8 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   kieuNhapXuat: string;
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   ngayKetThuc: string;
+  amount1 = { ...AMOUNT_ONE_DECIMAL };
+  amount1Left = { ...AMOUNT_ONE_DECIMAL, align: "left" }
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

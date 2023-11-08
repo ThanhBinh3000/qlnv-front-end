@@ -20,6 +20,7 @@ import { Validators } from '@angular/forms';
 import { PhieuKiemNghiemChatLuongService } from 'src/app/services/qlnv-hang/xuat-hang/chung/kiem-tra-chat-luong/PhieuKiemNghiemChatLuong.service';
 import { QuyetDinhGiaoNvCuuTroService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service';
 import { BienBanLayMauService } from 'src/app/services/qlnv-hang/xuat-hang/chung/xuat-kho/PhieuXuatKho.service';
+import { AMOUNT_ONE_DECIMAL } from 'src/app/Utility/utils';
 
 @Component({
   selector: 'app-them-moi-bien-ban-tinh-kho',
@@ -50,6 +51,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   idBangKe: number = 0;
   openBangKe = false;
   templateName = "Biên bản tinh kho";
+  amount1Left = { ...AMOUNT_ONE_DECIMAL, align: "left" }
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

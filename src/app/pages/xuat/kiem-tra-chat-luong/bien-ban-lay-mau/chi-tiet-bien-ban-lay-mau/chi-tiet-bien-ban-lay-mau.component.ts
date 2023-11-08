@@ -28,7 +28,7 @@ import dayjs from 'dayjs';
 import { uniqBy } from 'lodash';
 import { MangLuoiKhoService } from 'src/app/services/qlnv-kho/mangLuoiKho.service';
 import { QuyetDinhPheDuyetPhuongAnCuuTroService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhPheDuyetPhuongAnCuuTro.service';
-
+import { AMOUNT_ONE_DECIMAL } from 'src/app/Utility/utils';
 @Component({
   selector: 'app-chi-tiet-bien-ban-lay-mau',
   templateUrl: './chi-tiet-bien-ban-lay-mau.component.html',
@@ -58,7 +58,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
   maHauTo: any;
   public vldTrangThai: BienBanLayMauComponent;
   templateName = 'bien-ban-lay-mau';
-
+  amount1 = { ...AMOUNT_ONE_DECIMAL, align: "left" }
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
@@ -508,7 +508,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
   }
 
   async save() {
-    // await this.helperService.ignoreRequiredForm(this.formData);
+    await this.helperService.ignoreRequiredForm(this.formData);
     if (this.loaiXuat === "CTVT") {
       this.formData.controls['truongBpBaoQuan'].setValidators(Validators.required);
       this.formData.controls['truongBpBaoQuan'].updateValueAndValidity()
@@ -522,7 +522,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
       this.formData.controls['truongBpBaoQuan'].clearValidators();
       this.formData.controls['truongBpBaoQuan'].updateValueAndValidity()
     }
-    // await this.helperService.restoreRequiredForm(this.formData);
+    await this.helperService.restoreRequiredForm(this.formData);
   }
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {

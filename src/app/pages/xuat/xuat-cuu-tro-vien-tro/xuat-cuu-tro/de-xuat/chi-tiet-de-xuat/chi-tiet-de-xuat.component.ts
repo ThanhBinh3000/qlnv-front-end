@@ -25,6 +25,7 @@ import { LOAI_HANG_DTQG, TEN_LOAI_VTHH } from "src/app/constants/config";
 import { PREVIEW } from 'src/app/constants/fileType';
 import { MangLuoiKhoService } from 'src/app/services/qlnv-kho/mangLuoiKho.service';
 import { DataService } from 'src/app/services/data.service';
+import { AMOUNT_ONE_DECIMAL } from 'src/app/Utility/utils';
 
 
 @Component({
@@ -53,6 +54,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
   listDviNhan: any[] = [];
   listQuocGia: any[] = [];
   listDiaDanhHanhChinh: any[] = [];
+  amount1 = { ...AMOUNT_ONE_DECIMAL, align: "left" }
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
