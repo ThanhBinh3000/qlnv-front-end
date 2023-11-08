@@ -279,7 +279,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
 
   async loadListNguoiDaiDien() {
     let body = {
-      maDvi: '0101',
+      maDvi: this.userInfo.MA_DVI,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0
@@ -394,16 +394,15 @@ export class ThongTinComponent implements OnInit, OnChanges {
             res = await this.hopDongService.create(body);
         }
         if (res.msg == MESSAGE.SUCCESS) {
+          this.id = res.data.id;
+          this.formData.get('id').setValue(res.data.id);
             if (isKy) {
-                this.id = res.data.id;
                 await this.guiDuyet();
             } else {
                 if (this.formData.get('id').value) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-                    this.back();
                 } else {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-                    this.back();
                 }
             }
         } else {
@@ -802,6 +801,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
     async ngOnChanges(changes: SimpleChanges) {
         if (changes) {
             await this.spinner.show();
+            this.userInfo = this.userService.getUserLogin();
             await this.loadListNguoiDaiDien();
             await this.loadChiTiet(this.id);
             await this.spinner.hide()
@@ -907,9 +907,9 @@ export class ThongTinComponent implements OnInit, OnChanges {
       if (event) {
         let ngDaiDien =  this.listNguoiDaiDien.find(i => i.id == event)
         this.formData.patchValue({
-          tenNguoiDdien: ngDaiDien.fullName,
-          chucVu: ngDaiDien.positionName,
-          sdt: ngDaiDien.phoneNo,
+          tenNguoiDdien: ngDaiDien?.fullName,
+          chucVu: ngDaiDien?.positionName,
+          sdt: ngDaiDien?.phoneNo,
         })
       }
   }

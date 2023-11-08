@@ -755,6 +755,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
           this.formData.patchValue({
             soVanBanThayThe: detail.map(o => o.soVanBan).join(', '),
             idVanBanThayThe: detail.map(o => o.id).join(', '),
+            apDungCloaiVthh : res.data?.apDungCloaiVthh
           });
           detail.forEach(dt => {
             if (dt.loaiVthh) {

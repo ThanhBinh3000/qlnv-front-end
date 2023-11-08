@@ -197,7 +197,7 @@ export class DieuchinhLuachonNhathauComponent extends Base2Component implements 
   hienThiXem(data){
     if (this.userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_XEM') && data != null) {
       if(this.userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_THEM')
-        && (data.trangThai == STATUS.DU_THAO
+        && (data.trangThai == STATUS.DA_LAP
           || data.trangThai == STATUS.TU_CHOI_LDV)) {
         return false;
       } else if (this.userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_DUYET_LDVU') && data.trangThai == STATUS.CHO_DUYET_LDV) {

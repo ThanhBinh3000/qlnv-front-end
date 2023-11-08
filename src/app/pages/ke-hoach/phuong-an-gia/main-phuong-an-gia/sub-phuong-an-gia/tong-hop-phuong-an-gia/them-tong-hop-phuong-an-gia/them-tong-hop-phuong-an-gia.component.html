@@ -92,11 +92,11 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Cục DTNNKV</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                <nz-select [(ngModel)]="listCucSelected" [nzDisabled]="idInput > 0" [nzMaxTagCount]="3"
+                <nz-select [(ngModel)]="listCucSelected" [nzMaxTagCount]="3"
                            [nzMaxTagPlaceholder]="tagPlaceHolder"
                            (ngModelChange)="changeListDsCuc($event)" [ngModelOptions]="{standalone: true}"
                            nzMode="multiple">
-                  <nz-option *ngFor="let item of listCuc" [nzLabel]="item.tenDvi"
+                  <nz-option *ngFor="let item of listCuc" [nzLabel]="item.tenDvi" [nzDisabled]="idInput > 0"
                              [nzValue]="item.maDvi">
                   </nz-option>
                 </nz-select>
