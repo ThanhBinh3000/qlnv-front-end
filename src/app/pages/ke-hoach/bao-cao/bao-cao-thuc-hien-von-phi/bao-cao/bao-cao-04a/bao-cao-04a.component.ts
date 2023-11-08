@@ -299,10 +299,10 @@ export class BaoCao04aComponent implements OnInit {
                 }
                 if (a.loaiBquan && b.loaiBquan) {
                     if (parseInt(a.loaiBquan, 10) > parseInt(b.loaiBquan, 10)) {
-                        return 1
+                        return -1
                     }
                     if (parseInt(a.loaiBquan, 10) < parseInt(b.loaiBquan, 10)) {
-                        return -1
+                        return 1
                     }
                 }
                 if (a.loaiDm == 'LDM') {
@@ -667,6 +667,11 @@ export class BaoCao04aComponent implements OnInit {
         }
     }
 
+    isExistDm(data: Materials) {
+        const dm = this.dinhMucs[data.loaiDm].find(e => (e.cloaiVthh == data.maVtu || e.loaiVthh == data.maVtu) && (!data.loaiBquan || e.loaiBaoQuan == data.loaiBquan));
+        return dm ? true : false;
+    }
+
     tinhDinhMuc(data: ItemData) {
         if (!data) { return; }
         this.tinhCtietDm(this.para.nvChuyenMon, data.listCtiet, 'nvChuyenMonDviTt', 'nvChuyenMonVp');
@@ -990,9 +995,9 @@ export class BaoCao04aComponent implements OnInit {
     }
 
     checkEdit(item: ItemData) {
-        if (item.maNdungChi.startsWith('0.1.3')) {
-            return false;
-        }
+        // if (item.maNdungChi.startsWith('0.1.3')) {
+        //     return false;
+        // }
         if (item.maNdungChi.startsWith('0.1.5') && item.level < 3) {
             return false;
         }
@@ -1018,6 +1023,7 @@ export class BaoCao04aComponent implements OnInit {
             { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
             { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
             { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+            { t: 3, b: 3, l: 0, r: 4, val: 'Trạng thái báo cáo: ' + this.dataInfo.tenTrangThai },
             { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
             { t: 4, b: 5, l: 1, r: 1, val: 'Nội dung chi' },
             { t: 4, b: 4, l: 2, r: 2 + num, val: 'Chi tiết theo từng mặt hàng trong đợt' },

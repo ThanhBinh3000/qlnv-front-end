@@ -537,6 +537,7 @@ export class BaoCaoComponent implements OnInit {
             tenPl: bieuMau.tenPhuLuc,
             tieuDe: bieuMau.tieuDe,
             congVan: this.baoCao.congVan?.fileName ? Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi) : '',
+            tenTrangThai: Status.reportStatusName(this.baoCao.trangThai, this.isParent),
             luyKes: this.luyKes.find(e => e.maLoai == bieuMau.maLoai),
             isOffice: this.isOffice,
             isSynth: this.baoCao.lstBcaoDviTrucThuocs.length > 0,
