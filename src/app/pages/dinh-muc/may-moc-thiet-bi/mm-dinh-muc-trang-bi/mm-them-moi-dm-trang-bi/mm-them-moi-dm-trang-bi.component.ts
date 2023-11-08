@@ -212,12 +212,12 @@ export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnIni
   async addDetailDinhMuc() {
     let msgRequired = this.required(this.rowItem);
     if (msgRequired) {
-      this.notification.error(MESSAGE.ERROR, msgRequired);
+      this.notification.warning(MESSAGE.WARNING, msgRequired);
       this.spinner.hide();
       return;
     }
     if (this.checkExitsData(this.rowItem, this.dataTableDetail)) {
-      this.notification.error(MESSAGE.ERROR, "Dữ liệu trùng lặp, đề nghị nhập lại.");
+      this.notification.warning(MESSAGE.WARNING, "Dữ liệu trùng lặp, đề nghị nhập lại.");
       this.spinner.hide();
       return;
     }
@@ -284,7 +284,7 @@ export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnIni
   async saveDinhMuc(idx: number) {
     let msgRequired = this.required(this.dataEdit[idx].data)
     if (msgRequired) {
-      this.notification.error(MESSAGE.ERROR, msgRequired);
+      this.notification.warning(MESSAGE.WARNING, msgRequired);
       this.spinner.hide();
       return;
     }
@@ -362,4 +362,5 @@ export class DinhMucTrangBiMm {
   klChiCuc: number;
   loaiHinh: any;
   tenLoaiHinh: string;
+  isCanCu : boolean;
 }
