@@ -710,7 +710,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     if($event == "2"){
       this.formData.controls["nam"].setValidators(Validators.required);
     }else {
-      this.formData.controls["nam"].removeValidators(Validators.required);
+      this.formData.controls["nam"].setValidators(null);
     }
     this.rowItem = {};
     this.loadDmDinhMuc();
