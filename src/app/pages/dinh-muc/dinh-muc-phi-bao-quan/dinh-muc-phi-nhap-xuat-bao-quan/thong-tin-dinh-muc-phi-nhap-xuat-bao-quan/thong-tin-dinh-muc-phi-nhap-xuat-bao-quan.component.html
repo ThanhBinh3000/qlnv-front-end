@@ -40,7 +40,7 @@
   </div>
   <nz-card class='mg-t-16 flex-card p-lr16 mt-5'>
     <form nz-form nzLayout='vertical' [formGroup]='formData'>
-      <div nz-col [nzSpan]="12" class="loaiVthh-group">
+      <div nz-col [nzSpan]="24" class="loaiVthh-group">
         <nz-form-item>
           <nz-form-control [nzErrorTip]="error">
             <nz-radio-group [nzDisabled]="checkDisableNhomDinhMuc()" nzSize="small" class="rdo-input grid-4"
@@ -57,6 +57,17 @@
         </nz-form-item>
       </div>
       <div nz-row [nzGutter]='[24]'>
+        <div nz-col nzSpan='3' *ngIf="this.formData.value.nhomDinhMuc === '2'">
+          <nz-form-item>
+            <nz-form-control nz-col [nzErrorTip]="error">
+              <nz-form-label nzRequired [nzNoColon]="true"> Năm
+              </nz-form-label>
+              <nz-select [nzDisabled]="isViewDetail" formControlName="nam" nzAllowClear>
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
         <div nz-col nzSpan='4'>
           <nz-form-item>
             <nz-form-control [nzErrorTip]='error'>
@@ -538,12 +549,14 @@
         <th rowspan='2' width='200px'>Áp dụng tại {{capDvi == 1 ? 'cục' : 'chi cục'}}</th>
         <th rowspan='2' width='100px'>Đơn vị tính</th>
         <th rowspan='2' width='150px'>Số lượng</th>
-        <th rowspan='2' width='200px'>Chi phí theo định mức (đ)</th>
+        <th rowspan='1' colspan='2' width='500px'>Chi phí theo định mức (đ)</th>
         <th rowspan='1' colspan='2' width='500px'>Chi phí không theo định mức</th>
         <th rowspan='1' colspan='3' width='750'>Chi phí không theo định mức với trường hợp xuất viện trợ</th>
         <th rowspan='2' width='120px'>Hành động</th>
       </tr>
       <tr>
+        <th rowspan='1' width='250px'>Chi phí nhập tối đa</th>
+        <th rowspan='1' width='250px'>Chi phí xuất tối đa</th>
         <th rowspan='1' width='250px'>Chi phí nhập tối đa</th>
         <th rowspan='1' width='250px'>Chi phí xuất tối đa</th>
         <th rowspan='1' width='250px'>Thanh toán theo VNĐ (đ)</th>
@@ -600,8 +613,12 @@
                  nz-input/>
         </th>
         <th>
-          <input type='money-input' currencyMask [options]='amount'
-                 [(ngModel)]='rowItem.chiPhiTheoDinhMuc' nz-input/>
+          <input type='money-input' currencyMask [options]='amount' [disabled]="true"
+                 [(ngModel)]='rowItem.chiPhiTheoDinhMucNhapToiDa' nz-input/>
+        </th>
+        <th>
+          <input type='money-input' currencyMask [options]='amount' [disabled]="true"
+                 [(ngModel)]='rowItem.chiPhiTheoDinhMucXuatToiDa' nz-input/>
         </th>
         <th>
           <input type='money-input' currencyMask [options]='amount' [disabled]="true"
@@ -668,7 +685,8 @@
             <td>{{item.apDungTaiStr}}</td>
             <td>{{item.donViTinh}}</td>
             <td class='text-right'>{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class='text-right'>{{item.chiPhiTheoDinhMuc | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{item.chiPhiTheoDinhMucNhapToiDa | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{item.chiPhiTheoDinhMucXuatToiDa | number : '1.0-1' : 'vi_VN'}}</td>
             <td class='text-right'>{{item.chiPhiNhapToiDa | number : '1.0-1' : 'vi_VN'}}</td>
             <td class='text-right'>{{item.chiPhiXuatToiDa | number : '1.0-1' : 'vi_VN'}}</td>
             <td class='text-right'>{{item.thanhToanTheoVnd | number : '1.0-1' : 'vi_VN'}}</td>
@@ -681,7 +699,7 @@
               <a *ngIf="item.level < 2 && !isViewDetail" (click)='addRow(item,item.level +1)'>
                 <i class='fa fa-plus' title='Thêm'></i>
               </a>
-              <a *ngIf='!isViewDetail' (click)='editRowKtqd(item,item.level)'>
+              <a *ngIf='item.children.length ==0 && !isViewDetail' (click)='editRowKtqd(item,item.level)'>
                 <i class='fa fa-pencil' title='Sửa'></i>
               </a>
               <a *ngIf="item.children.length ==0 && !isViewDetail" (click)='deleteItemKtqd(item,item.level)'>
@@ -781,11 +799,26 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]='12' class='mg-t-16 flex-card p-lr16 mt-5' *ngIf="formDataDtl.value.level == 0">
+          <div nz-col nzSpan='24' class='mg-t-16 flex-card p-lr16 mt-5'>
+            <h3>Chi phí theo định mức (đồng)</h3>
+          </div>
+          <div nz-col nzSpan='12'>
             <nz-form-item>
               <nz-form-control [nzErrorTip]='error'>
-                <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Chi phí theo định mức (đồng)</nz-form-label>
-                <input nz-input formControlName='chiPhiTheoDinhMuc' [readonly]='isViewDetail'/>
+                <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Chi phí nhập tối đa
+                </nz-form-label>
+                <input *ngIf="formDataDtl.value.level != 0" nz-input formControlName='chiPhiTheoDinhMucNhapToiDa' [readonly]='isViewDetail'/>
+                <input *ngIf="formDataDtl.value.level == 0" nz-input formControlName='chiPhiTheoDinhMucNhapToiDa' [readonly]='true'/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan='12' >
+            <nz-form-item>
+              <nz-form-control [nzErrorTip]='error'>
+                <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Chi phí xuất tối đa
+                </nz-form-label>
+                <input *ngIf="formDataDtl.value.level != 0" nz-input formControlName='chiPhiTheoDinhMucXuatToiDa' [readonly]='isViewDetail'/>
+                <input *ngIf="formDataDtl.value.level == 0" nz-input formControlName='chiPhiTheoDinhMucXuatToiDa' [readonly]='true'/>
               </nz-form-control>
             </nz-form-item>
           </div>
