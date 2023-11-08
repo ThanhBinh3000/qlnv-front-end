@@ -236,7 +236,6 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
       this.listDonVi.forEach(item => {
         item.fullname = item.key + ' - ' + item.title;
       });
-      console.log(this.listDonVi, 'this.listDonVi');
     }
   }
 
