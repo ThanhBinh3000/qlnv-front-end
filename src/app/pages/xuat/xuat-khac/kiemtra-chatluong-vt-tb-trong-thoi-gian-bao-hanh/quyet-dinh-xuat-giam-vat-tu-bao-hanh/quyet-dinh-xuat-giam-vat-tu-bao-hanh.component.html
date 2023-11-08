@@ -107,9 +107,7 @@
           <td>{{ data.listSoQdGiaoNvXh }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
-            <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_QDXG_XEM') && !((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDV || data.trangThai == STATUS.TU_CHOI_LDTC) && data.nguoiTaoId == userInfo.ID)
-              &&!(userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_QDXG_DUYETLDV') && data.trangThai== STATUS.CHO_DUYET_LDV  )
-              &&!(userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_QDXG_DUYETLDTC') && data.trangThai == STATUS.CHO_DUYET_LDTC)"
+            <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_QDXG_XEM') && !((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDV || data.trangThai == STATUS.TU_CHOI_LDTC) && data.nguoiTaoId == userInfo.ID)"
                (click)="redirectDetail(data.id, true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
