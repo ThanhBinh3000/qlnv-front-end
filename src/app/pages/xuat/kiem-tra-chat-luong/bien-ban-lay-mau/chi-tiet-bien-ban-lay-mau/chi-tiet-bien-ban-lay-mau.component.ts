@@ -166,10 +166,10 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
       await this.service.getDetail(this.idSelected)
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            if (res.data.soBbQd) {
-              this.maHauTo = '/' + res.data.soBbQd?.split('/')[1];
-              res.data.soBbQd = res.data.soBbQd?.split('/')[0];
-            }
+            // if (res.data.soBbQd) {
+            //   this.maHauTo = '/' + res.data.soBbQd?.split('/')[1];
+            //   res.data.soBbQd = res.data.soBbQd?.split('/')[0];
+            // }
             this.formData.patchValue({ ...res.data, tenNganLoKho: res.data.tenLoKho ? `${res.data.tenLoKho} - ${res.data.tenNganKho}` : res.data.tenNganKho });
             this.formData.value.xhBienBanLayMauDtl.forEach(s => {
               s.idVirtual = uuidv4();
@@ -515,9 +515,14 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
     }
     let body = {
       ...this.formData.value,
-      soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null,
+      // soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : this.maHauTo,
+      soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd : this.maHauTo,
+
     };
-    await this.createUpdate(body);
+    const data = await this.createUpdate(body);
+    if (data) {
+      this.formData.patchValue({ soBbQd: data.soBbQd })
+    }
     if (this.loaiXuat === "CTVT") {
       this.formData.controls['truongBpBaoQuan'].clearValidators();
       this.formData.controls['truongBpBaoQuan'].updateValueAndValidity()
@@ -530,7 +535,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
       this.formData.controls['truongBpBaoQuan'].setValidators(Validators.required);
       this.formData.controls['truongBpBaoQuan'].updateValueAndValidity()
     }
-    let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd + this.maHauTo };
+    let body = { ...this.formData.value };
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
     if (this.loaiXuat === "CTVT") {
       this.formData.controls['truongBpBaoQuan'].clearValidators();

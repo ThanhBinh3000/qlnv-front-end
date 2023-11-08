@@ -128,7 +128,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       hinhThucBaoQuan: [new Array()],
       tenNganLoKho: [],
       ketLuanCuoi: [],
-      slTonKho: []
+      slHangBaoQuan: []
     });
   }
 
@@ -587,7 +587,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     // let tonKhoCloaiVthh: number = 0;
     const res = await this.mangLuoiKhoService.slTon(body);
     if (res.msg === MESSAGE.SUCCESS) {
-      this.formData.patchValue({ slTonKho: res.data })
+      this.formData.patchValue({ slHangBaoQuan: res.data })
     }
   }
   downloadPdf() {

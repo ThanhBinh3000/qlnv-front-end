@@ -465,8 +465,8 @@
                       <td class="text-right">{{lv1.soLuongGiao|number:globals.numberFormat:globals.locale}}</td>
                       <td></td>
                       <td></td>
-                      <!-- <td class="text-right bold">{{lv1.tonKhoDvi|number:globals.numberFormat:globals.locale}}</td> -->
-                      <td></td>
+                      <td class="text-right bold">{{lv1.tonKhoDvi|number:globals.numberFormat:globals.locale}}</td>
+                      <!-- <td></td> -->
                       <td></td>
                       <td class="text-right bold">
                         {{lv1.slGaoThuHoiSauXayXat|number:globals.numberFormat:globals.locale}}
@@ -806,7 +806,7 @@
                   [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                   [nzDisabled]="formData.value.trangThaiXh === STATUS.DA_HOAN_THANH">
                 </nz-input-number> -->
-                <input currencyMask formControlName="slGaoThuHoiSauXayXat"
+                <input class="money-input" currencyMask formControlName="slGaoThuHoiSauXayXat"
                   [readOnly]="formData.value.trangThaiXh === STATUS.DA_HOAN_THANH" [options]="amount1" />
               </nz-form-control>
             </nz-form-item>
