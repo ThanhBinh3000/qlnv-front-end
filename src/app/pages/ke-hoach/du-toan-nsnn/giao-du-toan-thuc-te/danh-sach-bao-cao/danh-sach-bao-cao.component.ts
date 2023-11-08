@@ -74,10 +74,10 @@ export class DanhSachBaoCaoComponent implements OnInit {
         this.userInfo = this.userService.getUserLogin();
         this.spinner.show();
         //khoi tao gia tri mac dinh
-        this.searchFilter.denNgay = new Date();
-        const newDate = new Date();
-        newDate.setMonth(newDate.getMonth() - 1);
-        this.searchFilter.tuNgay = newDate;
+        // this.searchFilter.denNgay = new Date();
+        // const newDate = new Date();
+        // newDate.setMonth(newDate.getMonth() - 1);
+        // this.searchFilter.tuNgay = newDate;
         this.searchFilter.donViTao = this.userInfo?.MA_DVI;
         //check quyen va cac nut chuc nang
         this.statusDelete = this.userService.isAccessPermisson(Roles.GTT.XOA_PA_TONGHOP_PBDT) || this.userService.isAccessPermisson(Roles.GTT.XOA_PA_TONGHOP_PBDT);

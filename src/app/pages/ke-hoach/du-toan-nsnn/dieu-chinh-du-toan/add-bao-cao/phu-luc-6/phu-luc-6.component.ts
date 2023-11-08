@@ -183,7 +183,7 @@ export class PhuLuc6Component implements OnInit {
         await this.getDinhMucPL2X()
         // if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == Status.NEW) {
         this.lstCtietBcao.forEach(item => {
-            const dinhMuc = this.dsDinhMuc.find(e => (!e.cloaiVthh && e.loaiVthh == item.maNdung) || (!e.cloaiVthh && e.loaiVthh == item.maDmuc));
+            const dinhMuc = this.dsDinhMuc.find(e => (e.cloaiVthh == item.maNdung || e.loaiVthh == item.maNdung) && e.maDinhMuc == item.maDmuc);
             if (!item.noiDung) {
                 item.noiDung = dinhMuc?.tenDinhMuc;
             }
@@ -345,8 +345,11 @@ export class PhuLuc6Component implements OnInit {
 
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path));
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.formDetail.lstFiles.find(e => e.id == id)?.noiDung;
+            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path, noiDung));
         }
+        request.fileDinhKems = request.fileDinhKems.concat(this.formDetail.lstFiles.filter(e => typeof e.id == 'number'))
 
         request.lstCtietDchinh = lstCtietBcaoTemp;
         request.trangThai = trangThai;
@@ -545,7 +548,7 @@ export class PhuLuc6Component implements OnInit {
                             id: uuid.v4() + 'FE',
                             stt: stt + '.' + i.toString(),
                             maNdung: data.ma,
-                            maDmuc: lstTemp[i - 1].loaiDinhMuc,
+                            maDmuc: lstTemp[i - 1].maDinhMuc,
                             noiDung: lstTemp[i - 1].tenDinhMuc,
                             maDviTinh: lstTemp[i - 1].donViTinh,
                             level: 1,

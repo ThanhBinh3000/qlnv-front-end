@@ -115,10 +115,10 @@ export class BaoCaoQuyetToanComponent implements OnInit {
     async ngOnInit() {
         this.spinner.show()
         this.userInfo = this.userService.getUserLogin();
-        this.searchFilter.namQtoan = new Date().getFullYear() - 1
-        this.searchFilter.ngayTaoDen = new Date();
-        this.newDate.setMonth(this.newDate.getMonth() - 1);
-        this.searchFilter.ngayTaoTu = this.newDate;
+        // this.searchFilter.namQtoan = new Date().getFullYear() - 1
+        // this.searchFilter.ngayTaoDen = new Date();
+        // this.newDate.setMonth(this.newDate.getMonth() - 1);
+        // this.searchFilter.ngayTaoTu = this.newDate;
         this.donViTao = this.userInfo?.MA_DVI;
         this.statusNewReport = this.userService.isAccessPermisson(Roles.QTVP.ADD_REPORT)
         this.statusDelete = this.userService.isAccessPermisson(Roles.QTVP.DELETE_REPORT);
@@ -233,6 +233,7 @@ export class BaoCaoQuyetToanComponent implements OnInit {
         this.searchFilter.ngayTaoDen = null
         this.searchFilter.ngayTaoTu = null
         this.searchFilter.maBcao = null
+        this.searchFilter.quyQtoan = null
         this.trangThai = null
         this.onSubmit();
     };

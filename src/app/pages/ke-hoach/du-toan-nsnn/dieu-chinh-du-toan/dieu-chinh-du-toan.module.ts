@@ -9,7 +9,7 @@ import { DialogTaoMoiComponent } from './dialog-tao-moi/dialog-tao-moi.component
 import { DialogThemKhoanMucComponent } from './dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { DieuChinhDuToanComponent } from './dieu-chinh-du-toan.component';
 import { TongHopBaoCaoComponent } from './tong-hop-bao-cao/tong-hop-bao-cao.component';
-
+import { DialogChonLoaiBaoQuanComponent } from './dialog-chon-loai-bao-quan/dialog-chon-loai-bao-quan.component';
 @NgModule({
     imports: [
         AddBaoCaoModule,
@@ -23,7 +23,8 @@ import { TongHopBaoCaoComponent } from './tong-hop-bao-cao/tong-hop-bao-cao.comp
         DanhSachBaoCaoDieuChinhComponent,
         DanhSachBaoCaoTuDonViCapDuoiComponent,
         DialogTaoMoiComponent,
-        DialogThemKhoanMucComponent
+        DialogThemKhoanMucComponent,
+        DialogChonLoaiBaoQuanComponent,
     ],
     exports: [
         DieuChinhDuToanComponent,

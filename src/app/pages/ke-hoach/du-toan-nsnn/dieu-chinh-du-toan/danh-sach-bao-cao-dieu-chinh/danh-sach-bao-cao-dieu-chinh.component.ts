@@ -57,10 +57,10 @@ export class DanhSachBaoCaoDieuChinhComponent implements OnInit {
         this.userInfo = this.userService.getUserLogin();
         this.spinner.show();
 
-        this.searchFilter.denNgay = new Date();
-        const newDate = new Date();
-        newDate.setMonth(newDate.getMonth() - 1);
-        this.searchFilter.tuNgay = newDate;
+        // this.searchFilter.denNgay = new Date();
+        // const newDate = new Date();
+        // this.searchFilter.tuNgay = newDate;
+        // newDate.setMonth(newDate.getMonth() - 1);
         this.searchFilter.donViTao = this.userInfo?.MA_DVI;
 
         //check quyen va cac nut chuc nang
@@ -164,10 +164,10 @@ export class DanhSachBaoCaoDieuChinhComponent implements OnInit {
             maDvi: this.searchFilter.donViTao,
             dotBcao: this.searchFilter.dotBcao,
             namBcao: this.searchFilter.nam,
-            // ngayTaoDen: Utils.fmtDate(this.searchFilter.denNgay),
-            // ngayTaoTu: Utils.fmtDate(this.searchFilter.tuNgay),
-            ngayTaoDen: "",
-            ngayTaoTu: "",
+            ngayTaoDen: Utils.fmtDate(this.searchFilter.denNgay),
+            ngayTaoTu: Utils.fmtDate(this.searchFilter.tuNgay),
+            // ngayTaoDen: "",
+            // ngayTaoTu: "",
             paggingReq: {
                 limit: this.pages.size,
                 page: this.pages.page,

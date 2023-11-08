@@ -20,6 +20,7 @@ import { TaoMoiGiaoDieuChinhDuToanComponent } from './tao-moi-giao-dieu-chinh-du
 import { TaoMoiGiaoDuToanComponent } from './tao-moi-giao-du-toan/tao-moi-giao-du-toan.component';
 import { TaoMoiQuyetDinhBtcComponent } from './tao-moi-quyet-dinh-btc/tao-moi-quyet-dinh-btc.component';
 import { TongHopBaoCaoCapDuoiComponent } from './tong-hop-bao-cao-cap-duoi/tong-hop-bao-cao-cap-duoi.component';
+import { DialogChonLoaiBaoQuanComponent } from './dialog-chon-loai-bao-quan/dialog-chon-loai-bao-quan.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,7 @@ import { TongHopBaoCaoCapDuoiComponent } from './tong-hop-bao-cao-cap-duoi/tong-
     DanhSachBaoCaoComponent,
     DialogThemKhoanMucComponent,
     DialogSelectTaiSanComponent,
-
+    DialogChonLoaiBaoQuanComponent
   ],
   imports: [
     CommonModule,
