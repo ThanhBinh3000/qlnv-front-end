@@ -68,6 +68,7 @@
                             <th scope="col">Loại đề nghị</th>
                             <th scope="col">Ngày tạo</th>
                             <th scope="col">Số quyết định chỉ tiêu</th>
+                            <th scope="col">Số công văn</th>
                             <th scope="col">Ngày công văn</th>
                             <th scope="col">Ngày trình duyệt</th>
                             <th scope="col">Ngày duyệt</th>
@@ -98,7 +99,7 @@
                             <td>
                                 {{ baoCao.soQdChiTieu }}
                             </td>
-                            <!-- <td>
+                            <td>
                                 <nz-upload *ngIf="status.save" [nzBeforeUpload]="beforeUploadCV">
                                     <button nz-button>
                                         <i nz-icon nzType="upload"></i>
@@ -108,7 +109,7 @@
                                 <div class="tep__sqd" (click)="downloadFile(null)">
                                     <span>{{baoCao.congVan?.fileName}}</span>
                                 </div>
-                            </td> -->
+                            </td>
                             <td>{{ Utils.fmtDate(baoCao.ngayCongVan) }}</td>
                             <td>
                                 {{ Utils.fmtDate(baoCao.ngayTrinh) }}

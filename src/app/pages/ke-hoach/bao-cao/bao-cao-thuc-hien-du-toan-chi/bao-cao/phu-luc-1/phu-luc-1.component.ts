@@ -394,6 +394,7 @@ export class PhuLucIComponent implements OnInit {
         })
 
         const request = JSON.parse(JSON.stringify(this.formDetail));
+        request.fileDinhKems = [];
         for (let iterator of this.listFile) {
             const id = iterator?.lastModified.toString();
             const noiDung = this.formDetail.lstFiles.find(e => e.id == id)?.noiDung;
