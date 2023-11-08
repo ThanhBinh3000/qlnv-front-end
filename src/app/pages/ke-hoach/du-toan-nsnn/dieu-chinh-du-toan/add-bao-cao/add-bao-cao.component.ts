@@ -337,9 +337,12 @@ export class AddBaoCaoComponent implements OnInit {
         if (!baoCaoTemp.fileDinhKems) {
             baoCaoTemp.fileDinhKems = [];
         }
-        for (const iterator of this.listFile) {
-            baoCaoTemp.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.path));
+        for (let iterator of this.listFile) {
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.baoCao.lstFiles.find(e => e.id == id)?.noiDung;
+            baoCaoTemp.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.path, noiDung));
         }
+        baoCaoTemp.fileDinhKems = baoCaoTemp.fileDinhKems.concat(this.baoCao.lstFiles.filter(e => typeof e.id == 'number'))
         //get file cong van url
         const file: any = this.fileDetail;
         if (file) {

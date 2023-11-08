@@ -194,7 +194,7 @@ export class PhuLuc8Component implements OnInit {
 
         this.lstCtietBcao.forEach(item => {
             if (!item.matHang) {
-                const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.matHang && e.htBaoQuan == item.maDmuc);
+                const dinhMuc = this.dsDinhMuc.find(e => (e.cloaiVthh == item.matHang || e.loaiVthh == item.matHang) && e.maDinhMuc == item.maDmuc);
                 item.matHang = dinhMuc?.tenDinhMuc;
                 item.dinhMuc = dinhMuc?.tongDmuc;
                 item.maDviTinh = dinhMuc?.donViTinh;
@@ -315,8 +315,11 @@ export class PhuLuc8Component implements OnInit {
 
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path));
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.formDetail.lstFiles.find(e => e.id == id)?.noiDung;
+            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path, noiDung));
         }
+        request.fileDinhKems = request.fileDinhKems.concat(this.formDetail.lstFiles.filter(e => typeof e.id == 'number'))
 
         request.lstCtietDchinh = lstCtietBcaoTemp;
         request.trangThai = trangThai;
@@ -607,7 +610,7 @@ export class PhuLuc8Component implements OnInit {
                                 id: uuid.v4() + 'FE',
                                 stt: stt + '.' + i.toString(),
                                 maMatHang: data.ma,
-                                maDmuc: lstTemp[i - 1].htBaoQuan,
+                                maDmuc: lstTemp[i - 1].maDinhMuc,
                                 matHang: lstTemp[i - 1].tenDinhMuc,
                                 maDviTinh: lstTemp[i - 1].donViTinh,
                                 level: 1,

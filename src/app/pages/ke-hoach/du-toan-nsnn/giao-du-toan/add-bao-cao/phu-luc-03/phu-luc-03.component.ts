@@ -9,18 +9,19 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
-import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from "uuid";
 import * as XLSX from 'xlsx';
 import { BtnStatus, Doc, Form } from '../../giao-du-toan.constant';
 import { DANH_MUC } from './phu-luc-03.constant';
-
+import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
+import { DialogChonLoaiBaoQuanComponent } from '../../dialog-chon-loai-bao-quan/dialog-chon-loai-bao-quan.component';
 export class ItemData {
     id: string;
     level: number;
     stt: string;
     danhMuc: string;
+    maDinhMuc: string;
     tenDanhMuc: string;
     maDviTinh: string;
     namDtCphiTaiCkhoSl: number;
@@ -112,6 +113,7 @@ export class PhuLuc03Component implements OnInit {
     listVattu: any[] = [];
     lstVatTuFull = [];
     dsDinhMuc: any[] = [];
+    dsBaoQuan: any[] = [];
     scrollX: string;
 
 
@@ -149,11 +151,11 @@ export class PhuLuc03Component implements OnInit {
     constructor(
         private _modalRef: NzModalRef,
         private spinner: NgxSpinnerService,
-        private lapThamDinhService: LapThamDinhService,
         private giaoDuToanService: GiaoDuToanChiService,
         private notification: NzNotificationService,
         private modal: NzModalService,
         private quanLyVonPhiService: QuanLyVonPhiService,
+        private danhMucService: DanhMucDungChungService,
     ) {
     }
 
@@ -170,7 +172,10 @@ export class PhuLuc03Component implements OnInit {
         Object.assign(this.status, this.dataInfo.status);
         await this.getFormDetail();
         this.namBcao = this.dataInfo.namBcao;
-
+        const baoquan = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_BAO_QUAN');
+        if (baoquan) {
+            this.dsBaoQuan = baoquan.data;
+        }
         if (this.lstCtietBcaos.length == 0) {
             this.linhVucChis.forEach(e => {
                 this.lstCtietBcaos.push(new ItemData({
@@ -300,8 +305,11 @@ export class PhuLuc03Component implements OnInit {
 
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path));
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.formDetail.lstFiles.find(e => e.id == id)?.noiDung;
+            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path, noiDung));
         }
+        request.fileDinhKems = request.fileDinhKems.concat(this.formDetail.lstFiles.filter(e => typeof e.id == 'number'))
 
         request.lstCtietBcaos = lstCtietBcaoTemp;
         request.trangThai = trangThai;
@@ -327,39 +335,6 @@ export class PhuLuc03Component implements OnInit {
 
         this.spinner.hide();
         this.getTotal()
-    }
-
-    // chuc nang check role
-    async onSubmit(mcn: string, lyDoTuChoi: string) {
-        if (!this.formDetail?.id) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING);
-            return;
-        }
-        const requestGroupButtons = {
-            id: this.formDetail.id,
-            trangThai: mcn,
-            lyDoTuChoi: lyDoTuChoi,
-        };
-        this.spinner.show();
-        await this.lapThamDinhService.approveCtietThamDinh(requestGroupButtons).toPromise().then(async (data) => {
-            if (data.statusCode == 0) {
-                this.formDetail.trangThai = mcn;
-                this.getStatusButton();
-                if (mcn == "0") {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-                } else {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-                }
-                this._modalRef.close({
-                    formDetail: this.formDetail,
-                });
-            } else {
-                this.notification.error(MESSAGE.ERROR, data?.msg);
-            }
-        }, err => {
-            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        });
-        this.spinner.hide();
     }
 
     //show popup tu choi
@@ -523,18 +498,17 @@ export class PhuLuc03Component implements OnInit {
         modalTuChoi.afterClose.subscribe(async (data) => {
             if (data) {
                 // const dm = this.dsDinhMuc.find(e => e.cloaiVthh == data.ma);
-                const dm = this.dsDinhMuc.find(e => e.cloaiVthh == data.ma || e.loaiVthh == data.ma);
-                if (this.lstCtietBcaos.findIndex(e => e.danhMuc == data.ma) == -1) {
-                    let stt: any;
-                    const index = this.lstCtietBcaos.findIndex(e => e.danhMuc == '0.2');
-                    if (data.ma.startsWith('02')) {
-                        stt = '0.2.' + (this.lstCtietBcaos.length - index).toString();
+                let stt: any;
+                const index = this.lstCtietBcaos.findIndex(e => e.danhMuc == '0.2');
+                if (data.ma.startsWith('02')) {
+                    const dm = this.dsDinhMuc.find(e => e.cloaiVthh == data.ma || e.loaiVthh == data.ma);
+                    if (this.lstCtietBcaos.findIndex(e => e.danhMuc == data.ma) == -1) {
                         //them vat tu moi vao bang
                         this.lstCtietBcaos.push(new ItemData({
-
                             id: uuid.v4() + 'FE',
                             stt: stt,
                             danhMuc: data.ma,
+                            maDinhMuc: dm?.maDinhMuc,
                             tenDanhMuc: data.ten,
                             maDviTinh: dm?.donViTinh,
                             namDtCphiTaiCkhoDm: dm?.tongDmuc,
@@ -542,46 +516,53 @@ export class PhuLuc03Component implements OnInit {
                         }))
                         this.lstCtietBcaos.forEach(e => {
                             if (e.stt.startsWith("0.2.")) {
-                                this.lstCtietBcaos[index].namDtCphiTaiCkhoDm = null;
-                                this.lstCtietBcaos[index].namDtCphiTaiCkhoSl = null;
-                                this.lstCtietBcaos[index].namDtCphiTaiCkhoDm = null;
-                                this.lstCtietBcaos[index].namDtCphiTaiCkhoTt = null;
-                                this.lstCtietBcaos[index].namDtCphiNgoaiCkhoTt = null;
-                                this.lstCtietBcaos[index].namDtTcong = null;
-                                this.lstCtietBcaos[index].namDtCphiNgoaiCkhoBq = null;
-                            }
-                        })
-                        this.getTotal()
-                        this.updateEditCache();
-                    } else {
-                        stt = '0.1.' + index.toString();
-                        this.lstCtietBcaos.splice(index, 0,
-                            new ItemData({
-                                id: uuid.v4() + 'FE',
-                                stt: stt,
-                                danhMuc: data.ma,
-                                tenDanhMuc: data.ten,
-                                maDviTinh: dm?.donViTinh,
-                                namDtCphiTaiCkhoDm: dm?.tongDmuc,
-                                level: 1,
-                            })
-                        )
-                        const index2 = this.lstCtietBcaos.findIndex(e => e.danhMuc == '0.1');
-                        this.lstCtietBcaos.forEach(e => {
-                            if (e.stt.startsWith("0.1.")) {
-                                this.lstCtietBcaos[index2].namDtCphiTaiCkhoDm = null;
-                                this.lstCtietBcaos[index2].namDtCphiTaiCkhoSl = null;
-                                this.lstCtietBcaos[index2].namDtCphiTaiCkhoDm = null;
-                                this.lstCtietBcaos[index2].namDtCphiTaiCkhoTt = null;
-                                this.lstCtietBcaos[index2].namDtCphiNgoaiCkhoTt = null;
-                                this.lstCtietBcaos[index2].namDtTcong = null;
-                                this.lstCtietBcaos[index2].namDtCphiNgoaiCkhoBq = null;
+                                this.lstCtietBcaos[index].clear();
                             }
                         })
                         this.getTotal()
                         this.updateEditCache();
                     }
-
+                } else if (data.ma.startsWith('01')) {
+                    let loaiBaoQuan: any;
+                    if (data.ma.startsWith('0101')) {
+                        const modalBaoQuan = this.modal.create({
+                            nzTitle: 'Danh sách loại bảo quản',
+                            nzContent: DialogChonLoaiBaoQuanComponent,
+                            nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
+                            nzMaskClosable: false,
+                            nzClosable: false,
+                            nzWidth: '500px',
+                            nzFooter: null,
+                            nzComponentParams: {
+                                dsBaoQuan: this.dsBaoQuan,
+                            },
+                        });
+                        await modalBaoQuan.afterClose.toPromise().then(async (res) => {
+                            if (res) { loaiBaoQuan = res; }
+                        })
+                    }
+                    const dm = this.dsDinhMuc.find(e => (e.cloaiVthh == data.ma || e.loaiVthh == data.ma) && (!loaiBaoQuan || e.loaiBaoQuan == loaiBaoQuan.ma));
+                    if (this.lstCtietBcaos.findIndex(e => e.danhMuc == data.ma && (!dm || e.maDinhMuc == dm?.maDinhMuc)) == -1) {
+                        stt = '0.1.' + index.toString();
+                        this.lstCtietBcaos.splice(index, 0, new ItemData({
+                            id: uuid.v4() + 'FE',
+                            stt: stt,
+                            danhMuc: data.ma,
+                            tenDanhMuc: data.ten + (loaiBaoQuan ? (' (' + loaiBaoQuan.giaTri + ')') : ''),
+                            maDviTinh: dm?.donViTinh,
+                            namDtCphiTaiCkhoDm: dm?.tongDmuc,
+                            maDinhMuc: dm?.maDinhMuc,
+                            level: 1,
+                        }))
+                        const index2 = this.lstCtietBcaos.findIndex(e => e.danhMuc == '0.1');
+                        this.lstCtietBcaos.forEach(e => {
+                            if (e.stt.startsWith("0.1.")) {
+                                this.lstCtietBcaos[index2].clear();
+                            }
+                        })
+                        this.getTotal()
+                        this.updateEditCache();
+                    }
                 }
             }
         });

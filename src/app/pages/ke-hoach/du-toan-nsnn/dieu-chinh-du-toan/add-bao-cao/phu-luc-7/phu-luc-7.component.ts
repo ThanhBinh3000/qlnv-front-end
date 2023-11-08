@@ -10,19 +10,21 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DialogAddVatTuComponent } from 'src/app/pages/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/von-phi-hang-du-tru-quoc-gia/bao-cao-quyet-toan/dialog-add-vat-tu/dialog-add-vat-tu.component';
 import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import * as XLSX from 'xlsx';
 import { BtnStatus, Doc, Form } from '../../dieu-chinh-du-toan.constant';
 import { TEN_HANG } from './phu-luc-7.constant';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { DialogDanhSachVatTuHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-vat-tu-hang-hoa/dialog-danh-sach-vat-tu-hang-hoa.component';
+import { DialogChonLoaiBaoQuanComponent } from '../../dialog-chon-loai-bao-quan/dialog-chon-loai-bao-quan.component';
+import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 export class ItemData {
     level: any;
     id: string;
     qlnvKhvonphiDchinhCtietId: string;
     stt: string;
     dmucHang: string;
+    maDinhMuc: string;
     tenHang: string;
     donViTinh: string;
     khoachDpNhan: string;
@@ -147,6 +149,7 @@ export class PhuLuc7Component implements OnInit {
     namBcao: number;
     //danh muc
     lstCtietBcao: ItemData[] = [];
+
     keys = [
         "tdiemBcaoChiPhiTaiCuaKho",
         "tdiemBcaoChiPhiNgoaiCuaKho",
@@ -163,6 +166,7 @@ export class PhuLuc7Component implements OnInit {
     ]
     lstVatTuFull: any[] = [];
     dsDinhMuc: any[] = [];
+    dsBaoQuan: any[] = [];
     scrollX: string;
     listIdDelete = ""
 
@@ -206,6 +210,7 @@ export class PhuLuc7Component implements OnInit {
         private modal: NzModalService,
         public userService: UserService,
         private quanLyVonPhiService: QuanLyVonPhiService,
+        private danhMucService: DanhMucDungChungService,
     ) { }
 
     async ngOnInit() {
@@ -219,7 +224,10 @@ export class PhuLuc7Component implements OnInit {
         Object.assign(this.status, this.dataInfo.status);
         await this.getFormDetail();
         this.namBcao = this.dataInfo.namBcao;
-
+        const baoquan = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_BAO_QUAN');
+        if (baoquan) {
+            this.dsBaoQuan = baoquan.data;
+        }
         if (this.status.general) {
             this.noiDungs = TEN_HANG;
             this.scrollX = Table.tableWidth(350, 21, 1, 110);
@@ -426,8 +434,11 @@ export class PhuLuc7Component implements OnInit {
 
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path));
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.formDetail.lstFiles.find(e => e.id == id)?.noiDung;
+            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path, noiDung));
         }
+        request.fileDinhKems = request.fileDinhKems.concat(this.formDetail.lstFiles.filter(e => typeof e.id == 'number'))
 
         request.lstCtietDchinh = lstCtietBcaoTemp;
         request.trangThai = trangThai;
@@ -540,6 +551,7 @@ export class PhuLuc7Component implements OnInit {
                 stt: data.stt,
                 level: data.level,
                 dmucHang: data.dmucHang,
+                maDinhMuc: data.maDinhMuc,
                 tenHang: data.tenHang,
                 donViTinh: data.donViTinh,
             })
@@ -651,40 +663,95 @@ export class PhuLuc7Component implements OnInit {
         });
         modalTuChoi.afterClose.subscribe(async (res) => {
             if (res) {
-                let parentItem: ItemData = this.lstCtietBcao.find(e => e.dmucHang == res.ma && Table.preIndex(e.stt) == data.stt);
-                //them phan tu cha neu chua co
-                if (!parentItem) {
-                    parentItem = new ItemData({
+                let parentItem: ItemData
+                if (!res.ma.startsWith('01')) {
+                    parentItem = this.lstCtietBcao.find(e => e.dmucHang == res.ma && Table.preIndex(e.stt) == data.stt);
+                    const dm = this.dsDinhMuc.find(e => e.cloaiVthh == res.ma || e.loaiVthh == res.ma);
+                    //them phan tu cha neu chua co
+                    if (!parentItem) {
+                        parentItem = new ItemData({
+                            id: uuid.v4() + 'FE',
+                            dmucHang: res.ma,
+                            maDinhMuc: dm?.maDinhMuc,
+                            level: data.level + 1,
+                            tenHang: res.ten,
+                            donViTinh: res.maDviTinh,
+                        })
+                        this.lstCtietBcao = Table.addChild(data.id, parentItem, this.lstCtietBcao);
+                        const item: ItemData = new ItemData({
+                            id: uuid.v4() + 'FE',
+                            dmucHang: res.ma,
+                            maDinhMuc: dm?.maDinhMuc,
+                            dmucChiPhiTaiCuaKho: dm?.tongDmuc,
+                            level: parentItem.level + 1,
+                        })
+                        this.lstCtietBcao = Table.addChild(parentItem.id, item, this.lstCtietBcao);
+                    } else {
+                        const item: ItemData = new ItemData({
+                            id: uuid.v4() + 'FE',
+                            dmucHang: res.ma,
+                            maDinhMuc: dm?.maDinhMuc,
+                            dmucChiPhiTaiCuaKho: dm?.tongDmuc,
+                            level: parentItem.level + 1,
+                        })
+                        this.lstCtietBcao = Table.addChild(parentItem.id, item, this.lstCtietBcao);
+                    }
+                } else if (res.ma.startsWith('01')) {
+                    let loaiBaoQuan: any;
+                    if (res.ma.startsWith('0101')) {
+                        const modalBaoQuan = this.modal.create({
+                            nzTitle: 'Danh sách loại bảo quản',
+                            nzContent: DialogChonLoaiBaoQuanComponent,
+                            nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
+                            nzMaskClosable: false,
+                            nzClosable: false,
+                            nzWidth: '500px',
+                            nzFooter: null,
+                            nzComponentParams: {
+                                dsBaoQuan: this.dsBaoQuan,
+                            },
+                        });
+                        await modalBaoQuan.afterClose.toPromise().then(async (resp) => {
+                            if (resp) { loaiBaoQuan = resp; }
+                        })
+                    }
 
-                        id: uuid.v4() + 'FE',
-                        dmucHang: res.ma,
-                        level: data.level + 1,
-                        tenHang: res.ten,
-                        donViTinh: res.maDviTinh,
-                    })
-                    this.lstCtietBcao = Table.addChild(data.id, parentItem, this.lstCtietBcao);
-                    const item: ItemData = new ItemData({
-                        id: uuid.v4() + 'FE',
-                        dmucHang: res.ma,
-                        level: parentItem.level + 1,
-                    })
-                    this.lstCtietBcao = Table.addChild(parentItem.id, item, this.lstCtietBcao);
-                } else {
-                    const item: ItemData = new ItemData({
-                        id: uuid.v4() + 'FE',
-                        dmucHang: res.ma,
-                        level: parentItem.level + 1,
-                    })
-                    this.lstCtietBcao = Table.addChild(parentItem.id, item, this.lstCtietBcao);
+                    const dm = this.dsDinhMuc.find(e => (e.cloaiVthh == res.ma || e.loaiVthh == res.ma) && (!loaiBaoQuan || e.loaiBaoQuan == loaiBaoQuan.ma));
+
+                    parentItem = this.lstCtietBcao.find(e => e.dmucHang == res.ma && e.maDinhMuc == dm.maDinhMuc && Table.preIndex(e.stt) == data.stt);
+                    if (this.lstCtietBcao.findIndex(e => e.dmucHang == data.ma && (!dm || e.maDinhMuc == dm?.maDinhMuc)) == -1) {
+                        if (!parentItem) {
+                            parentItem = new ItemData({
+                                id: uuid.v4() + 'FE',
+                                dmucHang: res.ma,
+                                maDinhMuc: dm?.maDinhMuc,
+                                level: data.level + 1,
+                                tenHang: res.ten + (loaiBaoQuan ? (' (' + loaiBaoQuan.giaTri + ')') : ''),
+                                donViTinh: res.maDviTinh,
+                            })
+                            this.lstCtietBcao = Table.addChild(data.id, parentItem, this.lstCtietBcao);
+                            const item: ItemData = new ItemData({
+                                id: uuid.v4() + 'FE',
+                                dmucHang: res.ma,
+                                maDinhMuc: dm?.maDinhMuc,
+                                dmucChiPhiTaiCuaKho: dm?.tongDmuc,
+                                level: parentItem.level + 1,
+                            })
+                            this.lstCtietBcao = Table.addChild(parentItem.id, item, this.lstCtietBcao);
+                        } else {
+                            const item: ItemData = new ItemData({
+                                id: uuid.v4() + 'FE',
+                                dmucHang: res.ma,
+                                maDinhMuc: dm?.maDinhMuc,
+                                dmucChiPhiTaiCuaKho: dm?.tongDmuc,
+                                level: parentItem.level + 1,
+                            })
+                            this.lstCtietBcao = Table.addChild(parentItem.id, item, this.lstCtietBcao);
+                        }
+                    }
                 }
 
                 const stt = this.lstCtietBcao.find(e => e.id == parentItem.id).stt;
-                this.lstCtietBcao.forEach(item => {
-                    if (item.level == 2) {
-                        const dinhMuc = this.dsDinhMuc.find(e => (!e.cloaiVthh && e.loaiVthh == item.dmucHang) || e.cloaiVthh == item.dmucHang);
-                        item.dmucChiPhiTaiCuaKho = dinhMuc?.tongDmuc;
-                    }
-                })
                 this.sum(stt + '.1');
                 this.updateEditCache();
             }

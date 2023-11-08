@@ -45,7 +45,8 @@
                                     31/12/{{namBcao}} (không tính HĐ 68)) </th>
                                 <th scope="col" rowSpan="4">Tổng nhu cầu <br> tiền lương năm <br> {{namBcao - 1}}
                                     <br> (năm kế
-                                    hoạchh)</th>
+                                    hoạchh)
+                                </th>
                                 <th scope="colgroup" colSpan="4">Bao gồm</th>
                                 <th scope="colgroup" colSpan="3">Dự toán, kinh phí <br> được sử dụng trong năm</th>
                                 <th scope="col" rowSpan="4">Dự toán điều <br> chỉnh <br> (+ tăng) (- giảm)</th>
@@ -641,8 +642,9 @@
                         <nz-table nzBordered class="table__body">
                             <thead>
                                 <tr>
-                                    <th scope="col" nzWidth="7%">STT</th>
-                                    <th scope="col">Tên file</th>
+                                    <th scope="col" nzWidth="5%">STT</th>
+                                    <th scope="col" nzWidth="25%">Tên file</th>
+                                    <th scope="col" nzWidth="55%">Nội dung</th>
                                     <th scope="col" nzWidth="15%"></th>
                                 </tr>
                             </thead>
@@ -651,10 +653,26 @@
                                     <td>{{ i + 1 }} </td>
                                     <td>{{ data.fileName }}</td>
                                     <td>
+                                        <ng-container *ngIf="data.isEdit; else readOnly">
+                                            <input nz-input [(ngModel)]="data.noiDung" />
+                                        </ng-container>
+                                        <ng-template #readOnly>
+                                            {{ data.noiDung }}
+                                        </ng-template>
+                                    </td>
+                                    <td>
                                         <a (click)="downloadFile(data.id)">
                                             <i class="fa fa-eye"></i>
                                         </a>
-                                        <a (click)="deleteFile(data.id)">
+                                        <a *ngIf="status.general" (click)="data.isEdit = !data.isEdit">
+                                            <ng-container *ngIf="data.isEdit; else saveText">
+                                                <i class="fa fa-save"></i>
+                                            </ng-container>
+                                            <ng-template #saveText>
+                                                <i class="fa fa-pencil"></i>
+                                            </ng-template>
+                                        </a>
+                                        <a *ngIf="status.general" (click)="deleteFile(data.id)">
                                             <i class="fa fa-trash-o do"></i>
                                         </a>
                                     </td>
