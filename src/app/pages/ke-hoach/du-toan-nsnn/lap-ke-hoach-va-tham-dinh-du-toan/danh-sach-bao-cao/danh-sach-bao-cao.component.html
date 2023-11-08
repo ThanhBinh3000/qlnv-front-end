@@ -7,12 +7,12 @@
                     [class]="(searchFilter.nam >= 1000 &&  searchFilter.nam <= 2999) || !searchFilter.nam && this.searchFilter.nam !== 0 ?'' : 'input-error-validate'"
                     [(ngModel)]="searchFilter.nam"></nz-input-number>
             </div>
-            <div nz-col nzSpan="3">
+            <!-- <div nz-col nzSpan="3">
                 <label class="search__label">Lần báo cáo</label>
                 <nz-input-number [nzSize]="'small'"
                     [class]="!searchFilter.lan && this.searchFilter.lan !== 0 && this.searchFilter.lan <= 0 ?'' : 'input-error-validate'"
                     [(ngModel)]="searchFilter.lan"></nz-input-number>
-            </div>
+            </div> -->
             <div nz-col nzSpan="3">
                 <label class="search__label">Ngày lập từ</label>
                 <nz-date-picker class="search__input" [(ngModel)]="searchFilter.tuNgay" nzFormat="dd/MM/yyyy">

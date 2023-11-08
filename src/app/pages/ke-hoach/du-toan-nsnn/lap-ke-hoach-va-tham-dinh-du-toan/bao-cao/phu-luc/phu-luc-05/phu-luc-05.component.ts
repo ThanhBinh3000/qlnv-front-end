@@ -301,7 +301,7 @@ export class PhuLuc05Component implements OnInit {
 		if (this.status.general) {
 			lstCtietBcaoTemp?.forEach(item => {
 				item.keHoachVonTd = item.keHoachVon;
-				item.chenhLech = Operator.sum([-item.keHoachVon, item.keHoachVonTd]);
+				item.chenhLech = Operator.sum([item.keHoachVon ? -item.keHoachVon : null, item.keHoachVonTd]);
 			})
 		}
 

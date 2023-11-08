@@ -240,7 +240,7 @@ export class BieuMau131Component implements OnInit {
         if (this.status.general) {
             lstCtietBcaoTemp.forEach(item => {
                 item.giaTriThamDinh = item.namKh;
-                item.chenhLech = Operator.sum([item.giaTriThamDinh, -item.namKh]);
+                item.chenhLech = Operator.sum([item.giaTriThamDinh, item.namKh ? -item.namKh : null]);
             })
         }
 
