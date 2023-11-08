@@ -172,7 +172,11 @@
                 (click)="taoQdinh(data)">
                 <i class="icon htvbdh_tcdt_tao-qd"></i>
               </a>
-              <a *ngIf="data.trangThai== STATUS.CHUA_TAO_QD && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_TONGHOP_XOA')"
+              <a *ngIf=" ( data.trangThai != STATUS.CHUA_TAO_QD ) && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_TONGHOP_TONGHOP')"
+                 (click)="showQd(data)">
+                <i class="icon htvbdh_tcdt_tao-qd"></i>
+              </a>
+              <a *ngIf="(data.trangThai== STATUS.CHUA_TAO_QD || data.trangThai== STATUS.DA_DU_THAO_QD) && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_TONGHOP_XOA')"
                 (click)="delete(data)">
                 <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
