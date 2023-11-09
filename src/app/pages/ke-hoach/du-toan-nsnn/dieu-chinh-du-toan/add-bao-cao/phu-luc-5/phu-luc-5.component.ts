@@ -296,7 +296,7 @@ export class PhuLuc5Component implements OnInit {
             }
         }
         lstVtuTemp.forEach(item => {
-            this.sum(item.stt + '.1');
+            this.sum(item.stt);
         })
     }
 

@@ -256,7 +256,7 @@ export class PhuLuc01NhapComponent implements OnInit {
             }
         }
         lstVtuTemp.forEach(item => {
-            this.sum(item.stt + '.1');
+            this.sum(item.stt);
         })
     }
 
