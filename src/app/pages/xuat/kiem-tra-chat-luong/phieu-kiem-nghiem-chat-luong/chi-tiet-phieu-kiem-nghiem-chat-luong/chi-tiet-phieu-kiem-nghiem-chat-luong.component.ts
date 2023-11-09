@@ -127,7 +127,8 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       thuKho: [],
       hinhThucBaoQuan: [new Array()],
       tenNganLoKho: [],
-      ketLuanCuoi: []
+      ketLuanCuoi: [],
+      slHangBaoQuan: []
     });
   }
 
@@ -360,7 +361,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     }).then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
-          this.dsBbLayMau = res.data.content;
+          this.dsBbLayMau = Array.isArray(res.data.content) ? res.data.content.filter(f => f.soQdGnv === this.formData.value.soQdGnv) : []; //TODO: Filter frontend=>filter BE
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -380,8 +381,8 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.dsQdGnv,
-        dataHeader: ['Số quyết định xuất hàng', 'Trích yếu', 'Ngày ký'],
-        dataColumn: ['soBbQd', 'trichYeu', 'ngayKy'],
+        dataHeader: ['Số quyết định xuất hàng', 'Ngày ký', 'Mục đích xuất'],
+        dataColumn: ['soBbQd', 'ngayKy', 'mucDichXuat'],
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -415,8 +416,8 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.dsBbLayMau,
-        dataHeader: ['Số biên bản', 'Trích yếu', 'Ngày ký'],
-        dataColumn: ['soBbQd', 'trichYeu', 'ngayKy'],
+        dataHeader: ['Số biên bản', 'Ngày lấy mẫu'],
+        dataColumn: ['soBbQd', 'ngayBbLayMau'],
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -518,7 +519,8 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
           }
           this.buildTableView();
           if (data.maDiaDiem) {
-            this.tenThuKho(data.maDiaDiem)
+            this.tenThuKho(data.maDiaDiem);
+            this.kiemTraTonKho(data.maDiaDiem)
           }
 
         }
@@ -577,7 +579,17 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     });
     this.spinner.hide();
   }
-
+  async kiemTraTonKho(maDvi: string) {
+    const { loaiVthh, cloaiVthh } = this.formData.value;
+    const body = {
+      maDvi, maVthh: cloaiVthh ? cloaiVthh : loaiVthh
+    }
+    // let tonKhoCloaiVthh: number = 0;
+    const res = await this.mangLuoiKhoService.slTon(body);
+    if (res.msg === MESSAGE.SUCCESS) {
+      this.formData.patchValue({ slHangBaoQuan: res.data })
+    }
+  }
   downloadPdf() {
     saveAs(this.pdfSrc, this.templateName + '.pdf');
   }

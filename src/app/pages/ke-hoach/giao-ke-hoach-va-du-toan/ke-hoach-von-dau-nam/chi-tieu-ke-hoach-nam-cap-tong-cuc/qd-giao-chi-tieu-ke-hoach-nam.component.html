@@ -108,7 +108,7 @@
                 <td class="text-left">{{ data.trangThaiDuyet }}</td>
                 <td>
                   <a
-                    *ngIf="data.trangThai !=  STATUS.DANG_NHAP_DU_LIEU && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_QD_TCGIAO_XEM')"
+                    *ngIf="data.trangThai !=  STATUS.TU_CHOI_LDV && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_QD_TCGIAO_XEM')"
                     (click)="redirectThongTinChiTieuKeHoachNam(data.id, true)">
                     <i class=" icon htvbdh_eye"></i>
                   </a>
@@ -266,7 +266,7 @@
               <span>Xuất file</span>
             </button>
             <button
-              *ngIf="(userService.isTongCuc && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_QD_TCGIAO_THEM')) || (userService.isCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_CTKH_CUCGIAO'))"
+              *ngIf="(userService.isTongCuc && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_QD_TCGIAO_THEM')) || (userService.isCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_QD_CUCGIAO_THEM'))"
               type="button"
               class="btn btn-main" (click)="redirectThongTinChiTieuKeHoachNam(0)">
               <i class="icon htvbdh_dau-cong"></i>

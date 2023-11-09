@@ -4,25 +4,28 @@
       <i class="fa fa-arrow-left"></i>
       <span> Quay lại </span>
     </button>
-    <button *ngIf="idInput" type="button" class="btn btn-sub" (click)="preview(idInput)">
+    <button *ngIf="idInput" type="button" class="btn btn-sub do"
+            (click)="xemTruoc(idInput,loaiVthh === LOAI_HANG_DTQG.VAT_TU ? templateNameVt: templateNameLt)">
       <i class="icon htvbdh_totrinh"></i>
       <span> Xem trước </span>
     </button>
-    <button
-      *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU &&  userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_THEM') &&
+    <ng-container>
+      <button
+        *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU &&  userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_THEM') &&
        userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_BANHANH') && !isView"
-      type="button" class="btn btn-sub xanh-nhat"
-      (click)="saveAndSend(STATUS.BAN_HANH, 'Bạn có muốn lưu và ban hành quyết định ?','Bạn đã lưu và ban hành quyết định thành công!')">
-      <i class="icon htvbdh_chuyenvanthu"></i>
-      <span>Ban hành</span>
-    </button>
-    <button
-      *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU  && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_THEM') && !isView"
-      type="button" class="btn btn-main"
-      (click)="save()">
-      <i class="icon htvbdh_tcdt_save"></i>
-      <span>Lưu</span>
-    </button>
+        type="button" class="btn btn-sub xanh-nhat"
+        (click)="saveAndSend(STATUS.BAN_HANH, 'Bạn có muốn lưu và ban hành quyết định ?','Bạn đã lưu và ban hành quyết định thành công!')">
+        <i class="icon htvbdh_chuyenvanthu"></i>
+        <span>Ban hành</span>
+      </button>
+      <button
+        *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU  && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_THEM') && !isView"
+        type="button" class="btn btn-main"
+        (click)="save()">
+        <i class="icon htvbdh_tcdt_save"></i>
+        <span>Lưu</span>
+      </button>
+    </ng-container>
   </div>
 </nz-affix>
 <div class="bg-trang">
@@ -113,23 +116,17 @@
             </div>
             <div nz-col [nzSpan]="24">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true">
-                  Căn cứ pháp lý
-                </nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Căn cứ pháp lý</nz-form-label>
                 <div class="list-file">
-                  <file-list [disabled]="isView" [isCanCuPL]="true"
-                             [data]="canCuPhapLy"></file-list>
+                  <file-list [data]="canCuPhapLy" [isCanCuPL]="true" [isViewDetail]="isView"></file-list>
                 </div>
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="24">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true">
-                  File đính kèm QĐ đã ban hành
-                </nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true"> File đính kèm QĐ đã ban hành</nz-form-label>
                 <div class="list-file">
-                  <file-list [disabled]="isView" [isCanCuPL]="true"
-                             [data]="fileDinhKem"></file-list>
+                  <file-list [data]="fileDinhKem" [isViewDetail]="isView"></file-list>
                 </div>
               </nz-form-item>
             </div>
@@ -292,17 +289,24 @@
 <ng-template #error let-control>
   <app-template-error #error [control]="control"></app-template-error>
 </ng-template>
-<nz-modal [nzWidth]="'75%'" [nzClosable]="false" [(nzVisible)]="showDlgPreview"
-          nzTitle="QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH BÁN ĐẤU GIÁ" nzWidth="100%" (nzOnCancel)="closeDlg()">
+<nz-modal [nzWidth]="'75%'" [nzClosable]="false" [(nzVisible)]="showDlgPreview" nzWidth="100%"
+          (nzOnCancel)="closeDlg()">
   <div *nzModalContent class="modal__content">
     <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
   </div>
   <div *nzModalFooter>
-    <button nz-button (click)="downloadPdf()" class="modal__button--save">
+    <button nz-button (click)="printPreview()"
+            class="modal__button--save">
+      <i class="icon htvbdh_printer"></i>
+      In
+    </button>
+    <button nz-button (click)="downloadPdf(loaiVthh === LOAI_HANG_DTQG.VAT_TU ? templateNameVt : templateNameLt)"
+            class="modal__button--save">
       <i class="icon htvbdh_file-pdf"></i>
       Xuất .pdf
     </button>
-    <button nz-button (click)="downloadWord()" class="modal__button--save">
+    <button nz-button (click)="downloadWord(loaiVthh === LOAI_HANG_DTQG.VAT_TU ? templateNameVt : templateNameLt)"
+            class="modal__button--save">
       <i class="icon htvbdh_file-word"></i>
       Xuất .docx
     </button>

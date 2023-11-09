@@ -1,4 +1,4 @@
-<div *ngIf="!isDetail" class="luong-thuc__danh-sach">
+<div *ngIf="!isDetail">
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
@@ -211,12 +211,12 @@
             <td>{{ data.nam }}</td>
             <td>{{ data.loaiNhapXuat }}</td>
             <td>{{ data.soDx}}</td>
-            <td>{{ data.tenDviDx }}</td>
+            <td class="break">{{ data.tenDviDx }}</td>
             <td class="text-center">{{ data.ngayDx | date: globals.dateFormat }}</td>
             <td class="text-center">{{ data.ngayPduyet| date: globals.dateFormat }}</td>
-            <td>{{ data.tenVthh }}</td>
+            <td class="break">{{ data.tenVthh }}</td>
             <!--          <td>{{ data.tongSoLuong| number: globals.numberFormat:globals.locale}}</td>-->
-            <td>{{ data.trichYeu }}</td>
+            <td class="break">{{ data.trichYeu }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td>{{ data.tenTrangThaiTh }}</td>
             <td>{{ data.idThop }}</td>
@@ -232,9 +232,9 @@
                 (click)="redirectDetail(data.id, false)">
                 <i class="fa fa-pencil" title="Sửa"></i>
               </a>
-              <a *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.TAO_QD)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_THEM') && !data.soQdPd && !data.maThop"
-                (click)="taoQuyetDinh(data)">
-                <i class="icon htvbdh_soanthao" title="Duyệt"></i>
+              <a *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.TAO_QD) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_THEM') && !data.soQdPd"
+                (click)="taoQuyetDinhPdPa(data)">
+                <i class="icon htvbdh_soanthao" title="Tạo quyết định"></i>
               </a>
               <a *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_XOA')"
                 (click)="delete(data)">
@@ -290,6 +290,7 @@
   <app-template-error #error [control]="control"></app-template-error>
 </ng-template>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-chi-tiet-de-xuat [idSelected]="idSelected" [isView]="isView" (showListEvent)="showList()">
+  <app-chi-tiet-de-xuat [idSelected]="idSelected" [isView]="isView" (showListEvent)="showList()"
+    (taoQuyetDinh)="taoQuyetDinh($event)">
   </app-chi-tiet-de-xuat>
 </div>

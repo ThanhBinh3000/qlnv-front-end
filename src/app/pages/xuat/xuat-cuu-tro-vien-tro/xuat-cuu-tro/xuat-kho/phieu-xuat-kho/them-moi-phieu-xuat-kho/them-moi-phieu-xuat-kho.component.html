@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix" *ngIf="!isViewOnModal">
+<nz-affix [nzOffsetTop]="globals.prop.MN_LV3" class="btn-affix" *ngIf="!isViewOnModal">
   <div class="btn-group">
     <button type="button" class="btn btn-sub" (click)="goBack()">
       <i class="fa fa-arrow-left"></i>
@@ -470,7 +470,7 @@
               <th colSpan="2">Số lượng</th>
               <!-- <th rowSpan="2">Đơn giá (3)</th>
               <th rowSpan="2">Thành tiền (4) = (2) x (3)</th> -->
-              <th rowSpan="2">Hành động</th>
+              <th rowSpan="2" *ngIf="showAction()">Hành động</th>
             </tr>
             <tr>
               <th>Theo chứng từ (1)</th>
@@ -503,10 +503,13 @@
                   <nz-input-group>
                     <!-- <input nz-input formControlName="theoChungTu"
                       [readonly]="isView || (!formData.value.tenCloaiVthh && !formData.value.tenLoaiVthh)" /> -->
-                    <nz-input-number nz-input [nzSize]="'small'" formControlName="theoChungTu"
+                    <!-- <nz-input-number nz-input [nzSize]="'small'" formControlName="theoChungTu"
                       [nzDisabled]="isView || (!formData.value.tenCloaiVthh && !formData.value.tenLoaiVthh)"
                       [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-                    </nz-input-number>
+                    </nz-input-number> -->
+                    <input currencyMask class="money-input" formControlName="theoChungTu"
+                      [readOnly]="isView || (!formData.value.tenCloaiVthh && !formData.value.tenLoaiVthh)"
+                      [options]="amount1" />
                   </nz-input-group>
                 </nz-form-control>
               </td>
@@ -516,10 +519,13 @@
                     <!-- <nz-input-number nz-input [nzSize]="'small'" formControlName="thucXuat" [nzDisabled]="isView"
                       [nzFormatter]="globals.formatter" [nzParser]="globals.parser" (input)="calculateSum()">
                     </nz-input-number> -->
-                    <nz-input-number nz-input [nzSize]="'small'" formControlName="thucXuat"
+                    <!-- <nz-input-number nz-input [nzSize]="'small'" formControlName="thucXuat"
                       [nzDisabled]="isView || (!formData.value.tenCloaiVthh && !formData.value.tenLoaiVthh)"
                       [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-                    </nz-input-number>
+                    </nz-input-number> -->
+                    <input currencyMask class="money-input" formControlName="thucXuat"
+                      [readOnly]="isView || (!formData.value.tenCloaiVthh && !formData.value.tenLoaiVthh)"
+                      [options]="amount1" />
                   </nz-input-group>
                 </nz-form-control>
               </td>
@@ -531,7 +537,7 @@
                 {{calculateSum() | number: '1.0-1' :
                 'vi_VN'}}
               </td> -->
-              <td>
+              <td *ngIf="showAction()">
                 <a (click)="clearItemRow(formData.value.id)">
                   <i class="fa fa-refresh"></i>
                 </a>

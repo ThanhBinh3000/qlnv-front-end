@@ -58,7 +58,7 @@
             <nz-form-item>
               <nz-form-label>Cục DTNN KV</nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error" >
-                <nz-select nzShowSearch formControlName="maCuc" (ngModelChange)="changeCuc($event)" nzAllowClear>
+                <nz-select nzShowSearch formControlName="maCuc" (ngModelChange)="changeCuc($event)" nzAllowClear [nzDisabled]="!userService.isTongCuc()">
                   <nz-option *ngFor="let p of dsDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -68,7 +68,7 @@
             <nz-form-item>
               <nz-form-label>Chi Cục DTNN KV</nz-form-label>
               <nz-form-control nz-col >
-                <nz-select nzShowSearch formControlName="maChiCuc" nzAllowClear>
+                <nz-select nzShowSearch formControlName="maChiCuc" nzAllowClear [nzDisabled]="userService.isChiCuc()">
                   <nz-option *ngFor="let p of listChiCuc" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -78,7 +78,7 @@
       </form>
     </nz-card>
     <div class="cangiua group-button-search">
-      <button nz-button class="search__button--clear" (click)="clearFilter()">
+      <button nz-button class="search__button--clear" (click)="clearFilter()" *ngIf="userService.isTongCuc()">
         <i class="icon  htvbdh_nhap-lai1"></i>
         Xóa điều kiện
       </button>

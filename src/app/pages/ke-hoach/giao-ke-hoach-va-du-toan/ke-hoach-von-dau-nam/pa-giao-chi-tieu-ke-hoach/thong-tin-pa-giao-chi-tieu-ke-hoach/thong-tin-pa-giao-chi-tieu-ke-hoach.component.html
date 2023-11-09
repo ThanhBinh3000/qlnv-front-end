@@ -51,7 +51,7 @@
       </div>
     </div>
   </nz-affix>
-  <nz-alert *ngIf='thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV ' nzShowIcon nzType='error' class='mg-t-10'
+  <nz-alert *ngIf='thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV  || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDC' nzShowIcon nzType='error' class='mg-t-10'
             nzMessage='Lý do từ chối' nzDescription='{{thongTinChiTieuKeHoachNam.lyDoTuChoi}}'>
   </nz-alert>
   <nz-card class='mt16 flex-card p-lr16'>
@@ -538,17 +538,17 @@
               <th></th>
               <th class='first-last-row-table background-last-row'> Chỉ tiêu của {{formData.value.loaiCanCu}} </th>
               <th
-                class='text-right text-btc '> {{(dataQdCanCu ? dataQdCanCu.ltThocMua : 0)|  number: '1.0-1': 'vi_VN'}}</th>
+                class='text-right text-btc '> {{(dataQdCanCu ? dataQdCanCu.ltThocMua : 0)|  number: '1.0-3': 'vi_VN'}}</th>
               <th
-                class='text-right text-btc '> {{(dataQdCanCu ? dataQdCanCu.ltGaoMua : 0) |  number: '1.0-1': 'vi_VN'}}</th>
-              <th></th>
-              <th
-                class='text-right text-btc '>  {{(dataQdCanCu ? dataQdCanCu.ltThocXuat : 0)|  number: '1.0-1': 'vi_VN' }}</th>
-              <th></th>
-              <th></th>
+                class='text-right text-btc '> {{(dataQdCanCu ? dataQdCanCu.ltGaoMua : 0) |  number: '1.0-3': 'vi_VN'}}</th>
               <th></th>
               <th
-                class='text-right text-btc '>  {{(dataQdCanCu ? dataQdCanCu.ltGaoXuat : 0) |  number: '1.0-1': 'vi_VN'}}</th>
+                class='text-right text-btc '>  {{(dataQdCanCu ? dataQdCanCu.ltThocXuat : 0)|  number: '1.0-3': 'vi_VN' }}</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th
+                class='text-right text-btc '>  {{(dataQdCanCu ? dataQdCanCu.ltGaoXuat : 0) |  number: '1.0-3': 'vi_VN'}}</th>
               <th></th>
               <th></th>
               <th></th>
@@ -571,17 +571,17 @@
               <th></th>
               <th class='first-last-row-table background-last-row'> Chỉ tiêu của TCDT</th>
               <th
-                class='text-right text-btc '> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltThocMua : 0)|  number: '1.0-1': 'vi_VN'}}</th>
+                class='text-right text-btc '> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltThocMua : 0)|  number: '1.0-3': 'vi_VN'}}</th>
               <th
-                class='text-right text-btc '> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltGaoMua : 0) |  number: '1.0-1': 'vi_VN'}}</th>
-              <th></th>
-              <th
-                class='text-right text-btc '>  {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltThocXuat : 0)|  number: '1.0-1' : 'vi_VN'}}</th>
-              <th></th>
-              <th></th>
+                class='text-right text-btc '> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltGaoMua : 0) |  number: '1.0-3': 'vi_VN'}}</th>
               <th></th>
               <th
-                class='text-right text-btc '>  {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltGaoXuat : 0) |  number: '1.0-1': 'vi_VN'}}</th>
+                class='text-right text-btc '>  {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltThocXuat : 0)|  number: '1.0-3' : 'vi_VN'}}</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th
+                class='text-right text-btc '>  {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltGaoXuat : 0) |  number: '1.0-3': 'vi_VN'}}</th>
               <th></th>
               <th></th>
               <th></th>
@@ -624,7 +624,7 @@
                 <td class='text-right'>{{dataMuoi.nhapTrongNam | number: '1.0-1': 'vi_VN'}}</td>
                 <td class='text-right'>{{dataMuoi.xuatTrongNamMuoi | number: '1.0-1': 'vi_VN'}}</td>
                 <td
-                  class='text-right'>{{(dataMuoi.tonKhoDauNam + dataMuoi.nhapTrongNam - dataMuoi.xuatTrongNamMuoi) | number: '1.0-1': 'vi_VN'}}</td>
+                  class='text-right'>{{(dataMuoi.tonKhoDauNam + dataMuoi.nhapTrongNam - dataMuoi.xuatTrongNamMuoi) | number: '1.0-3': 'vi_VN'}}</td>
                 <td *ngIf='!this.isViewDetail' class='text-center' nzRight>
                   <a (click)='startEditMuoi(i)'>
                     <i class='fa fa-pencil' title='Sửa'></i>
@@ -649,7 +649,7 @@
                          [(ngModel)]='dsMuoiClone[i].xuatTrongNamMuoi' />
                 </td>
                 <td
-                  class='text-right'>{{(dataMuoi.tonKhoDauNam + dsMuoiClone[i].nhapTrongNam - dsMuoiClone[i].xuatTrongNamMuoi) |  number: '1.0-1': 'vi_VN'}}</td>
+                  class='text-right'>{{(dataMuoi.tonKhoDauNam + dsMuoiClone[i].nhapTrongNam - dsMuoiClone[i].xuatTrongNamMuoi) |  number: '1.0-3': 'vi_VN'}}</td>
                 <td *ngIf='!this.isViewDetail' class='text-center' nzRight>
                   <a (click)='saveEditMuoi(i)' class='save'>
                     <i class='fa fa-save'></i>
@@ -709,7 +709,7 @@
                   <th rowSpan='2' class='text-center'>Chủng loại hàng</th>
                   <th rowSpan='2' class='text-center'>Đơn vị tính</th>
                   <th colSpan='3' class='text-center'>Chỉ tiêu nhập trong năm kế hoạch</th>
-                  <th rowSpan='2' class='text-center'>Hành động</th>
+                  <th rowSpan='2' class='text-center' *ngIf='!this.isViewDetail'>Hành động</th>
                 </tr>
                 <tr>
                   <th class='text-center'>Tổng số</th>
@@ -721,8 +721,8 @@
                 <ng-container *ngFor='let data of dataVatTuNhapTree , let idx = index'>
                   <tr>
                     <td class='bg-parent1'>{{idx + 1}}</td>
-                    <td class='bg-parent1' [nzExpand]='expandSet.has(data.idVirtual)'
-                        (nzExpandChange)='onExpandChange(data.idVirtual, $event)'>{{data.tenDvi}}</td>
+                    <td class='bg-parent1' [nzExpand]='expandSetNhap.has(data.idVirtual)'
+                        (nzExpandChange)='onExpandChangeNhap(data.idVirtual, $event)'>{{data.tenDvi}}</td>
                     <td class='bg-parent1'></td>
                     <td class='bg-parent1'></td>
                     <td class='bg-parent1'></td>
@@ -731,18 +731,20 @@
                     <td class='bg-parent1'></td>
                     <td class='bg-parent1'></td>
                     <td class='bg-parent1'></td>
-                    <td class='text-left bg-parent1' nzRight>
+                    <td class='text-left bg-parent1' nzRight *ngIf='!this.isViewDetail'>
                       <a (click)="themSuaVatTu(data,'them','NHAP',true,idx)">
                         <i class='icon htvbdh_dau-cong'></i>
                       </a>
                     </td>
                   </tr>
-                  <ng-container *ngIf='expandSet.has(data.idVirtual)'>
+                  <ng-container *ngIf='expandSetNhap.has(data.idVirtual)'>
                     <ng-container *ngFor='let item of data.dataChild, let y = index'>
                       <tr>
                         <td></td>
                         <td></td>
-                        <td class='font-weight-bold bg-parent2 text-center'>{{item.maVatTuCha}}</td>
+                        <td class='font-weight-bold bg-parent2 text-center'
+                            [nzExpand]='expandSetNhap.has(item.idVirtual)'
+                            (nzExpandChange)='onExpandChangeNhap(item.idVirtual, $event)'>{{item.maVatTuCha}}</td>
                         <td class='font-weight-bold bg-parent2 text-center'>{{item.kyHieu}}</td>
                         <td class='font-weight-bold bg-parent2'>{{item.tenVatTuCha}}</td>
                         <td class='bg-parent2'></td>
@@ -768,7 +770,7 @@
                             class='font-weight-bold bg-parent2 text-right'>{{sumSoLuong(item, 'soLuongChuyenSang')}}</td>
                           <td class='font-weight-bold bg-parent2 text-right'>{{sumSoLuong(item, 'soLuongNhap')}}</td>
                         </ng-container>
-                        <td class='text-left' nzRight>
+                        <td class='text-left' nzRight *ngIf='!this.isViewDetail'>
                           <a *ngIf='item && item.dataChild && item.dataChild.length > 0'
                              (click)="themSuaVatTu(item,'them','NHAP',false,idx,data.donViId)">
                             <i class='icon htvbdh_dau-cong'></i>
@@ -783,7 +785,7 @@
                         </td>
                       </tr>
                       <ng-container
-                        *ngIf='expandSet.has(item.idVirtual) && item.dataChild && item.dataChild.length > 0 && item.dataChild[0].tenVatTu'>
+                        *ngIf='expandSetNhap.has(item.idVirtual) && item.dataChild && item.dataChild.length > 0 && item.dataChild[0].tenVatTu'>
                         <ng-container *ngFor='let itemLoaiHang of item.dataChild, let y1 = index'>
                           <tr>
                             <td></td>
@@ -797,7 +799,7 @@
                               class='text-right'>{{(itemLoaiHang.soLuongChuyenSang + itemLoaiHang.soLuongNhap) |number: '1.0-1': 'vi_VN'}}</td>
                             <td class='text-right'>{{itemLoaiHang.soLuongChuyenSang |number: '1.0-1': 'vi_VN'}}</td>
                             <td class='text-right'>{{itemLoaiHang.soLuongNhap |number: '1.0-1': 'vi_VN'}}</td>
-                            <td class='text-left' nzRight>
+                            <td class='text-left' nzRight *ngIf='!this.isViewDetail'>
                               <a (click)="themSuaVatTu(itemLoaiHang,'sua','NHAP',false,idx,data.donViId)">
                                 <i class='fa fa-pencil' title='Sửa'></i>
                               </a>
@@ -831,15 +833,15 @@
                   <th>Đơn vị tính</th>
                   <th>Năm nhập</th>
                   <th>Chỉ tiêu xuất</th>
-                  <th>Hành động</th>
+                  <th *ngIf='!this.isViewDetail'>Hành động</th>
                 </tr>
                 </thead>
                 <tbody>
                 <ng-container *ngFor='let data of dataVatTuXuatTree , let idx = index'>
                   <tr>
                     <td class='bg-parent1'>{{idx + 1}}</td>
-                    <td class='bg-parent1' [nzExpand]='expandSet.has(data.idVirtual)'
-                        (nzExpandChange)='onExpandChange(data.idVirtual, $event)'>{{data.tenDvi}}</td>
+                    <td class='bg-parent1' [nzExpand]='expandSetXuat.has(data.idVirtual)'
+                        (nzExpandChange)='onExpandChangeXuat(data.idVirtual, $event)'>{{data.tenDvi}}</td>
                     <td class='bg-parent1'></td>
                     <td class='bg-parent1'></td>
                     <td class='bg-parent1'></td>
@@ -847,18 +849,20 @@
                     <td class='bg-parent1'></td>
                     <td class='bg-parent1'></td>
                     <td class='bg-parent1'></td>
-                    <td class='text-left bg-parent1' nzRight>
+                    <td class='text-left bg-parent1' nzRight *ngIf='!this.isViewDetail'>
                       <a (click)="themSuaVatTu(data,'them','XUAT',true,idx)">
                         <i class='icon htvbdh_dau-cong'></i>
                       </a>
                     </td>
                   </tr>
-                  <ng-container *ngIf='expandSet.has(data.idVirtual)'>
+                  <ng-container *ngIf='expandSetXuat.has(data.idVirtual)'>
                     <ng-container *ngFor='let item of data.dataChild, let y = index'>
                       <tr>
                         <td></td>
                         <td></td>
-                        <td class='font-weight-bold bg-parent2'>{{item.maVatTuCha}}</td>
+                        <td class='font-weight-bold bg-parent2'
+                            [nzExpand]='expandSetXuat.has(item.idVirtual)'
+                            (nzExpandChange)='onExpandChangeXuat(item.idVirtual, $event)'>{{item.maVatTuCha}}</td>
                         <td class='font-weight-bold bg-parent2 text-center'>{{item.kyHieu}}</td>
                         <td class='font-weight-bold bg-parent2'>{{item.tenVatTuCha}}</td>
                         <td class='font-weight-bold bg-parent2'></td>
@@ -871,7 +875,7 @@
                         <td class='font-weight-bold text-right bg-parent2'>
                           {{sumSoLuongVatTuXuat(item, 'soLuongXuat', 1)  |number: '1.0-1': 'vi_VN'}}
                         </td>
-                        <td class='text-left bg-parent2' nzRight>
+                        <td class='text-left bg-parent2' nzRight *ngIf='!this.isViewDetail'>
                           <a *ngIf='item && item.dataChild && item.dataChild.length > 0'
                              (click)="themSuaVatTu(item,'them','XUAT',false,idx,data.donViId)">
                             <i class='icon htvbdh_dau-cong'></i>
@@ -886,7 +890,7 @@
                         </td>
                       </tr>
                       <ng-container
-                        *ngIf='expandSet.has(item.idVirtual) && item.dataChild && item.dataChild.length > 0'>
+                        *ngIf='expandSetXuat.has(item.idVirtual) && item.dataChild && item.dataChild.length > 0'>
                         <ng-container *ngFor='let itemLoaiHang of item.dataChild, let y1 = index'>
                           <tr>
                             <td></td>
@@ -906,7 +910,7 @@
                               <td class='text-right'>{{itemLoaiHang.namNhap}}</td>
                               <td class='text-right'>{{itemLoaiHang.soLuongXuat}}</td>
                             </ng-container>
-                            <td class='text-left' nzRight>
+                            <td class='text-left' nzRight *ngIf='!this.isViewDetail'>
                               <a (click)="themSuaVatTu(itemLoaiHang,'them','XUAT',false,idx,data.donViId)">
                                 <i class='icon htvbdh_dau-cong'></i>
                               </a>
@@ -915,7 +919,7 @@
                               </a>
                             </td>
                           </tr>
-                          <ng-container *ngIf='expandSet.has(itemLoaiHang.idVirtual)'>
+                          <ng-container *ngIf='expandSetXuat.has(itemLoaiHang.idVirtual)'>
                             <ng-container *ngFor='let itemDetail of itemLoaiHang.dataChild, let y2 = index'>
                               <tr>
                                 <td></td>
@@ -927,7 +931,7 @@
                                 <td></td>
                                 <td class='text-right'>{{itemDetail.namNhap}}</td>
                                 <td class='text-right'>{{itemDetail.soLuongXuat |number: '1.0-1': 'vi_VN'}}</td>
-                                <td>
+                                <td *ngIf='!this.isViewDetail'>
                                   <a (click)="themSuaVatTu(itemDetail,'sua','XUAT',false,idx)">
                                     <i class='fa fa-pencil' title='Sửa'></i>
                                   </a>

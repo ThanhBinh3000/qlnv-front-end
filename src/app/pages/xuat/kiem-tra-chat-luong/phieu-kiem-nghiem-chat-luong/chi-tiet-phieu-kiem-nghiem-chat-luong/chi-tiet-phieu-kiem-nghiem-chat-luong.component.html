@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix" *ngIf="!isViewOnModal">
+<nz-affix [nzOffsetTop]="globals.prop.MN_LV2" class="btn-affix" *ngIf="!isViewOnModal">
   <div class="btn-group">
     <button type="button" class="btn btn-sub" (click)="goBack()">
       <i class="fa fa-arrow-left"></i>
@@ -219,7 +219,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired> Số lượng hàng bảo quản</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input nz-input formControlName="dviKiemNghiem" [readonly]="true" />
+                  <input nz-input formControlName="slHangBaoQuan" [readonly]="true" />
                 </nz-form-control>
               </nz-form-item>
             </div>

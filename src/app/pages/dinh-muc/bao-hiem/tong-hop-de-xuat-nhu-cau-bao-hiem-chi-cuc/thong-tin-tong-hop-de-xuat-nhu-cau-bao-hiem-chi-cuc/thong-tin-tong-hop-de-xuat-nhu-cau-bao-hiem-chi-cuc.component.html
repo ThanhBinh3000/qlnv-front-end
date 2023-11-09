@@ -15,8 +15,8 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button class="btn btn-sub ml-2" (click)="pheDuyet()"
-              *ngIf="(id && id > 0) && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_CBV)  && userService.isCuc() && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_THDEXUATCC_THEM')">
+      <button class="btn btn-sub ml-2" (click)="saveAndSend(STATUS.DA_KY, 'Bạn có muốn ký?','Bạn đã ký thành công!')"
+              *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_CBV)  && userService.isCuc() && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_THDEXUATCC_THEM')">
         <i class="icon htvbdh_trinh"></i>
         <span>Đã ký</span>
       </button>

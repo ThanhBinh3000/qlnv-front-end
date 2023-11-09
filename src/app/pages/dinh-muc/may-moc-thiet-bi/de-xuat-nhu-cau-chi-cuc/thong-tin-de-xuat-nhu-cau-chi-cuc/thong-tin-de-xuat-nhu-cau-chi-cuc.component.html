@@ -13,7 +13,8 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button class="btn btn-sub ml-2" (click)="pheDuyet()" *ngIf="(id && id > 0) && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TUCHOI_CB_CUC)  && userService.isChiCuc()">
+      <button class="btn btn-sub ml-2" (click)="saveAndSend(STATUS.DA_KY, 'Bạn có muốn ký?','Bạn đã ký thành công!')"
+              *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TUCHOI_CB_CUC)  && userService.isChiCuc()">
         <i class="icon htvbdh_trinh"></i>
         <span>Đã ký</span>
       </button>
@@ -55,20 +56,21 @@
         </div>
         <div nz-col nzSpan="4">
           <nz-form-item>
-            <nz-form-control [nzErrorTip]="error">
+            <nz-form-control [nzErrorTip]="error" >
               <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Số công văn</nz-form-label>
-              <input nz-input formControlName="soCv" [readonly]="isView"/>
+              <nz-input-group [nzAddOnAfter]="maQd">
+                <input nz-input formControlName="soCv" [readonly]="isView"/>
+              </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
-              <nz-form-label  [nzNoColon]="true" class="label-color-kh">Số quyết định giao chỉ tiêu của Cục
+              <nz-form-label [nzNoColon]="true" class="label-color-kh">Số quyết
+                định giao chỉ tiêu của Cục
               </nz-form-label>
-              <nz-select nzAllowClear (ngModelChange)="changeSoQdGiaoCt($event)" formControlName="soQdGiaoCt" [nzDisabled]="isView">
-                <nz-option *ngFor="let p of listCtieuKh" [nzValue]="p.id" [nzLabel]="p.soQuyetDinh"></nz-option>
-              </nz-select>
+              <input nz-input formControlName="soQdGiaoCt" [readonly]="true" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -199,7 +201,7 @@
                           [nzParser]="globals.parser"></nz-input-number>
       </th>
       <th>
-        <nz-input-number  [(ngModel)]="rowItem.soLuong" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzMin]="0"
+        <nz-input-number  [(ngModel)]="rowItem.soLuong" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzMin]="0" [nzMax]="rowItem.slTieuChuan ? rowItem.slTieuChuan : 9999999999999"
                           [nzParser]="globals.parser"></nz-input-number>
       </th>
       <th>
@@ -285,7 +287,7 @@
                             [nzParser]="globals.parser"></nz-input-number>
         </th>
         <th>
-          <nz-input-number [nzMin]="0"  [(ngModel)]="dataEdit[idx].data.soLuong" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+          <nz-input-number [nzMin]="0"  [(ngModel)]="dataEdit[idx].data.soLuong" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzMax]="dataEdit[idx].data.slTieuChuan ? dataEdit[idx].data.slTieuChuan : 9999999999999"
                             [nzParser]="globals.parser"></nz-input-number>
         </th>
         <th>

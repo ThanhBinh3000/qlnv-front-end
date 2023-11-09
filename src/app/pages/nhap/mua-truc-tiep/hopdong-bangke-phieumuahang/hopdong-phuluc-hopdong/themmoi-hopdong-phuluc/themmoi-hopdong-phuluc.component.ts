@@ -214,10 +214,68 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
     })
     this.idKqCgia = data.idKqCgia;
     this.dataTable = data.qdGiaoNvuDtlList.length > 0 ? data.qdGiaoNvuDtlList.filter(x => x.maDvi.includes(this.userInfo.MA_DVI)) : data.children;
-    console.log(this.dataTable, 333)
+    // dataKq.danhSachCtiet.forEach((item) => {
+    //   item.listChaoGia.forEach(res =>{
+    //     if (res.luaChon == true && res.signed != true) {
+    //       this.listDviLquan.push(res)
+    //       this.slChuaKy += res.soLuong
+    //     }else if(res.luaChon == true && res.signed == true){
+    //       this.slDaKy += item.children.filter(x => x.idDiaDiem == res.idQdPdKqSldd).reduce((prev, cur) => {
+    //         prev += cur.soLuongHd;
+    //         return prev;
+    //       }, 0);
+    //     }
+    //   })
+    // })
+    this.calculatorTable(data, this.dataTable);
+    console.log(data, 333)
     this.dataTablePhuLuc = data.phuLucDtl;
     this.objHopDongHdr = data;
     this.fileDinhKem = data.fileDinhKems;
+  }
+
+  calculatorTable(hopDong: any, dataTable: any) {
+    let sumDaKy = 0;
+    let sumSl = 0;
+    if (!this.userService.isTongCuc()) {
+      let listHd = dataTable.find(x => x.maDvi == hopDong.maDvi);
+      if (listHd) {
+        if (listHd.trangThai == STATUS.DA_KY) {
+          sumDaKy = listHd.children.reduce((prev, cur) => {
+            prev += cur.soLuong;
+            return prev;
+          }, 0);
+        }
+        sumSl = listHd.children.reduce((prev, cur) => {
+          prev += cur.soLuong;
+          return prev;
+        }, 0);
+      }
+    } else {
+      if (dataTable) {
+        let sumOfChildDaKy = 0;
+        let sumOfChildValues = 0;
+        sumDaKy = dataTable.reduce((acc, parentItem) => {
+          if (parentItem.trangThai == STATUS.DA_KY) {
+            sumOfChildDaKy = parentItem.children.reduce((childAcc, childItem) => {
+              return childAcc + childItem.soLuong;
+            }, 0);
+          }
+          return acc + sumOfChildDaKy;
+        }, 0);
+        sumSl = dataTable.reduce((acc, parentItem) => {
+          sumOfChildValues = parentItem.children.reduce((childAcc, childItem) => {
+            return childAcc + childItem.soLuong;
+          }, 0);
+          return acc + sumOfChildValues;
+        }, 0);
+      }
+    }
+    this.formData.patchValue({
+      tongSoLuongQdKhChuakyHd: sumSl - sumDaKy,
+      tongSoLuongQdKhDakyHd: sumDaKy,
+      tongSoLuongQdKh: sumSl
+    })
   }
 
   async save(isOther: boolean) {
@@ -334,6 +392,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
               moTaHangHoa: dataKq.moTaHangHoa,
               dviTinh: "tấn",
             });
+            console.log(dataKq, "dataKq")
             this.loaiHd = '02'
             this.dataTable = dataKq.children.filter(x => x.maDvi == this.userInfo.MA_DVI)
             // dataKq.danhSachCtiet.forEach((item) => {

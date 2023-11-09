@@ -1,5 +1,5 @@
 <!-- <nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="level1"> -->
-<nz-affix [nzOffsetTop]="77" class="level1">
+<nz-affix [nzOffsetTop]="globals.prop.MN_LV1" class="level1">
   <!-- (nzChange)="onChange($event)" -->
   <ul nz-menu nzMode="horizontal">
     <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)"
@@ -31,14 +31,14 @@
 <div class="contentBor chi-tieu__body giao-ke-hoach xuat_ctvt">
   <div class="contentDetail">
     <ng-container *ngIf="tabSelected == 0">
-      <app-de-xuat></app-de-xuat>
+      <app-de-xuat (eventTaoQd)="selectTab($event)"></app-de-xuat>
     </ng-container>
     <!--<ng-container *ngIf="tabSelected == 0">
       <app-xay-dung-phuong-an (eventTaoQd)="taoQd($event)"></app-xay-dung-phuong-an>
     </ng-container>-->
     <ng-container *ngIf="tabSelected == 1">
       <!--      <app-tong-hop-phuong-an (eventTaoQd)="taoQd($event)"></app-tong-hop-phuong-an>-->
-      <app-tong-hop></app-tong-hop>
+      <app-tong-hop (eventTaoQd)="selectTab($event)"></app-tong-hop>
     </ng-container>
     <ng-container *ngIf="tabSelected == 2">
       <!--      <app-quyet-dinh-phe-duyet-phuong-an [isDetail]="isDetail" [dataInit]="dataInit"-->

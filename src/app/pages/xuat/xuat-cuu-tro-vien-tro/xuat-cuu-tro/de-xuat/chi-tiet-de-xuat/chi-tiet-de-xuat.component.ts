@@ -24,6 +24,8 @@ import { QuanLyHangTrongKhoService } from "src/app/services/quanLyHangTrongKho.s
 import { LOAI_HANG_DTQG, TEN_LOAI_VTHH } from "src/app/constants/config";
 import { PREVIEW } from 'src/app/constants/fileType';
 import { MangLuoiKhoService } from 'src/app/services/qlnv-kho/mangLuoiKho.service';
+import { DataService } from 'src/app/services/data.service';
+import { AMOUNT_ONE_DECIMAL } from 'src/app/Utility/utils';
 
 
 @Component({
@@ -35,6 +37,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
   @Input() isView: boolean;
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
+  @Output() taoQuyetDinh = new EventEmitter<any>();
   formDataDtl: FormGroup;
   maHauTo: any;
   STATUS = STATUS;
@@ -51,6 +54,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
   listDviNhan: any[] = [];
   listQuocGia: any[] = [];
   listDiaDanhHanhChinh: any[] = [];
+  amount1 = { ...AMOUNT_ONE_DECIMAL, align: "left" }
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
@@ -64,7 +68,9 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
     private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
     private mangLuoiKhoService: MangLuoiKhoService,
-    private cdr: ChangeDetectorRef,) {
+    private cdr: ChangeDetectorRef,
+    private dataService: DataService
+  ) {
 
     super(httpClient, storageService, notification, spinner, modal, deXuatPhuongAnCuuTroService);
     for (let i = -3; i < 23; i++) {
@@ -693,5 +699,14 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
       }
     });
+  }
+  taoQuyetDinhPdPa() {
+    const dataSend = {
+      ...this.formData.value,
+      type: "TTr",
+      isTaoQdPdPa: true
+    }
+    this.dataService.changeData(dataSend);
+    this.taoQuyetDinh.emit(2);
   }
 }

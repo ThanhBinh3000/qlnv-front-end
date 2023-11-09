@@ -32,7 +32,7 @@ import { NzTreeSelectComponent } from "ng-zorro-antd/tree-select";
 import { QuanLyHangTrongKhoService } from "src/app/services/quanLyHangTrongKho.service";
 import { PREVIEW } from 'src/app/constants/fileType';
 import { LOAI_HANG_DTQG, TEN_LOAI_VTHH } from 'src/app/constants/config';
-import { AMOUNT_TWO_DECIMAL } from 'src/app/Utility/utils';
+import { AMOUNT_ONE_DECIMAL, AMOUNT_TWO_DECIMAL } from 'src/app/Utility/utils';
 
 @Component({
   selector: 'app-chi-tiet-quyet-dinh-gnv',
@@ -69,6 +69,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   maHauTo: any;
   selectedNode: any;
   templateName: string = "Quyết định giao nhiệm vụ xuất cứu trợ, viện trợ";
+  amount1 = { ...AMOUNT_ONE_DECIMAL, align: "left" }
   amount = { ...AMOUNT_TWO_DECIMAL, align: "left", min: 0, max: 100 };
   chuyenXuatCap: boolean = true;
   constructor(
@@ -113,7 +114,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       nguoiPduyetId: [],
       loaiNhapXuat: [],
       kieuNhapXuat: [],
-      mucDichXuat: [],
+      mucDichXuat: [, [Validators.required]],
       tenDvi: [, [Validators.required]],
       tenLoaiVthh: [],
       tenCloaiVthh: [],
@@ -371,7 +372,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   }
   checkHoanTatPhanBo() {
     const tongSoLuong = this.formData.value.soLuong;
-    const dataDtl = this.formData.value.dataDtl.filter(f => f.maDvi && f.maDvi.includes(this.userInfo.MA_DVI)).map(f => ({ ...f, noiDungDxTenChiCuc: `${f.noiDungDx}-${f.tenChiCuc}` }));
+    const dataDtl = this.formData.value.dataDtl.filter(f => f.maDvi && f.maDvi.includes(this.userInfo.MA_DVI)).map(f => ({ ...f, noiDungDxTenChiCuc: `${f.noiDungDx}-${f.cloaiVthh ? f.cloaiVthh : f.loaiVthh}-${f.tenChiCuc}` }));
     const tongSoLuongPb = dataDtl.reduce((sum, cur) => {
       if (this.formData.value.type === 'XC' && this.formData.value.paXuatGaoChuyenXc) {
         sum += cur.slGaoThuHoiSauXayXat ? cur.slGaoThuHoiSauXayXat : 0
@@ -511,8 +512,8 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           nzFooter: null,
           nzComponentParams: {
             dataTable: res.data,
-            dataHeader: ['Số quyết định', 'Ngày phê duyệt', 'Trích yếu'],
-            dataColumn: ['soBbQd', 'ngayPduyet', 'trichYeu']
+            dataHeader: ['Số quyết định', 'Ngày phê duyệt', 'Mục đích xuất'],
+            dataColumn: ['soBbQd', 'ngayPduyet', 'mucDichXuat']
           },
         });
         modalQD.afterClose.subscribe(async (data) => {
@@ -551,7 +552,8 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               if (detail.paXuatGaoChuyenXc) {
                 sum += cur.soLuongXc ? cur.soLuongXc : 0
               } else {
-                sum += cur.soLuong ? cur.soLuong : 0
+                // sum += cur.soLuong ? cur.soLuong : 0
+                sum += cur.soLuongDx ? cur.soLuongDx : 0
               }
               return sum
             }, 0);
@@ -561,6 +563,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               soQdPd: detail.soBbQd,
               loaiNhapXuat: detail.loaiNhapXuat,
               kieuNhapXuat: detail.kieuNhapXuat,
+              mucDichXuat: detail.mucDichXuat,
               // tenVthh: detail.tenVthh,
               dataDtl: detail.quyetDinhPdDtl,
               type: this.formData.value.type === 'XC' ? 'XC' : detail.type,
@@ -898,7 +901,6 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
             edit,
             mId: edit ? data.mId : uuidv4(),
             tonKhoCloaiVthh: 0,
-            tonKhoDvi: 0,
             id: null,
             tenDvi: '',
             maDvi: null,
@@ -943,7 +945,6 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           edit,
           mId: edit ? data.mId : uuidv4(),
           tonKhoCloaiVthh: data.tonKhoCloaiVthh || 0,
-          tonKhoDvi: data.tonKhoDvi || 0,
           tenDvi: edit ? data.tenDvi : '',
           maDvi: edit ? data.maDvi : null,
           tenDiemKho: edit ? data.tenDiemKho : '',
@@ -1029,7 +1030,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       soLuong: 0,
       slConLaiGiao: this.checkSlConLaiGiao(data, level, false, parentData),
       tonKhoCloaiVthh: 0,
-      tonKhoDvi: 0,
+      tonKhoDvi: level === 1 ? 0 : data.tonKhoDvi,
     });
     this.listDonVi.forEach(s => {
       // s.disable = this.formData.value.dataDtl.some(s1 => s1.maDvi.match("^" + s.maDvi)) && !(s.maDvi === data.maDvi && editRow);

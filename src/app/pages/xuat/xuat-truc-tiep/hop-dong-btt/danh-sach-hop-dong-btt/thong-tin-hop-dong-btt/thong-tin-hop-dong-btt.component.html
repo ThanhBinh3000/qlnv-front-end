@@ -233,7 +233,7 @@
                   </nz-form-control>
                 </nz-form-item>
               </div>
-              <div nz-col [nzSpan]="6">
+              <div nz-col [nzSpan]="5">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Ghi chú (Cho thời gian giao nhận hàng)</nz-form-label>
                   <nz-form-control nz-col>
@@ -301,7 +301,7 @@
                   <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ pháp lý</nz-form-label>
                   <nz-form-control [nzErrorTip]="error" nz-col>
                     <div class="list-file" nz-col>
-                      <file-list [data]="formData.value.fileCanCu" [isViewDetail]="isView">
+                      <file-list [data]="formData.value.fileCanCu" [isCanCuPL]='true' [isViewDetail]="isView">
                       </file-list>
                     </div>
                   </nz-form-control>
@@ -312,8 +312,7 @@
                   <nz-form-label nzRequired [nzNoColon]="true"> File đính kèm HĐ đã ký</nz-form-label>
                   <nz-form-control [nzErrorTip]="error" nz-col>
                     <div class="list-file" nz-col>
-                      <file-list [data]="formData.value.fileDinhKem" [isViewDetail]="isView">
-                      </file-list>
+                      <file-list [data]="formData.value.fileDinhKem" [isViewDetail]="isView"></file-list>
                     </div>
                   </nz-form-control>
                 </nz-form-item>
@@ -377,7 +376,7 @@
               </div>
               <div nz-col [nzSpan]="6">
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Fax</nz-form-label>
+                  <nz-form-label nzRequired [nzNoColon]="true"> Fax</nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
                     <input nz-input formControlName="faxBenBan" [readonly]="isView"/>
                   </nz-form-control>
@@ -433,7 +432,7 @@
               </div>
               <div nz-col [nzSpan]="6">
                 <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true"> Tên người đại diện ký hợp đồng</nz-form-label>
+                  <nz-form-label [nzNoColon]="true"> Tên người đại diện ký hợp đồng</nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
                     <input nz-input formControlName="tenNguoiDdienMua" [readonly]="isView"/>
                   </nz-form-control>
@@ -441,7 +440,7 @@
               </div>
               <div nz-col [nzSpan]="6">
                 <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true"> Chức vụ</nz-form-label>
+                  <nz-form-label [nzNoColon]="true"> Chức vụ</nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
                     <input nz-input formControlName="chucVuBenMua" [readonly]="isView"/>
                   </nz-form-control>
@@ -449,7 +448,7 @@
               </div>
               <div nz-col [nzSpan]="6">
                 <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true"> Số điện thoại</nz-form-label>
+                  <nz-form-label [nzNoColon]="true"> Số điện thoại</nz-form-label>
                   <nz-form-control nz-col
                                    [nzErrorTip]="formData.get('sdtBenMua').hasError('invalidPhoneNumber') ? 'Số điện thoại không hợp lệ' : ''">
                     <input nz-input formControlName="sdtBenMua" [readonly]="isView"/>
@@ -474,7 +473,7 @@
               </div>
               <div nz-col [nzSpan]="18">
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Mở tại</nz-form-label>
+                  <nz-form-label nzRequired [nzNoColon]="true"> Mở tại</nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
                     <input nz-input formControlName="moTaiBenMua" [readonly]="isView"/>
                   </nz-form-control>
@@ -586,7 +585,7 @@
               </div>
               <div nz-col [nzSpan]="12">
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> L xuất bán TT theo QĐ phê duyệt Kh bán trực tiếp chưa ký HĐ
+                  <nz-form-label [nzNoColon]="true"> SL xuất bán TT theo QĐ phê duyệt Kh bán trực tiếp chưa ký HĐ
                   </nz-form-label>
                   <nz-form-control nz-col>
                     <span style="color: red" *ngIf="formData.value.slXuatBanChuaKyHdong">
@@ -944,7 +943,7 @@
                   </nz-form-control>
                 </nz-form-item>
               </div>
-              <div nz-col [nzSpan]="9">
+              <div nz-col [nzSpan]="8">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Ghi chú (cho thời gian giao nhận hàng)</nz-form-label>
                   <nz-form-control nz-col>
@@ -1000,7 +999,8 @@
                   <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ pháp lý</nz-form-label>
                   <nz-form-control [nzErrorTip]="error" nz-col>
                     <div class="list-file" nz-col>
-                      <file-list [data]="formData.value.fileCanCu" [isViewDetail]="isView"></file-list>
+                      <file-list [data]="formData.value.fileCanCu" [isCanCuPL]='true' [isViewDetail]="isView">
+                      </file-list>
                     </div>
                   </nz-form-control>
                 </nz-form-item>

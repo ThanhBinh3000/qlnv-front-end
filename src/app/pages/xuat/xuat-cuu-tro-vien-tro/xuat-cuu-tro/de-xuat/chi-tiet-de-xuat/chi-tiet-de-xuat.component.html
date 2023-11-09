@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix" *ngIf="!isViewOnModal">
+<nz-affix [nzOffsetTop]="globals.prop.MN_LV1" class="btn-affix" *ngIf="!isViewOnModal">
   <div class="btn-group">
     <button type="button" class="btn btn-sub" (click)="quayLai()">
       <i class="fa fa-arrow-left"></i>
@@ -51,6 +51,11 @@
       (click)="saveAndSend(STATUS.DA_TAO_CBV,'Bạn có muốn hoàn thành đề xuất này ?','Đề xuất đã hoàn thành.')">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Hoàn thành</span>
+    </button>
+    <button type="button" class="btn btn-sub xanh" (click)="taoQuyetDinhPdPa()"
+      *ngIf="formData.value.trangThai == STATUS.DA_TAO_CBV && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_THEM')&& !formData.value.soQdPd && userService.isTongCuc()">
+      <i class="icon htvbdh_dau-cong"></i>
+      <span>Tạo quyết định</span>
     </button>
     <button
       *ngIf="formData.value.trangThai == STATUS.DA_TAO_CBV && userService.isTongCuc() && !formData.value.idQdPd && !formData.value.idThop"
@@ -762,11 +767,13 @@
             <nz-form-control [nzErrorTip]="error">
               <div nz-row [nzGutter]="48">
                 <div nz-col [nzSpan]="16">
-                  <nz-input-number formControlName="soLuongNhuCauXuat" [nzMax]="999999999999" [nzStep]="1"
+                  <!-- <nz-input-number formControlName="soLuongNhuCauXuat" [nzMax]="999999999999" [nzStep]="1"
                     nzPlaceHolder="Nhập số lượng" [nzDisabled]="isView"
                     (ngModelChange)="soLuongNhuCauXuatChange($event)" [nzSize]="'small'"
                     [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-                  </nz-input-number>
+                  </nz-input-number> -->
+                  <input currencyMask class="money-input" formControlName="soLuongNhuCauXuat"
+                    (ngModelChange)="soLuongNhuCauXuatChange($event)" [readOnly]="isView" [options]="amount1" />
                 </div>
                 <div nz-col [nzSpan]="8">
                   <p style="font-size: 13px;font-weight: 500">Đơn vị tính:
@@ -782,11 +789,13 @@
             <nz-form-control [nzErrorTip]="error">
               <div nz-row [nzGutter]="48">
                 <div nz-col [nzSpan]="16">
-                  <nz-input-number formControlName="soLuong" [nzMax]="999999999999" [nzStep]="1"
+                  <!-- <nz-input-number formControlName="soLuong" [nzMax]="999999999999" [nzStep]="1"
                     nzPlaceHolder="Nhập số lượng" (ngModelChange)="soLuongNhuCauXuatChange($event)"
                     [nzDisabled]="isView" [nzSize]="'small'" [nzFormatter]="globals.formatter"
                     [nzParser]="globals.parser">
-                  </nz-input-number>
+                  </nz-input-number> -->
+                  <input currencyMask class="money-input" formControlName="soLuong"
+                    (ngModelChange)="soLuongNhuCauXuatChange($event)" [readOnly]="isView" [options]="amount1" />
                 </div>
                 <div nz-col [nzSpan]="8">
                   <p style="font-size: 13px;font-weight: 500">Đơn vị tính:

@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix" *ngIf="!isViewOnModal">
+<nz-affix [nzOffsetTop]="globals.prop.MN_LV3" class="btn-affix" *ngIf="!isViewOnModal">
   <div class="btn-group">
     <button type="button" class="btn btn-sub" (click)="quayLai()">
       <i class="fa fa-arrow-left"></i>
@@ -265,14 +265,18 @@
               <input nz-input [(ngModel)]="bangKeDtlCreate.maCan" />
             </th>
             <th>
-              <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+              <!-- <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                 [(ngModel)]="bangKeDtlCreate.trongLuongBaoBi">
-              </nz-input-number>
+              </nz-input-number> -->
+              <input currencyMask class="money-input" [(ngModel)]="bangKeDtlCreate.trongLuongBaoBi"
+                [options]="amount" />
             </th>
             <th>
-              <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+              <!-- <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                 [(ngModel)]="bangKeDtlCreate.trongLuongCaBi">
-              </nz-input-number>
+              </nz-input-number> -->
+              <input currencyMask class="money-input" [(ngModel)]="bangKeDtlCreate.trongLuongCaBi"
+                [options]="amount1" />
             </th>
             <th>
               <a (click)="addRow()" *ngIf="!isView">
@@ -306,14 +310,16 @@
               <td></td>
               <td><input nz-input [(ngModel)]="item.maCan" /></td>
               <td>
-                <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                <!-- <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                   [(ngModel)]="item.trongLuongBaoBi">
-                </nz-input-number>
+                </nz-input-number> -->
+                <input currencyMask class="money-input" [(ngModel)]="item.trongLuongBaoBi" [options]="amount" />
               </td>
               <td>
-                <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                <!-- <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                   [(ngModel)]="item.trongLuongCaBi">
-                </nz-input-number>
+                </nz-input-number> -->
+                <input currencyMask class="money-input" [(ngModel)]="item.trongLuongCaBi" [options]="amount1" />
               </td>
               <td>
                 <a (click)="saveRow(i)">
@@ -335,10 +341,12 @@
             <nz-form-label class="label-color-kh"> Tổng trọng lượng bao bì (kg)
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error" nz-col style="margin-top: 5px;">
-              <nz-input-number [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+              <!-- <nz-input-number [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                 [nzFormatter]="globals.formatter" [nzParser]="globals.parserInput" formControlName="tongTrongLuongBaoBi"
                 (ngModelChange)="trongLuongTruBi()" [nzDisabled]="isView">
-              </nz-input-number>
+              </nz-input-number> -->
+              <input currencyMask class="money-input" formControlName="tongTrongLuongBaoBi"
+                (ngModelChange)="trongLuongTruBi()" [options]="amount1Left" [readOnly]="isView" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -389,10 +397,11 @@
               <input nz-input [(ngModel)]="bangKeDtlCreate.soSerial" />
             </th>
             <th>
-              <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+              <!-- <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                 [nzFormatter]="globals.formatter" [nzParser]="globals.parserInput"
                 [(ngModel)]="bangKeDtlCreate.soLuong">
-              </nz-input-number>
+              </nz-input-number> -->
+              <input currencyMask class="money-input" [(ngModel)]="bangKeDtlCreate.soLuong" [options]="amount" />
             </th>
             <th *ngIf="showAction()">
               <a (click)="addRow()" *ngIf="!isView">
@@ -425,9 +434,10 @@
               <td></td>
               <td><input nz-input [(ngModel)]="item.soSerial" /></td>
               <td>
-                <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                <!-- <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                   [nzFormatter]="globals.formatter" [nzParser]="globals.parserInput" [(ngModel)]="item.soLuong">
-                </nz-input-number>
+                </nz-input-number> -->
+                <input currencyMask class="money-input" [(ngModel)]="item.soLuong" [options]="amount" />
               </td>
               <td>
                 <a (click)="saveRow(i)">

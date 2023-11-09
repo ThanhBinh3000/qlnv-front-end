@@ -11,6 +11,7 @@ import { DanhMucKhoService } from "../../../../../../../services/danh-muc-kho.se
 import { DanhMucService } from "../../../../../../../services/danhmuc.service";
 import { STATUS } from "../../../../../../../constants/status";
 import dayjs from "dayjs";
+import {cloneDeep} from "lodash";
 
 @Component({
   selector: 'app-dialog-them-moi-dxkhth',
@@ -20,6 +21,7 @@ import dayjs from "dayjs";
 export class DialogThemMoiDxkhthComponent implements OnInit {
   @Input() dataInput: any
   @Input() type: string
+  @Input() namKh : number
   @Input() sum: number
   @Input() page: string
   item: DanhMucKho = new DanhMucKho();
@@ -27,7 +29,7 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
   listLoaiDuAn: any[] = []
   listKhoi: any[] = []
   userInfo: UserLogin
-  namKh : number
+
 
   constructor(
     private danhMucService: DanhMucService,
@@ -42,11 +44,12 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
 
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
-    this.namKh = dayjs().get('year');
+    // this.namKh = dayjs().get('year');
     this.getAllLoaiDuAn();
     this.getDsKhoi();
     await this.getAllDmKho();
     await this.getDetail();
+    this.item.namKeHoach= this.namKh;
   }
 
   async getDsKhoi() {
@@ -117,13 +120,11 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
       this.item.vonDauTu = this.dataInput.vonDauTu ? this.dataInput.vonDauTu : 0 ;
     }
   }
-
-  changeDmucDuAn(event: any) {
+  async changeDmucDuAn(event: any) {
     if (event) {
       let result = this.listDmKho.find(item => item.maDuAn == event)
       if (result) {
-        console.log(result,111)
-        this.item = result;
+        this.item = cloneDeep(result);
         this.item.tgKcHt = this.item.tgKhoiCong + ' - ' + this.item.tgHoanThanh
       }
     }

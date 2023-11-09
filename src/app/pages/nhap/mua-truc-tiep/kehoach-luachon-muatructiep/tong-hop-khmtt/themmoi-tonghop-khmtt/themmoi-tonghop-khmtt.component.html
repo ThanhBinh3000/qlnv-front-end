@@ -49,7 +49,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : selectHangHoa()">
                 <input [readonly]="isView" nz-input formControlName="tenLoaiVthh" />
@@ -59,7 +59,7 @@
         </div>
         <div nz-col [nzSpan]="18">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : selectHangHoa()">
                 <input [readonly]="isView" nz-input formControlName="tenCloaiVthh" />

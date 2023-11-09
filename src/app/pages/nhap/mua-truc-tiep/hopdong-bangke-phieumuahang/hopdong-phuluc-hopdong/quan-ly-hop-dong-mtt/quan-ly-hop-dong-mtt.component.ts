@@ -153,6 +153,7 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
     if (id) {
       let res = await this.quyetDinhGiaoNvNhapHangService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
+        console.log(res.data, 876)
         this.dataTable = []
           this.formData.patchValue({
             namKh: res.data.hhQdPheduyetKhMttHdr.namKh,
@@ -160,11 +161,14 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
             tenDuAn: res.data.hhQdPheduyetKhMttHdr.tenDuAn,
             tongMucDt: res.data.tongMucDt,
             nguonVon: res.data.nguonVon,
-            tongSoLuong: res.data.soLuong,
+            tongSoLuong: res.data.hopDongMttHdrs.reduce((prev, cur) => {
+              prev += cur.soLuong;
+              return prev;
+            }, 0),
             tenLoaiVthh: res.data.tenLoaiVthh,
             tenCloaiVthh: res.data.tenCloaiVthh,
-            trangThaiHd: res.data.hhQdPheduyetKhMttHdr?.trangThaiHd,
-            tenTrangThaiHd: res.data.hhQdPheduyetKhMttHdr?.tenTrangThaiHd,
+            trangThaiHd: res.data?.trangThaiHd,
+            tenTrangThaiHd: res.data?.tenTrangThaiHd,
             idQdGiaoNvNh: res.data.id
           })
         console.log(this.formData.value)

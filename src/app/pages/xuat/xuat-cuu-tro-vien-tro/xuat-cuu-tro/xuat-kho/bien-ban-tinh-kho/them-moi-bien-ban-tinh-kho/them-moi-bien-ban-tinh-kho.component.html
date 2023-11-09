@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix" *ngIf="!isViewOnModal">
+<nz-affix [nzOffsetTop]="globals.prop.MN_LV3" class="btn-affix" *ngIf="!isViewOnModal">
   <div class="btn-group">
     <button type="button" class="btn btn-sub" (click)="goBack()">
       <i class="fa fa-arrow-left"></i>
@@ -238,7 +238,7 @@
             <ng-container>
               <tr>
                 <td colspan="4" class="bold text-blue text-right">TỔNG</td>
-                <td class="bold text-blue">{{tongSoLuongXk |number:'1.0-1' : 'vi_VN'}} </td>
+                <td class="bold text-blue text-right">{{tongSoLuongXk |number:'1.0-1' : 'vi_VN'}} </td>
               </tr>
             </ng-container>
           </tfoot>
@@ -324,10 +324,12 @@
               SL thực tế còn lại khi xuất kho lần cuối
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-input-number [nzDisabled]="isView" formControlName="slThucTeCon" (ngModelChange)="slChenhLech()"
+              <!-- <nz-input-number [nzDisabled]="isView" formControlName="slThucTeCon" (ngModelChange)="slChenhLech()"
                 [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                 [nzFormatter]="globals.formatter" [nzParser]="globals.parser" readonly>
-              </nz-input-number>
+              </nz-input-number> -->
+              <input currencyMask class="money-input" formControlName="slThucTeCon" (ngModelChange)="slChenhLech()"
+                [options]="amount1Left" [readOnly]="isView" />
 
             </nz-form-control>
           </nz-form-item>

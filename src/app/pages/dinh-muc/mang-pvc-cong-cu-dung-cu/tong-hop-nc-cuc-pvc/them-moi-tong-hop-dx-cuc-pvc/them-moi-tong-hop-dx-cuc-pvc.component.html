@@ -324,7 +324,7 @@
               Tài liệu đính kèm
             </nz-form-label>
             <div class='list-file'>
-              <file-list [data]='fileDinhKem' [isViewDetail]="isView" [disabled]="isView"></file-list>
+              <file-list [data]='fileDinhKem'></file-list>
             </div>
           </nz-form-item>
         </div>
@@ -333,7 +333,7 @@
         <nz-form-item>
           <nz-form-label nz-col [nzSpan]='24' [nzNoColon]='true'>Ghi chú</nz-form-label>
           <nz-form-control nz-col [nzSpan]='24'>
-            <textarea rows='3' class='search__input' formControlName='ghiChu' nz-input></textarea>
+            <textarea rows='3' [readOnly]="isView" class='search__input' formControlName='ghiChu' nz-input></textarea>
           </nz-form-control>
         </nz-form-item>
       </div>

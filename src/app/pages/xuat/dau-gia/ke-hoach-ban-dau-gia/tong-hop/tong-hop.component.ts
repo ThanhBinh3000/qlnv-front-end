@@ -158,8 +158,8 @@ export class TongHopComponent extends Base2Component implements OnInit {
     this.isViewQdPd = isView;
   }
 
-  isActionAllowed(data): boolean {
-    return this.userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_XEM') &&
-      (data.trangThai !== STATUS.CHUA_TAO_QD || !this.userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP'));
-  }
+  // isActionAllowed(data): boolean {
+  //   return this.userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_XEM') &&
+  //     (data.trangThai !== STATUS.CHUA_TAO_QD || !this.userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP'));
+  // }
 }

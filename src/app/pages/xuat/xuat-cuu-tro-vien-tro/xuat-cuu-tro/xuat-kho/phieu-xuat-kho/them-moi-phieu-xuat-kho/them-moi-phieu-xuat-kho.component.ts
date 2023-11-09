@@ -26,6 +26,7 @@ import {
 } from "src/app/services/qlnv-hang/xuat-hang/chung/kiem-tra-chat-luong/PhieuKiemNghiemChatLuong.service";
 import { uniqBy } from 'lodash';
 import { BangKeCanCtvtService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BangKeCanCtvt.service';
+import { AMOUNT_ONE_DECIMAL } from 'src/app/Utility/utils';
 @Component({
   selector: 'app-them-moi-phieu-xuat-kho',
   templateUrl: './them-moi-phieu-xuat-kho.component.html',
@@ -52,6 +53,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   templateNameVt = "Phiếu xuất kho";
   listDonViNhan: any[];
   listDiaDiemNhapFilter: any[];
+  amount1 = { ...AMOUNT_ONE_DECIMAL };
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -124,7 +126,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         fileDinhKems: [new Array<FileDinhKem>()],
         loaiNhapXuat: [],
         kieuNhapXuat: [],
-        mucDichXuat: [],
+        mucDichXuat: [, [Validators.required]],
         noiDungDx: [],
         soLuong: []
 
@@ -266,7 +268,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       thoiGianGiaoNhan: data.thoiGianGiaoNhan,
       loaiNhapXuat: data.loaiNhapXuat,
       kieuNhapXuat: data.kieuNhapXuat,
-      // mucDichXuat: data.mucDichXuat
+      mucDichXuat: data.mucDichXuat
     });
     data.dataDtl.forEach(s => {
       s.maDiemKho = s.maDvi.length >= 10 ? s.maDvi.substring(0, 10) : null;
@@ -294,8 +296,8 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       nzComponentParams: {
         dataTable: this.listDiaDiemNhap,
         // dataTable: this.listDiaDiemNhapFilter,
-        dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho', 'Địa phương/cơ quan/đơn vị nhận cứu trợ', 'Mục đích xuất'],
-        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho', 'noiDungDx', 'mucDichXuat']
+        dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho', 'Địa phương/cơ quan/đơn vị nhận cứu trợ'],
+        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho', 'noiDungDx']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -315,7 +317,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
         donViTinh: data.donViTinh,
-        mucDichXuat: data.mucDichXuat,
+        // mucDichXuat: data.mucDichXuat,
         noiDungDx: data.noiDungDx,
         soLuong: data.soLuong
       })
@@ -479,5 +481,8 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   convertTien(tien: number): string {
     return convertTienTobangChu(tien);
   }
-
+  showAction() {
+    if (this.isView) return false;
+    return true;
+  }
 }

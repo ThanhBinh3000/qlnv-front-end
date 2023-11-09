@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="btn-affix">
+<nz-affix [nzOffsetTop]="50" class="btn-affix">
 
   <div class="btn-group">
     <button type="button" class="btn btn-sub ml-2" (click)="goBack()">
@@ -143,6 +143,7 @@
                   <th style="width: 17%;" class="text-center">Loại hàng hóa</th>
                   <th class="text-center">Chủng loại hàng hóa</th>
                   <th style="width: 10%;" class="text-center">Đơn vị tính</th>
+                  <th style="width: 15%;" class="text-center">Số lượng theo sổ sách</th>
                   <th style="width: 15%;" class="text-center">Số lượng thực tế</th>
                   <th style="width: 15%;" class="text-center">Số lượng hao hụt</th>
                   <th style="width: 15%;" class="text-center">Chất lượng hàng hóa</th>
@@ -153,7 +154,8 @@
                 <ng-container *ngFor="let item of dataViewHang; let idx = index">
                   <tr>
                     <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
-                      [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px">
+                      [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"
+                      class="text-center">
                     </td>
                     <td></td>
                     <td class="bold">{{(item.tenChiCucDi? item.tenChiCucDi + " - ": "") +
@@ -175,12 +177,13 @@
                     <ng-container *ngFor="let lv2 of item.childData; let idx2=index">
                       <tr>
                         <td></td>
-                        <td>{{idx2 + 1}}</td>
+                        <td class="text-center">{{idx2 + 1}}</td>
                         <td>{{lv2.tenLoaiVthh || ""}}</td>
                         <td>{{lv2.tenCloaiVthh || ""}}</td>
                         <td>{{lv2.donViTinh}}</td>
-                        <td>{{lv2.slThucTe || 0}}</td>
-                        <td>{{lv2.slHaoHut || 0}}</td>
+                        <td class="text-right">{{lv2.slTheoSoSach|number:globals.numberFormat:globals.locale}}</td>
+                        <td class="text-right">{{lv2.slThucTe|number:globals.numberFormat:globals.locale}}</td>
+                        <td class="text-right">{{lv2.slHaoHut|number:globals.numberFormat:globals.locale}}</td>
                         <td>{{lv2.chatLuongHangHoa}}</td>
                         <!-- <td>
                                             <nz-input-group>
@@ -226,7 +229,8 @@
                 <ng-container *ngFor="let item of dataViewCcdc; let idx = index">
                   <tr>
                     <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
-                      [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px">
+                      [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"
+                      class="text-center">
                     </td>
                     <td></td>
                     <td class="bold">{{item.tenCcdc}}</td>
@@ -238,9 +242,9 @@
                     <ng-container *ngFor="let lv2 of item.childData; let idx2=index">
                       <tr>
                         <td></td>
-                        <td>{{idx2 + 1}}</td>
+                        <td class="text-center">{{idx2 + 1}}</td>
                         <td>{{lv2.tenCcdc || ""}}</td>
-                        <td>{{lv2.slDieuChuyen || ""}}</td>
+                        <td class="text-right">{{lv2.slDieuChuyen|number:globals.numberFormat:globals.locale}}</td>
                         <td>{{lv2.donViTinh}}</td>
                         <td>{{lv2.chatLuongHangHoa}}</td>
                         <!-- <td>
@@ -274,13 +278,13 @@
               <thead>
                 <tr>
                   <th style="width: 3%;" class="text-center">STT</th>
-                  <th>Đơn vị chuyển đi</th>
-                  <th>Đơn vị chuyển đến</th>
+                  <th class="text-center">Đơn vị chuyển đi</th>
+                  <th class="text-center">Đơn vị chuyển đến</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let item of baoCaoKetQuaVpDtl; let idx=index">
-                  <td>{{idx+1}}</td>
+                  <td class="text-center">{{idx+1}}</td>
                   <td>{{ item.tenDonViDi }}</td>
                   <td>{{item.tenDonViDen}}</td>
                 </tr>

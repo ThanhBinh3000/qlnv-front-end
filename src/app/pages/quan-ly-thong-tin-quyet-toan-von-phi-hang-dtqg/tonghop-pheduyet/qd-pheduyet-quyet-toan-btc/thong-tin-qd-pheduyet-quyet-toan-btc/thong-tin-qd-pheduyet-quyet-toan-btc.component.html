@@ -22,8 +22,9 @@
         <i class='icon htvbdh_totrinh'></i>
         <span> In/Xem trước </span>
       </button>
-      <button *ngIf='!isView && dataDetail.trangThaiBtc == STATUS.CHODUYET_BTC && userService.isAccessPermisson("QTOANVONPHI_TONGHOPPHEDUYET_QDPDQTBTC_CAPNHAT_BTC")'
-              type='button' class='btn btn-main ml-2' (click)='save()'>
+      <button
+        *ngIf='!isView && dataDetail.trangThaiBtc == STATUS.CHODUYET_BTC && userService.isAccessPermisson("QTOANVONPHI_TONGHOPPHEDUYET_QDPDQTBTC_CAPNHAT_BTC")'
+        type='button' class='btn btn-main ml-2' (click)='save()'>
         <i class='icon htvbdh_tcdt_save'></i>
         <span>Lưu</span>
       </button>
@@ -176,7 +177,7 @@
           <th class='text-center'>(12)</th>
           <th class='text-center'>(13)</th>
           <th class='text-center'>(14)</th>
-<!--          <th class='text-center'></th>-->
+          <!--          <th class='text-center'></th>-->
           <th class='text-center' *ngIf='trangThaiEditDetail && !isView'></th>
         </tr>
         <!--        <tr>-->
@@ -271,7 +272,7 @@
         <tr *ngFor='let data of dsQtNsChiTw ;let i = index'>
           <ng-container
             *ngIf='(dataQtNsChiTwEdit && dataQtNsChiTwEdit[i] && !dataQtNsChiTwEdit[i].edit) ; else editTemplate '>
-            <!--            <td></td>-->
+<!--            <td></td>-->
             <td class='text-center'>{{i + 1}} </td>
             <td>{{data.tenBoNganh}}</td>
             <td
@@ -290,7 +291,7 @@
             <td class='text-right'>{{data.soTuPhaiNop | number}}</td>
             <td class='text-right'>{{data.soDuNamSau | number}}</td>
             <td class='text-right'>{{data.soTuNamSau | number}}</td>
-            <td class='text-center'  *ngIf='trangThaiEditDetail && !isView' >
+            <td class='text-center' *ngIf='trangThaiEditDetail && !isView'>
               <a (click)='editQtNsChiTw(i)'>
                 <i class='fa fa-pencil' title='Sửa'></i>
               </a>
@@ -300,7 +301,7 @@
             </td>
           </ng-container>
           <ng-template #editTemplate>
-            <td></td>
+<!--            <td></td>-->
             <td class='text-center'>{{i + 1}} </td>
             <td>
               <nz-select [(ngModel)]='dataQtNsChiTwEdit[i].data.maBoNganh' (ngModelChange)='changeBN()'
@@ -394,7 +395,7 @@
         <tfoot>
         <tr>
           <td></td>
-<!--          <td></td>-->
+          <!--          <td></td>-->
           <td class='text-right font-weight-bold'>Tổng</td>
           <td
             class='text-right font-weight-bold'>{{sumCT1('soDtDauNam') + sumCT1('soDtBsTrongNam') + sumCT1('soDuDtNamTruoc') + sumCT1('soTuNamTruoc') | number}}</td>
@@ -599,7 +600,7 @@
             </td>
           </ng-container>
           <ng-template #editTemplate>
-            <td></td>
+<!--            <td></td>-->
             <td class='text-center'>{{i + 1}} </td>
             <td>
               <nz-select [(ngModel)]='dataQtNsKpChiNvDtqgEdit[i].data.maBoNganh' (ngModelChange)='changeBN()'
@@ -693,7 +694,7 @@
         <tfoot>
         <tr>
           <td></td>
-<!--          <td></td>-->
+          <!--          <td></td>-->
           <td class='text-right font-weight-bold'>Tổng</td>
           <td
             class='text-right font-weight-bold'>{{sumCT2('soDtDauNam') + sumCT2('soDtBsTrongNam') + sumCT2('soDuDtNamTruoc') + sumCT2('soTuNamTruoc') | number}}</td>

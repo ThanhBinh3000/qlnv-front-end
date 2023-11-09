@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix" *ngIf="!isViewOnModal">
+<nz-affix [nzOffsetTop]="globals.prop.MN_LV1" class="btn-affix" *ngIf="!isViewOnModal">
   <div class="btn-group">
     <button (click)="quayLai()" class="btn btn-sub" type="button">
       <i class="fa fa-arrow-left"></i>
@@ -177,9 +177,11 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Số lượng gạo cần thu được sau xay xát thóc</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24">
-                <nz-input-number formControlName="soLuong" [nzMin]="0" [nzMax]="999999999999" [nzStep]="1"
+                <!-- <nz-input-number formControlName="soLuong" [nzMin]="0" [nzMax]="999999999999" [nzStep]="1"
                   [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="true">
-                </nz-input-number>
+                </nz-input-number> -->
+                <input class="money-input" currencyMask formControlName="soLuong" [readOnly]="true"
+                  [options]="amount1" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -463,8 +465,8 @@
                       <td class="text-right">{{lv1.soLuongGiao|number:globals.numberFormat:globals.locale}}</td>
                       <td></td>
                       <td></td>
-                      <!-- <td class="text-right bold">{{lv1.tonKhoDvi|number:globals.numberFormat:globals.locale}}</td> -->
-                      <td></td>
+                      <td class="text-right bold">{{lv1.tonKhoDvi|number:globals.numberFormat:globals.locale}}</td>
+                      <!-- <td></td> -->
                       <td></td>
                       <td class="text-right bold">
                         {{lv1.slGaoThuHoiSauXayXat|number:globals.numberFormat:globals.locale}}
@@ -724,9 +726,11 @@
             <nz-form-item>
               <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Tổng số lượng giao Cục</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-input-number formControlName="soLuongDx" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
+                <!-- <nz-input-number formControlName="soLuongDx" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
                   [nzDisabled]="true" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-                </nz-input-number>
+                </nz-input-number> -->
+                <input currencyMask class="money-input" formControlName="soLuongDx" [readOnly]="true"
+                  [options]="amount1" />
               </nz-form-control>
             </nz-form-item>
           </ng-container>
@@ -736,10 +740,12 @@
               'Tổng số lượng giao Chi cục'}}
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-number formControlName="soLuongGiao" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
+              <!-- <nz-input-number formControlName="soLuongGiao" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
                 [nzDisabled]="!userService.isCuc()" [nzSize]="'small'" [nzFormatter]="globals.formatter"
                 [nzParser]="globals.parser">
-              </nz-input-number>
+              </nz-input-number> -->
+              <input currencyMask class="money-input" formControlName="soLuongGiao" [readOnly]="!userService.isCuc()"
+                [options]="amount1" />
             </nz-form-control>
           </nz-form-item>
           <nz-form-item *ngIf="userService.isChiCuc()">
@@ -773,9 +779,10 @@
           <nz-form-item *ngIf="userService.isChiCuc() && formData.value.type !=='XC'">
             <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Số lượng xuất</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-number formControlName="soLuong" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
+              <!-- <nz-input-number formControlName="soLuong" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
                 [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-              </nz-input-number>
+              </nz-input-number> -->
+              <input currencyMask class="money-input" formControlName="soLuong" [options]="amount1" />
             </nz-form-control>
           </nz-form-item>
 
@@ -787,7 +794,7 @@
               <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Tỉ lệ thu hồi sau xay xát
                 (%)</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <input currencyMask formControlName="tyLeThuHoiSauXayXat" [options]="amount"
+                <input currencyMask class="money-input" formControlName="tyLeThuHoiSauXayXat" [options]="amount"
                   [readOnly]="formData.value.trangThaiXh === STATUS.DA_HOAN_THANH" />
               </nz-form-control>
             </nz-form-item>
@@ -795,19 +802,23 @@
               <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Số lượng gạo thu hồi được sau xay
                 xát</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-input-number formControlName="slGaoThuHoiSauXayXat" [nzMin]="0" [nzMax]="999999999999" [nzStep]="2"
+                <!-- <nz-input-number formControlName="slGaoThuHoiSauXayXat" [nzMin]="0" [nzMax]="999999999999" [nzStep]="2"
                   [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                   [nzDisabled]="formData.value.trangThaiXh === STATUS.DA_HOAN_THANH">
-                </nz-input-number>
+                </nz-input-number> -->
+                <input class="money-input" currencyMask formControlName="slGaoThuHoiSauXayXat"
+                  [readOnly]="formData.value.trangThaiXh === STATUS.DA_HOAN_THANH" [options]="amount1" />
               </nz-form-control>
             </nz-form-item>
             <nz-form-item>
               <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Số lượng thóc xuất để xay
                 xát</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-input-number formControlName="slThocDeXayXat" [nzMin]="0" [nzMax]="999999999999" [nzStep]="3"
+                <!-- <nz-input-number formControlName="slThocDeXayXat" [nzMin]="0" [nzMax]="999999999999" [nzStep]="3"
                   [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="true">
-                </nz-input-number>
+                </nz-input-number> -->
+                <input currencyMask class="money-input" formControlName="slThocDeXayXat" [readOnly]="true"
+                  [options]="amount1" />
               </nz-form-control>
             </nz-form-item>
           </ng-container>
@@ -817,7 +828,7 @@
               <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Tỉ lệ thu hồi sau xay xát
                 (%)</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <input currencyMask formControlName="tyLeThuHoiSauXayXat" [options]="amount"
+                <input currencyMask class="money-input" formControlName="tyLeThuHoiSauXayXat" [options]="amount"
                   [readOnly]="formData.value.trangThaiXh === STATUS.DA_HOAN_THANH" />
               </nz-form-control>
             </nz-form-item>
@@ -825,19 +836,23 @@
               <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Số lượng thóc xuất để xay
                 xát</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-input-number formControlName="slThocDeXayXat" [nzMin]="0" [nzMax]="999999999999" [nzStep]="3"
+                <!-- <nz-input-number formControlName="slThocDeXayXat" [nzMin]="0" [nzMax]="999999999999" [nzStep]="3"
                   [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                   [nzDisabled]="formData.value.trangThaiXh === STATUS.DA_HOAN_THANH">
-                </nz-input-number>
+                </nz-input-number> -->
+                <input currencyMask class="money-input" formControlName="slThocDeXayXat"
+                  [readOnly]="formData.value.trangThaiXh === STATUS.DA_HOAN_THANH" [options]="amount1" />
               </nz-form-control>
             </nz-form-item>
             <nz-form-item>
               <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Số lượng gạo thu hồi được sau xay
                 xát</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-input-number formControlName="slGaoThuHoiSauXayXat" [nzMin]="0" [nzMax]="999999999999" [nzStep]="2"
+                <!-- <nz-input-number formControlName="slGaoThuHoiSauXayXat" [nzMin]="0" [nzMax]="999999999999" [nzStep]="2"
                   [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="true">
-                </nz-input-number>
+                </nz-input-number> -->
+                <input class="money-input" currencyMask formControlName="slGaoThuHoiSauXayXat" [readOnly]="true"
+                  [options]="amount1" />
               </nz-form-control>
             </nz-form-item>
           </ng-container>

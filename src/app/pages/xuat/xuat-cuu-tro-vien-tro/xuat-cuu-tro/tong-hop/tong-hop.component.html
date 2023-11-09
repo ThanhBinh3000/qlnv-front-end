@@ -174,11 +174,10 @@
                 (click)="redirectDetail(data.id, true)">
                 <i class="icon htvbdh_tcdt_pheduyet" title="Phê duyệt bản ghi"></i>
               </a>
-              <!-- <a
-              *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.TAO_QD)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_THEM') && !data.soQdPd"
-              (click)="taoQuyetDinh(data)">
-              <i class="icon htvbdh_soanthao" title="Tạo quyết định"></i>
-            </a> -->
+              <a *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.TAO_QD)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_THEM') && !data.soQuyetDinh"
+                (click)="taoQuyetDinhPdPa(data)">
+                <i class="icon htvbdh_soanthao" title="Tạo quyết định"></i>
+              </a>
               <a *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_THPA_XOA')"
                 (click)="delete(data)">
                 <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
@@ -208,15 +207,16 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-chi-tiet-tong-hop [idSelected]="idSelected" [isView]="isView" (showListEvent)="showList()">
+  <app-chi-tiet-tong-hop [idSelected]="idSelected" [isView]="isView" (showListEvent)="showList()"
+    (taoQuyetDinh)="taoQuyetDinh($event)">
   </app-chi-tiet-tong-hop>
 </div>
 <nz-modal [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }" nzMaskClosable="true" [(nzVisible)]="isViewQdPd"
   (nzOnCancel)="closeModalQdPd()">
   <ng-container *nzModalContent>
-    <app-thong-tin-quyet-dinh-phe-duyet-phuong-an class="modal-content-detail" [idSelected]="idQdPd" [isView]="isView"
-      [dataInit]="dataInit" [isViewOnModal]="true" (showListEvent)="showList()">
-    </app-thong-tin-quyet-dinh-phe-duyet-phuong-an>
+    <app-chi-tiet-quyet-dinh-pd class="modal-content-detail" [idSelected]="idQdPd" [isView]="true" [dataInit]="dataInit"
+      [isViewOnModal]="true" (showListEvent)="showList()">
+    </app-chi-tiet-quyet-dinh-pd>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeModalQdPd()" class="modal__button--cancel">

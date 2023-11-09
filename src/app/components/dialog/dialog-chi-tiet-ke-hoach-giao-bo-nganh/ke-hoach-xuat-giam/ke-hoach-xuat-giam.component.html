@@ -258,7 +258,7 @@
     <nz-form-item  nz-col nzSpan="24" class="form-item" style="padding-right: 15px;">
       <nz-form-label [nzNoColon]="true" nzFor="bo-nganh">Ghi chú</nz-form-label>
       <nz-input-group>
-        <input nz-input [disabled]='isView' (ngModelChange)="onChangeGhiChu()" [(ngModel)]="ghiChu" />
+        <input nz-input [disabled]='isView' (change)="onChangeGhiChu()" [(ngModel)]="ghiChu" />
       </nz-input-group>
     </nz-form-item>
   </div>

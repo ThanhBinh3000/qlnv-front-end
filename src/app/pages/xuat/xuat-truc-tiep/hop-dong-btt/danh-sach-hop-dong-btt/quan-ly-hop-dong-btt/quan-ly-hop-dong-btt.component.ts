@@ -164,6 +164,8 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
         trangThaiHd: data.trangThaiHd,
         tenTrangThaiHd: data.tenTrangThaiHd,
       });
+      const dataChildren = data.children.find(item => item.maDvi === this.userInfo.MA_DVI);
+      this.formData.patchValue({tenDvi: dataChildren.tenDvi})
       const filteredItems = this.loadDanhSachHdongDaKy.filter(item => item.idChaoGia === data.id);
       const tongSlDaKyHdong = filteredItems.reduce((acc, item) => acc + item.soLuong, 0);
       const tongSlChuaKyHdong = data.tongSoLuong - tongSlDaKyHdong;
@@ -362,17 +364,17 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     return this.dataTable.reduce((sum, cur) => sum + (cur[column] || 0), 0);
   }
 
-  formatterTien = (value: number) => {
-    const donViTien = '(đ)';
-    const formattedValue = value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
-    return `${formattedValue} ${donViTien}`;
-  }
-
-  formatterSoLuong = (value: number) => {
-    const donViTinh = this.formData.value.donViTinh ? this.formData.value.donViTinh : ''
-    const formattedValue = value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
-    return `${formattedValue} ${donViTinh}`;
-  }
+  // formatterTien = (value: number) => {
+  //   const donViTien = '(đ)';
+  //   const formattedValue = value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
+  //   return `${formattedValue} ${donViTien}`;
+  // }
+  //
+  // formatterSoLuong = (value: number) => {
+  //   const donViTinh = this.formData.value.donViTinh ? this.formData.value.donViTinh : ''
+  //   const formattedValue = value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
+  //   return `${formattedValue} ${donViTinh}`;
+  // }
 
   openModal(id: number) {
     this.idQdNv = id;

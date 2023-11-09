@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix" *ngIf="!isViewOnModal">
+<nz-affix [nzOffsetTop]="globals.prop.MN_LV2" class="btn-affix" *ngIf="!isViewOnModal">
   <div class="btn-group">
     <button type="button" class="btn btn-sub" (click)="goBack()">
       <i class="fa fa-arrow-left"></i>
@@ -105,10 +105,13 @@
                   Số biên bản lấy mẫu/bàn giao mẫu
                 </nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfter="{{maHauTo}}">
+                  <!-- <nz-input-group nzAddOnAfter="{{maHauTo}}">
                     <nz-input-number formControlName="soBbQd" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
                       [nzSize]="'small'" [nzDisabled]=" isView">
                     </nz-input-number>
+                  </nz-input-group> -->
+                  <nz-input-group>
+                    <input nz-input [readonly]="true" formControlName="soBbQd">
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -389,10 +392,12 @@
               Số lượng mẫu hàng kiểm tra
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-number type="text" nz-input [nzSize]="'small'" formControlName="soLuongMau"
+              <!-- <nz-input-number type="text" nz-input [nzSize]="'small'" formControlName="soLuongMau"
                 [nzDisabled]="isView" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter"
                 [nzParser]="globals.parser">
-              </nz-input-number>
+              </nz-input-number> -->
+              <input currencyMask class="money-input" formControlName="soLuongMau" [readOnly]="isView"
+                [options]="amount1" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -410,9 +415,10 @@
             <nz-form-label [nzNoColon]="true" nzRequired class="border-label-left">Phương pháp lấy mẫu</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <!-- <nz-checkbox-group formControlName="ppLayMau" nzDisabled="true"></nz-checkbox-group> -->
-              <nz-checkbox-group formControlName="ppLayMau" class="grid-1" [nzDisabled]="isView"
-                *ngIf="loaiChon !=='radio'"></nz-checkbox-group>
-              <nz-radio-group formControlName="ppLayMau" *ngIf="loaiChon==='radio'" class="grid-1">
+              <!-- <nz-checkbox-group formControlName="ppLayMau" class="grid-1" [nzDisabled]="isView"
+                *ngIf="loaiChon !=='radio'"></nz-checkbox-group> -->
+              <nz-radio-group formControlName="ppLayMau" *ngIf="loaiChon==='radio'" class="grid-1"
+                [nzDisabled]="isView">
                 <label nz-radio *ngFor="let item of dsPpLayMau" [nzValue]="item.label">{{item.label}}</label>
               </nz-radio-group>
             </nz-form-control>

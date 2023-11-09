@@ -19,6 +19,7 @@ import {AMOUNT, AMOUNT_ONE_DECIMAL, AMOUNT_TWO_DECIMAL} from "../../../Utility/u
 import {QuyetDinhGiaCuaBtcService} from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
 import {STATUS} from "../../../constants/status";
 import {QuyetDinhGiaTCDTNNService} from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 
 @Component({
@@ -49,7 +50,20 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
   listChiCuc: any[] = [];
 
   listDiemKho: any[] = [];
-  amount = AMOUNT_ONE_DECIMAL;
+  // amount = AMOUNT_TWO_DECIMAL;
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "left",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
   customPrecisionFn(value: string | number, precision?: number): number {
     return +Number(value).toFixed(precision! + 1);
   }
@@ -88,6 +102,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
       cloaiVthh: [''],
       tenCloaiVthh: [''],
       donGiaTdVat: [''],
+      thueVat: [''],
       maDonVi: ['']
     });
   }
@@ -195,8 +210,9 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
       };
       let res = await this.donViService.getAll(body);
       if (res.msg === MESSAGE.SUCCESS) {
-        this.listChiCuc = res.data.filter(item => item.type == 'DV');
+        this.listChiCuc = this.dataChiTieu.khLuongThuc
         this.listChiCuc.map(v => Object.assign(v, { tenDonVi: v.tenDvi }))
+        console.log(this.listChiCuc, "this.listChiCuc")
       }
     }
   }
@@ -289,6 +305,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
   }
 
   calTongThanhTien() {
+    console.log(111)
     this.calcTongThanhTienTrucTiep();
     this.calcTongThanhTienTheoDonGiaDd();
   }
@@ -343,6 +360,9 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
       this.thongTinMuaTrucTiepEdit[index].donGiaVat = this.formData.get('donGiaVat').value;
       this.listOfData[index] = this.thongTinMuaTrucTiepEdit[index];
       this.listOfData[index].edit = false;
+      this.calcTongSLnhapTrucTiepDeXuat();
+      this.calcTongThanhTienTrucTiep();
+      this.calcTongThanhTienTheoDonGiaDd();
     }
   }
 
@@ -383,16 +403,16 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
   calcTongThanhTienTrucTiep() {
     this.formData.patchValue({
       tongThanhTien:
-        +this.formData.get('tongSoLuong').value *
-        +this.formData.get('donGia').value *1000,
+        +this.formData.value.tongSoLuong *
+        +this.formData.value.donGia *1000,
     });
   }
 
   calcTongThanhTienTheoDonGiaDd() {
     this.formData.patchValue({
       tongThanhTienVat:
-        +this.formData.get('tongSoLuong').value *
-        +this.formData.get('donGiaVat').value *1000,
+        +this.formData.value.tongSoLuong *
+        +this.formData.value.donGiaVat *1000,
     });
   }
 
@@ -413,6 +433,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     let res = await this.quyetDinhGiaCuaBtcService.getQdGiaLastestBtc(body);
     if (res.msg === MESSAGE.SUCCESS) {
       if (res.data) {
+        console.log(res.data, "0000")
         let giaToiDa = 0;
         res.data.forEach(i => {
           let giaQdBtc = 0;
@@ -424,6 +445,9 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
           if (giaQdBtc > giaToiDa) {
             giaToiDa = giaQdBtc;
           }
+          this.formData.patchValue({
+            thueVat: i.vat * 100
+          })
         })
         this.formData.get('donGiaTdVat').setValue(giaToiDa);
       }
