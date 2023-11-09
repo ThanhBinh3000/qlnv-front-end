@@ -12,7 +12,7 @@ import { UserService } from 'src/app/services/user.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { Operator, Status, Table, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import { BtnStatus, Doc, Form } from '../../giao-du-toan.constant';
 export class ItemData {
     id: any;

@@ -12,7 +12,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from "uuid";
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import { BtnStatus, Doc, Form } from '../../dieu-chinh-du-toan.constant';
 import { CurrencyMaskInputMode } from 'ngx-currency';
 

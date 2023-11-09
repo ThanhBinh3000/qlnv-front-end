@@ -9,7 +9,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import { BtnStatus, Doc, Form } from '../../dieu-chinh-du-toan.constant';
 import { DANH_MUC_PL_TH } from './phu-luc-tong-hop.constant';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';

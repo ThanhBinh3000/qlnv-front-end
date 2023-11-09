@@ -18,7 +18,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import * as uuid from 'uuid';
-import * as XLSX from "xlsx";
+import * as XLSX from 'xlsx-js-style';
 import { Doc } from '../giao-du-toan-thuc-te.constant';
 // khai báo class data request
 export class ItemData {

@@ -12,7 +12,7 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import { BtnStatus, Doc, Form } from '../../giao-du-toan.constant';
 
 export class ItemData {

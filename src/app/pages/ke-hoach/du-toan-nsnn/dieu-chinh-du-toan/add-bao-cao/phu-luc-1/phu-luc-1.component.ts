@@ -9,7 +9,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import { BtnStatus, Doc, Form } from '../../dieu-chinh-du-toan.constant';
 import { NOI_DUNG } from './phu-luc-1.constant';
 import { CurrencyMaskInputMode } from 'ngx-currency';

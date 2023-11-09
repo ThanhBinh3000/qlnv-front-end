@@ -12,7 +12,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from 'uuid';
 import { DialogSelectTaiSanComponent } from '../../dialogSelectTaiSan/dialogSelectTaiSan.component';
 import { BtnStatus, Doc, Form } from '../../giao-du-toan.constant';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 
 export class ItemData {
 	id: any;

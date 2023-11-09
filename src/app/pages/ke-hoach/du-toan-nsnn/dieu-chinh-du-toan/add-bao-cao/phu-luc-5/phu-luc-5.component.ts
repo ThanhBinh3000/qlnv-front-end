@@ -12,7 +12,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from 'uuid';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import { BtnStatus, Doc, Form } from '../../dieu-chinh-du-toan.constant';
 import { UserService } from 'src/app/services/user.service';
 import { CurrencyMaskInputMode } from 'ngx-currency';
@@ -969,6 +969,7 @@ export class PhuLuc5Component implements OnInit {
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        debugger
         for (const cell in worksheet) {
             if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
             worksheet[cell].s = Table.borderStyle;
