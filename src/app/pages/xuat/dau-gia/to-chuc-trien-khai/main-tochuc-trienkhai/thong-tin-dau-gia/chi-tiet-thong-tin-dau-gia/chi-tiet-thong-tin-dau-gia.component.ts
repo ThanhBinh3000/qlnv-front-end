@@ -15,8 +15,7 @@ import {
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
 import dayjs from 'dayjs';
 import {cloneDeep} from 'lodash';
-import {PREVIEW} from "src/app/constants/fileType";
-import {formatNumber} from "@angular/common";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {
   QuyetDinhDchinhKhBdgService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/dieuchinh-kehoach/quyetDinhDchinhKhBdg.service";
@@ -27,10 +26,13 @@ import {
   styleUrls: ['./chi-tiet-thong-tin-dau-gia.component.scss']
 })
 export class ChiTietThongTinDauGiaComponent extends Base2Component implements OnInit {
-  @Input() loaiVthhInput: string;
+  @Input() loaiVthh: string
   @Input() idInput: number;
-  @Output()
-  showListEvent = new EventEmitter<any>();
+  @Output() showListEvent = new EventEmitter<any>();
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
+  templateNameVt = "Thông tin bán đấu giá vật tư";
+  templateNameLt = "Thông tin bán đấu giá lương thực";
+  idThongTin: number;
   dataThongTin: any;
   selected: boolean = false;
 
@@ -238,6 +240,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
       this.selected = true;
     }
     this.dataThongTin = data;
+    this.idThongTin = data.id;
   }
 
   async themMoiPhienDauGia($event, isView: boolean, data?: any) {
@@ -292,40 +295,5 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
         }
       },
     });
-  }
-
-  // formatterTien = (value: number) => {
-  //   const donViTien = '(đ)';
-  //   const formattedValue = value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
-  //   return `${formattedValue} ${donViTien}`;
-  // }
-  //
-  // formatterSoLuong = (value: number) => {
-  //   const donViTinh = this.formData.value.donViTinh;
-  //   const formattedValue = value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
-  //   return `${formattedValue} ${donViTinh}`;
-  // }
-
-  async preview() {
-    const data = [];
-    for (const s of this.formData.value.listTtinDg) {
-      const res = await this.thongTinDauGiaService.getDetail(s.id);
-      data.push(res.data);
-    }
-    const body = {
-      tenCloaiVthh: this.formData.value.tenCloaiVthh.toUpperCase(),
-      nam: this.formData.value.nam,
-      maDvi: this.formData.value.maDvi,
-      children: data
-    };
-    try {
-      const s = await this.service.preview(body);
-      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
-      this.printSrc = s.data.pdfSrc;
-      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
-      this.showDlgPreview = true;
-    } catch (error) {
-      console.log('error: ', error);
-    }
   }
 }
