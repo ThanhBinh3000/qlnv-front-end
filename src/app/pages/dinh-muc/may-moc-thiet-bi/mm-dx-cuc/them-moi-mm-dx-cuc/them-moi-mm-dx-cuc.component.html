@@ -199,7 +199,7 @@
               </td>
               <td class="text-right">{{item.donGiaTd  | number : '1.0-1' : 'vi_VN'}}</td>
               <td class="text-right">{{item.donGiaTd * item.soLuong   | number : '1.0-1' : 'vi_VN'}}</td>
-              <td><input nz-input [(ngModel)]="item.ghiChu"></td>
+              <td><input nz-input [(ngModel)]="item.ghiChu" [readOnly]="isView"></td>
             </tr>
           </ng-container>
         </ng-container>
