@@ -153,7 +153,7 @@ export class ThongTinTonghopComponent implements OnInit {
           this.detail.trangThai = data.trangThai;
           this.detail.tenTrangThai = data.tenTrangThai;
           this.filePhuongAn = data.fileDinhKems;
-          let idsKhDnCapVonId = data.ct1s.filter(item => item.maBn != 'BTC' && !item.khDnCapVonId).map(s => Number(s.khDnCapVonId));
+          let idsKhDnCapVonId = data.ct1s.filter(item => item.maBn != 'BTC' && item.khDnCapVonId).map(s => Number(s.khDnCapVonId));
           this.formData.patchValue({
             'nam': res.data.nam,
             'nguonTongHop': data.nguonTongHop,
