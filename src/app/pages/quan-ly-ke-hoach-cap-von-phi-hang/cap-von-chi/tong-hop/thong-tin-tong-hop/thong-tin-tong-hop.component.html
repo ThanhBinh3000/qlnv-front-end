@@ -1,4 +1,4 @@
-<div *ngIf='!isDetail'>
+<div>
   <nz-affix [nzOffsetTop]='globals.prop.MENU_LV1' class='btn-affix'>
     <div class='btn-group'>
       <button type='button' class='btn btn-sub' (click)='back()'>
@@ -209,6 +209,9 @@
             <a *ngIf="!data.isSum && data.maBn != 'BTC'" (click)='goToDetail(data, true)'>
               <i class='fa fa-eye' title='Xem chi tiết'></i>
             </a>
+            <a *ngIf="data.maBn == 'BTC'" (click)='goToDetailHdv(data, true)'>
+              <i class='fa fa-eye' title='Xem chi tiết'></i>
+            </a>
           </td>
         </tr>
         </tbody>
@@ -309,7 +312,36 @@
     </nz-card>
   </div>
 </div>
-<div class='chi-tiet' *ngIf='isDetail'>
-  <app-thong-tin-de-nghi-cap-von-bo-nganh [idInput]='selectedId' [isView]='isView' (showListEvent)='showList()'>
-  </app-thong-tin-de-nghi-cap-von-bo-nganh>
-</div>
+<!--<div class='chi-tiet' *ngIf='isDetail'>-->
+
+<!--</div>-->
+<!--<div class='chi-tiet' *ngIf='isDetailHdv'>-->
+
+<!--</div>-->
+
+<nz-modal [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"
+          [(nzVisible)]="isDetail" (nzOnCancel)="closePopDnBn()">
+  <ng-container *nzModalContent>
+    <app-thong-tin-de-nghi-cap-von-bo-nganh [idInput]='selectedId' [isView]='isView' (showListEvent)='showList()'>
+    </app-thong-tin-de-nghi-cap-von-bo-nganh>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closePopDnBn()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+<nz-modal [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"
+          [(nzVisible)]="isDetailHdv" (nzOnCancel)="closePopHdv()">
+  <ng-container *nzModalContent>
+    <app-de-nghi-cap-von-quyet-dinh-don-gia-mua [dataInfo]='dataInfoHdv' >
+    </app-de-nghi-cap-von-quyet-dinh-don-gia-mua>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closePopHdv()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

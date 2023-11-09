@@ -156,6 +156,7 @@ export class PaGiaoChiTieuKeHoachComponent implements OnInit {
   }
 
   async search() {
+    console.log('hahaaaaaaaaaaaaaaaaa');
     let maDonVi = null;
     let tenDvi = null;
     let donviId = null;
@@ -452,7 +453,7 @@ export class PaGiaoChiTieuKeHoachComponent implements OnInit {
     this.indexTab = cap;
     this.clearFilter();
     this.clearFilterTable();
-    this.search();
+    // this.search();
   }
 
   filterInTable(key: string, value: string) {
