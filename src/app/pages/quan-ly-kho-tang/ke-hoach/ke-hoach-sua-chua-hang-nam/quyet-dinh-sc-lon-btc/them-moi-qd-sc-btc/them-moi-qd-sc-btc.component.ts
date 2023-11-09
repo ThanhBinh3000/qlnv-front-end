@@ -57,8 +57,8 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       namKeHoach: [dayjs().get('year'), Validators.required],
       trichYeu: [null, Validators.required],
       ngayKy: [null, Validators.required],
-      soQdGiaoNv: [null, Validators.required],
-      idQdGiaoNv: [null, Validators.required],
+      soQdGiaoNv: [null],
+      idQdGiaoNv: [null],
       trangThai: [STATUS.DANG_NHAP_DU_LIEU],
       tenTrangThai: ["Đang nhập dữ liệu"],
       type: ["00"],
@@ -77,6 +77,7 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       if (this.idInput > 0) {
         await this.getDataDetail(this.idInput);
       } else {
+        this.changeKieu(this.formData.value.kieu)
         // await this.loadDxCuc();
         // await this.loadListTh();
         // if (this.idTongHop && this.idTongHop > 0) {
@@ -298,23 +299,26 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
 
   changeKieu(event: any) {
     if (event) {
-      // this.formData.patchValue({
-      //   soQdGiaoNv: null,
-      //   idQdGiaoNv: null,
-      //   soQdBtc: null,
-      //   idQdBtc: null,
-      // })
-      // if (event == 'LD') {
-      //   this.formData.controls['soTtr'].setValidators([Validators.required]);
-      //   this.formData.controls['soQdGoc'].clearValidators();
-      //   this.formData.controls['idQdGoc'].clearValidators();
-      //   this.formData.controls['lanDc'].clearValidators();
-      // } else {
-      //   this.formData.controls['soTtr'].clearValidators();
-      //   this.formData.controls['soQdGoc'].setValidators([Validators.required]);
-      //   this.formData.controls['idQdGoc'].setValidators([Validators.required]);
-      //   this.formData.controls['lanDc'].setValidators([Validators.required]);
-      // }
+      this.formData.patchValue({
+        soQdGiaoNv: null,
+        idQdGiaoNv: null,
+        soQdBtc: null,
+        idQdBtc: null,
+        lanDc : null,
+      })
+      if (event == 'LD') {
+        this.formData.controls['soQdGiaoNv'].setValidators([Validators.required]);
+        this.formData.controls['idQdGiaoNv'].setValidators([Validators.required]);
+        this.formData.controls['soQdGoc'].clearValidators();
+        this.formData.controls['idQdGoc'].clearValidators();
+        this.formData.controls['lanDc'].clearValidators();
+      } else {
+        this.formData.controls['soQdGiaoNv'].clearValidators();;
+        this.formData.controls['idQdGiaoNv'].clearValidators();;
+        this.formData.controls['soQdGoc'].setValidators([Validators.required]);
+        this.formData.controls['idQdGoc'].setValidators([Validators.required]);
+        this.formData.controls['lanDc'].setValidators([Validators.required]);
+      }
     }
     this.dataTable = [];
   }
