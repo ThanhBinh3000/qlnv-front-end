@@ -256,7 +256,7 @@
             <th nzWidth="20%">Mã cân (A)</th>
             <th>Số bao bì (1)</th>
             <th>Trọng lượng cả bì (2)</th>
-            <th nzWidth="15%">Hành động</th>
+            <th nzWidth="15%" *ngIf="!isView">Hành động</th>
           </tr>
           <!--create row-->
           <tr>
@@ -278,11 +278,11 @@
               <input currencyMask class="money-input" [(ngModel)]="bangKeDtlCreate.trongLuongCaBi"
                 [options]="amount1" />
             </th>
-            <th>
-              <a (click)="addRow()" *ngIf="!isView">
+            <th *ngIf="!isView" class="text-center">
+              <a (click)="addRow()">
                 <i class="icon htvbdh_dau-cong"></i>
               </a>
-              <a (click)="clearRow()" *ngIf="!isView">
+              <a (click)="clearRow()">
                 <i class="fa fa-refresh"></i>
               </a>
             </th>
@@ -296,12 +296,11 @@
               <td>{{item.maCan}}</td>
               <td class="text-right">{{item.trongLuongBaoBi|number: '1.0-1' : 'vi_VN'}}</td>
               <td class="text-right">{{item.trongLuongCaBi|number: '1.0-1' : 'vi_VN'}}</td>
-              <td>
-                <a (click)="editRow(i)" *ngIf="!isView">
+              <td *ngIf="!isView" class="text-center">
+                <a (click)="editRow(i)">
                   <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
-                <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa ?" (nzOnConfirm)="deleteRow(i)"
-                  *ngIf="!isView">
+                <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa ?" (nzOnConfirm)="deleteRow(i)">
                   <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
@@ -321,7 +320,7 @@
                 </nz-input-number> -->
                 <input currencyMask class="money-input" [(ngModel)]="item.trongLuongCaBi" [options]="amount1" />
               </td>
-              <td>
+              <td class="text-center">
                 <a (click)="saveRow(i)">
                   <i class="icon htvbdh_tcdt_save"></i>
                 </a>
