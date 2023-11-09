@@ -145,6 +145,12 @@ export class LapBienBanNghiemThuBaoQuanComponent extends Base2Component implemen
       } else {
         await this.initForm();
       }
+      if(this.idQdGiaoNvNh){
+        await this.bindingDataQd(this.idQdGiaoNvNh)
+      }
+      if(this.dataDdiem){
+        await this.bindingDataDdNhap(this.dataDdiem)
+      }
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -641,6 +647,7 @@ export class LapBienBanNghiemThuBaoQuanComponent extends Base2Component implemen
       //   let phieuKtraCL = data.listPhieuKtraCl.filter(x => x.soPhieu == item.soPhieuKtraCl)[0];
       //   item.soLuongThucNhap = phieuKtraCL ? phieuKtraCL.soLuongNhapKho : 0
       // })
+      console.log(data)
       await this.getNganKho(data.maLoKho ? data.maLoKho : data.maNganKho);
       console.log(data, "9999")
       this.formData.patchValue({

@@ -4,7 +4,7 @@
             <div nz-row [nzGutter]="[24]">
                 <div nz-col [nzSpan]="6">
                     <nz-form-item>
-                        <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
+                        <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group nzAddOnAfterIcon="folder-open">
                                 <input [readonly]="true" nz-input formControlName="tenLoaiVthh" readonly="true" />
@@ -14,7 +14,7 @@
                 </div>
                 <div nz-col [nzSpan]="18">
                     <nz-form-item>
-                        <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
+                        <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng DTQG </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group nzAddOnAfterIcon="folder-open">
                                 <input [readonly]="true" nz-input formControlName="tenCloaiVthh" readonly="true" />
@@ -24,7 +24,7 @@
                 </div>
                 <div nz-col [nzSpan]="24">
                     <nz-form-item>
-                        <nz-form-label [nzNoColon]="true" nzRequired> Tên hàng hóa </nz-form-label>
+                        <nz-form-label [nzNoColon]="true" nzRequired> Tên hàng DTQG </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <input nz-input readonly formControlName="moTaHangHoa" />
                         </nz-form-control>
@@ -87,7 +87,7 @@
 
                 <div nz-col [nzSpan]="10">
                     <nz-form-item>
-                        <nz-form-label nzRequired [nzNoColon]="true"> Thời gian mở của kho mua từ ngày </nz-form-label>
+                        <nz-form-label nzRequired [nzNoColon]="true"> Thời điểm mở của kho mua từ ngày </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
                               <nz-date-picker [(ngModel)]="tgianMkhoChange" [ngModelOptions]="{standalone: true}" nzFormat="dd/MM/yyyy"
@@ -98,7 +98,7 @@
                 </div>
                 <div nz-col [nzSpan]="10">
                     <nz-form-item>
-                        <nz-form-label nzRequired [nzNoColon]="true"> Thời gian mua thóc đến hết ngày </nz-form-label>
+                        <nz-form-label nzRequired [nzNoColon]="true"> Thời hạn mua đến hết ngày </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
                               <nz-date-picker [(ngModel)]="tgianKthucChange" [ngModelOptions]="{standalone: true}" nzFormat="dd/MM/yyyy"
@@ -197,11 +197,11 @@
         <td>{{item.tenDvi}}</td>
         <td></td>
         <td></td>
-        <td class="text-blue">{{item.soLuongChiTieu | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="text-blue">{{item.soLuongKhDd | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="text-blue">{{item.tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="text-blue">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="text-blue">{{item.tongSoLuong * item.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-blue text-right">{{item.soLuongChiTieu | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-blue text-right">{{item.soLuongKhDd | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-blue text-right">{{item.tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-blue text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-blue text-right">{{item.tongSoLuong * item.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
         <td>
           <a *ngIf="!isView" (click)="themMoiBangPhanLoTaiSan(item,i)">
             <i class="fa fa-pencil" title="Sửa"></i>

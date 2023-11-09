@@ -111,12 +111,7 @@
             <td nzLeft class="bold">{{ item.nam }}</td>
             <td nzLeft class="bold">{{ item.tgianNkMnhat }}</td>
             <td colspan="8"></td>
-            <td>
-              <a *ngIf="userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_THEM')"
-                 (click)="redirectToChiTiet(false, 0,item.id)">
-                <i class="fa fa-plus"></i>
-              </a>
-            </td>
+            <td></td>
           </tr>
           <ng-container *ngIf="item.expand">
             <ng-container *ngFor="let dataDdiem of item.dtlList, let y = index">
@@ -128,7 +123,13 @@
                 <td nzLeft></td>
                 <td nzLeft>{{dataDdiem.tenDiemKho}}</td>
                 <td nzLeft>{{dataDdiem.tenLoKho}} - {{dataDdiem.tenNganKho}}</td>
-                <td colspan="7"></td>
+                <td colspan="6"></td>
+                <td>
+                  <a *ngIf="userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_THEM')"
+                     (click)="redirectToChiTiet(false, 0,item.id, dataDdiem)">
+                    <i class="fa fa-plus"></i>
+                  </a>
+                </td>
               </tr>
               <ng-container *ngFor="let dataBb of dataDdiem.bbNghiemThuNhapKhacList, let k = index">
                 <tr class="level-3"
@@ -195,7 +196,7 @@
 
 </ng-container>
 <ng-container *ngIf="isDetail">
-  <app-lap-bien-ban-nghiem-thu-bao-quan [title]="'BIÊN BẢN NGHIỆM THU BẢO QUẢN LẦN ĐẦU'" [idQdGiaoNvNh]="idQdGiaoNvNh" [id]="selectedId"
+  <app-lap-bien-ban-nghiem-thu-bao-quan [title]="'BIÊN BẢN NGHIỆM THU BẢO QUẢN LẦN ĐẦU'" [idQdGiaoNvNh]="idQdGiaoNvNh" [dataDdiem]="dataDdiem" [id]="selectedId"
                                               (showListEvent)="showList()" [isView]="isView" [typeVthh]="typeVthh">
   </app-lap-bien-ban-nghiem-thu-bao-quan>
 </ng-container>
