@@ -571,6 +571,7 @@ export class PhuLucPhanBoComponent implements OnInit {
             { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
             { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
             { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+            { t: 3, b: 3, l: 0, r: 8, val: 'Trạng thái báo cáo: ' + this.dataInfo.tenTrangThai },
 
             { t: 5, b: 7, l: 0, r: 0, val: 'STT' },
             { t: 5, b: 7, l: 1, r: 1, val: 'Nhóm' },
