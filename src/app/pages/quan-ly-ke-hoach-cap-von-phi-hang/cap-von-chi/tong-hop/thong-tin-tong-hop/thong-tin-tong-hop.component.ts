@@ -148,10 +148,12 @@ export class ThongTinTonghopComponent implements OnInit {
         this.isTonghop = true;
         let data = res.data;
         if (data) {
+          // console.log(data,'datadatadatadata');
           this.detail = res.data;
           this.detail.trangThai = data.trangThai;
           this.detail.tenTrangThai = data.tenTrangThai;
           this.filePhuongAn = data.fileDinhKems;
+          let idsKhDnCapVonId = data.ct1s.filter(item => item.maBn != 'BTC' && !item.khDnCapVonId).map(s => Number(s.khDnCapVonId));
           this.formData.patchValue({
             'nam': res.data.nam,
             'nguonTongHop': data.nguonTongHop,
@@ -161,7 +163,7 @@ export class ThongTinTonghopComponent implements OnInit {
             'noiDung': data.noiDung,
             'lyDoTuChoi': data.lyDoTuChoi,
             // nameFilePhuongAn: data.fileDinhKem.fileName,
-            khDnCapVonIds: data.ct1s.map(s => s.khDnCapVonId),
+            khDnCapVonIds: idsKhDnCapVonId,
           });
           // this.listFileDinhKem = [data.fileDinhKem];
           this.listThongTinChiTiet = [...data.ct1s];
@@ -185,7 +187,7 @@ export class ThongTinTonghopComponent implements OnInit {
     this.detail.tCThem.forEach(pa => {
       if (!pa.isSum) {
         const phuongAn = new Ct1sTonghop();
-        phuongAn.khDnCapVonId = pa.maBn == 'BTC' ? pa.idHdv : pa.id;
+        phuongAn.khDnCapVonId = this.idInput ? pa.khDnCapVonId : (pa.maBn == 'BTC' ? pa.idHdv : pa.id);
         phuongAn.tcCapThem = +pa.tcCapThem;
         phuongAn.loaiBn = pa.loaiBn;
         phuongAn.loaiHang = pa.loaiHang;
@@ -221,7 +223,6 @@ export class ThongTinTonghopComponent implements OnInit {
       'nguonTongHop': this.formData.value.nguonTongHop ? this.formData.value.nguonTongHop : '',
       'noiDung': this.formData.value.noiDung ? this.formData.value.noiDung : '',
     };
-
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
@@ -604,14 +605,14 @@ export class ThongTinTonghopComponent implements OnInit {
     this.isView = false;
   }
 
-  goToDetail(data?: any, isView?: boolean) {
+  goToDetailDn(data?: any) {
     this.selectedId = this.idInput ? data.khDnCapVonId : data.id;
     this.isDetail = true;
-    this.isView = isView;
   }
 
-  goToDetailHdv(data?: any, isView?: boolean) {
-    this.dataInfoHdv.id = this.idInput ? data.khDnCapVonId  :  data.idHdv;
+  goToDetailHdv(data?: any) {
+    console.log(data, 'datadatadata');
+    this.dataInfoHdv.id = this.idInput ? data.khDnCapVonId : data.idHdv;
     this.isDetailHdv = true;
   }
 
