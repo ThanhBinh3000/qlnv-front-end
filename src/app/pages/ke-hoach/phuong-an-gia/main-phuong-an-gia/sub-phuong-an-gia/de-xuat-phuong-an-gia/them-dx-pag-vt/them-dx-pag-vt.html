@@ -104,7 +104,7 @@
             <nz-form-label nzRequired [nzNoColon]="true">Loại hàng DTQG
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="loaiVthh" [nzDisabled]="isView" nzAllowClear="true"
+              <nz-select formControlName="loaiVthh" [nzDisabled]="isView" nzAllowClear="true" nzShowSearch
                          (ngModelChange)="onChangeLoaiVthh($event)">
                 <nz-option *ngFor="let p of listVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
                 </nz-option>
@@ -181,7 +181,7 @@
           </nz-form-item>
           <nz-form-item>
             <div class="list-file" nz-col nzSpan="24">
-              <file-list [data]="fileDinhKemList"
+              <file-list  [isCanCuPL]="true" [data]="fileDinhKemList"
                          [disabled]="isView">
               </file-list>
             </div>
@@ -233,7 +233,7 @@
             </td>
             <td>
               <nz-select (ngModelChange)="onChangeCloaiVthh($event)" [(ngModel)]="rowItemTtc.cloaiVthh"
-                         [nzDisabled]="isView" nzAllowClear="true">
+                         [nzDisabled]="isView" nzAllowClear="true" nzShowSearch>
                 <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
                 </nz-option>
               </nz-select>
