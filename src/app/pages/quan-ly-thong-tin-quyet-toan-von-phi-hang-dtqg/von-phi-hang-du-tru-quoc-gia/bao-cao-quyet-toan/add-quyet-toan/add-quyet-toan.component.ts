@@ -249,19 +249,20 @@ export class AddQuyetToanComponent implements OnInit {
 
 
 	// them file vao danh sach
-	handleUpload(): void {
+	handleUpload() {
 		this.fileList.forEach((file: any) => {
 			const id = file?.lastModified.toString();
 			this.lstFiles.push({
+				... new Doc(),
 				id: id,
-				fileName: file?.name,
-				fileSize: file?.size,
-				fileUrl: file?.url
+				fileName: file?.name
 			});
 			this.listFile.push(file);
 		});
+		console.log(this.listFile);
+
 		this.fileList = [];
-	}
+	};
 
 	amount = Operator.amount;
 
@@ -709,10 +710,10 @@ export class AddQuyetToanComponent implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
 			return;
 		}
-		const listFile: any = [];
-		for (const iterator of this.listFile) {
-			listFile.push(await this.uploadFile(iterator));
-		}
+		// const listFile: any = [];
+		// for (const iterator of this.listFile) {
+		// 	listFile.push(await this.uploadFile(iterator));
+		// }
 		const tongHopTuIds = []
 
 		//get file cong van url
@@ -739,7 +740,7 @@ export class AddQuyetToanComponent implements OnInit {
 
 		const request = JSON.parse(JSON.stringify({
 			id: this.idInput,
-			fileDinhKems: listFile,
+			fileDinhKems: this.listFile,
 			listIdFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
 			lstCtiet: lstCtietBcaoTemp,
 			maDviTien: this.maDviTien,
@@ -753,6 +754,14 @@ export class AddQuyetToanComponent implements OnInit {
 			maPhanBcao: this.maPhanBcao,
 			tongHopTuIds: tongHopTuIds,
 		}));
+
+		const fileDinhKems = [];
+		for (const iterator of this.listFile) {
+			const id = iterator?.lastModified.toString();
+			const noiDung = this.lstFiles.find(e => e.id == id)?.noiDung;
+			fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.path, noiDung));
+		}
+		request.fileDinhKems = fileDinhKems;
 
 		this.lstBcaoDviTrucThuocs.forEach(item => {
 			request.tongHopTuIds.push(item.id);

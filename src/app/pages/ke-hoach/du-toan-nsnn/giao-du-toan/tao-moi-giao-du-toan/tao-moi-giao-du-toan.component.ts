@@ -17,7 +17,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import * as uuid from 'uuid';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 // khai báo class data request
 export class ItemData {
     id: string;
@@ -28,6 +28,15 @@ export class ItemData {
     tongCongSoTranChi: number;
     lstCtietDvis: ItemDvi[] = [];
     checked!: boolean;
+}
+
+export class Doc {
+    id: string;
+    fileName: string;
+    fileSize: number;
+    fileUrl: number;
+    noiDung: string;
+    isEdit: boolean = false;
 }
 
 // khai báo class đơn vị
@@ -146,21 +155,24 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
     lstDvi: any[] = []; //danh sach don vi da duoc chon
     noiDungs: any[] = []; // danh sách nội dung danh mục
     lstDviTrucThuoc: any[] = []; // danh sách báo cáo của các đơn vị trực thuộc
-    fileList: NzUploadFile[] = []; // danh sách file upload
-    lstFiles: any[] = []; //list file show ra màn hình
-    listIdFilesDelete: any[] = []; // list id file khi xóa file
     donVis: any[] = []; // list đơn vị
     trangThais: any[] = TRANG_THAI_TIM_KIEM; // danh sách trạng thái
-    listFile: File[] = []; // list file chua ten va id de hien tai o input
     lstDviChon: any[] = []; //danh sach don vi chua duoc chon
     soLaMa: any[] = Utils.LA_MA; // danh sách ký tự la mã
+    file
+    fileList: NzUploadFile[] = []; // danh sách file upload
+    listIdFilesDelete: any[] = []; // list id file khi xóa file
+    lstFiles: any[] = []; //list file show ra màn hình
+    listFile: File[] = []; // list file chua ten va id de hien tai o input
+    fileDetail: NzUploadFile;
+    path: string;
 
     // khác
     editMoneyUnit = false;
     // phục vụ nút edit
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
     newDate = new Date();
-    fileDetail: NzUploadFile;
+
     scrollX: string;
     // trước khi upload
     beforeUpload = (file: NzUploadFile): boolean => {
@@ -330,7 +342,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
         } else {
             this.scrollX = (400 + 300 * (this.lstDvi.length + 1)).toString() + 'px';
         }
-
+        this.path = this.maDonViTao + "/" + this.maPa
         this.updateEditCache();
         this.getStatusButton();
         this.spinner.hide();
@@ -659,10 +671,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
         }
-        const listFile: any = [];
-        for (const iterator of this.listFile) {
-            listFile.push(await this.uploadFile(iterator));
-        }
 
         const tongHopTuIds = [];
         this.lstDviTrucThuoc.forEach(item => {
@@ -719,6 +727,15 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
                 request.soQd = await this.uploadFile(file);
             }
         }
+
+        const fileDinhKems = [];
+        for (const iterator of this.listFile) {
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.lstFiles.find(e => e.id == id)?.noiDung;
+            fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.path, noiDung));
+        }
+        request1.fileDinhKems = fileDinhKems;
+        request.fileDinhKems = fileDinhKems;
 
         // =================================================================
         this.spinner.show();
@@ -792,6 +809,68 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
         );
         return temp;
     }
+
+    // upload danh sách văn bản đính kèm
+    handleUpload() {
+        this.fileList.forEach((file: any) => {
+            const id = file?.lastModified.toString();
+            this.lstFiles.push({
+                ... new Doc(),
+                id: id,
+                fileName: file?.name
+            });
+            this.listFile.push(file);
+        });
+        console.log(this.listFile);
+
+        this.fileList = [];
+    };
+
+    // download file về máy tính
+    async downloadFile(id: string) {
+        const file: File = this.listFile.find(element => element?.lastModified.toString() == id);
+        if (!file) {
+            const fileAttach = this.lstFiles.find(element => element?.id == id);
+            if (fileAttach) {
+                await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
+                    (data) => {
+                        fileSaver.saveAs(data, fileAttach.fileName);
+                    },
+                    err => {
+                        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                    },
+                );
+            }
+        } else {
+            const blob = new Blob([file], { type: "application/octet-stream" });
+            fileSaver.saveAs(blob, file.name);
+        }
+    };
+
+    // download file công văn
+    async downloadFileCv() {
+        if (this.soQd?.fileUrl) {
+            await this.quanLyVonPhiService.downloadFile(this.soQd?.fileUrl).toPromise().then(
+                (data) => {
+                    fileSaver.saveAs(data, this.soQd?.fileName);
+                },
+                err => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                },
+            );
+        } else {
+            const file: any = this.fileDetail;
+            const blob = new Blob([file], { type: "application/octet-stream" });
+            fileSaver.saveAs(blob, file.name);
+        }
+    };
+
+    // xóa file
+    deleteFile(id: string) {
+        this.lstFiles = this.lstFiles.filter((a: any) => a.id !== id);
+        this.listFile = this.listFile.filter((a: any) => a?.lastModified.toString() !== id);
+        this.listIdFilesDelete.push(id);
+    };
 
     // xem chi tiết bản ghi
     xemChiTiet(id: string) {
@@ -1200,62 +1279,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
     // hiển thị trạng thái báo cáo của đơn vị trực thuộc
     getStatusNameDviTT(trangThaiDVTT: string) {
         return this.trangThais.find(e => e.id == trangThaiDVTT)?.tenDm;
-    };
-
-    // upload danh sách văn bản đính kèm
-    handleUpload() {
-        this.fileList.forEach((file: any) => {
-            const id = file?.lastModified.toString();
-            this.lstFiles.push({ id: id, fileName: file?.name });
-            this.listFile.push(file);
-        });
-        this.fileList = [];
-    };
-
-    // download file về máy tính
-    async downloadFile(id: string) {
-        const file: File = this.listFile.find(element => element?.lastModified.toString() == id);
-        if (!file) {
-            const fileAttach = this.lstFiles.find(element => element?.id == id);
-            if (fileAttach) {
-                await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
-                    (data) => {
-                        fileSaver.saveAs(data, fileAttach.fileName);
-                    },
-                    err => {
-                        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                    },
-                );
-            }
-        } else {
-            const blob = new Blob([file], { type: "application/octet-stream" });
-            fileSaver.saveAs(blob, file.name);
-        }
-    };
-
-    // download file công văn
-    async downloadFileCv() {
-        if (this.soQd?.fileUrl) {
-            await this.quanLyVonPhiService.downloadFile(this.soQd?.fileUrl).toPromise().then(
-                (data) => {
-                    fileSaver.saveAs(data, this.soQd?.fileName);
-                },
-                err => {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                },
-            );
-        } else {
-            const file: any = this.fileDetail;
-            const blob = new Blob([file], { type: "application/octet-stream" });
-            fileSaver.saveAs(blob, file.name);
-        }
-    };
-
-    // xóa file
-    deleteFile(id: string) {
-        this.lstFiles = this.lstFiles.filter((a: any) => a.id !== id);
-        this.listFile = this.listFile.filter((a: any) => a?.lastModified.toString() !== id);
-        this.listIdFilesDelete.push(id);
     };
 
     // update list checked

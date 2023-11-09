@@ -12,7 +12,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from 'uuid';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import { BtnStatus, Doc, Form } from '../../giao-du-toan.constant';
 export class ItemData {
     id: any;
@@ -222,7 +222,7 @@ export class PhuLuc01XuatComponent implements OnInit {
             }
         }
         lstVtuTemp.forEach(item => {
-            this.sum(item.stt + '.1');
+            this.sum(item.stt);
         })
     }
 
@@ -522,6 +522,7 @@ export class PhuLuc01XuatComponent implements OnInit {
             { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
             { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
             { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+            { t: 3, b: 3, l: 0, r: 8, val: 'Trạng thái báo cáo: ' + this.dataInfo.tenTrangThai },
 
             { t: 4, b: 4, l: 0, r: 0, val: 'STT' },
             { t: 4, b: 4, l: 1, r: 1, val: 'Danh mục' },

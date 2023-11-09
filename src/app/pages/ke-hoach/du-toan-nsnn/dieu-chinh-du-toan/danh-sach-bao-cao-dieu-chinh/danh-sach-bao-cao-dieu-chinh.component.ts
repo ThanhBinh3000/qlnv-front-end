@@ -69,7 +69,7 @@ export class DanhSachBaoCaoDieuChinhComponent implements OnInit {
         if (this.userService.isAccessPermisson(Roles.DCDT.DUYET_REPORT) || this.userService.isAccessPermisson(Roles.DCDT.DUYET_SYNTHETIC_REPORT)) {
             this.searchFilter.trangThai = Status.TT_02;
         } else {
-            if (this.userService.isAccessPermisson(Roles.DCDT.APPROVE_REPORT) || this.userService.isAccessPermisson(Roles.DCDT.APPROVE_SYNTHETIC_REPORT)) {
+            if (this.userService.isAccessPermisson(Roles.DCDT.PHE_DUYET_REPORT) || this.userService.isAccessPermisson(Roles.DCDT.PHE_DUYET_SYNTHETIC_REPORT)) {
                 this.searchFilter.trangThai = Status.TT_04;
             }
         }

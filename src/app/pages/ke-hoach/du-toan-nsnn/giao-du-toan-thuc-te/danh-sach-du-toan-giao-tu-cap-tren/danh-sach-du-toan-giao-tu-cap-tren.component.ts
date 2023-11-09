@@ -11,7 +11,7 @@ import { DataService } from 'src/app/services/data.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { Status, Utils } from 'src/app/Utility/utils';
+import { Roles, Status, Utils } from 'src/app/Utility/utils';
 import { cloneDeep } from 'lodash';
 export const TRANG_THAI_GIAO_DU_TOAN = [
     {
@@ -60,7 +60,7 @@ export class DanhSachDuToanGiaoTuCapTrenComponent implements OnInit {
     dataTableAll: any[] = [];
     donVis: any[] = [];
     trangThais: any[] = TRANG_THAI_GIAO_DU_TOAN;
-    trangThai!: string;
+    trangThai: string = "1";
     loaiDuAns: any[] = [
         {
             id: [1],
@@ -134,6 +134,7 @@ export class DanhSachDuToanGiaoTuCapTrenComponent implements OnInit {
         searchFilterTemp.trangThais = [];
         searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, Utils.FORMAT_DATE_STR) || searchFilterTemp.ngayTaoTu;
         searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, Utils.FORMAT_DATE_STR) || searchFilterTemp.ngayTaoDen;
+
         if (this.trangThai) {
             searchFilterTemp.trangThais.push(this.trangThai)
         } else {

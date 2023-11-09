@@ -29,7 +29,7 @@
                         <thead>
                             <tr>
                                 <th scope="col" rowspan="2" nzWidth="50px">STT</th>
-                                <th scope="col" rowspan="2" nzWidth="300px">Nhóm</th>
+                                <th scope="col" rowspan="2" nzWidth="300px">Nội dung</th>
                                 <th scope="col" rowspan="2">Tổng điều chỉnh giảm </th>
                                 <th scope="col" rowspan="2">Tổng điều chỉnh tăng</th>
                                 <th scope="colgroup" colspan="{{lstDvi.length}}">Danh sách đơn vị</th>
@@ -97,7 +97,7 @@
             </nz-tab>
             <nz-tab nzTitle="Thuyết minh">
                 <textarea nz-input nzAutosize="{minRows: 4, maxRows: 16}" [(ngModel)]="formDetail.thuyetMinh"
-                    *ngIf="status.general"></textarea>
+                    [disabled]="!status.general"></textarea>
             </nz-tab>
             <nz-tab nzTitle="Tài liệu đính kèm">
                 <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
