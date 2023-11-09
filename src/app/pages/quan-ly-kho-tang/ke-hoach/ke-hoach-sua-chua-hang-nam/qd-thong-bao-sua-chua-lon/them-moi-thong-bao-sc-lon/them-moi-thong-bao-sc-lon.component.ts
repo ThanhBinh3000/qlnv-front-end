@@ -223,6 +223,7 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
         idQdBtc : null,
       })
       if(event == '00'){
+        this.changeKieu('LD');
         this.formData.controls['soQdGiaoNv'].setValidators([Validators.required]);
         this.formData.controls['idQdGiaoNv'].setValidators([Validators.required]);
         this.formData.controls['soQdBtc'].clearValidators();
@@ -235,6 +236,32 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
       }
       this.dataTable = [];
     }
+  }
+
+  changeKieu(event: any) {
+    if (event) {
+      this.formData.patchValue({
+        soQdGiaoNv: null,
+        idQdGiaoNv: null,
+        soQdBtc: null,
+        idQdBtc: null,
+        lanDc : null,
+      })
+      if (event == 'LD') {
+        this.formData.controls['soQdGiaoNv'].setValidators([Validators.required]);
+        this.formData.controls['idQdGiaoNv'].setValidators([Validators.required]);
+        this.formData.controls['soQdGoc'].clearValidators();
+        this.formData.controls['idQdGoc'].clearValidators();
+        this.formData.controls['lanDc'].clearValidators();
+      } else {
+        this.formData.controls['soQdGiaoNv'].clearValidators();;
+        this.formData.controls['idQdGiaoNv'].clearValidators();;
+        this.formData.controls['soQdGoc'].setValidators([Validators.required]);
+        this.formData.controls['idQdGoc'].setValidators([Validators.required]);
+        this.formData.controls['lanDc'].setValidators([Validators.required]);
+      }
+    }
+    this.dataTable = [];
   }
 
   chonQdGiaoNv  () {
