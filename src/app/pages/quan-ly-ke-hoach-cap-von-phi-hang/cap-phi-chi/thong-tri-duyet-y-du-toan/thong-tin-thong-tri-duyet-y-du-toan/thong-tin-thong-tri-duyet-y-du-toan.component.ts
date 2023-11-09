@@ -386,8 +386,11 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   }
 
   pheDuyet() {
-    let trangThai = STATUS.DA_DUYET_LDV;
-    if (this.itemThongTri.trangThai == STATUS.DA_DUYET_LDV) {
+    let trangThai = STATUS.CHO_DUYET_LDTC;
+    if (this.itemThongTri.trangThai == STATUS.CHO_DUYET_LDV) {
+      trangThai = STATUS.CHO_DUYET_LDTC;
+    }
+    if (this.itemThongTri.trangThai == STATUS.CHO_DUYET_LDTC) {
       trangThai = STATUS.DA_DUYET_LDTC;
     }
     this.modal.confirm({

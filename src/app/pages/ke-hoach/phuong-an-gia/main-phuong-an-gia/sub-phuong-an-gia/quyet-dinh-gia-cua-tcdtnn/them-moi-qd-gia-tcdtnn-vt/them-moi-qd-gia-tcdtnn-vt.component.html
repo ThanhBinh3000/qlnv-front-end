@@ -122,7 +122,7 @@
               Tài liệu đính kèm
             </nz-form-label>
             <div class="list-file">
-              <file-list [data]="fileDinhKem"></file-list>
+              <file-list  [data]="fileDinhKem"></file-list>
             </div>
           </nz-form-item>
         </div>
@@ -132,7 +132,7 @@
               Căn cứ pháp lý
             </nz-form-label>
             <div class="list-file">
-              <file-list [data]="canCuPhapLys"></file-list>
+              <file-list  [isCanCuPL]="true" [data]="canCuPhapLys"></file-list>
             </div>
           </nz-form-item>
         </div>
@@ -245,7 +245,7 @@
       <td>{{ data.tenCloaiVthh }}</td>
       <td>{{ data.tchuanCluong }}</td>
       <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
-      <td>{{ data.donViTinh }}</td>
+      <td class="text-center">{{ data.donViTinh }}</td>
       <td class="text-right">{{ data.giaDn | number : '1.0-1' : 'vi_VN' }}</td>
       <td class="text-right">{{ data.giaQdBtc | number : '1.0-1' : 'vi_VN' }}</td>
       <td class="text-right" *ngIf="(formData.value.loaiDeXuat == '00')">

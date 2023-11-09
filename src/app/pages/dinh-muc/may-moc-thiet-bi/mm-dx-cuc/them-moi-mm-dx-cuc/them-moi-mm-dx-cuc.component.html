@@ -138,7 +138,7 @@
   </nz-card>
   <nz-collapse nzAccordion>
     <nz-collapse-panel [nzHeader]="'CHI TIẾT ĐỀ XUẤT'" [nzActive]="true">
-      <nz-table class="rap"  [nzData]="dataTable" [nzFrontPagination]="false" *ngIf="isTongHop"
+      <nz-table class="wrap mg-t-10 pd-10"  [nzData]="dataTable" [nzFrontPagination]="false" *ngIf="isTongHop"
                 [nzShowPagination]="false" nzBordered>
         <thead>
         <tr>
@@ -199,7 +199,7 @@
               </td>
               <td class="text-right">{{item.donGiaTd  | number : '1.0-1' : 'vi_VN'}}</td>
               <td class="text-right">{{item.donGiaTd * item.soLuong   | number : '1.0-1' : 'vi_VN'}}</td>
-              <td><input nz-input [(ngModel)]="item.ghiChu"></td>
+              <td><input nz-input [(ngModel)]="item.ghiChu" [readOnly]="isView"></td>
             </tr>
           </ng-container>
         </ng-container>

@@ -104,7 +104,7 @@
             <nz-form-label nzRequired [nzNoColon]="true">Loại hàng DTQG
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="loaiVthh" [nzDisabled]="isView" nzAllowClear="true"
+              <nz-select formControlName="loaiVthh" [nzDisabled]="isView" nzAllowClear="true" nzShowSearch
                          (ngModelChange)="onChangeLoaiVthh($event)">
                 <nz-option *ngFor="let p of listVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
                 </nz-option>
@@ -181,7 +181,7 @@
           </nz-form-item>
           <nz-form-item>
             <div class="list-file" nz-col nzSpan="24">
-              <file-list [data]="fileDinhKemList"
+              <file-list  [isCanCuPL]="true" [data]="fileDinhKemList"
                          [disabled]="isView">
               </file-list>
             </div>
@@ -233,7 +233,7 @@
             </td>
             <td>
               <nz-select (ngModelChange)="onChangeCloaiVthh($event)" [(ngModel)]="rowItemTtc.cloaiVthh"
-                         [nzDisabled]="isView" nzAllowClear="true">
+                         [nzDisabled]="isView" nzAllowClear="true" nzShowSearch>
                 <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
                 </nz-option>
               </nz-select>
@@ -295,7 +295,7 @@
               <td>{{ data.tenCloaiVthh }}</td>
               <td>{{ data.tchuanCluong }}</td>
               <td class="text-right">{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-              <td>{{ data.donViTinh }}</td>
+              <td class="text-center">{{ data.donViTinh }}</td>
               <td class="text-right"
                   *ngIf="type=='GCT' && (formData.value.loaiGia == 'LG03' || formData.value.loaiGia == 'LG01')">{{ data.vat * 100}}</td>
               <td class="text-right" *ngIf="type=='GCT'">{{data.giaQdBtc | number : '1.0-1' : 'vi_VN'}}</td>
@@ -623,6 +623,7 @@
         <span class="sub-title mb-10">CÁC THÔNG TIN KHÁC</span>
         <app-thong-tin-ksg-vt [dataParent]="formData.value" [isView]="isView" *ngIf="dataTableKsGia || !idInput"
                               [isTabNdKhac]="true" [type]="type"
+                              [listCloaiVthh]="listCloaiVthh && listCloaiVthh.length > 0 ? listCloaiVthh : []"
                               [isTableKetQua]="false" [(dataTable)]="dataTableTtThamKhao"
         ></app-thong-tin-ksg-vt>
       </nz-card>

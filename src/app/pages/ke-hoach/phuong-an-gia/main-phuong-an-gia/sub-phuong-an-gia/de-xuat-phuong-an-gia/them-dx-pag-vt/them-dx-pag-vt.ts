@@ -565,14 +565,19 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       "str": event
     };
     let loaiHangHoa = this.listVthh.filter(item => item.ma == event);
-    if (loaiHangHoa && loaiHangHoa.length > 0) {
-      this.tenLoaiVthh = loaiHangHoa[0].ten
-    }
     let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
     this.listCloaiVthh = [];
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
         this.listCloaiVthh = res.data;
+        if (this.listCloaiVthh.length == 0 && loaiHangHoa && loaiHangHoa.length > 0) {
+          let resp = await this.danhMucService.getDetail(event);
+          if (resp.msg == MESSAGE.SUCCESS) {
+            this.rowItemTtc.tchuanCluong = resp.data && resp.data.tieuChuanCl ? resp.data.tieuChuanCl : ""
+            this.rowItemTtc.donViTinh = resp.data && resp.data.maDviTinh ? resp.data.maDviTinh : "";
+            this.tenLoaiVthh = resp.data &&  resp.data.ten ? resp.data.ten : ''
+          }
+        }
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
