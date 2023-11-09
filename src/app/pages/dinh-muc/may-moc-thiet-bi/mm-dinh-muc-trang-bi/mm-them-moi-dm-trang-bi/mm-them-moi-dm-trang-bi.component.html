@@ -13,8 +13,8 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button type="button" class="btn btn-info ml-2" (click)="banHanh(formData.value.id,STATUS.BAN_HANH)"
-              *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && formData.value.id > 0">
+      <button type="button" class="btn btn-info ml-2" (click)="saveAndSend(STATUS.BAN_HANH, 'Bạn có muốn lưu và ban hành quyết định ?','Bạn đã lưu và ban hành quyết định thành công!')"
+        *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU">
         <i class="icon htvbdh_chuyenvanthu"></i>
         <span>Ban hành</span>
       </button>

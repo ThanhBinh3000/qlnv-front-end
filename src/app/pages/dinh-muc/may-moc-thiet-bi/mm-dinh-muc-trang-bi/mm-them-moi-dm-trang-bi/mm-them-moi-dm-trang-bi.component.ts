@@ -12,6 +12,7 @@ import {DanhMucService} from "../../../../../services/danhmuc.service";
 import {DonviService} from "../../../../../services/donvi.service";
 import {DanhMucTaiSanService} from "../../../../../services/danh-muc-tai-san.service";
 import { STATUS } from '../../../../../constants/status';
+import dayjs from "dayjs";
 
 @Component({
   selector: 'app-mm-them-moi-dm-trang-bi',
@@ -155,6 +156,34 @@ export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnIni
       })
     }
     return str;
+  }
+
+  async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
+    try {
+      if (this.dataTableDetail.length <= 0) {
+        this.notification.error(MESSAGE.ERROR, "Bạn chưa nhập chi tiết định mức trang bị!");
+        return;
+      }
+      this.helperService.markFormGroupTouched(this.formData)
+      if (this.formData.invalid) {
+        return;
+      }
+      if (this.fileDinhKem && this.fileDinhKem.length > 0) {
+        this.formData.value.fileDinhKems = this.fileDinhKem;
+      }
+      if (this.dataTableDetail && this.dataTableDetail.length > 0) {
+        this.dataTableDetail.forEach(item => {
+          if (item.loaiHinh && item.loaiHinh.length > 0) {
+            item.loaiHinh = item.loaiHinh.toString();
+          }
+        })
+      }
+      this.formData.value.listQlDinhMucPhiTbMmtbCd = this.dataTableDetail;
+      this.formData.value.maDvi = this.userInfo.MA_DVI;
+      await super.saveAndSend(this.formData.value, trangThai, msg, msgSuccess);
+    } catch (error) {
+      console.error("Lỗi khi lưu và gửi dữ liệu:", error);
+    }
   }
 
 
