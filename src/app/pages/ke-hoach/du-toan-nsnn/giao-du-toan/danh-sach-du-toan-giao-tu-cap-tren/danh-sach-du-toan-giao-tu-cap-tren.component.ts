@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { cloneDeep } from 'lodash';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Status, Utils } from 'src/app/Utility/utils';
+import { Roles, Status, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
@@ -57,7 +57,7 @@ export class DanhSachDuToanGiaoTuCapTrenComponent implements OnInit {
     danhSachBaoCao: any[] = [];
     dataTableAll: any[] = [];
     trangThais: any[] = TRANG_THAI_GIAO_DU_TOAN;
-    trangThai!: string;
+    trangThai: string = "1";
     loaiDuAns: any[] = [
         {
             id: '1',
@@ -98,7 +98,7 @@ export class DanhSachDuToanGiaoTuCapTrenComponent implements OnInit {
     }
 
     async ngOnInit() {
-        this.userInfo = this.userService.getUserLogin();
+        this.userInfo = await this.userService.getUserLogin();
         this.searchFilter.maDviNhan = this.userInfo?.MA_DVI;
         this.onSubmit()
     }
@@ -129,6 +129,12 @@ export class DanhSachDuToanGiaoTuCapTrenComponent implements OnInit {
         searchFilterTemp.trangThais = [];
         searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, Utils.FORMAT_DATE_STR) || searchFilterTemp.ngayTaoTu;
         searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, Utils.FORMAT_DATE_STR) || searchFilterTemp.ngayTaoDen;
+        debugger
+        // if (await this.userService.isAccessPermisson(Roles.GSTC.NHAN_SO_KIEMTRA)) {
+        //     this.trangThai == "1"
+        // } else {
+        //     this.trangThai = "2"
+        // }
         if (this.trangThai) {
             searchFilterTemp.trangThais.push(this.trangThai)
         } else {

@@ -19,6 +19,7 @@ import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import * as uuid from 'uuid';
 import * as XLSX from "xlsx";
+import { Doc } from '../giao-du-toan-thuc-te.constant';
 // khai báo class data request
 export class ItemData {
 	id: string;
@@ -121,6 +122,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 	newDate = new Date();
 	fileDetail: NzUploadFile;
 	scrollX: string;
+	path: string;
 	// trước khi upload
 	beforeUpload = (file: NzUploadFile): boolean => {
 		this.fileList = this.fileList.concat(file);
@@ -300,8 +302,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		} else {
 			this.scrollX = (400 + 250 * (this.lstDvi.length + 1)).toString() + 'px';
 		}
-		console.log(this.lstDvi);
-
+		this.path = this.maDonViTao + "/" + this.maPa
 		this.updateEditCache();
 		this.getStatusButton();
 		this.spinner.hide();
@@ -694,10 +695,10 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
 			return;
 		}
-		const listFile: any = [];
-		for (const iterator of this.listFile) {
-			listFile.push(await this.uploadFile(iterator));
-		}
+		// const listFile: any = [];
+		// for (const iterator of this.listFile) {
+		// 	listFile.push(await this.uploadFile(iterator));
+		// }
 
 		const tongHopTuIds = [];
 		this.lstDviTrucThuoc.forEach(item => {
@@ -744,6 +745,16 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 			soQd: this.soQd,
 			tongHopTuIds: tongHopTuIds,
 		}));
+
+		const fileDinhKems = [];
+		for (const iterator of this.listFile) {
+			const id = iterator?.lastModified.toString();
+			const noiDung = this.lstFiles.find(e => e.id == id)?.noiDung;
+			fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.path, noiDung));
+		}
+		request1.fileDinhKems = fileDinhKems;
+		request.fileDinhKems = fileDinhKems;
+
 		//get file cong van url
 		const file: any = this.fileDetail;
 		if (file) {
@@ -1269,9 +1280,15 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 	handleUpload() {
 		this.fileList.forEach((file: any) => {
 			const id = file?.lastModified.toString();
-			this.lstFiles.push({ id: id, fileName: file?.name });
+			this.lstFiles.push({
+				... new Doc(),
+				id: id,
+				fileName: file?.name
+			});
 			this.listFile.push(file);
 		});
+		console.log(this.listFile);
+
 		this.fileList = [];
 	};
 

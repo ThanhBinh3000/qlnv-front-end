@@ -326,7 +326,7 @@
 
 			<nz-tab nzTitle="Thuyết minh">
 				<textarea nz-input nzAutosize="{minRows: 4, maxRows: 16}" [(ngModel)]="formDetail.thuyetMinh"
-					*ngIf="status.general"></textarea>
+					[disabled]="!status.general"></textarea>
 			</nz-tab>
 			<nz-tab nzTitle="Tài liệu đính kèm">
 				<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">

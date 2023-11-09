@@ -16,6 +16,7 @@ import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import * as uuid from 'uuid';
 import * as XLSX from "xlsx";
+import { Doc } from '../giao-du-toan-thuc-te.constant';
 
 export class ItemData {
     id!: any;
@@ -120,7 +121,9 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     editMoneyUnit = false;
     isDataAvailable = false;
     amount = Operator.amount;
-    Status = Status
+    Status = Status;
+    path: string;
+
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
         this.fileList = this.fileList.concat(file);
@@ -128,14 +131,20 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     };
 
     // them file vao danh sach
-    handleUpload(): void {
+    handleUpload() {
         this.fileList.forEach((file: any) => {
             const id = file?.lastModified.toString();
-            this.lstFiles.push({ id: id, fileName: file?.name, fileUrl: file?.url, fileSize: file?.size });
+            this.lstFiles.push({
+                ... new Doc(),
+                id: id,
+                fileName: file?.name
+            });
             this.listFile.push(file);
         });
+        console.log(this.listFile);
+
         this.fileList = [];
-    }
+    };
 
     // before upload file so quyet dinh
     beforeUploadSoQuyetDinh = (file: NzUploadFile): boolean => {
@@ -257,6 +266,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
             this.statusBtnPrint = true;
             this.status = true;
         }
+        this.path = this.maDonViTao + "/" + this.maPa
         await this.getChildUnit();
         this.getStatusButton();
         await this.checkPlanBTC();
@@ -562,11 +572,11 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
         }
-        //get list file url
-        const listFile: any = [];
-        for (const iterator of this.listFile) {
-            listFile.push(await this.uploadFile(iterator));
-        }
+        // //get list file url
+        // const listFile: any = [];
+        // for (const iterator of this.listFile) {
+        //     listFile.push(await this.uploadFile(iterator));
+        // }
 
         // gui du lieu trinh duyet len server
         const request = JSON.parse(JSON.stringify({
@@ -585,6 +595,14 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
             soQd: this.soQd,
         }));
 
+
+        const fileDinhKems = [];
+        for (const iterator of this.listFile) {
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.lstFiles.find(e => e.id == id)?.noiDung;
+            fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.path, noiDung));
+        }
+        request.fileDinhKems = fileDinhKems;
 
         //get file cong van url
         const file: any = this.fileDetail;
