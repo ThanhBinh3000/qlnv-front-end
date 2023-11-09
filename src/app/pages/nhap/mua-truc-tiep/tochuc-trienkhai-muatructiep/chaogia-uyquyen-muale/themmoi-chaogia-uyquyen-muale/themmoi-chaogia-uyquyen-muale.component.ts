@@ -31,7 +31,9 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
   showListEvent = new EventEmitter<any>();
   dataDetail: any[] = [];
   radioValue: string = '01';
+  title: string = 'CHI TIẾT THÔNG TIN CHÀO GIÁ';
   fileDinhKemUyQuyen: any[] = [];
+  fileDinhKem: any[] = [];
   fileDinhKemMuaLe: any[] = [];
   donGiaRow: any;
   @Output()
@@ -130,15 +132,18 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
             diaDiemChaoGia: dataDtl.diaDiemChaoGia,
             ngayMkho: dataDtl.ngayMkho,
             ngayMua: dataDtl.ngayMua,
+            tenDvi: dataDtl.tenDvi,
             ghiChuChaoGia: dataDtl.ghiChuChaoGia
           })
           this.radioValue = dataDtl.pthucMuaTrucTiep ? dataDtl.pthucMuaTrucTiep : '01'
           this.fileDinhKemUyQuyen = dataDtl.fileDinhKemUyQuyen;
+          this.fileDinhKem = dataDtl.fileDinhKem;
           this.fileDinhKemMuaLe = dataDtl.fileDinhKemMuaLe;
           // this.danhSachCtiet.forEach(item =>{
           //   item.edit = false
           // })
           console.log(this.danhSachCtiet)
+          await this.handleChangeRadio()
           this.calcTong();
           this.showDetail(event,this.danhSachCtiet[0]);
         })
@@ -205,7 +210,9 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     for (let i = 0; i < this.danhSachCtiet[index].children.length; i++) {
       sum += Number.parseInt(this.danhSachCtiet[index].children[i].soLuong)
     }
-    sum += Number.parseInt(diemKho.soLuong)
+    if(typeof diemKho != 'number'){
+      sum += Number.parseInt(diemKho.soLuong)
+    }
     if(sum > Number.parseInt(this.danhSachCtiet[index].tongSoLuong)){
       this.notification.error(MESSAGE.ERROR, MESSAGE.ADD_DIEM_KHO_ERROR);
       return true;
@@ -226,6 +233,9 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
   deleteTaiLieuDinhKemTag(data: any) {
     if (!this.isView) {
       this.fileDinhKemUyQuyen = this.fileDinhKemUyQuyen.filter(
+        (x) => x.id !== data.id,
+      );
+      this.fileDinhKem = this.fileDinhKem.filter(
         (x) => x.id !== data.id,
       );
       this.fileDinhKemMuaLe = this.fileDinhKemMuaLe.filter(
@@ -288,10 +298,13 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
       body.danhSachCtiet = this.danhSachCtiet;
       body.pthucMuaTrucTiep = this.radioValue;
       body.fileDinhKemUyQuyen = this.fileDinhKemUyQuyen;
+      body.fileDinhKem = this.fileDinhKem;
       body.fileDinhKemMuaLe = this.fileDinhKemMuaLe;
       let res = await this.chaogiaUyquyenMualeService.create(body);
       if (res.msg == MESSAGE.SUCCESS) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        if(!isHoanThanh){
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        }
         if(isHoanThanh){
           await this.hoanThanhCapNhat()
         }
@@ -388,11 +401,12 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     this.diemKhoEdit[index1].data.children[index2].edit = true
   }
 
-  cancelEditDk(index1: number, index2: number): void {
+  cancelEditDk(index1: any, index2: any): void {
+    // this.diemKhoEdit[index1].data = this.diemKhoItem[index1]
     this.diemKhoEdit[index1].data.children[index2].edit = false
   }
 
-  saveEditDk(index1: number, index2: number): void {
+  saveEditDk(index1: any, index2: any): void {
     if(this.validateDiemKho(index1, index2)){
       return;
     }
@@ -538,6 +552,14 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
       };
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async handleChangeRadio(){
+    if(this.radioValue != '01'){
+      this.title = 'SỐ LƯỢNG, ĐỊA ĐIỂM NHẬP HÀNG'
+    }else{
+      this.title = 'CHI TIẾT THÔNG TIN CHÀO GIÁ'
     }
   }
 }
