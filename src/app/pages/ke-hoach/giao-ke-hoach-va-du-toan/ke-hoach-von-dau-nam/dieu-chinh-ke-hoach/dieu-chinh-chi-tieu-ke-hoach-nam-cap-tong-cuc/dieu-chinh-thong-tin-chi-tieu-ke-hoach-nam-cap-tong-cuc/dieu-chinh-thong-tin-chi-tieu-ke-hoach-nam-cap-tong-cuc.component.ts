@@ -2243,6 +2243,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   saveEdit(i: number): void {
     const newData = this.dsKeHoachLuongThucClone[i]
+    console.log("this.saveEdit", newData)
     const newDataString = `${newData.ntnThoc[0].soLuong}${newData.ntnGao[0].soLuong}` +
       `${newData.xtnThoc[0].soLuong}${newData.xtnThoc[1].soLuong}${newData.xtnThoc[2].soLuong}` +
       `${newData.xtnGao[0].soLuong}${newData.xtnGao[1].soLuong}${newData.xtnGao[2].soLuong}`

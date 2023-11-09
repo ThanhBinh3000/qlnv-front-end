@@ -381,9 +381,10 @@
                   {{calculatorntnTongSoQuyThoc(i)}}
                 </td>
                 <td [ngClass]="data.thayDoi ?'bg-selected':''" class="text-right">
-                  <input class="money-input" currencyMask
+                  <!-- <input class="money-input" currencyMask
                     [options]="{allowZero: true, allowNegative: false,precision: 3,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,inputMode: 1}"
-                    [(ngModel)]="data.ntnThoc[0].soLuong" />
+                    [(ngModel)]="data.ntnThoc[0].soLuong" /> -->
+                  <input class="money-input" currencyMask [options]="AMOUNT" [(ngModel)]="data.ntnThoc[0].soLuong" />
                 </td>
                 <td [ngClass]="data.thayDoi ?'bg-selected':''" class="text-right">
                   <input class="money-input" currencyMask [options]="AMOUNT" [(ngModel)]="data.ntnGao[0].soLuong" />
