@@ -290,6 +290,7 @@
   <app-template-error #error [control]="control"></app-template-error>
 </ng-template>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-chi-tiet-de-xuat [idSelected]="idSelected" [isView]="isView" (showListEvent)="showList()">
+  <app-chi-tiet-de-xuat [idSelected]="idSelected" [isView]="isView" (showListEvent)="showList()"
+    (taoQuyetDinh)="taoQuyetDinh($event)">
   </app-chi-tiet-de-xuat>
 </div>

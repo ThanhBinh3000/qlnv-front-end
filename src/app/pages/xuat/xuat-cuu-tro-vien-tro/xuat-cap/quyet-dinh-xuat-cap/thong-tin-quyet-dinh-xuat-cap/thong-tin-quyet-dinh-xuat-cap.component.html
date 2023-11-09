@@ -372,7 +372,7 @@
               <td class="text-center">{{i + 1}}</td>
               <td>{{item.tenDvi}}</td>
               <td>{{item.soDx}}</td>
-              <td>{{item.ngayKyDx}}</td>
+              <td class="text-center">{{item.ngayKyDx}}</td>
               <td>{{item.trichYeuDx}}</td>
               <td class="text-right">{{item.soLuong|number:globals.numberFormat:globals.locale}}</td>
             </tr>
@@ -558,7 +558,7 @@
               </div> -->
               <div nz-col>
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true">SL gạo được chuyển<br />xuất cấp thóc</nz-form-label>
+                  <nz-form-label [nzNoColon]="true">SL gạo được chuyển xuất cấp thóc</nz-form-label>
                   <nz-form-control nz-col [nzSpan]="24">
                     <span style="color: red;">
                       <strong>{{tongSlXuatCap|number:globals.numberFormat:globals.locale}} kg</strong>
