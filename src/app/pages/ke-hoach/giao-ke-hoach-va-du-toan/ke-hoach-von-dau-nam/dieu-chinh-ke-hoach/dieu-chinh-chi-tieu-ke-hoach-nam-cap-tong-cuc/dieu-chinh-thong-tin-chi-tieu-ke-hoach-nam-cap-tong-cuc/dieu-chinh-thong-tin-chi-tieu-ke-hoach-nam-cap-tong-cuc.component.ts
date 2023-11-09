@@ -218,7 +218,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     }
     this.listNamKH = [(this.yearNow - 3), (this.yearNow - 2), (this.yearNow - 1)]
     this.userInfo = this.userService.getUserLogin();
-    // this.maQd = '/QĐ-BTC'
+
     if (this.userInfo) {
       this.qdTCDT = this.userInfo.MA_QD;
       this.formData.patchValue({
@@ -233,11 +233,6 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         this.loadDanhMucHang(),
       ]);
 
-    // if (this.isTongCuc()) {
-    //   await this.getDSDXDC(this.yearNow)
-    // }
-
-
 
     if (this.id > 0) {
       await this.loadThongTinChiTieuKeHoachNam(this.id);
@@ -245,11 +240,14 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.thongTinChiTieuKeHoachNam.cap = this.userInfo.CAP_DVI;
       this.thongTinChiTieuKeHoachNam.trangThai = STATUS.DANG_NHAP_DU_LIEU;
 
-      if (this.userService.isCuc()) {
-        await this.findCanCuByYearCuc(this.yearNow)
-      }
+
 
     }
+
+    if (this.userService.isCuc()) {
+      await this.findCanCuByYearCuc(this.yearNow)
+    }
+
     await this.findCanCuByYear(this.yearNow);
 
   }
@@ -276,7 +274,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       if (data) {
         const dsDX = data.content
         this.listDeXuat = dsDX.map((dx) => dx.soDeXuat)
-        console.log("listDeXuat", this.listDeXuat)
+
       }
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR)
@@ -429,7 +427,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.expandAll(this.dataVatTuNhapTree);
           this.expandAllVatTuXuat(this.dataVatTuXuatTree);
         }
-        console.log("getPhuongAn", data)
+
       }
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR)
@@ -450,138 +448,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         this.formData.patchValue({
           soCongVan: data.soDeXuat
         });
-        // if (this.userService.isCuc()) {
-        //   this.dsKeHoachLuongThucClone = data.dcKeHoachNamLtDtl.map((khlt) => {
 
-        //     // gạo tồn
-        //     const tkdnGao = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "01").map((item) => {
-        //       return {
-        //         ...item,
-        //         keHoachDieuChuyenLtDtlId: undefined,
-        //         id: undefined
-        //       }
-        //     })
-
-        //     // thóc tồn
-        //     const tkdnThoc = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "00").map((item) => {
-        //       return {
-        //         ...item,
-        //         keHoachDieuChuyenLtDtlId: undefined,
-        //         id: undefined
-        //       }
-        //     })
-
-        //     // gạo nhập trong năm
-        //     const ntnGao = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "11").map((item) => {
-        //       return {
-        //         ...item,
-        //         keHoachDieuChuyenLtDtlId: undefined,
-        //         id: undefined
-        //       }
-        //     })
-
-        //     // thóc nhập trong năm
-        //     const ntnThoc = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "10").map((item) => {
-        //       return {
-        //         ...item,
-        //         keHoachDieuChuyenLtDtlId: undefined,
-        //         id: undefined
-        //       }
-        //     })
-
-        //     // gạo xuất trong năm
-        //     let xtnGao = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "21").map((item) => {
-        //       return {
-        //         ...item,
-        //         keHoachDieuChuyenLtDtlId: undefined,
-        //         id: undefined
-        //       }
-        //     })
-
-        //     // thóc xuất trong năm
-        //     let xtnThoc = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "20").map((item) => {
-        //       return {
-        //         ...item,
-        //         keHoachDieuChuyenLtDtlId: undefined,
-        //         id: undefined
-        //       }
-        //     })
-
-        //     // gạo tồn kho cuối kỳ
-        //     const tkcnGao = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "31").map((item) => {
-        //       return {
-        //         ...item,
-        //         keHoachDieuChuyenLtDtlId: undefined,
-        //         id: undefined
-        //       }
-        //     })
-        //     // thóc tông kho cuối kỳ
-        //     const tkcnThoc = khlt.dcKeHoachNamLtTtDtl.filter((tk) => tk.type == "30").map((item) => {
-        //       return {
-        //         ...item,
-        //         keHoachDieuChuyenLtDtlId: undefined,
-        //         id: undefined
-        //       }
-        //     })
-
-
-
-        //     const dcKeHoachNamLtTtDtl = [...tkdnGao, ...tkdnThoc, ...ntnGao, ...ntnThoc, ...xtnGao, ...xtnThoc, ...tkcnGao, ...tkcnThoc]
-
-
-        //     return {
-        //       ...khlt,
-        //       id: undefined,
-        //       hdrId: undefined,
-        //       dcKeHoachNamLtTtDtl,
-        //       tkdnGao,
-        //       tkdnThoc,
-        //       ntnGao,
-        //       ntnThoc,
-        //       xtnGao,
-        //       xtnThoc,
-        //       tkcnGao,
-        //       tkcnThoc
-        //     }
-        //   })
-
-        //   this.dsKeHoachLuongThucClone = cloneDeep(this.dsKeHoachLuongThucClone)
-        //   this.sumRowDetailLuongThuc();
-
-        //   this.dsMuoiClone = data.dcKeHoachNamMuoiDtl.map((item) => {
-        //     return {
-        //       ...item,
-        //       hdrId: undefined,
-        //       id: undefined
-        //     }
-        //   })
-        //   this.dsMuoiClone = cloneDeep(this.dsMuoiClone)
-        //   this.sumRowDetailMuoi()
-
-        //   this.dataVatTuNhap = data.dcKeHoachNamVatTuDtl.filter((vt) => vt.loai == "NHAP").map((item) => {
-        //     return {
-        //       ...item,
-        //       hdrId: undefined,
-        //       id: undefined
-        //     }
-        //   })
-        //   this.dataVatTuXuat = data.dcKeHoachNamVatTuDtl.filter((vt) => vt.loai == "XUAT").map((item) => {
-        //     return {
-        //       ...item,
-        //       hdrId: undefined,
-        //       id: undefined
-        //     }
-        //   })
-
-        //   this.dataVatTuNhap = cloneDeep(this.dataVatTuNhap)
-        //   this.dataVatTuXuat = cloneDeep(this.dataVatTuXuat)
-
-        //   this.convertListDataVatTuNhap(this.dataVatTuNhap);
-        //   this.convertListDataVatTuXuat(this.dataVatTuXuat);
-        //   this.expandAll(this.dataVatTuNhapTree);
-        //   this.expandAllVatTuXuat(this.dataVatTuXuatTree);
-        // }
-        console.log("getDeXuat", data)
       }
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR)
@@ -596,7 +463,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
 
       let res = await this.chiTieuKeHoachNamService.loadThongTinChiTieuKeHoachTongCucGiao(body)
       if (res.msg == MESSAGE.SUCCESS) {
-        console.log("loadThongTinChiTieuKeHoachTongCucGiao", res)
+
         let data = res.data
         if (data) {
 
@@ -714,7 +581,6 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
               tkcnThoc
             }
           })
-          this.dsKeHoachLuongThuc = dsLT
 
           const dsMuoi = dataMuoi.map((khmuoi) => {
             return {
@@ -728,7 +594,6 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
               tonKhoDauNam: khmuoi.tonKhoCuoiNam,
             }
           })
-          this.dsMuoi = dsMuoi
 
           const khVatTuNhap = data.khVatTuNhap.map((vattu) => {
             return {
@@ -745,8 +610,14 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
             }
           })
 
-          this.dsVatTuNhap = khVatTuNhap
-          this.dsVatTuXuat = khVatTuXuat
+          if (this.isTongCuc()) {
+            this.dsKeHoachLuongThuc = dsLT
+            this.dsMuoi = dsMuoi
+            this.dsVatTuNhap = khVatTuNhap
+            this.dsVatTuXuat = khVatTuXuat
+          }
+
+
 
           if (this.id) return
 
@@ -769,10 +640,10 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
 
           if (this.isTongCuc()) {
 
-            this.dsKeHoachLuongThucClone = dsLT
 
+            this.dsKeHoachLuongThucClone = dsLT
             this.dsKeHoachLuongThucClone = cloneDeep(this.dsKeHoachLuongThucClone)
-            console.log("this.dsKeHoachLuongThucClone", this.dsKeHoachLuongThucClone)
+
             this.sumRowDetailLuongThuc();
 
 
@@ -792,7 +663,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
             this.convertListDataVatTuXuat(this.dataVatTuXuat);
             this.expandAll(this.dataVatTuNhapTree);
             this.expandAllVatTuXuat(this.dataVatTuXuatTree);
-            console.log('dataQdTCDTGiaoCuc', this.dataQdTCDTGiaoCuc)
+
             await this.getPhuongAn(data.soQuyetDinh)
           } else {
             await this.getDeXuat(data.soQdDcChiTieu)
@@ -806,22 +677,21 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   }
 
-  async findCanCuByYearCuc(year: number, chiTieuKhNam?) {
+  async findCanCuByYearCuc(year: number) {
     if (year) {
 
       let res = await this.chiTieuKeHoachNamService.loadThongTinChiTieuKeHoachCucNam(year)
       if (res.msg == MESSAGE.SUCCESS) {
-        console.log("loadThongTinChiTieuKeHoachCucNam", res)
+
         let data = res.data
         if (data) {
           this.dataQdTCDTGiaoCuc = {};
           this.formData.patchValue({
             soQuyetDinhGiaoNam: data.soQuyetDinh,
-            quyetDinhGiaoNamId: data.id,
-            // soCongVan: data.qdGocId
+            quyetDinhGiaoNamId: data.id
           });
           let dataLuongThuc = data.khLuongThuc;
-          this.dsKeHoachLuongThucClone = dataLuongThuc.map((khlt) => {
+          let dsLT = dataLuongThuc.map((khlt) => {
 
             // gạo tồn
             const tkdnGao = this.listNamKH.map((nkh) => {
@@ -921,12 +791,10 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
               tkcnThoc
             }
           })
-
-          this.dsKeHoachLuongThucClone = cloneDeep(this.dsKeHoachLuongThucClone)
-          this.sumRowDetailLuongThuc();
+          this.dsKeHoachLuongThuc = dsLT
 
           let dataMuoi = data.khMuoiDuTru
-          this.dsMuoiClone = dataMuoi.map((khmuoi) => {
+          let dsMuoi = dataMuoi.map((khmuoi) => {
             return {
               donViTinh: khmuoi.donViTinh,
               maDvi: khmuoi.maDonVi,
@@ -938,28 +806,38 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
               tonKhoDauNam: khmuoi.tonKhoCuoiNam,
             }
           })
-          this.dsMuoiClone = cloneDeep(this.dsMuoiClone)
-          this.sumRowDetailMuoi()
+          this.dsMuoi = dsMuoi
 
-          const khVatTuNhap = data.khVatTuNhap
-          const khVatTuXuat = data.khVatTuXuat
-
-          this.dataVatTuNhap = khVatTuNhap.map((vattu) => {
+          let khVatTuNhap = data.khVatTuNhap.map((vattu) => {
             return {
               ...vattu,
               id: undefined,
               loai: "NHAP",
             }
           })
-          this.dataVatTuXuat = khVatTuXuat.map((vattu) => {
+          let khVatTuXuat = data.khVatTuXuat.map((vattu) => {
             return {
               ...vattu,
               id: undefined,
               loai: "XUAT",
             }
           })
-          this.dataVatTuNhap = cloneDeep(this.dataVatTuNhap)
-          this.dataVatTuXuat = cloneDeep(this.dataVatTuXuat)
+
+          this.dsVatTuNhap = khVatTuNhap
+          this.dsVatTuXuat = khVatTuXuat
+
+          if (this.id) return
+
+          this.dsKeHoachLuongThucClone = cloneDeep(dsLT)
+          this.sumRowDetailLuongThuc();
+
+
+          this.dsMuoiClone = cloneDeep(dsMuoi)
+          this.sumRowDetailMuoi()
+
+
+          this.dataVatTuNhap = cloneDeep(khVatTuNhap)
+          this.dataVatTuXuat = cloneDeep(khVatTuXuat)
 
           this.convertListDataVatTuNhap(this.dataVatTuNhap);
           this.convertListDataVatTuXuat(this.dataVatTuXuat);
@@ -1879,6 +1757,9 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   guiDuyet() {
+    if (this.isCuc()) {
+      this.formData.controls["soCongVan"].clearValidators();
+    }
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide()
@@ -2243,11 +2124,13 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   saveEdit(i: number): void {
     const newData = this.dsKeHoachLuongThucClone[i]
-    console.log("this.saveEdit", newData)
+    const oldData = this.dsKeHoachLuongThuc[i]
+    console.log("this.saveEditnewData", newData)
+    console.log("this.saveEditoldData", oldData)
     const newDataString = `${newData.ntnThoc[0].soLuong}${newData.ntnGao[0].soLuong}` +
       `${newData.xtnThoc[0].soLuong}${newData.xtnThoc[1].soLuong}${newData.xtnThoc[2].soLuong}` +
       `${newData.xtnGao[0].soLuong}${newData.xtnGao[1].soLuong}${newData.xtnGao[2].soLuong}`
-    const oldData = this.dsKeHoachLuongThuc[i]
+
     const oldDataString = `${oldData.ntnThoc[0].soLuong}${oldData.ntnGao[0].soLuong}` +
       `${oldData.xtnThoc[0].soLuong}${oldData.xtnThoc[1].soLuong}${oldData.xtnThoc[2].soLuong}` +
       `${oldData.xtnGao[0].soLuong}${oldData.xtnGao[1].soLuong}${oldData.xtnGao[2].soLuong}`
