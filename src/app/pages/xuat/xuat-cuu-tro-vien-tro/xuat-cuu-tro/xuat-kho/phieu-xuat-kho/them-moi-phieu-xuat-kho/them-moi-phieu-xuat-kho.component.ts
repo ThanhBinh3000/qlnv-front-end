@@ -481,5 +481,8 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   convertTien(tien: number): string {
     return convertTienTobangChu(tien);
   }
-
+  showAction() {
+    if (this.isView) return false;
+    return true;
+  }
 }
