@@ -129,7 +129,6 @@ export class DanhSachDuToanGiaoTuCapTrenComponent implements OnInit {
         searchFilterTemp.trangThais = [];
         searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, Utils.FORMAT_DATE_STR) || searchFilterTemp.ngayTaoTu;
         searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, Utils.FORMAT_DATE_STR) || searchFilterTemp.ngayTaoDen;
-        debugger
         // if (await this.userService.isAccessPermisson(Roles.GSTC.NHAN_SO_KIEMTRA)) {
         //     this.trangThai == "1"
         // } else {

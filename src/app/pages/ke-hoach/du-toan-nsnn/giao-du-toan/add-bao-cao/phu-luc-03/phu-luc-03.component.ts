@@ -21,7 +21,7 @@ export class ItemData {
     level: number;
     stt: string;
     danhMuc: string;
-    maDinhMuc: string;
+    maDmuc: string;
     tenDanhMuc: string;
     maDviTinh: string;
     namDtCphiTaiCkhoSl: number;
@@ -194,7 +194,7 @@ export class PhuLuc03Component implements OnInit {
 
         await this.getDinhMuc();
         this.lstCtietBcaos.forEach(item => {
-            const dinhMuc = this.dsDinhMuc.find(e => (!e.cloaiVthh && e.loaiVthh == item.danhMuc));
+            const dinhMuc = this.dsDinhMuc.find(e => (e.cloaiVthh == item.danhMuc || e.loaiVthh == item.danhMuc) && e.maDinhMuc == item.maDmuc);
             if (!item.tenDanhMuc) {
                 item.tenDanhMuc = dinhMuc?.tenDinhMuc;
                 item.namDtCphiTaiCkhoDm = dinhMuc?.tongDmuc;
@@ -206,18 +206,18 @@ export class PhuLuc03Component implements OnInit {
         })
 
 
-        if (this.dataInfo?.isSynthetic) {
-            this.lstCtietBcaos.forEach(item => {
-                const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc || e.loaiVthh == item.danhMuc);
-                // item.namDtCphiNgoaiCkhoBq = 0;
-                item.namDtCphiTaiCkhoDm = dinhMuc?.tongDmuc;
-                if (item.namDtCphiTaiCkhoDm) {
-                    item.namDtCphiTaiCkhoTt = Operator.mul(item.namDtCphiTaiCkhoDm, item.namDtCphiTaiCkhoSl);
-                    item.namDtTcong = Operator.sum([item.namDtCphiTaiCkhoTt, item.namDtCphiNgoaiCkhoTt])
-                }
-            })
-            this.sum1()
-        }
+        // if (this.dataInfo?.isSynthetic) {
+        this.lstCtietBcaos.forEach(item => {
+            const dinhMuc = this.dsDinhMuc.find(e => (e.cloaiVthh == item.danhMuc || e.loaiVthh == item.danhMuc) && e.maDinhMuc == item.maDmuc);
+            // item.namDtCphiNgoaiCkhoBq = 0;
+            item.namDtCphiTaiCkhoDm = dinhMuc?.tongDmuc;
+            if (item.namDtCphiTaiCkhoDm) {
+                item.namDtCphiTaiCkhoTt = Operator.mul(item.namDtCphiTaiCkhoDm, item.namDtCphiTaiCkhoSl);
+                item.namDtTcong = Operator.sum([item.namDtCphiTaiCkhoTt, item.namDtCphiNgoaiCkhoTt])
+            }
+        })
+        this.sum1()
+        // }
 
         this.lstCtietBcaos = Table.sortByIndex(this.lstCtietBcaos);
 
@@ -508,7 +508,7 @@ export class PhuLuc03Component implements OnInit {
                             id: uuid.v4() + 'FE',
                             stt: stt,
                             danhMuc: data.ma,
-                            maDinhMuc: dm?.maDinhMuc,
+                            maDmuc: dm?.maDinhMuc,
                             tenDanhMuc: data.ten,
                             maDviTinh: dm?.donViTinh,
                             namDtCphiTaiCkhoDm: dm?.tongDmuc,
@@ -542,7 +542,7 @@ export class PhuLuc03Component implements OnInit {
                         })
                     }
                     const dm = this.dsDinhMuc.find(e => (e.cloaiVthh == data.ma || e.loaiVthh == data.ma) && (!loaiBaoQuan || e.loaiBaoQuan == loaiBaoQuan.ma));
-                    if (this.lstCtietBcaos.findIndex(e => e.danhMuc == data.ma && (!dm || e.maDinhMuc == dm?.maDinhMuc)) == -1) {
+                    if (this.lstCtietBcaos.findIndex(e => e.danhMuc == data.ma && (!dm || e.maDmuc == dm?.maDmuc)) == -1) {
                         stt = '0.1.' + index.toString();
                         this.lstCtietBcaos.splice(index, 0, new ItemData({
                             id: uuid.v4() + 'FE',
@@ -551,7 +551,7 @@ export class PhuLuc03Component implements OnInit {
                             tenDanhMuc: data.ten + (loaiBaoQuan ? (' (' + loaiBaoQuan.giaTri + ')') : ''),
                             maDviTinh: dm?.donViTinh,
                             namDtCphiTaiCkhoDm: dm?.tongDmuc,
-                            maDinhMuc: dm?.maDinhMuc,
+                            maDmuc: dm?.maDinhMuc,
                             level: 1,
                         }))
                         const index2 = this.lstCtietBcaos.findIndex(e => e.danhMuc == '0.1');
