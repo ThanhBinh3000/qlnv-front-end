@@ -51,7 +51,7 @@
               <div nz-col nzSpan="24">
                 <nz-form-item class="form-item">
                   <nz-form-control [nzErrorTip]="error">
-                    <nz-radio-group formControlName="kieu" [nzDisabled]="isViewDetail">
+                    <nz-radio-group formControlName="kieu" [nzDisabled]="isViewDetail" (ngModelChange)="changeKieu($event)">
                       <label nz-radio nzValue="LD">Lần đầu</label>
                       <label nz-radio nzValue="DC">Điều chỉnh</label>
                     </nz-radio-group>

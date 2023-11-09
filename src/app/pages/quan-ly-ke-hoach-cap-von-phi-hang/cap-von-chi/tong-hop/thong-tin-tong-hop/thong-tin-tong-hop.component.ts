@@ -57,6 +57,7 @@ export class ThongTinTonghopComponent implements OnInit {
   listThongTinChiTiet: any[] = [];
   totalRecord: number = 0;
   isTonghop: boolean = false;
+  dataInfoHdv: any = {};
   dayNow: string;
   yearNow: number;
   filePhuongAn: any[] = [];
@@ -81,6 +82,7 @@ export class ThongTinTonghopComponent implements OnInit {
     },
   ];
   isDetail: boolean = false;
+  isDetailHdv: boolean = false;
   amount = AMOUNT_NO_DECIMAL;
 
   constructor(
@@ -183,7 +185,7 @@ export class ThongTinTonghopComponent implements OnInit {
     this.detail.tCThem.forEach(pa => {
       if (!pa.isSum) {
         const phuongAn = new Ct1sTonghop();
-        phuongAn.khDnCapVonId = pa.id;
+        phuongAn.khDnCapVonId = pa.maBn == 'BTC' ? pa.idHdv : pa.id;
         phuongAn.tcCapThem = +pa.tcCapThem;
         phuongAn.loaiBn = pa.loaiBn;
         phuongAn.loaiHang = pa.loaiHang;
@@ -241,8 +243,9 @@ export class ThongTinTonghopComponent implements OnInit {
       } else {
         let res = await this.tongHopDeNghiCapVonService.them(body);
         if (res.msg == MESSAGE.SUCCESS) {
-          this.detail.id = res.data.id
+          this.detail.id = res.data.id;
           this.idInput = res.data.id;
+          await this.loadChiTiet(this.idInput);
           if (!isGuiDuyet) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
           } else {
@@ -596,10 +599,28 @@ export class ThongTinTonghopComponent implements OnInit {
     this.isView = false;
   }
 
+  backHdv() {
+    this.isDetail = false;
+    this.isView = false;
+  }
+
   goToDetail(data?: any, isView?: boolean) {
-    this.selectedId = data.id;
+    this.selectedId = this.idInput ? data.khDnCapVonId : data.id;
     this.isDetail = true;
     this.isView = isView;
+  }
+
+  goToDetailHdv(data?: any, isView?: boolean) {
+    this.dataInfoHdv.id = this.idInput ? data.khDnCapVonId  :  data.idHdv;
+    this.isDetailHdv = true;
+  }
+
+  closePopHdv() {
+    this.isDetailHdv = false;
+  }
+
+  closePopDnBn() {
+    this.isDetail = false;
   }
 
   protected readonly AMOUNT_NO_DECIMAL = AMOUNT_NO_DECIMAL;

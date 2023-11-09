@@ -272,12 +272,12 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-    let checkKhNhaptXuat = this.validKeHoachNhapXuatLT(this.keHoachNhapXuat);
-    if (!checkKhNhaptXuat && isGuiDuyet) {
-      this.notification.warning(MESSAGE.WARNING, 'Vốn chi mua lương thực và Nguồn vốn có không bằng nhau.');
-      this.spinner.hide();
-      return;
-    }
+    // let checkKhNhaptXuat = this.validKeHoachNhapXuatLT(this.keHoachNhapXuat);
+    // if (!checkKhNhaptXuat && isGuiDuyet) {
+    //   this.notification.warning(MESSAGE.WARNING, 'Vốn chi mua lương thực và Nguồn vốn có không bằng nhau.');
+    //   this.spinner.hide();
+    //   return;
+    // }
     let body = this.formData.value;
     this.listFile = [];
     if (this.taiLieuDinhKemList.length > 0) {

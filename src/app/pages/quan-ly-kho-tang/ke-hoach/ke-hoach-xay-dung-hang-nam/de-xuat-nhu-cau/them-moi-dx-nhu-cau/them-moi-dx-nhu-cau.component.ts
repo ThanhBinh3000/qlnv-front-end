@@ -322,6 +322,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
         nzComponentParams: {
           dataInput: data,
           type: type,
+          namKh: this.formData.value.namKeHoach,
           page: "DXNC"
         }
       });

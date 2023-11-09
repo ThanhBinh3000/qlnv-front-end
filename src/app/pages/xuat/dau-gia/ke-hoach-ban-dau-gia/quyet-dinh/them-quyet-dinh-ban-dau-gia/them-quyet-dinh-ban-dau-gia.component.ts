@@ -23,8 +23,6 @@ import {HttpClient} from '@angular/common/http';
 import {StorageService} from 'src/app/services/storage.service';
 import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {ChiTieuKeHoachNamCapTongCucService} from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
-import {PREVIEW} from "src/app/constants/fileType";
-import {saveAs} from 'file-saver';
 import {QuyetDinhGiaTCDTNNService} from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
@@ -50,11 +48,8 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   dataInputCache: any;
   selected: boolean = false;
   maDviCuc: string;
-  showDlgPreview = false;
-  pdfBlob: any;
-  pdfSrc: any;
-  wordSrc: any;
-  templateName = "quyet-dinh-ke-hoach-ban-dau-gia";
+  templateNameVt = "Quyết định phê duyệt kế hoạch bán đấu giá vật tư";
+  templateNameLt = "Quyết định phê duyệt kế hoạch bán đấu giá lương thực";
 
   constructor(
     httpClient: HttpClient,
@@ -472,42 +467,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
         this.danhsachDx[this.index].tgianDkienDen = data.tgianDkienDen;
       }
     }
-  }
-
-  async preview(id) {
-    try {
-      const response = await this.quyetDinhPdKhBdgService.preview({
-        tenBaoCao: this.templateName,
-        id: id,
-      });
-
-      if (response.data) {
-        this.pdfSrc = PREVIEW.PATH_PDF + response.data.pdfSrc;
-        this.wordSrc = PREVIEW.PATH_WORD + response.data.wordSrc;
-        this.showDlgPreview = true;
-      } else {
-        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
-      }
-    } catch (error) {
-      console.error('Lỗi:', error);
-      this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
-    }
-  }
-
-  downloadFile(src: string, fileName: string) {
-    saveAs(src, fileName);
-  }
-
-  downloadPdf() {
-    this.downloadFile(this.pdfSrc, this.templateName + ".pdf");
-  }
-
-  downloadWord() {
-    this.downloadFile(this.wordSrc, this.templateName + ".docx");
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
   }
 
   isDisabledQD() {

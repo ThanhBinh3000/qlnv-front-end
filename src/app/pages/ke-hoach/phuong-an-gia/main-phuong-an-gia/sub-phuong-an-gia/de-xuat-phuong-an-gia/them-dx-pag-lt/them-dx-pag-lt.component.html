@@ -162,7 +162,7 @@
           </nz-form-item>
           <nz-form-item>
             <div class="list-file" nz-col nzSpan="24">
-              <file-list [data]="fileDinhKem"
+              <file-list  [isCanCuPL]="true"  [data]="fileDinhKem"
                          [disabled]="isView">
               </file-list>
             </div>
@@ -543,7 +543,7 @@
                 File đính kèm
               </nz-form-label>
               <div class="list-file">
-                <file-list [data]="fileDkPhanTich" [isViewDetail]="isView"></file-list>
+                <file-list  [isCanCuPL]="true" [data]="fileDkPhanTich" [isViewDetail]="isView"></file-list>
               </div>
             </nz-form-item>
           </div>

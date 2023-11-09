@@ -470,7 +470,7 @@
               <th colSpan="2">Số lượng</th>
               <!-- <th rowSpan="2">Đơn giá (3)</th>
               <th rowSpan="2">Thành tiền (4) = (2) x (3)</th> -->
-              <th rowSpan="2">Hành động</th>
+              <th rowSpan="2" *ngIf="showAction()">Hành động</th>
             </tr>
             <tr>
               <th>Theo chứng từ (1)</th>
@@ -537,7 +537,7 @@
                 {{calculateSum() | number: '1.0-1' :
                 'vi_VN'}}
               </td> -->
-              <td>
+              <td *ngIf="showAction()">
                 <a (click)="clearItemRow(formData.value.id)">
                   <i class="fa fa-refresh"></i>
                 </a>

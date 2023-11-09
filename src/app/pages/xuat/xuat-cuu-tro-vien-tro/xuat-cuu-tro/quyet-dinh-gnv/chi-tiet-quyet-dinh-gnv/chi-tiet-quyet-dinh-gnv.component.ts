@@ -372,7 +372,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   }
   checkHoanTatPhanBo() {
     const tongSoLuong = this.formData.value.soLuong;
-    const dataDtl = this.formData.value.dataDtl.filter(f => f.maDvi && f.maDvi.includes(this.userInfo.MA_DVI)).map(f => ({ ...f, noiDungDxTenChiCuc: `${f.noiDungDx}-${f.tenChiCuc}` }));
+    const dataDtl = this.formData.value.dataDtl.filter(f => f.maDvi && f.maDvi.includes(this.userInfo.MA_DVI)).map(f => ({ ...f, noiDungDxTenChiCuc: `${f.noiDungDx}-${f.cloaiVthh ? f.cloaiVthh : f.loaiVthh}-${f.tenChiCuc}` }));
     const tongSoLuongPb = dataDtl.reduce((sum, cur) => {
       if (this.formData.value.type === 'XC' && this.formData.value.paXuatGaoChuyenXc) {
         sum += cur.slGaoThuHoiSauXayXat ? cur.slGaoThuHoiSauXayXat : 0
@@ -901,7 +901,6 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
             edit,
             mId: edit ? data.mId : uuidv4(),
             tonKhoCloaiVthh: 0,
-            tonKhoDvi: 0,
             id: null,
             tenDvi: '',
             maDvi: null,
@@ -946,7 +945,6 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           edit,
           mId: edit ? data.mId : uuidv4(),
           tonKhoCloaiVthh: data.tonKhoCloaiVthh || 0,
-          tonKhoDvi: data.tonKhoDvi || 0,
           tenDvi: edit ? data.tenDvi : '',
           maDvi: edit ? data.maDvi : null,
           tenDiemKho: edit ? data.tenDiemKho : '',
@@ -1032,7 +1030,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       soLuong: 0,
       slConLaiGiao: this.checkSlConLaiGiao(data, level, false, parentData),
       tonKhoCloaiVthh: 0,
-      tonKhoDvi: 0,
+      tonKhoDvi: level === 1 ? 0 : data.tonKhoDvi,
     });
     this.listDonVi.forEach(s => {
       // s.disable = this.formData.value.dataDtl.some(s1 => s1.maDvi.match("^" + s.maDvi)) && !(s.maDvi === data.maDvi && editRow);

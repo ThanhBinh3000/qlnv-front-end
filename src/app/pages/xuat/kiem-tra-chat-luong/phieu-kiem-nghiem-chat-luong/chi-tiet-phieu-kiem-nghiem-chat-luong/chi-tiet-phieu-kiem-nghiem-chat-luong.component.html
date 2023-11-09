@@ -128,57 +128,91 @@
                 </nz-form-item>
               </div>
             </ng-container>
-            <div nz-col nzSpan="4">
-              <nz-form-item class="form-item">
-                <nz-form-label [nzNoColon]="true" nzRequired> Số BB lấy mẫu/bàn giao mẫu
-                </nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogBbLayMau()">
-                    <input nz-input formControlName="soBbLayMau" [readonly]="isView" />
-                  </nz-input-group>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col nzSpan="4">
-              <nz-form-item class="form-item">
-                <nz-form-label [nzNoColon]="true"> Ngày lấy mẫu
-                </nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker [nzFormat]="globals.dateFormat" formControlName="ngayBbLayMau" [nzDisabled]="true">
-                  </nz-date-picker>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="4">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true" nzRequired> Ngăn/Lô kho</nz-form-label>
-                <nz-form-control>
-                  <nz-input-group nzAddOnAfterIcon="folder-open">
-                    <input nz-input formControlName="tenNganLoKho" [readonly]="true" />
-                  </nz-input-group>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="4">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true" nzRequired> Nhà kho</nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfterIcon="folder-open">
-                    <input nz-input formControlName="tenNhaKho" [readonly]="true" />
-                  </nz-input-group>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="4">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true" nzRequired> Điểm kho</nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfterIcon="folder-open">
-                    <input nz-input formControlName="tenDiemKho" [readonly]="true" />
-                  </nz-input-group>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
+            <ng-container *ngIf="loaiXuat !== 'XC'">
+              <div nz-col nzSpan="4">
+                <nz-form-item class="form-item">
+                  <nz-form-label [nzNoColon]="true" nzRequired> Số BB lấy mẫu/bàn giao mẫu
+                  </nz-form-label>
+                  <nz-form-control [nzErrorTip]="error">
+                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogBbLayMau()">
+                      <input nz-input formControlName="soBbLayMau" [readonly]="isView" />
+                    </nz-input-group>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="4">
+                <nz-form-item class="form-item">
+                  <nz-form-label [nzNoColon]="true"> Ngày lấy mẫu
+                  </nz-form-label>
+                  <nz-form-control [nzErrorTip]="error">
+                    <nz-date-picker [nzFormat]="globals.dateFormat" formControlName="ngayBbLayMau" [nzDisabled]="true">
+                    </nz-date-picker>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="4">
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true" nzRequired> Ngăn/Lô kho</nz-form-label>
+                  <nz-form-control>
+                    <nz-input-group nzAddOnAfterIcon="folder-open">
+                      <input nz-input formControlName="tenNganLoKho" [readonly]="true" />
+                    </nz-input-group>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="4">
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true" nzRequired> Nhà kho</nz-form-label>
+                  <nz-form-control [nzErrorTip]="error">
+                    <nz-input-group nzAddOnAfterIcon="folder-open">
+                      <input nz-input formControlName="tenNhaKho" [readonly]="true" />
+                    </nz-input-group>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="4">
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true" nzRequired> Điểm kho</nz-form-label>
+                  <nz-form-control [nzErrorTip]="error">
+                    <nz-input-group nzAddOnAfterIcon="folder-open">
+                      <input nz-input formControlName="tenDiemKho" [readonly]="true" />
+                    </nz-input-group>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="loaiXuat === 'XC'">
+              <div nz-col [nzSpan]="4">
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true" nzRequired> Ngăn/Lô kho</nz-form-label>
+                  <nz-form-control>
+                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
+                      <input nz-input formControlName="tenNganLoKho" [readonly]="true" />
+                    </nz-input-group>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="4">
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true" nzRequired> Nhà kho</nz-form-label>
+                  <nz-form-control [nzErrorTip]="error">
+                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
+                      <input nz-input formControlName="tenNhaKho" [readonly]="true" />
+                    </nz-input-group>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="4">
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true" nzRequired> Điểm kho</nz-form-label>
+                  <nz-form-control [nzErrorTip]="error">
+                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
+                      <input nz-input formControlName="tenDiemKho" [readonly]="true" />
+                    </nz-input-group>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+            </ng-container>
             <!-- <div nz-col [nzSpan]="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired> Ngăn kho</nz-form-label>
@@ -219,7 +253,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired> Số lượng hàng bảo quản</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input nz-input formControlName="dviKiemNghiem" [readonly]="true" />
+                  <input nz-input formControlName="slHangBaoQuan" [readonly]="true" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -270,6 +304,7 @@
                 </nz-form-item>
               </div>
             </ng-container>
+            <div nz-col [nzSpan]="24"></div>
             <ng-container *ngIf="['XC', 'CTVT'].includes(loaiXuat)">
               <div nz-col [nzSpan]="4">
                 <nz-form-item>

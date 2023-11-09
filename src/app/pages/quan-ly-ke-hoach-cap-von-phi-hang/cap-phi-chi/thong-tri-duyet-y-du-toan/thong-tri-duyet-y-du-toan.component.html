@@ -154,7 +154,8 @@
           <td>{{ data.tenTrangThai }}</td>
           <td class='text-left'>
             <a (click)='detail(data, true)'
-               *ngIf='!(data.trangThai == STATUS.DU_THAO && data.maDvi == userInfo.MA_DVI)'>
+               *ngIf="data.trangThai==STATUS.DA_DUYET_LDV || data.trangThai==STATUS.CHO_DUYET_LDV || data.trangThai==STATUS.CHO_DUYET_LDTC || data.trangThai==STATUS.DA_DUYET_LDTC"
+            >
               <i class='fa fa-eye' title='Xem chi tiết'></i>
             </a>
             <a

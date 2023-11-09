@@ -31,7 +31,8 @@ export interface TreeNodeInterface {
   apDungTaiStr?: string;
   donViTinh?: string;
   soLuong?: number;
-  chiPhiTheoDinhMuc?: number;
+  chiPhiTheoDinhMucNhapToiDa?: number;
+  chiPhiTheoDinhMucXuatToiDa?: number;
   chiPhiNhapToiDa?: number;
   chiPhiXuatToiDa?: number;
   thanhToanTheoVnd?: number
@@ -112,6 +113,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [],
+      nam:  [''],
       soQd: ['', [Validators.required]],
       trangThai: [STATUS.DANG_NHAP_DU_LIEU],
       tenTrangThai: ['Đang nhập dữ liệu'],
@@ -140,7 +142,8 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       apDungTaiStr: [, [Validators.required]],
       donViTinh: [, [Validators.required]],
       soLuong: [, [Validators.required]],
-      chiPhiTheoDinhMuc: [, [Validators.required]],
+      chiPhiTheoDinhMucNhapToiDa: [, [Validators.required]],
+      chiPhiTheoDinhMucXuatToiDa: [, [Validators.required]],
       chiPhiNhapToiDa: [, [Validators.required]],
       chiPhiXuatToiDa: [, [Validators.required]],
       thanhToanTheoVnd: [, [Validators.required]],
@@ -455,8 +458,6 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       msgRequired = 'Áp dụng tại cục không được để trống';
     } else if (!this.rowItem.soLuong) {
       msgRequired = 'Số lượng không được để trống';
-    } else if (!this.rowItem.chiPhiTheoDinhMuc) {
-      msgRequired = 'Chi phí theo định mức không được để trống';
     } else if (!this.rowItem.thanhToanTheoVnd) {
       msgRequired = 'Thanh toán theo VNĐ không được để trống';
     } else if (!this.rowItem.tyGia) {
@@ -580,12 +581,16 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       if (item.parentUuid) {
         // If the item has a parent, add it as a child of the parent.
         map.get(item.parentUuid).children.push(map.get(item.uuid));
+        map.get(item.parentUuid).chiPhiTheoDinhMucNhapToiDa =  map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) +  parseFloat(currentValue.chiPhiTheoDinhMucNhapToiDa), 0);
+        map.get(item.parentUuid).chiPhiTheoDinhMucXuatToiDa=  map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) +  parseFloat(currentValue.chiPhiTheoDinhMucXuatToiDa), 0);
         map.get(item.parentUuid).chiPhiNhapToiDa =  map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) +  parseFloat(currentValue.chiPhiNhapToiDa), 0);
         map.get(item.parentUuid).chiPhiXuatToiDa=  map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) +  parseFloat(currentValue.chiPhiXuatToiDa), 0);
 
         // update vào list
         let p = this.dataListDetailKtqd.find(item1 =>item1.uuid == item.parentUuid);
         if(p){
+          p.chiPhiTheoDinhMucNhapToiDa = map.get(item.parentUuid).chiPhiTheoDinhMucNhapToiDa;
+          p.chiPhiTheoDinhMucXuatToiDa = map.get(item.parentUuid).chiPhiTheoDinhMucXuatToiDa;
           p.chiPhiNhapToiDa = map.get(item.parentUuid).chiPhiNhapToiDa;
           p.chiPhiXuatToiDa = map.get(item.parentUuid).chiPhiXuatToiDa;
         }
@@ -596,6 +601,8 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
         // update vào list
         let p = this.dataListDetailKtqd.find(item1 =>item1.uuid == item.uuid);
         if(p){
+          p.chiPhiTheoDinhMucNhapToiDa = map.get(item.uuid).chiPhiTheoDinhMucNhapToiDa;
+          p.chiPhiTheoDinhMucXuatToiDa = map.get(item.uuid).chiPhiTheoDinhMucXuatToiDa;
           p.chiPhiNhapToiDa = map.get(item.uuid).chiPhiNhapToiDa;
           p.chiPhiXuatToiDa = map.get(item.uuid).chiPhiXuatToiDa;
         }
@@ -617,6 +624,9 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     this.isAddDetail = false;
     this.sttEdit = this.dataListDetailKtqd.findIndex(element => element.uuid === item.uuid);
     this.openDlgAddEdit();
+    if(!item.apDungTai){
+      item.apDungTai = [''];
+    }
     this.formDataDtl.patchValue({
       ...item,
       level
@@ -697,6 +707,11 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
   protected readonly AMOUNT_ONE_DECIMAL = AMOUNT_ONE_DECIMAL;
 
   changeNhomDinhMuc($event: any) {
+    if($event == "2"){
+      this.formData.controls["nam"].setValidators(Validators.required);
+    }else {
+      this.formData.controls["nam"].setValidators(null);
+    }
     this.rowItem = {};
     this.loadDmDinhMuc();
   }
@@ -712,7 +727,8 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       maDinhMuc: undefined,
       tenDinhMuc: undefined,
       soLuong: undefined,
-      chiPhiTheoDinhMuc: undefined,
+      chiPhiTheoDinhMucNhapToiDa: undefined,
+      chiPhiTheoDinhMucXuatToiDa: undefined,
       loaiVthh: undefined,
       tenLoaiVthh: undefined,
       cloaiVthh: undefined,
@@ -928,7 +944,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       msgRequired = 'Tên định mức không được để trống';
     } else if (!this.formDataDtl.value.maDinhMuc) {
       msgRequired = 'Mã định mức không được để trống';
-    } else if (!this.formDataDtl.value.apDungTai) {
+    } else if (!this.formDataDtl.value.apDungTaiStr) {
       msgRequired = 'Áp dụng tại cục không được để trống';
     } else if (!this.formDataDtl.value.thanhToanTheoVnd) {
       msgRequired = 'Thanh toán theo VNĐ không được để trống';
@@ -936,12 +952,18 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       msgRequired = 'Tỷ giá không được để trống';
     } else if (!this.formDataDtl.value.thanhToanTheoUsd) {
       msgRequired = 'Thanh toán theo USD không được để trống';
+    }  else if (!this.formDataDtl.value.chiPhiTheoDinhMucNhapToiDa) {
+      msgRequired = 'Chi phí theo định mức không được để trống';
+    }else if (!this.formDataDtl.value.chiPhiTheoDinhMucXuatToiDa) {
+      msgRequired = 'Chi phí theo định mức không được để trống';
+    }else if (!this.formDataDtl.value.chiPhiNhapToiDa) {
+      msgRequired = 'Chi phí không theo định mức - chi phí nhập tối đa không được để trống';
+    }else if (!this.formDataDtl.value.chiPhiXuatToiDa) {
+      msgRequired = 'Chi phí không theo định mức - chi phí xuất tối đa không được để trống';
     }
     if (this.formDataDtl.value.level == 0) {
       if (!this.formDataDtl.value.soLuong) {
         msgRequired = 'Số lượng không được để trống';
-      } else if (!this.formDataDtl.value.chiPhiTheoDinhMuc) {
-        msgRequired = 'Chi phí theo định mức không được để trống';
       }
     }
 
