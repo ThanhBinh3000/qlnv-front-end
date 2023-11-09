@@ -372,7 +372,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   }
   checkHoanTatPhanBo() {
     const tongSoLuong = this.formData.value.soLuong;
-    const dataDtl = this.formData.value.dataDtl.filter(f => f.maDvi && f.maDvi.includes(this.userInfo.MA_DVI)).map(f => ({ ...f, noiDungDxTenChiCuc: `${f.noiDungDx}-${f.tenChiCuc}` }));
+    const dataDtl = this.formData.value.dataDtl.filter(f => f.maDvi && f.maDvi.includes(this.userInfo.MA_DVI)).map(f => ({ ...f, noiDungDxTenChiCuc: `${f.noiDungDx}-${f.cloaiVthh ? f.cloaiVthh : f.loaiVthh}-${f.tenChiCuc}` }));
     const tongSoLuongPb = dataDtl.reduce((sum, cur) => {
       if (this.formData.value.type === 'XC' && this.formData.value.paXuatGaoChuyenXc) {
         sum += cur.slGaoThuHoiSauXayXat ? cur.slGaoThuHoiSauXayXat : 0

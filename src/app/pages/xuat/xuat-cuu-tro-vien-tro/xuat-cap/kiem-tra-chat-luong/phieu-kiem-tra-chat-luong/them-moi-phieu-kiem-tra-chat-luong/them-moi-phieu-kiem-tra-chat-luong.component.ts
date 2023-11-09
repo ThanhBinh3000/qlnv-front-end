@@ -311,6 +311,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
 
   async save(isGuiDuyet?) {
     // this.setValidator(isGuiDuyet);
+    // const hinhThucBq= this.formData.value || "";
     let body = this.formData.value;
     body.fileDinhKems = this.listFileDinhKem;
     body.ketQuaPhanTich = this.dataTableChiTieu;
