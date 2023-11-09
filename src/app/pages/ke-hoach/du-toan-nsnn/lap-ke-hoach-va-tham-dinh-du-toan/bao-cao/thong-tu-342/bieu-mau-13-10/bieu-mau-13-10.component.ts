@@ -252,7 +252,7 @@ export class BieuMau1310Component implements OnInit {
 				item.gtriTdinhSluong = item.khDtoanNamSluong;
 				item.gtriTdinhDgia = item.khDtoanNamDgia;
 				item.gtriTdinhTtien = item.khDtoanNamTtien;
-				item.chenhLech = Operator.sum([item.gtriTdinhTtien, -item.khDtoanNamTtien]);
+				item.chenhLech = Operator.sum([item.gtriTdinhTtien, item.khDtoanNamTtien ? -item.khDtoanNamTtien : null]);
 			})
 		}
 
