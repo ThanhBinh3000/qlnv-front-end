@@ -503,6 +503,7 @@ export class PhuLuc03Component implements OnInit {
                 if (data.ma.startsWith('02')) {
                     const dm = this.dsDinhMuc.find(e => e.cloaiVthh == data.ma || e.loaiVthh == data.ma);
                     if (this.lstCtietBcaos.findIndex(e => e.danhMuc == data.ma) == -1) {
+                        stt = '0.2.' + (this.lstCtietBcaos.length - index).toString();
                         //them vat tu moi vao bang
                         this.lstCtietBcaos.push(new ItemData({
                             id: uuid.v4() + 'FE',
