@@ -108,6 +108,7 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
           idQdGiaoNv: res.idQdGiaoNv,
           soQdBtc : res.soQdBtc,
           idQdBtc : res.idQdBtc,
+          lanDc : res.lanDc
         })
         res.children.forEach((item)=>{
           let data = item.ktKhDxSuaChuaLonCtiet;

@@ -133,7 +133,12 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       await this.detail(id).then((res)=>{
         console.log(res);
         this.formData.patchValue({
-          soQuyetDinh : res.soQuyetDinh.split('/')[0]
+          soQuyetDinh : res.soQuyetDinh.split('/')[0],
+          soQdGiaoNv: res.soQdGiaoNv,
+          idQdGiaoNv: res.idQdGiaoNv,
+          soQdBtc : res.soQdBtc,
+          idQdBtc : res.idQdBtc,
+          lanDc : res.lanDc
         })
         res.children.forEach((item)=>{
           let data = item.ktKhDxSuaChuaLonCtiet;
