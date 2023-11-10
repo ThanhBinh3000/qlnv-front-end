@@ -4,10 +4,10 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="formData.value.trangThai===STATUS.BAN_HANH" type="button" class="btn btn-sub"
-            (click)="xemTruoc(idInput,loaiVthh=='02'?templateNameVt:templateName)">
+    <button *ngIf="idInput" type="button" class="btn btn-sub do"
+            (click)="xemTruoc(idInput,loaiVthh === LOAI_HANG_DTQG.VAT_TU ? templateNameVt: templateNameLt)">
       <i class="icon htvbdh_totrinh"></i>
-      <span> In/Xem trước </span>
+      <span> Xem trước </span>
     </button>
     <ng-container>
       <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDC) && isView
@@ -336,7 +336,7 @@
 <ng-template #error let-control>
   <app-template-error #error [control]="control"></app-template-error>
 </ng-template>
-<nz-modal [(nzVisible)]="showDlgPreview" nzWidth="70%"
+<nz-modal [nzWidth]="'75%'" [nzClosable]="false" [(nzVisible)]="showDlgPreview" nzWidth="100%"
           (nzOnCancel)="closeDlg()">
   <div *nzModalContent class="modal__content">
     <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
@@ -347,16 +347,16 @@
       <i class="icon htvbdh_printer"></i>
       In
     </button>
-    <button nz-button (click)="downloadPdf(loaiVthh=='02' ? templateNameVt : templateName)"
-            class="modal__button--save">
-      <i class="icon htvbdh_file-pdf"></i>
-      Xuất .pdf
-    </button>
-    <button nz-button (click)="downloadWord(loaiVthh=='02' ? templateNameVt : templateName)"
-            class="modal__button--save">
-      <i class="icon htvbdh_file-word"></i>
-      Xuất .docx
-    </button>
+    <!--    <button nz-button (click)="downloadPdf(loaiVthh === LOAI_HANG_DTQG.VAT_TU ? templateNameVt : templateNameLt)"-->
+    <!--            class="modal__button&#45;&#45;save">-->
+    <!--      <i class="icon htvbdh_file-pdf"></i>-->
+    <!--      Xuất .pdf-->
+    <!--    </button>-->
+    <!--    <button nz-button (click)="downloadWord(loaiVthh === LOAI_HANG_DTQG.VAT_TU ? templateNameVt : templateNameLt)"-->
+    <!--            class="modal__button&#45;&#45;save">-->
+    <!--      <i class="icon htvbdh_file-word"></i>-->
+    <!--      Xuất .docx-->
+    <!--    </button>-->
     <button nz-button (click)="closeDlg()" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
