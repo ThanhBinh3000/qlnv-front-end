@@ -495,6 +495,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
           maBoNganh: this.formData.value.dviThongTri,
           maTh: this.formData.value.soDnCapVon,
         });
+        console.log();
         if (res.msg == MESSAGE.SUCCESS && res.data) {
           this.listDviThuHuong = res.data;
         }

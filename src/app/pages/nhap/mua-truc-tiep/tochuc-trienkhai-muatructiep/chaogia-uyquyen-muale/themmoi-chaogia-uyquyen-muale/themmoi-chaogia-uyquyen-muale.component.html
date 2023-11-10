@@ -10,12 +10,12 @@
       <span>Xem trước</span>
     </button>
     <button
-      *ngIf="(this.userService.isCuc() && formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT)"
+      *ngIf="(this.userService.isCuc() && formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT) && userService.isAccessPermisson('NHDTQG_PTMTT_TCKHMTT_LT_TTDT_CAPNHAT')"
       type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Hoàn thành cập nhập</span>
     </button>
-    <button *ngIf="formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT && this.userService.isCuc()"
+    <button *ngIf="formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT && this.userService.isCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_TCKHMTT_LT_TTDT_CAPNHAT')"
             class="btn btn-main btn-sm waves-effect waves-light" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
@@ -44,7 +44,7 @@
                 <nz-form-label [nzNoColon]="true">
                 </nz-form-label>
                 <nz-form-control>
-                  <nz-radio-group [nzDisabled]="isDisable()" [(ngModel)]="radioValue" nzName="radiogroup"
+                  <nz-radio-group [nzDisabled]="isDisable()" [(ngModel)]="radioValue" (ngModelChange)="handleChangeRadio()" nzName="radiogroup"
                                   [ngModelOptions]="{standalone: true}">
                     <label nz-radio nzValue="01"> Chào giá </label>
                     <label nz-radio nzValue="02"> Ủy quyền </label>
@@ -91,8 +91,7 @@
             </div>
             <div nz-col [nzSpan]="4">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true">Thời gian mở cửa kho mua
-                  tiếp
+                <nz-form-label nzRequired [nzNoColon]="true">Thời gian mở kho mua
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-date-picker [nzDisabled]="isDisable()" nzFormat="dd/MM/yyyy"
@@ -141,6 +140,15 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
+            <div nz-col [nzSpan]="24" *ngIf=" radioValue == '01'">
+              <nz-form-item nz-col class="form-item">
+                <nz-form-label [nzNoColon]="true" class="label-color-kh">File tài liệu đính kèm
+                </nz-form-label>
+                <div class="list-file">
+                  <file-list [data]="fileDinhKem" [isViewDetail]="isView"></file-list>
+                </div>
+              </nz-form-item>
+            </div>
             <div nz-col [nzSpan]="24" *ngIf=" radioValue == '02'">
               <nz-form-item nz-col class="form-item">
                 <nz-form-label [nzNoColon]="true" class="label-color-kh">File đính kèm QĐ ủy quyền (nếu
@@ -164,7 +172,7 @@
             </div>
             <div nz-col [nzSpan]="24">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Ghi chú
+                <nz-form-label [nzNoColon]="true"> Ghi chú
                 </nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
                                     <textarea [readonly]="isDisable()" nz-input [rows]="3"
@@ -178,7 +186,7 @@
     </nz-collapse>
 
     <nz-collapse>
-      <nz-collapse-panel nzActive="true" nzHeader="CHI TIẾT THÔNG TIN CHÀO GIÁ">
+      <nz-collapse-panel nzActive="true" nzHeader="{{title}}">
         <nz-table #tableData [nzData]="danhSachCtiet" class="nowrap" nzBordered>
           <thead>
           <tr>
@@ -187,7 +195,7 @@
             <th>Điểm kho</th>
             <th>Chỉ tiêu kế hoạch được giao (tấn)</th>
             <th>Số đã thực hiện (tấn)</th>
-            <th>SL đề xuất mua trực tiếp (tấn)</th>
+            <th>SL phê duyệt (tấn)</th>
             <th>Đơn giá được duyệt có VAT (đ)</th>
             <th>Thành tiền theo đơn giá đã duyệt (đ)</th>
             <th>Hành động</th>
@@ -279,7 +287,7 @@
                       <i class="icon htvbdh_tcdt_save"></i>
                     </a>
                     <a
-                      (click)="cancelEditDk(i,y)">
+                      (click)="cancelEditDk(i,item)">
                       <i class="fa fa-ban do"></i>
                     </a>
                   </td>

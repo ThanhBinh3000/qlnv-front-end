@@ -35,7 +35,7 @@
       <div nz-row [nzGutter]='[24]'>
         <div nz-col [nzSpan]='3'>
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]='true'> Năm</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]='true'> Năm ngân sách</nz-form-label>
             <nz-form-control nz-col [nzSpan]='24' [nzErrorTip]='error'>
               <nz-select formControlName='nam' [nzDisabled]='isView'>
                 <nz-option *ngFor='let p of listNam' [nzValue]='p.value' [nzLabel]='p.text'></nz-option>
@@ -480,7 +480,7 @@
     <tr>
       <th width='40px'>STT</th>
       <th>Loại</th>
-      <th>Chủng loại</th>
+      <th>Chủng loại hàng</th>
       <th>Tên hàng</th>
       <th width='200px'>Số lượng đề nghị cấp vốn</th>
       <th>Đơn vị tính</th>

@@ -25,6 +25,7 @@ import {
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { MangLuoiKhoService } from "src/app/services/qlnv-kho/mangLuoiKho.service";
 import { LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG, TEN_LOAI_VTHH } from "src/app/constants/config";
+import { PREVIEW } from "src/app/constants/fileType";
 
 export class QuyetDinhPdDtl {
   idVirtual: string;
@@ -97,6 +98,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
   tongSoLuongDx: number;
   tongSlXuatCap: string;
   tongNhuCauXuat: string;
+  templateName: string = 'QuyetDinhPheDuyetPhuongAnXuatCap';
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
@@ -707,5 +709,21 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     } finally {
       await this.spinner.hide();
     }
+  }
+  async xemTruocPd(id, tenBaoCao, children) {
+    await this.quyetDinhPheDuyetPhuongAnCuuTroService.preview({
+      tenBaoCao: tenBaoCao + '.docx',
+      id: id,
+      children: children
+    }).then(async res => {
+      if (res.data) {
+        this.printSrc = res.data.pdfSrc;
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+      }
+    });
   }
 }
