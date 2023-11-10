@@ -254,8 +254,8 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
         this.formData.controls['idQdGoc'].clearValidators();
         this.formData.controls['lanDc'].clearValidators();
       } else {
-        this.formData.controls['soQdGiaoNv'].clearValidators();;
-        this.formData.controls['idQdGiaoNv'].clearValidators();;
+        this.formData.controls['soQdGiaoNv'].clearValidators();
+        this.formData.controls['idQdGiaoNv'].clearValidators();
         this.formData.controls['soQdGoc'].setValidators([Validators.required]);
         this.formData.controls['idQdGoc'].setValidators([Validators.required]);
         this.formData.controls['lanDc'].setValidators([Validators.required]);
