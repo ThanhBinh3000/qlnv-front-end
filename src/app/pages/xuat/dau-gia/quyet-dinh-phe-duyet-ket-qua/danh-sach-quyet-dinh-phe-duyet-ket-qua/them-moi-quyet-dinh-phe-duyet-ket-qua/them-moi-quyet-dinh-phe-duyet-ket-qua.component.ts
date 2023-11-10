@@ -23,8 +23,6 @@ import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import {cloneDeep} from 'lodash';
-import {PREVIEW} from "../../../../../../constants/fileType";
-import {saveAs} from 'file-saver';
 import {FileDinhKem} from "../../../../../../models/CuuTro";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
@@ -45,12 +43,8 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
   loadDsQuyetDinhKq: any[] = [];
   dataMaThongBao: any[] = [];
   maTrinh: String;
-  templateName = "quyet_dinh_phe_duyet_ket_qua";
-  templateNameVt = "quyet_dinh_phe_duyet_ket_qua_vat_tu";
-  showDlgPreview = false;
-  pdfBlob: any;
-  pdfSrc: any;
-  wordSrc: any;
+  templateNameVt = "Quyết định kết quả bán đấu giá vật tư";
+  templateNameLt = "Quyết định kết quả bán đấu giá lương thực";
   maHauTo: any;
 
   constructor(
@@ -338,51 +332,5 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
     this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
     this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
     this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
-  }
-
-  async preview(id) {
-    let tenBaoCao;
-    if (this.loaiVthh == "02") {
-      tenBaoCao = this.templateNameVt
-    } else {
-      tenBaoCao = this.templateName
-    }
-    await this.qdPdKetQuaBanDauGiaService.preview({
-      tenBaoCao: tenBaoCao,
-      id: id
-    }).then(async res => {
-      if (res.data) {
-        this.printSrc = res.data.pdfSrc;
-        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
-        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
-        this.showDlgPreview = true;
-      } else {
-        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
-      }
-    });
-  }
-
-  downloadPdf() {
-    let tenBaoCao;
-    if (this.loaiVthh == "02") {
-      tenBaoCao = this.templateNameVt
-    } else {
-      tenBaoCao = this.templateName
-    }
-    saveAs(this.pdfSrc, tenBaoCao + ".pdf");
-  }
-
-  downloadWord() {
-    let tenBaoCao;
-    if (this.loaiVthh == "02") {
-      tenBaoCao = this.templateNameVt
-    } else {
-      tenBaoCao = this.templateName
-    }
-    saveAs(this.wordSrc, tenBaoCao + ".docx");
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
   }
 }

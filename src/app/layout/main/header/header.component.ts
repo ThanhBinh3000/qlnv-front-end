@@ -137,6 +137,7 @@ export class HeaderComponent implements OnInit {
       nzComponentParams: {
         dataEdit: data,
         isView: true,
+        isOld: true
       },
     });
     modal.afterClose.subscribe((data) => {
