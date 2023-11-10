@@ -474,6 +474,7 @@ export class PhuLucKhoaHocCongNgheComponent implements OnInit {
         const filterData = this.lstCtietBcaos.map(item => {
             const row: any = {};
             fieldOrder.forEach(field => {
+                item[field] = item[field] ? item[field] : ""
                 row[field] = field == 'stt' ? item.index() : item[field]
             })
             return row;
