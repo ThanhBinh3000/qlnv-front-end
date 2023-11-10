@@ -21,7 +21,7 @@ import { DialogAddVatTuComponent } from '../dialog-add-vat-tu/dialog-add-vat-tu.
 import { TEN_HANG } from './add-quyet-toan-tong-hop.constant';
 import { DialogCongVanComponent } from 'src/app/components/dialog/dialog-cong-van/dialog-cong-van.component';
 import { Doc } from '../../von-phi-hang-du-tru-quoc-gia.constant';
-import * as XLSX from "xlsx";
+import * as XLSX from 'xlsx-js-style';
 export class ItemData {
     id!: any;
     stt!: string;
@@ -1600,7 +1600,8 @@ export class AddQuyetToanTongHopComponent implements OnInit {
         const filterData = this.lstCtietBcao.map(item => {
             const row: any = {};
             fieldOrder.forEach(field => {
-                row[field] = item[field]
+                item[field] ? item[field] : "";
+                row[field] = field == 'stt' ? this.getChiMuc(item.stt) : Utils.getValue(item[field]);
             })
             return row;
         })

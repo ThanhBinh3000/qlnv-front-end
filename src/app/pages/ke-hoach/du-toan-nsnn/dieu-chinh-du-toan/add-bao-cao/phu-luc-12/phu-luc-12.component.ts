@@ -605,7 +605,7 @@ export class PhuLuc12Component implements OnInit {
 			]
 		} else {
 			header = [
-				{ t: 0, b: 7, l: 0, r: 13, val: null },
+				{ t: 0, b: 7, l: 0, r: 10, val: null },
 
 				{ t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
 				{ t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
@@ -657,7 +657,8 @@ export class PhuLuc12Component implements OnInit {
 		const filterData = this.lstCtietBcao.map(item => {
 			const row: any = {};
 			fieldOrder.forEach(field => {
-				row[field] = item[field]
+				item[field] = item[field] ? item[field] : ""
+				row[field] = field == 'stt' ? this.getIndex(item.stt) : item[field];
 			})
 			return row;
 		})

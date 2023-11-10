@@ -729,7 +729,8 @@ export class PhuLuc4Component implements OnInit {
         const filterData = this.lstCtietBcao.map(item => {
             const row: any = {};
             fieldOrder.forEach(field => {
-                row[field] = item[field]
+                item[field] = item[field] ? item[field] : ""
+                row[field] = field == 'stt' ? this.getIndex(item.stt) : item[field]
             })
             return row;
         })

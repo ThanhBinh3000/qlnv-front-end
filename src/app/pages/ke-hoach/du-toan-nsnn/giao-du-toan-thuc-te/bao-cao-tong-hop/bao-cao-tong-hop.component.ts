@@ -1396,9 +1396,9 @@ export class BaoCaoTongHopComponent implements OnInit {
             const tenNdung = this.getTenNdung(item.maNdung);
             header.push({ t: row, b: row, l: 0, r: 0, val: this.getChiMuc(item.stt) })
             header.push({ t: row, b: row, l: 1, r: 1, val: tenNdung })
-            header.push({ t: row, b: row, l: 2, r: 2, val: item.tongCong?.toString() })
-            header.push({ t: row, b: row, l: 3, r: 3, val: item.dviCapDuoiTh?.toString() })
-            header.push({ t: row, b: row, l: 4, r: 4, val: item.chenhLech?.toString() })
+            header.push({ t: row, b: row, l: 2, r: 2, val: (item.tongCong ? item.tongCong : 0)?.toString() })
+            header.push({ t: row, b: row, l: 3, r: 3, val: (item.dviCapDuoiTh ? item.dviCapDuoiTh : 0)?.toString() })
+            header.push({ t: row, b: row, l: 4, r: 4, val: (item.chenhLech ? item.chenhLech : 0)?.toString() })
         })
 
         const workbook = XLSX.utils.book_new();
