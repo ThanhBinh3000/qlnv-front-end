@@ -184,7 +184,8 @@
         </div>
       </div>
       <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-        <nz-table #dataTblHdr class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="phuongAnHdrView">
+        <nz-table #dataTblHdr class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="phuongAnHdrView"
+          [nzFrontPagination]="false" [nzShowPagination]="false">
           <thead>
             <tr>
               <th style="width: 35px">STT</th>
@@ -281,7 +282,8 @@
       </form>
       <ng-container>
         <div class="mt-16">
-          <nz-table #tblData [nzData]="phuongAnView" class="nowrap table-chi-tiet" nzBordered>
+          <nz-table #tblData [nzData]="phuongAnView" class="nowrap table-chi-tiet" nzBordered
+            [nzFrontPagination]="false" [nzShowPagination]="false">
             <thead>
               <tr>
                 <ng-container *ngIf="isVthhVatuThietBi()">

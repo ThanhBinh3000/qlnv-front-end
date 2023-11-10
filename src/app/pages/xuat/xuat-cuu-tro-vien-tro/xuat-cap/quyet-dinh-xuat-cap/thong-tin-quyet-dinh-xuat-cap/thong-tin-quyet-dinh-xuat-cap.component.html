@@ -279,7 +279,8 @@
           </div>
           <ng-container>
             <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-              <nz-table #tblData [nzData]="phuongAnView" class="nowrap table-chi-tiet" nzBordered>
+              <nz-table #tblData [nzData]="phuongAnView" class="nowrap table-chi-tiet" nzBordered
+                [nzFrontPagination]="false" [nzShowPagination]="false">
                 <thead>
                   <tr>
                     <th [rowspan]="2"></th>
@@ -359,7 +360,8 @@
       </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-      <nz-table #tableHdr class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="this.phuongAnHdrView">
+      <nz-table #tableHdr class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="this.phuongAnHdrView"
+        [nzFrontPagination]="false" [nzShowPagination]="false">
         <thead>
           <tr>
             <th style="width: 35px">STT</th>
@@ -462,7 +464,8 @@
                 </div>
               </div>
               <nz-card>
-                <nz-table #tblPhuongAnViewCache [nzData]="phuongAnView" class="nowrap table-chi-tiet" nzBordered>
+                <nz-table #tblPhuongAnViewCache [nzData]="phuongAnView" class="nowrap table-chi-tiet" nzBordered
+                  [nzFrontPagination]="false" [nzShowPagination]="false">
                   <thead>
                     <tr>
                       <th style="width: 35px" class="text-center">STT</th>
@@ -582,7 +585,8 @@
               </div>
             </div>
             <nz-card>
-              <nz-table #tblPhuongAnView [nzData]="phuongAnView" class="nowrap table-chi-tiet" nzBordered>
+              <nz-table #tblPhuongAnView [nzData]="phuongAnView" class="nowrap table-chi-tiet" nzBordered
+                [nzFrontPagination]="false" [nzShowPagination]="false">
                 <thead>
                   <tr>
                     <th style="width: 35px" class="text-center">STT</th>
