@@ -423,6 +423,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
         nzComponentParams: {
           dataInput: data,
           type: type,
+          namKh: this.formData.value.namKeHoach,
           page: "DXTH"
         }
       });
