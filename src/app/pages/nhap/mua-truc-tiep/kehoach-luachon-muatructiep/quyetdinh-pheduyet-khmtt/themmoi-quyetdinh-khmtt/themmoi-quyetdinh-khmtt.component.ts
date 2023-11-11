@@ -348,7 +348,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
     await this.spinner.show();
     // Get data tờ trình
     let bodyToTrinh = {
-      trangThai: STATUS.DA_DUYET_CBV,
+      trangThai: STATUS.DA_DUYET_LDC,
       trangThaiTh: STATUS.CHUA_TONG_HOP,
       namKh: this.formData.get('namKh').value,
       loaiVthh: this.loaiVthh,
@@ -412,6 +412,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
         this.idSoQdCc = data.idSoQdCc
         this.dataInput = null;
         this.dataInputCache = null;
+        await this.showDetail(event, this.danhsachDx[0]);
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
