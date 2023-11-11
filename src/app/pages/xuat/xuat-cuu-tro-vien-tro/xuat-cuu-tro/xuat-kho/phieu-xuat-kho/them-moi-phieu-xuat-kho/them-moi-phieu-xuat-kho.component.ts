@@ -123,6 +123,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         tenNhaKho: ['', [Validators.required]],
         tenNganKho: ['', [Validators.required]],
         tenLoKho: [],
+        tenNganLoKho: [],
         fileDinhKems: [new Array<FileDinhKem>()],
         loaiNhapXuat: [],
         kieuNhapXuat: [],
@@ -160,7 +161,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       await this.phieuXuatKhoService.getDetail(idInput)
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            this.formData.patchValue(res.data);
+            this.formData.patchValue({ ...res.data, tenNganLoKho: res.data.tenLoKho ? `${res.data.tenLoKho} - ${res.data.tenNganKho}` : res.data.tenNganKho, });
             const data = res.data;
             this.fileDinhKems = data.fileDinhKems;
             if (res.data.idQdGiaoNvXh) {
@@ -314,6 +315,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         tenNhaKho: data.tenNhaKho,
         maNganKho: data.maNganKho,
         tenNganKho: data.tenNganKho,
+        tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
         donViTinh: data.donViTinh,

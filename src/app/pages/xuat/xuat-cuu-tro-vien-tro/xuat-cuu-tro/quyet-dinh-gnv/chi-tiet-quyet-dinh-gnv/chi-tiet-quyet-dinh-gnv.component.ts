@@ -402,7 +402,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   async save() {
     await this.helperService.ignoreRequiredForm(this.formData);
     this.formData.controls.soBbQd.setValidators([Validators.required]);
-    if (!this.checkHoanTatPhanBo()) return;
+    // if (!this.checkHoanTatPhanBo()) return;
     let body = {
       ...this.formData.value,
       soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null
@@ -430,8 +430,8 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     if (this.formData.value.trangThai === STATUS.BAN_HANH && this.formData.value.dataDtl.filter(s => s.maDvi.match(this.userInfo.MA_DVI + ".*")).some(f => !f.tenNganKho)) {
       return this.notification.error(MESSAGE.ERROR, "Bạn chưa hoàn thành phân bổ.")
     }
-    if (!this.checkHoanTatPhanBo()) return;
     if (trangThai === STATUS.DA_HOAN_THANH) {
+      if (!this.checkHoanTatPhanBo()) return;
 
       this.modal.confirm({
         nzClosable: false,

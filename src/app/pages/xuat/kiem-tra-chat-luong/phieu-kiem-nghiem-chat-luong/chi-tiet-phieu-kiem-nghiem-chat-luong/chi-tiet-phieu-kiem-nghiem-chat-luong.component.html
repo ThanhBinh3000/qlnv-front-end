@@ -88,10 +88,13 @@
                   Số phiếu kiểm nghiệm chất lượng
                 </nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfter="{{maHauTo}}">
+                  <!-- <nz-input-group nzAddOnAfter="{{maHauTo}}">
                     <nz-input-number formControlName="soBbQd" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
                       [nzSize]="'small'" [nzDisabled]="isView">
                     </nz-input-number>
+                  </nz-input-group> -->
+                  <nz-input-group>
+                    <input nz-input readonly formControlName="soBbQd" />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -150,7 +153,7 @@
                   </nz-form-control>
                 </nz-form-item>
               </div>
-              <div nz-col [nzSpan]="4">
+              <div nz-col [nzSpan]="8">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true" nzRequired> Ngăn/Lô kho</nz-form-label>
                   <nz-form-control>
@@ -290,7 +293,17 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired> Trưởng phòng KTBQ</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input nz-input formControlName="ktvBaoQuan" [readonly]="isView" />
+                  <input nz-input formControlName="ktvBaoQuan" readonly />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="4">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Lãnh đạo chi cục</nz-form-label>
+                <nz-form-control>
+                  <nz-input-group>
+                    <input nz-input formControlName="lanhDaoChiCuc" readonly />
+                  </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -362,7 +375,8 @@
   </nz-collapse>
   <nz-collapse>
     <nz-collapse-panel nzHeader="Kết quả phân tích chỉ tiêu chất lượng" nzActive="true">
-      <nz-table class="nowrap pd-t-16" #basicTable [nzData]="viewCtChatLuong" nzBordered>
+      <nz-table class="nowrap pd-t-16" #basicTable [nzData]="viewCtChatLuong" nzBordered [nzFrontPagination]="false"
+        [nzShowPagination]="false">
         <thead>
           <tr>
             <th class="text-center" nzWidth="50px">STT</th>

@@ -157,7 +157,7 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
       let bienBanSapNhapCcDtl = [];
       Array.isArray(this.dataViewHang) && this.dataViewHang.forEach(lv1 => {
         Array.isArray(lv1.childData) && lv1.childData.forEach(lv2 => {
-          bienBanSapNhapHangDtl.push({ ...lv2, id: undefined, hdrId: undefined, slThucTe: lv2.slThucTe ? lv2.slThucTe : 0, slHaoHut: lv2.slHaoHut ? lv2.slHaoHut : 0 })
+          bienBanSapNhapHangDtl.push({ ...lv2, id: undefined, hdrId: undefined, slThucTe: lv2.slThucTe ? lv2.slThucTe : 0, slHaoHut: lv2.slHaoHut ? lv2.slHaoHut : 0, slTheoSoSach: lv2.slTheoSoSach ? lv2.slTheoSoSach : 0 })
         });
       })
       if (this.formData.value.loai === "SN_CHI_CUC") {
@@ -316,7 +316,7 @@ export class ThongTinBienBanSapNhapKhoComponent extends Base2Component implement
             loai: res.data.loai,
             tenLoai: this.obTenLoai[res.data.loai]
           });
-          this.bienBanSapNhapHangDtl = Array.isArray(res.data.dieuChuyenKhoHangDtl) ? res.data.dieuChuyenKhoHangDtl.map(f => ({ ...f, groupBy: f.maDiemKhoDi ? `${f.maChiCucDi}${f.maDiemKhoDi}` : f.maChiCucDi, slThucTe: f.slTon, slHaoHut: f.slHaoHut || 0 })) : [];
+          this.bienBanSapNhapHangDtl = Array.isArray(res.data.dieuChuyenKhoHangDtl) ? res.data.dieuChuyenKhoHangDtl.map(f => ({ ...f, groupBy: f.maDiemKhoDi ? `${f.maChiCucDi}${f.maDiemKhoDi}` : f.maChiCucDi, slTheoSoSach: f.slTon, slThucTe: (f.slTon || 0) - (f.slHaoHut || 0), slHaoHut: f.slHaoHut || 0 })) : [];
           this.bienBanSapNhapCcDtl = Array.isArray(res.data.dieuChuyenKhoCcDtl) ? res.data.dieuChuyenKhoCcDtl.map(f => ({ ...f, groupBy: f.maChiCucDi })) : [];
           this.bienBanSapNhapVpDtl = Array.isArray(res.data.dieuChuyenKhoVpDtl) ? res.data.dieuChuyenKhoVpDtl : [];
           this.buidView("dataViewHang", "bienBanSapNhapHangDtl");
