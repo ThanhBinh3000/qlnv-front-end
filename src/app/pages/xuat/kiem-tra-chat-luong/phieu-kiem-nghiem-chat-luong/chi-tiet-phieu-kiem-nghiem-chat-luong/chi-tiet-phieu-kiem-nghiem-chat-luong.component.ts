@@ -115,6 +115,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       ngayKiemNghiem: [dayjs().format("YYYY-MM-DD")],
       ktvBaoQuan: [],
       dviKiemNghiem: [],
+      lanhDaoChiCuc: [],
       ketQua: [],
       ketLuan: [],
       loaiBb: [],
@@ -155,10 +156,6 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       await this.service.getDetail(this.idSelected)
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            if (res.data.soBbQd) {
-              this.maHauTo = '/' + res.data.soBbQd?.split('/')[1];
-              res.data.soBbQd = res.data.soBbQd?.split('/')[0];
-            }
             this.formData.patchValue({ ...res.data, tenNganLoKho: res.data.tenLoKho ? `${res.data.tenLoKho} - ${res.data.tenNganKho}` : res.data.tenNganKho });
             this.formData.value.xhPhieuKnclDtl.forEach(s => {
               s.idVirtual = uuidv4();
@@ -199,14 +196,17 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     this.formData.controls.soQdGnv.setValidators([Validators.required]);
     let body = {
       ...this.formData.value,
-      soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null,
+      soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd : this.maHauTo,
     };
-    await this.createUpdate(body);
+    const data = await this.createUpdate(body);
+    if (data) {
+      this.formData.patchValue({ soBbQd: data.soBbQd })
+    }
     await this.helperService.restoreRequiredForm(this.formData);
   }
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
-    let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd + this.maHauTo };
+    let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd : this.maHauTo };
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
   }
 

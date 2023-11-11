@@ -274,7 +274,8 @@
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
       <ng-container *ngIf="formData.value.type == 'TH'">
-        <nz-table #tableHdr class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="this.phuongAnHdrView">
+        <nz-table #tableHdr class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="this.phuongAnHdrView"
+          [nzFrontPagination]="false" [nzShowPagination]="false">
           <thead>
             <tr>
               <th style="width: 35px">STT</th>
@@ -358,7 +359,8 @@
               </form>
               <ng-container>
                 <div class="mt-16">
-                  <nz-table #tblPhuongAnViewCache [nzData]="phuongAnViewCache" class="nowrap table-chi-tiet" nzBordered>
+                  <nz-table #tblPhuongAnViewCache [nzData]="phuongAnViewCache" class="nowrap table-chi-tiet" nzBordered
+                    [nzFrontPagination]="false" [nzShowPagination]="false">
                     <thead>
                       <tr>
                         <th rowspan="2" style="width: 35px"></th>
@@ -551,7 +553,8 @@
             </form>
             <ng-container>
               <div class="mt-16">
-                <nz-table #tblPhuongAnView [nzData]="phuongAnView" class="nowrap table-chi-tiet" nzBordered>
+                <nz-table #tblPhuongAnView [nzData]="phuongAnView" class="nowrap table-chi-tiet" nzBordered
+                  [nzFrontPagination]="false" [nzShowPagination]="false">
                   <thead>
                     <tr>
                       <th rowspan="2" style="width: 35px"></th>
@@ -797,7 +800,8 @@
               </form>
               <ng-container>
                 <div class="mt-16">
-                  <nz-table #tblPhuongAnViewCache [nzData]="phuongAnViewCache" class="nowrap table-chi-tiet" nzBordered>
+                  <nz-table #tblPhuongAnViewCache [nzData]="phuongAnViewCache" class="nowrap table-chi-tiet" nzBordered
+                    [nzFrontPagination]="false" [nzShowPagination]="false">
                     <thead>
                       <tr>
                         <ng-container *ngIf="isVthhVatuThietBi()">
@@ -957,7 +961,8 @@
             </form>
             <ng-container>
               <div class="mt-16">
-                <nz-table #tblPhuongAnView [nzData]="phuongAnView" class="nowrap table-chi-tiet" nzBordered>
+                <nz-table #tblPhuongAnView [nzData]="phuongAnView" class="nowrap table-chi-tiet" nzBordered
+                  [nzFrontPagination]="false" [nzShowPagination]="false">
                   <thead>
                     <tr>
                       <ng-container *ngIf="isVthhVatuThietBi()">

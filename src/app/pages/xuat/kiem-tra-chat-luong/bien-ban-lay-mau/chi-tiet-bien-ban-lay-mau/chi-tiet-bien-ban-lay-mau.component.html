@@ -306,7 +306,8 @@
         </div>
       </div>
     </div>
-    <nz-table class="nowrap pd-10" #basicTable [nzData]="viewTableDaiDien" nzBordered>
+    <nz-table class="nowrap pd-10" #basicTable [nzData]="viewTableDaiDien" nzBordered [nzFrontPagination]="false"
+      [nzShowPagination]="false">
       <thead>
         <tr>
           <th class="text-center" nzWidth="50px">STT</th>
@@ -325,7 +326,7 @@
               <nz-option nzValue="Đại diện đơn vị cung cấp" nzLabel="Đại diện đơn vị cung cấp"></nz-option>
             </nz-select>
           </th>
-          <th>
+          <th class="text-center" *ngIf="!isView">
             <a (click)="themDaiDien()">
               <i class="fa fa-plus"></i>
             </a>
@@ -341,7 +342,7 @@
             <td class="text-center">{{i + 1}}</td>
             <td>{{data.ten}}</td>
             <td>{{data.loai}}</td>
-            <td>
+            <td class="text-center" *ngIf="!isView">
               <a (click)="suaDaiDien(data)">
                 <i class="fa fa-edit"></i>
               </a>
@@ -362,7 +363,7 @@
                 <nz-option nzValue="Đại diện đơn vị cung cấp" nzLabel="Đại diện đơn vị cung cấp"></nz-option>
               </nz-select>
             </td>
-            <td>
+            <td class="text-center" *ngIf="!isView">
               <a>
                 <i class="fa fa-save" nz-popconfirm nz-button nzPopconfirmTitle="Bạn có chắc muốn lưu thay đổi ?"
                   (nzOnConfirm)="luuDaiDien(data)"></i>

@@ -28,7 +28,6 @@ import {STATUS} from 'src/app/constants/status';
 import {DonviService} from "../../../../../../services/donvi.service";
 import _ from 'lodash';
 
-
 @Component({
   selector: 'app-thong-tin',
   templateUrl: './thong-tin.component.html',

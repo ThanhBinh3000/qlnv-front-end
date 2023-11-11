@@ -174,6 +174,7 @@
                   <th style="width: 17%;" class="text-center">Loại hàng hóa</th>
                   <th class="text-center">Chủng loại hàng hóa</th>
                   <th style="width: 10%;" class="text-center">Đơn vị tính</th>
+                  <th style="width: 15%;" class="text-center">Số lượng theo sổ sách</th>
                   <th style="width: 15%;" class="text-center">Số lượng thực tế</th>
                   <th style="width: 15%;" class="text-center">Số lượng hao hụt</th>
                   <th style="width: 15%;" class="text-center">Chất lượng hàng hóa</th>
@@ -201,6 +202,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td></td>
                   </tr>
                   <ng-container *ngIf="expandSetString.has(item.idVirtual)">
                     <ng-container *ngFor="let lv2 of item.childData; let idx2=index">
@@ -210,8 +212,9 @@
                         <td>{{lv2.tenLoaiVthh || ""}}</td>
                         <td>{{lv2.tenCloaiVthh || ""}}</td>
                         <td>{{lv2.donViTinh}}</td>
-                        <td>{{lv2.slThucTe|number: '1.0-1' : 'vi_VN'}}</td>
-                        <td>{{lv2.slHaoHut|number: '1.0-1' : 'vi_VN'}}</td>
+                        <td class="text-right">{{lv2.slTheoSoSach|number: '1.0-1' : 'vi_VN'}}</td>
+                        <td class="text-right">{{lv2.slThucTe|number: '1.0-1' : 'vi_VN'}}</td>
+                        <td class="text-right">{{lv2.slHaoHut|number: '1.0-1' : 'vi_VN'}}</td>
                         <td>
                           <nz-input-group>
                             <input nz-input [(ngModel)]="lv2.chatLuongHangHoa" [readOnly]="isView" />
@@ -264,7 +267,7 @@
                         <td></td>
                         <td>{{idx2 + 1}}</td>
                         <td>{{lv2.tenCcdc || ""}}</td>
-                        <td nzAlign="right">{{lv2.slDieuChuyen || ""}}</td>
+                        <td class="text-right">{{lv2.slDieuChuyen|number: '1.0-1' : 'vi_VN'}}</td>
                         <td>{{lv2.donViTinh}}</td>
                         <td>
                           <nz-input-group>
