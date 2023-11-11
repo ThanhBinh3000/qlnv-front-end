@@ -8,10 +8,10 @@ import { Observable } from 'rxjs';
     providedIn: 'root',
 })
 export class QuyetDinhGiaoNvNhapHangService extends BaseService {
-    GATEWAY = '';
+    GATEWAY = '/qlnv-hang';
 
     constructor(public httpClient: HttpClient) {
-        super(httpClient, 'mua-truc-tiep/qd-nv-nh', '');
+        super(httpClient, 'mua-truc-tiep/qd-nv-nh', '/qlnv-hang');
     }
 
     updateDdiemNhap(body: any): Promise<any> {
