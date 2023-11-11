@@ -80,8 +80,8 @@
           <th width="150px" class="text-center">Ngày ký</th>
           <th width="">Trích yếu</th>
           <th width="150px">Trạng thái</th>
-          <th width="150px">Mã tổng hợp</th>
-          <th width="130px" class="text-center" *ngIf="userService.isCuc">Hành động</th>
+          <th width="150px" *ngIf="userService.isTongCuc()">Mã tổng hợp</th>
+          <th width="130px" class="text-center" >Hành động</th>
         </tr>
         </thead>
         <tbody>
@@ -130,7 +130,7 @@
               </nz-select>
             </nz-input-group>
           </td>
-          <td>
+          <td *ngIf="userService.isTongCuc()">
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maTongHop"
                      (input)="filterInTable('maTongHop',filterTable.maTongHop)"/>
@@ -151,7 +151,7 @@
           <td class="text-center">{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.tenTrangThai }}</td>
-          <td>{{ data.maTongHop ? data.maTongHop : 'Bản ghi chưa tổng hợp'}}</td>
+          <td *ngIf="userService.isTongCuc()">{{ data.maTongHop ? data.maTongHop : 'Bản ghi chưa tổng hợp'}}</td>
           <td class="text-left" *ngIf="userService.isCuc">
             <a
               *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_DX_XEM') && !((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDV) && data.nguoiTaoId == userInfo.ID)"
