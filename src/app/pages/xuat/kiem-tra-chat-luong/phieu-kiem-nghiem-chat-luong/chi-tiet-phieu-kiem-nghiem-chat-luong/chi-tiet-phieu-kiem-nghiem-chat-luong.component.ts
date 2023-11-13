@@ -276,9 +276,9 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         this.dsHinhThucBq.push({ ...item, label: item.ten, giaTri: item.ten, checked: true })
       }
     });
-    this.formData.patchValue({ ppLayMau: this.dsPpLayMau, hinhThucBaoQuan: this.dsHinhThucBq });
-    // const hangBaoQuan = this.formData.value.xhPhieuKnclDtl.find(s => s.type === 'SO_LUONG_HANG_BAO_QUAN');
-    // this.formData.patchValue({ ppLayMau: this.dsPpLayMau, hinhThucBaoQuan: this.dsHinhThucBq, slHangBaoQuan: hangBaoQuan?.soLuong ? hangBaoQuan?.soLuong : '' });
+    // this.formData.patchValue({ ppLayMau: this.dsPpLayMau, hinhThucBaoQuan: this.dsHinhThucBq });
+    const hangBaoQuan = this.formData.value.xhPhieuKnclDtl.find(s => s.type === 'SO_LUONG_HANG_BAO_QUAN');
+    this.formData.patchValue({ ppLayMau: this.dsPpLayMau, hinhThucBaoQuan: this.dsHinhThucBq, slHangBaoQuan: hangBaoQuan?.soLuong ? hangBaoQuan?.soLuong : '' });
   }
 
   async loadDsPpLayMau() {
@@ -637,8 +637,8 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     // let tonKhoCloaiVthh: number = 0;
     const res = await this.mangLuoiKhoService.slTon(body);
     if (res.msg === MESSAGE.SUCCESS) {
-      // this.formData.patchValue({ xhPhieuKnclDtl: [...this.formData.value.xhPhieuKnclDtl.filter(f => f.type !== 'SO_LUONG_HANG_BAO_QUAN'), { ten: 'Số lượng hàng bảo quản', soLuong: res.data, type: 'SO_LUONG_HANG_BAO_QUAN' }] });
-      this.formData.patchValue({ slHangBaoQuan: res.data });
+      this.formData.patchValue({ xhPhieuKnclDtl: [...this.formData.value.xhPhieuKnclDtl.filter(f => f.type !== 'SO_LUONG_HANG_BAO_QUAN'), { ten: 'Số lượng hàng bảo quản', soLuong: res.data, type: 'SO_LUONG_HANG_BAO_QUAN' }] });
+      // this.formData.patchValue({ slHangBaoQuan: res.data });
     }
   }
   downloadPdf() {
