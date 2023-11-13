@@ -1500,7 +1500,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 			{ t: 2, b: 2, l: 4, r: 4, val: ` ${this.getStatusName()} ` },
 
 			{ t: 5, b: 7, l: 0, r: 0, val: 'STT' },
-			{ t: 5, b: 7, l: 1, r: 1, val: 'Nhóm' },
+			{ t: 5, b: 7, l: 1, r: 1, val: 'Nội dung' },
 			{ t: 5, b: 7, l: 2, r: 2, val: 'Số trần chi giao từ cấp trên' },
 			{ t: 5, b: 7, l: 3, r: 3, val: 'Tổng số' },
 			{ t: 5, b: 6, l: 4, r: 3 + this.lstDvi.length, val: 'Chi tiết theo các đơn vị sử dụng' },

@@ -1133,7 +1133,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         }
 
         const header = [
-            { t: 0, b: 5 + this.lstCtietBcao.length, l: 0, r: 8, val: null },
+            { t: 0, b: 5 + this.lstCtietBcao.length, l: 0, r: 4, val: null },
 
             { t: 0, b: 0, l: 0, r: 1, val: `Quyết định Bộ Tài Chính năm ${this.namPa}` },
 

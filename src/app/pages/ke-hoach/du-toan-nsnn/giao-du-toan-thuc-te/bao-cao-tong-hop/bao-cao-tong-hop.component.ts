@@ -1369,7 +1369,7 @@ export class BaoCaoTongHopComponent implements OnInit {
             loaiPa = "Phương án giao điều chỉnh NSNN"
         }
         const header = [
-            { t: 0, b: 5 + this.lstCtietBcao.length, l: 0, r: 8, val: null },
+            { t: 0, b: 5 + this.lstCtietBcao.length, l: 0, r: 4, val: null },
 
             { t: 0, b: 0, l: 0, r: 1, val: `Báo cáo tổng hợp ${loaiPa}` },
 
@@ -1384,7 +1384,7 @@ export class BaoCaoTongHopComponent implements OnInit {
             { t: 2, b: 2, l: 4, r: 4, val: ` ${this.getStatusName()} ` },
 
             { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
-            { t: 4, b: 5, l: 1, r: 1, val: 'Nhóm' },
+            { t: 4, b: 5, l: 1, r: 1, val: 'Nội dung' },
             { t: 4, b: 5, l: 2, r: 2, val: 'Tổng số' },
             { t: 4, b: 5, l: 3, r: 3, val: 'Đơn vị cấp dưới đã thực hiện' },
             { t: 4, b: 5, l: 4, r: 4, val: 'Chênh lệch' },

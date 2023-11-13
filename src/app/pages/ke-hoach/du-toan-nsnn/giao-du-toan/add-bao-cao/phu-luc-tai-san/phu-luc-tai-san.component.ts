@@ -480,11 +480,11 @@ export class PhuLucTaiSanComponent implements OnInit {
 			{ t: 4, b: 5, l: 1, r: 1, val: 'Tên tài sản (theo danh mục được phê duyệt tại Quyết định số 149/QĐ-TCDT)' },
 			{ t: 4, b: 5, l: 2, r: 2, val: 'ĐVT' },
 			{ t: 4, b: 5, l: 3, r: 7, val: 'Số lượng tài sản, máy móc, thiết bị hiện có' },
-			{ t: 4, b: 5, l: 8, r: 10, val: 'Dự toán đề nghị trang bị năm ' + (this.namBcao - 1).toString() },
+			{ t: 4, b: 5, l: 8, r: 10, val: 'Dự toán đề nghị trang bị năm ' + (this.namBcao).toString() },
 
 			{ t: 5, b: 5, l: 3, r: 3, val: 'Số lượng đến thời điểm báo cáo' },
 			{ t: 5, b: 5, l: 4, r: 4, val: 'Số lượng đã nhận chưa có QĐ điều chuyển' },
-			{ t: 5, b: 5, l: 5, r: 5, val: 'Số lượng đã được phê duyệt mua sắm năm' + + (this.namBcao - 2).toString() },
+			{ t: 5, b: 5, l: 5, r: 5, val: 'Số lượng đã được phê duyệt mua sắm năm' + (this.namBcao).toString() },
 			{ t: 5, b: 5, l: 6, r: 6, val: 'Cộng' },
 
 			{ t: 5, b: 5, l: 7, r: 7, val: 'Tiêu chuẩn định mức tối đa được phê duyệt' },

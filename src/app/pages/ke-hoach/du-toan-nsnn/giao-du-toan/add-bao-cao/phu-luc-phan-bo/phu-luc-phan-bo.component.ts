@@ -574,10 +574,11 @@ export class PhuLucPhanBoComponent implements OnInit {
             { t: 3, b: 3, l: 0, r: 8, val: 'Trạng thái báo cáo: ' + this.dataInfo.tenTrangThai },
 
             { t: 5, b: 7, l: 0, r: 0, val: 'STT' },
-            { t: 5, b: 7, l: 1, r: 1, val: 'Nhóm' },
+            { t: 5, b: 7, l: 1, r: 1, val: 'Nội dung' },
             { t: 5, b: 7, l: 2, r: 2, val: 'Số trần chi đơn vị cấp trên giao' },
             { t: 5, b: 7, l: 3, r: 3, val: 'Tổng cộng' },
             { t: 5, b: 6, l: 4, r: 3 + this.lstDvi.length, val: 'Chi tiết theo các đơn vị sử dụng' },
+
             { t: 7, b: 7, l: 1, r: 1, val: 'Tổng cộng' },
             { t: 7, b: 7, l: 6, r: 6, val: this.total?.dtoanGiao },
             { t: 7, b: 7, l: 8, r: 8, val: this.total?.tongCong },

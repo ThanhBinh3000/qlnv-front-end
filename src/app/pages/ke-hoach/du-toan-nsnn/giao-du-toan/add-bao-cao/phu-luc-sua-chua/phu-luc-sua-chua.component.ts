@@ -405,7 +405,7 @@ export class PhuLucSuaChuaComponent implements OnInit {
             return;
         }
         const header = [
-            { t: 0, b: 6, l: 0, r: 13, val: null },
+            { t: 0, b: 6, l: 0, r: 8, val: null },
 
             { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
             { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
@@ -413,12 +413,12 @@ export class PhuLucSuaChuaComponent implements OnInit {
             { t: 3, b: 3, l: 0, r: 8, val: 'Trạng thái báo cáo: ' + this.dataInfo.tenTrangThai },
 
             { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
-            { t: 4, b: 5, l: 1, r: 1, val: 'Tên công trình (Ghi chính xác theo danh mục kế hoạch năm ' + (this.namBcao - 1).toString() + ' )' },
-            { t: 4, b: 5, l: 2, r: 2, val: 'Kế hoạch vốn năm ' + (this.namBcao - 1).toString() },
+            { t: 4, b: 5, l: 1, r: 1, val: 'Tên công trình (Ghi chính xác theo danh mục kế hoạch năm ' + (this.namBcao).toString() + ' )' },
+            { t: 4, b: 5, l: 2, r: 2, val: 'Kế hoạch vốn năm ' + (this.namBcao).toString() },
             { t: 4, b: 5, l: 3, r: 3, val: 'Dự toán đã giao lũy kế đến thời điểm báo cáo' },
             { t: 4, b: 5, l: 4, r: 4, val: 'Giá trị công trình (Ghi giá trị quyết toán; giá trị dự toán hoặc tổng mức đầu tư nếu chưa phê duyệt quyết toán)' },
             { t: 4, b: 5, l: 5, r: 5, val: 'Kế hoạch điều chỉnh (+ Tăng)(- Giảm)' },
-            { t: 4, b: 5, l: 6, r: 6, val: 'Dự toán năm' + (this.namBcao - 1).toString() + 'sau điều chỉnh' },
+            { t: 4, b: 5, l: 6, r: 6, val: 'Dự toán năm' + (this.namBcao).toString() + 'sau điều chỉnh' },
 
             { t: 6, b: 6, l: 0, r: 0, val: 'A' },
             { t: 6, b: 6, l: 1, r: 1, val: 'B' },
