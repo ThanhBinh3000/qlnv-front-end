@@ -224,7 +224,6 @@ export class DanhSachHangTieuHuyComponent extends Base3Component implements OnIn
   showDetail(data) {
     if (data) {
       const modalGT = this.modal.create({
-        nzTitle: 'Thông tin hàng DTQG cần tiêu hủy',
         nzContent: ChiTietDsThComponent,
         nzMaskClosable: false,
         nzClosable: false,

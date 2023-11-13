@@ -31,10 +31,11 @@ export class BaoCaoKetQuaTieuHuyComponent extends Base3Component implements OnIn
     this.defaultPermisson = 'XHDTQG_XTH_BCKQ'
     this.formData = this.fb.group({
       nam: null,
-      maSc: null,
-      maCc: null,
-      ngayTu: null,
-      ngayDen: null,
+      soBaoCao: null,
+      soQd: null,
+      trangThai: null,
+      ngayBaoCaoTu: null,
+      ngayBaoCaoDen: null,
     })
     this.listTrangThai = [
       {
