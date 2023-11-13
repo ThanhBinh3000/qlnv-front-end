@@ -1568,7 +1568,7 @@ export class AddQuyetToanTongHopComponent implements OnInit {
         const dateExcel = this.datePipe.transform(date, Utils.FORMAT_DATE_STR)
 
         const header = [
-            { t: 0, b: 5, l: 0, r: 8, val: null },
+            { t: 0, b: 5, l: 0, r: 5, val: null },
 
             { t: 0, b: 0, l: 0, r: 1, val: `Báo cáo quyết toán vốn phí hàng DTQG quý ${this.quyQtoan}, năm ${this.namQtoan}` },
             { t: 1, b: 1, l: 0, r: 1, val: `Kèm theo công văn số ${this.congVan.fileName}/TCDT, ngày ${dateExcel} của ${this.userInfo.TEN_DVI} ` },
@@ -1587,7 +1587,6 @@ export class AddQuyetToanTongHopComponent implements OnInit {
             { t: 5, b: 5, l: 3, r: 3, val: '1' },
             { t: 5, b: 5, l: 4, r: 4, val: '2' },
             { t: 5, b: 5, l: 5, r: 5, val: '3 = 1 x 2' },
-
         ]
         const fieldOrder = [
             "stt",

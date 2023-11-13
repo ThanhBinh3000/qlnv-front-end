@@ -509,7 +509,7 @@ export class PhuLuc02Component implements OnInit {
             { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
             { t: 4, b: 5, l: 1, r: 1, val: 'Danh mục' },
             { t: 4, b: 5, l: 2, r: 2, val: 'Đơn vị tính' },
-            { t: 4, b: 5, l: 3, r: 3, val: 'Năm dự toán ' + (this.namBcao - 1).toString() },
+            { t: 4, b: 5, l: 3, r: 3, val: 'Năm dự toán ' + (this.namBcao).toString() },
 
             { t: 6, b: 6, l: 3, r: 3, val: 'Số lượng bảo quản' },
             { t: 6, b: 6, l: 4, r: 4, val: 'Định mức' },
