@@ -206,7 +206,15 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
-
+  async getDetailPhieuKnCl() {
+    if (this.formData.value.idPhieuKnCl) {
+      const res = await this.phieuKiemNghiemChatLuongService.getDetail(this.formData.value.idPhieuKnCl);
+      if (res.msg == MESSAGE.SUCCESS) {
+        const slHangBaoQuan = res.data.slHangBaoQuan ? res.data.slHangBaoQuan : '';
+        this.formData.patchValue({ tongSlNhap: slHangBaoQuan });
+      }
+    }
+  }
   async openDialogSoQd() {
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ xuất hàng',
@@ -313,6 +321,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       }
       )
       this.tongSoLuongXk = this.dataTable.reduce((prev, cur) => prev + cur.slXuat, 0);
+      await this.getDetailPhieuKnCl()
     }
   }
 
