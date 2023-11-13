@@ -1,4 +1,5 @@
 import { Validators } from "@angular/forms";
+import {FileDinhKem} from "./FileDinhKem";
 
 export class QuyChunKyThuatQuocGia {
   id: number;
@@ -6,7 +7,6 @@ export class QuyChunKyThuatQuocGia {
   maChiTieu: string;
   tenChiTieu: string;
   thuTuHt: string;
-  chiTieuCha: boolean;
   maDvi: string;
   mucYeuCauNhap: string;
   mucYeuCauNhapToiDa: string;
@@ -20,6 +20,11 @@ export class QuyChunKyThuatQuocGia {
   tenLoaiVthh: string;
   tenCloaiVthh: string;
   ghiChu: string;
+  nhomCtieu: string;
+  tenNhomCtieu: string;
+  toanTu: string;
+  tenToanTu: string;
+  fileDinhKem: FileDinhKem = new FileDinhKem();
 }
 
 export class TienDoThucHien {

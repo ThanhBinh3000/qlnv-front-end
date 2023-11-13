@@ -16,9 +16,10 @@ import {StorageService} from 'src/app/services/storage.service';
 import {DonviService} from 'src/app/services/donvi.service';
 import {Base2Component} from './../../../../components/base2/base2.component';
 import {TimKiemVanBanComponent} from './tim-kiem-van-ban/tim-kiem-van-ban.component';
-import {PREVIEW} from '../../../../constants/fileType';
+import {FILETYPE, PREVIEW} from '../../../../constants/fileType';
 import {saveAs} from 'file-saver';
 import printJS from 'print-js';
+import {FileDinhKem} from "../../../../models/FileDinhKem";
 
 
 @Component({
@@ -36,6 +37,9 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   showListEvent = new EventEmitter<any>();
   hasError: boolean = false;
   tabSelected: number = 0;
+  dsNhomCtieu: any[] = [];
+  dsToanTu: any[] = [];
+  listFile: any[] = [];
   dataTable: any[] = [];
   dataTableView: any[] = [];
   listCapDt: any[] = [];
@@ -43,6 +47,8 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   listOfTagOptions: any = [];
   listLoaiVthh: any = [];
   taiLieuDinhKemList: any[] = [];
+  vanBanHieuLuc: FileDinhKem = new FileDinhKem();
+  // vanBanHieuLuc:  any[] = [];
   dsNam: any[] = [];
   listCloaiVthh: any[] = [];
   listAllCloaiVthh: any[] = [];
@@ -130,6 +136,8 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       this.getListBoNganh();
       this.getListCapDt();
       this.getListVanBan();
+      this.loadDsNhomCtieu();
+      this.loadDsToanTu();
       await this.initForm();
       await this.getDetail(this.id),
         this.spinner.hide();
@@ -174,6 +182,13 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
             maBn: data.maBn,
           });
           this.dataTable = data.tieuChuanKyThuat;
+          if (this.dataTable && this.dataTable.length > 0) {
+            this.dataTable.forEach(item => {
+              if (!item.fileDinhKem) {
+                item.fileDinhKem = new FileDinhKem();
+              }
+            })
+          }
           this.dataTable.sort((a, b) => {
             if (a.thuTuHt !== b.thuTuHt) {
               return a.thuTuHt - b.thuTuHt;
@@ -181,7 +196,14 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
               return a.cloaiVthh && b.cloaiVthh ? a.cloaiVthh.localeCompare(b.cloaiVthh) : this.dataTable;
             }
           });
-          this.taiLieuDinhKemList = !data.isMat ? data.fileDinhKems : [];
+          let listFile: any[] = data.fileDinhKems;
+          if (listFile && listFile.length > 0) {
+            this.taiLieuDinhKemList = listFile.filter(item => item.fileType == FILETYPE.FILE_DINH_KEM);
+            let vbHieuLuc = listFile.find(item => item.fileType == FILETYPE.CAN_CU_PHAP_LY);
+            if (vbHieuLuc) {
+              this.vanBanHieuLuc = vbHieuLuc;
+            }
+          }
           this.dataTableView = cloneDeep(this.dataTable);
           this.updateEditCache();
         }
@@ -335,7 +357,19 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     } else {
       body.tieuChuanKyThuat = this.dataTable;
     }
-    body.fileDinhKems = !this.formData.value.isMat ? this.taiLieuDinhKemList : [];
+    this.listFile = [];
+    if (this.taiLieuDinhKemList.length > 0 && !this.formData.value.isMat) {
+      this.taiLieuDinhKemList.forEach(item => {
+        item.fileType = FILETYPE.FILE_DINH_KEM;
+        this.listFile.push(item);
+      });
+    }
+    if (this.vanBanHieuLuc && this.vanBanHieuLuc.fileName) {
+      this.listFile.push(this.vanBanHieuLuc);
+    }
+    if (this.listFile && this.listFile.length > 0) {
+      body.fileDinhKems = this.listFile;
+    }
     body.loaiVthh = this.listOfTagOptions.join(',');
     let uniquelistLoaiVthh = [...new Map(this.listLoaiVthh.map(item => [item, item])).values()];
     body.listTenLoaiVthh = uniquelistLoaiVthh.join(',');
@@ -459,6 +493,25 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       }
     });
   }
+
+  async loadDsNhomCtieu() {
+    let res = await this.danhMucService.danhMucChungGetAll("NHOM_CHI_TIEU_CL");
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        this.dsNhomCtieu = res.data;
+      }
+    }
+  }
+
+  async loadDsToanTu() {
+    let res = await this.danhMucService.danhMucChungGetAll("TOAN_TU");
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        this.dsToanTu = res.data;
+      }
+    }
+  }
+
 
   async loadLoaiHangHoa(maBn?) {
     try {
@@ -717,6 +770,12 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
             this.listLoaiVthh = itemVanBanSuaDoi.listTenLoaiVthh.split(',');
           }
           this.dataTable = itemVanBanSuaDoi.tieuChuanKyThuat;
+          this.dataTable.forEach(item => {
+            item.id = null;
+            if (!item.fileDinhKem) {
+              item.fileDinhKem = new FileDinhKem();
+            }
+          })
           this.dataTableView = cloneDeep(this.dataTable);
           this.updateEditCache();
           await this.getDsChiTieu(this.listOfTagOptions);
@@ -755,7 +814,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
           this.formData.patchValue({
             soVanBanThayThe: detail.map(o => o.soVanBan).join(', '),
             idVanBanThayThe: detail.map(o => o.id).join(', '),
-            apDungCloaiVthh : res.data?.apDungCloaiVthh
+            apDungCloaiVthh: res.data?.apDungCloaiVthh
           });
           detail.forEach(dt => {
             if (dt.loaiVthh) {
@@ -767,17 +826,23 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
             }
             this.dataTable = [...this.dataTable, ...dt.tieuChuanKyThuat];
           });
+          this.dataTable.forEach(item => {
+            item.id = null;
+            if (!item.fileDinhKem) {
+              item.fileDinhKem = new FileDinhKem();
+            }
+          })
           this.dataTableView = cloneDeep(this.dataTable);
           this.getDsChiTieu(this.listOfTagOptions);
           this.updateEditCache();
         }
       } else {
         this.formData.patchValue({
-          soVanBanThayThe : null,
-          idVanBanThayThe : null
+          soVanBanThayThe: null,
+          idVanBanThayThe: null
         })
         this.dataTable = [];
-        this.dataTableView= [];
+        this.dataTableView = [];
       }
     });
 
@@ -808,13 +873,35 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     }
   }
 
-  changChiTieu(event: any, type?) {
+  changeChiTieu(event: any, type?) {
     if (event) {
       let list = this.listChiTieu.filter(item => item.ma == event);
       if (type) {
         type.tenChiTieu = list && list.length > 0 ? list[0].giaTri : '';
       } else {
         this.rowItem.tenChiTieu = list && list.length > 0 ? list[0].giaTri : '';
+      }
+    }
+  }
+
+  changeNhomChiTieu(event: any, type?) {
+    if (event) {
+      let list = this.dsNhomCtieu.filter(item => item.ma == event);
+      if (type) {
+        type.tenNhomCtieu = list && list.length > 0 ? list[0].giaTri : '';
+      } else {
+        this.rowItem.tenNhomCtieu = list && list.length > 0 ? list[0].giaTri : '';
+      }
+    }
+  }
+
+  changeToanTu(event: any, type?) {
+    if (event) {
+      let list = this.dsToanTu.filter(item => item.ma == event);
+      if (type) {
+        type.tenToanTu = list && list.length > 0 ? list[0].giaTri : '';
+      } else {
+        this.rowItem.tenToanTu = list && list.length > 0 ? list[0].giaTri : '';
       }
     }
   }
@@ -863,5 +950,64 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
 
   changeBoNganh() {
     this.loadLoaiHangHoa(this.formData.get('maBn').value);
+  }
+
+  getNameFile(event: any, loai: string,  dataEdit: FileDinhKem) {
+    if (event) {
+      const element = event.currentTarget as HTMLInputElement;
+      const fileList: FileList | null = element.files;
+      if (fileList) {
+        const itemFile = {
+          name: fileList[0].name,
+          file: event.target.files[0] as File,
+        };
+        this.uploadFileService
+          .uploadFile(itemFile.file, itemFile.name)
+          .then((resUpload) => {
+            if (loai == '00') {
+              if (!this.vanBanHieuLuc) {
+                this.vanBanHieuLuc = new FileDinhKem();
+              }
+              this.vanBanHieuLuc.fileName = resUpload.filename;
+              this.vanBanHieuLuc.fileSize = resUpload.size;
+              this.vanBanHieuLuc.fileUrl = resUpload.url;
+              this.vanBanHieuLuc.idVirtual = new Date().getTime();
+              this.vanBanHieuLuc.fileType = FILETYPE.CAN_CU_PHAP_LY;
+            } else {
+              if (dataEdit) {
+                if (!dataEdit) {
+                  dataEdit = new FileDinhKem();
+                }
+                dataEdit.fileName = resUpload.filename;
+                dataEdit.fileSize = resUpload.size;
+                dataEdit.fileUrl = resUpload.url;
+                dataEdit.idVirtual = new Date().getTime();
+                dataEdit.fileType = FILETYPE.CAN_CU_PHAP_LY;
+              } else {
+                if (!this.rowItem.fileDinhKem) {
+                  this.rowItem.fileDinhKem = new FileDinhKem();
+                }
+                this.rowItem.fileDinhKem.fileName = resUpload.filename;
+                this.rowItem.fileDinhKem.fileSize = resUpload.size;
+                this.rowItem.fileDinhKem.fileUrl = resUpload.url;
+                this.rowItem.fileDinhKem.idVirtual = new Date().getTime();
+                this.rowItem.fileDinhKem.fileType = FILETYPE.CAN_CU_PHAP_LY;
+              }
+            }
+          });
+      }
+    }
+  }
+
+  downloadFile(item: FileDinhKem) {
+    if (item && item.fileName) {
+      this.uploadFileService.downloadFile(item.fileUrl).subscribe((blob) => {
+        saveAs(blob, item.fileName);
+      });
+    }
+  }
+
+  xoaFileVanBan() {
+    this.vanBanHieuLuc = new FileDinhKem();
   }
 }
