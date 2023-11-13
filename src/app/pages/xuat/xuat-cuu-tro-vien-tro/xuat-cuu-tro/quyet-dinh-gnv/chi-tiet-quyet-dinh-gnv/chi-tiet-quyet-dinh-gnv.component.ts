@@ -570,7 +570,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               tenVthh: this.formData.value.type === 'XC' ? TEN_LOAI_VTHH.THOC : detail.tenVthh,
               loaiVthh: this.formData.value.type === 'XC' ? LOAI_HANG_DTQG.THOC : detail.loaiVthh,
               tenLoaiVthh: this.formData.value.type === 'XC' ? TEN_LOAI_VTHH.THOC : detail.tenLoaiVthh,
-              // thoiGianGiaoNhan,
+              thoiGianGiaoNhan: this.formData.value.type === 'XC' ? detail.paXuatGaoChuyenXc ? detail.quyetDinhPdDtl.find(f => f.maDvi === this.userInfo.MA_DVI) ? detail.quyetDinhPdDtl.find(f => f.maDvi === this.userInfo.MA_DVI).ngayKetThuc : '' : detail.ngayKetThuc : '',
               soLuong,
               paXuatGaoChuyenXc: detail.paXuatGaoChuyenXc
 
