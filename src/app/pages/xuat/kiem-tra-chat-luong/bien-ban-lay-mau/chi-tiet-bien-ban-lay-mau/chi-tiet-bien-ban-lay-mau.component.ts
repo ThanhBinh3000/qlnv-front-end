@@ -141,7 +141,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
     try {
       await this.spinner.show();
       super.service = this.inputService;
-      this.maHauTo = '/BBLM-' + this.userInfo.DON_VI.tenVietTat;
+      this.maHauTo = '/' + this.formData.value.nam + '/BBLM-' + this.userInfo.DON_VI.tenVietTat;
       await Promise.all([
         this.loadDsQdGnv(),
       ]);

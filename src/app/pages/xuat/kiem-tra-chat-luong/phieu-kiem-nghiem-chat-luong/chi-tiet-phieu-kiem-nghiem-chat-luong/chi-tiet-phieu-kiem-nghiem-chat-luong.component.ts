@@ -137,7 +137,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     try {
       await this.spinner.show();
       super.service = this.inputService;
-      this.maHauTo = '/PKNCL-' + this.userInfo.DON_VI.tenVietTat;
+      this.maHauTo = '/' + this.formData.value.nam + '/PKNCL-' + this.userInfo.DON_VI.tenVietTat;
       await Promise.all([
         this.loadDsQdGnv(),
         // this.loadDsPplm(),
@@ -178,13 +178,14 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       })
       if (this.inputData) {
         await this.bindingQdGnv(this.inputData.idQdGnv);
-        // this.loadDsBbLayMau();
+        this.loadDsBbLayMau();
       } else {
         this.formData.patchValue({ type: this.loaiXuat })
       }
     }
   }
   async loadDanhSachHinhThucBaoQuan(cloaiVthh: string) {
+    if (!cloaiVthh) return;
     const res = await this.danhMucService.loadDanhMucHangChiTiet(cloaiVthh);
     if (res.msg === MESSAGE.SUCCESS) {
       const dsHinhThucBq = Array.isArray(res.data.hinhThucBq) ? res.data.hinhThucBq.map(item => ({ ten: item.giaTri, label: item.giaTri, value: item.ma, type: HINH_THUC_KE_LOT_BAO_QUAN.PHUONG_PHAP_BAO_QUAN })) : [];
@@ -265,7 +266,6 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     //   }
     // });
     this.viewCtChatLuong = this.formData.value.xhPhieuKnclDtl.filter(s => s.type == BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG);
-    console.log("viewCtChatLuong", this.viewCtChatLuong)
     this.dsPpLayMau = [];
     this.dsHinhThucBq = [];
     this.formData.value.xhPhieuKnclDtl.forEach(item => {
@@ -277,6 +277,8 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       }
     });
     this.formData.patchValue({ ppLayMau: this.dsPpLayMau, hinhThucBaoQuan: this.dsHinhThucBq });
+    // const hangBaoQuan = this.formData.value.xhPhieuKnclDtl.find(s => s.type === 'SO_LUONG_HANG_BAO_QUAN');
+    // this.formData.patchValue({ ppLayMau: this.dsPpLayMau, hinhThucBaoQuan: this.dsHinhThucBq, slHangBaoQuan: hangBaoQuan?.soLuong ? hangBaoQuan?.soLuong : '' });
   }
 
   async loadDsPpLayMau() {
@@ -526,14 +528,10 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
             xhPhieuKnclDtl: data.xhBienBanLayMauDtl,
             // donViTinh: data.donViTinh
           });
-          if (data.cloaiVthh) {
-            await this.loadDanhSachHinhThucBaoQuan(data.cloaiVthh)
+          if (data.cloaiVthh || data.loaiVthh) {
+            await Promise.all([this.loadDanhSachHinhThucBaoQuan(data.cloaiVthh || data.loaiVthh), this.tenThuKho(data.maDiaDiem), this.kiemTraTonKho(data.maDiaDiem)])
           }
           this.buildTableView();
-          if (data.maDiaDiem) {
-            this.tenThuKho(data.maDiaDiem);
-            this.kiemTraTonKho(data.maDiaDiem)
-          }
 
         }
       }
@@ -565,8 +563,9 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
 
   async bindingDataDdNhap(data, isChiTiet) {
     if (data) {
+      const maDiaDiem = data.maDiaDiem || data.maLoKho || data.maNganKho || data.maDvi;
       this.formData.patchValue({
-        maDiaDiem: data.maDiaDiem || data.maLoKho || data.maNganKho || data.maDvi,
+        maDiaDiem: maDiaDiem,
         loaiVthh: data.loaiVthh,
         cloaiVthh: data.cloaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
@@ -578,17 +577,12 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         donViTinh: data.donViTinh,
         tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho
       });
-      if (data.cloaiVthh) {
-        await Promise.all([this.loadDsPpLayMau(), this.loadDanhSachHinhThucBaoQuan(data.cloaiVthh), this.loadDsCtChatLuong()]);
-        this.buildTableView();
-      }
-      if (data.maDiaDiem) {
-        this.tenThuKho(data.maDiaDiem);
-        this.kiemTraTonKho(data.maDiaDiem)
-      }
+      await Promise.all([this.loadDsPpLayMau(), this.loadDanhSachHinhThucBaoQuan(data.cloaiVthh || data.loaiVthh), this.loadDsCtChatLuong(), this.tenThuKho(maDiaDiem), this.kiemTraTonKho(maDiaDiem)]);
+      this.buildTableView();
     }
   }
   async tenThuKho(event) {
+    if (!event) return;
     let body = {
       maDvi: event,
       capDvi: (event?.length / 2 - 1),
@@ -637,13 +631,14 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   }
   async kiemTraTonKho(maDvi: string) {
     const { loaiVthh, cloaiVthh } = this.formData.value;
-    const body = {
-      maDvi, maVthh: cloaiVthh ? cloaiVthh : loaiVthh
-    }
+    const maVthh = cloaiVthh ? cloaiVthh : loaiVthh;
+    if (!maDvi || !maVthh) return;
+    const body = { maDvi, maVthh };
     // let tonKhoCloaiVthh: number = 0;
     const res = await this.mangLuoiKhoService.slTon(body);
     if (res.msg === MESSAGE.SUCCESS) {
-      this.formData.patchValue({ slHangBaoQuan: res.data })
+      // this.formData.patchValue({ xhPhieuKnclDtl: [...this.formData.value.xhPhieuKnclDtl.filter(f => f.type !== 'SO_LUONG_HANG_BAO_QUAN'), { ten: 'Số lượng hàng bảo quản', soLuong: res.data, type: 'SO_LUONG_HANG_BAO_QUAN' }] });
+      this.formData.patchValue({ slHangBaoQuan: res.data });
     }
   }
   downloadPdf() {

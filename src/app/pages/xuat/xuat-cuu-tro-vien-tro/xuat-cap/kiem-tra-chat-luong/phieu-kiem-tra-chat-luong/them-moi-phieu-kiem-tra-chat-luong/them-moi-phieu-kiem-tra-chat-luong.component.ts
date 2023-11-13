@@ -19,6 +19,7 @@ import {
   PhieuKiemTraChatLuongService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-cap/PhieuKiemTraChatLuong.service";
 import { QuyetDinhGiaoNvCuuTroService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service';
+import { BienBanTinhKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanTinhKho.service';
 // import {
 //   QuyetDinhGiaoNvCuuTroService
 // } from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-cap/QuyetDinhGiaoNvCuuTro.service";
@@ -50,6 +51,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
   maVthh: string;
   templateName = "Phiếu kiểm tra chất lượng-Xuất cấp";
   type: string = 'XC';
+  listBbTinhKho: any[];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -60,6 +62,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
     private danhMucTieuChuanService: DanhMucTieuChuanService,
     private phieuKiemTraChatLuongService: PhieuKiemTraChatLuongService,
     private quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
+    private bienBanTinhKhoService: BienBanTinhKhoService
 
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuKiemTraChatLuongService);
@@ -175,10 +178,15 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
     this.showListEvent.emit();
   }
   async loadDanhMucPhuongThucBaoQuan(cloaiVthh: string) {
-    const res = await this.danhMucService.loadDanhMucHangChiTiet(cloaiVthh);
-    if (res.msg === MESSAGE.SUCCESS) {
-      const dsHinhThucBq = Array.isArray(res.data.hinhThucBq) ? res.data.hinhThucBq.map(item => ({ ten: item.giaTri, label: item.giaTri, value: item.ma, checked: true })) : [];
-      this.formData.controls['hinhThucBq'].setValue(dsHinhThucBq)
+    try {
+      if (!cloaiVthh) return;
+      const res = await this.danhMucService.loadDanhMucHangChiTiet(cloaiVthh);
+      if (res.msg === MESSAGE.SUCCESS) {
+        const dsHinhThucBq = Array.isArray(res.data.hinhThucBq) ? res.data.hinhThucBq.map(item => ({ ten: item.giaTri, label: item.giaTri, value: item.ma, checked: true })) : [];
+        this.formData.controls['hinhThucBq'].setValue(dsHinhThucBq)
+      }
+    } catch (error) {
+      console.log("e", error)
     }
   }
   // async loadDanhMucPhuongThucBaoQuan() {
@@ -208,7 +216,21 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
-
+  async loadDsBbTinhKho() {
+    try {
+      const body = {
+        trangThai: STATUS.BAN_HANH,
+        soQdGiaoNvXh: this.formData.value.soQdGiaoNvXh,
+        types: [this.type]
+      };
+      const res = await this.bienBanTinhKhoService.danhSach(body);
+      if (res.msg === MESSAGE.SUCCESS) {
+        this.listBbTinhKho = Array.isArray(res.data) ? res.data : [];
+      }
+    } catch (error) {
+      console.log("e", error)
+    }
+  }
   async openDialogSoQd() {
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ xuất hàng',
@@ -246,10 +268,11 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
       s.maNganKho = s.maDvi.length >= 14 ? s.maDvi.substring(0, 14) : null;
       s.maLoKho = s.maDvi.length >= 16 ? s.maDvi.substring(0, 16) : null;
     });
-    const dataChiCuc = dataRes.data.dataDtl.filter(item => item.maDvi && item.maDvi.slice(0, 8) == this.userInfo.MA_DVI && item.trangThai === STATUS.DA_HOAN_THANH);
-    if (dataChiCuc) {
-      this.listDiaDiemNhap = dataChiCuc;
-    }
+    // const dataChiCuc = dataRes.data.dataDtl.filter(item => item.maDvi && item.maDvi.slice(0, 8) == this.userInfo.MA_DVI && item.trangThai === STATUS.DA_HOAN_THANH);
+    // if (dataChiCuc) {
+    //   this.listDiaDiemNhap = dataChiCuc;
+    // }
+    this.loadDsBbTinhKho();
     await this.spinner.hide();
   }
 
@@ -302,13 +325,58 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
           });
         }
       }
-      if (data.cloaiVthh) {
-        this.loadDanhMucPhuongThucBaoQuan(data.cloaiVthh)
-      }
+      this.loadDanhMucPhuongThucBaoQuan(data.cloaiVthh || data.loaiVthh)
     }
   }
-
-
+  openDialogBienBanTinhKho() {
+    const modalQD = this.modal.create({
+      nzTitle: 'Danh sách biên bản tịnh kho',
+      nzContent: DialogTableSelectionComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: this.listBbTinhKho,
+        dataHeader: ['Số biên bản tịnh kho', 'Ngày lập biên bản tịnh kho', 'Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho'],
+        dataColumn: ['soBbTinhKho', 'ngayTaoBb', 'tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho']
+      },
+    });
+    modalQD.afterClose.subscribe(async (data) => {
+      this.bindingDataBbTinhKho(data, false);
+    });
+  }
+  async bindingDataBbTinhKho(data, isChiTiet) {
+    if (data) {
+      this.formData.patchValue({
+        maDiemKho: data.maDiemKho,
+        tenDiemKho: data.tenDiemKho,
+        maNhaKho: data.maNhaKho,
+        tenNhaKho: data.tenNhaKho,
+        maNganKho: data.maNganKho,
+        tenNganKho: data.tenNganKho,
+        maLoKho: data.maLoKho,
+        tenLoKho: data.tenLoKho,
+        loaiVthh: data.loaiVthh,
+        cloaiVthh: data.cloaiVthh,
+        tenLoaiVthh: data.tenLoaiVthh,
+        tenCloaiVthh: data.tenCloaiVthh,
+        moTaHangHoa: data.moTaHangHoa,
+        thuKho: data.tenThuKho,
+        tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho
+      })
+      if (!isChiTiet) {
+        let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
+        if (dmTieuChuan.data) {
+          this.dataTableChiTieu = dmTieuChuan.data.children;
+          this.dataTableChiTieu.forEach(element => {
+            element.edit = false
+          });
+        }
+      }
+      this.loadDanhMucPhuongThucBaoQuan(data.cloaiVthh || data.loaiVthh)
+    }
+  }
   async save(isGuiDuyet?) {
     // this.setValidator(isGuiDuyet);
     // const hinhThucBq= this.formData.value || "";
