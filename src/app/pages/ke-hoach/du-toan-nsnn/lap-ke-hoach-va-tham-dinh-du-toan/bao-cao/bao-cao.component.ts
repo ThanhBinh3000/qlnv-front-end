@@ -751,4 +751,8 @@ export class BaoCaoComponent implements OnInit {
             }
         );
     }
+
+    isDelAppendix(maBieuMau: string) {
+        return this.status.general && (this.userInfo?.sub == this.baoCao.nguoiTao) && this.listAppendix.find(e => e.id == maBieuMau).isDel;
+    }
 }
