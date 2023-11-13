@@ -213,7 +213,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     this.loadDanhMucHang();
     await Promise.all([
       this.loadDataComboBox(),
-      // this.getDataChiTieu()
+      this.getDataChiTieu()
     ]);
     this.initListQuy();
     await this.spinner.hide();
