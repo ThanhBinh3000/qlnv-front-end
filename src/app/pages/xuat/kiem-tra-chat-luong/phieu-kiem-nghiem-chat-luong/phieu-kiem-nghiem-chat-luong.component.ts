@@ -252,6 +252,12 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
     }
     return false
   }
+  hiddenField(field: string, dk: string[], param: string) {
+    const obj = {
+      bblm: dk.includes(param)
+    };
+    return obj[field]
+  }
 }
 export interface MA_QUYEN_PKNCL {
   THEM: string;
