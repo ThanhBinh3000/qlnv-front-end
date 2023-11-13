@@ -111,6 +111,11 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
   }
 
   save(isGuiDuyet?) {
+    if(this.viewTongCuc()){
+      this.formData.controls['ketQua'].setValidators([Validators.required]);
+    }else{
+      this.formData.controls['ketQua'].clearValidators();
+    }
     this.spinner.show();
     let body = this.formData.value;
     body.fileDinhKemReq = this.fileDinhKem;
