@@ -346,7 +346,8 @@
     <ng-container>
       <div class="mt-16">
         <ng-container *ngIf="formData.value.tenVthh !== 'Vật tư thiết bị'">
-          <nz-table #tblData [nzData]="phuongAnView" class="nowrap table-chi-tiet" nzBordered>
+          <nz-table #tblData [nzData]="phuongAnView" class="nowrap table-chi-tiet" nzBordered
+            [nzFrontPagination]="false" [nzShowPagination]="false">
             <thead>
               <tr>
                 <th class="text-center" [rowspan]="2" *ngIf="userService.isTongCuc()"></th>
@@ -481,7 +482,8 @@
           </nz-table>
         </ng-container>
         <ng-container *ngIf="formData.value.tenVthh === 'Vật tư thiết bị'">
-          <nz-table #tblData [nzData]="phuongAnView" class="nowrap table-chi-tiet" nzBordered>
+          <nz-table #tblData [nzData]="phuongAnView" class="nowrap table-chi-tiet" nzBordered
+            [nzFrontPagination]="false" [nzShowPagination]="false">
             <thead>
               <tr>
                 <th class="text-center" [rowspan]="2"></th>

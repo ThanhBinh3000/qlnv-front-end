@@ -6,7 +6,6 @@ import { Globals } from 'src/app/shared/globals';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HelperService } from '../../../services/helper.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { CauHinhDangNhapService } from 'src/app/services/quantri-nguoidung/cau-hinh-dang-nhap';
 
 @Component({
   selector: 'app-dialog-doi-mat-khau',
@@ -27,7 +26,6 @@ export class DialogDoiMatKhauComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private helperService: HelperService,
     private notification: NzNotificationService,
-    private cauHinhDangNhapService: CauHinhDangNhapService,
   ) {
     this.formData = this.fb.group({
       username: [null, [Validators.required]],
@@ -42,9 +40,9 @@ export class DialogDoiMatKhauComponent implements OnInit {
     this.formData.patchValue({
       username: this.username
     })
-    console.log("this.pattern", this.pattern)
+
     if (this.pattern) {
-      this.regexComplex = ` Mật khẩu yêu cầu ${this.pattern.sizePassword && 'tối thiểu ' + this.pattern.sizePassword + ' ký tự '}${this.pattern.includeNumberAndChar ? 'cả số và chữ, chữ hoa và chữ thường ' : ''}${this.pattern.minSpecial && this.pattern.minSpecial + ' ký tự đặc biệt'}`
+      this.regexComplex = ` Mật khẩu yêu cầu ${this.pattern.sizePassword ? 'tối thiểu ' + this.pattern.sizePassword + ' ký tự ' : ''}${this.pattern.includeNumberAndChar ? 'cả số và chữ, chữ hoa và chữ thường ' : ''}${this.pattern.minSpecial ? this.pattern.minSpecial + ' ký tự đặc biệt' : ''}`
       this.formData.controls["newPassword"].setValidators([Validators.pattern(this.pattern.regexComplex)]);
     }
 

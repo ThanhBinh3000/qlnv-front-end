@@ -19,6 +19,7 @@ import {
   HopDongXuatHangService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
 import {FileDinhKem} from "../../../../../models/CuuTro";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-create-giao-xh',
@@ -31,11 +32,12 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
   @Input() idInput: number;
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
+  templateNameVt = "Quyết định giao nhiệm vụ bán đấu giá vật tư";
+  templateNameLt = "Quyết định giao nhiệm vụ bán đấu giá lương thực";
   maHauTo: any;
   loadDanhSachQdGiaoNv: any[] = [];
   dataHopDong: any[] = [];
-  templateName = "Quyết định giao nhiệm vụ";
-  templateNameVt = "Quyết định giao nhiệm vụ vật tư";
 
   constructor(
     httpClient: HttpClient,

@@ -182,6 +182,7 @@ export class ThongtinDexuatMuattComponent implements OnChanges {
         this.dataTable.push(data);
       }
       this.calculatorTable();
+      this.sumTongMucDt();
     });
   }
 

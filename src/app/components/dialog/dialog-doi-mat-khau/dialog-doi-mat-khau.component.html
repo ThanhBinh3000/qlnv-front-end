@@ -49,7 +49,7 @@
 
   <ng-template #error let-control>
     <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
-    <ng-container *ngIf="control.hasError('pattern')">{{globals.prop.PASSWORD_INVALID}}</ng-container>
+    <!-- <ng-container *ngIf="control.hasError('pattern')">{{globals.prop.PASSWORD_INVALID}}</ng-container> -->
     <ng-container *ngIf="control.hasError('pattern')">{{regexComplex}}</ng-container>
   </ng-template>
 

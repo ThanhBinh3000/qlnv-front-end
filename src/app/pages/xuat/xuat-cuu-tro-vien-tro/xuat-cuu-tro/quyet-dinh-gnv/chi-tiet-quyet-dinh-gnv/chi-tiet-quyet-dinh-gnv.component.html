@@ -214,6 +214,14 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-col [nzSpan]="8">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Mục đích xuất</nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24">
+              <input nz-input [readonly]="true" formControlName="mucDichXuat" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
       </div>
       <div nz-row [nzGutter]="24">
         <div nz-col [nzSpan]="24">
@@ -260,7 +268,8 @@
     <!--    CHI TIET PA TONG CUC #1-->
     <ng-container *ngIf="formData.value.type !=='XC'">
       <div class="mt-16">
-        <nz-table #tblData [nzData]="phuongAnView" class="nowrap table-chi-tiet white-space-break" nzBordered>
+        <nz-table #tblData [nzData]="phuongAnView" class="nowrap table-chi-tiet white-space-break" nzBordered
+          [nzFrontPagination]="false" [nzShowPagination]="false">
           <thead>
             <tr>
               <th></th>
@@ -403,7 +412,8 @@
     </ng-container>
     <ng-container *ngIf="formData.value.type === 'XC'">
       <div class="mt-16">
-        <nz-table #tblData [nzData]="phuongAnView" class="nowrap table-chi-tiet white-space-break" nzBordered>
+        <nz-table #tblData [nzData]="phuongAnView" class="nowrap table-chi-tiet white-space-break" nzBordered
+          [nzFrontPagination]="false" [nzShowPagination]="false">
           <thead>
             <tr>
               <th></th>

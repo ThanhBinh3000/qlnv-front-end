@@ -160,9 +160,9 @@
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a
-              *ngIf="( data.trangThai== STATUS.CHO_DUYET_TP && userService.isCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_DX_DUYETTP'))
-              || data.trangThai== STATUS.CHO_DUYET_LDTC && userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_DX_DUYETLDCUC')
-              || data.trangThai== STATUS.CHO_DUYET_LDC && userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_DX_DUYETCBVU')"
+              *ngIf="( data.trangThai== STATUS.CHO_DUYET_TP && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_DX_DUYETTP'))
+              || (data.trangThai== STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_DX_DUYETLDCUC'))
+              || (data.trangThai== STATUS.DA_DUYET_LDC && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_DX_DUYETCBVU'))"
               (click)="redirectToChiTiet(data.id, true)">
               <i class="icon htvbdh_tcdt_pheduyet"></i>
             </a>

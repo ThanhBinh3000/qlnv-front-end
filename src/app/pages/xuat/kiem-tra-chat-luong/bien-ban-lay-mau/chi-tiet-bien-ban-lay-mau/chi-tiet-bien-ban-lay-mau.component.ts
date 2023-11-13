@@ -131,16 +131,9 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
       lanhDaoChiCuc: []
     });
     this.formData.controls['ppLayMau'].valueChanges.subscribe(value => {
-      if (this.loaiChon === "radio") {
-        const ppLayMau = [{ ten: value, type: BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU }]
-        const xhBienBanLayMauDtl = this.formData.value.xhBienBanLayMauDtl.filter(s => s.type !== BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU).concat(ppLayMau)
-        this.formData.controls['xhBienBanLayMauDtl'].setValue(xhBienBanLayMauDtl)
-      } else {
-        const ppLayMau = Array.isArray(value) ? value.filter(f => !!f.checked).map(s => ({ ...s, ten: s.label, type: BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU })) : [];
-        const xhBienBanLayMauDtl = this.formData.value.xhBienBanLayMauDtl.filter(s => s.type !== BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU).concat(ppLayMau)
-        this.formData.controls['xhBienBanLayMauDtl'].setValue(xhBienBanLayMauDtl)
-        // this.buildTableView();
-      }
+      const ppLayMau = [{ ten: value, type: BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU }]
+      const xhBienBanLayMauDtl = this.formData.value.xhBienBanLayMauDtl.filter(s => s.type !== BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU).concat(ppLayMau)
+      this.formData.controls['xhBienBanLayMauDtl'].setValue(xhBienBanLayMauDtl)
     })
   }
 
@@ -174,8 +167,9 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
             this.formData.value.xhBienBanLayMauDtl.forEach(s => {
               s.idVirtual = uuidv4();
             });
-            await this.loadDsPpLayMau();
-            await this.loadDsCtChatLuong();
+            // await this.loadDsPpLayMau();
+            // await this.loadDsCtChatLuong();
+            await Promise.all([this.loadDsPpLayMau(), this.loadDsCtChatLuong(), this.bindingQdGnv(this.formData.value.idQdGnv)]);
             await this.buildTableView();
           }
         })
@@ -242,100 +236,50 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
     await this.buildTableView();
   }
 
-  async buildTableView(isSelectKho?: boolean) {
+  async buildTableView() {
     //thanh phan lay mau
     this.viewTableDaiDien = cloneDeep(this.formData.value.xhBienBanLayMauDtl.filter(s => s.type == BBLM_LOAI_DOI_TUONG.NGUOI_LIEN_QUAN));
     //phuong phap lay mau
-    if (this.loaiChon === "radio") {
-      // Chi chon 1 phuong phap lay mau
-      const ppLayMau = this.formData.value.xhBienBanLayMauDtl.find(s => s.type == BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU) ?
-        this.formData.value.xhBienBanLayMauDtl.find(s => s.type == BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU).ten : "";
-      this.formData.patchValue({ ppLayMau })
-    } else {
-      let ppLayMauDtl = cloneDeep(this.formData.value.xhBienBanLayMauDtl.filter(s => s.type == BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU));
-      let ppLayMauArr = ppLayMauDtl.map(s => s.ten);
-      this.dsPpLayMau.forEach(s => {
-        if (ppLayMauArr.includes(s.label) && !isSelectKho) {
-          s.checked = true;
-        } else {
-          s.checked = false;
-        }
-      });
-      this.formData.patchValue({ ppLayMau: this.dsPpLayMau })
-    }
+    // Chi chon 1 phuong phap lay mau
+    const ppLayMau = this.formData.value.xhBienBanLayMauDtl.find(s => s.type == BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU) ?
+      this.formData.value.xhBienBanLayMauDtl.find(s => s.type == BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU).ten : "";
     //chi tieu can kiem tra
-    let ctChatLuongDtl = cloneDeep(this.formData.value.xhBienBanLayMauDtl.filter(s => s.type == BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG));
-    let ctChatLuongArr = ctChatLuongDtl.map(s => s.ten);
-    this.dsCtChatLuong.forEach(s => {
-      if (ctChatLuongArr.includes(s.label)) {
-        s.checked = true;
-      } else {
-        s.checked = false;
-      }
-    });
-    this.formData.patchValue({ ctChatLuong: this.dsCtChatLuong })
+    const ctChatLuong = cloneDeep(this.formData.value.xhBienBanLayMauDtl.filter(s => s.type == BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG)).map(f => ({ ...f, checked: true, label: f.ten, value: f.ten }));
+    this.formData.patchValue({ ctChatLuong, ppLayMau });
   }
 
   async loadDsPpLayMau() {
-    // if (this.dsPpLayMau.length <= 0) {
-    //   await this.danhMucService.loadDanhMucHangChiTiet(this.formData.value.cloaiVthh || this.formData.value.loaiVthh).then(res => {
-    //     if (res.msg == MESSAGE.SUCCESS) {
-    //       if (res.data && res.data.ppLayMau && res.data.ppLayMau?.length > 0) {
-    //         res.data.ppLayMau.forEach(item => {
-    //           let option = {
-    //             label: item.giaTri,
-    //             value: item.giaTri,
-    //             // checked: true,
-    //             checked: false,
-    //           };
-    //           this.dsPpLayMau.push(option);
-    //         });
-    //       }
-    //     } else {
-    //       this.notification.error(MESSAGE.ERROR, res.msg);
-    //     }
-    //   }).catch(err => {
-    //     this.notification.error(MESSAGE.ERROR, err.msg);
-    //   });
-    // }
     this.dsPpLayMau = [];
-    await this.danhMucService.loadDanhMucHangChiTiet(this.formData.value.cloaiVthh || this.formData.value.loaiVthh).then(res => {
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data && res.data.ppLayMau && res.data.ppLayMau?.length > 0) {
-          this.dsPpLayMau = res.data.ppLayMau.map(item => ({ label: item.giaTri, value: item.ma, checked: false }))
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
+    const res = await this.danhMucService.loadDanhMucHangChiTiet(this.formData.value.cloaiVthh || this.formData.value.loaiVthh);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data && res.data.ppLayMau && res.data.ppLayMau?.length > 0) {
+        this.dsPpLayMau = res.data.ppLayMau.map(item => ({ label: item.giaTri, value: item.ma, checked: false }))
       }
-    }).catch(err => {
-      this.notification.error(MESSAGE.ERROR, err.msg);
-    });
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
   }
 
   async loadDsCtChatLuong() {
     if (this.dsCtChatLuong.length <= 0) {
-      await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(this.formData.value.cloaiVthh || this.formData.value.loaiVthh)
-        .then(res => {
-          if (res.msg == MESSAGE.SUCCESS) {
-            if (res.data) {
-              res.data.forEach(item => {
-                let option = {
-                  label: item.tenChiTieu,
-                  value: item.id,
-                  chiSoCl: item.mucYeuCauXuat,
-                  phuongPhap: item.phuongPhapXd,
-                  type: item.maChiTieu,
-                  checked: true,
-                };
-                this.dsCtChatLuong.push(option);
-              });
-            }
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-        }).catch(err => {
-          this.notification.error(MESSAGE.ERROR, err.msg);
-        });
+      const res = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(this.formData.value.cloaiVthh || this.formData.value.loaiVthh);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          res.data.forEach(item => {
+            let option = {
+              label: item.tenChiTieu,
+              value: item.id,
+              chiSoCl: item.mucYeuCauXuat,
+              phuongPhap: item.phuongPhapXd,
+              type: item.maChiTieu,
+              checked: true,
+            };
+            this.dsCtChatLuong.push(option);
+          });
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     }
   }
 
@@ -445,8 +389,9 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
           donViTinh: data.donViTinh,
           tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho
         });
-        await this.loadDsPpLayMau();
-        await this.loadDsCtChatLuong();
+        // await this.loadDsPpLayMau();
+        // await this.loadDsCtChatLuong();
+        await Promise.all([this.loadDsPpLayMau(), this.loadDsCtChatLuong()]);
         this.tenThuKho()
         if (this.loaiChon === "radio") {
           // Chi chon 1 phuong phap lay mau duy nhat
@@ -476,7 +421,8 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
           });
           filter.push(...defaultPp, ...defaultCt);
         }
-        await this.buildTableView(true);
+        // await this.buildTableView(true);
+        await this.buildTableView();
       }
     });
   }

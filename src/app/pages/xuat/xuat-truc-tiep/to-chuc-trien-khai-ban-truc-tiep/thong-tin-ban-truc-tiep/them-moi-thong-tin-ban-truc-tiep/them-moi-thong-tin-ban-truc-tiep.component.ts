@@ -14,8 +14,6 @@ import {ChiTietThongTinBanTrucTiepChaoGia} from 'src/app/models/DeXuatKeHoachBan
 import {FileDinhKem} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import {saveAs} from 'file-saver';
 import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {PREVIEW} from "../../../../../../constants/fileType";
-import printJS from "print-js";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {THONG_TIN_BAN_TRUC_TIEP} from "../../../../../../constants/status";
 import {CurrencyMaskInputMode} from "ngx-currency";
@@ -398,38 +396,6 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     this.emitDataTable();
     this.updateEditCache();
     await this.spinner.hide();
-  }
-
-  async preview(id) {
-    await this.chaoGiaMuaLeUyQuyenService.preview({
-      tenBaoCao: 'Thông tin chào giá bán trực tiếp',
-      id: id
-    }).then(async res => {
-      if (res.data) {
-        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
-        this.printSrc = res.data.pdfSrc;
-        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
-        this.showDlgPreview = true;
-      } else {
-        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
-      }
-    });
-  }
-
-  downloadPdf() {
-    saveAs(this.pdfSrc, "thong-tin-chao-gia-ban-truc-tiep.pdf");
-  }
-
-  downloadWord() {
-    saveAs(this.wordSrc, "thong-tin-chao-gia-ban-truc-tiep.docx");
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
-  }
-
-  printPreview() {
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 
   setValidForm() {

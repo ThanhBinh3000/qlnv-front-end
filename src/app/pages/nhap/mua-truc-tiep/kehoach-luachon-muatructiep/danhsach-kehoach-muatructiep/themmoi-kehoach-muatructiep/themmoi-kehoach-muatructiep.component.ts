@@ -319,21 +319,21 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
 
   calculatorTable() {
     let tongMucDt: number = 0;
-    let tongSoLuong: number = 0;
+    // let tongSoLuong: number = 0;
     this.dataTable.forEach((item) => {
       let soLuongChiCuc = 0;
       if(item.children.length > 0){
         item.children.forEach(child => {
           soLuongChiCuc += child.soLuong;
-          tongSoLuong += child.soLuong;
+          // tongSoLuong += child.soLuong;
           tongMucDt += child.soLuong * child.donGia * 1000
         })
       }
-      tongSoLuong += item.tongSoLuong
+      // tongSoLuong += item.tongSoLuong
       item.soLuong = soLuongChiCuc;
     });
     this.formData.patchValue({
-      tongSoLuong: tongSoLuong,
+      // tongSoLuong: tongSoLuong,
       tongMucDt: tongMucDt,
       tongTienGomThue: tongMucDt,
     });
@@ -758,6 +758,9 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
         prev += cur.tongSoLuong;
         return prev;
       }, 0);
+      this.formData.patchValue({
+        tongSoLuong: sum,
+      });
       return sum;
     }
   }

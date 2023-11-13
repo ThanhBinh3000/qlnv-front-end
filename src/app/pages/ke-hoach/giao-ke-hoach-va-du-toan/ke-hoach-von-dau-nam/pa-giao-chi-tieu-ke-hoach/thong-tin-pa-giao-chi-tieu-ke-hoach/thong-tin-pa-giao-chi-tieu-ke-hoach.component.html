@@ -694,7 +694,7 @@
         </div>
       </nz-tab>
       <nz-tab [nzTitle]="'Kế hoạch nhập vật tư, thiết bị dự trữ nhà nước'">
-        <nz-tabset>
+        <nz-tabset [(nzSelectedIndex)]="subTabVatTu" [nzTabBarExtraContent]="extraTemplate">
           <!-- nhapvattu-->
           <nz-tab nzTitle='Chỉ tiêu nhập'>
             <nz-card class='mt-2px flex-card data-table card-border-content table-card'>
@@ -954,6 +954,14 @@
             </nz-card>
           </nz-tab>
         </nz-tabset>
+        <ng-template #extraTemplate>
+          <div class='btn-group mt-2'>
+            <button *ngIf="subTabVatTu==0" type="button" class="btn btn-main" (click)="baoCaoNhapVt()">
+              <i class="icon htvbdh_baocao"></i>
+              <span>Tải báo cáo</span>
+            </button>
+          </div>
+        </ng-template>
       </nz-tab>
       <!--      <nz-tab (nzClick)="downloadTemplate()" [nzTitle]="titleTemplate">-->
       <!--        <ng-template #titleTemplate>-->

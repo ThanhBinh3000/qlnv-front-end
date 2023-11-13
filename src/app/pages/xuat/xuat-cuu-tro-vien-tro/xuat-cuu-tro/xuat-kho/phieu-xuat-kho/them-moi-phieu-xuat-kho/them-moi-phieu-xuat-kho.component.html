@@ -159,13 +159,12 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-
-        <div nz-col [nzSpan]="4">
+        <div nz-col [nzSpan]="8">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nzRequired> Điểm kho</nz-form-label>
+            <nz-form-label [nzNoColon]="true" nzRequired> Ngăn/Lô kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
-                <input [readonly]="isView" nz-input formControlName="tenDiemKho" readonly />
+                <input [readonly]="isView" nz-input formControlName="tenNganLoKho" readonly />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -181,6 +180,16 @@
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" nzRequired> Điểm kho</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
+                <input [readonly]="isView" nz-input formControlName="tenDiemKho" readonly />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <!-- <div nz-col [nzSpan]="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nzRequired> Ngăn kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -199,7 +208,7 @@
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
-        </div>
+        </div> -->
         <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
@@ -576,7 +585,7 @@
         <div nz-col nzSpan="24">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
-              Chứng từ kèm theo
+              File đính kèm phiếu xuất kho đã ký
             </nz-form-label>
             <div class="list-file">
               <file-list [data]="fileDinhKems"></file-list>
