@@ -169,7 +169,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
         loaiVthh: this.loaiVthh,
         maDvi: this.formData.value.maDvi
       }
-      let soLuongDaLenKh = await this.soLuongNhapHangService.countSoLuongKeHoachNam(body);
+      let soLuongDaLenKh = await this.soLuongNhapHangService.getSoLuongCtkhTheoQd(body);
       this.formData.value.soLuongKhDd = soLuongDaLenKh.data;
       this.formData.value.tongSoLuongChuaTh = this.formData.value.soLuongChiTieu - this.formData.value.soLuongKhDd
       // this.changeChiCuc(this.dataEdit.maDvi);
@@ -231,7 +231,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     }
     await this.getGiaCuThe(event)
     await this.getGiaToiDa(event);
-    let soLuongDaLenKh = await this.soLuongNhapHangService.countSoLuongKeHoachNam(body);
+    let soLuongDaLenKh = await this.soLuongNhapHangService.getSoLuongCtkhTheoQd(body);
     console.log(this.dataChiTieu)
     let resChiTieu = this.dataChiTieu?.khLuongThuc.find(x => x.maDonVi == event);
     let chiCuc = this.listChiCuc.filter(item => item.maDvi == event)[0];
