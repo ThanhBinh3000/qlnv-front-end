@@ -156,7 +156,7 @@
                                                     <i class="fa fa-eye" (click)="viewAppendix(data.id)"></i>
                                                 </a>
                                             </ng-container>
-                                            <a *ngIf="status.general && (userInfo?.sub == baoCao.nguoiTao)">
+                                            <a *ngIf="isDelAppendix(data.maBieuMau)">
                                                 <i class="fa fa-trash-o do" (click)="deleteAppendix(data.id)"></i>
                                             </a>
                                         </td>
@@ -215,7 +215,7 @@
                                                     <i class="fa fa-eye" (click)="viewAppendix(data.id)"></i>
                                                 </a>
                                             </ng-container>
-                                            <a *ngIf="status.general && (userInfo?.sub == baoCao.nguoiTao)">
+                                            <a *ngIf="isDelAppendix(data.maBieuMau)">
                                                 <i class="fa fa-trash-o do" (click)="deleteAppendix(data.id)"></i>
                                             </a>
                                         </td>
@@ -274,7 +274,7 @@
                                                     <i class="fa fa-eye" (click)="viewAppendix(data.id)"></i>
                                                 </a>
                                             </ng-container>
-                                            <a *ngIf="status.general && (userInfo?.sub == baoCao.nguoiTao)">
+                                            <a *ngIf="isDelAppendix(data.maBieuMau)">
                                                 <i class="fa fa-trash-o do" (click)="deleteAppendix(data.id)"></i>
                                             </a>
                                         </td>
