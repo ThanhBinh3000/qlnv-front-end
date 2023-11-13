@@ -19,6 +19,7 @@ import {QuyetDinhGiaCuaBtcService} from "../../../services/ke-hoach/phuong-an-gi
 import {CurrencyMaskInputMode} from "ngx-currency";
 import {STATUS} from "../../../constants/status";
 import {QuyetDinhGiaTCDTNNService} from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
+import {SoLuongNhapHangService} from "../../../services/qlnv-hang/nhap-hang/sl-nhap-hang.service";
 
 @Component({
   selector: 'dialog-them-moi-vat-tu',
@@ -65,6 +66,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     private dmDonViService: DonviService,
     private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService,
     private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
+    private soLuongNhapHangService: SoLuongNhapHangService,
   ) {
     this.formData = this.fb.group({
       id: [null],
@@ -307,7 +309,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       loaiVthh: this.loaiVthh,
       maDvi: event
     }
-    let soLuongDaLenKh = await this.dxuatKhLcntService.getSoLuongAdded(body1);
+    let soLuongDaLenKh = await this.soLuongNhapHangService.getSoLuongCtkhTheoQd(body1);
     let chiCuc = this.listChiCuc.filter(item => item.maDvi == event)[0];
     const res = await this.donViService.layTatCaByMaDvi(body);
     this.listDiemKho = [];

@@ -8,6 +8,7 @@
         <span>Báo cáo kết quả bán đấu giá tiêu hủy hàng DTQG</span>
       </div>
     </div>
+
     <div class="btn-group">
       <button type="button" class="btn btn-sub ml-2" (click)="redirectDefault()">
         <i class="fa fa-arrow-left"></i>
@@ -33,6 +34,10 @@
       </button>
     </div>
   </div>
+  <nz-alert class="mg-t-10"
+            *ngIf="showLyDoTuChoi()"
+            nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
+  </nz-alert>
   <nz-card class="mg-t-16 flex-card p-lr16">
     <nz-collapse>
       <nz-collapse-panel nzActive="true" nzHeader="THÔNG TIN CHUNG">
@@ -134,7 +139,7 @@
               <th rowSpan="2">Tồn kho</th>
               <th rowSpan="2">ĐVT</th>
               <th colSpan="2">SL đề xuất tiêu hủy</th>
-              <th colSpan="2">Đơn giá tiêu hủy dự kiến</th>
+              <th colSpan="2">Chi phí thực hiện tiêu hủy</th>
               <th rowSpan="2">Đơn vị tổ chức tiêu hủy</th>
               <th rowSpan="2">Lý do cần tiêu hủy</th>
               <th rowSpan="2">Lý do tiêu hủy không thành công</th>

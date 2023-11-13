@@ -252,11 +252,10 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listQdGoc = res.data.content
-
     }
     this.spinner.hide();
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách số quyết định gốc',
+      nzTitle: 'DANH SÁCH SỐ QĐ CẦN ĐIỀU CHỈNH',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -264,8 +263,8 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listQdGoc,
-        dataHeader: ['Số quyết định gốc', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
-        dataColumn: ['soQd', 'tenLoaiVthh', 'tenCloaiVthh']
+        dataHeader: ['Số quyết định gốc', 'Số quyết định điều chỉnh', 'Loại hàng DTQG', 'Chủng loại hàng DTQG'],
+        dataColumn: ['soQd','soQdDc', 'tenLoaiVthh', 'tenCloaiVthh']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {

@@ -13,14 +13,13 @@ export class SoLuongNhapHangService extends BaseService {
     super(httpClient, 'sl-nhap-hang', '/qlnv-hang');
   }
 
-  countSoLuongKeHoachNam(body): Promise<OldResponseData> {
+  getSoLuongCtkhTheoQd(body): Promise<OldResponseData> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/count-sl-ctkh-qd`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
-  countSoLuongKeHoachNamTheoKh(body): Promise<OldResponseData> {
+  getSoLuongCtkhTheoKh(body): Promise<OldResponseData> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/count-sl-ctkh-kh`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
-
 }

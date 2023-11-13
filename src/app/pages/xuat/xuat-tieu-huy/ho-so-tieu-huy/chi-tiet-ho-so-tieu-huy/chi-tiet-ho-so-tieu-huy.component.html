@@ -3,7 +3,7 @@
     <div class="header-text">
       <div class="title-chi-tieu">
         <span
-          [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC || formData.value.trangThai == STATUS.DA_DUYET_LDTC ? 'status-xanh' : 'status-do'">
+          [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC || formData.value.trangThai == STATUS.DA_DUYET_LDTC || formData.value.trangThai == STATUS.DADUYET_BTC ? 'status-xanh' : 'status-do'">
           {{ formData.value.tenTrangThai }}
         </span>
         <span>Thẩm định hồ sơ đề nghị tiêu hủy hàng dự trự quốc gia</span>
@@ -108,7 +108,7 @@
             </div>
             <div nz-col [nzSpan]="4" *ngIf="this.userService.isTongCuc()">
               <nz-form-item>
-                <nz-form-label>Thời gian phê duyệt tiêu hủy</nz-form-label>
+                <nz-form-label nzRequired >Thời gian phê duyệt tiêu hủy</nz-form-label>
                 <nz-form-control>
                   <nz-range-picker [nzRanges]="ranges" ngModel formControlName="thoiGianPd"
                                    (ngModelChange)="onChangeTimeQd($event)" [nzDisabled]="disabledThamDinh()"
@@ -251,7 +251,7 @@
             <th>SL tiêu hủy phê duyệt</th>
             <th>ĐVT</th>
             <th>Đơn giá tiêu hủy phê duyệt</th>
-            <th>Chi phí tiêu hủy phê duyệt</th>
+            <th>Giá trị tiêu hủy phê duyệt</th>
             <th>Lý do cần tiêu hủy</th>
             <th>Kết quả đánh giá chất lượng</th>
           </tr>

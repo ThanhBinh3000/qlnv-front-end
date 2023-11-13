@@ -487,7 +487,8 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       ghiChuTtdt: this.formData.value.ghiChuTtdt,
       tgianTrinhKqTcg: this.formData.value.tgianTrinhKqTcg,
       tgianTrinhTtd: this.formData.value.tgianTrinhTtd,
-      fileDinhKems: this.fileDinhKems
+      fileDinhKems: this.fileDinhKems,
+      loaiVthh: this.loaiVthh
     }
     let res = await this.thongTinDauThauService.updateGoiThau(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -818,14 +819,18 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       let sum = 0
         if (this.isShowFromKq) {
           const sumChild = this.listOfData[i].children.reduce((prev, cur) => {
-            prev += cur.soLuong * this.abs(this.listOfData[i].kqlcntDtl?.donGiaVat - cur.donGia)
-            return prev;
+            if (this.listOfData[i].kqlcntDtl?.donGiaVat != null) {
+              prev += cur.soLuong * this.abs(this.listOfData[i].kqlcntDtl?.donGiaVat - cur.donGia)
+              return prev;
+            }
           }, 0);
           sum += sumChild;
         } else {
           const sumChild = this.listOfData[i].children.reduce((prev, cur) => {
-            prev += cur.soLuong * this.abs(this.listOfData[i].donGiaNhaThau - cur.donGia);
-            return prev;
+            if (this.listOfData[i].kqlcntDtl?.donGiaVat != null) {
+              prev += cur.soLuong * this.abs(this.listOfData[i].donGiaNhaThau - cur.donGia);
+              return prev;
+            }
           }, 0);
           sum += sumChild;
         }
