@@ -20,6 +20,7 @@ import {QuyetDinhGiaCuaBtcService} from "../../../services/ke-hoach/phuong-an-gi
 import {STATUS} from "../../../constants/status";
 import {QuyetDinhGiaTCDTNNService} from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
 import {CurrencyMaskInputMode} from "ngx-currency";
+import {SoLuongNhapHangService} from "../../../services/qlnv-hang/nhap-hang/sl-nhap-hang.service";
 
 
 @Component({
@@ -83,6 +84,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     private danhSachMuaTrucTiepService: DanhSachMuaTrucTiepService,
     private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService,
     private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
+    private soLuongNhapHangService: SoLuongNhapHangService,
   ) {
     this.formData = this.fb.group({
       id: [null],
@@ -167,7 +169,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
         loaiVthh: this.loaiVthh,
         maDvi: this.formData.value.maDvi
       }
-      let soLuongDaLenKh = await this.danhSachMuaTrucTiepService.getSoLuongAdded(body);
+      let soLuongDaLenKh = await this.soLuongNhapHangService.getSoLuongCtkhTheoQd(body);
       this.formData.value.soLuongKhDd = soLuongDaLenKh.data;
       this.formData.value.tongSoLuongChuaTh = this.formData.value.soLuongChiTieu - this.formData.value.soLuongKhDd
       // this.changeChiCuc(this.dataEdit.maDvi);
@@ -229,7 +231,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     }
     await this.getGiaCuThe(event)
     await this.getGiaToiDa(event);
-    let soLuongDaLenKh = await this.danhSachMuaTrucTiepService.getSoLuongAdded(body);
+    let soLuongDaLenKh = await this.soLuongNhapHangService.getSoLuongCtkhTheoQd(body);
     console.log(this.dataChiTieu)
     let resChiTieu = this.dataChiTieu?.khLuongThuc.find(x => x.maDonVi == event);
     let chiCuc = this.listChiCuc.filter(item => item.maDvi == event)[0];

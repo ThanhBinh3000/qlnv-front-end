@@ -4,7 +4,7 @@
       <div class="title-chi-tieu">
         <span
           [ngClass]="formData.value.trangThai == STATUS.DA_CHOT ? 'status-xanh' : 'status-do' ">{{formData.value.tenTrangThai}}</span>
-        <span class="title-form">Thông tin hàng DTQG cần tiêu hủy</span>
+        <span class="title-form">Thông tin hàng DTQG cần thanh lý</span>
       </div>
     </div>
   </div>
@@ -28,7 +28,7 @@
       </div>
       <div nz-col [nzSpan]="6">
         <nz-form-control>
-          <nz-form-label>Loại hàng</nz-form-label>
+          <nz-form-label>Loại hàng DTQG</nz-form-label>
           <nz-form-item>
             <input nz-input formControlName="tenLoaiVthh" readonly />
           </nz-form-item>
@@ -36,7 +36,7 @@
       </div>
       <div nz-col [nzSpan]="6">
         <nz-form-control>
-          <nz-form-label>Chủng loại </nz-form-label>
+          <nz-form-label>Chủng loại hàng DTQG</nz-form-label>
           <nz-form-item>
             <input nz-input formControlName="tenCloaiVthh" readonly />
           </nz-form-item>
@@ -112,7 +112,7 @@
       </div>
       <div nz-col [nzSpan]="6">
         <nz-form-control>
-          <nz-form-label>SL cần tiêu hủy</nz-form-label>
+          <nz-form-label>SL cần thanh lý</nz-form-label>
           <nz-form-item>
             <nz-input-number class="text-right" nz-input formControlName="slDeXuat" [nzMin]="1" [nzStep]="1"
                              [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
@@ -122,7 +122,7 @@
       </div>
       <div nz-col [nzSpan]="6">
         <nz-form-control>
-          <nz-form-label>SL cần tiêu hủy đã duyệt</nz-form-label>
+          <nz-form-label>SL cần thanh lý đã duyệt</nz-form-label>
           <nz-form-item>
             <nz-input-number class="text-right" nz-input formControlName="slDaDuyet" [nzMin]="1"
                              [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
@@ -133,7 +133,7 @@
       </div>
       <div nz-col [nzSpan]="6">
         <nz-form-control>
-          <nz-form-label>SL còn lại cần tiêu hủy</nz-form-label>
+          <nz-form-label>SL còn lại cần thanh lý</nz-form-label>
           <nz-form-item>
             <nz-input-number class="text-right" nz-input formControlName="slDaDuyet" [nzMin]="1"
                              [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
@@ -171,7 +171,7 @@
       <div nz-col [nzSpan]="24">
         <nz-form-item>
           <nz-form-label [nzNoColon]="true">
-            Lý do cần tiêu hủy
+            Lý do cần thanh lý
           </nz-form-label>
           <textarea nz-input [rows]="3" formControlName="lyDo" readonly></textarea>
         </nz-form-item>

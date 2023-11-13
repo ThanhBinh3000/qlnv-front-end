@@ -139,10 +139,20 @@
             </div> -->
             <div nz-col [nzSpan]="8">
               <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Biên bản tịnh kho</nz-form-label>
+                <nz-form-control>
+                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogBienBanTinhKho()">
+                    <input [readonly]="isView" nz-input formControlName="soBbTinhKho" readonly />
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="8">
+              <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Ngăn/Lô kho</nz-form-label>
                 <nz-form-control>
-                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
-                    <input [readonly]="isView" nz-input formControlName="tenNganLoKho" readonly />
+                  <nz-input-group>
+                    <input [readonly]="true" nz-input formControlName="tenNganLoKho" readonly />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -151,8 +161,8 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired> Nhà kho</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
-                    <input [readonly]="isView" nz-input formControlName="tenNhaKho" readonly />
+                  <nz-input-group>
+                    <input [readonly]="true" nz-input formControlName="tenNhaKho" readonly />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -161,8 +171,8 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired> Điểm kho</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
-                    <input [readonly]="isView" nz-input formControlName="tenDiemKho" readonly />
+                  <nz-input-group>
+                    <input [readonly]="true" nz-input formControlName="tenDiemKho" readonly />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -171,7 +181,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input nz-input formControlName="tenLoaiVthh" readonly="true" />
+                  <input nz-input formControlName="tenLoaiVthh" [readonly]="true" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -179,7 +189,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input nz-input formControlName="tenCloaiVthh" readonly="true" />
+                  <input nz-input formControlName="tenCloaiVthh" [readonly]="true" />
                 </nz-form-control>
               </nz-form-item>
             </div>

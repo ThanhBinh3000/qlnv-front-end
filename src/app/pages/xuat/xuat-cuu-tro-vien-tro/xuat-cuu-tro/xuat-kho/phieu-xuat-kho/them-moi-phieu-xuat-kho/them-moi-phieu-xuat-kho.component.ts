@@ -79,9 +79,9 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         ngayXuatKho: ['', [Validators.required]],
         taiKhoanNo: [],
         taiKhoanCo: [],
-        idQdGiaoNvXh: [],
+        idQdGiaoNvXh: ['', [Validators.required]],
         idDtlQdGiaoNvXh: [],
-        soQdGiaoNvXh: [],
+        soQdGiaoNvXh: ['', [Validators.required]],
         ngayQdGiaoNvXh: [],
         maDiemKho: ['', [Validators.required]],
         maNhaKho: [],
@@ -407,7 +407,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     return;
   }
   async save() {
-    this.helperService.ignoreRequiredForm(this.formData);
+    this.helperService.ignoreRequiredForm(this.formData, ['soQdGiaoNvXh']);
     this.formData.controls['soPhieuXuatKho'].setValidators(Validators.required);
     let body = this.formData.value;
     body.fileDinhKems = this.fileDinhKems;

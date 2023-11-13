@@ -256,7 +256,18 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired> Số lượng hàng bảo quản</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input nz-input formControlName="slHangBaoQuan" [readonly]="true" />
+                  <nz-input-number formControlName="slHangBaoQuan" [nzMin]="0" [nzMax]="999999999999" [nzStep]="1"
+                    [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                    [nzDisabled]="true">
+                  </nz-input-number>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="4">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Đơn vị tính</nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
+                  <input nz-input formControlName="donViTinh" readonly />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -307,7 +318,23 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <ng-container *ngIf="!['XC', 'CTVT'].includes(loaiXuat)">
+            <div nz-col [nzSpan]="4">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">Hình thức kê lót/bảo quản</nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-checkbox-group formControlName="hinhThucBaoQuan" nzDisabled class="grid-1"></nz-checkbox-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="4" *ngIf="!['XC'].includes(loaiXuat)">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">Phương pháp lấy mẫu</nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-checkbox-group formControlName="ppLayMau" nzDisabled="true" class="grid-1"></nz-checkbox-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <!-- <ng-container *ngIf="!['XC', 'CTVT'].includes(loaiXuat)">
               <div nz-col [nzSpan]="4">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Đơn vị tính</nz-form-label>
@@ -316,8 +343,8 @@
                   </nz-form-control>
                 </nz-form-item>
               </div>
-            </ng-container>
-            <div nz-col [nzSpan]="24"></div>
+            </ng-container> -->
+            <!-- <div nz-col [nzSpan]="24"></div>
             <ng-container *ngIf="['XC', 'CTVT'].includes(loaiXuat)">
               <div nz-col [nzSpan]="4">
                 <nz-form-item>
@@ -335,7 +362,7 @@
                   </nz-form-control>
                 </nz-form-item>
               </div>
-            </ng-container>
+            </ng-container> -->
             <div nz-col nzSpan="24">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzSpan="24">

@@ -19,6 +19,7 @@ import {QuyetDinhGiaCuaBtcService} from "../../../services/ke-hoach/phuong-an-gi
 import {CurrencyMaskInputMode} from "ngx-currency";
 import {STATUS} from "../../../constants/status";
 import {QuyetDinhGiaTCDTNNService} from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
+import {SoLuongNhapHangService} from "../../../services/qlnv-hang/nhap-hang/sl-nhap-hang.service";
 
 @Component({
   selector: 'dialog-them-moi-vat-tu',
@@ -65,6 +66,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     private dmDonViService: DonviService,
     private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService,
     private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
+    private soLuongNhapHangService: SoLuongNhapHangService,
   ) {
     this.formData = this.fb.group({
       id: [null],
@@ -267,9 +269,9 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         }
         this.listAllDiemKho.push(listDiemKho);
         if(this.listOfData[i].children.length > 0) {
-          this.listOfData[i].children.forEach((i) => {
-            i.thanhTienDx = i.soLuong * this.formData.get('donGiaTamTinh').value * 1000
-            i.thanhTien = i.soLuong * this.formData.get('donGia').value * 1000
+          this.listOfData[i].children.forEach((e) => {
+            e.thanhTienDx = e.soLuong * this.listOfData[i].donGiaTamTinh * 1000
+            e.thanhTien = e.soLuong * this.listOfData[i].donGia * 1000
             this.listThongTinDiemKho.push(new DanhSachGoiThau());
           })
         } else {
@@ -307,7 +309,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       loaiVthh: this.loaiVthh,
       maDvi: event
     }
-    let soLuongDaLenKh = await this.dxuatKhLcntService.getSoLuongAdded(body1);
+    let soLuongDaLenKh = await this.soLuongNhapHangService.getSoLuongCtkhTheoQd(body1);
     let chiCuc = this.listChiCuc.filter(item => item.maDvi == event)[0];
     const res = await this.donViService.layTatCaByMaDvi(body);
     this.listDiemKho = [];

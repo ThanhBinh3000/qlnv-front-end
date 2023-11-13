@@ -95,8 +95,8 @@
             <th>Thời hạn XH trước ngày</th>
             <th>Điểm kho</th>
             <th>Lô kho</th>
-            <th>Số phiếu KNCL</th>
-            <th>Ngày giám định</th>
+            <!-- <th>Số phiếu KNCL</th>
+            <th>Ngày giám định</th> -->
             <th>{{loaiVthh =='02'? 'Số bảng kê XVT': 'Số bảng cân hàng'}}</th>
             <th>Số phiếu xuất kho</th>
             <th>Ngày xuất kho</th>
@@ -115,8 +115,8 @@
               <td class="bold">{{item.thoiGianGiaoNhan | date: 'dd/MM/YYYY' }}</td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
+              <!-- <td></td>
+              <td></td> -->
               <td></td>
               <td></td>
               <td></td>
@@ -133,8 +133,8 @@
                   <td></td>
                   <td class="bold">{{lv1.tenDiemKho}}</td>
                   <td></td>
-                  <td></td>
-                  <td></td>
+                  <!-- <td></td>
+                  <td></td> -->
                   <td></td>
                   <td></td>
                   <td></td>
@@ -152,9 +152,9 @@
                       <td></td>
                       <td class="bold">{{ (lv2.tenLoKho ? lv2.tenLoKho + '-' : '') + (lv2.tenNganKho ? lv2.tenNganKho +
                         '-' : '')+ (lv2.tenNhaKho ? lv2.tenNhaKho : '') }}</td>
-                      <td><a *ngIf="lv2.soPhieuKnCl" nzType="link"
+                      <!-- <td><a *ngIf="lv2.soPhieuKnCl" nzType="link"
                           (click)="openPhieuKnClModal(lv2.idPhieuKnCl)">{{lv2.soPhieuKnCl}}</a></td>
-                      <td>{{lv2.ngayKn | date: 'dd/MM/YYYY' }}</td>
+                      <td>{{lv2.ngayKn | date: 'dd/MM/YYYY' }}</td> -->
                       <td></td>
                       <td></td>
                       <td></td>
@@ -171,8 +171,8 @@
                           <td></td>
                           <td></td>
                           <td></td>
-                          <td></td>
-                          <td></td>
+                          <!-- <td></td>
+                          <td></td> -->
                           <td class="bold">{{lv3.soBangKe}}</td>
                           <td> <a nz-button nzType="link"
                               (click)="openPhieuXkModal(lv3.idPhieuXuatKho)">{{lv3.soPhieuXuatKho}}</a></td>
