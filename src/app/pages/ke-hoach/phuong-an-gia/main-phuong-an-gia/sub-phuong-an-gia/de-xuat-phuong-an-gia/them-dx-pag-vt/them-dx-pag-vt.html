@@ -26,7 +26,7 @@
                 type="button" class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
           <i class="icon htvbdh_tcdt_guiduyet "></i>
           <span>Lưu và gửi duyệt</span>
-        </button>
+        </button>f
         <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV)&& ((userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_DEXUAT_DUYET_LDVU') && type == typeConst.GIA_MUA_TOI_DA )
      || (userService.isAccessPermisson('KHVDTNSNN_PAGIA_VT_GCT_DEXUAT_DUYET_LDVU') && type == typeConst.GIA_CU_THE ))"
                 type="button" class="btn btn-sub do ml-2" (click)="tuChoi()">

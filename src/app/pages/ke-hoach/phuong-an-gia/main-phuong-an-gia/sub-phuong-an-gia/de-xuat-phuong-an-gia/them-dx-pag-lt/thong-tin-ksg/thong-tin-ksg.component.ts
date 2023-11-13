@@ -183,7 +183,6 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
               type.fileDinhKem.fileUrl = resUpload.url;
               type.fileDinhKem.idVirtual = new Date().getTime();
             }
-
           }
         });
     }
