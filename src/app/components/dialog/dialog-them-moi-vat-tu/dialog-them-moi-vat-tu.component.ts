@@ -269,9 +269,9 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         }
         this.listAllDiemKho.push(listDiemKho);
         if(this.listOfData[i].children.length > 0) {
-          this.listOfData[i].children.forEach((i) => {
-            i.thanhTienDx = i.soLuong * this.formData.get('donGiaTamTinh').value * 1000
-            i.thanhTien = i.soLuong * this.formData.get('donGia').value * 1000
+          this.listOfData[i].children.forEach((e) => {
+            e.thanhTienDx = e.soLuong * this.listOfData[i].donGiaTamTinh * 1000
+            e.thanhTien = e.soLuong * this.listOfData[i].donGia * 1000
             this.listThongTinDiemKho.push(new DanhSachGoiThau());
           })
         } else {
