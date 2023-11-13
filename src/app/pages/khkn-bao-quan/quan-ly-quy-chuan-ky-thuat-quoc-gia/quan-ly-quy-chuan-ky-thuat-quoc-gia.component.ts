@@ -1,18 +1,20 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DonviService } from 'src/app/services/donvi.service';
+import {Component, Input, OnInit} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
+import {UserLogin} from 'src/app/models/userlogin';
+import {DonviService} from 'src/app/services/donvi.service';
 import dayjs from 'dayjs';
-import { KhCnQuyChuanKyThuat } from './../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
-import { STATUS } from 'src/app/constants/status';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { Router } from '@angular/router';
+import {KhCnQuyChuanKyThuat} from './../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
+import {STATUS} from 'src/app/constants/status';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {Router} from '@angular/router';
+import {FileDinhKem} from "../../../models/DeXuatKeHoachMuaTrucTiep";
+import {saveAs} from 'file-saver';
 
 @Component({
   selector: 'app-quan-ly-quy-chuan-ky-thuat-quoc-gia',
@@ -47,16 +49,16 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
   allChecked = false;
   indeterminate = false;
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LDV' },
-    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LDV' },
-    { ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt - LDV' },
-    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
+    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
+    {ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LDV'},
+    {ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LDV'},
+    {ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt - LDV'},
+    {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'},
 
   ];
   listTrangThaiHl: any[] = [
-    { ma: '01', giaTri: 'Còn hiệu lực' },
-    { ma: '00', giaTri: 'Hết hiệu lực' },
+    {ma: '01', giaTri: 'Còn hiệu lực'},
+    {ma: '00', giaTri: 'Hết hiệu lực'},
   ];
 
   constructor(
@@ -85,21 +87,8 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
       tenCloaiVthh: null,
       maDvi: [null],
       maBn: [null],
+      isSearch: [true],
     });
-    this.filterTable = {
-      soVanBan: '',
-      soVanBanThayThe: '',
-      soHieuQuyChuan: '',
-      apDungTai: '',
-      tenLoaiVthh: '',
-      tenCloaiVthh: '',
-      listTenLoaiVthh: '',
-      ngayKy: '',
-      ngayHieuLuc: '',
-      ngayHetHieuLuc: '',
-      tenTrangThai: '',
-      tenTrangThaiHl: '',
-    };
   }
 
   disabledStartNgayKy = (startValue: Date): boolean => {
@@ -130,12 +119,14 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
       if (this.userInfo) {
         this.qdTCDT = this.userInfo.MA_QD;
       }
-      await this.loadLoaiHangHoa();
-      await this.getListBoNganh();
+      this.loadDsHangHoa();
+      this.getListBoNganh();
       this.formData.patchValue({
         maBn: this.userInfo.MA_DVI.startsWith('01') ? null : this.userInfo.MA_DVI,
       });
       await this.search();
+      this.filterTable.trangThaiHl = '01';
+      this.filterInTable('trangThaiHl','01')
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -144,59 +135,11 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
     }
   }
 
-
-  // async loadLoaiHangHoa() {
-  //   let ds = [];
-  //   try {
-  //     let hangHoa = await this.danhMucService.loadDanhMucHangHoa().toPromise();
-  //     if (hangHoa) {
-  //       if (hangHoa.msg == MESSAGE.SUCCESS) {
-  //         hangHoa.data.forEach(element => {
-  //           ds = [...ds, element.children];
-  //           ds = ds.flat();
-  //           this.listOfOption = ds;
-  //         });
-  //       }
-  //     }
-  //   } catch (error) {
-  //     this.spinner.hide();
-  //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-  //   }
-  // }
-
-  async loadLoaiHangHoa(maBn?) {
-    try {
-      let hangHoa: any;
-      if (this.userInfo.MA_DVI == '0101') {
-        hangHoa = await this.danhMucService.getDanhMucHangHoaDvql({
-          'maDvi': maBn ? (maBn == '01' ? '0101' : maBn) : this.userInfo.MA_DVI,
-        }).toPromise();
-      } else {
-        hangHoa = await this.danhMucService.getDanhMucHangHoaDvql({
-          'maDvi': maBn ? (maBn == '01' ? '0101' : maBn) : this.userInfo.MA_DVI.substring(0, 2),
-        }).toPromise();
-      }
-      if (hangHoa) {
-        if (hangHoa.msg == MESSAGE.SUCCESS) {
-          let ds = hangHoa.data.filter(element => {
-              return element.maHangHoa.length == 4;
-            },
-          );
-          ds = ds.flat();
-          this.listOfOption = ds;
-        }
-      }
-    } catch (error) {
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  }
-
-  async onChangeLoaiHH(id: number) {
-    if (id && id > 0) {
-      let loaiHangHoa = this.dsLoaiHangHoa.filter(item => item.ma === id);
-      if (loaiHangHoa && loaiHangHoa.length > 0) {
-        this.dsChungLoaiHangHoa = loaiHangHoa[0].child;
+  async loadDsHangHoa() {
+    let res = await this.danhMucService.getAllVthhByCap("2");
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        this.listOfOption = res.data
       }
     }
   }
@@ -211,8 +154,7 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
 
   async changeHangHoa(event: any) {
     if (event) {
-      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
-      console.log(res, 5555);
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.listChungLoaiHangHoa = res.data;
@@ -252,11 +194,11 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
     return result;
   }
 
-  changeBoNganh(event: any) {
-    if (event) {
-      this.loadLoaiHangHoa(event);
-    } else {
-      this.listOfOption = [];
+  async downloadFile(item: any) {
+    if (item && item.fileName) {
+      this.uploadFileService.downloadFile(item.fileUrl).subscribe((blob) => {
+        saveAs(blob, item.fileName);
+      });
     }
   }
 }
