@@ -50,7 +50,8 @@ export class ChiTietDsThComponent extends Base3Component implements OnInit {
       slDaDuyet: [],
       ngayTongHop: [],
       id: [],
-      lyDo: []
+      lyDo: [],
+      tenTrangThai : [],
     })
   }
 

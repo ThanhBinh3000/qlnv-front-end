@@ -1,4 +1,13 @@
 <div class="bg-trang">
+  <div class="header header-green-background">
+    <div class="header-text">
+      <div class="title-chi-tieu">
+        <span
+          [ngClass]="formData.value.trangThai == STATUS.DA_CHOT ? 'status-xanh' : 'status-do' ">{{formData.value.tenTrangThai}}</span>
+        <span class="title-form">Biên bản chuẩn bị kho</span>
+      </div>
+    </div>
+  </div>
   <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
     <div nz-row [nzGutter]="12">
       <div nz-col [nzSpan]="12">
@@ -94,7 +103,7 @@
       </div>
       <div nz-col [nzSpan]="6">
         <nz-form-control>
-          <nz-form-label>Thời nhập kho</nz-form-label>
+          <nz-form-label>Ngày nhập kho</nz-form-label>
           <nz-form-item>
             <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayNhapKho" nzDisabled>
             </nz-date-picker>
@@ -144,7 +153,7 @@
       </div>
       <div nz-col [nzSpan]="6">
         <nz-form-control>
-          <nz-form-label>Ngày tổng hợp</nz-form-label>
+          <nz-form-label>Ngày tổng hợp ( chốt DS )</nz-form-label>
           <nz-form-item>
             <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayTongHop" nzDisabled>
             </nz-date-picker>
@@ -153,7 +162,7 @@
       </div>
       <div nz-col [nzSpan]="6">
         <nz-form-control>
-          <nz-form-label>Mã danh sách cần SC</nz-form-label>
+          <nz-form-label>Mã danh sách</nz-form-label>
           <nz-form-item>
             <input nz-input formControlName="id" readonly />
           </nz-form-item>
@@ -162,7 +171,7 @@
       <div nz-col [nzSpan]="24">
         <nz-form-item>
           <nz-form-label [nzNoColon]="true">
-            Ghi chú
+            Lý do cần tiêu hủy
           </nz-form-label>
           <textarea nz-input [rows]="3" formControlName="lyDo" readonly></textarea>
         </nz-form-item>
