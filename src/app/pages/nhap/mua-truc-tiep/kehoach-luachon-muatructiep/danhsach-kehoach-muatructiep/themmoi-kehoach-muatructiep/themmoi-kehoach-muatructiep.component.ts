@@ -334,7 +334,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
     });
     this.formData.patchValue({
       // tongSoLuong: tongSoLuong,
-      tongMucDt: tongMucDt,
+      // tongMucDt: tongMucDt,
       tongTienGomThue: tongMucDt,
     });
   }
@@ -502,7 +502,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
         break;
       }
     }
-    this.approve(this.idInput, trangThai, msg);
+    this.approve(this.idInput, trangThai, msg, null, MESSAGE.UPDATE_SUCCESS);
   }
 
 
