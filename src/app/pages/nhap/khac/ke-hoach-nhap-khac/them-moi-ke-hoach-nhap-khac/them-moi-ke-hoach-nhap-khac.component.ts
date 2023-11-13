@@ -84,7 +84,6 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
 
   async ngOnInit() {
       this.userInfo = this.userService.getUserLogin();
-      this.maTrinh = "/" + this.userInfo.MA_TR;
       await Promise.all([
         this.loadData(),
       ]);
@@ -118,6 +117,7 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
           const dataDetail = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, dataDetail.hdr);
           console.log(this.formData, "get detail")
+          this.maTrinh = "/" + dataDetail.hdr.soDxuat?.split('/')[1]
           this.formData.patchValue({
             soDxuat: dataDetail.hdr.soDxuat?.split('/')[0]
           })
@@ -138,6 +138,7 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
   }
 
   async initForm() {
+    this.maTrinh = "/" + this.userInfo.MA_TR;
     if (this.userService.isTongCuc()) {
       this.formData.patchValue({
         tenDvi: this.userInfo.TEN_PHONG_BAN,
