@@ -195,6 +195,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       tgianMthauTime: [null],
       tgianDthauTime: [null],
       tgianMoHoSoTime: [null],
+      idChiTieuKhNam: [],
     });
   }
 
@@ -212,7 +213,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     this.loadDanhMucHang();
     await Promise.all([
       this.loadDataComboBox(),
-      this.getDataChiTieu()
+      // this.getDataChiTieu()
     ]);
     this.initListQuy();
     await this.spinner.hide();
@@ -320,9 +321,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     body.tongMucDtBangChu = convertTienTobangChu(this.formData.get('tongMucDt').value)
     body.tgianDthau = pipe.transform(body.tgianDthau, 'yyyy-MM-dd HH:mm')
     body.tgianMthau = pipe.transform(body.tgianMthau, 'yyyy-MM-dd HH:mm')
-    console.log(body)
     await this.dauThauService.preview(body).then(async s => {
-      console.log(s)
       this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
       this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
       this.showDlgPreview = true;
@@ -364,6 +363,9 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
               this.fileDinhKem = dataDetail.fileDinhKems;
               this.listOfData = dataDetail.dsGtDtlList;
               this.bindingCanCu(dataDetail.ccXdgDtlList);
+            }
+            if (this.formData.get('trangThai').value != STATUS.DU_THAO) {
+              this.getDataChiTieuById(dataDetail.idChiTieuKhNam)
             }
           }
         })
@@ -764,7 +766,8 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     if (res2.msg == MESSAGE.SUCCESS) {
       this.dataChiTieu = res2.data;
       this.formData.patchValue({
-        soQd: this.dataChiTieu.soQuyetDinh
+        soQd: this.dataChiTieu.soQuyetDinh,
+        idChiTieuKhNam: this.dataChiTieu.id
       });
     } else {
       this.dataChiTieu = null;
@@ -772,6 +775,27 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
         soQd: null
       });
     }
+  }
+
+  async getDataChiTieuById(id) {
+    await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachNam(id).then((res) => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.dataChiTieu = res.data;
+        this.formData.patchValue({
+          soQd: this.dataChiTieu.soQuyetDinh,
+          idChiTieuKhNam: this.dataChiTieu.id
+        });
+      }
+    }).catch((e) => {
+      this.dataChiTieu = null;
+      this.formData.patchValue({
+        soQd: null,
+        idChiTieuKhNam: null
+      });
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    });
   }
 
   onChangeNamKh() {
