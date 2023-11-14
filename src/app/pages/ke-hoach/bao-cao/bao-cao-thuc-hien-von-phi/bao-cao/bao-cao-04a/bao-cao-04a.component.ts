@@ -41,7 +41,7 @@ export class ItemData {
         if (this.listCtiet.length > 0) {
             this.listCtiet.forEach(item => {
                 this.trongDotTcong = Operator.sum([this.trongDotTcong, item.gtri]);
-                const data = origin?.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiDm == item.loaiDm);
+                const data = origin?.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiDm == item.loaiDm && e.loaiBquan == item.loaiBquan);
                 item.lkGtri = Operator.sum([data?.lkGtri, item.gtri]);
                 this.luyKeTcong = Operator.sum([this.luyKeTcong, item.lkGtri]);
             })
@@ -443,7 +443,7 @@ export class BaoCao04aComponent implements OnInit {
         this.lstCtietBcao[index].trongDotTcong = data.trongDotTcong;
         this.lstCtietBcao[index].luyKeTcong = Operator.sum([this.lstCtietBcao[index].luyKeTcong, data.trongDotTcong]);
         this.lstCtietBcao[index].listCtiet.forEach(item => {
-            const vtu = data.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiDm == item.loaiDm);
+            const vtu = data.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiDm == item.loaiDm && e.loaiBquan == item.loaiBquan);
             item.gtri = vtu.gtri;
             item.lkGtri = Operator.sum([item.lkGtri, vtu.gtri]);
         })
@@ -853,94 +853,6 @@ export class BaoCao04aComponent implements OnInit {
                         })
                     })
                 }
-                // if (this.dataInfo.maLoai != Vp.BM_05) {
-                //     obj.loaiDm = this.para.loaiDm;
-                //     if (res.ma.startsWith('0101')) {
-                //         this.dsBaoQuan.forEach(bq => {
-                //             const objBq: Materials = {
-                //                 ...obj,
-                //                 tenVtu: obj.tenVtu + ' - ' + bq.giaTri,
-                //                 loaiBquan: bq.ma,
-                //             }
-                //             this.lstCol.push(objBq)
-                //             this.lstCtietBcao.forEach(item => {
-                //                 item.listCtiet.push({
-                //                     ...objBq,
-                //                     id: uuid.v4() + 'FE',
-                //                 })
-                //             })
-                //         })
-                //     } else {
-                //         this.lstCol.push(obj);
-                //         this.lstCtietBcao.forEach(item => {
-                //             item.listCtiet.push({
-                //                 ...obj,
-                //                 id: uuid.v4() + 'FE',
-                //             })
-                //         })
-                //     }
-                // } else {
-                //     if (res.ma.startsWith('01')) {
-                //         const objLDM: Materials = {
-                //             ...obj,
-                //             tenVtu: obj.tenVtu + ' - LDM',
-                //             loaiDm: 'LDM',
-                //         }
-                //         const objLDBS: Materials = {
-                //             ...obj,
-                //             tenVtu: obj.tenVtu + ' - LDBS',
-                //             loaiDm: 'LDBS',
-                //         }
-                //         if (res.ma.startsWith('0101')) {
-                //             this.dsBaoQuan.forEach(bq => {
-                //                 const objLdmBq: Materials = {
-                //                     ...objLDM,
-                //                     tenVtu: objLDM.tenVtu + ' - ' + bq.giaTri,
-                //                     loaiBquan: bq.ma,
-                //                 }
-                //                 const objLdbsBq: Materials = {
-                //                     ...objLDBS,
-                //                     tenVtu: objLDBS.tenVtu + ' - ' + bq.giaTri,
-                //                     loaiBquan: bq.ma,
-                //                 }
-                //                 this.lstCol.push(objLdmBq)
-                //                 this.lstCol.push(objLdbsBq)
-                //                 this.lstCtietBcao.forEach(item => {
-                //                     item.listCtiet.push({
-                //                         ...objLdmBq,
-                //                         id: uuid.v4() + 'FE',
-                //                     })
-                //                     item.listCtiet.push({
-                //                         ...objLdbsBq,
-                //                         id: uuid.v4() + 'FE',
-                //                     })
-                //                 })
-                //             })
-                //         } else {
-                //             this.lstCol.push(objLDM);
-                //             this.lstCol.push(objLDBS);
-                //             this.lstCtietBcao.forEach(item => {
-                //                 item.listCtiet.push({
-                //                     ...objLDM,
-                //                     id: uuid.v4() + 'FE',
-                //                 })
-                //                 item.listCtiet.push({
-                //                     ...objLDBS,
-                //                     id: uuid.v4() + 'FE',
-                //                 })
-                //             })
-                //         }
-                //     } else {
-                //         obj.loaiDm = 'LD';
-                //         this.lstCol.push(obj);
-                //         this.lstCtietBcao.forEach(item => {
-                //             item.listCtiet.push({
-                //                 ...obj,
-                //                 id: uuid.v4() + 'FE',
-                //             })
-                //         })
-                //     }
-                // }
                 this.setWidth();
                 this.updateEditCache();
             }
@@ -1085,7 +997,7 @@ export class BaoCao04aComponent implements OnInit {
                 header.push({ t: row, b: row, l: 3 + num, r: 3 + num, val: Utils.getValue(item.luyKeTcong) })
                 header.push({ t: row, b: row, l: 4 + 2 * num, r: 4 + 2 * num, val: Utils.getValue(item.ghiChu) })
                 this.lstCol.forEach((e, ind) => {
-                    const sl = item.listCtiet.find(d => d.maVtu == e.maVtu && d.loaiDm == e.loaiDm);
+                    const sl = item.listCtiet.find(d => d.maVtu == e.maVtu && d.loaiDm == e.loaiDm && e.loaiBquan == d.loaiBquan);
                     header.push({ t: row, b: row, l: 3 + ind, r: 3 + ind, val: Utils.getValue(sl.gtri) })
                     header.push({ t: row, b: row, l: 4 + ind + num, r: 4 + ind + num, val: Utils.getValue(sl.lkGtri) })
                 })
