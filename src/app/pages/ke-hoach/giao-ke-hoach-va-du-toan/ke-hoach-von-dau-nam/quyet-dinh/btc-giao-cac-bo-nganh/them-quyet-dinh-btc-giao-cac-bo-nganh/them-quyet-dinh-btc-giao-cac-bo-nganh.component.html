@@ -131,8 +131,15 @@
   </nz-card>
   <nz-card class='mt16 flex-card p-lr16 mt-2'>
     <nz-collapse>
-      <nz-collapse-panel [nzActive]='true' nzHeader='CHI TIẾT NỘI DUNG QUYẾT ĐỊNH'
+      <nz-collapse-panel [nzActive]='true' nzHeader='CHI TIẾT NỘI DUNG QUYẾT ĐỊNH' [nzExtra]="previewTpl"
                          class='mg-t-10'>
+        <ng-template #previewTpl>
+          <button
+                  type="button" class="btn btn-sub do" (click)="preview($event)" *ngIf="idInput > 0">
+            <i class="icon htvbdh_tcdt_tuchoi"></i>
+            <span>Xem trước</span>
+          </button>
+        </ng-template>
         <div nz-col [nzSpan]='24' class='mt-2'>
           <div nz-col [nzSpan]='4' class='mt-2'>
             <nz-form-item class='form-item'>
@@ -169,3 +176,31 @@
     </nz-tab> -->
   <!--  </nz-tabset>-->
 </div>
+
+<nz-modal [(nzVisible)]='showDlgPreview' nzTitle='THÔNG TIN DỰ TOÁN THU CHI NGÂN SÁCH NHÀ NƯỚC' nzWidth='100%'
+          (nzOnCancel)='closeDlg()'>
+  <div *nzModalContent class='modal__content'>
+    <pdf-viewer [src]='pdfSrc' [render-text]='true' style='width: 100%; height: 650px;'></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)='downloadPdf()'
+            class='modal__button--save'>
+      <i class='icon htvbdh_file-pdf'></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)='downloadWord()'
+            class='modal__button--save'>
+      <i class='icon htvbdh_file-word'></i>
+      Xuất .docx
+    </button>
+    <button nz-button (click)='printPreview()'
+            class='modal__button--save'>
+      <i class='icon htvbdh_printer'></i>
+      In
+    </button>
+    <button nz-button (click)='closeDlg()' class='modal__button--cancel'>
+      <i nz-icon nzType='close-circle' nzTheme='fill' class='icon-cancel'></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

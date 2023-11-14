@@ -79,7 +79,7 @@ export class DanhMucHangHoaComponent implements OnInit {
       ghiChu: ['',],
       trangThai: ["01"],
       nhomHhBaoHiem: [''],
-      isLoai: [false]
+      isLoaiKhoiDm: [false]
     })
   }
 
@@ -251,7 +251,7 @@ export class DanhMucHangHoaComponent implements OnInit {
             ghiChu: this.nodeDetail.ghiChu,
             nhomHhBaoHiem: this.nodeDetail.nhomHhBaoHiem,
             trangThai: res.data.trangThai == TrangThaiHoatDong.HOAT_DONG,
-            isLoai: res.data.isLoai,
+            isLoaiKhoiDm: res.data.isLoaiKhoiDm,
           })
           this.loadDetailBq(this.nodeDetail.loaiHinhBq, this.nodeDetail.phuongPhapBq, this.nodeDetail.hinhThucBq, this.nodeDetail.ppLayMau);
         } else {
