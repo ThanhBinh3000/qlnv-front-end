@@ -85,10 +85,13 @@
             <td>{{ data.soBbQd }}</td>
             <td class="text-center">{{ data.ngayHluc | date: 'dd/MM/YYYY' }}</td>
             <!-- <td>{{ data.soXc }}</td> -->
-            <td>{{data.qdPaXuatCap}}</td>
+            <!-- <td>{{data.qdPaXuatCap}}</td> -->
+            <td><a nz-button nzType="link" (click)="openQdPdModal(data.qdPaXuatCapId)">{{ data.qdPaXuatCap}}</a></td>
             <td class="text-center">{{data.ngayHieuLucQdcxc| date: 'dd/MM/YYYY'}}</td>
             <td class="text-right">{{data.slGaoChuyenXuatCap| number : '1.0-1' : 'vi_VN'}}</td>
-            <td>{{ data.trichYeu }}</td>
+            <td class="break-2">
+              <p>{{ data.trichYeu }}</p>
+            </td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
               <a (click)="redirectDetail(data.id, true)" *ngIf="checkRoleView(data.trangThai)">
@@ -132,3 +135,17 @@
     [dataInit]="dataInit">
   </app-thong-tin-quyet-dinh-xuat-cap>
 </div>
+<nz-modal [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }" nzMaskClosable="true" [(nzVisible)]="openQdPd"
+  (nzOnCancel)="closeQdPdModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-chi-tiet-quyet-dinh-pd class="modal-content-detail" [idSelected]="idQdPd" [loaiVthh]="LOAI_HANG_DTQG.THOC"
+      [isView]="true" [isViewOnModal]="true">
+    </app-chi-tiet-quyet-dinh-pd>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeQdPdModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

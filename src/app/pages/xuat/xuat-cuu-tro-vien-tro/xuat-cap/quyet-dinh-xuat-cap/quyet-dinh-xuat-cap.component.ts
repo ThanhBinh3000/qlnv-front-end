@@ -20,6 +20,7 @@ import { XuatCuuTroVienTroComponent } from "../../xuat-cuu-tro-vien-tro.componen
 import {
   QuyetDinhPheDuyetPhuongAnCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhPheDuyetPhuongAnCuuTro.service";
+import { LOAI_HANG_DTQG } from "src/app/constants/config";
 
 @Component({
   selector: 'app-quyet-dinh-xuat-cap',
@@ -29,7 +30,9 @@ import {
 export class QuyetDinhXuatCapComponent extends Base2Component implements OnInit {
   public vldTrangThai: XuatCuuTroVienTroComponent;
   public CHUC_NANG = CHUC_NANG;
-
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
+  openQdPd = false;
+  idQdPd = null;
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
@@ -115,6 +118,14 @@ export class QuyetDinhXuatCapComponent extends Base2Component implements OnInit 
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   };
+  openQdPdModal(id: number) {
+    this.idQdPd = id;
+    this.openQdPd = true;
+  }
+  closeQdPdModal() {
+    this.openQdPd = false;
+    this.idQdPd = null;
+  }
   checkRoleView(trangThai: STATUS) {
     return !this.checkRoleEdit(trangThai) && !this.checkRoleApprove(trangThai) && !this.checkRoleDelete(trangThai) && this.userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_XEM');
   }
