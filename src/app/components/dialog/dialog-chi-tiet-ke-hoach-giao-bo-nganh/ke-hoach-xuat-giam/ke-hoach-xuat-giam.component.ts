@@ -28,7 +28,6 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   dsHangHoa = [];
   @Input()
   dataTable = [];
-  @Input()
   dataTableView = [];
   @Input()
   dataToanBn = [];
@@ -91,7 +90,6 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   }
 
   emitDataTable() {
-    this.dataTableChange.emit(this.dataTableView);
     this.dataTableChange.emit(this.dataTable);
   }
 
