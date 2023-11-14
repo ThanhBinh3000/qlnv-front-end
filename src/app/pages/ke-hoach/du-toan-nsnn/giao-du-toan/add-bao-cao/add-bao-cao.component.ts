@@ -882,6 +882,10 @@ export class AddBaoCaoComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
             }
         );
+    };
+
+    isDelAppendix(maBieuMau: string) {
+        return this.status.general && (this.userInfo?.sub == this.baoCao.nguoiTao) && this.listAppendix.find(e => e.id == maBieuMau).isDel;
     }
 
 }
