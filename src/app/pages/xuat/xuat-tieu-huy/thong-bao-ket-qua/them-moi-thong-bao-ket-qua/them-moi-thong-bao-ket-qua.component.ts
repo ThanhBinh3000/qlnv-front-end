@@ -137,7 +137,6 @@ export class ThemMoiThongBaoKetQuaComponent extends Base3Component implements On
     this.spinner.show();
     let body = this.formData.value;
     body.fileDinhKemReq = this.fileDinhKem;
-    body.fileCanCuReq = this.fileCanCu;
     if (this.formData.value.soThongBao) {
       body.soThongBao = this.formData.value.soThongBao + this.symbol
     }

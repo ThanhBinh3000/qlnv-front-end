@@ -172,6 +172,7 @@
             <th>Chi cục DTNN</th>
             <th>Loại hàng</th>
             <th>Chủng loại</th>
+            <th>Tên hàng hóa</th>
             <th>Điểm kho</th>
             <th>Nhà kho/Ngăn kho/Lô kho</th>
             <th>Ngày nhập kho</th>
@@ -202,6 +203,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <ng-container *ngIf="item.expandSet">
               <tr *ngFor="let data of item.children">
@@ -209,6 +211,7 @@
                 <td></td>
                 <td>{{data.xhThDanhSachHdr.tenLoaiVthh}}</td>
                 <td>{{data.xhThDanhSachHdr.tenCloaiVthh}}</td>
+                <td></td>
                 <td>{{data.xhThDanhSachHdr.tenDiemKho}}</td>
                 <td>
                   {{data.xhThDanhSachHdr.tenNhaKho}}/{{data.xhThDanhSachHdr.tenNganKho}}
@@ -244,6 +247,7 @@
             <th>Chi cục DTNN</th>
             <th>Loại hàng</th>
             <th>Chủng loại</th>
+            <th>Tên hàng hóa</th>
             <th>Điểm kho</th>
             <th>Nhà kho/Ngăn kho/Lô kho</th>
             <th>Ngày nhập kho</th>
@@ -274,6 +278,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <ng-container *ngIf="item.expandSet">
               <tr *ngFor="let data of item.children">
@@ -281,6 +286,7 @@
                 <td></td>
                 <td>{{data.xhThDanhSachHdr.tenLoaiVthh}}</td>
                 <td>{{data.xhThDanhSachHdr.tenCloaiVthh}}</td>
+                <td></td>
                 <td>{{data.xhThDanhSachHdr.tenDiemKho}}</td>
                 <td>
                   {{data.xhThDanhSachHdr.tenNhaKho}}/{{data.xhThDanhSachHdr.tenNganKho}}

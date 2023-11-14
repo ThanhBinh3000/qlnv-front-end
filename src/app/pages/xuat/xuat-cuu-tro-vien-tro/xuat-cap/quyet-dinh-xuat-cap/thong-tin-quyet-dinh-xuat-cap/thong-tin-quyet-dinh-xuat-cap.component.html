@@ -593,7 +593,7 @@
                     <th class="text-center">Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
                     <!-- <th>SL gạo phê duyệt <br />giao Cục xuất cứu trợ</th> -->
                     <th class="text-center">Nhu cầu cứu trợ</th>
-                    <th class="text-center">SL gạo được chuyển xuất cấp thóc</th>
+                    <th class="text-center">SL gạo được chuyển<br />xuất cấp thóc</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -608,10 +608,12 @@
                   </ng-container>
                   <tr>
                     <td></td>
-                    <td class="text-blue">Tổng</td>
+                    <td class="text-blue bold">Tổng</td>
                     <!-- <td class="text-blue">{{tongSoLuong|number:globals.numberFormat:globals.locale}}</td> -->
-                    <td class="text-blue text-right">{{tongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
-                    <td class="text-blue text-right">{{tongSlXuatCap|number:globals.numberFormat:globals.locale}}</td>
+                    <td class="text-blue text-right bold">{{tongNhuCauXuat|number:globals.numberFormat:globals.locale}}
+                    </td>
+                    <td class="text-blue text-right bold">{{tongSlXuatCap|number:globals.numberFormat:globals.locale}}
+                    </td>
                   </tr>
                 </tbody>
               </nz-table>

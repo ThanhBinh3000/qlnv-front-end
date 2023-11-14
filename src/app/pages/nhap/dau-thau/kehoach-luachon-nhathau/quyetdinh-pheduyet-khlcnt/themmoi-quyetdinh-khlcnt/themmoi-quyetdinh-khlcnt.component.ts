@@ -532,11 +532,17 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     };
   }
 
-  async getDataChiTieu() {
-    let res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachTheoNamVaDonVi(+this.formData.get('namKhoach').value, this.maDviSelected);
-    if (res2.msg == MESSAGE.SUCCESS) {
-      this.dataChiTieu = res2.data;
-    }
+  async getDataChiTieu(id) {
+    await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachNam(id).then((res) => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.dataChiTieu = res.data;
+      }
+    }).catch((e) => {
+      this.dataChiTieu = null;
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    });
   }
 
   async openDialogTh() {
@@ -722,7 +728,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.dataInput = this.danhsachDx[index];
       this.dataInputCache = this.danhsachDxCache[index];
       this.index = index;
-      await this.getDataChiTieu()
+      await this.getDataChiTieu(this.danhsachDx[index].dxuatKhLcntHdr.idChiTieuKhNam)
       await this.spinner.hide();
     } else {
       this.selected = true
@@ -731,7 +737,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.dataInputCache = this.danhsachDxCache[0];
       this.index = 0;
       this.maDviSelected = this.danhsachDx[0].maDvi
-      await this.getDataChiTieu()
+      await this.getDataChiTieu(this.danhsachDx[0].dxuatKhLcntHdr.idChiTieuKhNam)
       await this.spinner.hide();
     }
   }

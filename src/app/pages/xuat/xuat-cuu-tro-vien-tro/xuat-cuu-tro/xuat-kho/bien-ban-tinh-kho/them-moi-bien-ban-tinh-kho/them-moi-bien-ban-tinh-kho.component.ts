@@ -210,7 +210,8 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     if (this.formData.value.idPhieuKnCl) {
       const res = await this.phieuKiemNghiemChatLuongService.getDetail(this.formData.value.idPhieuKnCl);
       if (res.msg == MESSAGE.SUCCESS) {
-        const slHangBaoQuan = res.data.slHangBaoQuan ? res.data.slHangBaoQuan : '';
+        // const slHangBaoQuan = res.data.slHangBaoQuan ? res.data.slHangBaoQuan : '';
+        const slHangBaoQuan = Array.isArray(res.data.xhPhieuKnclDtl) && res.data.xhPhieuKnclDtl.find(f => f.type === 'SO_LUONG_HANG_BAO_QUAN') ? res.data.xhPhieuKnclDtl.find(f => f.type === 'SO_LUONG_HANG_BAO_QUAN').soLuong : '';
         this.formData.patchValue({ tongSlNhap: slHangBaoQuan });
       }
     }

@@ -430,7 +430,8 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
     })
   }
 
-  async saveGoiThauPopup() {
+  async saveGoiThauPopup($event) {
+    $event.stopPropagation();
     await this.spinner.show();
     let type = "GOC";
     if (this.isDieuChinh) {
@@ -442,6 +443,7 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
       tgianTrinhKqTcg: this.formData.value.tgianTrinhKqTcg,
       tgianTrinhTtd: this.formData.value.tgianTrinhTtd,
       fileDinhKems: this.fileDinhKems,
+      loaiVthh: this.loaiVthh,
       type: type
     }
     let res = await this.thongTinDauThauService.updateGoiThau(body);

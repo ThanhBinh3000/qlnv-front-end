@@ -55,20 +55,12 @@ export class BaoCaoKetQuaTieuHuyComponent extends Base3Component implements OnIn
         text: 'Đã duyệt - LĐ Cục'
       },
       {
-        value: this.STATUS.DANG_DUYET_CB_VU,
-        text: 'Đang duyệt - CB Vụ'
+        value: this.STATUS.TU_CHOI_TP,
+        text: 'Từ chối - TP'
       },
       {
-        value: this.STATUS.CHO_DUYET_LDV,
-        text: 'Chờ duyệt - LĐ Vụ'
-      },
-      {
-        value: this.STATUS.CHO_DUYET_LDTC,
-        text: 'Chờ duyệt - LĐ Tổng cục'
-      },
-      {
-        value: this.STATUS.DA_DUYET_LDTC,
-        text: 'Đã duyệt - LĐ Tổng cục'
+        value: this.STATUS.TU_CHOI_LDC,
+        text: 'Từ chối - LĐ Cục '
       },
     ]
   }
