@@ -578,16 +578,10 @@ export class PhuLucPhanBoComponent implements OnInit {
             { t: 5, b: 7, l: 2, r: 2, val: 'Số trần chi đơn vị cấp trên giao' },
             { t: 5, b: 7, l: 3, r: 3, val: 'Tổng cộng' },
             { t: 5, b: 6, l: 4, r: 3 + this.lstDvi.length, val: 'Chi tiết theo các đơn vị sử dụng' },
-
-            { t: 7, b: 7, l: 1, r: 1, val: 'Tổng cộng' },
-            { t: 7, b: 7, l: 6, r: 6, val: this.total?.dtoanGiao },
-            { t: 7, b: 7, l: 8, r: 8, val: this.total?.tongCong },
         ]
         this.lstDvi.forEach((item, index) => {
             const left = 4 + index
             header.push({ t: 7, b: 7, l: left, r: left, val: item.tenDvi })
-            const unit = this.total.lstCtietDvis.find(e => e.maDviNhan == item.maDvi);
-            header.push({ t: 8, b: 8, l: left, r: left, val: unit?.soTranChi });
         })
 
         const headerBot = 7;

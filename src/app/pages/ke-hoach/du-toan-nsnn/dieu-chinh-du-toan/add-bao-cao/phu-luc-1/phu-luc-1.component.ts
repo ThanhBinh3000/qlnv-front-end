@@ -541,7 +541,7 @@ export class PhuLuc1Component implements OnInit {
                 { t: 4, b: 6, l: 5, r: 5, val: 'Tổng nhu cầu dự toán trong năm' },
                 { t: 4, b: 6, l: 6, r: 6, val: 'Dự toán đề nghị điều chỉnh(+ tăng)(- giảm)' },
 
-                { t: 6, b: 6, l: 2, r: 2, val: 'Dự toán năm trước chuyển sang < br > được cho phép sử dụng cho năm nay' },
+                { t: 6, b: 6, l: 2, r: 2, val: 'Dự toán năm trước chuyển sang được cho phép sử dụng cho năm nay' },
                 { t: 6, b: 6, l: 3, r: 3, val: 'Dự toán, kinh phí đã giao trong năm' },
                 { t: 6, b: 6, l: 4, r: 4, val: 'Cộng' },
 
