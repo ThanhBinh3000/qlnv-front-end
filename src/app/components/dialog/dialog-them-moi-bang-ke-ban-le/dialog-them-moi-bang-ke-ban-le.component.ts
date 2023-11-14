@@ -3,22 +3,22 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import {NzModalRef, NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
 import * as dayjs from 'dayjs';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
-import {BangKeBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/bang-ke-btt.service';
-import {DialogTableSelectionComponent} from '../dialog-table-selection/dialog-table-selection.component';
-import {STATUS} from 'src/app/constants/status';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
+import { BangKeBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/bang-ke-btt.service';
+import { DialogTableSelectionComponent } from '../dialog-table-selection/dialog-table-selection.component';
+import { STATUS } from 'src/app/constants/status';
 import {
   QuyetDinhNvXuatBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
-import {Validators} from '@angular/forms';
-import {MESSAGE} from 'src/app/constants/message';
-import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import { Validators } from '@angular/forms';
+import { MESSAGE } from 'src/app/constants/message';
+import { LOAI_HANG_DTQG } from 'src/app/constants/config';
 
 @Component({
   selector: 'app-dialog-them-moi-bang-ke-ban-le',
@@ -130,8 +130,8 @@ export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements
       };
       const res = await this.quyetDinhNvXuatBttService.search(body);
       if (res.msg === MESSAGE.SUCCESS) {
-        const set = new Set(this.loadBangKeBanLe.map(item => item.soQdNv));
-        this.listNhiemVuXh = res.data.content.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI)).filter(item => !set.has(item.soQdNv));
+        // const set = new Set(this.loadBangKeBanLe.map(item => item.soQdNv));
+        this.listNhiemVuXh = res.data.content.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI));
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
