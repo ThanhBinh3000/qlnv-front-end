@@ -14,9 +14,7 @@ import {MESSAGE} from 'src/app/constants/message';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {STATUS} from "../../../../../../../constants/status";
 import {DonviService} from "../../../../../../../services/donvi.service";
-import {FILETYPE, PREVIEW} from "../../../../../../../constants/fileType";
-import printJS from "print-js";
-import { saveAs } from 'file-saver';
+import {FILETYPE} from "../../../../../../../constants/fileType";
 
 @Component({
   selector: 'app-them-quyet-dinh-btc-giao-cac-bo-nganh',
@@ -44,12 +42,6 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
   dataTable: any[] = [];
   listFile: any[] = []
   STATUS = STATUS;
-  templateName = 'btc-giao-bo-nganh';
-  pdfSrc: any;
-  wordSrc: any;
-  excelSrc: any;
-  printSrc: any;
-  showDlgPreview = false;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -296,40 +288,5 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
 
   takeError($event) {
     this.hasError = $event;
-  }
-
-  async preview(event: any) {
-    event.stopPropagation();
-    this.spinner.show();
-    await this.quyetDinhBtcNganhService.preview({
-      tenBaoCao: this.templateName+ '.docx',
-      id: this.formData.value.id
-    }).then(async res => {
-      if (res.data) {
-        this.printSrc = res.data.pdfSrc;
-        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
-        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
-        this.showDlgPreview = true;
-      } else {
-        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
-      }
-    });
-    this.spinner.hide();
-  }
-
-  downloadPdf() {
-    saveAs(this.pdfSrc, this.templateName + '.pdf');
-  }
-
-  downloadWord() {
-    saveAs(this.wordSrc, this.templateName + '.docx');
-  }
-
-  printPreview() {
-    printJS({ printable: this.printSrc, type: 'pdf', base64: true });
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
   }
 }

@@ -6,12 +6,6 @@ import {DanhMucService} from '../../../services/danhmuc.service';
 import {KeHoachLuongThucComponent} from './ke-hoach-luong-thuc/ke-hoach-luong-thuc.component';
 import {cloneDeep} from 'lodash';
 import {DonviService} from "../../../services/donvi.service";
-import {PREVIEW} from "../../../constants/fileType";
-import printJS from "print-js";
-import {NgxSpinnerService} from "ngx-spinner";
-import {QuyetDinhTtcpService} from "../../../services/quyetDinhTtcp.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {saveAs} from 'file-saver';
 
 @Component({
   selector: 'app-dialog-chi-tiet-ke-hoach-giao-bo-nganh',
@@ -52,32 +46,18 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   dataTable: any[] = [];
   dsBoNganh: any[];
   dsHangHoa: any[] = [];
-  muaTangView: any[] = [];
-  xuatGiamView: any[] = [];
-  xuatBanView: any[] = [];
-  luanPhienView: any[] = [];
   dataEdit: any;
   dataToanBn: any;
   radioData: any;
   radioValue: any;
   errorInputRequired: string = 'Dữ liệu không được để trống.';
-  templateName : string;
-  pdfSrc: any;
-  wordSrc: any;
-  excelSrc: any;
-  printSrc: any;
-  showDlgPreview = false;
-
 
   constructor(
     private readonly _modalRef: NzModalRef,
     private danhMucService: DanhMucService,
     private donviService: DonviService,
-    private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
     public globals: Globals,
-    private quyetDinhTtcpService: QuyetDinhTtcpService,
-    ) {
+  ) {
     this.radioData = [
       {label: 'Bộ Tài chính', value: 'BTC'},
       {label: 'Bộ/Ngành khác', value: 'Khac'},
@@ -96,14 +76,11 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
     if (this.dataEdit) {
       if (this.dataEdit.tenBoNganh === 'Bộ Tài chính') {
         this.radioValue = 'BTC';
-        this.templateName = 'quyet-dinh-ttgcp-bo-tai-chinh';
       } else {
         this.radioValue = 'Khac';
-        this.templateName = 'quyet-dinh-ttgcp-bo-nganh';
       }
     } else {
       this.radioValue = 'BTC';
-      this.templateName = 'quyet-dinh-ttgcp-bo-tai-chinh';
     }
   }
 
@@ -207,57 +184,5 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
       //this.keHoach.maBoNganh = [];
       this.onChangeBoNganh("");
     }
-  }
-
-  async preview() {
-    this.spinner.show();
-    await this.quyetDinhTtcpService.preview({
-      tenBaoCao: this.templateName+ '.docx',
-      id: 1941
-    }).then(async res => {
-      if (res.data) {
-        this.printSrc = res.data.pdfSrc;
-        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
-        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
-        this.showDlgPreview = true;
-      } else {
-        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
-      }
-    });
-    this.spinner.hide();
-  }
-
-  downloadPdf() {
-    saveAs(this.pdfSrc, this.templateName + '.pdf');
-  }
-
-  downloadWord() {
-    saveAs(this.wordSrc, this.templateName + '.docx');
-  }
-
-  printPreview() {
-    printJS({ printable: this.printSrc, type: 'pdf', base64: true });
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
-  }
-
-  convertDataPreview(data: any[]) : any[] {
-    let result = [];
-    if (data && data.length > 0) {
-      data.forEach((item, index) => {
-        if (item.children && item.children.length > 0) {
-          let itemClonePr = cloneDeep(item);
-          result.push(itemClonePr)
-          item.children.forEach(child => {
-            let itemCloneChild = cloneDeep(child);
-            itemCloneChild.tenVthh = "";
-            result.push(itemCloneChild);
-          })
-        }
-      });
-    }
-    return  result;
   }
 }
