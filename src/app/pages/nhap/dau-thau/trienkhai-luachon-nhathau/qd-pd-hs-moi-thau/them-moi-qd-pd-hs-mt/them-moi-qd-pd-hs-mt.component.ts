@@ -109,7 +109,7 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
     }
     await this.spinner.hide();
     const modalQD = this.modal.create({
-      nzTitle: "Danh sách đề xuất kế hoạch lựa chọn nhà thầu",
+      nzTitle: "DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT/ĐIỀU CHỈNH KHLCNT",
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -144,6 +144,12 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
               tgianMthau: chiCuc.tgianMthau,
             })
             this.listOfData = chiCuc.children
+            for (let i = 0; i < this.listOfData.length; i++) {
+              this.expandSet.add(i)
+              for (let j = 0; j < this.listOfData[i].children.length; j++) {
+                this.expandSet2.add(j)
+              }
+            }
             this.tinhTongMucDtDx()
           }
         })
@@ -311,6 +317,12 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
             quy: cuc.dxuatKhLcntHdr?.quy,
           });
           this.listOfData = cuc.children
+          for (let i = 0; i < this.listOfData.length; i++) {
+           this.expandSet.add(i)
+            for (let j = 0; j < this.listOfData[i].children.length; j++) {
+              this.expandSet2.add(j)
+            }
+          }
           this.tinhTongMucDtDx()
         }
       })
