@@ -285,7 +285,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
     }
     await this.spinner.hide();
     const modalQD = this.modal.create({
-      nzTitle: 'DANH SÁCH TỔNG HỢP ĐỀ XUẤT KẾ HOẠCH BÁN ĐẤU GIÁ',
+      nzTitle: 'DANH SÁCH TỔNG HỢP ĐỀ XUẤT KẾ HOẠCH MUA TRỰC TIẾP',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,

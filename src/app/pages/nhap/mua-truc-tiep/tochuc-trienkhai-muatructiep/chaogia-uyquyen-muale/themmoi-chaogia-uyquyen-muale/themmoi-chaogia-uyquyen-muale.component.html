@@ -29,7 +29,7 @@
                 <span [ngClass]="formData.value.trangThai == STATUS.HOAN_THANH_CAP_NHAT ? 'status-xanh' : 'status-do'">
                     {{ formData.value.tenTrangThai }}
                 </span>
-        <span>THÔNG TIN CHÀO GIÁ/ỦY QUYỀN/BÁN LẺ</span>
+        <span>THÔNG TIN CHÀO GIÁ/ỦY QUYỀN/MUA LẺ</span>
       </div>
     </div>
   </div>
@@ -390,8 +390,8 @@
               <td>{{ data.sdt }}</td>
               <td>{{ data.ngayChaoGia | date: 'dd/MM/YYYY' }}</td>
               <td>{{ data.soLuong| number : '1.0-1' : 'vi_VN' }}</td>
-              <td>{{ data.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
-              <td>{{ data.soLuong * data.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
+              <td>{{ data.donGiaVat ? data.donGiaVat : data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
+              <td>{{ data.thanhTien | number : '1.0-1' : 'vi_VN' }}</td>
               <td>{{data.fileDinhKems?.fileName }}</td>
               <td><label nz-checkbox [nzDisabled]="isView" [(ngModel)]="data.luaChon"></label></td>
               <td>

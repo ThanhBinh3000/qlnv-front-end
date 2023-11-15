@@ -428,7 +428,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
-        dataHeader: ['Số QĐ kết quả chào giá', 'Tên loại hàng hóa', 'Tên chủng loại vật tư hàng háo'],
+        dataHeader: ['Số QĐ kết quả chào giá', 'Tên loại hàng DTQG', 'Tên chủng loại vật tư hàng háo'],
         dataColumn: ['soQdKq', 'tenLoaiVthh', 'tenCloaiVthh'],
         dataTable: listQdKq
       },
