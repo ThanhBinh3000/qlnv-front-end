@@ -6,12 +6,13 @@ import {Globals} from "../../../../../../../shared/globals";
 import {MESSAGE} from "../../../../../../../constants/message";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
-import { DanhMucKho } from "../../../../dm-du-an-cong-trinh/danh-muc-du-an/danh-muc-du-an.component";
-import { DanhMucKhoService } from "../../../../../../../services/danh-muc-kho.service";
-import { DanhMucService } from "../../../../../../../services/danhmuc.service";
-import { STATUS } from "../../../../../../../constants/status";
-import dayjs from "dayjs";
+import {DanhMucKho} from "../../../../dm-du-an-cong-trinh/danh-muc-du-an/danh-muc-du-an.component";
+import {DanhMucKhoService} from "../../../../../../../services/danh-muc-kho.service";
+import {DanhMucService} from "../../../../../../../services/danhmuc.service";
+import {STATUS} from "../../../../../../../constants/status";
 import {cloneDeep} from "lodash";
+import {DxXdTrungHanService} from "../../../../../../../services/dx-xd-trung-han.service";
+import {PAGE_SIZE_DEFAULT} from "../../../../../../../constants/config";
 
 @Component({
   selector: 'app-dialog-them-moi-dxkhth',
@@ -21,7 +22,7 @@ import {cloneDeep} from "lodash";
 export class DialogThemMoiDxkhthComponent implements OnInit {
   @Input() dataInput: any
   @Input() type: string
-  @Input() namKh : number
+  @Input() namKh: number
   @Input() sum: number
   @Input() page: string
   item: DanhMucKho = new DanhMucKho();
@@ -29,6 +30,9 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
   listLoaiDuAn: any[] = []
   listKhoi: any[] = []
   userInfo: UserLogin
+  listDx: any[] = [];
+  listDetailDx: any[] = [];
+  pageSize: number = PAGE_SIZE_DEFAULT;
 
 
   constructor(
@@ -38,7 +42,8 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
     public globals: Globals,
     private notification: NzNotificationService,
     private spinner: NgxSpinnerService,
-    private dmKhoService : DanhMucKhoService
+    private deXuatTrungHanService: DxXdTrungHanService,
+    private dmKhoService: DanhMucKhoService
   ) {
   }
 
@@ -48,8 +53,9 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
     this.getAllLoaiDuAn();
     this.getDsKhoi();
     await this.getAllDmKho();
+    await this.getAllDetailDx();
     await this.getDetail();
-    this.item.namKeHoach= this.namKh;
+    this.item.namKeHoach = this.namKh;
   }
 
   async getDsKhoi() {
@@ -87,16 +93,42 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
     return msgRequired;
   }
 
+  async getAllDetailDx() {
+    let body = {
+      "maDvi": this.userInfo.MA_DVI,
+      "capDvi": this.userInfo.CAP_DVI,
+      paggingReq: {
+        limit: this.globals.prop.MAX_INTERGER,
+        page: 0,
+      },
+    }
+    let res = await this.deXuatTrungHanService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listDx = res.data.content;
+      this.listDetailDx = this.listDx.flatMap(item => item.chiTiets);
+      let dmKho = [
+        ...this.listDmKho.filter((e) => {
+          return !this.listDetailDx.some((dx) => {
+            if (dx.maDuAn.length > 0 && e.maDuAn.length > 0) {
+              return dx.maDuAn === e.maDuAn;
+            }
+          })
+        })
+      ];
+      this.listDmKho = dmKho;
+    }
+  }
 
   async getAllDmKho() {
     let body = {
-      "type" : "DMK",
-      "maDvi" : this.userInfo.MA_DVI,
-      "trangThai" : STATUS.CHUA_THUC_HIEN
+      "type": "DMK",
+      "maDvi": this.userInfo.MA_DVI,
+      "trangThai": STATUS.CHUA_THUC_HIEN
     }
     let res = await this.dmKhoService.getAllDmKho(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listDmKho = res.data
+
     }
   }
 
@@ -117,9 +149,10 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
       this.item.ncKhNstw = this.dataInput.ncKhNstw;
       this.item.tgKhoiCong = this.dataInput.tgKhoiCong;
       this.item.tgHoanThanh = this.dataInput.tgHoanThanh;
-      this.item.vonDauTu = this.dataInput.vonDauTu ? this.dataInput.vonDauTu : 0 ;
+      this.item.vonDauTu = this.dataInput.vonDauTu ? this.dataInput.vonDauTu : 0;
     }
   }
+
   async changeDmucDuAn(event: any) {
     if (event) {
       let result = this.listDmKho.find(item => item.maDuAn == event)
