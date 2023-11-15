@@ -172,26 +172,26 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
     body.tgianMthauTime = pipe.transform(body.tgianMthauTime, 'yyyy-MM-dd HH:mm')
     body.tgianDthauTime = pipe.transform(body.tgianDthauTime, 'yyyy-MM-dd HH:mm')
     let res = null;
-    // if (this.formData.get("id").value) {
-    //   res = await this.quyetDinhPheDuyetHsmtService.update(body);
-    // } else {
-    //   res = await this.quyetDinhPheDuyetHsmtService.create(body);
-    // }
-    // if (res.msg == MESSAGE.SUCCESS) {
-    //   if (isGuiDuyet) {
-    //     this.formData.get("id").setValue(res.data.id);
-    //     this.guiDuyet();
-    //   } else {
-    //     if (this.formData.get("id").value) {
-    //       this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-    //     } else {
-    //       this.formData.get("id").setValue(res.data.id);
-    //       this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-    //     }
-    //   }
-    // } else {
-    //   this.notification.error(MESSAGE.ERROR, res.msg);
-    // }
+    if (this.formData.get("id").value) {
+      res = await this.quyetDinhPheDuyetHsmtService.update(body);
+    } else {
+      res = await this.quyetDinhPheDuyetHsmtService.create(body);
+    }
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (isGuiDuyet) {
+        this.formData.get("id").setValue(res.data.id);
+        this.guiDuyet();
+      } else {
+        if (this.formData.get("id").value) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        } else {
+          this.formData.get("id").setValue(res.data.id);
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        }
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
     await this.spinner.hide();
   }
 

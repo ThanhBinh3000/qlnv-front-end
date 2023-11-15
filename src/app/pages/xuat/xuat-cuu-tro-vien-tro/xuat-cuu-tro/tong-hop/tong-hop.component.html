@@ -16,7 +16,7 @@
             </nz-select>
           </div>
           <div nz-col nzSpan="3">
-            <label>Số công văn/đề xuất</label>
+            <label>Số công văn/tờ trình</label>
             <input nz-input formControlName="soDx" />
           </div>
           <div nz-col nzSpan="7">
@@ -157,7 +157,9 @@
                 data.soQuyetDinh}}</a>
             </td>
             <td class="text-center">{{ data.ngayKiQuyetDinh | date: globals.dateFormat }}</td>
-            <td>{{ data.noiDungThop }}</td>
+            <td class="break-2">
+              <p>{{ data.noiDungThop }}</p>
+            </td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-center">
               <a (click)="redirectDetail(data.id, true)" *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM) &&
