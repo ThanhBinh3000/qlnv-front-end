@@ -34,7 +34,7 @@
           </div>
           <div nz-col [nzSpan]="10" *ngIf="userService.isCuc() || userService.isTongCuc()">
             <nz-form-item>
-              <nz-form-label>Chi Cục DTNN KV</nz-form-label>
+              <nz-form-label>Chi Cục DTNN</nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
                 <nz-select formControlName="maChiCuc" nzAllowClear>
                   <nz-option *ngFor="let p of listChiCuc" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
