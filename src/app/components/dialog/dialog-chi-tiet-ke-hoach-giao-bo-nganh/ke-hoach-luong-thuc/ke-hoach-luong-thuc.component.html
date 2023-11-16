@@ -1,4 +1,4 @@
-<nz-table class='mt-2' nzBordered [nzData]='dataTable' [nzFrontPagination]='false' [nzShowPagination]='false'>
+<nz-table class='mt-2' nzBordered [nzData]='dataTable' [nzFrontPagination]='false' [nzShowPagination]='false' >
   <thead>
   <tr>
     <th style='width: 10%;'>STT</th>
@@ -117,7 +117,8 @@
   <div nz-col nzSpan='24'>
     <label class='search__label'> Ghi chú </label>
     <nz-input-group>
-      <input nz-input [disabled]='isView' [(ngModel)]='ghiChu' />
+<!--      <input nz-input [disabled]='isView' [(ngModel)]='ghiChu' />-->
+      <textarea rows='3' [(ngModel)]='ghiChu' class='search__input' nz-input [disabled]='isView'></textarea>
     </nz-input-group>
   </div>
 </div>
