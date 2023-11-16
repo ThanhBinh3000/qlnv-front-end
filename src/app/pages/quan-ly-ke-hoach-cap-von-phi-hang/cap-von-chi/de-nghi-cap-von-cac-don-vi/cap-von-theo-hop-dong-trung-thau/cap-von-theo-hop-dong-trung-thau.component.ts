@@ -437,6 +437,9 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
             this.lstCtiets[index].phatViPham = null;
             this.lstCtiets[index].tlSoluong = null;
             this.lstCtiets[index].tlThanhTien = null;
+            if (stt == '0.1' && this.lstCtiets.find(e => e.stt == '0.1.1' && (e.maDvi && e.maDvi != this.lstCtiets[index].maDvi))) {
+                this.lstCtiets[index].dtoanDaGiao = null;
+            }
             this.lstCtiets.forEach(item => {
                 if (Table.preIndex(item.stt) == stt) {
                     this.lstCtiets[index].slKeHoach = Operator.sum([this.lstCtiets[index].slKeHoach, item.slKeHoach]);
@@ -447,6 +450,9 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
                     this.lstCtiets[index].phatViPham = Operator.sum([this.lstCtiets[index].phatViPham, item.phatViPham]);
                     this.lstCtiets[index].tlSoluong = Operator.sum([this.lstCtiets[index].tlSoluong, item.tlSoluong]);
                     this.lstCtiets[index].tlThanhTien = Operator.sum([this.lstCtiets[index].tlThanhTien, item.tlThanhTien]);
+                    if (stt == '0.1' && (item.maDvi && item.maDvi != this.lstCtiets[index].maDvi)) {
+                        this.lstCtiets[index].dtoanDaGiao = Operator.sum([this.lstCtiets[index].dtoanDaGiao, item.dtoanDaGiao]);
+                    }
                 }
             })
             if (stt == '0.1') {
