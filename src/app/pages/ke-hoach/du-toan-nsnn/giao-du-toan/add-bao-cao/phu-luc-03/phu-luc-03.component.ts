@@ -600,7 +600,7 @@ export class PhuLuc03Component implements OnInit {
             { t: 4, b: 4, l: 3, r: 7, val: 'Năm dự toán' + (this.namBcao).toString() },
 
             { t: 5, b: 5, l: 3, r: 5, val: 'Chi phí tại cửa kho' },
-            { t: 5, b: 5, l: 5, r: 6, val: 'Chi phí ngoài cửa kho' },
+            { t: 5, b: 5, l: 6, r: 7, val: 'Chi phí ngoài cửa kho' },
             { t: 5, b: 6, l: 8, r: 8, val: 'Tổng cộng' },
 
             { t: 6, b: 6, l: 3, r: 3, val: 'Số lượng' },

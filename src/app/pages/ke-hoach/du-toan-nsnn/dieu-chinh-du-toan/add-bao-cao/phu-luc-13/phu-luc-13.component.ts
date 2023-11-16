@@ -531,16 +531,16 @@ export class PhuLuc13Component implements OnInit {
 
                 { t: 4, b: 6, l: 0, r: 0, val: 'STT' },
                 { t: 4, b: 6, l: 1, r: 1, val: 'Nội dung' },
-                { t: 4, b: 1, l: 2, r: 4, val: 'Dự toán, kinh phí được sử dụng trong năm' },
+                { t: 4, b: 5, l: 2, r: 4, val: 'Dự toán, kinh phí được sử dụng trong năm' },
                 { t: 4, b: 6, l: 5, r: 5, val: 'Tổng nhu cầu dự toán, kinh phí' },
-                { t: 4, b: 6, l: 6, r: 6, val: 'Dự toán đề nghị điều chỉnh<br>(+ tăng)(- giảm)' },
-                { t: 4, b: 6, l: 7, r: 7, val: 'Dự toán Vụ TVQT đề nghị<br>(+ tăng)(- giảm)' },
+                { t: 4, b: 6, l: 6, r: 6, val: 'Dự toán đề nghị điều chỉnh (+ tăng)(- giảm)' },
+                { t: 4, b: 6, l: 7, r: 7, val: 'Dự toán Vụ TVQT đề nghị (+ tăng)(- giảm)' },
                 { t: 4, b: 6, l: 8, r: 8, val: 'Ghi chú' },
-                { t: 4, b: 6, l: 9, r: 9, val: 'Dự toán chênh lệch < br > giữa Vụ TVQT điều chỉnh < br > và đơn vị đề nghị<br>(+ tăng)(- giảm)' },
+                { t: 4, b: 6, l: 9, r: 9, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị (+ tăng)(- giảm)' },
                 { t: 4, b: 6, l: 10, r: 10, val: 'Ý kiến của đơn vị cấp trên' },
 
 
-                { t: 6, b: 6, l: 2, r: 2, val: 'Dự toán năm trước chuyển sang được < br > phép sử dụng cho năm nay' },
+                { t: 6, b: 6, l: 2, r: 2, val: 'Dự toán năm trước chuyển sang được phép sử dụng cho năm nay' },
                 { t: 6, b: 6, l: 3, r: 3, val: 'Dự toán, kinh phí đã giao trong năm' },
                 { t: 6, b: 6, l: 4, r: 4, val: 'Tổng số' },
 
@@ -574,7 +574,7 @@ export class PhuLuc13Component implements OnInit {
             ]
         } else {
             header = [
-                { t: 0, b: 7, l: 0, r: 10, val: null },
+                { t: 0, b: 7, l: 0, r: 7, val: null },
 
                 { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
                 { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
@@ -583,13 +583,13 @@ export class PhuLuc13Component implements OnInit {
 
                 { t: 4, b: 6, l: 0, r: 0, val: 'STT' },
                 { t: 4, b: 6, l: 1, r: 1, val: 'Nội dung' },
-                { t: 4, b: 1, l: 2, r: 4, val: 'Dự toán, kinh phí được sử dụng trong năm' },
+                { t: 4, b: 5, l: 2, r: 4, val: 'Dự toán, kinh phí được sử dụng trong năm' },
                 { t: 4, b: 6, l: 5, r: 5, val: 'Tổng nhu cầu dự toán, kinh phí' },
-                { t: 4, b: 6, l: 6, r: 6, val: 'Dự toán đề nghị điều chỉnh<br>(+ tăng)(- giảm)' },
+                { t: 4, b: 6, l: 6, r: 6, val: 'Dự toán đề nghị điều chỉnh (+ tăng)(- giảm)' },
                 { t: 4, b: 6, l: 7, r: 7, val: 'Ghi chú' },
 
 
-                { t: 6, b: 6, l: 2, r: 2, val: 'Dự toán năm trước chuyển sang được < br > phép sử dụng cho năm nay' },
+                { t: 6, b: 6, l: 2, r: 2, val: 'Dự toán năm trước chuyển sang được phép sử dụng cho năm nay' },
                 { t: 6, b: 6, l: 3, r: 3, val: 'Dự toán, kinh phí đã giao trong năm' },
                 { t: 6, b: 6, l: 4, r: 4, val: 'Tổng số' },
 

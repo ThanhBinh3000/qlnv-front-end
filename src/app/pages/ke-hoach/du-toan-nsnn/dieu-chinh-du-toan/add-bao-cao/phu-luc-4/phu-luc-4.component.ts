@@ -695,11 +695,11 @@ export class PhuLuc4Component implements OnInit {
 
                 { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
                 { t: 4, b: 5, l: 1, r: 1, val: 'Nội dung' },
-                { t: 4, b: 5, l: 2, r: 2, val: 'Kế hoạch vốn năm  ' + (this.namBcao).toString() },
+                { t: 4, b: 5, l: 2, r: 2, val: 'Kế hoạch vốn năm ' + (this.namBcao).toString() },
                 { t: 4, b: 5, l: 3, r: 3, val: 'Dự toán đã giao lũy kế (đến 31/05/ ' + (this.namBcao).toString() + ')' },
                 { t: 4, b: 5, l: 4, r: 4, val: 'Quyết toán, giá trị dự toán hoặc tổng mức đầu tư' },
                 { t: 4, b: 5, l: 5, r: 5, val: 'Kế hoạch điều chỉnh (+ tăng) (- giảm)' },
-                { t: 4, b: 5, l: 6, r: 6, val: 'Kế hoạch năm' + (this.namBcao + 1) + 'sau điều chỉnh' },
+                { t: 4, b: 5, l: 6, r: 6, val: 'Kế hoạch năm ' + (this.namBcao + 1) + ' sau điều chỉnh' },
                 { t: 4, b: 5, l: 7, r: 7, val: 'Dự toán đề nghị điều chỉnh lần này' },
                 { t: 4, b: 5, l: 8, r: 8, val: 'Ghi chú (Đã duyệt quyết toán/ chưa duyệt quyết toán)' },
                 { t: 6, b: 6, l: 0, r: 0, val: 'A' },
@@ -725,6 +725,7 @@ export class PhuLuc4Component implements OnInit {
             ]
         }
 
+        console.log("this.lstCtietBcao", this.lstCtietBcao);
 
         const filterData = this.lstCtietBcao.map(item => {
             const row: any = {};
@@ -734,13 +735,13 @@ export class PhuLuc4Component implements OnInit {
             })
             return row;
         })
-        filterData.forEach(item => {
-            const level = item.stt.split('.').length - 2;
-            item.stt = this.getIndex(item.stt);
-            for (let i = 0; i < level; i++) {
-                item.stt = '   ' + item.stt;
-            }
-        });
+        // filterData.forEach(item => {
+        //     const level = item.stt.split('.').length - 2;
+        //     item.stt = this.getIndex(item.stt);
+        //     for (let i = 0; i < level; i++) {
+        //         item.stt = '   ' + item.stt;
+        //     }
+        // });
 
         let row: any = {};
         row = {}

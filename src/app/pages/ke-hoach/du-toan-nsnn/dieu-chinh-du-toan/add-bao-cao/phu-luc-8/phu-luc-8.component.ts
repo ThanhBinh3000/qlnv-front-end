@@ -748,7 +748,7 @@ export class PhuLuc8Component implements OnInit {
             ]
         } else {
             header = [
-                { t: 0, b: 7, l: 0, r: 17, val: null },
+                { t: 0, b: 7, l: 0, r: 14, val: null },
 
                 { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
                 { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
