@@ -635,11 +635,11 @@ export class PhuLuc11Component implements OnInit {
                 { t: 6, b: 6, l: 4, r: 4, val: 'Trong nước' },
                 { t: 6, b: 6, l: 5, r: 5, val: 'Ngoài nước' },
                 { t: 6, b: 6, l: 6, r: 6, val: 'Tổng số' },
-                { t: 6, b: 6, l: 9, r: 9, val: 'Dự toán năm trước chuyển sang được <br> phép sử dụng cho năm nay' },
+                { t: 6, b: 6, l: 9, r: 9, val: 'Dự toán năm trước chuyển sang được phép sử dụng cho năm nay' },
                 { t: 6, b: 6, l: 10, r: 10, val: 'Dự toán, kinh phí đã giao trong năm' },
                 { t: 6, b: 6, l: 11, r: 11, val: 'Tổng số' },
 
-                { t: 7, b: 7, l: 0, r: 4, val: 'A' },
+                { t: 7, b: 7, l: 0, r: 0, val: 'A' },
                 { t: 7, b: 7, l: 1, r: 1, val: 'B' },
                 { t: 7, b: 7, l: 2, r: 2, val: 'C' },
                 { t: 7, b: 7, l: 3, r: 3, val: 'D' },
@@ -702,11 +702,11 @@ export class PhuLuc11Component implements OnInit {
                 { t: 6, b: 6, l: 4, r: 4, val: 'Trong nước' },
                 { t: 6, b: 6, l: 5, r: 5, val: 'Ngoài nước' },
                 { t: 6, b: 6, l: 6, r: 6, val: 'Tổng số' },
-                { t: 6, b: 6, l: 9, r: 9, val: 'Dự toán năm trước chuyển sang được <br> phép sử dụng cho năm nay' },
+                { t: 6, b: 6, l: 9, r: 9, val: 'Dự toán năm trước chuyển sang được phép sử dụng cho năm nay' },
                 { t: 6, b: 6, l: 10, r: 10, val: 'Dự toán, kinh phí đã giao trong năm' },
                 { t: 6, b: 6, l: 11, r: 11, val: 'Tổng số' },
 
-                { t: 7, b: 7, l: 0, r: 4, val: 'A' },
+                { t: 7, b: 7, l: 0, r: 0, val: 'A' },
                 { t: 7, b: 7, l: 1, r: 1, val: 'B' },
                 { t: 7, b: 7, l: 2, r: 2, val: 'C' },
                 { t: 7, b: 7, l: 3, r: 3, val: 'D' },
@@ -750,13 +750,13 @@ export class PhuLuc11Component implements OnInit {
             })
             return row;
         })
-        filterData.forEach(item => {
-            const level = item.stt.split('.').length - 2;
-            item.stt = this.getIndex(item.stt);
-            for (let i = 0; i < level; i++) {
-                item.stt = '   ' + item.stt;
-            }
-        });
+        // filterData.forEach(item => {
+        //     const level = item.stt.split('.').length - 2;
+        //     item.stt = this.getIndex(item.stt);
+        //     for (let i = 0; i < level; i++) {
+        //         item.stt = '   ' + item.stt;
+        //     }
+        // });
 
         let row: any = {};
         row = {}

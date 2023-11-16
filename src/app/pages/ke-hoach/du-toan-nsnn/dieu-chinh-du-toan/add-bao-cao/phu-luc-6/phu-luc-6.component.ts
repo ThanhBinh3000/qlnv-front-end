@@ -771,7 +771,7 @@ export class PhuLuc6Component implements OnInit {
                 { t: 4, b: 6, l: 15, r: 15, val: 'Ghi chú' },
 
                 { t: 5, b: 6, l: 4, r: 4, val: 'Số lượng thực tế đã thực hiện đến thời điểm báo cáo' },
-                { t: 5, b: 5, l: 5, r: 5, val: 'Số lượng ước thực hiện từ thời điểm báo cáo đến cuối năm' },
+                { t: 5, b: 6, l: 5, r: 5, val: 'Số lượng ước thực hiện từ thời điểm báo cáo đến cuối năm' },
                 { t: 5, b: 6, l: 6, r: 6, val: 'Cộng' },
                 { t: 5, b: 6, l: 7, r: 7, val: 'Định mức' },
                 { t: 5, b: 6, l: 8, r: 8, val: 'Thành tiền (đồng) (Tổng nhu cầu năm nay)' },
@@ -831,7 +831,7 @@ export class PhuLuc6Component implements OnInit {
                 { t: 4, b: 6, l: 12, r: 12, val: 'Ghi chú' },
 
                 { t: 5, b: 6, l: 4, r: 4, val: 'Số lượng thực tế đã thực hiện đến thời điểm báo cáo' },
-                { t: 5, b: 5, l: 5, r: 5, val: 'Số lượng ước thực hiện từ thời điểm báo cáo đến cuối năm' },
+                { t: 5, b: 6, l: 5, r: 5, val: 'Số lượng ước thực hiện từ thời điểm báo cáo đến cuối năm' },
                 { t: 5, b: 6, l: 6, r: 6, val: 'Cộng' },
                 { t: 5, b: 6, l: 7, r: 7, val: 'Định mức' },
                 { t: 5, b: 6, l: 8, r: 8, val: 'Thành tiền (đồng) (Tổng nhu cầu năm nay)' },

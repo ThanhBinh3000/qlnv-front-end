@@ -560,7 +560,7 @@ export class PhuLuc12Component implements OnInit {
 				{ t: 4, b: 6, l: 2, r: 2, val: 'Cơ quan chủ trì' },
 				{ t: 4, b: 6, l: 3, r: 3, val: 'Thời gian thực hiện' },
 				{ t: 4, b: 6, l: 4, r: 4, val: 'Quyết định phê duyệt của cấp có thẩm quyền' },
-				{ t: 4, b: 6, l: 5, r: 7, val: 'Dự toán, kinh phí được sử dụng trong năm' },
+				{ t: 4, b: 5, l: 5, r: 7, val: 'Dự toán, kinh phí được sử dụng trong năm' },
 				{ t: 4, b: 6, l: 8, r: 8, val: 'Tổng nhu cầu dự toán' },
 				{ t: 4, b: 6, l: 9, r: 9, val: 'Dự toán đề nghị điều chỉnh (+ tăng )(- giảm)' },
 				{ t: 4, b: 6, l: 10, r: 10, val: 'Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)' },
@@ -617,7 +617,7 @@ export class PhuLuc12Component implements OnInit {
 				{ t: 4, b: 6, l: 2, r: 2, val: 'Cơ quan chủ trì' },
 				{ t: 4, b: 6, l: 3, r: 3, val: 'Thời gian thực hiện' },
 				{ t: 4, b: 6, l: 4, r: 4, val: 'Quyết định phê duyệt của cấp có thẩm quyền' },
-				{ t: 4, b: 6, l: 5, r: 7, val: 'Dự toán, kinh phí được sử dụng trong năm' },
+				{ t: 4, b: 5, l: 5, r: 7, val: 'Dự toán, kinh phí được sử dụng trong năm' },
 				{ t: 4, b: 6, l: 8, r: 8, val: 'Tổng nhu cầu dự toán' },
 				{ t: 4, b: 6, l: 9, r: 9, val: 'Dự toán đề nghị điều chỉnh (+ tăng )(- giảm)' },
 				{ t: 4, b: 6, l: 10, r: 10, val: 'Ghi chú' },
@@ -662,13 +662,13 @@ export class PhuLuc12Component implements OnInit {
 			})
 			return row;
 		})
-		filterData.forEach(item => {
-			const level = item.stt.split('.').length - 2;
-			item.stt = this.getIndex(item.stt);
-			for (let i = 0; i < level; i++) {
-				item.stt = '   ' + item.stt;
-			}
-		})
+		// filterData.forEach(item => {
+		// 	const level = item.stt.split('.').length - 2;
+		// 	item.stt = this.getIndex(item.stt);
+		// 	for (let i = 0; i < level; i++) {
+		// 		item.stt = '   ' + item.stt;
+		// 	}
+		// })
 
 		let row: any = {};
 		row = {}

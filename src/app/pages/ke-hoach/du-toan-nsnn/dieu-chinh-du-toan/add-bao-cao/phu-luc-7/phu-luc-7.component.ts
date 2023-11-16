@@ -831,9 +831,9 @@ export class PhuLuc7Component implements OnInit {
                 { t: 4, b: 4, l: 3, r: 5, val: 'Kế hoạch được giao' },
                 { t: 4, b: 6, l: 6, r: 6, val: 'Định mức (chi phí hàng tại cửa kho)' },
                 { t: 4, b: 6, l: 7, r: 7, val: 'Bình quân (chi phí hàng ngoài cửa kho)' },
-                { t: 4, b: 4, l: 8, r: 12, val: 'Đơn vị đã thực hiện đến thời điểm báo cáo )' },
+                { t: 4, b: 4, l: 8, r: 12, val: 'Đơn vị đã thực hiện đến thời điểm báo cáo' },
                 { t: 4, b: 4, l: 13, r: 16, val: 'Dự kiến thực hiện từ thời điểm báo cáo đến cuối năm' },
-                { t: 4, b: 6, l: 17, r: 17, val: 'Nhu cầu dự toán năm' + this.namBcao },
+                { t: 4, b: 6, l: 17, r: 17, val: 'Nhu cầu dự toán năm ' + this.namBcao },
                 { t: 4, b: 6, l: 18, r: 18, val: 'Dự toán lũy kế đã giao' },
                 { t: 4, b: 6, l: 19, r: 19, val: 'Dự toán đề nghị điều chỉnh (+ tăng) (- giảm)' },
                 { t: 4, b: 6, l: 20, r: 20, val: 'Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)' },
@@ -843,7 +843,7 @@ export class PhuLuc7Component implements OnInit {
                 { t: 4, b: 6, l: 24, r: 24, val: 'Ý kiến của đơn vị cấp trên' },
 
                 { t: 5, b: 6, l: 3, r: 3, val: 'Địa phương nhận' },
-                { t: 5, b: 6, l: 4, r: 4, val: 'QĐ giao nhiệm vụ của' + this.dataInfo.tenDvi },
+                { t: 5, b: 6, l: 4, r: 4, val: 'QĐ giao nhiệm vụ của ' + this.dataInfo.tenDvi },
                 { t: 5, b: 6, l: 5, r: 5, val: 'Lượng' },
 
                 { t: 5, b: 6, l: 8, r: 8, val: 'Lượng' },
@@ -924,15 +924,15 @@ export class PhuLuc7Component implements OnInit {
                 { t: 4, b: 4, l: 3, r: 5, val: 'Kế hoạch được giao' },
                 { t: 4, b: 6, l: 6, r: 6, val: 'Định mức (chi phí hàng tại cửa kho)' },
                 { t: 4, b: 6, l: 7, r: 7, val: 'Bình quân (chi phí hàng ngoài cửa kho)' },
-                { t: 4, b: 4, l: 8, r: 12, val: 'Đơn vị đã thực hiện đến thời điểm báo cáo )' },
+                { t: 4, b: 4, l: 8, r: 12, val: 'Đơn vị đã thực hiện đến thời điểm báo cáo' },
                 { t: 4, b: 4, l: 13, r: 16, val: 'Dự kiến thực hiện từ thời điểm báo cáo đến cuối năm' },
-                { t: 4, b: 6, l: 17, r: 17, val: 'Nhu cầu dự toán năm' + this.namBcao },
+                { t: 4, b: 6, l: 17, r: 17, val: 'Nhu cầu dự toán năm ' + this.namBcao },
                 { t: 4, b: 6, l: 18, r: 18, val: 'Dự toán lũy kế đã giao' },
                 { t: 4, b: 6, l: 19, r: 19, val: 'Dự toán đề nghị điều chỉnh (+ tăng) (- giảm)' },
                 { t: 4, b: 6, l: 20, r: 20, val: 'Kinh phí thiếu những năm trước' },
                 { t: 4, b: 6, l: 21, r: 21, val: 'Ghi chú' },
                 { t: 5, b: 6, l: 3, r: 3, val: 'Địa phương nhận' },
-                { t: 5, b: 6, l: 4, r: 4, val: 'QĐ giao nhiệm vụ của' + this.dataInfo.tenDvi },
+                { t: 5, b: 6, l: 4, r: 4, val: 'QĐ giao nhiệm vụ của ' + this.dataInfo.tenDvi },
                 { t: 5, b: 6, l: 5, r: 5, val: 'Lượng' },
 
                 { t: 5, b: 6, l: 8, r: 8, val: 'Lượng' },
@@ -1003,13 +1003,13 @@ export class PhuLuc7Component implements OnInit {
             })
             return row;
         })
-        filterData.forEach(item => {
-            const level = item.stt.split('.').length - 2;
-            item.stt = this.getChiMuc(item.stt);
-            for (let i = 0; i < level; i++) {
-                item.stt = '   ' + item.stt;
-            }
-        });
+        // filterData.forEach(item => {
+        //     const level = item.stt.split('.').length - 2;
+        //     item.stt = this.getChiMuc(item.stt);
+        //     for (let i = 0; i < level; i++) {
+        //         item.stt = '   ' + item.stt;
+        //     }
+        // });
 
         let row: any = {};
         row = {}
