@@ -500,7 +500,7 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
                             row[field] = this.getIndex(item);
                             break;
                         case 'uncNgay':
-                            row[field] = Utils.fmtDate(item[field]);
+                            row[field] = Utils.getValue(Utils.fmtDate(item[field]));
                             break;
                         default:
                             row[field] = Utils.getValue(item[field]);

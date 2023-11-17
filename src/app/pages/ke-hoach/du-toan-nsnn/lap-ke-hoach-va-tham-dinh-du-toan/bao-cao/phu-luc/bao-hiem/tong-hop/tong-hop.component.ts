@@ -415,11 +415,11 @@ export class TongHopComponent implements OnInit {
             { t: 5, b: 7, l: 0, r: 0, val: 'STT' },
             { t: 5, b: 7, l: 1, r: 1, val: 'Danh mục hàng DTQG tham gia bảo hiểm' },
             { t: 5, b: 7, l: 2, r: 2, val: 'Đơn vị tính' },
-            { t: 5, b: 5, l: 3, r: 5, val: 'Tổng số lượng hàng trong kho của các đơn vị cấp dưới' },
+            { t: 5, b: 5, l: 3, r: 5, val: 'Số lượng' },
             { t: 6, b: 7, l: 3, r: 3, val: 'Kho từ 5000m3 trở lên' },
             { t: 6, b: 7, l: 4, r: 4, val: 'Kho dưới 5000m3' },
             { t: 6, b: 7, l: 5, r: 5, val: 'Tổng SL' },
-            { t: 5, b: 5, l: 6, r: 12, val: 'Tổng giá trị hàng trong kho của các đơn vị cấp dưới' },
+            { t: 5, b: 5, l: 6, r: 12, val: 'Giá trị bảo hiểm' },
             { t: 6, b: 6, l: 6, r: 8, val: 'Kho từ ' + this.khoiTich.toString() + ' m3 trở lên' },
             { t: 7, b: 7, l: 6, r: 6, val: 'Giá trị' },
             { t: 7, b: 7, l: 7, r: 7, val: 'Tỷ lệ bảo hiểm' },
@@ -518,7 +518,8 @@ export class TongHopComponent implements OnInit {
         const worksheet = Table.initExcel(header);
         //Thêm khung viền cho bảng
         for (const cell in worksheet) {
-            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            const firstRow = this.childUnit.length == 0 ? 5 : 4;
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < firstRow) continue;
             worksheet[cell].s = Table.borderStyle;
         }
 

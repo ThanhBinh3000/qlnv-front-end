@@ -556,7 +556,7 @@ export class VonBanTheoHopDongTrungThauComponent implements OnInit {
             filterData = this.lstCtiets.filter(e => e.level < 2).map(item => {
                 const row: any = {};
                 fieldOrder.forEach(field => {
-                    row[field] = field == 'uncNgay' ? Utils.fmtDate(item[field]) : Utils.getValue(item[field]);
+                    row[field] = Utils.getValue(field == 'uncNgay' ? Utils.fmtDate(item[field]) : item[field]);
                 })
                 return row;
             })

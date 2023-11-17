@@ -513,7 +513,7 @@ export class CapVonQuyetDinhDonGiaMuaComponent implements OnInit {
             const filterHD = this.lstCtiets.filter(e => e.level > 0).map(item => {
                 const row: any = {};
                 fieldHD.forEach(field => {
-                    row[field] = field == 'stt' ? this.getIndex(item) : item[field];
+                    row[field] = field == 'stt' ? this.getIndex(item) : Utils.getValue(item[field]);
                 })
                 return row;
             })
