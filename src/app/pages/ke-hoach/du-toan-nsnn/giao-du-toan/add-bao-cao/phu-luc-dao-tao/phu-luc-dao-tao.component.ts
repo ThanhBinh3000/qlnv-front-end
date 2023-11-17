@@ -457,7 +457,7 @@ export class PhuLucDaoTaoComponent implements OnInit {
             { t: 4, b: 5, l: 2, r: 2, val: 'Đối tượng' },
             { t: 4, b: 5, l: 3, r: 3, val: 'Thời gian học' },
             { t: 4, b: 4, l: 4, r: 6, val: 'Số lượng' },
-            { t: 4, b: 5, l: 7, r: 7, val: 'Kinh phí hỗ trợ(đồng/người)' },
+            { t: 4, b: 5, l: 7, r: 7, val: 'Kinh phí hỗ trợ (đồng/người)' },
             { t: 4, b: 5, l: 8, r: 8, val: 'Tổng nhu cầu dự toán, kinh phí' },
 
             { t: 5, b: 5, l: 4, r: 4, val: 'Số lượng' },
@@ -500,7 +500,7 @@ export class PhuLucDaoTaoComponent implements OnInit {
         let row: any = {};
         row = {}
         fieldOrder.forEach(field => {
-            row[field] = field == 'tenTaiSan' ? 'Tổng cộng' : (!this.total[field] && this.total[field] !== 0) ? '' : this.total[field];
+            row[field] = field == 'tenNoiDung' ? 'Tổng cộng' : (!this.total[field] && this.total[field] !== 0) ? '' : this.total[field];
         })
         filterData.unshift(row)
 

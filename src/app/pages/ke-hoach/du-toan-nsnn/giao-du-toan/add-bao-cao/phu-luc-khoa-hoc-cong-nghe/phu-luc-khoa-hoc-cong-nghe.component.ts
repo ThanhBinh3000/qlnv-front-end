@@ -483,7 +483,7 @@ export class PhuLucKhoaHocCongNgheComponent implements OnInit {
         let row: any = {};
         row = {}
         fieldOrder.forEach(field => {
-            row[field] = field == 'tenTaiSan' ? 'Tổng cộng' : (!this.total[field] && this.total[field] !== 0) ? '' : this.total[field];
+            row[field] = field == 'tenNoiDung' ? 'Tổng cộng' : (!this.total[field] && this.total[field] !== 0) ? '' : this.total[field];
         })
         filterData.unshift(row)
 

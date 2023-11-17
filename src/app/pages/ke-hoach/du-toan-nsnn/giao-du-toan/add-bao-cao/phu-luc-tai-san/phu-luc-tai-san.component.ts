@@ -479,8 +479,8 @@ export class PhuLucTaiSanComponent implements OnInit {
 			{ t: 4, b: 5, l: 0, r: 0, val: 'STT' },
 			{ t: 4, b: 5, l: 1, r: 1, val: 'Tên tài sản (theo danh mục được phê duyệt tại Quyết định số 149/QĐ-TCDT)' },
 			{ t: 4, b: 5, l: 2, r: 2, val: 'ĐVT' },
-			{ t: 4, b: 5, l: 3, r: 7, val: 'Số lượng tài sản, máy móc, thiết bị hiện có' },
-			{ t: 4, b: 5, l: 8, r: 10, val: 'Dự toán đề nghị trang bị năm ' + (this.namBcao).toString() },
+			{ t: 4, b: 4, l: 3, r: 7, val: 'Số lượng tài sản, máy móc, thiết bị hiện có' },
+			{ t: 4, b: 4, l: 8, r: 10, val: 'Dự toán đề nghị trang bị năm ' + (this.namBcao).toString() },
 
 			{ t: 5, b: 5, l: 3, r: 3, val: 'Số lượng đến thời điểm báo cáo' },
 			{ t: 5, b: 5, l: 4, r: 4, val: 'Số lượng đã nhận chưa có QĐ điều chuyển' },
@@ -505,6 +505,7 @@ export class PhuLucTaiSanComponent implements OnInit {
 			{ t: 6, b: 6, l: 10, r: 10, val: '8 = 6 x 7' },
 		]
 		const fieldOrder = [
+			'stt',
 			'tenDanhMuc',
 			'dviTinh',
 			'sluongTdiemBc',
@@ -515,7 +516,7 @@ export class PhuLucTaiSanComponent implements OnInit {
 			'sluongDtoan',
 			'mucGia',
 			'ttien',
-			'stt',
+
 		]
 
 		const filterData = this.lstCtietBcaos.map(item => {

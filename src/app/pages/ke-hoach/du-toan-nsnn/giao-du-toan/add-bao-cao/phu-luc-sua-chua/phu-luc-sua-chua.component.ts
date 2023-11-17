@@ -418,7 +418,7 @@ export class PhuLucSuaChuaComponent implements OnInit {
             { t: 4, b: 5, l: 3, r: 3, val: 'Dự toán đã giao lũy kế đến thời điểm báo cáo' },
             { t: 4, b: 5, l: 4, r: 4, val: 'Giá trị công trình (Ghi giá trị quyết toán; giá trị dự toán hoặc tổng mức đầu tư nếu chưa phê duyệt quyết toán)' },
             { t: 4, b: 5, l: 5, r: 5, val: 'Kế hoạch điều chỉnh (+ Tăng)(- Giảm)' },
-            { t: 4, b: 5, l: 6, r: 6, val: 'Dự toán năm' + (this.namBcao).toString() + 'sau điều chỉnh' },
+            { t: 4, b: 5, l: 6, r: 6, val: 'Dự toán năm ' + (this.namBcao).toString() + 'sau điều chỉnh' },
 
             { t: 6, b: 6, l: 0, r: 0, val: 'A' },
             { t: 6, b: 6, l: 1, r: 1, val: 'B' },
