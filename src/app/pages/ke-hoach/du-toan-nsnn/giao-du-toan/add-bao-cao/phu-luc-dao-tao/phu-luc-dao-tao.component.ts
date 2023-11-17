@@ -460,9 +460,9 @@ export class PhuLucDaoTaoComponent implements OnInit {
             { t: 4, b: 5, l: 7, r: 7, val: 'Kinh phí hỗ trợ (đồng/người)' },
             { t: 4, b: 5, l: 8, r: 8, val: 'Tổng nhu cầu dự toán, kinh phí' },
 
-            { t: 5, b: 5, l: 4, r: 4, val: 'Số lượng' },
-            { t: 5, b: 5, l: 5, r: 5, val: 'Định mức' },
-            { t: 5, b: 5, l: 6, r: 6, val: 'Thành tiền' },
+            { t: 5, b: 5, l: 4, r: 4, val: 'Trong nước' },
+            { t: 5, b: 5, l: 5, r: 5, val: 'Ngoài nước' },
+            { t: 5, b: 5, l: 6, r: 6, val: 'Tổng số' },
 
 
             { t: 6, b: 6, l: 0, r: 0, val: 'A' },

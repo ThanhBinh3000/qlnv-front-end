@@ -98,8 +98,14 @@
 								<th scope="col">13</th>
 								<th scope="col">14=12-13</th>
 								<th scope="col" *ngIf="status.viewAppVal">15</th>
-								<th scope="col">16</th>
-								<th scope="col">17</th>
+								<ng-container *ngIf="status.viewAppVal; else soChiMuc ">
+									<th scope="col">16</th>
+									<th scope="col">17</th>
+								</ng-container>
+								<ng-template #soChiMuc>
+									<th scope="col">15</th>
+									<th scope="col">16</th>
+								</ng-template>
 								<th scope="col" *ngIf="status.viewAppVal">18 = 15 -14</th>
 								<th scope="col" *ngIf="status.viewAppVal">19</th>
 								<th scope="col" nzWidth="50px" rowspan="2" *ngIf="status.general"></th>

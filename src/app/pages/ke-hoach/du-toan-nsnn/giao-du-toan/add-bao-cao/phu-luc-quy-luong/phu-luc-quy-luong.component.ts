@@ -381,7 +381,7 @@ export class PhuLucQuyLuongComponent implements OnInit {
 
             { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
             { t: 4, b: 5, l: 1, r: 1, val: 'Tên đơn vị (Biên chế thực tế có mặt)' },
-            { t: 4, b: 5, l: 2, r: 2, val: 'Biên chế năm ' + (this.namBcao).toString() + 'được giao' },
+            { t: 4, b: 5, l: 2, r: 2, val: 'Biên chế năm ' + (this.namBcao).toString() + ' được giao' },
             { t: 4, b: 5, l: 3, r: 3, val: 'Biên chế có mặt' },
             { t: 4, b: 5, l: 4, r: 4, val: 'Biên chế chưa tuyển' },
             { t: 4, b: 5, l: 5, r: 5, val: 'Tiền lương biên chế thực tế có mặt' },
