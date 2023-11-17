@@ -110,8 +110,8 @@
                   <nz-select formControlName='soQdGiaoNvXh' [nzSize]='size'
                              (ngModelChange)='changeValueMaDsTongHop($event)' nzMode='multiple'
                              nzPlaceHolder='Chọn số QĐ giao nhiệm vụ xuất hàng' [nzDisabled]='idInput > 0'>
-                    <nz-option *ngFor='let option of listDsTongTop' [nzLabel]='option.soQuyetDinh'
-                               [nzValue]='option.soQuyetDinh'></nz-option>
+                    <nz-option *ngFor='let option of listDsTongTop' [nzLabel]='option.maDanhSach'
+                               [nzValue]='option.maDanhSach'></nz-option>
                   </nz-select>
                 </nz-form-control>
               </nz-form-item>

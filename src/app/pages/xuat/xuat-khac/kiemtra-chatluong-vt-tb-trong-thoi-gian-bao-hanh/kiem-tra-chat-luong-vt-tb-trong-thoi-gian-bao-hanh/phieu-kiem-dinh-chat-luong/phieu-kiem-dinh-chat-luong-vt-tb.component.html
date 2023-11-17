@@ -57,12 +57,12 @@
     <div class="group-button">
       <h3 class="text-uppercase">Danh sách phiếu kiểm định chất lượng</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub" (click)="exportData()">
+        <button type="button" class="btn btn-sub"  *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PKDCL_IN') " (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)"
-                *ngIf="userService.isCuc()">
+                *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PKDCL_THEM') && userService.isCuc()">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Thêm</span>
         </button>
@@ -114,12 +114,14 @@
             <td></td>
             <td></td>
             <td>
-              <button type="submit"  class="btn btn-outline-primary" (click)="openBaoCao(item)">Tạo BCKĐ kiểm định mẫu</button></td>
-<!--            <td class="text-left">-->
-<!--              <a (click)="redirectDetail(item.id, false,item.soQdGiaoNvXh)">-->
-<!--                <i class="icon htvbdh_dau-cong" title="Thêm mới"></i>-->
-<!--              </a>-->
-<!--            </td>-->
+              <button type="submit" class="btn btn-outline-primary" (click)="openBaoCao(item)">Tạo BCKĐ kiểm định mẫu
+              </button>
+            </td>
+            <!--            <td class="text-left">-->
+            <!--              <a (click)="redirectDetail(item.id, false,item.soQdGiaoNvXh)">-->
+            <!--                <i class="icon htvbdh_dau-cong" title="Thêm mới"></i>-->
+            <!--              </a>-->
+            <!--            </td>-->
           </tr>
           <ng-container *ngIf="expandSetString.has(item.idVirtual)">
             <ng-container *ngFor="let lv1 of item.childData,let i1=index">
@@ -140,11 +142,11 @@
                 <td></td>
                 <td></td>
                 <td></td>
-<!--                <td class="text-left">-->
-<!--                  <a (click)="redirectDetail(item.id, false,item.soQdGiaoNvXh)">-->
-<!--                    <i class="icon htvbdh_dau-cong" title="Thêm mới"></i>-->
-<!--                  </a>-->
-<!--                </td>-->
+                <!--                <td class="text-left">-->
+                <!--                  <a (click)="redirectDetail(item.id, false,item.soQdGiaoNvXh)">-->
+                <!--                    <i class="icon htvbdh_dau-cong" title="Thêm mới"></i>-->
+                <!--                  </a>-->
+                <!--                </td>-->
               </tr>
               <ng-container *ngIf="expandSetString.has(item.idVirtual)">
                 <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
@@ -185,17 +187,23 @@
                         <td>{{lv3.soLanLm}}</td>
                         <td>{{lv3.tenTrangThai}}</td>
                         <td class="text-left">
-                          <a *ngIf="lv3.trangThai ==STATUS.DA_DUYET_LDC" (click)="redirectDetail(lv3.id, true)">
+                          <a
+                            *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PKDCL_XEM')
+                            ! && ((lv3.trangThai ==STATUS.TU_CHOI_LDC ||lv3.trangThai ==STATUS.TU_CHOI_TP || lv3.trangThai ==STATUS.DU_THAO) && lv3.nguoiTaoId==userInfo.ID)"
+                            (click)="redirectDetail(lv3.id, true)">
                             <i class="fa fa-eye" title="Xem chi tiết"></i>
                           </a>
-                          <a *ngIf="lv3.trangThai ==STATUS.TU_CHOI_LDC ||lv3.trangThai ==STATUS.TU_CHOI_TP || lv3.trangThai ==STATUS.DU_THAO"
-                             (click)="redirectDetail(lv3.id, false)">
+                          <a
+                            *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_QDGNVXH_THEM') && (lv3.trangThai ==STATUS.TU_CHOI_LDC ||lv3.trangThai ==STATUS.TU_CHOI_TP || lv3.trangThai ==STATUS.DU_THAO)"
+                            (click)="redirectDetail(lv3.id, false)">
                             <i class="fa fa-pencil" title="Sửa"></i>
                           </a>
-                          <a *ngIf="lv3.trangThai ==STATUS.CHO_DUYET_LDC||lv3.trangThai ==STATUS.CHO_DUYET_TP" (click)="redirectDetail(lv3.id, true)">
+                          <a *ngIf="(userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PKDCL_DUYETLDC') && lv3.trangThai ==STATUS.CHO_DUYET_LDC)
+                             && (userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PKDCL_DUYETTP') && lv3.trangThai ==STATUS.CHO_DUYET_TP)"
+                             (click)="redirectDetail(lv3.id, true)">
                             <i class="icon htvbdh_tcdt_pheduyet"></i>
                           </a>
-                          <a *ngIf="lv3.trangThai ==STATUS.DU_THAO" (click)="delete(lv3)">
+                          <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PKDCL_XOA') && lv3.trangThai ==STATUS.DU_THAO" (click)="delete(lv3)">
                             <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                           </a>
                         </td>
@@ -232,7 +240,7 @@
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
   <app-thong-tin-phieu-kiem-dinh-chat-luong-vt-tb [idInput]="selectedId" [isView]="isView"
-                                               [soQdGiaoNvXh]="soQdGiaoNvXhSelected"
-                                               (showListEvent)="showList()">
+                                                  [soQdGiaoNvXh]="soQdGiaoNvXhSelected"
+                                                  (showListEvent)="showList()">
   </app-thong-tin-phieu-kiem-dinh-chat-luong-vt-tb>
 </div>

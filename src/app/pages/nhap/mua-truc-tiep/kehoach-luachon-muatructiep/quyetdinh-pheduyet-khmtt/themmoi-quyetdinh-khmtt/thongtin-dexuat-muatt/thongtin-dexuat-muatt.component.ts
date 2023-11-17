@@ -226,7 +226,6 @@ export class ThongtinDexuatMuattComponent implements OnChanges {
   this.formData.patchValue({
     tongSoLuong: sum
   })
-    console.log(sum, 123)
   }
 
   emitDataTable() {
