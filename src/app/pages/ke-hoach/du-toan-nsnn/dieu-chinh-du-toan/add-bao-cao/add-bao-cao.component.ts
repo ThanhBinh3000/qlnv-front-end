@@ -197,8 +197,12 @@ export class AddBaoCaoComponent implements OnInit {
         this.getStatusButton();
         if (this.status.general) {
             await this.getListUser();
-            this.listAppendix.forEach(e => {
-                e.tenDm = Utils.getName(this.baoCao.namBcao, e.tenDm);
+            this.listAppendix = []
+            Dcdt.PHU_LUC.forEach(e => {
+                this.listAppendix.push({
+                    ...e,
+                    tenDm: Utils.getName(this.baoCao.namBcao, e.tenDm),
+                })
             })
             this.baoCao?.lstDchinh.forEach(item => {
                 const appendix = this.listAppendix.find(e => e.id == item.maLoai);
