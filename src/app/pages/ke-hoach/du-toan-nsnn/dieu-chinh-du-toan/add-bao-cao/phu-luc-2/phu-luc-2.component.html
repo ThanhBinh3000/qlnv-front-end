@@ -69,7 +69,7 @@
                             <tr>
                                 <th scope="col">Số lượng đến thời điểm <br> báo cáo</th>
                                 <th scope="col">Số lượng đã nhận chưa có <br> QĐ điều chuyển</th>
-                                <th scope="col">Số lượng đã được <br> phê duyệt <br> mua sắm năm {{namBcao}}</th>
+                                <th scope="col">Số lượng đã được <br> phê duyệt <br> mua sắm năm {{namBcao - 1}}</th>
                                 <th scope="col">Cộng</th>
                                 <th scope="col">Tiêu chuẩn định mức tối đa <br> được phê duyệt</th>
                                 <th scope="col">Số lượng</th>
@@ -97,8 +97,14 @@
                                 <th scope="col">11=9+10</th>
                                 <th scope="col">12=8-11</th>
                                 <th scope="col" *ngIf="status.viewAppVal">13</th>
-                                <th scope="col">14</th>
-                                <th scope="col">15</th>
+                                <ng-container *ngIf="status.viewAppVal; else soChiMuc ">
+                                    <th scope="col">14</th>
+                                    <th scope="col">15</th>
+                                </ng-container>
+                                <ng-template #soChiMuc>
+                                    <th scope="col">13</th>
+                                    <th scope="col">14</th>
+                                </ng-template>
                                 <th scope="col" *ngIf="status.viewAppVal">16=13-12</th>
                                 <th scope="col" *ngIf="status.viewAppVal">17</th>
                                 <th scope="col" rowspan="2" *ngIf="status.general"></th>

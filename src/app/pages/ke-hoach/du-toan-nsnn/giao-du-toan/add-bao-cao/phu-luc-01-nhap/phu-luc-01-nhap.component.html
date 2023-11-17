@@ -47,6 +47,16 @@
                                 <th scope="col">Định mức</th>
                                 <th scope="col">Thành tiền</th>
                             </tr>
+                            <tr>
+                                <th></th>
+                                <th>Tổng Cộng</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th>{{Op.fmtVal(total.namDtTtien)}}</th>
+                                <th *ngIf="status.general"></th>
+                                <th *ngIf="status.general"></th>
+                            </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let data of lstCtietBcaos; let i = index">
@@ -109,16 +119,7 @@
                                     </td>
                                 </ng-template>
                             </tr>
-                            <tr>
-                                <td></td>
-                                <td>Tổng Cộng</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>{{Op.fmtVal(total.namDtTtien)}}</td>
-                                <td *ngIf="status.general"></td>
-                                <td *ngIf="status.general"></td>
-                            </tr>
+
                         </tbody>
                     </nz-table>
                 </div>

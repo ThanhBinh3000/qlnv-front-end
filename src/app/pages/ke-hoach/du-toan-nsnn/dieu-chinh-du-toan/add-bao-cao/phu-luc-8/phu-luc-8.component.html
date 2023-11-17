@@ -85,10 +85,20 @@
 								<th scope="col">9</th>
 								<th scope="col">10 = 6 - 7</th>
 								<th scope="col" *ngIf="status.viewAppVal">11</th>
-								<th scope="col">12</th>
+								<ng-container *ngIf="status.viewAppVal; else soChiMuc ">
+									<th scope="col">12</th>
+								</ng-container>
+								<ng-template #soChiMuc>
+									<th scope="col">11</th>
+								</ng-template>
 								<th scope="col" *ngIf="status.viewAppVal">13 = 11 -10</th>
 								<th scope="col" *ngIf="status.viewAppVal">14</th>
-								<th scope="col">15</th>
+								<ng-container *ngIf="status.viewAppVal; else soChiMuc1 ">
+									<th scope="col">15</th>
+								</ng-container>
+								<ng-template #soChiMuc1>
+									<th scope="col">12</th>
+								</ng-template>
 								<th scope="col" *ngIf="status.general"></th>
 								<th scope="col" *ngIf="status.general || status.editAppVal"></th>
 							</tr>

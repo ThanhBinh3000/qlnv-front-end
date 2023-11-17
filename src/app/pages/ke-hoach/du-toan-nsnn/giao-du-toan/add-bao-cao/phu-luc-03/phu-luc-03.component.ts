@@ -594,14 +594,14 @@ export class PhuLuc03Component implements OnInit {
             { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
             { t: 3, b: 3, l: 0, r: 8, val: 'Trạng thái báo cáo: ' + this.dataInfo.tenTrangThai },
 
-            { t: 4, b: 4, l: 0, r: 0, val: 'STT' },
-            { t: 4, b: 4, l: 1, r: 1, val: 'Danh mục' },
-            { t: 4, b: 4, l: 2, r: 2, val: 'Đơn vị tính' },
+            { t: 4, b: 6, l: 0, r: 0, val: 'STT' },
+            { t: 4, b: 6, l: 1, r: 1, val: 'Danh mục' },
+            { t: 4, b: 6, l: 2, r: 2, val: 'Đơn vị tính' },
             { t: 4, b: 4, l: 3, r: 7, val: 'Năm dự toán' + (this.namBcao).toString() },
 
             { t: 5, b: 5, l: 3, r: 5, val: 'Chi phí tại cửa kho' },
             { t: 5, b: 5, l: 6, r: 7, val: 'Chi phí ngoài cửa kho' },
-            { t: 5, b: 6, l: 8, r: 8, val: 'Tổng cộng' },
+            { t: 4, b: 6, l: 8, r: 8, val: 'Tổng cộng' },
 
             { t: 6, b: 6, l: 3, r: 3, val: 'Số lượng' },
             { t: 6, b: 6, l: 4, r: 4, val: 'Định mức' },

@@ -79,9 +79,12 @@
                                 <th scope="col">4</th>
                                 <th scope="col">5=4-3</th>
                                 <th scope="col" *ngIf="status.viewAppVal">6</th>
-                                <th scope="col" class="text-col">
-                                    7
-                                </th>
+                                <ng-container *ngIf="status.viewAppVal; else soChiMuc ">
+                                    <th scope="col">7</th>
+                                </ng-container>
+                                <ng-template #soChiMuc>
+                                    <th scope="col">6</th>
+                                </ng-template>
                                 <th scope="col" *ngIf="status.viewAppVal">
                                     8 = 6 - 5
                                 </th>
