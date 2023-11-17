@@ -12,6 +12,10 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {QuyetDinhTtcpService} from "../../../services/quyetDinhTtcp.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {saveAs} from 'file-saver';
+import {chain} from "lodash";
+import {v4 as uuidv4} from "uuid";
+import {sumBy} from "lodash";
+
 
 @Component({
   selector: 'app-dialog-chi-tiet-ke-hoach-giao-bo-nganh',
@@ -26,6 +30,7 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   nam: any;
   keHoach: any = {
     id: null,
+    idQdTtcp: null,
     sapXep: null,
     maBoNganh: null,
     tenBoNganh: null,
@@ -211,9 +216,34 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
 
   async preview() {
     this.spinner.show();
+    this.muaTangView = this.convertDataPreview(this.keHoach.muaTangList)
+    this.xuatBanView = this.convertDataPreview(this.keHoach.xuatBanList)
+    this.xuatGiamView = this.convertDataPreview(this.keHoach.xuatGiamList)
+    this.luanPhienView = this.convertDataPreview(this.keHoach.luanPhienList)
     await this.quyetDinhTtcpService.preview({
       tenBaoCao: this.templateName+ '.docx',
-      id: 1941
+      id:this.keHoach.idQdTtcp,
+      loaiBaoCao : "01",
+      ltTon : this.keHoach.ltGaoTon * 2 + this.keHoach.ltThocTon,
+      ltGaoTon: this.keHoach.ltGaoTon,
+      ltThocTon: this.keHoach.ltThocTon,
+      ltMua : this.keHoach.ltGaoMua * 2 + this.keHoach.ltThocMua ,
+      ltGaoMua: this.keHoach.ltGaoMua,
+      ltThocMua: this.keHoach.ltThocMua,
+      ltXuat : this.keHoach.ltGaoXuat * 2 + this.keHoach.ltThocXuat ,
+      ltGaoXuat: this.keHoach.ltGaoXuat,
+      ltThocXuat: this.keHoach.ltThocXuat,
+      slDuTru: (+this.keHoach.ltThocMua + +(this.keHoach.ltGaoMua * 2)) - (+this.keHoach.ltThocXuat + +(this.keHoach.ltGaoXuat * 2)) + (+this.keHoach.ltThocTon + +(this.keHoach.ltGaoTon * 2)),
+      slDuTruThoc: +this.keHoach.ltThocMua - +this.keHoach.ltThocXuat + +this.keHoach.ltThocTon,
+      slDuTruGao: +this.keHoach.ltGaoMua - +this.keHoach.ltGaoXuat + +this.keHoach.ltGaoTon,
+      muaTangList: this.muaTangView,
+      xuatGiamList: this.xuatGiamView,
+      xuatBanList:  this.xuatBanView,
+      luanPhienList: this.luanPhienView,
+      tenBoNganh: this.keHoach.tenBoNganh,
+      ttMuaTang: this.keHoach.ttMuaTang,
+      ttXuatBan: this.keHoach.ttXuatBan,
+      ttXuatGiam: this.keHoach.ttXuatGiam
     }).then(async res => {
       if (res.data) {
         this.printSrc = res.data.pdfSrc;
@@ -242,22 +272,41 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   closeDlg() {
     this.showDlgPreview = false;
   }
-
-  convertDataPreview(data: any[]) : any[] {
+  convertDataPreview(data: any[]): any[] {
+    let arr = [];
     let result = [];
     if (data && data.length > 0) {
-      data.forEach((item, index) => {
+      arr = chain(data)
+        .groupBy('tenVthh')
+        .map((value, key) => ({
+          tenVthh: key,
+          isLeaf: (!value || (value.length == 1 && !value[0].cloaiVthh)) ? true : false,
+          soLuong: sumBy(value, 'soLuong'), // Tính tổng soLuong của các phần tử con
+          children: value,
+          idVirtual: uuidv4(),
+        }))
+        .value();
+    }
+    if (arr && arr.length > 0) {
+      arr.forEach((item, index) => {
         if (item.children && item.children.length > 0) {
           let itemClonePr = cloneDeep(item);
+          itemClonePr.stt = index + 1;
+          if (item.isLeaf) {
+            itemClonePr.dviTinh = item.children[0].dviTinh
+          }
           result.push(itemClonePr)
-          item.children.forEach(child => {
-            let itemCloneChild = cloneDeep(child);
-            itemCloneChild.tenVthh = "";
-            result.push(itemCloneChild);
-          })
+          if (!item.isLeaf) {
+            item.children.forEach(child => {
+              let itemCloneChild = cloneDeep(child);
+              itemCloneChild.tenVthh = itemCloneChild.tenCloaiVthh;
+              itemCloneChild.stt = '-'
+              result.push(itemCloneChild);
+            })
+          }
         }
-      });
+      })
     }
-    return  result;
+    return result;
   }
 }

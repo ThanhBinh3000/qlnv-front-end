@@ -303,7 +303,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     this.spinner.show();
     await this.quyetDinhBtcNganhService.preview({
       tenBaoCao: this.templateName+ '.docx',
-      id: this.formData.value.id
+      id: this.formData.value.id,
     }).then(async res => {
       if (res.data) {
         this.printSrc = res.data.pdfSrc;

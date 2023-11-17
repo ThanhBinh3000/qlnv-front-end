@@ -420,7 +420,9 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     this.spinner.show();
     await this.quyetDinhTtcpService.preview({
       tenBaoCao: this.templateName+ '.docx',
-      id: this.formData.value.id
+      id: this.formData.value.id,
+      listToanBoNganh : this.dataTableAllBn,
+      loaiBaoCao : "00"
     }).then(async res => {
       if (res.data) {
         this.printSrc = res.data.pdfSrc;
