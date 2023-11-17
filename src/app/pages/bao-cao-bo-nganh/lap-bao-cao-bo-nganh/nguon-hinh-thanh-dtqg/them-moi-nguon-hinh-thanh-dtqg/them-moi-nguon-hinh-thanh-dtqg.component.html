@@ -131,6 +131,22 @@
 </nz-card>
 <div class="group-button">
   <h3>DANH SÁCH BÁO CÁO NGUỒN HÌNH THÀNH DỰ TRỮ QUỐC GIA</h3>
+  <div class="buttons">
+    <button
+            type="button" class="btn btn-sub xanh-nhat" (click)="downloadTemplate(templateName)">
+      <i class="icon htvbdh_download2"></i>
+      <span>Tải biểu mẫu import dữ liệu</span>
+    </button>
+<!--    <button-->
+<!--      type="file" class="btn btn-sub xanh-nhat" (click)="onFileSelected($event)">-->
+<!--      <i class="icon htvbdh_nhap-excel"></i>-->
+<!--      <span>Import dữ liệu</span>-->
+<!--    </button>-->
+<!--    <input class="custom-file-input" type="file" (change)="onFileSelected($event)">-->
+
+    <input type="file" (change)="onFileSelected($event)"/>
+<!--    <button (click)="uploadFile()">Import dữ liệu</button>-->
+  </div>
 </div>
 <nz-card class="mt-2px flex-card data-table card-border-content table-card">
   <nz-table class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
