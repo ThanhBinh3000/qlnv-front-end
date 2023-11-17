@@ -462,7 +462,7 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listSoQuyetDinh,
-        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
+        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng DTQG'],
         dataColumn: ['soQd', 'ngayQd', 'tenLoaiVthh'],
       },
     })

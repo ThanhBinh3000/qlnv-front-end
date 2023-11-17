@@ -116,7 +116,6 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
       await this.quyetDinhPheDuyetKeHoachMTTService.getDetailDtlCuc(id)
         .then(async (res) => {
           const dataDtl = res.data;
-          console.log(dataDtl)
           this.danhSachCtiet = dataDtl.children.length > 0 ? dataDtl.children : dataDtl.children2
           this.formData.patchValue({
             idQdDtl: id,
@@ -175,7 +174,6 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     } else {
       this.selected = true;
     }
-    console.log(data, 123)
     this.rowItem.donGiaVat = data.donGiaVat
     this.donGiaRow = data.donGiaVat
     if(this.listChiCuc.length > 0){
@@ -183,14 +181,12 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     }
     this.idRowSelect = data.id;
     this.dataTable = data.listChaoGia
-    console.log(this.dataTable, "datatable")
     this.updateEditCache()
     this.updateEditCacheDk()
     await this.spinner.hide();
   }
 
   addDiemKho(index: any, diemKho: any){
-    console.log("diemKho", diemKho)
     if(this.validateDiemKho(index, diemKho)){
       return;
     }

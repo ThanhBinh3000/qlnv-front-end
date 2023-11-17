@@ -198,7 +198,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
 
   selectHangHoa() {
     const modalTuChoi = this.modal.create({
-      nzTitle: 'Danh sách hàng hóa',
+      nzTitle: 'Danh sách hàng DTQG',
       nzContent: DialogDanhSachHangHoaComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -267,7 +267,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
   themMoiBangPhanLoTaiSan($event, data ?: DanhSachPhanLo, index ?: number) {
     $event.stopPropagation();
     if (!this.formData.get('loaiVthh').value) {
-      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa');
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng DTQG');
       return;
     }
     const modalGT = this.modal.create({

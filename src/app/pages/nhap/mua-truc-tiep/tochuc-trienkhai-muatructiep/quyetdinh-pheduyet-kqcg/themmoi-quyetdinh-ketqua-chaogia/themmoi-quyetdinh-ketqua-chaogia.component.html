@@ -157,7 +157,7 @@
             </div>
             <div nz-col [nzSpan]="6">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Thời gian mở kho bán trực tiếp
+                <nz-form-label nzRequired [nzNoColon]="true"> Thời gian mở kho mua trực tiếp
                 </nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
                   <nz-date-picker nzDisabled formControlName="ngayMkho" nzFormat="dd/MM/yyyy">
@@ -167,7 +167,7 @@
             </div>
             <div nz-col [nzSpan]="6">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Thời hạn bán trực tiếp </nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true"> Thời hạn mua trực tiếp </nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
                   <nz-date-picker nzDisabled formControlName="ngayMua" nzFormat="dd/MM/yyyy">
                   </nz-date-picker>
@@ -176,7 +176,7 @@
             </div>
             <div nz-col [nzSpan]="3">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Loại hàng DTQG </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open">
                     <input [readonly]="true" nz-input formControlName="tenLoaiVthh" readonly="true" />
@@ -186,7 +186,7 @@
             </div>
             <div nz-col [nzSpan]="3">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Chủng loại hàng DTQG </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open">
                     <input [readonly]="true" nz-input formControlName="tenCloaiVthh" readonly="true" />
@@ -196,7 +196,7 @@
             </div>
             <div nz-col [nzSpan]="6">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Tên hàng hóa </nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Tên hàng DTQG </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <input nz-input formControlName="moTaHangHoa" [readonly]="true" />
                 </nz-form-control>
