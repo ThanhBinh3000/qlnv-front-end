@@ -526,6 +526,7 @@ export class PhuLuc02Component implements OnInit {
 				} else if (data.ma.startsWith('01')) {
 					let loaiBaoQuan: any;
 					if (data.ma.startsWith('0101')) {
+						this.dsBaoQuan = this.dsBaoQuan.filter(item => this.dsDinhMuc.findIndex(e => (e.cloaiVthh == '0101' || e.loaiVthh == '0101') && e.loaiBaoQuan == item.ma) != -1)
 						const modalBaoQuan = this.modal.create({
 							nzTitle: 'Danh sách loại bảo quản',
 							nzContent: DialogChonLoaiBaoQuanComponent,
