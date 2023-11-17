@@ -359,7 +359,7 @@ export class ThongTinPhieuXuatHangHaoHutComponent extends Base2Component impleme
       donViTinh: data.donViTinh
     });
     // this.addItemRow();
-    this.setRowInitialTable({ donViTinh: data.donViTinh, ten: data.tenCloaiVthh })
+    this.setRowInitialTable({ donViTinh: data.donViTinh, ten: data.tenCloaiVthh || data.tenLoaiVthh })
   }
   setRowInitialTable(data: { donViTinh: string, ten: string }) {
     this.rowInitial = {
