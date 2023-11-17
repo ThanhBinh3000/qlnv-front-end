@@ -698,4 +698,11 @@ export class Base2Component implements OnInit {
       }
     });
   }
+
+  downloadTemplate(fileName) {
+    this.service.downloadTemplate(fileName).then( s => {
+      const blob = new Blob([s], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      saveAs(blob, fileName + '.xlsx');
+    });
+  }
 }
