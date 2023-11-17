@@ -176,8 +176,8 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Ngăn/Lô kho</nz-form-label>
-            <nz-form-control>
+            <nz-form-label [nzNoColon]="true" nzRequired> Ngăn/Lô kho</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="maDiaDiem" [nzDisabled]="isView"
                          (ngModelChange)="changeValueNganLoKho($event)">
                 <nz-option *ngFor="let p of listNganLoKho" [nzValue]="p.maDiaDiem"
@@ -200,7 +200,7 @@
             <nz-form-label [nzNoColon]="true" nzRequired> Nhà kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input [readonly]="isView" nz-input formControlName="tenNhaKho" readonly/>
+                <input [readonly]="true" nz-input formControlName="tenNhaKho" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -210,7 +210,7 @@
             <nz-form-label [nzNoColon]="true" nzRequired> Điểm kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input [readonly]="isView" nz-input formControlName="tenDiemKho" readonly/>
+                <input [readonly]="true" nz-input formControlName="tenDiemKho" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
