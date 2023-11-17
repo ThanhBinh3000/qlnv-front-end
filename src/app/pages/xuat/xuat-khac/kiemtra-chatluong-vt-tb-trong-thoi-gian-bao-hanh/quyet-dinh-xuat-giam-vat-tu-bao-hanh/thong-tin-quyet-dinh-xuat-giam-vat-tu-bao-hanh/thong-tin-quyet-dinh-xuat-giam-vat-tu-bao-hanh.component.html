@@ -20,7 +20,7 @@
           <span>Lưu và gửi duyệt</span>
         </button>
         <button class="btn btn-sub do ml-2" (click)="tuChoi()"
-                *ngIf="formData.value.trangThai  == STATUS.CHO_DUYET_LDV || formData.value.trangThai  == STATUS.CHO_DUYET_LDTC ">
+                *ngIf="formData.value.trangThai  == STATUS.CHO_DUYET_LDV || formData.value.trangThai  == STATUS.CHO_DUYET_LDTC "
                 (click)="pheDuyet()">
 <!--                *ngIf="(formData.value.trangThai  == STATUS.CHO_DUYET_LDV && userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_QDXG_DUYETLDV'))-->
 <!--                || (formData.value.trangThai  == STATUS.CHO_DUYET_LDTC && userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_QDXG_DUYETLDTC'))">-->
@@ -28,7 +28,7 @@
           <span>Từ chối</span>
         </button>
         <button class="btn btn-sub xanh-nhat ml-2"
-                *ngIf="formData.value.trangThai  == STATUS.CHO_DUYET_LDV || formData.value.trangThai  == STATUS.CHO_DUYET_LDTC ">
+                *ngIf="formData.value.trangThai  == STATUS.CHO_DUYET_LDV || formData.value.trangThai  == STATUS.CHO_DUYET_LDTC "
                 (click)="pheDuyet()">
 <!--          *ngIf="(formData.value.trangThai  == STATUS.CHO_DUYET_LDV && userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_QDXG_DUYETLDV'))-->
 <!--          || (formData.value.trangThai  == STATUS.CHO_DUYET_LDTC && userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_QDXG_DUYETLDTC'))">-->
