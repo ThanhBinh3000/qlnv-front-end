@@ -490,7 +490,7 @@ export class DeNghiCapVonTheoHopDongTrungThauComponent implements OnInit {
                 { t: 5, b: 5, l: 8, r: 8, val: 'Thành tiền' },
             ]
             fieldHD = ['tenDvi', 'qdPheDuyet', 'slKeHoach', 'slHopDong', 'donGia', 'gtHopDong', 'phatViPham',
-                'tlSoluong', 'tlThanhTien', 'congVan'];
+                'tlSoluong', 'tlThanhTien'];
             calHeaderHd = ['A', 'C', '1', '2', '4', '5=2x4', '7', '8', '9'];
         }
         const filterDataHD = this.lstCtiets.filter(e => e.level > (this.isSynth ? 1 : 0)).map(item => {

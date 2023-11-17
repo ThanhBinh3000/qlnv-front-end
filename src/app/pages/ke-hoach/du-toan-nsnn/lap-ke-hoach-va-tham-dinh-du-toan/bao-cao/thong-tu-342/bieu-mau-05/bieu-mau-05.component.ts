@@ -391,7 +391,7 @@ export class BieuMau05Component implements OnInit {
             return;
         }
         const header = [
-            { t: 0, b: 5, l: 0, r: 8, val: null },
+            { t: 0, b: 5, l: 0, r: 5, val: null },
             { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
             { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
             { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
@@ -436,6 +436,7 @@ export class BieuMau05Component implements OnInit {
         //Thêm khung viền cho bảng
         for (const cell in worksheet) {
             if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            if (!this.status.viewAppVal && XLSX.utils.decode_cell(cell).c > 5) continue;
             worksheet[cell].s = Table.borderStyle;
         }
 

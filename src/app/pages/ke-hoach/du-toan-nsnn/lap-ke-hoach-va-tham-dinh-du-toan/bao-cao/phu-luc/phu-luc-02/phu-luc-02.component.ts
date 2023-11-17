@@ -526,6 +526,7 @@ export class PhuLuc02Component implements OnInit {
 				} else if (data.ma.startsWith('01')) {
 					let loaiBaoQuan: any;
 					if (data.ma.startsWith('0101')) {
+						this.dsBaoQuan = this.dsBaoQuan.filter(item => this.dsDinhMuc.findIndex(e => (e.cloaiVthh == '0101' || e.loaiVthh == '0101') && e.loaiBaoQuan == item.ma) != -1)
 						const modalBaoQuan = this.modal.create({
 							nzTitle: 'Danh sách loại bảo quản',
 							nzContent: DialogChonLoaiBaoQuanComponent,
@@ -627,7 +628,7 @@ export class PhuLuc02Component implements OnInit {
 			calHeader = ['A', 'B', 'C', '', '', '', '1', '2', '3=1x2', '4', '5=1x4', '6=5+3', '7', '8=7*2', '10=8+5', '11=10-6', '12', '13'];
 		} else {
 			header = [
-				{ t: 0, b: 6, l: 0, r: 17, val: null },
+				{ t: 0, b: 6, l: 0, r: 12, val: null },
 				{ t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
 				{ t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
 				{ t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },

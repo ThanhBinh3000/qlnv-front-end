@@ -434,7 +434,7 @@ export class CapUngVonComponent implements OnInit {
                         row[field] = index + 1;
                         break;
                     case 'ngayLap':
-                        row[field] = Utils.fmtDate(item[field]);
+                        row[field] = Utils.getValue(Utils.fmtDate(item[field]));
                         break;
                     default:
                         row[field] = Utils.getValue(item[field]);

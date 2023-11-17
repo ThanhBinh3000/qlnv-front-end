@@ -400,7 +400,7 @@ export class ThanhToanTheoDonGiaComponent implements OnInit {
                         row[field] = index + 1;
                         break;
                     case 'uncNgay':
-                        row[field] = Utils.fmtDate(item[field]);
+                        row[field] = Utils.getValue(Utils.fmtDate(item[field]));
                         break;
                     default:
                         row[field] = Utils.getValue(item[field]);

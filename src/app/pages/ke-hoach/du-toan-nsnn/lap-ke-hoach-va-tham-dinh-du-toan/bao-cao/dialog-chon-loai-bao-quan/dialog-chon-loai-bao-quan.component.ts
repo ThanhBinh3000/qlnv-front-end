@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from 'src/app/constants/message';
 
 @Component({
     selector: 'dialog-chon-loai-bao-quan',
@@ -11,6 +13,7 @@ export class DialogChonLoaiBaoQuanComponent implements OnInit {
     loaiBaoQuan: any;
     constructor(
         private _modalRef: NzModalRef,
+        private notification: NzNotificationService,
     ) { }
 
     async ngOnInit() {
@@ -20,6 +23,10 @@ export class DialogChonLoaiBaoQuanComponent implements OnInit {
     }
 
     handleOk() {
+        if (this.dsBaoQuan.length > 0 && !this.loaiBaoQuan) {
+            this.notification.warning(MESSAGE.WARNING, 'Vui lòng chọn loại bảo quản');
+            return;
+        }
         this._modalRef.close(this.loaiBaoQuan);
     }
 
