@@ -140,12 +140,12 @@
                      (click)="redirectDetail(lv1.idPhieuKnCl, false)">
                     <i class="fa fa-eye" title="Xem chi tiết"></i>
                   </a>
-                  <a *ngIf="lv1.trangThaiKnCl== STATUS.DU_THAO
+                  <a *ngIf="lv1.trangThaiKnCl== STATUS.DU_THAO || lv1.trangThaiKnCl== STATUS.TU_CHOI_TP
                             || lv1.trangThaiKnCl== STATUS.TU_CHOI_LDC"
                      (click)="redirectDetail(lv1.idPhieuKnCl, false)">
                     <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
-                  <a *ngIf="lv1.trangThaiKnCl== STATUS.CHO_DUYET_LDC"
+                  <a *ngIf="lv1.trangThaiKnCl== STATUS.CHO_DUYET_TP || lv1.trangThaiKnCl== STATUS.CHO_DUYET_LDC"
                      (click)="redirectDetail(lv1.idPhieuKnCl, true)">
                     <i class="icon htvbdh_tcdt_pheduyet"></i>
                   </a>

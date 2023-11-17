@@ -236,7 +236,8 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
               let result = await this.createUpdate(this.formData.value);
               if (result) {
                 this.selectedItem = cloneDeep(result);
-                await this.buildTableView(result.tongHopDtl);
+                // await this.buildTableView(result.tongHopDtl);
+                await this.loadDetail(this.selectedItem.id)
                 this.step.emit({ step: 2, item: this.selectedItem });
               }
             }
@@ -307,6 +308,8 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
 
   onClickShowDetail() {
     this.showDetail = !this.showDetail;
+    console.log(this.showDetail,1)
+    console.log(this.selectedItem,2)
     this.changeShow.emit({ showDetail: this.showDetail, item: this.selectedItem })
   }
 }
