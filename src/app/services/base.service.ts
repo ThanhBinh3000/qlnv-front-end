@@ -87,4 +87,8 @@ export abstract class BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/report-template/findByTenFileAndTrangThai`;
     return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
   }
+  importExcel(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/bc-dtqg-bn/tt-130/import-du-lieu`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
 }

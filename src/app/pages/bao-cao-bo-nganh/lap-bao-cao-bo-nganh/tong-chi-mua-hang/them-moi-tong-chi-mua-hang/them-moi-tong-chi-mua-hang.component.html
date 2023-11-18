@@ -132,6 +132,14 @@
   </nz-card>
   <div class="group-button">
     <h3>DANH SÁCH BÁO CÁO TỔNG CHI CHO MUA HÀNG DỰ TRỮ QUỐC GIA TRONG KỲ</h3>
+    <div class="buttons">
+      <button
+        type="button" class="btn btn-sub xanh-nhat" (click)="downloadTemplate(templateName)">
+        <i class="icon htvbdh_download2"></i>
+        <span>Tải biểu mẫu import dữ liệu</span>
+      </button>
+      <input type="file" (change)="handleSelectFile($event)"/>
+    </div>
   </div>
   <nz-card class="mt-2px flex-card data-table card-border-content table-card">
     <nz-table class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
