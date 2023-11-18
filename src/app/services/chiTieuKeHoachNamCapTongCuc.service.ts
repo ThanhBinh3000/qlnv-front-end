@@ -184,4 +184,9 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/report-nhap-vt`;
     return this.httpClient.post(url, body, {responseType: 'blob', observe: 'response'}).toPromise();
   }
+
+  xemTruocCtKhNamTheoCuc(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/preview/xem-truoc-ct-kh-theo-cuc`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
 }

@@ -91,7 +91,7 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
         idQdGiaoNvXh: [null, [Validators.required]],
         soQdGiaoNvXh: [null, [Validators.required]],
         soLanLm: [],
-        ngayQdGiaoNvXh: [null, [Validators.required]],
+        ngayQdGiaoNvXh: [null],
         idBbLayMau: [null, [Validators.required]],
         soBbLayMau: [null, [Validators.required]],
         soPhieu: [null, [Validators.required]],
@@ -139,9 +139,9 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
   async ngOnInit() {
     try {
       this.spinner.show();
-      await Promise.all([
-        this.loadSoQuyetDinhGiaoNvXh(),
-      ])
+      // await Promise.all([
+      //   this.loadSoQuyetDinhGiaoNvXh(),
+      // ])
       await this.loadDetail(this.idInput)
       this.spinner.hide();
     } catch (e) {
@@ -160,14 +160,19 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
             this.formData.patchValue(res.data);
             const data = res.data;
             this.checked = data.ketQuaNiemPhong;
-            let itemQd = this.listSoQuyetDinh.find(item => item.soQuyetDinh == data.soQdGiaoNvXh);
-            if (itemQd) {
-              this.bindingDataQd(itemQd);
-            }
+            // let itemQd = this.listSoQuyetDinh.find(item => item.soQuyetDinh == data.soQdGiaoNvXh);
+            // if (itemQd) {
+            //   this.bindingDataQd(itemQd);
+            // }
             this.formData.patchValue({
               soBbLayMau: data.soBbLayMau,
               tenDiaDiem: data.tenLoKho ? data.tenLoKho + ' - ' + data.tenNganKho : data.tenNganKho,
             })
+
+             this.getListBbLayMau(data.soQdGiaoNvXh);
+             this.loadPhuongPhapLayMau(data.cloaiVthh);
+             this.tenThuKho(data.maDiaDiem);
+             this.loadChiTieuCl(data);
             //Xử lý pp lấy mẫu và chỉ tiêu kiểm tra chất lượng
             if (data.ppLayMau) {
               let ppLayMauOptions = data.ppLayMau.indexOf(",") > 0 ? data.ppLayMau.split(",") : Array.from(data.ppLayMau);
@@ -225,6 +230,7 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
   }
 
   async openDialogSoQd() {
+    await this.loadSoQuyetDinhGiaoNvXh();
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ xuất hàng',
       nzContent: DialogTableSelectionComponent,
@@ -276,7 +282,9 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
       if (res.msg == MESSAGE.SUCCESS) {
         this.listBbLayMau = res.data.content;
       }
-      await this.listPhieuKd(itemQdGnvXh.soQuyetDinh);
+      if (this.idInput == null) {
+        await this.listPhieuKd(itemQdGnvXh.soQuyetDinh);
+      }
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, e.msg);
     } finally {
@@ -418,6 +426,8 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
 
   async changeValueBienBanLayMau($event) {
     if ($event) {
+      console.log($event)
+      console.log(this.listBbLayMau,"this.listBbLayMau")
       let item = this.listBbLayMau.find(it => it.soBienBan == $event);
       console.log(item,"item")
       if (item) {

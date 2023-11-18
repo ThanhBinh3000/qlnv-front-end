@@ -601,7 +601,7 @@
 <ng-template #themMoiGt>
   <button
     *ngIf="idGoiThau > 0 && !isShowFromKq && formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT && !isView"
-    type="button" class="btn btn-sub xanh" (click)="saveGoiThauPopup()">
+    type="button" class="btn btn-sub xanh" (click)="saveGoiThauPopup($event)">
     <i class="icon htvbdh_tcdt_save"></i>
     <span>Lưu</span>
   </button>

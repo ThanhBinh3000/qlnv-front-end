@@ -78,6 +78,7 @@ export class ThongTinQdGiaoNhiemVuNhapHangComponent extends Base2Component imple
       lyDoTuChoi: [],
       trichYeu: [],
       trangThai: [STATUS.DU_THAO],
+      trangThaiXh: [STATUS.CHUA_THUC_HIEN],
       tenTrangThai: ['Dự thảo'],
       qdGiaonvXhDtl: [new Array<ItemXhXkVtQdGiaonvXhDtl>()],
       loaiCanCu: [],

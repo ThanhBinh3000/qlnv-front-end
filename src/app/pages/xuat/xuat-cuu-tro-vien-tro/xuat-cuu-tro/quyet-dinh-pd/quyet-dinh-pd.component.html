@@ -111,7 +111,7 @@
             <th class="text-center">Ngày ký quyết định</th>
             <th class="text-center">Mã tổng hợp</th>
             <th class="text-center">Ngày tổng hợp</th>
-            <th class="text-center">Số công văn/đề xuất</th>
+            <th class="text-center">Số công văn/tờ trình</th>
             <th class="text-center">Ngày đề xuất</th>
             <th class="text-center">Loại hàng hóa</th>
             <!--          <th class="text-center" class="text-center">Tổng SL đề xuất <br> cứu trợ, viện trợ (kg)</th>-->
@@ -195,7 +195,9 @@
             <!--          <td>{{ data.tongSoLuongDx |number:globals.numberFormat:globals.locale }}</td>-->
             <!--          <td>{{ data.tongSoLuong |number:globals.numberFormat:globals.locale }}</td>-->
             <!--          <td>{{ data.soLuongXuatCap |number:globals.numberFormat:globals.locale}}</td>-->
-            <td class="break">{{ data.trichYeu }}</td>
+            <td class="break-2">
+              <p>{{ data.trichYeu }}</p>
+            </td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-center">
               <a *ngIf="(!userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_XEM'))

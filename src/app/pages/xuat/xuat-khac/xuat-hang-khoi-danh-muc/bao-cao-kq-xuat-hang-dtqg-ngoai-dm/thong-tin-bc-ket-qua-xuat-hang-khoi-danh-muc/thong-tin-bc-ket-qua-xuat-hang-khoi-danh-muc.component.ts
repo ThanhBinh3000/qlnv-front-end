@@ -174,14 +174,13 @@ export class ThongTinBcKetQuaXuatHangKhoiDanhMucComponent extends Base2Component
     try {
       this.spinner.show();
       if (event && event.length > 0) {
-        const arrayQdGiaoNvXh = this.listDsTongTop.filter(obj1 =>
-          event.some(obj2 => obj1.soQuyetDinh === obj2),
-        );
-        const idsQdGiaoNvXh = arrayQdGiaoNvXh && arrayQdGiaoNvXh.length > 0 ? arrayQdGiaoNvXh.map(item => item.id) : [];
-        this.formData.patchValue({
-          idQdGiaoNvXh: idsQdGiaoNvXh,
-        });
-        this.getDetailDsTongHop(idsQdGiaoNvXh);
+        let dsThItem = this.listDsTongTop.find(it => it.maDanhSach == event);
+        if(dsThItem){
+          this.tongHopDanhSachHangXkdmService.getDetail(dsThItem.id);
+        }
+        // this.formData.patchValue({
+        //   idQdGiaoNvXh: idsQdGiaoNvXh,
+        // });
       } else {
         this.listPhieuXuatKho = [];
         this.buildTableView();

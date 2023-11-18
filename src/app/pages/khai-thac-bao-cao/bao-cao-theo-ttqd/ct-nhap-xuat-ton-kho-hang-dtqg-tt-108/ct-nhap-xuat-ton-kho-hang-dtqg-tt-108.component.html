@@ -44,7 +44,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="10" *ngIf="userService.isCuc()">
+          <div nz-col [nzSpan]="10" *ngIf="!userService.isTongCuc() || userService.isCuc()">
             <nz-form-item>
               <nz-form-label>Chi Cục DTNN</nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
