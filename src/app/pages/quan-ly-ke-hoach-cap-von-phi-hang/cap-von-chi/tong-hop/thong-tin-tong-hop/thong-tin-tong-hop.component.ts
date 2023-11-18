@@ -23,10 +23,12 @@ import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { DeNghiCapVonBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapVanBoNganh.service';
 import { TongHopDeNghiCapVonService } from 'src/app/services/ke-hoach/von-phi/tongHopDeNghiCapVon.service';
-import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { STATUS } from '../../../../../constants/status';
 import { AMOUNT_NO_DECIMAL } from '../../../../../Utility/utils';
+import { PREVIEW } from '../../../../../constants/fileType';
+import printJS from 'print-js';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-thong-tin-tong-hop',
@@ -84,7 +86,17 @@ export class ThongTinTonghopComponent implements OnInit {
   isDetail: boolean = false;
   isDetailHdv: boolean = false;
   amount = AMOUNT_NO_DECIMAL;
-
+  showDlgPreview = false;
+  pdfSrc: any;
+  wordSrc: any;
+  excelSrc: any;
+  printSrc: any;
+  reportTemplate: any = {
+    typeFile: '',
+    fileName: '',
+    tenBaoCao: '',
+    trangThai: '',
+  };
   constructor(
     private modal: NzModalService,
     private tongHopDeNghiCapVonService: TongHopDeNghiCapVonService,
@@ -624,5 +636,39 @@ export class ThongTinTonghopComponent implements OnInit {
     this.isDetail = false;
   }
 
-  protected readonly AMOUNT_NO_DECIMAL = AMOUNT_NO_DECIMAL;
+  templateName = 'tong-hop-de-nghi-cap-von-cac-bo-nganh';
+
+  async preview(id) {
+    this.spinner.show();
+    await this.tongHopDeNghiCapVonService.preview({
+      tenBaoCao: this.templateName + '.docx',
+      id: id,
+    }).then(async res => {
+      if (res.data) {
+        this.printSrc = res.data.pdfSrc;
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
+      }
+    });
+    this.spinner.hide();
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, this.templateName + '.pdf');
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, this.templateName + '.docx');
+  }
+
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true });
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
 }
