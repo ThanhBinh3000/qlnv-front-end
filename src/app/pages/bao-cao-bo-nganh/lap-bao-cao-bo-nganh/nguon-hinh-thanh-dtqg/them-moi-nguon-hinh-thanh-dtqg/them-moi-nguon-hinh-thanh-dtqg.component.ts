@@ -13,6 +13,7 @@ import { DonviService } from "../../../../../services/donvi.service";
 import { cloneDeep } from "lodash";
 import { STATUS } from "../../../../../constants/status";
 import { DanhMucService } from "../../../../../services/danhmuc.service";
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: "app-them-moi-nguon-hinh-thanh-dtqg",
@@ -46,8 +47,7 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
   itemRowNgoaiNguonEdit: any[] = [];
   listNguonVon: any[] = [];
   ghiChu: string = "Dấu “x” tại các hàng trong biểu là nội dung không phải tổng hợp, báo cáo.";
-  selectedFile: File | null = null;
-  templateName: 'template_bcbn_nguon_hinh_thanh_dtqg.xlsx'
+
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -77,6 +77,7 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
         tenTrangThai: ['Dự thảo'],
       }
     );
+    this.templateName = 'template_bcbn_nguon_hinh_thanh_dtqg.xlsx'
   }
 
   async ngOnInit() {
@@ -295,45 +296,21 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
       });
   }
 
-  onFileSelected(event: any): void {
-    this.selectedFile = event.target.files[0] as File;
-    if (this.isExcelFile(this.selectedFile)) {
-      this.uploadFile();
-    }else{
-      this.notification.error(MESSAGE.ERROR, 'Chọn file đuôi .xlsx');
-    }
-  }
 
-  isExcelFile(file: File): boolean {
-    const allowedExtensions = ['.xlsx'];
-    const fileName = file.name.toLowerCase();
 
-    return allowedExtensions.some(ext => fileName.endsWith(ext));
-  }
-
-  uploadFile(): void {
-    if (this.selectedFile) {
-      const formData = new FormData();
-      Object.keys(this.formData.value).forEach(key => {
-        formData.append(key, this.formData.value[key]);
-      });
-      formData.append('file', this.selectedFile);
-      this.bcBnTt108Service.importExcel(formData).then(r => {
-        if(r.msg == MESSAGE.SUCCESS){
-          this.dataNguonNsnn = r.data.filter(obj => obj.loaiNguon === 1);
-          this.dataNguonNgoaiNsnn = r.data.filter(obj => obj.loaiNguon === 2);
-        }
-      })
-    }
-  }
-
-  // downloadTemplate() {
-  //   let body = this.formData.value;
-  //   body.fileName = 'template_bcbn_nguon_hinh_thanh_dtqg.xlsx'
-  //   this.bcBnTt108Service.downloadTemplate(body).then( s => {
-  //     console.log(s)
+  // downloadTemplate(templateName: any) {
+  //   this.bcBnTt108Service.downloadTemplate(templateName).then( s => {
   //     const blob = new Blob([s], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-  //     saveAs(blob, 'downloadedFile.xlsx');
+  //     saveAs(blob, templateName);
   //   });
   // }
+  async handleSelectFile(event: any){
+    await this.onFileSelected(event);
+    if(this.dataImport.length > 0){
+      this.dataNguonNsnn = this.dataImport.filter(obj => obj.loaiNguon === 1);
+      this.dataNguonNgoaiNsnn = this.dataImport.filter(obj => obj.loaiNguon === 2);
+    }
+  }
+
+
 }
