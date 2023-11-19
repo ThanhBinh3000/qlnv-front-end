@@ -83,9 +83,9 @@ export abstract class BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/danh-sach`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
-  downloadTemplate(body) {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/report-template/findByTenFileAndTrangThai`;
-    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  downloadTemplate(tenFile) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/report-template/findByTenFileAndTrangThai/${tenFile}`;
+    return this._httpClient.get(url, { responseType: 'blob' }).toPromise();
   }
   importExcel(body): Promise<OldResponseData> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/bc-dtqg-bn/tt-130/import-du-lieu`;
