@@ -19,6 +19,11 @@
           <i class='icon  htvbdh_da-xu-ly'></i>
           <span>Hoàn thành</span>
         </button>
+        <button
+          type="button" class="btn btn-sub do" (click)="preview()" *ngIf="idInput > 0">
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Xem trước</span>
+        </button>
         <button type='button' class='btn btn-main mr-2' *ngIf='!isView' [disabled]='!formData.valid'
                 (click)='save(false)'>
           <i class='icon htvbdh_tcdt_save'></i>
@@ -327,3 +332,32 @@
     </form>
   </div>
 </div>
+<nz-modal [(nzVisible)]="showDlgPreview" nzTitle='ĐỀ NGHỊ CẤP PHÍ CHI NGHIỆP VỤ DỰ TRỮ QUỐC GIA CỦA BỘ/NGÀNH' nzWidth='100%'
+          (nzOnCancel)='closeDlg()'>
+  <div *nzModalContent class='modal__content'>
+    <pdf-viewer [src]='pdfSrc' [render-text]='true' style='width: 100%; height: 650px;'></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <div *ngIf="showDlgPreview">
+      <button nz-button (click)='downloadPdf()'
+              class='modal__button--save'>
+        <i class='icon htvbdh_file-pdf'></i>
+        Xuất .pdf
+      </button>
+      <button nz-button (click)='downloadWord()'
+              class='modal__button--save'>
+        <i class='icon htvbdh_file-word'></i>
+        Xuất .docx
+      </button>
+      <button nz-button (click)='printPreview()'
+              class='modal__button--save'>
+        <i class='icon htvbdh_printer'></i>
+        In
+      </button>
+      <button nz-button (click)='closeDlg()' class='modal__button--cancel'>
+        <i nz-icon nzType='close-circle' nzTheme='fill' class='icon-cancel'></i>
+        Đóng
+      </button>
+    </div>
+  </div>
+</nz-modal>

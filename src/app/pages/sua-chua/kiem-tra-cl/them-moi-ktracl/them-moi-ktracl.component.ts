@@ -278,7 +278,7 @@ export class ThemMoiKtraclComponent extends Base3Component implements OnInit {
       case STATUS.TU_CHOI_LDC:
       case STATUS.DU_THAO:
         confirm = 'Bạn có muốn gửi duyệt ?';
-        msg = 'Gửi duyệt thành công';
+        msg = 'Thao tác thành công';
         trangThai = STATUS.CHO_DUYET_TP;
         break;
       case STATUS.CHO_DUYET_TP:

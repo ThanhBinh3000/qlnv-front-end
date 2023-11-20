@@ -57,7 +57,7 @@ export const MESSAGE = {
   TRANG_THAI_TIEP_NHAN: 'Bản ghi đã được tiếp nhận',
   CHUA_CO_BAO_CAO: 'Chưa có bản ghi nào trong năm đã nhập',
   GUI_DUYET_CONFIRM: 'Bạn có muốn gửi duyệt bản ghi ?',
-  GUI_DUYET_SUCCESS: 'Gửi duyệt thành công',
+  GUI_DUYET_SUCCESS: 'Thao tác thành công',
   PHE_DUYET_CONFIRM: 'Bạn có muốn phê duyệt bản ghi ?',
   PHE_DUYET_SUCCESS: 'Phê duyệt thành công',
   BAN_HANH_CONFIRM: 'Bạn có muốn ban hành bản ghi ?',
