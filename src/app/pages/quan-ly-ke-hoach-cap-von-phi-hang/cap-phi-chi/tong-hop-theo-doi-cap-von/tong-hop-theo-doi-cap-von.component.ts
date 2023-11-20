@@ -293,9 +293,13 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
           "khoan": this.searchFilter.khoan,
           "loai": this.searchFilter.loai,
           "maDviDuocDuyet": this.searchFilter.donViDuocDuyet,
+          "paggingReq": {
+            "limit": this.pageSize,
+            "page": this.page - 1
+          },
           "soLenhChiTien": this.searchFilter.soLenhChiTien,
           "soThongTri": this.searchFilter.soThongTri,
-        }
+        };
         this.tongHopTheoDoiCapVonService.exportList(body).subscribe((blob) => {
           saveAs(blob, 'danh-sach-tong-hop-theo-doi-cap-von.xlsx')
         });

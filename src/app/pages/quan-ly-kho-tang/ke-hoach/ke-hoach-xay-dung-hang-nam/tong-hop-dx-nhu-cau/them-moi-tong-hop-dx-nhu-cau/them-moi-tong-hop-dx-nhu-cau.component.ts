@@ -80,7 +80,7 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
       namKetThuc: [null],
       ngayTaoTt: [dayjs().format('YYYY-MM-DD')],
       tgTongHop: [null],
-      namKeHoach: [null],
+      namKeHoach: [dayjs().year()],
       noiDung: [null],
       maToTrinh: [null],
       soQuyetDinh: [null],
@@ -177,6 +177,7 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
     if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDV) {
       this.formData.controls["maToTrinh"].setValidators([Validators.required]);
       this.formData.controls["ngayTaoTt"].setValidators([Validators.required]);
+      this.formData.controls["namKeHoach"].setValidators([Validators.required]);
     }
     if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDTC) {
       this.formData.controls["soQuyetDinh"].setValidators([Validators.required]);

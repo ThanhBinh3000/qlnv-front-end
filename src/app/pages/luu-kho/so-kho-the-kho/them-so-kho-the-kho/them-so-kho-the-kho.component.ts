@@ -185,7 +185,7 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
       case STATUS.DU_THAO:
         trangThai = STATUS.CHO_DUYET_KT;
         msgConfirm = "Bạn có muốn gửi duyệt ?";
-        msgSucess = "Gửi duyệt thành công"
+        msgSucess = "Thao tác thành công"
         break;
       case STATUS.CHO_DUYET_KT:
         trangThai = STATUS.CHO_DUYET_LDCC;

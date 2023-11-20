@@ -336,6 +336,7 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
         let body = {
           'chuong': this.searchFilter.chuong,
           'khoan': this.searchFilter.khoan,
+          'nam': this.searchFilter.nam,
           'loai': this.searchFilter.loai,
           'dviThongTri': this.searchFilter.dviThongTri,
           'soLenhChiTien': this.searchFilter.soLenhChiTien,

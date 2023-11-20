@@ -2,42 +2,44 @@
   <nz-card class="mt16 flex-card p-lr16">
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
       <div nz-row [nzGutter]="20">
-        <div nz-col nzSpan="4">
+        <div nz-col nzSpan="3">
           <nz-form-control>
-            <nz-form-label>Số quyết định</nz-form-label>
+            <nz-form-label>Năm</nz-form-label>
             <nz-form-item>
-              <input nz-input formControlName="maSc" />
+              <nz-select formControlName="nam">
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              </nz-select>
             </nz-form-item>
           </nz-form-control>
         </div>
         <div nz-col nzSpan="4">
           <nz-form-control>
-            <nz-form-label>Số tờ trình</nz-form-label>
+            <nz-form-label>Số công văn/tờ trình </nz-form-label>
             <nz-form-item>
-              <input nz-input formControlName="maSc" />
+              <input nz-input formControlName="soHoSo" />
             </nz-form-item>
           </nz-form-control>
         </div>
         <div nz-col nzSpan="4">
           <nz-form-control>
-            <nz-form-label>Trạng thái</nz-form-label>
+            <nz-form-label>Số QĐ thanh lý</nz-form-label>
             <nz-form-item>
-              <input nz-input formControlName="maSc" />
+              <input nz-input formControlName="soQd" />
             </nz-form-item>
           </nz-form-control>
         </div>
         <div nz-col nzSpan="6">
           <nz-form-control>
-            <nz-form-label>Ngày ký</nz-form-label>
+            <nz-form-label>Ngày ký QĐ thanh lý</nz-form-label>
             <nz-form-item>
               <div nz-row>
                 <div nz-col nzSpan="12" class="cus-start-date">
-                  <nz-date-picker [nzDisabledDate]="disabledNgayTu" nzFormat="dd/MM/yyyy" formControlName="ngayTu"
+                  <nz-date-picker [nzDisabledDate]="disabledNgayTu" nzFormat="dd/MM/yyyy" formControlName="ngayKyTu"
                                   nzPlaceHolder="Ngày bắt đầu">
                   </nz-date-picker>
                 </div>
                 <div nz-col nzSpan="12" class="cus-end-date">
-                  <nz-date-picker [nzDisabledDate]="disabledNgayDen" nzFormat="dd/MM/yyyy" formControlName="ngayDen"
+                  <nz-date-picker [nzDisabledDate]="disabledNgayDen" nzFormat="dd/MM/yyyy" formControlName="ngayKyDen"
                                   nzPlaceHolder="Ngày kết thúc">
                   </nz-date-picker>
                 </div>

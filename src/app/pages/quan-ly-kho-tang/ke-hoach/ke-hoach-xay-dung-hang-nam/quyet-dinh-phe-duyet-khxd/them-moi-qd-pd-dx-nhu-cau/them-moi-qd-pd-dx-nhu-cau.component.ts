@@ -104,7 +104,9 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
   }
   async getListQdBtc() {
     let body ={
-      trangThai:"29"
+      trangThai:"29",
+      maDvi: this.userInfo.MA_DVI,
+      namKeHoach: this.formData.value.namKeHoach
     };
     let result = await this.quyetDinhService.danhSach(body);
     if (result.msg == MESSAGE.SUCCESS) {

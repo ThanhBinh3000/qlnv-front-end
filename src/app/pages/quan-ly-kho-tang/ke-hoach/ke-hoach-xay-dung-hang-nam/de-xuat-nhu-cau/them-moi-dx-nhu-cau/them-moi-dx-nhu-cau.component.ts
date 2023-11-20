@@ -217,7 +217,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     body.ctiets = this.dataTableReq;
     body.tmdt = this.sumSoLuong(null, "tmdtDuKien", true);
     if (isOther) {
-      await super.saveAndSend(body, trangThai, 'Bạn có muốn gửi duyệt đề xuất này ?', 'Gửi duyệt thành công.');
+      await super.saveAndSend(body, trangThai, 'Bạn có muốn gửi duyệt đề xuất này ?', 'Thao tác thành công.');
     } else {
       await this.createUpdate(body);
     }
@@ -252,7 +252,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
       }
     }
     this.approve(this.idInput, trangThai, msg, null, trangThai==STATUS.DA_DUYET_LDC || trangThai==STATUS.DA_DUYET_CBV
-      ?"Bạn đã gửi duyệt thành công!":"Bạn đã lưu và gửi duyệt thành công!");
+      ?"Thao tác thành công!":"Bạn đã lưu và gửi duyệt thành công!");
   }
 
   tuChoi() {
