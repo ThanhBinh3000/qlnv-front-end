@@ -5,7 +5,7 @@
         <div nz-row [nzGutter]="20">
           <div nz-col nzSpan="6">
             <nz-form-control>
-              <nz-form-label>Chi cục DTNN KV</nz-form-label>
+              <nz-form-label> {{ userService.isTongCuc() ? 'Cục DTNN KV' : 'Chi cục DTNN KV' }} </nz-form-label>
               <nz-form-item>
                 <nz-select formControlName="maDviSr" nzShowSearch nzAllowClear>
                   <nz-option *ngFor="let p of dsDonvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
