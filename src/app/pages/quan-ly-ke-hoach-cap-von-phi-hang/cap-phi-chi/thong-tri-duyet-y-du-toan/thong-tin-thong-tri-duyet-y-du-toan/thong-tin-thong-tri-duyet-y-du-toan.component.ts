@@ -544,9 +544,12 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
 
   async preview() {
     this.spinner.show();
+    let boNganh = this.dsBoNganh.find(item => item.code == this.formData.value.dviThongTri);
     await this.thongTriDuyetYCapPhiService.preview({
       tenBaoCao: this.templateName+ '.docx',
-      id : this.idInput
+      id : this.idInput,
+      maQhns: this.userInfo.DON_VI.maQhns,
+      tenBoNganh : boNganh ? boNganh.tenDvi : ''
     }).then(async res => {
       if (res.data) {
         this.printSrc = res.data.pdfSrc;
