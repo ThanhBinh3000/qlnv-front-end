@@ -73,4 +73,9 @@ export class QuyetDinhDieuChinhCTKHService extends BaseService {
     return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
   }
 
+  xemTruocCtKhNamTheoCuc(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/preview/xem-truoc-ct-kh-theo-cuc`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
 }

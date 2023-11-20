@@ -177,6 +177,16 @@
       </div>
     </form>
   </nz-card>
+  <div class='d-flex justify-content-between header-tab mt-2' *ngIf='thongTinChiTieuKeHoachNam.cap == "1"'>
+    <div class='trai'>
+    </div>
+    <div class='canphai phai'>
+      <button type='button' class='btn btn-main' (click)='preViewTheoCuc()'>
+        <i class=' icon htvbdh_tcdt_print'></i>
+        <span>Kết xuất dữ liệu theo Cục</span>
+      </button>
+    </div>
+  </div>
   <!-- <nz-affix class="menu-lv3" [nzOffsetTop]="100"> -->
   <nz-tabset nzType="card" class="mt16 flex-card p-lr16" nz>
     <nz-tab [nzTitle]="'Kế hoạch lương thực dự trữ nhà nước'">
