@@ -189,19 +189,19 @@ export class TtcpComponent implements OnInit {
     }
   }
 
-  exportReportDemo() {
-    let body = {
-      typeFile: 'PDF',
-      fileName: 'bc_nhap_xuat_ton_kho_hang_dtnn.jrxml',
-      tenBaoCao: 'Hoa_test',
-      nam: 2023,
-    };
-    this.quyetDinhTtcpService
-      .exportReport(body)
-      .subscribe((blob) =>
-        saveAs(blob, body.tenBaoCao + '.pdf'),
-      );
-  }
+  // exportReportDemo() {
+  //   let body = {
+  //     typeFile: 'PDF',
+  //     fileName: 'bc_nhap_xuat_ton_kho_hang_dtnn.jrxml',
+  //     tenBaoCao: 'Hoa_test',
+  //     nam: 2023,
+  //   };
+  //   this.quyetDinhTtcpService
+  //     .exportReport(body)
+  //     .subscribe((blob) =>
+  //       saveAs(blob, body.tenBaoCao + '.pdf'),
+  //     );
+  // }
 
   exportData() {
     if (this.totalRecord > 0) {
