@@ -13,6 +13,7 @@ import {STATUS} from "../../../../../../../constants/status";
 import {cloneDeep} from "lodash";
 import {DxXdTrungHanService} from "../../../../../../../services/dx-xd-trung-han.service";
 import {PAGE_SIZE_DEFAULT} from "../../../../../../../constants/config";
+import {KtKhXdHangNamService} from "../../../../../../../services/kt-kh-xd-hang-nam.service";
 
 @Component({
   selector: 'app-dialog-them-moi-dxkhth',
@@ -43,19 +44,19 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
     private notification: NzNotificationService,
     private spinner: NgxSpinnerService,
     private deXuatTrungHanService: DxXdTrungHanService,
+    private dexuatDauTuXdService: KtKhXdHangNamService,
     private dmKhoService: DanhMucKhoService
   ) {
   }
 
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
-    // this.namKh = dayjs().get('year');
+    this.item.namKeHoach = this.namKh;
     this.getAllLoaiDuAn();
     this.getDsKhoi();
     await this.getAllDmKho();
     await this.getAllDetailDx();
     await this.getDetail();
-    this.item.namKeHoach = this.namKh;
   }
 
   async getDsKhoi() {
@@ -102,20 +103,38 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
         page: 0,
       },
     }
-    let res = await this.deXuatTrungHanService.search(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listDx = res.data.content;
-      this.listDetailDx = this.listDx.flatMap(item => item.chiTiets);
-      let dmKho = [
-        ...this.listDmKho.filter((e) => {
-          return !this.listDetailDx.some((dx) => {
-            if (dx.maDuAn.length > 0 && e.maDuAn.length > 0) {
-              return dx.maDuAn === e.maDuAn;
-            }
+    if (this.page == "DXTH") {
+      let res = await this.deXuatTrungHanService.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.listDx = res.data.content;
+        this.listDetailDx = this.listDx.flatMap(item => item.chiTiets);
+        let dmKho = [
+          ...this.listDmKho.filter((e) => {
+            return !this.listDetailDx.some((dx) => {
+              if (dx.maDuAn.length > 0 && e.maDuAn.length > 0) {
+                return dx.maDuAn === e.maDuAn;
+              }
+            })
           })
-        })
-      ];
-      this.listDmKho = dmKho;
+        ];
+        this.listDmKho = dmKho;
+      }
+    } else {
+      let res = await this.dexuatDauTuXdService.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.listDx = res.data.content;
+        this.listDetailDx = this.listDx.flatMap(item => item.ctiets);
+        let dmKho = [
+          ...this.listDmKho.filter((e) => {
+            return !this.listDetailDx.some((dx) => {
+              if (dx.maDuAn.length > 0 && e.maDuAn.length > 0) {
+                return dx.maDuAn === e.maDuAn;
+              }
+            })
+          })
+        ];
+        this.listDmKho = dmKho;
+      }
     }
   }
 
@@ -128,7 +147,6 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
     let res = await this.dmKhoService.getAllDmKho(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listDmKho = res.data
-
     }
   }
 
