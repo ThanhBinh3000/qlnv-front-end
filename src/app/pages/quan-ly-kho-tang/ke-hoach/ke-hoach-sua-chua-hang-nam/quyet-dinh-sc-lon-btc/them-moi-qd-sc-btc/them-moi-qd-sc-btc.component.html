@@ -90,7 +90,7 @@
             </div>
             <div nz-col nzSpan="10" *ngIf="formData.value.kieu == 'DC'">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true" nzRequired>Số QĐ giao NV cần điều chỉnh
+                <nz-form-label [nzNoColon]="true" nzRequired>Căn cứ số QĐ của BTC cần điều chỉnh
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="conSoQdDc()">
@@ -149,25 +149,26 @@
       </nz-collapse-panel>
     </nz-collapse>
     <nz-collapse>
-      <nz-collapse-panel [nzHeader]="'Quyết định của bộ tài chính '" [nzActive]="true">
+      <nz-collapse-panel [nzHeader]="'QUYẾT ĐỊNH CỦA BỘ TÀI CHÍNH'" [nzActive]="true">
         <nz-table #basicTable nzBordered class="nowrap pd-10" [nzFrontPagination]="false" [nzShowPagination]="false"
                   [nzData]="dataTable">
           <thead>
             <tr>
-              <th nzWidth="45px">STT</th>
-              <th nzWidth="130px">Cục DTNN KB </th>
-              <th nzWidth="130px">Chi cục </th>
-              <th nzWidth="130px">Khối dự án/ công trình </th>
-              <th nzWidth="130px">Tên công trình</th>
-              <th nzWidth="130px">Điểm kho</th>
-              <th nzWidth="90px">Địa điểm</th>
-              <th>Thời gian sửa chữa gần nhất</th>
-              <th nzWidth="80px">Nguồn vốn</th>
-              <th nzWidth="80px">Tổng mức đầu tư (khái toán/dự toán) (đ)</th>
-              <th nzWidth="80px">Giá trị quyết toán được duyệt (đ)</th>
-              <th nzWidth="80px">Lũy kế cấp vốn đến thời điểm hiện tại(đ)</th>
-              <th nzWidth="80px">Kế hoạch vốn năm hiện tại (đ)</th>
-              <th nzWidth="130px">Ghi chú</th>
+              <th class="text-center" nzWidth="45px">STT</th>
+              <th class="text-center" nzWidth="130px">Cục DTNN KV </th>
+              <th class="text-center" nzWidth="130px">Chi cục </th>
+              <th class="text-center" nzWidth="130px">Khối dự án/ công trình </th>
+              <th class="text-center" nzWidth="130px">Tên công trình</th>
+              <th class="text-center" nzWidth="130px">Điểm kho</th>
+              <th class="text-center" nzWidth="90px">Địa điểm</th>
+              <th class="text-center">Thời gian sửa chữa gần nhất</th>
+              <th class="text-center" nzWidth="80px">Nguồn vốn</th>
+              <th class="text-center" nzWidth="80px">Tổng mức đầu tư (khái toán/dự toán) (đ)</th>
+              <th class="text-center" nzWidth="80px">Giá trị quyết toán được duyệt (đ)</th>
+              <th class="text-center" nzWidth="80px">Lũy kế cấp vốn đến thời điểm hiện tại(đ)</th>
+              <th class="text-center" nzWidth="80px">Kế hoạch vốn năm hiện tại (đ)</th>
+              <th class="text-center" nzWidth="130px">Ghi chú</th>
+<!--              <th class="text-center" nzWidth="130px">Hành động</th>-->
             </tr>
           </thead>
           <tbody>
@@ -187,15 +188,19 @@
               <td><nz-input-number [nzSize]="'small'"  [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                                    nz-input [(ngModel)]="data.keHoachVon" [nzMin]="1" ></nz-input-number>
               <td>{{ data.ghiChu }}</td>
+<!--              <td>-->
+<!--                <a *ngIf="(formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU ) && !isViewDetail"-->
+<!--                  (click)="deleteRow(i)">-->
+<!--                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
+<!--                </a>-->
+<!--              </td>-->
             </tr>
           </tbody>
         </nz-table>
       </nz-collapse-panel>
     </nz-collapse>
   </nz-card>
-
 </div>
-
 <ng-template #error let-control>
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
   </ng-container>
