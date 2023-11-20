@@ -64,7 +64,7 @@ export class ThemMoiSlGtriHangDtqgXuatVtComponent extends Base2Component impleme
         loaiBc: [null],
         thoiHanGuiBc: [null],
         thongTuSo: ["130/2018/TT-BTC"],
-        bieuSo: ["010.H/BCDTQG-BN"],
+        bieuSo: ["009.H/BCDTQG-BN"],
         tenDonViGui: [null],
         maDonViGui: [null],
         tenDonViNhan: [null],
@@ -74,6 +74,7 @@ export class ThemMoiSlGtriHangDtqgXuatVtComponent extends Base2Component impleme
         tenTrangThai: ['Dự thảo'],
       }
     );
+    this.templateName = 'template_bcbn_sl_gtri_hang_dtqg_xuat_vt.xlsx'
   }
   async ngOnInit() {
     this.spinner.show();
@@ -331,6 +332,13 @@ export class ThemMoiSlGtriHangDtqgXuatVtComponent extends Base2Component impleme
           }
         }
       }
+    }
+  }
+
+  async handleSelectFile(event: any){
+    await this.onFileSelected(event);
+    if(this.dataImport.length > 0){
+      this.listDataGroup = this.dataImport
     }
   }
 }

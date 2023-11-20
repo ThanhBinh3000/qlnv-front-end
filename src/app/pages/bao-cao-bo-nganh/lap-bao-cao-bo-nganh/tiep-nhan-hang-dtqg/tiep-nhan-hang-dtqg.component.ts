@@ -146,7 +146,7 @@ export class TiepNhanHangDtqgComponent extends Base2Component implements OnInit 
     try {
       this.spinner.show();
       let body = this.formData.value;
-      body.idHdr = id;
+      body.id = id;
       body.typeFile = "xlsx";
       body.fileName = "bcbn_tiep_nhan_hang_dtqg.jrxml";
       await this.bcBnTt108Service.ketXuat(body).then(async s => {

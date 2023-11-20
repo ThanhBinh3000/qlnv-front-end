@@ -149,7 +149,7 @@ export class SlGtriHangDtqgComponent extends Base2Component implements OnInit {
     try {
       this.spinner.show();
       let body = this.formData.value;
-      body.idHdr = id;
+      body.id = id;
       body.typeFile = "xlsx";
       body.fileName = "bcbn_sl_gtri_hang_dtqg.jrxml";
       body.tenBaoCao = "Báo cáo số lượng và giá trị hàng DTQG";
