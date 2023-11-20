@@ -273,7 +273,7 @@
           </tbody>
         </nz-table>
         <div nz-row [nzGutter]="24">
-          <div nz-col [nzSpan]="formData.value.trangThai == STATUS.DU_THAO ? 24  : 12 ">
+          <div nz-col [nzSpan]="formData.value.trangThai == STATUS.DU_THAO ? 24  : 24 ">
             <nz-collapse nzAccordion>
               <nz-collapse-panel [nzHeader]="'ĐỀ XUẤT CỦA CÁC CỤC'" [nzActive]="true">
                 <nz-card class="mt-2px flex-card data-table card-border-content table-card">
@@ -369,7 +369,7 @@
               </nz-collapse-panel>
             </nz-collapse>
           </div>
-          <div nz-col nzSpan="12">
+          <div nz-col nzSpan="24">
             <nz-collapse nzAccordion *ngIf="formData.value.trangThai != STATUS.DU_THAO">
               <nz-collapse-panel [nzHeader]="'QUYẾT ĐỊNH CỦA TỔNG CỤC DTNN'" [nzActive]="true">
                 <nz-card class="mt-2px flex-card data-table card-border-content table-card">

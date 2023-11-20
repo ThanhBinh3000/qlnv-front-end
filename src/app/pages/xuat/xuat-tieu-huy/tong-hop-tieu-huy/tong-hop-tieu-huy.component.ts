@@ -38,21 +38,31 @@ export class TongHopTieuHuyComponent extends Base3Component implements OnInit {
     route: ActivatedRoute,
     router: Router,
     private _service: TongHopTieuHuyService,
+    private donviService : DonviService
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, _service);
     this.formData = this.fb.group({
       nam: null,
-      maSc: null,
-      maCc: null,
-      ngayTu: null,
-      ngayDen: null,
+      maDanhSach: null,
+      maDviSr: null,
+      ngayTaoTu: null,
+      ngayTaoDen: null,
     })
+  }
+
+  dsDonvi: any[] = [];
+  async loadDsDonVi() {
+    const dsTong = await this.donviService.layDonViCon();
+    if (!isEmpty(dsTong)) {
+      this.dsDonvi = dsTong.data.filter(s => s.type === 'DV');
+    }
   }
 
   async ngOnInit() {
     await this.spinner.show();
     await Promise.all([
       this.getId(),
+      this.loadDsDonVi(),
       this.search(),
     ])
     this.buildTableView()
