@@ -4,6 +4,11 @@
       <i class='fa fa-arrow-left'></i>
       <span>Quay lại</span>
     </button>
+    <button
+      type="button" class="btn btn-sub do" (click)="preview()" *ngIf="idInput > 0">
+      <i class="icon htvbdh_tcdt_tuchoi"></i>
+      <span>Xem trước</span>
+    </button>
     <button class='btn btn-sub btn-sm waves-effect waves-light'
             *ngIf='(!itemThongTri || itemThongTri.trangThai == STATUS.DU_THAO || itemThongTri.trangThai == STATUS.TU_CHOI_LDV || itemThongTri.trangThai == STATUS.TU_CHOI_LDTC ) && !isView && userService.isAccessPermisson("VONPHIHANG_PHICHINGVU_THONGTRI_THEM")'
             (click)='guiDuyet()' [disabled]='!formData.valid'>
@@ -49,7 +54,7 @@
       </div>
     </div>
     <form nzLayout='vertical' nz-form [formGroup]='formData'>
-      <div nz-row [nzGutter]='[24]'>
+      <div nz-row [nzGutter]='24'>
         <div nz-col [nzSpan]='4'>
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]='true'> Số thông tri</nz-form-label>
@@ -276,7 +281,7 @@
     </nz-card>
   </div>
   <form nzLayout='vertical' nz-form [formGroup]='formData'>
-    <div nz-row [nzGutter]='[24]'>
+    <div nz-row [nzGutter]='24'>
       <div nz-col [nzSpan]='24'>
         <nz-form-item>
           <nz-form-label nzRequired [nzNoColon]='true'> Nhận xét</nz-form-label>
@@ -298,3 +303,34 @@
     </div>
   </form>
 </div>
+
+<nz-modal [(nzVisible)]="showDlgPreview" nzTitle='THÔNG TRI DUYỆT Y DỰ TOÁN' nzWidth='100%'
+          (nzOnCancel)='closeDlg()'>
+  <div *nzModalContent class='modal__content'>
+    <pdf-viewer [src]='pdfSrc' [render-text]='true' style='width: 100%; height: 650px;'></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <div *ngIf="showDlgPreview">
+      <button nz-button (click)='downloadPdf()'
+              class='modal__button--save'>
+        <i class='icon htvbdh_file-pdf'></i>
+        Xuất .pdf
+      </button>
+      <button nz-button (click)='downloadWord()'
+              class='modal__button--save'>
+        <i class='icon htvbdh_file-word'></i>
+        Xuất .docx
+      </button>
+      <button nz-button (click)='printPreview()'
+              class='modal__button--save'>
+        <i class='icon htvbdh_printer'></i>
+        In
+      </button>
+      <button nz-button (click)='closeDlg()' class='modal__button--cancel'>
+        <i nz-icon nzType='close-circle' nzTheme='fill' class='icon-cancel'></i>
+        Đóng
+      </button>
+    </div>
+  </div>
+</nz-modal>
+
