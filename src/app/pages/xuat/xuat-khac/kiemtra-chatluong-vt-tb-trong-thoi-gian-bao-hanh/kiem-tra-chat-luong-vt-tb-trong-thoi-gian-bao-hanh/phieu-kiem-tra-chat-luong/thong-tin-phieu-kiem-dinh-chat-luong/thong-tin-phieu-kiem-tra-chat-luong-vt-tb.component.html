@@ -14,12 +14,12 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="xemTruoc(idInput,templateName)">
+        <button type="button" class="btn btn-sub ml-2" *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PKTCLSBH_XEMTRUOC')" (click)="xemTruoc(idInput,templateName)">
           <i class="icon htvbdh_totrinh"></i>
           <span> In/Xem trước </span>
         </button>
         <button
-          *ngIf="formData.value.trangThai == STATUS.DU_THAO "
+          *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PKTCLSBH_HOANTHANH') && formData.value.trangThai == STATUS.DU_THAO "
           type="button" class="btn btn-sub ml-2"
           (click)="saveAndSend(formData.value, STATUS.DA_HOAN_THANH, 'Bạn có muốn hoàn thành thông báo ?')">
           <i class="icon htvbdh_checkfile2"></i>
