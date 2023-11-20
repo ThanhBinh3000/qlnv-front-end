@@ -47,7 +47,7 @@ export class SlGtriHangDtqgXuatVtComponent extends Base2Component implements OnI
         tuNgayKyGui: [null],
         denNgayTao: [null],
         denNgayKyGui: [null],
-        bieuSo: ["010.H/BCDTQG-BN"],
+        bieuSo: ["009.H/BCDTQG-BN"],
       }
     );
   }
@@ -145,7 +145,7 @@ export class SlGtriHangDtqgXuatVtComponent extends Base2Component implements OnI
     try {
       this.spinner.show();
       let body = this.formData.value;
-      body.idHdr = id;
+      body.id = id;
       body.typeFile = "xlsx";
       body.fileName = "bcbn_sl_gtri_hang_dtqg_xuat_vt.jrxml";
       await this.bcBnTt108Service.ketXuat(body).then(async s => {

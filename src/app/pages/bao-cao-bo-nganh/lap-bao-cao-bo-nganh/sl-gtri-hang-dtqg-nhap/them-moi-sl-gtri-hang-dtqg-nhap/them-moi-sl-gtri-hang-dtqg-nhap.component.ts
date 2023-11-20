@@ -74,6 +74,7 @@ export class ThemMoiSlGtriHangDtqgNhapComponent extends Base2Component implement
         tenTrangThai: ['Dự thảo'],
       }
     );
+    this.templateName = 'template_bcbn_sl_gtri_hang_dtqg_nhap_trong_ky.xlsx'
   }
   async ngOnInit() {
     this.spinner.show();
@@ -359,6 +360,13 @@ export class ThemMoiSlGtriHangDtqgNhapComponent extends Base2Component implement
           }
         }
       }
+    }
+  }
+
+  async handleSelectFile(event: any){
+    await this.onFileSelected(event);
+    if(this.dataImport.length > 0){
+      this.listDataGroup = this.dataImport
     }
   }
 }
