@@ -163,7 +163,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     this.conVertTreToList();
     body.chiTiets = this.dataTableRes;
     if (isOther) {
-      await super.saveAndSend(body, trangThai, 'Bạn có muốn gửi duyệt đề xuất này ?', 'Gửi duyệt thành công.');
+      await super.saveAndSend(body, trangThai, 'Bạn có muốn gửi duyệt đề xuất này ?', 'Thao tác thành công.');
     } else {
       await this.createUpdate(body);
     }
