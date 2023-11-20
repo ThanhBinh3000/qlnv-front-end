@@ -145,7 +145,7 @@ export class TongChiMuaHangComponent extends Base2Component implements OnInit {
     try {
       this.spinner.show();
       let body = this.formData.value;
-      body.idHdr = id;
+      body.id = id;
       body.typeFile = "xlsx";
       body.fileName = "bcbn_tong_chi_mua_hang_dtqg_trong_ky.jrxml";
       await this.bcBnTt108Service.ketXuat(body).then(async s => {

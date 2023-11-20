@@ -137,15 +137,7 @@
       <i class="icon htvbdh_download2"></i>
       <span>Tải biểu mẫu import dữ liệu</span>
     </button>
-<!--    <button-->
-<!--      type="file" class="btn btn-sub xanh-nhat" (click)="onFileSelected($event)">-->
-<!--      <i class="icon htvbdh_nhap-excel"></i>-->
-<!--      <span>Import dữ liệu</span>-->
-<!--    </button>-->
-<!--    <input class="custom-file-input" type="file" (change)="onFileSelected($event)">-->
-
-    <input type="file" (change)="onFileSelected($event)"/>
-<!--    <button (click)="uploadFile()">Import dữ liệu</button>-->
+    <input type="file" (change)="handleSelectFile($event)"/>
   </div>
 </div>
 <nz-card class="mt-2px flex-card data-table card-border-content table-card">

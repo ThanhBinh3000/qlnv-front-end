@@ -77,6 +77,10 @@ export class Base2Component implements OnInit {
     tenBaoCao: "",
     trangThai: ""
   };
+  selectedFile: File | null = null;
+  templateName: any
+  dataImport: any[] = [];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -699,10 +703,43 @@ export class Base2Component implements OnInit {
     });
   }
 
-  downloadTemplate(fileName) {
-    this.service.downloadTemplate(fileName).then( s => {
+  downloadTemplate(templateName: any) {
+    this.service.downloadTemplate(templateName).then( s => {
       const blob = new Blob([s], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-      saveAs(blob, fileName + '.xlsx');
+      saveAs(blob, templateName);
     });
+  }
+
+  async onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0] as File;
+    if (await this.isExcelFile(this.selectedFile)) {
+      await this.uploadFile();
+    }else{
+      this.notification.error(MESSAGE.ERROR, 'Chọn file đuôi .xlsx');
+    }
+  }
+
+  async isExcelFile(file: File) {
+    const allowedExtensions = ['.xlsx'];
+    const fileName = file.name.toLowerCase();
+
+    return allowedExtensions.some(ext => fileName.endsWith(ext));
+  }
+
+  async uploadFile() {
+    if (this.selectedFile) {
+      const formData = new FormData();
+      Object.keys(this.formData.value).forEach(key => {
+        formData.append(key, this.formData.value[key]);
+      });
+      formData.append('file', this.selectedFile);
+      await this.service.importExcel(formData).then(res => {
+        if(res.msg == MESSAGE.SUCCESS){
+          console.log(res.data, "res.data")
+          this.dataImport = res.data
+          console.log(this.dataImport, "this.dataImport")
+        }
+      })
+    }
   }
 }
