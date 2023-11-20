@@ -65,11 +65,6 @@ export abstract class BaseService {
     return this._httpClient.post(url, body, { responseType: 'blob' });
   }
 
-  exportReport(body: any): Observable<Blob> {
-    const url = `http://192.168.5.184:3333/nhap-xuat-ton/bao-cao-chi-tiet`;
-    return this._httpClient.post(url, body, { responseType: 'blob' });
-  }
-
   deleteMuti(body): Promise<OldResponseData> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/xoa/multi`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
@@ -83,9 +78,9 @@ export abstract class BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/danh-sach`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
-  downloadTemplate(body) {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/report-template/findByTenFileAndTrangThai`;
-    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  downloadTemplate(tenFile) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/report-template/findByTenFileAndTrangThai/${tenFile}`;
+    return this._httpClient.get(url, { responseType: 'blob' }).toPromise();
   }
   importExcel(body): Promise<OldResponseData> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/bc-dtqg-bn/tt-130/import-du-lieu`;
