@@ -65,7 +65,7 @@ import {
 import {
   DialogTableSelectionComponent
 } from "../../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import { FILETYPE } from "../../../../../../../constants/fileType";
+import { FILETYPE, PREVIEW } from "../../../../../../../constants/fileType";
 import { QuyetDinhDieuChinhCTKHService } from 'src/app/services/dieu-chinh-chi-tieu-ke-hoach/quyet-dinh-dieu-chinh-ctkh';
 import { DeXuatDieuChinhCTKHService } from 'src/app/services/dieu-chinh-chi-tieu-ke-hoach/de-xuat-dieu-chinh-ctkh';
 import { PhuongAnDieuChinhCTKHService } from 'src/app/services/dieu-chinh-chi-tieu-ke-hoach/phuong-an-dieu-chinh-ctkh';
@@ -178,10 +178,13 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   //xem trước
   pdfSrc: any;
+  wordSrc: any;
   excelSrc: any;
+  printSrc: any;
   pdfBlob: any;
   excelBlob: any;
   showDlgPreview = false;
+  showDlgPreviewTheoCuc = false;
 
   constructor(
     private router: Router,
@@ -1444,6 +1447,41 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       }
     }
     return sumVal ? Intl.NumberFormat('vi-VN').format(sumVal) : '0';
+  }
+
+  async preViewTheoCuc() {
+    this.spinner.show();
+    //Convert data to list object cuc
+    this.quyetDinhDieuChinhCTKHService.xemTruocCtKhNamTheoCuc({
+      id: this.thongTinChiTieuKeHoachNam.id,
+      tenBaoCao: 'dieu_chinh_chi_tieu_ke_hoach_nam_theo_tung_cuc.docx',
+      dataVatTunhap: this.getDataPreviewTheoCuc(this.dsKeHoachLuongThucClone),
+    }).then(async res => {
+      if (res.data) {
+        this.printSrc = res.data.pdfSrc;
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreviewTheoCuc = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
+      }
+    });
+    this.spinner.hide();
+  }
+
+  getDataPreviewTheoCuc(khLuongThuc) {
+    let arrayData = [];
+    if (khLuongThuc && khLuongThuc.length > 0) {
+      for (let item of khLuongThuc) {
+        let data = {
+          tenDvi: item.tenDvi,
+          maDvi: item.maDvi,
+          khVatTuNhap: (this.dataVatTuNhapTree && this.dataVatTuNhapTree.length > 0) ? this.dataVatTuNhapTree.find(it => it.maDvi == item.maDvi) : [],
+        };
+        arrayData = [...arrayData, data];
+      }
+    }
+    return arrayData;
   }
 
   exportData() {
