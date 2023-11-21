@@ -12,37 +12,41 @@
                   nzMessage='Lý do từ chối' nzDescription='{{formData.value.lyDoTuChoi}}'>
         </nz-alert>
       </div>
-      <div class='btn-group'>
-        <button type='button' class='btn btn-sub mr-2' (click)='goBack()'>
-          <i class='fa fa-arrow-left'></i>
+      <div class="btn-group">
+        <button type="button" class="btn btn-sub mr-2" (click)="quayLai()">
+          <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
-        <button *ngIf='idInput' type='button' class='btn btn-sub do mr-2' (click)='preview(idInput)'>
+        <button *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_PKNCL_IN') && idInput" type='button' class='btn btn-sub do mr-2' (click)='preview(idInput)'>
           <i class='icon htvbdh_totrinh'></i>
           <span> In/Xem trước </span>
         </button>
-        <button class='btn btn-sub xanh-nhat mr-2' type='button'
-                *ngIf=' this.userService.isCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDC'
-                (click)="saveAndSend(formData.value,STATUS.CHO_DUYET_TP,'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
-          <i class='icon htvbdh_tcdt_guiduyet'></i>
+        <button
+          *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_PKNCL_THEM') && (formData.value.trangThai == STATUS.DU_THAO ||
+          formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC) && !isView"
+          type="button" class="btn btn-sub mr-2"
+          (click)="saveAndSend(formData.value, STATUS.CHO_DUYET_TP, 'Bạn có muốn gửi duyệt ?')">
+          <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Lưu và gửi duyệt</span>
         </button>
-        <button type='button' class='btn btn-sub do mr-2' (click)='tuChoi()'
-                *ngIf="  (this.userService.isCuc() && formData.value.trangThai == STATUS.CHO_DUYET_LDC   && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_KTCL_LT_PKNCL_DUYET_LDCUC'))
-        ||(this.userService.isCuc() && formData.value.trangThai == STATUS.CHO_DUYET_TP   && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_DUYET_TP'))">
-          <i class='icon htvbdh_tcdt_tuchoi do'></i>
+        <button
+          *ngIf="(userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_PKNCL_DUYETTP') && formData.value.trangThai == STATUS.CHO_DUYET_TP)
+          || (userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_PKNCL_DUYETLDC')  && formData.value.trangThai == STATUS.CHO_DUYET_LDC) && this.userService.isCuc()"
+          type="button" class="btn btn-sub do mr-2" (click)="tuChoi()">
+          <i class="icon htvbdh_tcdt_tuchoi do"></i>
           <span>Từ chối</span>
         </button>
-        <button class='btn btn-sub xanh-nhat mr-2' (click)='pheDuyet()'
-                *ngIf="  (this.userService.isCuc() && formData.value.trangThai == STATUS.CHO_DUYET_LDC   && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_KTCL_LT_PKNCL_DUYET_LDCUC'))
-        ||(this.userService.isCuc() && formData.value.trangThai == STATUS.CHO_DUYET_TP   && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_DUYET_TP'))">
-          <i class='icon htvbdh_tcdt_pheduyet '></i>
+        <button
+          *ngIf="(userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_PKNCL_DUYETTP') && formData.value.trangThai == STATUS.CHO_DUYET_TP)
+           || (userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_PKNCL_DUYETLDC') && formData.value.trangThai == STATUS.CHO_DUYET_LDC) && this.userService.isCuc()"
+          class="btn btn-sub xanh-nhat mr-2" (click)="pheDuyet()">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Duyệt</span>
         </button>
-        <button class='btn btn-sub xanh mr-2'
-                *ngIf=' this.userService.isCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDC'
-                (click)='save()'>
-          <i class='icon  htvbdh_tcdt_save'></i>
+        <button
+          *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_PKNCL_THEM') && !isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC )"
+          type="button" class="btn btn-main" (click)="save()">
+          <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
       </div>
@@ -145,7 +149,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]='true'> Lãnh đạo cục</nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName='nguoiPduyet' readonly />
+                  <input nz-input formControlName='lanhDaoCuc' readonly />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -200,14 +204,6 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]='6'>
-              <nz-form-item>
-                <nz-form-label [nzNoColon]='true'> Tên hàng hóa</nz-form-label>
-                <nz-form-control [nzErrorTip]='error'>
-                  <input nz-input formControlName='moTaHangHoa' readonly='true' />
-                </nz-form-control>
-              </nz-form-item>
-            </div>
             <div nz-col nzSpan='6'>
               <nz-form-item>
                 <nz-form-label [nzNoColon]='true'>
@@ -222,7 +218,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan='3'>
+            <div nz-col nzSpan='6'>
               <nz-form-item>
                 <nz-form-label [nzNoColon]='true'>
                   Ngày lấy mẫu
@@ -231,7 +227,7 @@
                 </nz-date-picker>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan='3'>
+            <div nz-col nzSpan='6'>
               <nz-form-item>
                 <nz-form-label [nzNoColon]='true'>
                   Ngày kiểm nghiệm mẫu

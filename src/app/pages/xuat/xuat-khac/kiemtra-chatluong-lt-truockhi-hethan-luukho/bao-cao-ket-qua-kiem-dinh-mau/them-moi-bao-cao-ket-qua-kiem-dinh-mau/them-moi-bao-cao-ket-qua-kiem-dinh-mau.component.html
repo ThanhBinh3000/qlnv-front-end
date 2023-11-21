@@ -25,7 +25,7 @@
         </button>
         <button
           *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_BCKQKD_THEM') && (formData.value.trangThai == STATUS.DU_THAO ||
-       formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC) && !isView"
+          formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC) && !isView"
           type="button" class="btn btn-sub"
           (click)="saveAndSend(formData.value, STATUS.CHO_DUYET_TP, 'Bạn có muốn gửi duyệt ?')">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
