@@ -69,6 +69,7 @@ import { FILETYPE, PREVIEW } from "../../../../../../../constants/fileType";
 import { QuyetDinhDieuChinhCTKHService } from 'src/app/services/dieu-chinh-chi-tieu-ke-hoach/quyet-dinh-dieu-chinh-ctkh';
 import { DeXuatDieuChinhCTKHService } from 'src/app/services/dieu-chinh-chi-tieu-ke-hoach/de-xuat-dieu-chinh-ctkh';
 import { PhuongAnDieuChinhCTKHService } from 'src/app/services/dieu-chinh-chi-tieu-ke-hoach/phuong-an-dieu-chinh-ctkh';
+import printJS from 'print-js';
 
 @Component({
   selector: 'app-dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -1482,6 +1483,22 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       }
     }
     return arrayData;
+  }
+
+  closeDlgTheoCuc() {
+    this.showDlgPreviewTheoCuc = false;
+  }
+
+  downloadPdfCuc() {
+    saveAs(this.pdfSrc, 'dieu_chinh_chi_tieu_ke_hoach_nam_theo_tung_cuc.pdf');
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, 'dieu_chinh_chi_tieu_ke_hoach_nam_theo_tung_cuc.docx');
+  }
+
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true });
   }
 
   exportData() {
