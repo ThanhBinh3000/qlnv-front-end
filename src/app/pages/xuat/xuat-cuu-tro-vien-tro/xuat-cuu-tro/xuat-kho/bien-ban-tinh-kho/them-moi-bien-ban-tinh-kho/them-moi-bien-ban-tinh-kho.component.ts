@@ -152,11 +152,15 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       await this.bienBanTinhKhoService.getDetail(idInput)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            this.formData.patchValue({ ...res.data, tenNganLoKho: res.data.tenLoKho ? `${res.data.tenLoKho} - ${res.data.tenNganKho}` : res.data.tenNganKho });
             const data = res.data;
+            this.formData.patchValue({
+              ...data, tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
+              // soPhieuKnCl: data.soPhieuKnCl ? data.soPhieuKnCl : data.listPhieuXuatKho[0]?.soPhieuKnCl,
+              // idPhieuKnCl: data.idPhieuKnCl ? data.idPhieuKnCl : data.listPhieuXuatKho[0]?.idPhieuKnCl
+            });
             this.fileDinhKems = data.fileDinhKems;
             this.dataTable = data.listPhieuXuatKho;
-
+            this.tongSoLuongXk = this.dataTable.reduce((prev, cur) => prev + cur.slXuat, 0);
           }
         })
         .catch((e) => {
@@ -307,13 +311,13 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       let res = await this.phieuXuatKhoService.search(body)
       const list = res.data.content;
       this.listPhieuXuatKho = list.filter(item => ((item.maLoKho === data.maLoKho && item.maNganKho === data.maNganKho) && item.soBangKeCh !== null));
+      this.dataTable = this.listPhieuXuatKho;
       this.formData.patchValue({
         ngayBatDauXuat: this.dataTable[this.dataTable.length - 1]?.ngayXuatKho,
         soPhieuKnCl: this.listPhieuXuatKho[0]?.soPhieuKnCl,
         idPhieuKnCl: this.listPhieuXuatKho[0]?.idPhieuKnCl,
         ngayKn: this.listPhieuXuatKho[0]?.ngayKn
       })
-      this.dataTable = this.listPhieuXuatKho;
       this.dataTable.forEach(s => {
         s.slXuat = s.thucXuat;
         s.soBkCanHang = s.soBangKeCh;
