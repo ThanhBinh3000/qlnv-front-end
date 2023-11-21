@@ -193,7 +193,7 @@ export class LuanPhienDoiHangDtqgComponent extends Base2Component implements OnI
 
 
   downloadPdf() {
-    saveAs(this.pdfBlob, "bc_kh_luan_phien_doi_hang_dtqg.pdf");
+    saveAs(this.pdfBlob, "bcbn_kh_luan_phien_doi_hang_dtqg.pdf");
   }
 
   async download(id: any, type: any) {
@@ -210,13 +210,13 @@ export class LuanPhienDoiHangDtqgComponent extends Base2Component implements OnI
       let body = this.formData.value;
       body.idHdr = id;
       body.typeFile = "xlsx";
-      body.fileName = "bc_kh_luan_phien_doi_hang_dtqg.jrxml";
+      body.fileName = "bcbn_kh_luan_phien_doi_hang_dtqg.jrxml";
       body.tenBaoCao = "Báo cáo KH luân phiên đổi hàng DTQG";
       body.trangThai = "01";
       await this.bcBnTt145Service.ketXuat(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
-        saveAs(this.excelBlob, "bc_kh_luan_phien_doi_hang_dtqg.xlsx");
+        saveAs(this.excelBlob, "bcbn_kh_luan_phien_doi_hang_dtqg.xlsx");
       });
       this.showDlgPreview = true;
     } catch (e) {
@@ -237,14 +237,14 @@ export class LuanPhienDoiHangDtqgComponent extends Base2Component implements OnI
       let body = this.formData.value;
       body.idHdr = id;
       body.typeFile = "pdf";
-      body.fileName = "bc_kh_luan_phien_doi_hang_dtqg.jrxml";
+      body.fileName = "bcbn_kh_luan_phien_doi_hang_dtqg.jrxml";
       body.tenBaoCao = "Báo cáo KH luân phiên đổi hàng DTQG";
       body.trangThai = "01";
       await this.bcBnTt145Service.ketXuat(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
-      saveAs(this.pdfBlob, "bc_kh_luan_phien_doi_hang_dtqg.pdf");
+      saveAs(this.pdfBlob, "bcbn_kh_luan_phien_doi_hang_dtqg.pdf");
       this.showDlgPreview = false;
     } catch (e) {
       console.log(e);
