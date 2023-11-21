@@ -24,6 +24,7 @@ export class ThongTinKhaoSatGia {
   donGia: number;
   donGiaVat: number;
   thoiHanBaoGia: string;
+  ngayBaoGia: any;
   ghiChu: string;
   fileDinhKem: FileDinhKem = new FileDinhKem();
 }
