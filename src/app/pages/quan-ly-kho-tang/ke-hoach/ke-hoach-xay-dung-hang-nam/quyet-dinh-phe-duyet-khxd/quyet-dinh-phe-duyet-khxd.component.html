@@ -44,7 +44,7 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3> DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH ĐẦU TƯ XÂY DỰNG KHO TÀNG DTQG HÀNG NĂM</h3>
+      <h3> DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT/ĐIỀU CHỈNH KẾ HOẠCH ĐẦU TƯ XÂY DỰNG KHO TÀNG DTQG HÀNG NĂM</h3>
       <div class="buttons">
         <button type="button" class="btn btn-sub btn-xoa" (click)="deleteMulti()" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_QD_XOA')">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
@@ -74,7 +74,9 @@
           <th class="text-center" nzWidth="120px">Năm kế hoạch</th>
           <th class="text-center" nzWidth="150px">Số QĐ/Số TB của BTC/Bộ KHDT</th>
           <th class="text-center" nzWidth="150px">Số tờ trình của TCDT</th>
-          <th class="text-center" nzWidth="150px">Ngày ký QĐ</th>
+          <th class="text-center" nzWidth="150px">Ngày ký QĐ của BTC</th>
+          <th class="text-center" nzWidth="150px">Số QĐ của BTC</th>
+          <th class="text-center" nzWidth="150px">Lần điều chỉnh</th>
           <th class="text-center" nzWidth="">Trích yếu</th>
           <th class="text-center" nzWidth="100px">Trạng thái</th>
           <th class="text-center" nzWidth="150px">Hành động</th>
@@ -136,6 +138,8 @@
           <td>{{ data.soQuyetDinh }}</td>
           <td> <a nz-button nzType="link" (click)="openModalCttongHop(data)">{{ data.phuongAnTc }}</a></td>
           <td class="text-center">{{ data.ngayKyBtc | date: 'dd/MM/YYYY' }}</td>
+          <td class="text-center">{{ data.soQdCanDieuChinh}}</td>
+          <td class="text-center">{{ data.soLanDieuChinh}}</td>
           <td>{{data.trichYeu}}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">

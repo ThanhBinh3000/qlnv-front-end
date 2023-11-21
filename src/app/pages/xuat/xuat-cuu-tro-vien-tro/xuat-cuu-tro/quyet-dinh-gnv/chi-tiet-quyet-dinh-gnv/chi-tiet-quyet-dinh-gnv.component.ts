@@ -371,8 +371,15 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     this.showListEvent.emit();
   }
   checkHoanTatPhanBo() {
-    const tongSoLuong = this.formData.value.soLuong;
-    const dataDtl = this.formData.value.dataDtl.filter(f => f.maDvi && f.maDvi.includes(this.userInfo.MA_DVI)).map(f => ({ ...f, noiDungDxTenChiCuc: `${f.noiDungDx}-${f.cloaiVthh ? f.cloaiVthh : f.loaiVthh}-${f.tenChiCuc}` }));
+    const { soLuong: tongSoLuong, tenVthh } = this.formData.value;
+    const dataDtlFilterDonVi = this.formData.value.dataDtl.filter(f => f.maDvi && f.maDvi.includes(this.userInfo.MA_DVI))
+    let dataDtl = [];
+    if (this.loaiXuat === 'XC' || tenVthh !== "Vật tư thiết bị") {
+      dataDtl = dataDtlFilterDonVi.map(f => ({ ...f, noiDungDxTenChiCuc: `${f.noiDungDx}-${f.loaiVthh}-${f.tenChiCuc}` }));
+    } else {
+      dataDtl = dataDtlFilterDonVi.map(f => ({ ...f, noiDungDxTenChiCuc: `${f.noiDungDx}-${f.cloaiVthh ? f.cloaiVthh : f.loaiVthh}-${f.tenChiCuc}` }));
+    }
+
     const tongSoLuongPb = dataDtl.reduce((sum, cur) => {
       if (this.formData.value.type === 'XC' && this.formData.value.paXuatGaoChuyenXc) {
         sum += cur.slGaoThuHoiSauXayXat ? cur.slGaoThuHoiSauXayXat : 0
@@ -432,7 +439,6 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     }
     if (trangThai === STATUS.DA_HOAN_THANH) {
       if (!this.checkHoanTatPhanBo()) return;
-
       this.modal.confirm({
         nzClosable: false,
         nzTitle: 'Xác nhận',
