@@ -38,6 +38,8 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   listSoQuyetDinh: any[] = []
   listDiaDiemNhap: any[] = [];
   listPhieuXuatKho: any[] = [];
+  bbTinhKho: any[] = [];
+  bbTinhKhoDtl: any[] = [];
   fileDinhKems: any[] = [];
   listDiemKho: any[] = [];
   maBb: string;
@@ -260,6 +262,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     if (dataChiCuc) {
       this.listDiaDiemNhap = dataChiCuc;
     }
+    this.phieuXuatKho(data.soBbQd);
     await this.spinner.hide();
   }
 
@@ -282,7 +285,30 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       this.bindingDataDdNhap(data);
     });
   }
-
+  async phieuXuatKho(soQd){
+    let body = {
+      soQdGiaoNvXh: soQd,
+    }
+    let res = await this.bienBanTinhKhoService.search(body)
+    console.log(res,"res");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.bbTinhKho = res.data.content;
+      console.log(this.listDiaDiemNhap,"this.listDiaDiemNhap")
+      console.log(this.bbTinhKho,"this.bbTinhKho")
+      let phieuXk = [
+        ...this.listDiaDiemNhap.filter((e) => {
+          return !this.bbTinhKho.some((bb) => {
+            if (bb.maLoKho.length > 0 && e.maLoKho.length > 0) {
+              return bb.maLoKho === e.maLoKho;
+            }else {
+              return bb.maNganKho === e.maNganKho;
+            }
+          })
+        })
+      ];
+      this.listDiaDiemNhap = phieuXk;
+    }
+  }
   async bindingDataDdNhap(data) {
     if (data) {
       this.formData.patchValue({

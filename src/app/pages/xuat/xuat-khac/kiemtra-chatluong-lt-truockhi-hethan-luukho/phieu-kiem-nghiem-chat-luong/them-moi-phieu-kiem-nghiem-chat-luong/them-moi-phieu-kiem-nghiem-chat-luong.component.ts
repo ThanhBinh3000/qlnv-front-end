@@ -121,7 +121,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         tenNhaKho: [],
         tenNganKho: [],
         tenLoKho: [],
-        nguoiPduyet: [],
+        lanhDaoCuc: [],
         fileDinhKems: [new Array<FileDinhKem>()],
         phieuKnClDtl: [new Array()],
 
