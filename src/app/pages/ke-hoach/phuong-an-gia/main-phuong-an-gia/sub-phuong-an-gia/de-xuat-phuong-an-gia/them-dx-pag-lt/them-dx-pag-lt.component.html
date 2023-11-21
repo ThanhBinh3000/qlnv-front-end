@@ -309,13 +309,14 @@
           <td>{{ idx + 1 }}</td>
           <td>{{ data.tenChiCuc }}</td>
           <td class="text-right">{{ data.soLuongCtieu | number : '1.0-1' : 'vi-VN'}}</td>
-          <td class="text-right">
+          <td class="text-right" *ngIf="!isView">
             <nz-input-number [(ngModel)]="data.soLuong" [nzSize]="'small'" nz-input [nzMin]="0"
                              [nzFormatter]="globals.formatter"
                              [nzMax]="data.soLuongCtieu > 0 ? data.soLuongCtieu : 0"
                              [nzParser]="globals.parser" [nzDisabled]="isView">
             </nz-input-number>
           </td>
+          <td class="text-right" *ngIf="isView">{{ data.soLuong | number : '1.0-1' : 'vi-VN' }}</td>
           <td class="text-right" *ngIf="isApDungTatCa == true">{{ data.giaDn | number : '1.0-1' : 'vi-VN' }}</td>
           <td *ngIf="isApDungTatCa == false">
             <nz-input-number [(ngModel)]="data.giaDn" [nzSize]="'small'" nz-input [nzMin]="0"
@@ -530,8 +531,8 @@
         <div nz-row [nzGutter]="16" class="mb-10">
           <div nz-col [nzSpan]="24">
             <nz-form-item class="form-item">
-              <nz-form-label [nzNoColon]="true" nzFor="ngay-qd">Nội dung</nz-form-label>
-              <nz-form-control>
+              <nz-form-label [nzNoColon]="true" nzRequired>Nội dung</nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
                 <textarea [readonly]="isView" formControlName="noiDung" rows="3" class="search__input"
                           nz-input></textarea>
               </nz-form-control>

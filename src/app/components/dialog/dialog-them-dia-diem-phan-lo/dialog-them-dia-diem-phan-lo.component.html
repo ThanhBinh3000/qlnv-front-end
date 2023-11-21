@@ -73,10 +73,10 @@
       <th class="text-center"> Tồn kho</th>
       <th class="text-center"><span style='color: red'>*</span> SL xuất bán <br>đề xuất</th>
       <th class="text-center"><span style='color: red'>*</span> Đơn giá <br>đề xuất
-        {{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? '(đ)' : '(đ/kg)'}}
+        {{typeLoaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? '(đ)' : '(đ/kg)'}}
       </th>
       <th class="text-center"> Đơn giá được <br>duyệt
-        {{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? '(đ)' : '(đ/kg)'}}
+        {{typeLoaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? '(đ)' : '(đ/kg)'}}
       </th>
       <th class="text-center"> Thành tiền <br>đề xuất (đ)</th>
       <th class="text-center"> Thành tiền <br>được duyệt (đ)</th>
@@ -114,20 +114,24 @@
       </th>
       <th>
         <input class="money-input" currencyMask [options]="amount" [min]="0"
-               [(ngModel)]="thongtinPhanLo.soLuongDeXuat" (ngModelChange)="onChangeTinh()"/>
+               [(ngModel)]="thongtinPhanLo.soLuongDeXuat" (ngModelChange)="onChangeTinh($event)"/>
       </th>
       <th>
         <input class="money-input" currencyMask [options]="amount" [min]="0"
-               [(ngModel)]="thongtinPhanLo.donGiaDeXuat" (ngModelChange)="onChangeTinh()"/>
+               [(ngModel)]="thongtinPhanLo.donGiaDeXuat" (ngModelChange)="onChangeTinh($event)"/>
       </th>
       <th class="text-right">
-        {{ thongtinPhanLo.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}
+         <span *ngIf="thongtinPhanLo.donGiaDuocDuyet">
+           {{ thongtinPhanLo.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}
+         </span>
       </th>
       <th class="text-right">
         {{ thongtinPhanLo.giaKhoiDiemDx|number:globals.numberFormat:globals.locale }}
       </th>
       <th class="text-right">
-        {{ thongtinPhanLo.giaKhoiDiemDd|number:globals.numberFormat:globals.locale }}
+         <span *ngIf="thongtinPhanLo.thanhTienDuocDuyet">
+           {{ thongtinPhanLo.thanhTienDuocDuyet|number:globals.numberFormat:globals.locale }}
+         </span>
       </th>
       <th class="text-center">
         <a (click)="addDiemKho()">
@@ -158,8 +162,8 @@
         </td>
         <td class="text-right">{{ data.giaKhoiDiemDx|number:globals.numberFormat:globals.locale }}</td>
         <td class="text-right">
-              <span *ngIf="data.giaKhoiDiemDd">
-                {{ data.giaKhoiDiemDd | number:globals.numberFormat:globals.locale }}
+              <span *ngIf="data.thanhTienDuocDuyet">
+                {{ data.thanhTienDuocDuyet | number:globals.numberFormat:globals.locale }}
               </span>
         </td>
         <td class="text-center">
@@ -210,13 +214,17 @@
                  [(ngModel)]="editCache[idx].data.donGiaDeXuat" (ngModelChange)="onChangeTinhEdit(idx)"/>
         </td>
         <td class="text-right">
-          {{ editCache[idx].data.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}
+          <span *ngIf="editCache[idx].data.donGiaDuocDuyet">
+            {{ editCache[idx].data.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}
+          </span>
         </td>
         <td class="text-right">
           {{ editCache[idx].data.giaKhoiDiemDx|number:globals.numberFormat:globals.locale }}
         </td>
         <td class="text-right">
-          {{ editCache[idx].data.giaKhoiDiemDd|number:globals.numberFormat:globals.locale }}
+          <span *ngIf="editCache[idx].data.thanhTienDuocDuyet">
+            {{ editCache[idx].data.thanhTienDuocDuyet|number:globals.numberFormat:globals.locale }}
+          </span>
         </td>
         <td class="text-center">
           <a (click)="saveEdit(idx)" class="save">
@@ -269,6 +277,3 @@
     </div>
   </div>
 </div>
-<ng-template #error let-control>
-  <app-template-error #error [control]="control"></app-template-error>
-</ng-template>

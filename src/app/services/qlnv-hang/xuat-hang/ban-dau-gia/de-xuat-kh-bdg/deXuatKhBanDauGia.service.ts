@@ -19,13 +19,13 @@ export class DeXuatKhBanDauGiaService extends BaseService {
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
-  getGiaBanToiThieu(cloaiVthh: string, maDvi: string, namKhoach: string) {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/gia-ban-toi-thieu/${cloaiVthh}/${maDvi}/${namKhoach}`;
-    return this.httpClient.get<any>(url).toPromise();
+  getDonGiaDuocDuyet(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/gia-duoc-duyet`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
-  getDonGiaDuocDuyet(cloaiVthh: string, maDvi: string, nam: string) {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/don-gia-duoc-duyet/${cloaiVthh}/${maDvi}/${nam}`;
+  getGiaBanToiThieu(cloaiVthh: string, maDvi: string, namKhoach: string) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/gia-ban-toi-thieu/${cloaiVthh}/${maDvi}/${namKhoach}`;
     return this.httpClient.get<any>(url).toPromise();
   }
 }
