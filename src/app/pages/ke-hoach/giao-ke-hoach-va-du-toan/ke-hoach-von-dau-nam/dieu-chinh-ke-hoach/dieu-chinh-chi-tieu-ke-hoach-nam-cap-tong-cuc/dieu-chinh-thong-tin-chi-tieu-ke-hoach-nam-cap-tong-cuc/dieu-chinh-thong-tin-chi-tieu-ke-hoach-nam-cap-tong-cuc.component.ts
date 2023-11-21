@@ -1750,7 +1750,16 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   downloadPdf() {
-    saveAs(this.pdfBlob, 'baocao.pdf');
+    // saveAs(this.pdfBlob, 'dieu-chinh-chi-tieu-ke-hoach.pdf');
+    if (this.subTab === 'LT') {
+      saveAs(this.pdfBlob, "dieu-chinh-chi-tieu-luong-thuc.pdf");
+    } else if (this.subTab === 'MUOI') {
+      saveAs(this.pdfBlob, "dieu-chinh-chi-tieu-muoi.pdf");
+    } else if (this.subTab === 'VT-NHAP') {
+      saveAs(this.pdfBlob, "dieu-chinh-chi-tieu-nhap-vat-tu-thiet-bi.pdf");
+    } else if (this.subTab === 'VT-XUAT') {
+      saveAs(this.pdfBlob, "dieu-chinh-chi-tieu-xuat-vat-tu-thiet-bi.pdf");
+    }
   }
 
   async downloadExcel() {
@@ -1764,7 +1773,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           tenBaoCao: "Kế hoạch lương thực dự trữ nhà nước"
         }).then(async s => {
           this.excelBlob = s;
-          saveAs(this.excelBlob, "Kế hoạch lương thực dự trữ nhà nước.xlsx");
+          saveAs(this.excelBlob, "dieu-chinh-chi-tieu-luong-thuc.xlsx");
         });
       } else if (this.subTab === 'MUOI') {
         await this.quyetDinhDieuChinhCTKHService.xemTruocCtKhNamMuoi({
@@ -1774,7 +1783,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           fileName: 'chi-tieu-vat-tu-thiet-bi.jrxml',
         }).then(async s => {
           this.excelBlob = s;
-          saveAs(this.excelBlob, "chi-tieu-nhap-vat-tu-thiet-bi.xlsx");
+          saveAs(this.excelBlob, "dieu-chinh-chi-tieu-muoi.xlsx");
         });
       } else if (this.subTab === 'VT-NHAP') {
         await this.quyetDinhDieuChinhCTKHService.xemTruocCtKhNamVatTu({
@@ -1785,7 +1794,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           loaiNhapXuat: 'NHAP'
         }).then(async s => {
           this.excelBlob = s;
-          saveAs(this.excelBlob, "chi-tieu-nhap-vat-tu-thiet-bi.xlsx");
+          saveAs(this.excelBlob, "dieu-chinh-chi-tieu-nhap-vat-tu-thiet-bi.xlsx");
         });
       } else if (this.subTab === 'VT-XUAT') {
         await this.quyetDinhDieuChinhCTKHService.xemTruocCtKhNamVatTu({
@@ -1796,7 +1805,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           loaiNhapXuat: 'XUAT'
         }).then(async s => {
           this.excelBlob = s;
-          saveAs(this.excelBlob, "chi-tieu-xuat-vat-tu-thiet-bi.xlsx");
+          saveAs(this.excelBlob, "dieu-chinh-chi-tieu-xuat-vat-tu-thiet-bi.xlsx");
         });
       }
       this.showDlgPreview = true;

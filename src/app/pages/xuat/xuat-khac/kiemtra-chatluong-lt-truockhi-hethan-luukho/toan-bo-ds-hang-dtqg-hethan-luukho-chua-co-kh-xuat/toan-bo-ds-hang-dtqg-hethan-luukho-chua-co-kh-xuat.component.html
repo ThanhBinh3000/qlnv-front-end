@@ -82,7 +82,7 @@
       <h3 class="text-uppercase">Danh sách kiểm tra chất lượng lương thực trước khi hết hạn lưu kho</h3>
       <div class="buttons">
         <button type="button" class="btn btn-main"
-                *ngIf="userService.isCuc()" (click)="openTongHop()">
+                *ngIf="userService.isCuc() && userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_THDS_THEM')" (click)="openTongHop()">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Tổng hợp DS kiểm tra chất lượng LT trước khi hết hạn lưu kho</span>
         </button>

@@ -212,7 +212,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
       };
       let res = await this.donViService.getAll(body);
       if (res.msg === MESSAGE.SUCCESS) {
-        this.listChiCuc = this.dataChiTieu.khLuongThuc
+        this.listChiCuc = this.dataChiTieu.khLuongThuc.filter(x => x.ntnThoc != 0)
         this.listChiCuc.map(v => Object.assign(v, { tenDonVi: v.tenDvi }))
         console.log(this.listChiCuc, "this.listChiCuc")
       }

@@ -30,6 +30,7 @@ import {saveAs} from 'file-saver';
 export class ThemMoiBaoCaoKetQuaKiemDinhMauComponent extends Base2Component implements OnInit {
   @Input() isView: boolean;
   @Input() idInput: number;
+  @Input() idTongHop: number;
   @Input() loaiVthh: string;
 
   expandSetString = new Set<string>();
@@ -136,7 +137,7 @@ export class ThemMoiBaoCaoKetQuaKiemDinhMauComponent extends Base2Component impl
     }).then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
-        if (data && data.content && data.content.length > 0 && this.formData.value.maDanhSach == null) {
+        if (data && data.content && data.content.length > 0 && this.idTongHop == null) {
           this.listMaDs = data.content.filter(item => item.soBaoCao == null);
         } else {
           this.listMaDs = data.content
