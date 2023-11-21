@@ -7,12 +7,13 @@
     <th *ngIf="isTabNdKhac" class="text-center"> Thông tin tham khảo</th>
     <th *ngIf="!isTabNdKhac" class="text-center">Chủng loại hàng DTQG - Tiêu chuẩn, quy chuẩn</th>
     <th *ngIf="!isTabNdKhac && !isApDung " class="text-center">Chi cục</th>
-    <th class="text-center">Số lượng</th>
+    <th class="text-center">Số lượng áp dụng</th>
     <th class="text-center">Đơn giá chưa VAT (đồng/kg)</th>
     <th *ngIf="isVat" class="text-center">Đơn giá có VAT (đồng/kg)</th>
     <th *ngIf="isTabNdKhac" class="text-center">Chỉ số CPI</th>
     <th *ngIf="isTableKetQua && !isTabNdKhac" class="text-center">Thời hạn báo giá</th>
     <th *ngIf="!isTableKetQua && !isTabNdKhac" class="text-center">Thời hạn thẩm định</th>
+    <th class="text-center" *ngIf="isTableKetQua && !isTabNdKhac">Ngày báo giá</th>
     <th class="text-center">File đính kèm</th>
     <th class="text-center">Ghi chú</th>
     <th class="text-center" nzWidth="120px">Hành động</th>
@@ -76,6 +77,11 @@
     <th *ngIf="!isTabNdKhac">
       <input [readonly]="isView" type="text" [(ngModel)]="rowItem.thoiHanBaoGia" nz-input/>
     </th>
+    <th *ngIf="!isTabNdKhac && isTableKetQua">
+      <nz-date-picker [nzDisabled]="isView" [(ngModel)]="rowItem.ngayBaoGia" nzFormat="dd/MM/yyyy"
+                      class="search__input">
+      </nz-date-picker>
+    </th>
     <th>
       <nz-form-control>
         <nz-input-group nzSize="large" [nzAddOnAfter]="suffixIcon">
@@ -111,9 +117,10 @@
         <td *ngIf="!isTabNdKhac">{{ data.cloaiVthh }}</td>
         <td *ngIf="!isTabNdKhac && !isApDung">{{ data.tenChiCuc }}</td>
         <td class="text-right">{{data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
-        <td class="text-right">{{data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-right">{{data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
         <td class="text-right" *ngIf="isVat">{{data.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
         <td *ngIf="!isTabNdKhac">{{data.thoiHanBaoGia }}</td>
+        <td *ngIf="!isTabNdKhac && isTableKetQua" class="text-center">{{data.ngayBaoGia | date : 'dd/MM/yyyy' }}</td>
         <td *ngIf="isTabNdKhac">{{data.chiSoCpi }}</td>
         <td>{{data.fileDinhKem?.fileName }}</td>
         <td>{{data.ghiChu }}</td>
@@ -166,6 +173,11 @@
         <td *ngIf="!isTabNdKhac">
           <input type="text" [(ngModel)]="dataEdit[idx].data.thoiHanBaoGia" nz-input/>
         </td>
+        <td *ngIf="!isTabNdKhac && isTableKetQua">
+          <nz-date-picker [nzDisabled]="isView" [(ngModel)]="dataEdit[idx].data.ngayBaoGia" nzFormat="dd/MM/yyyy"
+                          class="search__input">
+          </nz-date-picker>
+        </td>
         <td *ngIf="isTabNdKhac">
           <input type="text" [(ngModel)]="dataEdit[idx].data.chiSoCpi" nz-input/>
         </td>
@@ -187,7 +199,7 @@
           <a (click)="downloadFile(dataEdit[idx].data.fileDinhKem)">
             <i class="icon htvbdh_tcdt_import "></i>
           </a>
-          <a (click)="saveEdit(idx)" class="save">
+          <a (click)="saveEdit(idx,  dataEdit[idx].data)" class="save">
             <i class="fa fa-save"></i>
           </a>
           <a (click)="cancelEdit(idx)">
@@ -207,9 +219,11 @@
       <td *ngIf="!isTabNdKhac"></td>
       <td *ngIf="!isTabNdKhac && !isApDung"></td>
       <td></td>
+      <td></td>
       <td *ngIf="isVat"></td>
       <td *ngIf="!isTabNdKhac"></td>
       <td *ngIf="isTabNdKhac"></td>
+      <td *ngIf="!isTabNdKhac && isTableKetQua"></td>
       <td></td>
       <td></td>
       <td></td>
@@ -223,9 +237,11 @@
           <td *ngIf="isTabNdKhac"></td>
           <td *ngIf="!isTabNdKhac">{{ item.cloaiVthh }}</td>
           <td *ngIf="!isTabNdKhac && !isApDung">{{ item.tenChiCuc }}</td>
+          <td class="text-right">{{item.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
           <td class="text-right">{{item.donGia | number : '1.0-1' : 'vi_VN' }}</td>
           <td class="text-right" *ngIf="isVat">{{item.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
           <td *ngIf="!isTabNdKhac">{{item.thoiHanBaoGia }}</td>
+          <td *ngIf="!isTabNdKhac && isTableKetQua" class="text-center">{{item.ngayBaoGia | date : 'dd/MM/yyyy' }}</td>
           <td *ngIf="isTabNdKhac">{{item.chiSoCpi }}</td>
           <td>{{item.fileDinhKem?.fileName }}</td>
           <td>{{item.ghiChu }}</td>
