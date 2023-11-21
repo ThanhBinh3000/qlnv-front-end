@@ -16,9 +16,6 @@ import {
 import dayjs from 'dayjs';
 import {cloneDeep} from 'lodash';
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
-import {
-  QuyetDinhDchinhKhBdgService
-} from "../../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/dieuchinh-kehoach/quyetDinhDchinhKhBdg.service";
 
 @Component({
   selector: 'app-chi-tiet-thong-tin-dau-gia',
@@ -42,9 +39,8 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private thongTinDauGiaService: ThongTinDauGiaService,
     private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
-    private quyetDinhDchinhKhBdgService: QuyetDinhDchinhKhBdgService,
+    private thongTinDauGiaService: ThongTinDauGiaService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, thongTinDauGiaService);
     this.formData = this.fb.group(
@@ -57,7 +53,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
         idQdDc: [],
         soQdDc: [''],
         idQdPdDtl: [],
-        soQdPdKqBdg: [''],
+        soQdKq: [''],
         tenDvi: [''],
         tongTienDatTruoc: [],
         khoanTienDatTruoc: [],
@@ -102,8 +98,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     try {
       await this.spinner.show();
       const res = await this.quyetDinhPdKhBdgService.getDtlDetail(id);
-      if (!res || !res.data) {
-        console.log('Không tìm thấy dữ liệu');
+      if (res.msg !== MESSAGE.SUCCESS || !res.data) {
         return;
       }
       const data = res.data;
@@ -111,29 +106,14 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
       if (this.dataTable && this.dataTable.length > 0) {
         await this.showFirstRow(event, this.dataTable[0]);
       }
-      let resQdHdr = null;
-      let reDcHdr = null;
-
-      if (data.isDieuChinh) {
-        reDcHdr = await this.quyetDinhDchinhKhBdgService.getDetail(data.idHdr);
-      } else {
-        resQdHdr = await this.quyetDinhPdKhBdgService.getDetail(data.idHdr);
-      }
-      if ((!data.isDieuChinh && (!resQdHdr || !resQdHdr.data)) ||
-        (data.isDieuChinh && (!reDcHdr || !reDcHdr.data))) {
-        console.log('Không tìm thấy dữ liệu');
-        return;
-      }
-      const dataQdHdr = resQdHdr ? resQdHdr.data : null;
-      const dataDcHdr = reDcHdr ? reDcHdr.data : null;
       this.formData.patchValue({
         nam: data.nam,
-        idQdPd: dataQdHdr ? dataQdHdr.id : dataDcHdr.idQdPd,
-        soQdPd: dataQdHdr ? dataQdHdr.soQdPd : dataDcHdr.soQdPd,
-        idQdDc: dataDcHdr?.id,
-        soQdDc: dataDcHdr?.soQdDc,
+        idQdPd: data.xhQdPdKhBdg.type === 'QDDC' ? data.idQdPd : data.idHdr,
+        soQdPd: data.soQdPd,
+        idQdDc: data.xhQdPdKhBdg.type === 'QDDC' ? data.idHdr : null,
+        soQdDc: data.soQdDc,
         idQdPdDtl: data.id,
-        soQdPdKqBdg: data.soQdPdKqBdg,
+        soQdKq: data.soQdKq,
         maDvi: data.maDvi,
         tenDvi: data.tenDvi,
         khoanTienDatTruoc: data.khoanTienDatTruoc,
@@ -148,8 +128,8 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
         tenCloaiVthh: data.tenCloaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
         tongSoLuong: data.tongSoLuong,
-        tenLoaiHinhNx: dataQdHdr ? dataQdHdr.tenLoaiHinhNx : dataDcHdr.tenLoaiHinhNx,
-        tenKieuNx: dataQdHdr ? dataQdHdr.tenKieuNx : dataDcHdr.tenKieuNx,
+        tenLoaiHinhNx: data.xhQdPdKhBdg.tenLoaiHinhNx,
+        tenKieuNx: data.xhQdPdKhBdg.tenKieuNx,
         donViTinh: data.donViTinh,
         trangThai: data.trangThai,
         tenTrangThai: data.tenTrangThai,

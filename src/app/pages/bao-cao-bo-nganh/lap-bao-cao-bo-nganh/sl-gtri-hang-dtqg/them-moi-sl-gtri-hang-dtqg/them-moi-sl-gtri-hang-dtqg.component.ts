@@ -75,6 +75,7 @@ export class ThemMoiSlGtriHangDtqgComponent extends Base2Component implements On
         ghiChu: [null],
       }
     );
+    this.templateName = 'template_bcbn_sl_gtri_hang_dtqg.xlsx'
   }
   async ngOnInit() {
     this.spinner.show();
@@ -422,6 +423,13 @@ export class ThemMoiSlGtriHangDtqgComponent extends Base2Component implements On
         sum += this.nvl(item.gtriTonCuoiQuy);
       })
       return sum;
+    }
+  }
+
+  async handleSelectFile(event: any){
+    await this.onFileSelected(event);
+    if(this.dataImport.length > 0){
+      this.listDataGroup = this.dataImport
     }
   }
 }

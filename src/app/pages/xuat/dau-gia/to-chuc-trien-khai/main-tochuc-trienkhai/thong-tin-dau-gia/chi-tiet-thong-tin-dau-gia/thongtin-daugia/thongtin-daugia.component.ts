@@ -198,8 +198,8 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     await this.spinner.show();
     try {
       const res = await this.quyetDinhPdKhBdgService.getDtlDetail(id);
-      if (res.msg !== MESSAGE.SUCCESS) {
-        throw new Error('Không tìm thấy dữ liệu');
+      if (res.msg !== MESSAGE.SUCCESS || !res.data) {
+        return;
       }
       const data = res.data;
       this.formData.patchValue({
@@ -253,7 +253,6 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       }
       const res = await this.thongTinDauGiaService.getDetail(id);
       if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-        console.log('Không tìm thấy dữ liệu.');
         return;
       }
       const data = res.data;
@@ -267,10 +266,10 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       });
       this.dataTable = data.children;
       this.dataNguoiTgia = data.listNguoiTgia;
-      this.dataNguoiShow = chain(this.dataNguoiTgia)
-        .groupBy('loai')
-        .map((value, key) => ({loai: key, dataChild: value}))
-        .value();
+      this.dataNguoiShow = chain(this.dataNguoiTgia).groupBy('loai').map((value, key) => ({
+        loai: key,
+        dataChild: value
+      })).value();
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);

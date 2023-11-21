@@ -21,11 +21,11 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col nzSpan="6">
+          <div nz-col nzSpan="6" *ngIf="userService.isTongCuc()">
             <nz-form-item>
               <nz-form-label>Cục DTNN KV</nz-form-label>
               <nz-form-control>
-                <nz-select formControlName="maCuc" nzShowSearch nzAllowClear>
+                <nz-select formControlName="maCuc" (ngModelChange)="loadDsChiCuc()" nzShowSearch nzAllowClear>
                   <nz-option *ngFor="let p of dsDonvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -36,7 +36,7 @@
               <nz-form-label>Chi cục DTNN KV</nz-form-label>
               <nz-form-control>
                 <nz-select formControlName="maChiCuc" nzShowSearch nzAllowClear>
-                  <nz-option *ngFor="let p of dsDonvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
+                  <nz-option *ngFor="let p of listChiCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
