@@ -39,3 +39,8 @@
 .bg-selected td {
   background-color: #d8dcfe;
 }
+
+.rdo-input.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
