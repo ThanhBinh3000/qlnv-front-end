@@ -102,7 +102,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
       ptMua: ['', [Validators.required]],
       tchuanCluong: [null, [Validators.required]],
       giaMua: [null, [Validators.required]],
-      thueGtgt: [5],
+      thueGtgt: [null],
       tgianMkho: [, [Validators.required]],
       tgianKthuc: [, [Validators.required]],
       ghiChu: [null],
@@ -453,21 +453,23 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
   }
 
   async getDataChiTieu() {
-    let res2 =
-      await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
-        +this.formData.get('namKh').value,
-      );
-    if (res2.msg == MESSAGE.SUCCESS) {
-      this.dataChiTieu = res2.data;
-      this.formData.patchValue({
-        soQdCc: res2.data.soQuyetDinh,
-        idSoQdCc: res2.data.id
-      });
-    } else {
-      this.formData.patchValue({
-        soQdCc: null
-      });
-    }
+      let res2 =
+        await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
+          +this.formData.get('namKh').value,
+        );
+      if (res2.msg == MESSAGE.SUCCESS) {
+        this.dataChiTieu = res2.data;
+        if(this.userService.isCuc()){
+          this.formData.patchValue({
+            soQdCc: res2.data.soQuyetDinh,
+            idSoQdCc: res2.data.id
+          });
+        }
+      } else {
+        this.formData.patchValue({
+          soQdCc: null
+        });
+      }
   }
 
   quayLai() {
