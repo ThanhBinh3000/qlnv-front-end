@@ -1,59 +1,60 @@
 <div class="bg-trang">
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix level1">
-  <div class="header header-green-background">
-    <div class="header-text">
-      <div class="title-chi-tieu">
+  <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0">
+    <div class="header header-green-background">
+      <div class="header-text">
+        <div class="title-chi-tieu">
         <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
           {{ formData.value.tenTrangThai }}
         </span>
-        <span> BÁO CÁO KẾT QUẢ KIỂM ĐỊNH MẪU </span>
+          <span> BÁO CÁO KẾT QUẢ KIỂM ĐỊNH MẪU </span>
+        </div>
+        <nz-alert
+          *ngIf="formData.value.trangThai == STATUS.TU_CHOI_TP && formData.value.trangThai == STATUS.TU_CHOI_LDC "
+          nzShowIcon nzType="error" nzMessage="Lý do từ chối"
+          nzDescription="{{formData.value.lyDoTuChoi}}">
+        </nz-alert>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-sub mr-2" (click)="quayLai()">
+          <i class="fa fa-arrow-left"></i>
+          <span>Quay lại</span>
+        </button>
+        <button *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_BCKQKD_IN') && idInput" type='button' class='btn btn-sub do mr-2' (click)='preview(idInput)'>
+          <i class='icon htvbdh_totrinh'></i>
+          <span> In/Xem trước </span>
+        </button>
+        <button
+          *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_BCKQKD_THEM') && (formData.value.trangThai == STATUS.DU_THAO ||
+       formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC) && !isView"
+          type="button" class="btn btn-sub"
+          (click)="saveAndSend(formData.value, STATUS.CHO_DUYET_TP, 'Bạn có muốn gửi duyệt ?')">
+          <i class="icon htvbdh_tcdt_guiduyet"></i>
+          <span>Lưu và gửi duyệt</span>
+        </button>
+        <button
+          *ngIf="(userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_BCKQKD_DUYETTP') && formData.value.trangThai == STATUS.CHO_DUYET_TP)
+          || (userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_BCKQKD_DUYETLDC')  && formData.value.trangThai == STATUS.CHO_DUYET_LDC) && this.userService.isCuc()"
+          type="button" class="btn btn-sub do mr-2" (click)="tuChoi()">
+          <i class="icon htvbdh_tcdt_tuchoi do"></i>
+          <span>Từ chối</span>
+        </button>
+        <button
+          *ngIf="(userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_BCKQKD_DUYETTP') && formData.value.trangThai == STATUS.CHO_DUYET_TP)
+           || (userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_BCKQKD_DUYETLDC') && formData.value.trangThai == STATUS.CHO_DUYET_LDC) && this.userService.isCuc()"
+          class="btn btn-sub xanh-nhat mr-2" (click)="pheDuyet()">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          <span>Duyệt</span>
+        </button>
+        <button
+          *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_BCKQKD_THEM') && !isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC )"
+          type="button" class="btn btn-main" (click)="save()">
+          <i class="icon htvbdh_tcdt_save"></i>
+          <span>Lưu</span>
+        </button>
       </div>
     </div>
-  </div>
-  <div class="btn-group">
-    <button type="button" class="btn btn-sub" (click)="quayLai()">
-      <i class="fa fa-arrow-left"></i>
-      <span>Quay lại</span>
-    </button>
-    <button *ngIf='idInput' type='button' class='btn btn-sub do mr-2' (click)='preview(idInput)'>
-      <i class='icon htvbdh_totrinh'></i>
-      <span> In/Xem trước </span>
-    </button>
-    <button
-      *ngIf="userService.isAccessPermisson(' XHDTQG_XK_KTCLLTLK_BCKQKD_THEM') && (formData.value.trangThai == STATUS.DU_THAO ||
-       formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC) && !isView"
-      type="button" class="btn btn-sub"
-      (click)="saveAndSend(formData.value, STATUS.CHO_DUYET_TP, 'Bạn có muốn gửi duyệt ?')">
-      <i class="icon htvbdh_tcdt_guiduyet"></i>
-      <span>Lưu và gửi duyệt</span>
-    </button>
-    <button
-      *ngIf="(userService.isAccessPermisson(' XHDTQG_XK_KTCLLTLK_BCKQKD_DUYETTP') && formData.value.trangThai == STATUS.CHO_DUYET_TP)
-          || (userService.isAccessPermisson(' XHDTQG_XK_KTCLLTLK_BCKQKD_DUYETLDC')  && formData.value.trangThai == STATUS.CHO_DUYET_LDC) && this.userService.isCuc()"
-      type="button" class="btn btn-sub do mr-2" (click)="tuChoi()">
-      <i class="icon htvbdh_tcdt_tuchoi do"></i>
-      <span>Từ chối</span>
-    </button>
-    <button
-      *ngIf="(userService.isAccessPermisson(' XHDTQG_XK_KTCLLTLK_BCKQKD_DUYETTP') && formData.value.trangThai == STATUS.CHO_DUYET_TP)
-          || (userService.isAccessPermisson(' XHDTQG_XK_KTCLLTLK_BCKQKD_DUYETLDC')  && formData.value.trangThai == STATUS.CHO_DUYET_LDC) && this.userService.isCuc()"
-      class="btn btn-sub xanh-nhat mr-2" (click)="pheDuyet()">
-      <i class="icon htvbdh_tcdt_pheduyet"></i>
-      <span>Duyệt</span>
-    </button>
-    <button
-      *ngIf="userService.isAccessPermisson(' XHDTQG_XK_KTCLLTLK_BCKQKD_THEM') && !isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC )"
-      type="button" class="btn btn-main" (click)="save()">
-      <i class="icon htvbdh_tcdt_save"></i>
-      <span>Lưu</span>
-    </button>
-  </div>
-</nz-affix>
+  </nz-affix>
   <!--  Start Thông tin quyết định phê duyệt-->
-  <nz-alert *ngIf="formData.value.trangThai == STATUS.TU_CHOI_TP && formData.value.trangThai == STATUS.TU_CHOI_LDC "
-            nzShowIcon nzType="error" nzMessage="Lý do từ chối"
-            nzDescription="{{formData.value.lyDoTuChoi}}">
-  </nz-alert>
   <nz-card class="mg-t-16 flex-card p-lr16">
     <form nz-form nzLayout="vertical" [formGroup]="formData">
       <div nz-row [nzGutter]="24">
@@ -292,31 +293,31 @@
       </nz-collapse-panel>
     </nz-collapse>
   </div>
-<nz-modal [(nzVisible)]='showDlgPreview' nzTitle='THÔNG TIN BIÊN BẢN LẤY MẪU' nzWidth='100%'
-          (nzOnCancel)='closeDlg()'>
-  <div *nzModalContent class='modal__content'>
-    <pdf-viewer [src]='pdfSrc' [render-text]='true' style='width: 100%; height: 650px;'></pdf-viewer>
-  </div>
-  <div *nzModalFooter>
-    <button nz-button (click)='printPreview()'
-            class='modal__button--save'>
-      <i class='icon htvbdh_printer'></i>
-      In
-    </button>
-    <button nz-button (click)='downloadPdf()'
-            class='modal__button--save'>
-      <i class='icon htvbdh_file-pdf'></i>
-      Xuất .pdf
-    </button>
-    <button nz-button (click)='downloadWord()'
-            class='modal__button--save'>
-      <i class='icon htvbdh_file-word'></i>
-      Xuất .docx
-    </button>
-    <button nz-button (click)='closeDlg()' class='modal__button--cancel'>
-      <i nz-icon nzType='close-circle' nzTheme='fill' class='icon-cancel'></i>
-      Đóng
-    </button>
-  </div>
-</nz-modal>
+  <nz-modal [(nzVisible)]='showDlgPreview' nzTitle='THÔNG TIN BIÊN BẢN LẤY MẪU' nzWidth='100%'
+            (nzOnCancel)='closeDlg()'>
+    <div *nzModalContent class='modal__content'>
+      <pdf-viewer [src]='pdfSrc' [render-text]='true' style='width: 100%; height: 650px;'></pdf-viewer>
+    </div>
+    <div *nzModalFooter>
+      <button nz-button (click)='printPreview()'
+              class='modal__button--save'>
+        <i class='icon htvbdh_printer'></i>
+        In
+      </button>
+      <button nz-button (click)='downloadPdf()'
+              class='modal__button--save'>
+        <i class='icon htvbdh_file-pdf'></i>
+        Xuất .pdf
+      </button>
+      <button nz-button (click)='downloadWord()'
+              class='modal__button--save'>
+        <i class='icon htvbdh_file-word'></i>
+        Xuất .docx
+      </button>
+      <button nz-button (click)='closeDlg()' class='modal__button--cancel'>
+        <i nz-icon nzType='close-circle' nzTheme='fill' class='icon-cancel'></i>
+        Đóng
+      </button>
+    </div>
+  </nz-modal>
 </div>
