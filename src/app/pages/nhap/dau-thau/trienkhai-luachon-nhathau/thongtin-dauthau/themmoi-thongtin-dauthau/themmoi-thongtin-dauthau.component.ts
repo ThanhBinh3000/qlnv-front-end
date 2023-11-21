@@ -524,8 +524,13 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     await this.spinner.show();
     this.listNthauNopHs = [];
     if ($event.type == 'click') {
-      $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
-      $event.target.parentElement.classList.add('selectedRow')
+      if ($event.target.nodeName.toUpperCase() == 'TR') {
+        $event.target.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
+        $event.target.classList.add('selectedRow')
+      } else {
+        $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
+        $event.target.parentElement.classList.add('selectedRow')
+      }
       this.selected = false;
       this.idGoiThau = dataGoiThau.id;
     } else {
@@ -791,7 +796,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       let sum = 0
       this.listOfData.forEach(item => {
         const sumChild = item.children.reduce((prev, cur) => {
-          prev += cur.soLuong * item.donGia;
+          prev += cur.soLuong * cur.donGia;
           return prev;
         }, 0);
         sum += sumChild;
