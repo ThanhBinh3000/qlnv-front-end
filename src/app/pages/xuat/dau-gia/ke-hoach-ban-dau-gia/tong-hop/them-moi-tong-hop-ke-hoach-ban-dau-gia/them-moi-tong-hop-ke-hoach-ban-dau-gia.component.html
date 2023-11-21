@@ -1,24 +1,24 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix" *ngIf="!isQuyetDinh && !isViewOnModal">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix" *ngIf="!isViewOnModal">
   <div class="btn-group">
     <button type="button" class="btn btn-sub" (click)="goBack()">
       <i class="fa fa-arrow-left"></i>
       <span> Quay lại </span>
     </button>
-    <button *ngIf="idInput && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_IN')"
-            type="button" class="btn btn-sub do"
-            (click)="xemTruoc(idInput,loaiVthh === LOAI_HANG_DTQG.VAT_TU ? templateNameVt: templateNameLt)">
+    <button *ngIf="idInput && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_IN')" type="button"
+            class="btn btn-sub do"
+            (click)="xemTruoc(idInput,loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? templateNameVt: templateNameLt)">
       <i class="icon htvbdh_totrinh"></i>
       <span> Xem trước </span>
     </button>
     <ng-container>
-      <button *ngIf="formData.value.trangThai == STATUS.CHUA_TAO_QD"
-              type="button" class="btn btn-sub xanh-nhat"
+      <button *ngIf="formData.value.trangThai == STATUS.CHUA_TAO_QD && formData.value.idTh" type="button"
+              class="btn btn-sub xanh-nhat"
               (click)="save(true)">
         <i class="icon htvbdh_tcdt_tao-qd"></i>
         <span> Tạo quyết định </span>
       </button>
-      <button *ngIf="formData.value.trangThai == STATUS.CHUA_TAO_QD"
-              type="button" class="btn btn-main"
+      <button *ngIf="formData.value.trangThai == STATUS.CHUA_TAO_QD && formData.value.idTh && !isView" type="button"
+              class="btn btn-main"
               (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span> Lưu </span>
@@ -26,7 +26,7 @@
     </ng-container>
   </div>
 </nz-affix>
-<div *ngIf="!isDetailDxCuc && !isQuyetDinh" class="bg-trang">
+<div *ngIf="!isDetailDxCuc" class="bg-trang">
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
@@ -47,13 +47,12 @@
                 <nz-form-label [nzNoColon]="true"> Năm kế hoạch</nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                   <nz-select formControlName="namKh" [nzDisabled]="isView">
-                    <nz-option *ngFor="let p of listNam" [nzValue]="p.value"
-                               [nzLabel]="p.text"></nz-option>
+                    <nz-option *ngFor="let item of listNam" [nzValue]="item.value" [nzLabel]="item.text"></nz-option>
                   </nz-select>
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="4" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">
+            <div nz-col [nzSpan]="4" *ngIf="!loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
@@ -64,7 +63,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="13" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">
+            <div nz-col [nzSpan]="13" *ngIf="!loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
@@ -75,7 +74,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="8" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">
+            <div nz-col [nzSpan]="8" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -87,7 +86,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="9" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">
+            <div nz-col [nzSpan]="9" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
                 <nz-form-control>
@@ -188,7 +187,7 @@
             <th class="text-left"> Trích yếu</th>
             <th class="text-center"> SL đơn vị tài sản</th>
             <th class="text-center">Tổng SL xuất bán đề xuất
-              {{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? '' : '(đ/kg)'}}
+              {{loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? '' : '(đ/kg)'}}
             </th>
             <th class="text-center"> Thành tiền Cục đề xuất (đ)</th>
             <th class="text-center"> % Khoản tiền đặt trước (đ)</th>
@@ -229,13 +228,13 @@
                                          [loaiVthh]="loaiVthh" [isView]="true">
   </app-them-de-xuat-ke-hoach-ban-dau-gia>
 </div>
+<div *ngIf="isQuyetDinh" class="chi-tiet">
+  <app-them-quyet-dinh-ban-dau-gia (showListEvent)="goBack()">
+  </app-them-quyet-dinh-ban-dau-gia>
+</div>
 <ng-template #error let-control>
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
 </ng-template>
-<div *ngIf="isQuyetDinh" class="chi-tiet">
-  <app-them-quyet-dinh-ban-dau-gia [dataTongHop]="formData.value" (showListEvent)="showTongHop()">
-  </app-them-quyet-dinh-ban-dau-gia>
-</div>
 <nz-modal [nzWidth]="'75%'" [nzClosable]="false" [(nzVisible)]="showDlgPreview" nzWidth="100%"
           (nzOnCancel)="closeDlg()">
   <div *nzModalContent class="modal__content">
@@ -247,12 +246,14 @@
       <i class="icon htvbdh_printer"></i>
       In
     </button>
-    <button nz-button (click)="downloadPdf(loaiVthh === LOAI_HANG_DTQG.VAT_TU ? templateNameVt : templateNameLt)"
+    <button nz-button
+            (click)="downloadPdf(loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? templateNameVt : templateNameLt)"
             class="modal__button--save">
       <i class="icon htvbdh_file-pdf"></i>
       Xuất .pdf
     </button>
-    <button nz-button (click)="downloadWord(loaiVthh === LOAI_HANG_DTQG.VAT_TU ? templateNameVt : templateNameLt)"
+    <button nz-button
+            (click)="downloadWord(loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? templateNameVt : templateNameLt)"
             class="modal__button--save">
       <i class="icon htvbdh_file-word"></i>
       Xuất .docx

@@ -9,14 +9,10 @@ import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {
   QuyetDinhPdKhBdgService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service";
-import {
-  QuyetDinhDchinhKhBdgService
-} from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/dieuchinh-kehoach/quyetDinhDchinhKhBdg.service";
 import * as dayjs from "dayjs";
 import {Validators} from "@angular/forms";
 import {STATUS} from "../../../../../../constants/status";
 import {MESSAGE} from "../../../../../../constants/message";
-import {FileDinhKem} from "../../../../../../models/FileDinhKem";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
@@ -42,6 +38,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
   dataInput: any[] = [];
   dataInputCache: any[] = [];
   danhSachDieuChinh: any[] = [];
+  fileDinhKemDc: any[] = []
 
   constructor(
     httpClient: HttpClient,
@@ -51,47 +48,52 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     modal: NzModalService,
     private danhMucService: DanhMucService,
     private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
-    private quyetDinhDchinhKhBdgService: QuyetDinhDchinhKhBdgService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhDchinhKhBdgService);
+    super(httpClient, storageService, notification, spinner, modal, quyetDinhPdKhBdgService);
     this.formData = this.fb.group({
       id: [],
-      maDvi: [''],
       nam: [],
-      soCongVan: [''],
-      ngayTaoCongVan: [''],
-      trichYeu: [''],
-      idQdPd: [],
+      maDvi: [''],
+      idGoc: [],
       soQdPd: [''],
-      lanDieuChinh: [],
       ngayKyQd: [''],
+      ngayHluc: [''],
+      trichYeu: [''],
       soQdCc: [''],
-      soQdDc: [''],
-      soQdCanDc: [''],
-      idDcGoc: [],
-      ngayKyDc: [''],
-      ngayHlucDc: [''],
-      noiDungDieuChinh: [''],
-      loaiHinhNx: [''],
-      kieuNx: [''],
       loaiVthh: [''],
       cloaiVthh: [''],
       moTaHangHoa: [''],
+      loaiHinhNx: [''],
+      kieuNx: [''],
       tchuanCluong: [''],
-      slDviTsan: [],
-      slHdongDaKy: [],
-      thoiHanGiaoNhan: [],
+      slDviTsan: [''],
+      phanLoai: [''],
       trangThai: [''],
       lyDoTuChoi: [''],
+      ngayTao: [''],
+      nguoiTaoId: [''],
+      ngaySua: [''],
+      nguoiSuaId: [''],
+      ngayGuiDuyet: [''],
+      nguoiGuiDuyetId: [''],
+      ngayPduyet: [''],
+      nguoiPduyetId: [''],
+      soCongVan: [''],
+      ngayTaoCongVan: [''],
+      lanDieuChinh: [],
+      soQdCanDc: [''],
+      soQdDc: [''],
+      ngayKyDc: [''],
+      ngayHlucDc: [''],
+      noiDungDieuChinh: [''],
+      type: [''],
+      idQdPd: [],
       tenDvi: [''],
       tenLoaiHinhNx: [''],
       tenKieuNx: [''],
       tenLoaiVthh: [''],
       tenCloaiVthh: [''],
       tenTrangThai: [''],
-      fileToTrinh: [new Array<FileDinhKem>()],
-      fileDinhKem: [new Array<FileDinhKem>()],
-      fileCanCu: [new Array<FileDinhKem>()],
     })
   }
 
@@ -118,23 +120,31 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       nam: dayjs().get('year'),
       trangThai: STATUS.DA_LAP,
       tenTrangThai: 'Đã lập',
+      type: 'QDDC',
     })
   }
 
   async getDetail(id: number) {
-    if (!id) return;
-    const data = await this.detail(id)
-    if (!data) {
-      console.error('Không tìm thấy dữ liệu');
+    if (!id) {
       return;
     }
+    const data = await this.detail(id)
     const {soCongVan, soQdDc, children} = data;
     this.formData.patchValue({
-      soCongVan: soCongVan?.split('/')[0],
-      soQdDc: soQdDc?.split('/')[0],
+      soCongVan: soCongVan?.split('/')[0] || null,
+      soQdDc: soQdDc?.split('/')[0] || null,
     })
+    this.canCuPhapLy = data.canCuPhapLy;
+    this.fileDinhKem = data.fileDinhKem;
+    this.fileDinhKemDc = data.fileDinhKemDc;
     this.dataTable = this.userService.isCuc() ? children.filter(item => item.maDvi === this.userInfo.MA_DVI) : children;
-    await this.showFirstRow(event, 0);
+    if (data.idGoc > 0) {
+      let res = await this.quyetDinhPdKhBdgService.getDetail(data.idGoc);
+      if (res.msg === MESSAGE.SUCCESS && res.data) {
+        this.dataTableAll = res.data.children;
+      }
+    }
+    await this.selectRow(this.dataTable[0]);
   }
 
   async openDialog() {
@@ -144,23 +154,20 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
         loaiVthh: this.loaiVthh,
         nam: this.formData.value.nam,
         trangThai: STATUS.BAN_HANH,
-        lastest: 1,
+        lastest: 1
       }
       await this.loadDanhSachDieuChinh();
       const res = await this.quyetDinhPdKhBdgService.search(body)
       if (res && res.msg === MESSAGE.SUCCESS) {
-        const soQdPdSet = new Set(this.danhSachDieuChinh.map(item => item.soQdPd));
-        this.danhSachQdPdKeHoach = res.data.content.filter(item => !soQdPdSet.has(item.soQdPd));
-        this.danhSachQdPdKeHoach.push(...this.danhSachDieuChinh);
-        this.danhSachQdPdKeHoach = this.danhSachQdPdKeHoach.map(item => ({
+        this.danhSachQdPdKeHoach = res.data.content.map(item => ({
           soQd: item.soQdDc || item.soQdPd,
           ngayKy: item.ngayKyDc || item.ngayKyQd,
           ...item
         }));
-        const idGocSet = new Set(this.danhSachDieuChinh.map(item => item.idDcGoc));
+        const idGocSet = new Set(this.danhSachDieuChinh.map(item => item.idGoc));
         this.danhSachQdPdKeHoach = this.danhSachQdPdKeHoach.filter(item => !idGocSet.has(item.id))
         this.danhSachQdPdKeHoach.forEach(item => {
-          item.children = item.children.filter(item => item.idQdPdKqBdg === null && item.soQdPdKqBdg === null)
+          item.children = item.children.filter(item => item.idQdKq === null && item.soQdKq === null)
         })
       }
       const modalQD = this.modal.create({
@@ -189,21 +196,24 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
   }
 
   async onChange(datasearch) {
-    if (datasearch.id <= 0) return;
+    if (datasearch.id <= 0) {
+      return;
+    }
+    this.dataTable = [];
+    this.dataTableAll = [];
     try {
       await this.spinner.show();
-      const service = datasearch.soQdDc ? this.quyetDinhDchinhKhBdgService : this.quyetDinhPdKhBdgService;
-      const res = await service.getDetail(datasearch.id);
+      const res = await this.quyetDinhPdKhBdgService.getDetail(datasearch.id);
       if (res.msg !== MESSAGE.SUCCESS || !res.data) {
         return;
       }
       const data = res.data
       this.formData.patchValue({
-        idQdPd: datasearch.soQdDc ? data.idQdPd : datasearch.id,
-        soQdCanDc: datasearch.soQdDc ? data.soQdDc : data.soQdPd,
+        idGoc: data.id,
+        idQdPd: data.type === 'QDDC' ? data.idQdPd : data.id,
+        soQdCanDc: data.type === 'QDDC' ? data.soQdDc : data.soQdPd,
         soQdPd: data.soQdPd,
         ngayKyQd: data.ngayKyQd,
-        idDcGoc: datasearch.soQdDc ? data.id : '',
         soQdCc: data.soQdCc,
         loaiHinhNx: data.loaiHinhNx,
         tenLoaiHinhNx: data.tenLoaiHinhNx,
@@ -217,9 +227,10 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
         tchuanCluong: data.tchuanCluong,
         slDviTsan: data.slDviTsan,
       })
-      this.dataTable = data.children.filter(item => item.idQdPdKqBdg === null && item.soQdPdKqBdg === null)
+      this.dataTable = data.children.filter(item => item.idQdKq === null && item.soQdKq === null)
+      this.dataTableAll = data.children.filter(item => item.idQdKq === null && item.soQdKq === null)
       if (this.dataTable && this.dataTable.length > 0) {
-        await this.showFirstRow(event, 0);
+        await this.selectRow(this.dataTable[0]);
       }
       this.danhSachDieuChinh = this.danhSachDieuChinh.filter(item => item.soQdPd === data.soQdPd);
       this.formData.patchValue({
@@ -238,9 +249,9 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       nam: this.formData.value.nam,
       loaiVthh: this.loaiVthh,
       maDvi: this.userInfo.MA_DVI,
-      trangThai: STATUS.BAN_HANH,
+      type: 'QDDC',
     }
-    const res = await this.quyetDinhDchinhKhBdgService.search(body)
+    const res = await this.quyetDinhPdKhBdgService.search(body)
     if (res.msg !== MESSAGE.SUCCESS) {
       this.notification.error(MESSAGE.ERROR, res.msg);
       return;
@@ -252,24 +263,11 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     this.danhSachDieuChinh = data
   }
 
-  resetIds(data) {
-    data.forEach((item) => {
-      item.id = null;
-      item.lastest = null;
-      item.isDieuChinh = null;
-      if (item.children && item.children.length > 0) {
-        this.resetIds(item.children);
-      }
-    });
-  }
 
   async save() {
     try {
-      this.resetIds(this.dataTable);
       await this.helperService.ignoreRequiredForm(this.formData);
-      this.formData.controls["soCongVan"].setValidators([Validators.required]);
-      this.formData.controls["soQdPd"].setValidators([Validators.required]);
-      this.formData.controls["soQdDc"].setValidators([Validators.required]);
+      this.formData.controls["soQdCanDc"].setValidators([Validators.required]);
       const soCongVan = this.formData.value.soCongVan;
       const soQdDc = this.formData.value.soQdDc;
       const body = {
@@ -277,6 +275,9 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
         soCongVan: soCongVan ? soCongVan + this.maConVan : null,
         soQdDc: soQdDc ? soQdDc + this.maHauTo : null,
         children: this.dataTable,
+        canCuPhapLy: this.canCuPhapLy,
+        fileDinhKem: this.fileDinhKem,
+        fileDinhKemDc: this.fileDinhKemDc,
       };
       await this.createUpdate(body);
     } catch (e) {
@@ -289,7 +290,6 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
     try {
       this.setValidForm();
-      this.resetIds(this.dataTable);
       const soCongVan = this.formData.value.soCongVan;
       const soQdDc = this.formData.value.soQdDc;
       const body = {
@@ -297,6 +297,9 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
         soCongVan: soCongVan ? soCongVan + this.maConVan : null,
         soQdDc: soQdDc ? soQdDc + this.maHauTo : null,
         children: this.dataTable,
+        canCuPhapLy: this.canCuPhapLy,
+        fileDinhKem: this.fileDinhKem,
+        fileDinhKemDc: this.fileDinhKemDc,
       }
       await super.saveAndSend(body, trangThai, msg, msgSuccess);
     } catch (error) {
@@ -306,47 +309,37 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     }
   }
 
-  async showFirstRow($event, index: number) {
-    await this.showDetail($event, index);
-  }
 
   index = 0;
 
-  async showDetail($event, index: number) {
-    if ($event.type == 'click') {
-      const selectedRow = $event.target.parentElement;
-      const previouslySelectedRow = selectedRow.parentElement.querySelector('.selectedRow');
-      if (previouslySelectedRow) {
-        previouslySelectedRow.classList.remove('selectedRow');
-      }
-      selectedRow.classList.add('selectedRow');
-      this.selected = false;
-      this.index = index
-    } else {
-      this.selected = true
-    }
-    this.dataInput = this.dataTable[index];
-    const id = this.formData.value.idDcGoc || this.formData.value.idQdPd;
-    if (id) {
-      const service = this.formData.value.idDcGoc ? this.quyetDinhDchinhKhBdgService : this.quyetDinhPdKhBdgService;
-      const res = await service.getDetail(id);
-      if (res.msg === MESSAGE.SUCCESS && res.data) {
-        const data = res.data;
-        this.dataInputCache = data.children.find(item => item.soDxuat === this.dataTable[index].soDxuat) ?? null;
-      }
+  async selectRow(data: any) {
+    if (!data.selected) {
+      this.dataTable.forEach(item => item.selected = false);
+      data.selected = true;
+      const findndex = this.dataTable.findIndex(child => child.soDxuat == data.soDxuat);
+      const findndexCache = this.dataTableAll.findIndex(child => child.soDxuat == data.soDxuat);
+      this.index = findndex
+      this.dataInput = this.dataTable[findndex];
+      this.dataInputCache = this.dataTableAll[findndexCache];
     }
   }
 
-  async receiveDataFromChild(data: any) {
+  receiveDataFromChild(data: any) {
     if (this.dataTable[this.index]) {
       if (data.hasOwnProperty('tongSoLuong')) {
         this.dataTable[this.index].tongSoLuong = data.tongSoLuong;
       }
-      if (data.hasOwnProperty('tongTienKhoiDiem')) {
-        this.dataTable[this.index].tongTienKhoiDiem = data.tongTienKhoiDiem;
+      if (data.hasOwnProperty('tongTienKhoiDiemDx')) {
+        this.dataTable[this.index].tongTienKhoiDiemDx = data.tongTienKhoiDiemDx;
       }
-      if (data.hasOwnProperty('tongTienDatTruoc')) {
-        this.dataTable[this.index].tongTienDatTruoc = data.tongTienDatTruoc;
+      if (data.hasOwnProperty('tongTienDuocDuyet')) {
+        this.dataTable[this.index].tongTienDuocDuyet = data.tongTienDuocDuyet;
+      }
+      if (data.hasOwnProperty('tongTienDatTruocDx')) {
+        this.dataTable[this.index].tongTienDatTruocDx = data.tongTienDatTruocDx;
+      }
+      if (data.hasOwnProperty('tongKtienDtruocDduyet')) {
+        this.dataTable[this.index].tongKtienDtruocDduyet = data.tongKtienDtruocDduyet;
       }
       if (data.hasOwnProperty('tgianDkienTu')) {
         this.dataTable[this.index].tgianDkienTu = data.tgianDkienTu;
@@ -360,14 +353,11 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
   setValidForm() {
     const requiredFields = [
       "nam",
+      "soCongVan",
       "ngayTaoCongVan",
-      "trichYeu",
-      "ngayKyQd",
-      "soQdCc",
-      "tenLoaiHinhNx",
-      "tenKieuNx",
       "tenLoaiVthh",
       "tenCloaiVthh",
+      "tchuanCluong",
     ];
     requiredFields.forEach(fieldName => {
       this.formData.controls[fieldName].setValidators([Validators.required]);
