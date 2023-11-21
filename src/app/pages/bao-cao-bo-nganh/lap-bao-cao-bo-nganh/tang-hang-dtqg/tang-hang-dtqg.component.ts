@@ -194,7 +194,7 @@ export class TangHangDtqgComponent extends Base2Component implements OnInit {
 
 
   downloadPdf() {
-    saveAs(this.pdfBlob, "bc_kh_tang_hang_du_tru_quoc_gia.pdf");
+    saveAs(this.pdfBlob, "bcbn_kh_tang_hang_du_tru_quoc_gia.pdf");
   }
 
   async download(id: any, type: any) {
@@ -211,13 +211,13 @@ export class TangHangDtqgComponent extends Base2Component implements OnInit {
       let body = this.formData.value;
       body.idHdr = id;
       body.typeFile = "xlsx";
-      body.fileName = "bc_kh_tang_hang_du_tru_quoc_gia.jrxml";
+      body.fileName = "bcbn_kh_tang_hang_du_tru_quoc_gia.jrxml";
       body.tenBaoCao = "Báo cáo kế hoạch tăng hàng dự trữ quốc gia";
       body.trangThai = "01";
       await this.bcBnTt145Service.ketXuat(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
-        saveAs(this.excelBlob, "bc_kh_tang_hang_du_tru_quoc_gia.xlsx");
+        saveAs(this.excelBlob, "bcbn_kh_tang_hang_du_tru_quoc_gia.xlsx");
       });
       this.showDlgPreview = true;
     } catch (e) {
@@ -238,14 +238,14 @@ export class TangHangDtqgComponent extends Base2Component implements OnInit {
       let body = this.formData.value;
       body.idHdr = id;
       body.typeFile = "pdf";
-      body.fileName = "bc_kh_tang_hang_du_tru_quoc_gia.jrxml";
+      body.fileName = "bcbn_kh_tang_hang_du_tru_quoc_gia.jrxml";
       body.tenBaoCao = "Báo cáo kế hoạch tổng hợp nhập, xuất hàng dự trữ quốc gia";
       body.trangThai = "01";
       await this.bcBnTt145Service.ketXuat(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
-      saveAs(this.pdfBlob, "bc_kh_tang_hang_du_tru_quoc_gia.pdf");
+      saveAs(this.pdfBlob, "bcbn_kh_tang_hang_du_tru_quoc_gia.pdf");
       this.showDlgPreview = false;
     } catch (e) {
       console.log(e);
