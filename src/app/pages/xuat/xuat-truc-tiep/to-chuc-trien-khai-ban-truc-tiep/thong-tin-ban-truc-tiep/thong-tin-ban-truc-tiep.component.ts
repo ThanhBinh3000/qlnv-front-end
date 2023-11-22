@@ -22,7 +22,6 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
   @Input() loaiVthh: string;
   LOAI_HANG_DTQG = LOAI_HANG_DTQG
   dsDonvi: any[] = [];
-  userdetail: any = {};
   isView: boolean = false;
   idQdPdKh: number = 0;
   isViewQdPdKh: boolean = false;
@@ -49,17 +48,19 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
       ngayCgiaTu: null,
       ngayCgiaDen: null,
       tochucCanhan: null,
-      maChiCuc: null,
       loaiVthh: null,
     })
     this.filterTable = {
-      soQdPd: '',
-      pthucBanTrucTiep: '',
-      ngayNhanCgia: '',
-      soQdKq: '',
-      tenLoaiVthh: '',
-      tenCloaiVthh: '',
-      tenTrangThai: '',
+      soQdPd: null,
+      soQdDc: null,
+      soDxuat: null,
+      tenDvi: null,
+      pthucBanTrucTiep: null,
+      ngayNhanCgia: null,
+      soQdKq: null,
+      tenLoaiVthh: null,
+      tenCloaiVthh: null,
+      tenTrangThai: null,
     };
     this.listTrangThai = [
       {
@@ -80,11 +81,11 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
   async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([
-        this.timKiem(),
-        this.search(),
-        this.initData()
-      ]);
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+      })
+      await this.loadDsTong();
+      await this.search();
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -93,29 +94,10 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
     }
   }
 
-  async initData() {
-    this.userInfo = this.userService.getUserLogin();
-    this.userdetail.maDvi = this.userInfo.MA_DVI;
-    this.userdetail.tenDvi = this.userInfo.TEN_DVI;
-    await this.loadDsTong();
-  }
-
   async loadDsTong() {
     const dsTong = await this.donviService.layDonViCon();
     if (isEmpty(dsTong)) return;
     this.dsDonvi = dsTong.data;
-  }
-
-  async timKiem() {
-    this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
-    })
-  }
-
-  async clearFilter() {
-    this.formData.reset();
-    await this.timKiem();
-    await this.search();
   }
 
   redirectDetail(id, isView: boolean) {

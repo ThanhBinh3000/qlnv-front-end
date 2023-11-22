@@ -90,7 +90,8 @@
           <th class="text-left"> Nội dung tổng hợp</th>
           <th class="text-left"> Năm kế hoạch</th>
           <th class="text-left"> Số QĐ phê duyệt KH BĐG</th>
-          <th class="text-left"> Loại hàng DTQG</th>
+          <th class="text-left" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)"> Loại hàng DTQG</th>
+          <th class="text-left"> Chủng loại hàng DTQG</th>
           <th class="text-left"> Trạng thái</th>
           <th class="text-center">Hành động</th>
         </tr>
@@ -130,10 +131,16 @@
                      (input)="filterInTable('soQdPd',filterTable.soQdPd)" size="small"/>
             </nz-input-group>
           </th>
-          <th>
+          <th *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
                      (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small"/>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenCloaiVthh"
+                     (input)="filterInTable('tenCloaiVthh',filterTable.tenCloaiVthh)" size="small"/>
             </nz-input-group>
           </th>
           <th>
@@ -165,7 +172,8 @@
                style="color: blue">{{ data.soQdPd }}
             </a>
           </td>
-          <td class="text-left">{{ data.tenLoaiVthh }}</td>
+          <td class="text-left" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">{{ data.tenLoaiVthh }}</td>
+          <td class="text-left">{{ data.tenCloaiVthh }}</td>
           <td class="text-left">{{ data.tenTrangThai }}</td>
           <td class="text-center">
             <a (click)="redirectDetail(data.id, true)"

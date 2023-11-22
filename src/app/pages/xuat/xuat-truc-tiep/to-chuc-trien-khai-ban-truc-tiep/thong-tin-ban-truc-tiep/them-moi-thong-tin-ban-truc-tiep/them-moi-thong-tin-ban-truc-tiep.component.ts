@@ -16,7 +16,7 @@ import {saveAs} from 'file-saver';
 import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {THONG_TIN_BAN_TRUC_TIEP} from "../../../../../../constants/status";
-import {CurrencyMaskInputMode} from "ngx-currency";
+import {AMOUNT_ONE_DECIMAL} from "../../../../../../Utility/utils";
 
 @Component({
   selector: 'app-them-moi-thong-tin-ban-truc-tiep',
@@ -30,28 +30,15 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   @Output() showListEvent = new EventEmitter<any>();
   @Output() dataTableChange = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG
+  amount = {...AMOUNT_ONE_DECIMAL};
   TRUC_TIEP = THONG_TIN_BAN_TRUC_TIEP
   listOfData: any[] = [];
-  showFromTT: boolean;
+  showFromTT: boolean = false;
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
-  selected: boolean = false;
   idDviDtl: number;
   fileUyQuyen: any[] = [];
   fileBanLe: any[] = [];
-  amount = {
-    allowZero: true,
-    allowNegative: false,
-    precision: 2,
-    prefix: '',
-    thousands: '.',
-    decimal: ',',
-    align: "right",
-    nullable: true,
-    min: 0,
-    max: 1000000000000,
-    inputMode: CurrencyMaskInputMode.NATURAL,
-  }
 
   constructor(
     httpClient: HttpClient,
@@ -90,7 +77,6 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         kieuNx: [''],
         tenKieuNx: [''],
         thoiHanBan: [''],
-        tongGiaTriHdong: [],
       }
     );
   }
@@ -99,10 +85,8 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     try {
       await this.spinner.show();
       if (this.idInput > 0) {
-        await Promise.all([
-          this.onExpandChange(0, true),
-          this.loadDetail(this.idInput),
-        ]);
+        await this.loadDetail(this.idInput)
+        this.onExpandChange(0, true);
       }
     } catch (e) {
       console.log('error: ', e);
@@ -110,10 +94,6 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     } finally {
       await this.spinner.hide();
     }
-  }
-
-  async showFirstRow($event, dataToChuc: any) {
-    await this.selectRow($event, dataToChuc);
   }
 
   async loadDetail(id: number) {
@@ -125,9 +105,6 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         return;
       }
       const data = res.data;
-      if (data.children && data.children.length > 0) {
-        await this.showFirstRow(event, data.children[0].children);
-      }
       this.formData.patchValue({
         idDtl: data.id,
         soQdPd: data.soQdPd,
@@ -152,16 +129,12 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         tenTrangThai: data.tenTrangThai,
       })
       if (data.pthucBanTrucTiep) {
-        data.children.forEach(item => {
-          item.giaTriHopDong = 0;
-          item.giaTriHopDong = item.children.reduce((prev, cur) => prev + cur.thanhTienDuocDuyet, 0);
-        });
         this.formData.patchValue({
-          tongGiaTriHdong: data.children.reduce((prev, cur) => prev + cur.giaTriHopDong, 0),
           pthucBanTrucTiep: data.pthucBanTrucTiep.toString()
         });
       }
       this.dataTable = data.children;
+      await this.selectRow(this.dataTable[0].children[0]);
       this.fileUyQuyen = data.fileUyQuyen;
       this.fileBanLe = data.fileBanLe;
     } catch (e) {
@@ -240,10 +213,6 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     this.rowItem = new ChiTietThongTinBanTrucTiepChaoGia();
     this.emitDataTable();
     this.updateEditCache();
-  }
-
-  isDisabledLuaChon(item) {
-    return this.rowItem.luaChon !== item;
   }
 
   clearItemRow() {
@@ -376,52 +345,28 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     });
   }
 
-  async selectRow($event, dataChildren) {
-    await this.spinner.show();
-    const isClickEvent = $event.type === 'click';
-    this.selected = !isClickEvent;
-    const selectedRow = isClickEvent
-      ? $event.target.parentElement.parentElement?.querySelector('.selectedRow')
-      : null;
-    if (selectedRow) {
-      selectedRow.classList.remove('selectedRow');
+  async selectRow(data: any) {
+    if (!data.selected) {
+      this.dataTable[0].children.forEach(item => item.selected = false);
+      data.selected = true;
+      const findndex = this.dataTable[0].children.findIndex(child => child.id == data.id);
+      this.listOfData = this.dataTable[0].children[findndex].children;
+      this.idDviDtl = this.dataTable[0].children[findndex].id;
+      this.showFromTT = true;
+      this.emitDataTable();
+      this.updateEditCache();
     }
-    if ($event.target.parentElement) {
-      $event.target.parentElement.classList.add('selectedRow');
-    }
-    const selectedItem = isClickEvent ? dataChildren : dataChildren[0];
-    this.listOfData = selectedItem.children;
-    this.showFromTT = true;
-    this.idDviDtl = selectedItem.id;
-    this.emitDataTable();
-    this.updateEditCache();
-    await this.spinner.hide();
   }
 
   setValidForm() {
     const formDataControls = this.formData.controls;
-    const requiredFields = [
-      "soQdPd",
-      "maDvi",
-      "tenDvi",
-      "tenLoaiHinhNx",
-      "tenKieuNx",
-      "loaiVthh",
-      "tenLoaiVthh",
-      "cloaiVthh",
-      "tenCloaiVthh",
-      "ngayMkho",
-      "ngayKthuc"
-    ];
-    requiredFields.forEach(field => {
-      formDataControls[field].setValidators([Validators.required]);
-    });
+    formDataControls["soQdPd"].setValidators([Validators.required]);
+    formDataControls["ngayMkho"].setValidators([Validators.required]);
+    formDataControls["ngayKthuc"].setValidators([Validators.required]);
     if (this.formData.value.pthucBanTrucTiep === THONG_TIN_BAN_TRUC_TIEP.CHAO_GIA) {
       formDataControls["diaDiemChaoGia"].setValidators([Validators.required]);
-      formDataControls["ghiChuChaoGia"].setValidators([Validators.required]);
     } else {
       formDataControls["diaDiemChaoGia"].clearValidators();
-      formDataControls["ghiChuChaoGia"].clearValidators();
     }
     if (this.formData.value.pthucBanTrucTiep !== THONG_TIN_BAN_TRUC_TIEP.CHAO_GIA) {
       formDataControls["thoiHanBan"].setValidators([Validators.required]);

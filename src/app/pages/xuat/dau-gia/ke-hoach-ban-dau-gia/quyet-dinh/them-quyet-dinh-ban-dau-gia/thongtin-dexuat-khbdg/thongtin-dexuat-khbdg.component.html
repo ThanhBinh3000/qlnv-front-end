@@ -189,7 +189,8 @@
         <th class="text-left"> Điểm kho</th>
         <th class="text-left"> Lô kho</th>
         <th class="text-left"> Mã ĐVTS</th>
-        <th class="text-center" [innerHTML]="isView ? 'SL xuất bán <br>đề xuất' : 'SL xuất bán'"></th>
+        <th nzWidth="100px" class="text-center wrap"
+            [innerHTML]="isView ? 'SL xuất bán <br>đề xuất' : 'SL xuất bán'"></th>
         <th class="text-left"> ĐVT</th>
         <th class="text-center">Đơn giá được <br>duyệt
           {{loaiVthhCache.startsWith(LOAI_HANG_DTQG.VAT_TU) ? '(đ)' : '(đ/kg)'}}

@@ -268,7 +268,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     if (res.msg !== MESSAGE.SUCCESS || !res.data) {
       return;
     }
-    if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
+    if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.GAO) || this.loaiVthh.startsWith(LOAI_HANG_DTQG.THOC)) {
       this.formTraCuu.patchValue({
         tenLoaiVthh: res.data.flatMap(item => item.children || []).find(s => s.ma === this.loaiVthh)?.ten
       });
@@ -281,7 +281,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
 
   async setValidator() {
     this.formTraCuu.controls["loaiVthh"].setValidators([Validators.required]);
-    if (this.loaiVthh !== LOAI_HANG_DTQG.VAT_TU) {
+    if (!this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
       this.formTraCuu.controls["tenLoaiVthh"].setValidators([Validators.required]);
       this.formTraCuu.controls["cloaiVthh"].setValidators([Validators.required]);
       this.formTraCuu.controls["tenCloaiVthh"].setValidators([Validators.required]);

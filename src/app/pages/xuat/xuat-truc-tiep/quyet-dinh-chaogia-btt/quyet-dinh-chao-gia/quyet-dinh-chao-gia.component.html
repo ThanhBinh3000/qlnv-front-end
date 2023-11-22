@@ -25,7 +25,7 @@
       </div>
     </form>
     <div class="cangiua group-button-search">
-      <button nz-button class="search__button--clear" (click)="clearFilter()">
+      <button nz-button class="search__button--clear" (click)="clearForm()">
         <i class="icon  htvbdh_nhap-lai1"></i>
         Xóa điều kiện
       </button>
@@ -39,19 +39,19 @@
     <h3 class="text-uppercase"> DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT KẾT QUẢ CHÀO GIÁ </h3>
     <div class="buttons">
       <button
-        *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_XOA') : userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_XOA')"
+        *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_XOA') : userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_XOA')"
         type="button" class="btn btn-do" (click)="deleteMulti()">
         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
         <span>Xóa</span>
       </button>
       <button
-        *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_EXP'): userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_XOA')"
+        *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_EXP'): userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_XOA')"
         type="button" class="btn btn-sub" (click)="exportData('Danh-sach-ket-qua-chao-gia.xlsx')">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
       <button
-        *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_THEM') : userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_THEM')"
+        *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_THEM') : userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_THEM')"
         type="button" class="btn btn-main" (click)="redirectDetail(0, false)">
         <i class=" icon htvbdh_dau-cong"></i>
         <span>Tạo quyết định</span>
@@ -73,7 +73,7 @@
         <th class="text-left"> Trích yếu</th>
         <th class="text-left"> Đơn vị</th>
         <th class="text-left"> Số QĐ PDKH bán trực tiếp</th>
-        <th class="text-left"> Loại hàng DTQG</th>
+        <th class="text-left" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">Loại hàng DTQG</th>
         <th class="text-left"> Chủng loại hàng DTQG</th>
         <th class="text-left"> Trạng thái</th>
         <th class="text-center"> Hành động</th>
@@ -112,7 +112,7 @@
                    (input)="filterInTable('soQdPd',filterTable.soQdPd)" size="small"/>
           </nz-input-group>
         </th>
-        <th>
+        <th *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
           <nz-input-group>
             <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
                    (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small"/>
@@ -153,7 +153,7 @@
              style="color: blue">{{data.soQdPd}}
           </a>
         </td>
-        <td class="text-left">{{ data.tenLoaiVthh }}</td>
+        <td class="text-left" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">{{data.tenLoaiVthh}}</td>
         <td class="text-left">{{ data.tenCloaiVthh }}</td>
         <td class="text-left">{{ data.tenTrangThai }}</td>
         <td class="text-center">

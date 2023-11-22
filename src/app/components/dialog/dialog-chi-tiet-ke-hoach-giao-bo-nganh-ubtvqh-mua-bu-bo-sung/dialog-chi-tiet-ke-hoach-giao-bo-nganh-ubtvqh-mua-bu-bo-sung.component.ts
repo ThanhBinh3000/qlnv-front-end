@@ -9,6 +9,10 @@ import { MESSAGE } from '../../../constants/message';
 import { MuaBuComponent } from './mua-bu/mua-bu.component';
 import { DonviService } from '../../../services/donvi.service';
 import { AMOUNT_THREE_DECIMAL } from '../../../Utility/utils';
+import { PREVIEW } from '../../../constants/fileType';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { QuyetDinhUbtvqhMuaBuBoSungService } from '../../../services/quyet-dinh-ubtvqh-mua-bu-bo-sung.service';
 
 @Component({
   selector: 'app-dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung',
@@ -36,11 +40,20 @@ export class DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent implement
   dsHangHoa: any[];
   dataEdit: any;
   amount = AMOUNT_THREE_DECIMAL;
+  templateName : string;
+  pdfSrc: any;
+  wordSrc: any;
+  excelSrc: any;
+  printSrc: any;
+  showDlgPreview = false;
 
   constructor(
     private readonly _modalRef: NzModalRef,
     private danhMucService: DanhMucService,
     private donviService: DonviService,
+    private notification: NzNotificationService,
+    private spinner: NgxSpinnerService,
+    private quyetDinhUbtvqhMuBuBoSung: QuyetDinhUbtvqhMuaBuBoSungService,
     public globals: Globals,
   ) {
   }
@@ -84,7 +97,6 @@ export class DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent implement
           });
         } else {
           this.dsHangHoa = hangHoa.data.filter(item => item.cap == 2);
-          console.log(this.dsHangHoa,'this.dsHangHoa');
         }
       }
     });
@@ -111,7 +123,6 @@ export class DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent implement
     if (this.validateData()) {
       this.keHoach.tongTien = this.keHoach.ttMuaBsung + this.keHoach.ttMuaBu;
       this._modalRef.close(this.keHoach);
-      console.log(this.keHoach,'this.keHoachthis.keHoach');
     }
   }
 
@@ -127,5 +138,26 @@ export class DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent implement
 
   onCancel() {
     this._modalRef.close();
+  }
+
+  async preview() {
+    this.spinner.show();
+    // this.muaTangView = this.convertDataPreview(this.keHoach.muaTangList)
+    // this.xuatBanView = this.convertDataPreview(this.keHoach.xuatBanList)
+    // this.xuatGiamView = this.convertDataPreview(this.keHoach.xuatGiamList)
+    // this.luanPhienView = this.convertDataPreview(this.keHoach.luanPhienList)
+    await this.quyetDinhUbtvqhMuBuBoSung.preview({
+      id:this.keHoach.idMuaQdUbtvqh,
+    }).then(async res => {
+      if (res.data) {
+        this.printSrc = res.data.pdfSrc;
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
+      }
+    });
+    this.spinner.hide();
   }
 }

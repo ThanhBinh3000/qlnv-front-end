@@ -5,11 +5,7 @@ import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {Base2Component} from 'src/app/components/base2/base2.component';
 import {MESSAGE} from 'src/app/constants/message';
-import {STATUS} from 'src/app/constants/status';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {
-  QuyetDinhPdKhBanTrucTiepService
-} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
+import {STATUS, THONG_TIN_BAN_TRUC_TIEP} from 'src/app/constants/status';
 import {HopDongBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
 import {
   QdPdKetQuaBttService
@@ -19,7 +15,6 @@ import {
   ChaoGiaMuaLeUyQuyenService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
-import {formatNumber} from "@angular/common";
 
 @Component({
   selector: 'app-quan-ly-hop-dong-btt',
@@ -31,9 +26,9 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
   @Input() loaiVthh: string;
   @Output() showListEvent = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG
+  TRUC_TIEP = THONG_TIN_BAN_TRUC_TIEP
   isView: boolean
   isEditHopDong: boolean
-  selected: boolean = false;
   loadDanhSachHdongDaKy: any[] = [];
   idQdNv: number = 0;
   isViewQdNv: boolean = false;
@@ -46,9 +41,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     modal: NzModalService,
     private hopDongBttService: HopDongBttService,
     private qdPdKetQuaBttService: QdPdKetQuaBttService,
-    private quyetDinhPdKhBanTrucTiepService: QuyetDinhPdKhBanTrucTiepService,
     private chaoGiaMuaLeUyQuyenService: ChaoGiaMuaLeUyQuyenService,
-    private danhMucService: DanhMucService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBttService);
     this.formData = this.fb.group({
@@ -57,6 +50,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
       soQdKq: [''],
       soQdPd: [''],
       tenDuAn: [''],
+      tenDviCha: [''],
       tenDvi: [''],
       nguonVon: [''],
       tongGiaTriHdong: [],
@@ -66,11 +60,11 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
       donViTinh: [''],
       tenLoaiVthh: [''],
       tenCloaiVthh: [''],
-      vat: [''],
       tenLoaiHinhNx: [''],
       tenKieuNx: [''],
       trangThaiHd: [''],
       tenTrangThaiHd: [''],
+      phuongThucBan: [''],
     });
   }
 
@@ -113,13 +107,13 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
         tenCloaiVthh: data.tenCloaiVthh,
         tenLoaiHinhNx: data.tenLoaiHinhNx,
         tenKieuNx: data.tenKieuNx,
-        vat: '5 %',
         tongSlXuatBanQdKh: data.tongSoLuong,
         tongGiaTriHdong: data.tongGiaTriHdong,
         tongSlChuaKyHdong: data.tongSlChuaKyHdong,
         trangThaiHd: data.trangThaiHd,
         tenTrangThaiHd: data.tenTrangThaiHd,
         donViTinh: data.children[0]?.donViTinh,
+        phuongThucBan: THONG_TIN_BAN_TRUC_TIEP.CHAO_GIA,
       });
       const filteredItems = this.loadDanhSachHdongDaKy.filter(item => item.idQdKq === data.id);
       const tongSlDaKyHdong = filteredItems.reduce((acc, item) => acc + item.soLuong, 0);
@@ -130,7 +124,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
       });
       this.dataTable = data.listHopDongBtt.filter(item => item.maDvi === this.userInfo.MA_DVI);
       if (this.dataTable && this.dataTable.length > 0) {
-        this.showFirstRow(event, this.dataTable[0].id);
+        await this.selectRow(this.dataTable[0]);
       }
     } catch (e) {
       console.log('error: ', e);
@@ -150,6 +144,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
       await this.loadDanhDachHopDong();
       this.formData.patchValue({
         namKh: data.namKh,
+        tenDviCha: data.tenDvi,
         soQdPd: data.soQdPd,
         loaiVthh: data.loaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
@@ -158,11 +153,11 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
         tenLoaiHinhNx: data.tenLoaiHinhNx,
         tenKieuNx: data.tenKieuNx,
         tongSlXuatBanQdKh: data.tongSoLuong,
-        tongGiaTriHdong: data.tongGiaTriHdong,
+        tongGiaTriHdong: data.thanhTienDuocDuyet,
         donViTinh: data.donViTinh,
-        vat: '5 %',
         trangThaiHd: data.trangThaiHd,
         tenTrangThaiHd: data.tenTrangThaiHd,
+        phuongThucBan: THONG_TIN_BAN_TRUC_TIEP.UY_QUYEN,
       });
       const dataChildren = data.children.find(item => item.maDvi === this.userInfo.MA_DVI);
       this.formData.patchValue({tenDvi: dataChildren.tenDvi})
@@ -175,7 +170,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
       });
       this.dataTable = data.listHopDongBtt.filter(item => item.maDvi === this.userInfo.MA_DVI);
       if (this.dataTable && this.dataTable.length > 0) {
-        this.showFirstRow(event, this.dataTable[0].id);
+        await this.selectRow(this.dataTable[0]);
       }
     } catch (e) {
       console.log('error: ', e);
@@ -203,30 +198,14 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     this.loadDanhSachHdongDaKy = data;
   }
 
-  async showFirstRow($event, id: any) {
-    await this.showDetail($event, id);
-  }
-
   idHopDong: number;
 
-  async showDetail($event, id: number) {
-    try {
-      await this.spinner.show();
-      if ($event.type == 'click') {
-        this.selected = false;
-        const selectedRow = $event.target.parentElement.parentElement.querySelector('.selectedRow');
-        if (selectedRow) {
-          selectedRow.classList.remove('selectedRow');
-        }
-        $event.target.parentElement.classList.add('selectedRow');
-      } else {
-        this.selected = true;
-      }
-      this.idHopDong = id;
-    } catch (error) {
-      console.error('Error:', error);
-    } finally {
-      await this.spinner.hide();
+  async selectRow(data: any) {
+    if (!data.selected) {
+      this.dataTable.forEach(item => item.selected = false)
+      data.selected = true;
+      const findndex = this.dataTable.findIndex(child => child.id == data.id);
+      this.idHopDong = this.dataTable[findndex].id
     }
   }
 
@@ -363,18 +342,6 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     if (!this.dataTable) return 0;
     return this.dataTable.reduce((sum, cur) => sum + (cur[column] || 0), 0);
   }
-
-  // formatterTien = (value: number) => {
-  //   const donViTien = '(đ)';
-  //   const formattedValue = value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
-  //   return `${formattedValue} ${donViTien}`;
-  // }
-  //
-  // formatterSoLuong = (value: number) => {
-  //   const donViTinh = this.formData.value.donViTinh ? this.formData.value.donViTinh : ''
-  //   const formattedValue = value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
-  //   return `${formattedValue} ${donViTinh}`;
-  // }
 
   openModal(id: number) {
     this.idQdNv = id;

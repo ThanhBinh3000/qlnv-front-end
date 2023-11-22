@@ -329,7 +329,7 @@
           <td>{{data.tenDinhMuc}}</td>
           <td>{{data.apDungTai ? data.apDungTaiStr : 'Tất cả '}}</td>
           <td>{{data.donViTinh}}</td>
-          <td *ngIf='capDvi == 2'>{{data.tongDinhMucTc}}</td>
+          <td *ngIf='capDvi == 2'>{{data.tongDinhMucTc | number : '1.0-1' : 'vi_VN'}}</td>
           <td
             class='text-right'>{{(data.nvChuyenMonTc + data.ttCaNhanTc + data.tcDieuHanhTc + data.nvChuyenMonKv + data.ttCaNhanKv + data.tcDieuHanhKv) | number : '1.0-1' : 'vi_VN'}}</td>
           <td class='text-right'
