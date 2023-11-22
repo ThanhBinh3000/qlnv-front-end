@@ -120,7 +120,7 @@
         <th>
           <nz-form-control>
             <nz-input-group>
-              <nz-select [(ngModel)]="listHtbqSelected" [nzMaxTagCount]="1"
+              <nz-select [(ngModel)]="rowItem.listHtbq" [nzMaxTagCount]="1"
                          [nzMaxTagPlaceholder]="tagPlaceHolder2"
                          nzMode="multiple">
                 <nz-option *ngFor="let item of listHinhThucBq" [nzLabel]="item.giaTri"
@@ -135,7 +135,7 @@
         <th>
           <nz-form-control>
             <nz-input-group>
-              <nz-select [(ngModel)]="listPtbqSelected" [nzMaxTagCount]="1"
+              <nz-select [(ngModel)]="rowItem.listPtbq" [nzMaxTagCount]="1"
                          [nzMaxTagPlaceholder]="tagPlaceHolder1"
                          nzMode="multiple">
                 <nz-option *ngFor="let item of listPhuongThucBq" [nzLabel]="item.giaTri"
@@ -178,7 +178,7 @@
         <th>
           <nz-form-control>
             <nz-input-group>
-              <nz-select [(ngModel)]="listCucSelected" [nzMaxTagCount]="1"
+              <nz-select [(ngModel)]="rowItem.listCuc" [nzMaxTagCount]="1"
                          [nzMaxTagPlaceholder]="tagPlaceHolder"
                          nzMode="multiple">
                 <nz-option *ngFor="let item of dsCuc" [nzLabel]="item.tenDvi"
@@ -191,7 +191,7 @@
 
         </th>
         <th class="text-center">
-          <a (click)="themMoiItem(null, rowItem)" *ngIf="userService.isAccessPermisson('QTDM_DM_DINHMUC_HAOHUT_THEM')">
+          <a (click)="themMoiItem(rowItem, null)" *ngIf="userService.isAccessPermisson('QTDM_DM_DINHMUC_HAOHUT_THEM')">
             <i class="icon htvbdh_dau-cong"></i>
           </a>
           <a *ngIf="userService.isAccessPermisson('QTDM_DM_DINHMUC_HAOHUT_THEM')">
@@ -226,9 +226,9 @@
               </nz-option>
             </nz-select>
           </td>
-          <td>{{data.tgBaoQuanTu}}</td>
-          <td>{{data.tgBaoQuanDen}}</td>
-          <td>{{data.dinhMuc}}</td>
+          <td class="text-center">{{data.tgBaoQuanTu}}</td>
+          <td class="text-center">{{data.tgBaoQuanDen}}</td>
+          <td class="text-center">{{data.dinhMuc}}</td>
           <td>
             <nz-select [(ngModel)]="data.listCuc" [nzMaxTagCount]="1"
                        [nzMaxTagPlaceholder]="tagPlaceHolder"
@@ -266,8 +266,26 @@
           <td>
             <nz-form-control>
               <nz-input-group>
-                <nz-select  [(ngModel)]="dataEdit[i].data.loaiVthh" nzShowSearch nzAllowClear  (ngModelChange)="selectLoaiHangHoa($event)">
-                  <nz-option *ngFor="let item of listLoaiVthh" [nzLabel]="item.ten" [nzValue]="item.ma"></nz-option>
+                <input type="text" placeholder="Nhập text" nz-input [(ngModel)]="dataEdit[i].data.tenLoaiVthh" readonly/>
+              </nz-input-group>
+            </nz-form-control>
+          </td>
+          <td>
+            <nz-form-control>
+              <nz-input-group>
+                <input type="text" placeholder="Nhập text" nz-input [(ngModel)]="dataEdit[i].data.tenCloaiVthh" readonly/>
+              </nz-input-group>
+            </nz-form-control>
+          </td>
+          <td>
+            <nz-form-control>
+              <nz-input-group>
+                <nz-select [(ngModel)]="dataEdit[i].data.listHtbq" [nzMaxTagCount]="1"
+                           [nzMaxTagPlaceholder]="tagPlaceHolder2"
+                           nzMode="multiple">
+                  <nz-option *ngFor="let item of listHinhThucBq" [nzLabel]="item.giaTri"
+                             [nzValue]="item.ma">
+                  </nz-option>
                 </nz-select>
               </nz-input-group>
             </nz-form-control>
@@ -275,26 +293,12 @@
           <td>
             <nz-form-control>
               <nz-input-group>
-                <nz-select  [(ngModel)]="dataEdit[i].data.cloaiVthh" nzShowSearch nzAllowClear   >
-                  <nz-option *ngFor="let item of listCloaiVthh" [nzLabel]="item.ten" [nzValue]="item.ma"></nz-option>
-                </nz-select>
-              </nz-input-group>
-            </nz-form-control>
-          </td>
-          <td>
-            <nz-form-control>
-              <nz-input-group>
-                <nz-select  [(ngModel)]="dataEdit[i].data.hinhThucBq" nzShowSearch nzAllowClear   >
-                  <nz-option *ngFor="let item of listHinhThucBq" [nzLabel]="item.giaTri" [nzValue]="item.ma"></nz-option>
-                </nz-select>
-              </nz-input-group>
-            </nz-form-control>
-          </td>
-          <td>
-            <nz-form-control>
-              <nz-input-group>
-                <nz-select  [(ngModel)]="dataEdit[i].data.phuongThucBq" nzShowSearch nzAllowClear   >
-                  <nz-option *ngFor="let item of listPhuongThucBq" [nzLabel]="item.giaTri" [nzValue]="item.ma"></nz-option>
+                <nz-select [(ngModel)]="dataEdit[i].data.listPtbq" [nzMaxTagCount]="1"
+                           [nzMaxTagPlaceholder]="tagPlaceHolder1"
+                           nzMode="multiple">
+                  <nz-option *ngFor="let item of listPhuongThucBq" [nzLabel]="item.giaTri"
+                             [nzValue]="item.ma">
+                  </nz-option>
                 </nz-select>
               </nz-input-group>
             </nz-form-control>
@@ -327,9 +331,23 @@
               </nz-input-group>
             </nz-form-control>
           </td>
-          <td></td>
+          <td>
+            <nz-form-control>
+              <nz-input-group>
+                <nz-select [(ngModel)]="dataEdit[i].data.listCuc" [nzMaxTagCount]="1"
+                                         [nzMaxTagPlaceholder]="tagPlaceHolder"
+                                         nzMode="multiple">
+                <nz-option *ngFor="let item of dsCuc" [nzLabel]="item.tenDvi"
+                           [nzValue]="item.maDvi">
+                </nz-option>
+                <ng-template #tagPlaceHolder let-selectedList>và {{ selectedList.length }} Cục DTNNKV nữa</ng-template>
+              </nz-select>
+              </nz-input-group>
+            </nz-form-control>
+
+          </td>
           <td style="text-align: center;">
-            <a (click)="themMoiItem(data.id, dataEdit[i].data)" *ngIf="userService.isAccessPermisson('QTDM_DM_DINHMUC_HAOHUT_THEM')">
+            <a (click)="themMoiItem(dataEdit[i].data, data.id)" *ngIf="userService.isAccessPermisson('QTDM_DM_DINHMUC_HAOHUT_THEM')">
               <i class="fa fa-save mr-3"></i>
             </a>
             <a (click)="huyEdit(i)" *ngIf="userService.isAccessPermisson('QTDM_DM_DINHMUC_HAOHUT_XOA')">

@@ -28,9 +28,6 @@ export class DanhMucDinhMucHaoHutComponent implements OnInit {
   listCloaiVthh: any[] = [];
   listHinhThucBq: any[] = [];
   listPhuongThucBq: any[] = [];
-  listCucSelected: any[] = [];
-  listPtbqSelected: any[] = [];
-  listHtbqSelected: any[] = [];
   dataTableAll: any[] = [];
   dsCuc: any[] = [];
   page: number = 1;
@@ -162,31 +159,28 @@ export class DanhMucDinhMucHaoHutComponent implements OnInit {
     this.spinner.hide();
   }
 
-  async themMoiItem(id?, data?: DmDinhMucHaoHut) {
+  async themMoiItem(data: DmDinhMucHaoHut, id?: number) {
     this.spinner.show();
-    this.rowItem.hinhThucBq = this.listHtbqSelected.toString();
-    this.rowItem.phuongThucBq = this.listPtbqSelected.toString();
-    this.rowItem.apDungTai = this.listCucSelected.toString();
+    data.hinhThucBq =data.listHtbq.toString();
+    data.phuongThucBq = data.listPtbq.toString();
+    data.apDungTai = data.listCuc.toString();
     if (!this.checkValidators(data)) {
       this.notification.error(MESSAGE.ERROR, "Vui lòng không để trống!!")
       this.spinner.hide();
       return;
     }
-    if (id && id > 0) {
-      this.rowItem = data
-    }
     let body = {
-      "id": id ? id : null,
-      "maDinhMuc": this.rowItem.maDinhMuc,
-      "tenDinhMuc": this.rowItem.tenDinhMuc,
-      "loaiVthh": this.rowItem.loaiVthh,
-      "cloaiVthh": this.rowItem.cloaiVthh,
-      "hinhThucBq": this.rowItem.hinhThucBq,
-      "phuongThucBq": this.rowItem.phuongThucBq,
-      "tgBaoQuanTu": this.rowItem.tgBaoQuanTu,
-      "tgBaoQuanDen": this.rowItem.tgBaoQuanDen,
-      "dinhMuc": this.rowItem.dinhMuc,
-      "apDungTai": this.rowItem.apDungTai,
+      "id": id && id > 0 ? id : null,
+      "maDinhMuc": data.maDinhMuc,
+      "tenDinhMuc": data.tenDinhMuc,
+      "loaiVthh": data.loaiVthh,
+      "cloaiVthh": data.cloaiVthh,
+      "hinhThucBq": data.hinhThucBq,
+      "phuongThucBq": data.phuongThucBq,
+      "tgBaoQuanTu": data.tgBaoQuanTu,
+      "tgBaoQuanDen": data.tgBaoQuanDen,
+      "dinhMuc": data.dinhMuc,
+      "apDungTai": data.apDungTai,
       "maDvi": this.userInfo.MA_DVI
     }
     let res;
@@ -204,9 +198,8 @@ export class DanhMucDinhMucHaoHutComponent implements OnInit {
       this.rowItem = new DmDinhMucHaoHut();
       await this.search();
       this.updateEditCache();
-      this.listCucSelected = [];
-      this.listHtbqSelected = [];
-      this.listPtbqSelected= [];
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
   }
