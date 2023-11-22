@@ -90,7 +90,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         idPhieuKnCl: [],
         soPhieuKnCl: ['', [Validators.required]],
         ngayKn: [],
-        loaiVthh: [],
+        loaiVthh: [, [Validators.required]],
         cloaiVthh: [],
         moTaHangHoa: [],
         canBoLapPhieu: [],
@@ -105,11 +105,11 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         soBangKeCh: [],
         idBangKeCh: [],
         maSo: [],
-        donViTinh: [],
-        theoChungTu: [],
-        thucXuat: [],
-        // donGia: [],
-        // thanhTien: [],
+        donViTinh: [, [Validators.required]],
+        theoChungTu: [, [Validators.required, Validators.min(0)]],
+        thucXuat: [, [Validators.required, Validators.min(0)]],
+        donGia: [, [Validators.required, Validators.min(0)]],
+        thanhTien: [, [Validators.required, Validators.min(0)]],
         ghiChu: [''],
         trangThai: [STATUS.DU_THAO],
         tenDvi: [],
@@ -129,12 +129,21 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         kieuNhapXuat: [],
         mucDichXuat: [, [Validators.required]],
         noiDungDx: [],
-        soLuong: []
+        soLuong: [, [Validators.required, Validators.min(0)]],
+        thanhTienBc: [, [Validators.required]],
+        soLuongBc: [, [Validators.required]]
 
       }
     );
     this.maPhieu = 'PXK-' + this.userInfo.DON_VI.tenVietTat;
-
+    this.formData.controls.thucXuat.valueChanges.subscribe((value) => {
+      this.calculateThanhTien();
+      const soLuongBc = value ? convertTienTobangChu(value) + (this.formData.value.donViTinh ? this.formData.value.donViTinh === 'kg' ? "kilôgam" : this.formData.value.donViTinh : "") : "";
+      this.formData.patchValue({ soLuongBc });
+    })
+    this.formData.controls.donGia.valueChanges.subscribe((value) => {
+      this.calculateThanhTien();
+    })
     // this.setTitle();
   }
 
@@ -475,14 +484,10 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     })
   }
 
-  calculateSum() {
-    let sum = this.formData.value.thucXuat * this.formData.value.donGia;
-    return sum;
-
-  }
-
-  convertTien(tien: number): string {
-    return convertTienTobangChu(tien);
+  calculateThanhTien(): void {
+    const thanhTien = this.formData.value.thucXuat && this.formData.value.donGia ? this.formData.value.thucXuat * this.formData.value.donGia : "";
+    const thanhTienBc = thanhTien ? convertTienTobangChu(thanhTien) + "đồng" : "";
+    this.formData.patchValue({ thanhTien, thanhTienBc });
   }
   showAction() {
     if (this.isView) return false;
