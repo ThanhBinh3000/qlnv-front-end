@@ -1366,10 +1366,9 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
         })
         this.guiDuyet();
       }
-      // else {
-      //   // this.quayLai();
-      //   await this.loadChiTiet(this.idInput)
-      // }
+      else {
+        await this.loadChiTiet(this.idInput)
+      }
     }
     await this.spinner.hide();
   }
