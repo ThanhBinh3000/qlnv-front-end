@@ -202,16 +202,18 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       }
     };
     await Promise.all([
-      this.isView ? null : fetchData('LOAI_HINH_NHAP_XUAT', this.listLoaiHinhNx, item => item.apDung === 'XUAT_DG'),
-      this.isView ? null : fetchData('KIEU_NHAP_XUAT', this.listKieuNx, item => item.apDung === 'XUAT_DG'),
+      this.isView ? null : fetchData('LOAI_HINH_NHAP_XUAT', this.listLoaiHinhNx, () => true),
+      this.isView ? null : fetchData('KIEU_NHAP_XUAT', this.listKieuNx, () => true),
       fetchData('PHUONG_THUC_TT', this.listPhuongThucThanhToan, () => true),
     ]);
     if (!this.isView) {
+      const loaiHinhXuat = this.listLoaiHinhNx.find((item) => item.apDung === 'XUAT_DG')
+      const KieuXuat = this.listKieuNx.find((item) => item.apDung === 'XUAT_DG')
       this.formData.patchValue({
-        loaiHinhNx: this.listLoaiHinhNx[0].ma,
-        tenLoaiHinhNx: this.listLoaiHinhNx[0].giaTri,
-        kieuNx: this.listKieuNx[0].ma,
-        tenKieuNx: this.listKieuNx[0].giaTri,
+        loaiHinhNx: loaiHinhXuat.ma,
+        tenLoaiHinhNx: loaiHinhXuat.giaTri,
+        kieuNx: KieuXuat.ma,
+        tenKieuNx: KieuXuat.giaTri,
       });
     }
   }
@@ -320,7 +322,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     }
     let giaToiDa = 0;
     res.data.forEach((item) => {
-      const giaQdBtc = item.giaQdBtc != null && item.giaQdBtc > 0 ? item.giaQdBtc : item.giaQdDcBtc;
+      const giaQdBtc = item.giaQdDcBtc != null && item.giaQdDcBtc > 0 ? item.giaQdDcBtc : item.giaQdBtc;
       giaToiDa = Math.max(giaToiDa, giaQdBtc);
     });
     this.giaToiDa = giaToiDa;

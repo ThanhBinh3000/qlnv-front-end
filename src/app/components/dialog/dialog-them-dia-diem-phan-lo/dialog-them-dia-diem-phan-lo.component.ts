@@ -133,7 +133,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         ...this.dataChiTieu.khLuongThuc?.map(item => ({
           maDvi: item.maDonVi,
           tenDvi: item.tenDonvi,
-          soLuongXuat: this.typeLoaiVthh === LOAI_HANG_DTQG.GAO ? item.xtnTongGao * 1000 : item.xtnTongThoc * 1000
+          soLuongXuat: this.typeLoaiVthh.startsWith(LOAI_HANG_DTQG.GAO) ? item.xtnTongGao * 1000 : item.xtnTongThoc * 1000
         })) || []
       );
     } else if (this.typeLoaiVthh.startsWith(LOAI_HANG_DTQG.MUOI)) {

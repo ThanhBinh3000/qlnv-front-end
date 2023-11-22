@@ -48,7 +48,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   danhsachDxCaChe: any[] = [];
   dataInput: any;
   dataInputCache: any;
-  selected: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -410,9 +409,9 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
         kieuNx: data.kieuNx,
         tenKieuNx: data.tenKieuNx,
         namKh: this.formData.value.nam,
+        idTrHdr: data.id,
         soTrHdr: data.soDxuat,
         idThHdr: null,
-        idTrHdr: data.id,
       });
       await this.getDataChiTieu();
       this.danhsachDx.push(data);
