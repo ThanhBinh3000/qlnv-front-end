@@ -130,7 +130,7 @@
                   Căn cứ pháp lý
                 </nz-form-label>
                 <div class="list-file">
-                  <file-list [data]="canCuPhapLy" [isViewDetail]="isViewDetail"></file-list>
+                  <file-list [data]="fileCanCu" [isViewDetail]="isViewDetail"></file-list>
                 </div>
               </nz-form-item>
             </div>
@@ -185,7 +185,7 @@
               <td>{{ data.vonDauTuTcdt | number : '1.0-1' : 'vi_VN' }}</td>
               <td>{{ data.giaTriPd | number : '1.0-1' : 'vi_VN' }}</td>
               <td>{{ data.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
-              <td><nz-input-number [nzSize]="'small'"  [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+              <td><nz-input-number [nzDisabled]="isViewDetail" [nzSize]="'small'"  [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                                    nz-input [(ngModel)]="data.keHoachVon" [nzMin]="1" ></nz-input-number>
               <td>{{ data.ghiChu }}</td>
               <td>

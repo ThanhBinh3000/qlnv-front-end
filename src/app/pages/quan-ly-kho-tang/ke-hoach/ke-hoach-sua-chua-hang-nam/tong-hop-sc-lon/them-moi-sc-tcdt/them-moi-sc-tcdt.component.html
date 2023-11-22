@@ -594,7 +594,7 @@
                               <td class="text-right">{{ child1.tmdt | number : '1.0-1' : 'vi_VN' }}</td>
                               <td class="text-right">{{ child1.giaTriPd | number : '1.0-1' : 'vi_VN' }}</td>
                               <td class="text-right">{{ child1.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
-                              <td><nz-input-number [nzSize]="'small'"  [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                              <td><nz-input-number [nzDisabled]="isViewDetail" [nzSize]="'small'"  [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                                                    nz-input [(ngModel)]="child1.vonDauTuTcdt" [nzMin]="1" ></nz-input-number>
                               <td>{{ child1.ghiChu }}</td>
                               <td>
