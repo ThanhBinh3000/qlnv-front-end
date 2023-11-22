@@ -502,7 +502,6 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   async onChangeCanCuQdTc(id) {
     if (id) {
 
-      let tong = 0
       this.danhSachKeHoach = []
       this.danhSachQuyetDinh = []
       let dsHH = []
@@ -510,8 +509,12 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       const data = detail.data
       if (!data) return
       console.log('onChangeCanCuQdTc', detail)
-
-      let dsDX = data.danhSachQuyetDinh.filter((dvn) => dvn.maCucNhan === this.userInfo.MA_DVI)
+      let dsDX = []
+      if (this.formData.value.loaiQdinh === "01") {
+        dsDX = data.danhSachQuyetDinh.filter((dvn) => dvn.maCucXuat === this.userInfo.MA_DVI)
+      } else {
+        dsDX = data.danhSachQuyetDinh.filter((dvn) => dvn.maCucNhan === this.userInfo.MA_DVI)
+      }
 
       dsDX.forEach(element => {
         element.danhSachQuyetDinhChiTiet.forEach(itemQD => {
