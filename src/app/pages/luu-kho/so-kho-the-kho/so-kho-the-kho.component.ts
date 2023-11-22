@@ -82,6 +82,7 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit , Aft
       }
       this.loadDsHangHoa();
       this.loadDsChiCuc();
+      this.getOffSetTop();
       await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
