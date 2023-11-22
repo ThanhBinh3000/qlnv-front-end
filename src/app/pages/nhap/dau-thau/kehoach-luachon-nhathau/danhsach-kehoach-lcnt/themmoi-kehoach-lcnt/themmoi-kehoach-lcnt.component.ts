@@ -743,9 +743,23 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
 
   validateSave() {
     let pipe = new DatePipe('en-US');
+    let tgianMthau;
+    let tgianDthau;
+    if (this.formData.value.tgianMthau != null) {
+      if (this.formData.value.tgianMthauTime != null) {
+        tgianMthau = new Date(pipe.transform(this.formData.value.tgianMthau, 'yyyy-MM-dd') + " " + pipe.transform(this.formData.value.tgianMthauTime, 'HH:mm') + ":00")
+      } else {
+        tgianMthau = new Date(pipe.transform(this.formData.value.tgianMthau, 'yyyy-MM-dd') + " 00:00:00")
+      }
+    }
+    if (this.formData.value.tgianDthau != null) {
+      if (this.formData.value.tgianDthauTime != null) {
+        tgianDthau = new Date(pipe.transform(this.formData.value.tgianDthau, 'yyyy-MM-dd') + " " + pipe.transform(this.formData.value.tgianDthauTime, 'HH:mm') + ":00")
+      } else {
+        tgianDthau = new Date(pipe.transform(this.formData.value.tgianDthau, 'yyyy-MM-dd') + " 23:59:59")
+      }
+    }
     let tgianBdauTchuc = new Date(pipe.transform(this.formData.value.tgianBdauTchuc, 'yyyy-MM-dd') + " 23:59:59");
-    let tgianMthau = new Date(this.formData.value.tgianMthau)
-    let tgianDthau = new Date(this.formData.value.tgianDthau)
     let tgianNhang = new Date(pipe.transform(this.formData.value.tgianNhang, 'yyyy-MM-dd') + " 00:00:00");
     if (tgianBdauTchuc >= tgianMthau) {
       this.notification.error(MESSAGE.ERROR, "Thời gian bắt đầu tổ chức không được vượt quá thời gian mở thầu")

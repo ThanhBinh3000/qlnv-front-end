@@ -141,7 +141,8 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
     try {
       await this.spinner.show();
       super.service = this.inputService;
-      this.maHauTo = '/' + this.formData.value.nam + '/BBLM-' + this.userInfo.DON_VI.tenVietTat;
+      // this.maHauTo = '/' + this.formData.value.nam + '/BBLM-' + this.userInfo.DON_VI.tenVietTat;
+      this.maHauTo = '/BBLM-' + this.userInfo.DON_VI.tenVietTat;
       await Promise.all([
         this.loadDsQdGnv(),
       ]);
@@ -481,7 +482,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
       this.formData.controls['truongBpBaoQuan'].setValidators(Validators.required);
       this.formData.controls['truongBpBaoQuan'].updateValueAndValidity()
     }
-    let body = { ...this.formData.value };
+    let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd : this.maHauTo };
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
     if (this.loaiXuat === "CTVT") {
       this.formData.controls['truongBpBaoQuan'].clearValidators();

@@ -65,10 +65,11 @@ import {
 import {
   DialogTableSelectionComponent
 } from "../../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import { FILETYPE } from "../../../../../../../constants/fileType";
+import { FILETYPE, PREVIEW } from "../../../../../../../constants/fileType";
 import { QuyetDinhDieuChinhCTKHService } from 'src/app/services/dieu-chinh-chi-tieu-ke-hoach/quyet-dinh-dieu-chinh-ctkh';
 import { DeXuatDieuChinhCTKHService } from 'src/app/services/dieu-chinh-chi-tieu-ke-hoach/de-xuat-dieu-chinh-ctkh';
 import { PhuongAnDieuChinhCTKHService } from 'src/app/services/dieu-chinh-chi-tieu-ke-hoach/phuong-an-dieu-chinh-ctkh';
+import printJS from 'print-js';
 
 @Component({
   selector: 'app-dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -178,10 +179,13 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   //xem trước
   pdfSrc: any;
+  wordSrc: any;
   excelSrc: any;
+  printSrc: any;
   pdfBlob: any;
   excelBlob: any;
   showDlgPreview = false;
+  showDlgPreviewTheoCuc = false;
 
   constructor(
     private router: Router,
@@ -1446,6 +1450,57 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     return sumVal ? Intl.NumberFormat('vi-VN').format(sumVal) : '0';
   }
 
+  async preViewTheoCuc() {
+    this.spinner.show();
+    //Convert data to list object cuc
+    this.quyetDinhDieuChinhCTKHService.xemTruocCtKhNamTheoCuc({
+      id: this.thongTinChiTieuKeHoachNam.id,
+      tenBaoCao: 'dieu_chinh_chi_tieu_ke_hoach_nam_theo_tung_cuc.docx',
+      dataVatTunhap: this.getDataPreviewTheoCuc(this.dsKeHoachLuongThucClone),
+    }).then(async res => {
+      if (res.data) {
+        this.printSrc = res.data.pdfSrc;
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreviewTheoCuc = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
+      }
+    });
+    this.spinner.hide();
+  }
+
+  getDataPreviewTheoCuc(khLuongThuc) {
+    let arrayData = [];
+    if (khLuongThuc && khLuongThuc.length > 0) {
+      for (let item of khLuongThuc) {
+        let data = {
+          tenDvi: item.tenDvi,
+          maDvi: item.maDvi,
+          khVatTuNhap: (this.dataVatTuNhapTree && this.dataVatTuNhapTree.length > 0) ? this.dataVatTuNhapTree.find(it => it.maDvi == item.maDvi) : [],
+        };
+        arrayData = [...arrayData, data];
+      }
+    }
+    return arrayData;
+  }
+
+  closeDlgTheoCuc() {
+    this.showDlgPreviewTheoCuc = false;
+  }
+
+  downloadPdfCuc() {
+    saveAs(this.pdfSrc, 'dieu_chinh_chi_tieu_ke_hoach_nam_theo_tung_cuc.pdf');
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, 'dieu_chinh_chi_tieu_ke_hoach_nam_theo_tung_cuc.docx');
+  }
+
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true });
+  }
+
   exportData() {
     var workbook = XLSX.utils.book_new();
     const tableLuongThuc = document
@@ -1695,7 +1750,16 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   downloadPdf() {
-    saveAs(this.pdfBlob, 'baocao.pdf');
+    // saveAs(this.pdfBlob, 'dieu-chinh-chi-tieu-ke-hoach.pdf');
+    if (this.subTab === 'LT') {
+      saveAs(this.pdfBlob, "dieu-chinh-chi-tieu-luong-thuc.pdf");
+    } else if (this.subTab === 'MUOI') {
+      saveAs(this.pdfBlob, "dieu-chinh-chi-tieu-muoi.pdf");
+    } else if (this.subTab === 'VT-NHAP') {
+      saveAs(this.pdfBlob, "dieu-chinh-chi-tieu-nhap-vat-tu-thiet-bi.pdf");
+    } else if (this.subTab === 'VT-XUAT') {
+      saveAs(this.pdfBlob, "dieu-chinh-chi-tieu-xuat-vat-tu-thiet-bi.pdf");
+    }
   }
 
   async downloadExcel() {
@@ -1709,7 +1773,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           tenBaoCao: "Kế hoạch lương thực dự trữ nhà nước"
         }).then(async s => {
           this.excelBlob = s;
-          saveAs(this.excelBlob, "Kế hoạch lương thực dự trữ nhà nước.xlsx");
+          saveAs(this.excelBlob, "dieu-chinh-chi-tieu-luong-thuc.xlsx");
         });
       } else if (this.subTab === 'MUOI') {
         await this.quyetDinhDieuChinhCTKHService.xemTruocCtKhNamMuoi({
@@ -1719,7 +1783,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           fileName: 'chi-tieu-vat-tu-thiet-bi.jrxml',
         }).then(async s => {
           this.excelBlob = s;
-          saveAs(this.excelBlob, "chi-tieu-nhap-vat-tu-thiet-bi.xlsx");
+          saveAs(this.excelBlob, "dieu-chinh-chi-tieu-muoi.xlsx");
         });
       } else if (this.subTab === 'VT-NHAP') {
         await this.quyetDinhDieuChinhCTKHService.xemTruocCtKhNamVatTu({
@@ -1730,7 +1794,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           loaiNhapXuat: 'NHAP'
         }).then(async s => {
           this.excelBlob = s;
-          saveAs(this.excelBlob, "chi-tieu-nhap-vat-tu-thiet-bi.xlsx");
+          saveAs(this.excelBlob, "dieu-chinh-chi-tieu-nhap-vat-tu-thiet-bi.xlsx");
         });
       } else if (this.subTab === 'VT-XUAT') {
         await this.quyetDinhDieuChinhCTKHService.xemTruocCtKhNamVatTu({
@@ -1741,7 +1805,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           loaiNhapXuat: 'XUAT'
         }).then(async s => {
           this.excelBlob = s;
-          saveAs(this.excelBlob, "chi-tieu-xuat-vat-tu-thiet-bi.xlsx");
+          saveAs(this.excelBlob, "dieu-chinh-chi-tieu-xuat-vat-tu-thiet-bi.xlsx");
         });
       }
       this.showDlgPreview = true;

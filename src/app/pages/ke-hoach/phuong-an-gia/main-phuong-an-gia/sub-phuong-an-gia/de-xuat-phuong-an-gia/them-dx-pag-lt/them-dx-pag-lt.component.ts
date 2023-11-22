@@ -518,6 +518,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     this.formData.controls["ngayKy"].setValidators([Validators.required]);
     this.formData.controls["loaiGia"].setValidators([Validators.required]);
     this.formData.controls["maPphapXdg"].setValidators([Validators.required]);
+    this.formData.controls["noiDung"].setValidators([Validators.required]);
     if (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03') {
       this.formData.controls["vat"].setValidators([Validators.required]);
     }

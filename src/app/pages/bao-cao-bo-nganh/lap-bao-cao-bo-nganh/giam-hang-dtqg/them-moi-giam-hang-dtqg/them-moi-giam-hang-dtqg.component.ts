@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef} from '@angular/core';
 import { Base2Component } from "../../../../../components/base2/base2.component";
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "../../../../../services/storage.service";
@@ -21,6 +21,7 @@ import { DonviService } from 'src/app/services/donvi.service';
   styleUrls: ['./them-moi-giam-hang-dtqg.component.scss']
 })
 export class ThemMoiGiamHangDtqgComponent extends Base2Component implements OnInit {
+  @ViewChild('labelImport') labelImport: ElementRef;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -71,6 +72,7 @@ export class ThemMoiGiamHangDtqgComponent extends Base2Component implements OnIn
   async ngOnInit() {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
+    this.templateName = 'template_bcbn_kh_giam_hang_du_tru_quoc_gia.xlsx'
     this.now = dayjs(); // Lấy ngày giờ hiện tại
     if (this.idInput > 0) {
       await this.getDetail(this.idInput, null);
@@ -308,5 +310,9 @@ export class ThemMoiGiamHangDtqgComponent extends Base2Component implements OnIn
     }
     return result;
   }
-
+  async handleSelectFile(event: any){
+    this.labelImport.nativeElement.innerText = event.target.files[0].name;
+    await this.onFileSelected(event);
+    this.listDataDetail = this.dataImport
+  }
 }

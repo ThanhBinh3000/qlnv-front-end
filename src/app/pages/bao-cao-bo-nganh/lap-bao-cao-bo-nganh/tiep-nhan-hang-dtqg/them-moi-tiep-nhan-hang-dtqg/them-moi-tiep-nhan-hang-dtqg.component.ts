@@ -74,6 +74,7 @@ export class ThemMoiTiepNhanHangDtqgComponent extends Base2Component implements 
         tenTrangThai: ['Dự thảo'],
       }
     );
+    this.templateName = 'template_bcbn_tiep_nhan_hang_dtqg.xlsx'
   }
   async ngOnInit() {
     this.spinner.show();
@@ -300,5 +301,11 @@ export class ThemMoiTiepNhanHangDtqgComponent extends Base2Component implements 
     this.itemRowNhomMhEdit[i][y] = {};
   }
 
+  async handleSelectFile(event: any){
+    await this.onFileSelected(event);
+    if(this.dataImport.length > 0){
+      this.listDataGroup = this.dataImport
+    }
+  }
 }
 

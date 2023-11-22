@@ -39,32 +39,32 @@ export class DeXuatComponent extends Base2Component implements OnInit {
   ) {
     super(httpClient, storageService, notification, spinner, modal, deXuatKhBanDauGiaService);
     this.formData = this.fb.group({
-      namKh: '',
-      soDxuat: '',
-      ngayTaoTu: '',
-      ngayTaoDen: '',
-      ngayDuyetTu: '',
-      ngayDuyetDen: '',
-      trichYeu: '',
-      loaiVthh: '',
-      trangThaiList: '',
+      namKh: null,
+      soDxuat: null,
+      ngayTaoTu: null,
+      ngayTaoDen: null,
+      ngayDuyetTu: null,
+      ngayDuyetDen: null,
+      trichYeu: null,
+      loaiVthh: null,
+      trangThaiList: null,
     });
 
     this.filterTable = {
-      namKh: '',
-      soDxuat: '',
-      ngayTao: '',
-      ngayPduyet: '',
-      soQdPd: '',
-      ngayKyQd: '',
-      trichYeu: '',
-      tenCloaiVthh: '',
-      slDviTsan: '',
-      slHdDaKy: '',
-      soQdCtieu: '',
-      tenTrangThai: '',
-      tenTrangThaiTh: '',
-      idThop: '',
+      namKh: null,
+      soDxuat: null,
+      ngayTao: null,
+      ngayPduyet: null,
+      soQdPd: null,
+      ngayKyQd: null,
+      trichYeu: null,
+      tenLoaiVthh: null,
+      tenCloaiVthh: null,
+      slDviTsan: null,
+      soQdCtieu: null,
+      tenTrangThai: null,
+      tenTrangThaiTh: null,
+      idThop: null,
     };
 
     this.listTrangThai = [
@@ -106,28 +106,17 @@ export class DeXuatComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([
-        this.timKiem(),
-        this.search(),
-      ]);
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+        trangThaiList: this.userService.isTongCuc() ? [this.STATUS.DA_DUYET_LDC, this.STATUS.DA_DUYET_CBV, this.STATUS.TU_CHOI_CBV] : null
+      })
+      await this.search();
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
     }
-  }
-
-  async timKiem() {
-    this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
-      trangThaiList: this.userService.isTongCuc() ? [this.STATUS.DA_DUYET_LDC, this.STATUS.DA_DUYET_CBV, this.STATUS.TU_CHOI_CBV] : null
-    })
-  }
-
-  async clearFilter() {
-    this.formData.reset();
-    await Promise.all([this.timKiem(), this.search()]);
   }
 
   redirectDetail(id, isView: boolean) {

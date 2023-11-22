@@ -268,7 +268,7 @@
                             <td>{{data.goiThau}}</td>
                             <td class="text-right">{{data.hopDong?.soLuong | number :'1.0-1' : 'vi_VN'}}</td>
                             <td class="text-right">{{data.hopDong?.donGia | number :'1.0-1' : 'vi_VN'}}</td>
-                            <td class="text-right">{{data.hopDong?.donGia * data.hopDong?.soLuong | number :'1.0-1' :
+                            <td class="text-right">{{data.hopDong?.donGia * data.hopDong?.soLuong * 1000 | number :'1.0-1' :
                                 'vi_VN' }}</td>
                             <td>{{data.hopDong?.tenTrangThai}}</td>
                             <td></td>
