@@ -27,7 +27,6 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
   @Input() idInput: number;
   @Output() showListEvent = new EventEmitter<any>();
   TRUC_TIEP = THONG_TIN_BAN_TRUC_TIEP
-  maHauTo: any;
   listOfData: any[] = [];
   fileUyQuyen: any[] = [];
   fileBanLe: any[] = [];
@@ -48,13 +47,14 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
         namKh: [''],
         soQdPd: [''],
         soQdDc: [''],
-        ngayKyQd: [''],
+        ngayKy: [''],
         ngayHluc: [''],
         loaiVthh: [''],
         tenLoaiVthh: [''],
         cloaiVthh: [''],
         tenCloaiVthh: [''],
         pthucBanTrucTiep: [''],
+        pthucBanTrucTiepHt: [''],
         trichYeu: [''],
         thoiGianDeXuatBtt: [''],
         thoiGianPdBtt: [''],
@@ -67,11 +67,8 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
 
   async ngOnInit() {
     try {
-      this.maHauTo = this.userInfo.MA_QD;
       if (this.idInput) {
-        await Promise.all([
-          this.loadDetail(this.idInput),
-        ]);
+        await this.loadDetail(this.idInput)
       }
     } catch (e) {
       console.error('error: ', e);
@@ -100,14 +97,15 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
       }
       this.formData.patchValue({
         namKh: data.namKh,
-        soQdPd: data.soQdPd?.split('/')[0],
-        soQdDc: data.soQdDc?.split('/')[0],
-        ngayKyQd: data.xhQdPdKhBttHdr ? data.xhQdPdKhBttHdr.ngayKyQd : data.xhQdDchinhKhBttHdr.ngayKyDc,
-        ngayHluc: data.xhQdPdKhBttHdr ? data.xhQdPdKhBttHdr.ngayHluc : data.xhQdDchinhKhBttHdr.ngayHlucDc,
+        soQdPd: data.soQdPd,
+        soQdDc: data.soQdDc,
+        ngayKy: data.xhQdPdKhBttHdr.type === 'QDDC' ? data.xhQdPdKhBttHdr.ngayKyDc : data.xhQdPdKhBttHdr.ngayKyQd,
+        ngayHluc: data.xhQdPdKhBttHdr.type === 'QDDC' ? data.xhQdPdKhBttHdr.ngayHlucDc : data.xhQdPdKhBttHdr.ngayHluc,
         loaiVthh: data.loaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
-        pthucBanTrucTiep: data.pthucBanTrucTiep === THONG_TIN_BAN_TRUC_TIEP.UY_QUYEN ? 'Ủy quyền' : 'Bán lẻ',
-        trichYeu: data.xhQdPdKhBttHdr ? data.xhQdPdKhBttHdr.trichYeu : data.xhQdDchinhKhBttHdr.trichYeu,
+        pthucBanTrucTiepHt: data.pthucBanTrucTiep === THONG_TIN_BAN_TRUC_TIEP.UY_QUYEN ? 'Ủy quyền' : 'Bán lẻ',
+        pthucBanTrucTiep: data.pthucBanTrucTiep,
+        trichYeu: data.trichYeu,
         thoiGianDeXuatBtt: this.isValidDate(data.tgianDkienTu) && this.isValidDate(data.tgianDkienDen)
           ? [data.tgianDkienTu, data.tgianDkienDen] : [],
         thoiGianPdBtt: this.isValidDate(data.ngayMkho) && this.isValidDate(data.ngayKthuc)

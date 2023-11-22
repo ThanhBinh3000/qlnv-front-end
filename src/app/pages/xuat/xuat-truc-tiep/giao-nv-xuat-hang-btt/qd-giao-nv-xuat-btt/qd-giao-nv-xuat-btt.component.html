@@ -6,20 +6,20 @@
           <div nz-col [nzSpan]="2">
             <label class="search__label"> Năm xuất </label>
             <nz-select formControlName="namKh">
-              <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              <nz-option *ngFor="let item of listNam" [nzValue]="item.value" [nzLabel]="item.text"></nz-option>
             </nz-select>
           </div>
           <div nz-col [nzSpan]="4">
             <label class="search__label"> Số quyết định </label>
             <input placeholder="Nhập số quyết định" nz-input formControlName="soQdNv"/>
           </div>
-          <div nz-col [nzSpan]="4" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">
+          <div nz-col [nzSpan]="4" *ngIf="!loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
             <label class="search__label">Loại hàng DTQG</label>
             <nz-select formControlName="loaiVthh">
               <nz-option *ngFor="let item of listVthh" [nzValue]="item.ma" [nzLabel]="item.giaTri"></nz-option>
             </nz-select>
           </div>
-          <div nz-col [nzSpan]="4" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">
+          <div nz-col [nzSpan]="4" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
             <label class="search__label">Loại hàng DTQG</label>
             <nz-select formControlName="loaiVthh">
               <nz-option *ngFor="let item of listLoaiHangHoa" [nzValue]="item.ma" [nzLabel]="item.ten"></nz-option>
@@ -47,7 +47,7 @@
       </form>
       <div nz-col class="cangiua group-button-search">
         <div>
-          <button nz-button class="search__button--clear" (click)="clearFilter()">
+          <button nz-button class="search__button--clear" (click)="clearForm()">
             <i class="icon  htvbdh_nhap-lai1"></i>
             Xóa điều kiện
           </button>
@@ -90,7 +90,7 @@
             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                    [nzIndeterminate]="indeterminate"></label>
           </th>
-          <th nzWidth="50px" class="text-center wrap"></th>
+          <th nzWidth="50px" class="text-center wrap"> STT</th>
           <th class="text-left"> Năm xuất</th>
           <th class="text-left"> Số quyết định</th>
           <th class="text-left"> Ngày quyết định</th>
@@ -120,14 +120,14 @@
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
-                     (input)="filterInTable('soQd',filterTable.soQd)" size="small"/>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdNv"
+                     (input)="filterInTable('soQdNv',filterTable.soQdNv)" size="small"/>
             </nz-input-group>
           </th>
           <th>
             <nz-input-group>
-              <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="" [(ngModel)]="filterTable.ngayTao"
-                              (ngModelChange)="filterInTable('ngayTao', convertDateToString(filterTable.ngayTao))">
+              <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="" [(ngModel)]="filterTable.ngayKyQdNv"
+                              (ngModelChange)="filterInTable('ngayKyQdNv', convertDateToString(filterTable.ngayKyQdNv))">
               </nz-date-picker>
             </nz-input-group>
           </th>
@@ -159,8 +159,8 @@
           <th>
             <nz-input-group>
               <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder=""
-                              [(ngModel)]="filterTable.tgianGnhan"
-                              (ngModelChange)="filterInTable('tgianGnhan', convertDateToString(filterTable.tgianGnhan))">
+                              [(ngModel)]="filterTable.tgianGiaoNhan"
+                              (ngModelChange)="filterInTable('tgianGiaoNhan', convertDateToString(filterTable.tgianGiaoNhan))">
               </nz-date-picker>
             </nz-input-group>
           </th>
@@ -172,14 +172,14 @@
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.bbTinhKho"
-                     (input)="filterInTable('bbTinhKho',filterTable.bbTinhKho)" size="small"/>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soTinhKho"
+                     (input)="filterInTable('soTinhKho',filterTable.soTinhKho)" size="small"/>
             </nz-input-group>
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.bbHaoDoi"
-                     (input)="filterInTable('bbHaoDoi',filterTable.bbHaoDoi)" size="small"/>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.bienBanHaoDoi"
+                     (input)="filterInTable('bienBanHaoDoi',filterTable.bienBanHaoDoi)" size="small"/>
             </nz-input-group>
           </th>
           <th>

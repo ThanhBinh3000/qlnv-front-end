@@ -38,7 +38,7 @@
         </div>
       </form>
       <div class="cangiua group-button-search">
-        <button nz-button class="search__button--clear" (click)="clearFilter()">
+        <button nz-button class="search__button--clear" (click)="clearForm()">
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
@@ -87,10 +87,9 @@
           <th class="text-left"> Trích yếu</th>
           <th class="text-left"> Số công văn/tờ trình</th>
           <th class="text-center"> Mã tổng hợp</th>
-          <th class="text-left" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU"> Loại hàng DTQG</th>
+          <th class="text-left" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)"> Loại hàng DTQG</th>
           <th class="text-left"> Chủng loại hành DTQG</th>
           <th class="text-center"> Số ĐV tài sản</th>
-          <th class="text-center">SL HĐ đã ký</th>
           <th class="text-left">Trạng thái</th>
           <th class="text-center">Hành động</th>
         </tr>
@@ -136,7 +135,7 @@
                      (input)="filterInTable('idThHdr',filterTable.idThHdr)" size="small"/>
             </nz-input-group>
           </th>
-          <th *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">
+          <th *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
                      (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small"/>
@@ -153,12 +152,6 @@
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soDviTsan"
                      (input)="filterInTable('soDviTsan',filterTable.soDviTsan)" size="small"/>
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.slHdDaKy"
-                     (input)="filterInTable('soHdongDaKy',filterTable.soHopDong)" size="small"/>
             </nz-input-group>
           </th>
           <th>
@@ -195,10 +188,9 @@
                style="color: blue">{{ data.idThHdr }}
             </a>
           </td>
-          <td class="text-left" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">{{ data.tenLoaiVthh }}</td>
+          <td class="text-left" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">{{ data.tenLoaiVthh }}</td>
           <td class="text-left">{{ data.tenCloaiVthh }}</td>
           <td class="text-center">{{ data.slDviTsan }}</td>
-          <td class="text-center">{{ data.soHdongDaKy }}</td>
           <td class="text-left">{{ data.tenTrangThai }}</td>
           <td class="text-center">
             <a
@@ -245,7 +237,8 @@
 </div>
 <div *ngIf="isDetail" class="chi-tiet">
   <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [idInput]="idSelected" [loaiVthh]="loaiVthh" [isView]="isView"
-                                              (showListEvent)="showList()">
+                                              [dataInit]="dataInit"
+                                              (removeDataInit)="removeDataInit()" (showListEvent)="showList()">
   </app-them-moi-qd-phe-duyet-kh-ban-truc-tiep>
 </div>
 <!--xem -->
