@@ -266,7 +266,6 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
           item.soLuong = itemPnk.soLuongNhapKho;
         })
       } else {
-        debugger
         this.dataTable = data.listPhieuKtraCl;
         this.dataTable.forEach(item => {
           item.soPhieuNhapKho = '';
@@ -605,7 +604,11 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
         prev += cur.soLuong;
         return prev;
       }, 0);
-      return sum * 1000;
+      if (this.loaiVthh.startsWith('02')) {
+        return sum;
+      } else {
+        return sum * 1000;
+      }
     }
   }
 
