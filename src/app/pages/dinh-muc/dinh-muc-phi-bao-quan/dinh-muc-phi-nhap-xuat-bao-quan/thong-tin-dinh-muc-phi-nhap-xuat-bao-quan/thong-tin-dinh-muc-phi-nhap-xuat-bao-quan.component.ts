@@ -1,32 +1,33 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Base2Component} from '../../../../../components/base2/base2.component';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from '../../../../../services/storage.service';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {QlDinhMucPhiService} from '../../../../../services/qlnv-kho/QlDinhMucPhi.service';
-import {FormGroup, Validators} from '@angular/forms';
-import {DinhMucPhiNxBq} from '../../../../../models/DinhMucPhi';
-import {MESSAGE} from '../../../../../constants/message';
-import {DanhMucDinhMucService} from '../../../../../services/danh-muc-dinh-muc.service';
-import {DanhMucService} from '../../../../../services/danhmuc.service';
-import {DonviService} from '../../../../../services/donvi.service';
-import {AMOUNT_NO_DECIMAL, AMOUNT_ONE_DECIMAL} from '../../../../../Utility/utils';
-import {STATUS} from '../../../../../constants/status';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Base2Component } from '../../../../../components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from '../../../../../services/storage.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { QlDinhMucPhiService } from '../../../../../services/qlnv-kho/QlDinhMucPhi.service';
+import { FormGroup, Validators } from '@angular/forms';
+import { DinhMucPhiNxBq } from '../../../../../models/DinhMucPhi';
+import { MESSAGE } from '../../../../../constants/message';
+import { DanhMucDinhMucService } from '../../../../../services/danh-muc-dinh-muc.service';
+import { DanhMucService } from '../../../../../services/danhmuc.service';
+import { DonviService } from '../../../../../services/donvi.service';
+import { AMOUNT_NO_DECIMAL, AMOUNT_ONE_DECIMAL } from '../../../../../Utility/utils';
+import { STATUS } from '../../../../../constants/status';
 import { v4 as uuidv4 } from 'uuid';
+
 export interface TreeNodeInterface {
   id?: number;
-  uuid?:string;
-  parentId?:number;
-  parentUuid?:string;
+  uuid?: string;
+  parentId?: number;
+  parentUuid?: string;
   maDinhMuc?: string;
   tenDinhMuc?: string;
   loaiVthh?: string;
   tenLoaiVthh?: string;
   cloaiVthh?: string;
   tenCloaiVthh?: string;
-  loaiDinhMuc?:string;
+  loaiDinhMuc?: string;
   apDungTai?: any[];
   apDungTaiStr?: string;
   donViTinh?: string;
@@ -35,7 +36,7 @@ export interface TreeNodeInterface {
   chiPhiTheoDinhMucXuatToiDa?: number;
   chiPhiNhapToiDa?: number;
   chiPhiXuatToiDa?: number;
-  thanhToanTheoVnd?: number
+  thanhToanTheoVnd?: number;
   tyGia?: number;
   thanhToanTheoUsd?: number;
   level?: number;
@@ -85,18 +86,19 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
   amount = AMOUNT_NO_DECIMAL;
   showDlgAddEdit: boolean = false;
   sttEdit: number;
+  AMOUNT = AMOUNT_NO_DECIMAL;
   formatterDollar = (value: number): string => {
     if (value) {
       let valueStr = value.toFixed(2);
-      return `$ ${valueStr}`
+      return `$ ${valueStr}`;
     }
-    return `$ 0`
+    return `$ 0`;
   };
-  parserDollar = (value: string): string =>{
+  parserDollar = (value: string): string => {
     let valueNum = value.replace('$ ', '');
     let num = Number(valueNum);
     return num.toFixed(2);
-  }
+  };
 
   constructor(
     httpClient: HttpClient,
@@ -113,7 +115,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [],
-      nam:  [''],
+      nam: [''],
       soQd: ['', [Validators.required]],
       trangThai: [STATUS.DANG_NHAP_DU_LIEU],
       tenTrangThai: ['Đang nhập dữ liệu'],
@@ -130,9 +132,9 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     this.formDataDtl = this.fb.group({
       level: [, [Validators.required]],
       id: [],
-      uuid:[, [Validators.required]],
-      parentId:[, [Validators.required]],
-      parentUuid:[, [Validators.required]],
+      uuid: [, [Validators.required]],
+      parentId: [, [Validators.required]],
+      parentUuid: [, [Validators.required]],
       maDinhMuc: [, [Validators.required]],
       tenDinhMuc: [, [Validators.required]],
       loaiVthh: [, [Validators.required]],
@@ -148,7 +150,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       chiPhiXuatToiDa: [, [Validators.required]],
       thanhToanTheoVnd: [, [Validators.required]],
       tyGia: [, [Validators.required]],
-      thanhToanTheoUsd: [, [Validators.required]]
+      thanhToanTheoUsd: [, [Validators.required]],
     });
     this.filterTable = {};
     this.dataTableDetailKtqd.forEach(item => {
@@ -255,7 +257,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     let res = await this.createUpdate(this.formData.value);
     if (res) {
       this.idInput = res.id;
-      this.formData.patchValue({id: res.id});
+      this.formData.patchValue({ id: res.id });
     }
   }
 
@@ -403,7 +405,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
 
   async getTongDinhMucTongCucPhan() {
     this.listTongDinhMucTongCucPhan = [];
-    let body = {trangThai: STATUS.BAN_HANH, loai: '00', capDvi: 1, maDvi: this.userInfo.MA_DVI};
+    let body = { trangThai: STATUS.BAN_HANH, loai: '00', capDvi: 1, maDvi: this.userInfo.MA_DVI };
     let res = await this.qlDinhMucPhiService.layDanhSachTongDinhMucTongCucPhan(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listTongDinhMucTongCucPhan = res.data;
@@ -445,7 +447,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     if (!this.isAddDetail) {
       return;
     }
-    if(!this.rowItem.uuid){
+    if (!this.rowItem.uuid) {
       this.rowItem.uuid = uuidv4();
     }
     let msgRequired = '';
@@ -552,7 +554,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       this.dataTableDetailTqd.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
     }
@@ -581,14 +583,14 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       if (item.parentUuid) {
         // If the item has a parent, add it as a child of the parent.
         map.get(item.parentUuid).children.push(map.get(item.uuid));
-        map.get(item.parentUuid).chiPhiTheoDinhMucNhapToiDa =  map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) +  parseFloat(currentValue.chiPhiTheoDinhMucNhapToiDa), 0);
-        map.get(item.parentUuid).chiPhiTheoDinhMucXuatToiDa=  map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) +  parseFloat(currentValue.chiPhiTheoDinhMucXuatToiDa), 0);
-        map.get(item.parentUuid).chiPhiNhapToiDa =  map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) +  parseFloat(currentValue.chiPhiNhapToiDa), 0);
-        map.get(item.parentUuid).chiPhiXuatToiDa=  map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) +  parseFloat(currentValue.chiPhiXuatToiDa), 0);
+        map.get(item.parentUuid).chiPhiTheoDinhMucNhapToiDa = map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiTheoDinhMucNhapToiDa), 0);
+        map.get(item.parentUuid).chiPhiTheoDinhMucXuatToiDa = map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiTheoDinhMucXuatToiDa), 0);
+        map.get(item.parentUuid).chiPhiNhapToiDa = map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiNhapToiDa), 0);
+        map.get(item.parentUuid).chiPhiXuatToiDa = map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiXuatToiDa), 0);
 
         // update vào list
-        let p = this.dataListDetailKtqd.find(item1 =>item1.uuid == item.parentUuid);
-        if(p){
+        let p = this.dataListDetailKtqd.find(item1 => item1.uuid == item.parentUuid);
+        if (p) {
           p.chiPhiTheoDinhMucNhapToiDa = map.get(item.parentUuid).chiPhiTheoDinhMucNhapToiDa;
           p.chiPhiTheoDinhMucXuatToiDa = map.get(item.parentUuid).chiPhiTheoDinhMucXuatToiDa;
           p.chiPhiNhapToiDa = map.get(item.parentUuid).chiPhiNhapToiDa;
@@ -596,11 +598,11 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
         }
       } else {
         // If the item has no parent, it's a root item, so add it to the main tree.
-        map.get(item.uuid).chiPhiNhapToiDa =  map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) +  parseFloat(currentValue.chiPhiNhapToiDa), 0);
-        map.get(item.uuid).chiPhiXuatToiDa=  map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) +  parseFloat(currentValue.chiPhiXuatToiDa), 0);
+        map.get(item.uuid).chiPhiNhapToiDa = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiNhapToiDa), 0);
+        map.get(item.uuid).chiPhiXuatToiDa = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiXuatToiDa), 0);
         // update vào list
-        let p = this.dataListDetailKtqd.find(item1 =>item1.uuid == item.uuid);
-        if(p){
+        let p = this.dataListDetailKtqd.find(item1 => item1.uuid == item.uuid);
+        if (p) {
           p.chiPhiTheoDinhMucNhapToiDa = map.get(item.uuid).chiPhiTheoDinhMucNhapToiDa;
           p.chiPhiTheoDinhMucXuatToiDa = map.get(item.uuid).chiPhiTheoDinhMucXuatToiDa;
           p.chiPhiNhapToiDa = map.get(item.uuid).chiPhiNhapToiDa;
@@ -618,24 +620,25 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
 
   editRowTqd(stt: number) {
     this.dataEdit[stt].edit = true;
+    this.calcuLateTong('EDIT',stt);
   }
 
   editRowKtqd(item: any, level: number) {
     this.isAddDetail = false;
     this.sttEdit = this.dataListDetailKtqd.findIndex(element => element.uuid === item.uuid);
     this.openDlgAddEdit();
-    if(!item.apDungTai){
+    if (!item.apDungTai) {
       item.apDungTai = [''];
     }
     this.formDataDtl.patchValue({
       ...item,
-      level
+      level,
     });
   }
 
   cancelEdit(stt: number): void {
     this.dataEdit[stt] = {
-      data: {...this.dataTableDetailTqd[stt]},
+      data: { ...this.dataTableDetailTqd[stt] },
       edit: false,
     };
   }
@@ -707,10 +710,10 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
   protected readonly AMOUNT_ONE_DECIMAL = AMOUNT_ONE_DECIMAL;
 
   changeNhomDinhMuc($event: any) {
-    if($event == "2"){
-      this.formData.controls["nam"].setValidators(Validators.required);
-    }else {
-      this.formData.controls["nam"].setValidators(null);
+    if ($event == '2') {
+      this.formData.controls['nam'].setValidators(Validators.required);
+    } else {
+      this.formData.controls['nam'].setValidators(null);
     }
     this.rowItem = {};
     this.loadDmDinhMuc();
@@ -738,7 +741,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       tyGia: undefined,
       thanhToanTheoUsd: undefined,
       chiPhiNhapToiDa: undefined,
-      chiPhiXuatToiDa: undefined
+      chiPhiXuatToiDa: undefined,
     });
   }
 
@@ -762,14 +765,14 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     const stack: TreeNodeInterface[] = [];
     const array: TreeNodeInterface[] = [];
     const hashMap = {};
-    stack.push({...root, level: 0, expand: true});
+    stack.push({ ...root, level: 0, expand: true });
 
     while (stack.length !== 0) {
       const node = stack.pop()!;
       this.visitNode(node, hashMap, array);
       if (node.children) {
         for (let i = node.children.length - 1; i >= 0; i--) {
-          stack.push({...node.children[i], level: node.level! + 1, expand: true, parent: node});
+          stack.push({ ...node.children[i], level: node.level! + 1, expand: true, parent: node });
         }
       }
     }
@@ -867,7 +870,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       if (tongDinhMucTongCuc && this.capDvi == 2) {
         this.formDataDtl.patchValue({
           tongDinhMucTc: tongDinhMucTongCuc.tongDinhMuc,
-          tcTongCucDieuHanhKv: tongDinhMucTongCuc.tcTongCucDieuHanhKv
+          tcTongCucDieuHanhKv: tongDinhMucTongCuc.tcTongCucDieuHanhKv,
         });
       }
     } else {
@@ -880,7 +883,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
         loaiVthh: null,
         cloaiVthh: null,
         tenLoaiVthh: null,
-        tenCloaiVthh: null
+        tenCloaiVthh: null,
       });
     }
   }
@@ -896,7 +899,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       this.formDataDtl.value.thanhToanTheoUsd = 0;
     } else {
       this.formDataDtl.patchValue({
-        thanhToanTheoUsd: $event.target.value / this.formDataDtl.value.tyGia
+        thanhToanTheoUsd: $event.target.value / this.formDataDtl.value.tyGia,
       });
     }
   }
@@ -912,8 +915,22 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       this.formDataDtl.value.thanhToanTheoVnd = 0;
     }
     this.formDataDtl.patchValue({
-      thanhToanTheoVnd: $event.target.value * this.formDataDtl.value.tyGia
+      thanhToanTheoVnd: $event.target.value * this.formDataDtl.value.tyGia,
     });
+  }
+
+  calcuLateTong(type,idx?) {
+    if (type === 'ADD') {
+      this.rowItem.tongCongMucChiVpCuc = (this.rowItem.nvChuyenMonTc ? this.rowItem.nvChuyenMonTc : 0) + (this.rowItem.ttCaNhanTc ? this.rowItem.ttCaNhanTc : 0) + (this.rowItem.tcDieuHanhTc ? this.rowItem.tcDieuHanhTc : 0);
+      this.rowItem.congMucChiVpCuc = (this.rowItem.nvChuyenMonTc ? this.rowItem.nvChuyenMonTc : 0) + (this.rowItem.ttCaNhanTc ? this.rowItem.ttCaNhanTc : 0);
+      this.rowItem.tongCongMucChiCuc = (this.rowItem.nvChuyenMonKv ? this.rowItem.nvChuyenMonKv : 0) + (this.rowItem.ttCaNhanKv ? this.rowItem.ttCaNhanKv : 0) + (this.rowItem.tcDieuHanhKv ? this.rowItem.tcDieuHanhKv : 0);
+      this.rowItem.congMucChiCuc = (this.rowItem.nvChuyenMonKv ? this.rowItem.nvChuyenMonKv : 0) + (this.rowItem.ttCaNhanKv ? this.rowItem.ttCaNhanKv : 0);
+    }else{
+      this.dataEdit[idx].data.tongCongMucChiVpCuc = (this.dataEdit[idx].data.nvChuyenMonTc ? this.dataEdit[idx].data.nvChuyenMonTc : 0) + (this.dataEdit[idx].data.ttCaNhanTc ? this.dataEdit[idx].data.ttCaNhanTc : 0) + (this.dataEdit[idx].data.tcDieuHanhTc ? this.dataEdit[idx].data.tcDieuHanhTc : 0);
+      this.dataEdit[idx].data.congMucChiVpCuc = (this.dataEdit[idx].data.nvChuyenMonTc ? this.dataEdit[idx].data.nvChuyenMonTc : 0) + (this.dataEdit[idx].data.ttCaNhanTc ? this.dataEdit[idx].data.ttCaNhanTc : 0);
+      this.dataEdit[idx].data.tongCongMucChiCuc = (this.dataEdit[idx].data.nvChuyenMonKv ? this.dataEdit[idx].data.nvChuyenMonKv : 0) + (this.dataEdit[idx].data.ttCaNhanKv ? this.dataEdit[idx].data.ttCaNhanKv : 0) + (this.dataEdit[idx].data.tcDieuHanhKv ? this.dataEdit[idx].data.tcDieuHanhKv : 0);
+      this.dataEdit[idx].data.congMucChiCuc = (this.dataEdit[idx].data.nvChuyenMonKv ? this.dataEdit[idx].data.nvChuyenMonKv : 0) + (this.dataEdit[idx].data.ttCaNhanKv ? this.dataEdit[idx].data.ttCaNhanKv : 0);
+    }
   }
 
   changeTinhTyGia($event: any) {
@@ -927,16 +944,16 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       this.formDataDtl.value.thanhToanTheoUsd = 0;
     }
     this.formDataDtl.patchValue({
-      thanhToanTheoUsd: this.formDataDtl.value.thanhToanTheoVnd / $event.target.value
+      thanhToanTheoUsd: this.formDataDtl.value.thanhToanTheoVnd / $event.target.value,
     });
     this.formDataDtl.patchValue({
-      thanhToanTheoVnd: this.formDataDtl.value.thanhToanTheoUsd * $event.target.value
+      thanhToanTheoVnd: this.formDataDtl.value.thanhToanTheoUsd * $event.target.value,
     });
   }
 
   saveAddEdit() {
-    if(!this.formDataDtl.value.uuid){
-      this.formDataDtl.patchValue({uuid:  uuidv4()});
+    if (!this.formDataDtl.value.uuid) {
+      this.formDataDtl.patchValue({ uuid: uuidv4() });
     }
     let msgRequired = '';
     //validator
@@ -952,13 +969,13 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       msgRequired = 'Tỷ giá không được để trống';
     } else if (!this.formDataDtl.value.thanhToanTheoUsd) {
       msgRequired = 'Thanh toán theo USD không được để trống';
-    }  else if (!this.formDataDtl.value.chiPhiTheoDinhMucNhapToiDa) {
+    } else if (!this.formDataDtl.value.chiPhiTheoDinhMucNhapToiDa) {
       msgRequired = 'Chi phí theo định mức không được để trống';
-    }else if (!this.formDataDtl.value.chiPhiTheoDinhMucXuatToiDa) {
+    } else if (!this.formDataDtl.value.chiPhiTheoDinhMucXuatToiDa) {
       msgRequired = 'Chi phí theo định mức không được để trống';
-    }else if (!this.formDataDtl.value.chiPhiNhapToiDa) {
+    } else if (!this.formDataDtl.value.chiPhiNhapToiDa) {
       msgRequired = 'Chi phí không theo định mức - chi phí nhập tối đa không được để trống';
-    }else if (!this.formDataDtl.value.chiPhiXuatToiDa) {
+    } else if (!this.formDataDtl.value.chiPhiXuatToiDa) {
       msgRequired = 'Chi phí không theo định mức - chi phí xuất tối đa không được để trống';
     }
     if (this.formDataDtl.value.level == 0) {
@@ -989,15 +1006,15 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     if (this.formDataDtl.value.apDungTai) {
       let apDungTai = this.formDataDtl.value.apDungTai ? this.formDataDtl.value.apDungTai.toString() : null;
       if (apDungTai === '') {
-        this.formDataDtl.patchValue({apDungTaiStr: 'Tất cả'});
+        this.formDataDtl.patchValue({ apDungTaiStr: 'Tất cả' });
       } else {
-        this.formDataDtl.patchValue({apDungTaiStr: this.getStrTenDonVi(apDungTai)});
+        this.formDataDtl.patchValue({ apDungTaiStr: this.getStrTenDonVi(apDungTai) });
       }
     }
     if (this.isAddDetail) {
       this.dataListDetailKtqd = [...this.dataListDetailKtqd, this.formDataDtl.value];
     } else {
-      this.dataListDetailKtqd[this.sttEdit]= {...this.formDataDtl.value};
+      this.dataListDetailKtqd[this.sttEdit] = { ...this.formDataDtl.value };
     }
 
     this.formDataDtl.reset();
@@ -1010,7 +1027,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     this.openDlgAddEdit();
     this.formDataDtl.patchValue({
       ...item,
-      level
+      level,
     });
   }
 }

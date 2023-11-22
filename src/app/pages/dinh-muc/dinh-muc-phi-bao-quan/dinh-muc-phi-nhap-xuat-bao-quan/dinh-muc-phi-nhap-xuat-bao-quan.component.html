@@ -141,12 +141,12 @@
               <i class=' icon htvbdh_eye'></i>
             </a>
             <a
-              *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU && (userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_TC_THEM') && userService.isTongCuc() && capDvi == 1) || (userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_CUC_THEM') && userService.isCuc() && capDvi == 2)  "
+              *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU && ((userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_TC_THEM') && userService.isTongCuc() && capDvi == 1) || (userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_CUC_THEM') && userService.isCuc() && capDvi == 2))"
               (click)='redirectToChiTiet(data.id)'>
               <i class='fa fa-pencil' title='Sửa'></i>
             </a>
             <a
-              *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU && (userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_TC_XOA') && userService.isTongCuc() && capDvi == 1) || (userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_CUC_XOA') && userService.isCuc() && capDvi == 2)  "
+              *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU && ((userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_TC_XOA') && userService.isTongCuc() && capDvi == 1) || (userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_CUC_XOA') && userService.isCuc() && capDvi == 2))"
               (click)='delete(data)'>
               <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
             </a>
