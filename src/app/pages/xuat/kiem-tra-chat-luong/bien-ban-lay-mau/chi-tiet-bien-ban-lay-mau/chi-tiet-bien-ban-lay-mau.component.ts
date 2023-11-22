@@ -72,12 +72,12 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
   ) {
     super(httpClient, storageService, notification, spinner, modal, null);
     this.formData = this.fb.group({
-      id: [],
+      id: [, [Validators.required]],
       nam: [dayjs().get("year")],
       maDvi: [],
       soBbQd: [, [Validators.required]],
-      maDiaDiem: [],
-      loaiVthh: [],
+      maDiaDiem: [, [Validators.required]],
+      loaiVthh: [, [Validators.required]],
       cloaiVthh: [],
       tenVthh: [],
       lyDoTuChoi: [],
@@ -89,27 +89,27 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
       ngayPduyet: [],
       ngayKyQdGnv: [],
       nguoiPduyetId: [],
-      tenLoaiVthh: [],
+      tenLoaiVthh: [, [Validators.required]],
       tenCloaiVthh: [],
       tenTrangThai: ['Dự thảo'],
       tenDvi: [],
       tenCuc: [],
       tenChiCuc: [],
-      tenDiemKho: [],
-      tenNhaKho: [],
-      tenNganKho: [],
+      tenDiemKho: [, [Validators.required]],
+      tenNhaKho: [, [Validators.required]],
+      tenNganKho: [, [Validators.required]],
       tenLoKho: [],
-      maQhns: [],
-      idQdGnv: [],
-      soQdGnv: [],
+      maQhns: [, [Validators.required]],
+      idQdGnv: [, [Validators.required]],
+      soQdGnv: [, [Validators.required]],
       idHopDong: [],
       soHopDong: [],
       idBangKe: [],
       soBangKe: [],
       ngayKy: [],
       ktvBaoQuan: [],
-      dviKiemNghiem: [],
-      diaDiemLayMau: [],
+      dviKiemNghiem: [, [Validators.required]],
+      diaDiemLayMau: [, [Validators.required]],
       soLuongMau: [0, [Validators.required, Validators.min(1)]],
       niemPhong: [],
       loaiBb: ['LMBGM'],
@@ -121,13 +121,13 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
       ppLayMau: [new Array()],
       ctChatLuong: [new Array()],
       ngayBbLayMau: [dayjs().format("YYYY-MM-DD")],
-      donViTinh: [],
+      donViTinh: [, [Validators.required]],
       thuKho: [],
 
       soQdPd: [],
       ngayKyQdPd: [],
-      tenNganLoKho: [],
-      truongBpBaoQuan: [],
+      tenNganLoKho: [, [Validators.required]],
+      truongBpBaoQuan: [, [Validators.required]],
       lanhDaoChiCuc: []
     });
     this.formData.controls['ppLayMau'].valueChanges.subscribe(value => {
@@ -456,10 +456,6 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
 
   async save() {
     await this.helperService.ignoreRequiredForm(this.formData);
-    if (this.loaiXuat === "CTVT") {
-      this.formData.controls['truongBpBaoQuan'].setValidators(Validators.required);
-      this.formData.controls['truongBpBaoQuan'].updateValueAndValidity()
-    }
     let body = {
       ...this.formData.value,
       // soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : this.maHauTo,
@@ -470,17 +466,13 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
     if (data) {
       this.formData.patchValue({ soBbQd: data.soBbQd })
     }
-    if (this.loaiXuat === "CTVT") {
-      this.formData.controls['truongBpBaoQuan'].clearValidators();
-      this.formData.controls['truongBpBaoQuan'].updateValueAndValidity()
-    }
     await this.helperService.restoreRequiredForm(this.formData);
   }
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
-    if (this.loaiXuat === "CTVT") {
-      this.formData.controls['truongBpBaoQuan'].setValidators(Validators.required);
-      this.formData.controls['truongBpBaoQuan'].updateValueAndValidity()
+    if (this.formData.value.xhBienBanLayMauDtl.filter(f => f.type === BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU).every(f => !f.ten)) {
+      this.notification.error(MESSAGE.ERROR, "Bạn chưa chọn phương pháp lấy mẫu");
+      return;
     }
     let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd : this.maHauTo };
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
