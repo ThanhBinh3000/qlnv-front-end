@@ -285,6 +285,7 @@
             <th nzWidth="80px">Lũy kế cấp vốn đến thời điểm hiện tại(đ)</th>
             <th nzWidth="80px">Kế hoạch vốn năm hiện tại (đ)</th>
             <th nzWidth="130px">Ghi chú</th>
+            <th nzWidth="130px" *ngIf="formData.value.loai == '00'">Hành động</th>
           </tr>
           </thead>
           <tbody>
@@ -305,6 +306,12 @@
                                  nz-input [(ngModel)]="data.keHoachVon" [nzMin]="1" ></nz-input-number>
             <td *ngIf="formData.value.loai == '01'">{{ data.keHoachVon | number : '1.0-1' : 'vi_VN' }}</td>
             <td>{{ data.ghiChu }}</td>
+            <td *ngIf="formData.value.loai == '00'">
+              <a *ngIf="(formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU) "
+                 (click)="deleteRow(data)">
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+              </a>
+            </td>
           </tr>
           </tbody>
         </nz-table>
