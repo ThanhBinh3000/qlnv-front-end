@@ -230,7 +230,7 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
       if (data) {
         this.idInput = data.id;
         this.formData.patchValue({ id: data.id, trangThai: data.trangThai });
-      } else this.notification.error(MESSAGE.ERROR, "Vui lòng điền đủ thông tin");
+      };
     } catch (error) {
       console.log("e", error)
     }
