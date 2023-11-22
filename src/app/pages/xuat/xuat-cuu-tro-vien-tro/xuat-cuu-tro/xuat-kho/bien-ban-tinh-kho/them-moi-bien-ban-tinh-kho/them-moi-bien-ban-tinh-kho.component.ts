@@ -52,7 +52,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   openPhieuXk = false;
   idBangKe: number = 0;
   openBangKe = false;
-  templateName = "Biên bản tinh kho";
+  templateName = "Biên bản tịnh kho";
   amount1Left = { ...AMOUNT_ONE_DECIMAL, align: "left" }
   constructor(
     httpClient: HttpClient,
@@ -96,9 +96,9 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         slThucTeCon: ['', [Validators.required]],
         slThua: [],
         slThieu: [],
-        nguyenNhan: ['', [Validators.required]],
-        kienNghi: ['', [Validators.required]],
-        ghiChu: ['', [Validators.required]],
+        nguyenNhan: [],
+        kienNghi: [],
+        ghiChu: [],
         thuKho: [],
         ktvBaoQuan: [],
         keToan: [],

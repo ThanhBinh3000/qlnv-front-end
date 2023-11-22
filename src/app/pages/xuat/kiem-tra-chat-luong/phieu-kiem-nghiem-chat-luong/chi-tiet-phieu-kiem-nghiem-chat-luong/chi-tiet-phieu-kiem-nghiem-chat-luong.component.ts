@@ -137,7 +137,8 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     try {
       await this.spinner.show();
       super.service = this.inputService;
-      this.maHauTo = '/' + this.formData.value.nam + '/PKNCL-' + this.userInfo.DON_VI.tenVietTat;
+      // this.maHauTo = '/' + this.formData.value.nam + '/PKNCL-' + this.userInfo.DON_VI.tenVietTat;
+      this.maHauTo = '/PKNCL-' + this.userInfo.DON_VI.tenVietTat;
       await Promise.all([
         this.loadDsQdGnv(),
         // this.loadDsPplm(),
