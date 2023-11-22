@@ -268,7 +268,8 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
   chonQdGiaoNv  () {
     let body = {
       trangThai : STATUS.BAN_HANH,
-      type : "01"
+      type : "01",
+      phanLoai : "DUOI"
     }
     this.khScQdGiaoNvService.getListTaoBtcTcdt(body).then((res)=>{
       this.spinner.hide();
