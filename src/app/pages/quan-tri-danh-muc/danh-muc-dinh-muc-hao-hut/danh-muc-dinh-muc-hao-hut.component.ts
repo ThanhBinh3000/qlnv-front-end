@@ -209,7 +209,7 @@ export class DanhMucDinhMucHaoHutComponent implements OnInit {
     let check = true;
     arr.push(
       rowItem.maDinhMuc, rowItem.tenDinhMuc, rowItem.loaiVthh, rowItem.cloaiVthh, rowItem.hinhThucBq,
-      rowItem.phuongThucBq, rowItem.tgBaoQuanTu, rowItem.tgBaoQuanDen, rowItem.dinhMuc, rowItem.apDungTai
+      rowItem.phuongThucBq, rowItem.dinhMuc, rowItem.apDungTai
     )
     if (arr && arr.length > 0) {
       for (let i = 0; i < arr.length; i++) {
@@ -359,8 +359,8 @@ export class DmDinhMucHaoHut {
   cloaiVthh: string;
   hinhThucBq: string;
   phuongThucBq: string;
-  tgBaoQuanTu: number;
-  tgBaoQuanDen: number;
+  tgBaoQuanTu: number = 0;
+  tgBaoQuanDen: number = 0;
   dinhMuc: number;
   apDungTai: string;
   tenLoaiVthh: string;
