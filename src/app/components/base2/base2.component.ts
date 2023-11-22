@@ -742,4 +742,17 @@ export class Base2Component implements OnInit {
       })
     }
   }
+
+  showButtonPheDuyet(trangThai,permisson){
+    if(this.userService.isCuc()){
+      return (trangThai == STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson(permisson+'_DUYETTP')) ||
+        (trangThai == STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson(permisson+'_DUYETLDC'));
+    }
+    if (this.userService.isTongCuc()) {
+      return (trangThai == STATUS.CHO_DUYET_LDV && this.userService.isAccessPermisson(permisson+'_DUYETLDV')) ||
+        (trangThai == STATUS.CHO_DUYET_LDTC && this.userService.isAccessPermisson(permisson+'_DUYETLDTC')) ||
+        (trangThai == STATUS.CHODUYET_BTC && this.userService.isAccessPermisson(permisson+'_DUYETBTC'));
+    }
+
+  }
 }

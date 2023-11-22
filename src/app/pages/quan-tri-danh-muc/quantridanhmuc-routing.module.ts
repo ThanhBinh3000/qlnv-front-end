@@ -9,6 +9,7 @@ import {DanhMucCongCuDungCuComponent} from "./danh-muc-cong-cu-dung-cu/danh-muc-
 import {DanhMucTaiSanComponent} from "./danh-muc-tai-san/danh-muc-tai-san.component";
 import {DanhMucDviLqComponent} from "./danh-muc-dvi-lq/danh-muc-dvi-lq.component";
 import {DanhMucThuKhoComponent} from "./danh-muc-thu-kho/danh-muc-thu-kho.component";
+import {DanhMucDinhMucHaoHutComponent} from "./danh-muc-dinh-muc-hao-hut/danh-muc-dinh-muc-hao-hut.component";
 
 
 const routes: Routes = [
@@ -52,6 +53,10 @@ const routes: Routes = [
       {
         path: 'danh-muc-thu-kho',
         component: DanhMucThuKhoComponent,
+      },
+      {
+        path: 'danh-muc-dinh-muc-hao-hut',
+        component: DanhMucDinhMucHaoHutComponent,
       },
     ],
   },

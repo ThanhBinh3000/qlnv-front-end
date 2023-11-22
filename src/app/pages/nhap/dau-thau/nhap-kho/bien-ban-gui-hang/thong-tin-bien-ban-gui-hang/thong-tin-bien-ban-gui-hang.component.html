@@ -336,12 +336,12 @@
         <nz-form-label [nzNoColon]="true" class="label-empty">
         </nz-form-label>
         <nz-form-control>
-          <div class="btn-plus" (click)="addDaiDien(benNhan,'00')" *ngIf="!isView">
+          <div class="btn-plus" (click)="addDaiDien('00')" *ngIf="!isView">
             <i class="icon htvbdh_dau-cong"></i>
           </div>
         </nz-form-control>
       </div>
-      <ng-container *ngFor="let bienBan of dataTable">
+      <ng-container *ngFor="let bienBan of dataTable;let i = index">
         <ng-container *ngIf="bienBan.loaiBen === '00'">
           <div nz-col nzSpan="8">
             <nz-form-item>
@@ -354,7 +354,7 @@
             </nz-form-item>
           </div>
           <div nz-col nzSpan="8">
-            <div class="btn-delete" (click)="deleteBienBan(bienBan.id)" *ngIf="!isView">
+            <div class="btn-delete" (click)="deleteBienBan(i)" *ngIf="!isView">
               <i class="icon htvbdh_dau-tru"></i>
             </div>
           </div>
@@ -413,11 +413,11 @@
       <div nz-col [nzSpan]="8">
         <nz-form-label [nzNoColon]="true" class="label-empty">
         </nz-form-label>
-        <div class="btn-plus" (click)="addDaiDien(benGiao, '01')" *ngIf="!isView">
+        <div class="btn-plus" (click)="addDaiDien('01')" *ngIf="!isView">
           <i class="icon htvbdh_dau-cong"></i>
         </div>
       </div>
-      <ng-container *ngFor="let bienBan of dataTable">
+      <ng-container *ngFor="let bienBan of dataTable;let i = index">
         <ng-container *ngIf="bienBan.loaiBen === '01'">
           <div nz-col nzSpan="8">
             <nz-form-item>
@@ -430,7 +430,7 @@
             </nz-form-item>
           </div>
           <div nz-col nzSpan="8">
-            <div class="btn-delete" (click)="deleteBienBan(bienBan.id)" *ngIf="!isView">
+            <div class="btn-delete" (click)="deleteBienBan(i)" *ngIf="!isView">
               <i class="icon htvbdh_dau-tru"></i>
             </div>
           </div>

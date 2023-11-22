@@ -44,11 +44,6 @@
     <div class="group-button">
       <h3>DANH SÁCH BIÊN BẢN LẤY MẪU/BÀN GIAO MẪU</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteSelect()"
-          *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_BBLMBGM_XOA') : userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBLMBGM_XOA')">
-          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-          <span>Xóa</span>
-        </button>
         <button *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_BBLMBGM_EXP') : userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBLMBGM_EXP')" type="button"
           class="btn btn-sub" (click)="export()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
@@ -106,7 +101,7 @@
                   <td></td>
                   <td colspan="3"></td>
                   <td>{{bb.tenDiemKho}}</td>
-                  <td>{{bb.tenLoKho + ' - ' + bb.tenNganKho}}</td>
+                  <td>{{bb.tenLoKho ?bb.tenLoKho + ' - ' + bb.tenNganKho : bb.tenNganKho}}</td>
                   <td>{{bb.bienBanLayMau?.soBienBan}}</td>
                   <td>{{bb.bienBanLayMau?.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
                   <td>{{ loaiVthh == '02' ? bb.bienBanGuiHang?.soBienBanGuiHang :
