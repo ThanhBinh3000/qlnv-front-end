@@ -5,19 +5,19 @@ import { StorageService } from '../../../../../../services/storage.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { chain,cloneDeep } from 'lodash';
+import { chain, cloneDeep } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import {
-  PhieuXuatNhapKhoService
+  PhieuXuatNhapKhoService,
 } from '../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatNhapKho.service';
 import {
-  PhieuKdclVtKtclService
+  PhieuKdclVtKtclService,
 } from '../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuKdclVtKtcl.service';
 import {
-  QuyetDinhGiaoNvXuatHangService
+  QuyetDinhGiaoNvXuatHangService,
 } from '../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/QuyetDinhGiaoNvXuatHang.service';
 import {
-  BckqKiemDinhMauService
+  BckqKiemDinhMauService,
 } from '../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/BckqKiemDinhMau.service';
 import { Validators } from '@angular/forms';
 import dayjs from 'dayjs';
@@ -26,10 +26,10 @@ import { isArray } from 'rxjs/internal-compatibility';
 import { Base2Component } from '../../../../../../components/base2/base2.component';
 import { CHUC_NANG, STATUS } from '../../../../../../constants/status';
 import {
-  BckqXuatHangKdmService
+  BckqXuatHangKdmService,
 } from '../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuathangkhoidm/BckqXuatHangKdm.service';
 import {
-  TongHopDanhSachHangXkdmService
+  TongHopDanhSachHangXkdmService,
 } from '../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuathangkhoidm/TongHopDanhSachHangXkdm.service';
 import { CurrencyMaskInputMode } from 'ngx-currency';
 import { AMOUNT_TWO_DECIMAL } from '../../../../../../Utility/utils';
@@ -37,7 +37,7 @@ import { AMOUNT_TWO_DECIMAL } from '../../../../../../Utility/utils';
 @Component({
   selector: 'app-thong-tin-bc-ket-qua-xuat-hang-khoi-danh-muc',
   templateUrl: './thong-tin-bc-ket-qua-xuat-hang-khoi-danh-muc.component.html',
-  styleUrls: ['./thong-tin-bc-ket-qua-xuat-hang-khoi-danh-muc.component.scss']
+  styleUrls: ['./thong-tin-bc-ket-qua-xuat-hang-khoi-danh-muc.component.scss'],
 })
 export class ThongTinBcKetQuaXuatHangKhoiDanhMucComponent extends Base2Component implements OnInit {
   CHUC_NANG = CHUC_NANG;
@@ -68,7 +68,8 @@ export class ThongTinBcKetQuaXuatHangKhoiDanhMucComponent extends Base2Component
     { value: 1, label: 'Đạt' },
   ];
   dataPhieuKncl: any;
-  amount = AMOUNT_TWO_DECIMAL
+  amount = AMOUNT_TWO_DECIMAL;
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -131,17 +132,9 @@ export class ThongTinBcKetQuaXuatHangKhoiDanhMucComponent extends Base2Component
       await this.bckqXuatHangKdmService.getDetail(idInput)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            // this.formData.patchValue(res.data);
-            this.formData.patchValue({
-              id: res.data.id,
-              tenDvi: res.data.tenDvi,
-              soBaoCao: res.data.soBaoCao,
-              ngayBaoCao: res.data.ngayBaoCao,
-              tenBaoCao: res.data.tenBaoCao,
-              trangThai: res.data.trangThai,
-              tenTrangThai: res.data.tenTrangThai,
-              soQdGiaoNvXh: res.data?.soQdGiaoNvXh ? (res.data.soQdGiaoNvXh.indexOf(',') > 0 ? res.data.soQdGiaoNvXh.split(',') : [res.data.soQdGiaoNvXh]) : [],
-            });
+            this.formData.patchValue(res.data);
+            this.children = cloneDeep(res.data.xhXkThXuatHangKdmDtl);
+            this.buildTableView(this.children);
           }
         })
         .catch((e) => {
@@ -154,12 +147,6 @@ export class ThongTinBcKetQuaXuatHangKhoiDanhMucComponent extends Base2Component
         maDvi: this.userInfo.MA_DVI,
         tenDvi: this.userInfo.TEN_DVI,
       });
-      // if (this.soQdGiaoNvXh) {
-      //   let dataQdGiaoNvXh = this.listSoQuyetDinh.find(item => item.soQuyetDinh == this.soQdGiaoNvXh);
-      //   if (dataQdGiaoNvXh) {
-      //     // this.bindingDataQd(dataQdGiaoNvXh);
-      //   }
-      // }
     }
   }
 
@@ -174,10 +161,10 @@ export class ThongTinBcKetQuaXuatHangKhoiDanhMucComponent extends Base2Component
   async changeValueMaDsTongHop(event) {
     try {
       this.children = [];
-        this.spinner.show();
+      this.spinner.show();
       if (event && event.length > 0) {
         let dsThItem = this.listDsTongTop.find(it => it.maDanhSach == event);
-        if(dsThItem){
+        if (dsThItem) {
           this.children = cloneDeep(dsThItem.tongHopDtl);
         }
         this.formData.patchValue({
@@ -242,12 +229,6 @@ export class ThongTinBcKetQuaXuatHangKhoiDanhMucComponent extends Base2Component
     let body = this.formData.value;
     if (this.fileDinhKems && this.fileDinhKems.length > 0) {
       body.fileDinhKems = this.fileDinhKems;
-    }
-    if (body.soQdGiaoNvXh && isArray(body.soQdGiaoNvXh)) {
-      body.soQdGiaoNvXh = body.soQdGiaoNvXh.join(',');
-    }
-    if (body.idQdGiaoNvXh && isArray(body.idQdGiaoNvXh)) {
-      body.idQdGiaoNvXh = body.idQdGiaoNvXh.join(',');
     }
     body.xhXkThXuatHangKdmDtl = this.children && this.children.length > 0 ? this.conVertTreeToList(this.children) : [];
     let data = await this.createUpdate(body);
