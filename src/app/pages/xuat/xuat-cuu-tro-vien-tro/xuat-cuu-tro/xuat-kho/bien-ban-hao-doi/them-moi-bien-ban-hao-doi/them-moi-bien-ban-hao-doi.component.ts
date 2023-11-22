@@ -22,6 +22,7 @@ import { BienBanHaoDoiService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-
 import { Validators } from '@angular/forms';
 import { PhieuKiemNghiemChatLuongService } from 'src/app/services/qlnv-hang/xuat-hang/chung/kiem-tra-chat-luong/PhieuKiemNghiemChatLuong.service';
 import { BienBanLayMauService } from 'src/app/services/qlnv-hang/xuat-hang/chung/xuat-kho/PhieuXuatKho.service';
+import { MangLuoiKhoService } from 'src/app/services/qlnv-kho/mangLuoiKho.service';
 
 @Component({
   selector: 'app-them-moi-bien-ban-hao-doi',
@@ -64,6 +65,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
     // private quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
     private bienBanHaoDoiService: BienBanHaoDoiService,
     private bienBanTinhKhoService: BienBanTinhKhoService,
+    private mangLuoiKhoService: MangLuoiKhoService,
     public phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
     public quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
     public bienBanLayMauService: BienBanLayMauService,
@@ -131,6 +133,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         ngayKetThucNhap: [],
         soPhieuKnCl: [],
         idPhieuKnCl: [],
+        soThangBqHang: [],
       }
     );
     this.maBb = '-BBHD';
@@ -332,11 +335,6 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
   //     this.listBbTinhKho = this.listBbTinhKho.filter(item => (item.maLoKho == data.maLoKho && item.maNganKho === data.maNganKho));
   //   }
   // }
-  async getDinhMucHaoHut() {
-    const res = await this.danhMucService.danhMucChungGetAll('DINH_MUC_HAO_HUT');
-    if (res.msg !== MESSAGE.SUCCESS) return;
-    this.formData.patchValue({ dinhMucHaoHut: res.data })
-  }
   async onSelectSoBbTinhKho(event: any): Promise<void> {
     console.log(event, "event")
     if (!event) return;
@@ -345,6 +343,16 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
     const res = await this.bienBanTinhKhoService.getDetail(idBbTinhKho);
     if (res.msg !== MESSAGE.SUCCESS) return;
     const bienBan = res.data;
+    let ngayKetThucNhap = "";
+    if (bienBan.maLoKho || bienBan.maNganKho) {
+      const res = await this.mangLuoiKhoService.getDetailByMa({ maDvi: bienBan.maLoKho || bienBan.maNganKho });
+      if (res.data?.object?.ngayNhapDay) {
+        ngayKetThucNhap = res.data?.object?.ngayNhapDay;
+      }
+    };
+    const soThangBqHang = bienBan.ngayBatDauXuat && ngayKetThucNhap ? dayjs(dayjs(bienBan.ngayBatDauXuat, "DD/MM/YYYY").format("YYYY-MM-DD")).diff(dayjs(ngayKetThucNhap, "DD/MM/YYYY").format("YYYY-MM-DD"), 'month', true).toFixed(1) : "";
+    console.log("soThangBqHang", soThangBqHang)
+    //TODO: call api danh muc dinh muc hao hut
     if (this.listBbTinhKho) {
       this.dataTable = bienBan.listPhieuXuatKho
     }
@@ -363,6 +371,8 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
       // ngayBatDauXuat: this.dataTable[this.dataTable.length - 1].ngayXuatKho,
       ngayBatDauXuat: bienBan.ngayBatDauXuat,
       ngayKetThucXuat: bienBan.ngayKetThucXuat,
+      ngayKetThucNhap,
+      soThangBqHang,
       tongSlNhap: bienBan.tongSlNhap,
       tongSlXuat: bienBan.tongSlXuat,
       // tongSlXuat: this.tongSoLuongXk,

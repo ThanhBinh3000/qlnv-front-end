@@ -10,8 +10,8 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { MESSAGE } from 'src/app/constants/message';
 import { chain } from 'lodash';
 import * as uuid from "uuid";
-import {XuatCuuTroVienTroComponent} from "../../../xuat-cuu-tro-vien-tro.component";
-import {CHUC_NANG} from "../../../../../../constants/status";
+import { XuatCuuTroVienTroComponent } from "../../../xuat-cuu-tro-vien-tro.component";
+import { CHUC_NANG, STATUS } from "../../../../../../constants/status";
 import {
   PhieuKiemTraChatLuongService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuat-cap/PhieuKiemTraChatLuong.service";
@@ -102,7 +102,7 @@ export class PhieuKiemTraChatLuongComponent extends Base2Component implements On
 
   ngOnInit(): void {
     try {
-      console.log(this.loaiVthh,"2222")
+      console.log(this.loaiVthh, "2222")
       this.initData()
       this.timKiem();
     }
@@ -157,7 +157,8 @@ export class PhieuKiemTraChatLuongComponent extends Base2Component implements On
           soQdGiaoNvXh: key != "null" ? key : '',
           nam: nam,
           thoiHanXuatCtVt: thoiHanXuatCtVt,
-          childData: value };
+          childData: value
+        };
       }).value();
     this.children = dataView
     this.expandAll()
@@ -204,5 +205,28 @@ export class PhieuKiemTraChatLuongComponent extends Base2Component implements On
     this.idBbTk = null;
     this.openBbTk = false;
   }
-
+  checkRoleView(trangThai: STATUS): boolean {
+    if (!this.checkRoleEdit(trangThai) && !this.checkRoleApprop(trangThai) && !this.checkRoleDelete(trangThai) && this.userService.isAccessPermisson("XHDTQG_XCTVTXC_XC_KTCL_LT_BBLMBGM_XEM")) {
+      return true;
+    }
+    return false;
+  }
+  checkRoleEdit(trangThai: STATUS): boolean {
+    if ([STATUS.DU_THAO, STATUS.TU_CHOI_LDCC].includes(trangThai) && this.userService.isAccessPermisson("XHDTQG_XCTVTXC_XC_KTCL_LT_BBLMBGM_THEM") && this.userService.isChiCuc()) {
+      return true;
+    }
+    return false;
+  }
+  checkRoleApprop(trangThai: STATUS): boolean {
+    if ([STATUS.CHO_DUYET_LDCC].includes(trangThai) && this.userService.isAccessPermisson("XHDTQG_XCTVTXC_XC_KTCL_LT_BBLMBGM_DUYET_LDCCUC") && this.userService.isChiCuc()) {
+      return true;
+    }
+    return false;
+  }
+  checkRoleDelete(trangThai: STATUS): boolean {
+    if ([STATUS.DU_THAO].includes(trangThai) && this.userService.isAccessPermisson("XHDTQG_XCTVTXC_XC_KTCL_LT_BBLMBGM_XOA") && this.userService.isChiCuc()) {
+      return true
+    }
+    return false
+  }
 }
