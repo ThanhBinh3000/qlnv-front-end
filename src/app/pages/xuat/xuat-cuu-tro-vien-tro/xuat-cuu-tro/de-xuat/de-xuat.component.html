@@ -211,7 +211,8 @@
             <td>{{ data.nam }}</td>
             <td>{{ data.loaiNhapXuat }}</td>
             <td>{{ data.soDx}}</td>
-            <td>{{ data.tenDviDx }}</td>
+            <!-- <td>{{ data.tenDviDx }}</td> -->
+            <td>{{data.maDvi.length === 6 ? data.tenDvi: data.tenDviDx}}</td>
             <td class="text-center">{{ data.ngayDx | date: globals.dateFormat }}</td>
             <td class="text-center">{{ data.ngayPduyet| date: globals.dateFormat }}</td>
             <td class="break">{{ data.tenVthh }}</td>

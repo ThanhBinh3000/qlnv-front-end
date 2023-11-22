@@ -15,12 +15,12 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button *ngIf="userService.isTongCuc() && this.formData.value.loaiTmdt == 'DUOI15TY'  && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_QD_THEM')
-         && formData.value.trangThai == STATUS.DA_DUYET_LDTC && !hidden" type="button" class="btn btn-main ml-2"
-              (click)="openQdPheDuyet(formData.value.id, false)">
-        <i class="icon htvbdh_soanthao"></i>
-        <span>Dự thảo QĐ của BTC/Bộ KHĐT</span>
-      </button>
+<!--      <button *ngIf="userService.isTongCuc() && this.formData.value.loaiTmdt == 'DUOI15TY'  && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_QD_THEM')-->
+<!--         && formData.value.trangThai == STATUS.DA_DUYET_LDTC && !hidden" type="button" class="btn btn-main ml-2"-->
+<!--              (click)="openQdPheDuyet(formData.value.id, false)">-->
+<!--        <i class="icon htvbdh_soanthao"></i>-->
+<!--        <span>Dự thảo QĐ của BTC/Bộ KHĐT</span>-->
+<!--      </button>-->
       <button type="button" class="btn btn-sub xanh-nhat ml-2"
               *ngIf=" userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_TH_THEM') && !isViewQd && !isViewDetail && isTongHop && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC) "
               (click)="save(true)">
@@ -504,6 +504,7 @@
                 <th class="text-center">Lũy kế cấp vốn <br> đến thời điểm <br> hiện tại</th>
                 <th class="text-center">Kế hoạch vốn <br> năm hiện tại (đ)</th>
                 <th class="text-center">Ghi chú</th>
+                <th class="text-center">Hành động</th>
               </tr>
               </thead>
               <tbody>
@@ -512,6 +513,7 @@
                   <td [nzExpand]="data.expandSet"
                       (nzExpandChange)="onExpandChange(data, $event)"></td>
                   <td class="font-weight-bold">{{data.tenCuc}}</td>
+                  <td></td>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -549,6 +551,7 @@
                       <td></td>
                       <td></td>
                       <td></td>
+                      <td></td>
                     </tr>
                     <ng-container *ngIf="item.expandSet">
                       <ng-container *ngFor="let child of item.children">
@@ -558,6 +561,7 @@
                           <td></td>
                           <td [nzExpand]="child.expandSet"
                               (nzExpandChange)="onExpandChange(child, $event)">{{child.tenKhoi}}</td>
+                          <td></td>
                           <td></td>
                           <td></td>
                           <td></td>
@@ -590,9 +594,15 @@
                               <td class="text-right">{{ child1.tmdt | number : '1.0-1' : 'vi_VN' }}</td>
                               <td class="text-right">{{ child1.giaTriPd | number : '1.0-1' : 'vi_VN' }}</td>
                               <td class="text-right">{{ child1.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
-                              <td><nz-input-number [nzSize]="'small'"  [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                              <td><nz-input-number [nzDisabled]="isViewDetail" [nzSize]="'small'"  [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                                                    nz-input [(ngModel)]="child1.vonDauTuTcdt" [nzMin]="1" ></nz-input-number>
                               <td>{{ child1.ghiChu }}</td>
+                              <td>
+                                <a *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC ) && isTongHop "
+                                  (click)="deleteRow(child1)">
+                                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                                </a>
+                              </td>
                             </tr>
                           </ng-container>
                         </ng-container>
@@ -624,6 +634,7 @@
                       style="color: blue">{{calcTong( 'luyKeVon') | number : '1.0-1' : 'vi_VN'}}</td>
                   <td class="font-weight-bold text-right"
                       style="color: blue">{{calcTong( 'vonDauTuTcdt') | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td></td>
                   <td></td>
                 </tr>
               </tfoot>

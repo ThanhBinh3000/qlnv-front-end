@@ -105,9 +105,9 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         tiLeHaoDuoiDm: [],
         dinhMucHaoHut: [],
         sLHaoHutTheoDm: [],
-        nguyenNhan: ['', [Validators.required]],
-        kienNghi: ['', [Validators.required]],
-        ghiChu: ['', [Validators.required]],
+        nguyenNhan: [],
+        kienNghi: [],
+        ghiChu: [],
         thuKho: [],
         ktvBaoQuan: [],
         keToan: [],
@@ -128,7 +128,9 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         listPhieuXuatKho: [new Array()],
         fileDinhKems: [new Array<FileDinhKem>()],
         donViTinh: [],
-        ngayKetThucNhap: []
+        ngayKetThucNhap: [],
+        soPhieuKnCl: [],
+        idPhieuKnCl: [],
       }
     );
     this.maBb = '-BBHD';
@@ -278,6 +280,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
       tenNganKho: '',
       maLoKho: '',
       tenLoKho: '',
+      idPhieuKnCl: '',
       soPhieuKnCl: '',
       loaiVthh: '',
       cloaiVthh: '',
@@ -329,23 +332,53 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
   //     this.listBbTinhKho = this.listBbTinhKho.filter(item => (item.maLoKho == data.maLoKho && item.maNganKho === data.maNganKho));
   //   }
   // }
-
-  onSelectSoBbTinhKho(event: any): void {
+  async getDinhMucHaoHut() {
+    const res = await this.danhMucService.danhMucChungGetAll('DINH_MUC_HAO_HUT');
+    if (res.msg !== MESSAGE.SUCCESS) return;
+    this.formData.patchValue({ dinhMucHaoHut: res.data })
+  }
+  async onSelectSoBbTinhKho(event: any): Promise<void> {
     console.log(event, "event")
     if (!event) return;
-    let bienBan = this.listBbTinhKho.find(f => f.soBbTinhKho == event);
+    let idBbTinhKho = this.listBbTinhKho.find(f => f.soBbTinhKho == event)?.id;
+    if (!idBbTinhKho) return;
+    const res = await this.bienBanTinhKhoService.getDetail(idBbTinhKho);
+    if (res.msg !== MESSAGE.SUCCESS) return;
+    const bienBan = res.data;
     if (this.listBbTinhKho) {
       this.dataTable = bienBan.listPhieuXuatKho
     }
-    this.tongSoLuongXk = this.dataTable.reduce((prev, cur) => prev + cur.slXuat, 0);
-    let slHaoHut = this.formData.value.tongSlNhap * this.formData.value.dinhMucHaoHut;
+    // this.tongSoLuongXk = this.dataTable.reduce((prev, cur) => prev + cur.slXuat, 0);
+    const sLHaoHutTheoDm = bienBan.tongSlNhap * this.formData.value.dinhMucHaoHut / 100;
+    const slHaoThucTe = bienBan.slConLai - bienBan.slThucTeCon;
+    const tiLeHaoThucTe = bienBan.tongSlXuat ? slHaoThucTe * 100 / bienBan.tongSlXuat : '';
+    const slHaoThanhLy = sLHaoHutTheoDm;
+    const tiLeHaoThanhLy = bienBan.tongSlXuat ? slHaoThanhLy * 100 / bienBan.tongSlXuat : '';
+    const slHaoVuotDm = slHaoThucTe - sLHaoHutTheoDm > 0 ? slHaoThucTe - sLHaoHutTheoDm : '';
+    const tiLeHaoVuotDm = bienBan.tongSlXuat && slHaoVuotDm ? slHaoVuotDm * 100 / bienBan.tongSlXuat : '';
+    const slHaoDuoiDm = sLHaoHutTheoDm - slHaoThucTe > 0 ? sLHaoHutTheoDm - slHaoThucTe : '';
+    const tiLeHaoDuoiDm = bienBan.tongSlXuat && slHaoDuoiDm ? slHaoDuoiDm * 100 / bienBan.tongSlXuat : '';
     this.formData.patchValue({
       // ngayKetThucXuat: this.dataTable[0].ngayXuatKho,
       // ngayBatDauXuat: this.dataTable[this.dataTable.length - 1].ngayXuatKho,
       ngayBatDauXuat: bienBan.ngayBatDauXuat,
       ngayKetThucXuat: bienBan.ngayKetThucXuat,
-      tongSlXuat: this.tongSoLuongXk,
-      sLHaoHutTheoDm: slHaoHut,
+      tongSlNhap: bienBan.tongSlNhap,
+      tongSlXuat: bienBan.tongSlXuat,
+      // tongSlXuat: this.tongSoLuongXk,
+      sLHaoHutTheoDm,
+      //Thanh lý
+      slHaoThanhLy,
+      tiLeHaoThanhLy,
+      //Thực tế
+      slHaoThucTe,
+      tiLeHaoThucTe,
+      //Vượt định mức
+      slHaoVuotDm,
+      tiLeHaoVuotDm,
+      //Dưới định mức
+      slHaoDuoiDm,
+      tiLeHaoDuoiDm,
 
       maDiemKho: bienBan.maDiemKho,
       tenDiemKho: bienBan.tenDiemKho,
@@ -355,7 +388,10 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
       tenNganKho: bienBan.tenNganKho,
       maLoKho: bienBan.maLoKho,
       tenLoKho: bienBan.tenLoKho,
-      soPhieuKnCl: bienBan.soPhieuKnCl,
+      // soPhieuKnCl: bienBan.soPhieuKnCl,
+      // idPhieuKnCl: bienBan.idPhieuKnCl,
+      soPhieuKnCl: bienBan.listPhieuXuatKho[0]?.soPhieuKnCl,
+      idPhieuKnCl: bienBan.listPhieuXuatKho[0]?.idPhieuKnCl,
       loaiVthh: bienBan.loaiVthh,
       cloaiVthh: bienBan.cloaiVthh,
       tenLoaiVthh: bienBan.tenLoaiVthh,

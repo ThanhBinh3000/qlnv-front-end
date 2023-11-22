@@ -131,7 +131,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
           lyDoTuChoi: data.lyDoTuChoi,
           loaiDuAn: data.loaiDuAn,
           tgTongHop: data.tgTongHop,
-          loaiTmdt: data.loaiTmdt
+          loaiTmdt: data.loaiTmdt,
         });
       this.fileDinhKem = data.fileDinhKem;
       this.fileCanCu = data.fileCanCu;
@@ -177,6 +177,11 @@ export class ThemMoiScTcdtComponent implements OnInit {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
+      this.spinner.hide();
+      return;
+    }
+    if(this.dataTable && this.dataTable.length == 0){
+      this.notification.error(MESSAGE.ERROR, 'Danh sách dự án công trình không được để trống');
       this.spinner.hide();
       return;
     }
@@ -388,8 +393,6 @@ export class ThemMoiScTcdtComponent implements OnInit {
           expandSet : true,
         };
       }).value();
-    console.log(this.dataTableExpand)
-    console.log(this.dataTable)
   }
 
   expandAll(table: any[]) {
@@ -499,5 +502,26 @@ export class ThemMoiScTcdtComponent implements OnInit {
     this.idTongHop = id
     this.quyetDinh = !this.quyetDinh;
     this.emitTab({tab: "qdbtc", id: this.idTongHop, quyetDinh: this.quyetDinh});
+  }
+
+  deleteRow(data){
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          let indexData = this.dataTable.indexOf(data);
+          this.dataTable = this.dataTable.filter((item, index) => index != indexData);
+          this.buildDataTable();
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
   }
 }

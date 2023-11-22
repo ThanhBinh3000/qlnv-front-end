@@ -6963,4 +6963,14 @@ a[nzType=link] {
   font-weight: bold;
 }
 
+// css view modal
+.ant-modal-body .ant-row .ant-form-item-label.ant-col label,
+.ant-col-24.ant-form-item-label>label,
+.ant-col-xl-24.ant-form-item-label>label,
+.ant-form-vertical .ant-form-item-label>label {
+  margin-bottom: 0;
+  height: 32px;
+  font-weight: 500;
+}
+
 // end lấy từ default qua....................................................
