@@ -91,6 +91,10 @@ export class ThemMoiQdGiaoNvComponent extends Base2Component implements OnInit {
   }
 
   async save(isOther: boolean) {
+    if(this.dataTable && this.dataTable.length == 0){
+      this.notification.error(MESSAGE.ERROR, 'Danh mục sửa chữa không được để trống');
+      return;
+    }
     if(this.validateTable()){
       let body = this.formData.value;
       body.soQdGiaoNv = this.formData.value.soQdGiaoNv + this.symbol;
@@ -262,6 +266,26 @@ export class ThemMoiQdGiaoNvComponent extends Base2Component implements OnInit {
       }
       this.dataTable = [];
     }
+  }
+
+  deleteRow(data){
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          let indexData = this.dataTable.indexOf(data);
+          this.dataTable = this.dataTable.filter((item, index) => index != indexData);
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
   }
 
 }

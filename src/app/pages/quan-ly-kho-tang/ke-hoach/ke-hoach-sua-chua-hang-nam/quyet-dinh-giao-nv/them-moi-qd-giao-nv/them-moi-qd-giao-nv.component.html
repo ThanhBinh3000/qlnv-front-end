@@ -173,6 +173,7 @@
             <th nzWidth="80px">Dự toán BTC duyệt</th>
             <th nzWidth="80px">Thời gian thực hiện</th>
             <th nzWidth="130px">Ghi chú</th>
+            <th nzWidth="80px">Hành động</th>
           </tr>
           </thead>
           <tbody>
@@ -189,6 +190,12 @@
               </td>
               <td>{{data.namKh}}</td>
               <td><input nz-input [(ngModel)]="data.ghiChu" /></td>
+              <td>
+                <a *ngIf="(formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU) "
+                   (click)="deleteRow(data)">
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                </a>
+              </td>
             </tr>
           </tbody>
         </nz-table>

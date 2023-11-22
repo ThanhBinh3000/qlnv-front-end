@@ -170,7 +170,8 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
   chonSoQdGiaoNv() {
     let body = {
       trangThai : STATUS.BAN_HANH,
-      type : "00"
+      type : "00",
+      phanLoai : "TREN"
     }
     this.khScQdGiaoNvService.getListTaoBtcTcdt(body).then((res)=>{
       this.spinner.hide();
@@ -247,7 +248,6 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
         modalQD.afterClose.subscribe(async (res) => {
           if (res) {
             await this._service.getDetail(res.id).then((dtlTh)=>{
-              console.log(dtlTh.data);
               if(dtlTh.data){
                 if(dtlTh.data){
                   this.formData.patchValue({
@@ -258,6 +258,10 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
                   if(dtlTh.data.listDieuChinh != null && dtlTh.data.listDieuChinh.length == 0){
                     this.dataTable = dtlTh.data.children;
                     this.dataTable.forEach(item => {
+                      item.tenCuc = item.ktKhDxSuaChuaLonCtiet.tenCuc;
+                      item.tenChiCuc = item.ktKhDxSuaChuaLonCtiet.tenChiCuc;
+                      item.tenKhoi = item.ktKhDxSuaChuaLonCtiet.tenKhoi;
+                      item.tenDiemKho = item.ktKhDxSuaChuaLonCtiet.tenDiemKho;
                       item.tenCongTrinh = item.ktKhDxSuaChuaLonCtiet.tenCongTrinh;
                       item.soQd = item.ktKhDxSuaChuaLonCtiet.soQd;
                       item.tieuChuan = item.ktKhDxSuaChuaLonCtiet.tieuChuan;
@@ -266,6 +270,8 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
                       item.lyDo = item.ktKhDxSuaChuaLonCtiet.lyDo;
                       item.giaTriPd = item.ktKhDxSuaChuaLonCtiet.giaTriPd;
                       item.namKh = item.ktKhDxSuaChuaLonCtiet.namKh;
+                      item.ncKhTongSo = item.ktKhDxSuaChuaLonCtiet.ncKhTongSo;
+                      item.vonDauTuTcdt = item.ktKhDxSuaChuaLonCtiet.vonDauTuTcdt;
                     })
                   }else{
                     // Gét lastest DC đã ordet trên BE
