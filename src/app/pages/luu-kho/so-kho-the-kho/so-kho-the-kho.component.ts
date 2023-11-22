@@ -58,7 +58,7 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit , Aft
       ngayTaoTu: [null],
       ngayTaoDen: [null],
       idThuKho: [null],
-      tenSoKho: [null],
+      soSoKho: [null],
       tenTheKho: [null],
     })
     this.filterTable = {};
