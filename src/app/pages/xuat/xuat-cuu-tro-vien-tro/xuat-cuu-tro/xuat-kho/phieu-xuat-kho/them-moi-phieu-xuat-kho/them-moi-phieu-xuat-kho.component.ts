@@ -210,6 +210,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     let body = {
       trangThai: STATUS.BAN_HANH,
       loaiVthh: this.loaiVthh,
+      types: this.loaiXuat === 'CTVT' ? ['TH', 'TTr'] : [this.loaiXuat],
       // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
       // listTrangThaiXh: [STATUS.DA_HOAN_THANH],
       paggingReq: {
