@@ -218,10 +218,11 @@ export class ChiTietTongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Comp
           loai: LOAI_HH_XUAT_KHAC.VT_BH,
         }).then(async res => {
           if (res.msg == MESSAGE.SUCCESS) {
-            if (res.data.numberOfElements == 0) {
-              this.notification.warning(MESSAGE.ALERT, 'Không tìm thấy danh sách cần tổng hợp');
+            let danhSach = res.data.content.filter(i => i.idTongHop == null);
+            if (danhSach.length == 0) {
+              this.notification.warning(MESSAGE.ALERT, 'Không tìm thấy danh sách cần tổng hợp.');
             } else {
-              res.data.content.forEach(s => {
+              danhSach.forEach(s => {
                 s.idDsHdr = cloneDeep(s.id);
                 s.id = null;
               });
