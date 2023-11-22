@@ -40,24 +40,26 @@ export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implement
     super.ngOnInit();
     this.formData = this.fb.group({
       namKh: null,
-      soHd: null,
-      tenHd: null,
+      soHopDong: null,
+      tenHopDong: null,
       ngayPduyetTu: null,
       ngayPduyetDen: null,
       loaiVthh: null,
       trangThai: null,
       pthucBanTrucTiep: null,
-      lastest: 1
+      lastest: null,
     });
     this.filterTable = {
       namKh: '',
       soQdPd: '',
+      slHdChuaKy: '',
+      slHdDaKy: '',
       ngayMkho: '',
-      loaiVthh: '',
       tenLoaiVthh: '',
-      cloaiVthh: '',
       tenCloaiVthh: '',
+      thanhTienDuocDuyet: '',
       tenTrangThaiHd: '',
+      tenTrangThaiXh: '',
     }
     this.listTrangThaiHd = [
       {
@@ -92,24 +94,19 @@ export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implement
   async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([
-        this.timKiem(),
-        this.search(),
-      ]);
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+        trangThai: STATUS.DA_HOAN_THANH,
+        pthucBanTrucTiep: ['02'],
+        lastest: 1
+      })
+      await this.search();
     } catch (e) {
       console.error('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
     }
-  }
-
-  async timKiem() {
-    this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
-      trangThai: STATUS.DA_HOAN_THANH,
-      pthucBanTrucTiep: ['02']
-    })
   }
 
   redirectDetail(id: number, boolean?: boolean) {

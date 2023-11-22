@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
-import { UserService } from 'src/app/services/user.service';
+import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
+import {UserService} from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-main-ke-hoach-ban-truc-tiep',
@@ -11,10 +11,11 @@ export class MainKeHoachBanTrucTiepComponent implements OnInit {
   @Input() isView: boolean;
   @Input() inputLoaiVthh: string;
   @Input() idInput: number;
-  @Output()
-  showListEvent = new EventEmitter<any>();
   @Input()
   listVthh: any[] = [];
+  @Output()
+  showListEvent = new EventEmitter<any>();
+
   constructor(
     public userService: UserService
   ) {
@@ -24,6 +25,7 @@ export class MainKeHoachBanTrucTiepComponent implements OnInit {
   }
 
   tabSelected: number = 0;
+
   selectTab(tab: number) {
     this.tabSelected = tab;
   }

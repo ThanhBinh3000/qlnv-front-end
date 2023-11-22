@@ -45,7 +45,7 @@
             <div nz-col [nzSpan]="2">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Năm kế hoạch</nz-form-label>
-                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                <nz-form-control nz-col [nzErrorTip]="error">
                   <nz-select formControlName="namKh" [nzDisabled]="isView">
                     <nz-option *ngFor="let item of listNam" [nzValue]="item.value" [nzLabel]="item.text"></nz-option>
                   </nz-select>
@@ -55,10 +55,9 @@
             <div nz-col [nzSpan]="4" *ngIf="!loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
-                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                <nz-form-control nz-col [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
-                    <input [readonly]="true" nz-input formControlName="tenLoaiVthh"
-                           readonly="true"/>
+                    <input nz-input formControlName="tenLoaiVthh" readonly/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -66,10 +65,9 @@
             <div nz-col [nzSpan]="13" *ngIf="!loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
-                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                <nz-form-control nz-col [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
-                    <input [readonly]="true" nz-input formControlName="tenCloaiVthh"
-                           readonly="true"/>
+                    <input nz-input formControlName="tenCloaiVthh" readonly/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -77,9 +75,9 @@
             <div nz-col [nzSpan]="8" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                  <nz-select formControlName="loaiVthh" (ngModelChange)="onChangeCLoaiVthh($event, true)"
-                             [nzDisabled]="isView">
+                <nz-form-control nz-col [nzErrorTip]="error">
+                  <nz-select formControlName="loaiVthh"
+                             (ngModelChange)="onChangeCLoaiVthh($event, true)" [nzDisabled]="isView">
                     <nz-option *ngFor="let item of listVatTuCha" [nzValue]="item.ma" [nzLabel]="item.ten">
                     </nz-option>
                   </nz-select>
@@ -88,8 +86,8 @@
             </div>
             <div nz-col [nzSpan]="9" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
-                <nz-form-control>
+                <nz-form-label [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
+                <nz-form-control nz-col>
                   <nz-select formControlName="cloaiVthh" [nzDisabled]="isView">
                     <nz-option *ngFor="let item of listVatTu" [nzValue]="item.ma" [nzLabel]="item.ten">
                     </nz-option>

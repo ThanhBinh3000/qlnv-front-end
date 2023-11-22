@@ -10,6 +10,7 @@ import {DonviService} from 'src/app/services/donvi.service';
 import {
   ChaoGiaMuaLeUyQuyenService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-quyet-dinh-uy-quen-ban-le',
@@ -18,6 +19,7 @@ import {
 })
 export class QuyetDinhUyQuenBanLeComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG
   isView: boolean = false;
   idQdPdKh: number = 0;
   isViewQdPdKh: boolean = false;
@@ -54,46 +56,34 @@ export class QuyetDinhUyQuenBanLeComponent extends Base2Component implements OnI
     });
 
     this.filterTable = {
-      soQdPd: '',
-      soDxuat: '',
-      namKh: '',
-      ngayPduyet: '',
-      ngayNhanCgia: '',
-      trichYeu: '',
-      tenLoaiVthh: '',
-      tenCloaiVthh: '',
-      tongSoLuong: '',
-      pthucBanTrucTiep: '',
-      tenTrangThai: '',
+      soQdPd: null,
+      soDxuat: null,
+      namKh: null,
+      ngayPduyet: null,
+      ngayNhanCgia: null,
+      trichYeu: null,
+      tenLoaiVthh: null,
+      tenCloaiVthh: null,
+      tongSoLuong: null,
+      pthucBanTrucTiep: null,
+      tenTrangThai: null,
     };
   }
 
   async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([
-        this.timKiem(),
-        this.search(),
-      ]);
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+        pthucBanTrucTiep: ['02', '03'],
+      })
+      await this.search();
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
     }
-  }
-
-  async timKiem() {
-    this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
-      pthucBanTrucTiep: ['02', '03'],
-    })
-  }
-
-  async clearFilter() {
-    this.formData.reset();
-    await this.timKiem();
-    await this.search();
   }
 
   redirectDetail(id, isView: boolean) {

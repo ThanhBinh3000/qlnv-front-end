@@ -1,4 +1,4 @@
-<div *ngIf="!isDetail && !isQuyetDinh" class="luong-thuc__danh-sach">
+<div *ngIf="!isDetail" class="luong-thuc__danh-sach">
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
@@ -6,19 +6,19 @@
           <div nz-col [nzSpan]="2">
             <label class="search__label"> Năm kế hoạch </label>
             <nz-select formControlName="namKh">
-              <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              <nz-option *ngFor="let item of listNam" [nzValue]="item.value" [nzLabel]="item.text"></nz-option>
             </nz-select>
           </div>
-          <div nz-col [nzSpan]="4" *ngIf="loaiVthh !== LOAI_HANG_DTQG.VAT_TU">
+          <div nz-col [nzSpan]="4" *ngIf="!loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
             <label class="search__label"> Loại hàng DTQG </label>
             <nz-select formControlName="loaiVthh">
-              <nz-option *ngFor="let p of listVthh" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+              <nz-option *ngFor="let item of listVthh" [nzValue]="item.ma" [nzLabel]="item.giaTri"></nz-option>
             </nz-select>
           </div>
-          <div nz-col [nzSpan]="4" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">
+          <div nz-col [nzSpan]="4" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
             <label class="search__label"> Loại hàng DTQG </label>
             <nz-select formControlName="loaiVthh">
-              <nz-option *ngFor="let p of listLoaiHangHoa" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
+              <nz-option *ngFor="let item of listLoaiHangHoa" [nzValue]="item.ma" [nzLabel]="item.ten"></nz-option>
             </nz-select>
           </div>
           <div nz-col [nzSpan]="14">
@@ -42,7 +42,7 @@
         </div>
       </form>
       <div class="cangiua group-button-search">
-        <button nz-button class="search__button--clear" (click)="clearFilter()">
+        <button nz-button class="search__button--clear" (click)="clearForm()">
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
@@ -90,7 +90,7 @@
           <th class="text-left">Ngày tổng hợp</th>
           <th class="text-left">Nội dung tổng hợp</th>
           <th class="text-left">Số QĐ phê duyệt KH bán trực tiếp</th>
-          <th class="text-left" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">Loại hàng DTQG</th>
+          <th class="text-left" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">Loại hàng DTQG</th>
           <th class="text-left">Chủng loại hàng DTQG</th>
           <th class="text-left">Trạng thái</th>
           <th class="text-center">Hành động</th>
@@ -175,24 +175,10 @@
                style="color: blue">{{data.soQdPd}}
             </a>
           </td>
-          <td class="text-left" *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU">{{ data.tenLoaiVthh }}</td>
+          <td class="text-left" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">{{ data.tenLoaiVthh }}</td>
           <td class="text-left">{{ data.tenCloaiVthh }}</td>
           <td class="text-left">{{ data.tenTrangThai }}</td>
           <td class="text-center">
-            <!--            <a *ngIf="isActionAllowed(data)"-->
-            <!--               (click)="redirectDetail(data.id,true)">-->
-            <!--              <i class="fa fa-eye" title="Xem chi tiết"></i>-->
-            <!--            </a>-->
-            <!--            <a-->
-            <!--              *ngIf="data.trangThai == STATUS.CHUA_TAO_QD && userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_TONGHOP_TONGHOP')"-->
-            <!--              (click)="taoQdinh(data)">-->
-            <!--              <i class="icon htvbdh_tcdt_tao-qd"></i>-->
-            <!--            </a>-->
-            <!--            <a-->
-            <!--              *ngIf="data.trangThai== STATUS.CHUA_TAO_QD && (userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_TONGHOP_XOA'))"-->
-            <!--              (click)="delete(data)">-->
-            <!--              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
-            <!--            </a>-->
             <a (click)="redirectDetail(data.id, true)"
                *ngIf="(data.trangThai == STATUS.CHUA_TAO_QD ||data.trangThai==STATUS.DA_BAN_HANH_QD || data.trangThai == STATUS.DA_DU_THAO_QD ) &&
                 userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_TONGHOP_XEM')">
@@ -201,7 +187,7 @@
             <a
               *ngIf="(data.trangThai == STATUS.CHUA_TAO_QD ||data.trangThai==STATUS.DA_BAN_HANH_QD || data.trangThai == STATUS.DA_DU_THAO_QD ) &&
                userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_TONGHOP_TONGHOP')"
-              (click)="taoQdinh(data)">
+              (click)="taoQuyetDinhPd(data)">
               <i class="icon htvbdh_tcdt_tao-qd"></i>
             </a>
             <a
@@ -234,17 +220,11 @@
     </nz-card>
   </div>
 </div>
-<div *ngIf="isDetail  && !isQuyetDinh" class="chi-tiet">
+<div class="chi-tiet" *ngIf="isDetail">
   <app-them-moi-tong-hop-kh-ban-truc-tiep [idInput]="idSelected" [isView]="isView" [loaiVthh]="loaiVthh"
-                                          (showListEvent)="showList()">
+                                          (showListEvent)="showList()" (taoQuyetDinh)="taoQuyetDinh($event)">
   </app-them-moi-tong-hop-kh-ban-truc-tiep>
 </div>
-<div *ngIf="isQuyetDinh" class="chi-tiet">
-  <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [dataTongHop]="dataTongHop" [loaiVthh]="loaiVthh"
-                                              (showListEvent)="showTongHop()">
-  </app-them-moi-qd-phe-duyet-kh-ban-truc-tiep>
-</div>
-<!-- Xem -->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModalQdPd()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [idInput]="idQdPd" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
