@@ -110,7 +110,6 @@ export class ThemMoiUbtvqhComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       this.listKinhPhiBs = res.data;
     }
-    console.log(this.listKinhPhiBs,'this.listKinhPhiBs');
   }
 
   deleteTaiLieuDinhKemTag(data: any) {
@@ -198,7 +197,6 @@ export class ThemMoiUbtvqhComponent implements OnInit {
     body.soQd = body.soQd;
     body.listBoNganh = this.dataTable;
     body.fileDinhKems = this.taiLieuDinhKemList;
-    // console.log(body,'bodybodybodybody');return;
     let res;
     if (this.idInput > 0) {
       res = await this.quyetDinhUbtvqhMuBuBoSung.update(body);

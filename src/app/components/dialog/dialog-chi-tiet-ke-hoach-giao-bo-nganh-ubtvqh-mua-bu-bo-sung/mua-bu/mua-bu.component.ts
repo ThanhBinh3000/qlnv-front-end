@@ -98,7 +98,7 @@ export class MuaBuComponent implements OnInit {
   }
 
   clearData() {
-
+      this.rowItem = new ThongTinQuyetDinh();
   }
 
   huyEdit(idx: number): void {
@@ -125,26 +125,6 @@ export class MuaBuComponent implements OnInit {
   }
 
   onChangeLoaiVthh(event, typeData?: any) {
-    // if (typeData) {
-    //   this.dsChungLoaiHangHoa = [];
-    //   typeData.dviTinh = null;
-    //   const loaiVthh = this.dsHangHoa.filter(item => item.ma == event);
-    //   if (loaiVthh.length > 0) {
-    //     typeData.cloaiVthh = null;
-    //     typeData.dviTinh = loaiVthh[0].maDviTinh;
-    //     typeData.tenVthh = loaiVthh[0].ten;
-    //     this.dsChungLoaiHangHoa = loaiVthh[0].child;
-    //   }
-    // } else  {
-    //   this.dsChungLoaiHangHoa = [];
-    //   this.rowItem.dviTinh = null;
-    //   const loaiVthh = this.dsHangHoa.filter(item => item.ma == event);
-    //   if (loaiVthh.length > 0) {
-    //     this.rowItem.dviTinh = loaiVthh[0].maDviTinh;
-    //     this.rowItem.tenVthh = loaiVthh[0].ten;
-    //     this.dsChungLoaiHangHoa = loaiVthh[0].child;
-    //   }
-    // }
     if (typeData) {
       this.dsChungLoaiHangHoa = [];
       typeData.cloaiVthh = null;
@@ -183,9 +163,4 @@ export class MuaBuComponent implements OnInit {
       }
     }
   }
-
-  validate() {
-  }
-
-  protected readonly AMOUNT_NO_DECIMAL = AMOUNT_NO_DECIMAL;
 }
