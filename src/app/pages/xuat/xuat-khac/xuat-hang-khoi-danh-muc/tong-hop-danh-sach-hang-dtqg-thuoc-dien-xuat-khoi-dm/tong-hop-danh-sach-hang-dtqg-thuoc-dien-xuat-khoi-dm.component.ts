@@ -150,7 +150,6 @@ export class TongHopDanhSachHangDtqgThuocDienXuatKhoiDmComponent extends Base2Co
           return Object.assign(s1, s);
         })
       } else return s;
-
     });
     this.buildTableView();
   }
@@ -184,6 +183,7 @@ export class TongHopDanhSachHangDtqgThuocDienXuatKhoiDmComponent extends Base2Co
   }
 
   buildTableView() {
+    console.log(this.flatDataTable,'this.flatDataTablethis.flatDataTable');
     this.dataTableView = chain(this.flatDataTable)
       .groupBy("header")
       .map((value, key) => {
@@ -208,14 +208,14 @@ export class TongHopDanhSachHangDtqgThuocDienXuatKhoiDmComponent extends Base2Co
         this.expandSetString.add(idVirtual);
         return {
           idVirtual: idVirtual,
-          id: rowItem.id,
-          soQdXhKdm: rowItem.soQdXhKdm,
-          tenCuc: rowItem.tenCuc,
-          maDanhSach: rowItem.maDanhSach,
-          tenDanhSach: rowItem.tenDanhSach,
-          trangThai: rowItem.trangThai,
-          tenTrangThai: rowItem.tenTrangThai,
-          ngayTao: rowItem.ngayTao,
+          id: rowItem?.id,
+          soQdXhKdm: rowItem?.soQdXhKdm,
+          tenCuc: rowItem?.tenCuc,
+          maDanhSach: rowItem?.maDanhSach,
+          tenDanhSach: rowItem?.tenDanhSach,
+          trangThai: rowItem?.trangThai,
+          tenTrangThai: rowItem?.tenTrangThai,
+          ngayTao: rowItem?.ngayTao,
           childData: rs
         };
       }).value();
