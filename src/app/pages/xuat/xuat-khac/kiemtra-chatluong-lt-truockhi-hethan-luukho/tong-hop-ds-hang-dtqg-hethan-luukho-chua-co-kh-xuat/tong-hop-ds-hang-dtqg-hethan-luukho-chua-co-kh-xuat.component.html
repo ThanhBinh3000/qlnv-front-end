@@ -179,14 +179,14 @@
                         <td>{{lv2.tenDiemKho}}</td>
                         <td>{{lv2.tenLoKho ? (lv2.tenLoKho +' '+ lv2.tenNganKho): lv2.tenNganKho}}</td>
                         <td>{{lv2.ngayNhapKho}}</td>
-                        <td>{{lv2.slTon}}</td>
-                        <td>{{lv2.slHetHan}}</td>
+                        <td class="text-right">{{lv2.slTonKho}}</td>
+                        <td class="text-right">{{lv2.slHetHan}}</td>
                         <td>{{lv2.donViTinh}}</td>
                         <td></td>
-                        <td>{{lv2.thoiHanLk|number:globals.numberFormat}}</td>
+                        <td class="text-right">{{lv2.thoiHanLk|number:globals.numberFormat:globals.locale }}</td>
                         <td></td>
                         <td></td>
-                        <td>{{lv2.soPhieuKnCl ? (lv2.kqThamDinh == true ? "Đạt" : "Không đạt") : ''}}</td>
+                        <td>{{lv2.tenTrangThaiKnCl}}</td>
                         <td></td>
                       </tr>
                     </ng-container>
