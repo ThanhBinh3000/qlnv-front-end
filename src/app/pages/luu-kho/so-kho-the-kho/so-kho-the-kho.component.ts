@@ -15,6 +15,8 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { STATUS } from 'src/app/constants/status';
 import { DonviService } from 'src/app/services/donvi.service';
 import { StorageService } from 'src/app/services/storage.service';
+import { saveAs } from 'file-saver';
+
 
 @Component({
   selector: 'app-so-kho-the-kho',
@@ -337,6 +339,22 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit , Aft
         }
       },
     });
+  }
+
+  exportData(fileName?: string) {
+    this.spinner.show();
+    try {
+      this.service
+        .export(this.formData.value)
+        .subscribe((blob) =>
+          saveAs(blob, fileName ? fileName : 'data.xlsx'),
+        );
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
   }
 
   ngAfterViewInit(): void {
