@@ -4,6 +4,11 @@
       <i class='fa fa-arrow-left'></i>
       <span>Quay lại</span>
     </button>
+    <button
+      type="button" class="btn btn-sub do" (click)="preview($event)" *ngIf="idInput > 0">
+      <i class="icon htvbdh_tcdt_tuchoi"></i>
+      <span>Xem trước</span>
+    </button>
     <button *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU
       && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_BTCBN_BANHANH')" type='button' class='btn btn-sub'
             (click)='save(true)'>
@@ -131,15 +136,11 @@
   </nz-card>
   <nz-card class='mt16 flex-card p-lr16 mt-2'>
     <nz-collapse>
-      <nz-collapse-panel [nzActive]='true' nzHeader='CHI TIẾT NỘI DUNG QUYẾT ĐỊNH' [nzExtra]="previewTpl"
+      <nz-collapse-panel [nzActive]='true' nzHeader='CHI TIẾT NỘI DUNG QUYẾT ĐỊNH'
                          class='mg-t-10'>
-        <ng-template #previewTpl>
-          <button
-                  type="button" class="btn btn-sub do" (click)="preview($event)" *ngIf="idInput > 0">
-            <i class="icon htvbdh_tcdt_tuchoi"></i>
-            <span>Xem trước</span>
-          </button>
-        </ng-template>
+<!--        <ng-template #previewTpl>-->
+<!--         -->
+<!--        </ng-template>-->
         <div nz-col [nzSpan]='24' class='mt-2'>
           <div nz-col [nzSpan]='4' class='mt-2'>
             <nz-form-item class='form-item'>

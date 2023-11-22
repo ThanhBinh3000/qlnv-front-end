@@ -5,8 +5,8 @@ import { StorageService } from '../../../../../../services/storage.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { chain } from 'lodash';
-import * as uuid from 'uuid';
+import { chain,cloneDeep } from 'lodash';
+import { v4 as uuidv4 } from 'uuid';
 import {
   PhieuXuatNhapKhoService
 } from '../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatNhapKho.service';
@@ -31,6 +31,8 @@ import {
 import {
   TongHopDanhSachHangXkdmService
 } from '../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuathangkhoidm/TongHopDanhSachHangXkdm.service';
+import { CurrencyMaskInputMode } from 'ngx-currency';
+import { AMOUNT_TWO_DECIMAL } from '../../../../../../Utility/utils';
 
 @Component({
   selector: 'app-thong-tin-bc-ket-qua-xuat-hang-khoi-danh-muc',
@@ -66,7 +68,7 @@ export class ThongTinBcKetQuaXuatHangKhoiDanhMucComponent extends Base2Component
     { value: 1, label: 'Đạt' },
   ];
   dataPhieuKncl: any;
-
+  amount = AMOUNT_TWO_DECIMAL
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -88,10 +90,10 @@ export class ThongTinBcKetQuaXuatHangKhoiDanhMucComponent extends Base2Component
       maDviNhan: [],
       tenBaoCao: [null, [Validators.required]],
       soBaoCao: [null, [Validators.required]],
-      soQdGiaoNvXh: [null, [Validators.required]],
-      idQdGiaoNvXh: [null, [Validators.required]],
+      idDsTh: [null, [Validators.required]],
+      maDsTh: [null, [Validators.required]],
       ngayBaoCao: [null, [Validators.required]],
-      listDetailPxk: [new Array()],
+      xhXkThXuatHangKdmDtl: [new Array()],
     });
   }
 
@@ -118,7 +120,6 @@ export class ThongTinBcKetQuaXuatHangKhoiDanhMucComponent extends Base2Component
     let res = await this.tongHopDanhSachHangXkdmService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
-      console.log(data,'datadatadata');
       this.listDsTongTop = this.idInput > 0 ? data.content : data.content.filter(item => !item.soBaoCaoKdm);
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -172,20 +173,22 @@ export class ThongTinBcKetQuaXuatHangKhoiDanhMucComponent extends Base2Component
 
   async changeValueMaDsTongHop(event) {
     try {
-      this.spinner.show();
+      this.children = [];
+        this.spinner.show();
       if (event && event.length > 0) {
         let dsThItem = this.listDsTongTop.find(it => it.maDanhSach == event);
         if(dsThItem){
-          this.tongHopDanhSachHangXkdmService.getDetail(dsThItem.id);
+          this.children = cloneDeep(dsThItem.tongHopDtl);
         }
-        // this.formData.patchValue({
-        //   idQdGiaoNvXh: idsQdGiaoNvXh,
-        // });
+        this.formData.patchValue({
+          idDsTh: dsThItem.id,
+        });
+        this.buildTableView(this.children);
       } else {
-        this.listPhieuXuatKho = [];
+        // this.listPhieuXuatKho = [];
         this.buildTableView();
         this.formData.patchValue({
-          idQdGiaoNvXh: null,
+          idDsTh: null,
         });
       }
     } catch (e) {
@@ -216,20 +219,23 @@ export class ThongTinBcKetQuaXuatHangKhoiDanhMucComponent extends Base2Component
     }
   }
 
-  buildTableView() {
-    let dataView = chain(this.listPhieuXuatKho)
-      .groupBy('soCanCu')
-      .map((value, key) => {
-        let qdGiaoNvXh = value.find(f => f.soCanCu === key);
-        return {
-          idVirtual: uuid.v4(),
-          soQdGiaoNvXh: key != 'null' ? key : '',
-          tenTrangThaiXhQdGiaoNvXh: qdGiaoNvXh ? qdGiaoNvXh.tenTrangThaiXhQdGiaoNvXh : '',
-          childData: value,
-        };
-      }).value();
-    this.children = dataView;
-    this.expandAll();
+  async buildTableView(data?: any) {
+    this.children = chain(data)
+      .groupBy('tenChiCuc')
+      .map((v, k) => {
+          let rowItem = v.find(s => s.tenChiCuc === k);
+          let idVirtual = uuidv4();
+          this.expandSetString.add(idVirtual);
+          return {
+            idVirtual: idVirtual,
+            tenChiCuc: k,
+            tenCuc: rowItem?.tenCuc,
+            maDiaDiem: rowItem?.maDiaDiem,
+            tenCloaiVthh: rowItem?.tenCloaiVthh,
+            childData: v,
+          };
+        },
+      ).value();
   }
 
   async save(isGuiDuyet?) {
@@ -243,7 +249,7 @@ export class ThongTinBcKetQuaXuatHangKhoiDanhMucComponent extends Base2Component
     if (body.idQdGiaoNvXh && isArray(body.idQdGiaoNvXh)) {
       body.idQdGiaoNvXh = body.idQdGiaoNvXh.join(',');
     }
-    body.listDetailPxk = this.children && this.children.length > 0 ? this.conVertTreeToList(this.children) : [];
+    body.xhXkThXuatHangKdmDtl = this.children && this.children.length > 0 ? this.conVertTreeToList(this.children) : [];
     let data = await this.createUpdate(body);
     if (data) {
       this.idInput = data.id;
@@ -335,7 +341,6 @@ export class ThongTinBcKetQuaXuatHangKhoiDanhMucComponent extends Base2Component
     if (this.itemSelected) {
       this.itemSelected = null;
     }
-    console.log(data, 'datadatadatadata');
     if (data.idPhieuKncl) {
       await await this.phieuKdclVtKtclService.getDetail(data.idPhieuKncl).then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
