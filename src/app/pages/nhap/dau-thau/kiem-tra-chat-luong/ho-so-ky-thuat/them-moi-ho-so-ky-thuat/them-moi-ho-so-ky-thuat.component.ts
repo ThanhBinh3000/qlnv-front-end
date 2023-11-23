@@ -74,7 +74,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       tenTrangThai: "Dự Thảo",
       fileDinhKems: "",
       loai: LOAI_BIEN_BAN.BB_KTRA_NGOAI_QUAN,
-      previewName: 'bien_ban_kiem_tra_ngoai_quan.docx'
+      previewName: 'bien_ban_kiem_tra_ngoai_quan'
     },
     {
       id: null,
@@ -83,7 +83,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       tenTrangThai: "Dự Thảo",
       fileDinhKems: "",
       loai: LOAI_BIEN_BAN.BB_KTRA_VAN_HANH,
-      previewName: 'bien_ban_kiem_tra_van_hanh.docx'
+      previewName: 'bien_ban_kiem_tra_van_hanh'
     },
     {
       id: null,
@@ -92,7 +92,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       tenTrangThai: "Dự Thảo",
       fileDinhKems: "",
       loai: LOAI_BIEN_BAN.BB_KTRA_HOSO_KYTHUAT,
-      previewName: 'bien_ban_kiem_tra_hskt.docx'
+      previewName: 'bien_ban_kiem_tra_hskt'
     }
   ];
   previewName: string = 'ho_so_ky_thuat';
