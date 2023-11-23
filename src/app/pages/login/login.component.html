@@ -7,25 +7,13 @@
         </div>
         <h3 class="dangnhap">Đăng nhập</h3>
       </div>
-      <form
-        nz-form
-        class="login-form"
-        method="post"
-        [nzLayout]="'vertical'"
-        [formGroup]="formLogin"
-        (keyup.enter)="login(formLogin.value)"
-        (ngSubmit)="login(formLogin.value)"
-      >
+      <form nz-form class="login-form" method="post" [nzLayout]="'vertical'" [formGroup]="formLogin"
+        (keyup.enter)="login(formLogin.value)" (ngSubmit)="login(formLogin.value)">
         <nz-form-item>
           <nz-form-label nzFor="UserName">Người dùng</nz-form-label>
           <nz-form-control nzErrorTip="Tên đăng nhập là bắt buộc!">
             <nz-input-group nzPrefixIcon="user">
-              <input
-                type="text"
-                nz-input
-                formControlName="UserName"
-                placeholder="Người dùng"
-              />
+              <input type="text" nz-input formControlName="UserName" placeholder="Người dùng" />
             </nz-input-group>
           </nz-form-control>
           <!-- <div class="text-danger"
@@ -37,12 +25,7 @@
           <nz-form-label nzFor="Password">Mật khẩu</nz-form-label>
           <nz-form-control nzErrorTip="Mật khẩu là bắt buộc!">
             <nz-input-group nzPrefixIcon="lock">
-              <input
-                type="password"
-                nz-input
-                formControlName="Password"
-                placeholder="Mật khẩu"
-              />
+              <input type="password" nz-input formControlName="Password" placeholder="Mật khẩu" />
             </nz-input-group>
           </nz-form-control>
           <!-- <div class="text-danger"
@@ -50,6 +33,23 @@
             Password là bắt buộc!
           </div> -->
         </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label nzFor="captchaText">Captcha</nz-form-label>
+          <nz-form-control nzErrorTip="Captcha là bắt buộc!">
+            <nz-input-group nzPrefixIcon="captcha" [nzAddOnAfter]="suffixButton">
+              <input type="text" nz-input formControlName="captchaText" placeholder="Captcha" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <ng-template #suffixButton>
+          <img nz-image width="200px" height="30px" [src]="imgCaptcha" alt="" />
+          &nbsp;&nbsp;&nbsp;
+          <a>
+            <i class='fa fa-refresh' title="Đổi mật khẩu" (click)="getCaptcha()"></i>
+          </a>
+        </ng-template>
+
         <div nz-row class="login-form-margin">
           <div nz-col [nzSpan]="24">
             <label nz-checkbox>
@@ -59,12 +59,7 @@
         </div>
         <div nz-row [nzGutter]="24">
           <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24" class="center">
-            <button
-              type="submit"
-              nz-button
-              class="login-form-button login-form-margin"
-              [nzType]="'primary'"
-            >
+            <button type="submit" nz-button class="login-form-button login-form-margin" [nzType]="'primary'">
               Đăng nhập
             </button>
           </div>

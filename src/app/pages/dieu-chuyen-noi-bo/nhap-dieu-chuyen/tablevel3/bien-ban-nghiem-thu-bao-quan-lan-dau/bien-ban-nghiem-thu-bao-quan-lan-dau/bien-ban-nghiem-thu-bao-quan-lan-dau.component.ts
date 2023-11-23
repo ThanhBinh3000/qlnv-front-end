@@ -122,6 +122,10 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
     else return false
   }
 
+  isCuc() {
+    return this.userService.isCuc()
+  }
+
   isChiCuc() {
     return this.userService.isChiCuc()
   }
