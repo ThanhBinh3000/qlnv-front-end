@@ -128,7 +128,7 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
       soQdKq: data.soQdKq?.split('/')[0] || null,
     });
     this.dataTable = data.children;
-    await this.selectRow(this.dataTable[0].children[0]);
+    await this.selectRow(this.dataTable.flatMap(item => item.children)[0]);
   }
 
   async save() {
@@ -263,7 +263,7 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
         tongGiaTriHdong: data.thanhTienDuocDuyet,
       });
       this.dataTable = data.children;
-      await this.selectRow(this.dataTable[0].children[0]);
+      await this.selectRow(this.dataTable.flatMap(item => item.children)[0]);
     } catch (e) {
       console.error('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -298,11 +298,12 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
   }
 
   async selectRow(data: any) {
+    this.dataTableAll = this.dataTable.flatMap(item => item.children);
     if (!data.selected) {
-      this.dataTable[0].children.forEach(item => item.selected = false);
+      this.dataTableAll.forEach(item => item.selected = false);
       data.selected = true;
-      const findndex = this.dataTable[0].children.findIndex(child => child.id == data.id);
-      this.listOfData = this.dataTable[0].children[findndex].children;
+      const findndex = this.dataTableAll.findIndex(child => child.id == data.id);
+      this.listOfData = this.dataTableAll[findndex].children;
       this.showFromTT = true;
     }
   }

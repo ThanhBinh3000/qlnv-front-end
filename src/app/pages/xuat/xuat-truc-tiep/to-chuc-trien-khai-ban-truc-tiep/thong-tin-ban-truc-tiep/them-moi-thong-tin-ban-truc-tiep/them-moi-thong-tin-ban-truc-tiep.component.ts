@@ -134,7 +134,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         });
       }
       this.dataTable = data.children;
-      await this.selectRow(this.dataTable[0].children[0]);
+      await this.selectRow(this.dataTable.flatMap(item => item.children)[0]);
       this.fileUyQuyen = data.fileUyQuyen;
       this.fileBanLe = data.fileBanLe;
     } catch (e) {
@@ -346,12 +346,13 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   }
 
   async selectRow(data: any) {
+    this.dataTableAll = this.dataTable.flatMap(item => item.children);
     if (!data.selected) {
-      this.dataTable[0].children.forEach(item => item.selected = false);
+      this.dataTableAll.forEach(item => item.selected = false);
       data.selected = true;
-      const findndex = this.dataTable[0].children.findIndex(child => child.id == data.id);
-      this.listOfData = this.dataTable[0].children[findndex].children;
-      this.idDviDtl = this.dataTable[0].children[findndex].id;
+      const findndex = this.dataTableAll.findIndex(child => child.id == data.id);
+      this.listOfData = this.dataTableAll[findndex].children;
+      this.idDviDtl = this.dataTableAll[findndex].id;
       this.showFromTT = true;
       this.emitDataTable();
       this.updateEditCache();
