@@ -60,6 +60,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   flagInit: Boolean = false;
   listSoQdKqBtt: any[] = [];
   listSoQdPdKh: any[] = [];
+  dataChildren: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -338,9 +339,15 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         return;
       }
       const data = res.data;
+      this.dataChildren = data.children.map(item => {
+        item.children.forEach(child => {
+          child.children = child.children.filter(s => s.luaChon);
+        });
+        return item;
+      });
       await Promise.all([
         this.loadDanhDachHopDong(data),
-        this.setListDviTsanCuc(data.children),
+        this.setListDviTsanCuc(this.dataChildren),
       ]);
       this.formData.patchValue({
         namHd: data.namKh,
@@ -364,7 +371,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         donViTinh: this.listHangHoaAll.find(s => s.ma == data.loaiVthh)?.maDviTinh,
       });
       const childrenFlat = data.children.flatMap(item => item.children.flatMap(child => child.children.map(grandchild => grandchild)));
-      this.listTccnChaoGia = childrenFlat;
+      this.listTccnChaoGia = childrenFlat.filter(s => s.luaChon);
       const filteredItems = this.loadDanhSachHdong.filter(item => item.idQdKq === data.id && item.trangThai === STATUS.DA_KY);
       const slXuatBanKyHdong = filteredItems.reduce((acc, item) => acc + item.soLuong, 0);
       const tonSl = data.tongSoLuong || 0
@@ -403,7 +410,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         nzWidth: '900px',
         nzFooter: null,
         nzComponentParams: {
-          dataTable: uniqueObjects.filter(s => s.luaChon),
+          dataTable: uniqueObjects,
           dataHeader: ['Tên tổ chức cá nhân', 'Số điện thoại', 'Mã số thuế'],
           dataColumn: ['tochucCanhan', 'sdt', 'mst'],
         },
