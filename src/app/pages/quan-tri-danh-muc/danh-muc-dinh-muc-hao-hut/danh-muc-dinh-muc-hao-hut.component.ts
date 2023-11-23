@@ -164,7 +164,11 @@ export class DanhMucDinhMucHaoHutComponent implements OnInit {
     data.hinhThucBq =data.listHtbq.toString();
     data.phuongThucBq = data.listPtbq.toString();
     data.apDungTai = data.listCuc.toString();
-    data.cloaiVthh = data.listCloaiVthh.toString();
+    if (data.listCloaiVthh && data.listCloaiVthh.length > 0) {
+      data.cloaiVthh = data.listCloaiVthh.toString();
+    } else {
+      data.cloaiVthh = this.listCloaiVthh.map(item => item.ma).toString();
+    }
     if (!this.checkValidators(data)) {
       this.notification.error(MESSAGE.ERROR, "Vui lòng không để trống!!")
       this.spinner.hide();
