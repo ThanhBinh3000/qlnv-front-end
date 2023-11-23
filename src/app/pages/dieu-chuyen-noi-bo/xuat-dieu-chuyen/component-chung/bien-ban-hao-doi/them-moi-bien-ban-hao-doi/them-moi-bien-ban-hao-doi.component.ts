@@ -34,6 +34,7 @@ import {
 import { PassDataBienBanHaoDoi } from '../bien-ban-hao-doi.component';
 import { PREVIEW } from 'src/app/constants/fileType';
 import { PhieuKiemNghiemChatLuongDieuChuyenService } from '../../services/dcnb-phieu-kiem-nghiem-chat-luong.service';
+import { MangLuoiKhoService } from 'src/app/services/qlnv-kho/mangLuoiKho.service';
 
 export const LIST_TRANG_THAI_BBHD = {
   [STATUS.DU_THAO]: "Dự thảo",
@@ -86,6 +87,7 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService: DanhMucService,
+    private mangLuoiKhoService: MangLuoiKhoService,
     private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
     private phieuXuatKhoDieuChuyenService: PhieuXuatKhoDieuChuyenService,
     private bienBanTinhKhoDieuChuyenService: BienBanTinhKhoDieuChuyenService,
@@ -118,6 +120,7 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
         danhSachBangKe: [new Array()],
         fileDinhKems: [new Array()],
         thongTinHaoHut: [new Array()],
+        tongSlNhap: [],
         tongSlXuatTheoQd: [],
         ngayKetThucXuatQd: [],
         tongSlXuatTheoTt: [],
@@ -460,9 +463,34 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
       this.loadSoBbTinhKho();
       this.loadDSPhieuKNCluong(data);
       if (this.formData.value.qdinhDccId) {
-        this.getThongTinPhieuXuatKho();
+        await this.getThongTinPhieuXuatKho();
+        this.getChiTietNganLoKho()
       }
     }
+  }
+  async getChiTietNganLoKho() {
+    const maNganLo = this.formData.value.maLoKho || this.formData.value.maNganKho;
+    const ngayKetThucXuatTt = this.formData.value.ngayKetThucXuatTt;
+    let ngayKtNhap = "";
+    if (maNganLo) {
+      const res = await this.mangLuoiKhoService.getDetailByMa(maNganLo);
+      if (res.msg === MESSAGE.SUCCESS) {
+        ngayKtNhap = res.data?.object?.ngayNhapDay;
+      }
+    }
+    const soThangBaoQuanqHang = ngayKtNhap && ngayKetThucXuatTt ? +dayjs(dayjs(ngayKetThucXuatTt, "DD/MM/YYYY").format("YYYY-MM-DD")).diff(dayjs(ngayKtNhap, "DD/MM/YYYY").format("YYYY-MM-DD"), 'month', true).toFixed(1) : "";
+    const sLHao = this.formData.value.tongSlNhap * this.formData.value.dinhMucHaoHut / 100;
+    const slHaoTt = this.formData.value.slConLaiTheoSs - this.formData.value.slConLaiTheoTt;
+    const tiLeHaoTt = this.formData.value.tongSlNhap ? slHaoTt * 100 / this.formData.value.tongSlNhap : '';
+    const slHaoThanhLy = sLHao;
+    const tiLeHaoThanhLy = this.formData.value.tongSlNhap ? slHaoThanhLy * 100 / this.formData.value.tongSlNhap : '';
+    const slHaoVuotDm = slHaoTt - sLHao > 0 ? slHaoTt - sLHao : '';
+    const tiLeHaoVuotDm = this.formData.value.tongSlNhap && slHaoVuotDm ? slHaoVuotDm * 100 / this.formData.value.tongSlNhap : '';
+    const slHaoDuoiDm = sLHao - slHaoTt > 0 ? sLHao - slHaoTt : '';
+    const tiLeHaoDuoiDm = this.formData.value.tongSlNhap && slHaoDuoiDm ? slHaoDuoiDm * 100 / this.formData.value.tongSlNhap : '';
+    this.formData.patchValue({
+      soThangBaoQuanqHang, sLHao, slHaoTt, tiLeHaoTt, slHaoThanhLy, tiLeHaoThanhLy, slHaoVuotDm, tiLeHaoVuotDm, slHaoDuoiDm, tiLeHaoDuoiDm,
+    })
   }
 
   // async onSelectSoBbTinhKho(id: number): Promise<void> {
@@ -531,16 +559,10 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
     const res = await this.bienBanTinhKhoDieuChuyenService.getDetail(id);
     if (res.msg === MESSAGE.SUCCESS) {
       const { tongSlXuatTheoTt, tongSlXuatTheoQd, slConLaiTheoSs, slConLaiTheoTt } = res.data;
-      const slHaoTt = Number(slConLaiTheoSs) - Number(slConLaiTheoTt);
-      let tiLeHaoTt = 0;
-      if (tongSlXuatTheoTt) {
-        tiLeHaoTt = slHaoTt / (tongSlXuatTheoTt * 100)
-      }
-
       this.formData.patchValue({
         soBbTinhKho: res.data.soBbTinhKho, tongSlXuatTheoQd: tongSlXuatTheoQd, tongSlXuatTheoTt: tongSlXuatTheoTt,
         ngayBatDauXuat: res.data.ngayBatDauXuat, ngayKetThucXuat: res.data.ngayKetThucXuat, ngayBatDauXuatTt: res.data.ngayBatDauXuat,
-        ngayKetThucXuatTt: res.data.ngayKetThucXuat, slHaoTt, donViTinh: res.data.donViTinh, tiLeHaoTt
+        ngayKetThucXuatTt: res.data.ngayKetThucXuat, donViTinh: res.data.donViTinh, slConLaiTheoSs, slConLaiTheoTt, tongSlNhap: res.data.tonKhoBanDau
       })
     }
   }
