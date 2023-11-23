@@ -44,24 +44,25 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
       nam: null,
       soDxuat: null,
       soQdPd: null,
-      soQdPdKqBdg: null,
-      ngayKyQdPdKqBdgTu: null,
-      ngayKyQdPdKqBdgDen: null,
+      soQdKq: null,
+      ngayKyQdKqTu: null,
+      ngayKyQdKqDen: null,
       loaiVthh: null,
     })
     this.filterTable = {
-      nam: '',
-      soQdPd: '',
-      soQdDcBdg: '',
-      soQdKq: '',
-      soDxuat: '',
-      ngayKyQdKq: '',
-      slDviTsan: '',
-      soDviTsanThanhCong: '',
-      soDviTsanKhongThanh: '',
-      tenCloaiVthh: '',
-      tenTrangThai: '',
-      ketQuaDauGia: '',
+      nam: null,
+      soQdPd: null,
+      soQdDc: null,
+      soQdKq: null,
+      soDxuat: null,
+      ngayKyQdKq: null,
+      slDviTsan: null,
+      soDviTsanThanhCong: null,
+      soDviTsanKhongThanh: null,
+      tenLoaiVthh: null,
+      tenCloaiVthh: null,
+      tenTrangThai: null,
+      ketQuaDauGia: null,
     };
     this.listTrangThai = [
       {
@@ -82,10 +83,10 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([
-        this.timKiem(),
-        this.searchDtl()
-      ]);
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+      })
+      await this.searchDtl();
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -94,18 +95,12 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
     }
   }
 
-  async timKiem() {
+  async clearFilter() {
+    this.formData.reset();
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
     })
-  }
-
-  async clearFilter() {
-    this.formData.reset();
-    await Promise.all([
-      this.timKiem(),
-      this.searchDtl()
-    ]);
+    await this.searchDtl()
   }
 
   async searchDtl() {

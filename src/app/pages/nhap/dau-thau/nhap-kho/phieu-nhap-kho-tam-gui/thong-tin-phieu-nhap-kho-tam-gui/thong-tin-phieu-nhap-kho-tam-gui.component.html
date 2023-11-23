@@ -353,7 +353,7 @@
               Chứng từ kèm theo
             </nz-form-label>
             <div class="list-file">
-              <file-list></file-list>
+              <file-list [data]="fileDinhKems" [disabled]="isView" [isViewDetail]="isView"></file-list>
             </div>
           </nz-form-item>
         </div>

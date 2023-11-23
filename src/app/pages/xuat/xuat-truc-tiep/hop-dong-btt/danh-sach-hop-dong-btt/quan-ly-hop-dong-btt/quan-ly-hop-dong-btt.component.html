@@ -353,8 +353,8 @@
             <th class="text-center"> Số lượng
               {{loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? '' : '(kg)'}}
             </th>
-            <th class="text-center"> Đơn giá</th>
-            <th class="text-center"> Thành tiền đã bao gồm thuế VAT (đ)</th>
+            <th class="text-center" *ngIf="userService.isChiCuc()"> Đơn giá</th>
+            <th class="text-center"> Thành tiền không VAT (đ)</th>
             <th class="text-left"> Trạng thái HĐ</th>
             <th class="text-left"> Số QĐ giao NV XH</th>
             <th class="text-left"> Trạng thái XH</th>
@@ -370,7 +370,9 @@
               <td class="text-left">{{data.ngayKyHopDong|date: 'dd/MM/YYYY' }}</td>
               <td class="text-left">{{data.tenBenMua }}</td>
               <td class="text-right">{{data.soLuong|number:globals.numberFormat:globals.locale }}</td>
-              <td class="text-right">{{data.dongia|number:globals.numberFormat:globals.locale }}</td>
+              <td class="text-right" *ngIf="userService.isChiCuc()">
+                {{data.donGia|number:globals.numberFormat:globals.locale }}
+              </td>
               <td class="text-right">{{data.thanhTien|number:globals.numberFormat:globals.locale }}</td>
               <td class="text-left">{{data.tenTrangThai}}</td>
               <td class="text-left">
@@ -400,15 +402,17 @@
             <tfoot>
             <tr>
               <th colspan="5" class="text-right bold text-blue"> Tổng</th>
-              <th
-                class="text-right bold text-blue"> {{ calcTong('soLuong')|number:globals.numberFormat:globals.locale }}</th>
+              <th class="text-right bold text-blue">
+                {{ calcTong('soLuong')|number:globals.numberFormat:globals.locale }}
+              </th>
+              <th *ngIf="userService.isChiCuc()"></th>
+              <th class="text-right bold text-blue">
+                {{ calcTong('thanhTien')|number:globals.numberFormat:globals.locale }}
+              </th>
               <th></th>
-              <th
-                class="text-right bold text-blue"> {{ calcTong('thanhTien')|number:globals.numberFormat:globals.locale }}</th>
               <th></th>
               <th></th>
               <th></th>
-              <th *ngIf="!userService.isTongCuc()"></th>
             </tr>
             </tfoot>
           </ng-container>

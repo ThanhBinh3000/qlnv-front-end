@@ -109,373 +109,366 @@
       </div>
     </form>
   </nz-card>
-  <div class='header header-green-background mg-t-10'>
-    <div class='header-text'>
-      <div class='title-chi-tieu'>
-        <span class='text-uppercase font-weight-bold'>KHO ĐANG CHỨA HÀNG</span>
-      </div>
-    </div>
-  </div>
-  <nz-table class='nowrap mg-t-10' [nzData]='dataTable' [nzFrontPagination]='false'
-            [nzShowPagination]='false' nzBordered  [nzScroll]="{ x: '1700px' }" style='max-height: 700px; overflow: scroll;'>
-    <thead>
-    <tr>
-      <th nzWidth='40px' rowSpan='2'>STT</th>
-      <th nzWidth='' rowSpan='2'>Điểm kho</th>
-      <th nzWidth='200px' rowSpan='2'>Nhà kho</th>
-      <th nzWidth='140px' rowSpan='2'>Tích lượng (tấn)</th>
-      <th nzWidth='140px' rowSpan='2'>Diện tích (m2)</th>
-      <th nzWidth='140px' rowSpan='2'>Khối tích (m3)</th>
-      <th nzWidth='270px' colSpan='3'>Giá trị còn lại tại thời điểm báo cáo (đ)</th>
-      <th nzWidth='270px' colSpan='3'>Giá trị còn lại dự kiến đến hết 31/12 (đ)</th>
-      <!--      <th nzWidth="220px">Giá trị bảo hiểm đề xuất (đ)</th>-->
-      <th nzWidth='100px' *ngIf='!isView' rowSpan='2'>Hành động</th>
-    </tr>
-    <tr>
-      <th nzWidth='90px'>Kho lấy theo giá trị hiện tại</th>
-      <th nzWidth='90px'>Kho hết khấu hao</th>
-      <th nzWidth='90px'>Tổng giá trị kho</th>
-      <th nzWidth='90px'>Kho lấy theo giá trị hiện tại</th>
-      <th nzWidth='90px'>Kho hết khấu hao</th>
-      <th nzWidth='90px'>Tổng giá trị kho</th>
-    </tr>
-    <tr *ngIf='!isView'>
-      <th></th>
-      <th>
-        <nz-select [(ngModel)]='rowItemKho.diemKho' [nzDisabled]='isView' (ngModelChange)='changDiemKho($event)'
-                   nzAllowClear='true'>
-          <nz-option *ngFor='let p of dsDiemKho' [nzValue]='p.maDvi' [nzLabel]='p.tenDvi'>
-          </nz-option>
-        </nz-select>
-      </th>
-      <th>
-        <nz-select [(ngModel)]='rowItemKho.nhaKho' [nzDisabled]='isView' (ngModelChange)='changeNhaKho($event)'
-                   nzAllowClear='true'>
-          <nz-option *ngFor='let p of dsNhaKho' [nzValue]='p.maDvi' [nzLabel]='p.tenDvi'>
-          </nz-option>
-        </nz-select>
-      </th>
-      <th>
-        <input class='money-input' currencyMask [options]='amount' [readOnly]='true'
-               [min]='0'
-               [(ngModel)]='rowItemKho.tichLuong'
-        />
-      </th>
-      <th>
-        <input class='money-input' currencyMask [options]='amount' [readOnly]='true'
-               [min]='0'
-               [(ngModel)]='rowItemKho.dienTich'
-        />
-      </th>
-      <th>
-        <input class='money-input' currencyMask [options]='amount' [readOnly]='true'
-               [min]='0'
-               [(ngModel)]='rowItemKho.khoiTich'
-        />
-      </th>
-      <th>
-        <input class='money-input' currencyMask [options]='amount'
-               [min]='0'
-               [(ngModel)]='rowItemKho.giaTriHtKhoHt'
-        />
-      </th>
-      <th>
-        <input class='money-input' currencyMask [options]='amount'
-               [min]='0'
-               [(ngModel)]='rowItemKho.giaTriHtKhoKh'
-        />
-      </th>
-      <th>
-        <input class='money-input' currencyMask [options]='amount' [readOnly]='true'
-               [min]='0'
-               [(ngModel)]='rowItemKho.giaTriHtTc'
-        />
-      </th>
-      <th>
-        <input class='money-input' currencyMask [options]='amount'
-               [min]='0'
-               [(ngModel)]='rowItemKho.giaTriDkKhoHt'
-        />
-      </th>
-      <th>
-        <input class='money-input' currencyMask [options]='amount'
-               [min]='0'
-               [(ngModel)]='rowItemKho.giaTriDkKhoKh'
-        />
-      </th>
-      <th>
-        <input class='money-input' currencyMask [options]='amount' [readOnly]='true'
-               [min]='0'
-               [(ngModel)]='rowItemKho.giaTriDkTc'
-        />
-      </th>
-      <th class='text-center' *ngIf='!isView'>
-        <a (click)='themMoiCtiet()'>
-          <i class='icon htvbdh_dau-cong'></i>
-        </a>
-        <a (click)='refresh()'>
-          <i class='fa fa-refresh'></i>
-        </a>
-      </th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor='let data of dataTable; let idx = index'>
-      <ng-container *ngIf='!dataEditKho[idx].edit ; else editTemplate'>
-        <td>{{idx + 1}}</td>
-        <td>{{data.tenDiemKho}}</td>
-        <td>{{data.tenNhaKho}}</td>
-        <td class='text-right'>{{data.tichLuong | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class='text-right'>{{data.dienTich | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class='text-right'>{{data.giaTriHt | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class='text-right'>{{data.giaTriDk | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class='text-right'>{{data.giaTriBhDx | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class='text-center' *ngIf='!isView'>
-          <a (click)='editRow(idx)'>
-            <i class='fa fa-pencil' title='Sửa'></i>
-          </a>
-          <a (click)='deleteItem(idx)'>
-            <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
-          </a>
-        </td>
-      </ng-container>
-      <ng-template #editTemplate>
-        <td></td>
-        <td>
-          <nz-select [(ngModel)]='dataEditKho[idx].data.diemKho' [nzDisabled]='isView'
-                     (ngModelChange)='changDiemKho($event, dataEditKho[idx].data )'
-                     nzAllowClear='true'>
-            <nz-option *ngFor='let p of dsDiemKho' [nzValue]='p.maDvi' [nzLabel]='p.tenDvi'>
-            </nz-option>
-          </nz-select>
-        </td>
-        <td>
-          <nz-select [(ngModel)]='dataEditKho[idx].data.nhaKho' [nzDisabled]='isView'
-                     (ngModelChange)='changeNhaKho($event, dataEditKho[idx].data )'
-                     nzAllowClear='true'>
-            <nz-option *ngFor='let p of dsNhaKho' [nzValue]='p.maDvi' [nzLabel]='p.tenDvi'>
-            </nz-option>
-          </nz-select>
-        </td>
-        <td>
-          <input class='money-input' currencyMask [options]='amount' [readOnly]='true'
-                 [min]='0'
-                 [(ngModel)]='dataEditKho[idx].data.tichLuong'
-          />
-        </td>
-        <td>
-          <input class='money-input' currencyMask [options]='amount' [readOnly]='true'
-                 [min]='0'
-                 [(ngModel)]='dataEditKho[idx].data.dienTich'
-          />
-        </td>
-        <td>
-          <input class='money-input' currencyMask [options]='amount'
-                 [min]='0'
-                 [(ngModel)]='dataEditKho[idx].data.giaTriHt'
-          />
-        </td>
-        <td>
-          <input class='money-input' currencyMask [options]='amount'
-                 [min]='0'
-                 [(ngModel)]='dataEditKho[idx].data.giaTriDk'
-          />
-        </td>
-        <td>
-          <input class='money-input' currencyMask [options]='amount'
-                 [min]='0'
-                 [(ngModel)]='dataEditKho[idx].data.giaTriBhDx'
-          />
-        </td>
-        <td class='text-center' *ngIf='!isView'>
-          <a class='save' (click)='saveDinhMuc(idx)'>
-            <i class='fa fa-save'></i>
-          </a>
-          <a (click)='cancelEdit(idx)'>
-            <i class='fa fa-ban do'></i> </a>
-        </td>
-      </ng-template>
-    </tr>
-    <tr>
-      <td></td>
-      <td class='font-weight-bold text-left'>Tổng cộng</td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td class='font-weight-bold text-right'>{{sumTable(dataTable, 'tichLuong') | number : '1.0-1' : 'vi_VN'}}</td>
-      <td class='font-weight-bold text-right'>{{sumTable(dataTable, 'dienTich') | number : '1.0-1' : 'vi_VN'}}</td>
-      <td class='font-weight-bold text-right'>{{sumTable(dataTable, 'giaTriHt') | number : '1.0-1' : 'vi_VN'}}</td>
-      <td class='font-weight-bold text-right'>{{sumTable(dataTable, 'giaTriDk') | number : '1.0-1' : 'vi_VN'}}</td>
-      <td class='font-weight-bold text-right'>{{sumTable(dataTable, 'giaTriBhDx')| number : '1.0-1' : 'vi_VN'}}</td>
-      <td></td>
-    </tr>
-    </tbody>
-  </nz-table>
-  <div class='header header-green-background mg-t-10'>
-    <div class='header-text'>
-      <div class='title-chi-tieu'>
-        <span class='text-uppercase font-weight-bold'>HÀNG DỰ TRỮ QUỐC GIA</span>
-      </div>
-    </div>
-  </div>
-  <nz-table class='nowrap mg-t-10' [nzData]='tableHangDtqg' [nzFrontPagination]='false'
-            [nzShowPagination]='false' nzBordered>
-    <thead>
-    <tr>
-      <th rowSpan='2' nzWidth='4%'>STT</th>
-      <th rowSpan='2' nzWidth='30%'>Loại hàng</th>
-      <th rowSpan='2' nzWidth='10%'>Đơn vị tính</th>
-      <th colSpan='2' nzWidth='15%'>Đến thời điểm hiện tại</th>
-      <th colSpan='2' nzWidth='15%'>Dự kiến đến hết 31/12</th>
-      <th rowSpan='2' nzWidth='10%'>Giá trị bảo hiểm đề xuất</th>
-      <th rowSpan='2' nzWidth='15%' *ngIf='!isView'>Hành động</th>
-    </tr>
-    <tr>
-      <th class='text-center'>Số lượng</th>
-      <th class='text-center'>Giá trị (đ)</th>
-      <th class='text-center'>Số lượng</th>
-      <th class='text-center'>Giá trị (đ)</th>
-    </tr>
-    <tr *ngIf='!isView'>
-      <th></th>
-      <th>
-        <nz-select nzShowSearch [(ngModel)]='rowItemHh.maHangHoa' [nzDisabled]='isView'
-                   (ngModelChange)='changHangHoa($event)'
-                   nzAllowClear>
-          <nz-option *ngFor='let p of listHangHoa' [nzValue]='p.ma' [nzLabel]='p.ten'>
-          </nz-option>
-        </nz-select>
-      </th>
-      <th>
-        <input nz-input [(ngModel)]='rowItemHh.donViTinh' readonly>
-      </th>
-      <th>
-        <nz-input-number [(ngModel)]='rowItemHh.soLuongHt' [nzSize]="'small'" [nzFormatter]='globals.formatter'
-                         nzDisabled
-                         [nzMin]='0'
-                         [nzParser]='globals.parser'></nz-input-number>
-      </th>
-      <th>
-        <nz-input-number [(ngModel)]='rowItemHh.giaTriHt' [nzSize]="'small'" [nzFormatter]='globals.formatter'
-                         nzDisabled
-                         [nzMin]='0'
-                         [nzParser]='globals.parser'></nz-input-number>
-      </th>
-      <th>
-        <nz-input-number [(ngModel)]='rowItemHh.soLuongDk' [nzSize]="'small'" [nzFormatter]='globals.formatter'
-                         [nzMin]='0'
-                         [nzParser]='globals.parser'></nz-input-number>
-      </th>
-      <th>
-        <nz-input-number [(ngModel)]='rowItemHh.giaTriDk' [nzSize]="'small'"
-                         [nzFormatter]='globals.formatter' [nzMin]='0'
-                         [nzParser]='globals.parser'></nz-input-number>
-      </th>
-      <th>
-        <nz-input-number [(ngModel)]='rowItemHh.giaTriBhDx' [nzSize]="'small'" [nzFormatter]='globals.formatter'
-                         [nzMin]='0'
-                         [nzParser]='globals.parser'></nz-input-number>
-      </th>
-      <th class='text-center' *ngIf='!isView'>
-        <a (click)='themMoiCtietHh()'>
-          <i class='icon htvbdh_dau-cong'></i>
-        </a>
-        <a (click)='refreshHh()'>
-          <i class='fa fa-refresh'></i>
-        </a>
-      </th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor='let data of tableHangDtqg; let idx = index'>
-      <ng-container *ngIf='!dataEditHh[idx].edit ; else editTemplate'>
-        <td>{{idx + 1}}</td>
-        <td>{{data.tenHangHoa}}</td>
-        <td>{{data.donViTinh}}</td>
-        <td class='text-right'>{{data.soLuongHt | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class='text-right'>{{data.giaTriHt | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class='text-right'>{{data.soLuongDk | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class='text-right'>{{data.giaTriDk | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class='text-right'>{{data.giaTriBhDx | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class='text-center' *ngIf='!isView'>
-          <a (click)='editRowHh(idx)'>
-            <i class='fa fa-pencil' title='Sửa'></i>
-          </a>
-          <a (click)='deleteItemHh(idx)'>
-            <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
-          </a>
-        </td>
-      </ng-container>
-      <ng-template #editTemplate>
-        <td></td>
-        <td>
-          <nz-select [(ngModel)]='dataEditHh[idx].data.maHangHoa' [nzDisabled]='isView'
-                     (ngModelChange)='changHangHoa($event , dataEditHh[idx].data)'
-                     nzAllowClear='true'>
-            <nz-option *ngFor='let p of listHangHoa' [nzValue]='p.ma' [nzLabel]='p.ten'>
-            </nz-option>
-          </nz-select>
-        </td>
-        <td>
-          <input nz-input [(ngModel)]='dataEditHh[idx].data.donViTinh' readonly>
-        </td>
-        <td>
-          <nz-input-number [(ngModel)]='dataEditHh[idx].data.soLuongHt' [nzSize]="'small'"
-                           [nzFormatter]='globals.formatter'
-                           nzDisabled
-                           [nzMin]='0'
-                           [nzParser]='globals.parser'></nz-input-number>
-        </td>
-        <td>
-          <nz-input-number [(ngModel)]='dataEditHh[idx].data.giaTriHt' [nzSize]="'small'"
-                           [nzFormatter]='globals.formatter'
-                           nzDisabled
-                           [nzMin]='0'
-                           [nzParser]='globals.parser'></nz-input-number>
-        </td>
-        <td>
-          <nz-input-number [(ngModel)]='dataEditHh[idx].data.soLuongDk' [nzSize]="'small'"
-                           [nzFormatter]='globals.formatter'
-                           [nzMin]='0'
-                           [nzParser]='globals.parser'></nz-input-number>
-        </td>
-        <td>
-          <nz-input-number [(ngModel)]='dataEditHh[idx].data.giaTriDk' [nzSize]="'small'"
-                           [nzFormatter]='globals.formatter' [nzMin]='0'
-                           [nzParser]='globals.parser'></nz-input-number>
-        </td>
-        <td>
-          <nz-input-number [(ngModel)]='dataEditHh[idx].data.giaTriBhDx' [nzSize]="'small'"
-                           [nzFormatter]='globals.formatter'
-                           [nzMin]='0'
-                           [nzParser]='globals.parser'></nz-input-number>
-        </td>
-        <td class='text-center' *ngIf='!isView'>
-          <a class='save' (click)='saveEditHh(idx)'>
-            <i class='fa fa-save'></i>
-          </a>
-          <a (click)='cancelEditHh(idx)'>
-            <i class='fa fa-ban do'></i> </a>
-        </td>
-      </ng-template>
-    </tr>
+  <nz-collapse nzAccordion>
+    <nz-collapse-panel [nzHeader]="'KHO ĐANG CHỨA HÀNG'" [nzActive]="true">
+      <nz-table class='wrap pd-10 mg-t-10' [nzData]='dataTable' [nzFrontPagination]='false'
+                [nzShowPagination]='false' nzBordered  [nzScroll]="{ x: '2000px' }" style='max-height: 700px; overflow: scroll;'>
+        <thead>
+        <tr>
+          <th width='40px' rowSpan='2'>STT</th>
+          <th width='' rowSpan='2'>Điểm kho</th>
+          <th width='200px' rowSpan='2'>Nhà kho</th>
+          <th width='140px' rowSpan='2'>Tích lượng (tấn)</th>
+          <th width='140px' rowSpan='2'>Diện tích (m2)</th>
+          <th width='140px' rowSpan='2'>Khối tích (m3)</th>
+          <th width='360px' colSpan='3'>Giá trị còn lại tại thời điểm báo cáo (đ)</th>
+          <th width='360px' colSpan='3'>Giá trị còn lại dự kiến đến hết 31/12 (đ)</th>
+          <th width='100px' *ngIf='!isView' nzRight rowSpan='2'>Hành động</th>
+        </tr>
+        <tr>
+          <th >Kho lấy theo giá trị hiện tại</th>
+          <th >Kho hết khấu hao</th>
+          <th >Tổng giá trị kho</th>
+          <th >Kho lấy theo giá trị hiện tại</th>
+          <th >Kho hết khấu hao</th>
+          <th >Tổng giá trị kho</th>
+        </tr>
+        <tr *ngIf='!isView'>
+          <th></th>
+          <th>
+            <nz-select [(ngModel)]='rowItemKho.diemKho' [nzDisabled]='isView' (ngModelChange)='changDiemKho($event)'
+                       nzAllowClear='true'>
+              <nz-option *ngFor='let p of dsDiemKho' [nzValue]='p.maDvi' [nzLabel]='p.tenDvi'>
+              </nz-option>
+            </nz-select>
+          </th>
+          <th>
+            <nz-select [(ngModel)]='rowItemKho.nhaKho' [nzDisabled]='isView' (ngModelChange)='changeNhaKho($event)'
+                       nzAllowClear='true'>
+              <nz-option *ngFor='let p of dsNhaKho' [nzValue]='p.maDvi' [nzLabel]='p.tenDvi'>
+              </nz-option>
+            </nz-select>
+          </th>
+          <th>
+            <input class='money-input' currencyMask [options]='amount' [readOnly]='true'
+                   [min]='0'
+                   [(ngModel)]='rowItemKho.tichLuong'
+            />
+          </th>
+          <th>
+            <input class='money-input' currencyMask [options]='amount' [readOnly]='true'
+                   [min]='0'
+                   [(ngModel)]='rowItemKho.dienTich'
+            />
+          </th>
+          <th>
+            <input class='money-input' currencyMask [options]='amount' [readOnly]='true'
+                   [min]='0'
+                   [(ngModel)]='rowItemKho.khoiTich'
+            />
+          </th>
+          <th>
+            <input class='money-input' currencyMask [options]='amount'
+                   [min]='0'
+                   [(ngModel)]='rowItemKho.giaTriHtKhoHt'
+            />
+          </th>
+          <th>
+            <input class='money-input' currencyMask [options]='amount'
+                   [min]='0'
+                   [(ngModel)]='rowItemKho.giaTriHtKhoKh'
+            />
+          </th>
+          <th>
+            <input class='money-input' currencyMask [options]='amount' [readOnly]='true'
+                   [min]='0'
+                   [(ngModel)]='rowItemKho.giaTriHtTc'
+            />
+          </th>
+          <th>
+            <input class='money-input' currencyMask [options]='amount'
+                   [min]='0'
+                   [(ngModel)]='rowItemKho.giaTriDkKhoHt'
+            />
+          </th>
+          <th>
+            <input class='money-input' currencyMask [options]='amount'
+                   [min]='0'
+                   [(ngModel)]='rowItemKho.giaTriDkKhoKh'
+            />
+          </th>
+          <th>
+            <input class='money-input' currencyMask [options]='amount' [readOnly]='true'
+                   [min]='0'
+                   [(ngModel)]='rowItemKho.giaTriDkTc'
+            />
+          </th>
+          <th class='text-center' *ngIf='!isView' nzRight>
+            <a (click)='themMoiCtiet()'>
+              <i class='icon htvbdh_dau-cong'></i>
+            </a>
+            <a (click)='refresh()'>
+              <i class='fa fa-refresh'></i>
+            </a>
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor='let data of dataTable; let idx = index'>
+          <ng-container *ngIf='!dataEditKho[idx].edit ; else editTemplate'>
+            <td>{{idx + 1}}</td>
+            <td>{{data.tenDiemKho}}</td>
+            <td>{{data.tenNhaKho}}</td>
+            <td class='text-right'>{{data.tichLuong | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.dienTich | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.giaTriHt | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.giaTriDk | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.giaTriBhDx | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-center' *ngIf='!isView' nzRight>
+              <a (click)='editRow(idx)'>
+                <i class='fa fa-pencil' title='Sửa'></i>
+              </a>
+              <a (click)='deleteItem(idx)'>
+                <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
+              </a>
+            </td>
+          </ng-container>
+          <ng-template #editTemplate>
+            <td></td>
+            <td>
+              <nz-select [(ngModel)]='dataEditKho[idx].data.diemKho' [nzDisabled]='isView'
+                         (ngModelChange)='changDiemKho($event, dataEditKho[idx].data )'
+                         nzAllowClear='true'>
+                <nz-option *ngFor='let p of dsDiemKho' [nzValue]='p.maDvi' [nzLabel]='p.tenDvi'>
+                </nz-option>
+              </nz-select>
+            </td>
+            <td>
+              <nz-select [(ngModel)]='dataEditKho[idx].data.nhaKho' [nzDisabled]='isView'
+                         (ngModelChange)='changeNhaKho($event, dataEditKho[idx].data )'
+                         nzAllowClear='true'>
+                <nz-option *ngFor='let p of dsNhaKho' [nzValue]='p.maDvi' [nzLabel]='p.tenDvi'>
+                </nz-option>
+              </nz-select>
+            </td>
+            <td>
+              <input class='money-input' currencyMask [options]='amount' [readOnly]='true'
+                     [min]='0'
+                     [(ngModel)]='dataEditKho[idx].data.tichLuong'
+              />
+            </td>
+            <td>
+              <input class='money-input' currencyMask [options]='amount' [readOnly]='true'
+                     [min]='0'
+                     [(ngModel)]='dataEditKho[idx].data.dienTich'
+              />
+            </td>
+            <td>
+              <input class='money-input' currencyMask [options]='amount'
+                     [min]='0'
+                     [(ngModel)]='dataEditKho[idx].data.giaTriHt'
+              />
+            </td>
+            <td>
+              <input class='money-input' currencyMask [options]='amount'
+                     [min]='0'
+                     [(ngModel)]='dataEditKho[idx].data.giaTriDk'
+              />
+            </td>
+            <td>
+              <input class='money-input' currencyMask [options]='amount'
+                     [min]='0'
+                     [(ngModel)]='dataEditKho[idx].data.giaTriBhDx'
+              />
+            </td>
+            <td class='text-center' *ngIf='!isView' nzRight>
+              <a class='save' (click)='saveDinhMuc(idx)'>
+                <i class='fa fa-save'></i>
+              </a>
+              <a (click)='cancelEdit(idx)'>
+                <i class='fa fa-ban do'></i> </a>
+            </td>
+          </ng-template>
+        </tr>
+        <tr>
+          <td></td>
+          <td class='font-weight-bold text-left'>Tổng cộng</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td class='font-weight-bold text-right'>{{sumTable(dataTable, 'tichLuong') | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='font-weight-bold text-right'>{{sumTable(dataTable, 'dienTich') | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='font-weight-bold text-right'>{{sumTable(dataTable, 'giaTriHt') | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='font-weight-bold text-right'>{{sumTable(dataTable, 'giaTriDk') | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='font-weight-bold text-right'>{{sumTable(dataTable, 'giaTriBhDx')| number : '1.0-1' : 'vi_VN'}}</td>
+          <td></td>
+        </tr>
+        </tbody>
+      </nz-table>
+    </nz-collapse-panel>
+  </nz-collapse>
+  <nz-collapse nzAccordion>
+    <nz-collapse-panel [nzHeader]="'HÀNG DỰ TRỮ QUỐC GIA'" [nzActive]="true">
+      <nz-table class='nowrap mg-t-10' [nzData]='tableHangDtqg' [nzFrontPagination]='false'
+                [nzShowPagination]='false' nzBordered>
+        <thead>
+        <tr>
+          <th rowSpan='2' nzWidth='4%'>STT</th>
+          <th rowSpan='2' nzWidth='30%'>Loại hàng</th>
+          <th rowSpan='2' nzWidth='10%'>Đơn vị tính</th>
+          <th colSpan='2' nzWidth='15%'>Đến thời điểm hiện tại</th>
+          <th colSpan='2' nzWidth='15%'>Dự kiến đến hết 31/12</th>
+          <th rowSpan='2' nzWidth='10%'>Giá trị bảo hiểm đề xuất</th>
+          <th rowSpan='2' nzWidth='15%' *ngIf='!isView'>Hành động</th>
+        </tr>
+        <tr>
+          <th class='text-center'>Số lượng</th>
+          <th class='text-center'>Giá trị (đ)</th>
+          <th class='text-center'>Số lượng</th>
+          <th class='text-center'>Giá trị (đ)</th>
+        </tr>
+        <tr *ngIf='!isView'>
+          <th></th>
+          <th>
+            <nz-select nzShowSearch [(ngModel)]='rowItemHh.maHangHoa' [nzDisabled]='isView'
+                       (ngModelChange)='changHangHoa($event)'
+                       nzAllowClear>
+              <nz-option *ngFor='let p of listHangHoa' [nzValue]='p.ma' [nzLabel]='p.ten'>
+              </nz-option>
+            </nz-select>
+          </th>
+          <th>
+            <input nz-input [(ngModel)]='rowItemHh.donViTinh' readonly>
+          </th>
+          <th>
+            <nz-input-number [(ngModel)]='rowItemHh.soLuongHt' [nzSize]="'small'" [nzFormatter]='globals.formatter'
+                             nzDisabled
+                             [nzMin]='0'
+                             [nzParser]='globals.parser'></nz-input-number>
+          </th>
+          <th>
+            <nz-input-number [(ngModel)]='rowItemHh.giaTriHt' [nzSize]="'small'" [nzFormatter]='globals.formatter'
+                             nzDisabled
+                             [nzMin]='0'
+                             [nzParser]='globals.parser'></nz-input-number>
+          </th>
+          <th>
+            <nz-input-number [(ngModel)]='rowItemHh.soLuongDk' [nzSize]="'small'" [nzFormatter]='globals.formatter'
+                             [nzMin]='0'
+                             [nzParser]='globals.parser'></nz-input-number>
+          </th>
+          <th>
+            <nz-input-number [(ngModel)]='rowItemHh.giaTriDk' [nzSize]="'small'"
+                             [nzFormatter]='globals.formatter' [nzMin]='0'
+                             [nzParser]='globals.parser'></nz-input-number>
+          </th>
+          <th>
+            <nz-input-number [(ngModel)]='rowItemHh.giaTriBhDx' [nzSize]="'small'" [nzFormatter]='globals.formatter'
+                             [nzMin]='0'
+                             [nzParser]='globals.parser'></nz-input-number>
+          </th>
+          <th class='text-center' *ngIf='!isView'>
+            <a (click)='themMoiCtietHh()'>
+              <i class='icon htvbdh_dau-cong'></i>
+            </a>
+            <a (click)='refreshHh()'>
+              <i class='fa fa-refresh'></i>
+            </a>
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor='let data of tableHangDtqg; let idx = index'>
+          <ng-container *ngIf='!dataEditHh[idx].edit ; else editTemplate'>
+            <td>{{idx + 1}}</td>
+            <td>{{data.tenHangHoa}}</td>
+            <td>{{data.donViTinh}}</td>
+            <td class='text-right'>{{data.soLuongHt | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.giaTriHt | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.soLuongDk | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.giaTriDk | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.giaTriBhDx | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-center' *ngIf='!isView'>
+              <a (click)='editRowHh(idx)'>
+                <i class='fa fa-pencil' title='Sửa'></i>
+              </a>
+              <a (click)='deleteItemHh(idx)'>
+                <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
+              </a>
+            </td>
+          </ng-container>
+          <ng-template #editTemplate>
+            <td></td>
+            <td>
+              <nz-select [(ngModel)]='dataEditHh[idx].data.maHangHoa' [nzDisabled]='isView'
+                         (ngModelChange)='changHangHoa($event , dataEditHh[idx].data)'
+                         nzAllowClear='true'>
+                <nz-option *ngFor='let p of listHangHoa' [nzValue]='p.ma' [nzLabel]='p.ten'>
+                </nz-option>
+              </nz-select>
+            </td>
+            <td>
+              <input nz-input [(ngModel)]='dataEditHh[idx].data.donViTinh' readonly>
+            </td>
+            <td>
+              <nz-input-number [(ngModel)]='dataEditHh[idx].data.soLuongHt' [nzSize]="'small'"
+                               [nzFormatter]='globals.formatter'
+                               nzDisabled
+                               [nzMin]='0'
+                               [nzParser]='globals.parser'></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [(ngModel)]='dataEditHh[idx].data.giaTriHt' [nzSize]="'small'"
+                               [nzFormatter]='globals.formatter'
+                               nzDisabled
+                               [nzMin]='0'
+                               [nzParser]='globals.parser'></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [(ngModel)]='dataEditHh[idx].data.soLuongDk' [nzSize]="'small'"
+                               [nzFormatter]='globals.formatter'
+                               [nzMin]='0'
+                               [nzParser]='globals.parser'></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [(ngModel)]='dataEditHh[idx].data.giaTriDk' [nzSize]="'small'"
+                               [nzFormatter]='globals.formatter' [nzMin]='0'
+                               [nzParser]='globals.parser'></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [(ngModel)]='dataEditHh[idx].data.giaTriBhDx' [nzSize]="'small'"
+                               [nzFormatter]='globals.formatter'
+                               [nzMin]='0'
+                               [nzParser]='globals.parser'></nz-input-number>
+            </td>
+            <td class='text-center' *ngIf='!isView'>
+              <a class='save' (click)='saveEditHh(idx)'>
+                <i class='fa fa-save'></i>
+              </a>
+              <a (click)='cancelEditHh(idx)'>
+                <i class='fa fa-ban do'></i> </a>
+            </td>
+          </ng-template>
+        </tr>
 
-    <tr>
-      <td></td>
-      <td class='font-weight-bold text-left'>Tổng cộng</td>
-      <td></td>
-      <td></td>
-      <td class='font-weight-bold text-right'>{{sumTable(tableHangDtqg, 'giaTriHt') | number : '1.0-1' : 'vi_VN'}}</td>
-      <td></td>
-      <td class='font-weight-bold text-right'>{{sumTable(tableHangDtqg, 'giaTriDk') | number : '1.0-1' : 'vi_VN'}}</td>
-      <td
-        class='font-weight-bold text-right'>{{sumTable(tableHangDtqg, 'giaTriBhDx') | number : '1.0-1' : 'vi_VN'}}</td>
-      <td></td>
-    </tr>
-    </tbody>
-  </nz-table>
+        <tr>
+          <td></td>
+          <td class='font-weight-bold text-left'>Tổng cộng</td>
+          <td></td>
+          <td></td>
+          <td class='font-weight-bold text-right'>{{sumTable(tableHangDtqg, 'giaTriHt') | number : '1.0-1' : 'vi_VN'}}</td>
+          <td></td>
+          <td class='font-weight-bold text-right'>{{sumTable(tableHangDtqg, 'giaTriDk') | number : '1.0-1' : 'vi_VN'}}</td>
+          <td
+            class='font-weight-bold text-right'>{{sumTable(tableHangDtqg, 'giaTriBhDx') | number : '1.0-1' : 'vi_VN'}}</td>
+          <td></td>
+        </tr>
+        </tbody>
+      </nz-table>
+    </nz-collapse-panel>
+  </nz-collapse>
 </div>
 <ng-template #error let-control>
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
