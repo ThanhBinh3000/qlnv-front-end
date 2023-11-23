@@ -473,7 +473,7 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
   }
   async getDinhMucHaoHut(cloaiVthh: string, loaiVthh: string, soThangBaoQuanqHang: number) {
     const body = {
-      loaiVthh, cloaiVthh, apDungTai: this.userInfo.MA_DVI.slice(0, -2)
+      loaiVthh, cloaiVthh
     }
     let hinhThucBq = [];
     let loaiHinhBq = [];
@@ -515,7 +515,7 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
     const ngayKetThucXuatTt = this.formData.value.ngayKetThucXuatTt;
     let ngayKtNhap = "";
     if (maNganLo) {
-      const res = await this.mangLuoiKhoService.getDetailByMa(maNganLo);
+      const res = await this.mangLuoiKhoService.getDetailByMa({ maDvi: maNganLo });
       if (res.msg === MESSAGE.SUCCESS) {
         ngayKtNhap = res.data?.object?.ngayNhapDay;
       }
