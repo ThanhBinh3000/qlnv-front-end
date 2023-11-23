@@ -63,11 +63,19 @@ export class DialogThemMoiDmNhomHangComponent extends Base2Component implements 
     let body = {};
     if (this.nhomCcdc != null) {
       body = {
-        nhomCcdc: this.nhomCcdc
+        nhomCcdc: this.nhomCcdc,
+        paggingReq: {
+          limit: this.globals.prop.MAX_INTERGER,
+          page: 0
+        }
       }
     } else {
       body = {
-        nhomCcdc: [1]
+        nhomCcdc: [1],
+        paggingReq: {
+          limit: this.globals.prop.MAX_INTERGER,
+          page: 0
+        }
       }
     }
     this.listMatHang = []
