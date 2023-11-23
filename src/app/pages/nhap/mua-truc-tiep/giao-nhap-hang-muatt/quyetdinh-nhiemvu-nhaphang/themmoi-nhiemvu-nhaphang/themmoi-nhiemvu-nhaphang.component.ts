@@ -525,7 +525,10 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
           //     return prev;
           //   }, 0);
           // })
-
+          let hhQdGiaoNvNhangDtl = null;
+          if(this.userService.isChiCuc()){
+            hhQdGiaoNvNhangDtl = data.hhQdGiaoNvNhangDtlList.filter(x => x.maDvi.includes(this.userInfo.MA_DVI))
+          }
           this.formData.patchValue({
             id: data.id,
             namNhap: data.namNhap,
@@ -541,7 +544,7 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
             tenCloaiVthh: data.tenCloaiVthh,
             cloaiVthh: data.cloaiVthh,
             trangThai: data.trangThai,
-            trangThaiDtl: data.hhQdGiaoNvNhangDtlList[0].trangThai,
+            trangThaiDtl: hhQdGiaoNvNhangDtl?.trangThai,
             tenTrangThai: data.tenTrangThai,
             lyDoTuChoi: data.ldoTuchoi,
             idHd: data.idHd,
