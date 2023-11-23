@@ -216,8 +216,8 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     if (this.formData.value.idPhieuKnCl) {
       const res = await this.phieuKiemNghiemChatLuongService.getDetail(this.formData.value.idPhieuKnCl);
       if (res.msg == MESSAGE.SUCCESS) {
-        // const slHangBaoQuan = res.data.slHangBaoQuan ? res.data.slHangBaoQuan : '';
-        const slHangBaoQuan = Array.isArray(res.data.xhPhieuKnclDtl) && res.data.xhPhieuKnclDtl.find(f => f.type === 'SO_LUONG_HANG_BAO_QUAN') ? res.data.xhPhieuKnclDtl.find(f => f.type === 'SO_LUONG_HANG_BAO_QUAN').soLuong : '';
+        const slHangBaoQuan = res.data.slHangBaoQuan ? res.data.slHangBaoQuan : '';
+        // const slHangBaoQuan = Array.isArray(res.data.xhPhieuKnclDtl) && res.data.xhPhieuKnclDtl.find(f => f.type === 'SO_LUONG_HANG_BAO_QUAN') ? res.data.xhPhieuKnclDtl.find(f => f.type === 'SO_LUONG_HANG_BAO_QUAN').soLuong : '';
         this.formData.patchValue({ tongSlNhap: slHangBaoQuan });
       }
     }
@@ -285,22 +285,22 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       this.bindingDataDdNhap(data);
     });
   }
-  async phieuXuatKho(soQd){
+  async phieuXuatKho(soQd) {
     let body = {
       soQdGiaoNvXh: soQd,
     }
     let res = await this.bienBanTinhKhoService.search(body)
-    console.log(res,"res");
+    console.log(res, "res");
     if (res.msg == MESSAGE.SUCCESS) {
       this.bbTinhKho = res.data.content;
-      console.log(this.listDiaDiemNhap,"this.listDiaDiemNhap")
-      console.log(this.bbTinhKho,"this.bbTinhKho")
+      console.log(this.listDiaDiemNhap, "this.listDiaDiemNhap")
+      console.log(this.bbTinhKho, "this.bbTinhKho")
       let phieuXk = [
         ...this.listDiaDiemNhap.filter((e) => {
           return !this.bbTinhKho.some((bb) => {
             if (bb.maLoKho.length > 0 && e.maLoKho.length > 0) {
               return bb.maLoKho === e.maLoKho;
-            }else {
+            } else {
               return bb.maNganKho === e.maNganKho;
             }
           })
