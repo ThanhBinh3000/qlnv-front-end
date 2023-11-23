@@ -64,6 +64,7 @@ export class ThongTinPhieuNhapKhoTamGuiComponent extends Base2Component implemen
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
   detailHopDong: any = {};
   listFileDinhKem: any[] = [];
+  fileDinhKems: any[] = [];
   listHopDong: any[] = [];
   formData: FormGroup;
   listDiaDiemNhap: any[] = [];
@@ -179,6 +180,7 @@ export class ThongTinPhieuNhapKhoTamGuiComponent extends Base2Component implemen
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
         const data = res.data;
+        this.fileDinhKems = data.fileDinhKems;
         this.helperService.bidingDataInFormGroup(this.formData, data);
         this.dataTable = data.children
       }
@@ -260,6 +262,7 @@ export class ThongTinPhieuNhapKhoTamGuiComponent extends Base2Component implemen
       let body = this.formData.value;
       body.children = this.dataTable;
       body.thoiGianGiaoNhan = pipe.transform(this.formData.value.thoiGianGiaoNhan, 'yyyy-MM-dd HH:mm')
+      body.fileDinhKems = this.fileDinhKems;
       let res;
       if (this.formData.get('id').value > 0) {
         res = await this.phieuNhapKhoTamGuiService.update(body);
