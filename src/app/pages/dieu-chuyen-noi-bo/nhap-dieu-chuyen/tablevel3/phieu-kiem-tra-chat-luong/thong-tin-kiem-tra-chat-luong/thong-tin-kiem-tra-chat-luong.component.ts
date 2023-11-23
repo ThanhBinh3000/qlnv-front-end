@@ -151,7 +151,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
       thayDoiThuKho: true
     })
-    this.getPPKTCL()
+    // this.getPPKTCL()
 
     if (this.idInput) {
       await this.loadChiTiet(this.idInput)
