@@ -14,29 +14,35 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
-        <button type="button" class="btn btn-sub ml-2" (click)="xemTruoc(idInput,templateName)">
+        <button type="button" class="btn btn-sub ml-2" *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PNK_IN')"
+                (click)="xemTruoc(idInput,templateName)">
           <i class="icon htvbdh_totrinh"></i>
           <span> In/Xem trước </span>
         </button>
         <button class="btn btn-sub xanh-nhat ml-2" type="button"
-                *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC  "
+                *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PNK_THEM') && this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC  "
                 (click)="saveAndSend(formData.value,STATUS.CHO_DUYET_LDCC,'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Lưu và gửi duyệt</span>
 
         </button>
-        <button type="button" class="btn btn-sub do ml-2" *ngIf="  this.userService.isChiCuc() && isDisabled()"
+        <button type="button" class="btn btn-sub do ml-2"
+                *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PNK_DUYETLDCC') &&
+                this.userService.isChiCuc() && isDisabled()"
                 (click)="tuChoi()">
           <i class="icon htvbdh_tcdt_tuchoi do"></i>
           <span>Từ chối</span>
         </button>
-        <button class="btn btn-sub xanh-nhat ml-2" *ngIf="  this.userService.isChiCuc() && isDisabled()"
+        <button class="btn btn-sub xanh-nhat ml-2"
+                *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PNK_DUYETLDCC') &&
+                this.userService.isChiCuc() && isDisabled()"
                 (click)="pheDuyet()">
           <i class="icon htvbdh_tcdt_pheduyet "></i>
           <span>Duyệt</span>
         </button>
         <button class="btn btn-sub xanh ml-2"
-                *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC "
+                *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PNK_THEM') &&
+                this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC "
                 (click)="save()">
           <i class="icon  htvbdh_tcdt_save"></i>
           <span>Lưu</span>
