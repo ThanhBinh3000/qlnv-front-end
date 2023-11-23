@@ -21,7 +21,6 @@ export class QuyetDinhChaoGiaComponent extends Base2Component implements OnInit 
   @Input() loaiVthh: string;
   LOAI_HANG_DTQG = LOAI_HANG_DTQG
   isView = false;
-  userdetail: any = {};
   idQdPdKh: number = 0;
   isViewQdPdKh: boolean = false;
   listTrangThai: any = [];
@@ -43,17 +42,14 @@ export class QuyetDinhChaoGiaComponent extends Base2Component implements OnInit 
       ngayCgiaDen: null,
     });
     this.filterTable = {
-      soQdKq: '',
-      ngayKy: '',
-      maDvi: '',
-      tenDvi: '',
-      soQdPd: '',
-      loaiVthh: '',
-      tenLoaiVthh: '',
-      cloaiVthh: '',
-      tenCloaiVthh: '',
-      trangThai: '',
-      tenTrangThai: '',
+      soQdKq: null,
+      ngayKy: null,
+      trichYeu: null,
+      tenDvi: null,
+      soQdPd: null,
+      tenLoaiVthh: null,
+      tenCloaiVthh: null,
+      tenTrangThai: null,
     };
     this.listTrangThai = [
       {
@@ -86,37 +82,16 @@ export class QuyetDinhChaoGiaComponent extends Base2Component implements OnInit 
   async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([
-        this.timKiem(),
-        this.search(),
-        this.initData()
-      ]);
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+      })
+      await this.search();
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
     }
-  }
-
-  async initData() {
-    this.userInfo = this.userService.getUserLogin();
-    this.userdetail.maDvi = this.userInfo.MA_DVI;
-    this.userdetail.tenDvi = this.userInfo.TEN_DVI;
-  }
-
-  async timKiem() {
-    this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
-    })
-  }
-
-  async clearFilter() {
-    this.formData.reset();
-    await Promise.all([
-      this.timKiem(),
-      this.search()
-    ]);
   }
 
   redirectDetail(id, isView: boolean) {

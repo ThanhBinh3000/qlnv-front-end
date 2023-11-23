@@ -58,20 +58,20 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
     });
 
     this.filterTable = {
-      namKh: '',
-      soDxuat: '',
-      ngayTao: '',
-      ngayPduyet: '',
-      soQdPd: '',
-      ngayKyQd: '',
-      trichYeu: '',
-      tenLoaiVthh: '',
-      tenCloaiVthh: '',
-      slDviTsan: '',
-      slHdDaKy: '',
-      soQdCtieu: '',
-      tenTrangThaiTh: '',
-      idThop: '',
+      namKh: null,
+      soDxuat: null,
+      ngayTao: null,
+      ngayPduyet: null,
+      soQdPd: null,
+      ngayKyQd: null,
+      trichYeu: null,
+      tenLoaiVthh: null,
+      tenCloaiVthh: null,
+      slDviTsan: null,
+      soQdCtieu: null,
+      tenTrangThai: null,
+      tenTrangThaiTh: null,
+      idThop: null,
     };
 
     this.listTrangThai = [
@@ -128,11 +128,11 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
   async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([
-        this.timKiem(),
-        this.search(),
-        this.loadDsTong()
-      ]);
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+      })
+      await this.loadDsTong();
+      await this.search();
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -144,17 +144,6 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
   async loadDsTong() {
     const dsTong = await this.donviService.layDonViCon();
     this.dsDonvi = isEmpty(dsTong) ? [] : dsTong.data;
-  }
-
-  async timKiem() {
-    this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
-    })
-  }
-
-  async clearFilter() {
-    this.formData.reset();
-    await Promise.all([this.timKiem(), this.search()]);
   }
 
   redirectDetail(id, isView: boolean) {

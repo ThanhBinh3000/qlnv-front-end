@@ -178,8 +178,8 @@
                (click)="redirectToChiTiet(false, data.id)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a *ngIf="true"
-               (click)="showButtonPheDuyet(data.trangThai, 'QLKT_QHKHKT_KHSUACHUALON_TH')">
+            <a *ngIf="showButtonPheDuyet(data.trangThai, 'QLKT_QHKHKT_KHSUACHUALON_TH')"
+               (click)="redirectToChiTiet(true, data.id)">
               <i class="icon htvbdh_tcdt_pheduyet"></i>
             </a>
             <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_TH_XOA')" (click)="delete(data)">

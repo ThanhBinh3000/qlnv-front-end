@@ -1,52 +1,43 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
-import {Globals} from "../../../../../../../shared/globals";
 import {NgxSpinnerService} from 'ngx-spinner';
-import {HelperService} from 'src/app/services/helper.service';
 import {NzModalService} from "ng-zorro-antd/modal";
 import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {
-  DialogThemMoiXuatBanTrucTiepComponent
-} from 'src/app/components/dialog/dialog-them-moi-xuat-ban-truc-tiep/dialog-them-moi-xuat-ban-truc-tiep.component';
-import {STATUS} from "../../../../../../../constants/status";
 import {LOAI_HANG_DTQG} from "../../../../../../../constants/config";
-import {MESSAGE} from "../../../../../../../constants/message";
-import {
-  QuyetDinhGiaTCDTNNService
-} from "../../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
 import dayjs from "dayjs";
+import {AMOUNT_ONE_DECIMAL} from "../../../../../../../Utility/utils";
+import {Base2Component} from "../../../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../../../services/storage.service";
+import {cloneDeep} from 'lodash';
 
 @Component({
   selector: 'app-thong-tin-kh-ban-truc-tiep',
   templateUrl: './thong-tin-kh-ban-truc-tiep.component.html',
   styleUrls: ['./thong-tin-kh-ban-truc-tiep.component.scss']
 })
-export class ThongTinKhBanTrucTiepComponent implements OnChanges {
+export class ThongTinKhBanTrucTiepComponent extends Base2Component implements OnChanges {
   @Input() title;
   @Input() dataInput;
   @Input() isView;
   @Input() isCache: boolean = false;
   @Input() trangThaiQd;
-  @Input() isTongHop;
   @Input() loaiVthhCache;
   @Output() countChanged: EventEmitter<any> = new EventEmitter();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
-  formData: FormGroup
-  dataTable: any[] = [];
-  dataDonGiaDuocDuyet: any;
+  amount = {...AMOUNT_ONE_DECIMAL};
 
   constructor(
-    private fb: FormBuilder,
-    public globals: Globals,
-    private spinner: NgxSpinnerService,
-    private helperService: HelperService,
-    private modal: NzModalService,
-    private notification: NzNotificationService,
-    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
   ) {
+    super(httpClient, storageService, notification, spinner, modal, null);
     this.formData = this.fb.group({
       id: [],
-      thoiGianDuKien: [''],
+      maDvi: [''],
+      tenDvi: [''],
       tgianDkienTu: [''],
       tgianDkienDen: [''],
       tgianTtoan: [],
@@ -59,6 +50,7 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
       thongBao: [''],
       tongSoLuong: [],
       thanhTien: [],
+      thanhTienDuocDuyet: [],
       donViTinh: [''],
     });
   }
@@ -69,12 +61,8 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
       const dataInput = changes.dataInput.currentValue;
       if (dataInput) {
         this.helperService.bidingDataInFormGroup(this.formData, dataInput);
-        const hasValidTime = dataInput.tgianDkienTu && dataInput.tgianDkienDen;
-        this.formData.patchValue({
-          thoiGianDuKien: hasValidTime ? [dataInput.tgianDkienTu, dataInput.tgianDkienDen] : null
-        });
-        this.dataTable = dataInput.children;
-        await this.calculatorTable();
+        this.dataTableAll = dataInput.children;
+        this.dataTable = cloneDeep(dataInput.children);
       } else {
         this.formData.reset();
       }
@@ -82,98 +70,68 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
     }
   }
 
+
   expandSet = new Set<number>();
 
   onExpandChange(id: number, checked: boolean): void {
     checked ? this.expandSet.add(id) : this.expandSet.delete(id);
   }
 
-  async themMoiBangPhanLoTaiSan(data?: any, index?: number) {
-    const modalGT = this.modal.create({
-      nzTitle: '',
-      nzContent: DialogThemMoiXuatBanTrucTiepComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '2500px',
-      nzFooter: null,
-      nzComponentParams: {
-        dataEdit: data,
-        loaiVthh: this.dataInput.loaiVthh,
-        cloaiVthh: this.dataInput.cloaiVthh,
-        typeLoaiVthh: this.loaiVthhCache,
-        donViTinh: this.dataInput.donViTinh,
-      },
-    });
-    modalGT.afterClose.subscribe(async (updatedData) => {
-      if (updatedData && index >= 0) {
-        this.dataTable[index] = updatedData;
-        await this.calculatorTable();
-      }
-    });
-  }
 
-  async calculatorTable() {
-    let bodyPag = {
-      namKeHoach: this.dataInput.namKh ? this.dataInput.namKh : this.dataInput.nam,
-      loaiVthh: this.dataInput.loaiVthh,
-      cloaiVthh: this.dataInput.cloaiVthh,
-      trangThai: STATUS.BAN_HANH,
-      maDvi: this.dataInput.maDvi.substring(0, 6),
-      loaiGia: 'LG04',
-    };
-    const pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag);
-    if (pag.msg !== MESSAGE.SUCCESS) {
-      return;
-    }
-    this.dataDonGiaDuocDuyet = pag.data || null;
-    if (this.dataDonGiaDuocDuyet && this.dataDonGiaDuocDuyet.length > 0) {
-      const donGiaMap = new Map();
-      this.dataDonGiaDuocDuyet.forEach((item) => {
-        donGiaMap.set(item.maChiCuc, item.giaQdTcdt);
-      });
-      this.dataTable.forEach((item) => {
-        item.tienChiCuc = 0;
-        let donGiaDuocDuyet = 0;
-        if (this.loaiVthhCache === LOAI_HANG_DTQG.VAT_TU) {
-          const firstItem = this.dataDonGiaDuocDuyet?.[0];
-          donGiaDuocDuyet = firstItem?.giaQdTcdt || 0;
-        } else {
-          donGiaDuocDuyet = donGiaMap.get(item.maDvi);
-        }
-        item.children.forEach((child) => {
-          child.donGiaDuocDuyet = donGiaDuocDuyet || null;
-          child.thanhTienDuocDuyet = (donGiaDuocDuyet || 0) * child.soLuongDeXuat;
-          child.thanhTienDeXuat = child.soLuongDeXuat * child.donGiaDeXuat;
-        });
-        item.tienChiCuc = item.children.map(child => child.thanhTienDuocDuyet).reduce((prev, cur) => prev + cur, 0);
-      });
+  async changeTable(item: any, child: any) {
+    if (item && child) {
+      child.thanhTienDeXuat = child.soLuongDeXuat * child.donGiaDeXuat;
+      child.thanhTienDuocDuyet = child.soLuongDeXuat * child.donGiaDuocDuyet;
+      item.soLuongChiCuc = item.children.reduce((total, child) => total + child.soLuongDeXuat, 0);
+      item.thanhTien = item.children.reduce((total, child) => total + child.thanhTienDeXuat, 0);
+      item.tienDuocDuyet = item.children.reduce((total, child) => total + child.thanhTienDuocDuyet, 0);
       this.formData.patchValue({
         tongSoLuong: this.dataTable.reduce((prev, cur) => prev + cur.soLuongChiCuc, 0),
-        thanhTien: this.dataTable.reduce((prev, cur) => prev + cur.tienChiCuc, 0),
+        thanhTien: this.dataTable.reduce((prev, cur) => prev + cur.thanhTien, 0),
+        thanhTienDuocDuyet: this.dataTable.reduce((prev, cur) => prev + cur.tienDuocDuyet, 0),
       });
+      this.dataTable = this.dataTableAll
     }
     await this.sendDataToParent();
   }
 
-  async onChangeThoiGian(event) {
-    if (event) {
-      this.formData.patchValue({
-        tgianDkienTu: this.formatDate(event, 0),
-        tgianDkienDen: this.formatDate(event, 1)
-      })
+  async onChangeThoiGian(event: Date, changeType: string) {
+    if (event && changeType) {
+      const formattedDate = this.formatDate(event);
+      if ((changeType === 'tu' && formattedDate !== this.formData.get('tgianDkienTu').value) ||
+        (changeType === 'den' && formattedDate !== this.formData.get('tgianDkienDen').value)) {
+        if (changeType === 'tu') {
+          this.formData.patchValue({tgianDkienTu: formattedDate});
+        } else if (changeType === 'den') {
+          this.formData.patchValue({tgianDkienDen: formattedDate});
+        }
+        await this.sendDataToParent();
+      }
     }
-    await this.sendDataToParent();
   }
 
-  formatDate(dateRange, index) {
-    return dateRange ? dayjs(dateRange[index]).format('YYYY-MM-DD') : null;
+  formatDate(date: Date): string | null {
+    return date ? dayjs(date).format('YYYY-MM-DD') : null;
+
   }
 
   async sendDataToParent() {
     this.countChanged.emit(this.formData.value);
   }
 
-  isDisable() {
-    return false;
-  }
+  disabledTgianTocChucTu = (startValue: Date): boolean => {
+    const tgianDkienDen = this.formData.value.tgianDkienDen as Date;
+    if (!startValue || !tgianDkienDen || !(tgianDkienDen instanceof Date)) {
+      return false;
+    }
+    return startValue.getTime() > tgianDkienDen.getTime();
+  };
+
+  disabledTgianTocChucDen = (endValue: Date): boolean => {
+    const tgianDkienTu = this.formData.value.tgianDkienTu as Date;
+    if (!endValue || !tgianDkienTu || !(tgianDkienTu instanceof Date)) {
+      return false;
+    }
+    return endValue.getTime() <= tgianDkienTu.getTime();
+  };
 }

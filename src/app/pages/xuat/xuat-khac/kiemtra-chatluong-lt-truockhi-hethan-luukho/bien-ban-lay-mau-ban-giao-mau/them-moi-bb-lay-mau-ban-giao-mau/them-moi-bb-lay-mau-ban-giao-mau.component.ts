@@ -119,7 +119,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
         tenNhaKho: [],
         tenNganKho: [],
         tenLoKho: [],
-        nguoiPduyet: [],
+        lanhDaoChiCuc: [],
         bbLayMauDtl: [new Array()],
         fileDinhKems: [new Array<FileDinhKem>()],
         canCu: [new Array<FileDinhKem>()],

@@ -225,6 +225,13 @@ export class ThongTinHoSoKyThuatComponent extends Base2Component implements OnIn
       ...this.listDaiDien
       , item
     ]
+    if (type == 'cuc') {
+      this.daiDienCuc = {}
+    } else if (type == 'chiCuc') {
+      this.daiDienChiCuc = {}
+    } else if (type == 'donVi') {
+      this.daiDienDonVi = {}
+    }
   }
 
   xoaDaiDien(index) {
@@ -307,17 +314,16 @@ export class ThongTinHoSoKyThuatComponent extends Base2Component implements OnIn
         res = await this.hoSoBienBanService.create(body);
       }
       if (res.msg == MESSAGE.SUCCESS) {
+        this.id = res.data.id;
         if (isGuiDuyet) {
           await this.spinner.hide();
-          this.id = res.data.id;
           this.pheDuyet();
         } else {
           if (this.formData.get('id').value) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.back();
           } else {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            this.back();
+            this.formData.get('id').setValue(res.data.id);
           }
           await this.spinner.hide();
         }

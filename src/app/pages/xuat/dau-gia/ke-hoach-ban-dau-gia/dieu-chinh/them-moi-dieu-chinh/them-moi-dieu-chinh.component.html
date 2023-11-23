@@ -75,7 +75,7 @@
                 <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
                   <nz-select formControlName="nam" [nzDisabled]="isView">
-                    <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                    <nz-option *ngFor="let item of listNam" [nzValue]="item.value" [nzLabel]="item.text"></nz-option>
                   </nz-select>
                 </nz-form-control>
               </nz-form-item>
@@ -85,7 +85,8 @@
                 <nz-form-label nzRequired [nzNoColon]="true"> Số công văn/tờ trình</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfter="{{maConVan}}">
-                    <nz-input-number formControlName="soCongVan" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+                    <nz-input-number formControlName="soCongVan" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
+                                     [nzStep]="1"
                                      [nzSize]="'small'" [nzDisabled]="isView">
                     </nz-input-number>
                   </nz-input-group>
@@ -113,7 +114,7 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Số QĐ cần điều chỉnh</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialog()">
+                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? null : openDialog()">
                     <input [readonly]="true" nz-input formControlName="soQdCanDc" readonly/>
                   </nz-input-group>
                 </nz-form-control>

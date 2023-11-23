@@ -6,7 +6,7 @@
           <div nz-col [nzSpan]="2">
             <label class="search__label"> Năm kế hoạch </label>
             <nz-select formControlName="namKh">
-              <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              <nz-option *ngFor="let item of listNam" [nzValue]="item.value" [nzLabel]="item.text"></nz-option>
             </nz-select>
           </div>
           <div nz-col [nzSpan]="4">
@@ -45,7 +45,7 @@
       </form>
       <div nz-col class="cangiua group-button-search">
         <div>
-          <button nz-button class="search__button--clear" (click)="clearFilter()">
+          <button nz-button class="search__button--clear" (click)="clearForm()">
             <i class="icon  htvbdh_nhap-lai1"></i>
             Xóa điều kiện
           </button>
@@ -78,9 +78,11 @@
           <th class="text-left"> Ngày duyệt</th>
           <th class="text-left"> Ngày ủy quyền</th>
           <th class="text-left"> Trích yếu</th>
-          <th class="text-left"> Loại hàng DTQG</th>
+          <th class="text-left" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">Loại hàng DTQG</th>
           <th class="text-left"> Chủng loại hàng DTQG</th>
-          <th class="text-center"> Số lượng</th>
+          <th class="text-center"> Số lượng
+            {{loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? '' : '(kg)'}}
+          </th>
           <th class="text-left"> Phương thức bán trực tiếp</th>
           <th class="text-left"> Trạng thái</th>
           <th class="text-center"> Hành Động</th>
@@ -127,7 +129,7 @@
                      (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small"/>
             </nz-input-group>
           </th>
-          <th>
+          <th *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
                      (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small"/>
@@ -171,8 +173,8 @@
         <tr *ngFor="let data of basicTable.data; let i = index">
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td class="text-left">
-            <a *ngIf="data.soQdPd && data.xhQdDchinhKhBttHdr ? data.xhQdDchinhKhBttHdr.idQdPd : data.idHdr"
-               (click)="openModal((data.xhQdDchinhKhBttHdr ? data.xhQdDchinhKhBttHdr.idQdPd : data.idHdr), 'QdKh')"
+            <a *ngIf="data.soQdPd && data.xhQdPdKhBttHdr.type === 'QDDC' ? data.xhQdPdKhBttHdr.idQdPd : data.idHdr"
+               (click)="openModal((data.xhQdPdKhBttHdr.type === 'QDDC' ? data.xhQdPdKhBttHdr.idQdPd : data.idHdr), 'QdKh')"
                style="color: blue">{{ data.soQdPd }}
             </a>
           </td>
@@ -187,14 +189,14 @@
           <td class="text-left" style="max-width: 300px; min-width: 250px;  white-space: break-spaces;">
             {{data.trichYeu}}
           </td>
-          <td class="text-left">{{ data.tenLoaiVthh}}</td>
+          <td class="text-left" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">{{data.tenLoaiVthh}}</td>
           <td class="text-left">{{ data.tenCloaiVthh}}</td>
           <td class="text-right">{{ data.tongSoLuong|number:globals.numberFormat:globals.locale}}</td>
           <td class="text-left">
             {{{'02': 'Ủy quyền', '03': 'Bán lẻ'}[data.pthucBanTrucTiep] || null}}
           </td>
           <td class="text-left">
-            {{ data.xhQdDchinhKhBttHdr ? data.xhQdDchinhKhBttHdr?.tenTrangThai : data.xhQdPdKhBttHdr?.tenTrangThai}}
+            {{data.xhQdPdKhBttHdr?.tenTrangThai}}
           </td>
           <td class="text-center">
             <a (click)="redirectDetail(data.id,true)">

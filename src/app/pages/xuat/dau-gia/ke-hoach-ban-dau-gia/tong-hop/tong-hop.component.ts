@@ -25,7 +25,6 @@ export class TongHopComponent extends Base2Component implements OnInit {
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   isView = false;
   listLoaiHangHoa: any[] = [];
-  dataTongHop: any;
   idQdPd: number = 0;
   isViewQdPd: boolean = false;
   listTrangThai: any = [];
@@ -55,6 +54,7 @@ export class TongHopComponent extends Base2Component implements OnInit {
       namKh: null,
       soQdPd: null,
       tenLoaiVthh: null,
+      tenCloaiVthh: null,
       tenTrangThai: null,
     }
     this.listTrangThai = [

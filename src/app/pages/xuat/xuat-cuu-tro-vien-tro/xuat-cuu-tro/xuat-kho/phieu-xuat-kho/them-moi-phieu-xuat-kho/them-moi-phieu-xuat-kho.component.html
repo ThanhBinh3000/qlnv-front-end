@@ -67,7 +67,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="3">
+        <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
               Đơn vị
@@ -79,7 +79,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="3">
+        <div nz-col nzSpan="2">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
               Mã QHNS (mã quan hệ ngân sách)
@@ -477,8 +477,8 @@
               <th rowSpan="2">Mã số (C)</th>
               <th rowSpan="2">Đơn vị tính (D)</th>
               <th colSpan="2">Số lượng</th>
-              <!-- <th rowSpan="2">Đơn giá (3)</th>
-              <th rowSpan="2">Thành tiền (4) = (2) x (3)</th> -->
+              <th rowSpan="2">Đơn giá (3)</th>
+              <th rowSpan="2">Thành tiền (4) = (2) x (3)</th>
               <th rowSpan="2" *ngIf="showAction()">Hành động</th>
             </tr>
             <tr>
@@ -538,14 +538,21 @@
                   </nz-input-group>
                 </nz-form-control>
               </td>
-              <!-- <td>
-                {{formData.value.donGia| number: '1.0-1' :
+              <td>
+                <!-- {{formData.value.donGia| number: '1.0-1' :
+                'vi_VN'}} -->
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-input-group>
+                    <input currencyMask class="money-input" formControlName="donGia"
+                      [readOnly]="isView || (!formData.value.tenCloaiVthh && !formData.value.tenLoaiVthh)"
+                      [options]="amount1" />
+                  </nz-input-group>
+                </nz-form-control>
+              </td>
+              <td class="text-right">
+                {{formData.value.thanhTien | number: '1.0-1' :
                 'vi_VN'}}
               </td>
-              <td>
-                {{calculateSum() | number: '1.0-1' :
-                'vi_VN'}}
-              </td> -->
               <td *ngIf="showAction()">
                 <a (click)="clearItemRow(formData.value.id)">
                   <i class="fa fa-refresh"></i>
@@ -558,30 +565,33 @@
         </nz-table>
       </nz-card>
     </form>
-    <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
+    <form nz-form [formGroup]="formData">
       <div nz-row [nzGutter]="[18, 6]">
         <div nz-col nzSpan="24">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
-              Tổng số lượng (viết bằng chữ)
+              Tổng số lượng (viết bằng chữ):
             </nz-form-label>
-            <nz-form-control nz-col [nzErrorTip]="error">
-              <input nz-input [ngModelOptions]="{standalone: true}"
-                [ngModel]="formData.value.thucXuat > 0 ? convertTien(formData.value.thucXuat) : ''" readonly />
+            <nz-form-control [nzErrorTip]="error" style="margin-top: 5px;">
+              <span>{{formData.value.soLuongBc}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
-        <!-- <div nz-col nzSpan="24">
+        <div nz-col nzSpan="24">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
-              Tổng số tiền (viết bằng chữ)
+              Tổng số tiền (viết bằng chữ):
             </nz-form-label>
-            <nz-form-control nz-col [nzErrorTip]="error">
-              <input nz-input [ngModelOptions]="{standalone: true}"
-                [ngModel]="calculateSum() > 0 ? convertTien(calculateSum()) : ''" readonly />
+            <nz-form-control [nzErrorTip]="error" style="margin-top: 5px;">
+              <span>{{formData.value.thanhTienBc}}</span>
             </nz-form-control>
           </nz-form-item>
-        </div> -->
+        </div>
+      </div>
+    </form>
+
+    <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
+      <div nz-row [nzGutter]="[18, 6]">
         <div nz-col nzSpan="24">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">

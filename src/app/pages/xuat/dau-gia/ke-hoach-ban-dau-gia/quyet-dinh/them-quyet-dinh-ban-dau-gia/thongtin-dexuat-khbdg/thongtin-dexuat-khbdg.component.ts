@@ -127,10 +127,6 @@ export class ThongtinDexuatKhbdgComponent extends Base2Component implements OnCh
     this.countChanged.emit(this.formData.value);
   }
 
-  isDisable() {
-    return false;
-  }
-
   disabledTgianTocChucTu = (startValue: Date): boolean => {
     const tgianDkienDen = this.formData.value.tgianDkienDen as Date;
     if (!startValue || !tgianDkienDen || !(tgianDkienDen instanceof Date)) {

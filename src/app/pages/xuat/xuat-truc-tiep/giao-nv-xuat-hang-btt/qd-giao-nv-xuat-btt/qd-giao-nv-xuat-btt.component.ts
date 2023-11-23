@@ -53,18 +53,19 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
     })
 
     this.filterTable = {
-      namKh: '',
-      soQdNv: '',
-      ngayTao: '',
-      soHd: '',
-      tenLoaiVthh: '',
-      tenCloaiVthh: '',
-      tgianGnhan: '',
-      trichYeu: '',
-      bbTinhKho: '',
-      bbHaoDoi: '',
-      tenTrangThai: '',
-      tenTrangThaiXh: '',
+      namKh: null,
+      soQdNv: null,
+      ngayKyQdNv: null,
+      soHopDong: null,
+      soBangKeBanLe: null,
+      tenLoaiVthh: null,
+      tenCloaiVthh: null,
+      tgianGiaoNhan: null,
+      trichYeu: null,
+      soTinhKho: null,
+      bienBanHaoDoi: null,
+      tenTrangThai: null,
+      tenTrangThaiXh: null,
     };
     this.listTrangThai = [
       {
@@ -111,30 +112,19 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([
-        this.timKiem(),
-        this.search(),
-      ]);
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+      })
+      if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+        await this.loadDsVthh();
+      }
+      await this.search();
     } catch (e) {
       console.error('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
     }
-  }
-
-  async timKiem() {
-    this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
-    })
-    if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
-      await this.loadDsVthh();
-    }
-  }
-
-  async clearFilter() {
-    this.formData.reset();
-    await Promise.all([this.timKiem(), this.search()]);
   }
 
   async loadDsVthh() {

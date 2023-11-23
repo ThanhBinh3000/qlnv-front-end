@@ -102,10 +102,11 @@
           <td>{{(page - 1) * pageSize + idx +
           1}}</td>
           <td> {{ data.nam }} </td>
+          <td>{{ data.tenDvi }}</td>
           <td>{{ data.soBaoCao }}</td>
           <td>{{ data.tenBaoCao }}</td>
           <td>{{ data.ngayBaoCao | date: 'dd/MM/YYYY' }}</td>
-          <td>{{ data.soQdGiaoNvXh }}</td>
+          <td>{{ data.maDsTh }}</td>
           <td></td>
           <td>{{ data.tenTrangThai }}</td>
           <td class='text-left'>
@@ -113,7 +114,7 @@
               <i class='fa fa-eye' title='Xem chi tiết'></i>
             </a>
             <a
-              *ngIf='data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_TBP_KTBQ || data.trangThai ==STATUS.DU_THAO'
+              *ngIf='data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_TBP_KTBQ || data.trangThai ==STATUS.DANG_NHAP_DU_LIEU'
               (click)='redirectDetail(data.id, false)'>
               <i class='fa fa-pencil' title='Sửa'></i>
             </a>
@@ -121,7 +122,7 @@
                (click)='redirectDetail(data.id, true)'>
               <i class='icon htvbdh_tcdt_pheduyet'></i>
             </a>
-            <a *ngIf='data.trangThai ==STATUS.DU_THAO || STATUS.TU_CHOI_LDC' (click)='delete(data)'>
+            <a *ngIf='data.trangThai ==STATUS.DANG_NHAP_DU_LIEU || STATUS.TU_CHOI_LDC' (click)='delete(data)'>
               <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
             </a>
           </td>

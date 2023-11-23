@@ -32,11 +32,11 @@
           <div nz-col nzSpan="4" *ngIf="isThuKho">
             <nz-form-label class="search__label">Số sổ kho</nz-form-label>
             <nz-form-control>
-              <input type="text" nz-input formControlName="tenSoKho" />
+              <input type="text" nz-input formControlName="soSoKho" />
             </nz-form-control>
           </div>
           <div nz-col nzSpan="5" *ngIf="isThuKho">
-            <nz-form-label class="search__label">Tên sổ kho</nz-form-label>
+            <nz-form-label class="search__label">Tên thẻ kho</nz-form-label>
             <nz-form-control>
               <input type="text" nz-input formControlName="tenTheKho" />
             </nz-form-control>
@@ -250,7 +250,7 @@
                               <td></td>
                               <td></td>
                               <td class="bg-parent2 font-weight-bold" [nzExpand]="expandSet.has(nam.idVirtual)"
-                                (nzExpandChange)="onExpandChange(soKho.idVirtual, $event)">{{soKho.ten}}</td>
+                                (nzExpandChange)="onExpandChange(soKho.idVirtual, $event)">{{soKho.so}}</td>
                               <td class="bg-parent2 font-weight-bold"></td>
                               <td class="bg-parent2 font-weight-bold">{{soKho.ngayMo | date : 'dd/MM/yyyy' }}</td>
                               <td class="bg-parent2 font-weight-bold">{{soKho.ngayDong | date : 'dd/MM/yyyy' }}</td>
@@ -309,7 +309,7 @@
                                     <a (click)="openModalCreate(theKho.id, true)">
                                       <i class="fa fa-eye"></i>
                                     </a>
-                                    <a *ngIf="soKho.trangThai == STATUS.DU_THAO  && this.userService.isAccessPermisson('LKQLCL_QLSKTK_SKTK_XOA')" (click)="delete(theKho)">
+                                    <a *ngIf="theKho.trangThai == STATUS.DU_THAO  && this.userService.isAccessPermisson('LKQLCL_QLSKTK_SKTK_XOA')" (click)="delete(theKho)">
                                       <i class="fa fa-trash-o do"></i>
                                     </a>
                                   </td>

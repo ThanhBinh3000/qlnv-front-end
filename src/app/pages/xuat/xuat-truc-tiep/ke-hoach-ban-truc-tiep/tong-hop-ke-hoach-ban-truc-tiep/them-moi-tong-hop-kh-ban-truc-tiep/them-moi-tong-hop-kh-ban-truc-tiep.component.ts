@@ -24,6 +24,7 @@ import {
 import {STATUS} from 'src/app/constants/status';
 import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import {DataService} from "../../../../../../services/data.service";
 
 @Component({
   selector: 'app-them-moi-tong-hop-kh-ban-truc-tiep',
@@ -37,6 +38,7 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
   @Input() isView: boolean;
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
+  @Output() taoQuyetDinh = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   templateNameVt = "Tổng hợp kế hoạch bán trực tiếp vật tư";
   templateNameLt = "Tổng hợp kế hoạch bán trực tiếp lương thực";
@@ -56,6 +58,7 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService: DanhMucService,
+    private dataService: DataService,
     private tongHopKhBanTrucTiepService: TongHopKhBanTrucTiepService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopKhBanTrucTiepService);
@@ -179,18 +182,19 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
     }
   }
 
-  async save(isTaoQuyetDinh?) {
+  async save(isQuyetDinh?) {
     try {
       await this.helperService.ignoreRequiredForm(this.formData);
       this.formData.controls["noiDungThop"].setValidators([Validators.required]);
       const body = this.formData.value;
-      const data = await this.createUpdate(body);
+      let data = null
+      if (!body.id && body.id === null) {
+        data = await this.createUpdate(body);
+        body.id = data.id
+      }
       await this.helperService.restoreRequiredForm(this.formData);
-      if (data.id) {
-        if (isTaoQuyetDinh) {
-          this.formData.controls["noiDungThop"].setValidators([Validators.required]);
-          this.taoQdinh();
-        }
+      if (isQuyetDinh && body.id) {
+        this.taoQuyetDinhPd();
       }
     } catch (error) {
       console.error('Error in save:', error);
@@ -252,8 +256,8 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
     const data = res.data.find(item => item.ma === this.loaiVthh);
     this.listVatTuCha = data?.children || [];
     if (this.formData.value.loaiVthh) {
-      const chungLoai = this.listVatTuCha.find(item => item.ma === this.formData.value.loaiVthh);
-      this.listVatTu = chungLoai?.children || [];
+      const listCloaiVthh = this.listVatTuCha.find(item => item.ma === this.formData.value.loaiVthh);
+      this.listVatTu = listCloaiVthh?.children || [];
     }
   }
 
@@ -273,7 +277,7 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
     if (res.msg !== MESSAGE.SUCCESS || !res.data) {
       return;
     }
-    if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
+    if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.GAO) || this.loaiVthh.startsWith(LOAI_HANG_DTQG.THOC)) {
       this.formTraCuu.patchValue({
         tenLoaiVthh: res.data.flatMap(item => item.children || []).find(s => s.ma === this.loaiVthh)?.ten
       });
@@ -286,7 +290,7 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
 
   setValidator() {
     this.formTraCuu.controls["loaiVthh"].setValidators([Validators.required]);
-    if (this.loaiVthh !== LOAI_HANG_DTQG.VAT_TU) {
+    if (!this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
       this.formTraCuu.controls["tenLoaiVthh"].setValidators([Validators.required]);
       this.formTraCuu.controls["cloaiVthh"].setValidators([Validators.required]);
       this.formTraCuu.controls["tenCloaiVthh"].setValidators([Validators.required]);
@@ -297,24 +301,15 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
     }
   }
 
-  taoQdinh() {
-    let elem = document.getElementById('mainTongCuc');
-    let tabActive = elem.getElementsByClassName('ant-menu-item')[0];
-    tabActive.classList.remove('ant-menu-item-selected')
-    let setActive = elem.getElementsByClassName('ant-menu-item')[2];
-    setActive.classList.add('ant-menu-item-selected');
-    this.isQuyetDinh = true;
+  taoQuyetDinhPd() {
+    const dataSend = {
+      ...this.formData.value,
+      isQuyetDinh: true
+    }
+    this.dataService.changeData(dataSend);
+    this.taoQuyetDinh.emit(2);
   }
 
-  showTongHop() {
-    this.loadChiTiet()
-    let elem = document.getElementById('mainTongCuc');
-    let tabActive = elem.getElementsByClassName('ant-menu-item')[2];
-    tabActive.classList.remove('ant-menu-item-selected')
-    let setActive = elem.getElementsByClassName('ant-menu-item')[0];
-    setActive.classList.add('ant-menu-item-selected');
-    this.isQuyetDinh = false;
-  }
 
   idRowSelect: number;
 
