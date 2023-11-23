@@ -95,7 +95,8 @@ export class QuanTriDanhMucComponent implements OnInit, AfterViewInit {
       title: 'DM Chỉ tiêu chất lượng',
       url: `/quan-tri-danh-muc/danh-muc-chi-tieu-chat-luong`,
       dropdown: 'danh-muc-chi-tieu-chat-luong',
-      idHover: 'danh-muc-chi-tieu-chat-luong'
+      idHover: 'danh-muc-chi-tieu-chat-luong',
+      permission : true
     },
   ];
   routerUrl: string = "";
