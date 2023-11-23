@@ -65,7 +65,7 @@
   </div>
   <nz-card class="mt-2px flex-card data-table card-border-content table-card">
     <nz-table class="wrap" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
-              [nzShowPagination]="false" [nzScroll]="dataTable && dataTable.length > 0 ? { x: '2300px' } : null">
+              [nzShowPagination]="false" [nzScroll]="dataTable && dataTable.length > 0 ? { x: '2300px' } : null" style="overflow: auto">
       <thead>
       <tr>
         <th class="text-center" rowSpan="2" width="45px">STT</th>
