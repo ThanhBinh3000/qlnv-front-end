@@ -18,6 +18,7 @@ import {DanhMucService} from "../../../../../services/danhmuc.service";
 import {
   DeXuatNhuCauBaoHiemService
 } from "../../../../../services/dinhmuc-maymoc-baohiem/de-xuat-nhu-cau-bao-hiem.service";
+import { AMOUNT_NO_DECIMAL } from '../../../../../Utility/utils';
 
 @Component({
   selector: 'app-them-moi-de-xuat-bao-hiem-cc',
@@ -37,6 +38,7 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
   dsNhaKho: any[] = [];
   tableHangDtqg: any[] = [];
   listHangHoa: any[] = [];
+  amount = AMOUNT_NO_DECIMAL;
 
   constructor(
     httpClient: HttpClient,
@@ -469,6 +471,8 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
     result = sum
     return result;
   }
+
+  protected readonly AMOUNT_NO_DECIMAL = AMOUNT_NO_DECIMAL;
 }
 
 export class BaoHiemKhoDangChuaHang {
@@ -480,11 +484,19 @@ export class BaoHiemKhoDangChuaHang {
   tenDiemKho: string;
   tenNhaKho: string;
   dienTich: string;
+  khoiTich :string;
   giaTriBhDx: number;
   giaTriDk: number;
   giaTriHt: number;
   tichLuong: number;
   giaTriTc: number;
+  //theo thiết ke mới
+  giaTriHtKhoHt:number;
+  giaTriHtKhoKh:number;
+  giaTriHtTc:number;
+  giaTriDkKhoHt:number;
+  giaTriDkKhoKh:number;
+  giaTriDkTc:number;
 }
 
 

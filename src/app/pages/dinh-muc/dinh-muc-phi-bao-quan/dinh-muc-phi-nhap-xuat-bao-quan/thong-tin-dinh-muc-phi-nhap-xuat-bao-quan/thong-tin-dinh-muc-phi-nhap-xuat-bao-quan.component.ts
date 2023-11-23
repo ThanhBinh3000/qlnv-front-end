@@ -558,7 +558,6 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
         };
       });
     }
-
   }
 
   updateEditCacheKtqd(): void {
