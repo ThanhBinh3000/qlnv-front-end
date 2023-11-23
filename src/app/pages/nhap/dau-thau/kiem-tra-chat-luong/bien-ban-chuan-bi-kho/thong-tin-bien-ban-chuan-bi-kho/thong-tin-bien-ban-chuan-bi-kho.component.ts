@@ -75,7 +75,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
   dsHangPD = []
   typeData: string;
   typeAction: string;
-  previewName: string = 'nk_bb_cb_kho';
+  previewName: string = 'bien_ban_chuan_bi_kho';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
