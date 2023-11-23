@@ -27,6 +27,7 @@ export class DanhMucDinhMucHaoHutComponent implements OnInit {
   listLoaiVthh: any[] = [];
   listCloaiVthh: any[] = [];
   listHinhThucBq: any[] = [];
+  listLoaiHinhBq: any[] = [];
   listPhuongThucBq: any[] = [];
   dataTableAll: any[] = [];
   dsCuc: any[] = [];
@@ -39,6 +40,7 @@ export class DanhMucDinhMucHaoHutComponent implements OnInit {
     loaiVthh: '',
     cloaiVthh: '',
     hinhThucBq: '',
+    loaiHinhBq: '',
     phuongThucBq: ''
   };
   rowItem: DmDinhMucHaoHut = new DmDinhMucHaoHut();
@@ -65,6 +67,7 @@ export class DanhMucDinhMucHaoHutComponent implements OnInit {
     try {
       this.userInfo = this.userService.getUserLogin();
       this.getListHtbq();
+      this.getListLhbq();
       this.getListPtbq();
       this.loadDsVthh();
       this.loadDsCuc();
@@ -88,6 +91,14 @@ export class DanhMucDinhMucHaoHutComponent implements OnInit {
     let res = await this.danhMucService.danhMucChungGetAll('HINH_THUC_BAO_QUAN');
     if (res.msg == MESSAGE.SUCCESS) {
       this.listHinhThucBq = res.data;
+    }
+  }
+
+  async getListLhbq() {
+    this.listLoaiHinhBq = [];
+    let res = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_BAO_QUAN');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listLoaiHinhBq = res.data;
     }
   }
 
@@ -146,6 +157,7 @@ export class DanhMucDinhMucHaoHutComponent implements OnInit {
           item.checked = false;
           item.listPtbq = item.phuongThucBq.split(",");
           item.listHtbq = item.hinhThucBq.split(",");
+          item.listLhbq = item.loaiHinhBq.split(",");
           item.listCuc = item.apDungTai.split(",");
         });
       }
@@ -163,6 +175,7 @@ export class DanhMucDinhMucHaoHutComponent implements OnInit {
     this.spinner.show();
     data.hinhThucBq =data.listHtbq.toString();
     data.phuongThucBq = data.listPtbq.toString();
+    data.loaiHinhBq = data.listLhbq.toString();
     if (data.listCuc && data.listCuc.length > 0) {
       data.apDungTai = data.listCuc.toString();
     } else {
@@ -185,6 +198,7 @@ export class DanhMucDinhMucHaoHutComponent implements OnInit {
       "loaiVthh": data.loaiVthh,
       "cloaiVthh": data.cloaiVthh,
       "hinhThucBq": data.hinhThucBq,
+      "loaiHinhBq": data.loaiHinhBq,
       "phuongThucBq": data.phuongThucBq,
       "tgBaoQuanTu": data.tgBaoQuanTu,
       "tgBaoQuanDen": data.tgBaoQuanDen,
@@ -217,7 +231,7 @@ export class DanhMucDinhMucHaoHutComponent implements OnInit {
     let arr = [];
     let check = true;
     arr.push(
-      rowItem.maDinhMuc, rowItem.tenDinhMuc, rowItem.loaiVthh, rowItem.hinhThucBq,
+      rowItem.maDinhMuc, rowItem.tenDinhMuc, rowItem.loaiVthh, rowItem.hinhThucBq, rowItem.loaiHinhBq,
       rowItem.phuongThucBq, rowItem.dinhMuc
     )
     if (arr && arr.length > 0) {
@@ -242,6 +256,7 @@ export class DanhMucDinhMucHaoHutComponent implements OnInit {
       loaiVthh: '',
       cloaiVthh: '',
       hinhThucBq: '',
+      loaiHinhBq: '',
       phuongThucBq: ''
     };
     this.search();
@@ -372,6 +387,7 @@ export class DmDinhMucHaoHut {
   cloaiVthh: string;
   listCloaiVthh: string;
   hinhThucBq: string;
+  loaiHinhBq: string;
   phuongThucBq: string;
   tgBaoQuanTu: number = 0;
   tgBaoQuanDen: number = 0;
@@ -384,4 +400,5 @@ export class DmDinhMucHaoHut {
   listPtbq : any[];
   listHtbq : any[];
   listCuc : any[];
+  listLhbq : any[];
 }
