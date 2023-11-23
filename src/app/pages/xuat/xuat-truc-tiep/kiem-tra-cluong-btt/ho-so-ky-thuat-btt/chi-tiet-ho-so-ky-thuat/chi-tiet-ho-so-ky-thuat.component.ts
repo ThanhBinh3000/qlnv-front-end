@@ -25,6 +25,9 @@ import {
   HoSoKyThuatBttService
 } from "src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/HoSoKyThuatBtt.service";
 import {PREVIEW} from "src/app/constants/fileType";
+import {
+  BienBanLayMauBttService
+} from "src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/bien-ban-lay-mau-btt.service";
 
 @Component({
   selector: 'app-chi-tiet-ho-so-ky-thuat-btt',
@@ -118,7 +121,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
     modal: NzModalService,
     public userService: UserService,
     // private bienBanLayMauService: QuanLyBienBanLayMauService,
-    private bienBanLayMauBanGiaoMauService: BienBanLayMauBanGiaoMauService,
+    private bienBanLayMauBttService: BienBanLayMauBttService,
     private hoSoKyThuatBttService: HoSoKyThuatBttService
   ) {
     super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatBttService);
@@ -404,7 +407,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
       },
       trangThai: STATUS.DA_DUYET_LDCC,
     }
-    let res = await this.bienBanLayMauBanGiaoMauService.search(body);
+    let res = await this.bienBanLayMauBttService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listBanGiaoMau = data.content;
