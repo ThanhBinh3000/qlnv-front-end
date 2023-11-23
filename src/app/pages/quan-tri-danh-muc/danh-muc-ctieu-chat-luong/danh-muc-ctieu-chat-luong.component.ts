@@ -1,6 +1,4 @@
-import {
-  Component , OnInit,
-} from '@angular/core';
+import {Component, OnInit,} from '@angular/core';
 import {Base2Component} from "../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../services/storage.service";
@@ -14,6 +12,8 @@ import {Router} from "@angular/router";
 import {
   ThemMoiDanhMucCtieuChatLuongComponent
 } from "./them-moi-danh-muc-ctieu-chat-luong/them-moi-danh-muc-ctieu-chat-luong.component";
+import {DanhMucCtieuCluongService} from "../../../services/quantri-danhmuc/danh-muc-ctieu-cluong";
+
 @Component({
   selector: 'app-danh-muc-ctieu-chat-luong',
   templateUrl: './danh-muc-ctieu-chat-luong.component.html',
@@ -22,7 +22,7 @@ import {
 export class DanhMucCtieuChatLuongComponent extends Base2Component implements OnInit {
 
   listTrangThai = [{"ma": "01", "giaTri": "Hoạt động"}, {"ma": "00", "giaTri": "Không hoạt động"}];
-  listLoaiDvi : any[] = [];
+  listLoaiVthh : any[] = [];
 
   constructor(
     private httpClient: HttpClient,
@@ -30,18 +30,16 @@ export class DanhMucCtieuChatLuongComponent extends Base2Component implements On
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private dmDviLqService : DanhMucDviLqService,
-    private dmService : DanhMucService,
+    private danhMucCtieuCluongService : DanhMucCtieuCluongService,
+    private danhMucService : DanhMucService,
     private router : Router
   ) {
-    super(httpClient, storageService, notification, spinner, modal, dmDviLqService);
+    super(httpClient, storageService, notification, spinner, modal, danhMucCtieuCluongService);
     super.ngOnInit()
     this.formData = this.fb.group({
-      type : [null],
-      mstCccd : [null],
-      ten : [null],
-      sdt : [null],
-      diaChi : [null],
+      tenChiTieu : [null],
+      maChiTieu : [null],
+      loaiVthh : [null],
       trangThai : [null]
     });
   }
@@ -55,7 +53,7 @@ export class DanhMucCtieuChatLuongComponent extends Base2Component implements On
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
         this.search(),
-        this.loadDsLoaiDvi()
+        this.loadDsLoaiVthh()
       ]);
       this.spinner.hide();
     } catch (e) {
@@ -65,24 +63,26 @@ export class DanhMucCtieuChatLuongComponent extends Base2Component implements On
     }
   }
 
-  async loadDsLoaiDvi() {
-    let res = await this.dmService.danhMucChungGetAll("LOAI_DON_VI")
+  async loadDsLoaiVthh() {
+    this.listLoaiVthh = [];
+    let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listLoaiDvi = res.data;
+      this.listLoaiVthh = res.data;
+      this.listLoaiVthh = res.data?.filter((x) => x.ma.length == 4);
     }
   }
 
-  async themMoi(id) {
+  async themMoi(id: number, isView: boolean) {
     let modalTuChoi = this.modal.create({
       nzContent: ThemMoiDanhMucCtieuChatLuongComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '1000px',
-      nzStyle: { top : '100px'},
+      nzWidth: '1200px',
+      nzStyle: { top : '120px'},
       nzFooter: null,
-      nzClassName: 'themdmdungchung',
       nzComponentParams: {
-        idInput : id
+        idInput : id,
+        isView : isView
       },
     });
     modalTuChoi.afterClose.subscribe((data) => {
@@ -92,19 +92,7 @@ export class DanhMucCtieuChatLuongComponent extends Base2Component implements On
     })
   }
 
-  delete( type, item?: any) {
-    let dataDelete = [];
-    if (type == 'single') {
-      dataDelete.push(item.id)
-    } else {
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          if (item.checked) {
-            dataDelete.push(item.id);
-          }
-        });
-      }
-    }
+  delete(id :number) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -116,7 +104,7 @@ export class DanhMucCtieuChatLuongComponent extends Base2Component implements On
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.dmDviLqService.delete({idList: dataDelete}).then(async () => {
+          this.danhMucCtieuCluongService.delete({idList: [id]}).then(async () => {
             await this.search();
             this.spinner.hide();
           });
