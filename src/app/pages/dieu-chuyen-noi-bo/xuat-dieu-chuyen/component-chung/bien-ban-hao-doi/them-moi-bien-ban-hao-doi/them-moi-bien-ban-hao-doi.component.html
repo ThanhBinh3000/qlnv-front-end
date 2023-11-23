@@ -311,7 +311,7 @@
             <nz-form-label [nzNoColon]="true">
               Thời gian kết thúc nhập
             </nz-form-label>
-            <span></span>
+            <span>{{formData.value.ngayKtNhap|date: 'dd/MM/YYYY'}}</span>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="6">
@@ -330,7 +330,7 @@
             <nz-form-label [nzNoColon]="true">
               Thời gian kết thúc xuất
             </nz-form-label>
-            <span>{{formData.value.ngayKetThucXuatTt}}</span>
+            <span>{{formData.value.ngayKetThucXuatTt| date:'dd/MM/YYYY'}}</span>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="12">
