@@ -378,10 +378,10 @@
               </th> -->
                 <th>
                   <form nz-form nzLayout="vertical" [formGroup]="formData">
-                    <!-- <input type="text" nz-input class="w-400" formControlName="soBaoBi" /> -->
-                    <nz-input-number formControlName="soSerial" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
+                    <input type="text" nz-input class="w-400" formControlName="soSerial" />
+                    <!-- <nz-input-number formControlName="soSerial" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
                       [nzSize]="'small'">
-                    </nz-input-number>
+                    </nz-input-number> -->
                   </form>
 
                 </th>
@@ -424,7 +424,7 @@
                   <input type="text" nz-input class="w-400" [(ngModel)]="item.maCan" />
                 </td> -->
                   <td>
-                    <input type="number" nz-input class="w-400" [(ngModel)]="item.soSerial" />
+                    <input type="text" nz-input class="w-400" [(ngModel)]="item.soSerial" />
                   </td>
                   <td>
                     <input type="number" nz-input class="w-400" [(ngModel)]="item.soBaoBi" />
