@@ -13,22 +13,21 @@
         <div nz-col [nzSpan]="6">
           <label class="search__label">Tên thủ kho</label>
           <nz-input-group>
-            <input placeholder="Nhập text" type="text" nz-input formControlName="tenThuKho" />
+            <input placeholder="Nhập text" type="text" nz-input formControlName="fullName" />
           </nz-input-group>
         </div>
         <div nz-col [nzSpan]="6">
           <label class="search__label">Đơn vị quản lý</label>
           <nz-input-group>
             <nz-select formControlName="maDvi">
-              <nz-option *ngFor="let item of listDvi" [nzLabel]="item" [nzValue]="item"></nz-option>
+              <nz-option *ngFor="let item of listDvi" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
             </nz-select>
-
           </nz-input-group>
         </div>
         <div nz-col [nzSpan]="6">
           <label class="search__label">Trạng thái</label>
           <nz-input-group>
-            <nz-select formControlName="trangThai">
+            <nz-select formControlName="status">
               <nz-option *ngFor="let item of listTrangThai" [nzLabel]="item.giaTri" [nzValue]="item.ma"></nz-option>
             </nz-select>
           </nz-input-group>

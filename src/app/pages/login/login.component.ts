@@ -50,8 +50,10 @@ export class LoginComponent implements OnInit {
     this.formLogin = this.fb.group({
       UserName: ['', Validators.required],
       Password: ['', Validators.required],
-      code: ['', Validators.required],
-      captchaText: ['', Validators.required],
+      // code: ['', Validators.required],
+      // captchaText: ['', Validators.required],
+      code: [],
+      captchaText: [],
       rememberMe: [''],
     });
   }
@@ -86,7 +88,7 @@ export class LoginComponent implements OnInit {
       const user = {
         username: form.UserName,
         password: form.Password,
-        code: form.code,
+        code: form.captchaText ? form.code : '',
         captchaText: form.captchaText
       };
       let allRoles = '';
