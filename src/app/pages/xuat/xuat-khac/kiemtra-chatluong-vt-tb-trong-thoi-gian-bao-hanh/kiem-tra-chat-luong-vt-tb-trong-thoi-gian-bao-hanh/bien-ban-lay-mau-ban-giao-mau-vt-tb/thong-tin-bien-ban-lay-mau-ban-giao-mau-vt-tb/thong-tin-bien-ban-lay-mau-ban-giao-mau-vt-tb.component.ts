@@ -224,7 +224,7 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
     let body = {
       nam: this.formData.get("nam").value,
       dvql: this.userInfo.MA_DVI,
-      trangThai: STATUS.DA_DUYET_LDC,
+      trangThai: STATUS.DA_DUYET_LDCC,
       listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
       loaiXn: "XUAT"
     }
@@ -367,14 +367,14 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
     let trangThai = '';
     let msg = '';
     switch (this.formData.value.trangThai) {
-      case STATUS.TU_CHOI_LDC:
+      case STATUS.TU_CHOI_LDCC:
       case STATUS.DU_THAO: {
-        trangThai = STATUS.CHO_DUYET_LDC;
+        trangThai = STATUS.CHO_DUYET_LDCC;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
       }
-      case STATUS.CHO_DUYET_LDC: {
-        trangThai = STATUS.DA_DUYET_LDC;
+      case STATUS.CHO_DUYET_LDCC: {
+        trangThai = STATUS.DA_DUYET_LDCC;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
       }
@@ -385,8 +385,8 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
   tuChoi() {
     let trangThai = '';
     switch (this.formData.value.trangThai) {
-      case STATUS.CHO_DUYET_LDC: {
-        trangThai = STATUS.TU_CHOI_LDC;
+      case STATUS.CHO_DUYET_LDCC: {
+        trangThai = STATUS.TU_CHOI_LDCC;
         break;
       }
     }
@@ -395,7 +395,7 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
 
   isDisabled() {
     let trangThai = this.formData.value.trangThai;
-    if (trangThai == STATUS.CHO_DUYET_LDC) {
+    if (trangThai == STATUS.CHO_DUYET_LDCC) {
       return true
     }
     return false;

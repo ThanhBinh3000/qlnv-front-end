@@ -18,6 +18,7 @@ import { BienBanNghiemThuBaoQuanLanDauService } from "src/app/services/dieu-chuy
 import { BienBanNhapDayKhoService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-nhap-day-kho";
 import { PhieuKiemNghiemChatLuongService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/phieu-kiem-nghiem-chat-luong";
 import { QuyetDinhDieuChuyenCucService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service";
+import { KhCnQuyChuanKyThuat } from "src/app/services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
 import { MangLuoiKhoService } from "src/app/services/qlnv-kho/mangLuoiKho.service";
 import { DanhMucTieuChuanService } from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
 import { StorageService } from "src/app/services/storage.service";
@@ -65,6 +66,7 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
     private bienBanNhapDayKhoService: BienBanNhapDayKhoService,
     private bienBanLayMauService: BienBanLayMauService,
     private mangLuoiKhoService: MangLuoiKhoService,
+    private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
     private phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuKiemNghiemChatLuongService);
@@ -168,21 +170,22 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
         donViTinh: this.data.donViTinh,
         keHoachDcDtlId: this.data.keHoachDcDtlId,
       });
-      // await this.loadChiTietQdinh(this.data.qdinhDccId);
-      let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(this.data.maChLoaiHangHoa);
+
+      let dmTieuChuan = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(this.data.maChLoaiHangHoa);
       if (dmTieuChuan.data) {
-        this.dataTableChiTieu = dmTieuChuan.data.children;
+        this.dataTableChiTieu = dmTieuChuan.data;
         this.dataTableChiTieu = this.dataTableChiTieu.map(element => {
           return {
             ...element,
             edit: true,
-            chiSoCl: element.tenTchuan,
-            chiTieuCl: element.chiSoNhap,
+            chiSoCl: element.mucYeuCauXuat,
+            chiTieuCl: element.tenChiTieu,
             ketQuaPt: element.ketQuaPt,
             danhGia: element.danhGia
           }
         });
       }
+
       await this.dsHinhThucBaoQuan(this.data.maChLoaiHangHoa)
       if (this.data.maLoKho)
         await this.loadThuKho(this.data.maLoKho, DANH_MUC_LEVEL.LO_KHO)
@@ -423,21 +426,21 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
       });
 
 
-      let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
+      let dmTieuChuan = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(data.cloaiVthh);
       if (dmTieuChuan.data) {
-        console.log('dmTieuChuan')
-        this.dataTableChiTieu = dmTieuChuan.data.children;
+        this.dataTableChiTieu = dmTieuChuan.data;
         this.dataTableChiTieu = this.dataTableChiTieu.map(element => {
           return {
             ...element,
             edit: true,
-            chiSoCl: element.tenTchuan,
-            chiTieuCl: element.chiSoNhap,
+            chiSoCl: element.mucYeuCauXuat,
+            chiTieuCl: element.tenChiTieu,
             ketQuaPt: element.ketQuaPt,
             danhGia: element.danhGia
           }
         });
       }
+
       if (data.maLoKho)
         await this.loadThuKho(data.maLoKho, DANH_MUC_LEVEL.LO_KHO)
       else
@@ -576,16 +579,15 @@ export class ThongTinKiemNghiemChatLuongComponent extends Base2Component impleme
           keHoachDcDtlId: data.id
         });
 
-        let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
+        let dmTieuChuan = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(data.cloaiVthh);
         if (dmTieuChuan.data) {
-          console.log('dmTieuChuan')
-          this.dataTableChiTieu = dmTieuChuan.data.children;
+          this.dataTableChiTieu = dmTieuChuan.data;
           this.dataTableChiTieu = this.dataTableChiTieu.map(element => {
             return {
               ...element,
               edit: true,
-              chiSoCl: element.tenTchuan,
-              chiTieuCl: element.chiSoNhap,
+              chiSoCl: element.mucYeuCauXuat,
+              chiTieuCl: element.tenChiTieu,
               ketQuaPt: element.ketQuaPt,
               danhGia: element.danhGia
             }

@@ -837,7 +837,8 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
         data: row,
         typeData: this.typeData,
         typeAction: this.typeAction,
-        isChildren: isChildren
+        isChildren: isChildren,
+        nhomCcdc: [1, 2]
       },
     });
     modalQD.afterClose.subscribe(async (data) => {

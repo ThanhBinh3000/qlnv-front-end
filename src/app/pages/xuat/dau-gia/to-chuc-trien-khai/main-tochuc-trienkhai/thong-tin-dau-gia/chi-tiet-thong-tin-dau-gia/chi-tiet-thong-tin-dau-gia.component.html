@@ -4,13 +4,8 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="idThongTin" type="button" class="btn btn-sub do"
-            (click)="xemTruoc(idThongTin,loaiVthh === LOAI_HANG_DTQG.VAT_TU ? templateNameVt: templateNameLt)">
-      <i class="icon htvbdh_totrinh"></i>
-      <span> Xem trước </span>
-    </button>
     <ng-container>
-      <button *ngIf="this.userService.isCuc() && formData.value.trangThai != STATUS.DA_HOAN_THANH && idThongTin"
+      <button *ngIf="this.userService.isCuc() && formData.value.trangThai != STATUS.DA_HOAN_THANH"
               type="button"
               class="btn btn-sub xanh-nhat" (click)="hoanThanhCapNhat()">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
@@ -260,7 +255,7 @@
           </thead>
           <tbody>
           <ng-container *ngFor="let data of dataTable; let i = index">
-            <tr [ngClass]="{'bg-selected': i == 0 && this.selected}" (click)="showDetail($event,data)">
+            <tr [ngClass]="{'bg-selected': data.selected}" (click)="selectRow(data)">
               <td class="text-center">{{i + 1}}</td>
               <td class="text-left">{{data.soQdDc ? data.soQdDc : data.soQdPd}}</td>
               <td class="text-center">{{data.lanDauGia}}</td>
@@ -279,6 +274,10 @@
               <td class="text-center">{{data.ketQuaSl}}</td>
               <td class="text-left">{{data.tenTrangThai}}</td>
               <td class="text-center">
+                <a *ngIf="data.id > 0"
+                   (click)="xemTruoc(data.id,loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? templateNameVt: templateNameLt)">
+                  <i class="icon htvbdh_tcdt_tuchoi" title="Xem trước"></i>
+                </a>
                 <a *ngIf="data.trangThai == STATUS.DA_HOAN_THANH"
                    (click)="themMoiPhienDauGia($event,true,data)">
                   <i class="fa fa-eye" title="Xem chi tiết"></i>
@@ -298,7 +297,8 @@
         </nz-table>
       </nz-collapse-panel>
     </nz-collapse>
-    <app-thongtin-daugia *ngIf="dataThongTin" [dataThongTin]="dataThongTin" [isView]="true" [isModal]="true">
+    <app-thongtin-daugia *ngIf="dataThongTin && idThongTin" [dataThongTin]="dataThongTin" [isView]="true"
+                         [isModal]="true">
     </app-thongtin-daugia>
   </nz-card>
 </div>
@@ -316,12 +316,14 @@
       <i class="icon htvbdh_printer"></i>
       In
     </button>
-    <button nz-button (click)="downloadPdf(loaiVthh === LOAI_HANG_DTQG.VAT_TU ? templateNameVt : templateNameLt)"
+    <button nz-button
+            (click)="downloadPdf(loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? templateNameVt : templateNameLt)"
             class="modal__button--save">
       <i class="icon htvbdh_file-pdf"></i>
       Xuất .pdf
     </button>
-    <button nz-button (click)="downloadWord(loaiVthh === LOAI_HANG_DTQG.VAT_TU ? templateNameVt : templateNameLt)"
+    <button nz-button
+            (click)="downloadWord(loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? templateNameVt : templateNameLt)"
             class="modal__button--save">
       <i class="icon htvbdh_file-word"></i>
       Xuất .docx

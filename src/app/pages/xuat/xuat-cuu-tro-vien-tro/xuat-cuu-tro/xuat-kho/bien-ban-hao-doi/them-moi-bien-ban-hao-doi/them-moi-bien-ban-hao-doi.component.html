@@ -336,14 +336,14 @@
           </nz-form-item>
         </div>
         <div nz-col nzSpan="12">
-          <b>
+          <div class="bold mb-20-">
             Số lượng hao thực tế
-          </b>
+          </div>
           <div nz-row nzSpan="24">
             <div nz-col nzSpan="12">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Số lượng
+                  <span class="color-grey">Số lượng</span>
                 </nz-form-label>
                 <nz-form-control>
                   <span>
@@ -355,7 +355,7 @@
             <div nz-col nzSpan="12">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Tỉ lệ
+                  <span class="color-grey">Tỉ lệ</span>
                 </nz-form-label>
                 <!-- <nz-select formControlName="tiLeHaoThucTe" [nzDisabled]="isView">
                   <nz-option *ngFor="let p of listTiLe" [nzValue]="p.value" [nzLabel]="p.text">
@@ -369,14 +369,14 @@
           </div>
         </div>
         <div nz-col nzSpan="12">
-          <b>
+          <div class="bold mb-20-">
             Số lượng hao vượt định mức
-          </b>
+          </div>
           <div nz-row nzSpan="24">
             <div nz-col nzSpan="12">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Số lượng
+                  <span class="color-grey">Số lượng</span>
                 </nz-form-label>
                 <nz-form-control>
                   <span>
@@ -388,7 +388,7 @@
             <div nz-col nzSpan="12">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Tỉ lệ
+                  <span class="color-grey">Tỉ lệ</span>
                 </nz-form-label>
                 <!-- <nz-select formControlName="tiLeHaoVuotDm" [nzDisabled]="isView">
                   <nz-option *ngFor="let p of listTiLe" [nzValue]="p.value" [nzLabel]="p.text">
@@ -402,14 +402,14 @@
           </div>
         </div>
         <div nz-col nzSpan="12">
-          <b>
+          <div class="bold mb-20-">
             Số lượng hao được thanh lý
-          </b>
+          </div>
           <div nz-row nzSpan="24">
             <div nz-col nzSpan="12">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Số lượng
+                  <span class="color-grey">Số lượng</span>
                 </nz-form-label>
                 <nz-form-control>
                   <span>
@@ -421,7 +421,7 @@
             <div nz-col nzSpan="12">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Tỉ lệ
+                  <span class="color-grey">Tỉ lệ</span>
                 </nz-form-label>
                 <!-- <nz-select formControlName="tiLeHaoThanhLy" [nzDisabled]="isView">
                   <nz-option *ngFor="let p of listTiLe" [nzValue]="p.value" [nzLabel]="p.text">
@@ -435,12 +435,12 @@
           </div>
         </div>
         <div nz-col nzSpan="12">
-          <b> Số lượng hao dưới định mức</b>
+          <div class="bold mb-20-">Số lượng hao dưới định mức</div>
           <div nz-row nzSpan="24">
             <div nz-col nzSpan="12">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Số lượng
+                  <span class="color-grey">Số lượng</span>
                 </nz-form-label>
                 <span>
                   {{formData.value.slHaoDuoiDm |number:'1.0-1' : 'vi_VN'}}
@@ -450,7 +450,7 @@
             <div nz-col nzSpan="12">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Tỉ lệ
+                  <span class="color-grey">Tỉ lệ</span>
                 </nz-form-label>
                 <!-- <nz-select formControlName="tiLeHaoVuotDm" [nzDisabled]="isView">
                   <nz-option *ngFor="let p of listTiLe" [nzValue]="p.value" [nzLabel]="p.text">
@@ -489,7 +489,7 @@
                       {{formData.value.ngayKetThucNhap && formData.value.ngayKetThucXuat? "-": ""}}
                       {{formData.value.ngayKetThucXuat
                       |date: 'dd/MM/YYYY' }} </td>
-                    <td class="text-right">{{formData.value.soThangBqHang|number:'1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-right">{{formData.value.soThangBaoQuanqHang|number:'1.0-1' : 'vi_VN'}}</td>
                     <td class="text-right">{{formData.value.tongSlNhap |number:'1.0-1' : 'vi_VN'}}</td>
                     <td class="text-right">{{formData.value.dinhMucHaoHut}}</td>
                     <td class="text-right">{{formData.value.sLHaoHutTheoDm |number:'1.0-1' : 'vi_VN'}}</td>

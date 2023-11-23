@@ -34,7 +34,7 @@
           <span>Duyệt</span>
         </button>
         <button
-          *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BCKQKD_THEM') && this.userService.isCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDC "
+          *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BCKQKD_THEM') && this.userService.isCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDC"
           type="button" class="btn btn-main" (click)="save()">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
