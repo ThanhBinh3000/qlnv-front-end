@@ -12,6 +12,7 @@ import { UserAPIService } from 'src/app/services/user/userApi.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { STORAGE_KEY } from 'src/app/constants/config';
 import { LIST_PAGES } from '../../layout/main/main-routing.constant';
+import { DomSanitizer } from '@angular/platform-browser';
 
 declare var vgcapluginObject: any;
 
@@ -23,6 +24,7 @@ declare var vgcapluginObject: any;
 export class LoginComponent implements OnInit {
   public formLogin: FormGroup;
   lstPage = [];
+  imgCaptcha;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -34,20 +36,45 @@ export class LoginComponent implements OnInit {
     private userAPIService: UserAPIService,
     public router: Router,
     private storageService: StorageService,
+    private _sanitizer: DomSanitizer
   ) {
     this.lstPage = LIST_PAGES;
   }
 
   ngOnInit(): void {
     this.initForm();
+    this.getCaptcha()
   }
 
   initForm() {
     this.formLogin = this.fb.group({
       UserName: ['', Validators.required],
       Password: ['', Validators.required],
+      // code: ['', Validators.required],
+      // captchaText: ['', Validators.required],
+      code: [],
+      captchaText: [],
       rememberMe: [''],
     });
+  }
+
+  getCaptcha() {
+    try {
+      this.apiService.captcha().subscribe(async (res: OldResponseData) => {
+        if (res.data) {
+          const data = res.data
+          this.formLogin.patchValue({ code: data.code })
+          this.imgCaptcha = this._sanitizer.bypassSecurityTrustResourceUrl('data:image/jpg;base64,'
+            + data.captcha);
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+        }
+        this.spinner.hide();
+      });
+    } catch (err) {
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
   }
 
   login(form) {
@@ -61,6 +88,8 @@ export class LoginComponent implements OnInit {
       const user = {
         username: form.UserName,
         password: form.Password,
+        code: form.captchaText ? form.code : '',
+        captchaText: form.captchaText
       };
       let allRoles = '';
       this.apiService.login(user).subscribe(async (res: OldResponseData) => {

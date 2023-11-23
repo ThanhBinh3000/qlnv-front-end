@@ -29,9 +29,8 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   templateNameVt = "Thông tin bán đấu giá vật tư";
   templateNameLt = "Thông tin bán đấu giá lương thực";
-  idThongTin: number;
   dataThongTin: any;
-  selected: boolean = false;
+  idThongTin: number;
 
   constructor(
     httpClient: HttpClient,
@@ -104,7 +103,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
       const data = res.data;
       this.dataTable = cloneDeep(data.listTtinDg);
       if (this.dataTable && this.dataTable.length > 0) {
-        await this.showFirstRow(event, this.dataTable[0]);
+        await this.selectRow(this.dataTable[0]);
       }
       this.formData.patchValue({
         nam: data.nam,
@@ -118,9 +117,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
         tenDvi: data.tenDvi,
         khoanTienDatTruoc: data.khoanTienDatTruoc,
         khoanTienDatTruocHienThi: data.khoanTienDatTruoc + '%',
-        tgianDauGia: this.isValidDate(data.tgianDkienTu) && this.isValidDate(data.tgianDkienDen)
-          ? [`Từ ${dayjs(data.tgianDkienTu).format('DD/MM/YYYY')} Đến ${dayjs(data.tgianDkienDen).format('DD/MM/YYYY')}`]
-          : [],
+        tgianDauGia: this.isValidDate(data.tgianDkienTu) && this.isValidDate(data.tgianDkienDen) ? [`Từ ${dayjs(data.tgianDkienTu).format('DD/MM/YYYY')} Đến ${dayjs(data.tgianDkienDen).format('DD/MM/YYYY')}`] : [],
         tgianTtoan: data.tgianTtoan,
         tenPthucTtoan: data.tenPthucTtoan,
         tgianGnhan: data.tgianGnhan,
@@ -204,23 +201,15 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     });
   }
 
-  async showFirstRow($event, data: any) {
-    await this.showDetail($event, data);
-  }
 
-  async showDetail($event, data: any) {
-    if ($event.type === 'click') {
-      this.selected = false;
-      const selectedRow = $event.target.parentElement.parentElement.querySelector('.selectedRow');
-      if (selectedRow) {
-        selectedRow.classList.remove('selectedRow');
-      }
-      $event.target.parentElement.classList.add('selectedRow');
-    } else {
-      this.selected = true;
+  async selectRow(data: any) {
+    if (!data.selected) {
+      this.dataTable.forEach(item => item.selected = false);
+      data.selected = true;
+      const findndex = this.dataTable.findIndex(child => child.id == data.id);
+      this.dataThongTin = this.dataTable[findndex]
+      this.idThongTin = this.dataTable[findndex].id
     }
-    this.dataThongTin = data;
-    this.idThongTin = data.id;
   }
 
   async themMoiPhienDauGia($event, isView: boolean, data?: any) {
@@ -252,6 +241,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     });
   }
 
+
   async deleteThongTin(data) {
     this.modal.confirm({
       nzClosable: false,
@@ -266,6 +256,14 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
         try {
           const body = {id: data.id};
           await this.thongTinDauGiaService.delete(body);
+          if (this.idInput > 0) {
+            const dataDtl = await this.quyetDinhPdKhBdgService.getDtlDetail(this.idInput);
+            if (data.dataDtl && dataDtl.data.listTtinDg && dataDtl.data.listTtinDg.length > 0) {
+              this.idThongTin = dataDtl.data.listTtinDg.length
+            } else {
+              this.idThongTin = null
+            }
+          }
           await this.loadDetail(this.idInput);
         } catch (error) {
           console.log('error: ', error);

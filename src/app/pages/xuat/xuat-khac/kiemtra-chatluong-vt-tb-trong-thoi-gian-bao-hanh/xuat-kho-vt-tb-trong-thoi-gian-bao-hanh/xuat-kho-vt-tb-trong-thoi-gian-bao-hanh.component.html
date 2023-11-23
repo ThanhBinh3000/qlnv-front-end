@@ -58,12 +58,12 @@
     <div class="group-button">
       <h3 class="text-uppercase">Danh sách phiếu xuất kho</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub" (click)="exportData()">
+        <button type="button" *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PXK_EXP')" class="btn btn-sub" (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)"
-                *ngIf="userService.isChiCuc()">
+                *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PXK_THEM') && userService.isChiCuc()">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Thêm</span>
         </button>
@@ -147,7 +147,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>{{lv2.tenLoKho ? (lv2.tenLoKho +' '+ lv2.tenNganKho): lv2.tenNganKho}}</td>
+                    <td>{{lv2.tenLoKho ? (lv2.tenLoKho + ' ' + lv2.tenNganKho) : lv2.tenNganKho}}</td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -170,7 +170,7 @@
                         <td></td>
                         <td class="bold">{{lv3.tenLoaiVthh}}</td>
                         <td class="bold">{{lv3.soPhieu}}</td>
-                        <td >{{lv3.ngayXuatNhap| date:globals.dateFormat}}</td>
+                        <td>{{lv3.ngayXuatNhap| date:globals.dateFormat}}</td>
                         <td>{{ lv3.loai === 'XUAT_MAU' ? 'Xuất hàng lấy mẫu' : (lv3.loai === 'XUAT_HUY' ? 'Xuất mẫu bị hủy khỏi kho' : (lv3.loai === 'XUAT_BH' ? 'Xuất để bảo hành' : '')) }}</td>
                         <td><a *ngIf="lv3.soPhieuKnCl" nzType="link"
                                (click)="openPhieuKnClModal(lv3.idPhieuKnCl)">{{lv3.soPhieuKnCl}}</a></td>
@@ -178,17 +178,24 @@
                         <td>{{lv3.ngayGiamDinh| date:globals.dateFormat }}</td>
                         <td>{{lv3.tenTrangThai}}</td>
                         <td class="text-left">
-                          <a *ngIf="lv3.trangThai ==STATUS.DA_DUYET_LDCC" (click)="redirectDetail(lv3.id, true)">
+                          <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PXK_XEM')
+                              && !((lv3.trangThai ==STATUS.TU_CHOI_LDCC || lv2.trangThai ==STATUS.DU_THAO) && lv3.nguoiTaoId == userInfo.ID)"
+                             (click)="redirectDetail(lv2.id, true)">
                             <i class="fa fa-eye" title="Xem chi tiết"></i>
                           </a>
-                          <a *ngIf="lv3.trangThai ==STATUS.TU_CHOI_LDCC || lv3.trangThai ==STATUS.DU_THAO"
-                             (click)="redirectDetail(lv3.id, false)">
+                          <a
+                            *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PXK_THEM') && (lv3.trangThai ==STATUS.TU_CHOI_LDCC || lv3.trangThai ==STATUS.DU_THAO)"
+                            (click)="redirectDetail(lv3.id, false)">
                             <i class="fa fa-pencil" title="Sửa"></i>
                           </a>
-                          <a *ngIf="lv3.trangThai ==STATUS.CHO_DUYET_LDCC" (click)="redirectDetail(lv3.id, true)">
+                          <a
+                            *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PXK_DUYETLDCC') && lv3.trangThai ==STATUS.CHO_DUYET_LDCC"
+                            (click)="redirectDetail(lv3.id, true)">
                             <i class="icon htvbdh_tcdt_pheduyet"></i>
                           </a>
-                          <a *ngIf="lv3.trangThai ==STATUS.DU_THAO" (click)="delete(lv3)">
+                          <a
+                            *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PXK_XOA') && lv3.trangThai ==STATUS.DU_THAO"
+                            (click)="delete(lv3)">
                             <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                           </a>
                         </td>
@@ -225,7 +232,7 @@
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
   <app-thong-tin-xuat-kho-vt-tb-trong-thoi-gian-bao-hanh [idInput]="selectedId" [isView]="isView" [loaiVthh]="loaiVthh"
-                                (showListEvent)="showList()">
+                                                         (showListEvent)="showList()">
   </app-thong-tin-xuat-kho-vt-tb-trong-thoi-gian-bao-hanh>
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openPhieuKnCl" (nzOnCancel)="closePhieuKnClModal()">

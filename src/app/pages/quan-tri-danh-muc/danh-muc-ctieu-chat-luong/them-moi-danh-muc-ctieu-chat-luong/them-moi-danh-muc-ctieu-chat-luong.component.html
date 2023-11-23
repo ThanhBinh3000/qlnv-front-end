@@ -3,264 +3,93 @@
     <div class="header-text">
       <div class="title-chi-tieu">
         <span></span>
-        <span>THÊM MỚI ĐƠN VỊ LIÊN QUAN</span>
+        <span>THÊM MỚI DANH MỤC CHỈ TIÊU CHẤT LƯỢNG</span>
       </div>
     </div>
   </div>
   <nz-card class="mt16 p-lr16 card-table mg-t-10">
     <form nz-form [formGroup]="formData" [nzLayout]="'vertical'">
       <div nz-row [nzGutter]="24">
-        <div nz-col [nzSpan]="10">
-          <nz-form-item class="form-item">
-            <nz-form-control [nzErrorTip]="error">
-              <nz-radio-group formControlName="type" (ngModelChange)="changeLoaiDvi($event)">
-                <label nz-radio *ngFor="let item of listType" [nzDisabled]="idInput && idInput >0"
-                       [nzValue]="item.ma">{{item.giaTri}}</label>
-              </nz-radio-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-      </div>
-      <div nz-row [nzGutter]="24" *ngIf="formData.value.type == '00'">
-        <div nz-col [nzSpan]="5">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nzRequired> Số CCCD/CMND</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
-                <input type="text"  nz-input formControlName="mstCccd" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="5">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nzRequired> Họ và tên</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
-                <input type="text"  nz-input formControlName="ten" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="14">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nzRequired >Địa chỉ</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
-                <input type="text"  nz-input formControlName="diaChi" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="5">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nzRequired>Số điện thoại</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
-                <input type="text"  nz-input formControlName="sdt" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="5">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nzRequired>Số tài khoản</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
-                <input type="text"  nz-input formControlName="stk" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="14">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nzRequired>Ngân hàng</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
-                <input type="text"  nz-input formControlName="nganHang" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="24">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Ghi chú</nz-form-label>
-            <textarea nz-row="3" class="search__input" nz-input formControlName="ghiChu"></textarea>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="24">
-          <div nz-row [nzGutter]="24">
-            <div nz-col [nzSpan]="8">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true" >Phân loại</nz-form-label>
-                <nz-form-control>
-                  <label nz-checkbox (ngModelChange)="addPloai('00', $event)" formControlName="phanLoaiMua">Bên mua</label>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="8">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true" ></nz-form-label>
-                <nz-form-control>
-                  <label nz-checkbox (ngModelChange)="addPloai('01', $event)" formControlName="phanLoaiBan">Bên bán</label>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="8">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true" ></nz-form-label>
-                <nz-form-control>
-                  <label nz-checkbox (ngModelChange)="addPloai('02', $event)" formControlName="phanLoaiDg">Đơn vị tổ chức đấu giá</label>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-          </div>
-        </div>
-        <div nz-col [nzSpan]="4">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nzRequired>Trạng thái</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
-                <label nz-checkbox formControlName="trangThai">Hoạt động</label>
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-      </div>
-      <div nz-row [nzGutter]="24" *ngIf="formData.value.type == '01'">
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nzRequired>Mã số thuế</nz-form-label>
+            <nz-form-label [nzNoColon]="true" nzRequired>Mã chỉ tiêu</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input type="text"  nz-input formControlName="mstCccd" />
+                <input type="text" nz-input formControlName="maChiTieu" [readOnly]="isView"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nzRequired>Tên công ty</nz-form-label>
+            <nz-form-label [nzNoColon]="true" nzRequired>Tên chỉ tiêu</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input type="text"  nz-input formControlName="ten" />
+                <input type="text" nz-input formControlName="tenChiTieu" [readOnly]="isView"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nzRequired>Số điện thoại</nz-form-label>
+            <nz-form-label [nzNoColon]="true" nzRequired>Áp dụng cho loại hàng DTQG</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input type="text"  nz-input formControlName="sdt" />
+                <nz-select nzAllowClear formControlName="loaiVthh" (ngModelChange)="selectLoaiHangHoa($event)"
+                           nzShowSearch [nzDisabled]="isView">
+                  <nz-option *ngFor="let p of listLoaiVthh" [nzLabel]="p.ten" [nzValue]="p.ma"></nz-option>
+                </nz-select>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nzRequired>Số Fax</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
-                <input type="text"  nz-input formControlName="fax" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="6">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nzRequired>Số tài khoản</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
-                <input type="text"  nz-input formControlName="stk" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="6">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nzRequired>Ngân hàng</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
-                <input type="text"  nz-input formControlName="nganHang" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="6">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nzRequired>Người đại diện</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
-                <input type="text"  nz-input formControlName="nguoiDdien" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="6">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nzRequired>Chức vụ</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
-                <input type="text"  nz-input formControlName="chucVu" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="24">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nzRequired>Địa chỉ</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
-                <input type="text"  nz-input formControlName="diaChi" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="24">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true" >Ghi chú</nz-form-label>
+            <nz-form-label [nzNoColon]="true">Áp dụng cho chủng loại hàng DTQG</nz-form-label>
             <nz-form-control>
-              <textarea nz-input nz-row="3" formControlName="ghiChu"></textarea>
+              <nz-input-group>
+                <nz-select [(ngModel)]="listCloaiSelected" [nzMaxTagCount]="2" [ngModelOptions]="{standalone: true}"
+                           nzShowSearch
+                           [nzMaxTagPlaceholder]="tagPlaceHolder3"
+                           nzMode="multiple">
+                  <nz-option *ngFor="let item of listCloaiVthh" [nzLabel]="item.ten" [nzDisabled]="isView"
+                             [nzValue]="item.ma">
+                  </nz-option>
+                  <ng-template #tagPlaceHolder3 let-selectedList3>và {{ selectedList3.length }} chủng loại hàng hóa nữa
+                  </ng-template>
+                </nz-select>
+              </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="24">
-          <div nz-row [nzGutter]="24">
-            <div nz-col [nzSpan]="8">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true" >Phân loại</nz-form-label>
-                <nz-form-control>
-                  <label nz-checkbox (ngModelChange)="addPloai('00', $event)" formControlName="phanLoaiMua">Bên mua</label>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="8">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true" ></nz-form-label>
-                <nz-form-control>
-                  <label nz-checkbox (ngModelChange)="addPloai('01', $event)" formControlName="phanLoaiBan">Bên bán</label>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="8">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true" ></nz-form-label>
-                <nz-form-control>
-                  <label nz-checkbox (ngModelChange)="addPloai('02', $event)" formControlName="phanLoaiDg">Đơn vị tổ chức đấu giá</label>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-          </div>
-        </div>
-        <div nz-col [nzSpan]="4">
+        <div nz-col [nzSpan]="12">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nzRequired>Trạng thái</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <label nz-checkbox formControlName="trangThai">Hoạt động</label>
+                <nz-select formControlName="trangThai" nzAllowClear [nzDisabled]="isView">
+                  <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                  </nz-option>
+                </nz-select>
               </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" nzRequired>Thứ tự hiển thị</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group>
+                <input type="text" nz-input formControlName="thuTu" [readOnly]="isView"/>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label [nzNoColon]="true"> Mô tả</nz-form-label>
+              <textarea nz-row="4" class="search__input" nz-input formControlName="moTa" [readOnly]="isView"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -277,7 +106,8 @@
         <i class="icon htvbdh_tcdt_delete"></i>
         Hủy
       </button>
-      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active ml-2" (click)="save() " *ngIf="userService.isAccessPermisson('QTDM_DM_DVI_LIENQUAN_THEM')">
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active ml-2" (click)="save() "
+              *ngIf="userService.isAccessPermisson('QTDM_DM_DVI_LIENQUAN_THEM')">
         <i aria-hidden="true" class="fa fa-save"></i>
         Lưu
       </button>

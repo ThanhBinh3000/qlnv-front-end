@@ -23,10 +23,13 @@ import {Router} from "@angular/router";
 })
 export class DanhMucThuKhoComponent extends Base2Component implements OnInit {
 
-  listTrangThai = [{ "ma": "01", "giaTri": "Hoạt động" }, { "ma": "00", "giaTri": "Không hoạt động" }];
+  listTrangThai = [
+    { "ma": "Hoạt", "giaTri": "Hoạt động" },
+    { "ma": "Không", "giaTri": "Không hoạt động" }
+  ];
   datePipe = new DatePipe('en-US');
 
-  listDvi : []
+  listDvi :any = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -41,9 +44,9 @@ export class DanhMucThuKhoComponent extends Base2Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, userService);
     this.formData = this.fb.group({
       maThuKho: null,
-      tenThuKho: null,
+      fullName: null,
       cccd: null,
-      trangThai: null,
+      status: null,
       position: "CBTHUKHO",
       maDviLike : this.userInfo.MA_DVI,
       maDvi : null
@@ -56,6 +59,7 @@ export class DanhMucThuKhoComponent extends Base2Component implements OnInit {
     }
     this.spinner.show();
     try {
+      this.loadDsChiCuc();
       await this.search();
     } catch (e) {
       console.log('error: ', e);
@@ -124,6 +128,14 @@ export class DanhMucThuKhoComponent extends Base2Component implements OnInit {
       });
     });
 
+  }
+
+  async loadDsChiCuc() {
+    let res = await this.donviService.layTatCaDonViByLevel(3);
+    if (res && res.data) {
+      this.listDvi = res.data
+      this.listDvi = this.listDvi.filter(item => item.type != "PB" && item.maDvi.startsWith(this.userInfo.MA_DVI))
+    }
   }
 
 }

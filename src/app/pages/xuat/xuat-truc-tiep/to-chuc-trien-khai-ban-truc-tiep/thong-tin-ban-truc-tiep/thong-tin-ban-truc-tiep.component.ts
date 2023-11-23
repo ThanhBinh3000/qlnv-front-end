@@ -49,6 +49,7 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
       ngayCgiaDen: null,
       tochucCanhan: null,
       loaiVthh: null,
+      maChiCuc: null,
     })
     this.filterTable = {
       soQdPd: null,

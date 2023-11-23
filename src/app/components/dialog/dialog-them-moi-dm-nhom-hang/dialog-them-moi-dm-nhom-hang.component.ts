@@ -22,6 +22,7 @@ export class DialogThemMoiDmNhomHangComponent extends Base2Component implements 
   isChildren: boolean
   data: any
   listMatHang: any[] = [];
+  nhomCcdc: any[] = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -59,8 +60,23 @@ export class DialogThemMoiDmNhomHangComponent extends Base2Component implements 
   }
 
   async getDSMatHang() {
-    const body = {
-      nhomCcdc: [1]
+    let body = {};
+    if (this.nhomCcdc != null) {
+      body = {
+        nhomCcdc: this.nhomCcdc,
+        paggingReq: {
+          limit: this.globals.prop.MAX_INTERGER,
+          page: 0
+        }
+      }
+    } else {
+      body = {
+        nhomCcdc: [1],
+        paggingReq: {
+          limit: this.globals.prop.MAX_INTERGER,
+          page: 0
+        }
+      }
     }
     this.listMatHang = []
     let res = await this.danhMucService.getDSMatHang(body);

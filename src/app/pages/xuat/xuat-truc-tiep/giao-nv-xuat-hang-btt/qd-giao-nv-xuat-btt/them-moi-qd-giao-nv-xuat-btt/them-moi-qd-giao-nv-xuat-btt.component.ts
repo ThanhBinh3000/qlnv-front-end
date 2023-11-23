@@ -157,10 +157,11 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
       console.error('Không tìm thấy dữ liệu');
       return;
     }
-    const {soQdNv, soHopDong, idChaoGia, children} = data;
+    const {soQdNv, soQdDc, soQdPd, soHopDong, idChaoGia, children} = data;
     this.formData.patchValue({
       soQdNv: soQdNv?.split('/')[0] || null,
-      soHopDong: idChaoGia ? null : soHopDong
+      soHopDong: idChaoGia ? null : soHopDong,
+      soQd: soQdDc || soQdDc
     });
     if (data.idChaoGia > 0) {
       await this.onChangeThongTin(data.idChaoGia);

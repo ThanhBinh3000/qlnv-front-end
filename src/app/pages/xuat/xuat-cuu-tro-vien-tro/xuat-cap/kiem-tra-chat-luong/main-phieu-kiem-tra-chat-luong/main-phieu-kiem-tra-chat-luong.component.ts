@@ -32,7 +32,6 @@ export class MainPhieuKiemTraChatLuongComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log(this.loaiVthh);
   }
   tabSelected = 0;
   selectTab(tab) {
