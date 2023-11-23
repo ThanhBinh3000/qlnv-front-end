@@ -50,8 +50,8 @@ export class LoginComponent implements OnInit {
     this.formLogin = this.fb.group({
       UserName: ['', Validators.required],
       Password: ['', Validators.required],
-      // code: ['', Validators.required],
-      // captchaText: ['', Validators.required],
+      code: ['', Validators.required],
+      captchaText: ['', Validators.required],
       rememberMe: [''],
     });
   }
@@ -60,7 +60,6 @@ export class LoginComponent implements OnInit {
     try {
       this.apiService.captcha().subscribe(async (res: OldResponseData) => {
         if (res.data) {
-          console.log('getCaptcha', res.data)
           const data = res.data
           this.formLogin.patchValue({ code: data.code })
           this.imgCaptcha = this._sanitizer.bypassSecurityTrustResourceUrl('data:image/jpg;base64,'
