@@ -16,12 +16,13 @@ import { StorageService } from 'src/app/services/storage.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
+import {Base2Component} from "../../../../../components/base2/base2.component";
 @Component({
   selector: 'app-bien-ban-gui-hang',
   templateUrl: './bien-ban-gui-hang.component.html',
   styleUrls: ['./bien-ban-gui-hang.component.scss']
 })
-export class BienBanGuiHangComponent extends BaseComponent implements OnInit {
+export class BienBanGuiHangComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
 
   qdTCDT: string = MESSAGE.QD_TCDT;
@@ -68,12 +69,15 @@ export class BienBanGuiHangComponent extends BaseComponent implements OnInit {
 
 
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private bienBanGuiHangService: BienBanGuiHangService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService
   ) {
-    super(httpClient, storageService, bienBanGuiHangService);
+    super(httpClient, storageService, notification, spinner, modal, bienBanGuiHangService);
     super.ngOnInit();
   }
   tuNgayNk: Date | null = null;

@@ -90,6 +90,14 @@ export class QuanTriDanhMucComponent implements OnInit, AfterViewInit {
       idHover: 'danh-muc-thu-kho',
       permission: this.userService.isAccessPermisson('QTDM_DM_THU_KHO') ? true : false
     },
+    {
+      icon: 'htvbdh_tcdt_icon-common',
+      title: 'DM Chỉ tiêu chất lượng',
+      url: `/quan-tri-danh-muc/danh-muc-chi-tieu-chat-luong`,
+      dropdown: 'danh-muc-chi-tieu-chat-luong',
+      idHover: 'danh-muc-chi-tieu-chat-luong',
+      permission : true
+    },
   ];
   routerUrl: string = "";
   routerUrlActive : string = "";
