@@ -407,7 +407,7 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
             }
           });
         }
-        this.listDiaDiemNhap = dataChiCuc.map(f => ({ ...f, noiNhan: `${f.tenDiemKhoNhan || ""} - ${f.tenNhaKhoNhan || ""} - ${f.tenNganKhoNhan || ""} - ${f.tenLoKhoNhan}` }));
+        this.listDiaDiemNhap = dataChiCuc.map(f => ({ ...f, noiNhan: `${f.tenDiemKhoNhan || ""} - ${f.tenNhaKhoNhan || ""} - ${f.tenNganKhoNhan || ""} ${f.tenLoKhoNhan ? "- " + f.tenLoKhoNhan : ""}` }));
       }
     } catch (error) {
       console.log('e', error)
