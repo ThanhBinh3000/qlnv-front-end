@@ -7,7 +7,7 @@
             <nz-form-item class='form-item'>
               <nz-form-label nzFor='nam-qd'>Bộ/Ngành</nz-form-label>
               <nz-form-control>
-                <nz-select formControlName='maBn' [nzDisabled]='isDisableByBoNganh()'  nzAllowClear nzShowSearch>
+                <nz-select formControlName='maBn' [nzDisabled]='isDisableByBoNganh()' nzAllowClear nzShowSearch>
                   <nz-option *ngFor='let option of dsBoNganh' [nzLabel]='option.tenDvi' [nzValue]='option.maDvi'>
                   </nz-option>
                 </nz-select>
@@ -34,23 +34,23 @@
             <nz-form-item class='form-item'>
               <nz-form-label nzFor='nam-qd'>Loại hàng hóa</nz-form-label>
               <nz-form-control>
-                <nz-select formControlName='loaiVthh' (ngModelChange)="changeHangHoa($event)" nzAllowClear nzShowSearch>
+                <nz-select formControlName='loaiVthh' (ngModelChange)='changeHangHoa($event)' nzAllowClear nzShowSearch>
                   <nz-option *ngFor='let option of listOfOption' [nzLabel]='option.ten' [nzValue]='option.ma'>
                   </nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
           </div>
-<!--          <div nz-col nzSpan='5'>-->
-<!--            <nz-form-item class='form-item'>-->
-<!--              <nz-form-label nzFor='nam-qd'>Chủng loại hàng hóa</nz-form-label>-->
-<!--              <nz-form-control>-->
-<!--                <nz-select formControlName='cloaiVthh'>-->
-<!--                  <nz-option *ngFor='let p of listChungLoaiHangHoa' [nzValue]='p.ma' [nzLabel]='p.ten'></nz-option>-->
-<!--                </nz-select>-->
-<!--              </nz-form-control>-->
-<!--            </nz-form-item>-->
-<!--          </div>-->
+          <!--          <div nz-col nzSpan='5'>-->
+          <!--            <nz-form-item class='form-item'>-->
+          <!--              <nz-form-label nzFor='nam-qd'>Chủng loại hàng hóa</nz-form-label>-->
+          <!--              <nz-form-control>-->
+          <!--                <nz-select formControlName='cloaiVthh'>-->
+          <!--                  <nz-option *ngFor='let p of listChungLoaiHangHoa' [nzValue]='p.ma' [nzLabel]='p.ten'></nz-option>-->
+          <!--                </nz-select>-->
+          <!--              </nz-form-control>-->
+          <!--            </nz-form-item>-->
+          <!--          </div>-->
           <div nz-col nzSpan='7'>
             <nz-form-item class='form-item'>
               <nz-form-label nzFor='nam-qd'>Ngày ban hành</nz-form-label>
@@ -74,7 +74,7 @@
 
             </nz-form-item>
           </div>
-          <div nz-col nzSpan='24'>
+          <div nz-col nzSpan='20'>
             <nz-form-item class='form-item'>
               <nz-form-label nzFor='nam-qd'>Trích yếu</nz-form-label>
               <nz-form-control>
@@ -82,14 +82,26 @@
               </nz-form-control>
             </nz-form-item>
           </div>
+          <div nz-col nzSpan='4'>
+            <nz-form-item class='form-item'>
+              <nz-form-label nzFor='nam-qd'>Tình trạng</nz-form-label>
+              <nz-form-control>
+                <nz-select formControlName='trangThaiHl' nzAllowClear nzShowSearch>
+                  <nz-option *ngFor='let option of listTrangThaiHl' [nzLabel]='option.giaTri' [nzValue]='option.ma'>
+                  </nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
         </div>
       </form>
       <div class='cangiua group-button-search'>
-        <button nz-button class='search__button--clear' (click)="clearForm({maBn: this.userInfo.MA_DVI.startsWith('01') ? null : this.userInfo.MA_DVI, isSearch : true})">
+        <button nz-button class='search__button--clear'
+                (click)="clearForm({maBn: this.userInfo.MA_DVI.startsWith('01') ? null : this.userInfo.MA_DVI, isSearch : true})">
           <i class='icon  htvbdh_nhap-lai1'></i>
           Xóa điều kiện
         </button>
-        <button nz-button class='search__button--search' (click)='search()'>
+        <button nz-button class='search__button--search' (click)='timKiem()'>
           <i nz-icon nzType='search'></i>
           Tìm kiếm
         </button>
@@ -119,7 +131,8 @@
       </div>
     </div>
     <nz-card class='mt-2px flex-card data-table card-border-content table-card'>
-      <nz-table #basicTable nzBordered [nzData]='dataTable' class='table-chi-tiet' [nzFrontPagination]='false' [nzShowPagination]='false'
+      <nz-table #basicTable nzBordered [nzData]='dataTable' class='table-chi-tiet' [nzFrontPagination]='false'
+                [nzShowPagination]='false'
                 [nzScroll]="dataTable && dataTable.length ? { x: '1700px' } : null">
         <thead>
         <tr>
@@ -136,8 +149,8 @@
           <th nzWidth='150px'>Ngày ban hành</th>
           <th nzWidth='150px'>Ngày hiệu lực</th>
           <th nzWidth='150px'>Ngày hết hiệu lực</th>
-          <th nzWidth="100px">Tài liệu mật</th>
-          <th nzWidth="200px">Trạng thái nhập dữ liệu</th>
+          <th nzWidth='100px'>Tài liệu mật</th>
+          <th nzWidth='200px'>Trạng thái nhập dữ liệu</th>
           <th nzWidth='200px'>Tình trạng</th>
           <th nzWidth='200px'>Văn bản hiệu lực</th>
           <th nzWidth='120px' nzRight>Hành động</th>
@@ -171,7 +184,7 @@
                      (input)="filterInTable('listTenLoaiVthh',filterTable.listTenLoaiVthh)" />
             </nz-input-group>
           </th>
-          <th >
+          <th>
             <nz-input-group>
               <nz-date-picker nzFormat='dd/MM/yyyy' [(ngModel)]='filterTable.ngayKy'
                               (ngModelChange)="filterInTable('ngayKy', convertDateToString(filterTable.ngayKy))">
@@ -202,12 +215,12 @@
             </nz-input-group>
           </th>
           <th>
-            <nz-input-group>
-              <nz-select nzAllowClear [(ngModel)]='filterTable.trangThaiHl'
-                         (ngModelChange)="filterInTable('trangThaiHl',filterTable.trangThaiHl)">
-                <nz-option *ngFor='let p of listTrangThaiHl' [nzValue]='p.ma' [nzLabel]='p.giaTri'></nz-option>
-              </nz-select>
-            </nz-input-group>
+<!--            <nz-input-group>-->
+<!--              <nz-select nzAllowClear [(ngModel)]='filterTable.trangThaiHl'-->
+<!--                         (ngModelChange)="filterInTable('trangThaiHl',filterTable.trangThaiHl)">-->
+<!--                <nz-option *ngFor='let p of listTrangThaiHl' [nzValue]='p.ma' [nzLabel]='p.giaTri'></nz-option>-->
+<!--              </nz-select>-->
+<!--            </nz-input-group>-->
           </th>
           <th></th>
           <th nzRight></th>
@@ -237,14 +250,15 @@
             <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.ngayHetHieuLuc | date: 'dd/MM/YYYY' }}</td>
-            <td class="text-center">
+            <td class='text-center'>
               <label nz-checkbox nzDisabled [(ngModel)]='data.isMat'
                      [nzIndeterminate]='indeterminate'></label>
             </td>
             <td>{{ data.tenTrangThai }}</td>
             <td>{{ data.tenTrangThaiHl }}</td>
             <td>
-              <a class="link" (click)="downloadFile(data.fileDinhKems && data.fileDinhKems.length > 0 ? data.fileDinhKems[0] : null)">{{ data.fileDinhKems && data.fileDinhKems.length > 0 ? data.fileDinhKems[0].fileName : ''  }}</a>
+              <a class='link'
+                 (click)='downloadFile(data.fileDinhKems && data.fileDinhKems.length > 0 ? data.fileDinhKems[0] : null)'>{{ data.fileDinhKems && data.fileDinhKems.length > 0 ? data.fileDinhKems[0].fileName : ''  }}</a>
             </td>
             <td class='text-left' nzRight>
               <a *ngIf=" (userService.isAccessPermisson('KHCNBQ_QCKTTCCS_XEM') && (data.trangThai == STATUS.BAN_HANH))
