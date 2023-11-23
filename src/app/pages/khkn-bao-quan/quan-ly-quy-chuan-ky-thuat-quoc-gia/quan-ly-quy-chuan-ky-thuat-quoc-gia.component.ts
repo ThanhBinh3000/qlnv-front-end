@@ -1,20 +1,20 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {MESSAGE} from 'src/app/constants/message';
-import {UserLogin} from 'src/app/models/userlogin';
-import {DonviService} from 'src/app/services/donvi.service';
+import { Component, Input, OnInit } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
+import { UserLogin } from 'src/app/models/userlogin';
+import { DonviService } from 'src/app/services/donvi.service';
 import dayjs from 'dayjs';
-import {KhCnQuyChuanKyThuat} from './../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
-import {STATUS} from 'src/app/constants/status';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {Router} from '@angular/router';
-import {FileDinhKem} from "../../../models/DeXuatKeHoachMuaTrucTiep";
-import {saveAs} from 'file-saver';
+import { KhCnQuyChuanKyThuat } from './../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
+import { STATUS } from 'src/app/constants/status';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { Router } from '@angular/router';
+import { FileDinhKem } from '../../../models/DeXuatKeHoachMuaTrucTiep';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-quan-ly-quy-chuan-ky-thuat-quoc-gia',
@@ -28,9 +28,6 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
   qdTCDT: string = MESSAGE.QD_TCDT;
   userInfo: UserLogin;
   detail: any = {};
-  dataTest: any = {};
-  dsCha: any = {};
-  dsCon: any = {};
   STATUS = STATUS;
   listChungLoaiHangHoa: any[] = [];
   errorMessage = '';
@@ -38,27 +35,27 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
   selectedId: number = 0;
   isView: boolean = false;
   dataTableAll: any[] = [];
-  dsLoaiHangHoa: any[] = [];
   dsChungLoaiHangHoa: any[] = [];
   isTatCa: boolean = false;
   yearNow: number = 0;
   listNam: any[] = [];
   dsBoNganh: any[] = [];
-  boNganhAd: any[] = [];
   listOfOption: any = [];
   allChecked = false;
   indeterminate = false;
+  defaultTrangThaiHl = "01";
   listTrangThai: any[] = [
-    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
-    {ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LDV'},
-    {ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LDV'},
-    {ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt - LDV'},
-    {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'},
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LDV' },
+    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LDV' },
+    { ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt - LDV' },
+    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
 
   ];
   listTrangThaiHl: any[] = [
-    {ma: '01', giaTri: 'Còn hiệu lực'},
-    {ma: '00', giaTri: 'Hết hiệu lực'},
+    { ma: '01', giaTri: 'Còn hiệu lực' },
+    { ma: '00', giaTri: 'Hết hiệu lực' },
+    { ma: '02', giaTri: 'Chưa có hiệu lực' },
   ];
 
   constructor(
@@ -88,6 +85,7 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
       maDvi: [null],
       maBn: [null],
       isSearch: [true],
+      trangThaiHl: ['01'],
     });
   }
 
@@ -107,9 +105,6 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
   };
 
   async ngOnInit() {
-    // if (!this.userService.isAccessPermisson('KHCNBQ_QCKTTCCS')) {
-    //   this.router.navigateByUrl('/error/401')
-    // }
     this.spinner.show();
     try {
       if (!this.typeVthh || this.typeVthh == '') {
@@ -124,9 +119,7 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
       this.formData.patchValue({
         maBn: this.userInfo.MA_DVI.startsWith('01') ? null : this.userInfo.MA_DVI,
       });
-      await this.search();
-      this.filterTable.trangThaiHl = '01';
-      this.filterInTable('trangThaiHl','01')
+      await this.timKiem();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -136,11 +129,19 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
   }
 
   async loadDsHangHoa() {
-    let res = await this.danhMucService.getAllVthhByCap("2");
+    let res = await this.danhMucService.getAllVthhByCap('2');
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
-        this.listOfOption = res.data
+        this.listOfOption = res.data;
       }
+    }
+  }
+
+  async timKiem() {
+    await this.search();
+    if (this.formData.get('trangThaiHl').value) {
+      this.filterTable.trangThaiHl = this.formData.get('trangThaiHl').value;
+      this.filterInTable('trangThaiHl', this.formData.get('trangThaiHl').value);
     }
   }
 
@@ -154,7 +155,7 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
 
   async changeHangHoa(event: any) {
     if (event) {
-      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.listChungLoaiHangHoa = res.data;
@@ -164,6 +165,24 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
       }
     }
   }
+
+
+  showList() {
+    this.isDetail = false;
+    this.timKiem();
+    this.showListEvent.emit();
+  }
+
+  async changePageIndex(event) {
+    this.page = event;
+    await this.timKiem();
+  }
+
+  async changePageSize(event) {
+    this.pageSize = event;
+    await this.timKiem();
+  }
+
 
   async getListBoNganh() {
     this.dsBoNganh = [];
@@ -177,7 +196,7 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
     this.userInfo = this.userService.getUserLogin();
     this.detail.maDvi = this.userInfo.MA_DVI;
     this.detail.tenDvi = this.userInfo.TEN_DVI;
-    await this.search();
+    await this.timKiem();
   }
 
   redirectToChiTiet(isView: boolean, id: number) {
