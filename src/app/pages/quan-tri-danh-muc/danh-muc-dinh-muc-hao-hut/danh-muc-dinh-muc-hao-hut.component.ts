@@ -71,7 +71,7 @@ export class DanhMucDinhMucHaoHutComponent implements OnInit {
       this.getListPtbq();
       this.loadDsVthh();
       this.loadDsCuc();
-      await this.search();
+       this.search();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -158,6 +158,7 @@ export class DanhMucDinhMucHaoHutComponent implements OnInit {
           item.listPtbq = item.phuongThucBq.split(",");
           item.listHtbq = item.hinhThucBq.split(",");
           item.listLhbq = item.loaiHinhBq.split(",");
+          item.listCloaiVthh = item.cloaiVthh.split(",");
           item.listCuc = item.apDungTai.split(",");
         });
       }
