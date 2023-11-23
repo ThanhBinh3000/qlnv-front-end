@@ -339,7 +339,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
   // }
   async getDinhMucHaoHut(cloaiVthh: string, loaiVthh: string, soThangBaoQuanqHang: number) {
     const body = {
-      loaiVthh, cloaiVthh, apDungTai: this.userInfo.MA_DVI.slice(0, -2)
+      loaiVthh, cloaiVthh
     }
     let hinhThucBq = [];
     let loaiHinhBq = [];

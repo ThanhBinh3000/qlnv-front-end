@@ -473,7 +473,7 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
   }
   async getDinhMucHaoHut(cloaiVthh: string, loaiVthh: string, soThangBaoQuanqHang: number) {
     const body = {
-      loaiVthh, cloaiVthh, apDungTai: this.userInfo.MA_DVI.slice(0, -2)
+      loaiVthh, cloaiVthh
     }
     let hinhThucBq = [];
     let loaiHinhBq = [];
