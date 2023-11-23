@@ -191,12 +191,12 @@
                   <td class="text-center">{{lv1.ngayKnMau | date: 'dd/MM/YYYY' }}</td>
                   <td>{{lv1.tenDiemKho}}</td>
                   <td>{{lv1.tenLoKho}}</td>
-                  <td><a nz-button nzType="link" *ngIf="lv1.soBienBan"
+                  <td><a nz-button nzType="link" *ngIf="lv1.soBbTinhKho"
                       (click)="openSoBbTkModal(lv1.idBbTinhKho)">{{lv1.soBbTinhKho}}</a>
                   </td>
                   <td>{{lv1.tenTrangThai}}</td>
                   <td class="text-center">
-                    <a (click)="redirectDetail(lv1.id, true)"
+                    <!-- <a (click)="redirectDetail(lv1.id, true)"
                       *ngIf="vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.XEM) &&
                             !(vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.DUYET_LDCC) && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_KTCL_LT_BBLMBGM_XEM'))">
                       <i class="fa fa-eye" title="Xem chi tiết"></i>
@@ -211,6 +211,18 @@
                     </a>
                     <a *ngIf="vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_KTCL_LT_BBLMBGM_XOA')"
                       (click)="delete(lv1)">
+                      <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                    </a> -->
+                    <a (click)="redirectDetail(lv1.id, true)" *ngIf="checkRoleView(lv1.trangThai)">
+                      <i class="fa fa-eye" title="Xem chi tiết"></i>
+                    </a>
+                    <a *ngIf="checkRoleEdit(lv1.trangThai)" (click)="redirectDetail(lv1.id, false)">
+                      <i class="fa fa-pencil" title="Sửa"></i>
+                    </a>
+                    <a *ngIf="checkRoleApprop(lv1.trangThai)" (click)="redirectDetail(lv1.id, true)">
+                      <i class="icon htvbdh_tcdt_pheduyet"></i>
+                    </a>
+                    <a *ngIf="checkRoleDelete(lv1.trangThai)" (click)="delete(lv1)">
                       <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     </a>
                   </td>
