@@ -47,8 +47,9 @@
                                     149/QĐ-TCDT)
                                 </th>
                                 <th scope="col" rowSpan="2">ĐVT</th>
-                                <th scope="colgroup" colSpan="5">Số lượng tài sản, máy móc, thiết bị hiện có</th>
-                                <th scope="colgroup" colSpan="3">Dự toán đề nghị trang bị năm {{namBcao}}</th>
+                                <th scope="colgroup" colSpan="4">Số lượng tài sản, máy móc, thiết bị hiện có</th>
+                                <th scope="colgroup" colSpan="5">Dự toán đề nghị trang bị năm {{namBcao}} (năm kế
+                                    hoặc)</th>
                                 <th scope="colgroup" colSpan="3">Dự toán, kinh phí được sử dụng trong năm </th>
                                 <th scope="col" rowSpan="2">Dự toán đề nghị điều chỉnh <br> (+ tăng) (- giảm)</th>
                                 <th scope="col" rowSpan="2" *ngIf="status.viewAppVal">Dự toán vụ TVQT <br> đề nghị <br>
@@ -67,14 +68,18 @@
                                 <th scope="col" rowspan="2" *ngIf="status.general "></th>
                             </tr>
                             <tr>
-                                <th scope="col">Số lượng đến thời điểm <br> báo cáo</th>
+                                <th scope="col">Số lượng đã có trong kho đến thời điểm <br> hiện tại</th>
                                 <th scope="col">Số lượng đã nhận chưa có <br> QĐ điều chuyển</th>
-                                <th scope="col">Số lượng đã được <br> phê duyệt <br> mua sắm năm {{namBcao - 1}}</th>
+                                <!-- <th scope="col">Số lượng đã được <br> phê duyệt <br> mua sắm năm {{namBcao - 1}}</th> -->
                                 <th scope="col">Cộng</th>
                                 <th scope="col">Tiêu chuẩn định mức tối đa <br> được phê duyệt</th>
-                                <th scope="col">Số lượng</th>
+
+                                <th scope="col">Số lượng(thực hiện đến thời điểm hiện tại)</th>
+                                <th scope="col">Số lượng ước thực hiện đến cuối năm</th>
+                                <th scope="col">Tổng</th>
                                 <th scope="col">Mức giá</th>
                                 <th scope="col">Thành tiền <br>(Tổng nhu cầu năm nay)</th>
+
                                 <th scope="col">Dự toán năm trước <br> chuyển sang <br> được phép sử dụng <br> cho năm
                                     nay</th>
                                 <th scope="col">Dự toán, kinh phí đã giao</th>
@@ -86,27 +91,28 @@
                                 <th scope="col">C</th>
                                 <th scope="col">1</th>
                                 <th scope="col">2</th>
-                                <th scope="col">3</th>
-                                <th scope="col">4 = 1 + 2 + 3</th>
+                                <th scope="col">3=1+2</th>
+                                <th scope="col">4</th>
                                 <th scope="col">5</th>
                                 <th scope="col">6</th>
-                                <th scope="col">7</th>
-                                <th scope="col">8=6x7</th>
-                                <th scope="col">9</th>
+                                <th scope="col">7=5+6</th>
+                                <th scope="col">8</th>
+                                <th scope="col">9=7x8</th>
                                 <th scope="col">10</th>
-                                <th scope="col">11=9+10</th>
-                                <th scope="col">12=8-11</th>
-                                <th scope="col" *ngIf="status.viewAppVal">13</th>
+                                <th scope="col">11</th>
+                                <th scope="col">12=10+11</th>
+                                <th scope="col">13</th>
+                                <th scope="col" *ngIf="status.viewAppVal">14</th>
                                 <ng-container *ngIf="status.viewAppVal; else soChiMuc ">
-                                    <th scope="col">14</th>
                                     <th scope="col">15</th>
+                                    <th scope="col">16</th>
                                 </ng-container>
                                 <ng-template #soChiMuc>
-                                    <th scope="col">13</th>
                                     <th scope="col">14</th>
+                                    <th scope="col">15</th>
                                 </ng-template>
-                                <th scope="col" *ngIf="status.viewAppVal">16=13-12</th>
                                 <th scope="col" *ngIf="status.viewAppVal">17</th>
+                                <th scope="col" *ngIf="status.viewAppVal">18</th>
                                 <th scope="col" rowspan="2" *ngIf="status.general"></th>
                                 <th scope="col" rowspan="2" *ngIf="status.general "></th>
                             </tr>
@@ -115,6 +121,7 @@
                             <tr>
                                 <td nzLeft></td>
                                 <td nzLeft>Tổng cộng</td>
+                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -151,6 +158,7 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
+                                <td></td>
                                 <td>{{Op.fmtVal(tongDieuChinhTang)}}</td>
                                 <td *ngIf="status.viewAppVal">{{Op.fmtVal(dtoanVuTang)}}</td>
                                 <td></td>
@@ -163,6 +171,7 @@
                             <tr>
                                 <td nzLeft></td>
                                 <td nzLeft>Phát sinh điều chỉnh giảm</td>
+                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -195,12 +204,16 @@
                                     <td>{{data.dvTinh}}</td>
                                     <td>{{Op.fmtVal(data.sluongTsDenTd)}}</td>
                                     <td>{{Op.fmtVal(data.sluongTsDaNhan)}}</td>
-                                    <td>{{Op.fmtVal(data.sluongTsDaPd)}}</td>
+                                    <!-- <td>{{Op.fmtVal(data.sluongTsDaPd)}}</td> -->
                                     <td>{{Op.fmtVal(data.sluongTsCong)}}</td>
                                     <td>{{Op.fmtVal(data.sluongTsTcDinhMuc)}}</td>
+
                                     <td>{{Op.fmtVal(data.dtoanDnghiSl)}}</td>
+                                    <td>{{Op.fmtVal(data.dtoanDnghiSlThien)}}</td>
+                                    <td>{{Op.fmtVal(data.dtoanDnghiSlTong)}}</td>
                                     <td>{{Op.fmtVal(data.dtoanDnghiMucGia)}}</td>
                                     <td>{{Op.fmtVal(data.dtoanDnghiThanhTien)}}</td>
+
                                     <td>{{Op.fmtVal(data.dtoanKpNamTruoc)}}</td>
                                     <td>{{Op.fmtVal(data.dtoanKpDaGiao)}}</td>
                                     <td>{{Op.fmtVal(data.dtoanKpCong)}}</td>
@@ -244,12 +257,12 @@
                                                 (ngModelChange)="changeModel(editCache[data.id].data.id)"
                                                 [options]="Op.amount" />
                                         </td>
-                                        <td>
+                                        <!-- <td>
                                             <input class="money-input" currencyMask
                                                 [(ngModel)]="editCache[data.id].data.sluongTsDaPd"
                                                 (ngModelChange)="changeModel(editCache[data.id].data.id)"
                                                 [options]="Op.amount" />
-                                        </td>
+                                        </td> -->
                                         <td>
                                             {{Op.fmtVal(editCache[data.id].data.sluongTsCong)}}
                                         </td>
@@ -266,6 +279,20 @@
                                                 (ngModelChange)="changeModel(editCache[data.id].data.id)"
                                                 [class]="statusCanhBao == true ? '' : 'input-error-validate'"
                                                 [options]="Op.amount" />
+                                        </td>
+                                        <td>
+                                            <input class="money-input" currencyMask
+                                                [(ngModel)]="editCache[data.id].data.dtoanDnghiSlThien"
+                                                (ngModelChange)="changeModel(editCache[data.id].data.id)"
+                                                [class]="statusCanhBao == true ? '' : 'input-error-validate'"
+                                                [options]="Op.amount" />
+                                        </td>
+                                        <td>
+                                            <!-- <input class="money-input" currencyMask
+                                                [(ngModel)]="editCache[data.id].data.dtoanDnghiSlTong"
+                                                (ngModelChange)="changeModel(editCache[data.id].data.id)"
+                                                [options]="Op.amount" /> -->
+                                            {{Op.fmtVal(editCache[data.id].data.dtoanDnghiSlTong)}}
                                         </td>
                                         <td>
                                             <!-- {{Op.fmtVal(editCache[data.id].data.dtoanDnghiMucGia)}} -->
@@ -308,10 +335,13 @@
                                     <ng-template #viewAppVal>
                                         <td>{{Op.fmtVal(editCache[data.id].data.sluongTsDenTd)}}</td>
                                         <td>{{Op.fmtVal(editCache[data.id].data.sluongTsDaNhan)}}</td>
-                                        <td>{{Op.fmtVal(editCache[data.id].data.sluongTsDaPd)}}</td>
+                                        <!-- <td>{{Op.fmtVal(editCache[data.id].data.sluongTsDaPd)}}</td> -->
                                         <td>{{Op.fmtVal(editCache[data.id].data.sluongTsCong)}}</td>
                                         <td>{{Op.fmtVal(editCache[data.id].data.sluongTsTcDinhMuc)}}</td>
+
                                         <td>{{Op.fmtVal(editCache[data.id].data.dtoanDnghiSl)}}</td>
+                                        <td>{{Op.fmtVal(editCache[data.id].data.dtoanDnghiSlThien)}}</td>
+                                        <td>{{Op.fmtVal(editCache[data.id].data.dtoanDnghiSlTong)}}</td>
                                         <td>{{Op.fmtVal(editCache[data.id].data.dtoanDnghiMucGia)}}</td>
                                         <td>{{Op.fmtVal(editCache[data.id].data.dtoanDnghiThanhTien)}}</td>
                                         <td>{{Op.fmtVal(editCache[data.id].data.dtoanKpNamTruoc)}}</td>
