@@ -163,7 +163,11 @@ export class DanhMucDinhMucHaoHutComponent implements OnInit {
     this.spinner.show();
     data.hinhThucBq =data.listHtbq.toString();
     data.phuongThucBq = data.listPtbq.toString();
-    data.apDungTai = data.listCuc.toString();
+    if (data.listCuc && data.listCuc.length > 0) {
+      data.apDungTai = data.listCuc.toString();
+    } else {
+      data.apDungTai= this.dsCuc.map(item => item.maDvi).toString();
+    }
     if (data.listCloaiVthh && data.listCloaiVthh.length > 0) {
       data.cloaiVthh = data.listCloaiVthh.toString();
     } else {
@@ -214,7 +218,7 @@ export class DanhMucDinhMucHaoHutComponent implements OnInit {
     let check = true;
     arr.push(
       rowItem.maDinhMuc, rowItem.tenDinhMuc, rowItem.loaiVthh, rowItem.hinhThucBq,
-      rowItem.phuongThucBq, rowItem.dinhMuc, rowItem.apDungTai
+      rowItem.phuongThucBq, rowItem.dinhMuc
     )
     if (arr && arr.length > 0) {
       for (let i = 0; i < arr.length; i++) {
