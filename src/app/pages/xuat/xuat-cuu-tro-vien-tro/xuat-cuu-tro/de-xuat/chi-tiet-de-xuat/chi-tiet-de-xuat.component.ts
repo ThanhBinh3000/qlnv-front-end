@@ -17,7 +17,7 @@ import * as dayjs from "dayjs";
 import { FormGroup, Validators } from "@angular/forms";
 import { FileDinhKem } from "src/app/models/DeXuatKeHoachuaChonNhaThau";
 import { STATUS } from "src/app/constants/status";
-import { chain, cloneDeep } from 'lodash';
+import { chain, cloneDeep, uniqBy } from 'lodash';
 import { MESSAGE } from "src/app/constants/message";
 import { v4 as uuidv4 } from "uuid";
 import { QuanLyHangTrongKhoService } from "src/app/services/quanLyHangTrongKho.service";
@@ -54,6 +54,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
   listDviNhan: any[] = [];
   listQuocGia: any[] = [];
   listDiaDanhHanhChinh: any[] = [];
+  editSoLuongNhuCauXuat: boolean = false;
   amount1 = { ...AMOUNT_ONE_DECIMAL, align: "left" }
   constructor(httpClient: HttpClient,
     storageService: StorageService,
@@ -150,16 +151,23 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         soLuongNhuCauXuat: [0],
         soLuongConThieu: [0],
         soLuongChuyenCapThoc: [0],
-        idDonViNhan: ['']
+        idDonViNhan: [''],
+        editNhuCauXuat: []
       });
     this.formData.controls['deXuatPhuongAn'].valueChanges.subscribe(value => {
-      const { tongSoLuongDeXuat, tongSoLuongXuatCap, tongSoLuongNhuCauXuat } = Array.isArray(value) ? value.reduce((obj, cur) => {
-        obj.tongSoLuongDeXuat += cur.soLuong ? +cur.soLuong : 0;
-        // obj.tongSoLuongDeXuat += this.formData.value.tenVthh === TEN_LOAI_VTHH.GAO ? (cur.soLuongNhuCauXuat ? cur.soLuongNhuCauXuat : 0) : (cur.soLuong ? +cur.soLuong : 0)
+      // const { tongSoLuongDeXuat, tongSoLuongXuatCap, tongSoLuongNhuCauXuat } = Array.isArray(value) ? value.reduce((obj, cur) => {
+      //   obj.tongSoLuongDeXuat += cur.soLuong ? +cur.soLuong : 0;
+      //   // obj.tongSoLuongDeXuat += this.formData.value.tenVthh === TEN_LOAI_VTHH.GAO ? (cur.soLuongNhuCauXuat ? cur.soLuongNhuCauXuat : 0) : (cur.soLuong ? +cur.soLuong : 0)
+      //   obj.tongSoLuongXuatCap += cur.soLuongChuyenCapThoc ? +cur.soLuongChuyenCapThoc : 0;
+      //   obj.tongSoLuongNhuCauXuat += cur.soLuongNhuCauXuat ? cur.soLuongNhuCauXuat : 0
+      //   return obj;
+      // }, { tongSoLuongDeXuat: 0, tongSoLuongXuatCap: 0, tongSoLuongNhuCauXuat: 0 }) : { tongSoLuongDeXuat: 0, tongSoLuongXuatCap: 0, tongSoLuongNhuCauXuat: 0 };
+      const tongSoLuongDeXuat = Array.isArray(value) ? value.reduce((sum, cur) => sum += cur.soLuong ? cur.soLuong : 0, 0) : 0;
+      const { tongSoLuongXuatCap, tongSoLuongNhuCauXuat } = Array.isArray(value) ? uniqBy(value, 'noiDung').reduce((obj, cur) => {
         obj.tongSoLuongXuatCap += cur.soLuongChuyenCapThoc ? +cur.soLuongChuyenCapThoc : 0;
         obj.tongSoLuongNhuCauXuat += cur.soLuongNhuCauXuat ? cur.soLuongNhuCauXuat : 0
         return obj;
-      }, { tongSoLuongDeXuat: 0, tongSoLuongXuatCap: 0, tongSoLuongNhuCauXuat: 0 }) : { tongSoLuongDeXuat: 0, tongSoLuongXuatCap: 0, tongSoLuongNhuCauXuat: 0 };
+      }, { tongSoLuongXuatCap: 0, tongSoLuongNhuCauXuat: 0 }) : { tongSoLuongXuatCap: 0, tongSoLuongNhuCauXuat: 0 };
       this.formData.controls["tongSoLuongDeXuat"].setValue(tongSoLuongDeXuat);
       this.formData.controls["tongSoLuongXuatCap"].setValue(tongSoLuongXuatCap);
       this.formData.controls["tongSoLuongNhuCauXuat"].setValue(tongSoLuongNhuCauXuat)
@@ -233,13 +241,14 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       this.formData.patchValue({
         tenVthh: TEN_LOAI_VTHH.GAO,
         loaiVthh: LOAI_HANG_DTQG.GAO,
-        maDvi: this.userInfo.MA_DVI,
-        maDviDx: this.userInfo.MA_DVI,
+        maDvi: this.userInfo.MA_PHONG_BAN,
+        maDviDx: this.userInfo.MA_PHONG_BAN,
         tenDvi: this.userInfo.TEN_DVI,
         kieuNhapXuat: 'Xuất không thu tiền',
         loaiNhapXuat: 'Xuất cứu trợ',
         donViTinh: 'kg'
       });
+      console.log(" this.userInfo", this.userInfo)
       if (this.userService.isCuc) {
         this.checkTonKhoDonViTaoDeXuat()
       }
@@ -288,7 +297,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     this.formDataDtl.reset();
     if (data) {
       if (level == 0) {
-        this.formDataDtl.patchValue({ noiDung: data.noiDung, idDonViNhan: data.idDonViNhan });
+        this.formDataDtl.patchValue({ noiDung: data.noiDung, idDonViNhan: data.idDonViNhan, editNhuCauXuat: false });
       } else if (level == 1) {
         this.formDataDtl.patchValue({
           idVirtual: uuidv4(),
@@ -297,14 +306,11 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
           loaiVthh: data.loaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
           maDvi: data.maDvi,
-          edit: level
+          soLuongNhuCauXuat: data.soLuongNhuCauXuat,
+          editNhuCauXuat: false
+          // edit: true
         });
-      } else if (level == 2) {
-        data.edit = level;
-        this.formDataDtl.patchValue(data);
-      } else if (level === 3) {
-        this.formDataDtl.patchValue({ noiDung: data.noiDung, idDonViNhan: data.idDonViNhan, loaiVthh: data.childData[0]?.loaiVthh, tenLoaiVthh: data.childData[0]?.tenLoaiVthh });
-      } else if (level === 5) {
+      } else {
         this.formDataDtl.patchValue({
           idVirtual: uuidv4(),
           noiDung: data.noiDung,
@@ -312,6 +318,8 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
           loaiVthh: data.loaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
           maDvi: data.maDvi,
+          soLuongNhuCauXuat: data.soLuongNhuCauXuat,
+          editNhuCauXuat: false
         });
       }
     } else {
@@ -319,6 +327,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         idVirtual: uuidv4(),
         loaiVthh: this.listLoaiHangHoa[0].ma,
         tenLoaiVthh: this.listLoaiHangHoa[0].ten,
+        editNhuCauXuat: true
       });
     }
     // await this.changeLoaiVthh(this.formDataDtl.value.loaiVthh);
@@ -336,37 +345,81 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       }
     });
   }
+  async suaPhuongAn(data?: any, level?: any) {
+    this.formDataDtl.reset();
+    if (data) {
+      if (level === 0) {
+        this.formDataDtl.patchValue({ noiDung: data.noiDung, soLuongNhuCauXuat: data.soLuongNhuCauXuat, editNhuCauXuat: true, edit: true });
+        this.editSoLuongNhuCauXuat = true;
+        this.modalChiTiet = true;
+      } else {
+        data.edit = true;
+        this.formDataDtl.patchValue({ ...data, editNhuCauXuat: false });
+        // await this.changeLoaiVthh(this.formDataDtl.value.loaiVthh);
+        if (this.userService.isCuc()) {
+          this.formDataDtl.patchValue({ maDvi: this.userInfo.MA_DVI });
+          await this.changeMaDviDtl(this.userInfo.MA_DVI);
+        }
+        this.modalChiTiet = true;
 
+        this.listDiaDanh.forEach(f => {
+          if (!this.isVthhVatuThietBi()) {
+            f.disabled = this.formData.value.deXuatPhuongAn.some(s => s.noiDung === f.ten && (!data?.noiDung || f.ten !== data.noiDung));
+          } else {
+            delete f.disabled;
+          }
+        });
+      }
+    }
+  }
   async luuPhuongAn() {
     // await this.helperService.ignoreRequiredForm(this.formDataDtl);
-    await this.helperService.markFormGroupTouched(this.formDataDtl);
-    if (this.formDataDtl.invalid) {
-      return;
-    }
     let row = this.formDataDtl.value;
     let deXuatPhuongAn = this.formData.value.deXuatPhuongAn;
-    if (row.edit == 0) {
-      deXuatPhuongAn.forEach(s => {
-        if (s.noiDung === row.noiDungOld) {
-          s.noiDung = row.noiDung;
+    if (row.editNhuCauXuat && row.edit) {
+      this.formData.value.deXuatPhuongAn.forEach(item => {
+        if (item.noiDung === row.noiDung) {
+          item.soLuongNhuCauXuat = row.soLuongNhuCauXuat;
+          item.soLuongConThieu = row.soLuongConThieu;
+          item.soLuongChuyenCapThoc = row.soLuongConThieu
         }
       });
-    } else {
-      let exist =
-        // this.formData.value.deXuatPhuongAn.find(s => s.idVirtual === row.idVirtual) ||
-        this.formData.value.deXuatPhuongAn.find(s => s.noiDung === row.noiDung && s.maDvi === row.maDvi && s.loaiVthh === row.loaiVthh && s.cloaiVthh === '') ||
-        this.formData.value.deXuatPhuongAn.find(s => s.noiDung === row.noiDung && s.maDvi === row.maDvi && s.loaiVthh === row.loaiVthh && s.cloaiVthh === row.cloaiVthh);
-      if (exist) {
-        Object.assign(exist, row);
+    }
+    else {
+      await this.helperService.markFormGroupTouched(this.formDataDtl);
+      if (this.formDataDtl.invalid) {
+        return;
+      }
+      if (row.edit == 0) {
+        deXuatPhuongAn.forEach(s => {
+          if (s.noiDung === row.noiDungOld) {
+            s.noiDung = row.noiDung;
+          }
+        });
       } else {
-        deXuatPhuongAn = [...deXuatPhuongAn, row];
-      }/*
-      let existRowIndex = deXuatPhuongAn.findIndex(s => s.idVirtual === row.idVirtual);
-      if (existRowIndex !== -1) {
-        deXuatPhuongAn[existRowIndex] = row;
-      } else {
-        deXuatPhuongAn = [...deXuatPhuongAn, row];
-      }*/
+        let exist =
+          // this.formData.value.deXuatPhuongAn.find(s => s.idVirtual === row.idVirtual) ||
+          this.formData.value.deXuatPhuongAn.find(s => s.noiDung === row.noiDung && s.maDvi === row.maDvi && s.loaiVthh === row.loaiVthh && s.cloaiVthh === '') ||
+          this.formData.value.deXuatPhuongAn.find(s => s.noiDung === row.noiDung && s.maDvi === row.maDvi && s.loaiVthh === row.loaiVthh && s.cloaiVthh === row.cloaiVthh);
+        if (exist) {
+          Object.assign(exist, row);
+        } else {
+          deXuatPhuongAn = [...deXuatPhuongAn, row];
+        }/*
+        let existRowIndex = deXuatPhuongAn.findIndex(s => s.idVirtual === row.idVirtual);
+        if (existRowIndex !== -1) {
+          deXuatPhuongAn[existRowIndex] = row;
+        } else {
+          deXuatPhuongAn = [...deXuatPhuongAn, row];
+        }*/
+      }
+      deXuatPhuongAn.forEach(item => {
+        if (item.noiDung === row.noiDung) {
+          item.soLuongNhuCauXuat = row.soLuongNhuCauXuat;
+          item.soLuongConThieu = row.soLuongConThieu;
+          item.soLuongChuyenCapThoc = row.soLuongConThieu
+        }
+      });
     }
     this.formData.patchValue({ deXuatPhuongAn: deXuatPhuongAn });
     await this.buildTableView();
@@ -376,6 +429,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
 
   async huyPhuongAn() {
     this.formDataDtl.reset();
+    this.editSoLuongNhuCauXuat = false;
     this.modalChiTiet = false;
   }
 
@@ -389,7 +443,12 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     } else if (level == 1) {
       deXuatPhuongAn = deXuatPhuongAn.filter(s => s.noiDung !== data.noiDung);
     }
-
+    deXuatPhuongAn.forEach(item => {
+      if (item.noiDung === data.noiDung) {
+        item.soLuongConThieu += data.soLuong;
+        item.soLuongChuyenCapThoc += data.soLuong;
+      }
+    });
     this.formData.patchValue({ deXuatPhuongAn: deXuatPhuongAn });
     await this.buildTableView();
   }
@@ -408,10 +467,12 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
               idVirtual: uuidv4(),
               noiDung: key,
               idDonViNhan: rs ? rs.idDonViNhan : '',
+              loaiVthh: rs ? rs.loaiVthh : '',
+              tenLoaiVthh: rs ? rs.tenLoaiVthh : '',
               soLuong: rs ? value.reduce((sum, cur) => sum += cur.soLuong ? cur.soLuong : 0, 0) : 0,
               childData: rs ? value : [],
-              soLuongNhuCauXuat: rs ? value.reduce((sum, cur) => sum += cur.soLuongNhuCauXuat ? cur.soLuongNhuCauXuat : 0, 0) : 0,
-              soLuongChuyenCapThoc: rs ? value.reduce((sum, cur) => sum += cur.soLuongChuyenCapThoc ? cur.soLuongChuyenCapThoc : 0, 0) : 0,
+              soLuongNhuCauXuat: rs ? rs.soLuongNhuCauXuat : 0,
+              soLuongChuyenCapThoc: rs ? rs.soLuongChuyenCapThoc : 0,
             };
           }).value();
       }
@@ -650,8 +711,26 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
 
   soLuongNhuCauXuatChange($event) {
     // (tính soLuongConThieu = nếu (Nhu cầu xuất cứu trợ  - sl xuất cứu trợ đề xuất ) > 0 thì (Nhu cầu xuất cứu trợ  - sl xuất cứu trợ đề xuất ) ngược lại  = 0 )
-    if (this.formDataDtl.value.soLuongNhuCauXuat > this.formDataDtl.value.soLuong) {
-      let soLuongConThieu = this.formDataDtl.value.soLuongNhuCauXuat - this.formDataDtl.value.soLuong;
+    // if (this.formDataDtl.value.soLuongNhuCauXuat > this.formDataDtl.value.soLuong) {
+    //   let soLuongConThieu = this.formDataDtl.value.soLuongNhuCauXuat - this.formDataDtl.value.soLuong;
+    //   if (soLuongConThieu < 0) {
+    //     soLuongConThieu = 0;
+    //   }
+    //   this.formDataDtl.patchValue({
+    //     soLuongConThieu: soLuongConThieu,
+    //     soLuongChuyenCapThoc: soLuongConThieu
+    //   });
+    // } else {
+    //   this.formDataDtl.patchValue({
+    //     soLuongConThieu: 0,
+    //     soLuongChuyenCapThoc: 0
+    //   });
+    // }
+    if (!$event) return;
+    const soLuongNhuCauXuat = this.formDataDtl.value.soLuongNhuCauXuat ? this.formDataDtl.value.soLuongNhuCauXuat : 0;
+    const soLuong = this.formData.value.deXuatPhuongAn.filter(f => f.noiDung === this.formDataDtl.value.noiDung && f.idVirtual !== this.formDataDtl.value.idVirtual).reduce((sum, cur) => sum += cur.soLuong, 0) + this.formDataDtl.value.soLuong;
+    if (soLuongNhuCauXuat > soLuong) {
+      let soLuongConThieu = soLuongNhuCauXuat - soLuong;
       if (soLuongConThieu < 0) {
         soLuongConThieu = 0;
       }
