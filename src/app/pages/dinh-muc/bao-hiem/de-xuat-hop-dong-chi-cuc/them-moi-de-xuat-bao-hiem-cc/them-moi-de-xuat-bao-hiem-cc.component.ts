@@ -18,8 +18,7 @@ import {
 } from "../../../../../services/dinhmuc-maymoc-baohiem/de-xuat-nhu-cau-bao-hiem.service";
 import {AMOUNT_NO_DECIMAL} from '../../../../../Utility/utils';
 import * as uuidv4 from "uuid";
-import {chain} from "lodash";
-import {cloneDeep} from 'lodash';
+import {chain, cloneDeep} from "lodash";
 
 @Component({
   selector: 'app-them-moi-de-xuat-bao-hiem-cc',
@@ -150,6 +149,7 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
                 data.soLuongHt = item.slHienThoi;
                 data.maKhoChua = item.maDonVi;
                 data.maDvi = this.userInfo.MA_DVI;
+                data.khoiTich = this.rowItemKho.khoiTich
                 this.tableHangDtqgReq.push(data)
               }
             }
@@ -425,6 +425,7 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
                   children: value2,
                   tenNhaKho: key2,
                   tenDiemKho: key1,
+                  khoiTich: value2 && value2.length > 0 ? value2[0].khoiTich : 0,
                 }
               }
             ).value();
@@ -481,6 +482,7 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
       this.rowItemHh.tenNhaKho = item.tenNhaKho;
       this.rowItemHh.maKhoChua = kho ? kho.nhaKho : null;
       this.rowItemHh.maDvi = this.userInfo.MA_DVI;
+      this.rowItemHh.khoiTich = kho ? kho.khoiTich : null;
     } else {
       this.rowItemHh = cloneDeep(item);
     }
