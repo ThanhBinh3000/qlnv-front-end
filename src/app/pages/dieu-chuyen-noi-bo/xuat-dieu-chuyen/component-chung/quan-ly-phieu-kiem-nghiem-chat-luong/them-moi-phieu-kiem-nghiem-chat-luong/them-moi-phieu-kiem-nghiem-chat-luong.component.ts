@@ -360,7 +360,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       case STATUS.TU_CHOI_LDC:
       case STATUS.DU_THAO: {
         trangThai = STATUS.CHO_DUYET_TP;
-        mess = 'Bạn có muối gửi duyệt ?';
+        mess = 'Bạn có muốn gửi duyệt ?';
         MSG = MESSAGE.GUI_DUYET_SUCCESS;
         break;
       }

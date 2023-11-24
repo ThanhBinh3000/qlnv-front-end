@@ -289,7 +289,7 @@ export class ThongTinKeHoachXuatHangCuaCucComponent extends Base2Component imple
       case STATUS.DU_THAO:
       case STATUS.TU_CHOI_TP: {
         trangThai = STATUS.CHO_DUYET_TP;
-        mess = 'Bạn có muối gửi duyệt?'
+        mess = 'Bạn có muốn gửi duyệt?'
         break;
       }
       case STATUS.CHO_DUYET_TP: {

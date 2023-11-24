@@ -33,7 +33,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
   @Input() loaiVthh: string;
   @Output()
   showListEvent = new EventEmitter<any>();
-
+  isViewChild: boolean;
   isBienBan: boolean = false;
   idBienBan: number;
   loaiBienBan: string;
@@ -378,6 +378,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
     this.loaiBienBan = data.loai;
     this.isBienBan = true;
     this.previewNameBienBan = data.previewName;
+    this.isViewChild = isView;
   }
 
   async backMain() {
