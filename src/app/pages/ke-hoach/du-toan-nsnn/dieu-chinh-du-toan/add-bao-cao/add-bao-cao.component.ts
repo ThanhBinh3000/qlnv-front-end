@@ -182,7 +182,7 @@ export class AddBaoCaoComponent implements OnInit {
     async initialization() {
         //lay thong tin chung bao cao
         this.baoCao.id = this.data?.id;
-        this.userInfo = this.userService.getUserLogin();
+        this.userInfo = await this.userService.getUserLogin();
         if (this.baoCao.id) {
             await this.getDetailReport();
         } else {
@@ -198,19 +198,33 @@ export class AddBaoCaoComponent implements OnInit {
         if (this.status.general) {
             await this.getListUser();
             this.listAppendix = []
-            Dcdt.PHU_LUC.forEach(e => {
-                this.listAppendix.push({
-                    ...e,
-                    tenDm: Utils.getName(this.baoCao.namBcao, e.tenDm),
+
+            if (this.userInfo.CAP_DVI == "1" && isSynthetic == true) {
+                Dcdt.PHU_LUC_TH.forEach(e => {
+                    this.listAppendix.push({
+                        ...e,
+                        tenDm: Utils.getName(this.baoCao.namBcao, e.tenDm),
+                    })
                 })
-            })
+            } else {
+                Dcdt.PHU_LUC.forEach(e => {
+                    this.listAppendix.push({
+                        ...e,
+                        tenDm: Utils.getName(this.baoCao.namBcao, e.tenDm),
+                    })
+                })
+            }
+
+
+
             this.baoCao?.lstDchinh.forEach(item => {
+
                 const appendix = this.listAppendix.find(e => e.id == item.maLoai);
                 item.tenPl = appendix.tenPl;
                 item.tenDm = Utils.getName(this.baoCao.namBcao, appendix.tenDm);
                 if (item.tenPl == "Phụ lục I") {
                     const tenDm1 = item.tenDm.split('');
-                    tenDm1.splice(Number(item.tenDm.indexOf("đợt")) - 9, 0, `${this.baoCao.dotBcao}`);
+                    tenDm1.splice(Number(item.tenDm.indexOf("đợt ")) - 9, 0, `${this.baoCao.dotBcao}`);
                     item.tenDm = tenDm1.join('');
                 }
             })
@@ -277,7 +291,7 @@ export class AddBaoCaoComponent implements OnInit {
                             this.listAppendix = Dcdt.PHU_LUC_TH
                         }
                     }
-                    this.baoCao.lstDchinh.forEach(item => {
+                    this.baoCao?.lstDchinh.forEach(item => {
                         const appendix = this.listAppendix.find(e => e.id == item.maLoai);
                         item.tenPl = appendix.tenPl;
                         item.tenDm = Utils.getName(this.baoCao.namBcao, appendix.tenDm);

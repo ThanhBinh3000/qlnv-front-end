@@ -25,10 +25,12 @@ export class ItemData {
     dvTinh: string;
     sluongTsDenTd: number;
     sluongTsDaNhan: number;
-    sluongTsDaPd: number;
+    // sluongTsDaPd: number;
     sluongTsCong: number;
     sluongTsTcDinhMuc: number;
     dtoanDnghiSl: number;
+    dtoanDnghiSlThien: number;
+    dtoanDnghiSlTong: number;
     dtoanDnghiMucGia: number;
     dtoanDnghiThanhTien: number;
     dtoanKpNamTruoc: number;
@@ -391,10 +393,10 @@ export class PhuLuc2Component implements OnInit {
 
     saveEdit(id: string): void {
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
-        if (this.editCache[id].data.dtoanDnghiSl > (this.editCache[id].data.sluongTsTcDinhMuc - this.editCache[id].data.sluongTsCong)) {
+        if (this.editCache[id].data.dtoanDnghiSlTong > (this.editCache[id].data.sluongTsTcDinhMuc - this.editCache[id].data.sluongTsCong)) {
             this.notification.warning(
                 MESSAGE.WARNING,
-                "Số lượng dự toán đề nghị không vượt quá hiệu của số lượng tiêu chuẩn định mức tối đa và tổng tài sản hiện có (cột 6 <= cột 5 - cột 4)"
+                "Số lượng dự toán đề nghị không vượt quá hiệu của số lượng tiêu chuẩn định mức tối đa và tổng tài sản hiện có (cột 7 nhỏ hơn hoặc bằng cột 4 - cột 3)"
             ).onClose.subscribe(() => {
                 this.statusCanhBao = false
             })
@@ -459,8 +461,10 @@ export class PhuLuc2Component implements OnInit {
     };
 
     changeModel(id: string): void {
-        this.editCache[id].data.sluongTsCong = Operator.sum([this.editCache[id].data.sluongTsDenTd, this.editCache[id].data.sluongTsDaNhan, this.editCache[id].data.sluongTsDaPd]);
-        this.editCache[id].data.dtoanDnghiThanhTien = Operator.mul(this.editCache[id].data.dtoanDnghiSl, this.editCache[id].data.dtoanDnghiMucGia);
+        this.editCache[id].data.sluongTsCong = Operator.sum([this.editCache[id].data.sluongTsDenTd, this.editCache[id].data.sluongTsDaNhan]);
+        this.editCache[id].data.dtoanDnghiSlTong = Operator.sum([this.editCache[id].data.dtoanDnghiSl, this.editCache[id].data.dtoanDnghiSlThien]);
+        this.editCache[id].data.dtoanDnghiThanhTien = Operator.mul(this.editCache[id].data.dtoanDnghiSlTong, this.editCache[id].data.dtoanDnghiMucGia);
+
         this.editCache[id].data.dtoanKpCong = Operator.sum([this.editCache[id].data.dtoanKpNamTruoc, this.editCache[id].data.dtoanKpDaGiao]);
         this.editCache[id].data.dtoanKpDieuChinh = Operator.sum([this.editCache[id].data.dtoanDnghiThanhTien, - this.editCache[id].data.dtoanKpCong]);
         this.editCache[id].data.chenhLech = Operator.sum([this.editCache[id].data.dtoanVuDnghi, - this.editCache[id].data.dtoanKpDieuChinh]);
@@ -542,49 +546,54 @@ export class PhuLuc2Component implements OnInit {
                 { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
                 { t: 4, b: 5, l: 1, r: 1, val: 'Tên tài sản (theo danh mục được phê duyệt tại Quyết định số 149/QĐ-TCDT)' },
                 { t: 4, b: 5, l: 2, r: 2, val: 'Đơn vị tính' },
-                { t: 4, b: 4, l: 3, r: 7, val: 'Số lượng tài sản, máy móc, thiết bị hiện có' },
-                { t: 4, b: 4, l: 8, r: 10, val: 'Dự toán đề nghị trang bị năm ' + (this.namBcao).toString() },
-                { t: 4, b: 4, l: 11, r: 13, val: 'Dự toán, kinh phí được sử dụng trong năm' },
+                { t: 4, b: 4, l: 3, r: 6, val: 'Số lượng tài sản, máy móc, thiết bị hiện có' },
+                { t: 4, b: 4, l: 7, r: 11, val: 'Dự toán đề nghị trang bị năm ' + (this.namBcao).toString() },
+                { t: 4, b: 4, l: 12, r: 14, val: 'Dự toán, kinh phí được sử dụng trong năm' },
 
-                { t: 4, b: 5, l: 14, r: 14, val: 'Dự toán điều chỉnh (+ tăng) (- giảm)' },
-                { t: 4, b: 5, l: 15, r: 15, val: 'Dự toán vụ TVQT đề nghị (+ tăng)(- giảm)' },
-                { t: 4, b: 5, l: 16, r: 16, val: 'Thuyết minh' },
-                { t: 4, b: 5, l: 17, r: 17, val: 'Ghi chú' },
-                { t: 4, b: 5, l: 18, r: 18, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị (+ tăng) (- giảm)' },
-                { t: 4, b: 5, l: 19, r: 19, val: 'Ý kiến của đơn vị cấp trên' },
+                { t: 4, b: 5, l: 15, r: 15, val: 'Dự toán điều chỉnh (+ tăng) (- giảm)' },
+                { t: 4, b: 5, l: 16, r: 16, val: 'Dự toán vụ TVQT đề nghị (+ tăng)(- giảm)' },
+                { t: 4, b: 5, l: 17, r: 17, val: 'Thuyết minh' },
+                { t: 4, b: 5, l: 18, r: 18, val: 'Ghi chú' },
+                { t: 4, b: 5, l: 19, r: 19, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị (+ tăng) (- giảm)' },
+                { t: 4, b: 5, l: 20, r: 20, val: 'Ý kiến của đơn vị cấp trên' },
 
                 { t: 5, b: 5, l: 3, r: 3, val: 'Số lượng đến thời điểm báo cáo' },
                 { t: 5, b: 5, l: 4, r: 4, val: 'Số lượng đã nhận chưa có QĐ điều chuyển' },
-                { t: 5, b: 5, l: 5, r: 5, val: 'Số lượng đã được phê duyệt mua sắm năm ' + (this.namBcao).toString() },
-                { t: 5, b: 5, l: 6, r: 6, val: 'Cộng' },
-                { t: 5, b: 5, l: 7, r: 7, val: 'Tiêu chuẩn định mức tối đa được phê duyệt' },
-                { t: 5, b: 5, l: 8, r: 8, val: 'Số lượng' },
-                { t: 5, b: 5, l: 9, r: 9, val: 'Mức giá' },
-                { t: 5, b: 5, l: 10, r: 10, val: 'Thành tiền (Tổng nhu cầu năm nay)' },
-                { t: 5, b: 5, l: 11, r: 11, val: 'Dự toán năm trước chuyển sang được phép sử dụng cho năm nay' },
-                { t: 5, b: 5, l: 12, r: 12, val: 'Dự toán, kinh phí đã giao' },
-                { t: 5, b: 5, l: 13, r: 13, val: 'Cộng' },
+                // { t: 5, b: 5, l: 5, r: 5, val: 'Số lượng đã được phê duyệt mua sắm năm ' + (this.namBcao).toString() },
+                { t: 5, b: 5, l: 5, r: 5, val: 'Cộng' },
+                { t: 5, b: 5, l: 6, r: 6, val: 'Tiêu chuẩn định mức tối đa được phê duyệt' },
+
+                { t: 5, b: 5, l: 7, r: 7, val: 'Số lượng (thực hiện đến thời điểm hiện tại)' },
+                { t: 5, b: 5, l: 8, r: 8, val: 'Số lượng ước thực hiện đến cuối năm' },
+                { t: 5, b: 5, l: 9, r: 9, val: 'Tổng' },
+                { t: 5, b: 5, l: 10, r: 10, val: 'Mức giá' },
+                { t: 5, b: 5, l: 11, r: 11, val: 'Thành tiền (Tổng nhu cầu năm nay)' },
+
+                { t: 5, b: 5, l: 12, r: 12, val: 'Dự toán năm trước chuyển sang được phép sử dụng cho năm nay' },
+                { t: 5, b: 5, l: 13, r: 13, val: 'Dự toán, kinh phí đã giao' },
+                { t: 5, b: 5, l: 14, r: 14, val: 'Cộng' },
 
                 { t: 6, b: 6, l: 0, r: 0, val: 'A' },
                 { t: 6, b: 6, l: 1, r: 1, val: 'B' },
                 { t: 6, b: 6, l: 2, r: 2, val: 'C' },
                 { t: 6, b: 6, l: 3, r: 3, val: '1' },
                 { t: 6, b: 6, l: 4, r: 4, val: '2' },
-                { t: 6, b: 6, l: 5, r: 5, val: '3' },
-                { t: 6, b: 6, l: 6, r: 6, val: '4 = 1 + 2 + 3' },
+                { t: 6, b: 6, l: 5, r: 5, val: '3=1+2' },
+                { t: 6, b: 6, l: 6, r: 6, val: '4' },
                 { t: 6, b: 6, l: 7, r: 7, val: '5' },
                 { t: 6, b: 6, l: 8, r: 8, val: '6' },
-                { t: 6, b: 6, l: 9, r: 9, val: '7' },
-                { t: 6, b: 6, l: 10, r: 10, val: '8 = 6 x 7 ' },
-                { t: 6, b: 6, l: 11, r: 11, val: '9' },
+                { t: 6, b: 6, l: 9, r: 9, val: '7=5+6' },
+                { t: 6, b: 6, l: 10, r: 10, val: '8 ' },
+                { t: 6, b: 6, l: 11, r: 11, val: '9=7x8' },
                 { t: 6, b: 6, l: 12, r: 12, val: '10' },
-                { t: 6, b: 6, l: 13, r: 13, val: '11 = 9 + 10' },
-                { t: 6, b: 6, l: 14, r: 14, val: '12 = 8 - 11' },
-                { t: 6, b: 6, l: 15, r: 15, val: '13' },
+                { t: 6, b: 6, l: 13, r: 13, val: '11 ' },
+                { t: 6, b: 6, l: 14, r: 14, val: '12 = 10+11' },
+                { t: 6, b: 6, l: 15, r: 15, val: '13=9-12' },
                 { t: 6, b: 6, l: 16, r: 16, val: '14' },
                 { t: 6, b: 6, l: 17, r: 17, val: '15' },
-                { t: 6, b: 6, l: 18, r: 18, val: '16 = 13 - 12' },
-                { t: 6, b: 6, l: 19, r: 19, val: '17' },
+                { t: 6, b: 6, l: 18, r: 18, val: '16' },
+                { t: 6, b: 6, l: 19, r: 19, val: '17=14-13' },
+                { t: 6, b: 6, l: 20, r: 20, val: '18' },
             ]
             fieldOrder = [
                 'stt',
@@ -592,10 +601,12 @@ export class PhuLuc2Component implements OnInit {
                 'dvTinh',
                 'sluongTsDenTd',
                 'sluongTsDaNhan',
-                'sluongTsDaPd',
+                // 'sluongTsDaPd',
                 'sluongTsCong',
                 'sluongTsTcDinhMuc',
                 'dtoanDnghiSl',
+                'dtoanDnghiSlThien',
+                'dtoanDnghiSlTong',
                 'dtoanDnghiMucGia',
                 'dtoanDnghiThanhTien',
                 'dtoanKpNamTruoc',
@@ -633,31 +644,35 @@ export class PhuLuc2Component implements OnInit {
 
                 { t: 5, b: 5, l: 3, r: 3, val: 'Số lượng đến thời điểm báo cáo' },
                 { t: 5, b: 5, l: 4, r: 4, val: 'Số lượng đã nhận chưa có QĐ điều chuyển' },
-                { t: 5, b: 5, l: 5, r: 5, val: 'Số lượng đã được phê duyệt mua sắm năm ' + (this.namBcao).toString() },
-                { t: 5, b: 5, l: 6, r: 6, val: 'Cộng' },
-                { t: 5, b: 5, l: 7, r: 7, val: 'Tiêu chuẩn định mức tối đa được phê duyệt' },
-                { t: 5, b: 5, l: 8, r: 8, val: 'Số lượng' },
-                { t: 5, b: 5, l: 9, r: 9, val: 'Mức giá' },
-                { t: 5, b: 5, l: 10, r: 10, val: 'Thành tiền (Tổng nhu cầu năm nay)' },
-                { t: 5, b: 5, l: 11, r: 11, val: 'Dự toán năm trước chuyển sang được phép sử dụng cho năm nay' },
-                { t: 5, b: 5, l: 12, r: 12, val: 'Dự toán, kinh phí đã giao' },
-                { t: 5, b: 5, l: 13, r: 13, val: 'Cộng' },
+                // { t: 5, b: 5, l: 5, r: 5, val: 'Số lượng đã được phê duyệt mua sắm năm ' + (this.namBcao).toString() },
+                { t: 5, b: 5, l: 5, r: 5, val: 'Cộng' },
+                { t: 5, b: 5, l: 6, r: 6, val: 'Tiêu chuẩn định mức tối đa được phê duyệt' },
+
+                { t: 5, b: 5, l: 7, r: 7, val: 'Số lượng (thực hiện đến thời điểm hiện tại)' },
+                { t: 5, b: 5, l: 8, r: 8, val: 'Số lượng ước thực hiện đến cuối năm' },
+                { t: 5, b: 5, l: 9, r: 9, val: 'Tổng' },
+                { t: 5, b: 5, l: 10, r: 10, val: 'Mức giá' },
+                { t: 5, b: 5, l: 11, r: 11, val: 'Thành tiền (Tổng nhu cầu năm nay)' },
+
+                { t: 5, b: 5, l: 12, r: 12, val: 'Dự toán năm trước chuyển sang được phép sử dụng cho năm nay' },
+                { t: 5, b: 5, l: 13, r: 13, val: 'Dự toán, kinh phí đã giao' },
+                { t: 5, b: 5, l: 14, r: 14, val: 'Cộng' },
 
                 { t: 6, b: 6, l: 0, r: 0, val: 'A' },
                 { t: 6, b: 6, l: 1, r: 1, val: 'B' },
                 { t: 6, b: 6, l: 2, r: 2, val: 'C' },
                 { t: 6, b: 6, l: 3, r: 3, val: '1' },
                 { t: 6, b: 6, l: 4, r: 4, val: '2' },
-                { t: 6, b: 6, l: 5, r: 5, val: '3' },
-                { t: 6, b: 6, l: 6, r: 6, val: '4 = 1 + 2 + 3' },
+                { t: 6, b: 6, l: 5, r: 5, val: '3 = 1 + 2' },
+                { t: 6, b: 6, l: 6, r: 6, val: '4 ' },
                 { t: 6, b: 6, l: 7, r: 7, val: '5' },
                 { t: 6, b: 6, l: 8, r: 8, val: '6' },
-                { t: 6, b: 6, l: 9, r: 9, val: '7' },
-                { t: 6, b: 6, l: 10, r: 10, val: '8 = 6 x 7 ' },
-                { t: 6, b: 6, l: 11, r: 11, val: '9' },
+                { t: 6, b: 6, l: 9, r: 9, val: '7 = 5 + 6 ' },
+                { t: 6, b: 6, l: 10, r: 10, val: '8 ' },
+                { t: 6, b: 6, l: 11, r: 11, val: '9 = 7 x 8' },
                 { t: 6, b: 6, l: 12, r: 12, val: '10' },
-                { t: 6, b: 6, l: 13, r: 13, val: '11 = 9 + 10' },
-                { t: 6, b: 6, l: 14, r: 14, val: '12 = 8 - 11' },
+                { t: 6, b: 6, l: 13, r: 13, val: '11' },
+                { t: 6, b: 6, l: 14, r: 14, val: '12 = 10 + 11' },
                 // { t: 6, b: 6, l: 15, r: 15, val: '13' },
                 { t: 6, b: 6, l: 15, r: 15, val: '13' },
                 { t: 6, b: 6, l: 16, r: 16, val: '14' },
@@ -670,10 +685,12 @@ export class PhuLuc2Component implements OnInit {
                 'dvTinh',
                 'sluongTsDenTd',
                 'sluongTsDaNhan',
-                'sluongTsDaPd',
+                // 'sluongTsDaPd',
                 'sluongTsCong',
                 'sluongTsTcDinhMuc',
                 'dtoanDnghiSl',
+                'dtoanDnghiSlThien',
+                'dtoanDnghiSlTong',
                 'dtoanDnghiMucGia',
                 'dtoanDnghiThanhTien',
                 'dtoanKpNamTruoc',
@@ -715,10 +732,12 @@ export class PhuLuc2Component implements OnInit {
                 if (![
                     'sluongTsDenTd',
                     'sluongTsDaNhan',
-                    'sluongTsDaPd',
+                    // 'sluongTsDaPd',
                     'sluongTsCong',
                     'sluongTsTcDinhMuc',
                     'dtoanDnghiSl',
+                    'dtoanDnghiSlThien',
+                    'dtoanDnghiSlTong',
                     'dtoanDnghiMucGia',
                     'dtoanDnghiThanhTien',
                     'dtoanKpNamTruoc',
@@ -743,10 +762,12 @@ export class PhuLuc2Component implements OnInit {
                 if (![
                     'sluongTsDenTd',
                     'sluongTsDaNhan',
-                    'sluongTsDaPd',
+                    // 'sluongTsDaPd',
                     'sluongTsCong',
                     'sluongTsTcDinhMuc',
                     'dtoanDnghiSl',
+                    'dtoanDnghiSlThien',
+                    'dtoanDnghiSlTong',
                     'dtoanDnghiMucGia',
                     'dtoanDnghiThanhTien',
                     'dtoanKpNamTruoc',
