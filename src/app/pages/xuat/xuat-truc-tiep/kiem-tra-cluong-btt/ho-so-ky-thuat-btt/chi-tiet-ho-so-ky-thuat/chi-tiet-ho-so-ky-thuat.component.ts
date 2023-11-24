@@ -424,7 +424,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
       nzComponentParams: {
         dataTable: this.listBanGiaoMau,
         dataHeader: ['Số biên bản', 'Loại hàng hóa'],
-        dataColumn: ['soBienBan', 'tenLoaiVthh'],
+        dataColumn: ['soBbLayMau', 'tenLoaiVthh'],
       },
     })
     modalQD.afterClose.subscribe(async (dataChose) => {
