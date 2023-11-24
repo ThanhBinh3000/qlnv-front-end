@@ -263,6 +263,9 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
         tongGiaTriHdong: data.thanhTienDuocDuyet,
       });
       this.dataTable = data.children;
+      this.dataTable.forEach((item) => {
+        item.isKetQua = true
+      })
       await this.selectRow(this.dataTable.flatMap(item => item.children)[0]);
     } catch (e) {
       console.error('error: ', e);

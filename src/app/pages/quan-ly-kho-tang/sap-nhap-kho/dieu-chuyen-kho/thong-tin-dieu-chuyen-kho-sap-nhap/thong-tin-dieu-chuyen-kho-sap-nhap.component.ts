@@ -153,7 +153,8 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
     this.nzActiveDCH = value
   }
 
-  async xoaDCH() {
+  async xoaDCH($event) {
+    $event.stopPropagation();
     if (this.dataTableHang.length == 0) return
     this.modal.confirm({
       nzClosable: false,
@@ -164,12 +165,12 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
       nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: async () => {
-        this.nzActiveDCH = true
-        this.dataTableHang = this.dataTableHangDefault
+        // this.nzActiveDCH = true
+        this.dataTableHang = cloneDeep(this.dataTableHangDefault);
         this.buildView("dataTableHang", "dataViewHang");
       },
       nzOnCancel: async () => {
-        this.nzActiveDCH = true
+        // this.nzActiveDCH = true
       },
     });
   }
@@ -178,7 +179,8 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
     this.nzActiveCCDC = value
   }
 
-  async xoaCCDC() {
+  async xoaCCDC($event) {
+    $event.stopPropagation();
     if (this.dataTableChiCuc.length == 0) return
     this.modal.confirm({
       nzClosable: false,
@@ -189,12 +191,12 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
       nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: async () => {
-        this.nzActiveCCDC = true
+        // this.nzActiveCCDC = true
         this.dataTableChiCuc = cloneDeep(this.dataTableChiCucDefault);
         this.buildView("dataTableChiCuc", "dataViewChiCuc")
       },
       nzOnCancel: async () => {
-        this.nzActiveCCDC = true
+        // this.nzActiveCCDC = true
       },
     });
   }
@@ -464,7 +466,7 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
                 ...f, groupBy: `${f.maChiCucDi}-${f.maDiemKhoDi}-${f.maChiCucDen}-${f.maDiemKhoDen}`
               })) : [];
               this.dataTableHangDefault = dsHang
-              this.dataTableHang = dsHang
+              this.dataTableHang = cloneDeep(dsHang);
               this.buildView("dataTableHang", "dataViewHang");
             }
           }

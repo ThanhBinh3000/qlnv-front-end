@@ -58,12 +58,13 @@
     <div class="group-button">
       <h3 class="text-uppercase">Danh sách biên bản kết thúc nhập kho</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub" (click)="exportData()">
+        <button type="button" class="btn btn-sub"
+                *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BBKTNK_EXP')" (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)"
-                *ngIf="userService.isChiCuc()">
+                *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BBKTNK_THEM') && userService.isChiCuc()">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Thêm</span>
         </button>
@@ -151,20 +152,25 @@
                     <td></td>
                     <td>{{lv2.tenTrangThai}}</td>
                     <td class="text-left">
-                      <a *ngIf="lv2.trangThai ==STATUS.DA_DUYET_LDCC" (click)="redirectDetail(lv2.id, true)">
+                      <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BBKTNK_XEM')
+                      && !((lv2.trangThai ==STATUS.TU_CHOI_LDCC ||  lv2.trangThai== STATUS.TU_CHOI_KTVBQ || lv2.trangThai ==STATUS.DU_THAO || lv2.trangThai == STATUS.TU_CHOI_KT)
+                      && lv2.nguoiTaoId == userInfo.ID)" (click)="redirectDetail(lv2.id, true)">
                         <i class="fa fa-eye" title="Xem chi tiết"></i>
                       </a>
                       <a
-                        *ngIf="lv2.trangThai ==STATUS.TU_CHOI_LDCC||  lv2.trangThai== STATUS.TU_CHOI_KTVBQ|| lv2.trangThai ==STATUS.DU_THAO || lv2.trangThai == STATUS.TU_CHOI_KT"
+                        *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BBKTNK_THEM') && (lv2.trangThai ==STATUS.TU_CHOI_LDCC||  lv2.trangThai== STATUS.TU_CHOI_KTVBQ|| lv2.trangThai ==STATUS.DU_THAO || lv2.trangThai == STATUS.TU_CHOI_KT)"
                         (click)="redirectDetail(lv2.id, false)">
                         <i class="fa fa-pencil" title="Sửa"></i>
                       </a>
                       <a
-                        *ngIf="lv2.trangThai== STATUS.CHO_DUYET_LDCC || lv2.trangThai == STATUS.CHO_DUYET_KTVBQ|| lv2.trangThai == STATUS.CHO_DUYET_KT"
+                        *ngIf="(userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BBKTNK_DUYETLDCC') && lv2.trangThai== STATUS.CHO_DUYET_LDCC)
+                        || (userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BBKTNK_DUYETKTVBQ') && lv2.trangThai == STATUS.CHO_DUYET_KTVBQ)
+                        || (userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BBKTNK_DUYETKT') && lv2.trangThai == STATUS.CHO_DUYET_KT)"
                         (click)="redirectDetail(lv2.id, true)">
                         <i class="icon htvbdh_tcdt_pheduyet"></i>
                       </a>
-                      <a *ngIf="lv2.trangThai == STATUS.DU_THAO "
+                      <a
+                        *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BBKTNK_XOA') && lv2.trangThai == STATUS.DU_THAO "
                          (click)="delete(lv2)">
                         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                       </a>

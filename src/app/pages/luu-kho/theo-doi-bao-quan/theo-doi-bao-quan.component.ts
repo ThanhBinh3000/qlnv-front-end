@@ -110,6 +110,11 @@ export class TheoDoiBaoQuanComponent extends Base3Component implements OnInit {
       this.dsChiCuc = res.data
       this.dsChiCuc = this.dsChiCuc.filter(item => item.type != "PB" && item.maDvi.startsWith(this.userInfo.MA_DVI))
     }
+    if(this.userService.isChiCuc()){
+      this.formData.patchValue({
+        maDviSr : this.userInfo.MA_DVI
+      })
+    }
   }
 
   async changeDonVi(event: any,level) {

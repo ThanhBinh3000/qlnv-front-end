@@ -103,12 +103,8 @@
               <th class="text-center">Thời hạn NH</th>
               <th class="text-center">Số BB chuẩn bị kho</th>
               <th class="text-center">Ngày lập biên bản</th>
-              <!-- <th class="text-center">Phiếu nhập kho</th>
-              <th class="text-center">BB kết thúc nhập kho</th>
-              <th class="text-center">BB giao nhận</th>
-              <th class="text-center">Ngày kết thúc nhập kho</th> -->
               <th class="text-center">Trạng thái</th>
-              <th class="text-center" *ngIf="isChiCuc()">Hành động</th>
+              <th class="text-center">Hành động</th>
             </tr>
           </thead>
           <tbody>
@@ -125,12 +121,8 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <!-- <td></td>
                 <td></td>
                 <td></td>
-                <td></td> -->
-                <td></td>
-                <td *ngIf="isChiCuc()"></td>
               </tr>
               <ng-container *ngIf="row1.expand">
                 <ng-container *ngFor="let row2 of row1.children, let y = index">
@@ -145,12 +137,8 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <!-- <td></td>
                     <td></td>
                     <td></td>
-                    <td></td> -->
-                    <td></td>
-                    <td *ngIf="isChiCuc()"></td>
                   </tr>
                   <ng-container>
                     <ng-container *ngFor="let row3 of row2.children, let y = index">
@@ -165,10 +153,6 @@
                         <td class="bold">{{row3.thoiGianNhapKhoMuonNhat|date: "dd/MM/yyyy"}}</td>
                         <td class="bold">{{row3.soBbChuanBiKho || ""}}</td>
                         <td class="bold">{{row3.ngayBbChuanBiKho|date: "dd/MM/yyyy"}}</td>
-                        <!-- <td class="bold">{{row3.soPhieuNhapKho || ""}}</td>
-                        <td class="bold">{{row3.soBbKetThucNK || ""}}</td>
-                        <td class="bold">{{row3.soBbGiaoNhan || ""}}</td>
-                        <td class="bold">{{row3.ngayKtNhapKho|date: "dd/MM/yyyy"}}</td> -->
                         <td>{{row3.tenTrangThai}}</td>
                         <td *ngIf="isChiCuc()">
                           <a *ngIf="!row3.soBbChuanBiKho" (click)="add(row3)">
@@ -188,6 +172,11 @@
                           </a>
                           <a *ngIf="row3.trangThai == STATUS.DU_THAO" (click)="xoa(row3)">
                             <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                          </a>
+                        </td>
+                        <td *ngIf="isCuc()">
+                          <a (click)="redirectDetail(row3.id, true)">
+                            <i class="fa fa-eye" title="Xem chi tiết"></i>
                           </a>
                         </td>
                       </tr>

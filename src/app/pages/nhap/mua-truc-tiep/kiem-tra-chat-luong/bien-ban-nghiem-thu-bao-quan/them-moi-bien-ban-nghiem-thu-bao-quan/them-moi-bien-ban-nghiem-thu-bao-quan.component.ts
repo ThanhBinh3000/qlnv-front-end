@@ -289,6 +289,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
         tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
+        slCanNhap: data.soLuong,
         // soPhieuNhapKho: data?.hhPhieuNhapKhoHdr.find(x => x.maLoKho == data.maLoKho).soPhieuNhapKho,
       })
       // this.loadLoaiKho()

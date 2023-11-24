@@ -23,6 +23,7 @@ import { Validators } from '@angular/forms';
 import { PhieuKiemNghiemChatLuongService } from 'src/app/services/qlnv-hang/xuat-hang/chung/kiem-tra-chat-luong/PhieuKiemNghiemChatLuong.service';
 import { BienBanLayMauService } from 'src/app/services/qlnv-hang/xuat-hang/chung/xuat-kho/PhieuXuatKho.service';
 import { MangLuoiKhoService } from 'src/app/services/qlnv-kho/mangLuoiKho.service';
+import { DanhMucDinhMucHaoHutService } from 'src/app/services/danh-muc-dinh-muc-hao-hut.service';
 
 @Component({
   selector: 'app-them-moi-bien-ban-hao-doi',
@@ -69,6 +70,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
     public phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
     public quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
     public bienBanLayMauService: BienBanLayMauService,
+    private danhMucDinhMucHaoHutService: DanhMucDinhMucHaoHutService
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanHaoDoiService);
 
@@ -133,7 +135,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         ngayKetThucNhap: [],
         soPhieuKnCl: [],
         idPhieuKnCl: [],
-        soThangBaoQuanqHang: [],
+        soThangBaoQuanHang: [],
       }
     );
     this.maBb = '-BBHD';
@@ -335,6 +337,45 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
   //     this.listBbTinhKho = this.listBbTinhKho.filter(item => (item.maLoKho == data.maLoKho && item.maNganKho === data.maNganKho));
   //   }
   // }
+  async getDinhMucHaoHut(cloaiVthh: string, loaiVthh: string, soThangBaoQuanHang: number) {
+    const body = {
+      loaiVthh, cloaiVthh
+    }
+    let hinhThucBq = [];
+    let loaiHinhBq = [];
+    let phuongPhapBq = [];
+    const [resDmh, resDmhh] = await Promise.all([this.danhMucService.loadDanhMucHangChiTiet(cloaiVthh || loaiVthh), this.danhMucDinhMucHaoHutService.search(body)]);
+    if (resDmh.msg === MESSAGE.SUCCESS) {
+      hinhThucBq = Array.isArray(resDmh.data?.hinhThucBq) ? resDmh.data?.hinhThucBq : [];
+      loaiHinhBq = Array.isArray(resDmh.data?.loaiHinhBq) ? resDmh.data?.loaiHinhBq : [];
+      phuongPhapBq = Array.isArray(resDmh.data?.phuongPhapBq) ? resDmh.data?.phuongPhapBq : [];
+    }
+    if (resDmhh.msg === MESSAGE.SUCCESS) {
+      const data = Array.isArray(resDmhh.data?.content) ? resDmhh.data.content : [];
+      const listDmhh = data.filter(f => {
+        return hinhThucBq.some(item => f.hinhThucBq.split(",").includes(item.ma)) &&
+          loaiHinhBq.some(item => f.loaiHinhBq.split(",").includes(item.ma)) &&
+          phuongPhapBq.some(item => f.phuongThucBq.split(",").includes(item.ma)) &&
+          f.apDungTai.split(",").includes(this.userInfo.MA_DVI.slice(0, -2));
+      })
+      let dataDmhh = listDmhh.find(f => {
+        if (soThangBaoQuanHang <= 3) {
+          return f.tgBaoQuanDen === 3
+        } else if (soThangBaoQuanHang > 3 && soThangBaoQuanHang <= 18) {
+          return soThangBaoQuanHang > f.tgBaoQuanTu && soThangBaoQuanHang <= f.tgBaoQuanDen
+        } else {
+          return f.tgBaoQuanTu === 18
+        }
+      })?.dinhMuc || 0;
+      let dinhMucHaoHut = 0;
+      if (soThangBaoQuanHang > 18) {
+        dinhMucHaoHut = (listDmhh.find(f => f.tgBaoQuanDen === 18)?.dinhMuc || 0) + (Math.ceil(soThangBaoQuanHang) - 18) * dataDmhh
+      } else {
+        dinhMucHaoHut = dataDmhh
+      }
+      this.formData.patchValue({ dinhMucHaoHut })
+    }
+  }
   async onSelectSoBbTinhKho(event: any): Promise<void> {
     console.log(event, "event")
     if (!event) return;
@@ -350,9 +391,12 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         ngayKetThucNhap = res.data?.object?.ngayNhapDay;
       }
     };
-    const soThangBaoQuanqHang = bienBan.ngayKetThucXuat && ngayKetThucNhap ? +dayjs(dayjs(bienBan.ngayKetThucXuat, "DD/MM/YYYY").format("YYYY-MM-DD")).diff(dayjs(ngayKetThucNhap, "DD/MM/YYYY").format("YYYY-MM-DD"), 'month', true).toFixed(1) : "";
-    console.log("soThangBaoQuanqHang", soThangBaoQuanqHang)
+    const soThangBaoQuanHang = bienBan.ngayKetThucXuat && ngayKetThucNhap ? +dayjs(dayjs(bienBan.ngayKetThucXuat, "DD/MM/YYYY").format("YYYY-MM-DD")).diff(dayjs(ngayKetThucNhap, "DD/MM/YYYY").format("YYYY-MM-DD"), 'month', true).toFixed(1) : null;
     //TODO: call api danh muc dinh muc hao hut
+    if (bienBan.cloaiVthh || bienBan.loaiVthh) {
+      await this.getDinhMucHaoHut(bienBan.cloaiVthh, bienBan.loaiVthh, soThangBaoQuanHang);
+    }
+
     if (this.listBbTinhKho) {
       this.dataTable = bienBan.listPhieuXuatKho
     }
@@ -372,7 +416,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
       ngayBatDauXuat: bienBan.ngayBatDauXuat,
       ngayKetThucXuat: bienBan.ngayKetThucXuat,
       ngayKetThucNhap,
-      soThangBaoQuanqHang,
+      soThangBaoQuanHang,
       tongSlNhap: bienBan.tongSlNhap,
       tongSlXuat: bienBan.tongSlXuat,
       // tongSlXuat: this.tongSoLuongXk,

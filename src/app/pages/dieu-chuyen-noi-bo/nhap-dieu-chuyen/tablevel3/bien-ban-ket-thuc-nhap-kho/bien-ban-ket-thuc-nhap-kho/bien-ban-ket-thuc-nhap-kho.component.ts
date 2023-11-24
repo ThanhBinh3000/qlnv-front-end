@@ -123,6 +123,10 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
     else return false
   }
 
+  isCuc() {
+    return this.userService.isCuc()
+  }
+
   isChiCuc() {
     return this.userService.isChiCuc()
   }

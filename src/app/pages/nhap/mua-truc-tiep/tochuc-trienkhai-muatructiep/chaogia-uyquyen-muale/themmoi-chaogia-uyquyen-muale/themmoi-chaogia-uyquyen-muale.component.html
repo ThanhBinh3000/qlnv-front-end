@@ -391,7 +391,7 @@
               <td>{{ data.ngayChaoGia | date: 'dd/MM/YYYY' }}</td>
               <td>{{ data.soLuong| number : '1.0-1' : 'vi_VN' }}</td>
               <td>{{ data.donGiaVat ? data.donGiaVat : data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
-              <td>{{ data.thanhTien | number : '1.0-1' : 'vi_VN' }}</td>
+              <td>{{ data.thanhTien ? data.thanhTien : data.soLuong * (data.donGiaVat ? data.donGiaVat : data.donGia) * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
               <td>{{data.fileDinhKems?.fileName }}</td>
               <td><label nz-checkbox [nzDisabled]="isView" [(ngModel)]="data.luaChon"></label></td>
               <td>
