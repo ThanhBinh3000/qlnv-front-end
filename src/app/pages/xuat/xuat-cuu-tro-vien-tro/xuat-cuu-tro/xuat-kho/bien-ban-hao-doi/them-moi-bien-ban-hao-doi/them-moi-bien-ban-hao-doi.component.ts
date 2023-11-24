@@ -135,7 +135,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         ngayKetThucNhap: [],
         soPhieuKnCl: [],
         idPhieuKnCl: [],
-        soThangBaoQuanqHang: [],
+        soThangBaoQuanHang: [],
       }
     );
     this.maBb = '-BBHD';
@@ -337,7 +337,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
   //     this.listBbTinhKho = this.listBbTinhKho.filter(item => (item.maLoKho == data.maLoKho && item.maNganKho === data.maNganKho));
   //   }
   // }
-  async getDinhMucHaoHut(cloaiVthh: string, loaiVthh: string, soThangBaoQuanqHang: number) {
+  async getDinhMucHaoHut(cloaiVthh: string, loaiVthh: string, soThangBaoQuanHang: number) {
     const body = {
       loaiVthh, cloaiVthh
     }
@@ -359,17 +359,17 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
           f.apDungTai.split(",").includes(this.userInfo.MA_DVI.slice(0, -2));
       })
       let dataDmhh = listDmhh.find(f => {
-        if (soThangBaoQuanqHang <= 3) {
+        if (soThangBaoQuanHang <= 3) {
           return f.tgBaoQuanDen === 3
-        } else if (soThangBaoQuanqHang > 3 && soThangBaoQuanqHang <= 18) {
-          return soThangBaoQuanqHang > f.tgBaoQuanTu && soThangBaoQuanqHang <= f.tgBaoQuanDen
+        } else if (soThangBaoQuanHang > 3 && soThangBaoQuanHang <= 18) {
+          return soThangBaoQuanHang > f.tgBaoQuanTu && soThangBaoQuanHang <= f.tgBaoQuanDen
         } else {
           return f.tgBaoQuanTu === 18
         }
       })?.dinhMuc || 0;
       let dinhMucHaoHut = 0;
-      if (soThangBaoQuanqHang > 18) {
-        dinhMucHaoHut = (listDmhh.find(f => f.tgBaoQuanDen === 18)?.dinhMuc || 0) + (Math.ceil(soThangBaoQuanqHang) - 18) * dataDmhh
+      if (soThangBaoQuanHang > 18) {
+        dinhMucHaoHut = (listDmhh.find(f => f.tgBaoQuanDen === 18)?.dinhMuc || 0) + (Math.ceil(soThangBaoQuanHang) - 18) * dataDmhh
       } else {
         dinhMucHaoHut = dataDmhh
       }
@@ -391,10 +391,10 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         ngayKetThucNhap = res.data?.object?.ngayNhapDay;
       }
     };
-    const soThangBaoQuanqHang = bienBan.ngayKetThucXuat && ngayKetThucNhap ? +dayjs(dayjs(bienBan.ngayKetThucXuat, "DD/MM/YYYY").format("YYYY-MM-DD")).diff(dayjs(ngayKetThucNhap, "DD/MM/YYYY").format("YYYY-MM-DD"), 'month', true).toFixed(1) : null;
+    const soThangBaoQuanHang = bienBan.ngayKetThucXuat && ngayKetThucNhap ? +dayjs(dayjs(bienBan.ngayKetThucXuat, "DD/MM/YYYY").format("YYYY-MM-DD")).diff(dayjs(ngayKetThucNhap, "DD/MM/YYYY").format("YYYY-MM-DD"), 'month', true).toFixed(1) : null;
     //TODO: call api danh muc dinh muc hao hut
     if (bienBan.cloaiVthh || bienBan.loaiVthh) {
-      await this.getDinhMucHaoHut(bienBan.cloaiVthh, bienBan.loaiVthh, soThangBaoQuanqHang);
+      await this.getDinhMucHaoHut(bienBan.cloaiVthh, bienBan.loaiVthh, soThangBaoQuanHang);
     }
 
     if (this.listBbTinhKho) {
@@ -416,7 +416,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
       ngayBatDauXuat: bienBan.ngayBatDauXuat,
       ngayKetThucXuat: bienBan.ngayKetThucXuat,
       ngayKetThucNhap,
-      soThangBaoQuanqHang,
+      soThangBaoQuanHang,
       tongSlNhap: bienBan.tongSlNhap,
       tongSlXuat: bienBan.tongSlXuat,
       // tongSlXuat: this.tongSoLuongXk,
