@@ -104,7 +104,7 @@ export class DanhMucCtieuChatLuongComponent extends Base2Component implements On
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.danhMucCtieuCluongService.delete({idList: [id]}).then(async () => {
+          this.danhMucCtieuCluongService.delete({ids: id}).then(async () => {
             await this.search();
             this.spinner.hide();
           });
