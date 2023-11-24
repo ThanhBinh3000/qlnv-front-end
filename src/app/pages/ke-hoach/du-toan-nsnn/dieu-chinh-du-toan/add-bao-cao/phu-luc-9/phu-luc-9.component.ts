@@ -570,7 +570,7 @@ export class PhuLuc9Component implements OnInit {
                 { t: 3, b: 3, l: 0, r: 8, val: 'Trạng thái biểu mẫu: ' + Status.reportStatusName(this.dataInfo.trangThai) },
 
                 { t: 4, b: 11, l: 0, r: 0, val: 'STT' },
-                { t: 4, b: 11, l: 1, r: 1, val: 'Tên đơn vị(Biên chế thực tế có mặt)' },
+                { t: 4, b: 11, l: 1, r: 1, val: 'Tên đơn vị (Biên chế thực tế có mặt)' },
                 { t: 4, b: 11, l: 2, r: 2, val: 'Biên chế ' + this.namBcao.toString() + ' được giao' },
                 { t: 4, b: 11, l: 3, r: 3, val: 'Biên chế có mặt' },
                 { t: 4, b: 11, l: 4, r: 4, val: 'Biên chế chưa tuyển' },
@@ -593,9 +593,9 @@ export class PhuLuc9Component implements OnInit {
                 { t: 6, b: 11, l: 30, r: 30, val: 'Tiền lương biên chế thực tế có mặt' },
                 { t: 6, b: 11, l: 31, r: 31, val: 'Các khoản đóng góp theo lương của biên chế thực tế' },
                 { t: 6, b: 11, l: 32, r: 32, val: 'Lương CBCC chưa tuyển dụng' },
-                { t: 6, b: 11, l: 33, r: 33, val: 'Lương điều hòa chung' },
+                { t: 6, b: 11, l: 33, r: 33, val: 'Các Khoản lương khác theo chế độ' },
 
-                { t: 6, b: 11, l: 34, r: 34, val: 'Các khoản lương khác theo chế độ' },
+                { t: 6, b: 11, l: 34, r: 34, val: 'Dự toán năm trước chuyển sang được phép sử dụng cho năm nay' },
                 { t: 6, b: 11, l: 35, r: 35, val: 'Dự toán, kinh phí đã giao trong năm' },
                 { t: 6, b: 11, l: 36, r: 36, val: 'Cộng' },
 
@@ -726,7 +726,7 @@ export class PhuLuc9Component implements OnInit {
                 { t: 3, b: 3, l: 0, r: 8, val: 'Trạng thái biểu mẫu: ' + Status.reportStatusName(this.dataInfo.trangThai) },
 
                 { t: 4, b: 11, l: 0, r: 0, val: 'STT' },
-                { t: 4, b: 11, l: 1, r: 1, val: 'Tên đơn vị(Biên chế thực tế có mặt)' },
+                { t: 4, b: 11, l: 1, r: 1, val: 'Tên đơn vị (Biên chế thực tế có mặt)' },
                 { t: 4, b: 11, l: 2, r: 2, val: 'Biên chế ' + this.namBcao.toString() + ' được giao' },
                 { t: 4, b: 11, l: 3, r: 3, val: 'Biên chế có mặt' },
                 { t: 4, b: 11, l: 4, r: 4, val: 'Biên chế chưa tuyển' },
@@ -746,8 +746,8 @@ export class PhuLuc9Component implements OnInit {
                 { t: 6, b: 11, l: 30, r: 30, val: 'Tiền lương biên chế thực tế có mặt' },
                 { t: 6, b: 11, l: 31, r: 31, val: 'Các khoản đóng góp theo lương của biên chế thực tế' },
                 { t: 6, b: 11, l: 32, r: 32, val: 'Lương CBCC chưa tuyển dụng' },
-                { t: 6, b: 11, l: 33, r: 33, val: 'Lương điều hòa chung' },
-                { t: 6, b: 11, l: 34, r: 34, val: 'Các khoản lương khác theo chế độ' },
+                { t: 6, b: 11, l: 33, r: 33, val: 'Các khoản lương khác theo chế độ' },
+                { t: 6, b: 11, l: 34, r: 34, val: ' Dự toán năm trước chuyển sang được phép sử dụng cho năm nay' },
                 { t: 6, b: 11, l: 35, r: 35, val: 'Dự toán, kinh phí đã giao trong năm' },
                 { t: 6, b: 11, l: 36, r: 36, val: 'Cộng' },
 
