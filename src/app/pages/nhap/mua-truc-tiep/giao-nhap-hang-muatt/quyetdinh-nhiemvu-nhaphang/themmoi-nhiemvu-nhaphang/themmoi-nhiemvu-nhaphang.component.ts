@@ -83,7 +83,7 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
   multipleValue = ['a10', 'c12'];
   dsHongDong = [];
   soLuong: number = 0;
-  previewName: string = 'qd_giao_nhiem_vu_nhap_hang_lt';
+  previewName: string = 'mtt_qd_giao_nhiem_vu_nhap_hang';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
