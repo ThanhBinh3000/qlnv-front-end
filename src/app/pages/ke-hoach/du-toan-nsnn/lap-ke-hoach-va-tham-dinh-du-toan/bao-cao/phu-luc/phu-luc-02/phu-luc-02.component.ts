@@ -625,7 +625,7 @@ export class PhuLuc02Component implements OnInit {
 			]
 			fieldOrder = ['stt', 'tenDanhMuc', 'dviTinh', 'thNamTruoc', 'namDtoan', 'namUocTh', 'sluongTaiKho', 'dmucTaiKho', 'ttienTaiKho',
 				'binhQuanNgoaiKho', 'ttienNgoaiKho', 'tongCong', 'tdinhKhoSluong', 'tdinhKhoTtien', 'tdinhTcong', 'chenhLech', 'ghiChu', 'ykienDviCtren']
-			calHeader = ['A', 'B', 'C', '', '', '', '1', '2', '3=1x2', '4', '5=1x4', '6=5+3', '7', '8=7*2', '10=8+5', '11=10-6', '12', '13'];
+			calHeader = ['A', 'B', 'C', '1', '2', '3', '4', '5', '6=4*5', '7', '8=4*7', '9=6+8', '10', '11=5*7', '12=11+8', '13=12-9', '14', '15'];
 		} else {
 			header = [
 				{ t: 0, b: 6, l: 0, r: 12, val: null },
@@ -653,7 +653,7 @@ export class PhuLuc02Component implements OnInit {
 			]
 			fieldOrder = ['stt', 'tenDanhMuc', 'dviTinh', 'thNamTruoc', 'namDtoan', 'namUocTh', 'sluongTaiKho', 'dmucTaiKho', 'ttienTaiKho',
 				'binhQuanNgoaiKho', 'ttienNgoaiKho', 'tongCong', 'ghiChu'];
-			calHeader = ['A', 'B', 'C', '', '', '', '1', '2', '3=1x2', '4', '5=1x4', '6=5+3', '7'];
+      calHeader = ['A', 'B', 'C', '1', '2', '3', '4', '5', '6=4*5', '7', '8=4*7', '9=6+8', '14'];
 		}
 
 		const filterData = this.lstCtietBcao.map(item => {
