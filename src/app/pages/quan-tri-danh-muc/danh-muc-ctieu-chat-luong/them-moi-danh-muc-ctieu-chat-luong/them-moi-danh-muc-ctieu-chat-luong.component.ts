@@ -83,7 +83,8 @@ export class ThemMoiDanhMucCtieuChatLuongComponent extends Base2Component implem
     if (this.formData.invalid) {
       return;
     }
-    let body = this.formData.value
+    let body = this.formData.value;
+    body.maDvi = this.userInfo.MA_DVI;
     if (this.listCloaiSelected.length > 0) {
       body.cloaiVthh = this.listCloaiSelected.toString();
     } else {
