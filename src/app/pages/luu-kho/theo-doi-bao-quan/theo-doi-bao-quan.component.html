@@ -42,7 +42,7 @@
           </nz-form-control>
         </div>
         <div nz-col nzSpan="4">
-          <nz-form-label >Tên chi cục</nz-form-label>
+          <nz-form-label >Chi cục</nz-form-label>
           <nz-form-control>
             <nz-select formControlName="maDviSr" nzAllowClear nzShowSearch (ngModelChange)="changeDonVi($event,4)">
               <nz-option *ngFor="let item of dsChiCuc" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
@@ -51,7 +51,7 @@
           </nz-form-control>
         </div>
         <div nz-col nzSpan="4">
-          <nz-form-label >Tên điểm kho</nz-form-label>
+          <nz-form-label >Điểm kho</nz-form-label>
           <nz-form-control >
             <nz-select formControlName="maDiemKho" nzAllowClear nzShowSearch (ngModelChange)="changeDonVi($event,5)">
               <nz-option *ngFor="let item of dsDiemKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
@@ -60,7 +60,7 @@
           </nz-form-control>
         </div>
         <div nz-col nzSpan="4">
-          <nz-form-label >Tên nhà kho</nz-form-label>
+          <nz-form-label >Nhà kho</nz-form-label>
           <nz-form-control >
             <nz-select formControlName="maNhaKho" nzAllowClear nzShowSearch (ngModelChange)="changeDonVi($event,6)">
               <nz-option *ngFor="let item of dsNhaKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
@@ -69,7 +69,7 @@
           </nz-form-control>
         </div>
         <div nz-col nzSpan="4">
-          <nz-form-label>Tên ngăn kho</nz-form-label>
+          <nz-form-label>Ngăn kho</nz-form-label>
           <nz-form-control>
             <nz-select formControlName="maNganKho" nzAllowClear nzShowSearch (ngModelChange)="changeDonVi($event,7)">
               <nz-option *ngFor="let item of dsNganKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
@@ -78,7 +78,7 @@
           </nz-form-control>
         </div>
         <div nz-col nzSpan="4">
-          <nz-form-label>Tên lô kho</nz-form-label>
+          <nz-form-label>Lô kho</nz-form-label>
           <nz-form-control>
             <nz-select formControlName="maLoKho" nzAllowClear nzShowSearch >
               <nz-option *ngFor="let item of dsLoKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
@@ -110,7 +110,7 @@
       </button>
       <button type="button" class="btn btn-main" *ngIf="userService.isChiCuc() && isAccessPermisson('LKQLCL_TDBQ_THEM')" (click)="redirectCreate()">
         <i class="icon htvbdh_dau-cong"></i>
-        <span>Tạo quyết định</span>
+        <span>Thêm</span>
       </button>
     </div>
   </div>
