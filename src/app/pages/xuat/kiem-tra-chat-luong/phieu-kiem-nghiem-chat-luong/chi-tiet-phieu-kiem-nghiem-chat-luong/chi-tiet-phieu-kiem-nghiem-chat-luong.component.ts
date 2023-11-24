@@ -115,6 +115,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       ngayKiemNghiem: [dayjs().format("YYYY-MM-DD")],
       ktvBaoQuan: [],
       dviKiemNghiem: [],
+      truongPhong: [],
       lanhDaoCuc: [],
       ketQua: [],
       ketLuan: [],
@@ -175,7 +176,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         tenDvi: this.userInfo.TEN_DVI,
         tenChiCuc: this.userInfo.TEN_DVI,
         maQhns: this.userInfo.DON_VI.maQhns,
-        dviKiemNghiem: this.userInfo.TEN_DAY_DU,
+        ktvBaoQuan: this.userInfo.TEN_DAY_DU,
       })
       if (this.inputData) {
         await this.bindingQdGnv(this.inputData.idQdGnv);

@@ -81,9 +81,9 @@
             <th width="">Ngăn/Lô kho</th>
             <th width="">Số BB LM/BGM</th>
             <th width="">Ngày lấy mẫu</th>
-            <th width="">Số BB tịnh kho</th>
+            <!-- <th width="">Số BB tịnh kho</th>
             <th width="">Ngày xuất dốc kho</th>
-            <th width="">Số BB hao dôi</th>
+            <th width="">Số BB hao dôi</th> -->
             <th width="">Trạng thái</th>
             <th width="90px">Hành động</th>
           </tr>
@@ -187,9 +187,9 @@
               <td></td>
               <td></td>
               <td></td>
+              <!-- <td></td>
               <td></td>
-              <td></td>
-              <td></td>
+              <td></td> -->
               <td></td>
               <td>
                 <a (click)="redirectDetail(0, false,item)" *ngIf="checkRoleAdd()">
@@ -209,9 +209,9 @@
                   <td></td>
                   <td></td>
                   <td></td>
+                  <!-- <td></td>
                   <td></td>
-                  <td></td>
-                  <td></td>
+                  <td></td> -->
                   <td></td>
                   <td class="text-left">
                   </td>
@@ -229,9 +229,9 @@
                         lv2.tenNganKho + ' - ' + lv2.tenNhaKho}}</td>
                       <td>{{lv2.soBbQd}}</td>
                       <td>{{lv2.ngayBbLayMau | date:globals.dateFormat}}</td>
-                      <td>{{lv2.soBbTinhKho}}</td>
+                      <!-- <td>{{lv2.soBbTinhKho}}</td>
                       <td>{{lv2.ngayXuatDocKho | date:globals.dateFormat}}</td>
-                      <td>{{lv2.soBbHaoDoi}}</td>
+                      <td>{{lv2.soBbHaoDoi}}</td> -->
                       <td>{{lv2.tenTrangThai}}</td>
                       <td>
                         <a (click)="redirectDetail(lv2.id, true)" *ngIf="checkRoleView(lv2.trangThai)">

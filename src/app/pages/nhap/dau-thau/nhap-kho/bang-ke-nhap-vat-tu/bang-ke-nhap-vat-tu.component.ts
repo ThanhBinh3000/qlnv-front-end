@@ -1,13 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { BaseComponent } from 'src/app/components/base/base.component';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { STATUS } from 'src/app/constants/status';
@@ -16,15 +14,14 @@ import { QuanLyBangKeVatTuService } from 'src/app/services/qlnv-hang/nhap-hang/d
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
+import {Base2Component} from "../../../../../components/base2/base2.component";
 
 @Component({
   selector: 'app-bang-ke-nhap-vat-tu',
   templateUrl: './bang-ke-nhap-vat-tu.component.html',
   styleUrls: ['./bang-ke-nhap-vat-tu.component.scss']
 })
-export class BangKeNhapVatTuComponent extends BaseComponent implements OnInit {
+export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
 
   searchFilter = {
@@ -66,13 +63,16 @@ export class BangKeNhapVatTuComponent extends BaseComponent implements OnInit {
   };
 
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private quanLyBangKeVatTuService: QuanLyBangKeVatTuService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService
   ) {
-    super(httpClient, storageService, quanLyBangKeVatTuService);
+    super(httpClient, storageService, notification, spinner, modal, quanLyBangKeVatTuService);
     super.ngOnInit();
   }
 
