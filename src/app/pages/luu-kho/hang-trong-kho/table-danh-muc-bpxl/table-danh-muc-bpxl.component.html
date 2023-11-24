@@ -141,7 +141,7 @@
             <tr>
               <td></td>
               <td nzShowExpand="true" [nzExpand]="cloaiVthh.expandSet"
-                  (nzExpandChange)="onExpandChange(cloaiVthh, $event)">{{cloaiVthh.tenCloaiVthh}}</td>
+                  (nzExpandChange)="onExpandChange(cloaiVthh, $event)">{{cloaiVthh.tenCloaiVthh == 'null' ? loaiVthh.tenLoaiVthh : cloaiVthh.tenCloaiVthh}}</td>
               <td></td>
               <td></td>
               <td></td>
