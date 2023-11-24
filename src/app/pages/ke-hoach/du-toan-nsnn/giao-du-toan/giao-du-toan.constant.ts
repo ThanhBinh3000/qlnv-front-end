@@ -205,6 +205,8 @@ export class Doc {
     fileName: string;
     fileSize: number;
     fileUrl: number;
+    noiDung: string;
+    isEdit: boolean = false;
 }
 
 export class Form {

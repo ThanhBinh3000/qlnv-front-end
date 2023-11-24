@@ -375,7 +375,8 @@ export class AddBaoCaoComponent implements OnInit {
             status: new BtnStatus(),
             isSynthetic: isSynthetic,
             isOffice: this.isOffice,
-            listFile: this.listFile
+            listFile: this.listFile,
+            tenTrangThai: Status.reportStatusName(this.baoCao.trangThai, this.isParent),
         };
         Object.assign(dataInfo.status, this.status);
         dataInfo.status.general = dataInfo.status.general && (this.userInfo?.sub == bieuMau.nguoiBcao);
@@ -550,9 +551,12 @@ export class AddBaoCaoComponent implements OnInit {
         if (!baoCaoTemp.fileDinhKems) {
             baoCaoTemp.fileDinhKems = [];
         }
-        for (const iterator of this.listFile) {
-            baoCaoTemp.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.path));
+        for (let iterator of this.listFile) {
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.baoCao.lstFiles.find(e => e.id == id)?.noiDung;
+            baoCaoTemp.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.path, noiDung));
         }
+        baoCaoTemp.fileDinhKems = baoCaoTemp.fileDinhKems.concat(this.baoCao.lstFiles.filter(e => typeof e.id == 'number'))
         //get file cong van url
         const file: any = this.fileDetail;
         if (file) {
@@ -878,6 +882,10 @@ export class AddBaoCaoComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
             }
         );
+    };
+
+    isDelAppendix(maBieuMau: string) {
+        return this.status.general && (this.userInfo?.sub == this.baoCao.nguoiTao) && this.listAppendix.find(e => e.id == maBieuMau).isDel;
     }
 
 }

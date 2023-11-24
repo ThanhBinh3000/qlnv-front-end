@@ -47,6 +47,16 @@
                                 <th scope="col">Định mức</th>
                                 <th scope="col">Thành tiền</th>
                             </tr>
+                            <tr>
+                                <th></th>
+                                <th>Tổng Cộng</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th>{{Op.fmtVal(total.namDtTtien)}}</th>
+                                <th *ngIf="status.general"></th>
+                                <th *ngIf="status.general"></th>
+                            </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let data of lstCtietBcaos; let i = index">
@@ -109,16 +119,7 @@
                                     </td>
                                 </ng-template>
                             </tr>
-                            <tr>
-                                <td></td>
-                                <td>Tổng Cộng</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>{{Op.fmtVal(total.namDtTtien)}}</td>
-                                <td *ngIf="status.general"></td>
-                                <td *ngIf="status.general"></td>
-                            </tr>
+
                         </tbody>
                     </nz-table>
                 </div>
@@ -148,8 +149,9 @@
                         <nz-table nzBordered class="table__body">
                             <thead>
                                 <tr>
-                                    <th scope="col" nzWidth="7%">STT</th>
-                                    <th scope="col">Tên file</th>
+                                    <th scope="col" nzWidth="5%">STT</th>
+                                    <th scope="col" nzWidth="25%">Tên file</th>
+                                    <th scope="col" nzWidth="55%">Nội dung</th>
                                     <th scope="col" nzWidth="15%"></th>
                                 </tr>
                             </thead>
@@ -158,10 +160,26 @@
                                     <td>{{ i + 1 }} </td>
                                     <td>{{ data.fileName }}</td>
                                     <td>
+                                        <ng-container *ngIf="data.isEdit; else readOnly">
+                                            <input nz-input [(ngModel)]="data.noiDung" />
+                                        </ng-container>
+                                        <ng-template #readOnly>
+                                            {{ data.noiDung }}
+                                        </ng-template>
+                                    </td>
+                                    <td>
                                         <a (click)="downloadFile(data.id)">
                                             <i class="fa fa-eye"></i>
                                         </a>
-                                        <a (click)="deleteFile(data.id)">
+                                        <a *ngIf="status.general" (click)="data.isEdit = !data.isEdit">
+                                            <ng-container *ngIf="data.isEdit; else saveText">
+                                                <i class="fa fa-save"></i>
+                                            </ng-container>
+                                            <ng-template #saveText>
+                                                <i class="fa fa-pencil"></i>
+                                            </ng-template>
+                                        </a>
+                                        <a *ngIf="status.general" (click)="deleteFile(data.id)">
                                             <i class="fa fa-trash-o do"></i>
                                         </a>
                                     </td>

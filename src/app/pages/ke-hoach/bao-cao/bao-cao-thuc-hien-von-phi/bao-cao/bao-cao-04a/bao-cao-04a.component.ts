@@ -14,8 +14,9 @@ import { BaoCaoThucHienVonPhiService } from 'src/app/services/quan-ly-von-phi/ba
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import { BtnStatus, Doc, Form, Para, Vp } from '../../bao-cao-thuc-hien-von-phi.constant';
+import { BC_DOT } from '../../../bao-cao.constant';
 
 export class ItemData {
     id: string;
@@ -40,7 +41,7 @@ export class ItemData {
         if (this.listCtiet.length > 0) {
             this.listCtiet.forEach(item => {
                 this.trongDotTcong = Operator.sum([this.trongDotTcong, item.gtri]);
-                const data = origin?.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiDm == item.loaiDm);
+                const data = origin?.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiDm == item.loaiDm && e.loaiBquan == item.loaiBquan);
                 item.lkGtri = Operator.sum([data?.lkGtri, item.gtri]);
                 this.luyKeTcong = Operator.sum([this.luyKeTcong, item.lkGtri]);
             })
@@ -106,7 +107,7 @@ export class ItemData {
         this.trongDotTcong = Operator.sum([this.trongDotTcong, Operator.mul(coe, data.trongDotTcong)]);
         this.luyKeTcong = Operator.sum([this.luyKeTcong, Operator.mul(coe, data.luyKeTcong)]);
         this.listCtiet.forEach(item => {
-            const gtri = data.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiDm == item.loaiDm);
+            const gtri = data.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiDm == item.loaiDm && (!item.loaiBquan || e.loaiBquan == item.loaiBquan));
             item.gtri = Operator.sum([item.gtri, Operator.mul(coe, gtri.gtri)]);
             item.lkGtri = Operator.sum([item.lkGtri, Operator.mul(coe, gtri.lkGtri)]);
         })
@@ -135,6 +136,7 @@ export class Materials {
     maVtu: string;
     tenVtu: string;
     loaiDm: string;
+    loaiBquan: string;
     gtri: number;
     lkGtri: number;
 }
@@ -161,9 +163,12 @@ export class BaoCao04aComponent implements OnInit {
     //danh muc
     lstCtietBcao: ItemData[] = [];
     noiDungChis: any[] = [];
+    dsBaoQuan: any[] = [];
     dinhMucs: any = {
+        'all': [],
         '01': [],
         '02': [],
+        '03': [],
         'LD': [],
         'LDM': [],
         'LDBS': [],
@@ -227,6 +232,10 @@ export class BaoCao04aComponent implements OnInit {
         if (this.status.save) {
             await this.getListNdung();
             await this.getDinhMuc();
+            const baoquan = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_BAO_QUAN');
+            if (baoquan) {
+                this.dsBaoQuan = baoquan.data;
+            }
         }
         this.luyKes = this.dataInfo.luyKes?.lstCtietBcaos;
         // nếu là báo cáo văn phòng thì lấy ra các dòng số lượng của nó
@@ -289,6 +298,14 @@ export class BaoCao04aComponent implements OnInit {
                 }
                 if (parseInt(a.maVtu, 10) < parseInt(b.maVtu, 10)) {
                     return -1
+                }
+                if (a.loaiBquan && b.loaiBquan) {
+                    if (parseInt(a.loaiBquan, 10) > parseInt(b.loaiBquan, 10)) {
+                        return -1
+                    }
+                    if (parseInt(a.loaiBquan, 10) < parseInt(b.loaiBquan, 10)) {
+                        return 1
+                    }
                 }
                 if (a.loaiDm == 'LDM') {
                     return -1
@@ -386,6 +403,7 @@ export class BaoCao04aComponent implements OnInit {
         await this.baoCaoThucHienVonPhiService.getDinhMuc(request).toPromise().then(
             res => {
                 if (res.statusCode == 0) {
+                    this.dinhMucs['all'] = res.data;
                     if (this.dataInfo.maLoai != Vp.BM_05) {
                         this.dinhMucs[this.para.loaiDm] = res.data;
                     } else {
@@ -425,7 +443,7 @@ export class BaoCao04aComponent implements OnInit {
         this.lstCtietBcao[index].trongDotTcong = data.trongDotTcong;
         this.lstCtietBcao[index].luyKeTcong = Operator.sum([this.lstCtietBcao[index].luyKeTcong, data.trongDotTcong]);
         this.lstCtietBcao[index].listCtiet.forEach(item => {
-            const vtu = data.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiDm == item.loaiDm);
+            const vtu = data.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiDm == item.loaiDm && e.loaiBquan == item.loaiBquan);
             item.gtri = vtu.gtri;
             item.lkGtri = Operator.sum([item.lkGtri, vtu.gtri]);
         })
@@ -435,6 +453,11 @@ export class BaoCao04aComponent implements OnInit {
     async save(trangThai: string) {
         if (this.lstCtietBcao.some(e => this.editCache[e.id].edit)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+            return;
+        }
+
+        if (this.formDetail.lstFiles.some(e => e.isEdit)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_SAVE_FILE);
             return;
         }
 
@@ -456,8 +479,11 @@ export class BaoCao04aComponent implements OnInit {
         const request = JSON.parse(JSON.stringify(this.formDetail));
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path));
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.formDetail.lstFiles.find(e => e.id == id)?.noiDung;
+            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path, noiDung));
         }
+        request.fileDinhKems = request.fileDinhKems.concat(this.formDetail.lstFiles.filter(e => typeof e.id == 'number'))
         request.lstCtietBcaos = lstCtietBcaoTemp;
         request.trangThai = trangThai;
         //call service cap nhat phu luc
@@ -633,8 +659,8 @@ export class BaoCao04aComponent implements OnInit {
         const index = this.lstCtietBcao.findIndex(e => e.maNdungChi == maNdungChi);
         if (index && index != -1) {
             this.lstCtietBcao[index].listCtiet.forEach(item => {
-                const gtri = sl.find(e => e.maVtu == item.maVtu && e.loaiDm == item.loaiDm).gtri;
-                const dm = this.dinhMucs[item.loaiDm].find(e => e.cloaiVthh == item.maVtu || e.loaiVthh == item.maVtu);
+                const gtri = sl.find(e => e.maVtu == item.maVtu && e.loaiDm == item.loaiDm && (!item.loaiBquan || e.loaiBquan == item.loaiBquan)).gtri;
+                const dm = this.dinhMucs[item.loaiDm].find(e => (e.cloaiVthh == item.maVtu || e.loaiVthh == item.maVtu) && (!item.loaiBquan || e.loaiBaoQuan == item.loaiBquan));
                 if (dm) {
                     item.gtri = keyVp ? Operator.mul(gtri, this.getDmValue(dm[keyDvi], dm[keyVp])) : Operator.mul(gtri, dm[keyDvi]);
                 }
@@ -642,6 +668,11 @@ export class BaoCao04aComponent implements OnInit {
             this.lstCtietBcao[index].changeModel(this.luyKes);
             this.sum(this.lstCtietBcao[index].stt);
         }
+    }
+
+    isExistDm(data: Materials) {
+        const dm = this.dinhMucs[data.loaiDm].find(e => (e.cloaiVthh == data.maVtu || e.loaiVthh == data.maVtu) && (!data.loaiBquan || e.loaiBaoQuan == data.loaiBquan));
+        return dm ? true : false;
     }
 
     tinhDinhMuc(data: ItemData) {
@@ -785,9 +816,17 @@ export class BaoCao04aComponent implements OnInit {
                     maVtu: res.ma,
                     tenVtu: res.ten + ' (' + res.maDviTinh + ')',
                 }
-                if (this.dataInfo.maLoai != Vp.BM_05) {
-                    obj.loaiDm = this.para.loaiDm;
-                    this.lstCol.push(obj);
+                let lstDm = this.dinhMucs['all'].filter(e => e.loaiVthh == res.ma || e.cloaiVthh == res.ma);
+                if (this.dataInfo.maLoai == Vp.BM_05) {
+                    if (res.ma.startsWith('01')) {
+                        lstDm = lstDm.filter(e => e.htBaoQuan == 'LDM' || e.htBaoQuan == 'LDBS');
+                    } else {
+                        lstDm = lstDm.filter(e => e.htBaoQuan == 'LD');
+                    }
+                }
+                if (!lstDm || lstDm.length == 0) {
+                    obj.loaiDm = this.dataInfo.maLoai == Vp.BM_05 ? '03' : this.para.loaiDm;
+                    this.lstCol.push(obj)
                     this.lstCtietBcao.forEach(item => {
                         item.listCtiet.push({
                             ...obj,
@@ -795,39 +834,24 @@ export class BaoCao04aComponent implements OnInit {
                         })
                     })
                 } else {
-                    if (res.ma.startsWith('01')) {
-                        const objLDM: Materials = {
+                    lstDm.forEach(item => {
+                        const objTemp: Materials = {
                             ...obj,
-                            tenVtu: obj.tenVtu + ' - LDM',
-                            loaiDm: 'LDM',
+                            loaiDm: item.loaiDinhMuc == '03' ? item.htBaoQuan : this.para.loaiDm,
+                            tenVtu: obj.tenVtu + (item.htBaoQuan ? ' - ' + item.htBaoQuan : ''),
+                            loaiBquan: (item.loaiBaoQuan ? item.loaiBaoQuan : null),
                         }
-                        const objLDBS: Materials = {
-                            ...obj,
-                            tenVtu: obj.tenVtu + ' - LDBS',
-                            loaiDm: 'LDBS',
+                        if (objTemp.loaiBquan) {
+                            objTemp.tenVtu += ' - ' + this.dsBaoQuan.find(e => e.ma == objTemp.loaiBquan)?.giaTri;
                         }
-                        this.lstCol.push(objLDM);
-                        this.lstCol.push(objLDBS);
+                        this.lstCol.push(objTemp)
                         this.lstCtietBcao.forEach(item => {
                             item.listCtiet.push({
-                                ...objLDM,
-                                id: uuid.v4() + 'FE',
-                            })
-                            item.listCtiet.push({
-                                ...objLDBS,
+                                ...objTemp,
                                 id: uuid.v4() + 'FE',
                             })
                         })
-                    } else {
-                        obj.loaiDm = 'LD';
-                        this.lstCol.push(obj);
-                        this.lstCtietBcao.forEach(item => {
-                            item.listCtiet.push({
-                                ...obj,
-                                id: uuid.v4() + 'FE',
-                            })
-                        })
-                    }
+                    })
                 }
                 this.setWidth();
                 this.updateEditCache();
@@ -923,9 +947,9 @@ export class BaoCao04aComponent implements OnInit {
     }
 
     checkEdit(item: ItemData) {
-        if (item.maNdungChi.startsWith('0.1.3')) {
-            return false;
-        }
+        // if (item.maNdungChi.startsWith('0.1.3')) {
+        //     return false;
+        // }
         if (item.maNdungChi.startsWith('0.1.5') && item.level < 3) {
             return false;
         }
@@ -951,6 +975,7 @@ export class BaoCao04aComponent implements OnInit {
             { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
             { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
             { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+            { t: 3, b: 3, l: 0, r: 4, val: 'Trạng thái báo cáo: ' + this.dataInfo.tenTrangThai },
             { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
             { t: 4, b: 5, l: 1, r: 1, val: 'Nội dung chi' },
             { t: 4, b: 4, l: 2, r: 2 + num, val: 'Chi tiết theo từng mặt hàng trong đợt' },
@@ -966,20 +991,26 @@ export class BaoCao04aComponent implements OnInit {
         this.lstCtietBcao.forEach((item, index) => {
             const row = 6 + index;
             header.push({ t: row, b: row, l: 0, r: 0, val: item.index() })
-            header.push({ t: row, b: row, l: 1, r: 1, val: item.tenNdungChi })
+            header.push({ t: row, b: row, l: 1, r: 1, val: Utils.getValue(item.tenNdungChi) })
             if (item.maNdungChi != '0.1') {
-                header.push({ t: row, b: row, l: 2, r: 2, val: item.trongDotTcong })
-                header.push({ t: row, b: row, l: 3 + num, r: 3 + num, val: item.luyKeTcong })
-                header.push({ t: row, b: row, l: 4 + 2 * num, r: 4 + 2 * num, val: item.ghiChu })
+                header.push({ t: row, b: row, l: 2, r: 2, val: Utils.getValue(item.trongDotTcong) })
+                header.push({ t: row, b: row, l: 3 + num, r: 3 + num, val: Utils.getValue(item.luyKeTcong) })
+                header.push({ t: row, b: row, l: 4 + 2 * num, r: 4 + 2 * num, val: Utils.getValue(item.ghiChu) })
                 this.lstCol.forEach((e, ind) => {
-                    const sl = item.listCtiet.find(d => d.maVtu == e.maVtu && d.loaiDm == e.loaiDm);
-                    header.push({ t: row, b: row, l: 3 + ind, r: 3 + ind, val: sl.gtri })
-                    header.push({ t: row, b: row, l: 4 + ind + num, r: 4 + ind + num, val: sl.lkGtri })
+                    const sl = item.listCtiet.find(d => d.maVtu == e.maVtu && d.loaiDm == e.loaiDm && e.loaiBquan == d.loaiBquan);
+                    header.push({ t: row, b: row, l: 3 + ind, r: 3 + ind, val: Utils.getValue(sl.gtri) })
+                    header.push({ t: row, b: row, l: 4 + ind + num, r: 4 + ind + num, val: Utils.getValue(sl.lkGtri) })
                 })
             }
         })
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
+        //Thêm khung viền cho bảng
+        for (const cell in worksheet) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheet[cell].s = Table.borderStyle;
+        }
+
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         XLSX.writeFile(workbook, this.para.excel);
     }

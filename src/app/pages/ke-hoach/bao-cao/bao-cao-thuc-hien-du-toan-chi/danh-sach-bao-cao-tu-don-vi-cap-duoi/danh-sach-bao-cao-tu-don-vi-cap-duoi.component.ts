@@ -46,10 +46,10 @@ export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
         this.spinner.show();
         //khoi tao gia tri mac dinh
         const date = new Date();
-        this.searchFilter.namBcao = date.getFullYear();
-        this.searchFilter.thangBcao = date.getMonth();
+        // this.searchFilter.namBcao = date.getFullYear();
+        // this.searchFilter.thangBcao = date.getMonth();
         this.trangThai = Status.TT_07;
-        this.searchFilter.maLoaiBcao = Dtc.BC_DINH_KY;
+        // this.searchFilter.maLoaiBcao = Dtc.BC_DINH_KY;
         this.searchFilter.loaiTimKiem = '1';
         //lay danh sach ca don vi truc thuoc
         const request = {
@@ -81,6 +81,7 @@ export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
                 res.data.content.forEach(item => {
                     this.dataTable.push({
                         ...item,
+                        thangBcao: item.maLoaiBcao == Dtc.BC_CA_NAM ? null : item.thangBcao,
                         congVan: JSON.parse(item.congVan),
                     })
                 })

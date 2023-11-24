@@ -15,7 +15,8 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import * as uuid from 'uuid';
-import * as XLSX from "xlsx";
+import * as XLSX from 'xlsx-js-style';
+import { Doc } from '../giao-du-toan-thuc-te.constant';
 
 export class ItemData {
     id!: any;
@@ -120,7 +121,9 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     editMoneyUnit = false;
     isDataAvailable = false;
     amount = Operator.amount;
-    Status = Status
+    Status = Status;
+    path: string;
+
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
         this.fileList = this.fileList.concat(file);
@@ -128,14 +131,20 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     };
 
     // them file vao danh sach
-    handleUpload(): void {
+    handleUpload() {
         this.fileList.forEach((file: any) => {
             const id = file?.lastModified.toString();
-            this.lstFiles.push({ id: id, fileName: file?.name, fileUrl: file?.url, fileSize: file?.size });
+            this.lstFiles.push({
+                ... new Doc(),
+                id: id,
+                fileName: file?.name
+            });
             this.listFile.push(file);
         });
+        console.log(this.listFile);
+
         this.fileList = [];
-    }
+    };
 
     // before upload file so quyet dinh
     beforeUploadSoQuyetDinh = (file: NzUploadFile): boolean => {
@@ -257,6 +266,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
             this.statusBtnPrint = true;
             this.status = true;
         }
+        this.path = this.maDonViTao + "/" + this.maPa
         await this.getChildUnit();
         this.getStatusButton();
         await this.checkPlanBTC();
@@ -562,11 +572,11 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
         }
-        //get list file url
-        const listFile: any = [];
-        for (const iterator of this.listFile) {
-            listFile.push(await this.uploadFile(iterator));
-        }
+        // //get list file url
+        // const listFile: any = [];
+        // for (const iterator of this.listFile) {
+        //     listFile.push(await this.uploadFile(iterator));
+        // }
 
         // gui du lieu trinh duyet len server
         const request = JSON.parse(JSON.stringify({
@@ -585,6 +595,14 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
             soQd: this.soQd,
         }));
 
+
+        const fileDinhKems = [];
+        for (const iterator of this.listFile) {
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.lstFiles.find(e => e.id == id)?.noiDung;
+            fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.path, noiDung));
+        }
+        request.fileDinhKems = fileDinhKems;
 
         //get file cong van url
         const file: any = this.fileDetail;
@@ -1115,7 +1133,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         }
 
         const header = [
-            { t: 0, b: 5 + this.lstCtietBcao.length, l: 0, r: 8, val: null },
+            { t: 0, b: 5 + this.lstCtietBcao.length, l: 0, r: 4, val: null },
 
             { t: 0, b: 0, l: 0, r: 1, val: `Quyết định Bộ Tài Chính năm ${this.namPa}` },
 
@@ -1144,14 +1162,18 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
             const tenNdung = this.getTenNdung(item.maNdung);
             header.push({ t: row, b: row, l: 0, r: 0, val: this.getChiMuc(item.stt) })
             header.push({ t: row, b: row, l: 1, r: 1, val: tenNdung })
-            header.push({ t: row, b: row, l: 2, r: 2, val: item.tongCong?.toString() })
-            header.push({ t: row, b: row, l: 3, r: 3, val: item.nguonNsnn?.toString() })
-            header.push({ t: row, b: row, l: 4, r: 4, val: item.nguonKhac?.toString() })
+            header.push({ t: row, b: row, l: 2, r: 2, val: (item.tongCong ? item.tongCong : 0)?.toString() })
+            header.push({ t: row, b: row, l: 3, r: 3, val: (item.nguonNsnn ? item.nguonNsnn : 0)?.toString() })
+            header.push({ t: row, b: row, l: 4, r: 4, val: (item.nguonKhac ? item.nguonKhac : 0)?.toString() })
 
         })
 
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
+        for (const cell in worksheet) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheet[cell].s = Table.borderStyle;
+        }
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         let excelName = this.maPa;
         excelName = excelName + '_GTT_QDBTC.xlsx'

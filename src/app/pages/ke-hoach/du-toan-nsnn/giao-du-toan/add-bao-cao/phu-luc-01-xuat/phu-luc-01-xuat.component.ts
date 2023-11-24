@@ -12,7 +12,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from 'uuid';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import { BtnStatus, Doc, Form } from '../../giao-du-toan.constant';
 export class ItemData {
     id: any;
@@ -186,7 +186,7 @@ export class PhuLuc01XuatComponent implements OnInit {
         }
         if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == Status.NEW) {
             this.lstCtietBcaos.forEach(item => {
-                const dinhMuc = this.dsDinhMuc.find(e => (e.cloaiVthh == item.danhMuc || e.loaiVthh == item.danhMuc) && e.loaiDinhMuc == item.maDmuc);
+                const dinhMuc = this.dsDinhMuc.find(e => (e.cloaiVthh == item.danhMuc || e.loaiVthh == item.danhMuc) && e.maDinhMuc == item.maDmuc);
                 if (!item.tenDanhMuc) {
                     item.tenDanhMuc = dinhMuc?.tenDinhMuc;
                 }
@@ -222,7 +222,7 @@ export class PhuLuc01XuatComponent implements OnInit {
             }
         }
         lstVtuTemp.forEach(item => {
-            this.sum(item.stt + '.1');
+            this.sum(item.stt);
         })
     }
 
@@ -307,8 +307,11 @@ export class PhuLuc01XuatComponent implements OnInit {
 
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path));
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.formDetail.lstFiles.find(e => e.id == id)?.noiDung;
+            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path, noiDung));
         }
+        request.fileDinhKems = request.fileDinhKems.concat(this.formDetail.lstFiles.filter(e => typeof e.id == 'number'))
 
         request.lstCtietBcaos = lstCtietBcaoTemp;
         request.trangThai = trangThai;
@@ -431,7 +434,7 @@ export class PhuLuc01XuatComponent implements OnInit {
                             id: uuid.v4() + 'FE',
                             stt: stt + '.' + i.toString(),
                             danhMuc: data.ma,
-                            maDmuc: lstTemp[i - 1].loaiDinhMuc,
+                            maDmuc: lstTemp[i - 1].maDinhMuc,
                             tenDanhMuc: lstTemp[i - 1].tenDinhMuc,
                             maDviTinh: lstTemp[i - 1].donViTinh,
                             level: 1,
@@ -514,27 +517,28 @@ export class PhuLuc01XuatComponent implements OnInit {
             return;
         }
         const header = [
-            { t: 0, b: 7, l: 0, r: 5, val: null },
+            { t: 0, b: 6, l: 0, r: 5, val: null },
 
             { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
             { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
             { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+            { t: 3, b: 3, l: 0, r: 8, val: 'Trạng thái báo cáo: ' + this.dataInfo.tenTrangThai },
 
-            { t: 4, b: 4, l: 0, r: 0, val: 'STT' },
-            { t: 4, b: 4, l: 1, r: 1, val: 'Danh mục' },
-            { t: 4, b: 4, l: 2, r: 2, val: 'Đơn vị tính' },
+            { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+            { t: 4, b: 5, l: 1, r: 1, val: 'Danh mục' },
+            { t: 4, b: 5, l: 2, r: 2, val: 'Đơn vị tính' },
             { t: 4, b: 4, l: 3, r: 5, val: 'Năm dự toán' },
 
-            { t: 6, b: 6, l: 3, r: 3, val: 'Số lượng' },
-            { t: 6, b: 6, l: 4, r: 4, val: 'Định mức' },
-            { t: 6, b: 6, l: 5, r: 5, val: 'Thành tiền' },
+            { t: 5, b: 5, l: 3, r: 3, val: 'Số lượng' },
+            { t: 5, b: 5, l: 4, r: 4, val: 'Định mức' },
+            { t: 5, b: 5, l: 5, r: 5, val: 'Thành tiền' },
 
-            { t: 7, b: 7, l: 0, r: 0, val: 'A' },
-            { t: 7, b: 7, l: 1, r: 1, val: 'B' },
-            { t: 7, b: 7, l: 2, r: 2, val: 'C' },
-            { t: 7, b: 7, l: 3, r: 3, val: '1' },
-            { t: 7, b: 7, l: 4, r: 4, val: '2' },
-            { t: 7, b: 7, l: 5, r: 5, val: '3 = 1 x 2' },
+            { t: 6, b: 6, l: 0, r: 0, val: 'A' },
+            { t: 6, b: 6, l: 1, r: 1, val: 'B' },
+            { t: 6, b: 6, l: 2, r: 2, val: 'C' },
+            { t: 6, b: 6, l: 3, r: 3, val: '1' },
+            { t: 6, b: 6, l: 4, r: 4, val: '2' },
+            { t: 6, b: 6, l: 5, r: 5, val: '3 = 1 x 2' },
         ]
         const fieldOrder = [
             "stt",
@@ -548,6 +552,7 @@ export class PhuLuc01XuatComponent implements OnInit {
         const filterData = this.lstCtietBcaos.map(item => {
             const row: any = {};
             fieldOrder.forEach(field => {
+                item[field] = item[field] ? item[field] : ""
                 row[field] = field == 'stt' ? item.index() : item[field]
             })
             return row;
@@ -571,6 +576,10 @@ export class PhuLuc01XuatComponent implements OnInit {
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        for (const cell in worksheet) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheet[cell].s = Table.borderStyle;
+        }
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         let excelName = this.dataInfo.maBcao;
         excelName = excelName + '_GSTC_PL01_Xuat.xlsx'

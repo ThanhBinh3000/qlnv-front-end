@@ -116,21 +116,21 @@
 								<th scope="col" nzLeft>A</th>
 								<th scope="col" nzLeft>B</th>
 								<th scope="col">C</th>
-								<th scope="col"></th>
-								<th scope="col"></th>
-								<th scope="col"></th>
 								<th scope="col">1</th>
 								<th scope="col">2</th>
-								<th scope="col">3=2x1</th>
+								<th scope="col">3</th>
 								<th scope="col">4</th>
-								<th scope="col">5=4x1</th>
-								<th scope="col">6=5+3</th>
-								<th scope="col" *ngIf="status.viewAppVal">7</th>
-								<th scope="col" *ngIf="status.viewAppVal">8 = 7 * 2</th>
-								<th scope="col" *ngIf="status.viewAppVal">10 = 8 + 5</th>
-								<th scope="col" *ngIf="status.viewAppVal">11 = 10 - 6 </th>
-								<th scope="col">12</th>
-								<th scope="col" *ngIf="status.viewAppVal"></th>
+								<th scope="col">5</th>
+								<th scope="col">6=4*5</th>
+								<th scope="col">7</th>
+								<th scope="col">8=4*7</th>
+								<th scope="col">9=6+8</th>
+								<th scope="col" *ngIf="status.viewAppVal">10</th>
+								<th scope="col" *ngIf="status.viewAppVal">11=5*7</th>
+								<th scope="col" *ngIf="status.viewAppVal">12=11+8</th>
+								<th scope="col" *ngIf="status.viewAppVal">13=12-9</th>
+								<th scope="col">14</th>
+								<th scope="col" *ngIf="status.viewAppVal">15</th>
 								<th scope="col" *ngIf="status.general" nzRight></th>
 								<th scope="col" *ngIf="status.general || status.editAppVal" nzRight></th>
 							</tr>
@@ -384,12 +384,13 @@
 					</div>
 				</div>
 				<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-					<div nz-col class="gutter-row" [nzSpan]="13">
+					<div nz-col class="gutter-row" [nzSpan]="18">
 						<nz-table nzBordered class="table__body">
 							<thead>
 								<tr>
-									<th scope="col" nzWidth="7%">STT</th>
-									<th scope="col">Tên file</th>
+									<th scope="col" nzWidth="5%">STT</th>
+									<th scope="col" nzWidth="25%">Tên file</th>
+									<th scope="col" nzWidth="55%">Nội dung</th>
 									<th scope="col" nzWidth="15%"></th>
 								</tr>
 							</thead>
@@ -398,8 +399,24 @@
 									<td>{{ i + 1 }} </td>
 									<td>{{ data.fileName }}</td>
 									<td>
+										<ng-container *ngIf="data.isEdit; else readOnly">
+											<input nz-input [(ngModel)]="data.noiDung" />
+										</ng-container>
+										<ng-template #readOnly>
+											{{ data.noiDung }}
+										</ng-template>
+									</td>
+									<td>
 										<a (click)="downloadFile(data.id)">
 											<i class="fa fa-eye"></i>
+										</a>
+										<a *ngIf="status.general" (click)="data.isEdit = !data.isEdit">
+											<ng-container *ngIf="data.isEdit; else saveText">
+												<i class="fa fa-save"></i>
+											</ng-container>
+											<ng-template #saveText>
+												<i class="fa fa-pencil"></i>
+											</ng-template>
 										</a>
 										<a *ngIf="status.general" (click)="deleteFile(data.id)">
 											<i class="fa fa-trash-o do"></i>

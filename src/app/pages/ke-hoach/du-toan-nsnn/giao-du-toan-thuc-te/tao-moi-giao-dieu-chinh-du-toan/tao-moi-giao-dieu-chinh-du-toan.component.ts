@@ -18,7 +18,8 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import * as uuid from 'uuid';
-import * as XLSX from "xlsx";
+import * as XLSX from 'xlsx-js-style';
+import { Doc } from '../giao-du-toan-thuc-te.constant';
 // khai báo class data request
 export class ItemData {
 	id: string;
@@ -97,6 +98,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 	checkTrangThaiGiao: string; // trạng thái giao
 	qdGiaoDuToan: ItemSoQd;
 	maDviCha: string;
+	path: string;
 
 	//===================================================================================
 
@@ -300,7 +302,8 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 		} else {
 			this.scrollX = (400 + 250 * (this.lstDvi.length + 1)).toString() + 'px';
 		}
-		console.log(this.lstDvi);
+
+		this.path = this.maDonViTao + "/" + this.maPa;
 
 		this.updateEditCache();
 		this.getStatusButton();
@@ -682,10 +685,10 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
 			return;
 		}
-		const listFile: any = [];
-		for (const iterator of this.listFile) {
-			listFile.push(await this.uploadFile(iterator));
-		}
+		// const listFile: any = [];
+		// for (const iterator of this.listFile) {
+		// 	listFile.push(await this.uploadFile(iterator));
+		// }
 
 		const tongHopTuIds = [];
 		this.lstDviTrucThuoc.forEach(item => {
@@ -732,6 +735,17 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 			soQd: this.soQd,
 			tongHopTuIds: tongHopTuIds,
 		}));
+
+
+		const fileDinhKems = [];
+		for (const iterator of this.listFile) {
+			const id = iterator?.lastModified.toString();
+			const noiDung = this.lstFiles.find(e => e.id == id)?.noiDung;
+			fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.path, noiDung));
+		}
+		request1.fileDinhKems = fileDinhKems;
+		request.fileDinhKems = fileDinhKems;
+
 		//get file cong van url
 		const file: any = this.fileDetail;
 		if (file) {
@@ -1257,9 +1271,15 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 	handleUpload() {
 		this.fileList.forEach((file: any) => {
 			const id = file?.lastModified.toString();
-			this.lstFiles.push({ id: id, fileName: file?.name });
+			this.lstFiles.push({
+				... new Doc(),
+				id: id,
+				fileName: file?.name
+			});
 			this.listFile.push(file);
 		});
+		console.log(this.listFile);
+
 		this.fileList = [];
 	};
 
@@ -1470,9 +1490,8 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 			{ t: 2, b: 2, l: 3, r: 3, val: ` ${this.maPaCha} ` },
 			{ t: 2, b: 2, l: 4, r: 4, val: ` ${this.getStatusName()} ` },
 
-
 			{ t: 5, b: 7, l: 0, r: 0, val: 'STT' },
-			{ t: 5, b: 7, l: 1, r: 1, val: 'Nhóm' },
+			{ t: 5, b: 7, l: 1, r: 1, val: 'Nội dung' },
 			{ t: 5, b: 7, l: 2, r: 2, val: 'Số trần chi giao từ cấp trên' },
 			{ t: 5, b: 7, l: 3, r: 3, val: 'Tổng số' },
 			{ t: 5, b: 6, l: 4, r: 3 + this.lstDvi.length, val: 'Chi tiết theo các đơn vị sử dụng' },
@@ -1488,18 +1507,22 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 			const tenNdung = this.getTenNdung(item.maNdung);
 			header.push({ t: row, b: row, l: 0, r: 0, val: this.getChiMuc(item.stt) })
 			header.push({ t: row, b: row, l: 1, r: 1, val: tenNdung })
-			header.push({ t: row, b: row, l: 2, r: 2, val: item.tongCong?.toString() })
-			header.push({ t: row, b: row, l: 3, r: 3, val: item.tongCongSoTranChi?.toString() })
+			header.push({ t: row, b: row, l: 2, r: 2, val: (item.tongCong ? item.tongCong : 0)?.toString() })
+			header.push({ t: row, b: row, l: 3, r: 3, val: (item.tongCongSoTranChi ? item.tongCongSoTranChi : 0)?.toString() })
 
 			item.lstCtietDvis.forEach((e, ind) => {
 				const col = 4 + ind;
-				header.push({ t: row, b: row, l: col, r: col, val: e.soTranChi?.toString() })
+				header.push({ t: row, b: row, l: col, r: col, val: (e.soTranChi ? e.soTranChi : 0)?.toString() })
 			})
 		})
 
 		const workbook = XLSX.utils.book_new();
 		const worksheet = Table.initExcel(header);
 		// XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+		for (const cell in worksheet) {
+			if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 5) continue;
+			worksheet[cell].s = Table.borderStyle;
+		}
 		XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
 
 		let excelName = this.maPa;

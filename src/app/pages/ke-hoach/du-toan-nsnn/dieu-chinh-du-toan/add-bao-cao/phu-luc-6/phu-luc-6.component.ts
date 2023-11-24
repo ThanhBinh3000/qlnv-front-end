@@ -13,7 +13,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from 'uuid';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import { BtnStatus, Doc, Form } from '../../dieu-chinh-du-toan.constant';
 export class ItemData {
     level: any;
@@ -183,15 +183,17 @@ export class PhuLuc6Component implements OnInit {
         await this.getDinhMucPL2X()
         // if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == Status.NEW) {
         this.lstCtietBcao.forEach(item => {
-            const dinhMuc = this.dsDinhMuc.find(e => (!e.cloaiVthh && e.loaiVthh == item.maNdung) || (!e.cloaiVthh && e.loaiVthh == item.maDmuc));
+            const dinhMuc = this.dsDinhMuc.find(e => (e.cloaiVthh == item.maNdung || e.loaiVthh == item.maNdung) && e.maDinhMuc == item.maDmuc);
             if (!item.noiDung) {
                 item.noiDung = dinhMuc?.tenDinhMuc;
             }
             item.sluongThienDmuc = dinhMuc?.tongDmuc;
             item.maDviTinh = dinhMuc?.donViTinh;
-            item.sluongThienTtien = Operator.mul(item.sluongThienDmuc, item.sluongThienCong);
-            item.dtoanDchinh = item.sluongThienTtien - item.dtoanGiaoLke;
-            item.dtoanVuTvqtDnghi = item.sluongThienTtien - item.dtoanGiaoLke;
+            if (item.sluongThienDmuc) {
+                item.sluongThienTtien = Operator.mul(item.sluongThienDmuc, item.sluongThienCong);
+                item.dtoanDchinh = Operator.sum([item.sluongThienTtien, - item.dtoanGiaoLke]);
+                item.dtoanVuTvqtDnghi = Operator.sum([item.sluongThienTtien, - item.dtoanGiaoLke]);
+            }
         })
         // }
         if (!this.lstCtietBcao[0]?.stt) {
@@ -199,8 +201,10 @@ export class PhuLuc6Component implements OnInit {
         }
 
         this.lstCtietBcao.forEach(item => {
-            item.sluongThienTtien = Operator.mul(item.sluongThienDmuc, item.sluongThienCong);
-            item.dtoanDchinh = item.sluongThienTtien - item.dtoanGiaoLke;
+            if (item.sluongThienDmuc) {
+                item.sluongThienTtien = Operator.mul(item.sluongThienDmuc, item.sluongThienCong);
+                item.dtoanDchinh = item.sluongThienTtien - item.dtoanGiaoLke;
+            }
         })
 
         this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
@@ -273,7 +277,7 @@ export class PhuLuc6Component implements OnInit {
             }
         }
         lstVtuTemp.forEach(item => {
-            this.sum(item.stt + '.1');
+            this.sum(item.stt);
         })
     }
 
@@ -341,8 +345,11 @@ export class PhuLuc6Component implements OnInit {
 
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path));
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.formDetail.lstFiles.find(e => e.id == id)?.noiDung;
+            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path, noiDung));
         }
+        request.fileDinhKems = request.fileDinhKems.concat(this.formDetail.lstFiles.filter(e => typeof e.id == 'number'))
 
         request.lstCtietDchinh = lstCtietBcaoTemp;
         request.trangThai = trangThai;
@@ -541,7 +548,7 @@ export class PhuLuc6Component implements OnInit {
                             id: uuid.v4() + 'FE',
                             stt: stt + '.' + i.toString(),
                             maNdung: data.ma,
-                            maDmuc: lstTemp[i - 1].loaiDinhMuc,
+                            maDmuc: lstTemp[i - 1].maDinhMuc,
                             noiDung: lstTemp[i - 1].tenDinhMuc,
                             maDviTinh: lstTemp[i - 1].donViTinh,
                             level: 1,
@@ -743,48 +750,49 @@ export class PhuLuc6Component implements OnInit {
 
         if (this.status.viewAppVal) {
             header = [
-                { t: 0, b: 7, l: 0, r: 16, val: null },
+                { t: 0, b: 6, l: 0, r: 16, val: null },
 
                 { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
                 { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
                 { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
-                { t: 3, b: 3, l: 0, r: 8, val: 'Trạng thái biểu mẫu' + Status.reportStatusName(this.dataInfo.trangThai) },
+                { t: 3, b: 3, l: 0, r: 8, val: 'Trạng thái biểu mẫu: ' + Status.reportStatusName(this.dataInfo.trangThai) },
 
-                { t: 4, b: 6, l: 0, r: 0, val: 'STT' },
-                { t: 4, b: 6, l: 1, r: 1, val: 'Nội dung' },
-                { t: 4, b: 6, l: 2, r: 2, val: 'Đơn vị tính' },
-                { t: 4, b: 6, l: 3, r: 3, val: 'Số lượng theo KH được giao năm' + (this.namBcao - 1).toString() },
-                { t: 4, b: 4, l: 4, r: 8, val: 'Số lượng thực hiện năm' + (this.namBcao - 1).toString() },
-                { t: 4, b: 6, l: 9, r: 9, val: 'Dự toán đã giao lũy kế' },
-                { t: 4, b: 6, l: 10, r: 10, val: 'Dự toán điều chỉnh' },
-                { t: 4, b: 6, l: 11, r: 11, val: 'Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)' },
-                { t: 4, b: 6, l: 12, r: 12, val: 'Kinh phí thiếu năm ' + (this.namBcao - 1).toString() },
-                { t: 4, b: 6, l: 13, r: 13, val: 'Dự toán chênh lệch giữa Vụ TVQT và đơn vị đề nghị (+ tăng) (- giảm)' },
-                { t: 4, b: 6, l: 14, r: 14, val: 'Ý kiến của đơn vị cấp trên' },
-                { t: 4, b: 6, l: 15, r: 15, val: 'Ghi chú' },
+                { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+                { t: 4, b: 5, l: 1, r: 1, val: 'Nội dung' },
+                { t: 4, b: 5, l: 2, r: 2, val: 'Đơn vị tính' },
+                { t: 4, b: 5, l: 3, r: 3, val: 'Số lượng theo KH được giao năm ' + (this.namBcao).toString() },
+                { t: 4, b: 4, l: 4, r: 8, val: 'Số lượng thực hiện năm ' + (this.namBcao).toString() },
 
-                { t: 5, b: 6, l: 4, r: 4, val: 'Số lượng thực tế đã thực hiện đến thời điểm báo cáo' },
+                { t: 4, b: 5, l: 9, r: 9, val: 'Dự toán đã giao lũy kế' },
+                { t: 4, b: 5, l: 10, r: 10, val: 'Dự toán điều chỉnh' },
+                { t: 4, b: 5, l: 11, r: 11, val: 'Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)' },
+                { t: 4, b: 5, l: 12, r: 12, val: 'Kinh phí thiếu năm ' + (this.namBcao).toString() },
+                { t: 4, b: 5, l: 13, r: 13, val: 'Dự toán chênh lệch giữa Vụ TVQT và đơn vị đề nghị (+ tăng) (- giảm)' },
+                { t: 4, b: 5, l: 14, r: 14, val: 'Ý kiến của đơn vị cấp trên' },
+                { t: 4, b: 5, l: 15, r: 15, val: 'Ghi chú' },
+
+                { t: 5, b: 5, l: 4, r: 4, val: 'Số lượng thực tế đã thực hiện đến thời điểm báo cáo' },
                 { t: 5, b: 5, l: 5, r: 5, val: 'Số lượng ước thực hiện từ thời điểm báo cáo đến cuối năm' },
-                { t: 5, b: 6, l: 6, r: 6, val: 'Cộng' },
-                { t: 5, b: 6, l: 7, r: 7, val: 'Định mức' },
-                { t: 5, b: 6, l: 8, r: 8, val: 'Thành tiền (đồng) (Tổng nhu cầu năm nay)' },
+                { t: 5, b: 5, l: 6, r: 6, val: 'Cộng' },
+                { t: 5, b: 5, l: 7, r: 7, val: 'Định mức' },
+                { t: 5, b: 5, l: 8, r: 8, val: 'Thành tiền (đồng) (Tổng nhu cầu năm nay)' },
 
-                { t: 7, b: 7, l: 0, r: 0, val: 'A' },
-                { t: 7, b: 7, l: 1, r: 1, val: 'B' },
-                { t: 7, b: 7, l: 2, r: 2, val: 'C' },
-                { t: 7, b: 7, l: 3, r: 3, val: '1' },
-                { t: 7, b: 7, l: 4, r: 4, val: '2' },
-                { t: 7, b: 7, l: 5, r: 5, val: '3' },
-                { t: 7, b: 7, l: 6, r: 6, val: '4 = 2 + 3' },
-                { t: 7, b: 7, l: 7, r: 7, val: '5' },
-                { t: 7, b: 7, l: 8, r: 8, val: '6 = 4 * 5' },
-                { t: 7, b: 7, l: 9, r: 9, val: '7' },
-                { t: 7, b: 7, l: 10, r: 10, val: '8 = 6 - 7' },
-                { t: 7, b: 7, l: 11, r: 11, val: '9' },
-                { t: 7, b: 7, l: 12, r: 12, val: '10' },
-                { t: 7, b: 7, l: 13, r: 13, val: '11 = 9 - 8' },
-                { t: 7, b: 7, l: 14, r: 14, val: '12' },
-                { t: 7, b: 7, l: 15, r: 15, val: '13' },
+                { t: 6, b: 6, l: 0, r: 0, val: 'A' },
+                { t: 6, b: 6, l: 1, r: 1, val: 'B' },
+                { t: 6, b: 6, l: 2, r: 2, val: 'C' },
+                { t: 6, b: 6, l: 3, r: 3, val: '1' },
+                { t: 6, b: 6, l: 4, r: 4, val: '2' },
+                { t: 6, b: 6, l: 5, r: 5, val: '3' },
+                { t: 6, b: 6, l: 6, r: 6, val: '4 = 2 + 3' },
+                { t: 6, b: 6, l: 7, r: 7, val: '5' },
+                { t: 6, b: 6, l: 8, r: 8, val: '6 = 4 * 5' },
+                { t: 6, b: 6, l: 9, r: 9, val: '7' },
+                { t: 6, b: 6, l: 10, r: 10, val: '8 = 6 - 7' },
+                { t: 6, b: 6, l: 11, r: 11, val: '9' },
+                { t: 6, b: 6, l: 12, r: 12, val: '10' },
+                { t: 6, b: 6, l: 13, r: 13, val: '11 = 9 - 8' },
+                { t: 6, b: 6, l: 14, r: 14, val: '12' },
+                { t: 6, b: 6, l: 15, r: 15, val: '13' },
             ]
             fieldOrder = [
                 'stt',
@@ -806,41 +814,42 @@ export class PhuLuc6Component implements OnInit {
             ]
         } else {
             header = [
-                { t: 0, b: 7, l: 0, r: 12, val: null },
+                { t: 0, b: 6, l: 0, r: 12, val: null },
 
                 { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
                 { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
                 { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+                { t: 3, b: 3, l: 0, r: 8, val: 'Trạng thái biểu mẫu: ' + Status.reportStatusName(this.dataInfo.trangThai) },
 
-                { t: 4, b: 6, l: 0, r: 0, val: 'STT' },
-                { t: 4, b: 6, l: 1, r: 1, val: 'Nội dung' },
-                { t: 4, b: 6, l: 2, r: 2, val: 'Đơn vị tính' },
-                { t: 4, b: 6, l: 3, r: 3, val: 'Số lượng theo KH được giao năm' + (this.namBcao - 1).toString() },
-                { t: 4, b: 4, l: 4, r: 8, val: 'Số lượng thực hiện năm' + (this.namBcao - 1).toString() },
-                { t: 4, b: 6, l: 9, r: 9, val: 'Dự toán đã giao lũy kế' },
-                { t: 4, b: 6, l: 10, r: 10, val: 'Dự toán điều chỉnh' },
-                { t: 4, b: 6, l: 11, r: 11, val: 'Kinh phí thiếu năm ' + (this.namBcao - 1).toString() },
-                { t: 4, b: 6, l: 12, r: 12, val: 'Ghi chú' },
+                { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+                { t: 4, b: 5, l: 1, r: 1, val: 'Nội dung' },
+                { t: 4, b: 5, l: 2, r: 2, val: 'Đơn vị tính' },
+                { t: 4, b: 5, l: 3, r: 3, val: 'Số lượng theo KH được giao năm ' + (this.namBcao).toString() },
+                { t: 4, b: 4, l: 4, r: 8, val: 'Số lượng thực hiện năm ' + (this.namBcao).toString() },
+                { t: 4, b: 5, l: 9, r: 9, val: 'Dự toán đã giao lũy kế' },
+                { t: 4, b: 5, l: 10, r: 10, val: 'Dự toán điều chỉnh' },
+                { t: 4, b: 5, l: 11, r: 11, val: 'Kinh phí thiếu năm ' + (this.namBcao).toString() },
+                { t: 4, b: 5, l: 12, r: 12, val: 'Ghi chú' },
 
-                { t: 5, b: 6, l: 4, r: 4, val: 'Số lượng thực tế đã thực hiện đến thời điểm báo cáo' },
+                { t: 5, b: 5, l: 4, r: 4, val: 'Số lượng thực tế đã thực hiện đến thời điểm báo cáo' },
                 { t: 5, b: 5, l: 5, r: 5, val: 'Số lượng ước thực hiện từ thời điểm báo cáo đến cuối năm' },
-                { t: 5, b: 6, l: 6, r: 6, val: 'Cộng' },
-                { t: 5, b: 6, l: 7, r: 7, val: 'Định mức' },
-                { t: 5, b: 6, l: 8, r: 8, val: 'Thành tiền (đồng) (Tổng nhu cầu năm nay)' },
+                { t: 5, b: 5, l: 6, r: 6, val: 'Cộng' },
+                { t: 5, b: 5, l: 7, r: 7, val: 'Định mức' },
+                { t: 5, b: 5, l: 8, r: 8, val: 'Thành tiền (đồng) (Tổng nhu cầu năm nay)' },
 
-                { t: 7, b: 7, l: 0, r: 0, val: 'A' },
-                { t: 7, b: 7, l: 1, r: 1, val: 'B' },
-                { t: 7, b: 7, l: 2, r: 2, val: 'C' },
-                { t: 7, b: 7, l: 3, r: 3, val: '1' },
-                { t: 7, b: 7, l: 4, r: 4, val: '2' },
-                { t: 7, b: 7, l: 5, r: 5, val: '3' },
-                { t: 7, b: 7, l: 6, r: 6, val: '4 = 2 + 3' },
-                { t: 7, b: 7, l: 7, r: 7, val: '5' },
-                { t: 7, b: 7, l: 8, r: 8, val: '6 = 4 * 5' },
-                { t: 7, b: 7, l: 9, r: 9, val: '7' },
-                { t: 7, b: 7, l: 10, r: 10, val: '8 = 6 - 7' },
-                { t: 7, b: 7, l: 11, r: 11, val: '10' },
-                { t: 7, b: 7, l: 12, r: 12, val: '13' },
+                { t: 6, b: 6, l: 0, r: 0, val: 'A' },
+                { t: 6, b: 6, l: 1, r: 1, val: 'B' },
+                { t: 6, b: 6, l: 2, r: 2, val: 'C' },
+                { t: 6, b: 6, l: 3, r: 3, val: '1' },
+                { t: 6, b: 6, l: 4, r: 4, val: '2' },
+                { t: 6, b: 6, l: 5, r: 5, val: '3' },
+                { t: 6, b: 6, l: 6, r: 6, val: '4 = 2 + 3' },
+                { t: 6, b: 6, l: 7, r: 7, val: '5' },
+                { t: 6, b: 6, l: 8, r: 8, val: '6 = 4 * 5' },
+                { t: 6, b: 6, l: 9, r: 9, val: '7' },
+                { t: 6, b: 6, l: 10, r: 10, val: '8 = 6 - 7' },
+                { t: 6, b: 6, l: 11, r: 11, val: '10' },
+                { t: 6, b: 6, l: 12, r: 12, val: '13' },
             ]
             fieldOrder = [
                 'stt',
@@ -863,7 +872,8 @@ export class PhuLuc6Component implements OnInit {
         const filterData = this.lstCtietBcao.map(item => {
             const row: any = {};
             fieldOrder.forEach(field => {
-                row[field] = item[field]
+                item[field] = item[field] ? item[field] : ""
+                row[field] = field == 'stt' ? this.getChiMuc(item.stt) : item[field]
             })
             return row;
         })
@@ -930,6 +940,10 @@ export class PhuLuc6Component implements OnInit {
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        for (const cell in worksheet) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheet[cell].s = Table.borderStyle;
+        }
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         let excelName = this.dataInfo.maBcao;
         excelName = excelName + '_BCDC_PL06.xlsx'

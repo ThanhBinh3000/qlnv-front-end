@@ -11,6 +11,7 @@ import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToa
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Utils } from 'src/app/Utility/utils';
+import { Doc } from '../giao-du-toan.constant';
 
 export class ItemCongVan {
     fileName: string;
@@ -31,6 +32,7 @@ export class DialogThemThongTinQuyetToanComponent implements OnInit {
     maDviTao: string;
     soQd: ItemCongVan;
     maPa: string;
+    path: string;
     maLoai: string;
     namGiao: number;
     maGiao: string;
@@ -73,14 +75,18 @@ export class DialogThemThongTinQuyetToanComponent implements OnInit {
     };
 
     // them file vao danh sach
-    handleUpload(): void {
+    handleUpload() {
         this.fileList.forEach((file: any) => {
             const id = file?.lastModified.toString();
-            this.lstFiles.push({ id: id, fileName: file?.name });
+            this.lstFiles.push({
+                ... new Doc(),
+                id: id,
+                fileName: file?.name
+            });
             this.listFile.push(file);
         });
         this.fileList = [];
-    }
+    };
 
     constructor(
         private _modalRef: NzModalRef,
@@ -110,7 +116,7 @@ export class DialogThemThongTinQuyetToanComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             },
         );
-
+        this.path = this.maDviTao + "/" + this.maPa
         this.spinner.hide();
 
         await this.getPhuongAn();
@@ -220,15 +226,15 @@ export class DialogThemThongTinQuyetToanComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
         }
-        const listFile: any = [];
-        for (const iterator of this.listFile) {
-            listFile.push(await this.uploadFile(iterator));
-        }
+        // const listFile: any = [];
+        // for (const iterator of this.listFile) {
+        //     listFile.push(await this.uploadFile(iterator));
+        // }
 
         const request = JSON.parse(JSON.stringify(
             {
                 id: null,
-                fileDinhKems: listFile,
+                fileDinhKems: this.lstFiles,
                 listIdFiles: this.listIdFilesDelete,
                 namDtoan: this.namGiao,
                 maPa: this.maPa,
@@ -236,6 +242,15 @@ export class DialogThemThongTinQuyetToanComponent implements OnInit {
                 maGiao: this.maGiao,
             }
         ))
+
+        const fileDinhKems = [];
+        for (const iterator of this.listFile) {
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.lstFiles.find(e => e.id == id)?.noiDung;
+            fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.path, noiDung));
+        }
+        console.log("fileDinhKems", fileDinhKems);
+        request.fileDinhKems = fileDinhKems;
 
         //get file cong van url
         if (!request.soQd) {

@@ -32,6 +32,7 @@ export class BaoCaoQuyetToanComponent implements OnInit {
         maBcao: null,
         maPhanBcao: '1',
         namQtoan: null,
+        quyQtoan: null,
         ngayTaoDen: null,
         ngayTaoTu: null,
         paggingReq: {
@@ -58,6 +59,24 @@ export class BaoCaoQuyetToanComponent implements OnInit {
     danhSachBaoCao: any[] = [];
     danhSachBaoCaoAll: any[] = [];
     trangThais: any[] = Status.TRANG_THAI_FULL;
+    lstQuy: any[] = [
+        {
+            val: 1,
+            ten: "quý 1"
+        },
+        {
+            val: 2,
+            ten: "quý 2"
+        },
+        {
+            val: 3,
+            ten: "quý 3"
+        },
+        {
+            val: 4,
+            ten: "quý 4"
+        }
+    ];
     //phan trang
     totalElements = 0;
     totalPages = 0;
@@ -96,10 +115,10 @@ export class BaoCaoQuyetToanComponent implements OnInit {
     async ngOnInit() {
         this.spinner.show()
         this.userInfo = this.userService.getUserLogin();
-        this.searchFilter.namQtoan = new Date().getFullYear() - 1
-        this.searchFilter.ngayTaoDen = new Date();
-        this.newDate.setMonth(this.newDate.getMonth() - 1);
-        this.searchFilter.ngayTaoTu = this.newDate;
+        // this.searchFilter.namQtoan = new Date().getFullYear() - 1
+        // this.searchFilter.ngayTaoDen = new Date();
+        // this.newDate.setMonth(this.newDate.getMonth() - 1);
+        // this.searchFilter.ngayTaoTu = this.newDate;
         this.donViTao = this.userInfo?.MA_DVI;
         this.statusNewReport = this.userService.isAccessPermisson(Roles.QTVP.ADD_REPORT)
         this.statusDelete = this.userService.isAccessPermisson(Roles.QTVP.DELETE_REPORT);
@@ -214,6 +233,7 @@ export class BaoCaoQuyetToanComponent implements OnInit {
         this.searchFilter.ngayTaoDen = null
         this.searchFilter.ngayTaoTu = null
         this.searchFilter.maBcao = null
+        this.searchFilter.quyQtoan = null
         this.trangThai = null
         this.onSubmit();
     };

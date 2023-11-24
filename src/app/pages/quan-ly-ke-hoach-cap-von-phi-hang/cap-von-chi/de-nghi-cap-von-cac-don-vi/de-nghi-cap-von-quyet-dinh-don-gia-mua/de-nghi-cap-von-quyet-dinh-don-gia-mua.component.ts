@@ -13,7 +13,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { BtnStatus, CapVon, Cvnc, Doc, Report } from '../de-nghi-cap-von-cac-don-vi.constant';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 
 @Component({
     selector: 'app-de-nghi-cap-von-quyet-dinh-don-gia-mua',
@@ -80,6 +80,7 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
         this.fileList.forEach((file: any) => {
             const id = file?.lastModified.toString();
             this.baoCao.lstFiles.push({
+                ... new Doc(),
                 id: id,
                 fileName: file?.name
             });
@@ -308,6 +309,10 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
 
     // luu
     async save() {
+        if (this.baoCao.lstFiles.some(e => e.isEdit)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_SAVE_FILE);
+            return;
+        }
         if (this.listFile.some(file => file.size > Utils.FILE_SIZE)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
@@ -321,8 +326,11 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
         request.lstCtiets = lstCtietTemp;
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.baoCao.maDvi + '/' + this.baoCao.maDnghi));
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.baoCao.lstFiles.find(e => e.id == id)?.noiDung;
+            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.baoCao.maDvi + '/' + this.baoCao.maDnghi, noiDung));
         }
+        request.fileDinhKems = request.fileDinhKems.concat(this.baoCao.lstFiles.filter(e => typeof e.id == 'number'))
 
         //get file cong van url
         const file: any = this.fileDetail;
@@ -397,6 +405,7 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
             { t: 0, b: 5, l: 0, r: 11, val: null },
             { t: 0, b: 0, l: 0, r: 8, val: "Đề nghị cấp vốn" },
             { t: 1, b: 1, l: 0, r: 8, val: congVan },
+            { t: 2, b: 2, l: 0, r: 4, val: 'Trạng thái báo cáo: ' + Status.reportStatusName(this.baoCao.trangThai, this.isParent) },
             { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
             { t: 4, b: 5, l: 1, r: 1, val: 'Đơn vị' },
             { t: 4, b: 4, l: 2, r: 3, val: 'Số lượng' },
@@ -417,7 +426,7 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
         const filterData = this.lstCtiets.map(item => {
             const row: any = {};
             fieldOrder.forEach(field => {
-                row[field] = field == 'stt' ? this.getIndex(item) : item[field];
+                row[field] = field == 'stt' ? this.getIndex(item) : Utils.getValue(item[field]);
             })
             return row;
         })
@@ -430,6 +439,12 @@ export class DeNghiCapVonQuyetDinhDonGiaMuaComponent implements OnInit {
         filterData.unshift(cal);
         const worksheetHD = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheetHD, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        //Thêm khung viền cho bảng
+        for (const cell in worksheetHD) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheetHD[cell].s = Table.borderStyle;
+        }
+
         XLSX.utils.book_append_sheet(workbook, worksheetHD, 'Đề nghị cấp vốn');
         XLSX.writeFile(workbook, this.baoCao.maDnghi + '.xlsx');
     }

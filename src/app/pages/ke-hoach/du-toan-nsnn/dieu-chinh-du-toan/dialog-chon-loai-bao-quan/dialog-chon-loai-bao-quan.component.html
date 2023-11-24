@@ -1,0 +1,22 @@
+<div class="modal__content">
+    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại bảo quản" [(ngModel)]="loaiBaoQuan">
+        <nz-option *ngFor="let item of dsBaoQuan" [nzValue]="item" [nzLabel]="item.giaTri">
+        </nz-option>
+    </nz-select>
+</div>
+<div class="modal-footer">
+    <div class="nut">
+        <div class="cantrai">
+        </div>
+        <div class="canphai">
+            <button type="button" class="btn btn-main" (click)="handleOk()">
+                <i class="icon htvbdh_dau-cong"></i>
+                <span>Chọn</span>
+            </button>
+            <!-- <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+                <i nz-icon nzType="close"></i>
+                Hủy
+            </button> -->
+        </div>
+    </div>
+</div>

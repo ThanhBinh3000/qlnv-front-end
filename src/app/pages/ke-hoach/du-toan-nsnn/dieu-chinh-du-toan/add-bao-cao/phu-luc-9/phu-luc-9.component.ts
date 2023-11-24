@@ -11,7 +11,7 @@ import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuTo
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import { BtnStatus, Doc, Form } from '../../dieu-chinh-du-toan.constant';
 import { CurrencyMaskInputMode } from 'ngx-currency';
 
@@ -394,8 +394,11 @@ export class PhuLuc9Component implements OnInit {
 
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path));
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.formDetail.lstFiles.find(e => e.id == id)?.noiDung;
+            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path, noiDung));
         }
+        request.fileDinhKems = request.fileDinhKems.concat(this.formDetail.lstFiles.filter(e => typeof e.id == 'number'))
 
         request.lstCtietDchinh = lstCtietBcaoTemp;
         request.trangThai = trangThai;
@@ -564,23 +567,23 @@ export class PhuLuc9Component implements OnInit {
                 { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
                 { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
                 { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
-                { t: 3, b: 3, l: 0, r: 8, val: 'Trạng thái biểu mẫu' + Status.reportStatusName(this.dataInfo.trangThai) },
+                { t: 3, b: 3, l: 0, r: 8, val: 'Trạng thái biểu mẫu: ' + Status.reportStatusName(this.dataInfo.trangThai) },
 
-                { t: 4, b: 12, l: 0, r: 0, val: 'STT' },
-                { t: 4, b: 12, l: 1, r: 1, val: 'Tên đơn vị(Biên chế thực tế có mặt)' },
-                { t: 4, b: 12, l: 2, r: 2, val: 'Biên chế' + this.namBcao.toString() + 'được giao' },
-                { t: 4, b: 12, l: 3, r: 3, val: 'Biên chế có mặt' },
-                { t: 4, b: 12, l: 4, r: 4, val: 'Biên chế chưa tuyển' },
-                { t: 4, b: 5, l: 5, r: 16, val: 'Hệ số lương và các loại phụ cấp cho biên chế công chức có mặt năm' + (this.namBcao - 1).toString() },
-                { t: 4, b: 5, l: 17, r: 28, val: 'Tổng quỹ lương và các loại phụ cấp cho biên chế công chức có mặt năm' + (this.namBcao - 1).toString() + ' (tính đến 31/12/' + (this.namBcao - 1).toString() + '(không tính HĐ 68))' },
-                { t: 4, b: 12, l: 29, r: 29, val: 'Các khoản lương khác theo chế độ' },
-                { t: 4, b: 12, l: 30, r: 33, val: 'Bao gồm' },
-                { t: 4, b: 12, l: 34, r: 36, val: 'Dự toán, kinh phí được sử dụng trong năm' },
-                { t: 4, b: 12, l: 37, r: 37, val: 'Dự toán điều chỉnh (+ tăng) (- giảm)' },
-                { t: 4, b: 12, l: 38, r: 38, val: 'Dự toán Vụ TVQT đề nghị (+ tăng)(- giảm)' },
-                { t: 4, b: 12, l: 39, r: 39, val: 'Ghi chú' },
-                { t: 4, b: 12, l: 40, r: 40, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị (+ tăng)(- giảm)' },
-                { t: 4, b: 12, l: 41, r: 41, val: 'Ý kiến của đơn vị cấp trên' },
+                { t: 4, b: 11, l: 0, r: 0, val: 'STT' },
+                { t: 4, b: 11, l: 1, r: 1, val: 'Tên đơn vị (Biên chế thực tế có mặt)' },
+                { t: 4, b: 11, l: 2, r: 2, val: 'Biên chế ' + this.namBcao.toString() + ' được giao' },
+                { t: 4, b: 11, l: 3, r: 3, val: 'Biên chế có mặt' },
+                { t: 4, b: 11, l: 4, r: 4, val: 'Biên chế chưa tuyển' },
+                { t: 4, b: 5, l: 5, r: 16, val: 'Hệ số lương và các loại phụ cấp cho biên chế công chức có mặt năm ' + (this.namBcao).toString() },
+                { t: 4, b: 5, l: 17, r: 28, val: 'Tổng quỹ lương và các loại phụ cấp cho biên chế công chức có mặt năm ' + (this.namBcao).toString() + ' (tính đến 31/12/' + (this.namBcao).toString() + ' (không tính HĐ 68))' },
+                { t: 4, b: 11, l: 29, r: 29, val: 'Tổng nhu cầu tiền lương năm ' + (this.namBcao).toString() + ' (năm kế hoạchh)' },
+                { t: 4, b: 5, l: 30, r: 33, val: 'Bao gồm' },
+                { t: 4, b: 5, l: 34, r: 36, val: 'Dự toán, kinh phí được sử dụng trong năm' },
+                { t: 4, b: 11, l: 37, r: 37, val: 'Dự toán điều chỉnh (+ tăng) (- giảm)' },
+                { t: 4, b: 11, l: 38, r: 38, val: 'Dự toán Vụ TVQT đề nghị (+ tăng)(- giảm)' },
+                { t: 4, b: 11, l: 39, r: 39, val: 'Ghi chú' },
+                { t: 4, b: 11, l: 40, r: 40, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị (+ tăng)(- giảm)' },
+                { t: 4, b: 11, l: 41, r: 41, val: 'Ý kiến của đơn vị cấp trên' },
 
                 { t: 6, b: 11, l: 5, r: 5, val: 'Tổng số' },
                 { t: 6, b: 7, l: 6, r: 16, val: 'Bao gồm' },
@@ -590,16 +593,17 @@ export class PhuLuc9Component implements OnInit {
                 { t: 6, b: 11, l: 30, r: 30, val: 'Tiền lương biên chế thực tế có mặt' },
                 { t: 6, b: 11, l: 31, r: 31, val: 'Các khoản đóng góp theo lương của biên chế thực tế' },
                 { t: 6, b: 11, l: 32, r: 32, val: 'Lương CBCC chưa tuyển dụng' },
-                { t: 6, b: 11, l: 33, r: 33, val: 'Lương điều hòa chung' },
-                { t: 6, b: 11, l: 34, r: 34, val: 'Các khoản lương khác theo chế độ' },
+                { t: 6, b: 11, l: 33, r: 33, val: 'Các Khoản lương khác theo chế độ' },
+
+                { t: 6, b: 11, l: 34, r: 34, val: 'Dự toán năm trước chuyển sang được phép sử dụng cho năm nay' },
                 { t: 6, b: 11, l: 35, r: 35, val: 'Dự toán, kinh phí đã giao trong năm' },
                 { t: 6, b: 11, l: 36, r: 36, val: 'Cộng' },
 
 
-                { t: 6, b: 11, l: 6, r: 6, val: 'Hệ số lương' },
-                { t: 6, b: 9, l: 7, r: 16, val: 'Hệ số các loại phụ cấp' },
-                { t: 6, b: 11, l: 18, r: 18, val: 'Tiền lương' },
-                { t: 6, b: 9, l: 19, r: 28, val: 'Tiền phụ cấp lương' },
+                { t: 8, b: 11, l: 6, r: 6, val: 'Hệ số lương' },
+                { t: 8, b: 9, l: 7, r: 16, val: 'Hệ số các loại phụ cấp' },
+                { t: 8, b: 11, l: 18, r: 18, val: 'Tiền lương' },
+                { t: 8, b: 9, l: 19, r: 28, val: 'Tiền phụ cấp lương' },
 
                 { t: 10, b: 11, l: 7, r: 7, val: 'Tổng' },
                 { t: 10, b: 11, l: 8, r: 8, val: 'PC chức vụ' },
@@ -719,19 +723,20 @@ export class PhuLuc9Component implements OnInit {
                 { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
                 { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
                 { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+                { t: 3, b: 3, l: 0, r: 8, val: 'Trạng thái biểu mẫu: ' + Status.reportStatusName(this.dataInfo.trangThai) },
 
-                { t: 4, b: 12, l: 0, r: 0, val: 'STT' },
-                { t: 4, b: 12, l: 1, r: 1, val: 'Tên đơn vị(Biên chế thực tế có mặt)' },
-                { t: 4, b: 12, l: 2, r: 2, val: 'Biên chế' + this.namBcao.toString() + 'được giao' },
-                { t: 4, b: 12, l: 3, r: 3, val: 'Biên chế có mặt' },
-                { t: 4, b: 12, l: 4, r: 4, val: 'Biên chế chưa tuyển' },
-                { t: 4, b: 5, l: 5, r: 16, val: 'Hệ số lương và các loại phụ cấp cho biên chế công chức có mặt năm' + (this.namBcao - 1).toString() },
-                { t: 4, b: 5, l: 17, r: 28, val: 'Tổng quỹ lương và các loại phụ cấp cho biên chế công chức có mặt năm' + (this.namBcao - 1).toString() + ' (tính đến 31/12/' + (this.namBcao - 1).toString() + '(không tính HĐ 68))' },
-                { t: 4, b: 12, l: 29, r: 29, val: 'Các khoản lương khác theo chế độ' },
-                { t: 4, b: 12, l: 30, r: 33, val: 'Bao gồm' },
-                { t: 4, b: 12, l: 34, r: 36, val: 'Dự toán, kinh phí được sử dụng trong năm' },
-                { t: 4, b: 12, l: 37, r: 37, val: 'Dự toán điều chỉnh (+ tăng) (- giảm)' },
-                { t: 4, b: 12, l: 38, r: 38, val: 'Ghi chú' },
+                { t: 4, b: 11, l: 0, r: 0, val: 'STT' },
+                { t: 4, b: 11, l: 1, r: 1, val: 'Tên đơn vị (Biên chế thực tế có mặt)' },
+                { t: 4, b: 11, l: 2, r: 2, val: 'Biên chế ' + this.namBcao.toString() + ' được giao' },
+                { t: 4, b: 11, l: 3, r: 3, val: 'Biên chế có mặt' },
+                { t: 4, b: 11, l: 4, r: 4, val: 'Biên chế chưa tuyển' },
+                { t: 4, b: 5, l: 5, r: 16, val: 'Hệ số lương và các loại phụ cấp cho biên chế công chức có mặt năm ' + (this.namBcao).toString() },
+                { t: 4, b: 5, l: 17, r: 28, val: 'Tổng quỹ lương và các loại phụ cấp cho biên chế công chức có mặt năm ' + (this.namBcao).toString() + ' (tính đến 31/12/' + (this.namBcao).toString() + ' (không tính HĐ 68))' },
+                { t: 4, b: 11, l: 29, r: 29, val: 'Tổng nhu cầu tiền lương năm ' + (this.namBcao).toString() + ' (năm kế hoạchh)' },
+                { t: 4, b: 5, l: 30, r: 33, val: 'Bao gồm' },
+                { t: 4, b: 5, l: 34, r: 36, val: 'Dự toán, kinh phí được sử dụng trong năm' },
+                { t: 4, b: 11, l: 37, r: 37, val: 'Dự toán điều chỉnh (+ tăng) (- giảm)' },
+                { t: 4, b: 11, l: 38, r: 38, val: 'Ghi chú' },
 
                 { t: 6, b: 11, l: 5, r: 5, val: 'Tổng số' },
                 { t: 6, b: 7, l: 6, r: 16, val: 'Bao gồm' },
@@ -741,16 +746,16 @@ export class PhuLuc9Component implements OnInit {
                 { t: 6, b: 11, l: 30, r: 30, val: 'Tiền lương biên chế thực tế có mặt' },
                 { t: 6, b: 11, l: 31, r: 31, val: 'Các khoản đóng góp theo lương của biên chế thực tế' },
                 { t: 6, b: 11, l: 32, r: 32, val: 'Lương CBCC chưa tuyển dụng' },
-                { t: 6, b: 11, l: 33, r: 33, val: 'Lương điều hòa chung' },
-                { t: 6, b: 11, l: 34, r: 34, val: 'Các khoản lương khác theo chế độ' },
+                { t: 6, b: 11, l: 33, r: 33, val: 'Các khoản lương khác theo chế độ' },
+                { t: 6, b: 11, l: 34, r: 34, val: ' Dự toán năm trước chuyển sang được phép sử dụng cho năm nay' },
                 { t: 6, b: 11, l: 35, r: 35, val: 'Dự toán, kinh phí đã giao trong năm' },
                 { t: 6, b: 11, l: 36, r: 36, val: 'Cộng' },
 
 
-                { t: 6, b: 11, l: 6, r: 6, val: 'Hệ số lương' },
-                { t: 6, b: 9, l: 7, r: 16, val: 'Hệ số các loại phụ cấp' },
-                { t: 6, b: 11, l: 18, r: 18, val: 'Tiền lương' },
-                { t: 6, b: 9, l: 19, r: 28, val: 'Tiền phụ cấp lương' },
+                { t: 8, b: 11, l: 6, r: 6, val: 'Hệ số lương' },
+                { t: 8, b: 9, l: 7, r: 16, val: 'Hệ số các loại phụ cấp' },
+                { t: 8, b: 11, l: 18, r: 18, val: 'Tiền lương' },
+                { t: 8, b: 9, l: 19, r: 28, val: 'Tiền phụ cấp lương' },
 
                 { t: 10, b: 11, l: 7, r: 7, val: 'Tổng' },
                 { t: 10, b: 11, l: 8, r: 8, val: 'PC chức vụ' },
@@ -862,17 +867,18 @@ export class PhuLuc9Component implements OnInit {
         const filterData = this.lstCtietBcao.map(item => {
             const row: any = {};
             fieldOrder.forEach(field => {
-                row[field] = item[field]
+                item[field] = item[field] ? item[field] : ""
+                row[field] = field == 'stt' ? this.getChiMuc(item.stt) : item[field]
             })
             return row;
         })
-        filterData.forEach(item => {
-            const level = item.stt.split('.').length - 2;
-            item.stt = this.getChiMuc(item.stt);
-            for (let i = 0; i < level; i++) {
-                item.stt = '   ' + item.stt;
-            }
-        });
+        // filterData.forEach(item => {
+        //     const level = item.stt.split('.').length - 2;
+        //     item.stt = this.getChiMuc(item.stt);
+        //     for (let i = 0; i < level; i++) {
+        //         item.stt = '   ' + item.stt;
+        //     }
+        // });
 
         let row: any = {};
         row = {}
@@ -978,6 +984,10 @@ export class PhuLuc9Component implements OnInit {
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        for (const cell in worksheet) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheet[cell].s = Table.borderStyle;
+        }
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         let excelName = this.dataInfo.maBcao;
         excelName = excelName + '_BCDC_PL09.xlsx'

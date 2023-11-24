@@ -111,7 +111,7 @@
                         <thead>
                             <tr>
                                 <th scope="col" nzWidth="150px">STT</th>
-                                <th scope="col" nzWidth="700px">Nhóm</th>
+                                <th scope="col" nzWidth="700px">Nội dung</th>
                                 <th scope="col">Tổng số</th>
                                 <th scope="col">Đơn vị cấp dưới đã thực hiện</th>
                                 <th scope="col">Chênh lệch</th>
@@ -213,10 +213,10 @@
                             <nz-table nzBordered class="table__body">
                                 <thead>
                                     <tr>
-                                        <th scope="col">STT</th>
-                                        <th scope="col">Tên file</th>
-                                        <th scope="col"></th>
-                                        <th scope="col" class="th" [hidden]="status"></th>
+                                        <th scope="col" nzWidth="5%">STT</th>
+                                        <th scope="col" nzWidth="25%">Tên file</th>
+                                        <th scope="col" nzWidth="55%">Nội dung</th>
+                                        <th scope="col" nzWidth="15%"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -224,11 +224,28 @@
                                         <td>{{ i + 1 }} </td>
                                         <td>{{ data.fileName }}</td>
                                         <td>
-                                            <button class="btn btn-function"
-                                                (click)="downloadFile(data.id)">Xem</button>
+                                            <ng-container *ngIf="data.isEdit; else readOnly">
+                                                <input nz-input [(ngModel)]="data.noiDung" />
+                                            </ng-container>
+                                            <ng-template #readOnly>
+                                                {{ data.noiDung }}
+                                            </ng-template>
                                         </td>
-                                        <td [hidden]="status">
-                                            <button class="btn btn-function" (click)="deleteFile(data.id)">Xóa</button>
+                                        <td>
+                                            <a (click)="downloadFile(data.id)">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
+                                            <a [hidden]="status" (click)="data.isEdit = !data.isEdit">
+                                                <ng-container *ngIf="data.isEdit; else saveText">
+                                                    <i class="fa fa-save"></i>
+                                                </ng-container>
+                                                <ng-template #saveText>
+                                                    <i class="fa fa-pencil"></i>
+                                                </ng-template>
+                                            </a>
+                                            <a [hidden]="status" (click)="deleteFile(data.id)">
+                                                <i class="fa fa-trash-o do"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                 </tbody>

@@ -12,7 +12,7 @@ import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToa
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import { BtnStatus, Doc, Form } from '../../giao-du-toan.constant';
 
 export class ItemData {
@@ -236,8 +236,11 @@ export class PhuLucSuaChuaComponent implements OnInit {
 
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path));
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.formDetail.lstFiles.find(e => e.id == id)?.noiDung;
+            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path, noiDung));
         }
+        request.fileDinhKems = request.fileDinhKems.concat(this.formDetail.lstFiles.filter(e => typeof e.id == 'number'))
 
         request.lstCtietBcaos = lstCtietBcaoTemp;
         request.trangThai = trangThai;
@@ -402,19 +405,20 @@ export class PhuLucSuaChuaComponent implements OnInit {
             return;
         }
         const header = [
-            { t: 0, b: 6, l: 0, r: 13, val: null },
+            { t: 0, b: 6, l: 0, r: 6, val: null },
 
             { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
             { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
             { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+            { t: 3, b: 3, l: 0, r: 8, val: 'Trạng thái báo cáo: ' + this.dataInfo.tenTrangThai },
 
             { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
-            { t: 4, b: 5, l: 1, r: 1, val: 'Tên công trình (Ghi chính xác theo danh mục kế hoạch năm ' + (this.namBcao - 1).toString() + ' )' },
-            { t: 4, b: 5, l: 2, r: 2, val: 'Kế hoạch vốn năm ' + (this.namBcao - 1).toString() },
+            { t: 4, b: 5, l: 1, r: 1, val: 'Tên công trình (Ghi chính xác theo danh mục kế hoạch năm ...)' },
+            { t: 4, b: 5, l: 2, r: 2, val: 'Kế hoạch vốn' },
             { t: 4, b: 5, l: 3, r: 3, val: 'Dự toán đã giao lũy kế đến thời điểm báo cáo' },
-            { t: 4, b: 5, l: 4, r: 4, val: 'Giá trị công trình (Ghi giá trị quyết toán; giá trị dự toán hoặc tổng mức đầu tư nếu chưa phê duyệt quyết toán)' },
+            { t: 4, b: 5, l: 4, r: 4, val: 'Giá trị công trình (ghi giá trị dự toán hoặc tổng mức đầu tư nếu chưa phê duyệt quyết toán)' },
             { t: 4, b: 5, l: 5, r: 5, val: 'Kế hoạch điều chỉnh (+ Tăng)(- Giảm)' },
-            { t: 4, b: 5, l: 6, r: 6, val: 'Dự toán năm' + (this.namBcao - 1).toString() + 'sau điều chỉnh' },
+            { t: 4, b: 5, l: 6, r: 6, val: 'Dự toán năm ' + (this.namBcao).toString() + ' sau điều chỉnh' },
 
             { t: 6, b: 6, l: 0, r: 0, val: 'A' },
             { t: 6, b: 6, l: 1, r: 1, val: 'B' },
@@ -437,6 +441,7 @@ export class PhuLucSuaChuaComponent implements OnInit {
         const filterData = this.lstCtietBcaos.map(item => {
             const row: any = {};
             fieldOrder.forEach(field => {
+                item[field] = item[field] ? item[field] : ""
                 row[field] = field == 'stt' ? item.index() : item[field]
             })
             return row;
@@ -452,6 +457,10 @@ export class PhuLucSuaChuaComponent implements OnInit {
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        for (const cell in worksheet) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheet[cell].s = Table.borderStyle;
+        }
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         let excelName = this.dataInfo.maBcao;
         excelName = excelName + '_GSTC_PL04.xlsx'

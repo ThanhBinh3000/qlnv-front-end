@@ -159,7 +159,7 @@
                                                     <i class="fa fa-eye" (click)="viewAppendix(data.id)"></i>
                                                 </a>
                                             </ng-container>
-                                            <a *ngIf="status.general && (userInfo?.sub == baoCao.nguoiTao)">
+                                            <a *ngIf="isDelAppendix(data.maLoai)">
                                                 <i class="fa fa-trash-o do" (click)="deleteAppendix(data.id)"></i>
                                             </a>
                                         </td>
@@ -199,9 +199,10 @@
                                 <nz-table nzBordered class="table__body">
                                     <thead>
                                         <tr>
-                                            <th scope="col" nzWidth="7%">STT</th>
-                                            <th scope="col">Tên file</th>
-                                            <th scope="col" nzWidth="10%"></th>
+                                            <th scope="col" nzWidth="5%">STT</th>
+                                            <th scope="col" nzWidth="25%">Tên file</th>
+                                            <th scope="col" nzWidth="55%">Nội dung</th>
+                                            <th scope="col" nzWidth="15%"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -209,8 +210,24 @@
                                             <td>{{ i + 1 }} </td>
                                             <td>{{ data.fileName }}</td>
                                             <td>
+                                                <ng-container *ngIf="data.isEdit; else readOnly">
+                                                    <input nz-input [(ngModel)]="data.noiDung" />
+                                                </ng-container>
+                                                <ng-template #readOnly>
+                                                    {{ data.noiDung }}
+                                                </ng-template>
+                                            </td>
+                                            <td>
                                                 <a (click)="downloadFile(data.id)">
                                                     <i class="fa fa-eye"></i>
+                                                </a>
+                                                <a *ngIf="status.general" (click)="data.isEdit = !data.isEdit">
+                                                    <ng-container *ngIf="data.isEdit; else saveText">
+                                                        <i class="fa fa-save"></i>
+                                                    </ng-container>
+                                                    <ng-template #saveText>
+                                                        <i class="fa fa-pencil"></i>
+                                                    </ng-template>
                                                 </a>
                                                 <a *ngIf="status.general" (click)="deleteFile(data.id)">
                                                     <i class="fa fa-trash-o do"></i>
@@ -269,6 +286,7 @@
                                     <th scope="col" nzWidth="30%">Đơn vị lập</th>
                                     <th scope="col" nzWidth="12%">Mã báo cáo</th>
                                     <th scope="col" nzWidth="12%">Năm báo cáo</th>
+                                    <th scope="col" nzWidth="12%">Đợt báo cáo</th>
                                     <th scope="col" nzWidth="12%">Ngày trình duyệt <br /> (Ngày đơn vị cấp dưới
                                         gửi báo cáo)</th>
                                     <th scope="col" nzWidth="12%">Ngày duyệt <br />(Ngày đơn vị cấp trên duyệt báo
@@ -286,6 +304,9 @@
                                         {{ data.maBcao }}
                                     </td>
                                     <td>{{ data.namBcao }}</td>
+                                    <td>
+                                        {{ data.dotBcao }}
+                                    </td>
                                     <td>{{ Utils.fmtDate(data.ngayDuyet) }}</td>
                                     <td>{{ Utils.fmtDate(data.ngayPheDuyet) }}</td>
                                     <td>{{ Status.reportStatusName(data.trangThai) }}</td>

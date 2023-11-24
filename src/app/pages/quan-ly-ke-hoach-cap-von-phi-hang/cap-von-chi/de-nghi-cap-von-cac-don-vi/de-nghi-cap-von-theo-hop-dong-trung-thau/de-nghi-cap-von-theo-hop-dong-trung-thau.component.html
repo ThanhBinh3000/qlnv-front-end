@@ -68,6 +68,7 @@
                             <th scope="col">Loại đề nghị</th>
                             <th scope="col">Ngày tạo</th>
                             <th scope="col">Số quyết định chỉ tiêu</th>
+                            <th scope="col">Số công văn</th>
                             <th scope="col">Ngày công văn</th>
                             <th scope="col">Ngày trình duyệt</th>
                             <th scope="col">Ngày duyệt</th>
@@ -98,7 +99,7 @@
                             <td>
                                 {{ baoCao.soQdChiTieu }}
                             </td>
-                            <!-- <td>
+                            <td>
                                 <nz-upload *ngIf="status.save" [nzBeforeUpload]="beforeUploadCV">
                                     <button nz-button>
                                         <i nz-icon nzType="upload"></i>
@@ -108,7 +109,7 @@
                                 <div class="tep__sqd" (click)="downloadFile(null)">
                                     <span>{{baoCao.congVan?.fileName}}</span>
                                 </div>
-                            </td> -->
+                            </td>
                             <td>{{ Utils.fmtDate(baoCao.ngayCongVan) }}</td>
                             <td>
                                 {{ Utils.fmtDate(baoCao.ngayTrinh) }}
@@ -433,12 +434,13 @@
                             </div>
                         </div>
                         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" class="tb-box">
-                            <div nz-col class="gutter-row" [nzSpan]="13">
+                            <div nz-col class="gutter-row" [nzSpan]="18">
                                 <nz-table nzBordered class="table__body">
                                     <thead>
                                         <tr>
-                                            <th scope="col" nzWidth="7%">STT</th>
-                                            <th scope="col">Tên file</th>
+                                            <th scope="col" nzWidth="5%">STT</th>
+                                            <th scope="col" nzWidth="25%">Tên file</th>
+                                            <th scope="col" nzWidth="55%">Nội dung</th>
                                             <th scope="col" nzWidth="15%"></th>
                                         </tr>
                                     </thead>
@@ -447,8 +449,24 @@
                                             <td>{{ i + 1 }} </td>
                                             <td>{{ data.fileName }}</td>
                                             <td>
+                                                <ng-container *ngIf="data.isEdit; else readOnly">
+                                                    <input nz-input [(ngModel)]="data.noiDung" />
+                                                </ng-container>
+                                                <ng-template #readOnly>
+                                                    {{ data.noiDung }}
+                                                </ng-template>
+                                            </td>
+                                            <td>
                                                 <a (click)="downloadFile(data.id)">
                                                     <i class="fa fa-eye"></i>
+                                                </a>
+                                                <a *ngIf="status.save" (click)="data.isEdit = !data.isEdit">
+                                                    <ng-container *ngIf="data.isEdit; else saveText">
+                                                        <i class="fa fa-save"></i>
+                                                    </ng-container>
+                                                    <ng-template #saveText>
+                                                        <i class="fa fa-pencil"></i>
+                                                    </ng-template>
                                                 </a>
                                                 <a *ngIf="status.save" (click)="deleteFile(data.id)">
                                                     <i class="fa fa-trash-o do"></i>

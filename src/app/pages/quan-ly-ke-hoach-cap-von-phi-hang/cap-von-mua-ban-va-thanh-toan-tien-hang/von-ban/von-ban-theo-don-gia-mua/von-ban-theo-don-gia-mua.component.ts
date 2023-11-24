@@ -11,9 +11,9 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { BtnStatus, Cvmb, Report, ThanhToan } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
+import { BtnStatus, Cvmb, Doc, Report, ThanhToan } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 import { Tab, Vb } from '../von-ban.constant';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 
 @Component({
     selector: 'app-von-ban-theo-don-gia-mua',
@@ -58,6 +58,7 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
         this.fileList.forEach((file: any) => {
             const id = file?.lastModified.toString();
             this.baoCao.lstFiles.push({
+                ... new Doc(),
                 id: id,
                 fileName: file?.name
             });
@@ -305,6 +306,11 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
             return;
         }
 
+        if (this.baoCao.lstFiles.some(e => e.isEdit)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_SAVE_FILE);
+            return;
+        }
+
         if (this.lstCtiets.some(e => e.upperBound())) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
             return;
@@ -323,8 +329,11 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
         request.lstCtiets = lstCtietTemp;
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.baoCao.maDvi + '/' + this.baoCao.maCapUng));
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.baoCao.lstFiles.find(e => e.id == id)?.noiDung;
+            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.baoCao.maDvi + '/' + this.baoCao.maCapUng, noiDung));
         }
+        request.fileDinhKems = request.fileDinhKems.concat(this.baoCao.lstFiles.filter(e => typeof e.id == 'number'))
 
         if (!this.baoCao.id) {
             this.capVonMuaBanTtthService.themMoiVonMuaBan(request).toPromise().then(
@@ -459,6 +468,7 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
             header = [
                 { t: 0, b: 5, l: 0, r: 16, val: null },
                 { t: 0, b: 0, l: 0, r: 8, val: "Vốn bán nộp lên đơn vị cấp trên" },
+                { t: 1, b: 1, l: 0, r: 4, val: 'Trạng thái báo cáo: ' + Status.reportStatusName(this.baoCao.trangThai, this.isParent) },
                 { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
                 { t: 4, b: 5, l: 1, r: 1, val: 'Đơn vị' },
                 { t: 4, b: 4, l: 2, r: 3, val: 'Số lượng' },
@@ -490,10 +500,10 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
                             row[field] = this.getIndex(item);
                             break;
                         case 'uncNgay':
-                            row[field] = Utils.fmtDate(item[field]);
+                            row[field] = Utils.getValue(Utils.fmtDate(item[field]));
                             break;
                         default:
-                            row[field] = item[field];
+                            row[field] = Utils.getValue(item[field]);
                             break;
                     }
                 })
@@ -510,6 +520,7 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
             header = [
                 { t: 0, b: 5, l: 0, r: 15, val: null },
                 { t: 0, b: 0, l: 0, r: 8, val: "Vốn bán nộp lên đơn vị cấp trên" },
+                { t: 1, b: 1, l: 0, r: 4, val: 'Trạng thái báo cáo: ' + Status.reportStatusName(this.baoCao.trangThai, this.isParent) },
                 { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
                 { t: 4, b: 5, l: 1, r: 1, val: 'Đơn vị' },
                 { t: 4, b: 4, l: 2, r: 3, val: 'Số lượng' },
@@ -535,7 +546,7 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
             filterData = this.lstCtiets.map(item => {
                 const row: any = {};
                 fieldOrder.forEach(field => {
-                    row[field] = field == 'stt' ? this.getIndex(item) : item[field];
+                    row[field] = field == 'stt' ? this.getIndex(item) : Utils.getValue(item[field]);
                 })
                 return row;
             })
@@ -550,6 +561,12 @@ export class VonBanTheoDonGiaMuaComponent implements OnInit {
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        //Thêm khung viền cho bảng
+        for (const cell in worksheet) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheet[cell].s = Table.borderStyle;
+        }
+
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         XLSX.writeFile(workbook, this.baoCao.maCapUng + '.xlsx');
     }

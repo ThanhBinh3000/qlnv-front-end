@@ -1,4 +1,3 @@
-import { ComponentType } from '@angular/cdk/portal';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -8,9 +7,9 @@ import { Roles, Status, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
 import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
 import { UserService } from 'src/app/services/user.service';
-import { Cvmb, Perm, Search } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
-import { Tab, Vb } from '../von-ban.constant';
+import { Cvmb, Search } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
+import { Tab, Vb } from '../von-ban.constant';
 // import { DialogTaoMoiCapVonComponent } from '../dialog-tao-moi-cap-von/dialog-tao-moi-cap-von.component';
 
 @Component({
@@ -53,10 +52,10 @@ export class DanhSachVonBanNopDvctComponent implements OnInit {
         this.userInfo = this.userService.getUserLogin();
         this.spinner.show();
         //khoi tao gia tri mac dinh
-        this.searchFilter.ngayTaoDen = new Date();
-        const newDate = new Date();
-        newDate.setMonth(newDate.getMonth() - 1);
-        this.searchFilter.ngayTaoTu = newDate;
+        // this.searchFilter.ngayTaoDen = new Date();
+        // const newDate = new Date();
+        // newDate.setMonth(newDate.getMonth() - 1);
+        // this.searchFilter.ngayTaoTu = newDate;
         this.searchFilter.maDvi = this.userInfo?.MA_DVI;
         this.searchFilter.maLoai = Cvmb.VON_BAN;
         this.statusNewReport = this.userService.isTongCuc() ? false : this.userService.isAccessPermisson(Roles.CVMB.ADD_VB);

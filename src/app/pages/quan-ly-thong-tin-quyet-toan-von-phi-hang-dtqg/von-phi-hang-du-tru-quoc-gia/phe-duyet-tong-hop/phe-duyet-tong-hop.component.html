@@ -13,6 +13,14 @@
                         [(ngModel)]="searchFilter.namQtoan"></nz-input-number>
                 </div>
                 <div nz-col nzSpan="6">
+                    <label class="search__label">Quý quyết toán</label>
+                    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
+                        [(ngModel)]="searchFilter.quyQtoan">
+                        <nz-option *ngFor="let item of lstQuy" [nzValue]="item.val" [nzLabel]="item.ten">
+                        </nz-option>
+                    </nz-select>
+                </div>
+                <div nz-col nzSpan="6">
                     <label class="search__label">Ngày lập từ</label>
                     <nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayTaoTu" nzFormat="dd/MM/yyyy">
                     </nz-date-picker>
@@ -22,7 +30,7 @@
                     <nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayTaoDen" nzFormat="dd/MM/yyyy">
                     </nz-date-picker>
                 </div>
-                <div nz-col nzSpan="12">
+                <div nz-col nzSpan="6">
                     <label class="search__label">Trạng thái</label>
                     <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="trangThai">
                         <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">

@@ -25,4 +25,5 @@ export const MESSAGEVALIDATE = {
   NOT_EXIST_REPORT: "Không tồn tại báo cáo cho việc tổng hợp",
   EXIST_MONEY: "Vui lòng chọn đơn vị tiền",
   MONEY_LIMIT: "Giá trị tiền nằm trong khoảng từ 0 đến 9.000.000.000.000.000 đồng",
+  NOT_SAVE_FILE: 'Vui lòng lưu các trường thông tin của tài liệu đính kèm!'
 };

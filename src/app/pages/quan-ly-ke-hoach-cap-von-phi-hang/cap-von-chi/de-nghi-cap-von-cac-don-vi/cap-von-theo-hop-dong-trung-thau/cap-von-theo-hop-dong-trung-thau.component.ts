@@ -13,7 +13,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { BtnStatus, CapVon, Cvnc, Doc, Report } from '../de-nghi-cap-von-cac-don-vi.constant';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 
 @Component({
     selector: 'app-cap-von-theo-hop-dong-trung-thau',
@@ -83,6 +83,7 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
         this.fileList.forEach((file: any) => {
             const id = file?.lastModified.toString();
             this.baoCao.lstFiles.push({
+                ... new Doc(),
                 id: id,
                 fileName: file?.name
             });
@@ -306,6 +307,10 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
             return;
         }
+        if (this.baoCao.lstFiles.some(e => e.isEdit)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_SAVE_FILE);
+            return;
+        }
         // kiểm tra giới hạn của các trường
         if (this.lstCtiets.some(e => e.upperBound())) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
@@ -326,8 +331,11 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
         // upload file đính kèm
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.baoCao.maDvi + '/' + this.baoCao.maDnghi));
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.baoCao.lstFiles.find(e => e.id == id)?.noiDung;
+            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.baoCao.maDvi + '/' + this.baoCao.maDnghi, noiDung));
         }
+        request.fileDinhKems = request.fileDinhKems.concat(this.baoCao.lstFiles.filter(e => typeof e.id == 'number'))
         //upload file công văn
         // const file: any = this.fileDetail;
         // if (file) {
@@ -429,6 +437,9 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
             this.lstCtiets[index].phatViPham = null;
             this.lstCtiets[index].tlSoluong = null;
             this.lstCtiets[index].tlThanhTien = null;
+            if (stt == '0.1' && this.lstCtiets.find(e => e.stt == '0.1.1' && (e.maDvi && e.maDvi != this.lstCtiets[index].maDvi))) {
+                this.lstCtiets[index].dtoanDaGiao = null;
+            }
             this.lstCtiets.forEach(item => {
                 if (Table.preIndex(item.stt) == stt) {
                     this.lstCtiets[index].slKeHoach = Operator.sum([this.lstCtiets[index].slKeHoach, item.slKeHoach]);
@@ -439,6 +450,9 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
                     this.lstCtiets[index].phatViPham = Operator.sum([this.lstCtiets[index].phatViPham, item.phatViPham]);
                     this.lstCtiets[index].tlSoluong = Operator.sum([this.lstCtiets[index].tlSoluong, item.tlSoluong]);
                     this.lstCtiets[index].tlThanhTien = Operator.sum([this.lstCtiets[index].tlThanhTien, item.tlThanhTien]);
+                    if (stt == '0.1' && (item.maDvi && item.maDvi != this.lstCtiets[index].maDvi)) {
+                        this.lstCtiets[index].dtoanDaGiao = Operator.sum([this.lstCtiets[index].dtoanDaGiao, item.dtoanDaGiao]);
+                    }
                 }
             })
             if (stt == '0.1') {
@@ -497,6 +511,7 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
                 { t: 0, b: 5, l: 0, r: 11, val: null },
                 { t: 0, b: 0, l: 0, r: 8, val: "Hợp đồng" },
                 { t: 1, b: 1, l: 0, r: 8, val: congVan },
+                { t: 2, b: 2, l: 0, r: 4, val: 'Trạng thái báo cáo: ' + Status.reportStatusName(this.baoCao.trangThai, this.isParent) },
                 { t: 4, b: 5, l: 0, r: 0, val: 'Tên khách hàng' },
                 { t: 4, b: 5, l: 1, r: 1, val: 'Quyết định phê duyệt kết quả lựa chọn nhà thầu / Hợp đồng' },
                 { t: 4, b: 4, l: 2, r: 4, val: 'Số lượng' },
@@ -520,6 +535,7 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
                 { t: 0, b: 5, l: 0, r: 9, val: null },
                 { t: 0, b: 0, l: 0, r: 8, val: "Hợp đồng" },
                 { t: 1, b: 1, l: 0, r: 8, val: congVan },
+                { t: 2, b: 2, l: 0, r: 4, val: 'Trạng thái báo cáo: ' + Status.reportStatusName(this.baoCao.trangThai, this.isParent) },
                 { t: 4, b: 5, l: 0, r: 0, val: 'Đơn vị' },
                 { t: 4, b: 5, l: 1, r: 1, val: 'Quyết định phê duyệt kết quả lựa chọn nhà thầu / Hợp đồng' },
                 { t: 4, b: 4, l: 2, r: 3, val: 'Số lượng' },
@@ -540,7 +556,7 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
         const filterDataHD = this.lstCtiets.filter(e => e.level > (this.isSynth ? 1 : 0)).map(item => {
             const row: any = {};
             fieldHD.forEach(field => {
-                row[field] = item[field];
+                row[field] = Utils.getValue(item[field]);
             })
             return row;
         })
@@ -552,6 +568,11 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
         filterDataHD.unshift(calHd);
         const worksheetHD = Table.initExcel(headerHD);
         XLSX.utils.sheet_add_json(worksheetHD, filterDataHD, { skipHeader: true, origin: Table.coo(headerHD[0].l, headerHD[0].b + 1) })
+        //Thêm khung viền cho bảng
+        for (const cell in worksheetHD) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheetHD[cell].s = Table.borderStyle;
+        }
         XLSX.utils.book_append_sheet(workbook, worksheetHD, 'Hợp đồng');
         // export sheet cap von
         let header = [];
@@ -562,6 +583,7 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
                 { t: 0, b: 5, l: 0, r: 22, val: null },
                 { t: 0, b: 0, l: 0, r: 8, val: "Cấp vốn" },
                 { t: 1, b: 1, l: 0, r: 8, val: congVan },
+                { t: 2, b: 2, l: 0, r: 4, val: 'Trạng thái báo cáo: ' + Status.reportStatusName(this.baoCao.trangThai, this.isParent) },
                 { t: 4, b: 5, l: 0, r: 0, val: 'Đơn vị' },
                 { t: 4, b: 4, l: 1, r: 3, val: 'Số lượng' },
                 { t: 5, b: 5, l: 1, r: 1, val: 'Kế hoạch' },
@@ -598,6 +620,7 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
                 { t: 0, b: 5, l: 0, r: 18, val: null },
                 { t: 0, b: 0, l: 0, r: 8, val: "Cấp vốn" },
                 { t: 1, b: 1, l: 0, r: 8, val: congVan },
+                { t: 2, b: 2, l: 0, r: 4, val: 'Trạng thái báo cáo: ' + Status.reportStatusName(this.baoCao.trangThai, this.isParent) },
                 { t: 4, b: 5, l: 0, r: 0, val: 'Đơn vị' },
                 { t: 4, b: 4, l: 1, r: 2, val: 'Số lượng' },
                 { t: 5, b: 5, l: 1, r: 1, val: 'Kế hoạch' },
@@ -629,7 +652,7 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
         const filterData = this.lstCtiets.filter(e => e.level < (this.isSynth ? 2 : 1)).map(item => {
             const row: any = {};
             fieldOrder.forEach(field => {
-                row[field] = field == 'uncNgay' ? Utils.fmtDate(item[field]) : item[field];
+                row[field] = field == 'uncNgay' ? Utils.fmtDate(item[field]) : Utils.getValue(item[field]);
             })
             return row;
         })
@@ -641,6 +664,12 @@ export class CapVonTheoHopDongTrungThauComponent implements OnInit {
         filterData.unshift(cal);
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        //Thêm khung viền cho bảng
+        for (const cell in worksheet) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheet[cell].s = Table.borderStyle;
+        }
+
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Cấp vốn');
         XLSX.writeFile(workbook, this.baoCao.maDnghi + '.xlsx');
     }

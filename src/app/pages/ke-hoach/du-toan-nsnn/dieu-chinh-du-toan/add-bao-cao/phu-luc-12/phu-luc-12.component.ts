@@ -11,7 +11,7 @@ import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuTo
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import { BtnStatus, Doc, Form } from '../../dieu-chinh-du-toan.constant';
 import { DANH_MUC } from './phu-luc-12.constant';
 import { CurrencyMaskInputMode } from 'ngx-currency';
@@ -300,8 +300,11 @@ export class PhuLuc12Component implements OnInit {
 
 		request.fileDinhKems = [];
 		for (let iterator of this.listFile) {
-			request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path));
+			const id = iterator?.lastModified.toString();
+			const noiDung = this.formDetail.lstFiles.find(e => e.id == id)?.noiDung;
+			request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path, noiDung));
 		}
+		request.fileDinhKems = request.fileDinhKems.concat(this.formDetail.lstFiles.filter(e => typeof e.id == 'number'))
 
 		request.lstCtietDchinh = lstCtietBcaoTemp;
 		request.trangThai = trangThai;
@@ -545,44 +548,44 @@ export class PhuLuc12Component implements OnInit {
 		let fieldOrder = [];
 		if (this.status.viewAppVal) {
 			header = [
-				{ t: 0, b: 7, l: 0, r: 13, val: null },
+				{ t: 0, b: 6, l: 0, r: 13, val: null },
 
 				{ t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
 				{ t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
 				{ t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
-				{ t: 3, b: 3, l: 0, r: 8, val: 'Trạng thái biểu mẫu' + Status.reportStatusName(this.dataInfo.trangThai) },
+				{ t: 3, b: 3, l: 0, r: 8, val: 'Trạng thái biểu mẫu: ' + Status.reportStatusName(this.dataInfo.trangThai) },
 
-				{ t: 4, b: 6, l: 0, r: 0, val: 'STT' },
-				{ t: 4, b: 6, l: 1, r: 1, val: 'Chương Trình/ Đề tài/ Dự án/ Nhiệm vụ HK&CN' },
-				{ t: 4, b: 6, l: 2, r: 2, val: 'Cơ quan chủ trì' },
-				{ t: 4, b: 6, l: 3, r: 3, val: 'Thời gian thực hiện' },
-				{ t: 4, b: 6, l: 4, r: 4, val: 'Quyết định phê duyệt của cấp có thẩm quyền' },
-				{ t: 4, b: 6, l: 5, r: 7, val: 'Dự toán, kinh phí được sử dụng trong năm' },
-				{ t: 4, b: 6, l: 8, r: 8, val: 'Tổng nhu cầu dự toán' },
-				{ t: 4, b: 6, l: 9, r: 9, val: 'Dự toán đề nghị điều chỉnh (+ tăng )(- giảm)' },
-				{ t: 4, b: 6, l: 10, r: 10, val: 'Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)' },
-				{ t: 4, b: 6, l: 11, r: 11, val: 'Ghi chú' },
-				{ t: 4, b: 6, l: 12, r: 12, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị (+tăng) (- giảm)' },
-				{ t: 4, b: 6, l: 13, r: 13, val: 'Ý kiến của đơn vị cấp trên' },
+				{ t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+				{ t: 4, b: 5, l: 1, r: 1, val: 'Chương Trình/ Đề tài/ Dự án/ Nhiệm vụ HK&CN' },
+				{ t: 4, b: 5, l: 2, r: 2, val: 'Cơ quan chủ trì' },
+				{ t: 4, b: 5, l: 3, r: 3, val: 'Thời gian thực hiện' },
+				{ t: 4, b: 5, l: 4, r: 4, val: 'Quyết định phê duyệt của cấp có thẩm quyền' },
+				{ t: 4, b: 4, l: 5, r: 7, val: 'Dự toán, kinh phí được sử dụng trong năm' },
+				{ t: 4, b: 5, l: 8, r: 8, val: 'Tổng nhu cầu dự toán' },
+				{ t: 4, b: 5, l: 9, r: 9, val: 'Dự toán đề nghị điều chỉnh (+ tăng )(- giảm)' },
+				{ t: 4, b: 5, l: 10, r: 10, val: 'Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)' },
+				{ t: 4, b: 5, l: 11, r: 11, val: 'Ghi chú' },
+				{ t: 4, b: 5, l: 12, r: 12, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị (+tăng) (- giảm)' },
+				{ t: 4, b: 5, l: 13, r: 13, val: 'Ý kiến của đơn vị cấp trên' },
 
-				{ t: 6, b: 6, l: 5, r: 5, val: 'Dự toán năm trước chuyển sang được phép sử dụng cho năm nay' },
-				{ t: 6, b: 6, l: 6, r: 6, val: 'Dự toán, kinh phí đã giao trong năm' },
-				{ t: 6, b: 6, l: 7, r: 7, val: 'Tổng số' },
+				{ t: 5, b: 5, l: 5, r: 5, val: 'Dự toán năm trước chuyển sang được phép sử dụng cho năm nay' },
+				{ t: 5, b: 5, l: 6, r: 6, val: 'Dự toán, kinh phí đã giao trong năm' },
+				{ t: 5, b: 5, l: 7, r: 7, val: 'Tổng số' },
 
-				{ t: 7, b: 7, l: 0, r: 0, val: 'A' },
-				{ t: 7, b: 7, l: 1, r: 1, val: 'B' },
-				{ t: 7, b: 7, l: 2, r: 2, val: 'C' },
-				{ t: 7, b: 7, l: 3, r: 3, val: 'D' },
-				{ t: 7, b: 7, l: 4, r: 4, val: 'E' },
-				{ t: 7, b: 7, l: 5, r: 5, val: '1' },
-				{ t: 7, b: 7, l: 6, r: 6, val: '2=1+2' },
-				{ t: 7, b: 7, l: 7, r: 7, val: '3 = 1 + 2' },
-				{ t: 7, b: 7, l: 8, r: 8, val: '4' },
-				{ t: 7, b: 7, l: 9, r: 9, val: '5 = 4 - 3 ' },
-				{ t: 7, b: 7, l: 10, r: 10, val: '6' },
-				{ t: 7, b: 7, l: 11, r: 11, val: '7' },
-				{ t: 7, b: 7, l: 12, r: 12, val: '8 = 6 - 5' },
-				{ t: 7, b: 7, l: 13, r: 13, val: '9' },
+				{ t: 6, b: 6, l: 0, r: 0, val: 'A' },
+				{ t: 6, b: 6, l: 1, r: 1, val: 'B' },
+				{ t: 6, b: 6, l: 2, r: 2, val: 'C' },
+				{ t: 6, b: 6, l: 3, r: 3, val: 'D' },
+				{ t: 6, b: 6, l: 4, r: 4, val: 'E' },
+				{ t: 6, b: 6, l: 5, r: 5, val: '1' },
+				{ t: 6, b: 6, l: 6, r: 6, val: '2=1+2' },
+				{ t: 6, b: 6, l: 7, r: 7, val: '3 = 1 + 2' },
+				{ t: 6, b: 6, l: 8, r: 8, val: '4' },
+				{ t: 6, b: 6, l: 9, r: 9, val: '5 = 4 - 3 ' },
+				{ t: 6, b: 6, l: 10, r: 10, val: '6' },
+				{ t: 6, b: 6, l: 11, r: 11, val: '7' },
+				{ t: 6, b: 6, l: 12, r: 12, val: '8 = 6 - 5' },
+				{ t: 6, b: 6, l: 13, r: 13, val: '9' },
 			]
 			fieldOrder = [
 				'stt',
@@ -602,37 +605,38 @@ export class PhuLuc12Component implements OnInit {
 			]
 		} else {
 			header = [
-				{ t: 0, b: 7, l: 0, r: 13, val: null },
+				{ t: 0, b: 6, l: 0, r: 10, val: null },
 
 				{ t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
 				{ t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
 				{ t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+				{ t: 3, b: 3, l: 0, r: 8, val: 'Trạng thái biểu mẫu: ' + Status.reportStatusName(this.dataInfo.trangThai) },
 
-				{ t: 4, b: 6, l: 0, r: 0, val: 'STT' },
-				{ t: 4, b: 6, l: 1, r: 1, val: 'Chương Trình/ Đề tài/ Dự án/ Nhiệm vụ HK&CN' },
-				{ t: 4, b: 6, l: 2, r: 2, val: 'Cơ quan chủ trì' },
-				{ t: 4, b: 6, l: 3, r: 3, val: 'Thời gian thực hiện' },
-				{ t: 4, b: 6, l: 4, r: 4, val: 'Quyết định phê duyệt của cấp có thẩm quyền' },
-				{ t: 4, b: 6, l: 5, r: 7, val: 'Dự toán, kinh phí được sử dụng trong năm' },
-				{ t: 4, b: 6, l: 8, r: 8, val: 'Tổng nhu cầu dự toán' },
-				{ t: 4, b: 6, l: 9, r: 9, val: 'Dự toán đề nghị điều chỉnh (+ tăng )(- giảm)' },
-				{ t: 4, b: 6, l: 10, r: 10, val: 'Ghi chú' },
+				{ t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+				{ t: 4, b: 5, l: 1, r: 1, val: 'Chương Trình/ Đề tài/ Dự án/ Nhiệm vụ HK&CN' },
+				{ t: 4, b: 5, l: 2, r: 2, val: 'Cơ quan chủ trì' },
+				{ t: 4, b: 5, l: 3, r: 3, val: 'Thời gian thực hiện' },
+				{ t: 4, b: 5, l: 4, r: 4, val: 'Quyết định phê duyệt của cấp có thẩm quyền' },
+				{ t: 4, b: 4, l: 5, r: 7, val: 'Dự toán, kinh phí được sử dụng trong năm' },
+				{ t: 4, b: 5, l: 8, r: 8, val: 'Tổng nhu cầu dự toán' },
+				{ t: 4, b: 5, l: 9, r: 9, val: 'Dự toán đề nghị điều chỉnh (+ tăng )(- giảm)' },
+				{ t: 4, b: 5, l: 10, r: 10, val: 'Ghi chú' },
 
-				{ t: 6, b: 6, l: 5, r: 5, val: 'Dự toán năm trước chuyển sang được phép sử dụng cho năm nay' },
-				{ t: 6, b: 6, l: 6, r: 6, val: 'Dự toán, kinh phí đã giao trong năm' },
-				{ t: 6, b: 6, l: 7, r: 7, val: 'Tổng số' },
+				{ t: 5, b: 5, l: 5, r: 5, val: 'Dự toán năm trước chuyển sang được phép sử dụng cho năm nay' },
+				{ t: 5, b: 5, l: 6, r: 6, val: 'Dự toán, kinh phí đã giao trong năm' },
+				{ t: 5, b: 5, l: 7, r: 7, val: 'Tổng số' },
 
-				{ t: 7, b: 7, l: 0, r: 0, val: 'A' },
-				{ t: 7, b: 7, l: 1, r: 1, val: 'B' },
-				{ t: 7, b: 7, l: 2, r: 2, val: 'C' },
-				{ t: 7, b: 7, l: 3, r: 3, val: 'D' },
-				{ t: 7, b: 7, l: 4, r: 4, val: 'E' },
-				{ t: 7, b: 7, l: 5, r: 5, val: '1' },
-				{ t: 7, b: 7, l: 6, r: 6, val: '2=1+2' },
-				{ t: 7, b: 7, l: 7, r: 7, val: '3 = 1 + 2' },
-				{ t: 7, b: 7, l: 8, r: 8, val: '4' },
-				{ t: 7, b: 7, l: 9, r: 9, val: '5 = 4 - 3 ' },
-				{ t: 7, b: 7, l: 10, r: 10, val: '6' },
+				{ t: 6, b: 6, l: 0, r: 0, val: 'A' },
+				{ t: 6, b: 6, l: 1, r: 1, val: 'B' },
+				{ t: 6, b: 6, l: 2, r: 2, val: 'C' },
+				{ t: 6, b: 6, l: 3, r: 3, val: 'D' },
+				{ t: 6, b: 6, l: 4, r: 4, val: 'E' },
+				{ t: 6, b: 6, l: 5, r: 5, val: '1' },
+				{ t: 6, b: 6, l: 6, r: 6, val: '2=1+2' },
+				{ t: 6, b: 6, l: 7, r: 7, val: '3 = 1 + 2' },
+				{ t: 6, b: 6, l: 8, r: 8, val: '4' },
+				{ t: 6, b: 6, l: 9, r: 9, val: '5 = 4 - 3 ' },
+				{ t: 6, b: 6, l: 10, r: 10, val: '6' },
 			]
 			fieldOrder = [
 				'stt',
@@ -653,17 +657,18 @@ export class PhuLuc12Component implements OnInit {
 		const filterData = this.lstCtietBcao.map(item => {
 			const row: any = {};
 			fieldOrder.forEach(field => {
-				row[field] = item[field]
+				item[field] = item[field] ? item[field] : ""
+				row[field] = field == 'stt' ? this.getIndex(item.stt) : item[field];
 			})
 			return row;
 		})
-		filterData.forEach(item => {
-			const level = item.stt.split('.').length - 2;
-			item.stt = this.getIndex(item.stt);
-			for (let i = 0; i < level; i++) {
-				item.stt = '   ' + item.stt;
-			}
-		})
+		// filterData.forEach(item => {
+		// 	const level = item.stt.split('.').length - 2;
+		// 	item.stt = this.getIndex(item.stt);
+		// 	for (let i = 0; i < level; i++) {
+		// 		item.stt = '   ' + item.stt;
+		// 	}
+		// })
 
 		let row: any = {};
 		row = {}
@@ -716,6 +721,10 @@ export class PhuLuc12Component implements OnInit {
 		const workbook = XLSX.utils.book_new();
 		const worksheet = Table.initExcel(header);
 		XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+		for (const cell in worksheet) {
+			if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+			worksheet[cell].s = Table.borderStyle;
+		}
 		XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
 		let excelName = this.dataInfo.maBcao;
 		excelName = excelName + '_BCDC_PL12.xlsx'

@@ -9,7 +9,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import { BtnStatus, Doc, Form } from '../../dieu-chinh-du-toan.constant';
 import { DANH_MUC_PL_TH } from './phu-luc-tong-hop.constant';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
@@ -463,8 +463,11 @@ export class PhuLucTongHopComponent implements OnInit {
 
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path));
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.formDetail.lstFiles.find(e => e.id == id)?.noiDung;
+            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path, noiDung));
         }
+        request.fileDinhKems = request.fileDinhKems.concat(this.formDetail.lstFiles.filter(e => typeof e.id == 'number'))
 
         request.lstCtietDchinh = lstCtietBcaoTemp;
         if (lyDoTuChoi) {
@@ -600,34 +603,62 @@ export class PhuLucTongHopComponent implements OnInit {
             return;
         }
         const header = [
-            { t: 0, b: 1 + this.lstCtietBcao.length, l: 0, r: 1 + this.lstDvi.length, val: null },
-            { t: 0, b: 1, l: 0, r: 0, val: 'STT' },
-            { t: 0, b: 1, l: 1, r: 1, val: 'Nhóm' },
-            { t: 0, b: 1, l: 2, r: 2, val: 'Tổng điều chỉnh giảm' },
-            { t: 0, b: 1, l: 3, r: 3, val: 'Tổng điều chỉnh tăng' },
+
+            { t: 0, b: 7 + this.lstCtietBcao.length, l: 0, r: 3 + this.lstDvi.length, val: null },
+            { t: 0, b: 0, l: 0, r: 3 + this.lstDvi.length, val: this.dataInfo.tenPl },
+            { t: 1, b: 1, l: 0, r: 3 + this.lstDvi.length, val: this.dataInfo.tieuDe },
+            { t: 2, b: 2, l: 0, r: 3 + this.lstDvi.length, val: this.dataInfo.congVan ? this.dataInfo.congVan : "" },
+            { t: 3, b: 3, l: 0, r: 3 + this.lstDvi.length, val: 'Trạng thái biểu mẫu: ' + Status.reportStatusName(this.dataInfo.trangThai) },
+
+            { t: 5, b: 7, l: 0, r: 0, val: 'STT' },
+            { t: 5, b: 7, l: 1, r: 1, val: 'Nội dung' },
+            { t: 5, b: 7, l: 2, r: 2, val: 'Tổng điều chỉnh giảm' },
+            { t: 5, b: 7, l: 3, r: 3, val: 'Tổng điều chỉnh tăng' },
+            { t: 5, b: 6, l: 4, r: 3 + this.lstDvi.length, val: 'Danh sách đơn vị' },
         ]
-        const fieldOrder = [
-            "maNoiDung",
-            "tongCong",
-            "dtoanGiao",
-            "tongDchinhGiam",
-            "tongDchinhTang",
-        ]
-        const filterData = this.lstCtietBcao.map(item => {
-            const row: any = {};
-            fieldOrder.forEach(field => {
-                row[field] = field == 'stt' ? item.index() : item[field]
+
+
+        this.lstDvi.forEach((item, index) => {
+            const left = 4 + index
+            header.push({ t: 7, b: 7, l: left, r: left, val: item.tenDvi })
+        })
+
+        const headerBot = 7;
+        this.lstCtietBcao.forEach((item, index) => {
+            const row = headerBot + index + 1;
+            const tenNdung = this.getTenNdung(item.maNoiDung);
+            header.push({ t: row, b: row, l: 0, r: 0, val: item.index() })
+            header.push({ t: row, b: row, l: 1, r: 1, val: tenNdung })
+            header.push({ t: row, b: row, l: 2, r: 2, val: (item.tongDchinhTang ? item.tongDchinhTang : 0)?.toString() })
+            header.push({ t: row, b: row, l: 3, r: 3, val: (item.tongDchinhGiam ? item.tongDchinhGiam : 0)?.toString() })
+
+            item.child.forEach((e, ind) => {
+                const col = 4 + ind;
+                header.push({ t: row, b: row, l: col, r: col, val: (e.dtoanVuTvqtDnghi ? e.dtoanVuTvqtDnghi : 0)?.toString() })
             })
-            return row;
         })
 
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
-        XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        // XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        for (const cell in worksheet) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheet[cell].s = Table.borderStyle;
+        }
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         let excelName = this.dataInfo.maBcao;
         excelName = excelName + '_BCDC_PLTH.xlsx'
         XLSX.writeFile(workbook, excelName);
+    }
+
+    getTenNdung(maNdung: any): any {
+        let tenNdung: string;
+        this.noiDungs.forEach(itm => {
+            if (itm.ma == maNdung) {
+                return tenNdung = itm.giaTri;
+            }
+        })
+        return tenNdung
     }
 
 

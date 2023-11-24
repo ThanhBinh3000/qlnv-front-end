@@ -9,18 +9,19 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
-import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from "uuid";
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import { BtnStatus, Doc, Form } from '../../giao-du-toan.constant';
 import { DANH_MUC } from './phu-luc-03.constant';
-
+import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
+import { DialogChonLoaiBaoQuanComponent } from '../../dialog-chon-loai-bao-quan/dialog-chon-loai-bao-quan.component';
 export class ItemData {
     id: string;
     level: number;
     stt: string;
     danhMuc: string;
+    maDmuc: string;
     tenDanhMuc: string;
     maDviTinh: string;
     namDtCphiTaiCkhoSl: number;
@@ -112,6 +113,7 @@ export class PhuLuc03Component implements OnInit {
     listVattu: any[] = [];
     lstVatTuFull = [];
     dsDinhMuc: any[] = [];
+    dsBaoQuan: any[] = [];
     scrollX: string;
 
 
@@ -149,11 +151,11 @@ export class PhuLuc03Component implements OnInit {
     constructor(
         private _modalRef: NzModalRef,
         private spinner: NgxSpinnerService,
-        private lapThamDinhService: LapThamDinhService,
         private giaoDuToanService: GiaoDuToanChiService,
         private notification: NzNotificationService,
         private modal: NzModalService,
         private quanLyVonPhiService: QuanLyVonPhiService,
+        private danhMucService: DanhMucDungChungService,
     ) {
     }
 
@@ -170,7 +172,10 @@ export class PhuLuc03Component implements OnInit {
         Object.assign(this.status, this.dataInfo.status);
         await this.getFormDetail();
         this.namBcao = this.dataInfo.namBcao;
-
+        const baoquan = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_BAO_QUAN');
+        if (baoquan) {
+            this.dsBaoQuan = baoquan.data;
+        }
         if (this.lstCtietBcaos.length == 0) {
             this.linhVucChis.forEach(e => {
                 this.lstCtietBcaos.push(new ItemData({
@@ -189,26 +194,30 @@ export class PhuLuc03Component implements OnInit {
 
         await this.getDinhMuc();
         this.lstCtietBcaos.forEach(item => {
-            const dinhMuc = this.dsDinhMuc.find(e => (!e.cloaiVthh && e.loaiVthh == item.danhMuc));
+            const dinhMuc = this.dsDinhMuc.find(e => (e.cloaiVthh == item.danhMuc || e.loaiVthh == item.danhMuc) && e.maDinhMuc == item.maDmuc);
             if (!item.tenDanhMuc) {
                 item.tenDanhMuc = dinhMuc?.tenDinhMuc;
                 item.namDtCphiTaiCkhoDm = dinhMuc?.tongDmuc;
                 item.maDviTinh = dinhMuc?.donViTinh;
-                item.namDtCphiTaiCkhoTt = Operator.mul(item.namDtCphiTaiCkhoDm, item.namDtCphiTaiCkhoSl);
+                if (item.namDtCphiTaiCkhoDm) {
+                    item.namDtCphiTaiCkhoTt = Operator.mul(item.namDtCphiTaiCkhoDm, item.namDtCphiTaiCkhoSl);
+                }
             }
         })
 
 
-        if (this.dataInfo?.isSynthetic) {
-            this.lstCtietBcaos.forEach(item => {
-                const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc || e.loaiVthh == item.danhMuc);
-                // item.namDtCphiNgoaiCkhoBq = 0;
-                item.namDtCphiTaiCkhoDm = dinhMuc?.tongDmuc;
+        // if (this.dataInfo?.isSynthetic) {
+        this.lstCtietBcaos.forEach(item => {
+            const dinhMuc = this.dsDinhMuc.find(e => (e.cloaiVthh == item.danhMuc || e.loaiVthh == item.danhMuc) && e.maDinhMuc == item.maDmuc);
+            // item.namDtCphiNgoaiCkhoBq = 0;
+            item.namDtCphiTaiCkhoDm = dinhMuc?.tongDmuc;
+            if (item.namDtCphiTaiCkhoDm) {
                 item.namDtCphiTaiCkhoTt = Operator.mul(item.namDtCphiTaiCkhoDm, item.namDtCphiTaiCkhoSl);
                 item.namDtTcong = Operator.sum([item.namDtCphiTaiCkhoTt, item.namDtCphiNgoaiCkhoTt])
-            })
-            this.sum1()
-        }
+            }
+        })
+        this.sum1()
+        // }
 
         this.lstCtietBcaos = Table.sortByIndex(this.lstCtietBcaos);
 
@@ -296,8 +305,11 @@ export class PhuLuc03Component implements OnInit {
 
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path));
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.formDetail.lstFiles.find(e => e.id == id)?.noiDung;
+            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path, noiDung));
         }
+        request.fileDinhKems = request.fileDinhKems.concat(this.formDetail.lstFiles.filter(e => typeof e.id == 'number'))
 
         request.lstCtietBcaos = lstCtietBcaoTemp;
         request.trangThai = trangThai;
@@ -323,39 +335,6 @@ export class PhuLuc03Component implements OnInit {
 
         this.spinner.hide();
         this.getTotal()
-    }
-
-    // chuc nang check role
-    async onSubmit(mcn: string, lyDoTuChoi: string) {
-        if (!this.formDetail?.id) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING);
-            return;
-        }
-        const requestGroupButtons = {
-            id: this.formDetail.id,
-            trangThai: mcn,
-            lyDoTuChoi: lyDoTuChoi,
-        };
-        this.spinner.show();
-        await this.lapThamDinhService.approveCtietThamDinh(requestGroupButtons).toPromise().then(async (data) => {
-            if (data.statusCode == 0) {
-                this.formDetail.trangThai = mcn;
-                this.getStatusButton();
-                if (mcn == "0") {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-                } else {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-                }
-                this._modalRef.close({
-                    formDetail: this.formDetail,
-                });
-            } else {
-                this.notification.error(MESSAGE.ERROR, data?.msg);
-            }
-        }, err => {
-            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        });
-        this.spinner.hide();
     }
 
     //show popup tu choi
@@ -519,18 +498,18 @@ export class PhuLuc03Component implements OnInit {
         modalTuChoi.afterClose.subscribe(async (data) => {
             if (data) {
                 // const dm = this.dsDinhMuc.find(e => e.cloaiVthh == data.ma);
-                const dm = this.dsDinhMuc.find(e => e.cloaiVthh == data.ma || e.loaiVthh == data.ma);
-                if (this.lstCtietBcaos.findIndex(e => e.danhMuc == data.ma) == -1) {
-                    let stt: any;
-                    const index = this.lstCtietBcaos.findIndex(e => e.danhMuc == '0.2');
-                    if (data.ma.startsWith('02')) {
+                let stt: any;
+                const index = this.lstCtietBcaos.findIndex(e => e.danhMuc == '0.2');
+                if (data.ma.startsWith('02')) {
+                    const dm = this.dsDinhMuc.find(e => e.cloaiVthh == data.ma || e.loaiVthh == data.ma);
+                    if (this.lstCtietBcaos.findIndex(e => e.danhMuc == data.ma) == -1) {
                         stt = '0.2.' + (this.lstCtietBcaos.length - index).toString();
                         //them vat tu moi vao bang
                         this.lstCtietBcaos.push(new ItemData({
-
                             id: uuid.v4() + 'FE',
                             stt: stt,
                             danhMuc: data.ma,
+                            maDmuc: dm?.maDinhMuc,
                             tenDanhMuc: data.ten,
                             maDviTinh: dm?.donViTinh,
                             namDtCphiTaiCkhoDm: dm?.tongDmuc,
@@ -538,46 +517,53 @@ export class PhuLuc03Component implements OnInit {
                         }))
                         this.lstCtietBcaos.forEach(e => {
                             if (e.stt.startsWith("0.2.")) {
-                                this.lstCtietBcaos[index].namDtCphiTaiCkhoDm = null;
-                                this.lstCtietBcaos[index].namDtCphiTaiCkhoSl = null;
-                                this.lstCtietBcaos[index].namDtCphiTaiCkhoDm = null;
-                                this.lstCtietBcaos[index].namDtCphiTaiCkhoTt = null;
-                                this.lstCtietBcaos[index].namDtCphiNgoaiCkhoTt = null;
-                                this.lstCtietBcaos[index].namDtTcong = null;
-                                this.lstCtietBcaos[index].namDtCphiNgoaiCkhoBq = null;
-                            }
-                        })
-                        this.getTotal()
-                        this.updateEditCache();
-                    } else {
-                        stt = '0.1.' + index.toString();
-                        this.lstCtietBcaos.splice(index, 0,
-                            new ItemData({
-                                id: uuid.v4() + 'FE',
-                                stt: stt,
-                                danhMuc: data.ma,
-                                tenDanhMuc: data.ten,
-                                maDviTinh: dm?.donViTinh,
-                                namDtCphiTaiCkhoDm: dm?.tongDmuc,
-                                level: 1,
-                            })
-                        )
-                        const index2 = this.lstCtietBcaos.findIndex(e => e.danhMuc == '0.1');
-                        this.lstCtietBcaos.forEach(e => {
-                            if (e.stt.startsWith("0.1.")) {
-                                this.lstCtietBcaos[index2].namDtCphiTaiCkhoDm = null;
-                                this.lstCtietBcaos[index2].namDtCphiTaiCkhoSl = null;
-                                this.lstCtietBcaos[index2].namDtCphiTaiCkhoDm = null;
-                                this.lstCtietBcaos[index2].namDtCphiTaiCkhoTt = null;
-                                this.lstCtietBcaos[index2].namDtCphiNgoaiCkhoTt = null;
-                                this.lstCtietBcaos[index2].namDtTcong = null;
-                                this.lstCtietBcaos[index2].namDtCphiNgoaiCkhoBq = null;
+                                this.lstCtietBcaos[index].clear();
                             }
                         })
                         this.getTotal()
                         this.updateEditCache();
                     }
-
+                } else if (data.ma.startsWith('01')) {
+                    let loaiBaoQuan: any;
+                    if (data.ma.startsWith('0101')) {
+                        const modalBaoQuan = this.modal.create({
+                            nzTitle: 'Danh sách loại bảo quản',
+                            nzContent: DialogChonLoaiBaoQuanComponent,
+                            nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
+                            nzMaskClosable: false,
+                            nzClosable: false,
+                            nzWidth: '500px',
+                            nzFooter: null,
+                            nzComponentParams: {
+                                dsBaoQuan: this.dsBaoQuan,
+                            },
+                        });
+                        await modalBaoQuan.afterClose.toPromise().then(async (res) => {
+                            if (res) { loaiBaoQuan = res; }
+                        })
+                    }
+                    const dm = this.dsDinhMuc.find(e => (e.cloaiVthh == data.ma || e.loaiVthh == data.ma) && (!loaiBaoQuan || e.loaiBaoQuan == loaiBaoQuan.ma));
+                    if (this.lstCtietBcaos.findIndex(e => e.danhMuc == data.ma && (!dm || e.maDmuc == dm?.maDmuc)) == -1) {
+                        stt = '0.1.' + index.toString();
+                        this.lstCtietBcaos.splice(index, 0, new ItemData({
+                            id: uuid.v4() + 'FE',
+                            stt: stt,
+                            danhMuc: data.ma,
+                            tenDanhMuc: data.ten + (loaiBaoQuan ? (' (' + loaiBaoQuan.giaTri + ')') : ''),
+                            maDviTinh: dm?.donViTinh,
+                            namDtCphiTaiCkhoDm: dm?.tongDmuc,
+                            maDmuc: dm?.maDinhMuc,
+                            level: 1,
+                        }))
+                        const index2 = this.lstCtietBcaos.findIndex(e => e.danhMuc == '0.1');
+                        this.lstCtietBcaos.forEach(e => {
+                            if (e.stt.startsWith("0.1.")) {
+                                this.lstCtietBcaos[index2].clear();
+                            }
+                        })
+                        this.getTotal()
+                        this.updateEditCache();
+                    }
                 }
             }
         });
@@ -606,15 +592,16 @@ export class PhuLuc03Component implements OnInit {
             { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
             { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
             { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+            { t: 3, b: 3, l: 0, r: 8, val: 'Trạng thái báo cáo: ' + this.dataInfo.tenTrangThai },
 
-            { t: 4, b: 4, l: 0, r: 0, val: 'STT' },
-            { t: 4, b: 4, l: 1, r: 1, val: 'Danh mục' },
-            { t: 4, b: 4, l: 2, r: 2, val: 'Đơn vị tính' },
-            { t: 4, b: 4, l: 3, r: 7, val: 'Năm dự toán' + (this.namBcao - 1).toString() },
+            { t: 4, b: 6, l: 0, r: 0, val: 'STT' },
+            { t: 4, b: 6, l: 1, r: 1, val: 'Danh mục' },
+            { t: 4, b: 6, l: 2, r: 2, val: 'Đơn vị tính' },
+            { t: 4, b: 4, l: 3, r: 7, val: 'Năm dự toán' + (this.namBcao).toString() },
 
             { t: 5, b: 5, l: 3, r: 5, val: 'Chi phí tại cửa kho' },
-            { t: 5, b: 5, l: 5, r: 6, val: 'Chi phí ngoài cửa kho' },
-            { t: 5, b: 6, l: 8, r: 8, val: 'Tổng cộng' },
+            { t: 5, b: 5, l: 6, r: 7, val: 'Chi phí ngoài cửa kho' },
+            { t: 4, b: 6, l: 8, r: 8, val: 'Tổng cộng' },
 
             { t: 6, b: 6, l: 3, r: 3, val: 'Số lượng' },
             { t: 6, b: 6, l: 4, r: 4, val: 'Định mức' },
@@ -648,6 +635,7 @@ export class PhuLuc03Component implements OnInit {
         const filterData = this.lstCtietBcaos.map(item => {
             const row: any = {};
             fieldOrder.forEach(field => {
+                item[field] = item[field] ? item[field] : ""
                 row[field] = field == 'stt' ? item.index() : item[field]
             })
             return row;
@@ -671,6 +659,10 @@ export class PhuLuc03Component implements OnInit {
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        for (const cell in worksheet) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheet[cell].s = Table.borderStyle;
+        }
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         let excelName = this.dataInfo.maBcao;
         excelName = excelName + '_GSTC_PL03.xlsx'

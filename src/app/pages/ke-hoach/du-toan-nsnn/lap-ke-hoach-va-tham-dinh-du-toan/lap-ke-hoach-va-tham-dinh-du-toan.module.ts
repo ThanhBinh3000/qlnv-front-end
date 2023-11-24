@@ -12,6 +12,7 @@ import { TongHopBaoCaoTuDonViCapDuoiComponent } from './tong-hop-bao-cao-tu-don-
 import { DanhSachHeSoBaoHiemComponent } from './danh-sach-he-so-bao-hiem/danh-sach-he-so-bao-hiem.component';
 import { HeSoBaoHiemComponent } from './he-so-bao-hiem/he-so-bao-hiem.component';
 import { DialogTaoMoiTyLeBaoHiemComponent } from './dialog-tao-moi-ty-le-bao-hiem/dialog-tao-moi-ty-le-bao-hiem.component';
+import { DialogChonLoaiBaoQuanComponent } from './bao-cao/dialog-chon-loai-bao-quan/dialog-chon-loai-bao-quan.component';
 
 @NgModule({
     declarations: [
@@ -23,6 +24,7 @@ import { DialogTaoMoiTyLeBaoHiemComponent } from './dialog-tao-moi-ty-le-bao-hie
         DialogTaoMoiComponent,
         DialogTaoMoiTyLeBaoHiemComponent,
         DialogThemKhoanMucComponent,
+        DialogChonLoaiBaoQuanComponent,
         HeSoBaoHiemComponent,
     ],
     imports: [

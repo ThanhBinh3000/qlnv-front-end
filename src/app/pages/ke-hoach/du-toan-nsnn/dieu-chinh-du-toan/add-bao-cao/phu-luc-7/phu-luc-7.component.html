@@ -98,8 +98,14 @@
 								<th scope="col">13</th>
 								<th scope="col">14=12-13</th>
 								<th scope="col" *ngIf="status.viewAppVal">15</th>
-								<th scope="col">16</th>
-								<th scope="col">17</th>
+								<ng-container *ngIf="status.viewAppVal; else soChiMuc ">
+									<th scope="col">16</th>
+									<th scope="col">17</th>
+								</ng-container>
+								<ng-template #soChiMuc>
+									<th scope="col">15</th>
+									<th scope="col">16</th>
+								</ng-template>
 								<th scope="col" *ngIf="status.viewAppVal">18 = 15 -14</th>
 								<th scope="col" *ngIf="status.viewAppVal">19</th>
 								<th scope="col" nzWidth="50px" rowspan="2" *ngIf="status.general"></th>
@@ -298,7 +304,15 @@
 												[options]="Op.amount" />
 										</td>
 										<td>
-											{{Op.fmtVal(editCache[data.id].data.tdiemBcaoChiPhiTaiCuaKho)}}
+											<!-- {{Op.fmtVal(editCache[data.id].data.tdiemBcaoChiPhiTaiCuaKho)}} -->
+											<ng-container *ngIf="data.dmucChiPhiTaiCuaKho; else nhap1">
+												{{ Op.fmtVal(editCache[data.id].data.tdiemBcaoChiPhiTaiCuaKho) }}
+											</ng-container>
+											<ng-template #nhap1>
+												<input class="money-input" currencyMask [options]="Op.amount"
+													[(ngModel)]="editCache[data.id].data.tdiemBcaoChiPhiTaiCuaKho"
+													(ngModelChange)="changeModel(editCache[data.id].data.id)" />
+											</ng-template>
 										</td>
 										<td>
 											{{Op.fmtVal(editCache[data.id].data.tdiemBcaoChiPhiNgoaiCuaKho)}}
@@ -318,7 +332,15 @@
 												[options]="Op.amount" />
 										</td>
 										<td>
-											{{Op.fmtVal(editCache[data.id].data.dkienThienChiPhiTaiCuaKho)}}
+											<!-- {{Op.fmtVal(editCache[data.id].data.dkienThienChiPhiTaiCuaKho)}} -->
+											<ng-container *ngIf="data.dmucChiPhiTaiCuaKho; else nhap2">
+												{{ Op.fmtVal(editCache[data.id].data.dkienThienChiPhiTaiCuaKho) }}
+											</ng-container>
+											<ng-template #nhap2>
+												<input class="money-input" currencyMask [options]="Op.amount"
+													[(ngModel)]="editCache[data.id].data.dkienThienChiPhiTaiCuaKho"
+													(ngModelChange)="changeModel(editCache[data.id].data.id)" />
+											</ng-template>
 										</td>
 										<td>
 											{{Op.fmtVal(editCache[data.id].data.dkienThienChiPhiNgoaiCuaKho)}}
@@ -401,7 +423,7 @@
 
 			<nz-tab nzTitle="Thuyết minh">
 				<textarea nz-input nzAutosize="{minRows: 4, maxRows: 16}" [(ngModel)]="formDetail.thuyetMinh"
-					*ngIf="status.general"></textarea>
+					[disabled]="!status.general"></textarea>
 			</nz-tab>
 			<nz-tab nzTitle="Tài liệu đính kèm">
 				<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
@@ -424,8 +446,9 @@
 						<nz-table nzBordered class="table__body">
 							<thead>
 								<tr>
-									<th scope="col" nzWidth="7%">STT</th>
-									<th scope="col">Tên file</th>
+									<th scope="col" nzWidth="5%">STT</th>
+									<th scope="col" nzWidth="25%">Tên file</th>
+									<th scope="col" nzWidth="55%">Nội dung</th>
 									<th scope="col" nzWidth="15%"></th>
 								</tr>
 							</thead>
@@ -434,10 +457,26 @@
 									<td>{{ i + 1 }} </td>
 									<td>{{ data.fileName }}</td>
 									<td>
+										<ng-container *ngIf="data.isEdit; else readOnly">
+											<input nz-input [(ngModel)]="data.noiDung" />
+										</ng-container>
+										<ng-template #readOnly>
+											{{ data.noiDung }}
+										</ng-template>
+									</td>
+									<td>
 										<a (click)="downloadFile(data.id)">
 											<i class="fa fa-eye"></i>
 										</a>
-										<a (click)="deleteFile(data.id)">
+										<a *ngIf="status.general" (click)="data.isEdit = !data.isEdit">
+											<ng-container *ngIf="data.isEdit; else saveText">
+												<i class="fa fa-save"></i>
+											</ng-container>
+											<ng-template #saveText>
+												<i class="fa fa-pencil"></i>
+											</ng-template>
+										</a>
+										<a *ngIf="status.general" (click)="deleteFile(data.id)">
 											<i class="fa fa-trash-o do"></i>
 										</a>
 									</td>
