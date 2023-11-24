@@ -335,7 +335,6 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
   }
 
   async save(isGuiDuyet?: boolean) {
-    if (this.validateSave()) {
       this.spinner.show();
       try {
         this.helperService.markFormGroupTouched(this.formData);
@@ -344,6 +343,10 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
           return;
         }
         if (isGuiDuyet) {
+          if (this.validateSave()) {
+            this.spinner.hide();
+            return;
+          }
           if(this.listFileDinhKemBb.length <= 0) {
             this.notification.error(MESSAGE.ERROR, 'File đính kèm biên bản đã ký không được để trống.');
             this.spinner.hide();
@@ -386,17 +389,21 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
       } finally {
         this.spinner.hide();
       };
-    }
-
   }
 
   validateSave(): boolean {
-    if (this.calcTong() != this.formData.value.soLuongNhapKho) {
-      this.notification.error(MESSAGE.ERROR, "Số lượng bảng kê cân hàng và phiếu nhập kho không đủ số lượng đầy kho")
-      return false
+    if (this.loaiVthh.startsWith('02')) {
+      if (this.calcTong() != this.formData.value.soLuongNhapKho) {
+        this.notification.error(MESSAGE.ERROR, "Số lượng bảng kê cân hàng và phiếu nhập kho không đủ số lượng đầy kho")
+        return true
+      }
+    } else {
+      if (this.calcTong() != this.formData.value.soLuongNhapKho *1000) {
+        this.notification.error(MESSAGE.ERROR, "Số lượng bảng kê cân hàng và phiếu nhập kho không đủ số lượng đầy kho")
+        return true
+      }
     }
-
-    return true;
+    return false;
   }
 
   pheDuyet() {
