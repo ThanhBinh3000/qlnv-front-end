@@ -46,6 +46,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
   fileDinhKems: any[] = [];
   dataTable: any[] = [];
   previewName: string;
+  templateName = "8.C20a-HD_Phiếu nhập kho";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
