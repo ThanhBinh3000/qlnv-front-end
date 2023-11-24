@@ -5,14 +5,9 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button *ngIf="idHopDong" type="button" class="btn btn-sub do"
-              (click)="xemTruoc(idHopDong)">
-        <i class="icon htvbdh_totrinh"></i>
-        <span> Xem trước </span>
-      </button>
       <ng-container>
         <button *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH
-            && (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_HDBKPB_VT_HDPL_THEM') : userService.isAccessPermisson('XHDTQG_PTDG_HDBKPB_LT_HDPL_THEM')) && idHopDong"
+            && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)  ? userService.isAccessPermisson('XHDTQG_PTDG_HDBKPB_VT_HDPL_THEM') : userService.isAccessPermisson('XHDTQG_PTDG_HDBKPB_LT_HDPL_THEM')) && idHopDong"
                 type="button" class="btn btn-sub xanh-nhat" (click)="pheDuyet()">
           <i class="icon htvbdh_checkfile2"></i>
           <span>Hoàn thành thực hiện</span>
@@ -210,7 +205,7 @@
           </div>
         </div>
         <div class="buttons" *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH
-        && (loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_HDBKPB_VT_HDPL_THEM') :
+        && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_HDBKPB_VT_HDPL_THEM') :
             userService.isAccessPermisson('XHDTQG_PTDG_HDBKPB_LT_HDPL_THEM'))">
           <button type="button" class="btn btn-main"
                   (click)="redirectHopDong(0,false, true)">
@@ -229,7 +224,7 @@
             <th class="text-left"> Tên hợp đồng</th>
             <th class="text-left"> Ngày ký hợp đồng</th>
             <th class="text-center"> Số lượng
-              {{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? '' : '(kg)'}}
+              {{loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? '' : '(kg)'}}
             </th>
             <th class="text-center"> Giá trị (đ)</th>
             <th class="text-left"> Trạng thái HĐ</th>
@@ -240,7 +235,7 @@
           </thead>
           <tbody>
           <ng-container *ngFor="let data of dataTable;let i = index">
-            <tr [ngClass]="{'bg-selected': i == 0 && this.selected}" (click)="showDetail($event, data)">
+            <tr [ngClass]="{'bg-selected': data.selected}" (click)="selectRow(data)">
               <td class="text-center">{{ i + 1}}</td>
               <td class="text-left">{{ data.soHopDong}}</td>
               <td class="text-left" style="max-width: 200px; min-width: 150px;  white-space: break-spaces;">
@@ -257,6 +252,10 @@
               </td>
               <td class="text-left">{{ data.tenTrangThaiXh}}</td>
               <td class="text-center">
+                <a *ngIf="data.id > 0"
+                   (click)="xemTruoc(data.id)">
+                  <i class="icon htvbdh_tcdt_tuchoi" title="Xem trước"></i>
+                </a>
                 <a *ngIf="data.trangThai == STATUS.DA_KY"
                    (click)="redirectHopDong(data.id, true, true) ">
                   <i class="fa fa-eye" title="Xem"></i>
@@ -290,7 +289,7 @@
           </ng-container>
         </nz-table>
       </nz-card>
-      <app-thong-tin *ngIf="idHopDong" [idInput]="idInput" [loaiVthh]="loaiVthh" [idHopDong]="idHopDong"
+      <app-thong-tin *ngIf="idHopDong && isHopDong" [idInput]="idInput" [loaiVthh]="loaiVthh" [idHopDong]="idHopDong"
                      [isQuanLy]="true" [isView]="true">
       </app-thong-tin>
     </nz-card>
@@ -324,16 +323,16 @@
       <i class="icon htvbdh_printer"></i>
       In
     </button>
-    <!--    <button nz-button (click)="downloadPdf('Hợp đồng bán đấu giá')"-->
-    <!--            class="modal__button&#45;&#45;save">-->
-    <!--      <i class="icon htvbdh_file-pdf"></i>-->
-    <!--      Xuất .pdf-->
-    <!--    </button>-->
-    <!--    <button nz-button (click)="downloadWord('Hợp đồng bán đấu giá')"-->
-    <!--            class="modal__button&#45;&#45;save">-->
-    <!--      <i class="icon htvbdh_file-word"></i>-->
-    <!--      Xuất .docx-->
-    <!--    </button>-->
+    <button nz-button (click)="downloadPdf('Hợp đồng bán đấu giá')"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-pdf"></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)="downloadWord('Hợp đồng bán đấu giá')"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-word"></i>
+      Xuất .docx
+    </button>
     <button nz-button (click)="closeDlg()" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng

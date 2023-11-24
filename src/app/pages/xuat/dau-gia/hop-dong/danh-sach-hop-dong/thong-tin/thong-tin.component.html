@@ -44,7 +44,7 @@
                   <nz-form-label nzRequired [nzNoColon]="true"> Năm Hợp đồng</nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
                     <nz-select formControlName="nam" (ngModelChange)="onChangeNam($event)" [nzDisabled]="isView">
-                      <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                      <nz-option *ngFor="let item of listNam" [nzValue]="item.value" [nzLabel]="item.text"></nz-option>
                     </nz-select>
                   </nz-form-control>
                 </nz-form-item>
@@ -52,7 +52,7 @@
               <div nz-col [nzSpan]="3">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
-                  <nz-form-control nz-col [nzErrorTip]="error">
+                  <nz-form-control nz-col>
                     <input nz-input formControlName="tenLoaiHinhNx" readonly/>
                   </nz-form-control>
                 </nz-form-item>
@@ -60,7 +60,7 @@
               <div nz-col [nzSpan]="3">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất</nz-form-label>
-                  <nz-form-control nz-col [nzErrorTip]="error">
+                  <nz-form-control nz-col>
                     <input nz-input formControlName="tenKieuNhapXuat" readonly/>
                   </nz-form-control>
                 </nz-form-item>
@@ -70,7 +70,7 @@
                   <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ QĐ phê duyệt kết quả BĐG</nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
                     <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialog()">
-                      <input [readonly]="true" nz-input formControlName="soQdKq" readonly/>
+                      <input nz-input formControlName="soQdKq" readonly/>
                     </nz-input-group>
                   </nz-form-control>
                 </nz-form-item>
@@ -86,7 +86,7 @@
               </div>
               <div nz-col [nzSpan]="3">
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Căn cứ QĐ Phê duyệt KH BĐG</nz-form-label>
+                  <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ QĐ Phê duyệt KH BĐG</nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
                     <input nz-input formControlName="soQdPd" readonly/>
                   </nz-form-control>
@@ -132,8 +132,8 @@
                   <nz-form-label nzRequired [nzNoColon]="true"> Số hợp đồng</nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
                     <nz-input-group nzAddOnAfter="{{maHopDongSuffix}}">
-                      <nz-input-number formControlName="soHopDong" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
-                                       [nzSize]="'small'" [nzDisabled]="isView">
+                      <nz-input-number formControlName="soHopDong" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
+                                       [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isView">
                       </nz-input-number>
                     </nz-input-group>
                   </nz-form-control>
@@ -224,8 +224,8 @@
               </div>
               <div nz-col [nzSpan]="6">
                 <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true"> Thời gian bảo hành (tháng), kể từ ngày ký biên bản giao
-                    nhận
+                  <nz-form-label nzRequired [nzNoColon]="true">
+                    Thời gian bảo hành (tháng), kể từ ngày ký biên bản giao nhận
                   </nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
                     <nz-input-number formControlName="tgianBaoHanh" nz-input [nzMin]="0"
@@ -250,8 +250,9 @@
                   <nz-form-label [nzNoColon]="true"> Thời gian bắn đầu tính phạt
                   </nz-form-label>
                   <nz-form-control nz-col>
-                    <span
-                      style="color: blue">{{formData.value.tgianTinhPhat|number:globals.numberFormat:globals.locale}}</span>
+                    <span style="color: blue">
+                      {{formData.value.tgianTinhPhat|number:globals.numberFormat:globals.locale}}
+                    </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -260,20 +261,18 @@
                   <nz-form-label [nzNoColon]="true"> Số lượng nhận hàng chậm
                   </nz-form-label>
                   <nz-form-control nz-col>
-                    <span
-                      style="color: blue">{{formData.value.soLuongHangCham|number:globals.numberFormat:globals.locale}}</span>
+                    <span style="color: blue">
+                      {{formData.value.soLuongHangCham|number:globals.numberFormat:globals.locale}}
+                    </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
               <div nz-col [nzSpan]="9">
                 <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true"> Số tiền tính phạt (đ)</nz-form-label>
-                  <nz-form-control nz-col [nzErrorTip]="error">
-                    <nz-input-number formControlName="soTienTinhPhat" nz-input [nzMin]="0"
-                                     [nzStep]="1" [nzSize]="'small'"
-                                     [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                     [nzDisabled]="isView">
-                    </nz-input-number>
+                  <nz-form-label [nzNoColon]="true"> Số tiền tính phạt (đ)</nz-form-label>
+                  <nz-form-control nz-col>
+                    <input class="money-input" currencyMask [options]="amount" [min]="0"
+                           formControlName="soTienTinhPhat" [readonly]="isView"/>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -283,20 +282,16 @@
                 <div nz-row [nzGutter]="24" class="hd-custom-label">
                   <div nz-col [nzSpan]="16">
                     <nz-form-item>
-                      <nz-form-label nzRequired [nzNoColon]="true"> Giá trị</nz-form-label>
-                      <nz-form-control nz-col [nzErrorTip]="error">
-                        <nz-input-number formControlName="giaTri" nz-input [nzMin]=""
-                                         [nzStep]="1" [nzSize]="'small'"
-                                         [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                         [nzDisabled]="isView">
-                        </nz-input-number>
+                      <nz-form-label [nzNoColon]="true"> Giá trị</nz-form-label>
+                      <nz-form-control nz-col>
+                        <input nz-input formControlName="giaTri" [readonly]="isView"/>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="8">
                     <nz-form-item>
                       <nz-form-label [nzNoColon]="true"> Thời gian bảo đảm thực hiện hợp đồng</nz-form-label>
-                      <nz-form-control nz-col [nzErrorTip]="error">
+                      <nz-form-control nz-col>
                         <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="tgianBaoDamHdong" [nzDisabled]="isView">
                         </nz-date-picker>
                       </nz-form-control>
@@ -322,8 +317,8 @@
               </div>
               <div nz-col [nzSpan]="24">
                 <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ pháp lý</nz-form-label>
-                  <nz-form-control [nzErrorTip]="error" nz-col>
+                  <nz-form-label [nzNoColon]="true"> Căn cứ pháp lý</nz-form-label>
+                  <nz-form-control nz-col>
                     <div class="list-file" nz-col>
                       <file-list [data]="formData.value.fileCanCu" [isCanCuPL]='true' [isViewDetail]="isView">
                       </file-list>
@@ -333,8 +328,8 @@
               </div>
               <div nz-col [nzSpan]="24">
                 <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true"> File đính kèm HĐ đã ký</nz-form-label>
-                  <nz-form-control [nzErrorTip]="error" nz-col>
+                  <nz-form-label [nzNoColon]="true"> File đính kèm HĐ đã ký</nz-form-label>
+                  <nz-form-control nz-col>
                     <div class="list-file" nz-col>
                       <file-list [data]="formData.value.fileDinhKem" [isViewDetail]="isView">
                       </file-list>
@@ -523,10 +518,9 @@
               <div nz-col [nzSpan]="3">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
-                  <nz-form-control nz-col [nzErrorTip]="error">
+                  <nz-form-control nz-col>
                     <nz-input-group nzAddOnAfterIcon="folder-open">
-                      <input [readonly]="true" nz-input formControlName="tenLoaiVthh"
-                             readonly/>
+                      <input nz-input formControlName="tenLoaiVthh" readonly/>
                     </nz-input-group>
                   </nz-form-control>
                 </nz-form-item>
@@ -534,10 +528,9 @@
               <div nz-col [nzSpan]="3">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
-                  <nz-form-control nz-col [nzErrorTip]="error">
+                  <nz-form-control nz-col>
                     <nz-input-group nzAddOnAfterIcon="folder-open">
-                      <input [readonly]="true" nz-input formControlName="tenCloaiVthh"
-                             readonly/>
+                      <input nz-input formControlName="tenCloaiVthh" readonly/>
                     </nz-input-group>
                   </nz-form-control>
                 </nz-form-item>
@@ -554,8 +547,9 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Số lượng</nz-form-label>
                   <nz-form-control nz-col>
-                    <span
-                      style="color: blue">{{formData.value.soLuong|number:globals.numberFormat:globals.locale}}</span>
+                    <span style="color: blue">
+                      {{formData.value.soLuong|number:globals.numberFormat:globals.locale}}
+                    </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -745,16 +739,16 @@
       <i class="icon htvbdh_printer"></i>
       In
     </button>
-    <!--    <button nz-button (click)="downloadPdf('Hợp đồng bán đấu giá')"-->
-    <!--            class="modal__button&#45;&#45;save">-->
-    <!--      <i class="icon htvbdh_file-pdf"></i>-->
-    <!--      Xuất .pdf-->
-    <!--    </button>-->
-    <!--    <button nz-button (click)="downloadWord('Hợp đồng bán đấu giá')"-->
-    <!--            class="modal__button&#45;&#45;save">-->
-    <!--      <i class="icon htvbdh_file-word"></i>-->
-    <!--      Xuất .docx-->
-    <!--    </button>-->
+    <button nz-button (click)="downloadPdf('Hợp đồng bán đấu giá')"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-pdf"></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)="downloadWord('Hợp đồng bán đấu giá')"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-word"></i>
+      Xuất .docx
+    </button>
     <button nz-button (click)="closeDlg()" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng

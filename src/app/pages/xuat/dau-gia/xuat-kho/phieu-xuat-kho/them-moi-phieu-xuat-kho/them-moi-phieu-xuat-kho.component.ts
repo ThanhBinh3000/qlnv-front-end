@@ -12,7 +12,6 @@ import {STATUS} from 'src/app/constants/status';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {convertTienTobangChu} from 'src/app/shared/commonFunction';
 import {Validators} from '@angular/forms';
 import {
@@ -25,12 +24,10 @@ import {
   PhieuXuatKhoService
 } from './../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/PhieuXuatKho.service';
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
-import {PREVIEW} from "../../../../../../constants/fileType";
-import printJS from "print-js";
-import {CurrencyMaskInputMode} from "ngx-currency";
 import {
   BbNghiemThuBaoQuanService
 } from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
+import {AMOUNT_ONE_DECIMAL} from "../../../../../../Utility/utils";
 
 @Component({
   selector: 'app-bdg-them-moi-phieu-xuat-kho',
@@ -46,24 +43,16 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
+  amount = {...AMOUNT_ONE_DECIMAL};
+  amount1 = {...AMOUNT_ONE_DECIMAL};
+  templateNameVt = "Phiếu xuất kho bán đấu giá vật tư";
+  templateNameLt = "Phiếu xuất kho bán đấu giá lương thực";
   maTuSinh: number;
   maHauTo: any;
   flagInit: Boolean = false;
+  isViewBangKe: boolean = false
   dataQuyetDinh: any[] = [];
   danhSachKghiemCluong: any[] = [];
-  amount = {
-    allowZero: true,
-    allowNegative: false,
-    precision: 2,
-    prefix: '',
-    thousands: '.',
-    decimal: ',',
-    align: "right",
-    nullable: true,
-    min: 0,
-    max: 1000000000000,
-    inputMode: CurrencyMaskInputMode.NATURAL,
-  }
 
   constructor(
     httpClient: HttpClient,
@@ -71,11 +60,10 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private danhMucService: DanhMucService,
     private quyetDinhGiaoNhiemVuXuatHangService: QuyetDinhGiaoNvXuatHangService,
     private xhPhieuKnghiemCluongService: XhPhieuKnghiemCluongService,
-    private phieuXuatKhoService: PhieuXuatKhoService,
     private bbNghiemThuBaoQuanService: BbNghiemThuBaoQuanService,
+    private phieuXuatKhoService: PhieuXuatKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoService);
     this.formData = this.fb.group(
@@ -156,6 +144,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     try {
       await this.spinner.show();
       this.maHauTo = '/PXK-' + this.userInfo.DON_VI.tenVietTat;
+      this.amount.align = "left";
       if (this.idInput > 0) {
         await this.getDetail(this.idInput);
       } else {
@@ -198,13 +187,12 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   async getDetail(id: number) {
     if (!id) return;
     const data = await this.detail(id);
-    if (!data) {
-      console.error('Không tìm thấy dữ liệu');
-      return;
-    }
     this.maTuSinh = this.idInput;
-    if (!this.isView) {
-      await this.onChange(data.idQdNv)
+    if (data.soBangKeHang) {
+      this.isViewBangKe = true;
+    }
+    if (!this.isView && !this.isViewBangKe) {
+      await this.onChange(data.idQdNv);
     }
   }
 
@@ -219,8 +207,6 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       const res = await this.quyetDinhGiaoNhiemVuXuatHangService.search(body)
       if (res && res.msg === MESSAGE.SUCCESS) {
         this.dataQuyetDinh = res.data.content.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI));
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ XUẤT HÀNG',
@@ -479,7 +465,6 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   async save() {
     try {
       await this.helperService.ignoreRequiredForm(this.formData);
-      this.formData.controls["soPhieuXuatKho"].setValidators([Validators.required]);
       this.formData.controls["soQdNv"].setValidators([Validators.required]);
       this.formData.controls["soPhieuKiemNghiem"].setValidators([Validators.required]);
       const body = {...this.formData.value,};
@@ -511,58 +496,19 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
 
   setValidForm() {
     const requiredFields = [
-      "nam",
-      "tenDvi",
-      "maQhNs",
       "ngayLapPhieu",
-      "tenLoaiHinhNx",
-      "tenKieuNhapXuat",
-      "soHopDong",
-      "ngayKyHopDong",
-      "toChucCaNhan",
+      "soQdNv",
       "ngayKyQdNv",
+      "soPhieuKiemNghiem",
       "tenNganLoKho",
       "tenNhaKho",
       "tenDiemKho",
-      "tenLoaiVthh",
-      "tenCloaiVthh",
-      "tenThuKho",
-      "tenKtvBaoQuan",
-      "keToanTruong",
       "thoiGianGiaoNhan",
-      "soBangKeHang",
-      "tenNguoiGiao",
-      "cmtNguoiGiao",
-      "congTyNguoiGiao",
-      "diaChiNguoiGiao",
+      "ghiChu",
     ];
     requiredFields.forEach(fieldName => {
       this.formData.controls[fieldName].setValidators([Validators.required]);
       this.formData.controls[fieldName].updateValueAndValidity();
     });
-  }
-
-  async preview(id) {
-    await this.phieuXuatKhoService.preview({
-      tenBaoCao: 'Phiếu xuất kho kế hoạch bán đấu giá',
-      id: id
-    }).then(async res => {
-      if (res.data) {
-        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
-        this.printSrc = res.data.pdfSrc;
-        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
-        this.showDlgPreview = true;
-      } else {
-        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
-      }
-    });
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
-  }
-
-  printPreview() {
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 }

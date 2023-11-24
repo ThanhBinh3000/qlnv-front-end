@@ -57,18 +57,19 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
       loaiVthh: null,
     })
     this.filterTable = {
-      soQdNv: '',
-      nam: '',
-      thoiGianGiaoNhan: '',
-      tenDiemKho: '',
-      tenNganKho: '',
-      tenLoKho: '',
-      soPhieuKiemNghiem: '',
-      ngayKiemNghiemMau: '',
-      soPhieuXuatKho: '',
-      soBangKeHang: '',
-      ngayLapPhieu: '',
-      tenTrangThai: '',
+      soQdNv: null,
+      nam: null,
+      thoiGianGiaoNhan: null,
+      tenDiemKho: null,
+      tenNhaKho: null,
+      tenNganKho: null,
+      tenLoKho: null,
+      soPhieuKiemNghiem: null,
+      ngayKiemNghiemMau: null,
+      soBangKeHang: null,
+      soPhieuXuatKho: null,
+      ngayLapPhieu: null,
+      tenTrangThai: null,
     };
   }
 
@@ -238,7 +239,7 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
         DUYET_LDCHICUC: 'XHDTQG_PTDG_XK_LT_BKCH_DUYET_LDCCUC',
       },
     };
-    const permissions = this.loaiVthh === LOAI_HANG_DTQG.VAT_TU ? permissionMapping.VT : permissionMapping.LT;
+    const permissions = this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? permissionMapping.VT : permissionMapping.LT;
     switch (action) {
       case 'XEM':
         return (

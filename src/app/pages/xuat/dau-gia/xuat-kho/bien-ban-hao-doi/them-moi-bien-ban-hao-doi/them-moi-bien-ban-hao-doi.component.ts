@@ -12,7 +12,6 @@ import {STATUS} from 'src/app/constants/status';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {Validators} from '@angular/forms';
 import {
   QuyetDinhGiaoNvXuatHangService
@@ -23,8 +22,6 @@ import {
 import {
   BienBanTinhKhoService
 } from "src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/BienBanTinhKho.service";
-import {PREVIEW} from "../../../../../../constants/fileType";
-import printJS from "print-js";
 
 @Component({
   selector: 'app-bdg-them-moi-bien-ban-hao-doi',
@@ -54,7 +51,6 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private danhMucService: DanhMucService,
     private quyetDinhGiaoNhiemVuXuatHangService: QuyetDinhGiaoNvXuatHangService,
     private bienBanTinhKhoService: BienBanTinhKhoService,
     private bienBanHaoDoiService: BienBanHaoDoiService,
@@ -199,8 +195,6 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
       const res = await this.quyetDinhGiaoNhiemVuXuatHangService.search(body)
       if (res && res.msg === MESSAGE.SUCCESS) {
         this.dataQuyetDinh = res.data.content.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI));
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ XUẤT HÀNG',
@@ -339,8 +333,6 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
       if (res && res.msg === MESSAGE.SUCCESS) {
         const tinhKhoSet = new Set(this.listDanhSachHaoDoi.map(item => item.soBbTinhKho));
         this.danhSachTinhKho = res.data.content.filter(item => !tinhKhoSet.has(item.soBbTinhKho))
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH BIÊN BẢN TỊNH KHO',
@@ -498,7 +490,6 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
       await this.helperService.ignoreRequiredForm(this.formData);
       this.formData.controls["soQdNv"].setValidators([Validators.required]);
       this.formData.controls["soBbTinhKho"].setValidators([Validators.required]);
-      this.formData.controls["soBbHaoDoi"].setValidators([Validators.required]);
       const body = {
         ...this.formData.value,
         children: this.dataTable,
@@ -529,19 +520,11 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
 
   setValidForm() {
     const requiredFields = [
-      "nam",
-      "tenDvi",
-      "maQhNs",
-      "ngayLapBienBan",
-      "soHopDong",
-      "ngayKyHopDong",
-      "ngayLapBbTinhKho",
+      "soQdNv",
+      "soBbTinhKho",
       "tenNganLoKho",
       "tenNhaKho",
       "tenDiemKho",
-      "ngayBatDauXuat",
-      "ngayKetThucXuat",
-      "tenThuKho",
       "nguyenNhan",
       "kienNghi",
       "ghiChu",
@@ -550,29 +533,5 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
       this.formData.controls[fieldName].setValidators([Validators.required]);
       this.formData.controls[fieldName].updateValueAndValidity();
     });
-  }
-
-  async preview(id) {
-    await this.bienBanHaoDoiService.preview({
-      tenBaoCao: 'Biên bản hao đôi bán đấu giá',
-      id: id
-    }).then(async res => {
-      if (res.data) {
-        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
-        this.printSrc = res.data.pdfSrc;
-        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
-        this.showDlgPreview = true;
-      } else {
-        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
-      }
-    });
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
-  }
-
-  printPreview() {
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 }

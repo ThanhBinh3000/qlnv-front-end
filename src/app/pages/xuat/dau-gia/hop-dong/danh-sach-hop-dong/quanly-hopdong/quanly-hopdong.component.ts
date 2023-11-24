@@ -16,8 +16,6 @@ import {StorageService} from 'src/app/services/storage.service';
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {PREVIEW} from "../../../../../../constants/fileType";
-import {saveAs} from 'file-saver';
-import printJS from "print-js";
 
 @Component({
   selector: 'app-quanly-hopdong',
@@ -36,6 +34,7 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
   selected: boolean = false;
   listHangHoaAll: any[] = [];
   idHopDong: number;
+  isHopDong: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -118,7 +117,7 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
       await this.loadDsVthh();
       this.dataTable = data.listHopDong.filter(item => item.maDvi === this.userInfo.MA_DVI);
       if (this.dataTable && this.dataTable.length > 0) {
-        await this.showFirstRow(event, this.dataTable[0]);
+        await this.selectRow(this.dataTable[0]);
       }
     } catch (e) {
       console.log('error: ', e);
@@ -138,28 +137,14 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
     this.formData.patchValue({donViTinh: donViTinh})
   }
 
-  async showFirstRow($event, data: any) {
-    await this.showDetail($event, data);
-  }
 
-  async showDetail($event, data: any) {
-    try {
-      await this.spinner.show();
-      if ($event.type == 'click') {
-        this.selected = false;
-        const selectedRow = $event.target.parentElement.parentElement.querySelector('.selectedRow');
-        if (selectedRow) {
-          selectedRow.classList.remove('selectedRow');
-        }
-        $event.target.parentElement.classList.add('selectedRow');
-      } else {
-        this.selected = true;
-      }
-      this.idHopDong = data.id;
-    } catch (error) {
-      console.error('Error:', error);
-    } finally {
-      await this.spinner.hide();
+  async selectRow(data: any) {
+    if (!data.selected) {
+      this.dataTable.forEach(item => item.selected = false);
+      data.selected = true;
+      const findndex = this.dataTable.findIndex(child => child.id == data.id);
+      this.idHopDong = this.dataTable[findndex].id
+      this.isHopDong = true;
     }
   }
 
@@ -200,6 +185,14 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
         try {
           const body = {id: data.id};
           await this.hopDongXuatHangService.delete(body);
+          if (this.idInput > 0) {
+            const res = await this.qdPdKetQuaBanDauGiaService.getDetail(this.idInput);
+            if (res.data && res.data.listHopDong && res.data.listHopDong.length > 0) {
+              this.isHopDong = true;
+            } else {
+              this.isHopDong = false;
+            }
+          }
           await this.getDetail(this.idInput);
         } catch (error) {
           console.log('error: ', error);
