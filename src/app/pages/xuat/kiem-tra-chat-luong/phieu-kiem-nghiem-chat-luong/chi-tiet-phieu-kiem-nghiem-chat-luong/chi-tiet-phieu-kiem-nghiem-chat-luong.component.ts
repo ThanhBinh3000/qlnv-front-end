@@ -115,7 +115,8 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       ngayKiemNghiem: [dayjs().format("YYYY-MM-DD")],
       ktvBaoQuan: [],
       dviKiemNghiem: [],
-      lanhDaoChiCuc: [],
+      truongPhong: [],
+      lanhDaoCuc: [],
       ketQua: [],
       ketLuan: [],
       loaiBb: [],
@@ -137,7 +138,8 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     try {
       await this.spinner.show();
       super.service = this.inputService;
-      this.maHauTo = '/' + this.formData.value.nam + '/PKNCL-' + this.userInfo.DON_VI.tenVietTat;
+      // this.maHauTo = '/' + this.formData.value.nam + '/PKNCL-' + this.userInfo.DON_VI.tenVietTat;
+      this.maHauTo = '/PKNCL-' + this.userInfo.DON_VI.tenVietTat;
       await Promise.all([
         this.loadDsQdGnv(),
         // this.loadDsPplm(),
@@ -174,7 +176,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         tenDvi: this.userInfo.TEN_DVI,
         tenChiCuc: this.userInfo.TEN_DVI,
         maQhns: this.userInfo.DON_VI.maQhns,
-        dviKiemNghiem: this.userInfo.TEN_DAY_DU,
+        ktvBaoQuan: this.userInfo.TEN_DAY_DU,
       })
       if (this.inputData) {
         await this.bindingQdGnv(this.inputData.idQdGnv);
@@ -276,9 +278,9 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         this.dsHinhThucBq.push({ ...item, label: item.ten, giaTri: item.ten, checked: true })
       }
     });
-    // this.formData.patchValue({ ppLayMau: this.dsPpLayMau, hinhThucBaoQuan: this.dsHinhThucBq });
-    const hangBaoQuan = this.formData.value.xhPhieuKnclDtl.find(s => s.type === 'SO_LUONG_HANG_BAO_QUAN');
-    this.formData.patchValue({ ppLayMau: this.dsPpLayMau, hinhThucBaoQuan: this.dsHinhThucBq, slHangBaoQuan: hangBaoQuan?.soLuong ? hangBaoQuan?.soLuong : '' });
+    this.formData.patchValue({ ppLayMau: this.dsPpLayMau, hinhThucBaoQuan: this.dsHinhThucBq });
+    // const hangBaoQuan = this.formData.value.xhPhieuKnclDtl.find(s => s.type === 'SO_LUONG_HANG_BAO_QUAN');
+    // this.formData.patchValue({ ppLayMau: this.dsPpLayMau, hinhThucBaoQuan: this.dsHinhThucBq, slHangBaoQuan: hangBaoQuan?.soLuong ? hangBaoQuan?.soLuong : '' });
   }
 
   async loadDsPpLayMau() {
@@ -637,8 +639,8 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     // let tonKhoCloaiVthh: number = 0;
     const res = await this.mangLuoiKhoService.slTon(body);
     if (res.msg === MESSAGE.SUCCESS) {
-      this.formData.patchValue({ xhPhieuKnclDtl: [...this.formData.value.xhPhieuKnclDtl.filter(f => f.type !== 'SO_LUONG_HANG_BAO_QUAN'), { ten: 'Số lượng hàng bảo quản', soLuong: res.data, type: 'SO_LUONG_HANG_BAO_QUAN' }] });
-      // this.formData.patchValue({ slHangBaoQuan: res.data });
+      // this.formData.patchValue({ xhPhieuKnclDtl: [...this.formData.value.xhPhieuKnclDtl.filter(f => f.type !== 'SO_LUONG_HANG_BAO_QUAN'), { ten: 'Số lượng hàng bảo quản', soLuong: res.data, type: 'SO_LUONG_HANG_BAO_QUAN' }] });
+      this.formData.patchValue({ slHangBaoQuan: res.data });
     }
   }
   downloadPdf() {

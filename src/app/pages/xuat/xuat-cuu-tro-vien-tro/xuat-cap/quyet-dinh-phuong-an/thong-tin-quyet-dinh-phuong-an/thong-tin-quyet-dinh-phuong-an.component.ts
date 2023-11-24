@@ -11,7 +11,7 @@ import {
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
 import * as dayjs from "dayjs";
 import { FileDinhKem } from "../../../../../../models/DeXuatKeHoachuaChonNhaThau";
-import {STATUS} from "../../../../../../constants/status";
+import { STATUS } from "../../../../../../constants/status";
 import { MESSAGE } from "../../../../../../constants/message";
 import { DanhMucService } from "../../../../../../services/danhmuc.service";
 import {
@@ -24,8 +24,8 @@ import {
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import {v4 as uuidv4} from 'uuid';
-import {chain, cloneDeep} from 'lodash';
+import { v4 as uuidv4 } from 'uuid';
+import { chain, cloneDeep } from 'lodash';
 export class QuyetDinhPdDtl {
   idVirtual: number;
   id: number;
@@ -101,38 +101,38 @@ export class ThongTinQuyetDinhPhuongAnComponent extends Base2Component implement
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPheDuyetPhuongAnCuuTroService);
     this.formData = this.fb.group({
-        id: [0],
-        maDvi: [],
-        nam: [dayjs().get("year"), [Validators.required]],
-        soQd: [, [Validators.required]],
-        ngayKy: [, [Validators.required]],
-        ngayHluc: [, [Validators.required]],
-        idTongHop: [, [Validators.required]],
-        maTongHop: [, [Validators.required]],
-        ngayThop: [, [Validators.required]],
-        idDx: [, [Validators.required]],
-        soDx: [, [Validators.required]],
-        ngayDx: [, [Validators.required]],
-        tongSoLuongDx: [],
-        tongSoLuong: [],
-        soLuongXuaCap: [],
-        loaiVthh: [],
-        cloaiVthh: [],
-        loaiNhapXuat: [],
-        trichYeu: [],
-        trangThai: [STATUS.DU_THAO],
-        lyDoTuChoi: [],
-        type: ['TH', [Validators.required]],
-        xuatCap: [false],
-        ngayPduyet: [],
-        fileDinhKem: [FileDinhKem],
-        canCu: [new Array<FileDinhKem>()],
-        tenDvi: [],
-        tenLoaiVthh: [],
-        tenCloaiVthh: [],
-        tenTrangThai: ['Dự thảo'],
-        quyetDinhPdDtl: [new Array<QuyetDinhPdDtl>(),],
-      }
+      id: [0],
+      maDvi: [],
+      nam: [dayjs().get("year"), [Validators.required]],
+      soQd: [, [Validators.required]],
+      ngayKy: [, [Validators.required]],
+      ngayHluc: [, [Validators.required]],
+      idTongHop: [, [Validators.required]],
+      maTongHop: [, [Validators.required]],
+      ngayThop: [, [Validators.required]],
+      idDx: [, [Validators.required]],
+      soDx: [, [Validators.required]],
+      ngayDx: [, [Validators.required]],
+      tongSoLuongDx: [],
+      tongSoLuong: [],
+      soLuongXuaCap: [],
+      loaiVthh: [],
+      cloaiVthh: [],
+      loaiNhapXuat: [],
+      trichYeu: [],
+      trangThai: [STATUS.DU_THAO],
+      lyDoTuChoi: [],
+      type: ['TH', [Validators.required]],
+      xuatCap: [false],
+      ngayPduyet: [],
+      fileDinhKem: [FileDinhKem],
+      canCu: [new Array<FileDinhKem>()],
+      tenDvi: [],
+      tenLoaiVthh: [],
+      tenCloaiVthh: [],
+      tenTrangThai: ['Dự thảo'],
+      quyetDinhPdDtl: [new Array<QuyetDinhPdDtl>(),],
+    }
     );
   }
 
@@ -203,7 +203,7 @@ export class ThongTinQuyetDinhPhuongAnComponent extends Base2Component implement
         let listDeXuat = await Promise.all(data.deXuatCuuTro.map(async item => {
           let res1 = await this.deXuatPhuongAnCuuTroService.getDetail(item.idDx);
           if (res1.msg === MESSAGE.SUCCESS) {
-            return Object.assign(item, {quyetDinhPdDx: res1.data.deXuatPhuongAn});
+            return Object.assign(item, { quyetDinhPdDx: res1.data.deXuatPhuongAn });
           } else {
             console.log(MESSAGE.ERROR, res1.msg);
           }
@@ -371,7 +371,7 @@ export class ThongTinQuyetDinhPhuongAnComponent extends Base2Component implement
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listDanhSachDeXuat,
-        dataHeader: ['Số tờ trình đề xuất', 'Loại hàng hóa', 'loại hình nhập xuất'],
+        dataHeader: ['Số tờ trình đề xuất', 'Loại hàng hóa', 'loại hình xuất'],
         dataColumn: ['soDx', 'tenLoaiVthh', 'loaiNhapXuat']
       },
     });
@@ -425,7 +425,7 @@ export class ThongTinQuyetDinhPhuongAnComponent extends Base2Component implement
 
 
   async selectHangHoa(event: any) {
-    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
+    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
         this.listChungLoaiHangHoa = res.data;
@@ -489,18 +489,18 @@ export class ThongTinQuyetDinhPhuongAnComponent extends Base2Component implement
         let rs = chain(value)
           .groupBy("tenCuc")
           .map((v, k) => {
-              let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
-              let rowCuc = v.find(s => s.tenCuc === k);
-              console.log(rowCuc, 'rowCuc');
-              return {
-                idVirtual: uuidv4(),
-                tenCuc: k,
-                soLuongXuatCuc: rowCuc.soLuongXuatCuc,
-                soLuongXuatCucThucTe: soLuongXuatCucThucTe,
-                tenCloaiVthh: v[0].tenCloaiVthh,
-                childData: v
-              }
+            let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
+            let rowCuc = v.find(s => s.tenCuc === k);
+            console.log(rowCuc, 'rowCuc');
+            return {
+              idVirtual: uuidv4(),
+              tenCuc: k,
+              soLuongXuatCuc: rowCuc.soLuongXuatCuc,
+              soLuongXuatCucThucTe: soLuongXuatCucThucTe,
+              tenCloaiVthh: v[0].tenCloaiVthh,
+              childData: v
             }
+          }
           ).value();
         let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0);
         let soLuongXuatThucTe = rs.reduce((prev, cur) => prev + cur.soLuongXuatCucThucTe, 0);
@@ -520,18 +520,18 @@ export class ThongTinQuyetDinhPhuongAnComponent extends Base2Component implement
         let rs = chain(value)
           .groupBy("tenCuc")
           .map((v, k) => {
-              let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
-              let rowCuc = v.find(s => s.tenCuc === k);
-              console.log(rowCuc, 'rowCuc');
-              return {
-                idVirtual: uuidv4(),
-                tenCuc: k,
-                soLuongXuatCuc: rowCuc.soLuongXuatCuc,
-                soLuongXuatCucThucTe: soLuongXuatCucThucTe,
-                tenCloaiVthh: v[0].tenCloaiVthh,
-                childData: v
-              }
+            let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
+            let rowCuc = v.find(s => s.tenCuc === k);
+            console.log(rowCuc, 'rowCuc');
+            return {
+              idVirtual: uuidv4(),
+              tenCuc: k,
+              soLuongXuatCuc: rowCuc.soLuongXuatCuc,
+              soLuongXuatCucThucTe: soLuongXuatCucThucTe,
+              tenCloaiVthh: v[0].tenCloaiVthh,
+              childData: v
             }
+          }
           ).value();
         let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0);
         let soLuongXuatThucTe = rs.reduce((prev, cur) => prev + cur.soLuongXuatCucThucTe, 0);

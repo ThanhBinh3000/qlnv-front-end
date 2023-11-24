@@ -69,4 +69,8 @@ export class TongHopDeNghiCapVonService extends BaseService {
     return this.httpClient.post(url, body, {responseType: 'blob'});
   }
 
+  preview(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/tong-hop-de-nghi-cap-von/xem-truoc`;
+    return this.httpClient.post(url, body).toPromise();
+  }
 }

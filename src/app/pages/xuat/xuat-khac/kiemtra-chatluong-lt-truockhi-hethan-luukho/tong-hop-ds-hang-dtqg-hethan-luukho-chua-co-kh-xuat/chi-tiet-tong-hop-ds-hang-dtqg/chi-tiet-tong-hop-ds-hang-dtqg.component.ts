@@ -222,21 +222,23 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
           loai: this.loaiHhXuatKhac.LT_6_THANG,
         }).then(async res => {
           if (res.msg == MESSAGE.SUCCESS) {
-            if (res.data.numberOfElements == 0) {
-              this.notification.warning(MESSAGE.ALERT, 'Không tìm thấy hàng hóa cần thanh lý trong danh sách.');
+            let danhSach = res.data.content.filter(i => i.idTongHop == null);
+            if (danhSach.length == 0) {
+              this.notification.warning(MESSAGE.ALERT, 'Không tìm thấy danh sách cần tổng hợp.');
             } else {
-              res.data.content.forEach(s => {
+              danhSach.forEach(s => {
                 s.idDsHdr = cloneDeep(s.id);
                 s.id = null;
               });
               this.formData.patchValue({
                 maDanhSach: this.selectedItem ?? this.maHauTo,
-                tongHopDtl: res.data.content
+                tongHopDtl: danhSach
               });
               let result = await this.createUpdate(this.formData.value);
               if (result) {
                 this.selectedItem = cloneDeep(result);
-                await this.buildTableView(result.tongHopDtl);
+                // await this.buildTableView(result.tongHopDtl);
+                await this.loadDetail(this.selectedItem.id)
                 this.step.emit({ step: 2, item: this.selectedItem });
               }
             }
@@ -307,6 +309,8 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
 
   onClickShowDetail() {
     this.showDetail = !this.showDetail;
+    console.log(this.showDetail,1)
+    console.log(this.selectedItem,2)
     this.changeShow.emit({ showDetail: this.showDetail, item: this.selectedItem })
   }
 }

@@ -34,7 +34,7 @@
         </div>
       </form>
       <div class="cangiua group-button-search">
-        <button nz-button class="search__button--clear" (click)="clearFilter()">
+        <button nz-button class="search__button--clear" (click)="clearForm()">
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
@@ -81,9 +81,9 @@
           <th class="text-left"> Số QĐ cần điều chỉnh</th>
           <th class="text-left"> Số QĐ công văn/tờ trình</th>
           <th class="text-left"> Trích yếu</th>
+          <th class="text-left" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)"> Loại hàng DTQG</th>
           <th class="text-left"> Chủng loại hàng DTQG</th>
           <th class="text-center"> Số ĐV tài sản</th>
-          <th class="text-center"> Số HĐ đã ký</th>
           <th class="text-left"> Thời hạn giao nhận</th>
           <th class="text-left"> Trạng thái</th>
           <th class="text-center"> Hành động</th>
@@ -130,6 +130,12 @@
                      (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small"/>
             </nz-input-group>
           </th>
+          <th *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
+                     (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small"/>
+            </nz-input-group>
+          </th>
           <th>
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenCloaiVthh"
@@ -144,20 +150,15 @@
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.slHdongDaKy"
-                     (input)="filterInTable('slHdongDaKy',filterTable.slHdongDaKy)" size="small"/>
+              <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="" [(ngModel)]="filterTable.thoiHanGiaoNhan"
+                              (ngModelChange)="filterInTable('thoiHanGiaoNhan', convertDateToString(filterTable.thoiHanGiaoNhan))">
+              </nz-date-picker>
             </nz-input-group>
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.thoiHanGiaoNhan"
-                     (input)="filterInTable('thoiHanGiaoNhan',filterTable.thoiHanGiaoNhan)" size="small"/>
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group>
-              <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.trangThaiTh"
-                         (ngModelChange)="filterInTable('trangThaiTh',filterTable.trangThaiTh)">
+              <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
+                         (ngModelChange)="filterInTable('trangThai',filterTable.trangThai)">
                 <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </nz-input-group>
@@ -184,9 +185,9 @@
           <td class="text-left" style="max-width: 300px; min-width: 250px;  white-space: break-spaces;">
             {{ data.trichYeu }}
           </td>
+          <td class="text-left" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">{{ data.tenLoaiVthh }}</td>
           <td class="text-left">{{ data.tenCloaiVthh }}</td>
           <td class="text-center">{{ data.slDviTsan }}</td>
-          <td class="text-center">{{ data.slHdongDaKy }}</td>
           <td class="text-left">{{ data.thoiHanGiaoNhan }}</td>
           <td class="text-left">{{ data.tenTrangThai }}</td>
           <td class="text-center">

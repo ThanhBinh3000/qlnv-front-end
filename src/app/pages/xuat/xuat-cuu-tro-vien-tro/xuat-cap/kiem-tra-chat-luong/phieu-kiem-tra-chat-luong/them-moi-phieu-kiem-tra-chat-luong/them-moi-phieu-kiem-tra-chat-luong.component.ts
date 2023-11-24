@@ -20,6 +20,7 @@ import {
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-cap/PhieuKiemTraChatLuong.service";
 import { QuyetDinhGiaoNvCuuTroService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service';
 import { BienBanTinhKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanTinhKho.service';
+import { AMOUNT_ONE_DECIMAL } from 'src/app/Utility/utils';
 // import {
 //   QuyetDinhGiaoNvCuuTroService
 // } from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-cap/QuyetDinhGiaoNvCuuTro.service";
@@ -52,6 +53,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
   templateName = "Phiếu kiểm tra chất lượng-Xuất cấp";
   type: string = 'XC';
   listBbTinhKho: any[];
+  amount1Left = { ...AMOUNT_ONE_DECIMAL, align: "left" };
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -100,6 +102,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
         lyDoTuChoi: [],
         type: [],
         soBbTinhKho: [],
+        idBbTinhKho: [],
         tenDvi: [],
         diaChiDvi: [],
         tenLoaiVthh: [],
@@ -143,7 +146,8 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
       await this.phieuKiemTraChatLuongService.getDetail(idInput)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            this.formData.patchValue({ ...res.data, tenNganLoKho: res.data.tenLoKho ? `${res.data.tenLoKho} - ${res.data.tenNganKho}` : res.data.tenNganKho });
+            const hinhThucBq = res.data.hinhThucBq ? JSON.parse(res.data.hinhThucBq) : [];
+            this.formData.patchValue({ ...res.data, hinhThucBq, tenNganLoKho: res.data.tenLoKho ? `${res.data.tenLoKho} - ${res.data.tenNganKho}` : res.data.tenNganKho });
             const data = res.data;
             this.listFileDinhKem = data.fileDinhKems;
             this.dataTableChiTieu = data.ketQuaPhanTich;
@@ -219,13 +223,13 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
   async loadDsBbTinhKho() {
     try {
       const body = {
-        trangThai: STATUS.BAN_HANH,
+        trangThai: STATUS.DA_DUYET_LDCC,
         soQdGiaoNvXh: this.formData.value.soQdGiaoNvXh,
-        types: [this.type]
+        type: this.type
       };
-      const res = await this.bienBanTinhKhoService.danhSach(body);
+      const res = await this.bienBanTinhKhoService.search(body);
       if (res.msg === MESSAGE.SUCCESS) {
-        this.listBbTinhKho = Array.isArray(res.data) ? res.data : [];
+        this.listBbTinhKho = Array.isArray(res.data?.content) ? res.data.content : [];
       }
     } catch (error) {
       console.log("e", error)
@@ -334,7 +338,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '900px',
+      nzWidth: '1200px',
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listBbTinhKho,
@@ -343,11 +347,20 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
-      this.bindingDataBbTinhKho(data, false);
+      this.spinner.show()
+      await this.bindingDataBbTinhKho(data, false);
+      this.spinner.hide();
     });
   }
-  async bindingDataBbTinhKho(data, isChiTiet) {
-    if (data) {
+  async bindingDataBbTinhKho(dataBbTinhKho, isChiTiet) {
+    if (dataBbTinhKho) {
+      let data;
+      if (dataBbTinhKho.id) {
+        const res = await this.bienBanTinhKhoService.getDetail(dataBbTinhKho.id);
+        if (res.msg === MESSAGE.SUCCESS) {
+          data = res.data
+        }
+      }
       this.formData.patchValue({
         maDiemKho: data.maDiemKho,
         tenDiemKho: data.tenDiemKho,
@@ -363,9 +376,11 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
         tenCloaiVthh: data.tenCloaiVthh,
         moTaHangHoa: data.moTaHangHoa,
         thuKho: data.tenThuKho,
-        tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho
+        tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
+        soBbTinhKho: data.soBbTinhKho,
+        idBbTinhKho: data.id
       })
-      if (!isChiTiet) {
+      if (!isChiTiet && data) {
         let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
         if (dmTieuChuan.data) {
           this.dataTableChiTieu = dmTieuChuan.data.children;
@@ -374,17 +389,18 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
           });
         }
       }
-      this.loadDanhMucPhuongThucBaoQuan(data.cloaiVthh || data.loaiVthh)
+      await this.loadDanhMucPhuongThucBaoQuan(data.cloaiVthh || data.loaiVthh)
     }
   }
   async save(isGuiDuyet?) {
     // this.setValidator(isGuiDuyet);
-    // const hinhThucBq= this.formData.value || "";
     let body = this.formData.value;
+    const hinhThucBq = this.formData.value.hinhThucBq ? JSON.stringify(this.formData.value.hinhThucBq) : "";
     body.fileDinhKems = this.listFileDinhKem;
     body.ketQuaPhanTich = this.dataTableChiTieu;
     body.type = this.radioValue;
-    let data = await this.createUpdate(body);
+    body.hinhThucBq = hinhThucBq;
+    let data = await this.createUpdate(body, null, isGuiDuyet);
     if (data) {
       if (isGuiDuyet) {
         this.idInput = data.id;

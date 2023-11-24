@@ -24,18 +24,18 @@
         <span>Lưu</span>
       </button>
 
-      <button *ngIf="isView && formData.value.trangThai == STATUS.DU_THAO" type="button" class="btn btn-sub"
-        (click)="guiDuyet()">
+      <button *ngIf="isView && isChiCuc() && formData.value.trangThai == STATUS.DU_THAO" type="button"
+        class="btn btn-sub" (click)="guiDuyet()">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Gửi duyệt</span>
       </button>
 
-      <button *ngIf="isTuChoi()" type="button" class="btn btn-sub" (click)="tuChoi()">
+      <button *ngIf="isChiCuc() && isTuChoi()" type="button" class="btn btn-sub" (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span>Từ chối</span>
       </button>
 
-      <button *ngIf="isPheDuyet()" type="button" class="btn btn-sub" (click)="pheDuyet()">
+      <button *ngIf="isChiCuc() && isPheDuyet()" type="button" class="btn btn-sub" (click)="pheDuyet()">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>

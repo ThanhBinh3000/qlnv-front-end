@@ -39,10 +39,11 @@ export class ThongBaoKetQuaComponent extends Base3Component implements OnInit {
     this.defaultURL = 'xuat/xuat-thanh-ly/thong-bao-kq'
     this.formData = this.fb.group({
       nam: null,
-      maSc: null,
-      maCc: null,
+      soThongBao: null,
+      soHoSo: null,
       ngayTu: null,
       ngayDen: null,
+      trangThai : null,
     })
     this.listTrangThai = [
       {

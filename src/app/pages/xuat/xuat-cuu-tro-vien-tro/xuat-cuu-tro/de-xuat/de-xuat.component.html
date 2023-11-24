@@ -109,8 +109,8 @@
             </th>
             <th width="60px" class="text-center">STT</th>
             <th class="text-center">Năm kế hoạch</th>
-            <th class="text-center">Loại hình nhập xuất</th>
-            <th class="text-center">Số công văn/đề xuất</th>
+            <th class="text-center">Loại hình xuất</th>
+            <th class="text-center">Số công văn/tờ trình</th>
             <th class="text-center">Đơn vị đề xuất</th>
             <th class="text-center">Ngày đề xuất</th>
             <th class="text-center">Ngày duyệt đề xuất</th>
@@ -211,7 +211,8 @@
             <td>{{ data.nam }}</td>
             <td>{{ data.loaiNhapXuat }}</td>
             <td>{{ data.soDx}}</td>
-            <td>{{ data.tenDviDx }}</td>
+            <!-- <td>{{ data.tenDviDx }}</td> -->
+            <td>{{data.maDvi.length === 6 ? data.tenDvi: data.tenDviDx}}</td>
             <td class="text-center">{{ data.ngayDx | date: globals.dateFormat }}</td>
             <td class="text-center">{{ data.ngayPduyet| date: globals.dateFormat }}</td>
             <td class="break">{{ data.tenVthh }}</td>

@@ -251,9 +251,6 @@ export class ChiTietTongHopDanhSachHangDtqgXuatKhoiDmComponent extends Base2Comp
               this.notification.warning(MESSAGE.ALERT, 'Không tìm thấy quyết định xuất hàng khỏi danh mục');
             } else {
               let listCLoaiVthh = [];
-              // this.dataTh.forEach(s => {
-              //   listCLoaiVthh.push(s.ma);
-              // });
               res.data.listDtl.forEach(item => {
                 if (item.children && item.children.length > 0) {
                   item.children.forEach(child => {

@@ -10,31 +10,35 @@
         </div>
       </div>
       <div class="btn-group">
-        <button type="button" class="btn btn-sub" (click)="goBack()">
+        <button type="button" class="btn btn-sub mr-2" (click)="goBack()">
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
-        <button class="btn btn-sm ml-2" type="button"
-                *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC  "
-                (click)="saveAndSend(formData.value,STATUS.CHO_DUYET_LDCC,'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
+        <button type="button" class="btn btn-sub mr-2" *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PXK_IN')" (click)="xemTruoc(idInput,templateName)">
+          <i class="icon htvbdh_totrinh"></i>
+          <span> In/Xem trước </span>
+        </button>
+        <button *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PXK_THEM') && this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC"
+                class="btn btn-sub xanh-nhat mr-2" (click)="saveAndSend(formData.value,STATUS.CHO_DUYET_LDCC,'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Lưu và gửi duyệt</span>
-
         </button>
-        <button type="button" class="btn btn-sub do  ml-2" *ngIf="  this.userService.isChiCuc() && isDisabled()"
-                (click)="tuChoi()">
+        <button
+          *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PXK_DUYETLDCC') && this.userService.isChiCuc() && isDisabled()"
+          type="button" class="btn btn-sub do mr-2" (click)="tuChoi()">
           <i class="icon htvbdh_tcdt_tuchoi do"></i>
           <span>Từ chối</span>
         </button>
-        <button class="btn btn-sub xanh-nhat  ml-2" *ngIf="  this.userService.isChiCuc() && isDisabled()"
-                (click)="pheDuyet()">
-          <i class="icon htvbdh_tcdt_pheduyet "></i>
+        <button
+          *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PXK_DUYETLDCC') && this.userService.isChiCuc() && isDisabled() "
+          class="btn btn-sub xanh-nhat mr-2" (click)="pheDuyet()">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Duyệt</span>
         </button>
-        <button class="btn btn-main btn-sm waves-effect waves-light ml-2"
-                *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC "
-                (click)="save()">
-          <i class="icon  htvbdh_tcdt_save"></i>
+        <button
+          *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PXK_THEM') && this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC "
+          type="button" class="btn btn-main" (click)="save()">
+          <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
       </div>
@@ -176,8 +180,8 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Ngăn/Lô kho</nz-form-label>
-            <nz-form-control>
+            <nz-form-label [nzNoColon]="true" nzRequired> Ngăn/Lô kho</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="maDiaDiem" [nzDisabled]="isView"
                          (ngModelChange)="changeValueNganLoKho($event)">
                 <nz-option *ngFor="let p of listNganLoKho" [nzValue]="p.maDiaDiem"
@@ -200,7 +204,7 @@
             <nz-form-label [nzNoColon]="true" nzRequired> Nhà kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input [readonly]="isView" nz-input formControlName="tenNhaKho" readonly/>
+                <input [readonly]="true" nz-input formControlName="tenNhaKho" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -210,7 +214,7 @@
             <nz-form-label [nzNoColon]="true" nzRequired> Điểm kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input [readonly]="isView" nz-input formControlName="tenDiemKho" readonly/>
+                <input [readonly]="true" nz-input formControlName="tenDiemKho" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>

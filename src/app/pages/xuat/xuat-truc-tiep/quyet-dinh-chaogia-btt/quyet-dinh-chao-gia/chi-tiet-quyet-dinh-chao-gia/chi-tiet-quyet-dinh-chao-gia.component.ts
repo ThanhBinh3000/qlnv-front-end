@@ -5,10 +5,6 @@ import {StorageService} from "../../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import {
-  QuyetDinhPdKhBanTrucTiepService
-} from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service";
 import {
   QdPdKetQuaBttService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service";
@@ -42,8 +38,7 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   maHauTo: any;
   listOfData: any[] = [];
-  showFromTT: boolean;
-  selected: boolean = false;
+  showFromTT: boolean = false;
   luaChon: boolean = false;
   loadQuyetDinhKetQua: any[] = [];
   dataThongTinChaoGia: any[] = [];
@@ -54,13 +49,10 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private danhMucService: DanhMucService,
-    private quyetDinhPdKhBanTrucTiepService: QuyetDinhPdKhBanTrucTiepService,
     private qdPdKetQuaBttService: QdPdKetQuaBttService,
     private chaoGiaMuaLeUyQuyenService: ChaoGiaMuaLeUyQuyenService
   ) {
     super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBttService);
-
     this.formData = this.fb.group({
       id: [],
       namKh: [],
@@ -110,7 +102,7 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
       } else {
         await this.initForm();
       }
-      await this.onExpandChange(0, true);
+      this.onExpandChange(0, true);
     } catch (e) {
       console.error('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -127,46 +119,52 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
     });
   }
 
-  async showFirstRow($event, dataToChuc: any) {
-    await this.selectRow($event, dataToChuc);
-  }
-
   async getDetail(idInput) {
-    if (!idInput) return;
-    const res = await this.detail(idInput);
-    if (!res) return;
-    const {soQdKq, children} = res;
-    this.formData.patchValue({
-      soQdKq: soQdKq?.split('/')[0] || null,
-    });
-    this.dataTable = children;
-    if (this.dataTable?.length > 0) {
-      this.showFirstRow(event, this.dataTable[0].children);
+    if (!idInput) {
+      return;
     }
+    const data = await this.detail(idInput);
+    this.formData.patchValue({
+      soQdKq: data.soQdKq?.split('/')[0] || null,
+    });
+    this.dataTable = data.children;
+    await this.selectRow(this.dataTable.flatMap(item => item.children)[0]);
   }
 
   async save() {
-    await this.helperService.ignoreRequiredForm(this.formData);
-    this.formData.controls["soQdKq"].setValidators([Validators.required]);
-    const soQdKq = this.formData.value.soQdKq;
-    const body = {
-      ...this.formData.value,
-      soQdKq: soQdKq ? `${soQdKq}${this.maHauTo}` : null,
-      children: this.dataTable,
-    };
-    await this.createUpdate(body);
-    await this.helperService.restoreRequiredForm(this.formData);
+    try {
+      await this.helperService.ignoreRequiredForm(this.formData);
+      this.formData.controls["soQdPd"].setValidators([Validators.required]);
+      const soQdKq = this.formData.value.soQdKq;
+      const body = {
+        ...this.formData.value,
+        soQdKq: soQdKq ? `${soQdKq}${this.maHauTo}` : null,
+        children: this.dataTable,
+      };
+      await this.createUpdate(body);
+      await this.helperService.restoreRequiredForm(this.formData);
+    } catch (e) {
+      console.error('Error: ', e);
+    } finally {
+      await this.helperService.restoreRequiredForm(this.formData);
+    }
   }
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
-    this.setValidForm();
-    const soQdKq = this.formData.value.soQdKq;
-    const body = {
-      ...this.formData.value,
-      soQdKq: soQdKq ? `${soQdKq}${this.maHauTo}` : null,
-      children: this.dataTable,
-    };
-    await super.saveAndSend(body, trangThai, msg, msgSuccess);
+    try {
+      this.setValidForm();
+      const soQdKq = this.formData.value.soQdKq;
+      const body = {
+        ...this.formData.value,
+        soQdKq: soQdKq ? `${soQdKq}${this.maHauTo}` : null,
+        children: this.dataTable,
+      };
+      await super.saveAndSend(body, trangThai, msg, msgSuccess);
+    } catch (e) {
+      console.error('Error: ', e);
+    } finally {
+      await this.helperService.restoreRequiredForm(this.formData);
+    }
   }
 
   async openThongtinChaoGia() {
@@ -181,17 +179,12 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
       await this.loadQdNvXuatHang();
       const res = await this.chaoGiaMuaLeUyQuyenService.search(body);
       if (res && res.msg === MESSAGE.SUCCESS) {
-        const data = res.data.content;
         const set = new Set(this.loadQuyetDinhKetQua.map(item => item.idChaoGia));
-        this.dataThongTinChaoGia = data.filter(item => !set.has(item.id));
+        this.dataThongTinChaoGia = res.data.content.filter(item => !set.has(item.id));
         this.dataThongTinChaoGia = this.dataThongTinChaoGia.map(item => {
-          item.soQd = item.soQdDc !== null ? item.soQdDc : item.soQdPd;
+          item.soQd = item.soQdDc ? item.soQdDc : item.soQdPd;
           return item;
         });
-      } else if (res && res.msg) {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      } else {
-        this.notification.error(MESSAGE.ERROR, 'Unknown error occurred.');
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH THÔNG TIN CHÀO GIÁ',
@@ -211,11 +204,10 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
           await this.onChangeTtin(data.id);
         }
       });
-    } catch (error) {
-      console.error('Error during openThongtinChaoGia:', error);
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } catch (e) {
+      console.error('Error: ', e);
     } finally {
-      this.spinner.hide();
+      await this.spinner.hide();
     }
   }
 
@@ -248,9 +240,9 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
       }
       const data = res.data;
       this.formData.patchValue({
-        idQdPd: data.xhQdDchinhKhBttHdr ? data.xhQdDchinhKhBttHdr.idQdPd : data.idHdr,
+        idQdPd: data.xhQdPdKhBttHdr.type === 'QDDC' ? data.xhQdPdKhBttHdr.idQdPd : data.idHdr,
         soQdPd: data.soQdPd,
-        idQdDc: data.xhQdDchinhKhBttHdr ? data.idHdr : null,
+        idQdDc: data.xhQdPdKhBttHdr.type === 'QDDC' ? data.idHdr : null,
         soQdDc: data.soQdDc,
         idChaoGia: data.id,
         tenDvi: data.tenDvi,
@@ -268,30 +260,13 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
         kieuNx: data.kieuNx,
         tenKieuNx: data.tenKieuNx,
         tongSoLuong: data.tongSoLuong,
+        tongGiaTriHdong: data.thanhTienDuocDuyet,
       });
       this.dataTable = data.children;
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.showFirstRow(event, this.dataTable[0].children);
-      }
-      if (this.dataTable) {
-        let tongGiaTriHdong: number = 0;
-        this.dataTable.forEach((item) => {
-          item.id = null;
-          item.children.forEach((child) => {
-            child.id = null;
-            tongGiaTriHdong += child.thanhTienDuocDuyet;
-            child.children.forEach((s) => {
-              s.id = null;
-              if (s.fileDinhKems) {
-                s.fileDinhKems.id = null;
-              }
-            });
-          });
-        });
-        this.formData.patchValue({
-          tongGiaTriHdong: tongGiaTriHdong,
-        });
-      }
+      this.dataTable.forEach((item) => {
+        item.isKetQua = true
+      })
+      await this.selectRow(this.dataTable.flatMap(item => item.children)[0]);
     } catch (e) {
       console.error('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -325,25 +300,15 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
       });
   }
 
-  async selectRow($event, dataChildren) {
-    const isClickEvent = $event.type === 'click';
-    this.selected = !isClickEvent;
-    const selectedRow = isClickEvent
-      ? $event.target.parentElement.parentElement?.querySelector('.selectedRow')
-      : null;
-    if (selectedRow) {
-      selectedRow.classList.remove('selectedRow');
+  async selectRow(data: any) {
+    this.dataTableAll = this.dataTable.flatMap(item => item.children);
+    if (!data.selected) {
+      this.dataTableAll.forEach(item => item.selected = false);
+      data.selected = true;
+      const findndex = this.dataTableAll.findIndex(child => child.id == data.id);
+      this.listOfData = this.dataTableAll[findndex].children;
+      this.showFromTT = true;
     }
-    if ($event.target.parentElement) {
-      $event.target.parentElement.classList.add('selectedRow');
-    }
-    const selectedItem = isClickEvent ? dataChildren : dataChildren[0];
-    this.listOfData = selectedItem.children;
-    this.showFromTT = true;
-  }
-
-  isDisabledQD() {
-    return this.formData.value.id !== null;
   }
 
   isDisabledLuaChon(item) {
@@ -385,20 +350,10 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
 
   setValidForm() {
     const fieldsToValidate = [
-      "namKh",
-      "tenDvi",
       "soQdKq",
-      "ngayKy",
-      "ngayHluc",
-      "loaiHinhNx",
-      "trichYeu",
-      "diaDiemChaoGia",
+      "soQdPd",
       "ngayMkho",
       "ngayKthuc",
-      "loaiVthh",
-      "tenLoaiVthh",
-      "cloaiVthh",
-      "tenCloaiVthh",
     ];
     fieldsToValidate.forEach(field => {
       this.formData.controls[field].setValidators([Validators.required]);

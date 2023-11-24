@@ -108,8 +108,8 @@
               <th width="">Số BB LM/BGM</th>
               <th width="">Ngày lấy mẫu</th>
             </ng-container>
-            <th width="">Số BB tịnh kho</th>
-            <th width="">Ngày xuất dốc kho</th>
+            <!-- <th width="">Số BB tịnh kho</th>
+            <th width="">Ngày xuất dốc kho</th> -->
             <th width="">Trạng thái</th>
             <th width="90px">Hành động</th>
           </tr>
@@ -133,8 +133,8 @@
                 <td></td>
                 <td></td>
               </ng-container>
-              <td></td>
-              <td></td>
+              <!-- <td></td>
+              <td></td> -->
               <td></td>
               <td>
                 <a (click)="redirectDetail(0, false,item)" *ngIf="checkRoleAdd()">
@@ -158,8 +158,8 @@
                     <td>{{lv1.soBbLayMau}}</td>
                     <td>{{lv1.ngayBbLayMau}}</td>
                   </ng-container>
-                  <td></td>
-                  <td></td>
+                  <!-- <td></td>
+                  <td></td> -->
                   <td>{{lv1.tenTrangThai}}</td>
                   <td>
                     <a *ngIf="checkRoleView(lv1.trangThai)" (click)="redirectDetail(lv1.id, true)">

@@ -36,14 +36,14 @@ export class HoSoThanhLyComponent extends Base3Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, route, router, _service);
     this.defaultURL = 'xuat/xuat-thanh-ly/trinh-tham-dinh'
     this.formData = this.fb.group({
-      soTtr: null,
-      soQdScSr: null,
+      nam : null,
+      soHoSo: null,
+      soQd: null,
+      trangThai: null,
       ngayTuCuc: null,
       ngayDenCuc: null,
       ngayTuTc: null,
       ngayDenTc: null,
-      ngayDen: null,
-      trangThai: null,
     });
     this.listTrangThai = [
       {

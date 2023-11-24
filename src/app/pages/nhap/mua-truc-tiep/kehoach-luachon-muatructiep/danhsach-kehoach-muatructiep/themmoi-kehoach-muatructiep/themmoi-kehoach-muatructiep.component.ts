@@ -102,7 +102,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
       ptMua: ['', [Validators.required]],
       tchuanCluong: [null, [Validators.required]],
       giaMua: [null, [Validators.required]],
-      thueGtgt: [5],
+      thueGtgt: [null],
       tgianMkho: [, [Validators.required]],
       tgianKthuc: [, [Validators.required]],
       ghiChu: [null],
@@ -198,7 +198,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
 
   selectHangHoa() {
     const modalTuChoi = this.modal.create({
-      nzTitle: 'Danh sách hàng hóa',
+      nzTitle: 'Danh sách hàng DTQG',
       nzContent: DialogDanhSachHangHoaComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -267,7 +267,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
   themMoiBangPhanLoTaiSan($event, data ?: DanhSachPhanLo, index ?: number) {
     $event.stopPropagation();
     if (!this.formData.get('loaiVthh').value) {
-      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa');
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng DTQG');
       return;
     }
     const modalGT = this.modal.create({
@@ -453,21 +453,23 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
   }
 
   async getDataChiTieu() {
-    let res2 =
-      await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
-        +this.formData.get('namKh').value,
-      );
-    if (res2.msg == MESSAGE.SUCCESS) {
-      this.dataChiTieu = res2.data;
-      this.formData.patchValue({
-        soQdCc: res2.data.soQuyetDinh,
-        idSoQdCc: res2.data.id
-      });
-    } else {
-      this.formData.patchValue({
-        soQdCc: null
-      });
-    }
+      let res2 =
+        await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
+          +this.formData.get('namKh').value,
+        );
+      if (res2.msg == MESSAGE.SUCCESS) {
+        this.dataChiTieu = res2.data;
+        if(this.userService.isCuc()){
+          this.formData.patchValue({
+            soQdCc: res2.data.soQuyetDinh,
+            idSoQdCc: res2.data.id
+          });
+        }
+      } else {
+        this.formData.patchValue({
+          soQdCc: null
+        });
+      }
   }
 
   quayLai() {

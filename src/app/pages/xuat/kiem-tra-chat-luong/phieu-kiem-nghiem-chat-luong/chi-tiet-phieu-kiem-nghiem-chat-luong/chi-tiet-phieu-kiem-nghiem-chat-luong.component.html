@@ -296,7 +296,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired> Người kiểm nghiệm (Cán bộ lập phiếu)</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input nz-input formControlName="dviKiemNghiem" [readonly]="true" />
+                  <input nz-input formControlName="ktvBaoQuan" [readonly]="true" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -304,16 +304,16 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired> Trưởng phòng KTBQ</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input nz-input formControlName="ktvBaoQuan" readonly />
+                  <input nz-input formControlName="truongPhong" readonly />
                 </nz-form-control>
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="4">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Lãnh đạo chi cục</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Lãnh đạo cục</nz-form-label>
                 <nz-form-control>
                   <nz-input-group>
-                    <input nz-input formControlName="lanhDaoChiCuc" readonly />
+                    <input nz-input formControlName="lanhDaoCuc" readonly />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>

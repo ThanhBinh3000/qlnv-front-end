@@ -27,7 +27,8 @@ export class BangKeComponent extends Base3Component implements OnInit {
     private bangKeXuatScService: BangKeXuatScService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, bangKeXuatScService);
-    this.defaultURL = 'sua-chua/xuat-hang/bang-ke'
+    this.defaultURL = 'sua-chua/xuat-hang/bang-ke';
+    this.defaultPermisson = 'SCHDTQG_XH_BKXVT'
     this.formData = this.fb.group({
       nam: null,
       soQdXh: null,

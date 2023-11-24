@@ -200,7 +200,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Loại hình xuất</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
               <input nz-input [readonly]="true" formControlName="loaiNhapXuat" />
             </nz-form-control>
@@ -645,7 +645,7 @@
 </div>
 
 <!--popup them sua-->
-<nz-modal [nzWidth]="'70%'" [(nzVisible)]="modalChiTiet" [nzFooter]="modalFooter" [nzClosable]="false"
+<nz-modal [nzWidth]="'90%'" [(nzVisible)]="modalChiTiet" [nzFooter]="modalFooter" [nzClosable]="false"
   nzTitle="CHI TIẾT PHƯƠNG ÁN CỨU TRỢ, VIỆN TRỢ">
   <ng-container *nzModalContent>
     <form nz-form [formGroup]="formDataDtl">

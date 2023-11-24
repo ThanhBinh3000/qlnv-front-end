@@ -6,12 +6,12 @@
     </button>
     <ng-container>
       <button class="btn btn-main btn-sm waves-effect waves-light"
-              *ngIf="formData.value.pthucBanTrucTiep === TRUC_TIEP.BAN_LE">
+              *ngIf="formData.value.pthucBanTrucTiep === TRUC_TIEP.UY_QUYEN">
         <i class=" icon htvbdh_dau-cong"></i>
         <span>Thêm Hợp đồng</span>
       </button>
       <button class="btn btn-main btn-sm waves-effect waves-light" (click)="themMoiBangKeBanLe($event)"
-              *ngIf="formData.value.pthucBanTrucTiep === TRUC_TIEP.UY_QUYEN">
+              *ngIf="formData.value.pthucBanTrucTiep === TRUC_TIEP.BAN_LE">
         <i class=" icon htvbdh_dau-cong"></i>
         <span>Thêm bảng kê</span>
       </button>
@@ -35,34 +35,23 @@
         <div nz-col [nzSpan]="3">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Năm kế hoạch</nz-form-label>
-            <nz-form-control nz-col [nzErrorTip]="error">
+            <nz-form-control nz-col>
               <nz-select formControlName="namKh" nzDisabled>
-                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                <nz-option *ngFor="let item of listNam" [nzValue]="item.value" [nzLabel]="item.text"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="5" *ngIf="!this.formData.value.soQdDc">
+        <div nz-col [nzSpan]="5">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định/điều chỉnh</nz-form-label>
-            <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfter="{{maHauTo}}">
-                <nz-input-number formControlName="soQdPd" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
-                                 [nzSize]="'small'" nzDisabled>
-                </nz-input-number>
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="5" *ngIf="this.formData.value.soQdDc">
-          <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định/điều chỉnh</nz-form-label>
-            <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfter="{{maHauTo}}">
-                <nz-input-number formControlName="soQdDc" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
-                                 [nzSize]="'small'" nzDisabled>
-                </nz-input-number>
-              </nz-input-group>
+            <nz-form-control nz-col>
+                <span *ngIf="!this.formData.value.soQdDc">
+                      <input nz-input formControlName="soQdPd" readonly/>
+                </span>
+              <span *ngIf="this.formData.value.soQdDc">
+                      <input nz-input formControlName="soQdDc" readonly/>
+                </span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -70,7 +59,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Ngày ký</nz-form-label>
             <nz-form-control nz-col>
-              <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayKyQd" nzDisabled>
+              <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayKy" nzDisabled>
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -87,7 +76,7 @@
         <div nz-col [nzSpan]="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
+            <nz-form-control nz-col>
               <nz-input-group nzAddOnAfterIcon="folder-open">
                 <input [readonly]="true" nz-input formControlName="tenLoaiVthh" readonly/>
               </nz-input-group>
@@ -98,23 +87,22 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Phương thức bán trực tiếp</nz-form-label>
             <nz-form-control nz-col>
-              <input nz-input formControlName="pthucBanTrucTiep" readonly/>
+              <input nz-input formControlName="pthucBanTrucTiepHt" readonly/>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Trích yếu</nz-form-label>
-            <nz-form-control>
+            <nz-form-label nzRequired [nzNoColon]="true"> Trích yếu</nz-form-label>
+            <nz-form-control nz-col>
               <input nz-input formControlName="trichYeu" readonly/>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="8">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Thời gian đề xuất bán trực tiếp
-            </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
+            <nz-form-label [nzNoColon]="true"> Thời gian đề xuất bán trực tiếp</nz-form-label>
+            <nz-form-control nz-col>
               <nz-range-picker formControlName="thoiGianDeXuatBtt" nzFormat="dd/MM/yyyy" nzDisabled>
               </nz-range-picker>
             </nz-form-control>
@@ -122,9 +110,8 @@
         </div>
         <div nz-col [nzSpan]="8">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Thời gian phê duyệt bán trực tiếp
-            </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
+            <nz-form-label [nzNoColon]="true"> Thời gian phê duyệt bán trực tiếp</nz-form-label>
+            <nz-form-control nz-col>
               <nz-range-picker formControlName="thoiGianPdBtt" nzFormat="dd/MM/yyyy" nzDisabled>
               </nz-range-picker>
             </nz-form-control>
@@ -132,8 +119,8 @@
         </div>
         <div nz-col [nzSpan]="8">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá thị trường</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
+            <nz-form-label [nzNoColon]="true"> Đơn giá thị trường (đồng)</nz-form-label>
+            <nz-form-control nz-col>
               <nz-range-picker formControlName="donGiaThiTruong" nzFormat="dd/MM/yyyy" nzDisabled>
               </nz-range-picker>
             </nz-form-control>
@@ -193,7 +180,7 @@
           <td class="text-left"> {{data.donViTinh}}</td>
           <td class="text-right"> {{data.tonKho|number:globals.numberFormat:globals.locale}}</td>
           <td class="text-right"> {{data.soLuongDeXuat|number:globals.numberFormat:globals.locale}}</td>
-          <td class="text-right"> {{data.donGiaDeXuat|number:globals.numberFormat:globals.locale}}</td>
+          <td class="text-right"> {{data.donGiaDuocDuyet|number:globals.numberFormat:globals.locale}}</td>
         </tr>
       </ng-container>
       </tbody>
@@ -215,6 +202,3 @@
     </nz-table>
   </nz-card>
 </div>
-<ng-template #error let-control>
-  <app-template-error #error [control]="control"></app-template-error>
-</ng-template>

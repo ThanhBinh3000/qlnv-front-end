@@ -122,6 +122,7 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
         await this.getPag(this.dataInput);
         this.dataTable = this.dataInput.children
         this.calculatorTable();
+        this.sumTongMucDt();
       } else {
         this.formData.reset();
       }
@@ -130,14 +131,6 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
     await this.spinner.hide()
   }
 
-  updateDonGiaVat() {
-    let dt = this.formData.value;
-    dt.donGiaVat = (dt.donGia + (dt.donGia * dt.thueGtgt / 100));
-    this.formData.patchValue({
-      donGiaVat: dt.donGiaVat,
-      tongMucDt: dt.donGiaVat * dt.tongSoLuong * 1000,
-    })
-  }
 
   convertListData() {
     this.listDataGroup = chain(this.listOfData).groupBy('tenDvi').map((value, key) => ({ tenDvi: key, dataChild: value }))
@@ -161,25 +154,6 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
   }
 
 
-  calcTong() {
-    let dt = this.formData.value.hhDcQdPduyetKhmttSlddList
-    let tong = 0;
-    dt.forEach(e => {
-      const sum = e.children.reduce((prev, cur) => {
-        prev += cur.soLuong;
-        return prev;
-      }, 0);
-      tong += sum;
-      this.dataChild.emit(this.formData.value.hhDcQdPduyetKhmttSlddList)
-      this.formData.patchValue({
-        tongSoLuong: tong,
-        tongMucDt: tong * this.formData.value.donGiaVat * 1000
-      })
-      this.data.emit(this.formData.value)
-
-    });
-    return tong;
-  }
 
   OnChangesAll() {
     this.data.emit(this.formData.value)
@@ -229,7 +203,7 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
 
   themMoiBangPhanLoTaiSan(data?: any, index?: number) {
     const modalGT = this.modal.create({
-      nzTitle: 'Thêm địa điểm nhập kho',
+      nzTitle: 'THÊM ĐỊA ĐIỂM NHẬP KHO',
       nzContent: DialogThemMoiKeHoachMuaTrucTiepComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -259,31 +233,28 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
         this.dataTable.push(data);
       }
       this.calculatorTable();
+      this.sumTongMucDt();
     });
   }
 
   calculatorTable() {
-    let tongMucDt: number = 0;
-    let tongSoLuong: number = 0;
-    this.dataTable.forEach((item) => {
-      if(item.children.length > 0){
-        let soLuongChiCuc = 0;
-        item.children.forEach(child => {
-          soLuongChiCuc += child.soLuong;
-          tongSoLuong += child.soLuong;
-          tongMucDt += child.soLuong * child.donGia * 1000
-        })
-        item.soLuong = soLuongChiCuc;
-      }else{
-        tongSoLuong += item.tongSoLuong;
-        tongMucDt += item.tongSoLuong * item.donGiaVat * 1000;
-      }
-    });
-    console.log("1")
+    let sum = 0;
+    this.dataTable.forEach(item =>{
+      sum += Number.parseInt(item.tongSoLuong)
+    })
     this.formData.patchValue({
-      tongSoLuong: tongSoLuong,
-      tongMucDt: tongMucDt,
-    });
+      tongSoLuong: sum
+    })
+  }
+
+  sumTongMucDt(){
+    let sum = 0;
+    this.dataInput.children.forEach(item =>{
+      sum += item.donGiaVat * item.tongSoLuong * 1000
+    })
+    this.formData.patchValue({
+      tongMucDt: sum
+    })
   }
 
   isDisable() {

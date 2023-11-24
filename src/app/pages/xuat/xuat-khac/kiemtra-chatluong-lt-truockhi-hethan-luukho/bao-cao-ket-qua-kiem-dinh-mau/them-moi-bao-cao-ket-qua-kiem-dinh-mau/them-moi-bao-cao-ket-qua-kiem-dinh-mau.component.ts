@@ -30,6 +30,7 @@ import {saveAs} from 'file-saver';
 export class ThemMoiBaoCaoKetQuaKiemDinhMauComponent extends Base2Component implements OnInit {
   @Input() isView: boolean;
   @Input() idInput: number;
+  @Input() idTongHop: number;
   @Input() loaiVthh: string;
 
   expandSetString = new Set<string>();
@@ -136,7 +137,7 @@ export class ThemMoiBaoCaoKetQuaKiemDinhMauComponent extends Base2Component impl
     }).then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
-        if (data && data.content && data.content.length > 0 && this.formData.value.maDanhSach == null) {
+        if (data && data.content && data.content.length > 0 && this.idTongHop == null) {
           this.listMaDs = data.content.filter(item => item.soBaoCao == null);
         } else {
           this.listMaDs = data.content
@@ -166,6 +167,46 @@ export class ThemMoiBaoCaoKetQuaKiemDinhMauComponent extends Base2Component impl
   quayLai() {
     this.showListEvent.emit();
   }
+  pheDuyet() {
+    let trangThai = '';
+    let msg = '';
+    switch (this.formData.get('trangThai').value) {
+      case STATUS.TU_CHOI_TP:
+      case STATUS.TU_CHOI_LDC:
+      case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_TP;
+        msg = 'Bạn có muối gửi duyệt ?'
+        break;
+      }
+      case STATUS.CHO_DUYET_TP: {
+        trangThai = STATUS.CHO_DUYET_LDC;
+        msg = 'Bạn có chắc chắn muốn phê duyệt ?'
+        break;
+      }
+      case STATUS.CHO_DUYET_LDC: {
+        trangThai = STATUS.DA_DUYET_LDC;
+        msg = 'Bạn có chắc chắn muốn phê duyệt ?'
+        break;
+      }
+    }
+    this.approve(this.idInput, trangThai, msg);
+  }
+
+  tuChoi() {
+    let trangThai = '';
+    switch (this.formData.value.trangThai) {
+      case STATUS.CHO_DUYET_LDC: {
+        trangThai = STATUS.TU_CHOI_LDC;
+        break;
+      }
+      case STATUS.CHO_DUYET_TP: {
+        trangThai = STATUS.TU_CHOI_TP;
+        break;
+      }
+    }
+    this.reject(this.idInput, trangThai)
+  }
+
 
   async changeMaDs($event: any) {
     try {

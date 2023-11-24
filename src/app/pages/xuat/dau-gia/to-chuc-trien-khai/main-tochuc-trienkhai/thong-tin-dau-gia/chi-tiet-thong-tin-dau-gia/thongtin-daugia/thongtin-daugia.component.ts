@@ -19,7 +19,7 @@ import {STATUS} from 'src/app/constants/status';
 import {FileDinhKem} from "../../../../../../../../models/DeXuatKeHoachuaChonNhaThau";
 import {Validators} from "@angular/forms";
 import _ from 'lodash';
-import {CurrencyMaskInputMode} from "ngx-currency";
+import {AMOUNT_ONE_DECIMAL} from "../../../../../../../../Utility/utils";
 
 @Component({
   selector: 'app-thongtin-daugia',
@@ -31,6 +31,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
   @Input() dataDetail
   @Input() dataThongTin
   @Input() idInput
+  amount = {...AMOUNT_ONE_DECIMAL};
   soLanDauGia: number;
   rowItemKhach: any = {};
   rowItemDgv: any = {};
@@ -40,19 +41,6 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
   listHinhThucBDG: any[] = [];
   listPhuongThucBDG: any[] = [];
   listHinhThucLucChonToChucBDG: any[] = [];
-  amount = {
-    allowZero: true,
-    allowNegative: false,
-    precision: 2,
-    prefix: '',
-    thousands: '.',
-    decimal: ',',
-    align: "right",
-    nullable: true,
-    min: 0,
-    max: 1000000000000,
-    inputMode: CurrencyMaskInputMode.NATURAL,
-  }
 
   constructor(
     httpClient: HttpClient,
@@ -90,8 +78,8 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       ghiChuTgianDky: [''],
       diaDiemDky: [''],
       dieuKienDky: [''],
-      tienMuaHoSo: [''],
-      buocGia: [''],
+      tienMuaHoSo: [],
+      buocGia: [],
       ghiChuBuocGia: [''],
       tgianXem: [''],
       tgianXemTu: [''],
@@ -145,6 +133,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
         await this.getDetail(this.idInput);
       }
       await this.loadDataComboBox();
+      this.amount.align = "left";
     } catch (error) {
       console.log('error: ', error);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -198,8 +187,8 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     await this.spinner.show();
     try {
       const res = await this.quyetDinhPdKhBdgService.getDtlDetail(id);
-      if (res.msg !== MESSAGE.SUCCESS) {
-        throw new Error('Không tìm thấy dữ liệu');
+      if (res.msg !== MESSAGE.SUCCESS || !res.data) {
+        return;
       }
       const data = res.data;
       this.formData.patchValue({
@@ -210,8 +199,10 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       });
       if (data.listTtinDg && data.listTtinDg.length > 0) {
         const tTinDthauLastest = data.listTtinDg.pop();
-        const tTinDthau = await this.thongTinDauGiaService.getDetail(tTinDthauLastest.id);
-        this.dataTable = tTinDthau.data?.children;
+        const tTinDthau = tTinDthauLastest.id > 0 ? await this.thongTinDauGiaService.getDetail(tTinDthauLastest.id) : null;
+        if (tTinDthau && tTinDthau.data && tTinDthau.data.children) {
+          this.dataTable = tTinDthau.data.children;
+        }
       } else {
         this.dataTable = data.children;
       }
@@ -253,7 +244,6 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       }
       const res = await this.thongTinDauGiaService.getDetail(id);
       if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-        console.log('Không tìm thấy dữ liệu.');
         return;
       }
       const data = res.data;
@@ -267,10 +257,10 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       });
       this.dataTable = data.children;
       this.dataNguoiTgia = data.listNguoiTgia;
-      this.dataNguoiShow = chain(this.dataNguoiTgia)
-        .groupBy('loai')
-        .map((value, key) => ({loai: key, dataChild: value}))
-        .value();
+      this.dataNguoiShow = chain(this.dataNguoiTgia).groupBy('loai').map((value, key) => ({
+        loai: key,
+        dataChild: value
+      })).value();
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -287,39 +277,37 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     this.modal.closeAll();
   }
 
-  async handleOk() {
+  async save() {
     try {
       await this.helperService.ignoreRequiredForm(this.formData);
+      this.formData.controls["maThongBao"].setValidators([Validators.required]);
       const body = this.prepareFormData();
       await this.createUpdate(body);
+    } catch (e) {
+      console.error('Error: ', e);
+    } finally {
       await this.helperService.restoreRequiredForm(this.formData);
-    } catch (error) {
-      console.error('Đã xảy ra lỗi:', error);
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
   async saveAndSend() {
-    this.setValidForm();
-    if (this.formData.value.ketQua == 1 && this.dataNguoiShow.length != 3) {
-      this.notification.error(MESSAGE.ERROR, "Vui lòng thêm các thành phần tham dự đấu giá");
-      return;
-    }
-    const confirmed = await this.showConfirmationDialog();
-    if (!confirmed) {
-      return;
-    }
     try {
-      await this.spinner.show();
+      this.setValidForm();
+      if (this.formData.value.ketQua == 1 && this.dataNguoiShow.length != 3) {
+        this.notification.error(MESSAGE.ERROR, "Vui lòng thêm các thành phần tham dự đấu giá");
+        return;
+      }
+      const confirmed = await this.showConfirmationDialog();
+      if (!confirmed) {
+        return;
+      }
       this.helperService.markFormGroupTouched(this.formData);
       if (this.formData.invalid) {
         return;
       }
       const body = this.prepareFormData();
       const isUpdate = body.id && body.id > 0;
-      const result = isUpdate
-        ? await this.thongTinDauGiaService.update(body)
-        : await this.thongTinDauGiaService.create(body);
+      const result = isUpdate ? await this.thongTinDauGiaService.update(body) : await this.thongTinDauGiaService.create(body);
       if (result && result.msg == MESSAGE.SUCCESS) {
         const approvalResult = await this.thongTinDauGiaService.approve({
           id: result.data.id,
@@ -335,10 +323,9 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
         this.notification.error(MESSAGE.ERROR, result ? result.msg : MESSAGE.SYSTEM_ERROR);
       }
     } catch (e) {
-      console.log('error: ', e);
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      console.error('Error: ', e);
     } finally {
-      await this.spinner.hide();
+      await this.helperService.restoreRequiredForm(this.formData);
     }
   }
 
@@ -363,9 +350,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     const dateFields = ['tgianDky', 'tgianXem', 'tgianNopTien', 'tgianDauGia'];
     dateFields.forEach((field) => {
       if (this.formData.get(field).value) {
-        const [startDate, endDate] = this.formData.get(field).value.map((date) =>
-          dayjs(date).format('YYYY-MM-DD')
-        );
+        const [startDate, endDate] = this.formData.get(field).value.map((date) => dayjs(date).format('YYYY-MM-DD'));
         formData[`${field}Tu`] = startDate;
         formData[`${field}Den`] = endDate;
       }
@@ -383,28 +368,28 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     let totalItems = 0;
     let totalMatching = 0;
     let totalNotMatching = 0;
+    let uniqueMaDviTsan = new Set();
     this.dataTable.forEach((item) => {
       item.children.forEach((child) => {
-        if (this.formData.value.ketQua == 1) {
-          if (child.soLanTraGia > 0 && child.toChucCaNhan != null) {
-            totalMatching++;
+        if (!uniqueMaDviTsan.has(child.maDviTsan)) {
+          uniqueMaDviTsan.add(child.maDviTsan);
+          if (this.formData.value.ketQua == 1) {
+            if (child.soLanTraGia > 0 && child.toChucCaNhan != null) {
+              totalMatching++;
+            }
           }
-        } else {
-          child.toChucCaNhan = null;
-          child.soLanTraGia = null;
-          if (child.soLanTraGia == null && child.toChucCaNhan == null) {
-            totalNotMatching++;
+          if (this.formData.value.ketQua == 0) {
+            if (child.soLanTraGia == null && child.toChucCaNhan == null) {
+              totalNotMatching = 0;
+            }
           }
+          totalItems++;
         }
-        totalItems++;
       });
     });
     const ketQua = this.formData.value.ketQua == 1 ? 1 : 0;
-    const ketQuaSl =
-      this.formData.value.ketQua == 1
-        ? `${totalMatching}/${totalItems}`
-        : `${totalNotMatching}/${totalItems}`;
-    const soDviTsan = this.formData.value.ketQua == 1 ? totalMatching : totalNotMatching;
+    const ketQuaSl = this.formData.value.ketQua == 1 ? `${totalMatching}/${totalItems}` : `${totalNotMatching}/${totalItems}`;
+    const soDviTsan = totalItems;
     return {ketQua, ketQuaSl, soDviTsan};
   }
 
@@ -413,9 +398,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       const data = {...item, loai: name, idVirtual: new Date().getTime()};
       this.dataNguoiTgia.push(data);
       this.dataNguoiShow = _.chain(this.dataNguoiTgia)
-        .groupBy('loai')
-        .map((value, key) => ({loai: key, dataChild: value}))
-        .value();
+        .groupBy('loai').map((value, key) => ({loai: key, dataChild: value})).value();
       const resetItems = {
         KM: 'rowItemKhach',
         DGV: 'rowItemDgv',
@@ -481,9 +464,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
         try {
           this.dataNguoiTgia = this.dataNguoiTgia.filter(item => item.idVirtual != idVirtual);
           this.dataNguoiShow = _.chain(this.dataNguoiTgia)
-            .groupBy('loai')
-            .map((value, key) => ({loai: key, dataChild: value}))
-            .value();
+            .groupBy('loai').map((value, key) => ({loai: key, dataChild: value})).value();
         } catch (e) {
           console.log('error', e);
         }
@@ -495,10 +476,10 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     this.dataNguoiTgia.forEach(s => s.isEdit = false);
     let currentRow = this.dataNguoiTgia.find(s => s.idVirtual == data.idVirtual);
     currentRow.isEdit = true;
-    this.dataNguoiShow = _.chain(this.dataNguoiTgia)
-      .groupBy('loai')
-      .map((value, key) => ({loai: key, dataChild: value}))
-      .value();
+    this.dataNguoiShow = _.chain(this.dataNguoiTgia).groupBy('loai').map((value, key) => ({
+      loai: key,
+      dataChild: value
+    })).value();
   }
 
   saveRow(data: any, index: number) {
@@ -542,33 +523,38 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
   }
 
   setValidForm() {
-    this.formData.controls["maThongBao"].setValidators([Validators.required]);
-    this.formData.controls["soQdPd"].setValidators([Validators.required]);
-    this.formData.controls["trichYeuTbao"].setValidators([Validators.required]);
-    this.formData.controls["tenToChuc"].setValidators([Validators.required]);
-    this.formData.controls["diaChiToChuc"].setValidators([Validators.required]);
-    this.formData.controls["taiKhoanToChuc"].setValidators([Validators.required]);
-    this.formData.controls["soHd"].setValidators([Validators.required]);
-    this.formData.controls["hthucTchuc"].setValidators([Validators.required]);
-    this.formData.controls["tgianDky"].setValidators([Validators.required]);
-    this.formData.controls["diaDiemDky"].setValidators([Validators.required]);
-    this.formData.controls["dieuKienDky"].setValidators([Validators.required]);
-    this.formData.controls["tienMuaHoSo"].setValidators([Validators.required]);
-    this.formData.controls["buocGia"].setValidators([Validators.required]);
-    this.formData.controls["tgianXem"].setValidators([Validators.required]);
-    this.formData.controls["diaDiemXem"].setValidators([Validators.required]);
-    this.formData.controls["tgianNopTien"].setValidators([Validators.required]);
-    this.formData.controls["pthucTtoan"].setValidators([Validators.required]);
-    this.formData.controls["tgianDauGia"].setValidators([Validators.required]);
-    this.formData.controls["diaDiemDauGia"].setValidators([Validators.required]);
-    this.formData.controls["pthucTtoan"].setValidators([Validators.required]);
-    this.formData.controls["pthucTtoan"].setValidators([Validators.required]);
-    this.formData.controls["dkienCthuc"].setValidators([Validators.required]);
-    this.formData.controls["soBienBan"].setValidators([Validators.required]);
-    this.formData.controls["trichYeuBban"].setValidators([Validators.required]);
-    this.formData.controls["ngayKyBban"].setValidators([Validators.required]);
-    if (this.formData.get('ketQua').value != '1') {
-      this.formData.controls["thongBaoKhongThanh"].setValidators([Validators.required]);
+    const fieldsToValidate = [
+      "maThongBao",
+      "soQdPd",
+      "trichYeuTbao",
+      "tenToChuc",
+      "diaChiToChuc",
+      "taiKhoanToChuc",
+      "soHd",
+      "hthucTchuc",
+      "tgianDky",
+      "diaDiemDky",
+      "dieuKienDky",
+      "tienMuaHoSo",
+      "buocGia",
+      "tgianXem",
+      "diaDiemXem",
+      "tgianNopTien",
+      "pthucTtoan",
+      "tgianDauGia",
+      "diaDiemDauGia",
+      "hthucDgia",
+      "pthucDgia",
+      "dkienCthuc",
+      "soBienBan",
+      "trichYeuBban",
+      "ngayKyBban",
+    ];
+    if (this.formData.value.ketQua === '0') {
+      fieldsToValidate.push("thongBaoKhongThanh");
     }
+    fieldsToValidate.forEach(field => {
+      this.formData.controls[field].setValidators([Validators.required]);
+    });
   }
 }

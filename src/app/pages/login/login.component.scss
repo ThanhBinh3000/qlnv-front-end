@@ -1,10 +1,12 @@
 @import '../../../assets/scss/default.scss';
+
 ::ng-deep body {
   background-image: url(../../../assets/images/bg-teca1.png);
   background-repeat: no-repeat;
   background-position: top left;
   background-size: 20vw;
   background-color: $maincolor;
+
   .main-login {
     background-image: url(../../../assets/images/bg-teca2.png);
     background-repeat: no-repeat;
@@ -14,21 +16,25 @@
     display: flex;
     width: 100%;
     flex-wrap: wrap;
+
     .ant-input,
     .ant-input:hover,
     .ant-input-focused,
     .ant-input:focus {
       color: #fff !important;
     }
+
     .dangnhap {
       font-size: 2.5rem;
       text-align: center;
     }
+
     .dangnhap,
     .ant-checkbox-wrapper,
-    .ant-form-item-label > label {
+    .ant-form-item-label>label {
       color: #fff;
     }
+
     .login-form-button.login-form-margin.ant-btn.ant-btn-primary {
       background: #353a64;
       color: #fff;
@@ -37,48 +43,63 @@
       min-width: 200px;
       margin-top: 12px;
     }
-    .ant-form-item-has-error
-      .ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled),
+
+    .ant-form-item-has-error .ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled),
     .ant-input-affix-wrapper {
       border-color: rgb(255 255 255 / 40%) !important;
       background: rgb(255 255 255 / 20%);
-      & > input.ant-input {
+
+      &>input.ant-input {
         background: transparent;
+
         &::placeholder {
           color: rgb(255 255 255 / 60%);
         }
       }
     }
+
     .ng-trigger-helpMotion {
       color: #fff;
       text-align: right;
     }
+
     .ant-input-prefix {
       color: #fff;
     }
+
     .logo {
       text-align: center;
+
       img {
         height: 150px;
         margin-bottom: 12px;
       }
     }
+
     .ant-checkbox-checked:after {
       border-color: rgb(255 255 255 / 40%);
     }
+
     .ant-checkbox-wrapper .ant-checkbox:hover .ant-checkbox-inner,
     .ant-checkbox-inner {
       background-color: rgb(255 255 255 / 20%);
       border-color: rgb(255 255 255 / 40%) !important;
     }
   }
+
   .main-login .ant-row-middle {
     width: 100%;
   }
+
   .ant-checkbox-inner {
     background-color: rgb(255 255 255 / 40%);
   }
+
+  // .ant-input-group-addon:last-child {
+  //   padding-left: 0px;
+  // }
 }
+
 .banquyen {
   position: fixed;
   bottom: 0;
@@ -89,12 +110,15 @@
   padding: 4px 12px;
   text-align: right;
 }
+
 .heading {
   margin-top: -160px;
 }
+
 @media (max-width: 991px) {
   ::ng-deep body {
     background-size: 23vh;
+
     .main-login {
       background-size: 65vh;
     }

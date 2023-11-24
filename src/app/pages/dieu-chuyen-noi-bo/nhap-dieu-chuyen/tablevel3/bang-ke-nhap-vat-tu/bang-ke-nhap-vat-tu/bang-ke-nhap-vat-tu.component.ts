@@ -127,6 +127,10 @@ export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
     else return false
   }
 
+  isCuc() {
+    return this.userService.isCuc()
+  }
+
   isChiCuc() {
     return this.userService.isChiCuc()
   }

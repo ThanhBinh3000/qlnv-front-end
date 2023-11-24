@@ -4,7 +4,9 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button type="button" class="btn btn-sub" (click)="xemTruoc(idInput,templateName)">
+    <button type="button" class="btn btn-sub"
+      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_IN')"
+      (click)="xemTruoc(idInput,templateName)">
       <i class="icon htvbdh_totrinh"></i>
       <span> In/Xem trước </span>
     </button>
@@ -137,7 +139,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div> -->
-            <div nz-col [nzSpan]="8">
+            <div nz-col [nzSpan]="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Biên bản tịnh kho</nz-form-label>
                 <nz-form-control>
@@ -157,7 +159,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="6">
+            <div nz-col [nzSpan]="8">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired> Nhà kho</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -167,7 +169,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="6">
+            <div nz-col [nzSpan]="8">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired> Điểm kho</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -193,7 +195,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="16">
+            <div nz-col [nzSpan]="8">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Hình thức bảo quản</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -245,7 +247,9 @@
                   xát(kg)
                 </nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName="soLuongNhan" [readonly]="isView" />
+                  <!-- <input nz-input formControlName="soLuongNhan" [readonly]="isView" /> -->
+                  <input currencyMask class="money-input" formControlName="soLuongNhan" [readOnly]="isView"
+                    [options]="amount1Left" style="color: blue; font-weight: bold" />
                 </nz-form-control>
               </nz-form-item>
             </div>

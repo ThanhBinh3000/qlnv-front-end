@@ -72,12 +72,12 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
   ) {
     super(httpClient, storageService, notification, spinner, modal, null);
     this.formData = this.fb.group({
-      id: [],
+      id: [, [Validators.required]],
       nam: [dayjs().get("year")],
       maDvi: [],
       soBbQd: [, [Validators.required]],
-      maDiaDiem: [],
-      loaiVthh: [],
+      maDiaDiem: [, [Validators.required]],
+      loaiVthh: [, [Validators.required]],
       cloaiVthh: [],
       tenVthh: [],
       lyDoTuChoi: [],
@@ -89,27 +89,27 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
       ngayPduyet: [],
       ngayKyQdGnv: [],
       nguoiPduyetId: [],
-      tenLoaiVthh: [],
+      tenLoaiVthh: [, [Validators.required]],
       tenCloaiVthh: [],
       tenTrangThai: ['Dự thảo'],
       tenDvi: [],
       tenCuc: [],
       tenChiCuc: [],
-      tenDiemKho: [],
-      tenNhaKho: [],
-      tenNganKho: [],
+      tenDiemKho: [, [Validators.required]],
+      tenNhaKho: [, [Validators.required]],
+      tenNganKho: [, [Validators.required]],
       tenLoKho: [],
-      maQhns: [],
-      idQdGnv: [],
-      soQdGnv: [],
+      maQhns: [, [Validators.required]],
+      idQdGnv: [, [Validators.required]],
+      soQdGnv: [, [Validators.required]],
       idHopDong: [],
       soHopDong: [],
       idBangKe: [],
       soBangKe: [],
       ngayKy: [],
       ktvBaoQuan: [],
-      dviKiemNghiem: [],
-      diaDiemLayMau: [],
+      dviKiemNghiem: [, [Validators.required]],
+      diaDiemLayMau: [, [Validators.required]],
       soLuongMau: [0, [Validators.required, Validators.min(1)]],
       niemPhong: [],
       loaiBb: ['LMBGM'],
@@ -121,13 +121,13 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
       ppLayMau: [new Array()],
       ctChatLuong: [new Array()],
       ngayBbLayMau: [dayjs().format("YYYY-MM-DD")],
-      donViTinh: [],
+      donViTinh: [, [Validators.required]],
       thuKho: [],
 
       soQdPd: [],
       ngayKyQdPd: [],
-      tenNganLoKho: [],
-      truongBpBaoQuan: [],
+      tenNganLoKho: [, [Validators.required]],
+      truongBpBaoQuan: [, [Validators.required]],
       lanhDaoChiCuc: []
     });
     this.formData.controls['ppLayMau'].valueChanges.subscribe(value => {
@@ -141,7 +141,8 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
     try {
       await this.spinner.show();
       super.service = this.inputService;
-      this.maHauTo = '/' + this.formData.value.nam + '/BBLM-' + this.userInfo.DON_VI.tenVietTat;
+      // this.maHauTo = '/' + this.formData.value.nam + '/BBLM-' + this.userInfo.DON_VI.tenVietTat;
+      this.maHauTo = '/BBLM-' + this.userInfo.DON_VI.tenVietTat;
       await Promise.all([
         this.loadDsQdGnv(),
       ]);
@@ -376,6 +377,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
+        await this.spinner.show();
         this.formData.patchValue({
           maDiaDiem: data.maDiaDiem || data.maLoKho || data.maNganKho || data.maDvi,
           loaiVthh: data.loaiVthh,
@@ -423,6 +425,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
         }
         // await this.buildTableView(true);
         await this.buildTableView();
+        await this.spinner.hide();
       }
     });
   }
@@ -455,10 +458,6 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
 
   async save() {
     await this.helperService.ignoreRequiredForm(this.formData);
-    if (this.loaiXuat === "CTVT") {
-      this.formData.controls['truongBpBaoQuan'].setValidators(Validators.required);
-      this.formData.controls['truongBpBaoQuan'].updateValueAndValidity()
-    }
     let body = {
       ...this.formData.value,
       // soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : this.maHauTo,
@@ -469,19 +468,15 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
     if (data) {
       this.formData.patchValue({ soBbQd: data.soBbQd })
     }
-    if (this.loaiXuat === "CTVT") {
-      this.formData.controls['truongBpBaoQuan'].clearValidators();
-      this.formData.controls['truongBpBaoQuan'].updateValueAndValidity()
-    }
     await this.helperService.restoreRequiredForm(this.formData);
   }
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
-    if (this.loaiXuat === "CTVT") {
-      this.formData.controls['truongBpBaoQuan'].setValidators(Validators.required);
-      this.formData.controls['truongBpBaoQuan'].updateValueAndValidity()
+    if (this.formData.value.xhBienBanLayMauDtl.filter(f => f.type === BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU).every(f => !f.ten)) {
+      this.notification.error(MESSAGE.ERROR, "Bạn chưa chọn phương pháp lấy mẫu");
+      return;
     }
-    let body = { ...this.formData.value };
+    let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd : this.maHauTo };
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
     if (this.loaiXuat === "CTVT") {
       this.formData.controls['truongBpBaoQuan'].clearValidators();
@@ -490,43 +485,64 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
   }
 
   async bindingQdGnv(idQdGnv) {
-    let res = await this.inputServiceGnv.getDetail(idQdGnv);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data.noiDungCuuTro) {
-        this.dsDiaDiem = res.data.noiDungCuuTro;
-        this.formData.patchValue({
-          idQdGnv: res.data.id,
-          soQdGnv: res.data.soQd,
-          ngayKyQdGnv: res.data.ngayKy,
-        });
-      } else if (res.data.quyetDinhDtl) {
-        this.dsDiaDiem = res.data.quyetDinhDtl;
-        this.formData.patchValue({
-          idQdGnv: res.data.id,
-          soQdGnv: res.data.soBbQd,
-          ngayKyQdGnv: res.data.ngayKy,
-        });
-      } else if (res.data.dataDtl) {
-        this.dsDiaDiem = uniqBy(res.data.dataDtl, "maDvi").filter(f => f.tenNganKho && f.maDvi && f.maDvi.includes(this.userInfo.MA_DVI));
-        this.formData.patchValue({
-          idQdGnv: res.data.id,
-          soQdGnv: res.data.soBbQd,
-          ngayKyQdGnv: res.data.ngayKy,
-          soQdPd: res.data.soQdPd,
-          ngayKyQdPd: res.data.ngayKyQdPd
-        });
+    try {
+      await this.spinner.show();
+      //Get ds bien ban lay mau;
+      let listBienBanLayMau = [];
+      const bodyBblm = {
+        paggingReq: {
+          limit: this.globals.prop.MAX_INTERGER,
+          page: 0,
+        },
+        loaiVthh: this.loaiVthh,
+        type: this.loaiXuat
       }
-    }
-    if (this.loaiXuat === "CTVT" && res.data.idQdPd) {
-      const resData = await this.quyetDinhPheDuyetPhuongAnCuuTroService.getDetail(res.data.idQdPd);
-      if (resData.msg === MESSAGE.SUCCESS) {
-        this.formData.patchValue({ ngayKyQdPd: resData.data.ngayKy })
+      const [resBblm, res] = await Promise.all([this.service.search(bodyBblm), this.inputServiceGnv.getDetail(idQdGnv)])
+      if (resBblm.msg === MESSAGE.SUCCESS) {
+        listBienBanLayMau = Array.isArray(resBblm.data?.content) ? resBblm.data.content : [];
       }
+      // let res = await this.inputServiceGnv.getDetail(idQdGnv);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data.noiDungCuuTro) {
+          this.dsDiaDiem = res.data.noiDungCuuTro;
+          this.formData.patchValue({
+            idQdGnv: res.data.id,
+            soQdGnv: res.data.soQd,
+            ngayKyQdGnv: res.data.ngayKy,
+          });
+        } else if (res.data.quyetDinhDtl) {
+          this.dsDiaDiem = res.data.quyetDinhDtl;
+          this.formData.patchValue({
+            idQdGnv: res.data.id,
+            soQdGnv: res.data.soBbQd,
+            ngayKyQdGnv: res.data.ngayKy,
+          });
+        } else if (res.data.dataDtl) {
+          this.dsDiaDiem = uniqBy(res.data.dataDtl, "maDvi").filter(f => f.tenNganKho && f.maDvi && f.maDvi.includes(this.userInfo.MA_DVI) && listBienBanLayMau.every(b => b.maDiaDiem !== f.maDvi));
+          this.formData.patchValue({
+            idQdGnv: res.data.id,
+            soQdGnv: res.data.soBbQd,
+            ngayKyQdGnv: res.data.ngayKy,
+            soQdPd: res.data.soQdPd,
+            ngayKyQdPd: res.data.ngayKyQdPd
+          });
+        }
+      }
+      if (this.loaiXuat === "CTVT" && res.data.idQdPd) {
+        const resData = await this.quyetDinhPheDuyetPhuongAnCuuTroService.getDetail(res.data.idQdPd);
+        if (resData.msg === MESSAGE.SUCCESS) {
+          this.formData.patchValue({ ngayKyQdPd: resData.data.ngayKy })
+        }
+      }
+    } catch (error) {
+      console.log("e", error)
+    } finally {
+      await this.spinner.hide();
     }
+
   }
 
   async onChangePpLayMau($event: any) {
-    console.log($event)
     let xhBienBanLayMauDtl = this.formData.value.xhBienBanLayMauDtl;
     xhBienBanLayMauDtl = xhBienBanLayMauDtl.filter(s => s.type = LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU);
     let newData = [];
@@ -538,7 +554,6 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
   }
 
   async onChangeCtChatLuong($event: any) {
-    console.log($event)
     let xhBienBanLayMauDtl = this.formData.value.xhBienBanLayMauDtl;
     xhBienBanLayMauDtl = xhBienBanLayMauDtl.filter(s => s.type != LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU);
     let newData = [];

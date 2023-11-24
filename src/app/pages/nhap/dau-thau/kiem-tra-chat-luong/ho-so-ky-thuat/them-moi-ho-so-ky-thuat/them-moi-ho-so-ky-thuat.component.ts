@@ -74,7 +74,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       tenTrangThai: "Dự Thảo",
       fileDinhKems: "",
       loai: LOAI_BIEN_BAN.BB_KTRA_NGOAI_QUAN,
-      previewName: 'bien_ban_kiem_tra_ngoai_quan.docx'
+      previewName: 'bien_ban_kiem_tra_ngoai_quan'
     },
     {
       id: null,
@@ -83,7 +83,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       tenTrangThai: "Dự Thảo",
       fileDinhKems: "",
       loai: LOAI_BIEN_BAN.BB_KTRA_VAN_HANH,
-      previewName: 'bien_ban_kiem_tra_van_hanh.docx'
+      previewName: 'bien_ban_kiem_tra_van_hanh'
     },
     {
       id: null,
@@ -92,7 +92,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       tenTrangThai: "Dự Thảo",
       fileDinhKems: "",
       loai: LOAI_BIEN_BAN.BB_KTRA_HOSO_KYTHUAT,
-      previewName: 'bien_ban_kiem_tra_hskt.docx'
+      previewName: 'bien_ban_kiem_tra_hskt'
     }
   ];
   previewName: string = 'ho_so_ky_thuat';
@@ -141,6 +141,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       truongPhong: [],
       lanhDaoCuc: [],
       dviCungCap: [],
+      idBbLayMauXuat: [],
     });
   }
 
@@ -167,6 +168,18 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
         this.helperService.bidingDataInFormGroup(this.formData, data);
+        this.formData.patchValue({
+          soHd: data.qdGiaoNvuNhapxuatHdr?.hopDong?.soHd,
+          ngayKyHd: data.qdGiaoNvuNhapxuatHdr?.hopDong?.ngayKy,
+          dviCungCap: data.qdGiaoNvuNhapxuatHdr?.hopDong?.tenNhaThau,
+          tenLoaiVthh: data.qdGiaoNvuNhapxuatHdr?.tenLoaiVthh,
+          tenCloaiVthh: data.qdGiaoNvuNhapxuatHdr?.tenCloaiVthh,
+          dvt: data.qdGiaoNvuNhapxuatHdr?.donViTinh,
+          tenNganLoKho: data.bienBanLayMau?.tenNganLoKho,
+          tenNhaKho: data.bienBanLayMau?.tenNhaKho,
+          tenDiemKho: data.bienBanLayMau?.tenDiemKho,
+          tenChiCuc: data.bienBanLayMau?.tenDvi,
+        })
         this.dataTable = data.children;
         if (data.listHoSoBienBan) {
           this.dataTableBienBan.forEach(item => {
@@ -224,6 +237,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       if (dataChose) {
         this.formData.patchValue({
           soBbLayMau: dataChose.soBienBan,
+          idBbLayMauXuat: dataChose.id,
           soHd: dataChose.soHd,
           soQdGiaoNvNh: dataChose.soQdGiaoNvNh,
           idQdGiaoNvNh: dataChose.idQdGiaoNvNh,

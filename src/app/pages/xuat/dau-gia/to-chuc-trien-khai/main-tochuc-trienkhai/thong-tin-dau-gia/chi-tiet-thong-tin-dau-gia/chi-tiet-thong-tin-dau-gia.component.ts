@@ -16,9 +16,6 @@ import {
 import dayjs from 'dayjs';
 import {cloneDeep} from 'lodash';
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
-import {
-  QuyetDinhDchinhKhBdgService
-} from "../../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/dieuchinh-kehoach/quyetDinhDchinhKhBdg.service";
 
 @Component({
   selector: 'app-chi-tiet-thong-tin-dau-gia',
@@ -32,9 +29,8 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   templateNameVt = "Thông tin bán đấu giá vật tư";
   templateNameLt = "Thông tin bán đấu giá lương thực";
-  idThongTin: number;
   dataThongTin: any;
-  selected: boolean = false;
+  idThongTin: number;
 
   constructor(
     httpClient: HttpClient,
@@ -42,9 +38,8 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private thongTinDauGiaService: ThongTinDauGiaService,
     private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
-    private quyetDinhDchinhKhBdgService: QuyetDinhDchinhKhBdgService,
+    private thongTinDauGiaService: ThongTinDauGiaService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, thongTinDauGiaService);
     this.formData = this.fb.group(
@@ -57,7 +52,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
         idQdDc: [],
         soQdDc: [''],
         idQdPdDtl: [],
-        soQdPdKqBdg: [''],
+        soQdKq: [''],
         tenDvi: [''],
         tongTienDatTruoc: [],
         khoanTienDatTruoc: [],
@@ -102,45 +97,27 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     try {
       await this.spinner.show();
       const res = await this.quyetDinhPdKhBdgService.getDtlDetail(id);
-      if (!res || !res.data) {
-        console.log('Không tìm thấy dữ liệu');
+      if (res.msg !== MESSAGE.SUCCESS || !res.data) {
         return;
       }
       const data = res.data;
       this.dataTable = cloneDeep(data.listTtinDg);
       if (this.dataTable && this.dataTable.length > 0) {
-        await this.showFirstRow(event, this.dataTable[0]);
+        await this.selectRow(this.dataTable[0]);
       }
-      let resQdHdr = null;
-      let reDcHdr = null;
-
-      if (data.isDieuChinh) {
-        reDcHdr = await this.quyetDinhDchinhKhBdgService.getDetail(data.idHdr);
-      } else {
-        resQdHdr = await this.quyetDinhPdKhBdgService.getDetail(data.idHdr);
-      }
-      if ((!data.isDieuChinh && (!resQdHdr || !resQdHdr.data)) ||
-        (data.isDieuChinh && (!reDcHdr || !reDcHdr.data))) {
-        console.log('Không tìm thấy dữ liệu');
-        return;
-      }
-      const dataQdHdr = resQdHdr ? resQdHdr.data : null;
-      const dataDcHdr = reDcHdr ? reDcHdr.data : null;
       this.formData.patchValue({
         nam: data.nam,
-        idQdPd: dataQdHdr ? dataQdHdr.id : dataDcHdr.idQdPd,
-        soQdPd: dataQdHdr ? dataQdHdr.soQdPd : dataDcHdr.soQdPd,
-        idQdDc: dataDcHdr?.id,
-        soQdDc: dataDcHdr?.soQdDc,
+        idQdPd: data.xhQdPdKhBdg.type === 'QDDC' ? data.idQdPd : data.idHdr,
+        soQdPd: data.soQdPd,
+        idQdDc: data.xhQdPdKhBdg.type === 'QDDC' ? data.idHdr : null,
+        soQdDc: data.soQdDc,
         idQdPdDtl: data.id,
-        soQdPdKqBdg: data.soQdPdKqBdg,
+        soQdKq: data.soQdKq,
         maDvi: data.maDvi,
         tenDvi: data.tenDvi,
         khoanTienDatTruoc: data.khoanTienDatTruoc,
         khoanTienDatTruocHienThi: data.khoanTienDatTruoc + '%',
-        tgianDauGia: this.isValidDate(data.tgianDkienTu) && this.isValidDate(data.tgianDkienDen)
-          ? [`Từ ${dayjs(data.tgianDkienTu).format('DD/MM/YYYY')} Đến ${dayjs(data.tgianDkienDen).format('DD/MM/YYYY')}`]
-          : [],
+        tgianDauGia: this.isValidDate(data.tgianDkienTu) && this.isValidDate(data.tgianDkienDen) ? [`Từ ${dayjs(data.tgianDkienTu).format('DD/MM/YYYY')} Đến ${dayjs(data.tgianDkienDen).format('DD/MM/YYYY')}`] : [],
         tgianTtoan: data.tgianTtoan,
         tenPthucTtoan: data.tenPthucTtoan,
         tgianGnhan: data.tgianGnhan,
@@ -148,8 +125,8 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
         tenCloaiVthh: data.tenCloaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
         tongSoLuong: data.tongSoLuong,
-        tenLoaiHinhNx: dataQdHdr ? dataQdHdr.tenLoaiHinhNx : dataDcHdr.tenLoaiHinhNx,
-        tenKieuNx: dataQdHdr ? dataQdHdr.tenKieuNx : dataDcHdr.tenKieuNx,
+        tenLoaiHinhNx: data.xhQdPdKhBdg.tenLoaiHinhNx,
+        tenKieuNx: data.xhQdPdKhBdg.tenKieuNx,
         donViTinh: data.donViTinh,
         trangThai: data.trangThai,
         tenTrangThai: data.tenTrangThai,
@@ -224,23 +201,15 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     });
   }
 
-  async showFirstRow($event, data: any) {
-    await this.showDetail($event, data);
-  }
 
-  async showDetail($event, data: any) {
-    if ($event.type === 'click') {
-      this.selected = false;
-      const selectedRow = $event.target.parentElement.parentElement.querySelector('.selectedRow');
-      if (selectedRow) {
-        selectedRow.classList.remove('selectedRow');
-      }
-      $event.target.parentElement.classList.add('selectedRow');
-    } else {
-      this.selected = true;
+  async selectRow(data: any) {
+    if (!data.selected) {
+      this.dataTable.forEach(item => item.selected = false);
+      data.selected = true;
+      const findndex = this.dataTable.findIndex(child => child.id == data.id);
+      this.dataThongTin = this.dataTable[findndex]
+      this.idThongTin = this.dataTable[findndex].id
     }
-    this.dataThongTin = data;
-    this.idThongTin = data.id;
   }
 
   async themMoiPhienDauGia($event, isView: boolean, data?: any) {
@@ -272,6 +241,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     });
   }
 
+
   async deleteThongTin(data) {
     this.modal.confirm({
       nzClosable: false,
@@ -286,6 +256,14 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
         try {
           const body = {id: data.id};
           await this.thongTinDauGiaService.delete(body);
+          if (this.idInput > 0) {
+            const dataDtl = await this.quyetDinhPdKhBdgService.getDtlDetail(this.idInput);
+            if (data.dataDtl && dataDtl.data.listTtinDg && dataDtl.data.listTtinDg.length > 0) {
+              this.idThongTin = dataDtl.data.listTtinDg.length
+            } else {
+              this.idThongTin = null
+            }
+          }
           await this.loadDetail(this.idInput);
         } catch (error) {
           console.log('error: ', error);

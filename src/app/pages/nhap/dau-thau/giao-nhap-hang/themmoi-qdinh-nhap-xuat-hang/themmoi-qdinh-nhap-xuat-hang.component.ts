@@ -1,36 +1,32 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import {
-  FormBuilder, FormGroup,
-  Validators
-} from '@angular/forms';
-import { Router } from '@angular/router';
-import { differenceInCalendarDays } from 'date-fns';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormGroup, Validators} from '@angular/forms';
+import {differenceInCalendarDays} from 'date-fns';
 import dayjs from 'dayjs';
-import { cloneDeep } from 'lodash';
-import { DisabledTimeFn } from 'ng-zorro-antd/date-picker';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { DATEPICKER_CONFIG, LEVEL_USER } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { FileDinhKem } from 'src/app/models/FileDinhKem';
-import { DetailQuyetDinhNhapXuat, QuyetDinhNhapXuat, ThongTinDiaDiemNhap } from 'src/app/models/QuyetDinhNhapXuat';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
-import { ThongTinHopDongService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
-import { UploadFileService } from 'src/app/services/uploaFile.service';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
-import { STATUS } from "../../../../../constants/status";
+import {cloneDeep} from 'lodash';
+import {DisabledTimeFn} from 'ng-zorro-antd/date-picker';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {
+  DialogTableSelectionComponent
+} from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
+import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import {DATEPICKER_CONFIG} from 'src/app/constants/config';
+import {MESSAGE} from 'src/app/constants/message';
+import {FileDinhKem} from 'src/app/models/FileDinhKem';
+import {DetailQuyetDinhNhapXuat, QuyetDinhNhapXuat, ThongTinDiaDiemNhap} from 'src/app/models/QuyetDinhNhapXuat';
+import {UserLogin} from 'src/app/models/userlogin';
+import {DonviService} from 'src/app/services/donvi.service';
+import {
+  QuyetDinhGiaoNhapHangService
+} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
+import {ThongTinHopDongService} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
+import {STATUS} from "../../../../../constants/status";
 import {Base2Component} from "../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../services/storage.service";
 import {PREVIEW} from "../../../../../constants/fileType";
+
 @Component({
   selector: 'app-themmoi-qdinh-nhap-xuat-hang',
   templateUrl: './themmoi-qdinh-nhap-xuat-hang.component.html',
@@ -237,6 +233,11 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
               })
             });
           }
+          let soLuong = 0;
+          this.dataTable.forEach(i => {
+            soLuong += i.soLuong
+          })
+          this.formData.get('soLuong').setValue(soLuong);
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg)
         }
@@ -465,6 +466,11 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
             //   }
             // });
           }
+          let soLuong = 0;
+          this.dataTable.forEach(i => {
+            soLuong += i.soLuong
+          })
+          this.formData.get('soLuong').setValue(soLuong);
           this.listFileDinhKem = data.fileDinhKems;
           this.listCanCu = data.fileCanCu;
         } else {
@@ -658,13 +664,10 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
       }, 0);
       return sum;
     } else if (this.dataTable) {
-      const sum = this.dataTable.reduce((prev, cur) => {
-        cur.children.forEach(res => {
-          prev += res.soLuong;
-        })
+      return this.dataTable.reduce((prev, cur) => {
+        prev += cur.soLuong;
         return prev;
       }, 0);
-      return sum;
     }
   }
 

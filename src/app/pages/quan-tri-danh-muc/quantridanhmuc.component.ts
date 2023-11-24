@@ -52,6 +52,14 @@ export class QuanTriDanhMucComponent implements OnInit, AfterViewInit {
     },
     {
       icon: 'htvbdh_tcdt_icon-common',
+      title: 'DM định mức hao hụt',
+      url: `/quan-tri-danh-muc/danh-muc-dinh-muc-hao-hut`,
+      dropdown: 'danh-muc-dinh-muc-hao-hut',
+      idHover: 'danh-muc-dinh-muc-hao-hut',
+      permission: this.userService.isAccessPermisson('QTDM_DM_DINHMUC_HAOHUT') ? true : false
+    },
+    {
+      icon: 'htvbdh_tcdt_icon-common',
       title: 'DM công cụ, dụng cụ',
       url: `/quan-tri-danh-muc/danh-muc-cong-cu-dung-cu`,
       dropdown: 'danh-muc-cong-cu-dung-cu',
@@ -81,6 +89,14 @@ export class QuanTriDanhMucComponent implements OnInit, AfterViewInit {
       dropdown: 'danh-muc-thu-kho',
       idHover: 'danh-muc-thu-kho',
       permission: this.userService.isAccessPermisson('QTDM_DM_THU_KHO') ? true : false
+    },
+    {
+      icon: 'htvbdh_tcdt_icon-common',
+      title: 'DM Chỉ tiêu chất lượng',
+      url: `/quan-tri-danh-muc/danh-muc-chi-tieu-chat-luong`,
+      dropdown: 'danh-muc-chi-tieu-chat-luong',
+      idHover: 'danh-muc-chi-tieu-chat-luong',
+      permission : true
     },
   ];
   routerUrl: string = "";

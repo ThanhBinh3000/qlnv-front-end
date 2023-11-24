@@ -82,7 +82,7 @@
       <h3 class="text-uppercase">Danh sách kiểm tra chất lượng lương thực trước khi hết hạn lưu kho</h3>
       <div class="buttons">
         <button type="button" class="btn btn-main"
-                *ngIf="userService.isCuc()" (click)="openTongHop()">
+                *ngIf="userService.isCuc() && userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_THDS_THEM')" (click)="openTongHop()">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Tổng hợp DS kiểm tra chất lượng LT trước khi hết hạn lưu kho</span>
         </button>
@@ -132,7 +132,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
+<!--                <td></td>-->
               </tr>
               <ng-container *ngIf="expandSetString.has(item.idVirtual) && expandSetString.has(item.idVirtual)">
                 <ng-container *ngFor="let lv1 of item.childData,let i1=index">
@@ -142,13 +142,13 @@
                     <td>{{lv1.tenCloaiVthh}}</td>
                     <td>{{lv1.tenDiemKho}}</td>
                     <td>{{lv1.tenLoKho == null ? lv1.tenNganKho : lv1.tenLoKho}}</td>
-                    <td>{{lv1.slTonKho|number:globals.numberFormat}}</td>
-                    <td>{{lv1.ngayNhapKho|date:globals.dateFormat}}</td>
-                    <td>{{lv1.slHetHan|number:globals.numberFormat}}</td>
+                    <td class="text-right">{{lv1.slTonKho|number:globals.numberFormat:globals.locale}}</td>
+                    <td class="text-center">{{lv1.ngayNhapKho|date:globals.dateFormat}}</td>
+                    <td class="text-right">{{lv1.slHetHan|number:globals.numberFormat:globals.locale}}</td>
                     <td>{{lv1.donViTinh}}</td>
-                    <td>{{lv1.ngayTongHop|date:globals.dateFormat}}</td>
-                    <td>{{lv1.thoiHanLk}}</td>
-                    <td>{{lv1.ngayDeXuat|date:globals.dateFormat}}</td>
+                    <td class="text-center">{{lv1.ngayTongHop|date:globals.dateFormat}}</td>
+                    <td class="text-right">{{lv1.thoiHanLk}}</td>
+                    <td class="text-center">{{lv1.ngayDeXuat|date:globals.dateFormat}}</td>
                     <td>{{lv1.tenTrangThai}}</td>
                     <td>{{lv1.maTongHop}}</td>
 <!--                    <td><a *ngIf="lv1.id" nzType="link"-->
