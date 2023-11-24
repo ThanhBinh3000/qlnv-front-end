@@ -37,14 +37,14 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
   @Input() isView: boolean;
   @Input() isViewOnModal: boolean;
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
+  templateNameVt = "Quyết định kết quả bán đấu giá vật tư";
+  templateNameLt = "Quyết định kết quả bán đấu giá lương thực";
   fileDinhKems: any[] = []
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
   loadDsQuyetDinhKq: any[] = [];
   dataMaThongBao: any[] = [];
   maTrinh: String;
-  templateNameVt = "Quyết định kết quả bán đấu giá vật tư";
-  templateNameLt = "Quyết định kết quả bán đấu giá lương thực";
   maHauTo: any;
 
   constructor(
@@ -53,10 +53,9 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private danhMucService: DanhMucService,
-    private qdPdKetQuaBanDauGiaService: QdPdKetQuaBanDauGiaService,
     private thongTinDauGiaService: ThongTinDauGiaService,
     private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
+    private qdPdKetQuaBanDauGiaService: QdPdKetQuaBanDauGiaService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBanDauGiaService);
     this.formData = this.fb.group({
@@ -155,7 +154,6 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
   async save() {
     try {
       await this.helperService.ignoreRequiredForm(this.formData);
-      this.formData.controls["soQdKq"].setValidators([Validators.required]);
       this.formData.controls["maThongBao"].setValidators([Validators.required]);
       const soQdKq = this.formData.value.soQdKq;
       const body = {
@@ -181,6 +179,8 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
       await super.saveAndSend(body, trangThai, msg, msgSuccess);
     } catch (e) {
       console.error('Error: ', e);
+    } finally {
+      await this.helperService.restoreRequiredForm(this.formData);
     }
   }
 
@@ -197,8 +197,6 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
       if (res && res.msg === MESSAGE.SUCCESS) {
         const maThongBaoSet = new Set(this.loadDsQuyetDinhKq.map(item => item.maThongBao));
         this.dataMaThongBao = res.data.content.filter(item => !maThongBaoSet.has(item.maThongBao));
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH THÔNG BÁO BÁN ĐẤU GIÁ',
@@ -242,14 +240,14 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
       }
       const dataQd = resQd.data;
       this.formData.patchValue({
-        loaiHinhNx: dataQd.xhQdPdKhBdg ? dataQd.xhQdPdKhBdg.loaiHinhNx : dataQd.xhQdDchinhKhBdgHdr.loaiHinhNx,
-        tenLoaiHinhNx: dataQd.xhQdPdKhBdg ? dataQd.xhQdPdKhBdg.tenLoaiHinhNx : dataQd.xhQdDchinhKhBdgHdr.tenLoaiHinhNx,
-        kieuNhapXuat: dataQd.xhQdPdKhBdg ? dataQd.xhQdPdKhBdg.kieuNx : dataQd.xhQdDchinhKhBdgHdr.kieuNx,
-        tenKieuNhapXuat: dataQd.xhQdPdKhBdg ? dataQd.xhQdPdKhBdg.tenKieuNx : dataQd.xhQdDchinhKhBdgHdr.tenKieuNx,
-        idQdPd: data.idQdPd,
+        loaiHinhNx: dataQd.xhQdPdKhBdg.loaiHinhNx,
+        tenLoaiHinhNx: dataQd.xhQdPdKhBdg.tenLoaiHinhNx,
+        kieuNhapXuat: dataQd.xhQdPdKhBdg.kieuNx,
+        tenKieuNhapXuat: dataQd.xhQdPdKhBdg.tenKieuNx,
+        idQdPd: dataQd.xhQdPdKhBdg.type === 'QDDC' ? dataQd.xhQdPdKhBdg.idQdPd : dataQd.idHdr,
         idQdPdDtl: data.idQdPdDtl,
         soQdPd: data.soQdPd,
-        idQdDc: data.idQdDc,
+        idQdDc: dataQd.xhQdPdKhBdg.type === 'QDDC' ? dataQd.idHdr : null,
         soQdDc: data.soQdDc,
         idThongBao: data.id,
         maThongBao: data.maThongBao,
@@ -271,7 +269,7 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
       this.dataTable.forEach(s => {
         s.children = s.children.filter(f => f.toChucCaNhan);
       });
-      this.calculatorTable(this.dataTable);
+      this.calculatorTable(dataQd);
     } catch (e) {
       console.error('Error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -281,22 +279,19 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
   }
 
   calculatorTable(data) {
-    let slDviTsanThanhCong: number = 0;
-    data.forEach((item) => {
+    this.dataTable.forEach((item) => {
       item.children.forEach((child) => {
         child.thanhTien = child.soLuongDeXuat * child.donGiaTraGia
       })
       item.tongSoLuong = item.children.reduce((total, child) => total + child.soLuongDeXuat, 0);
-      item.tongGiaKhoiDiem = item.children.reduce((total, child) => total + child.donGiaDeXuat, 0);
       item.tongTienDatTruoc = item.children.reduce((total, child) => total + child.soTienDatTruoc, 0);
       item.tongThanhTien = item.children.reduce((total, child) => total + child.thanhTien, 0);
-      slDviTsanThanhCong += item.children.length;
     });
     this.formData.patchValue({
-      slDviTsanThanhCong: slDviTsanThanhCong,
-      slDviTsanKhongThanh: this.formData.value.tongDviTsan - slDviTsanThanhCong,
-      tongSlXuat: data.reduce((total, child) => total + child.tongSoLuong, 0),
-      thanhTien: data.reduce((total, child) => total + child.tongThanhTien, 0),
+      slDviTsanThanhCong: data.soDviTsanThanhCong,
+      slDviTsanKhongThanh: data.slDviTsanKhongThanh,
+      tongSlXuat: this.dataTable.reduce((total, child) => total + child.tongSoLuong, 0),
+      thanhTien: this.dataTable.reduce((total, child) => total + child.tongThanhTien, 0),
     })
   }
 
@@ -319,18 +314,14 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
   }
 
   setValidForm() {
-    this.formData.controls["nam"].setValidators([Validators.required]);
-    this.formData.controls["trichYeu"].setValidators([Validators.required]);
-    this.formData.controls["ngayHieuLuc"].setValidators([Validators.required]);
-    this.formData.controls["ngayKy"].setValidators([Validators.required]);
-    this.formData.controls["loaiHinhNx"].setValidators([Validators.required]);
-    this.formData.controls["tenLoaiHinhNx"].setValidators([Validators.required]);
-    this.formData.controls["kieuNhapXuat"].setValidators([Validators.required]);
-    this.formData.controls["tenKieuNhapXuat"].setValidators([Validators.required]);
-    this.formData.controls["soBienBan"].setValidators([Validators.required]);
-    this.formData.controls["loaiVthh"].setValidators([Validators.required]);
-    this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
-    this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
-    this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
+    const fieldsToValidate = [
+      "soQdKq",
+      "trichYeu",
+      "maThongBao",
+      "soBienBan",
+    ];
+    fieldsToValidate.forEach(field => {
+      this.formData.controls[field].setValidators([Validators.required]);
+    });
   }
 }

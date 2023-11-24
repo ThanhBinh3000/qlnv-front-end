@@ -142,7 +142,6 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
         children: this.dataTable,
       };
       await this.createUpdate(body);
-      await this.helperService.restoreRequiredForm(this.formData);
     } catch (e) {
       console.error('Error: ', e);
     } finally {

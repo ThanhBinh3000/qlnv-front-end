@@ -30,7 +30,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
   templateNameVt = "Thông tin bán đấu giá vật tư";
   templateNameLt = "Thông tin bán đấu giá lương thực";
   dataThongTin: any;
-  idThongTin: number;
+  isThongTin: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -208,7 +208,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
       data.selected = true;
       const findndex = this.dataTable.findIndex(child => child.id == data.id);
       this.dataThongTin = this.dataTable[findndex]
-      this.idThongTin = this.dataTable[findndex].id
+      this.isThongTin = true
     }
   }
 
@@ -257,11 +257,11 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
           const body = {id: data.id};
           await this.thongTinDauGiaService.delete(body);
           if (this.idInput > 0) {
-            const dataDtl = await this.quyetDinhPdKhBdgService.getDtlDetail(this.idInput);
-            if (data.dataDtl && dataDtl.data.listTtinDg && dataDtl.data.listTtinDg.length > 0) {
-              this.idThongTin = dataDtl.data.listTtinDg.length
+            const res = await this.quyetDinhPdKhBdgService.getDtlDetail(this.idInput);
+            if (res.data && res.data.listTtinDg && res.data.listTtinDg.length > 0) {
+              this.isThongTin = true;
             } else {
-              this.idThongTin = null
+              this.isThongTin = false;
             }
           }
           await this.loadDetail(this.idInput);

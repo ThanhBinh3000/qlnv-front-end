@@ -11,11 +11,11 @@
           </div>
           <div nz-col [nzSpan]="4">
             <label class="search__label"> Số QĐ giao NV xuất hàng </label>
-            <input placeholder="Nhập số quyết định" nz-input formControlName="soQdNv"/>
+            <input nz-input formControlName="soQdNv"/>
           </div>
           <div nz-col [nzSpan]="4">
             <label class="search__label"> Số phiếu kiểm nghiệm chất lượng </label>
-            <input placeholder="Nhập số phiếu kiểm nghiệm" nz-input formControlName="soPhieuKiemNghiem"/>
+            <input nz-input formControlName="soPhieuKiemNghiem"/>
           </div>
           <div nz-col [nzSpan]="4">
             <label class="search__label"> Ngày kiểm nghiệm </label>
@@ -33,11 +33,11 @@
           </div>
           <div nz-col [nzSpan]="4">
             <label class="search__label"> Số biên bản lấy mẫu/bàn giao mẫu </label>
-            <input placeholder="Nhập số biên bản lấy mẫu/ bàn giao mẫu" nz-input formControlName="soBbLayMau"/>
+            <input nz-input formControlName="soBbLayMau"/>
           </div>
           <div nz-col [nzSpan]="4">
             <label class="search__label"> Số biên bản tịnh kho </label>
-            <input placeholder="Nhập số biên bản tịnh kho" nz-input formControlName="soBbTinhKho"/>
+            <input nz-input formControlName="soBbTinhKho"/>
           </div>
         </div>
       </form>
@@ -58,13 +58,13 @@
       <h3> DANH SÁCH PHIẾU KIỂM NGHIỆM CHẤT LƯỢNG </h3>
       <div class="buttons">
         <button
-          *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_KNCL_EXP') : userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_EXP')"
+          *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_KNCL_EXP') : userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_EXP')"
           type="button" class="btn btn-sub" (click)="exportData('Danh-sach-de-xuat-ke-hoach-ban-dau-gia.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span> Xuất file </span>
         </button>
         <button
-          *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_KNCL_THEM') : userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_THEM')"
+          *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_KNCL_THEM') : userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_THEM')"
           type="button" class="btn btn-main" (click)="redirectDetail(0, false)">
           <i class=" icon htvbdh_dau-cong"></i>
           <span> Thêm </span>
@@ -161,7 +161,7 @@
                          style="color: blue">{{ lv2.soBbTinhKho }}
                       </a>
                     </td>
-                    <td class="text-left">{{ lv2.ngayLapTinhKho }}</td>
+                    <td class="text-left">{{ lv2.ngayLapTinhKho |date:'dd/MM/YYYY'}}</td>
                     <td class="text-left">{{ lv2.tenTrangThai }}</td>
                     <td class="text-center">
                       <a *ngIf="isActionAllowed('XEM', lv2)" (click)="redirectDetail(lv2.id,true)">

@@ -87,7 +87,7 @@
           <span> Xuất file </span>
         </button>
         <button
-          *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_XK_VT_BKXVT_THEM') : userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BKCH_DUYET_LDCCUC')"
+          *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_XK_VT_BKXVT_THEM') : userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BKCH_THEM')"
           type="button" class="btn btn-main" (click)="redirectDetail(0, false)">
           <i class=" icon htvbdh_dau-cong"></i>
           <span> Thêm </span>

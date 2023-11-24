@@ -27,6 +27,7 @@ import {convertTienTobangChu} from 'src/app/shared/commonFunction';
 import {STATUS} from 'src/app/constants/status';
 import {DonviService} from "../../../../../../services/donvi.service";
 import _ from 'lodash';
+import {AMOUNT_ONE_DECIMAL} from "../../../../../../Utility/utils";
 
 @Component({
   selector: 'app-thong-tin',
@@ -42,6 +43,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
   @Input() isQuanLy: boolean;
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
+  amount = {...AMOUNT_ONE_DECIMAL};
   maHopDongSuffix: string = '';
   listLoaiHopDong: any[] = [];
   listHangHoaAll: any[] = [];
@@ -129,8 +131,8 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
       ghiChu: [''],
       idQdNv: [],
       soQdNv: [''],
-      trangThai: [STATUS.DU_THAO],
-      tenTrangThai: ['Dự thảo'],
+      trangThai: [''],
+      tenTrangThai: [''],
       tenDvi: [''],
       tenLoaiHinhNx: [''],
       tenKieuNhapXuat: [''],
@@ -150,7 +152,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
         this.loadDataComboBox(),
         this.loadDsVthh()
       ]);
-      this.initForm();
+      this.amount.align = "left";
     } catch (error) {
       console.log('error: ', error);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -164,13 +166,50 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
     this.maHopDongSuffix = `/${event}/HĐMB`;
   }
 
-  async ngOnChanges(changes: SimpleChanges) {
-    const {idInput, idHopDong} = this;
-    if (idInput) {
-      await this.onChange(idInput);
+  async ChangeNgay(event: Date | number, changeType: string) {
+    const formDataValue = this.formData.value;
+    switch (changeType) {
+      case 'XK':
+        if (formDataValue.tgianGiaoNhanNgay) {
+          const updatedDateXK = new Date(event);
+          updatedDateXK.setDate(updatedDateXK.getDate() + formDataValue.tgianGiaoNhanNgay);
+          this.formData.patchValue({tgianXuatKho: updatedDateXK.toISOString().split('T')[0]});
+        }
+        break;
+      case 'TH':
+        if (formDataValue.ngayHieuLuc) {
+          const updatedDateTH = new Date(formDataValue.ngayHieuLuc);
+          if (typeof event === 'number') {
+            updatedDateTH.setDate(updatedDateTH.getDate() + event);
+          }
+          this.formData.patchValue({tgianThienHdong: updatedDateTH.toISOString().split('T')[0]});
+        }
+        break;
+      case 'TP':
+        if (formDataValue.tgianXuatKho) {
+          const tgianXuatKho = new Date(formDataValue.tgianXuatKho);
+          const tgianGiaoHang = new Date(event);
+          if (tgianXuatKho > tgianGiaoHang && this.formData.value.tgianGiaoHang) {
+            this.notification.error(MESSAGE.WARNING, 'Thời gian giao hàng thực tế phải lớn hơn hoặc bằng thời gian xuất kho trước ngày.');
+            this.formData.patchValue({tgianGiaoHang: '', tgianTinhPhat: ''});
+          } else {
+            const khoangThoiGianMs = tgianGiaoHang.getTime() - tgianXuatKho.getTime();
+            const khoangThoiGianNgayLamTron = Math.round(khoangThoiGianMs / (1000 * 60 * 60 * 24));
+            this.formData.patchValue({tgianTinhPhat: khoangThoiGianNgayLamTron});
+          }
+        }
+        break;
     }
-    if (idHopDong) {
-      await this.loadChiTiet(idHopDong);
+  }
+
+  async ngOnChanges(changes: SimpleChanges) {
+    if (this.idInput) {
+      await this.onChange(this.idInput);
+    }
+    if (this.idHopDong) {
+      await this.loadChiTiet(this.idHopDong);
+    } else {
+      await this.initForm();
     }
   }
 
@@ -179,6 +218,8 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
       maDvi: this.userInfo.MA_DVI ?? null,
       tenDvi: this.userInfo.TEN_DVI ?? null,
       diaChiBenBan: this.userInfo.DON_VI.diaChi ?? null,
+      trangThai: STATUS.DU_THAO,
+      tenTrangThai: 'Dự thảo',
     })
   }
 
@@ -220,7 +261,6 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
     try {
       await this.helperService.ignoreRequiredForm(this.formData);
       this.formData.controls["listMaDviTsan"].setValidators([Validators.required]);
-      this.formData.controls["soHopDong"].setValidators([Validators.required]);
       const soHopDong = this.formData.value.soHopDong;
       const body = {
         ...this.formData.value,
@@ -228,9 +268,10 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
         children: this.dataTable,
       };
       await this.createUpdate(body);
+    } catch (e) {
+      console.error('Error: ', e);
+    } finally {
       await this.helperService.restoreRequiredForm(this.formData);
-    } catch (error) {
-      console.error("Lỗi khi lưu dữ liệu:", error);
     }
   }
 
@@ -244,8 +285,10 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
         children: this.dataTable,
       };
       await super.saveAndSend(body, status, msg, msgSuccess);
-    } catch (error) {
-      console.error("Lỗi khi lưu và gửi dữ liệu:", error);
+    } catch (e) {
+      console.error('Error: ', e);
+    } finally {
+      await this.helperService.restoreRequiredForm(this.formData);
     }
   }
 
@@ -260,8 +303,6 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
       const res = await this.qdPdKetQuaBanDauGiaService.search(body)
       if (res && res.msg === MESSAGE.SUCCESS) {
         this.listDataQdKq = res.data.content.filter(item => item.maDvi === this.userInfo.MA_DVI) || [];
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const modalQD = this.modal.create({
         nzTitle: 'THÔNG TIN QUYẾT ĐỊNH KẾT QUẢ BÁN ĐẤU GIÁ',
@@ -271,7 +312,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
         nzWidth: '900px',
         nzFooter: null,
         nzComponentParams: {
-          dataTable: this.listDataQdKq.filter(item => item.maDvi === this.userInfo.MA_DVI),
+          dataTable: this.listDataQdKq,
           dataHeader: ['Số QĐ PDKQ BĐG', 'Số biên bản', 'Mã thông báo'],
           dataColumn: ['soQdKq', 'soBienBan', 'maThongBao'],
         },
@@ -289,7 +330,9 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
   }
 
   async onChange(id) {
-    if (id <= 0) return;
+    if (id <= 0) {
+      return;
+    }
     try {
       await this.spinner.show();
       const res = await this.qdPdKetQuaBanDauGiaService.getDetail(id);
@@ -334,41 +377,6 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
     }
   }
 
-  async ChangeNgay(event: Date | number, changeType: string) {
-    const formDataValue = this.formData.value;
-    switch (changeType) {
-      case 'XK':
-        if (formDataValue.tgianGiaoNhanNgay) {
-          const updatedDateXK = new Date(event);
-          updatedDateXK.setDate(updatedDateXK.getDate() + formDataValue.tgianGiaoNhanNgay);
-          this.formData.patchValue({tgianXuatKho: updatedDateXK.toISOString().split('T')[0]});
-        }
-        break;
-      case 'TH':
-        if (formDataValue.ngayHieuLuc) {
-          const updatedDateTH = new Date(formDataValue.ngayHieuLuc);
-          if (typeof event === 'number') {
-            updatedDateTH.setDate(updatedDateTH.getDate() + event);
-          }
-          this.formData.patchValue({tgianThienHdong: updatedDateTH.toISOString().split('T')[0]});
-        }
-        break;
-      case 'TP':
-        if (formDataValue.tgianXuatKho) {
-          const tgianXuatKho = new Date(formDataValue.tgianXuatKho);
-          const tgianGiaoHang = new Date(event);
-          if (tgianXuatKho > tgianGiaoHang && this.formData.value.tgianGiaoHang) {
-            this.notification.error(MESSAGE.WARNING, 'Thời gian giao hàng thực tế phải lớn hơn hoặc bằng thời gian xuất kho trước ngày.');
-            this.formData.patchValue({tgianGiaoHang: '', tgianTinhPhat: ''});
-          } else {
-            const khoangThoiGianMs = tgianGiaoHang.getTime() - tgianXuatKho.getTime();
-            const khoangThoiGianNgayLamTron = Math.round(khoangThoiGianMs / (1000 * 60 * 60 * 24));
-            this.formData.patchValue({tgianTinhPhat: khoangThoiGianNgayLamTron});
-          }
-        }
-        break;
-    }
-  }
 
   async setListDviTsan(inputTable) {
     this.listDviTsan = [];
@@ -552,34 +560,33 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
   }
 
   setValidForm() {
-    this.formData.controls["nam"].setValidators([Validators.required]);
-    this.formData.controls["soQdKq"].setValidators([Validators.required]);
-    this.formData.controls["soQdPd"].setValidators([Validators.required]);
-    this.formData.controls["toChucCaNhan"].setValidators([Validators.required]);
-    this.formData.controls["listMaDviTsan"].setValidators([Validators.required]);
-    this.formData.controls["soHopDong"].setValidators([Validators.required]);
-    this.formData.controls["tenHopDong"].setValidators([Validators.required]);
-    this.formData.controls["ngayKyHopDong"].setValidators([Validators.required]);
-    this.formData.controls["ngayHieuLuc"].setValidators([Validators.required]);
-    this.formData.controls["loaiHopDong"].setValidators([Validators.required]);
-    this.formData.controls["tgianBaoHanh"].setValidators([Validators.required]);
-    this.formData.controls["tgianGiaoHang"].setValidators([Validators.required]);
-    this.formData.controls["soTienTinhPhat"].setValidators([Validators.required]);
-    this.formData.controls["giaTri"].setValidators([Validators.required]);
-    this.formData.controls["tgianBaoDamHdong"].setValidators([Validators.required]);
-    this.formData.controls["dieuKien"].setValidators([Validators.required]);
-    this.formData.controls["diaChiBenBan"].setValidators([Validators.required]);
-    this.formData.controls["mstBenBan"].setValidators([Validators.required]);
-    this.formData.controls["tenNguoiDaiDien"].setValidators([Validators.required]);
-    this.formData.controls["chucVuBenBan"].setValidators([Validators.required]);
-    this.formData.controls["sdtBenBan"].setValidators([Validators.required]);
-    this.formData.controls["stkBenBan"].setValidators([Validators.required]);
-    this.formData.controls["moTaiBenBan"].setValidators([Validators.required]);
-    this.formData.controls["tenNguoiDdienMua"].setValidators([Validators.required]);
-    this.formData.controls["chucVuBenMua"].setValidators([Validators.required]);
-    this.formData.controls["sdtBenMua"].setValidators([Validators.required]);
-    this.formData.controls["stkBenMua"].setValidators([Validators.required]);
-    this.formData.controls["moTaiBenMua"].setValidators([Validators.required]);
-    this.formData.controls["moTaHangHoa"].setValidators([Validators.required]);
+    const fieldsToValidate = [
+      "nam",
+      "soQdKq",
+      "soQdPd",
+      "toChucCaNhan",
+      "listMaDviTsan",
+      "soHopDong",
+      "tenHopDong",
+      "ngayKyHopDong",
+      "ngayHieuLuc",
+      "loaiHopDong",
+      "tgianBaoHanh",
+      "tgianGiaoHang",
+      "dieuKien",
+      "diaChiBenBan",
+      "mstBenBan",
+      "tenNguoiDaiDien",
+      "chucVuBenBan",
+      "stkBenBan",
+      "moTaiBenBan",
+      "tenNguoiDdienMua",
+      "chucVuBenMua",
+      "sdtBenMua",
+      "moTaHangHoa",
+    ];
+    fieldsToValidate.forEach(field => {
+      this.formData.controls[field].setValidators([Validators.required]);
+    });
   }
 }

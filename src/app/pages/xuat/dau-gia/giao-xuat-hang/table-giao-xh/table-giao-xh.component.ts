@@ -11,7 +11,6 @@ import {
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service';
 import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
-import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-table-giao-xh',
@@ -45,27 +44,25 @@ export class TableGiaoXh extends Base2Component implements OnInit {
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvXuatHangService);
     this.formData = this.fb.group({
-      nam: [null],
-      soQdNv: [null],
-      loaiVthh: [null],
-      trichYeu: [null],
-      ngayKyTu: [null],
-      ngayKyDen: [null],
+      nam: null,
+      soQdNv: null,
+      loaiVthh: null,
+      trichYeu: null,
+      ngayKyTu: null,
+      ngayKyDen: null,
     });
 
     this.filterTable = {
-      nam: '',
-      soQdNv: '',
-      ngayKy: '',
-      soHopDong: '',
-      tenLoaiVthh: '',
-      tenCloaiVthh: '',
-      tgianGiaoHang: '',
-      trichYeu: '',
-      BienBanTinhKho: '',
-      BienBanHaoDoi: '',
-      tenTrangThai: '',
-      tenTrangThaiXh: '',
+      nam: null,
+      soQdNv: null,
+      ngayKy: null,
+      soHopDong: null,
+      tenLoaiVthh: null,
+      tenCloaiVthh: null,
+      tgianGiaoHang: null,
+      trichYeu: null,
+      tenTrangThai: null,
+      tenTrangThaiXh: null,
     };
     this.listTrangThai = [
       {
@@ -112,30 +109,19 @@ export class TableGiaoXh extends Base2Component implements OnInit {
   async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([
-        this.timKiem(),
-        this.search(),
-      ]);
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+      })
+      if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+        await this.loadDsVthh();
+      }
+      await this.search();
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
     }
-  }
-
-  async timKiem() {
-    this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
-    })
-    if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
-      await this.loadDsVthh();
-    }
-  }
-
-  async clearFilter() {
-    this.formData.reset();
-    await Promise.all([this.timKiem(), this.search()]);
   }
 
   redirectDetail(id, isView: boolean) {
