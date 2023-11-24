@@ -1,19 +1,20 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { chain } from "lodash";
-import { v4 as uuidv4 } from "uuid"; import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { TYPE_PAG } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { STATUS } from 'src/app/constants/status';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { TongHopPhuongAnGiaService } from 'src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service';
-import { ToTrinhPAGService } from 'src/app/services/ke-hoach/phuong-an-gia/toTrinhPAG.service';
-import { Globals } from 'src/app/shared/globals';
-import { UserService } from "../../../../../../../services/user.service";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {chain} from "lodash";
+import {v4 as uuidv4} from "uuid";
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import {TYPE_PAG} from 'src/app/constants/config';
+import {MESSAGE} from 'src/app/constants/message';
+import {STATUS} from 'src/app/constants/status';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {HelperService} from 'src/app/services/helper.service';
+import {TongHopPhuongAnGiaService} from 'src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service';
+import {ToTrinhPAGService} from 'src/app/services/ke-hoach/phuong-an-gia/toTrinhPAG.service';
+import {Globals} from 'src/app/shared/globals';
+import {UserService} from "../../../../../../../services/user.service";
 
 @Component({
   selector: 'app-them-moi-to-trinh-pag',
@@ -35,9 +36,12 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
   dataTable: any[] = [];
   dataTableView: any[] = [];
   dsLoaiGia: any[] = [];
+  fileDinhKem: any[] = [];
+  canCuPhapLys: any[] = [];
   idSelected: number;
   isViewModal: boolean = false;
   isMuaToiDa: boolean;
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
@@ -148,22 +152,44 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
 
     })
     this.dataTable = data.pagChiTiets;
+    this.fileDinhKem = data.fileDinhKems;
+    this.canCuPhapLys = data.canCuPhapLys;
     this.buildTreePagCt();
+  }
+
+   checkGiaTcdt() {
+    let rs = false;
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach(it => {
+        if (!it.giaQdTcdt || it.giaQdTcdt == 0) {
+          rs = true;
+          return;
+        }
+      });
+    }
+    return rs;
   }
 
   async save(isGuiDuyet?) {
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.FORM_REQUIRED_ERROR)
       this.spinner.hide();
       return;
     }
-    this.convertTreeToList();
+    await this.convertTreeToList();
+    if (this.checkGiaTcdt()) {
+      this.notification.warning(MESSAGE.WARNING, "Vui lòng không để trống giá đề xuất của Tổng Cục!")
+      this.spinner.hide();
+      return;
+    }
     let body = this.formData.value;
     body.type = this.type;
     body.soToTrinh = body.soToTrinh + this.maSuffix;
-    body.pagChiTiets = this.dataTable
+    body.pagChiTiets = this.dataTable;
+    body.fileDinhKemReq = this.fileDinhKem;
+    body.canCuPhapLys = this.canCuPhapLys;
     let res = await this.toTrinhPAGService.update(body);
     if (res.msg == MESSAGE.SUCCESS) {
       if (isGuiDuyet) {
@@ -294,6 +320,7 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
     }
     this.expandAll()
   }
+
   onExpandChange(id: number, checked: boolean): void {
     if (checked) {
       this.expandSet.add(id);
@@ -311,7 +338,7 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
     }
   }
 
-  convertTreeToList() {
+  async convertTreeToList() {
     if (this.dataTableView && this.dataTableView.length > 0) {
       this.dataTable = [];
       this.dataTableView.forEach(item => {
@@ -319,9 +346,9 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
           item.children.forEach(child => {
             if (child.apDungTatCa) {
               child.giaQdTcdt = item.giaQdTcdt;
-              if (child.vat && (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03')) {
-                child.giaQdTcdtVat = child.giaQdTcdt + child.giaQdTcdt * child.vat
-              }
+            }
+            if (child.vat && (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03')) {
+              child.giaQdTcdtVat = child.giaQdTcdt + child.giaQdTcdt * child.vat
             }
             this.dataTable.push(child);
           })
@@ -338,5 +365,20 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
   closeDxPaModal() {
     this.idSelected = null;
     this.isViewModal = false;
+  }
+
+
+  calcTong(tenDvi: string) {
+    let sum = 0
+    if (this.dataTableView && this.dataTableView.length > 0) {
+      let item = this.dataTableView.find(item => item.tenDvi == tenDvi);
+      if (item && item.children && item.children.length>0) {
+         sum = item.children.reduce((prev, cur) => {
+          prev += cur.soLuong;
+          return prev;
+        }, 0);
+      }
+      return sum;
+    }
   }
 }

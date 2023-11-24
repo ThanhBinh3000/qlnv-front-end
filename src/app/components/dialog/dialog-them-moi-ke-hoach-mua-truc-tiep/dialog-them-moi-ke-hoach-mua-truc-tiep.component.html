@@ -7,182 +7,178 @@
                     <nz-form-control>
                         <nz-select formControlName="maDvi" (ngModelChange)="changeChiCuc($event)"
                             [nzDisabled]='selectedChiCuc'>
-                            <nz-option *ngFor="let p of listChiCuc" [nzValue]="p.maDvi"
-                                [nzLabel]="p.tenDvi"></nz-option>
+                            <nz-option *ngFor="let p of listChiCuc" [nzValue]="p.maDonVi"
+                                [nzLabel]="p.tenDonvi"></nz-option>
                         </nz-select>
                     </nz-form-control>
                 </nz-form-item>
             </div>
             <div *ngIf="userService.isCuc()" nz-col [nzSpan]="3">
-                <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Chủng loại hàng DTQG </nz-form-label>
-                    <nz-form-control nz-col [nzSpan]="24">
-                        <span class="text-green">{{formData.value.tenCloaiVthh }}</span>
-                    </nz-form-control>
-                </nz-form-item>
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Chủng loại hàng DTQG </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                              <span class="text-blue">{{formData.value.tenCloaiVthh }}</span>
+                </nz-form-control>
+              </nz-form-item>
             </div>
             <div *ngIf="userService.isCuc()" nz-col [nzSpan]="3">
-                <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Đơn vị tính </nz-form-label>
-                    <nz-form-control nz-col [nzSpan]="24">
-                        <span class="text-green">{{formData.value.dvt }}</span>
-                    </nz-form-control>
-                </nz-form-item>
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Đơn vị tính </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                              <span class="text-blue">{{formData.value.dvt }}</span>
+                </nz-form-control>
+              </nz-form-item>
             </div>
             <div nz-col [nzSpan]="3">
-                <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Chỉ tiêu kế hoạch được giao (Tấn) </nz-form-label>
-                    <nz-form-control nz-col [nzSpan]="24">
-                        <span class="text-green">{{formData.value.soLuongChiTieu }}</span>
-                    </nz-form-control>
-                </nz-form-item>
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Chỉ tiêu kế hoạch được giao (Tấn) </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                              <span class="text-red">{{formData.value.soLuongChiTieu }}</span>
+                </nz-form-control>
+              </nz-form-item>
             </div>
             <div nz-col [nzSpan]="3">
-                <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Số đã thực hiện (Tấn) </nz-form-label>
-                    <nz-form-control nz-col [nzSpan]="24">
-                        <span class="text-green">{{formData.value.soLuongKhDd }}</span>
-                    </nz-form-control>
-                </nz-form-item>
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Số đã thực hiện (Tấn) </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                              <span class="text-red">{{formData.value.soLuongKhDd }}</span>
+                </nz-form-control>
+              </nz-form-item>
             </div>
             <div nz-col [nzSpan]="3">
-                <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Số còn lại chưa thực hiện (Tấn) </nz-form-label>
-                    <nz-form-control nz-col [nzSpan]="24">
-                        <span class="text-green">{{formData.value.tongSoLuongChuaTh }}</span>
-                    </nz-form-control>
-                </nz-form-item>
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Số còn lại chưa thực hiện (Tấn) </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                              <span class="text-red">{{formData.value.tongSoLuongChuaTh }}</span>
+                </nz-form-control>
+              </nz-form-item>
             </div>
             <div nz-col [nzSpan]="6">
                 <nz-form-item>
-                    <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá đề xuất có VAT (đ/kg) </nz-form-label>
+                    <nz-form-label [nzNoColon]="true"> Đơn giá đề xuất có VAT (đ/kg) </nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                        <!--                      <nz-input-number-->
-                        <!--                        formControlName="donGia"-->
-                        <!--                        (input)="calTongThanhTien()"-->
-                        <!--                        [nzPrecisionMode]="customPrecisionFn"-->
-                        <!--                        nzPlaceHolder="Đơn giá đề xuất"-->
-                        <!--                      ></nz-input-number>-->
-                        <input [readonly]="!userService.isCuc()" class="money-input" currencyMask
-                            formControlName="donGia" [options]="amount" />
+<!--                      <nz-input-number-->
+<!--                        formControlName="donGia"-->
+<!--                        (input)="calTongThanhTien()"-->
+<!--                        [nzPrecisionMode]="customPrecisionFn"-->
+<!--                        nzPlaceHolder="Đơn giá đề xuất"-->
+<!--                      ></nz-input-number>-->
+                      <input [readonly]="!userService.isCuc()" class="money-input text-blue" (blur)="calTongThanhTien()" currencyMask formControlName="donGia"  [options]="amount"/>
                     </nz-form-control>
                 </nz-form-item>
             </div>
             <div nz-col [nzSpan]="6">
-                <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Đơn giá mua tối đa có VAT đã duyệt (đ/kg) </nz-form-label>
-                    <nz-form-control nz-col [nzSpan]="24">
-                        <span class="text-green">{{formData.value.donGiaTdVat }}
-                            (đ)</span>
-                    </nz-form-control>
-                </nz-form-item>
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Đơn giá mua tối đa có VAT đã duyệt (đ/kg) </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                                <span class="text-blue">{{formData.value.donGiaTdVat | number : '1.0-1' :'vi_VN' }}
+                                  (đ)</span>
+                </nz-form-control>
+              </nz-form-item>
             </div>
             <div nz-col [nzSpan]="6">
-                <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Đơn giá (cụ thể) có VAT đã duyệt (đ/kg) </nz-form-label>
-                    <nz-form-control nz-col [nzSpan]="24">
-                        <span class="text-green">{{formData.value.donGiaVat }}
-                            (đ)</span>
-                    </nz-form-control>
-                </nz-form-item>
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Đơn giá (cụ thể) có VAT đã duyệt (đ/kg) </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                                  <span class="text-blue">{{formData.value.donGiaVat | number : '1.0-1' :'vi_VN' }}
+                                    (đ)</span>
+                </nz-form-control>
+              </nz-form-item>
             </div>
             <div *ngIf="userService.isTongCuc()" nz-col [nzSpan]="6">
-                <nz-form-item>
-                    <nz-form-label nzRequired [nzNoColon]="true"> SL nhập phê duyệt (kg)</nz-form-label>
-                    <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                        <nz-input-number formControlName="tongSoLuong" (input)="calTongThanhTien()"
-                            [nzPrecisionMode]="customPrecisionFn" nzPlaceHolder="SL nhập phê duyệt"></nz-input-number>
-                    </nz-form-control>
-                </nz-form-item>
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true"> SL trình phê duyệt (tấn)</nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                  <nz-input-number
+                    formControlName="tongSoLuong"
+                    (input)="calTongThanhTien()"
+                    [nzPrecisionMode]="customPrecisionFn"
+                    nzPlaceHolder="SL nhập phê duyệt"
+                  ></nz-input-number>
+                </nz-form-control>
+              </nz-form-item>
             </div>
-            <!--            <div *ngIf="userService.isCuc()" nz-col [nzSpan]="6">-->
-            <!--              <nz-form-item>-->
-            <!--                <nz-form-label [nzNoColon]="true"> Tổng SL trình phê duyệt </nz-form-label>-->
-            <!--                <nz-form-control nz-col [nzSpan]="24">-->
-            <!--                                    <span class="text-green">{{formData.value.tongSoLuong }}-->
-            <!--                                      (Tấn)</span>-->
-            <!--                </nz-form-control>-->
-            <!--              </nz-form-item>-->
-            <!--            </div>-->
-
             <div *ngIf="userService.isCuc()" nz-col [nzSpan]="6">
-                <nz-form-item>
-                    <nz-form-label nzRequired [nzNoColon]="true"> Tổng SL trình phê duyệt </nz-form-label>
-                    <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                        <nz-input-number [nzDisabled]="this.listOfData.length > 0" formControlName="tongSoLuong"
-                            (input)="calTongThanhTien()" [nzPrecisionMode]="customPrecisionFn"></nz-input-number>
-                    </nz-form-control>
-                </nz-form-item>
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true"> Tổng SL trình phê duyệt </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                  <nz-input-number class="text-blue" [nzDisabled]="this.listOfData.length > 0"
+                    formControlName="tongSoLuong"
+                    (input)="calTongThanhTien()"
+                    [nzPrecisionMode]="customPrecisionFn"
+                  ></nz-input-number>
+                </nz-form-control>
+              </nz-form-item>
             </div>
 
             <div nz-col [nzSpan]="6">
-                <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Tổng thành tiền trình phê duyệt </nz-form-label>
-                    <nz-form-control nz-col [nzSpan]="24">
-                        <span class="text-green">{{formData.value.tongThanhTien }}
-                            (đ)</span>
-                    </nz-form-control>
-                </nz-form-item>
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Tổng thành tiền trình phê duyệt </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                                      <span class="text-blue">{{formData.value.tongThanhTien | number : '1.0-1' :'vi_VN' }}
+                                        (đ)</span>
+                </nz-form-control>
+              </nz-form-item>
             </div>
             <div *ngIf="userService.isCuc()" nz-col [nzSpan]="6">
-                <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Tổng thành tiền theo đơn giá có VAT được duyệt </nz-form-label>
-                    <nz-form-control nz-col [nzSpan]="24">
-                        <span class="text-green">{{formData.value.tongThanhTienVat }}
-                            (đ)</span>
-                    </nz-form-control>
-                </nz-form-item>
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Tổng thành tiền theo đơn giá có VAT được duyệt </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                                        <span class="text-blue">{{formData.value.tongThanhTienVat | number : '1.0-1' :'vi_VN' }}
+                                          (đ)</span>
+                </nz-form-control>
+              </nz-form-item>
             </div>
 
 
 
-            <!--            <div nz-col [nzSpan]="6">-->
-            <!--                <nz-form-item>-->
-            <!--                    <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá được duyệt bao gồm VAT(đ) </nz-form-label>-->
-            <!--                    <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">-->
-            <!--                        <nz-input-number [nzDisabled]="true" formControlName="donGiaVat" [nzMin]="1"-->
-            <!--                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"-->
-            <!--                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser">-->
-            <!--                        </nz-input-number>-->
-            <!--                    </nz-form-control>-->
-            <!--                </nz-form-item>-->
-            <!--            </div>-->
-            <!--            <div nz-col [nzSpan]="6">-->
-            <!--                <nz-form-item>-->
-            <!--                    <nz-form-label nzRequired [nzNoColon]="true"> Tổng số lượng nhập trực tiếp đề xuất (Tấn)-->
-            <!--                    </nz-form-label>-->
-            <!--                    <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">-->
-            <!--                        <nz-input-number [nzDisabled]="userService.isCuc()" formControlName="tongSoLuong" (input)="calTongThanhTien()" [nzMin]="1"-->
-            <!--                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"-->
-            <!--                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser">-->
-            <!--                        </nz-input-number>-->
-            <!--                    </nz-form-control>-->
-            <!--                </nz-form-item>-->
-            <!--            </div>-->
-            <!--            <div nz-col [nzSpan]="6">-->
-            <!--                <nz-form-item>-->
-            <!--                    <nz-form-label nzRequired [nzNoColon]="true"> Tổng thành tiền đề xuất (đ)-->
-            <!--                    </nz-form-label>-->
-            <!--                    <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">-->
-            <!--                        <nz-input-number [nzDisabled]="true" formControlName="tongThanhTien" [nzMin]="1"-->
-            <!--                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"-->
-            <!--                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser">-->
-            <!--                        </nz-input-number>-->
-            <!--                    </nz-form-control>-->
-            <!--                </nz-form-item>-->
-            <!--            </div>-->
-            <!--            <div nz-col [nzSpan]="6">-->
-            <!--                <nz-form-item>-->
-            <!--                    <nz-form-label nzRequired [nzNoColon]="true"> Tổng thành tiền theo đơn giá được duyệt (đ)-->
-            <!--                    </nz-form-label>-->
-            <!--                    <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">-->
-            <!--                        <nz-input-number [nzDisabled]="true" formControlName="tongThanhTienVat" [nzMin]="1"-->
-            <!--                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"-->
-            <!--                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser">-->
-            <!--                        </nz-input-number>-->
-            <!--                    </nz-form-control>-->
-            <!--                </nz-form-item>-->
-            <!--            </div>-->
+<!--            <div nz-col [nzSpan]="6">-->
+<!--                <nz-form-item>-->
+<!--                    <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá được duyệt bao gồm VAT(đ) </nz-form-label>-->
+<!--                    <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">-->
+<!--                        <nz-input-number [nzDisabled]="true" formControlName="donGiaVat" [nzMin]="1"-->
+<!--                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"-->
+<!--                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser">-->
+<!--                        </nz-input-number>-->
+<!--                    </nz-form-control>-->
+<!--                </nz-form-item>-->
+<!--            </div>-->
+<!--            <div nz-col [nzSpan]="6">-->
+<!--                <nz-form-item>-->
+<!--                    <nz-form-label nzRequired [nzNoColon]="true"> Tổng số lượng nhập trực tiếp đề xuất (Tấn)-->
+<!--                    </nz-form-label>-->
+<!--                    <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">-->
+<!--                        <nz-input-number [nzDisabled]="userService.isCuc()" formControlName="tongSoLuong" (input)="calTongThanhTien()" [nzMin]="1"-->
+<!--                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"-->
+<!--                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser">-->
+<!--                        </nz-input-number>-->
+<!--                    </nz-form-control>-->
+<!--                </nz-form-item>-->
+<!--            </div>-->
+<!--            <div nz-col [nzSpan]="6">-->
+<!--                <nz-form-item>-->
+<!--                    <nz-form-label nzRequired [nzNoColon]="true"> Tổng thành tiền đề xuất (đ)-->
+<!--                    </nz-form-label>-->
+<!--                    <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">-->
+<!--                        <nz-input-number [nzDisabled]="true" formControlName="tongThanhTien" [nzMin]="1"-->
+<!--                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"-->
+<!--                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser">-->
+<!--                        </nz-input-number>-->
+<!--                    </nz-form-control>-->
+<!--                </nz-form-item>-->
+<!--            </div>-->
+<!--            <div nz-col [nzSpan]="6">-->
+<!--                <nz-form-item>-->
+<!--                    <nz-form-label nzRequired [nzNoColon]="true"> Tổng thành tiền theo đơn giá được duyệt (đ)-->
+<!--                    </nz-form-label>-->
+<!--                    <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">-->
+<!--                        <nz-input-number [nzDisabled]="true" formControlName="tongThanhTienVat" [nzMin]="1"-->
+<!--                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"-->
+<!--                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser">-->
+<!--                        </nz-input-number>-->
+<!--                    </nz-form-control>-->
+<!--                </nz-form-item>-->
+<!--            </div>-->
             <div nz-col [nzSpan]="20">
             </div>
             <div nz-col [nzSpan]="4">
@@ -213,15 +209,15 @@
                     </nz-select>
                 </th>
                 <th>{{thongTinMuaTrucTiep.diaDiemNhap}}</th>
-                <th>
-                    <nz-input-number placeholder="(1)" class="text-right" nz-input
+                <th class="text-right">
+                    <nz-input-number placeholder="(1)" nz-input
                         [(ngModel)]="thongTinMuaTrucTiep.soLuong" [nzMin]="1" [nzStep]="1" [nzSize]="'small'"
                         [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                     </nz-input-number>
                 </th>
-                <th>{{ formData.value.donGia * thongTinMuaTrucTiep.soLuong * 1000 | number : '1.0-1' : 'vi_VN' }}
+                <th class="text-right">{{ formData.value.donGia * thongTinMuaTrucTiep.soLuong * 1000 | number : '1.0-1' : 'vi_VN' }}
                 </th>
-                <th>{{ (thongTinMuaTrucTiep.soLuong * formData.value.donGiaVat * 1000) | number
+                <th class="text-right">{{ (thongTinMuaTrucTiep.soLuong * formData.value.donGiaVat * 1000) | number
                     : '1.0-1'
                     : 'vi_VN'}}</th>
                 <th class="text-center">
@@ -239,9 +235,9 @@
                 <ng-container *ngIf="!data.edit; else editTemplate">
                     <td>{{ data.tenDiemKho }}</td>
                     <td>{{ data.diaDiemNhap }}</td>
-                    <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{ formData.value.donGia * data.soLuong * 1000| number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{ data.soLuong * formData.value.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
+                    <td class="text-right">{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-right">{{ formData.value.donGia * data.soLuong * 1000| number : '1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-right">{{ data.soLuong * formData.value.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
                     <td class="text-center">
                         <a (click)="startEdit(i)">
                             <i class="fa fa-pencil" title="Sửa"></i>
@@ -254,16 +250,14 @@
                 <ng-template #editTemplate>
                     <td>{{thongTinMuaTrucTiepEdit[i].tenDiemKho}}</td>
                     <td>{{thongTinMuaTrucTiepEdit[i].diaDiemNhap}} </td>
-                    <td>
-                        <nz-input-number class="text-right" nz-input [(ngModel)]="thongTinMuaTrucTiepEdit[i].soLuong"
-                            [nzMin]="1" [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                            [nzParser]="globals.parser">
+                    <td class="text-right">
+                        <nz-input-number class="text-right" nz-input [(ngModel)]="thongTinMuaTrucTiepEdit[i].soLuong" [nzMin]="1" [nzStep]="1"
+                            [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                         </nz-input-number>
                     </td>
-                    <td>{{ formData.value.donGia * thongTinMuaTrucTiepEdit[i].soLuong * 1000 | number : '1.0-1' :
-                        'vi_VN'
+                    <td class="text-right">{{ formData.value.donGia * thongTinMuaTrucTiepEdit[i].soLuong * 1000 | number : '1.0-1' : 'vi_VN'
                         }}</td>
-                    <td>{{ (thongTinMuaTrucTiepEdit[i].soLuong * formData.value.donGiaVat * 1000) | number
+                    <td class="text-right">{{ (thongTinMuaTrucTiepEdit[i].soLuong * formData.value.donGiaVat * 1000) | number
                         : '1.0-1'
                         : 'vi_VN'}}</td>
 

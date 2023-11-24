@@ -14,7 +14,7 @@ import { Validators } from "@angular/forms";
 import { MESSAGE } from "../../../../constants/message";
 import { Base2Component } from "../../../../components/base2/base2.component";
 import { saveAs } from "file-saver";
-import { ThongTu1082018Service } from "../../../../services/bao-cao/ThongTu1082018.service";
+import {ThongTu1082018Service} from "../../../../services/bao-cao/ThongTu1082018.service";
 
 @Component({
   selector: 'app-tinh-hinh-th-phi-bq-hang-dtqg-theo-dinh-muc',
@@ -39,17 +39,17 @@ export class TinhHinhThPhiBqHangDtqgTheoDinhMucComponent extends Base2Component 
   rows: any[] = [];
 
   constructor(httpClient: HttpClient,
-    storageService: StorageService,
-    notification: NzNotificationService,
-    spinner: NgxSpinnerService,
-    modal: NzModalService,
-    private thongTu1082018Service: ThongTu1082018Service,
-    public userService: UserService,
-    private donViService: DonviService,
-    private danhMucService: DanhMucService,
+              storageService: StorageService,
+              notification: NzNotificationService,
+              spinner: NgxSpinnerService,
+              modal: NzModalService,
+              private thongTu1082018Service: ThongTu1082018Service,
+              public userService: UserService,
+              private donViService: DonviService,
+              private danhMucService: DanhMucService,
 
-    private donviService: DonviService,
-    public globals: Globals) {
+              private donviService: DonviService,
+              public globals: Globals) {
     super(httpClient, storageService, notification, spinner, modal, thongTu1082018Service);
     this.formData = this.fb.group(
       {
@@ -96,10 +96,6 @@ export class TinhHinhThPhiBqHangDtqgTheoDinhMucComponent extends Base2Component 
   async preView() {
     try {
       this.spinner.show();
-      if (this.formData.value.thoiGianSx) {
-        this.formData.value.thoiGianSxTu = dayjs(this.formData.value.thoiGianSx[0]).format("YYYY-MM-DD");
-        this.formData.value.thoiGianSxDen = dayjs(this.formData.value.thoiGianSx[1]).format("YYYY-MM-DD");
-      }
       let body = this.formData.value;
       body.typeFile = "pdf";
       body.fileName = "bc_tinh_hinh_th_phi_bao_quan_hang_dtqg_theo_dinh_muc_130.jrxml";
@@ -153,19 +149,24 @@ export class TinhHinhThPhiBqHangDtqgTheoDinhMucComponent extends Base2Component 
     }
   }
 
-  async changeCuc(event: any) {
-    if (event) {
-      let body = {
-        trangThai: "01",
-        maDviCha: event,
-        type: "DV"
-      };
-      let res = await this.donViService.getDonViTheoMaCha(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        this.listChiCuc = res.data;
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
+  clearFilter() {
+    this.formData.patchValue({
+      nam: dayjs().get("year"),
+    })
+    if (this.userService.isTongCuc()) {
+      this.formData.patchValue({
+        listMaCuc: null,
+      })
+    } else if (this.userService.isCuc()) {
+      this.formData.patchValue({
+        listMaChiCuc: null,
+        listMaCuc: [this.userInfo.MA_DVI],
+      })
+    } else if (this.userService.isChiCuc()) {
+      this.formData.patchValue({
+        listMaChiCuc: [this.userInfo.MA_DVI],
+        listMaCuc: [this.userInfo.MA_DVI.substring(0,6)]
+      })
     }
   }
 }

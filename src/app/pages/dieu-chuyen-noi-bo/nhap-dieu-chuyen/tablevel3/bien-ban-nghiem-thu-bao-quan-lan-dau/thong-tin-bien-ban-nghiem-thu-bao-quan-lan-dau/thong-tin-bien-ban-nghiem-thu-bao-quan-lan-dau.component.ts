@@ -551,47 +551,58 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
   }
 
   xoa(row, type) {
-    if (type === "TH") {
-      if (row.id)
-        this.dsHangTH = this.dsHangTH.filter(item => item.id !== row.id)
-      else
-        this.dsHangTH = this.dsHangTH.filter(item => item.idVirtual !== row.idVirtual)
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: `Bạn chắc chắn muốn xoá dữ liệu?`,
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        if (type === "TH") {
+          if (row.id)
+            this.dsHangTH = this.dsHangTH.filter(item => item.id !== row.id)
+          else
+            this.dsHangTH = this.dsHangTH.filter(item => item.idVirtual !== row.idVirtual)
 
 
-      if (row.isParent)
-        this.dsHangTH = this.dsHangTH.filter(item => item.idParent !== row.idParent)
+          if (row.isParent)
+            this.dsHangTH = this.dsHangTH.filter(item => item.idParent !== row.idParent)
 
-      let tongKinhPhiDaTh = this.dsHangTH.reduce((prev, cur) => prev + cur.tongGiaTri, 0);
-      if (tongKinhPhiDaTh > 0) {
-        let tongKinhPhiDaThBc = this.convertTien(tongKinhPhiDaTh) + ' đồng'
-        this.formData.patchValue({
-          tongKinhPhiDaTh,
-          tongKinhPhiDaThBc
-        })
-      } else {
-        this.formData.patchValue({
-          tongKinhPhiDaTh: "",
-          tongKinhPhiDaThBc: ""
-        })
-      }
+          let tongKinhPhiDaTh = this.dsHangTH.reduce((prev, cur) => prev + cur.tongGiaTri, 0);
+          if (tongKinhPhiDaTh > 0) {
+            let tongKinhPhiDaThBc = this.convertTien(tongKinhPhiDaTh) + ' đồng'
+            this.formData.patchValue({
+              tongKinhPhiDaTh,
+              tongKinhPhiDaThBc
+            })
+          } else {
+            this.formData.patchValue({
+              tongKinhPhiDaTh: "",
+              tongKinhPhiDaThBc: ""
+            })
+          }
 
-      this.dsHangTH = cloneDeep(this.dsHangTH)
-    }
-    if (type === "PD") {
-      if (row.id)
-        this.dsHangPD = this.dsHangPD.filter(item => item.id !== row.id)
-      else
-        this.dsHangPD = this.dsHangPD.filter(item => item.idVirtual !== row.idVirtual)
-
-
-      if (row.isParent)
-        this.dsHangPD = this.dsHangPD.filter(item => item.idParent !== row.idParent)
-
-      this.dsHangPD = cloneDeep(this.dsHangPD)
-    }
+          this.dsHangTH = cloneDeep(this.dsHangTH)
+        }
+        if (type === "PD") {
+          if (row.id)
+            this.dsHangPD = this.dsHangPD.filter(item => item.id !== row.id)
+          else
+            this.dsHangPD = this.dsHangPD.filter(item => item.idVirtual !== row.idVirtual)
 
 
-    this.updateDataTable()
+          if (row.isParent)
+            this.dsHangPD = this.dsHangPD.filter(item => item.idParent !== row.idParent)
+
+          this.dsHangPD = cloneDeep(this.dsHangPD)
+        }
+
+
+        this.updateDataTable()
+      },
+    });
+
   }
 
 
@@ -800,15 +811,15 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
   }
 
   isTuChoi() {
-    return this.formData.value.trangThai == STATUS.CHO_DUYET_TK || this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC
+    return this.formData.value.trangThai == STATUS.CHO_DUYET_TK || this.formData.value.trangThai == STATUS.CHO_DUYET_KT || this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC
   }
 
   async tuChoi() {
     let trangThai = () => {
       if (this.formData.value.trangThai == STATUS.CHO_DUYET_TK)
         return STATUS.TU_CHOI_TK
-      // if (this.formData.value.trangThai == STATUS.CHO_DUYET_KT)
-      //   return STATUS.TU_CHOI_KT
+      if (this.formData.value.trangThai == STATUS.CHO_DUYET_KT)
+        return STATUS.TU_CHOI_KT
       if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC)
         return STATUS.TU_CHOI_LDCC
     };

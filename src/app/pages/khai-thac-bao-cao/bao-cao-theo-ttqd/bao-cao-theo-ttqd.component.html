@@ -29,7 +29,7 @@
               <span>Thực hiện KH nhập, xuất, cứu trợ, viện trợ, bảo quản hàng DTQG</span>
             </li>
             <li nz-menu-item nzSelected (click)="selectTab(5)"
-              *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA1')">
+                *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA1')">
               <span nz-icon nzType="fund"></span>
               <span>Nhập, xuất, tồn kho hàng DTQG</span>
             </li>
@@ -57,7 +57,7 @@
           </ul>
         </li>
         <!--        tab 3-->
-        <li nz-submenu nzTitle="&nbsp;&nbsp;&nbsp;Quyết định số 1457/TCDT-TVQT">
+        <li style="display: none" nz-submenu nzTitle="&nbsp;&nbsp;&nbsp;Quyết định số 1457/TCDT-TVQT">
           <ul>
             <li nz-menu-item (click)="selectTab(10)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA1')">
               <span nz-icon nzType="fund"></span>
@@ -79,7 +79,8 @@
               <span nz-icon nzType="fund"></span>
               <span>Chi tiết thực hiện phí nhập mua (hoặc xuất bán) hàng DTQG</span>
             </li>
-            <li nz-menu-item (click)="selectTab(15)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA1')">
+            <li nz-menu-item (click)="selectTab(15)"
+                *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA1')">
               <span nz-icon nzType="fund"></span>
               <span>Chi tiết thực hiện phí xuất hàng DTQG cứu trợ, viện trợ, hỗ trợ</span>
             </li>
@@ -108,7 +109,8 @@
               <span nz-icon nzType="fund"></span>
               <span>Số lượng và giá trị hàng DTQG nhập trong kỳ</span>
             </li>
-            <li nz-menu-item (click)="selectTab(21)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA1')">
+            <li nz-menu-item (click)="selectTab(21)"
+                *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA1')">
               <span nz-icon nzType="fund"></span>
               <span>Số lượng và giá trị hàng DTQG xuất trong kỳ</span>
             </li>
@@ -118,8 +120,7 @@
             </li>
             <li nz-menu-item (click)="selectTab(23)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA1')">
               <span nz-icon nzType="fund"></span>
-              <span>Số lượng và giá trị hàng xuất cứu trợ, hỗ trợ, phục vụ quốc phòng, an ninh và nv khác trong
-                kỳ</span>
+              <span>Số lượng và giá trị hàng xuất cứu trợ, hỗ trợ, phục vụ quốc phòng, an ninh và nv khác trong kỳ</span>
             </li>
             <li nz-menu-item (click)="selectTab(24)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA1')">
               <span nz-icon nzType="fund"></span>
@@ -127,8 +128,7 @@
             </li>
             <li nz-menu-item (click)="selectTab(25)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA1')">
               <span nz-icon nzType="fund"></span>
-              <span>Tiếp nhận, sử dụng hàng DTQG xuất cứu trợ, quốc phòng, an ninh và nhiệm vụ khác được giao trong
-                kỳ</span>
+              <span>Tiếp nhận, sử dụng hàng DTQG xuất cứu trợ, quốc phòng, an ninh và nhiệm vụ khác được giao trong kỳ</span>
             </li>
           </ul>
         </li>
@@ -158,7 +158,7 @@
           <app-ct-nhap-xuat-ton-kho-hang-dtqg></app-ct-nhap-xuat-ton-kho-hang-dtqg>
         </ng-container>
 
-        <!--        tab 2-->
+<!--        tab 2-->
         <ng-container *ngIf="tabSelected == 7">
           <app-ct-nhap-xuat-ton-kho-hang-dtqg-tt-108></app-ct-nhap-xuat-ton-kho-hang-dtqg-tt-108>
         </ng-container>
@@ -169,7 +169,7 @@
           <app-th-phi-nhap-xuat-phi-xuat-vien-tro-cuu-ho-ht-hang-dtqg></app-th-phi-nhap-xuat-phi-xuat-vien-tro-cuu-ho-ht-hang-dtqg>
         </ng-container>
 
-        <!--        tab 4-->
+<!--        tab 4-->
         <ng-container *ngIf="tabSelected == 16">
           <app-nguon-hinh-thanh-dtqg></app-nguon-hinh-thanh-dtqg>
         </ng-container>
@@ -177,6 +177,7 @@
           <app-tong-chi-cho-mua-hang-dtqg-trong-ky></app-tong-chi-cho-mua-hang-dtqg-trong-ky>
         </ng-container>
         <ng-container *ngIf="tabSelected == 18">
+
           <app-kh-mua-hang-dtqg></app-kh-mua-hang-dtqg>
         </ng-container>
         <ng-container *ngIf="tabSelected == 19">

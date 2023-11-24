@@ -86,7 +86,7 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
     }
     let msgRequired = this.required(this.rowItem);
     if (msgRequired) {
-      this.notification.error(MESSAGE.ERROR, msgRequired);
+      this.notification.warning(MESSAGE.WARNING, msgRequired);
       this.spinner.hide();
       return;
     }
@@ -135,14 +135,9 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
   required(item: ThongTinKhaoSatGia) {
     let msgRequired = "";
     //validator
-    if (!item.cloaiVthh && !this.isTabNdKhac) {
-      msgRequired = "Không được để trống chủng loại hàng hóa";
-    } else if (!item.donGia) {
-      msgRequired = "Không được để trống đơn giá";
-    } else if (!item.maChiCuc && !this.isApDung && !this.isTabNdKhac) {
-      msgRequired = "Không được để trống Chi cục"
-    } else if ((!item.tenDviBaoGia && this.isTableKetQua && !this.isTabNdKhac) || !item.tenDviThamDinh && !this.isTableKetQua && !this.isTabNdKhac) {
-      msgRequired = "Không được để trống đơn vị"
+    if (!this.isTabNdKhac && ((this.isTableKetQua && (!item.tenDviBaoGia || !item.ngayBaoGia)) || (!this.isTableKetQua && !item.tenDviThamDinh)
+      || !item.cloaiVthh || !item.soLuong || !item.donGia || !item.thoiHanBaoGia || !item.fileDinhKem.fileName)) {
+      msgRequired = "Vui lòng nhập đủ thông tin";
     }
     return msgRequired;
   }
@@ -183,7 +178,6 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
               type.fileDinhKem.fileUrl = resUpload.url;
               type.fileDinhKem.idVirtual = new Date().getTime();
             }
-
           }
         });
     }
@@ -240,7 +234,13 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
     }
   }
 
-  saveEdit(idx: number): void {
+  saveEdit(idx: number, item: ThongTinKhaoSatGia): void {
+    let msgRequired = this.required(item);
+    if (msgRequired) {
+      this.notification.warning(MESSAGE.WARNING, msgRequired);
+      this.spinner.hide();
+      return;
+    }
     this.dataEdit[idx].data.donGiaVat =this.dataEdit[idx].data.donGia * this.vat + this.dataEdit[idx].data.donGia
     Object.assign(this.dataTable[idx], this.dataEdit[idx].data);
     this.dataEdit[idx].edit = false;

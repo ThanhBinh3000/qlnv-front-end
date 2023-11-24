@@ -1,24 +1,25 @@
-import { Component, EventEmitter, Input, OnInit, Output, } from '@angular/core';
-import { Validators } from '@angular/forms';
+import {Component, EventEmitter, Input, OnInit, Output,} from '@angular/core';
+import {Validators} from '@angular/forms';
 import * as dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { STATUS } from 'src/app/constants/status';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
+import {MESSAGE} from 'src/app/constants/message';
+import {STATUS} from 'src/app/constants/status';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
 import {
   QuyetDinhGiaoNvXuatHangService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service';
 import {
   HopDongXuatHangService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
-import { FileDinhKem } from "../../../../../models/CuuTro";
+import {FileDinhKem} from "../../../../../models/CuuTro";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-create-giao-xh',
@@ -31,11 +32,12 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
   @Input() idInput: number;
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
+  templateNameVt = "Quyết định giao nhiệm vụ bán đấu giá vật tư";
+  templateNameLt = "Quyết định giao nhiệm vụ bán đấu giá lương thực";
   maHauTo: any;
   loadDanhSachQdGiaoNv: any[] = [];
   dataHopDong: any[] = [];
-  templateName = "Quyết định giao nhiệm vụ";
-  templateNameVt = "Quyết định giao nhiệm vụ vật tư";
 
   constructor(
     httpClient: HttpClient,
@@ -120,7 +122,7 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
       console.error('Không tìm thấy dữ liệu');
       return;
     }
-    const { soQdNv, children } = data;
+    const {soQdNv, children} = data;
     this.formData.patchValue({
       soQdNv: soQdNv?.split('/')[0]
     });
@@ -201,6 +203,8 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.map(item => {
           item.tonKho = item.children.reduce((total, child) => total + child.tonKho, 0);
+          item.tenTrangThai = data.tenTrangThaiXh
+          item.trangThai = data.trangThaiXh
         })
       }
     } catch (e) {

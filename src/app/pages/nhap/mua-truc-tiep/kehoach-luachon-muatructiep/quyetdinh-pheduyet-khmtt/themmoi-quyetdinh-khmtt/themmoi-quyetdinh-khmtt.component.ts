@@ -21,6 +21,7 @@ import { QuyetDinhPheDuyetKeHoachMTTService } from 'src/app/services/quyet-dinh-
 import { TongHopDeXuatKHMTTService } from 'src/app/services/tong-hop-de-xuat-khmtt.service';
 import { DatePipe } from "@angular/common";
 import { ChiTieuKeHoachNamCapTongCucService } from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
+import {QuyetDinhGiaTCDTNNService} from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
 
 @Component({
   selector: 'app-themmoi-quyetdinh-khmtt',
@@ -44,6 +45,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
   listToTrinh: any[] = [];
 
   danhsachDx: any[] = [];
+  danhSachPag: any[] = [];
 
   dataInput: any;
   dataInputCache: any;
@@ -62,6 +64,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
     private quyetDinhPheDuyetKeHoachMTTService: QuyetDinhPheDuyetKeHoachMTTService,
     private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
     private tongHopDeXuatKHMTTService: TongHopDeXuatKHMTTService,
+    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPheDuyetKeHoachMTTService);
     this.formData = this.fb.group({
@@ -123,7 +126,6 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
   async ngOnInit() {
     await this.spinner.show();
     try {
-      console.log(this.disableField)
       this.maQd = this.userInfo.MA_QD;
       if (this.idInput) {
         await this.loadChiTiet(this.idInput)
@@ -175,6 +177,9 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
     let data = await this.createUpdate(body);
     if (data) {
       if (isGuiDuyet) {
+        if(this.checkGiaCuThe(body.maDvi, body.children)){
+          return;
+        }
         this.idInput = data.id;
         this.guiDuyet();
       } else {
@@ -183,6 +188,53 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
     }
     await this.spinner.hide();
   }
+
+  checkGiaCuThe(maDvi?:any, data?: any): Boolean{
+      data.forEach(item =>{
+        item.children.forEach(res =>{
+          if(res.donGiaVat == null){
+            console.log(1)
+            this.notification.error(MESSAGE.ERROR, res.tenChiCuc + " chưa có giá cụ thể!");
+            return true;
+          }
+        })
+      })
+    console.log(2)
+      return false;
+  }
+
+  async getGiaCuThe(maDvi?:any){
+    let dvi;
+    if (maDvi != null) {
+      dvi = maDvi;
+    } else {
+      dvi = this.userInfo.MA_DVI
+    }
+    let body = {
+      loaiGia: "LG03",
+      namKeHoach: this.formData.value.namKh,
+      maDvi: dvi,
+      loaiVthh: this.formData.value.loaiVthh,
+      cloaiVthh: this.formData.value.cloaiVthh
+    }
+    let pag = await this.quyetDinhGiaTCDTNNService.getPag(body)
+    if (pag.msg == MESSAGE.SUCCESS && pag.data.length > 0) {
+      this.danhSachPag = pag.data;
+      // let donGiaVatQd = 0;
+      // if (data != null && data.giaQdDcTcdtVat != null && data.giaQdDcTcdtVat > 0) {
+      //   donGiaVatQd = data.giaQdDcTcdtVat
+      // } else {
+      //   donGiaVatQd = data.giaQdTcdtVat
+      // }
+      // this.formData.patchValue({
+      //   donGiaVat: donGiaVatQd
+      // })
+    }
+    // else {
+    //   this.formData.patchValue({
+    //     donGiaVat: null
+    //   })
+    }
 
   tuChoi() {
     this.reject(this.idInput, STATUS.TU_CHOI_LDV)
@@ -207,9 +259,9 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
       })
       this.idSoQdCc = data.idSoQdCc
       this.danhsachDx = data.children.filter(x => x.maDvi.includes(this.userInfo.MA_DVI));
-      console.log(this.danhsachDx, "danhsachDx")
       this.fileDinhKem = data.fileDinhKems;
     }
+    console.log(this.danhsachDx, "loadChiTiet")
     this.showDetail(event, this.danhsachDx[0]);
     this.spinner.hide()
   }
@@ -233,7 +285,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
     }
     await this.spinner.hide();
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách tổng hợp đề xuất kế hoạch bán đấu giá',
+      nzTitle: 'DANH SÁCH TỔNG HỢP ĐỀ XUẤT KẾ HOẠCH MUA TRỰC TIẾP',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -277,7 +329,6 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
               const dataRes = res.data;
               dataRes.idDxHdr = dataRes.id;
               this.danhsachDx.push(dataRes);
-              console.log(this.danhsachDx, 4444)
             }
           })
         };
@@ -313,7 +364,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
     await this.spinner.hide();
 
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách đề xuất kế hoạch lựa chọn nhà thầu',
+      nzTitle: 'DANH SÁCH ĐỀ XUẤT KẾ HOẠCH LỰA CHỌN NHÀ THẦU',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -321,7 +372,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listToTrinh,
-        dataHeader: ['Số tờ trình đề xuất', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
+        dataHeader: ['Số tờ trình đề xuất', 'Loại hàng DTQG', 'Chủng loại hàng DTQG'],
         dataColumn: ['soDxuat', 'tenLoaiVthh', 'tenCloaiVthh']
       },
     });
@@ -360,8 +411,8 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
         })
         this.idSoQdCc = data.idSoQdCc
         this.dataInput = null;
-        console.log(this.danhsachDx, "00000")
         this.dataInputCache = null;
+        await this.showDetail(event, this.danhsachDx[0]);
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -371,7 +422,6 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
 
   index = 0;
   async showDetail($event, data) {
-    console.log(data)
     await this.spinner.show();
     if ($event != undefined && $event.type == 'click') {
       this.selected = false
@@ -384,6 +434,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
     await this.getDataChiTieu(this.idSoQdCc);
     if (data) {
       this.dataInput = data;
+      console.log(data, "showDetail")
       let res = await this.danhSachMuaTrucTiepService.getDetail(data.idDxHdr);
       this.dataInputCache = res.data;
     }
@@ -393,7 +444,6 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
   async getDataChiTieu(id: any) {
     let res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachNam(id);
     if (res2.msg == MESSAGE.SUCCESS) {
-      console.log("dataChiTieu ", res2.data)
       this.dataChiTieu = res2.data;
     }
   }
@@ -421,7 +471,6 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
       item.tongSoLuong = item.children.reduce((acc, data) => acc + data.tongSoLuong, 0)
       item.tongTienGomThue = item.children.reduce((acc, data) => acc + data.tongThanhTien, 0)
     })
-    console.log(this.danhsachDx)
   }
 
   calcTongThanhTien(index: any) {

@@ -99,10 +99,10 @@ export class PaGiaoChiTieuKeHoachComponent implements OnInit {
     this.spinner.show();
     try {
       let dayNow = dayjs().get('year');
-      for (let i = -3; i < 23; i++) {
+      for (let i = -3; i <= 5; i++) {
         this.listNam.push({
-          value: dayNow - i,
-          text: dayNow - i,
+          value: dayNow + i,
+          text: dayNow + i,
         });
       }
       const res = await this.donViService.layDonViCon();
@@ -156,6 +156,7 @@ export class PaGiaoChiTieuKeHoachComponent implements OnInit {
   }
 
   async search() {
+    console.log('hahaaaaaaaaaaaaaaaaa');
     let maDonVi = null;
     let tenDvi = null;
     let donviId = null;
@@ -341,6 +342,7 @@ export class PaGiaoChiTieuKeHoachComponent implements OnInit {
           tenDvi: tenDvi,
           pageNumber: null,
           pageSize: null,
+          loaiQuyetDinh: this.LOAI_QD.PA,
           soQD: this.searchFilter.soQD,
           trichYeu: this.searchFilter.trichYeu,
           ngayKyTuNgay: this.startValue
@@ -350,7 +352,7 @@ export class PaGiaoChiTieuKeHoachComponent implements OnInit {
         this.chiTieuKeHoachNamService
           .exportList(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-chi-tieu-ke-hoach-nam.xlsx'),
+            saveAs(blob, 'danh-sach-phuong-an-chi-tieu-ke-hoach-nam.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -451,7 +453,7 @@ export class PaGiaoChiTieuKeHoachComponent implements OnInit {
     this.indexTab = cap;
     this.clearFilter();
     this.clearFilterTable();
-    this.search();
+    // this.search();
   }
 
   filterInTable(key: string, value: string) {

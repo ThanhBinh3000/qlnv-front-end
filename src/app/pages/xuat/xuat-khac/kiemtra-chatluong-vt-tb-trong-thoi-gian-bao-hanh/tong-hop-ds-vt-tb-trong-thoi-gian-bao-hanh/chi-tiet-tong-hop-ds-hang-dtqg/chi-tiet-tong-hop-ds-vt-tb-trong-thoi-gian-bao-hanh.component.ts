@@ -1,27 +1,27 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
-import { NumberToRoman } from "../../../../../../shared/commonFunction";
-import { Base2Component } from "../../../../../../components/base2/base2.component";
-import { CHUC_NANG } from "../../../../../../constants/status";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { DonviService } from "../../../../../../services/donvi.service";
-import { DanhMucService } from "../../../../../../services/danhmuc.service";
+import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
+import {NumberToRoman} from "../../../../../../shared/commonFunction";
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {CHUC_NANG} from "../../../../../../constants/status";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {DonviService} from "../../../../../../services/donvi.service";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import dayjs from "dayjs";
-import { Validators } from "@angular/forms";
-import { MESSAGE } from "../../../../../../constants/message";
-import { chain, cloneDeep, isEmpty } from "lodash";
-import { v4 as uuidv4 } from "uuid";
-import { FileDinhKem } from "../../../../../../models/FileDinhKem";
+import {Validators} from "@angular/forms";
+import {MESSAGE} from "../../../../../../constants/message";
+import {chain, cloneDeep, isEmpty} from "lodash";
+import {v4 as uuidv4} from "uuid";
+import {FileDinhKem} from "../../../../../../models/FileDinhKem";
 import {
   DanhSachVtTbTrongThoiGIanBaoHanh
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/DanhSachVtTbTrongThoiGianBaoHanh.service";
 import {
   TongHopDanhSachVtTbTrongThoiGIanBaoHanh
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/TongHopDanhSachVtTbTrongThoiGIanBaoHanh.service";
-import { LOAI_HH_XUAT_KHAC } from "../../../../../../constants/config";
+import {LOAI_HH_XUAT_KHAC} from "../../../../../../constants/config";
 
 @Component({
   selector: 'app-chi-tiet-tong-hop-ds-vt-tb-trong-thoi-gian-bao-hanh',
@@ -55,15 +55,15 @@ export class ChiTietTongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Comp
   fileDinhKems: any[] = [];
 
   constructor(httpClient: HttpClient,
-    storageService: StorageService,
-    notification: NzNotificationService,
-    spinner: NgxSpinnerService,
-    modal: NzModalService,
-    private donviService: DonviService,
-    private danhMucService: DanhMucService,
-    private tongHopDanhSachVtTbTrongThoiGIanBaoHanh: TongHopDanhSachVtTbTrongThoiGIanBaoHanh,
-    private danhSachVtTbTrongThoiGIanBaoHanh: DanhSachVtTbTrongThoiGIanBaoHanh,
-    private cdr: ChangeDetectorRef) {
+              storageService: StorageService,
+              notification: NzNotificationService,
+              spinner: NgxSpinnerService,
+              modal: NzModalService,
+              private donviService: DonviService,
+              private danhMucService: DanhMucService,
+              private tongHopDanhSachVtTbTrongThoiGIanBaoHanh: TongHopDanhSachVtTbTrongThoiGIanBaoHanh,
+              private danhSachVtTbTrongThoiGIanBaoHanh: DanhSachVtTbTrongThoiGIanBaoHanh,
+              private cdr: ChangeDetectorRef) {
     super(httpClient, storageService, notification, spinner, modal, tongHopDanhSachVtTbTrongThoiGIanBaoHanh);
     this.formData = this.fb.group({
       id: [0],
@@ -156,9 +156,9 @@ export class ChiTietTongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Comp
   }
 
   async changeHangHoa(event: any) {
-    this.formData.patchValue({ cloaiVthh: null })
+    this.formData.patchValue({cloaiVthh: null})
     if (event) {
-      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.dsCloaiVthh = res.data;
@@ -173,18 +173,18 @@ export class ChiTietTongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Comp
     this.selectedItem.childData = chain(data)
       .groupBy("tenChiCuc")
       .map((v, k) => {
-        let rowItem = v.find(s => s.tenChiCuc === k);
-        let idVirtual = uuidv4();
-        this.expandSetString.add(idVirtual);
-        return {
-          idVirtual: idVirtual,
-          tenChiCuc: k,
-          tenCuc: rowItem?.tenCuc,
-          maDiaDiem: rowItem?.maDiaDiem,
-          tenCloaiVthh: rowItem?.tenCloaiVthh,
-          childData: v
+          let rowItem = v.find(s => s.tenChiCuc === k);
+          let idVirtual = uuidv4();
+          this.expandSetString.add(idVirtual);
+          return {
+            idVirtual: idVirtual,
+            tenChiCuc: k,
+            tenCuc: rowItem?.tenCuc,
+            maDiaDiem: rowItem?.maDiaDiem,
+            tenCloaiVthh: rowItem?.tenCloaiVthh,
+            childData: v
+          }
         }
-      }
       ).value();
     console.log(data, 'raw');
     console.log(this.selectedItem, 'view');
@@ -218,10 +218,11 @@ export class ChiTietTongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Comp
           loai: LOAI_HH_XUAT_KHAC.VT_BH,
         }).then(async res => {
           if (res.msg == MESSAGE.SUCCESS) {
-            if (res.data.numberOfElements == 0) {
-              this.notification.warning(MESSAGE.ALERT, 'Không tìm thấy danh sách cần tổng hợp');
+            let danhSach = res.data.content.filter(i => i.idTongHop == null);
+            if (danhSach.length == 0) {
+              this.notification.warning(MESSAGE.ALERT, 'Không tìm thấy danh sách cần tổng hợp.');
             } else {
-              res.data.content.forEach(s => {
+              danhSach.forEach(s => {
                 s.idDsHdr = cloneDeep(s.id);
                 s.id = null;
               });
@@ -235,7 +236,7 @@ export class ChiTietTongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Comp
                 // console.log(this.selectedItem,"file")
                 // await this.buildTableView(result.tongHopDtl);
                 await this.loadDetail(this.selectedItem.id)
-                this.step.emit({ step: 2, item: this.selectedItem });
+                this.step.emit({step: 2, item: this.selectedItem});
               }
             }
           } else {
@@ -280,7 +281,7 @@ export class ChiTietTongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Comp
                 let res = await this.tongHopDanhSachVtTbTrongThoiGIanBaoHanh.approve(body);
                 if (res.msg == MESSAGE.SUCCESS) {
                   this.notification.success(MESSAGE.NOTIFICATION, 'Gửi duyệt tổng hợp thành công.');
-                  this.step.emit({ step: 1 });
+                  this.step.emit({step: 1});
                 } else {
                   this.notification.error(MESSAGE.ERROR, res.msg);
                 }
@@ -296,8 +297,8 @@ export class ChiTietTongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Comp
       }
       if (changes.eventCancel) {
         // this.quayLai();
-        this.step.emit({ step: 0 });
-        this.changeShow.emit({ showDetail: false, item: this.selectedItem })
+        this.step.emit({step: 0});
+        this.changeShow.emit({showDetail: false, item: this.selectedItem})
       }
     }
 
@@ -305,6 +306,6 @@ export class ChiTietTongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Comp
 
   onClickShowDetail() {
     this.showDetail = !this.showDetail;
-    this.changeShow.emit({ showDetail: this.showDetail, item: this.selectedItem })
+    this.changeShow.emit({showDetail: this.showDetail, item: this.selectedItem})
   }
 }

@@ -1,14 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Base2Component } from "../../../../../components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
+import {Component, Input, OnInit} from '@angular/core';
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {MESSAGE} from "../../../../../constants/message";
 import {
-  QuyetDinhDchinhKhBdgService
-} from "../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/dieuchinh-kehoach/quyetDinhDchinhKhBdg.service";
-import { MESSAGE } from "../../../../../constants/message";
+  QuyetDinhPdKhBdgService
+} from "../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-dieu-chinh',
@@ -17,6 +18,7 @@ import { MESSAGE } from "../../../../../constants/message";
 })
 export class DieuChinhComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   isView = false;
   idQdPd: number = 0;
   isViewQdPd: boolean = false;
@@ -28,9 +30,9 @@ export class DieuChinhComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private quyetDinhDchinhKhBdgService: QuyetDinhDchinhKhBdgService,
+    private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhDchinhKhBdgService);
+    super(httpClient, storageService, notification, spinner, modal, quyetDinhPdKhBdgService);
     this.formData = this.fb.group({
       nam: null,
       soQdDc: null,
@@ -39,20 +41,21 @@ export class DieuChinhComponent extends Base2Component implements OnInit {
       ngayKyDcDen: null,
       loaiVthh: null,
       maDvi: null,
+      type: null,
     })
 
     this.filterTable = {
-      nam: '',
-      soQdDc: '',
-      ngayKyDc: '',
-      soQdPd: '',
-      soCongVan: '',
-      trichYeu: '',
-      tenCloaiVthh: '',
-      slDviTsan: '',
-      slHdongDaKy: '',
-      thoiHanGiaoNhan: '',
-      tenTrangThai: '',
+      nam: null,
+      soQdDc: null,
+      ngayKyDc: null,
+      soQdPd: null,
+      soCongVan: null,
+      trichYeu: null,
+      tenLoaiVthh: null,
+      tenCloaiVthh: null,
+      slDviTsan: null,
+      thoiHanGiaoNhan: null,
+      tenTrangThai: null,
     };
 
     this.listTrangThai = [
@@ -86,27 +89,17 @@ export class DieuChinhComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([
-        this.timKiem(),
-        this.search(),
-      ]);
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+        type: 'QDDC',
+      })
+      await this.search();
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
     }
-  }
-
-  timKiem() {
-    this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
-    })
-  }
-
-  async clearFilter() {
-    this.formData.reset();
-    await Promise.all([this.timKiem(), this.search()]);
   }
 
   redirectDetail(id, isView: boolean) {
@@ -150,13 +143,13 @@ export class DieuChinhComponent extends Base2Component implements OnInit {
       case 'XEM':
         return (
           this.userService.isAccessPermisson(permissions.XEM) && ((this.userService.isAccessPermisson(permissions.THEM) &&
-            [
-              this.STATUS.CHO_DUYET_LDV, this.STATUS.CHO_DUYET_LDTC, this.STATUS.BAN_HANH
-            ].includes(data.trangThai)) ||
+              [
+                this.STATUS.CHO_DUYET_LDV, this.STATUS.CHO_DUYET_LDTC, this.STATUS.BAN_HANH
+              ].includes(data.trangThai)) ||
             (!this.userService.isAccessPermisson(permissions.THEM) && [
-              this.STATUS.DA_LAP, this.STATUS.TU_CHOI_LDV, this.STATUS.TU_CHOI_LDTC,
-              this.STATUS.BAN_HANH
-            ].includes(data.trangThai) ||
+                this.STATUS.DA_LAP, this.STATUS.TU_CHOI_LDV, this.STATUS.TU_CHOI_LDTC,
+                this.STATUS.BAN_HANH
+              ].includes(data.trangThai) ||
               (data.trangThai === this.STATUS.CHO_DUYET_LDV) ||
               (data.trangThai === this.STATUS.CHO_DUYET_LDTC && !this.userService.isAccessPermisson(permissions.BAN_HANH))))
         );

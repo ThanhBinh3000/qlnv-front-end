@@ -19,21 +19,23 @@
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Duyệt</span>
             </button>
-            <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_CBV)
-                && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_THEM')" type="button"
-                class="btn btn-sub xanh-nhat" (click)="save(true)">
+            <button
+                *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_CBV)
+                && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_THEM')"
+                type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
                 <i class="icon htvbdh_tcdt_guiduyet"></i>
                 <span>Lưu và gửi duyệt</span>
             </button>
-            <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_CBV )
-                && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_THEM')" type="button"
-                class="btn btn-main" (click)="save()">
+            <button
+                *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_CBV )
+                && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_THEM')"
+                type="button" class="btn btn-main" (click)="save()">
                 <i class="icon htvbdh_tcdt_save"></i>
                 <span>Lưu</span>
             </button>
             <button *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDC)
-             && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_DUYET_CANBOVU')" type="button"
-                class="btn btn-sub do" (click)="tuChoi()">
+             && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_DUYET_CANBOVU')" type="button" class="btn btn-sub do"
+                (click)="tuChoi()">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
             </button>
@@ -113,8 +115,7 @@
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true">Năm kế hoạch</nz-form-label>
                                 <nz-form-control nz-col [nzErrorTip]="error">
-                                    <nz-select [nzDisabled]="isDisable()" formControlName="namKh"
-                                        (ngModelChange)="changeNamKh()">
+                                    <nz-select [nzDisabled]="isDisable()" formControlName="namKh" (ngModelChange)="changeNamKh()">
                                         <nz-option *ngFor="let p of listNam" [nzValue]="p.value"
                                             [nzLabel]="p.text"></nz-option>
                                     </nz-select>
@@ -126,7 +127,7 @@
                                 <nz-form-label nzRequired [nzNoColon]="true"> Số công văn/ tờ trình </nz-form-label>
                                 <nz-form-control nz-col [nzErrorTip]="error">
                                     <nz-input-group nzAddOnAfter="{{maTrinh}}">
-                                        <input nz-input formControlName="soDxuat" [readonly]="isDisable()" />
+                                        <input nz-input formControlName="soDxuat" [readonly]="isDisable()"/>
                                     </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
@@ -156,8 +157,7 @@
                                 <nz-form-label nzRequired [nzNoColon]="true"> Ngày duyệt kế hoạch </nz-form-label>
                                 <nz-form-control nz-col>
                                     <nz-input-group>
-                                        <nz-date-picker formControlName="ngayPduyet" nzFormat="dd/MM/yyyy"
-                                            [nzDisabled]="isDisable()">
+                                        <nz-date-picker formControlName="ngayPduyet" nzFormat="dd/MM/yyyy" [nzDisabled]="true">
                                         </nz-date-picker>
                                     </nz-input-group>
                                 </nz-form-control>
@@ -173,8 +173,7 @@
                         </div>
                         <div nz-col [nzSpan]="6">
                             <nz-form-item>
-                                <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ QĐ giao chỉ tiêu/QĐ điều chỉnh chỉ
-                                    tiêu KH năm
+                                <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ QĐ giao chỉ tiêu/QĐ điều chỉnh chỉ tiêu KH năm
                                 </nz-form-label>
                                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                                     <nz-input-group nzAddOnAfterIcon="folder-open">
@@ -442,7 +441,7 @@
                         <tr>
                             <th class="text-center">STT</th>
                             <th class="text-center wrap">Chi cục</th>
-                            <!--                            <th class="text-center wrap">Điểm kho</th>-->
+<!--                            <th class="text-center wrap">Điểm kho</th>-->
                             <th class="text-center wrap">Điểm kho nhập kho</th>
                             <th class="text-center wrap">Chỉ tiêu KH được giao (Tấn)</th>
                             <th class="text-center wrap">Số đã thực hiện (Tấn)</th>
@@ -460,52 +459,44 @@
                             <tr>
                                 <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>
                                 <td colspan="2">{{item.tenDvi}}</td>
-                                <td class="text-right text-red">{{item.soLuongChiTieu | number : '1.0-1' : 'vi_VN'}}
-                                </td>
+                                <td class="text-right text-red">{{item.soLuongChiTieu | number : '1.0-1' : 'vi_VN'}}</td>
                                 <td class="text-right text-red">{{item.soLuongKhDd | number : '1.0-1' : 'vi_VN'}}</td>
                                 <td class="text-right text-black">{{item.tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                                <td *ngIf="item.children.length == 0" class="text-right text-black">{{item.donGia |
-                                    number : '1.0-1' : 'vi_VN'}}</td>
+                                <td *ngIf="item.children.length == 0" class="text-right text-black">{{item.donGia | number : '1.0-1' : 'vi_VN'}}</td>
                                 <td *ngIf="item.children.length != 0" class="text-right text-black"></td>
-                                <td class="text-right text-black">{{item.tongThanhTien | number : '1.0-1' : 'vi_VN'}}
-                                </td>
-                                <td *ngIf="item.children.length == 0" class="text-right text-black">{{item.donGiaVat |
-                                    number : '1.0-1' : 'vi_VN'}}</td>
-                                <td *ngIf="item.children.length != 0"></td>
+                                <td class="text-right text-black">{{item.tongThanhTien | number : '1.0-1' : 'vi_VN'}}</td>
+                              <td *ngIf="item.children.length == 0" class="text-right text-black">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                              <td *ngIf="item.children.length != 0"></td>
                                 <td class="text-right">{{item.tongThanhTienVat | number : '1.0-1' : 'vi_VN'}}</td>
-                                <td class="text-right text-red">{{item.soLuongChiTieu - item.tongSoLuong -
-                                    item.soLuongKhDd | number : '1.0-1' : 'vi_VN'}}</td>
+                                <td class="text-right text-red">{{item.soLuongChiTieu - item.tongSoLuong - item.soLuongKhDd | number : '1.0-1' : 'vi_VN'}}</td>
                                 <td>
-                                    <a *ngIf="!isDisable() && item.children.length == 0"
-                                        (click)="themMoiBangPhanLoTaiSan($event,item,i)">
-                                        <i class="fa fa-pencil" title="Sửa"></i>
-                                    </a>
-                                    <a *ngIf="!isDisable() && item.children.length == 0" (click)="deleteRow(i)">
-                                        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                                    </a>
+                                  <a *ngIf="!isDisable() && item.children.length == 0" (click)="themMoiBangPhanLoTaiSan($event,item,i)">
+                                    <i class="fa fa-pencil" title="Sửa"></i>
+                                  </a>
+                                  <a *ngIf="!isDisable() && item.children.length == 0" (click)="deleteRow(i)">
+                                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                                  </a>
                                 </td>
                             </tr>
                             <ng-container>
                                 <tr *ngFor="let children of item.children, let y = index">
                                     <td></td>
                                     <td></td>
-                                    <!--                                    <td>{{children.tenDiemKho}}</td>-->
-                                    <td class="text-left">{{children.diaDiemNhap}}</td>
+                                    <td>{{children.tenDiemKho}}</td>
+<!--                                    <td class="text-left">{{children.diaDiemNhap}}</td>-->
                                     <td></td>
                                     <td></td>
                                     <td class="text-right">{{children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                                     <td class="text-right">{{children.donGia | number : '1.0-1' : 'vi_VN'}}</td>
-                                    <td class="text-right">{{children.soLuong * children.donGia * 1000 | number :
-                                        '1.0-1' : 'vi_VN' }}</td>
+                                    <td class="text-right">{{children.soLuong * children.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
                                     <td class="text-right">{{children.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
-                                    <td class="text-right">{{children.soLuong * children.donGiaVat * 1000 | number :
-                                        '1.0-1' : 'vi_VN'}}</td>
+                                    <td class="text-right">{{children.soLuong * children.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
                                     <td></td>
                                     <td>
                                         <a *ngIf="!isDisable()" (click)="themMoiBangPhanLoTaiSan($event,item,i)">
                                             <i class="fa fa-pencil" title="Sửa"></i>
                                         </a>
-                                        <a *ngIf="!isDisable()" (click)="deleteRow(i)">
+                                        <a *ngIf="!isDisable()" (click)="deleteRow(i, y)">
                                             <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                                         </a>
                                     </td>
@@ -518,11 +509,11 @@
                             <th colspan="3" class="text-blue">Tổng</th>
                             <th></th>
                             <th></th>
-                            <th class="text-blue text-right">{{calcTongSoLuong()|number: '1.0-1'}}</th>
+                            <th class="text-blue text-right">{{calcTongSoLuong()|number: '1.0-1': 'vi_VN'}}</th>
                             <th></th>
-                            <th class="text-blue text-right">{{calcTongThanhTienDeXuat()|number: '1.0-1'}}</th>
+                            <th class="text-blue text-right">{{calcTongThanhTienDeXuat()|number: '1.0-1': 'vi_VN'}}</th>
                             <th></th>
-                            <th class="text-blue text-right">{{calcTongThanhTien()|number: '1.0-1'}}</th>
+                            <th class="text-blue text-right">{{calcTongThanhTien()|number: '1.0-1': 'vi_VN'}}</th>
                             <th></th>
                         </tr>
                     </tfoot>

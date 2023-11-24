@@ -40,6 +40,7 @@ export class LapBienBanNghiemThuBaoQuanComponent extends Base2Component implemen
   @Input() typeVthh: string;
   @Input() title: string;
   @Input() idQdGiaoNvNh: number;
+  @Input() dataDdiem: any;
   @Output() showListEvent = new EventEmitter<any>();
   listSoQuyetDinh: any[] = [];
   listDiaDiemNhap: any[] = [];
@@ -143,6 +144,12 @@ export class LapBienBanNghiemThuBaoQuanComponent extends Base2Component implemen
         await this.loadChiTiet(this.id);
       } else {
         await this.initForm();
+      }
+      if(this.idQdGiaoNvNh){
+        await this.bindingDataQd(this.idQdGiaoNvNh)
+      }
+      if(this.dataDdiem){
+        await this.bindingDataDdNhap(this.dataDdiem)
       }
       this.spinner.hide();
     } catch (e) {
@@ -503,8 +510,21 @@ export class LapBienBanNghiemThuBaoQuanComponent extends Base2Component implemen
       nguoiTao: this.userInfo.sub,
       tenNguoiTao: this.userInfo.TEN_DAY_DU,
     });
-    if (this.idQdGiaoNvNh) {
+    if (this.dataDdiem && this.idQdGiaoNvNh) {
+      console.log(this.dataDdiem)
+      // this.formData.patchValue({
+      //   tenNganLoKho: this.dataDdiem.tenLoKho ? `${this.dataDdiem.tenLoKho} - ${this.dataDdiem.tenNganKho}` : this.dataDdiem.tenNganKho,
+      //   maLoKho: this.dataDdiem.maLoKho,
+      //   tenLoKho: this.dataDdiem.tenLoKho,
+      //   maNganKho: this.dataDdiem.maNganKho,
+      //   tenNganKho: this.dataDdiem.tenNganKho,
+      //   maNhaKho: this.dataDdiem.maNhaKho,
+      //   tenNhaKho: this.dataDdiem.tenNhaKho,
+      //   maDiemKho: this.dataDdiem.maDiemKho,
+      //   tenDiemKho: this.dataDdiem.tenDiemKho,
+      // });
       await this.bindingDataQd(this.idQdGiaoNvNh, true);
+      await this.bindingDataDdNhap(this.listDiaDiemNhap.find(x => x.id == this.dataDdiem.id))
     }
   }
 
@@ -592,6 +612,7 @@ export class LapBienBanNghiemThuBaoQuanComponent extends Base2Component implemen
   async loadDataComboBox() {
     if (this.formData.value.cloaiVthh) {
       let res = await this.danhMucService.getDetail(this.formData.value.cloaiVthh);
+      console.log(res, "000")
       if (res.msg == MESSAGE.SUCCESS) {
         this.listPhuongThucBaoQuan = res.data?.phuongPhapBq
         this.listHinhThucBaoQuan = res.data?.hinhThucBq
@@ -626,6 +647,7 @@ export class LapBienBanNghiemThuBaoQuanComponent extends Base2Component implemen
       //   let phieuKtraCL = data.listPhieuKtraCl.filter(x => x.soPhieu == item.soPhieuKtraCl)[0];
       //   item.soLuongThucNhap = phieuKtraCL ? phieuKtraCL.soLuongNhapKho : 0
       // })
+      console.log(data)
       await this.getNganKho(data.maLoKho ? data.maLoKho : data.maNganKho);
       console.log(data, "9999")
       this.formData.patchValue({
@@ -766,27 +788,48 @@ export class LapBienBanNghiemThuBaoQuanComponent extends Base2Component implemen
 
   pheDuyet() {
     let trangThai = ''
-    switch (this.formData.value.trangThai) {
-      case STATUS.TU_CHOI_LDCC:
-      case STATUS.TU_CHOI_KT:
-      case STATUS.TU_CHOI_TK:
-      case STATUS.DU_THAO: {
-        trangThai = STATUS.CHO_DUYET_TK;
-        break;
+    if(!this.formData.value.loaiVthh.startsWith('02')){
+      switch (this.formData.value.trangThai) {
+        case STATUS.TU_CHOI_LDCC:
+        case STATUS.TU_CHOI_KT:
+        case STATUS.TU_CHOI_TK:
+        case STATUS.DU_THAO: {
+          trangThai = STATUS.CHO_DUYET_TK;
+          break;
+        }
+        case STATUS.CHO_DUYET_TK: {
+          trangThai = STATUS.CHO_DUYET_KT;
+          break;
+        }
+        case STATUS.CHO_DUYET_KT: {
+          trangThai = STATUS.CHO_DUYET_LDCC;
+          break;
+        }
+        case STATUS.CHO_DUYET_LDCC: {
+          trangThai = STATUS.DA_DUYET_LDCC;
+          break;
+        }
       }
-      case STATUS.CHO_DUYET_TK: {
-        trangThai = STATUS.CHO_DUYET_KT;
-        break;
-      }
-      case STATUS.CHO_DUYET_KT: {
-        trangThai = STATUS.CHO_DUYET_LDCC;
-        break;
-      }
-      case STATUS.CHO_DUYET_LDCC: {
-        trangThai = STATUS.DA_DUYET_LDCC;
-        break;
+    }else{
+      switch (this.formData.value.trangThai) {
+        case STATUS.TU_CHOI_LDCC:
+        case STATUS.TU_CHOI_KT:
+        case STATUS.TU_CHOI_TK:
+        case STATUS.DU_THAO: {
+          trangThai = STATUS.CHO_DUYET_TK;
+          break;
+        }
+        case STATUS.CHO_DUYET_TK: {
+          trangThai = STATUS.CHO_DUYET_LDCC;
+          break;
+        }
+        case STATUS.CHO_DUYET_LDCC: {
+          trangThai = STATUS.DA_DUYET_LDCC;
+          break;
+        }
       }
     }
+
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',

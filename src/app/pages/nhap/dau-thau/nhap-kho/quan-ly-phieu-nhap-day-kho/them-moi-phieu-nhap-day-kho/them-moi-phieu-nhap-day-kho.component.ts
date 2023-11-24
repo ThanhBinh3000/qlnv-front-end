@@ -22,6 +22,9 @@ import { STATUS } from "../../../../../../constants/status";
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
+import {DonviService} from "../../../../../../services/donvi.service";
+import {TheoDoiBqService} from "../../../../../../services/luu-kho/theo-doi-bq.service";
+import {STATUS_DA_DUYET} from "../../../../../../constants/config";
 
 @Component({
   selector: 'them-moi-phieu-nhap-day-kho',
@@ -60,6 +63,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
   bbNghiemThuBaoQuans: any[] = [];
   previewName: string = 'bien_ban_ket_thuc_nhap_kho';
   listFileDinhKemBb: any[] = [];
+  templateName = "10. C76-HD_Biên bản nhập đầy kho";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -69,6 +73,8 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
     private quanLyPhieuNhapDayKhoService: QuanLyPhieuNhapDayKhoService,
     private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
+    private donViService: DonviService,
+    private theoDoiBqService: TheoDoiBqService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quanLyPhieuNhapDayKhoService);
     this.formData = this.fb.group({
@@ -123,6 +129,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
       diaDiemKho: [],
       ngayHetHanNk: [],
       thanLuuKho: [],
+      ngayHetHanLk: [],
     })
 
   }
@@ -226,6 +233,11 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
       ngayHd: data.hopDong.ngayKy,
       donGiaHd: data.hopDong.donGia
     });
+    if (this.loaiVthh.startsWith('02')) {
+      this.formData.patchValue({
+        dvt: data.donViTinh,
+      })
+    }
     let dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
     if (dataChiCuc.length > 0) {
       this.listDiaDiemNhap = dataChiCuc[0].children;
@@ -249,12 +261,12 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
-        this.bindingDataDdNhap(data);
+        await this.bindingDataDdNhap(data);
       }
     });
   }
 
-  bindingDataDdNhap(data, isDetail?: boolean) {
+  async bindingDataDdNhap(data, isDetail?: boolean) {
     if (!isDetail) {
       if (this.loaiVthh.startsWith('02')) {
         this.dataTable = data.listBangKeVt;
@@ -262,11 +274,10 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
           let itemPnk = data.listPhieuNhapKho.filter(x => x.soPhieuNhapKho == item.soPhieuNhapKho)[0];
           item.soPhieuNhapKho = item.soPhieuNhapKho;
           item.soBangKe = item.soBangKe;
-          item.ngayNhap = itemPnk.ngayTao;
-          item.soLuong = itemPnk.soLuongNhapKho;
+          item.ngayNhap = itemPnk?.ngayTao;
+          item.soLuong = itemPnk?.soLuongNhapKho;
         })
       } else {
-        debugger
         this.dataTable = data.listPhieuKtraCl;
         this.dataTable.forEach(item => {
           item.soPhieuNhapKho = '';
@@ -318,6 +329,36 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
       bienBanLayMau: data.bienBanLayMau?.soBienBan,
       tenNganLoKho: data.tenLoKho ? data.tenLoKho + " - " + data.tenNganKho : data.tenNganKho,
     });
+    const res = await this.donViService.layDonViCon();
+    if (res.msg === MESSAGE.SUCCESS) {
+      const dataDiemKho = res.data.find(f => f.maDvi === data.maDiemKho);
+      if (dataDiemKho) {
+        this.formData.patchValue({
+          diaDiemKho: dataDiemKho.diaChi
+        })
+      }
+    }
+    let body = {
+      nam: this.formData.value.nam,
+      maDviSr: this.formData.value.maDvi,
+      maDiemKho: data.maDiemKho,
+      maNhaKho: data.maNhaKho,
+      maNganKho: data.maNganKho,
+      maLoKho: data.maLoKho,
+      loaiVthh: this.formData.value.loaiVthh,
+      cloaiVthh: this.formData.value.cloaiVthh,
+      trangThai : this.STATUS.DA_DUYET_LDCC,
+    }
+    let soBaoQuan = await this.theoDoiBqService.search(body);
+    if (soBaoQuan.msg === MESSAGE.SUCCESS) {
+      let dataBq = soBaoQuan.data.content[0];
+      if (dataBq) {
+        this.formData.patchValue({
+          thanLuuKho: dataBq.thoiHanLk,
+          ngayHetHanLk: dataBq.ngayHetHanLk,
+        })
+      }
+    }
   }
 
   isDisableField() {
@@ -336,7 +377,6 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
   }
 
   async save(isGuiDuyet?: boolean) {
-    if (this.validateSave()) {
       this.spinner.show();
       try {
         this.helperService.markFormGroupTouched(this.formData);
@@ -345,7 +385,11 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
           return;
         }
         if (isGuiDuyet) {
-          if (this.listFileDinhKemBb.length <= 0) {
+          if (this.validateSave()) {
+            this.spinner.hide();
+            return;
+          }
+          if(this.listFileDinhKemBb.length <= 0) {
             this.notification.error(MESSAGE.ERROR, 'File đính kèm biên bản đã ký không được để trống.');
             this.spinner.hide();
             return;
@@ -387,17 +431,21 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
       } finally {
         this.spinner.hide();
       };
-    }
-
   }
 
   validateSave(): boolean {
-    if (this.calcTong() != this.formData.value.soLuongNhapKho) {
-      this.notification.error(MESSAGE.ERROR, "Số lượng bảng kê cân hàng và phiếu nhập kho không đủ số lượng đầy kho")
-      return false
+    if (this.loaiVthh.startsWith('02')) {
+      if (this.calcTong() != this.formData.value.soLuongNhapKho) {
+        this.notification.error(MESSAGE.ERROR, "Số lượng bảng kê cân hàng và phiếu nhập kho không đủ số lượng đầy kho")
+        return true
+      }
+    } else {
+      if (this.calcTong() != this.formData.value.soLuongNhapKho *1000) {
+        this.notification.error(MESSAGE.ERROR, "Số lượng bảng kê cân hàng và phiếu nhập kho không đủ số lượng đầy kho")
+        return true
+      }
     }
-
-    return true;
+    return false;
   }
 
   pheDuyet() {
@@ -605,7 +653,11 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
         prev += cur.soLuong;
         return prev;
       }, 0);
-      return sum * 1000;
+      if (this.loaiVthh.startsWith('02')) {
+        return sum;
+      } else {
+        return sum * 1000;
+      }
     }
   }
 

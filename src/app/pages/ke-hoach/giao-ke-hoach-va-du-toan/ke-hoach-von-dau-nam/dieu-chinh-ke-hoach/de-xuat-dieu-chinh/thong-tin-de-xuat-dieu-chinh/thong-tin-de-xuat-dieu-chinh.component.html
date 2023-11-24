@@ -10,39 +10,26 @@
           <span>Quay lại</span>
         </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="guiDuyet()"
-          *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO || thongTinChiTieuKeHoachNam.trangThai ==  STATUS.TU_CHOI_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDC || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV) && !isViewDetail">
+          *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO || thongTinChiTieuKeHoachNam.trangThai ==  STATUS.TU_CHOI_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDC || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV) && !isViewDetail && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_THEM')">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Lưu và gửi duyệt</span>
         </button>
-        <!--        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="taoQuyetDinh()"-->
-        <!--                *ngIf="thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDC ||thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDV  ">-->
-        <!--          <i class="icon htvbdh_chuyenvanthu"></i>-->
-        <!--          <span>Tạo quyết định</span>-->
-        <!--        </button>-->
+
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-          *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && ( userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_TP')  || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_LDC'))"
+          *ngIf="((thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_DUYET_TP')) || (thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_DUYET_LDCUC')))"
           (click)="pheDuyet()">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Duyệt</span>
         </button>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-          *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_DUYET_LDVU')"
-          (click)="pheDuyet()">
-          <i class="icon htvbdh_tcdt_pheduyet"></i>
-          <span>Duyệt</span>
-        </button>
+
         <a class="btn btn-outline-danger btn-sm waves-effect waves-light" (click)="tuChoi()"
-          *ngIf="(!userService.isTongCuc() &&  thongTinChiTieuKeHoachNam.trangThai ==  STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_TP') || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_LDC'))">
+          *ngIf="((thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_DUYET_TP')) || (thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_DUYET_LDCUC')))">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </a>
-        <a class="btn btn-outline-danger btn-sm waves-effect waves-light" (click)="tuChoi()"
-          *ngIf="(userService.isTongCuc() && thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV ) && ( userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_DUYET_LDVU') )">
-          <i class="icon htvbdh_tcdt_tuchoi"></i>
-          <span>Từ chối</span>
-        </a>
+
         <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
-          *ngIf="!this.isViewDetail && (thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDC || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_TP)">
+          *ngIf="!this.isViewDetail && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_THEM') && (thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDC || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_TP)">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
@@ -56,11 +43,11 @@
       <div class="header-text">
         <div class="title-chi-tieu">
           <span
-            [ngClass]="thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDV ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'  ">
+            [ngClass]="thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDC ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'  ">
             {{thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO ? 'Dự thảo' : thongTinChiTieuKeHoachNam.tenTrangThai
             }}
           </span>
-          <span>THÔNG TIN ĐỀ XUẤT ĐIỀU CHỈNH CHỈ TIÊU KẾ HOẠCH NĂM CỦA {{thongTinChiTieuKeHoachNam.capDvi == "1" ?
+          <span>THÔNG TIN ĐỀ XUẤT ĐIỀU CHỈNH CHỈ TIÊU KẾ HOẠCH NĂM CỦA {{thongTinChiTieuKeHoachNam.cap == "1" ?
             'TỔNG CỤC' : 'CỤC'}}
           </span>
         </div>
@@ -73,10 +60,11 @@
             <nz-form-label nz-col nzRequired [nzNoColon]="true" class="text-left"> Năm kế hoạch
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-select formControlName="namKeHoach" (ngModelChange)="selectNam()" [nzDisabled]="isViewDetail"
-                nzAllowClear>
+              <nz-select formControlName="namKeHoach" (ngModelChange)="selectNam()"
+                [nzDisabled]="isViewDetail || !!this.id" nzAllowClear>
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
+              <!-- <input [readonly]="true" nz-input formControlName="namKeHoach" readonly="true" /> -->
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -84,10 +72,10 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Số đề xuất</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
-                <input formControlName="soDeXuat" [readonly]="checkTrangThaiRecord()" nz-input nzSize="small"
-                  placeholder="Nhập số công văn/tờ trình" />
-              </nz-input-group>
+              <!-- <nz-input-group nzAddOnAfter="/TTr-CDTNN"> -->
+              <input formControlName="soDeXuat" [readonly]="isViewDetail" nz-input nzSize="small"
+                placeholder="Nhập số đề xuất" />
+              <!-- </nz-input-group> -->
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -97,7 +85,7 @@
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <nz-date-picker class="search__input" nzFormat="dd/MM/yyyy" formControlName="ngayKy"
-                nzPlaceHolder="Ngày ký">
+                [nzDisabled]="isViewDetail" nzPlaceHolder="Ngày ký">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -107,47 +95,12 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">Số QĐ giao chỉ tiêu của TC</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <!-- <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQD()"> -->
               <input [readonly]="true" nz-input formControlName="soQuyetDinhGiaoCuaTc" readonly="true" />
-              <!-- </nz-input-group> -->
             </nz-form-control>
           </nz-form-item>
         </div>
 
-        <!-- <div nz-col [nzSpan]="12" *ngIf="thongTinChiTieuKeHoachNam.capDvi == '1'">
-          <div nz-col [nzSpan]="24" style="margin-top: 12px">
-            <nz-form-item>
-              <nz-radio-group [nzDisabled]="disableSelect()" nzSize="small"
-                (ngModelChange)="changeRadioLoaiCanCu($event)" class="rdo-input" formControlName="loaiCanCu">
-                <label nz-radio nzValue="OTHER">Căn cứ khác</label>
-                <label nz-radio nzValue="TTCP">Căn cứ QĐ của TTCP</label>
-                <label nz-radio nzValue="BTC">Căn cứ QĐ của BTC</label>
-              </nz-radio-group>
-            </nz-form-item>
-          </div>
-          <div nz-col [nzSpan]="12">
-            <nz-form-item>
-              <nz-form-control [nzErrorTip]="error">
-                <nz-input-group>
-                  <input [readonly]="formData.value.loaiCanCu == 'TTCP' || formData.value.loaiCanCu == 'BTC'" nz-input
-                    formControlName="canCu" />
-                </nz-input-group>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-        </div>
-        <div nz-col nzSpan="13" *ngIf="thongTinChiTieuKeHoachNam.capDvi == '2'">
-          <nz-form-item>
-            <nz-form-label nz-col nzRequired [nzNoColon]="true" class="text-left">
-              Căn cứ
-            </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
-                <input formControlName="canCu" nz-input nzSize="small" [readonly]="true" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div> -->
+
         <div nz-col nzSpan="24">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Trích yếu
@@ -170,14 +123,7 @@
           </nz-form-item>
         </div>
 
-        <!-- <div nz-col [nzSpan]="24">
-          <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Căn cứ pháp lý</nz-form-label>
-            <div class="list-file">
-              <file-list [isCanCuPL]="true" [isViewDetail]="isViewDetail" [data]="listCcPhapLy"></file-list>
-            </div>
-          </nz-form-item>
-        </div> -->
+
         <div nz-col [nzSpan]="24">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm</nz-form-label>
@@ -191,7 +137,7 @@
       </div>
     </form>
   </nz-card>
-  <!-- <nz-affix class="menu-lv3" [nzOffsetTop]="100"> -->
+
   <nz-tabset nzType="card" class="mt16 flex-card p-lr16" nz>
     <nz-tab [nzTitle]="'Kế hoạch lương thực dự trữ nhà nước'">
       <div id="table-luong-thuc"
@@ -203,7 +149,7 @@
             <tr>
               <th rowspan="4" class="text-center" width="40px" nzLeft>STT</th>
               <th rowspan="4" class="text-center" width="330px" nzLeft>
-                {{userService.isTongCuc() ? 'CỤC DTNN KHU VỰC' : 'CHI CỤC KHU VỰC'}}</th>
+                CỤC DTNN KHU VỰC
               <th colspan="9" class="text-center" width="1200px">Tồn kho đầu năm (1) <br />( 01/01/{{yearNow}})</th>
               <th colspan="3" class="text-center" width="400px">Nhập trong năm (2)</th>
               <th colspan="9" class="text-center" width="1200px">Xuất trong năm (3)</th>
@@ -334,9 +280,9 @@
                   <a (click)="startEdit(i)">
                     <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
-                  <a (click)="deleteKeHoachLuongThuc(data.stt)" class="ml-3">
+                  <!-- <a (click)="deleteKeHoachLuongThuc(i)" class="ml-3">
                     <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                  </a>
+                  </a> -->
                 </td>
                 <td *ngIf="data.stt == null" class="background-last-row"></td>
                 <td *ngIf="data.stt ==  null" class="background-last-row"></td>
@@ -368,10 +314,12 @@
                   <td class="text-right"> 0</td>
                 </ng-container>
                 <td class="text-right">
-                  <!-- {{calculatorntnTongSoQuyThoc(i)}} -->{{data?.tongSoNhap}}
+                  {{calculatorntnTongSoQuyThoc(i)}}
                 </td>
                 <td class="text-right">
-                  <input class="money-input" currencyMask [options]="AMOUNT" [(ngModel)]="data.ntnThoc[0].soLuong" />
+                  <input class="money-input" currencyMask
+                    [options]="{allowZero: true, allowNegative: false,precision: 3,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,inputMode: 1}"
+                    [(ngModel)]="data.ntnThoc[0].soLuong" />
                 </td>
                 <td class="text-right">
                   <input class="money-input" currencyMask [options]="AMOUNT" [(ngModel)]="data.ntnGao[0].soLuong" />
@@ -436,177 +384,7 @@
               </ng-template>
             </tr>
           </tbody>
-          <tfoot>
-            <tr *ngIf="thongTinChiTieuKeHoachNam?.khLuongThuc?.length > 0">
-              <th nzLeft></th>
-              <th class="first-last-row-table background-last-row" nzLeft> Cộng</th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnTongSoQuyThoc ?
-                (sumTotalKhDuTruLuongThuc.tkdnTongSoQuyThoc) : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnTongThoc ?
-                (sumTotalKhDuTruLuongThuc.tkdnTongThoc) : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{(sumTotalKhDuTruLuongThuc.tkdnThoc_nam1 ?
-                (sumTotalKhDuTruLuongThuc.tkdnThoc_nam1) : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnThoc_nam2 ?
-                (sumTotalKhDuTruLuongThuc.tkdnThoc_nam2) : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{(sumTotalKhDuTruLuongThuc.tkdnThoc_nam3 ?
-                (sumTotalKhDuTruLuongThuc.tkdnThoc_nam3) : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnTongGao ?
-                (sumTotalKhDuTruLuongThuc.tkdnTongGao) : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnGao_nam1 ?
-                (sumTotalKhDuTruLuongThuc.tkdnGao_nam1) : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnGao_nam2 ?
-                (sumTotalKhDuTruLuongThuc.tkdnGao_nam2) : 0)|
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnGao_nam3 ?
-                (sumTotalKhDuTruLuongThuc.tkdnGao_nam3) : 0)|
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{(sumTotalKhDuTruLuongThuc.ntnTongSoQuyThoc ?
-                sumTotalKhDuTruLuongThuc.ntnTongSoQuyThoc : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.ntnThoc ?
-                sumTotalKhDuTruLuongThuc.ntnThoc : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.ntnGao ?
-                sumTotalKhDuTruLuongThuc.ntnGao : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnTongSoQuyThoc ?
-                sumTotalKhDuTruLuongThuc.xtnTongSoQuyThoc : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnTongThoc ?
-                sumTotalKhDuTruLuongThuc.xtnTongThoc : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnThoc_nam1 ?
-                sumTotalKhDuTruLuongThuc.xtnThoc_nam1 : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnThoc_nam2 ?
-                sumTotalKhDuTruLuongThuc.xtnThoc_nam2 : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnThoc_nam3 ?
-                sumTotalKhDuTruLuongThuc.xtnThoc_nam3 : 0)|
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnTongGao ?
-                sumTotalKhDuTruLuongThuc.xtnTongGao : 0)|
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnGao_nam1 ?
-                sumTotalKhDuTruLuongThuc.xtnGao_nam1 : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnGao_nam2 ?
-                sumTotalKhDuTruLuongThuc.xtnGao_nam2 : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnGao_nam3 ?
-                sumTotalKhDuTruLuongThuc.xtnGao_nam3 : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkcnTongSoQuyThoc ?
-                (sumTotalKhDuTruLuongThuc.tkcnTongSoQuyThoc) : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkcnTongThoc ?
-                (sumTotalKhDuTruLuongThuc.tkcnTongThoc) : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <th class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkcnTongGao ?
-                (sumTotalKhDuTruLuongThuc.tkcnTongGao) : 0) |
-                number: '1.0-3': 'vi_VN'}}
-              </th>
-              <!-- <td class="background-last-row"></td> -->
-              <th class="background-last-row" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
-                thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI" nzRight></th>
-            </tr>
-            <tr *ngIf="thongTinChiTieuKeHoachNam.capDvi == '1' &&  formData.value.loaiCanCu != 'OTHER'">
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th class="first-last-row-table background-last-row"> Chỉ tiêu của {{formData.value.loaiCanCu}} </th>
-              <th class="text-right text-btc "> {{(dataQdCanCu ? dataQdCanCu.ltThocMua : 0)| number: '1.0-1':
-                'vi_VN'}}</th>
-              <th class="text-right text-btc "> {{(dataQdCanCu ? dataQdCanCu.ltGaoMua : 0) | number: '1.0-1':
-                'vi_VN'}}</th>
-              <th></th>
-              <th class="text-right text-btc "> {{(dataQdCanCu ? dataQdCanCu.ltThocXuat : 0)| number: '1.0-1': 'vi_VN'
-                }}</th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th class="text-right text-btc "> {{(dataQdCanCu ? dataQdCanCu.ltGaoXuat : 0) | number: '1.0-1':
-                'vi_VN'}}</th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-            </tr>
-            <tr *ngIf="thongTinChiTieuKeHoachNam.capDvi != '1'">
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th class="first-last-row-table background-last-row"> Chỉ tiêu của TCDT</th>
-              <th class="text-right text-btc "> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltThocMua : 0)| number:
-                '1.0-1': 'vi_VN'}}</th>
-              <th class="text-right text-btc "> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltGaoMua : 0) | number:
-                '1.0-1': 'vi_VN'}}</th>
-              <th></th>
-              <th class="text-right text-btc "> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltThocXuat : 0)| number:
-                '1.0-1' : 'vi_VN'}}</th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th class="text-right text-btc "> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltGaoXuat : 0) | number:
-                '1.0-1': 'vi_VN'}}</th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-            </tr>
-          </tfoot>
+
         </nz-table>
       </div>
     </nz-tab>
@@ -620,7 +398,7 @@
             <tr>
               <th class="text-center" width="40px" nzLeft>STT</th>
               <th class="text-center" nzLeft>
-                {{userService.isTongCuc() ? 'CỤC DTNN KHU VỰC' : 'CHI CỤC KHU VỰC'}}
+                CỤC DTNN KHU VỰC
               </th>
               <th class="text-center" width="200px">Tồn kho đầu năm</th>
               <th class="text-center" width="200px">Nhập trong năm</th>
@@ -634,20 +412,20 @@
           <tbody>
             <tr *ngFor="let dataMuoi of groupingTableMuoi.data, let i = index">
               <ng-container *ngIf="!dsMuoiClone[i]?.isEdit; else editTemplateMuoi">
-                <td class="text-center">{{dataMuoi.stt}}</td>
+                <td class="text-center">{{i+1}}</td>
                 <td class="text-left">{{dataMuoi.tenDvi}}</td>
                 <td class="text-right">{{dataMuoi.tonKhoDauNam | number: '1.0-1': 'vi_VN'}}</td>
                 <td class="text-right">{{dataMuoi.soLuongNhap | number: '1.0-1': 'vi_VN'}}</td>
                 <td class="text-right">{{dataMuoi.soLuongXuat | number: '1.0-1': 'vi_VN'}}</td>
-                <td class="text-right">{{(dataMuoi.tonKhoDauNam + dataMuoi.soLuongNhap - dataMuoi.soLuongXuat) |
+                <td class="text-right">{{dataMuoi.tonKhoCuoiNam |
                   number: '1.0-1': 'vi_VN'}}</td>
                 <td *ngIf="!this.isViewDetail" class="text-center" nzRight>
                   <a (click)="startEditMuoi(i)">
                     <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
-                  <a (click)="deleteKeHoachMuoi(dataMuoi.stt)">
+                  <!-- <a (click)="deleteKeHoachMuoi(dataMuoi.stt)">
                     <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                  </a>
+                  </a> -->
                 </td>
               </ng-container>
               <ng-template #editTemplateMuoi>
@@ -664,8 +442,7 @@
                     [options]="{allowZero: true, allowNegative: false,precision: 0,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,max: dsMuoiClone[i].tonKhoDauNam,inputMode: 1}"
                     [(ngModel)]="dataMuoi.soLuongXuat" />
                 </td>
-                <td class="text-right">{{(dataMuoi.tonKhoDauNam + dataMuoi.soLuongNhap -
-                  dataMuoi.soLuongXuat) | number: '1.0-1': 'vi_VN'}}</td>
+                <td class="text-right">{{calculatortkcnMuoi(i)}}</td>
                 <td *ngIf="!this.isViewDetail" class="text-center" nzRight>
                   <a (click)="saveEditMuoi(i)" class="save">
                     <i class="fa fa-save"></i>
@@ -685,28 +462,9 @@
               <th class="text-right"> {{sumTotalKhDuTruMuoi.nhapTrongNam | number: '1.0-1': 'vi_VN'}}</th>
               <th class="text-right"> {{sumTotalKhDuTruMuoi.xuatTrongNamMuoi | number: '1.0-1': 'vi_VN'}}</th>
               <th class="text-right"> {{sumTotalKhDuTruMuoi.tonKhoCuoiNam | number: '1.0-1': 'vi_VN'}}</th>
-              <th></th>
+              <th *ngIf="!this.isViewDetail"></th>
             </tr>
-            <tr *ngIf="userService.isTongCuc()">
-              <td></td>
-              <th style="text-align: right; font-weight: 700">Chỉ tiêu của BTC</th>
-              <th class="text-right text-btc"> {{sumTotalKhDuTruMuoi.tonKhoDauNam | number: '1.0-1': 'vi_VN'}}</th>
-              <th class="text-right text-btc"> {{sumTotalKhDuTruMuoi.nhapTrongNam | number: '1.0-1': 'vi_VN'}}</th>
-              <th class="text-right text-btc"> {{sumTotalKhDuTruMuoi.xuatTrongNamMuoi | number: '1.0-1': 'vi_VN'}}
-              </th>
-              <th class="text-right text-btc"> {{sumTotalKhDuTruMuoi.tonKhoCuoiNam | number: '1.0-1': 'vi_VN'}}</th>
-              <th></th>
-            </tr>
-            <tr *ngIf="userService.isCuc()">
-              <th></th>
-              <th style="text-align: right; font-weight: 700">Chỉ tiêu của TCDT</th>
-              <th class="text-right text-btc"> {{sumTotalKhDuTruMuoi.tonKhoDauNam | number: '1.0-1': 'vi_VN'}}</th>
-              <th class="text-right text-btc"> {{sumTotalKhDuTruMuoi.nhapTrongNam | number: '1.0-1': 'vi_VN'}}</th>
-              <th class="text-right text-btc"> {{sumTotalKhDuTruMuoi.xuatTrongNamMuoi | number: '1.0-1': 'vi_VN'}}
-              </th>
-              <th class="text-right text-btc"> {{sumTotalKhDuTruMuoi.tonKhoCuoiNam | number: '1.0-1': 'vi_VN'}}</th>
-              <th></th>
-            </tr>
+
           </tfoot>
         </nz-table>
       </div>
@@ -720,14 +478,14 @@
               <thead>
                 <tr>
                   <th rowSpan="2" class="text-center">STT</th>
-                  <th rowSpan="2">Cục DTNN khu vực</th>
+                  <th rowSpan="2">CỤC DTNN KHU VỰC</th>
                   <th rowSpan="2" class="text-center">Mã hàng</th>
                   <th rowSpan="2" class="text-center">Ký hiệu</th>
                   <th rowSpan="2" class="text-center">Tên hàng</th>
                   <th rowSpan="2" class="text-center">Chủng loại hàng</th>
                   <th rowSpan="2" class="text-center">Đơn vị tính</th>
                   <th colSpan="3" class="text-center">Chỉ tiêu nhập trong năm kế hoạch</th>
-                  <th rowSpan="2" class="text-center">Hành động</th>
+                  <th rowSpan="2" class="text-center" *ngIf="!this.isViewDetail">Hành động</th>
                 </tr>
                 <tr>
                   <th class="text-center">Tổng số</th>
@@ -749,7 +507,7 @@
                     <td class="bg-parent1"></td>
                     <td class="bg-parent1"></td>
                     <td class="bg-parent1"></td>
-                    <td class="text-left bg-parent1" nzRight>
+                    <td class="text-left bg-parent1" nzRight *ngIf="!this.isViewDetail">
                       <a (click)="themSuaVatTu(data,'them','NHAP',true,idx)">
                         <i class="icon htvbdh_dau-cong"></i>
                       </a>
@@ -757,7 +515,7 @@
                   </tr>
                   <ng-container *ngIf="expandSet.has(data.idVirtual)">
                     <ng-container *ngFor="let item of data.dataChild, let y = index">
-                      <tr>
+                      <tr *ngIf="item.tenVatTuCha">
                         <td></td>
                         <td></td>
                         <td class="font-weight-bold bg-parent2">{{item.maVatTuCha}}</td>
@@ -785,7 +543,7 @@
                           <td class="font-weight-bold bg-parent2">{{sumSoLuong(item, 'soLuongChuyenSang')}}</td>
                           <td class="font-weight-bold bg-parent2">{{sumSoLuong(item, 'soLuongNhap')}}</td>
                         </ng-container>
-                        <td class="text-left" nzRight>
+                        <td class="text-left" nzRight *ngIf="!this.isViewDetail">
                           <a *ngIf="item && item.dataChild && item.dataChild.length > 0"
                             (click)="themSuaVatTu(item,'them','NHAP',false,idx,data.donViId)">
                             <i class="icon htvbdh_dau-cong"></i>
@@ -814,7 +572,7 @@
                               'vi_VN'}}</td>
                             <td>{{itemLoaiHang.soLuongChuyenSang |number: '1.0-1': 'vi_VN'}}</td>
                             <td>{{itemLoaiHang.soLuongNhap |number: '1.0-1': 'vi_VN'}}</td>
-                            <td class="text-left" nzRight>
+                            <td class="text-left" nzRight *ngIf="!this.isViewDetail">
                               <a (click)="themSuaVatTu(itemLoaiHang,'sua','NHAP',false,idx,data.donViId)">
                                 <i class="fa fa-pencil" title="Sửa"></i>
                               </a>
@@ -840,7 +598,7 @@
               <thead>
                 <tr>
                   <th>STT</th>
-                  <th>Cục DTNN khu vực</th>
+                  <th>CỤC DTNN KHU VỰC</th>
                   <th>Mã hàng</th>
                   <th>Ký hiệu</th>
                   <th>Tên hàng</th>
@@ -848,7 +606,7 @@
                   <th>Đơn vị tính</th>
                   <th>Năm nhập</th>
                   <th>Chỉ tiêu xuất</th>
-                  <th>Hành động</th>
+                  <th *ngIf="!this.isViewDetail">Hành động</th>
                 </tr>
               </thead>
               <tbody>
@@ -864,7 +622,7 @@
                     <td class="bg-parent1"></td>
                     <td class="bg-parent1"></td>
                     <td class="bg-parent1"></td>
-                    <td class="text-left bg-parent1" nzRight>
+                    <td class="text-left bg-parent1" nzRight *ngIf="!this.isViewDetail">
                       <a (click)="themSuaVatTu(data,'them','XUAT',true,idx)">
                         <i class="icon htvbdh_dau-cong"></i>
                       </a>
@@ -872,7 +630,7 @@
                   </tr>
                   <ng-container *ngIf="expandSet.has(data.idVirtual)">
                     <ng-container *ngFor="let item of data.dataChild, let y = index">
-                      <tr>
+                      <tr *ngIf="item.tenVatTuCha">
                         <td></td>
                         <td></td>
                         <td class="font-weight-bold bg-parent2">{{item.maVatTuCha}}</td>
@@ -888,7 +646,7 @@
                         <td class="font-weight-bold text-right bg-parent2">
                           {{sumSoLuongVatTuXuat(item, 'soLuongXuat', 1) |number: '1.0-1': 'vi_VN'}}
                         </td>
-                        <td class="text-left bg-parent2" nzRight>
+                        <td class="text-left bg-parent2" nzRight *ngIf="!this.isViewDetail">
                           <a *ngIf="item && item.dataChild && item.dataChild.length > 0"
                             (click)="themSuaVatTu(item,'them','XUAT',false,idx,data.donViId)">
                             <i class="icon htvbdh_dau-cong"></i>
@@ -923,7 +681,7 @@
                               <td class="text-right">{{itemLoaiHang.namNhap}}</td>
                               <td class="text-right">{{itemLoaiHang.soLuongXuat}}</td>
                             </ng-container>
-                            <td class="text-left" nzRight>
+                            <td class="text-left" nzRight *ngIf="!this.isViewDetail">
                               <a (click)="themSuaVatTu(itemLoaiHang,'them','XUAT',false,idx,data.donViId)">
                                 <i class="icon htvbdh_dau-cong"></i>
                               </a>
@@ -944,7 +702,7 @@
                                 <td></td>
                                 <td class="text-right">{{itemDetail.namNhap}}</td>
                                 <td class="text-right">{{itemDetail.soLuongXuat |number: '1.0-1': 'vi_VN'}}</td>
-                                <td>
+                                <td *ngIf="!this.isViewDetail">
                                   <a (click)="themSuaVatTu(itemDetail,'sua','XUAT',false,idx)">
                                     <i class="fa fa-pencil" title="Sửa"></i>
                                   </a>
@@ -968,12 +726,9 @@
         </nz-tab>
       </nz-tabset>
     </nz-tab>
-    <!--      <nz-tab (nzClick)="downloadTemplate()" [nzTitle]="titleTemplate">-->
-    <!--        <ng-template #titleTemplate>-->
-    <!--          <div><i style="color: blue" class="icon htvbdh_tcdt_tep"></i> Tải biểu mẫu import dữ liệu</div>-->
-    <!--        </ng-template>-->
-    <!--      </nz-tab>-->
+
   </nz-tabset>
+
   <form nz-form [formGroup]="formData" [nzLayout]="'vertical'">
     <div nz-row [nzGutter]="[16, 12]">
 

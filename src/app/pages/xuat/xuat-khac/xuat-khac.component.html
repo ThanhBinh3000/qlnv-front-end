@@ -1,24 +1,19 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item [nzSelected]="tabSelected==0" *ngIf='userService.isAccessPermisson("XHDTQG_XK_KTCLVTBH")'
-      (click)="selectTab(0)">
+    <li nz-menu-item [nzSelected]="tabSelected==0" *ngIf='userService.isAccessPermisson("XHDTQG_XK_KTCLVTBH")' (click)="selectTab(0)">
       Kiểm tra chất lượng VT, TB trong thời gian bảo hành theo HĐ
     </li>
-    <li nz-menu-item [nzSelected]="tabSelected==1" *ngIf='userService.isAccessPermisson("XHDTQG_XK_KTCLVTLK")'
-      (click)="selectTab(1)">
+    <li nz-menu-item [nzSelected]="tabSelected==1" *ngIf='userService.isAccessPermisson("XHDTQG_XK_KTCLVTLK")' (click)="selectTab(1)">
       Kiểm tra chất lượng VT, TB trước khi hết hạn lưu kho
     </li>
-    <li nz-menu-item [nzSelected]="tabSelected==2" *ngIf='userService.isAccessPermisson("XHDTQG_XK_KTCLLTLK")'
-      (click)="selectTab(2)">
+    <li nz-menu-item [nzSelected]="tabSelected==2" *ngIf='userService.isAccessPermisson("XHDTQG_XK_KTCLLTLK")' (click)="selectTab(2)">
       Kiểm tra chất lượng LT trước khi hết hạn lưu kho
     </li>
-    <li nz-menu-item [nzSelected]="tabSelected==3" *ngIf='userService.isAccessPermisson("XHDTQG_XK_XHBKK")'
-      (click)="selectTab(3)">
+    <li nz-menu-item [nzSelected]="tabSelected==3" *ngIf='userService.isAccessPermisson("XHDTQG_XK_XHBKK")' (click)="selectTab(3)">
       Xuất hàng DTQG trong trường hợp bất khả kháng theo quy định tại HĐ bảo hiểm
     </li>
-    <li nz-menu-item [nzSelected]="tabSelected==4" *ngIf='userService.isAccessPermisson("XHDTQG_XK_XHKDM")'
-      (click)="selectTab(4)">
-      Xuất hàng khỏi danh mục
+    <li nz-menu-item [nzSelected]="tabSelected==4" *ngIf='userService.isAccessPermisson("XHDTQG_XK_XHKDM")' (click)="selectTab(4)">
+     Xuất hàng khỏi danh mục
     </li>
   </ul>
 </nz-affix>
@@ -41,3 +36,9 @@
     </ng-container>
   </div>
 </div>
+
+
+
+
+
+

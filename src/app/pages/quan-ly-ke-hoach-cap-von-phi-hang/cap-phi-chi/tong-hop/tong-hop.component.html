@@ -3,32 +3,33 @@
         <nz-card class="mt16 flex-card p-lr16">
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" class="tong-hop">
                 <div nz-row [nzGutter]="24">
-                    <div nz-col nzSpan="4">
-                        <label class="search__label">Mã tổng hợp</label>
-                        <input nz-input type="text" formControlName="maTongHop" id="math">
+                  <div nz-col nzSpan="4">
+                    <label class="search__label">Mã tổng hợp</label>
+                    <input nz-input type="text" formControlName="maTongHop" id="math">
+                  </div>
+                  <div nz-col nzSpan='3'>
+                    <label class='search__label'>Năm</label>
+                    <nz-select formControlName='nam' id='nam'>
+                      <nz-option *ngFor='let item of listNam' nzValue='{{item.value}}'
+                                 nzLabel='{{item.text}}'>
+                      </nz-option>
+                    </nz-select>
+                  </div>
+                  <div nz-col nzSpan="5">
+                    <label class="search__label">Ngày tổng hợp </label>
+                    <div nz-row>
+                      <div nz-col nzSpan="11" class="cus-start-date">
+                        <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayTongHopTuNgay">
+                        </nz-date-picker>
+                      </div>
+                      <div nz-col nzSpan="1">
+                      </div>
+                      <div nz-col nzSpan="11" class="cus-end-date">
+                        <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayTongHopDenNgay">
+                        </nz-date-picker>
+                      </div>
                     </div>
-                    <div nz-col nzSpan='3'>
-                        <label class='search__label'>Năm</label>
-                        <nz-select formControlName='nam' id='nam'>
-                            <nz-option *ngFor='let item of listNam' nzValue='{{item.value}}' nzLabel='{{item.text}}'>
-                            </nz-option>
-                        </nz-select>
-                    </div>
-                    <div nz-col nzSpan="5">
-                        <label class="search__label">Ngày tổng hợp </label>
-                        <div nz-row>
-                            <div nz-col nzSpan="11" class="cus-start-date">
-                                <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayTongHopTuNgay">
-                                </nz-date-picker>
-                            </div>
-                            <div nz-col nzSpan="1">
-                            </div>
-                            <div nz-col nzSpan="11" class="cus-end-date">
-                                <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayTongHopDenNgay">
-                                </nz-date-picker>
-                            </div>
-                        </div>
-                    </div>
+                  </div>
                 </div>
             </form>
             <div class="cangiua group-button-search">
@@ -45,18 +46,15 @@
         <div class="group-button">
             <h3 class="text-uppercase">Thông tin tổng hợp</h3>
             <div class="buttons">
-                <button type="button" class="btn btn-do" (click)="deleteSelect()"
-                    *ngIf="userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_TONGHOP_XOA')">
+                <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_TONGHOP_XOA')">
                     <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     <span>Xóa</span>
                 </button>
-                <button type="button" class="btn btn-sub" (click)="exportData()"
-                    *ngIf="userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_TONGHOP_EXP')">
+                <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_TONGHOP_EXP')">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="themMoi()"
-                    *ngIf="userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_TONGHOP_THEM')">
+                <button type="button" class="btn btn-main" (click)="themMoi()" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_TONGHOP_THEM')">
                     <i class="icon htvbdh_tcdt_tao-qd"></i>
                     <span>Tổng hợp</span>
                 </button>
@@ -85,7 +83,7 @@
                         <th></th>
                         <th></th>
                         <th>
-                            <nz-input-group>
+                            <nz-input-group >
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maTongHop"
                                     (ngModelChange)="filterInTable('maTongHop',filterTable.maTongHop)" size="small" />
                             </nz-input-group>
@@ -99,20 +97,19 @@
                             </nz-select>
                         </th>
                         <th>
-                            <nz-input-group>
-                                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm"
-                                    [(ngModel)]="filterTable.ngayTongHop"
-                                    (ngModelChange)="filterInTable('ngayTongHop', convertDateToString(filterTable.ngayTongHop))"></nz-date-picker>
-                            </nz-input-group>
+                          <nz-input-group>
+                            <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.ngayTongHop"
+                                            (ngModelChange)="filterInTable('ngayTongHop', convertDateToString(filterTable.ngayTongHop))"></nz-date-picker>
+                          </nz-input-group>
                         </th>
                         <th>
-                            <nz-input-group>
+                            <nz-input-group >
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tongTien"
                                     (ngModelChange)="filterInTable('tongTien',filterTable.tongTien)" size="small" />
                             </nz-input-group>
                         </th>
                         <th>
-                            <nz-input-group>
+                            <nz-input-group >
                                 <input type="text" nz-input placeholder="Tìm kiếm"
                                     [(ngModel)]="filterTable.kinhPhiDaCap"
                                     (ngModelChange)="filterInTable('kinhPhiDaCap',filterTable.kinhPhiDaCap)"
@@ -120,22 +117,21 @@
                             </nz-input-group>
                         </th>
                         <th>
-                            <nz-input-group>
+                            <nz-input-group >
                                 <input type="text" nz-input placeholder="Tìm kiếm"
                                     [(ngModel)]="filterTable.ycCapThemPhi"
                                     (ngModelChange)="filterInTable('ycCapThemPhi',filterTable.ycCapThemPhi)"
                                     size="small" />
                             </nz-input-group>
                         </th>
-                        <th>
-                            <nz-input-group>
-                                <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
-                                    (ngModelChange)="filterInTable('trangThai',filterTable.trangThai)">
-                                    <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma"
-                                        [nzLabel]="p.giaTri"></nz-option>
-                                </nz-select>
-                            </nz-input-group>
-                        </th>
+                      <th>
+                        <nz-input-group>
+                          <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
+                                     (ngModelChange)="filterInTable('trangThai',filterTable.trangThai)">
+                            <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+                          </nz-select>
+                        </nz-input-group>
+                      </th>
                         <th></th>
                     </tr>
                 </thead>
@@ -149,13 +145,12 @@
                         <td>{{ data.maTongHop }}</td>
                         <td class="text-center">{{ data.nam }}</td>
                         <td>{{ data.ngayTongHop|date: 'dd/MM/YYYY'}}</td>
-                        <td class="text-right">{{ data.tongTien | number : '1.0-1' : 'vi-VN' }}</td>
-                        <td class="text-right">{{ data.kinhPhiDaCap | number : '1.0-1' : 'vi-VN' }}</td>
-                        <td class="text-right">{{ data.ycCapThemPhi | number : '1.0-1' : 'vi-VN' }}</td>
+                        <td class="text-right">{{ data.tongTien  | number : '1.0-1' : 'vi-VN' }}</td>
+                        <td class="text-right">{{ data.kinhPhiDaCap  | number : '1.0-1' : 'vi-VN' }}</td>
+                        <td class="text-right">{{ data.ycCapThemPhi  | number : '1.0-1' : 'vi-VN' }}</td>
                         <td>{{ data.tenTrangThai }}</td>
                         <td class="text-left">
-                            <a (click)="detail(data, true)"
-                                *ngIf="!((data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai==globals.prop.NHAP_TU_CHOI_TP || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || data.trangThai==globals.prop.NHAP_TU_CHOI_LD_VU) && userInfo.MA_DVI == data.maDvi)">
+                            <a (click)="detail(data, true)" *ngIf="!((data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai==globals.prop.NHAP_TU_CHOI_TP || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || data.trangThai==globals.prop.NHAP_TU_CHOI_LD_VU) && userInfo.MA_DVI == data.maDvi)">
                                 <i class="fa fa-eye" title="Xem chi tiết"></i>
                             </a>
                             <a *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai==globals.prop.NHAP_TU_CHOI_TP || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || data.trangThai==globals.prop.NHAP_TU_CHOI_LD_VU) && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_TONGHOP_THEM')"

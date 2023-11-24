@@ -178,12 +178,9 @@
           <input nz-input [(ngModel)]="rowItem.dviTinh" [readonly]="true"/>
         </nz-input-group>
       </td>
-      <td>
+      <td class="text-right">
         <nz-input-group>
           <input class="money-input" currencyMask [(ngModel)]="rowItem.soLuong" [options]="amount"/>
-          <!--          <nz-input-number [disabled]="isView" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"-->
-          <!--                           [(ngModel)]="rowItem.soLuong">-->
-          <!--          </nz-input-number>-->
         </nz-input-group>
       </td>
       <td>
@@ -254,6 +251,16 @@
     <nz-form-item nz-col nzSpan="8" class="form-item">
       <nz-form-label [nzNoColon]="true" nzFor="gia-tri">Tổng giá trị (Triệu đồng): &nbsp;<span
         class="text-primary"> {{tongSoLT | number : '1.0-1' : 'vi_VN'}}</span></nz-form-label>
+    </nz-form-item>
+  </div>
+
+  <div nz-col nzSpan="24" class='mb-3 mt-3'>
+    <nz-form-item  nz-col nzSpan="24" class="form-item" style="padding-right: 15px;">
+      <nz-form-label [nzNoColon]="true" nzFor="bo-nganh">Ghi chú</nz-form-label>
+      <nz-input-group>
+<!--        <input nz-input [disabled]='isView' (change)="onChangeGhiChu()" [(ngModel)]="ghiChu" />-->
+        <textarea rows='3' (change)="onChangeGhiChu()" [(ngModel)]='ghiChu' class='search__input' nz-input [disabled]='isView'></textarea>
+      </nz-input-group>
     </nz-form-item>
   </div>
 </div>

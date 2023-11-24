@@ -10,7 +10,7 @@ import { ChiTietHoSoThanhLyComponent } from './ho-so-thanh-ly/chi-tiet-ho-so-tha
 import { ThemMoiQuyetDinhThanhLyComponent } from './quyet-dinh-thanh-ly/them-moi-quyet-dinh-thanh-ly/them-moi-quyet-dinh-thanh-ly.component';
 import { ThemMoiBaoCaoKetQuaThanhLyComponent } from './bao-cao-ket-qua/them-moi-bao-ket-qua-thanh-ly/them-moi-bao-cao-ket-qua-thanh-ly.component';
 import { ThemMoiThongBaoKetQuaComponent } from './thong-bao-ket-qua/them-moi-thong-bao-ket-qua/them-moi-thong-bao-ket-qua.component';
-import { BaoCaoKetQuaThanhLyComponent } from "./bao-cao-ket-qua/bao-cao-ket-qua-thanh-ly.component";
+import {BaoCaoKetQuaThanhLyComponent} from "./bao-cao-ket-qua/bao-cao-ket-qua-thanh-ly.component";
 
 
 const routes: Routes = [

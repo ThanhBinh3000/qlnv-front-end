@@ -9,7 +9,7 @@
       <span>Hoàn thành</span>
     </button>
     <button *ngIf='itemTongHopTd.trangThai == STATUS.DANG_THUC_HIEN && !isView' type='button' class='btn btn-main'
-      [disabled]='!formData.valid' (click)='save(false)' [disabled]='!formData.valid'>
+            [disabled]='!formData.valid' (click)='save(false)' [disabled]='!formData.valid'>
       <i class='icon htvbdh_tcdt_save'></i>
       <span>Lưu</span>
     </button>
@@ -118,7 +118,8 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]='true'> Số tiền</nz-form-label>
             <nz-input-group nz-col [nzSpan]='24'>
-              <input class='money-input' formControlName='soTien' [min]='0' currencyMask [options]='amount' />
+              <input class='money-input' formControlName='soTien' [min]='0' currencyMask [options]='amount'
+              />
               <!--              <nz-input-number [nzMin]='1' [nzMax]='' [nzSize]="'small'" formControlName='soTien' [nzDisabled]='isView'>-->
               <!--              </nz-input-number>-->
             </nz-input-group>

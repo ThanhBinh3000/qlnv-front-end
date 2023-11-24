@@ -3,32 +3,33 @@ import {
   Input,
   OnInit, Output
 } from '@angular/core';
-import { Validators } from '@angular/forms';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
+import {Validators} from '@angular/forms';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
 import {
   BienBanLayMauXhService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/bienBanLayMauXh.service';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
 import dayjs from 'dayjs';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { BBLM_LOAI_DOI_TUONG, STATUS } from 'src/app/constants/status';
+import {BBLM_LOAI_DOI_TUONG, STATUS} from 'src/app/constants/status';
 import {
   QuyetDinhGiaoNvXuatHangService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service';
-import { FileDinhKem } from "../../../../../../models/CuuTro";
-import { v4 as uuidv4 } from 'uuid';
-import { KhCnQuyChuanKyThuat } from "../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
-import { PREVIEW } from "../../../../../../constants/fileType";
+import {FileDinhKem} from "../../../../../../models/CuuTro";
+import {v4 as uuidv4} from 'uuid';
+import {KhCnQuyChuanKyThuat} from "../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
+import {PREVIEW} from "../../../../../../constants/fileType";
 import printJS from "print-js";
-import { LOAI_HANG_DTQG } from 'src/app/constants/config';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import {MangLuoiKhoService} from "../../../../../../services/qlnv-kho/mangLuoiKho.service";
 
 @Component({
   selector: 'app-create-bien-ban-lay-mau',
@@ -52,7 +53,8 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
   danhSachPpLayMau: any[] = [];
   danhSachCtieuCluong: any[] = [];
   flagInit: Boolean = false;
-  children: any[] = [];
+  listOfData: any[] = [];
+  selectedItems: string[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -60,10 +62,11 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private quyetDinhGiaoNhiemVuXuatHangService: QuyetDinhGiaoNvXuatHangService,
+    private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService,
     private bienBanLayMauXhService: BienBanLayMauXhService,
     private danhMucService: DanhMucService,
     private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
+    private mangLuoiKhoService: MangLuoiKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanLayMauXhService);
     this.formData = this.fb.group({
@@ -77,15 +80,19 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
       idQdNv: [''],
       soQdNv: [''],
       ngayKyQdNv: [''],
+      idQdNvDtl: [''],
+      tgianGiaoHang: [''],
       idHopDong: [''],
       soHopDong: [''],
       ngayKyHopDong: [''],
       toChucCaNhan: [''],
+      idKho: [],
       maDiemKho: [''],
       diaDiemKho: [''],
       maNhaKho: [''],
       maNganKho: [''],
       maLoKho: [''],
+      soLuong: [''],
       loaiHinhNx: [''],
       kieuNhapXuat: [''],
       loaiVthh: [''],
@@ -121,8 +128,6 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
       tenKtvBaoQuan: [''],
       tenLanhDaoChiCuc: [''],
       tenTrangThai: [''],
-      phuongPhapLayMau: [new Array()],
-      chiTieuChatLuong: [new Array()],
       fileCanCu: [new Array<FileDinhKem>()],
       fileDinhKem: [new Array<FileDinhKem>()],
       fileNiemPhong: [new Array<FileDinhKem>()],
@@ -190,29 +195,20 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
       console.error('Không tìm thấy dữ liệu');
       return;
     }
-    this.dataTable = data.children.filter(item => item.type === BBLM_LOAI_DOI_TUONG.NGUOI_LIEN_QUAN);
-    this.danhSachPpLayMau = data.children.filter(item => item.type === BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU)
-      .map(item => ({
-        label: item.ten,
-        value: item.ma,
-        type: item.type,
-        checked: item.checked,
-      }));
-    this.formData.patchValue({
-      phuongPhapLayMau: this.danhSachPpLayMau
-    });
-    this.danhSachCtieuCluong = data.children.filter(item => item.type === BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG)
-      .map(item => ({
-        label: item.ten,
-        value: item.ma,
-        chiSoCl: item.chiSoCl,
-        phuongPhap: item.phuongPhap,
-        type: item.type,
-        checked: item.checked,
-      }));
-    this.formData.patchValue({
-      chiTieuChatLuong: this.danhSachCtieuCluong
-    });
+    this.maTuSinh = this.idInput;
+    this.dataTable = data.children
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.listOfData = this.dataTable.filter(item => item.type === BBLM_LOAI_DOI_TUONG.NGUOI_LIEN_QUAN)
+      this.danhSachPpLayMau = this.dataTable.filter(item => item.type === BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU);
+      const firstCheckedItem = this.danhSachPpLayMau.find(item => item.checked === true);
+      if (firstCheckedItem) {
+        this.selectedItems = firstCheckedItem.ma;
+      }
+      await this.loadDanhSachCtieuCluong();
+      if (!this.isView) {
+        await this.onChange(data.idQdNv)
+      }
+    }
   }
 
   async openDialog() {
@@ -223,13 +219,11 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
         nam: this.formData.value.nam,
         trangThai: STATUS.BAN_HANH
       }
-      const res = await this.quyetDinhGiaoNhiemVuXuatHangService.search(body)
+      const res = await this.quyetDinhGiaoNvXuatHangService.search(body)
       if (res && res.msg === MESSAGE.SUCCESS) {
         this.dataQuyetDinh = res.data.content.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI));
-      } else if (res && res.msg) {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       } else {
-        this.notification.error(MESSAGE.ERROR, 'Unknown error occurred.');
+        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ XUẤT HÀNG',
@@ -276,16 +270,19 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
     if (id <= 0) return;
     try {
       await this.spinner.show();
-      const res = await this.quyetDinhGiaoNhiemVuXuatHangService.getDetail(id);
+      const res = await this.quyetDinhGiaoNvXuatHangService.getDetail(id);
       if (res.msg !== MESSAGE.SUCCESS || !res.data) {
         return;
       }
       const data = res.data;
+      const dataChiCuc = data.children.find(item => item.maDvi === this.userInfo.MA_DVI);
       this.formData.patchValue({
         nam: data.nam,
         idQdNv: data.id,
         soQdNv: data.soQdNv,
         ngayKyQdNv: data.ngayKy,
+        idQdNvDtl: dataChiCuc ? dataChiCuc.id : null,
+        tgianGiaoHang: data.tgianGiaoHang,
         idHopDong: data.idHopDong,
         soHopDong: data.soHopDong,
         ngayKyHopDong: data.ngayKyHopDong,
@@ -300,8 +297,9 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
         donViTinh: data.donViTinh,
       });
       await this.loadDanhSachLayMau(data.soQdNv)
-      const dataChiCuc = data.children.find(item => item.maDvi === this.userInfo.MA_DVI);
-      this.listDiaDiemXuat = dataChiCuc?.children
+      if (dataChiCuc && dataChiCuc.children && dataChiCuc.children.length > 0) {
+        this.listDiaDiemXuat = dataChiCuc.children
+      }
     } catch (e) {
       console.error('Error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -329,6 +327,10 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
   }
 
   async openDialogKho() {
+    const formattedDataKho = this.listDiaDiemXuat.map(item => ({
+      soLuongXuat: item.soLuong.toLocaleString(),
+      ...item
+    }))
     const modalQD = this.modal.create({
       nzTitle: 'DANH SÁCH ĐỊA ĐIỂM XUẤT HÀNG',
       nzContent: DialogTableSelectionComponent,
@@ -337,14 +339,15 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
-        dataTable: this.listDiaDiemXuat,
-        dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho'],
-        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho']
+        dataTable: formattedDataKho,
+        dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho', 'Số lượng'],
+        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho', 'soLuongXuat']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
+          idKho: data.id,
           maDiemKho: data.maDiemKho,
           tenDiemKho: data.tenDiemKho,
           diaDiemKho: data.diaDiemKho,
@@ -354,98 +357,146 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
           tenNganKho: data.tenNganKho,
           maLoKho: data.maLoKho,
           tenLoKho: data.tenLoKho,
-          tenNganLoKho: data.tenLoKho ? data.tenLoKho + ' - ' + data.tenNganKho : data.tenNganKho
+          tenNganLoKho: data.tenLoKho ? data.tenLoKho + ' - ' + data.tenNganKho : data.tenNganKho,
+          soLuong: data.soLuong,
         });
-        await this.loadDanhSachPpLayMau();
-        await this.loadDanhSachCtieuCluong();
+        await this.loadThuKho();
+        if (this.idInput === 0) {
+          await this.loadDanhSachPpLayMau();
+          await this.loadDanhSachCtieuCluong();
+        }
       }
     });
   }
 
-  async saveDataTable() {
-    const { ten, loai } = this.daiDienRow;
+  async loadThuKho() {
+    const maDiemKho = this.formData.value.maLoKho || this.formData.value.maNganKho;
+    if (!maDiemKho) {
+      return;
+    }
+    let body = {
+      maDvi: maDiemKho,
+      capDvi: (maDiemKho?.length / 2 - 1),
+    };
+    const res = await this.mangLuoiKhoService.getDetailByMa(body);
+    if (res.statusCode == 0) {
+      const detailThuKho = res.data.object.detailThuKho;
+      this.formData.patchValue({
+        idThuKho: detailThuKho ? detailThuKho.id : null,
+        tenThuKho: detailThuKho ? detailThuKho.fullName : null,
+      });
+    }
+  }
+
+  async addDataTable() {
+    this.dataTable = [];
+    const filter = [...this.listOfData, ...this.danhSachPpLayMau, ...this.danhSachCtieuCluong, ...this.dataTable].map(item => {
+      return {
+        ten: item.label ? item.label : item.ten,
+        loai: item.loai,
+        ma: item.value ? item.value : item.ma,
+        chiSoCl: item.chiSoCl,
+        phuongPhap: item.phuongPhap,
+        checked: item.checked,
+        type: item.type,
+      };
+    });
+    this.dataTable.push(...filter);
+  }
+
+  async saveListOfData() {
+    const {ten, loai} = this.daiDienRow;
     if (ten && loai) {
       this.daiDienRow.type = BBLM_LOAI_DOI_TUONG.NGUOI_LIEN_QUAN;
       this.daiDienRow.idVirtual = uuidv4();
-      this.dataTable = [...this.dataTable, this.daiDienRow];
+      this.listOfData = [...this.listOfData, this.daiDienRow];
       this.daiDienRow = {};
     }
   }
 
-  async clearDataTable() {
+  async clearListOfData() {
     this.daiDienRow = {};
   }
 
-  async startDataTable(item) {
-    this.dataTable.forEach((s) => (s.edit = false));
-    const currentRow = this.dataTable.find((s) => s.idVirtual === item.idVirtual);
+  async startListOfData(item) {
+    this.listOfData.forEach((s) => (s.edit = false));
+    const currentRow = this.listOfData.find((s) => s.idVirtual === item.idVirtual);
     if (currentRow) {
       currentRow.edit = true;
     }
   }
 
-  async deleteDataTable(item) {
-    const indexToDelete = this.dataTable.findIndex((s) => s.idVirtual === item.idVirtual);
+  async deleteListOfData(item) {
+    const indexToDelete = this.listOfData.findIndex((s) => s.idVirtual === item.idVirtual);
     if (indexToDelete !== -1) {
-      this.dataTable.splice(indexToDelete, 1);
+      this.listOfData.splice(indexToDelete, 1);
     }
   }
 
-  async createDataTable(item) {
-    const indexToUpdate = this.dataTable.findIndex((s) => s.idVirtual === item.idVirtual);
+  async createListOfData(item) {
+    const indexToUpdate = this.listOfData.findIndex((s) => s.idVirtual === item.idVirtual);
     if (indexToUpdate !== -1) {
       item.edit = false;
-      this.dataTable[indexToUpdate] = item;
+      this.listOfData[indexToUpdate] = item;
     }
   }
 
-  async cancelDataTable() {
-    this.dataTable.forEach(s => s.edit = false);
+  async cancelListOfData() {
+    this.listOfData.forEach(s => s.edit = false);
   }
 
   async loadDanhSachPpLayMau() {
-    if (this.danhSachPpLayMau.length > 0) return;
+    this.danhSachPpLayMau = [];
     try {
-      const formDataValue = this.formData.value;
-      const cloaiVthh = formDataValue.cloaiVthh || formDataValue.loaiVthh;
+      const cloaiVthh = this.formData.value.cloaiVthh || this.formData.value.loaiVthh;
       const res = await this.danhMucService.loadDanhMucHangChiTiet(cloaiVthh);
-      if (res.msg === MESSAGE.SUCCESS && Array.isArray(res.data?.ppLayMau) && res.data.ppLayMau.length > 0) {
+      if (res.msg !== MESSAGE.SUCCESS || !res.data) {
+        return;
+      }
+      if (res.data.ppLayMau && res.data.ppLayMau.length > 0) {
         this.danhSachPpLayMau = res.data.ppLayMau.map(item => ({
-          label: item.giaTri,
-          value: item.ma,
+          ten: item.giaTri,
+          ma: item.ma,
           checked: false,
           type: BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU,
-        }));
-        this.formData.patchValue({
-          phuongPhapLayMau: this.danhSachPpLayMau
-        });
+        }))
       }
-    } catch (err) {
-      this.notification.error(MESSAGE.ERROR, err.msg);
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, e.msg);
+    }
+  }
+
+  async onChangePpLayMau(event) {
+    if (event) {
+      const dataToCheck = this.dataTable && this.dataTable.length > 0 ? this.dataTable : this.danhSachPpLayMau;
+      dataToCheck.forEach(item => {
+        if (item.ma === event) {
+          item.checked = true;
+        } else {
+          item.checked = false;
+        }
+      })
     }
   }
 
   async loadDanhSachCtieuCluong() {
-    if (this.danhSachCtieuCluong.length > 0) return;
+    this.danhSachCtieuCluong = [];
     try {
-      const formDataValue = this.formData.value;
-      const cloaiVthh = formDataValue.cloaiVthh || formDataValue.loaiVthh;
+      const cloaiVthh = this.formData.value.cloaiVthh || this.formData.value.loaiVthh;
       const res = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(cloaiVthh);
-      if (res.msg === MESSAGE.SUCCESS && Array.isArray(res.data)) {
-        this.danhSachCtieuCluong = res.data.map(item => ({
-          label: item.tenChiTieu,
-          value: item.id,
-          chiSoCl: item.mucYeuCauXuat,
-          phuongPhap: item.phuongPhapXd,
-          checked: true,
-          type: BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG
-        }));
-        this.formData.patchValue({
-          chiTieuChatLuong: this.danhSachCtieuCluong
-        });
+      if (res.msg !== MESSAGE.SUCCESS || !res.data) {
+        return;
       }
-    } catch (err) {
-      this.notification.error(MESSAGE.ERROR, err.msg);
+      this.danhSachCtieuCluong = res.data.map(item => ({
+        label: item.tenChiTieu,
+        value: item.id,
+        chiSoCl: item.mucYeuCauXuat,
+        phuongPhap: item.phuongPhapXd,
+        checked: true,
+        type: BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG
+      }));
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, e.msg);
     }
   }
 
@@ -453,10 +504,10 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
     try {
       await this.helperService.ignoreRequiredForm(this.formData);
       this.setValidator();
-      await this.saveChildren();
+      await this.addDataTable()
       const body = {
         ...this.formData.value,
-        children: this.children,
+        children: this.dataTable,
       };
       await this.createUpdate(body);
     } catch (e) {
@@ -470,10 +521,10 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
     try {
       await this.helperService.ignoreRequiredForm(this.formData);
       this.setValidForm();
-      await this.saveChildren();
+      await this.addDataTable()
       const body = {
         ...this.formData.value,
-        children: this.children,
+        children: this.dataTable,
       };
       await super.saveAndSend(body, trangThai, msg, msgSuccess);
     } catch (e) {
@@ -481,22 +532,6 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
     } finally {
       await this.helperService.restoreRequiredForm(this.formData);
     }
-  }
-
-  async saveChildren() {
-    const { phuongPhapLayMau, chiTieuChatLuong } = this.formData.value;
-    const filter = phuongPhapLayMau.concat(chiTieuChatLuong, this.dataTable).map(s => ({
-      ten: s.label ? s.label : s.ten,
-      loai: s.loai,
-      ma: s.value,
-      chiSoCl: s.chiSoCl,
-      phuongPhap: s.phuongPhap,
-      checked: s.checked,
-      type: s.type,
-    }));
-    this.children.push(...filter);
-    this.formData.value.phuongPhapLayMau = "";
-    this.formData.value.chiTieuChatLuong = "";
   }
 
   async preview(id) {
@@ -520,31 +555,44 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
   }
 
   printPreview() {
-    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 
   setValidator() {
-    this.formData.controls["soQdNv"].setValidators([Validators.required]);
-    this.formData.controls["tenDiemKho"].setValidators([Validators.required]);
-    this.formData.controls["tenNhaKho"].setValidators([Validators.required]);
-    this.formData.controls["tenNganKho"].setValidators([Validators.required]);
-    this.formData.controls["tenNganLoKho"].setValidators([Validators.required]);
+    const requiredFields = [
+      "soBbLayMau",
+      "soQdNv",
+      "tenDiemKho",
+      "tenNhaKho",
+      "tenNganKho",
+      "tenNganLoKho",
+    ];
+    requiredFields.forEach(fieldName => {
+      this.formData.controls[fieldName].setValidators([Validators.required]);
+      this.formData.controls[fieldName].updateValueAndValidity();
+    });
   }
 
   setValidForm() {
-    this.formData.controls["loaiBienBan"].setValidators([Validators.required]);
-    this.formData.controls["tenDvi"].setValidators([Validators.required]);
-    this.formData.controls["maQhNs"].setValidators([Validators.required]);
-    this.formData.controls["soBbLayMau"].setValidators([Validators.required]);
-    this.formData.controls["ngayLayMau"].setValidators([Validators.required]);
-    this.formData.controls["soHopDong"].setValidators([Validators.required]);
-    this.formData.controls["ngayKyHopDong"].setValidators([Validators.required]);
-    this.formData.controls["toChucCaNhan"].setValidators([Validators.required]);
-    this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
-    this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
-    this.formData.controls["truongBpKtbq"].setValidators([Validators.required]);
-    this.formData.controls["donViKnghiem"].setValidators([Validators.required]);
-    this.formData.controls["diaDiemLayMau"].setValidators([Validators.required]);
-    this.formData.controls["soLuongKiemTra"].setValidators([Validators.required]);
+    const requiredFields = [
+      "loaiBienBan",
+      "nam",
+      "tenDvi",
+      "maQhNs",
+      "ngayLayMau",
+      "soHopDong",
+      "ngayKyHopDong",
+      "toChucCaNhan",
+      "tenLoaiVthh",
+      "tenCloaiVthh",
+      "tenKtvBaoQuan",
+      "truongBpKtbq",
+      "donViKnghiem",
+      "soLuongKiemTra",
+    ];
+    requiredFields.forEach(fieldName => {
+      this.formData.controls[fieldName].setValidators([Validators.required]);
+      this.formData.controls[fieldName].updateValueAndValidity();
+    });
   }
 }

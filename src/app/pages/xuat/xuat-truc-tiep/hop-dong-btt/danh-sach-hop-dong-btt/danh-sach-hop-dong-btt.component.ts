@@ -1,17 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { MESSAGE } from 'src/app/constants/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
+import {Component, Input, OnInit} from '@angular/core';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {MESSAGE} from 'src/app/constants/message';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
 import {
   QdPdKetQuaBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
-import { saveAs } from 'file-saver';
-import { STATUS } from "../../../../../constants/status";
-import { LOAI_HANG_DTQG } from 'src/app/constants/config';
+import {saveAs} from 'file-saver';
+import {STATUS} from "../../../../../constants/status";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-danh-sach-hop-dong-btt',
@@ -20,11 +20,15 @@ import { LOAI_HANG_DTQG } from 'src/app/constants/config';
 })
 export class DanhSachHopDongBttComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG
   isQuanLy: boolean;
   isAddNew: boolean;
-  LOAI_HANG_DTQG = LOAI_HANG_DTQG
   listTrangThaiHd: any = [];
   listTrangThaiXh: any = [];
+  idQdPd: number = 0;
+  isViewQdPd: boolean = false;
+  idQdKq: number = 0;
+  isViewQdKq: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -104,7 +108,6 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
     }
   }
 
-
   async timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
@@ -112,15 +115,7 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
     })
   }
 
-  async clearFilter() {
-    this.formData.reset();
-    await Promise.all([
-      this.timKiem(),
-      this.search()
-    ]);
-  }
-
-  goDetail(id: number, boolean?: boolean) {
+  redirectDetail(id: number, boolean?: boolean) {
     this.idSelected = id;
     this.isDetail = true;
     this.isQuanLy = boolean;
@@ -143,6 +138,36 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
         this.spinner.hide();
       }
     );
+  }
+
+  openModal(id: number, modalType: string) {
+    switch (modalType) {
+      case 'pheDuyet':
+        this.idQdPd = id;
+        this.isViewQdPd = true;
+        break;
+      case 'ketQua':
+        this.idQdKq = id;
+        this.isViewQdKq = true;
+        break;
+      default:
+        break;
+    }
+  }
+
+  closeModal(modalType: string) {
+    switch (modalType) {
+      case 'pheDuyet':
+        this.idQdPd = null;
+        this.isViewQdPd = false;
+        break;
+      case 'ketQua':
+        this.idQdKq = null;
+        this.isViewQdKq = false;
+        break;
+      default:
+        break;
+    }
   }
 
   isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {

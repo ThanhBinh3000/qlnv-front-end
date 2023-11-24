@@ -13,7 +13,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { DATEPICKER_CONFIG, LEVEL_USER } from 'src/app/constants/config';
+import {DATEPICKER_CONFIG, LEVEL_USER, LOAI_HINH_NHAP_XUAT} from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { DetailQuyetDinhNhapXuat, QuyetDinhNhapXuat, ThongTinDiaDiemNhap } from 'src/app/models/QuyetDinhNhapXuat';
@@ -99,6 +99,7 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent extends Base2Component implem
   listNganKho: any[] = [];
   listNganLo: any[] = [];
   listCanCu: any[] = [];
+  loaiHinhNhapXuat = LOAI_HINH_NHAP_XUAT;
 
   constructor(
     httpClient: HttpClient,
@@ -331,8 +332,24 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent extends Base2Component implem
         // });
       });
     });
-    this.formData.get('tongSlNhap').setValue(this.sumSlNhap);
+    this.calculatorSl();
     console.log(this.listDataGroup)
+  }
+
+  calculatorSl(){
+    let total = 0;
+    if(this.formData.value.loaiHinhNx == this.loaiHinhNhapXuat.DOI_THUA){
+      total = this.dataTable.reduce((acc, item) => acc + item.slDoiThua, 0);
+    }
+    if(this.formData.value.loaiHinhNx == this.loaiHinhNhapXuat.NHAP_TANG_SO_LUONG_SAU_KK){
+      total = this.dataTable.reduce((acc, item) => acc + (item.slTonKhoThucTe - item.slTonKho), 0);
+    }
+    if(this.formData.value.loaiHinhNx == this.loaiHinhNhapXuat.NHAP_DO_BOI_THUONG
+      || this.formData.value.loaiHinhNx == this.loaiHinhNhapXuat.NHAP_DO_TAI_NHAP
+      || this.formData.value.loaiHinhNx == this.loaiHinhNhapXuat.NHAP_KHAC){
+      total = this.dataTable.reduce((acc, item) => acc + item.slNhap, 0);
+    }
+    this.formData.get('tongSlNhap').setValue(total);
   }
 
   convertTrangThai(status: string) {
@@ -501,7 +518,7 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent extends Base2Component implem
   setValidator(isGuiDuyet) {
     debugger
     if (isGuiDuyet) {
-      if (this.formData.value.trangThai == STATUS.DU_THAO) {
+      if (this.formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU) {
         this.formData.controls["soQd"].setValidators([Validators.required]);
         this.formData.controls["trichYeu"].setValidators([Validators.required]);
         this.formData.controls["ngayQd"].setValidators([Validators.required]);
@@ -555,7 +572,7 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent extends Base2Component implem
     let trangThai = ''
     let mesg = ''
     switch (this.formData.get('trangThai').value) {
-      case STATUS.DU_THAO: {
+      case STATUS.DANG_NHAP_DU_LIEU: {
         trangThai = STATUS.BAN_HANH;
         mesg = 'Bạn có muốn ban hành ?'
         break;
@@ -877,4 +894,5 @@ export class ThemmoiQdinhNhapXuatHangKhacComponent extends Base2Component implem
     }
   }
 
+  protected readonly LOAI_HINH_NHAP_XUAT = LOAI_HINH_NHAP_XUAT;
 }

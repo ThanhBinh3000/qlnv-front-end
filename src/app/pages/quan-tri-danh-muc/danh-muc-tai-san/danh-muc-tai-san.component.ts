@@ -41,7 +41,7 @@ export class DanhMucTaiSanComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private userService : UserService,
+    public userService : UserService,
     private dmHangService : DanhMucService,
     private dmTaiSan: DanhMucTaiSanService,
     private notification: NzNotificationService,
@@ -53,6 +53,9 @@ export class DanhMucTaiSanComponent implements OnInit {
   }
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QTDM_DM_TAI_SAN')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();

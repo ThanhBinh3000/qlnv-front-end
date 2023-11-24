@@ -1,4 +1,5 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="level2">
+<!-- <nz-affix [nzOffsetTop]="globals.prop.MENU_LV3" class="level3"> -->
+<nz-affix [nzOffsetTop]="globals.prop.MN_LV3" class="level1">
     <ul nz-menu nzMode="horizontal">
         <li nz-menu-item nzSelected (click)="selectTab(0)">
             Phiếu xuất kho
@@ -7,7 +8,7 @@
             Bảng kê cân hàng
         </li>
         <li nz-menu-item (click)="selectTab(1)" *ngIf="loaiVthh == '02'">
-            Bảng kê vật tư
+            Bảng kê xuất vật tư
         </li>
         <li nz-menu-item (click)="selectTab(2)">
             Biên bản tịnh kho
@@ -18,14 +19,14 @@
     </ul>
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
-    <app-phieu-xuat-kho [loaiVthh]="loaiVthh"></app-phieu-xuat-kho>
+    <app-phieu-xuat-kho [loaiVthh]="loaiVthh" [loaiXuat]="loaiXuat"></app-phieu-xuat-kho>
 </ng-container>
 <ng-container *ngIf="tabSelected == 1">
-    <app-bang-ke-can [loaiVthh]="loaiVthh"></app-bang-ke-can>
+    <app-bang-ke-can [loaiVthh]="loaiVthh" [loaiXuat]="loaiXuat"></app-bang-ke-can>
 </ng-container>
 <ng-container *ngIf="tabSelected == 2">
-    <app-bien-ban-tinh-kho [loaiVthh]="loaiVthh"></app-bien-ban-tinh-kho>
+    <app-bien-ban-tinh-kho [loaiVthh]="loaiVthh" [loaiXuat]="loaiXuat"></app-bien-ban-tinh-kho>
 </ng-container>
 <ng-container *ngIf="tabSelected == 3">
-    <app-bien-ban-hao-doi [loaiVthh]="loaiVthh"></app-bien-ban-hao-doi>
+    <app-bien-ban-hao-doi [loaiVthh]="loaiVthh" [loaiXuat]="loaiXuat"></app-bien-ban-hao-doi>
 </ng-container>

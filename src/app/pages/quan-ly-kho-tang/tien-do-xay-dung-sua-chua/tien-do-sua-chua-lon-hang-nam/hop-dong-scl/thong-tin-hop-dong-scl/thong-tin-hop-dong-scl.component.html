@@ -11,7 +11,7 @@
     </div>
     <div class="btn-group">
       <button class="btn btn-sub xanh-nhat ml-2" (click)="hoanThanh()"
-        *ngIf="(formData.value.trangThaiHd != STATUS.DA_HOAN_THANH) && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_HD_THEM') ">
+              *ngIf="(formData.value.trangThaiHd != STATUS.DA_HOAN_THANH) && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_HD_THEM') ">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Hoàn thành</span>
       </button>
@@ -34,7 +34,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Số QĐ phê duyệt KH LCNT</nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName="soQd" readonly />
+                  <input nz-input formControlName="soQd" readonly/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -42,7 +42,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Số QĐ phê duyệt KQ LCNT</nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName="soQdPdKqlcnt" readonly />
+                  <input nz-input formControlName="soQdPdKqlcnt" readonly/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -50,7 +50,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Tên dự án</nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName="tenDuAn" readonly />
+                  <input nz-input formControlName="tenDuAn" readonly/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -58,7 +58,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Loại hợp đồng</nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName="tenLoaiHopDong" readonly />
+                  <input nz-input formControlName="tenLoaiHopDong" readonly/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -66,7 +66,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Chủ đầu tư</nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName="chuDauTu" readonly />
+                  <input nz-input formControlName="chuDauTu" readonly/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -83,7 +83,7 @@
                 <nz-form-label [nzNoColon]="true"> Tổng mức đầu tư</nz-form-label>
                 <nz-form-control>
                   <nz-input-group>
-                    <input nz-input currencyMask [options]="AMOUNT" formControlName="tongTien" readonly />
+                    <input nz-input currencyMask [options]="AMOUNT" formControlName="tongTien" readonly/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -93,7 +93,7 @@
                 <nz-form-label [nzNoColon]="true">Nguồn vốn</nz-form-label>
                 <nz-form-control>
                   <nz-input-group>
-                    <input nz-input formControlName="tenNguonVon" readonly />
+                    <input nz-input formControlName="tenNguonVon" readonly/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -103,7 +103,7 @@
                 <nz-form-label [nzNoColon]="true"> Tổng số gói thầu</nz-form-label>
                 <nz-form-control>
                   <nz-input-group>
-                    <input nz-input formControlName="soGoiThau" readonly />
+                    <input nz-input formControlName="soGoiThau" readonly/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -113,7 +113,7 @@
                 <nz-form-label [nzNoColon]="true"> Số gói thầu đã trúng</nz-form-label>
                 <nz-form-control>
                   <nz-input-group>
-                    <input nz-input formControlName="soGoiThauTc" readonly />
+                    <input nz-input formControlName="soGoiThauTc" readonly/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -123,7 +123,7 @@
                 <nz-form-label [nzNoColon]="true"> Số gói thầu trượt</nz-form-label>
                 <nz-form-control>
                   <nz-input-group>
-                    <input nz-input formControlName="soGoiThauTb" readonly />
+                    <input nz-input formControlName="soGoiThauTb" readonly/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -133,7 +133,7 @@
                 <nz-form-label [nzNoColon]="true"> Tổng số hợp đồng đã ký</nz-form-label>
                 <nz-form-control>
                   <nz-input-group>
-                    <input nz-input formControlName="soHopDongDaKy" readonly />
+                    <input nz-input formControlName="soHopDongDaKy" readonly/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -159,54 +159,59 @@
         </div>
       </div>-->
     </div>
-    <nz-table #basicTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered
-      class="mt-2">
+    <nz-table #basicTable [nzData]="dataTable" [nzFrontPagination]="false"
+              [nzShowPagination]="false" nzBordered class="mt-2">
       <thead>
-        <tr>
-          <th width="40px" class="text-center">STT</th>
-          <th>Gói thầu</th>
-          <th width="150px">Số hợp đồng</th>
-          <th width="130px">Tên hợp đồng</th>
-          <th width="130px">Ngày ký hợp đồng</th>
-          <th width="130px">Giá trị hợp đồng</th>
-          <th width="130px">Trạng thái HĐ</th>
-          <th width="100px" class="text-center">Hành động</th>
-        </tr>
+      <tr>
+        <th width="40px" class="text-center">STT</th>
+        <th>Gói thầu</th>
+        <th width="150px">Số hợp đồng</th>
+        <th width="130px">Tên hợp đồng</th>
+        <th width="130px">Ngày ký hợp đồng</th>
+        <th width="130px">Giá trị hợp đồng</th>
+        <th width="130px">Trạng thái HĐ</th>
+        <th width="100px" class="text-center">Hành động</th>
+      </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let data of listHopDong; let i = index" style="cursor: pointer"
-          [ngClass]="{'bg-selected': data.selected}" (click)="selectRow(data)">
-          <td>{{ i + 1}}</td>
-          <td>{{ data.noiDung }}</td>
-          <td>{{ data.hopDong?.soHd }}</td>
-          <td>{{ data.hopDong?.tenHd }}</td>
-          <td>{{ data.hopDong?.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
-          <td>{{ data.hopDong?.thanhTien | number }}</td>
-          <td class="text-left">{{ data.hopDong?.tenTrangThai }}</td>
-          <td class="text-center">
-            <a (click)="openThemMoiHd(data.idHopDong,true)"
-              *ngIf="(data.hopDong && data.hopDong?.trangThai == STATUS.DA_KY )">
-              <i class=" icon htvbdh_eye"></i>
-            </a>
-            <a (click)="openThemMoiHd(data.idHopDong)"
-              *ngIf="(!data.hopDong || data.hopDong?.trangThai == STATUS.DU_THAO )">
-              <i class="fa fa-pencil" title="Sửa"></i>
-            </a>
-          </td>
-        </tr>
+      <tr *ngFor="let data of listHopDong; let i = index"
+          style="cursor: pointer" [ngClass]="{'bg-selected': data.selected}"
+          (click)="selectRow(data)">
+        <td>{{ i + 1}}</td>
+        <td>{{ data.noiDung }}</td>
+        <td>{{ data.hopDong?.soHd }}</td>
+        <td>{{ data.hopDong?.tenHd }}</td>
+        <td>{{ data.hopDong?.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
+        <td>{{ data.hopDong?.thanhTien | number }}</td>
+        <td class="text-left">{{  data.hopDong?.tenTrangThai  }}</td>
+        <td class="text-center">
+          <a (click)="openThemMoiHd(data.idHopDong,true)"
+             *ngIf="(data.hopDong && data.hopDong?.trangThai == STATUS.DA_KY )">
+            <i class=" icon htvbdh_eye"></i>
+          </a>
+          <a (click)="openThemMoiHd(data.idHopDong)"
+             *ngIf="(!data.hopDong || data.hopDong?.trangThai == STATUS.DU_THAO )">
+            <i class="fa fa-pencil" title="Sửa"></i>
+          </a>
+        </td>
+      </tr>
       </tbody>
     </nz-table>
   </nz-card>
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openPopThemMoiHd" (nzOnCancel)="closeThemHopDong()"
-  [nzBodyStyle]="{ 'overflow-y': 'auto' }">
+          [nzBodyStyle]="{ 'overflow-y': 'auto' }">
   <div *nzModalTitle>
     <p style="font-size: 18px" class="text-uppercase">Hợp đồng</p>
   </div>
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-them-moi-hop-dong-scl [isViewDetail]="isViewDetail" [flagThemMoi]="flagThemMoi" [itemDuAn]="itemDuAn"
-      (dataItemHopDong)="receivedData($event)" [itemQdPdKhlcnt]="itemQdPdKhLcnt" [itemGoiThau]="itemSelected"
-      [idInput]="idInput">
+    <app-them-moi-hop-dong-scl  [isViewDetail]="isViewDetail"
+                                [flagThemMoi]="flagThemMoi"
+                                [itemDuAn]="itemDuAn"
+                                (dataItemHopDong)="receivedData($event)"
+                                [itemQdPdKhlcnt]="itemQdPdKhLcnt"
+                                [itemGoiThau]="itemSelected"
+                                [idInput]="idInput">
     </app-them-moi-hop-dong-scl>
   </ng-container>
   <div *nzModalFooter>

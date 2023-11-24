@@ -35,7 +35,13 @@ export class CtNhapXuatTonKhoHangDtqgComponent extends Base2Component implements
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
   rows: any[] = [];
-
+  listQuy = [
+    {text: 'Quý I', value: 1},
+    {text: 'Quý II', value: 2},
+    {text: 'Quý III', value: 3},
+    {text: 'Quý IV', value: 4},
+  ];
+  selectedValue = 1;
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
@@ -51,8 +57,8 @@ export class CtNhapXuatTonKhoHangDtqgComponent extends Base2Component implements
     super(httpClient, storageService, notification, spinner, modal, thongTu1452013Service);
     this.formData = this.fb.group(
       {
-        nam: [dayjs().get("year"), [Validators.required]],
-        quy: [dayjs().get("year"), [Validators.required]],
+        nam: [, [Validators.required]],
+        quy:  null,
         boNganh: null,
         dviBaoCao: null,
         maDvqhns: null,
@@ -61,17 +67,30 @@ export class CtNhapXuatTonKhoHangDtqgComponent extends Base2Component implements
         chungLoaiHangHoa: null
       }
     );
+    // this.formData.controls['nam'].valueChanges.subscribe((namValue) => {
+    //   const month = dayjs().get("month");
+    //   this.listQuy = [];
+    //   for (let i = 0; i <= Math.floor(month / 3); i++) {
+    //     if (i >= 1) {
+    //       this.listQuy.push(this.quyData[i - 1]);
+    //     }
+    //   }
+    //   if (namValue < dayjs().get('year')) {
+    //     this.listQuy = this.quyData
+    //   }
+    // });
   }
 
   async ngOnInit() {
     await this.spinner.show();
     try {
-      for (let i = -3; i < 23; i++) {
+      for (let i = 0; i < 23; i++) {
         this.listNam.push({
           value: dayjs().get("year") - i,
           text: dayjs().get("year") - i
         });
       }
+      this.formData.controls['nam'].setValue(dayjs().get("year"))
       await Promise.all([
         this.loadDsDonVi(),
         this.loadDsVthh(),
@@ -208,5 +227,11 @@ export class CtNhapXuatTonKhoHangDtqgComponent extends Base2Component implements
 
   deleteRow(index: number) {
     this.rows.splice(index, 1)
+  }
+  clearFilter() {
+    this.formData.patchValue({
+      nam: null,
+      quy:null,
+    })
   }
 }

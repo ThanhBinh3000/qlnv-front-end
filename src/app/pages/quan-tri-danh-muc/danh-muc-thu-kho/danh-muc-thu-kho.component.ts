@@ -13,6 +13,7 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { ThemmoiThukhoComponent } from './themmoi-thukho/themmoi-thukho.component';
 import { DanhMucThuKhoService } from 'src/app/services/danh-muc-thu-kho.service';
 import { DatePipe } from '@angular/common';
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -22,8 +23,13 @@ import { DatePipe } from '@angular/common';
 })
 export class DanhMucThuKhoComponent extends Base2Component implements OnInit {
 
-  listTrangThai = [{ "ma": "01", "giaTri": "Hoạt động" }, { "ma": "00", "giaTri": "Không hoạt động" }];
+  listTrangThai = [
+    { "ma": "Hoạt", "giaTri": "Hoạt động" },
+    { "ma": "Không", "giaTri": "Không hoạt động" }
+  ];
   datePipe = new DatePipe('en-US');
+
+  listDvi :any = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -31,28 +37,44 @@ export class DanhMucThuKhoComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     userService: UserService,
+    private router: Router,
     private donviService: DonviService,
     private danhMucThuKhoService: DanhMucThuKhoService
   ) {
     super(httpClient, storageService, notification, spinner, modal, userService);
     this.formData = this.fb.group({
       maThuKho: null,
-      tenThuKho: null,
+      fullName: null,
       cccd: null,
-      trangThai: null,
-      position: "CBTHUKHO"
+      status: null,
+      position: "CBTHUKHO",
+      maDviLike : this.userInfo.MA_DVI,
+      maDvi : null
     })
   }
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QTDM_DM_THU_KHO')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
     try {
+      this.loadDsChiCuc();
       await this.search();
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  clearForm() {
+    this.formData.reset();
+    this.formData.patchValue({
+      position: "CBTHUKHO",
+      maDviLike : this.userInfo.MA_DVI
+    })
+    this.search();
   }
 
   export() {
@@ -106,6 +128,14 @@ export class DanhMucThuKhoComponent extends Base2Component implements OnInit {
       });
     });
 
+  }
+
+  async loadDsChiCuc() {
+    let res = await this.donviService.layTatCaDonViByLevel(3);
+    if (res && res.data) {
+      this.listDvi = res.data
+      this.listDvi = this.listDvi.filter(item => item.type != "PB" && item.maDvi.startsWith(this.userInfo.MA_DVI))
+    }
   }
 
 }

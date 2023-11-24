@@ -126,7 +126,7 @@
 
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Loại hình xuất</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
               <nz-select formControlName="loaiNhapXuat" (ngModelChange)="changeLoaiHinhNhapXuat($event)"
                 [nzDisabled]="isView">
@@ -149,7 +149,7 @@
 
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Số công văn/đề xuất</nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Số công văn/tờ trình</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
               <nz-input-group nzAddOnAfter="{{maHauTo}}">
                 <nz-input-number formControlName="soDx" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"

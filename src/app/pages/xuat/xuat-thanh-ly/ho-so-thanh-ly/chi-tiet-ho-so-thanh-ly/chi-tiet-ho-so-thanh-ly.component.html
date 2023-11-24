@@ -210,8 +210,8 @@
                   <td>{{data.xhTlDanhSachHdr.slHienTai | number : '1.0-1' : 'vi_VN' }}</td>
                   <td>{{data.xhTlDanhSachHdr.slDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
                   <td>{{data.xhTlDanhSachHdr.donViTinh }}</td>
-                  <td><nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      nz-input [(ngModel)]="data.xhTlDanhSachHdr.donGiaDk"
+                  <td><nz-input-number [nzSize]="'small'"  [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                      nz-input [(ngModel)]="data.xhTlDanhSachHdr.donGiaDk" [nzMin]="1"
                       [nzDisabled]="disabledTrinh()"></nz-input-number>
                   </td>
                   <td>{{data.xhTlDanhSachHdr.slDeXuat * data.xhTlDanhSachHdr.donGiaDk | number : '1.0-1' :
@@ -224,7 +224,9 @@
           </tbody>
         </nz-table>
       </nz-collapse-panel>
-      <nz-collapse-panel *ngIf="viewTongCuc()" nzActive="true" nzHeader="Kết quả thẩm của Vụ QlHDT">
+    </nz-collapse>
+    <nz-collapse>
+    <nz-collapse-panel *ngIf="viewTongCuc()" nzActive="true" nzHeader="Kết quả thẩm định của Vụ QLHDT">
         <nz-table class="mt-2px pd-10 nowrap" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
           [nzShowPagination]="false">
           <thead>
@@ -279,13 +281,13 @@
                   </td>
                   <td>{{data.xhTlDanhSachHdr.ngayNhapKho | date : 'dd/MM/yyyy'}}</td>
                   <td>{{data.xhTlDanhSachHdr.slHienTai | number : '1.0-1' : 'vi_VN' }}</td>
-                  <td><nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      nz-input [(ngModel)]="data.xhTlDanhSachHdr.slDaDuyet"
+                  <td><nz-input-number [nzSize]="'small'" [nzMax]="data.xhTlDanhSachHdr.slDeXuat" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                      nz-input [(ngModel)]="data.xhTlDanhSachHdr.slDaDuyet" [nzMin]="1"
                       [nzDisabled]="disabledThamDinh()"></nz-input-number>
                   </td>
                   <td>{{data.xhTlDanhSachHdr.donViTinh }}</td>
                   <td><nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      nz-input [(ngModel)]="data.xhTlDanhSachHdr.donGiaPd"
+                      nz-input [(ngModel)]="data.xhTlDanhSachHdr.donGiaPd" [nzMin]="1"
                       [nzDisabled]="disabledThamDinh()"></nz-input-number>
                   </td>
                   <td>{{data.xhTlDanhSachHdr.slDaDuyet * data.xhTlDanhSachHdr.donGiaPd | number : '1.0-1'

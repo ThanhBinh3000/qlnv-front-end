@@ -4,7 +4,8 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button type="button" class="btn btn-sub do" (click)="preview(previewName)">
+    <button
+      type="button" class="btn btn-sub do" (click)="xemTruoc(id,previewName)">
       <i class="icon htvbdh_tcdt_tuchoi"></i>
       <span>Xem trước</span>
     </button>
@@ -183,7 +184,7 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <input nz-input formControlName="tenLoaiVthh" [readonly]="true" />
             </nz-form-control>
@@ -191,7 +192,7 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <input nz-input formControlName="tenCloaiVthh" [readonly]="true" />
             </nz-form-control>
@@ -247,7 +248,7 @@
         </div>
         <div nz-col [nzSpan]="8">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Tình trạng hàng hóa</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Tình trạng hàng DTQG</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <textarea rows="3" nz-input formControlName="tinhTrang"></textarea>
             </nz-form-control>
@@ -255,7 +256,7 @@
         </div>
         <div nz-col [nzSpan]="8">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Chất lượng hàng hóa</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Chất lượng hàng DTQG</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <textarea rows="3" nz-input formControlName="chatLuong"></textarea>
             </nz-form-control>
@@ -335,12 +336,12 @@
         <nz-form-label [nzNoColon]="true" class="label-empty">
         </nz-form-label>
         <nz-form-control>
-          <div class="btn-plus" (click)="addDaiDien(benNhan,'00')" *ngIf="!isView">
+          <div class="btn-plus" (click)="addDaiDien('00')" *ngIf="!isView">
             <i class="icon htvbdh_dau-cong"></i>
           </div>
         </nz-form-control>
       </div>
-      <ng-container *ngFor="let bienBan of dataTable">
+      <ng-container *ngFor="let bienBan of dataTable;let i = index">
         <ng-container *ngIf="bienBan.loaiBen === '00'">
           <div nz-col nzSpan="8">
             <nz-form-item>
@@ -353,7 +354,7 @@
             </nz-form-item>
           </div>
           <div nz-col nzSpan="8">
-            <div class="btn-delete" (click)="deleteBienBan(bienBan.id)" *ngIf="!isView">
+            <div class="btn-delete" (click)="deleteBienBan(i)" *ngIf="!isView">
               <i class="icon htvbdh_dau-tru"></i>
             </div>
           </div>
@@ -412,11 +413,11 @@
       <div nz-col [nzSpan]="8">
         <nz-form-label [nzNoColon]="true" class="label-empty">
         </nz-form-label>
-        <div class="btn-plus" (click)="addDaiDien(benGiao, '01')" *ngIf="!isView">
+        <div class="btn-plus" (click)="addDaiDien('01')" *ngIf="!isView">
           <i class="icon htvbdh_dau-cong"></i>
         </div>
       </div>
-      <ng-container *ngFor="let bienBan of dataTable">
+      <ng-container *ngFor="let bienBan of dataTable;let i = index">
         <ng-container *ngIf="bienBan.loaiBen === '01'">
           <div nz-col nzSpan="8">
             <nz-form-item>
@@ -429,7 +430,7 @@
             </nz-form-item>
           </div>
           <div nz-col nzSpan="8">
-            <div class="btn-delete" (click)="deleteBienBan(bienBan.id)" *ngIf="!isView">
+            <div class="btn-delete" (click)="deleteBienBan(i)" *ngIf="!isView">
               <i class="icon htvbdh_dau-tru"></i>
             </div>
           </div>
@@ -463,7 +464,7 @@
 <ng-template #error let-control>
   <app-template-error #error [control]="control"></app-template-error>
 </ng-template>
-<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="BIÊN BẢN GỬI HÀNG" nzWidth="100%" (nzOnCancel)="closeDlg()">
+<nz-modal [(nzVisible)]="showDlgPreview" nzWidth="70%" (nzOnCancel)="closeDlg()">
   <div *nzModalContent class="modal__content">
     <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
   </div>
@@ -472,11 +473,11 @@
       <i class="icon htvbdh_printer"></i>
       In
     </button>
-    <button nz-button (click)="downloadPdf(previewName)" class="modal__button--save">
+    <button nz-button (click)="downloadPdf(templateName)" class="modal__button--save">
       <i class="icon htvbdh_file-pdf"></i>
       Xuất .pdf
     </button>
-    <button nz-button (click)="downloadWord(previewName)" class="modal__button--save">
+    <button nz-button (click)="downloadWord(templateName)" class="modal__button--save">
       <i class="icon htvbdh_file-word"></i>
       Xuất .docx
     </button>

@@ -33,6 +33,7 @@
       <app-ke-hoach-luong-thuc #keHoachLuongThuc [(ltGaoMua)]="keHoach.ltGaoMua" [isView]="isView" [namHienTai]="nam"
                                [(ltGaoXuat)]="keHoach.ltGaoXuat" [(ltThocMua)]="keHoach.ltThocMua"
                                [(ltThocXuat)]="keHoach.ltThocXuat" [(ltGaoTon)]="keHoach.ltGaoTon"
+                               [(ghiChu)]="keHoach.ghiChuLt"
                                [(ltThocTon)]="keHoach.ltThocTon"
                                [maBoNganh]="keHoach.maBoNganh">
       </app-ke-hoach-luong-thuc>
@@ -41,6 +42,7 @@
     <nz-tab [nzTitle]="'Mua tăng'">
       <app-ke-hoach-xuat-giam [isView]="isView" tab='MT' [tabRadio]="radioValue" [dsHangHoa]="dsHangHoa"
                               [(tongGtri)]="keHoach.ttMuaTang"
+                              [(ghiChu)]="keHoach.ghiChuMuaTang"
                               [namHienTai]="nam" [maBoNganh]="keHoach.maBoNganh" [(dataTable)]="keHoach.muaTangList"
                               [dataToanBn]="dataToanBn">
       </app-ke-hoach-xuat-giam>
@@ -49,6 +51,7 @@
     <nz-tab [nzTitle]="'Xuất giảm không thu tiền'">
       <app-ke-hoach-xuat-giam [isView]="isView" tab="XG" [tabRadio]="radioValue" [dsHangHoa]="dsHangHoa"
                               [(tongGtri)]="keHoach.ttXuatGiam"
+                              [(ghiChu)]="keHoach.ghiChuXuatGiam"
                               [namHienTai]="nam" [maBoNganh]="keHoach.maBoNganh" [(dataTable)]="keHoach.xuatGiamList">
       </app-ke-hoach-xuat-giam>
     </nz-tab>
@@ -56,6 +59,7 @@
     <nz-tab [nzTitle]="'Xuất bán thu tiền'">
       <app-ke-hoach-xuat-giam [isView]="isView" tab="XB" [tabRadio]="radioValue" [dsHangHoa]="dsHangHoa"
                               [(tongGtri)]="keHoach.ttXuatBan"
+                              [(ghiChu)]="keHoach.ghiChuXuatBan"
                               [namHienTai]="nam" [maBoNganh]="keHoach.maBoNganh" [(dataTable)]="keHoach.xuatBanList">
       </app-ke-hoach-xuat-giam>
     </nz-tab>
@@ -64,6 +68,7 @@
       <app-ke-hoach-xuat-giam [isView]="isView" tab="LPDH" [tabRadio]="radioValue" [dsHangHoa]="dsHangHoa"
                               [tabName]="'LuanPhien'"
                               [namHienTai]="nam"
+                              [(ghiChu)]="keHoach.ghiChuLuanPhien"
                               [maBoNganh]="keHoach.maBoNganh" [(dataTable)]="keHoach.luanPhienList">
       </app-ke-hoach-xuat-giam>
     </nz-tab>
@@ -79,6 +84,11 @@
         Đóng
       </a>
       &nbsp;
+      <a  class="btn btn-sub btn-sm waves-effect waves-light" (click)="preview()">
+        <i class="icon htvbdh_tcdt_tuchoi"></i>
+        Xem trước
+      </a>
+      &nbsp;
       <a *ngIf="!isView" class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="luu()">
         <i aria-hidden="true" class="fa fa-save"></i>
         Lưu
@@ -86,3 +96,36 @@
     </div>
   </div>
 </div>
+
+
+<nz-modal [(nzVisible)]="showDlgPreview" nzTitle='Kế hoạch dự trữ quốc gia - TTCP giao Bộ/Ngành' nzWidth='100%'
+          (nzOnCancel)='closeDlg()'>
+  <div *nzModalContent class='modal__content'>
+    <pdf-viewer [src]='pdfSrc' [render-text]='true' style='width: 100%; height: 650px;'></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <div *ngIf="showDlgPreview">
+      <button nz-button (click)='downloadPdf()'
+              class='modal__button--save'>
+        <i class='icon htvbdh_file-pdf'></i>
+        Xuất .pdf
+      </button>
+      <button nz-button (click)='downloadWord()'
+              class='modal__button--save'>
+        <i class='icon htvbdh_file-word'></i>
+        Xuất .docx
+      </button>
+      <button nz-button (click)='printPreview()'
+              class='modal__button--save'>
+        <i class='icon htvbdh_printer'></i>
+        In
+      </button>
+      <button nz-button (click)='closeDlg()' class='modal__button--cancel'>
+        <i nz-icon nzType='close-circle' nzTheme='fill' class='icon-cancel'></i>
+        Đóng
+      </button>
+    </div>
+  </div>
+</nz-modal>
+
+

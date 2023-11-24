@@ -10,3 +10,8 @@
   display: inline-grid;
   grid-template-columns: auto auto auto;
 }
+
+::ng-deep .ant-checkbox-group.grid-1 {
+  display: grid;
+  grid-template-columns: 1fr
+}

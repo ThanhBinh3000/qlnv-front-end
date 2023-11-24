@@ -1,18 +1,18 @@
-import {Component, EventEmitter, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import { Component, EventEmitter, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import * as dayjs from 'dayjs';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
-import {MESSAGE} from 'src/app/constants/message';
-import {UserService} from 'src/app/services/user.service';
-import {cloneDeep} from 'lodash';
-import {QuyetDinhTtcpService} from 'src/app/services/quyetDinhTtcp.service';
-import {saveAs} from 'file-saver';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {UserLogin} from './../../../../../../models/userlogin';
-import {STATUS} from 'src/app/constants/status';
-import printJS from "print-js";
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { MESSAGE } from 'src/app/constants/message';
+import { UserService } from 'src/app/services/user.service';
+import { cloneDeep } from 'lodash';
+import { QuyetDinhTtcpService } from 'src/app/services/quyetDinhTtcp.service';
+import { saveAs } from 'file-saver';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { UserLogin } from './../../../../../../models/userlogin';
+import { STATUS } from 'src/app/constants/status';
+import printJS from 'print-js';
 
 
 @Component({
@@ -53,7 +53,7 @@ export class TtcpComponent implements OnInit {
   setOfCheckedId = new Set<number>();
   dataTable: any[] = [];
   dataTableAll: any[] = [];
-  boTaiChinh: number = 100
+  boTaiChinh: number = 100;
   listBoNganh: any[] = [];
   namDataSelect: number;
   userInfo: UserLogin;
@@ -68,8 +68,8 @@ export class TtcpComponent implements OnInit {
     public userService: UserService,
     private modal: NzModalService,
   ) {
-    if (!userService.isAccessPermisson("KHVDTNSNN_GKHDT_VDNDT_QD_TTCP")) {
-      window.location.href = '/error/401'
+    if (!userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP')) {
+      window.location.href = '/error/401';
     }
     this.formData = this.fb.group({
       namQd: [],
@@ -77,7 +77,7 @@ export class TtcpComponent implements OnInit {
       ngayQd: [[]],
       trichYeu: [null],
       trangThai: [],
-      maDvi: []
+      maDvi: [],
     });
   }
 
@@ -119,9 +119,9 @@ export class TtcpComponent implements OnInit {
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1,
-    }
+    };
     if (this.userService.isCuc()) {
-      body.maDvi = this.userInfo.MA_DVI
+      body.maDvi = this.userInfo.MA_DVI;
     }
     let res = await this.quyetDinhTtcpService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -133,7 +133,7 @@ export class TtcpComponent implements OnInit {
           item.checked = false;
           // item.statusConvert = this.convertTrangThai(item.trangThai);
         });
-        this.getDetailRow(this.dataTable[0].id)
+        this.getDetailRow(this.dataTable[0].id);
       }
       this.dataTableAll = cloneDeep(this.dataTable);
 
@@ -167,7 +167,7 @@ export class TtcpComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quyetDinhTtcpService.deleteMuti({idList: dataDelete});
+            let res = await this.quyetDinhTtcpService.deleteMuti({ idList: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -185,23 +185,23 @@ export class TtcpComponent implements OnInit {
         },
       });
     } else {
-      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+      this.notification.error(MESSAGE.ERROR, 'Không có dữ liệu phù hợp để xóa.');
     }
   }
 
-  exportReportDemo() {
-    let body = {
-      typeFile: "PDF",
-      fileName: "bc_nhap_xuat_ton_kho_hang_dtnn.jrxml",
-      tenBaoCao: "Hoa_test",
-      nam: 2023
-    };
-    this.quyetDinhTtcpService
-      .exportReport(body)
-      .subscribe((blob) =>
-        saveAs(blob, body.tenBaoCao + ".pdf"),
-      );
-  }
+  // exportReportDemo() {
+  //   let body = {
+  //     typeFile: 'PDF',
+  //     fileName: 'bc_nhap_xuat_ton_kho_hang_dtnn.jrxml',
+  //     tenBaoCao: 'Hoa_test',
+  //     nam: 2023,
+  //   };
+  //   this.quyetDinhTtcpService
+  //     .exportReport(body)
+  //     .subscribe((blob) =>
+  //       saveAs(blob, body.tenBaoCao + '.pdf'),
+  //     );
+  // }
 
   exportData() {
     if (this.totalRecord > 0) {
@@ -229,12 +229,12 @@ export class TtcpComponent implements OnInit {
 
   async onClose() {
     this.isAddNew = false;
-    await this.search()
+    await this.search();
 
   }
 
   onAllChecked(checked) {
-    this.dataTable.forEach(({id}) => this.updateCheckedSet(id, checked));
+    this.dataTable.forEach(({ id }) => this.updateCheckedSet(id, checked));
     this.refreshCheckedStatus();
   }
 
@@ -247,11 +247,11 @@ export class TtcpComponent implements OnInit {
   }
 
   refreshCheckedStatus(): void {
-    this.allChecked = this.dataTable.every(({id}) =>
+    this.allChecked = this.dataTable.every(({ id }) =>
       this.setOfCheckedId.has(id),
     );
     this.indeterminate =
-      this.dataTable.some(({id}) => this.setOfCheckedId.has(id)) &&
+      this.dataTable.some(({ id }) => this.setOfCheckedId.has(id)) &&
       !this.allChecked;
   }
 
@@ -316,7 +316,7 @@ export class TtcpComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quyetDinhTtcpService.delete({id: item.id}).then((res) => {
+          this.quyetDinhTtcpService.delete({ id: item.id }).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -345,7 +345,7 @@ export class TtcpComponent implements OnInit {
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
           if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-            temp.push(item)
+            temp.push(item);
           }
         });
       }
@@ -363,7 +363,7 @@ export class TtcpComponent implements OnInit {
       trichYeu: '',
       taiLieuDinhKem: '',
       tenTrangThai: '',
-    }
+    };
   }
 
   updateAllChecked(): void {
@@ -400,10 +400,21 @@ export class TtcpComponent implements OnInit {
   async getDetailRow(id) {
     if (id) {
       let res = await this.quyetDinhTtcpService.getDetail(id);
-      console.log(res, 'aaaaaaaaaaaaaaaaaaa')
       if (res.msg == MESSAGE.SUCCESS) {
-        this.listBoNganh = res.data.listBoNganh ? res.data.listBoNganh : [];
-        this.namDataSelect = res.data.namQd
+        this.listBoNganh = res.data.listChiTangToanBoNganh ? res.data.listChiTangToanBoNganh : [];
+        //gộp 2 dòng vt, lt thành btc
+        const mergedItems: itemBn[] = this.listBoNganh.reduce((result: itemBn[], currentItem: itemBn) => {
+          const lastIndex = result.length - 1;
+          if (lastIndex >= 0 && result[lastIndex].maBn === currentItem.maBn) {
+            result[lastIndex].tenBn = 'Bộ Tài Chính';
+            result[lastIndex].tongSo += currentItem.tongSo;
+          } else {
+            result.push(currentItem);
+          }
+          return result;
+        }, []);
+        this.listBoNganh = cloneDeep(mergedItems.filter(item => item.tongSo));
+        this.namDataSelect = res.data.namQd;
         this.rowSelected = id;
       }
     }
@@ -412,7 +423,7 @@ export class TtcpComponent implements OnInit {
   calcTong() {
     if (this.listBoNganh) {
       const sum = this.listBoNganh.reduce((prev, cur) => {
-        prev += cur.tongTien;
+        prev += cur.tongSo;
         return prev;
       }, 0);
       return sum;
@@ -423,7 +434,7 @@ export class TtcpComponent implements OnInit {
     let dataPrint = this.dataTable.map((item, index) => {
       return {
         ...item,
-        'stt': index + 1
+        'stt': index + 1,
       };
     });
     printJS({
@@ -434,41 +445,47 @@ export class TtcpComponent implements OnInit {
         {
           field: 'stt',
           displayName: 'STT',
-          columnSize: '40px'
+          columnSize: '40px',
         },
         {
           field: 'soQd',
           displayName: 'Số quyết định',
-          columnSize: '100px'
+          columnSize: '100px',
         }
         ,
         {
           field: 'namQd',
           displayName: 'Năm kế hoạch',
-          columnSize: '100px'
+          columnSize: '100px',
         },
         {
           field: 'ngayQd',
           displayName: 'Ngày ký quyết định',
-          columnSize: '100px'
+          columnSize: '100px',
         },
         {
           field: 'ngayQd',
           displayName: 'Ngày ký quyết định',
-          columnSize: '100px'
+          columnSize: '100px',
         },
         {
           field: 'trichYeu',
           displayName: 'Trích yếu',
-          columnSize: 'calc(100% - calc( 40px + 400px)) px'
+          columnSize: 'calc(100% - calc( 40px + 400px)) px',
         }, {
           field: 'tenTrangThai',
           displayName: 'Trạng thái',
-          columnSize: '100px'
-        }
+          columnSize: '100px',
+        },
       ],
       type: 'json',
-      header: 'Danh sách quyết định của thủ tướng chính phủ'
-    })
+      header: 'Danh sách quyết định của thủ tướng chính phủ',
+    });
   }
+}
+
+interface itemBn {
+  tenBn: string;
+  maBn: string;
+  tongSo: number;
 }

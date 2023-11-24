@@ -19,12 +19,12 @@
           <div nz-row [nzGutter]="24">
             <div nz-col nzSpan="12" class="cus-start-date">
               <nz-date-picker [nzDisabledDate]="disabledStartDate" nzFormat="dd/MM/yyyy" [(ngModel)]="tuNgayLayMau"
-                nzPlaceHolder="Ngày bắt đầu">
+                              nzPlaceHolder="Ngày bắt đầu">
               </nz-date-picker>
             </div>
             <div nz-col nzSpan="12" class="cus-end-date">
               <nz-date-picker [nzDisabledDate]="disabledEndDate" nzFormat="dd/MM/yyyy" [(ngModel)]="denNgayLayMau"
-                nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                              nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
             </div>
           </div>
         </div>
@@ -44,14 +44,8 @@
     <div class="group-button">
       <h3>DANH SÁCH BIÊN BẢN LẤY MẪU/BÀN GIAO MẪU</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteSelect()"
-          *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_BBLMBGM_XOA') : userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBLMBGM_XOA')">
-          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-          <span>Xóa</span>
-        </button>
-        <button
-          *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_BBLMBGM_EXP') : userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBLMBGM_EXP')"
-          type="button" class="btn btn-sub" (click)="export()">
+        <button *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_BBLMBGM_EXP') : userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBLMBGM_EXP')" type="button"
+          class="btn btn-sub" (click)="export()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
@@ -95,7 +89,7 @@
               <td colspan="7"></td>
               <td>
                 <a *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_BBLMBGM_THEM') : userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBLMBGM_THEM')"
-                  (click)="redirectToChiTiet(false, 0,item.id)">
+                   (click)="redirectToChiTiet(false, 0,item.id)">
                   <i class="fa fa-plus"></i>
                 </a>
               </td>
@@ -107,7 +101,7 @@
                   <td></td>
                   <td colspan="3"></td>
                   <td>{{bb.tenDiemKho}}</td>
-                  <td>{{bb.tenLoKho + ' - ' + bb.tenNganKho}}</td>
+                  <td>{{bb.tenLoKho ?bb.tenLoKho + ' - ' + bb.tenNganKho : bb.tenNganKho}}</td>
                   <td>{{bb.bienBanLayMau?.soBienBan}}</td>
                   <td>{{bb.bienBanLayMau?.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
                   <td>{{ loaiVthh == '02' ? bb.bienBanGuiHang?.soBienBanGuiHang :
@@ -129,7 +123,7 @@
                     </a>
                     <a *ngIf="bb.bienBanLayMau && bb.bienBanLayMau.trangThai == STATUS.CHO_DUYET_LDCC
               && (loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_BBLMBGM_DUYET_LDCCUC') : userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBLMBGM_DUYET_LDCCUC'))"
-                      (click)="redirectToChiTiet(true, bb.bienBanLayMau?.id)">
+                       (click)="redirectToChiTiet(true, bb.bienBanLayMau?.id)">
                       <i class="icon htvbdh_tcdt_pheduyet" title="Phê duyệt"></i>
                     </a>
                     <a *ngIf="bb.bienBanLayMau && bb.bienBanLayMau?.trangThai == STATUS.DU_THAO
@@ -164,7 +158,7 @@
   </div>
 </ng-container>
 <ng-container *ngIf="isDetail">
-  <them-moi-bien-ban-lay-mau [id]="selectedId" (showListEvent)="showList()" [isView]="isView" [loaiVthh]="loaiVthh"
-    [idQdGiaoNvNh]="idQdGiaoNvNh" [isTatCa]="isTatCa">
+  <them-moi-bien-ban-lay-mau [id]="selectedId" (showListEvent)="showList()" [isView]="isView" [loaiVthh]="loaiVthh" [idQdGiaoNvNh]="idQdGiaoNvNh"
+    [isTatCa]="isTatCa">
   </them-moi-bien-ban-lay-mau>
 </ng-container>

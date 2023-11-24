@@ -1,17 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { MESSAGE } from "../../../../../../constants/message";
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { cloneDeep } from 'lodash';
+import {Component, Input, OnInit} from '@angular/core';
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {MESSAGE} from "../../../../../../constants/message";
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {cloneDeep} from 'lodash';
 import {
   QuyetDinhPdKhBdgService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
-import { saveAs } from 'file-saver';
-import { LOAI_HANG_DTQG } from 'src/app/constants/config';
+import {saveAs} from 'file-saver';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-thong-tin-dau-gia',
@@ -44,24 +44,25 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
       nam: null,
       soDxuat: null,
       soQdPd: null,
-      soQdPdKqBdg: null,
-      ngayKyQdPdKqBdgTu: null,
-      ngayKyQdPdKqBdgDen: null,
+      soQdKq: null,
+      ngayKyQdKqTu: null,
+      ngayKyQdKqDen: null,
       loaiVthh: null,
     })
     this.filterTable = {
-      nam: '',
-      soQdPd: '',
-      soQdDcBdg: '',
-      soQdPdKqBdg: '',
-      soDxuat: '',
-      ngayKyQdPdKqBdg: '',
-      slDviTsan: '',
-      soDviTsanThanhCong: '',
-      soDviTsanKhongThanh: '',
-      tenCloaiVthh: '',
-      tenTrangThai: '',
-      ketQuaDauGia: '',
+      nam: null,
+      soQdPd: null,
+      soQdDc: null,
+      soQdKq: null,
+      soDxuat: null,
+      ngayKyQdKq: null,
+      slDviTsan: null,
+      soDviTsanThanhCong: null,
+      soDviTsanKhongThanh: null,
+      tenLoaiVthh: null,
+      tenCloaiVthh: null,
+      tenTrangThai: null,
+      ketQuaDauGia: null,
     };
     this.listTrangThai = [
       {
@@ -82,10 +83,10 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([
-        this.timKiem(),
-        this.searchDtl()
-      ]);
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+      })
+      await this.searchDtl();
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -94,18 +95,12 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
     }
   }
 
-  async timKiem() {
+  async clearFilter() {
+    this.formData.reset();
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
     })
-  }
-
-  async clearFilter() {
-    this.formData.reset();
-    await Promise.all([
-      this.timKiem(),
-      this.search()
-    ]);
+    await this.searchDtl()
   }
 
   async searchDtl() {
@@ -115,24 +110,15 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
         ...this.formData.value,
       };
       const res = await this.quyetDinhPdKhBdgService.searchDtl(body);
-      if (res.msg === MESSAGE.SUCCESS) {
-        const data = res.data;
-        const soDxuatMap = {};
-        const filteredRecords = [];
-        data.content.forEach(record => {
-          if (!soDxuatMap[record.soDxuat]) {
-            filteredRecords.push(record);
-            soDxuatMap[record.soDxuat] = true;
-          } else if (record.isDieuChinh) {
-            const index = filteredRecords.findIndex(existingRecord => existingRecord.soDxuat === record.soDxuat);
-            if (index !== -1) {
-              filteredRecords[index] = record;
-            }
-          }
-        });
-        this.dataTable = filteredRecords;
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        this.dataTable = data.content;
         this.totalRecord = data.totalElements;
-        this.dataTable?.forEach((item) => (item.checked = false));
+        if (this.dataTable && this.dataTable.length > 0) {
+          this.dataTable.forEach((item) => {
+            item.checked = false;
+          });
+        }
         this.dataTableAll = cloneDeep(this.dataTable);
       } else {
         this.dataTable = [];
@@ -171,7 +157,7 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
         this.idQdPdKh = id;
         this.isViewQdPdKh = true;
         break;
-      case 'QdPdDc':
+      case 'QdPdDc' :
         this.idQdDc = id;
         this.isViewQdDc = true;
         break;
@@ -194,7 +180,7 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
         this.idQdPdKh = null;
         this.isViewQdPdKh = false;
         break;
-      case 'QdPdDc':
+      case 'QdPdDc' :
         this.idQdDc = null;
         this.isViewQdDc = false;
         break;

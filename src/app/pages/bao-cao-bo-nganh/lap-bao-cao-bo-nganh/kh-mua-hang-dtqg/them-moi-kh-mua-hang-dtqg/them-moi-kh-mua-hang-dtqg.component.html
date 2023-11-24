@@ -2,7 +2,8 @@
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'status-xanh' : 'status-do'">
+        <span
+          [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'status-xanh' : 'status-do'">
           {{ formData.value.tenTrangThai }}
         </span>
         <span>BÁO CÁO KẾ HOẠCH MUA HÀNG DỰ TRỮ QUỐC GIA</span>
@@ -15,14 +16,14 @@
       </button>
       <ng-container>
         <button *ngIf="formData.value.trangThai == STATUS.DU_THAO
-        && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_KHMHDTQG_DUYET')" type="button"
-          class="btn btn-sub xanh-nhat" (click)="guiDuyet(idInput)">
+        && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_KHMHDTQG_DUYET')"
+                type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet(idInput)">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Ban hành</span>
         </button>
         <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && !isView
-        && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_KHMHDTQG_LAP')" type="button" class="btn btn-main"
-          (click)="save()">
+        && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_KHMHDTQG_LAP')"
+                type="button" class="btn btn-main" (click)="save()">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
@@ -132,6 +133,12 @@
   <div class="group-button">
     <h3>DANH SÁCH BÁO CÁO KẾ HOẠCH MUA HÀNG DỰ TRỮ QUỐC GIA</h3>
     <div class="buttons" *ngIf="!isView">
+      <button
+        type="button" class="btn btn-sub xanh-nhat" (click)="downloadTemplate(templateName)">
+        <i class="icon htvbdh_download2"></i>
+        <span>Tải biểu mẫu import dữ liệu</span>
+      </button>
+      <input type="file" (change)="handleSelectFile($event)"/>
       <button type="button" class="btn btn-main" (click)="themMoiDanhMuc()">
         <i class="icon htvbdh_dau-cong"></i>
         <span>Thêm</span>
@@ -139,597 +146,558 @@
     </div>
   </div>
   <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-    <nz-table class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered
-      [nzScroll]="{ x: '1700px' }">
+    <nz-table class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
+              [nzShowPagination]="false" nzBordered [nzScroll]="{ x: '1700px' }">
       <thead>
-        <tr>
-          <th rowSpan="3" class="text-center multi-line" nzWidth="200px" nzLeft>NSNN chi cho mua hàng DTQG</th>
-          <th rowSpan="3" class="text-center multi-line" nzWidth="150px" nzLeft>Mặt hàng</th>
-          <th rowSpan="3" class="text-center multi-line" nzWidth="100px">Mã số</th>
-          <th rowSpan="3" class="text-center multi-line" nzWidth="100px">ĐVT</th>
-          <th colSpan="7" class="text-center multi-line" nzWidth="100px">Kế hoạch được giao</th>
-          <th colSpan="7" class="text-center multi-line" nzWidth="100px">Thực hiện trong năm</th>
-          <th colSpan="6" class="text-center multi-line" nzWidth="100px">Dự toán còn lại</th>
-          <th rowSpan="3" class="text-center multi-line" nzWidth="100px" nzRight *ngIf="!isView">Hành động</th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-        </tr>
-        <tr>
-          <th colSpan="3" class="text-center multi-line">Kế hoạch năm trước chuyển sang</th>
-          <th colSpan="2" class="text-center multi-line">Kế hoạch giao trong năm</th>
-          <th colSpan="2" class="text-center multi-line">Tổng</th>
-          <th colSpan="3" class="text-center multi-line">Thực hiện năm trước chuyển sang</th>
-          <th colSpan="2" class="text-center multi-line">Thực hiện giao trong năm</th>
-          <th colSpan="2" class="text-center multi-line">Tổng</th>
-          <th colSpan="2" class="text-center multi-line">Chuyển sang năm sau</th>
-          <th colSpan="2" class="text-center multi-line">Hủy dự toán</th>
-          <th colSpan="2" class="text-center multi-line">Tổng</th>
-        </tr>
-        <tr>
-          <th class="text-center multi-line">Năm<br />kế hoạch</th>
-          <th class="text-center multi-line">Số lượng</th>
-          <th class="text-center multi-line">Giá trị<br />(tỷ đồng)</th>
-          <th class="text-center multi-line">Số lượng</th>
-          <th class="text-center multi-line">Giá trị<br />(tỷ đồng)</th>
-          <th class="text-center multi-line">Số lượng</th>
-          <th class="text-center multi-line">Giá trị<br />(tỷ đồng)</th>
-          <th class="text-center multi-line">Năm<br />kế hoạch</th>
-          <th class="text-center multi-line">Số lượng</th>
-          <th class="text-center multi-line">Giá trị<br />(tỷ đồng)</th>
-          <th class="text-center multi-line">Số lượng</th>
-          <th class="text-center multi-line">Giá trị<br />(tỷ đồng)</th>
-          <th class="text-center multi-line">Số lượng</th>
-          <th class="text-center multi-line">Giá trị<br />(tỷ đồng)</th>
-          <th class="text-center multi-line">Số lượng</th>
-          <th class="text-center multi-line">Giá trị<br />(tỷ đồng)</th>
-          <th class="text-center multi-line">Số lượng</th>
-          <th class="text-center multi-line">Giá trị<br />(tỷ đồng)</th>
-          <th class="text-center multi-line">Số lượng</th>
-          <th class="text-center multi-line">Giá trị<br />(tỷ đồng)</th>
-        </tr>
-        <tr class="grey-bg">
-          <th class="text-center" nzLeft>A</th>
-          <th class="text-center" nzLeft>B</th>
-          <th class="text-center">C</th>
-          <th class="text-center">1</th>
-          <th class="text-center">2</th>
-          <th class="text-center">3</th>
-          <th class="text-center">4</th>
-          <th class="text-center">5</th>
-          <th class="text-center">6</th>
-          <th class="text-center">7</th>
-          <th class="text-center">8</th>
-          <th class="text-center">9</th>
-          <th class="text-center">10</th>
-          <th class="text-center">11</th>
-          <th class="text-center">12</th>
-          <th class="text-center">13</th>
-          <th class="text-center">14</th>
-          <th class="text-center">15</th>
-          <th class="text-center">16</th>
-          <th class="text-center">17</th>
-          <th class="text-center">18</th>
-          <th class="text-center">19</th>
-          <th class="text-center">20</th>
-          <th class="text-center">21</th>
-          <th class="text-center" nzRight *ngIf="!isView"></th>
-        </tr>
+      <tr>
+        <th rowSpan="3" class="text-center multi-line" nzWidth="200px" nzLeft>NSNN chi cho mua hàng DTQG</th>
+        <th rowSpan="3" class="text-center multi-line" nzWidth="150px" nzLeft>Mặt hàng</th>
+        <th rowSpan="3" class="text-center multi-line" nzWidth="100px">Mã số</th>
+        <th rowSpan="3" class="text-center multi-line" nzWidth="100px">ĐVT</th>
+        <th colSpan="7" class="text-center multi-line" nzWidth="100px">Kế hoạch được giao</th>
+        <th colSpan="7" class="text-center multi-line" nzWidth="100px">Thực hiện trong năm</th>
+        <th colSpan="6" class="text-center multi-line" nzWidth="100px">Dự toán còn lại</th>
+        <th rowSpan="3" class="text-center multi-line" nzWidth="100px" nzRight *ngIf="!isView">Hành động</th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+      </tr>
+      <tr>
+        <th colSpan="3" class="text-center multi-line">Kế hoạch năm trước chuyển sang</th>
+        <th colSpan="2" class="text-center multi-line">Kế hoạch giao trong năm</th>
+        <th colSpan="2" class="text-center multi-line">Tổng</th>
+        <th colSpan="3" class="text-center multi-line">Thực hiện năm trước chuyển sang</th>
+        <th colSpan="2" class="text-center multi-line">Thực hiện giao trong năm</th>
+        <th colSpan="2" class="text-center multi-line">Tổng</th>
+        <th colSpan="2" class="text-center multi-line">Chuyển sang năm sau</th>
+        <th colSpan="2" class="text-center multi-line">Hủy dự toán</th>
+        <th colSpan="2" class="text-center multi-line">Tổng</th>
+      </tr>
+      <tr>
+        <th class="text-center multi-line">Năm<br/>kế hoạch</th>
+        <th class="text-center multi-line">Số lượng</th>
+        <th class="text-center multi-line">Giá trị<br/>(tỷ đồng)</th>
+        <th class="text-center multi-line">Số lượng</th>
+        <th class="text-center multi-line">Giá trị<br/>(tỷ đồng)</th>
+        <th class="text-center multi-line">Số lượng</th>
+        <th class="text-center multi-line">Giá trị<br/>(tỷ đồng)</th>
+        <th class="text-center multi-line">Năm<br/>kế hoạch</th>
+        <th class="text-center multi-line">Số lượng</th>
+        <th class="text-center multi-line">Giá trị<br/>(tỷ đồng)</th>
+        <th class="text-center multi-line">Số lượng</th>
+        <th class="text-center multi-line">Giá trị<br/>(tỷ đồng)</th>
+        <th class="text-center multi-line">Số lượng</th>
+        <th class="text-center multi-line">Giá trị<br/>(tỷ đồng)</th>
+        <th class="text-center multi-line">Số lượng</th>
+        <th class="text-center multi-line">Giá trị<br/>(tỷ đồng)</th>
+        <th class="text-center multi-line">Số lượng</th>
+        <th class="text-center multi-line">Giá trị<br/>(tỷ đồng)</th>
+        <th class="text-center multi-line">Số lượng</th>
+        <th class="text-center multi-line">Giá trị<br/>(tỷ đồng)</th>
+      </tr>
+      <tr class="grey-bg">
+        <th class="text-center" nzLeft>A</th>
+        <th class="text-center" nzLeft>B</th>
+        <th class="text-center">C</th>
+        <th class="text-center">1</th>
+        <th class="text-center">2</th>
+        <th class="text-center">3</th>
+        <th class="text-center">4</th>
+        <th class="text-center">5</th>
+        <th class="text-center">6</th>
+        <th class="text-center">7</th>
+        <th class="text-center">8</th>
+        <th class="text-center">9</th>
+        <th class="text-center">10</th>
+        <th class="text-center">11</th>
+        <th class="text-center">12</th>
+        <th class="text-center">13</th>
+        <th class="text-center">14</th>
+        <th class="text-center">15</th>
+        <th class="text-center">16</th>
+        <th class="text-center">17</th>
+        <th class="text-center">18</th>
+        <th class="text-center">19</th>
+        <th class="text-center">20</th>
+        <th class="text-center">21</th>
+        <th class="text-center" nzRight *ngIf="!isView"></th>
+      </tr>
       </thead>
       <tbody>
-        <ng-container *ngFor="let data of listDataGroup; let i = index">
+      <ng-container *ngFor="let data of listDataGroup; let i = index">
+        <tr>
+          <ng-container *ngIf="!data.edit; else editTemplateDvi">
+            <td nzLeft class="dm-title">{{ data.danhMuc }}</td>
+            <td nzLeft></td>
+            <td class="dm-title">{{ data.maSo }}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="dm-title">{{ data.gtriKhNamTruoc }}</td>
+            <td></td>
+            <td class="dm-title">{{ data.gtriKhGiaoTrongNam }}</td>
+            <td></td>
+            <td class="dm-title">{{ data.gtriTongKhDuocGiao }}</td>
+            <td></td>
+            <td></td>
+            <td class="dm-title">{{ data.gtriThucHienNamTruoc }}</td>
+            <td></td>
+            <td class="dm-title">{{ data.gtriThucHienGiaoTrongNam }}</td>
+            <td></td>
+            <td class="dm-title">{{ data.gtriTongThucHienTrongNam }}</td>
+            <td></td>
+            <td class="dm-title">{{ data.gtriChuyenSangNamSau }}</td>
+            <td></td>
+            <td class="dm-title">{{ data.gtriHuyDuToan }}</td>
+            <td></td>
+            <td class="dm-title">{{ data.gtriTongDuToanConLai }}</td>
+            <td nzRight *ngIf="!isView">
+              <a (click)="editRowDvi(i)">
+                <i class=" fa fa-pencil"></i>
+              </a>
+              <a (click)="deleteRowDvi(i)">
+                <i class=" fa fa-trash-o do"></i>
+              </a>
+            </td>
+          </ng-container>
+          <ng-template #editTemplateDvi>
+            <td nzLeft class="dm-title"><input nz-input [(ngModel)]="itemRowDonViEdit[i].danhMuc" /></td>
+            <td nzLeft></td>
+            <td class="dm-title"><input nz-input [(ngModel)]="itemRowDonViEdit[i].maSo"/></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{ data.gtriKhNamTruoc }}</td>
+            <td></td>
+            <td>{{ data.gtriKhGiaoTrongNam }}</td>
+            <td></td>
+            <td>{{ data.gtriTongKhDuocGiao }}</td>
+            <td></td>
+            <td></td>
+            <td>{{ data.gtriThucHienNamTruoc }}</td>
+            <td></td>
+            <td>{{ data.gtriThucHienGiaoTrongNam }}</td>
+            <td></td>
+            <td>{{ data.gtriTongThucHienTrongNam }}</td>
+            <td></td>
+            <td>{{ data.gtriChuyenSangNamSau }}</td>
+            <td></td>
+            <td>{{ data.gtriHuyDuToan }}</td>
+            <td></td>
+            <td>{{ data.gtriTongDuToanConLai }}</td>
+            <td nzRight>
+              <a (click)="saveEditRowDvi(i)">
+                <i class="icon htvbdh_tcdt_save"></i>
+              </a>
+              <a (click)="cancelEditRowDvi(i)">
+                <i class="fa fa-ban do"></i>
+              </a>
+            </td>
+          </ng-template>
+        </tr>
+        <ng-container *ngFor="let nhomMatHang of data.children, let y = index">
           <tr>
-            <ng-container *ngIf="!data.edit; else editTemplateDvi">
-              <td nzLeft class="dm-title">{{ data.danhMuc }}</td>
+            <ng-container *ngIf="!nhomMatHang.edit; else editTemplateNhomMh">
+              <td nzLeft class="dm-title">{{ nhomMatHang.danhMuc }}</td>
               <td nzLeft></td>
-              <td class="dm-title">{{ data.maSo }}</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td class="dm-title">{{ data.gtriKhNamTruoc }}</td>
-              <td></td>
-              <td class="dm-title">{{ data.gtriKhGiaoTrongNam }}</td>
-              <td></td>
-              <td class="dm-title">{{ data.gtriTongKhDuocGiao }}</td>
-              <td></td>
-              <td></td>
-              <td class="dm-title">{{ data.gtriThucHienNamTruoc }}</td>
-              <td></td>
-              <td class="dm-title">{{ data.gtriThucHienGiaoTrongNam }}</td>
-              <td></td>
-              <td class="dm-title">{{ data.gtriTongThucHienTrongNam }}</td>
-              <td></td>
-              <td class="dm-title">{{ data.gtriChuyenSangNamSau }}</td>
-              <td></td>
-              <td class="dm-title">{{ data.gtriHuyDuToan }}</td>
-              <td></td>
-              <td class="dm-title">{{ data.gtriTongDuToanConLai }}</td>
+              <td class="dm-title">{{ nhomMatHang.maSo }}</td>
+              <td>{{ nhomMatHang.dvt }}</td>
+              <td>{{ nhomMatHang.namKhNamTruoc }}</td>
+              <td>{{ nhomMatHang.slKhNamTruoc }}</td>
+              <td>{{ nhomMatHang.gtriKhNamTruoc }}</td>
+              <td>{{ nhomMatHang.slKhGiaoTrongNam }}</td>
+              <td>{{ nhomMatHang.gtriKhGiaoTrongNam }}</td>
+              <td>{{ nhomMatHang.slTongKhDuocGiao }}</td>
+              <td>{{ nhomMatHang.gtriTongKhDuocGiao }}</td>
+              <td>{{ nhomMatHang.namThucHienNamTruoc }}</td>
+              <td>{{ nhomMatHang.slThucHienNamTruoc }}</td>
+              <td>{{ nhomMatHang.gtriThucHienNamTruoc }}</td>
+              <td>{{ nhomMatHang.slThucHienGiaoTrongNam }}</td>
+              <td>{{ nhomMatHang.gtriThucHienGiaoTrongNam }}</td>
+              <td>{{ nhomMatHang.slTongThucHienTrongNam }}</td>
+              <td>{{ nhomMatHang.gtriTongThucHienTrongNam }}</td>
+              <td>{{ nhomMatHang.slChuyenSangNamSau }}</td>
+              <td>{{ nhomMatHang.gtriChuyenSangNamSau }}</td>
+              <td>{{ nhomMatHang.slHuyDuToan }}</td>
+              <td>{{ nhomMatHang.gtriHuyDuToan }}</td>
+              <td>{{ nhomMatHang.slTongDuToanConLai }}</td>
+              <td>{{ nhomMatHang.gtriTongDuToanConLai }}</td>
               <td nzRight *ngIf="!isView">
-                <a (click)="editRowDvi(i)">
+                <a *ngIf="!isView" (click)="editRowNhomMh(i, y)">
                   <i class=" fa fa-pencil"></i>
                 </a>
-                <a (click)="deleteRowDvi(i)">
+                <a *ngIf="!isView" (click)="deleteRowNhomMh(i, y)">
                   <i class=" fa fa-trash-o do"></i>
                 </a>
               </td>
             </ng-container>
-            <ng-template #editTemplateDvi>
-              <td nzLeft class="dm-title"><input nz-input [(ngModel)]="itemRowDonViEdit[i].danhMuc" /></td>
+            <ng-template #editTemplateNhomMh>
+              <td nzLeft class="dm-title"><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].danhMuc" /></td>
               <td nzLeft></td>
-              <td class="dm-title"><input nz-input [(ngModel)]="itemRowDonViEdit[i].maSo" /></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>{{ data.gtriKhNamTruoc }}</td>
-              <td></td>
-              <td>{{ data.gtriKhGiaoTrongNam }}</td>
-              <td></td>
-              <td>{{ data.gtriTongKhDuocGiao }}</td>
-              <td></td>
-              <td></td>
-              <td>{{ data.gtriThucHienNamTruoc }}</td>
-              <td></td>
-              <td>{{ data.gtriThucHienGiaoTrongNam }}</td>
-              <td></td>
-              <td>{{ data.gtriTongThucHienTrongNam }}</td>
-              <td></td>
-              <td>{{ data.gtriChuyenSangNamSau }}</td>
-              <td></td>
-              <td>{{ data.gtriHuyDuToan }}</td>
-              <td></td>
-              <td>{{ data.gtriTongDuToanConLai }}</td>
+              <td class="dm-title"><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].maSo"/></td>
+              <td><input nz-input *ngIf="!nhomMatHang.coNhieuMatHang" [(ngModel)]="itemRowNhomMhEdit[i][y].dvt" /></td>
+              <td>
+                <nz-input-number [nzMin]="0" *ngIf="!nhomMatHang.coNhieuMatHang"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].namKhNamTruoc"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slKhNamTruoc"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriKhNamTruoc"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slKhGiaoTrongNam"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriKhGiaoTrongNam"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slTongKhDuocGiao"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriTongKhDuocGiao"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzMin]="0" *ngIf="!nhomMatHang.coNhieuMatHang"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].namThucHienNamTruoc"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slThucHienNamTruoc"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriThucHienNamTruoc"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slThucHienGiaoTrongNam"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriThucHienGiaoTrongNam"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slTongThucHienTrongNam"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriTongThucHienTrongNam"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slChuyenSangNamSau"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriChuyenSangNamSau"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slHuyDuToan"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriHuyDuToan"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slTongDuToanConLai"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriTongDuToanConLai"></nz-input-number>
+              </td>
               <td nzRight>
-                <a (click)="saveEditRowDvi(i)">
+                <a (click)="saveEditRowNhomMh(i, y)">
                   <i class="icon htvbdh_tcdt_save"></i>
                 </a>
-                <a (click)="cancelEditRowDvi(i)">
+                <a (click)="cancelEditRowNhomMh(i, y)">
                   <i class="fa fa-ban do"></i>
                 </a>
               </td>
             </ng-template>
           </tr>
-          <ng-container *ngFor="let nhomMatHang of data.children, let y = index">
+          <ng-container *ngFor="let matHang of nhomMatHang.children, let z = index">
             <tr>
-              <ng-container *ngIf="!nhomMatHang.edit; else editTemplateNhomMh">
-                <td nzLeft class="dm-title">{{ nhomMatHang.danhMuc }}</td>
+              <ng-container *ngIf="!matHang.edit; else editTemplate">
                 <td nzLeft></td>
-                <td class="dm-title">{{ nhomMatHang.maSo }}</td>
-                <td>{{ nhomMatHang.dvt }}</td>
-                <td>{{ nhomMatHang.namKhNamTruoc }}</td>
-                <td>{{ nhomMatHang.slKhNamTruoc }}</td>
-                <td>{{ nhomMatHang.gtriKhNamTruoc }}</td>
-                <td>{{ nhomMatHang.slKhGiaoTrongNam }}</td>
-                <td>{{ nhomMatHang.gtriKhGiaoTrongNam }}</td>
-                <td>{{ nhomMatHang.slTongKhDuocGiao }}</td>
-                <td>{{ nhomMatHang.gtriTongKhDuocGiao }}</td>
-                <td>{{ nhomMatHang.namThucHienNamTruoc }}</td>
-                <td>{{ nhomMatHang.slThucHienNamTruoc }}</td>
-                <td>{{ nhomMatHang.gtriThucHienNamTruoc }}</td>
-                <td>{{ nhomMatHang.slThucHienGiaoTrongNam }}</td>
-                <td>{{ nhomMatHang.gtriThucHienGiaoTrongNam }}</td>
-                <td>{{ nhomMatHang.slTongThucHienTrongNam }}</td>
-                <td>{{ nhomMatHang.gtriTongThucHienTrongNam }}</td>
-                <td>{{ nhomMatHang.slChuyenSangNamSau }}</td>
-                <td>{{ nhomMatHang.gtriChuyenSangNamSau }}</td>
-                <td>{{ nhomMatHang.slHuyDuToan }}</td>
-                <td>{{ nhomMatHang.gtriHuyDuToan }}</td>
-                <td>{{ nhomMatHang.slTongDuToanConLai }}</td>
-                <td>{{ nhomMatHang.gtriTongDuToanConLai }}</td>
+                <td nzLeft>{{ matHang.matHang }}</td>
+                <td>{{ matHang.maSo }}</td>
+                <td>{{ matHang.dvt }}</td>
+                <td>{{ matHang.namKhNamTruoc }}</td>
+                <td>{{ matHang.slKhNamTruoc }}</td>
+                <td>{{ matHang.gtriKhNamTruoc }}</td>
+                <td>{{ matHang.slKhGiaoTrongNam }}</td>
+                <td>{{ matHang.gtriKhGiaoTrongNam }}</td>
+                <td>{{ matHang.slTongKhDuocGiao }}</td>
+                <td>{{ matHang.gtriTongKhDuocGiao }}</td>
+                <td>{{ matHang.namThucHienNamTruoc }}</td>
+                <td>{{ matHang.slThucHienNamTruoc }}</td>
+                <td>{{ matHang.gtriThucHienNamTruoc }}</td>
+                <td>{{ matHang.slThucHienGiaoTrongNam }}</td>
+                <td>{{ matHang.gtriThucHienGiaoTrongNam }}</td>
+                <td>{{ matHang.slTongThucHienTrongNam }}</td>
+                <td>{{ matHang.gtriTongThucHienTrongNam }}</td>
+                <td>{{ matHang.slChuyenSangNamSau }}</td>
+                <td>{{ matHang.gtriChuyenSangNamSau }}</td>
+                <td>{{ matHang.slHuyDuToan }}</td>
+                <td>{{ matHang.gtriHuyDuToan }}</td>
+                <td>{{ matHang.slTongDuToanConLai }}</td>
+                <td>{{ matHang.gtriTongDuToanConLai }}</td>
                 <td nzRight *ngIf="!isView">
-                  <a *ngIf="!isView" (click)="editRowNhomMh(i, y)">
+                  <a *ngIf="!isView" (click)="editRowMatHang(i, y, z)">
                     <i class=" fa fa-pencil"></i>
                   </a>
-                  <a *ngIf="!isView" (click)="deleteRowNhomMh(i, y)">
+                  <a *ngIf="!isView" (click)="deleteRowMatHang(i, y, z)">
                     <i class=" fa fa-trash-o do"></i>
                   </a>
                 </td>
               </ng-container>
-              <ng-template #editTemplateNhomMh>
-                <td nzLeft class="dm-title"><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].danhMuc" /></td>
+              <ng-template #editTemplate>
                 <td nzLeft></td>
-                <td class="dm-title"><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].maSo" /></td>
-                <td><input nz-input *ngIf="!nhomMatHang.coNhieuMatHang" [(ngModel)]="itemRowNhomMhEdit[i][y].dvt" />
+                <td nzLeft></td>
+                <td nzLeft><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].matHang" /></td>
+                <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].maSo" /></td>
+                <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].dvt" /></td>
+                <td>
+                  <nz-input-number [nzMin]="0"
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].namKhNamTruoc"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number [nzMin]="0" *ngIf="!nhomMatHang.coNhieuMatHang"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].namKhNamTruoc"></nz-input-number>
+                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slKhNamTruoc"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                    [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].slKhNamTruoc"></nz-input-number>
+                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriKhNamTruoc"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                    [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].gtriKhNamTruoc"></nz-input-number>
+                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slKhGiaoTrongNam"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                    [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].slKhGiaoTrongNam"></nz-input-number>
+                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriKhGiaoTrongNam"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                    [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].gtriKhGiaoTrongNam"></nz-input-number>
+                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slTongKhDuocGiao"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                    [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].slTongKhDuocGiao"></nz-input-number>
+                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriTongKhDuocGiao"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                    [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].gtriTongKhDuocGiao"></nz-input-number>
+                  <nz-input-number [nzMin]="0"
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].namThucHienNamTruoc"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number [nzMin]="0" *ngIf="!nhomMatHang.coNhieuMatHang"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].namThucHienNamTruoc"></nz-input-number>
+                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slThucHienNamTruoc"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                    [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].slThucHienNamTruoc"></nz-input-number>
+                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriThucHienNamTruoc"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                    [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].gtriThucHienNamTruoc"></nz-input-number>
+                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slThucHienGiaoTrongNam"></nz-input-number>
+                </td>
+
+                <td>
+                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriThucHienGiaoTrongNam"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                    [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].slThucHienGiaoTrongNam"></nz-input-number>
+                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slTongThucHienTrongNam"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                    [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].gtriThucHienGiaoTrongNam"></nz-input-number>
+                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriTongThucHienTrongNam"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                    [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].slTongThucHienTrongNam"></nz-input-number>
+                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slChuyenSangNamSau"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                    [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].gtriTongThucHienTrongNam"></nz-input-number>
+                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriChuyenSangNamSau"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                    [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].slChuyenSangNamSau"></nz-input-number>
+                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slHuyDuToan"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                    [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].gtriChuyenSangNamSau"></nz-input-number>
+                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriHuyDuToan"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                    [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].slHuyDuToan"></nz-input-number>
+                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slTongDuToanConLai"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                    [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].gtriHuyDuToan"></nz-input-number>
-                </td>
-                <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                    [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].slTongDuToanConLai"></nz-input-number>
-                </td>
-                <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                    [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].gtriTongDuToanConLai"></nz-input-number>
+                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriTongDuToanConLai"></nz-input-number>
                 </td>
                 <td nzRight>
-                  <a (click)="saveEditRowNhomMh(i, y)">
+                  <a (click)="saveEditRowMatHang(i, y, z)">
                     <i class="icon htvbdh_tcdt_save"></i>
                   </a>
-                  <a (click)="cancelEditRowNhomMh(i, y)">
+                  <a (click)="cancelEditRowMatHang(i, y, z)">
                     <i class="fa fa-ban do"></i>
                   </a>
                 </td>
               </ng-template>
             </tr>
-            <ng-container *ngFor="let matHang of nhomMatHang.children, let z = index">
-              <tr>
-                <ng-container *ngIf="!matHang.edit; else editTemplate">
-                  <td nzLeft></td>
-                  <td nzLeft>{{ matHang.matHang }}</td>
-                  <td>{{ matHang.maSo }}</td>
-                  <td>{{ matHang.dvt }}</td>
-                  <td>{{ matHang.namKhNamTruoc }}</td>
-                  <td>{{ matHang.slKhNamTruoc }}</td>
-                  <td>{{ matHang.gtriKhNamTruoc }}</td>
-                  <td>{{ matHang.slKhGiaoTrongNam }}</td>
-                  <td>{{ matHang.gtriKhGiaoTrongNam }}</td>
-                  <td>{{ matHang.slTongKhDuocGiao }}</td>
-                  <td>{{ matHang.gtriTongKhDuocGiao }}</td>
-                  <td>{{ matHang.namThucHienNamTruoc }}</td>
-                  <td>{{ matHang.slThucHienNamTruoc }}</td>
-                  <td>{{ matHang.gtriThucHienNamTruoc }}</td>
-                  <td>{{ matHang.slThucHienGiaoTrongNam }}</td>
-                  <td>{{ matHang.gtriThucHienGiaoTrongNam }}</td>
-                  <td>{{ matHang.slTongThucHienTrongNam }}</td>
-                  <td>{{ matHang.gtriTongThucHienTrongNam }}</td>
-                  <td>{{ matHang.slChuyenSangNamSau }}</td>
-                  <td>{{ matHang.gtriChuyenSangNamSau }}</td>
-                  <td>{{ matHang.slHuyDuToan }}</td>
-                  <td>{{ matHang.gtriHuyDuToan }}</td>
-                  <td>{{ matHang.slTongDuToanConLai }}</td>
-                  <td>{{ matHang.gtriTongDuToanConLai }}</td>
-                  <td nzRight *ngIf="!isView">
-                    <a *ngIf="!isView" (click)="editRowMatHang(i, y, z)">
-                      <i class=" fa fa-pencil"></i>
-                    </a>
-                    <a *ngIf="!isView" (click)="deleteRowMatHang(i, y, z)">
-                      <i class=" fa fa-trash-o do"></i>
-                    </a>
-                  </td>
-                </ng-container>
-                <ng-template #editTemplate>
-                  <td nzLeft></td>
-                  <td nzLeft></td>
-                  <td nzLeft><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].matHang" /></td>
-                  <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].maSo" /></td>
-                  <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].dvt" /></td>
-                  <td>
-                    <nz-input-number [nzMin]="0"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].namKhNamTruoc"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                      [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].slKhNamTruoc"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                      [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriKhNamTruoc"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                      [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].slKhGiaoTrongNam"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                      [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriKhGiaoTrongNam"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                      [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].slTongKhDuocGiao"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                      [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriTongKhDuocGiao"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzMin]="0"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].namThucHienNamTruoc"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                      [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].slThucHienNamTruoc"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                      [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriThucHienNamTruoc"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                      [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].slThucHienGiaoTrongNam"></nz-input-number>
-                  </td>
-
-                  <td>
-                    <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                      [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriThucHienGiaoTrongNam"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                      [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].slTongThucHienTrongNam"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                      [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriTongThucHienTrongNam"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                      [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].slChuyenSangNamSau"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                      [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriChuyenSangNamSau"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                      [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].slHuyDuToan"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                      [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriHuyDuToan"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                      [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].slTongDuToanConLai"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                      [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriTongDuToanConLai"></nz-input-number>
-                  </td>
-                  <td nzRight>
-                    <a (click)="saveEditRowMatHang(i, y, z)">
-                      <i class="icon htvbdh_tcdt_save"></i>
-                    </a>
-                    <a (click)="cancelEditRowMatHang(i, y, z)">
-                      <i class="fa fa-ban do"></i>
-                    </a>
-                  </td>
-                </ng-template>
-              </tr>
-            </ng-container>
-            <tr *ngIf="!isView && nhomMatHang.coNhieuMatHang">
-              <td nzLeft></td>
-              <td nzLeft><input nz-input [(ngModel)]="itemRowMatHang[i][y].matHang" /></td>
-              <td><input nz-input [(ngModel)]="itemRowMatHang[i][y].maSo" /></td>
-              <td><input nz-input [(ngModel)]="itemRowMatHang[i][y].dvt" /></td>
-              <td>
-                <nz-input-number [nzMin]="0" [(ngModel)]="itemRowMatHang[i][y].namKhNamTruoc"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser" [(ngModel)]="itemRowMatHang[i][y].slKhNamTruoc"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser" [(ngModel)]="itemRowMatHang[i][y].gtriKhNamTruoc"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser" [(ngModel)]="itemRowMatHang[i][y].slKhGiaoTrongNam"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser" [(ngModel)]="itemRowMatHang[i][y].gtriKhGiaoTrongNam"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser" [(ngModel)]="itemRowMatHang[i][y].slTongKhDuocGiao"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser" [(ngModel)]="itemRowMatHang[i][y].gtriTongKhDuocGiao"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzMin]="0" [(ngModel)]="itemRowMatHang[i][y].namThucHienNamTruoc"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser" [(ngModel)]="itemRowMatHang[i][y].slThucHienNamTruoc"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser" [(ngModel)]="itemRowMatHang[i][y].gtriThucHienNamTruoc"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser"
-                  [(ngModel)]="itemRowMatHang[i][y].slThucHienGiaoTrongNam"></nz-input-number>
-              </td>
-
-              <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser"
-                  [(ngModel)]="itemRowMatHang[i][y].gtriThucHienGiaoTrongNam"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser"
-                  [(ngModel)]="itemRowMatHang[i][y].slTongThucHienTrongNam"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser"
-                  [(ngModel)]="itemRowMatHang[i][y].gtriTongThucHienTrongNam"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser" [(ngModel)]="itemRowMatHang[i][y].slChuyenSangNamSau"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser" [(ngModel)]="itemRowMatHang[i][y].gtriChuyenSangNamSau"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser" [(ngModel)]="itemRowMatHang[i][y].slHuyDuToan"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser" [(ngModel)]="itemRowMatHang[i][y].gtriHuyDuToan"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser" [(ngModel)]="itemRowMatHang[i][y].slTongDuToanConLai"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser" [(ngModel)]="itemRowMatHang[i][y].gtriTongDuToanConLai"></nz-input-number>
-              </td>
-              <td nzRight>
-                <a (click)="addRowMatHang(i, y)">
-                  <i class="fa fa-plus"></i>
-                </a>
-                <a (click)="clearItemRowMatHang(i, y)">
-                  <i class="fa fa-refresh"></i>
-                </a>
-              </td>
-            </tr>
           </ng-container>
+          <tr *ngIf="!isView && nhomMatHang.coNhieuMatHang">
+            <td nzLeft></td>
+            <td nzLeft><input nz-input [(ngModel)]="itemRowMatHang[i][y].matHang" /></td>
+            <td><input nz-input [(ngModel)]="itemRowMatHang[i][y].maSo" /></td>
+            <td><input nz-input [(ngModel)]="itemRowMatHang[i][y].dvt" /></td>
+            <td>
+              <nz-input-number [nzMin]="0"
+                               [(ngModel)]="itemRowMatHang[i][y].namKhNamTruoc"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].slKhNamTruoc"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].gtriKhNamTruoc"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].slKhGiaoTrongNam"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].gtriKhGiaoTrongNam"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].slTongKhDuocGiao"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].gtriTongKhDuocGiao"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzMin]="0"
+                               [(ngModel)]="itemRowMatHang[i][y].namThucHienNamTruoc"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].slThucHienNamTruoc"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].gtriThucHienNamTruoc"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].slThucHienGiaoTrongNam"></nz-input-number>
+            </td>
+
+            <td>
+              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].gtriThucHienGiaoTrongNam"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].slTongThucHienTrongNam"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].gtriTongThucHienTrongNam"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].slChuyenSangNamSau"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].gtriChuyenSangNamSau"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].slHuyDuToan"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].gtriHuyDuToan"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].slTongDuToanConLai"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].gtriTongDuToanConLai"></nz-input-number>
+            </td>
+            <td nzRight>
+              <a (click)="addRowMatHang(i, y)">
+                <i class="fa fa-plus"></i>
+              </a>
+              <a (click)="clearItemRowMatHang(i, y)">
+                <i class="fa fa-refresh"></i>
+              </a>
+            </td>
+          </tr>
         </ng-container>
-        <tr>
-          <td nzLeft></td>
-          <td nzLeft class="first-last-row-table background-last-row text-right">Tổng</td>
-          <td class="text-center">X</td>
-          <td class="text-center">X</td>
-          <td class="text-center">X</td>
-          <td class="text-center">X</td>
-          <td class="text-center"></td>
-          <td class="text-center">X</td>
-          <td class="text-center"></td>
-          <td class="text-center">X</td>
-          <td class="text-center"></td>
-          <td class="text-center">X</td>
-          <td class="text-center">X</td>
-          <td class="text-center"></td>
-          <td class="text-center">X</td>
-          <td class="text-center"></td>
-          <td class="text-center">X</td>
-          <td class="text-center"></td>
-          <td class="text-center">X</td>
-          <td class="text-center"></td>
-          <td class="text-center">X</td>
-          <td class="text-center"></td>
-          <td class="text-center">X</td>
-          <td class="text-center"></td>
-          <td nzRight class="text-center" *ngIf="!isView"></td>
-        </tr>
+      </ng-container>
+      <tr>
+        <td nzLeft></td>
+        <td nzLeft class="first-last-row-table background-last-row text-right">Tổng</td>
+        <td class="text-center">X</td>
+        <td class="text-center">X</td>
+        <td class="text-center">X</td>
+        <td class="text-center">X</td>
+        <td class="text-center"></td>
+        <td class="text-center">X</td>
+        <td class="text-center"></td>
+        <td class="text-center">X</td>
+        <td class="text-center"></td>
+        <td class="text-center">X</td>
+        <td class="text-center">X</td>
+        <td class="text-center"></td>
+        <td class="text-center">X</td>
+        <td class="text-center"></td>
+        <td class="text-center">X</td>
+        <td class="text-center"></td>
+        <td class="text-center">X</td>
+        <td class="text-center"></td>
+        <td class="text-center">X</td>
+        <td class="text-center"></td>
+        <td class="text-center">X</td>
+        <td class="text-center"></td>
+        <td nzRight class="text-center" *ngIf="!isView"></td>
+      </tr>
       </tbody>
     </nz-table>
     <label><span style="color: red">* </span> Ghi chú</label>

@@ -24,7 +24,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="12">
+          <div nz-col [nzSpan]="8">
             <nz-form-item class="form-item">
               <nz-form-label nzFor="trich-yeu">Trích yếu</nz-form-label>
               <nz-form-control>
@@ -50,6 +50,17 @@
                                   nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>
                 </div>
               </div>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="4">
+            <nz-form-item class="form-item">
+              <nz-form-label>Loại quyết định</nz-form-label>
+              <nz-form-control>
+                <nz-select nzAllowClear formControlName="loaiDeXuat" >
+                  <nz-option *ngFor="let item of listLoaiDx" [nzValue]="item.ma"
+                             [nzLabel]="item.giaTri"></nz-option>
+                </nz-select>
+              </nz-form-control>
             </nz-form-item>
           </div>
         </div>
@@ -105,7 +116,8 @@
             <th class="text-center" nzWidth="120px" >Ngày ký</th>
             <th class="text-center" >Trích yếu</th>
             <th class="text-center" nzWidth="150px" >Loại giá</th>
-            <th class="text-center" nzWidth="150px" >Loại hàng hóa</th>
+            <th class="text-center" nzWidth="150px" *ngIf="pagType == 'LT'" >Loại hàng DTQG</th>
+            <th class="text-center" nzWidth="150px">Số quyết định cần điều chỉnh</th>
             <th class="text-center" nzWidth="120px" >Trạng thái</th>
             <th class="text-center" nzWidth="100px" >Hành động</th>
           </tr>
@@ -140,8 +152,13 @@
                   (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
               </nz-input-group>
             </th>
-
             <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiGia"
+                       (input)="filterInTable('tenLoaiGia',filterTable.tenLoaiGia)" size="small" />
+              </nz-input-group>
+            </th>
+            <th *ngIf="pagType == 'LT'">
               <nz-input-group >
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
                   (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small" />
@@ -149,8 +166,8 @@
             </th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiGia"
-                  (input)="filterInTable('tenLoaiGia',filterTable.tenLoaiGia)" size="small" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdDc"
+                       (input)="filterInTable('tenLoaiGia',filterTable.tenLoaiGia)" size="small" />
               </nz-input-group>
             </th>
             <th>
@@ -176,7 +193,8 @@
             <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.trichYeu }}</td>
             <td>{{ data.tenLoaiGia }}</td>
-            <td>{{ data.tenLoaiVthh }}</td>
+            <td *ngIf="pagType == 'LT'">{{ data.tenLoaiVthh }}</td>
+            <td>{{ data.soQdDc }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td>
               <a (click)="viewDetail(data.id, true,data.trangThai)"

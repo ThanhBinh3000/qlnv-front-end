@@ -19,7 +19,6 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
 import { HelperService } from 'src/app/services/helper.service';
-import { TongHopDeXuatKHLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
@@ -29,13 +28,13 @@ import { cloneDeep } from "lodash";
 import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
 import { DatePipe } from '@angular/common';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
-import { STATUS } from "../../../../../constants/status";
+import {STATUS} from "../../../../../constants/status";
 import {
   QuyetDinhPheDuyetKeHoachNhapKhacService
 } from "../../../../../services/qlnv-hang/nhap-hang/nhap-khac/quyetDinhPheDuyetKeHoachNhapKhac.service";
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
-import { FILETYPE } from "../../../../../constants/fileType";
-import { DxKhNhapKhacService } from "../../../../../services/qlnv-hang/nhap-hang/nhap-khac/dxKhNhapKhac.service";
+import {FILETYPE} from "../../../../../constants/fileType";
+import {DxKhNhapKhacService} from "../../../../../services/qlnv-hang/nhap-hang/nhap-khac/dxKhNhapKhac.service";
 import {
   TongHopDxKhNhapKhacService
 } from "../../../../../services/qlnv-hang/nhap-hang/nhap-khac/tongHopDxKhNhapKhac.service";
@@ -153,6 +152,8 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       ngayPduyet: [null],
       tongThanhTien: [null],
       lastest: [''],
+      tongSlNhap: [''],
+      noiDung: [''],
       loaiHinhNx: [null]
     })
   }
@@ -206,7 +207,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
 
 
   isDetailPermission() {
-    if (this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_THEM")) {
+    if (this.userService.isAccessPermisson("NHDTQG_NK_QDNH_THEM")) {
       return true;
     }
     return false;
@@ -327,10 +328,11 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
   }
 
   async save(isGuiDuyet?) {
+    debugger
     await this.spinner.show();
-    if (!this.isDetailPermission()) {
-      return;
-    }
+    // if (!this.isDetailPermission()) {
+    //   return;
+    // }
     this.setValidator(isGuiDuyet)
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
@@ -559,9 +561,9 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
 
   async getDataChiTieu() {
     let res2 = null;
-    res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
-      +this.formData.get('namKhoach').value,
-    );
+      res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
+        +this.formData.get('namKhoach').value,
+      );
     if (res2.msg == MESSAGE.SUCCESS) {
       this.dataChiTieu = res2.data;
       // this.formData.patchValue({
@@ -615,7 +617,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
     await this.spinner.show()
     if (event) {
       const data = event;
-      console.log(data)
+      console.log(data, "0000000")
       this.formData.patchValue({
         loaiVthh: data.dxHdr[0].loaiVthh,
         tenLoaiVthh: data.dxHdr[0].tenLoaiVthh,
@@ -625,6 +627,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
         kieuNx: data.dxHdr[0].kieuNx,
         idTh: data.id,
         maTh: data.maTh,
+        noiDung: data.noiDungTh,
         idDx: null,
         soTrHdr: null,
         dvt: data.dvt
@@ -633,6 +636,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       this.danhsachDxCache = cloneDeep(this.danhsachDx);
       this.dataInput = null;
       this.dataInputCache = null;
+      await this.calTongSlNhap();
       await this.showFirstRow(Event, this.danhsachDx[0]);
 
     }
@@ -677,39 +681,40 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
     await this.spinner.show();
     this.danhsachDx = [];
     if (data) {
-      const dataRes = data.hdr;
-      let tongMucDt = 0
-      // dataRes.idDxHdr = data.hdr.id;
-      if (data.dtl) {
-        dataRes.details = data.dtl
-      };
-      this.danhsachDx.push(dataRes);
-      this.formData.patchValue({
-        cloaiVthh: data.hdr.cloaiVthh,
-        tenCloaiVthh: data.hdr.tenCloaiVthh,
-        loaiVthh: data.hdr.loaiVthh,
-        tenLoaiVthh: data.hdr.tenLoaiVthh,
-        trichYeu: data.hdr.trichYeu,
-        tgianBdauTchuc: data.hdr.tgianBdauTchuc,
-        ngayPduyet: data.hdr.ngayPduyet,
-        dvt: data.hdr.dvt,
-        tongThanhTien: data.hdr.tongThanhTien,
-        tgianMthau: data.hdr.tgianMthau,
-        tgianDthau: data.hdr.tgianDthau,
-        tgianThien: data.hdr.tgianThien,
-        maDvi: data.hdr.maDviDxuat,
-        idTh: null,
-        maTh: null,
-        soDxuat: data.hdr.soDxuat,
-        tongMucDt: tongMucDt,
-        kieuNx: data.hdr.kieuNx,
-        tenKieuNx: data.hdr.tenKieuNx,
-        tenLoaiHinhNx: data.hdr.tenLoaiHinhNx,
-        loaiHinhNx: data.hdr.loaiHinhNx
-      })
-      this.danhsachDxCache = cloneDeep(this.danhsachDx);
-      this.dataInput = null;
-      this.dataInputCache = null;
+        const dataRes = data.hdr;
+        let tongMucDt = 0
+        // dataRes.idDxHdr = data.hdr.id;
+        if (data.dtl) {
+          dataRes.details = data.dtl
+        };
+        this.danhsachDx.push(dataRes);
+        this.formData.patchValue({
+          cloaiVthh: data.hdr.cloaiVthh,
+          tenCloaiVthh: data.hdr.tenCloaiVthh,
+          loaiVthh: data.hdr.loaiVthh,
+          tenLoaiVthh: data.hdr.tenLoaiVthh,
+          trichYeu: data.hdr.trichYeu,
+          tgianBdauTchuc: data.hdr.tgianBdauTchuc,
+          ngayPduyet: data.hdr.ngayPduyet,
+          dvt: data.hdr.dvt,
+          tongThanhTien: data.hdr.tongThanhTien,
+          tgianMthau: data.hdr.tgianMthau,
+          tgianDthau: data.hdr.tgianDthau,
+          tgianThien: data.hdr.tgianThien,
+          maDvi: data.hdr.maDviDxuat,
+          idTh: null,
+          maTh: null,
+          soDxuat: data.hdr.soDxuat,
+          tongMucDt: tongMucDt,
+          kieuNx: data.hdr.kieuNx,
+          tenKieuNx: data.hdr.tenKieuNx,
+          tenLoaiHinhNx: data.hdr.tenLoaiHinhNx,
+          loaiHinhNx: data.hdr.loaiHinhNx
+        })
+        this.danhsachDxCache = cloneDeep(this.danhsachDx);
+        this.dataInput = null;
+        this.dataInputCache = null;
+      await this.calTongSlNhap();
       await this.showFirstRow(Event, this.danhsachDx[0]);
     }
     await this.spinner.hide();
@@ -734,6 +739,18 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       this.dataInputCache = this.danhsachDxCache[0];
       this.index = 0;
       await this.spinner.hide();
+    }
+  }
+
+  async calTongSlNhap() {
+    if (this.danhsachDx) {
+      let sum = 0
+      this.danhsachDx.forEach(item => {
+        sum += item.tongSlNhap;
+      })
+      this.formData.patchValue({
+        tongSlNhap: sum,
+      })
     }
   }
 

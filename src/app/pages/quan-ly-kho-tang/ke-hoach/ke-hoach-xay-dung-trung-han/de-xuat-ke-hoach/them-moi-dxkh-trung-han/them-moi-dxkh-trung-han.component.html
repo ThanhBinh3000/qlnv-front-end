@@ -4,7 +4,7 @@
       <div class="title-chi-tieu">
         <span
           [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC || formData.value.trangThai == STATUS.DA_DUYET_CBV ? 'status-xanh' : 'status-do'">
-          {{ formData.value.tenTrangThai }}
+           {{ formData.value.tenTrangThai == 'Đã duyệt - CB Vụ' ? 'Đã tiếp nhận - CB Vụ': formData.value.tenTrangThai}}
         </span>
         <span>THÔNG TIN ĐẦU TƯ XÂY DỰNG TRUNG HẠN (5 NĂM)</span>
       </div>
@@ -15,36 +15,44 @@
         <span>Quay lại</span>
       </button>
       <button type="button" class="btn btn-sub xanh-nhat ml-2"
-        *ngIf=" userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX_THEM') && !isViewDetail && (formData.value.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || formData.value.trangThai == globals.prop.NHAP_TU_CHOI_TP || formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_CBV) && userService.isCuc() "
-        (click)="save(true)">
+              *ngIf=" userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX_THEM') && !isViewDetail && (formData.value.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || formData.value.trangThai == globals.prop.NHAP_TU_CHOI_TP || formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_CBV) && userService.isCuc() "
+              (click)="save(true)">
         <i class="icon htvbdh_tcdt_print"></i>
-        <span>Lưu và gửi duyệt</span>
+        <span *ngIf="!checkCbVu()">Lưu và gửi duyệt</span>
+        <span *ngIf="checkCbVu()">Lưu và gửi tiếp nhận</span>
       </button>
-      <button type="button" class="btn btn-sub btn-xoa  ml-2" *ngIf="(((formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX_DUYETLDCUC'))  ||
-               (formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX_DUYETTP'))) && userService.isCuc()) ||
-                ( formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX_DUYETCBVU') &&
-                 userService.isTongCuc())" (click)="tuChoi()">
-        <i class="icon htvbdh_tcdt_tuchoi"></i>
-        <span>Từ chối</span>
-      </button>
-      <button type="button" class="btn btn-sub xanh-nhat  ml-2" *ngIf="(((formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX_DUYETLDCUC'))  ||
+      <button type="button" class="btn btn-sub btn-xoa  ml-2"
+              *ngIf="(((formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX_DUYETLDCUC'))  ||
                (formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX_DUYETTP'))) && userService.isCuc()) ||
                 ( formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX_DUYETCBVU') &&
                  userService.isTongCuc())"
-        (click)="formData.value.trangThai == STATUS.DA_DUYET_LDC || formData.value.trangThai == STATUS.CHO_DUYET_TP  ? save(true) : duyet()">
-        <i class="icon htvbdh_dakyduyet"></i>
-        <span>Duyệt</span>
+              (click)="tuChoi()">
+        <i class="icon htvbdh_tcdt_tuchoi"></i>
+        <span>Từ chối</span>
       </button>
-      <button type="button" class="btn btn-sub xanh ml-2" (click)="save()"
-        *ngIf=" userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX_THEM') &&  !isViewDetail && (formData.value.trangThai == globals.prop.NHAP_DU_THAO  ||formData.value.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || formData.value.trangThai == globals.prop.NHAP_TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_CBV ) && userService.isCuc() ">
+      <button type="button" class="btn btn-sub xanh-nhat  ml-2"
+              *ngIf="(((formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX_DUYETLDCUC'))  ||
+               (formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX_DUYETTP'))) && userService.isCuc()) ||
+                ( formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX_DUYETCBVU') &&
+                 userService.isTongCuc())"
+              (click)="formData.value.trangThai == STATUS.DA_DUYET_LDC || formData.value.trangThai == STATUS.CHO_DUYET_TP  ? save(true) : duyet()">
+        <i class="icon htvbdh_dakyduyet"></i>
+        <span *ngIf="!checkCbVu()">Duyệt</span>
+        <span *ngIf="checkCbVu()">Tiếp nhận</span>
+      </button>
+      <button type="button" class="btn btn-sub xanh ml-2"
+              (click)="save()"
+              *ngIf=" userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX_THEM') &&  !isViewDetail && (formData.value.trangThai == globals.prop.NHAP_DU_THAO  ||formData.value.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || formData.value.trangThai == globals.prop.NHAP_TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_CBV ) && userService.isCuc() "
+      >
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
     </div>
   </div>
   <nz-alert class="mg-t-16"
-    *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP  " nzShowIcon
-    nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDo}}">
+            *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP  "
+            nzShowIcon nzType="error"
+            nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDo}}">
   </nz-alert>
   <nz-card class="mt16 flex-card p-lr16">
     <div class="header header-green-background mg-t-10">
@@ -75,7 +83,7 @@
             </nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input formControlName="tenDvi" class="search__input" readonly="true" nz-input />
+                <input formControlName="tenDvi" class="search__input" readonly="true" nz-input/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -96,7 +104,7 @@
             <nz-form-label [nzNoColon]="true">Trích yếu
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input [readOnly]="isViewDetail" formControlName="trichYeu" class="search__input" nz-input />
+              <input [readOnly]="isViewDetail" formControlName="trichYeu" class="search__input" nz-input/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -105,7 +113,7 @@
             <nz-form-label [nzNoColon]="true" nzRequired> Ngày tạo đề xuất</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-date-picker [nzDisabled]="isViewDetail || (formData.value.trangThai != STATUS.DU_THAO)"
-                formControlName="ngayTaoDx" nzFormat="dd/MM/yyyy"></nz-date-picker>
+                              formControlName="ngayTaoDx" nzFormat="dd/MM/yyyy"></nz-date-picker>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -114,7 +122,7 @@
             <nz-form-label [nzNoColon]="true" nzRequired> Ngày duyệt đề xuất</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-date-picker
-                [nzDisabled]="!(userService.isTongCuc() && formData.value.trangThai == STATUS.DA_DUYET_LDC)"
+                [nzDisabled]="!(userService.isCuc() && formData.value.trangThai == STATUS.CHO_DUYET_LDC)"
                 formControlName="ngayDuyet" nzFormat="dd/MM/yyyy"></nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -127,7 +135,7 @@
               <div nz-col nzSpan="11">
                 <nz-form-control [nzErrorTip]="error">
                   <nz-select [nzDisabled]="isViewDetail" nzPlaceHolder="Năm bắt đầu" nzSpan="2" nzAllowClear
-                    formControlName="namBatDau">
+                             formControlName="namBatDau">
                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
                     </nz-option>
                   </nz-select>
@@ -139,7 +147,7 @@
               <div nz-col nzSpan="11">
                 <nz-form-control [nzErrorTip]="error">
                   <nz-select [nzDisabled]="isViewDetail" nzPlaceHolder="Năm kết thúc" nzSpan="2" nzAllowClear
-                    formControlName="namKetThuc">
+                             formControlName="namKetThuc">
                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
                     </nz-option>
                   </nz-select>
@@ -156,7 +164,7 @@
               Căn cứ pháp lý
             </nz-form-label>
             <div class="list-file">
-              <file-list [disabled]="isViewDetail" [data]="listFileDinhKem"></file-list>
+              <file-list [isViewDetail]="isViewDetail" [data]="listFileDinhKem"></file-list>
             </div>
           </nz-form-item>
         </div>
@@ -168,128 +176,99 @@
           <span class="text-uppercase font-weight-bold">CHI TIẾT KẾ HOẠCH</span>
         </div>
       </div>
+      <button type="button" class="btn btn-main" (click)="themMoiItem('them', null)" *ngIf="!isViewDetail">
+        <i class="icon htvbdh_dau-cong"></i>
+        <span>Thêm</span>
+      </button>
     </div>
     <div>
-      <span class="text-right">
-        <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Đồng</h2>
-      </span>
+    <span class="text-right">
+      <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Đồng</h2>
+    </span>
     </div>
-    <nz-table nzBordered class="pd-10" [nzFrontPagination]="false" [nzShowPagination]="false"
-      [nzScroll]="dataTable &&dataTable.length > 0 ? { x: '2500px' } : null">
+    <nz-table nzBordered class="pd-10"
+              [nzFrontPagination]="false" [nzShowPagination]="false"
+              [nzScroll]="dataTable &&dataTable.length > 0 ? { x: '2500px' } : null">
       <thead>
-        <tr>
-          <th class="text-center" width="2%" rowSpan="2">STT</th>
-          <th class="text-center" width="8%%" rowSpan="2">Danh mục khối</th>
-          <th class="text-center" width="8%%" rowSpan="2">Danh mục dự án</th>
-          <th class="text-center" width="8%%" rowSpan="2">Địa điểm xây dựng</th>
-          <th class="text-center" width="7%%" rowSpan="2">Loại dự án</th>
-          <th class="text-center" width="5%" rowSpan="2">Thời gian <br> khởi công - hoàn thành</th>
-          <th class="text-center" width="5%" rowSpan="2">Số QĐ phê duyệt/ <br> điều chỉnh TMĐT</th>
-          <th class="text-center" width="13%" colSpan="2">Tổng mức đầu tư (TMĐT)</th>
-          <th class="text-center" width="13%" colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 5 năm</th>
-          <th class="text-center" *ngIf="!isViewDetail" width="5%" rowSpan="2" nzRight>Hành động</th>
-        </tr>
-        <tr>
-          <th class="text-center">Tổng số (tất cả nguồn vốn)</th>
-          <th class="text-center">Trong đó vốn NSTW</th>
-          <th class="text-center">Tổng số (tất cả nguồn vốn)</th>
-          <th class="text-center">Trong đó vốn NSTW</th>
-        </tr>
-        <tr *ngIf="!isViewDetail">
-          <th></th>
-          <th>
-            <nz-select nzAllowClear [(ngModel)]="rowItemCha.khoi" (ngModelChange)="changeKhoi($event)">
-              <nz-option *ngFor="let p of listKhoi" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-              </nz-option>
-            </nz-select>
-          </th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th class="text-center"
-            *ngIf="formData.value.trangThai != STATUS.DA_DUYET_CBV && formData.value.trangThai != STATUS.DA_DUYET_LDC"
-            nzRight>
-            <a (click)="themItemcha()">
-              <i class="icon htvbdh_dau-cong"></i>
-            </a>
-
-          </th>
-        </tr>
+      <tr>
+        <th class="text-center" width="2%" rowSpan="2">STT</th>
+        <th class="text-center" width="8%%" rowSpan="2">Danh mục khối</th>
+        <th class="text-center" width="8%%" rowSpan="2">Danh mục dự án</th>
+        <th class="text-center" width="8%%" rowSpan="2">Địa điểm xây dựng</th>
+        <th class="text-center" width="7%%" rowSpan="2">Loại dự án</th>
+        <th class="text-center" width="5%" rowSpan="2">Thời gian <br> khởi công - hoàn thành</th>
+        <th class="text-center" width="5%" rowSpan="2">Số QĐ phê duyệt/ <br> điều chỉnh TMĐT</th>
+        <th class="text-center" width="13%" colSpan="2">Tổng mức đầu tư (TMĐT)</th>
+        <th class="text-center" width="13%" colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 5 năm</th>
+        <th class="text-center"*ngIf="!isViewDetail" width="5%" rowSpan="2" nzRight>Hành động</th>
+      </tr>
+      <tr>
+        <th class="text-center">Tổng số (tất cả nguồn vốn)</th>
+        <th class="text-center">Trong đó vốn NSTW</th>
+        <th class="text-center">Tổng số (tất cả nguồn vốn)</th>
+        <th class="text-center">Trong đó vốn NSTW</th>
+      </tr>
       </thead>
       <tbody>
-        <ng-container *ngFor="let data of dataTable , let idx = index">
-          <tr>
-            <td [nzExpand]="expandSet.has(data.idVirtual)" (nzExpandChange)="onExpandChange(data.idVirtual, $event)">
-            </td>
-            <td class="font-weight-bold">{{data.tenKhoi}}</td>
+      <ng-container *ngFor="let data of dataTable , let idx = index">
+        <tr>
+          <td [nzExpand]="expandSet.has(data.idVirtual)" (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
+          <td class="font-weight-bold">{{data.tenKhoi}}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td class="font-weight-bold text-right">{{sumSoLuong(data, 'tmdtDuKien') | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="font-weight-bold text-right">{{sumSoLuong(data, 'nstwDuKien') | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="font-weight-bold text-right">{{sumSoLuong(data, 'ncKhTongSo') | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="font-weight-bold text-right">{{sumSoLuong(data, 'ncKhNstw') | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="font-weight-bold text-right" class="text-center"*ngIf="!isViewDetail" nzRight></td>
+        </tr>
+        <ng-container *ngIf="expandSet.has(data.idVirtual)">
+          <tr *ngFor="let item of data.dataChild, let y = index">
+            <td class="text-right font-weight-bold">{{y + 1}}</td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td class="font-weight-bold text-right">{{sumSoLuong(data, 'tmdtDuKien') | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="font-weight-bold text-right">{{sumSoLuong(data, 'nstwDuKien') | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="font-weight-bold text-right">{{sumSoLuong(data, 'ncKhTongSo') | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="font-weight-bold text-right">{{sumSoLuong(data, 'ncKhNstw') | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="font-weight-bold text-right" class="text-center" *ngIf="!isViewDetail" nzRight>
-              <a (click)="themMoiItem(data, 'them', idx, dataTable[idx])">
-                <i class="icon htvbdh_dau-cong"></i>
+            <td>{{item.tenDuAn}}</td>
+            <td>{{item.diaDiem}}</td>
+            <td>{{item.loaiDuAn}}</td>
+            <td>{{item.tgKcHt}}</td>
+            <td>{{ item.soQdPd }}</td>
+            <td class="text-right">{{ item.tmdtDuKien | number : '1.0-1' : 'vi_VN' }}</td>
+            <td class="text-right">{{ item.nstwDuKien | number : '1.0-1' : 'vi_VN' }}</td>
+            <td class="text-right">{{ item.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
+            <td class="text-right">{{ item.ncKhNstw | number : '1.0-1' : 'vi_VN' }}</td>
+            <td class="text-center" nzRight *ngIf="!isViewDetail">
+              <a (click)="themMoiItem( 'sua', item)">
+                <i class="fa fa-pencil" title="Sửa"></i>
               </a>
-              <a (click)="deleteItemCha(idx)">
+              <a (click)="deleteItem(item)">
                 <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>
             </td>
           </tr>
-          <ng-container *ngIf="expandSet.has(data.idVirtual)">
-            <tr *ngFor="let item of data.dataChild, let y = index">
-              <td class="text-right font-weight-bold">{{y + 1}}</td>
-              <td></td>
-              <td>{{item.tenDuAn}}</td>
-              <td>{{item.diaDiem}}</td>
-              <td>{{item.loaiDuAn}}</td>
-              <td>{{item.tgKcHt}}</td>
-              <td>{{ item.soQdPd }}</td>
-              <td class="text-right">{{ item.tmdtDuKien | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ item.nstwDuKien | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ item.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ item.ncKhNstw | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-center" nzRight *ngIf="!isViewDetail">
-                <a (click)="themMoiItem(item, 'sua', y, dataTable[idx])">
-                  <i class="fa fa-pencil" title="Sửa"></i>
-                </a>
-                <a (click)="deleteItem(idx, y)">
-                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                </a>
-              </td>
-            </tr>
-          </ng-container>
         </ng-container>
+      </ng-container>
       </tbody>
-      <tfoot>
-        <tr>
-          <td></td>
-          <td></td>
-          <td class="font-weight-bold" style="color: blue">Tổng</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'tmdtDuKien', true) | number :
-            '1.0-1' : 'vi_VN'}}</td>
-          <td class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'nstwDuKien', true) | number :
-            '1.0-1' : 'vi_VN'}}</td>
-          <td class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'ncKhTongSo', true) | number :
-            '1.0-1' : 'vi_VN'}}</td>
-          <td class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'ncKhNstw', true) | number :
-            '1.0-1' : 'vi_VN'}}</td>
-          <td *ngIf="!isViewDetail" nzRight></td>
-        </tr>
+      <tfoot *ngIf="dataTable.length > 0">
+      <tr>
+        <td></td>
+        <td></td>
+        <td class="font-weight-bold" style="color: blue">Tổng</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="font-weight-bold text-right"
+            style="color: blue">{{sumSoLuong(null, 'tmdtDuKien', true) | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="font-weight-bold text-right"
+            style="color: blue">{{sumSoLuong(null, 'nstwDuKien', true) | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="font-weight-bold text-right"
+            style="color: blue">{{sumSoLuong(null, 'ncKhTongSo', true) | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="font-weight-bold text-right"
+            style="color: blue">{{sumSoLuong(null, 'ncKhNstw', true) | number : '1.0-1' : 'vi_VN'}}</td>
+        <td *ngIf="!isViewDetail" nzRight></td>
+      </tr>
       </tfoot>
     </nz-table>
   </nz-card>

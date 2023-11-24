@@ -22,7 +22,7 @@ import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { cloneDeep } from "lodash";
-import { DialogTuChoiComponent } from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import {DialogTuChoiComponent} from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 
 @Component({
   selector: "app-themmoi-dieuchinh-vt",
@@ -97,10 +97,10 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
       kieuNx: [""],
       tenDuAn: [""],
       tongMucDtDx: [""],
-      dienGiaiTongMucDt: [""],
+      dienGiaiTongMucDt:[""],
       quyMo: [""],
-      tgianThienHd: [""],
-      dienGiai: [""],
+      tgianThienHd:[""],
+      dienGiai:[""],
       vat: [""],
     });
   }
@@ -196,11 +196,20 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
           soQdDc: data.soQdDc?.split("/")[0],
           soTtrDc: data.soTtrDc?.split("/")[0]
         });
+        if (data.soQdDc != null) {
+          this.maQd = "/" + data.soQdDc?.split("/")[1]
+        }
+        if (data.soTtrDc != null) {
+          this.maTrinh = "/" + data.soTtrDc?.split("/")[1]
+        }
         this.dataLoadDetail = data.dsGthau;
         this.fileDinhKems = data.fileDinhKems;
         this.listCcPhapLy = data.listCcPhapLy;
         this.fileDinhKemsTtr = data.fileDinhKemsTtr;
         await this.onChangeSoQdGoc(data.idQdGoc, true);
+        this.formData.patchValue({
+          lanDieuChinh: data.lanDieuChinh
+        })
       }
     }
   }
@@ -248,7 +257,7 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
         this.formData.patchValue({
           soQdGoc: data.soQd,
           idQdGoc: $event,
-          lanDieuChinh: data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.lanDieuChinh + 1 : 1,
+          lanDieuChinh: data.dchinhDxKhLcntHdr?data.dchinhDxKhLcntHdr.lanDieuChinh + 1 : 1,
           ngayQdGoc: data.ngayQd,
           soQdCc: data.dxKhlcntHdr.soQd,
           loaiVthh: data.loaiVthh,
@@ -285,24 +294,12 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
     this.dataInput.dsGthau = this.dataLoadDetail;
   }
 
-  async pheDuyet() {
-    let trangThai = STATUS.BAN_HANH;
-    let mesg = "Văn bản sẵn sàng ban hành ?";
-    await this.approve(this.formData.value.id, trangThai, mesg);
-  }
-
   quayLai() {
     this.showListEvent.emit();
   }
 
   async save(isGuiDuyet?) {
     await this.spinner.show();
-    this.setValidator(isGuiDuyet);
-    this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      await this.spinner.hide();
-      return;
-    }
     let childBody = this.thongtinDieuchinhComponent.formData.value;
     this.formData.patchValue({
       tenDuAn: childBody.tenDuAn,
@@ -318,12 +315,19 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
       dienGiai: childBody.dienGiai,
       vat: childBody.vat,
     });
+    this.setValidator(isGuiDuyet);
+    this.helperService.markFormGroupTouched(this.formData);
+    this.helperService.markFormGroupTouched(this.thongtinDieuchinhComponent.formData);
+    if (this.formData.invalid || this.thongtinDieuchinhComponent.formData.invalid) {
+      await this.spinner.hide();
+      return;
+    }
     let body = this.formData.value;
-    if (this.formData.value.soQd) {
-      body.soQdDc = this.formData.value.soQdDc + "/" + this.maQd;
+    if (this.formData.value.soQdDc) {
+      body.soQdDc = this.formData.value.soQdDc + this.maQd;
     }
     if (this.formData.value.soTtrDc) {
-      body.soTtrDc = this.formData.value.soTtrDc + "/" + this.maTrinh;
+      body.soTtrDc = this.formData.value.soTtrDc + this.maTrinh;
     }
     body.dsGoiThau = this.dataInput.dsGoiThau;
     body.fileDinhKems = this.fileDinhKems;
@@ -336,15 +340,14 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
       res = await this.dieuChinhQuyetDinhPdKhlcntService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
+      this.formData.get("id").setValue(res.data.id);
+      this.id = res.data.id;
       if (isGuiDuyet) {
-        this.id = res.data.id;
         this.guiDuyet();
       } else {
         if (this.formData.get("id").value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
         } else {
-          this.formData.get("id").setValue(res.data.id);
-          this.id = res.data.id;
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         }
       }
@@ -357,17 +360,14 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
 
   setValidator(isGuiDuyet?) {
     if (!isGuiDuyet) {
-      this.formData.controls["nam"].clearValidators();
-      this.formData.controls["soTtrDc"].clearValidators();
-      this.formData.controls["ngayQd"].clearValidators();
-      this.formData.controls["soQdGoc"].clearValidators();
-      this.formData.controls["lanDieuChinh"].clearValidators();
-      this.formData.controls["soQdDc"].clearValidators();
-      this.formData.controls["ngayQdDc"].clearValidators();
-      this.formData.controls["ngayHluc"].clearValidators();
-      this.formData.controls["kieuNx"].clearValidators();
-      this.formData.controls["loaiHinhNx"].clearValidators();
-      this.formData.controls["loaiVthh"].clearValidators();
+      Object.keys(this.formData.controls).forEach(key => {
+        const control = this.formData.controls[key];
+        control.clearValidators();
+        control.updateValueAndValidity();
+      });
+      this.formData.updateValueAndValidity();
+      this.formData.controls["soQdGoc"].setValidators([Validators.required]);
+      this.formData.controls["nam"].setValidators([Validators.required]);
     } else {
       if (this.formData.get('trangThai').value == this.STATUS.DA_LAP) {
         this.formData.controls["nam"].setValidators([Validators.required]);
@@ -378,6 +378,13 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
         this.formData.controls["kieuNx"].setValidators([Validators.required]);
         this.formData.controls["loaiHinhNx"].setValidators([Validators.required]);
         this.formData.controls["loaiVthh"].setValidators([Validators.required]);
+        this.thongtinDieuchinhComponent.formData.controls["tenDuAn"].setValidators([Validators.required]);
+        this.thongtinDieuchinhComponent.formData.controls["tongMucDtDx"].setValidators([Validators.required]);
+        this.thongtinDieuchinhComponent.formData.controls["tgianThien"].setValidators([Validators.required]);
+        this.thongtinDieuchinhComponent.formData.controls["hthucLcnt"].setValidators([Validators.required]);
+        this.thongtinDieuchinhComponent.formData.controls["pthucLcnt"].setValidators([Validators.required]);
+        this.thongtinDieuchinhComponent.formData.controls["loaiHdong"].setValidators([Validators.required]);
+        this.thongtinDieuchinhComponent.formData.controls["tgianThienHd"].setValidators([Validators.required]);
       } else if (this.formData.get('trangThai').value == this.STATUS.CHO_DUYET_LDV) {
         this.formData.controls["soQdDc"].setValidators([Validators.required]);
         this.formData.controls["ngayQdDc"].setValidators([Validators.required]);

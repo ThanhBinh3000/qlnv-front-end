@@ -13,6 +13,8 @@ import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Router } from '@angular/router';
+import { FileDinhKem } from '../../../models/DeXuatKeHoachMuaTrucTiep';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-quan-ly-quy-chuan-ky-thuat-quoc-gia',
@@ -26,9 +28,6 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
   qdTCDT: string = MESSAGE.QD_TCDT;
   userInfo: UserLogin;
   detail: any = {};
-  dataTest: any = {};
-  dsCha: any = {};
-  dsCon: any = {};
   STATUS = STATUS;
   listChungLoaiHangHoa: any[] = [];
   errorMessage = '';
@@ -36,16 +35,15 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
   selectedId: number = 0;
   isView: boolean = false;
   dataTableAll: any[] = [];
-  dsLoaiHangHoa: any[] = [];
   dsChungLoaiHangHoa: any[] = [];
   isTatCa: boolean = false;
   yearNow: number = 0;
   listNam: any[] = [];
   dsBoNganh: any[] = [];
-  boNganhAd: any[] = [];
   listOfOption: any = [];
   allChecked = false;
   indeterminate = false;
+  defaultTrangThaiHl = "01";
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
     { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LDV' },
@@ -57,6 +55,7 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
   listTrangThaiHl: any[] = [
     { ma: '01', giaTri: 'Còn hiệu lực' },
     { ma: '00', giaTri: 'Hết hiệu lực' },
+    { ma: '02', giaTri: 'Chưa có hiệu lực' },
   ];
 
   constructor(
@@ -84,23 +83,12 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
       tenLoaiVthh: null,
       tenCloaiVthh: null,
       maDvi: [null],
-      maBn: [],
+      maBn: [null],
+      isSearch: [true],
+      trangThaiHl: ['01'],
     });
-    this.filterTable = {
-      soVanBan: '',
-      soVanBanThayThe: '',
-      soHieuQuyChuan: '',
-      apDungTai: '',
-      tenLoaiVthh: '',
-      tenCloaiVthh: '',
-      listTenLoaiVthh: '',
-      ngayKy: '',
-      ngayHieuLuc: '',
-      ngayHetHieuLuc: '',
-      tenTrangThai: '',
-      tenTrangThaiHl: '',
-    };
   }
+
   disabledStartNgayKy = (startValue: Date): boolean => {
     if (startValue && this.formData.value.ngayKyDen) {
       return startValue.getTime() > this.formData.value.ngayKyDen.getTime();
@@ -117,9 +105,6 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
   };
 
   async ngOnInit() {
-    // if (!this.userService.isAccessPermisson('KHCNBQ_QCKTTCCS')) {
-    //   this.router.navigateByUrl('/error/401')
-    // }
     this.spinner.show();
     try {
       if (!this.typeVthh || this.typeVthh == '') {
@@ -129,12 +114,12 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
       if (this.userInfo) {
         this.qdTCDT = this.userInfo.MA_QD;
       }
-      await this.loadLoaiHangHoa();
-      await this.getListBoNganh();
+      this.loadDsHangHoa();
+      this.getListBoNganh();
       this.formData.patchValue({
         maBn: this.userInfo.MA_DVI.startsWith('01') ? null : this.userInfo.MA_DVI,
       });
-      await this.search();
+      await this.timKiem();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -143,32 +128,20 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
     }
   }
 
-
-  async loadLoaiHangHoa() {
-    let ds = [];
-    try {
-      let hangHoa = await this.danhMucService.loadDanhMucHangHoa().toPromise();
-      if (hangHoa) {
-        if (hangHoa.msg == MESSAGE.SUCCESS) {
-          hangHoa.data.forEach(element => {
-            ds = [...ds, element.children];
-            ds = ds.flat();
-            this.listOfOption = ds;
-          });
-        }
+  async loadDsHangHoa() {
+    let res = await this.danhMucService.getAllVthhByCap('2');
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        this.listOfOption = res.data;
       }
-    } catch (error) {
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
-  async onChangeLoaiHH(id: number) {
-    if (id && id > 0) {
-      let loaiHangHoa = this.dsLoaiHangHoa.filter(item => item.ma === id);
-      if (loaiHangHoa && loaiHangHoa.length > 0) {
-        this.dsChungLoaiHangHoa = loaiHangHoa[0].child;
-      }
+  async timKiem() {
+    await this.search();
+    if (this.formData.get('trangThaiHl').value) {
+      this.filterTable.trangThaiHl = this.formData.get('trangThaiHl').value;
+      this.filterInTable('trangThaiHl', this.formData.get('trangThaiHl').value);
     }
   }
 
@@ -183,7 +156,6 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
   async changeHangHoa(event: any) {
     if (event) {
       let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
-      console.log(res, 5555);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.listChungLoaiHangHoa = res.data;
@@ -193,6 +165,24 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
       }
     }
   }
+
+
+  showList() {
+    this.isDetail = false;
+    this.timKiem();
+    this.showListEvent.emit();
+  }
+
+  async changePageIndex(event) {
+    this.page = event;
+    await this.timKiem();
+  }
+
+  async changePageSize(event) {
+    this.pageSize = event;
+    await this.timKiem();
+  }
+
 
   async getListBoNganh() {
     this.dsBoNganh = [];
@@ -206,7 +196,7 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
     this.userInfo = this.userService.getUserLogin();
     this.detail.maDvi = this.userInfo.MA_DVI;
     this.detail.tenDvi = this.userInfo.TEN_DVI;
-    await this.search();
+    await this.timKiem();
   }
 
   redirectToChiTiet(isView: boolean, id: number) {
@@ -221,5 +211,13 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
       result = dayjs(event).format('DD/MM/YYYY').toString();
     }
     return result;
+  }
+
+  async downloadFile(item: any) {
+    if (item && item.fileName) {
+      this.uploadFileService.downloadFile(item.fileUrl).subscribe((blob) => {
+        saveAs(blob, item.fileName);
+      });
+    }
   }
 }

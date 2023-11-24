@@ -14,6 +14,7 @@
   "KEY_ENTER": 13,
   "REQUIRED": "Dữ liệu không được để trống.",
   "EMAIL_INVALID": "Tài khoản email không hợp lệ.",
+  "PASSWORD_INVALID": "Mật khẩu không hợp lệ.",
   "NHAP_DU_THAO": "00",
   "NHAP_CHO_DUYET_TP": "01",
   "NHAP_TU_CHOI_TP": "02",
@@ -52,5 +53,11 @@
   "MENU_LV2": 98,
   "MENU_LV3": 120,
   "MENU_LV4": 150,
-  "MENU_LV5": 180
+  "MENU_LV5": 180,
+  "MN_LV0": 42,
+  "MN_LV1": 77,
+  "MN_LV2": 105,
+  "MN_LV3": 133,
+  "MN_LV4": 160,
+  "MN_LV5": 190
 }

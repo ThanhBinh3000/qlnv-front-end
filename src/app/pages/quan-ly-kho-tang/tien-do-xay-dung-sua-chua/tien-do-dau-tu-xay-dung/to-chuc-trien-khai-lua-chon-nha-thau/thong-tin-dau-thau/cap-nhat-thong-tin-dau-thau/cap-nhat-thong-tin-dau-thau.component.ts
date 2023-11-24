@@ -1,20 +1,20 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { STATUS } from "../../../../../../../constants/status";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { Base2Component } from "../../../../../../../components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../../../services/storage.service";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {STATUS} from "../../../../../../../constants/status";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {Base2Component} from "../../../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../../../services/storage.service";
 import {
   QuyetdinhpheduyetKhlcntService
 } from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKhlcnt.service";
-import { MESSAGE } from "../../../../../../../constants/message";
+import {MESSAGE} from "../../../../../../../constants/message";
 import {
   CongViec
 } from "../../../quyet-dinh-phe-duyet-khlcnt/thong-tin-quyet-dinh-phe-duyet-khlcnt/thong-tin-quyet-dinh-phe-duyet-khlcnt.component";
-import { AMOUNT_NO_DECIMAL } from "../../../../../../../Utility/utils";
-import { CurrencyMaskInputMode } from "ngx-currency";
+import {AMOUNT_NO_DECIMAL} from "../../../../../../../Utility/utils";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
   selector: 'app-cap-nhat-thong-tin-dau-thau',
@@ -181,7 +181,7 @@ export class CapNhatThongTinDauThauComponent extends Base2Component implements O
 
   cancelEditNhaThauNopHs(idx) {
     this.dataNhaThauGuiHsEdit[idx] = {
-      data: { ...this.listNthauNopHs[idx] },
+      data: {...this.listNthauNopHs[idx]},
       edit: false
     };
   }
@@ -259,7 +259,7 @@ export class CapNhatThongTinDauThauComponent extends Base2Component implements O
         ...this.dataNhaThauNopHs,
         this.rowItemNtNopHs
       ];
-      this.rowItemNtNopHs = { idGoiThau: this.idGoiThau };
+      this.rowItemNtNopHs = {idGoiThau: this.idGoiThau};
     }
     this.changeTenTrangThaiGoiThau(this.idGoiThau);
     this.updateDataNhaThauNopHsCache();
@@ -270,7 +270,7 @@ export class CapNhatThongTinDauThauComponent extends Base2Component implements O
       this.listNthauNopHs.forEach((item, index) => {
         this.dataNhaThauGuiHsEdit[index] = {
           edit: false,
-          data: { ...item },
+          data: {...item},
         };
       });
     }
@@ -341,7 +341,7 @@ export class CapNhatThongTinDauThauComponent extends Base2Component implements O
     if (goiThau) {
       if (this.listNthauNopHs.filter(item => item.trangThai == STATUS.TRUNG_THAU).length > 0) {
         let nhaThauTrung = this.listNthauNopHs.filter(item => item.trangThai == STATUS.TRUNG_THAU)[0];
-        console.log(nhaThauTrung, "nhaThauTrung");
+        console.log(nhaThauTrung,"nhaThauTrung");
         goiThau.tenTrangThai = 'Thành công'
         goiThau.nhaThauTrung = nhaThauTrung.tenNhaThau;
         goiThau.giaTrungThau = nhaThauTrung.giaDuThau;

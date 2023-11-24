@@ -18,7 +18,7 @@ import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
-import { PREVIEW } from "../../../../../../constants/fileType";
+import {PREVIEW} from "../../../../../../constants/fileType";
 import printJS from "print-js";
 import { saveAs } from "file-saver";
 
@@ -46,6 +46,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
   fileDinhKems: any[] = [];
   dataTable: any[] = [];
   previewName: string;
+  templateName = "8.C20a-HD_Phiếu nhập kho";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -102,6 +103,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
       ghiChu: [''],
 
       soBangKeCanHang: [''],
+      trangThaiBkch: [''],
 
       trangThai: [],
       tenTrangThai: [],
@@ -320,9 +322,17 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
         this.fileDinhKems = data.fileDinhKems;
         this.chungTuKemTheo = data.chungTuKemTheo;
         this.helperService.bidingDataInFormGroup(this.formData, data);
-        this.formData.patchValue({
-          soBangKeCanHang: data.bangKeCanHang?.soBangKe
-        })
+        if (this.loaiVthh.startsWith('02')) {
+          this.formData.patchValue({
+            soBangKeCanHang: data.bangKeVt?.soBangKe,
+            trangThaiBkch: data.bangKeVt?.trangThai
+          })
+        } else {
+          this.formData.patchValue({
+            soBangKeCanHang: data.bangKeCanHang?.soBangKe,
+            trangThaiBkch: data.bangKeCanHang?.trangThai
+          })
+        }
         await this.bindingDataQd(res.data?.idQdGiaoNvNh);
         let dataDdNhap = this.listDiaDiemNhap.filter(item => item.id == res.data.idDdiemGiaoNvNh)[0];
         await this.bindingDataDdNhap(dataDdNhap);
@@ -336,6 +346,14 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
   }
 
   pheDuyet() {
+    if (this.formData.value.soBangKeCanHang == null || this.formData.value.trangThaiBkch != this.STATUS.DA_DUYET_LDCC) {
+      if (this.loaiVthh.startsWith('02')) {
+        this.notification.error(MESSAGE.ERROR, "Bạn cần tạo và phê duyệt bảng kê nhập vật tư trước.")
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Bạn cần tạo và phê duyệt bảng kê cân hàng trước.")
+      }
+      return;
+    }
     let trangThai = ''
     let mess = ''
     switch (this.formData.get('trangThai').value) {

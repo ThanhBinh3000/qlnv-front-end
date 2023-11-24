@@ -8,13 +8,13 @@
               <div nz-col nzSpan="4">
                 <label class="search__label">Tên người dùng</label>
                 <nz-input-group>
-                  <input nz-input formControlName="userName"/>
+                  <input nz-input formControlName="userName" />
                 </nz-input-group>
               </div>
               <div nz-col nzSpan="4">
                 <label class="search__label">Địa chỉ IP</label>
                 <nz-input-group>
-                  <input nz-input formControlName="ip"/>
+                  <input nz-input formControlName="ip" />
                 </nz-input-group>
               </div>
               <div nz-col nzSpan="6">
@@ -43,69 +43,44 @@
         <div class="group-button">
           <h3></h3>
           <div class="buttons">
-            <button type="button"
-                    class="btn btn-sub" (click)="exportData()">
+            <button type="button" class="btn btn-sub" (click)="exportData()">
               <i class="icon htvbdh_chuyen-xu-ly"></i>
               <span>Xuất file</span>
             </button>
           </div>
         </div>
         <div class="tab-giao-chi-tieu mt-16">
-          <nz-tabset nzType="card" class="tab-level-3" >
-            <nz-tab nzTitle="Lịch sử truy cập hệ thống">
-              <nz-table #basicTable  nzBordered  [nzData]="dataTable" [nzFrontPagination]="false"
-                        [nzShowPagination]="false"  [nzScroll]="{ x: '1400px' }">
+          <nz-tabset nzType="card" class="tab-level-3" [nzTabBarExtraContent]="extraTemplate">
+            <nz-tab nzTitle="Tất cả" (nzClick)="selectTab('')">
+              <nz-table #basicTable nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
+                [nzShowPagination]="false" [nzScroll]="{ x: '1400px' }">
                 <thead>
-                <tr>
-                  <th width="60px">STT</th>
-                  <th width="150px">Tên đăng nhập</th>
-                  <th width="100px">Địa chỉ IP</th>
-                  <th width="200px">Thông tin thiết bị</th>
-                  <th width="80px">Hệ thống</th>
-                  <th width="80px">Phương thức</th>
-                  <th width="300px">Đường dẫn chức năng</th>
-                  <th width="400px">Tham số đầu vào</th>
-                  <th width="161px">Ngày thực hiện</th>
-                </tr>
+                  <tr>
+                    <th width="60px">STT</th>
+                    <th width="150px">Tên đăng nhập</th>
+                    <th width="100px">Địa chỉ IP</th>
+                    <th width="200px">Thông tin thiết bị</th>
+                    <th width="80px">Hệ thống</th>
+                    <th width="120px">Phương thức</th>
+                    <th width="300px">Đường dẫn chức năng</th>
+                    <th width="400px">Tham số đầu vào</th>
+                    <th width="161px">Ngày thực hiện</th>
+                  </tr>
                 </thead>
                 <tbody>
-                <!--                <tr class="search-table">-->
-                <!--                  <th></th>-->
-                <!--                  <th>-->
-                <!--                  </th>-->
-                <!--                  <th>-->
-                <!--                  </th>-->
-                <!--                  <th>-->
-                <!--                  </th>-->
-                <!--                  <th>-->
-                <!--                    &lt;!&ndash;                    <nz-input-group>&ndash;&gt;-->
-                <!--                    &lt;!&ndash;                      <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.userName"&ndash;&gt;-->
-                <!--                    &lt;!&ndash;                             (input)="filterInTable('soQuyetDinhNhap',filterTable.userName)"&ndash;&gt;-->
-                <!--                    &lt;!&ndash;                             name="userName"/>&ndash;&gt;-->
-                <!--                    &lt;!&ndash;                    </nz-input-group>&ndash;&gt;-->
-                <!--                  </th>-->
-                <!--                  <th>-->
-                <!--                    &lt;!&ndash;                    <nz-input-group>&ndash;&gt;-->
-                <!--                    &lt;!&ndash;                      <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ip"&ndash;&gt;-->
-                <!--                    &lt;!&ndash;                             (input)="filterInTable('namNhap',filterTable.ip)" name="ip"/>&ndash;&gt;-->
-                <!--                    &lt;!&ndash;                    </nz-input-group>&ndash;&gt;-->
-                <!--                  </th>-->
-                <!--                </tr>-->
-                <tr *ngFor="let data of basicTable.data; let i = index">
-                  <!--                  <td width="45px">-->
-                  <!--                    <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"-->
-                  <!--                           [nzDisabled]="data.trangThai != '00'"></label>-->
-                  <!--                  </td>-->
-                  <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-                  <td>{{data.userName}}</td>
-                  <td>{{data.ip}}</td>
-                  <td>{{data.userAgent}}</td>
-                  <td>{{data.system}}</td>
-                  <td>{{data.requestMethod}}</td>
-                  <td>{{data.requestUrl}}</td>
-                  <td>{{ data.requestMethod == 'GET' ? data.requestParameter : data.requestBody }}</td>
-                  <td>{{data.ngayTao}}</td>
-                </tr>
+
+                  <tr *ngFor="let data of basicTable.data; let i = index">
+
+                    <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+                    <td>{{data.userName}}</td>
+                    <td>{{data.ip}}</td>
+                    <td>{{data.userAgent}}</td>
+                    <td>{{data.system}}</td>
+                    <td>{{data.requestMethod}}</td>
+                    <td>{{data.requestUrl}}</td>
+                    <td>{{ data.requestMethod == 'GET' ? data.requestParameter : data.requestBody }}</td>
+                    <td>{{data.ngayTao}}</td>
+                  </tr>
                 </tbody>
               </nz-table>
               <div class="tab-content tab-menu">
@@ -114,9 +89,155 @@
                   <div class="canphai">
                     <!-- begin phân trang  -->
                     <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord"
-                                   nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
-                                   (nzPageIndexChange)="changePageIndex($event)"
-                                   (nzPageSizeChange)="changePageSize($event)">
+                      nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+                      (nzPageIndexChange)="changePageIndex($event)" (nzPageSizeChange)="changePageSize($event)">
+                      <ng-template #rangeTemplate let-range="range" let-total>
+                        {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
+                      </ng-template>
+                    </nz-pagination>
+                    <!-- end phân trang  -->
+                  </div>
+                </div>
+              </div>
+            </nz-tab>
+            <nz-tab nzTitle="Đăng nhập" (nzClick)="selectTab('LOGIN')">
+              <nz-table #basicTable nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
+                [nzShowPagination]="false" [nzScroll]="{ x: '1400px' }">
+                <thead>
+                  <tr>
+                    <th width="60px">STT</th>
+                    <th width="150px">Tên đăng nhập</th>
+                    <th width="100px">Địa chỉ IP</th>
+                    <th width="200px">Thông tin thiết bị</th>
+                    <th width="80px">Hệ thống</th>
+                    <th width="120px">Phương thức</th>
+                    <th width="300px">Đường dẫn chức năng</th>
+                    <th width="400px">Tham số đầu vào</th>
+                    <th width="161px">Ngày thực hiện</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <tr *ngFor="let data of basicTable.data; let i = index">
+
+                    <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+                    <td>{{data.userName}}</td>
+                    <td>{{data.ip}}</td>
+                    <td>{{data.userAgent}}</td>
+                    <td>{{data.system}}</td>
+                    <td>{{data.requestMethod}}</td>
+                    <td>{{data.requestUrl}}</td>
+                    <td>{{ data.requestMethod == 'GET' ? data.requestParameter : data.requestBody }}</td>
+                    <td>{{data.ngayTao}}</td>
+                  </tr>
+                </tbody>
+              </nz-table>
+              <div class="tab-content tab-menu">
+                <div class="tab-pane fade show active justify-content-between">
+                  <div class="trai"></div>
+                  <div class="canphai">
+                    <!-- begin phân trang  -->
+                    <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord"
+                      nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+                      (nzPageIndexChange)="changePageIndex($event)" (nzPageSizeChange)="changePageSize($event)">
+                      <ng-template #rangeTemplate let-range="range" let-total>
+                        {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
+                      </ng-template>
+                    </nz-pagination>
+                    <!-- end phân trang  -->
+                  </div>
+                </div>
+              </div>
+            </nz-tab>
+            <nz-tab nzTitle="Đăng xuất" (nzClick)="selectTab('LOGOUT')">
+              <nz-table #basicTable nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
+                [nzShowPagination]="false" [nzScroll]="{ x: '1400px' }">
+                <thead>
+                  <tr>
+                    <th width="60px">STT</th>
+                    <th width="150px">Tên đăng nhập</th>
+                    <th width="100px">Địa chỉ IP</th>
+                    <th width="200px">Thông tin thiết bị</th>
+                    <th width="80px">Hệ thống</th>
+                    <th width="120px">Phương thức</th>
+                    <th width="300px">Đường dẫn chức năng</th>
+                    <th width="400px">Tham số đầu vào</th>
+                    <th width="161px">Ngày thực hiện</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <tr *ngFor="let data of basicTable.data; let i = index">
+
+                    <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+                    <td>{{data.userName}}</td>
+                    <td>{{data.ip}}</td>
+                    <td>{{data.userAgent}}</td>
+                    <td>{{data.system}}</td>
+                    <td>{{data.requestMethod}}</td>
+                    <td>{{data.requestUrl}}</td>
+                    <td>{{ data.requestMethod == 'GET' ? data.requestParameter : data.requestBody }}</td>
+                    <td>{{data.ngayTao}}</td>
+                  </tr>
+                </tbody>
+              </nz-table>
+              <div class="tab-content tab-menu">
+                <div class="tab-pane fade show active justify-content-between">
+                  <div class="trai"></div>
+                  <div class="canphai">
+                    <!-- begin phân trang  -->
+                    <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord"
+                      nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+                      (nzPageIndexChange)="changePageIndex($event)" (nzPageSizeChange)="changePageSize($event)">
+                      <ng-template #rangeTemplate let-range="range" let-total>
+                        {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
+                      </ng-template>
+                    </nz-pagination>
+                    <!-- end phân trang  -->
+                  </div>
+                </div>
+              </div>
+            </nz-tab>
+            <nz-tab nzTitle="Sử dụng chức năng" (nzClick)="selectTab('SERVICE')">
+              <nz-table #basicTable nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
+                [nzShowPagination]="false" [nzScroll]="{ x: '1400px' }">
+                <thead>
+                  <tr>
+                    <th width="60px">STT</th>
+                    <th width="150px">Tên đăng nhập</th>
+                    <th width="100px">Địa chỉ IP</th>
+                    <th width="200px">Thông tin thiết bị</th>
+                    <th width="80px">Hệ thống</th>
+                    <th width="120px">Phương thức</th>
+                    <th width="300px">Đường dẫn chức năng</th>
+                    <th width="400px">Tham số đầu vào</th>
+                    <th width="161px">Ngày thực hiện</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <tr *ngFor="let data of basicTable.data; let i = index">
+
+                    <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+                    <td>{{data.userName}}</td>
+                    <td>{{data.ip}}</td>
+                    <td>{{data.userAgent}}</td>
+                    <td>{{data.system}}</td>
+                    <td>{{data.requestMethod}}</td>
+                    <td>{{data.requestUrl}}</td>
+                    <td>{{ data.requestMethod == 'GET' ? data.requestParameter : data.requestBody }}</td>
+                    <td>{{data.ngayTao}}</td>
+                  </tr>
+                </tbody>
+              </nz-table>
+              <div class="tab-content tab-menu">
+                <div class="tab-pane fade show active justify-content-between">
+                  <div class="trai"></div>
+                  <div class="canphai">
+                    <!-- begin phân trang  -->
+                    <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord"
+                      nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+                      (nzPageIndexChange)="changePageIndex($event)" (nzPageSizeChange)="changePageSize($event)">
                       <ng-template #rangeTemplate let-range="range" let-total>
                         {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
                       </ng-template>
@@ -127,13 +248,19 @@
               </div>
             </nz-tab>
           </nz-tabset>
-          <ng-template #action>
-            <button nz-button class="icon-thong-ke">
-              <i class="icon htvbdh_bao-cao-thong-ke"></i>
-            </button>
+          <ng-template #extraTemplate>
+            <div class="group-button">
+
+              <div class="buttons">
+
+                <button type="button" class="btn btn-main" (click)="cauhinhhethong()">
+                  <i class="icon htvbdh_tcdt_tao-qd"></i>
+                  <span>Cấu hình nhật ký hệ thống</span>
+                </button>
+              </div>
+            </div>
           </ng-template>
-          <!-- <div class="action-giao-chi-tieu">
-          </div> -->
+
         </div>
       </div>
     </div>

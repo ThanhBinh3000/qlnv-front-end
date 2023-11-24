@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
@@ -6,17 +6,17 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
-import { chain, cloneDeep } from "lodash";
+import {chain, cloneDeep} from "lodash";
 import { QuyetDinhPheDuyetKetQuaChaoGiaMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ket-qua-chao-gia-mtt.service';
 import * as dayjs from "dayjs";
 import {
   QuyetDinhGiaoNvNhapHangService
 } from "../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/qdinh-giao-nvu-nh/quyetDinhGiaoNvNhapHang.service";
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { UserLogin } from "../../../../../models/userlogin";
-import { UserService } from "../../../../../services/user.service";
-import { STATUS } from "../../../../../constants/status";
-import { PAGE_SIZE_DEFAULT } from "../../../../../constants/config";
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {UserLogin} from "../../../../../models/userlogin";
+import {UserService} from "../../../../../services/user.service";
+import {STATUS} from "../../../../../constants/status";
+import {PAGE_SIZE_DEFAULT} from "../../../../../constants/config";
 import { saveAs } from 'file-saver';
 import {
   MttHopDongPhuLucHdService
@@ -58,7 +58,7 @@ export class HopdongPhulucHopdongComponent implements OnInit {
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
-  STATUS = STATUS
+  STATUS=STATUS
   listNam: any[] = [];
   tuNgayKy: Date | null = null;
   denNgayKy: Date | null = null;
@@ -113,14 +113,14 @@ export class HopdongPhulucHopdongComponent implements OnInit {
   }
 
   async timKiem() {
-    if (!this.userService.isChiCuc()) {
+    if(!this.userService.isChiCuc()){
       this.formData.patchValue({
         trangThaiKq: STATUS.DA_DUYET_LDC,
         trangThaiQd: STATUS.BAN_HANH,
         loaiQd: '02',
       });
       await this.searchCuc();
-    } else {
+    }else{
       this.formData.patchValue({
         trangThai: STATUS.BAN_HANH,
         loaiQd: '02'
@@ -140,7 +140,7 @@ export class HopdongPhulucHopdongComponent implements OnInit {
     await this.spinner.show();
     try {
       let body = this.formData.value
-      body.namNhap = dayjs().get('year')
+      // body.namNhap = dayjs().get('year')
       body.tuNgayKy = this.tuNgayKy != null ? dayjs(this.tuNgayKy).format('YYYY-MM-DD') + " 00:00:00" : null
       body.denNgayKy = this.denNgayKy != null ? dayjs(this.denNgayKy).format('YYYY-MM-DD') + " 23:59:59" : null
       body.paggingReq = {
@@ -174,7 +174,7 @@ export class HopdongPhulucHopdongComponent implements OnInit {
     await this.spinner.show();
     try {
       let body = this.formData.value
-      body.namNhap = dayjs().get('year')
+      // body.namNhap = dayjs().get('year')
       body.trangThaiKq = STATUS.DA_DUYET_LDC
       body.trangThaiQd = STATUS.BAN_HANH
       body.tuNgayKy = this.tuNgayKy != null ? dayjs(this.tuNgayKy).format('YYYY-MM-DD') + " 00:00:00" : null
@@ -296,7 +296,7 @@ export class HopdongPhulucHopdongComponent implements OnInit {
       this.formData.patchValue(currentSearch)
     }
     this.tuNgayKy = null;
-    this.denNgayKy = null;
+    this.denNgayKy  = null;
     this.timKiem();
   }
 

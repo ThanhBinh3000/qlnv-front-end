@@ -1,21 +1,21 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { FormGroup, Validators } from "@angular/forms";
-import { Base2Component } from "../../../../../components/base2/base2.component";
-import { chain } from 'lodash';
+import {Component, Input, OnInit} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {FormGroup, Validators} from "@angular/forms";
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {chain} from 'lodash';
 import * as uuid from "uuid";
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 import {
   MmThongTinNcChiCuc
 } from "../../de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc.component";
-import { MmDxChiCucService } from "../../../../../services/mm-dx-chi-cuc.service";
-import { MESSAGE } from "../../../../../constants/message";
+import {MmDxChiCucService} from "../../../../../services/mm-dx-chi-cuc.service";
+import {MESSAGE} from "../../../../../constants/message";
 import dayjs from "dayjs";
-import { STATUS } from "../../../../../constants/status";
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-them-moi-mm-dx-cuc',
@@ -31,6 +31,7 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
   dataEdit: { [key: string]: { edit: boolean; data: MmThongTinNcChiCuc } } = {};
   formDataTongHop: FormGroup
   expandSet = new Set<number>();
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -125,7 +126,7 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
           }
           item.id = null;
           item.ghiChu = null;
-          idVirtual: uuidv4();
+          idVirtual:uuidv4();
         })
         this.convertListData()
       }
@@ -176,6 +177,28 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       this.spinner.hide();
+    }
+  }
+
+  async saveAndSend(status: string, msg: string, msgSuccess?: string) {
+    try {
+      this.formData.patchValue({
+        namKeHoach: this.formDataTongHop.value.namKeHoach
+      })
+      this.helperService.markFormGroupTouched(this.formData)
+      if (this.formData.invalid) {
+        return;
+      }
+      if (this.fileDinhKem && this.fileDinhKem.length > 0) {
+        this.formData.value.fileDinhKems = this.fileDinhKem;
+      }
+      this.conVertTreToList();
+      this.formData.value.listQlDinhMucDxTbmmTbcdDtl = this.dataTable;
+      this.formData.value.maDvi = this.userInfo.MA_DVI;
+      this.formData.value.capDvi = this.userInfo.CAP_DVI;
+      await super.saveAndSend(this.formData.value, status, msg, msgSuccess);
+    } catch (error) {
+      console.error("Lỗi khi lưu và gửi dữ liệu:", error);
     }
   }
 
@@ -231,12 +254,12 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
   async pheDuyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.DU_THAO:
-      case STATUS.TU_CHOI_CBV: {
+      case STATUS.DU_THAO :
+      case STATUS.TU_CHOI_CBV : {
         trangThai = STATUS.DA_KY;
         break;
       }
-      case STATUS.DA_KY: {
+      case STATUS.DA_KY : {
         trangThai = STATUS.DA_DUYET_CBV
       }
     }
@@ -245,7 +268,11 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
 
   convertListData() {
     if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTable = chain(this.dataTable).groupBy('tenTaiSan').map((value, key) => ({ tenTaiSan: key, dataChild: value, idVirtual: uuidv4(), })
+      this.dataTable = chain(this.dataTable).groupBy('tenTaiSan').map((value, key) => ({
+          tenTaiSan: key,
+          dataChild: value,
+          idVirtual: uuidv4(),
+        })
       ).value()
     }
     if (this.dataTable && this.dataTable.length > 0) {
@@ -299,7 +326,6 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     }
     return check;
   }
-
 
 
   expandAll() {

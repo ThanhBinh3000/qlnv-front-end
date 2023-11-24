@@ -18,13 +18,12 @@
     </button>
     <button
       *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV ) && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_DUYET_LDVU')"
-      class="btn btn-sub xanh-nhat" (click)="pheDuyet()">
+      class="btn btn-sub xanh-nhat" (click)="save(true)">
       <i [class]="'icon htvbdh_chuyenvanthu'"></i>
       <span>Duyệt</span>
     </button>
-    <button
-      *ngIf="(formData.value.trangThai == STATUS.DA_LAP || formData.value.trangThai == STATUS.TU_CHOI_LDV ) && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_THEM')"
-      class="btn btn-main btn-sm waves-effect waves-light" (click)="save()">
+    <button *ngIf="(formData.value.trangThai == STATUS.DA_LAP || formData.value.trangThai == STATUS.TU_CHOI_LDV ) && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_THEM')"
+            class="btn btn-main btn-sm waves-effect waves-light" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
@@ -34,9 +33,9 @@
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span [ngClass]=" formData.value.trangThai == STATUS.BAN_HANH  ? 'status-xanh' : 'status-do' ">
-          {{formData.value.tenTrangThai}}
-        </span>
+                <span [ngClass]=" formData.value.trangThai == STATUS.BAN_HANH  ? 'status-xanh' : 'status-do' ">
+                    {{formData.value.tenTrangThai}}
+                </span>
         <span>PHƯƠNG ÁN/QUYẾT ĐỊNH ĐIỀU CHỈNH KẾ HOẠCH LỰA CHỌN NHÀ THẦU</span>
       </div>
     </div>
@@ -48,7 +47,8 @@
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzRequired>Năm kế hoạch</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="nam" nzAllowClear [nzDisabled]="isViewDetail">
+              <nz-select formControlName="nam" nzAllowClear
+                         [nzDisabled]="isViewDetail">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
                 </nz-option>
               </nz-select>
@@ -61,7 +61,8 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maTrinh}}">
-                <input nz-input formControlName="soTtrDc" [readonly]="isViewDetail" />
+                <input nz-input formControlName="soTtrDc"
+                       [readonly]="isViewDetail" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -70,7 +71,8 @@
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzRequired> Ngày tạo công văn/tờ trình</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker formControlName="ngayQd" nzFormat="dd/MM/yyyy" [nzDisabled]="isViewDetail">
+              <nz-date-picker formControlName="ngayQd" nzFormat="dd/MM/yyyy"
+                              [nzDisabled]="isViewDetail">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -79,7 +81,9 @@
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true"> Trích yếu</nz-form-label>
             <nz-form-control>
-              <input [readonly]="isViewDetail" nz-input formControlName="trichYeu" />
+              <input
+                [readonly]="isViewDetail"
+                nz-input formControlName="trichYeu" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -136,7 +140,8 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}">
-                <input nz-input formControlName="soQdDc" [readonly]="checkDisableQdDc()" />
+                <input nz-input formControlName="soQdDc"
+                       [readonly]="checkDisableQdDc()" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -145,7 +150,8 @@
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzRequired> Ngày ký QĐ điều chỉnh</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker formControlName="ngayQdDc" nzFormat="dd/MM/yyyy" [nzDisabled]="checkDisableQdDc()">
+              <nz-date-picker formControlName="ngayQdDc" nzFormat="dd/MM/yyyy"
+                              [nzDisabled]="checkDisableQdDc()">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -154,7 +160,8 @@
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzRequired> Ngày hiệu lực của QĐ điều chỉnh</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker formControlName="ngayHluc" nzFormat="dd/MM/yyyy" [nzDisabled]="checkDisableQdDc()">
+              <nz-date-picker formControlName="ngayHluc" nzFormat="dd/MM/yyyy"
+                              [nzDisabled]="checkDisableQdDc()">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -195,7 +202,8 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="loaiHinhNx" (ngModelChange)="onChangeLhNx($event)" [nzDisabled]="true">
+              <nz-select formControlName="loaiHinhNx" (ngModelChange)="onChangeLhNx($event)"
+                         [nzDisabled]="true">
                 <nz-option *ngFor="let p of listLoaiHinhNx" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
@@ -239,20 +247,25 @@
       <div nz-col [nzSpan]="12">
         <nz-card class="mg-t-10 flex-card p-lr16 ">
           <app-thongtin-dieuchinh-vt [title]="'Nội dung quyết định cần điều chỉnh'"
-            [titleDx]="'Phụ lục kế hoạch lựa chọn nhà thầu trước điều chỉnh'" [isView]="true"
-            [dataInput]="dataInputCache" [listLoaiHopDong]="listLoaiHopDong" [listHinhThucDauThau]="listHinhThucDauThau"
-            [listPhuongThucDauThau]="listPhuongThucDauThau" [listNguonVon]="listNguonVon">
+                                     [titleDx]="'Phụ lục kế hoạch lựa chọn nhà thầu trước điều chỉnh'"
+                                  [isView]="true"
+                                  [dataInput]="dataInputCache"
+                                  [listLoaiHopDong]="listLoaiHopDong"
+                                  [listHinhThucDauThau]="listHinhThucDauThau"
+                                  [listPhuongThucDauThau]="listPhuongThucDauThau"
+                                  [listNguonVon]="listNguonVon">
           </app-thongtin-dieuchinh-vt>
         </nz-card>
       </div>
       <div nz-col [nzSpan]="12">
         <nz-card class="mg-t-10 flex-card p-lr16 ">
           <app-thongtin-dieuchinh-vt #thongTinDc [isView]="isViewDetail"
-            [title]="'Quyết định điều chỉnh của Tổng cục DTNN'"
-            [titleDx]="'Phụ lục kế hoạch lựa chọn nhà thầu sau điều chỉnh'" [dataInput]="dataInput"
-            [listLoaiHopDong]="listLoaiHopDong" [listHinhThucDauThau]="listHinhThucDauThau"
-            [listPhuongThucDauThau]="listPhuongThucDauThau" [listNguonVon]="listNguonVon"
-            (dsDxChange)="setNewDanhsachDx($event)">
+                                  [title]="'Quyết định điều chỉnh của Tổng cục DTNN'"
+                                     [titleDx]="'Phụ lục kế hoạch lựa chọn nhà thầu sau điều chỉnh'"
+                                  [dataInput]="dataInput"
+                                  [listLoaiHopDong]="listLoaiHopDong" [listHinhThucDauThau]="listHinhThucDauThau"
+                                  [listPhuongThucDauThau]="listPhuongThucDauThau" [listNguonVon]="listNguonVon"
+                                     (dsDxChange)="setNewDanhsachDx($event)">
           </app-thongtin-dieuchinh-vt>
         </nz-card>
       </div>

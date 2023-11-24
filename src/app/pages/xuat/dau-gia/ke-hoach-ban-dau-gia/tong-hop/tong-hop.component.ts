@@ -1,17 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
+import {NzModalService} from 'ng-zorro-antd/modal';
 import {
   TongHopDeXuatKeHoachBanDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/tongHopDeXuatKeHoachBanDauGia.service';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { LOAI_HANG_DTQG } from 'src/app/constants/config';
-import { STATUS } from 'src/app/constants/status';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import {DataService} from "../../../../../services/data.service";
 
 @Component({
   selector: 'app-tong-hop',
@@ -21,10 +21,10 @@ import { STATUS } from 'src/app/constants/status';
 export class TongHopComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
   @Input() listVthh: any[] = [];
+  @Output() eventTaoQd: EventEmitter<any> = new EventEmitter<any>();
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   isView = false;
   listLoaiHangHoa: any[] = [];
-  dataTongHop: any;
-  isQuyetDinh: boolean = false;
   idQdPd: number = 0;
   isViewQdPd: boolean = false;
   listTrangThai: any = [];
@@ -36,24 +36,26 @@ export class TongHopComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService: DanhMucService,
+    private dataService: DataService,
     private tongHopDeXuatKeHoachBanDauGiaService: TongHopDeXuatKeHoachBanDauGiaService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopDeXuatKeHoachBanDauGiaService);
     this.formData = this.fb.group({
-      namKh: '',
-      loaiVthh: '',
-      noiDungThop: '',
-      ngayThopTu: '',
-      ngayThopDen: '',
+      namKh: null,
+      loaiVthh: null,
+      noiDungThop: null,
+      ngayThopTu: null,
+      ngayThopDen: null,
     });
     this.filterTable = {
-      id: '',
-      ngayTao: '',
-      noiDungThop: '',
-      namKh: '',
-      soQdPd: '',
-      tenLoaiVthh: '',
-      tenTrangThai: '',
+      id: null,
+      ngayTao: null,
+      noiDungThop: null,
+      namKh: null,
+      soQdPd: null,
+      tenLoaiVthh: null,
+      tenCloaiVthh: null,
+      tenTrangThai: null,
     }
     this.listTrangThai = [
       {
@@ -74,7 +76,13 @@ export class TongHopComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([this.timKiem(), this.search()]);
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+      })
+      await this.search()
+      if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+        await this.loadDsVthh();
+      }
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -89,20 +97,6 @@ export class TongHopComponent extends Base2Component implements OnInit {
     this.isView = isView;
   }
 
-  async timKiem() {
-    this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
-    });
-    if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
-      await this.loadDsVthh();
-    }
-  }
-
-  async clearFilter() {
-    this.formData.reset();
-    await Promise.all([this.timKiem(), this.search()]);
-  }
-
   async loadDsVthh() {
     const res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
     if (res.msg === MESSAGE.SUCCESS) {
@@ -110,24 +104,17 @@ export class TongHopComponent extends Base2Component implements OnInit {
     }
   }
 
-  taoQdinh(data: number) {
-    let elem = document.getElementById('mainTongCuc');
-    let tabActive = elem.getElementsByClassName('ant-menu-item')[0];
-    tabActive.classList.remove('ant-menu-item-selected')
-    let setActive = elem.getElementsByClassName('ant-menu-item')[2];
-    setActive.classList.add('ant-menu-item-selected');
-    this.isQuyetDinh = true;
-    this.dataTongHop = data;
+  taoQuyetDinh(data) {
+    this.eventTaoQd.emit(data);
   }
 
-  async showTongHop() {
-    let elem = document.getElementById('mainTongCuc');
-    let tabActive = elem.getElementsByClassName('ant-menu-item')[2];
-    tabActive.classList.remove('ant-menu-item-selected')
-    let setActive = elem.getElementsByClassName('ant-menu-item')[0];
-    setActive.classList.add('ant-menu-item-selected');
-    this.isQuyetDinh = false;
-    await this.search();
+  taoQuyetDinhPd(data) {
+    const dataSend = {
+      ...data,
+      isQuyetDinh: true
+    }
+    this.dataService.changeData(dataSend);
+    this.eventTaoQd.emit(2);
   }
 
   isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
@@ -155,10 +142,5 @@ export class TongHopComponent extends Base2Component implements OnInit {
   private updateQdPd(id: number | null, isView: boolean) {
     this.idQdPd = id;
     this.isViewQdPd = isView;
-  }
-
-  isActionAllowed(data): boolean {
-    return this.userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_XEM') &&
-      (data.trangThai !== STATUS.CHUA_TAO_QD || !this.userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP'));
   }
 }

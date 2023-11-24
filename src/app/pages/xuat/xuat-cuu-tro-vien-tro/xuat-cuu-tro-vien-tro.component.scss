@@ -19,7 +19,7 @@
 .title-card {
   width: 100%;
 
-  & > * {
+  &>* {
     display: inline;
   }
 
@@ -60,7 +60,8 @@
   font-weight: bold;
 }
 
-::ng-deep .ant-modal-header, ::ng-deep .ant-modal-footer {
+::ng-deep .ant-modal-header,
+::ng-deep .ant-modal-footer {
   background-color: #f3f3f3;
 }
 
@@ -89,6 +90,33 @@
     color: grey;
   }
 }
-::ng-deep .ant-btn-primary{
+
+::ng-deep .ant-btn-primary {
   background-color: #353a64;
+}
+
+::ng-deep {
+  .xuat_ctvt_xc {
+    .chi-tiet {
+      position: relative;
+    }
+
+    .btn-affix>div {
+      margin-top: 0 !important;
+    }
+
+    .btn-affix {
+      position: absolute !important;
+      right: 0;
+      top: -37px;
+    }
+  }
+
+  .level0 .ant-menu-horizontal,
+  .ant-affix,
+  .fix.collapse>div.ant-affix .nav-tabs li span,
+  .fix.collapse>div.ant-affix .nav-tabs,
+  .fix.collapse>div.ant-affix .nav-tabs li {
+    transition: all .2s;
+  }
 }

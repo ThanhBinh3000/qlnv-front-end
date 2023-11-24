@@ -64,11 +64,13 @@ export class ThongTinPhieuNhapKhoTamGuiComponent extends Base2Component implemen
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
   detailHopDong: any = {};
   listFileDinhKem: any[] = [];
+  fileDinhKems: any[] = [];
   listHopDong: any[] = [];
   formData: FormGroup;
   listDiaDiemNhap: any[] = [];
   dataTable: any[] = [];
-  previewName: string = 'phieu_nhap_kho_tam_gui';
+  previewName: string = '12.C20a-HD_Phiếu nhập kho tạm gửi';
+  templateName = "Phiếu nhập kho tạm gửi";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -179,6 +181,7 @@ export class ThongTinPhieuNhapKhoTamGuiComponent extends Base2Component implemen
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
         const data = res.data;
+        this.fileDinhKems = data.fileDinhKems;
         this.helperService.bidingDataInFormGroup(this.formData, data);
         this.dataTable = data.children
       }
@@ -260,6 +263,7 @@ export class ThongTinPhieuNhapKhoTamGuiComponent extends Base2Component implemen
       let body = this.formData.value;
       body.children = this.dataTable;
       body.thoiGianGiaoNhan = pipe.transform(this.formData.value.thoiGianGiaoNhan, 'yyyy-MM-dd HH:mm')
+      body.fileDinhKems = this.fileDinhKems;
       let res;
       if (this.formData.get('id').value > 0) {
         res = await this.phieuNhapKhoTamGuiService.update(body);
@@ -337,7 +341,7 @@ export class ThongTinPhieuNhapKhoTamGuiComponent extends Base2Component implemen
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listSoQuyetDinh,
-        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
+        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng DTQG'],
         dataColumn: ['soQd', 'ngayQdinh', 'tenLoaiVthh'],
       },
     })

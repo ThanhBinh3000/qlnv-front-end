@@ -1,15 +1,15 @@
-import { saveAs } from 'file-saver';
-import { Component, OnInit } from '@angular/core';
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { UserService } from "../../../../services/user.service";
-import { DonviService } from "../../../../services/donvi.service";
-import { Globals } from "../../../../shared/globals";
-import { ThongTu1452013Service } from "../../../../services/bao-cao/ThongTu1452013.service";
+import {saveAs} from 'file-saver';
+import {Component, OnInit} from '@angular/core';
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {UserService} from "../../../../services/user.service";
+import {DonviService} from "../../../../services/donvi.service";
+import {Globals} from "../../../../shared/globals";
+import {ThongTu1452013Service} from "../../../../services/bao-cao/ThongTu1452013.service";
 import * as dayjs from "dayjs";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { createLogErrorHandler } from "@angular/compiler-cli/ngcc/src/execution/tasks/completion";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {createLogErrorHandler} from "@angular/compiler-cli/ngcc/src/execution/tasks/completion";
 
 @Component({
   selector: 'app-thong-tu1452013',
@@ -24,21 +24,28 @@ export class ThongTu1452013Component implements OnInit {
   showDlgPreview = false;
   listNam: any[] = [];
   formData: FormGroup;
-
+  listQuy = [
+    {text: 'Quý I', value: 1},
+    {text: 'Quý II', value: 2},
+    {text: 'Quý III', value: 3},
+    {text: 'Quý IV', value: 4},
+  ];
+  selectedValue = 1;
 
   constructor(private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
-    private thongTu1452013Service: ThongTu1452013Service,
-    private fb: FormBuilder,
-    private modal: NzModalService,
-    public userService: UserService,
-    private donviService: DonviService,
-    public globals: Globals,
+              private notification: NzNotificationService,
+              private thongTu1452013Service: ThongTu1452013Service,
+              private fb: FormBuilder,
+              private modal: NzModalService,
+              public userService: UserService,
+              private donviService: DonviService,
+              public globals: Globals,
   ) {
 
     this.formData = this.fb.group(
       {
-        nam: [dayjs().get("year"), [Validators.required]],
+        nam: [, [Validators.required]],
+        quy: [,[Validators.required]],
         maCuc: [],
         maChiCuc: [],
         loaiVthh: [],
@@ -47,16 +54,28 @@ export class ThongTu1452013Component implements OnInit {
         tenCloaiVthh: [],
       }
     );
+    // this.formData.controls['nam'].valueChanges.subscribe((namValue) => {
+    //   const month = dayjs().get("month");
+    //   this.listQuy = [];
+    //   for (let i = 0; i <= Math.floor(month / 3); i++) {
+    //     if (i >= 1) {
+    //       this.listQuy.push(this.quyData[i - 1]);
+    //     }
+    //   }
+    //   if (namValue < dayjs().get('year')) {
+    //     this.listQuy = this.quyData
+    //   }
+    // });
   }
 
   ngOnInit(): void {
-    for (let i = -3; i < 23; i++) {
+    for (let i = 0; i < 23; i++) {
       this.listNam.push({
         value: dayjs().get('year') - i,
         text: dayjs().get('year') - i,
       });
     }
-    //do stuff here to give the blob some data...
+    this.formData.controls['nam'].setValue(dayjs().get("year"))
   }
 
   private blobToFile = (theBlob: Blob, fileName: string): File => {
@@ -121,5 +140,11 @@ export class ThongTu1452013Component implements OnInit {
     } finally {
       this.spinner.hide();
     }
+  }
+  clearFilter() {
+    this.formData.patchValue({
+      nam: null,
+      quy:null,
+    })
   }
 }

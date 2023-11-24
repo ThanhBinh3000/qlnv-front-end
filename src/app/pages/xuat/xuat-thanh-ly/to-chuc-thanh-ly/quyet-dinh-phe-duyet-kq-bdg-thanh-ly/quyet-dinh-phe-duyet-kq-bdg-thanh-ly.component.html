@@ -51,11 +51,11 @@
         <span>Xóa</span>
       </button>
       <button type="button" class="btn btn-sub"
-        (click)="exportData('Danh-sach-quyet-dinh-phe-duyet-ket-qua-thanh-ly.xlsx')">
+        (click)="exportData('Danh-sach-quyet-dinh-phe-duyet-ket-qua-thanh-ly.xlsx','XHDTQG_XTL_TCKHBDG_QDKQDG_EXP')">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
-      <button type="button" class="btn btn-main" (click)="redirectCreate()">
+      <button type="button" class="btn btn-main" (click)="redirectCreate('XHDTQG_XTL_TCKHBDG_QDKQDG_THEM')">
         <i class=" icon htvbdh_dau-cong"></i>
         <span>Thêm</span>
       </button>
@@ -181,22 +181,22 @@
           <td>{{ data.soQd }}</td>
           <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.trichYeu }}</td>
-          <td></td>
-          <td></td>
-          <td>{{data.maThongBao}}</td>
-          <td>{{ data.tenHthucDgia }}</td>
-          <td>{{ data.tenPthucDgia }}</td>
+          <td>{{ data.xhTlToChucHdr?.ngayTao | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.xhTlToChucHdr?.soQdTl }}</td>
+          <td>{{ data.maThongBao }}</td>
+          <td>{{ data.xhTlToChucHdr?.tenHthucDgia }}</td>
+          <td>{{ data.xhTlToChucHdr?.tenPthucDgia }}</td>
           <td>{{ data.thongBaoKhongThanh }}</td>
-          <td>{{ data.soBienBan}}</td>
+          <td>{{ data.soBienBan }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
             <a (click)="redirectDetail(data.id)">
               <span class="icon htvbdh_eye"></span>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="redirectDetail(data.id,'XHDTQG_XTL_QDTL_THEM')">
+            <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="redirectDetail(data.id,'XHDTQG_XTL_TCKHBDG_QDKQDG_THEM')">
               <span class="fa fa-pencil"></span>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data,'XHDTQG_XTL_QDTL_XOA')">
+            <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data,'XHDTQG_XTL_TCKHBDG_QDKQDG_XOA')">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>

@@ -91,7 +91,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       maNhaKho: [],
       tenDiemKho: [, [Validators.required]],
       maDiemKho: [],
-      soPhieuKtraCluong: [, [Validators.required]],
+      soPhieuKtraCluong: [],
       idPhieuKtraCluong: [],
       tenHang: [],
       loaiVthh: [],
@@ -532,12 +532,12 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
 
       const data = res.data
       let dtlList = data.dtlList.find(x => x.maLoKho.includes(this.formData.value.maLoKho))
-      console.log(data.dtlList.find(x => x.maLoKho.includes(this.formData.value.maLoKho).slTonKho), "888888")
       this.donGia = dtlList.donGia;
       console.log(this.donGia)
       this.dsKeHoach = []
       if (data.dtlList.length == 0) return
       this.dsKeHoach = this.dsKeHoach.concat(data.dtlList)
+      console.log(this.dsKeHoach, "888888")
 
     }
   }

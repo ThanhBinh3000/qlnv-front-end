@@ -1,4 +1,5 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="level1">
+<!-- <nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="level1"> -->
+<nz-affix [nzOffsetTop]="globals.prop.MN_LV1" class="level1">
   <!-- (nzChange)="onChange($event)" -->
   <ul nz-menu nzMode="horizontal">
     <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)"
@@ -27,17 +28,17 @@
     </li>
   </ul>
 </nz-affix>
-<div class="contentBor chi-tieu__body giao-ke-hoach">
+<div class="contentBor chi-tieu__body giao-ke-hoach xuat_ctvt">
   <div class="contentDetail">
     <ng-container *ngIf="tabSelected == 0">
-      <app-de-xuat></app-de-xuat>
+      <app-de-xuat (eventTaoQd)="selectTab($event)"></app-de-xuat>
     </ng-container>
     <!--<ng-container *ngIf="tabSelected == 0">
       <app-xay-dung-phuong-an (eventTaoQd)="taoQd($event)"></app-xay-dung-phuong-an>
     </ng-container>-->
     <ng-container *ngIf="tabSelected == 1">
       <!--      <app-tong-hop-phuong-an (eventTaoQd)="taoQd($event)"></app-tong-hop-phuong-an>-->
-      <app-tong-hop></app-tong-hop>
+      <app-tong-hop (eventTaoQd)="selectTab($event)"></app-tong-hop>
     </ng-container>
     <ng-container *ngIf="tabSelected == 2">
       <!--      <app-quyet-dinh-phe-duyet-phuong-an [isDetail]="isDetail" [dataInit]="dataInit"-->
@@ -49,11 +50,14 @@
       <!-- <app-quyet-dinh-gnv [loaiXuat]="'CTVT'"></app-quyet-dinh-gnv> -->
       <app-quyet-dinh-gnv></app-quyet-dinh-gnv>
     </ng-container>
-    <ng-container *ngIf="tabSelected == 4">
+    <!-- <ng-container *ngIf="tabSelected == 4">
       <app-kiem-tra-chat-luong></app-kiem-tra-chat-luong>
+    </ng-container> -->
+    <ng-container *ngIf="tabSelected == 4">
+      <app-chuc-nang-kiem-tra-chat-luong loaiXuat="CTVT"></app-chuc-nang-kiem-tra-chat-luong>
     </ng-container>
     <ng-container *ngIf="tabSelected == 5">
-      <app-xuat-kho></app-xuat-kho>
+      <app-xuat-kho loaiXuat="CTVT"></app-xuat-kho>
     </ng-container>
   </div>
 </div>

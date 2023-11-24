@@ -604,6 +604,7 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
                         tongTrongLuongTruBi: 0,
                         tongTrongLuongTruBiText: ''
                     });
+                    this.tinhTongSl();
                 } catch (error) {
                     console.log("e", error);
                     this.notification.error(MESSAGE.ERROR, error)
@@ -618,7 +619,7 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
         try {
 
             const body = {
-                // soQdinhDcc: data.soQdinh,
+                soQdinhDcc: this.formData.value.soQdinhDcc,
                 // paggingReq: {
                 //   limit: this.globals.prop.MAX_INTERGER,
                 //   page: 0
@@ -693,6 +694,7 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
                 tenDiemKho: dataRes.data.tenDiemKho,
                 tenNganLoKho: dataRes.data.tenLoKho ? `${dataRes.data.tenLoKho} - ${dataRes.data.tenNganKho}` : dataRes.data.tenNganKho
             });
+            this.tinhTongSl();
             this.chiTietDiemKho(dataRes.data.maDiemKho);
         }
     }

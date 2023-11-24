@@ -37,6 +37,7 @@ export class Base2Component implements OnInit {
   // Const
   listNam: any[] = [];
   fileDinhKem: any[] = []
+  fileCanCu: any[] = []
   canCuPhapLy: any[] = []
   STATUS = STATUS
 
@@ -76,6 +77,10 @@ export class Base2Component implements OnInit {
     tenBaoCao: "",
     trangThai: ""
   };
+  selectedFile: File | null = null;
+  templateName: any
+  dataImport: any[] = [];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -246,7 +251,7 @@ export class Base2Component implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == this.STATUS.DU_THAO) {
+          if (item.trangThai == this.STATUS.DU_THAO || item.trangThai == this.STATUS.DANG_NHAP_DU_LIEU) {
             item.checked = true;
           }
         });
@@ -373,13 +378,13 @@ export class Base2Component implements OnInit {
   }
 
   // Save
-  async createUpdate(body, roles?: any, isHideMessage?: boolean) {
+  async createUpdate(body, roles?: any, isHideMessage?: boolean, ignoreFields?: Array<string>) {
     if (!this.checkPermission(roles)) {
       return
     }
     await this.spinner.show();
     try {
-      this.helperService.markFormGroupTouched(this.formData);
+      this.helperService.markFormGroupTouched(this.formData, ignoreFields);
       if (this.formData.invalid) {
         return;
       }
@@ -422,6 +427,7 @@ export class Base2Component implements OnInit {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.fileDinhKem = data.fileDinhKem
+          this.fileCanCu = data.fileCanCu
           return data;
         }
       } else {
@@ -440,7 +446,7 @@ export class Base2Component implements OnInit {
 
   // Approve
   async approve(id: number, trangThai: string, msg: string, roles?: any, msgSuccess?: string) {
-    if (!this.checkPermission(roles)) {
+    if (roles && !this.checkPermission(roles)) {
       return
     }
     this.modal.confirm({
@@ -546,7 +552,7 @@ export class Base2Component implements OnInit {
   }
 
   // Approve
-  async saveAndSend(body: any, trangThai: string, msg: string, msgSuccess?: string) {
+  async saveAndSend(body: any, trangThai: string, msg: string, msgSuccess?: string, ignoreFields?: Array<string>) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -558,7 +564,7 @@ export class Base2Component implements OnInit {
       nzOnOk: async () => {
         await this.spinner.show();
         try {
-          this.helperService.markFormGroupTouched(this.formData);
+          this.helperService.markFormGroupTouched(this.formData, ignoreFields);
           if (this.formData.invalid) {
             return;
           }
@@ -695,5 +701,58 @@ export class Base2Component implements OnInit {
         this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
       }
     });
+  }
+
+  downloadTemplate(templateName: any) {
+    this.service.downloadTemplate(templateName).then( s => {
+      const blob = new Blob([s], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      saveAs(blob, templateName);
+    });
+  }
+
+  async onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0] as File;
+    if (await this.isExcelFile(this.selectedFile)) {
+      await this.uploadFile();
+    }else{
+      this.notification.error(MESSAGE.ERROR, 'Chọn file đuôi .xlsx');
+    }
+  }
+
+  async isExcelFile(file: File) {
+    const allowedExtensions = ['.xlsx'];
+    const fileName = file.name.toLowerCase();
+
+    return allowedExtensions.some(ext => fileName.endsWith(ext));
+  }
+
+  async uploadFile() {
+    if (this.selectedFile) {
+      const formData = new FormData();
+      Object.keys(this.formData.value).forEach(key => {
+        formData.append(key, this.formData.value[key]);
+      });
+      formData.append('file', this.selectedFile);
+      await this.service.importExcel(formData).then(res => {
+        if(res.msg == MESSAGE.SUCCESS){
+          console.log(res.data, "res.data")
+          this.dataImport = res.data
+          console.log(this.dataImport, "this.dataImport")
+        }
+      })
+    }
+  }
+
+  showButtonPheDuyet(trangThai,permisson){
+    if(this.userService.isCuc()){
+      return (trangThai == STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson(permisson+'_DUYETTP')) ||
+        (trangThai == STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson(permisson+'_DUYETLDC'));
+    }
+    if (this.userService.isTongCuc()) {
+      return (trangThai == STATUS.CHO_DUYET_LDV && this.userService.isAccessPermisson(permisson+'_DUYETLDV')) ||
+        (trangThai == STATUS.CHO_DUYET_LDTC && this.userService.isAccessPermisson(permisson+'_DUYETLDTC')) ||
+        (trangThai == STATUS.CHODUYET_BTC && this.userService.isAccessPermisson(permisson+'_DUYETBTC'));
+    }
+
   }
 }

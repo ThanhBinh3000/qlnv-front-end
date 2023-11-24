@@ -4,64 +4,62 @@
       <h3 class="text-uppercase">Danh sách quyết định phê duyệt kế hoạch lựa chọn nhà thầu</h3>
       <div class="buttons">
         <button type="button" *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKQLCNT_XOA')"
-          (click)="deleteMulti()" class="btn btn-sub btn-xoa">
+                (click)="deleteMulti()" class="btn btn-sub btn-xoa">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
-        <button *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKQLCNT_THEM')" type="button"
-          class="btn btn-main" (click)="openThongTinModal()">
+        <button *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKQLCNT_THEM')"
+                type="button" class="btn btn-main" (click)="openThongTinModal()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
       </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-      <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false"
-        nzBordered>
+      <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
+                [nzShowPagination]="false" nzBordered>
         <thead>
-          <tr>
-            <th width="45px">
-              <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
-                [nzIndeterminate]="indeterminate"></label>
-            </th>
-            <th width="60px">STT</th>
-            <th width="100px">Năm KH</th>
-            <th width="130px">Số QĐ PD KQLCNT</th>
-            <th width="150px">Ngày ký QĐ PD KQLCNT</th>
-            <th width="">Trích yếu</th>
-            <th width="150px">Số gói thầu</th>
-            <th width="175px">Trạng thái</th>
-            <th width="130px" class="text-center">Hành động</th>
-          </tr>
+        <tr>
+          <th width="45px">
+            <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                   [nzIndeterminate]="indeterminate"></label>
+          </th>
+          <th width="60px">STT</th>
+          <th width="100px">Năm KH</th>
+          <th width="130px">Số QĐ PD KQLCNT</th>
+          <th width="150px">Ngày ký QĐ PD KQLCNT</th>
+          <th width="">Trích yếu</th>
+          <th width="150px">Số gói thầu</th>
+          <th width="175px">Trạng thái</th>
+          <th width="130px" class="text-center">Hành động</th>
+        </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let data of basicTable.data; let i = index">
-            <td>
-              <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                [nzDisabled]="data.trangThai != STATUS.DANG_NHAP_DU_LIEU"></label>
-            </td>
-            <td>{{(page - 1) * pageSize + i + 1}}</td>
-            <td>{{ data.namKh }}</td>
-            <td>{{ data.soQd }}</td>
-            <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.trichYeu }}</td>
-            <td>{{ data.soGoiThau | number: '1.0-1': 'vi_VN' }}</td>
-            <td class="text-left">{{ data.tenTrangThai }}</td>
-            <td class="text-center">
-              <a *ngIf="data.trangThai == STATUS.BAN_HANH && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKQLCNT_XEM') "
-                (click)="openThongTinModal(data.id, true)">
-                <i class=" icon htvbdh_eye"></i>
-              </a>
-              <a *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKQLCNT_THEM')"
-                (click)="openThongTinModal(data.id,false)">
-                <i class="fa fa-pencil" title="Sửa"></i>
-              </a>
-              <a *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKQLCNT_XOA') "
-                (click)="delete(data)">
-                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-              </a>
-            </td>
-          </tr>
+        <tr *ngFor="let data of basicTable.data; let i = index">
+          <td>
+            <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
+                   [nzDisabled]="data.trangThai != STATUS.DANG_NHAP_DU_LIEU"></label>
+          </td>
+          <td>{{(page - 1) * pageSize + i + 1}}</td>
+          <td>{{ data.namKh }}</td>
+          <td>{{ data.soQd }}</td>
+          <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.trichYeu }}</td>
+          <td>{{ data.soGoiThau | number: '1.0-1': 'vi_VN' }}</td>
+          <td class="text-left">{{ data.tenTrangThai }}</td>
+          <td class="text-center">
+            <a *ngIf="data.trangThai == STATUS.BAN_HANH && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKQLCNT_XEM') "
+               (click)="openThongTinModal(data.id, true)">
+              <i class=" icon htvbdh_eye"></i>
+            </a>
+            <a *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKQLCNT_THEM')" (click)="openThongTinModal(data.id,false)">
+              <i class="fa fa-pencil" title="Sửa"></i>
+            </a>
+            <a *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKQLCNT_XOA') " (click)="delete(data)">
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+            </a>
+          </td>
+        </tr>
         </tbody>
       </nz-table>
       <div class="tab-content tab-menu">
@@ -70,8 +68,9 @@
           <div class="canphai">
             <!-- begin phân trang  -->
             <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
-              [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
-              (nzPageSizeChange)="changePageSize($event)">
+                           [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+                           (nzPageIndexChange)="changePageIndex($event)"
+                           (nzPageSizeChange)="changePageSize($event)">
               <ng-template #rangeTemplate let-range="range" let-total>
                 {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
               </ng-template>
@@ -83,15 +82,18 @@
     </nz-card>
   </div>
 </div>
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"
-  [(nzVisible)]="openPopThongTin" (nzOnCancel)="closeThongTinModal()">
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }" [(nzVisible)]="openPopThongTin" (nzOnCancel)="closeThongTinModal()">
   <div *nzModalTitle>
     <p style="font-size: 18px">QUYẾT ĐỊNH PHÊ DUYỆT KẾT QUẢ LỰA CHỌN NHÀ THẦU </p>
   </div>
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-thong-tin-quyet-dinh-phe-duyet-kqlcnt-scl [id]="selectedId" (showListEvent)="showList()"
-      [isViewDetail]="isViewDetail" [itemQdPdKhLcnt]="itemTtdt" [itemDuAn]="itemDuAn"
-      *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKQLCNT_XEM')" [idInput]="selectedId">
+                                                   [isViewDetail]="isViewDetail"
+                                                   [itemQdPdKhLcnt]="itemTtdt"
+                                                   [itemDuAn]="itemDuAn"
+                                                   (dataItemKqLcnt)="receivedData($event)"
+                                                   *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_QDPDKQLCNT_XEM')"
+                                                   [idInput]="selectedId">
 
     </app-thong-tin-quyet-dinh-phe-duyet-kqlcnt-scl>
   </ng-container>
@@ -102,3 +104,5 @@
     </button>
   </div>
 </nz-modal>
+
+

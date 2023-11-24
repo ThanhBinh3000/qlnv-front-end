@@ -174,14 +174,14 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
         let rs = chain(value)
           .groupBy('nam')
           .map((v, k) => {
-            let idVirtual = uuidv4();
-            this.expandSetString.add(idVirtual);
-            return {
-              idVirtual: idVirtual,
-              nam: k,
-              childData: v,
-            };
-          },
+              let idVirtual = uuidv4();
+              this.expandSetString.add(idVirtual);
+              return {
+                idVirtual: idVirtual,
+                nam: k,
+                childData: v,
+              };
+            },
           ).value();
         let idVirtual = uuidv4();
         this.expandSetString.add(idVirtual);
@@ -224,6 +224,7 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
       this.expandSetString.delete(id);
     }
   }
+
   async changePageIndex(event) {
     this.spinner.show();
     try {
@@ -335,6 +336,7 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
         let body = {
           'chuong': this.searchFilter.chuong,
           'khoan': this.searchFilter.khoan,
+          'nam': this.searchFilter.nam,
           'loai': this.searchFilter.loai,
           'dviThongTri': this.searchFilter.dviThongTri,
           'soLenhChiTien': this.searchFilter.soLenhChiTien,

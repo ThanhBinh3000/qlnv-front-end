@@ -4,7 +4,7 @@
       Kế hoạch bán trực tiếp
     </li>
     <li nz-menu-item (click)="selectTab(1)"
-      *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG')">
+        *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG')">
       Tổ chức triển khai KH bán trực tiếp
     </li>
     <li nz-menu-item (click)="selectTab(2)" *ngIf="!userService.isChiCuc()">

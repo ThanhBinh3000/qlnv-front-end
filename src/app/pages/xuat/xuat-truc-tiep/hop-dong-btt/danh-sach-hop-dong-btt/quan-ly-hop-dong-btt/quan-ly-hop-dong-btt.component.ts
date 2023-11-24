@@ -1,24 +1,20 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { STATUS } from 'src/app/constants/status';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import {
-  QuyetDinhPdKhBanTrucTiepService
-} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
-import { HopDongBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
+import {HttpClient} from '@angular/common/http';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {MESSAGE} from 'src/app/constants/message';
+import {STATUS, THONG_TIN_BAN_TRUC_TIEP} from 'src/app/constants/status';
+import {HopDongBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
 import {
   QdPdKetQuaBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
-import { StorageService } from 'src/app/services/storage.service';
+import {StorageService} from 'src/app/services/storage.service';
 import {
   ChaoGiaMuaLeUyQuyenService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service";
-import { LOAI_HANG_DTQG } from 'src/app/constants/config';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-quan-ly-hop-dong-btt',
@@ -30,10 +26,12 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
   @Input() loaiVthh: string;
   @Output() showListEvent = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG
+  TRUC_TIEP = THONG_TIN_BAN_TRUC_TIEP
   isView: boolean
   isEditHopDong: boolean
-  selected: boolean = false;
   loadDanhSachHdongDaKy: any[] = [];
+  idQdNv: number = 0;
+  isViewQdNv: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -43,29 +41,30 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     modal: NzModalService,
     private hopDongBttService: HopDongBttService,
     private qdPdKetQuaBttService: QdPdKetQuaBttService,
-    private quyetDinhPdKhBanTrucTiepService: QuyetDinhPdKhBanTrucTiepService,
     private chaoGiaMuaLeUyQuyenService: ChaoGiaMuaLeUyQuyenService,
-    private danhMucService: DanhMucService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBttService);
     this.formData = this.fb.group({
       id: [],
       namKh: [],
-      soQdKq: [],
-      soQdPd: [],
-      tenHd: [],
-      tenDvi: [],
+      soQdKq: [''],
+      soQdPd: [''],
+      tenDuAn: [''],
+      tenDviCha: [''],
+      tenDvi: [''],
+      nguonVon: [''],
       tongGiaTriHdong: [],
       tongSlXuatBanQdKh: [],
       tongSlDaKyHdong: [],
       tongSlChuaKyHdong: [],
-      tenLoaiVthh: [],
-      tenCloaiVthh: [],
-      vat: [''],
+      donViTinh: [''],
+      tenLoaiVthh: [''],
+      tenCloaiVthh: [''],
       tenLoaiHinhNx: [''],
       tenKieuNx: [''],
       trangThaiHd: [''],
       tenTrangThaiHd: [''],
+      phuongThucBan: [''],
     });
   }
 
@@ -93,7 +92,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     try {
       const res = await this.qdPdKetQuaBttService.getDetail(this.idInput);
       if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-        throw new Error('Response error');
+        return;
       }
       const data = res.data;
       await this.loadDanhDachHopDong();
@@ -101,29 +100,31 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
         namKh: data.namKh,
         soQdPd: data.soQdPd,
         soQdKq: data.soQdKq,
+        tenDvi: data.tenDvi,
         loaiVthh: data.loaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
         cloaiVthh: data.cloaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
         tenLoaiHinhNx: data.tenLoaiHinhNx,
         tenKieuNx: data.tenKieuNx,
-        vat: '5 %',
         tongSlXuatBanQdKh: data.tongSoLuong,
         tongGiaTriHdong: data.tongGiaTriHdong,
         tongSlChuaKyHdong: data.tongSlChuaKyHdong,
         trangThaiHd: data.trangThaiHd,
         tenTrangThaiHd: data.tenTrangThaiHd,
+        donViTinh: data.children[0]?.donViTinh,
+        phuongThucBan: THONG_TIN_BAN_TRUC_TIEP.CHAO_GIA,
       });
       const filteredItems = this.loadDanhSachHdongDaKy.filter(item => item.idQdKq === data.id);
-      const tongSlDaKyHdong = filteredItems.reduce((acc, item) => acc + item.soLuongBanTrucTiep, 0);
+      const tongSlDaKyHdong = filteredItems.reduce((acc, item) => acc + item.soLuong, 0);
       const tongSlChuaKyHdong = data.tongSoLuong - tongSlDaKyHdong;
       this.formData.patchValue({
         tongSlDaKyHdong: tongSlDaKyHdong,
         tongSlChuaKyHdong: tongSlChuaKyHdong,
       });
-      this.dataTable = data.listHopDongBtt;
+      this.dataTable = data.listHopDongBtt.filter(item => item.maDvi === this.userInfo.MA_DVI);
       if (this.dataTable && this.dataTable.length > 0) {
-        this.showFirstRow(event, this.dataTable[0].id);
+        await this.selectRow(this.dataTable[0]);
       }
     } catch (e) {
       console.log('error: ', e);
@@ -137,12 +138,13 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     try {
       const res = await this.chaoGiaMuaLeUyQuyenService.getDetail(this.idInput);
       if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-        throw new Error('Response error');
+        return;
       }
       const data = res.data;
       await this.loadDanhDachHopDong();
-      const formDataValues = {
+      this.formData.patchValue({
         namKh: data.namKh,
+        tenDviCha: data.tenDvi,
         soQdPd: data.soQdPd,
         loaiVthh: data.loaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
@@ -151,22 +153,24 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
         tenLoaiHinhNx: data.tenLoaiHinhNx,
         tenKieuNx: data.tenKieuNx,
         tongSlXuatBanQdKh: data.tongSoLuong,
-        tongGiaTriHdong: data.tongGiaTriHdong,
-        vat: '5 %',
+        tongGiaTriHdong: data.thanhTienDuocDuyet,
+        donViTinh: data.donViTinh,
         trangThaiHd: data.trangThaiHd,
         tenTrangThaiHd: data.tenTrangThaiHd,
-      };
+        phuongThucBan: THONG_TIN_BAN_TRUC_TIEP.UY_QUYEN,
+      });
+      const dataChildren = data.children.find(item => item.maDvi === this.userInfo.MA_DVI);
+      this.formData.patchValue({tenDvi: dataChildren.tenDvi})
       const filteredItems = this.loadDanhSachHdongDaKy.filter(item => item.idChaoGia === data.id);
-      const tongSlDaKyHdong = filteredItems.reduce((acc, item) => acc + item.soLuongBanTrucTiep, 0);
+      const tongSlDaKyHdong = filteredItems.reduce((acc, item) => acc + item.soLuong, 0);
       const tongSlChuaKyHdong = data.tongSoLuong - tongSlDaKyHdong;
       this.formData.patchValue({
         tongSlDaKyHdong: tongSlDaKyHdong,
         tongSlChuaKyHdong: tongSlChuaKyHdong,
       });
-      this.formData.patchValue(formDataValues);
-      this.dataTable = data.listHopDongBtt;
+      this.dataTable = data.listHopDongBtt.filter(item => item.maDvi === this.userInfo.MA_DVI);
       if (this.dataTable && this.dataTable.length > 0) {
-        this.showFirstRow(event, this.dataTable[0].id);
+        await this.selectRow(this.dataTable[0]);
       }
     } catch (e) {
       console.log('error: ', e);
@@ -180,7 +184,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     let body = {
       namKh: this.formData.value.namKh,
       loaiVthh: this.loaiVthh,
-      trangThai: STATUS.DA_KY,
+      trangThai: STATUS.DA_KY
     };
     const res = await this.hopDongBttService.search(body);
     if (res.msg !== MESSAGE.SUCCESS) {
@@ -194,30 +198,14 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     this.loadDanhSachHdongDaKy = data;
   }
 
-  async showFirstRow($event, id: any) {
-    await this.showDetail($event, id);
-  }
-
   idHopDong: number;
 
-  async showDetail($event, id: number) {
-    try {
-      await this.spinner.show();
-      if ($event.type == 'click') {
-        this.selected = false;
-        const selectedRow = $event.target.parentElement.parentElement.querySelector('.selectedRow');
-        if (selectedRow) {
-          selectedRow.classList.remove('selectedRow');
-        }
-        $event.target.parentElement.classList.add('selectedRow');
-      } else {
-        this.selected = true;
-      }
-      this.idHopDong = id;
-    } catch (error) {
-      console.error('Error:', error);
-    } finally {
-      await this.spinner.hide();
+  async selectRow(data: any) {
+    if (!data.selected) {
+      this.dataTable.forEach(item => item.selected = false)
+      data.selected = true;
+      const findndex = this.dataTable.findIndex(child => child.id == data.id);
+      this.idHopDong = this.dataTable[findndex].id
     }
   }
 
@@ -239,7 +227,6 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
   }
 
   async guiDuyetCuc() {
-    await this.spinner.show();
     if (!this.validateData()) {
       await this.spinner.hide();
       return;
@@ -276,7 +263,6 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
   }
 
   async guiDuyetChiCuc() {
-    await this.spinner.show();
     if (!this.validateData()) {
       await this.spinner.hide();
       return;
@@ -355,5 +341,15 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
   calcTong(column) {
     if (!this.dataTable) return 0;
     return this.dataTable.reduce((sum, cur) => sum + (cur[column] || 0), 0);
+  }
+
+  openModal(id: number) {
+    this.idQdNv = id;
+    this.isViewQdNv = true;
+  }
+
+  closeModal() {
+    this.idQdNv = null;
+    this.isViewQdNv = false;
   }
 }

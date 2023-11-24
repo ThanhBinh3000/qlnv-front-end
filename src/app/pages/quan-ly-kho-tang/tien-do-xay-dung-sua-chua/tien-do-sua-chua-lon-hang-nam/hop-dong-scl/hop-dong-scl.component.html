@@ -1,8 +1,13 @@
 <div class="luong-thuc__danh-sach" *ngIf="isDetail; else templateThemmoi">
 </div>
 <ng-template #templateThemmoi>
-  <app-thong-tin-hop-dong-scl [id]="selectedId" (showListEvent)="showList()" [isViewDetail]="isViewDetail"
-    [itemDuAn]="itemDuAn" [itemQdPdKhLcnt]="itemQdPdKhLcnt" [itemQdPdKtkt]="itemQdPdKtkt"
-    *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_HD_XEM')" [idInput]="selectedId" [flagThemMoi]="flagInfo">
+  <app-thong-tin-hop-dong-scl  [id]="selectedId" (showListEvent)="showList()"
+                               [isViewDetail]="isViewDetail"
+                               [itemDuAn]="itemDuAn"
+                               [itemQdPdKhLcnt]="itemQdPdKhLcnt"
+                               [itemQdPdKtkt]="itemQdPdKtkt"
+                               *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL_HD_XEM')"
+                               [idInput]="selectedId" [flagThemMoi]="flagInfo">
   </app-thong-tin-hop-dong-scl>
 </ng-template>
+

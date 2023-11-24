@@ -164,17 +164,19 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
   }
 
   async getCtieuKhTc(event) {
-    let res = await this.dxChiCucService.getCtieuKhTc({
-      namKeHoach: event,
-    });
-    if (res.data) {
-      this.formData.patchValue({
-        soQdGiaoCt: res.data.soQuyetDinh,
-      });
-    }
+    // let res = await this.dxChiCucService.getCtieuKhTc({
+    //   namKeHoach: event,
+    // });
+    // if (res.data) {
+    //   this.formData.patchValue({
+    //     soQdGiaoCt: res.data.soQuyetDinh,
+    //   });
+    // }
   }
 
   async save() {
+    // console.log("dataTable", this.dataTable);
+    // return
     this.formData.patchValue({
       namKeHoach: this.formDataTongHop.value.namKeHoach,
     });
@@ -254,7 +256,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
   convertListData() {
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable = chain(this.dataTable).groupBy('tenCcdc')
-        .map((value, key) => ({ tenCcdc: key, dataChild: value, idVirtual: uuidv4() }),
+        .map((value, key) => ({ tenCcdc: key, dataChild: value, donGia: value[0].donGia, idVirtual: uuidv4() }),
         ).value();
     }
     console.log(this.dataTable, 'this.dataTable this.dataTable this.dataTable ');
@@ -266,7 +268,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
     this.dataTable.forEach(item => {
       if (item.dataChild && item.dataChild.length > 0) {
         item.dataChild.forEach(data => {
-          arr.push(data);
+          arr.push({ ...data, donGia: item.donGia });
         });
       }
     });

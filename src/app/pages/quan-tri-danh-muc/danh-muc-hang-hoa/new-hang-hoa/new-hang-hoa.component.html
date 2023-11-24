@@ -7,8 +7,8 @@
           <nz-form-label>Tên hàng hóa cấp trên</nz-form-label>
           <nz-form-control>
             <nz-input-group>
-              <nz-tree-select #treeSelect [nzNodes]="nodesTree" (nzTreeClick)="nzClickNodeTree($event)" nzShowSearch
-                nzVirtualHeight="300px" nzPlaceHolder="Vui lòng chọn" formControlName="maCha">
+              <nz-tree-select #treeSelect [nzNodes]="nodesTree" (nzTreeClick)="nzClickNodeTree($event)"  nzShowSearch nzVirtualHeight="300px" nzPlaceHolder="Vui lòng chọn"
+                              formControlName="maCha">
               </nz-tree-select>
             </nz-input-group>
           </nz-form-control>
@@ -38,7 +38,7 @@
         <nz-form-item>
           <nz-form-label nzRequired>Mã hàng hóa</nz-form-label>
           <nz-form-control [nzErrorTip]="error">
-            <nz-input-group>
+            <nz-input-group >
               <input nz-input [readonly]="formHangHoa.value.maCha != null" formControlName="ma" />
             </nz-input-group>
           </nz-form-control>
@@ -48,35 +48,35 @@
         <nz-form-item>
           <nz-form-label>Mô tả chi tiết</nz-form-label>
           <nz-form-control>
-            <textarea placeholder="Nhập text" nz-input [rows]="3" formControlName="ghiChu"></textarea>
+            <textarea placeholder="Nhập text" nz-input [rows]="3" formControlName="ghiChu" ></textarea>
           </nz-form-control>
         </nz-form-item>
       </div>
       <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
         <nz-form-item>
-          <nz-form-label>Phân loại hàng hóa </nz-form-label>
+          <nz-form-label >Phân loại hàng hóa </nz-form-label>
           <nz-form-control [nzErrorTip]="error">
-            <nz-select formControlName="loaiHang" nzAllowClear="true">
-              <nz-option *ngFor="let p of listLoaiHang" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-              </nz-option>
-            </nz-select>
+          <nz-select formControlName="loaiHang"  nzAllowClear="true">
+            <nz-option *ngFor="let p of listLoaiHang" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+            </nz-option>
+          </nz-select>
           </nz-form-control>
         </nz-form-item>
       </div>
       <div nz-col nzXs="24" nzSm="24" nzMd="4" nzLg="4">
         <nz-form-item>
-          <nz-form-label>Ký hiệu</nz-form-label>
-          <input nz-input formControlName="kyHieu" />
+          <nz-form-label >Ký hiệu</nz-form-label>
+          <input nz-input formControlName="kyHieu"  />
         </nz-form-item>
       </div>
       <div nz-col nzXs="24" nzSm="24" nzMd="5" nzLg="5">
         <nz-form-item>
-          <nz-form-label>Đơn vị tính</nz-form-label>
+          <nz-form-label >Đơn vị tính</nz-form-label>
           <nz-form-control [nzErrorTip]="error">
-            <nz-select formControlName="maDviTinh" nzAllowClear="true">
-              <nz-option *ngFor="let p of listDviTinh" [nzValue]="p.giaTri" [nzLabel]="p.giaTri">
-              </nz-option>
-            </nz-select>
+          <nz-select formControlName="maDviTinh"  nzAllowClear="true">
+            <nz-option *ngFor="let p of listDviTinh" [nzValue]="p.giaTri" [nzLabel]="p.giaTri">
+            </nz-option>
+          </nz-select>
           </nz-form-control>
         </nz-form-item>
       </div>
@@ -84,7 +84,7 @@
         <nz-form-item>
           <nz-form-label nzRequired>Đơn vị quản lý</nz-form-label>
           <nz-form-control [nzErrorTip]="error">
-            <nz-select size="small" nzMode="tags" [ngModelOptions]="{standalone: true}" [(ngModel)]="listOfTagOption">
+            <nz-select size="small"  nzMode="tags"  [ngModelOptions]="{standalone: true}" [(ngModel)]="listOfTagOption">
               <nz-option *ngFor="let option of listOfOption" [nzLabel]="option.tenDvi" [nzValue]="option"></nz-option>
             </nz-select>
           </nz-form-control>
@@ -93,32 +93,28 @@
       <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
         <nz-form-item>
           <nz-form-label>Hình thức bảo quản</nz-form-label>
-          <label [ngModelOptions]="{standalone: true}" [(ngModel)]="item.checked" nz-checkbox
-            *ngFor="let item of listHtbq"> {{item.giaTri}}
+          <label    [ngModelOptions]="{standalone: true}" [(ngModel)]="item.checked"  nz-checkbox *ngFor="let item of listHtbq"  >  {{item.giaTri}}
           </label>
         </nz-form-item>
       </div>
       <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
         <nz-form-item>
           <nz-form-label>Phương pháp bảo quản</nz-form-label>
-          <label [ngModelOptions]="{standalone: true}" [(ngModel)]="item.checked" nz-checkbox
-            *ngFor="let item of listPpbq"> {{item.giaTri}}
+          <label     [ngModelOptions]="{standalone: true}" [(ngModel)]="item.checked"  nz-checkbox *ngFor="let item of listPpbq"  > {{item.giaTri}}
           </label>
         </nz-form-item>
       </div>
       <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
         <nz-form-item>
           <nz-form-label>Loại hình bảo quản</nz-form-label>
-          <label [ngModelOptions]="{standalone: true}" [(ngModel)]="item.checked" nz-checkbox
-            *ngFor="let item of listLhbq"> {{item.giaTri}}
+          <label  [ngModelOptions]="{standalone: true}" [(ngModel)]="item.checked"  nz-checkbox *ngFor="let item of listLhbq"  >  {{item.giaTri}}
           </label>
         </nz-form-item>
       </div>
       <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
         <nz-form-item>
           <nz-form-label>Phương pháp lấy mẫu</nz-form-label>
-          <label [ngModelOptions]="{standalone: true}" [(ngModel)]="item.checked" nz-checkbox
-            *ngFor="let item of listPpLayMau"> {{item.giaTri}}
+          <label    [ngModelOptions]="{standalone: true}" [(ngModel)]="item.checked"  nz-checkbox *ngFor="let item of listPpLayMau"  >  {{item.giaTri}}
           </label>
         </nz-form-item>
       </div>
@@ -127,7 +123,13 @@
       <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
         <nz-form-item>
           <nz-form-label>Trạng thái</nz-form-label>
-          <label nz-checkbox formControlName="trangThai">Hoạt động</label>
+          <label nz-checkbox formControlName="trangThai" >Hoạt động</label>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
+        <nz-form-item>
+          <nz-form-label></nz-form-label>
+          <label nz-checkbox formControlName="isLoaiKhoiDm" >Loại khỏi danh mục hàng DTQG</label>
         </nz-form-item>
       </div>
     </div>
@@ -145,7 +147,7 @@
           <span>Thoát</span>
         </a>
 
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="add()">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="add()" *ngIf="userService.isAccessPermisson('QTDM_DM_HANG_DTQG_THEM')">
           <div>
             <i class="fa fa-save" aria-hidden="true"></i>
             Lưu

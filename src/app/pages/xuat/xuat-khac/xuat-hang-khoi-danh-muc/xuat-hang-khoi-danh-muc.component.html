@@ -1,27 +1,27 @@
 <nz-affix [nzOffsetTop]='globals.prop.MENU_LV1' class='level1'>
   <ul nz-menu nzMode='horizontal'>
     <li nz-menu-item *ngIf="userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_XK_XHKDM_THDSHDTQG') "
-      [nzSelected]='tabSelected==0' (click)='selectTab(0)'>
+        [nzSelected]='tabSelected==0' (click)='selectTab(0)'>
       Danh sách hàng dự trữ theo chỉ đạo của chính phủ
     </li>
     <li [nzSelected]='tabSelected==1'
-      *ngIf="userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_XK_XHKDM_THDSHNDM')" nz-menu-item
-      (click)='selectTab(1)'>
+        *ngIf="userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_XK_XHKDM_THDSHNDM')" nz-menu-item
+        (click)='selectTab(1)'>
       Danh sách hàng dự trữ trong kho ngoài danh mục
     </li>
     <li [nzSelected]='tabSelected==2'
-      *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_XK_XHKDM_QDXH')" nz-menu-item
-      (click)='selectTab(2)'>
+        *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_XK_XHKDM_QDXH')" nz-menu-item
+        (click)='selectTab(2)'>
       Quyết định xuất hàng khỏi danh mục
     </li>
     <li [nzSelected]='tabSelected==3'
-      *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_XK_XHKDM_THDSXH')" nz-menu-item
-      (click)='selectTab(3)'>
+        *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_XK_XHKDM_THDSXH')" nz-menu-item
+        (click)='selectTab(3)'>
       Tổng hợp danh sách hàng DTQG thuộc diện xuất hàng khỏi danh mục
     </li>
     <li [nzSelected]='tabSelected==4'
-      *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_XK_XHKDM_BCKQ')" nz-menu-item
-      (click)='selectTab(4)'>
+        *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_XK_XHKDM_BCKQ')" nz-menu-item
+        (click)='selectTab(4)'>
       Báo cáo kết quả xuất hàng DTQG ngoài danh mục
     </li>
   </ul>

@@ -1,127 +1,132 @@
-<nz-card class="mt16 flex-card p-lr16 bg-trang">
-  <nz-table #editRowTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+<nz-card class='mt16 flex-card p-lr16 bg-trang'>
+  <nz-table #editRowTable [nzData]='dataTable' nzBordered [nzFrontPagination]='false' [nzShowPagination]='false'
+            [nzScroll]="{ y: '600px' }">
     <thead>
-      <tr>
-        <th class="text-center" style="width: 5%;">STT</th>
-        <th style="width: 45%;">Tên hàng hoá</th>
-        <th style="width: 25%;">Chủng loại hàng hoá</th>
-        <th style="width: 10%;">Đơn vị tính</th>
-        <th style="width: 10%;">Số lượng</th>
-        <th style="width: 5%;">Thao tác</th>
-      </tr>
-      <tr>
-        <th class="text-center" style="width: 5%;"></th>
-        <th style="width: 45%;">
-          <nz-input-group>
-            <nz-select [nzDisabled]="isView" [(ngModel)]="rowItem.loaiVthh" [nzShowArrow]="false" nzAllowClear
-              (ngModelChange)="onChangeLoaiVthh($event)">
-              <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsHangHoa">
-              </nz-option>
-            </nz-select>
-          </nz-input-group>
-        </th>
-        <th style="width: 25%;">
-          <nz-input-group>
-            <nz-select [nzDisabled]="isView" [(ngModel)]="rowItem.cloaiVthh" [nzShowArrow]="false"
-              (ngModelChange)="onChangeCloaiVthh($event)">
-              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-              <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChungLoaiHangHoa">
-              </nz-option>
-            </nz-select>
-          </nz-input-group>
-        </th>
-        <th style="width: 10%;">
-          <nz-input-group>
-            <input [readonly]="isView" nz-input [(ngModel)]="rowItem.dviTinh" [readonly]="true" />
-          </nz-input-group>
-        </th>
-        <th style="width: 10%;">
-          <nz-input-group>
-            <input [readonly]="isView" nz-input [(ngModel)]="rowItem.soLuong" />
-          </nz-input-group>
-        </th>
-        <th style="width: 5%;" style="text-align: center;">
-          <a *ngIf="!isView" (click)="themMoiItem()">
-            <i class="table-icon icon htvbdh_dau-cong"></i>
-          </a>
-          <a *ngIf="!isView" (click)="clearData()">
-            <i class="table-icon fa fa-trash-o do"></i>
-          </a>
-        </th>
-      </tr>
+    <tr>
+      <th class='text-center' nzWidth='50px'>STT</th>
+      <th>Tên hàng DTQG</th>
+      <th nzWidth='300px'>Chủng loại hàng DTQG</th>
+      <th nzWidth='100px'>Đơn vị tính</th>
+      <th nzWidth='100px'>Số lượng</th>
+      <th nzWidth='100px'>Hành động</th>
+    </tr>
+    <tr>
+      <th class='text-center' style='width: 5%;'></th>
+      <th style='width: 45%;'>
+        <nz-input-group>
+          <nz-select [nzDisabled]='isView' [(ngModel)]='rowItem.loaiVthh' [nzShowArrow]='false' nzAllowClear
+                     (ngModelChange)='onChangeLoaiVthh($event)'>
+            <nz-option nzValue='{{item.ma}}' nzLabel='{{item.ten}}' *ngFor='let item of dsHangHoa'>
+            </nz-option>
+          </nz-select>
+        </nz-input-group>
+      </th>
+      <th style='width: 25%;'>
+        <nz-input-group>
+          <nz-select [nzDisabled]='isView' [(ngModel)]='rowItem.cloaiVthh' [nzShowArrow]='false'
+                     (ngModelChange)='onChangeCloaiVthh($event)'>
+            <nz-option nzValue='null' nzDisabled nzHide></nz-option>
+            <nz-option nzValue='{{item.ma}}' nzLabel='{{item.ten}}' *ngFor='let item of dsChungLoaiHangHoa'>
+            </nz-option>
+          </nz-select>
+        </nz-input-group>
+      </th>
+      <th style='width: 10%;'>
+        <nz-input-group>
+          <input [readonly]='isView' nz-input [(ngModel)]='rowItem.dviTinh' [readonly]='true' />
+        </nz-input-group>
+      </th>
+      <th style='width: 10%;'>
+        <nz-input-group>
+          <input class='money-input' currencyMask [options]='amountSL' [readOnly]='isView'
+                 [(ngModel)]='rowItem.soLuong'
+          />
+        </nz-input-group>
+      </th>
+      <th style='width: 5%;' style='text-align: center;'>
+        <a *ngIf='!isView' (click)='themMoiItem()'>
+          <i class='table-icon icon htvbdh_dau-cong'></i>
+        </a>
+        <a *ngIf='!isView' (click)='clearData()'>
+          <i class='table-icon fa fa-trash-o do'></i>
+        </a>
+      </th>
+    </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let data of dataTable; let idx = index">
-        <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
-          <td>{{ idx + 1 }}</td>
-          <td>{{ data.tenVthh }}</td>
-          <td>{{ data.tenCloaiVthh }}</td>
-          <td>{{ data.dviTinh }}</td>
-          <td>{{ data.soLuong }}</td>
-          <td style="text-align: center;">
-            <a *ngIf="!isView" (click)="editItem(idx)">
-              <i class="table-icon fa fa-pencil"></i>
-            </a>
-            <a *ngIf="!isView" (click)="xoaItem(idx)">
-              <i class="table-icon fa fa-trash-o do"></i>
-            </a>
-          </td>
-        </ng-container>
-        <ng-template #editTemplate>
-          <td></td>
-          <td>
+    <tr *ngFor='let data of dataTable; let idx = index'>
+      <ng-container *ngIf='!dataEdit[idx].edit; else editTemplate'>
+        <td>{{ idx + 1 }}</td>
+        <td>{{ data.tenVthh }}</td>
+        <td>{{ data.tenCloaiVthh }}</td>
+        <td>{{ data.dviTinh }}</td>
+        <td>{{ data.soLuong }}</td>
+        <td style='text-align: center;'>
+          <a *ngIf='!isView' (click)='editItem(idx)'>
+            <i class='table-icon fa fa-pencil'></i>
+          </a>
+          <a *ngIf='!isView' (click)='xoaItem(idx)'>
+            <i class='table-icon fa fa-trash-o do'></i>
+          </a>
+        </td>
+      </ng-container>
+      <ng-template #editTemplate>
+        <td></td>
+        <td>
+          <nz-input-group>
+            <nz-select [(ngModel)]='dataEdit[idx].data.loaiVthh' [nzShowArrow]='false' nzAllowClear
+                       (ngModelChange)='onChangeLoaiVthh($event, dataEdit[idx].data)'>
+              <nz-option nzValue='null' nzDisabled nzHide></nz-option>
+              <nz-option nzValue='{{item.ma}}' nzLabel='{{item.ten}}' *ngFor='let item of dsHangHoa'>
+              </nz-option>
+            </nz-select>
+          </nz-input-group>
+        </td>
+        <td>
+          <nz-input-group>
+            <nz-select [(ngModel)]='dataEdit[idx].data.cloaiVthh' [nzShowArrow]='false'
+                       (ngModelChange)='onChangeCloaiVthh($event, dataEdit[idx].data)'>
+              <nz-option nzValue='null' nzDisabled nzHide></nz-option>
+              <nz-option nzValue='{{item.ma}}' nzLabel='{{item.ten}}' *ngFor='let item of dsChungLoaiHangHoa'>
+              </nz-option>
+            </nz-select>
+          </nz-input-group>
+        </td>
+        <td>
+          <nz-input-group>
             <nz-input-group>
-              <nz-select [(ngModel)]="dataEdit[idx].data.loaiVthh" [nzShowArrow]="false" nzAllowClear
-                (ngModelChange)="onChangeLoaiVthh($event, dataEdit[idx].data)">
-                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-                <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsHangHoa">
-                </nz-option>
-              </nz-select>
+              <input nz-input [(ngModel)]='dataEdit[idx].data.dviTinh' [readonly]='true' />
             </nz-input-group>
-          </td>
-          <td>
+          </nz-input-group>
+        </td>
+        <td>
+          <nz-input-group>
             <nz-input-group>
-              <nz-select [(ngModel)]="dataEdit[idx].data.cloaiVthh" [nzShowArrow]="false" (ngModelChange)="onChangeCloaiVthh($event, dataEdit[idx].data)">
-                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-                <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChungLoaiHangHoa">
-                </nz-option>
-              </nz-select>
+              <input class='money-input' currencyMask [options]='amountSL'
+                     [(ngModel)]='dataEdit[idx].data.soLuong'
+              />
             </nz-input-group>
-          </td>
-          <td>
-            <nz-input-group>
-              <nz-input-group>
-                <input nz-input [(ngModel)]="dataEdit[idx].data.dviTinh" [readonly]="true" />
-              </nz-input-group>
-            </nz-input-group>
-          </td>
-          <td>
-            <nz-input-group>
-              <nz-input-group>
-                <input nz-input [(ngModel)]="dataEdit[idx].data.soLuong" />
-              </nz-input-group>
-            </nz-input-group>
-          </td>
-          <td class="text-center">
-            <a (click)="luuEdit(idx)" class="save">
-              <i class="fa fa-save"></i>
-            </a>
-            <a (click)="huyEdit(idx)">
-              <i class="fa fa-ban do"></i> </a>
-          </td>
-        </ng-template>
-      </tr>
+          </nz-input-group>
+        </td>
+        <td class='text-center'>
+          <a (click)='luuEdit(idx)' class='save'>
+            <i class='fa fa-save'></i>
+          </a>
+          <a (click)='huyEdit(idx)'>
+            <i class='fa fa-ban do'></i> </a>
+        </td>
+      </ng-template>
+    </tr>
     </tbody>
     <tfoot>
-      <tr *ngIf="tabName != 'LuanPhien'">
-        <td style="text-align: right; font-weight: 700" colspan="4">Tổng giá trị (Triệu đồng)</td>
-        <td>
-<!--          <input [(ngModel)]="tongGtri" [readonly]="isView" (ngModelChange)="onChangeTongGtri()"-->
-<!--            style="text-align: left;" type="number" nz-input />-->
-          <input class="money-input" currencyMask [(ngModel)]="tongGtri" [readonly]="isView"  (ngModelChange)="onChangeTongGtri()" [options]="amount"/>
-        </td>
-        <td></td>
-      </tr>
+    <tr *ngIf="tabName != 'LuanPhien'">
+      <td style='text-align: right; font-weight: 700' colspan='4'>Tổng giá trị (Triệu đồng)</td>
+      <td>
+        <input class='money-input' currencyMask [(ngModel)]='tongGtri' [readonly]='isView'
+               (ngModelChange)='onChangeTongGtri()' [options]='amount' />
+      </td>
+      <td></td>
+    </tr>
     </tfoot>
   </nz-table>
 </nz-card>

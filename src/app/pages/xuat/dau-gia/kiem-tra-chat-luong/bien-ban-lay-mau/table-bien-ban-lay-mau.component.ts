@@ -1,18 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { MESSAGE } from 'src/app/constants/message';
+import {Component, Input, OnInit} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {MESSAGE} from 'src/app/constants/message';
 import * as uuid from "uuid";
 import {
   BienBanLayMauXhService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/bienBanLayMauXh.service';
-import { LOAI_HANG_DTQG } from 'src/app/constants/config';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import _ from 'lodash';
-import { STATUS } from "../../../../../constants/status";
 
 @Component({
   selector: 'app-table-bien-ban-lay-mau',
@@ -103,7 +102,7 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
         soQdNv: soQdNvKey || "",
         nam: firstRowInGroup.nam || "",
         idQdNv: firstRowInGroup.idQdNv || "",
-        ngayKyQdNv: firstRowInGroup.ngayKyQdNv || "",
+        tgianGiaoHang: firstRowInGroup.tgianGiaoHang || "",
         childData,
       };
     }).value();
@@ -132,15 +131,15 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
 
   openModal(id: number, modalType: string) {
     switch (modalType) {
-      case 'QdNv':
+      case 'QdNv' :
         this.idQdNv = id;
         this.isViewQdNv = true;
         break;
-      case 'tinhKho':
+      case 'tinhKho' :
         this.idTinhKho = id;
         this.isViewTinhKho = true;
         break;
-      case 'haoDoi':
+      case 'haoDoi' :
         this.idHaoDoi = id;
         this.isViewHaoDoi = true;
         break;
@@ -151,15 +150,15 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
 
   closeModal(modalType: string) {
     switch (modalType) {
-      case 'QdNv':
+      case 'QdNv' :
         this.idQdNv = null;
         this.isViewQdNv = false;
         break;
-      case 'tinhKho':
+      case 'tinhKho' :
         this.idTinhKho = null;
         this.isViewTinhKho = false;
         break;
-      case 'haoDoi':
+      case 'haoDoi' :
         this.idHaoDoi = null;
         this.isViewHaoDoi = false;
         break;
@@ -175,11 +174,11 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
   };
 
   disabledNgayLayMauTu = (startValue: Date): boolean => {
-    return this.isInvalidDateRange(startValue, this.formData.value.ngayKyQd, 'ngayKyQd');
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayLayMauTu, 'ngayLayMau');
   };
 
   disabledNgayLayMauDen = (endValue: Date): boolean => {
-    return this.isInvalidDateRange(endValue, this.formData.value.ngayKyQdTu, 'ngayKyQd');
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayLayMauTu, 'ngayLayMau');
   };
 
   isActionAllowed(action: string, data: any): boolean {
@@ -202,15 +201,15 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
       case 'XEM':
         return (
           this.userService.isAccessPermisson(permissions.XEM) && ((this.userService.isAccessPermisson(permissions.THEM) &&
-            [
-              this.STATUS.CHO_DUYET_LDCC,
-              this.STATUS.DA_DUYET_LDCC,
-            ].includes(data.trangThai)) ||
+              [
+                this.STATUS.CHO_DUYET_LDCC,
+                this.STATUS.DA_DUYET_LDCC,
+              ].includes(data.trangThai)) ||
             (!this.userService.isAccessPermisson(permissions.THEM) && [
-              this.STATUS.DU_THAO,
-              this.STATUS.TU_CHOI_LDCC,
-              this.STATUS.DA_DUYET_LDCC
-            ].includes(data.trangThai) ||
+                this.STATUS.DU_THAO,
+                this.STATUS.TU_CHOI_LDCC,
+                this.STATUS.DA_DUYET_LDCC
+              ].includes(data.trangThai) ||
               (data.trangThai === this.STATUS.CHO_DUYET_LDCC &&
                 !this.userService.isAccessPermisson(permissions.DUYET_LDCHICUC))))
         );

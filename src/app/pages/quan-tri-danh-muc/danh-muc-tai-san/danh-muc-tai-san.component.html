@@ -44,7 +44,7 @@
     <div class="group-button">
       <h3 class="label_dm">DANH SÁCH DANH MỤC TÀI SẢN</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub" (click)="export()">
+        <button type="button" class="btn btn-sub" (click)="export()" *ngIf="userService.isAccessPermisson('QTDM_DM_TAI_SAN_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
@@ -105,10 +105,10 @@
             </nz-form-control>
           </th>
           <th class="text-center">
-            <a (click)="themMoiItem(null, rowItem)">
+            <a (click)="themMoiItem(null, rowItem)" *ngIf="userService.isAccessPermisson('QTDM_DM_TAI_SAN_THEM')">
               <i class="icon htvbdh_dau-cong"></i>
             </a>
-            <a>
+            <a *ngIf="userService.isAccessPermisson('QTDM_DM_TAI_SAN_THEM')">
               <i (click)="refresh()" class="icon  htvbdh_nhap-lai1 "></i>
             </a>
           </th>
@@ -124,10 +124,10 @@
             <td>{{data.dviTinh}}</td>
             <td>{{data.tenTrangThai}}</td>
             <td style="text-align: center;">
-              <a (click)="startEdit(i)">
+              <a (click)="startEdit(i)" *ngIf="userService.isAccessPermisson('QTDM_DM_TAI_SAN_THEM')">
                 <i class="table-icon fa fa-pencil"></i>
               </a>
-              <a (click)="xoaItem(data)">
+              <a (click)="xoaItem(data)" *ngIf="userService.isAccessPermisson('QTDM_DM_TAI_SAN_XOA')">
                 <i class="table-icon fa fa-trash-o do"></i>
               </a>
             </td>
@@ -176,10 +176,10 @@
               </nz-form-control>
             </th>
             <th style="text-align: center;">
-              <a (click)="themMoiItem(data.id, dataEdit[i].data)">
+              <a (click)="themMoiItem(data.id, dataEdit[i].data)" *ngIf="userService.isAccessPermisson('QTDM_DM_TAI_SAN_THEM')">
                 <i class="fa fa-save mr-3"></i>
               </a>
-              <a (click)="huyEdit(i)">
+              <a (click)="huyEdit(i)" *ngIf="userService.isAccessPermisson('QTDM_DM_TAI_SAN_XOA')">
                 <i class="fa fa-times do mr-3"></i>
               </a>
             </th>

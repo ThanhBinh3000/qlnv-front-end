@@ -19,9 +19,12 @@ export class ThongTinKhaoSatGia {
   cloaiVthh: string;
   tieuChuanCl: string;
   tenCloaiVthh: string;
+  vat: number = 0;
+  soLuong: number;
   donGia: number;
   donGiaVat: number;
   thoiHanBaoGia: string;
+  ngayBaoGia: any;
   ghiChu: string;
   fileDinhKem: FileDinhKem = new FileDinhKem();
 }
@@ -45,13 +48,17 @@ export class ThongTinChungPag {
   giaDnVat?: number;
   giaQdBtc: number;
   giaQdBtcVat : number;
+  giaQdBtcCu: number;
+  giaQdBtcCuVat : number;
   giaQdDcBtc: number;
   giaQdDcBtcVat : number;
-  giaQdTcdt : number;
-  giaQdTcdtVat : number;
+  giaQdTcdtCu : number;
+  giaQdTcdtCuVat : number;
   giaQdDcTcdt : number;
   giaQdDcTcdtVat : number;
   vat : number;
+  soQdBtc: string;
+  soQdTcdt: string;
 }
 
 export class PhuongPhapXacDinhGia {

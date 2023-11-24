@@ -1,10 +1,10 @@
-import { OldResponseData, ResponseData } from "./../interfaces/response";
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../environments/environment';
-import { BaseService } from './base.service';
-import { Observable } from 'rxjs';
-import { TonKhoDauNamLuongThuc } from '../models/ThongTinChiTieuKHNam';
+import {OldResponseData, ResponseData} from './../interfaces/response';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
+import {environment} from '../../environments/environment';
+import {BaseService} from './base.service';
+import {Observable} from 'rxjs';
+import {TonKhoDauNamLuongThuc} from '../models/ThongTinChiTieuKHNam';
 
 @Injectable({
   providedIn: 'root',
@@ -72,7 +72,7 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
 
   exportList(body: any): Observable<Blob> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/export/list`;
-    return this.httpClient.post(url, body, { responseType: 'blob' });
+    return this.httpClient.post(url, body, {responseType: 'blob'});
   }
 
   deleteData(id: any): Promise<any> {
@@ -97,12 +97,12 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
 
   downloadFile(): Observable<Blob> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/download/import-template`;
-    return this.httpClient.post(url, null, { responseType: 'blob' });
+    return this.httpClient.post(url, null, {responseType: 'blob'});
   }
 
   downloadFileKeHoach(body: any): Observable<Blob> {
     const url = `${environment.SERVICE_API}/qlnv-core/file/download`;
-    return this.httpClient.post(url, body, { responseType: 'blob' });
+    return this.httpClient.post(url, body, {responseType: 'blob'});
   }
 
   deleteMultiple(body: any): Promise<any> {
@@ -124,6 +124,7 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
     const url_ = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/dxkh-lcnt/${namKh}/${maDvi}`;
     return this.httpClient.get<any>(url_).toPromise();
   }
+
   loadThongTinChiTieuKeHoachTongCucGiao(body: any): Promise<any> {
     const url_ = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/chi-tieu-cua-tong-cuc`;
     return this.httpClient.post(url_, body).toPromise();
@@ -162,5 +163,30 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
   trangThaiHienThoi(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}/qlnv-luukho/hang-trong-kho/trang-thai-ht`;
     return this.httpClient.post(url, body).toPromise();
+  }
+
+  xemTruocCtKhNamLuongThuc(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/preview/ke-hoach-luong-thuc`;
+    return this._httpClient.post(url, body, {responseType: 'blob'}).toPromise();
+  }
+
+  xemTruocCtKhNamMuoi(body) {
+    const url = `${environment.SERVICE_API}/qlnv-report/ct-kh-preview/xem-truoc-ct-kh-muoi`;
+    return this._httpClient.post(url, body, {responseType: 'blob'}).toPromise();
+  }
+
+  xemTruocCtKhNamVatTu(body) {
+    const url = `${environment.SERVICE_API}/qlnv-report/ct-kh-preview/xem-truoc-ct-kh-vat-tu`;
+    return this._httpClient.post(url, body, {responseType: 'blob'}).toPromise();
+  }
+
+  xuatBaoCaoNhapVt(body: any): Promise<HttpResponse<Blob>> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/report-nhap-vt`;
+    return this.httpClient.post(url, body, {responseType: 'blob', observe: 'response'}).toPromise();
+  }
+
+  xemTruocCtKhNamTheoCuc(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/preview/xem-truoc-ct-kh-theo-cuc`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 }

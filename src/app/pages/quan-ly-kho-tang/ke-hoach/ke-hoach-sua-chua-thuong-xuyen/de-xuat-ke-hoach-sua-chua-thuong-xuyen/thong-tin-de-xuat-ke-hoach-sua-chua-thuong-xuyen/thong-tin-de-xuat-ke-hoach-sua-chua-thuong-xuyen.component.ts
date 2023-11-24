@@ -1,30 +1,30 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup, Validators } from "@angular/forms";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { DonviService } from "../../../../../../services/donvi.service";
-import { Base2Component } from "../../../../../../components/base2/base2.component";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormGroup, Validators} from "@angular/forms";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {DonviService} from "../../../../../../services/donvi.service";
+import {Base2Component} from "../../../../../../components/base2/base2.component";
 import dayjs from "dayjs";
-import { v4 as uuidv4 } from "uuid";
+import {v4 as uuidv4} from "uuid";
 import {
   DeXuatScThuongXuyenService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-thuong-xuyen/de-xuat-sc-thuong-xuyen.service";
-import { MESSAGE } from "../../../../../../constants/message";
-import { DanhMucService } from "../../../../../../services/danhmuc.service";
-import { chain } from "lodash";
+import {MESSAGE} from "../../../../../../constants/message";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
+import {chain} from "lodash";
 import {
   DialogThemMoiKehoachDanhmucChitietComponent
 } from "./dialog-them-moi-kehoach-danhmuc-chitiet/dialog-them-moi-kehoach-danhmuc-chitiet.component";
-import { STATUS } from "../../../../../../constants/status";
-import { DM_SC_TYPE } from "../../../../../../constants/config";
+import {STATUS} from "../../../../../../constants/status";
+import {DM_SC_TYPE} from "../../../../../../constants/config";
 import {
   DanhMucSuaChuaService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/danh-muc-kho/danh-muc-sua-chua.service";
-import { FILETYPE } from "../../../../../../constants/fileType";
-import { DialogTuChoiComponent } from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import {FILETYPE} from "../../../../../../constants/fileType";
+import {DialogTuChoiComponent} from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 
 @Component({
   selector: 'app-thong-tin-de-xuat-ke-hoach-sua-chua-thuong-xuyen',
@@ -46,7 +46,7 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
   listDmSuaChua: any[] = [];
   dataTableRes: any[] = [];
   listFile: any[] = []
-  suffixCv: string
+  suffixCv : string
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -70,7 +70,7 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
       trichYeu: [null, Validators.required],
       ngayDuyet: [null],
       lyDoTuChoi: [null],
-      trangThai: ['00'],
+      trangThai: [STATUS.DU_THAO],
       trangThaiTh: [STATUS.CHUA_TONG_HOP],
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
@@ -80,7 +80,7 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
 
 
   async ngOnInit() {
-    console.log(this.userInfo, 1211)
+    console.log(this.userInfo,1211)
     this.suffixCv = "/" + this.userInfo.MA_TCKT;
     await this.spinner.show();
     try {
@@ -108,6 +108,7 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.formData.patchValue({
             soCv: data.soCv ? data.soCv.split('/')[0] : null,
+            ngayDuyet: data.trangThai == STATUS.CHO_DUYET_LDTC ? dayjs().format('YYYY-MM-DDTHH:mm:ss') : data.ngayDuyet,
           })
           data.fileDinhKems.forEach(item => {
             if (item.fileType == FILETYPE.FILE_DINH_KEM) {
@@ -144,8 +145,8 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
       "type": DM_SC_TYPE.SC_THUONG_XUYEN,
       "maDvi": this.userInfo.MA_DVI,
       "namKh": namKh,
-      "trangThai": STATUS.CHUA_THUC_HIEN,
-      "paggingReq": { "limit": 10000, "page": 0 }
+      "trangThai" : STATUS.CHUA_THUC_HIEN,
+      "paggingReq": {"limit": 10000, "page": 0}
     }
     let res = await this.danhMucSuaChuaService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -194,11 +195,11 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
   convertListData() {
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable = chain(this.dataTable).groupBy("khoi").map((value, key) => ({
-        khoi: key,
-        tenKhoi: value[0].tenKhoi,
-        dataChild: value,
-        idVirtual: uuidv4()
-      })
+          khoi: key,
+          tenKhoi: value[0].tenKhoi,
+          dataChild: value,
+          idVirtual: uuidv4()
+        })
       ).value();
     }
     this.expandAll();
@@ -374,7 +375,7 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
           switch (this.formData.value.trangThai) {
             case STATUS.TU_CHOI_TP:
             case STATUS.TU_CHOI_LDC:
-            case STATUS.TU_CHOI_CBV:
+            case STATUS.TU_CHOI_CBV :
             case STATUS.DU_THAO: {
               trangThai = STATUS.CHO_DUYET_TP;
               break;
@@ -383,11 +384,11 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
               trangThai = STATUS.CHO_DUYET_LDC;
               break;
             }
-            case STATUS.CHO_DUYET_LDC: {
+            case STATUS.CHO_DUYET_LDC : {
               trangThai = STATUS.DA_DUYET_LDC;
               break;
             }
-            case STATUS.DA_DUYET_LDC: {
+            case STATUS.DA_DUYET_LDC : {
               trangThai = STATUS.DA_DUYET_CBV;
               break;
             }
@@ -395,7 +396,8 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
           let body = {
             id: this.formData.get("id").value,
             lyDo: null,
-            trangThai: trangThai
+            trangThai: trangThai,
+            ngayDuyet: this.formData.value.ngayDuyet
           };
           let res =
             await this.deXuatScThuongXuyenService.approve(
@@ -469,10 +471,10 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
   }
 
   sumSoLuong(data
-    :
-    any, row
-      :
-      string, type?: any
+               :
+               any, row
+               :
+               string, type ?: any
   ) {
     let sl = 0;
     if (!type) {
@@ -515,10 +517,10 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
   }
 
   deleteItem(index
-    :
-    any, y
-      :
-      any
+               :
+               any, y
+               :
+               any
   ) {
     this.modal.confirm({
       nzClosable: false,

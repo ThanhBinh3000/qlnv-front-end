@@ -22,6 +22,7 @@ export class TongHopKhSuaChuaThuongXuyenComponent extends Base2Component impleme
   selectedId: number = 0;
   isViewDetail: boolean;
   isDetail: boolean = false;
+  isApprove: boolean = false;
   listTrangThai: any[] = [
     {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
     {ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt lãnh đạo vụ'},
@@ -30,6 +31,8 @@ export class TongHopKhSuaChuaThuongXuyenComponent extends Base2Component impleme
     {ma: this.STATUS.TU_CHOI_LDTC, giaTri: 'Từ chối LĐ Tổng cục'},
     {ma: this.STATUS.DA_DUYET_LDTC, giaTri: 'Đã duyệt LĐ Tổng cục'},
   ];
+  openQdPd: boolean;
+  idQdPdKhDm: number;
 
   constructor(
     httpClient: HttpClient,
@@ -55,24 +58,36 @@ export class TongHopKhSuaChuaThuongXuyenComponent extends Base2Component impleme
       maTongHop: [''],
       noiDungTh: [''],
       trangThai: [''],
-      thoiGianTh: [''],
+      ngayThTu: [''],
+      ngayThDen: [''],
       loai : ['00']
     });
     this.filter();
   }
 
   filter() {
-    if (this.formData.value.thoiGianTh && this.formData.value.thoiGianTh.length > 0) {
-      this.formData.value.ngayThTu = this.formData.value.thoiGianTh[0];
-      this.formData.value.ngayThDen = this.formData.value.thoiGianTh[1];
-    }
+    // if (this.formData.value.thoiGianTh && this.formData.value.thoiGianTh.length > 0) {
+    //   this.formData.value.ngayThTu = this.formData.value.thoiGianTh[0];
+    //   this.formData.value.ngayThDen = this.formData.value.thoiGianTh[1];
+    // }
     this.search();
   }
 
-  redirectToChiTiet(id: number, isView?: boolean) {
+  redirectToChiTiet(id: number, isView?: boolean, isApprove?: boolean) {
     this.selectedId = id;
     this.isDetail = true;
+    this.isApprove = isApprove
     this.isViewDetail = isView ?? false;
   }
+  openQdPdModal(id: number) {
+    this.idQdPdKhDm = id;
+    this.openQdPd = true;
+  }
+
+  closeQdPdModal() {
+    this.idQdPdKhDm = null;
+    this.openQdPd = false;
+  }
+
 
 }

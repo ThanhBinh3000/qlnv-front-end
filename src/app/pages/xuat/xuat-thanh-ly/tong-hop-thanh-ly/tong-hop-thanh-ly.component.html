@@ -14,20 +14,18 @@
         </div>
         <div nz-col nzSpan="5">
           <nz-form-control>
-            <nz-form-label>Mã danh sách cần SC</nz-form-label>
+            <nz-form-label>Mã danh sách cần TL</nz-form-label>
             <nz-form-item>
-              <input nz-input formControlName="maSc" />
+              <input nz-input formControlName="maDanhSach" />
             </nz-form-item>
           </nz-form-control>
         </div>
         <div nz-col nzSpan="5">
           <nz-form-control>
-            <nz-form-label>
-              Chi cục DTNN
-            </nz-form-label>
+            <nz-form-label> {{ userService.isTongCuc() ? 'Cục DTNN KV' : 'Chi cục DTNN KV' }} </nz-form-label>
             <nz-form-item>
-              <nz-select formControlName="maCc" nzShowSearch nzAllowClear>
-                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              <nz-select formControlName="maDviSr" nzShowSearch nzAllowClear>
+                <nz-option *ngFor="let p of dsDonvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
               </nz-select>
             </nz-form-item>
           </nz-form-control>
@@ -38,12 +36,12 @@
             <nz-form-item>
               <div nz-row>
                 <div nz-col nzSpan="12" class="cus-start-date">
-                  <nz-date-picker [nzDisabledDate]="disabledNgayTu" nzFormat="dd/MM/yyyy" formControlName="ngayTu"
+                  <nz-date-picker [nzDisabledDate]="disabledNgayTu" nzFormat="dd/MM/yyyy" formControlName="ngayTaoTu"
                     nzPlaceHolder="Ngày bắt đầu">
                   </nz-date-picker>
                 </div>
                 <div nz-col nzSpan="12" class="cus-end-date">
-                  <nz-date-picker [nzDisabledDate]="disabledNgayDen" nzFormat="dd/MM/yyyy" formControlName="ngayDen"
+                  <nz-date-picker [nzDisabledDate]="disabledNgayDen" nzFormat="dd/MM/yyyy" formControlName="ngayTaoDen"
                     nzPlaceHolder="Ngày kết thúc">
                   </nz-date-picker>
                 </div>
@@ -86,8 +84,8 @@
           <th>Năm KH</th>
           <th>Mã danh sách cần TL</th>
           <th>Chi cục DTNN</th>
-          <th>Loại hàng</th>
-          <th>Chủng loại</th>
+          <th>Loại hàng hóa</th>
+          <th>Chủng loại hàng hóa</th>
           <th>Điểm kho</th>
           <th>Nhà/Ngăn/Lô kho</th>
           <th>Ngày nhập kho</th>
@@ -171,15 +169,12 @@
                   <td>{{data.xhTlDanhSachHdr.tenLoaiVthh}}</td>
                   <td>{{data.xhTlDanhSachHdr.tenCloaiVthh}}</td>
                   <td>{{data.xhTlDanhSachHdr.tenDiemKho}}</td>
-                  <td>
-                    {{data.xhTlDanhSachHdr.tenNhaKho}}/{{data.xhTlDanhSachHdr.tenNganKho}}/{{data.xhTlDanhSachHdr.tenLoKho}}
-                  </td>
+                  <td>{{data.xhTlDanhSachHdr.tenNhaKho}}/{{data.xhTlDanhSachHdr.tenNganKho}}/{{data.xhTlDanhSachHdr.tenLoKho}}</td>
                   <td>{{data.xhTlDanhSachHdr.ngayNhapKho | date : 'dd/MM/yyyy'}}</td>
                   <td>{{data.xhTlDanhSachHdr.slHienTai | number : '1.0-1' : 'vi_VN' }}</td>
                   <td>{{data.xhTlDanhSachHdr.slDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
                   <td>{{data.xhTlDanhSachHdr.slDaDuyet | number : '1.0-1' : 'vi_VN' }}</td>
-                  <td>{{data.xhTlDanhSachHdr.slDeXuat - data.xhTlDanhSachHdr.slDaDuyet | number : '1.0-1' : 'vi_VN' }}
-                  </td>
+                  <td>{{data.xhTlDanhSachHdr.slDeXuat - data.xhTlDanhSachHdr.slDaDuyet | number : '1.0-1' : 'vi_VN' }}</td>
                   <td>{{data.xhTlDanhSachHdr.donViTinh }}</td>
                   <td>{{data.xhTlDanhSachHdr.ngayDeXuat | date : 'dd/MM/yyyy'}}</td>
                   <td>{{data.xhTlDanhSachHdr.lyDo}}</td>

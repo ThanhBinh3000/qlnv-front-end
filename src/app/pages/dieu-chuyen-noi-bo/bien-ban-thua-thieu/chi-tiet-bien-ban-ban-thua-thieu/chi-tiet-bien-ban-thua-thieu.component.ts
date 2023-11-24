@@ -196,7 +196,7 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
     async loadListBaoCaoChiCuc() {
         try {
             const body = {
-                soQdDcCuc: this.formData.value.soQdDcCuc,
+                soQdinhCuc: this.formData.value.soQdDcCuc,
                 trangThai: STATUS.DA_HOAN_THANH
             }
             const res = await this.baoCaoDieuChuyenService.danhSach(body);

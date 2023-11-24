@@ -1,4 +1,51 @@
-::ng-deep .ant-checkbox-group {
-  display: inline-grid;
-  grid-template-columns: auto auto auto;
+::ng-deep {
+  .ant-checkbox-group {
+    display: inline-grid;
+    grid-template-columns: auto auto auto;
+  }
+
+  .ant-checkbox-group.grid-1 {
+    display: grid;
+    grid-template-columns: 1fr
+  }
+
+  .ant-radio-group.grid-1 {
+    display: grid;
+    grid-template-columns: 1fr
+  }
+
+  .border-label-left {
+    position: relative;
+    font-size: 16px;
+
+    label {
+      font-size: 16px !important;
+      margin-left: 10px !important;
+    }
+  }
+
+  .border-label-left::before {
+    content: "";
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
+    height: 24px;
+    border-left: 2px solid black;
+  }
+
+  .bg-bblm {
+    position: relative
+  }
+
+  .bg-bblm::before {
+    position: absolute;
+    content: "";
+    top: 15px;
+    left: 0;
+    bottom: 0;
+    right: 12px;
+    background-color: rgba(240, 240, 240, 0.7);
+    opacity: 0.7;
+  }
 }

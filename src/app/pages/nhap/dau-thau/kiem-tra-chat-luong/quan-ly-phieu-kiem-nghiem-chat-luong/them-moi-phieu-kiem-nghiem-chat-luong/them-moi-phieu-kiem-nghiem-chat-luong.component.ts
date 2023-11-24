@@ -37,7 +37,7 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { PREVIEW } from "../../../../../../constants/fileType";
 import printJS from "print-js";
 import { saveAs } from "file-saver";
-import { KhCnQuyChuanKyThuat } from "../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
+import {KhCnQuyChuanKyThuat} from "../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
 
 @Component({
   selector: 'app-them-moi-phieu-kiem-nghiem-chat-luong',

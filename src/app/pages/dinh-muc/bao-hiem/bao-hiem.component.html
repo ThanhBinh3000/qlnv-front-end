@@ -3,7 +3,7 @@
     <!-- (nzChange)="onChange($event)" -->
     <ul nz-menu nzMode="horizontal">
       <li nz-menu-item [nzSelected]="tabSelected == 'dexuatbaohiemchicuc'" (click)="selectTab('dexuatbaohiemchicuc')" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_DEXUATCC')">
-        {{userService.isChiCuc()  ? 'Đề xuất nhu cầu bảo hiểm ' : 'Đề xuất nhu cầu bảo hiểm của Chi cục' }}
+        Đề xuất nhu cầu bảo hiểm của Chi cục
       </li>
       <li nz-menu-item (click)="selectTab('tonghopdexuatnhucaubaohiemchicuc')" *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_THDEXUATCC')">
         {{userService.isCuc() ? 'Tổng hợp đề xuất nhu cầu bảo hiểm của Chi cục và đề xuất lên TC' : 'Đề xuất nhu cầu bảo hiểm Cục'}}

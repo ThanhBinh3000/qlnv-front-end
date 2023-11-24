@@ -1,26 +1,24 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import dayjs from 'dayjs';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
-import { STATUS } from "../../../../../../../constants/status";
-import {
-  TongHopPhuongAnGiaService
-} from "../../../../../../../services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
-import { DialogPagQdTcdtnnComponent } from "../dialog-pag-qd-tcdtnn/dialog-pag-qd-tcdtnn.component";
-import { DialogPagQdBtcComponent } from "../../quyet-dinh-gia-btc/dialog-pag-qd-btc/dialog-pag-qd-btc.component";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
+import {UserLogin} from 'src/app/models/userlogin';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {HelperService} from 'src/app/services/helper.service';
+import {QuyetDinhGiaTCDTNNService} from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
+import {UserService} from 'src/app/services/user.service';
+import {Globals} from 'src/app/shared/globals';
+import {DialogPagQdBtcComponent} from "../../quyet-dinh-gia-btc/dialog-pag-qd-btc/dialog-pag-qd-btc.component";
 import {
   QuyetDinhGiaCuaBtcService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
+import {saveAs} from "file-saver";
+import printJS from "print-js";
+import { cloneDeep } from 'lodash';
+import {DialogPagQdTcdtnnComponent} from "../dialog-pag-qd-tcdtnn/dialog-pag-qd-tcdtnn.component";
 
 @Component({
   selector: 'app-them-moi-qd-gia-tcdtnn-vt',
@@ -48,6 +46,13 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
   maQd: string;
   dataTable: any[] = [];
   fileDinhKem: any[] = [];
+  canCuPhapLys: any[] = [];
+  pdfSrc: any;
+  excelSrc: any;
+  pdfBlob: any;
+  excelBlob: any;
+  printSrc: any
+  showDlgPreview = false;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -77,7 +82,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
         loaiVthh: [null],
         cloaiVthh: [],
         tchuanCluong: [null],
-        soQdCanDc: [null],
+        soQdDc: [null],
         loaiDeXuat: ['00'],
       }
     );
@@ -112,9 +117,12 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
         trangThai: data.trangThai,
         ghiChu: data.ghiChu,
         soDeXuat: data.soToTrinh,
-        soToTrinh: data.soToTrinh
+        soQdDc: data.soQdDc,
+        soToTrinh: data.soToTrinh,
+        loaiDeXuat : data.loaiDeXuat
       });
       this.fileDinhKem = data.fileDinhKems;
+      this.canCuPhapLys = data.canCuPhapLys;
       this.arrThongTinGia = data.thongTinGiaVt
     }
   }
@@ -180,7 +188,11 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
       if (this.formData.value.loaiGia == 'LG03') {
         this.arrThongTinGia.forEach(item => {
           if (item.vat) {
-            item.giaQdTcdtVat = item.giaQdTcdt + item.giaQdTcdt * item.vat
+            if (this.formData.value.loaiDeXuat == '00') {
+              item.giaQdTcdtVat = item.giaQdTcdt + item.giaQdTcdt * item.vat
+            } else {
+              item.giaQdDcTcdtVat = item.giaQdDcTcdt + item.giaQdDcTcdt * item.vat
+            }
           }
         })
       }
@@ -191,6 +203,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
     body.pagType = this.pagType;
     body.thongTinGiaVt = this.arrThongTinGia;
     body.fileDinhKemReq = this.fileDinhKem;
+    body.canCuPhapLys = this.canCuPhapLys;
     let res;
     if (this.idInput > 0) {
       res = await this.quyetDinhGiaTCDTNNService.update(body);
@@ -235,7 +248,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
     if (!this.isView && this.formData.value.loaiGia != null) {
       let modalQD = this.modal.create({
         nzTitle: 'CHỌN SỐ TỜ TRÌNH HỒ SƠ PHƯƠNG ÁN GIÁ HOẶC SỐ TỜ TRÌNH ĐỀ XUẤT ĐIỀU CHỈNH GIÁ',
-        nzContent: DialogPagQdBtcComponent,
+        nzContent: DialogPagQdTcdtnnComponent,
         nzMaskClosable: false,
         nzClosable: false,
         nzWidth: '1200px',
@@ -247,18 +260,24 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
           loaiGia: this.formData.value.loaiGia,
         },
       });
-      modalQD.afterClose.subscribe((data) => {
+      modalQD.afterClose.subscribe(async (data) => {
         if (data) {
           let thRes = data.listDx;
           let body = {
             listId: thRes && thRes.length > 0 ? thRes.map(item => item.id) : []
           }
           this.formData.patchValue({
-            soToTrinh: thRes && thRes.length > 0 ? thRes.map(item => item.soDeXuat).toString() : []
+            soToTrinh : thRes && thRes.length > 0 ? thRes.map(item=> item.soDeXuat).toString() : [],
+            loaiDeXuat: data.formData.loaiQd,
           })
-          this.tongHopData(body);
+          await this.tongHopData(body);
         }
       });
+    }  else {
+      if (!this.isView) {
+        this.notification.warning(MESSAGE.WARNING, 'Vui lòng chọn loại giá!');
+        return;
+      }
     }
   }
 
@@ -269,17 +288,93 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         let dataTongHop = res.data;
         if (dataTongHop && dataTongHop.length > 0) {
-          this.arrThongTinGia = dataTongHop
-        }
+          const uniqueSoDeXuat = new Set<string>();
+          for (const record of dataTongHop) {
+            record.giaQdTcdt =  record.giaQdTcdtCu;
+            record.giaQdTcdtVat =  record.giaQdTcdtCuVat;
+            // Sử dụng trường "type" làm key trong Set để kiểm tra sự trùng lặp
+            if (!uniqueSoDeXuat.has(record.soQdTcdt)) {
+              // Nếu trường "type" chưa tồn tại trong Set, thêm giá trị "soDeXuat" vào Set
+              uniqueSoDeXuat.add(record.soQdTcdt ? record.soQdTcdt.toString() : "");
+            }
+          }
+          const uniqueSoDeXuatArray = Array.from(uniqueSoDeXuat);
+          this.formData.patchValue({
+            soQdDc : uniqueSoDeXuatArray && this.formData.value.loaiDeXuat == '01' ? uniqueSoDeXuatArray.join(', ') : ""
+          })
+          this.arrThongTinGia = cloneDeep(dataTongHop);
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
       this.spinner.hide();
+    }
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
     }
+  }
+
+  async previewQdGia() {
+    try {
+      this.spinner.show();
+      let body = cloneDeep(this.formData.value);
+      body.typeFile = "pdf";
+      body.trangThai = "01";
+      body.listDto = this.arrThongTinGia
+      body.pagType = this.pagType;
+      body.type = this.type;
+      body.ngayHieuLuc = this.formData.value.ngayHieuLuc ? dayjs(this.formData.value.ngayHieuLuc).format("DD/MM/YYYY") : "";
+      await this.quyetDinhGiaCuaBtcService.previewQdGia(body).then(async s => {
+        this.pdfBlob = s;
+        this.pdfSrc = await new Response(s).arrayBuffer();
+      });
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  async downloadExcel() {
+    try {
+      this.spinner.show();
+      let body = cloneDeep(this.formData.value);
+      body.typeFile = "xlsx";
+      body.trangThai = "01";
+      body.listDto = this.arrThongTinGia
+      body.pagType = this.pagType;
+      body.type = this.type;
+      body.ngayHieuLuc = this.formData.value.ngayHieuLuc ? dayjs(this.formData.value.ngayHieuLuc).format("DD/MM/YYYY") : "";
+      await this.quyetDinhGiaCuaBtcService.previewQdGia(body).then(async s => {
+        this.excelBlob = s;
+        this.excelSrc = await new Response(s).arrayBuffer();
+        saveAs(this.excelBlob, "quyet_dinh_gia_tcdtnn.xlsx");
+      });
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  async downloadPdf() {
+    saveAs(this.pdfBlob, 'quyet_dinh_gia_tcdtnn.pdf');
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+
+  printPreview() {
+    const blobUrl = URL.createObjectURL(this.pdfBlob);
+    printJS({
+      printable: blobUrl,
+      type: 'pdf',
+      base64: false
+    })
   }
 
 

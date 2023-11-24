@@ -12,6 +12,7 @@ import { STATUS } from '../../../../../constants/status';
 import { DanhMucCongCuDungCuService } from '../../../../../services/danh-muc-cong-cu-dung-cu.service';
 import { DxChiCucPvcService } from '../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/dx-chi-cuc-pvc.service';
 import { AMOUNT, AMOUNT_ONE_DECIMAL, AMOUNT_TWO_DECIMAL } from '../../../../../Utility/utils';
+import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 
 @Component({
   selector: 'app-them-moi-dx-chi-cuc-pvc',
@@ -24,7 +25,6 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
   rowItem: PvcDxChiCucCtiet = new PvcDxChiCucCtiet();
   dataEdit: { [key: string]: { edit: boolean; data: PvcDxChiCucCtiet } } = {};
   listCcdc: any[] = [];
-  listCtieuKh: any[] = [];
   maQd: string;
   amount = AMOUNT_ONE_DECIMAL;
 
@@ -36,6 +36,7 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
     modal: NzModalService,
     private dxChiCucService: DxChiCucPvcService,
     private danhMucCongCuDungCuService: DanhMucCongCuDungCuService,
+    private ctieuKhService: ChiTieuKeHoachNamCapTongCucService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, dxChiCucService);
     super.ngOnInit();
@@ -46,7 +47,7 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
       soCv: [null, Validators.required],
       ngayKy: [null, Validators.required],
       namKeHoach: [dayjs().get('year'), Validators.required],
-      soQdGiaoCt: [null],
+      soQdGiaoCt: [null, Validators.required],
       trichYeu: [null],
       ghiChu: [null],
       trangThai: ['00'],
@@ -64,10 +65,11 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
       this.maQd = '/' + this.userInfo.DON_VI.tenVietTat + '-TCKT';
       await Promise.all([
         this.getAllDmCcdc(),
-        this.changeNamKh(this.formData.value.namKeHoach),
       ]);
-      if (this.id) {
+      if (this.id > 0) {
         this.detail(this.id);
+      } else {
+        this.changeNamKh(this.formData.value.namKeHoach)
       }
       this.spinner.hide();
     } catch (e) {
@@ -128,17 +130,36 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
   async pheDuyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.DU_THAO:
-      case STATUS.TUCHOI_CB_CUC: {
-        trangThai = STATUS.DA_KY;
-        break;
-      }
       case STATUS.DA_KY: {
         trangThai = STATUS.DADUYET_CB_CUC;
       }
     }
     await this.approve(this.id, trangThai, 'Bạn có chắc chắn muốn duyệt?');
   }
+
+  async saveAndSend(status: string, msg: string, msgSuccess?: string) {
+    try {
+      if (this.dataTable.length <= 0) {
+        this.notification.error(MESSAGE.ERROR, 'Bạn chưa nhập chi tiết đề xuất');
+        return;
+      }
+      this.helperService.markFormGroupTouched(this.formData);
+      if (this.formData.invalid) {
+        return;
+      }
+      if (this.fileDinhKem && this.fileDinhKem.length > 0) {
+        this.formData.value.fileDinhKems = this.fileDinhKem;
+      }
+      this.formData.value.listQlDinhMucPvcDxCcdcDtl = this.dataTable;
+      this.formData.value.maDvi = this.userInfo.MA_DVI;
+      this.formData.value.capDvi = this.userInfo.CAP_DVI;
+      this.formData.value.soCv = this.formData.value.soCv + this.maQd;
+      await super.saveAndSend(this.formData.value, status, msg, msgSuccess);
+    } catch (error) {
+      console.error("Lỗi khi lưu và gửi dữ liệu:", error);
+    }
+  }
+
 
   async themMoiCtiet() {
     let msgRequired = this.required(this.rowItem);
@@ -290,30 +311,33 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
   }
 
   async changeNamKh(event) {
-    if (this.userService.isChiCuc()) {
-      let res = await this.dxChiCucService.getCtieuKhoach(event);
+    if (event && !this.isView && this.userService.isChiCuc()) {
+      let res = await this.ctieuKhService.loadThongTinChiTieuKeHoachTheoNamVaDonVi(event, this.userInfo.MA_DVI.substring(0,6));
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
-          this.listCtieuKh = [];
-          this.listCtieuKh.push(res.data);
+          this.formData.patchValue({
+            soQdGiaoCt : res.data?.soQuyetDinh
+          })
         }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-        return;
       }
+      // else {
+      //   this.notification.warning(MESSAGE.WARNING, 'Chưa có chỉ tiêu KH năm Cục giao, bạn vẫn có thể đề xuất nhu cầu nếu muốn!');
+      //   return;
+      // }
     }
   }
-
-  changeSoQdGiaoCt(event) {
-
-  }
-
-  protected readonly AMOUNT = AMOUNT;
 
   changeSlTieuChuan(event: number) {
     if (event) {
-      this.rowItem.nhuCauTb = event - (this.rowItem.slHienCo + this.rowItem.slNhapThem);
+      this.rowItem.nhuCauTb = event - (this.rowItem.slHienCo + this.rowItem.slNhapThem + this.rowItem.slThuHoiTaiSuDung);
     }
+  }
+
+  checkCbCuc() {
+    if(this.formData.value.trangThai == STATUS.DA_DUYET_LDC && this.userService.isTongCuc()){
+      return true;
+    }
+    return false;
   }
 }
 
@@ -329,8 +353,11 @@ export class PvcDxChiCucCtiet {
   maCcdc: string;
   moTaCcdc: string;
   donViTinh: string;
+  slChiTieuGao: number = 0;
+  slChiTieuThoc: number = 0;
   slHienCo: number = 0;
   slNhapThem: number = 0;
+  slThuHoiTaiSuDung: number = 0;
   slTieuChuan: number = 0;
   nhuCauTb: number = 0;
   ghiChu: number;

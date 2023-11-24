@@ -41,13 +41,13 @@
                             </div>
                         </div>
                     </div>
-                    <!--                    <div nz-col nzSpan="4">-->
-                    <!--                        <label>Trạng thái tổng hợp</label>-->
-                    <!--                        <nz-select formControlName="trangThaiTh">-->
-                    <!--                            <nz-option *ngFor="let p of listTrangThaiTh" [nzValue]="p.ma"-->
-                    <!--                                [nzLabel]="p.giaTri"></nz-option>-->
-                    <!--                        </nz-select>-->
-                    <!--                    </div>-->
+<!--                    <div nz-col nzSpan="4">-->
+<!--                        <label>Trạng thái tổng hợp</label>-->
+<!--                        <nz-select formControlName="trangThaiTh">-->
+<!--                            <nz-option *ngFor="let p of listTrangThaiTh" [nzValue]="p.ma"-->
+<!--                                [nzLabel]="p.giaTri"></nz-option>-->
+<!--                        </nz-select>-->
+<!--                    </div>-->
                 </div>
             </form>
             <div nz-col class="cangiua group-button-search">
@@ -190,7 +190,7 @@
                                 [nzDisabled]="data.trangThai != '00'"></label>
                         </td>
                         <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-                        <td>{{ data.soQd }}</td>
+                        <td>{{ data?.hhQdPheduyetKhMttHdr.isChange ? data?.hhQdPheduyetKhMttHdr.soQdDc : data?.hhQdPheduyetKhMttHdr.soQd }}</td>
                         <td>{{ data.namKh }}</td>
                         <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
                         <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
@@ -201,7 +201,8 @@
                         <td>{{ data.tenPthucMuaTrucTiep}}</td>
                         <td>{{ data.tenTrangThai }}</td>
                         <td class="text-left">
-                            <a (click)="xemChiTiet(data.id, true)">
+                            <a (click)="xemChiTiet(data.id, true)"
+                               >
                                 <i class="fa fa-eye" title="Xem chi tiết"></i>
                             </a>
                         </td>

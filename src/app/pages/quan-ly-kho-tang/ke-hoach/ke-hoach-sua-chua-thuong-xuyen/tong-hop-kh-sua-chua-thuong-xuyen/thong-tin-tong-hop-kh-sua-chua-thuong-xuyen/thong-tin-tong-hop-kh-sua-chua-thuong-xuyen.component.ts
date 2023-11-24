@@ -1,32 +1,32 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { UserLogin } from "../../../../../../models/userlogin";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { KeHoachXayDungTrungHan } from "../../../../../../models/QuyHoachVaKeHoachKhoTang";
-import { Router } from "@angular/router";
-import { chain } from "lodash";
-import { v4 as uuidv4 } from "uuid";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { UserService } from "../../../../../../services/user.service";
-import { Globals } from "../../../../../../shared/globals";
-import { DanhMucService } from "../../../../../../services/danhmuc.service";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { HelperService } from "../../../../../../services/helper.service";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {UserLogin} from "../../../../../../models/userlogin";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {KeHoachXayDungTrungHan} from "../../../../../../models/QuyHoachVaKeHoachKhoTang";
+import {Router} from "@angular/router";
+import {chain} from "lodash";
+import {v4 as uuidv4} from "uuid";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {UserService} from "../../../../../../services/user.service";
+import {Globals} from "../../../../../../shared/globals";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {HelperService} from "../../../../../../services/helper.service";
 import dayjs from "dayjs";
-import { MESSAGE } from "../../../../../../constants/message";
-import { DialogTuChoiComponent } from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
-import { STATUS } from 'src/app/constants/status';
+import {MESSAGE} from "../../../../../../constants/message";
+import {DialogTuChoiComponent} from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import {STATUS} from 'src/app/constants/status';
 import {
   DeXuatScThuongXuyenService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-thuong-xuyen/de-xuat-sc-thuong-xuyen.service";
 import {
   DialogThemMoiKehoachDanhmucChitietComponent
 } from "../../de-xuat-ke-hoach-sua-chua-thuong-xuyen/thong-tin-de-xuat-ke-hoach-sua-chua-thuong-xuyen/dialog-them-moi-kehoach-danhmuc-chitiet/dialog-them-moi-kehoach-danhmuc-chitiet.component";
-import { DM_SC_TYPE } from "../../../../../../constants/config";
+import {DM_SC_TYPE} from "../../../../../../constants/config";
 import {
   DanhMucSuaChuaService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/danh-muc-kho/danh-muc-sua-chua.service";
-import { FILETYPE } from "../../../../../../constants/fileType";
+import {FILETYPE} from "../../../../../../constants/fileType";
 import {
   TongHopScThuongXuyenService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-thuong-xuyen/tong-hop-sc-thuong-xuyen.service";
@@ -41,6 +41,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
   @Input() isViewQd: boolean;
   @Input() typeHangHoa: string;
   @Input() idInput: number;
+  @Input() isApprove: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
   expandSet = new Set<number>();
@@ -94,7 +95,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
       soToTrinh: [null, Validators.required],
       soQuyetDinh: [null],
       ngayKy: [null],
-      trangThai: ["00"],
+      trangThai: [STATUS.DU_THAO],
       tenTrangThai: ["Dự thảo"],
       loai: ["00", Validators.required],
       lyDoTuChoi: []
@@ -102,6 +103,9 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
   }
 
   async ngOnInit() {
+    console.log(this.isTongHop, "isTongHop")
+    console.log(this.isViewDetail, "isViewDetail")
+    console.log(this.isViewQd, "isViewQd")
     this.userInfo = this.userService.getUserLogin();
     this.maTt = "/TTr-TCDT";
     this.soQd = "/QĐ-TCDT";
@@ -136,6 +140,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
         this.helperService.bidingDataInFormGroup(this.formData, data);
         this.formData.patchValue({
           soToTrinh: data.soToTrinh ? data.soToTrinh.split('/')[0] : null,
+          soQuyetDinh: data.soQuyetDinh ? data.soQuyetDinh.split('/')[0] : null,
         })
         data.fileDinhKems.forEach(item => {
           if (item.fileType == FILETYPE.FILE_DINH_KEM) {
@@ -374,7 +379,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
       "trangThai": STATUS.DA_DUYET_CBV,
       "trangThaiTh": STATUS.CHUA_TONG_HOP,
       "capDvi": 1,
-      "paggingReq": { "limit": 10000, "page": 0 }
+      "paggingReq": {"limit": 10000, "page": 0}
     };
     let res = await this.deXuatScThuongXuyenService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -384,6 +389,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
       this.dataTable = [];
       this.dataTableReq = [];
       let listDataDx = res.data;
+      console.log(listDataDx,"let listDataDx")
       if (listDataDx && listDataDx.content.length > 0) {
         this.isTongHop = true;
         this.listDx = listDataDx.content;
@@ -417,7 +423,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
     let body = {
       "type": DM_SC_TYPE.SC_THUONG_XUYEN,
       "namKh": this.formData.value.namKh,
-      "paggingReq": { "limit": 10000, "page": 0 }
+      "paggingReq": {"limit": 10000, "page": 0}
     }
     let res = await this.danhMucSuaChuaService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -461,7 +467,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
   }
 
   updateItemDetail(data: any, type: string, idx: number, list?: any) {
-    if (!this.isViewDetail) {
+    if (!this.isViewDetail || (this.isViewDetail && this.formData.value.trangThai == STATUS.CHO_DUYET_LDV) || (this.isViewDetail && this.formData.value.trangThai == STATUS.CHO_DUYET_LDTC)) {
       let modalQD = this.modal.create({
         nzTitle: "Chỉnh sửa kế hoạch, danh mục chi tiết",
         nzContent: DialogThemMoiKehoachDanhmucChitietComponent,
@@ -473,6 +479,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
           dataTable: list && list.dataChild ? list.dataChild : [],
           dataInput: data,
           type: type,
+          typeKh: 'TH',
           listDmSuaChua: this.listDmSuaChua,
           dataHeader: this.formData.value,
         }
@@ -524,13 +531,13 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
           let rs = chain(value)
             .groupBy("khoi")
             .map((v, k) => {
-              return {
-                idVirtual: uuidv4(),
-                khoi: k,
-                tenKhoi: v[0].tenKhoi,
-                dataChild: v
-              };
-            }
+                return {
+                  idVirtual: uuidv4(),
+                  khoi: k,
+                  tenKhoi: v[0].tenKhoi,
+                  dataChild: v
+                };
+              }
             ).value();
           return {
             idVirtual: uuidv4(),
@@ -554,7 +561,8 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
         sl = sum;
       }
     } else {
-      const sum = this.dataTableReq.reduce((prev, cur) => {
+      let arr = this.dataTableReq.filter(item => item.tenDvi == this.itemSelected.tenDvi);
+      const sum = arr.reduce((prev, cur) => {
         prev += cur[row];
         return prev;
       }, 0);

@@ -10,6 +10,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ChitietThComponent} from "../../../sua-chua/tong-hop/chitiet-th/chitiet-th.component";
 import {TheoDoiBqDtlService} from "../../../../services/luu-kho/theoDoiBqDtl.service";
 import { chain } from 'lodash';
+import {DanhMucService} from "../../../../services/danhmuc.service";
+import {DonviService} from "../../../../services/donvi.service";
 
 @Component({
   selector: 'app-table-danh-muc-bpxl',
@@ -18,6 +20,12 @@ import { chain } from 'lodash';
 })
 export class TableDanhMucBpxlComponent extends Base3Component implements OnInit {
 
+  listLoaiHangHoa: any[] = [];
+  listChungLoaiHangHoa: any[] = [];
+  dsDiemKho: any = [];
+  dsNhaKho: any = [];
+  dsNganKho: any = [];
+  dsLoKho: any = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -27,14 +35,20 @@ export class TableDanhMucBpxlComponent extends Base3Component implements OnInit 
     route: ActivatedRoute,
     router: Router,
     private theoDoiBqDtlService: TheoDoiBqDtlService,
+    private danhMucService: DanhMucService,
+    private donviService: DonviService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, theoDoiBqDtlService);
     this.formData = this.fb.group({
       nam: null,
-      maSc: null,
-      maCc: null,
+      loaiVthh: null,
+      cloaiVthh: null,
       ngayTu: null,
       ngayDen: null,
+      maDiemKho: null,
+      maNhaKho: null,
+      maNganKho: null,
+      maLoKho : null,
       bienPhapXl : null,
       vaiTro : 'CBTHUKHO',
       trangThai : this.STATUS.DA_HOAN_THANH
@@ -48,6 +62,8 @@ export class TableDanhMucBpxlComponent extends Base3Component implements OnInit 
     await Promise.all([
       this.bindingParam(),
     ])
+    this.loadDsHangHoa();
+    this.loadDsDiemKho();
     await this.buildTableView()
     await this.spinner.hide();
   }
@@ -91,7 +107,7 @@ export class TableDanhMucBpxlComponent extends Base3Component implements OnInit 
         break;
       case '/luu-kho/hang-trong-kho/da-het-han':
         typeBpxl = '8';
-        this.title = 'sửa chữa'
+        this.title = 'đã hết hạn bảo hành, chưa hết hạn lưu kho'
         vaiTro = null;
         trangThai = null;
         break;
@@ -142,6 +158,68 @@ export class TableDanhMucBpxlComponent extends Base3Component implements OnInit 
 
   showDetail(data) {
     this.router.navigate(['luu-kho/theo-doi-bao-quan/chi-tiet', data.idHdr]);
+  }
+
+  async loadDsHangHoa() {
+    let res = await this.danhMucService.getAllVthhByCap("2");
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        this.listLoaiHangHoa = res.data
+      }
+    }
+  }
+
+  async onChangeLoaiVthh(event) {
+    if (event) {
+      this.formData.patchValue({
+        tenHH: null
+      })
+      let body = {
+        "str": event
+      };
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
+      this.listChungLoaiHangHoa = [];
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.listChungLoaiHangHoa = res.data;
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }
+  }
+
+  async loadDsDiemKho() {
+    let res = await this.donviService.layTatCaDonViByLevel(4);
+    if (res && res.data) {
+      this.dsDiemKho = res.data
+      this.dsDiemKho = this.dsDiemKho.filter(item => item.type != "PB" && item.maDvi.startsWith(this.userInfo.MA_DVI))
+    }
+    if(this.userService.isChiCuc()){
+      this.formData.patchValue({
+        maDviSr : this.userInfo.MA_DVI
+      })
+    }
+  }
+
+  async changeDonVi(event: any,level) {
+    if (event) {
+      let res = await this.donviService.layTatCaDonViByLevel(level);
+      if (res && res.data) {
+        if(level == 5){
+          this.dsNhaKho = res.data
+          this.dsNhaKho = this.dsNhaKho.filter(item => item.type != "PB" && item.maDvi.startsWith(event))
+        }
+        if(level == 6){
+          this.dsNganKho = res.data
+          this.dsNganKho = this.dsNganKho.filter(item => item.type != "PB" && item.maDvi.startsWith(event))
+        }
+        if(level == 7){
+          this.dsLoKho = res.data
+          this.dsLoKho = this.dsLoKho.filter(item => item.type != "PB" && item.maDvi.startsWith(event))
+        }
+      }
+    }
   }
 
 }

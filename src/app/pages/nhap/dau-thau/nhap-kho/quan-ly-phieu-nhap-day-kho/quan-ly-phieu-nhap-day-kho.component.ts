@@ -458,10 +458,10 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
     }
   }
 
-  hienThiXem(data) {
+  hienThiXem(data){
     if (this.loaiVthh.startsWith('02')) {
       if (this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBKTNK_XEM') && data != null) {
-        if (this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBKTNK_THEM') &&
+        if(this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBKTNK_THEM') &&
           (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDCC
             || data.trangThai == STATUS.TU_CHOI_KT || data.trangThai == STATUS.TU_CHOI_KTVBQ)) {
           return false;
@@ -476,9 +476,9 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
       return false;
     } else {
       if (this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_XEM') && data != null) {
-        if (this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_THEM') &&
+        if(this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_THEM') &&
           (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDCC
-            || data.trangThai == STATUS.TU_CHOI_KT || data.trangThai == STATUS.TU_CHOI_KTVBQ)) {
+          || data.trangThai == STATUS.TU_CHOI_KT || data.trangThai == STATUS.TU_CHOI_KTVBQ)) {
           return false;
         } else if ((this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_DUYET_LDCCUC') && data.trangThai == STATUS.CHO_DUYET_LDCC)
           || (this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_DUYET_KETOAN') && data.trangThai == STATUS.CHO_DUYET_KT)
@@ -509,7 +509,7 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
     return false;
   }
 
-  hienThiDuyet(data) {
+  hienThiDuyet(data){
     if (this.loaiVthh.startsWith('02')) {
       if ((this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBKTNK_DUYET_LDCCUC') && data.trangThai == STATUS.CHO_DUYET_LDCC)
         || (this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBKTNK_DUYET_KETOAN') && data.trangThai == STATUS.CHO_DUYET_KT)

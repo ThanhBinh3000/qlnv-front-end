@@ -14,15 +14,16 @@ import {
 } from "./thong-bao-ket-qua/them-moi-thong-bao-ket-qua/them-moi-thong-bao-ket-qua.component";
 import {DanhSachHangTieuHuyComponent} from "./danh-sach-hang-tieu-huy/danh-sach-hang-tieu-huy.component";
 import {TongHopTieuHuyComponent} from "./tong-hop-tieu-huy/tong-hop-tieu-huy.component";
-import {
-  ChiTietTongHopTieuHuyComponent
-} from "./tong-hop-tieu-huy/chi-tiet-tong-hop-tieu-huy/chi-tiet-tong-hop-tieu-huy.component";
+
 import {HoSoTieuHuyComponent} from "./ho-so-tieu-huy/ho-so-tieu-huy.component";
 import {ChiTietHoSoTieuHuyComponent} from "./ho-so-tieu-huy/chi-tiet-ho-so-tieu-huy/chi-tiet-ho-so-tieu-huy.component";
 import {BaoCaoKetQuaTieuHuyComponent} from "./bao-cao-ket-qua-tieu-huy/bao-cao-ket-qua-tieu-huy.component";
 import {
   ThemMoiBaoCaoKetQuaTieuHuyComponent
 } from "./bao-cao-ket-qua-tieu-huy/them-moi-bao-ket-qua-tieu-huy/them-moi-bao-cao-ket-qua-tieu-huy.component";
+import { ThemmoiThThComponent } from './tong-hop-tieu-huy/themmoi-th-th/themmoi-th-th.component';
+import { ChitietThThComponent } from './tong-hop-tieu-huy/chitiet-th-th/chitiet-th-th.component';
+import { ChiTietDsThComponent } from './danh-sach-hang-tieu-huy/chi-tiet-ds-th/chi-tiet-ds-th.component';
 
 
 
@@ -30,7 +31,6 @@ import {
   declarations: [
     DanhSachHangTieuHuyComponent,
     TongHopTieuHuyComponent,
-    ChiTietTongHopTieuHuyComponent,
     HoSoTieuHuyComponent,
     ChiTietHoSoTieuHuyComponent,
     QuyetDinhTieuHuyComponent,
@@ -39,6 +39,9 @@ import {
     ThemMoiThongBaoKetQuaComponent,
     BaoCaoKetQuaTieuHuyComponent,
     ThemMoiBaoCaoKetQuaTieuHuyComponent,
+    ThemmoiThThComponent,
+    ChitietThThComponent,
+    ChiTietDsThComponent,
   ],
   imports: [
     CommonModule,
@@ -52,7 +55,6 @@ import {
   exports: [
     DanhSachHangTieuHuyComponent,
     TongHopTieuHuyComponent,
-    ChiTietTongHopTieuHuyComponent,
     HoSoTieuHuyComponent,
     ChiTietHoSoTieuHuyComponent,
     QuyetDinhTieuHuyComponent,

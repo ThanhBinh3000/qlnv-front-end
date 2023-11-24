@@ -20,7 +20,7 @@ import { PhieuKiemNghiemChatLuongService } from './../../../../../../../services
 import {
   QuyetDinhGiaoNvCuuTroService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-cap/QuyetDinhGiaoNvCuuTro.service";
-import { KhCnQuyChuanKyThuat } from "../../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
+import {KhCnQuyChuanKyThuat} from "../../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
 
 @Component({
   selector: 'app-them-moi-phieu-kiem-nghiem-chat-luong',
@@ -271,7 +271,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       if (!isChiTiet) {
         let [dmTieuChuan] = await Promise.all([this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(data.cloaiVthh)])
         if (dmTieuChuan.data) {
-          console.log(dmTieuChuan.data, "dmTieuChuan.data")
+          console.log(dmTieuChuan.data,"dmTieuChuan.data")
           this.dataTableChiTieu = Array.isArray(dmTieuChuan.data) ? dmTieuChuan.data.map(element => ({
             edit: false,
             chiSoXuat: element.mucYeuCauXuat,

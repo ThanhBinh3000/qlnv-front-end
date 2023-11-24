@@ -5,7 +5,7 @@
         <div nz-row [nzGutter]="24">
           <div nz-col [nzSpan]="3">
             <nz-form-item class="form-item">
-              <nz-form-label nzFor="nam-qd">Năm Quyết Định</nz-form-label>
+              <nz-form-label nzFor="nam-qd">Năm kế hoạch</nz-form-label>
               <nz-form-control>
                 <nz-select formControlName="namQd" id="nam-qd">
                   <nz-option nzValue="{{item}}" nzLabel="{{item}}" *ngFor="let item of dsNam">
@@ -16,7 +16,7 @@
           </div>
           <div nz-col [nzSpan]="4">
             <nz-form-item class="form-item">
-              <nz-form-label nzFor="so-qd">Số Quyết Định</nz-form-label>
+              <nz-form-label nzFor="so-qd">Số quyết định</nz-form-label>
               <nz-form-control>
                 <nz-input-group id="so-qd">
                   <input type="text" nz-input formControlName="soQd" />
@@ -26,7 +26,7 @@
           </div>
           <div nz-col [nzSpan]="6">
             <nz-form-item class="form-item">
-              <nz-form-label nzFor="ngay-qd">Ngày Quyết Định</nz-form-label>
+              <nz-form-label nzFor="ngay-qd">Ngày quyết định</nz-form-label>
               <nz-form-control>
                 <nz-form-control>
                   <nz-range-picker formControlName="ngayQd" nzFormat="dd/MM/yyyy">
@@ -60,7 +60,7 @@
     </nz-card>
 
     <div class="group-button">
-      <h3>Danh sách nghị quyết của Bộ tài chính</h3>
+      <h3 class='text-uppercase'>Danh sách quyết định của Bộ tài chính</h3>
       <div class="buttons">
         <button *ngIf=" userService.isTongCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_BTC_XOA')"
           type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
@@ -88,9 +88,9 @@
             <th width="45px" [nzChecked]="allChecked" [nzIndeterminate]="indeterminate"
               (nzCheckedChange)="onAllChecked($event)"></th>
             <th class="text-center" style="width: 2%;">STT</th>
-            <th style="width: 10%;">Số QĐ</th>
-            <th style="width: 10%;">Năm QĐ</th>
-            <th style="width: 10%;">Ngày QĐ</th>
+            <th style="width: 10%;">Số quyết định</th>
+            <th class="text-center" style="width: 10%;">Năm kế hoạch</th>
+            <th class="text-center" style="width: 10%;">Ngày quyết định</th>
             <th style="width: 25%;">Trích yếu</th>
             <th style="width: 10%;">Trạng thái</th>
             <th class="text-center" width="width: 5%;">Hành động</th>
@@ -98,7 +98,7 @@
               <div class="container">
                 <div class="header">
                   <h3 class="first">Bộ</h3>
-                  <h3 class="second">Kế hoạch năm {{ namDataSelect }} (tỷ đồng)</h3>
+                  <h3 class="second">Kế hoạch năm {{ namDataSelect }} (triệu đồng)</h3>
                 </div>
                 <div class="content" *ngFor="let data of listBoNganh">
                   <div class="content-item">
@@ -154,16 +154,16 @@
             <th></th>
           </tr>
           <tr *ngFor="let data of rowSelectionTable.data; let idx = index" (click)="getDetailRow(data.id)">
-            <td [nzChecked]="setOfCheckedId.has(data.id)" [nzDisabled]="data.trangThai != '00'"
+            <td [nzChecked]="setOfCheckedId.has(data.id)" [nzDisabled]="data.trangThai != STATUS.DANG_NHAP_DU_LIEU"
               (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
             <td class="text-center">{{(page-1)*pageSize+idx+1}}</td>
             <td>{{ data.soQd }}</td>
-            <td>{{ data.namQd }}</td>
-            <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
+            <td class="text-center">{{ data.namQd }}</td>
+            <td class="text-center">{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.trichYeu }}</td>
             <td>{{ data.tenTrangThai }}</td>
-            <td style="text-align: left; white-space: nowrap;">
-              <a *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_BTC_XEM')"
+            <td style="text-align: center; white-space: nowrap;">
+              <a *ngIf="data.trangThai != STATUS.DANG_NHAP_DU_LIEU && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_BTC_XEM')"
                 (click)="viewDetail(data.id, true)">
                 <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>

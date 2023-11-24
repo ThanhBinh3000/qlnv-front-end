@@ -4,14 +4,14 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <!--    <button-->
-    <!--      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV ) &&  userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM') &&  !userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_BANHANH') && !isView"-->
-    <!--      type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">-->
-    <!--      <i class="icon htvbdh_tcdt_guiduyet"></i>-->
-    <!--      <span>Lưu và gửi duyệt</span>-->
-    <!--    </button>-->
+<!--    <button-->
+<!--      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV ) &&  userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM') &&  !userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_BANHANH') && !isView"-->
+<!--      type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">-->
+<!--      <i class="icon htvbdh_tcdt_guiduyet"></i>-->
+<!--      <span>Lưu và gửi duyệt</span>-->
+<!--    </button>-->
     <button *ngIf="formData.value.trangThai == STATUS.BAN_HANH && formData.value.lastest == false" type="button"
-      class="btn btn-sub xanh-nhat" (click)="taoQdinh()">
+            class="btn btn-sub xanh-nhat" (click)="taoQdinh()">
       <i class="icon htvbdh_tcdt_tao-qd"></i>
       <span>Tạo quyết định giao NV nhập hàng</span>
     </button>
@@ -21,9 +21,8 @@
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>
-    <button
-      *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isAccessPermisson('NHDTQG_NK_QDNH_DUYETLDV') && !isView"
-      type="button" class="btn btn-sub do" (click)="tuChoi()">
+    <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isAccessPermisson('NHDTQG_NK_QDNH_DUYETLDV') && !isView" type="button"
+      class="btn btn-sub do" (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi "></i>
       <span>Từ chối</span>
     </button>
@@ -277,6 +276,7 @@
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
 </ng-template>
 <div *ngIf="isQuyetDinh" class="chi-tiet">
-  <app-themmoi-qdinh-nhap-xuat-hang-khac [idQdPd]="idInput" [loaiVthh]="loaiVthh" (showListEvent)="showTongHop()">
+  <app-themmoi-qdinh-nhap-xuat-hang-khac [idQdPd]="idInput" [loaiVthh]="loaiVthh"
+                                  (showListEvent)="showTongHop()">
   </app-themmoi-qdinh-nhap-xuat-hang-khac>
 </div>

@@ -20,4 +20,15 @@ export class KtKhSuaChuaBtcService extends BaseService{
     const url = `${environment.SERVICE_API}${this.GATEWAY}/kt-kh-sc-lon/quyet-dinh/danh-sach-dm-du-an`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
+
+  getQdBtcTaoThongBao(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/kt-kh-sc-lon/quyet-dinh/ds-qd-btc-tao-tb`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
+  getListTaoDc(body){
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/kt-kh-sc-lon/quyet-dinh/ds-tao-dc`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
 }

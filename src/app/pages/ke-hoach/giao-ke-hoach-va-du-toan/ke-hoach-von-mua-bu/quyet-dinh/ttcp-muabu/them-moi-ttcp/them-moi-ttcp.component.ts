@@ -1,7 +1,9 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
-import { DialogChiTietKeHoachGiaoBoNganhComponent } from 'src/app/components/dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh/dialog-chi-tiet-ke-hoach-giao-bo-nganh.component';
+import {
+  DialogChiTietKeHoachGiaoBoNganhComponent,
+} from 'src/app/components/dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh/dialog-chi-tiet-ke-hoach-giao-bo-nganh.component';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Globals } from 'src/app/shared/globals';
@@ -13,22 +15,22 @@ import { UserService } from 'src/app/services/user.service';
 import { UserLogin } from 'src/app/models/userlogin';
 import { HelperService } from 'src/app/services/helper.service';
 import {
-  DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent
-} from "../../../../../../../components/dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung.component";
+  DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent,
+} from '../../../../../../../components/dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung/dialog-chi-tiet-ke-hoach-giao-bo-nganh-ubtvqh-mua-bu-bo-sung.component';
 import {
-  QuyetDinhUbtvqhMuaBuBoSungService
-} from "../../../../../../../services/quyet-dinh-ubtvqh-mua-bu-bo-sung.service";
+  QuyetDinhUbtvqhMuaBuBoSungService,
+} from '../../../../../../../services/quyet-dinh-ubtvqh-mua-bu-bo-sung.service';
 import {
-  DialogQdMuabubosungTtcpComponent
-} from "../../../../../../../components/dialog/dialog-qd-muabubosung-ttcp/dialog-qd-muabubosung-ttcp.component";
-import {MuaBuBoSungTtcpServiceService} from "../../../../../../../services/mua-bu-bo-sung-ttcp-service.service";
-import {STATUS} from "../../../../../../../constants/status";
+  DialogQdMuabubosungTtcpComponent,
+} from '../../../../../../../components/dialog/dialog-qd-muabubosung-ttcp/dialog-qd-muabubosung-ttcp.component';
+import { MuaBuBoSungTtcpServiceService } from '../../../../../../../services/mua-bu-bo-sung-ttcp-service.service';
+import { STATUS } from '../../../../../../../constants/status';
 
 
 @Component({
   selector: 'app-them-moi-ttcp',
   templateUrl: './them-moi-ttcp.component.html',
-  styleUrls: ['./them-moi-ttcp.component.scss']
+  styleUrls: ['./them-moi-ttcp.component.scss'],
 })
 export class ThemMoiTtcpComponent implements OnInit {
 
@@ -51,8 +53,8 @@ export class ThemMoiTtcpComponent implements OnInit {
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
     public globals: Globals,
-    private qdTccp : MuaBuBoSungTtcpServiceService,
-    private  quyetDinhUbtvqhMuBuBoSung : QuyetDinhUbtvqhMuaBuBoSungService,
+    private qdTccp: MuaBuBoSungTtcpServiceService,
+    private quyetDinhUbtvqhMuBuBoSung: QuyetDinhUbtvqhMuaBuBoSungService,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     public userService: UserService,
@@ -61,14 +63,14 @@ export class ThemMoiTtcpComponent implements OnInit {
     this.formData = this.fb.group(
       {
         id: [],
-        namQd: [, [Validators.required]],
+        namQd: [dayjs().get('year'), [Validators.required]],
         soQd: [, [Validators.required]],
-        soQdUbtvqh:  [, [Validators.required]],
+        soQdUbtvqh: [, [Validators.required]],
         ngayQd: [null, [Validators.required]],
         trichYeu: [null],
         trangThai: [STATUS.DANG_NHAP_DU_LIEU],
-        listBoNganh: []
-      }
+        listBoNganh: [],
+      },
     );
   }
 
@@ -78,7 +80,8 @@ export class ThemMoiTtcpComponent implements OnInit {
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
       this.getDataDetail(this.idInput),
-    ])
+    ]);
+
     this.spinner.hide();
   }
 
@@ -89,23 +92,28 @@ export class ThemMoiTtcpComponent implements OnInit {
       this.formData.patchValue({
         id: data.id,
         namQd: data.namQd,
-        soQdUbtvqh: data.soQdUbtvqh,
         ngayQd: data.ngayQd,
         soQd: data.soQd,
         trangThai: data.trangThai,
-        trichYeu: data.trichYeu
-      })
-      this.dataTable = data.listBoNganh
-      this.taiLieuDinhKemList = data.fileDinhkems
+        trichYeu: data.trichYeu,
+      });
+      this.onChangeNamQd(this.formData.get('namQd').value, data);
+      this.dataTable = data.listBoNganh;
+      this.formData.patchValue({
+        soQdUbtvqh: data.soQdUbtvqh,
+      });
+      this.taiLieuDinhKemList = data.fileDinhkems;
+    }else{
+      this.onChangeNamQd(this.formData.get('namQd').value,null);
     }
   }
 
 
   loadDsNam() {
-    for (let i = -3; i < 23; i++) {
+    for (let i = -3; i <= 5; i++) {
       this.dsNam.push({
-        value: dayjs().get('year') - i,
-        text: dayjs().get('year') - i,
+        value: dayjs().get('year') + i,
+        text: dayjs().get('year') + i,
       });
     }
   }
@@ -143,7 +151,8 @@ export class ThemMoiTtcpComponent implements OnInit {
     }
   }
 
-  downloadFileKeHoach(event) { }
+  downloadFileKeHoach(event) {
+  }
 
 
   xoaItem(id: number) {
@@ -211,7 +220,7 @@ export class ThemMoiTtcpComponent implements OnInit {
       return;
     }
     if (this.dataTable.length == 0) {
-      this.notification.error(MESSAGE.ERROR, "Danh sách kế hoạch không được để trống");
+      this.notification.error(MESSAGE.ERROR, 'Danh sách kế hoạch không được để trống');
       this.spinner.hide();
       return;
     }
@@ -219,7 +228,7 @@ export class ThemMoiTtcpComponent implements OnInit {
     body.soQd = body.soQd;
     body.listBoNganh = this.dataTable;
     body.fileDinhKems = this.taiLieuDinhKemList;
-    let res
+    let res;
     if (this.idInput > 0) {
       res = await this.qdTccp.update(body);
     } else {
@@ -229,8 +238,8 @@ export class ThemMoiTtcpComponent implements OnInit {
       if (isGuiDuyet) {
         this.formData.patchValue({
           id: res.data.id,
-          trangThai: STATUS.BAN_HANH
-        })
+          trangThai: STATUS.BAN_HANH,
+        });
         this.pheDuyet();
       } else {
         if (this.idInput > 0) {
@@ -245,7 +254,9 @@ export class ThemMoiTtcpComponent implements OnInit {
     }
     this.spinner.hide();
   }
-  exportData() { }
+
+  exportData() {
+  }
 
   themKeHoach(data?: any, index?, isView?: boolean) {
     const modalQD = this.modal.create({
@@ -271,16 +282,34 @@ export class ThemMoiTtcpComponent implements OnInit {
     });
     this.formData.get('listBoNganh').setValue(this.dataTable);
   }
-  async onChangeNamQd(namQd) {
+
+  async onChangeNamQd(namQd, dataQdTtcp?) {
+    this.dataTable = [];
     this.formData.get('soQdUbtvqh').setValue(null);
     let body = {
       namQd: namQd,
-      trangThai: STATUS.BAN_HANH
-    }
+      trangThai: STATUS.BAN_HANH,
+    };
     let res = await this.quyetDinhUbtvqhMuBuBoSung.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      const data = res.data.content;
-      this.listUbtvqh = data
+      let data = [];
+      if (dataQdTtcp) {
+        data = res.data.content;
+      } else {
+        data = res.data.content.filter(item => !item.soQdTtcp);
+      }
+      this.listUbtvqh = data;
+      if (this.listUbtvqh && this.listUbtvqh.length > 0 && !dataQdTtcp) {
+        this.formData.patchValue({
+          soQdUbtvqh: this.listUbtvqh[0].soQd,
+        });
+        let res = await this.quyetDinhUbtvqhMuBuBoSung.getDetail(this.listUbtvqh[0].id);
+        if (res.msg == MESSAGE.SUCCESS) {
+          this.dataTable = res.data.listBoNganh;
+        } else {
+          this.notification.error(MESSAGE.ERROR, 'Không tìm thấy thông tin chi tiết Nghị quyết của UBTVQH');
+        }
+      }
     }
   }
 

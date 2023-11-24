@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -15,13 +15,15 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { STATUS } from 'src/app/constants/status';
 import { DonviService } from 'src/app/services/donvi.service';
 import { StorageService } from 'src/app/services/storage.service';
+import { saveAs } from 'file-saver';
+
 
 @Component({
   selector: 'app-so-kho-the-kho',
   templateUrl: './so-kho-the-kho.component.html',
   styleUrls: ['./so-kho-the-kho.component.scss'],
 })
-export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
+export class SoKhoTheKhoComponent extends Base2Component implements OnInit , AfterViewInit {
   isView: boolean;
   formData: FormGroup;
   STATUS = STATUS;
@@ -32,6 +34,8 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
   openPhieuNx = false;
   idPhieuNx: any;
   isThuKho: boolean;
+
+  offSetTop : string;
 
   constructor(
     private httpClient: HttpClient,
@@ -45,7 +49,7 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
     private quanLySoKhoTheKhoService: QuanLySoKhoTheKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quanLySoKhoTheKhoService);
-    super.ngOnInit()
+    super.ngOnInit();
     this.formData = this.fb.group({
       nam: [null],
       maDvi: [null],
@@ -56,10 +60,15 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
       ngayTaoTu: [null],
       ngayTaoDen: [null],
       idThuKho: [null],
-      tenSoKho: [null],
+      soSoKho: [null],
       tenTheKho: [null],
     })
     this.filterTable = {};
+  }
+
+  getOffSetTop(){
+    this.offSetTop = (window.innerHeight - document.getElementById("tableView").getBoundingClientRect().top - 150) + 'px';
+    console.log(this.offSetTop,window.innerHeight,document.getElementById("tableView").getBoundingClientRect().top)
   }
 
   async ngOnInit() {
@@ -75,6 +84,7 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
       }
       this.loadDsHangHoa();
       this.loadDsChiCuc();
+      this.getOffSetTop();
       await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -329,5 +339,25 @@ export class SoKhoTheKhoComponent extends Base2Component implements OnInit {
         }
       },
     });
+  }
+
+  exportData(fileName?: string) {
+    this.spinner.show();
+    try {
+      this.service
+        .export(this.formData.value)
+        .subscribe((blob) =>
+          saveAs(blob, fileName ? fileName : 'data.xlsx'),
+        );
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  ngAfterViewInit(): void {
+    this.getOffSetTop();
   }
 }

@@ -10,7 +10,7 @@
         </div>
         <div nz-col nzSpan="4">
           <label class="search__label">Số QĐ giao nhiệm vụ NH</label>
-          <input class="search__input" [(ngModel)]="searchFilter.soQd" nz-input placeholder="" />
+          <input class="search__input" [(ngModel)]="searchFilter.soQd" nz-input placeholder=""/>
         </div>
         <div nz-col nzSpan="4">
           <label class="search__label">Số BB NT kê lót, BQLĐ</label>
@@ -20,13 +20,15 @@
           <label class="search__label">Ngày lập biên bản</label>
           <div nz-row [nzGutter]="24">
             <div nz-col nzSpan="12" class="cus-start-date">
-              <nz-date-picker [nzDisabledDate]="disabledTuNgayLP" nzFormat="dd/MM/yyyy" [(ngModel)]="tuNgayLP"
-                [ngModelOptions]="{standalone: true}" nzPlaceHolder="Ngày bắt đầu">
+              <nz-date-picker [nzDisabledDate]="disabledTuNgayLP" nzFormat="dd/MM/yyyy"
+                              [(ngModel)]="tuNgayLP" [ngModelOptions]="{standalone: true}"
+                              nzPlaceHolder="Ngày bắt đầu">
               </nz-date-picker>
             </div>
             <div nz-col nzSpan="12" class="cus-end-date">
-              <nz-date-picker [nzDisabledDate]="disabledDenNgayLP" nzFormat="dd/MM/yyyy" [(ngModel)]="denNgayLP"
-                [ngModelOptions]="{standalone: true}" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+              <nz-date-picker [nzDisabledDate]="disabledDenNgayLP" nzFormat="dd/MM/yyyy"
+                              [(ngModel)]="denNgayLP" [ngModelOptions]="{standalone: true}"
+                              nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
             </div>
           </div>
         </div>
@@ -34,13 +36,15 @@
           <label class="search__label">Ngày kết thúc NT kê lót, BQLĐ</label>
           <div nz-row [nzGutter]="24">
             <div nz-col nzSpan="12" class="cus-start-date">
-              <nz-date-picker [nzDisabledDate]="disabledTuNgayKT" nzFormat="dd/MM/yyyy" [(ngModel)]="tuNgayKT"
-                [ngModelOptions]="{standalone: true}" nzPlaceHolder="Ngày bắt đầu">
+              <nz-date-picker [nzDisabledDate]="disabledTuNgayKT" nzFormat="dd/MM/yyyy"
+                              [(ngModel)]="tuNgayKT" [ngModelOptions]="{standalone: true}"
+                              nzPlaceHolder="Ngày bắt đầu">
               </nz-date-picker>
             </div>
             <div nz-col nzSpan="12" class="cus-end-date">
-              <nz-date-picker [nzDisabledDate]="disabledDenNgayKT" nzFormat="dd/MM/yyyy" [(ngModel)]="denNgayKT"
-                [ngModelOptions]="{standalone: true}" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+              <nz-date-picker [nzDisabledDate]="disabledDenNgayKT" nzFormat="dd/MM/yyyy"
+                              [(ngModel)]="denNgayKT" [ngModelOptions]="{standalone: true}"
+                              nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
             </div>
           </div>
         </div>
@@ -60,14 +64,15 @@
     <div class="group-button">
       <h3>DANH SÁCH LẬP BIÊN BẢN NGHIỆM THU BẢO QUẢN LẦN ĐẦU NHẬP HÀNG DỰ TRỮ QUỐC GIA</h3>
       <div class="buttons">
-        <button type="button" *ngIf="userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_EXP')"
-          class="btn btn-sub" (click)="export()">
+        <button type="button"
+                *ngIf="userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_EXP')"
+                class="btn btn-sub" (click)="export()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-main"
-          *ngIf="userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_THEM')"
-          (click)="redirectToChiTiet(false, 0)">
+                *ngIf="userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_THEM')"
+                (click)="redirectToChiTiet(false, 0)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -76,96 +81,98 @@
 
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
       <nz-table nzBordered #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
-        [nzData]="dataTable">
+                [nzData]="dataTable">
         <thead>
-          <tr>
-            <th nzLeft width="40px" class="text-center">STT</th>
-            <th nzLeft width="30px" class="text-center"></th>
-            <th nzLeft width="130px"> Số QĐ giao NVNH</th>
-            <th nzLeft width="80px">Năm kế hoạch</th>
-            <th nzLeft width="150px">Thời hạn NH trước ngày</th>
-            <th nzLeft width="150px">Điểm kho</th>
-            <th nzLeft width="150px">Ngăn Lô kho</th>
-            <th nzLeft width="150px">Số BB NT kê lót, BQLĐ</th>
-            <th nzLeft width="150px">Ngày lập biên bản</th>
-            <th nzLeft width="150px">Ngày kết thúc NT kê lót, BQLĐ</th>
-            <th nzLeft width="150px">Tổng kinh phí thực tế (đ)</th>
-            <th nzLeft width="150px">Tổng kinh phí TC PD (đ)</th>
-            <th nzLeft width="150px">Trạng thái</th>
-            <th nzRight>Hành động</th>
-          </tr>
+        <tr>
+          <th nzLeft width="40px" class="text-center">STT</th>
+          <th nzLeft width="30px" class="text-center"></th>
+          <th nzLeft width="130px"> Số QĐ giao NVNH</th>
+          <th nzLeft width="80px">Năm kế hoạch</th>
+          <th nzLeft width="150px">Thời hạn NH trước ngày</th>
+          <th nzLeft width="150px">Điểm kho</th>
+          <th nzLeft width="150px">Ngăn Lô kho</th>
+          <th nzLeft width="150px">Số BB NT kê lót, BQLĐ</th>
+          <th nzLeft width="150px">Ngày lập biên bản</th>
+          <th nzLeft width="150px">Ngày kết thúc NT kê lót, BQLĐ</th>
+          <th nzLeft width="150px">Tổng kinh phí thực tế (đ)</th>
+          <th nzLeft width="150px">Tổng kinh phí TC PD (đ)</th>
+          <th nzLeft width="150px">Trạng thái</th>
+          <th nzRight>Hành động</th>
+        </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let item of dataTable , let i = index">
-            <tr class="level-1">
-              <td nzLeft>{{(page - 1) * pageSize + i + 1}}</td>
-              <td [nzExpand]="item.expand"
+        <ng-container *ngFor="let item of dataTable , let i = index">
+          <tr class="level-1">
+            <td nzLeft>{{(page - 1) * pageSize + i + 1}}</td>
+            <td [nzExpand]="item.expand"
                 (nzExpandChange)="item.expand=!item.expand; item.children=setExpand(item.expand, item.dtlList)">
-              </td>
-              <td nzLeft class="link bold">{{ item.soQd }}</td>
-              <td nzLeft class="bold">{{ item.nam }}</td>
-              <td nzLeft class="bold">{{ item.tgianNkMnhat }}</td>
-              <td colspan="8"></td>
-              <td>
-                <a *ngIf="userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_THEM')"
-                  (click)="redirectToChiTiet(false, 0,item.id)">
-                  <i class="fa fa-plus"></i>
-                </a>
-              </td>
-            </tr>
-            <ng-container *ngIf="item.expand">
-              <ng-container *ngFor="let dataDdiem of item.dtlList, let y = index">
-                <tr class="level-2">
-                  <td nzLeft></td>
-                  <td nzLeft></td>
-                  <td nzLeft></td>
-                  <td nzLeft></td>
-                  <td nzLeft></td>
-                  <td nzLeft>{{dataDdiem.tenDiemKho}}</td>
-                  <td nzLeft>{{dataDdiem.tenLoKho}} - {{dataDdiem.tenNganKho}}</td>
-                  <td colspan="7"></td>
-                </tr>
-                <ng-container *ngFor="let dataBb of dataDdiem.bbNghiemThuNhapKhacList, let k = index">
-                  <tr class="level-3"
+            </td>
+            <td nzLeft class="link bold">{{ item.soQd }}</td>
+            <td nzLeft class="bold">{{ item.nam }}</td>
+            <td nzLeft class="bold">{{ item.tgianNkMnhat }}</td>
+            <td colspan="8"></td>
+            <td></td>
+          </tr>
+          <ng-container *ngIf="item.expand">
+            <ng-container *ngFor="let dataDdiem of item.dtlList, let y = index">
+              <tr class="level-2">
+                <td nzLeft></td>
+                <td nzLeft></td>
+                <td nzLeft></td>
+                <td nzLeft></td>
+                <td nzLeft></td>
+                <td nzLeft>{{dataDdiem.tenDiemKho}}</td>
+                <td nzLeft>{{dataDdiem.tenLoKho}} - {{dataDdiem.tenNganKho}}</td>
+                <td colspan="6"></td>
+                <td>
+                  <a *ngIf="userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_THEM')"
+                     (click)="redirectToChiTiet(false, 0,item.id, dataDdiem)">
+                    <i class="fa fa-plus"></i>
+                  </a>
+                </td>
+              </tr>
+              <ng-container *ngFor="let dataBb of dataDdiem.bbNghiemThuNhapKhacList, let k = index">
+                <tr class="level-3"
                     *ngIf="dataDdiem.maLoKho && dataBb.maLoKho != null ? dataDdiem.maLoKho == dataBb.maLoKho : (dataDdiem.maNganKho && dataBb.maNganKho != null ? dataDdiem.maNganKho == dataBb.maNganKho : (dataDdiem.maNhaKho && dataBb.maNhaKho != null ? dataDdiem.maNhaKho == dataBb.maNhaKho : false))">
-                    <td nzLeft></td>
-                    <td nzLeft></td>
-                    <td nzLeft></td>
-                    <td nzLeft></td>
-                    <td nzLeft></td>
-                    <td nzLeft></td>
-                    <td nzLeft></td>
-                    <td class="bold">{{dataBb.soBbNtBq}}</td>
-                    <td>{{dataBb.ngayTao}}</td>
-                    <td>{{dataBb.ngayNghiemThu}}</td>
-                    <td>{{dataBb.tongKinhPhiThucTe}}</td>
-                    <td>{{dataBb.tongKinhPhiGiao}}</td>
-                    <td>{{dataBb.tenTrangThai}}</td>
-                    <td nzRight>
-                      <a *ngIf="hienThiXem(dataBb)" (click)="redirectToChiTiet(true, dataBb.id)">
-                        <i class="fa fa-eye" title="Xem chi tiết"></i>
-                      </a>
-                      <a (click)="redirectToChiTiet(false, dataBb.id)" *ngIf="(dataBb.trangThai == STATUS.DU_THAO
+                  <td nzLeft></td>
+                  <td nzLeft></td>
+                  <td nzLeft></td>
+                  <td nzLeft></td>
+                  <td nzLeft></td>
+                  <td nzLeft></td>
+                  <td nzLeft></td>
+                  <td class="bold">{{dataBb.soBbNtBq}}</td>
+                  <td>{{dataBb.ngayTao}}</td>
+                  <td>{{dataBb.ngayNghiemThu}}</td>
+                  <td>{{dataBb.tongKinhPhiThucTe}}</td>
+                  <td>{{dataBb.tongKinhPhiGiao}}</td>
+                  <td>{{dataBb.tenTrangThai}}</td>
+                  <td nzRight>
+                    <a *ngIf="hienThiXem(dataBb)" (click)="redirectToChiTiet(true, dataBb.id)">
+                      <i class="fa fa-eye" title="Xem chi tiết"></i>
+                    </a>
+                    <a (click)="redirectToChiTiet(false, dataBb.id)"
+                       *ngIf="(dataBb.trangThai == STATUS.DU_THAO
                        || dataBb.trangThai == STATUS.TU_CHOI_TK
                        || dataBb.trangThai == STATUS.TU_CHOI_KT
                        || dataBb.trangThai == STATUS.TU_CHOI_LDCC
                        )
                        && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_THEM')">
-                        <i class="fa fa-pencil" title="Sửa"></i>
-                      </a>
-                      <a *ngIf="hienThiPheDuyet(dataBb)" (click)="redirectToChiTiet(true, dataBb.id)">
-                        <i class="icon htvbdh_tcdt_pheduyet"></i>
-                      </a>
-                      <a (click)="xoaItem(dataBb)"
-                        *ngIf="userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_XOA') && dataBb.trangThai == STATUS.DU_THAO">
-                        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                      </a>
-                    </td>
-                  </tr>
-                </ng-container>
+                      <i class="fa fa-pencil" title="Sửa"></i>
+                    </a>
+                    <a  *ngIf="hienThiPheDuyet(dataBb)"
+                        (click)="redirectToChiTiet(true, dataBb.id)">
+                      <i class="icon htvbdh_tcdt_pheduyet"></i>
+                    </a>
+                    <a (click)="xoaItem(dataBb)" *ngIf="userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBNTBQLD_XOA') && dataBb.trangThai == STATUS.DU_THAO">
+                      <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                    </a>
+                  </td>
+                </tr>
               </ng-container>
             </ng-container>
           </ng-container>
+        </ng-container>
         </tbody>
       </nz-table>
       <div class="tab-content tab-menu">
@@ -173,9 +180,9 @@
           <div class="trai"></div>
           <div class="canphai">
             <!-- begin phân trang  -->
-            <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
-              [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
-              (nzPageSizeChange)="changePageSize($event)">
+            <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord"
+                           nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+                           (nzPageIndexChange)="changePageIndex($event)" (nzPageSizeChange)="changePageSize($event)">
               <ng-template #rangeTemplate let-range="range" let-total>
                 {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
               </ng-template>
@@ -189,7 +196,7 @@
 
 </ng-container>
 <ng-container *ngIf="isDetail">
-  <app-lap-bien-ban-nghiem-thu-bao-quan [title]="'BIÊN BẢN NGHIỆM THU BẢO QUẢN LẦN ĐẦU'" [idQdGiaoNvNh]="idQdGiaoNvNh"
-    [id]="selectedId" (showListEvent)="showList()" [isView]="isView" [typeVthh]="typeVthh">
+  <app-lap-bien-ban-nghiem-thu-bao-quan [title]="'BIÊN BẢN NGHIỆM THU BẢO QUẢN LẦN ĐẦU'" [idQdGiaoNvNh]="idQdGiaoNvNh" [dataDdiem]="dataDdiem" [id]="selectedId"
+                                              (showListEvent)="showList()" [isView]="isView" [typeVthh]="typeVthh">
   </app-lap-bien-ban-nghiem-thu-bao-quan>
 </ng-container>

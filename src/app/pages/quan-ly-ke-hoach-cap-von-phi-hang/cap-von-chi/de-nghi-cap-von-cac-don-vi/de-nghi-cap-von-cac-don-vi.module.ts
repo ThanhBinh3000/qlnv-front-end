@@ -31,8 +31,9 @@ import { CapVonTheoHopDongTrungThauComponent } from './cap-von-theo-hop-dong-tru
         ComponentsModule,
         DirectivesModule,
     ],
-    exports: [
-        DeNghiCapVonCacDonViComponent
-    ]
+  exports: [
+    DeNghiCapVonCacDonViComponent,
+    DeNghiCapVonQuyetDinhDonGiaMuaComponent,
+  ],
 })
 export class DeNghiCapVonCacDonViModule { }

@@ -23,8 +23,4 @@ export class TongHopPhuongAnGiaService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/phuong-an-gia/tong-hop/ds-tt-dx`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
-  previewPag(body: any) {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/phuong-an-gia/tong-hop/xem-truoc`;
-    return this.httpClient.post<any>(url, body).toPromise();
-  }
 }

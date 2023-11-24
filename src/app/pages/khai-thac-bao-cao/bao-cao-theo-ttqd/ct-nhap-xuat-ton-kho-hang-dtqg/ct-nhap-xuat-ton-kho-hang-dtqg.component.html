@@ -7,130 +7,107 @@
           <app-template-error #error [control]="control"></app-template-error>
         </ng-template>
         <div nz-row [nzGutter]="24">
-          <div nz-col [nzSpan]="3">
+          <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Năm
+              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Năm báo cáo
               </nz-form-label>
-              <nz-select formControlName="nam">
-                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-              </nz-select>
-            </nz-form-item>
-          </div>
-          <div nz-col [nzSpan]="3">
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Quý
-              </nz-form-label>
-              <nz-select formControlName="quy">
-                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-              </nz-select>
-            </nz-form-item>
-          </div>
-          <div nz-col [nzSpan]="5">
-            <nz-form-item>
-              <nz-form-label [nzXs]="7">Bộ/ngành</nz-form-label>
-              <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select formControlName="boNganh">
-                  <nz-option *ngFor="let p of dsBoNganh" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
-                  </nz-option>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-select formControlName="nam">
+                  <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="6">
+          <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Đơn vị báo cáo
+              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Quý
               </nz-form-label>
-              <nz-select formControlName="dviBaoCao">
-                <nz-option *ngFor="let p of dsDonVi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
+              <nz-select formControlName="quy" [(ngModel)]="selectedValue">
+                <nz-option *ngFor="let p of listQuy" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
-            </nz-form-item>
-          </div>
-          <div nz-col [nzSpan]="6">
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Mã ĐVQHNS
-              </nz-form-label>
-              <nz-input-group>
-                <input formControlName="maDvqhns" nz-input />
-              </nz-input-group>
             </nz-form-item>
           </div>
         </div>
       </form>
-      <form nzLayout="vertical" nz-form>
-        <div nz-row [nzGutter]="24">
-          <div nz-col [nzSpan]="6">
-            <nz-form-item>
-              <nz-form-label [nzXs]="7">Loại hàng hóa</nz-form-label>
-              <nz-select (change)="changeLoaiVthh($event)">
-                <nz-option *ngFor="let p of listVthh" [nzLabel]="p.giaTri" [nzValue]="p.ma"></nz-option>
-              </nz-select>
-            </nz-form-item>
-          </div>
-          <div nz-col [nzSpan]="5">
-            <nz-form-item>
-              <nz-form-label [nzXs]="8">Nước sản xuất</nz-form-label>
-              <nz-select (change)="changeNuocSX($event)">
-                <nz-option *ngFor="let p of listVthh" [nzLabel]="p.giaTri" [nzValue]="p.ma"></nz-option>
-              </nz-select>
-            </nz-form-item>
-          </div>
-          <div nz-col [nzSpan]="12">
-            <nz-form-item>
-              <nz-form-label [nzXs]="7">Chủng loại hàng hóa</nz-form-label>
-              <nz-select (change)="changeCloaiVthh($event)">
-                <nz-option *ngFor="let p of listCloaiVthh" [nzLabel]="p.giaTri" [nzValue]="p.ma"></nz-option>
-              </nz-select>
-            </nz-form-item>
-          </div>
-          <div nz-col [nzSpan]="1">
-            <nz-form-item>
-              <nz-form-label style="line-height: 0"></nz-form-label>
+<!--      <form nzLayout="vertical" nz-form>-->
+<!--        <div nz-row [nzGutter]="24">-->
+<!--          <div nz-col [nzSpan]="6">-->
+<!--            <nz-form-item>-->
+<!--              <nz-form-label [nzXs]="7">Loại hàng hóa</nz-form-label>-->
+<!--              <nz-select (change)="changeLoaiVthh($event)">-->
+<!--                <nz-option *ngFor="let p of listVthh" [nzLabel]="p.giaTri" [nzValue]="p.ma"></nz-option>-->
+<!--              </nz-select>-->
+<!--            </nz-form-item>-->
+<!--          </div>-->
+<!--          <div nz-col [nzSpan]="5">-->
+<!--            <nz-form-item>-->
+<!--              <nz-form-label [nzXs]="8">Nước sản xuất</nz-form-label>-->
+<!--              <nz-select (change)="changeNuocSX($event)">-->
+<!--                <nz-option *ngFor="let p of listVthh" [nzLabel]="p.giaTri" [nzValue]="p.ma"></nz-option>-->
+<!--              </nz-select>-->
+<!--            </nz-form-item>-->
+<!--          </div>-->
+<!--          <div nz-col [nzSpan]="12">-->
+<!--            <nz-form-item>-->
+<!--              <nz-form-label [nzXs]="7">Chủng loại hàng hóa</nz-form-label>-->
+<!--              <nz-select (change)="changeCloaiVthh($event)">-->
+<!--                <nz-option *ngFor="let p of listCloaiVthh" [nzLabel]="p.giaTri" [nzValue]="p.ma"></nz-option>-->
+<!--              </nz-select>-->
+<!--            </nz-form-item>-->
+<!--          </div>-->
+<!--          <div nz-col [nzSpan]="1">-->
+<!--            <nz-form-item>-->
+<!--              <nz-form-label style="line-height: 0"></nz-form-label>-->
 
-              <button type="button" class="btn cus-btn btn-main" (click)="addRow()">
-                <i class="icon htvbdh_dau-cong"></i>
-              </button>
-            </nz-form-item>
-          </div>
-        </div>
-        <div nz-row [nzGutter]="24" *ngFor="let row of rows; let i = index">
-          <div nz-col [nzSpan]="6">
-            <nz-form-item>
-              <nz-form-label [nzXs]="7">Loại hàng hóa</nz-form-label>
-              <nz-select (change)="changeLoaiVthh($event)">
-                <nz-option *ngFor="let p of listVthh" [nzLabel]="p.giaTri" [nzValue]="p.ma"></nz-option>
-              </nz-select>
-            </nz-form-item>
-          </div>
-          <div nz-col [nzSpan]="5">
-            <nz-form-item>
-              <nz-form-label [nzXs]="8">Nước sản xuất</nz-form-label>
-              <nz-select (change)="changeNuocSX($event)">
-                <nz-option *ngFor="let p of listVthh" [nzLabel]="p.giaTri" [nzValue]="p.ma"></nz-option>
-              </nz-select>
-            </nz-form-item>
-          </div>
-          <div nz-col [nzSpan]="12">
-            <nz-form-item>
-              <nz-form-label [nzXs]="7">Chủng loại hàng hóa</nz-form-label>
-              <nz-select (change)="changeCloaiVthh($event)">
-                <nz-option *ngFor="let p of listCloaiVthh" [nzLabel]="p.giaTri" [nzValue]="p.ma"></nz-option>
-              </nz-select>
-            </nz-form-item>
-          </div>
-          <div nz-col [nzSpan]="1">
-            <nz-form-item>
-              <nz-form-label style="line-height: 0"></nz-form-label>
-              <button type="button" class="btn cus-btn btn-do" (click)="deleteRow(i)">
-                <i class="icon htvbdh_xoa"></i>
-              </button>
-            </nz-form-item>
-          </div>
-        </div>
-      </form>
+<!--              <button type="button" class="btn cus-btn btn-main" (click)="addRow()">-->
+<!--                <i class="icon htvbdh_dau-cong"></i>-->
+<!--              </button>-->
+<!--            </nz-form-item>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div nz-row [nzGutter]="24" *ngFor="let row of rows; let i = index">-->
+<!--          <div nz-col [nzSpan]="6">-->
+<!--            <nz-form-item>-->
+<!--              <nz-form-label [nzXs]="7">Loại hàng hóa</nz-form-label>-->
+<!--              <nz-select (change)="changeLoaiVthh($event)">-->
+<!--                <nz-option *ngFor="let p of listVthh" [nzLabel]="p.giaTri" [nzValue]="p.ma"></nz-option>-->
+<!--              </nz-select>-->
+<!--            </nz-form-item>-->
+<!--          </div>-->
+<!--          <div nz-col [nzSpan]="5">-->
+<!--            <nz-form-item>-->
+<!--              <nz-form-label [nzXs]="8">Nước sản xuất</nz-form-label>-->
+<!--              <nz-select (change)="changeNuocSX($event)">-->
+<!--                <nz-option *ngFor="let p of listVthh" [nzLabel]="p.giaTri" [nzValue]="p.ma"></nz-option>-->
+<!--              </nz-select>-->
+<!--            </nz-form-item>-->
+<!--          </div>-->
+<!--          <div nz-col [nzSpan]="12">-->
+<!--            <nz-form-item>-->
+<!--              <nz-form-label [nzXs]="7">Chủng loại hàng hóa</nz-form-label>-->
+<!--              <nz-select (change)="changeCloaiVthh($event)">-->
+<!--                <nz-option *ngFor="let p of listCloaiVthh" [nzLabel]="p.giaTri" [nzValue]="p.ma"></nz-option>-->
+<!--              </nz-select>-->
+<!--            </nz-form-item>-->
+<!--          </div>-->
+<!--          <div nz-col [nzSpan]="1">-->
+<!--            <nz-form-item>-->
+<!--              <nz-form-label style="line-height: 0"></nz-form-label>-->
+<!--              <button type="button" class="btn cus-btn btn-do" (click)="deleteRow(i)">-->
+<!--                <i class="icon htvbdh_xoa"></i>-->
+<!--              </button>-->
+<!--            </nz-form-item>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </form>-->
     </nz-card>
-    <div class="group-button">
-      <button type="button" class="btn btn-sub" (click)="preView()"
-        *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_EXP1')">
+    <div class="cangiua group-button-search">
+      <button nz-button class="search__button--clear" (click)="clearFilter()">
+        <i class="icon  htvbdh_nhap-lai1"></i>
+        Xóa điều kiện
+      </button>
+      <button nz-button class="modal__button--save ml-2" (click)="preView()"
+              *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_EXP1')">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Kết xuất báo cáo</span>
       </button>
@@ -139,20 +116,27 @@
 </div>
 
 <!--popup preview-->
-<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="Báo cáo" nzWidth="100%">
+<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="Kết xuất báo cáo" nzWidth="100%" (nzOnCancel)="closeDlg()">
   <div *nzModalContent class="modal__content">
     <pdf-viewer [src]="pdfSrc" [original-size]="false" [render-text]="true" style="width: 100%; height: 600px;">
     </pdf-viewer>
   </div>
   <div *nzModalFooter>
-    <button nz-button (click)="downloadPdf()" class="modal__button--save">
-      <i class="icon htvbdh_tcdt_tuchoi"></i>
-      Tải báo cáo
+    <button nz-button (click)="downloadPdf()"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-pdf"></i>
+      Xuất .pdf
     </button>
-    <button nz-button (click)="downloadExcel()" class="modal__button--save">
-      <i class="icon htvbdh_nhap-excel"></i>
+    <button nz-button (click)="downloadExcel()"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-word"></i>
       Xuất Excel
     </button>
+    <!--    <button nz-button (click)="printPreview()"-->
+    <!--            class="modal__button&#45;&#45;save">-->
+    <!--      <i class="icon htvbdh_printer"></i>-->
+    <!--      In-->
+    <!--    </button>-->
     <button nz-button (click)="closeDlg()" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng

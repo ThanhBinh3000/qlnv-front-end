@@ -1,22 +1,21 @@
-import { DataService } from 'src/app/services/data.service';
-import { HelperService } from './../../../../../services/helper.service';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { DeNghiCapPhiBoNganh } from './../../../../../models/DeNghiCapPhiBoNganh';
-// import { Component, OnInit } from '@angular/core';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as dayjs from 'dayjs';
-import { cloneDeep } from 'lodash';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DeNghiCapPhiBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapPhiBoNganh.service';
-import { Globals } from 'src/app/shared/globals';
-import { isEmpty } from 'lodash';
-import { DonviService } from '../../../../../services/donvi.service';
-import { STATUS } from '../../../../../constants/status';
-import { AMOUNT_NO_DECIMAL } from '../../../../../Utility/utils';
+import {cloneDeep} from 'lodash';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {DeNghiCapPhiBoNganhService} from 'src/app/services/ke-hoach/von-phi/deNghiCapPhiBoNganh.service';
+import {Globals} from 'src/app/shared/globals';
+import {DonviService} from '../../../../../services/donvi.service';
+import {STATUS} from '../../../../../constants/status';
+import {AMOUNT_NO_DECIMAL} from '../../../../../Utility/utils';
+import {PREVIEW} from "../../../../../constants/fileType";
+import printJS from "print-js";
+import {saveAs} from 'file-saver';
+import {NzModalService} from "ng-zorro-antd/modal";
+import {HelperService} from "../../../../../services/helper.service";
 
 export class DeNghiCapPhi {
   stt: string;
@@ -31,6 +30,7 @@ export class DeNghiCapPhi {
   isEdit: boolean;
   idVirtual: number;
 }
+
 export class ChiTietDeNghiCapPhi {
   loaiChiPhi: string;
   namPhatSinh: number;
@@ -81,6 +81,13 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
   create: any = {};
   create1: any = {};
   amount = AMOUNT_NO_DECIMAL;
+
+  templateName : string = 'tinh-hinh-cap-von-bo-nganh';
+  pdfSrc: any;
+  wordSrc: any;
+  excelSrc: any;
+  printSrc: any;
+  showDlgPreview = false;
 
   constructor(
     private deNghiCapPhiBoNganhService: DeNghiCapPhiBoNganhService,
@@ -485,5 +492,39 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
     } else {
       return 0;
     }
+  }
+
+  async preview() {
+    this.spinner.show();
+    await this.deNghiCapPhiBoNganhService.preview({
+      tenBaoCao: this.templateName+ '.docx',
+      id : this.idInput
+    }).then(async res => {
+      if (res.data) {
+        this.printSrc = res.data.pdfSrc;
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
+      }
+    });
+    this.spinner.hide();
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, this.templateName + '.pdf');
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, this.templateName + '.docx');
+  }
+
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true });
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
   }
 }

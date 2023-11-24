@@ -11,6 +11,8 @@ import {MESSAGE} from "../../../../../constants/message";
 import {DanhMucService} from "../../../../../services/danhmuc.service";
 import {DonviService} from "../../../../../services/donvi.service";
 import {DanhMucTaiSanService} from "../../../../../services/danh-muc-tai-san.service";
+import { STATUS } from '../../../../../constants/status';
+import dayjs from "dayjs";
 
 @Component({
   selector: 'app-mm-them-moi-dm-trang-bi',
@@ -42,8 +44,8 @@ export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnIni
     this.formData = this.fb.group({
       id: [''],
       soQd: ['', [Validators.required]],
-      trangThai: ['00'],
-      tenTrangThai: ['Dự thảo'],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
+      tenTrangThai: ['Đang nhập dữ liệu'],
       ngayKy: ['', [Validators.required]],
       ngayHieuLuc: ['', [Validators.required]],
       ngayHetHieuLuc: [''],
@@ -156,6 +158,34 @@ export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnIni
     return str;
   }
 
+  async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
+    try {
+      if (this.dataTableDetail.length <= 0) {
+        this.notification.error(MESSAGE.ERROR, "Bạn chưa nhập chi tiết định mức trang bị!");
+        return;
+      }
+      this.helperService.markFormGroupTouched(this.formData)
+      if (this.formData.invalid) {
+        return;
+      }
+      if (this.fileDinhKem && this.fileDinhKem.length > 0) {
+        this.formData.value.fileDinhKems = this.fileDinhKem;
+      }
+      if (this.dataTableDetail && this.dataTableDetail.length > 0) {
+        this.dataTableDetail.forEach(item => {
+          if (item.loaiHinh && item.loaiHinh.length > 0) {
+            item.loaiHinh = item.loaiHinh.toString();
+          }
+        })
+      }
+      this.formData.value.listQlDinhMucPhiTbMmtbCd = this.dataTableDetail;
+      this.formData.value.maDvi = this.userInfo.MA_DVI;
+      await super.saveAndSend(this.formData.value, trangThai, msg, msgSuccess);
+    } catch (error) {
+      console.error("Lỗi khi lưu và gửi dữ liệu:", error);
+    }
+  }
+
 
   async save() {
     if (this.dataTableDetail.length <= 0) {
@@ -211,12 +241,12 @@ export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnIni
   async addDetailDinhMuc() {
     let msgRequired = this.required(this.rowItem);
     if (msgRequired) {
-      this.notification.error(MESSAGE.ERROR, msgRequired);
+      this.notification.warning(MESSAGE.WARNING, msgRequired);
       this.spinner.hide();
       return;
     }
     if (this.checkExitsData(this.rowItem, this.dataTableDetail)) {
-      this.notification.error(MESSAGE.ERROR, "Dữ liệu trùng lặp, đề nghị nhập lại.");
+      this.notification.warning(MESSAGE.WARNING, "Dữ liệu trùng lặp, đề nghị nhập lại.");
       this.spinner.hide();
       return;
     }
@@ -283,7 +313,7 @@ export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnIni
   async saveDinhMuc(idx: number) {
     let msgRequired = this.required(this.dataEdit[idx].data)
     if (msgRequired) {
-      this.notification.error(MESSAGE.ERROR, msgRequired);
+      this.notification.warning(MESSAGE.WARNING, msgRequired);
       this.spinner.hide();
       return;
     }
@@ -361,4 +391,5 @@ export class DinhMucTrangBiMm {
   klChiCuc: number;
   loaiHinh: any;
   tenLoaiHinh: string;
+  isCanCu : boolean;
 }

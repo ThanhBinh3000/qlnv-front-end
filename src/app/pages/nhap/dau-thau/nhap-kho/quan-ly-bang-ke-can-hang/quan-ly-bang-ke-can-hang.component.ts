@@ -16,7 +16,7 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { STATUS } from "../../../../../constants/status";
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'quan-ly-bang-ke-can-hang',
@@ -279,13 +279,13 @@ export class QuanLyBangKeCanHangComponent extends Base2Component implements OnIn
     }
   }
 
-  hienThiXem(data) {
+  hienThiXem(data){
     if (this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BKCH_XEM') && data != null) {
-      if (this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BKCH_THEM')
+      if(this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BKCH_THEM')
         && (data.trangThai == STATUS.DU_THAO
           || data.trangThai == STATUS.TU_CHOI_LDCC)) {
         return false;
-      } else if (this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BKCH_DUYET_LDCCUC') && data.trangThai == STATUS.CHO_DUYET_LDCC) {
+      }  else if (this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BKCH_DUYET_LDCCUC') && data.trangThai == STATUS.CHO_DUYET_LDCC) {
         return false;
       }
       return true;

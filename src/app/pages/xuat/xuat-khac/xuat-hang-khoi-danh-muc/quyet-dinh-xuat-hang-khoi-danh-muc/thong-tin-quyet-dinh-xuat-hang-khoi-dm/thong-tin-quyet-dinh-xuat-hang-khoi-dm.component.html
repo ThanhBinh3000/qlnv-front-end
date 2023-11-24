@@ -3,10 +3,10 @@
     <div class='header header-green-background'>
       <div class='header-text'>
         <div class='title-chi-tieu'>
-          <span
-            [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC  ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
-            {{ formData.value.tenTrangThai }}
-          </span>
+        <span
+          [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC  ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+          {{ formData.value.tenTrangThai }}
+        </span>
           <span class='text-uppercase'>Quyết định xuất hàng khỏi danh mục</span>
         </div>
       </div>
@@ -15,28 +15,30 @@
           <i class='fa fa-arrow-left'></i>
           <span>Quay lại</span>
         </button>
-        <button type='button' class='btn btn-sub ml-2' (click)='print()'>
+        <button
+          type='button' class='btn btn-sub ml-2' (click)='print()'>
           <i class='icon htvbdh_tcdt_print'></i>
           <span>In</span>
         </button>
         <button type='button' (click)='save(true)' class='btn btn-sm ml-2'
-          *ngIf='(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC )'>
+                *ngIf='(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC )'>
           <i class='icon htvbdh_tcdt_guiduyet'></i>
           <span>Lưu và gửi duyệt</span>
         </button>
         <a class='btn btn-outline-danger btn-sm waves-effect waves-light ml-2' (click)='tuChoi()'
-          *ngIf='(formData.value.trangThai  == STATUS.CHO_DUYET_LDV || formData.value.trangThai  == STATUS.CHO_DUYET_LDTC) && ( userService.isAccessPermisson("XHDTQG_XK_XHKDM_QDXH_DUYETLDV")  || userService.isAccessPermisson("XHDTQG_XK_XHKDM_QDXH_DUYETLDTC") )'>
+           *ngIf='(formData.value.trangThai  == STATUS.CHO_DUYET_LDV || formData.value.trangThai  == STATUS.CHO_DUYET_LDTC) && ( userService.isAccessPermisson("XHDTQG_XK_XHKDM_QDXH_DUYETLDV")  || userService.isAccessPermisson("XHDTQG_XK_XHKDM_QDXH_DUYETLDTC") )'>
           <i class='icon htvbdh_tcdt_tuchoi'></i>
           <span>Từ chối</span>
         </a>
         <a class='btn btn-outline-success btn-sm waves-effect waves-light ml-2'
-          *ngIf='(formData.value.trangThai  == STATUS.CHO_DUYET_LDV || formData.value.trangThai  == STATUS.CHO_DUYET_LDTC) && ( userService.isAccessPermisson("XHDTQG_XK_XHKDM_QDXH_DUYETLDV")  || userService.isAccessPermisson("XHDTQG_XK_XHKDM_QDXH_DUYETLDTC") )'
-          (click)='pheDuyet()'>
+           *ngIf='(formData.value.trangThai  == STATUS.CHO_DUYET_LDV || formData.value.trangThai  == STATUS.CHO_DUYET_LDTC) && ( userService.isAccessPermisson("XHDTQG_XK_XHKDM_QDXH_DUYETLDV")  || userService.isAccessPermisson("XHDTQG_XK_XHKDM_QDXH_DUYETLDTC") )'
+           (click)='pheDuyet()'>
           <i class='icon htvbdh_tcdt_pheduyet'></i>
           <span>Duyệt</span>
         </a>
-        <button (click)='save(false)' *ngIf='(formData.value.trangThai == STATUS.DU_THAO && !isViewDetail)  '
-          class='btn btn-main btn-sm waves-effect waves-light ml-2'>
+        <button (click)='save(false)'
+                *ngIf='(formData.value.trangThai == STATUS.DU_THAO && !isViewDetail)  '
+                class='btn btn-main btn-sm waves-effect waves-light ml-2'>
           <i class='icon htvbdh_tcdt_save'></i>
           <span>Lưu</span>
         </button>
@@ -44,7 +46,9 @@
     </div>
   </nz-affix>
   <nz-alert *ngIf='formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC '
-    nzShowIcon nzType='error' nzMessage='Lý do từ chối' nzDescription='{{formData.value.lyDoTuChoi}}'>
+            nzShowIcon nzType='error'
+            nzMessage='Lý do từ chối'
+            nzDescription='{{formData.value.lyDoTuChoi}}'>
   </nz-alert>
   <nz-card class='mt16 flex-card p-lr16'>
     <form nz-form nzLayout='vertical' [formGroup]='formData'>
@@ -65,7 +69,8 @@
             <nz-form-control [nzErrorTip]='error'>
               <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Ngày ký</nz-form-label>
               <nz-date-picker [nzDisabled]='isViewDetail' class='search__input' nzFormat='dd/MM/YYYY'
-                nzPlaceHolder='Ngày ký ' formControlName='ngayKy'>
+                              nzPlaceHolder='Ngày ký '
+                              formControlName='ngayKy'>
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -75,7 +80,8 @@
             <nz-form-control [nzErrorTip]='error'>
               <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Ngày hiệu lực</nz-form-label>
               <nz-date-picker [nzDisabled]='isViewDetail' class='search__input' nzFormat='dd/MM/YYYY'
-                nzPlaceHolder='Ngày ký ' formControlName='ngayHieuLuc'>
+                              nzPlaceHolder='Ngày ký '
+                              formControlName='ngayHieuLuc'>
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -83,12 +89,14 @@
         <div nz-col nzSpan='5'>
           <nz-form-item>
             <nz-form-control [nzErrorTip]='error'>
-              <nz-form-label [nzNoColon]='true' class='label-color-kh'>Mã danh sách hàng ngoài danh mục
+              <nz-form-label [nzNoColon]='true'
+                             class='label-color-kh'>Mã danh sách hàng ngoài danh mục
               </nz-form-label>
               <nz-form-control [nzErrorTip]='error'>
                 <nz-input-group nzAddOnAfterIcon='folder-open'
-                  (click)="!isViewDetail  ? openDialogDsHangNgoaiMuc():  'javascript:;'">
-                  <input class='search__input' [readonly]='true' nz-input formControlName='maCanCu' readonly />
+                                (click)="!isViewDetail  ? openDialogDsHangNgoaiMuc():  'javascript:;'">
+                  <input class='search__input' [readonly]='true' nz-input formControlName='maCanCu'
+                         readonly />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-control>
@@ -132,59 +140,59 @@
   <nz-card class='mg-t-16'>
     <nz-table #tblData [nzData]='dataTable' class='table-chi-tiet' [nzScroll]="{ x: '1700px' }" nzBordered>
       <thead>
-        <tr>
-          <th class='text-center' width='40px'>STT</th>
-          <th width='200px'>Nhóm hàng DTQG</th>
-          <th width='250px'>Loại hàng DTQG</th>
-          <th width='250px'>Chủng loại hàng DTQG</th>
-          <th width='250px'>Mô tả</th>
-          <th width='100px'>ĐVT</th>
-          <th width='200px'>Đơn vị quản lý</th>
-          <th width='200px'>Loại hình xuất</th>
-        </tr>
+      <tr>
+        <th class='text-center' width='40px'>STT</th>
+        <th width='200px'>Nhóm hàng DTQG</th>
+        <th width='250px'>Loại hàng DTQG</th>
+        <th width='250px'>Chủng loại hàng DTQG</th>
+        <th width='250px'>Mô tả</th>
+        <th width='100px'>ĐVT</th>
+        <th width='200px'>Đơn vị quản lý</th>
+        <th width='200px'>Loại hình xuất</th>
+      </tr>
       </thead>
       <tbody>
-        <ng-container *ngFor='let item of tblData.data, let i = index;'>
+      <ng-container *ngFor='let item of tblData.data, let i = index;'>
+        <tr>
+          <td>{{numberToRoman(i + 1)!}}</td>
+          <td class='bold'>{{item.tenNhomHang}}</td>
+          <td>{{item.ten}}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>TCDT</td>
+          <td>
+            <nz-select [(ngModel)]='item.loaiHinhXuat'>
+              <nz-option *ngFor='let p of loaiHinhXuatOptions' [nzValue]='p.value' [nzLabel]='p.text'></nz-option>
+            </nz-select>
+          </td>
+        </tr>
+        <ng-container *ngFor='let lv1 of item.children,let i2=index'>
           <tr>
-            <td>{{numberToRoman(i + 1)!}}</td>
-            <td class='bold'>{{item.ten}}</td>
+            <td style='text-align: right;'>{{i2 + 1}}</td>
+            <td></td>
+            <td class='bold'>{{lv1.ten}}</td>
             <td></td>
             <td></td>
-            <td></td>
-            <td></td>
+            <td>{{lv1.maDviTinh}}</td>
             <td>TCDT</td>
             <td>
-              <nz-select [(ngModel)]='item.loaiHinhXuat'>
-                <nz-option *ngFor='let p of loaiHinhXuatOptions' [nzValue]='p.value' [nzLabel]='p.text'></nz-option>
-              </nz-select>
             </td>
           </tr>
-          <ng-container *ngFor='let lv1 of item.children,let i2=index'>
+          <ng-container *ngFor='let lv2 of lv1.children,let i3=index'>
             <tr>
-              <td style='text-align: right;'>{{i2 + 1}}</td>
-              <td></td>
-              <td class='bold'>{{lv1.ten}}</td>
+              <td style='text-align: right;'>{{i3 + 1}}</td>
               <td></td>
               <td></td>
-              <td>{{lv1.maDviTinh}}</td>
+              <td>{{lv2.ten}}</td>
+              <td></td>
+              <td>{{lv2.maDviTinh}}</td>
               <td>TCDT</td>
-              <td>
-              </td>
+              <td></td>
             </tr>
-            <ng-container *ngFor='let lv2 of lv1.children,let i3=index'>
-              <tr>
-                <td style='text-align: right;'>{{i3 + 1}}</td>
-                <td></td>
-                <td></td>
-                <td>{{lv2.ten}}</td>
-                <td></td>
-                <td>{{lv2.maDviTinh}}</td>
-                <td>TCDT</td>
-                <td></td>
-              </tr>
-            </ng-container>
           </ng-container>
         </ng-container>
+      </ng-container>
       </tbody>
     </nz-table>
   </nz-card>

@@ -1,8 +1,8 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {QuanLyHangTrongKhoService} from "../../../../services/quanLyHangTrongKho.service";
-import {MESSAGE} from "../../../../constants/message";
-import {Globals} from './../../../../shared/globals';
-import {AMOUNT_ONE_DECIMAL} from "../../../../Utility/utils";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { QuanLyHangTrongKhoService } from '../../../../services/quanLyHangTrongKho.service';
+import { MESSAGE } from '../../../../constants/message';
+import { Globals } from './../../../../shared/globals';
+import { AMOUNT_ONE_DECIMAL } from '../../../../Utility/utils';
 
 @Component({
   selector: 'app-ke-hoach-luong-thuc',
@@ -13,12 +13,12 @@ export class KeHoachLuongThucComponent implements OnInit, OnChanges {
   @Input() keHoach: any = {};
   @Output() keHoachChange = new EventEmitter<number>();
   @Input()
-  ltGaoMua: number = 0
+  ltGaoMua: number = 0;
   @Output()
   ltGaoMuaChange = new EventEmitter<number>();
 
   @Input()
-  ltGaoXuat: number = 0
+  ltGaoXuat: number = 0;
   @Output()
   ltGaoXuatChange = new EventEmitter<number>();
 
@@ -28,7 +28,7 @@ export class KeHoachLuongThucComponent implements OnInit, OnChanges {
   ltThocXuatChange = new EventEmitter<number>();
 
   @Input()
-  ltThocMua: number = 0
+  ltThocMua: number = 0;
   @Output()
   ltThocMuaChange = new EventEmitter<number>();
 
@@ -41,6 +41,11 @@ export class KeHoachLuongThucComponent implements OnInit, OnChanges {
   ltGaoTon: number = 0;
   @Output()
   ltGaoTonChange = new EventEmitter<number>();
+
+  @Input()
+  ghiChu: string;
+  @Output()
+  ghiChuChange = new EventEmitter<string>();
 
   @Input()
   isView: boolean = false;
@@ -88,6 +93,7 @@ export class KeHoachLuongThucComponent implements OnInit, OnChanges {
     this.ltGaoMuaChange.emit(this.ltGaoMua);
     this.ltGaoTonChange.emit(this.ltGaoTon);
     this.ltThocTonChange.emit(this.ltThocTon);
+    this.ghiChuChange.emit(this.ghiChu);
   }
 
   ngOnChanges(changes: SimpleChanges): void {

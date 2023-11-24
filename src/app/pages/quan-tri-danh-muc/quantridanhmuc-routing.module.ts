@@ -9,6 +9,8 @@ import {DanhMucCongCuDungCuComponent} from "./danh-muc-cong-cu-dung-cu/danh-muc-
 import {DanhMucTaiSanComponent} from "./danh-muc-tai-san/danh-muc-tai-san.component";
 import {DanhMucDviLqComponent} from "./danh-muc-dvi-lq/danh-muc-dvi-lq.component";
 import {DanhMucThuKhoComponent} from "./danh-muc-thu-kho/danh-muc-thu-kho.component";
+import {DanhMucDinhMucHaoHutComponent} from "./danh-muc-dinh-muc-hao-hut/danh-muc-dinh-muc-hao-hut.component";
+import {DanhMucCtieuChatLuongComponent} from "./danh-muc-ctieu-chat-luong/danh-muc-ctieu-chat-luong.component";
 
 
 const routes: Routes = [
@@ -18,7 +20,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'danh-muc-dung-chung',
+        redirectTo: '',
         pathMatch: 'full',
       },
       {
@@ -52,6 +54,13 @@ const routes: Routes = [
       {
         path: 'danh-muc-thu-kho',
         component: DanhMucThuKhoComponent,
+      },
+      {
+        path: 'danh-muc-dinh-muc-hao-hut',
+        component: DanhMucDinhMucHaoHutComponent,
+      },{
+        path: 'danh-muc-chi-tieu-chat-luong',
+        component: DanhMucCtieuChatLuongComponent,
       },
     ],
   },

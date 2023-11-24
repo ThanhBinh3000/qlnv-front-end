@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ROUTE_LIST } from "../khai-thac-bao-cao/khai-thac-bao-cao.constant";
-import { Router } from "@angular/router";
-import { UserService } from "src/app/services/user.service";
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {ROUTE_LIST} from "../khai-thac-bao-cao/khai-thac-bao-cao.constant";
+import {Router} from "@angular/router";
+import {UserService} from "src/app/services/user.service";
 
 @Component({
   selector: 'app-khai-thac-bao-cao',

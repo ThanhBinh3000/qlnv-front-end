@@ -1,23 +1,23 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from "@angular/core";
-import { Base2Component } from "../../../../../components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { DxKhNhapKhacService } from "../../../../../services/qlnv-hang/nhap-hang/nhap-khac/dxKhNhapKhac.service";
-import { MESSAGE } from "../../../../../constants/message";
-import { DanhMucService } from "../../../../../services/danhmuc.service";
-import { Validators } from "@angular/forms";
+import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from "@angular/core";
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {DxKhNhapKhacService} from "../../../../../services/qlnv-hang/nhap-hang/nhap-khac/dxKhNhapKhac.service";
+import {MESSAGE} from "../../../../../constants/message";
+import {DanhMucService} from "../../../../../services/danhmuc.service";
+import {Validators} from "@angular/forms";
 import * as dayjs from "dayjs";
-import { DonviService } from "../../../../../services/donvi.service";
-import { DANH_MUC_LEVEL } from "../../../../luu-kho/luu-kho.constant";
-import { OldResponseData } from "../../../../../interfaces/response";
-import { MangLuoiKhoService } from "../../../../../services/qlnv-kho/mangLuoiKho.service";
-import { chain, cloneDeep } from "lodash";
-import { STATUS } from "../../../../../constants/status";
-import { LOAI_HINH_NHAP_XUAT } from "../../../../../constants/config";
-import { DialogTuChoiComponent } from "../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import {DonviService} from "../../../../../services/donvi.service";
+import {DANH_MUC_LEVEL} from "../../../../luu-kho/luu-kho.constant";
+import {OldResponseData} from "../../../../../interfaces/response";
+import {MangLuoiKhoService} from "../../../../../services/qlnv-kho/mangLuoiKho.service";
+import {chain, cloneDeep} from "lodash";
+import {STATUS} from "../../../../../constants/status";
+import {LOAI_HINH_NHAP_XUAT} from "../../../../../constants/config";
+import {DialogTuChoiComponent} from "../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 
 @Component({
   selector: "app-them-moi-ke-hoach-nhap-khac",
@@ -83,11 +83,10 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
   }
 
   async ngOnInit() {
-    this.userInfo = this.userService.getUserLogin();
-    this.maTrinh = "/" + this.userInfo.MA_TR;
-    await Promise.all([
-      this.loadData(),
-    ]);
+      this.userInfo = this.userService.getUserLogin();
+      await Promise.all([
+        this.loadData(),
+      ]);
   }
 
   async ngOnChanges(changes: SimpleChanges) {
@@ -117,6 +116,8 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
         if (res.msg == MESSAGE.SUCCESS) {
           const dataDetail = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, dataDetail.hdr);
+          console.log(this.formData, "get detail")
+          this.maTrinh = "/" + dataDetail.hdr.soDxuat?.split('/')[1]
           this.formData.patchValue({
             soDxuat: dataDetail.hdr.soDxuat?.split('/')[0]
           })
@@ -137,6 +138,7 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
   }
 
   async initForm() {
+    this.maTrinh = "/" + this.userInfo.MA_TR;
     if (this.userService.isTongCuc()) {
       this.formData.patchValue({
         tenDvi: this.userInfo.TEN_PHONG_BAN,
@@ -251,6 +253,13 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
     body.details = this.listOfData;
     body.fileDinhKems = this.fileDinhKems;
     body.canCuPhapLy = this.canCuPhapLy;
+    if(!await this.validateCloaiVthh(body)){
+      this.notification.error(
+        MESSAGE.ERROR,
+        'Loại hàng DTQG không khớp với Ngăn/lô kho.',
+      );
+      return;
+    }
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.dxKhNhapKhacService.update(body);
@@ -275,6 +284,20 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+  }
+
+  async validateCloaiVthh(data){
+    let value = true;
+    console.log(this.formData.value, "formData")
+    data.details.forEach(item =>{
+      if(!item.cloaiVthh.includes(this.formData.value.loaiVthh)){
+        value = false;
+        return value;
+      }else{
+        return value;
+      }
+    })
+    return value;
   }
 
   clearValidatorLuuDuThao() {
@@ -407,6 +430,18 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
   }
 
   async hoanThanh() {
+    this.setValidator();
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      return;
+    }
+    if (this.listOfData.length == 0) {
+      this.notification.error(
+        MESSAGE.ERROR,
+        'Chi tiết đề xuất kế hoạch nhập khác không được để trống.',
+      );
+      return;
+    }
     let body: any = {};
     if (this.formData.get('soDxuat').value) {
       this.formData.get('soDxuat').setValue(this.formData.get('soDxuat').value + this.maTrinh);

@@ -2,11 +2,11 @@
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span *ngIf="isTongHop"
+        <span *ngIf="isTongHop && formData.value.id != null"
               [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDTC ?  'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
         {{ formData.value.tenTrangThai }}
       </span>
-        <span *ngIf="!isTongHop"></span>
+        <span *ngIf="!(isTongHop && formData.value.id != null)"></span>
         <span>TỔNG HỢP PHƯƠNG ÁN ĐỀ XUẤT KẾ HOẠCH ĐẦU TƯ XÂY DỰNG TRUNG HẠN (5 NĂM)</span>
       </div>
     </div>
@@ -187,7 +187,7 @@
             </div>
             <div nz-col nzSpan="4">
               <nz-form-item class="form-item">
-                <nz-form-label [nzNoColon]="true">Ngày tạo tờ trình
+                <nz-form-label nzRequired [nzNoColon]="true">Ngày tạo tờ trình
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-date-picker
@@ -199,7 +199,7 @@
             </div>
             <div nz-col nzSpan="4">
               <nz-form-item class="form-item">
-                <nz-form-label [nzNoColon]="true">Số quyết định
+                <nz-form-label [nzNoColon]="true">Số văn bản
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group [nzAddOnAfter]="soQd">
@@ -211,7 +211,7 @@
             </div>
             <div nz-col nzSpan="4">
               <nz-form-item class="form-item">
-                <nz-form-label [nzNoColon]="true">Ngày ký quyết định
+                <nz-form-label [nzNoColon]="true">Ngày ký văn bản
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-date-picker [nzDisabled]="formData.value.trangThai != STATUS.CHO_DUYET_LDTC"
@@ -226,7 +226,7 @@
                   Căn cứ pháp lý
                 </nz-form-label>
                 <div class="list-file">
-                  <file-list [disabled]="isViewDetail" [data]="canCuPhapLys"></file-list>
+                  <file-list [disabled]="isViewDetail" [isViewDetail]="isViewDetail" [data]="canCuPhapLys"></file-list>
                 </div>
               </nz-form-item>
             </div>
@@ -236,7 +236,7 @@
                   File đính kèm QĐ đã ký của Tổng cục DTNN
                 </nz-form-label>
                 <div class="list-file">
-                  <file-list [disabled]="isViewDetail" [data]="fileDinhKems"></file-list>
+                  <file-list [disabled]="isViewDetail" [isViewDetail]="isViewDetail" [data]="fileDinhKems"></file-list>
                 </div>
               </nz-form-item>
             </div>
@@ -245,7 +245,7 @@
       </nz-collapse-panel>
     </nz-collapse>
     <nz-collapse nzAccordion>
-      <nz-collapse-panel [nzHeader]="'NỘI DUNG QUYẾT ĐỊNH'" [nzActive]="true">
+      <nz-collapse-panel [nzHeader]="'THÔNG TIN CHI TIẾT'" [nzActive]="true">
         <nz-table #dataTbl class="nowrap mt-16 table-chi-tiet pd-10" [nzData]="listDx" nzBordered>
           <thead>
           <tr>
@@ -273,7 +273,7 @@
           </tbody>
         </nz-table>
         <div nz-row [nzGutter]="24">
-          <div nz-col [nzSpan]="formData.value.trangThai == STATUS.DU_THAO ? 24  : 12 ">
+          <div nz-col [nzSpan]="formData.value.trangThai == STATUS.DU_THAO ? 24  : 24 ">
             <nz-collapse nzAccordion>
               <nz-collapse-panel [nzHeader]="'ĐỀ XUẤT CỦA CÁC CỤC'" [nzActive]="true">
                 <nz-card class="mt-2px flex-card data-table card-border-content table-card">
@@ -369,9 +369,9 @@
               </nz-collapse-panel>
             </nz-collapse>
           </div>
-          <div nz-col nzSpan="12">
+          <div nz-col nzSpan="24">
             <nz-collapse nzAccordion *ngIf="formData.value.trangThai != STATUS.DU_THAO">
-              <nz-collapse-panel [nzHeader]="'PHƯƠNG ÁN CỦA TỔNG CỤC'" [nzActive]="true">
+              <nz-collapse-panel [nzHeader]="'QUYẾT ĐỊNH CỦA TỔNG CỤC DTNN'" [nzActive]="true">
                 <nz-card class="mt-2px flex-card data-table card-border-content table-card">
                   <div>
     <span class="text-right">
@@ -380,7 +380,7 @@
                   </div>
                   <nz-table nzBordered class="pd-10"
                             [nzFrontPagination]="false" [nzShowPagination]="false"
-                            [nzScroll]="dataTable &&dataTable.length > 0 ? { x: '2500px' } : null">
+                            [nzScroll]="dataTable && dataTable.length > 0 ? { x: '2500px' } : null">
                     <thead>
                     <tr>
                       <th class="text-center" width="2%" rowSpan="2">STT</th>
@@ -444,7 +444,7 @@
                           <td class="text-right">{{ item.ncKhNstw | number : '1.0-1' : 'vi_VN' }}</td>
                           <td class="text-center" nzRight
                               *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC)">
-                            <a (click)="themMoiItem(item, 'sua', y, dataTable[idx])">
+                            <a (click)="themMoiItem('sua', item,  y, data.dataChild)">
                               <i class="fa fa-pencil" title="Sửa"></i>
                             </a>
                             <a (click)="deleteRow(item)">

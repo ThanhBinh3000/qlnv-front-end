@@ -18,19 +18,19 @@
           </div>
           <div nz-col [nzSpan]="10" *ngIf="userService.isTongCuc()">
             <nz-form-item>
-              <nz-form-label>Cục DTNN KV</nz-form-label>
-              <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select formControlName="maCuc" (ngModelChange)="changeCuc($event)" nzAllowClear>
+              <nz-form-label>Cục DTNN</nz-form-label>
+              <nz-form-control nz-col [nzErrorTip]="error" >
+                <nz-select formControlName="listMaCuc" nzAllowClear nzMode="multiple">
                   <nz-option *ngFor="let p of dsDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="10" *ngIf="userService.isCuc() || userService.isTongCuc()">
+          <div nz-col [nzSpan]="10" *ngIf="!userService.isTongCuc() || userService.isCuc()">
             <nz-form-item>
-              <nz-form-label>Chi Cục DTNN KV</nz-form-label>
+              <nz-form-label>Chi Cục DTNN</nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select formControlName="maChiCuc" nzAllowClear>
+                <nz-select formControlName="listMaChiCuc" nzAllowClear nzMode="multiple">
                   <nz-option *ngFor="let p of listChiCuc" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -39,11 +39,16 @@
         </div>
       </form>
     </nz-card>
-    <div class="group-button">
-      <button type="button" class="btn btn-sub" (click)="preView()">
-        <!--              *ngIf="userService.isAccessPermisson('KTBC_TTQD_TT08_PBQHDTQG')">-->
+    <div class="cangiua group-button-search">
+      <button nz-button class="search__button--clear" (click)="clearFilter()">
+        <i class="icon  htvbdh_nhap-lai1"></i>
+        Xóa điều kiện
+      </button>
+      <button nz-button (click)="preView()"
+              class="modal__button--save ml-2"
+              *ngIf="userService.isAccessPermisson('KTBC_TTQD_TT08_PNXCTVTHDTQG')">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
-        <span>Kết xuất báo cáo</span>
+        Kết xuất báo cáo
       </button>
     </div>
   </div>
@@ -56,7 +61,8 @@
     </pdf-viewer>
   </div>
   <div *nzModalFooter>
-    <button nz-button (click)="downloadPdf()" class="modal__button--save">
+    <button nz-button (click)="downloadPdf()"
+            class="modal__button--save">
       <i class="icon htvbdh_tcdt_tuchoi"></i>
       Tải báo cáo
     </button>

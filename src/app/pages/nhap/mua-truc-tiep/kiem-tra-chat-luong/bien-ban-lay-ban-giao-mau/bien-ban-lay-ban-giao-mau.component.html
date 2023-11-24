@@ -76,10 +76,10 @@
                     <ng-container *ngFor="let item of dataTable , let i = index">
                         <tr class="level-2">
                             <td>{{(page - 1) * pageSize + i + 1}}</td>
-                            <!--                            <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>-->
-                            <td [nzExpand]="item.expand"
-                                (nzExpandChange)="item.expand=!item.expand; item.children=setExpand(item.expand, item.children)">
-                            </td>
+<!--                            <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>-->
+                          <td [nzExpand]="item.expand"
+                              (nzExpandChange)="item.expand=!item.expand; item.children=setExpand(item.expand, item.children)">
+                          </td>
                             <td class="link bold">{{ item.soQd }}</td>
                             <td class="bold">{{ item.namNhap }}</td>
                             <td class="bold">{{ item.tgianNkho }}</td>
@@ -108,37 +108,41 @@
                                     <td></td>
                                     <td class="text-left"></td>
                                 </tr>
-                                <ng-container *ngFor="let bblm of bb.listBienBanLayMau, let k = index">
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td colspan="3"></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>{{bblm.soBienBan}}</td>
-                                        <td>{{bblm.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
-                                        <td>{{bblm.soBbNhapDayKho }}</td>
-                                        <td>{{bblm.ngayKetThucNhap | date:'dd/MM/YYYY'}}
-                                        </td>
-                                        <td>{{bblm.tenTrangThai}}</td>
-                                        <td class="text-left">
-                                            <a (click)="goDetail(bblm.id, null, true)"
-                                                *ngIf="userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBLMBGM_XEM')">
-                                                <i class="fa fa-eye" title="Xem chi tiết"></i>
-                                            </a>
-                                            <a *ngIf="(bblm.trangThai != STATUS.DA_DUYET_LDCC) && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBLMBGM_THEM')"
-                                                (click)="goDetail(bblm.id, null, false) ">
-                                                <i class="fa fa-pencil" title="Sửa"></i>
-                                            </a>
-                                            <a *ngIf="(bblm.trangThai == STATUS.DU_THAO ) && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBLMBGM_XOA')"
-                                                (click)="xoaItem(bblm)">
-                                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                </ng-container>
+                              <ng-container *ngFor="let bblm of bb.listBienBanLayMau, let k = index">
+                                <tr>
+                                  <td></td>
+                                  <td></td>
+                                  <td colspan="3"></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td>{{bblm.soBienBan}}</td>
+                                  <td>{{bblm.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
+                                  <td>{{bblm.soBbNhapDayKho }}</td>
+                                  <td>{{bblm.ngayKetThucNhap | date:'dd/MM/YYYY'}}
+                                  </td>
+                                  <td>{{bblm.tenTrangThai}}</td>
+                                  <td class="text-left">
+                                    <a (click)="goDetail(bblm.id, null, true)"
+                                       *ngIf="userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBLMBGM_XEM')">
+                                      <i class="fa fa-eye" title="Xem chi tiết"></i>
+                                    </a>
+                                    <a *ngIf="(bblm.trangThai == STATUS.DU_THAO || bblm.trangThai == STATUS.TU_CHOI_LDCC) && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBLMBGM_THEM')"
+                                       (click)="goDetail(bblm.id, null, false) ">
+                                      <i class="fa fa-pencil" title="Sửa"></i>
+                                    </a>
+                                    <a *ngIf="bblm.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBLMBGM_DUYET')"
+                                       (click)="goDetail(bblm.id, null, false) ">
+                                      <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
+                                    </a>
+                                    <a *ngIf="(bblm.trangThai == STATUS.DU_THAO ) && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBLMBGM_XOA')"
+                                       (click)="xoaItem(bblm)">
+                                      <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                                    </a>
+                                  </td>
+                                </tr>
+                              </ng-container>
                             </ng-container>
                         </ng-container>
                     </ng-container>
@@ -164,7 +168,7 @@
     </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-    <app-them-moi-bien-ban-lay-ban-giao-mau [idQdGiaoNvNh]="idQdGiaoNvNh" [isView]="isView" [id]="selectedId"
-        [typeVthh]="loaiVthh" (showListEvent)="showList()">
+    <app-them-moi-bien-ban-lay-ban-giao-mau [idQdGiaoNvNh]="idQdGiaoNvNh" [isView]="isView" [id]="selectedId" [typeVthh]="loaiVthh"
+        (showListEvent)="showList()">
     </app-them-moi-bien-ban-lay-ban-giao-mau>
 </div>

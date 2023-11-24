@@ -13,7 +13,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { cloneDeep } from 'lodash';
-import { STATUS } from "../../../../../constants/status";
+import {STATUS} from "../../../../../constants/status";
 @Component({
   selector: 'app-dieuchinh-luachon-nhathau',
   templateUrl: './dieuchinh-luachon-nhathau.component.html',
@@ -103,7 +103,6 @@ export class DieuchinhLuachonNhathauComponent extends Base2Component implements 
         limit: this.pageSize,
         page: this.page - 1
       }
-      console.log(body)
       let res = await this.dieuChinhQuyetDinhPdKhlcntService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
@@ -169,7 +168,7 @@ export class DieuchinhLuachonNhathauComponent extends Base2Component implements 
   };
 
   disableXem(trangThai) {
-    switch (trangThai) {
+    switch (trangThai){
       case this.STATUS.DA_LAP: {
         if (this.userService.isAccessPermisson("NHDTQG_PTDT_DCKHLCNT_THEM")) {
           return false;
@@ -195,10 +194,10 @@ export class DieuchinhLuachonNhathauComponent extends Base2Component implements 
     }
   }
 
-  hienThiXem(data) {
+  hienThiXem(data){
     if (this.userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_XEM') && data != null) {
-      if (this.userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_THEM')
-        && (data.trangThai == STATUS.DU_THAO
+      if(this.userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_THEM')
+        && (data.trangThai == STATUS.DA_LAP
           || data.trangThai == STATUS.TU_CHOI_LDV)) {
         return false;
       } else if (this.userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_DUYET_LDVU') && data.trangThai == STATUS.CHO_DUYET_LDV) {

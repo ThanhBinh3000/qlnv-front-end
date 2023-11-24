@@ -1,19 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { Base2Component } from "../../../../../components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { DonviService } from "../../../../../services/donvi.service";
-import { MESSAGE } from "../../../../../constants/message";
-import { saveAs } from 'file-saver';
+import {Component, OnInit} from '@angular/core';
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {DonviService} from "../../../../../services/donvi.service";
+import {MESSAGE} from "../../../../../constants/message";
+import {saveAs} from 'file-saver';
 import dayjs from "dayjs";
-import { ThongTinDmScLonComponent } from "./thong-tin-dm-sc-lon/thong-tin-dm-sc-lon.component";
+import {ThongTinDmScLonComponent} from "./thong-tin-dm-sc-lon/thong-tin-dm-sc-lon.component";
 import {
   DanhMucSuaChuaService
 } from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/danh-muc-kho/danh-muc-sua-chua.service";
-import { Router } from "@angular/router";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-danh-muc-sc-lon',
@@ -25,10 +25,11 @@ export class DanhMucScLonComponent extends Base2Component implements OnInit {
   dsCuc: any[] = [];
   dsKho: any[] = [];
   listTrangThai: any[] = [
-    { ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện' },
-    { ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
-    { ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành' },
+    {ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện'},
+    {ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện'},
+    {ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành'},
   ];
+
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
@@ -62,10 +63,10 @@ export class DanhMucScLonComponent extends Base2Component implements OnInit {
     }
     this.spinner.show();
     try {
-      this.loadDsCuc()
+       this.loadDsCuc()
       if (this.userService.isCuc()) {
         this.formData.patchValue({
-          maDvi: this.userInfo.MA_DVI
+          maDvi : this.userInfo.MA_DVI
         })
       }
       await this.filter()
@@ -117,7 +118,7 @@ export class DanhMucScLonComponent extends Base2Component implements OnInit {
       nzContent: ThongTinDmScLonComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzStyle: { top: '100px' },
+      nzStyle: {top: '100px'},
       nzWidth: '1000px',
       nzFooter: null,
       nzComponentParams: {

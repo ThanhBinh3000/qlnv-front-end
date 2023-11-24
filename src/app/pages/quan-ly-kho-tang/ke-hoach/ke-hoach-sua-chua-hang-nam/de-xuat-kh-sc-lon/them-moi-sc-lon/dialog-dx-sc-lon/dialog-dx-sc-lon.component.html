@@ -22,8 +22,8 @@
         <nz-form-item>
           <nz-form-label nzRequired nzNoColon="true">Tên công trình</nz-form-label>
           <nz-select [nzDisabled]="type == 'sua'" nzAllowClear [(ngModel)]="item.maCongTrinh"
-            (ngModelChange)="changeDmucDuAn($event)">
-            <nz-option *ngFor="let item of listDmScLon" [nzLabel]="item.tenCongTrinh" [nzValue]="item.maCongTrinh">
+                     (ngModelChange)="changeDmucDuAn($event)">
+            <nz-option *ngFor="let x of listDmScLon" [nzLabel]="x.tenCongTrinh" [nzValue]="x.maCongTrinh">
             </nz-option>
           </nz-select>
         </nz-form-item>
@@ -100,7 +100,7 @@
         <nz-form-item>
           <nz-form-label nzNoColon="true">Ngày ký QĐ PD TMĐT khái toán, dự toán</nz-form-label>
           <nz-input-group>
-            <span class="text-blue">{{item.ngayQdPd ? item.ngayQdPd : '' | date: 'dd/MM/YYYY'}}</span>
+            <span class="text-blue">{{item.ngayQdPd ? item.ngayQdPd : ''  | date: 'dd/MM/YYYY'}}</span>
           </nz-input-group>
         </nz-form-item>
       </div>
@@ -108,8 +108,9 @@
         <nz-form-item>
           <nz-form-label nzNoColon="true">Giá trị quyết toán được duyệt (đ)</nz-form-label>
           <nz-input-group>
-            <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="item.giaTriPd" [nzMin]="0"
-              [nzDisabled]="!isQd" [nzFormatter]="globals.formatter" class="text-blue" [nzParser]="globals.parser">
+            <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="item.giaTriPd" [nzMin]="0" [nzDisabled]="!isQd"
+                              [nzFormatter]="globals.formatter" class="text-blue"
+                             [nzParser]="globals.parser">
             </nz-input-number>
           </nz-input-group>
         </nz-form-item>
@@ -118,8 +119,9 @@
         <nz-form-item>
           <nz-form-label nzNoColon="true">Lũy kế cấp vốn đến thời điểm hiện tại</nz-form-label>
           <nz-input-group>
-            <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="item.luyKeVon" [nzMin]="0"
-              [nzDisabled]="!isQd" [nzFormatter]="globals.formatter" class="text-blue" [nzParser]="globals.parser">
+            <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="item.luyKeVon" [nzMin]="0" [nzDisabled]="!isQd"
+                             [nzFormatter]="globals.formatter" class="text-blue"
+                             [nzParser]="globals.parser">
             </nz-input-number>
           </nz-input-group>
         </nz-form-item>
@@ -129,8 +131,8 @@
           <nz-form-label nzRequired nzNoColon="true">Kế hoạch vốn năm hiện tại (đ)</nz-form-label>
           <nz-input-group>
             <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="item.vonDauTu" [nzMin]="0"
-              [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter" class="text-blue"
-              [nzParser]="globals.parser">
+                             [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter" class="text-blue"
+                             [nzParser]="globals.parser">
             </nz-input-number>
           </nz-input-group>
         </nz-form-item>

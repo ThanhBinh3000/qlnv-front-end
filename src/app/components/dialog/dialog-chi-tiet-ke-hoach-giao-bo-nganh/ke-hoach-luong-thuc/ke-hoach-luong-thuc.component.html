@@ -1,9 +1,9 @@
-<nz-table class="mt-2" nzBordered [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+<nz-table class='mt-2' nzBordered [nzData]='dataTable' [nzFrontPagination]='false' [nzShowPagination]='false' >
   <thead>
   <tr>
-    <th style="width: 10%;">STT</th>
-    <th style="width: 60%;">Chỉ tiêu</th>
-    <th style="width: 30%;">
+    <th style='width: 10%;'>STT</th>
+    <th style='width: 60%;'>Chỉ tiêu</th>
+    <th style='width: 30%;'>
       Kế hoạch năm {{namHienTai}} (tấn)
     </th>
   </tr>
@@ -12,36 +12,36 @@
   <tr>
     <td><strong>I</strong></td>
     <td>Lương thực tồn kho đầu kỳ (quy thóc)</td>
-    <td style="text-align: right;"><strong> {{+ltThocTon + +(ltGaoTon * 2)|number: '1.0-1': 'vi_VN'}} </strong></td>
+    <td style='text-align: right;'><strong> {{+ltThocTon + +(ltGaoTon * 2)|number: '1.0-1': 'vi_VN'}} </strong></td>
   </tr>
   <tr>
     <td>-</td>
     <td>Thóc</td>
-    <td style="text-align: right;">
-      <input class="money-input" currencyMask [(ngModel)]="ltThocTon" [options]="amount"/>
+    <td style='text-align: right;'>
+      <input class='money-input' currencyMask [(ngModel)]='ltThocTon' [options]='amount' />
       <!--      {{ltThocTon|number: '1.0-1': 'vi_VN'}}-->
     </td>
   </tr>
   <tr>
     <td>-</td>
     <td>Gạo</td>
-    <td style="text-align: right;">
-      <input class="money-input" currencyMask [(ngModel)]="ltGaoTon" [options]="amount"/>
+    <td style='text-align: right;'>
+      <input class='money-input' currencyMask [(ngModel)]='ltGaoTon' [options]='amount' />
       <!--      {{ltGaoTon|number: '1.0-1': 'vi_VN'}}-->
     </td>
   </tr>
   <tr>
     <td><strong>II</strong></td>
     <td>Lương thực xuất ra (quy thóc)</td>
-    <td style="text-align: right;"><strong>{{ +ltThocXuat + +(ltGaoXuat * 2)|number: '1.0-1': 'vi_VN'}} </strong>
+    <td style='text-align: right;'><strong>{{ +ltThocXuat + +(ltGaoXuat * 2)|number: '1.0-1': 'vi_VN'}} </strong>
     </td>
   </tr>
   <tr>
     <td>-</td>
     <td>Thóc</td>
-    <td style="text-align: right;">
+    <td style='text-align: right;'>
       <div>
-        <input class="money-input" currencyMask [(ngModel)]="ltThocXuat" [options]="amount"/>
+        <input class='money-input' currencyMask [(ngModel)]='ltThocXuat' [options]='amount' />
         <!--        <nz-input-number [disabled]="isView" [nzMin]="0" [nzStep]="0.1" [nzSize]="'small'" [(ngModel)]="ltThocXuat"-->
         <!--                         text-align="right">-->
         <!--        </nz-input-number>-->
@@ -51,9 +51,9 @@
   <tr>
     <td>-</td>
     <td>Gạo</td>
-    <td style="text-align: right;">
+    <td style='text-align: right;'>
       <div>
-        <input class="money-input" currencyMask [(ngModel)]="ltGaoXuat" [options]="amount"/>
+        <input class='money-input' currencyMask [(ngModel)]='ltGaoXuat' [options]='amount' />
         <!--        <nz-input-number [disabled]="isView" [nzMin]="0" [nzStep]="0.1" [nzSize]="'small'" [(ngModel)]="ltGaoXuat"-->
         <!--                         text-align="right">-->
         <!--        </nz-input-number>-->
@@ -63,14 +63,14 @@
   <tr>
     <td><strong>III</strong></td>
     <td>Lương thực mua vào (quy thóc)</td>
-    <td style="text-align: right;"><strong> {{ +ltThocMua + +(ltGaoMua * 2)|number: '1.0-1': 'vi_VN'}}</strong></td>
+    <td style='text-align: right;'><strong> {{ +ltThocMua + +(ltGaoMua * 2)|number: '1.0-1': 'vi_VN'}}</strong></td>
   </tr>
   <tr>
     <td>-</td>
     <td>Thóc</td>
-    <td style="text-align: right;">
+    <td style='text-align: right;'>
       <div>
-        <input class="money-input" currencyMask [(ngModel)]="ltThocMua" [options]="amount"/>
+        <input class='money-input' currencyMask [(ngModel)]='ltThocMua' [options]='amount' />
         <!--        <nz-input-number [disabled]="isView" [nzMin]="0" [nzStep]="0.1" [nzSize]="'small'" [(ngModel)]="ltThocMua"-->
         <!--                         text-align="right">-->
         <!--        </nz-input-number>-->
@@ -82,7 +82,7 @@
     <td>Gạo</td>
     <td>
       <div>
-        <input class="money-input" currencyMask [(ngModel)]="ltGaoMua" [options]="amount"/>
+        <input class='money-input' currencyMask [(ngModel)]='ltGaoMua' [options]='amount' />
         <!--        <nz-input-number style="text-align: right;" [disabled]="isView" [nzMin]="0" [nzStep]="0.1"-->
         <!--                         [nzSize]="'small'" [(ngModel)]="ltGaoMua">-->
         <!--        </nz-input-number>-->
@@ -94,7 +94,7 @@
     <td><strong>IV</strong></td>
     <td>Lương thực dự trữ cuối năm (quy thóc)</td>
     <!--      <td style="text-align: right;"> {{ +ltThocDuTru + +(ltGaoDuTru * 2)|number: '1.0-1'}} </td>-->
-    <td style="text-align: right;"><strong> {{(+ltThocMua + +(ltGaoMua * 2)) - (+ltThocXuat + +(ltGaoXuat * 2)) +
+    <td style='text-align: right;'><strong> {{(+ltThocMua + +(ltGaoMua * 2)) - (+ltThocXuat + +(ltGaoXuat * 2)) +
     (+ltThocTon + +(ltGaoTon * 2))|number: '1.0-1'}}
     </strong>
     </td>
@@ -102,14 +102,23 @@
   <tr>
     <td>-</td>
     <td>Thóc</td>
-    <td style="text-align: right;"> {{ +ltThocMua - +ltThocXuat + +ltThocTon|number: '1.0-1': 'vi_VN'}}
+    <td style='text-align: right;'> {{ +ltThocMua - +ltThocXuat + +ltThocTon|number: '1.0-1': 'vi_VN'}}
     </td>
   </tr>
   <tr>
     <td>-</td>
     <td>Gạo</td>
-    <td style="text-align: right;"> {{+ltGaoMua - +ltGaoXuat + +ltGaoTon|number: '1.0-1': 'vi_VN'}}
+    <td style='text-align: right;'> {{+ltGaoMua - +ltGaoXuat + +ltGaoTon|number: '1.0-1': 'vi_VN'}}
     </td>
   </tr>
   </tbody>
 </nz-table>
+<div nz-row [nzGutter]='24' class='mt-3 mb-3'>
+  <div nz-col nzSpan='24'>
+    <label class='search__label'> Ghi chú </label>
+    <nz-input-group>
+<!--      <input nz-input [disabled]='isView' [(ngModel)]='ghiChu' />-->
+      <textarea rows='3' [(ngModel)]='ghiChu' class='search__input' nz-input [disabled]='isView'></textarea>
+    </nz-input-group>
+  </div>
+</div>

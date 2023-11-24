@@ -9,7 +9,7 @@ import { Globals } from 'src/app/shared/globals';
 })
 export class MainXuatKhoComponent implements OnInit {
   @Input() loaiVthh: string;
-
+  @Input() loaiXuat: string;
 
   constructor(public userService: UserService, public globals: Globals) { }
 

@@ -128,7 +128,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
       ]);
-      if (this.idQdGiaoNvNh > 0) {
+      if(this.idQdGiaoNvNh > 0){
         await this.bindingDataQd(this.idQdGiaoNvNh)
       }
       if (this.id > 0) {
@@ -189,7 +189,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listSoQuyetDinh,
-        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
+        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng DTQG'],
         dataColumn: ['soQd', 'ngayQd', 'tenLoaiVthh'],
       },
     })
@@ -424,7 +424,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
           let body = {
             id: this.id,
             lyDoTuChoi: text,
-            trangThai: this.formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ ? STATUS.TU_CHOI_KTVBQ : (this.formData.value.trangThai == STATUS.CHO_DUYET_KT ? STATUS.TU_CHOI_KT : STATUS.CHO_DUYET_LDCC),
+            trangThai:  this.formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ ? STATUS.TU_CHOI_KTVBQ : (this.formData.value.trangThai == STATUS.CHO_DUYET_KT ? STATUS.TU_CHOI_KT : STATUS.CHO_DUYET_LDCC),
           };
           let res =
             await this.bienBanDayKhoMuaTrucTiepService.approve(
@@ -533,7 +533,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
   calcTong() {
     if (this.dataTable.length > 0) {
       let sum = 0;
-      this.dataTable.forEach(item => {
+      this.dataTable.forEach(item =>{
         sum = item.bcanKeHangHdr.reduce((prev, cur) => {
           prev += cur.tongSlCaBaoBi - cur.tongSlBaoBi;
           return prev;

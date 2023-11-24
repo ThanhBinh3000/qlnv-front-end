@@ -54,17 +54,17 @@
       <h3 class="text-uppercase">Danh sách biên bản lấy mẫu/bàn giao mẫu</h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteMulti()"
-                *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_XOA')">
+                *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_BBLMBGM_XOA') && userService.isChiCuc()">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button type="button" class="btn btn-sub" (click)="exportData()"
-                *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_EXP')">
+                *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_BBLMBGM_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)"
-                *ngIf=" userService.isChiCuc()">
+                *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_BBLMBGM_THEM') && userService.isChiCuc()">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Thêm</span>
         </button>
@@ -134,21 +134,18 @@
                 <td>{{lv1.ngayLayMau}}</td>
                 <td>{{lv1.tenTrangThaiBienBan}}</td>
                 <td class="text-left">
-                  <a *ngIf="lv1.trangThaiBienBan== STATUS.DA_DUYET_LDCC"
-                     (click)="redirectDetail(lv1.idBienBan, false)">
+                  <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_BBLMBGM_XEM')
+                      && !((lv1.trangThaiBienBan ==STATUS.TU_CHOI_LDCC || lv1.trangThaiBienBan ==STATUS.DU_THAO) && lv1.idNguoiTaoBb == userInfo.ID)" (click)="redirectDetail(lv1.idBienBan, true)">
                     <i class="fa fa-eye" title="Xem chi tiết"></i>
                   </a>
-                  <a *ngIf="lv1.trangThaiBienBan== STATUS.DU_THAO
-                            || lv1.trangThaiBienBan== STATUS.TU_CHOI_LDCC"
+                  <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_BBLMBGM_THEM') && (lv1.trangThaiBienBan == STATUS.TU_CHOI_LDCC || lv1.trangThaiBienBan ==STATUS.DU_THAO)"
                      (click)="redirectDetail(lv1.idBienBan, false)">
                     <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
-                  <a *ngIf="lv1.trangThaiBienBan== STATUS.CHO_DUYET_LDCC"
-                     (click)="redirectDetail(lv1.idBienBan, true)">
+                  <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_BBLMBGM_DUYETLDCC') && lv1.trangThaiBienBan == STATUS.CHO_DUYET_LDCC" (click)="redirectDetail(lv1.idBienBan, true)">
                     <i class="icon htvbdh_tcdt_pheduyet"></i>
                   </a>
-                  <a *ngIf="lv1.trangThaiBienBan== STATUS.DU_THAO"
-                     (click)="delete(lv1)">
+                  <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_BBLMBGM_XOA') && lv1.trangThaiBienBan == STATUS.DU_THAO" (click)="delete(lv1)">
                     <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>

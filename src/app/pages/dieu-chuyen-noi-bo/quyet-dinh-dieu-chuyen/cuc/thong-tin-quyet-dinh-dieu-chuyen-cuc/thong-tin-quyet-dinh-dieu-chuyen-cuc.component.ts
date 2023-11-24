@@ -156,6 +156,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       tenKieuNhapXuat: [],
       quyetDinhPdDtl: [new Array<any>(),],
       danhSachQuyetDinh: [new Array<any>(),],
+
     }
     );
   }
@@ -501,7 +502,6 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   async onChangeCanCuQdTc(id) {
     if (id) {
 
-      let tong = 0
       this.danhSachKeHoach = []
       this.danhSachQuyetDinh = []
       let dsHH = []
@@ -509,8 +509,12 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       const data = detail.data
       if (!data) return
       console.log('onChangeCanCuQdTc', detail)
-
-      let dsDX = data.danhSachQuyetDinh.filter((dvn) => dvn.maCucNhan === this.userInfo.MA_DVI)
+      let dsDX = []
+      if (this.formData.value.loaiQdinh === "01") {
+        dsDX = data.danhSachQuyetDinh.filter((dvn) => dvn.maCucXuat === this.userInfo.MA_DVI)
+      } else {
+        dsDX = data.danhSachQuyetDinh.filter((dvn) => dvn.maCucNhan === this.userInfo.MA_DVI)
+      }
 
       dsDX.forEach(element => {
         element.danhSachQuyetDinhChiTiet.forEach(itemQD => {
@@ -537,6 +541,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
         }
 
       })
+
 
 
       this.dataTableView = this.buildTableView(dsHH, "maDvi")
@@ -605,6 +610,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
 
                 let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+
                 return {
                   ...maLoKho,
                   idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
@@ -1330,6 +1336,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     this.setValidator()
     this.helperService.markFormGroupTouched(this.formData);
     if (!this.formData.valid) return
+
     let body = this.formData.value;
     body.canCu = this.canCu;
     body.quyetDinh = this.quyetDinh;
@@ -1359,10 +1366,9 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
         })
         this.guiDuyet();
       }
-      // else {
-      //   // this.quayLai();
-      //   await this.loadChiTiet(this.idInput)
-      // }
+      else {
+        await this.loadChiTiet(this.idInput)
+      }
     }
     await this.spinner.hide();
   }

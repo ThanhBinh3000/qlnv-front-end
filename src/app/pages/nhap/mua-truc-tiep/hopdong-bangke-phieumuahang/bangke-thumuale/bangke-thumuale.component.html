@@ -16,32 +16,31 @@
                     </div>
                     <div nz-col nzSpan="5">
                         <label class="search__label">Số QĐ giao nhệm vụ NH</label>
-                        <input class="search__input" placeholder="Nhập số QĐ" nz-input formControlName="soQdGiaoNvNh" />
+                        <input class="search__input" placeholder="Nhập số QĐ" nz-input
+                            formControlName="soQdGiaoNvNh" />
                     </div>
                     <div nz-col nzSpan="10">
                         <label class="search__label">Tên người bán</label>
                         <input class="search__input" placeholder="Nhập tên người bán" nz-input
                             formControlName="nguoiMua" />
                     </div>
-                    <!--                    <div nz-col nzSpan="5">-->
-                    <!--                        <label class="search__label">Ngày mua hàng</label>-->
-                    <!--                        <nz-range-picker formControlName="ngayMua" nzFormat="dd/MM/yyyy"></nz-range-picker>-->
-                    <!--                    </div>-->
+<!--                    <div nz-col nzSpan="5">-->
+<!--                        <label class="search__label">Ngày mua hàng</label>-->
+<!--                        <nz-range-picker formControlName="ngayMua" nzFormat="dd/MM/yyyy"></nz-range-picker>-->
+<!--                    </div>-->
                     <div nz-col nzSpan="4">
-                        <label class="search__label">Ngày mua hàng</label>
-                        <div nz-row [nzGutter]="24">
-                            <div nz-col nzSpan="12" class="cus-start-date">
-                                <nz-date-picker [nzDisabledDate]="disabledStartDate" nzFormat="dd/MM/yyyy"
-                                    [(ngModel)]="tuNgayMua" [ngModelOptions]="{standalone: true}"
-                                    nzPlaceHolder="Ngày bắt đầu">
-                                </nz-date-picker>
-                            </div>
-                            <div nz-col nzSpan="12" class="cus-end-date">
-                                <nz-date-picker [nzDisabledDate]="disabledEndDate" nzFormat="dd/MM/yyyy"
-                                    [(ngModel)]="denNgayMua" [ngModelOptions]="{standalone: true}"
-                                    nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
-                            </div>
+                      <label class="search__label">Ngày mua hàng</label>
+                      <div nz-row [nzGutter]="24">
+                        <div nz-col nzSpan="12" class="cus-start-date">
+                          <nz-date-picker [nzDisabledDate]="disabledStartDate" nzFormat="dd/MM/yyyy" [(ngModel)]="tuNgayMua" [ngModelOptions]="{standalone: true}"
+                                          nzPlaceHolder="Ngày bắt đầu">
+                          </nz-date-picker>
                         </div>
+                        <div nz-col nzSpan="12" class="cus-end-date">
+                          <nz-date-picker [nzDisabledDate]="disabledEndDate" nzFormat="dd/MM/yyyy" [(ngModel)]="denNgayMua" [ngModelOptions]="{standalone: true}"
+                                          nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                        </div>
+                      </div>
                     </div>
                 </div>
             </form>
@@ -91,8 +90,8 @@
                         <th>Tên người bán</th>
                         <th>Địa chỉ</th>
                         <th>Số CMT/CCCD</th>
-                        <th>Loại hàng hóa</th>
-                        <th>Chủng loại hàng hóa</th>
+                        <th>Loại hàng DTQG</th>
+                        <th>Chủng loại hàng DTQG</th>
                         <th>Số lượng</th>
                         <th>Đơn giá (đ)</th>
                         <th>Thành tiền (đ)</th>

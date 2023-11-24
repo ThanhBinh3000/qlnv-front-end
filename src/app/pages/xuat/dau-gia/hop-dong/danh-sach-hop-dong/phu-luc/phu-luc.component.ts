@@ -1,19 +1,19 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { MESSAGE } from 'src/app/constants/message';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from './../../../../../../services/storage.service';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {MESSAGE} from 'src/app/constants/message';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from './../../../../../../services/storage.service';
 import {
   HopDongXuatHangService
 } from './../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
 import dayjs from 'dayjs';
-import { STATUS } from 'src/app/constants/status';
-import { convertTienTobangChu } from 'src/app/shared/commonFunction';
-import { FileDinhKem } from "../../../../../../models/FileDinhKem";
-import { cloneDeep } from 'lodash';
+import {STATUS} from 'src/app/constants/status';
+import {convertTienTobangChu} from 'src/app/shared/commonFunction';
+import {FileDinhKem} from "../../../../../../models/FileDinhKem";
+import {cloneDeep} from 'lodash';
 
 @Component({
   selector: 'app-phu-luc',
@@ -88,7 +88,7 @@ export class PhuLucComponent extends Base2Component implements OnInit {
     if (!id) return;
     const data = await this.detail(id);
     if (!data) return;
-    const { soPhuLuc, ngayHlucSauDcTu, ngayHlucSauDcDen, children } = data;
+    const {soPhuLuc, ngayHlucSauDcTu, ngayHlucSauDcDen, children} = data;
     this.formData.patchValue({
       soPhuLuc: soPhuLuc?.split('/')[0] || null,
       ngayHieuLucPhuLuc: ngayHlucSauDcTu && ngayHlucSauDcDen ? [ngayHlucSauDcTu, ngayHlucSauDcDen] : null,

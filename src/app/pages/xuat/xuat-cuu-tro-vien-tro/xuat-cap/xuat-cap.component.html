@@ -1,6 +1,6 @@
 <!-- duongvd 230223-->
 <!-- menu xuat cap -->
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="level1">
+<nz-affix [nzOffsetTop]="globals.prop.MN_LV1" class="level1">
   <ul nz-menu nzMode="horizontal">
     <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)"
       *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDPACHUYENXC') && userService.isTongCuc()">
@@ -27,7 +27,7 @@
     </li>
   </ul>
 </nz-affix>
-<div class="contentBor chi-tieu__body giao-ke-hoach">
+<div class="contentBor chi-tieu__body giao-ke-hoach xuat_ctvt xuat_cap">
   <div class="contentDetail">
     <!-- <ng-container *ngIf="tabSelected == 0">
       <app-quyet-dinh-phuong-an (eventTaoQd)="taoQd($event)"></app-quyet-dinh-phuong-an>
@@ -63,10 +63,11 @@
       <app-quyet-dinh-gnv [loaiXuat]="'XC'"></app-quyet-dinh-gnv>
     </ng-container>
     <ng-container *ngIf="tabSelected == 3">
-      <app-kiem-tra-chat-luong></app-kiem-tra-chat-luong>
+      <!-- <app-kiem-tra-chat-luong></app-kiem-tra-chat-luong> -->
+      <app-xc-kiem-tra-chat-luong></app-xc-kiem-tra-chat-luong>
     </ng-container>
     <ng-container *ngIf="tabSelected == 4">
-      <app-xuat-kho></app-xuat-kho>
+      <app-xuat-kho [loaiXuat]="'XC'"></app-xuat-kho>
     </ng-container>
   </div>
 </div>

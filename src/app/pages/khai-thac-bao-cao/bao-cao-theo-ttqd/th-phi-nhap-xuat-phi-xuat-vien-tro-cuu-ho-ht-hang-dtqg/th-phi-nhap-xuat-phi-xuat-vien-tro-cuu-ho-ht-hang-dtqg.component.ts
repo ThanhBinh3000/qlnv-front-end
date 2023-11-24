@@ -14,7 +14,7 @@ import { Validators } from "@angular/forms";
 import { MESSAGE } from "../../../../constants/message";
 import { Base2Component } from "../../../../components/base2/base2.component";
 import { saveAs } from "file-saver";
-import { ThongTu1082018Service } from "../../../../services/bao-cao/ThongTu1082018.service";
+import {ThongTu1082018Service} from "../../../../services/bao-cao/ThongTu1082018.service";
 
 @Component({
   selector: 'app-th-phi-nhap-xuat-phi-xuat-vien-tro-cuu-ho-ht-hang-dtqg',
@@ -35,28 +35,23 @@ export class ThPhiNhapXuatPhiXuatVienTroCuuHoHtHangDtqgComponent extends Base2Co
   rows: any[] = [];
 
   constructor(httpClient: HttpClient,
-    storageService: StorageService,
-    notification: NzNotificationService,
-    spinner: NgxSpinnerService,
-    modal: NzModalService,
-    private thongTu1082018Service: ThongTu1082018Service,
-    public userService: UserService,
-    private donViService: DonviService,
-    private danhMucService: DanhMucService,
+              storageService: StorageService,
+              notification: NzNotificationService,
+              spinner: NgxSpinnerService,
+              modal: NzModalService,
+              private thongTu1082018Service: ThongTu1082018Service,
+              public userService: UserService,
+              private donViService: DonviService,
+              private danhMucService: DanhMucService,
 
-    private donviService: DonviService,
-    public globals: Globals) {
+              private donviService: DonviService,
+              public globals: Globals) {
     super(httpClient, storageService, notification, spinner, modal, thongTu1082018Service);
     this.formData = this.fb.group(
       {
         nam: [dayjs().get("year"), [Validators.required]],
-        quy: [dayjs().get("year"), [Validators.required]],
-        boNganh: null,
-        dviBaoCao: null,
-        maDvqhns: null,
-        loaiHangHoa: null,
-        nuocSanXuat: null,
-        chungLoaiHangHoa: null
+        listMaCuc: null,
+        listMaChiCuc: null,
       }
     );
   }
@@ -73,6 +68,17 @@ export class ThPhiNhapXuatPhiXuatVienTroCuuHoHtHangDtqgComponent extends Base2Co
       await Promise.all([
         this.loadDsDonVi(),
       ]);
+      if (this.userService.isCuc()) {
+        this.formData.patchValue({
+          listMaChiCuc: null,
+          listMaCuc: [this.userInfo.MA_DVI],
+        })
+      } else if (this.userService.isChiCuc()) {
+        this.formData.patchValue({
+          listMaChiCuc: [this.userInfo.MA_DVI],
+          listMaCuc: [this.userInfo.MA_DVI.substring(0,6)]
+        })
+      }
     } catch (e) {
       console.log("error: ", e);
       await this.spinner.hide();
@@ -92,10 +98,6 @@ export class ThPhiNhapXuatPhiXuatVienTroCuuHoHtHangDtqgComponent extends Base2Co
   async preView() {
     try {
       this.spinner.show();
-      if (this.formData.value.thoiGianSx) {
-        this.formData.value.thoiGianSxTu = dayjs(this.formData.value.thoiGianSx[0]).format("YYYY-MM-DD");
-        this.formData.value.thoiGianSxDen = dayjs(this.formData.value.thoiGianSx[1]).format("YYYY-MM-DD");
-      }
       let body = this.formData.value;
       body.typeFile = "pdf";
       body.fileName = "bc_th_phi_nhap_xuat_vt_ct_ht_dtqg_130.jrxml";
@@ -138,31 +140,39 @@ export class ThPhiNhapXuatPhiXuatVienTroCuuHoHtHangDtqgComponent extends Base2Co
   async loadDsDonVi() {
     let body = {
       trangThai: "01",
-      maDviCha: this.userInfo.MA_DVI.substring(0, 4),
+      maDviCha: this.userInfo.MA_DVI,
       type: "DV"
     };
     let res = await this.donViService.getDonViTheoMaCha(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.dsDonVi = res.data;
+      if (this.userService.isTongCuc()) {
+        this.dsDonVi = res.data;
+      } else if (this.userService.isCuc()) {
+        this.listChiCuc = res.data;
+      }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
-
-  async changeCuc(event: any) {
-    if (event) {
-      let body = {
-        trangThai: "01",
-        maDviCha: event,
-        type: "DV"
-      };
-      let res = await this.donViService.getDonViTheoMaCha(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        this.listChiCuc = res.data;
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
+  clearFilter() {
+    this.formData.patchValue({
+      nam: dayjs().get("year"),
+    })
+    if (this.userService.isTongCuc()) {
+      this.formData.patchValue({
+        listMaCuc: null,
+      })
+    } else if (this.userService.isCuc()) {
+      this.formData.patchValue({
+        listMaChiCuc: null,
+        listMaCuc: [this.userInfo.MA_DVI],
+      })
+    } else if (this.userService.isChiCuc()) {
+      this.formData.patchValue({
+        listMaChiCuc: [this.userInfo.MA_DVI],
+        listMaCuc: [this.userInfo.MA_DVI.substring(0,6)]
+      })
     }
   }
 }

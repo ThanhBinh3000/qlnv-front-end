@@ -18,8 +18,8 @@ import { ChiTieuKeHoachNamCapTongCucService } from "../../../../../../../service
 import { FormGroup } from "@angular/forms";
 import * as dayjs from "dayjs";
 import { NzCollapsePanelComponent } from "ng-zorro-antd/collapse";
-import { formatDate } from "@angular/common";
-import { CurrencyMaskInputMode } from "ngx-currency";
+import {formatDate} from "@angular/common";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
   selector: 'app-thongtin-dexuat-vt',
@@ -215,7 +215,7 @@ export class ThongtinDexuatVtComponent extends Base2Component implements OnInit 
     }
     this.listQuy = [];
     for (const element of quarters) {
-      this.listQuy.push({ giaTri: "Quý " + element + "/" + this.formData.get("namKhoach").value, ma: element })
+      this.listQuy.push({ giaTri: "Quý " + element + "/" + this.formData.get("namKhoach").value, ma: element})
     }
   }
   disabledDate = (current: Date): boolean => {

@@ -28,7 +28,7 @@ import {
   DialogThemMoiDmNhomHangComponent
 } from "../../../../../../components/dialog/dialog-them-moi-dm-nhom-hang/dialog-them-moi-dm-nhom-hang.component";
 import * as uuidv4 from "uuid";
-import { formatNumber } from "@angular/common";
+import {formatNumber} from "@angular/common";
 @Component({
   selector: 'app-thong-tin-bien-ban-nghiem-thu-bao-quan',
   templateUrl: './thong-tin-bien-ban-nghiem-thu-bao-quan.component.html',
@@ -837,7 +837,8 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
         data: row,
         typeData: this.typeData,
         typeAction: this.typeAction,
-        isChildren: isChildren
+        isChildren: isChildren,
+        nhomCcdc: [1, 2]
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -1101,4 +1102,5 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
     }
     this.updateDataTable()
   }
+
 }

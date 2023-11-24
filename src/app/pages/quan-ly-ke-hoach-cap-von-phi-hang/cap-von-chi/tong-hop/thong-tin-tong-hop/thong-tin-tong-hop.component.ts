@@ -23,10 +23,12 @@ import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { DeNghiCapVonBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapVanBoNganh.service';
 import { TongHopDeNghiCapVonService } from 'src/app/services/ke-hoach/von-phi/tongHopDeNghiCapVon.service';
-import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { STATUS } from '../../../../../constants/status';
 import { AMOUNT_NO_DECIMAL } from '../../../../../Utility/utils';
+import { PREVIEW } from '../../../../../constants/fileType';
+import printJS from 'print-js';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-thong-tin-tong-hop',
@@ -57,6 +59,7 @@ export class ThongTinTonghopComponent implements OnInit {
   listThongTinChiTiet: any[] = [];
   totalRecord: number = 0;
   isTonghop: boolean = false;
+  dataInfoHdv: any = {};
   dayNow: string;
   yearNow: number;
   filePhuongAn: any[] = [];
@@ -81,8 +84,19 @@ export class ThongTinTonghopComponent implements OnInit {
     },
   ];
   isDetail: boolean = false;
+  isDetailHdv: boolean = false;
   amount = AMOUNT_NO_DECIMAL;
-
+  showDlgPreview = false;
+  pdfSrc: any;
+  wordSrc: any;
+  excelSrc: any;
+  printSrc: any;
+  reportTemplate: any = {
+    typeFile: '',
+    fileName: '',
+    tenBaoCao: '',
+    trangThai: '',
+  };
   constructor(
     private modal: NzModalService,
     private tongHopDeNghiCapVonService: TongHopDeNghiCapVonService,
@@ -146,10 +160,12 @@ export class ThongTinTonghopComponent implements OnInit {
         this.isTonghop = true;
         let data = res.data;
         if (data) {
+          // console.log(data,'datadatadatadata');
           this.detail = res.data;
           this.detail.trangThai = data.trangThai;
           this.detail.tenTrangThai = data.tenTrangThai;
           this.filePhuongAn = data.fileDinhKems;
+          let idsKhDnCapVonId = data.ct1s.filter(item => item.maBn != 'BTC' && item.khDnCapVonId).map(s => Number(s.khDnCapVonId));
           this.formData.patchValue({
             'nam': res.data.nam,
             'nguonTongHop': data.nguonTongHop,
@@ -157,8 +173,9 @@ export class ThongTinTonghopComponent implements OnInit {
             'ngayTongHop': data.ngayTongHop,
             'maToTrinh': data.maToTrinh,
             'noiDung': data.noiDung,
+            'lyDoTuChoi': data.lyDoTuChoi,
             // nameFilePhuongAn: data.fileDinhKem.fileName,
-            khDnCapVonIds: data.ct1s.map(s => s.khDnCapVonId),
+            khDnCapVonIds: idsKhDnCapVonId,
           });
           // this.listFileDinhKem = [data.fileDinhKem];
           this.listThongTinChiTiet = [...data.ct1s];
@@ -182,7 +199,7 @@ export class ThongTinTonghopComponent implements OnInit {
     this.detail.tCThem.forEach(pa => {
       if (!pa.isSum) {
         const phuongAn = new Ct1sTonghop();
-        phuongAn.khDnCapVonId = pa.id;
+        phuongAn.khDnCapVonId = this.idInput ? pa.khDnCapVonId : (pa.maBn == 'BTC' ? pa.idHdv : pa.id);
         phuongAn.tcCapThem = +pa.tcCapThem;
         phuongAn.loaiBn = pa.loaiBn;
         phuongAn.loaiHang = pa.loaiHang;
@@ -218,7 +235,6 @@ export class ThongTinTonghopComponent implements OnInit {
       'nguonTongHop': this.formData.value.nguonTongHop ? this.formData.value.nguonTongHop : '',
       'noiDung': this.formData.value.noiDung ? this.formData.value.noiDung : '',
     };
-
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
@@ -240,8 +256,9 @@ export class ThongTinTonghopComponent implements OnInit {
       } else {
         let res = await this.tongHopDeNghiCapVonService.them(body);
         if (res.msg == MESSAGE.SUCCESS) {
-          this.detail.id = res.data.id
+          this.detail.id = res.data.id;
           this.idInput = res.data.id;
+          await this.loadChiTiet(this.idInput);
           if (!isGuiDuyet) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
           } else {
@@ -570,7 +587,7 @@ export class ThongTinTonghopComponent implements OnInit {
         if (res.data && res.data.length > 0) {
           let data = res.data;
           this.listThongTinChiTiet = data;
-          this.khDnCapVonIds = data.map(item => item.id).filter(function (el) {
+          this.khDnCapVonIds = data.map(item => item.id).filter(function(el) {
             return el != null;
           });
           this.formData.patchValue({ khDnCapVonIds: this.khDnCapVonIds });
@@ -595,11 +612,63 @@ export class ThongTinTonghopComponent implements OnInit {
     this.isView = false;
   }
 
-  goToDetail(data?: any, isView?: boolean) {
-    this.selectedId = data.id;
-    this.isDetail = true;
-    this.isView = isView;
+  backHdv() {
+    this.isDetail = false;
+    this.isView = false;
   }
 
-  protected readonly AMOUNT_NO_DECIMAL = AMOUNT_NO_DECIMAL;
+  goToDetailDn(data?: any) {
+    this.selectedId = this.idInput ? data.khDnCapVonId : data.id;
+    this.isDetail = true;
+  }
+
+  goToDetailHdv(data?: any) {
+    console.log(data, 'datadatadata');
+    this.dataInfoHdv.id = this.idInput ? data.khDnCapVonId : data.idHdv;
+    this.isDetailHdv = true;
+  }
+
+  closePopHdv() {
+    this.isDetailHdv = false;
+  }
+
+  closePopDnBn() {
+    this.isDetail = false;
+  }
+
+  templateName = 'tong-hop-de-nghi-cap-von-cac-bo-nganh';
+
+  async preview(id) {
+    this.spinner.show();
+    await this.tongHopDeNghiCapVonService.preview({
+      tenBaoCao: this.templateName + '.docx',
+      id: id,
+    }).then(async res => {
+      if (res.data) {
+        this.printSrc = res.data.pdfSrc;
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
+      }
+    });
+    this.spinner.hide();
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, this.templateName + '.pdf');
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, this.templateName + '.docx');
+  }
+
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true });
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
 }

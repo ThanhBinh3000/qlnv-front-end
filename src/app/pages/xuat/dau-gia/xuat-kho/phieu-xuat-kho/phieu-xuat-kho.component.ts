@@ -1,16 +1,15 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { MESSAGE } from 'src/app/constants/message';
+import {Component, OnInit, Input} from '@angular/core';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {MESSAGE} from 'src/app/constants/message';
 import * as uuid from "uuid";
-import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/PhieuXuatKho.service';
+import {PhieuXuatKhoService} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/PhieuXuatKho.service';
 import _ from 'lodash';
-import { LOAI_HANG_DTQG } from 'src/app/constants/config';
-import { STATUS } from "../../../../../constants/status";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-bdg-phieu-xuat-kho',
@@ -50,7 +49,7 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
     this.filterTable = {
       soQdNv: '',
       nam: '',
-      ngayKyQdNv: '',
+      thoiGianGiaoNhan: '',
       tenDiemKho: '',
       tenNganKho: '',
       tenLoKho: '',
@@ -94,14 +93,15 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
       const childData = _(soQdNvGroup).groupBy("tenDiemKho").map((tenDiemKhoGroup, tenDiemKhoKey) => {
         const lv1IdVirtual = uuid.v4();
         this.expandSetString.add(lv1IdVirtual);
-        const lv1ChildData = _(tenDiemKhoGroup).groupBy((row) => row.tenLoKho || row.tenNganKho).map((group, key) => {
+        const lv1ChildData = _(tenDiemKhoGroup).groupBy((row) => row.soPhieuKiemNghiem).map((group, key) => {
           const lv2IdVirtual = uuid.v4();
           this.expandSetString.add(lv2IdVirtual);
           return {
             idVirtual: lv2IdVirtual,
-            tenLoKho: key || "",
+            tenLoKho: group[0].tenLoKho || "",
             tenNganKho: group[0].tenNganKho || "",
-            soPhieuKiemNghiem: group[0].soPhieuKiemNghiem || "",
+            tenNhaKho: group[0].tenNhaKho || "",
+            soPhieuKiemNghiem: key || "",
             idPhieuKiemNghiem: group[0].idPhieuKiemNghiem || "",
             ngayKiemNghiemMau: group[0].ngayKiemNghiemMau || "",
             childData: group,
@@ -118,7 +118,7 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
         soQdNv: soQdNvKey || "",
         nam: firstRowInGroup.nam || "",
         idQdNv: firstRowInGroup.idQdNv || "",
-        ngayKyQdNv: firstRowInGroup.ngayKyQdNv || "",
+        thoiGianGiaoNhan: firstRowInGroup.thoiGianGiaoNhan || "",
         childData,
       };
     }).value();
@@ -149,15 +149,15 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
 
   openModal(id: number, modalType: string) {
     switch (modalType) {
-      case 'QdNv':
+      case 'QdNv' :
         this.idQdNv = id;
         this.isViewQdNv = true;
         break;
-      case 'kiemNghiem':
+      case 'kiemNghiem' :
         this.idKiemnghiem = id;
         this.isViewKiemnghiem = true;
         break;
-      case 'bangKe':
+      case 'bangKe' :
         this.idBangKe = id;
         this.isViewBangKe = true;
         break;
@@ -168,15 +168,15 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
 
   closeModal(modalType: string) {
     switch (modalType) {
-      case 'QdNv':
+      case 'QdNv' :
         this.idQdNv = null;
         this.isViewQdNv = false;
         break;
-      case 'kiemNghiem':
+      case 'kiemNghiem' :
         this.idKiemnghiem = null;
         this.isViewKiemnghiem = false;
         break;
-      case 'bangKe':
+      case 'bangKe' :
         this.idBangKe = null;
         this.isViewBangKe = false;
         break;
@@ -191,11 +191,11 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
     return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
   };
 
-  disabledStartNgayXk = (startValue: Date): boolean => {
+  disabledStartNgayXkTu = (startValue: Date): boolean => {
     return this.isInvalidDateRange(startValue, this.formData.value.ngayLapPhieuTu, 'ngayLapPhieu');
   };
 
-  disabledEndNgayXk = (endValue: Date): boolean => {
+  disabledStartNgayXkDen = (endValue: Date): boolean => {
     return this.isInvalidDateRange(endValue, this.formData.value.ngayLapPhieuDen, 'ngayLapPhieu');
   };
 
@@ -219,15 +219,15 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
       case 'XEM':
         return (
           this.userService.isAccessPermisson(permissions.XEM) && ((this.userService.isAccessPermisson(permissions.THEM) &&
-            [
-              this.STATUS.CHO_DUYET_LDCC,
-              this.STATUS.DA_DUYET_LDCC,
-            ].includes(data.trangThai)) ||
+              [
+                this.STATUS.CHO_DUYET_LDCC,
+                this.STATUS.DA_DUYET_LDCC,
+              ].includes(data.trangThai)) ||
             (!this.userService.isAccessPermisson(permissions.THEM) && [
-              this.STATUS.DU_THAO,
-              this.STATUS.TU_CHOI_LDCC,
-              this.STATUS.DA_DUYET_LDCC
-            ].includes(data.trangThai) ||
+                this.STATUS.DU_THAO,
+                this.STATUS.TU_CHOI_LDCC,
+                this.STATUS.DA_DUYET_LDCC
+              ].includes(data.trangThai) ||
               (data.trangThai === this.STATUS.CHO_DUYET_LDCC &&
                 !this.userService.isAccessPermisson(permissions.DUYET_LDCHICUC))))
         );
@@ -249,4 +249,3 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
     }
   }
 }
-

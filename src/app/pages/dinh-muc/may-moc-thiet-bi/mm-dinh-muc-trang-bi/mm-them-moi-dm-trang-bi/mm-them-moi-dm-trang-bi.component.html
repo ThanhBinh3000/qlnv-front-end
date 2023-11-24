@@ -5,7 +5,7 @@
         <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
           {{ formData.value.tenTrangThai }}
         </span>
-        <span class="text-uppercase">QUẢN LÝ ĐỊNH MỨC TRANG BỊ CÔNG CỤ, DỤNG CỤ</span>
+        <span class="text-uppercase">QUẢN LÝ ĐỊNH MỨC TRANG BỊ MÁY MÓC, THIẾT BỊ CHUYÊN DÙNG</span>
       </div>
     </div>
     <div class="btn-group">
@@ -13,8 +13,8 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button type="button" class="btn btn-info ml-2" (click)="banHanh(formData.value.id,STATUS.BAN_HANH)"
-              *ngIf="formData.value.trangThai == STATUS.DU_THAO && formData.value.id > 0">
+      <button type="button" class="btn btn-info ml-2" (click)="saveAndSend(STATUS.BAN_HANH, 'Bạn có muốn lưu và ban hành quyết định ?','Bạn đã lưu và ban hành quyết định thành công!')"
+        *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU">
         <i class="icon htvbdh_chuyenvanthu"></i>
         <span>Ban hành</span>
       </button>
@@ -103,14 +103,15 @@
         <th rowspan="2" nzWidth="45px">STT</th>
         <th rowspan="2" nzWidth="300px">Loại tài sản</th>
         <th rowspan="2" nzWidth="120px">ĐVT</th>
-        <th colspan="2" nzWidth="">Số lượng tối đa</th>
+        <th colspan="3" nzWidth="">Số lượng tối đa</th>
         <th rowspan="2" nzWidth="120px">Đơn giá tối đa (triệu đồng)</th>
         <th rowspan="2" nzWidth="300px">Ghi chú</th>
         <th rowspan="2" nzWidth="150px" *ngIf="!isViewDetail">Hành động</th>
       </tr>
       <tr>
-        <th class="text-center">VP Cục DTNN KV</th>
-        <th class="text-center">Chi cục DTNN</th>
+        <th class="text-center" style="width: 20%">Căn cứ SL nhập, xuất</th>
+        <th class="text-center" style="width: 20%">VP Cục DTNN KV</th>
+        <th class="text-center" style="width: 60%">Chi cục DTNN</th>
       </tr>
       <tr *ngIf="!isViewDetail">
         <th></th>
@@ -124,10 +125,13 @@
         <th>
           <input type="text" [disabled]="true" [(ngModel)]="rowItem.donViTinh" nz-input/>
         </th>
+        <th class="text-center">
+          <label nz-checkbox [(ngModel)]="rowItem.isCanCu"></label>
+        </th>
         <th>
           <nz-input-number [nzSize]="'small'" [nzMin]="0" [(ngModel)]="rowItem.slVpCucKv"></nz-input-number>
         </th>
-        <th>
+        <th *ngIf="!rowItem.isCanCu">
           <div class="chi-cuc-sl">
             <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.slChiCuc" [nzMin]="0"
                              class="w-50"></nz-input-number>
@@ -137,12 +141,19 @@
             <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.klChiCuc" [nzMin]="0"
                              class="w-50"></nz-input-number>
             &nbsp; <span>tấn lương thực</span> &nbsp;
-            <nz-select nzPlaceHolder="Nhập loại hình" nzMode="tags" class="w-300" [(ngModel)]="rowItem.loaiHinh">
+            <nz-select nzPlaceHolder="Nhập loại hình" nzMode="tags" style="width: 55%" [(ngModel)]="rowItem.loaiHinh">
               <nz-option nzValue="00" nzLabel="Nhập"></nz-option>
               <nz-option nzValue="01" nzLabel="Xuất"></nz-option>
               <nz-option nzValue="02" nzLabel="Bảo quản"></nz-option>
             </nz-select>
           </div>
+        </th>
+        <th *ngIf="rowItem.isCanCu">
+            <nz-select nzPlaceHolder="Nhập loại hình" nzMode="tags" style="width: 100%" [(ngModel)]="rowItem.loaiHinh">
+              <nz-option nzValue="00" nzLabel="Nhập"></nz-option>
+              <nz-option nzValue="01" nzLabel="Xuất"></nz-option>
+              <nz-option nzValue="02" nzLabel="Bảo quản"></nz-option>
+            </nz-select>
         </th>
         <th>
           <nz-input-number [nzSize]="'small'" [nzMin]="0" [(ngModel)]="rowItem.donGiaTd"></nz-input-number>
@@ -166,10 +177,11 @@
           <td>{{idx + 1}}</td>
           <td>{{data.tenTaiSan}}</td>
           <td>{{data.donViTinh}}</td>
-          <td>{{data.slVpCucKv}} </td>
-          <td>{{data.slChiCuc}}
-             {{data.klChiCuc ? data.klChiCuc + ' / tấn lương thực' : ''}}  {{data.tenLoaiHinh ? '( ' + data.tenLoaiHinh + ')' : ''}}</td>
-          <td>{{data.donGiaTd}}</td>
+          <td class="text-center"><label nz-checkbox nzDisabled [(ngModel)]="data.isCanCu"></label></td>
+          <td class="text-right">{{data.slVpCucKv | number : '1.0-1' : 'vi_VN'}} </td>
+          <td *ngIf="!data.isCanCu">{{data.slChiCuc ? data.slChiCuc : ''}}/{{data.klChiCuc ? data.klChiCuc + ' tấn lương thực' : ''}}  {{data.tenLoaiHinh ? ' ('+ data.tenLoaiHinh + ')' : ''}}</td>
+          <td *ngIf="data.isCanCu">{{data.tenLoaiHinh ? ' ('+ data.tenLoaiHinh + ')' : ''}}</td>
+          <td class="text-right">{{data.donGiaTd | number : '1.0-1' : 'vi_VN'}}</td>
           <td>{{data.ghiChu}}</td>
           <td class="text-center" *ngIf="!isViewDetail">
             <a (click)="editRow(idx)">
@@ -193,12 +205,15 @@
           <td>
             <input type="text" [disabled]="true" [(ngModel)]="dataEdit[idx].data.donViTinh" nz-input/>
           </td>
+          <td class="text-center">
+            <label nz-checkbox [(ngModel)]="dataEdit[idx].data.isCanCu"></label>
+          </td>
           <td>
             <nz-input-number [nzSize]="'small'" [nzMin]="0"
                              [(ngModel)]="dataEdit[idx].data.slVpCucKv"></nz-input-number>
           </td>
           <td>
-            <div class="chi-cuc-sl">
+            <div class="chi-cuc-sl" *ngIf="!dataEdit[idx].data.isCanCu">
               <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.slChiCuc" [nzMin]="0"
                                class="w-50"></nz-input-number>
               &nbsp;
@@ -207,6 +222,13 @@
               <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.klChiCuc" [nzMin]="0"
                                class="w-50"></nz-input-number>
               &nbsp; <span>tấn lương thực</span> &nbsp;
+              <nz-select nzMode="tags" class="w-300" [(ngModel)]="dataEdit[idx].data.loaiHinh">
+                <nz-option nzValue="00" nzLabel="Nhập"></nz-option>
+                <nz-option nzValue="01" nzLabel="Xuất"></nz-option>
+                <nz-option nzValue="02" nzLabel="Bảo quản"></nz-option>
+              </nz-select>
+            </div>
+            <div class="chi-cuc-sl" *ngIf="dataEdit[idx].data.isCanCu">
               <nz-select nzMode="tags" class="w-300" [(ngModel)]="dataEdit[idx].data.loaiHinh">
                 <nz-option nzValue="00" nzLabel="Nhập"></nz-option>
                 <nz-option nzValue="01" nzLabel="Xuất"></nz-option>

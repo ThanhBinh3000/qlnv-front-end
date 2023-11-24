@@ -3,9 +3,9 @@
     <div class="header header-green-background">
       <div class="header-text">
         <div class="title-chi-tieu">
-          <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'status-xanh' : 'status-do'">
-            {{ formData.value.tenTrangThai }}
-          </span>
+                <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'status-xanh' : 'status-do'">
+                    {{ formData.value.tenTrangThai }}
+                </span>
           <span>Biên bản kết thúc nhập kho</span>
         </div>
       </div>
@@ -14,29 +14,40 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
-        <button type="button" class="btn btn-sub ml-2" (click)="xemTruoc(idInput,templateName)">
+        <button type="button" class="btn btn-sub ml-2"
+                *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BBKTNK_IN')"
+                (click)="xemTruoc(idInput,templateName)">
           <i class="icon htvbdh_totrinh"></i>
           <span> In/Xem trước </span>
         </button>
-        <button class="btn btn-sub xanh-nha  ml-2" type="button" *ngIf=" this.userService.isChiCuc() && formData.value.trangThai == STATUS.DU_THAO|| formData.value.trangThai == STATUS.TU_CHOI_KTVBQ||
-                  formData.value.trangThai == STATUS.TU_CHOI_LDCC"
-          (click)="saveAndSend(formData.value,STATUS.CHO_DUYET_KTVBQ,'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
+        <button class="btn btn-sub xanh-nha  ml-2" type="button"
+                *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BBKTNK_THEM') && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_KTVBQ ||
+                  formData.value.trangThai == STATUS.TU_CHOI_LDCC) && !isView"
+                (click)="saveAndSend(formData.value,STATUS.CHO_DUYET_KTVBQ,'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Lưu và gửi duyệt</span>
 
         </button>
-        <button type="button" class="btn btn-sub do  ml-2" *ngIf="  this.userService.isChiCuc() && formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ||formData.value.trangThai == STATUS.CHO_DUYET_KT||
-formData.value.trangThai == STATUS.CHO_DUYET_LDCC" (click)="tuChoi()">
+        <button type="button" class="btn btn-sub do  ml-2"
+                *ngIf="(userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BBKTNK_DUYETKTVBQ') && formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ)
+                ||(userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BBKTNK_DUYETKT') && formData.value.trangThai == STATUS.CHO_DUYET_KT)
+                ||(userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BBKTNK_DUYETLDCC') && formData.value.trangThai == STATUS.CHO_DUYET_LDCC) !isView"
+                (click)="tuChoi()">
           <i class="icon htvbdh_tcdt_tuchoi do"></i>
           <span>Từ chối</span>
         </button>
-        <button class="btn btn-sub xanh-nhat  ml-2" *ngIf="  this.userService.isChiCuc() && (formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ||formData.value.trangThai == STATUS.CHO_DUYET_KT||
-formData.value.trangThai == STATUS.CHO_DUYET_LDCC)" (click)="pheDuyet()">
+        <button class="btn btn-sub xanh-nhat  ml-2"
+                *ngIf="(userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BBKTNK_DUYETKTVBQ') && formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ)
+                ||(userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BBKTNK_DUYETKT') && formData.value.trangThai == STATUS.CHO_DUYET_KT)
+                ||(userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BBKTNK_DUYETLDCC') && formData.value.trangThai == STATUS.CHO_DUYET_LDCC) !isView"
+                (click)="pheDuyet()">
           <i class="icon htvbdh_tcdt_pheduyet "></i>
           <span>Duyệt</span>
         </button>
-        <button class="btn btn-sub xanh  ml-2" *ngIf=" this.userService.isChiCuc()  && ( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_KTVBQ || formData.value.trangThai==STATUS.TU_CHOI_KT
-                ||formData.value.trangThai == STATUS.TU_CHOI_LDCC) " (click)="save()">
+        <button class="btn btn-sub xanh  ml-2"
+                *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BBKTNK_THEM') && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_KTVBQ || formData.value.trangThai==STATUS.TU_CHOI_KT
+                ||formData.value.trangThai == STATUS.TU_CHOI_LDCC) && !isView "
+                (click)="save()">
           <i class="icon  htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
@@ -44,8 +55,8 @@ formData.value.trangThai == STATUS.CHO_DUYET_LDCC)" (click)="pheDuyet()">
     </div>
   </nz-affix>
   <nz-alert class="mg-t-10" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_KTVBQ || formData.value.trangThai==STATUS.TU_CHOI_KT
-            ||formData.value.trangThai == STATUS.TU_CHOI_LDCC" nzShowIcon nzType="error" nzMessage="Lý do từ chối"
-    nzDescription="{{formData.value.lyDoTuChoi}}">
+            ||formData.value.trangThai == STATUS.TU_CHOI_LDCC" nzShowIcon nzType="error"
+            nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
 
   <nz-card class="mg-t-16 flex-card p-lr16">
@@ -71,7 +82,7 @@ formData.value.trangThai == STATUS.CHO_DUYET_LDCC)" (click)="pheDuyet()">
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="tenDvi" readonly />
+                <input nz-input formControlName="tenDvi" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -83,7 +94,7 @@ formData.value.trangThai == STATUS.CHO_DUYET_LDCC)" (click)="pheDuyet()">
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="maQhns" readonly />
+                <input nz-input formControlName="maQhns" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -95,7 +106,7 @@ formData.value.trangThai == STATUS.CHO_DUYET_LDCC)" (click)="pheDuyet()">
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="soBienBan" readonly />
+                <input nz-input formControlName="soBienBan" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -119,7 +130,7 @@ formData.value.trangThai == STATUS.CHO_DUYET_LDCC)" (click)="pheDuyet()">
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQd()">
-                <input nz-input formControlName="soCanCu" [readonly]="isView" />
+                <input nz-input formControlName="soCanCu" [readonly]="isView"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -132,7 +143,7 @@ formData.value.trangThai == STATUS.CHO_DUYET_LDCC)" (click)="pheDuyet()">
                 <input nz-input [value]="
                         (formData.value.tenLoKho ? formData.value.tenLoKho + '/ ' : '') +
                         (formData.value.tenNganKho ? formData.value.tenNganKho + '/ ' : '')
-                      " [readonly]="isView" />
+                      " [readonly]="isView"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -142,7 +153,7 @@ formData.value.trangThai == STATUS.CHO_DUYET_LDCC)" (click)="pheDuyet()">
             <nz-form-label [nzNoColon]="true" nzRequired> Nhà kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
-                <input [readonly]="isView" nz-input formControlName="tenNhaKho" [readonly]="isView" />
+                <input [readonly]="isView" nz-input formControlName="tenNhaKho" [readonly]="isView"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -152,7 +163,7 @@ formData.value.trangThai == STATUS.CHO_DUYET_LDCC)" (click)="pheDuyet()">
             <nz-form-label [nzNoColon]="true" nzRequired> Điểm kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
-                <input [readonly]="isView" nz-input formControlName="tenDiemKho" [readonly]="isView" />
+                <input [readonly]="isView" nz-input formControlName="tenDiemKho" [readonly]="isView"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -164,7 +175,7 @@ formData.value.trangThai == STATUS.CHO_DUYET_LDCC)" (click)="pheDuyet()">
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="tenLoaiVthh" readonly />
+                <input nz-input formControlName="tenLoaiVthh" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -176,7 +187,7 @@ formData.value.trangThai == STATUS.CHO_DUYET_LDCC)" (click)="pheDuyet()">
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="tenCloaiVthh" readonly />
+                <input nz-input formControlName="tenCloaiVthh" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -186,28 +197,29 @@ formData.value.trangThai == STATUS.CHO_DUYET_LDCC)" (click)="pheDuyet()">
     </form>
     <h3 class="mt-3">Thông tin bảng kê cân hàng và phiếu nhập kho</h3>
     <nz-table #basicTable nzBordered class="pd-10" [nzData]="listPhieuNhapKho" class="nowrap"
-      [nzFrontPagination]="false" [nzShowPagination]="false">
+              [nzFrontPagination]="false"
+              [nzShowPagination]="false">
       <thead>
-        <tr>
-          <th>STT</th>
-          <th>Phiếu nhập kho</th>
-          <th>Ngày nhập</th>
-          <th>Số lượng nhập</th>
-        </tr>
+      <tr>
+        <th>STT</th>
+        <th>Phiếu nhập kho</th>
+        <th>Ngày nhập</th>
+        <th>Số lượng nhập</th>
+      </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let data of  basicTable.data; let i = index">
-          <td>{{i + 1}}</td>
-          <td>
-            {{data.soPhieu}}
-          </td>
-          <td>
-            {{data.ngayXuatNhap | date: 'dd/MM/YYYY' }}
-          </td>
-          <td>
-            {{data.slThucTe}}
-          </td>
-        </tr>
+      <tr *ngFor="let data of  basicTable.data; let i = index">
+        <td>{{i + 1}}</td>
+        <td>
+          {{data.soPhieu}}
+        </td>
+        <td>
+          {{data.ngayXuatNhap | date: 'dd/MM/YYYY' }}
+        </td>
+        <td>
+          {{data.slThucTe}}
+        </td>
+      </tr>
       </tbody>
     </nz-table>
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
@@ -266,7 +278,7 @@ formData.value.trangThai == STATUS.CHO_DUYET_LDCC)" (click)="pheDuyet()">
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="canBoLapBb" readonly />
+                <input nz-input formControlName="canBoLapBb" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -278,7 +290,7 @@ formData.value.trangThai == STATUS.CHO_DUYET_LDCC)" (click)="pheDuyet()">
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="ktvBaoQuan" readonly />
+                <input nz-input formControlName="ktvBaoQuan" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -290,7 +302,7 @@ formData.value.trangThai == STATUS.CHO_DUYET_LDCC)" (click)="pheDuyet()">
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="keToanTruong" readonly />
+                <input nz-input formControlName="keToanTruong" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -302,7 +314,7 @@ formData.value.trangThai == STATUS.CHO_DUYET_LDCC)" (click)="pheDuyet()">
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="ldChiCuc" readonly />
+                <input nz-input formControlName="ldChiCuc" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -328,20 +340,24 @@ formData.value.trangThai == STATUS.CHO_DUYET_LDCC)" (click)="pheDuyet()">
 <ng-template #error let-control>
   <app-template-error #error [control]="control"></app-template-error>
 </ng-template>
-<nz-modal [(nzVisible)]="showDlgPreview" nzWidth="70%" (nzOnCancel)="closeDlg()">
+<nz-modal [(nzVisible)]="showDlgPreview" nzWidth="70%"
+          (nzOnCancel)="closeDlg()">
   <div *nzModalContent class="modal__content">
     <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
   </div>
   <div *nzModalFooter>
-    <button nz-button (click)="printPreview()" class="modal__button--save">
+    <button nz-button (click)="printPreview()"
+            class="modal__button--save">
       <i class="icon htvbdh_printer"></i>
       In
     </button>
-    <button nz-button (click)="downloadPdf( templateName)" class="modal__button--save">
+    <button nz-button (click)="downloadPdf( templateName)"
+            class="modal__button--save">
       <i class="icon htvbdh_file-pdf"></i>
       Xuất .pdf
     </button>
-    <button nz-button (click)="downloadWord( templateName)" class="modal__button--save">
+    <button nz-button (click)="downloadWord( templateName)"
+            class="modal__button--save">
       <i class="icon htvbdh_file-word"></i>
       Xuất .docx
     </button>

@@ -7,7 +7,7 @@
             [ngClass]="formData.value.trangThai == STATUS.DA_KY  || formData.value.trangThai == STATUS.DA_KY ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
             {{ formData.value.tenTrangThai }}
           </span>
-          <span>HỢP ĐỒNG</span>
+          <span> NHẬP HỢP ĐỒNG</span>
         </div>
       </div>
       <div class="btn-group">
@@ -15,8 +15,8 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
-        <button class="btn btn-sub ml-2" (click)="pheDuyet()"
-          *ngIf="(formData.value.trangThai == STATUS.DU_THAO && id > 0 && !isView) && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_HDMUASAM_THEM')">
+        <button class="btn btn-sub ml-2" (click)="saveAndSend(STATUS.DA_KY, 'Bạn có muốn ký?','Bạn đã ký thành công!')"
+          *ngIf="(formData.value.trangThai == STATUS.DU_THAO && !isView) && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_HDMUASAM_THEM')">
           <i class="icon htvbdh_trinh "></i>
           <span>Đã ký</span>
         </button>
@@ -128,12 +128,14 @@
         nzBordered>
         <thead>
           <tr>
-            <th nzWidth="40px">STT</th>
-            <th nzWidth="">Loại hàng hóa</th>
-            <th nzWidth="150px">Đơn vị tính</th>
-            <th nzWidth="170px">Số lượng</th>
-            <th nzWidth="170px">Đơn giá gồm thuế</th>
-            <th nzWidth="170px">Thành tiền</th>
+            <th nzWidth="40px" nzAlign="center">STT</th>
+            <th nzWidth="" nzAlign="center">Loại hàng hóa</th>
+            <th nzWidth="170px" nzAlign="center">Số lượng <br /> (m2)</th>
+            <th nzWidth="150px" nzAlign="center">Đơn vị tính</th>
+            <th nzWidth="170px" nzAlign="center">Số m2/cuộn</th>
+            <th nzWidth="150px" nzAlign="center">Quy đổi cuộn</th>
+            <th nzWidth="170px" nzAlign="center">Đơn giá có VAT <br /> (đ)</th>
+            <th nzWidth="170px" nzAlign="center">Thành tiền <br /> (đ)</th>
             <th nzWidth="120px" *ngIf="!isView">Hành động</th>
           </tr>
           <tr *ngIf="!isView">
@@ -145,13 +147,26 @@
               </nz-select>
             </th>
             <th>
-              <input type="text" [(ngModel)]="rowItem.donViTinh" readonly nz-input />
-            </th>
-            <th>
               <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.soLuong" [nzMin]="0" [nzDisabled]="isView"
-                [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                (ngModelChange)="changSoLuong($event, rowItem)" [nzFormatter]="globals.formatter"
+                [nzParser]="globals.parser">
               </nz-input-number>
             </th>
+            <th>
+              <input type="text" [(ngModel)]="rowItem.donViTinh" readonly nz-input />
+            </th>
+
+            <th>
+              <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.slMetQuyCuon" [nzMin]="35" [nzDisabled]="isView"
+                (ngModelChange)="changMetQuyCuon($event, rowItem)" [nzFormatter]="globals.formatter"
+                [nzParser]="globals.parser">
+              </nz-input-number>
+            </th>
+
+            <th>
+              <input type="text" [(ngModel)]="rowItem.slCuon" readonly nz-input />
+            </th>
+
             <th>
               <input type="text" [(ngModel)]="rowItem.donGia" readonly nz-input />
             </th>
@@ -173,8 +188,10 @@
             <ng-container *ngIf="!dataEdit[idx].edit ; else editTemplate">
               <td>{{idx + 1}}</td>
               <td>{{data.tenHangHoa}}</td>
-              <td>{{data.donViTinh}}</td>
               <td class="text-right">{{data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{data.donViTinh}}</td>
+              <td>{{data.slMetQuyCuon}}</td>
+              <td>{{data.slCuon}}</td>
               <td class="text-right">{{data.donGia | number : '1.0-1' : 'vi_VN'}}</td>
               <td class="text-right">{{data.soLuong * data.donGia | number : '1.0-1' : 'vi_VN'}}</td>
               <td class="text-center" *ngIf="!isView">
@@ -191,18 +208,31 @@
                 <input type="text" [(ngModel)]="dataEdit[idx].data.tenHangHoa" readonly nz-input />
               </td>
               <td>
-                <input type="text" [(ngModel)]="dataEdit[idx].data.donViTinh" readonly nz-input />
-              </td>
-              <td>
                 <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.soLuong" [nzMin]="0"
-                  [nzMax]="data.soLuong" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                  (ngModelChange)="changSoLuong($event, dataEdit[idx].data)" [nzMax]="data.soLuong"
+                  [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                 </nz-input-number>
               </td>
+              <td>
+                <input type="text" [(ngModel)]="dataEdit[idx].data.donViTinh" readonly nz-input />
+              </td>
+
+              <td>
+                <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.slMetQuyCuon" [nzMin]="35"
+                  (ngModelChange)="changMetQuyCuon($event, dataEdit[idx].data)" [nzMax]="99999"
+                  [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                </nz-input-number>
+              </td>
+
+              <td>
+                <input type="text" [(ngModel)]="dataEdit[idx].data.slCuon" readonly nz-input />
+              </td>
+
               <td>
                 <input type="text" [(ngModel)]="dataEdit[idx].data.donGia" readonly nz-input />
               </td>
               <td>
-                <input type="text" [(ngModel)]="dataEdit[idx].data.donGia * dataEdit[idx].data.soLuong " readonly
+                <input type="text" [(ngModel)]="dataEdit[idx].data.donGia * dataEdit[idx].data.soLuong" readonly
                   nz-input />
               </td>
               <td class="text-center" *ngIf="!isView">
@@ -447,7 +477,7 @@
       <div class="header header-green-background mg-t-10" *ngIf="formData.value.trangThai == STATUS.DA_KY">
         <div class="header-text">
           <div class="title-chi-tieu">
-            <span class="text-uppercase font-weight-bold">Phụ lục hợp đồng</span>
+            <span class="text-uppercase font-weight-bold">DANH SÁCH PHỤ LỤC HỢP ĐỒNG</span>
           </div>
         </div>
         <div class="btn-group">

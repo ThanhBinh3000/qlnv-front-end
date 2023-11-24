@@ -54,14 +54,14 @@
     </div>
   </nz-card>
   <div class="group-button">
-    <h3 class="text-uppercase"> QUẢN LÝ KÝ HỢP ĐỒNG THANH LÝ HÀNG DRQG THEO PHƯƠNG THỨC ĐẤU GIÁ </h3>
+    <h3 class="text-uppercase"> QUẢN LÝ KÝ HỢP ĐỒNG THANH LÝ HÀNG DTQG THEO PHƯƠNG THỨC ĐẤU GIÁ </h3>
     <div class="buttons">
       <button type="button" class="btn btn-sub"
               (click)="exportData('quan-ly-ky-hop-dong-ban-hang-dtqg-theo-phuong-thuc-ban-dau-gia.xlsx')">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
-      <button type="button" class="btn btn-main" *ngIf="userService.isCuc()" (click)="redirectCreate()">
+      <button type="button" class="btn btn-main" *ngIf="userService.isCuc()" (click)="redirectCreate('XHDTQG_XTL_TCKHBDG_HDPL_THEM')">
         <i class="icon htvbdh_dau-cong"></i>
         <span>Thêm hợp đồng</span>
       </button>
@@ -79,12 +79,7 @@
         <th width="175px" class="wrap">Tổng số ĐV tài sản</th>
         <th width="175px" class="wrap">Số ĐVTS ĐG thành công</th>
         <th width="175px" class="wrap">SL HĐ đã ký</th>
-        <th width="175px" class="wrap">Thời hạn thanh toán</th>
-        <th width="175px">Chủng loại hàng hóa</th>
         <th width="175px">ĐV thực hiện</th>
-        <th width="175px">TCCN thắng đấu giá</th>
-        <th width="175px" class="wrap">Tổng SL xuất bán</th>
-        <th width="90px">Thành tiền (đ)</th>
         <th width="90px">Trạng thái HĐ</th>
         <th width="90px">Trạng thái XH</th>
         <th width="120px">Hành động</th>
@@ -133,33 +128,8 @@
         </th>
         <th>
           <nz-input-group>
-            <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày ký" [(ngModel)]="filterTable.thoiHanTt"
-                            (ngModelChange)="filterInTable('thoiHanTt', convertDateToString(filterTable.thoiHanTt))">
-            </nz-date-picker>
-          </nz-input-group>
-        </th>
-        <th>
-          <nz-input-group>
-            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
-                   (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small"/>
-          </nz-input-group>
-        </th>
-        <th>
-          <nz-input-group>
             <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenCloaiVthh"
                    (input)="filterInTable('tenCloaiVthh',filterTable.tenCloaiVthh)" size="small"/>
-          </nz-input-group>
-        </th>
-        <th>
-          <nz-input-group>
-            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDviThucHien"
-                   (input)="filterInTable('tenDviThucHien',filterTable.tenDviThucHien)" size="small"/>
-          </nz-input-group>
-        </th>
-        <th>
-          <nz-input-group>
-            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soLuong"
-                   (input)="filterInTable('soLuong',filterTable.soLuong)" size="small"/>
           </nz-input-group>
         </th>
         <th>
@@ -176,14 +146,6 @@
             </nz-select>
           </nz-input-group>
         </th>
-        <th>
-          <nz-input-group>
-            <nz-select nzAllowClear [(ngModel)]="filterTable.trangThaiXh"
-                       (ngModelChange)="filterInTable('trangThai',filterTable.trangThaiXh)">
-              <nz-option *ngFor="let p of listTrangThaiXh" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
-            </nz-select>
-          </nz-input-group>
-        </th>
         <th></th>
       </tr>
       </thead>
@@ -192,20 +154,15 @@
         <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
         <td>{{ data.nam }}</td>
         <td>
-          <a *ngIf="data.soQdTl && data.idQdTl" nz-button nzType="link" >{{data.soQdTl}}</a>
+          <a *ngIf="data.xhTlQuyetDinhHdr?.soQd && data.xhTlQuyetDinhHdr?.id" nz-button nzType="link" >{{data.xhTlQuyetDinhHdr?.soQd}}</a>
         </td>
         <td>
           <a *ngIf="data.soQd && data.id" nz-button nzType="link" >{{data.soQd}}</a>
         </td>
-        <td>{{ data.tongSoDviTsan }}</td>
-        <td>{{ data.soDviTsanThanhCong }}</td>
+        <td>{{ data.xhTlQuyetDinhHdr?.tongDviTsan }}</td>
+        <td>{{ data.xhTlQuyetDinhHdr?.tongDviTsanThanhCong }}</td>
         <td>{{ data.slHdDaKy }}</td>
-        <td></td>
-        <td>{{ data.tenCloaiVthh }}</td>
         <td>{{ data.tenDvi }}</td>
-        <td></td>
-        <td>{{ data.tongSlXuatBan|number:globals.numberFormat:globals.locale}}</td>
-        <td>{{ data.thanhTien|number:globals.numberFormat:globals.locale }}</td>
         <td>{{ data.tenTrangThaiHd }}</td>
         <td>{{ data.tenTrangThaiXh }}</td>
         <td class="text-left">

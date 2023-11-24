@@ -1,20 +1,20 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { Base2Component } from 'src/app/components/base2/base2.component';
+import {Component, OnInit, Input, Output, EventEmitter, OnChanges} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {Base2Component} from 'src/app/components/base2/base2.component';
 import dayjs from 'dayjs';
-import { FileDinhKem } from 'src/app/models/FileDinhKem';
-import { MESSAGE } from 'src/app/constants/message';
-import { STATUS } from 'src/app/constants/status';
+import {FileDinhKem} from 'src/app/models/FileDinhKem';
+import {MESSAGE} from 'src/app/constants/message';
+import {STATUS} from 'src/app/constants/status';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { convertTienTobangChu } from 'src/app/shared/commonFunction';
-import { Validators } from '@angular/forms';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {convertTienTobangChu} from 'src/app/shared/commonFunction';
+import {Validators} from '@angular/forms';
 import {
   QuyetDinhGiaoNvXuatHangService
 } from './../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service';
@@ -24,7 +24,13 @@ import {
 import {
   PhieuXuatKhoService
 } from './../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/PhieuXuatKho.service';
-import { LOAI_HANG_DTQG } from 'src/app/constants/config';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import {PREVIEW} from "../../../../../../constants/fileType";
+import printJS from "print-js";
+import {CurrencyMaskInputMode} from "ngx-currency";
+import {
+  BbNghiemThuBaoQuanService
+} from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
 
 @Component({
   selector: 'app-bdg-them-moi-phieu-xuat-kho',
@@ -45,6 +51,19 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   flagInit: Boolean = false;
   dataQuyetDinh: any[] = [];
   danhSachKghiemCluong: any[] = [];
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "right",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
 
   constructor(
     httpClient: HttpClient,
@@ -56,6 +75,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     private quyetDinhGiaoNhiemVuXuatHangService: QuyetDinhGiaoNvXuatHangService,
     private xhPhieuKnghiemCluongService: XhPhieuKnghiemCluongService,
     private phieuXuatKhoService: PhieuXuatKhoService,
+    private bbNghiemThuBaoQuanService: BbNghiemThuBaoQuanService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoService);
     this.formData = this.fb.group(
@@ -71,6 +91,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         idQdNv: [],
         soQdNv: [''],
         ngayKyQdNv: [''],
+        idQdNvDtl: [],
         loaiHinhNx: [''],
         kieuNhapXuat: [''],
         idHopDong: [],
@@ -80,11 +101,14 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         idPhieuKiemNghiem: [],
         soPhieuKiemNghiem: [''],
         ngayKiemNghiemMau: [''],
+        idKho: [],
         maDiemKho: [''],
         diaDiemKho: [''],
         maNhaKho: [''],
         maNganKho: [''],
         maLoKho: [''],
+        loaiHinhKho: [''],
+        hinhThucBaoQuan: [''],
         loaiVthh: [''],
         cloaiVthh: [''],
         tenHangHoa: [''],
@@ -178,6 +202,10 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       console.error('Không tìm thấy dữ liệu');
       return;
     }
+    this.maTuSinh = this.idInput;
+    if (!this.isView) {
+      await this.onChange(data.idQdNv)
+    }
   }
 
   async openDialog() {
@@ -191,10 +219,8 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       const res = await this.quyetDinhGiaoNhiemVuXuatHangService.search(body)
       if (res && res.msg === MESSAGE.SUCCESS) {
         this.dataQuyetDinh = res.data.content.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI));
-      } else if (res && res.msg) {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       } else {
-        this.notification.error(MESSAGE.ERROR, 'Unknown error occurred.');
+        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ XUẤT HÀNG',
@@ -224,12 +250,18 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   changeSoQdNv(event) {
     if (this.flagInit && event && event !== this.formData.value.soQdNv) {
       this.formData.patchValue({
+        loaiHinhNx: null,
+        tenLoaiHinhNx: null,
+        kieuNhapXuat: null,
+        tenKieuNhapXuat: null,
+        idHopDong: null,
+        soHopDong: null,
+        ngayKyHopDong: null,
+        toChucCaNhan: null,
         idPhieuKiemNghiem: null,
         soPhieuKiemNghiem: null,
         ngayKiemNghiemMau: null,
-        maDiemKho: null,
-        tenDiemKho: null,
-        diaDiemKho: null,
+        idKho: null,
         maNhaKho: null,
         tenNhaKho: null,
         maNganKho: null,
@@ -237,14 +269,19 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         maLoKho: null,
         tenLoKho: null,
         tenNganLoKho: null,
+        hinhThucBaoQuan: null,
+        loaiHinhKho: null,
         loaiVthh: null,
         tenLoaiVthh: null,
         cloaiVthh: null,
         tenCloaiVthh: null,
         tenHangHoa: null,
-        donViTinh: null,
         idKtvBaoQuan: null,
         tenKtvBaoQuan: null,
+        thoiGianGiaoNhan: null,
+        donViTinh: null,
+        theoChungTu: null,
+        donGia: null,
       });
       this.dataTable = [];
     }
@@ -272,28 +309,27 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         soHopDong: data.soHopDong,
         ngayKyHopDong: data.ngayKyHopDong,
         toChucCaNhan: data.toChucCaNhan,
-        thoiGianGiaoNhan: data.tgianGiaoHang,
       });
       data.children.forEach(item => {
         item.children.forEach(child => {
           this.dataTable.push(child);
         });
       });
-      const resKn = await this.xhPhieuKnghiemCluongService.search({
+      const resKN = await this.xhPhieuKnghiemCluongService.search({
         nam: data.nam,
         soQdNv: data.soQdNv,
         loaiVthh: data.loaiVthh,
         trangThai: STATUS.DA_DUYET_LDC,
       })
-      if (resKn.msg !== MESSAGE.SUCCESS) {
-        this.notification.error(MESSAGE.ERROR, resKn.msg);
+      if (resKN.msg !== MESSAGE.SUCCESS) {
+        this.notification.error(MESSAGE.ERROR, resKN.msg);
         return;
       }
-      const dataKn = resKn.data.content;
-      if (!dataKn || dataKn.length === 0) {
+      const dataKN = resKN.data.content;
+      if (!dataKN || dataKN.length === 0) {
         return;
       }
-      this.danhSachKghiemCluong = dataKn
+      this.danhSachKghiemCluong = dataKN
     } catch (e) {
       console.error('Error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -323,6 +359,34 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     });
   }
 
+  changePhieuKnghiem(event) {
+    if (this.flagInit && event && event !== this.formData.value.soPhieuKiemNghiem) {
+      this.formData.patchValue({
+        idKho: null,
+        maNhaKho: null,
+        tenNhaKho: null,
+        maNganKho: null,
+        tenNganKho: null,
+        maLoKho: null,
+        tenLoKho: null,
+        tenNganLoKho: null,
+        loaiHinhKho: null,
+        hinhThucBaoQuan: null,
+        loaiVthh: null,
+        tenLoaiVthh: null,
+        cloaiVthh: null,
+        tenCloaiVthh: null,
+        tenHangHoa: null,
+        idKtvBaoQuan: null,
+        tenKtvBaoQuan: null,
+        thoiGianGiaoNhan: null,
+        donViTinh: null,
+        theoChungTu: null,
+        donGia: null,
+      });
+    }
+  }
+
   async onChangeKnghiemCluong(id) {
     if (id <= 0) return;
     try {
@@ -332,9 +396,11 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       }
       const data = res.data;
       this.formData.patchValue({
+        idQdNvDtl: data.idQdNvDtl,
         idPhieuKiemNghiem: data.id,
         soPhieuKiemNghiem: data.soPhieuKiemNghiem,
         ngayKiemNghiemMau: data.ngayKiemNghiemMau,
+        idKho: data.idKho,
         maDiemKho: data.maDiemKho,
         tenDiemKho: data.tenDiemKho,
         diaDiemKho: data.diaDiemKho,
@@ -350,28 +416,43 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         cloaiVthh: data.cloaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
         tenHangHoa: data.tenHangHoa,
+        idKtvBaoQuan: data.idNguoiKiemNghiem,
+        tenKtvBaoQuan: data.tenNguoiKiemNghiem,
+        thoiGianGiaoNhan: data.tgianGiaoHang,
         donViTinh: data.donViTinh,
-        idKtvBaoQuan: data.idTruongPhongKtvbq,
-        tenKtvBaoQuan: data.tenTruongPhongKtvbq,
+        hinhThucBaoQuan: data.hinhThucBaoQuan,
       });
-      let soLuongDonGia = this.dataTable.find(item =>
-        item.maDiemKho == data.maDiemKho &&
-        item.maNhaKho == data.maNhaKho &&
-        item.maNganKho == data.maNganKho &&
-        item.maLoKho == data.maLoKho
-      );
-      if (soLuongDonGia) {
-        this.formData.patchValue({
-          theoChungTu: soLuongDonGia.soLuong,
-          donGia: soLuongDonGia.donGia,
-        });
+      await this.loadLoaiHinhKho(data);
+      if (this.dataTable && this.dataTable.length > 0) {
+        let soLuongDonGia = this.dataTable.find(item => item.id === data.idKho);
+        if (soLuongDonGia) {
+          this.formData.patchValue({
+            theoChungTu: soLuongDonGia.soLuong,
+            donGia: soLuongDonGia.donGia,
+          });
+        }
       }
+
     } catch (e) {
       console.error('Error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
     }
+  }
+
+  async loadLoaiHinhKho(kho) {
+    if (!kho) {
+      return
+    }
+    let maKho = kho.maLoKho || kho.maNganKho
+    let res = await this.bbNghiemThuBaoQuanService.getDataKho(maKho);
+    if (res.msg !== MESSAGE.SUCCESS || !res.data) {
+      return;
+    }
+    this.formData.patchValue({
+      loaiHinhKho: res.data.lhKho
+    });
   }
 
   onChangeTien(event) {
@@ -401,7 +482,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       this.formData.controls["soPhieuXuatKho"].setValidators([Validators.required]);
       this.formData.controls["soQdNv"].setValidators([Validators.required]);
       this.formData.controls["soPhieuKiemNghiem"].setValidators([Validators.required]);
-      const body = { ...this.formData.value, };
+      const body = {...this.formData.value,};
       await this.createUpdate(body);
     } catch (e) {
       console.error('Error: ', e);
@@ -419,7 +500,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       }
       await this.helperService.ignoreRequiredForm(this.formData);
       this.setValidForm();
-      const body = { ...this.formData.value };
+      const body = {...this.formData.value};
       await super.saveAndSend(body, trangThai, msg, msgSuccess);
     } catch (e) {
       console.error('Error: ', e);
@@ -429,20 +510,59 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   }
 
   setValidForm() {
-    this.formData.controls["tenDvi"].setValidators([Validators.required]);
-    this.formData.controls["maQhNs"].setValidators([Validators.required]);
-    this.formData.controls["ngayLapPhieu"].setValidators([Validators.required]);
-    this.formData.controls["tenLoaiHinhNx"].setValidators([Validators.required]);
-    this.formData.controls["tenKieuNhapXuat"].setValidators([Validators.required]);
-    this.formData.controls["soHopDong"].setValidators([Validators.required]);
-    this.formData.controls["ngayKyHopDong"].setValidators([Validators.required]);
-    this.formData.controls["toChucCaNhan"].setValidators([Validators.required]);
-    this.formData.controls["ngayKyQdNv"].setValidators([Validators.required]);
-    this.formData.controls["tenDiemKho"].setValidators([Validators.required]);
-    this.formData.controls["tenNhaKho"].setValidators([Validators.required]);
-    this.formData.controls["tenNganKho"].setValidators([Validators.required]);
-    this.formData.controls["tenNganLoKho"].setValidators([Validators.required]);
-    this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
-    this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
+    const requiredFields = [
+      "nam",
+      "tenDvi",
+      "maQhNs",
+      "ngayLapPhieu",
+      "tenLoaiHinhNx",
+      "tenKieuNhapXuat",
+      "soHopDong",
+      "ngayKyHopDong",
+      "toChucCaNhan",
+      "ngayKyQdNv",
+      "tenNganLoKho",
+      "tenNhaKho",
+      "tenDiemKho",
+      "tenLoaiVthh",
+      "tenCloaiVthh",
+      "tenThuKho",
+      "tenKtvBaoQuan",
+      "keToanTruong",
+      "thoiGianGiaoNhan",
+      "soBangKeHang",
+      "tenNguoiGiao",
+      "cmtNguoiGiao",
+      "congTyNguoiGiao",
+      "diaChiNguoiGiao",
+    ];
+    requiredFields.forEach(fieldName => {
+      this.formData.controls[fieldName].setValidators([Validators.required]);
+      this.formData.controls[fieldName].updateValueAndValidity();
+    });
+  }
+
+  async preview(id) {
+    await this.phieuXuatKhoService.preview({
+      tenBaoCao: 'Phiếu xuất kho kế hoạch bán đấu giá',
+      id: id
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.printSrc = res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+      }
+    });
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+
+  printPreview() {
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 }

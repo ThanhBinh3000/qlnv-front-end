@@ -1,20 +1,20 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
 
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { Base2Component } from "../../../../../../../components/base2/base2.component";
-import { CHUC_NANG, STATUS } from "../../../../../../../constants/status";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {Base2Component} from "../../../../../../../components/base2/base2.component";
+import {CHUC_NANG, STATUS} from "../../../../../../../constants/status";
 import {
   PhieuXuatNhapKhoService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatNhapKho.service";
-import { StorageService } from "../../../../../../../services/storage.service";
-import { DanhMucService } from "../../../../../../../services/danhmuc.service";
-import { Validators } from "@angular/forms";
+import {StorageService} from "../../../../../../../services/storage.service";
+import {DanhMucService} from "../../../../../../../services/danhmuc.service";
+import {Validators} from "@angular/forms";
 import dayjs from "dayjs";
-import { MESSAGE } from "../../../../../../../constants/message";
-import { FILETYPE } from "../../../../../../../constants/fileType";
+import {MESSAGE} from "../../../../../../../constants/message";
+import {FILETYPE} from "../../../../../../../constants/fileType";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
@@ -27,8 +27,8 @@ import {
 import {
   QdGiaoNvXuatHangTrongThoiGianBaoHanhService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/QdGiaoNvXuatHangTrongThoiGianBaoHanh.service";
-import { MangLuoiKhoService } from "../../../../../../../services/qlnv-kho/mangLuoiKho.service";
-import { OldResponseData } from "../../../../../../../interfaces/response";
+import {MangLuoiKhoService} from "../../../../../../../services/qlnv-kho/mangLuoiKho.service";
+import {OldResponseData} from "../../../../../../../interfaces/response";
 
 @Component({
   selector: 'app-thong-tin-bien-ban-yeu-cau-bao-hanh',
@@ -51,15 +51,15 @@ export class ThongTinBienBanYeuCauBaoHanhComponent extends Base2Component implem
   listFile: any[] = [];
   listPhieuXuatKho: any[] = [];
   listTrangThaiBh: any[] = [
-    { value: 'DANG_BH', label: "Đang bảo hành" },
-    { value: 'DA_BH', label: "Đã hoàn thành bảo hành" },
+    {value: 'DANG_BH', label: "Đang bảo hành"},
+    {value: 'DA_BH', label: "Đã hoàn thành bảo hành"},
   ]
   matchingLoaiVthh = ['0201', '0202', '0208'];
   dataThTree: any[] = [];
   expandSetString = new Set<string>();
   LIST_DANH_GIA: any[] = [
-    { value: 0, label: "Không đạt" },
-    { value: 1, label: "Đạt" }
+    {value: 0, label: "Không đạt"},
+    {value: 1, label: "Đạt"}
   ]
   maQd: string;
   templateName = "Biên bản lấy mẫu bàn giao mẫu vật tư";
@@ -273,14 +273,14 @@ export class ThongTinBienBanYeuCauBaoHanhComponent extends Base2Component implem
       let res = await this.qdGiaoNvXuatHangTrongThoiGianBaoHanhService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
-        console.log(data, "data")
+        console.log(data,"data")
         this.formData.patchValue({
           soCanCu: data.soQuyetDinh,
           idCanCu: data.id,
           soLanLm: data.soLanLm,
         });
-        this.loadSoPhieuKdcl(data.soQuyetDinh)
-        this.changePhieuKdclL1(data.idCanCu)
+         this.loadSoPhieuKdcl(data.soQuyetDinh)
+         this.changePhieuKdclL1(data.idCanCu)
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -374,7 +374,7 @@ export class ThongTinBienBanYeuCauBaoHanhComponent extends Base2Component implem
       await this.phieuKdclVtTbTrongThoiGianBaoHanhService.getDetail($event).then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           let item = res.data;
-          console.log(item, "lấy mẫu lần 1")
+          console.log(item,"lấy mẫu lần 1")
           if (item) {
             this.formData.patchValue({
               idBbLayMauL1: item.idBbLayMau,

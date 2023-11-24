@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Subject } from "rxjs";
-import { UserService } from "../../../services/user.service";
-import { Globals } from "../../../shared/globals";
-import { STATUS } from "../../../constants/status";
-import { cloneDeep } from 'lodash';
+import {Subject} from "rxjs";
+import {UserService} from "../../../services/user.service";
+import {Globals} from "../../../shared/globals";
+import {STATUS} from "../../../constants/status";
+import {cloneDeep} from 'lodash';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-xuat-tieu-huy',
@@ -11,84 +12,60 @@ import { cloneDeep } from 'lodash';
   styleUrls: ['./xuat-tieu-huy.component.scss']
 })
 export class XuatTieuHuyComponent implements OnInit {
+  defaultUrl: string = 'xuat/xuat-tieu-huy'
 
-
-  isVisibleChangeTab$ = new Subject();
-  visibleTab: boolean = true;
-
+  routerUrl: string = "";
   constructor(
-    public userService: UserService,
-    public globals: Globals
-  ) { }
+    private router: Router,
+    public globals: Globals,
+    public userService: UserService
+  ) {
+    router.events.subscribe((val) => {
+      this.routerUrl = this.router.url;
+    })
+  }
+
+  routes: any[] = [
+    {
+      url: '/danh-sach',
+      name: 'Toàn bộ danh sách hàng DTQG cần tiêu hủy',
+      accessPermisson: 'XHDTQG_XTH_DSCTH'
+    },
+    {
+      url: '/tong-hop',
+      name: 'Tổng hợp danh sách hàng DTQG cần tiêu hủy',
+      accessPermisson: 'XHDTQG_XTH_THDSCTH'
+    },
+    {
+      url: '/trinh-tham-dinh',
+      name: 'Trình và thẩm định hồ sơ tiêu hủy',
+      accessPermisson: 'XHDTQG_XTH_HSTH'
+    },
+    {
+      url: '/quyet-dinh',
+      name: 'Quyết định tiêu hủy',
+      accessPermisson: 'XHDTQG_XTH_QDTH'
+    },
+    {
+      url: '/thong-bao-kq',
+      name: 'Thông báo kết quả trình hồ sơ',
+      accessPermisson: 'XHDTQG_XTH_TBKQ'
+    },
+    {
+      url: '/bao-cao-kq',
+      name: 'Báo cáo kết quả tiêu hủy',
+      accessPermisson: 'XHDTQG_XTH_BCKQ'
+    }
+  ]
 
   ngOnInit(): void {
-    this.isVisibleChangeTab$.subscribe((value: boolean) => {
-      this.visibleTab = value;
-    });
-  }
-  tabSelected: number = 0;
-
-  selectTab(tab: number) {
-    this.tabSelected = tab;
-  }
-
-  checkStatusPermission(data: any, action: any) {
-    let mapQuyen = {
-      XEM: [
-        STATUS.CHO_DUYET_LDTC, STATUS.DA_DUYET_LDTC, STATUS.TU_CHOI_LDTC,
-        STATUS.DU_THAO, STATUS.CHO_DUYET_TP, STATUS.TU_CHOI_TP,
-        STATUS.DA_TAO_CBV, STATUS.CHO_DUYET_LDV, STATUS.TU_CHOI_LDV, STATUS.DA_DUYET_LDV,
-        STATUS.CHO_DUYET_LDC, STATUS.TU_CHOI_LDC, STATUS.DA_DUYET_LDC,
-        STATUS.CHO_DUYET_LDCC, STATUS.DA_DUYET_LDCC, STATUS.TU_CHOI_LDCC,
-        STATUS.CHO_DUYET_KTVBQ, STATUS.TU_CHOI_KTVBQ, STATUS.CHO_DUYET_KT, STATUS.TU_CHOI_KT,
-        STATUS.BAN_HANH,
-        STATUS.DA_HOAN_THANH
-      ],
-      SUA: [STATUS.DU_THAO, STATUS.TU_CHOI_TP, STATUS.TU_CHOI_LDTC, STATUS.TU_CHOI_LDV, STATUS.TU_CHOI_LDC, STATUS.TU_CHOI_LDCC],
-      XOA: [STATUS.DU_THAO],
-      DUYET_LDTC: [STATUS.CHO_DUYET_LDTC],
-      DUYET_TP: [STATUS.CHO_DUYET_TP],
-      DUYET_LDV: [STATUS.CHO_DUYET_LDV],
-      DUYET_LDC: [STATUS.CHO_DUYET_LDC],
-      DUYET_LDCC: [STATUS.CHO_DUYET_LDCC],
-      DUYET_KTVBQ: [STATUS.CHO_DUYET_KTVBQ],
-      DUYET_KT: [STATUS.CHO_DUYET_KT],
-      TAO_QD: [STATUS.DA_DUYET_LDV],
-
-      XEM_NO: [
-        STATUS.CHO_DUYET_LDTC, STATUS.DA_DUYET_LDTC, STATUS.TU_CHOI_LDTC,
-        STATUS.DU_THAO, STATUS.CHO_DUYET_TP, STATUS.TU_CHOI_TP,
-        STATUS.CHO_DUYET_LDC, STATUS.TU_CHOI_LDC, STATUS.DA_DUYET_LDC,
-        STATUS.DA_TAO_CBV, STATUS.CHO_DUYET_LDV, STATUS.TU_CHOI_LDV, STATUS.DA_DUYET_LDV,
-        STATUS.CHO_DUYET_LDCC, STATUS.DA_DUYET_LDCC, STATUS.TU_CHOI_LDCC,
-        STATUS.CHO_DUYET_KTVBQ, STATUS.TU_CHOI_KTVBQ, STATUS.CHO_DUYET_KT, STATUS.TU_CHOI_KT,
-        STATUS.BAN_HANH
-      ],
-      SUA_NO: [],
-      XOA_NO: [],
-      DUYET_LDTC_NO: [STATUS.CHO_DUYET_LDTC],
-      DUYET_TP_NO: [STATUS.CHO_DUYET_TP],
-      DUYET_LDV_NO: [STATUS.CHO_DUYET_LDV],
-      DUYET_LDC_NO: [STATUS.CHO_DUYET_LDC],
-      DUYET_LDCC_NO: [STATUS.CHO_DUYET_LDCC],
-      DUYET_KTVBQ_NO: [STATUS.CHO_DUYET_KTVBQ],
-      DUYET_KT_NO: [STATUS.CHO_DUYET_KT],
-      TAO_QD_NO: []
-    }
-    let actionTmp = cloneDeep(action);
-    if (data.maDvi !== this.userService.getUserLogin().MA_PHONG_BAN) {
-      actionTmp = actionTmp + "_NO";
-    }
-    if (data) {
-      return mapQuyen[actionTmp].includes(data.trangThai) && mapQuyen[actionTmp].includes(data.trangThaiTc);
-    } else {
-      return false;
+    if (this.router.url) {
+      this.routerUrl = this.router.url;
     }
   }
 
-  receivedTab(tab) {
-    if (tab >= 0) {
-      this.tabSelected = tab;
-    }
+  redirectUrl(url) {
+    console.log(this.defaultUrl + url);
+    this.router.navigate([this.defaultUrl + url]);
   }
 }

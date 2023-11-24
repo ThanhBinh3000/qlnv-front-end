@@ -24,7 +24,7 @@ import { Base3Component } from 'src/app/components/base3/base3.component';
 export class ThemMoiThongBaoKetQuaComponent extends Base3Component implements OnInit {
   fileCanCu: any[] = []
 
-  symbol: string;
+  symbol : string;
 
   constructor(
     httpClient: HttpClient,

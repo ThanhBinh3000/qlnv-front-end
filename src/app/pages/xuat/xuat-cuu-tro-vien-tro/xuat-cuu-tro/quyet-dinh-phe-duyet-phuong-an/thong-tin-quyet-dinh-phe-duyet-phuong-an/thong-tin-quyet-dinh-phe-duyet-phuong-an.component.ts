@@ -518,7 +518,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listDanhSachDeXuat,
-        dataHeader: ['Số tờ trình đề xuất', 'Loại hàng hóa', 'loại hình nhập xuất'],
+        dataHeader: ['Số tờ trình đề xuất', 'Loại hàng hóa', 'loại hình xuất'],
         dataColumn: ['soDx', 'tenLoaiVthh', 'loaiNhapXuat']
       },
     });

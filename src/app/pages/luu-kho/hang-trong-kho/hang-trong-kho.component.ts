@@ -52,7 +52,7 @@ export class HangTrongKhoComponent implements OnInit {
     },
     {
       url : '/hong-hoc-sua-chua',
-      name : 'Bỉ hỏng cần sửa chữa'
+      name : 'Bị hỏng cần sửa chữa'
     },
     {
       url : '/da-het-han',

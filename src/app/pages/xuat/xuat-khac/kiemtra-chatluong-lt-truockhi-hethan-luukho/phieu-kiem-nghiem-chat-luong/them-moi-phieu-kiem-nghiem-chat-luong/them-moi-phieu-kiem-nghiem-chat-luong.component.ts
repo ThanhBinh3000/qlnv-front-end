@@ -28,7 +28,7 @@ import {
   PhieuKiemNgiemClLuongThucHangDTQGService,
 } from '../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/PhieuKiemNgiemClLuongThucHangDTQG.service';
 import { PREVIEW } from '../../../../../../constants/fileType';
-import { saveAs } from 'file-saver';
+import {saveAs} from 'file-saver';
 @Component({
   selector: 'app-them-moi-phieu-kiem-nghiem-chat-luong',
   templateUrl: './them-moi-phieu-kiem-nghiem-chat-luong.component.html',
@@ -121,7 +121,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         tenNhaKho: [],
         tenNganKho: [],
         tenLoKho: [],
-        nguoiPduyet: [],
+        lanhDaoCuc: [],
         fileDinhKems: [new Array<FileDinhKem>()],
         phieuKnClDtl: [new Array()],
 

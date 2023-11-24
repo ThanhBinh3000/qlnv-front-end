@@ -107,6 +107,7 @@ export class DanhSachGoiThau {
   diaDiemNhap: string;
   donGia: number;
   donGiaVat: number;
+  donGiaTamTinh: number;
   donGiaDx: number;
   goiThau: string;
   id: number;
@@ -124,6 +125,7 @@ export class DanhSachGoiThau {
   parent?: DanhSachGoiThau
   thanhTienDx?: number;
   thanhTienQd?: number;
+  giaToiDa: number;
 }
 
 export class CanCuXacDinh {
@@ -168,6 +170,7 @@ export class DanhMucMucPhi {
   cloaiVthh: string
   tencLoaiVthh: string
   hinhThucBq: string
+  nhomDinhMuc: string
   loaiDinhMuc: string
   loaiHinhBq: string
   dviTinh: string

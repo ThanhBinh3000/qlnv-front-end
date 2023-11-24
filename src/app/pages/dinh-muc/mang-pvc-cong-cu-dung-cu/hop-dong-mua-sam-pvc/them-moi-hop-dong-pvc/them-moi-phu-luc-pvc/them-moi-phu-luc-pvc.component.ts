@@ -1,16 +1,16 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Base2Component } from "../../../../../../components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { chain } from 'lodash';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {chain} from 'lodash';
 import * as uuid from "uuid";
-import { Validators } from "@angular/forms";
-import { MESSAGE } from "../../../../../../constants/message";
-import { STATUS } from "../../../../../../constants/status";
-import { HopDongPvcService } from "../../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/hop-dong-pvc.service";
+import {Validators} from "@angular/forms";
+import {MESSAGE} from "../../../../../../constants/message";
+import {STATUS} from "../../../../../../constants/status";
+import {HopDongPvcService} from "../../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/hop-dong-pvc.service";
 
 @Component({
   selector: 'app-them-moi-phu-luc-pvc',
@@ -146,13 +146,14 @@ export class ThemMoiPhuLucPvcComponent extends Base2Component implements OnInit 
     this.formData.value.listQlDinhMucPvcHdDiaDiemNh = this.listDiaDiem
     let body = this.formData.value
     let data = await this.createUpdate(body);
-    if (isGuiDuyet) {
-      this.id = data.id;
+    if(isGuiDuyet){
+    this.id = data.id;
       await this.pheDuyet();
     }
     if (data && !isGuiDuyet) {
       this.goBackHdr(true)
     }
+    this.buildDiaDiemTc();
   }
 
   onExpandStringChange(id: string, checked: boolean): void {
@@ -240,12 +241,12 @@ export class ThemMoiPhuLucPvcComponent extends Base2Component implements OnInit 
           let rs = chain(value)
             .groupBy("tenDviCha")
             .map((v, k) => {
-              return {
-                idVirtual: uuid.v4(),
-                tenDviCha: k,
-                childData: v
+                return {
+                  idVirtual: uuid.v4(),
+                  tenDviCha: k,
+                  childData: v
+                }
               }
-            }
             ).value();
           return {
             idVirtual: uuid.v4(),

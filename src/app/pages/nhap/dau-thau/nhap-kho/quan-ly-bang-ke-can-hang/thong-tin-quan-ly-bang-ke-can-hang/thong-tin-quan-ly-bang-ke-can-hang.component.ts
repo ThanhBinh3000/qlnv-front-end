@@ -29,7 +29,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import {
   QuanLyNghiemThuKeLotService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyNghiemThuKeLot.service";
-import { cloneDeep } from 'lodash';
+import {cloneDeep} from 'lodash';
+import {PREVIEW} from "../../../../../../constants/fileType";
 @Component({
   selector: 'thong-tin-quan-ly-bang-ke-can-hang',
   templateUrl: './thong-tin-quan-ly-bang-ke-can-hang.component.html',
@@ -54,6 +55,8 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
   rowItem: any = {};
   listFileDinhKem: any[] = [];
   rowItemEdit: any[] = [];
+  templateName = "9.C85-HD_Bảng kê cân hàng_nhập_LT";
+  dataDdNhap: any;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -156,8 +159,8 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
           this.listFileDinhKem = data.listFileDinhKem;
           this.helperService.bidingDataInFormGroup(this.formData, data);
           await this.bindingDataQd(data.idQdGiaoNvNh);
-          let dataDdNhap = this.listDiaDiemNhap.filter(item => item.id == data.idDdiemGiaoNvNh)[0];
-          this.bindingDataDdNhap(dataDdNhap);
+          this.dataDdNhap = this.listDiaDiemNhap.filter(item => item.id == data.idDdiemGiaoNvNh)[0];
+          this.bindingDataDdNhap(this.dataDdNhap);
           this.bindingDataPhieuNhapKho(data.soPhieuNhapKho.split("/")[0]);
           this.dataTable = data.chiTiets;
         }
@@ -374,8 +377,8 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
 
   addRow() {
     // if (this.validateDataRow()) {
-    this.dataTable = [...this.dataTable, this.rowItem];
-    this.rowItem = {};
+      this.dataTable = [...this.dataTable, this.rowItem];
+      this.rowItem = {};
     // }
   }
 
@@ -587,5 +590,21 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
       }, 0);
       return sum;
     }
+  }
+
+  async xemTruocBk(id, tenBaoCao) {
+    await this.service.preview({
+      tenBaoCao: tenBaoCao + '.docx',
+      id: id,
+    }).then(async res => {
+      if (res.data) {
+        this.printSrc = res.data.pdfSrc;
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+      }
+    });
   }
 }

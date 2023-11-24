@@ -1,32 +1,32 @@
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, OnChanges } from '@angular/core';
-import { Validators } from '@angular/forms';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges, OnChanges} from '@angular/core';
+import {Validators} from '@angular/forms';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
 import * as dayjs from 'dayjs';
-import { saveAs } from 'file-saver';
-import { API_STATUS_CODE } from 'src/app/constants/config';
+import {saveAs} from 'file-saver';
+import {API_STATUS_CODE} from 'src/app/constants/config';
 import {
   DialogDanhSachHangHoaComponent
 } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
-import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
-import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
-import { STATUS } from "../../../../../../constants/status";
-import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
-import { DanhSachPhanLo } from 'src/app/models/KeHoachBanDauGia';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
-import { CanCuXacDinh, FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
+import {ChiTieuKeHoachNamCapTongCucService} from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
+import {DanhMucTieuChuanService} from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
+import {STATUS} from "../../../../../../constants/status";
+import {QuyetDinhGiaTCDTNNService} from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
+import {DanhSachPhanLo} from 'src/app/models/KeHoachBanDauGia';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {DanhSachMuaTrucTiepService} from 'src/app/services/danh-sach-mua-truc-tiep.service';
+import {CanCuXacDinh, FileDinhKem} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import {UploadComponent} from 'src/app/components/dialog/dialog-upload/upload.component';
 import {
   DialogThemMoiKeHoachMuaTrucTiepComponent
 } from 'src/app/components/dialog/dialog-them-moi-ke-hoach-mua-truc-tiep/dialog-them-moi-ke-hoach-mua-truc-tiep.component';
-import { DatePipe } from '@angular/common';
-import { QuyetDinhGiaCuaBtcService } from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
+import {DatePipe} from '@angular/common';
+import {QuyetDinhGiaCuaBtcService} from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
 
 
 @Component({
@@ -102,7 +102,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
       ptMua: ['', [Validators.required]],
       tchuanCluong: [null, [Validators.required]],
       giaMua: [null, [Validators.required]],
-      thueGtgt: [5],
+      thueGtgt: [null],
       tgianMkho: [, [Validators.required]],
       tgianKthuc: [, [Validators.required]],
       ghiChu: [null],
@@ -120,7 +120,6 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
 
   async ngOnInit() {
     this.spinner.show();
-    this.maTrinh = '/' + this.userInfo.MA_TR;
     if (this.idInput > 0) {
       // await this.getDetail(this.idInput);
     } else {
@@ -170,6 +169,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
         this.formData.patchValue({
           soDxuat: data.soDxuat?.split('/')[0],
         })
+        this.maTrinh = "/" + data.soDxuat?.split('/')[1]
         this.dataTable = data.children;
         console.log(this.dataTable)
         this.fileDinhKem = data.fileDinhKems;
@@ -180,6 +180,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
   }
 
   initForm() {
+    this.maTrinh = '/' + this.userInfo.MA_TR;
     this.formData.patchValue({
       tenDvi: this.userInfo.TEN_DVI,
       maDvi: this.userInfo.MA_DVI,
@@ -197,7 +198,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
 
   selectHangHoa() {
     const modalTuChoi = this.modal.create({
-      nzTitle: 'Danh sách hàng hóa',
+      nzTitle: 'Danh sách hàng DTQG',
       nzContent: DialogDanhSachHangHoaComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -208,69 +209,69 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
       }
     });
     modalTuChoi.afterClose.subscribe(async (data) => {
-      if (data) {
-        if (this.userService.isCuc()) {
-          this.formData.patchValue({
-            cloaiVthh: data.ma,
-            tenCloaiVthh: data.ten,
-            loaiVthh: data.parent.ma,
-            tenLoaiVthh: data.parent.ten
-          });
-        } else {
-          this.formData.patchValue({
-            loaiVthh: data.ma,
-            tenLoaiVthh: data.ten
-          });
-        }
-        let res = await this.dmTieuChuanService.getDetailByMaHh(
-          this.formData.get('cloaiVthh').value,
-        );
-        let body = {
-          loaiGia: "LG03",
-          namKeHoach: this.formData.value.namKh,
-          loaiVthh: this.formData.value.loaiVthh,
-          cloaiVthh: this.formData.value.cloaiVthh,
-          maDvi: this.formData.value.maDvi,
-          trangThai: STATUS.BAN_HANH,
-        }
-        let pag = await this.quyetDinhGiaTCDTNNService.getPag(body)
-        if (pag.msg === MESSAGE.SUCCESS) {
-          if (pag.data) {
-            let giaCuThe = 0;
-            pag.data.forEach(i => {
-              let giaQdTcdtVat = 0;
-              if (i.giaQdDcTcdtVat != null && i.giaQdDcTcdtVat > 0) {
-                giaQdTcdtVat = i.giaQdDcTcdtVat
-              } else {
-                giaQdTcdtVat = i.giaQdTcdtVat
-              }
-              if (giaQdTcdtVat > giaCuThe) {
-                giaCuThe = giaQdTcdtVat;
-              }
-            })
+        if (data) {
+          if (this.userService.isCuc()) {
             this.formData.patchValue({
-              donGiaVat: giaCuThe
-            })
+              cloaiVthh: data.ma,
+              tenCloaiVthh: data.ten,
+              loaiVthh: data.parent.ma,
+              tenLoaiVthh: data.parent.ten
+            });
+          } else {
+            this.formData.patchValue({
+              loaiVthh: data.ma,
+              tenLoaiVthh: data.ten
+            });
+          }
+          let res = await this.dmTieuChuanService.getDetailByMaHh(
+            this.formData.get('cloaiVthh').value,
+          );
+          let body = {
+            loaiGia: "LG03",
+            namKeHoach: this.formData.value.namKh,
+            loaiVthh: this.formData.value.loaiVthh,
+            cloaiVthh: this.formData.value.cloaiVthh,
+            maDvi: this.formData.value.maDvi,
+            trangThai: STATUS.BAN_HANH,
+          }
+          let pag = await this.quyetDinhGiaTCDTNNService.getPag(body)
+          if (pag.msg === MESSAGE.SUCCESS) {
+            if (pag.data) {
+              let giaCuThe = 0;
+              pag.data.forEach(i => {
+                let giaQdTcdtVat = 0;
+                if (i.giaQdDcTcdtVat != null && i.giaQdDcTcdtVat > 0) {
+                  giaQdTcdtVat = i.giaQdDcTcdtVat
+                } else {
+                  giaQdTcdtVat = i.giaQdTcdtVat
+                }
+                if (giaQdTcdtVat > giaCuThe) {
+                  giaCuThe = giaQdTcdtVat;
+                }
+              })
+              this.formData.patchValue({
+                donGiaVat: giaCuThe
+              })
+            }
+          }
+          if (res.statusCode == API_STATUS_CODE.SUCCESS) {
+            this.formData.patchValue({
+              tchuanCluong: res.data ? res.data.tenQchuan : null,
+            });
           }
         }
-        if (res.statusCode == API_STATUS_CODE.SUCCESS) {
-          this.formData.patchValue({
-            tchuanCluong: res.data ? res.data.tenQchuan : null,
-          });
-        }
       }
-    }
     );
   }
 
-  themMoiBangPhanLoTaiSan($event, data?: DanhSachPhanLo, index?: number) {
+  themMoiBangPhanLoTaiSan($event, data ?: DanhSachPhanLo, index ?: number) {
     $event.stopPropagation();
     if (!this.formData.get('loaiVthh').value) {
-      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa');
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng DTQG');
       return;
     }
     const modalGT = this.modal.create({
-      nzTitle: 'Thêm địa điểm nhập kho',
+      nzTitle: 'THÊM ĐỊA ĐIỂM NHẬP KHO',
       nzContent: DialogThemMoiKeHoachMuaTrucTiepComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -290,6 +291,10 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
       if (!data) {
         return;
       }
+      console.log(data, 999)
+      this.formData.patchValue({
+        thueGtgt: data.thueVat
+      })
       if (index >= 0) {
         this.dataTable[index] = data;
       } else {
@@ -314,27 +319,27 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
 
   calculatorTable() {
     let tongMucDt: number = 0;
-    let tongSoLuong: number = 0;
+    // let tongSoLuong: number = 0;
     this.dataTable.forEach((item) => {
       let soLuongChiCuc = 0;
-      if (item.children.length > 0) {
+      if(item.children.length > 0){
         item.children.forEach(child => {
           soLuongChiCuc += child.soLuong;
-          tongSoLuong += child.soLuong;
+          // tongSoLuong += child.soLuong;
           tongMucDt += child.soLuong * child.donGia * 1000
         })
       }
-      tongSoLuong += item.tongSoLuong
+      // tongSoLuong += item.tongSoLuong
       item.soLuong = soLuongChiCuc;
     });
     this.formData.patchValue({
-      tongSoLuong: tongSoLuong,
-      tongMucDt: tongMucDt,
+      // tongSoLuong: tongSoLuong,
+      // tongMucDt: tongMucDt,
       tongTienGomThue: tongMucDt,
     });
   }
 
-  deleteRow(i: number) {
+  deleteRow(i: number, y?: number) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -345,7 +350,11 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
       nzWidth: 400,
       nzOnOk: async () => {
         try {
-          this.dataTable = this.dataTable.filter((item, index) => index != i);
+          if(y != undefined){
+            this.dataTable[i].children = this.dataTable.find((res, index) => index == i).children.filter((item, index) => index != y);
+          }else{
+            this.dataTable = this.dataTable.filter((item, index) => index != i);
+          }
           this.calculatorTable();
         } catch (e) {
           console.log('error', e);
@@ -360,6 +369,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
     if (this.formData.invalid) {
       return;
     }
+    let body = this.formData.value;
     if (isGuiDuyet) {
       if (this.dataTable.length == 0) {
         this.notification.error(
@@ -367,10 +377,11 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
           'Danh sách số lượng địa điểm không được để trống',
         );
         return;
+      }else{
+        body.ngayPduyet = new Date();
       }
     }
     let pipe = new DatePipe('en-US');
-    let body = this.formData.value;
     if (this.formData.get('soDxuat').value) {
       body.soDxuat = this.formData.get('soDxuat').value + this.maTrinh;
     }
@@ -442,21 +453,23 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
   }
 
   async getDataChiTieu() {
-    let res2 =
-      await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
-        +this.formData.get('namKh').value,
-      );
-    if (res2.msg == MESSAGE.SUCCESS) {
-      this.dataChiTieu = res2.data;
-      this.formData.patchValue({
-        soQdCc: res2.data.soQuyetDinh,
-        idSoQdCc: res2.data.id
-      });
-    } else {
-      this.formData.patchValue({
-        soQdCc: null
-      });
-    }
+      let res2 =
+        await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
+          +this.formData.get('namKh').value,
+        );
+      if (res2.msg == MESSAGE.SUCCESS) {
+        this.dataChiTieu = res2.data;
+        if(this.userService.isCuc()){
+          this.formData.patchValue({
+            soQdCc: res2.data.soQuyetDinh,
+            idSoQdCc: res2.data.id
+          });
+        }
+      } else {
+        this.formData.patchValue({
+          soQdCc: null
+        });
+      }
   }
 
   quayLai() {
@@ -491,7 +504,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
         break;
       }
     }
-    this.approve(this.idInput, trangThai, msg);
+    this.approve(this.idInput, trangThai, msg, null, MESSAGE.UPDATE_SUCCESS);
   }
 
 
@@ -566,7 +579,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
     }
   }
 
-  taiLieuDinhKem(type?: string) {
+  taiLieuDinhKem(type ?: string) {
     const modal = this.modal.create({
       nzTitle: 'Thêm mới căn cứ xác định giá',
       nzContent: UploadComponent,
@@ -747,6 +760,9 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
         prev += cur.tongSoLuong;
         return prev;
       }, 0);
+      this.formData.patchValue({
+        tongSoLuong: sum,
+      });
       return sum;
     }
   }
