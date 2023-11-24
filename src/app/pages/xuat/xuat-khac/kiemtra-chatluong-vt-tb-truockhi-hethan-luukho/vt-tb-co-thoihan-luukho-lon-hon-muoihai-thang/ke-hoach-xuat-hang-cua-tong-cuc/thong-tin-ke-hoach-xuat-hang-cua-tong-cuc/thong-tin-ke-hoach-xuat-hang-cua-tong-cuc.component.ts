@@ -316,7 +316,7 @@ export class ThongTinKeHoachXuatHangCuaTongCucComponent extends Base2Component i
     switch (this.formData.get('trangThai').value) {
       case STATUS.DU_THAO: {
         trangThai = STATUS.CHO_DUYET_LDV;
-        mess = 'Bạn có muối gửi duyệt?'
+        mess = 'Bạn có muốn gửi duyệt?'
         break;
       }
       case STATUS.CHO_DUYET_LDV: {

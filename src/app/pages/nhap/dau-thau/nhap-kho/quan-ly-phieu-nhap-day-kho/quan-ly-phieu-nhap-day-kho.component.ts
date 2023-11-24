@@ -321,6 +321,7 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
+    this.isViewDetail = isView;
     this.idQdGiaoNvNh = idQdGiaoNvNh;
   }
 

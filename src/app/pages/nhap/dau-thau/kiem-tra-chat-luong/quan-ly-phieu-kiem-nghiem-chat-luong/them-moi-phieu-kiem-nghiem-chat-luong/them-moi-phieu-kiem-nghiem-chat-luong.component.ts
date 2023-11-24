@@ -170,9 +170,10 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   }
 
   async initForm() {
+    let maBb = 'PKNCL-' + this.userInfo.DON_VI.tenVietTat;
     let res = await this.userService.getId("PHIEU_KNGHIEM_CLUONG_SEQ");
     this.formData.patchValue({
-      soPhieuKiemNghiemCl: `${res}/${this.formData.get('nam').value}/PKNCL-CDTVP`,
+      soPhieuKiemNghiemCl: `${res}/${this.formData.get('nam').value}/${maBb}`,
       maDvi: this.userInfo.MA_DVI,
       tenDvi: this.userInfo.TEN_DVI,
       maQhns: this.userInfo.DON_VI.maQhns,
@@ -251,7 +252,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       case STATUS.TU_CHOI_LDC:
       case STATUS.DU_THAO: {
         trangThai = STATUS.CHO_DUYET_TP;
-        mess = 'Bạn có muối gửi duyệt ?'
+        mess = 'Bạn có muốn gửi duyệt ?'
         break;
       }
       case STATUS.CHO_DUYET_TP: {

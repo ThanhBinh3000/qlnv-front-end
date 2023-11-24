@@ -304,9 +304,10 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
   }
 
   async initForm() {
+    let maBb = 'BBCBK-' + this.userInfo.DON_VI.tenVietTat;
     let res = await this.userService.getId("BIEN_BAN_CHUAN_BI_KHO_SEQ");
     this.formData.patchValue({
-      soBienBan: `${res}/${this.formData.get('nam').value}/BBNTBQ-CCDTVP`,
+      soBienBan: `${res}/${this.formData.get('nam').value}/${maBb}`,
       maDvi: this.userInfo.MA_DVI,
       tenDvi: this.userInfo.TEN_DVI,
       maQhns: this.userInfo.DON_VI.maQhns,

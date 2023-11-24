@@ -67,7 +67,8 @@
             <th>Số QĐ giao NV NH</th>
             <th>Năm kế hoạch</th>
             <th>Thời hạn NH trước ngày</th>
-            <th>Số BB NĐK</th>
+            <th *ngIf="!loaiVthh.startsWith('02')">Số BB NĐK</th>
+            <th *ngIf="loaiVthh.startsWith('02')">Số BB kết thúc NK</th>
             <th>Ngày bắt đầu nhập</th>
             <th>Ngày kết thúc nhập</th>
             <th>Điểm kho</th>
@@ -174,6 +175,6 @@
 </ng-container>
 <ng-container *ngIf="isDetail">
   <them-moi-phieu-nhap-day-kho [id]="selectedId" (showListEvent)="showList()" [isView]="isViewDetail"
-    [loaiVthh]="loaiVthh" [isTatCa]="isTatCa">
+    [loaiVthh]="loaiVthh" [isTatCa]="isTatCa" [idQdGiaoNvNh]="idQdGiaoNvNh">
   </them-moi-phieu-nhap-day-kho>
 </ng-container>

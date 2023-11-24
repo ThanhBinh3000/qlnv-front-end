@@ -140,9 +140,10 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
   }
 
   async initForm() {
+    let maBb = 'PNK-' + this.userInfo.DON_VI.tenVietTat;
     let res = await this.userService.getId("PHIEU_NHAP_KHO_SEQ");
     this.formData.patchValue({
-      soPhieuNhapKho: `${res}/${this.formData.get('nam').value}/PNK-CCDTVP`,
+      soPhieuNhapKho: `${res}/${this.formData.get('nam').value}/${maBb}`,
       maDvi: this.userInfo.MA_DVI,
       tenDvi: this.userInfo.TEN_DVI,
       maQhns: this.userInfo.DON_VI.maQhns,

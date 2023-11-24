@@ -170,9 +170,10 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
   }
 
   async initForm() {
+    let maBb = 'BKCH-' + this.userInfo.DON_VI.tenVietTat;
     let res = await this.userService.getId("BANG_KE_CAN_HANG_LT_SEQ");
     this.formData.patchValue({
-      soBangKe: `${res}/${this.formData.get('nam').value}/BKCH-CCDTVP`,
+      soBangKe: `${res}/${this.formData.get('nam').value}/${maBb}`,
       maDvi: this.userInfo.MA_DVI,
       tenDvi: this.userInfo.TEN_DVI,
       maQhns: this.userInfo.DON_VI.maQhns,
@@ -416,7 +417,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
       case STATUS.TU_CHOI_LDCC:
       case STATUS.DU_THAO: {
         trangThai = STATUS.CHO_DUYET_LDCC;
-        mess = 'Bạn có muối gửi duyệt ?'
+        mess = 'Bạn có muốn gửi duyệt ?'
         break;
       }
       case STATUS.CHO_DUYET_LDCC: {
@@ -519,7 +520,6 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
   }
 
   async save(isGuiDuyet: boolean) {
-    if (this.validateSave()) {
       this.spinner.show();
       try {
         this.helperService.markFormGroupTouched(this.formData);
@@ -531,6 +531,9 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
         body.chiTiets = this.dataTable;
         body.fileDinhKems = this.listFileDinhKem;
         let res;
+        if (isGuiDuyet && !this.validateSave()) {
+          return;
+        }
         if (this.formData.get('id').value > 0) {
           res = await this.quanLyBangKeCanHangService.update(body);
         } else {
@@ -561,7 +564,6 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
         this.spinner.hide();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
-    }
   }
 
   validateSave() {
