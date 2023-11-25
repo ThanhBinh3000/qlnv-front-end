@@ -200,7 +200,7 @@
                 <tr>
                   <th></th>
                   <th>STT</th>
-                  <th>Tên CCDC</th>
+                  <th>Tên công cụ dụng cụ</th>
                   <th>Số lượng tồn</th>
                   <th>Đơn vị tính</th>
                   <th>Số lượng điều chuyển</th>
@@ -228,7 +228,8 @@
                         <td>{{lv2.slTon}}</td>
                         <td>{{lv2.donViTinh}}</td>
                         <td>
-                          <input class="money-input" currencyMask [(ngModel)]='lv2.slDieuChuyen' [options]="AMOUNT" />
+                          <input class="money-input" currencyMask [(ngModel)]='lv2.slDieuChuyen'
+                            [options]="amountFn(lv2.slTon)" />
                         </td>
                       </tr>
                     </ng-container>
