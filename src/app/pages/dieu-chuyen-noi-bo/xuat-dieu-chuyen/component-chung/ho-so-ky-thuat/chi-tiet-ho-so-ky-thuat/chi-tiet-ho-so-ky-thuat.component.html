@@ -77,7 +77,7 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Cán bộ tạo HSKT</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                <input nz-input readonly formControlName="canBoTaoHoSo" />
+                <input nz-input readonly formControlName="canBoTaoHoSoNh" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -102,7 +102,8 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Ngày duyệt HSKT</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                <input nz-input readonly formControlName="ngayTaoNh" />
+                <nz-date-picker nzDisabled formControlName="ngayDuyetNh" [nzFormat]="globals.dateFormat">
+                </nz-date-picker>
               </nz-form-control>
             </nz-form-item>
           </div>
