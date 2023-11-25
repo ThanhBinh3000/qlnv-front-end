@@ -57,10 +57,10 @@ export class DanhSachBaoCaoDieuChinhComponent implements OnInit {
         this.userInfo = this.userService.getUserLogin();
         this.spinner.show();
 
-        this.searchFilter.denNgay = new Date();
-        const newDate = new Date();
-        newDate.setMonth(newDate.getMonth() - 1);
-        this.searchFilter.tuNgay = newDate;
+        // this.searchFilter.denNgay = new Date();
+        // const newDate = new Date();
+        // this.searchFilter.tuNgay = newDate;
+        // newDate.setMonth(newDate.getMonth() - 1);
         this.searchFilter.donViTao = this.userInfo?.MA_DVI;
 
         //check quyen va cac nut chuc nang
@@ -69,7 +69,7 @@ export class DanhSachBaoCaoDieuChinhComponent implements OnInit {
         if (this.userService.isAccessPermisson(Roles.DCDT.DUYET_REPORT) || this.userService.isAccessPermisson(Roles.DCDT.DUYET_SYNTHETIC_REPORT)) {
             this.searchFilter.trangThai = Status.TT_02;
         } else {
-            if (this.userService.isAccessPermisson(Roles.DCDT.APPROVE_REPORT) || this.userService.isAccessPermisson(Roles.DCDT.APPROVE_SYNTHETIC_REPORT)) {
+            if (this.userService.isAccessPermisson(Roles.DCDT.PHE_DUYET_REPORT) || this.userService.isAccessPermisson(Roles.DCDT.PHE_DUYET_SYNTHETIC_REPORT)) {
                 this.searchFilter.trangThai = Status.TT_04;
             }
         }
@@ -166,6 +166,8 @@ export class DanhSachBaoCaoDieuChinhComponent implements OnInit {
             namBcao: this.searchFilter.nam,
             ngayTaoDen: Utils.fmtDate(this.searchFilter.denNgay),
             ngayTaoTu: Utils.fmtDate(this.searchFilter.tuNgay),
+            // ngayTaoDen: "",
+            // ngayTaoTu: "",
             paggingReq: {
                 limit: this.pages.size,
                 page: this.pages.page,

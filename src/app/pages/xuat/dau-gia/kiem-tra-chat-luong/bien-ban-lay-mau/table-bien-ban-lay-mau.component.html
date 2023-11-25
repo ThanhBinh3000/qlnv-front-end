@@ -18,12 +18,12 @@
           <div nz-col [nzSpan]="4">
             <label class="search__label"> Ngày lấy mẫu</label>
             <div nz-row [nzGutter]="24">
-              <div nz-col nzSpan="12" class="cus-start-date">
+              <div nz-col [nzSpan]="12" class="cus-start-date">
                 <nz-date-picker [nzDisabledDate]="disabledNgayLayMauTu" nzFormat="dd/MM/yyyy"
                                 formControlName="ngayLayMauTu" nzPlaceHolder="Ngày bắt đầu">
                 </nz-date-picker>
               </div>
-              <div nz-col nzSpan="12" class="cus-end-date">
+              <div nz-col [nzSpan]="12" class="cus-end-date">
                 <nz-date-picker [nzDisabledDate]="disabledNgayLayMauDen" nzFormat="dd/MM/yyyy"
                                 formControlName="ngayLayMauDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
               </div>
@@ -48,13 +48,13 @@
       <h3> DANH SÁCH BIÊN BẢN LẤY MẪU/BÀN GIAO MẪU </h3>
       <div class="buttons">
         <button
-          *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_BBBGM_EXP') : userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_BBLM_EXP')"
+          *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_BBBGM_EXP') : userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_BBLM_EXP')"
           type="button" class="btn btn-sub" (click)="exportData('Danh-sach-bien-ban-lay-mau/ban-giao-mau.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span> Xuất file </span>
         </button>
         <button
-          *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_BBBGM_THEM') : userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_BBLM_THEM')"
+          *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_BBBGM_THEM') : userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_BBLM_THEM')"
           type="button" class="btn btn-main" (click)="redirectDetail(0, false)">
           <i class=" icon htvbdh_dau-cong"></i>
           <span> Thêm </span>
@@ -77,7 +77,7 @@
           <th class="text-left"> Ngày lấy mẫu</th>
           <th class="text-left"> Số BB tịnh kho</th>
           <th class="text-left"> Ngày xuất dốc kho</th>
-          <th class="text-left"> Số BB hao dôi</th>
+          <th class="text-left" *ngIf="!loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)"> Số BB hao dôi</th>
           <th class="text-left"> Trạng thái</th>
           <th class="text-center"> Hành động</th>
         </tr>
@@ -143,8 +143,8 @@
                          style="color: blue">{{ lv2.soBbTinhKho }}
                       </a>
                     </td>
-                    <td class="text-left">{{ lv2.ngayXuatDocKho }}</td>
-                    <td class="text-left">
+                    <td class="text-left">{{ lv2.ngayXuatDocKho |date:'dd/MM/YYYY'}}</td>
+                    <td class="text-left" *ngIf="!loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
                       <a *ngIf="lv2.soBbHaoDoi && lv2.idHaoDoi" (click)="openModal(lv2.idHaoDoi, 'haoDoi')"
                          style="color: blue">{{ lv2.soBbHaoDoi }}
                       </a>

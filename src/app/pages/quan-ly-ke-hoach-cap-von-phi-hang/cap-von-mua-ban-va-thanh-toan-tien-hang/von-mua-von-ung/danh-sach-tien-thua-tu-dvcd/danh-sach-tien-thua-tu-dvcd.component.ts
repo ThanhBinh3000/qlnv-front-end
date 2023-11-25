@@ -49,10 +49,10 @@ export class DanhSachTienThuaTuDvcdComponent implements OnInit {
         this.userInfo = this.userService.getUserLogin();
         this.spinner.show();
         //khoi tao gia tri mac dinh
-        this.searchFilter.ngayTaoDen = new Date();
-        const newDate = new Date();
-        newDate.setMonth(newDate.getMonth() - 1);
-        this.searchFilter.ngayTaoTu = newDate;
+        // this.searchFilter.ngayTaoDen = new Date();
+        // const newDate = new Date();
+        // newDate.setMonth(newDate.getMonth() - 1);
+        // this.searchFilter.ngayTaoTu = newDate;
         this.searchFilter.maDvi = this.userInfo?.MA_DVI;
         const request = {
             maDviCha: this.userInfo.MA_DVI,

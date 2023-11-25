@@ -204,7 +204,7 @@ export class ThongTinQuyetDinhXuatGiamVatTuBaoHanhComponent extends Base2Compone
       case STATUS.TU_CHOI_LDV:
       case STATUS.TU_CHOI_LDTC: {
         trangThai = STATUS.CHO_DUYET_LDV;
-        mess = 'Bạn có muối gửi duyệt?'
+        mess = 'Bạn có muốn gửi duyệt?'
         break;
       }
       case STATUS.CHO_DUYET_LDV: {

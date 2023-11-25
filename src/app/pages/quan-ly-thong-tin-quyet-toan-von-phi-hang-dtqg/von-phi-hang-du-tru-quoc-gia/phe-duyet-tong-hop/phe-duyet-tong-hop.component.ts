@@ -45,6 +45,7 @@ export class PheDuyetTongHopComponent implements OnInit {
         loaiTimKiem: "1",
         maPhanBcao: '1',
         namQtoan: null,
+        quyQtoan: null,
         ngayTaoDen: null,
         ngayTaoTu: null,
         paggingReq: {
@@ -95,6 +96,24 @@ export class PheDuyetTongHopComponent implements OnInit {
     isAddNew = false;
     idSelected: string;
     isStatus: string;
+    lstQuy: any[] = [
+        {
+            val: 1,
+            ten: "quý 1"
+        },
+        {
+            val: 2,
+            ten: "quý 2"
+        },
+        {
+            val: 3,
+            ten: "quý 3"
+        },
+        {
+            val: 4,
+            ten: "quý 4"
+        }
+    ];
     constructor(
         private quanLyVonPhiService: QuanLyVonPhiService,
         private quyetToanVonPhiService: QuyetToanVonPhiService,
@@ -110,10 +129,10 @@ export class PheDuyetTongHopComponent implements OnInit {
     async ngOnInit() {
         this.spinner.show()
         this.userInfo = this.userService.getUserLogin();
-        this.searchFilter.namQtoan = new Date().getFullYear() - 1
-        this.searchFilter.ngayTaoDen = new Date();
-        this.newDate.setMonth(this.newDate.getMonth() - 1);
-        this.searchFilter.ngayTaoTu = this.newDate;
+        // this.searchFilter.namQtoan = new Date().getFullYear() - 1
+        // this.searchFilter.ngayTaoDen = new Date();
+        // this.newDate.setMonth(this.newDate.getMonth() - 1);
+        // this.searchFilter.ngayTaoTu = this.newDate;
         this.donViTao = this.userInfo?.MA_DVI;
         this.statusNewReport = this.userService.isAccessPermisson(Roles.QTVP.SYNTHETIC_REPORT)
         this.statusDelete = this.userService.isAccessPermisson(Roles.QTVP.DELETE_REPORT);

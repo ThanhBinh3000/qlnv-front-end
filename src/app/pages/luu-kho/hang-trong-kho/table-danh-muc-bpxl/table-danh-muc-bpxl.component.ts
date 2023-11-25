@@ -41,10 +41,14 @@ export class TableDanhMucBpxlComponent extends Base3Component implements OnInit 
     super(httpClient, storageService, notification, spinner, modal, route, router, theoDoiBqDtlService);
     this.formData = this.fb.group({
       nam: null,
-      maSc: null,
-      maCc: null,
+      loaiVthh: null,
+      cloaiVthh: null,
       ngayTu: null,
       ngayDen: null,
+      maDiemKho: null,
+      maNhaKho: null,
+      maNganKho: null,
+      maLoKho : null,
       bienPhapXl : null,
       vaiTro : 'CBTHUKHO',
       trangThai : this.STATUS.DA_HOAN_THANH

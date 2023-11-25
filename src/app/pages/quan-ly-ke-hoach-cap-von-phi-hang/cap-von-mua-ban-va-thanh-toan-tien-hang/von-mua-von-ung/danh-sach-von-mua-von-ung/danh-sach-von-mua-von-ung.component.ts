@@ -63,10 +63,10 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
         this.searchFilter.maDvi = this.userInfo.MA_DVI;
         this.spinner.show();
         //khoi tao gia tri mac dinh
-        this.searchFilter.ngayTaoDen = new Date();
-        const newDate = new Date();
-        newDate.setMonth(newDate.getMonth() - 1);
-        this.searchFilter.ngayTaoTu = newDate;
+        // this.searchFilter.ngayTaoDen = new Date();
+        // const newDate = new Date();
+        // newDate.setMonth(newDate.getMonth() - 1);
+        // this.searchFilter.ngayTaoTu = newDate;
         this.searchFilter.maDvi = this.userInfo?.MA_DVI;
         switch (this.dataInfo?.tabSelected) {
             case Tab.DS_GNV:
@@ -92,6 +92,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
             case Tab.DS_TT:
                 this.title = 'DANH SÁCH TIỀN THỪA NỘP LÊN ĐƠN VỊ CẤP TRÊN';
                 this.searchFilter.loaiTimKiem = '0';
+                this.trangThais = Status.TRANG_THAI_FULL;
                 this.searchFilter.maLoai = Cvmb.TIEN_THUA;
                 this.perm.create = Roles.CVMB.ADD_NTT;
                 this.perm.edit = Roles.CVMB.EDIT_NTT;

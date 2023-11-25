@@ -40,28 +40,28 @@ export class DanhSachQuyetDinhPheDuyetKetQuaComponent extends Base2Component imp
   ) {
     super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBanDauGiaService);
     this.formData = this.fb.group({
-      nam: [null],
-      loaiVthh: [null],
-      cloaiVthh: [null],
-      soQdKq: [null],
-      trichYeu: [null],
-      ngayKyTu: [null],
-      ngayKyDen: [null],
-      maDvi: [null]
+      nam: null,
+      loaiVthh: null,
+      cloaiVthh: null,
+      soQdKq: null,
+      trichYeu: null,
+      ngayKyTu: null,
+      ngayKyDen: null,
+      maDvi: null,
     });
     this.filterTable = {
-      nam: '',
-      soQdKq: '',
-      ngayPduyet: '',
-      trichYeu: '',
-      ngayKy: '',
-      soQdPd: '',
-      maThongBao: '',
-      tenHinhThucDauGia: '',
-      tenPthucDauGia: '',
-      soTbKhongThanh: '',
-      soBienBan: '',
-      tenTrangThai: '',
+      nam: null,
+      soQdKq: null,
+      ngayKy: null,
+      trichYeu: null,
+      soQdPd: null,
+      maThongBao: null,
+      tenLoaiVthh: null,
+      tenCloaiVthh: null,
+      tenHinhThucDauGia: null,
+      tenPhuongThucDauGia: null,
+      soBienBan: null,
+      tenTrangThai: null,
     };
 
     this.listTrangThai = [
@@ -95,31 +95,17 @@ export class DanhSachQuyetDinhPheDuyetKetQuaComponent extends Base2Component imp
   async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([
-        this.timKiem(),
-        this.search(),
-        this.loadDsVthh(),
-      ]);
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+      })
+      await this.search();
+      await this.loadDsVthh();
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       this.spinner.hide();
     }
-  }
-
-  async timKiem() {
-    this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
-    })
-  }
-
-  async clearFilter() {
-    this.formData.reset();
-    await Promise.all([
-      this.timKiem(),
-      this.search()
-    ])
   }
 
   redirectDetail(id, isView: boolean) {

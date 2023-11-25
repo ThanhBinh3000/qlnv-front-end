@@ -6,18 +6,18 @@
           <div nz-col [nzSpan]="3">
             <label class="search__label"> Năm kế hoạch </label>
             <nz-select formControlName="nam">
-              <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              <nz-option *ngFor="let item of listNam" [nzValue]="item.value" [nzLabel]="item.text"></nz-option>
             </nz-select>
           </div>
           <div nz-col [nzSpan]="4">
             <label
               class="search__label"> Số QĐ giao NV xuất hàng</label>
-            <input placeholder="Nhập nội dung" nz-input formControlName="soQdNv"/>
+            <input nz-input formControlName="soQdNv"/>
           </div>
           <div nz-col [nzSpan]="4">
             <label
               class="search__label"> Số BB hao dôi</label>
-            <input placeholder="Nhập nội dung" nz-input formControlName="soBbHaoDoi"/>
+            <input nz-input formControlName="soBbHaoDoi"/>
           </div>
           <div nz-col [nzSpan]="4">
             <label class="search__label"> Ngày lâp BB hao dôi</label>

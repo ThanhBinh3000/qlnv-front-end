@@ -161,6 +161,13 @@ export class DialogDanhSachVatTuHangHoaComponent implements OnInit {
                 return false;
             }
         } else {
+            // if (!!item.child && item.child.length !== 0) {
+            //     if (item.ma.startsWith('0101') || item.level < 1) {
+            //         return true
+            //     } else {
+            //         return false
+            //     }
+            // }
             if ((!!item.child && item.child.length !== 0) && item.level < 1) {
                 return true;
             } else {

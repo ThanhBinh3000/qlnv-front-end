@@ -11,8 +11,8 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { BtnStatus, CapUng, Cvmb, Report } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
-import * as XLSX from 'xlsx';
+import { BtnStatus, CapUng, Cvmb, Doc, Report } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
+import * as XLSX from 'xlsx-js-style';
 
 @Component({
     selector: 'app-cap-ung-von',
@@ -57,6 +57,7 @@ export class CapUngVonComponent implements OnInit {
         this.fileList.forEach((file: any) => {
             const id = file?.lastModified.toString();
             this.baoCao.lstFiles.push({
+                ... new Doc(),
                 id: id,
                 fileName: file?.name
             });
@@ -288,6 +289,11 @@ export class CapUngVonComponent implements OnInit {
             return;
         }
 
+        if (this.baoCao.lstFiles.some(e => e.isEdit)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_SAVE_FILE);
+            return;
+        }
+
         if (this.lstCtiets.some(e => e.lkCong > Utils.MONEY_LIMIT || e.uncCong > Utils.MONEY_LIMIT)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
             return;
@@ -306,8 +312,11 @@ export class CapUngVonComponent implements OnInit {
         request.lstCtiets = lstCtietTemp;
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.baoCao.maDvi + '/' + this.baoCao.maCapUng));
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.baoCao.lstFiles.find(e => e.id == id)?.noiDung;
+            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.baoCao.maDvi + '/' + this.baoCao.maCapUng, noiDung));
         }
+        request.fileDinhKems = request.fileDinhKems.concat(this.baoCao.lstFiles.filter(e => typeof e.id == 'number'))
 
         if (!this.baoCao.id) {
             this.capVonMuaBanTtthService.themMoiVonMuaBan(request).toPromise().then(
@@ -397,6 +406,7 @@ export class CapUngVonComponent implements OnInit {
         const header = [
             { t: 0, b: 5, l: 0, r: 13, val: null },
             { t: 0, b: 0, l: 0, r: 8, val: this.title },
+            { t: 1, b: 1, l: 0, r: 4, val: 'Trạng thái báo cáo: ' + Status.reportStatusName(this.baoCao.trangThai) },
             { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
             { t: 4, b: 5, l: 1, r: 1, val: 'Đơn vị' },
             { t: 4, b: 4, l: 2, r: 9, val: 'Thông tin Ủy nhiệm chi bên gửi đợt ' + this.baoCao.dot.toString() },
@@ -424,10 +434,10 @@ export class CapUngVonComponent implements OnInit {
                         row[field] = index + 1;
                         break;
                     case 'ngayLap':
-                        row[field] = Utils.fmtDate(item[field]);
+                        row[field] = Utils.getValue(Utils.fmtDate(item[field]));
                         break;
                     default:
-                        row[field] = item[field];
+                        row[field] = Utils.getValue(item[field]);
                         break;
                 }
             })
@@ -443,6 +453,12 @@ export class CapUngVonComponent implements OnInit {
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        //Thêm khung viền cho bảng
+        for (const cell in worksheet) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheet[cell].s = Table.borderStyle;
+        }
+
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         XLSX.writeFile(workbook, this.baoCao.maCapUng + '.xlsx');
     }

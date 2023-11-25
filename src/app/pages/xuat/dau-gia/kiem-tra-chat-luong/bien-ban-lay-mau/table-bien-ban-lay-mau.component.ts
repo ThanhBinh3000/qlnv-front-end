@@ -46,21 +46,23 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
       donViKnghiem: null,
       ngayLayMauTu: null,
       ngayLayMauDen: null,
-      maDvi: null,
       loaiVthh: null,
+      maDvi: null,
     })
     this.filterTable = {
-      soQdNv: '',
-      nam: '',
-      ngayKyQdNv: '',
-      tenDiemKho: '',
-      tenLoKho: '',
-      tenNganKho: '',
-      ngayLayMau: '',
-      soBbTinhKho: '',
-      ngayXuatDocKho: '',
-      soBbHaoDoi: '',
-      tenTrangThai: '',
+      soQdNv: null,
+      nam: null,
+      tgianGiaoHang: null,
+      tenDiemKho: null,
+      tenNhaKho: null,
+      tenNganKho: null,
+      tenLoKho: null,
+      soBbLayMau: null,
+      ngayLayMau: null,
+      soBbTinhKho: null,
+      ngayXuatDocKho: null,
+      soBbHaoDoi: null,
+      tenTrangThai: null,
     };
   }
 
@@ -196,7 +198,7 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
         DUYET_LDCHICUC: 'XHDTQG_PTDG_KTCL_LT_BBLM_DUYET_LDCCUC',
       },
     };
-    const permissions = this.loaiVthh === LOAI_HANG_DTQG.VAT_TU ? permissionMapping.VT : permissionMapping.LT;
+    const permissions = this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? permissionMapping.VT : permissionMapping.LT;
     switch (action) {
       case 'XEM':
         return (

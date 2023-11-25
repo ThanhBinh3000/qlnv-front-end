@@ -11,8 +11,8 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { BtnStatus, Cvmb, Report, TienThua } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
-import * as XLSX from 'xlsx';
+import { BtnStatus, Cvmb, Doc, Report, TienThua } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
+import * as XLSX from 'xlsx-js-style';
 
 @Component({
     selector: 'app-nop-tien-thua',
@@ -58,6 +58,7 @@ export class NopTienThuaComponent implements OnInit {
         this.fileList.forEach((file: any) => {
             const id = file?.lastModified.toString();
             this.baoCao.lstFiles.push({
+                ... new Doc(),
                 id: id,
                 fileName: file?.name
             });
@@ -262,6 +263,11 @@ export class NopTienThuaComponent implements OnInit {
             return;
         }
 
+        if (this.baoCao.lstFiles.some(e => e.isEdit)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_SAVE_FILE);
+            return;
+        }
+
         if (this.lstCtiets.some(e => e.nopTong > Utils.MONEY_LIMIT || e.daNopTong > Utils.MONEY_LIMIT)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
             return;
@@ -280,8 +286,11 @@ export class NopTienThuaComponent implements OnInit {
         request.lstCtiets = lstCtietTemp;
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.baoCao.maDvi + '/' + this.baoCao.maCapUng));
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.baoCao.lstFiles.find(e => e.id == id)?.noiDung;
+            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.baoCao.maDvi + '/' + this.baoCao.maCapUng, noiDung));
         }
+        request.fileDinhKems = request.fileDinhKems.concat(this.baoCao.lstFiles.filter(e => typeof e.id == 'number'))
 
         if (!this.baoCao.id) {
             this.capVonMuaBanTtthService.themMoiVonMuaBan(request).toPromise().then(
@@ -365,17 +374,18 @@ export class NopTienThuaComponent implements OnInit {
         const header = [
             { t: 0, b: 6, l: 0, r: 8, val: null },
             { t: 0, b: 0, l: 0, r: 8, val: 'Nộp tiền thừa lên đơn vị cấp trên' },
+            { t: 1, b: 1, l: 0, r: 4, val: 'Trạng thái báo cáo: ' + Status.reportStatusName(this.baoCao.trangThai, this.isParent) },
             { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
             { t: 4, b: 5, l: 1, r: 1, val: 'Đơn vị cấp dưới' },
             { t: 4, b: 4, l: 2, r: 4, val: 'Số đã nộp Đơn vị cấp trên' },
             { t: 5, b: 5, l: 2, r: 2, val: 'Nộp vốn' },
-            { t: 5, b: 5, l: 3, r: 3, val: 'Nợp hoàn ứng' },
+            { t: 5, b: 5, l: 3, r: 3, val: 'Nộp hoàn ứng' },
             { t: 5, b: 5, l: 4, r: 4, val: 'Tổng nộp' },
             { t: 4, b: 4, l: 5, r: 8, val: 'Nộp đợt ' + this.baoCao.dot.toString() },
             { t: 5, b: 5, l: 5, r: 5, val: 'Ủy nhiệm chi ngày' },
             { t: 5, b: 5, l: 6, r: 6, val: 'Nộp vốn' },
-            { t: 5, b: 5, l: 7, r: 7, val: 'Nợp hoàn ứng' },
-            { t: 5, b: 5, l: 8, r: 8, val: 'Tổng nộp nộp lần này' },
+            { t: 5, b: 5, l: 7, r: 7, val: 'Nộp hoàn ứng' },
+            { t: 5, b: 5, l: 8, r: 8, val: 'Tổng nộp lần này' },
         ]
         const fieldOrder = ['stt', 'tenHangDtqg', 'daNopVonUng', 'daNopVonCap', 'daNopTong', 'nopUncNgay', 'nopVonUng', 'nopVonCap', 'nopTong'];
         const calHeader = ['A', 'B', '1', '2', '3=1+2', '4', '5', '6', '7=5+6'];
@@ -388,10 +398,10 @@ export class NopTienThuaComponent implements OnInit {
                         row[field] = index + 1;
                         break;
                     case 'nopUncNgay':
-                        row[field] = Utils.fmtDate(item[field]);
+                        row[field] = Utils.getValue(Utils.fmtDate(item[field]));
                         break;
                     default:
-                        row[field] = item[field];
+                        row[field] = Utils.getValue(item[field]);
                         break;
                 }
             })
@@ -406,6 +416,12 @@ export class NopTienThuaComponent implements OnInit {
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        //Thêm khung viền cho bảng
+        for (const cell in worksheet) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheet[cell].s = Table.borderStyle;
+        }
+
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         XLSX.writeFile(workbook, this.baoCao.maCapUng + '.xlsx');
     }

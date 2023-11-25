@@ -36,6 +36,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
   @Input() isView: boolean;
   @Input() loaiVthh: string;
   @Input() isTatCa: boolean;
+  @Input() idQdGiaoNvNh: number;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -63,6 +64,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
   bbNghiemThuBaoQuans: any[] = [];
   previewName: string = 'bien_ban_ket_thuc_nhap_kho';
   listFileDinhKemBb: any[] = [];
+  templateName = "10. C76-HD_Biên bản nhập đầy kho";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -169,6 +171,9 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
       tenTrangThai: 'Dự thảo',
       tenNguoiTao: this.userInfo.TEN_DAY_DU
     });
+    if (this.idQdGiaoNvNh) {
+      await this.bindingDataQd(this.idQdGiaoNvNh);
+    }
   }
 
   async loadSoQuyetDinh() {
@@ -411,10 +416,12 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
           } else {
             if (this.formData.get('id').value) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-              this.back();
+              // this.back();
             } else {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-              this.back();
+              this.formData.get('id').setValue(res.data.id);
+              this.id = res.data.id;
+              // this.back();
             }
             await this.spinner.hide();
           }
@@ -456,7 +463,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
       case STATUS.TU_CHOI_LDCC:
       case STATUS.DU_THAO: {
         trangThai = STATUS.CHO_DUYET_KTVBQ;
-        mess = 'Bạn có muối gửi duyệt ?'
+        mess = 'Bạn có muốn gửi duyệt ?'
         break;
       }
       case STATUS.CHO_DUYET_KTVBQ: {
@@ -482,7 +489,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,
-      nzWidth: 500,
+      nzWidth: 300,
       nzOnOk: async () => {
         this.spinner.show();
         try {

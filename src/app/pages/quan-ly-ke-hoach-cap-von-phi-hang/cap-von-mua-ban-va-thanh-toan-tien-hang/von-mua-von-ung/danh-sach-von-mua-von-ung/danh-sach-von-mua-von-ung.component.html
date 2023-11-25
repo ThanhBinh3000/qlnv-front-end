@@ -87,10 +87,13 @@
                     <th scope="col">Đợt</th>
                     <th scope="col">Loại mặt hàng</th>
                     <th scope="col" *ngIf="searchFilter.maLoai == Cvmb.THANH_TOAN">Căn cứ về giá</th>
+                    <th scope="col" *ngIf="searchFilter.maLoai == Cvmb.THANH_TOAN">Quyết định</th>
                     <th scope="col">Ngày tạo</th>
                     <th scope="col">Ngày trình duyệt</th>
                     <th scope="col">Ngày duyệt</th>
                     <th scope="col">Ngày phê duyệt</th>
+                    <th scope="col" *ngIf="searchFilter.maLoai == Cvmb.TIEN_THUA && !userService.isTongCuc()">
+                        Ngày tiếp nhận</th>
                     <th scope="col">Trạng thái</th>
                     <th scope="col" style="width: 90px;">Hành động</th>
                 </tr>
@@ -119,6 +122,9 @@
                     <td *ngIf="searchFilter.maLoai == Cvmb.THANH_TOAN">
                         {{ Vm.priceBasisName(data.canCuVeGia) }}
                     </td>
+                    <td *ngIf="searchFilter.maLoai == Cvmb.THANH_TOAN">
+                        {{ data.quyetDinh }}
+                    </td>
                     <td>
                         {{ Utils.fmtDate(data.ngayTao) }}
                     </td>
@@ -130,6 +136,9 @@
                     </td>
                     <td>
                         {{ Utils.fmtDate(data.ngayPheDuyet) }}
+                    </td>
+                    <td *ngIf="searchFilter.maLoai == Cvmb.TIEN_THUA  && !userService.isTongCuc()">
+                        {{ Utils.fmtDate(data.ngayTraKq) }}
                     </td>
                     <td>
                         {{Status.reportStatusName(data.trangThai, isParent)}}

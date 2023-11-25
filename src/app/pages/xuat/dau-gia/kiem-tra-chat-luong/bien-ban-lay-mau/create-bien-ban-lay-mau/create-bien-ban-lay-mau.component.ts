@@ -26,10 +26,9 @@ import {
 import {FileDinhKem} from "../../../../../../models/CuuTro";
 import {v4 as uuidv4} from 'uuid';
 import {KhCnQuyChuanKyThuat} from "../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
-import {PREVIEW} from "../../../../../../constants/fileType";
-import printJS from "print-js";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {MangLuoiKhoService} from "../../../../../../services/qlnv-kho/mangLuoiKho.service";
+import {AMOUNT_ONE_DECIMAL} from "../../../../../../Utility/utils";
 
 @Component({
   selector: 'app-create-bien-ban-lay-mau',
@@ -43,6 +42,9 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
+  amount = {...AMOUNT_ONE_DECIMAL};
+  templateNameVt = "Biên bản lấy mẫu bán đấu giá vật tư";
+  templateNameLt = "Biên bản lấy mẫu bán đấu giá lương thực";
   listBienBan: any[] = [];
   maTuSinh: number;
   maHauTo: any;
@@ -63,10 +65,10 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService,
-    private bienBanLayMauXhService: BienBanLayMauXhService,
     private danhMucService: DanhMucService,
     private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
     private mangLuoiKhoService: MangLuoiKhoService,
+    private bienBanLayMauXhService: BienBanLayMauXhService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanLayMauXhService);
     this.formData = this.fb.group({
@@ -114,6 +116,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
       idTinhKho: [''],
       soBbTinhKho: [''],
       ngayXuatDocKho: [''],
+      tchuanCluong: [''],
       tenDvi: [''],
       tenDiemKho: [''],
       tenNhaKho: [''],
@@ -138,6 +141,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
     try {
       await this.spinner.show();
       this.maHauTo = '/BBLM-' + this.userInfo.DON_VI.tenVietTat;
+      this.amount.align = "left";
       if (this.idInput > 0) {
         await this.getDetail(this.idInput);
       } else {
@@ -191,10 +195,6 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
   async getDetail(id: number) {
     if (!id) return;
     const data = await this.detail(id);
-    if (!data) {
-      console.error('Không tìm thấy dữ liệu');
-      return;
-    }
     this.maTuSinh = this.idInput;
     this.dataTable = data.children
     if (this.dataTable && this.dataTable.length > 0) {
@@ -222,8 +222,6 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
       const res = await this.quyetDinhGiaoNvXuatHangService.search(body)
       if (res && res.msg === MESSAGE.SUCCESS) {
         this.dataQuyetDinh = res.data.content.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI));
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ XUẤT HÀNG',
@@ -297,6 +295,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
         donViTinh: data.donViTinh,
       });
       await this.loadDanhSachLayMau(data.soQdNv)
+      await this.getDanhMucTieuChuan();
       if (dataChiCuc && dataChiCuc.children && dataChiCuc.children.length > 0) {
         this.listDiaDiemXuat = dataChiCuc.children
       }
@@ -324,6 +323,20 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
       return;
     }
     this.loadDanhSachBbLm = data;
+  }
+
+  async getDanhMucTieuChuan() {
+    const loaiVthhValue = this.formData.get('loaiVthh').value;
+    const cloaiVthhValue = this.formData.get('cloaiVthh').value;
+    if (this.formData.value.cloaiVthh || this.formData.value.loaiVthh) {
+      let res = await this.danhMucService.getDetail(cloaiVthhValue || loaiVthhValue);
+      if (res.msg !== MESSAGE.SUCCESS || !res.data.tieuChuanCl) {
+        return;
+      }
+      this.formData.patchValue({
+        tchuanCluong: res.data.tieuChuanCl,
+      });
+    }
   }
 
   async openDialogKho() {
@@ -503,7 +516,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
   async save() {
     try {
       await this.helperService.ignoreRequiredForm(this.formData);
-      this.setValidator();
+      this.formData.controls["soQdNv"].setValidators([Validators.required]);
       await this.addDataTable()
       const body = {
         ...this.formData.value,
@@ -534,65 +547,17 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
     }
   }
 
-  async preview(id) {
-    await this.bienBanLayMauXhService.preview({
-      tenBaoCao: 'Biên bản lấy mẫu bàn giao mẫu bán đấu giá',
-      id: id
-    }).then(async res => {
-      if (res.data) {
-        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
-        this.printSrc = res.data.pdfSrc;
-        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
-        this.showDlgPreview = true;
-      } else {
-        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
-      }
-    });
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
-  }
-
-  printPreview() {
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
-  }
-
-  setValidator() {
-    const requiredFields = [
-      "soBbLayMau",
-      "soQdNv",
-      "tenDiemKho",
-      "tenNhaKho",
-      "tenNganKho",
-      "tenNganLoKho",
-    ];
-    requiredFields.forEach(fieldName => {
-      this.formData.controls[fieldName].setValidators([Validators.required]);
-      this.formData.controls[fieldName].updateValueAndValidity();
-    });
-  }
-
   setValidForm() {
-    const requiredFields = [
-      "loaiBienBan",
-      "nam",
-      "tenDvi",
-      "maQhNs",
+    const fieldsToValidate = [
       "ngayLayMau",
-      "soHopDong",
-      "ngayKyHopDong",
-      "toChucCaNhan",
-      "tenLoaiVthh",
-      "tenCloaiVthh",
-      "tenKtvBaoQuan",
+      "soQdNv",
       "truongBpKtbq",
       "donViKnghiem",
+      "diaDiemLayMau",
       "soLuongKiemTra",
     ];
-    requiredFields.forEach(fieldName => {
-      this.formData.controls[fieldName].setValidators([Validators.required]);
-      this.formData.controls[fieldName].updateValueAndValidity();
+    fieldsToValidate.forEach(field => {
+      this.formData.controls[field].setValidators([Validators.required]);
     });
   }
 }

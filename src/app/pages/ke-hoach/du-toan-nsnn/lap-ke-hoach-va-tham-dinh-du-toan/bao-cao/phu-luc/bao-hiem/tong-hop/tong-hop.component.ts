@@ -11,7 +11,7 @@ import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.se
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from "uuid";
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import { BtnStatus, Doc, Form } from '../../../../lap-ke-hoach-va-tham-dinh-du-toan.constant';
 
 export class UnitItem {
@@ -206,6 +206,11 @@ export class TongHopComponent implements OnInit {
 
     // luu
     async save(trangThai: string, lyDoTuChoi: string) {
+        if (this.formDetail.lstFiles.some(e => e.isEdit)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_SAVE_FILE);
+            return;
+        }
+
         if (this.lstCtietBcao.some(e => e.tong > Utils.MONEY_LIMIT)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
             return;
@@ -231,8 +236,11 @@ export class TongHopComponent implements OnInit {
 
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path));
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.formDetail.lstFiles.find(e => e.id == id)?.noiDung;
+            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path, noiDung));
         }
+        request.fileDinhKems = request.fileDinhKems.concat(this.formDetail.lstFiles.filter(e => typeof e.id == 'number'))
 
         request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
         request.trangThai = trangThai;
@@ -403,14 +411,15 @@ export class TongHopComponent implements OnInit {
             { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
             { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
             { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+            { t: 3, b: 3, l: 0, r: 4, val: 'Trạng thái báo cáo: ' + this.dataInfo.tenTrangThai },
             { t: 5, b: 7, l: 0, r: 0, val: 'STT' },
             { t: 5, b: 7, l: 1, r: 1, val: 'Danh mục hàng DTQG tham gia bảo hiểm' },
             { t: 5, b: 7, l: 2, r: 2, val: 'Đơn vị tính' },
-            { t: 5, b: 5, l: 3, r: 5, val: 'Tổng số lượng hàng trong kho của các đơn vị cấp dưới' },
+            { t: 5, b: 5, l: 3, r: 5, val: 'Số lượng' },
             { t: 6, b: 7, l: 3, r: 3, val: 'Kho từ 5000m3 trở lên' },
             { t: 6, b: 7, l: 4, r: 4, val: 'Kho dưới 5000m3' },
             { t: 6, b: 7, l: 5, r: 5, val: 'Tổng SL' },
-            { t: 5, b: 5, l: 6, r: 12, val: 'Tổng giá trị hàng trong kho của các đơn vị cấp dưới' },
+            { t: 5, b: 5, l: 6, r: 12, val: 'Giá trị bảo hiểm' },
             { t: 6, b: 6, l: 6, r: 8, val: 'Kho từ ' + this.khoiTich.toString() + ' m3 trở lên' },
             { t: 7, b: 7, l: 6, r: 6, val: 'Giá trị' },
             { t: 7, b: 7, l: 7, r: 7, val: 'Tỷ lệ bảo hiểm' },
@@ -479,34 +488,41 @@ export class TongHopComponent implements OnInit {
         this.lstCtietBcao.forEach((item, index) => {
             const row = headerBot + index + 1;
             header.push({ t: row, b: row, l: 0, r: 0, val: this.getChiMuc(item.stt) })
-            header.push({ t: row, b: row, l: 1, r: 1, val: item.tenDanhMuc })
-            header.push({ t: row, b: row, l: 2, r: 2, val: item.dviTinh })
-            header.push({ t: row, b: row, l: 3, r: 3, val: item.slTren?.toString() })
-            header.push({ t: row, b: row, l: 4, r: 4, val: item.slDuoi?.toString() })
-            header.push({ t: row, b: row, l: 5, r: 5, val: item.slTong?.toString() })
-            header.push({ t: row, b: row, l: 6, r: 6, val: item.gtTrenGt?.toString() })
-            header.push({ t: row, b: row, l: 7, r: 7, val: item.gtTrenTyLeBh?.toString() })
-            header.push({ t: row, b: row, l: 8, r: 8, val: item.gtTrenGtBh?.toString() })
-            header.push({ t: row, b: row, l: 9, r: 9, val: item.gtDuoiGt?.toString() })
-            header.push({ t: row, b: row, l: 10, r: 10, val: item.gtDuoiTyLeBh?.toString() })
-            header.push({ t: row, b: row, l: 11, r: 11, val: item.gtDuoiGtBh?.toString() })
-            header.push({ t: row, b: row, l: 12, r: 12, val: item.tong?.toString() })
+            header.push({ t: row, b: row, l: 1, r: 1, val: Utils.getValue(item.tenDanhMuc) })
+            header.push({ t: row, b: row, l: 2, r: 2, val: Utils.getValue(item.dviTinh) })
+            header.push({ t: row, b: row, l: 3, r: 3, val: Utils.getValue(item.slTren) })
+            header.push({ t: row, b: row, l: 4, r: 4, val: Utils.getValue(item.slDuoi) })
+            header.push({ t: row, b: row, l: 5, r: 5, val: Utils.getValue(item.slTong) })
+            header.push({ t: row, b: row, l: 6, r: 6, val: Utils.getValue(item.gtTrenGt) })
+            header.push({ t: row, b: row, l: 7, r: 7, val: Utils.getValue(item.gtTrenTyLeBh) })
+            header.push({ t: row, b: row, l: 8, r: 8, val: Utils.getValue(item.gtTrenGtBh) })
+            header.push({ t: row, b: row, l: 9, r: 9, val: Utils.getValue(item.gtDuoiGt) })
+            header.push({ t: row, b: row, l: 10, r: 10, val: Utils.getValue(item.gtDuoiTyLeBh) })
+            header.push({ t: row, b: row, l: 11, r: 11, val: Utils.getValue(item.gtDuoiGtBh) })
+            header.push({ t: row, b: row, l: 12, r: 12, val: Utils.getValue(item.tong) })
             item.lstDviCapDuoi.forEach((e, ind) => {
                 const col = 12 + ind * 10;
-                header.push({ t: row, b: row, l: col + 1, r: col + 1, val: e.slTren?.toString() })
-                header.push({ t: row, b: row, l: col + 2, r: col + 2, val: e.slDuoi?.toString() })
-                header.push({ t: row, b: row, l: col + 3, r: col + 3, val: e.slTong?.toString() })
-                header.push({ t: row, b: row, l: col + 4, r: col + 4, val: e.gtTrenGt?.toString() })
-                header.push({ t: row, b: row, l: col + 5, r: col + 5, val: e.gtTrenTyLeBh?.toString() })
-                header.push({ t: row, b: row, l: col + 6, r: col + 6, val: e.gtTrenGtBh?.toString() })
-                header.push({ t: row, b: row, l: col + 7, r: col + 7, val: e.gtDuoiGt?.toString() })
-                header.push({ t: row, b: row, l: col + 8, r: col + 8, val: e.gtDuoiTyLeBh?.toString() })
-                header.push({ t: row, b: row, l: col + 9, r: col + 9, val: e.gtDuoiGtBh?.toString() })
-                header.push({ t: row, b: row, l: col + 10, r: col + 10, val: e.tong?.toString() })
+                header.push({ t: row, b: row, l: col + 1, r: col + 1, val: Utils.getValue(e.slTren) })
+                header.push({ t: row, b: row, l: col + 2, r: col + 2, val: Utils.getValue(e.slDuoi) })
+                header.push({ t: row, b: row, l: col + 3, r: col + 3, val: Utils.getValue(e.slTong) })
+                header.push({ t: row, b: row, l: col + 4, r: col + 4, val: Utils.getValue(e.gtTrenGt) })
+                header.push({ t: row, b: row, l: col + 5, r: col + 5, val: Utils.getValue(e.gtTrenTyLeBh) })
+                header.push({ t: row, b: row, l: col + 6, r: col + 6, val: Utils.getValue(e.gtTrenGtBh) })
+                header.push({ t: row, b: row, l: col + 7, r: col + 7, val: Utils.getValue(e.gtDuoiGt) })
+                header.push({ t: row, b: row, l: col + 8, r: col + 8, val: Utils.getValue(e.gtDuoiTyLeBh) })
+                header.push({ t: row, b: row, l: col + 9, r: col + 9, val: Utils.getValue(e.gtDuoiGtBh) })
+                header.push({ t: row, b: row, l: col + 10, r: col + 10, val: Utils.getValue(e.tong) })
             })
         })
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
+        //Thêm khung viền cho bảng
+        for (const cell in worksheet) {
+            const firstRow = this.childUnit.length == 0 ? 5 : 4;
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < firstRow) continue;
+            worksheet[cell].s = Table.borderStyle;
+        }
+
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         XLSX.writeFile(workbook, 'bao_hiem_tong_hop.xlsx');
     }

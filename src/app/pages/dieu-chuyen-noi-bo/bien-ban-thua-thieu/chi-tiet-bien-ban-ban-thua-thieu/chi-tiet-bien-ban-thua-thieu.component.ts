@@ -332,7 +332,7 @@ export class ChiTietBienBanThuaThieuComponent extends Base2Component implements 
             case STATUS.TU_CHOI_LDC:
             case STATUS.DU_THAO: {
                 trangThai = STATUS.CHO_DUYET_TP;
-                mess = 'Bạn có muối gửi duyệt ?'
+                mess = 'Bạn có muốn gửi duyệt ?'
                 break;
             }
             case STATUS.CHO_DUYET_TP: {

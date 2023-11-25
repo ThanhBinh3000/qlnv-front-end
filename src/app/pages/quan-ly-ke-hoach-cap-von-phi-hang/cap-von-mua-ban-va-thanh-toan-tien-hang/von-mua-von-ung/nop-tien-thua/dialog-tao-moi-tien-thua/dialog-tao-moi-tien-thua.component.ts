@@ -65,7 +65,8 @@ export class DialogTaoMoiTienThuaComponent implements OnInit {
                     if (data.data.content?.length > 0) {
                         lstBcao = data.data.content;
                         lstBcao.sort((a, b) => b.dot - a.dot);
-                        if ([Status.TT_02, Status.TT_04, Status.TT_01].includes(lstBcao[0].trangThai)) {
+                        if ([Status.TT_02, Status.TT_04, Status.TT_01].includes(lstBcao[0].trangThai) ||
+                            (this.response.maLoai == Cvmb.TIEN_THUA && lstBcao[0].trangThai == Status.TT_07 && !this.userService.isTongCuc())) {
                             this.notification.warning(MESSAGE.WARNING, 'Trạng thái của đợt trước không cho phép tạo mới!')
                             this.response.loaiDnghi = null;
                             return;

@@ -47,10 +47,10 @@ export class TongHopBaoCaoComponent implements OnInit {
         this.userInfo = this.userService.getUserLogin();
         this.spinner.show();
         //khoi tao gia tri mac dinh
-        const date = new Date();
-        this.searchFilter.namBcao = date.getFullYear();
-        this.searchFilter.thangBcao = date.getMonth();
-        this.searchFilter.maLoaiBcao = Dtc.BC_DINH_KY;
+        // const date = new Date();
+        // this.searchFilter.namBcao = date.getFullYear();
+        // this.searchFilter.thangBcao = date.getMonth();
+        // this.searchFilter.maLoaiBcao = Dtc.BC_DINH_KY;
         this.searchFilter.loaiTimKiem = '1';
         this.searchFilter.trangThais = [Status.TT_09];
         //lay danh sach danh muc
@@ -82,6 +82,7 @@ export class TongHopBaoCaoComponent implements OnInit {
                 res.data.content.forEach(e => {
                     this.dataTable.push({
                         ...e,
+                        thangBcao: e.maLoaiBcao == Dtc.BC_CA_NAM ? null : e.thangBcao,
                     })
                 })
                 this.dataTableAll = cloneDeep(this.dataTable);
