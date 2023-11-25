@@ -192,7 +192,8 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
       nzWidth: 310,
       nzOnOk: async () => {
         // this.nzActiveCCDC = true
-        this.dataTableChiCuc = cloneDeep(this.dataTableChiCucDefault);
+        // this.dataTableChiCuc = cloneDeep(this.dataTableChiCucDefault);
+        this.dataTableChiCuc = this.dataTableChiCucDefault.map(f => ({ ...f, slDieuChuyen: 0 }));
         this.buildView("dataTableChiCuc", "dataViewChiCuc")
       },
       nzOnCancel: async () => {
@@ -480,8 +481,8 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
             })));
             if (dataCCDC.length > 0) {
               const dsCC = Array.isArray(dataCCDC) ? dataCCDC.map(f => ({ ...f, groupBy: `${f.maChiCucDi}-${f.maChiCucDen}` })) : []
-              this.dataTableChiCucDefault = cloneDeep(dsCC)
-              this.dataTableChiCuc = cloneDeep(dsCC)
+              this.dataTableChiCucDefault = cloneDeep(dsCC);
+              this.dataTableChiCuc = cloneDeep(dsCC);
               this.buildView("dataTableChiCuc", "dataViewChiCuc")
             }
           }
@@ -603,6 +604,9 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
   }
   checkRoleSave(trangThai: string) {
     return trangThai === STATUS.DANG_NHAP_DU_LIEU && this.userService.isAccessPermisson("QLKT_THSDK_DCK_THEM") && this.userService.isCuc()
+  }
+  amountFn(max: number) {
+    return { ...this.AMOUNT, max }
   }
 }
 
