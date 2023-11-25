@@ -147,12 +147,12 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td>{{Op.fmtVal(data.tongCong)}}</td>
-                                    <td>{{Op.fmtVal(data.tongCongSoTranChi)}}</td>
+                                    <td>{{data.tongCong!=0 ? Op.fmtVal(data.tongCong) : null}}</td>
+                                    <td>{{data.tongCongSoTranChi != 0 ? Op.fmtVal(data.tongCongSoTranChi) : null}}</td>
                                     <td *ngFor="let item of lstDvi">
                                         <div *ngFor="let e of data.lstCtietDvis;">
                                             <div *ngIf="e.maDviNhan == item.maDvi">
-                                                {{Op.fmtVal(e.soTranChi)}}
+                                                {{e.soTranChi !== 0 ? Op.fmtVal(e.soTranChi) : null}}
                                             </div>
                                         </div>
                                     </td>

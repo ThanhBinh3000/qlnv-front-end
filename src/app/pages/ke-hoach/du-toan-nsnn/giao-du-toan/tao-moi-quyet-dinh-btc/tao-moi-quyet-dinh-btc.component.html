@@ -119,9 +119,9 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td>{{Op.fmtVal(data.tongCong)}}</td>
-                                    <td>{{Op.fmtVal(data.nguonNsnn)}}</td>
-                                    <td>{{Op.fmtVal(data.nguonKhac)}}</td>
+                                    <td>{{data.tongCong !== 0 ? Op.fmtVal(data.tongCong) : null}}</td>
+                                    <td>{{data.nguonNsnn !==0 ? Op.fmtVal(data.nguonNsnn) : null}}</td>
+                                    <td>{{data.nguonKhac !== 0 ? Op.fmtVal(data.nguonKhac) : null}}</td>
                                     <td [hidden]="status">
                                         <ng-container *ngIf="!getLowStatus(data.stt)">
                                             <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
