@@ -434,7 +434,7 @@ export class PhuLuc06Component implements OnInit {
             ]
             fieldOrder = ['stt', 'tenTaiSan', 'sluongTsanTdiemBcao', 'sluongTsanDaNhan', 'sluongTsanPduyet', 'sluongTsanTcong', 'tchuanDmucTda', 'dtoanDnghiSluong',
                 'dtoanDnghiMgia', 'thanhTien', 'tdinhSluong', 'tdinhTtien', 'chenhLech', 'ghiChu', 'ykienDviCtren'];
-            calHeader = ['A', 'B', '1', '2', '3', '4=1+2+3', '5', '6', '7', '8=6*7', '6A', '8A=6A*7', '9=8A-8', '10', '11'];
+            calHeader = ['A', 'B', '1', '2', '3', '4=1+2+3', '5', '6', '7', '8=6*7', '9', '10=9*7', '11=10-8', '12', '13'];
         } else {
             header = [
                 { t: 0, b: 5, l: 0, r: 10, val: null },
@@ -458,7 +458,7 @@ export class PhuLuc06Component implements OnInit {
             ]
             fieldOrder = ['stt', 'tenTaiSan', 'sluongTsanTdiemBcao', 'sluongTsanDaNhan', 'sluongTsanPduyet', 'sluongTsanTcong', 'tchuanDmucTda', 'dtoanDnghiSluong',
                 'dtoanDnghiMgia', 'thanhTien', 'ghiChu'];
-            calHeader = ['A', 'B', '1', '2', '3', '4=1+2+3', '5', '6', '7', '8=6*7', '9'];
+            calHeader = ['A', 'B', '1', '2', '3', '4=1+2+3', '5', '6', '7', '8=6*7', '12'];
         }
 
         const filterData = this.lstCtietBcao.map(item => {
