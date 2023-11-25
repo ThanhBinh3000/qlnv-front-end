@@ -559,7 +559,6 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
                       // soLuongDx: row2.soLuongDx,
                       soLuong,
                       soLuongDx,
-                      soLuongNhuCauXuat: row2.soLuongNhuCauXuat,
                       tonKho: row2.tonKhoLoaiVthh || tonKhoCloaiVthh,
                       tenCloaiVthh: row2.tenCloaiVthh,
                       childData: v1,
@@ -581,7 +580,8 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               }).value() : [];
             let soLuong = rs.reduce((prev, next) => prev += next.soLuong, 0);
             let soLuongDx = rs.reduce((prev, next) => prev += next.soLuongDx, 0);
-            let soLuongNhuCauXuat = rs.reduce((prev, next) => prev += next.soLuongNhuCauXuat ? next.soLuongNhuCauXuat : 0, 0);
+            // let soLuongNhuCauXuat = rs.reduce((prev, next) => prev += next.soLuongNhuCauXuat ? next.soLuongNhuCauXuat : 0, 0);
+            let soLuongNhuCauXuat = row.soLuongNhuCauXuat;
             return {
               idVirtual: uuidv4(),
               tenDvi: row.tenDvi,
@@ -618,8 +618,10 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
             //   }).value() : [];
             let soLuongDx = value.reduce((prev, next) => prev += next.soLuongDx, 0);
             let soLuong = value.reduce((prev, next) => prev += next.soLuong, 0);
-            let soLuongNhuCauXuat = value.reduce((prev, next) => prev += next.soLuongNhuCauXuat ? next.soLuongNhuCauXuat : 0, 0);
-            let soLuongXc = value.reduce((prev, next) => prev += next.soLuongXc ? next.soLuongXc : 0, 0);
+            // let soLuongNhuCauXuat = value.reduce((prev, next) => prev += next.soLuongNhuCauXuat ? next.soLuongNhuCauXuat : 0, 0);
+            // let soLuongXc = value.reduce((prev, next) => prev += next.soLuongXc ? next.soLuongXc : 0, 0);
+            let soLuongNhuCauXuat = row.soLuongNhuCauXuat;
+            let soLuongXc = row.soLuongXc;
             return {
               idVirtual: uuidv4(),
               tenDvi: row.tenDvi,
@@ -707,7 +709,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
             let row = value.find(s => s.soDx === key);
             let soLuongDx = value.reduce((prev, next) => prev += next.soLuongDx, 0);
             let soLuong = value.reduce((prev, next) => prev += next.soLuong, 0);
-            let soLuongNhuCauXuat = value.reduce((prev, next) => prev += next.soLuongNhuCauXuat ? next.soLuongNhuCauXuat : 0, 0);
+            // let soLuongNhuCauXuat = row.soLuongNhuCauXuat;
             return {
               idVirtual: uuidv4(),
               tenDvi: row.tenDvi,
@@ -720,7 +722,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               thoiGian: row.ngayKyDx,
               soLuongDx: soLuongDx,
               soLuong,
-              soLuongNhuCauXuat,
+              // soLuongNhuCauXuat,
               childData: row ? value : [],
             };
           }).value();
@@ -777,8 +779,10 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
             let row = value.find(s => s.noiDungDx === key);
             let soLuongDx = value.reduce((prev, next) => prev += next.soLuongDx, 0);
             let soLuong = value.reduce((prev, next) => prev += next.soLuong, 0);
-            let soLuongNhuCauXuat = value.reduce((prev, next) => prev += next.soLuongNhuCauXuat ? next.soLuongNhuCauXuat : 0, 0);
-            let soLuongXc = value.reduce((prev, next) => prev += next.soLuongXc ? next.soLuongXc : 0, 0);
+            // let soLuongNhuCauXuat = value.reduce((prev, next) => prev += next.soLuongNhuCauXuat ? next.soLuongNhuCauXuat : 0, 0);
+            // let soLuongXc = value.reduce((prev, next) => prev += next.soLuongXc ? next.soLuongXc : 0, 0);
+            let soLuongNhuCauXuat = row.soLuongNhuCauXuat;
+            let soLuongXc = row.soLuongXc;
             return {
               idVirtual: uuidv4(),
               noiDungDx: row.noiDungDx,
@@ -853,8 +857,10 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
             let row = value.find(s => s.noiDungDx === key);
             let soLuongDx = value.reduce((prev, next) => prev += next.soLuongDx, 0);
             let soLuong = value.reduce((prev, next) => prev += next.soLuong, 0);
-            let soLuongNhuCauXuat = value.reduce((prev, next) => prev += next.soLuongNhuCauXuat ? next.soLuongNhuCauXuat : 0, 0);
-            let soLuongXc = value.reduce((prev, next) => prev += next.soLuongXc ? next.soLuongXc : 0, 0);
+            // let soLuongNhuCauXuat = value.reduce((prev, next) => prev += next.soLuongNhuCauXuat ? next.soLuongNhuCauXuat : 0, 0);
+            // let soLuongXc = value.reduce((prev, next) => prev += next.soLuongXc ? next.soLuongXc : 0, 0);
+            let soLuongNhuCauXuat = row.soLuongNhuCauXuat;
+            let soLuongXc = row.soLuongXc;
             return {
               idVirtual: uuidv4(),
               noiDungDx: row.noiDungDx,

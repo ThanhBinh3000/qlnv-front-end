@@ -411,8 +411,6 @@
                           <td class="bold text-right">{{item.soLuongDx|number:globals.numberFormat:globals.locale}}
                           </td>
                           <ng-container *ngIf="isVthhGao()">
-                            <!-- <td class="bold">{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}
-                              </td> -->
                             <td class="bold text-right">{{item.soLuongXc|number:globals.numberFormat:globals.locale}}
                             </td>
                           </ng-container>
@@ -428,16 +426,13 @@
                                 lv1.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}
                               </td>
                               <ng-container *ngIf="isVthhGao()">
-                                <td class="text-right">
-                                  {{lv1.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
+                                <td></td>
                               </ng-container>
                               <td style="height: 31.5px" class="text-right">
                                 {{lv1.soLuongDx|number:globals.numberFormat:globals.locale}}
                               </td>
                               <ng-container *ngIf="isVthhGao()">
-                                <!-- <td>{{lv1.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td> -->
-                                <td class="text-right">{{lv1.soLuongXc|number:globals.numberFormat:globals.locale}}
-                                </td>
+                                <td></td>
                               </ng-container>
                             </tr>
                           </ng-container>
@@ -604,8 +599,6 @@
                         </ng-container>
                         <td class="bold text-right">{{item.soLuong|number:globals.numberFormat:globals.locale}}</td>
                         <ng-container *ngIf="isVthhGao()">
-                          <!-- <td class="bold">{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}
-                            </td> -->
                           <td class="bold text-right">{{item.soLuongXc|number:globals.numberFormat:globals.locale}}
                           </td>
                         </ng-container>
@@ -620,21 +613,16 @@
                             <td class="text-right">{{lv1.tonKhoLoaiVthh ||
                               lv1.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}
                             </td>
-                            <!-- <td>{{lv1.soLuongDx|number:globals.numberFormat:globals.locale}}</td> -->
                             <ng-container *ngIf="isVthhGao()">
-                              <td class="text-right">
-                                {{lv1.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
+                              <td></td>
                             </ng-container>
                             <td>
-                              <!-- <nz-input-number nzSize="small" (ngModelChange)="tinhXuatCap(lv1,$event, false, item)"
-                                  [(ngModel)]="lv1.soLuong" [nzDisabled]="isView"></nz-input-number> -->
                               <input currencyMask class="money-input"
                                 (ngModelChange)="tinhXuatCap(lv1,$event, false, item)" [(ngModel)]="lv1.soLuong"
                                 [readOnly]="isView" [options]="amount1" />
                             </td>
                             <ng-container *ngIf="isVthhGao()">
-                              <!-- <td>{{lv1.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td> -->
-                              <td class="text-right">{{lv1.soLuongXc|number:globals.numberFormat:globals.locale}}</td>
+                              <td></td>
                             </ng-container>
                           </tr>
                         </ng-container>
