@@ -209,7 +209,7 @@ export class ThongTinQuyetDinhXuatHangKhoiDmComponent extends Base2Component imp
       case STATUS.DU_THAO:
       case STATUS.TU_CHOI_LDTC: {
         trangThai = STATUS.CHO_DUYET_LDV;
-        mess = 'Bạn có muối gửi duyệt?';
+        mess = 'Bạn có muốn gửi duyệt?';
         break;
       }
       case STATUS.CHO_DUYET_LDV: {

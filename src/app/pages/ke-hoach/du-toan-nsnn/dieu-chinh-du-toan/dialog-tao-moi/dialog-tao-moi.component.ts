@@ -190,7 +190,7 @@ export class DialogTaoMoiComponent implements OnInit {
     async synthetic() {
         this.spinner.show();
         const requestReport = {
-            dotBcao: 1,
+            dotBcao: this.response.dotBcao,
             namBcao: this.response.namBcao,
         };
         await this.dieuChinhService.tongHopDieuChinhDuToan(requestReport).toPromise().then(

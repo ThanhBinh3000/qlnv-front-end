@@ -11,7 +11,7 @@ import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.se
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from "uuid";
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import { BtnStatus, Doc, Form } from '../../../lap-ke-hoach-va-tham-dinh-du-toan.constant';
 
 export class ItemData {
@@ -219,6 +219,11 @@ export class BieuMau16Component implements OnInit {
             return;
         }
 
+        if (this.formDetail.lstFiles.some(e => e.isEdit)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_SAVE_FILE);
+            return;
+        }
+
         if (this.lstCtietBcao.some(e => e.upperBound())) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
             return;
@@ -238,8 +243,11 @@ export class BieuMau16Component implements OnInit {
 
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path));
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.formDetail.lstFiles.find(e => e.id == id)?.noiDung;
+            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path, noiDung));
         }
+        request.fileDinhKems = request.fileDinhKems.concat(this.formDetail.lstFiles.filter(e => typeof e.id == 'number'))
 
         request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
         request.trangThai = trangThai;
@@ -378,6 +386,7 @@ export class BieuMau16Component implements OnInit {
             { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
             { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
             { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+            { t: 3, b: 3, l: 0, r: 4, val: 'Trạng thái báo cáo: ' + this.dataInfo.tenTrangThai },
             { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
             { t: 4, b: 5, l: 1, r: 1, val: 'Nội dung' },
             { t: 4, b: 5, l: 2, r: 2, val: 'Thực hiện năm hiện hành ' + (this.namBcao - 5).toString() },
@@ -400,23 +409,23 @@ export class BieuMau16Component implements OnInit {
         const filterData = this.lstCtietBcao.map(item => {
             const row: any = {};
             fieldOrder.forEach(field => {
-                row[field] = field == 'stt' ? item.index() : ((!item[field] && item[field] !== 0) ? '' : item[field]);
+                row[field] = field == 'stt' ? item.index() : Utils.getValue(item[field]);
             })
             return row;
         })
         let row: any = {};
         fieldOrder.forEach(field => {
-            row[field] = field == 'tenNdung' ? '          -Chi thường xuyên mới' : ((!this.chiMoi[field] && this.chiMoi[field] !== 0) ? '' : this.chiMoi[field]);
+            row[field] = field == 'tenNdung' ? '          -Chi thường xuyên mới' : Utils.getValue(this.chiMoi[field]);
         })
         filterData.unshift(row)
         row = {}
         fieldOrder.forEach(field => {
-            row[field] = field == 'tenNdung' ? 'Trong đó: -Chi thường xuyên cơ sở' : ((!this.chiCoSo[field] && this.chiCoSo[field] !== 0) ? '' : this.chiCoSo[field]);
+            row[field] = field == 'tenNdung' ? 'Trong đó: -Chi thường xuyên cơ sở' : Utils.getValue(this.chiCoSo[field]);
         })
         filterData.unshift(row)
         row = {}
         fieldOrder.forEach(field => {
-            row[field] = field == 'tenNdung' ? 'TỔNG NHU CẦU' : ((!this.total[field] && this.total[field] !== 0) ? '' : this.total[field]);
+            row[field] = field == 'tenNdung' ? 'TỔNG NHU CẦU' : Utils.getValue(this.total[field]);
         })
         filterData.unshift(row)
         // thêm công thức tính cho biểu mẫu
@@ -429,6 +438,11 @@ export class BieuMau16Component implements OnInit {
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        //Thêm khung viền cho bảng
+        for (const cell in worksheet) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheet[cell].s = Table.borderStyle;
+        }
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         XLSX.writeFile(workbook, this.dataInfo.maBcao + '_TT69_16.xlsx');
     }

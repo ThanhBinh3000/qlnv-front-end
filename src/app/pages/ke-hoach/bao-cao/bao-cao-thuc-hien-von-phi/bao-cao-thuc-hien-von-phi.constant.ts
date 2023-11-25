@@ -233,6 +233,8 @@ export class Doc {
     fileName: string;
     fileSize: number;
     fileUrl: string;
+    noiDung: string;
+    isEdit: boolean = false;
 }
 
 export class Form {
@@ -250,7 +252,7 @@ export class Form {
     tuNgay: string;
     denNgay: string;
     lstFiles: Doc[];
-    fileDinhKems: any[];
+    fileDinhKems: Doc[];
     listIdDeleteFiles: string[];
 }
 
@@ -293,7 +295,7 @@ export class Report {
     maPhanBcao: string = '1';
     maLoaiBcao: string;
     lstBcaos: Form[] = [];
-    lstFiles: any[] = [];
+    lstFiles: Doc[] = [];
     lstBcaoDviTrucThuocs: any[] = [];
     tongHopTuIds: string[] = [];
     lichSu: History[] = [];

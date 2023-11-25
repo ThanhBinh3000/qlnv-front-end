@@ -59,10 +59,10 @@ export class DanhSachHeSoBaoHiemComponent implements OnInit {
         }
         this.spinner.show();
         //khoi tao gia tri mac dinh
-        this.searchFilter.denNgay = new Date();
-        const newDate = new Date();
-        newDate.setMonth(newDate.getMonth() - 1);
-        this.searchFilter.tuNgay = newDate;
+        // this.searchFilter.denNgay = new Date();
+        // const newDate = new Date();
+        // newDate.setMonth(newDate.getMonth() - 1);
+        // this.searchFilter.tuNgay = newDate;
         //check quyen va cac nut chuc nang
         this.statusNewReport = this.userService.isAccessPermisson(Roles.LTD.ADD_COEF_INS);
         this.statusDelete = this.userService.isAccessPermisson(Roles.LTD.DEL_COEF_INS);

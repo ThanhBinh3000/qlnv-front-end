@@ -45,7 +45,7 @@ export class QuanLyVonPhiService extends BaseService {
     );
   }
 
-  async upFile(file: File, path: string) {
+  async upFile(file: File, path: string, noiDung?: string) {
     const upfile: FormData = new FormData();
     upfile.append('file', file);
     upfile.append('folder', path);
@@ -55,6 +55,7 @@ export class QuanLyVonPhiService extends BaseService {
           fileName: data.filename,
           fileSize: data.size,
           fileUrl: data.url,
+          noiDung: noiDung,
         }
         return objfile;
       },

@@ -19,12 +19,11 @@ import {
 import {
   QuyetDinhGiaoNvXuatHangService
 } from './../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service';
-import {PREVIEW} from "../../../../../../constants/fileType";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
-import printJS from "print-js";
 import {
   PhieuXuatKhoService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/PhieuXuatKho.service";
+import {AMOUNT_ONE_DECIMAL} from "../../../../../../Utility/utils";
 
 @Component({
   selector: 'app-bdg-them-moi-bien-ban-tinh-kho',
@@ -38,6 +37,9 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
+  amount = {...AMOUNT_ONE_DECIMAL};
+  templateNameVt = "Biên bản tịnh kho bán đấu giá vật tư";
+  templateNameLt = "Biên bản tịnh kho bán đấu giá lương thực";
   maTuSinh: number;
   maHauTo: any;
   flagInit: Boolean = false;
@@ -133,6 +135,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     try {
       await this.spinner.show();
       this.maHauTo = '-BBTK';
+      this.amount.align = "left";
       if (this.idInput > 0) {
         await this.getDetail(this.idInput);
       } else {
@@ -171,10 +174,6 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   async getDetail(id: number) {
     if (!id) return;
     const data = await this.detail(id);
-    if (!data) {
-      console.error('Không tìm thấy dữ liệu');
-      return;
-    }
     this.maTuSinh = this.idInput;
     this.dataTable = data.children
     if (!this.isView) {
@@ -194,8 +193,6 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       const res = await this.quyetDinhGiaoNhiemVuXuatHangService.search(body)
       if (res && res.msg === MESSAGE.SUCCESS) {
         this.dataQuyetDinh = res.data.content.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI));
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ XUẤT HÀNG',
@@ -401,7 +398,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       const tongSlXuat = filterConditions.reduce((prev, cur) => prev + cur.thucXuat, 0);
       this.formData.patchValue({
         idQdNvDtl: filterConditions[0].idQdNvDtl,
-        idPhieuKiemNghiem: filterConditions[0].id,
+        idPhieuKiemNghiem: filterConditions[0].idPhieuKiemNghiem,
         soPhieuKiemNghiem: filterConditions[0].soPhieuKiemNghiem,
         ngayKiemNghiemMau: filterConditions[0].ngayKiemNghiemMau,
         thoiGianGiaoNhan: filterConditions[0].thoiGianGiaoNhan,
@@ -443,9 +440,14 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     const slConLai = this.formData.value.slConLai || 0;
     const slChenhLech = event - slConLai
     this.formData.patchValue({
-      slThua: slChenhLech > 0 ? slChenhLech : null,
-      slThieu: slChenhLech < 0 ? slChenhLech * (-1) : null
+      slThua: slChenhLech > 0 ? slChenhLech : 0,
+      slThieu: slChenhLech < 0 ? slChenhLech * (-1) : 0
     });
+  }
+
+  calcTong(column) {
+    if (!this.dataTable) return 0;
+    return this.dataTable.reduce((sum, cur) => sum + (cur[column] || 0), 0);
   }
 
   openModal(id: number, modalType: string) {
@@ -471,7 +473,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   async save() {
     try {
       await this.helperService.ignoreRequiredForm(this.formData);
-      this.setValidator();
+      this.formData.controls["soQdNv"].setValidators([Validators.required]);
       const body = {
         ...this.formData.value,
         children: this.dataTable,
@@ -500,71 +502,19 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     }
   }
 
-  setValidator() {
-    const requiredFields = [
-      "soBbTinhKho",
-      "soQdNv",
-      "tenDiemKho",
-      "tenNhaKho",
-      "tenNganLoKho",
-    ];
-    requiredFields.forEach(fieldName => {
-      this.formData.controls[fieldName].setValidators([Validators.required]);
-      this.formData.controls[fieldName].updateValueAndValidity();
-    });
-  }
-
   setValidForm() {
     const requiredFields = [
-      "nam",
-      "tenDvi",
-      "maQhNs",
       "ngayLapBienBan",
-      "soHopDong",
-      "ngayKyHopDong",
-      "tenLoaiVthh",
-      "tenCloaiVthh",
-      "donViTinh",
-      "tenHinhThucBaoQuan",
-      "ngayBatDauXuat",
-      "ngayKetThucXuat",
+      "soQdNv",
+      "tenNganLoKho",
+      "slThucTe",
       "nguyenNhan",
       "kienNghi",
       "ghiChu",
-      "tenThuKho",
     ];
     requiredFields.forEach(fieldName => {
       this.formData.controls[fieldName].setValidators([Validators.required]);
       this.formData.controls[fieldName].updateValueAndValidity();
     });
-  }
-
-  calcTong(column) {
-    if (!this.dataTable) return 0;
-    return this.dataTable.reduce((sum, cur) => sum + (cur[column] || 0), 0);
-  }
-
-  async preview(id) {
-    await this.bienBanTinhKhoService.preview({
-      tenBaoCao: 'Biên bản tịnh kho bán đấu giá',
-      id: id
-    }).then(async res => {
-      if (res.data) {
-        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
-        this.printSrc = res.data.pdfSrc;
-        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
-        this.showDlgPreview = true;
-      } else {
-        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
-      }
-    });
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
-  }
-
-  printPreview() {
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 }

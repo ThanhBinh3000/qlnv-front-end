@@ -6,9 +6,6 @@ import {StorageService} from "src/app/services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {DanhMucService} from "src/app/services/danhmuc.service";
-import {DonviService} from "src/app/services/donvi.service";
-import {QuanLyHangTrongKhoService} from "src/app/services/quanLyHangTrongKho.service";
 import * as dayjs from "dayjs";
 import {MESSAGE} from "src/app/constants/message";
 import {STATUS} from 'src/app/constants/status';
@@ -27,11 +24,9 @@ import {
   QuyetDinhGiaoNvXuatHangService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service";
 import {convertTienTobangChu} from "../../../../../../shared/commonFunction";
-import {PREVIEW} from "../../../../../../constants/fileType";
-import printJS from "print-js";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {FileDinhKem} from "../../../../../../models/CuuTro";
-import {CurrencyMaskInputMode} from "ngx-currency";
+import {AMOUNT_ONE_DECIMAL} from "../../../../../../Utility/utils";
 
 @Component({
   selector: 'app-bdg-chi-tiet-bang-ke-can',
@@ -46,6 +41,10 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   @Output() showListEvent = new EventEmitter<any>();
   dataTableChange = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
+  amount = {...AMOUNT_ONE_DECIMAL};
+  amount1 = {...AMOUNT_ONE_DECIMAL};
+  templateNameVt = "Bảng kê cân hàng bán đấu giá vật tư";
+  templateNameLt = "Bảng kê cân hàng bán đấu giá lương thực";
   maTuSinh: number;
   maHauTo: any;
   flagInit: Boolean = false;
@@ -53,19 +52,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   listPhieuXuatKho: any[] = [];
   listDiaDiemXuat: any[] = [];
   loadDanhSachBangKeCan: any[] = [];
-  amount = {
-    allowZero: true,
-    allowNegative: false,
-    precision: 2,
-    prefix: '',
-    thousands: '.',
-    decimal: ',',
-    align: "left",
-    nullable: true,
-    min: 0,
-    max: 1000000000000,
-    inputMode: CurrencyMaskInputMode.NATURAL,
-  }
 
   constructor(
     httpClient: HttpClient,
@@ -73,9 +59,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private danhMucService: DanhMucService,
-    private donViService: DonviService,
-    private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
     private quyetDinhGiaoNhiemVuXuatHangService: QuyetDinhGiaoNvXuatHangService,
     private phieuXuatKhoService: PhieuXuatKhoService,
     private bangKeCanService: BangKeCanService,
@@ -152,6 +135,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     try {
       await this.spinner.show();
       this.maHauTo = '/BKCH-' + this.userInfo.DON_VI.tenVietTat;
+      this.amount1.align = "left";
       if (this.idInput > 0) {
         await this.getDetail(this.idInput);
       } else {
@@ -193,10 +177,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   async getDetail(id: number) {
     if (!id) return;
     const data = await this.detail(id);
-    if (!data) {
-      console.error('Không tìm thấy dữ liệu');
-      return;
-    }
     this.maTuSinh = this.idInput;
     this.dataTable = data.children
     if (!this.isView) {
@@ -215,8 +195,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
       const res = await this.quyetDinhGiaoNhiemVuXuatHangService.search(body)
       if (res && res.msg === MESSAGE.SUCCESS) {
         this.dataQuyetDinh = res.data.content.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI));
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ XUẤT HÀNG',
@@ -421,8 +399,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
       if (res && res.msg === MESSAGE.SUCCESS) {
         const phieuXuatKhoSet = new Set(this.loadDanhSachBangKeCan.map(item => item.soPhieuXuatKho));
         this.listPhieuXuatKho = res.data.content.filter(item => !phieuXuatKhoSet.has(item.soPhieuXuatKho))
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const formattedDataPhieuXuatKho = this.listPhieuXuatKho.map(item => ({
         soLuongXuat: item.thucXuat.toLocaleString(),
@@ -629,7 +605,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
       await this.helperService.ignoreRequiredForm(this.formData);
       this.formData.controls["soQdNv"].setValidators([Validators.required]);
       this.formData.controls["soPhieuXuatKho"].setValidators([Validators.required]);
-      this.formData.controls["soBangKeHang"].setValidators([Validators.required]);
       const body = {
         ...this.formData.value,
         children: this.dataTable,
@@ -661,53 +636,15 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   setValidForm() {
     const requiredFields = [
       "nam",
-      "tenDvi",
-      "maQhNs",
       "ngayLapBangKe",
-      "soHopDong",
-      "ngayKyHopDong",
-      "tenNganLoKho",
-      "tenNhaKho",
-      "tenDiemKho",
+      "soQdNv",
       "diaDiemKho",
       "nguoiGiamSat",
-      "tenThuKho",
-      "tenNguoiGiao",
-      "cmtNguoiGiao",
-      "congTyNguoiGiao",
-      "diaChiNguoiGiao",
-      "thoiGianGiaoNhan",
-      "tenLoaiVthh",
-      "tenCloaiVthh",
-      "donViTinh",
+      "soPhieuXuatKho",
     ];
     requiredFields.forEach(fieldName => {
       this.formData.controls[fieldName].setValidators([Validators.required]);
       this.formData.controls[fieldName].updateValueAndValidity();
     });
-  }
-
-  async preview(id) {
-    await this.bangKeCanService.preview({
-      tenBaoCao: 'Bảng kê cân hàng bán đấu giá',
-      id: id
-    }).then(async res => {
-      if (res.data) {
-        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
-        this.printSrc = res.data.pdfSrc;
-        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
-        this.showDlgPreview = true;
-      } else {
-        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
-      }
-    });
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
-  }
-
-  printPreview() {
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 }

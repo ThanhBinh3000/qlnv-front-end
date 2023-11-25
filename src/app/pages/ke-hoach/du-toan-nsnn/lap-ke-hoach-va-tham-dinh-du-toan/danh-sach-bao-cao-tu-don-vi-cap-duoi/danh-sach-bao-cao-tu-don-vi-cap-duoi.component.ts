@@ -1,6 +1,5 @@
 
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import * as fileSaver from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -58,10 +57,10 @@ export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
         this.userInfo = this.userService.getUserLogin();
         this.spinner.show();
         //khoi tao gia tri mac dinh
-        this.searchFilter.denNgay = new Date();
-        const newDate = new Date();
-        newDate.setMonth(newDate.getMonth() - 1);
-        this.searchFilter.tuNgay = newDate;
+        // this.searchFilter.denNgay = new Date();
+        // const newDate = new Date();
+        // newDate.setMonth(newDate.getMonth() - 1);
+        // this.searchFilter.tuNgay = newDate;
         //lay danh sach ca don vi truc thuoc
         const request = {
             maDviCha: this.userInfo.MA_DVI,

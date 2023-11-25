@@ -142,10 +142,6 @@ export class Status {
       tenDm: 'Từ chối phê duyệt',
     },
     {
-      id: Status.TT_06,
-      tenDm: 'Phê duyệt',
-    },
-    {
       id: Status.TT_07,
       tenDm: 'Phê duyệt',
     },
@@ -482,6 +478,15 @@ export class Table {
     worksheet['!merges'] = mergeCells;
     return worksheet;
   }
+
+  static readonly borderStyle = {
+    border: {
+      top: { style: 'thin', color: { rgb: '000000' } },
+      bottom: { style: 'thin', color: { rgb: '000000' } },
+      left: { style: 'thin', color: { rgb: '000000' } },
+      right: { style: 'thin', color: { rgb: '000000' } },
+    }
+  };
 }
 
 export class Operator {
@@ -708,6 +713,14 @@ export class Utils {
   static fmtDate(date: any) {
     const datePipe = new DatePipe('en-US');
     return datePipe.transform(date, Utils.FORMAT_DATE_STR);
+  }
+
+  static getValue(val: string | number) {
+    if (typeof val === 'number') {
+      return (val || val === 0) ? val : '';
+    } else {
+      return val ? val : '';
+    }
   }
 
   static getName(n: number, name: string) {

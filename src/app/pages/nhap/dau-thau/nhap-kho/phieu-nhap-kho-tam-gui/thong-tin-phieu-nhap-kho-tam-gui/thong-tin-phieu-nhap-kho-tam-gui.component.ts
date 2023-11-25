@@ -161,9 +161,10 @@ export class ThongTinPhieuNhapKhoTamGuiComponent extends Base2Component implemen
   }
 
   async initForm() {
+    let maBb = 'PNKTG-' + this.userInfo.DON_VI.tenVietTat;
     let res = await this.userService.getId("PHIEU_NHAP_KHO_TAM_GUI_SEQ");
     this.formData.patchValue({
-      soPhieuNhapKhoTamGui: `${res}/${this.formData.get('nam').value}/PNKTG-CCDTVP`,
+      soPhieuNhapKhoTamGui: `${res}/${this.formData.get('nam').value}/${maBb}`,
       maDvi: this.userInfo.MA_DVI,
       tenDvi: this.userInfo.TEN_DVI,
       maQhns: this.userInfo.DON_VI.maQhns,

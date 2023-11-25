@@ -48,9 +48,9 @@ export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
         //khoi tao gia tri mac dinh
         const date = new Date();
         this.searchFilter.loaiTimKiem = '1';
-        this.searchFilter.namBcao = date.getFullYear();
+        // this.searchFilter.namBcao = date.getFullYear();
         this.trangThai = '7';
-        this.searchFilter.maLoaiBcao = Vp.BC_DOT;
+        // this.searchFilter.maLoaiBcao = Vp.BC_DOT;
         //lay danh sach ca don vi truc thuoc
         const request = {
             maDviCha: this.userInfo.MA_DVI,

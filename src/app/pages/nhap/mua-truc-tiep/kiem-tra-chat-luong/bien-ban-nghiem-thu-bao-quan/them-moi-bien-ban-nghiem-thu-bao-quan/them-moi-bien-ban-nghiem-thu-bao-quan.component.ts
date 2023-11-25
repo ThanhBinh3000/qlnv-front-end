@@ -710,7 +710,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
       case STATUS.TU_CHOI_LDCC:
       case STATUS.DU_THAO: {
         trangThai = STATUS.CHO_DUYET_TK;
-        mess = 'Bạn có muối gửi duyệt ?'
+        mess = 'Bạn có muốn gửi duyệt ?'
         break;
       }
       case STATUS.CHO_DUYET_TK: {

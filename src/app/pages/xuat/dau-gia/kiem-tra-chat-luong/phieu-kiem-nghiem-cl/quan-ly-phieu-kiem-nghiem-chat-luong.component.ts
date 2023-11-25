@@ -51,19 +51,20 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
       loaiVthh: null,
     })
     this.filterTable = {
-      soQdNv: '',
-      nam: '',
-      ngayKyQdNv: '',
-      tenDiemKho: '',
-      tenLoKho: '',
-      tenNganKho: '',
-      soPhieuKiemNghiem: '',
-      ngayKiemNghiemMau: '',
-      soBbLayMau: '',
-      ngayLayMau: '',
-      soBbTinhKho: '',
-      ngayLapTinhKho: '',
-      tenTrangThai: '',
+      soQdNv: null,
+      nam: null,
+      tgianGiaoHang: null,
+      tenDiemKho: null,
+      tenNhakho: null,
+      tenNganKho: null,
+      tenLoKho: null,
+      soPhieuKiemNghiem: null,
+      ngayKiemNghiemMau: null,
+      soBbLayMau: null,
+      ngayLayMau: null,
+      soBbTinhKho: null,
+      ngayLapTinhKho: null,
+      tenTrangThai: null,
     };
   }
 
@@ -201,7 +202,7 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
         DUYET_LDCUC: 'XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_LDCUC',
       },
     };
-    const permissions = this.loaiVthh === LOAI_HANG_DTQG.VAT_TU ? permissionMapping.VT : permissionMapping.LT;
+    const permissions = this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? permissionMapping.VT : permissionMapping.LT;
     switch (action) {
       case 'XEM':
         return (

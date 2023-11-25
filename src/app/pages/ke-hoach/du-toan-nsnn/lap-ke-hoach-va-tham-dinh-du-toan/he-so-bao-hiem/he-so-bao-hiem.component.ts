@@ -12,7 +12,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { BtnStatus, CoeffIns, Insurance } from '../lap-ke-hoach-va-tham-dinh-du-toan.constant';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 
 @Component({
     selector: 'app-he-so-bao-hiem',
@@ -242,6 +242,11 @@ export class HeSoBaoHiemComponent implements OnInit {
 
     // luu
     async save() {
+        if (this.baoCao.lstFiles.some(e => e.isEdit)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_SAVE_FILE);
+            return;
+        }
+
         if (this.listFile.some(item => item.size > Utils.FILE_SIZE)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
@@ -254,9 +259,12 @@ export class HeSoBaoHiemComponent implements OnInit {
         const baoCaoTemp = JSON.parse(JSON.stringify(this.baoCao));
 
         baoCaoTemp.fileDinhKems = [];
-        for (const iterator of this.listFile) {
-            baoCaoTemp.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.baoCao.maDvi + '/' + this.baoCao.maBaoHiem));
+        for (let iterator of this.listFile) {
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.baoCao.lstFiles.find(e => e.id == id)?.noiDung;
+            baoCaoTemp.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.baoCao.maDvi + '/' + this.baoCao.maBaoHiem, noiDung));
         }
+        baoCaoTemp.fileDinhKems = baoCaoTemp.fileDinhKems.concat(this.baoCao.lstFiles.filter(e => typeof e.id == 'number'))
 
         // replace nhung ban ghi dc them moi id thanh null
         baoCaoTemp.lstCtiets.forEach(item => {
@@ -382,6 +390,7 @@ export class HeSoBaoHiemComponent implements OnInit {
         const header = [
             { t: 0, b: 5, l: 0, r: 5, val: null },
             { t: 0, b: 0, l: 0, r: 5, val: 'Hệ số bảo hiểm' },
+            { t: 1, b: 1, l: 0, r: 4, val: 'Trạng thái báo cáo: ' + Status.reportStatusName(this.baoCao.trangThai) },
             { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
             { t: 4, b: 5, l: 1, r: 1, val: 'Danh mục' },
             { t: 4, b: 5, l: 2, r: 2, val: 'Đơn vị' },
@@ -401,6 +410,12 @@ export class HeSoBaoHiemComponent implements OnInit {
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        //Thêm khung viền cho bảng
+        for (const cell in worksheet) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheet[cell].s = Table.borderStyle;
+        }
+
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         XLSX.writeFile(workbook, 'HSBH_' + this.baoCao.nam.toString() + '.xlsx');
     }

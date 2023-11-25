@@ -108,7 +108,11 @@ export class BaoCaoComponent implements OnInit {
     handleUpload(): void {
         this.fileList.forEach((file: any) => {
             const id = file?.lastModified.toString();
-            this.baoCao.lstFiles.push({ id: id, fileName: file?.name });
+            this.baoCao.lstFiles.push({
+                ... new Doc(),
+                id: id,
+                fileName: file?.name
+            });
             this.listFile.push(file);
         });
         this.fileList = [];
@@ -400,6 +404,11 @@ export class BaoCaoComponent implements OnInit {
             return;
         }
 
+        if (this.baoCao.lstFiles.some(e => e.isEdit)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_SAVE_FILE);
+            return;
+        }
+
         if (this.listFile.some(item => item.size > Utils.FILE_SIZE)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
@@ -417,9 +426,12 @@ export class BaoCaoComponent implements OnInit {
         if (!baoCaoTemp.fileDinhKems) {
             baoCaoTemp.fileDinhKems = [];
         }
-        for (const iterator of this.listFile) {
-            baoCaoTemp.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.path));
+        for (let iterator of this.listFile) {
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.baoCao.lstFiles.find(e => e.id == id)?.noiDung;
+            baoCaoTemp.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.path, noiDung));
         }
+        baoCaoTemp.fileDinhKems = baoCaoTemp.fileDinhKems.concat(this.baoCao.lstFiles.filter(e => typeof e.id == 'number'))
         //get file cong van url
         const file: any = this.fileDetail;
         if (file) {
@@ -586,6 +598,7 @@ export class BaoCaoComponent implements OnInit {
             tenPl: bieuMau.tenPl,
             tieuDe: bieuMau.tenDm,
             congVan: this.baoCao.congVan?.fileName ? Utils.getDocName(this.baoCao.congVan.fileName, this.baoCao.ngayCongVan, this.baoCao.tenDvi) : '',
+            tenTrangThai: Status.reportStatusName(this.baoCao.trangThai, this.isParent),
             path: this.path,
             status: new BtnStatus(),
             isSynthetic: isSynthetic,
@@ -737,5 +750,9 @@ export class BaoCaoComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
             }
         );
+    }
+
+    isDelAppendix(maBieuMau: string) {
+        return this.status.general && (this.userInfo?.sub == this.baoCao.nguoiTao) && this.listAppendix.find(e => e.id == maBieuMau).isDel;
     }
 }

@@ -6,10 +6,9 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Roles, Status, Utils } from 'src/app/Utility/utils';
 import { MESSAGE } from 'src/app/constants/message';
-import { UserService } from 'src/app/services/user.service';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { Cvnc, Perm, Search } from '../de-nghi-cap-von-cac-don-vi.constant';
 import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNguonChi.service';
+import { UserService } from 'src/app/services/user.service';
+import { Cvnc, Perm, Search } from '../de-nghi-cap-von-cac-don-vi.constant';
 import { DialogTaoMoiCapVonComponent } from '../dialog-tao-moi-cap-von/dialog-tao-moi-cap-von.component';
 import { DialogTaoMoiDeNghiComponent } from '../dialog-tao-moi-de-nghi/dialog-tao-moi-de-nghi.component';
 
@@ -57,10 +56,10 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
         this.searchFilter.maDvi = this.userInfo.MA_DVI;
         this.spinner.show();
         //khoi tao gia tri mac dinh
-        this.searchFilter.ngayTaoDen = new Date();
-        const newDate = new Date();
-        newDate.setMonth(newDate.getMonth() - 1);
-        this.searchFilter.ngayTaoTu = newDate;
+        // this.searchFilter.ngayTaoDen = new Date();
+        // const newDate = new Date();
+        // newDate.setMonth(newDate.getMonth() - 1);
+        // this.searchFilter.ngayTaoTu = newDate;
         this.searchFilter.maDvi = this.userInfo?.MA_DVI;
         this.searchFilter.loaiTimKiem = '0';
         switch (this.dataInfo?.tabSelected) {

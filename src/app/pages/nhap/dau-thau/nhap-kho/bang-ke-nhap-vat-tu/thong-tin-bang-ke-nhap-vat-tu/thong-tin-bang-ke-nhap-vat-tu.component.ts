@@ -55,7 +55,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
   formData: FormGroup;
   listDiaDiemNhap: any[] = [];
   dataTable: any[] = [];
-  previewName: string = 'bang_ke_nhap_vat_tu';
+  templateName = "14. Bảng kê nhập Vật tư";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -351,7 +351,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       case STATUS.TU_CHOI_LDC:
       case STATUS.DU_THAO: {
         trangThai = STATUS.CHO_DUYET_TBP_KTBQ;
-        mess = 'Bạn có muối gửi duyệt ?'
+        mess = 'Bạn có muốn gửi duyệt ?'
         break;
       }
       case STATUS.CHO_DUYET_TBP_KTBQ: {
@@ -372,7 +372,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,
-      nzWidth: 500,
+      nzWidth: 300,
       nzOnOk: async () => {
         this.spinner.show();
         try {

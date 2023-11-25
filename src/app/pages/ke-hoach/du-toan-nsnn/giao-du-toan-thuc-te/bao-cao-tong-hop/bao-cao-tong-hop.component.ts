@@ -17,7 +17,8 @@ import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToa
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import * as XLSX from "xlsx";
+import * as XLSX from 'xlsx-js-style';
+import { Doc } from '../giao-du-toan-thuc-te.constant';
 
 
 export const TRANG_THAI_TIM_KIEM = [
@@ -157,7 +158,8 @@ export class BaoCaoTongHopComponent implements OnInit {
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
     newDate = new Date();
     fileDetail: NzUploadFile;
-    Status = Status
+    Status = Status;
+    path: string;
     // trước khi upload
     beforeUpload = (file: NzUploadFile): boolean => {
         this.fileList = this.fileList.concat(file);
@@ -364,6 +366,7 @@ export class BaoCaoTongHopComponent implements OnInit {
                 this.location.back();
             }
         }
+        this.path = this.maDonViTao + "/" + this.maPa;
         this.sum1();
         this.getStatusButton();
         this.spinner.hide();
@@ -655,10 +658,10 @@ export class BaoCaoTongHopComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
         }
-        const listFile: any = [];
-        for (const iterator of this.listFile) {
-            listFile.push(await this.uploadFile(iterator));
-        }
+        // const listFile: any = [];
+        // for (const iterator of this.listFile) {
+        //     listFile.push(await this.uploadFile(iterator));
+        // }
 
         const tongHopTuIds = [];
         this.lstDviTrucThuoc.forEach(item => {
@@ -707,6 +710,16 @@ export class BaoCaoTongHopComponent implements OnInit {
             soQd: this.soQd,
             tongHopTuIds: tongHopTuIds,
         }));
+
+        const fileDinhKems = [];
+        for (const iterator of this.listFile) {
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.lstFiles.find(e => e.id == id)?.noiDung;
+            fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.path, noiDung));
+        }
+        request1.fileDinhKems = fileDinhKems;
+        request.fileDinhKems = fileDinhKems;
+
         //get file cong van url
         const file: any = this.fileDetail;
         if (file) {
@@ -1168,12 +1181,19 @@ export class BaoCaoTongHopComponent implements OnInit {
     };
 
     // upload danh sách văn bản đính kèm
+    // them file vao danh sach
     handleUpload() {
         this.fileList.forEach((file: any) => {
             const id = file?.lastModified.toString();
-            this.lstFiles.push({ id: id, fileName: file?.name });
+            this.lstFiles.push({
+                ... new Doc(),
+                id: id,
+                fileName: file?.name
+            });
             this.listFile.push(file);
         });
+        console.log(this.listFile);
+
         this.fileList = [];
     };
 
@@ -1349,7 +1369,7 @@ export class BaoCaoTongHopComponent implements OnInit {
             loaiPa = "Phương án giao điều chỉnh NSNN"
         }
         const header = [
-            { t: 0, b: 5 + this.lstCtietBcao.length, l: 0, r: 8, val: null },
+            { t: 0, b: 5 + this.lstCtietBcao.length, l: 0, r: 4, val: null },
 
             { t: 0, b: 0, l: 0, r: 1, val: `Báo cáo tổng hợp ${loaiPa}` },
 
@@ -1364,7 +1384,7 @@ export class BaoCaoTongHopComponent implements OnInit {
             { t: 2, b: 2, l: 4, r: 4, val: ` ${this.getStatusName()} ` },
 
             { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
-            { t: 4, b: 5, l: 1, r: 1, val: 'Nhóm' },
+            { t: 4, b: 5, l: 1, r: 1, val: 'Nội dung' },
             { t: 4, b: 5, l: 2, r: 2, val: 'Tổng số' },
             { t: 4, b: 5, l: 3, r: 3, val: 'Đơn vị cấp dưới đã thực hiện' },
             { t: 4, b: 5, l: 4, r: 4, val: 'Chênh lệch' },
@@ -1376,13 +1396,17 @@ export class BaoCaoTongHopComponent implements OnInit {
             const tenNdung = this.getTenNdung(item.maNdung);
             header.push({ t: row, b: row, l: 0, r: 0, val: this.getChiMuc(item.stt) })
             header.push({ t: row, b: row, l: 1, r: 1, val: tenNdung })
-            header.push({ t: row, b: row, l: 2, r: 2, val: item.tongCong?.toString() })
-            header.push({ t: row, b: row, l: 3, r: 3, val: item.dviCapDuoiTh?.toString() })
-            header.push({ t: row, b: row, l: 4, r: 4, val: item.chenhLech?.toString() })
+            header.push({ t: row, b: row, l: 2, r: 2, val: (item.tongCong ? item.tongCong : 0)?.toString() })
+            header.push({ t: row, b: row, l: 3, r: 3, val: (item.dviCapDuoiTh ? item.dviCapDuoiTh : 0)?.toString() })
+            header.push({ t: row, b: row, l: 4, r: 4, val: (item.chenhLech ? item.chenhLech : 0)?.toString() })
         })
 
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
+        for (const cell in worksheet) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheet[cell].s = Table.borderStyle;
+        }
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         let excelName = this.maPa;
         excelName = excelName + '_GTT_BCTH.xlsx'

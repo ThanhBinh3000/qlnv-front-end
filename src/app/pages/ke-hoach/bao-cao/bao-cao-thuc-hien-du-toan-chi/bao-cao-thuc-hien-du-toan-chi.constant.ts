@@ -120,7 +120,7 @@ export class Form {
     lyDoTuChoi: string;
     nguoiBcao: string;
     lstFiles: Doc[] = [];
-    fileDinhKems: any[] = [];
+    fileDinhKems: Doc[] = [];
     listIdDeleteFiles: string[] = [];
 }
 
@@ -129,6 +129,8 @@ export class Doc {
     fileName: string;
     fileSize: number;
     fileUrl: number;
+    noiDung: string;
+    isEdit: boolean = false;
 }
 
 export class History {
@@ -163,12 +165,12 @@ export class Report {
     ngayDuyet: string;
     ngayPheDuyet: string;
     ngayTraKq: string;
-    fileDinhKems: any[] = [];
+    fileDinhKems: Doc[] = [];
     listIdDeleteFiles: string[] = [];     //list id file xoa khi cap nhat
     maLoaiBcao: string;
     maPhanBcao: string = '0';
     lstBcaos: Form[] = [];
-    lstFiles: any[] = [];
+    lstFiles: Doc[] = [];
     lstBcaoDviTrucThuocs: any[] = [];
     tongHopTuIds: string[] = [];
     lichSu: History[] = [];

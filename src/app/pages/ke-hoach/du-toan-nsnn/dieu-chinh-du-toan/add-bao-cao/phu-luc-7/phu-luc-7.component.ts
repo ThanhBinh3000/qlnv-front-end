@@ -10,19 +10,21 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DialogAddVatTuComponent } from 'src/app/pages/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/von-phi-hang-du-tru-quoc-gia/bao-cao-quyet-toan/dialog-add-vat-tu/dialog-add-vat-tu.component';
 import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import { BtnStatus, Doc, Form } from '../../dieu-chinh-du-toan.constant';
 import { TEN_HANG } from './phu-luc-7.constant';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { DialogDanhSachVatTuHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-vat-tu-hang-hoa/dialog-danh-sach-vat-tu-hang-hoa.component';
+import { DialogChonLoaiBaoQuanComponent } from '../../dialog-chon-loai-bao-quan/dialog-chon-loai-bao-quan.component';
+import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 export class ItemData {
     level: any;
     id: string;
     qlnvKhvonphiDchinhCtietId: string;
     stt: string;
     dmucHang: string;
+    maDinhMuc: string;
     tenHang: string;
     donViTinh: string;
     khoachDpNhan: string;
@@ -147,6 +149,7 @@ export class PhuLuc7Component implements OnInit {
     namBcao: number;
     //danh muc
     lstCtietBcao: ItemData[] = [];
+
     keys = [
         "tdiemBcaoChiPhiTaiCuaKho",
         "tdiemBcaoChiPhiNgoaiCuaKho",
@@ -163,6 +166,7 @@ export class PhuLuc7Component implements OnInit {
     ]
     lstVatTuFull: any[] = [];
     dsDinhMuc: any[] = [];
+    dsBaoQuan: any[] = [];
     scrollX: string;
     listIdDelete = ""
 
@@ -206,6 +210,7 @@ export class PhuLuc7Component implements OnInit {
         private modal: NzModalService,
         public userService: UserService,
         private quanLyVonPhiService: QuanLyVonPhiService,
+        private danhMucService: DanhMucDungChungService,
     ) { }
 
     async ngOnInit() {
@@ -219,7 +224,10 @@ export class PhuLuc7Component implements OnInit {
         Object.assign(this.status, this.dataInfo.status);
         await this.getFormDetail();
         this.namBcao = this.dataInfo.namBcao;
-
+        const baoquan = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_BAO_QUAN');
+        if (baoquan) {
+            this.dsBaoQuan = baoquan.data;
+        }
         if (this.status.general) {
             this.noiDungs = TEN_HANG;
             this.scrollX = Table.tableWidth(350, 21, 1, 110);
@@ -257,17 +265,18 @@ export class PhuLuc7Component implements OnInit {
             this.lstCtietBcao.forEach(item => {
                 const dinhMuc = this.dsDinhMuc.find(e => (!e.cloaiVthh && e.loaiVthh == item.dmucHang) || e.cloaiVthh == item.dmucHang);
                 item.dmucChiPhiTaiCuaKho = dinhMuc?.tongDmuc;
+                if (item.dmucChiPhiTaiCuaKho) {
+                    item.dkienThienChiPhiTaiCuaKho = Operator.mul(item.dmucChiPhiTaiCuaKho, item.dkienThienLuong);
+                    // item.dkienThienChiPhiNgoaiCuaKho = Operator.mul(item.binhQuanChiPhiNgoaiCuaKho, item.dkienThienLuong);
+                    item.dkienThienChiPhiTongCong = Operator.sum([item.dkienThienChiPhiTaiCuaKho, item.dkienThienChiPhiNgoaiCuaKho])
 
-                item.dkienThienChiPhiTaiCuaKho = Operator.mul(item.dmucChiPhiTaiCuaKho, item.dkienThienLuong);
-                // item.dkienThienChiPhiNgoaiCuaKho = Operator.mul(item.binhQuanChiPhiNgoaiCuaKho, item.dkienThienLuong);
-                item.dkienThienChiPhiTongCong = Operator.sum([item.dkienThienChiPhiTaiCuaKho, item.dkienThienChiPhiNgoaiCuaKho])
+                    item.tdiemBcaoChiPhiTaiCuaKho = Operator.mul(item.tdiemBcaoLuong, item.dmucChiPhiTaiCuaKho)
+                    // item.tdiemBcaoChiPhiNgoaiCuaKho = Operator.mul(item.binhQuanChiPhiNgoaiCuaKho, item.tdiemBcaoLuong)
+                    item.tdiemBcaoChiPhiTongCong = Operator.sum([item.tdiemBcaoChiPhiTaiCuaKho, item.tdiemBcaoChiPhiNgoaiCuaKho])
 
-                item.tdiemBcaoChiPhiTaiCuaKho = Operator.mul(item.tdiemBcaoLuong, item.dmucChiPhiTaiCuaKho)
-                // item.tdiemBcaoChiPhiNgoaiCuaKho = Operator.mul(item.binhQuanChiPhiNgoaiCuaKho, item.tdiemBcaoLuong)
-                item.tdiemBcaoChiPhiTongCong = Operator.sum([item.tdiemBcaoChiPhiTaiCuaKho, item.tdiemBcaoChiPhiNgoaiCuaKho])
-
-                item.ncauDtoan = Operator.sum([item.tdiemBcaoChiPhiTongCong, item.dkienThienChiPhiTongCong])
-                item.dtoanDnghiDchinh = Operator.sum([item.ncauDtoan, - item.dtoanLkeDaGiao])
+                    item.ncauDtoan = Operator.sum([item.tdiemBcaoChiPhiTongCong, item.dkienThienChiPhiTongCong])
+                    item.dtoanDnghiDchinh = Operator.sum([item.ncauDtoan, - item.dtoanLkeDaGiao])
+                }
             })
             this.sum1()
         } else {
@@ -277,16 +286,18 @@ export class PhuLuc7Component implements OnInit {
                     // item.tenHang = dinhMuc?.tenDinhMuc;
                     item.dmucChiPhiTaiCuaKho = dinhMuc?.tongDmuc;
                     // item.donViTinh = dinhMuc?.donViTinh;
-                    item.dkienThienChiPhiTaiCuaKho = Operator.mul(item.dmucChiPhiTaiCuaKho, item.dkienThienLuong);
-                    item.dkienThienChiPhiNgoaiCuaKho = Operator.mul(item.binhQuanChiPhiNgoaiCuaKho, item.dkienThienLuong);
-                    item.dkienThienChiPhiTongCong = Operator.sum([item.dkienThienChiPhiTaiCuaKho, item.dkienThienChiPhiNgoaiCuaKho])
+                    if (item.dmucChiPhiTaiCuaKho) {
+                        item.dkienThienChiPhiTaiCuaKho = Operator.mul(item.dmucChiPhiTaiCuaKho, item.dkienThienLuong);
+                        item.dkienThienChiPhiNgoaiCuaKho = Operator.mul(item.binhQuanChiPhiNgoaiCuaKho, item.dkienThienLuong);
+                        item.dkienThienChiPhiTongCong = Operator.sum([item.dkienThienChiPhiTaiCuaKho, item.dkienThienChiPhiNgoaiCuaKho])
 
-                    item.tdiemBcaoChiPhiTaiCuaKho = Operator.mul(item.tdiemBcaoLuong, item.dmucChiPhiTaiCuaKho)
-                    item.tdiemBcaoChiPhiNgoaiCuaKho = Operator.mul(item.binhQuanChiPhiNgoaiCuaKho, item.tdiemBcaoLuong)
-                    item.tdiemBcaoChiPhiTongCong = Operator.sum([item.tdiemBcaoChiPhiTaiCuaKho, item.tdiemBcaoChiPhiNgoaiCuaKho])
+                        item.tdiemBcaoChiPhiTaiCuaKho = Operator.mul(item.tdiemBcaoLuong, item.dmucChiPhiTaiCuaKho)
+                        item.tdiemBcaoChiPhiNgoaiCuaKho = Operator.mul(item.binhQuanChiPhiNgoaiCuaKho, item.tdiemBcaoLuong)
+                        item.tdiemBcaoChiPhiTongCong = Operator.sum([item.tdiemBcaoChiPhiTaiCuaKho, item.tdiemBcaoChiPhiNgoaiCuaKho])
 
-                    item.ncauDtoan = Operator.sum([item.tdiemBcaoChiPhiTongCong, item.dkienThienChiPhiTongCong])
-                    item.dtoanDnghiDchinh = Operator.sum([item.ncauDtoan, - item.dtoanLkeDaGiao])
+                        item.ncauDtoan = Operator.sum([item.tdiemBcaoChiPhiTongCong, item.dkienThienChiPhiTongCong])
+                        item.dtoanDnghiDchinh = Operator.sum([item.ncauDtoan, - item.dtoanLkeDaGiao])
+                    }
                 }
                 this.sum1()
             })
@@ -423,8 +434,11 @@ export class PhuLuc7Component implements OnInit {
 
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path));
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.formDetail.lstFiles.find(e => e.id == id)?.noiDung;
+            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path, noiDung));
         }
+        request.fileDinhKems = request.fileDinhKems.concat(this.formDetail.lstFiles.filter(e => typeof e.id == 'number'))
 
         request.lstCtietDchinh = lstCtietBcaoTemp;
         request.trangThai = trangThai;
@@ -537,6 +551,7 @@ export class PhuLuc7Component implements OnInit {
                 stt: data.stt,
                 level: data.level,
                 dmucHang: data.dmucHang,
+                maDinhMuc: data.maDinhMuc,
                 tenHang: data.tenHang,
                 donViTinh: data.donViTinh,
             })
@@ -596,6 +611,9 @@ export class PhuLuc7Component implements OnInit {
 
     changeModel(id: string): void {
         this.editCache[id].data.chenhLech = Operator.sum([this.editCache[id].data.dtoanVuTvqtDnghi, - this.editCache[id].data.dtoanDnghiDchinh]);
+        this.editCache[id].data.tdiemBcaoChiPhiTongCong = Operator.sum([this.editCache[id].data.tdiemBcaoChiPhiTaiCuaKho, this.editCache[id].data.tdiemBcaoChiPhiNgoaiCuaKho]);
+        this.editCache[id].data.dkienThienChiPhiTongCong = Operator.sum([this.editCache[id].data.dkienThienChiPhiTaiCuaKho, this.editCache[id].data.dkienThienChiPhiNgoaiCuaKho]);
+        this.editCache[id].data.ncauDtoan = Operator.sum([this.editCache[id].data.tdiemBcaoChiPhiTongCong, this.editCache[id].data.dkienThienChiPhiTongCong]);
     };
 
     deleteAllChecked() {
@@ -645,40 +663,95 @@ export class PhuLuc7Component implements OnInit {
         });
         modalTuChoi.afterClose.subscribe(async (res) => {
             if (res) {
-                let parentItem: ItemData = this.lstCtietBcao.find(e => e.dmucHang == res.ma && Table.preIndex(e.stt) == data.stt);
-                //them phan tu cha neu chua co
-                if (!parentItem) {
-                    parentItem = new ItemData({
+                let parentItem: ItemData
+                if (!res.ma.startsWith('01')) {
+                    parentItem = this.lstCtietBcao.find(e => e.dmucHang == res.ma && Table.preIndex(e.stt) == data.stt);
+                    const dm = this.dsDinhMuc.find(e => e.cloaiVthh == res.ma || e.loaiVthh == res.ma);
+                    //them phan tu cha neu chua co
+                    if (!parentItem) {
+                        parentItem = new ItemData({
+                            id: uuid.v4() + 'FE',
+                            dmucHang: res.ma,
+                            maDinhMuc: dm?.maDinhMuc,
+                            level: data.level + 1,
+                            tenHang: res.ten,
+                            donViTinh: res.maDviTinh,
+                        })
+                        this.lstCtietBcao = Table.addChild(data.id, parentItem, this.lstCtietBcao);
+                        const item: ItemData = new ItemData({
+                            id: uuid.v4() + 'FE',
+                            dmucHang: res.ma,
+                            maDinhMuc: dm?.maDinhMuc,
+                            dmucChiPhiTaiCuaKho: dm?.tongDmuc,
+                            level: parentItem.level + 1,
+                        })
+                        this.lstCtietBcao = Table.addChild(parentItem.id, item, this.lstCtietBcao);
+                    } else {
+                        const item: ItemData = new ItemData({
+                            id: uuid.v4() + 'FE',
+                            dmucHang: res.ma,
+                            maDinhMuc: dm?.maDinhMuc,
+                            dmucChiPhiTaiCuaKho: dm?.tongDmuc,
+                            level: parentItem.level + 1,
+                        })
+                        this.lstCtietBcao = Table.addChild(parentItem.id, item, this.lstCtietBcao);
+                    }
+                } else if (res.ma.startsWith('01')) {
+                    let loaiBaoQuan: any;
+                    if (res.ma.startsWith('0101')) {
+                        const modalBaoQuan = this.modal.create({
+                            nzTitle: 'Danh sách loại bảo quản',
+                            nzContent: DialogChonLoaiBaoQuanComponent,
+                            nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
+                            nzMaskClosable: false,
+                            nzClosable: false,
+                            nzWidth: '500px',
+                            nzFooter: null,
+                            nzComponentParams: {
+                                dsBaoQuan: this.dsBaoQuan,
+                            },
+                        });
+                        await modalBaoQuan.afterClose.toPromise().then(async (resp) => {
+                            if (resp) { loaiBaoQuan = resp; }
+                        })
+                    }
 
-                        id: uuid.v4() + 'FE',
-                        dmucHang: res.ma,
-                        level: data.level + 1,
-                        tenHang: res.ten,
-                        donViTinh: res.maDviTinh,
-                    })
-                    this.lstCtietBcao = Table.addChild(data.id, parentItem, this.lstCtietBcao);
-                    const item: ItemData = new ItemData({
-                        id: uuid.v4() + 'FE',
-                        dmucHang: res.ma,
-                        level: parentItem.level + 1,
-                    })
-                    this.lstCtietBcao = Table.addChild(parentItem.id, item, this.lstCtietBcao);
-                } else {
-                    const item: ItemData = new ItemData({
-                        id: uuid.v4() + 'FE',
-                        dmucHang: res.ma,
-                        level: parentItem.level + 1,
-                    })
-                    this.lstCtietBcao = Table.addChild(parentItem.id, item, this.lstCtietBcao);
+                    const dm = this.dsDinhMuc.find(e => (e.cloaiVthh == res.ma || e.loaiVthh == res.ma) && (!loaiBaoQuan || e.loaiBaoQuan == loaiBaoQuan.ma));
+
+                    parentItem = this.lstCtietBcao.find(e => e.dmucHang == res.ma && e.maDinhMuc == dm.maDinhMuc && Table.preIndex(e.stt) == data.stt);
+                    if (this.lstCtietBcao.findIndex(e => e.dmucHang == data.ma && (!dm || e.maDinhMuc == dm?.maDinhMuc)) == -1) {
+                        if (!parentItem) {
+                            parentItem = new ItemData({
+                                id: uuid.v4() + 'FE',
+                                dmucHang: res.ma,
+                                maDinhMuc: dm?.maDinhMuc,
+                                level: data.level + 1,
+                                tenHang: res.ten + (loaiBaoQuan ? (' (' + loaiBaoQuan.giaTri + ')') : ''),
+                                donViTinh: res.maDviTinh,
+                            })
+                            this.lstCtietBcao = Table.addChild(data.id, parentItem, this.lstCtietBcao);
+                            const item: ItemData = new ItemData({
+                                id: uuid.v4() + 'FE',
+                                dmucHang: res.ma,
+                                maDinhMuc: dm?.maDinhMuc,
+                                dmucChiPhiTaiCuaKho: dm?.tongDmuc,
+                                level: parentItem.level + 1,
+                            })
+                            this.lstCtietBcao = Table.addChild(parentItem.id, item, this.lstCtietBcao);
+                        } else {
+                            const item: ItemData = new ItemData({
+                                id: uuid.v4() + 'FE',
+                                dmucHang: res.ma,
+                                maDinhMuc: dm?.maDinhMuc,
+                                dmucChiPhiTaiCuaKho: dm?.tongDmuc,
+                                level: parentItem.level + 1,
+                            })
+                            this.lstCtietBcao = Table.addChild(parentItem.id, item, this.lstCtietBcao);
+                        }
+                    }
                 }
 
                 const stt = this.lstCtietBcao.find(e => e.id == parentItem.id).stt;
-                this.lstCtietBcao.forEach(item => {
-                    if (item.level == 2) {
-                        const dinhMuc = this.dsDinhMuc.find(e => (!e.cloaiVthh && e.loaiVthh == item.dmucHang) || e.cloaiVthh == item.dmucHang);
-                        item.dmucChiPhiTaiCuaKho = dinhMuc?.tongDmuc;
-                    }
-                })
                 this.sum(stt + '.1');
                 this.updateEditCache();
             }
@@ -745,69 +818,69 @@ export class PhuLuc7Component implements OnInit {
         let fieldOrder = [];
         if (this.status.viewAppVal) {
             header = [
-                { t: 0, b: 7, l: 0, r: 24, val: null },
+                { t: 0, b: 6, l: 0, r: 24, val: null },
 
                 { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
                 { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
                 { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
-                { t: 3, b: 3, l: 0, r: 8, val: 'Trạng thái biểu mẫu' + Status.reportStatusName(this.dataInfo.trangThai) },
+                { t: 3, b: 3, l: 0, r: 8, val: 'Trạng thái biểu mẫu: ' + Status.reportStatusName(this.dataInfo.trangThai) },
 
-                { t: 4, b: 6, l: 0, r: 0, val: 'STT' },
-                { t: 4, b: 6, l: 1, r: 1, val: 'Danh mục hàng' },
-                { t: 4, b: 6, l: 2, r: 2, val: 'Đơn vị tính' },
+                { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+                { t: 4, b: 5, l: 1, r: 1, val: 'Danh mục hàng' },
+                { t: 4, b: 5, l: 2, r: 2, val: 'Đơn vị tính' },
                 { t: 4, b: 4, l: 3, r: 5, val: 'Kế hoạch được giao' },
-                { t: 4, b: 6, l: 6, r: 6, val: 'Định mức (chi phí hàng tại cửa kho)' },
-                { t: 4, b: 6, l: 7, r: 7, val: 'Bình quân (chi phí hàng ngoài cửa kho)' },
-                { t: 4, b: 4, l: 8, r: 12, val: 'Đơn vị đã thực hiện đến thời điểm báo cáo )' },
+                { t: 4, b: 5, l: 6, r: 6, val: 'Định mức (chi phí hàng tại cửa kho)' },
+                { t: 4, b: 5, l: 7, r: 7, val: 'Bình quân (chi phí hàng ngoài cửa kho)' },
+                { t: 4, b: 4, l: 8, r: 12, val: 'Đơn vị đã thực hiện đến thời điểm báo cáo' },
                 { t: 4, b: 4, l: 13, r: 16, val: 'Dự kiến thực hiện từ thời điểm báo cáo đến cuối năm' },
-                { t: 4, b: 6, l: 17, r: 17, val: 'Nhu cầu dự toán năm' + this.namBcao },
-                { t: 4, b: 6, l: 18, r: 18, val: 'Dự toán lũy kế đã giao' },
-                { t: 4, b: 6, l: 19, r: 19, val: 'Dự toán đề nghị điều chỉnh (+ tăng) (- giảm)' },
-                { t: 4, b: 6, l: 20, r: 20, val: 'Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)' },
-                { t: 4, b: 6, l: 21, r: 21, val: 'Kinh phí thiếu những năm trước' },
-                { t: 4, b: 6, l: 22, r: 22, val: 'Ghi chú' },
-                { t: 4, b: 6, l: 23, r: 23, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị ' },
-                { t: 4, b: 6, l: 24, r: 24, val: 'Ý kiến của đơn vị cấp trên' },
+                { t: 4, b: 5, l: 17, r: 17, val: 'Nhu cầu dự toán năm ' + this.namBcao },
+                { t: 4, b: 5, l: 18, r: 18, val: 'Dự toán lũy kế đã giao' },
+                { t: 4, b: 5, l: 19, r: 19, val: 'Dự toán đề nghị điều chỉnh (+ tăng) (- giảm)' },
+                { t: 4, b: 5, l: 20, r: 20, val: 'Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)' },
+                { t: 4, b: 5, l: 21, r: 21, val: 'Kinh phí thiếu những năm trước' },
+                { t: 4, b: 5, l: 22, r: 22, val: 'Ghi chú' },
+                { t: 4, b: 5, l: 23, r: 23, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị ' },
+                { t: 4, b: 5, l: 24, r: 24, val: 'Ý kiến của đơn vị cấp trên' },
 
-                { t: 5, b: 6, l: 3, r: 3, val: 'Địa phương nhận' },
-                { t: 5, b: 6, l: 4, r: 4, val: 'QĐ giao nhiệm vụ của' + this.dataInfo.tenDvi },
-                { t: 5, b: 6, l: 5, r: 5, val: 'Lượng' },
+                { t: 5, b: 5, l: 3, r: 3, val: 'Địa phương nhận' },
+                { t: 5, b: 5, l: 4, r: 4, val: 'QĐ giao nhiệm vụ của ' + this.dataInfo.tenDvi },
+                { t: 5, b: 5, l: 5, r: 5, val: 'Lượng' },
 
-                { t: 5, b: 6, l: 8, r: 8, val: 'Lượng' },
-                { t: 5, b: 6, l: 9, r: 9, val: 'Chi phí tại cửa kho' },
-                { t: 5, b: 6, l: 10, r: 10, val: 'Chi phí ngoài cửa kho' },
-                { t: 5, b: 6, l: 11, r: 11, val: 'Tổng cộng' },
-                { t: 5, b: 6, l: 12, r: 12, val: 'Căn cứ kèm theo' },
-                { t: 5, b: 6, l: 13, r: 13, val: 'Lượng' },
-                { t: 5, b: 6, l: 14, r: 14, val: 'Chi phí tại cửa kho' },
-                { t: 5, b: 6, l: 15, r: 15, val: 'Chi phí ngoài cửa kho' },
-                { t: 5, b: 6, l: 16, r: 16, val: 'Tổng cộng' },
+                { t: 5, b: 5, l: 8, r: 8, val: 'Lượng' },
+                { t: 5, b: 5, l: 9, r: 9, val: 'Chi phí tại cửa kho' },
+                { t: 5, b: 5, l: 10, r: 10, val: 'Chi phí ngoài cửa kho' },
+                { t: 5, b: 5, l: 11, r: 11, val: 'Tổng cộng' },
+                { t: 5, b: 5, l: 12, r: 12, val: 'Căn cứ kèm theo' },
+                { t: 5, b: 5, l: 13, r: 13, val: 'Lượng' },
+                { t: 5, b: 5, l: 14, r: 14, val: 'Chi phí tại cửa kho' },
+                { t: 5, b: 5, l: 15, r: 15, val: 'Chi phí ngoài cửa kho' },
+                { t: 5, b: 5, l: 16, r: 16, val: 'Tổng cộng' },
 
-                { t: 7, b: 7, l: 0, r: 0, val: 'A' },
-                { t: 7, b: 7, l: 1, r: 1, val: 'B' },
-                { t: 7, b: 7, l: 2, r: 2, val: 'C' },
-                { t: 7, b: 7, l: 3, r: 3, val: 'D' },
-                { t: 7, b: 7, l: 4, r: 4, val: 'E' },
-                { t: 7, b: 7, l: 5, r: 5, val: 'F' },
-                { t: 7, b: 7, l: 6, r: 6, val: '1' },
-                { t: 7, b: 7, l: 7, r: 7, val: '2' },
-                { t: 7, b: 7, l: 8, r: 8, val: '3' },
-                { t: 7, b: 7, l: 9, r: 9, val: '4 = 3 x 1' },
-                { t: 7, b: 7, l: 10, r: 10, val: '5 = 3 x 2 ' },
-                { t: 7, b: 7, l: 11, r: 11, val: '6 = 4 + 5' },
-                { t: 7, b: 7, l: 12, r: 12, val: '7' },
-                { t: 7, b: 7, l: 13, r: 13, val: '8' },
-                { t: 7, b: 7, l: 14, r: 14, val: '9 = 8 x 1' },
-                { t: 7, b: 7, l: 15, r: 15, val: '10 = 8 x 2' },
-                { t: 7, b: 7, l: 16, r: 16, val: '11 = 9 + 10' },
-                { t: 7, b: 7, l: 17, r: 17, val: '12 = 6 + 11' },
-                { t: 7, b: 7, l: 18, r: 18, val: '13' },
-                { t: 7, b: 7, l: 19, r: 19, val: '14 = 12 - 13' },
-                { t: 7, b: 7, l: 20, r: 20, val: '15' },
-                { t: 7, b: 7, l: 21, r: 21, val: '16' },
-                { t: 7, b: 7, l: 22, r: 22, val: '17' },
-                { t: 7, b: 7, l: 23, r: 23, val: '18 = 15 - 14' },
-                { t: 7, b: 7, l: 24, r: 24, val: '19' },
+                { t: 6, b: 6, l: 0, r: 0, val: 'A' },
+                { t: 6, b: 6, l: 1, r: 1, val: 'B' },
+                { t: 6, b: 6, l: 2, r: 2, val: 'C' },
+                { t: 6, b: 6, l: 3, r: 3, val: 'D' },
+                { t: 6, b: 6, l: 4, r: 4, val: 'E' },
+                { t: 6, b: 6, l: 5, r: 5, val: 'F' },
+                { t: 6, b: 6, l: 6, r: 6, val: '1' },
+                { t: 6, b: 6, l: 7, r: 7, val: '2' },
+                { t: 6, b: 6, l: 8, r: 8, val: '3' },
+                { t: 6, b: 6, l: 9, r: 9, val: '4 = 3 x 1' },
+                { t: 6, b: 6, l: 10, r: 10, val: '5 = 3 x 2 ' },
+                { t: 6, b: 6, l: 11, r: 11, val: '6 = 4 + 5' },
+                { t: 6, b: 6, l: 12, r: 12, val: '7' },
+                { t: 6, b: 6, l: 13, r: 13, val: '8' },
+                { t: 6, b: 6, l: 14, r: 14, val: '9 = 8 x 1' },
+                { t: 6, b: 6, l: 15, r: 15, val: '10 = 8 x 2' },
+                { t: 6, b: 6, l: 16, r: 16, val: '11 = 9 + 10' },
+                { t: 6, b: 6, l: 17, r: 17, val: '12 = 6 + 11' },
+                { t: 6, b: 6, l: 18, r: 18, val: '13' },
+                { t: 6, b: 6, l: 19, r: 19, val: '14 = 12 - 13' },
+                { t: 6, b: 6, l: 20, r: 20, val: '15' },
+                { t: 6, b: 6, l: 21, r: 21, val: '16' },
+                { t: 6, b: 6, l: 22, r: 22, val: '17' },
+                { t: 6, b: 6, l: 23, r: 23, val: '18 = 15 - 14' },
+                { t: 6, b: 6, l: 24, r: 24, val: '19' },
             ]
             fieldOrder = [
                 'stt',
@@ -838,61 +911,62 @@ export class PhuLuc7Component implements OnInit {
             ]
         } else {
             header = [
-                { t: 0, b: 7, l: 0, r: 21, val: null },
+                { t: 0, b: 6, l: 0, r: 21, val: null },
 
                 { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
                 { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
                 { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+                { t: 3, b: 3, l: 0, r: 8, val: 'Trạng thái biểu mẫu: ' + Status.reportStatusName(this.dataInfo.trangThai) },
 
-                { t: 4, b: 6, l: 0, r: 0, val: 'STT' },
-                { t: 4, b: 6, l: 1, r: 1, val: 'Danh mục hàng' },
-                { t: 4, b: 6, l: 2, r: 2, val: 'Đơn vị tính' },
+                { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
+                { t: 4, b: 5, l: 1, r: 1, val: 'Danh mục hàng' },
+                { t: 4, b: 5, l: 2, r: 2, val: 'Đơn vị tính' },
                 { t: 4, b: 4, l: 3, r: 5, val: 'Kế hoạch được giao' },
-                { t: 4, b: 6, l: 6, r: 6, val: 'Định mức (chi phí hàng tại cửa kho)' },
-                { t: 4, b: 6, l: 7, r: 7, val: 'Bình quân (chi phí hàng ngoài cửa kho)' },
-                { t: 4, b: 4, l: 8, r: 12, val: 'Đơn vị đã thực hiện đến thời điểm báo cáo )' },
+                { t: 4, b: 5, l: 6, r: 6, val: 'Định mức (chi phí hàng tại cửa kho)' },
+                { t: 4, b: 5, l: 7, r: 7, val: 'Bình quân (chi phí hàng ngoài cửa kho)' },
+                { t: 4, b: 4, l: 8, r: 12, val: 'Đơn vị đã thực hiện đến thời điểm báo cáo' },
                 { t: 4, b: 4, l: 13, r: 16, val: 'Dự kiến thực hiện từ thời điểm báo cáo đến cuối năm' },
-                { t: 4, b: 6, l: 17, r: 17, val: 'Nhu cầu dự toán năm' + this.namBcao },
-                { t: 4, b: 6, l: 18, r: 18, val: 'Dự toán lũy kế đã giao' },
-                { t: 4, b: 6, l: 19, r: 19, val: 'Dự toán đề nghị điều chỉnh (+ tăng) (- giảm)' },
-                { t: 4, b: 6, l: 20, r: 20, val: 'Kinh phí thiếu những năm trước' },
-                { t: 4, b: 6, l: 21, r: 21, val: 'Ghi chú' },
-                { t: 5, b: 6, l: 3, r: 3, val: 'Địa phương nhận' },
-                { t: 5, b: 6, l: 4, r: 4, val: 'QĐ giao nhiệm vụ của' + this.dataInfo.tenDvi },
-                { t: 5, b: 6, l: 5, r: 5, val: 'Lượng' },
+                { t: 4, b: 5, l: 17, r: 17, val: 'Nhu cầu dự toán năm ' + this.namBcao },
+                { t: 4, b: 5, l: 18, r: 18, val: 'Dự toán lũy kế đã giao' },
+                { t: 4, b: 5, l: 19, r: 19, val: 'Dự toán đề nghị điều chỉnh (+ tăng) (- giảm)' },
+                { t: 4, b: 5, l: 20, r: 20, val: 'Kinh phí thiếu những năm trước' },
+                { t: 4, b: 5, l: 21, r: 21, val: 'Ghi chú' },
+                { t: 5, b: 5, l: 3, r: 3, val: 'Địa phương nhận' },
+                { t: 5, b: 5, l: 4, r: 4, val: 'QĐ giao nhiệm vụ của ' + this.dataInfo.tenDvi },
+                { t: 5, b: 5, l: 5, r: 5, val: 'Lượng' },
 
-                { t: 5, b: 6, l: 8, r: 8, val: 'Lượng' },
-                { t: 5, b: 6, l: 9, r: 9, val: 'Chi phí tại cửa kho' },
-                { t: 5, b: 6, l: 10, r: 10, val: 'Chi phí ngoài cửa kho' },
-                { t: 5, b: 6, l: 11, r: 11, val: 'Tổng cộng' },
-                { t: 5, b: 6, l: 12, r: 12, val: 'Căn cứ kèm theo' },
-                { t: 5, b: 6, l: 13, r: 13, val: 'Lượng' },
-                { t: 5, b: 6, l: 14, r: 14, val: 'Chi phí tại cửa kho' },
-                { t: 5, b: 6, l: 15, r: 15, val: 'Chi phí ngoài cửa kho' },
-                { t: 5, b: 6, l: 16, r: 16, val: 'Tổng cộng' },
+                { t: 5, b: 5, l: 8, r: 8, val: 'Lượng' },
+                { t: 5, b: 5, l: 9, r: 9, val: 'Chi phí tại cửa kho' },
+                { t: 5, b: 5, l: 10, r: 10, val: 'Chi phí ngoài cửa kho' },
+                { t: 5, b: 5, l: 11, r: 11, val: 'Tổng cộng' },
+                { t: 5, b: 5, l: 12, r: 12, val: 'Căn cứ kèm theo' },
+                { t: 5, b: 5, l: 13, r: 13, val: 'Lượng' },
+                { t: 5, b: 5, l: 14, r: 14, val: 'Chi phí tại cửa kho' },
+                { t: 5, b: 5, l: 15, r: 15, val: 'Chi phí ngoài cửa kho' },
+                { t: 5, b: 5, l: 16, r: 16, val: 'Tổng cộng' },
 
-                { t: 7, b: 7, l: 0, r: 0, val: 'A' },
-                { t: 7, b: 7, l: 1, r: 1, val: 'B' },
-                { t: 7, b: 7, l: 2, r: 2, val: 'C' },
-                { t: 7, b: 7, l: 3, r: 3, val: 'D' },
-                { t: 7, b: 7, l: 4, r: 4, val: 'E' },
-                { t: 7, b: 7, l: 5, r: 5, val: 'F' },
-                { t: 7, b: 7, l: 6, r: 6, val: '1' },
-                { t: 7, b: 7, l: 7, r: 7, val: '2' },
-                { t: 7, b: 7, l: 8, r: 8, val: '3' },
-                { t: 7, b: 7, l: 9, r: 9, val: '4 = 3 x 1' },
-                { t: 7, b: 7, l: 10, r: 10, val: '5 = 3 x 2 ' },
-                { t: 7, b: 7, l: 11, r: 11, val: '6 = 4 + 5' },
-                { t: 7, b: 7, l: 12, r: 12, val: '7' },
-                { t: 7, b: 7, l: 13, r: 13, val: '8' },
-                { t: 7, b: 7, l: 14, r: 14, val: '9 = 8 x 1' },
-                { t: 7, b: 7, l: 15, r: 15, val: '10 = 8 x 2' },
-                { t: 7, b: 7, l: 16, r: 16, val: '11 = 9 + 10' },
-                { t: 7, b: 7, l: 17, r: 17, val: '12 = 6 + 11' },
-                { t: 7, b: 7, l: 18, r: 18, val: '13' },
-                { t: 7, b: 7, l: 19, r: 19, val: '14 = 12 - 13' },
-                { t: 7, b: 7, l: 20, r: 20, val: '16' },
-                { t: 7, b: 7, l: 21, r: 21, val: '17' },
+                { t: 6, b: 6, l: 0, r: 0, val: 'A' },
+                { t: 6, b: 6, l: 1, r: 1, val: 'B' },
+                { t: 6, b: 6, l: 2, r: 2, val: 'C' },
+                { t: 6, b: 6, l: 3, r: 3, val: 'D' },
+                { t: 6, b: 6, l: 4, r: 4, val: 'E' },
+                { t: 6, b: 6, l: 5, r: 5, val: 'F' },
+                { t: 6, b: 6, l: 6, r: 6, val: '1' },
+                { t: 6, b: 6, l: 7, r: 7, val: '2' },
+                { t: 6, b: 6, l: 8, r: 8, val: '3' },
+                { t: 6, b: 6, l: 9, r: 9, val: '4 = 3 x 1' },
+                { t: 6, b: 6, l: 10, r: 10, val: '5 = 3 x 2 ' },
+                { t: 6, b: 6, l: 11, r: 11, val: '6 = 4 + 5' },
+                { t: 6, b: 6, l: 12, r: 12, val: '7' },
+                { t: 6, b: 6, l: 13, r: 13, val: '8' },
+                { t: 6, b: 6, l: 14, r: 14, val: '9 = 8 x 1' },
+                { t: 6, b: 6, l: 15, r: 15, val: '10 = 8 x 2' },
+                { t: 6, b: 6, l: 16, r: 16, val: '11 = 9 + 10' },
+                { t: 6, b: 6, l: 17, r: 17, val: '12 = 6 + 11' },
+                { t: 6, b: 6, l: 18, r: 18, val: '13' },
+                { t: 6, b: 6, l: 19, r: 19, val: '14 = 12 - 13' },
+                { t: 6, b: 6, l: 20, r: 20, val: '16' },
+                { t: 6, b: 6, l: 21, r: 21, val: '17' },
             ]
             fieldOrder = [
                 'stt',
@@ -924,17 +998,18 @@ export class PhuLuc7Component implements OnInit {
         const filterData = this.lstCtietBcao.map(item => {
             const row: any = {};
             fieldOrder.forEach(field => {
-                row[field] = item[field]
+                item[field] = item[field] ? item[field] : ""
+                row[field] = field == 'stt' ? this.getChiMuc(item.stt) : item[field]
             })
             return row;
         })
-        filterData.forEach(item => {
-            const level = item.stt.split('.').length - 2;
-            item.stt = this.getChiMuc(item.stt);
-            for (let i = 0; i < level; i++) {
-                item.stt = '   ' + item.stt;
-            }
-        });
+        // filterData.forEach(item => {
+        //     const level = item.stt.split('.').length - 2;
+        //     item.stt = this.getChiMuc(item.stt);
+        //     for (let i = 0; i < level; i++) {
+        //         item.stt = '   ' + item.stt;
+        //     }
+        // });
 
         let row: any = {};
         row = {}
@@ -990,6 +1065,10 @@ export class PhuLuc7Component implements OnInit {
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
         XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+        for (const cell in worksheet) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheet[cell].s = Table.borderStyle;
+        }
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         let excelName = this.dataInfo.maBcao;
         excelName = excelName + '_BCDC_PL07.xlsx'

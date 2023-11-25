@@ -24,8 +24,6 @@ import {
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import {PREVIEW} from "../../../../../../constants/fileType";
-import printJS from "print-js";
 import {KhCnQuyChuanKyThuat} from "../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
@@ -41,6 +39,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
+  templateNameVt = "Phiếu kiểm nghiệm chất lượng bán đấu giá vật tư";
+  templateNameLt = "Phiếu kiểm nghiệm chất lượng bán đấu giá lương thực";
   maTuSinh: number;
   maHauTo: any;
   flagInit: Boolean = false;
@@ -56,7 +56,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService: DanhMucService,
-    private danhMucTieuChuanService: DanhMucTieuChuanService,
     private quyetDinhGiaoNhiemVuXuatHangService: QuyetDinhGiaoNvXuatHangService,
     private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
     private bienBanLayMauXhService: BienBanLayMauXhService,
@@ -179,10 +178,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   async getDetail(id: number) {
     if (!id) return;
     const data = await this.detail(id);
-    if (!data) {
-      console.error('Không tìm thấy dữ liệu');
-      return;
-    }
     this.maTuSinh = this.idInput;
     this.dataTable = data.children;
     if (!this.isView) {
@@ -201,8 +196,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       const res = await this.quyetDinhGiaoNhiemVuXuatHangService.search(body)
       if (res && res.msg === MESSAGE.SUCCESS) {
         this.danhSachQuyetDinh = res.data.content.filter(item => item.maDvi === this.userInfo.MA_DVI);
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ XUẤT HÀNG',
@@ -420,7 +413,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   async save() {
     try {
       await this.helperService.ignoreRequiredForm(this.formData);
-      this.formData.controls["soPhieuKiemNghiem"].setValidators([Validators.required]);
       this.formData.controls["soQdNv"].setValidators([Validators.required]);
       this.formData.controls["soBbLayMau"].setValidators([Validators.required]);
       const body = {
@@ -451,49 +443,15 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     }
   }
 
-  async preview(id) {
-    await this.xhPhieuKnghiemCluongService.preview({
-      tenBaoCao: 'Phiếu kiểm nghiệm chất lượng bán đấu giá',
-      id: id
-    }).then(async res => {
-      if (res.data) {
-        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
-        this.printSrc = res.data.pdfSrc;
-        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
-        this.showDlgPreview = true;
-      } else {
-        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
-      }
-    });
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
-  }
-
-  printPreview() {
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
-  }
-
   setValidForm() {
-    const requiredFields = [
-      "nam",
-      "tenDvi",
-      "maQhNs",
-      "ngayLapPhieu",
-      "ngayLayMau",
-      "tenNganLoKho",
-      "tenNhaKho",
-      "tenDiemKho",
-      "tenLoaiVthh",
-      "tenCloaiVthh",
-      "hinhThucBaoQuan",
+    const fieldsToValidate = [
+      "soQdNv",
+      "soBbLayMau",
       "ngayKiemNghiemMau",
-      "tenNguoiKiemNghiem",
+      "nhanXet",
     ];
-    requiredFields.forEach(fieldName => {
-      this.formData.controls[fieldName].setValidators([Validators.required]);
-      this.formData.controls[fieldName].updateValueAndValidity();
+    fieldsToValidate.forEach(field => {
+      this.formData.controls[field].setValidators([Validators.required]);
     });
   }
 }

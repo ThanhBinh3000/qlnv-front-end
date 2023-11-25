@@ -173,7 +173,7 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
         // fileDinhKems: [new Array<FileDinhKem>()],
         ngayBatDauXuat: [, Validators.required],
         ngayKetThucXuat: [, Validators.required],
-        soThangBaoQuanqHang: []
+        soThangBaoQuanHang: []
       }
     );
     this.maBb = '-BBHD';
@@ -471,7 +471,7 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
       }
     }
   }
-  async getDinhMucHaoHut(cloaiVthh: string, loaiVthh: string, soThangBaoQuanqHang: number) {
+  async getDinhMucHaoHut(cloaiVthh: string, loaiVthh: string, soThangBaoQuanHang: number) {
     const body = {
       loaiVthh, cloaiVthh
     }
@@ -493,17 +493,17 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
           f.apDungTai.split(",").includes(this.userInfo.MA_DVI.slice(0, -2));
       })
       let dataDmhh = listDmhh.find(f => {
-        if (soThangBaoQuanqHang <= 3) {
+        if (soThangBaoQuanHang <= 3) {
           return f.tgBaoQuanDen === 3
-        } else if (soThangBaoQuanqHang > 3 && soThangBaoQuanqHang <= 18) {
-          return soThangBaoQuanqHang > f.tgBaoQuanTu && soThangBaoQuanqHang <= f.tgBaoQuanDen
+        } else if (soThangBaoQuanHang > 3 && soThangBaoQuanHang <= 18) {
+          return soThangBaoQuanHang > f.tgBaoQuanTu && soThangBaoQuanHang <= f.tgBaoQuanDen
         } else {
           return f.tgBaoQuanTu === 18
         }
       })?.dinhMuc || 0;
       let dinhMucHaoHut = 0;
-      if (soThangBaoQuanqHang > 18) {
-        dinhMucHaoHut = (listDmhh.find(f => f.tgBaoQuanDen === 18)?.dinhMuc || 0) + (Math.ceil(soThangBaoQuanqHang) - 18) * dataDmhh
+      if (soThangBaoQuanHang > 18) {
+        dinhMucHaoHut = (listDmhh.find(f => f.tgBaoQuanDen === 18)?.dinhMuc || 0) + (Math.ceil(soThangBaoQuanHang) - 18) * dataDmhh
       } else {
         dinhMucHaoHut = dataDmhh
       }
@@ -520,8 +520,8 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
         ngayKtNhap = res.data?.object?.ngayNhapDay;
       }
     }
-    const soThangBaoQuanqHang = ngayKtNhap && ngayKetThucXuatTt ? +dayjs(dayjs(ngayKetThucXuatTt, "DD/MM/YYYY").format("YYYY-MM-DD")).diff(dayjs(ngayKtNhap, "DD/MM/YYYY").format("YYYY-MM-DD"), 'month', true).toFixed(1) : null;
-    await this.getDinhMucHaoHut(this.formData.value.cloaiVthh, this.formData.value.loaiVthh, soThangBaoQuanqHang);
+    const soThangBaoQuanHang = ngayKtNhap && ngayKetThucXuatTt ? +dayjs(dayjs(ngayKetThucXuatTt, "DD/MM/YYYY").format("YYYY-MM-DD")).diff(dayjs(ngayKtNhap, "DD/MM/YYYY").format("YYYY-MM-DD"), 'month', true).toFixed(1) : null;
+    await this.getDinhMucHaoHut(this.formData.value.cloaiVthh, this.formData.value.loaiVthh, soThangBaoQuanHang);
     const sLHao = this.formData.value.tongSlNhap * this.formData.value.dinhMucHaoHut / 100;
     const slHaoTt = this.formData.value.slConLaiTheoSs - this.formData.value.slConLaiTheoTt;
     const tiLeHaoTt = this.formData.value.tongSlNhap ? slHaoTt * 100 / this.formData.value.tongSlNhap : '';
@@ -532,7 +532,7 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
     const slHaoDuoiDm = sLHao - slHaoTt > 0 ? sLHao - slHaoTt : '';
     const tiLeHaoDuoiDm = this.formData.value.tongSlNhap && slHaoDuoiDm ? slHaoDuoiDm * 100 / this.formData.value.tongSlNhap : '';
     this.formData.patchValue({
-      soThangBaoQuanqHang, sLHao, slHaoTt, tiLeHaoTt, slHaoThanhLy, tiLeHaoThanhLy, slHaoVuotDm, tiLeHaoVuotDm, slHaoDuoiDm, tiLeHaoDuoiDm,
+      soThangBaoQuanHang, sLHao, slHaoTt, tiLeHaoTt, slHaoThanhLy, tiLeHaoThanhLy, slHaoVuotDm, tiLeHaoVuotDm, slHaoDuoiDm, tiLeHaoDuoiDm,
     })
   }
 

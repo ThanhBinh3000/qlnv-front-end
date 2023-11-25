@@ -11,7 +11,7 @@ import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.se
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import * as uuid from "uuid";
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import { BtnStatus, Doc, Form } from '../../../../lap-ke-hoach-va-tham-dinh-du-toan.constant';
 export class ItemData {
     id: string;
@@ -207,6 +207,11 @@ export class HangComponent implements OnInit {
             return;
         }
 
+        if (this.formDetail.lstFiles.some(e => e.isEdit)) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_SAVE_FILE);
+            return;
+        }
+
         if (this.lstCtietBcao.some(e => e.giaTri > Utils.MONEY_LIMIT)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
             return;
@@ -229,8 +234,11 @@ export class HangComponent implements OnInit {
 
         request.fileDinhKems = [];
         for (let iterator of this.listFile) {
-            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path));
+            const id = iterator?.lastModified.toString();
+            const noiDung = this.formDetail.lstFiles.find(e => e.id == id)?.noiDung;
+            request.fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.dataInfo.path, noiDung));
         }
+        request.fileDinhKems = request.fileDinhKems.concat(this.formDetail.lstFiles.filter(e => typeof e.id == 'number'))
 
         request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
         request.trangThai = trangThai;
@@ -487,6 +495,7 @@ export class HangComponent implements OnInit {
             { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
             { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
             { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
+            { t: 3, b: 3, l: 0, r: 4, val: 'Trạng thái báo cáo: ' + this.dataInfo.tenTrangThai },
             { t: 4, b: 4, l: 0, r: 0, val: 'STT' },
             { t: 4, b: 4, l: 1, r: 1, val: 'Tên cục DTNNKV, chi cục DTNN' },
             { t: 4, b: 4, l: 2, r: 2, val: 'Tên địa điểm, địa chỉ' },
@@ -510,21 +519,27 @@ export class HangComponent implements OnInit {
         this.lstCtietBcao.forEach((item, index) => {
             if (item.unitSpan) {
                 header.push({ t: headerBot + index, b: headerBot + index + item.unitSpan - 1, l: 0, r: 0, val: this.getIndex(item.stt) })
-                header.push({ t: headerBot + index, b: headerBot + index + item.unitSpan - 1, l: 1, r: 1, val: item.tenDvi })
+                header.push({ t: headerBot + index, b: headerBot + index + item.unitSpan - 1, l: 1, r: 1, val: item.tenDvi ? item.tenDvi : '' })
             }
             if (item.locationSpan) {
-                header.push({ t: headerBot + index, b: headerBot + index + item.locationSpan - 1, l: 2, r: 2, val: item.tenDiaChiKho })
+                header.push({ t: headerBot + index, b: headerBot + index + item.locationSpan - 1, l: 2, r: 2, val: item.tenDiaChiKho ? item.tenDiaChiKho : '' })
             }
             if (item.storehouseSpan) {
-                header.push({ t: headerBot + index, b: headerBot + index + item.storehouseSpan - 1, l: 3, r: 3, val: item.tenNhaKho })
+                header.push({ t: headerBot + index, b: headerBot + index + item.storehouseSpan - 1, l: 3, r: 3, val: item.tenNhaKho ? item.tenNhaKho : '' })
             }
-            header.push({ t: headerBot + index, b: headerBot + index, l: 4, r: 4, val: item.khoiTich?.toString() })
-            header.push({ t: headerBot + index, b: headerBot + index, l: 5, r: 5, val: item.tenHang })
-            header.push({ t: headerBot + index, b: headerBot + index, l: 6, r: 6, val: item.soLuong?.toString() })
-            header.push({ t: headerBot + index, b: headerBot + index, l: 7, r: 7, val: item.giaTri?.toString() })
+            header.push({ t: headerBot + index, b: headerBot + index, l: 4, r: 4, val: (item.khoiTich || item.khoiTich === 0) ? item.khoiTich : '' })
+            header.push({ t: headerBot + index, b: headerBot + index, l: 5, r: 5, val: item.tenHang ? item.tenHang : '' })
+            header.push({ t: headerBot + index, b: headerBot + index, l: 6, r: 6, val: (item.soLuong || item.soLuong === 0) ? item.soLuong : '' })
+            header.push({ t: headerBot + index, b: headerBot + index, l: 7, r: 7, val: (item.giaTri || item.giaTri === 0) ? item.giaTri : '' })
         })
         const workbook = XLSX.utils.book_new();
         const worksheet = Table.initExcel(header);
+        //Thêm khung viền cho bảng
+        for (const cell in worksheet) {
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 4) continue;
+            worksheet[cell].s = Table.borderStyle;
+        }
+
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
         XLSX.writeFile(workbook, 'bao_hiem_hang.xlsx');
     }

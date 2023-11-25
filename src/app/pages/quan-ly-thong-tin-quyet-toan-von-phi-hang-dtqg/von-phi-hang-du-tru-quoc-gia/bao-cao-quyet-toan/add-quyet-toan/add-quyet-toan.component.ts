@@ -18,7 +18,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import * as uuid from "uuid";
-import * as XLSX from "xlsx";
+import * as XLSX from 'xlsx-js-style';
 import { Doc } from '../../von-phi-hang-du-tru-quoc-gia.constant';
 import { DialogAddVatTuComponent } from '../dialog-add-vat-tu/dialog-add-vat-tu.component';
 import { TEN_HANG } from './add-quyet-toan.constant';
@@ -249,19 +249,20 @@ export class AddQuyetToanComponent implements OnInit {
 
 
 	// them file vao danh sach
-	handleUpload(): void {
+	handleUpload() {
 		this.fileList.forEach((file: any) => {
 			const id = file?.lastModified.toString();
 			this.lstFiles.push({
+				... new Doc(),
 				id: id,
-				fileName: file?.name,
-				fileSize: file?.size,
-				fileUrl: file?.url
+				fileName: file?.name
 			});
 			this.listFile.push(file);
 		});
+		console.log(this.listFile);
+
 		this.fileList = [];
-	}
+	};
 
 	amount = Operator.amount;
 
@@ -709,10 +710,10 @@ export class AddQuyetToanComponent implements OnInit {
 			this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
 			return;
 		}
-		const listFile: any = [];
-		for (const iterator of this.listFile) {
-			listFile.push(await this.uploadFile(iterator));
-		}
+		// const listFile: any = [];
+		// for (const iterator of this.listFile) {
+		// 	listFile.push(await this.uploadFile(iterator));
+		// }
 		const tongHopTuIds = []
 
 		//get file cong van url
@@ -739,7 +740,7 @@ export class AddQuyetToanComponent implements OnInit {
 
 		const request = JSON.parse(JSON.stringify({
 			id: this.idInput,
-			fileDinhKems: listFile,
+			fileDinhKems: this.listFile,
 			listIdFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
 			lstCtiet: lstCtietBcaoTemp,
 			maDviTien: this.maDviTien,
@@ -753,6 +754,14 @@ export class AddQuyetToanComponent implements OnInit {
 			maPhanBcao: this.maPhanBcao,
 			tongHopTuIds: tongHopTuIds,
 		}));
+
+		const fileDinhKems = [];
+		for (const iterator of this.listFile) {
+			const id = iterator?.lastModified.toString();
+			const noiDung = this.lstFiles.find(e => e.id == id)?.noiDung;
+			fileDinhKems.push(await this.quanLyVonPhiService.upFile(iterator, this.path, noiDung));
+		}
+		request.fileDinhKems = fileDinhKems;
 
 		this.lstBcaoDviTrucThuocs.forEach(item => {
 			request.tongHopTuIds.push(item.id);
@@ -1444,7 +1453,7 @@ export class AddQuyetToanComponent implements OnInit {
 		const dateExcel = this.datePipe.transform(date, Utils.FORMAT_DATE_STR)
 
 		const header = [
-			{ t: 0, b: 5, l: 0, r: 8, val: null },
+			{ t: 0, b: 5, l: 0, r: 5, val: null },
 
 			{ t: 0, b: 0, l: 0, r: 1, val: `Báo cáo quyết toán vốn phí hàng DTQG quý ${this.quyQtoan}, năm ${this.namQtoan}` },
 			{ t: 1, b: 1, l: 0, r: 1, val: `Kèm theo công văn số ${this.congVan.fileName}/TCDT, ngày ${dateExcel} của ${this.userInfo.TEN_DVI} ` },
@@ -1476,7 +1485,8 @@ export class AddQuyetToanComponent implements OnInit {
 		const filterData = this.lstCtietBcao.map(item => {
 			const row: any = {};
 			fieldOrder.forEach(field => {
-				row[field] = item[field]
+				item[field] ? item[field] : "";
+				row[field] = field == 'stt' ? this.getChiMuc(item.stt) : Utils.getValue(item[field]);
 			})
 			return row;
 		})
@@ -1504,6 +1514,10 @@ export class AddQuyetToanComponent implements OnInit {
 		const workbook = XLSX.utils.book_new();
 		const worksheet = Table.initExcel(header);
 		XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
+		for (const cell in worksheet) {
+			if (XLSX.utils.decode_cell(cell).r < 4) continue;
+			worksheet[cell].s = Table.borderStyle;
+		}
 		XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
 		let excelName = "BC_QTVP_DTQG";
 		excelName = excelName + '_BCQTVP_DTQG.xlsx'

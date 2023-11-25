@@ -252,6 +252,15 @@ export class TienThua {
     }
 }
 
+export class Doc {
+    id: string;
+    fileName: string;
+    fileSize: number;
+    fileUrl: number;
+    noiDung: string;
+    isEdit: boolean = false;
+}
+
 export class Report {
     id: string;
     maDvi: string;
@@ -277,9 +286,9 @@ export class Report {
     thuyetMinh: string;
     ngayNhanLenhChuyenCo: string;
     tkNhan: string;
-    lstFiles: any[] = [];
+    lstFiles: Doc[] = [];
     lstCtiets: any[] = [];
-    fileDinhKems: any[] = [];
+    fileDinhKems: Doc[] = [];
     listIdDeleteFiles: string[] = [];
 }
 

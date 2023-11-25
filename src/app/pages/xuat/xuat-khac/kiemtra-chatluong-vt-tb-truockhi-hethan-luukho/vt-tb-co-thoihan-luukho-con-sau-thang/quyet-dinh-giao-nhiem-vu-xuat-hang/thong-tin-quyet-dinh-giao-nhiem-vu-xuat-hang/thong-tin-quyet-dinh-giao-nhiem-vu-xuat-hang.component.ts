@@ -370,12 +370,12 @@ export class ThongTinQuyetDinhGiaoNhiemVuXuatHangComponent extends Base2Componen
       case STATUS.TU_CHOI_TP:
       case STATUS.TU_CHOI_LDC: {
         trangThai = STATUS.CHO_DUYET_TP;
-        mess = 'Bạn có muối gửi duyệt?';
+        mess = 'Bạn có muốn gửi duyệt?';
         break;
       }
       case STATUS.CHO_DUYET_TP: {
         trangThai = STATUS.CHO_DUYET_LDC;
-        mess = 'Bạn có muối gửi duyệt?';
+        mess = 'Bạn có muốn gửi duyệt?';
         break;
       }
       case STATUS.CHO_DUYET_LDC: {
