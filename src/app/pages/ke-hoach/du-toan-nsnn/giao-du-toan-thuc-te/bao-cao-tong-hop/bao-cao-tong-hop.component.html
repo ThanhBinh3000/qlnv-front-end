@@ -131,9 +131,9 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td>{{Op.fmtVal(data.tongCong)}}</td>
-                                <td>{{Op.fmtVal(data.dviCapDuoiTh)}}</td>
-                                <td>{{Op.fmtVal(data.chenhLech)}}</td>
+                                <td>{{data.tongCong !=0 ? Op.fmtVal(data.tongCong) : null}}</td>
+                                <td>{{data.dviCapDuoiTh !=0 ? Op.fmtVal(data.dviCapDuoiTh) : null}}</td>
+                                <td>{{data.chenhLech != 0 ? Op.fmtVal(data.chenhLech) : null}}</td>
                             </tr>
                         </tbody>
                     </nz-table>

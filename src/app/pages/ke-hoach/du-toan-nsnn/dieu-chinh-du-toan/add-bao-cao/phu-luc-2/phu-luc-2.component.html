@@ -49,7 +49,7 @@
                                 <th scope="col" rowSpan="2">ĐVT</th>
                                 <th scope="colgroup" colSpan="4">Số lượng tài sản, máy móc, thiết bị hiện có</th>
                                 <th scope="colgroup" colSpan="5">Dự toán đề nghị trang bị năm {{namBcao}} (năm kế
-                                    hoặc)</th>
+                                    hoạch)</th>
                                 <th scope="colgroup" colSpan="3">Dự toán, kinh phí được sử dụng trong năm </th>
                                 <th scope="col" rowSpan="2">Dự toán đề nghị điều chỉnh <br> (+ tăng) (- giảm)</th>
                                 <th scope="col" rowSpan="2" *ngIf="status.viewAppVal">Dự toán vụ TVQT <br> đề nghị <br>
@@ -101,7 +101,7 @@
                                 <th scope="col">10</th>
                                 <th scope="col">11</th>
                                 <th scope="col">12=10+11</th>
-                                <th scope="col">13</th>
+                                <th scope="col">13=9-12</th>
                                 <th scope="col" *ngIf="status.viewAppVal">14</th>
                                 <ng-container *ngIf="status.viewAppVal; else soChiMuc ">
                                     <th scope="col">15</th>
@@ -284,7 +284,6 @@
                                             <input class="money-input" currencyMask
                                                 [(ngModel)]="editCache[data.id].data.dtoanDnghiSlThien"
                                                 (ngModelChange)="changeModel(editCache[data.id].data.id)"
-                                                [class]="statusCanhBao == true ? '' : 'input-error-validate'"
                                                 [options]="Op.amount" />
                                         </td>
                                         <td>
@@ -401,8 +400,9 @@
                         <nz-table nzBordered class="table__body">
                             <thead>
                                 <tr>
-                                    <th scope="col" nzWidth="7%">STT</th>
-                                    <th scope="col">Tên file</th>
+                                    <th scope="col" nzWidth="5%">STT</th>
+                                    <th scope="col" nzWidth="25%">Tên file</th>
+                                    <th scope="col" nzWidth="55%">Nội dung</th>
                                     <th scope="col" nzWidth="15%"></th>
                                 </tr>
                             </thead>
@@ -411,10 +411,26 @@
                                     <td>{{ i + 1 }} </td>
                                     <td>{{ data.fileName }}</td>
                                     <td>
+                                        <ng-container *ngIf="data.isEdit; else readOnly">
+                                            <input nz-input [(ngModel)]="data.noiDung" />
+                                        </ng-container>
+                                        <ng-template #readOnly>
+                                            {{ data.noiDung }}
+                                        </ng-template>
+                                    </td>
+                                    <td>
                                         <a (click)="downloadFile(data.id)">
                                             <i class="fa fa-eye"></i>
                                         </a>
-                                        <a (click)="deleteFile(data.id)">
+                                        <a *ngIf="status.general" (click)="data.isEdit = !data.isEdit">
+                                            <ng-container *ngIf="data.isEdit; else saveText">
+                                                <i class="fa fa-save"></i>
+                                            </ng-container>
+                                            <ng-template #saveText>
+                                                <i class="fa fa-pencil"></i>
+                                            </ng-template>
+                                        </a>
+                                        <a *ngIf="status.general" (click)="deleteFile(data.id)">
                                             <i class="fa fa-trash-o do"></i>
                                         </a>
                                     </td>

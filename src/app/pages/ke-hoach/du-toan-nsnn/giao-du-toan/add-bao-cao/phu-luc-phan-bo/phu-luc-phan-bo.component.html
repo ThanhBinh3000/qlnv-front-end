@@ -46,10 +46,10 @@
                             <tr>
                                 <td></td>
                                 <td>Tổng cộng</td>
-                                <td>{{Op.fmtVal(total.dtoanGiao)}}</td>
-                                <td>{{Op.fmtVal(total.tongCong)}}</td>
+                                <td>{{total.dtoanGiao !== 0 ? Op.fmtVal(total.dtoanGiao) : null}}</td>
+                                <td>{{total.tongCong !== 0 ? Op.fmtVal(total.tongCong) : null}}</td>
                                 <ng-container *ngFor="let item of total.lstCtietDvis">
-                                    <td>{{Op.fmtVal(item.soTranChi)}}</td>
+                                    <td>{{item.soTranChi !== 0 ? Op.fmtVal(item.soTranChi) : null}}</td>
                                 </ng-container>
                                 <td *ngIf="status.general"></td>
                             </tr>
@@ -65,12 +65,12 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td>{{Op.fmtVal(data.dtoanGiao)}}</td>
-                                    <td>{{Op.fmtVal(data.tongCong)}}</td>
+                                    <td>{{data.dtoanGiao !==0 ? Op.fmtVal(data.dtoanGiao) : null}}</td>
+                                    <td>{{data.tongCong !== 0 ? Op.fmtVal(data.tongCong) : null}}</td>
                                     <td *ngFor="let item of lstDvi">
                                         <div *ngFor="let e of data.lstCtietDvis;">
                                             <div *ngIf="e.maDviNhan == item.maDvi">
-                                                {{Op.fmtVal(e.soTranChi)}}
+                                                {{e.soTranChi!==0 ? Op.fmtVal(e.soTranChi) : null}}
                                             </div>
                                         </div>
                                     </td>

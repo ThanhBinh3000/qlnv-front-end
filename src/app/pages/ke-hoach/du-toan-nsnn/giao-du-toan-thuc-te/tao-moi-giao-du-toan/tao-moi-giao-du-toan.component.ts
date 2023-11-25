@@ -583,10 +583,15 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		);
 	}
 
-	// đóng
+	// // đóng
 	// back() {
+	// 	// const obj = {
+	// 	// 	id: this.data?.idPaBTC,
+	// 	// 	tabSelected: this.data?.preTab,
+	// 	// }
+	// 	// this.dataChange.emit(obj);
 	// 	const obj = {
-	// 		id: this.data?.idPaBTC,
+	// 		id: this.data?.idPaBTC ? this.data?.idPaBTC : this.data?.preData && this.data?.preData?.id,
 	// 		tabSelected: this.data?.preTab,
 	// 	}
 	// 	this.dataChange.emit(obj);
@@ -603,6 +608,8 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 			this.dataChange.emit(obj);
 		}
 	}
+
+
 
 	// in
 	doPrint() {

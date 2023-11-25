@@ -345,11 +345,11 @@ export class BaoCaoTongHopComponent implements OnInit {
 
 
             this.lstDviTrucThuoc = this.data?.lstGiaoDtoanTrucThuocs;
-            this.lstDviTrucThuoc.forEach(item => {
-                item.ngayTrinh = this.datePipe.transform(item.ngayTrinh, Utils.FORMAT_DATE_STR)
-                item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR)
-            }
-            )
+            // this.lstDviTrucThuoc.forEach(item => {
+            //     item.ngayTrinh = this.datePipe.transform(item.ngayTrinh, Utils.FORMAT_DATE_STR)
+            //     item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR)
+            // }
+            // )
 
             this.lstDviTrucThuoc.forEach(e => {
                 if (e.ngayDuyet.includes('/')) {
