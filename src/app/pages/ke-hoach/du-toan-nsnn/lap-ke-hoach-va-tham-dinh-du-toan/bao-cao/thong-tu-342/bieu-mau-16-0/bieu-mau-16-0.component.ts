@@ -467,7 +467,7 @@ export class BieuMau160Component implements OnInit {
 			]
 			fieldOrder = ['stt', 'tenDmuc', 'maDviTinh', 'khSluong', 'khTtien', 'uocThSluong', 'uocThTtien', 'tonKho', 'tongMucDtru', 'namKhSluong', 'namKhTtien', 'tdinhSluong', 'tdinhTtien',
 				'chenhLech', 'ghiChu', 'ykienDviCtren']
-			calHeader = ['A', 'B', '1', '2', '3', '4', '5', '6', '7', '8', '9', '8A', '9A', '10=9A-9', '11', '12'];
+			calHeader = ['A', 'B', 'C', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11=10-8', '12', '13'];
 		} else {
 			header = [
 				{ t: 0, b: 5, l: 0, r: 11, val: null },
@@ -492,7 +492,7 @@ export class BieuMau160Component implements OnInit {
 				{ t: 4, b: 5, l: 11, r: 11, val: 'Ghi chú' },
 			]
 			fieldOrder = ['stt', 'tenDmuc', 'maDviTinh', 'khSluong', 'khTtien', 'uocThSluong', 'uocThTtien', 'tonKho', 'tongMucDtru', 'namKhSluong', 'namKhTtien', 'ghiChu']
-			calHeader = ['A', 'B', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+			calHeader = ['A', 'B', 'C', '1', '2', '3', '4', '5', '6', '7', '8', '12'];
 		}
 
 		const filterData = this.lstCtietBcao.map(item => {

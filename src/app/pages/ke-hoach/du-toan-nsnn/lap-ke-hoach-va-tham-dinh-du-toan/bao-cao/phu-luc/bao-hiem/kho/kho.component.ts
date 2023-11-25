@@ -578,7 +578,7 @@ export class KhoComponent implements OnInit {
         }
 
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
-        XLSX.writeFile(workbook, 'bao_hiem_kho.xlsx');
+        XLSX.writeFile(workbook, this.dataInfo.maBcao + '_bh_kho.xlsx');
     }
 
 }
