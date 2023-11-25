@@ -185,7 +185,7 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
               return {
                 ...rowLv3,
                 idVirtual: uuidv4(),
-                childData: x.filter(f => !!f.id)
+                childData: rowLv3 ? x.filter(f => !!f.id) : []
               }
             }).value();
             return {
