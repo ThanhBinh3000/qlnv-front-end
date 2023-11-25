@@ -470,7 +470,7 @@ export class BieuMau133Component implements OnInit {
 		})
 		filterData.push(row)
 		// thêm công thức tính cho biểu mẫu
-		const calHeader = ['A', 'B', '1', '2', '3', '4=5+6', '5', '6', '7=9+10', '8', '9', '10', '11=12+13', '12', '13', '14=15+16', '15', '16', '17'];
+		const calHeader = ['A', 'B', 'C', 'D', 'E', '1=2+3', '2', '3', '4=6+7', '5', '6', '7', '8=9+10', '9', '10', '11=12+13', '12', '13', '14'];
 		let cal = {};
 		fieldOrder.forEach((field, index) => {
 			cal[field] = calHeader[index];
