@@ -991,51 +991,54 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
     // this.formData.patchValue({ quyetDinhPdDtl });
   }
   tinhXuatCap(currentRow: any, $event: any, isVatTu?: boolean, parentRow?: any, ppRow?: any) {
-    if (isVatTu) {
+    // if (isVatTu) {
+    //   currentRow.soLuong = $event;
+    //   let currentDvi = this.formData.value.quyetDinhPdDtl.filter(s => s.maDvi == currentRow.maDvi);
+    //   let tongSoDaGiao = currentDvi.reduce((prev, next) => prev += next.soLuong, 0);
+    //   currentDvi.forEach(s => s.soLuongXc = 0);
+    //   if (tongSoDaGiao < currentRow.soLuongNhuCauXuat) {
+    //     currentRow.soLuongXc = (currentRow.soLuongNhuCauXuat - tongSoDaGiao) > 0 ? (currentRow.soLuongNhuCauXuat - tongSoDaGiao) : 0;
+    //   } else {
+    //     currentRow.soLuongXc = 0;
+    //   }
+    // }
+    // else {
+    //   currentRow.soLuong = $event;
+    //   currentRow.soLuongNhuCauXuat = !isNaN(currentRow.soLuongNhuCauXuat) ? currentRow.soLuongNhuCauXuat : 0;
+    //   if ($event < currentRow.soLuongNhuCauXuat) {
+    //     currentRow.soLuongXc = (currentRow.soLuongNhuCauXuat - $event) > 0 ? (currentRow.soLuongNhuCauXuat - $event) : 0;
+    //   } else {
+    //     currentRow.soLuongXc = 0;
+    //   };
+    //   if (parentRow) {
+    //     const { soLuong, soLuongXc } = Array.isArray(parentRow.childData) ? parentRow.childData.reduce((obj, cur) => {
+    //       obj.soLuong += cur.soLuong;
+    //       obj.soLuongXc += cur.soLuongXc;
+    //       return obj;
+    //     }, { soLuong: 0, soLuongXc: 0 }) : { soLuong: 0, soLuongXc: 0 };
+    //     parentRow.soLuongXc = soLuongXc;
+    //     parentRow.soLuong = soLuong;
+    //     if (ppRow) {
+    //       const { soLuong, soLuongXc } = Array.isArray(ppRow.childData) ? ppRow.childData.reduce((obj, cur) => {
+    //         obj.soLuong += cur.soLuong;
+    //         obj.soLuongXc += cur.soLuongXc;
+    //         return obj;
+    //       }, { soLuong: 0, soLuongXc: 0 }) : { soLuong: 0, soLuongXc: 0 };
+    //       ppRow.soLuongXc = soLuongXc;
+    //       ppRow.soLuong = soLuong;
+    //     }
+    //   }
+    //   this.tinhTong()
+    // }
+    if (parentRow) {
+      const soLuongNhuCauXuat = parentRow.soLuongNhuCauXuat
       currentRow.soLuong = $event;
-      let currentDvi = this.formData.value.quyetDinhPdDtl.filter(s => s.maDvi == currentRow.maDvi);
-      let tongSoDaGiao = currentDvi.reduce((prev, next) => prev += next.soLuong, 0);
-      currentDvi.forEach(s => s.soLuongXc = 0);
-      if (tongSoDaGiao < currentRow.soLuongNhuCauXuat) {
-        currentRow.soLuongXc = (currentRow.soLuongNhuCauXuat - tongSoDaGiao) > 0 ? (currentRow.soLuongNhuCauXuat - tongSoDaGiao) : 0;
-      } else {
-        currentRow.soLuongXc = 0;
-      }
-    }
-    else {
-      currentRow.soLuong = $event;
-      currentRow.soLuongNhuCauXuat = !isNaN(currentRow.soLuongNhuCauXuat) ? currentRow.soLuongNhuCauXuat : 0;
-      if ($event < currentRow.soLuongNhuCauXuat) {
-        currentRow.soLuongXc = (currentRow.soLuongNhuCauXuat - $event) > 0 ? (currentRow.soLuongNhuCauXuat - $event) : 0;
-      } else {
-        currentRow.soLuongXc = 0;
-      };
-      if (parentRow) {
-        const { soLuong, soLuongXc } = Array.isArray(parentRow.childData) ? parentRow.childData.reduce((obj, cur) => {
-          obj.soLuong += cur.soLuong;
-          obj.soLuongXc += cur.soLuongXc;
-          return obj;
-        }, { soLuong: 0, soLuongXc: 0 }) : { soLuong: 0, soLuongXc: 0 };
-        parentRow.soLuongXc = soLuongXc;
-        parentRow.soLuong = soLuong;
-        if (ppRow) {
-          const { soLuong, soLuongXc } = Array.isArray(ppRow.childData) ? ppRow.childData.reduce((obj, cur) => {
-            obj.soLuong += cur.soLuong;
-            obj.soLuongXc += cur.soLuongXc;
-            return obj;
-          }, { soLuong: 0, soLuongXc: 0 }) : { soLuong: 0, soLuongXc: 0 };
-          ppRow.soLuongXc = soLuongXc;
-          ppRow.soLuong = soLuong;
-        }
-      }
-      this.tinhTong()
-      // const quyetDinhPdDtl = this.formData.value.quyetDinhPdDtl.map(f => {
-      //   if (f.mId === currentRow.mId) {
-      //     return { ...f, soLuong: currentRow.soLuong, soLuongXc: currentRow.soLuongXc }
-      //   }
-      //   return f
-      // });
-      // this.formData.patchValue({ quyetDinhPdDtl });
+      const tongSoLuong = Array.isArray(parentRow.childData) ? parentRow.childData.reduce((sum, cur) => sum += cur.soLuong ? cur.soLuong : 0, 0) : 0;
+      const soLuongXc = soLuongNhuCauXuat > tongSoLuong ? soLuongNhuCauXuat - tongSoLuong : 0;
+      currentRow.soLuongXc = soLuongXc;
+      parentRow.soLuongXc = soLuongXc;
+      parentRow.soLuong = tongSoLuong;
+      this.tinhTong();
     }
   }
   isVthhGao() {
