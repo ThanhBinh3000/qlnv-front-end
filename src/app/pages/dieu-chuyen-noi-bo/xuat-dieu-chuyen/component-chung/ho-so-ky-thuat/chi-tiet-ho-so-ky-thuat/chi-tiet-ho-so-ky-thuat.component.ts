@@ -158,6 +158,7 @@ export class ChiTietHoSoKyThuatXuatDieuChuyenComponent extends Base2Component im
       tenNganKho: [],
       tenLoKho: [],
       canBoTaoHoSo: [],
+      canBoTaoHoSoNh: [],
       soBbKtNgoaiQuan: [],
       soBbKtVanHanh: [],
       soBbKtHskt: [],
