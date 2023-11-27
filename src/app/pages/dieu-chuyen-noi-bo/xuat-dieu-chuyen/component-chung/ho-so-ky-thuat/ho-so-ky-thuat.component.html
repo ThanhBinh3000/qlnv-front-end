@@ -34,10 +34,10 @@
             </nz-select>
           </div> -->
           <div nz-col nzSpan="16">
-            <label class="search__label">Ngăn/Lô kho</label>
+            <label class="search__label">Đơn vị/địa điểm</label>
             <nz-tree-select #NzTreeSelectComponent [nzNodes]="listDiaDiemKho" [nzShowSearch]="true"
               [ngModel]="selectedNode" [ngModelOptions]="{standalone: true}" nzVirtualHeight="300px"
-              [nzAllowClear]="false">
+              [nzAllowClear]="true">
               <ng-template #nzTreeTemplate let-node let-origin="origin">
                 <div class="node-content" [class.ant-tree-node-selected]="node.isSelected"
                   (click)="selectDiaDiem(node)">

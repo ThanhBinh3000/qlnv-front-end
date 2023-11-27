@@ -100,7 +100,7 @@ export class HoSoKyThuatXuatDieuChuyenComponent extends Base2Component implement
     };
     let res = await this.donViService.getDonViHangTree(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listDiaDiemKho = res.data.filter(f => f.type === "DV");
+      this.listDiaDiemKho = Array(res.data?.children) ? res.data.children : [];
       this.listDiaDiemKho[0].expanded = true;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -140,6 +140,10 @@ export class HoSoKyThuatXuatDieuChuyenComponent extends Base2Component implement
     //   node.isSelectable = false;
     //   node.isExpanded = !node.isExpanded;
     // }
+  }
+  clearForm() {
+    this.selectedNode = null;
+    super.clearForm();
   }
   redirectToChiTiet(id: number, isView?: boolean) {
     this.selectedId = id;
