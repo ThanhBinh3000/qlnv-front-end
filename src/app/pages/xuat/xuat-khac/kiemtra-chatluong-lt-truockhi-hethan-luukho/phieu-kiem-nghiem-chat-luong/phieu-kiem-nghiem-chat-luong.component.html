@@ -10,15 +10,15 @@
             </nz-select>
           </div>
           <div nz-col nzSpan="4">
-            <label>Số biên bản lấy mẫu/bàn giao mẫu</label>
+            <label>Số phiếu kiểm nghiệm chất lượng</label>
             <input placeholder="" nz-input formControlName="soBienBan"/>
           </div>
           <div nz-col nzSpan="4">
-            <label>Mã danh sách hàng sắp hết hạn lưu kho</label>
+            <label>Mã DS LT <= 6 tháng hết hạn lưu kho</label>
             <input placeholder="" nz-input formControlName="maDanhSach"/>
           </div>
           <div nz-col nzSpan="4">
-            <label>Ngày lấy mẫu</label>
+            <label>Ngày Kiểm nghiệm</label>
             <div nz-row>
               <div nz-col nzSpan="12" class="cus-start-date">
                 <nz-date-picker [nzDisabledDate]="disabledStartNgayKnMau" nzFormat="dd/MM/yyyy"
@@ -30,6 +30,10 @@
                                 formControlName="ngayKnMauDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
               </div>
             </div>
+          </div>
+          <div nz-col nzSpan="4">
+            <label>Số biên bản lấy mẫu/bàn giao mẫu</label>
+            <input placeholder="" nz-input formControlName="soBienBan"/>
           </div>
         </div>
       </form>
@@ -136,7 +140,7 @@
                 <td>{{lv1.ngayKnMau}}</td>
                 <td>{{lv1.tenTrangThaiKnCl}}</td>
                 <td class="text-left">
-                  <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_PKNCL_XEM')
+                  <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_PKNCL_XEM') &&(lv1.trangThaiKnCl != null)
                && !((lv1.trangThaiKnCl ==STATUS.TU_CHOI_LDC || lv1.trangThaiKnCl == STATUS.TU_CHOI_TP || lv1.trangThaiKnCl ==STATUS.DU_THAO) && lv1.idNguoiTaoPhieu == userInfo.ID)"
                      (click)="redirectDetail(lv1.idPhieuKnCl, false)">
                     <i class="fa fa-eye" title="Xem chi tiết"></i>
