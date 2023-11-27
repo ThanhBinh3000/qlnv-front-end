@@ -40,7 +40,7 @@
     </nz-card>
 
     <div class="group-button">
-      <h3>DANH SÁCH THÔNG TIN PHÂN BỔ CHO VP CỤC, CHI CỤC</h3>
+      <h3>DANH SÁCH THÔNG TIN PHÂN BỔ CHO VP CỤC, CHI CỤC 11</h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_PHANBO_XOA')">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
@@ -142,11 +142,11 @@
             <a (click)="redirectToChiTiet(true, data.id)" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_PHANBO_XEM') && !((data.trangThai == STATUS.DU_THAO) && data.nguoiTaoId == userInfo.ID)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a *ngIf="(data.trangThai == STATUS.DU_THAO ) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_PHANBO_THEM')"
+            <a *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU ) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_PHANBO_THEM')"
                (click)="redirectToChiTiet(false, data.id)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a *ngIf="data.trangThai ==STATUS.DU_THAO && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_PHANBO_XOA')" (click)="delete(data)">
+            <a *ngIf="data.trangThai ==STATUS.DANG_NHAP_DU_LIEU && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_PHANBO_XOA')" (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
