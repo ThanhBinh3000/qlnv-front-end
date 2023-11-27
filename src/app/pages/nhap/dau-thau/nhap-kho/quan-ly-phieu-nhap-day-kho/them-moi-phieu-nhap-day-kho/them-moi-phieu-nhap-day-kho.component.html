@@ -5,12 +5,12 @@
       <span>Quay lại</span>
     </button>
     <button *ngIf="!loaiVthh.startsWith('02')"
-      type="button" class="btn btn-sub do" (click)="xemTruoc(formData.value.id,templateName)">
+      type="button" class="btn btn-sub" (click)="xemTruoc(formData.value.id,templateName)">
       <i class="icon htvbdh_tcdt_tuchoi"></i>
       <span>Xem trước</span>
     </button>
     <button *ngIf="loaiVthh.startsWith('02')"
-      type="button" class="btn btn-sub do" (click)="xemTruoc(formData.value.id,templateNameVt)">
+      type="button" class="btn btn-sub" (click)="xemTruoc(formData.value.id,templateNameVt)">
       <i class="icon htvbdh_tcdt_tuchoi"></i>
       <span>Xem trước</span>
     </button>
