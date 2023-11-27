@@ -141,7 +141,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       truongPhong: [],
       lanhDaoCuc: [],
       dviCungCap: [],
-      idBbLayMauXuat: [],
+      idBbLayMau: [],
     });
   }
 
@@ -237,7 +237,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       if (dataChose) {
         this.formData.patchValue({
           soBbLayMau: dataChose.soBienBan,
-          idBbLayMauXuat: dataChose.id,
+          idBbLayMau: dataChose.id,
           soHd: dataChose.soHd,
           soQdGiaoNvNh: dataChose.soQdGiaoNvNh,
           idQdGiaoNvNh: dataChose.idQdGiaoNvNh,

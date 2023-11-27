@@ -293,12 +293,10 @@
         </th>
         <th>
           <input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="rowItem.slNhapThem" />
-
         </th>
         <th>
           <input class="money-input" currencyMask [options]="amount" [min]="0"
             [(ngModel)]="rowItem.slThuHoiTaiSuDung" />
-
         </th>
         <th>
           <nz-input-number [(ngModel)]="rowItem.slHienCo + rowItem.slNhapThem + rowItem.slThuHoiTaiSuDung"
@@ -369,12 +367,27 @@
             <input type="text" [(ngModel)]="dataEdit[idx].data.donViTinh" readonly nz-input />
           </th>
           <th>
-            <nz-input-number [(ngModel)]="dataEdit[idx].data.slHienCo" [nzSize]="'small'"
-              [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0" [nzParser]="globals.parser"></nz-input-number>
+            <nz-input-number [(ngModel)]="dataEdit[idx].data.slChiTieuGao" [nzSize]="'small'"
+                             [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0" [nzParser]="globals.parser"></nz-input-number>
           </th>
           <th>
-            <nz-input-number [(ngModel)]="dataEdit[idx].data.slNhapThem" [nzSize]="'small'"
-              [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0" [nzParser]="globals.parser"></nz-input-number>
+            <nz-input-number [(ngModel)]="dataEdit[idx].data.slChiTieuThoc" [nzSize]="'small'"
+                             [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0" [nzParser]="globals.parser"></nz-input-number>
+          </th>
+          <th>
+            <input class="money-input" currencyMask [options]="amount" [disabled]='true' [min]="0" [(ngModel)]="rowItem.slHienCo" />
+<!--            <nz-input-number [(ngModel)]="dataEdit[idx].data.slHienCo" [nzSize]="'small'"-->
+<!--              [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0" [nzParser]="globals.parser"></nz-input-number>-->
+          </th>
+          <th>
+            <input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="rowItem.slNhapThem" />
+<!--            <nz-input-number [(ngModel)]="dataEdit[idx].data.slNhapThem" [nzSize]="'small'"-->
+<!--              [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0" [nzParser]="globals.parser"></nz-input-number>-->
+          </th>
+          <th>
+            <input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="rowItem.slThuHoiTaiSuDung" />
+<!--            <nz-input-number [(ngModel)]="dataEdit[idx].data.slThuHoiTaiSuDung" [nzSize]="'small'"-->
+<!--                             [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0" [nzParser]="globals.parser"></nz-input-number>-->
           </th>
           <th>
             <nz-input-number [(ngModel)]="dataEdit[idx].data.slNhapThem + dataEdit[idx].data.slHienCo"
@@ -386,7 +399,7 @@
               [(ngModel)]="dataEdit[idx].data.slTieuChuan" />
 
           <th>
-            <input class="money-input" currencyMask [options]="amount" [min]="0"
+            <input class="money-input" currencyMask [options]="amount" [disabled]='true' [min]="0"
               [(ngModel)]="dataEdit[idx].data.nhuCauTb" />
 
           </th>

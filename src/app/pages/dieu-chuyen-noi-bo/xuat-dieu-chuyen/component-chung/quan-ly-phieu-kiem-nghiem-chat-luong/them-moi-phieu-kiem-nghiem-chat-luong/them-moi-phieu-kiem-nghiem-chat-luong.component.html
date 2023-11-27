@@ -337,11 +337,11 @@
         </div>
       </div>
     </div> -->
-    <nz-collapse nzAccordion>
+    <nz-collapse nzAccordion *ngIf="!isVatTu">
       <nz-collapse-panel [nzHeader]="kqdgTemPlate" [nzActive]="true">
-        <ng-template #kqdgTemPlate><label class="dcnb-pkncl-collapse-header">KẾT QUẢ ĐÁNH GIÁ CẢM QUAN: (Về màu sắc, mùi
-            vị, tạp chất, đánh bóng, sinh vật
-            hại)</label></ng-template>
+        <ng-template #kqdgTemPlate>
+          <label class="dcnb-pkncl-collapse-header">KẾT QUẢ ĐÁNH GIÁ CẢM QUAN: (Về màu sắc, mùi vị, tạp chất, đánh bóng,
+            sinh vật hại)</label></ng-template>
         <form class="mg-t-16" nzLayout="vertical" nz-form [formGroup]="formData">
           <div class="search__body" nz-row [nzGutter]="[18, 6]">
             <div nz-col nzSpan="24">

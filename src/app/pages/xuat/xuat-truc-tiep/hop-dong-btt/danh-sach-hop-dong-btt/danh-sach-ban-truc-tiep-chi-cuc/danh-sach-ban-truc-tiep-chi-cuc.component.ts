@@ -50,16 +50,16 @@ export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implement
       lastest: null,
     });
     this.filterTable = {
-      namKh: '',
-      soQdPd: '',
-      slHdChuaKy: '',
-      slHdDaKy: '',
-      ngayMkho: '',
-      tenLoaiVthh: '',
-      tenCloaiVthh: '',
-      thanhTienDuocDuyet: '',
-      tenTrangThaiHd: '',
-      tenTrangThaiXh: '',
+      namKh: null,
+      soQdPd: null,
+      slHdChuaKy: null,
+      slHdDaKy: null,
+      tgianDkienDen: null,
+      tenLoaiVthh: null,
+      tenCloaiVthh: null,
+      thanhTienDuocDuyet: null,
+      tenTrangThaiHd: null,
+      tenTrangThaiXh: null,
     }
     this.listTrangThaiHd = [
       {

@@ -73,8 +73,8 @@ export class QuyetDinhChaoGiaComponent extends Base2Component implements OnInit 
         text: 'Từ chối - LĐ Cục'
       },
       {
-        value: this.STATUS.BAN_HANH,
-        text: 'Ban hành'
+        value: this.STATUS.DA_DUYET_LDC,
+        text: 'Đã duyệt - LĐ Cục'
       },
     ]
   }
@@ -127,18 +127,18 @@ export class QuyetDinhChaoGiaComponent extends Base2Component implements OnInit 
   isActionAllowed(action: string, data: any): boolean {
     const permissionMapping = {
       VT: {
-        XEM: 'XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_XEM',
-        THEM: 'XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_THEM',
-        XOA: 'XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_XOA',
-        DUYET_TP: 'XHDTQG_PTDG_TCKHBDG_VT_QDKQDG_DUYET_TP',
-        BAN_HANH: 'XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_BANHANH',
-      },
-      LT: {
         XEM: 'XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_XEM',
         THEM: 'XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_THEM',
         XOA: 'XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_XOA',
-        DUYET_TP: 'XHDTQG_PTDG_TCKHBDG_LT_QDKQDG_DUYET_TP',
-        BAN_HANH: 'XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_BANHANH',
+        DUYET_TP: 'XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_DUYET_TP',
+        DUYET_LDCUC: 'XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_DUYET_LDCUC',
+      },
+      LT: {
+        XEM: 'XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_XEM',
+        THEM: 'XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_THEM',
+        XOA: 'XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_XOA',
+        DUYET_TP: 'XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_DUYET_TP',
+        DUYET_LDCUC: 'XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_DUYET_LDCUC',
       },
     };
     const permissions = this.loaiVthh === LOAI_HANG_DTQG.VAT_TU ? permissionMapping.VT : permissionMapping.LT;
@@ -149,19 +149,18 @@ export class QuyetDinhChaoGiaComponent extends Base2Component implements OnInit 
               [
                 this.STATUS.CHO_DUYET_TP,
                 this.STATUS.CHO_DUYET_LDC,
-                this.STATUS.CHO_DUYET_LDC,
-                this.STATUS.BAN_HANH,
+                this.STATUS.DA_DUYET_LDC
               ].includes(data.trangThai)) ||
             (!this.userService.isAccessPermisson(permissions.THEM) && [
                 this.STATUS.DU_THAO,
                 this.STATUS.TU_CHOI_TP,
                 this.STATUS.TU_CHOI_LDC,
-                this.STATUS.BAN_HANH
+                this.STATUS.DA_DUYET_LDC
               ].includes(data.trangThai) ||
               (data.trangThai === this.STATUS.CHO_DUYET_TP &&
                 !this.userService.isAccessPermisson(permissions.DUYET_TP)) ||
               (data.trangThai === this.STATUS.CHO_DUYET_LDC &&
-                !this.userService.isAccessPermisson(permissions.BAN_HANH))))
+                !this.userService.isAccessPermisson(permissions.DUYET_LDCUC))))
         );
       case 'SUA':
         return [
@@ -173,7 +172,7 @@ export class QuyetDinhChaoGiaComponent extends Base2Component implements OnInit 
         return (
           (this.userService.isAccessPermisson(permissions.DUYET_TP) &&
             data.trangThai === this.STATUS.CHO_DUYET_TP) ||
-          (this.userService.isAccessPermisson(permissions.BAN_HANH) &&
+          (this.userService.isAccessPermisson(permissions.DUYET_LDCUC) &&
             data.trangThai === this.STATUS.CHO_DUYET_LDC)
         );
       case 'XOA':

@@ -105,6 +105,21 @@ export class DanhSachHangDuTruTrongKhoNgoaiDanhMucComponent extends Base2Compone
 
   async timKiem() {
     await this.search();
+    console.log(this.dataTable,'dataTabledataTabledataTabledataTable');
+    // console.log(this.dataTable,'this.dataTablethis.dataTable');
+    // this.flatDataTable = this.dataTable.flatMap(s => {
+    //   if (s.xhXkDsHangDtqgDtl && s.xhXkDsHangDtqgDtl.length > 0) {
+    //     return s.xhXkDsHangDtqgDtl.map(s1 => {
+    //       delete s.tongHopDtl;
+    //       s.idVirtual = uuidv4();
+    //       s.header = s.maDanhSach + s.tenDanhSach;
+    //       s.soQdXhKdm = s.soQdXhKdm;
+    //       this.expandSetString.add(s.idVirtual);
+    //       return Object.assign(s1, s);
+    //     })
+    //   } else return s;
+    // });
+    // this.buildTableView();
   }
 
   async loadDsDonVi() {
@@ -160,18 +175,19 @@ export class DanhSachHangDuTruTrongKhoNgoaiDanhMucComponent extends Base2Compone
         this.expandSetString.add(idVirtual);
         return {
           idVirtual: idVirtual,
-          id: rowItem.id,
-          nam: rowItem.nam,
-          tenCuc: rowItem.tenCuc,
-          maDanhSach: rowItem.maDanhSach,
-          tenDanhSach: rowItem.tenDanhSach,
-          trangThai: rowItem.trangThai,
-          tenTrangThai: rowItem.tenTrangThai,
-          ngayTao: rowItem.ngayTao,
+          id: rowItem?.id,
+          soQdXhKdm: rowItem?.soQdXhKdm,
+          tenCuc: rowItem?.tenCuc,
+          maDanhSach: rowItem?.maDanhSach,
+          tenDanhSach: rowItem?.tenDanhSach,
+          trangThai: rowItem?.trangThai,
+          tenTrangThai: rowItem?.tenTrangThai,
+          ngayTao: rowItem?.ngayTao,
           childData: rs
         };
       }).value();
   }
+
 
   onExpandStringChange(id: string, checked: boolean) {
     if (checked) {
@@ -234,14 +250,14 @@ export class DanhSachHangDuTruTrongKhoNgoaiDanhMucComponent extends Base2Compone
       },
     });
   }
-
-  exportExcel() {
-    if (this.selectedItem) {
-      this.formData.patchValue({
-        maDanhSach: this.selectedItem.maDanhSach
-      });
-      this.exportData("danh-sach-hang-dtqg-theo-chi-dao-cua-chinh-phu.xlsx");
-    }
-  }
-
 }
+
+  // exportExcel() {
+  //   if (this.selectedItem) {
+  //     this.formData.patchValue({
+  //       maDanhSach: this.selectedItem.maDanhSach
+  //     });
+  //     this.exportData("danh-sach-hang-dtqg-theo-chi-dao-cua-chinh-phu.xlsx");
+  //   }
+  // }
+

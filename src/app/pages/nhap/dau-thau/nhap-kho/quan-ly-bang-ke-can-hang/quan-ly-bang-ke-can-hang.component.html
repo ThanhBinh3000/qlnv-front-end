@@ -103,8 +103,8 @@
                     <td></td>
                     <td colspan="6"></td>
                     <td class="bold">{{dataPhieu.soBangKe}}</td>
-                    <td>{{dataPhieu.phieuNhapKho.soPhieuNhapKho}}</td>
-                    <td>{{dataPhieu.phieuNhapKho.ngayTao | date: 'dd/MM/YYYY'}}</td> <!-- //Data fake -->
+                    <td>{{dataPhieu.phieuNhapKho?.soPhieuNhapKho}}</td>
+                    <td>{{dataPhieu.phieuNhapKho?.ngayTao | date: 'dd/MM/YYYY'}}</td> <!-- //Data fake -->
                     <td>{{dataPhieu.tenTrangThai}}</td>
                     <td>
                       <a *ngIf="hienThiXem(dataPhieu)"

@@ -22,7 +22,9 @@ import {
 import {
   DialogTableSelectionComponent
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
-import { HoSoKyThuatBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/HoSoKyThuatBdg.service';
+import {
+  HoSoKyThuatBdgService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/HoSoKyThuatBdg.service';
 import {PREVIEW} from "src/app/constants/fileType";
 import {
   BienBanLayMauBttService
@@ -113,7 +115,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
   viewTableHoSo: any[] = [];
   viewTableBienBan: any[] = [];
   bienBanRow: any = {};
-  templateName: string="Hồ sơ kỹ thuật";
+  templateName: string = "Hồ sơ kỹ thuật";
 
   constructor(
     httpClient: HttpClient,
@@ -162,6 +164,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
       tenNganKho: [],
       tenLoKho: [],
       canBoTaoHoSo: [],
+      canBoTaoHoSoNh: [],
       soBbKtNgoaiQuan: [],
       soBbKtVanHanh: [],
       soBbKtHskt: [],
@@ -173,6 +176,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
     try {
       await this.spinner.show();
       this.userInfo = this.userService.getUserLogin();
+      console.log(this.id)
       if (this.id) {
         await this.loadDetail(this.id);
       }
@@ -192,7 +196,6 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
       this.viewTableHoSo = [];
       this.radioData[0].disable = false;
       this.formData.value.xhHoSoKyThuatDtl.forEach(s => {
-        console.log(s.trangThai, 'trangthai')
         if (s.trangThai != STATUS.DA_KY) {
           this.radioData[0].disable = true;
         }
@@ -205,6 +208,12 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
           })
         }
       })
+    }
+    if (!this.formData.value.id) {
+      this.formData.patchValue({
+        trangThai: STATUS.DA_DUYET_LDC
+      })
+      await this.save(true);
     }
   }
 
@@ -232,11 +241,11 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
     }
   }
 
-  async save() {
+  async save(isHideMessage?: boolean) {
     try {
       this.formData.patchValue({type: 'BDG'});
       let body = this.formData.value;
-      let rs = await this.createUpdate(body);
+      let rs = await this.createUpdate(body, null, isHideMessage);
     } catch (e) {
       console.log(e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -430,15 +439,16 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
       },
     })
     modalQD.afterClose.subscribe(async (dataChose) => {
-      console.log(dataChose,'dataChose')
+      console.log(dataChose, 'dataChose')
       if (dataChose) {
         this.formData.patchValue({
           idBbLayMau: dataChose.id,
-          soBbLayMau: dataChose.soBienBan
+          soBbLayMau: dataChose.soBbLayMau
         });
       }
     });
   };
+
   async inBienBan(id, type, loai) {
     await this.hoSoKyThuatBdgService.preview({
       id: id,
