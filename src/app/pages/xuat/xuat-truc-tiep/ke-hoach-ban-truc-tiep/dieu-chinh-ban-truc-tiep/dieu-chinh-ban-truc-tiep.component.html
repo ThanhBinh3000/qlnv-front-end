@@ -93,8 +93,7 @@
             <nz-input-group>
               <nz-select nzAllowClear [(ngModel)]="filterTable.namKh"
                          (ngModelChange)="filterInTable('namKh',filterTable.namKh)">
-                <nz-option *ngFor="let p of listNam" [nzValue]="p.value"
-                           [nzLabel]="p.text"></nz-option>
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </nz-input-group>
           </th>

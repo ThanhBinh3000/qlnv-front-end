@@ -93,8 +93,7 @@
             <nz-input-group>
               <nz-select nzAllowClear [(ngModel)]="filterTable.namKh"
                          (ngModelChange)="filterInTable('namKh',filterTable.namKh)">
-                <nz-option *ngFor="let p of listNam" [nzValue]="p.value"
-                           [nzLabel]="p.text"></nz-option>
+                <nz-option *ngFor="let item of listNam" [nzValue]="item.value" [nzLabel]="item.text"></nz-option>
               </nz-select>
             </nz-input-group>
           </th>
@@ -119,8 +118,8 @@
           <th>
             <nz-input-group>
               <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder=""
-                              [(ngModel)]="filterTable.ngayMkho"
-                              (ngModelChange)="filterInTable('ngayMkho', convertDateToString(filterTable.ngayMkho))">
+                              [(ngModel)]="filterTable.tgianDkienDen"
+                              (ngModelChange)="filterInTable('tgianDkienDen', convertDateToString(filterTable.tgianDkienDen))">
               </nz-date-picker>
             </nz-input-group>
           </th>
@@ -139,8 +138,8 @@
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdKq"
-                     (input)="filterInTable('soQdKq',filterTable.soQdKq)" size="small"/>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.thanhTienDuocDuyet"
+                     (input)="filterInTable('thanhTienDuocDuyet',filterTable.thanhTienDuocDuyet)" size="small"/>
             </nz-input-group>
           </th>
           <th>
@@ -182,7 +181,7 @@
           <td class="text-center">
             <span *ngIf="data.slHdDaKy">{{ data.slHdDaKy}}</span>
           </td>
-          <td class="text-left">{{ data.ngayMkho | date: 'dd/MM/YYYY' }}</td>
+          <td class="text-left">{{ data.tgianDkienDen | date: 'dd/MM/YYYY' }}</td>
           <td class="text-left" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">{{ data.tenLoaiVthh }}</td>
           <td class="text-left">{{ data.tenCloaiVthh }}</td>
           <td class="text-right">{{ data.thanhTienDuocDuyet|number:globals.numberFormat:globals.locale}}</td>

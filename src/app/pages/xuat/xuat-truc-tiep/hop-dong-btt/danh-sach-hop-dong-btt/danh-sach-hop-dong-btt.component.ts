@@ -41,27 +41,26 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
     super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBttService);
     this.formData = this.fb.group({
       namKh: null,
-      soHd: null,
-      tenHd: null,
-      tenDviMua: null,
+      soHopDong: null,
+      tenHopDong: null,
+      tenBenMua: null,
       ngayPduyetTu: null,
       ngayPduyetDen: null,
       trangThai: null,
       loaiVthh: null,
-      maDvi: null,
-      maChiCuc: null,
     });
     this.filterTable = {
-      namKh: '',
-      soQdPd: '',
-      soQdKq: '',
-      ngayMkho: '',
-      loaiVthh: '',
-      tenLoaiVthh: '',
-      cloaiVthh: '',
-      tenCloaiVthh: '',
-      tenTrangThaiHd: '',
-      tenTrangThaiXh: '',
+      namKh: null,
+      soQdPd: null,
+      soQdKq: null,
+      slHdChuaKy: null,
+      slHdDaKy: null,
+      ngayKthuc: null,
+      tenLoaiVthh: null,
+      tenCloaiVthh: null,
+      tongGiaTriHdong: null,
+      tenTrangThaiHd: null,
+      tenTrangThaiXh: null,
     }
     this.listTrangThaiHd = [
       {
@@ -96,23 +95,17 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
   async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([
-        this.timKiem(),
-        this.search(),
-      ]);
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+        trangThai: STATUS.DA_DUYET_LDC
+      })
+      await this.search();
     } catch (e) {
       console.error('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
     }
-  }
-
-  async timKiem() {
-    this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
-      trangThai: STATUS.BAN_HANH
-    })
   }
 
   redirectDetail(id: number, boolean?: boolean) {

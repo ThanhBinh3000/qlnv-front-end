@@ -592,17 +592,17 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     const requiredFields = [
       "namKh",
       "tenDvi",
-      "maQhNs",
-      "ngayLapBienBan",
-      "tenLoaiVthh",
-      "tenCloaiVthh",
-      "donViTinh",
-      "ngayBatDauXuat",
-      "ngayKetThucXuat",
-      "nguyenNhan",
-      "kienNghi",
-      "ghiChu",
-      "tenThuKho",
+      // "maQhNs",
+      // "ngayLapBienBan",
+      // "tenLoaiVthh",
+      // "tenCloaiVthh",
+      // "donViTinh",
+      // "ngayBatDauXuat",
+      // "ngayKetThucXuat",
+      // "nguyenNhan",
+      // "kienNghi",
+      // "ghiChu",
+      // "tenThuKho",
     ];
     requiredFields.forEach(fieldName => {
       this.formData.controls[fieldName].setValidators([Validators.required]);
