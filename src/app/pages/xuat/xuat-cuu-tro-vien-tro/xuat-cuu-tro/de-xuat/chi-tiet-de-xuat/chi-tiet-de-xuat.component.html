@@ -90,7 +90,7 @@
             {{ formData.value.tenTrangThai }}
           </span>
           <!-- <span>Đề xuất cứu trợ, viện trợ</span> -->
-          <span>{{formData.value.maDvi>6? "Đề xuất cứu trợ" : "Phương án xuất cứu trợ, viện trợ"}} </span>
+          <span>{{formData.value.maDvi.length <=6 ? "Phương án xuất cứu trợ, viện trợ" : "Đề xuất cứu trợ" }} </span>
         </div>
       </div>
     </div>
