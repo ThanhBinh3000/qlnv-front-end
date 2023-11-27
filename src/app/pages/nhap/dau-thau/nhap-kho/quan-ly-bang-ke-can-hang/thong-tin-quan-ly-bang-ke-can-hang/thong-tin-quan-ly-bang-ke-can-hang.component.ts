@@ -161,7 +161,9 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
           await this.bindingDataQd(data.idQdGiaoNvNh);
           this.dataDdNhap = this.listDiaDiemNhap.filter(item => item.id == data.idDdiemGiaoNvNh)[0];
           this.bindingDataDdNhap(this.dataDdNhap);
-          this.bindingDataPhieuNhapKho(data.soPhieuNhapKho.split("/")[0]);
+          if (data.soPhieuNhapKho) {
+            this.bindingDataPhieuNhapKho(data.soPhieuNhapKho.split("/")[0]);
+          }
           this.dataTable = data.chiTiets;
         }
       }
