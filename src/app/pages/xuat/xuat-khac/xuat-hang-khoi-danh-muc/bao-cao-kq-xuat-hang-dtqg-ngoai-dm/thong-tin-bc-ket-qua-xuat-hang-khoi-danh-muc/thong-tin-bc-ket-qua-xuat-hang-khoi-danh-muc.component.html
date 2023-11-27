@@ -15,7 +15,7 @@
           <span>Quay lại</span>
         </button>
         <button
-          *ngIf='this.userService.isCuc() && isDisabled() '
+          *ngIf='this.userService.isCuc() && isDisabled()  && idInput > 0'
           class='btn btn-sub xanh-nhat mr-2' (click)='pheDuyet()'>
           <i class='icon htvbdh_tcdt_pheduyet'></i>
           <span>Hoàn thành</span>

@@ -215,8 +215,6 @@ export class ThongTinBcKetQuaXuatHangKhoiDanhMucComponent extends Base2Component
       body.fileDinhKems = this.fileDinhKems;
     }
     body.xhXkThXuatHangKdmDtl = this.children && this.children.length > 0 ? this.conVertTreeToList(this.children) : [];
-    console.log(body, 'bodybodybody');
-    return;
     let data = await this.createUpdate(body);
     if (data) {
       this.idInput = data.id;
