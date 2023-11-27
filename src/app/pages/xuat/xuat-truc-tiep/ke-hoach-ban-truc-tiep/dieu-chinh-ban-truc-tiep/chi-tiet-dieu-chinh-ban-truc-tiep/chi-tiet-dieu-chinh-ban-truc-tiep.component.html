@@ -86,8 +86,7 @@
                 <nz-form-control nz-col [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfter="{{maConVan}}">
                     <nz-input-number formControlName="soCongVan" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-                                     [nzStep]="1"
-                                     [nzSize]="'small'" [nzDisabled]="isView">
+                                     [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isView">
                     </nz-input-number>
                   </nz-input-group>
                 </nz-form-control>
@@ -123,7 +122,7 @@
             <div nz-col [nzSpan]="3">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Lần điều chỉnh</nz-form-label>
-                <nz-form-control nz-col [nzErrorTip]="error">
+                <nz-form-control nz-col>
                   <input nz-input formControlName="lanDieuChinh" readonly/>
                 </nz-form-control>
               </nz-form-item>
@@ -234,7 +233,7 @@
           <div nz-row [nzGutter]="24">
             <div nz-col [nzSpan]="4">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Loại hình xuất</nz-form-label>
                 <nz-form-control nz-col>
                   <nz-input-group>
                     <input nz-input formControlName="tenLoaiHinhNx" readonly/>
@@ -244,7 +243,7 @@
             </div>
             <div nz-col [nzSpan]="4">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Kiểu xuất</nz-form-label>
                 <nz-form-control nz-col>
                   <nz-input-group>
                     <input nz-input formControlName="tenKieuNx" readonly/>
@@ -302,7 +301,7 @@
               <th class="text-left"> Ngày ký</th>
               <th class="text-left"> Trích yếu</th>
               <th class="text-center">Số lượng
-                {{loaiVthh === LOAI_HANG_DTQG.VAT_TU ? '' : '(kg)'}}
+                {{loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? '' : '(kg)'}}
               </th>
               <th class="text-center"> Tổng tiền không gồm thuế (đồng)</th>
             </tr>

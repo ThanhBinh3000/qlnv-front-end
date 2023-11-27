@@ -86,7 +86,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       tenLoaiHinhNx: [''],
       kieuNx: [''],
       tenKieuNx: [''],
-      namKh: [],
       type: [''],
     })
   }
@@ -120,8 +119,10 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     }
   }
 
-  async onChangeNamKh() {
-    this.formData.get('namKh').setValue(this.formData.get('nam').value);
+  async onChangeNamKh(event) {
+    this.formData.patchValue({
+      nam: event
+    })
   }
 
   async initForm() {
@@ -207,7 +208,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     const {soQdPd, children} = data;
     this.formData.patchValue({
       soQdPd: soQdPd?.split('/')[0] || null,
-      namKh: this.formData.value.nam,
     });
     this.canCuPhapLy = data.canCuPhapLy;
     this.fileDinhKem = data.fileDinhKem;
@@ -283,12 +283,12 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       const data = res.data;
       const soLuongDviTsan = data.children.reduce((total, item) => total + item.slDviTsan, 0);
       this.formData.patchValue({
+        nam: data.namKh,
         cloaiVthh: data.cloaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
         loaiVthh: data.loaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
         slDviTsan: soLuongDviTsan,
-        namKh: this.formData.value.nam,
         idThHdr: data.id,
         phanLoai: 'TH',
         idTrHdr: null,
@@ -321,8 +321,8 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   }
 
   async getDataChiTieu() {
-    const namKhValue = +this.formData.get('namKh').value;
-    const res = await this.chiTieuKeHoachNamCapTongCucService.canCuCucQd(namKhValue);
+    const namValue = +this.formData.get('nam').value;
+    const res = await this.chiTieuKeHoachNamCapTongCucService.canCuCucQd(namValue);
     if (res.msg !== MESSAGE.SUCCESS || !res.data) {
       this.formData.patchValue({soQdCc: null,});
       return;
@@ -388,6 +388,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       const data = res.data;
       data.idDxHdr = data.id;
       this.formData.patchValue({
+        nam: data.namKh,
         cloaiVthh: data.cloaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
         loaiVthh: data.loaiVthh,
@@ -408,7 +409,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
         tenLoaiHinhNx: data.tenLoaiHinhNx,
         kieuNx: data.kieuNx,
         tenKieuNx: data.tenKieuNx,
-        namKh: this.formData.value.nam,
         idTrHdr: data.id,
         soTrHdr: data.soDxuat,
         idThHdr: null,

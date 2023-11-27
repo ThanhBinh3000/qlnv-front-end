@@ -28,8 +28,6 @@ import {
   ChaoGiaMuaLeUyQuyenService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service";
 import _ from 'lodash';
-import {PREVIEW} from "../../../../../../constants/fileType";
-import printJS from "print-js";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
@@ -241,9 +239,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         ? [tgianGiaoNhanTu, tgianGiaoNhanDen] : [],
     });
     this.dataTable = cloneDeep(this.userService.isChiCuc() ? xhHopDongBttDviList : children);
-    if (!this.userService.isChiCuc()) {
-      await this.maDviTsanCuc(tenBenMua);
-    }
     this.dataTablePhuLuc = phuLuc || [];
     this.objHopDongHdr = data;
   }
@@ -297,7 +292,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       const body = {
         loaiVthh: this.loaiVthh,
         namKh: this.formData.value.namHd,
-        trangThai: STATUS.BAN_HANH,
+        trangThai: STATUS.DA_DUYET_LDC,
       };
       const res = await this.qdPdKetQuaBttService.search(body);
       if (res.msg === MESSAGE.SUCCESS) {
@@ -339,16 +334,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         return;
       }
       const data = res.data;
-      this.dataChildren = data.children.map(item => {
-        item.children.forEach(child => {
-          child.children = child.children.filter(s => s.luaChon);
-        });
-        return item;
-      });
-      await Promise.all([
-        this.loadDanhDachHopDong(data),
-        this.setListDviTsanCuc(this.dataChildren),
-      ]);
+      await this.loadDanhDachHopDong(data);
       this.formData.patchValue({
         namHd: data.namKh,
         loaiHinhNx: data.loaiHinhNx,
@@ -370,16 +356,19 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         slXuatBanQdPd: data.tongSoLuong || 0,
         donViTinh: this.listHangHoaAll.find(s => s.ma == data.loaiVthh)?.maDviTinh,
       });
-      const childrenFlat = data.children.flatMap(item => item.children.flatMap(child => child.children.map(grandchild => grandchild)));
-      this.listTccnChaoGia = childrenFlat.filter(s => s.luaChon);
+      this.listTccnChaoGia = data.children.flatMap(item => item.children.flatMap(child => child.children.map(grandchild => grandchild))).filter(info => info.luaChon);
       const filteredItems = this.loadDanhSachHdong.filter(item => item.idQdKq === data.id && item.trangThai === STATUS.DA_KY);
-      const slXuatBanKyHdong = filteredItems.reduce((acc, item) => acc + item.soLuong, 0);
-      const tonSl = data.tongSoLuong || 0
-      const slXuatBanChuaKyHdong = tonSl - slXuatBanKyHdong;
       this.formData.patchValue({
-        slXuatBanKyHdong: slXuatBanKyHdong,
-        slXuatBanChuaKyHdong: slXuatBanChuaKyHdong,
+        slXuatBanKyHdong: filteredItems.reduce((acc, item) => acc + item.soLuong, 0),
+        slXuatBanChuaKyHdong: data.tongSoLuong - filteredItems.reduce((acc, item) => acc + item.soLuong, 0),
       });
+      this.dataChildren = data.children.map(item => {
+        item.children.forEach(child => {
+          child.children = child.children.filter(s => s.luaChon);
+        });
+        return item;
+      });
+      await this.setListDviTsanCuc(this.dataChildren);
     } catch (e) {
       console.error('Error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -417,7 +406,15 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       });
       modalQD.afterClose.subscribe(async (data) => {
         if (data) {
-          await this.onChangeToChucCaNhan(data.id);
+          const dataThongTin = this.listTccnChaoGia.find(item => item.id === data.id);
+          if (dataThongTin) {
+            this.formData.patchValue({
+              idBenMua: data.id,
+              tenBenMua: data.tochucCanhan,
+              diaChiBenMua: data.diaDiemChaoGia,
+              mstBenMua: data.mst,
+            });
+          }
         }
       });
     } catch (e) {
@@ -427,68 +424,47 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     }
   }
 
-  async onChangeToChucCaNhan(id) {
-    if (!id) {
-      return;
-    }
-    try {
-      await this.spinner.show();
-      const res = await this.qdPdKetQuaBttService.getToChucDetail(id);
-      if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-        return;
-      }
-      const data = res.data;
-      await this.maDviTsanCuc(data.tochucCanhan);
-      this.formData.patchValue({
-        idBenMua: data.id,
-        tenBenMua: data.tochucCanhan,
-        diaChiBenMua: data.diaDiemChaoGia,
-        mstBenMua: data.mst,
-      });
-    } catch (e) {
-      console.log('error: ', e);
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    } finally {
-      await this.spinner.hide();
-    }
+  async setListDviTsanCuc(inputTable) {
+    this.listDviTsan = [];
+    inputTable.forEach((element) => {
+      const dataGroup = _.chain(element.children).groupBy('maDviTsan').map((value, key) => ({
+        maDviTsan: key,
+        children: value,
+      })).filter((x) => x.maDviTsan).map((childs) => ({
+        maDvi: element.maDvi,
+        tenDvi: element.tenDvi,
+        diaChi: element.diaChi,
+        ...childs
+      })).value();
+
+      this.listDviTsan.push(...dataGroup);
+      // } else {
+      //   const listDanhSachHopDong = this.loadDanhSachHdong.filter(item => item.idQdKq === this.formData.value.idQdKq);
+      //   const filteredDataGroup = dataGroup.filter(item => {
+      //     return !listDanhSachHopDong.some(grandchild =>
+      //       grandchild.maDviTsan.split(',').includes(item.maDviTsan) &&
+      //       item.children.some(child => child.children.filter(s => s.tochucCanhan === grandchild.tenBenMua))
+      //     );
+      //   });
+      //   this.listDviTsan.push(...filteredDataGroup);
+      // }
+    })
   }
 
-  async ChangeToChucCaNhan(event) {
+  async maDviTsanCuc(event) {
     if (this.flagInit && event && event !== this.formData.value.tenBenMua) {
       this.formData.patchValue({
         listMaDviTsan: null,
       });
+      this.dataTable = [];
     }
-  }
-
-  async setListDviTsanCuc(inputTable) {
-    this.listDviTsan = [];
-    inputTable.forEach((item) => {
-      item.children.forEach((element) => {
-        const dataGroup = _.chain(element.children).groupBy('tochucCanhan').map((value, key) => ({
-          tochucCanhan: key,
-          toChuc: value,
-        })).value();
-        dataGroup.forEach((child) => {
-          child.tenDvi = item.tenDvi;
-          child.maDvi = item.maDvi;
-          child.diaChi = item.diaChi;
-          child.maDviTsan = element.maDviTsan;
-          child.children = item.children.filter((s) => s.maDviTsan === element.maDviTsan);
-        });
-        const filteredDataGroup = dataGroup.filter((s1) => s1.maDviTsan);
-        this.listDviTsan.push(...filteredDataGroup);
-      });
-    });
-  }
-
-  async maDviTsanCuc(event) {
-    this.listDviTsanFilter = this.idHopDong ? this.listDviTsan.filter(item => item.tochucCanhan === event) : this.listDviTsan.filter(item => {
-      return item.tochucCanhan === event && !this.loadDanhSachHdong.some(child =>
-        child.maDviTsan.includes(child.maDviTsan) &&
-        child.tenBenMua.includes(child.tochucCanhan)
-      );
-    });
+    this.listDviTsanFilter = this.listDviTsan.map(grandchild => {
+      if (grandchild.children && grandchild.children.length > 0) {
+        const filteredChildren = grandchild.children.filter(item => item.children.some(child => child.tochucCanhan === event));
+        return filteredChildren.length > 0 ? {...grandchild, children: filteredChildren} : null;
+      }
+      return null;
+    }).filter(item => item !== null);
   }
 
   async selectMaDviTsanCuc() {
@@ -500,7 +476,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         const existingItem = this.dataTable.find(child => child.maDvi === item.maDvi);
         if (existingItem) {
           existingItem.children.push(...item.children);
-          existingItem.toChuc.push(...item.toChuc);
         } else {
           this.dataTable.push(item);
         }
@@ -524,23 +499,22 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         thanhTien: this.dataTable.reduce((prev, cur) => prev + cur.thanhTien, 0),
       });
     } else {
-      let thanhTien = 0;
-      for (const item of this.dataTable) {
-        for (const child of item.children) {
-          const toChucItem = item.toChuc.find(s => s.idDviDtl === child.id);
-          if (toChucItem) {
-            child.soLuongKyHd = toChucItem.soLuong;
-            child.donGiaKyHd = toChucItem.donGia;
-            child.thanhTien = child.soLuongKyHd * child.donGiaKyHd;
-            thanhTien += child.thanhTien;
+      this.dataTable.forEach((item) => {
+        item.children.forEach(child => {
+          const thongTin = child.children.find((info) => info.idDviDtl === child.id);
+          if (thongTin) {
+            child.soLuongKyHd = thongTin.soLuong;
+            child.donGiaKyHd = thongTin.donGia;
+            child.thanhTien = thongTin.soLuong * thongTin.donGia;
           }
-        }
+        })
         item.soLuongXuatBan = item.children.reduce((prev, cur) => prev + cur.soLuongDeXuat, 0);
         item.soLuongKyHopDong = item.children.reduce((prev, cur) => prev + cur.soLuongKyHd, 0);
-      }
+        item.thanhTien = item.children.reduce((prev, cur) => prev + cur.thanhTien, 0);
+      });
       this.formData.patchValue({
         soLuong: this.dataTable.reduce((prev, cur) => prev + cur.soLuongKyHopDong, 0),
-        thanhTien: thanhTien,
+        thanhTien: this.dataTable.reduce((prev, cur) => prev + cur.thanhTien, 0),
       });
     }
     await this.loadDiaDiemKho();
@@ -635,7 +609,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         idQdNv: data.idQdNv,
         soQdNv: data.soQdNv,
         ngayKyUyQuyen: data.ngayNhanCgia,
-        thoiHanXuatKho: data.ngayMkho,
+        thoiHanXuatKho: data.tgianDkienDen,
         loaiHinhNx: data.loaiHinhNx,
         tenLoaiHinhNx: data.tenLoaiHinhNx,
         kieuNx: data.kieuNx,
@@ -688,6 +662,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   }
 
   setListMaDviTsanChiCuc(inputTable) {
+    console.log(inputTable, 999)
     this.listDviTsan = [];
     inputTable.forEach((item) => {
       let dataGroup = _.chain(item.children).groupBy('maDviTsan').map((value, key) => ({
@@ -703,7 +678,8 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         }
       })
     })
-    this.listAllDviTsan = this.idHopDong ? this.listDviTsan : this.listDviTsan.filter(item => !this.loadDanhSachHdong.some(child => child.maDviTsan.includes(item.maDviTsan)));
+    const listDanhSachHopDong = this.loadDanhSachHdong.filter(item => item.maDvi === this.userInfo.MA_DVI && item.idQdNv === this.formData.value.idQdNv);
+    this.listAllDviTsan = this.idHopDong ? this.listDviTsan : this.listDviTsan.filter(item => !listDanhSachHopDong.some(child => child.maDviTsan.includes(item.maDviTsan)));
   }
 
   async selectMaDviTsanChiCuc() {
@@ -791,30 +767,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       return 0;
     }
     return this.dataTable.reduce((sum, item) => sum + (item[column] || 0), 0);
-  }
-
-  async preview(id) {
-    await this.hopDongBttService.preview({
-      tenBaoCao: 'Hợp đồng bán trực tiếp',
-      id: id
-    }).then(async res => {
-      if (res.data) {
-        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
-        this.printSrc = res.data.pdfSrc;
-        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
-        this.showDlgPreview = true;
-      } else {
-        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
-      }
-    });
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
-  }
-
-  printPreview() {
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 
   setValidForm() {
