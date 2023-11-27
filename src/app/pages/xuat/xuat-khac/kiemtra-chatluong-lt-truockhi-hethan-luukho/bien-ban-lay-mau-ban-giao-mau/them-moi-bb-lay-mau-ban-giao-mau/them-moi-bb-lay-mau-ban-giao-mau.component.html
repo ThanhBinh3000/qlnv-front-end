@@ -14,7 +14,7 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
-        <button type="button" class="btn btn-sub mr-2"
+        <button type="button" class='btn btn-sub do mr-2'
                 *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_BBLMBGM_IN')"
                 (click)="xemTruoc(idInput,templateName)">
           <i class="icon htvbdh_totrinh"></i>
@@ -428,12 +428,12 @@
       <i class='icon htvbdh_printer'></i>
       In
     </button>
-    <button nz-button (click)='downloadPdf()'
+    <button nz-button (click)='downloadPdf(templateName)'
             class='modal__button--save'>
       <i class='icon htvbdh_file-pdf'></i>
       Xuất .pdf
     </button>
-    <button nz-button (click)='downloadWord()'
+    <button nz-button (click)='downloadWord(templateName)'
             class='modal__button--save'>
       <i class='icon htvbdh_file-word'></i>
       Xuất .docx

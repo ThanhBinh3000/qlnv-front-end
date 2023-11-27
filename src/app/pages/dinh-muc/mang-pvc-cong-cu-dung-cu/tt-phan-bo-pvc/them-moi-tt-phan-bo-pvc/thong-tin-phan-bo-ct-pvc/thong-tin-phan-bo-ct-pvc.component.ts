@@ -106,7 +106,7 @@ export class ThongTinPhanBoCtPvcComponent  implements OnInit {
     } else if (!item.soLuong) {
       msgRequired = "Số lượng không được để trống";
     } else {
-      let dataCheck = this.listData.find(it => it.maDvi == item.maDvi );
+      let dataCheck = this.listData.find(it => it.maDvi == item.maDvi && it.maCcdc == item.maCcdc);
       if (this.type == 'them') {
         if (dataCheck)
           msgRequired = "Chi cục này đã được phân bổ hàng hóa!";

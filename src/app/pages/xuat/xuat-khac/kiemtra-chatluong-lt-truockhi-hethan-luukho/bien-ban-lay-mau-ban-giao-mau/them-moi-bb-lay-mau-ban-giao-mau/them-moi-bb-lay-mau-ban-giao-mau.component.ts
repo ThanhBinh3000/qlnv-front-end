@@ -26,6 +26,7 @@ import {
 import {PREVIEW} from '../../../../../../constants/fileType';
 import {cloneDeep} from 'lodash';
 import {KhCnQuyChuanKyThuat} from "../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
+import {MangLuoiKhoService} from "../../../../../../services/qlnv-kho/mangLuoiKho.service";
 
 @Component({
   selector: 'app-xk-them-moi-bb-lay-mau-ban-giao-mau',
@@ -58,7 +59,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
   fileNiemPhong: any = [];
   bienBan: any[] = [];
   loaiHhXuatKhac = LOAI_HH_XUAT_KHAC;
-  templateName = 'xuat_khac_ktcl_luong_thuc_bien_ban_lay_mau';
+  templateName = 'Biên bản lấy mẫu bàn giao mẫu';
   rowItem: BbLayMauDtl = new BbLayMauDtl;
   dataEdit: { [key: string]: { edit: boolean; data: BbLayMauDtl } } = {};
   hasError: boolean = false;
@@ -71,6 +72,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
     modal: NzModalService,
     private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
     private danhMucService: DanhMucService,
+    private mangLuoiKhoService: MangLuoiKhoService,
     private tongHopDanhSachHangDTQGService: TongHopDanhSachHangDTQGService,
     private bienBanLayMauLuongThucHangDTQGService: BienBanLayMauLuongThucHangDTQGService
   ) {
@@ -119,6 +121,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
         tenNhaKho: [],
         tenNganKho: [],
         tenLoKho: [],
+        thuKho: [],
         lanhDaoChiCuc: [],
         bbLayMauDtl: [new Array()],
         fileDinhKems: [new Array<FileDinhKem>()],
@@ -254,8 +257,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
       idTongHop: data.id,
       tenDanhSach: data.tenDanhSach,
       maDanhSach: data.maDanhSach,
-
-
+      ngayTongHop: data.ngayTongHop,
     });
     if (data.tongHopDtl) {
       this.listDiaDiemNhap = data.tongHopDtl;
@@ -281,7 +283,6 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
       }),
     ];
     this.listDiaDiemNhap = listDd;
-    console.log(this.listDiaDiemNhap, "this.listDiaDiemNhap")
   }
 
   openDialogDdiemNhapHang() {
@@ -315,9 +316,29 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
         tenLoaiVthh: data.tenLoaiVthh,
         cloaiVthh: data.cloaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
+        slTon: data.slTon,
+        slHetHan: data.slHetHan,
+        donViTinh: data.donViTinh,
+        thoiHanLk: data.thoiHanLk,
       });
-      await this.loadPhuongPhapLayMau(data.cloaiVthh);
-      await this.loadChiTieuCl(data.cloaiVthh);
+      this.loadPhuongPhapLayMau(data.cloaiVthh);
+      this.loadChiTieuCl(data.cloaiVthh);
+      this.tenThuKho(data.maDiaDiem);
+    }
+  }
+  async tenThuKho(event) {
+    let body = {
+      maDvi: event,
+      capDvi: (event?.length / 2 - 1),
+    };
+    const detail = await this.mangLuoiKhoService.getDetailByMa(body);
+    if (detail.statusCode == 0) {
+      const detailThuKho = detail.data.object.detailThuKho;
+      if (detailThuKho) {
+        this.formData.patchValue({
+          thuKho: detailThuKho.hoTen,
+        });
+      }
     }
   }
 
@@ -457,13 +478,6 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
     this.spinner.hide();
   }
 
-  downloadPdf() {
-    saveAs(this.pdfSrc, this.templateName + ".pdf");
-  }
-
-  downloadWord() {
-    saveAs(this.wordSrc, this.templateName + ".docx");
-  }
 
   themMoiItem1() {
 
