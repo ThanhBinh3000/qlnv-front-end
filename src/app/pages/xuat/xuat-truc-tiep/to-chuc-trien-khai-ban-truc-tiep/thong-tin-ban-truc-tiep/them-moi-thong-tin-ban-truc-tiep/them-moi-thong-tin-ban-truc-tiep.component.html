@@ -5,7 +5,7 @@
       <span> Quay lại </span>
     </button>
     <button *ngIf="idDviDtl && formData.value.pthucBanTrucTiep === TRUC_TIEP.CHAO_GIA"
-            type="button" class="btn btn-sub do"
+            type="button" class="btn btn-sub"
             (click)="xemTruoc(idInput, 'Thông tin bán trực tiếp chào giá')">
       <i class="icon htvbdh_totrinh"></i>
       <span> Xem trước </span>
@@ -49,9 +49,9 @@
             <div nz-col [nzSpan]="24">
               <nz-form-control nz-col [nzErrorTip]="error">
                 <nz-radio-group formControlName="pthucBanTrucTiep" [nzDisabled]="isView">
-                  <label nz-radio [nzValue]="TRUC_TIEP.CHAO_GIA"> Chào giá </label>
-                  <label nz-radio [nzValue]="TRUC_TIEP.UY_QUYEN"> Ủy quyền </label>
-                  <label nz-radio [nzValue]="TRUC_TIEP.BAN_LE"> Bán lẻ </label>
+                  <label nz-radio [nzValue]="TRUC_TIEP.CHAO_GIA"> Chào giá</label>
+                  <label nz-radio [nzValue]="TRUC_TIEP.UY_QUYEN"> Ủy quyền</label>
+                  <label nz-radio [nzValue]="TRUC_TIEP.BAN_LE"> Bán lẻ</label>
                 </nz-radio-group>
               </nz-form-control>
             </div>
@@ -59,7 +59,7 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Số QĐ phê duyệt/điều chỉnh KH bán trực tiếp
                 </nz-form-label>
-                <nz-form-control nz-col>
+                <nz-form-control nz-col [nzErrorTip]="error">
                 <span *ngIf="!this.formData.value.soQdDc">
                       <input nz-input formControlName="soQdPd" readonly/>
                 </span>
@@ -77,25 +77,6 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="6" *ngIf="formData.value.pthucBanTrucTiep !== TRUC_TIEP.CHAO_GIA">
-              <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Thời hạn bán</nz-form-label>
-                <nz-form-control nz-col [nzErrorTip]="error">
-                  <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="thoiHanBan" [nzDisabled]="isView">
-                  </nz-date-picker>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="6" *ngIf="formData.value.pthucBanTrucTiep !== TRUC_TIEP.CHAO_GIA">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
-                <nz-form-control nz-col>
-                  <nz-input-group nzAddOnAfterIcon="folder-open">
-                    <input nz-input formControlName="tenLoaiVthh" readonly/>
-                  </nz-input-group>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
             <div nz-col [nzSpan]="6" *ngIf="formData.value.pthucBanTrucTiep === TRUC_TIEP.CHAO_GIA">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Địa điểm chào giá</nz-form-label>
@@ -106,40 +87,6 @@
             </div>
             <div nz-col [nzSpan]=" formData.value.pthucBanTrucTiep === TRUC_TIEP.CHAO_GIA ? 3 : 6">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
-                <nz-form-control nz-col>
-                  <input nz-input formControlName="tenLoaiHinhNx" readonly/>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]=" formData.value.pthucBanTrucTiep === TRUC_TIEP.CHAO_GIA ? 3 : 6">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất</nz-form-label>
-                <nz-form-control nz-col>
-                  <input nz-input formControlName="tenKieuNx" readonly/>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="6">
-              <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Thời gian mở cửa kho bán trực tiếp</nz-form-label>
-                <nz-form-control nz-col [nzErrorTip]="error">
-                  <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayMkho" [nzDisabled]="isView">
-                  </nz-date-picker>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="6">
-              <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Thời hạn bán trực tiếp</nz-form-label>
-                <nz-form-control nz-col [nzErrorTip]="error">
-                  <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayKthuc" [nzDisabled]="isView">
-                  </nz-date-picker>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col [nzSpan]="3" *ngIf="formData.value.pthucBanTrucTiep === TRUC_TIEP.CHAO_GIA">
-              <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
                 <nz-form-control nz-col>
                   <nz-input-group nzAddOnAfterIcon="folder-open">
@@ -148,7 +95,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="3" *ngIf="formData.value.pthucBanTrucTiep === TRUC_TIEP.CHAO_GIA">
+            <div nz-col [nzSpan]=" formData.value.pthucBanTrucTiep === TRUC_TIEP.CHAO_GIA ? 3 : 6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
                 <nz-form-control nz-col>
@@ -166,21 +113,46 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="24" *ngIf="formData.value.pthucBanTrucTiep === TRUC_TIEP.UY_QUYEN">
+            <div nz-col [nzSpan]=" formData.value.pthucBanTrucTiep === TRUC_TIEP.CHAO_GIA ? 3 : 6">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> File đính kèm QĐ ủy quyền (nếu có)
-                </nz-form-label>
-                <div class="list-file">
-                  <file-list [data]="fileUyQuyen" [isCanCuPL]="true" [isViewDetail]="isView"></file-list>
-                </div>
+                <nz-form-label [nzNoColon]="true"> Loại hình xuất</nz-form-label>
+                <nz-form-control nz-col>
+                  <input nz-input formControlName="tenLoaiHinhNx" readonly/>
+                </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="24" *ngIf="formData.value.pthucBanTrucTiep === TRUC_TIEP.BAN_LE">
+            <div nz-col [nzSpan]=" formData.value.pthucBanTrucTiep === TRUC_TIEP.CHAO_GIA ? 3 : 6">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true">File đính kèm QĐ giao chi cục bán lẻ (nếu có)
-                </nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Kiểu xuất</nz-form-label>
+                <nz-form-control nz-col>
+                  <input nz-input formControlName="tenKieuNx" readonly/>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true"> Thời gian mở cửa kho bán trực tiếp</nz-form-label>
+                <nz-form-control nz-col [nzErrorTip]="error">
+                  <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="tgianDkienTu" nzDisabled>
+                  </nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true"> Thời hạn bán trực tiếp</nz-form-label>
+                <nz-form-control nz-col [nzErrorTip]="error">
+                  <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="tgianDkienDen" nzDisabled>
+                  </nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="24" *ngIf="formData.value.pthucBanTrucTiep !== TRUC_TIEP.CHAO_GIA">
+              <nz-form-item>
+                <nz-form-label
+                  [nzNoColon]="true"> {{formData.value.pthucBanTrucTiep === TRUC_TIEP.UY_QUYEN ? "File đính kèm QĐ ủy quyền (nếu có)" : "File đính kèm QĐ giao Chi cục bán lẻ (nếu có)"}} </nz-form-label>
                 <div class="list-file">
-                  <file-list [data]="fileBanLe" [isCanCuPL]="true" [isViewDetail]="isView"></file-list>
+                  <file-list [data]="fileDinhKem" [isCanCuPL]="true" [isViewDetail]="isView"></file-list>
                 </div>
               </nz-form-item>
             </div>

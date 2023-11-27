@@ -15,6 +15,7 @@ import {
   ChaoGiaMuaLeUyQuyenService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import {PREVIEW} from "../../../../../../constants/fileType";
 
 @Component({
   selector: 'app-quan-ly-hop-dong-btt',
@@ -152,7 +153,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
         tenCloaiVthh: data.tenCloaiVthh,
         tenLoaiHinhNx: data.tenLoaiHinhNx,
         tenKieuNx: data.tenKieuNx,
-        tongSlXuatBanQdKh: data.tongSoLuong,
+        tongSlXuatBanQdKh: data.children.find(item => item.maDvi === this.userInfo.MA_DVI).soLuongChiCuc,
         tongGiaTriHdong: data.thanhTienDuocDuyet,
         donViTinh: data.donViTinh,
         trangThaiHd: data.trangThaiHd,
@@ -163,7 +164,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
       this.formData.patchValue({tenDvi: dataChildren.tenDvi})
       const filteredItems = this.loadDanhSachHdongDaKy.filter(item => item.idChaoGia === data.id);
       const tongSlDaKyHdong = filteredItems.reduce((acc, item) => acc + item.soLuong, 0);
-      const tongSlChuaKyHdong = data.tongSoLuong - tongSlDaKyHdong;
+      const tongSlChuaKyHdong = this.formData.value.tongSlXuatBanQdKh - tongSlDaKyHdong;
       this.formData.patchValue({
         tongSlDaKyHdong: tongSlDaKyHdong,
         tongSlChuaKyHdong: tongSlChuaKyHdong,
@@ -351,5 +352,21 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
   closeModal() {
     this.idQdNv = null;
     this.isViewQdNv = false;
+  }
+
+  async xemTruoc(id) {
+    await this.hopDongBttService.preview({
+      tenBaoCao: this.userService.isChiCuc() ? 'Hợp đồng bán trực tiếp cấp Chi cục.docx' : 'Hợp đồng bán trực tiếp cấp Cục.docx',
+      id: id
+    }).then(async res => {
+      if (res.data) {
+        this.printSrc = res.data.pdfSrc;
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+      }
+    });
   }
 }
