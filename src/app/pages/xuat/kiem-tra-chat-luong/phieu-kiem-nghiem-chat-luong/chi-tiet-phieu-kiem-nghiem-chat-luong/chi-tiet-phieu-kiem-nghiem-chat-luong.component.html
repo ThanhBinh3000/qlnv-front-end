@@ -386,9 +386,8 @@
     <app-template-error #error [control]="control"></app-template-error>
   </ng-template>
 
-  <nz-collapse>
-    <nz-collapse-panel
-      [nzHeader]="loaiVthh === '02'? 'Kết quả đánh giá cảm quan':'Kết quả đánh giá cảm quan (Về màu sắc, mùi vị, tạp chất, đa bóng, sinh vật hại)'"
+  <nz-collapse *ngIf="loaiVthh !== '02'">
+    <nz-collapse-panel nzHeader="Kết quả đánh giá cảm quan (Về màu sắc, mùi vị, tạp chất, đa bóng, sinh vật hại)"
       nzActive="true">
       <form nzLayout="vertical" nz-form [formGroup]="formData">
         <div nz-col [nzSpan]="24">
