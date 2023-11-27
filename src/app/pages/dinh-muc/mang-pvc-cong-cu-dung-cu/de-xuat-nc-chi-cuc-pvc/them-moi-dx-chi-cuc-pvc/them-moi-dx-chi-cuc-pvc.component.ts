@@ -13,6 +13,9 @@ import { DanhMucCongCuDungCuService } from '../../../../../services/danh-muc-con
 import { DxChiCucPvcService } from '../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/dx-chi-cuc-pvc.service';
 import { AMOUNT, AMOUNT_ONE_DECIMAL, AMOUNT_TWO_DECIMAL } from '../../../../../Utility/utils';
 import { ChiTieuKeHoachNamCapTongCucService } from '../../../../../services/chiTieuKeHoachNamCapTongCuc.service';
+import {
+  HienTrangMayMocService
+} from "../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/hien-trang-may-moc.service";
 
 @Component({
   selector: 'app-them-moi-dx-chi-cuc-pvc',
@@ -38,6 +41,7 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
     private dxChiCucService: DxChiCucPvcService,
     private danhMucCongCuDungCuService: DanhMucCongCuDungCuService,
     private ctieuKhService: ChiTieuKeHoachNamCapTongCucService,
+    private hienTrangMayMocService: HienTrangMayMocService
   ) {
     super(httpClient, storageService, notification, spinner, modal, dxChiCucService);
     super.ngOnInit();
@@ -112,6 +116,23 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
     let result = this.listCcdc.filter(item => item.maCcdc == event);
     if (result && result.length > 0) {
       let itemQdGiaoChiTieuChiCuc = this.qdGiaoChiTieu.khLuongThuc.find(it => it.maDonVi === this.userInfo.MA_DVI);
+      let body ={
+        maCcdc: result[0].maCcdc,
+        namKeHoach: this.formData.value.namKeHoach,
+        maDvi: this.userInfo.MA_DVI,
+        paggingReq: {limit: 999, page: 0 }
+      }
+      let res = await this.hienTrangMayMocService.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data.content;
+        if(data && data.length > 0){
+          this.rowItem.slHienCo = data[0].soDuNamTruoc + data[0].slNhap + data[0].dieuChinhTang - data[0].dieuChinhGiam - data[0].slCanThanhLy;
+        }
+      } else {
+        this.dataTable = [];
+        this.totalRecord = 0;
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
       if (!type) {
         this.rowItem.tenCcdc = result[0].tenCcdc;
         this.rowItem.donViTinh = result[0].donViTinh;
