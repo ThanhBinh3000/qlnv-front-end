@@ -37,8 +37,6 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
   idDviDtl: number;
-  fileUyQuyen: any[] = [];
-  fileBanLe: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -61,8 +59,6 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         tenDvi: [''],
         pthucBanTrucTiep: [THONG_TIN_BAN_TRUC_TIEP.CHAO_GIA],
         diaDiemChaoGia: [''],
-        ngayMkho: [''],
-        ngayKthuc: [''],
         loaiVthh: [''],
         tenLoaiVthh: [''],
         cloaiVthh: [''],
@@ -76,7 +72,8 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         tenLoaiHinhNx: [''],
         kieuNx: [''],
         tenKieuNx: [''],
-        thoiHanBan: [''],
+        tgianDkienTu: [''],
+        tgianDkienDen: [''],
       }
     );
   }
@@ -116,14 +113,13 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         tenLoaiHinhNx: data.tenLoaiHinhNx,
         kieuNx: data.kieuNx,
         tenKieuNx: data.tenKieuNx,
-        ngayMkho: data.ngayMkho,
-        ngayKthuc: data.ngayKthuc,
+        tgianDkienTu: data.tgianDkienTu,
+        tgianDkienDen: data.tgianDkienDen,
         loaiVthh: data.loaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
         cloaiVthh: data.cloaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
         moTaHangHoa: data.moTaHangHoa,
-        thoiHanBan: data.thoiHanBan,
         ghiChuChaoGia: data.ghiChuChaoGia,
         trangThai: data.trangThai,
         tenTrangThai: data.tenTrangThai,
@@ -135,21 +131,12 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       }
       this.dataTable = data.children;
       await this.selectRow(this.dataTable.flatMap(item => item.children)[0]);
-      this.fileUyQuyen = data.fileUyQuyen;
-      this.fileBanLe = data.fileBanLe;
+      this.fileDinhKem = data.fileDinhKem;
     } catch (e) {
       console.error('Error:', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
-    }
-  }
-
-  deleteTaiLieuDinhKemTag(data: any) {
-    if (!this.isView) {
-      const fileId = data.id;
-      this.fileUyQuyen = this.fileUyQuyen.filter((x) => x.id !== fileId);
-      this.fileBanLe = this.fileBanLe.filter((x) => x.id !== fileId);
     }
   }
 
@@ -159,8 +146,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       const body = {
         ...this.formData.value,
         children: this.dataTable,
-        fileUyQuyen: this.fileUyQuyen,
-        fileBanLe: this.fileBanLe,
+        fileDinhKem: this.fileDinhKem,
       };
       body.id = 0;
       await this.createUpdate(body);
@@ -178,8 +164,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       const body = {
         ...this.formData.value,
         children: this.dataTable,
-        fileUyQuyen: this.fileUyQuyen,
-        fileBanLe: this.fileBanLe,
+        fileDinhKem: this.fileDinhKem,
       };
       body.id = 0;
       await super.saveAndSend(body, trangThai, msg, msgSuccess);
@@ -362,17 +347,12 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   setValidForm() {
     const formDataControls = this.formData.controls;
     formDataControls["soQdPd"].setValidators([Validators.required]);
-    formDataControls["ngayMkho"].setValidators([Validators.required]);
-    formDataControls["ngayKthuc"].setValidators([Validators.required]);
+    formDataControls["tgianDkienTu"].setValidators([Validators.required]);
+    formDataControls["tgianDkienDen"].setValidators([Validators.required]);
     if (this.formData.value.pthucBanTrucTiep === THONG_TIN_BAN_TRUC_TIEP.CHAO_GIA) {
       formDataControls["diaDiemChaoGia"].setValidators([Validators.required]);
     } else {
       formDataControls["diaDiemChaoGia"].clearValidators();
-    }
-    if (this.formData.value.pthucBanTrucTiep !== THONG_TIN_BAN_TRUC_TIEP.CHAO_GIA) {
-      formDataControls["thoiHanBan"].setValidators([Validators.required]);
-    } else {
-      formDataControls["thoiHanBan"].clearValidators();
     }
     Object.keys(formDataControls).forEach(field => {
       formDataControls[field].updateValueAndValidity();

@@ -94,7 +94,6 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       tenKieuNx: [''],
       tenLoaiVthh: [''],
       tenCloaiVthh: [''],
-      nam: [''],
       type: [''],
     })
   }
@@ -128,8 +127,10 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     }
   }
 
-  async onChangeNamKh() {
-    this.formData.get('nam').setValue(this.formData.get('namKh').value);
+  async onChangeNamKh(event) {
+    this.formData.patchValue({
+      namKh: event
+    })
   }
 
   async initForm() {
@@ -215,7 +216,6 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     const {soQdPd, children} = data;
     this.formData.patchValue({
       soQdPd: soQdPd?.split('/')[0] || null,
-      namKh: this.formData.value.nam,
     });
     this.canCuPhapLy = data.canCuPhapLy;
     this.fileDinhKem = data.fileDinhKem;
@@ -291,12 +291,12 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       const data = res.data;
       const soLuongDviTsan = data.children.reduce((total, item) => total + item.slDviTsan, 0);
       this.formData.patchValue({
+        namKh : data.namKh,
         cloaiVthh: data.cloaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
         loaiVthh: data.loaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
         slDviTsan: soLuongDviTsan,
-        nam: this.formData.value.namKh,
         idThHdr: data.id,
         phanLoai: 'TH',
         idTrHdr: null,
@@ -396,6 +396,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       const data = res.data;
       data.idDxHdr = data.id;
       this.formData.patchValue({
+        namKh: data.namKh,
         cloaiVthh: data.cloaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
         loaiVthh: data.loaiVthh,
@@ -416,7 +417,6 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
         tenLoaiHinhNx: data.tenLoaiHinhNx,
         kieuNx: data.kieuNx,
         tenKieuNx: data.tenKieuNx,
-        nam: this.formData.value.namKh,
         idTrHdr: data.id,
         soTrHdr: data.soDxuat,
         idThHdr: null,

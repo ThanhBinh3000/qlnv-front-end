@@ -134,6 +134,7 @@ export class DieuChinhBanTrucTiepComponent extends Base2Component implements OnI
     const permissions = {
       XEM: 'XHDTQG_PTTT_DCKHBTT_XEM',
       THEM: 'XHDTQG_PTTT_DCKHBTT_THEM',
+      DUYET_LDV: 'XHDTQG_PTTT_DCKHBTT_DUYET_LDVU',
       BAN_HANH: 'XHDTQG_PTTT_DCKHBTT_BANHANH',
       XOA: 'XHDTQG_PTTT_DCKHBTT_XOA',
     };

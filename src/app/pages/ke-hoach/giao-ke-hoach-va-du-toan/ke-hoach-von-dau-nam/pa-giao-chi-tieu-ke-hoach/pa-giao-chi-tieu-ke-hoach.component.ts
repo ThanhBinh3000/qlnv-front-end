@@ -156,7 +156,6 @@ export class PaGiaoChiTieuKeHoachComponent implements OnInit {
   }
 
   async search() {
-    console.log('hahaaaaaaaaaaaaaaaaa');
     let maDonVi = null;
     let tenDvi = null;
     let donviId = null;

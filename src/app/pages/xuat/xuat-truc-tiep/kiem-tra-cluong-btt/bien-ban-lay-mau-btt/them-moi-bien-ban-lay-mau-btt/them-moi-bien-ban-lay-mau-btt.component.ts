@@ -780,15 +780,15 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
     const requiredFields = [
       "loaiBienBan",
       "namKh",
-      "tenDvi",
-      "maQhNs",
-      "ngayLayMau",
-      "tenLoaiVthh",
-      "tenCloaiVthh",
-      "tenKtvBaoQuan",
-      "donViKnghiem",
-      "diaDiemLayMau",
-      "soLuongKiemTra"
+      // "tenDvi",
+      // "maQhNs",
+      // "ngayLayMau",
+      // "tenLoaiVthh",
+      // "tenCloaiVthh",
+      // "tenKtvBaoQuan",
+      // "donViKnghiem",
+      // "diaDiemLayMau",
+      // "soLuongKiemTra"
     ];
     requiredFields.forEach(fieldName => {
       this.formData.get(fieldName).setValidators([Validators.required]);

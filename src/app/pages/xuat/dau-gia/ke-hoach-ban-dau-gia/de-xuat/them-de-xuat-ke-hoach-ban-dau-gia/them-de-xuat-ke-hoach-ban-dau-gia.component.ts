@@ -571,7 +571,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       "ngayTao",
       "trichYeu",
       "ngayTao",
-      "tenLoaiVthh",
       "tgianTtoan",
       "pthucTtoan",
       "thongBao",

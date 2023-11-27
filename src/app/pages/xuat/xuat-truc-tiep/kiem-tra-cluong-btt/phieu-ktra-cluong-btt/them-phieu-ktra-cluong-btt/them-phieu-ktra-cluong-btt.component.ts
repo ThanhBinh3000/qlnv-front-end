@@ -524,16 +524,16 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
     const requiredFields = [
       "namKh",
       "tenDvi",
-      "maQhNs",
-      "ngayLapPhieu",
-      "ngayLayMau",
-      "tenNganLoKho",
-      "tenNhaKho",
-      "tenDiemKho",
-      "tenLoaiVthh",
-      "tenCloaiVthh",
-      "hinhThucBaoQuan",
-      "ngayKiemNghiemMau",
+      // "maQhNs",
+      // "ngayLapPhieu",
+      // "ngayLayMau",
+      // "tenNganLoKho",
+      // "tenNhaKho",
+      // "tenDiemKho",
+      // "tenLoaiVthh",
+      // "tenCloaiVthh",
+      // "hinhThucBaoQuan",
+      // "ngayKiemNghiemMau",
     ];
     requiredFields.forEach(fieldName => {
       this.formData.controls[fieldName].setValidators([Validators.required]);
