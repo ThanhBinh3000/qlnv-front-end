@@ -275,11 +275,16 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     await this.spinner.hide();
   }
 
-  async getDataNX(loaiDC) {
+  async getDataNX(loaiDC, loaiQdinh?) {
     await this.spinner.show()
     let ma = () => {
-      if (loaiDC == "CUC")
-        return '144'
+      if (loaiDC == "CUC") {
+        if (loaiQdinh && loaiQdinh === "00") {
+          return '85'
+        } else
+          return '144'
+
+      }
       if (loaiDC == "CHI_CUC")
         return '94'
       return '90';
@@ -450,6 +455,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
         this.formData.patchValue({
           tenLoaiQdinh: loaiQD.text,
         })
+        this.getDataNX(this.formData.value.loaiDc, value)
       }
 
     }
@@ -1357,13 +1363,14 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       if (isGuiDuyet) {
         body.danhSachQuyetDinh.forEach((item) => {
           const ds = item.dcnbKeHoachDcHdr.danhSachHangHoa
-          const diemnhap = ds.find((nhap) => !!nhap.maNganKhoNhan)
+          const diemnhap = ds.find((nhap) => nhap.maNganKhoNhan !== null && nhap.maNganKhoNhan !== "")
           if (!diemnhap) {
             this.notification.error(MESSAGE.ERROR, "Bạn chưa xác định điểm nhập");
             return
           }
 
         })
+
         this.guiDuyet();
       }
       else {
