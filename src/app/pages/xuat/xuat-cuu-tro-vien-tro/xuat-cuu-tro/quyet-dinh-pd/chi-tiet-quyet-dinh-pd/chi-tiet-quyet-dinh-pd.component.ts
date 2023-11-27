@@ -22,7 +22,7 @@ import { STATUS } from "src/app/constants/status";
 import { FileDinhKem } from "src/app/models/DeXuatKeHoachuaChonNhaThau";
 import { MESSAGE } from "src/app/constants/message";
 import { v4 as uuidv4 } from "uuid";
-import { chain, cloneDeep, groupBy } from 'lodash';
+import { chain, cloneDeep, groupBy, uniqBy } from 'lodash';
 import { UserLogin } from "src/app/models/userlogin";
 import { DiaDiemGiaoNhan, KeHoachBanDauGia, PhanLoTaiSan } from "src/app/models/KeHoachBanDauGia";
 import { DatePipe } from "@angular/common";
@@ -32,6 +32,7 @@ import {
 import { PREVIEW } from "../../../../../../constants/fileType";
 import { LOAI_HANG_DTQG, TEN_LOAI_VTHH } from 'src/app/constants/config';
 import { AMOUNT_ONE_DECIMAL } from 'src/app/Utility/utils';
+import { MangLuoiKhoService } from 'src/app/services/qlnv-kho/mangLuoiKho.service';
 
 @Component({
   selector: 'app-chi-tiet-quyet-dinh-pd',
@@ -78,6 +79,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   tongHopEdit: any = [];
   datePipe = new DatePipe('en-US');
   isVisible = false;
+  formDataDtl: FormGroup;
 
   isVisibleTuChoiDialog = false;
   isQuyetDinh: boolean = false;
@@ -109,6 +111,10 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   ngayKetThuc: string;
   amount1 = { ...AMOUNT_ONE_DECIMAL };
   amount1Left = { ...AMOUNT_ONE_DECIMAL, align: "left" }
+  dataPhanBoXuatCap: any[] = [];
+  dataPhanBoXuatCapView: any[] = [];
+  modalChiTiet: boolean = false;
+  listDonVi: any[] = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -120,6 +126,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
     private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
     private tongHopPhuongAnCuuTroService: TongHopPhuongAnCuuTroService,
     private quyetDinhPheDuyetPhuongAnCuuTroService: QuyetDinhPheDuyetPhuongAnCuuTroService,
+    private mangLuoiKhoService: MangLuoiKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPheDuyetPhuongAnCuuTroService);
     this.formData = this.fb.group({
@@ -167,6 +174,40 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       ngayKetThuc: [],
     }
     );
+    this.formDataDtl = this.fb.group({
+      id: [""],
+      idDx: [""],
+      soDx: [""],
+      ngayKyDx: [""],
+      trichYeuDx: [""],
+      soLuongDx: [""],
+      loaiHinhNhapXuat: [""],
+      loaiNhapXuat: ["", [Validators.required]],
+      kieuNhapXuat: ["", [Validators.required]],
+      mucDichXuat: ["", [Validators.required]],
+      noiDungDx: ["", [Validators.required]],
+      idDonViNhan: ["", [Validators.required]],
+      loaiVthh: ["", [Validators.required]],
+      cloaiVthh: [""],
+      maDvi: ["", [Validators.required]],
+      mId: [""],
+      soLuong: ["", [Validators.required, Validators.min(1)]],
+      soLuongXc: [""],
+      soLuongNhuCauXuat: [""],
+      tonKhoDvi: ["", [Validators.required]],
+      tonKhoLoaiVthh: [""],
+      tonKhoCloaiVthh: [""],
+      donViTinh: [""],
+      idQdGnv: [""],
+      soQdGnv: [""],
+      ngayKetThuc: [""],
+      tenLoaiVthh: [""],
+      tenCloaiVthh: [""],
+      tenDvi: ["", [Validators.required]],
+      type: [""],
+      ghiChu: [""],
+      edit: true
+    })
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
         value: dayjs().get('year') - i,
@@ -221,8 +262,8 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       await this.spinner.show();
       // this.formData.patchValue({ type: this.loaiXuat });
       this.maHauTo = '/QĐPDCTVT-' + this.userInfo.DON_VI.tenVietTat;
-      await Promise.all([]);
       await this.loadDetail();
+      await this.loadDsDonVi();
     } catch (e) {
       console.log('error: ', e)
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -230,16 +271,6 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       await this.spinner.hide();
     }
   }
-  bidingDataInFormGroupAndIgnore(formGroup: FormGroup, dataBinding: any, ignoreField: Array<string>) {
-    if (dataBinding) {
-      for (const name in dataBinding) {
-        if (formGroup.controls.hasOwnProperty(name) && !ignoreField.includes(name)) {
-          formGroup.controls[name].setValue(dataBinding[name]);
-        }
-      }
-    }
-  }
-
   async loadDetail() {
     if (this.idSelected > 0) {
       await this.quyetDinhPheDuyetPhuongAnCuuTroService.getDetail(this.idSelected)
@@ -249,8 +280,276 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               this.maHauTo = '/' + res.data.soBbQd?.split("/")[1];
               res.data.soBbQd = res.data.soBbQd?.split("/")[0];
             }
-            res.data.quyetDinhPdDtl.forEach(s => s.idVirtual = uuidv4());
-            this.helperService.bidingDataInFormGroupAndNotTrigger(this.formData, res.data, ['type', 'tenVthh']);
+            //TODO: Xóa dữ liệu test này đi
+            res.data = {
+              ngayTao: "2023-11-27T11:11:43.677",
+              nguoiTaoId: 1,
+              ngaySua: "2023-11-27T11:11:43.677",
+              nguoiSuaId: 1,
+              id: 3264,
+              maDvi: "010130",
+              nam: 2023,
+              soBbQd: "71/QĐPDCTVT-TCDT",
+              ngayKy: "2023-11-27",
+              ngayHluc: "2023-11-29",
+              idTongHop: null,
+              maTongHop: null,
+              ngayThop: null,
+              idDx: 4722,
+              soDx: "80/TTr-QLHDT",
+              idXc: null,
+              soXc: null,
+              ngayDx: "2023-11-24",
+              tongSoLuongDx: null,
+              tongSoLuong: null,
+              thanhTien: null,
+              soLuongXuatCap: 60000,
+              loaiVthh: "0102",
+              cloaiVthh: null,
+              tenVthh: "Gạo tẻ",
+              loaiNhapXuat: "Xuất cứu trợ",
+              kieuNhapXuat: "Xuất không thu tiền",
+              mucDichXuat: "Học kỳ II năm học 2021 - 2022",
+              trichYeu: "qeqweqe",
+              trangThai: "78",
+              lyDoTuChoi: null,
+              xuatCap: true,
+              type: "TTr",
+              ngayPduyet: "2023-11-24",
+              nguoiPduyetId: 1,
+              donViTinh: "kg",
+              paXuatGaoChuyenXc: null,
+              qdPaXuatCapId: null,
+              qdPaXuatCap: null,
+              idQdGiaoNv: null,
+              soQdGiaoNv: null,
+              ngayKetThuc: "2023-11-29",
+              tenDvi: null,
+              tenLoaiVthh: null,
+              tenCloaiVthh: null,
+              tenTrangThai: "Đang nhập dữ liệu",
+              ngayHieuLucQdcxc: null,
+              slGaoChuyenXuatCap: null,
+              quyetDinhPdDtl: [
+                {
+                  id: 3039,
+                  idDx: null,
+                  soDx: "80/TTr-QLHDT",
+                  ngayKyDx: "2023-11-24",
+                  trichYeuDx: "test",
+                  soLuongDx: 20000,
+                  loaiHinhNhapXuat: null,
+                  loaiNhapXuat: "Xuất cứu trợ",
+                  kieuNhapXuat: "Xuất không thu tiền",
+                  mucDichXuat: "Học kỳ II năm học 2021 - 2022",
+                  noiDungDx: "An Giang",
+                  idDonViNhan: "89",
+                  loaiVthh: "0102",
+                  cloaiVthh: null,
+                  maDvi: "010101",
+                  soLuong: 20000,
+                  soLuongXc: 50000,
+                  soLuongNhuCauXuat: 100000,
+                  tonKhoDvi: null,
+                  tonKhoLoaiVthh: 9900005,
+                  tonKhoCloaiVthh: 9900005,
+                  donViTinh: "kg",
+                  idQdGnv: null,
+                  soQdGnv: null,
+                  ngayKetThuc: "2023-11-29",
+                  tenLoaiVthh: "Gạo tẻ",
+                  tenCloaiVthh: null,
+                  tenDvi: "Cục DTNNKV Hoàng Liên Sơn"
+                },
+                {
+                  id: 3040,
+                  idDx: null,
+                  soDx: "80/TTr-QLHDT",
+                  ngayKyDx: "2023-11-24",
+                  trichYeuDx: "test",
+                  soLuongDx: 30000,
+                  loaiHinhNhapXuat: null,
+                  loaiNhapXuat: "Xuất cứu trợ",
+                  kieuNhapXuat: "Xuất không thu tiền",
+                  mucDichXuat: "Học kỳ II năm học 2021 - 2022",
+                  noiDungDx: "An Giang",
+                  idDonViNhan: "89",
+                  loaiVthh: "0102",
+                  cloaiVthh: null,
+                  maDvi: "010102",
+                  soLuong: 30000,
+                  soLuongXc: 50000,
+                  soLuongNhuCauXuat: 100000,
+                  tonKhoDvi: null,
+                  tonKhoLoaiVthh: 1287120,
+                  tonKhoCloaiVthh: 1287120,
+                  donViTinh: "kg",
+                  idQdGnv: null,
+                  soQdGnv: null,
+                  ngayKetThuc: "2023-11-29",
+                  tenLoaiVthh: "Gạo tẻ",
+                  tenCloaiVthh: null,
+                  tenDvi: "Cục DTNNKV Vĩnh Phú"
+                },
+                {
+                  id: 3041,
+                  idDx: null,
+                  soDx: "80/TTr-QLHDT",
+                  ngayKyDx: "2023-11-24",
+                  trichYeuDx: "test",
+                  soLuongDx: 30000,
+                  loaiHinhNhapXuat: null,
+                  loaiNhapXuat: "Xuất cứu trợ",
+                  kieuNhapXuat: "Xuất không thu tiền",
+                  mucDichXuat: "Học kỳ II năm học 2021 - 2022",
+                  noiDungDx: "Bà Rịa - Vũng Tàu",
+                  idDonViNhan: "77",
+                  loaiVthh: "0102",
+                  cloaiVthh: null,
+                  maDvi: "010101",
+                  soLuong: 30000,
+                  soLuongXc: 10000,
+                  soLuongNhuCauXuat: 60000,
+                  tonKhoDvi: null,
+                  tonKhoLoaiVthh: 9900005,
+                  tonKhoCloaiVthh: 9900005,
+                  donViTinh: "kg",
+                  idQdGnv: null,
+                  soQdGnv: null,
+                  ngayKetThuc: "2023-11-29",
+                  tenLoaiVthh: "Gạo tẻ",
+                  tenCloaiVthh: null,
+                  tenDvi: "Cục DTNNKV Hoàng Liên Sơn"
+                },
+                {
+                  id: 3042,
+                  idDx: null,
+                  soDx: "80/TTr-QLHDT",
+                  ngayKyDx: "2023-11-24",
+                  trichYeuDx: "test",
+                  soLuongDx: 20000,
+                  loaiHinhNhapXuat: null,
+                  loaiNhapXuat: "Xuất cứu trợ",
+                  kieuNhapXuat: "Xuất không thu tiền",
+                  mucDichXuat: "Học kỳ II năm học 2021 - 2022",
+                  noiDungDx: "Bà Rịa - Vũng Tàu",
+                  idDonViNhan: "77",
+                  loaiVthh: "0102",
+                  cloaiVthh: null,
+                  maDvi: "010102",
+                  soLuong: 20000,
+                  soLuongXc: 10000,
+                  soLuongNhuCauXuat: 60000,
+                  tonKhoDvi: null,
+                  tonKhoLoaiVthh: 1287120,
+                  tonKhoCloaiVthh: 1287120,
+                  donViTinh: "kg",
+                  idQdGnv: null,
+                  soQdGnv: null,
+                  ngayKetThuc: "2023-11-29",
+                  tenLoaiVthh: "Gạo tẻ",
+                  tenCloaiVthh: null,
+                  tenDvi: "Cục DTNNKV Vĩnh Phú"
+                },
+                {
+                  id: 3043,
+                  idDx: null,
+                  soDx: "80/TTr-QLHDT",
+                  ngayKyDx: "2023-11-24",
+                  trichYeuDx: "test",
+                  soLuongDx: 20000,
+                  loaiHinhNhapXuat: null,
+                  loaiNhapXuat: "Xuất cứu trợ",
+                  kieuNhapXuat: "Xuất không thu tiền",
+                  mucDichXuat: "Học kỳ II năm học 2021 - 2022",
+                  noiDungDx: "An Giang",
+                  idDonViNhan: "89",
+                  loaiVthh: "0102",
+                  cloaiVthh: null,
+                  maDvi: "010101",
+                  soLuong: 5,
+                  soLuongXc: 50000,
+                  soLuongNhuCauXuat: 100000,
+                  tonKhoDvi: 10,
+                  tonKhoLoaiVthh: null,
+                  tonKhoCloaiVthh: null,
+                  donViTinh: "kg",
+                  idQdGnv: null,
+                  soQdGnv: null,
+                  ngayKetThuc: "2023-11-29",
+                  tenLoaiVthh: "Gạo tẻ",
+                  tenCloaiVthh: null,
+                  tenDvi: "Cục DTNNKV Hoàng Liên Sơn",
+                  type: "XC"
+                },
+                {
+                  id: 3044,
+                  idDx: null,
+                  soDx: "80/TTr-QLHDT",
+                  ngayKyDx: "2023-11-24",
+                  trichYeuDx: "test",
+                  soLuongDx: 40000,
+                  loaiHinhNhapXuat: null,
+                  loaiNhapXuat: "Xuất cứu trợ",
+                  kieuNhapXuat: "Xuất không thu tiền",
+                  mucDichXuat: "Học kỳ II năm học 2021 - 2022",
+                  noiDungDx: "An Giang",
+                  idDonViNhan: "89",
+                  loaiVthh: "0102",
+                  cloaiVthh: null,
+                  maDvi: "010102",
+                  soLuong: 10,
+                  soLuongXc: 50000,
+                  soLuongNhuCauXuat: 100000,
+                  tonKhoDvi: 5329366,
+                  tonKhoLoaiVthh: null,
+                  tonKhoCloaiVthh: null,
+                  donViTinh: "kg",
+                  idQdGnv: null,
+                  soQdGnv: null,
+                  ngayKetThuc: "2023-11-29",
+                  tenLoaiVthh: "Gạo tẻ",
+                  tenCloaiVthh: null,
+                  tenDvi: "Cục DTNNKV Vĩnh Phú",
+                  type: "XC"
+                },
+                {
+                  id: 3045,
+                  idDx: null,
+                  soDx: "80/TTr-QLHDT",
+                  ngayKyDx: "2023-11-24",
+                  trichYeuDx: "test",
+                  soLuongDx: 30000,
+                  loaiHinhNhapXuat: null,
+                  loaiNhapXuat: "Xuất cứu trợ",
+                  kieuNhapXuat: "Xuất không thu tiền",
+                  mucDichXuat: "Học kỳ II năm học 2021 - 2022",
+                  noiDungDx: "Bà Rịa - Vũng Tàu",
+                  idDonViNhan: "77",
+                  loaiVthh: "0102",
+                  cloaiVthh: null,
+                  maDvi: "010102",
+                  soLuong: 20,
+                  soLuongXc: 10000,
+                  soLuongNhuCauXuat: 60000,
+                  tonKhoDvi: 5329366,
+                  tonKhoLoaiVthh: null,
+                  tonKhoCloaiVthh: null,
+                  donViTinh: "kg",
+                  idQdGnv: null,
+                  soQdGnv: null,
+                  ngayKetThuc: "2023-11-29",
+                  tenLoaiVthh: "Gạo tẻ",
+                  tenCloaiVthh: null,
+                  tenDvi: "Cục DTNNKV Vĩnh Phú",
+                  type: "XC"
+                }
+              ],
+              fileDinhKem: [],
+              canCu: []
+            }
+            const quyetDinhPdDtl = res.data.quyetDinhPdDtl.filter(f => f.type !== "XC").map(s => ({ ...s, idVirtual: uuidv4() }));
+            this.helperService.bidingDataInFormGroupAndNotTrigger(this.formData, { ...res.data, quyetDinhPdDtl }, ['type', 'tenVthh']);
 
             //get cache
             if (this.formData.value.type == 'TTr') {
@@ -283,6 +582,10 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
                 soLuongXc: element.soLuongXc ? element.soLuongXc : element.soLuongChuyenCapThoc, soLuongDx: element.soLuongDx ? element.soLuongDx : element.soLuong
               }))).sort((a, b) => b.id - a.id);
 
+            }
+            if (res.data.xuatCap) {
+              this.dataPhanBoXuatCap = cloneDeep(res.data.quyetDinhPdDtl).filter(f => f.type === "XC").map(f => ({ ...f, mId: uuidv4() }));
+              this.buildTableViewXuatCap();
             }
             await this.buildTableView();
             if (this.phuongAnHdrView && this.formData.value.type === "TH" && this.phuongAnHdrView[0]) {
@@ -319,13 +622,14 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
 
   async save() {
     await this.helperService.ignoreRequiredForm(this.formData);
-    this.formData.controls['soBbQd'].setValidators(Validators.required)
-    if (this.formData.value.xuatCap) {
-      const soLuongXuatCap = this.formData.value.quyetDinhPdDtl.reduce((sum, cur) => sum += cur.soLuongXc, 0);
-      this.formData.patchValue({ soLuongXuatCap })
-    }
+    this.formData.controls['soBbQd'].setValidators(Validators.required);
+
     if (!this.formData.value.quyetDinhPdDtl || this.formData.value.quyetDinhPdDtl.length <= 0) {
       return this.notification.error(MESSAGE.ERROR, "Thông tin chi tiết đề xuất cứu trợ, viện trợ của các đơn vị không tồn tại.")
+    }
+    if (this.formData.value.xuatCap) {
+      const soLuongXuatCap = this.dataPhanBoXuatCap.filter(f => !f.maDvi).reduce((sum, cur) => sum += cur.soLuongXc, 0);
+      this.formData.patchValue({ soLuongXuatCap, quyetDinhPdDtl: [...this.formData.value.quyetDinhPdDtl, ...this.dataPhanBoXuatCap.filter(f => !!f.maDvi)] })
     }
     let body = {
       ...this.formData.value,
@@ -336,9 +640,10 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   }
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
+    if (!this.checkHoanThanhPhanBoXuatCap()) return;
     if (this.formData.value.xuatCap) {
-      const soLuongXuatCap = this.formData.value.quyetDinhPdDtl.reduce((sum, cur) => sum += cur.soLuongXc, 0);
-      this.formData.patchValue({ soLuongXuatCap })
+      const soLuongXuatCap = this.dataPhanBoXuatCap.filter(f => !f.maDvi).reduce((sum, cur) => sum += cur.soLuongXc, 0);
+      this.formData.patchValue({ soLuongXuatCap, quyetDinhPdDtl: [...this.formData.value.quyetDinhPdDtl, ...this.dataPhanBoXuatCap.filter(f => !!f.maDvi)] })
     }
     let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd + this.maHauTo }
     await super.saveAndSend(body, trangThai, msg, msgSuccess, ['tenVthh', 'type']);
@@ -413,7 +718,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       delete s.id
     });
     // this.formData.patchValue(data);
-    this.bidingDataInFormGroupAndIgnore(this.formData, data, ['tenVthh', 'quyetDinhPdDtl']);
+    this.helperService.bidingDataInFormGroupAndIgnore(this.formData, data, ['tenVthh', 'quyetDinhPdDtl']);
     await this.buildTableView();
     if (this.phuongAnHdrView[0]) {
       await this.selectRow(this.phuongAnHdrView[0]);
@@ -497,7 +802,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
     this.formData.value.quyetDinhPdDtl.forEach(s => delete s.id);
     // this.formData.patchValue(data, { onlySelf: true, emitEvent: false });
     // this.formData.patchValue(data);
-    this.bidingDataInFormGroupAndIgnore(this.formData, data, ['tenVthh', 'quyetDinhPdDtl']);
+    this.helperService.bidingDataInFormGroupAndIgnore(this.formData, data, ['tenVthh', 'quyetDinhPdDtl']);
     this.loaiNhapXuat = detail.loaiNhapXuat;
     this.kieuNhapXuat = detail.kieuNhapXuat;
     this.ngayKetThuc = detail.ngayKetThuc;
@@ -890,7 +1195,25 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
     // await this.tinhTong();
     this.expandAll();
   }
+  buildTableViewXuatCap() {
+    this.dataPhanBoXuatCapView = chain(this.dataPhanBoXuatCap).groupBy('noiDungDx').map((value, key) => {
+      let row = value.find(s => s.noiDungDx === key);
+      let soLuongDx = value.reduce((prev, next) => prev += next.soLuongDx, 0);
+      let soLuong = value.reduce((prev, next) => prev += next.soLuong, 0);
+      return {
+        ...row,
+        idVirtual: uuidv4(),
+        mId: uuidv4(),
+        soLuong,
+        soLuongDx,
+        tonKhoDvi: '',
+        ghiChu: '',
+        childData: row ? value.filter(f => f.maDvi) : [],
+      }
 
+    }).value().filter(f => !!f);
+    this.expandAll('XC');
+  }
   async selectRow(item: any) {
     if (!item.selected) {
       this.phuongAnHdrView.forEach(i => i.selected = false);
@@ -908,20 +1231,28 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
     }
   }
 
-  expandAll() {
-    this.phuongAnHdrView.forEach(s => {
+  expandAll(type?: string) {
+    if (type === 'XC') {
+      Array.isArray(this.dataPhanBoXuatCapView) && this.dataPhanBoXuatCapView.forEach(s => {
+        this.expandSetString.add(s.idVirtual);
+        Array.isArray(s.childData) && s.childData.forEach(s1 => {
+          this.expandSetString.add(s1.idVirtual);
+        })
+      });
+    }
+    Array.isArray(this.phuongAnHdrView) && this.phuongAnHdrView.forEach(s => {
       this.expandSetString.add(s.idVirtual);
       Array.isArray(s.childData) && s.childData.forEach(s1 => {
         this.expandSetString.add(s1.idVirtual);
       })
     });
 
-    this.phuongAnHdrViewCache.forEach(s => {
+    Array.isArray(this.phuongAnHdrViewCache) && this.phuongAnHdrViewCache.forEach(s => {
       this.expandSetStringCache.add(s.idVirtual);
       Array.isArray(s.childData) && s.childData.forEach(s1 => {
         this.expandSetStringCache.add(s1.idVirtual);
       })
-    })
+    });
   }
 
   onExpandStringChange(id: string, checked: boolean) {
@@ -991,45 +1322,6 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
     // this.formData.patchValue({ quyetDinhPdDtl });
   }
   tinhXuatCap(currentRow: any, $event: any, isVatTu?: boolean, parentRow?: any, ppRow?: any) {
-    // if (isVatTu) {
-    //   currentRow.soLuong = $event;
-    //   let currentDvi = this.formData.value.quyetDinhPdDtl.filter(s => s.maDvi == currentRow.maDvi);
-    //   let tongSoDaGiao = currentDvi.reduce((prev, next) => prev += next.soLuong, 0);
-    //   currentDvi.forEach(s => s.soLuongXc = 0);
-    //   if (tongSoDaGiao < currentRow.soLuongNhuCauXuat) {
-    //     currentRow.soLuongXc = (currentRow.soLuongNhuCauXuat - tongSoDaGiao) > 0 ? (currentRow.soLuongNhuCauXuat - tongSoDaGiao) : 0;
-    //   } else {
-    //     currentRow.soLuongXc = 0;
-    //   }
-    // }
-    // else {
-    //   currentRow.soLuong = $event;
-    //   currentRow.soLuongNhuCauXuat = !isNaN(currentRow.soLuongNhuCauXuat) ? currentRow.soLuongNhuCauXuat : 0;
-    //   if ($event < currentRow.soLuongNhuCauXuat) {
-    //     currentRow.soLuongXc = (currentRow.soLuongNhuCauXuat - $event) > 0 ? (currentRow.soLuongNhuCauXuat - $event) : 0;
-    //   } else {
-    //     currentRow.soLuongXc = 0;
-    //   };
-    //   if (parentRow) {
-    //     const { soLuong, soLuongXc } = Array.isArray(parentRow.childData) ? parentRow.childData.reduce((obj, cur) => {
-    //       obj.soLuong += cur.soLuong;
-    //       obj.soLuongXc += cur.soLuongXc;
-    //       return obj;
-    //     }, { soLuong: 0, soLuongXc: 0 }) : { soLuong: 0, soLuongXc: 0 };
-    //     parentRow.soLuongXc = soLuongXc;
-    //     parentRow.soLuong = soLuong;
-    //     if (ppRow) {
-    //       const { soLuong, soLuongXc } = Array.isArray(ppRow.childData) ? ppRow.childData.reduce((obj, cur) => {
-    //         obj.soLuong += cur.soLuong;
-    //         obj.soLuongXc += cur.soLuongXc;
-    //         return obj;
-    //       }, { soLuong: 0, soLuongXc: 0 }) : { soLuong: 0, soLuongXc: 0 };
-    //       ppRow.soLuongXc = soLuongXc;
-    //       ppRow.soLuong = soLuong;
-    //     }
-    //   }
-    //   this.tinhTong()
-    // }
     if (parentRow) {
       const soLuongNhuCauXuat = parentRow.soLuongNhuCauXuat
       currentRow.soLuong = $event;
@@ -1040,6 +1332,108 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       parentRow.soLuong = tongSoLuong;
       this.tinhTong();
     }
+  }
+  handleChangeXuatCap() {
+    if (this.formData.value.type === "TTr") {
+      if (this.formData.value.xuatCap) {
+        this.dataPhanBoXuatCap = uniqBy(this.formData.value.quyetDinhPdDtl, 'noiDungDx')
+          .map(f => ({ ...f, tenDvi: '', maDvi: '', id: null, mId: uuidv4(), type: "XC", soLuong: "", tonKhoDvi: "", tonKhoLoaiVthh: "", tonKhoCloaiVthh: "" }));
+        this.buildTableViewXuatCap();
+      }
+    }
+  }
+  async loadDsDonVi() {
+    let body = {
+      trangThai: "01",
+      maDviCha: this.userInfo.MA_DVI.substring(0, 4),
+      type: "DV"
+    };
+    let res = await this.donViService.getDonViTheoMaCha(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listDonVi = res.data;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+  async changeMaDviDtl($event) {
+    if ($event) {
+      let item = this.listDonVi.find(s => s.maDvi === $event);
+      this.formDataDtl.patchValue({
+        tenDvi: item.tenDvi
+      })
+      await this.kiemTraTonKho();
+    }
+  }
+  checkHoanThanhPhanBoXuatCap() {
+    if (this.formData.value.xuatCap) {
+      const tongSoLuongXc = this.dataPhanBoXuatCap.filter(f => !f.maDvi).reduce((sum, cur) => sum += cur.soLuongXc);
+      const tongSoLuongPhanBoXuatCap = this.dataPhanBoXuatCap.filter(f => !!f.maDvi).reduce((sum, cur) => sum += cur.soLuong);
+      if (tongSoLuongPhanBoXuatCap === tongSoLuongXc) {
+        return true
+      }
+      this.notification.error(MESSAGE.ERROR, "Vui lòng hoàn thành phân bổ gạo cần chuyển xuất cấp!.")
+      return false;
+    }
+    return true
+  }
+  async kiemTraTonKho() {
+    const { maDvi, mId, soLuongXc, noiDungDx } = this.formDataDtl.value;
+    const soLuongCanPhanBo = soLuongXc - this.dataPhanBoXuatCap.filter(f => f.maDvi && f.mId !== mId && f.noiDungDx === noiDungDx).reduce((sum, cur) => sum += cur.soLuong, 0);
+    if (maDvi) {
+      const body = { maDvi, maVthh: LOAI_HANG_DTQG.THOC }
+      const res = await this.mangLuoiKhoService.slTon(body);
+      let tonKhoDvi: number = 0;
+      if (res.msg === MESSAGE.SUCCESS) {
+        const slTon = res.data;
+        tonKhoDvi = slTon;
+        this.formDataDtl.patchValue({ tonKhoDvi });
+        this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(tonKhoDvi, soLuongCanPhanBo, soLuongXc))]);
+        this.formDataDtl.controls['soLuong'].updateValueAndValidity();
+      } else {
+        this.formDataDtl.patchValue({ tonKhoLoaiVthh: 0, tonKhoDvi: 0 });
+        this.formDataDtl.controls['soLuong'].setValidators([Validators.required, Validators.min(1), Validators.max(0)]);
+        this.formDataDtl.controls['soLuong'].updateValueAndValidity();
+      }
+    }
+  }
+  themPhuongAnXc(data: any) {
+    this.formDataDtl.reset();
+    this.formDataDtl.patchValue({ ...data, mId: uuidv4(), soLuong: 0 });
+    this.modalChiTiet = true
+  }
+  suaPhuongAnXc(data: any) {
+    this.formDataDtl.reset();
+    this.formDataDtl.patchValue({ ...data, edit: true });
+    this.modalChiTiet = true
+  }
+  async luuPhuongAnXc() {
+    await this.helperService.markFormGroupTouched(this.formDataDtl);
+    if (this.formDataDtl.invalid) {
+      return;
+    }
+    const row = this.formDataDtl.value;
+    if (row.edit) {
+      this.dataPhanBoXuatCap.forEach((item) => {
+        if (item.mId === row.mId) {
+          Object.assign(item, row);
+        }
+      })
+    } else {
+      this.dataPhanBoXuatCap.push(row);
+    }
+    this.huyPhuongAnXc()
+  }
+  xoaPhuongAnXc(data: any) {
+    this.dataPhanBoXuatCap = this.dataPhanBoXuatCap.filter(f => f.mId !== data.mId);
+    this.huyPhuongAnXc();
+  }
+  async huyPhuongAnXc() {
+    this.formDataDtl.reset();
+    this.modalChiTiet = false;
+    this.formDataDtl.controls.soLuong.clearValidators();
+    this.formDataDtl.controls.soLuong.setValidators([Validators.required, Validators.min(1)]);
+    this.formDataDtl.controls.soLuong.updateValueAndValidity();
+    this.buildTableViewXuatCap();
   }
   isVthhGao() {
     if (this.formData.value.tenVthh == "Gạo tẻ") {
@@ -1052,5 +1446,8 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       return true;
     }
     return false
+  }
+  isDisabled() {
+    return this.isView || this.formData.value.xuatCap
   }
 }
