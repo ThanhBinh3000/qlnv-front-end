@@ -509,7 +509,6 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       "slThucTe",
       "nguyenNhan",
       "kienNghi",
-      "ghiChu",
     ];
     requiredFields.forEach(fieldName => {
       this.formData.controls[fieldName].setValidators([Validators.required]);

@@ -98,7 +98,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
       tgianTinhPhat: [],
       soLuongHangCham: [],
       soTienTinhPhat: [],
-      giaTri: [''],
+      giaTri: [],
       tgianBaoDamHdong: [''],
       ghiChuBaoDam: [''],
       dieuKien: [''],
