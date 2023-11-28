@@ -119,6 +119,8 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base3Component 
               this.maHauTo = '/' + res.data.soQd?.split("/")[1];
               res.data.soQd = res.data.soQd?.split("/")[0];
             }
+            this.fileCanCu = res.data.fileCanCu;
+            this.fileDinhKem = res.data.fileDinhKem;
             this.formData.patchValue(res.data);
             await this.getDetailThongBao(res.data.idThongBao);
           }
@@ -225,6 +227,7 @@ export class ChiTietQuyetDinhPheDuyetBdgThanhLyComponent extends Base3Component 
     this.spinner.show();
     let body = this.formData.value;
     body.fileDinhKemReq = this.fileDinhKem;
+    body.fileCanCuReq = this.fileCanCu;
     if (this.formData.value.soQd) {
       body.soQd = this.formData.value.soQd + this.maHauTo
     }
