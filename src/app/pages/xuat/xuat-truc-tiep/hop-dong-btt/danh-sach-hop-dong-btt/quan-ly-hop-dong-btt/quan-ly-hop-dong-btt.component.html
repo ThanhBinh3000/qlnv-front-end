@@ -422,7 +422,7 @@
           </ng-container>
         </nz-table>
       </nz-card>
-      <app-thong-tin-hop-dong-btt *ngIf="idHopDong" [idInput]="idInput" [loaiVthh]="loaiVthh" [idHopDong]="idHopDong"
+      <app-thong-tin-hop-dong-btt *ngIf="idHopDong && isHopDong"  [idInput]="idInput" [loaiVthh]="loaiVthh" [idHopDong]="idHopDong"
                                   [isQuanLy]="true" [isView]="true">
       </app-thong-tin-hop-dong-btt>
     </nz-card>

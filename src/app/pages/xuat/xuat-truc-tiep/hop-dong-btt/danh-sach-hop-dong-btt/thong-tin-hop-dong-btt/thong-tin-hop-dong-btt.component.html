@@ -5,7 +5,7 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button *ngIf="idHopDong" type="button" class="btn btn-sub do"
+      <button *ngIf="idHopDong" type="button" class="btn btn-sub"
               (click)="xemTruoc(idHopDong,this.userService.isChiCuc() ? 'Hợp đồng bán trực tiếp cấp Chi cục' : 'Hợp đồng bán trực tiếp cấp Cục')">
         <i class="icon htvbdh_totrinh"></i>
         <span> Xem trước </span>
@@ -262,10 +262,8 @@
                     <nz-form-item>
                       <nz-form-label [nzNoColon]="true"> Giá trị</nz-form-label>
                       <nz-form-control nz-col>
-                        <nz-input-number formControlName="giaTri" nz-input [nzMin]=""
-                                         [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                         [nzParser]="globals.parser" [nzDisabled]="isView">
-                        </nz-input-number>
+                        <input class="money-input" currencyMask [options]="amount" [min]="0"
+                               formControlName="giaTri" [readonly]="isView"/>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
@@ -535,11 +533,11 @@
               </div>
               <div nz-col [nzSpan]="5">
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true">Thành tiền</nz-form-label>
-                  <nz-input-number formControlName="thanhTien" [nzMin]="1"
-                                   [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                                   [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
-                  </nz-input-number>
+                  <nz-form-label [nzNoColon]="true"> Thành tiền</nz-form-label>
+                  <nz-form-control nz-col>
+                    <input class="money-input" currencyMask [options]="amount" [min]="0"
+                           formControlName="thanhTien" readonly/>
+                  </nz-form-control>
                 </nz-form-item>
               </div>
               <div nz-col [nzSpan]="1">
@@ -956,10 +954,8 @@
                     <nz-form-item>
                       <nz-form-label [nzNoColon]="true"> Giá trị</nz-form-label>
                       <nz-form-control nz-col>
-                        <nz-input-number formControlName="giaTri" nz-input [nzMin]="" [nzStep]="1" [nzSize]="'small'"
-                                         [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                         [nzDisabled]="isView">
-                        </nz-input-number>
+                        <input class="money-input" currencyMask [options]="amount" [min]="0"
+                               formControlName="giaTri" [readonly]="isView"/>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
@@ -1246,11 +1242,11 @@
               </div>
               <div nz-col [nzSpan]="5">
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true">Thành tiền</nz-form-label>
-                  <nz-input-number formControlName="thanhTien" [nzMin]="1"
-                                   [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                                   [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
-                  </nz-input-number>
+                  <nz-form-label [nzNoColon]="true"> Thành tiền</nz-form-label>
+                  <nz-form-control nz-col>
+                    <input class="money-input" currencyMask [options]="amount" [min]="0"
+                           formControlName="thanhTien" readonly/>
+                  </nz-form-control>
                 </nz-form-item>
               </div>
               <div nz-col [nzSpan]="1">

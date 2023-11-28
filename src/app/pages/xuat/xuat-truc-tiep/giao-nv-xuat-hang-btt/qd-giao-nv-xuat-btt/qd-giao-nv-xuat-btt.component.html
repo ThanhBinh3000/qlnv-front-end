@@ -96,12 +96,10 @@
           <th class="text-left"> Ngày quyết định</th>
           <th class="text-left"> Số hợp đồng</th>
           <th class="text-left"> Số bảng kê bán lẻ</th>
-          <th class="text-left"> Loại hàng DTQG</th>
+          <th class="text-left" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)"> Loại hàng DTQG</th>
           <th class="text-left"> Chủng loại hàng DTQG</th>
           <th class="text-left"> Thời hạn giao nhận hàng</th>
           <th class="text-left"> Trích yếu quyết định</th>
-          <th class="text-left"> Số BB tịnh kho</th>
-          <th class="text-left"> Số BB hao dôi</th>
           <th class="text-left"> Trạng thái QĐ</th>
           <th class="text-left"> Trạng thái XH</th>
           <th class="text-center"> Hành động</th>
@@ -143,7 +141,7 @@
                      (input)="filterInTable('soBangKeBanLe',filterTable.soBangKeBanLe)" size="small"/>
             </nz-input-group>
           </th>
-          <th>
+          <th *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
                      (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small"/>
@@ -168,18 +166,6 @@
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
                      (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small"/>
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soTinhKho"
-                     (input)="filterInTable('soTinhKho',filterTable.soTinhKho)" size="small"/>
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.bienBanHaoDoi"
-                     (input)="filterInTable('bienBanHaoDoi',filterTable.bienBanHaoDoi)" size="small"/>
             </nz-input-group>
           </th>
           <th>
@@ -221,21 +207,11 @@
                style="color: blue">{{ data.soBangKeBanLe }}
             </a>
           </td>
-          <td class="text-left">{{ data.tenLoaiVthh }}</td>
+          <td class="text-left" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">{{ data.tenLoaiVthh }}</td>
           <td class="text-left">{{ data.tenCloaiVthh }}</td>
           <td class="text-left">{{ data.tgianGiaoNhan|date: 'dd/MM/YYYY'}}</td>
           <td class="text-left" style="max-width: 300px; min-width: 250px;  white-space: break-spaces;">
             {{data.trichYeu}}
-          </td>
-          <td class="text-left">
-            <a *ngIf="data.soTinhKho && data.idTinhKho" (click)="openModal(data.idTinhKho, 'tinhKho')"
-               style="color: blue">{{ data.soTinhKho }}
-            </a>
-          </td>
-          <td class="text-left">
-            <a *ngIf="data.soHaoDoi && data.idHaoDoi" (click)="openModal(data.soHaoDoi, 'haoDoi')"
-               style="color: blue">{{ data.bienBanHaoDoi }}
-            </a>
           </td>
           <td class="text-left">{{ data.tenTrangThai }}</td>
           <td class="text-left">{{ data.tenTrangThaiXh }}</td>
