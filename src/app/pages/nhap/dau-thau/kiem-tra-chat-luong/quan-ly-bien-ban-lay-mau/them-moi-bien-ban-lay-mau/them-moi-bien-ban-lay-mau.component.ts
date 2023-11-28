@@ -238,7 +238,7 @@ export class ThemMoiBienBanLayMauKhoComponent extends Base2Component implements 
     body.listCcPhapLy = this.listCcPhapLy;
     body.chiTiets = this.viewTableDaiDien;
     body.ppLayMau = this.phuongPhapLayMaus.filter(item => item.checked).map(f => `${f.id}-${f.giaTri}`).join(",")
-    body.chiTieuKiemTra = this.chiTieuChatLuongs.filter(item => item.checked).map(f => `${f.id}-${f.giaTri}`).join(",")
+    body.chiTieuKiemTra = this.chiTieuChatLuongs.filter(item => item.checked).map(f => `${f.id}-${f.giaTri}`).join(";")
     let res;
     if (this.formData.get('id').value > 0) {
       res = await this.bienBanLayMauService.update(body);
@@ -446,7 +446,7 @@ export class ThemMoiBienBanLayMauKhoComponent extends Base2Component implements 
         })
       }
       if (data.chiTieuKiemTra) {
-        const dschiTieuKiemTra = data.chiTieuKiemTra.split(",").map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1] }))
+        const dschiTieuKiemTra = data.chiTieuKiemTra.split(";").map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1] }))
         this.chiTieuChatLuongs = this.chiTieuChatLuongs.map(pp => {
           return {
             ...pp,
@@ -581,7 +581,7 @@ export class ThemMoiBienBanLayMauKhoComponent extends Base2Component implements 
       const res = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(cloaiVthh);
       if (res?.msg === MESSAGE.SUCCESS) {
         this.chiTieuChatLuongs = Array.isArray(res.data) ? res.data.map((f) => ({
-          id: f.id, giaTri: (f.tenChiTieu || "") + " " + (f.mucYeuCauNhap || ""), checked: true
+          id: f.id, giaTri: (f.tenChiTieu || "") + " " + (f.mucYeuCauNhap || ""), checked: false
         })) : []
       }
     }
