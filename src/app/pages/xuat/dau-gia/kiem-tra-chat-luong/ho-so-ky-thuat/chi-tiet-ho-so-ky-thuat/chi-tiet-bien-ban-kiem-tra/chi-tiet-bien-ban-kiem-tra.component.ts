@@ -172,6 +172,7 @@ export class ChiTietBienBanKiemTraComponent extends Base2Component implements On
   }
 
   async getDetail(data) {
+    console.log(data,11111111)
     this.title = ''
     if (data.loaiBb == LOAI_BIEN_BAN.BB_KTRA_NGOAI_QUAN) {
       this.title = 'Biên bản kiểm tra ngoại quan';
@@ -201,7 +202,8 @@ export class ChiTietBienBanKiemTraComponent extends Base2Component implements On
 
   async save() {
     try {
-      this.dataHdr.dtl = this.formData.value;
+      // this.dataHdr.dtl = this.formData.value;
+      Object.assign(this.dataHdr.xhHoSoKyThuatDtl.find(s => s.idVirtual == this.formData.value.idVirtual), this.formData.value)
       await this.createUpdate(this.dataHdr);
       // this.saveDtl.emit(this.formData.value);
       /*this.data.xhHoSoKyThuatDtl = this.formData.value;
