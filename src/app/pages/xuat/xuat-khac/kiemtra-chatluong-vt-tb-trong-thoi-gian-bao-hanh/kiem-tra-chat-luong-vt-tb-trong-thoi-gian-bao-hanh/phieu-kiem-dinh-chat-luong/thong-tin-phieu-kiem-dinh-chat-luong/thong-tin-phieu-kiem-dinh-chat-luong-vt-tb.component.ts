@@ -65,6 +65,7 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
   ]
   dataTableChiTieu: any[] = [];
   phieuKd: any;
+  templateName = "3.7. C84-HD_Phiếu kiểm định chất lượng_VT-Xuất khác";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -123,9 +124,10 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
         tenNhaKho: [null],
         tenNganKho: [null],
         tenLoKho: [null],
-        tenNguoiTao: [null],
+        canBoTao: [null],
         tpKtbq: [null],
         thuKho: [null],
+        lanhDaoCuc: [null],
         ngayLayMau: [null],
         soLuongMau : [null],
         slTonKho: [null],
@@ -168,11 +170,8 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
               soBbLayMau: data.soBbLayMau,
               tenDiaDiem: data.tenLoKho ? data.tenLoKho + ' - ' + data.tenNganKho : data.tenNganKho,
             })
-
              this.getListBbLayMau(data.soQdGiaoNvXh);
              this.loadPhuongPhapLayMau(data.cloaiVthh);
-             this.tenThuKho(data.maDiaDiem);
-             this.loadChiTieuCl(data);
             //Xử lý pp lấy mẫu và chỉ tiêu kiểm tra chất lượng
             if (data.ppLayMau) {
               let ppLayMauOptions = data.ppLayMau.indexOf(",") > 0 ? data.ppLayMau.split(",") : Array.from(data.ppLayMau);
@@ -196,7 +195,7 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
         maDvi: this.userInfo.MA_DVI,
         tenDvi: this.userInfo.TEN_DVI,
         maQhNs: this.userInfo.DON_VI.maQhns,
-        tenNguoiTao: this.userInfo.TEN_DAY_DU,
+        canBoTao: this.userInfo.TEN_DAY_DU,
         soPhieu: `${id}/${this.formData.get('nam').value}/${this.maPhieu}`,
       });
       if (this.soQdGiaoNvXh) {
@@ -447,7 +446,7 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
           donViTinh:item.donViTinh,
         });
         await this.loadPhuongPhapLayMau(item.cloaiVthh);
-        await this.tenThuKho(item.maDiaDiem);
+        // await this.tenThuKho(item.maDiaDiem);
         await this.loadChiTieuCl(item);
       }
     }

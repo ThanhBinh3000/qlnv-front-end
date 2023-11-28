@@ -11,7 +11,7 @@
           </div>
           <div nz-col nzSpan="4">
             <label>Số phiếu kiểm nghiệm chất lượng</label>
-            <input placeholder="" nz-input formControlName="soBienBan"/>
+            <input placeholder="" nz-input formControlName="soPhieu"/>
           </div>
           <div nz-col nzSpan="4">
             <label>Mã DS LT <= 6 tháng hết hạn lưu kho</label>
@@ -130,14 +130,14 @@
                 <td></td>
                 <td>{{lv1.tenDiemKho}}</td>
                 <td>{{lv1.tenLoKho ? lv1.tenLoKho : lv1.tenNganKho}}</td>
-                <td>{{lv1.slTonKho}}</td>
-                <td>{{lv1.slHetHan}}</td>
+                <td>{{lv1.slTonKho|number:globals.numberFormat:globals.locale}}</td>
+                <td>{{lv1.slHetHan|number:globals.numberFormat:globals.locale}}</td>
                 <td>{{lv1.donViTinh}}</td>
                 <td>{{lv1.tgianLuuKho}}</td>
                 <td class="bold">{{lv1.soBienBan}}</td>
-                <td>{{lv1.ngayLayMau}}</td>
+                <td>{{lv1.ngayLayMau|date:globals.dateFormat}}</td>
                 <td class="bold">{{lv1.soPhieuKnCl}}</td>
-                <td>{{lv1.ngayKnMau}}</td>
+                <td>{{lv1.ngayKnMau|date:globals.dateFormat}}</td>
                 <td>{{lv1.tenTrangThaiKnCl}}</td>
                 <td class="text-left">
                   <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_PKNCL_XEM') &&(lv1.trangThaiKnCl != null)
