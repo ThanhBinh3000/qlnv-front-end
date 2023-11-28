@@ -6,27 +6,23 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuanLyPhieuKiemNghiemChatLuongHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyPhieuKiemNghiemChatLuongHang.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
-import { UserService } from 'src/app/services/user.service';
 import { MESSAGE } from 'src/app/constants/message';
 import * as dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
-import { Globals } from 'src/app/shared/globals';
-import { BaseComponent } from 'src/app/components/base/base.component';
-import { QuyetDinhGiaoNvNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/mua-truc-tiep/qdinh-giao-nvu-nh/quyetDinhGiaoNvNhapHang.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import {STATUS} from "../../../../../constants/status";
+import {Base2Component} from "../../../../../components/base2/base2.component";
 
 @Component({
   selector: 'app-quan-ly-phieu-kiem-nghiem-chat-luong',
   templateUrl: './quan-ly-phieu-kiem-nghiem-chat-luong.component.html',
   styleUrls: ['./quan-ly-phieu-kiem-nghiem-chat-luong.component.scss'],
 })
-export class QuanLyPhieuKiemNghiemChatLuongComponent extends BaseComponent implements OnInit {
+export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component implements OnInit {
   @Input() typeVthh: string;
   toDay = new Date();
   last30Day = new Date(
@@ -88,14 +84,17 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends BaseComponent imple
   indeterminate = false;
 
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private donViService: DonviService,
     private phieuKiemNghiemChatLuongHangService: QuanLyPhieuKiemNghiemChatLuongHangService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService
   ) {
-    super(httpClient, storageService, phieuKiemNghiemChatLuongHangService);
+    super(httpClient, storageService, notification, spinner, modal, phieuKiemNghiemChatLuongHangService);
   }
 
   async ngOnInit() {

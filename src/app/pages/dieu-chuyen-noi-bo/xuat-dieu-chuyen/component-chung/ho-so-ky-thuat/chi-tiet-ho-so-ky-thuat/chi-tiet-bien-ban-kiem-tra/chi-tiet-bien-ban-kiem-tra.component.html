@@ -5,12 +5,11 @@
       <span>Quay lại</span>
     </a>
     <button type="button" class="btn btn-sub xanh-nhat" *ngIf="formData.value.trangThai != STATUS.DA_KY"
-            (click)="approve()">
+      (click)="approve()">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Ký</span>
     </button>
-    <button type="button" class="btn btn-sub xanh" *ngIf="formData.value.trangThai != STATUS.DA_KY"
-            (click)="save()">
+    <button type="button" class="btn btn-sub xanh" *ngIf="formData.value.trangThai != STATUS.DA_KY" (click)="save()">
       <i class="icon  htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
@@ -39,7 +38,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Số biên bản</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input nz-input formControlName="soBienBan" [readonly]="true"/>
+                  <input nz-input formControlName="soBienBan" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -48,7 +47,7 @@
                 <nz-form-label [nzNoColon]="true"> Ngày lập biên bản</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-date-picker formControlName="ngayLapBb" [nzFormat]="globals.dateFormat"
-                                  [nzDisabled]="isDisable"></nz-date-picker>
+                    [nzDisabled]="isDisable"></nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -59,7 +58,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input formControlName="soHskt" [readonly]="true"/>
+                    <input nz-input formControlName="soHskt" [readonly]="true" />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -70,7 +69,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input formControlName="tenDviNhapHskt" [readonly]="true"/>
+                    <input nz-input formControlName="tenDviNhapHskt" [readonly]="true" />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -90,7 +89,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input formControlName="soBbLayMau" [readonly]="true"/>
+                    <input nz-input formControlName="soBbLayMau" [readonly]="true" />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -101,7 +100,7 @@
                   Số quyết định giao nhiệm vụ nhập hàng
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input nz-input formControlName="soQdGiaoNvNh" [readonly]="true"/>
+                  <input nz-input formControlName="soQdGiaoNvNh" [readonly]="true" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -119,7 +118,7 @@
                   Đơn vị cung cấp hàng
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input nz-input [readonly]="true"/>
+                  <input nz-input [readonly]="true" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -143,7 +142,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input formControlName="diaDiemKtra" readonly/>
+                    <input nz-input formControlName="diaDiemKtra" readonly />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -170,73 +169,72 @@
       <nz-collapse-panel nzHeader="THÀNH PHẦN KIỂM TRA" [nzActive]="true">
         <nz-table class="nowrap pd-10" #basicTable [nzData]="viewTableDaiDien" nzBordered>
           <thead>
-          <tr>
-            <th class="text-center" nzWidth="50px">STT</th>
-            <th>Họ và tên</th>
-            <th nzWidth="300px">Đại diện</th>
-            <th nzWidth="100px"></th>
-          </tr>
-          <tr>
-            <th></th>
-            <th><input nz-input [(ngModel)]="daiDienRow.ten"/></th>
-            <th>
-              <nz-select [(ngModel)]="daiDienRow.loai">
-                <nz-option nzValue="Đại diện Cục Dự trữ Nhà nước" nzLabel="Đại diện Cục Dự trữ Nhà nước"></nz-option>
-                <nz-option nzValue="Đại diện Chi cục Dự trữ Nhà nước"
-                           nzLabel="Đại diện Chi cục Dự trữ Nhà nước"></nz-option>
-                <nz-option nzValue="Đại diện đơn vị cung cấp" nzLabel="Đại diện đơn vị cung cấp"></nz-option>
-              </nz-select>
-            </th>
-            <th>
-              <a (click)="themDaiDien()">
-                <i class="fa fa-plus"></i>
-              </a>
-              <a (click)="nhapLaiDaiDien()">
-                <i class="fa fa-refresh"></i>
-              </a>
-            </th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let data of basicTable.data;let i = index">
-            <ng-container *ngIf="!data.edit">
-              <td class="text-center">{{i + 1}}</td>
-              <td>{{data.ten}}</td>
-              <td>{{data.loai}}</td>
-              <td>
-                <a (click)="suaDaiDien(data)">
-                  <i class="fa fa-edit"></i>
-                </a>
-                <a>
-                  <i class="fa fa-trash-o do" nz-popconfirm nz-button
-                     nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
-                     (nzOnConfirm)="xoaDaiDien(data)"></i>
-                </a>
-              </td>
-            </ng-container>
-            <ng-container *ngIf="data.edit">
-              <td class="text-center">{{i + 1}}</td>
-              <td><input nz-input [(ngModel)]="data.ten"/></td>
-              <td>
-                <nz-select [(ngModel)]="data.loai">
+            <tr>
+              <th class="text-center" nzWidth="50px">STT</th>
+              <th>Họ và tên</th>
+              <th nzWidth="300px">Đại diện</th>
+              <th nzWidth="100px"></th>
+            </tr>
+            <tr>
+              <th></th>
+              <th><input nz-input [(ngModel)]="daiDienRow.ten" /></th>
+              <th>
+                <nz-select [(ngModel)]="daiDienRow.loai">
                   <nz-option nzValue="Đại diện Cục Dự trữ Nhà nước" nzLabel="Đại diện Cục Dự trữ Nhà nước"></nz-option>
                   <nz-option nzValue="Đại diện Chi cục Dự trữ Nhà nước"
-                             nzLabel="Đại diện Chi cục Dự trữ Nhà nước"></nz-option>
+                    nzLabel="Đại diện Chi cục Dự trữ Nhà nước"></nz-option>
                   <nz-option nzValue="Đại diện đơn vị cung cấp" nzLabel="Đại diện đơn vị cung cấp"></nz-option>
                 </nz-select>
-              </td>
-              <td>
-                <a>
-                  <i class="fa fa-save" nz-popconfirm nz-button
-                     nzPopconfirmTitle="Bạn có chắc muốn lưu thay đổi ?"
-                     (nzOnConfirm)="luuDaiDien(data)"></i>
+              </th>
+              <th>
+                <a (click)="themDaiDien()">
+                  <i class="fa fa-plus"></i>
                 </a>
-                <a (click)="huySuaDaiDien()">
-                  <i class="fa fa-ban do"></i>
+                <a (click)="nhapLaiDaiDien()">
+                  <i class="fa fa-refresh"></i>
                 </a>
-              </td>
-            </ng-container>
-          </tr>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of basicTable.data;let i = index">
+              <ng-container *ngIf="!data.edit">
+                <td class="text-center">{{i + 1}}</td>
+                <td>{{data.ten}}</td>
+                <td>{{data.loai}}</td>
+                <td>
+                  <a (click)="suaDaiDien(data)">
+                    <i class="fa fa-edit"></i>
+                  </a>
+                  <a>
+                    <i class="fa fa-trash-o do" nz-popconfirm nz-button nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
+                      (nzOnConfirm)="xoaDaiDien(data)"></i>
+                  </a>
+                </td>
+              </ng-container>
+              <ng-container *ngIf="data.edit">
+                <td class="text-center">{{i + 1}}</td>
+                <td><input nz-input [(ngModel)]="data.ten" /></td>
+                <td>
+                  <nz-select [(ngModel)]="data.loai">
+                    <nz-option nzValue="Đại diện Cục Dự trữ Nhà nước"
+                      nzLabel="Đại diện Cục Dự trữ Nhà nước"></nz-option>
+                    <nz-option nzValue="Đại diện Chi cục Dự trữ Nhà nước"
+                      nzLabel="Đại diện Chi cục Dự trữ Nhà nước"></nz-option>
+                    <nz-option nzValue="Đại diện đơn vị cung cấp" nzLabel="Đại diện đơn vị cung cấp"></nz-option>
+                  </nz-select>
+                </td>
+                <td>
+                  <a>
+                    <i class="fa fa-save" nz-popconfirm nz-button nzPopconfirmTitle="Bạn có chắc muốn lưu thay đổi ?"
+                      (nzOnConfirm)="luuDaiDien(data)"></i>
+                  </a>
+                  <a (click)="huySuaDaiDien()">
+                    <i class="fa fa-ban do"></i>
+                  </a>
+                </td>
+              </ng-container>
+            </tr>
           </tbody>
         </nz-table>
       </nz-collapse-panel>
@@ -254,7 +252,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input formControlName="tenLoaiVthh" readonly/>
+                    <input nz-input formControlName="tenLoaiVthh" readonly />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -266,7 +264,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input formControlName="tenCloaiVthh" readonly/>
+                    <input nz-input formControlName="tenCloaiVthh" readonly />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -278,7 +276,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input formControlName="tenVthh" readonly/>
+                    <input nz-input formControlName="tenVthh" readonly />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -290,7 +288,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input formControlName="soLuongNhap" readonly/>
+                    <input nz-input formControlName="soLuongNhap" readonly />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -302,7 +300,8 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <nz-date-picker nzDisabled [nzFormat]="globals.dateFormat" formControlName="tgianNhap"></nz-date-picker>
+                    <nz-date-picker nzDisabled [nzFormat]="globals.dateFormat"
+                      formControlName="tgianNhap"></nz-date-picker>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -312,33 +311,32 @@
         <div class="pd-10"><strong>Các văn bản, tài liệu kỹ thuật đã kiểm tra</strong></div>
         <nz-table class="nowrap pd-10" #tblHoSo [nzData]="viewTableHoSo" nzBordered>
           <thead>
-          <tr>
-            <th class="text-center" nzWidth="50px">STT</th>
-            <th>Tên hồ sơ, tài liệu</th>
-            <th>Loại tài liệu</th>
-            <th>Số lượng</th>
-            <th>Ghi chú</th>
-            <th>File đính kèm</th>
-            <th nzWidth="100px" class="text-center">Trạng thái kiểm tra</th>
-          </tr>
+            <tr>
+              <th class="text-center" nzWidth="50px">STT</th>
+              <th>Tên hồ sơ, tài liệu</th>
+              <th>Loại tài liệu</th>
+              <th>Số lượng</th>
+              <th>Ghi chú</th>
+              <th>File đính kèm</th>
+              <th nzWidth="100px" class="text-center">Trạng thái kiểm tra</th>
+            </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let data of tblHoSo.data;let i = index">
-            <ng-container>
-              <td class="text-center">{{i + 1}}</td>
-              <td>{{data.ten}}</td>
-              <td>{{data.loai}}</td>
-              <td>{{data.soLuong}}</td>
-              <td>{{data.ghiChu}}</td>
-              <td>
-                <a nz-button nzType="link"
-                   (click)="downloadFile(data.fileDinhKem[0])">
-                  {{(data.fileDinhKem && data.fileDinhKem.length > 0) ? data.fileDinhKem[0].fileName : null}}
-                </a>
-              </td>
-              <td class="text-center"><label nz-checkbox [(ngModel)]="data.trangThai" disabled="true"></label></td>
-            </ng-container>
-          </tr>
+            <tr *ngFor="let data of tblHoSo.data;let i = index">
+              <ng-container>
+                <td class="text-center">{{i + 1}}</td>
+                <td>{{data.ten}}</td>
+                <td>{{data.loai}}</td>
+                <td>{{data.soLuong}}</td>
+                <td>{{data.ghiChu}}</td>
+                <td>
+                  <a nz-button nzType="link" (click)="downloadFile(data.fileDinhKem[0])">
+                    {{(data.fileDinhKem && data.fileDinhKem.length > 0) ? data.fileDinhKem[0].fileName : null}}
+                  </a>
+                </td>
+                <td class="text-center"><label nz-checkbox [(ngModel)]="data.trangThai" disabled="true"></label></td>
+              </ng-container>
+            </tr>
           </tbody>
         </nz-table>
         <div>
@@ -347,12 +345,12 @@
             <nz-form-control [nzErrorTip]="error">
               <div class="list-file">
                 <nz-input-group nzSize="small" [nzSuffix]="suffixTemplateInfo">
-                  <input type="text" [ngModel]="formData.value.fileDinhKem[0]?.fileName" nz-input/>
+                  <input type="text" [ngModel]="formData.value.fileDinhKem[0]?.fileName" nz-input />
                 </nz-input-group>
                 <ng-template #suffixTemplateInfo>
                   <div class="icon-file-dinh-kem">
                     <i class="icon htvbdh_tcdt_tep"></i>
-                    <input class="input-file" (change)="getNameFile($event)" type="file"/>
+                    <input class="input-file" (change)="getNameFile($event)" type="file" />
                   </div>
                 </ng-template>
               </div>
