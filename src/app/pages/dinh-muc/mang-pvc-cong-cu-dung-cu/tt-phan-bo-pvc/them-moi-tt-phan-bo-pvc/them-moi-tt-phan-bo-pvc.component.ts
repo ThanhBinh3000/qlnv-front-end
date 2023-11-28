@@ -225,16 +225,13 @@ export class ThemMoiTtPhanBoPvcComponent extends Base2Component implements OnIni
   }
 
   async changSoTh(event) {
-    if (this.listTongHop && this.listTongHop.length > 0) {
-      let result = this.listTongHop.filter(item => item.id = event)
-      if (result && result.length > 0) {
-        let detailTh = result[0]
-        let res = await this.qdMuaSamService.getDetail(detailTh.id);
+    if (event) {
+        let res = await this.qdMuaSamService.getDetail(event);
         if (res.msg == MESSAGE.SUCCESS) {
           if (res.data) {
             const data = res.data;
             if (data && data.listQlDinhMucPvcQdMuaSamDtl && data.listQlDinhMucPvcQdMuaSamDtl.length > 0 ) {
-              this.dataTable = data.listQlDinhMucPvcQdMuaSamDtl.filter(item => item.maDvi = this.userInfo.MA_DVI)
+              this.dataTable = data.listQlDinhMucPvcQdMuaSamDtl.filter(item => item.maDvi == this.userInfo.MA_DVI);
             }
             if (this.dataTable && this.dataTable.length > 0) {
               this.dataTable.forEach(item => {
@@ -248,7 +245,6 @@ export class ThemMoiTtPhanBoPvcComponent extends Base2Component implements OnIni
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg)
         }
-      }
     }
   }
 
