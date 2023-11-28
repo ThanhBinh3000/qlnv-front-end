@@ -19,6 +19,7 @@ import {
 } from '../../../may-moc-thiet-bi/de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc.component';
 import { ThongTinPhanBoCtPvcComponent } from './thong-tin-phan-bo-ct-pvc/thong-tin-phan-bo-ct-pvc.component';
 import { QdMuaSamPvcService } from '../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/qd-mua-sam-pvc.service';
+import { DxChiCucPvcService } from '../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/dx-chi-cuc-pvc.service';
 
 @Component({
   selector: 'app-them-moi-tt-phan-bo-pvc',
@@ -29,10 +30,10 @@ export class ThemMoiTtPhanBoPvcComponent extends Base2Component implements OnIni
   @Input() id: number;
   @Input() isView: boolean;
   listTongHop: any[] = [];
+  listDxChiCuc: any[];
   maQd: string;
   rowItem: MmThongTinNcChiCuc = new MmThongTinNcChiCuc();
   dataEdit: { [key: string]: { edit: boolean; data: MmThongTinNcChiCuc } } = {};
-  qdMuaSam: {};
   expandSet = new Set<number>();
 
   constructor(
@@ -40,6 +41,7 @@ export class ThemMoiTtPhanBoPvcComponent extends Base2Component implements OnIni
     storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
+    private dxChiCucService: DxChiCucPvcService,
     modal: NzModalService,
     private qdMuaSamService: QdMuaSamPvcService,
   ) {
@@ -227,6 +229,17 @@ export class ThemMoiTtPhanBoPvcComponent extends Base2Component implements OnIni
     }
   }
 
+  async loadListDxCuaChiCuc(qdMuaSam) {
+    if (qdMuaSam) {
+      this.listDxChiCuc = [];
+      let rs = await this.dxChiCucService.getListDxChiCucTheoIdTongHopTC(qdMuaSam.maTh);
+      if (rs.msg == MESSAGE.SUCCESS) {
+        this.listDxChiCuc = rs.data;
+      }
+    }
+  }
+
+
   async changSoTh(event) {
     if (event) {
       let res = await this.qdMuaSamService.getDetail(event);
@@ -284,8 +297,7 @@ export class ThemMoiTtPhanBoPvcComponent extends Base2Component implements OnIni
           this.formData.patchValue({
             soQdMs: data.soQd,
           });
-          this.qdMuaSam = data;
-          console.log(this.qdMuaSam,'this.qdMuaSamthis.qdMuaSam');
+          this.loadListDxCuaChiCuc(data);
           await this.changSoTh(data.id);
           this.spinner.hide();
         }
@@ -314,7 +326,7 @@ export class ThemMoiTtPhanBoPvcComponent extends Base2Component implements OnIni
         nzComponentParams: {
           dataInput: data,
           type: type,
-          qdMuaSam : this.qdMuaSam,
+          listDxChiCuc : this.listDxChiCuc,
           sum: this.sumSlPb(list),
           listData: arr,
         },
