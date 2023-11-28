@@ -254,9 +254,9 @@ export class ThemMoiBienBanPvcComponent extends Base2Component implements OnInit
   }
 
   async chagneHopDong(soHd) {
-    let filter = this.listHopDong.filter(item => item.soHopDong = soHd)
-    if (filter && filter.length > 0) {
-      let res = await this.hopDongService.getDetail(filter[0].id);
+    let filter = this.listHopDong.find(item => item.soHopDong == soHd)
+    if (filter) {
+      let res = await this.hopDongService.getDetail(filter.id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           const data = res.data;
