@@ -477,11 +477,16 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
       return;
     }
     let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd : this.maHauTo };
-    await super.saveAndSend(body, trangThai, msg, msgSuccess);
-    if (this.loaiXuat === "CTVT") {
-      this.formData.controls['truongBpBaoQuan'].clearValidators();
-      this.formData.controls['truongBpBaoQuan'].updateValueAndValidity()
+    // await super.saveAndSend(body, trangThai, msg, msgSuccess);
+    await this.helperService.ignoreRequiredForm(this.formData);
+    const data = await this.createUpdate(body, null, true);
+    if (data) {
+      this.formData.patchValue({ soBbQd: data.soBbQd });
+      await this.helperService.restoreRequiredForm(this.formData);
+      this.approve(data.id, trangThai, msg, null, msgSuccess)
     }
+    this.formData.controls['truongBpBaoQuan'].clearValidators();
+    this.formData.controls['truongBpBaoQuan'].updateValueAndValidity()
   }
 
   async bindingQdGnv(idQdGnv) {

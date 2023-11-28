@@ -456,7 +456,8 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
     }
   }
 
-  sumTable(table: any[], column: string, tenDiemKho?: string): number {
+  sumTable(array: any[], column: string, tenDiemKho?: string): number {
+    let table = cloneDeep(array);
     if (tenDiemKho) {
       table = table.filter(item => item.tenDiemKho == tenDiemKho);
     }

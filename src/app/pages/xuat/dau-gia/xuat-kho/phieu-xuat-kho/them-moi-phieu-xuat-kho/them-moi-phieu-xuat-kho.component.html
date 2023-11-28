@@ -4,7 +4,7 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="idInput" type="button" class="btn btn-sub do"
+    <button *ngIf="idInput" type="button" class="btn btn-sub"
             (click)="xemTruoc(idInput,loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? templateNameVt: templateNameLt)">
       <i class="icon htvbdh_totrinh"></i>
       <span> Xem trước </span>
@@ -419,8 +419,7 @@
             <nz-form-control nz-col>
               <div class="list-file" nz-col>
                 <file-list [data]="formData.value.fileCanCu" [isCanCuPL]='true'
-                           [isViewDetail]="isView || isViewBangKe">
-                </file-list>
+                           [isViewDetail]="isView || isViewBangKe"></file-list>
               </div>
             </nz-form-control>
           </nz-form-item>

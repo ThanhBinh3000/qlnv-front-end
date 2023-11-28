@@ -11,7 +11,7 @@ import {
 import {
   ChaoGiaMuaLeUyQuyenService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service";
-import {ChiTietThongTinBanTrucTiepChaoGia, FileDinhKem} from "../../../../../../models/DeXuatKeHoachBanTrucTiep";
+import {FileDinhKem} from "../../../../../../models/DeXuatKeHoachBanTrucTiep";
 import {MESSAGE} from "../../../../../../constants/message";
 import {STATUS} from "../../../../../../constants/status";
 import * as dayjs from "dayjs";
@@ -20,8 +20,6 @@ import {
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import {Validators} from "@angular/forms";
 import {saveAs} from 'file-saver';
-import {PREVIEW} from "../../../../../../constants/fileType";
-import printJS from "print-js";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
@@ -36,6 +34,8 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
+  templateNameVt = "Quyết định kết quả chào giá vật tư";
+  templateNameLt = "Quyết định kết quả chào giá lương thực";
   maHauTo: any;
   listOfData: any[] = [];
   showFromTT: boolean = false;
@@ -89,7 +89,6 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
       tenCloaiVthh: [''],
       fileCanCu: [new Array<FileDinhKem>()],
       fileDaKy: [new Array<FileDinhKem>()],
-      fileQd: [new Array<FileDinhKem>()],
     });
   }
 
@@ -246,8 +245,8 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
         idChaoGia: data.id,
         tenDvi: data.tenDvi,
         diaDiemChaoGia: data.diaDiemChaoGia,
-        ngayMkho: data.ngayMkho,
-        ngayKthuc: data.ngayKthuc,
+        ngayMkho: data.tgianDkienTu,
+        ngayKthuc: data.tgianDkienDen,
         loaiVthh: data.loaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
         cloaiVthh: data.cloaiVthh,
@@ -274,22 +273,6 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
     }
   }
 
-  dataEdit: { [key: string]: { edit: boolean; data: ChiTietThongTinBanTrucTiepChaoGia } } = {};
-
-  startEdit(index: number): void {
-    this.listOfData[index].edit = true
-  }
-
-  saveEdit(index: number): void {
-    this.listOfData[index].edit = false
-    this.formData.patchValue({})
-  }
-
-  cancelEdit(index: number): void {
-    this.listOfData[index].edit = false
-    this.formData.patchValue({})
-  }
-
   downloadFile(item: FileDinhKem) {
     this.uploadFileService.downloadFile(item.fileUrl)
       .subscribe((blob) => {
@@ -309,43 +292,6 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
       this.showFromTT = true;
     }
   }
-
-  isDisabledLuaChon(item) {
-    return this.luaChon !== item;
-  }
-
-  async preview(id) {
-    await this.qdPdKetQuaBttService.preview({
-      tenBaoCao: 'Quyết định phê duyệt kết quả chào giá',
-      id: id
-    }).then(async res => {
-      if (res.data) {
-        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
-        this.printSrc = res.data.pdfSrc;
-        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
-        this.showDlgPreview = true;
-      } else {
-        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
-      }
-    });
-  }
-
-  downloadPdf() {
-    saveAs(this.pdfSrc, "quyet-dinh-phe-duyet-ke-qua-chao-gia.pdf");
-  }
-
-  downloadWord() {
-    saveAs(this.wordSrc, "quyet-dinh-phe-duyet-ke-qua-chao-gia.docx");
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
-  }
-
-  printPreview() {
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
-  }
-
 
   setValidForm() {
     const fieldsToValidate = [

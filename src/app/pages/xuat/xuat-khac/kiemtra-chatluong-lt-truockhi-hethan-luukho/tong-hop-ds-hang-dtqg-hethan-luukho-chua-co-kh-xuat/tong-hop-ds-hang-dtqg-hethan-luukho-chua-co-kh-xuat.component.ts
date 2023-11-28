@@ -243,6 +243,7 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
           trangThai: rowItem.trangThai,
           tenTrangThai: rowItem.tenTrangThai,
           ngayTao: rowItem.ngayTao,
+          ngayDeXuat: rowItem.ngayDeXuat,
           childData: rs
         };
       }).value();

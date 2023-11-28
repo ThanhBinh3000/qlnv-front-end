@@ -3,22 +3,23 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
+import {NzModalRef, NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
 import * as dayjs from 'dayjs';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { BangKeBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/bang-ke-btt.service';
-import { DialogTableSelectionComponent } from '../dialog-table-selection/dialog-table-selection.component';
-import { STATUS } from 'src/app/constants/status';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {BangKeBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/bang-ke-btt.service';
+import {DialogTableSelectionComponent} from '../dialog-table-selection/dialog-table-selection.component';
+import {STATUS} from 'src/app/constants/status';
 import {
   QuyetDinhNvXuatBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
-import { Validators } from '@angular/forms';
-import { MESSAGE } from 'src/app/constants/message';
-import { LOAI_HANG_DTQG } from 'src/app/constants/config';
+import {Validators} from '@angular/forms';
+import {MESSAGE} from 'src/app/constants/message';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import {AMOUNT_ONE_DECIMAL} from "../../../Utility/utils";
 
 @Component({
   selector: 'app-dialog-them-moi-bang-ke-ban-le',
@@ -32,6 +33,8 @@ export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements
   loadBangKeBanLe: any[] = [];
   listNhiemVuXh: any[] = [];
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
+  amount = {...AMOUNT_ONE_DECIMAL};
+  sumSlDaLap: number = 0
 
   constructor(
     httpClient: HttpClient,
@@ -70,12 +73,14 @@ export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements
         tenDvi: [''],
         tenLoaiVthh: [''],
         tenCloaiVthh: [''],
+        tenNguoiTao: [''],
       });
   }
 
   async ngOnInit() {
     try {
       await this.spinner.show();
+      this.amount.align = "left";
       if (this.idInput) {
         await this.detail(this.idInput);
       } else {
@@ -93,10 +98,10 @@ export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements
     try {
       const id = await this.userService.getId('XH_BANG_KE_BTT_SEQ');
       this.formData.patchValue({
+        tenNguoiTao: this.userInfo.TEN_DAY_DU,
         tenDvi: this.userInfo.TEN_DVI,
         soBangKe: `${id}/${this.formData.value.namKh}/BK-CCDT KVVP`,
       });
-      await this.loadBangKeBanHang();
     } catch (error) {
       console.error('Error in initForm:', error);
     }
@@ -130,7 +135,6 @@ export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements
       };
       const res = await this.quyetDinhNvXuatBttService.search(body);
       if (res.msg === MESSAGE.SUCCESS) {
-        // const set = new Set(this.loadBangKeBanLe.map(item => item.soQdNv));
         this.listNhiemVuXh = res.data.content.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI));
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -176,6 +180,7 @@ export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements
           tenLoaiVthh: data.tenLoaiVthh,
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
+          ngayBanHang: data.tgianGiaoNhan,
         });
         const childWithDonGia = data.children.find(item => item.children.length > 0 && item.maDvi === this.userInfo.MA_DVI);
         if (childWithDonGia) {
@@ -184,6 +189,12 @@ export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements
             slXuatBanQdPd: childWithDonGia.soLuong || null,
           });
         }
+        await this.loadBangKeBanHang();
+        const listBangKeBanLe = this.loadBangKeBanLe.filter(item => item.idQdNv === data.id);
+        this.sumSlDaLap = listBangKeBanLe.reduce((prev, cur) => prev + cur.soLuong, 0);
+        this.formData.patchValue({
+          soLuongConLai: this.sumSlDaLap,
+        });
       }
     } catch (error) {
       console.error('error: ', error);
@@ -196,7 +207,7 @@ export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements
   async changeSoLuong(event) {
     if (event) {
       this.formData.patchValue({
-        soLuongConLai: this.formData.value.slXuatBanQdPd - event,
+        soLuongConLai: this.formData.value.slXuatBanQdPd - (event + this.sumSlDaLap),
         thanhTien: this.formData.value.donGia * event
       });
     }
@@ -205,7 +216,6 @@ export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements
   async save() {
     try {
       await this.helperService.ignoreRequiredForm(this.formData);
-      this.setValidator();
       const body = this.formData.value;
       await this.createUpdate(body);
     } catch (error) {
@@ -218,21 +228,5 @@ export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements
 
   onCancel() {
     this._modalRef.destroy();
-  }
-
-  setValidator() {
-    this.formData.controls["soBangKe"].setValidators([Validators.required]);
-    this.formData.controls["tenDvi"].setValidators([Validators.required]);
-    this.formData.controls["soQdNv"].setValidators([Validators.required]);
-    this.formData.controls["namKh"].setValidators([Validators.required]);
-    this.formData.controls["nguoiPhuTrach"].setValidators([Validators.required]);
-    this.formData.controls["diaChi"].setValidators([Validators.required]);
-    this.formData.controls["ngayBanHang"].setValidators([Validators.required]);
-    this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
-    this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
-    this.formData.controls["soLuong"].setValidators([Validators.required]);
-    this.formData.controls["tenBenMua"].setValidators([Validators.required]);
-    this.formData.controls["diaChiBenMua"].setValidators([Validators.required]);
-    this.formData.controls["cmtBenMua"].setValidators([Validators.required]);
   }
 }

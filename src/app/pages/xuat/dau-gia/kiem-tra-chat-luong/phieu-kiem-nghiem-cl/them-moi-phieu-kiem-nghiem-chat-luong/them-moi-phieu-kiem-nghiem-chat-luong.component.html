@@ -4,7 +4,7 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="idInput" type="button" class="btn btn-sub do"
+    <button *ngIf="idInput" type="button" class="btn btn-sub"
             (click)="xemTruoc(idInput,loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? templateNameVt: templateNameLt)">
       <i class="icon htvbdh_totrinh"></i>
       <span> Xem trước </span>
@@ -270,10 +270,10 @@
       </nz-collapse-panel>
     </nz-collapse>
   </nz-card>
-  <nz-card class="mg-t-16 flex-card p-lr16">
+  <nz-card class="mg-t-16 flex-card p-lr16" *ngIf="!loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
     <nz-collapse>
       <nz-collapse-panel nzActive="true"
-                         [nzHeader]="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? 'KẾT QUẢ ĐÁNH GIÁ CẢM QUAN' : 'KẾT QUẢ ĐÁNH GIÁ CẢM QUAN: (Về màu sắc, mùi vị, tạp chất, đánh bóng, sinh vật hại)'">
+                         nzHeader="KẾT QUẢ ĐÁNH GIÁ CẢM QUAN: (Về màu sắc, mùi vị, tạp chất, đánh bóng, sinh vật hại)">
         <form nz-form nzLayout="vertical" [formGroup]="formData">
           <br>
           <div nz-row [nzGutter]="24">

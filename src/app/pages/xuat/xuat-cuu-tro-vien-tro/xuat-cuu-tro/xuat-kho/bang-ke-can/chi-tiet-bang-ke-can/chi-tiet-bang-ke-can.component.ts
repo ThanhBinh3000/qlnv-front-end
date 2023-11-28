@@ -192,7 +192,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     this.userInfo = this.userService.getUserLogin();
     this.maDeXuat = '/' + this.userInfo.MA_TCKT;
     this.formData.controls.tongTrongLuongHang.valueChanges.subscribe((value) => {
-      const tongTrongLuongHangBc = value ? this.convertTienTobangChu(value) + (this.formData.value.donViTinh ? this.formData.value.donViTinh === "kg" ? "kilôgam" : this.formData.value.donViTinh : "") : "";
+      const tongTrongLuongHangBc = value ? this.convertTienTobangChu(value) + (this.formData.value.donViTinh ? this.formData.value.donViTinh === "kg" ? " " + "kilôgam" : " " + this.formData.value.donViTinh : "") : "";
       this.formData.patchValue({ tongTrongLuongHangBc });
     })
     // this.setTitle();

@@ -41,6 +41,8 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
+  templateNameVt = "Phiếu kiểm nghiệm chất lượng";
+  templateNameLt = "Phiếu kiểm nghiệm chất lượng";
   TRUC_TIEP = TRUC_TIEP;
   maTuSinh: number;
   maHauTo: any;
@@ -481,30 +483,6 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
     }
   }
 
-  async preview(id) {
-    await this.phieuKtraCluongBttService.preview({
-      tenBaoCao: 'Phiếu kiểm nghiệm chất lượng bán trực tiếp',
-      id: id
-    }).then(async res => {
-      if (res.data) {
-        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
-        this.printSrc = res.data.pdfSrc;
-        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
-        this.showDlgPreview = true;
-      } else {
-        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
-      }
-    });
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
-  }
-
-  printPreview() {
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
-  }
-
   setValidator() {
     const phuongThuc = this.formData.get('phanLoai').value;
     if (phuongThuc === TRUC_TIEP.HOP_DONG) {
@@ -516,24 +494,14 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
       this.formData.get("soBangKeBanLe").updateValueAndValidity();
     }
     this.formData.get("soQdNv").setValidators([Validators.required]);
-    this.formData.get("soBbLayMau").setValidators([Validators.required]);
-    this.formData.controls["soPhieuKiemNghiem"].setValidators([Validators.required]);
   }
 
   setValidForm() {
     const requiredFields = [
-      "namKh",
-      "tenDvi",
-      "maQhNs",
-      "ngayLapPhieu",
-      "ngayLayMau",
-      "tenNganLoKho",
-      "tenNhaKho",
-      "tenDiemKho",
-      "tenLoaiVthh",
-      "tenCloaiVthh",
-      "hinhThucBaoQuan",
+      "soQdNv",
+      "soBbLayMau",
       "ngayKiemNghiemMau",
+      "nhanXet",
     ];
     requiredFields.forEach(fieldName => {
       this.formData.controls[fieldName].setValidators([Validators.required]);

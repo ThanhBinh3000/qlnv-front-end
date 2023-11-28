@@ -1,31 +1,28 @@
-import { NgIf } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
-import { cloneDeep } from 'lodash';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { BaseComponent } from 'src/app/components/base/base.component';
+import {chain, cloneDeep } from 'lodash';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { BienBanKetThucNhapKho } from 'src/app/models/BienBanKetThucNhapKho';
 import { UserLogin } from 'src/app/models/userlogin';
 import { QuanLyBienBanGiaoNhanService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/quanLyBienBanGiaoNhan.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
-import { QuanLyBienBanKetThucNhapKhoService } from 'src/app/services/quanLyBienBanKetThucNhapKho.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import { STATUS } from 'src/app/constants/status';
 @Component({
   selector: 'app-bien-ban-giao-nhan',
   templateUrl: './bien-ban-giao-nhan.component.html',
   styleUrls: ['./bien-ban-giao-nhan.component.scss']
 })
-export class BienBanGiaoNhanComponent extends BaseComponent implements OnInit {
+export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
   searchFilter = {
     soBienBan: '',
@@ -48,7 +45,7 @@ export class BienBanGiaoNhanComponent extends BaseComponent implements OnInit {
   routerVthh: string;
 
   userInfo: UserLogin;
-
+  STATUS = STATUS
   dataTable: any[] = [];
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
@@ -59,6 +56,10 @@ export class BienBanGiaoNhanComponent extends BaseComponent implements OnInit {
 
   allChecked = false;
   indeterminate = false;
+  tuNgayKtnk: Date | null = null;
+  denNgayKtnk: Date | null = null;
+  tuNgayThoiHanNhap: Date | null = null;
+  denNgayThoiHanNhap: Date | null = null;
 
   filterTable = {
     soBienBan: '',
@@ -73,14 +74,16 @@ export class BienBanGiaoNhanComponent extends BaseComponent implements OnInit {
   dataTableAll: any[] = [];
   bienBanKetThucNhapKho: BienBanKetThucNhapKho = new BienBanKetThucNhapKho();
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private quanLyBienBanBanGiaoNhanService: QuanLyBienBanGiaoNhanService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     public userService: UserService,
-    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService
   ) {
-    super(httpClient, storageService, quanLyBienBanBanGiaoNhanService);
+    super(httpClient, storageService, notification, spinner, modal, quanLyBienBanBanGiaoNhanService);
     super.ngOnInit();
   }
 
@@ -134,6 +137,13 @@ export class BienBanGiaoNhanComponent extends BaseComponent implements OnInit {
   async search() {
     await this.spinner.show();
     let body = {
+      tuNgayKtnk: this.tuNgayKtnk != null ? dayjs(this.tuNgayKtnk).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayKtnk: this.denNgayKtnk != null ? dayjs(this.denNgayKtnk).format('YYYY-MM-DD') + " 23:59:59" : null,
+      tuNgayThoiHanNhap: this.tuNgayThoiHanNhap != null ? dayjs(this.tuNgayThoiHanNhap).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayThoiHanNhap: this.denNgayThoiHanNhap != null ? dayjs(this.denNgayThoiHanNhap).format('YYYY-MM-DD') + " 23:59:59": null,
+      nam: this.searchFilter.nam,
+      soQdGiaonvNh: this.searchFilter.soQuyetDinhNhap,
+      soBienBan: this.searchFilter.soBienBan,
       trangThai: this.STATUS.BAN_HANH,
       paggingReq: {
         "limit": this.pageSize,
@@ -141,10 +151,19 @@ export class BienBanGiaoNhanComponent extends BaseComponent implements OnInit {
       },
       loaiVthh: this.loaiVthh
     };
-    let res = await this.quyetDinhGiaoNhapHangService.search(body);
+    let res = await this.quanLyBienBanBanGiaoNhanService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
+      for (let i = 0; i < this.dataTable.length; i++) {
+        this.expandSet.add(i)
+        this.dataTable[i].children = chain(this.dataTable[i].listBienBanGiaoNhan).groupBy("tenDiemKho").map((value, key) => (
+          {
+            tenDiemKho: key,
+            children: value
+          }))
+          .value();
+      }
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -164,6 +183,10 @@ export class BienBanGiaoNhanComponent extends BaseComponent implements OnInit {
       nam: '',
       soQuyetDinhNhap: '',
     };
+    this.tuNgayKtnk = null;
+    this.denNgayKtnk = null;
+    this.tuNgayThoiHanNhap = null;
+    this.denNgayThoiHanNhap = null;
     this.search();
   }
 
@@ -337,18 +360,19 @@ export class BienBanGiaoNhanComponent extends BaseComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "ngayHopDongTu": this.searchFilter.ngayHopDong && this.searchFilter.ngayHopDong.length > 1
-            ? dayjs(this.searchFilter.ngayHopDong[0]).format('YYYY-MM-DD')
-            : null,
-          "ngayHopDongDen": this.searchFilter.ngayHopDong && this.searchFilter.ngayHopDong.length > 0
-            ? dayjs(this.searchFilter.ngayHopDong[1]).format('YYYY-MM-DD')
-            : null,
-          "pageSize": this.pageSize,
-          "pageNumber": this.page,
-          "soBienBan": this.searchFilter.soBienBan,
-          "nam": this.searchFilter.nam,
-          "soHopDong": this.searchFilter.soHopDong,
-          "soQdNhap": this.searchFilter.soQuyetDinhNhap
+          tuNgayKtnk: this.tuNgayKtnk != null ? dayjs(this.tuNgayKtnk).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denNgayKtnk: this.denNgayKtnk != null ? dayjs(this.denNgayKtnk).format('YYYY-MM-DD') + " 23:59:59" : null,
+          tuNgayThoiHanNhap: this.tuNgayThoiHanNhap != null ? dayjs(this.tuNgayThoiHanNhap).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denNgayThoiHanNhap: this.denNgayThoiHanNhap != null ? dayjs(this.denNgayThoiHanNhap).format('YYYY-MM-DD') + " 23:59:59": null,
+          nam: this.searchFilter.nam,
+          soQdGiaonvNh: this.searchFilter.soQuyetDinhNhap,
+          soBienBan: this.searchFilter.soBienBan,
+          trangThai: this.STATUS.BAN_HANH,
+          paggingReq: {
+            "limit": this.pageSize,
+            "page": this.page - 1
+          },
+          loaiVthh: this.loaiVthh
         };
         this.quanLyBienBanBanGiaoNhanService
           .export(body)
@@ -416,5 +440,49 @@ export class BienBanGiaoNhanComponent extends BaseComponent implements OnInit {
     } else {
       this.expandSet2.delete(id);
     }
+  }
+  disabledStartNgayKtnk = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.denNgayKtnk) {
+      return startValue.getTime() > this.formData.value.denNgayKtnk.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledEndNgayKtnk = (endValue: Date): boolean => {
+    if (endValue && this.formData.value.tuNgayKtnk) {
+      return endValue.getTime() < this.formData.value.tuNgayKtnk.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledStartNgayTHN = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.denNgayThoiHanNhap) {
+      return startValue.getTime() > this.formData.value.denNgayThoiHanNhap.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledEndNgayTHN = (endValue: Date): boolean => {
+    if (endValue && this.formData.value.tuNgayThoiHanNhap) {
+      return endValue.getTime() < this.formData.value.tuNgayThoiHanNhap.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  hienThiXem(data){
+    if (this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBGN_XEM') && data != null) {
+      if(this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBGN_THEM') && (data.trangThai == STATUS.DU_THAO
+        || data.trangThai == STATUS.TU_CHOI_LDC)) {
+        return false;
+      } else if (this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBGN_DUYET') && data.trangThai == STATUS.CHO_DUYET_LDC) {
+        return false;
+      }
+      return true;
+    }
+    return false;
   }
 }

@@ -115,7 +115,7 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
         tenTrangThaiHd: data.tenTrangThaiHd,
       });
       await this.loadDsVthh();
-      this.dataTable = data.listHopDong.filter(item => item.maDvi === this.userInfo.MA_DVI);
+      this.dataTable = this.userService.isTongCuc() ? data.listHopDong :  data.listHopDong.filter(item => item.maDvi === this.userInfo.MA_DVI);
       if (this.dataTable && this.dataTable.length > 0) {
         await this.selectRow(this.dataTable[0]);
       }
@@ -187,7 +187,8 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
           await this.hopDongXuatHangService.delete(body);
           if (this.idInput > 0) {
             const res = await this.qdPdKetQuaBanDauGiaService.getDetail(this.idInput);
-            if (res.data && res.data.listHopDong && res.data.listHopDong.length > 0) {
+            this.dataTableAll = res.data.listHopDong.filter(item => item.maDvi === this.userInfo.MA_DVI);
+            if (this.dataTableAll && this.dataTableAll.length > 0) {
               this.isHopDong = true;
             } else {
               this.isHopDong = false;

@@ -26,12 +26,10 @@ import {DonviService} from 'src/app/services/donvi.service';
 import {chiTietBangCanKeHang} from 'src/app/models/DeXuatKeHoachBanTrucTiep';
 import {HopDongBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
 import {BangKeBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/bang-ke-btt.service';
-import {PREVIEW} from "../../../../../../constants/fileType";
-import printJS from "print-js";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {FileDinhKem} from "../../../../../../models/CuuTro";
 import {chiTietBangKeCanHangBdg} from "../../../../../../models/KeHoachBanDauGia";
-import {CurrencyMaskInputMode} from "ngx-currency";
+import {AMOUNT_ONE_DECIMAL} from "../../../../../../Utility/utils";
 
 @Component({
   selector: 'app-them-moi-bang-ke-can-hang-btt',
@@ -46,6 +44,10 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
   @Output() showListEvent = new EventEmitter<any>();
   dataTableChange = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
+  amount = {...AMOUNT_ONE_DECIMAL};
+  amount1 = {...AMOUNT_ONE_DECIMAL};
+  templateNameVt = "Bảng kê cân hàng vật tư";
+  templateNameLt = "Bảng kê cân hàng lương thực";
   TRUC_TIEP = TRUC_TIEP;
   maTuSinh: number;
   maHauTo: any;
@@ -54,19 +56,6 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
   listPhieuXuatKho: any[] = [];
   listDiaDiemXuat: any[] = [];
   loadDanhSachBangKeCan: any[] = [];
-  amount = {
-    allowZero: true,
-    allowNegative: false,
-    precision: 2,
-    prefix: '',
-    thousands: '.',
-    decimal: ',',
-    align: "left",
-    nullable: true,
-    min: 0,
-    max: 1000000000000,
-    inputMode: CurrencyMaskInputMode.NATURAL,
-  }
 
   constructor(
     httpClient: HttpClient,
@@ -100,7 +89,6 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
       maNganKho: [''],
       maLoKho: [''],
       loaiHinhKho: [''],
-      nguoiGiamSat: [''],
       loaiVthh: [''],
       cloaiVthh: [''],
       tenHangHoa: [''],
@@ -134,6 +122,7 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
       pthucBanTrucTiep: [''],
       phanLoai: [''],
       trangThai: [''],
+      nguoiGiamSat: [''],
       lyDoTuChoi: [''],
       tenDvi: [''],
       tenDiemKho: [''],
@@ -156,6 +145,7 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
     try {
       await this.spinner.show();
       this.maHauTo = '/BKCH-' + this.userInfo.DON_VI.tenVietTat;
+      this.amount1.align = "left";
       if (this.idInput > 0) {
         await this.getDetail(this.idInput);
       } else {
@@ -198,10 +188,6 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
   async getDetail(id: number) {
     if (!id) return;
     const data = await this.detail(id);
-    if (!data) {
-      console.error('Không tìm thấy dữ liệu');
-      return;
-    }
     this.maTuSinh = this.idInput;
     this.dataTable = data.children
     if (!this.isView) {
@@ -220,8 +206,6 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
       const res = await this.quyetDinhNvXuatBttService.search(body)
       if (res && res.msg === MESSAGE.SUCCESS) {
         this.danhSachQuyetDinh = res.data.content.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI));
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ XUẤT HÀNG',
@@ -469,8 +453,6 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
       if (res && res.msg === MESSAGE.SUCCESS) {
         const phieuXuatKhoSet = new Set(this.loadDanhSachBangKeCan.map(item => item.soPhieuXuatKho));
         this.listPhieuXuatKho = res.data.content.filter(item => !phieuXuatKhoSet.has(item.soPhieuXuatKho))
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const formattedDataPhieuXuatKho = this.listPhieuXuatKho.map(item => ({
         soLuongXuat: item.thucXuat.toLocaleString(),
@@ -678,7 +660,6 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
       await this.helperService.ignoreRequiredForm(this.formData);
       this.formData.controls["soQdNv"].setValidators([Validators.required]);
       this.formData.controls["soPhieuXuatKho"].setValidators([Validators.required]);
-      this.formData.controls["soBangKeHang"].setValidators([Validators.required]);
       const body = {
         ...this.formData.value,
         children: this.dataTable,
@@ -707,47 +688,14 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
     }
   }
 
-  async preview(id) {
-    await this.bangCanKeHangBttService.preview({
-      tenBaoCao: 'Bảng kê cân hàng bán trực tiếp',
-      id: id
-    }).then(async res => {
-      if (res.data) {
-        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
-        this.printSrc = res.data.pdfSrc;
-        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
-        this.showDlgPreview = true;
-      } else {
-        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
-      }
-    });
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
-  }
-
-  printPreview() {
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
-  }
-
   setValidForm() {
     const requiredFields = [
       "namKh",
-      "tenDvi",
-      "maQhNs",
       "ngayLapBangKe",
-      "tenNganLoKho",
-      "tenNhaKho",
-      "tenDiemKho",
-      "tenThuKho",
-      "tenNguoiGiao",
-      "cmtNguoiGiao",
-      "congTyNguoiGiao",
-      "diaChiNguoiGiao",
-      "tgianGiaoNhan",
-      "tenLoaiVthh",
-      "tenCloaiVthh",
+      "soQdNv",
+      "diaDiemKho",
+      "soPhieuXuatKho",
+      "nguoiGiamSat",
     ];
     requiredFields.forEach(fieldName => {
       this.formData.controls[fieldName].setValidators([Validators.required]);

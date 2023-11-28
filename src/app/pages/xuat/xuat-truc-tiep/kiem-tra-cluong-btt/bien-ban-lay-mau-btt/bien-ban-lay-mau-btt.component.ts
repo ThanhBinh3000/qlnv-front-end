@@ -46,23 +46,23 @@ export class BienBanLayMauBttComponent extends Base2Component implements OnInit 
       donViKnghiem: null,
       ngayLayMauTu: null,
       ngayLayMauDen: null,
-      maDvi: null,
       loaiVthh: null,
     })
 
     this.filterTable = {
-      soQdNv: '',
-      namKh: '',
-      ngayKyQdNv: '',
-      soBbLayMau: '',
-      ngayLayMau: '',
-      tenDiemKho: '',
-      tenLoKho: '',
-      tenNganKho: '',
-      soBbTinhKho: '',
-      ngayXuatDocKho: '',
-      soBbHaoDoi: '',
-      tenTrangThai: '',
+      soQdNv: null,
+      namKh: null,
+      tgianGiaoNhan: null,
+      tenDiemKho: null,
+      tenNhaKho: null,
+      tenNganKho: null,
+      tenLoKho: null,
+      soBbLayMau: null,
+      ngayLayMau: null,
+      soBbTinhKho: null,
+      ngayXuatDocKho: null,
+      soBbHaoDoi: null,
+      tenTrangThai: null,
     };
   }
 
@@ -199,7 +199,7 @@ export class BienBanLayMauBttComponent extends Base2Component implements OnInit 
         DUYET_LDCHICUC: 'XHDTQG_PTTT_KTCL_LT_BBLM_DUYET_LDCCUC',
       },
     };
-    const permissions = this.loaiVthh === LOAI_HANG_DTQG.VAT_TU ? permissionMapping.VT : permissionMapping.LT;
+    const permissions = this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? permissionMapping.VT : permissionMapping.LT;
     switch (action) {
       case 'XEM':
         return (

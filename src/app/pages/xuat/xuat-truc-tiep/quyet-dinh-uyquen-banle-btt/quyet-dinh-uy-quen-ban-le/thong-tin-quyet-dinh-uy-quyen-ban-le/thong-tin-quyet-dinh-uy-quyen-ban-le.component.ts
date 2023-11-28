@@ -28,8 +28,6 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
   @Output() showListEvent = new EventEmitter<any>();
   TRUC_TIEP = THONG_TIN_BAN_TRUC_TIEP
   listOfData: any[] = [];
-  fileUyQuyen: any[] = [];
-  fileBanLe: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -56,9 +54,8 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
         pthucBanTrucTiep: [''],
         pthucBanTrucTiepHt: [''],
         trichYeu: [''],
-        thoiGianDeXuatBtt: [''],
-        thoiGianPdBtt: [''],
-        donGiaThiTruong: [''],
+        tgianDkienTu: [''],
+        tgianDkienDen : [''],
         trangThai: [STATUS.BAN_HANH],
         tenTrangThai: ['Ban Hành'],
       }
@@ -103,16 +100,14 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
         ngayHluc: data.xhQdPdKhBttHdr.type === 'QDDC' ? data.xhQdPdKhBttHdr.ngayHlucDc : data.xhQdPdKhBttHdr.ngayHluc,
         loaiVthh: data.loaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
+        tenCloaiVthh: data.tenCloaiVthh,
         pthucBanTrucTiepHt: data.pthucBanTrucTiep === THONG_TIN_BAN_TRUC_TIEP.UY_QUYEN ? 'Ủy quyền' : 'Bán lẻ',
         pthucBanTrucTiep: data.pthucBanTrucTiep,
         trichYeu: data.trichYeu,
-        thoiGianDeXuatBtt: this.isValidDate(data.tgianDkienTu) && this.isValidDate(data.tgianDkienDen)
-          ? [data.tgianDkienTu, data.tgianDkienDen] : [],
-        thoiGianPdBtt: this.isValidDate(data.ngayMkho) && this.isValidDate(data.ngayKthuc)
-          ? [data.ngayMkho, data.ngayKthuc] : [],
+        tgianDkienTu : data.tgianDkienTu,
+        tgianDkienDen : data.tgianDkienDen,
       });
-      this.fileUyQuyen = data.fileUyQuyen;
-      this.fileBanLe = data.fileBanLe;
+      this.fileDinhKem = data.fileDinhKem;
     } catch (e) {
       console.error('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -120,6 +115,22 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
       this.spinner.hide();
     }
   }
+
+  disabledTgianTocChucTu = (startValue: Date): boolean => {
+    const tgianDkienDen = this.formData.value.tgianDkienDen as Date;
+    if (!startValue || !tgianDkienDen || !(tgianDkienDen instanceof Date)) {
+      return false;
+    }
+    return startValue.getTime() > tgianDkienDen.getTime();
+  };
+
+  disabledTgianTocChucDen = (endValue: Date): boolean => {
+    const tgianDkienTu = this.formData.value.tgianDkienTu as Date;
+    if (!endValue || !tgianDkienTu || !(tgianDkienTu instanceof Date)) {
+      return false;
+    }
+    return endValue.getTime() <= tgianDkienTu.getTime();
+  };
 
   isValidDate(dateString: string): boolean {
     return dayjs(dateString).isValid();

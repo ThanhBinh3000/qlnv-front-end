@@ -4,54 +4,57 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="idInput" type="button" class="btn btn-sub" (click)="preview(idInput)">
+    <button *ngIf="idInput" type="button" class="btn btn-sub"
+            (click)="xemTruoc(idInput,loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? templateNameVt: templateNameLt)">
       <i class="icon htvbdh_totrinh"></i>
       <span> Xem trước </span>
     </button>
-    <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDC) && isView
-              && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_BANHANH') : userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_BANHANH'))"
-            type="button" class="btn btn-sub do"
-            (click)="reject(idInput,STATUS.TU_CHOI_LDC)">
-      <i class="icon htvbdh_tcdt_tuchoi do"></i>
-      <span> Từ chối </span>
-    </button>
-    <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDC) && isView
-              && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_BANHANH') : userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_BANHANH'))"
-            type="button" class="btn btn-sub xanh-nhat"
-            (click)="approve(idInput,STATUS.BAN_HANH,'Bạn có muốn ban hành quyết định này')">
-      <i class="icon htvbdh_tcdt_pheduyet"></i>
-      <span> Duyệt </span>
-    </button>
-    <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP) && isView
-               && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_QDKQDG_DUYET_TP') : userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_QDKQDG_DUYET_TP'))"
-            type="button" class="btn btn-sub do"
-            (click)="reject(idInput,STATUS.TU_CHOI_TP)">
-      <i class="icon htvbdh_tcdt_tuchoi do"></i>
-      <span> Từ chối </span>
-    </button>
-    <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP) && isView
-               && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_QDKQDG_DUYET_TP') : userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_QDKQDG_DUYET_TP'))"
-            type="button" class="btn btn-sub xanh-nhat"
-            (click)="approve(idInput,STATUS.CHO_DUYET_LDC,'Bạn có muốn duyệt quyết định này')">
-      <i class="icon htvbdh_tcdt_pheduyet"></i>
-      <span> Duyệt </span>
-    </button>
-    <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP
+    <ng-container>
+      <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDC) && isView
+              && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_DUYET_LDCUC') : userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_DUYET_LDCUC'))"
+              type="button" class="btn btn-sub do"
+              (click)="reject(idInput,STATUS.TU_CHOI_LDC)">
+        <i class="icon htvbdh_tcdt_tuchoi do"></i>
+        <span> Từ chối </span>
+      </button>
+      <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDC) && isView
+              && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_DUYET_LDCUC') : userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_DUYET_LDCUC'))"
+              type="button" class="btn btn-sub xanh-nhat"
+              (click)="approve(idInput,STATUS.DA_DUYET_LDC,'Bạn có muốn duyệt quyết định này')">
+        <i class="icon htvbdh_tcdt_pheduyet"></i>
+        <span> Duyệt </span>
+      </button>
+      <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP) && isView
+               && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_DUYET_TP') : userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_DUYET_TP'))"
+              type="button" class="btn btn-sub do"
+              (click)="reject(idInput,STATUS.TU_CHOI_TP)">
+        <i class="icon htvbdh_tcdt_tuchoi do"></i>
+        <span> Từ chối </span>
+      </button>
+      <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP) && isView
+               && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_DUYET_TP') : userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_DUYET_TP'))"
+              type="button" class="btn btn-sub xanh-nhat"
+              (click)="approve(idInput,STATUS.CHO_DUYET_LDC,'Bạn có muốn duyệt quyết định này')">
+        <i class="icon htvbdh_tcdt_pheduyet"></i>
+        <span> Duyệt </span>
+      </button>
+      <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP
               || formData.value.trangThai == STATUS.TU_CHOI_LDC) && !isView
               && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_THEM') : userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_THEM'))"
-            type="button" class="btn btn-sub xanh-nhat"
-            (click)="saveAndSend(STATUS.CHO_DUYET_TP, 'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
-      <i class="icon htvbdh_tcdt_guiduyet"></i>
-      <span>Lưu và gửi duyệt</span>
-    </button>
-    <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP
+              type="button" class="btn btn-sub xanh-nhat"
+              (click)="saveAndSend(STATUS.CHO_DUYET_TP, 'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
+        <i class="icon htvbdh_tcdt_guiduyet"></i>
+        <span>Lưu và gửi duyệt</span>
+      </button>
+      <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP
               || formData.value.trangThai == STATUS.TU_CHOI_LDC)  && !isView
               && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_THEM') : userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_THEM'))"
-            type="button" class="btn btn-main"
-            (click)="save()">
-      <i class="icon htvbdh_tcdt_save"></i>
-      <span>Lưu</span>
-    </button>
+              type="button" class="btn btn-main"
+              (click)="save()">
+        <i class="icon htvbdh_tcdt_save"></i>
+        <span>Lưu</span>
+      </button>
+    </ng-container>
   </div>
 </nz-affix>
 <div class="bg-trang">
@@ -59,7 +62,7 @@
     <div class="header-text">
       <div class="title-chi-tieu">
                 <span
-                  [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+                  [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
                     {{ formData.value.tenTrangThai }}
                 </span>
         <span> QUYẾT ĐỊNH PHÊ DUYỆT KẾT QUẢ CHÀO GIÁ </span>
@@ -132,7 +135,7 @@
             </div>
             <div nz-col [nzSpan]="3">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Loại hình xuất</nz-form-label>
                 <nz-form-control nz-col>
                   <input nz-input formControlName="tenLoaiHinhNx" readonly/>
                 </nz-form-control>
@@ -140,7 +143,7 @@
             </div>
             <div nz-col [nzSpan]="3">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Kiểu xuất</nz-form-label>
                 <nz-form-control nz-col>
                   <input nz-input formControlName="tenKieuNx" readonly/>
                 </nz-form-control>
@@ -322,8 +325,8 @@
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let data of listOfData , let i = index">
-            <ng-container *ngIf="!data.edit; else editTemplate">
+          <ng-container *ngFor="let data of listOfData, let i = index">
+            <tr>
               <td class="text-center">{{i + 1}}</td>
               <td class="text-left">{{data.tochucCanhan}}</td>
               <td class="text-left">{{data.mst}}</td>
@@ -334,58 +337,19 @@
               <td class="text-right">{{data.donGia|number:globals.numberFormat:globals.locale}}</td>
               <td class="text-right">{{data.thanhTien|number:globals.numberFormat:globals.locale}}</td>
               <td class="text-left">{{data.fileDinhKems?.fileName }}</td>
-              <td class="text-center"><label nz-checkbox [(ngModel)]="data.luaChon"
-                                             [nzDisabled]="isDisabledLuaChon(true)"></label>
+              <td class="text-center">
+                <label nz-checkbox [(ngModel)]="data.luaChon" [nzDisabled]="isView"></label>
               </td>
               <td class="text-center">
-                <a *ngIf="!isView" (click)="startEdit(i)">
-                  <i class=" fa fa-pencil"></i>
-                </a>
                 <a (click)="downloadFile(data.fileDinhKems)">
                   <i class="icon htvbdh_tcdt_import "></i>
                 </a>
               </td>
-            </ng-container>
-            <ng-template #editTemplate>
-              <td class="text-center">{{i + 1}}</td>
-              <td class="text-left">{{data.tochucCanhan}}</td>
-              <td class="text-left">{{data.mst}}</td>
-              <td class="text-left">{{data.diaDiemChaoGia}}</td>
-              <td class="text-left">{{data.sdt}}</td>
-              <td class="text-left">{{data.ngayChaoGia}}</td>
-              <td class="text-right">{{data.soLuong|number:globals.numberFormat:globals.locale}}</td>
-              <td class="text-right">{{data.donGia|number:globals.numberFormat:globals.locale}}</td>
-              <td class="text-right">{{data.thanhTien|number:globals.numberFormat:globals.locale}}</td>
-              <td class="text-left">{{data.fileDinhKems?.fileName }}</td>
-              <td class="text-center">
-                <label nz-checkbox [(ngModel)]="data.luaChon"></label>
-              </td>
-              <td class="text-center" *ngIf=" formData.value.trangThai != STATUS.BAN_HANH">
-                <a *ngIf="!isView" (click)="saveEdit(i)" class="save">
-                  <i class="icon htvbdh_tcdt_save"></i>
-                </a>
-                <a (click)="cancelEdit(i)" *ngIf=" formData.value.trangThai != STATUS.BAN_HANH">
-                  <i class="fa fa-ban do"></i>
-                </a>
-              </td>
-            </ng-template>
-          </tr>
+            </tr>
+          </ng-container>
           </tbody>
         </nz-table>
         <form nz-form nzLayout="vertical" [formGroup]="formData">
-          <div nz-col [nzSpan]="24">
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="true">
-                File đính kèm quyết định
-              </nz-form-label>
-              <nz-form-control [nzErrorTip]="error" nz-col>
-                <div class="list-file" nz-col>
-                  <file-list [data]="formData.value.fileQd" [isViewDetail]="isView">
-                  </file-list>
-                </div>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
           <div nz-col [nzSpan]="24">
             <nz-form-item class="form-item display-block">
               <nz-form-label [nzNoColon]="true"> Ghi chú</nz-form-label>
@@ -402,8 +366,8 @@
 <ng-template #error let-control>
   <app-template-error #error [control]="control"></app-template-error>
 </ng-template>
-<nz-modal [nzWidth]="'75%'" [nzClosable]="false" [(nzVisible)]="showDlgPreview"
-          nzTitle="QUYẾT ĐỊNH PHÊ DUYỆT KẾT QUẢ CHÀO GIÁ" nzWidth="100%" (nzOnCancel)="closeDlg()">
+<nz-modal [nzWidth]="'75%'" [nzClosable]="false" [(nzVisible)]="showDlgPreview" nzWidth="100%"
+          (nzOnCancel)="closeDlg()">
   <div *nzModalContent class="modal__content">
     <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
   </div>
@@ -413,12 +377,14 @@
       <i class="icon htvbdh_printer"></i>
       In
     </button>
-    <button nz-button (click)="downloadPdf()"
+    <button nz-button
+            (click)="downloadPdf(loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? templateNameVt : templateNameLt)"
             class="modal__button--save">
       <i class="icon htvbdh_file-pdf"></i>
       Xuất .pdf
     </button>
-    <button nz-button (click)="downloadWord()"
+    <button nz-button
+            (click)="downloadWord(loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? templateNameVt : templateNameLt)"
             class="modal__button--save">
       <i class="icon htvbdh_file-word"></i>
       Xuất .docx

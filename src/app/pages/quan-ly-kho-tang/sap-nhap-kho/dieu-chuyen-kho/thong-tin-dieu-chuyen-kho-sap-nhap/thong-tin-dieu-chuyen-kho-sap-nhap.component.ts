@@ -46,6 +46,11 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
     { ma: this.STATUS.DANG_THUC_HIEN, giaTri: "Đang thực hiện" },
     { ma: this.STATUS.DA_HOAN_THANH, giaTri: "Đã hoàn thành" },
   ];
+  ObTrangThaiSn: { [key: string]: string } = {
+    [this.STATUS.CHUA_THUC_HIEN]: "Chưa thực hiện",
+    [this.STATUS.DANG_THUC_HIEN]: "Đang thực hiện",
+    [this.STATUS.DA_HOAN_THANH]: "Đã hoàn thành"
+  };
   ObTrangThai: { [key: string]: string } = {
     [this.STATUS.DANG_NHAP_DU_LIEU]: "Đang thực hiện"
   };
@@ -119,8 +124,8 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
       trichYeu: [],
       trangThai: [STATUS.DANG_NHAP_DU_LIEU, [Validators.required]],
       tenTrangThai: [],
-      trangThaiSn: [],
-      tenTrangThaiSn: [],
+      trangThaiSn: [STATUS.CHUA_THUC_HIEN],
+      tenTrangThaiSn: [this.ObTrangThaiSn[STATUS.CHUA_THUC_HIEN]],
       quyetDinhPdDtl: [new Array<ItemXhXkVtquyetDinhPdDtl>()],
       loai: ["SN_DIEM_KHO", [Validators.required]],
     });
@@ -192,7 +197,8 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
       nzWidth: 310,
       nzOnOk: async () => {
         // this.nzActiveCCDC = true
-        this.dataTableChiCuc = cloneDeep(this.dataTableChiCucDefault);
+        // this.dataTableChiCuc = cloneDeep(this.dataTableChiCucDefault);
+        this.dataTableChiCuc = this.dataTableChiCucDefault.map(f => ({ ...f, slDieuChuyen: 0 }));
         this.buildView("dataTableChiCuc", "dataViewChiCuc")
       },
       nzOnCancel: async () => {
@@ -480,8 +486,8 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
             })));
             if (dataCCDC.length > 0) {
               const dsCC = Array.isArray(dataCCDC) ? dataCCDC.map(f => ({ ...f, groupBy: `${f.maChiCucDi}-${f.maChiCucDen}` })) : []
-              this.dataTableChiCucDefault = cloneDeep(dsCC)
-              this.dataTableChiCuc = cloneDeep(dsCC)
+              this.dataTableChiCucDefault = cloneDeep(dsCC);
+              this.dataTableChiCuc = cloneDeep(dsCC);
               this.buildView("dataTableChiCuc", "dataViewChiCuc")
             }
           }
@@ -603,6 +609,9 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
   }
   checkRoleSave(trangThai: string) {
     return trangThai === STATUS.DANG_NHAP_DU_LIEU && this.userService.isAccessPermisson("QLKT_THSDK_DCK_THEM") && this.userService.isCuc()
+  }
+  amountFn(max: number) {
+    return { ...this.AMOUNT, max }
   }
 }
 

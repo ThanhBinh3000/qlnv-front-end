@@ -23,8 +23,8 @@
     <div class="header-text">
       <div class="title-chi-tieu">
         <span
-          [ngClass]="formData.value.trangThai == STATUS.DA_HOAN_THANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
-          {{ ObTrangThai[formData.value.trangThai] }}
+          [ngClass]="formData.value.trangThaiSn == STATUS.DA_HOAN_THANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+          {{ formData.value.tenTrangThaiSn }}
         </span>
         <span class="text-uppercase">Điều chuyển hàng</span>
       </div>
@@ -200,7 +200,7 @@
                 <tr>
                   <th></th>
                   <th>STT</th>
-                  <th>Tên CCDC</th>
+                  <th>Tên công cụ dụng cụ</th>
                   <th>Số lượng tồn</th>
                   <th>Đơn vị tính</th>
                   <th>Số lượng điều chuyển</th>
@@ -228,7 +228,8 @@
                         <td>{{lv2.slTon}}</td>
                         <td>{{lv2.donViTinh}}</td>
                         <td>
-                          <input class="money-input" currencyMask [(ngModel)]='lv2.slDieuChuyen' [options]="AMOUNT" />
+                          <input class="money-input" currencyMask [(ngModel)]='lv2.slDieuChuyen'
+                            [options]="amountFn(lv2.slTon)" />
                         </td>
                       </tr>
                     </ng-container>

@@ -25,6 +25,9 @@ import {
   DialogTableSelectionComponent
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
 import {PREVIEW} from "src/app/constants/fileType";
+import {
+  BienBanLayMauService
+} from "src/app/services/qlnv-hang/xuat-hang/chung/kiem-tra-chat-luong/BienBanLayMau.service";
 
 @Component({
   selector: 'app-chi-tiet-ho-so-ky-thuat',
@@ -118,7 +121,8 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
     modal: NzModalService,
     public userService: UserService,
     // private bienBanLayMauService: QuanLyBienBanLayMauService,
-    private bienBanLayMauBanGiaoMauService: BienBanLayMauBanGiaoMauService,
+    // private bienBanLayMauBanGiaoMauService: BienBanLayMauBanGiaoMauService,
+    public bienBanLayMauService: BienBanLayMauService,
     private hoSoKyThuatCtvtService: HoSoKyThuatCtvtService
   ) {
     super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatCtvtService);
@@ -157,6 +161,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
       tenNganKho: [],
       tenLoKho: [],
       canBoTaoHoSo: [],
+      canBoTaoHoSoNh: [],
       soBbKtNgoaiQuan: [],
       soBbKtVanHanh: [],
       soBbKtHskt: [],
@@ -170,6 +175,9 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
       this.userInfo = this.userService.getUserLogin();
       if (this.id) {
         await this.loadDetail(this.id);
+      }
+      else{
+        await this.save(true)
       }
     } catch (e) {
       console.log('error: ', e);
@@ -201,6 +209,9 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
         }
       })
     }
+    if (!this.formData.value.id) {
+      await this.save(true);
+    }
   }
 
   async initForm() {
@@ -227,11 +238,11 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
     }
   }
 
-  async save() {
+  async save(isHideMessage?: boolean) {
     try {
       this.formData.patchValue({type: 'CTVT'});
       let body = this.formData.value;
-      let rs = await this.createUpdate(body);
+      let rs = await this.createUpdate(body, null, isHideMessage);
       this.formData.patchValue(rs);
     } catch (e) {
       console.log(e);
@@ -405,7 +416,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
       },
       trangThai: STATUS.DA_DUYET_LDCC,
     }
-    let res = await this.bienBanLayMauBanGiaoMauService.search(body);
+    let res = await this.bienBanLayMauService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listBanGiaoMau = data.content;
@@ -422,7 +433,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
       nzComponentParams: {
         dataTable: this.listBanGiaoMau,
         dataHeader: ['Số biên bản', 'Loại hàng hóa'],
-        dataColumn: ['soBienBan', 'tenLoaiVthh'],
+        dataColumn: ['soBbQd', 'tenLoaiVthh'],
       },
     })
     modalQD.afterClose.subscribe(async (dataChose) => {
@@ -430,7 +441,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
       if (dataChose) {
         this.formData.patchValue({
           idBbLayMau: dataChose.id,
-          soBbLayMau: dataChose.soBienBan
+          soBbLayMau: dataChose.soBbQd
         });
       }
     });

@@ -286,8 +286,8 @@
   </app-them-moi-phieu-xuat-kho>
 </div>
 
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }" [(nzVisible)]="openQdGnv"
-  (nzOnCancel)="closeQdGnvModal()">
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }" nzMaskClosable="true"
+  [(nzVisible)]="openQdGnv" (nzOnCancel)="closeQdGnvModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-chi-tiet-quyet-dinh-gnv [idSelected]="idQdGnv" (showListEvent)="showList()" [isView]="true"
       [isViewOnModal]="true">
@@ -301,7 +301,7 @@
   </div>
 </nz-modal>
 
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }" nzMaskClosable="true"
   [(nzVisible)]="openPhieuKnCl" (nzOnCancel)="closePhieuKnClModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-chi-tiet-phieu-kiem-nghiem-chat-luong [idSelected]="idPhieuKnCl" [loaiVthh]="loaiVthh" [isView]="true"

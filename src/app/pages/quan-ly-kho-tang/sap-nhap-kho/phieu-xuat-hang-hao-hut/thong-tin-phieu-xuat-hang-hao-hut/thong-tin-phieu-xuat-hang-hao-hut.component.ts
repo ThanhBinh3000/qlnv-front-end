@@ -156,7 +156,7 @@ export class ThongTinPhieuXuatHangHaoHutComponent extends Base2Component impleme
       let data = await this.createUpdate(body, null, isGuiDuyet);
       if (data) {
         this.idInput = data.id;
-        this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soQuyetDinh: data.soQuyetDinh?.split('/')[0], soPhieu: data.soPhieu });
+        this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soQuyetDinh: data.soQuyetDinh, soPhieu: data.soPhieu });
         if (isGuiDuyet) {
           this.hoanThanh()
         }

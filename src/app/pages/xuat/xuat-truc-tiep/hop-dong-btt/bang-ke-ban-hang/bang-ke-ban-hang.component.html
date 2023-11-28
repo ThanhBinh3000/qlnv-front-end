@@ -54,21 +54,21 @@
       <h3> DANH SÁCH BẢNG KÊ BÁN LẺ </h3>
       <div class="buttons">
         <button
-          *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_BKBL_SUA'):
+          *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_BKBL_SUA'):
                      userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_BKBL_SUA')"
           type="button" class="btn btn-do" (click)="deleteMulti()">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
         <button
-          *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_BKBL_EXP'):
+          *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_BKBL_EXP'):
            userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_BKBL_EXP')"
           type="button" class="btn btn-sub" (click)="exportData('Danh-sach-bang-ke-ban-le.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
         <button
-          *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_BKBL_THEM'):
+          *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_BKBL_THEM'):
            userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_BKBL_THEM')"
           type="button" class="btn btn-main" (click)="themMoiBangKeBanLe($event, false, 0)">
           <i class=" icon htvbdh_dau-cong"></i>
@@ -202,12 +202,12 @@
           <td class="text-right">{{ data.donGia|number:globals.numberFormat:globals.locale}}</td>
           <td class="text-right">{{ data.thanhTien|number:globals.numberFormat:globals.locale}}</td>
           <td class="text-center">
-            <a *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_BKBL_XEM'):
+            <a *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_BKBL_XEM'):
                 userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_BKBL_XEM')"
                (click)="themMoiBangKeBanLe($event,true, data.id, idx)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a *ngIf="loaiVthh === LOAI_HANG_DTQG.VAT_TU ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_BKBL_SUA'):
+            <a *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_BKBL_SUA'):
                 userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_BKBL_SUA')"
                (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>

@@ -5,7 +5,7 @@
       <span>Quay lại</span>
     </button>
     <button *ngIf="idInput && userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_TONGHOP_IN')"
-            type="button" class="btn btn-sub do"
+            type="button" class="btn btn-sub"
             (click)="xemTruoc(idInput, userService.isTongCuc() ? templateNameTongCuc : templateNameCuc)">
       <i class="icon htvbdh_totrinh"></i>
       <span> Xem trước </span>
@@ -50,7 +50,8 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
-                  <nz-select formControlName="namKh" (ngModelChange)="onChangeNamKh()" [nzDisabled]="isView">
+                  <nz-select formControlName="namKh" (ngModelChange)="isView ? null : onChangeNamKh($event)"
+                             [nzDisabled]="isView">
                     <nz-option *ngFor="let item of listNam" [nzValue]="item.value" [nzLabel]="item.text"></nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -145,9 +146,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Năm kế hoạch</nz-form-label>
                 <nz-form-control nz-col>
-                  <nz-select formControlName="nam" nzAllowClear [nzDisabled]="true">
-                    <nz-option *ngFor="let item of listNam" [nzValue]="item.value" [nzLabel]="item.text"></nz-option>
-                  </nz-select>
+                  <input nz-input formControlName="namKh" readonly/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -191,7 +190,7 @@
             </div>
             <div nz-col [nzSpan]="3">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Loại hình xuất</nz-form-label>
                 <nz-form-control nz-col>
                   <input nz-input formControlName="tenLoaiHinhNx" readonly/>
                 </nz-form-control>
@@ -199,7 +198,7 @@
             </div>
             <div nz-col [nzSpan]="3">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Kiểu xuất</nz-form-label>
                 <nz-form-control nz-col>
                   <input nz-input formControlName="tenKieuNx" readonly/>
                 </nz-form-control>

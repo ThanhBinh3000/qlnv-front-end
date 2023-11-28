@@ -85,7 +85,7 @@
             <ng-container *ngFor="let item of tblData.data, let i = index;">
               <tr>
                 <td class="text-center" (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
-                    [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px">
+                    [nzExpand]="true" nzShowExpand="true" style="width: 35px">
                 </td>
                 <td class="text-center">{{i + 1}}</td>
                 <td class="bold">{{item.maDanhSach}}</td>
@@ -113,10 +113,10 @@
                     <td></td>
                     <td></td>
                     <td class="bold">{{lv1.tenNhomHang}}</td>
+                    <td class="bold">{{lv1.tenCha}}</td>
                     <td class="bold">{{lv1.ten}}</td>
                     <td></td>
-                    <td></td>
-                    <td></td>
+                    <td class="bold">{{lv1.maDviTinh}}</td>
                     <td>TCDT</td>
                     <td></td>
                     <td></td>

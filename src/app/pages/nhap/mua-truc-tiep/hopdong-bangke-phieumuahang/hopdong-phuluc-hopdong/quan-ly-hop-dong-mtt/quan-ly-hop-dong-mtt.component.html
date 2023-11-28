@@ -5,10 +5,10 @@
                 <i class="fa fa-arrow-left"></i>
                 <span>Quay lại</span>
             </button>
-            <button *ngIf="!userService.isTongCuc() && (formData.value.idQdKq || formData.value.idQdGiaoNvNh)" type="button" class="btn btn-sub xanh-nhat" (click)="preview(previewName)">
-              <i class=" icon htvbdh_tcdt_print"></i>
-              <span>Xem trước</span>
-            </button>
+          <button *ngIf="!userService.isTongCuc() && (formData.value.idQdKq || formData.value.idQdGiaoNvNh)" type="button" class="btn btn-sub xanh-nhat" (click)="preview(previewName)">
+            <i class=" icon htvbdh_tcdt_print"></i>
+            <span>In/xem trước</span>
+          </button>
             <button *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH && (userService.isCuc() || userService.isChiCuc()) " type="button"
                 class="btn btn-sub xanh-nhat" (click)="pheDuyet()">
                 <i class="icon htvbdh_checkfile2"></i>

@@ -33,6 +33,7 @@ import {v4 as uuidv4} from 'uuid';
 import {FileDinhKem} from "../../../../../../models/CuuTro";
 import {Validators} from "@angular/forms";
 import {MangLuoiKhoService} from "../../../../../../services/qlnv-kho/mangLuoiKho.service";
+import {AMOUNT_ONE_DECIMAL} from "../../../../../../Utility/utils";
 
 @Component({
   selector: 'app-them-moi-bien-ban-lay-mau-btt',
@@ -47,6 +48,9 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
+  amount = {...AMOUNT_ONE_DECIMAL};
+  templateNameVt = "Biên bản lấy mẫu bàn giao mẫu vật tư";
+  templateNameLt = "Biên bản lấy mẫu bàn giao mẫu lương thực";
   TRUC_TIEP = TRUC_TIEP;
   listBienBan: any[] = [];
   maTuSinh: number;
@@ -131,6 +135,7 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
       tenThuKho: [''],
       tenKtvBaoQuan: [''],
       tenLanhDaoChiCuc: [''],
+      tchuanCluong: [''],
       tenTrangThai: [''],
       fileCanCu: [new Array<FileDinhKem>()],
       fileDinhKem: [new Array<FileDinhKem>()],
@@ -142,6 +147,7 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
     try {
       await this.spinner.show();
       this.maHauTo = '/BBLM-' + this.userInfo.DON_VI.tenVietTat;
+      this.amount.align = "left";
       if (this.idInput > 0) {
         await this.getDetail(this.idInput);
       } else {
@@ -229,8 +235,6 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
       const res = await this.quyetDinhNvXuatBttService.search(body)
       if (res && res.msg === MESSAGE.SUCCESS) {
         this.danhSachQuyetDinh = res.data.content.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI));
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ XUẤT HÀNG',
@@ -311,6 +315,7 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
         phanLoai: data.pthucBanTrucTiep === THONG_TIN_BAN_TRUC_TIEP.BAN_LE ? TRUC_TIEP.BAN_LE : TRUC_TIEP.HOP_DONG,
       })
       await this.loadDanhSachLayMau(data.soQdNv)
+      await this.getDanhMucTieuChuan(data);
       if (data.pthucBanTrucTiep && data.pthucBanTrucTiep !== THONG_TIN_BAN_TRUC_TIEP.UY_QUYEN) {
         if (dataChiCuc && dataChiCuc.children && dataChiCuc.children.length > 0) {
           this.listDiaDiemXuat = dataChiCuc.children
@@ -321,6 +326,18 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
+    }
+  }
+
+  async getDanhMucTieuChuan(data) {
+    if (data.cloaiVthh || data.loaiVthh) {
+      let res = await this.danhMucService.getDetail(data.cloaiVthh || data.loaiVthh);
+      if (res.msg !== MESSAGE.SUCCESS || !res.data.tieuChuanCl) {
+        return;
+      }
+      this.formData.patchValue({
+        tchuanCluong: res.data.tieuChuanCl,
+      });
     }
   }
 
@@ -358,8 +375,6 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
       const res = await this.hopDongBttService.search(body)
       if (res && res.msg === MESSAGE.SUCCESS) {
         this.danhSachHopDong = res.data.content.filter(item => item.maDvi === this.userInfo.MA_DVI);
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH HỢP ĐỒNG BÁN TRỰC TIẾP',
@@ -755,12 +770,7 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
   setValidator() {
     const phuongThuc = this.formData.get('pthucBanTrucTiep').value;
     const requiredFields = [
-      "soBbLayMau",
       "soQdNv",
-      "tenDiemKho",
-      "tenNhaKho",
-      "tenNganKho",
-      "tenNganLoKho",
     ];
     requiredFields.forEach(fieldName => {
       this.formData.get(fieldName).setValidators([Validators.required]);
@@ -778,17 +788,11 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
 
   setValidForm() {
     const requiredFields = [
-      "loaiBienBan",
-      "namKh",
-      "tenDvi",
-      "maQhNs",
       "ngayLayMau",
-      "tenLoaiVthh",
-      "tenCloaiVthh",
-      "tenKtvBaoQuan",
+      "soQdNv",
       "donViKnghiem",
       "diaDiemLayMau",
-      "soLuongKiemTra"
+      "soLuongKiemTra",
     ];
     requiredFields.forEach(fieldName => {
       this.formData.get(fieldName).setValidators([Validators.required]);

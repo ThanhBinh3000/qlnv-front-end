@@ -24,14 +24,12 @@ import {
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/phieu-ktra-cluong-btt.service';
 import {HopDongBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
 import {BangKeBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/bang-ke-btt.service';
-import {PREVIEW} from "../../../../../../constants/fileType";
-import printJS from "print-js";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {FileDinhKem} from "../../../../../../models/FileDinhKem";
-import {CurrencyMaskInputMode} from "ngx-currency";
 import {
   BbNghiemThuBaoQuanService
 } from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
+import {AMOUNT_ONE_DECIMAL} from "../../../../../../Utility/utils";
 
 @Component({
   selector: 'app-them-moi-phieu-xuat-kho-btt',
@@ -47,25 +45,18 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
+  amount = {...AMOUNT_ONE_DECIMAL};
+  amount1 = {...AMOUNT_ONE_DECIMAL};
+  templateNameVt = "Phiếu xuất kho vật tư";
+  templateNameLt = "Phiếu xuất kho lương thực";
   TRUC_TIEP = TRUC_TIEP;
   maTuSinh: number;
   maHauTo: any;
   flagInit: Boolean = false;
+  isViewBangKe: boolean = false
   danhSachQuyetDinh: any[] = [];
   danhSachKghiemCluong: any[] = [];
-  amount = {
-    allowZero: true,
-    allowNegative: false,
-    precision: 2,
-    prefix: '',
-    thousands: '.',
-    decimal: ',',
-    align: "right",
-    nullable: true,
-    min: 0,
-    max: 1000000000000,
-    inputMode: CurrencyMaskInputMode.NATURAL,
-  }
+
 
   constructor(
     httpClient: HttpClient,
@@ -137,6 +128,7 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
       ghiChu: [''],
       pthucBanTrucTiep: [''],
       phanLoai: [''],
+      tenBenMua: [''],
       trangThai: [''],
       lyDoTuChoi: [''],
       tenDvi: [''],
@@ -162,6 +154,7 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
     try {
       await this.spinner.show();
       this.maHauTo = '/PXK-' + this.userInfo.DON_VI.tenVietTat;
+      this.amount.align = "left";
       if (this.idInput > 0) {
         await this.getDetail(this.idInput);
       } else {
@@ -205,13 +198,12 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
   async getDetail(id: number) {
     if (!id) return;
     const data = await this.detail(id);
-    if (!data) {
-      console.error('Không tìm thấy dữ liệu');
-      return;
-    }
     this.maTuSinh = this.idInput;
-    if (!this.isView) {
-      await this.onChange(data.idQdNv)
+    if (data.soBangKeHang) {
+      this.isViewBangKe = true;
+    }
+    if (!this.isView && !this.isViewBangKe) {
+      await this.onChange(data.idQdNv);
     }
   }
 
@@ -226,8 +218,6 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
       const res = await this.quyetDinhNvXuatBttService.search(body)
       if (res && res.msg === MESSAGE.SUCCESS) {
         this.danhSachQuyetDinh = res.data.content.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI));
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ XUẤT HÀNG',
@@ -304,14 +294,10 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
         idQdNv: data.id,
         soQdNv: data.soQdNv,
         ngayKyQdNv: data.ngayKyQdNv,
+        tenBenMua: data.pthucBanTrucTiep === THONG_TIN_BAN_TRUC_TIEP.CHAO_GIA ? data.tenBenMua : null,
       });
       if ([THONG_TIN_BAN_TRUC_TIEP.CHAO_GIA, THONG_TIN_BAN_TRUC_TIEP.BAN_LE].includes(data.pthucBanTrucTiep)) {
         data.children.forEach(item => {
-          if ([THONG_TIN_BAN_TRUC_TIEP.CHAO_GIA].includes(data.pthucBanTrucTiep)) {
-            this.formData.patchValue({
-              soLuongHopDong: item.soLuong
-            });
-          }
           item.children.forEach(child => {
             this.dataTable.push(child)
           })
@@ -471,6 +457,8 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
           this.formData.patchValue({
             theoChungTu: soLuongDonGia.soLuong,
             donGia: soLuongDonGia.donGia,
+            soLuongHopDong: THONG_TIN_BAN_TRUC_TIEP.CHAO_GIA ? soLuongDonGia.soLuong : null,
+            soLuongBkeBanLe: THONG_TIN_BAN_TRUC_TIEP.BAN_LE ? soLuongDonGia.soLuong : null,
           });
         }
       }
@@ -485,7 +473,8 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
         this.formData.patchValue({
           theoChungTu: soLuongDonGia.soLuongKyHd,
           donGia: soLuongDonGia.donGiaKyHd,
-          soLuongHopDong: resHd.data.soLuong,
+          soLuongHopDong: soLuongDonGia.soLuongKyHd,
+          tenBenMua: resHd.data.tenBenMua,
         });
       }
     }
@@ -495,7 +484,7 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
         return;
       }
       this.formData.patchValue({
-        soLuongBkeBanLe: resBL.data.soLuong,
+        tenBenMua: resBL.data.tenBenMua,
       });
     }
   }
@@ -524,7 +513,6 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
   async save() {
     try {
       await this.helperService.ignoreRequiredForm(this.formData);
-      this.formData.controls["soPhieuXuatKho"].setValidators([Validators.required]);
       this.formData.controls["soQdNv"].setValidators([Validators.required]);
       this.formData.controls["soPhieuKiemNghiem"].setValidators([Validators.required]);
       const body = {...this.formData.value,};
@@ -554,53 +542,16 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
     }
   }
 
-  async preview(id) {
-    await this.phieuXuatKhoBttService.preview({
-      tenBaoCao: 'Phiếu xuất kho kế hoạch bán trực tiếp',
-      id: id
-    }).then(async res => {
-      if (res.data) {
-        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
-        this.printSrc = res.data.pdfSrc;
-        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
-        this.showDlgPreview = true;
-      } else {
-        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
-      }
-    });
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
-  }
-
-  printPreview() {
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
-  }
-
   setValidForm() {
     const phanLoai = this.formData.get('phanLoai').value;
     const requiredFields = [
-      "namKh",
-      "tenDvi",
-      "maQhNs",
       "ngayLapPhieu",
-      "tenLoaiHinhNx",
-      "tenKieuNx",
+      "ngayKyQdNv",
+      "soPhieuKiemNghiem",
       "tenNganLoKho",
       "tenNhaKho",
       "tenDiemKho",
-      "tenLoaiVthh",
-      "tenCloaiVthh",
-      "tenThuKho",
-      "tenKtvBaoQuan",
-      "keToanTruong",
       "tgianGiaoNhan",
-      "soBangKeHang",
-      "tenNguoiGiao",
-      "cmtNguoiGiao",
-      "congTyNguoiGiao",
-      "diaChiNguoiGiao",
     ];
     requiredFields.forEach(fieldName => {
       this.formData.controls[fieldName].setValidators([Validators.required]);

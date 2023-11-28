@@ -337,6 +337,7 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
       "namKh",
       "soCongVan",
       "ngayTaoCongVan",
+      "soQdCanDc",
       "tenLoaiVthh",
       "tenCloaiVthh",
       "tchuanCluong",

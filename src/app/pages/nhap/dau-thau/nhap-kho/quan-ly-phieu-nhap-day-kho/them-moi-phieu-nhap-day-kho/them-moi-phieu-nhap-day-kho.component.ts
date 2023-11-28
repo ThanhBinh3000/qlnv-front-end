@@ -65,6 +65,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
   previewName: string = 'bien_ban_ket_thuc_nhap_kho';
   listFileDinhKemBb: any[] = [];
   templateName = "10. C76-HD_Biên bản nhập đầy kho";
+  templateNameVt = "15. C76-HD_Biên bản kết thúc nhập kho";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -242,7 +243,12 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
         dvt: data.donViTinh,
       })
     }
-    let dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
+    let dataChiCuc;
+    if (this.userService.isChiCuc()) {
+      dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
+    } else {
+      dataChiCuc = data.dtlList
+    }
     if (dataChiCuc.length > 0) {
       this.listDiaDiemNhap = dataChiCuc[0].children;
     }

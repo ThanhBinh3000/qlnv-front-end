@@ -4,10 +4,9 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button
-      type="button" class="btn btn-sub do" (click)="preview(previewName)">
-      <i class="icon htvbdh_tcdt_tuchoi"></i>
-      <span>Xem trước</span>
+    <button *ngIf="formData.value.id" type="button" class="btn btn-sub xanh-nhat" (click)="preview(previewName)">
+      <i class=" icon htvbdh_tcdt_print"></i>
+      <span>In/xem trước</span>
     </button>
     <button class="btn btn-sub xanh-nhat" type="button"
             *ngIf="(!isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_TK)) "
@@ -134,6 +133,30 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div *ngIf="formData.value.loaiQd == '01'" nz-col nzSpan="3">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true">
+              Căn cứ vào hợp đồng
+            </nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+              <nz-input-group nzAddOnAfterIcon="folder-open">
+                <input nz-input [readonly]="true" formControlName="soHopDong"/>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div *ngIf="formData.value.loaiQd == '02'" nz-col nzSpan="3">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true">
+              Căn cứ vào bảng kê
+            </nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoBangKe()">
+                <input nz-input [readonly]="true" formControlName="soBangKe"/>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
         <div nz-col nzSpan="3">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
@@ -223,8 +246,6 @@
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
-        </div>
-        <div nz-col nzSpan="6">
         </div>
         <div nz-col nzSpan="3">
           <nz-form-item>

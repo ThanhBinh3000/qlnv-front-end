@@ -238,7 +238,7 @@
               <!-- <nz-input-group>
                 <input [readonly]="true" nz-input formControlName="donViTinh" readonly />
               </nz-input-group> -->
-              <span class="bold" style="color: #001CFF">{{formData.value.donViTinh}}</span>
+              <span class="text-blue bold">{{formData.value.donViTinh}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -250,8 +250,8 @@
                 <input [readonly]="true" nz-input formControlName="soPhieuKnCl" readonly />
               </nz-input-group> -->
               <a *ngIf="formData.value.soPhieuKnCl" nzType="link"
-                (click)="openPhieuKnClModal(formData.value.idPhieuKnCl)"><span class="bold"
-                  style="color: #001CFF">{{formData.value.soPhieuKnCl}}</span></a>
+                (click)="openPhieuKnClModal(formData.value.idPhieuKnCl)"><span
+                  class="text-blue bold">{{formData.value.soPhieuKnCl}}</span></a>
 
             </nz-form-control>
           </nz-form-item>
@@ -291,7 +291,7 @@
           <tfoot>
             <ng-container>
               <tr>
-                <td colspan="4" class="bold text-blue text-right">TỔNG</td>
+                <td colspan="4" class="bold text-blue text-right uppercase">TỔNG</td>
                 <td class="bold text-blue text-right">{{formData.value.tongSlXuat |number:'1.0-1' : 'vi_VN'}} </td>
               </tr>
             </ng-container>
@@ -598,7 +598,8 @@
   <app-template-error #error [control]="control"></app-template-error>
 </ng-template>
 
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openPhieuKnCl" (nzOnCancel)="closePhieuKnClModal()">
+<nz-modal class="scroll-nz-modal" [nzBodyStyle]="{ 'overflow-y': 'auto' }" nzMaskClosable="true" [nzWidth]="'90%'"
+  [(nzVisible)]="openPhieuKnCl" (nzOnCancel)="closePhieuKnClModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-chi-tiet-phieu-kiem-nghiem-chat-luong [idSelected]="idPhieuKnCl" [loaiVthh]="loaiVthh" [isView]="true"
       [inputService]="phieuKiemNghiemChatLuongService" [inputServiceGnv]="quyetDinhGiaoNvCuuTroService"
@@ -612,7 +613,8 @@
     </button>
   </div>
 </nz-modal>
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openPhieuXk" (nzOnCancel)="closePhieuXkModal()">
+<nz-modal class="scroll-nz-modal" [nzBodyStyle]="{ 'overflow-y': 'auto' }" nzMaskClosable="true" [nzWidth]="'90%'"
+  [(nzVisible)]="openPhieuXk" (nzOnCancel)="closePhieuXkModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-moi-phieu-xuat-kho [idInput]="idPhieuXk" [loaiVthh]="loaiVthh" [isView]="true" [loaiXuat]="loaiXuat"
       [isViewOnModal]="true">
@@ -625,7 +627,8 @@
     </button>
   </div>
 </nz-modal>
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openBangKe" (nzOnCancel)="closeBangKeModal()">
+<nz-modal class="scroll-nz-modal" [nzBodyStyle]="{ 'overflow-y': 'auto' }" nzMaskClosable="true" [nzWidth]="'90%'"
+  [(nzVisible)]="openBangKe" (nzOnCancel)="closeBangKeModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-chi-tiet-bang-ke-can [idInput]="idBangKe" [loaiVthh]="loaiVthh" [isView]="true" [loaiXuat]="loaiXuat"
       [isViewOnModal]="true">

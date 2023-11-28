@@ -5,9 +5,9 @@
       <span>Quay lại</span>
     </button>
     <button  *ngIf="radioValue == '01'"
-      type="button" class="btn btn-sub do" (click)="preview(previewName)">
-      <i class="icon htvbdh_tcdt_tuchoi"></i>
-      <span>Xem trước</span>
+      type="button" class="btn btn-sub xanh-nhat" (click)="preview(previewName)">
+      <i class=" icon htvbdh_tcdt_print"></i>
+      <span>In/xem trước</span>
     </button>
     <button
       *ngIf="(this.userService.isCuc() && formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT) && userService.isAccessPermisson('NHDTQG_PTMTT_TCKHMTT_LT_TTDT_CAPNHAT')"

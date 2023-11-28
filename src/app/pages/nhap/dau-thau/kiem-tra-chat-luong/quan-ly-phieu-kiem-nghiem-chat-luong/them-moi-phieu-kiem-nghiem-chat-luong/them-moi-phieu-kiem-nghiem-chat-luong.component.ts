@@ -69,7 +69,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   listSoQuyetDinh = [];
   listBbBanGiaoMau = [];
   dataTableChiTieu: any[] = [];
-  previewName: string = 'nk_phieu_knghiem_cl';
+  previewName: string = 'phieu_khiem_nghiem_cl';
 
   phieuKiemNghiemChatLuongHang: PhieuKiemNghiemChatLuongHang =
     new PhieuKiemNghiemChatLuongHang();
@@ -231,10 +231,12 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       } else {
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          this.back();
+          // this.back();
         } else {
+          this.formData.get('id').setValue(res.data.id);
+          this.id = res.data.id;
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-          this.back();
+          // this.back();
         }
         await this.spinner.hide();
       }
@@ -431,20 +433,27 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         tenThuKho: data.bbNhapDayKho.tenNguoiTao
       })
       if (!isChiTiet) {
-        this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(this.formData.value.cloaiVthh).then(res => {
-          if (res.msg == MESSAGE.SUCCESS) {
-            if (res.data) {
-              this.dataTableChiTieu = res.data
-              this.dataTableChiTieu.forEach(element => {
-                element.edit = false
-              });
-            }
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-        }).catch(err => {
-          this.notification.error(MESSAGE.ERROR, err.msg);
-        });
+        let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(this.formData.value.cloaiVthh);
+        if (dmTieuChuan.data) {
+          this.dataTableChiTieu = dmTieuChuan.data.children;
+          this.dataTableChiTieu.forEach(element => {
+            element.edit = false
+          });
+        }
+        // this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(this.formData.value.cloaiVthh).then(res => {
+        //   if (res.msg == MESSAGE.SUCCESS) {
+        //     if (res.data) {
+        //       this.dataTableChiTieu = res.data
+        //       this.dataTableChiTieu.forEach(element => {
+        //         element.edit = false
+        //       });
+        //     }
+        //   } else {
+        //     this.notification.error(MESSAGE.ERROR, res.msg);
+        //   }
+        // }).catch(err => {
+        //   this.notification.error(MESSAGE.ERROR, err.msg);
+        // });
       }
     }
   }
