@@ -157,8 +157,8 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
             const data = res.data;
             this.formData.patchValue({
               ...data, tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
-              // soPhieuKnCl: data.soPhieuKnCl ? data.soPhieuKnCl : data.listPhieuXuatKho[0]?.soPhieuKnCl,
-              // idPhieuKnCl: data.idPhieuKnCl ? data.idPhieuKnCl : data.listPhieuXuatKho[0]?.idPhieuKnCl
+              soPhieuKnCl: data.soPhieuKnCl ? data.soPhieuKnCl : data.listPhieuXuatKho[0]?.soPhieuKnCl,
+              idPhieuKnCl: data.idPhieuKnCl ? data.idPhieuKnCl : data.listPhieuXuatKho[0]?.idPhieuKnCl
             });
             this.fileDinhKems = data.fileDinhKems;
             this.dataTable = data.listPhieuXuatKho;

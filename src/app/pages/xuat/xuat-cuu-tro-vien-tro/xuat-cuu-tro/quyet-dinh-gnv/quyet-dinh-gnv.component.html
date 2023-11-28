@@ -286,7 +286,8 @@
   </div>
 </nz-modal>
 
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openQdGnv" (nzOnCancel)="closeQdGnvModal()">
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }" nzMaskClosable="true"
+  [(nzVisible)]="openQdGnv" (nzOnCancel)="closeQdGnvModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-chi-tiet-quyet-dinh-gnv [idSelected]="id" (showListEvent)="showList()" [isView]="true" [isViewOnModal]="true"
       [loaiXuat]="loaiXuat">

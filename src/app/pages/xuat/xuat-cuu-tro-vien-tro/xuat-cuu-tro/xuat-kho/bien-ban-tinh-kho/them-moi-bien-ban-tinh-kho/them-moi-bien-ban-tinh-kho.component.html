@@ -184,10 +184,10 @@
               Đơn vị tính
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
+              <!-- <nz-input-group>
                 <input readonly nz-input formControlName="donViTinh" readonly />
-              </nz-input-group>
-              <!-- <span>{{formData.value.donViTinh}}</span> -->
+              </nz-input-group> -->
+              <span class="text-blue bold">{{formData.value.donViTinh}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -197,11 +197,37 @@
               Phiếu kiểm nghiệm chất lượng
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
+              <!-- <nz-input-group>
                 <input readonly nz-input formControlName="soPhieuKnCl" readonly />
+              </nz-input-group> -->
+              <a *ngIf="formData.value.soPhieuKnCl" nzType="link" class="text-blue bold"
+                (click)="openPhieuKnClModal(formData.value.idPhieuKnCl)">{{formData.value.soPhieuKnCl}}</a>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              Loại hàng hóa
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group>
+                <input readonly nz-input formControlName="tenLoaiVthh" />
               </nz-input-group>
-              <!-- <a *ngIf="item.soPhieuKnCl" nz-button nzType="link"
-                    (click)="openPhieuKnClModal(item.idPhieuKnCl)">{{item.soPhieuKnCl}}</a> -->
+              <!-- <span>{{formData.value.donViTinh}}</span> -->
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              Chủng loại hàng hóa
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group>
+                <input readonly nz-input formControlName="tenCloaiVthh" />
+              </nz-input-group>
+              <!-- <span>{{formData.value.donViTinh}}</span> -->
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -229,7 +255,7 @@
                     (click)="openPhieuXkModal(item.idPhieuXuatKho)">{{item.soPhieuXuatKho}}</a></td>
                 <td><a *ngIf="item.soBkCanHang" nz-button nzType="link"
                     (click)="openBangKeModal(item.idBkCanHang)">{{item.soBkCanHang}}</a></td>
-                <td class="text-right">{{item.ngayXuatKho | date: 'dd/MM/YYYY' }}</td>
+                <td class="text-center">{{item.ngayXuatKho | date: 'dd/MM/YYYY' }}</td>
                 <td class="text-right">{{item.slXuat |number:'1.0-1' : 'vi_VN'}}</td>
               </tr>
             </ng-container>
@@ -237,7 +263,7 @@
           <tfoot>
             <ng-container>
               <tr>
-                <td colspan="4" class="bold text-blue text-right">TỔNG</td>
+                <td colspan="4" class="bold text-blue text-right uppercase">TỔNG</td>
                 <td class="bold text-blue text-right">{{tongSoLuongXk |number:'1.0-1' : 'vi_VN'}} </td>
               </tr>
             </ng-container>
@@ -445,7 +471,8 @@
 </ng-template>
 
 
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openPhieuKnCl" (nzOnCancel)="closePhieuKnClModal()">
+<nz-modal class="scroll-nz-modal" [nzBodyStyle]="{ 'overflow-y': 'auto' }" nzMaskClosable="true" [nzWidth]="'90%'"
+  [(nzVisible)]="openPhieuKnCl" (nzOnCancel)="closePhieuKnClModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-chi-tiet-phieu-kiem-nghiem-chat-luong [idSelected]="idPhieuKnCl" [loaiVthh]="loaiVthh" [isView]="true"
       [inputService]="phieuKiemNghiemChatLuongService" [inputServiceGnv]="quyetDinhGiaoNvCuuTroService"
@@ -459,7 +486,8 @@
     </button>
   </div>
 </nz-modal>
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openPhieuXk" (nzOnCancel)="closePhieuXkModal()">
+<nz-modal class="scroll-nz-modal" [nzBodyStyle]="{ 'overflow-y': 'auto' }" nzMaskClosable="true" [nzWidth]="'90%'"
+  [(nzVisible)]="openPhieuXk" (nzOnCancel)="closePhieuXkModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-moi-phieu-xuat-kho [idInput]="idPhieuXk" [loaiVthh]="loaiVthh" [isView]="true" [loaiXuat]="loaiXuat"
       [isViewOnModal]="true">
@@ -472,7 +500,8 @@
     </button>
   </div>
 </nz-modal>
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openBangKe" (nzOnCancel)="closeBangKeModal()">
+<nz-modal class="scroll-nz-modal" [nzBodyStyle]="{ 'overflow-y': 'auto' }" nzMaskClosable="true" [nzWidth]="'90%'"
+  [(nzVisible)]="openBangKe" (nzOnCancel)="closeBangKeModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-chi-tiet-bang-ke-can [idInput]="idBangKe" [loaiVthh]="loaiVthh" [isView]="true" [loaiXuat]="loaiXuat"
       [isViewOnModal]="true">
