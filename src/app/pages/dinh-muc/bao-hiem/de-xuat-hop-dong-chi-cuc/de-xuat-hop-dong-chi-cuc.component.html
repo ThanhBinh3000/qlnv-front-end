@@ -68,7 +68,6 @@
           <th width="130px">Năm kế hoạch</th>
           <th width="130px">Ngày ký</th>
           <th>Trích yếu</th>
-          <th width="130px">Giá trị bảo hiểm đề xuất</th>
           <th width="130px">Trạng thái</th>
           <th width="120px">Hành động</th>
         </tr>
@@ -104,12 +103,6 @@
             </nz-input-group>
           </th>
           <th>
-            <nz-input-group >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.giaTriDx"
-                     (input)="filterInTable('giaTriDx',filterTable.giaTriDx)" />
-            </nz-input-group>
-          </th>
-          <th>
             <nz-input-group>
               <nz-select nzAllowClear [(ngModel)]="filterTable.trangThai"
                          (ngModelChange)="filterInTable('trangThai',filterTable.trangThai)">
@@ -132,7 +125,6 @@
           <td>{{ data.namKeHoach }}</td>
           <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.trichYeu }}</td>
-          <td>{{ data.giaTriDx | number : '1.0-1'  : 'vi-VN' }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>
             <a (click)="redirectToChiTiet(true, data.id)" *ngIf="(((data.trangThai == STATUS.DA_KY || data.trangThai == STATUS.DADUYET_CB_CUC) && userService.isChiCuc()) ||!userService.isChiCuc()) && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_DEXUATCC_XEM')">

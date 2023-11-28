@@ -263,25 +263,17 @@ export class ThemMoiBienBanPvcComponent extends Base2Component implements OnInit
           this.formData.patchValue({
             benGiaoHang: data.banTenDvi
           })
-          let listDdnh : any[] = data?.listQlDinhMucPvcHdDiaDiemNh;
-          if (listDdnh && listDdnh.length > 0) {
-            listDdnh = listDdnh.filter(dd => dd.maDvi == this.userInfo.MA_DVI);
-            let listHh = listDdnh.map(item => item.maTaiSan);
             this.listHangHoa = data.listQlDinhMucPvcHdLoaiHh;
             if (this.listHangHoa && this.listHangHoa.length > 0) {
-              this.listHangHoa = this.listHangHoa.filter(it => listHh.includes(it.maHangHoa));
               this.listHangHoa.forEach(item => {
                 item.id = null;
-                item.soLuong = 0
+                item.soLuong = 0;
               })
             }
           }
         }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg)
       }
     }
-  }
 
   changHangHoa(event, type?: any) {
     let result = this.listHangHoa.filter(item => item.maHangHoa === event)
