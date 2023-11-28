@@ -183,7 +183,6 @@ export class TongHopDanhSachHangDtqgThuocDienXuatKhoiDmComponent extends Base2Co
   }
 
   buildTableView() {
-    console.log(this.flatDataTable,'this.flatDataTablethis.flatDataTable');
     this.dataTableView = chain(this.flatDataTable)
       .groupBy("header")
       .map((value, key) => {

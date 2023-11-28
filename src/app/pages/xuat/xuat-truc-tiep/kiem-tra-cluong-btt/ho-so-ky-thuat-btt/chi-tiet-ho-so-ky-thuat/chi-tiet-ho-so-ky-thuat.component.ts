@@ -111,7 +111,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
   viewTableHoSo: any[] = [];
   viewTableBienBan: any[] = [];
   bienBanRow: any = {};
-  templateName: string="Hồ sơ kỹ thuật";
+  templateName: string = "Hồ sơ kỹ thuật";
 
   constructor(
     httpClient: HttpClient,
@@ -205,6 +205,12 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
         }
       })
     }
+    if (!this.formData.value.id) {
+      this.formData.patchValue({
+        trangThai: STATUS.DA_DUYET_LDC
+      })
+      await this.save(true);
+    }
   }
 
   async initForm() {
@@ -231,11 +237,11 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
     }
   }
 
-  async save() {
+  async save(isHideMessage?: boolean) {
     try {
       this.formData.patchValue({type: 'BTT'});
       let body = this.formData.value;
-      let rs = await this.createUpdate(body);
+      let rs = await this.createUpdate(body, null, isHideMessage);
     } catch (e) {
       console.log(e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -438,6 +444,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
       }
     });
   };
+
   async inBienBan(id, type, loai) {
     await this.hoSoKyThuatBttService.preview({
       id: id,

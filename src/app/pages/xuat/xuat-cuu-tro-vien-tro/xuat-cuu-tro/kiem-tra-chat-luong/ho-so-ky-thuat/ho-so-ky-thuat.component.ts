@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Base2Component } from "src/app/components/base2/base2.component";
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "src/app/services/storage.service";
@@ -13,6 +13,9 @@ import {
   HoSoKyThuatCtvtService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/HoSoKyThuatCtvt.service";
 import { MESSAGE } from "src/app/constants/message";
+import { DonviService } from 'src/app/services/donvi.service';
+import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
+import { NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 
 @Component({
   selector: 'app-ho-so-ky-thuat-cuu-tro',
@@ -21,6 +24,7 @@ import { MESSAGE } from "src/app/constants/message";
 })
 //hosokythuatchung
 export class HoSoKyThuatComponent extends Base2Component implements OnInit {
+  @ViewChild('NzTreeSelectComponent', { static: false }) nzTreeSelectComponent!: NzTreeSelectComponent;
   @Input() loaiVthh: string;
   isDetail: boolean = false;
   selectedId: number = 0;
@@ -28,7 +32,8 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
 
   listHangHoaAll: any[] = [];
   listLoaiHangHoa: any[] = [];
-
+  listDiaDiemKho: any[] = [];
+  selectedNode: any;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -36,7 +41,8 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
-    private hoSoKyThuatCtvtService: HoSoKyThuatCtvtService
+    private hoSoKyThuatCtvtService: HoSoKyThuatCtvtService,
+    private donViService: DonviService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatCtvtService);
     this.formData = this.fb.group({
@@ -55,6 +61,7 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
       maNhaKho: [],
       maNganKho: [],
       maLoKho: [],
+      maDiaDiem: [],
       tenDiemKho: [],
       tenNhaKho: [],
       tenNganKho: [],
@@ -81,7 +88,7 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
     });
     try {
       await Promise.all([
-        this.search(),
+        this.search(), this.loadDsDiemKho()
       ])
     } catch (e) {
       console.log('error: ', e);
@@ -90,7 +97,57 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
       await this.spinner.hide();
     }
   }
-
+  async loadDsDiemKho() {
+    let body = {
+      maDvi: this.userInfo.MA_DVI,
+    };
+    let res = await this.donViService.getDonViHangTree(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listDiaDiemKho = Array(res.data?.children) ? res.data.children : [];
+      this.listDiaDiemKho[0].expanded = true;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+  selectDiaDiem(node: NzTreeNodeOptions) {
+    // if (node.isLeaf) {
+    const current = node.origin;
+    console.log("current", current.maDvi);
+    const cucNode = current.maDvi.length >= 6 ? this.nzTreeSelectComponent.getTreeNodeByKey(current.maDvi.substring(0, 6)) : null;
+    const chiCucNode = current.maDvi.length >= 8 ? this.nzTreeSelectComponent.getTreeNodeByKey(current.maDvi.substring(0, 8)) : null;
+    const diemKhoNode = current.maDvi.length >= 10 ? this.nzTreeSelectComponent.getTreeNodeByKey(current.maDvi.substring(0, 10)) : null;
+    const nhaKhoNode = current.maDvi.length >= 12 ? this.nzTreeSelectComponent.getTreeNodeByKey(current.maDvi.substring(0, 12)) : null;
+    const nganKhoNode = current.maDvi.length >= 14 ? this.nzTreeSelectComponent.getTreeNodeByKey(current.maDvi.substring(0, 14)) : null;
+    const loKhoNode = current.maDvi.length >= 16 ? this.nzTreeSelectComponent.getTreeNodeByKey(current.maDvi.substring(0, 16)) : null;
+    const tenCuc = cucNode ? cucNode.origin.tenDvi : "";
+    const tenChiCuc = chiCucNode ? chiCucNode.origin.tenDvi : ""
+    const tenDiemKho = diemKhoNode ? diemKhoNode.origin.tenDvi : "";
+    const tenNhaKho = nhaKhoNode ? nhaKhoNode.origin.tenDvi : "";
+    const tenNganKho = nganKhoNode ? nganKhoNode.origin.tenDvi : "";
+    const tenLoKho = loKhoNode ? loKhoNode.origin.tenDvi : "";
+    const tenDiaDiem = (tenLoKho ? tenLoKho : "") + (tenLoKho && tenNganKho ? " - " : "") + (tenNganKho ? tenNganKho : "") + (tenNganKho && tenNhaKho ? " - " : "") + (tenNhaKho ? tenNhaKho : "") + (tenNhaKho && tenDiemKho ? " - " : "") + (tenDiemKho ? tenDiemKho : "") + (tenDiemKho && tenChiCuc ? " - " : "")
+      + (tenChiCuc ? tenChiCuc : "") + (tenChiCuc && tenCuc ? " - " : "") + (tenCuc ? tenCuc : "");
+    this.formData.patchValue({
+      tenDiemKho,
+      tenNhaKho,
+      tenNganKho,
+      tenLoKho,
+      cloaiVthh: current.cloaiVthh,
+      tenCloaiVthh: current.tenCloaiVthh,
+      maDiaDiem: current.maDvi
+    });
+    //chon ngan
+    node.title = tenDiaDiem;
+    // } 
+    // else {
+    //   node.isSelectable = false;
+    //   node.isExpanded = !node.isExpanded;
+    // }
+  }
+  clearForm() {
+    this.selectedNode = null;
+    super.clearForm();
+  }
   redirectToChiTiet(id: number, isView?: boolean) {
     this.selectedId = id;
     this.isDetail = true;

@@ -243,7 +243,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         loaiVthh: LOAI_HANG_DTQG.GAO,
         maDvi: this.userInfo.MA_PHONG_BAN,
         maDviDx: this.userInfo.MA_PHONG_BAN,
-        tenDvi: this.userInfo.TEN_DVI,
+        tenDvi: !this.userInfo.MA_PHONG_BAN || this.userInfo.MA_PHONG_BAN.length <= 6 ? this.userInfo.TEN_PHONG_BAN : this.userInfo.TEN_DVI,
         kieuNhapXuat: 'Xuất không thu tiền',
         loaiNhapXuat: 'Xuất cứu trợ',
         donViTinh: 'kg'

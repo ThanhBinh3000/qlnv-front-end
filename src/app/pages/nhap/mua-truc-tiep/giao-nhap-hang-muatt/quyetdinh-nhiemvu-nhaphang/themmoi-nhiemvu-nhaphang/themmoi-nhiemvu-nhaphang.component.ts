@@ -442,6 +442,7 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
     await this.spinner.show();
     let body = this.formData.value;
     console.log(body, "body");
+    body.ngayQd = this.formData.value.ngayQd != null ? dayjs(this.formData.value.ngayQd).format('YYYY-MM-DD') + " 00:00:00" : null
     body.soQd = this.formData.get('soQd').value + this.maQdSuffix;
     body.loaiQd = this.radioValue
     body.hhQdGiaoNvNhangDtlList = this.dataTable;
@@ -527,7 +528,7 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
           // })
           let hhQdGiaoNvNhangDtl = null;
           if(this.userService.isChiCuc()){
-            hhQdGiaoNvNhangDtl = data.hhQdGiaoNvNhangDtlList.filter(x => x.maDvi.includes(this.userInfo.MA_DVI))
+            hhQdGiaoNvNhangDtl = data.hhQdGiaoNvNhangDtlList.find(x => x.maDvi.includes(this.userInfo.MA_DVI))
           }
           this.formData.patchValue({
             id: data.id,

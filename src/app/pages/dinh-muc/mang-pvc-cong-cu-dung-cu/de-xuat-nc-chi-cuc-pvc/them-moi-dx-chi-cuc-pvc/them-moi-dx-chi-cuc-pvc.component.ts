@@ -12,7 +12,10 @@ import { STATUS } from '../../../../../constants/status';
 import { DanhMucCongCuDungCuService } from '../../../../../services/danh-muc-cong-cu-dung-cu.service';
 import { DxChiCucPvcService } from '../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/dx-chi-cuc-pvc.service';
 import { AMOUNT, AMOUNT_ONE_DECIMAL, AMOUNT_TWO_DECIMAL } from '../../../../../Utility/utils';
-import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
+import { ChiTieuKeHoachNamCapTongCucService } from '../../../../../services/chiTieuKeHoachNamCapTongCuc.service';
+import {
+  HienTrangMayMocService
+} from "../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/hien-trang-may-moc.service";
 
 @Component({
   selector: 'app-them-moi-dx-chi-cuc-pvc',
@@ -26,6 +29,7 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
   dataEdit: { [key: string]: { edit: boolean; data: PvcDxChiCucCtiet } } = {};
   listCcdc: any[] = [];
   maQd: string;
+  qdGiaoChiTieu: any;
   amount = AMOUNT_ONE_DECIMAL;
 
   constructor(
@@ -37,6 +41,7 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
     private dxChiCucService: DxChiCucPvcService,
     private danhMucCongCuDungCuService: DanhMucCongCuDungCuService,
     private ctieuKhService: ChiTieuKeHoachNamCapTongCucService,
+    private hienTrangMayMocService: HienTrangMayMocService
   ) {
     super(httpClient, storageService, notification, spinner, modal, dxChiCucService);
     super.ngOnInit();
@@ -69,7 +74,7 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
       if (this.id > 0) {
         this.detail(this.id);
       } else {
-        this.changeNamKh(this.formData.value.namKeHoach)
+        this.changeNamKh(this.formData.value.namKeHoach);
       }
       this.spinner.hide();
     } catch (e) {
@@ -110,14 +115,40 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
   async changeDm(event, type?: any) {
     let result = this.listCcdc.filter(item => item.maCcdc == event);
     if (result && result.length > 0) {
+      let itemQdGiaoChiTieuChiCuc = this.qdGiaoChiTieu.khLuongThuc.find(it => it.maDonVi === this.userInfo.MA_DVI);
+      let body ={
+        maCcdc: result[0].maCcdc,
+        namKeHoach: this.formData.value.namKeHoach,
+        maDvi: this.userInfo.MA_DVI,
+        paggingReq: {limit: 999, page: 0 }
+      }
+      let res = await this.hienTrangMayMocService.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data.content;
+        if(data && data.length > 0){
+          this.rowItem.slHienCo = data[0].soDuNamTruoc + data[0].slNhap + data[0].dieuChinhTang - data[0].dieuChinhGiam - data[0].slCanThanhLy;
+        }
+      } else {
+        this.dataTable = [];
+        this.totalRecord = 0;
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
       if (!type) {
         this.rowItem.tenCcdc = result[0].tenCcdc;
         this.rowItem.donViTinh = result[0].donViTinh;
         this.rowItem.moTaCcdc = result[0].moTa;
+        if (itemQdGiaoChiTieuChiCuc) {
+          this.rowItem.slChiTieuGao = itemQdGiaoChiTieuChiCuc.ntnGao;
+          this.rowItem.slChiTieuThoc = itemQdGiaoChiTieuChiCuc.ntnThoc;
+        }
       } else {
         type.tenCcdc = result[0].tenCcdc;
         type.donViTinh = result[0].donViTinh;
         type.moTaCcdc = result[0].moTa;
+        if (itemQdGiaoChiTieuChiCuc) {
+          type.slChiTieuGao = itemQdGiaoChiTieuChiCuc.ntnGao;
+          type.slChiTieuThoc = itemQdGiaoChiTieuChiCuc.ntnThoc;
+        }
       }
     }
   }
@@ -156,7 +187,7 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
       this.formData.value.soCv = this.formData.value.soCv + this.maQd;
       await super.saveAndSend(this.formData.value, status, msg, msgSuccess);
     } catch (error) {
-      console.error("Lỗi khi lưu và gửi dữ liệu:", error);
+      console.error('Lỗi khi lưu và gửi dữ liệu:', error);
     }
   }
 
@@ -312,12 +343,13 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
 
   async changeNamKh(event) {
     if (event && !this.isView && this.userService.isChiCuc()) {
-      let res = await this.ctieuKhService.loadThongTinChiTieuKeHoachTheoNamVaDonVi(event, this.userInfo.MA_DVI.substring(0,6));
+      let res = await this.ctieuKhService.loadThongTinChiTieuKeHoachTheoNamVaDonVi(event, this.userInfo.MA_DVI.substring(0, 6));
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
+          this.qdGiaoChiTieu = res.data;
           this.formData.patchValue({
-            soQdGiaoCt : res.data?.soQuyetDinh
-          })
+            soQdGiaoCt: res.data?.soQuyetDinh,
+          });
         }
       }
       // else {
@@ -334,7 +366,7 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
   }
 
   checkCbCuc() {
-    if(this.formData.value.trangThai == STATUS.DA_DUYET_LDC && this.userService.isTongCuc()){
+    if (this.formData.value.trangThai == STATUS.DA_DUYET_LDC && this.userService.isTongCuc()) {
       return true;
     }
     return false;
