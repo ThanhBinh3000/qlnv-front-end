@@ -443,8 +443,8 @@
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item class="form-item display-block">
-            <nz-form-label nzRequired [nzNoColon]="true"> ghi chú</nz-form-label>
-            <nz-form-control nz-col [nzErrorTip]="error">
+            <nz-form-label [nzNoColon]="true"> Ghi chú</nz-form-label>
+            <nz-form-control nz-col>
               <textarea nz-input [rows]="3" formControlName="ghiChu" [readonly]="isView"></textarea>
             </nz-form-control>
           </nz-form-item>
@@ -483,7 +483,7 @@
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> File đính kèm bảng kê đã ký</nz-form-label>
+            <nz-form-label [nzNoColon]="true"> File đính kèm biên bản tịnh kho đã ký</nz-form-label>
             <nz-form-control nz-col>
               <div class="list-file" nz-col>
                 <file-list [data]="formData.value.fileDinhKem" [isViewDetail]="isView">

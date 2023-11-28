@@ -4,7 +4,8 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="idInput" type="button" class="btn btn-sub" (click)="preview(idInput)">
+    <button *ngIf="idInput" type="button" class="btn btn-sub"
+            (click)="xemTruoc(idInput,'Biên bản hao dôi')">
       <i class="icon htvbdh_totrinh"></i>
       <span> Xem trước </span>
     </button>
@@ -93,7 +94,8 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Năm kế hoạch</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-select formControlName="namKh" (ngModelChange)="onChangeNam($event)" [nzDisabled]="isView">
+              <nz-select formControlName="namKh" (ngModelChange)="isView ? null : onChangeNam($event)"
+                         [nzDisabled]="isView">
                 <nz-option *ngFor="let item of listNam" [nzValue]="item.value" [nzLabel]="item.text"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -102,31 +104,31 @@
         <div nz-col [nzSpan]="6">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Đơn vị</nz-form-label>
-            <nz-form-control nz-col [nzErrorTip]="error">
-              <input placeholder="" nz-input formControlName="tenDvi" readonly/>
+            <nz-form-control nz-col>
+              <input nz-input formControlName="tenDvi" readonly/>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Mã QHNS</nz-form-label>
-            <nz-form-control nz-col [nzErrorTip]="error">
-              <input placeholder="" nz-input formControlName="maQhNs" readonly/>
+            <nz-form-control nz-col>
+              <input nz-input formControlName="maQhNs" readonly/>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Số BB hao dôi</nz-form-label>
-            <nz-form-control nz-col [nzErrorTip]="error">
-              <input placeholder="" nz-input formControlName="soBbHaoDoi" readonly/>
+            <nz-form-control nz-col>
+              <input nz-input formControlName="soBbHaoDoi" readonly/>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Ngày lập BB hao dôi</nz-form-label>
-            <nz-form-control nz-col [nzErrorTip]="error">
+            <nz-form-control nz-col>
               <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayLapBienBan" [nzDisabled]="isView">
               </nz-date-picker>
             </nz-form-control>
@@ -137,8 +139,8 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Số QĐ giao NV xuất hàng</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? null : openDialog()">
-                <input [readonly]="true" nz-input formControlName="soQdNv"
-                       (ngModelChange)="changeSoQdNv($event)" readonly/>
+                <input nz-input formControlName="soQdNv"
+                       (ngModelChange)="isView ? null : changeSoQdNv($event)" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -148,8 +150,8 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Số BB tịnh kho</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? null : openDialogTinhKho()">
-                <input [readonly]="true" nz-input formControlName="soBbTinhKho"
-                       (ngModelChange)="changeBbTinhKho($event)" readonly/>
+                <input nz-input formControlName="soBbTinhKho"
+                       (ngModelChange)="isView ? null : changeBbTinhKho($event)" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -187,7 +189,7 @@
         <div nz-col [nzSpan]="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Ngày bắt đầu xuất</nz-form-label>
-            <nz-form-control nz-col [nzErrorTip]="error">
+            <nz-form-control nz-col>
               <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayBatDauXuat" nzDisabled>
               </nz-date-picker>
             </nz-form-control>
@@ -196,7 +198,7 @@
         <div nz-col [nzSpan]="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Ngày kết thúc xuất</nz-form-label>
-            <nz-form-control nz-col [nzErrorTip]="error">
+            <nz-form-control nz-col>
               <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayKetThucXuat" nzDisabled>
               </nz-date-picker>
             </nz-form-control>
@@ -494,48 +496,48 @@
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item class="form-item display-block">
-            <nz-form-label nzRequired [nzNoColon]="true"> ghi chú</nz-form-label>
-            <nz-form-control nz-col [nzErrorTip]="error">
+            <nz-form-label [nzNoColon]="true"> ghi chú</nz-form-label>
+            <nz-form-control nz-col>
               <textarea nz-input [rows]="3" formControlName="ghiChu" [readonly]="isView"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Thủ kho</nz-form-label>
-            <nz-form-control nz-col [nzErrorTip]="error">
-              <input placeholder="" nz-input formControlName="tenThuKho" readonly/>
+            <nz-form-label [nzNoColon]="true"> Thủ kho (Cán bộ thủ kho)</nz-form-label>
+            <nz-form-control nz-col>
+              <input nz-input formControlName="tenThuKho" readonly/>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> KTV bảo quản</nz-form-label>
-            <nz-form-control nz-col [nzErrorTip]="error">
-              <input placeholder="" nz-input formControlName="tenKtvBaoQuan" readonly/>
+            <nz-form-control nz-col>
+              <input nz-input formControlName="tenKtvBaoQuan" readonly/>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Kế toán/Kế toán trưởng</nz-form-label>
-            <nz-form-control nz-col [nzErrorTip]="error">
-              <input placeholder="" nz-input formControlName="tenKeToan" readonly/>
+            <nz-form-control nz-col>
+              <input nz-input formControlName="tenKeToan" readonly/>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Lãnh đạo Chi cục</nz-form-label>
-            <nz-form-control nz-col [nzErrorTip]="error">
-              <input placeholder="" nz-input formControlName="tenLanhDaoChiCuc" readonly/>
+            <nz-form-control nz-col>
+              <input nz-input formControlName="tenLanhDaoChiCuc" readonly/>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> File đính kèm bảng kê đã ký</nz-form-label>
-            <nz-form-control [nzErrorTip]="error" nz-col>
+            <nz-form-label [nzNoColon]="true"> File đính kèm bảng kê đã ký</nz-form-label>
+            <nz-form-control nz-col>
               <div class="list-file" nz-col>
                 <file-list [data]="formData.value.fileDinhKem" [isViewDetail]="isView">
                 </file-list>
@@ -550,8 +552,60 @@
 <ng-template #error let-control>
   <app-template-error #error [control]="control"></app-template-error>
 </ng-template>
-<nz-modal [nzWidth]="'75%'" [nzClosable]="false" [(nzVisible)]="showDlgPreview"
-          nzTitle="BIÊN BẢN HAO DÔI BÁN TRỰC TIẾP" nzWidth="100%" (nzOnCancel)="closeDlg()">
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewXuatKho" (nzOnCancel)="closeModal('xuatKho')">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-them-moi-phieu-xuat-kho-btt [idInput]="idXuatKho" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
+                                     [isView]="true">
+    </app-them-moi-phieu-xuat-kho-btt>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModal('xuatKho')" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewBangKe" (nzOnCancel)="closeModal('bangKe')">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-them-moi-bang-ke-can-hang-btt [idInput]="idBangKe" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
+                                       [isView]="true">
+    </app-them-moi-bang-ke-can-hang-btt>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModal('bangKe')" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewXuatKho" (nzOnCancel)="closeModal('xuatKho')">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-them-moi-phieu-xuat-kho-btt [idInput]="idXuatKho" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
+                                     [isView]="true">
+    </app-them-moi-phieu-xuat-kho-btt>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModal('xuatKho')" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewBangKe" (nzOnCancel)="closeModal('bangKe')">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-them-moi-bang-ke-can-hang-btt [idInput]="idBangKe" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
+                                       [isView]="true">
+    </app-them-moi-bang-ke-can-hang-btt>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModal('bangKe')" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+<nz-modal [nzWidth]="'75%'" [nzClosable]="false" [(nzVisible)]="showDlgPreview" nzWidth="100%"
+          (nzOnCancel)="closeDlg()">
   <div *nzModalContent class="modal__content">
     <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
   </div>
@@ -561,59 +615,19 @@
       <i class="icon htvbdh_printer"></i>
       In
     </button>
+    <button nz-button
+            (click)="downloadPdf('Biên bản hao dôi')"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-pdf"></i>
+      Xuất .pdf
+    </button>
+    <button nz-button
+            (click)="downloadWord('Biên bản hao dôi')"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-word"></i>
+      Xuất .docx
+    </button>
     <button nz-button (click)="closeDlg()" class="modal__button--cancel">
-      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-      Đóng
-    </button>
-  </div>
-</nz-modal>
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewXuatKho" (nzOnCancel)="closeModal('xuatKho')">
-  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-them-moi-phieu-xuat-kho-btt [idInput]="idXuatKho" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
-                                     [isView]="true">
-    </app-them-moi-phieu-xuat-kho-btt>
-  </ng-container>
-  <div *nzModalFooter>
-    <button nz-button (click)="closeModal('xuatKho')" class="modal__button--cancel">
-      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-      Đóng
-    </button>
-  </div>
-</nz-modal>
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewBangKe" (nzOnCancel)="closeModal('bangKe')">
-  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-them-moi-bang-ke-can-hang-btt [idInput]="idBangKe" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
-                                       [isView]="true">
-    </app-them-moi-bang-ke-can-hang-btt>
-  </ng-container>
-  <div *nzModalFooter>
-    <button nz-button (click)="closeModal('bangKe')" class="modal__button--cancel">
-      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-      Đóng
-    </button>
-  </div>
-</nz-modal>
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewXuatKho" (nzOnCancel)="closeModal('xuatKho')">
-  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-them-moi-phieu-xuat-kho-btt [idInput]="idXuatKho" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
-                                     [isView]="true">
-    </app-them-moi-phieu-xuat-kho-btt>
-  </ng-container>
-  <div *nzModalFooter>
-    <button nz-button (click)="closeModal('xuatKho')" class="modal__button--cancel">
-      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-      Đóng
-    </button>
-  </div>
-</nz-modal>
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewBangKe" (nzOnCancel)="closeModal('bangKe')">
-  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-them-moi-bang-ke-can-hang-btt [idInput]="idBangKe" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
-                                       [isView]="true">
-    </app-them-moi-bang-ke-can-hang-btt>
-  </ng-container>
-  <div *nzModalFooter>
-    <button nz-button (click)="closeModal('bangKe')" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>

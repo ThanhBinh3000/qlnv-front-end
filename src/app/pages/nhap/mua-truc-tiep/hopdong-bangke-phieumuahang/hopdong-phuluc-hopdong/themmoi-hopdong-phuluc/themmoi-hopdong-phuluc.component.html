@@ -113,8 +113,8 @@
                   </nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-select (ngModelChange)="changeDviCungCap($event)" [nzDisabled]="isDisabled()"
-                      formControlName="idDviBan" nzAllowClear nzShowSearch>
-                      <nz-option *ngFor="let p of listDviLquan" [nzLabel]="p.canhanTochuc" [nzValue]="p.id"></nz-option>
+                      formControlName="id" nzAllowClear nzShowSearch>
+                      <nz-option *ngFor="let p of listDviLquan" [nzLabel]="p.dviCungCap" [nzValue]="p.id"></nz-option>
                     </nz-select>
                   </nz-form-control>
                 </nz-form-item>
