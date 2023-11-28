@@ -1,11 +1,11 @@
 <nz-affix [nzOffsetTop]="69" class="level1">
-    <ul nz-menu nzMode="horizontal">
-        <li *ngFor="let tab of tabs,let i = index" [nzSelected]="i == 0" nz-menu-item (click)="selectTab(tab.ma)">
-            {{tab.giaTri}}
-        </li>
-    </ul>
+  <ul nz-menu nzMode="horizontal">
+    <li *ngFor="let tab of tabs,let i = index" [nzSelected]="i == 0" nz-menu-item (click)="selectTab(tab.ma)">
+      {{tab.giaTri}}
+    </li>
+  </ul>
 </nz-affix>
-<ng-container *ngFor="let tab of tabs, let i = index">
-    <app-main-ke-hoach-ban-truc-tiep *ngIf="tab.ma == loaiVthhSelected" [inputLoaiVthh]="tab.ma" [listVthh]="tabs">
-    </app-main-ke-hoach-ban-truc-tiep>
+<ng-container *ngFor="let tab of tabs,let i = index">
+  <app-main-ke-hoach-ban-truc-tiep *ngIf="tab.ma == loaiVthhSelected" [inputLoaiVthh]="tab.ma"
+                                   [listVthh]="tabs"></app-main-ke-hoach-ban-truc-tiep>
 </ng-container>

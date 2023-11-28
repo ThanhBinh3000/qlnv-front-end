@@ -1,22 +1,35 @@
-<nz-affix [nzOffsetTop]="98" class="level2">
-    <ul nz-menu nzMode="horizontal">
-        <li nz-menu-item nzSelected (click)="selectTab(0)" *ngIf="!userService.isChiCuc()">
-            Hợp đồng/Phụ lục hợp đồng
-        </li>
-        <li nz-menu-item nzSelected (click)="selectTab(0)" *ngIf="userService.isChiCuc()">
-            Hợp đồng/Phụ lục hợp đồng
-        </li>
-        <li nz-menu-item (click)="selectTab(1)">
-            Bảng kê bán lẻ
-        </li>
-    </ul>
+<nz-affix [nzOffsetTop]="98" class="level2-border">
+  <ul nz-menu nzMode="horizontal">
+    <li [nzSelected]="tabSelected==0" nz-menu-item (click)="selectTab(0)" *ngIf="!userService.isChiCuc()">
+      <div
+        *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_HDPL') : userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_HDPL')">
+        Hợp đồng/Phụ lục hợp đồng
+      </div>
+    </li>
+    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)" *ngIf="userService.isChiCuc()">
+      <div
+        *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_HDPL') : userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_HDPL')">
+        Hợp đồng/Phụ lục hợp đồng
+      </div>
+    </li>
+    <li [nzSelected]="tabSelected==2" nz-menu-item (click)="selectTab(2)" *ngIf="!userService.isTongCuc()">
+      <div
+        *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_BKBL') : userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_BKBL')">
+        Bảng kê bán lẻ
+      </div>
+    </li>
+  </ul>
 </nz-affix>
-<ng-container *ngIf="tabSelected == 0 && !userService.isChiCuc()">
-    <app-danh-sach-hop-dong-btt [loaiVthh]="loaiVthh"></app-danh-sach-hop-dong-btt>
-</ng-container>
-<ng-container *ngIf="tabSelected == 0 && userService.isChiCuc()">
-    <app-danh-sach-ban-truc-tiep-chi-cuc [loaiVthh]="loaiVthh"></app-danh-sach-ban-truc-tiep-chi-cuc>
-</ng-container>
-<ng-container *ngIf="tabSelected == 1">
-    <app-bang-ke-ban-hang [loaiVthh]="loaiVthh"></app-bang-ke-ban-hang>
-</ng-container>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 0">
+      <app-danh-sach-hop-dong-btt [loaiVthh]="loaiVthh"></app-danh-sach-hop-dong-btt>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 1">
+      <app-danh-sach-ban-truc-tiep-chi-cuc [loaiVthh]="loaiVthh"></app-danh-sach-ban-truc-tiep-chi-cuc>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 2">
+      <app-bang-ke-ban-hang [loaiVthh]="loaiVthh"></app-bang-ke-ban-hang>
+    </ng-container>
+  </div>
+</div>
