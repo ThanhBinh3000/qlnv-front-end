@@ -214,19 +214,6 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
     })
     this.idKqCgia = data.idKqCgia;
     this.dataTable = data.qdGiaoNvuDtlList.length > 0 ? data.qdGiaoNvuDtlList.filter(x => x.maDvi.includes(this.userInfo.MA_DVI)) : data.children;
-    // dataKq.danhSachCtiet.forEach((item) => {
-    //   item.listChaoGia.forEach(res =>{
-    //     if (res.luaChon == true && res.signed != true) {
-    //       this.listDviLquan.push(res)
-    //       this.slChuaKy += res.soLuong
-    //     }else if(res.luaChon == true && res.signed == true){
-    //       this.slDaKy += item.children.filter(x => x.idDiaDiem == res.idQdPdKqSldd).reduce((prev, cur) => {
-    //         prev += cur.soLuongHd;
-    //         return prev;
-    //       }, 0);
-    //     }
-    //   })
-    // })
     this.calculatorTable(data, this.dataTable);
     console.log(data, 333)
     this.dataTablePhuLuc = data.phuLucDtl;
@@ -294,6 +281,12 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
     if (this.formData.invalid) {
       this.spinner.hide();
       return;
+    }
+    if(!this.formData.value.id){
+      let res = await this.thongTinPhuLucHopDongService.findByIdKqCgia(this.formData.value);
+      if(res.msg == MESSAGE.SUCCESS){
+        await this.loadChiTiet(res.data.id)
+      }
     }
     let body = this.formData.value;
     body.soHd = this.formData.value.soHd + this.maHopDongSuffix;
@@ -373,10 +366,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
       await this.quyetDinhPheDuyetKeHoachMTTService.getDetailDtlCuc(id)
         .then(async (resKq) => {
           const dataKq = resKq.data;
-          // let resTtin = await this.quyetDinhPheDuyetKeHoachMTTService.getDetailDtlCuc(dataKq.idPdKhDtl);
           if (dataKq) {
-            // const dataThongTin = resTtin.data;
-            // this.dataTable = dataKq.danhSachCtiet;
             this.formData.patchValue({
               idQdKh: dataKq.idQdHdr,
               soQdKh: dataKq.hhQdPheduyetKhMttHdr.isChange ? dataKq.hhQdPheduyetKhMttHdr.soQdDc : dataKq.hhQdPheduyetKhMttHdr.soQd,
@@ -395,13 +385,6 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
             console.log(dataKq, "dataKq")
             this.loaiHd = '02'
             this.dataTable = dataKq.children.filter(x => x.maDvi == this.userInfo.MA_DVI)
-            // dataKq.danhSachCtiet.forEach((item) => {
-            //   item.listChaoGia.forEach(res => {
-            //     if (res.luaChon == true) {
-            //       this.listDviLquan.push(res)
-            //     }
-            //   })
-            // })
           }
         })
     }
@@ -445,18 +428,16 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
       await this.quyetDinhPheDuyetKetQuaChaoGiaMTTService.getDetail(id)
         .then(async (resKq) => {
           const dataKq = resKq.data;
-          let resTtin = await this.quyetDinhPheDuyetKeHoachMTTService.getDetailDtlCuc(dataKq.idPdKhDtl);
           if (resKq.data) {
-            const dataThongTin = resTtin.data;
             this.slDaKy = 0;
             this.slChuaKy = 0;
             this.listDviLquan = [];
             dataKq.danhSachCtiet.forEach((item) => {
-              item.listChaoGia.forEach(res =>{
-                if (res.luaChon == true && res.signed != true) {
-                  this.listDviLquan.push(res)
+              item.listHdong.forEach(res =>{
+                this.listDviLquan.push(res)
+                if (res.trangThai != STATUS.DA_KY) {
                   this.slChuaKy += res.soLuong
-                }else if(res.luaChon == true && res.signed == true){
+                }else if(res.trangThai == STATUS.DA_KY){
                   this.slDaKy += item.children.filter(x => x.idDiaDiem == res.idQdPdKqSldd).reduce((prev, cur) => {
                     prev += cur.soLuongHd;
                     return prev;
@@ -481,9 +462,9 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
               dviTinh: "tấn",
               tongSoLuongQdKh: this.slChuaKy + this.slDaKy
             });
-            if(this.idKqCgia){
-              this.changeDviCungCap(this.idKqCgia)
-            }
+            // if(this.id){
+            //   this.changeDviCungCap(this.id)
+            // }
           }
         })
     }
@@ -612,12 +593,19 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
         soLuong: dViCc.soLuong,
         dviCungCap: dViCc.dviCungCap,
         donGia: dViCc.donGia,
-        donGiaGomThue: dViCc.donGia + (dViCc.donGia * dViCc.thueGtgt / 100),
+        donGiaGomThue: dViCc.donGiaGomThue,
         sdtDviBan: dViCc.sdt,
         thanhTien: Math.round(dViCc.soLuong * dViCc.donGia * 1000),
       })
     }
   }
+  //
+  // async findByIdDviBan(body: any){
+  //   let res = await this.thongTinPhuLucHopDongService.findByIdDviBan(body);
+  //   if(res.msg == MESSAGE.SUCCESS){
+  //       await this.loadChiTiet(res.data.id)
+  //   }
+  // }
 
   onSoLuongHdChange(item: any, newValue: number) {
     console.log(item, "item")
