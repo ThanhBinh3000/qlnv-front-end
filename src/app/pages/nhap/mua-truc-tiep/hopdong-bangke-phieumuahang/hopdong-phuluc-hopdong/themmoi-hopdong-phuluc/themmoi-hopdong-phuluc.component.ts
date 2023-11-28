@@ -282,12 +282,6 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
       this.spinner.hide();
       return;
     }
-    if(!this.formData.value.id){
-      let res = await this.thongTinPhuLucHopDongService.findByIdKqCgia(this.formData.value);
-      if(res.msg == MESSAGE.SUCCESS){
-        await this.loadChiTiet(res.data.id)
-      }
-    }
     let body = this.formData.value;
     body.soHd = this.formData.value.soHd + this.maHopDongSuffix;
     if (this.formData.get('thoiGianDuKien').value) {
