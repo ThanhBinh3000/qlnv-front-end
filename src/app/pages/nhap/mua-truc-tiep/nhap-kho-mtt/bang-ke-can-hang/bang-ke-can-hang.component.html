@@ -127,7 +127,7 @@
                                 <td>{{bk.ngayNkho}}</td>
                                 <td>{{bk.tenTrangThai}}</td>
                                 <td>
-                                  <a *ngIf="bk.trangThai == STATUS.DA_DUYET_LDCC "
+                                  <a *ngIf="userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BKCH_XEM')"
                                      (click)="redirectToChiTiet(true, bk.id)">
                                     <i class="fa fa-eye" title="Xem chi tiết"></i>
                                   </a>
