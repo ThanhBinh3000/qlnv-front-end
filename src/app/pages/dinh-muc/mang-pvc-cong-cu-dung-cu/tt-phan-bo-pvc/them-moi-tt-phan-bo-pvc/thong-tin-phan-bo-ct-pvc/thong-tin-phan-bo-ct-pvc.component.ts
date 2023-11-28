@@ -12,6 +12,7 @@ import {
   PvcDxChiCucCtiet
 } from "../../../de-xuat-nc-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc.component";
 import {AMOUNT} from "../../../../../../Utility/utils";
+import { DxChiCucPvcService } from '../../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/dx-chi-cuc-pvc.service';
 
 @Component({
   selector: 'app-thong-tin-phan-bo-ct-pvc',
@@ -34,6 +35,7 @@ export class ThongTinPhanBoCtPvcComponent  implements OnInit {
     private _modalRef: NzModalRef,
     public globals: Globals,
     private notification: NzNotificationService,
+    private dxChiCucService: DxChiCucPvcService,
     private spinner: NgxSpinnerService
   ) {
   }
@@ -119,8 +121,7 @@ export class ThongTinPhanBoCtPvcComponent  implements OnInit {
     let loaiHangHoa = this.listChiCuc.filter(item => item.maDvi === event)
     if (loaiHangHoa && loaiHangHoa.length > 0) {
       this.item.tenDvi = loaiHangHoa[0].tenDvi
+      // dxChiCucService
     }
   }
-
-  protected readonly AMOUNT = AMOUNT;
 }
