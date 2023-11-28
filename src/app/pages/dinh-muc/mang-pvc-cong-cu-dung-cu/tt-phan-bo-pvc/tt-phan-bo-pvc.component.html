@@ -129,7 +129,7 @@
         <tr *ngFor="let data of basicTable.data; let i = index">
           <td width="45px">
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                   [nzDisabled]="data.trangThai != globals.prop.NHAP_DU_THAO"></label>
+                   [nzDisabled]="data.trangThai != STATUS.DANG_NHAP_DU_LIEU"></label>
           </td>
           <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
           <td>{{ data.soVb }}</td>
@@ -139,7 +139,7 @@
           <td>{{ data.soQdMs }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>
-            <a (click)="redirectToChiTiet(true, data.id)" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_XEM') && !((data.trangThai == STATUS.DU_THAO) && data.nguoiTaoId == userInfo.ID)">
+            <a (click)="redirectToChiTiet(true, data.id)" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_XEM') && !((data.trangThai == STATUS.DANG_NHAP_DU_LIEU) && data.nguoiTaoId == userInfo.ID)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU )&& userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_THEM') && !userService.isChiCuc()"
