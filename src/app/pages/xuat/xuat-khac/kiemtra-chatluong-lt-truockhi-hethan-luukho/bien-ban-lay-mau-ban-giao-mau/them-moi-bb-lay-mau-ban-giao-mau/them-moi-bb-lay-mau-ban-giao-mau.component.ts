@@ -260,7 +260,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
       ngayTongHop: data.ngayTongHop,
     });
     if (data.tongHopDtl) {
-      this.listDiaDiemNhap = data.tongHopDtl;
+      this.listDiaDiemNhap = data.tongHopDtl.filter(i=>i.maDiaDiem.substring(0,8) === this.userInfo.MA_DVI);
     }
     await this.listBienBan(data.maDanhSach)
     await this.spinner.hide();
