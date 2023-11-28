@@ -95,11 +95,11 @@
         <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-control>
-              <nz-form-label [nzNoColon]="true" class="label-color-kh">Khối lượng lương thực nhập theo chỉ tiêu (tấn)
+              <nz-form-label [nzNoColon]="true" class="label-color-kh">Khối lượng gạo đang bảo quản (tấn)
               </nz-form-label>
               <nz-input-group>
                 <nz-input-number [nzDisabled]="isView || formData.value.soQdGiaoCt"  [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzSize]="'small'" nz-input
-                                 formControlName="klLtNhap" [nzMin]="0">
+                                 formControlName="slGaoDangBaoQuan" [nzMin]="0">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -108,24 +108,11 @@
         <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-control>
-              <nz-form-label [nzNoColon]="true" class="label-color-kh">Khối lượng lương thực xuất theo chỉ tiêu
-              </nz-form-label>
-              <nz-input-group>
-                <nz-input-number [nzDisabled]="isView || formData.value.soQdGiaoCt"  [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzSize]="'small'" nz-input
-                                 formControlName="klLtXuat" [nzMin]="0">
-                </nz-input-number>
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col nzSpan="4">
-          <nz-form-item>
-            <nz-form-control>
-              <nz-form-label [nzNoColon]="true" class="label-color-kh">Khối lượng lương thực bảo quản (tấn)
+              <nz-form-label [nzNoColon]="true" class="label-color-kh">Khối lượng thóc đang bảo quản (tấn)
               </nz-form-label>
               <nz-input-group>
                 <nz-input-number [nzDisabled]="isView || formData.value.soQdGiaoCt" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzSize]="'small'" nz-input
-                                 formControlName="klLtBaoQuan" [nzMin]="0">
+                                 formControlName="slThocDangBaoQuan" [nzMin]="0">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -148,16 +135,19 @@
       <th rowSpan="2" nzWidth="40px">STT</th>
       <th rowSpan="2" nzWidth="200px">Tên tài sản</th>
       <th rowSpan="2" nzWidth="100px">Đơn vị tính</th>
-      <th rowSpan="2" nzWidth="100px">Số lượng hiện có (1)</th>
-      <th rowSpan="2" nzWidth="100px">Số lượng sẽ nhập <br> thêm năm {{formData.value.namKeHoach -1 }}(2)</th>
+      <th colspan="2" width="200px" nzAlign="center">SL lương thực nhập <br /> theo chỉ tiêu KH</th>
+      <th rowSpan="2" nzWidth="100px">SL sử dụng được <br /> tại thời điểm đề xuất (1)</th>
+      <th rowSpan="2" nzWidth="100px">Số lượng sẽ nhập <br> thêm năm trước (2)</th>
       <th rowSpan="2" nzWidth="100px">Tổng cộng (3=1+2)</th>
-      <th rowSpan="2" nzWidth="100px">SL theo tiêu chuẩn <br> định mức (4)</th>
+      <th rowSpan="2" nzWidth="100px">SL định mức theo <br> chỉ tiêu KH năm (4)</th>
       <th colSpan="2" nzWidth="150px">Chênh lệch</th>
-      <th colSpan="3" nzWidth="200px">Nhu cầu trang bị năm {{formData.value.namKeHoach}}</th>
+      <th colSpan="3" nzWidth="200px">Nhu cầu trang bị đề xuất</th>
       <th rowSpan="2" nzWidth="200px">Ghi chú</th>
       <th rowSpan="2" nzWidth="140px" *ngIf="!isView">Hành động</th>
     </tr>
     <tr>
+      <th width="100px">Gạo tẻ (1)</th>
+      <th width="100px">Thóc tẻ (2)</th>
       <th nzWidth="75px">Còn thiếu (5=4-3)</th>
       <th nzWidth="75px">Thừa (6=3-4)</th>
       <th nzWidth="100px">Số lượng (7)</th>
@@ -175,6 +165,14 @@
       </th>
       <th>
         <input type="text" [(ngModel)]="rowItem.donViTinh" readonly nz-input/>
+      </th>
+      <th>
+        <nz-input-number [(ngModel)]="rowItem.slChiTieuGao" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                         nzDisabled [nzMin]="0" [nzParser]="globals.parser"></nz-input-number>
+      </th>
+      <th>
+        <nz-input-number [(ngModel)]="rowItem.slChiTieuThoc" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                         nzDisabled [nzMin]="0" [nzParser]="globals.parser"></nz-input-number>
       </th>
       <th>
         <nz-input-number  [(ngModel)]="rowItem.slHienCo" [nzSize]="'small'" [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0"
@@ -231,6 +229,8 @@
         <td>{{idx + 1}}</td>
         <td>{{data.tenTaiSan}}</td>
         <td>{{data.donViTinh}}</td>
+        <td>{{data.slChiTieuGao | number : '1.0-1' : 'vi_VN'}}</td>
+        <td>{{data.slChiTieuThoc | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="text-right">{{data.slHienCo | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="text-right">{{data.slNhapThem | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="text-right">{{data.slHienCo + data.slNhapThem | number : '1.0-1' : 'vi_VN'}}</td>
