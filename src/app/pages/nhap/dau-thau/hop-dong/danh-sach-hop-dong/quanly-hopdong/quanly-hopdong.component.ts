@@ -47,6 +47,7 @@ export class QuanlyHopdongComponent implements OnInit {
   };
   previewName : string;
   listNguoiDaiDien: any[] = [];
+  isView: any;
   constructor(
     public globals: Globals,
     private helperService: HelperService,
@@ -281,9 +282,10 @@ export class QuanlyHopdongComponent implements OnInit {
     this.spinner.hide();
   }
 
-  async redirectHopDong(isShowHd: boolean, id: number) {
+  async redirectHopDong(isShowHd: boolean, id: number, isView: boolean) {
     this.isEditHopDong = isShowHd;
     this.idHopDong = id;
+    this.isView = isView;
     if (!isShowHd) {
       await this.ngOnInit()
     }
