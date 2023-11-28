@@ -34,6 +34,9 @@ import {
   ThongTinHangDtqgComponent
 } from "../../../../../dieu-chuyen-noi-bo/nhap-dieu-chuyen/tablevel3/bien-ban-nghiem-thu-bao-quan-lan-dau/thong-tin-hang-dtqg/thong-tin-hang-dtqg.component";
 import * as uuidv4 from "uuid";
+import {
+  BangKeThuMuaLeService
+} from "../../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/BangKeThuMuaLeService.service";
 
 @Component({
   selector: 'app-them-moi-bien-ban-nghiem-thu-bao-quan',
@@ -47,6 +50,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
   @Input() idQdGiaoNvNh: number;
   @Output()
   showListEvent = new EventEmitter<any>();
+  @Input() disableField: boolean = false;
 
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
   isVisibleChangeTab$ = new Subject();
@@ -56,6 +60,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
   detailGiaoNhap: any = {};
   detailHopDong: any = {};
 
+  listBangKe: any[] = [];
   listLoaiKho: any[] = [];
   listPhuongThucBaoQuan: any[] = [];
   listHinhThucBaoQuan: any[] = [];
@@ -89,6 +94,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
     private danhMucService: DanhMucService,
     private bienBanNghiemThuBaoQuan: MttBienBanNghiemThuBaoQuan,
     private quyetDinhGiaoNvNhapHangService: QuyetDinhGiaoNvNhapHangService,
+    private banKeThuMuaLeService: BangKeThuMuaLeService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanNghiemThuBaoQuan);
@@ -140,6 +146,8 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
         dinhMucGiao: [''],
         dinhMucThucTe: [''],
         ketLuan: [''],
+        loaiQd: [''],
+        soBangKe: [''],
 
         ldoTuChoi: [''],
         trangThai: [],
@@ -162,6 +170,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
       await Promise.all([
         this.loadDataComboBox(),
         this.loadSoQuyetDinh(),
+        this.loadDsBangKe(),
         this.loadDonViTinh()
       ]);
       if (this.id) {
@@ -203,6 +212,54 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
     }
   }
 
+  async loadDsBangKe(){
+    let body = {
+      idQdGiaoNvNh: this.idQdGiaoNvNh,
+      paggingReq: {
+        limit: this.globals.prop.MAX_INTERGER,
+        page: 0,
+      },
+    }
+    let res = await this.banKeThuMuaLeService.search(body);
+    if(res.msg == MESSAGE.SUCCESS){
+      this.listBangKe = res.data.content
+    }
+  }
+
+  async openDialogSoBangKe() {
+    const modalQD = this.modal.create({
+      nzTitle: 'DANH SÁCH BẢNG KÊ MUA LẺ',
+      nzContent: DialogTableSelectionComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: this.listBangKe,
+        dataHeader: ['Số bảng kê', 'Loại hàng DTQG', 'Chủng loại hàng DTQG'],
+        dataColumn: ['soBangKe', 'tenLoaiVthh', 'tenCloaiVthh'],
+      },
+    })
+    modalQD.afterClose.subscribe(async (data) => {
+      if (data) {
+        await this.bindingDataBangKe(data.id, true);
+      }
+    });
+  };
+
+  async bindingDataBangKe(id, isSetTc?) {
+    await this.spinner.show();
+    let dataRes = await this.banKeThuMuaLeService.getDetail(id)
+    console.log(dataRes, "1")
+    const data = dataRes.data;
+    this.formData.patchValue({
+      soBangKe: data.soBangKe,
+      idQdGiaoNvNh: data.idQdGiaoNvNh,
+      // slCanNhap: data.soLuongQd,
+    });
+    await this.spinner.hide();
+  }
+
   async openDialogSoQd() {
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ nhập hàng',
@@ -238,9 +295,10 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
       tenLoaiVthh: data.tenLoaiVthh,
       tenCloaiVthh: data.tenCloaiVthh,
       moTaHangHoa: data.moTaHangHoa,
+      loaiQd: data.loaiQd,
     });
     let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi.includes(this.userInfo.MA_DVI));
-    console.log(dataChiCuc)
+    console.log(dataChiCuc, "2")
     if (dataChiCuc.length > 0) {
       this.listDiaDiemNhap = dataChiCuc[0].children;
     }
@@ -362,11 +420,11 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
       let res = await this.bienBanNghiemThuBaoQuan.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
-        this.helperService.bidingDataInFormGroup(this.formData, data);
+        await this.helperService.bidingDataInFormGroup(this.formData, data);
         console.log(data)
         await this.bindingDataQd(res.data?.idQdGiaoNvNh);
         let dataDdNhap = this.listDiaDiemNhap.filter(item => item.id == res.data.idDdiemGiaoNvNh)[0];
-        this.bindingDataDdNhap(dataDdNhap);
+        await this.bindingDataDdNhap(dataDdNhap);
         this.dsHangTH = data.dviChuDongThucHien;
         this.dsHangPD = data.dmTongCucPdTruocThucHien;
       }

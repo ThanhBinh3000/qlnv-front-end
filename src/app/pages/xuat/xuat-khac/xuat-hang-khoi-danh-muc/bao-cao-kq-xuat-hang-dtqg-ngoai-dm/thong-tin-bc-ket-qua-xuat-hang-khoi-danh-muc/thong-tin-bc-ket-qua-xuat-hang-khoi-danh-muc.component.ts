@@ -166,13 +166,11 @@ export class ThongTinBcKetQuaXuatHangKhoiDanhMucComponent extends Base2Component
         let dsThItem = this.listDsTongTop.find(it => it.maDanhSach == event);
         if (dsThItem) {
           dsThItem.tongHopDtl.map(obj => ({ ...obj, tongHopHdr: dsThItem }));
-          console.log(dsThItem.tongHopDtl, 'dsThItem.tongHopDtldsThItem.tongHopDtl');
           this.children = cloneDeep(dsThItem.tongHopDtl);
         }
         this.formData.patchValue({
           idDsTh: dsThItem.id,
         });
-        console.log(this.children, 'this.childrenthis.childrenthis.children');
         this.buildTableView(this.children);
       } else {
         // this.listPhieuXuatKho = [];
@@ -215,8 +213,6 @@ export class ThongTinBcKetQuaXuatHangKhoiDanhMucComponent extends Base2Component
       body.fileDinhKems = this.fileDinhKems;
     }
     body.xhXkThXuatHangKdmDtl = this.children && this.children.length > 0 ? this.conVertTreeToList(this.children) : [];
-    console.log(body, 'bodybodybody');
-    return;
     let data = await this.createUpdate(body);
     if (data) {
       this.idInput = data.id;

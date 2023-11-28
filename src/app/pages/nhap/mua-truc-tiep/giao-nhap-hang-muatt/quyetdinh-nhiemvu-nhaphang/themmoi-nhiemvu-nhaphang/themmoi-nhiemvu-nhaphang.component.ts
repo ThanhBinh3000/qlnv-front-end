@@ -527,7 +527,7 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
           // })
           let hhQdGiaoNvNhangDtl = null;
           if(this.userService.isChiCuc()){
-            hhQdGiaoNvNhangDtl = data.hhQdGiaoNvNhangDtlList.filter(x => x.maDvi.includes(this.userInfo.MA_DVI))
+            hhQdGiaoNvNhangDtl = data.hhQdGiaoNvNhangDtlList.find(x => x.maDvi.includes(this.userInfo.MA_DVI))
           }
           this.formData.patchValue({
             id: data.id,

@@ -170,20 +170,14 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      this.dataTable.forEach(item => {
+      for (let i = 0; i < this.dataTable.length; i++) {
+        this.expandSet.add(i)
         if (this.userService.isChiCuc()) {
-          item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+          this.dataTable[i].detail = this.dataTable[i].dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
         } else {
-          // let data = [];
-          // item.dtlList.forEach(item => {
-          //   data = [...data, ...item.listBienBanChuanBiKho];
-          // })
-          // item.detail = {
-          //   listBienBanChuanBiKho: data
-          // }
-          item.detail = item.dtlList.filter(item => item.maDvi.includes(this.userInfo.MA_DVI))[0]
-        };
-      });
+          this.dataTable[i].detail = this.dataTable[i].dtlList.filter(item => item.maDvi.includes(this.userInfo.MA_DVI))[0]
+        }
+      }
       this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
     } else {

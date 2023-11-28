@@ -3,13 +3,13 @@
     <nz-card class="mt16 flex-card p-lr16">
       <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
         <div nz-row [nzGutter]="24">
-          <div nz-col nzSpan="3">
+          <!-- <div nz-col nzSpan="3">
             <label class="search__label"> Năm KH </label>
             <nz-select formControlName="nam">
               <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
             </nz-select>
-          </div>
-          <div nz-col nzSpan="4">
+          </div> -->
+          <!-- <div nz-col nzSpan="4">
             <label class="search__label">Điểm kho</label>
             <nz-select nzAllowClear formControlName="loaiVthh" nzPlaceHolder="Chọn loại hàng hóa" nzShowSearch>
               <nz-option *ngFor="let p of listNam" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
@@ -32,6 +32,19 @@
             <nz-select nzAllowClear formControlName="loaiVthh" nzPlaceHolder="Chọn loại hàng hóa" nzShowSearch>
               <nz-option *ngFor="let p of listNam" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
             </nz-select>
+          </div> -->
+          <div nz-col nzSpan="16">
+            <label class="search__label">Đơn vị/địa điểm</label>
+            <nz-tree-select #NzTreeSelectComponent [nzNodes]="listDiaDiemKho" [nzShowSearch]="true"
+              [ngModel]="selectedNode" [ngModelOptions]="{standalone: true}" nzVirtualHeight="300px"
+              [nzAllowClear]="true">
+              <ng-template #nzTreeTemplate let-node let-origin="origin">
+                <div class="node-content" [class.ant-tree-node-selected]="node.isSelected"
+                  (click)="selectDiaDiem(node)">
+                  {{ node.title }}
+                </div>
+              </ng-template>
+            </nz-tree-select>
           </div>
           <div nz-col nzSpan="4">
             <label class="search__label">Số hồ sơ kỹ thuật</label>
@@ -219,7 +232,7 @@
 <ng-template #templateThemmoi>
   <div class="chi-tiet">
     <app-chi-tiet-ho-so-ky-thuat-xuat-dieu-chuyen [id]="selectedId" (showListEvent)="showList()"
-      [isViewDetail]="isViewDetail" [loaiVthh]="loaiVthh">
+      [isViewDetail]="isViewDetail" [loaiVthh]="loaiVthh" [loaiDc]="loaiDc">
     </app-chi-tiet-ho-so-ky-thuat-xuat-dieu-chuyen>
   </div>
 </ng-template>

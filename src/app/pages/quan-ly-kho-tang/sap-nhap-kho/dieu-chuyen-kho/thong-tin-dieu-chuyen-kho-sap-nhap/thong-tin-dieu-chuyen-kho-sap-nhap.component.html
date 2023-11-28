@@ -23,8 +23,8 @@
     <div class="header-text">
       <div class="title-chi-tieu">
         <span
-          [ngClass]="formData.value.trangThai == STATUS.DA_HOAN_THANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
-          {{ ObTrangThai[formData.value.trangThai] }}
+          [ngClass]="formData.value.trangThaiSn == STATUS.DA_HOAN_THANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+          {{ formData.value.tenTrangThaiSn }}
         </span>
         <span class="text-uppercase">Điều chuyển hàng</span>
       </div>

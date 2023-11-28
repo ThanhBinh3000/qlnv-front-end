@@ -46,6 +46,11 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
     { ma: this.STATUS.DANG_THUC_HIEN, giaTri: "Đang thực hiện" },
     { ma: this.STATUS.DA_HOAN_THANH, giaTri: "Đã hoàn thành" },
   ];
+  ObTrangThaiSn: { [key: string]: string } = {
+    [this.STATUS.CHUA_THUC_HIEN]: "Chưa thực hiện",
+    [this.STATUS.DANG_THUC_HIEN]: "Đang thực hiện",
+    [this.STATUS.DA_HOAN_THANH]: "Đã hoàn thành"
+  };
   ObTrangThai: { [key: string]: string } = {
     [this.STATUS.DANG_NHAP_DU_LIEU]: "Đang thực hiện"
   };
@@ -119,8 +124,8 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
       trichYeu: [],
       trangThai: [STATUS.DANG_NHAP_DU_LIEU, [Validators.required]],
       tenTrangThai: [],
-      trangThaiSn: [],
-      tenTrangThaiSn: [],
+      trangThaiSn: [STATUS.CHUA_THUC_HIEN],
+      tenTrangThaiSn: [this.ObTrangThaiSn[STATUS.CHUA_THUC_HIEN]],
       quyetDinhPdDtl: [new Array<ItemXhXkVtquyetDinhPdDtl>()],
       loai: ["SN_DIEM_KHO", [Validators.required]],
     });

@@ -142,11 +142,11 @@
             <a (click)="redirectToChiTiet(true, data.id)" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_XEM') && !((data.trangThai == STATUS.DU_THAO) && data.nguoiTaoId == userInfo.ID)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a *ngIf="(data.trangThai == STATUS.DU_THAO )&& userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_THEM') && !userService.isChiCuc()"
+            <a *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU )&& userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_THEM') && !userService.isChiCuc()"
                (click)="redirectToChiTiet(false, data.id)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a  (click)="delete(data)" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_THEM') && data.trangThai == STATUS.DU_THAO && !userService.isChiCuc()">
+            <a  (click)="delete(data)" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_THEM') && data.trangThai == STATUS.DANG_NHAP_DU_LIEU && !userService.isChiCuc()">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>

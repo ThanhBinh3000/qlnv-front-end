@@ -115,36 +115,38 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     if (id > 0) {
       await this.quyetDinhPheDuyetKeHoachMTTService.getDetailDtlCuc(id)
         .then(async (res) => {
-          const dataDtl = res.data;
-          this.danhSachCtiet = dataDtl.children.length > 0 ? dataDtl.children : dataDtl.children2
-          this.formData.patchValue({
-            idQdDtl: id,
-            soQd: dataDtl.hhQdPheduyetKhMttHdr.soQd,
-            soQdDc: dataDtl.hhQdPheduyetKhMttHdr.soQdDc,
-            trangThai: dataDtl.trangThai,
-            tenTrangThai: dataDtl.tenTrangThai,
-            tenCloaiVthh: dataDtl.hhQdPheduyetKhMttHdr.tenCloaiVthh,
-            cloaiVthh: dataDtl.hhQdPheduyetKhMttHdr.cloaiVthh,
-            tenLoaiVthh: dataDtl.hhQdPheduyetKhMttHdr.tenLoaiVthh,
-            loaiVthh: dataDtl.hhQdPheduyetKhMttHdr.loaiVthh,
-            moTaHangHoa: dataDtl.hhQdPheduyetKhMttHdr.moTaHangHoa,
-            diaDiemChaoGia: dataDtl.diaDiemChaoGia,
-            ngayMkho: dataDtl.ngayMkho,
-            ngayMua: dataDtl.ngayMua,
-            tenDvi: dataDtl.tenDvi,
-            ghiChuChaoGia: dataDtl.ghiChuChaoGia
-          })
-          this.radioValue = dataDtl.pthucMuaTrucTiep ? dataDtl.pthucMuaTrucTiep : '01'
-          this.fileDinhKemUyQuyen = dataDtl.fileDinhKemUyQuyen;
-          this.fileDinhKem = dataDtl.fileDinhKem;
-          this.fileDinhKemMuaLe = dataDtl.fileDinhKemMuaLe;
-          // this.danhSachCtiet.forEach(item =>{
-          //   item.edit = false
-          // })
-          console.log(this.danhSachCtiet)
-          await this.handleChangeRadio()
-          this.calcTong();
-          this.showDetail(event,this.danhSachCtiet[0]);
+          if(res.msg == MESSAGE.SUCCESS){
+            const dataDtl = res.data;
+            this.danhSachCtiet = dataDtl.children.length > 0 ? dataDtl.children : dataDtl.children2
+            this.formData.patchValue({
+              idQdDtl: id,
+              soQd: dataDtl.hhQdPheduyetKhMttHdr.soQd,
+              soQdDc: dataDtl.hhQdPheduyetKhMttHdr.soQdDc,
+              trangThai: dataDtl.trangThai,
+              tenTrangThai: dataDtl.tenTrangThai,
+              tenCloaiVthh: dataDtl.hhQdPheduyetKhMttHdr.tenCloaiVthh,
+              cloaiVthh: dataDtl.hhQdPheduyetKhMttHdr.cloaiVthh,
+              tenLoaiVthh: dataDtl.hhQdPheduyetKhMttHdr.tenLoaiVthh,
+              loaiVthh: dataDtl.hhQdPheduyetKhMttHdr.loaiVthh,
+              moTaHangHoa: dataDtl.hhQdPheduyetKhMttHdr.moTaHangHoa,
+              diaDiemChaoGia: dataDtl.diaDiemChaoGia,
+              ngayMkho: dataDtl.ngayMkho,
+              ngayMua: dataDtl.ngayMua,
+              tenDvi: dataDtl.tenDvi,
+              ghiChuChaoGia: dataDtl.ghiChuChaoGia
+            })
+            this.radioValue = dataDtl.pthucMuaTrucTiep ? dataDtl.pthucMuaTrucTiep : '01'
+            this.fileDinhKemUyQuyen = dataDtl.fileDinhKemUyQuyen;
+            this.fileDinhKem = dataDtl.fileDinhKem;
+            this.fileDinhKemMuaLe = dataDtl.fileDinhKemMuaLe;
+            // this.danhSachCtiet.forEach(item =>{
+            //   item.edit = false
+            // })
+            console.log(this.danhSachCtiet)
+            await this.handleChangeRadio()
+            this.calcTong();
+            this.showDetail(event,this.danhSachCtiet[0]);
+          }
         })
         .catch((e) => {
           console.log('error: ', e);

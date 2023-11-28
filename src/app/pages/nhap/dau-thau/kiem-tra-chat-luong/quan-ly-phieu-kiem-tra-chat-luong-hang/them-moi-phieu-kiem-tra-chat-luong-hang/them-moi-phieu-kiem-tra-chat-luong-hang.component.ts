@@ -232,7 +232,12 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
       soHd: data.soHd,
       ngayHd: data.hopDong?.ngayHlucHd,
     });
-    let dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
+    let dataChiCuc;
+    if (this.userService.isChiCuc()) {
+      dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
+    } else {
+      dataChiCuc = data.dtlList
+    }
     if (dataChiCuc.length > 0) {
       this.listDiaDiemNhap = dataChiCuc[0].children;
     }

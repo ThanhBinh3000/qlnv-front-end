@@ -4,10 +4,9 @@
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
         </button>
-      <button
-        type="button" class="btn btn-sub do" (click)="preview(previewName)">
-        <i class="icon htvbdh_tcdt_tuchoi"></i>
-        <span>Xem trước</span>
+      <button *ngIf="formData.value.id" type="button" class="btn btn-sub xanh-nhat" (click)="preview(previewName)">
+        <i class=" icon htvbdh_tcdt_print"></i>
+        <span>In/xem trước</span>
       </button>
         <button class="btn btn-sub xanh-nhat" type="button"
             *ngIf="(formData.value.soBangKeCanHang != null && formData.value.trangThaiBk == STATUS.DA_DUYET_LDCC && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC)) "

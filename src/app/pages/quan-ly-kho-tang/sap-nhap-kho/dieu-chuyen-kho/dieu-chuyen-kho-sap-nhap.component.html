@@ -40,7 +40,7 @@
                             </div>
                         </nz-form-item>
                     </div>
-                    <div nz-col nzSpan="4">
+                    <!-- <div nz-col nzSpan="4">
                         <nz-form-item class="form-item">
                             <nz-form-label>Trạng thái</nz-form-label>
                             <nz-select formControlName="trangThai">
@@ -48,7 +48,7 @@
                                     [nzLabel]="p.giaTri"></nz-option>
                             </nz-select>
                         </nz-form-item>
-                    </div>
+                    </div> -->
                 </div>
             </form>
             <div nz-col class="cangiua group-button-search">
@@ -122,7 +122,7 @@
                         </th>
                         <th>
                             <nz-input-group>
-                                <nz-select nzAllowClear [(ngModel)]="filterTable.trangThai"
+                                <nz-select nzAllowClear [(ngModel)]="filterTable.trangThaiSn"
                                     (ngModelChange)="filterInTable('trangThaiSn',filterTable.trangThaiSn)">
                                     <nz-option *ngFor="let p of listTrangThaiSn" [nzValue]="p.ma"
                                         [nzLabel]="p.giaTri"></nz-option>
