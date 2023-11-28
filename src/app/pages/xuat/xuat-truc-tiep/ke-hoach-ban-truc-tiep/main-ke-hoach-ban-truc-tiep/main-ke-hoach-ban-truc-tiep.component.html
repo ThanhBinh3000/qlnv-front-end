@@ -1,15 +1,15 @@
-<nz-affix [nzOffsetTop]="98" class="level2">
-  <ul nz-menu nzMode="horizontal" id="mainTongCuc">
+<nz-affix [nzOffsetTop]="98" class="level2-border">
+  <ul nz-menu nzMode="horizontal">
     <li [nzSelected]="tabSelected==0" nz-menu-item (click)="selectTab(0)"
-        *ngIf="inputLoaiVthh == '02' ? userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT') : userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT')">
+        *ngIf="inputLoaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT') : userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT')">
       Đề xuất KH bán trực tiếp
     </li>
     <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)"
-        *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP') && this.userService.isTongCuc()">
+        *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_TONGHOP') && userService.isTongCuc()">
       Tổng hợp đề xuất KH bán trực tiếp
     </li>
     <li [nzSelected]="tabSelected==2" nz-menu-item (click)="selectTab(2)"
-        *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT')">
+        *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_QDLCNT')">
       Quyết định phê duyệt KH bán trực tiếp
     </li>
     <li [nzSelected]="tabSelected==3" nz-menu-item (click)="selectTab(3)"
@@ -18,17 +18,24 @@
     </li>
   </ul>
 </nz-affix>
-<ng-container *ngIf="tabSelected == 0">
-  <app-de-xuat-kh-ban-truc-tiep [loaiVthh]="inputLoaiVthh"></app-de-xuat-kh-ban-truc-tiep>
-</ng-container>
-<ng-container *ngIf="tabSelected == 1">
-  <app-tong-hop-ke-hoach-ban-truc-tiep [loaiVthh]="inputLoaiVthh" [listVthh]="listVthh"
-                                       (eventTaoQd)="selectTab($event)">
-  </app-tong-hop-ke-hoach-ban-truc-tiep>
-</ng-container>
-<ng-container *ngIf="tabSelected == 2">
-  <app-quyet-dinh-phe-duyet-kh-ban-truc-tiep [loaiVthh]="inputLoaiVthh"></app-quyet-dinh-phe-duyet-kh-ban-truc-tiep>
-</ng-container>
-<ng-container *ngIf="tabSelected == 3">
-  <app-dieu-chinh-ban-truc-tiep [loaiVthh]="inputLoaiVthh"></app-dieu-chinh-ban-truc-tiep>
-</ng-container>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 0">
+      <app-de-xuat-kh-ban-truc-tiep [loaiVthh]="inputLoaiVthh">
+      </app-de-xuat-kh-ban-truc-tiep>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 1">
+      <app-tong-hop-ke-hoach-ban-truc-tiep [loaiVthh]="inputLoaiVthh" [listVthh]="listVthh"
+                                           (eventTaoQd)="selectTab($event)">
+      </app-tong-hop-ke-hoach-ban-truc-tiep>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 2">
+      <app-quyet-dinh-phe-duyet-kh-ban-truc-tiep [loaiVthh]="inputLoaiVthh">
+      </app-quyet-dinh-phe-duyet-kh-ban-truc-tiep>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 3">
+      <app-dieu-chinh-ban-truc-tiep [loaiVthh]="inputLoaiVthh">
+      </app-dieu-chinh-ban-truc-tiep>
+    </ng-container>
+  </div>
+</div>
