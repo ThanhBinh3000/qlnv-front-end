@@ -157,6 +157,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
         fileDinhKem: [FileDinhKem],
         kinhPhiThucTe: [''],
         kinhPhiTcPd: [''],
+        soHopDong: [''],
       }
     );
 
