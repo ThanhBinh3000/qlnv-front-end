@@ -100,6 +100,8 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent extends Base2Component i
     body.ngayDxDen = body.ngayDx ? body.ngayDx[1] : null
     body.trangThai = STATUS.DADUYET_CB_CUC;
     body.trangThaiTh = STATUS.CHUA_TONG_HOP;
+    body.maDvi =this.userInfo.MA_DVI;
+    // body.capDvi =this.userInfo.CAP_DVI;
     let res = await this.dxChiCucService.tongHopDxCc(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let detail = res.data;
