@@ -141,17 +141,20 @@ export class CtNhapXuatTonKhoHangDtqgTt108Component extends Base2Component imple
   async loadDsDonVi() {
     let body = {
       trangThai: "01",
-      maDviCha: this.userInfo.MA_DVI.substring(0, 4),
+      maDviCha: this.userInfo.MA_DVI,
       type: "DV"
     };
     let res = await this.donViService.getDonViTheoMaCha(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.dsDonVi = res.data;
+      if (this.userService.isTongCuc()) {
+        this.dsDonVi = res.data;
+      } else if (this.userService.isCuc()) {
+        this.listChiCuc = res.data;
+      }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
-
   clearFilter() {
     this.formData.patchValue({
       nam: dayjs().get("year"),

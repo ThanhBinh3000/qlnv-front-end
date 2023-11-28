@@ -234,7 +234,7 @@
                 </div>
                 <div class="buttons" *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH
 && (loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_VT_HDPL_THEM') : userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_THEM'))">
-                    <button type="button" class="btn btn-main" (click)="redirectHopDong(true, null)">
+                    <button type="button" class="btn btn-main" (click)="redirectHopDong(true, null, false)">
                         <i class="icon htvbdh_dau-cong"></i>
                         <span>Thêm</span>
                     </button>
@@ -278,8 +278,11 @@
                                 (click)="preview(data.hopDong?.id)">
                                 <i class="icon htvbdh_tcdt_tuchoi" title="Xem trước"></i>
                               </a>
-                                <a *ngIf="data.hopDong?.trangThai == STATUS.DU_THAO ||
-                                    (data.hopDong?.trangThai == STATUS.DA_KY && formData.value.trangThaiHd != STATUS.DA_HOAN_THANH)" (click)="redirectHopDong(true,data.hopDong.id)">
+                                <a *ngIf=" data.hopDong?.trangThai == STATUS.DA_KY" (click)="redirectHopDong(true,data.hopDong.id, true)">
+                                    <i class="fa fa-eye" title="Xem chi tiết"></i>
+                                </a>
+                              <a *ngIf="data.hopDong?.trangThai == STATUS.DU_THAO && formData.value.trangThaiHd != STATUS.DA_HOAN_THANH"
+                                 (click)="redirectHopDong(true,data.hopDong.id, false)">
                                     <i class="fa fa-pencil" title="Sửa"></i>
                                 </a>
                                 <a *ngIf="data.hopDong?.trangThai == STATUS.DU_THAO"
@@ -303,15 +306,15 @@
                     </tr>
                 </nz-table>
             </nz-card>
-            <app-thong-tin [loaiVthh]="loaiVthh" *ngIf="idHopDong" [id]="idHopDong" [isView]="true" [isQuanLy]="true" (showListEvent)="redirectHopDong(false,idHopDong)"
+            <app-thong-tin [loaiVthh]="loaiVthh" *ngIf="idHopDong" [id]="idHopDong" [isView]="true" [isQuanLy]="true" (showListEvent)="redirectHopDong(false,idHopDong, true)"
                            [dataBinding]="formData.value">
             </app-thong-tin>
         </nz-card>
     </div>
 </ng-container>
 <ng-template #tempHopDong>
-    <app-thong-tin [id]="idHopDong" [loaiVthh]="loaiVthh" (showListEvent)="redirectHopDong(false,null)"
-        [dataBinding]="formData.value">
+    <app-thong-tin [id]="idHopDong" [loaiVthh]="loaiVthh" (showListEvent)="redirectHopDong(false,null, true)"
+        [dataBinding]="formData.value" [isView]="isView">
     </app-thong-tin>
 </ng-template>
 <nz-modal [(nzVisible)]="showDlgPreview" nzTitle="THÔNG TIN HỢP ĐỒNG" nzWidth="100%"
