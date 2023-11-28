@@ -103,7 +103,7 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     body.ngayDxDen = body.ngayDx ? body.ngayDx[1] : null
     body.trangThai = STATUS.DADUYET_CB_CUC;
     body.trangThaiTh = STATUS.CHUA_TONG_HOP;
-    body.MA_DVI = this.userInfo.MA_DVI;
+    body.maDvi = this.userInfo.MA_DVI;
     let res = await this.dxChiCucService.tongHopDxCc(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let detail = res.data;
