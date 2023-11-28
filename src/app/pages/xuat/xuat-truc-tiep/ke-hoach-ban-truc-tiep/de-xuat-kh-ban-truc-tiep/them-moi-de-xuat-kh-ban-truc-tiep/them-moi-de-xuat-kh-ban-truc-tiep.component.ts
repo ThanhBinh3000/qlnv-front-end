@@ -560,7 +560,6 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       "ngayTao",
       "trichYeu",
       "soQdCtieu",
-      "tenLoaiVthh",
       "tgianTtoan",
       "pthucTtoan",
       "tgianGnhan",
