@@ -172,7 +172,6 @@ export class ChiTietBienBanKiemTraComponent extends Base2Component implements On
   }
 
   async getDetail(data) {
-    console.log(data,11111111)
     this.title = ''
     if (data.loaiBb == LOAI_BIEN_BAN.BB_KTRA_NGOAI_QUAN) {
       this.title = 'Biên bản kiểm tra ngoại quan';
