@@ -99,7 +99,6 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
         let data = res.data;
         if (data && data.content) {
           this.listCcdc = data.content;
-          console.log(this.listCcdc, ' this.listCcdc this.listCcdc this.listCcdc');
         }
       }
       this.spinner.hide();

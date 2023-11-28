@@ -150,9 +150,9 @@ export class QdPdHsMoiThauComponent implements OnInit {
         page: this.page - 1,
       },
     };
-    if (this.userService.isCuc()) {
-      body.maDvi = this.userInfo.MA_DVI
-    }
+    // if (this.userService.isCuc()) {
+    //   body.maDvi = this.userInfo.MA_DVI
+    // }
     let res = await this.quyetDinhPheDuyetHsmtService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
