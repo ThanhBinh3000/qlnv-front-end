@@ -2,7 +2,7 @@
   <nz-table #editRowTable [nzData]="dataTable" [nzFrontPagination]="false" nzBordered [nzShowPagination]="false">
     <thead>
     <tr>
-      <th class="text-center" width="40px">STT</th>
+      <th class="text-center" width="5%">STT</th>
       <th>Nội dung dự toán</th>
       <th width="20%">Nguồn chi</th>
       <th width="10%">Dự toán</th>
@@ -24,7 +24,7 @@
       <td>{{rowItem.tenNguonChi}}</td>
       <td>
         <nz-input-group>
-          <input class="money-input" currencyMask [(ngModel)]="rowItem.sluongDtoan" [options]="amount"/>
+          <input class="money-input" currencyMask [(ngModel)]="rowItem.sluongDtoan"  [disabled]="isView"  [options]="amount"/>
         </nz-input-group>
       </td>
       <td style="text-align: center;" *ngIf="trangThai != STATUS.BAN_HANH">
@@ -83,7 +83,7 @@
     <tfoot>
     <tr class="text-blue">
       <td style="text-align: right; font-weight: 700" colspan="2">Tổng</td>
-      <td class='text-right'>{{ calcTong() | number : '1.0-1' : 'vi_VN' }}</td>
+      <td class='text-right'></td>
       <td class='text-right'>{{ calcTong() | number : '1.0-1' : 'vi_VN' }}</td>
       <td></td>
     </tr>
