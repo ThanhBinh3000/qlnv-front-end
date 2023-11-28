@@ -84,24 +84,18 @@
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" >
       <div nz-row [nzGutter]="20">
         <div nz-col nzSpan="4">
-          <nz-form-label class="text-wrap">Khối lượng thực nhập theo chỉ tiêu (tấn)</nz-form-label>
+          <nz-form-label class="text-wrap">Khối lượng gạo đang bảo quản (tấn)</nz-form-label>
           <nz-form-control>
-            <input nz-input formControlName="klLtNhap" [readonly]="true"/>
+            <input nz-input formControlName="slGaoDangBaoQuan" [readonly]="true"/>
           </nz-form-control>
         </div>
         <div nz-col nzSpan="4">
-          <nz-form-label class="text-wrap">Khối lượng thực xuất theo chỉ tiêu (tấn)</nz-form-label>
+          <nz-form-label class="text-wrap">Khối lượng thóc đang bảo quản (tấn)</nz-form-label>
           <nz-form-control>
-            <input nz-input formControlName="klLtXuat" [readonly]="true"/>
+            <input nz-input formControlName="slThocDangBaoQuan" [readonly]="true"/>
           </nz-form-control>
         </div>
-        <div nz-col nzSpan="4">
-          <nz-form-label>Khối lượng thực bảo quản (tấn)</nz-form-label>
-          <nz-form-control [nzErrorTip]="error">
-            <input nz-input formControlName="klLtBaoQuan" [readonly]="true"/>
-          </nz-form-control>
-        </div>
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="16">
         </div>
         <div nz-col nzSpan="4" *ngIf="isView">
           <nz-form-label>Năm kế hoạch</nz-form-label>

@@ -50,6 +50,8 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
       klLtBaoQuan: [null],
       klLtNhap: [null],
       klLtXuat: [null],
+      slGaoDangBaoQuan: [null],
+      slThocDangBaoQuan: [null],
       trichYeu: [null, Validators.required],
       ngayKy: [null, Validators.required],
       trangThai: ['00'],
@@ -112,7 +114,9 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
           namKeHoach: this.formDataTongHop.value.namKeHoach,
           klLtBaoQuan: detail.klLtBaoQuan,
           klLtNhap: detail.klLtNhap,
-          klLtXuat: detail.klLtXuat
+          klLtXuat: detail.klLtXuat,
+          slGaoDangBaoQuan: detail.slGaoDangBaoQuan,
+          slThocDangBaoQuan: detail.slThocDangBaoQuan
         })
         this.dataTable = detail.listQlDinhMucDxTbmmTbcdDtl
         this.dataTable.forEach(item => {

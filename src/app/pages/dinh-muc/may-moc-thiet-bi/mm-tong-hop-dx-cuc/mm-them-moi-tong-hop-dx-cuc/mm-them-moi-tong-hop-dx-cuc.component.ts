@@ -51,6 +51,8 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
       klLtNhap: [null],
       klLtXuat: [null],
       klLtBaoQuanCuc: [null],
+      slGaoDangBaoQuan: [null],
+      slThocDangBaoQuan: [null],
       klLtNhapCuc: [null],
       klLtXuatCuc: [null],
       trichYeu: [null, Validators.required],
@@ -129,7 +131,9 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
           namKeHoach: this.formDataTongHop.value.namKeHoach,
           klLtBaoQuanCuc: detail.klLtBaoQuan,
           klLtNhapCuc: detail.klLtNhap,
-          klLtXuatCuc: detail.klLtXuat
+          klLtXuatCuc: detail.klLtXuat,
+          slGaoDangBaoQuan: detail.slGaoDangBaoQuan,
+          slThocDangBaoQuan: detail.slThocDangBaoQuan
         })
         this.dataTable = detail.listQlDinhMucDxTbmmTbcdDtl
         if (detail && detail.listQlDinhMucDxTbmmTbcd && detail.listQlDinhMucDxTbmmTbcd.length > 0) {

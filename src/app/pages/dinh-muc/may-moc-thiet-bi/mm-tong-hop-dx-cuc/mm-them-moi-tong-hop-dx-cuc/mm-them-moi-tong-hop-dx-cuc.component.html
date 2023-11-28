@@ -121,53 +121,45 @@
           </nz-form-control>
         </div>
         <div nz-col nzSpan="4">
-          <nz-form-label class="text-wrap">Khối lượng thực nhập theo chỉ tiêu (tấn)</nz-form-label>
+          <nz-form-label class="text-wrap">Khối lượng gạo đang bảo quản (tấn)</nz-form-label>
           <nz-form-control>
-            <nz-input-number formControlName="klLtNhap" [nzSize]="'small'" [nzDisabled]="true"
+            <nz-input-number formControlName="slGaoDangBaoQuan" [nzSize]="'small'" [nzDisabled]="true"
                              [nzFormatter]="globals.formatter"
                              [nzParser]="globals.parser"></nz-input-number>
           </nz-form-control>
         </div>
         <div nz-col nzSpan="4">
-          <nz-form-label class="text-wrap">Khối lượng thực xuất theo chỉ tiêu (tấn)</nz-form-label>
+          <nz-form-label class="text-wrap">Khối lượng thóc đang bảo quản (tấn)</nz-form-label>
           <nz-form-control>
-            <nz-input-number formControlName="klLtXuat" [nzSize]="'small'" [nzDisabled]="true"
+            <nz-input-number formControlName="slThocDangBaoQuan" [nzSize]="'small'" [nzDisabled]="true"
                              [nzFormatter]="globals.formatter"
                              [nzParser]="globals.parser"></nz-input-number>
           </nz-form-control>
         </div>
-        <div nz-col nzSpan="4">
-          <nz-form-label>Khối lượng thực bảo quản theo chỉ tiêu (tấn)</nz-form-label>
-          <nz-form-control [nzErrorTip]="error">
-            <nz-input-number formControlName="klLtBaoQuan" [nzSize]="'small'" [nzDisabled]="true"
-                             [nzFormatter]="globals.formatter"
-                             [nzParser]="globals.parser"></nz-input-number>
-          </nz-form-control>
-        </div>
-        <div nz-col nzSpan="4">
-          <nz-form-label class="text-wrap">Khối lượng thực nhập theo đề xuất của các Cục (tấn)</nz-form-label>
-          <nz-form-control>
-            <nz-input-number formControlName="klLtNhapCuc" [nzSize]="'small'" [nzDisabled]="true"
-                             [nzFormatter]="globals.formatter"
-                             [nzParser]="globals.parser"></nz-input-number>
-          </nz-form-control>
-        </div>
-        <div nz-col nzSpan="4">
-          <nz-form-label class="text-wrap">Khối lượng thực xuất theo đề xuất của các Cục (tấn)</nz-form-label>
-          <nz-form-control>
-            <nz-input-number formControlName="klLtXuatCuc" [nzSize]="'small'" [nzDisabled]="true"
-                             [nzFormatter]="globals.formatter"
-                             [nzParser]="globals.parser"></nz-input-number>
-          </nz-form-control>
-        </div>
-        <div nz-col nzSpan="4">
-          <nz-form-label>Khối lượng thực bảo quản theo đề xuất của các Cục (tấn)</nz-form-label>
-          <nz-form-control [nzErrorTip]="error">
-            <nz-input-number formControlName="klLtBaoQuanCuc" [nzSize]="'small'" [nzDisabled]="true"
-                             [nzFormatter]="globals.formatter"
-                             [nzParser]="globals.parser"></nz-input-number>
-          </nz-form-control>
-        </div>
+<!--        <div nz-col nzSpan="4">-->
+<!--          <nz-form-label class="text-wrap">Khối lượng thực nhập theo đề xuất của các Cục (tấn)</nz-form-label>-->
+<!--          <nz-form-control>-->
+<!--            <nz-input-number formControlName="klLtNhapCuc" [nzSize]="'small'" [nzDisabled]="true"-->
+<!--                             [nzFormatter]="globals.formatter"-->
+<!--                             [nzParser]="globals.parser"></nz-input-number>-->
+<!--          </nz-form-control>-->
+<!--        </div>-->
+<!--        <div nz-col nzSpan="4">-->
+<!--          <nz-form-label class="text-wrap">Khối lượng thực xuất theo đề xuất của các Cục (tấn)</nz-form-label>-->
+<!--          <nz-form-control>-->
+<!--            <nz-input-number formControlName="klLtXuatCuc" [nzSize]="'small'" [nzDisabled]="true"-->
+<!--                             [nzFormatter]="globals.formatter"-->
+<!--                             [nzParser]="globals.parser"></nz-input-number>-->
+<!--          </nz-form-control>-->
+<!--        </div>-->
+<!--        <div nz-col nzSpan="4">-->
+<!--          <nz-form-label>Khối lượng thực bảo quản theo đề xuất của các Cục (tấn)</nz-form-label>-->
+<!--          <nz-form-control [nzErrorTip]="error">-->
+<!--            <nz-input-number formControlName="klLtBaoQuanCuc" [nzSize]="'small'" [nzDisabled]="true"-->
+<!--                             [nzFormatter]="globals.formatter"-->
+<!--                             [nzParser]="globals.parser"></nz-input-number>-->
+<!--          </nz-form-control>-->
+<!--        </div>-->
       </div>
     </form>
   </nz-card>
