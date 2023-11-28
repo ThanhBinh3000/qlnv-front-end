@@ -102,6 +102,8 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
     body.ngayDxTu = body.ngayDx ? body.ngayDx[0] : null;
     body.ngayDxDen = body.ngayDx ? body.ngayDx[1] : null;
     body.trangThai = STATUS.DA_DUYET_CBV;
+    body.maDvi =this.userInfo.MA_DVI;
+    // body.capDvi =this.userInfo.CAP_DVI;
     body.trangThaiTh = STATUS.CHUA_TONG_HOP;
     let res = await this.dxChiCucService.tongHopDxCc(body);
     if (res.msg == MESSAGE.SUCCESS) {
