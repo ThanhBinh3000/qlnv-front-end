@@ -105,21 +105,6 @@ export class DanhSachHangDuTruTrongKhoNgoaiDanhMucComponent extends Base2Compone
 
   async timKiem() {
     await this.search();
-    console.log(this.dataTable,'dataTabledataTabledataTabledataTable');
-    // console.log(this.dataTable,'this.dataTablethis.dataTable');
-    // this.flatDataTable = this.dataTable.flatMap(s => {
-    //   if (s.xhXkDsHangDtqgDtl && s.xhXkDsHangDtqgDtl.length > 0) {
-    //     return s.xhXkDsHangDtqgDtl.map(s1 => {
-    //       delete s.tongHopDtl;
-    //       s.idVirtual = uuidv4();
-    //       s.header = s.maDanhSach + s.tenDanhSach;
-    //       s.soQdXhKdm = s.soQdXhKdm;
-    //       this.expandSetString.add(s.idVirtual);
-    //       return Object.assign(s1, s);
-    //     })
-    //   } else return s;
-    // });
-    // this.buildTableView();
   }
 
   async loadDsDonVi() {

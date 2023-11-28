@@ -249,7 +249,8 @@
     (showListEvent)="showList()" (removeDataInit)="removeDataInit()">
   </app-chi-tiet-quyet-dinh-pd>
 </div>
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openDxPa" (nzOnCancel)="closeDxPaModal()">
+<nz-modal class="scroll-nz-modal" [nzBodyStyle]="{ 'overflow-y': 'auto' }" nzMaskClosable="true" [nzWidth]="'90%'"
+  [(nzVisible)]="openDxPa" (nzOnCancel)="closeDxPaModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-chi-tiet-de-xuat [idSelected]="idDx">
     </app-chi-tiet-de-xuat>
@@ -262,7 +263,8 @@
   </div>
 </nz-modal>
 
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openTh" (nzOnCancel)="closeThModal()">
+<nz-modal class="scroll-nz-modal" [nzBodyStyle]="{ 'overflow-y': 'auto' }" nzMaskClosable="true" [nzWidth]="'90%'"
+  [(nzVisible)]="openTh" (nzOnCancel)="closeThModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-chi-tiet-tong-hop [idSelected]="idTh">
     </app-chi-tiet-tong-hop>

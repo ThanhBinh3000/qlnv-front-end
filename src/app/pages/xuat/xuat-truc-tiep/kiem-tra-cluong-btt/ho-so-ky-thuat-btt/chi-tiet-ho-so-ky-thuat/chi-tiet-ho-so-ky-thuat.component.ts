@@ -206,9 +206,6 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
       })
     }
     if (!this.formData.value.id) {
-      this.formData.patchValue({
-        trangThai: STATUS.DA_DUYET_LDC
-      })
       await this.save(true);
     }
   }

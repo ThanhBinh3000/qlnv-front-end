@@ -53,18 +53,19 @@ export class BangCanKeHangBttComponent extends Base2Component implements OnInit 
       loaiVthh: null,
     })
     this.filterTable = {
-      soQdNv: '',
-      namKh: '',
-      tgianGiaoNhan: '',
-      tenDiemKho: '',
-      tenNganKho: '',
-      tenLoKho: '',
-      soPhieuKiemNghiem: '',
-      ngayKiemNghiemMau: '',
-      soPhieuXuatKho: '',
-      soBangKeHang: '',
-      ngayLapPhieu: '',
-      tenTrangThai: '',
+      soQdNv: null,
+      namKh: null,
+      tgianGiaoNhan: null,
+      tenDiemKho: null,
+      tenNhaKho: null,
+      tenNganKho: null,
+      tenLoKho: null,
+      soPhieuKiemNghiem: null,
+      ngayKiemNghiemMau: null,
+      soPhieuXuatKho: null,
+      soBangKeHang: null,
+      ngayLapPhieu: null,
+      tenTrangThai: null,
     };
   }
 

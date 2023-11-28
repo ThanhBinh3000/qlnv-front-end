@@ -326,16 +326,17 @@
                 </ng-container>
                 <tr>
                   <td></td>
-                  <td class="text-blue uppercase text-right">Tổng</td>
+                  <td class="text-blue uppercase text-right bold">Tổng</td>
                   <ng-container *ngIf="isVthhGao()">
-                    <td class="text-blue text-right">
+                    <td class="text-blue text-right bold">
                       {{tongSoLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
                   </ng-container>
-                  <td class="text-blue text-right">{{tongSoLuongDx|number:globals.numberFormat:globals.locale}}</td>
+                  <td class="text-blue text-right bold">{{tongSoLuongDx|number:globals.numberFormat:globals.locale}}
+                  </td>
                   <ng-container *ngIf="isVthhGao()">
                     <!-- <td class="text-blue text-right">
                       {{tongSoLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td> -->
-                    <td class="text-blue text-right">
+                    <td class="text-blue text-right bold">
                       {{tongSoLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}</td>
                   </ng-container>
                 </tr>

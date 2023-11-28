@@ -184,7 +184,7 @@
               </nz-form-item>
               <nz-form-item>
                 <div class="list-file" nz-col>
-                  <file-list [isCanCuPL]="true" [data]="formData.value.canCu" [isViewDetail]=" isDisabled()">
+                  <file-list [isCanCuPL]="true" [data]="fileCanCu" [isViewDetail]=" isDisabled()">
                   </file-list>
                 </div>
               </nz-form-item>
@@ -196,7 +196,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error" nz-col>
                   <div class="list-file" nz-col>
-                    <file-list [data]="formData.value.fileDinhKem" [isViewDetail]=" isDisabled()">
+                    <file-list [data]="fileDinhKem" [isViewDetail]=" isDisabled()">
                     </file-list>
                   </div>
                 </nz-form-control>
