@@ -121,7 +121,7 @@
                   Số quyết định giao nhiệm vụ nhập hàng
                 </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQd()">
+                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView?'':openDialogSoQd()">
                     <input nz-input [readonly]="true" formControlName="soQdGiaoNvNh" />
                   </nz-input-group>
                 </nz-form-control>
@@ -192,7 +192,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired> Ngăn/Lô kho</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
+                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView?'':openDialogDdiemNhapHang()">
                     <input [readonly]="true" nz-input formControlName="tenNganLoKho" readonly />
                   </nz-input-group>
                 </nz-form-control>
@@ -202,7 +202,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired> Nhà kho</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
+                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView?'':openDialogDdiemNhapHang()">
                     <input [readonly]="true" nz-input formControlName="tenNhaKho" readonly />
                   </nz-input-group>
                 </nz-form-control>
@@ -212,7 +212,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired> Điểm kho</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
+                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView?'':openDialogDdiemNhapHang()">
                     <input [readonly]="true" nz-input formControlName="tenDiemKho" readonly />
                   </nz-input-group>
                 </nz-form-control>

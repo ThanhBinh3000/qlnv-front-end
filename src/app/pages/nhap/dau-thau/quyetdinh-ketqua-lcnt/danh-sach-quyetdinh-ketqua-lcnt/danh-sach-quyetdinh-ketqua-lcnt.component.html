@@ -200,15 +200,15 @@
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
             <a *ngIf="(userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_XEM') || userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_QDKQLCNT_XEM'))
-                      && !(data.trangThai == STATUS.DANG_NHAP_DU_LIEU && (userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_SUA') || userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_QDKQLCNT_SUA')))"
+                      && !(data.trangThai == STATUS.DANG_NHAP_DU_LIEU && (loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_QDKQLCNT_SUA') : userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_SUA')))"
                (click)="redirectToChiTiet(data.id, loaiVthh.startsWith('02') ? 'NHDTQG_PTDT_TCKHLCNT_VT_QDKQLCNT_XEM' : 'NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_XEM')">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU && (userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_SUA') || userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_QDKQLCNT_SUA'))"
+            <a *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU && (loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_QDKQLCNT_SUA') : userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_SUA'))"
                (click)="redirectToChiTiet(data.id, loaiVthh.startsWith('02') ? 'NHDTQG_PTDT_TCKHLCNT_VT_QDKQLCNT_SUA' : 'NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_SUA')">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU && (userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_XOA') || userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_QDKQLCNT_XOA'))"
+            <a *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU && (loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_QDKQLCNT_XOA') : userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_XOA'))"
                (click)="xoaItem(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
