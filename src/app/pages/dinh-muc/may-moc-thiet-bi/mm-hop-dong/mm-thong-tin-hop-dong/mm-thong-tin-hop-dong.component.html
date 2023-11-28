@@ -117,7 +117,7 @@
           </div>
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label nzRequired>Giá trị hợp đồng</nz-form-label>
+              <nz-form-label nzRequired>Giá trị hợp đồng (trđ)</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-number nzDisabled [ngModel]="calcTong()" [nzFormatter]="globals.formatter"
                                  [nzParser]="globals.parser"
@@ -137,7 +137,7 @@
           <th nzWidth="">Loại hàng hóa</th>
           <th nzWidth="150px">Đơn vị tính</th>
           <th nzWidth="170px">Số lượng</th>
-          <th nzWidth="170px">Đơn giá gồm thuế</th>
+          <th nzWidth="170px">Đơn giá gồm thuế (trđ)</th>
           <th nzWidth="170px">Thành tiền</th>
           <th nzWidth="120px" *ngIf="!isView">Hành động</th>
         </tr>

@@ -224,7 +224,12 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
       donGiaHd: data.hopDong?.donGia,
       dviCungCap: data.hopDong?.tenNhaThau,
     });
-    let dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
+    let dataChiCuc;
+    if (this.userService.isChiCuc()) {
+      dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
+    } else {
+      dataChiCuc = data.dtlList
+    }
     if (dataChiCuc.length > 0) {
       this.listDiaDiemNhap = dataChiCuc[0].children;
       this.listDiaDiemNhap = this.listDiaDiemNhap.filter(item => isEmpty(item.phieuNhapKho));
