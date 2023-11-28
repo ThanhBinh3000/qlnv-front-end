@@ -239,6 +239,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
       this.formData.patchValue({type: 'BTT'});
       let body = this.formData.value;
       let rs = await this.createUpdate(body, null, isHideMessage);
+      this.formData.patchValue(rs);
     } catch (e) {
       console.log(e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
