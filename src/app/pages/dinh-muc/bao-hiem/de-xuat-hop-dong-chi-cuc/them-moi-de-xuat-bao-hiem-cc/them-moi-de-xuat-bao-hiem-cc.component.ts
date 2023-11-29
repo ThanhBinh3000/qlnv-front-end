@@ -187,7 +187,7 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
 
   required(item: BaoHiemKhoDangChuaHang) {
     let msgRequired = ''
-    if (!item.diemKho || !item.nhaKho || !item.giaTriHtKhoHt || !item.giaTriHtKhoKh || !item.giaTriDkKhoHt || !item.giaTriDkKhoKh) {
+    if (!item.diemKho || !item.nhaKho || (!item.giaTriHtKhoHt && !item.giaTriHtKhoKh ) || (!item.giaTriDkKhoKh && !item.giaTriDkKhoHt)) {
       msgRequired = 'Vui lòng nhập đầy đủ thông tin!'
     }
     return msgRequired;
@@ -634,12 +634,12 @@ export class BaoHiemKhoDangChuaHang {
   tichLuong: number;
   giaTriTc: number;
   //theo thiết ke mới
-  giaTriHtKhoHt: number;
-  giaTriHtKhoKh: number;
-  giaTriHtTc: number;
-  giaTriDkKhoHt: number;
-  giaTriDkKhoKh: number;
-  giaTriDkTc: number;
+  giaTriHtKhoHt: number = 0;
+  giaTriHtKhoKh: number =0;
+  giaTriHtTc: number = 0;
+  giaTriDkKhoHt: number =0;
+  giaTriDkKhoKh: number =0;
+  giaTriDkTc: number = 0;
 }
 
 
