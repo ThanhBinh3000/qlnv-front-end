@@ -1336,7 +1336,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   handleChangeXuatCap() {
     if (this.formData.value.type === "TTr") {
       if (this.formData.value.xuatCap) {
-        this.dataPhanBoXuatCap = uniqBy(this.formData.value.quyetDinhPdDtl, 'noiDungDx')
+        this.dataPhanBoXuatCap = uniqBy(this.formData.value.quyetDinhPdDtl.filter(f => f.soLuongXc > 0), 'noiDungDx')
           .map(f => ({ ...f, tenDvi: '', maDvi: '', id: null, mId: uuidv4(), type: "XC", soLuong: "", tonKhoDvi: "", tonKhoLoaiVthh: "", tonKhoCloaiVthh: "" }));
         this.buildTableViewXuatCap();
       }

@@ -17,7 +17,7 @@ import * as dayjs from "dayjs";
 import { FormGroup, Validators } from "@angular/forms";
 import { FileDinhKem } from "src/app/models/DeXuatKeHoachuaChonNhaThau";
 import { STATUS } from "src/app/constants/status";
-import { chain, cloneDeep, uniqBy } from 'lodash';
+import { chain, cloneDeep, uniqBy, groupBy } from 'lodash';
 import { MESSAGE } from "src/app/constants/message";
 import { v4 as uuidv4 } from "uuid";
 import { QuanLyHangTrongKhoService } from "src/app/services/quanLyHangTrongKho.service";
@@ -55,7 +55,8 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
   listQuocGia: any[] = [];
   listDiaDanhHanhChinh: any[] = [];
   editSoLuongNhuCauXuat: boolean = false;
-  amount1 = { ...AMOUNT_ONE_DECIMAL, align: "left" }
+  amount1 = { ...AMOUNT_ONE_DECIMAL, align: "left" };
+  listNamNhap: Array<{ value: number, text: number, soLuong: number }> = [];
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
@@ -124,7 +125,9 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         tongSoLuongXuatCap: [0],
         tongSoLuongNhuCauXuat: [0],
         tonKhoDvi: [0],
-        maDviDx: [0]
+        maDviDx: [0],
+        ngayTapKet: [],
+        ngayGiaoHang: []
       }
     );
 
@@ -146,13 +149,14 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         tenLoaiVthh: [''],
         tenCloaiVthh: [''],
         mapDmucDvi: [''],
-        tenDvi: [''],
+        tenDvi: ['', [Validators.required]],
         edit: [],
         soLuongNhuCauXuat: [0],
         soLuongConThieu: [0],
         soLuongChuyenCapThoc: [0],
         idDonViNhan: [''],
-        editNhuCauXuat: []
+        editNhuCauXuat: [],
+        namNhap: [, [Validators.required]],
       });
     this.formData.controls['deXuatPhuongAn'].valueChanges.subscribe(value => {
       // const { tongSoLuongDeXuat, tongSoLuongXuatCap, tongSoLuongNhuCauXuat } = Array.isArray(value) ? value.reduce((obj, cur) => {
@@ -188,7 +192,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       } else {
         this.listDiaDanh = [];
       }
-    })
+    });
   }
 
   async ngOnInit() {
@@ -294,22 +298,11 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
   }
 
   async themPhuongAn(data?: any, level?: any) {
+    console.log("data", data)
     this.formDataDtl.reset();
     if (data) {
       if (level == 0) {
         this.formDataDtl.patchValue({ noiDung: data.noiDung, idDonViNhan: data.idDonViNhan, editNhuCauXuat: false });
-      } else if (level == 1) {
-        this.formDataDtl.patchValue({
-          idVirtual: uuidv4(),
-          noiDung: data.noiDung,
-          idDonViNhan: data.idDonViNhan,
-          loaiVthh: data.loaiVthh,
-          tenLoaiVthh: data.tenLoaiVthh,
-          maDvi: data.maDvi,
-          soLuongNhuCauXuat: data.soLuongNhuCauXuat,
-          editNhuCauXuat: false
-          // edit: true
-        });
       } else {
         this.formDataDtl.patchValue({
           idVirtual: uuidv4(),
@@ -317,9 +310,13 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
           idDonViNhan: data.idDonViNhan,
           loaiVthh: data.loaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
+          cloaiVthh: data.cloaiVthh,
+          tenCloaiVthh: data.tenCloaiVthh,
           maDvi: data.maDvi,
+          tenDvi: data.tenDvi,
           soLuongNhuCauXuat: data.soLuongNhuCauXuat,
-          editNhuCauXuat: false
+          editNhuCauXuat: false,
+          // edit: true
         });
       }
     } else {
@@ -399,12 +396,12 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       } else {
         let exist =
           // this.formData.value.deXuatPhuongAn.find(s => s.idVirtual === row.idVirtual) ||
-          this.formData.value.deXuatPhuongAn.find(s => s.noiDung === row.noiDung && s.maDvi === row.maDvi && s.loaiVthh === row.loaiVthh && s.cloaiVthh === '') ||
-          this.formData.value.deXuatPhuongAn.find(s => s.noiDung === row.noiDung && s.maDvi === row.maDvi && s.loaiVthh === row.loaiVthh && s.cloaiVthh === row.cloaiVthh);
+          deXuatPhuongAn.find(s => s.noiDung === row.noiDung && s.maDvi === row.maDvi && s.loaiVthh === row.loaiVthh && s.cloaiVthh === '' && s.namNhap === row.namNhap) ||
+          deXuatPhuongAn.find(s => s.noiDung === row.noiDung && s.maDvi === row.maDvi && s.loaiVthh === row.loaiVthh && s.cloaiVthh === row.cloaiVthh && s.namNhap === row.namNhap);
         if (exist) {
           Object.assign(exist, row);
         } else {
-          deXuatPhuongAn = [...deXuatPhuongAn, row];
+          deXuatPhuongAn.push(row);
         }/*
         let existRowIndex = deXuatPhuongAn.findIndex(s => s.idVirtual === row.idVirtual);
         if (existRowIndex !== -1) {
@@ -421,7 +418,8 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         }
       });
     }
-    this.formData.patchValue({ deXuatPhuongAn: deXuatPhuongAn });
+    console.log("deXuatPhuongAn", deXuatPhuongAn)
+    this.formData.patchValue({ deXuatPhuongAn });
     await this.buildTableView();
     await this.huyPhuongAn();
     await this.helperService.restoreRequiredForm(this.formDataDtl);
@@ -431,6 +429,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     this.formDataDtl.reset();
     this.editSoLuongNhuCauXuat = false;
     this.modalChiTiet = false;
+    this.listNamNhap = [];
   }
 
 
@@ -452,6 +451,42 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     this.formData.patchValue({ deXuatPhuongAn: deXuatPhuongAn });
     await this.buildTableView();
   }
+  async getListNamXuat() {
+    const { maDvi, loaiVthh, cloaiVthh } = this.formDataDtl.value;
+    const res = await this.mangLuoiKhoService.getDetailByMa({ maDvi });
+    if (res.msg === MESSAGE.SUCCESS) {
+      this.listNamNhap = [];
+      Array.isArray(res.data.object.ctietHhTrongKho) && res.data.object.ctietHhTrongKho.forEach(element => {
+        if (cloaiVthh ? cloaiVthh === element.cloaiVthh : loaiVthh && loaiVthh === element.loaiVthh) {
+          const findIndex = this.listNamNhap.findIndex(f => f.value === element.namNhap);
+          if (findIndex >= 0) {
+            this.listNamNhap[findIndex].soLuong += element.slHienThoi;
+          } else {
+            this.listNamNhap.push({ value: element.namNhap, text: element.namNhap, soLuong: element.slHienThoi })
+          }
+        }
+      });
+
+      console.log("listaNamNhap", this.listNamNhap,)
+    }
+  };
+  validatorSoLuong() {
+    const { maDvi, tonKhoDvi, soLuongNhuCauXuat } = this.formDataDtl.value;
+    if (maDvi) {
+      if (this.isVthhGao()) {
+        this.formDataDtl.get('soLuong').setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongNhuCauXuat, tonKhoDvi))]);
+      } else {
+        this.formDataDtl.get('soLuong').setValidators([Validators.required, Validators.min(1), Validators.max(tonKhoDvi)]);
+      }
+    }
+    this.formDataDtl.get('soLuong').updateValueAndValidity()
+  }
+  handleChangeNamNhap() {
+    const namNhapData = this.listNamNhap.find(f => f.value === this.formDataDtl.value.namNhap);
+    const tonKhoDvi = namNhapData ? namNhapData.soLuong : 0;
+    this.formDataDtl.patchValue({ tonKhoDvi });
+    this.validatorSoLuong()
+  }
 
   async buildTableView() {
     let dataView = [];
@@ -463,18 +498,31 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
           .groupBy("noiDung")
           .map((value, key) => {
             let rs = value.find(f => f.noiDung === key);
+            if (!rs) return;
+            const lv1 = chain(value).groupBy("maDvi").map((v1, k1) => {
+              const rs1 = v1.find(s => s.maDvi === k1);
+              if (!rs1) return;
+              const soLuong = v1.reduce((sum, cur) => sum += cur.soLuong, 0);
+              return {
+                ...rs1,
+                idVirtual: uuidv4(),
+                soLuong,
+                childData: v1
+              }
+            }).value().filter(f => !!f);
+            const soLuong = lv1.reduce((sum, cur) => sum += cur.soLuong ? cur.soLuong : 0, 0);
             return {
               idVirtual: uuidv4(),
               noiDung: key,
-              idDonViNhan: rs ? rs.idDonViNhan : '',
-              loaiVthh: rs ? rs.loaiVthh : '',
-              tenLoaiVthh: rs ? rs.tenLoaiVthh : '',
-              soLuong: rs ? value.reduce((sum, cur) => sum += cur.soLuong ? cur.soLuong : 0, 0) : 0,
-              childData: rs ? value : [],
-              soLuongNhuCauXuat: rs ? rs.soLuongNhuCauXuat : 0,
-              soLuongChuyenCapThoc: rs ? rs.soLuongChuyenCapThoc : 0,
+              idDonViNhan: rs.idDonViNhan,
+              loaiVthh: rs.loaiVthh,
+              tenLoaiVthh: rs.tenLoaiVthh,
+              soLuongNhuCauXuat: rs.soLuongNhuCauXuat,
+              soLuongChuyenCapThoc: rs.soLuongChuyenCapThoc,
+              soLuong,
+              childData: lv1,
             };
-          }).value();
+          }).value().filter(f => !!f);
       }
     } else {
 
@@ -482,38 +530,47 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         .groupBy("noiDung")
         .map((value, key) => {
           const rx = value.find(f => f.noiDung === key);
-          let rs = chain(value)
+          const lv1 = chain(value)
             .groupBy("loaiVthh")
-            .map((v, k) => {
-              let row = v.find(s => s.loaiVthh === k);
-              let tonKho = v.reduce((prev, next) => prev + next.tonKho, 0);
-              let soLuong = v.reduce((prev, next) => prev + next.soLuong, 0);
-              let tonKhoLoaiVthh = v[0]?.tonKhoLoaiVthh ? v[0].tonKhoLoaiVthh : 0;
+            .map((v1, k1) => {
+              let row = v1.find(s => s.loaiVthh === k1);
+              if (!row) return;
+              const lv2 = chain(v1).groupBy("maDvi").map((v2, k2) => {
+                const row1 = v2.find(f => f.maDvi === k2);
+                if (!row1) return;
+                const soLuong = v2.reduce((sum, cur) => sum += cur.soLuong, 0);
+                return {
+                  ...row1,
+                  idVirtual: uuidv4(),
+                  soLuong,
+                  childData: v2
+                }
+              }).value().filter(f => !!f)
+              let soLuong = lv2.reduce((prev, next) => prev + next.soLuong, 0);
               return {
                 idVirtual: uuidv4(),
-                loaiVthh: k,
-                tenLoaiVthh: row?.tenLoaiVthh,
-                cloaiVthh: row?.cloaiVthh,
-                tenCloaiVthh: row?.tenCloaiVthh,
+                loaiVthh: k1,
+                tenLoaiVthh: row.tenLoaiVthh,
+                // cloaiVthh: row.cloaiVthh,
+                // tenCloaiVthh: row.tenCloaiVthh,
                 noiDung: row.noiDung,
                 idDonViNhan: row.idDonViNhan,
-                tonKho: tonKho,
                 soLuong: soLuong,
-                donViTinh: row?.donViTinh,
-                tonKhoLoaiVthh,
-                childData: v
+                donViTinh: row.donViTinh,
+                childData: lv2
               }
             }
-            ).value();
+            ).value().filter(f => !!f);
           return {
             idVirtual: uuidv4(),
             noiDung: key,
             idDonViNhan: rx.idDonViNhan,
             soLuong: 0,
-            childData: rs
+            childData: lv1
           };
-        }).value();
+        }).value().filter(f => !!f);
     }
+    console.log("dataView", dataView)
     this.phuongAnView = dataView;
     this.expandAll();
   }
@@ -583,7 +640,14 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       this.formDataDtl.patchValue({
         tenDvi: item.tenDvi
       })
-      await this.kiemTraTonKho();
+      this.formDataDtl.get("namNhap").reset();
+      this.formDataDtl.get("soLuong").reset();
+      this.formDataDtl.get("tonKhoDvi").reset();
+      this.formDataDtl.get("namNhap").setErrors(null);
+      this.formDataDtl.get("soLuong").setErrors(null);
+      this.formDataDtl.get("tonKhoDvi").setErrors(null);
+      // await this.kiemTraTonKho();
+      await this.getListNamXuat();
     }
   }
 
@@ -682,7 +746,8 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
           donViTinh: item.maDviTinh
         });
       }
-      await this.kiemTraTonKho();
+      // await this.kiemTraTonKho();
+      await this.getListNamXuat();
       if (this.formDataDtl.value.cloaiVthh) {
         let item = this.listChungLoaiHangHoa.find(s => s.ma === this.formDataDtl.value.cloaiVthh);
         if (!item) {
@@ -706,7 +771,8 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         tenCloaiVthh: item.ten
       });
     }
-    await this.kiemTraTonKho();
+    // await this.kiemTraTonKho();
+    await this.getListNamXuat();
   }
 
   soLuongNhuCauXuatChange($event) {
@@ -727,6 +793,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     //   });
     // }
     if (!$event) return;
+    this.validatorSoLuong();
     const soLuongNhuCauXuat = this.formDataDtl.value.soLuongNhuCauXuat ? this.formDataDtl.value.soLuongNhuCauXuat : 0;
     const soLuong = this.formData.value.deXuatPhuongAn.filter(f => f.noiDung === this.formDataDtl.value.noiDung && f.idVirtual !== this.formDataDtl.value.idVirtual).reduce((sum, cur) => sum += cur.soLuong, 0) + this.formDataDtl.value.soLuong;
     if (soLuongNhuCauXuat > soLuong) {
