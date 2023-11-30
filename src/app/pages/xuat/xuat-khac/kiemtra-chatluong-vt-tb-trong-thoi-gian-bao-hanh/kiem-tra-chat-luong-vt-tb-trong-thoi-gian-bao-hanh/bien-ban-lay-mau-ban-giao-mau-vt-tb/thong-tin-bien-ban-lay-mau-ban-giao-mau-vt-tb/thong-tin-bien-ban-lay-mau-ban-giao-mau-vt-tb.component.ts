@@ -224,7 +224,7 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
     let body = {
       nam: this.formData.get("nam").value,
       dvql: this.userInfo.MA_DVI,
-      trangThai: STATUS.DA_DUYET_LDCC,
+      trangThai: STATUS.DA_DUYET_LDC,
       listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
       loaiXn: "XUAT"
     }
