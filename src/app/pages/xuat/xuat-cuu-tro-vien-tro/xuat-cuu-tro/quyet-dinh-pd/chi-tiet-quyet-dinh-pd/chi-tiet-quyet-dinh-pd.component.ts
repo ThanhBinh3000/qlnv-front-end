@@ -115,6 +115,138 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   dataPhanBoXuatCapView: any[] = [];
   modalChiTiet: boolean = false;
   listDonVi: any[] = [];
+  fakeData = [
+    {
+      idVirtual: "12900dc0-f467-4ac4-9070-334866ec3fa4",
+      noiDungOld: null,
+      id: null,
+      noiDung: "An Giang",
+      loaiVthh: "0102",
+      cloaiVthh: null,
+      maDvi: "010102",
+      tonKhoDvi: 2000,
+      tonKhoLoaiVthh: null,
+      tonKhoCloaiVthh: null,
+      donViTinh: "kg",
+      soLuong: 2000,
+      mapVthh: null,
+      tenLoaiVthh: "Gạo tẻ",
+      tenCloaiVthh: null,
+      mapDmucDvi: null,
+      tenDvi: "Cục DTNNKV Vĩnh Phú",
+      edit: null,
+      soLuongNhuCauXuat: 100000,
+      soLuongConThieu: 13000,
+      soLuongChuyenCapThoc: 13000,
+      idDonViNhan: 89,
+      editNhuCauXuat: true,
+      namNhap: 2019
+    },
+    {
+      idVirtual: "02a5e038-a866-4b8f-b2e9-955341f59716",
+      noiDungOld: null,
+      id: null,
+      noiDung: "An Giang",
+      loaiVthh: "0102",
+      cloaiVthh: null,
+      maDvi: "010102",
+      tonKhoDvi: 5000,
+      tonKhoLoaiVthh: null,
+      tonKhoCloaiVthh: null,
+      donViTinh: "kg",
+      soLuong: 5000,
+      mapVthh: null,
+      tenLoaiVthh: "Gạo tẻ",
+      tenCloaiVthh: null,
+      mapDmucDvi: null,
+      tenDvi: "Cục DTNNKV Vĩnh Phú",
+      edit: null,
+      soLuongNhuCauXuat: 100000,
+      soLuongConThieu: 13000,
+      soLuongChuyenCapThoc: 13000,
+      idDonViNhan: 89,
+      editNhuCauXuat: false,
+      namNhap: 2013
+    },
+    {
+      idVirtual: "e671e784-af41-4930-a8e3-c93d3af134a7",
+      noiDungOld: null,
+      id: null,
+      noiDung: "An Giang",
+      loaiVthh: "0102",
+      cloaiVthh: null,
+      maDvi: "010102",
+      tonKhoDvi: 270000,
+      tonKhoLoaiVthh: null,
+      tonKhoCloaiVthh: null,
+      donViTinh: "kg",
+      soLuong: 80000,
+      mapVthh: null,
+      tenLoaiVthh: "Gạo tẻ",
+      tenCloaiVthh: null,
+      mapDmucDvi: null,
+      tenDvi: "Cục DTNNKV Vĩnh Phú",
+      edit: null,
+      soLuongNhuCauXuat: 100000,
+      soLuongConThieu: 13000,
+      soLuongChuyenCapThoc: 13000,
+      idDonViNhan: 89,
+      editNhuCauXuat: false,
+      namNhap: 2021
+    },
+    {
+      idVirtual: "474fe1f4-ccf8-4567-8d8e-28b16425d968",
+      noiDungOld: null,
+      id: null,
+      noiDung: "Bà Rịa - Vũng Tàu",
+      loaiVthh: "0102",
+      cloaiVthh: null,
+      maDvi: "010102",
+      tonKhoDvi: 270000,
+      tonKhoLoaiVthh: null,
+      tonKhoCloaiVthh: null,
+      donViTinh: "kg",
+      soLuong: 10000,
+      mapVthh: null,
+      tenLoaiVthh: "Gạo tẻ",
+      tenCloaiVthh: null,
+      mapDmucDvi: null,
+      tenDvi: "Cục DTNNKV Vĩnh Phú",
+      edit: null,
+      soLuongNhuCauXuat: 20000,
+      soLuongConThieu: 0,
+      soLuongChuyenCapThoc: 0,
+      idDonViNhan: 77,
+      editNhuCauXuat: true,
+      namNhap: 2021
+    },
+    {
+      idVirtual: "d141c2f5-2dbc-4c31-8ce3-f0fe224ed5cb",
+      noiDungOld: null,
+      id: null,
+      noiDung: "Bà Rịa - Vũng Tàu",
+      loaiVthh: "0102",
+      cloaiVthh: null,
+      maDvi: "010101",
+      tonKhoDvi: 1900005,
+      tonKhoLoaiVthh: null,
+      tonKhoCloaiVthh: null,
+      donViTinh: "kg",
+      soLuong: 15000,
+      mapVthh: null,
+      tenLoaiVthh: "Gạo tẻ",
+      tenCloaiVthh: null,
+      mapDmucDvi: null,
+      tenDvi: "Cục DTNNKV Hoàng Liên Sơn",
+      edit: null,
+      soLuongNhuCauXuat: 20000,
+      soLuongConThieu: 0,
+      soLuongChuyenCapThoc: 0,
+      idDonViNhan: 77,
+      editNhuCauXuat: false,
+      namNhap: 2022
+    }
+  ]
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -1078,34 +1210,34 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
             };
           }).value();
       } else {
-        this.phuongAnHdrView = chain(this.formData.value.quyetDinhPdDtl)
+        // this.phuongAnHdrView = chain(this.formData.value.quyetDinhPdDtl)
+        this.phuongAnHdrView = chain(this.fakeData)
           .groupBy("noiDungDx")
           .map((value, key) => {
             let row = value.find(s => s.noiDungDx === key);
+            const rs = chain(value).groupBy("maDvi").map().value((v1, k1) => {
+              const row1 = v1.find(f => f.maDvi === k1);
+              if (!row1) return;
+              let soLuongDx = v1.reduce((prev, next) => prev += next.soLuongDx, 0);
+              let soLuong = v1.reduce((prev, next) => prev += next.soLuong, 0);
+              return {
+                idVirtual: uuidv4(),
+                ...row1,
+                soLuong,
+                soLuongDx,
+                childData: v1,
+              }
+            }).filter(f => !!f)
             let soLuongDx = value.reduce((prev, next) => prev += next.soLuongDx, 0);
             let soLuong = value.reduce((prev, next) => prev += next.soLuong, 0);
             // let soLuongNhuCauXuat = value.reduce((prev, next) => prev += next.soLuongNhuCauXuat ? next.soLuongNhuCauXuat : 0, 0);
             // let soLuongXc = value.reduce((prev, next) => prev += next.soLuongXc ? next.soLuongXc : 0, 0);
-            let soLuongNhuCauXuat = row.soLuongNhuCauXuat;
-            let soLuongXc = row.soLuongXc;
             return {
               idVirtual: uuidv4(),
-              noiDungDx: row.noiDungDx,
-              tenDvi: row.tenDvi,
-              maDvi: row.maDvi,
-              soDx: row.soDx,
-              trichYeuDx: row.trichYeuDx,
-              mucDichXuat: row.mucDichXuat,
-              ngayKetThuc: row.ngayKetThuc,
-              ngayKyDx: row.ngayKyDx,
-              thoiGian: row.ngayKyDx,
-              soLuongDx: soLuongDx,
-              soLuong: soLuong,
-              soLuongNhuCauXuat,
-              loaiNhapXuat: row.loaiNhapXuat,
-              kieuNhapXuat: row.kieuNhapXuat,
-              soLuongXc,
-              childData: row ? value : [],
+              ...row,
+              soLuong,
+              soLuongDx,
+              childData: row ? rs : [],
             };
           }).value();
       }
