@@ -19,8 +19,6 @@ import {
   BienBanTinhKhoBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/xuat-kho-btt/bien-ban-tinh-kho-btt.service';
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
-import {PREVIEW} from "../../../../../../constants/fileType";
-import printJS from "print-js";
 import {FileDinhKem} from "../../../../../../models/FileDinhKem";
 import {
   HopDongBttService
@@ -28,6 +26,7 @@ import {
 import {
   PhieuXuatKhoBttService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/xuat-kho-btt/phieu-xuat-kho-btt.service";
+import {AMOUNT_ONE_DECIMAL} from "../../../../../../Utility/utils";
 
 @Component({
   selector: 'app-them-moi-bien-ban-tinh-kho',
@@ -41,6 +40,9 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
+  amount = {...AMOUNT_ONE_DECIMAL};
+  templateNameVt = "Biên bản tịnh kho vật tư";
+  templateNameLt = "Biên bản tịnh kho lương thực";
   TRUC_TIEP = TRUC_TIEP;
   maTuSinh: number;
   maHauTo: any;
@@ -134,6 +136,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       tenKeToan: [''],
       tenLanhDaoChiCuc: [''],
       tenTrangThai: [''],
+      tenHinhThucBaoQuan: [''],
       fileDinhKem: [new Array<FileDinhKem>()],
     })
   }
@@ -142,6 +145,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     try {
       await this.spinner.show();
       this.maHauTo = '-BBTK';
+      this.amount.align = "left";
       if (this.idInput > 0) {
         await this.getDetail(this.idInput);
       } else {
@@ -181,11 +185,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   async getDetail(id: number) {
     if (!id) return;
     const data = await this.detail(id);
-    if (!data) {
-      console.error('Không tìm thấy dữ liệu');
-      return;
-    }
-    this.dataTable = data.children
+    this.maTuSinh = this.idInput;
     this.dataTable = data.children
     if (!this.isView) {
       await this.onChange(data.idQdNv)
@@ -203,8 +203,6 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       const res = await this.quyetDinhNvXuatBttService.search(body)
       if (res && res.msg === MESSAGE.SUCCESS) {
         this.danhSachQuyetDinh = res.data.content.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI));
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ XUẤT HÀNG',
@@ -437,7 +435,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       const tongSlXuat = filterConditions.reduce((prev, cur) => prev + cur.thucXuat, 0);
       this.formData.patchValue({
         idQdNvDtl: filterConditions[0].idQdNvDtl,
-        idPhieuKiemNghiem: filterConditions[0].id,
+        idPhieuKiemNghiem: filterConditions[0].idPhieuKiemNghiem,
         soPhieuKiemNghiem: filterConditions[0].soPhieuKiemNghiem,
         ngayKiemNghiemMau: filterConditions[0].ngayKiemNghiemMau,
         tgianGiaoNhan: filterConditions[0].tgianGiaoNhan,
@@ -484,13 +482,17 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   }
 
   async onChangeSlChenhLech(event) {
-    if (!event) return;
     const slConLai = this.formData.value.slConLai || 0;
     const slChenhLech = event - slConLai
     this.formData.patchValue({
-      slThua: slChenhLech > 0 ? slChenhLech : null,
-      slThieu: slChenhLech < 0 ? slChenhLech * (-1) : null
+      slThua: slChenhLech >= 0 ? slChenhLech : 0,
+      slThieu: slChenhLech <= 0 ? slChenhLech * (-1) : 0
     });
+  }
+
+  calcTong(column) {
+    if (!this.dataTable) return 0;
+    return this.dataTable.reduce((sum, cur) => sum + (cur[column] || 0), 0);
   }
 
   openModal(id: number, modalType: string) {
@@ -516,7 +518,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   async save() {
     try {
       await this.helperService.ignoreRequiredForm(this.formData);
-      this.setValidator();
+      this.formData.controls["soQdNv"].setValidators([Validators.required]);
       const body = {
         ...this.formData.value,
         children: this.dataTable,
@@ -545,64 +547,16 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     }
   }
 
-  calcTong(column) {
-    if (!this.dataTable) return 0;
-    return this.dataTable.reduce((sum, cur) => sum + (cur[column] || 0), 0);
-  }
-
-  async preview(id) {
-    await this.bienBanTinhKhoBttService.preview({
-      tenBaoCao: 'Biên bản tịnh kho bán trực tiếp',
-      id: id
-    }).then(async res => {
-      if (res.data) {
-        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
-        this.printSrc = res.data.pdfSrc;
-        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
-        this.showDlgPreview = true;
-      } else {
-        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
-      }
-    });
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
-  }
-
-  printPreview() {
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
-  }
-
-  setValidator() {
-    const requiredFields = [
-      "soBbTinhKho",
-      "soQdNv",
-      "tenDiemKho",
-      "tenNhaKho",
-      "tenNganLoKho",
-    ];
-    requiredFields.forEach(fieldName => {
-      this.formData.controls[fieldName].setValidators([Validators.required]);
-      this.formData.controls[fieldName].updateValueAndValidity();
-    });
-  }
-
   setValidForm() {
     const requiredFields = [
-      "namKh",
-      "tenDvi",
-      // "maQhNs",
-      // "ngayLapBienBan",
-      // "tenLoaiVthh",
-      // "tenCloaiVthh",
-      // "donViTinh",
-      // "ngayBatDauXuat",
-      // "ngayKetThucXuat",
-      // "nguyenNhan",
-      // "kienNghi",
-      // "ghiChu",
-      // "tenThuKho",
+      "ngayLapBienBan",
+      "soQdNv",
+      "tenNganLoKho",
+      "tenNhaKho",
+      "tenDiemKho",
+      "slThucTe",
+      "nguyenNhan",
+      "kienNghi",
     ];
     requiredFields.forEach(fieldName => {
       this.formData.controls[fieldName].setValidators([Validators.required]);

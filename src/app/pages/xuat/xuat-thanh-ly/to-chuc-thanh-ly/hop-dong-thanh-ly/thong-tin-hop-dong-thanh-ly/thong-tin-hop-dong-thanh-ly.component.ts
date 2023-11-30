@@ -175,6 +175,8 @@ export class ThongTinHopDongThanhLyComponent extends Base3Component implements O
     this.formData.patchValue({
       soHd: data?.soHd?.split('/')[0],
     });
+    this.fileCanCu = data.fileCanCu;
+    this.fileDinhKem = data.fileDinhKem;
     if(data.idQdKqTl){
       await this.onChangeKqBdg(data.idQdKqTl);
     }
@@ -192,6 +194,8 @@ export class ThongTinHopDongThanhLyComponent extends Base3Component implements O
         body.soHd = this.formData.value.soHd + this.maHopDongSuffix;
       }
       body.children = this.dataTable;
+      body.fileDinhKemReq = this.fileDinhKem;
+      body.fileCanCuReq = this.fileCanCu
       this.createUpdate(body).then((res) => {
         if (res) {
           if (isGuiDuyet) {

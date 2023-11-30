@@ -46,6 +46,9 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base3Component implem
   listPhuongThucGiaoNhanBDG: any[] = [];
   listPhuongThucThanhToan: any[] = [];
 
+  fileDinhKemDaKy: any[] = [];
+
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -269,7 +272,6 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base3Component implem
               tgianDauGia: [data.tgianDauGiaTu, data.tgianDauGiaDen],
               ketQua: data.ketQua.toString()
             })
-            console.log(data)
             data.children.forEach( item => {
               let dsHdr = item.xhTlDanhSachHdr;
               dsHdr.idDsHdr = dsHdr.id;
@@ -281,6 +283,9 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base3Component implem
               loai: key,
               dataChild: value
             })).value();
+            this.fileDinhKemDaKy = data.fileDinhKemDaKy;
+            this.fileDinhKem = data.fileDinhKem;
+            this.fileCanCu = data.fileCanCu;
           }
         })
       .catch((e) => {
@@ -341,6 +346,9 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base3Component implem
       body.childrenNlq = this.dataNguoiTgia;
       body.trangThai = isHoanThanh ? this.STATUS.DA_HOAN_THANH : this.STATUS.DU_THAO
       body.children = dataTableSaved;
+      body.fileDinhKemReq = this.fileDinhKem
+      body.fileCanCuReq = this.fileCanCu
+      body.fileDinhKemDaKyReq = this.fileDinhKemDaKy
       if (this.formData.value.ketQua == 1) {
         body.ketQuaSl = soLuongTrung + "/" + soLuongDviTsan;
       } else {

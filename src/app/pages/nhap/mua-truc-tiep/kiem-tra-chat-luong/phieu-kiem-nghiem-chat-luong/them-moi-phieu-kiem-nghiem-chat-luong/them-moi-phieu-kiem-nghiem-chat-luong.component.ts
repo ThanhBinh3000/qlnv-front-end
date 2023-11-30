@@ -577,8 +577,12 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
 
   }
 
-  async bindingDataBbLayMau(id, isChiTiet) {
-    let res = await this.bienBanLayMauServive.getDetailBySoQd(id);
+  async bindingDataBbLayMau(req, isChiTiet) {
+    if(req == undefined){
+      this.notification.error(MESSAGE.ERROR, 'Điểm kho chưa tạo Biên bản lẫy mẫu/bàn giao mẫu');
+      return;
+    }
+    let res = await this.bienBanLayMauServive.getDetailBySoQd(req);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
       this.formData.patchValue({
@@ -765,8 +769,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
-    }).catch(err => {
-      this.notification.error(MESSAGE.ERROR, err.msg);
     })
   }
 

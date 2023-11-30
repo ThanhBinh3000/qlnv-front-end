@@ -11,8 +11,8 @@
     </button>
     <button class="btn btn-sub xanh-nhat" type="button"
       *ngIf="(formData.value.trangThai == STATUS.DU_THAO
-      || formData.value.trangThai == STATUS.TU_CHOI_LDCC
-      || formData.value.trangThai == STATUS.TU_CHOI_LDCC)
+      || formData.value.trangThai == STATUS.TU_CHOI_TP
+      || formData.value.trangThai == STATUS.TU_CHOI_LDC)
        && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_THEM')"
       (click)="save(true)">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
@@ -34,8 +34,8 @@
     </button>
     <button class="btn btn-sub xanh"
             *ngIf="(formData.value.trangThai == STATUS.DU_THAO
-      || formData.value.trangThai == STATUS.TU_CHOI_LDCC
-      || formData.value.trangThai == STATUS.TU_CHOI_LDCC)
+      || formData.value.trangThai == STATUS.TU_CHOI_TP
+      || formData.value.trangThai == STATUS.TU_CHOI_LDC)
        && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_THEM')"
       (click)="save(false)">
       <i class="icon  htvbdh_tcdt_save"></i>

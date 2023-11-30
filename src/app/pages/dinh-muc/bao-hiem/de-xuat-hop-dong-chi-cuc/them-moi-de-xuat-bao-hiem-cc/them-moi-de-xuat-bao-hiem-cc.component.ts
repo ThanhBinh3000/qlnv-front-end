@@ -19,7 +19,8 @@ import {
 import {AMOUNT_NO_DECIMAL} from '../../../../../Utility/utils';
 import * as uuidv4 from "uuid";
 import {chain, cloneDeep} from "lodash";
-
+import printJS from "print-js";
+import {saveAs} from "file-saver";
 @Component({
   selector: 'app-them-moi-de-xuat-bao-hiem-cc',
   templateUrl: './them-moi-de-xuat-bao-hiem-cc.component.html',
@@ -42,7 +43,12 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
   amount = AMOUNT_NO_DECIMAL;
   expandSetString = new Set<string>();
   isThemMoi: boolean = false;
-
+  pdfSrc: any;
+  excelSrc: any;
+  pdfBlob: any;
+  excelBlob: any;
+  printSrc: any
+  showDlgPreview = false;
   onExpandStringChange(idVirtual: string, isExpanded: boolean): void {
     if (isExpanded) {
       this.expandSetString.add(idVirtual);
@@ -181,7 +187,7 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
 
   required(item: BaoHiemKhoDangChuaHang) {
     let msgRequired = ''
-    if (!item.diemKho || !item.nhaKho || !item.giaTriHtKhoHt || !item.giaTriHtKhoKh || !item.giaTriDkKhoHt || !item.giaTriDkKhoKh) {
+    if (!item.diemKho || !item.nhaKho || (!item.giaTriHtKhoHt && !item.giaTriHtKhoKh ) || (!item.giaTriDkKhoKh && !item.giaTriDkKhoHt)) {
       msgRequired = 'Vui lòng nhập đầy đủ thông tin!'
     }
     return msgRequired;
@@ -313,6 +319,7 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
         if (res.data) {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
+          this.maCv = this.formData.value.soCv ? this.formData.value.soCv.split('/')[1] : null
           this.formData.patchValue({
             soCv: this.formData.value.soCv ? this.formData.value.soCv.split('/')[0] : null
           })
@@ -438,8 +445,6 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
     } else {
       this.tableHangDtqgView = [];
     }
-    console.log(this.tableHangDtqgReq, 111)
-    console.log(this.tableHangDtqgView, 222)
     this.expandAll();
   }
 
@@ -526,6 +531,91 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
     this.tableHangDtqgReq.splice(idx, 1);
     this.buildTableView(this.tableHangDtqgReq);
   }
+
+  convertDataPreview(): any[] {
+    let arrResult: any[] = [];
+    let arrCopy = cloneDeep(this.dataTable);
+    if (arrCopy && arrCopy.length > 0) {
+      let arr = [];
+      arr = chain(arrCopy)
+          .groupBy("tenDonVi")
+          ?.map((value1, key1) => {
+            let children1 = chain(value1)
+                .groupBy("tenDiemKho")
+                ?.map((value2, key2) => {
+                      return {
+                        children: value2,
+                        tenDiemKho: key2,
+                        khoiTich: null
+                      }
+                    }
+                ).value();
+            return {
+              children: children1,
+              tenChiCuc: key1,
+              khoiTich: null
+            };
+          }).value();
+      arr.forEach((item, index) => {
+        item.stt = index + 1;
+        if (item.children && item.children.length > 0) {
+          arrResult.push(item)
+          item.children.forEach(child1 => {
+            arrResult.push(child1);
+            child1.children.forEach(child2 => {
+              child2.tenDiemKho = '';
+              arrResult.push(child2);
+            })
+          })
+        }
+      });
+    }
+    return arrResult;
+  }
+
+  async preview() {
+    try {
+      this.spinner.show();
+      let arr = this.convertDataPreview();
+      let body = {
+        typeFile : "pdf",
+        trangThai : "01",
+        nam: 2023,
+        baoHiemDxChiCucDTOS: arr
+      }
+      await this.deXuatBaoHiemSv.previewDx(body).then(async s => {
+        this.printSrc = s;
+        this.pdfBlob = s;
+        this.pdfSrc = await new Response(s).arrayBuffer();
+      });
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  async downloadPdf() {
+    saveAs(this.pdfBlob, 'quyet_dinh_gia_btc.pdf');
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+
+  printPreview() {
+    const blobUrl = URL.createObjectURL(this.pdfBlob);
+    printJS({
+      printable: blobUrl,
+      type: 'pdf',
+      base64: false
+    })
+  }
+
+  downloadExcel() {
+
+  }
 }
 
 export class BaoHiemKhoDangChuaHang {
@@ -544,12 +634,12 @@ export class BaoHiemKhoDangChuaHang {
   tichLuong: number;
   giaTriTc: number;
   //theo thiết ke mới
-  giaTriHtKhoHt: number;
-  giaTriHtKhoKh: number;
-  giaTriHtTc: number;
-  giaTriDkKhoHt: number;
-  giaTriDkKhoKh: number;
-  giaTriDkTc: number;
+  giaTriHtKhoHt: number = 0;
+  giaTriHtKhoKh: number =0;
+  giaTriHtTc: number = 0;
+  giaTriDkKhoHt: number =0;
+  giaTriDkKhoKh: number =0;
+  giaTriDkTc: number = 0;
 }
 
 

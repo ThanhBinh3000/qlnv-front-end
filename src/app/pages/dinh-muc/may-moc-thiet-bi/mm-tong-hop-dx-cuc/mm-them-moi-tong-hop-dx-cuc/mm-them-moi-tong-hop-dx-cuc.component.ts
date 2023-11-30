@@ -51,6 +51,8 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
       klLtNhap: [null],
       klLtXuat: [null],
       klLtBaoQuanCuc: [null],
+      slGaoDangBaoQuan: [null],
+      slThocDangBaoQuan: [null],
       klLtNhapCuc: [null],
       klLtXuatCuc: [null],
       trichYeu: [null, Validators.required],
@@ -120,7 +122,7 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
     body.ngayDxDen = body.ngayDx ? body.ngayDx[1] : null
     body.trangThai = STATUS.DA_DUYET_CBV;
     body.trangThaiTh = STATUS.CHUA_TONG_HOP;
-    body.MA_DVI = this.userInfo.MA_DVI;
+    body.maDvi = this.userInfo.MA_DVI;
     let res = await this.dxChiCucService.tongHopDxCc(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let detail = res.data;
@@ -129,7 +131,9 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
           namKeHoach: this.formDataTongHop.value.namKeHoach,
           klLtBaoQuanCuc: detail.klLtBaoQuan,
           klLtNhapCuc: detail.klLtNhap,
-          klLtXuatCuc: detail.klLtXuat
+          klLtXuatCuc: detail.klLtXuat,
+          slGaoDangBaoQuan: detail.slGaoDangBaoQuan,
+          slThocDangBaoQuan: detail.slThocDangBaoQuan
         })
         this.dataTable = detail.listQlDinhMucDxTbmmTbcdDtl
         if (detail && detail.listQlDinhMucDxTbmmTbcd && detail.listQlDinhMucDxTbmmTbcd.length > 0) {

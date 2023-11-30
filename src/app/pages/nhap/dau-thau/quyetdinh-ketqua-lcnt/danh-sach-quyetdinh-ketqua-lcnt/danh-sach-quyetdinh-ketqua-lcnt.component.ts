@@ -194,12 +194,8 @@ export class DanhSachQuyetdinhKetquaLcntComponent implements OnInit {
   };
 
 
-  redirectToChiTiet(id: number, roles: any) {
-    if (roles != "NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_XEM" || roles != "NHDTQG_PTDT_TCKHLCNT_VT_QDKQLCNT_XEM") {
-      this.isViewDetail = false;
-    } else {
-      this.isViewDetail = true;
-    }
+  redirectToChiTiet(id: number, roles: any, isView: boolean) {
+    this.isViewDetail = isView;
     this.selectedId = id;
     this.isDetail = true;
   }

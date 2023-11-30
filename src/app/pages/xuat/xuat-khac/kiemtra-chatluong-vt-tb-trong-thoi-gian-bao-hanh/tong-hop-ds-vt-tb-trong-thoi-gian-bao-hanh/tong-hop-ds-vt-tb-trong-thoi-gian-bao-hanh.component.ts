@@ -150,8 +150,10 @@ export class TongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Component i
           return Object.assign(s1, s);
         })
       } else return s;
-
     });
+    if(this.formData.value.maChiCuc){
+      this.flatDataTable = this.flatDataTable.filter(i=> i.maDiaDiem.substring(0,8) === this.formData.value.maChiCuc)
+    }
     this.buildTableView();
   }
 

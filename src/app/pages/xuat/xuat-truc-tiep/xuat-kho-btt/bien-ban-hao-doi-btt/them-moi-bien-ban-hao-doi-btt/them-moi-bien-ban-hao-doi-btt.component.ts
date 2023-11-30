@@ -81,7 +81,6 @@ export class ThemMoiBienBanHaoDoiBttComponent extends Base2Component implements 
       maNhaKho: [''],
       maNganKho: [''],
       maLoKho: [''],
-      loaiHinhhKho: [''],
       loaiHinhKho: [''],
       tgianGiaoNhan: [''],
       loaiVthh: [''],
@@ -185,10 +184,6 @@ export class ThemMoiBienBanHaoDoiBttComponent extends Base2Component implements 
   async getDetail(id: number) {
     if (!id) return;
     const data = await this.detail(id);
-    if (!data) {
-      console.error('Không tìm thấy dữ liệu');
-      return;
-    }
     this.maTuSinh = this.idInput;
     this.dataTable = data.children
     if (!this.isView) {
@@ -207,8 +202,6 @@ export class ThemMoiBienBanHaoDoiBttComponent extends Base2Component implements 
       const res = await this.quyetDinhNvXuatBttService.search(body)
       if (res && res.msg === MESSAGE.SUCCESS) {
         this.danhSachQuyetDinh = res.data.content.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI));
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ XUẤT HÀNG',
@@ -343,8 +336,6 @@ export class ThemMoiBienBanHaoDoiBttComponent extends Base2Component implements 
       if (res && res.msg === MESSAGE.SUCCESS) {
         const tinhKhoSet = new Set(this.danhSachHaoDoi.map(item => item.soBbTinhKho));
         this.danhSachTinhKho = res.data.content.filter(item => !tinhKhoSet.has(item.soBbTinhKho))
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH BIÊN BẢN TỊNH KHO',
@@ -440,6 +431,7 @@ export class ThemMoiBienBanHaoDoiBttComponent extends Base2Component implements 
         idPhieuKiemNghiem: data.idPhieuKiemNghiem,
         soPhieuKiemNghiem: data.soPhieuKiemNghiem,
         ngayKiemNghiemMau: data.ngayKiemNghiemMau,
+        loaiHinhKho: data.loaiHinhKho,
         maDiemKho: data.maDiemKho,
         tenDiemKho: data.tenDiemKho,
         maNhaKho: data.maNhaKho,
@@ -449,7 +441,6 @@ export class ThemMoiBienBanHaoDoiBttComponent extends Base2Component implements 
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
         tenNganLoKho: data.tenLoKho ? data.tenLoKho + ' - ' + data.tenNganKho : data.tenNganKho,
-        loaiHinhhKho: data.loaiHinhhKho,
         tgianGiaoNhan: data.tgianGiaoNhan,
         loaiVthh: data.loaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
@@ -516,7 +507,6 @@ export class ThemMoiBienBanHaoDoiBttComponent extends Base2Component implements 
       await this.helperService.ignoreRequiredForm(this.formData);
       this.formData.controls["soQdNv"].setValidators([Validators.required]);
       this.formData.controls["soBbTinhKho"].setValidators([Validators.required]);
-      this.formData.controls["soBbHaoDoi"].setValidators([Validators.required]);
       const body = {
         ...this.formData.value,
         children: this.dataTable,
@@ -547,50 +537,17 @@ export class ThemMoiBienBanHaoDoiBttComponent extends Base2Component implements 
 
   setValidForm() {
     const requiredFields = [
-      "namKh",
-      "tenDvi",
-      // "maQhNs",
-      // "ngayLapBienBan",
-      // "soHopDong",
-      // "ngayKyHopDong",
-      // "ngayLapBbTinhKho",
-      // "tenNganLoKho",
-      // "tenNhaKho",
-      // "tenDiemKho",
-      // "ngayBatDauXuat",
-      // "ngayKetThucXuat",
-      // "tenThuKho",
-      // "nguyenNhan",
-      // "kienNghi",
-      // "ghiChu",
+      "soQdNv",
+      "soBbTinhKho",
+      "tenNganLoKho",
+      "tenNhaKho",
+      "tenDiemKho",
+      "nguyenNhan",
+      "kienNghi",
     ];
     requiredFields.forEach(fieldName => {
       this.formData.controls[fieldName].setValidators([Validators.required]);
       this.formData.controls[fieldName].updateValueAndValidity();
     });
-  }
-
-  async preview(id) {
-    await this.bienBanHaoDoiBttService.preview({
-      tenBaoCao: 'Biên bản hao đôi bán trực tiếp',
-      id: id
-    }).then(async res => {
-      if (res.data) {
-        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
-        this.printSrc = res.data.pdfSrc;
-        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
-        this.showDlgPreview = true;
-      } else {
-        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
-      }
-    });
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
-  }
-
-  printPreview() {
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 }

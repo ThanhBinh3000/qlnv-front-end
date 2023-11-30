@@ -81,6 +81,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         maNhaKho: [''],
         maNganKho: [''],
         maLoKho: [''],
+        loaiHinhKho: [''],
         loaiVthh: [''],
         cloaiVthh: [''],
         tenHangHoa: [''],
@@ -173,10 +174,6 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
   async getDetail(id: number) {
     if (!id) return;
     const data = await this.detail(id);
-    if (!data) {
-      console.error('Không tìm thấy dữ liệu');
-      return;
-    }
     this.maTuSinh = this.idInput;
     this.dataTable = data.children
     if (!this.isView) {
@@ -433,7 +430,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
         tenNganLoKho: data.tenLoKho ? data.tenLoKho + ' - ' + data.tenNganKho : data.tenNganKho,
-        loaiHinhhKho: data.loaiHinhhKho,
+        loaiHinhKho: data.loaiHinhKho,
         loaiVthh: data.loaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
         cloaiVthh: data.cloaiVthh,
@@ -527,7 +524,6 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
       "tenDiemKho",
       "nguyenNhan",
       "kienNghi",
-      "ghiChu",
     ];
     requiredFields.forEach(fieldName => {
       this.formData.controls[fieldName].setValidators([Validators.required]);

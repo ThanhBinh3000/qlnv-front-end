@@ -295,7 +295,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
         donViTinh: data.donViTinh,
       });
       await this.loadDanhSachLayMau(data.soQdNv)
-      await this.getDanhMucTieuChuan();
+      await this.getDanhMucTieuChuan(data);
       if (dataChiCuc && dataChiCuc.children && dataChiCuc.children.length > 0) {
         this.listDiaDiemXuat = dataChiCuc.children
       }
@@ -325,11 +325,9 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
     this.loadDanhSachBbLm = data;
   }
 
-  async getDanhMucTieuChuan() {
-    const loaiVthhValue = this.formData.get('loaiVthh').value;
-    const cloaiVthhValue = this.formData.get('cloaiVthh').value;
-    if (this.formData.value.cloaiVthh || this.formData.value.loaiVthh) {
-      let res = await this.danhMucService.getDetail(cloaiVthhValue || loaiVthhValue);
+  async getDanhMucTieuChuan(data) {
+    if (data.cloaiVthh || data.loaiVthh) {
+      let res = await this.danhMucService.getDetail(data.cloaiVthh || data.loaiVthh);
       if (res.msg !== MESSAGE.SUCCESS || !res.data.tieuChuanCl) {
         return;
       }

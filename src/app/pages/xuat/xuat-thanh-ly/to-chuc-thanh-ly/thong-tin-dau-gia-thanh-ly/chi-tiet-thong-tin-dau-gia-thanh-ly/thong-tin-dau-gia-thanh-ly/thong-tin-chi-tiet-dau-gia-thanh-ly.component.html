@@ -434,7 +434,7 @@
                         </nz-form-item>
                         <nz-form-item>
                           <div class="list-file" nz-col>
-                            <file-list [isCanCuPL]="true" [data]="formData.value.fileCanCu"
+                            <file-list [isCanCuPL]="true" [data]="fileCanCu"
                                        [isViewDetail]=" isDisabled()">
                             </file-list>
                           </div>
@@ -448,7 +448,7 @@
                         </nz-form-item>
                         <nz-form-item>
                           <div class="list-file" nz-col>
-                            <file-list [isCanCuPL]="true" [data]="formData.value.fileDinhKem"
+                            <file-list [isCanCuPL]="true" [data]="fileDinhKem"
                                        [isViewDetail]=" isDisabled()">
                             </file-list>
                           </div>
@@ -788,13 +788,13 @@
                         <th nzWidth="120px" class="text-center wrap"> Giá TL không VAT(đ)</th>
                         <th nzWidth="120px" class="text-center wrap"> Giá khởi điểm (đ)</th>
                         <th nzWidth="120px" class="text-center wrap"> Số tiền đặt trước (đ)</th>
-                        <th nzWidth="120px" class="text-center wrap"><span style='color: red;'>*</span> Số lần trả giá
+                        <th nzWidth="120px" class="text-center wrap">Số lần trả giá
                         </th>
-                        <th nzWidth="150px" class="text-center wrap"><span style='color: red;'>*</span> Đơn giá cao
+                        <th nzWidth="150px" class="text-center wrap">Đơn giá cao
                           nhất (đ)
                         </th>
                         <th nzWidth="120px" class="text-center wrap"> Thành tiền (đ)</th>
-                        <th nzWidth="200px" class="text-center wrap"><span style='color: red;'>*</span> Tổ chức/cá
+                        <th nzWidth="200px" class="text-center wrap"> Tổ chức/cá
                           nhân trúng đấu giá
                         </th>
                       </tr>
@@ -931,7 +931,7 @@
                     </nz-form-item>
                     <nz-form-item>
                       <div class="list-file" nz-col>
-                        <file-list [isCanCuPL]="true" [data]="formData.value.fileDinhKemDaKy"
+                        <file-list [isCanCuPL]="true" [data]="fileDinhKemDaKy"
                                    [isViewDetail]=" isDisabled()">
                         </file-list>
                       </div>

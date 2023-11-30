@@ -111,8 +111,8 @@
         <div nz-col nzSpan="12">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
-              <nz-form-label nzRequired [nzNoColon]="true">Tổng mức đầu tư khái toán, dự toán được duyệt (đ)</nz-form-label>
-              <nz-input-number [nzDisabled]="isViewDetail" [nzParser]="globals.parser" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+              <nz-form-label  [nzNoColon]="true">Tổng mức đầu tư khái toán, dự toán được duyệt (đ)</nz-form-label>
+              <nz-input-number [nzDisabled]="true" [nzParser]="globals.parser" [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                formControlName="tmdt">
               </nz-input-number>
             </nz-form-control>
@@ -121,8 +121,8 @@
         <div nz-col nzSpan="12">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
-              <nz-form-label nzRequired [nzNoColon]="true">Kế hoạch cải tạo, sửa chữa thường xuyên kho tàng (đ)</nz-form-label>
-              <nz-input-number [nzFormatter]="globals.formatter" [nzDisabled]="isViewDetail" [nzParser]="globals.parser" [nzSize]="'small'"
+              <nz-form-label [nzNoColon]="true">Kế hoạch cải tạo, sửa chữa thường xuyên kho tàng (đ)</nz-form-label>
+              <nz-input-number [nzFormatter]="globals.formatter" [nzDisabled]="true" [nzParser]="globals.parser" [nzSize]="'small'"
                                formControlName="keHoachCaiTao">
               </nz-input-number>
             </nz-form-control>

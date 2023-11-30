@@ -49,18 +49,19 @@ export class PhieuXuatKhoBttComponent extends Base2Component implements OnInit {
       loaiVthh: null,
     })
     this.filterTable = {
-      soQdNv: '',
-      namKh: '',
-      tgianGiaoNhan: '',
-      tenDiemKho: '',
-      tenNganKho: '',
-      tenLoKho: '',
-      soPhieuKiemNghiem: '',
-      ngayKiemNghiemMau: '',
-      soPhieuXuatKho: '',
-      soBangKeHang: '',
-      ngayLapPhieu: '',
-      tenTrangThai: '',
+      soQdNv: null,
+      namKh: null,
+      tgianGiaoNhan: null,
+      tenDiemKho: null,
+      tenNhaKho: null,
+      tenNganKho: null,
+      tenLoKho: null,
+      soPhieuKiemNghiem: null,
+      ngayKiemNghiemMau: null,
+      soPhieuXuatKho: null,
+      soBangKeHang: null,
+      ngayLapPhieu: null,
+      tenTrangThai: null,
     };
   }
 
@@ -216,7 +217,7 @@ export class PhieuXuatKhoBttComponent extends Base2Component implements OnInit {
         DUYET_LDCHICUC: 'XHDTQG_PTTT_XK_LT_PXK_DUYET',
       },
     };
-    const permissions = this.loaiVthh === LOAI_HANG_DTQG.VAT_TU ? permissionMapping.VT : permissionMapping.LT;
+    const permissions = this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? permissionMapping.VT : permissionMapping.LT;
     switch (action) {
       case 'XEM':
         return (

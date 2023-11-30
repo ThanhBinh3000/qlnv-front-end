@@ -141,11 +141,11 @@
                   <a (click)="redirectDetail(bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.id)">
                     <span class="icon htvbdh_eye"></span>
                   </a>
-                  <a *ngIf="this.userService.isCuc() && bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.trangThai == STATUS.DU_THAO"
+                  <a *ngIf="this.userService.isChiCuc() && bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.trangThai == STATUS.DU_THAO"
                      (click)="redirectDetail(bbTk.xhTlDanhSachHdr?.xlTlTinhKhoHdr?.id)">
                     <span class="fa fa-pencil"></span>
                   </a>
-                  <a *ngIf="this.userService.isCuc() && bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.trangThai == STATUS.DU_THAO"
+                  <a *ngIf="this.userService.isChiCuc() && bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.trangThai == STATUS.DU_THAO"
                      (click)="delete(bbTk.xhTlDanhSachHdr?.xlTlTinhKhoHdr)">
                     <i class="fa fa-trash-o do"></i>
                   </a>

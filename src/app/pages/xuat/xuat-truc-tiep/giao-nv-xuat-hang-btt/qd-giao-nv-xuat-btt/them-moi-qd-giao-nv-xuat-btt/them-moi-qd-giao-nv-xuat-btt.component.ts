@@ -23,6 +23,7 @@ import {cloneDeep} from 'lodash';
 import {FileDinhKem} from "../../../../../../models/DeXuatKeHoachBanTrucTiep";
 import {PREVIEW} from "../../../../../../constants/fileType";
 import printJS from "print-js";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import _ from 'lodash';
 
 @Component({
@@ -36,7 +37,10 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
   @Input() idInput: number;
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   TRUC_TIEP = BAN_TRUC_TIEP;
+  templateNameVt = "Quyết định giao nhiệm vụ xuất vật tư";
+  templateNameLt = "Quyết định giao nhiệm vụ xuất lương thực";
   maHauTo: any;
   flagInit: Boolean = false;
   listDviTsan: any[] = [];
@@ -153,10 +157,6 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
       return;
     }
     const data = await this.detail(id);
-    if (!data) {
-      console.error('Không tìm thấy dữ liệu');
-      return;
-    }
     const {soQdNv, soQdDc, soQdPd, soHopDong, idChaoGia, children} = data;
     this.formData.patchValue({
       soQdNv: soQdNv?.split('/')[0] || null,
@@ -303,8 +303,6 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
           phuongThuc: item.pthucBanTrucTiep === THONG_TIN_BAN_TRUC_TIEP.UY_QUYEN ? 'Ủy quyền' : 'Bán lẻ',
           ...item
         }));
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH QUYẾT ĐỊNH ỦY QUYỀN/BÁN LẺ',
@@ -381,7 +379,7 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           tenHangHoa: data.moTaHangHoa,
-          tgianGiaoNhan: data.thoiHanBan,
+          tgianGiaoNhan: data.tgianDkienDen,
           donViTinh: data.donViTinh,
           loaiHinhNx: data.loaiHinhNx,
           kieuNx: data.kieuNx,
@@ -412,7 +410,8 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
         }
       })
     })
-    this.listAllDviTsan = this.listDviTsan.filter(item => !this.loadQdNvXh.some(child => child.maDviTsan.includes(item.maDviTsan)));
+    const listQdNvXh = this.loadQdNvXh.filter(item => item.idChaoGia === this.formData.value.idChaoGia)
+    this.listAllDviTsan = this.listDviTsan.filter(item => !listQdNvXh.some(child => child.maDviTsan.includes(item.maDviTsan)));
   }
 
   async selectMaDviTsan() {
@@ -480,35 +479,9 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
     }
   }
 
-  calcTong(column) {
-    if (!this.dataTable) {
-      return 0;
-    }
-    return this.dataTable.reduce((sum, item) => sum + (item[column] || 0), 0);
-  }
-
-  async preview(id) {
-    await this.quyetDinhNvXuatBttService.preview({
-      tenBaoCao: 'Quyết định kết quả bán trực tiếp',
-      id: id
-    }).then(async res => {
-      if (res.data) {
-        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
-        this.printSrc = res.data.pdfSrc;
-        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
-        this.showDlgPreview = true;
-      } else {
-        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
-      }
-    });
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
-  }
-
-  printPreview() {
-    printJS({printable: this.printSrc, type: 'pdf', base64: true})
+  calcTong(columnName) {
+    if (!this.dataTable) return 0;
+    return this.dataTable.reduce((sum, cur) => sum + (cur[columnName] || 0), 0);
   }
 
   setValidator() {
