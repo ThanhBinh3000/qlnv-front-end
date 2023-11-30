@@ -144,12 +144,11 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
 
   async loadListDonVi() {
     if (this.dataChiTieu) {
-      debugger
       for (let index = 0; index < this.dataChiTieu.khVatTuNhap.length; index++) {
         if (this.formGoiThau.get('cloaiVthh').value == null) {
-          // if (this.dataChiTieu.khVatTuNhap[index].maVatTuCha == this.loaiVthh || this.dataChiTieu.khVatTuNhap[index].maVatTu == this.loaiVthh) {
-          //   this.loadThongTinCuc(index);
-          // }
+          if (this.dataChiTieu.khVatTuNhap[index].maVatTuCha == this.loaiVthh || this.dataChiTieu.khVatTuNhap[index].maVatTu == this.loaiVthh) {
+            this.loadThongTinCuc(index);
+          }
         } else {
           if (this.dataChiTieu.khVatTuNhap[index].maVatTu == this.formGoiThau.get('cloaiVthh').value
             || (this.dataChiTieu.khVatTuNhap[index].maVatTuCha == this.loaiVthh && this.dataChiTieu.khVatTuNhap[index].maVatTu == null)) {
