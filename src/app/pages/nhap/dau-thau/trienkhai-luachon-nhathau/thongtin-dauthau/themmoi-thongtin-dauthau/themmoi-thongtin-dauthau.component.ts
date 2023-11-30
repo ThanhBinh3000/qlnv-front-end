@@ -253,8 +253,12 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       let tongMucDtTrung = 0
       let tongMucDt = 0
       let slGthauTrung  = 0
+      let indexGthau = 0
       this.listOfData = data.children;
       for (let i = 0; i < this.listOfData.length; i++) {
+        if (this.idGoiThau > 0 && this.idGoiThau == this.listOfData[i].id) {
+          indexGthau = i;
+        }
         if ( this.listOfData[i].trangThaiDt == STATUS.THANH_CONG) {
           slGthauTrung += 1
           tongMucDtTrung +=  this.listOfData[i].soLuong *  this.listOfData[i].donGiaNhaThau
@@ -304,7 +308,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         trangThai: data.trangThai,
         tenTrangThai: data.tenTrangThai
       })
-      this.showDetail(event, this.listOfData[0])
+      this.showDetail(event, this.listOfData[indexGthau])
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -513,7 +517,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     let res = await this.thongTinDauThauService.create(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-      await this.getDetail()
+      // await this.getDetail()
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
