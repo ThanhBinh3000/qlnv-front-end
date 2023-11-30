@@ -585,8 +585,7 @@
                       <nz-form-label [nzNoColon]="true">Giá trị
                       </nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
-                <textarea rows="3" [readonly]="isDisableForm()" nz-input
-                          formControlName="noiDung"></textarea>
+                        <input nz-input class="money-input" currencyMask [options]="amount" formControlName="noiDung"/>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
@@ -617,7 +616,7 @@
                   <nz-form-label [nzNoColon]="true" nzRequired> Điều kiện và thời hạn thanh toán
                   </nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
-                <textarea rows="10" [readonly]="isDisableForm()" nz-input
+                <textarea rows="7" [readonly]="isDisableForm()" nz-input
                           formControlName="dieuKien"></textarea>
                   </nz-form-control>
                 </nz-form-item>
@@ -999,7 +998,7 @@
                       <td colspan="3">{{chiCuc.tenDvi}}</td>
                       <td class="text-right text-bold">{{chiCuc.soLuong}}</td>
                       <td class="text-right text-bold">{{chiCuc.donGia}}</td>
-                      <td class="text-right text-bold">{{chiCuc.soLuong * chiCuc.donGia | number :
+                      <td class="text-right text-bold">{{chiCuc.soLuong * chiCuc.donGia * 1000 | number :
                         '1.0-1' :
                         'vi_VN'}}</td>
                       <td *ngIf="!isDisableForm()"></td>
@@ -1021,7 +1020,7 @@
                           </nz-input-number>
                         </td>
                         <td class="text-right text-bold">{{chiCuc.donGia}}</td>
-                        <td class="text-right text-bold">{{rowItem[y].soLuong * chiCuc.donGia | number :
+                        <td class="text-right text-bold">{{rowItem[y].soLuong * chiCuc.donGia*1000 | number :
                           '1.0-1' :
                           'vi_VN'}}</td>
                         <td *ngIf="!isDisableForm()">
@@ -1041,7 +1040,7 @@
                         <td>{{diemKho.diaDiemNhap}}</td>
                         <td class="text-right">{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                           <td class="text-right text-bold">{{chiCuc.donGia}}</td>
-                        <td class="text-right">{{diemKho.soLuong * chiCuc.donGia  | number : '1.0-1' :
+                        <td class="text-right">{{diemKho.soLuong * chiCuc.donGia *1000  | number : '1.0-1' :
                           'vi_VN'}}
                         </td>
                         <td *ngIf="!isDisableForm()">
@@ -1069,7 +1068,7 @@
                             </nz-input-number>
                           </td>
                           <td class="text-right text-bold">{{chiCuc.donGia}}</td>
-                          <td class="text-right text-bold">{{rowItemEdit[z].soLuong * chiCuc.donGia | number :
+                          <td class="text-right text-bold">{{rowItemEdit[z].soLuong * chiCuc.donGia *1000| number :
                             '1.0-1' :
                             'vi_VN'}}</td>
                           <td *ngIf="!isDisableForm()">
