@@ -147,10 +147,10 @@ export class ThemMoiHopDongSctxComponent extends Base2Component implements OnIni
     this.spinner.show();
     try {
       await this.loadHinhThucThanhToan();
-      if (!this.idInput || !this.itemGoiThau.hopDong) {
-        this.bindingData();
-      } else {
+      if (this.idInput) {
         await this.detail(this.idInput)
+      } else {
+        this.bindingData();
       }
       this.spinner.hide();
     } catch (e) {
