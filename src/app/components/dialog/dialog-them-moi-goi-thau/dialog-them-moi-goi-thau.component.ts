@@ -108,6 +108,21 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+    await this.getGiaToiDa(null);
+    let bodyPag = {
+      namKeHoach: this.namKeHoach,
+      loaiVthh: this.loaiVthh,
+      loaiGia: "LG03"
+    }
+    let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
+    if (pag.msg == MESSAGE.SUCCESS && pag.data.length > 0) {
+      this.formGoiThau.patchValue({
+        donGiaVat: (pag.data[0].giaQdDcTcdtVat && pag.data[0].giaQdDcTcdtVat > 0) ? pag.data[0].giaQdDcTcdtVat : pag.data[0].giaQdTcdtVat,
+        soQdPdGiaCuThe: pag.data[0].soQdTcdt,
+        ngayKyQdPdGiaCuThe: pag.data[0].ngayKyTcdt,
+        vat: pag.data[0].vat * 100,
+      })
+    }
     await this.initForm(this.data)
     if (!this.data) {
       await this.loadListDonVi();
