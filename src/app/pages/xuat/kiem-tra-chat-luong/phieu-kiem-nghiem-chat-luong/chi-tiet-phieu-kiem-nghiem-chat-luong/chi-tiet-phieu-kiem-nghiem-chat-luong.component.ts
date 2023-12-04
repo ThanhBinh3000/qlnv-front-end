@@ -388,7 +388,6 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     return await this.service.search({
       type: this.loaiXuat,
       soQdGiaoNvNh: this.formData.value.soQdGnv,
-      trangThai: STATUS.DA_DUYET_LDC,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0,
