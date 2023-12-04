@@ -25,6 +25,8 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import {DonviService} from "../../../../../../services/donvi.service";
 import {TheoDoiBqService} from "../../../../../../services/luu-kho/theo-doi-bq.service";
 import {STATUS_DA_DUYET} from "../../../../../../constants/config";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
+import {addDays} from "date-fns";
 
 @Component({
   selector: 'them-moi-phieu-nhap-day-kho',
@@ -77,6 +79,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private donViService: DonviService,
     private theoDoiBqService: TheoDoiBqService,
+    private danhMucService: DanhMucService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quanLyPhieuNhapDayKhoService);
     this.formData = this.fb.group({
@@ -252,7 +255,27 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
     if (dataChiCuc.length > 0) {
       this.listDiaDiemNhap = dataChiCuc[0].children;
     }
+    await this.loadThanLuuKho();
     await this.spinner.hide();
+  }
+
+  async loadThanLuuKho () {
+    let res;
+    if (this.formData.value.cloaiVthh) {
+      res = await this.danhMucService.getDetail(this.formData.value.cloaiVthh);
+    } else {
+      res = await this.danhMucService.getDetail(this.formData.value.loaiVthh);
+    }
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.formData.get('thanLuuKho').setValue(res.data.thoiHanLk);
+      if(this.formData.get('ngayKetThucNhap').value != null) {
+        let ngayKetThucNhap = dayjs(this.formData.get('ngayKetThucNhap').value).toDate();
+        ngayKetThucNhap.setMonth(ngayKetThucNhap.getMonth() + res.data.thoiHanLk);
+        this.formData.patchValue({
+          ngayHetHanLk: ngayKetThucNhap,
+        })
+      }
+    }
   }
 
   openDialogDdiemNhapHang() {
@@ -345,27 +368,6 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
       if (dataDiemKho) {
         this.formData.patchValue({
           diaDiemKho: dataDiemKho.diaChi
-        })
-      }
-    }
-    let body = {
-      nam: this.formData.value.nam,
-      maDviSr: this.formData.value.maDvi,
-      maDiemKho: data.maDiemKho,
-      maNhaKho: data.maNhaKho,
-      maNganKho: data.maNganKho,
-      maLoKho: data.maLoKho,
-      loaiVthh: this.formData.value.loaiVthh,
-      cloaiVthh: this.formData.value.cloaiVthh,
-      trangThai : this.STATUS.DA_DUYET_LDCC,
-    }
-    let soBaoQuan = await this.theoDoiBqService.search(body);
-    if (soBaoQuan.msg === MESSAGE.SUCCESS) {
-      let dataBq = soBaoQuan.data.content[0];
-      if (dataBq) {
-        this.formData.patchValue({
-          thanLuuKho: dataBq.thoiHanLk,
-          ngayHetHanLk: dataBq.ngayHetHanLk,
         })
       }
     }

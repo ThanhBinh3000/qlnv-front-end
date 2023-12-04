@@ -173,7 +173,7 @@ export class QuanlyHopdongComponent implements OnInit {
       soGthauTruot: data.hhQdKhlcntHdr?.soGthauTruot == null ? 0 : data.hhQdKhlcntHdr?.soGthauTruot,
       tenDuAn: data.hhQdKhlcntHdr?.tenDuAn,
       tongMucDt: data.hhQdKhlcntHdr?.tongMucDt,
-      vat: 5,
+      vat: data.hhQdKhlcntHdr?.dxKhlcntHdr?.thueVat,
       tenTrangThaiHd: data.tenTrangThaiHd,
       trangThaiHd: data.trangThaiHd,
       tenDvi: data.hhQdKhlcntHdr?.tenDvi,
@@ -188,8 +188,8 @@ export class QuanlyHopdongComponent implements OnInit {
         item.hopDong = data.listHopDong.filter(x => x.idGoiThau == item.id)[0]
         if (item.hopDong) {
           soLuong += item.hopDong.soLuong;
-          tongMucDtGoiTrung += item.hopDong.soLuong * item.hopDong.donGia;
         }
+        tongMucDtGoiTrung += item.soLuong * item.donGiaNhaThau;
         if (item.trangThaiDt == this.STATUS.THANH_CONG) {
           soGthauTrung += 1;
         }

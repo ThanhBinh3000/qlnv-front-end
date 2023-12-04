@@ -179,7 +179,7 @@
           <th rowSpan="3" width="100px">Tổng cộng</th>
           <th rowSpan="3" class="text-center">SL định mức theo <br> chỉ tiêu <br> KH năm</th>
           <th colSpan="5" width="500px">Nhu cầu theo đề xuất của Cục</th>
-          <th colSpan="5" width="500px">Số lượng trang bị cho đơn vị</th>
+          <th colSpan="3" width="500px">Số lượng trang bị cho đơn vị</th>
           <th rowSpan="3" width="">Ghi chú</th>
         </tr>
         <tr>
@@ -187,7 +187,7 @@
           <th colSpan="1"  rowSpan="2" class="text-center">Số lượng</th>
           <th colSpan="1" rowSpan="2" class="text-center">Đơn giá (trđ)</th>
           <th colSpan="1" rowSpan="2" class="text-center">Thành tiền (trđ)</th>
-          <th colSpan="2"  class="text-center">Chênh lệch</th>
+<!--          <th colSpan="2"  class="text-center">Chênh lệch</th>-->
           <th colSpan="1" rowSpan="2" class="text-center">Số lượng</th>
           <th colSpan="1" rowSpan="2" class="text-center">Đơn giá (trđ)</th>
           <th colSpan="1" rowSpan="2" class="text-center">Thành tiền (trđ)</th>
@@ -197,8 +197,8 @@
           <th class="text-center" width="100px">Thóc tẻ</th>
           <th class="text-center">Còn thiếu</th>
           <th class="text-center">Thừa</th>
-          <th class="text-center">Còn thiếu</th>
-          <th class="text-center">Thừa</th>
+<!--          <th class="text-center">Còn thiếu</th>-->
+<!--          <th class="text-center">Thừa</th>-->
         </tr>
         </thead>
         <tbody>
@@ -220,8 +220,8 @@
             <td class="font-weight-bold">{{sumSoLuong(data, 'child')}}</td>
             <td class="font-weight-bold">{{data.donGiaTd | number: '1.0-1': 'vi_VN' }}</td>
             <td class="font-weight-bold">{{sumSoLuong(data, ' child') * data.donGiaTd | number: '1.0-1': 'vi_VN' }}</td>
-            <td></td>
-            <td></td>
+<!--            <td></td>-->
+<!--            <td></td>-->
             <td class="font-weight-bold">{{sumSoLuong(data, 'tong')  | number: '1.0-1' : 'vi_VN' }}</td>
             <td class="font-weight-bold">{{data.donGiaTd | number: '1.0-1': 'vi_VN' }}</td>
             <td class="font-weight-bold">{{sumSoLuong(data, 'tong') * data.donGiaTd | number: '1.0-1': 'vi_VN' }}</td>
@@ -248,8 +248,8 @@
               </td>
               <td>{{item.donGiaTd  | number: '1.0-1': 'vi_VN' }}</td>
               <td>{{item.donGiaTd * item.soLuong   | number: '1.0-1': 'vi_VN' }}</td>
-              <td>{{item.chenhLechThieuTc | number: '1.0-1': 'vi_VN' }}</td>
-              <td>{{item.chenhLechThuaTc | number: '1.0-1': 'vi_VN' }}</td>
+<!--              <td>{{item.chenhLechThieuTc | number: '1.0-1': 'vi_VN' }}</td>-->
+<!--              <td>{{item.chenhLechThuaTc | number: '1.0-1': 'vi_VN' }}</td>-->
               <td>
                 <nz-input-number [(ngModel)]="item.soLuongTc" [nzSize]="'small'" [nzDisabled]="isView"
                                  [nzFormatter]="globals.formatter"

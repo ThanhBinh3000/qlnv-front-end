@@ -29,7 +29,7 @@
       <div class="title-chi-tieu">
         <span
           [ngClass]="formData.value.trangThai == STATUS.DA_HOAN_THANH ? 'status-xanh' : 'status-do' ">{{formData.value.tenTrangThai}}</span>
-        <span class="title-form">Phiếu nhập kho tạm gửi</span>
+        <span class="title-form">Phiếu tạm giao, nhận hàng chờ kết quả ktcl tại cơ quan chuyên môn</span>
       </div>
     </div>
   </div>
@@ -76,7 +76,7 @@
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Số phiếu nhập kho</nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Số phiếu tạm giao, nhận hàng</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <input nz-input formControlName="soPhieuNhapKhoTamGui" [readonly]="true" />
             </nz-form-control>
@@ -84,7 +84,7 @@
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Ngày nhập kho</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Ngày lập phiếu</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayNhapKho" nzDisabled>
               </nz-date-picker>

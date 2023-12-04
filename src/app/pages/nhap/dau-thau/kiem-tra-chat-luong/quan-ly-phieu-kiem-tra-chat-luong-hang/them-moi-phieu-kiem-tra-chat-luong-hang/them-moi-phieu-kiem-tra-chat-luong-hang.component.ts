@@ -374,7 +374,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
       this.formData.controls["maDiemKho"].setValidators([Validators.required]);
       this.formData.controls["maNhaKho"].setValidators([Validators.required]);
       this.formData.controls["maNganKho"].setValidators([Validators.required]);
-      this.formData.controls["maLoKho"].setValidators([Validators.required]);
+      // this.formData.controls["maLoKho"].setValidators([Validators.required]);
       this.formData.controls["soBbNtbq"].setValidators([Validators.required]);
       this.formData.controls["nguoiGiaoHang"].setValidators([Validators.required]);
       this.formData.controls["donViGiaoHang"].setValidators([Validators.required]);

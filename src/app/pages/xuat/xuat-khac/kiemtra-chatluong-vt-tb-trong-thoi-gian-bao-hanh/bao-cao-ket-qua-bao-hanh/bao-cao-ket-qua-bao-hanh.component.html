@@ -105,7 +105,7 @@
           <td></td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
-            <a *data="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BCKQKD_XEM')
+            <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BCKQKD_XEM')
                && !((data.trangThai ==STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai ==STATUS.DU_THAO) && data.nguoiTaoId == userInfo.ID)" (click)="redirectDetail(data.id, true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>

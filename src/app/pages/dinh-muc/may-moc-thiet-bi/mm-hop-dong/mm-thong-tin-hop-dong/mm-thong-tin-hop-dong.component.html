@@ -16,7 +16,7 @@
           <span>Quay lại</span>
         </button>
         <button class="btn btn-sub ml-2" (click)="daKy()"
-                *ngIf="(formData.value.trangThai == STATUS.DU_THAO && id > 0 && !isView) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_QDMUASAM_DUYET')">
+                *ngIf="(formData.value.trangThai == STATUS.DU_THAO && id > 0) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_QDMUASAM_DUYET')">
           <i class="icon htvbdh_trinh "></i>
           <span>Đã ký</span>
         </button>

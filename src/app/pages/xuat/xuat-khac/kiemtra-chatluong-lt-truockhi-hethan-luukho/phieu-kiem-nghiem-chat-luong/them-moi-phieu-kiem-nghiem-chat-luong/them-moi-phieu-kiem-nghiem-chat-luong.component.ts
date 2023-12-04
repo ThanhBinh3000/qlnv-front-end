@@ -27,8 +27,6 @@ import {MangLuoiKhoService} from 'src/app/services/qlnv-kho/mangLuoiKho.service'
 import {
   PhieuKiemNgiemClLuongThucHangDTQGService,
 } from '../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/PhieuKiemNgiemClLuongThucHangDTQG.service';
-import {PREVIEW} from '../../../../../../constants/fileType';
-import {saveAs} from 'file-saver';
 
 @Component({
   selector: 'app-them-moi-phieu-kiem-nghiem-chat-luong',
@@ -285,7 +283,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     let bienBan = [
       ...this.listBbLayMau.filter((e) => {
         return !this.listPhieuKn.some((bb) => {
-          return e.idBienBan === bb.id;
+          return e.soBienBan === bb.soBienBan;
         });
       }),
     ];

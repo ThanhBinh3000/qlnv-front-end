@@ -148,10 +148,10 @@ export class ThemMoiHopDongSclComponent extends Base2Component implements OnInit
     this.spinner.show();
     try {
       await this.loadHinhThucThanhToan();
-      if (!this.idInput || !this.itemGoiThau.hopDong) {
-        this.bindingData();
-      } else {
+      if (this.idInput && this.itemGoiThau.hopDong) {
         await this.detail(this.idInput)
+      } else {
+        this.bindingData();
       }
       this.spinner.hide();
     } catch (e) {
@@ -244,7 +244,6 @@ export class ThemMoiHopDongSclComponent extends Base2Component implements OnInit
     if (this.listPhuLuc && this.listPhuLuc.length > 0) {
       this.formData.value.listPhuLuc = this.listPhuLuc;
     }
-    this.formData.value.idDuAn = this.itemDuAn.id
     if (isKy) {
       this.modal.confirm({
         nzClosable: false,

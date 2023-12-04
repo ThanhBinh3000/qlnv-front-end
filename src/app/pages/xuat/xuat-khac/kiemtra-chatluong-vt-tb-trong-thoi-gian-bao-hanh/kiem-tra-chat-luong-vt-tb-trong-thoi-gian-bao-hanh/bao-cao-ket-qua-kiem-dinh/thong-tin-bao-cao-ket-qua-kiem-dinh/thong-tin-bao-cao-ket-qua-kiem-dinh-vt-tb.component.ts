@@ -62,7 +62,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
   isViewModel: boolean = false;
   listPhieuKtcl: any;
   dviNhan: any;
-
+  templateName = "19.Báo cáo KQ kiểm định mẫu_trong thời gian BH theo HĐ_sau LM";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

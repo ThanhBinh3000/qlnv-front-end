@@ -190,7 +190,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       this.phuongAnView = [];
       this.phuongAnViewCache = [];
     });
-    this.formData.controls['tenVthh'].valueChanges.pipe().subscribe((value) => {
+    this.formData.get('tenVthh').valueChanges.pipe().subscribe((value) => {
       if (value == TEN_LOAI_VTHH.THOC) {
         this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.THOC, donViTinh: "kg" });
       } else if (value == TEN_LOAI_VTHH.GAO) {
@@ -299,7 +299,8 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       if (this.dataInit.isTaoQdPdPa) {
         this.formData.controls['tenVthh'].setValue(this.dataInit.tenVthh, { emitEvent: false });
         this.formData.controls['type'].setValue(this.dataInit.type, { emitEvent: false });
-        this.formData.controls['tenDvi'].setValue(this.userInfo.TEN_DVI)
+        this.formData.controls['tenDvi'].setValue(this.userInfo.TEN_DVI);
+        this.formData.controls['donViTinh'].setValue([TEN_LOAI_VTHH.GAO, TEN_LOAI_VTHH.THOC, TEN_LOAI_VTHH.MUOI].includes(this.dataInit.tenVthh) ? 'kg' : '');
         if (this.dataInit.type === "TH") {
           this.bindingDataTh(this.dataInit)
         } else if (this.dataInit.type === "TTr") {

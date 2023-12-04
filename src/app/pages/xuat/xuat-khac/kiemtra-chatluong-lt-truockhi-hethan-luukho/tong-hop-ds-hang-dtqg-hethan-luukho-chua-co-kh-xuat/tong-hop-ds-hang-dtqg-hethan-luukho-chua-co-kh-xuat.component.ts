@@ -161,6 +161,9 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
       } else return s;
 
     });
+    if(this.formData.value.maChiCuc){
+      this.flatDataTable = this.flatDataTable.filter(i=> i.maDiaDiem.substring(0,8) === this.formData.value.maChiCuc)
+    }
     this.buildTableView();
   }
 

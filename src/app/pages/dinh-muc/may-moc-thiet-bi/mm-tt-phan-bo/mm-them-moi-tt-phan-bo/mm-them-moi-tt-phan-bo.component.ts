@@ -29,6 +29,7 @@ import { STATUS } from '../../../../../constants/status';
   @Input() isView: boolean;
   listTongHop: any[] = [];
   maQd: string
+  listDxChiCuc: any[];
   rowItem: MmThongTinNcChiCuc = new MmThongTinNcChiCuc();
   dataEdit: { [key: string]: { edit: boolean; data: MmThongTinNcChiCuc } } = {};
   expandSet = new Set<number>();
@@ -109,6 +110,16 @@ import { STATUS } from '../../../../../constants/status';
       this.spinner.hide();
     }
   }
+
+    async loadListDxCuaChiCuc(qdMuaSam) {
+      if (qdMuaSam) {
+        this.listDxChiCuc = [];
+        let rs = await this.dxChiCucService.getListDxChiCucTheoIdTongHopTC(qdMuaSam.maTh);
+        if (rs.msg == MESSAGE.SUCCESS) {
+          this.listDxChiCuc = rs.data;
+        }
+      }
+    }
 
   async save() {
     this.helperService.markFormGroupTouched(this.formData);
@@ -270,6 +281,7 @@ import { STATUS } from '../../../../../constants/status';
           this.formData.patchValue({
             soQdMs : data.soQd
           })
+          this.loadListDxCuaChiCuc(data);
           await this.changSoTh(data.id);
         }
       })
@@ -312,6 +324,7 @@ import { STATUS } from '../../../../../constants/status';
           nzComponentParams: {
             dataInput : data,
             type : type,
+            listDxChiCuc: this.listDxChiCuc,
             sum : this.sumSlPb(list)
           },
         });

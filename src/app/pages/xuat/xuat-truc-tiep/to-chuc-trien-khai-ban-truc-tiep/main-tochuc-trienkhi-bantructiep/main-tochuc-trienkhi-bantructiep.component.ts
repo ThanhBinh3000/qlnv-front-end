@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { UserService } from "../../../../../services/user.service";
+import {Component, Input, OnInit} from '@angular/core';
+import {UserService} from "../../../../../services/user.service";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-main-tochuc-trienkhi-bantructiep',
@@ -8,10 +9,14 @@ import { UserService } from "../../../../../services/user.service";
 })
 export class MainTochucTrienkhiBantructiepComponent implements OnInit {
   @Input() inputLoaiVthh: string;
-  constructor(public userService: UserService) {
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
+
+  constructor(
+    public userService: UserService
+  ) {
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
   }
 
   tabSelected: number = 0;

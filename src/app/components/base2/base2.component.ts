@@ -71,6 +71,7 @@ export class Base2Component implements OnInit {
   pdfSrc: any;
   printSrc: any;
   wordSrc: any;
+  pdfBlob: any;
   reportTemplate: any = {
     typeFile: "",
     fileName: "",

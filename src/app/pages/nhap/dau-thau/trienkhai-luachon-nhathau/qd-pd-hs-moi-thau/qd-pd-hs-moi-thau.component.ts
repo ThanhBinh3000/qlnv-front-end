@@ -144,15 +144,11 @@ export class QdPdHsMoiThauComponent implements OnInit {
       cloaiVthh: this.searchFilter.cloaiVthh,
       namKhoach: this.searchFilter.namKhoach,
       trichYeu: this.searchFilter.trichYeu,
-      maDvi: null,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
       },
     };
-    // if (this.userService.isCuc()) {
-    //   body.maDvi = this.userInfo.MA_DVI
-    // }
     let res = await this.quyetDinhPheDuyetHsmtService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;

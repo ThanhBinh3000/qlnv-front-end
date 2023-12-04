@@ -87,11 +87,11 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
         maQhNs: [],
         idQdGiaoNvXh: [null, [Validators.required]],
         soQdGiaoNvXh: [null, [Validators.required]],
-        ngayQdGiaoNvXh: [null, [Validators.required]],
+        thoiGianXuat: [null, [Validators.required]],
         idPhieuXuatKho: [null, [Validators.required]],
         soPhieuXuatKho: [null, [Validators.required]],
         soBienBan: [null, [Validators.required]],
-        ngayLayMau: [null,],
+        ngayLayMau: [dayjs().format('YYYY-MM-DD')],
         ngayXuatLayMau: [null],
         dviKiemNghiem: [null, [Validators.required]],
         diaDiemLayMau: [null, [Validators.required]],
@@ -224,7 +224,7 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
     let body = {
       nam: this.formData.get("nam").value,
       dvql: this.userInfo.MA_DVI,
-      trangThai: STATUS.DA_DUYET_LDCC,
+      trangThai: STATUS.DA_DUYET_LDC,
       listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
       loaiXn: "XUAT"
     }
@@ -265,7 +265,7 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
       this.formData.patchValue({
         soQdGiaoNvXh: data.soQuyetDinh,
         idQdGiaoNvXh: data.id,
-        ngayQdGiaoNvXh: data.ngayKy
+        thoiGianXuat: data.ngayKy
       });
       await this.getListPhieuXuatKho(data);
     } catch (e) {

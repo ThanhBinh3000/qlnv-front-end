@@ -24,11 +24,10 @@ export class ThongTinPhanBoCtPvcComponent implements OnInit {
   @Input() dataInput: any;
   @Input() type: string;
   @Input() sum: number;
-  @Input() qdMuaSam: any;
   item: PvcDxChiCucCtiet = new PvcDxChiCucCtiet();
   listChiCuc: any[] = [];
   userInfo: UserLogin;
-  listDxChiCuc: any[];
+  @Input()  listDxChiCuc: any[];
   amount = AMOUNT;
 
   constructor(
@@ -37,7 +36,6 @@ export class ThongTinPhanBoCtPvcComponent implements OnInit {
     private _modalRef: NzModalRef,
     public globals: Globals,
     private notification: NzNotificationService,
-    private dxChiCucService: DxChiCucPvcService,
     private spinner: NgxSpinnerService,
   ) {
   }
@@ -46,7 +44,7 @@ export class ThongTinPhanBoCtPvcComponent implements OnInit {
     this.userInfo = this.userService.getUserLogin();
     this.addDetail();
     await this.loadDsChiCuc();
-    await this.loadListDxCuaChiCuc();
+    // await this.loadListDxCuaChiCuc();
   }
 
   addDetail() {
@@ -101,15 +99,6 @@ export class ThongTinPhanBoCtPvcComponent implements OnInit {
     this._modalRef.close();
   }
 
-  async loadListDxCuaChiCuc() {
-    if (this.qdMuaSam) {
-      this.listDxChiCuc = [];
-      let rs = await this.dxChiCucService.getListDxChiCucTheoIdTongHopTC(this.qdMuaSam.maTh);
-      if (rs.msg == MESSAGE.SUCCESS) {
-        this.listDxChiCuc = rs.data;
-      }
-    }
-  }
 
   required(item: PvcDxChiCucCtiet) {
     let msgRequired = '';
@@ -129,7 +118,6 @@ export class ThongTinPhanBoCtPvcComponent implements OnInit {
   }
 
   changeDvi(event) {
-
     let itemDvi = this.listChiCuc.find(item => item.maDvi === event);
     if (itemDvi) {
       this.item.slHienCo = 0;

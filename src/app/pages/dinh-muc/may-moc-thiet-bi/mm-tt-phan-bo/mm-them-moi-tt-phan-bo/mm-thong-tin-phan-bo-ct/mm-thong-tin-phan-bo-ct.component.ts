@@ -24,6 +24,7 @@ export class MmThongTinPhanBoCtComponent implements OnInit {
   item: MmThongTinNcChiCuc = new MmThongTinNcChiCuc();
   listChiCuc: any[] = []
   userInfo: UserLogin
+  @Input()  listDxChiCuc: any[];
 
   constructor(
     private dmDviService: DonviService,
@@ -104,9 +105,16 @@ export class MmThongTinPhanBoCtComponent implements OnInit {
   }
 
   changeDvi(event) {
-      let loaiHangHoa = this.listChiCuc.filter(item => item.maDvi === event)
-      if (loaiHangHoa && loaiHangHoa.length > 0) {
-        this.item.tenDvi = loaiHangHoa[0].tenDvi
+      let itemChiCuc = this.listChiCuc.find(item => item.maDvi === event)
+      if (itemChiCuc) {
+        this.item.tenDvi = itemChiCuc.tenDvi;
+        this.item.slHienCo = 0;
+        this.item.slNhapThem = 0;
+        let itemDx = this.listDxChiCuc.find(it => it.maDvi == itemChiCuc.maDvi);
+        if (itemDx) {
+          this.item.slHienCo = itemDx.slHienCo;
+          this.item.slNhapThem = itemDx.slNhapThem;
+        }
       }
   }
 }

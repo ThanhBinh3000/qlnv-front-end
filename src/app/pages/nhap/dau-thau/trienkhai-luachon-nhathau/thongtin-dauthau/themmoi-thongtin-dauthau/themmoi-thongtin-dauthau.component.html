@@ -612,11 +612,7 @@
                 </nz-input-number>
               </td>
               <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow.diaChi"/></td>
-              <td>
-                <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-                         [nzStep]="1"  [nzDisabled]="isView" [(ngModel)]="itemRow.sdt">
-                </nz-input-number>
-              </td>
+              <td><input nz-input pattern="[0-9]*" [readonly]="isView" [(ngModel)]="itemRow.sdt"/></td>
               <td *ngIf="!isShowFromKq && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isView">
                 <a (click)="addRow()">
                   <i class="fa fa-plus" title="Thêm bản ghi"></i>
@@ -630,7 +626,7 @@
               <ng-container *ngIf="!data.edit; else editTemplate">
                 <td class="text-center">{{i + 1}}</td>
                 <td>{{ data.tenNhaThau }}</td>
-                <td>{{ data.donGia }}</td>
+                <td>{{ data.donGia | number: '1.0-1' : 'vi_VN' }}</td>
                 <td>{{ data.mst }}</td>
                 <td>{{ data.diaChi }}</td>
                 <td>{{ data.sdt }}</td>
@@ -639,7 +635,7 @@
                   <a (click)="startEdit(i)">
                     <i class=" fa fa-pencil" title="Sửa bản ghi"></i>
                   </a>
-                  <a (click)="deleteRow(data.id)">
+                  <a (click)="deleteRow(i, data)">
                     <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
@@ -655,12 +651,7 @@
                   </nz-input-number>
                 </td>
                 <td><input nz-input [(ngModel)]="itemRowUpdate.diaChi"/></td>
-                <td>
-                  <nz-input-number
-                    [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-                    [nzStep]="1" [(ngModel)]="itemRowUpdate.sdt">
-                  </nz-input-number>
-                </td>
+                <td><input nz-input [(ngModel)]="itemRowUpdate.sdt"/></td>
                 <td class="text-center" *ngIf="!isShowFromKq && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isView">
                   <a
                     (click)="saveEdit(itemRowUpdate,i)" class="save">
