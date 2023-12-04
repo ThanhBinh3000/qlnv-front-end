@@ -56,6 +56,7 @@ export class TableDanhMucBpxlComponent extends Base3Component implements OnInit 
   }
 
   title : string = ''
+  column : string = ''
 
   async ngOnInit() {
     await this.spinner.show();
@@ -75,39 +76,47 @@ export class TableDanhMucBpxlComponent extends Base3Component implements OnInit 
     switch (this.router.url) {
       case '/luu-kho/hang-trong-kho/thanh-ly':
         typeBpxl = '1';
-        this.title = 'thanh lý';
+        this.title = 'Danh sách hàng thuộc diện thanh lý';
+        this.column = 'thanh lý';
         break;
       case '/luu-kho/hang-trong-kho/tieu-huy':
         typeBpxl = '2';
+        this.title = 'Danh sách hàng thuộc diện tiêu hủy';
         this.title = 'tiêu hủy';
-        break;
-      case '/luu-kho/hang-trong-kho/hong-hoc-bao-hanh':
-        typeBpxl = '3';
-        this.title = 'bảo hành';
-        break;
-      case '/luu-kho/hang-trong-kho/hong-hoc-giam-cl':
-        typeBpxl = '4';
-        this.title = 'bảo hành';
-        break;
-      case '/luu-kho/hang-trong-kho/hong-hoc-sua-chua':
-        typeBpxl = '5';
-        this.title = 'sửa chữa'
         break;
       case '/luu-kho/hang-trong-kho/sap-het-han-bao-hanh':
         typeBpxl = '6';
-        this.title = 'sắp hết hạn bảo hành';
+        this.title = 'Danh sách hàng DTQG sắp hết hạn bảo hành (trước 3 tháng) theo hợp đồng đã ký';
+        this.column = 'sắp hết hạn bảo hành';
         vaiTro = null;
         trangThai = null;
         break;
       case '/luu-kho/hang-trong-kho/het-han-luu-kho':
         typeBpxl = '7';
-        this.title = 'sửa chữa'
+        this.title = 'Danh sách hàng sắp hết hạn lưu kho nhưng chưa có kế hoạch xuất kho'
+        this.column = 'sửa chữa'
         vaiTro = null;
         trangThai = null;
         break;
+      case '/luu-kho/hang-trong-kho/hong-hoc-giam-cl':
+        typeBpxl = '4';
+        this.title = 'Danh sách hàng hỏng, giảm chất lượng do nguyên nhân bất khả kháng';
+        this.column = 'bảo hành';
+        break;
+      case '/luu-kho/hang-trong-kho/hong-hoc-bao-hanh':
+        typeBpxl = '3';
+        this.title = 'Danh sách hàng thuộc diện hỏng cần bảo hành';
+        this.column = 'bảo hành';
+        break;
+      case '/luu-kho/hang-trong-kho/hong-hoc-sua-chua':
+        typeBpxl = '5';
+        this.title = 'Danh sách hàng thuộc diện hỏng cần sửa chữa'
+        this.column = 'sửa chữa'
+        break;
       case '/luu-kho/hang-trong-kho/da-het-han':
         typeBpxl = '8';
-        this.title = 'đã hết hạn bảo hành, chưa hết hạn lưu kho'
+        this.title = 'Danh sách hàng đã hết hạn bảo hành, chưa hết hạn lưu kho'
+        this.column = 'đã hết hạn bảo hành, chưa hết hạn lưu kho'
         vaiTro = null;
         trangThai = null;
         break;
