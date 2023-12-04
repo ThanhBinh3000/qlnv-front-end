@@ -59,7 +59,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="goDetail(null,null,false)" *ngIf="!userService.isTongCuc()">
+        <button type="button" class="btn btn-main" (click)="goDetail(null,null,false)" *ngIf="!userService.isTongCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_HDBKPM_LT_HDPL_THEM')">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm hợp đồng</span>
         </button>
@@ -183,11 +183,11 @@
             <td>{{ data.tenTrangThaiHd ? data.tenTrangThaiHd : data?.hhQdPheduyetKhMttHdr?.tenTrangThaiHd }}</td>
             <td>{{ data.tenTrangThaiNh }}</td>
             <td class="text-left">
-              <a *ngIf="(data.trangThaiHd ? data.trangThaiHd : data?.hhQdPheduyetKhMttHdr?.trangThaiHd) != STATUS.DA_HOAN_THANH"
+              <a *ngIf="((data.trangThaiHd ? data.trangThaiHd : data?.hhQdPheduyetKhMttHdr?.trangThaiHd) != STATUS.DA_HOAN_THANH) && userService.isAccessPermisson('NHDTQG_PTMTT_HDBKPM_LT_HDPL_THEM')"
                 (click)="goDetail(data.id,null,true)">
                 <i class="fa fa-pencil" title="Sửa"></i>
               </a>
-              <a *ngIf="(data.trangThaiHd ? data.trangThaiHd : data?.hhQdPheduyetKhMttHdr?.trangThaiHd) != (STATUS.CHUA_CAP_NHAT || STATUS.DANG_CAP_NHAT)"
+              <a *ngIf="((data.trangThaiHd ? data.trangThaiHd : data?.hhQdPheduyetKhMttHdr?.trangThaiHd) != (STATUS.CHUA_CAP_NHAT || STATUS.DANG_CAP_NHAT)) && userService.isAccessPermisson('NHDTQG_PTMTT_HDBKPM_LT_HDPL_XEM')"
                 (click)="goDetail(data.id,null,true)">
                 <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
