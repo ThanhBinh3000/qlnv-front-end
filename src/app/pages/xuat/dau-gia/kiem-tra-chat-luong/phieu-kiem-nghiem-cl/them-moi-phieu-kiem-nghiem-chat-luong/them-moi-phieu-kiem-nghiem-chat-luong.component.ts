@@ -9,7 +9,6 @@ import {
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/bienBanLayMauXh.service';
 import {StorageService} from 'src/app/services/storage.service';
 import {Base2Component} from 'src/app/components/base2/base2.component';
-import {DanhMucTieuChuanService} from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 import {
   XhPhieuKnghiemCluongService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/xhPhieuKnghiemCluong.service';
@@ -383,6 +382,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       this.dataTable = res.data || [];
       this.dataTable.forEach(element => {
         element.edit = false;
+        element.danhGia = 'Đạt';
       });
     } catch (e) {
       console.error('Error: ', e);

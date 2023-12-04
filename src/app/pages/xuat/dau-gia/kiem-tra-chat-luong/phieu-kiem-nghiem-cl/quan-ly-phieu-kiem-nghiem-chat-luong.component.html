@@ -43,7 +43,7 @@
       </form>
       <div nz-col class="cangiua group-button-search">
         <div>
-          <button nz-button class="search__button--clear" (click)="clearForm()">
+          <button nz-button class="search__button--clear" (click)="clearForm(loaiVthh)">
             <i class="icon  htvbdh_nhap-lai1"></i>
             Xóa điều kiện
           </button>
@@ -59,7 +59,7 @@
       <div class="buttons">
         <button
           *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_KNCL_EXP') : userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_EXP')"
-          type="button" class="btn btn-sub" (click)="exportData('Danh-sach-de-xuat-ke-hoach-ban-dau-gia.xlsx')">
+          type="button" class="btn btn-sub" (click)="exportData('danh-sach-phieu-kiem-nghiem-chat-luong-hang-DTQG.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span> Xuất file </span>
         </button>

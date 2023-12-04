@@ -281,6 +281,7 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
     this.dataTable.forEach((item) => {
       item.children.forEach((child) => {
         child.thanhTien = child.soLuongDeXuat * child.donGiaTraGia
+        child.giaKhoiDiem = child.soLuongDeXuat * child.donGiaDeXuat
       })
       item.tongSoLuong = item.children.reduce((total, child) => total + child.soLuongDeXuat, 0);
       item.tongTienDatTruoc = item.children.reduce((total, child) => total + child.soTienDatTruoc, 0);
