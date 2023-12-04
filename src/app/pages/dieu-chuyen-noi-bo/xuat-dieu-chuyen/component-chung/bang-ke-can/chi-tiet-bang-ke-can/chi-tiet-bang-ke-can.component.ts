@@ -633,7 +633,7 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
 
   convertTienTobangChu(tien: number, donVi?: string) {
     if (tien > 0) {
-      let rs = convertTienTobangChuThapPhan(tien);
+      let rs = convertTienTobangChuThapPhan(Number(tien.toFixed(1)));
       return rs.charAt(0).toUpperCase() + rs.slice(1) + (donVi ? " " + donVi : "");
     }
   }
