@@ -208,7 +208,15 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
         if (res.msg == MESSAGE.SUCCESS) {
           this.formData.patchValue(res.data);
           const data = res.data;
-          this.formData.patchValue({ soBienBan: this.genSoBBHaoDoi(data.id), tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho }),
+          this.formData.patchValue({
+            soBienBan: this.genSoBBHaoDoi(data.id), tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
+            ngayKtNhap: data.thongTinHaoHut[0]?.ngayBatDau,
+            ngayKetThucXuatTt: data.thongTinHaoHut[0]?.ngayKetThuc,
+            soThangBaoQuanHang: data.thongTinHaoHut[0]?.soThangBaoQuan,
+            slBaoQuan: data.thongTinHaoHut[0]?.slBaoQuan,
+            dinhMucHaoHut: data.thongTinHaoHut[0]?.dinhMucHaoHut,
+            slHao: data.thongTinHaoHut[0]?.slHao
+          }),
             this.loadSoBbTinhKho()
         }
       } catch (e) {
@@ -619,6 +627,14 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
     body.thayDoiThuKho = this.thayDoiThuKho;
     body.type = this.type;
     body.loaiQding = this.loaiDc === "CUC" ? "XUAT" : undefined;
+    body.thongTinHaoHut = [{
+      ngayBatDau: this.formData.value.ngayKtNhap,
+      ngayKetThuc: this.formData.value.ngayKetThucXuatTt,
+      soThangBaoQuan: this.formData.value.soThangBaoQuanHang,
+      slBaoQuan: this.formData.value.slBaoQuan,
+      dinhMucHaoHut: this.formData.value.dinhMucHaoHut,
+      slHao: this.formData.value.slHao
+    }]
     let data = await this.createUpdate(body, null, isGuiDuyet);
     if (data) {
       this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soBienBan: data.soBienBan ? data.soBienBan : this.genSoBBHaoDoi(data.id) })
