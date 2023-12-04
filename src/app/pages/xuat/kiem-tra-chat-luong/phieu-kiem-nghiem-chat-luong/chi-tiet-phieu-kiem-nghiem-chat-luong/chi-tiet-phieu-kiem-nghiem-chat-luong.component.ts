@@ -491,7 +491,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
           });
         }
         if (this.loaiXuat === 'XC') {
-          this.listDiaDiemNhap = uniqBy(res.data.dataDtl, "maDvi").filter(f => f.tenNganKho && f.maDvi && f.maDvi.includes(this.userInfo.MA_DVI));;
+          this.listDiaDiemNhap = uniqBy(res.data.dataDtl, "maDvi").filter(f => f.tenNganKho && f.maDvi && f.maDvi.startWith(this.userInfo.MA_DVI));;
         }
       }
     } catch (e) {

@@ -36,7 +36,7 @@ import {
 } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuKiemNghiemChatLuong.service';
 import { PhieuXuatKhoService } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service";
 import { BangKeCanCtvtService } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BangKeCanCtvt.service";
-import { convertTienTobangChu } from 'src/app/shared/commonFunction';
+import { convertTienTobangChu, convertTienTobangChuThapPhan } from 'src/app/shared/commonFunction';
 import { HelperService } from 'src/app/services/helper.service';
 import { FileDinhKem } from 'src/app/models/CuuTro';
 
@@ -64,8 +64,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   styleStatus: string = 'du-thao-va-lanh-dao-duyet';
   tabSelected: string = 'thongTinChung';
   listNam: any[] = [];
-  listHangHoaAll: any[] = [];
-  listLoaiHangHoa: any[] = [];
   errorInputRequired: string = 'Dữ liệu không được để trống.';
   userInfo: UserLogin;
   expandSet = new Set<number>();
@@ -192,7 +190,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     this.userInfo = this.userService.getUserLogin();
     this.maDeXuat = '/' + this.userInfo.MA_TCKT;
     this.formData.controls.tongTrongLuongHang.valueChanges.subscribe((value) => {
-      const tongTrongLuongHangBc = value ? this.convertTienTobangChu(value) + (this.formData.value.donViTinh ? this.formData.value.donViTinh === "kg" ? " " + "kilôgam" : " " + this.formData.value.donViTinh : "") : "";
+      const tongTrongLuongHangBc = this.convertTienTobangChu(value, this.formData.value.donViTinh === "kg" ? "kilôgam" : this.formData.value.donViTinh);
       this.formData.patchValue({ tongTrongLuongHangBc });
     })
     // this.setTitle();
@@ -202,7 +200,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     try {
       await this.spinner.show();
       await Promise.all([
-        this.loadDsVthh(),
         this.loadDsDonVi(),
         this.loadDsQdGnv(),
       ])
@@ -229,16 +226,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
 
     }
   }
-
-  async loadDsVthh() {
-    let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listHangHoaAll = res.data;
-      this.listLoaiHangHoa = res.data?.filter((x) => x.ma.length == 4);
-    }
-  }
-
-
   async loadDsDonVi() {
     let body = {
       trangThai: "01",
@@ -729,7 +716,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
           donViTinh: data.donViTinh,
           // bangKeDtl: this.formData.value.bangKeDtl
         });
-        this.formData.patchValue({ donViTinh: this.listHangHoaAll.find(s => s.ma == data.loaiVthh)?.maDviTinh })
       }
     });
   }
@@ -767,12 +753,11 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     });
   }
 
-  convertTienTobangChu(tien: number) {
-    if (Math.floor(tien) === tien) {
-      let rs = convertTienTobangChu(tien);
-      return rs.charAt(0).toUpperCase() + rs.slice(1);
+  convertTienTobangChu(tien: number, donVi?: string) {
+    if (tien > 0) {
+      let rs = convertTienTobangChuThapPhan(tien);
+      return rs.charAt(0).toUpperCase() + rs.slice(1) + (donVi ? " " + donVi : "");
     }
-    return '';
   }
   showAction() {
     return !this.isView
