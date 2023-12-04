@@ -171,13 +171,13 @@ export class ThongTinHopDongSctxComponent extends Base2Component implements OnIn
           "idDuAn": this.itemQdPdKhLcnt.idDuAn,
           "idQdPdKtkt": this.itemQdPdKtkt.id,
           "idQdPdKhLcnt": this.itemQdPdKhLcnt.id,
-          "loai": '00'
+          "loai": '01'
         }
         let res = await this.hopdongService.detailQdPdKhLcnt(body);
         if (res.msg == MESSAGE.SUCCESS) {
-          if (res.data) {(this.itemQdPdKhLcnt, 'this item')
+          if (res.data) {
             this.helperService.bidingDataInFormGroup(this.formData, this.itemQdPdKhLcnt);
-            this.listHopDong = this.itemQdPdKhLcnt.listKtTdscQuyetDinhPdKhlcntDsnt;
+            this.listHopDong = this.itemQdPdKhLcnt.listKtTdscQuyetDinhPdKhlcntCvKh;
             if (this.listHopDong && this.listHopDong.length > 0) {
               this.selectRow(this.listHopDong[0]);
             }
@@ -228,10 +228,7 @@ export class ThongTinHopDongSctxComponent extends Base2Component implements OnIn
     this.openPopThemMoiHd = true;
   }
 
-  delete(item
-           :
-           any
-  ) {
+  delete(item: any) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
