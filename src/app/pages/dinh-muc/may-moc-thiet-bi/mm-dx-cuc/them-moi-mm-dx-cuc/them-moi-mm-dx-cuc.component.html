@@ -130,7 +130,7 @@
       </div>
     </form>
   </nz-card>
-  <nz-collapse nzAccordion>
+  <nz-collapse nzAccordion *ngIf="isTongHop">
     <nz-collapse-panel [nzHeader]="'CHI TIẾT ĐỀ XUẤT'" [nzActive]="true">
       <nz-table class="wrap mg-t-10 pd-10"  [nzData]="dataTable" [nzFrontPagination]="false" *ngIf="isTongHop"
                 [nzShowPagination]="false" nzBordered>
