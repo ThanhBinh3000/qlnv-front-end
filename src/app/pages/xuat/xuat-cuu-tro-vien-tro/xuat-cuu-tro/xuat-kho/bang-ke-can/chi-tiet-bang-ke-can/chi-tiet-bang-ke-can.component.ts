@@ -189,7 +189,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     );
     this.userInfo = this.userService.getUserLogin();
     this.maDeXuat = '/' + this.userInfo.MA_TCKT;
-    this.formData.controls.tongTrongLuongHang.valueChanges.subscribe((value) => {
+    this.formData.get("tongTrongLuongHang").valueChanges.subscribe((value) => {
       const tongTrongLuongHangBc = this.convertTienTobangChu(value, this.formData.value.donViTinh === "kg" ? "kilôgam" : this.formData.value.donViTinh);
       this.formData.patchValue({ tongTrongLuongHangBc });
     })
@@ -755,7 +755,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
 
   convertTienTobangChu(tien: number, donVi?: string) {
     if (tien > 0) {
-      let rs = convertTienTobangChuThapPhan(tien);
+      let rs = convertTienTobangChuThapPhan(Number(tien.toFixed(1)));
       return rs.charAt(0).toUpperCase() + rs.slice(1) + (donVi ? " " + donVi : "");
     }
   }
