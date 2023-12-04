@@ -213,7 +213,7 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
             ngayKtNhap: data.thongTinHaoHut[0]?.ngayBatDau,
             ngayKetThucXuatTt: data.thongTinHaoHut[0]?.ngayKetThuc,
             soThangBaoQuanHang: data.thongTinHaoHut[0]?.soThangBaoQuan,
-            slBaoQuan: data.thongTinHaoHut[0]?.slBaoQuan,
+            tongSlNhap: data.thongTinHaoHut[0]?.slBaoQuan,
             dinhMucHaoHut: data.thongTinHaoHut[0]?.dinhMucHaoHut,
             slHao: data.thongTinHaoHut[0]?.slHao
           }),
@@ -631,7 +631,7 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
       ngayBatDau: this.formData.value.ngayKtNhap,
       ngayKetThuc: this.formData.value.ngayKetThucXuatTt,
       soThangBaoQuan: this.formData.value.soThangBaoQuanHang,
-      slBaoQuan: this.formData.value.slBaoQuan,
+      slBaoQuan: this.formData.value.tongSlNhap,
       dinhMucHaoHut: this.formData.value.dinhMucHaoHut,
       slHao: this.formData.value.slHao
     }]
