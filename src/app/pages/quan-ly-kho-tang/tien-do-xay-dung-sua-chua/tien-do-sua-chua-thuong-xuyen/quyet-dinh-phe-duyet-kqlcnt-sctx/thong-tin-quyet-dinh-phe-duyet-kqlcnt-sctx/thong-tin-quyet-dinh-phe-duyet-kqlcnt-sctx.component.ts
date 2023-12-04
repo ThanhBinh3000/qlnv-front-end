@@ -17,7 +17,7 @@ import {
 import {
   QdPheDuyetKhlcntTdsclService
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qd-phe-duyet-khlcnt-tdscl.service";
-
+import { cloneDeep } from 'lodash';
 @Component({
   selector: 'app-thong-tin-quyet-dinh-phe-duyet-kqlcnt-sctx',
   templateUrl: './thong-tin-quyet-dinh-phe-duyet-kqlcnt-sctx.component.html',
@@ -184,10 +184,12 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSctxComponent extends Base2Component
     this.formData.value.soQd = this.formData.value.soQd + this.maQd;
     if (this.listGoiThau && this.listGoiThau.length > 0) {
       this.formData.value.listKtTdscQuyetDinhPdKqlcntDsgt = this.listGoiThau;
-      this.formData.value.listKtTdscQuyetDinhPdKqlcntDsgt.forEach(item => {
-        item.idGoiThau = item.id;
-        item.id = null
-      })
+      if (!this.formData.value.id) {
+        this.formData.value.listKtTdscQuyetDinhPdKqlcntDsgt.forEach(item => {
+          item.idGoiThau = cloneDeep(item.id);
+          item.id = null
+        })
+      }
     } else {
       this.notification.success(MESSAGE.ERROR, "Kết quả lựa chọn nhà thầu không được để trống.");
       return;

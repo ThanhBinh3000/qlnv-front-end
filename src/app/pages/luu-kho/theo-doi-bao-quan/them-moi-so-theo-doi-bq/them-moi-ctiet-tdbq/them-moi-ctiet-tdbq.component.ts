@@ -195,8 +195,6 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
       return false
     }
   }
-
-  protected readonly AMOUNT = AMOUNT;
 }
 
 export class ChiSoChatLuong {

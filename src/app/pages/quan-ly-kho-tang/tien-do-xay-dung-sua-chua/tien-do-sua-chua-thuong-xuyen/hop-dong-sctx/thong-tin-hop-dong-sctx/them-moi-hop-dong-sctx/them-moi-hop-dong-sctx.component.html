@@ -13,7 +13,7 @@
       <button *ngIf="idInput && formData.value.trangThai == STATUS.DU_THAO " type="button" (click)="delete(formData.value)"
               class="btn btn-sub btn-xoa">
         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-        <span>Xóa {{idInput}}</span>
+        <span>Xóa</span>
       </button>
       <button class="btn btn-sub xanh-nhat ml-2" (click)="save(true)"
               *ngIf="(formData.value.trangThai == STATUS.DU_THAO) ">
@@ -184,7 +184,7 @@
                   <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Địa chỉ
                   </nz-form-label>
                   <input [readonly]="true" nz-input
-                         formControlName="cdtDiaChi" readonly="true"/>
+                         formControlName="cdtDiaChi" [readonly]="isViewDetail"/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -289,8 +289,8 @@
                 <nz-form-control [nzErrorTip]="error">
                   <nz-form-label [nzNoColon]="true" class="label-color-kh"> Địa chỉ
                   </nz-form-label>
-                  <input [readonly]="true" nz-input
-                         formControlName="dvccDiaChi" readonly="true"/>
+                  <input [readonly]="isViewDetail" nz-input
+                         formControlName="dvccDiaChi"/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -299,7 +299,7 @@
                 <nz-form-control [nzErrorTip]="error">
                   <nz-form-label [nzNoColon]="true" class="label-color-kh"> Mã số thuế
                   </nz-form-label>
-                  <input [readonly]="true" nz-input
+                  <input [readonly]="true" nz-input [readonly]="isViewDetail"
                          formControlName="dvccMst"/>
                 </nz-form-control>
               </nz-form-item>
