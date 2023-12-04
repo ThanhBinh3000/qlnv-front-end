@@ -86,7 +86,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         maDvi: [''],
         loaiNhapXuat: [''],
         kieuNhapXuat: [''],
-        mucDichXuat: [''],
+        mucDichXuat: ['', [Validators.required]],
         soDx: [''],
         trichYeu: [''],
         loaiVthh: [''],

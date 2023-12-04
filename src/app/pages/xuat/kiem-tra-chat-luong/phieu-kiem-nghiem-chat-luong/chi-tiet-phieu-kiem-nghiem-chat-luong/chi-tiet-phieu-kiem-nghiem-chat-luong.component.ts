@@ -378,7 +378,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       }
       if (dataBBLM.msg === MESSAGE.SUCCESS) {
         const listBienBanLayMau = Array.isArray(dataBBLM.data?.content) ? dataBBLM.data.content : []
-        this.dsBbLayMau = listBienBanLayMau.filter(item => !listPhieuKnCl.find(f => f.soBbLayMau === item) && item.soQdGnv === this.formData.value.soQdGnv);
+        this.dsBbLayMau = listBienBanLayMau.filter(item => !listPhieuKnCl.find(f => f.soBbLayMau === item.soBbQd) && item.soQdGnv === this.formData.value.soQdGnv);
       }
     } catch (error) {
       console.log("error", error)
