@@ -69,6 +69,15 @@ export class TableDanhMucBpxlComponent extends Base3Component implements OnInit 
     await this.spinner.hide();
   }
 
+  clearForm(){
+    this.formData.reset();
+    this.formData.patchValue({
+      vaiTro : 'CBTHUKHO',
+      trangThai : this.STATUS.DA_HOAN_THANH
+    })
+    this.bindingParam();
+  }
+
   async bindingParam(){
     let trangThai = ''
     let typeBpxl = ''
