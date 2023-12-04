@@ -369,8 +369,34 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     });
   }
   async loadDsBbLayMau() {
-    if (!this.formData.value.soQdGnv && ['XC', 'CTVT'].includes(this.loaiXuat)) return;
-    await this.inputServiceBbLayMau.search({
+    try {
+      if (!this.formData.value.soQdGnv && ['XC', 'CTVT'].includes(this.loaiXuat)) return;
+      const [dataBBLM, dataPKNCL] = await Promise.all([this.getDSBienBanLayMau(), this.getDSPhieuKNCluong()]);
+      let listPhieuKnCl = [];
+      if (dataPKNCL.msg === MESSAGE.SUCCESS) {
+        listPhieuKnCl = Array.isArray(dataPKNCL.data?.content) ? dataPKNCL.data.content : []
+      }
+      if (dataBBLM.msg === MESSAGE.SUCCESS) {
+        const listBienBanLayMau = Array.isArray(dataBBLM.data?.content) ? dataBBLM.data.content : []
+        this.dsBbLayMau = listBienBanLayMau.filter(item => !listPhieuKnCl.find(f => f.soBbLayMau === item) && item.soQdGnv === this.formData.value.soQdGnv);
+      }
+    } catch (error) {
+      console.log("error", error)
+    }
+  }
+  async getDSPhieuKNCluong() {
+    return await this.service.search({
+      type: this.loaiXuat,
+      soQdGiaoNvNh: this.formData.value.soQdGnv,
+      trangThai: STATUS.DA_DUYET_LDC,
+      paggingReq: {
+        limit: this.globals.prop.MAX_INTERGER,
+        page: 0,
+      },
+    })
+  }
+  async getDSBienBanLayMau() {
+    return await this.inputServiceBbLayMau.search({
       type: this.loaiXuat,
       soQdGiaoNvNh: this.formData.value.soQdGnv,
       trangThai: STATUS.DA_DUYET_LDCC,
@@ -378,17 +404,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         limit: this.globals.prop.MAX_INTERGER,
         page: 0,
       },
-    }).then(res => {
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data) {
-          this.dsBbLayMau = Array.isArray(res.data.content) ? res.data.content.filter(f => f.soQdGnv === this.formData.value.soQdGnv) : []; //TODO: Filter frontend=>filter BE
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-    }).catch(err => {
-      this.notification.error(MESSAGE.ERROR, err.msg);
-    });
+    })
   }
 
   openDialogSoQdGnv() {
@@ -491,7 +507,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
           });
         }
         if (this.loaiXuat === 'XC') {
-          this.listDiaDiemNhap = uniqBy(res.data.dataDtl, "maDvi").filter(f => f.tenNganKho && f.maDvi && f.maDvi.startWith(this.userInfo.MA_DVI));;
+          this.listDiaDiemNhap = uniqBy(res.data.dataDtl, "maDvi").filter(f => f.tenNganKho && f.maDvi && f.maDvi.startsWith(this.userInfo.MA_DVI));;
         }
       }
     } catch (e) {
