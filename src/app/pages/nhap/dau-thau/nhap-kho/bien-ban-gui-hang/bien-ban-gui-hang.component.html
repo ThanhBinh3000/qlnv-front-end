@@ -14,16 +14,16 @@
             <input [(ngModel)]="searchFilter.soQuyetDinh" nz-input nzSize="small" placeholder="Nhập số QĐ giao NV NH" appNumberOnly />
           </nz-input-group>
         </div>
+<!--        <div nz-col nzSpan="4">-->
+<!--          <label class="search__label">Số phiếu tạm giao, nhận hàng</label>-->
+<!--          <input class="search__input" placeholder="Nhập Số phiếu tạm giao, nhận hàng" nz-input [(ngModel)]="searchFilter.soPhieuNkTamGui" />-->
+<!--        </div>-->
         <div nz-col nzSpan="4">
-          <label class="search__label">Số phiếu NK tạm gửi</label>
-          <input class="search__input" placeholder="Nhập Số phiếu NK tạm gửi" nz-input [(ngModel)]="searchFilter.soPhieuNkTamGui" />
+          <label class="search__label">Số BB tạm giao, nhận hàng</label>
+          <input class="search__input" placeholder="Nhập Số BB tạm giao, nhận hàng" nz-input [(ngModel)]="searchFilter.soBienBan" />
         </div>
         <div nz-col nzSpan="4">
-          <label class="search__label">Số BB gửi hàng</label>
-          <input class="search__input" placeholder="Nhập Số BB gửi hàng" nz-input [(ngModel)]="searchFilter.soBienBan" />
-        </div>
-        <div nz-col nzSpan="4">
-          <label class="search__label">Ngày nhập kho tạm gửi</label>
+          <label class="search__label">Ngày lập BB tạm giao, nhận hàng</label>
           <div nz-row [nzGutter]="24">
             <div nz-col nzSpan="12" class="cus-start-date">
               <nz-date-picker [nzDisabledDate]="disabledStartDate" nzFormat="dd/MM/yyyy" [(ngModel)]="tuNgayNk"
@@ -50,7 +50,7 @@
     </nz-card>
 
     <div class="group-button">
-      <h3>DANH SÁCH BIÊN BẢN GỬI HÀNG</h3>
+      <h3 style="text-transform: uppercase">DANH SÁCH BIÊN BẢN tạm giao, nhận hàng</h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()"
           *ngIf="userService.isChiCuc()&& userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBGH_XOA')">
@@ -77,14 +77,14 @@
           <tr>
             <th width="60px">STT</th>
             <th width="30px"></th>
-            <th>Số QĐ giao nhiệm vụ</th>
-            <th>Năm kế hoạch</th>
-            <th>Thời gian NH trước ngày</th>
+            <th>Số QĐ giao NVNH</th>
+            <th>Năm KH</th>
+            <th>Thời gian NH</th>
             <th>Điểm kho</th>
             <th>Lô kho</th>
-            <th>Số BB gửi hàng </th>
-            <th>Ngày NK tạm gửi</th>
-            <th>Số phiếu NK tạm gửi</th>
+            <th>Số BB tạm giao, nhận hàng </th>
+            <th>Ngày tạm giao, nhận hàng</th>
+            <th>Số phiếu tạm giao, nhận hàng</th>
             <th>Số BB lấy mẫu / BG mẫu</th>
             <th>Trạng thái</th>
             <th>Hành động</th>

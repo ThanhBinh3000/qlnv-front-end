@@ -612,7 +612,7 @@
                 </nz-input-number>
               </td>
               <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow.diaChi"/></td>
-              <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow.sdt"/></td>
+              <td><input nz-input pattern="[0-9]*" [readonly]="isView" [(ngModel)]="itemRow.sdt"/></td>
               <td *ngIf="!isShowFromKq && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isView">
                 <a (click)="addRow()">
                   <i class="fa fa-plus" title="Thêm bản ghi"></i>
@@ -635,7 +635,7 @@
                   <a (click)="startEdit(i)">
                     <i class=" fa fa-pencil" title="Sửa bản ghi"></i>
                   </a>
-                  <a (click)="deleteRow(data.id)">
+                  <a (click)="deleteRow(i, data)">
                     <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>

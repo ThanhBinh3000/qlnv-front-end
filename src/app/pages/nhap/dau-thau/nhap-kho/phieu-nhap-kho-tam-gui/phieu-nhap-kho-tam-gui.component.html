@@ -15,11 +15,11 @@
           </nz-input-group>
         </div>
         <div nz-col nzSpan="4">
-          <label class="search__label">Số phiếu NK tạm gửi</label>
+          <label class="search__label">Số phiếu tạm giao, nhận hàng</label>
           <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.soPhieu" />
         </div>
         <div nz-col nzSpan="6">
-          <label class="search__label">Ngày nhập kho tạm gửi</label>
+          <label class="search__label">Ngày tạm giao, nhận hàng</label>
           <div nz-row [nzGutter]="24">
             <div nz-col nzSpan="12" class="cus-start-date">
               <nz-date-picker [nzDisabledDate]="disabledTuNgayNk" nzFormat="dd/MM/yyyy"
@@ -52,7 +52,7 @@
     </nz-card>
 
     <div class="group-button">
-      <h3>Danh sách phiếu nhập kho tạm gửi </h3>
+      <h3 style="text-transform: uppercase">Danh sách phiếu tạm giao, nhận hàng chờ kết quả ktcl tại cơ quan chuyên môn </h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()"
           *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_XOA')">
@@ -86,9 +86,9 @@
             <th>Nhà kho</th>
             <th>Ngăn kho</th>
             <th>Lô kho</th>
-            <th>Số phiếu NK tạm gửi</th>
-            <th>Ngày NK tạm gửi </th>
-            <th>Số BB gửi hàng</th>
+            <th>Số phiếu tạm giao, nhận hàng</th>
+            <th>Ngày tạm giao, nhận hàng </th>
+            <th>Số BB tạm giao, nhận hàng</th>
             <th>Số BB lấy mẫu/BG mẫu</th>
             <th>Trạng thái</th>
             <th>Hành động</th>
