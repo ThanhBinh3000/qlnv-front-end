@@ -186,7 +186,7 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
         tongMucDtGoiTrung: [''],
         soGthauTrung: [''],
         tenLoaiVthh: data.tenLoaiVthh,
-        vat: data.vat + '%',
+        vat: data.dxKhlcntHdr?.thueVat + '%',
         tgianThien: data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.tgianThien + " ngày" : data.tgianThien + " ngày",
         tenLoaiHinhNx: data.dxKhlcntHdr?.tenLoaiHinhNx,
         tenKieuNx: data.dxKhlcntHdr?.tenKieuNx,
@@ -232,16 +232,16 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
     if (this.isDieuChinh) {
       type = "DC"
     }
-    this.formData.patchValue({
-      tgianTrinhKqTcg: dataGoiThau.tgianTrinhKqTcg,
-      tgianTrinhTtd: dataGoiThau.tgianTrinhTtd,
-      ghiChuTtdt: dataGoiThau.ghiChuTtdt,
-    })
-    this.fileDinhKems = dataGoiThau.fileDinhKems
     let res = await this.thongTinDauThauService.getDetailThongTinVt(this.idGoiThau, this.loaiVthh, type);
-    this.itemRow.soLuong = dataGoiThau.soLuong
+    // this.itemRow.soLuong = dataGoiThau.soLuong
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listNthauNopHs = res.data;
+      this.formData.patchValue({
+        tgianTrinhKqTcg: res.data.tgianTrinhKqTcg,
+        tgianTrinhTtd: res.data.tgianTrinhTtd,
+        ghiChuTtdt: res.data.ghiChuTtdt,
+      })
+      this.fileDinhKems = res.data.fileDinhKems
+      this.listNthauNopHs = res.data.dsNhaThauDthau;
       this.listNthauNopHs.forEach(item => {
         item.edit = false;
       })
@@ -251,7 +251,7 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
     await this.spinner.hide();
   }
 
-  deleteRow(i) {
+  deleteRow(i, data) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -260,8 +260,22 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
       nzCancelText: 'Không',
       nzOkDanger: true,
       nzWidth: 310,
-      nzOnOk: () => {
-        this.listNthauNopHs.splice(i, 1)
+      nzOnOk: async () => {
+        await this.spinner.show();
+        try {
+          let res = await this.thongTinDauThauService.delete({id: data.id});
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.listNthauNopHs.splice(i, 1)
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          await this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          await this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
       },
     });
   }
@@ -296,6 +310,7 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
       let res = await this.thongTinDauThauService.create(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        this.listNthauNopHs = res.data
         // await this.detailVatTu()
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
