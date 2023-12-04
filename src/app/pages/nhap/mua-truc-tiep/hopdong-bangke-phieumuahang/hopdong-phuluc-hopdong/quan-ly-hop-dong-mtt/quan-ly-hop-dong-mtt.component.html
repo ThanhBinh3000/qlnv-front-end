@@ -5,10 +5,10 @@
                 <i class="fa fa-arrow-left"></i>
                 <span>Quay lại</span>
             </button>
-          <button *ngIf="!userService.isTongCuc() && (formData.value.idQdKq || formData.value.idQdGiaoNvNh)" type="button" class="btn btn-sub xanh-nhat" (click)="preview(previewName)">
-            <i class=" icon htvbdh_tcdt_print"></i>
-            <span>In/xem trước</span>
-          </button>
+<!--          <button *ngIf="!userService.isTongCuc() && (formData.value.idQdKq || formData.value.idQdGiaoNvNh)" type="button" class="btn btn-sub xanh-nhat" (click)="preview(previewName)">-->
+<!--            <i class=" icon htvbdh_tcdt_print"></i>-->
+<!--            <span>In/xem trước</span>-->
+<!--          </button>-->
             <button *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH && (userService.isCuc() || userService.isChiCuc()) " type="button"
                 class="btn btn-sub xanh-nhat" (click)="pheDuyet()">
                 <i class="icon htvbdh_checkfile2"></i>
@@ -316,6 +316,10 @@
                 <td nzLeft>{{data.soQdGiaoNvNh}}</td> <!-- so qd giao nv nhap hang -->
                 <td nzLeft>{{data.tenTrangThaiNh}}</td>
                 <td class="text-center">
+                  <a *ngIf="data?.id > 0"
+                     (click)="preview(data.id)">
+                    <i class="icon htvbdh_tcdt_tuchoi" title="Xem trước"></i>
+                  </a>
                   <a *ngIf="data.trangThai != STATUS.DA_KY"
                      (click)="redirectHopDong(true,data.id) ">
                     <i class="fa fa-pencil" title="Sửa"></i>
@@ -348,7 +352,7 @@
         (showListEvent)="redirectHopDong(false,idHopDong)">
     </app-themmoi-hopdong-phuluc>
 </ng-template>
-<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="PHIẾU KIỂM TRA CHẤT LƯỢNG" nzWidth="100%" (nzOnCancel)="closeDlg()">
+<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="HỢP ĐỒNG" nzWidth="100%" (nzOnCancel)="closeDlg()">
   <div *nzModalContent class="modal__content">
     <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
   </div>

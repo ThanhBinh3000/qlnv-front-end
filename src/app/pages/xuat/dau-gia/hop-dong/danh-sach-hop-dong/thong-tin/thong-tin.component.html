@@ -284,7 +284,8 @@
                     <nz-form-item>
                       <nz-form-label [nzNoColon]="true"> Giá trị</nz-form-label>
                       <nz-form-control nz-col>
-                        <input nz-input formControlName="giaTri" [readonly]="isView"/>
+                        <input class="money-input" currencyMask [options]="amount" [min]="0"
+                               formControlName="giaTri" [readonly]="isView"/>
                       </nz-form-control>
                     </nz-form-item>
                   </div>

@@ -106,7 +106,7 @@
               <nz-form-label nzRequired [nzNoColon]="true">Tên mặt hàng
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select [nzDisabled]="false" formControlName="matHang" nzAllowClear
+                <nz-select [nzDisabled]="false" formControlName="matHang" nzAllowClear nzShowSearch
                            (ngModelChange)="onChangeTenMH($event)">
                   <nz-option *ngFor="let p of listMatHang" [nzValue]="p.maCcdc" [nzLabel]="p.tenCcdc"></nz-option>
                 </nz-select>

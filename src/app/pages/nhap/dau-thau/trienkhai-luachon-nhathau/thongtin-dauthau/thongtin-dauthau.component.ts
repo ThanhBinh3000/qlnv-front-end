@@ -165,7 +165,7 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
           limit: this.pageSize,
           page: this.page - 1,
         },
-        maDvi: this.userService.isTongCuc() ? '' : this.userInfo.MA_DVI
+        // maDvi: this.userService.isTongCuc() ? '' : this.userInfo.MA_DVI
       };
     } else {
       body = {

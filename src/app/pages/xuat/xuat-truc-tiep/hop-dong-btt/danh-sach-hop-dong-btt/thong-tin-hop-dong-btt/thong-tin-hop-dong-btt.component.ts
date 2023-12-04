@@ -29,6 +29,7 @@ import {
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service";
 import _ from 'lodash';
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import {AMOUNT_ONE_DECIMAL} from "../../../../../../Utility/utils";
 
 @Component({
   selector: 'app-thong-tin-hop-dong-btt',
@@ -45,6 +46,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
+  amount = {...AMOUNT_ONE_DECIMAL};
   listLoaiHopDong: any[] = [];
   dataTablePhuLuc: any[] = [];
   maHopDongSuffix: string = '';
@@ -162,6 +164,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         this.loadDataComboBox(),
         this.loadDsVthh()
       ]);
+      this.amount.align = "left";
     } catch (e) {
       console.error('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -430,24 +433,13 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       const dataGroup = _.chain(element.children).groupBy('maDviTsan').map((value, key) => ({
         maDviTsan: key,
         children: value,
-      })).filter((x) => x.maDviTsan).map((childs) => ({
+      })).filter((x) => x.maDviTsan).map((child) => ({
         maDvi: element.maDvi,
         tenDvi: element.tenDvi,
         diaChi: element.diaChi,
-        ...childs
+        ...child
       })).value();
-
       this.listDviTsan.push(...dataGroup);
-      // } else {
-      //   const listDanhSachHopDong = this.loadDanhSachHdong.filter(item => item.idQdKq === this.formData.value.idQdKq);
-      //   const filteredDataGroup = dataGroup.filter(item => {
-      //     return !listDanhSachHopDong.some(grandchild =>
-      //       grandchild.maDviTsan.split(',').includes(item.maDviTsan) &&
-      //       item.children.some(child => child.children.filter(s => s.tochucCanhan === grandchild.tenBenMua))
-      //     );
-      //   });
-      //   this.listDviTsan.push(...filteredDataGroup);
-      // }
     })
   }
 
@@ -662,7 +654,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   }
 
   setListMaDviTsanChiCuc(inputTable) {
-    console.log(inputTable, 999)
     this.listDviTsan = [];
     inputTable.forEach((item) => {
       let dataGroup = _.chain(item.children).groupBy('maDviTsan').map((value, key) => ({

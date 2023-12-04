@@ -436,12 +436,11 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   }
 
   async onChangeSlChenhLech(event) {
-    if (!event) return;
     const slConLai = this.formData.value.slConLai || 0;
     const slChenhLech = event - slConLai
     this.formData.patchValue({
-      slThua: slChenhLech > 0 ? slChenhLech : 0,
-      slThieu: slChenhLech < 0 ? slChenhLech * (-1) : 0
+      slThua: slChenhLech >= 0 ? slChenhLech : 0,
+      slThieu: slChenhLech <= 0 ? slChenhLech * (-1) : 0
     });
   }
 
@@ -510,7 +509,6 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       "slThucTe",
       "nguyenNhan",
       "kienNghi",
-      "ghiChu",
     ];
     requiredFields.forEach(fieldName => {
       this.formData.controls[fieldName].setValidators([Validators.required]);

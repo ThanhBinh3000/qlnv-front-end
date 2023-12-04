@@ -79,12 +79,12 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
         let body = {maDvi: this.userInfo.DON_VI.maDvi, maVthh: "0101"};
         let res = await this.mangLuoiKhoService.slTon(body);
         if (res.msg === MESSAGE.SUCCESS) {
-          this.formData.patchValue({slGaoDangBaoQuan: res.data});
+          this.formData.patchValue({slGaoDangBaoQuan: (res.data/1000)});
         }
         body = {maDvi: this.userInfo.DON_VI.maDvi, maVthh: "0102"};
         res = await this.mangLuoiKhoService.slTon(body);
         if (res.msg === MESSAGE.SUCCESS) {
-          this.formData.patchValue({slThocDangBaoQuan: res.data});
+          this.formData.patchValue({slThocDangBaoQuan: (res.data/1000)});
         }
         this.changeNamKh(this.formData.value.namKeHoach)
       }

@@ -1,10 +1,15 @@
-<nz-affix [nzOffsetTop]="98" class="level2">
-  <ul nz-menu nzMode="horizontal" id="mainTongCuc">
-    <li nz-menu-item nzSelected (click)="selectTab(0)">
+<nz-affix [nzOffsetTop]="98" class="level2-border">
+  <ul nz-menu nzMode="horizontal">
+    <li [nzSelected]="tabSelected==0" nz-menu-item (click)="selectTab(0)"
+        *ngIf="inputLoaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_TBBTT') : userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_TBBTT')">
       Chào giá/Ủy quyền/Bán Lẻ
     </li>
   </ul>
 </nz-affix>
-<ng-container *ngIf="tabSelected == 0">
-  <app-thong-tin-ban-truc-tiep [loaiVthh]="inputLoaiVthh"></app-thong-tin-ban-truc-tiep>
-</ng-container>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 0">
+      <app-thong-tin-ban-truc-tiep [loaiVthh]="inputLoaiVthh"></app-thong-tin-ban-truc-tiep>
+    </ng-container>
+  </div>
+</div>

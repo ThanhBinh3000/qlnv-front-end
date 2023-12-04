@@ -62,8 +62,6 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
       tenCloaiVthh: null,
       tgianGiaoNhan: null,
       trichYeu: null,
-      soTinhKho: null,
-      bienBanHaoDoi: null,
       tenTrangThai: null,
       tenTrangThaiXh: null,
     };

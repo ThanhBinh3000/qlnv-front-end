@@ -33,6 +33,8 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
   loadDanhSachHdongDaKy: any[] = [];
   idQdNv: number = 0;
   isViewQdNv: boolean = false;
+  idHopDong: number;
+  isHopDong: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -199,14 +201,13 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     this.loadDanhSachHdongDaKy = data;
   }
 
-  idHopDong: number;
-
   async selectRow(data: any) {
     if (!data.selected) {
       this.dataTable.forEach(item => item.selected = false)
       data.selected = true;
       const findndex = this.dataTable.findIndex(child => child.id == data.id);
       this.idHopDong = this.dataTable[findndex].id
+      this.isHopDong = true;
     }
   }
 
@@ -328,6 +329,20 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
             id: data.id
           };
           await this.hopDongBttService.delete(body);
+          if (this.idInput > 0) {
+            if (this.userService.isChiCuc()) {
+              const res = await this.chaoGiaMuaLeUyQuyenService.getDetail(this.idInput);
+              this.dataTableAll = res.data.listHopDongBtt.filter(item => item.maDvi === this.userInfo.MA_DVI);
+            } else {
+              const res = await this.qdPdKetQuaBttService.getDetail(this.idInput);
+              this.dataTableAll = res.data.listHopDongBtt.filter(item => item.maDvi === this.userInfo.MA_DVI);
+            }
+            if (this.dataTableAll && this.dataTableAll.length > 0) {
+              this.isHopDong = true;
+            } else {
+              this.isHopDong = false;
+            }
+          }
           await this.getDetail();
         } catch (e) {
           console.log('error: ', e);

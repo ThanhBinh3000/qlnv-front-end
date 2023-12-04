@@ -17,6 +17,7 @@ import dayjs from "dayjs";
 import {QuyetDinhMuaSamService} from "../../../../../services/quyet-dinh-mua-sam.service";
 import {DialogMmMuaSamComponent} from "../../../../../components/dialog/dialog-mm-mua-sam/dialog-mm-mua-sam.component";
 import {MmThongTinPhanBoCtComponent} from "./mm-thong-tin-phan-bo-ct/mm-thong-tin-phan-bo-ct.component";
+import { STATUS } from '../../../../../constants/status';
 
   @Component({
     selector: 'app-mm-them-moi-tt-phan-bo',
@@ -28,6 +29,7 @@ import {MmThongTinPhanBoCtComponent} from "./mm-thong-tin-phan-bo-ct/mm-thong-ti
   @Input() isView: boolean;
   listTongHop: any[] = [];
   maQd: string
+  listDxChiCuc: any[];
   rowItem: MmThongTinNcChiCuc = new MmThongTinNcChiCuc();
   dataEdit: { [key: string]: { edit: boolean; data: MmThongTinNcChiCuc } } = {};
   expandSet = new Set<number>();
@@ -51,8 +53,8 @@ import {MmThongTinPhanBoCtComponent} from "./mm-thong-tin-phan-bo-ct/mm-thong-ti
       soQdMs: [null, Validators.required],
       trichYeu: [null, Validators.required],
       ngayKy: [null, Validators.required],
-      trangThai: ['00'],
-      tenTrangThai: ['Dự thảo'],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
+      tenTrangThai: ['Đang nhập dữ liệu'],
       fileDinhKems: [null],
       lyDoTuChoi: [null],
       listQlDinhMucQdMuaSamDtlReq: [null],
@@ -108,6 +110,16 @@ import {MmThongTinPhanBoCtComponent} from "./mm-thong-tin-phan-bo-ct/mm-thong-ti
       this.spinner.hide();
     }
   }
+
+    async loadListDxCuaChiCuc(qdMuaSam) {
+      if (qdMuaSam) {
+        this.listDxChiCuc = [];
+        let rs = await this.dxChiCucService.getListDxChiCucTheoIdTongHopTC(qdMuaSam.maTh);
+        if (rs.msg == MESSAGE.SUCCESS) {
+          this.listDxChiCuc = rs.data;
+        }
+      }
+    }
 
   async save() {
     this.helperService.markFormGroupTouched(this.formData);
@@ -269,6 +281,7 @@ import {MmThongTinPhanBoCtComponent} from "./mm-thong-tin-phan-bo-ct/mm-thong-ti
           this.formData.patchValue({
             soQdMs : data.soQd
           })
+          this.loadListDxCuaChiCuc(data);
           await this.changSoTh(data.id);
         }
       })
@@ -311,6 +324,7 @@ import {MmThongTinPhanBoCtComponent} from "./mm-thong-tin-phan-bo-ct/mm-thong-ti
           nzComponentParams: {
             dataInput : data,
             type : type,
+            listDxChiCuc: this.listDxChiCuc,
             sum : this.sumSlPb(list)
           },
         });

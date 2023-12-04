@@ -50,6 +50,8 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
       klLtBaoQuan: [null],
       klLtNhap: [null],
       klLtXuat: [null],
+      slGaoDangBaoQuan: [null],
+      slThocDangBaoQuan: [null],
       trichYeu: [null, Validators.required],
       ngayKy: [null, Validators.required],
       trangThai: ['00'],
@@ -103,7 +105,7 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     body.ngayDxDen = body.ngayDx ? body.ngayDx[1] : null
     body.trangThai = STATUS.DADUYET_CB_CUC;
     body.trangThaiTh = STATUS.CHUA_TONG_HOP;
-    body.MA_DVI = this.userInfo.MA_DVI;
+    body.maDvi = this.userInfo.MA_DVI;
     let res = await this.dxChiCucService.tongHopDxCc(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let detail = res.data;
@@ -112,7 +114,9 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
           namKeHoach: this.formDataTongHop.value.namKeHoach,
           klLtBaoQuan: detail.klLtBaoQuan,
           klLtNhap: detail.klLtNhap,
-          klLtXuat: detail.klLtXuat
+          klLtXuat: detail.klLtXuat,
+          slGaoDangBaoQuan: detail.slGaoDangBaoQuan,
+          slThocDangBaoQuan: detail.slThocDangBaoQuan
         })
         this.dataTable = detail.listQlDinhMucDxTbmmTbcdDtl
         this.dataTable.forEach(item => {

@@ -1,6 +1,7 @@
 import {Component, OnInit, SimpleChanges} from '@angular/core';
 import {DanhMucService} from "../../../../services/danhmuc.service";
 import {MESSAGE} from "../../../../constants/message";
+import {UserService} from "../../../../services/user.service";
 
 @Component({
   selector: 'app-ke-hoach-ban-dau-gia',
@@ -8,41 +9,31 @@ import {MESSAGE} from "../../../../constants/message";
   styleUrls: ['./ke-hoach-ban-dau-gia.component.scss']
 })
 export class KeHoachBanDauGiaComponent implements OnInit {
-  tabs: any[]=[];
-  loaiVthhSelected: string;
+  tabs: any[] = [];
+  loaiVthhSelected: string
 
-  constructor(private danhMucService: DanhMucService) {
-    this.loaiVTHHGetAll();
+  constructor(
+    public userService: UserService,
+    private danhMucService: DanhMucService,
+  ) {
   }
 
-  ngOnInit() {
-    this.loaiVthhSelected = '0101';
+  async ngOnInit() {
+    await this.loaiVTHHGetAll();
   }
 
   async loaiVTHHGetAll() {
-    /*this.tabs = [
-      {
-        giaTri: 'Tất cả',
-        ma: ""
-      }
-    ];*/
+    this.tabs = [];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.length > 0) {
-        res.data.forEach(element => {
-          element.count = 0;
-          this.tabs.push(element);
-        });
-      }
+    if (res.msg === MESSAGE.SUCCESS && res.data && res.data.length > 0) {
+      this.tabs = res.data.map(element => {
+        return {...element, count: 0};
+      });
+      this.selectTab(this.tabs[0].ma);
     }
   }
 
   selectTab(loaiVthh) {
     this.loaiVthhSelected = loaiVthh;
   }
-/*
-  ngOnChanges(changes: SimpleChanges): void {
-    this.ngOnInit();
-  }*/
-
 }

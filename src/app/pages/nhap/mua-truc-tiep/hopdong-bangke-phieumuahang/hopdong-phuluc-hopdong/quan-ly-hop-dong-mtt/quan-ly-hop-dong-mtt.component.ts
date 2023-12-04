@@ -19,6 +19,7 @@ import {UserService} from "../../../../../../services/user.service";
 import {UserLogin} from "../../../../../../models/userlogin";
 import { Globals } from 'src/app/shared/globals';
 import { STATUS, STATUS_LABEL } from 'src/app/constants/status';
+import {PREVIEW} from "../../../../../../constants/fileType";
 
 @Component({
   selector: 'app-quan-ly-hop-dong-mtt',
@@ -217,6 +218,7 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
   async redirectHopDong(isShowHd: boolean, id: number) {
     this.isEditHopDong = isShowHd;
     this.idHopDong = id;
+    debugger
     if (!isShowHd) {
       if(!this.userService.isChiCuc()){
         await this.ngOnInit()
@@ -347,7 +349,6 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
       this.selectedHd = true;
     }
     this.idHopDong = data.id;
-    this.id = data.idQdKq;
     await this.spinner.hide();
   }
 
@@ -387,5 +388,37 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
   //   this.getDetail(idHopDong);
   //   this.showListEvent.emit();
   // }
+
+  // async preview(fileName: string): Promise<void> {
+  //   if (this.loaiVthh.startsWith('02')) {
+  //     this.previewName = 'thong_tin_hop_dong_vt'
+  //   } else {
+  //     this.previewName = 'thong_tin_hop_dong_lt'
+  //   }
+  //   this.reportTemplate.fileName = this.previewName + '.docx';
+  //   let body = {
+  //     id: id,
+  //     reportTemplateRequest: this.reportTemplate
+  //   }
+  // }
+
+  async preview(id: string) {
+    this.reportTemplate.fileName = this.previewName + '.docx';
+      let body = {
+        id: id,
+        reportTemplateRequest: this.reportTemplate
+      }
+    await this.thongTinPhuLucHopDongService.preview(body).then(async s => {
+      if (s.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
+        this.printSrc = s.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.info(MESSAGE.NOTIFICATION, MESSAGE.TEMPLATE_NULL);
+      }
+
+    });
+  }
 
 }

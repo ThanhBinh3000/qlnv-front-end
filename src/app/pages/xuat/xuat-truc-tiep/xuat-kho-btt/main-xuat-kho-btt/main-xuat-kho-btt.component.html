@@ -1,28 +1,36 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="level2">
-    <ul nz-menu nzMode="horizontal">
-        <li nz-menu-item nzSelected (click)="selectTab(0)">
-            Phiếu xuất kho
-        </li>
-        <li nz-menu-item (click)="selectTab(1)">
-            Bảng kê cân hàng
-        </li>
-        <li nz-menu-item (click)="selectTab(2)">
-            Biên bản tịnh kho
-        </li>
-        <li nz-menu-item (click)="selectTab(3)">
-            Biên bản hao dôi
-        </li>
-    </ul>
+<nz-affix [nzOffsetTop]="98" class="level2-border">
+  <ul nz-menu nzMode="horizontal">
+    <li [nzSelected]="tabSelected==0" nz-menu-item (click)="selectTab(0)"
+        *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_XK_VT_PXK') : userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_PXK')">
+      Phiếu xuất kho
+    </li>
+    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)"
+        *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_XK_VT_BKXVT') : userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BKCH')">
+      {{loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? 'Bảng kê xuất vật tư' : 'Bảng kê cân hàng'}}
+    </li>
+    <li [nzSelected]="tabSelected==2" nz-menu-item (click)="selectTab(2)"
+        *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_XK_VT_BBTK') : userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBTK')">
+      Biên bản tịnh kho
+    </li>
+    <li [nzSelected]="tabSelected==3" nz-menu-item (click)="selectTab(3)"
+        *ngIf="!loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) && userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBHD')">
+      Biên bản hao dôi
+    </li>
+  </ul>
 </nz-affix>
-<ng-container *ngIf="tabSelected == 0">
-    <app-phieu-xuat-kho-btt [loaiVthh]="loaiVthh"></app-phieu-xuat-kho-btt>
-</ng-container>
-<ng-container *ngIf="tabSelected == 1">
-    <app-bang-can-ke-hang-btt [loaiVthh]="loaiVthh"></app-bang-can-ke-hang-btt>
-</ng-container>
-<ng-container *ngIf="tabSelected == 2">
-    <app-bien-ban-tinh-kho-btt [loaiVthh]="loaiVthh"></app-bien-ban-tinh-kho-btt>
-</ng-container>
-<ng-container *ngIf="tabSelected == 3">
-    <app-bien-ban-hao-doi-btt [loaiVthh]="loaiVthh"></app-bien-ban-hao-doi-btt>
-</ng-container>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 0">
+      <app-phieu-xuat-kho-btt [loaiVthh]="loaiVthh"></app-phieu-xuat-kho-btt>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 1">
+      <app-bang-can-ke-hang-btt [loaiVthh]="loaiVthh"></app-bang-can-ke-hang-btt>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 2">
+      <app-bien-ban-tinh-kho-btt [loaiVthh]="loaiVthh"></app-bien-ban-tinh-kho-btt>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 3">
+      <app-bien-ban-hao-doi-btt [loaiVthh]="loaiVthh"></app-bien-ban-hao-doi-btt>
+    </ng-container>
+  </div>
+</div>

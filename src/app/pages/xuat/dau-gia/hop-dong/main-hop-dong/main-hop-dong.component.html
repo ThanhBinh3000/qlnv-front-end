@@ -1,10 +1,15 @@
-<nz-affix [nzOffsetTop]="98" class="level2">
-    <ul nz-menu nzMode="horizontal">
-        <li nz-menu-item nzSelected (click)="selectTab(0)">
-            Hợp đồng/Phụ lục hợp đồng
-        </li>
-    </ul>
+<nz-affix [nzOffsetTop]="98" class="level2-border">
+  <ul nz-menu nzMode="horizontal">
+    <li [nzSelected]="tabSelected==0" nz-menu-item (click)="selectTab(0)"
+        *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_HDBKPB_VT_HDPL') : userService.isAccessPermisson('XHDTQG_PTDG_HDBKPB_LT_HDPL')">
+      Hợp đồng/Phụ lục hợp đồng
+    </li>
+  </ul>
 </nz-affix>
-<ng-container *ngIf="tabSelected == 0">
-    <app-danh-sach-hop-dong [loaiVthh]="loaiVthh"></app-danh-sach-hop-dong>
-</ng-container>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 0">
+      <app-danh-sach-hop-dong [loaiVthh]="loaiVthh"></app-danh-sach-hop-dong>
+    </ng-container>
+  </div>
+</div>

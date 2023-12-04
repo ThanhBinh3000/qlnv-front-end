@@ -183,6 +183,15 @@ export class MmHienTrangCcdcComponent extends Base2Component implements OnInit {
       },
     });
   }
+  async changePageIndex(event) {
+    this.page = event;
+    await this.searchData();
+  }
+
+  async changePageSize(event) {
+    this.pageSize = event;
+    await this.searchData();
+  }
 }
 
 

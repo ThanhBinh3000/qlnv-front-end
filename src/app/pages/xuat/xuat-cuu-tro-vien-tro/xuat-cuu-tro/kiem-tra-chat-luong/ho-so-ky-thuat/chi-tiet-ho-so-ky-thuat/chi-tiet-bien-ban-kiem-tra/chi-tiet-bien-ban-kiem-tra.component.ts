@@ -183,6 +183,10 @@ export class ChiTietBienBanKiemTraComponent extends Base2Component implements On
     this.data.maDviNhapHskt = this.data.maDviNhapHskt ? this.userInfo.MA_DVI : this.data.maDviNhapHskt;
     this.data.tenDviNhapHskt = this.data.tenDviNhapHskt ? this.userInfo.TEN_DVI : this.data.tenDviNhapHskt;
     this.formData.patchValue(data);
+    this.formData.patchValue({
+      idBbLayMau: this.dataHdr.idBbLayMau,
+      soBbLayMau: this.dataHdr.soBbLayMau
+    });
     this.listCanCu = this.data.canCu ? this.data.canCu : [];
     this.listVanBanBsung = this.data.listVanBanBsung ? this.data.listVanBanBsung : [];
     await this.buildTableView();

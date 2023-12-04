@@ -81,6 +81,7 @@ export class DanhSachHangTieuHuyComponent extends Base3Component implements OnIn
       tenNhaKho: [],
       tenNganKho: [],
       tenLoKho: [],
+      maDviSr : []
     })
   }
 
@@ -154,16 +155,24 @@ export class DanhSachHangTieuHuyComponent extends Base3Component implements OnIn
   }
 
   async loadDsVthh() {
-    let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
+    let res = await this.danhMucService.getAllVthhByCap("2");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.dsLoaiVthh = res.data?.filter((x) => (x.ma.length == 2 && !x.ma.match("^01.*")) || (x.ma.length == 4 && x.ma.match("^01.*")));
+      if (res.data) {
+        this.dsLoaiVthh = res.data
+      }
     }
   }
 
   async changeHangHoa(event: any) {
-    this.formData.patchValue({cloaiVthh: null})
     if (event) {
-      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
+      this.formData.patchValue({
+        tenHH: null
+      })
+      let body = {
+        "str": event
+      };
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
+      this.dsCloaiVthh = [];
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.dsCloaiVthh = res.data;

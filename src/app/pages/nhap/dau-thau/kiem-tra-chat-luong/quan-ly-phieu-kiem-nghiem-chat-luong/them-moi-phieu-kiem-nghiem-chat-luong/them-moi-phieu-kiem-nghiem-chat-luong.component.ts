@@ -69,7 +69,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   listSoQuyetDinh = [];
   listBbBanGiaoMau = [];
   dataTableChiTieu: any[] = [];
-  previewName: string = 'nk_phieu_knghiem_cl';
+  previewName: string = 'phieu_khiem_nghiem_cl';
 
   phieuKiemNghiemChatLuongHang: PhieuKiemNghiemChatLuongHang =
     new PhieuKiemNghiemChatLuongHang();

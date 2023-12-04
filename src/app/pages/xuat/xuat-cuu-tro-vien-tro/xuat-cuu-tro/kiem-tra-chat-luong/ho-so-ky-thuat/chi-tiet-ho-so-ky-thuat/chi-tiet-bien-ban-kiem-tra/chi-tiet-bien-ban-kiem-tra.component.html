@@ -39,7 +39,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Số biên bản</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input nz-input formControlName="soBienBan"/>
+                  <input nz-input formControlName="soBienBan" [readonly]="true"/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -77,7 +77,7 @@
             </div>
             <div nz-col nzSpan="4">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Ngày lập biên bản</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Ngày tạo hồ sơ kỹ thuật</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-date-picker formControlName="ngayTaoHskt" [nzFormat]="globals.dateFormat"></nz-date-picker>
                 </nz-form-control>
