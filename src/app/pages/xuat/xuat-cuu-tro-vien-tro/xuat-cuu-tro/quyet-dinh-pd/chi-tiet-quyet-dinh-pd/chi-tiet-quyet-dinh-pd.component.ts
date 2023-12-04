@@ -190,7 +190,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       this.phuongAnView = [];
       this.phuongAnViewCache = [];
     });
-    this.formData.controls['tenVthh'].valueChanges.pipe().subscribe((value) => {
+    this.formData.get('tenVthh').valueChanges.pipe().subscribe((value) => {
       if (value == TEN_LOAI_VTHH.THOC) {
         this.formData.patchValue({ loaiVthh: LOAI_HANG_DTQG.THOC, donViTinh: "kg" });
       } else if (value == TEN_LOAI_VTHH.GAO) {
