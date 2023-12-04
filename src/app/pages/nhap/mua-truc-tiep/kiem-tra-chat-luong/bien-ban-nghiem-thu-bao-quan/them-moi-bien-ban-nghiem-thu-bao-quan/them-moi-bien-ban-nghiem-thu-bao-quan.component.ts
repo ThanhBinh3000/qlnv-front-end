@@ -28,7 +28,7 @@ import {
 } from './../../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/MttBienBanNghiemThuBaoQuan.service';
 import { BienBanNghiemThuBaoQuanDtl } from './../../../../../../models/KiemTraChatLuong';
 import { cloneDeep } from 'lodash';
-import { FileDinhKem } from './../../../../../../models/DeXuatKeHoachuaChonNhaThau';
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { UploadFileService } from './../../../../../../services/uploaFile.service';
 import {
   ThongTinHangDtqgComponent
@@ -69,6 +69,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
   listHopDong: any[] = [];
   listDiaDiemNhap: any[] = [];
   listSoPhieuNhapKho: any[] = [];
+  listFileDinhKem: FileDinhKem[] = [];
 
   hasError: boolean = false;
   rowItem: BienBanNghiemThuBaoQuanDtl = new BienBanNghiemThuBaoQuanDtl;
@@ -423,6 +424,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
         const data = res.data;
         await this.helperService.bidingDataInFormGroup(this.formData, data);
         console.log(data)
+        this.listFileDinhKem = data.fileDinhKems;
         await this.bindingDataQd(res.data?.idQdGiaoNvNh);
         let dataDdNhap = this.listDiaDiemNhap.filter(item => item.id == res.data.idDdiemGiaoNvNh)[0];
         await this.bindingDataDdNhap(dataDdNhap);
@@ -722,7 +724,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
         let body = this.formData.value;
         body.dviChuDongThucHien = this.dsHangTH;
         body.dmTongCucPdTruocThucHien = this.dsHangPD;
-
+        body.fileDinhkems = this.listFileDinhKem;
         let res;
         if (this.formData.get('id').value > 0) {
           res = await this.bienBanNghiemThuBaoQuan.update(body);

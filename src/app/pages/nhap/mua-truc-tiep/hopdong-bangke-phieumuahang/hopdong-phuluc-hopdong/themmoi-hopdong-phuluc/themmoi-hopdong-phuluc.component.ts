@@ -210,12 +210,14 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
       id: data.id,
       idKqCgia: data.idKqCgia,
       soQdKh: data?.hhQdPheduyetKhMttHdr?.soQd,
-      idQdPdSldd: data.idQdPdSldd
+      idQdPdSldd: data.idQdPdSldd,
+      trangThai: data.trangThai ? data.trangThai : STATUS.DU_THAO,
+      tenTrangThai: data.tenTrangThai ? data.tenTrangThai : 'Dự thảo',
     })
     this.idKqCgia = data.idKqCgia;
     this.dataTable = data.qdGiaoNvuDtlList.length > 0 ? data.qdGiaoNvuDtlList.filter(x => x.maDvi.includes(this.userInfo.MA_DVI)) : data.children;
     this.calculatorTable(data, this.dataTable);
-    console.log(data, 333)
+    console.log(this.dataTable, 333)
     this.dataTablePhuLuc = data.phuLucDtl;
     this.objHopDongHdr = data;
     this.fileDinhKem = data.fileDinhKems;
@@ -267,7 +269,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
 
   async save(isOther: boolean) {
     this.helperService.markFormGroupTouched(this.formData);
-    if(this.validateSlKyHd()){
+    if(isOther && this.validateSlKyHd()){
       this.notification.error(MESSAGE.ERROR, 'Số lượng ký hợp đồng phải bằng số lượng nhập trực tiếp');
       return;
     }
@@ -306,7 +308,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
     let sumSlNhapTt = 0;
     this.dataTable.forEach(item =>{
       item.children.forEach(x =>{
-        sumSlKyHd += Number.parseInt(x.soLuongHd)
+        sumSlKyHd += x.soLuongHd ? Number.parseInt(x.soLuongHd) : 0
         sumSlNhapTt += x.soLuong
       })
     })
@@ -545,7 +547,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
 
 
   isDisabled() {
-    if (!this.isQuanLy && this.formData.value.trangThai == STATUS.DU_THAO) {
+    if (!this.isQuanLy && this.formData.value.trangThai != STATUS.DA_KY) {
       return false;
     } else {
       return true;
