@@ -66,7 +66,7 @@
             <nz-form-control nz-col>
               <nz-select formControlName="nam"
                          (ngModelChange)="isView ? null : onChangeNam($event)"
-                         [nzDisabled]="isView || isViewBangKe">
+                         [nzDisabled]="isView">
                 <nz-option *ngFor="let item of listNam" [nzValue]="item.value" [nzLabel]="item.text"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -101,7 +101,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Ngày lập phiếu</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayLapPhieu"
-                              [nzDisabled]="isView || isViewBangKe">
+                              [nzDisabled]="isView">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -111,7 +111,7 @@
             <nz-form-label [nzNoColon]="true"> Nợ</nz-form-label>
             <nz-form-control nz-col>
               <input class="money-input" currencyMask [options]="amount" [min]="0"
-                     formControlName="taiKhoanNo" [readonly]="isView || isViewBangKe"/>
+                     formControlName="taiKhoanNo" [readonly]="isView"/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -120,7 +120,7 @@
             <nz-form-label [nzNoColon]="true"> Có</nz-form-label>
             <nz-form-control nz-col>
               <input class="money-input" currencyMask [options]="amount" [min]="0"
-                     formControlName="taiKhoanCo" [readonly]="isView || isViewBangKe"/>
+                     formControlName="taiKhoanCo" [readonly]="isView"/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -282,7 +282,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Kế toán trưởng</nz-form-label>
             <nz-form-control nz-col>
-              <input nz-input formControlName="keToanTruong" [readonly]="isView || isViewBangKe"/>
+              <input nz-input formControlName="keToanTruong" [readonly]="isView"/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -307,7 +307,7 @@
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Họ và tên người giao hàng</nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Họ và tên người nhận hàng</nz-form-label>
             <nz-form-control nz-col>
               <input nz-input formControlName="tenNguoiGiao" [readonly]="isView || isViewBangKe"/>
             </nz-form-control>
@@ -323,7 +323,7 @@
         </div>
         <div nz-col [nzSpan]="8">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Đơn vị/Công ty (của người giao hàng)</nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Đơn vị/Công ty (của người nhận hàng)</nz-form-label>
             <nz-form-control nz-col>
               <input nz-input formControlName="congTyNguoiGiao" [readonly]="isView || isViewBangKe"/>
             </nz-form-control>
@@ -352,7 +352,7 @@
             <th colSpan="2" class="text-center">Số lượng</th>
             <th rowSpan="2" class="text-center">Đơn giá <br>(3)</th>
             <th rowSpan="2" class="text-center">Thành tiền <br>(4) = (2) x (3)</th>
-            <th rowSpan="2" nzWidth="100px" class="text-center wrap" *ngIf="!isView && !isViewBangKe">
+            <th rowSpan="2" nzWidth="100px" class="text-center wrap" *ngIf="!isView">
               Hành động
             </th>
           </tr>
@@ -367,7 +367,7 @@
             <td class="text-center">1</td>
             <td class="text-left">{{formData.value.tenCloaiVthh}}</td>
             <td class="text-right">
-              <input nz-input formControlName="maSo" [readonly]="isView || isViewBangKe"/>
+              <input nz-input formControlName="maSo" [readonly]="isView"/>
             </td>
             <td class="text-left">{{formData.value.donViTinh}}</td>
             <td>
@@ -377,11 +377,11 @@
             <td>
               <input class="money-input" currencyMask [options]="amount1" [min]="0"
                      formControlName="thucXuat" (ngModelChange)="onChangeTien($event)"
-                     [readonly]="isView || isViewBangKe"/>
+                     [readonly]="isView"/>
             </td>
             <td class="text-right">{{formData.value.donGia|number:globals.numberFormat:globals.locale}}</td>
             <td class="text-right">{{formData.value.thanhTien|number:globals.numberFormat:globals.locale}}</td>
-            <td class="text-center" *ngIf="!isView && !isViewBangKe">
+            <td class="text-center" *ngIf="!isView">
               <a (click)="clear()">
                 <i class="fa fa-refresh"></i>
               </a>
@@ -419,7 +419,7 @@
             <nz-form-control nz-col>
               <div class="list-file" nz-col>
                 <file-list [data]="formData.value.fileCanCu" [isCanCuPL]='true'
-                           [isViewDetail]="isView || isViewBangKe"></file-list>
+                           [isViewDetail]="isView"></file-list>
               </div>
             </nz-form-control>
           </nz-form-item>
@@ -429,7 +429,7 @@
             <nz-form-label [nzNoColon]="true"> File đính kèm phiếu xuất kho đã ký</nz-form-label>
             <nz-form-control nz-col>
               <div class="list-file" nz-col>
-                <file-list [data]="formData.value.fileDinhKem" [isViewDetail]="isView || isViewBangKe">
+                <file-list [data]="formData.value.fileDinhKem" [isViewDetail]="isView">
                 </file-list>
               </div>
             </nz-form-control>
@@ -440,7 +440,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Ghi chú</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <textarea nz-input [rows]="3" formControlName="ghiChu"
-                        [readonly]="isView || isViewBangKe"></textarea>
+                        [readonly]="isView"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>

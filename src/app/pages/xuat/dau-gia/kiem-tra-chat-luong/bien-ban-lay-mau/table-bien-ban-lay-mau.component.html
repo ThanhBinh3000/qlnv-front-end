@@ -5,15 +5,15 @@
         <div nz-row [nzGutter]="20">
           <div nz-col [nzSpan]="4">
             <label class="search__label"> Biên bản lấy mẫu/bàn giao mẫu</label>
-            <input placeholder="Nhập số biên bản" nz-input formControlName="soBbLayMau"/>
+            <input nz-input formControlName="soBbLayMau"/>
           </div>
           <div nz-col [nzSpan]="4">
             <label class="search__label"> Số QĐ giao nhiệm vụ xuất hàng</label>
-            <input placeholder="Nhập số quyết định" nz-input formControlName="soQdNv"/>
+            <input nz-input formControlName="soQdNv"/>
           </div>
           <div nz-col [nzSpan]="10">
             <label class="search__label"> Đơn vị kiểu nghiệm</label>
-            <input placeholder="Nhập nội dung" nz-input formControlName="donViKnghiem"/>
+            <input nz-input formControlName="donViKnghiem"/>
           </div>
           <div nz-col [nzSpan]="4">
             <label class="search__label"> Ngày lấy mẫu</label>
@@ -33,7 +33,7 @@
       </form>
       <div nz-col class="cangiua group-button-search">
         <div>
-          <button nz-button class="search__button--clear" (click)="clearForm()">
+          <button nz-button class="search__button--clear" (click)="clearForm(loaiVthh)">
             <i class="icon  htvbdh_nhap-lai1"></i>
             Xóa điều kiện
           </button>
@@ -49,7 +49,8 @@
       <div class="buttons">
         <button
           *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_BBBGM_EXP') : userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_BBLM_EXP')"
-          type="button" class="btn btn-sub" (click)="exportData('Danh-sach-bien-ban-lay-mau/ban-giao-mau.xlsx')">
+          type="button" class="btn btn-sub"
+          (click)="exportData('danh-sach-bien-ban-lay-mau/ban-giao-mau-hang-DTQG.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span> Xuất file </span>
         </button>

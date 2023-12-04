@@ -74,13 +74,12 @@
                                 formControlName="thoiGianGiaoNhanDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
               </div>
             </div>
-
           </div>
         </div>
       </form>
       <div nz-col class="cangiua group-button-search">
         <div>
-          <button nz-button class="search__button--clear" (click)="clearForm()">
+          <button nz-button class="search__button--clear" (click)="clearForm(loaiVthh)">
             <i class="icon  htvbdh_nhap-lai1"></i>
             Xóa điều kiện
           </button>
@@ -96,7 +95,7 @@
       <div class="buttons">
         <button
           *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_XK_VT_BBTK_EXP') : userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_EXP')"
-          type="button" class="btn btn-sub" (click)="exportData('danh-sach-bien-ban-tinh-kho.xlsx')">
+          type="button" class="btn btn-sub" (click)="exportData('danh-sach-bien-ban-tinh-kho-hang-DTQG.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span> Xuất file </span>
         </button>
