@@ -11,21 +11,21 @@
           </div>
           <div nz-col [nzSpan]="4">
             <label class="search__label"> Số QĐ PD KH BĐG </label>
-            <input placeholder="" nz-input formControlName="soQdPd"/>
+            <input nz-input formControlName="soQdPd"/>
           </div>
           <div nz-col [nzSpan]="10">
             <label class="search__label"> Trích yếu </label>
-            <input placeholder="" nz-input formControlName="trichYeu"/>
+            <input nz-input formControlName="trichYeu"/>
           </div>
           <div nz-col nzSpan="5">
             <label class="search__label"> Ngày Ký QĐ </label>
             <div nz-row [nzGutter]="24">
-              <div nz-col nzSpan="12" class="cus-start-date">
+              <div nz-col [nzSpan]="12" class="cus-start-date">
                 <nz-date-picker [nzDisabledDate]="disabledNgayKyQdTu" nzFormat="dd/MM/yyyy"
                                 formControlName="ngayKyQdTu" nzPlaceHolder="Ngày bắt đầu">
                 </nz-date-picker>
               </div>
-              <div nz-col nzSpan="12" class="cus-end-date">
+              <div nz-col [nzSpan]="12" class="cus-start-date">
                 <nz-date-picker [nzDisabledDate]="disabledNgayKyQdDen" nzFormat="dd/MM/yyyy"
                                 formControlName="ngayKyQdDen" nzPlaceHolder="Ngày kết thúc">
                 </nz-date-picker>
@@ -39,7 +39,7 @@
         </div>
       </form>
       <div class="cangiua group-button-search">
-        <button nz-button class="search__button--clear" (click)="clearForm()">
+        <button nz-button class="search__button--clear" (click)="clearForm(loaiVthh)">
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
@@ -60,7 +60,7 @@
         </button>
         <button *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_EXP')"
                 type="button" class="btn btn-sub"
-                (click)="exportData('Danh-sach-quyet-dinh-phe-duyet-ke-hoach-ban-dau-gia.xlsx')">
+                (click)="exportData('danh-sach-quyet-dinh-phe-duyet-ke-hoach-ban-dau-gia-hang-DTQG.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span> Xuất file </span>
         </button>

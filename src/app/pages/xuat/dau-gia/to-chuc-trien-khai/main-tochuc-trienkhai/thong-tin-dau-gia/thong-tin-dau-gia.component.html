@@ -11,15 +11,15 @@
           </div>
           <div nz-col [nzSpan]="4">
             <label class="search__label"> Số Kh/đề xuất </label>
-            <input placeholder="" nz-input formControlName="soDxuat"/>
+            <input nz-input formControlName="soDxuat"/>
           </div>
           <div nz-col [nzSpan]="4">
             <label class="search__label"> Số QĐ PD KHBĐG</label>
-            <input placeholder="" nz-input formControlName="soQdPd"/>
+            <input nz-input formControlName="soQdPd"/>
           </div>
           <div nz-col [nzSpan]="4">
             <label class="search__label"> Số QĐ PD KQBĐG</label>
-            <input placeholder="" nz-input formControlName="soQdKq"/>
+            <input nz-input formControlName="soQdKq"/>
           </div>
           <div nz-col [nzSpan]="4">
             <label class="search__label">Ngày QĐ PD KQBĐG</label>
@@ -55,7 +55,8 @@
       <div class="buttons">
         <button
           *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_VT_TBBDG_EXP') : userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG_LT_TBBDG_EXP')"
-          type="button" class="btn btn-sub" (click)="exportDataDtl('Danh-sach-thong-tin-ban-dau-giá.xlsx')">
+          type="button" class="btn btn-sub"
+          (click)="exportDataDtl('danh-sach-quan-ly-thong-tin-ban-dau-gia-hang-DTQG.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span> Xuất file </span>
         </button>

@@ -23,7 +23,7 @@
           </div>
           <div nz-col [nzSpan]="10">
             <label class="search__label"> Nội dung tổng hợp </label>
-            <input class="search__input" placeholder="" nz-input formControlName="noiDungThop"/>
+            <input class="search__input" nz-input formControlName="noiDungThop"/>
           </div>
           <div nz-col [nzSpan]="5">
             <label class="search__label"> Ngày tổng hợp </label>
@@ -42,7 +42,7 @@
         </div>
       </form>
       <div class="cangiua group-button-search">
-        <button nz-button class="search__button--clear" (click)="clearForm()">
+        <button nz-button class="search__button--clear" (click)="clearForm(loaiVthh)">
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
@@ -63,7 +63,7 @@
         </button>
         <button *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_EXP')"
                 type="button" class="btn btn-sub"
-                (click)="exportData('Danh-sach-tong-hop-ke-hoach-ban-dau-gia.xlsx')">
+                (click)="exportData('danh-sach-tong-hop-ban-dau-gia-hang-DTQG.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span> Xuất file </span>
         </button>

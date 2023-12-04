@@ -189,10 +189,11 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
         if (formDataValue.tgianXuatKho) {
           const tgianXuatKho = new Date(formDataValue.tgianXuatKho);
           const tgianGiaoHang = new Date(event);
-          if (tgianXuatKho > tgianGiaoHang && this.formData.value.tgianGiaoHang) {
-            this.notification.error(MESSAGE.WARNING, 'Thời gian giao hàng thực tế phải lớn hơn hoặc bằng thời gian xuất kho trước ngày.');
-            this.formData.patchValue({tgianGiaoHang: '', tgianTinhPhat: ''});
-          } else {
+          // if (tgianXuatKho > tgianGiaoHang && this.formData.value.tgianGiaoHang) {
+          //   this.notification.error(MESSAGE.WARNING, 'Thời gian giao hàng thực tế phải lớn hơn hoặc bằng thời gian xuất kho trước ngày.');
+          //   this.formData.patchValue({tgianGiaoHang: '', tgianTinhPhat: ''});
+          // } else {
+          if (tgianGiaoHang > tgianXuatKho) {
             const khoangThoiGianMs = tgianGiaoHang.getTime() - tgianXuatKho.getTime();
             const khoangThoiGianNgayLamTron = Math.round(khoangThoiGianMs / (1000 * 60 * 60 * 24));
             this.formData.patchValue({tgianTinhPhat: khoangThoiGianNgayLamTron});
