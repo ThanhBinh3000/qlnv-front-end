@@ -145,6 +145,18 @@
           </th>
           <th>
             <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdCanDieuChinh"
+                     (input)="filterInTable('soQdCanDieuChinh',filterTable.soQdCanDieuChinh)" size="small" />
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soLanDieuChinh"
+                     (input)="filterInTable('soLanDieuChinh',filterTable.soLanDieuChinh)" size="small" />
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.phuongAnTc"
                      (input)="filterInTable('phuongAnTc',filterTable.phuongAnTc)" size="small" />
             </nz-input-group>
