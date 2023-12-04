@@ -433,10 +433,10 @@
                         <a>
                           <i class="fa fa-pencil" title="Sửa" (click)="suaPhuongAn(item, 0)"></i>
                         </a>
-                        <a>
+                        <!-- <a>
                           <i class="fa fa-trash-o do" title="Xóa bản ghi" nz-popconfirm nz-button
                             nzPopconfirmTitle="Bạn có chắc muốn xóa ?" (nzOnConfirm)="xoaPhuongAn(item,null,1)"></i>
-                        </a>
+                        </a> -->
                       </td>
                     </ng-container>
                   </tr>
@@ -468,11 +468,11 @@
                             <!-- <a>
                               <i class="fa fa-pencil" title="Sửa" *ngIf="!isView" (click)="suaPhuongAn(lv1,2)"></i>
                             </a> -->
-                            <a>
+                            <!-- <a>
                               <i class="fa fa-trash-o do" title="Xóa bản ghi" nz-popconfirm nz-button
                                 nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
                                 (nzOnConfirm)="xoaPhuongAn(lv1, null, 2)"></i>
-                            </a>
+                            </a> -->
                           </td>
                         </ng-container>
                       </tr>
@@ -600,10 +600,10 @@
                           <i class="fa fa-plus" title="Thêm" (click)="themPhuongAn(item,1)"></i>
                         </a>
 
-                        <a>
+                        <!-- <a>
                           <i class="fa fa-trash-o do" title="Xóa bản ghi" nz-popconfirm nz-button
                             nzPopconfirmTitle="Bạn có chắc muốn xóa ?" (nzOnConfirm)="xoaPhuongAn(item,null,1)"></i>
-                        </a>
+                        </a> -->
                       </td>
                     </ng-container>
                   </tr>
@@ -627,11 +627,11 @@
                             <a>
                               <i class="fa fa-plus" title="Thêm" (click)="themPhuongAn(lv1,2)"></i>
                             </a>
-                            <a>
+                            <!-- <a>
                               <i class="fa fa-trash-o do" title="Xóa bản ghi" nz-popconfirm nz-button
                                 nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
                                 (nzOnConfirm)="xoaPhuongAn(lv1, item, 2)"></i>
-                            </a>
+                            </a> -->
                           </td>
                         </ng-container>
                       </tr>
@@ -656,11 +656,11 @@
                                 <a>
                                   <i class="fa fa-plus" title="Thêm" (click)="themPhuongAn(lv2,3)"></i>
                                 </a>
-                                <a>
+                                <!-- <a>
                                   <i class="fa fa-trash-o do" title="Xóa bản ghi" nz-popconfirm nz-button
                                     nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
                                     (nzOnConfirm)="xoaPhuongAn(lv2,null,2)"></i>
-                                </a>
+                                </a> -->
                               </td>
                             </ng-container>
                           </tr>
@@ -714,10 +714,10 @@
                           <i class="fa fa-pencil" *ngIf="!isView" (click)="themPhuongAn(item,0)"></i>
                         </a> -->
 
-                      <a>
+                      <!-- <a>
                         <i class="fa fa-trash-o do" title="Xóa bản ghi" nz-popconfirm nz-button
                           nzPopconfirmTitle="Bạn có chắc muốn xóa ?" (nzOnConfirm)="xoaPhuongAn(item,null,1)"></i>
-                      </a>
+                      </a> -->
                     </td>
                   </tr>
                   <ng-container *ngIf="expandSetString.has(item.idVirtual)">
@@ -734,10 +734,10 @@
                           <a>
                             <i class="fa fa-plus" title="Thêm" (click)="themPhuongAn(lv1,2)"></i>
                           </a>
-                          <a>
+                          <!-- <a>
                             <i class="fa fa-trash-o do" title="Xóa bản ghi" nz-popconfirm nz-button
                               nzPopconfirmTitle="Bạn có chắc muốn xóa ?" (nzOnConfirm)="xoaPhuongAn(lv1, item, 2)"></i>
-                          </a>
+                          </a> -->
                         </td>
                       </tr>
                       <ng-container *ngIf="item.childData?.length>0">

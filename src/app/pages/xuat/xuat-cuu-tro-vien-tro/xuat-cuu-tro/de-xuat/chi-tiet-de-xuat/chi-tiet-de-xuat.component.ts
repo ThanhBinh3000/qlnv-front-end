@@ -435,13 +435,15 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
 
   async xoaPhuongAn(data: any, dataParent?: any, level?: any) {
     let deXuatPhuongAn = this.formData.value.deXuatPhuongAn;
-    if (level == 3) {
-      deXuatPhuongAn = deXuatPhuongAn.filter(s => s.idVirtual != data.idVirtual);
-    } else if (level == 2) {
-      deXuatPhuongAn = deXuatPhuongAn.filter(s => !(s.tenLoaiVthh === data.tenLoaiVthh && s.noiDung === dataParent.noiDung));
-    } else if (level == 1) {
-      deXuatPhuongAn = deXuatPhuongAn.filter(s => s.noiDung !== data.noiDung);
-    }
+    // if (level == 3) {
+    //   deXuatPhuongAn = deXuatPhuongAn.filter(s => s.idVirtual != data.idVirtual);
+    // } else if (level == 2) {
+    //   deXuatPhuongAn = deXuatPhuongAn.filter(s => !(s.tenLoaiVthh === data.tenLoaiVthh && s.noiDung === dataParent.noiDung));
+    // } else if (level == 1) {
+    //   deXuatPhuongAn = deXuatPhuongAn.filter(s => s.noiDung !== data.noiDung);
+    // }
+    // deXuatPhuongAn = deXuatPhuongAn.filter(s => s.noiDung !== data.noiDung);
+    deXuatPhuongAn = deXuatPhuongAn.filter(s => s.idVirtual != data.idVirtual);
     deXuatPhuongAn.forEach(item => {
       if (item.noiDung === data.noiDung) {
         item.soLuongConThieu += data.soLuong;
@@ -452,22 +454,41 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     await this.buildTableView();
   }
   async getListNamXuat() {
-    const { maDvi, loaiVthh, cloaiVthh } = this.formDataDtl.value;
-    const res = await this.mangLuoiKhoService.getDetailByMa({ maDvi });
-    if (res.msg === MESSAGE.SUCCESS) {
-      this.listNamNhap = [];
-      Array.isArray(res.data.object.ctietHhTrongKho) && res.data.object.ctietHhTrongKho.forEach(element => {
-        if (cloaiVthh ? cloaiVthh === element.cloaiVthh : loaiVthh && loaiVthh === element.loaiVthh) {
-          const findIndex = this.listNamNhap.findIndex(f => f.value === element.namNhap);
-          if (findIndex >= 0) {
-            this.listNamNhap[findIndex].soLuong += element.slHienThoi;
-          } else {
-            this.listNamNhap.push({ value: element.namNhap, text: element.namNhap, soLuong: element.slHienThoi })
+    await this.spinner.show();
+    try {
+      const { maDvi, loaiVthh, cloaiVthh } = this.formDataDtl.value;
+      const res = await this.mangLuoiKhoService.getDetailByMa({ maDvi });
+      if (res.msg === MESSAGE.SUCCESS) {
+        // this.listNamNhap = [];
+        // Array.isArray(res.data.object.ctietHhTrongKho) && res.data.object.ctietHhTrongKho.forEach(element => {
+        //   if (cloaiVthh ? cloaiVthh === element.cloaiVthh : loaiVthh && loaiVthh === element.loaiVthh) {
+        //     const findIndex = this.listNamNhap.findIndex(f => f.value === element.namNhap);
+        //     if (findIndex >= 0) {
+        //       this.listNamNhap[findIndex].soLuong += element.slHienThoi;
+        //     } else {
+        //       this.listNamNhap.push({ value: element.namNhap, text: element.namNhap, soLuong: element.slHienThoi })
+        //     }
+        //   }
+        // });
+        const newObject = new Map();
+        Array.isArray(res.data.object.ctietHhTrongKho) && res.data.object.ctietHhTrongKho.forEach(element => {
+          if (cloaiVthh ? cloaiVthh === element.cloaiVthh : loaiVthh && loaiVthh === element.loaiVthh) {
+            if (newObject.get(element.namNhap)) {
+              newObject[element.namNhap] += element.slHienThoi;
+            } else {
+              newObject[element.namNhap] = element.slHienThoi;
+            }
           }
-        }
-      });
-
-      console.log("listaNamNhap", this.listNamNhap,)
+        })
+        this.listNamNhap = Object.entries(newObject).map(([namNhap, soLuong]) => {
+          return { value: Number(namNhap), text: Number(namNhap), soLuong: Number(soLuong) };
+        });
+        console.log("listaNamNhap", this.listNamNhap,)
+      }
+    } catch (error) {
+      console.log("error", error)
+    } finally {
+      await this.spinner.hide();
     }
   };
   validatorSoLuong() {
