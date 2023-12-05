@@ -22,6 +22,7 @@ export class DinhMucPhiNxBq {
   congMucChiVpCuc: number = 0;
   tongCongMucChiCuc: number = 0;
   congMucChiCuc: number = 0;
+  tongDinhMucChiDonVi: number = 0;
   ngayHieuLuc: string;
   trangThai: string = '00';
   loaiVthh:string;
