@@ -920,15 +920,18 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
 
   calcuLateTong(type,idx?) {
     if (type === 'ADD') {
+      // console.log('vaoooooo oo');
       this.rowItem.tongCongMucChiVpCuc = (this.rowItem.nvChuyenMonTc ? this.rowItem.nvChuyenMonTc : 0) + (this.rowItem.ttCaNhanTc ? this.rowItem.ttCaNhanTc : 0) + (this.rowItem.tcDieuHanhTc ? this.rowItem.tcDieuHanhTc : 0);
       this.rowItem.congMucChiVpCuc = (this.rowItem.nvChuyenMonTc ? this.rowItem.nvChuyenMonTc : 0) + (this.rowItem.ttCaNhanTc ? this.rowItem.ttCaNhanTc : 0);
       this.rowItem.tongCongMucChiCuc = (this.rowItem.nvChuyenMonKv ? this.rowItem.nvChuyenMonKv : 0) + (this.rowItem.ttCaNhanKv ? this.rowItem.ttCaNhanKv : 0) + (this.rowItem.tcDieuHanhKv ? this.rowItem.tcDieuHanhKv : 0);
       this.rowItem.congMucChiCuc = (this.rowItem.nvChuyenMonKv ? this.rowItem.nvChuyenMonKv : 0) + (this.rowItem.ttCaNhanKv ? this.rowItem.ttCaNhanKv : 0);
+      this.rowItem.tongDinhMucChiDonVi = (this.rowItem.tongCongMucChiVpCuc ? this.rowItem.tongCongMucChiVpCuc : 0) + (this.rowItem.tcDieuHanhTc ? this.rowItem.tcDieuHanhTc : 0);
     }else{
       this.dataEdit[idx].data.tongCongMucChiVpCuc = (this.dataEdit[idx].data.nvChuyenMonTc ? this.dataEdit[idx].data.nvChuyenMonTc : 0) + (this.dataEdit[idx].data.ttCaNhanTc ? this.dataEdit[idx].data.ttCaNhanTc : 0) + (this.dataEdit[idx].data.tcDieuHanhTc ? this.dataEdit[idx].data.tcDieuHanhTc : 0);
       this.dataEdit[idx].data.congMucChiVpCuc = (this.dataEdit[idx].data.nvChuyenMonTc ? this.dataEdit[idx].data.nvChuyenMonTc : 0) + (this.dataEdit[idx].data.ttCaNhanTc ? this.dataEdit[idx].data.ttCaNhanTc : 0);
       this.dataEdit[idx].data.tongCongMucChiCuc = (this.dataEdit[idx].data.nvChuyenMonKv ? this.dataEdit[idx].data.nvChuyenMonKv : 0) + (this.dataEdit[idx].data.ttCaNhanKv ? this.dataEdit[idx].data.ttCaNhanKv : 0) + (this.dataEdit[idx].data.tcDieuHanhKv ? this.dataEdit[idx].data.tcDieuHanhKv : 0);
       this.dataEdit[idx].data.congMucChiCuc = (this.dataEdit[idx].data.nvChuyenMonKv ? this.dataEdit[idx].data.nvChuyenMonKv : 0) + (this.dataEdit[idx].data.ttCaNhanKv ? this.dataEdit[idx].data.ttCaNhanKv : 0);
+      this.dataEdit[idx].data.tongDinhMucChiDonVi = (this.dataEdit[idx].data.tongCongMucChiVpCuc ? this.dataEdit[idx].data.tongCongMucChiVpCuc : 0) + (this.dataEdit[idx].data.tcDieuHanhTc ? this.dataEdit[idx].data.tcDieuHanhTc : 0);
     }
   }
 
