@@ -487,18 +487,18 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
       if (soThangBaoQuanHang < minTgBaoQuanDen) {
         return dsDinhMuc.find(f => f.tgBaoQuanDen === minTgBaoQuanDen) ? dsDinhMuc.find(f => f.tgBaoQuanDen === minTgBaoQuanDen).dinhMuc : 0;
       } else if (soThangBaoQuanHang <= maxTgBaoQuanDen) {
-        return dsDinhMuc.find(f => soThangBaoQuanHang > f.tgBaoQuanTu && soThangBaoQuanHang <= f.tgBaoQuanDen) ? dsDinhMuc.find(f => soThangBaoQuanHang > f.tgBaoQuanTu && soThangBaoQuanHang <= f.tgBaoQuanDen) : 0
+        return dsDinhMuc.find(f => soThangBaoQuanHang > f.tgBaoQuanTu && soThangBaoQuanHang <= f.tgBaoQuanDen) ? dsDinhMuc.find(f => soThangBaoQuanHang > f.tgBaoQuanTu && soThangBaoQuanHang <= f.tgBaoQuanDen).dinhMuc : 0
       } else {
-        return dsDinhMuc.find(f => f.tgBaoQuanTu === maxTgBaoQuanDen) ? dsDinhMuc.find(f => f.tgBaoQuanTu === maxTgBaoQuanDen) : 0
+        return dsDinhMuc.find(f => f.tgBaoQuanTu === maxTgBaoQuanDen) ? dsDinhMuc.find(f => f.tgBaoQuanTu === maxTgBaoQuanDen).dinhMuc : 0
       }
     } else {
       if (soThangBaoQuanHang <= minTgBaoQuanDen) {
         return dsDinhMuc.find(f => f.tgBaoQuanDen === minTgBaoQuanDen) ? dsDinhMuc.find(f => f.tgBaoQuanDen === minTgBaoQuanDen).dinhMuc : 0;
       } else if (soThangBaoQuanHang <= maxTgBaoQuanDen) {
-        return dsDinhMuc.find(f => soThangBaoQuanHang > f.tgBaoQuanTu && soThangBaoQuanHang <= f.tgBaoQuanDen) ? dsDinhMuc.find(f => soThangBaoQuanHang > f.tgBaoQuanTu && soThangBaoQuanHang <= f.tgBaoQuanDen) : 0
+        return dsDinhMuc.find(f => soThangBaoQuanHang > f.tgBaoQuanTu && soThangBaoQuanHang <= f.tgBaoQuanDen) ? dsDinhMuc.find(f => soThangBaoQuanHang > f.tgBaoQuanTu && soThangBaoQuanHang <= f.tgBaoQuanDen).dinhMuc : 0
       } else {
-        const dinhMuc = dsDinhMuc.find(f => f.tgBaoQuanDen === maxTgBaoQuanDen) ? dsDinhMuc.find(f => f.tgBaoQuanDen === maxTgBaoQuanDen) : 0
-        const dinhMucThem = dsDinhMuc.find(f => f.tgBaoQuanTu === maxTgBaoQuanDen) ? dsDinhMuc.find(f => f.tgBaoQuanTu === maxTgBaoQuanDen) : 0
+        const dinhMuc = dsDinhMuc.find(f => f.tgBaoQuanDen === maxTgBaoQuanDen) ? dsDinhMuc.find(f => f.tgBaoQuanDen === maxTgBaoQuanDen).dinhMuc : 0
+        const dinhMucThem = dsDinhMuc.find(f => f.tgBaoQuanTu === maxTgBaoQuanDen) ? dsDinhMuc.find(f => f.tgBaoQuanTu === maxTgBaoQuanDen).dinhMuc : 0
         return dinhMuc + (soThangBaoQuanHang - maxTgBaoQuanDen) * dinhMucThem
       }
     }
