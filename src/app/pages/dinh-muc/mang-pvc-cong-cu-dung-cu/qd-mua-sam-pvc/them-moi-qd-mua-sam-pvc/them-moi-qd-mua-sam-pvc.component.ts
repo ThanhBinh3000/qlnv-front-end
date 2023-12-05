@@ -11,6 +11,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { MESSAGE } from '../../../../../constants/message';
 import dayjs from 'dayjs';
 import { STATUS } from '../../../../../constants/status';
+import { saveAs } from 'file-saver';
 import {
   DialogMmMuaSamComponent,
 } from '../../../../../components/dialog/dialog-mm-mua-sam/dialog-mm-mua-sam.component';
@@ -417,4 +418,30 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
   // }
 
   protected readonly AMOUNT_NO_DECIMAL = AMOUNT_NO_DECIMAL;
+
+  exportDataDetail() {
+    if (this.dataTable.length > 0) {
+      this.spinner.show();
+      try {
+        let body = this.formData.value;
+        body.listQlDinhMucPvcQdMuaSamDtl = this.dataTable;
+        body.paggingReq = {
+          limit: this.pageSize,
+          page: this.page - 1
+        }
+        this.qdMuaSamService
+          .exportDetail(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-chi-tiet-quyet-dinh-mua-sam.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
+  }
 }
