@@ -144,7 +144,7 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base3Component implemen
 
   showSave() {
     let trangThai = this.formData.value.trangThai;
-    return (trangThai == STATUS.DU_THAO || this.isAccessPermisson('XHDTQG_XTL_BCKQ_THEM'));
+    return (trangThai == STATUS.DU_THAO && this.isAccessPermisson('XHDTQG_XTL_BCKQ_THEM'));
   }
 
   save(isGuiDuyet?) {
