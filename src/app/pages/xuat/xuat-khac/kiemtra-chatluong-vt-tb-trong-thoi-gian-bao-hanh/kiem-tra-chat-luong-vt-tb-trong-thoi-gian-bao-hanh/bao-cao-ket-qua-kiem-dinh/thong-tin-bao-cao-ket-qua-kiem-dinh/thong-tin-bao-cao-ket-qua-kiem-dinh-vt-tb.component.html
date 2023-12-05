@@ -14,7 +14,8 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
-        <button type="button" class="btn btn-sub mr-2" *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BCKQKD_IN')" (click)="xemTruoc(idInput,templateName)">
+        <button type="button" class="btn btn-sub mr-2" *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BCKQKD_IN')"
+                (click)="xemTruoc(idInput,this.formData.value.loaiCanCu == 'QD_GNV' ? templateName : templateNameBh)">
           <i class="icon htvbdh_totrinh"></i>
           <span> In/Xem trước </span>
         </button>
@@ -155,7 +156,7 @@
     </nz-collapse>
   </nz-card>
   <nz-card class="mt-2 flex-card data-table card-border-content table-card">
-    <nz-table #basicTable class="nowrap table__container-tt" [nzData]="this.children" [nzFrontPagination]="false"
+    <nz-table *ngIf="this.formData.value.loaiCanCu == 'QD_GNV'" #basicTable class="nowrap table__container-tt" [nzData]="this.children" [nzFrontPagination]="false"
               [nzShowPagination]="false" nzBordered>
       <thead>
       <tr>
@@ -217,6 +218,64 @@
                 <label nz-checkbox [(ngModel)]="lv1.mauBiHuy" [disabled]="true"></label>
               </td>
               <td>{{lv1.tenTrangThaiXh}}</td>
+            </tr>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+      </tbody>
+    </nz-table>
+    <nz-table *ngIf="this.formData.value.loaiCanCu == 'PHIEU_KTCL'" #basicTable class="nowrap table__container-tt" [nzData]="this.children" [nzFrontPagination]="false"
+              [nzShowPagination]="false" nzBordered>
+      <thead>
+      <tr>
+        <th width="60px" class="text-center">STT</th>
+        <th></th>
+        <th width="">Số phiếu KTCL sau bảo hành</th>
+        <th width="">Chi cục DTNN</th>
+        <th width="">Loại hàng hóa</th>
+        <th width="">Chủng loại</th>
+        <th width="">Điểm kho</th>
+        <th width="">Ngăn/Lô kho</th>
+        <th width="">ĐVT</th>
+        <th width="">Mã đơn vị tài sản</th>
+        <th width="">Mẫu có bị hủy?</th>
+        <th width="">Kết quả kiểm định</th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let item of basicTable.data, let i = index;">
+        <tr>
+          <td class="bold">{{i + 1}}</td>
+          <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
+              [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
+          <td class="bold">{{ item.soPhieu }}</td>
+          <td>{{ item.tenChiCuc }}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <ng-container *ngIf="expandSetString.has(item.idVirtual)">
+          <ng-container *ngFor="let lv1 of item.childData,let i1=index">
+            <tr (click)="selectRow(lv1)" style="cursor: pointer" [ngClass]="{'bg-selected': lv1.selected}">
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>{{lv1.tenLoaiVthh}}</td>
+              <td>{{lv1.tenCloaiVthh}}</td>
+              <td>{{lv1.tenDiemKho}}</td>
+              <td>{{lv1.tenLoKho ? lv1.tenNganKho + ' - ' + lv1.tenLoKho : lv1.tenNganKho}}</td>
+              <td>{{lv1.donViTinh}}</td>
+              <td>{{lv1.maDviTsan}}</td>
+              <td class="text-center">
+                <label nz-checkbox [(ngModel)]="lv1.mauBiHuy" [disabled]="true"></label>
+              </td>
+              <td>{{lv1.isDat == 1 ? 'Đạt' : 'Không đạt'}}</td>
             </tr>
           </ng-container>
         </ng-container>
