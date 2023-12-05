@@ -94,7 +94,8 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
     }
     let body = this.formDataTongHop.value;
     if (!body.listSoCv || body.listSoCv.length == 0) {
-      body.listSoCv = this.listDxChiCuc.toString();
+      let arr = this.listDxChiCuc.map(item => item.soCv);
+      body.listSoCv = arr && arr.length > 0 ?  arr.toString() : [];
     } else {
       body.listSoCv = body.listSoCv.toString();
     }
