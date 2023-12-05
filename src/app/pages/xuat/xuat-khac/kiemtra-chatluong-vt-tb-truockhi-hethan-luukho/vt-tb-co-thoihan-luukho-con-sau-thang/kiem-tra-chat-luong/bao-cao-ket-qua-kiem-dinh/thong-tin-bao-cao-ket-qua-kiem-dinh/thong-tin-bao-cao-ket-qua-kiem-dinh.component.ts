@@ -77,6 +77,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
   ) {
     super(httpClient, storageService, notification, spinner, modal, bckqKiemDinhMauService);
     this.formData = this.fb.group({
+      id: [],
       tenDvi: [null, [Validators.required]],
       nam: [dayjs().get('year')],
       maDvi: [],
