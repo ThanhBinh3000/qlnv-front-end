@@ -164,10 +164,13 @@ export class TableDanhMucBpxlComponent extends Base3Component implements OnInit 
       page: this.page - 1
     }
     let res = await this.theoDoiBqDtlService.search(body);
+    this.spinner.show();
     if (res.msg == MESSAGE.SUCCESS) {
+      this.spinner.hide();
       this.dataTable = res.data;
       this.buildTableView();
     } else {
+      this.spinner.hide();
       this.dataTable = [];
       this.totalRecord = 0;
       this.notification.error(MESSAGE.ERROR, res.msg);

@@ -84,7 +84,7 @@ export class TongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Component im
   async clearForm() {
     this.formData.reset();
     this.formData.patchValue({
-      maDvi : this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+      maDvi : this.userInfo.MA_DVI,
       capDvi : 2
     })
     await this.search();

@@ -853,7 +853,13 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   async startEditRowNt(i) {
     let res = await this.thongTinDauThauService.getDetailThongTin(this.listOfData[i].id, this.loaiVthh);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listNthauNopHs = res.data;
+      this.formData.patchValue({
+        tgianTrinhKqTcg: res.data.tgianTrinhKqTcg,
+        tgianTrinhTtd: res.data.tgianTrinhTtd,
+        ghiChuTtdt: res.data.ghiChuTtdt,
+      })
+      this.fileDinhKems = res.data.fileDinhKems
+      this.listNthauNopHs = res.data.dsNhaThauDthau;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -873,8 +879,12 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   }
   async saveEditRowNt(i) {
     this.listOfData[i].kqlcntDtl = this.itemRowQd[i];
-    this.listOfData[i].kqlcntDtl.tenTrangThai = this.dsTrangThai.find(item => item.value == this.itemRowQd[i].trangThai).text;
-    this.listOfData[i].kqlcntDtl.tenNhaThau = this.listNthauNopHs.find(item => item.id == this.itemRowQd[i].idNhaThau)?.tenNhaThau;
+    if (this.itemRowQd[i].trangThai != null) {
+      this.listOfData[i].kqlcntDtl.tenTrangThai = this.dsTrangThai.find(item => item.value == this.itemRowQd[i].trangThai).text;
+    }
+    if (this.itemRowQd[i].idNhaThau != null) {
+      this.listOfData[i].kqlcntDtl.tenNhaThau = this.listNthauNopHs.find(item => item.id == this.itemRowQd[i].idNhaThau)?.tenNhaThau;
+    }
     this.listOfData[i].edit = false;
   }
 

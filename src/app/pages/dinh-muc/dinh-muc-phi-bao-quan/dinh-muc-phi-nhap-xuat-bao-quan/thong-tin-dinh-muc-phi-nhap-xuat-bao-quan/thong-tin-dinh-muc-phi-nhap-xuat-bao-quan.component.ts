@@ -169,6 +169,8 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       await this.loadAllDonViTheoCap();
       if (this.idInput > 0) {
         await this.detail(this.idInput);
+      }else{
+        this.rowItem = new DinhMucPhiNxBq();
       }
       await this.loadDmDinhMuc();
       this.updateEditCacheTqd();
@@ -920,7 +922,6 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
 
   calcuLateTong(type,idx?) {
     if (type === 'ADD') {
-      // console.log('vaoooooo oo');
       this.rowItem.tongCongMucChiVpCuc = (this.rowItem.nvChuyenMonTc ? this.rowItem.nvChuyenMonTc : 0) + (this.rowItem.ttCaNhanTc ? this.rowItem.ttCaNhanTc : 0) + (this.rowItem.tcDieuHanhTc ? this.rowItem.tcDieuHanhTc : 0);
       this.rowItem.congMucChiVpCuc = (this.rowItem.nvChuyenMonTc ? this.rowItem.nvChuyenMonTc : 0) + (this.rowItem.ttCaNhanTc ? this.rowItem.ttCaNhanTc : 0);
       this.rowItem.tongCongMucChiCuc = (this.rowItem.nvChuyenMonKv ? this.rowItem.nvChuyenMonKv : 0) + (this.rowItem.ttCaNhanKv ? this.rowItem.ttCaNhanKv : 0) + (this.rowItem.tcDieuHanhKv ? this.rowItem.tcDieuHanhKv : 0);
