@@ -79,7 +79,7 @@
       </form>
       <div nz-col class="cangiua group-button-search">
         <div>
-          <button nz-button class="search__button--clear" (click)="clearForm()">
+          <button nz-button class="search__button--clear" (click)="clearForm(loaiVthh)">
             <i class="icon  htvbdh_nhap-lai1"></i>
             Xóa điều kiện
           </button>
@@ -93,7 +93,7 @@
     <div class="group-button">
       <h3 class="text-uppercase"> DANH SÁCH BIÊN BẢN HAO DÔI </h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub" (click)="exportData()"
+        <button type="button" class="btn btn-sub" (click)="exportData('danh-sach-bien-ban-hao-doi-hang-DTQG.xlsx')"
                 *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBHD_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>

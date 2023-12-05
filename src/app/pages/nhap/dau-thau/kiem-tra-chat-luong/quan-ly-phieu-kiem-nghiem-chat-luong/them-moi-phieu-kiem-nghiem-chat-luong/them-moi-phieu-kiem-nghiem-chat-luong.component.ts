@@ -371,13 +371,10 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   async loadBbLayMau() {
     let body = {
       trangThai: STATUS.DA_DUYET_LDCC,
-      paggingReq: {
-        "limit": this.globals.prop.MAX_INTERGER,
-        "page": 0
-      },
       loaiVthh: this.loaiVthh,
+      maDvi: this.userInfo.MA_DVI,
     }
-    let res = await this.quanLyBienBanLayMauService.search(body);
+    let res = await this.quanLyBienBanLayMauService.danhSach(body);
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
         this.listBbBanGiaoMau = res.data.content
@@ -400,7 +397,9 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
-      this.bindingDataBbLayMau(data.id, false);
+      if (data) {
+        this.bindingDataBbLayMau(data.id, false);
+      }
     });
   }
 
