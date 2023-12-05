@@ -475,6 +475,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
         ngayBatDauNhap: data.bienBanNhapDayKho?.ngayBatDauNhap,
         ngayKetThucNhap: data.bienBanNhapDayKho?.ngayKetThucNhap,
         soBbNhapDayKho: data.bienBanNhapDayKho?.soBienBanNhapDayKho,
+        ldcc: data.bienBanNhapDayKho?.tenNguoiPduyet,
         soHoSoKyThuat: data.hoSoKyThuat?.soHoSoKyThuat,
         tenNganLoKho: data.tenLoKho ? data.tenLoKho + " - " + data.tenNganKho : data.tenNganKho,
       });

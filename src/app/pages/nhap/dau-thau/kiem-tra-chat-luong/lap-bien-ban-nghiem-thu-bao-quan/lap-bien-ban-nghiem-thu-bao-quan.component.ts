@@ -271,9 +271,10 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      this.dataTable.forEach(item =>
-        item.detail = item.dtlList.filter(i => i.maDvi.startsWith(this.userInfo.MA_DVI))[0]
-      );
+      for (let i = 0; i < this.dataTable.length; i++) {
+        this.dataTable[i].detail = this.dataTable[i].dtlList.filter(i => i.maDvi.startsWith(this.userInfo.MA_DVI))[0]
+        this.expandSet.add(i)
+      }
       this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
     } else {

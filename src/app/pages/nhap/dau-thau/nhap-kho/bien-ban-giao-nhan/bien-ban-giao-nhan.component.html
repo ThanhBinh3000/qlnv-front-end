@@ -121,7 +121,7 @@
                 <td class="bold">{{diemKho.tenDiemKho}}</td>
                 <td colspan="9"></td>
               </tr>
-              <ng-container *ngFor="let row3 of diemKho.children, let y = index">
+              <tr class="level-3" *ngFor="let row3 of diemKho.children, let y = index">
                 <td colspan="7"></td>
                 <td
                   class="bold">{{row3.tenLoKho ? row3.tenLoKho + ' - ' + row3.tenNganKho + ' - ' + row3.tenNhaKho : row3.tenNganKho + ' - ' + row3.tenNhaKho}}</td>
@@ -137,20 +137,23 @@
                      (click)="redirectToChiTiet(true, row3.id)">
                     <i class="fa fa-eye" title="Xem chi tiết"></i>
                   </a>
-                  <a  *ngIf="(row3.trangThai == STATUS.DU_THAO || row3.trangThai == STATUS.TU_CHOI_LDC)
+                  <a *ngIf="(row3.trangThai == STATUS.DU_THAO || row3.trangThai == STATUS.TU_CHOI_LDC)
                   && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBGN_THEM')"
                      (click)="redirectToChiTiet(false, row3.id)">
                     <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
-                  <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBGN_DUYET') && row3.trangThai == STATUS.CHO_DUYET_LDC "
-                     (click)="redirectToChiTiet(true, row3.id)">
+                  <a
+                    *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBGN_DUYET') && row3.trangThai == STATUS.CHO_DUYET_LDC "
+                    (click)="redirectToChiTiet(true, row3.id)">
                     <i class="icon htvbdh_tcdt_pheduyet"></i>
                   </a>
-                  <a *ngIf="row3.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBGN_XOA')" (click)="xoaItem(row3)">
+                  <a
+                    *ngIf="row3.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBGN_XOA')"
+                    (click)="xoaItem(row3)">
                     <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
-              </ng-container>
+              </tr>
             </ng-container>
           </ng-container>
         </ng-container>
