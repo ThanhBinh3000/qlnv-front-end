@@ -11,11 +11,11 @@
           </div>
           <div nz-col [nzSpan]="4">
             <label class="search__label"> Số QĐ PD KH BTT </label>
-            <input placeholder="Nhập số quyết định" nz-input formControlName="soQdPd"/>
+            <input nz-input formControlName="soQdPd"/>
           </div>
           <div nz-col [nzSpan]="10">
             <label class="search__label"> Trích yếu </label>
-            <input placeholder="Nhập nội dung" nz-input formControlName="trichYeu"/>
+            <input nz-input formControlName="trichYeu"/>
           </div>
           <div nz-col [nzSpan]="5">
             <label class="search__label"> Ngày Ký QĐ </label>
@@ -33,12 +33,12 @@
           </div>
           <div nz-col [nzSpan]="3">
             <label class="search__label"> Số công văn/tờ trình</label>
-            <input placeholder="nhập số KH/Tờ trình" nz-input formControlName="soTrHdr"/>
+            <input nz-input formControlName="soTrHdr"/>
           </div>
         </div>
       </form>
       <div class="cangiua group-button-search">
-        <button nz-button class="search__button--clear" (click)="clearForm()">
+        <button nz-button class="search__button--clear" (click)="clearForm(loaiVthh)">
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
@@ -59,7 +59,7 @@
         </button>
         <button *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_QDLCNT_EXP')"
                 type="button" class="btn btn-sub"
-                (click)="exportData('Danh-sach-quyet-dinh-phe-duyet-ke-hoach-ban-truc-tiep.xlsx')">
+                (click)="exportData('danh-sach-quyet-dinh-phe-duyet-ke-hoach-ban-truc-tiep-hang-DTQG.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span> Xuất file </span>
         </button>

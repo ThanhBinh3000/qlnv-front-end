@@ -202,10 +202,6 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
   async getDetail(id: number) {
     if (!id) return;
     const data = await this.detail(id);
-    if (!data) {
-      console.error('Không tìm thấy dữ liệu');
-      return;
-    }
     this.maTuSinh = this.idInput;
     this.dataTable = data.children
     if (this.dataTable && this.dataTable.length > 0) {
