@@ -655,8 +655,8 @@
                   <td>{{children.tenNganKho}}</td>
                   <td>{{children.tenLoKho}}</td>
                   <td>{{children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td>{{children.soLuong * children.donGia * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td></td>
+                  <td>{{(children.donGia ? children.donGia : item.donGiaVat) | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td>{{children.soLuong * (children.donGia ? children.donGia : item.donGiaVat) * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
                   <td></td>
                   <td></td>
                 </tr>

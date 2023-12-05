@@ -142,6 +142,10 @@
                      (click)="redirectToChiTiet(false, row3.id)">
                     <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
+                  <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBGN_DUYET') && row3.trangThai == STATUS.CHO_DUYET_LDC "
+                     (click)="redirectToChiTiet(true, row3.id)">
+                    <i class="icon htvbdh_tcdt_pheduyet"></i>
+                  </a>
                   <a *ngIf="row3.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBGN_XOA')" (click)="xoaItem(row3)">
                     <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>

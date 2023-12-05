@@ -144,7 +144,7 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base3Component implemen
 
   showSave() {
     let trangThai = this.formData.value.trangThai;
-    return (trangThai == STATUS.DU_THAO || this.isAccessPermisson('XHDTQG_XTL_BCKQ_THEM'));
+    return (trangThai == STATUS.DU_THAO && this.isAccessPermisson('XHDTQG_XTL_BCKQ_THEM'));
   }
 
   save(isGuiDuyet?) {
@@ -158,6 +158,9 @@ export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base3Component implemen
       if (res) {
         if (isGuiDuyet) {
           this.id = res.id;
+          this.formData.patchValue({
+            id : res.id
+          })
           this.pheDuyet();
         } else {
           this.redirectDefault();
