@@ -138,10 +138,12 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
                   loaiVthh: item.loaiVthh || "",
                   tenDonViTinh: item.tenDonViTinh || "",
                   slHienThoi: 0,
+                  thanhTien: 0,
                   maDonVi : item.maDonVi ? item.maDonVi.substr(0,12)  :''
                 };
               }
               groupedData[key].slHienThoi += item.slHienThoi;
+              groupedData[key].thanhTien += item.thanhTien;
             });
             const result: any[] = Object.values(groupedData);
             for (const item of result) {
@@ -153,6 +155,7 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
                 data.tenHangHoa = item.tenLoaiVthh;
                 data.donViTinh = item.tenDonViTinh;
                 data.soLuongHt = item.slHienThoi;
+                data.giaTriHt = item.thanhTien;
                 data.maKhoChua = item.maDonVi;
                 data.maDvi = this.userInfo.MA_DVI;
                 data.khoiTich = this.rowItemKho.khoiTich
@@ -386,11 +389,11 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
             if (type) {
               type.dienTich = detail.dienTichDat ? detail.dienTichDat : 0
               type.tichLuong = detail.tichLuongTkLt && detail.tichLuongTkVt ? detail.tichLuongTkLt + detail.tichLuongTkVt : 0
-              type.khoiTich = detail.theTichTkLt && detail.theTichTkVt ? detail.theTichTkLt + detail.theTichTkVt : 0
+              type.khoiTich = detail.khoiTich ? detail.khoiTich : 0
             } else {
               this.rowItemKho.dienTich = detail.dienTichDat ? detail.dienTichDat : 0
               this.rowItemKho.tichLuong = detail.tichLuongTkLt && detail.tichLuongTkVt ? detail.tichLuongTkLt + detail.tichLuongTkVt : 0
-              this.rowItemKho.khoiTich = detail.theTichTkLt && detail.theTichTkVt ? detail.theTichTkLt + detail.theTichTkVt : 0
+              this.rowItemKho.khoiTich = detail.khoiTich  ? detail.khoiTich : 0
             }
 
           }

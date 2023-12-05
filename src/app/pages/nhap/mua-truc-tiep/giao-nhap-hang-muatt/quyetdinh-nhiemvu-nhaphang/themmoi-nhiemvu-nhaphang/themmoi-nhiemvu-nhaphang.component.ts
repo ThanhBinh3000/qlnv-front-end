@@ -101,7 +101,7 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
     this.formData = this.fb.group({
       id: [null],
       soQd: [''],
-      ngayQd: [''],
+      ngayQd: [null],
       tenHd: [''],
       idHd: [''],
       soHd: [''],
