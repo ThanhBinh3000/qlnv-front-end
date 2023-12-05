@@ -111,10 +111,7 @@ export class ChiTietHoSoThanhLyComponent extends Base3Component implements OnIni
       })
     })
     body.children = children;
-
-    if (this.formData.value.soHoSo) {
-      body.soHoSo = this.formData.value.soHoSo + this.symbol
-    }
+    body.soHoSo = this.formData.value.soHoSo + this.symbol
     let validateDataTable = true;
     if(isGuiDuyet){
       if(this.userService.isCuc()){
