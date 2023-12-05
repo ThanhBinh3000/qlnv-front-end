@@ -28,9 +28,7 @@ export class QuyetDinhPheDuyetDuAnDtxdComponent implements OnInit {
   }
 
   async ngOnInit() {
-    console.log(this.itemQdPdDaDtxd,"this.1232")
     if (this.itemQdPdDaDtxd) {
-      console.log(this.itemQdPdDaDtxd,"this.itemQdPdDaDtxd")
       this.selectedId = this.itemQdPdDaDtxd.id;
       this.isDetail = true;
       this.isViewDetail = this.itemQdPdDaDtxd.trangThai == STATUS.BAN_HANH ? true : false;

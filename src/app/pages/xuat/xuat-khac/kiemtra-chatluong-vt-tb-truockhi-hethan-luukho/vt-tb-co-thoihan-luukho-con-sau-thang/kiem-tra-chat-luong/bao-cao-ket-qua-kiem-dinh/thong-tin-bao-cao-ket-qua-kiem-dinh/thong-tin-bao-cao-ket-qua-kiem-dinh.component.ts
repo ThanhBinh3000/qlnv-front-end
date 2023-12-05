@@ -79,7 +79,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
     this.formData = this.fb.group({
       tenDvi: [null, [Validators.required]],
       nam: [dayjs().get('year')],
-      maDvi: [, [Validators.required]],
+      maDvi: [],
       tenTrangThai: ['Dự Thảo'],
       trangThai: [STATUS.DU_THAO],
       maDviNhan: [],

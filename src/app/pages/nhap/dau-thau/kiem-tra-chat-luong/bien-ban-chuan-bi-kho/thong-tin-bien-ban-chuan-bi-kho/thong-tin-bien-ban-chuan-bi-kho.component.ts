@@ -313,6 +313,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       maQhns: this.userInfo.DON_VI.maQhns,
       trangThai: this.STATUS.DU_THAO,
       tenTrangThai: 'Dự thảo',
+      tenKyThuatVien: this.userInfo.TEN_DAY_DU,
     });
     if (this.idQdGiaoNvNh) {
       await this.bindingDataQd(this.idQdGiaoNvNh);
