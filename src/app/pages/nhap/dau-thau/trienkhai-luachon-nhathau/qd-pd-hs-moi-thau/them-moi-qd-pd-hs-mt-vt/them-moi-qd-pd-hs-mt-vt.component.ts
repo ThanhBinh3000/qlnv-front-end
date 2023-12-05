@@ -296,6 +296,12 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
       });
       this.listOfData = data.qdKhlcntHdr.dchinhDxKhLcntHdr? data.qdKhlcntHdr.dchinhDxKhLcntHdr.dsGthau : data.qdKhlcntHdr.dsGthau;
       this.listCcPhapLy = data.listCcPhapLy;
+      if (this.userService.isCuc()) {
+        for (let item of this.listOfData) {
+          item.children = item.children.filter(i => i.maDvi == this.userInfo.MA_DVI)
+        }
+        this.listOfData = this.listOfData.filter(k => k.children.length > 0)
+      }
     }
   }
 

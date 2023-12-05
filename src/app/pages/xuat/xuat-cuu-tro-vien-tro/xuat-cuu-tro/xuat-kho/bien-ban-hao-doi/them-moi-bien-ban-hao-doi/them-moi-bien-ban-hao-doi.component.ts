@@ -165,7 +165,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
       try {
         const res = await this.bienBanHaoDoiService.getDetail(idInput);
         if (res.msg == MESSAGE.SUCCESS) {
-          this.formData.patchValue({ ...res.data, tenNganLoKho: res.data.tenLoKho ? `${res.data.tenLoKho} - ${res.data.tenNganKho}` : res.data.tenNganKho });
+          this.formData.patchValue({ ...res.data, donViTinh: res.data.dviTinh, tenNganLoKho: res.data.tenLoKho ? `${res.data.tenLoKho} - ${res.data.tenNganKho}` : res.data.tenNganKho });
           const data = res.data;
           this.fileDinhKems = data.fileDinhKems;
           this.dataTable = data.listPhieuXuatKho;

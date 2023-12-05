@@ -382,7 +382,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       return false;
     }
     if (!isGiaToiDaValid) {
-      this.notification.error(MESSAGE.ERROR, 'Bạn cần lập và trình duyệt phương án giá mua tối đa, giá bán tối thiểu trước. Chỉ sau khi có giá bán tối thiểu bạn mới thêm được danh mục đơn vị tài sản BDG vì giá bán đề xuất ở đây nhập vào phải lớn hơn hoặc bằng giá bán tối thiểu');
+      this.notification.error(MESSAGE.ERROR, 'Bạn cần lập và trình duyệt phương án giá mua tối đa, giá bán tối thiểu trước. Chỉ sau khi có giá bán tối thiểu bạn mới thêm được danh mục đơn vị tài sản BĐG vì giá bán đề xuất ở đây nhập vào phải lớn hơn hoặc bằng giá bán tối thiểu');
       return false;
     }
     return true;

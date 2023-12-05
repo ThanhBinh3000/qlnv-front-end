@@ -65,7 +65,7 @@
       </form>
       <div nz-col class="cangiua group-button-search">
         <div>
-          <button nz-button class="search__button--clear" (click)="clearForm()">
+          <button nz-button class="search__button--clear" (click)="clearForm(loaiVthh)">
             <i class="icon  htvbdh_nhap-lai1"></i>
             Xóa điều kiện
           </button>
@@ -82,7 +82,7 @@
       <div class="buttons">
         <button
           *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_XK_VT_BKXVT_EXP') : userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BKCH_EXP')"
-          type="button" class="btn btn-sub" (click)="exportData('danh-sach-bang-ke-can-hang.xlsx')">
+          type="button" class="btn btn-sub" (click)="exportData('danh-sach-bang-ke-can-hang-DTQG.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span> Xuất file </span>
         </button>
@@ -110,7 +110,7 @@
           <th class="text-left"> Ngày giám định</th>
           <th class="text-left"> Số bảng kê</th>
           <th class="text-left"> Số phiếu xuất kho</th>
-          <th class="text-left"> NGày tạo bảng kê</th>
+          <th class="text-left"> Ngày tạo bảng kê</th>
           <th class="text-left"> Trạng thái</th>
           <th class="text-center"> Hành động</th>
         </tr>

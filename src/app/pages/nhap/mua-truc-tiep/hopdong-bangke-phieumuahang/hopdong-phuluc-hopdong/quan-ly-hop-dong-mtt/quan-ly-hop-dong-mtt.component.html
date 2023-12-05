@@ -9,7 +9,7 @@
 <!--            <i class=" icon htvbdh_tcdt_print"></i>-->
 <!--            <span>In/xem trước</span>-->
 <!--          </button>-->
-            <button *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH && (userService.isCuc() || userService.isChiCuc()) " type="button"
+            <button *ngIf="(formData.value.trangThaiHd != STATUS.DA_HOAN_THANH && (userService.isCuc() || userService.isChiCuc())) && userService.isAccessPermisson('NHDTQG_PTMTT_HDBKPM_LT_HDPL_THEM') " type="button"
                 class="btn btn-sub xanh-nhat" (click)="pheDuyet()">
                 <i class="icon htvbdh_checkfile2"></i>
                 <span>Hoàn thành thực hiện</span>
@@ -88,7 +88,10 @@
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true"> Tổng mức đầu tư </nz-form-label>
                                     <nz-form-control>
-                                        <input class="blue-text" nz-input formControlName="tongMucDt" readonly />
+<!--                                        <input class="blue-text" nz-input formControlName="tongMucDt" readonly />-->
+                                      <nz-input-number class="text-blue" [nzSize]="'small'" formControlName="tongMucDt"
+                                                       [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
+                                      </nz-input-number>
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
@@ -106,7 +109,12 @@
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true"> Tổng số Lượng nhập </nz-form-label>
                                     <nz-form-control>
-                                        <input nz-input formControlName="tongSoLuong" readonly />
+                                      <nz-input-group nzAddOnAfter="(kg)">
+                                        <nz-input-number class="text-right" nz-input formControlName="tongSoLuong"
+                                                         [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                                         nzDisabled>
+                                        </nz-input-number>
+                                      </nz-input-group>
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
@@ -275,7 +283,7 @@
             </div>
           </div>
           <div class="buttons"
-               *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH && !userService.isTongCuc()">
+               *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH && !userService.isTongCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_HDBKPM_LT_HDPL_THEM')">
             <button type="button" class="btn btn-main" (click)="redirectHopDong(true, null)">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
@@ -320,11 +328,11 @@
                      (click)="preview(data.id)">
                     <i class="icon htvbdh_tcdt_tuchoi" title="Xem trước"></i>
                   </a>
-                  <a *ngIf="data.trangThai != STATUS.DA_KY"
+                  <a *ngIf="data.trangThai != STATUS.DA_KY && userService.isAccessPermisson('NHDTQG_PTMTT_HDBKPM_LT_HDPL_THEM')"
                      (click)="redirectHopDong(true,data.id) ">
                     <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
-                  <a *ngIf="data.trangThai != STATUS.DA_KY"
+                  <a *ngIf="data.trangThai != STATUS.DA_KY && userService.isAccessPermisson('NHDTQG_PTMTT_HDBKPM_LT_HDPL_XOA')"
                      (click)="deleteHd(data)">
                     <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>

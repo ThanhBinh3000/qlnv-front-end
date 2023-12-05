@@ -228,19 +228,13 @@
               </nz-input-number>
             </td>
             <td>
-              <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
-                [(ngModel)]="rowItem.nongDo" [nzDisabled]="disabled()">
-              </nz-input-number>
+              <input nz-input  [(ngModel)]="rowItem.nongDo" class="money-input" currencyMask [options]="amount" [readOnly]="disabled()">
             </td>
             <td>
-              <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
-                [(ngModel)]="rowItem.doAm" [nzDisabled]="disabled()">
-              </nz-input-number>
+              <input nz-input  [(ngModel)]="rowItem.doAm" class="money-input" currencyMask [options]="amount" [readOnly]="disabled()">
             </td>
             <td>
-              <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
-                [(ngModel)]="rowItem.hatVang" [nzDisabled]="disabled()">
-              </nz-input-number>
+              <input nz-input  [(ngModel)]="rowItem.hatVang" class="money-input" currencyMask [options]="amount" [readOnly]="disabled()">
             </td>
             <td><input [(ngModel)]="rowItem.camQuan" [readonly]="disabled()"></td>
             <td><input [(ngModel)]="rowItem.tinhTrangNamMoc" [readonly]="disabled()"></td>

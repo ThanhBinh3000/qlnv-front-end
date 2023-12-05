@@ -156,7 +156,9 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
           if (res.msg == MESSAGE.SUCCESS) {
             const data = res.data;
             this.formData.patchValue({
-              ...data, tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
+              ...data,
+              donViTinh: data.dviTinh,
+              tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
               soPhieuKnCl: data.soPhieuKnCl ? data.soPhieuKnCl : data.listPhieuXuatKho[0]?.soPhieuKnCl,
               idPhieuKnCl: data.idPhieuKnCl ? data.idPhieuKnCl : data.listPhieuXuatKho[0]?.idPhieuKnCl
             });
@@ -290,11 +292,8 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       soQdGiaoNvXh: soQd,
     }
     let res = await this.bienBanTinhKhoService.search(body)
-    console.log(res, "res");
     if (res.msg == MESSAGE.SUCCESS) {
       this.bbTinhKho = res.data.content;
-      console.log(this.listDiaDiemNhap, "this.listDiaDiemNhap")
-      console.log(this.bbTinhKho, "this.bbTinhKho")
       let phieuXk = [
         ...this.listDiaDiemNhap.filter((e) => {
           return !this.bbTinhKho.some((bb) => {
@@ -478,7 +477,6 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
 
 
   openPhieuKnClModal(id: number) {
-    console.log(id, "id")
     this.idPhieuKnCl = id;
     this.openPhieuKnCl = true;
   }
@@ -489,7 +487,6 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   }
 
   openPhieuXkModal(id: number) {
-    console.log(id, "id")
     this.idPhieuXk = id;
     this.openPhieuXk = true;
   }
@@ -500,7 +497,6 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   }
 
   openBangKeModal(id: number) {
-    console.log(id, "id")
     this.idBangKe = id;
     this.openBangKe = true;
   }

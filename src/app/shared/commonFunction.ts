@@ -1,4 +1,4 @@
-import {LOAI_HANG_DTQG, STATUS_DA_DUYET, STATUS_DA_HOAN_THANH, TEN_HANG_DTQG, TEN_LOAI_VTHH} from "../constants/config";
+import { LOAI_HANG_DTQG, STATUS_DA_DUYET, STATUS_DA_HOAN_THANH, TEN_HANG_DTQG, TEN_LOAI_VTHH } from "../constants/config";
 import VNnum2words from 'vn-num2words';
 import { STATUS } from "../constants/status";
 
@@ -242,4 +242,13 @@ export function NumberToRoman(num) {
   while (i--)
     romanNum = (key[+digits.pop() + (i * 10)] || "") + romanNum;
   return Array(+digits.join("") + 1).join("M") + romanNum;
+}
+export function convertTienTobangChuThapPhan(tien: number): string {
+  if (tien > 0) {
+    const phanNguyen = +tien.toString().split(".")[0];
+    const phanThapPhan = +tien.toString().split(".")[1];
+    return VNnum2words(phanNguyen) + (phanThapPhan ? " " + "phẩy" + " " + VNnum2words(phanThapPhan) : "");
+  } else {
+    return ''
+  }
 }

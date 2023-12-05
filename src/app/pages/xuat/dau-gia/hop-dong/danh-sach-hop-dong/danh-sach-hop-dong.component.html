@@ -11,11 +11,11 @@
           </div>
           <div nz-col [nzSpan]="3">
             <label class="search__label">Số hợp đồng</label>
-            <input nz-input placeholder="" formControlName="soHopDong"/>
+            <input nz-input formControlName="soHopDong"/>
           </div>
           <div nz-col [nzSpan]="4">
             <label class="search__label">Tên hợp đồng</label>
-            <input nz-input placeholder="" formControlName="tenHopDong"/>
+            <input nz-input formControlName="tenHopDong"/>
           </div>
           <div nz-col [nzSpan]="6">
             <label class="search__label"> Đơn vị thực hiện</label>
@@ -25,7 +25,7 @@
           </div>
           <div nz-col [nzSpan]="4">
             <label class="search__label">Tổ chức/cá nhân thắng đấu giá</label>
-            <input nz-input placeholder="" formControlName="toChucCaNhan"/>
+            <input nz-input formControlName="toChucCaNhan"/>
           </div>
           <div nz-col [nzSpan]="4">
             <label class="search__label">Ngày ký QĐ phê duyệt KQ BĐG</label>
@@ -45,7 +45,7 @@
       </form>
       <div nz-col class="cangiua group-button-search">
         <div>
-          <button nz-button class="search__button--clear" (click)="clearForm()">
+          <button nz-button class="search__button--clear" (click)="clearForm(loaiVthh)">
             <i class="icon  htvbdh_nhap-lai1"></i>
             Xóa điều kiện
           </button>
@@ -62,7 +62,7 @@
         <button
           *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)  ? userService.isAccessPermisson('XHDTQG_PTDG_HDBKPB_VT_HDPL_EXP') : userService.isAccessPermisson('XHDTQG_PTDG_HDBKPB_LT_HDPL_EXP')"
           type="button" class="btn btn-sub"
-          (click)="exportDataHopDong('quan-ly-ky-hop-dong-ban-hang-dtqg-theo-phuong-thuc-ban-dau-gia.xlsx')">
+          (click)="exportDataHopDong('danh-sach-quan-ly-thong-tin=hop-dong-ban-dau-gia-hang-DTQG.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span> Xuất file </span>
         </button>

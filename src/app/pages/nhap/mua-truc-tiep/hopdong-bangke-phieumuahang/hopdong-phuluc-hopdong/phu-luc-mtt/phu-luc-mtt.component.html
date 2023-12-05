@@ -5,12 +5,12 @@
             <span>Quay lại</span>
         </button>
         <button class="btn btn-sub btn-sm waves-effect xanh-nhat" (click)="save(true)"
-            *ngIf="formData.value.trangThaiPhuLuc == STATUS.DU_THAO && userService.isCuc()">
+            *ngIf="formData.value.trangThaiPhuLuc == STATUS.DU_THAO && userService.isCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_HDBKPM_LT_HDPL_THEM')">
             <i class="icon htvbdh_trinh"></i>
             <span>Ký</span>
         </button>
         <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
-            *ngIf="formData.value.trangThaiPhuLuc == STATUS.DU_THAO && userService.isCuc()">
+            *ngIf="formData.value.trangThaiPhuLuc == STATUS.DU_THAO && userService.isCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_HDBKPM_LT_HDPL_THEM')">
             <i class="icon  htvbdh_tcdt_save"></i>
             <span>Lưu</span>
         </button>

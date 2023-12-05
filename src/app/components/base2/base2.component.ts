@@ -1,26 +1,26 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import {HttpClient} from '@angular/common/http';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormGroup, FormBuilder} from '@angular/forms';
 import dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { PAGE_SIZE_DEFAULT, STATUS_DA_DUYET } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { STATUS, STATUS_LABEL } from 'src/app/constants/status';
-import { UserLogin } from 'src/app/models/userlogin';
-import { BaseService } from 'src/app/services/base.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { StorageService } from 'src/app/services/storage.service';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
-import { cloneDeep } from 'lodash';
-import { saveAs } from 'file-saver';
-import { DialogTuChoiComponent } from '../dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { UploadFileService } from 'src/app/services/uploaFile.service';
-import { endOfMonth } from 'date-fns';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {PAGE_SIZE_DEFAULT, STATUS_DA_DUYET} from 'src/app/constants/config';
+import {MESSAGE} from 'src/app/constants/message';
+import {STATUS, STATUS_LABEL} from 'src/app/constants/status';
+import {UserLogin} from 'src/app/models/userlogin';
+import {BaseService} from 'src/app/services/base.service';
+import {HelperService} from 'src/app/services/helper.service';
+import {StorageService} from 'src/app/services/storage.service';
+import {UserService} from 'src/app/services/user.service';
+import {Globals} from 'src/app/shared/globals';
+import {cloneDeep} from 'lodash';
+import {saveAs} from 'file-saver';
+import {DialogTuChoiComponent} from '../dialog/dialog-tu-choi/dialog-tu-choi.component';
+import {UploadFileService} from 'src/app/services/uploaFile.service';
+import {endOfMonth} from 'date-fns';
 import printJS from "print-js";
-import { PREVIEW } from "../../constants/fileType";
+import {PREVIEW} from "../../constants/fileType";
 
 @Component({
   selector: 'app-base2',
@@ -66,7 +66,7 @@ export class Base2Component implements OnInit {
   notification: NzNotificationService
   uploadFileService: UploadFileService
   service: BaseService;
-  ranges = { 'Hôm nay': [new Date(), new Date()], 'Tháng hiện tại': [new Date(), endOfMonth(new Date())] };
+  ranges = {'Hôm nay': [new Date(), new Date()], 'Tháng hiện tại': [new Date(), endOfMonth(new Date())]};
   showDlgPreview = false;
   pdfSrc: any;
   printSrc: any;
@@ -148,7 +148,9 @@ export class Base2Component implements OnInit {
   clearForm(currentSearch?: any) {
     this.formData.reset();
     if (currentSearch) {
-      this.formData.patchValue(currentSearch)
+      this.formData.patchValue({
+        loaiVthh: currentSearch,
+      })
     }
     this.search();
   }
@@ -336,7 +338,7 @@ export class Base2Component implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.service.deleteMuti({ idList: dataDelete });
+            let res = await this.service.deleteMuti({idList: dataDelete});
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -400,7 +402,7 @@ export class Base2Component implements OnInit {
           !isHideMessage && this.notification.success(MESSAGE.NOTIFICATION, MESSAGE.UPDATE_SUCCESS);
           return res.data;
         } else {
-          this.formData.patchValue({ id: res.data.id });
+          this.formData.patchValue({id: res.data.id});
           !isHideMessage && this.notification.success(MESSAGE.NOTIFICATION, MESSAGE.ADD_SUCCESS);
           return res.data;
         }
@@ -576,7 +578,7 @@ export class Base2Component implements OnInit {
             res = await this.service.create(body);
           }
           if (res.msg == MESSAGE.SUCCESS) {
-            let res1 = await this.service.approve({ id: res.data.id, trangThai: trangThai });
+            let res1 = await this.service.approve({id: res.data.id, trangThai: trangThai});
             if (res1.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.NOTIFICATION, msgSuccess ? msgSuccess : MESSAGE.SUCCESS);
               this.goBack();
@@ -617,19 +619,19 @@ export class Base2Component implements OnInit {
 
   convertToRoman(number) {
     var romanNumerals = [
-      { value: 1000, symbol: 'M' },
-      { value: 900, symbol: 'CM' },
-      { value: 500, symbol: 'D' },
-      { value: 400, symbol: 'CD' },
-      { value: 100, symbol: 'C' },
-      { value: 90, symbol: 'XC' },
-      { value: 50, symbol: 'L' },
-      { value: 40, symbol: 'XL' },
-      { value: 10, symbol: 'X' },
-      { value: 9, symbol: 'IX' },
-      { value: 5, symbol: 'V' },
-      { value: 4, symbol: 'IV' },
-      { value: 1, symbol: 'I' }
+      {value: 1000, symbol: 'M'},
+      {value: 900, symbol: 'CM'},
+      {value: 500, symbol: 'D'},
+      {value: 400, symbol: 'CD'},
+      {value: 100, symbol: 'C'},
+      {value: 90, symbol: 'XC'},
+      {value: 50, symbol: 'L'},
+      {value: 40, symbol: 'XL'},
+      {value: 10, symbol: 'X'},
+      {value: 9, symbol: 'IX'},
+      {value: 5, symbol: 'V'},
+      {value: 4, symbol: 'IV'},
+      {value: 1, symbol: 'I'}
     ];
 
     var romanNumber = '';
@@ -657,6 +659,7 @@ export class Base2Component implements OnInit {
     }
     return endValue.getTime() <= this.formData.value.ngayDen.getTime();
   };
+
   async preview(fileName: string) {
     let body = this.formData.value;
     this.reportTemplate.fileName = fileName + '.docx';
@@ -673,6 +676,7 @@ export class Base2Component implements OnInit {
 
     });
   }
+
   downloadPdf(fileName: string) {
     saveAs(this.pdfSrc, fileName + '.pdf');
   }
@@ -684,8 +688,9 @@ export class Base2Component implements OnInit {
   closeDlg() {
     this.showDlgPreview = false;
   }
+
   printPreview() {
-    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 
   async xemTruoc(id, tenBaoCao) {
@@ -705,8 +710,8 @@ export class Base2Component implements OnInit {
   }
 
   downloadTemplate(templateName: any) {
-    this.service.downloadTemplate(templateName).then( s => {
-      const blob = new Blob([s], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    this.service.downloadTemplate(templateName).then(s => {
+      const blob = new Blob([s], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
       saveAs(blob, templateName);
     });
   }
@@ -715,7 +720,7 @@ export class Base2Component implements OnInit {
     this.selectedFile = event.target.files[0] as File;
     if (await this.isExcelFile(this.selectedFile)) {
       await this.uploadFile();
-    }else{
+    } else {
       this.notification.error(MESSAGE.ERROR, 'Chọn file đuôi .xlsx');
     }
   }
@@ -735,7 +740,7 @@ export class Base2Component implements OnInit {
       });
       formData.append('file', this.selectedFile);
       await this.service.importExcel(formData).then(res => {
-        if(res.msg == MESSAGE.SUCCESS){
+        if (res.msg == MESSAGE.SUCCESS) {
           console.log(res.data, "res.data")
           this.dataImport = res.data
           console.log(this.dataImport, "this.dataImport")
@@ -744,15 +749,15 @@ export class Base2Component implements OnInit {
     }
   }
 
-  showButtonPheDuyet(trangThai,permisson){
-    if(this.userService.isCuc()){
-      return (trangThai == STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson(permisson+'_DUYETTP')) ||
-        (trangThai == STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson(permisson+'_DUYETLDC'));
+  showButtonPheDuyet(trangThai, permisson) {
+    if (this.userService.isCuc()) {
+      return (trangThai == STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson(permisson + '_DUYETTP')) ||
+        (trangThai == STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson(permisson + '_DUYETLDC'));
     }
     if (this.userService.isTongCuc()) {
-      return (trangThai == STATUS.CHO_DUYET_LDV && this.userService.isAccessPermisson(permisson+'_DUYETLDV')) ||
-        (trangThai == STATUS.CHO_DUYET_LDTC && this.userService.isAccessPermisson(permisson+'_DUYETLDTC')) ||
-        (trangThai == STATUS.CHODUYET_BTC && this.userService.isAccessPermisson(permisson+'_DUYETBTC'));
+      return (trangThai == STATUS.CHO_DUYET_LDV && this.userService.isAccessPermisson(permisson + '_DUYETLDV')) ||
+        (trangThai == STATUS.CHO_DUYET_LDTC && this.userService.isAccessPermisson(permisson + '_DUYETLDTC')) ||
+        (trangThai == STATUS.CHODUYET_BTC && this.userService.isAccessPermisson(permisson + '_DUYETBTC'));
     }
 
   }

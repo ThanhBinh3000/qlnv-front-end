@@ -517,6 +517,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     let res = await this.thongTinDauThauService.create(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+      this.listNthauNopHs = res.data
       // await this.getDetail()
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -541,17 +542,18 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       this.selected = true;
       this.idGoiThau = dataGoiThau.id;
     }
-    this.formData.patchValue({
-      tgianTrinhKqTcg: dataGoiThau.tgianTrinhKqTcg,
-      tgianTrinhTtd: dataGoiThau.tgianTrinhTtd,
-      ghiChuTtdt: dataGoiThau.ghiChuTtdt,
-    })
-    this.fileDinhKems = dataGoiThau.fileDinhKems
+
     let res = await this.thongTinDauThauService.getDetailThongTin(this.idGoiThau, this.loaiVthh);
     this.itemRow = {};
-    this.itemRow.soLuong = dataGoiThau.soLuong
+    // this.itemRow.soLuong = dataGoiThau.soLuong
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listNthauNopHs = res.data;
+      this.formData.patchValue({
+        tgianTrinhKqTcg: res.data.tgianTrinhKqTcg,
+        tgianTrinhTtd: res.data.tgianTrinhTtd,
+        ghiChuTtdt: res.data.ghiChuTtdt,
+      })
+      this.fileDinhKems = res.data.fileDinhKems
+      this.listNthauNopHs = res.data.dsNhaThauDthau;
       this.listNthauNopHs.forEach(item => {
         item.edit = false;
       })
@@ -607,7 +609,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     this.itemRow.id = null;
   }
 
-  deleteRow(i) {
+  deleteRow(i, data) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -619,10 +621,11 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       nzOnOk: async() => {
         this.spinner.show();
         try {
-          let res = await this.thongTinDauThauService.delete({ id: i });
+          let res = await this.thongTinDauThauService.delete({ id: data.id });
           if (res.msg == MESSAGE.SUCCESS) {
+            this.listNthauNopHs.splice(i, 1)
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-            await this.getDetail()
+            // await this.getDetail()
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }

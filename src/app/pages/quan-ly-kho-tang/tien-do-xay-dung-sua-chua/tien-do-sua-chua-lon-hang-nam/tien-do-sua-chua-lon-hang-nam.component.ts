@@ -101,7 +101,7 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
     try {
       this.formData.patchValue({
         maDvi: this.userInfo.MA_DVI,
-        loai : 'QDTCDT'
+        // loai : 'QDTCDT'
       })
       let body = this.formData.value
       let res = await this.ktQdXdHangNamService.getDanhSachDmDuAn(body);

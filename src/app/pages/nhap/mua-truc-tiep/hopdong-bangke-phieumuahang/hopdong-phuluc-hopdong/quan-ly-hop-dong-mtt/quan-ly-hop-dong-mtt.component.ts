@@ -119,6 +119,7 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
         await this.quyetDinhPheDuyetKeHoachMTTService.getDetailDtlCuc(data.idPdKhDtl).then(dataTtin => {
+          console.log(dataTtin, "ql hd")
           this.formData.patchValue({
             namKh: data.namKh,
             soQd: dataTtin.data?.soQd,
@@ -368,8 +369,8 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
             id: data.id
           };
           this.thongTinPhuLucHopDongService.delete(body).then(async () => {
-            this.getDetail(this.id);
-            this.spinner.hide();
+            await this.getDetail(this.id);
+            await this.spinner.hide();
           });
         } catch (e) {
           console.log('error: ', e);
