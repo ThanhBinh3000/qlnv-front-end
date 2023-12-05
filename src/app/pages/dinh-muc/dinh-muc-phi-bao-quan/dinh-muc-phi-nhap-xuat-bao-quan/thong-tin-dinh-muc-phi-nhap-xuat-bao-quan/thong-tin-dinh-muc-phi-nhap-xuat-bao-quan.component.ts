@@ -169,9 +169,8 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       await this.loadAllDonViTheoCap();
       if (this.idInput > 0) {
         await this.detail(this.idInput);
-      }else{
-        this.rowItem = new DinhMucPhiNxBq();
       }
+      this.rowItem = new DinhMucPhiNxBq();
       await this.loadDmDinhMuc();
       this.updateEditCacheTqd();
       this.spinner.hide();

@@ -20,8 +20,6 @@ import {
 import {
   BienBanLayMauBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/bien-ban-lay-mau-btt.service';
-import {PREVIEW} from "../../../../../../constants/fileType";
-import printJS from "print-js";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {FileDinhKem} from "../../../../../../models/CuuTro";
 import {
@@ -184,10 +182,6 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
   async getDetail(id: number) {
     if (!id) return;
     const data = await this.detail(id);
-    if (!data) {
-      console.error('Không tìm thấy dữ liệu');
-      return;
-    }
     this.maTuSinh = this.idInput;
     this.dataTable = data.children;
     if (!this.isView) {
@@ -423,6 +417,7 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
       this.dataTable = res.data || [];
       this.dataTable.forEach(element => {
         element.edit = false;
+        element.danhGia = 'Đạt';
       });
     } catch (e) {
       console.error('Error: ', e);

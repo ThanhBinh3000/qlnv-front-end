@@ -455,7 +455,7 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
         this.listPhieuXuatKho = res.data.content.filter(item => !phieuXuatKhoSet.has(item.soPhieuXuatKho))
       }
       const formattedDataPhieuXuatKho = this.listPhieuXuatKho.map(item => ({
-        soLuongXuat: item.thucXuat.toLocaleString(),
+        soLuongXuat: item.thucXuat ? item.thucXuat.toLocaleString() : null,
         ...item
       }))
       const modalQD = this.modal.create({
