@@ -71,10 +71,10 @@
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
-      <button type="button" class="btn btn-main" *ngIf="userService.isCuc()"
-              (click)="showCreate()">
+      <button type="button" class="btn btn-main" *ngIf="userService.isCuc() && showCreate()"
+              (click)="redirectCreate()">
         <i class="icon htvbdh_dau-cong"></i>
-        <span>Tạo quyết định</span>
+        <span>Thêm</span>
       </button>
     </div>
   </div>
