@@ -54,7 +54,6 @@ export class ChiTietHoSoThanhLyComponent extends Base3Component implements OnIni
       thoiGianTlTu: [null],
       thoiGianTlDen: [null],
     });
-    this.symbol = '/'+this.userInfo.DON_VI.tenVietTat+"-KH&QLHDT";
   }
 
   async ngOnInit() {
@@ -68,11 +67,12 @@ export class ChiTietHoSoThanhLyComponent extends Base3Component implements OnIni
     if (this.id) {
       this.detail(this.id).then((res) => {
         if (res) {
-          let ttr = res.soHoSo.split('/')[0];
+          let ttr = res.soHoSo.split('/')
           this.formData.patchValue({
-            soHoSo: ttr,
+            soHoSo: ttr[0],
             thoiGianTl: [res.thoiGianTlTu, res.thoiGianTlDen]
           })
+          this.symbol = '/'+ttr[1];
           this.dataTable = chain(res.children).groupBy('xhTlDanhSachHdr.tenChiCuc').map((value, key) => ({
             expandSet: true,
             tenDonVi: key,
@@ -81,6 +81,10 @@ export class ChiTietHoSoThanhLyComponent extends Base3Component implements OnIni
           ).value()
         }
       })
+    }else{
+      if(this.userService.isCuc()){
+        this.symbol = '/'+this.userInfo.DON_VI.tenVietTat+"-KH&QLHDT";
+      }
     }
   }
 
