@@ -163,7 +163,8 @@ export class MangLuoiKhoComponent implements OnInit {
       dviReq: [null],
       loaiHangHoa: [],
       kieuHang: [""],
-      idDmDonVi: []
+      idDmDonVi: [],
+      khoiTich: [0]
     });
   }
 
@@ -478,6 +479,7 @@ export class MangLuoiKhoComponent implements OnInit {
       this.detailDonVi.patchValue({
         id: dataNode && dataNode.id ? dataNode.id : null,
         // maCha:dataNode && dataNode.id ? dataNode.id : null,
+        khoiTich: dataNode.khoiTich ? dataNode.khoiTich : 0,
         tichLuongTkLt: dataNode.tichLuongTkLt ? dataNode.tichLuongTkLt : 0,
         dienTichDat: dataNode.dienTichDat ? dataNode.dienTichDat : 0,
         tichLuongTkVt: dataNode.tichLuongTkVt ? dataNode.tichLuongTkVt : 0,
