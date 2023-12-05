@@ -3,10 +3,10 @@
   <ul nz-menu nzMode="horizontal">
     <li nz-menu-item [nzSelected]="typeVthh == '02'" (click)="selectTab(0)"
       *ngIf="typeVthh == '02' || typeVthh == '' || typeVthh == null">
-      Phiếu nhập kho tạm gửi
+      Phiếu tạm giao, nhận hàng
     </li>
     <li nz-menu-item (click)="selectTab(1)" *ngIf="typeVthh == '02' || typeVthh == '' || typeVthh == null">
-      Biên bản gửi hàng
+      Biên bản tạm giao, nhận hàng
     </li>
     <li nz-menu-item [nzSelected]="typeVthh != '02'" (click)="selectTab(2)">
       Phiếu nhập kho

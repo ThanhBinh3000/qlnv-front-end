@@ -225,7 +225,13 @@
       <nz-card class="mg-t-10 flex-card p-lr16">
         <nz-collapse class="pd-15"
                      *ngIf=" (dataTable && dataTable.length > 0) ">
-          <nz-collapse-panel [nzHeader]="formData.value.loaiTmdt == 'TREN15TY' ?  'Dự án/công trình trên 15 tỷ đồng' : 'Dự án/công trình dưới 15 tỷ đồng'" [nzActive]="true">
+          <nz-collapse-panel [nzHeader]="formData.value.loaiTmdt == 'TREN15TY' ?  'Dự án/công trình trên 15 tỷ đồng' : 'Dự án/công trình dưới 15 tỷ đồng'" [nzActive]="true" [nzExtra]="extraTpl">
+              <ng-template #extraTpl>
+                <button type="button" class="btn btn-sub" (click)="exportDetail($event)">
+                  <i class="icon htvbdh_chuyen-xu-ly" ></i>
+                  <span>Xuất file</span>
+                </button>
+              </ng-template>
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
               <div nz-row [nzGutter]="20">
                 <div nz-col nzSpan="24">
@@ -272,9 +278,9 @@
               </div>
             </form>
             <div>
-    <span class="text-right">
-      <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Đồng</h2>
-    </span>
+              <span class="text-right">
+                <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Đồng</h2>
+              </span>
             </div>
             <nz-table nzBordered class="pd-10"
                       [nzFrontPagination]="false" [nzShowPagination]="false"
@@ -427,11 +433,19 @@
     </nz-collapse-panel>
   </nz-collapse>
   <nz-collapse *ngIf="isTongHop">
-    <nz-collapse-panel [nzHeader]="'QUYẾT ĐỊNH CỦA TỔNG CỤC DTNN'" [nzActive]="true">
+    <nz-collapse-panel [nzHeader]="'QUYẾT ĐỊNH CỦA TỔNG CỤC DTNN'" [nzActive]="true" >
+
       <nz-card class="mg-t-10 flex-card p-lr16">
         <nz-collapse class="pd-15"
                      *ngIf="(dataTable && dataTable.length > 0)">
-          <nz-collapse-panel [nzHeader]="formData.value.loaiTmdt == 'DUOI15TY' ?  'Dự án/công trình dưới 15 tỷ đồng' : 'Dự án/công trình trên 15 tỷ đồng'" [nzActive]="true">
+          <nz-collapse-panel [nzHeader]="formData.value.loaiTmdt == 'DUOI15TY' ?  'Dự án/công trình dưới 15 tỷ đồng' : 'Dự án/công trình trên 15 tỷ đồng'" [nzActive]="true" [nzExtra]="extraTpl">
+            <ng-template #extraTpl>
+              <button type="button" class="btn btn-sub" (click)="exportDetail($event)">
+                <i class="icon htvbdh_chuyen-xu-ly" ></i>
+                <span>Xuất file</span>
+              </button>
+              <!-- You can use stopPropagation if you don't want the panel to toggle -->
+            </ng-template>
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
               <div nz-row [nzGutter]="20">
                 <div nz-col nzSpan="24">
@@ -478,9 +492,9 @@
               </div>
             </form>
             <div>
-    <span class="text-right">
-      <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Đồng</h2>
-    </span>
+            <span class="text-right">
+              <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Đồng</h2>
+            </span>
             </div>
             <nz-table nzBordered class="pd-10"
                       [nzFrontPagination]="false" [nzShowPagination]="false"

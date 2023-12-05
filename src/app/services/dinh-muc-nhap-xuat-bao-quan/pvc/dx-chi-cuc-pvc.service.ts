@@ -38,4 +38,9 @@ export class DxChiCucPvcService extends BaseService{
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/list-dx-theo-id-th-tcdt/${id}`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
+
+  exportDetail(body: any) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ket-xuat-detail`;
+    return this._httpClient.post(url, body, { responseType: 'blob' });
+  }
 }
