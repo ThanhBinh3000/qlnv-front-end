@@ -55,6 +55,8 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
     giaiDoan : '' ,
     soQuyetDinh: '',
     ngayKyBtc: '',
+    soQdCanDieuChinh: '',
+    soLanDieuChinh: '',
     trichYeu: '',
     phuongAnTc: '',
     tenTrangThai: '',
@@ -65,7 +67,7 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
   dataTableAll: any[] = [];
   dataTable: any[] = [];
 
-  listTrangThai = [{"ma": "00", "giaTri": "Dự thảo"}, {"ma": "29", "giaTri": "Ban hành"}];
+  listTrangThai = [{"ma": "78", "giaTri": "Đang nhập dữ liệu"}, {"ma": "29", "giaTri": "Ban hành"}];
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
