@@ -45,7 +45,7 @@
       </form>
       <div nz-col class="cangiua group-button-search">
         <div>
-          <button nz-button class="search__button--clear" (click)="clearForm()">
+          <button nz-button class="search__button--clear" (click)="clearForm(loaiVthh)">
             <i class="icon  htvbdh_nhap-lai1"></i>
             Xóa điều kiện
           </button>
@@ -59,7 +59,7 @@
     <div class="group-button">
       <h3 class="text-uppercase"> DANH SÁCH QD PD KẾ HOẠCH BÁN TRỰC TIẾP ĐƯỢC ỦY QUYỀN/BÁN LẺ </h3>
       <div class="buttons">
-        <button type="button" (click)="exportData('danh-sach-quyet-dinh-phe-duyet-ket-qua-chao-gia.xlsx')"
+        <button type="button" (click)="exportData('danh-sach-quyet-dinh-phe-duyet-ke-hoach-ban-truc-tiep-duoc-uy-quyen/ban-le-hang-DTQG.xlsx')"
                 class="btn btn-sub">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
@@ -184,10 +184,10 @@
             </a>
           </td>
           <td class="text-left">{{ data.namKh }}</td>
-          <td class="text-left">{{ data.ngayPduyet|date: 'dd/MM/YYYY' }}</td>
+          <td class="text-left">{{ data.xhQdPdKhBttHdr?.ngayPduyet|date: 'dd/MM/YYYY' }}</td>
           <td class="text-left">{{ data.ngayNhanCgia|date: 'dd/MM/YYYY'}}</td>
           <td class="text-left" style="max-width: 300px; min-width: 250px;  white-space: break-spaces;">
-            {{data.trichYeu}}
+            {{data.xhQdPdKhBttHdr?.trichYeu}}
           </td>
           <td class="text-left" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">{{data.tenLoaiVthh}}</td>
           <td class="text-left">{{ data.tenCloaiVthh}}</td>

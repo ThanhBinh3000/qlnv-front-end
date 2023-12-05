@@ -10,13 +10,15 @@
             </nz-select>
           </div>
           <div nz-col [nzSpan]="3">
-            <label
-              class="search__label"> {{loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? 'Số QĐ giao NV XH' : 'Số QĐ giao NV xuất hàng'}}</label>
+            <label class="search__label">
+              {{loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? 'Số QĐ giao NV XH' : 'Số QĐ giao NV xuất hàng'}}
+            </label>
             <input nz-input formControlName="soQdNv"/>
           </div>
           <div nz-col [nzSpan]="4">
-            <label
-              class="search__label"> {{loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? 'Số bảng kê xuất vật tư' : 'Số bảng kê cân hàng'}}</label>
+            <label class="search__label">
+              {{loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? 'Số bảng kê xuất vật tư' : 'Số bảng kê cân hàng'}}
+            </label>
             <input nz-input formControlName="soBangKeHang"/>
           </div>
           <div nz-col [nzSpan]="4" *ngIf="!loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
@@ -57,7 +59,7 @@
               </div>
               <div nz-col nzSpan="12" class="cus-end-date">
                 <nz-date-picker [nzDisabledDate]="disabledStartNgayXuatKhoDen" nzFormat="dd/MM/yyyy"
-                                formControlName="ngayXuatKho" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                                formControlName="ngayXuatKhoDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
               </div>
             </div>
           </div>
@@ -65,7 +67,7 @@
       </form>
       <div nz-col class="cangiua group-button-search">
         <div>
-          <button nz-button class="search__button--clear" (click)="clearForm()">
+          <button nz-button class="search__button--clear" (click)="clearForm(loaiVthh)">
             <i class="icon  htvbdh_nhap-lai1"></i>
             Xóa điều kiện
           </button>
@@ -82,7 +84,7 @@
       <div class="buttons">
         <button
           *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_XK_VT_BKXVT_EXP') : userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BKCH_EXP')"
-          type="button" class="btn btn-sub" (click)="exportData('danh-sach-bang-ke-can-hang.xlsx')">
+          type="button" class="btn btn-sub" (click)="exportData('danh-sach-bang-ke-can-hang-ban-truc-tiep-hang-DTQG.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span> Xuất file </span>
         </button>

@@ -4,25 +4,25 @@
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
         <div nz-row [nzGutter]="24">
           <div nz-col [nzSpan]="2">
-            <label> Năm kế hoạch </label>
+            <label class="search__label"> Năm kế hoạch</label>
             <nz-select formControlName="namKh">
-              <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              <nz-option *ngFor="let item of listNam" [nzValue]="item.value" [nzLabel]="item.text"></nz-option>
             </nz-select>
           </div>
           <div nz-col [nzSpan]="3">
-            <label> Số bảng kê </label>
-            <input placeholder="" nz-input formControlName="soBangKe"/>
+            <label class="search__label"> Số bảng kê</label>
+            <input nz-input formControlName="soBangKe"/>
           </div>
           <div nz-col [nzSpan]="4">
-            <label> Số QĐ phê duyệt KH bán trực tiếp </label>
-            <input placeholder="" nz-input formControlName="soQdNv"/>
+            <label class="search__label"> Số QĐ phê duyệt KH bán trực tiếp</label>
+            <input nz-input formControlName="soQdNv"/>
           </div>
           <div nz-col [nzSpan]="11">
-            <label> Tên người mua </label>
-            <input placeholder="" nz-input formControlName="tenNguoiMua"/>
+            <label class="search__label"> Tên người mua</label>
+            <input nz-input formControlName="tenNguoiMua"/>
           </div>
           <div nz-col [nzSpan]="4">
-            <label> Ngày lập kế hoạch </label>
+            <label class="search__label"> Ngày lập kế hoạch</label>
             <div nz-row [nzGutter]="24">
               <div nz-col [nzSpan]="12" class="cus-start-date">
                 <nz-date-picker [nzDisabledDate]="disabledNgayBanHangTu" nzFormat="dd/MM/yyyy"
@@ -39,7 +39,7 @@
       </form>
       <div nz-col class="cangiua group-button-search">
         <div>
-          <button nz-button class="search__button--clear" (click)="clearFilter()">
+          <button nz-button class="search__button--clear" (click)="clearForm(loaiVthh)">
             <i class="icon  htvbdh_nhap-lai1"></i>
             Xóa điều kiện
           </button>
@@ -63,7 +63,7 @@
         <button
           *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_BKBL_EXP'):
            userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_BKBL_EXP')"
-          type="button" class="btn btn-sub" (click)="exportData('Danh-sach-bang-ke-ban-le.xlsx')">
+          type="button" class="btn btn-sub" (click)="exportData('danh-sach-bang-ke-ban-le-hang-DTQG.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
@@ -92,7 +92,7 @@
           <th class="text-center">Tên người mua</th>
           <th class="text-center">Địa chỉ</th>
           <th class="text-center">Số CMT/CCCD</th>
-          <th class="text-center">Loại hàng hóa</th>
+          <th class="text-center" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">Loại hàng hóa</th>
           <th class="text-center">Chủng loại hàng hóa</th>
           <th class="text-center">Số Lượng</th>
           <th class="text-center">Đơn giá (đ)</th>
@@ -142,7 +142,7 @@
                      (input)="filterInTable('cmt',filterTable.cmt)" size="small"/>
             </nz-input-group>
           </th>
-          <th>
+          <th *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
                      (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small"/>
@@ -196,7 +196,7 @@
           <td class="text-left">{{ data.tenBenMua }}</td>
           <td class="text-left">{{ data.diaChiBenMua }}</td>
           <td class="text-left">{{ data.cmtBenMua }}</td>
-          <td class="text-left">{{ data.tenLoaiVthh }}</td>
+          <td class="text-left" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">{{ data.tenLoaiVthh }}</td>
           <td class="text-left">{{ data.tenCloaiVthh }}</td>
           <td class="text-right">{{ data.soLuong|number:globals.numberFormat:globals.locale}}</td>
           <td class="text-right">{{ data.donGia|number:globals.numberFormat:globals.locale}}</td>

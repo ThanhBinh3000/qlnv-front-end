@@ -20,12 +20,12 @@
           <div nz-col [nzSpan]="4">
             <label class="search__label"> Ngày xuất kho</label>
             <div nz-row [nzGutter]="24">
-              <div nz-col nzSpan="12" class="cus-start-date">
+              <div nz-col [nzSpan]="12" class="cus-start-date">
                 <nz-date-picker [nzDisabledDate]="disabledStartNgayXkTu" nzFormat="dd/MM/yyyy"
                                 formControlName="ngayLapPhieuTu" nzPlaceHolder="Ngày bắt đầu">
                 </nz-date-picker>
               </div>
-              <div nz-col nzSpan="12" class="cus-end-date">
+              <div nz-col [nzSpan]="12" class="cus-start-date">
                 <nz-date-picker [nzDisabledDate]="disabledStartNgayXkDen" nzFormat="dd/MM/yyyy"
                                 formControlName="ngayLapPhieuDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
               </div>
@@ -35,7 +35,7 @@
       </form>
       <div nz-col class="cangiua group-button-search">
         <div>
-          <button nz-button class="search__button--clear" (click)="clearForm()">
+          <button nz-button class="search__button--clear" (click)="clearForm(loaiVthh)">
             <i class="icon  htvbdh_nhap-lai1"></i>
             Xóa điều kiện
           </button>
@@ -51,7 +51,7 @@
       <div class="buttons">
         <button
           *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_XK_VT_PXK_EXP') : userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_PXK_EXP')"
-          type="button" class="btn btn-sub" (click)="exportData('danh-sach-phieu-xuat-kho.xlsx')">
+          type="button" class="btn btn-sub" (click)="exportData('danh-sach-phieu-xuat-kho-ban-truc-tiep-hang-DTQG.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span> Xuất file </span>
         </button>

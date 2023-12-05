@@ -63,27 +63,16 @@ export class BangKeBanHangComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([
-        this.timKiem(),
-        this.search(),
-      ]);
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+      })
+      await this.search();
     } catch (e) {
       console.error('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
     }
-  }
-
-  async timKiem() {
-    this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
-    })
-  }
-
-  async clearFilter() {
-    this.formData.reset();
-    await Promise.all([this.timKiem(), this.search()]);
   }
 
   async themMoiBangKeBanLe($event, isView: boolean, idInput?: number, index?: number) {
