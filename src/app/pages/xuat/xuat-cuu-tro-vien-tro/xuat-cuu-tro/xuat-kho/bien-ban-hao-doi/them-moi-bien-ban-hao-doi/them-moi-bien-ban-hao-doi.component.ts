@@ -24,6 +24,7 @@ import { PhieuKiemNghiemChatLuongService } from 'src/app/services/qlnv-hang/xuat
 import { BienBanLayMauService } from 'src/app/services/qlnv-hang/xuat-hang/chung/xuat-kho/PhieuXuatKho.service';
 import { MangLuoiKhoService } from 'src/app/services/qlnv-kho/mangLuoiKho.service';
 import { DanhMucDinhMucHaoHutService } from 'src/app/services/danh-muc-dinh-muc-hao-hut.service';
+import { LOAI_HANG_DTQG } from 'src/app/constants/config';
 
 @Component({
   selector: 'app-them-moi-bien-ban-hao-doi',
@@ -337,7 +338,31 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
   //     this.listBbTinhKho = this.listBbTinhKho.filter(item => (item.maLoKho == data.maLoKho && item.maNganKho === data.maNganKho));
   //   }
   // }
+  tinhDinhMucHaoHut(dsDinhMuc: any[] = [], soThangBaoQuanHang: number, loaiVthh: string) {
+    const minTgBaoQuanDen = dsDinhMuc.reduce((min, cur) => min > cur.tgBaoQuanDen ? cur.tgBaoQuanDen : min, 0);
+    const maxTgBaoQuanDen = dsDinhMuc.reduce((max, cur) => max > cur.tgBaoQuanDen ? max : cur.tgBaoQuanDen, 0);
+    if (loaiVthh === LOAI_HANG_DTQG.GAO) {
+      if (soThangBaoQuanHang < minTgBaoQuanDen) {
+        return dsDinhMuc.find(f => f.tgBaoQuanDen === minTgBaoQuanDen) ? dsDinhMuc.find(f => f.tgBaoQuanDen === minTgBaoQuanDen).dinhMuc : 0;
+      } else if (soThangBaoQuanHang <= maxTgBaoQuanDen) {
+        return dsDinhMuc.find(f => soThangBaoQuanHang > f.tgBaoQuanTu && f <= f.tgBaoQuanDen) ? dsDinhMuc.find(f => soThangBaoQuanHang > f.tgBaoQuanTu && f <= f.tgBaoQuanDen) : 0
+      } else {
+        return dsDinhMuc.find(f => f.tgBaoQuanTu === maxTgBaoQuanDen) ? dsDinhMuc.find(f => f.tgBaoQuanTu === maxTgBaoQuanDen) : 0
+      }
+    } else {
+      if (soThangBaoQuanHang <= minTgBaoQuanDen) {
+        return dsDinhMuc.find(f => f.tgBaoQuanDen === minTgBaoQuanDen) ? dsDinhMuc.find(f => f.tgBaoQuanDen === minTgBaoQuanDen).dinhMuc : 0;
+      } else if (soThangBaoQuanHang <= maxTgBaoQuanDen) {
+        return dsDinhMuc.find(f => soThangBaoQuanHang > f.tgBaoQuanTu && f <= f.tgBaoQuanDen) ? dsDinhMuc.find(f => soThangBaoQuanHang > f.tgBaoQuanTu && f <= f.tgBaoQuanDen) : 0
+      } else {
+        const dinhMuc = dsDinhMuc.find(f => f.tgBaoQuanDen === maxTgBaoQuanDen) ? dsDinhMuc.find(f => f.tgBaoQuanDen === maxTgBaoQuanDen) : 0
+        const dinhMucThem = dsDinhMuc.find(f => f.tgBaoQuanTu === maxTgBaoQuanDen) ? dsDinhMuc.find(f => f.tgBaoQuanTu === maxTgBaoQuanDen) : 0
+        return dinhMuc + (soThangBaoQuanHang - maxTgBaoQuanDen) * dinhMucThem
+      }
+    }
+  }
   async getDinhMucHaoHut(cloaiVthh: string, loaiVthh: string, soThangBaoQuanHang: number) {
+    if (!soThangBaoQuanHang && ![0, "0"].includes(soThangBaoQuanHang)) return;
     const body = {
       loaiVthh, cloaiVthh
     }
@@ -357,22 +382,8 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
           loaiHinhBq.some(item => f.loaiHinhBq.split(",").includes(item.ma)) &&
           phuongPhapBq.some(item => f.phuongThucBq.split(",").includes(item.ma)) &&
           f.apDungTai.split(",").includes(this.userInfo.MA_DVI.slice(0, -2));
-      })
-      let dataDmhh = listDmhh.find(f => {
-        if (soThangBaoQuanHang <= 3) {
-          return f.tgBaoQuanDen === 3
-        } else if (soThangBaoQuanHang > 3 && soThangBaoQuanHang <= 18) {
-          return soThangBaoQuanHang > f.tgBaoQuanTu && soThangBaoQuanHang <= f.tgBaoQuanDen
-        } else {
-          return f.tgBaoQuanTu === 18
-        }
-      })?.dinhMuc || 0;
-      let dinhMucHaoHut = 0;
-      if (soThangBaoQuanHang > 18) {
-        dinhMucHaoHut = (listDmhh.find(f => f.tgBaoQuanDen === 18)?.dinhMuc || 0) + (Math.ceil(soThangBaoQuanHang) - 18) * dataDmhh
-      } else {
-        dinhMucHaoHut = dataDmhh
-      }
+      }).sort((a, b) => a.tgBaoQuanTu - b.tgBaoQuanTu);
+      const dinhMucHaoHut = this.tinhDinhMucHaoHut(listDmhh, soThangBaoQuanHang, loaiVthh)
       this.formData.patchValue({ dinhMucHaoHut })
     }
   }
