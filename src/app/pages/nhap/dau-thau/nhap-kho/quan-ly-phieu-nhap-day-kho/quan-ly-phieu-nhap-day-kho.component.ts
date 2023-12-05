@@ -165,19 +165,23 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
     // this.dataTable.forEach(item => {
     //   item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0];
     // });
-    this.dataTable.forEach(item => {
+    for (let i = 0; i < this.dataTable.length; i++) {
       if (this.userService.isChiCuc()) {
-        item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+        this.dataTable[i].detail = this.dataTable[i].dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
       } else {
         let data = [];
-        item.dtlList.forEach(item => {
+        this.dataTable[i].dtlList.forEach(item => {
           data = [...data, ...item.listBienBanNhapDayKho];
         })
-        item.detail = {
+        this.dataTable[i].detail = {
           listBienBanNhapDayKho: data
         }
       };
-    });
+      this.expandSet.add(i)
+      for (let j = 0; j < this.dataTable[i].detail.listBienBanNhapDayKho.length; j++) {
+        this.expandSet2.add(j)
+      }
+    }
     // this.dataTable.forEach(item => {
     //   item.detail.children.forEach(ddNhap => {
     //     ddNhap.listPhieuNhapKho.forEach(x => {
@@ -185,7 +189,6 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
     //     });
     //   })
     // });
-    console.log(this.dataTable);
   }
 
   clearFilter() {

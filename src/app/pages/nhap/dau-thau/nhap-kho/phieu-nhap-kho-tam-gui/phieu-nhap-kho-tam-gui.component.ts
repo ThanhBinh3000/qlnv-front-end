@@ -171,19 +171,20 @@ export class PhieuNhapKhoTamGuiComponent extends Base2Component implements OnIni
   }
 
   convertDataTable() {
-    this.dataTable.forEach(item => {
+    for (let i = 0; i < this.dataTable.length; i++) {
       if (this.userService.isChiCuc()) {
-        item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+        this.dataTable[i].detail = this.dataTable[i].dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
       } else {
         let data = [];
-        item.dtlList.forEach(item => {
+        this.dataTable[i].dtlList.forEach(item => {
           data = [...data, ...item.children];
         })
-        item.detail = {
+        this.dataTable[i].detail = {
           children: data
         }
       };
-    });
+      this.expandSet.add(i)
+    }
     // this.dataTable.forEach(item => {
     //   item.detail.children.forEach(ddNhap => {
     //     ddNhap.listPhieuNhapKho.forEach(x => {
@@ -191,7 +192,6 @@ export class PhieuNhapKhoTamGuiComponent extends Base2Component implements OnIni
     //     });
     //   })
     // });
-    console.log(this.dataTable);
   }
 
   async changePageIndex(event) {
