@@ -219,7 +219,7 @@
         </th>
         <th *ngIf='capDvi == 2'>
           <input class='money-input' [readOnly]='true' currencyMask [options]='AMOUNT'
-                 [(ngModel)]='rowItem.nvChuyenMonTc + rowItem.ttCaNhanTc  +rowItem.nvChuyenMonKv + rowItem.ttCaNhanKv' />
+                 [(ngModel)]='rowItem.tongDinhMucChiDonVi' />
         </th>
         <th>
           <input class='money-input' [readOnly]='true' currencyMask [options]='AMOUNT'
@@ -402,7 +402,7 @@
           </td>
           <td *ngIf='capDvi == 2'>
             <input class='money-input' currencyMask [options]='amount' [readOnly]='true'
-                   [(ngModel)]='dataEdit[idx].data.nvChuyenMonTc + dataEdit[idx].data.ttCaNhanTc + dataEdit[idx].data.nvChuyenMonKv + dataEdit[idx].data.ttCaNhanKv'
+                   [(ngModel)]='dataEdit[idx].data.tongDinhMucChiDonVi'
             />
           </td>
           <td>

@@ -65,6 +65,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     tienBanThoc: 0,
     tienBanGao: 0,
     tienGaoCtro: 0,
+    tienVonKhac: 0,
   };
   dataQdTtcpGiaoBTC: any;
   taiLieuDinhKemList: any[] = [];
@@ -176,29 +177,33 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   async getDataDetail(id) {
     if (id > 0) {
       let res = await this.quyetDinhBtcTcdtService.getDetail(id);
-      const data = res.data;
-      this.yearCurrentView = data.namQd;
-      this.formData.patchValue({
-        id: data.id,
-        namQd: data.namQd,
-        ngayQd: data.ngayQd,
-        soQd: data.soQd.split('/')[0],
-        trangThai: data.trangThai,
-        trichYeu: data.trichYeu,
-        ghiChu: data.ghiChu,
-      });
-      data.fileDinhkems.forEach(item => {
-        if (item.fileType == FILETYPE.FILE_DINH_KEM) {
-          this.taiLieuDinhKemList.push(item);
-        } else if (item.fileType == FILETYPE.CAN_CU_PHAP_LY) {
-          this.listCcPhapLy.push(item);
-        }
-      });
-      this.keHoachNhapXuat = data.keHoachNhapXuat;
-      this.muaTangList = data.muaTangList;
-      this.xuatGiamList = data.xuatGiamList;
-      this.xuatBanList = data.xuatBanList;
-      this.luanPhienList = data.luanPhienList;
+      if (res.msg == MESSAGE.SUCCESS) {
+        const data = res.data;
+        this.yearCurrentView = data.namQd;
+        this.formData.patchValue({
+          id: data.id,
+          namQd: data.namQd,
+          ngayQd: data.ngayQd,
+          soQd: data.soQd.split('/')[0],
+          trangThai: data.trangThai,
+          trichYeu: data.trichYeu,
+          ghiChu: data.ghiChu,
+        });
+        data.fileDinhkems.forEach(item => {
+          if (item.fileType == FILETYPE.FILE_DINH_KEM) {
+            this.taiLieuDinhKemList.push(item);
+          } else if (item.fileType == FILETYPE.CAN_CU_PHAP_LY) {
+            this.listCcPhapLy.push(item);
+          }
+        });
+        this.keHoachNhapXuat = data.keHoachNhapXuat;
+        this.muaTangList = data.muaTangList;
+        this.xuatGiamList = data.xuatGiamList;
+        this.xuatBanList = data.xuatBanList;
+        this.luanPhienList = data.luanPhienList;
+      }else{
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     }
   }
 
@@ -382,8 +387,8 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
         item.dataChild.forEach(child => {
           if (!child.loaiVthh.startsWith('04') && !child.loaiVthh.startsWith('03')) {
             ttVatTu += child.tongTien ? child.tongTien : 0;
-          }else if(child.loaiVthh.startsWith('03')){
-            ttVatTu +=  child.tongTien ? child.tongTien : 0;
+          } else if (child.loaiVthh.startsWith('03')) {
+            ttVatTu += child.tongTien ? child.tongTien : 0;
           } else {
             ttMuoi += child.tongTien ? child.tongTien : 0;
           }
@@ -391,8 +396,8 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
       } else {
         if (!item.loaiVthh.startsWith('04') && !item.loaiVthh.startsWith('03')) {
           ttVatTu += item.tongTien ? item.tongTien : 0;
-        }else if(item.loaiVthh.startsWith('03')){
-          ttVatTuCn +=  item.tongTien ? item.tongTien : 0;
+        } else if (item.loaiVthh.startsWith('03')) {
+          ttVatTuCn += item.tongTien ? item.tongTien : 0;
         } else {
           ttMuoi += item.tongTien ? item.tongTien : 0;
         }
@@ -401,7 +406,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     this.dtMuaVatTu = ttVatTu;
     this.dtMuaMuoi = ttMuoi;
     this.dtMuaVatCn = ttVatTuCn;
-    this.tongTable1 =  this.dtMuaVatTu+  this.dtMuaMuoi+  this.dtMuaVatCn + (this.keHoachNhapXuat.nhapCtMua ? (this.keHoachNhapXuat.tienMuaThoc + this.keHoachNhapXuat.tienMuaGaoXcht + this.keHoachNhapXuat.tienMuaGaoLpdh) : (this.keHoachNhapXuat.tienMuaThoc + this.keHoachNhapXuat.tongTienMuaGao));
+    this.tongTable1 = this.dtMuaVatTu + this.dtMuaMuoi + this.dtMuaVatCn + (this.keHoachNhapXuat.nhapCtMua ? (this.keHoachNhapXuat.tienMuaThoc + this.keHoachNhapXuat.tienMuaGaoXcht + this.keHoachNhapXuat.tienMuaGaoLpdh) : (this.keHoachNhapXuat.tienMuaThoc + this.keHoachNhapXuat.tongTienMuaGao));
   }
 
   templateName = 'danh-sach-quyet-dinh-cua-bo-tai-chinh-giao-tong-cuc-du-tru';
@@ -409,7 +414,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   async preview(id) {
     this.spinner.show();
     await this.quyetDinhBtcTcdtService.preview({
-      tenBaoCao: this.templateName+ '.docx',
+      tenBaoCao: this.templateName + '.docx',
       id: id,
     }).then(async res => {
       if (res.data) {
