@@ -4,8 +4,7 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="idInput && userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_TONGHOP_IN')"
-            type="button" class="btn btn-sub"
+    <button *ngIf="idInput" type="button" class="btn btn-sub"
             (click)="xemTruoc(idInput, userService.isTongCuc() ? templateNameTongCuc : templateNameCuc)">
       <i class="icon htvbdh_totrinh"></i>
       <span> Xem trước </span>
