@@ -226,9 +226,11 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
   calculatorTable(hopDong: any, dataTable: any) {
     let sumDaKy = 0;
     let sumSl = 0;
+    let donGiaVat = 0;
     if (!this.userService.isTongCuc()) {
       let listHd = dataTable.find(x => x.maDvi == hopDong.maDvi);
       if (listHd) {
+        donGiaVat = listHd.donGiaVat;
         if (listHd.trangThai == STATUS.DA_KY) {
           sumDaKy = listHd.children.reduce((prev, cur) => {
             prev += cur.soLuong;
@@ -263,13 +265,16 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
     this.formData.patchValue({
       tongSoLuongQdKhChuakyHd: sumSl - sumDaKy,
       tongSoLuongQdKhDakyHd: sumDaKy,
-      tongSoLuongQdKh: sumSl
+      tongSoLuongQdKh: sumSl,
+      donGiaGomThue: donGiaVat,
+      thanhTien: sumSl * donGiaVat * 1000,
+      soLuong: sumSl
     })
   }
 
   async save(isOther: boolean) {
     this.helperService.markFormGroupTouched(this.formData);
-    if(isOther && this.validateSlKyHd()){
+    if(!this.userService.isChiCuc() && isOther && this.validateSlKyHd()){
       this.notification.error(MESSAGE.ERROR, 'Số lượng ký hợp đồng phải bằng số lượng nhập trực tiếp');
       return;
     }
