@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { FormGroup, Validators } from "@angular/forms";
 import { Base2Component } from "../../../../../components/base2/base2.component";
 import dayjs from "dayjs";
+import { saveAs } from 'file-saver';
 import { MESSAGE } from "../../../../../constants/message";
 import { STATUS } from "../../../../../constants/status";
 import {
@@ -57,6 +58,8 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
       klLtXuatCuc: [null],
       trichYeu: [null, Validators.required],
       ngayKy: [null, Validators.required],
+      ngayTongHopNgayTrinh:[null],
+      soToTrinh:[null],
       soQdGiaoCt: [null],
       trangThai: ['00'],
       trangThaiTh: [],
@@ -133,7 +136,8 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
           klLtNhapCuc: detail.klLtNhap,
           klLtXuatCuc: detail.klLtXuat,
           slGaoDangBaoQuan: detail.slGaoDangBaoQuan,
-          slThocDangBaoQuan: detail.slThocDangBaoQuan
+          slThocDangBaoQuan: detail.slThocDangBaoQuan,
+          ngayTongHopNgayTrinh: new Date()
         })
         this.dataTable = detail.listQlDinhMucDxTbmmTbcdDtl
         if (detail && detail.listQlDinhMucDxTbmmTbcd && detail.listQlDinhMucDxTbmmTbcd.length > 0) {
@@ -446,6 +450,31 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
           item.slTieuChuanTc = tongKl * detail.slChiCuc / detail.klChiCuc
         }
       }
+    }
+  }
+
+  exportDataDetail() {
+    if (this.dataTable.length > 0) {
+      this.spinner.show();
+      try {
+        let body = this.formData.value;
+        body.paggingReq = {
+          limit: this.pageSize,
+          page: this.page - 1
+        }
+        this.dxChiCucService
+          .exportDetail(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-chi-tiet-tong-hop-nhu-cau-mmtb-va-ccdc.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
   }
 }

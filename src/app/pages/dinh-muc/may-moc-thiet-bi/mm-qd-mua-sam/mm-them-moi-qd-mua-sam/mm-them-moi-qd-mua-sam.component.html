@@ -121,6 +121,18 @@
       </div>
     </form>
   </nz-card>
+  <div class='header header-green-background mg-t-10' >
+    <div class='header-text'>
+      <div class='title-chi-tieu'>
+      </div>
+    </div>
+    <div class='btn-group'>
+      <button type="button" class="btn btn-sub" (click)="exportDataDetail()">
+        <i class="icon htvbdh_chuyen-xu-ly"></i>
+        <span>Xuất file</span>
+      </button>
+    </div>
+  </div>
   <nz-table class="nowrap mg-t-10" [nzData]="dataTable" [nzFrontPagination]="false"
             [nzShowPagination]="false" nzBordered>
     <thead>
