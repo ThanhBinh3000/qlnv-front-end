@@ -24,6 +24,7 @@ import {
 import {
   KtKhSuaChuaBtcService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/kh-sc-lon-btc/kt-kh-sua-chua-btc.service";
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: "app-them-moi-sc-tcdt",
@@ -523,5 +524,20 @@ export class ThemMoiScTcdtComponent implements OnInit {
         }
       },
     });
+  }
+
+  exportDetail($event){
+    $event.stopPropagation()
+    let body = {
+      id : this.idInput,
+      title : this.formData.value.loaiTmdt == 'TREN15TY' ? 'TRÊN 15 TỶ' : 'DƯỚI 15 TỶ'
+    }
+    this.spinner.show();
+      this.tongHopDxScLon
+        .exportDetail(body)
+        .subscribe((blob) =>
+          saveAs(blob,'data.xlsx'),
+        );
+      this.spinner.hide();
   }
 }
