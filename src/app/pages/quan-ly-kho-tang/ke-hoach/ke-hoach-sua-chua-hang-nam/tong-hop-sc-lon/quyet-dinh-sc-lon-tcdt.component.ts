@@ -90,7 +90,6 @@ export class QuyetDinhScLonTcdtComponent extends Base2Component implements OnIni
     this.formData.patchValue({
       maDvi: this.userInfo.MA_DVI,
       capDvi: this.userInfo.CAP_DVI,
-      namKeHoach : dayjs().get('year')
     })
     await this.search();
   }
