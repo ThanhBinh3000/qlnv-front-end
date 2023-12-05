@@ -18,7 +18,7 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import {
   QuyetDinhGiaoNvCuuTroService
 } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service';
-import { convertTienTobangChu } from 'src/app/shared/commonFunction';
+import { convertTienTobangChu, convertTienTobangChuThapPhan } from 'src/app/shared/commonFunction';
 import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
 import { Validators } from '@angular/forms';
 import {
@@ -136,13 +136,13 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       }
     );
     this.maPhieu = 'PXK-' + this.userInfo.DON_VI.tenVietTat;
-    this.formData.controls.thucXuat.valueChanges.subscribe((value) => {
-      this.calculateThanhTien();
-      const soLuongBc = value ? convertTienTobangChu(value) + (this.formData.value.donViTinh ? this.formData.value.donViTinh === 'kg' ? "kilôgam" : this.formData.value.donViTinh : "") : "";
+    this.formData.get("thucXuat").valueChanges.subscribe((value) => {
+      this.calculateThanhTien(value, "thucXuat");
+      const soLuongBc = value ? this.convertTienTobangChu(value, this.formData.value.donViTinh === "kg" ? "kilôgam" : this.formData.value.donViTinh) : "";
       this.formData.patchValue({ soLuongBc });
     })
-    this.formData.controls.donGia.valueChanges.subscribe((value) => {
-      this.calculateThanhTien();
+    this.formData.get("donGia").valueChanges.subscribe((value) => {
+      this.calculateThanhTien(value, "donGia");
     })
     // this.setTitle();
   }
@@ -484,10 +484,18 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     })
   }
 
-  calculateThanhTien(): void {
-    const thanhTien = this.formData.value.thucXuat && this.formData.value.donGia ? this.formData.value.thucXuat * this.formData.value.donGia : "";
-    const thanhTienBc = thanhTien ? convertTienTobangChu(thanhTien) + "đồng" : "";
+  calculateThanhTien(value: number, loai: string): void {
+    const thucXuat = loai === "thucXuat" ? value : this.formData.value.thucXuat;
+    const donGia = loai === "donGia" ? value : this.formData.value.donGia;
+    const thanhTien = thucXuat && donGia ? thucXuat * donGia : "";
+    const thanhTienBc = thanhTien ? this.convertTienTobangChu(thanhTien, "đồng") : "";
     this.formData.patchValue({ thanhTien, thanhTienBc });
+  }
+  convertTienTobangChu(tien: number, donVi?: string) {
+    if (tien > 0) {
+      let rs = convertTienTobangChuThapPhan(Number(tien.toFixed(1)));
+      return rs.charAt(0).toUpperCase() + rs.slice(1) + (donVi ? " " + donVi : "");
+    }
   }
   showAction() {
     if (this.isView) return false;

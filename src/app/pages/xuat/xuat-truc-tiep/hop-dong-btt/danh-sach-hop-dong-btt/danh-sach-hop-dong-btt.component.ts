@@ -44,8 +44,8 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
       soHopDong: null,
       tenHopDong: null,
       tenBenMua: null,
-      ngayPduyetTu: null,
-      ngayPduyetDen: null,
+      ngayKyHopDongTu: null,
+      ngayKyHopDongDen: null,
       trangThai: null,
       loaiVthh: null,
     });
@@ -169,11 +169,11 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
     return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
   };
 
-  disabledNgayPduyetTu = (startValue: Date): boolean => {
-    return this.isInvalidDateRange(startValue, this.formData.value.ngayPduyetDen, 'ngayPduyet');
+  disabledNgayKyHopDongTu = (startValue: Date): boolean => {
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayKyHopDongDen, 'ngayKyHopDong');
   };
 
-  disabledNgayPduyetDen = (endValue: Date): boolean => {
-    return this.isInvalidDateRange(endValue, this.formData.value.ngayPduyetTu, 'ngayPduyet');
+  disabledNgayKyHopDongDen = (endValue: Date): boolean => {
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayKyHopDongTu, 'ngayKyHopDong');
   };
 }
