@@ -12,6 +12,7 @@ import { MESSAGE } from '../../../../../constants/message';
 import dayjs from 'dayjs';
 import { STATUS } from '../../../../../constants/status';
 import { DxChiCucPvcService } from '../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/dx-chi-cuc-pvc.service';
+import { saveAs } from 'file-saver';
 import {
   PvcDxChiCucCtiet,
 } from '../../de-xuat-nc-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc.component';
@@ -337,4 +338,29 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
   }
 
   protected readonly AMOUNT_ONE_DECIMAL = AMOUNT_ONE_DECIMAL;
+
+  exportDataDetail() {
+    if (this.dataTable.length > 0) {
+      this.spinner.show();
+      try {
+        let body = this.formData.value;
+        body.paggingReq = {
+          limit: this.pageSize,
+          page: this.page - 1
+        }
+        this.dxChiCucService
+          .exportDetail(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-chi-tiet-tong-hop-nhu-cau-mang-pvc-va-ccdc.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
+  }
 }
