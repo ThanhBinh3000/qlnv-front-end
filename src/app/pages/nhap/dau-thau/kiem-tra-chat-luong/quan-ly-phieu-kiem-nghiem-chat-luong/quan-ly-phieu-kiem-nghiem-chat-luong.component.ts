@@ -32,35 +32,11 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
   dataTable: any[] = [];
   dataTableAll: any[] = [];
   searchFilter = {
-    soQdNhap: '',
-    ngayBanGiaoMau: [this.last30Day, this.toDay],
-    soHopDong: '',
-    diemkho: '',
-    nhaKho: '',
-    nganLoBaoQuan: '',
-    maDvi: '',
-    maHhoa: '',
-    maKho: '',
-    maNgan: '',
-    ngayKnghiemDenNgay: '',
-    ngayKnghiemTuNgay: '',
-    orderBy: '',
-    orderDirection: '',
-    soPhieu: '',
-    str: '',
-    trangThai: '',
-    pageNumber: '',
-    pageSize: '',
+    namKhoach: '',
+    soQuyetDinh: '',
+    soPhieuKncl: '',
     soBbBanGiao: '',
-  };
-  filterTable = {
-    soQuyetDinhNhap: '',
-    soPhieu: '',
-    ngayBanGiaoMau: null,
-    tenDiemKho: '',
-    tenDvi: '',
-    soLuongMauHangKt: '',
-    trangThaiDuyet: '',
+    soBbNhapDayKho: '',
   };
   listDiemKho: any[] = [];
   listNganKho: any[] = [];
@@ -82,7 +58,8 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
 
   allChecked = false;
   indeterminate = false;
-
+  tuNgayKncl: Date | null = null;
+  denNgayKncl: Date | null = null;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -153,7 +130,14 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
         "page": this.page - 1
       },
       loaiVthh: this.typeVthh,
-      trangThai: this.STATUS.BAN_HANH
+      trangThai: this.STATUS.BAN_HANH,
+      namNhap: this.searchFilter.namKhoach,
+      soQd: this.searchFilter.soQuyetDinh,
+      soPhieuKncl: this.searchFilter.soPhieuKncl,
+      soBbBanGiao: this.searchFilter.soBbBanGiao,
+      soBbNhapDayKho: this.searchFilter.soBbNhapDayKho,
+      tuNgayKncl: this.tuNgayKncl != null ? dayjs(this.tuNgayKncl).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayKncl: this.denNgayKncl != null ? dayjs(this.denNgayKncl).format('YYYY-MM-DD') + " 24:59:59" : null,
     };
     let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -215,27 +199,14 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
 
   clearFilter() {
     this.searchFilter = {
-      soQdNhap: '',
-      ngayBanGiaoMau: null,
-      soHopDong: '',
-      diemkho: '',
-      nhaKho: '',
-      nganLoBaoQuan: '',
-      maDvi: '',
-      maHhoa: '',
-      maKho: '',
-      maNgan: '',
-      ngayKnghiemDenNgay: '',
-      ngayKnghiemTuNgay: '',
-      orderBy: '',
-      orderDirection: '',
-      soPhieu: '',
-      str: '',
-      trangThai: '',
-      pageNumber: '',
-      pageSize: '',
+      namKhoach: '',
+      soQuyetDinh: '',
+      soPhieuKncl: '',
       soBbBanGiao: '',
+      soBbNhapDayKho: '',
     };
+    this.tuNgayKncl = null;
+    this.denNgayKncl = null;
     this.search();
   }
 
@@ -341,34 +312,20 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
     }
   }
 
-  clearFilterTable() {
-    this.filterTable = {
-      soQuyetDinhNhap: '',
-      soPhieu: '',
-      ngayBanGiaoMau: null,
-      tenDiemKho: '',
-      tenDvi: '',
-      soLuongMauHangKt: '',
-      trangThaiDuyet: '',
-    };
-  }
-
   async export() {
     if (this.totalRecord && this.totalRecord > 0) {
       this.spinner.show();
       try {
         let body = {
-          maDvi: this.userInfo.MA_DVI,
-          maVatTuCha: this.isTatCa ? null : this.typeVthh,
-          ngayBanGiaoMauTu: this.searchFilter.ngayBanGiaoMau
-            ? dayjs(this.searchFilter.ngayBanGiaoMau[0]).format('YYYY-MM-DD')
-            : null,
-          ngayBanGiaoMauDen: this.searchFilter.ngayBanGiaoMau
-            ? dayjs(this.searchFilter.ngayBanGiaoMau[1]).format('YYYY-MM-DD')
-            : null,
-          soPhieu: this.searchFilter.soPhieu || null,
-          soQdNhap: this.searchFilter.soQdNhap || null,
-          soBbBanGiao: this.searchFilter.soBbBanGiao || null,
+          loaiVthh: this.typeVthh,
+          trangThai: this.STATUS.BAN_HANH,
+          namNhap: this.searchFilter.namKhoach,
+          soQd: this.searchFilter.soQuyetDinh,
+          soPhieuKncl: this.searchFilter.soPhieuKncl,
+          soBbBanGiao: this.searchFilter.soBbBanGiao,
+          soBbNhapDayKho: this.searchFilter.soBbNhapDayKho,
+          tuNgayKncl: this.tuNgayKncl != null ? dayjs(this.tuNgayKncl).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denNgayKncl: this.denNgayKncl != null ? dayjs(this.denNgayKncl).format('YYYY-MM-DD') + " 24:59:59" : null,
           pageNumber: this.page,
           pageSize: this.pageSize,
         };
@@ -428,4 +385,18 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
     }
     return false;
   }
+
+  disabledTuNgayKn = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayKncl) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayKncl.getTime();
+  };
+
+  disabledDenNgayKn = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayKncl) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayKncl.getTime();
+  };
 }
