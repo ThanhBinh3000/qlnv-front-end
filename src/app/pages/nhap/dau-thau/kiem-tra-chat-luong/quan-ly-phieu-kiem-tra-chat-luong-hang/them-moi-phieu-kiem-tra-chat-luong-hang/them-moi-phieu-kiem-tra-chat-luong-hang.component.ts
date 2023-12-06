@@ -288,8 +288,8 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
         soLuongQdGiaoNvNh: data.soLuong * 1000,
         soLuongDaNhap: soLuongNhap.data,
         soLuongNhapKho: data.soLuong,
-        soBbNtbq: data.listBbNtbqld?.find(item => item.id === Math.min(...data.listBbNtbqld?.map(item => item.id))).soBbNtBq,
-        hthucBquan: data.listBbNtbqld?.find(item => item.id === Math.min(...data.listBbNtbqld?.map(item => item.id))).hthucBquan,
+        soBbNtbq: data.listBbNtbqld?.find(item => item.id === Math.min(...data.listBbNtbqld?.map(item => item.id)))?.soBbNtBq,
+        hthucBquan: data.listBbNtbqld?.find(item => item.id === Math.min(...data.listBbNtbqld?.map(item => item.id)))?.hthucBquan,
         tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
       })
       this.formattedSlNhapKho = this.formData.get('soLuongNhapKho') ? formatNumber(this.formData.get('soLuongNhapKho').value * 1000, 'vi_VN', '1.0-99') : '0';
