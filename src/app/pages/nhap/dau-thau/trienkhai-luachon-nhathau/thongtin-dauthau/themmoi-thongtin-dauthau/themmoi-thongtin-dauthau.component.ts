@@ -434,7 +434,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     for (const data of this.listOfData) {{
       let res = await this.thongTinDauThauService.getDetailThongTin(data.id, this.loaiVthh);
       if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data == null || res.data.length == 0) {
+        if (res.data.dsNhaThauDthau == null || res.data.dsNhaThauDthau.length == 0) {
           this.notification.error(MESSAGE.ERROR, data.goiThau + ' chưa cập nhật danh sách nhà thầu.');
           return;
         }
