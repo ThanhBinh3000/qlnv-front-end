@@ -481,25 +481,25 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
     }
   }
   tinhDinhMucHaoHut(dsDinhMuc: any[] = [], soThangBaoQuanHang: number, loaiVthh: string) {
-    const minTgBaoQuanDen = dsDinhMuc.reduce((min, cur) => min > cur.tgBaoQuanDen ? cur.tgBaoQuanDen : min, 0);
-    const maxTgBaoQuanDen = dsDinhMuc.reduce((max, cur) => max > cur.tgBaoQuanDen ? max : cur.tgBaoQuanDen, 0);
+    const minTgBaoQuanTu = dsDinhMuc.reduce((min, cur) => min > cur.tgBaoQuanTu ? cur.tgBaoQuanTu : min, dsDinhMuc[0].tgBaoQuanTu);
+    const maxTgBaoQuanDen = dsDinhMuc.reduce((max, cur) => max > cur.tgBaoQuanDen ? max : cur.tgBaoQuanDen, dsDinhMuc[0].tgBaoQuanDen);
     if (loaiVthh === LOAI_HANG_DTQG.GAO) {
-      if (soThangBaoQuanHang < minTgBaoQuanDen) {
-        return dsDinhMuc.find(f => f.tgBaoQuanDen === minTgBaoQuanDen) ? dsDinhMuc.find(f => f.tgBaoQuanDen === minTgBaoQuanDen).dinhMuc : 0;
-      } else if (soThangBaoQuanHang <= maxTgBaoQuanDen) {
-        return dsDinhMuc.find(f => soThangBaoQuanHang > f.tgBaoQuanTu && soThangBaoQuanHang <= f.tgBaoQuanDen) ? dsDinhMuc.find(f => soThangBaoQuanHang > f.tgBaoQuanTu && soThangBaoQuanHang <= f.tgBaoQuanDen).dinhMuc : 0
+      if (soThangBaoQuanHang < minTgBaoQuanTu) {
+        return dsDinhMuc.find(f => f.tgBaoQuanTu === minTgBaoQuanTu) ? dsDinhMuc.find(f => f.tgBaoQuanTu === minTgBaoQuanTu).dinhMuc : 0;
+      } else if (soThangBaoQuanHang < maxTgBaoQuanDen) {
+        return dsDinhMuc.find(f => soThangBaoQuanHang >= f.tgBaoQuanTu && soThangBaoQuanHang < f.tgBaoQuanDen) ? dsDinhMuc.find(f => soThangBaoQuanHang >= f.tgBaoQuanTu && soThangBaoQuanHang < f.tgBaoQuanDen).dinhMuc : 0
       } else {
         return dsDinhMuc.find(f => f.tgBaoQuanTu === maxTgBaoQuanDen) ? dsDinhMuc.find(f => f.tgBaoQuanTu === maxTgBaoQuanDen).dinhMuc : 0
       }
     } else {
-      if (soThangBaoQuanHang <= minTgBaoQuanDen) {
-        return dsDinhMuc.find(f => f.tgBaoQuanDen === minTgBaoQuanDen) ? dsDinhMuc.find(f => f.tgBaoQuanDen === minTgBaoQuanDen).dinhMuc : 0;
+      if (soThangBaoQuanHang <= minTgBaoQuanTu) {
+        return dsDinhMuc.find(f => f.tgBaoQuanTu === minTgBaoQuanTu) ? dsDinhMuc.find(f => f.tgBaoQuanTu === minTgBaoQuanTu).dinhMuc : 0;
       } else if (soThangBaoQuanHang <= maxTgBaoQuanDen) {
         return dsDinhMuc.find(f => soThangBaoQuanHang > f.tgBaoQuanTu && soThangBaoQuanHang <= f.tgBaoQuanDen) ? dsDinhMuc.find(f => soThangBaoQuanHang > f.tgBaoQuanTu && soThangBaoQuanHang <= f.tgBaoQuanDen).dinhMuc : 0
       } else {
         const dinhMuc = dsDinhMuc.find(f => f.tgBaoQuanDen === maxTgBaoQuanDen) ? dsDinhMuc.find(f => f.tgBaoQuanDen === maxTgBaoQuanDen).dinhMuc : 0
         const dinhMucThem = dsDinhMuc.find(f => f.tgBaoQuanTu === maxTgBaoQuanDen) ? dsDinhMuc.find(f => f.tgBaoQuanTu === maxTgBaoQuanDen).dinhMuc : 0
-        return dinhMuc + (soThangBaoQuanHang - maxTgBaoQuanDen) * dinhMucThem
+        return dinhMuc + Math.ceil((soThangBaoQuanHang - maxTgBaoQuanDen)) * dinhMucThem
       }
     }
   }
@@ -525,7 +525,7 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
           phuongPhapBq.some(item => f.phuongThucBq.split(",").includes(item.ma)) &&
           f.apDungTai.split(",").includes(this.userInfo.MA_DVI.slice(0, -2));
       }).sort((a, b) => a.tgBaoQuanTu - b.tgBaoQuanTu);
-      const dinhMucHaoHut = this.tinhDinhMucHaoHut(listDmhh, soThangBaoQuanHang, loaiVthh)
+      const dinhMucHaoHut = Array.isArray(listDmhh) && listDmhh.length > 0 ? this.tinhDinhMucHaoHut(listDmhh, soThangBaoQuanHang, loaiVthh) : ""
       this.formData.patchValue({ dinhMucHaoHut })
     }
   }

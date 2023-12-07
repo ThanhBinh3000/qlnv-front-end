@@ -174,8 +174,8 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
             <nz-form-control nz-col>
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="showFromTH ? '' : selectHangHoa()">
-                <input [readonly]="true" nz-input formControlName="tenLoaiVthh" readonly/>
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="showFromTH ? null : selectHangHoa()">
+                <input nz-input formControlName="tenLoaiVthh" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -184,8 +184,8 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="showFromTH ? '' : selectHangHoa()">
-                <input [readonly]="true" nz-input formControlName="tenCloaiVthh" readonly/>
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="showFromTH ? null : selectHangHoa()">
+                <input nz-input formControlName="tenCloaiVthh" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -518,6 +518,7 @@
     </div>
   </form>
 </div>
+
 <ng-template #error let-control>
   <app-template-error #error [control]="control"></app-template-error>
 </ng-template>

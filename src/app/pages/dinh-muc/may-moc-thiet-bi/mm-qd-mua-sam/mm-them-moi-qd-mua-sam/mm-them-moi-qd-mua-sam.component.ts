@@ -14,6 +14,7 @@ import {
 import {MmDxChiCucService} from "../../../../../services/mm-dx-chi-cuc.service";
 import {MESSAGE} from "../../../../../constants/message";
 import dayjs from "dayjs";
+import { saveAs } from 'file-saver';
 import {STATUS} from "../../../../../constants/status";
 import {QuyetDinhMuaSamService} from "../../../../../services/quyet-dinh-mua-sam.service";
 import {DialogMmMuaSamComponent} from "../../../../../components/dialog/dialog-mm-mua-sam/dialog-mm-mua-sam.component";
@@ -386,5 +387,30 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
     }
   }
 
+  exportDataDetail() {
+    if (this.dataTable.length > 0) {
+      this.spinner.show();
+      try {
+        let body = this.formData.value;
+        body.listQlDinhMucQdMuaSamDtl = this.dataTable;
+        body.paggingReq = {
+          limit: this.pageSize,
+          page: this.page - 1
+        }
+        this.qdMuaSamService
+          .exportDetail(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-chi-tiet-tong-hop-nhu-cau-mmtb-va-ccdc.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
+  }
 }
 

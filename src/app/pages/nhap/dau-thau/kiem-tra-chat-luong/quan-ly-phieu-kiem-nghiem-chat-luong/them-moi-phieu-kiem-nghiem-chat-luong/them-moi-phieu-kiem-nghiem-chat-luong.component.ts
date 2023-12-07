@@ -377,7 +377,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     let res = await this.quanLyBienBanLayMauService.danhSach(body);
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
-        this.listBbBanGiaoMau = res.data.content
+        this.listBbBanGiaoMau = res.data
       }
     }
   }

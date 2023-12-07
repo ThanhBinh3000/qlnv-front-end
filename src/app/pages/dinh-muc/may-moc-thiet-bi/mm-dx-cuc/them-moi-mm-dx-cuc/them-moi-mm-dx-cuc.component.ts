@@ -7,7 +7,7 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import {FormGroup, Validators} from "@angular/forms";
 import {Base2Component} from "../../../../../components/base2/base2.component";
 import {chain} from 'lodash';
-import * as uuid from "uuid";
+import { saveAs } from 'file-saver';
 import {v4 as uuidv4} from 'uuid';
 import {
   MmThongTinNcChiCuc
@@ -344,6 +344,31 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
       this.expandSet.add(id);
     } else {
       this.expandSet.delete(id);
+    }
+  }
+
+  exportDataDetail() {
+    if (this.dataTable.length > 0) {
+      this.spinner.show();
+      try {
+        let body = this.formData.value;
+        body.paggingReq = {
+          limit: this.pageSize,
+          page: this.page - 1
+        }
+        this.dxChiCucService
+          .exportDetailCc(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-chi-tiet-tong-hop-nhu-cau-mmtb-va-ccdc.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
   }
 }
