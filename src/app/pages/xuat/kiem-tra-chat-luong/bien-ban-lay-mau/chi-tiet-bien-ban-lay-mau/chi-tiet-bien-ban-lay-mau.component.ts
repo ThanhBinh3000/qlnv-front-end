@@ -524,7 +524,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
           });
         } else if (res.data.dataDtl) {
           // this.dsDiaDiem = uniqBy(res.data.dataDtl, "maDvi").filter(f => f.tenNganKho && f.maDvi && f.maDvi.startsWith(this.userInfo.MA_DVI) && listBienBanLayMau.every(b => b.maDiaDiem !== f.maDvi));
-          this.dsDiaDiem = res.data.quyetDinhDtl;
+          this.dsDiaDiem = res.data.dataDtl;
           this.formData.patchValue({
             idQdGnv: res.data.id,
             soQdGnv: res.data.soBbQd,
