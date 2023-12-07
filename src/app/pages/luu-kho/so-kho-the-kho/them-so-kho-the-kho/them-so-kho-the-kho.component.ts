@@ -145,7 +145,7 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
     let body = this.formData.value;
     body.maDvi = this.userInfo.MA_DVI
     if (body.loai == '01') {
-      this.loadDsNhapXuat()
+      await this.loadDsNhapXuat()
     }
     body.theKhoCtList = this.listDsNhapXuat;
     let res = await this.createUpdate(body);
@@ -411,6 +411,7 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
       denNgay: this.formData.value.ngayTaoDen,
       cloaiVthh: this.formData.value.cloaiVthh,
       loaiVthh: this.formData.value.loaiVthh,
+      maKho : this.formData.value.maLoKho ? this.formData.value.maLoKho : this.formData.value.maNganKho
     }
     let res = await this.quanLySoKhoTheKhoService.loadDsNhapXuat(body);
     if (res.msg == MESSAGE.SUCCESS) {

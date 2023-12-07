@@ -236,8 +236,8 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
     // this.itemRow.soLuong = dataGoiThau.soLuong
     if (res.msg == MESSAGE.SUCCESS) {
       this.formData.patchValue({
-        tgianTrinhKqTcg: res.data.tgianTrinhKqTcg,
-        tgianTrinhTtd: res.data.tgianTrinhTtd,
+        // tgianTrinhKqTcg: res.data.tgianTrinhKqTcg,
+        // tgianTrinhTtd: res.data.tgianTrinhTtd,
         ghiChuTtdt: res.data.ghiChuTtdt,
       })
       this.fileDinhKems = res.data.fileDinhKems
@@ -340,8 +340,8 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
     let res = await this.thongTinDauThauService.getDetailThongTinVt(this.danhsachDx[i].id, this.loaiVthh, type);
     if (res.msg == MESSAGE.SUCCESS) {
       this.formData.patchValue({
-        tgianTrinhKqTcg: res.data.tgianTrinhKqTcg,
-        tgianTrinhTtd: res.data.tgianTrinhTtd,
+        // tgianTrinhKqTcg: res.data.tgianTrinhKqTcg,
+        // tgianTrinhTtd: res.data.tgianTrinhTtd,
         ghiChuTtdt: res.data.ghiChuTtdt,
       })
       this.fileDinhKems = res.data.fileDinhKems
@@ -468,8 +468,8 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
     let body = {
       idGoiThau: this.idGoiThau,
       ghiChuTtdt: this.formData.value.ghiChuTtdt,
-      tgianTrinhKqTcg: this.formData.value.tgianTrinhKqTcg,
-      tgianTrinhTtd: this.formData.value.tgianTrinhTtd,
+      // tgianTrinhKqTcg: this.formData.value.tgianTrinhKqTcg,
+      // tgianTrinhTtd: this.formData.value.tgianTrinhTtd,
       fileDinhKems: this.fileDinhKems,
       loaiVthh: this.loaiVthh,
       type: type
