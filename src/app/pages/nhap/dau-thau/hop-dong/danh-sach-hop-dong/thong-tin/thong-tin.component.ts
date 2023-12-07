@@ -628,7 +628,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
               } else {
                 let res = await this.thongTinDauThauService.getDetailThongTin(data.id, this.loaiVthh);
                 if (res.msg == MESSAGE.SUCCESS) {
-                  let nhaThauTrung = res.data.find(item => item.id == data.idNhaThau);
+                  let nhaThauTrung = res.data.dsNhaThauDthau.find(item => item.id == data.idNhaThau);
                   if (this.userService.isTongCuc()) {
                     this.dataTable = data.children;
                     this.dataTable.forEach(item => {
@@ -686,7 +686,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
       }
       let res = await this.thongTinDauThauService.getDetailThongTinVt(data.id, this.loaiVthh, type);
       if (res.msg == MESSAGE.SUCCESS) {
-        let nhaThauTrung = res.data.find(item => item.id == data.idNhaThau);
+        let nhaThauTrung = res.data.dsNhaThauDthau.find(item => item.id == data.idNhaThau);
         this.formData.patchValue({
           idGoiThau: data.id,
           tenGoiThau: data.goiThau,
