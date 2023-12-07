@@ -8,10 +8,10 @@ import {environment} from "../../../../../environments/environment";
   providedIn: 'root',
 })
 export class ReportKhScThuongXuyenService extends BaseService {
-  GATEWAY = '';
+  GATEWAY = '/qlnv-report';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'kh-sc-thuong-xuyen', '');
+    super(httpClient, 'kh-sc-thuong-xuyen', '/qlnv-report');
   }
 
   thKhSuaChuaTXuyen(body) {
