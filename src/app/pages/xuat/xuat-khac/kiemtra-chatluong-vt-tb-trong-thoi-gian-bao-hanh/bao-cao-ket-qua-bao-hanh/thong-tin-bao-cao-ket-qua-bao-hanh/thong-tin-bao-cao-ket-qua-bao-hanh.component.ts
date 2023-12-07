@@ -130,7 +130,7 @@ export class ThongTinBaoCaoKetQuaBaoHanhComponent extends Base2Component impleme
               soCanCu: res.data?.soCanCu ? res.data.soCanCu.split(",") : [],
               tenDviNhan: this.dviNhan.title,
             });
-            console.log(this.formData.value, 152)
+            this.maBc = res.data.soBaoCao.split("/")[1]
             this.dataTable = this.formData.value.bhBaoCaoKqDtl
             this.buildTableView(this.dataTable)
           }
