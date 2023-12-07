@@ -359,10 +359,12 @@ export class ThongTinBienBanGuiHangComponent extends Base2Component implements O
       } else {
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          this.back();
+          // this.back();
         } else {
+          this.formData.get('id').setValue(res.data.id);
+          this.id = res.data.id;
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-          this.back();
+          // this.back();
         }
         this.spinner.hide();
       }

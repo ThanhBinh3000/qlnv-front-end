@@ -67,6 +67,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   maQd: string = null;
   fileDinhKem: Array<FileDinhKem> = [];
   listFileDinhKem: any[] = [];
+  listCcPhapLy: any[] = [];
 
   listPhuongThucDauThau: any[] = [];
   listNguonVon: any[] = [];
@@ -166,6 +167,8 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       tenDvi: [''],
       tgianThien: [''],
       ykienThamGia: [''],
+      loaiHinhNx: 'Mua đấu thầu',
+      kieuNx: 'Nhập mua'
     })
   }
 
@@ -388,6 +391,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     this.danhsachDx[this.index].giaBanHoSo = this.thongtinDexuatComponent.formData.value.giaBanHoSo
     body.children = this.danhsachDx;
     body.fileDinhKems = this.listFileDinhKem;
+    body.listCcPhapLy = this.listCcPhapLy;
     if (isGuiDuyet && !this.isValidate(body.children)) {
       await this.spinner.hide();
       return;
@@ -515,6 +519,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.listDanhSachTongHop = [];
       const data = res.data;
       this.listFileDinhKem = data.fileDinhKems;
+      this.listCcPhapLy = data.listCcPhapLy;
       this.helperService.bidingDataInFormGroup(this.formData, data);
       this.formData.patchValue({
         soQd: data.soQd?.split("/")[0],
