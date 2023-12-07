@@ -339,8 +339,8 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
   //   }
   // }
   tinhDinhMucHaoHut(dsDinhMuc: any[] = [], soThangBaoQuanHang: number, loaiVthh: string) {
-    const minTgBaoQuanTu = dsDinhMuc.reduce((min, cur) => min > cur.tgBaoQuanTu ? cur.tgBaoQuanTu : min, 0);
-    const maxTgBaoQuanDen = dsDinhMuc.reduce((max, cur) => max > cur.tgBaoQuanDen ? max : cur.tgBaoQuanDen, 0);
+    const minTgBaoQuanTu = dsDinhMuc.reduce((min, cur) => min > cur.tgBaoQuanTu ? cur.tgBaoQuanTu : min, dsDinhMuc[0].tgBaoQuanTu);
+    const maxTgBaoQuanDen = dsDinhMuc.reduce((max, cur) => max > cur.tgBaoQuanDen ? max : cur.tgBaoQuanDen, dsDinhMuc[0].tgBaoQuanDen);
     if (loaiVthh === LOAI_HANG_DTQG.GAO) {
       if (soThangBaoQuanHang < minTgBaoQuanTu) {
         return dsDinhMuc.find(f => f.tgBaoQuanTu === minTgBaoQuanTu) ? dsDinhMuc.find(f => f.tgBaoQuanTu === minTgBaoQuanTu).dinhMuc : 0;
@@ -383,7 +383,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
           phuongPhapBq.some(item => f.phuongThucBq.split(",").includes(item.ma)) &&
           f.apDungTai.split(",").includes(this.userInfo.MA_DVI.slice(0, -2));
       }).sort((a, b) => a.tgBaoQuanTu - b.tgBaoQuanTu);
-      const dinhMucHaoHut = this.tinhDinhMucHaoHut(listDmhh, soThangBaoQuanHang, loaiVthh)
+      const dinhMucHaoHut = Array.isArray(listDmhh) && listDmhh.length > 0 ? this.tinhDinhMucHaoHut(listDmhh, soThangBaoQuanHang, loaiVthh) : ""
       this.formData.patchValue({ dinhMucHaoHut })
     }
   }
