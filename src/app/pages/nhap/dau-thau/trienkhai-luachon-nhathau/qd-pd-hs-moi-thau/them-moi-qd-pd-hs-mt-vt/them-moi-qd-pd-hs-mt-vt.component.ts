@@ -203,7 +203,6 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
       this.formData.controls["ngayHluc"].setValidators([Validators.required]);
       this.formData.controls["soQdPdKhlcnt"].setValidators([Validators.required]);
       this.formData.controls["trichYeu"].setValidators([Validators.required]);
-      this.formData.controls["noiDungQd"].setValidators([Validators.required]);
       this.formData.controls["tenDuAn"].setValidators([Validators.required]);
       this.formData.controls["quy"].setValidators([Validators.required]);
       this.formData.controls["tgianMthau"].setValidators([Validators.required]);

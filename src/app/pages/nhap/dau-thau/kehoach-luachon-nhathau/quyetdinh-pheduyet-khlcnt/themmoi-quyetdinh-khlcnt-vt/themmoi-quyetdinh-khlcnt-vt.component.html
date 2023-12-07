@@ -71,27 +71,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4">
-          <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Ngày hiệu lực</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker formControlName="ngayHluc" nzFormat="dd/MM/yyyy"
-                              [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== '78' && formData.value.trangThai !== '' || isView">
-              </nz-date-picker>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
         <div nz-col [nzSpan]="8">
-          <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Chọn công văn/ tờ trình</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : openDialogTr()">
-                <input [readonly]="true" nz-input formControlName="soTrHdr" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="24">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
               Trích yếu
@@ -102,10 +82,31 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+<!--        <div nz-col [nzSpan]="4">-->
+<!--          <nz-form-item>-->
+<!--            <nz-form-label nzRequired [nzNoColon]="true"> Ngày hiệu lực</nz-form-label>-->
+<!--            <nz-form-control [nzErrorTip]="error">-->
+<!--              <nz-date-picker formControlName="ngayHluc" nzFormat="dd/MM/yyyy"-->
+<!--                              [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== '78' && formData.value.trangThai !== '' || isView">-->
+<!--              </nz-date-picker>-->
+<!--            </nz-form-control>-->
+<!--          </nz-form-item>-->
+<!--        </div>-->
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Chọn công văn/ tờ trình</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : openDialogTr()">
+                <input [readonly]="true" nz-input formControlName="soTrHdr" />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
         <div nz-col [nzSpan]="24">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">
-              File đính kèm quyết định đã ký và đóng dấu
+              File đính kèm quyết định đã ban hành
             </nz-form-label>
             <div class="list-file">
               <file-list [data]="fileDinhKems" [isViewDetail]="isView"></file-list>
@@ -134,7 +135,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Loại hình nhập</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="loaiHinhNx" (ngModelChange)="onChangeLhNx($event)"
                          [nzDisabled]="true">
@@ -146,7 +147,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Kiểu nhập xuất</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Kiểu nhập</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="kieuNx" [nzDisabled]="true">
                 <nz-option *ngFor="let p of listKieuNx" [nzValue]="p.ma" [nzLabel]="p.giaTri">
@@ -188,7 +189,7 @@
   </nz-card>
   <div nz-row [nzGutter]="24">
     <div nz-col [nzSpan]="12">
-      <app-thongtin-dexuat-vt [title]="'Nội dung đề xuất kế hoạch/dự án lựa chọn nhà thầu của vụ QLHDT'"
+      <app-thongtin-dexuat-vt [title]="'Nội dung đề xuất của vụ QLHDT'"
                               [titleDx]="'Phụ lục đề xuất kế hoạch lựa chọn nhà thầu của Vụ QLHDT'"
                               [dataInput]="dataInputCache"
                               [isCache]="true"
@@ -197,7 +198,7 @@
     </div>
     <div nz-col [nzSpan]="12">
       <app-thongtin-dexuat-vt #thongtinDexuatVtComponent
-                              [title]="'Quyết định của Vụ QLHDT'"
+                              [title]="'Quyết định của Tổng cục DTNN'"
                               [titleDx]="'Phụ lục kế hoạch lựa chọn nhà thầu'"
                               [dataInput]="dataInput"
                               [isCache]="false"

@@ -5,7 +5,7 @@
         <div nz-row [nzGutter]="24">
           <div nz-col [nzSpan]="12">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true" nzRequired> Tên dự án</nz-form-label>
+              <nz-form-label [nzNoColon]="true" nzRequired> Tên dự án/dự toán</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <input nz-input formControlName="tenDuAn"
                        [readonly]="isView" />
@@ -35,7 +35,7 @@
           </div>
           <div nz-col [nzSpan]="6">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư (tỷ đồng)
+              <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư/dự toán (tỷ đồng)
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <input nz-input

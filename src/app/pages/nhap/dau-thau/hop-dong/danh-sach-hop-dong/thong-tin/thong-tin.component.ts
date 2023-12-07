@@ -434,7 +434,6 @@ export class ThongTinComponent implements OnInit, OnChanges {
             this.formData.controls["chucVu"].setValidators([Validators.required]);
             this.formData.controls["stkNhaThau"].setValidators([Validators.required]);
             this.formData.controls["moTaiNhaThau"].setValidators([Validators.required]);
-            this.formData.controls["ghiChu"].setValidators([Validators.required]);
         } else {
           Object.keys(this.formData.controls).forEach(key => {
             const control = this.formData.controls[key];

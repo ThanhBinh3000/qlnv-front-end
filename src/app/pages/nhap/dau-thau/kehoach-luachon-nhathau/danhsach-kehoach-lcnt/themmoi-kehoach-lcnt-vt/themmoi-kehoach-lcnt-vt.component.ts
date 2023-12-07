@@ -501,7 +501,6 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
     this.formData.controls["tgianThien"].setValidators([Validators.required]);
     this.formData.controls["hthucLcnt"].setValidators([Validators.required]);
     this.formData.controls["pthucLcnt"].setValidators([Validators.required]);
-    this.formData.controls["tgianBdauTchuc"].setValidators([Validators.required]);
     this.formData.controls["loaiHdong"].setValidators([Validators.required]);
     this.formData.controls["tgianThienHd"].setValidators([Validators.required]);
     this.formData.controls["quy"].setValidators([Validators.required]);
@@ -527,7 +526,7 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
       await this.modal.confirm({
         nzClosable: false,
         nzTitle: "Xác nhận",
-        nzContent: "Tổng mức đầu tư cao hơn Tổng dự toán các gói thầu, bạn vẫn muốn lưu ?",
+        nzContent: "Tổng giá trị gói thầu cao hơn Tổng mức đầu tư/dự toán. Bạn có muốn lưu không?",
         nzOkText: "Đồng ý",
         nzCancelText: "Không",
         nzOkDanger: true,

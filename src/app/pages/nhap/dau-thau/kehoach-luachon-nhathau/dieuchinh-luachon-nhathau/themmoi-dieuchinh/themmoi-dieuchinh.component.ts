@@ -96,6 +96,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       soQd: [''],
       ngayQdDc: [''],
       noiDungQd: [''],
+      noiDungTtr: [''],
       loaiHinhNx: [''],
       kieuNx: [''],
       idHhQdKhlcntDtl: [''],
@@ -336,6 +337,11 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
         break;
       }
       case STATUS.CHO_DUYET_LDV: {
+        trangThai = STATUS.DA_DUYET_LDV;
+        mesg = "Bạn có chắc chắn muốn phê duyệt?";
+        break;
+      }
+      case STATUS.DA_DUYET_LDV: {
         trangThai = STATUS.BAN_HANH;
         mesg = "Bạn muốn ban hành quyết định?";
         break;
@@ -387,10 +393,21 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       if (text) {
         this.spinner.show();
         try {
+          let trangThai = null;
+          switch (this.formData.get("trangThai").value) {
+            case STATUS.CHO_DUYET_LDV: {
+              trangThai = STATUS.TU_CHOI_LDV
+              break;
+            }
+            case STATUS.DA_DUYET_LDV: {
+              trangThai = STATUS.TU_CHOI_LDTC
+              break;
+            }
+          }
           let body = {
             id: this.formData.get("id").value,
             lyDo: text,
-            trangThai: STATUS.TU_CHOI_LDV,
+            trangThai: trangThai,
           };
           const res = await this.dieuChinhQuyetDinhPdKhlcntService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {

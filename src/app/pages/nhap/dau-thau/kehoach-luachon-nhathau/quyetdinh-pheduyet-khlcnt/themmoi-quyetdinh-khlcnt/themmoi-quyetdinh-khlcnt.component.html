@@ -160,11 +160,20 @@
               Căn cứ pháp lý
             </nz-form-label>
             <div class="list-file">
+              <file-list [data]="listCcPhapLy" [isViewDetail]="isView"></file-list>
+            </div>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              File đính kèm QĐ phê duyệt kế hoạch lựa chọn nhà thầu của Tổng cục DTNN đã ký và đóng dấu
+            </nz-form-label>
+            <div class="list-file">
               <file-list [data]="listFileDinhKem" [isViewDetail]="isView"></file-list>
             </div>
           </nz-form-item>
         </div>
-
       </div>
     </form>
   </nz-card>
@@ -184,6 +193,22 @@
       </div>
       <form nz-form nzLayout="vertical" [formGroup]="formData">
         <div nz-row [nzGutter]="24">
+          <div nz-col [nzSpan]=6>
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true"> Kiểu nhập </nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                  <input [readonly]="true" nz-input formControlName="kieuNx"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]=6>
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true"> Loại hình nhập </nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <input [readonly]="true" nz-input formControlName="loaiHinhNx"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
           <div nz-col [nzSpan]=6>
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG </nz-form-label>

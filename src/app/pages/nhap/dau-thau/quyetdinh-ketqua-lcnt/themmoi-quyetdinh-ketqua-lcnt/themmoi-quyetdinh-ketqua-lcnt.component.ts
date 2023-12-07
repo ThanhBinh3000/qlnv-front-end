@@ -106,6 +106,8 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
         cloaiVthh: [''],
         noiDungQd: [''],
         fileDinhKems: new FormControl([]),
+        tgianTrinhKqTcg: [''],
+        tgianTrinhTtd: [''],
       }
     );
   }
@@ -253,7 +255,9 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
     if (isBanHanh) {
       this.formData.controls["soQd"].setValidators([Validators.required]);
       this.formData.controls["ngayKy"].setValidators([Validators.required]);
-      this.formData.controls["ngayHluc"].setValidators([Validators.required]);
+      if (!this.loaiVthh.startsWith('02')) {
+        this.formData.controls["ngayHluc"].setValidators([Validators.required]);
+      }
     } else {
       this.formData.controls["soQd"].clearValidators();
       this.formData.controls["ngayKy"].clearValidators();

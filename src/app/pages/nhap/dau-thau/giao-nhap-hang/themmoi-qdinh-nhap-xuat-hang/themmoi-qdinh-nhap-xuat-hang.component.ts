@@ -207,7 +207,7 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
             moTaHangHoa: data.moTaHangHoa,
             donViTinh: data.donViTinh,
             soLuong: data.soLuong,
-            tgianNkho: data.tgianNkho,
+            tgianNkho: data.tgianGiaoDuHang,
           })
           if (data.loaiVthh.startsWith('02')) {
             let dataUserLogin = data.details.filter(item => item.maDvi == this.userInfo.MA_DVI);

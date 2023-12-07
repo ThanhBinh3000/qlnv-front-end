@@ -46,6 +46,7 @@ export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
 
   isDetail: boolean = false;
   selectedId: number = 0;
+  idQdGiaoNvNh: number = 0;
   isView: boolean = false;
   isTatCa: boolean = false;
 
@@ -295,6 +296,7 @@ export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
 
   redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
     this.selectedId = id;
+    this.idQdGiaoNvNh = idQdGiaoNvNh;
     this.isDetail = true;
     this.isView = isView;
   }

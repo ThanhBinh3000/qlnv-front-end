@@ -53,6 +53,7 @@ export class PhieuNhapKhoTamGuiComponent extends Base2Component implements OnIni
   userInfo: UserLogin;
   isDetail: boolean = false;
   selectedId: number = 0;
+  idQdGiaoNvNh: number = 0;
   isView: boolean = false;
   isTatCa: boolean = false;
 
@@ -269,6 +270,7 @@ export class PhieuNhapKhoTamGuiComponent extends Base2Component implements OnIni
 
   redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
     this.selectedId = id;
+    this.idQdGiaoNvNh = idQdGiaoNvNh;
     this.isDetail = true;
     this.isView = isView;
   }
