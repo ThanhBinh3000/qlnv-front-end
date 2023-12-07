@@ -407,7 +407,7 @@
         </button>
       </div>
     </div>
-    <nz-table #tblDatadsHangTH class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="dsHangTH">
+    <nz-table #tblDatadsHangTH class="nowrap mt-16 table-chi-tiet" nzBordered [nzFrontPagination]="false" [nzPageSize]="9999" [nzData]="dsHangTH">
       <thead>
         <tr>
           <th rowspan="2" style="width: 35px">STT</th>
