@@ -393,10 +393,10 @@ export class PhuLuc2Component implements OnInit {
 
     saveEdit(id: string): void {
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
-        if (this.editCache[id].data.dtoanDnghiSlTong > (this.editCache[id].data.sluongTsTcDinhMuc - this.editCache[id].data.sluongTsCong)) {
+        if (this.editCache[id].data.dtoanDnghiSl > (this.editCache[id].data.sluongTsTcDinhMuc - this.editCache[id].data.sluongTsCong)) {
             this.notification.warning(
                 MESSAGE.WARNING,
-                "Số lượng dự toán đề nghị không vượt quá hiệu của số lượng tiêu chuẩn định mức tối đa và tổng tài sản hiện có (cột 7 nhỏ hơn hoặc bằng cột 4 - cột 3)"
+                "Số lượng dự toán đề nghị không vượt quá hiệu của số lượng tiêu chuẩn định mức tối đa và tổng tài sản hiện có (cột 6 nhỏ hơn hoặc bằng cột 4 trừ cột 3)"
             ).onClose.subscribe(() => {
                 this.statusCanhBao = false
             })
@@ -557,7 +557,7 @@ export class PhuLuc2Component implements OnInit {
                 { t: 4, b: 5, l: 19, r: 19, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị (+ tăng) (- giảm)' },
                 { t: 4, b: 5, l: 20, r: 20, val: 'Ý kiến của đơn vị cấp trên' },
 
-                { t: 5, b: 5, l: 3, r: 3, val: 'Số lượng đến thời điểm báo cáo' },
+                { t: 5, b: 5, l: 3, r: 3, val: 'Số lượng đã có trong kho đến thời điểm hiện tại' },
                 { t: 5, b: 5, l: 4, r: 4, val: 'Số lượng đã nhận chưa có QĐ điều chuyển' },
                 // { t: 5, b: 5, l: 5, r: 5, val: 'Số lượng đã được phê duyệt mua sắm năm ' + (this.namBcao).toString() },
                 { t: 5, b: 5, l: 5, r: 5, val: 'Cộng' },
@@ -621,7 +621,7 @@ export class PhuLuc2Component implements OnInit {
             ]
         } else {
             header = [
-                { t: 0, b: 6, l: 0, r: 16, val: null },
+                { t: 0, b: 6, l: 0, r: 17, val: null },
 
                 { t: 0, b: 0, l: 0, r: 1, val: this.dataInfo.tenPl },
                 { t: 1, b: 1, l: 0, r: 8, val: this.dataInfo.tieuDe },
@@ -631,18 +631,18 @@ export class PhuLuc2Component implements OnInit {
                 { t: 4, b: 5, l: 0, r: 0, val: 'STT' },
                 { t: 4, b: 5, l: 1, r: 1, val: 'Tên tài sản (theo danh mục được phê duyệt tại Quyết định số 149/QĐ-TCDT)' },
                 { t: 4, b: 5, l: 2, r: 2, val: 'Đơn vị tính' },
-                { t: 4, b: 4, l: 3, r: 7, val: 'Số lượng tài sản, máy móc, thiết bị hiện có' },
-                { t: 4, b: 4, l: 8, r: 10, val: 'Dự toán đề nghị trang bị năm ' + (this.namBcao).toString() },
-                { t: 4, b: 4, l: 11, r: 13, val: 'Dự toán, kinh phí được sử dụng trong năm' },
+                { t: 4, b: 4, l: 3, r: 6, val: 'Số lượng tài sản, máy móc, thiết bị hiện có' },
+                { t: 4, b: 4, l: 7, r: 11, val: 'Dự toán đề nghị trang bị năm ' + (this.namBcao).toString() },
+                { t: 4, b: 4, l: 12, r: 14, val: 'Dự toán, kinh phí được sử dụng trong năm' },
 
-                { t: 4, b: 5, l: 14, r: 14, val: 'Dự toán điều chỉnh (+ tăng) (- giảm)' },
+                { t: 4, b: 5, l: 15, r: 15, val: 'Dự toán điều chỉnh (+ tăng) (- giảm)' },
                 // { t: 4, b: 5, l: 15, r: 15, val: 'Dự toán vụ TVQT đề nghị (+ tăng)(- giảm)' },
-                { t: 4, b: 5, l: 15, r: 15, val: 'Thuyết minh' },
-                { t: 4, b: 5, l: 16, r: 16, val: 'Ghi chú' },
+                { t: 4, b: 5, l: 16, r: 16, val: 'Thuyết minh' },
+                { t: 4, b: 5, l: 17, r: 17, val: 'Ghi chú' },
                 // { t: 4, b: 5, l: 18, r: 18, val: 'Dự toán chênh lệch giữa Vụ TVQT điều chỉnh và đơn vị đề nghị (+ tăng) (- giảm)' },
                 // { t: 4, b: 5, l: 19, r: 19, val: 'Ý kiến của đơn vị cấp trên' },
 
-                { t: 5, b: 5, l: 3, r: 3, val: 'Số lượng đến thời điểm báo cáo' },
+                { t: 5, b: 5, l: 3, r: 3, val: 'Số lượng đã có trong kho đến thời điểm hiện tại' },
                 { t: 5, b: 5, l: 4, r: 4, val: 'Số lượng đã nhận chưa có QĐ điều chuyển' },
                 // { t: 5, b: 5, l: 5, r: 5, val: 'Số lượng đã được phê duyệt mua sắm năm ' + (this.namBcao).toString() },
                 { t: 5, b: 5, l: 5, r: 5, val: 'Cộng' },
@@ -674,8 +674,9 @@ export class PhuLuc2Component implements OnInit {
                 { t: 6, b: 6, l: 13, r: 13, val: '11' },
                 { t: 6, b: 6, l: 14, r: 14, val: '12 = 10 + 11' },
                 // { t: 6, b: 6, l: 15, r: 15, val: '13' },
-                { t: 6, b: 6, l: 15, r: 15, val: '13' },
+                { t: 6, b: 6, l: 15, r: 15, val: '13 = 9-12' },
                 { t: 6, b: 6, l: 16, r: 16, val: '14' },
+                { t: 6, b: 6, l: 17, r: 17, val: '15' },
                 // { t: 6, b: 6, l: 18, r: 18, val: '16 = 13 - 12' },
                 // { t: 6, b: 6, l: 19, r: 19, val: '17' },
             ]

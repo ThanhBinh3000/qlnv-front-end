@@ -3,7 +3,7 @@
     <div class="header-text">
       <div class="title-chi-tieu">
         <span
-          [ngClass]="formData.value.trangThai == STATUS.DA_KY ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+          [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
         {{ formData.value.tenTrangThai }}
       </span>
         <span>THÔNG TIN PHÂN BỔ MÁY MÓC, THIẾT BỊ CHUYÊN DÙNG</span>
@@ -14,10 +14,10 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button class="btn btn-sub ml-2" (click)="approve(this.id, STATUS.DA_KY, 'Bạn có chắc chắn muốn ký?')"
+      <button class="btn btn-sub ml-2" (click)="approve(this.id, STATUS.DA_DUYET_LDC, 'Bạn có chắc chắn muốn duyệt LĐ-Cục?')"
               *ngIf="(formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && id > 0 ) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_PHANBO_THEM')">
         <i class="icon htvbdh_trinh "></i>
-        <span>Đã ký</span>
+        <span>Đã duyệt - LĐ Cục</span>
       </button>
       <button type="button" class="btn btn-sub xanh ml-2" (click)="save()"
               *ngIf=" !isView && (formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU ) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_PHANBO_THEM')">

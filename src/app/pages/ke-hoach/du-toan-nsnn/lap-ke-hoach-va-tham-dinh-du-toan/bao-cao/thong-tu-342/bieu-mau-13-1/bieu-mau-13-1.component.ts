@@ -407,7 +407,7 @@ export class BieuMau131Component implements OnInit {
                 { t: 4, b: 5, l: 10, r: 10, val: 'Ý kiến của đơn vị cấp trên' },
             ]
             fieldOrder = ['stt', 'tenDmuc', 'maDviTinh', 'thienNtruoc', 'namDtoan', 'namUocThien', 'namKh', 'giaTriThamDinh', 'chenhLech', 'ghiChu', 'ykienDviCtren']
-            calHeader = ['A', 'B', '1', '2', '3', '4', '5', '6', '7=6-5', '8', '9'];
+            calHeader = ['A', 'B', 'C', '1', '2', '3', '4', '5', '6=5-4', '7', '8'];
         } else {
             header = [
                 { t: 0, b: 5, l: 0, r: 7, val: null },
@@ -427,7 +427,7 @@ export class BieuMau131Component implements OnInit {
                 { t: 4, b: 5, l: 7, r: 7, val: 'Ghi chú' },
             ]
             fieldOrder = ['stt', 'tenDmuc', 'maDviTinh', 'thienNtruoc', 'namDtoan', 'namUocThien', 'namKh', 'ghiChu']
-            calHeader = ['A', 'B', '1', '2', '3', '4', '5', '6'];
+            calHeader = ['A', 'B', 'C', '1', '2', '3', '4', '7'];
         }
         const filterData = this.lstCtietBcao.map(item => {
             const row: any = {};

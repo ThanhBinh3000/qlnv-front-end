@@ -1,6 +1,6 @@
-import { LOAI_HANG_DTQG, STATUS_DA_DUYET, STATUS_DA_HOAN_THANH, TEN_HANG_DTQG, TEN_LOAI_VTHH } from "../constants/config";
+import {LOAI_HANG_DTQG, STATUS_DA_DUYET, STATUS_DA_HOAN_THANH, TEN_HANG_DTQG, TEN_LOAI_VTHH} from "../constants/config";
 import VNnum2words from 'vn-num2words';
-import { STATUS } from "../constants/status";
+import {STATUS} from "../constants/status";
 
 export function convertTrangThai(status: string): string {
   if (status == '00') {
@@ -137,17 +137,17 @@ export function convertVthhToId(ten: string) {
 
 export function convertTienTobangChu(tien: number): string {
   if (tien > 0) {
-    return VNnum2words(tien);
+    const chuoiChu = VNnum2words(tien);
+    return chuoiChu.charAt(0).toUpperCase() + chuoiChu.slice(1);
   } else {
-    return ''
+    return '';
   }
 }
 
 export function thongTinTrangThaiNhap(trangThai: string, statusDaDuyet?: string): string {
   if (statusDaDuyet && trangThai === statusDaDuyet) {
     return 'da-ban-hanh';
-  }
-  else if (trangThai === STATUS_DA_DUYET || trangThai === STATUS.DA_HOAN_THANH || trangThai == STATUS.DA_DUYET_LDTC) {
+  } else if (trangThai === STATUS_DA_DUYET || trangThai === STATUS.DA_HOAN_THANH || trangThai == STATUS.DA_DUYET_LDTC) {
     return 'da-ban-hanh';
   } else {
     return 'du-thao-va-lanh-dao-duyet';
@@ -243,6 +243,7 @@ export function NumberToRoman(num) {
     romanNum = (key[+digits.pop() + (i * 10)] || "") + romanNum;
   return Array(+digits.join("") + 1).join("M") + romanNum;
 }
+
 export function convertTienTobangChuThapPhan(tien: number): string {
   if (tien > 0) {
     const phanNguyen = +tien.toString().split(".")[0];

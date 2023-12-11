@@ -449,14 +449,17 @@ export class TongHopComponent implements OnInit {
             { t: 9, b: 9, l: 11, r: 11, val: this.total?.gtDuoiGtBh },
             { t: 9, b: 9, l: 12, r: 12, val: this.total?.tong },
         ]
+        if (this.childUnit?.length > 0) {
+            header.push({ t: 4, b: 4, l: 3, r: 12, val: "" })
+        }
         this.childUnit.forEach((item, index) => {
             const left = 12 + index * 10;
             header.push({ t: 4, b: 4, l: left + 1, r: left + 10, val: item.tenDvi })
-            header.push({ t: 5, b: 5, l: left + 1, r: left + 3, val: 'Tổng số lượng hàng trong kho của các đơn vị cấp dưới' })
+            header.push({ t: 5, b: 5, l: left + 1, r: left + 3, val: 'Số lượng' })
             header.push({ t: 6, b: 7, l: left + 1, r: left + 1, val: 'Kho từ 5000m3 trở lên' })
             header.push({ t: 6, b: 7, l: left + 2, r: left + 2, val: 'Kho dưới 5000m3' })
             header.push({ t: 6, b: 7, l: left + 3, r: left + 3, val: 'Tổng SL' })
-            header.push({ t: 5, b: 5, l: left + 4, r: left + 10, val: 'Tổng giá trị hàng trong kho của các đơn vị cấp dưới' })
+            header.push({ t: 5, b: 5, l: left + 4, r: left + 10, val: 'Giá trị bảo hiểm (VNĐ)' })
             header.push({ t: 6, b: 6, l: left + 4, r: left + 6, val: 'Kho từ ' + this.khoiTich.toString() + ' m3 trở lên' })
             header.push({ t: 7, b: 7, l: left + 4, r: left + 4, val: 'Giá trị' })
             header.push({ t: 7, b: 7, l: left + 5, r: left + 5, val: 'Tỷ lệ bảo hiểm' })
@@ -524,6 +527,6 @@ export class TongHopComponent implements OnInit {
         }
 
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
-        XLSX.writeFile(workbook, 'bao_hiem_tong_hop.xlsx');
+        XLSX.writeFile(workbook, this.dataInfo.maBcao + '_bh_tong_hop.xlsx');
     }
 }
