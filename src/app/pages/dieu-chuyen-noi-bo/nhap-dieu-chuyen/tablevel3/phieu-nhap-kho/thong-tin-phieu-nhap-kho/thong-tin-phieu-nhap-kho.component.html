@@ -499,9 +499,10 @@
                 <th>{{noiDung}}</th>
                 <th>
                   <form nz-form nzLayout="vertical" [formGroup]="formData">
-                    <nz-input-number formControlName="maSo" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
+                    <input type="text" nz-input formControlName="maSo" />
+                    <!-- <nz-input-number formControlName="maSo" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
                       [nzSize]="'small'">
-                    </nz-input-number>
+                    </nz-input-number> -->
                   </form>
                 </th>
                 <th>{{dviTinh}}</th>
@@ -515,7 +516,7 @@
                 <th>{{duToanKinhPhi}}</th>
                 <th>
                   <form nz-form nzLayout="vertical" [formGroup]="formData">
-                    <nz-input-number formControlName="thucTeKinhPhi" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
+                    <nz-input-number formControlName="thucTeKinhPhi" [nzMin]="0" [nzMax]="999999999999" [nzStep]="1"
                       [nzSize]="'small'">
                     </nz-input-number>
                   </form>

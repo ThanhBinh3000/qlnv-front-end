@@ -1,19 +1,20 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NzModalService } from "ng-zorro-antd/modal";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { MESSAGE } from 'src/app/constants/message';
-import { STATUS } from 'src/app/constants/status';
-import { DonviService } from 'src/app/services/donvi.service';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {NzModalService} from "ng-zorro-antd/modal";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {MESSAGE} from 'src/app/constants/message';
+import {STATUS, THONG_TIN_BAN_TRUC_TIEP} from 'src/app/constants/status';
+import {DonviService} from 'src/app/services/donvi.service';
 import {
   DialogThemMoiBangKeBanLeComponent
 } from 'src/app/components/dialog/dialog-them-moi-bang-ke-ban-le/dialog-them-moi-bang-ke-ban-le.component';
 import {
   ChaoGiaMuaLeUyQuyenService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service";
+import dayjs from "dayjs";
 
 @Component({
   selector: 'app-thong-tin-quyet-dinh-uy-quyen-ban-le',
@@ -25,11 +26,8 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
   @Input() isView: boolean;
   @Input() idInput: number;
   @Output() showListEvent = new EventEmitter<any>();
-  maHauTo: any;
+  TRUC_TIEP = THONG_TIN_BAN_TRUC_TIEP
   listOfData: any[] = [];
-  fileUyQuyen: any[] = [];
-  fileBanLe: any[] = [];
-  listPthucBanTt: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -47,17 +45,17 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
         namKh: [''],
         soQdPd: [''],
         soQdDc: [''],
-        ngayKyQd: [''],
+        ngayKy: [''],
         ngayHluc: [''],
         loaiVthh: [''],
         tenLoaiVthh: [''],
         cloaiVthh: [''],
         tenCloaiVthh: [''],
         pthucBanTrucTiep: [''],
+        pthucBanTrucTiepHt: [''],
         trichYeu: [''],
-        thoiGianDeXuatBtt: [''],
-        thoiGianPdBtt: [''],
-        donGiaThiTruong: [''],
+        tgianDkienTu: [''],
+        tgianDkienDen : [''],
         trangThai: [STATUS.BAN_HANH],
         tenTrangThai: ['Ban Hành'],
       }
@@ -66,12 +64,8 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
 
   async ngOnInit() {
     try {
-      this.maHauTo = this.userInfo.MA_QD;
       if (this.idInput) {
-        await Promise.all([
-          this.loadDetail(this.idInput),
-          this.loadDataComboBox(),
-        ]);
+        await this.loadDetail(this.idInput)
       }
     } catch (e) {
       console.error('error: ', e);
@@ -81,26 +75,13 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
     }
   }
 
-  loadDataComboBox() {
-    this.listPthucBanTt = [
-      {
-        ma: '02',
-        giaTri: 'Ủy quyền',
-      },
-      {
-        ma: '03',
-        giaTri: 'Bán lẻ',
-      },
-    ];
-  }
-
   async loadDetail(id: number) {
     if (id <= 0) {
       return;
     }
     try {
       const res = await this.chaoGiaMuaLeUyQuyenService.getDetail(id);
-      if (!res.data) {
+      if (res.msg !== MESSAGE.SUCCESS || !res.data) {
         return;
       }
       const data = res.data;
@@ -113,19 +94,20 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
       }
       this.formData.patchValue({
         namKh: data.namKh,
-        soQdPd: data.soQdPd?.split('/')[0],
-        soQdDc: data.soQdDc?.split('/')[0],
-        ngayKyQd: data.xhQdPdKhBttHdr ? data.xhQdPdKhBttHdr.ngayKyQd : data.xhQdDchinhKhBttHdr.ngayKyDc,
-        ngayHluc: data.xhQdPdKhBttHdr ? data.xhQdPdKhBttHdr.ngayHluc : data.xhQdDchinhKhBttHdr.ngayHlucDc,
+        soQdPd: data.soQdPd,
+        soQdDc: data.soQdDc,
+        ngayKy: data.xhQdPdKhBttHdr.type === 'QDDC' ? data.xhQdPdKhBttHdr.ngayKyDc : data.xhQdPdKhBttHdr.ngayKyQd,
+        ngayHluc: data.xhQdPdKhBttHdr.type === 'QDDC' ? data.xhQdPdKhBttHdr.ngayHlucDc : data.xhQdPdKhBttHdr.ngayHluc,
         loaiVthh: data.loaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
+        tenCloaiVthh: data.tenCloaiVthh,
+        pthucBanTrucTiepHt: data.pthucBanTrucTiep === THONG_TIN_BAN_TRUC_TIEP.UY_QUYEN ? 'Ủy quyền' : 'Bán lẻ',
         pthucBanTrucTiep: data.pthucBanTrucTiep,
-        trichYeu: data.xhQdPdKhBttHdr ? data.xhQdPdKhBttHdr.trichYeu : data.xhQdDchinhKhBttHdr.trichYeu,
-        thoiGianDeXuatBtt: (data.tgianDkienTu && data.tgianDkienDen) ? [data.tgianDkienTu, data.tgianDkienDen] : null,
-        thoiGianPdBtt: (data.ngayMkho && data.ngayKthuc) ? [data.ngayMkho, data.ngayKthuc] : null,
+        trichYeu: data.trichYeu,
+        tgianDkienTu : data.tgianDkienTu,
+        tgianDkienDen : data.tgianDkienDen,
       });
-      this.fileUyQuyen = data.fileUyQuyen;
-      this.fileBanLe = data.fileBanLe;
+      this.fileDinhKem = data.fileDinhKem;
     } catch (e) {
       console.error('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -134,13 +116,36 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
     }
   }
 
+  disabledTgianTocChucTu = (startValue: Date): boolean => {
+    const tgianDkienDen = this.formData.value.tgianDkienDen as Date;
+    if (!startValue || !tgianDkienDen || !(tgianDkienDen instanceof Date)) {
+      return false;
+    }
+    return startValue.getTime() > tgianDkienDen.getTime();
+  };
+
+  disabledTgianTocChucDen = (endValue: Date): boolean => {
+    const tgianDkienTu = this.formData.value.tgianDkienTu as Date;
+    if (!endValue || !tgianDkienTu || !(tgianDkienTu instanceof Date)) {
+      return false;
+    }
+    return endValue.getTime() <= tgianDkienTu.getTime();
+  };
+
+  isValidDate(dateString: string): boolean {
+    return dayjs(dateString).isValid();
+  }
+
   async diaDiemKho(dataCha) {
     const body = {
-      trangThai: "01",
+      trangThai: STATUS.CHO_DUYET_TP,
       maDviCha: this.userInfo.MA_DVI
     };
     try {
       const res = await this.donViService.getAll(body);
+      if (res.msg !== MESSAGE.SUCCESS || !res.data) {
+        return;
+      }
       const dataDk = res.data.find(item => item.maDvi === dataCha.maDiemKho);
       if (dataDk) {
         dataCha.diaChi = dataDk.diaChi;
@@ -161,7 +166,7 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
       nzContent: DialogThemMoiBangKeBanLeComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzStyle: { top: '200px' },
+      nzStyle: {top: '200px'},
       nzWidth: '1500px',
       nzFooter: null,
       nzComponentParams: {

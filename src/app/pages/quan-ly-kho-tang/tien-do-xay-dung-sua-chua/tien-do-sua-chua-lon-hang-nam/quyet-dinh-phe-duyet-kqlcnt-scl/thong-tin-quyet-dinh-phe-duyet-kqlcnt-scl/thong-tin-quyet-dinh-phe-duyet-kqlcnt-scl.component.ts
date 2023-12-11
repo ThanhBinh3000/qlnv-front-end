@@ -1,16 +1,16 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup, Validators } from "@angular/forms";
-import { Base2Component } from "../../../../../../components/base2/base2.component";
-import { STATUS } from "../../../../../../constants/status";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { DanhMucService } from "../../../../../../services/danhmuc.service";
-import { MESSAGE } from "../../../../../../constants/message";
-import { FILETYPE } from "../../../../../../constants/fileType";
-import { CurrencyMaskInputMode } from "ngx-currency";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormGroup, Validators} from "@angular/forms";
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {STATUS} from "../../../../../../constants/status";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
+import {MESSAGE} from "../../../../../../constants/message";
+import {FILETYPE} from "../../../../../../constants/fileType";
+import {CurrencyMaskInputMode} from "ngx-currency";
 import {
   QuyetdinhpheduyetKqLcntSclService
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qdPdKqLcntScl.service";
@@ -53,7 +53,7 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
     max: 100000000000,
     inputMode: CurrencyMaskInputMode.NATURAL,
   }
-
+  @Output() dataItemKqLcnt = new EventEmitter<object>();
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -113,12 +113,12 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
     if (this.itemQdPdKhLcnt) {
       this.formData.patchValue({
         namKh: this.itemQdPdKhLcnt.namKh,
-        idQdPdKhlcnt: this.itemQdPdKhLcnt && this.itemQdPdKhLcnt.id ? this.itemQdPdKhLcnt.id : null,
-        soQdPdKhlcnt: this.itemQdPdKhLcnt && this.itemQdPdKhLcnt.soQd ? this.itemQdPdKhLcnt.soQd : null,
+        idQdPdKhlcnt: this.itemQdPdKhLcnt && this.itemQdPdKhLcnt.id ? this.itemQdPdKhLcnt.id : null  ,
+        soQdPdKhlcnt: this.itemQdPdKhLcnt && this.itemQdPdKhLcnt.soQd ?this.itemQdPdKhLcnt.soQd : null,
         chuDauTu: this.itemQdPdKhLcnt && this.itemQdPdKhLcnt.chuDauTu ? this.itemQdPdKhLcnt.chuDauTu : null,
         tenCongTrinh: this.itemQdPdKhLcnt && this.itemQdPdKhLcnt.tenCongTrinh ? this.itemQdPdKhLcnt.tenCongTrinh : null,
         idDuAn: this.itemDuAn && this.itemDuAn.idDuAn ? this.itemDuAn.idDuAn : null,
-        tongMucDt: this.itemQdPdKhLcnt && this.itemQdPdKhLcnt.tongMucDt ? this.itemQdPdKhLcnt.tongMucDt : null,
+        tongMucDt:this.itemQdPdKhLcnt &&  this.itemQdPdKhLcnt.tongMucDt ?  this.itemQdPdKhLcnt.tongMucDt : null,
         loaiCongTrinh: this.itemDuAn && this.itemDuAn.tenLoaiCongTrinh ? this.itemDuAn.tenLoaiCongTrinh : null,
       });
       let res = await this.quyetdinhpheduyetKhlcntService.getDetail(this.itemQdPdKhLcnt.id);
@@ -192,10 +192,12 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
     this.formData.value.soQd = this.formData.value.soQd + this.maQd;
     if (this.listGoiThau && this.listGoiThau.length > 0) {
       this.formData.value.listKtTdscQuyetDinhPdKqlcntDsgt = this.listGoiThau;
-      this.formData.value.listKtTdscQuyetDinhPdKqlcntDsgt.forEach(item => {
-        item.idGoiThau = item.id;
-        item.id = null
-      })
+      if (!this.formData.value.id) {
+        this.formData.value.listKtTdscQuyetDinhPdKqlcntDsgt.forEach(item => {
+          item.idGoiThau = item.id;
+          item.id = null
+        })
+      }
     } else {
       this.notification.success(MESSAGE.ERROR, "Kết quả lựa chọn nhà thầu không được để trống.");
       return;
@@ -241,6 +243,7 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
                   trangThai: STATUS.BAN_HANH,
                   tenTrangThai: "Ban hành",
                 })
+                this.emitDataKqLcnt(res1.data);
                 this.isViewDetail = true;
                 this.spinner.hide();
               } else {
@@ -261,6 +264,37 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
       await this.createUpdate(this.formData.value)
     }
   }
+
+  xoa() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let res = await this.quyetdinhpheduyetKqLcntService.delete({id: this.idInput});
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+            this.showListEvent.emit();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+        } catch (e) {
+          console.log('error: ', e);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        } finally {
+          this.spinner.hide();
+        }
+      },
+    });
+  }
+
+
 
   // async changeSoQdPdKhlcnt(event) {
   //   if (event) {
@@ -298,5 +332,7 @@ export class ThongTinQuyetDinhPheDuyetKqlcntSclComponent extends Base2Component 
   //       });
   //   }
   // }
-
+  emitDataKqLcnt(data) {
+    this.dataItemKqLcnt.emit(data);
+  }
 }

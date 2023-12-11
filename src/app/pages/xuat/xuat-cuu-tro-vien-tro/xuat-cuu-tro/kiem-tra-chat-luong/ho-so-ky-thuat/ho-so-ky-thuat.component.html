@@ -3,13 +3,13 @@
     <nz-card class="mt16 flex-card p-lr16">
       <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
         <div nz-row [nzGutter]="24">
-          <div nz-col nzSpan="3">
+          <!-- <div nz-col nzSpan="3">
             <label class="search__label"> Năm KH </label>
             <nz-select formControlName="nam">
               <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
             </nz-select>
-          </div>
-          <div nz-col nzSpan="4">
+          </div> -->
+          <!-- <div nz-col nzSpan="4">
             <label class="search__label">Điểm kho</label>
             <nz-select nzAllowClear formControlName="loaiVthh" nzPlaceHolder="Chọn loại hàng hóa" nzShowSearch>
               <nz-option *ngFor="let p of listNam" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
@@ -32,10 +32,23 @@
             <nz-select nzAllowClear formControlName="loaiVthh" nzPlaceHolder="Chọn loại hàng hóa" nzShowSearch>
               <nz-option *ngFor="let p of listNam" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
             </nz-select>
+          </div> -->
+          <div nz-col nzSpan="16">
+            <label class="search__label">Đơn vị/địa điểm</label>
+            <nz-tree-select #NzTreeSelectComponent [nzNodes]="listDiaDiemKho" [nzShowSearch]="true"
+              [ngModel]="selectedNode" [ngModelOptions]="{standalone: true}" nzVirtualHeight="300px"
+              [nzAllowClear]="true">
+              <ng-template #nzTreeTemplate let-node let-origin="origin">
+                <div class="node-content" [class.ant-tree-node-selected]="node.isSelected"
+                  (click)="selectDiaDiem(node)">
+                  {{ node.title }}
+                </div>
+              </ng-template>
+            </nz-tree-select>
           </div>
           <div nz-col nzSpan="4">
             <label class="search__label">Số hồ sơ kỹ thuật</label>
-            <input nz-input formControlName="soHoSoKyThuat"/>
+            <input nz-input formControlName="soHoSoKyThuat" />
           </div>
           <div nz-col nzSpan="4">
             <label class="search__label">Ngày tạo HSKT</label>
@@ -60,8 +73,7 @@
       <h3> DANH SÁCH HỒ SƠ KỸ THUẬT</h3>
       <div class="buttons">
         <button *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_EXP')" type="button"
-                class="btn btn-sub"
-                (click)="exportData()">
+          class="btn btn-sub" (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
@@ -69,29 +81,29 @@
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
       <nz-table #basicTable nzBordered class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
-                [nzShowPagination]="false" nzBordered>
+        [nzShowPagination]="false" nzBordered>
         <thead>
-        <tr>
-          <th width="40px">
-            <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
-                   [nzIndeterminate]="indeterminate"></label>
-          </th>
-          <th class="text-center">STT</th>
-          <th>Năm KH</th>
-          <th>Số HSKT</th>
-          <th>Ngày tạo HSKT</th>
-          <th>Điểm kho</th>
-          <th>Lô kho</th>
-          <th>Số BB LM/BGM</th>
-          <th>Số QĐ giao NVNH</th>
-          <th>Số BB KT ngoại quan</th>
-          <th>Số BB KT vận hành</th>
-          <th>Số BB KT HSKT</th>
-          <th>Trạng thái trước NH</th>
-          <th>Trạng thái trước XH</th>
-          <th width="90px"></th>
-        </tr>
-        <!--        <tr class="search-table">
+          <tr>
+            <th width="40px">
+              <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                [nzIndeterminate]="indeterminate"></label>
+            </th>
+            <th class="text-center">STT</th>
+            <th>Năm KH</th>
+            <th>Số HSKT</th>
+            <th>Ngày tạo HSKT</th>
+            <th>Điểm kho</th>
+            <th>Lô kho</th>
+            <th>Số BB LM/BGM</th>
+            <th>Số QĐ giao NVNH</th>
+            <th>Số BB KT ngoại quan</th>
+            <th>Số BB KT vận hành</th>
+            <th>Số BB KT HSKT</th>
+            <th>Trạng thái trước NH</th>
+            <th>Trạng thái trước XH</th>
+            <th width="90px"></th>
+          </tr>
+          <!--        <tr class="search-table">
                   <th></th>
                   <th></th>
                   <th>
@@ -171,31 +183,30 @@
                 </tr>-->
         </thead>
         <tbody>
-        <tr *ngFor="let data of basicTable.data; let i = index">
-          <td width="45px">
-            <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                   [nzDisabled]="data.trangThai != '00'"></label>
-          </td>
-          <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-          <td>{{ data.nam }}</td>
-          <td>{{ data.soHoSoKyThuat }}</td>
-          <td>{{ data.ngayTao|date: globals.dateFormat}}</td>
-          <td>{{ data.tenDiemKho }}</td>
-          <td>{{ data.tenLoKho}}</td>
-          <td>{{ data.soBbLayMau}}</td>
-          <td>{{ data.soQdGiaoNvNh }}</td>
-          <td>{{ data.soBbKtNgoaiQuan }}</td>
-          <td>{{ data.soBbKtVanHanh }}</td>
-          <td>{{ data.soBbKtHskt }}</td>
-          <td>{{ data.tenTrangThai }}</td>
-          <td>{{ data.kqKiemTraXh == '0' ? 'Không đạt yêu cầu' : data.kqKiemTraXh == '1' ? 'Đạt yêu cầu' : '' }}</td>
-          <td class="text-left">
-            <a
-              (click)="redirectToChiTiet(data.id,false)">
-              <i class="fa fa-eye" title="Xem chi tiết"></i>
-            </a>
-          </td>
-        </tr>
+          <tr *ngFor="let data of basicTable.data; let i = index">
+            <td width="45px">
+              <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
+                [nzDisabled]="data.trangThai != '00'"></label>
+            </td>
+            <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+            <td>{{ data.nam }}</td>
+            <td>{{ data.soHoSoKyThuat }}</td>
+            <td>{{ data.ngayTao|date: globals.dateFormat}}</td>
+            <td>{{ data.tenDiemKho }}</td>
+            <td>{{ data.tenLoKho}}</td>
+            <td>{{ data.soBbLayMau}}</td>
+            <td>{{ data.soQdGiaoNvNh }}</td>
+            <td>{{ data.soBbKtNgoaiQuan }}</td>
+            <td>{{ data.soBbKtVanHanh }}</td>
+            <td>{{ data.soBbKtHskt }}</td>
+            <td>{{ data.tenTrangThai }}</td>
+            <td>{{ data.kqKiemTraXh == '0' ? 'Không đạt yêu cầu' : data.kqKiemTraXh == '1' ? 'Đạt yêu cầu' : '' }}</td>
+            <td class="text-left">
+              <a (click)="redirectToChiTiet(data.id,false)">
+                <i class="fa fa-eye" title="Xem chi tiết"></i>
+              </a>
+            </td>
+          </tr>
         </tbody>
       </nz-table>
       <div class="tab-content tab-menu" id="myTabContent">
@@ -205,9 +216,8 @@
           <div class="canphai">
             <!-- begin phân trang  -->
             <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
-                           [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
-                           (nzPageIndexChange)="changePageIndex($event)"
-                           (nzPageSizeChange)="changePageSize($event)">
+              [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+              (nzPageSizeChange)="changePageSize($event)">
               <ng-template #rangeTemplate let-range="range" let-total>
                 {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
               </ng-template>
@@ -222,7 +232,7 @@
 <ng-template #templateThemmoi>
   <div class="chi-tiet">
     <app-chi-tiet-ho-so-ky-thuat [id]="selectedId" (showListEvent)="showList()" [isViewDetail]="isViewDetail"
-                                 [loaiVthh]="loaiVthh">
+      [loaiVthh]="loaiVthh">
     </app-chi-tiet-ho-so-ky-thuat>
   </div>
 </ng-template>

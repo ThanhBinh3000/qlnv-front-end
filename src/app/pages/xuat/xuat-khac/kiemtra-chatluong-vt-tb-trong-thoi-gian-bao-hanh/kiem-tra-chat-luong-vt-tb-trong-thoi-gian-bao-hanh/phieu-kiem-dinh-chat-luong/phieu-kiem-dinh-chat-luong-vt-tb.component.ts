@@ -1,15 +1,15 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { chain } from 'lodash';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {chain} from 'lodash';
 import * as uuid from "uuid";
-import { Base2Component } from "../../../../../../components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../../services/storage.service";
-import { CHUC_NANG } from "../../../../../../constants/status";
-import { UserLogin } from "../../../../../../models/userlogin";
-import { MESSAGE } from "../../../../../../constants/message";
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../../services/storage.service";
+import {CHUC_NANG} from "../../../../../../constants/status";
+import {UserLogin} from "../../../../../../models/userlogin";
+import {MESSAGE} from "../../../../../../constants/message";
 import dayjs from "dayjs";
 import {
   PhieuKdclVtTbTrongThoiGianBaoHanhService
@@ -123,25 +123,25 @@ export class XkVtPhieuKiemDinhChatLuongVtTbComponent extends Base2Component impl
         let rs = chain(value)
           .groupBy("tenDiemKho")
           .map((v, k) => {
-            let rs1 = chain(v)
-              .groupBy("tenLoKho")
-              .map((v1, k1) => {
-                let tenNganKho = v1.find(s => s.tenLoKho === k1)
-                return {
-                  idVirtual: uuid.v4(),
-                  tenLoKho: k1 != "null" ? k1 : '',
-                  tenNganKho: tenNganKho ? tenNganKho.tenNganKho : null,
-                  childData: v1,
-                };
-              }
-              ).value();
-            // let bb = v.find(s => s.tenDiemKho === k)
-            return {
-              idVirtual: uuid.v4(),
-              tenDiemKho: k != "null" ? k : '',
-              childData: rs1,
-            };
-          }
+              let rs1 = chain(v)
+                .groupBy("tenLoKho")
+                .map((v1, k1) => {
+                  let tenNganKho = v1.find(s => s.tenLoKho === k1)
+                    return {
+                      idVirtual: uuid.v4(),
+                      tenLoKho: k1 != "null" ? k1 : '',
+                      tenNganKho: tenNganKho ? tenNganKho.tenNganKho : null,
+                      childData: v1,
+                    };
+                  }
+                ).value();
+              // let bb = v.find(s => s.tenDiemKho === k)
+              return {
+                idVirtual: uuid.v4(),
+                tenDiemKho: k != "null" ? k : '',
+                childData: rs1,
+              };
+            }
           ).value();
         return {
           idVirtual: uuid.v4(),
@@ -152,7 +152,7 @@ export class XkVtPhieuKiemDinhChatLuongVtTbComponent extends Base2Component impl
         };
       }).value();
     this.children = dataView
-    console.log(this.children, "this")
+    console.log(this.children,"this")
     this.expandAll()
   }
 

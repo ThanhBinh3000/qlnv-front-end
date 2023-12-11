@@ -39,6 +39,10 @@ export class DonviService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/dmuc-donvi/danh-sach/all-tree`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
+  getDviTree(body): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dmuc-donvi/danh-sach/tree-node`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
   getAllChildrenByMadvi(body): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/dmuc-donvi/danh-sach/children`;
     return this.httpClient.post<any>(url, body).toPromise();

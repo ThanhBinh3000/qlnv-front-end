@@ -35,15 +35,15 @@
   <div class="group-button">
     <h3 class="text-uppercase"> DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT KẾT QUẢ CHÀO GIÁ </h3>
     <div class="buttons">
-      <button type="button" *ngIf="userService.isCuc()" class="btn btn-sub btn-xoa" (click)="deleteMulti()">
+      <button type="button" *ngIf="userService.isCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_TCKHMTT_LT_QDKQCG_XOA')" class="btn btn-sub btn-xoa" (click)="deleteMulti()">
         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
         <span>Xóa</span>
       </button>
-      <button type="button" (click)="exportData()" class="btn btn-sub">
+      <button *ngIf="userService.isAccessPermisson('NHDTQG_PTMTT_TCKHMTT_LT_QDKQCG_EXP')" type="button" (click)="exportData()" class="btn btn-sub">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
-      <button type="button" *ngIf="userService.isCuc()" class="btn btn-sub xanh" (click)="goDetail(null)">
+      <button type="button" *ngIf="userService.isCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_TCKHMTT_LT_QDKQCG_THEM')" class="btn btn-sub xanh" (click)="goDetail(null)">
         <i class="icon htvbdh_dau-cong"></i>
         <span>Tạo quyết định</span>
       </button>
@@ -64,8 +64,8 @@
           <th class="text-center">Ngày ký QĐ</th>
           <th class="text-center">Đơn vị</th>
           <th class="text-center">Số QĐ PDKH mua trực tiếp</th>
-          <th class="text-center">Loại hàng hóa</th>
-          <th class="text-center">Chủng loại hàng hóa</th>
+          <th class="text-center">Loại hàng DTQG</th>
+          <th class="text-center">Chủng loại hàng DTQG</th>
           <th class="text-center">Trạng thái</th>
           <th class="text-center">Hành động</th>
         </tr>
@@ -136,19 +136,16 @@
           <td>{{ data.tenCloaiVthh }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
-            <a *ngIf="data.trangThai == STATUS.CHO_DUYET_TP || data.trangThai == STATUS.CHO_DUYET_LDC || data.trangThai == STATUS.DA_DUYET_LDC"
-              (click)="goDetail(data.id)">
+            <a *ngIf="userService.isAccessPermisson('NHDTQG_PTMTT_TCKHMTT_LT_QDKQCG_XEM')" (click)="goDetail(data.id)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a *ngIf="userService.isCuc() && ((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC) && userService.isAccessPermisson('NHDTQG_PTMTT_TCKHMTT_LT_QDKQCG_THEM') )"
-              (click)="goDetail(data.id)">
+            <a *ngIf="userService.isCuc() && ((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC) && userService.isAccessPermisson('NHDTQG_PTMTT_TCKHMTT_LT_QDKQCG_THEM') )" (click)="goDetail(data.id)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a *ngIf="userService.isCuc() && ((userService.isAccessPermisson('NHDTQG_PTMTT_TCKHMTT_LT_QDKQCG_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP) || (userService.isAccessPermisson('NHDTQG_PTMTT_TCKHMTT_LT_QDKQCG_DUYET_LDC') && data.trangThai == STATUS.CHO_DUYET_LDC))"
-              (click)="goDetail(data.id)">
+            <a *ngIf="userService.isCuc() && ((userService.isAccessPermisson('NHDTQG_PTMTT_TCKHMTT_LT_QDKQCG_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP) || (userService.isAccessPermisson('NHDTQG_PTMTT_TCKHMTT_LT_QDKQCG_DUYET_LDC') && data.trangThai == STATUS.CHO_DUYET_LDC))" (click)="goDetail(data.id)">
               <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data)">
+            <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTMTT_TCKHMTT_LT_QDKQCG_XOA')" (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>

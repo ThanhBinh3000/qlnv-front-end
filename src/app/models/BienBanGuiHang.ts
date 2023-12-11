@@ -43,4 +43,6 @@ export class ChiTiet {
     stt: string;
     idVirtual: number;
     loaiDaiDien: string;
+    hoVaTen: string;
+    edit: boolean;
 }

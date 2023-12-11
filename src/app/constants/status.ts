@@ -87,21 +87,13 @@ export enum STATUS {
   DA_DONG = '87'
 }
 
-export enum LoaiTaiLieu {
-  VanBanDen = 1,
-  VanBanDi = 3,
-  ToTrinh = 4,
-  VanBanNoiBo = 5,
-  VanBanTraLoi = 6,
-}
-
 export enum LoaiDanhMuc {
-  VAI_TRO = "VAI_TRO"
+  VAI_TRO = 'VAI_TRO'
 }
 
 export enum TrangThaiHoatDong {
-  HOAT_DONG = "01",
-  KHONG_HOAT_DONG = "00"
+  HOAT_DONG = '01',
+  KHONG_HOAT_DONG = '00'
 }
 
 export enum HienTrangMayMoc {
@@ -111,20 +103,20 @@ export enum HienTrangMayMoc {
 
 
 export enum LOAI_DON_VI {
-  MLK = "MLK",
-  PB = "PB",
-  DV = "DV"
+  MLK = 'MLK',
+  PB = 'PB',
+  DV = 'DV'
 }
 
 export enum KH_CT_LOAI_CHI_TIEU {
-  NHAP = "01",
-  XUAT = "00",
+  NHAP = '01',
+  XUAT = '00',
 }
 
 export enum LOAI_BIEN_BAN {
-  BB_KTRA_NGOAI_QUAN = "BBKTNQ",
-  BB_KTRA_VAN_HANH = "BBKTVH",
-  BB_KTRA_HOSO_KYTHUAT = "BBKTHSKT",
+  BB_KTRA_NGOAI_QUAN = 'BBKTNQ',
+  BB_KTRA_VAN_HANH = 'BBKTVH',
+  BB_KTRA_HOSO_KYTHUAT = 'BBKTHSKT',
 }
 
 export const STATUS_LABEL = {
@@ -154,28 +146,56 @@ export enum CHUC_NANG {
 
 
 export enum TRANG_THAI_QUY_CHUAN_TIEU_CHUAN {
-  CON_HIEU_LUC = "01",
-  HET_HIEU_LUC = "00",
+  CON_HIEU_LUC = '01',
+  HET_HIEU_LUC = '00',
 }
 
 export enum HSKT_LOAI_DOI_TUONG {
-  HO_SO = "HS",
-  NGUOI_LIEN_QUAN = "NLQ"
+  HO_SO = 'HS',
+  NGUOI_LIEN_QUAN = 'NLQ'
 }
+
 export enum LOAI_DOI_TUONG {
-  HO_SO = "HS",
-  NGUOI_LIEN_QUAN = "NLQ",
-  PHUONG_PHAP_LAY_MAU = "PPLM",
-  KET_QUA_PHAN_TICH = "KKPT"
+  HO_SO = 'HS',
+  NGUOI_LIEN_QUAN = 'NLQ',
+  PHUONG_PHAP_LAY_MAU = 'PPLM',
+  KET_QUA_PHAN_TICH = 'KKPT'
 }
 
 export enum LOAI_CHOT {
-  CHOT_GIA = "CHOT_GIA",
-  CHOT_NHAP_XUAT = "CHOT_NHAP_XUAT",
+  CHOT_GIA = 'CHOT_GIA',
+  CHOT_NHAP_XUAT = 'CHOT_NHAP_XUAT',
 }
 
 export enum BBLM_LOAI_DOI_TUONG {
-  NGUOI_LIEN_QUAN = "NLQ",
-  PHUONG_PHAP_LAY_MAU = "PPLM",
-  CHI_TIEU_CHAT_LUONG = "CTCL"
+  NGUOI_LIEN_QUAN = 'NLQ',
+  PHUONG_PHAP_LAY_MAU = 'PPLM',
+  CHI_TIEU_CHAT_LUONG = 'CTCL'
+}
+
+export enum THONG_TIN_BAN_TRUC_TIEP {
+  CHAO_GIA = '01',
+  UY_QUYEN = '02',
+  BAN_LE = '03'
+}
+
+export enum BAN_TRUC_TIEP {
+  CHAO_GIA = 'CG',
+  UY_QUYEN_BAN_LE = 'UQBL'
+}
+
+export enum TRUC_TIEP {
+  HOP_DONG = 'HĐ',
+  BAN_LE = 'BL'
+}
+
+export enum HINH_THUC_KE_LOT_BAO_QUAN {
+  PHUONG_PHAP_BAO_QUAN = 'ppbq'
+}
+
+export enum TRANG_THAI_CTNC {
+  PHE_DUYET_NV_KHCN = '01',
+  DANG_THUC_HIEN_NV_KHCN = '02',
+  DA_NGHIEM_THU_NV_KHCN = '03',
+  DA_THANH_LY_NV_KHCN = '04'
 }

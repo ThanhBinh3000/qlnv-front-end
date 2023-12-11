@@ -23,14 +23,25 @@
 
 .border-right {
   border-right: solid 1px #e2e2e2;
-
-}
-
-::ng-deep .ant-input-number-input {
-  color: #001CFF !important;
-  font-weight: bold;
 }
 
 .bg-selected td {
-  background-color: #ebedff;
+  background-color: #d8dcfe;
+}
+
+::ng-deep {
+  .blue-bold input {
+    color: blue;
+    font-weight: bold;
+  }
+
+  .black-bold input {
+    color: black;
+    font-weight: bold;
+  }
+
+  .red-bold input {
+    color: red;
+    font-weight: bold;
+  }
 }

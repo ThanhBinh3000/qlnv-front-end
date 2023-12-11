@@ -3,13 +3,13 @@
     <div class='header header-green-background'>
       <div class='header-text'>
         <div class='title-chi-tieu'>
-          <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'status-xanh' : 'status-do'">
-            {{ formData.value.tenTrangThai }}
-          </span>
+                <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'status-xanh' : 'status-do'">
+                    {{ formData.value.tenTrangThai }}
+                </span>
           <span>Biên bản kết thúc nhập kho</span>
         </div>
         <nz-alert class='mg-t-10' *ngIf='formData.value.trangThai == STATUS.TU_CHOI_LDCC ' nzShowIcon nzType='error'
-          nzMessage='Lý do từ chối' nzDescription='{{formData.value.lyDoTuChoi}}'>
+                  nzMessage='Lý do từ chối' nzDescription='{{formData.value.lyDoTuChoi}}'>
         </nz-alert>
       </div>
       <div class='btn-group'>
@@ -18,25 +18,25 @@
           <span>Quay lại</span>
         </button>
         <button class='btn btn-sub xanh-nhat ml-2' type='button'
-          *ngIf=' this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC  '
-          (click)="saveAndSend(formData.value,STATUS.CHO_DUYET_KTVBQ,'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
+                *ngIf=' this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC  '
+                (click)="saveAndSend(formData.value,STATUS.CHO_DUYET_KTVBQ,'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
           <i class='icon htvbdh_tcdt_guiduyet'></i>
           <span>Lưu và gửi duyệt</span>
 
         </button>
         <button type='button' class='btn btn-sub do ml-2' *ngIf='  this.userService.isChiCuc() && isDisabled()'
-          (click)='tuChoi()'>
+                (click)='tuChoi()'>
           <i class='icon htvbdh_tcdt_tuchoi do'></i>
           <span>Từ chối</span>
         </button>
         <button class='btn btn-sub xanh-nhat ml-2' *ngIf='  this.userService.isChiCuc() && isDisabled()'
-          (click)='pheDuyet()'>
+                (click)='pheDuyet()'>
           <i class='icon htvbdh_tcdt_pheduyet '></i>
           <span>Duyệt</span>
         </button>
         <button class='btn btn-sub xanh ml-2'
-          *ngIf=' this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC '
-          (click)='save()'>
+                *ngIf=' this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC '
+                (click)='save()'>
           <i class='icon  htvbdh_tcdt_save'></i>
           <span>Lưu</span>
         </button>
@@ -114,7 +114,8 @@
               Số báo cáo KQKĐ mẫu
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]='24' [nzErrorTip]='error'>
-              <nz-input-group nzAddOnAfterIcon='folder-open' (click)="!soBcKqkdMau ? openDialogSoQd() : 'javascript;:'">
+              <nz-input-group nzAddOnAfterIcon='folder-open'
+                              (click)="!soBcKqkdMau ? openDialogSoQd() : 'javascript;:'">
                 <input nz-input [readonly]='isView || soBcKqkdMau' formControlName='soCanCu' readonly />
               </nz-input-group>
             </nz-form-control>
@@ -125,9 +126,9 @@
             <nz-form-label [nzNoColon]='true'> Ngăn/Lô kho</nz-form-label>
             <nz-form-control>
               <nz-select formControlName='maDiaDiem' [nzDisabled]='isView'
-                (ngModelChange)='changeValueNganLoKho($event)'>
+                         (ngModelChange)='changeValueNganLoKho($event)'>
                 <nz-option *ngFor='let p of listNganLoKho' [nzValue]='p.maDiaDiem'
-                  [nzLabel]="p.tenLoKho ? p.tenLoKho + ' - ' + p.tenNganKho : p.tenNganKho">
+                           [nzLabel]="p.tenLoKho ? p.tenLoKho + ' - ' + p.tenNganKho : p.tenNganKho">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -193,28 +194,28 @@
     </form>
     <h3 class='mt-3'>Thông tin bảng kê cân hàng và phiếu nhập kho</h3>
     <nz-table nzBordered class='pd-10' [nzData]='dataPhieuNhapKho' class='nowrap' [nzFrontPagination]='false'
-      [nzShowPagination]='false'>
+              [nzShowPagination]='false'>
       <thead>
-        <tr>
-          <th width='30px'>STT</th>
-          <th>Phiếu nhập kho</th>
-          <th width='200px'>Ngày nhập</th>
-          <th width='200px'>Số lượng nhập</th>
-        </tr>
+      <tr>
+        <th width='30px'>STT</th>
+        <th>Phiếu nhập kho</th>
+        <th width='200px'>Ngày nhập</th>
+        <th width='200px'>Số lượng nhập</th>
+      </tr>
       </thead>
       <tbody>
-        <tr *ngFor='let data of dataPhieuNhapKho; let i = index'>
-          <td>{{i + 1}}</td>
-          <td>
-            {{data.soPhieu}}
-          </td>
-          <td>
-            {{data.ngayXuatNhap | date: 'dd/MM/YYYY' }}
-          </td>
-          <td>
-            {{data.slThucTe}}
-          </td>
-        </tr>
+      <tr *ngFor='let data of dataPhieuNhapKho; let i = index'>
+        <td>{{i + 1}}</td>
+        <td>
+          {{data.soPhieu}}
+        </td>
+        <td>
+          {{data.ngayXuatNhap | date: 'dd/MM/YYYY' }}
+        </td>
+        <td>
+          {{data.slThucTe}}
+        </td>
+      </tr>
       </tbody>
     </nz-table>
     <form [nzLayout]="'vertical'" nz-form [formGroup]='formData'>

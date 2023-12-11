@@ -233,7 +233,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listSoQuyetDinh,
-        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
+        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng DTQG'],
         dataColumn: ['soQd', 'ngayQd', 'tenLoaiVthh'],
       },
     })
@@ -427,12 +427,12 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       case STATUS.TU_CHOI_TP:
       case STATUS.DU_THAO: {
         trangThai = STATUS.CHO_DUYET_TP;
-        mess = 'Bạn có muối gửi duyệt ?'
+        mess = 'Bạn có muốn gửi duyệt ?'
         break;
       }
       case STATUS.CHO_DUYET_TP: {
         trangThai = STATUS.CHO_DUYET_LDC;
-        mess = 'Bạn có muối gửi duyệt ?'
+        mess = 'Bạn có muốn gửi duyệt ?'
         break;
       }
       case STATUS.CHO_DUYET_LDC: {
@@ -577,8 +577,12 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
 
   }
 
-  async bindingDataBbLayMau(id, isChiTiet) {
-    let res = await this.bienBanLayMauServive.getDetailBySoQd(id);
+  async bindingDataBbLayMau(req, isChiTiet) {
+    if(req == undefined){
+      this.notification.error(MESSAGE.ERROR, 'Điểm kho chưa tạo Biên bản lẫy mẫu/bàn giao mẫu');
+      return;
+    }
+    let res = await this.bienBanLayMauServive.getDetailBySoQd(req);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
       this.formData.patchValue({
@@ -765,8 +769,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
-    }).catch(err => {
-      this.notification.error(MESSAGE.ERROR, err.msg);
     })
   }
 

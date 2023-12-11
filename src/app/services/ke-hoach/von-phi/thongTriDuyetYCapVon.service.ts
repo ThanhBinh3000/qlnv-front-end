@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {environment} from 'src/environments/environment';
-import {BaseService} from '../../base.service';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { BaseService } from '../../base.service';
 
 @Injectable({
   providedIn: 'root',
@@ -52,6 +52,11 @@ export class ThongTriDuyetYCapVonService extends BaseService {
 
   exportList(body: any): Observable<Blob> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.router}/export/list`;
-    return this.httpClient.post(url, body, {responseType: 'blob'});
+    return this.httpClient.post(url, body, { responseType: 'blob' });
+  }
+
+  preview(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.router}/xem-truoc`;
+    return this.httpClient.post(url, body).toPromise();
   }
 }

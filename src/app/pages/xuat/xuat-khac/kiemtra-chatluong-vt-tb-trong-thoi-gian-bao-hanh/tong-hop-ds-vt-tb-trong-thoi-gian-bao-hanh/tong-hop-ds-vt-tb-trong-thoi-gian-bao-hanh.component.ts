@@ -1,19 +1,19 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Base2Component } from "../../../../../components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { FormGroup } from "@angular/forms";
-import { NumberToRoman } from "../../../../../shared/commonFunction";
-import { CHUC_NANG } from "../../../../../constants/status";
-import { DonviService } from "../../../../../services/donvi.service";
-import { DanhMucService } from "../../../../../services/danhmuc.service";
-import { MESSAGE } from "../../../../../constants/message";
-import { chain, isEmpty } from "lodash";
-import { v4 as uuidv4 } from "uuid";
-import { LOAI_HH_XUAT_KHAC } from "../../../../../constants/config";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {FormGroup} from "@angular/forms";
+import {NumberToRoman} from "../../../../../shared/commonFunction";
+import {CHUC_NANG} from "../../../../../constants/status";
+import {DonviService} from "../../../../../services/donvi.service";
+import {DanhMucService} from "../../../../../services/danhmuc.service";
+import {MESSAGE} from "../../../../../constants/message";
+import {chain, isEmpty} from "lodash";
+import {v4 as uuidv4} from "uuid";
+import {LOAI_HH_XUAT_KHAC} from "../../../../../constants/config";
 import {
   TongHopDanhSachVtTbTrongThoiGIanBaoHanh
 } from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/TongHopDanhSachVtTbTrongThoiGIanBaoHanh.service";
@@ -139,7 +139,7 @@ export class TongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Component i
       loai: this.loaiHhXuatKhac.VT_BH,
     });
     await this.search();
-    console.log(this.dataTable, 100000)
+    console.log( this.dataTable,100000)
     this.flatDataTable = this.dataTable.flatMap(s => {
       if (s.tongHopDtl && s.tongHopDtl.length > 0) {
         return s.tongHopDtl.map(s1 => {
@@ -150,8 +150,10 @@ export class TongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Component i
           return Object.assign(s1, s);
         })
       } else return s;
-
     });
+    if(this.formData.value.maChiCuc){
+      this.flatDataTable = this.flatDataTable.filter(i=> i.maDiaDiem.substring(0,8) === this.formData.value.maChiCuc)
+    }
     this.buildTableView();
   }
 
@@ -175,9 +177,9 @@ export class TongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Component i
   }
 
   async changeHangHoa(event: any) {
-    this.formData.patchValue({ cloaiVthh: null })
+    this.formData.patchValue({cloaiVthh: null})
     if (event) {
-      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.dsCloaiVthh = res.data;
@@ -195,18 +197,18 @@ export class TongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Component i
         let rs = chain(value)
           .groupBy("tenChiCuc")
           .map((v, k) => {
-            let rowItem = v.find(s => s.tenChiCuc === k);
-            let idVirtual = uuidv4();
-            this.expandSetString.add(idVirtual);
-            return {
-              idVirtual: idVirtual,
-              tenChiCuc: k,
-              tenCuc: rowItem?.tenCuc,
-              maDiaDiem: rowItem?.maDiaDiem,
-              tenCloaiVthh: rowItem?.tenCloaiVthh,
-              childData: v
+              let rowItem = v.find(s => s.tenChiCuc === k);
+              let idVirtual = uuidv4();
+              this.expandSetString.add(idVirtual);
+              return {
+                idVirtual: idVirtual,
+                tenChiCuc: k,
+                tenCuc: rowItem?.tenCuc,
+                maDiaDiem: rowItem?.maDiaDiem,
+                tenCloaiVthh: rowItem?.tenCloaiVthh,
+                childData: v
+              }
             }
-          }
           ).value();
         let rowItem = value.find(s => s.header === key);
         let idVirtual = uuidv4();
@@ -221,7 +223,7 @@ export class TongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Component i
           trangThai: rowItem.trangThai,
           tenTrangThai: rowItem.tenTrangThai,
           ngayTao: rowItem.ngayTao,
-          fileDinhKems: rowItem.fileDinhKems,
+          fileDinhKems:rowItem.fileDinhKems,
           childData: rs
         };
       }).value();
@@ -248,7 +250,7 @@ export class TongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Component i
     this.selectedItem = item;
     this.modalWidth = showDetail ? '80vw' : (item ? '40vw' : '40vw');
     // this.step = item ? '1' : '2';
-    console.log(this.selectedItem, 9999)
+    console.log(this.selectedItem,9999)
   }
 
   async changeStep($event: any) {

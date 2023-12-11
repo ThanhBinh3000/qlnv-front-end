@@ -1,12 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NzModalService } from "ng-zorro-antd/modal";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { MESSAGE } from "src/app/constants/message";
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { ThongtinDaugiaComponent } from './thongtin-daugia/thongtin-daugia.component';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {NzModalService} from "ng-zorro-antd/modal";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {MESSAGE} from "src/app/constants/message";
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {ThongtinDaugiaComponent} from './thongtin-daugia/thongtin-daugia.component';
 import {
   QuyetDinhPdKhBdgService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
@@ -14,12 +14,8 @@ import {
   ThongTinDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
 import dayjs from 'dayjs';
-import { cloneDeep } from 'lodash';
-import { PREVIEW } from "src/app/constants/fileType";
-import { formatNumber } from "@angular/common";
-import {
-  QuyetDinhDchinhKhBdgService
-} from "../../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/dieuchinh-kehoach/quyetDinhDchinhKhBdg.service";
+import {cloneDeep} from 'lodash';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-chi-tiet-thong-tin-dau-gia',
@@ -27,12 +23,14 @@ import {
   styleUrls: ['./chi-tiet-thong-tin-dau-gia.component.scss']
 })
 export class ChiTietThongTinDauGiaComponent extends Base2Component implements OnInit {
-  @Input() loaiVthhInput: string;
+  @Input() loaiVthh: string
   @Input() idInput: number;
-  @Output()
-  showListEvent = new EventEmitter<any>();
+  @Output() showListEvent = new EventEmitter<any>();
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
+  templateNameVt = "Thông tin bán đấu giá vật tư";
+  templateNameLt = "Thông tin bán đấu giá lương thực";
   dataThongTin: any;
-  selected: boolean = false;
+  isThongTin: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -40,9 +38,8 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private thongTinDauGiaService: ThongTinDauGiaService,
     private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
-    private quyetDinhDchinhKhBdgService: QuyetDinhDchinhKhBdgService,
+    private thongTinDauGiaService: ThongTinDauGiaService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, thongTinDauGiaService);
     this.formData = this.fb.group(
@@ -55,7 +52,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
         idQdDc: [],
         soQdDc: [''],
         idQdPdDtl: [],
-        soQdPdKqBdg: [''],
+        soQdKq: [''],
         tenDvi: [''],
         tongTienDatTruoc: [],
         khoanTienDatTruoc: [],
@@ -100,43 +97,27 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     try {
       await this.spinner.show();
       const res = await this.quyetDinhPdKhBdgService.getDtlDetail(id);
-      if (!res || !res.data) {
-        console.log('Không tìm thấy dữ liệu');
+      if (res.msg !== MESSAGE.SUCCESS || !res.data) {
         return;
       }
       const data = res.data;
       this.dataTable = cloneDeep(data.listTtinDg);
       if (this.dataTable && this.dataTable.length > 0) {
-        await this.showFirstRow(event, this.dataTable[0]);
+        await this.selectRow(this.dataTable[0]);
       }
-      let resQdHdr = null;
-      let reDcHdr = null;
-
-      if (data.isDieuChinh) {
-        reDcHdr = await this.quyetDinhDchinhKhBdgService.getDetail(data.idHdr);
-      } else {
-        resQdHdr = await this.quyetDinhPdKhBdgService.getDetail(data.idHdr);
-      }
-      if ((!data.isDieuChinh && (!resQdHdr || !resQdHdr.data)) ||
-        (data.isDieuChinh && (!reDcHdr || !reDcHdr.data))) {
-        console.log('Không tìm thấy dữ liệu');
-        return;
-      }
-      const dataQdHdr = resQdHdr ? resQdHdr.data : null;
-      const dataDcHdr = reDcHdr ? reDcHdr.data : null;
       this.formData.patchValue({
         nam: data.nam,
-        idQdPd: dataQdHdr ? dataQdHdr.id : dataDcHdr.idQdPd,
-        soQdPd: dataQdHdr ? dataQdHdr.soQdPd : dataDcHdr.soQdPd,
-        idQdDc: dataDcHdr?.id,
-        soQdDc: dataDcHdr?.soQdDc,
+        idQdPd: data.xhQdPdKhBdg.type === 'QDDC' ? data.idQdPd : data.idHdr,
+        soQdPd: data.soQdPd,
+        idQdDc: data.xhQdPdKhBdg.type === 'QDDC' ? data.idHdr : null,
+        soQdDc: data.soQdDc,
         idQdPdDtl: data.id,
-        soQdPdKqBdg: data.soQdPdKqBdg,
+        soQdKq: data.soQdKq,
         maDvi: data.maDvi,
         tenDvi: data.tenDvi,
         khoanTienDatTruoc: data.khoanTienDatTruoc,
         khoanTienDatTruocHienThi: data.khoanTienDatTruoc + '%',
-        tgianDauGia: ['Từ ' + dayjs(data.tgianDkienTu).format('DD/MM/YYYY') + ' Đến ' + dayjs(data.tgianDkienDen).format('DD/MM/YYYY')],
+        tgianDauGia: this.isValidDate(data.tgianDkienTu) && this.isValidDate(data.tgianDkienDen) ? [`Từ ${dayjs(data.tgianDkienTu).format('DD/MM/YYYY')} Đến ${dayjs(data.tgianDkienDen).format('DD/MM/YYYY')}`] : [],
         tgianTtoan: data.tgianTtoan,
         tenPthucTtoan: data.tenPthucTtoan,
         tgianGnhan: data.tgianGnhan,
@@ -144,8 +125,8 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
         tenCloaiVthh: data.tenCloaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
         tongSoLuong: data.tongSoLuong,
-        tenLoaiHinhNx: dataQdHdr ? dataQdHdr.tenLoaiHinhNx : dataDcHdr.tenLoaiHinhNx,
-        tenKieuNx: dataQdHdr ? dataQdHdr.tenKieuNx : dataDcHdr.tenKieuNx,
+        tenLoaiHinhNx: data.xhQdPdKhBdg.tenLoaiHinhNx,
+        tenKieuNx: data.xhQdPdKhBdg.tenKieuNx,
         donViTinh: data.donViTinh,
         trangThai: data.trangThai,
         tenTrangThai: data.tenTrangThai,
@@ -158,6 +139,10 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     } finally {
       await this.spinner.hide();
     }
+  }
+
+  isValidDate(dateString: string): boolean {
+    return dayjs(dateString).isValid();
   }
 
   async calculatorTable(data) {
@@ -216,24 +201,15 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     });
   }
 
-  async showFirstRow($event, data: any) {
-    await this.showDetail($event, data);
-  }
 
-  async showDetail($event, data: any) {
-    await this.spinner.show();
-    if ($event.type === 'click') {
-      this.selected = false;
-      const selectedRow = $event.target.parentElement.parentElement.querySelector('.selectedRow');
-      if (selectedRow) {
-        selectedRow.classList.remove('selectedRow');
-      }
-      $event.target.parentElement.classList.add('selectedRow');
-    } else {
-      this.selected = true;
+  async selectRow(data: any) {
+    if (!data.selected) {
+      this.dataTable.forEach(item => item.selected = false);
+      data.selected = true;
+      const findndex = this.dataTable.findIndex(child => child.id == data.id);
+      this.dataThongTin = this.dataTable[findndex]
+      this.isThongTin = true
     }
-    this.dataThongTin = data;
-    await this.spinner.hide();
   }
 
   async themMoiPhienDauGia($event, isView: boolean, data?: any) {
@@ -252,7 +228,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
       nzClosable: false,
       nzWidth: '2000px',
       nzFooter: null,
-      nzBodyStyle: { 'overflow-y': 'auto' },
+      nzBodyStyle: {'overflow-y': 'auto'},
       nzComponentParams: {
         isView: isView,
         dataDetail: this.formData.value,
@@ -264,6 +240,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
       await this.loadDetail(this.idInput);
     });
   }
+
 
   async deleteThongTin(data) {
     this.modal.confirm({
@@ -277,8 +254,16 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
       nzOnOk: async () => {
         await this.spinner.show();
         try {
-          const body = { id: data.id };
+          const body = {id: data.id};
           await this.thongTinDauGiaService.delete(body);
+          if (this.idInput > 0) {
+            const res = await this.quyetDinhPdKhBdgService.getDtlDetail(this.idInput);
+            if (res.data && res.data.listTtinDg && res.data.listTtinDg.length > 0) {
+              this.isThongTin = true;
+            } else {
+              this.isThongTin = false;
+            }
+          }
           await this.loadDetail(this.idInput);
         } catch (error) {
           console.log('error: ', error);
@@ -288,41 +273,5 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
         }
       },
     });
-  }
-
-
-  formatterTien = (value: number) => {
-    const donViTien = '(đ)';
-    const formattedValue = value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
-    return `${formattedValue} ${donViTien}`;
-  }
-
-  formatterSoLuong = (value: number) => {
-    const donViTinh = this.formData.value.donViTinh;
-    const formattedValue = value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
-    return `${formattedValue} ${donViTinh}`;
-  }
-
-  async preview() {
-    const data = [];
-    for (const s of this.formData.value.listTtinDg) {
-      const res = await this.thongTinDauGiaService.getDetail(s.id);
-      data.push(res.data);
-    }
-    const body = {
-      tenCloaiVthh: this.formData.value.tenCloaiVthh.toUpperCase(),
-      nam: this.formData.value.nam,
-      maDvi: this.formData.value.maDvi,
-      children: data
-    };
-    try {
-      const s = await this.service.preview(body);
-      this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
-      this.printSrc = s.data.pdfSrc;
-      this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
-      this.showDlgPreview = true;
-    } catch (error) {
-      console.log('error: ', error);
-    }
   }
 }

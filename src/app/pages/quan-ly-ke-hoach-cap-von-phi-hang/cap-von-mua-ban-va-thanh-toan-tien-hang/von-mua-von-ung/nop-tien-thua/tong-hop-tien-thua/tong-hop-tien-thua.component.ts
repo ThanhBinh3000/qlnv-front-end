@@ -148,7 +148,7 @@ export class TongHopTienThuaComponent implements OnInit {
         this.status.save = Status.check('saveWHist', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.EDIT_TH_NTT) && isChild;
         this.status.submit = Status.check('submit', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.SUBMIT_TH_NTT) && isChild && !(!this.baoCao.id);
         this.status.pass = Status.check('pass', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.PASS_TH_NTT) && isChild;
-        this.status.approve = Status.check('approve', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.APPROVE_TH_NTT) && isChild;
+        this.status.approve = Status.check('approve', this.baoCao.trangThai) && this.userService.isAccessPermisson(Roles.CVMB.  APPROVE_TH_NTT) && isChild;
         this.status.export = this.userService.isAccessPermisson(Roles.CVMB.EXPORT_TH_NTT) && (isChild || this.isParent) && !(!this.baoCao.id);
         this.scrollX = this.status.save ? Table.tableWidth(200, 7, 0, 60) : Table.tableWidth(200, 7, 0, 0);
     }

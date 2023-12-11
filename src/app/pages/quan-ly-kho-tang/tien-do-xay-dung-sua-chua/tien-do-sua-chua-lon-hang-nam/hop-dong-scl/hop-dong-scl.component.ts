@@ -1,13 +1,13 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { STATUS } from "../../../../../constants/status";
-import { MESSAGE } from "../../../../../constants/message";
-import { HopdongTdscService } from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/hopdongTdsc.service";
-import { UserService } from "../../../../../services/user.service";
+import {Component, Input, OnInit} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {STATUS} from "../../../../../constants/status";
+import {MESSAGE} from "../../../../../constants/message";
+import {HopdongTdscService} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/hopdongTdsc.service";
+import {UserService} from "../../../../../services/user.service";
 
 @Component({
   selector: 'app-hop-dong-scl',
@@ -22,7 +22,7 @@ export class HopDongSclComponent implements OnInit {
   STATUS = STATUS;
   @Input() itemQdPdKhLcnt: any;
   @Input() itemQdPdKtkt: any;
-  @Input() itemDuAn: any;
+  @Input()   itemDuAn: any;
   @Input()
   itemTtdt: any;
 
@@ -33,7 +33,7 @@ export class HopDongSclComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private modal: NzModalService,
     private hopdongService: HopdongTdscService,
-    public userService: UserService
+    public userService : UserService
   ) {
 
   }
@@ -53,7 +53,7 @@ export class HopDongSclComponent implements OnInit {
         "idDuAn": this.itemTtdt.idDuAn,
         "idQdPdKtkt": this.itemQdPdKtkt.id,
         "idQdPdKhLcnt": this.itemQdPdKhLcnt.id,
-        "loai": "00"
+        "loai" : "00"
       }
       let res = await this.hopdongService.detailQdPdKhLcnt(body);
       if (res.msg == MESSAGE.SUCCESS) {

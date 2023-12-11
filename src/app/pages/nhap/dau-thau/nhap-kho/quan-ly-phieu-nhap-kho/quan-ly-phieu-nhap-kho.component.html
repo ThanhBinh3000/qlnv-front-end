@@ -22,12 +22,12 @@
           <div nz-row [nzGutter]="24">
             <div nz-col nzSpan="12" class="cus-start-date">
               <nz-date-picker [nzDisabledDate]="disabledStartDate" nzFormat="dd/MM/yyyy" [(ngModel)]="tuNgayNk"
-                nzPlaceHolder="Ngày bắt đầu">
+                              nzPlaceHolder="Ngày bắt đầu">
               </nz-date-picker>
             </div>
             <div nz-col nzSpan="12" class="cus-end-date">
               <nz-date-picker [nzDisabledDate]="disabledEndDate" nzFormat="dd/MM/yyyy" [(ngModel)]="denNgayNk"
-                nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                              nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
             </div>
           </div>
         </div>
@@ -51,11 +51,11 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <!--        <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_IN')" type="button" class="btn btn-sub"-->
-        <!--          (click)="print()">-->
-        <!--          <i class="icon htvbdh_tcdt_print"></i>-->
-        <!--          <span>In</span>-->
-        <!--        </button>-->
+<!--        <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_IN')" type="button" class="btn btn-sub"-->
+<!--          (click)="print()">-->
+<!--          <i class="icon htvbdh_tcdt_print"></i>-->
+<!--          <span>In</span>-->
+<!--        </button>-->
         <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)" *ngIf="userService.isChiCuc()
         && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_THEM')">
           <i class="icon htvbdh_dau-cong"></i>
@@ -68,21 +68,22 @@
         [nzData]="dataTable">
         <thead>
           <tr>
-            <th width="60px">STT</th>
+            <th class="text-center" width="60px">STT</th>
             <th width="30px"></th>
             <th width="30px"></th>
-            <th>Số QĐ giao NVNH</th>
-            <th>Năm KH</th>
-            <th>Thời hạn NH</th>
-            <th>Điểm kho</th>
-            <th>Ngăn/Lô kho</th>
-            <th *ngIf="!loaiVthh.startsWith('02')">BB NTBQLĐ</th>
-            <th>Số phiếu nhập kho</th>
-            <th>Ngày nhập kho</th>
-            <th>{{ loaiVthh == '02' ? 'Số BB gửi hàng' : 'Số phiếu KTCL' }}</th>
-            <th>{{ loaiVthh == '02' ? 'Ngày lập phiếu' : 'Ngày giám định' }}</th>
-            <th>Trạng thái</th>
-            <th>Hành động</th>
+            <th class="text-center">Số QĐ giao NVNH</th>
+            <th class="text-center">Năm KH</th>
+            <th class="text-center">Thời hạn NH</th>
+            <th class="text-center">Điểm kho</th>
+            <th class="text-center">Ngăn/Lô kho</th>
+            <th class="text-center" *ngIf="!loaiVthh.startsWith('02')">BB NTBQLĐ</th>
+            <th class="text-center">Số phiếu nhập kho</th>
+            <th class="text-center">Ngày nhập kho</th>
+            <th class="text-center">{{ loaiVthh == '02' ? 'Số BB gửi hàng' : 'Số phiếu KTCL' }}</th>
+            <th class="text-center">{{ loaiVthh == '02' ? 'Ngày lập phiếu' : 'Ngày giám định' }}</th>
+            <th class="text-center" *ngIf="!loaiVthh.startsWith('02')">Bảng kê cân hàng</th>
+            <th class="text-center">Trạng thái</th>
+            <th class="text-center">Hành động</th>
           </tr>
         </thead>
         <tbody>
@@ -94,6 +95,7 @@
               <td class="link bold">{{ item.soQd }}</td>
               <td class="bold">{{ item.namNhap }}</td>
               <td class="bold">{{ item.tgianNkho }}</td>
+              <td *ngIf="!loaiVthh.startsWith('02')"></td>
               <td colspan="8"></td>
               <td>
                 <a *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_THEM')"
@@ -110,10 +112,10 @@
                   <td [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>
                   <td colspan="3"></td>
                   <td>{{dataDdiem.tenDiemKho}}</td>
-                  <td>{{dataDdiem.tenLoKho? dataDdiem.tenLoKho + ' - ' + dataDdiem.tenNganKho: dataDdiem.tenNganKho}}
-                  </td>
+                  <td>{{dataDdiem.tenLoKho? dataDdiem.tenLoKho + ' - ' + dataDdiem.tenNganKho: dataDdiem.tenNganKho}}</td>
                   <td *ngIf="!loaiVthh.startsWith('02')">{{dataDdiem.soBbNtbqld}}</td>
-                  <td colspan="6"></td>
+                  <td *ngIf="!loaiVthh.startsWith('02')"></td>
+                  <td colspan="7"></td>
                 </tr>
                 <ng-container *ngIf="expandSet2.has(y)">
                   <tr class="level-3" *ngFor="let dataPhieu of dataDdiem.listPhieuNhapKho">
@@ -127,21 +129,23 @@
                       dataPhieu.phieuKiemTraCl?.soPhieu}}</td>
                     <td>{{ (loaiVthh == '02' ? dataPhieu.bienBanGuiHang?.ngayTao : dataPhieu.phieuKiemTraCl?.ngayGdinh )
                       | date: 'dd/MM/YYYY'}}</td>
+                    <td *ngIf="!loaiVthh.startsWith('02')">{{dataPhieu.bangKeCanHang?.soBangKe}}</td>
                     <td>{{ dataPhieu.tenTrangThai }}</td>
                     <td>
-                      <a *ngIf="hienThiXem(dataPhieu) " (click)="redirectToChiTiet(true, dataPhieu.id)">
+                      <a *ngIf="hienThiXem(dataPhieu) "
+                        (click)="redirectToChiTiet(true, dataPhieu.id)">
                         <i class="fa fa-eye" title="Xem chi tiết"></i>
                       </a>
                       <a *ngIf="(dataPhieu.trangThai == STATUS.DU_THAO || dataPhieu.trangThai == STATUS.TU_CHOI_LDCC) && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_THEM')"
-                        (click)="redirectToChiTiet(false, dataPhieu.id)">
+                         (click)="redirectToChiTiet(false, dataPhieu.id)">
                         <i class="fa fa-pencil" title="Sửa"></i>
                       </a>
                       <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_DUYET') && dataPhieu.trangThai == STATUS.CHO_DUYET_LDCC "
-                        (click)="redirectToChiTiet(true, dataPhieu.id)">
+                         (click)="redirectToChiTiet(true, dataPhieu.id)">
                         <i class="icon htvbdh_tcdt_pheduyet"></i>
                       </a>
                       <a *ngIf="dataPhieu.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_XOA')"
-                        (click)="xoaItem(dataPhieu)">
+                         (click)="xoaItem(dataPhieu)">
                         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                       </a>
                     </td>

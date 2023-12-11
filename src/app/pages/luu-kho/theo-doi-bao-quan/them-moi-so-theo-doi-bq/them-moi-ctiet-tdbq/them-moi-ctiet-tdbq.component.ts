@@ -1,19 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalRef, NzModalService } from "ng-zorro-antd/modal";
-import { ActivatedRoute, Router } from "@angular/router";
+import {Component, OnInit} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalRef, NzModalService} from "ng-zorro-antd/modal";
+import {ActivatedRoute, Router} from "@angular/router";
 import dayjs from "dayjs";
-import { Validators } from "@angular/forms";
-import { Base3Component } from "../../../../../components/base3/base3.component";
-import { TongHopScService } from "../../../../../services/sua-chua/tongHopSc.service";
-import { LOAI_HANG_DTQG } from "../../../../../constants/config";
-import { TheoDoiBqService } from "../../../../../services/luu-kho/theo-doi-bq.service";
-import { TheoDoiBqDtlService } from "../../../../../services/luu-kho/theoDoiBqDtl.service";
-import { DanhMucService } from "../../../../../services/danhmuc.service";
-import { MESSAGE } from "../../../../../constants/message";
+import {Validators} from "@angular/forms";
+import {Base3Component} from "../../../../../components/base3/base3.component";
+import {TongHopScService} from "../../../../../services/sua-chua/tongHopSc.service";
+import {LOAI_HANG_DTQG} from "../../../../../constants/config";
+import {TheoDoiBqService} from "../../../../../services/luu-kho/theo-doi-bq.service";
+import {TheoDoiBqDtlService} from "../../../../../services/luu-kho/theoDoiBqDtl.service";
+import {DanhMucService} from "../../../../../services/danhmuc.service";
+import {MESSAGE} from "../../../../../constants/message";
+import {AMOUNT} from "../../../../../Utility/utils";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
   selector: 'app-them-moi-ctiet-tdbq',
@@ -31,6 +33,20 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
   dataKtv: any;
   dataLdcc: any;
   thoiGianConLaiBh: any;
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "left",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -60,7 +76,7 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
       nguyenNhan: [null],
       dienBien: [null],
       bienPhapXl: [null],
-      soLuongXl: [null, [Validators.required]],
+      soLuongXl: [0, [Validators.required]],
       moTa: [null],
       idDataTk: [],
       idDataKtv: [],
@@ -74,6 +90,7 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
     if (this.id) {
       await this.detail(this.id).then((res) => {
         for (const property in this.rowItem) {
+          console.log(property, res[property]);
           this.rowItem[property] = res[property];
         }
       });
@@ -104,9 +121,9 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
       if (res.msg == MESSAGE.SUCCESS) {
         console.log(this.formData.value.loaiVthh);
         if (this.formData.value.loaiVthh?.startsWith('02')) {
-          this.listBpxl = res.data.filter(item => item.phanLoai == 'VT');
+          this.listBpxl = res.data.filter(item => item.phanLoai.includes('VT'));
         } else {
-          this.listBpxl = res.data.filter(item => item.phanLoai == 'LT');
+          this.listBpxl = res.data.filter(item => item.phanLoai.includes('LT'));
         }
       }
     });
@@ -178,7 +195,6 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
       return false
     }
   }
-
 }
 
 export class ChiSoChatLuong {
@@ -190,12 +206,12 @@ export class ChiSoChatLuong {
   nhietDo: number = 0;
   doAm: number = 0;
   hatVang: number = 0;
-  camQuan: string;
-  tinhTrangNamMoc: string;
+  camQuan: string = '';
+  tinhTrangNamMoc: string = '';
   conTrungSong: number = 0;
   // Muoi them
-  muiVi: string;
-  benNgoaiCoHat: string;
+  muiVi: string = '';
+  benNgoaiCoHat: string = '';
   //VT
   baoQuanLanDau: number = 0;
   anToanBqtx: number = 0;

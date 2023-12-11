@@ -11,25 +11,25 @@
         <span>In/xem trước</span>
       </button>
       <button
-        *ngIf="!isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TK || formData.value.trangThai == STATUS.TU_CHOI_LDCC)"
+        *ngIf="!isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TK || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_LDCC)"
         type="button" class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
 
       <button
-        *ngIf="!isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TK || formData.value.trangThai == STATUS.TU_CHOI_LDCC)"
+        *ngIf="!isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TK || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_LDCC)"
         type="button" class="btn btn-main ml-2" (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
 
-      <button *ngIf="isTuChoi()" type="button" class="btn btn-sub" (click)="tuChoi()">
+      <button *ngIf="isChiCuc() && isTuChoi()" type="button" class="btn btn-sub" (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span>Từ chối</span>
       </button>
 
-      <button *ngIf="isPheDuyet()" type="button" class="btn btn-sub" (click)="pheDuyet()">
+      <button *ngIf="isChiCuc() && isPheDuyet()" type="button" class="btn btn-sub" (click)="pheDuyet()">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
@@ -445,7 +445,7 @@
               <span>Đơn vị chủ động thực hiện</span>
             </div>
           </div>
-          <div class="btn-group" *ngIf="!isView && formData.value.trangThai === STATUS.DU_THAO">
+          <div class="btn-group" *ngIf="!isView">
             <button type="button" class="btn btn-main ml-2" (click)="addTH()">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
@@ -464,7 +464,7 @@
                 <th colspan="3">Chi phí thực hiện trong năm</th>
                 <th colspan="2">Khối lượng đã quyết toán năm trước</th>
                 <th rowspan="2">Tổng giá trị</th>
-                <th rowspan="2" *ngIf="!isView && formData.value.trangThai === STATUS.DU_THAO">Hành động</th>
+                <th rowspan="2" *ngIf="!isView">Hành động</th>
               </tr>
               <tr>
                 <th>Số lượng</th>
@@ -486,7 +486,7 @@
                 <td>{{item.soLuongNamTruoc|number:'1.0-1':'vi_VN'}}</td>
                 <td>{{item.thanhTienNamTruoc|number:'1.0-1':'vi_VN'}}</td>
                 <td>{{(item.tongGiaTri)|number:'1.0-1':'vi_VN'}}</td>
-                <td *ngIf="!isView && formData.value.trangThai === STATUS.DU_THAO">
+                <td *ngIf="!isView">
                   <a (click)="addRowTH(item)" *ngIf="!item.soLuongTrongNam">
                     <i class="icon htvbdh_dau-cong"></i>
                   </a>
@@ -551,7 +551,7 @@
                 <span>Định mức tổng cục phê duyệt trước khi thực hiện</span>
               </div>
             </div>
-            <div class="btn-group" *ngIf="!isView && formData.value.trangThai === STATUS.DU_THAO">
+            <div class="btn-group" *ngIf="!isView">
               <button type="button" class="btn btn-main ml-2" (click)="addPD()">
                 <i class="icon htvbdh_dau-cong"></i>
                 <span>Thêm</span>
@@ -569,7 +569,7 @@
                 <th colspan="3">Chi phí thực hiện trong năm</th>
                 <th colspan="2">Khối lượng đã quyết toán năm trước</th>
                 <th rowspan="2">Tổng giá trị</th>
-                <th rowspan="2" *ngIf="!isView && formData.value.trangThai === STATUS.DU_THAO">Hành động</th>
+                <th rowspan="2" *ngIf="!isView">Hành động</th>
               </tr>
               <tr>
                 <th>Số lượng</th>
@@ -592,7 +592,7 @@
                 <td>{{item.soLuongNamTruoc|number:'1.0-1':'vi_VN'}}</td>
                 <td>{{item.thanhTienNamTruoc|number:'1.0-1':'vi_VN'}}</td>
                 <td>{{(item.tongGiaTri)|number:'1.0-1':'vi_VN'}}</td>
-                <td *ngIf="!isView && formData.value.trangThai === STATUS.DU_THAO">
+                <td *ngIf="!isView">
                   <a *ngIf="!item.soLuongTrongNam" (click)="addRowPD(item)">
                     <i class="icon htvbdh_dau-cong"></i>
                   </a>

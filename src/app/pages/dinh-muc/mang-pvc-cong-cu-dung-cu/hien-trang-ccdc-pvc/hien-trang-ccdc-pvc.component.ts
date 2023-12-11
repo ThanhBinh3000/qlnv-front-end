@@ -37,6 +37,7 @@ export class HienTrangCcdcPvcComponent extends Base2Component implements OnInit 
     super.ngOnInit()
     this.formData = this.fb.group({
       maDvi: [null],
+      capDvi: [null],
       namKeHoach: [null],
       tenCcdc: [null],
       maCcdc: [null],

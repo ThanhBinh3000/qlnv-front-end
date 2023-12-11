@@ -16,6 +16,7 @@ import { v4 as uuidv4 } from "uuid";
 import { TongHopThanhLyService } from "../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/TongHopThanhLy.service";
 import { Base3Component } from 'src/app/components/base3/base3.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import {ChiTietHangTlComponent} from "./chi-tiet-hang-tl/chi-tiet-hang-tl.component";
 
 @Component({
   selector: 'app-thanh-ly-danh-sach-hang',
@@ -47,39 +48,15 @@ export class ThanhLyDanhSachHangComponent extends Base3Component implements OnIn
     super(httpClient, storageService, notification, spinner, modal, route, router, danhSachThanhLyService);
     this.vldTrangThai = xuatThanhLyComponent;
     this.formData = this.fb.group({
-      id: [],
-      maDvi: [],
-      idTongHop: [],
-      maTongHop: [],
-      maDiaDiem: [],
+      maDviSr : [],
       loaiVthh: [],
       cloaiVthh: [],
-      donViTinh: [],
-      slHienTai: [],
-      slDeXuat: [],
-      slDaDuyet: [],
-      slConlai: [],
-      thanhTien: [],
-      ngayNhapKho: [],
       ngayDeXuat: [],
       ngayDeXuatTu: [],
       ngayDeXuatDen: [],
       ngayTongHop: [],
       ngayTongHopTu: [],
       ngayTongHopDen: [],
-      lyDo: [],
-      trangThai: [],
-      type: [],
-      tenLoaiVthh: [],
-      tenCloaiVthh: [],
-      moTaHangHoa: [],
-      tenTrangThai: [],
-      tenCuc: [],
-      tenChiCuc: [],
-      tenDiemKho: [],
-      tenNhaKho: [],
-      tenNganKho: [],
-      tenLoKho: [],
     })
   }
 
@@ -242,22 +219,21 @@ export class ThanhLyDanhSachHangComponent extends Base3Component implements OnIn
     this.spinner.hide()
   }
 
-  // showDetail(data) {
-  //   if (data) {
-  //     const modalGT = this.modal.create({
-  //       nzTitle: 'Thông tin hàng DTQG cần sửa chữa',
-  //       nzContent: ChiTietDanhSachSuaChuaComponent,
-  //       nzMaskClosable: false,
-  //       nzClosable: false,
-  //       nzWidth: '900px',
-  //       nzFooter: null,
-  //       nzComponentParams: {
-  //         data: data
-  //       },
-  //     });
-  //   } else {
-  //     this.notification.error(MESSAGE.ERROR, MESSAGE.ACCESS_DENIED);
-  //   }
-  // }
+  showDetail(data) {
+    if (data) {
+      const modalGT = this.modal.create({
+        nzContent: ChiTietHangTlComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          data: data
+        },
+      });
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.ACCESS_DENIED);
+    }
+  }
 
 }

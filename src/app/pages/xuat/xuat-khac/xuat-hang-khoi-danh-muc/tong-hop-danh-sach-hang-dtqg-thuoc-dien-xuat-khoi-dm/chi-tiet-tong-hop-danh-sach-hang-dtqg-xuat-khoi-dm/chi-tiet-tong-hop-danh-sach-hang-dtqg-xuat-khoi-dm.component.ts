@@ -237,6 +237,7 @@ export class ChiTietTongHopDanhSachHangDtqgXuatKhoiDmComponent extends Base2Comp
   async tongHopDanhSach() {
     try {
       await this.spinner.show();
+      this.dataTh = [];
       this.helperService.markFormGroupTouched(this.formData);
       if (this.formData.invalid) {
         this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin.');
@@ -245,9 +246,11 @@ export class ChiTietTongHopDanhSachHangDtqgXuatKhoiDmComponent extends Base2Comp
         let idQdXhKdm = this.formData.get('idQdXhKdm').value;
         await this.quyetDinhXuatHangKhoiDmService.getDetail(idQdXhKdm).then(async res => {
           if (res.msg == MESSAGE.SUCCESS) {
+            console.log(res.data,'aaaaa');
             if (!res.data || res.data.listDtl.length <= 0) {
               this.notification.warning(MESSAGE.ALERT, 'Không tìm thấy quyết định xuất hàng khỏi danh mục');
             } else {
+              let listCLoaiVthh = [];
               res.data.listDtl.forEach(item => {
                 if (item.children && item.children.length > 0) {
                   item.children.forEach(child => {
@@ -255,13 +258,12 @@ export class ChiTietTongHopDanhSachHangDtqgXuatKhoiDmComponent extends Base2Comp
                   });
                 }
                 this.dataTh = [...this.dataTh, ...item.children];
+                listCLoaiVthh.push(item.ma);
               });
+              console.log(this.dataTh,' this.dataTh this.dataTh this.dataTh this.dataTh');
               let listLoaiHinhXuatByCLoaiVthh = this.dataTh.map(({ ma, loaiHinhXuat }) => ({ ma, loaiHinhXuat }));
               let listDtl = [];
-              let listCLoaiVthh = [];
-              this.dataTh.forEach(s => {
-                listCLoaiVthh.push(s.ma);
-              });
+
               let body = {
                 // listCloaiVthh: ['010102', '021102', '021302', '020301'],
                 // maDvi: '010102',

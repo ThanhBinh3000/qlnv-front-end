@@ -190,7 +190,7 @@ export class CapNhatThongTinDauThauSclComponent extends Base2Component implement
       listKtTdscQuyetDinhPdKhlcntDsnt: this.dataNhaThauNopHs,
     }
     if (isHoanThanh) {
-      let mesg = 'Hoàn thành'
+      let mesg = 'Bạn có muốn xác nhận hoàn thành Thông tin đấu thầu'
       this.modal.confirm({
         nzClosable: false,
         nzTitle: 'Xác nhận',

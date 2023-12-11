@@ -53,7 +53,7 @@
       <!--        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
       <!--        <span>Xóa</span>-->
       <!--      </button>-->
-            <button type="button" class="btn btn-sub" (click)="exportData()">
+            <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="userService.isAccessPermisson('QTDM_DM_CONGCU_DUNGCU_EXP')">
               <i class="icon htvbdh_chuyen-xu-ly"></i>
               <span>Xuất file</span>
             </button>
@@ -135,10 +135,10 @@
             </nz-form-control>
           </th>
           <th class="text-center">
-            <a (click)="saveDmCc()" [ngClass]="{'isDisabled': formData.invalid}">
+            <a (click)="saveDmCc()" [ngClass]="{'isDisabled': formData.invalid}" *ngIf="userService.isAccessPermisson('QTDM_DM_CONGCU_DUNGCU_THEM')">
               <i class="icon htvbdh_dau-cong"></i>
             </a>
-            <a>
+            <a *ngIf="userService.isAccessPermisson('QTDM_DM_CONGCU_DUNGCU_THEM')">
               <i class="icon htvbdh_nhap-lai1" (click)="clearForm()"></i>
             </a>
           </th>
@@ -156,10 +156,10 @@
             <td>{{data.tenNhomCcdc}}</td>
             <td>{{ data.trangThai == '01' ? 'Hoạt động' : 'Không hoạt động'}}</td>
             <td style="text-align: center;">
-              <a (click)="startEdit(i)">
+              <a (click)="startEdit(i)" *ngIf="userService.isAccessPermisson('QTDM_DM_CONGCU_DUNGCU_THEM')">
                 <i class="table-icon fa fa-pencil"></i>
               </a>
-              <a (click)="xoaItem(data)">
+              <a (click)="xoaItem(data)" *ngIf="userService.isAccessPermisson('QTDM_DM_CONGCU_DUNGCU_XOA')">
                 <i class="table-icon fa fa-trash-o do"></i>
               </a>
             </td>
@@ -233,10 +233,10 @@
               </nz-form-control>
             </th>
             <th style="text-align: center;">
-              <a (click)="saveDmCc(dataEdit[i].data, data.id)">
+              <a (click)="saveDmCc(dataEdit[i].data, data.id)" *ngIf="userService.isAccessPermisson('QTDM_DM_CONGCU_DUNGCU_THEM')">
                 <i class="fa fa-save mr-3"></i>
               </a>
-              <a (click)="huyEdit(i)">
+              <a (click)="huyEdit(i)" *ngIf="userService.isAccessPermisson('QTDM_DM_CONGCU_DUNGCU_XOA')">
                 <i class="fa fa-times do mr-3"></i>
               </a>
             </th>

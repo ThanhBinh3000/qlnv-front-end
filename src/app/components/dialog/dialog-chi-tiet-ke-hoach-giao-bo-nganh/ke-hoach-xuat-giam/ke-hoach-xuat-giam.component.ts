@@ -1,18 +1,18 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {ThongTinQuyetDinh} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import {Globals} from './../../../../shared/globals';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {MESSAGE} from 'src/app/constants/message';
-import {PAGE_SIZE_DEFAULT} from "../../../../constants/config";
-import {CurrencyMaskInputMode} from "ngx-currency";
-import {AMOUNT, AMOUNT_ONE_DECIMAL, AMOUNT_TWO_DECIMAL} from "../../../../Utility/utils";
-import {chain} from "lodash";
-import {v4 as uuidv4} from "uuid";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { ThongTinQuyetDinh } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import { Globals } from './../../../../shared/globals';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from 'src/app/constants/message';
+import { PAGE_SIZE_DEFAULT } from '../../../../constants/config';
+import { CurrencyMaskInputMode } from 'ngx-currency';
+import { AMOUNT, AMOUNT_ONE_DECIMAL, AMOUNT_TWO_DECIMAL } from '../../../../Utility/utils';
+import { chain } from 'lodash';
+import { v4 as uuidv4 } from 'uuid';
 import {
-  ThemSuaMuaTangComponent
-} from "../../../../pages/ke-hoach/giao-ke-hoach-va-du-toan/ke-hoach-von-dau-nam/quyet-dinh/btc-giao-tcdt/them-quyet-dinh-btc-giao-tcdt/ke-hoach-mua-tang/them-sua-mua-tang/them-sua-mua-tang.component";
-import {DialogSuaXuatGiamComponent} from "../../dialog-sua-xuat-giam/dialog-sua-xuat-giam.component";
+  ThemSuaMuaTangComponent,
+} from '../../../../pages/ke-hoach/giao-ke-hoach-va-du-toan/ke-hoach-von-dau-nam/quyet-dinh/btc-giao-tcdt/them-quyet-dinh-btc-giao-tcdt/ke-hoach-mua-tang/them-sua-mua-tang/them-sua-mua-tang.component';
+import { DialogSuaXuatGiamComponent } from '../../dialog-sua-xuat-giam/dialog-sua-xuat-giam.component';
 
 @Component({
   selector: 'app-ke-hoach-xuat-giam',
@@ -21,6 +21,7 @@ import {DialogSuaXuatGiamComponent} from "../../dialog-sua-xuat-giam/dialog-sua-
 })
 export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   @Input() maBoNganh: string;
+
   @Input() tab: string;
   @Input() tabRadio: string;
   @Input()
@@ -39,6 +40,10 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   tongGtri: number;
   @Output()
   tongGtriChange = new EventEmitter<number>();
+  @Input()
+  ghiChu: number;
+  @Output()
+  ghiChuChange = new EventEmitter<number>();
   @Input()
   isView: boolean = false;
   expandSet = new Set<number>();
@@ -65,14 +70,14 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
     // this.updateEditCache()
     // this.emitDataTable();
     for (let item of this.dataToanBn) {
-      if (item.maBn == '01' && !item.isSum && item.tenBn.indexOf("Lương thực") != -1) {
+      if (item.maBn == '01' && !item.isSum && item.tenBn.indexOf('Lương thực') != -1) {
         this.tongSoLT = item.tongSo;
       }
-      if (item.maBn == '01' && !item.isSum && item.tenBn.indexOf("Vật tư") != -1) {
+      if (item.maBn == '01' && !item.isSum && item.tenBn.indexOf('Vật tư') != -1) {
         this.tongSoVT = item.tongSo;
       }
       if (!item.isSum) {
-        this.listTongGiaTriBnKhac[item.maBn] = {tongSo: item.tongSo};
+        this.listTongGiaTriBnKhac[item.maBn] = { tongSo: item.tongSo };
       }
     }
   }
@@ -81,11 +86,11 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   }
 
   onChangeTongGtri() {
-    this.tongGtriChange.emit(this.tongGtri)
+    this.tongGtriChange.emit(this.tongGtri);
   }
 
   emitDataTable() {
-    this.dataTableChange.emit(this.dataTable)
+    this.dataTableChange.emit(this.dataTable);
   }
 
   editItem(index: number): void {
@@ -94,12 +99,12 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
 
   convertListData() {
     if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTableView = chain(this.dataTable).groupBy("tenVthh").map((value, key) => ({
+      this.dataTableView = chain(this.dataTable).groupBy('tenVthh').map((value, key) => ({
           tenVthh: key,
           isLeaf: (!value || (value.length == 1 && !value[0].cloaiVthh)) ? true : false,
           dataChild: value,
-          idVirtual: uuidv4()
-        })
+          idVirtual: uuidv4(),
+        }),
       ).value();
     } else {
       this.dataTableView = [];
@@ -152,15 +157,15 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
         this.dataTable = [];
       }
       if ((this.rowItem.loaiVthh && !this.rowItem.cloaiVthh && this.dataTable.filter(item => item.loaiVthh == this.rowItem.loaiVthh).length > 0) || (this.rowItem.loaiVthh && this.rowItem.cloaiVthh && this.dataTable.filter(item => item.loaiVthh == this.rowItem.loaiVthh && item.cloaiVthh == this.rowItem.cloaiVthh).length > 0)) {
-        this.notification.warning(MESSAGE.WARNING, "Hàng hóa đã được thêm, vui lòng chọn loại hàng hóa khác.")
+        this.notification.warning(MESSAGE.WARNING, 'Hàng hóa đã được thêm, vui lòng chọn loại hàng hóa khác.');
         return;
       }
-      this.dataTable = [...this.dataTable, this.rowItem]
+      this.dataTable = [...this.dataTable, this.rowItem];
       this.rowItem = new ThongTinQuyetDinh();
       this.convertListData();
-      this.emitDataTable()
+      this.emitDataTable();
     } else {
-      this.notification.error(MESSAGE.ERROR, "Vui lòng điền đầy đủ thông tin")
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đầy đủ thông tin');
     }
   }
 
@@ -170,7 +175,7 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
 
   huyEdit(idx: number): void {
     this.dataEdit[idx] = {
-      data: {...this.dataTable[idx]},
+      data: { ...this.dataTable[idx] },
       edit: false,
     };
   }
@@ -267,13 +272,13 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
         nzComponentParams: {
           itemInput: data,
           dsHangHoa: this.dsHangHoa,
-          dsChungLoaiHangHoa: this.dsChungLoaiHangHoa
+          dsChungLoaiHangHoa: this.dsChungLoaiHangHoa,
         },
       });
       modalGT.afterClose.subscribe((detail) => {
         if (detail) {
           if ((detail.loaiVthh && !detail.cloaiVthh && this.dataTable.filter(item => item.loaiVthh == detail.loaiVthh).length > 0 && detail.loaiVthh != data.loaiVthh) || (detail.loaiVthh && detail.cloaiVthh && this.dataTable.filter(item => item.loaiVthh == detail.loaiVthh && item.cloaiVthh == detail.cloaiVthh).length > 0 && (detail.loaiVthh != data.loaiVthh || detail.cloaiVthh != data.cloaiVthh))) {
-            this.notification.warning(MESSAGE.WARNING, "Hàng hóa đã được thêm, vui lòng chọn loại hàng hóa khác.")
+            this.notification.warning(MESSAGE.WARNING, 'Hàng hóa đã được thêm, vui lòng chọn loại hàng hóa khác.');
             return;
           }
           Object.assign(this.dataTable[idx], detail);
@@ -284,7 +289,7 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
         }
       });
     } else {
-      this.notification.warning(MESSAGE.WARNING, "Không tìm thấy bản ghi.");
+      this.notification.warning(MESSAGE.WARNING, 'Không tìm thấy bản ghi.');
     }
   }
 
@@ -292,6 +297,10 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
     if (changes.maBoNganh) {
       this.rowItem = new ThongTinQuyetDinh();
     }
+  }
+
+  onChangeGhiChu() {
+    this.ghiChuChange.emit(this.ghiChu);
   }
 }
 

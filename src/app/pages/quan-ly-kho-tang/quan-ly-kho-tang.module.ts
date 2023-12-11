@@ -62,7 +62,7 @@ import {
 } from "./ke-hoach/ke-hoach-sua-chua-hang-nam/quyet-dinh-sc-lon-btc/quyet-dinh-sc-lon-btc.component";
 import {
   QuyetDinhScLonTcdtComponent
-} from "./ke-hoach/ke-hoach-sua-chua-hang-nam/quyet-dinh-sc-lon-tcdt/quyet-dinh-sc-lon-tcdt.component";
+} from "./ke-hoach/ke-hoach-sua-chua-hang-nam/tong-hop-sc-lon/quyet-dinh-sc-lon-tcdt.component";
 import {
   ThemMoiScLonComponent
 } from './ke-hoach/ke-hoach-sua-chua-hang-nam/de-xuat-kh-sc-lon/them-moi-sc-lon/them-moi-sc-lon.component';
@@ -105,7 +105,7 @@ import {
 } from "./ke-hoach/ke-hoach-sua-chua-hang-nam/qd-thong-bao-sua-chua-lon/qd-thong-bao-sua-chua-lon.component";
 import {
   ThemMoiScTcdtComponent
-} from "./ke-hoach/ke-hoach-sua-chua-hang-nam/quyet-dinh-sc-lon-tcdt/them-moi-sc-tcdt/them-moi-sc-tcdt.component";
+} from "./ke-hoach/ke-hoach-sua-chua-hang-nam/tong-hop-sc-lon/them-moi-sc-tcdt/them-moi-sc-tcdt.component";
 import {
   QuyetDinhPheDuyetKhlcntComponent
 } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/quyet-dinh-phe-duyet-khlcnt/quyet-dinh-phe-duyet-khlcnt.component';
@@ -319,6 +319,9 @@ import { QuyetDinhDieuChinhQuyHoachBkComponent } from './ke-hoach/quy-hoach-kho-
 import { QuyetDinhQuyHoachBkComponent } from './ke-hoach/quy-hoach-kho-bk/quyet-dinh-quy-hoach-bk/quyet-dinh-quy-hoach-bk.component';
 import { ThemMoiQdBkComponent } from './ke-hoach/quy-hoach-kho-bk/quyet-dinh-quy-hoach-bk/them-moi-qd-bk/them-moi-qd-bk.component';
 import { ThemMoiQdDcBkComponent } from './ke-hoach/quy-hoach-kho-bk/quyet-dinh-dieu-chinh-quy-hoach-bk/them-moi-qd-dc-bk/them-moi-qd-dc-bk.component';
+import {CuuTroVienTroModule} from "../xuat/xuat-cuu-tro-vien-tro/xuat-cuu-tro/cuu-tro-vien-tro.module";
+import { QuyetDinhGiaoNvComponent } from './ke-hoach/ke-hoach-sua-chua-hang-nam/quyet-dinh-giao-nv/quyet-dinh-giao-nv.component';
+import { ThemMoiQdGiaoNvComponent } from './ke-hoach/ke-hoach-sua-chua-hang-nam/quyet-dinh-giao-nv/them-moi-qd-giao-nv/them-moi-qd-giao-nv.component';
 @NgModule({
   declarations: [
     QuanLyKhoTangComponent,
@@ -452,9 +455,11 @@ import { ThemMoiQdDcBkComponent } from './ke-hoach/quy-hoach-kho-bk/quyet-dinh-d
     QuyetDinhDieuChinhQuyHoachBkComponent,
     QuyetDinhQuyHoachBkComponent,
     ThemMoiQdBkComponent,
-    ThemMoiQdDcBkComponent
+    ThemMoiQdDcBkComponent,
+    QuyetDinhGiaoNvComponent,
+    ThemMoiQdGiaoNvComponent
   ],
-  imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule, KiemtraChatluongVtTbTrongThbhComponentModule],
+    imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule, KiemtraChatluongVtTbTrongThbhComponentModule, CuuTroVienTroModule],
 })
 
 export class QuanLyKhoTangModule {

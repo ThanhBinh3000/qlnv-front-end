@@ -3,22 +3,24 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
-import {Base2Component} from "../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../services/storage.service";
+import { Base2Component } from '../../../../components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from '../../../../services/storage.service';
 import { saveAs } from 'file-saver';
-import {QdMuaSamPvcService} from "../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/qd-mua-sam-pvc.service";
+import { QdMuaSamPvcService } from '../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/qd-mua-sam-pvc.service';
+import { STATUS } from '../../../../constants/status';
 
 @Component({
   selector: 'app-qd-mua-sam-pvc',
   templateUrl: './qd-mua-sam-pvc.component.html',
-  styleUrls: ['./qd-mua-sam-pvc.component.scss']
+  styleUrls: ['./qd-mua-sam-pvc.component.scss'],
 })
 export class QdMuaSamPvcComponent extends Base2Component implements OnInit {
 
   selectedId: number = 0;
   isViewDetail: boolean;
   isDetail: boolean = false;
+  STATUS = STATUS;
 
   constructor(
     httpClient: HttpClient,
@@ -26,10 +28,10 @@ export class QdMuaSamPvcComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private qdMuaSamService: QdMuaSamPvcService
+    private qdMuaSamService: QdMuaSamPvcService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, qdMuaSamService)
-    super.ngOnInit()
+    super(httpClient, storageService, notification, spinner, modal, qdMuaSamService);
+    super.ngOnInit();
     this.formData = this.fb.group({
       maDvi: [''],
       capDvi: [''],
@@ -39,10 +41,11 @@ export class QdMuaSamPvcComponent extends Base2Component implements OnInit {
       ngayKy: [''],
       ngayKyTu: [''],
       ngayKyDen: [''],
-      loai: ['00']
+      loai: ['00'],
     });
     this.filterTable = {};
   }
+
   async ngOnInit() {
     this.spinner.show();
     try {
@@ -65,23 +68,23 @@ export class QdMuaSamPvcComponent extends Base2Component implements OnInit {
     if (this.formData.value.ngayKy && this.formData.value.ngayKy.length > 0) {
       this.formData.patchValue({
         ngayKyTu: this.formData.value.ngayKy[0],
-        ngayKyDen: this.formData.value.ngayKy[1]
-      })
+        ngayKyDen: this.formData.value.ngayKy[1],
+      });
     }
     this.formData.patchValue({
-      maDvi : this.userInfo.MA_DVI,
-      capDvi : this.userInfo.CAP_DVI
-    })
+      maDvi: this.userInfo.MA_DVI,
+      capDvi: this.userInfo.CAP_DVI,
+    });
     await this.search();
   }
 
   async clearForm() {
     this.formData.reset();
     this.formData.patchValue({
-      maDvi : this.userInfo.MA_DVI,
-      capDvi : this.userInfo.CAP_DVI,
-      loai : '00',
-    })
+      maDvi: this.userInfo.MA_DVI,
+      capDvi: this.userInfo.CAP_DVI,
+      loai: '00',
+    });
     await this.search();
   }
 
@@ -98,8 +101,8 @@ export class QdMuaSamPvcComponent extends Base2Component implements OnInit {
         let body = this.formData.value;
         body.paggingReq = {
           limit: this.pageSize,
-          page: this.page - 1
-        }
+          page: this.page - 1,
+        };
         this.qdMuaSamService
           .export(body)
           .subscribe((blob) =>

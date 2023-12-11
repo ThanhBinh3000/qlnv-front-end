@@ -1,44 +1,28 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output,} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import {
-  DialogQuyetDinhGiaoChiTieuComponent,
-} from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
-import {
-  ChiTietDiaDiemNhapKho,
-  DiaDiemNhapKho,
-  DialogThemDiaDiemNhapKhoComponent,
-} from 'src/app/components/dialog/dialog-them-dia-diem-nhap-kho/dialog-them-dia-diem-nhap-kho.component';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import {
-  DiaDiemGiaoNhan, PhanLoTaiSan,
-} from 'src/app/models/KeHoachBanDauGia';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { DeNghiCapPhiBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapPhiBoNganh.service';
-import { ThongTriDuyetYCapPhiService } from 'src/app/services/ke-hoach/von-phi/thongTriDuyetYCapPhi.service';
-import { TongHopDeNghiCapPhiService } from 'src/app/services/ke-hoach/von-phi/tongHopDeNghiCapPhi.service';
-import { UserService } from 'src/app/services/user.service';
-import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
-import { Globals } from 'src/app/shared/globals';
-import VNnum2words from 'vn-num2words';
-import { STATUS } from '../../../../../constants/status';
-import { AMOUNT_NO_DECIMAL } from '../../../../../Utility/utils';
-
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import {MESSAGE} from 'src/app/constants/message';
+import {FileDinhKem} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import {DiaDiemGiaoNhan, PhanLoTaiSan,} from 'src/app/models/KeHoachBanDauGia';
+import {UserLogin} from 'src/app/models/userlogin';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {DonviService} from 'src/app/services/donvi.service';
+import {HelperService} from 'src/app/services/helper.service';
+import {DeNghiCapPhiBoNganhService} from 'src/app/services/ke-hoach/von-phi/deNghiCapPhiBoNganh.service';
+import {ThongTriDuyetYCapPhiService} from 'src/app/services/ke-hoach/von-phi/thongTriDuyetYCapPhi.service';
+import {TongHopDeNghiCapPhiService} from 'src/app/services/ke-hoach/von-phi/tongHopDeNghiCapPhi.service';
+import {UserService} from 'src/app/services/user.service';
+import {thongTinTrangThaiNhap} from 'src/app/shared/commonFunction';
+import {Globals} from 'src/app/shared/globals';
+import {STATUS} from '../../../../../constants/status';
+import {AMOUNT_NO_DECIMAL} from '../../../../../Utility/utils';
+import {PREVIEW} from "../../../../../constants/fileType";
+import printJS from "print-js";
+import {saveAs} from 'file-saver';
 @Component({
   selector: 'app-thong-tin-thong-tri-duyet-y-du-toan',
   templateUrl: './thong-tin-thong-tri-duyet-y-du-toan.component.html',
@@ -84,6 +68,13 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   chiTietList: any[] = [];
   STATUS = STATUS;
   amount = AMOUNT_NO_DECIMAL;
+
+  templateName : string = 'thong-tri-y-duyet-du-toan';
+  pdfSrc: any;
+  wordSrc: any;
+  excelSrc: any;
+  printSrc: any;
+  showDlgPreview = false;
 
   constructor(
     private modal: NzModalService,
@@ -386,8 +377,11 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   }
 
   pheDuyet() {
-    let trangThai = STATUS.DA_DUYET_LDV;
-    if (this.itemThongTri.trangThai == STATUS.DA_DUYET_LDV) {
+    let trangThai = STATUS.CHO_DUYET_LDTC;
+    if (this.itemThongTri.trangThai == STATUS.CHO_DUYET_LDV) {
+      trangThai = STATUS.CHO_DUYET_LDTC;
+    }
+    if (this.itemThongTri.trangThai == STATUS.CHO_DUYET_LDTC) {
       trangThai = STATUS.DA_DUYET_LDTC;
     }
     this.modal.confirm({
@@ -548,5 +542,40 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
 
   }
 
-  protected readonly AMOUNT_NO_DECIMAL = AMOUNT_NO_DECIMAL;
+  async preview() {
+    this.spinner.show();
+    let boNganh = this.dsBoNganh.find(item => item.code == this.formData.value.dviThongTri);
+    await this.thongTriDuyetYCapPhiService.preview({
+      tenBaoCao: this.templateName+ '.docx',
+      id : this.idInput,
+      maQhns: this.userInfo.DON_VI.maQhns,
+      tenBoNganh : boNganh ? boNganh.tenDvi : ''
+    }).then(async res => {
+      if (res.data) {
+        this.printSrc = res.data.pdfSrc;
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
+      }
+    });
+    this.spinner.hide();
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, this.templateName + '.pdf');
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, this.templateName + '.docx');
+  }
+
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true });
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
 }

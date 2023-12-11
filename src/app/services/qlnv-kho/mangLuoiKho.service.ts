@@ -44,4 +44,8 @@ export class MangLuoiKhoService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ds-nganlokho-theo-cloaivthh`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
+  slTon(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/sl-ton`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
 }

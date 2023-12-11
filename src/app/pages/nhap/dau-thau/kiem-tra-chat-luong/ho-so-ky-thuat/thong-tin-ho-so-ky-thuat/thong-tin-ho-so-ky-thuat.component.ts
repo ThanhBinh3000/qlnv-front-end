@@ -178,6 +178,8 @@ export class ThongTinHoSoKyThuatComponent extends Base2Component implements OnIn
       if (res.data) {
         const data = res.data;
         this.helperService.bidingDataInFormGroup(this.formData, data);
+        this.listFileDinhKem = data.fileDinhKems;
+        this.listCanCu = data.listCanCu;
         this.listDaiDien = data.children;
       }
     }
@@ -225,6 +227,13 @@ export class ThongTinHoSoKyThuatComponent extends Base2Component implements OnIn
       ...this.listDaiDien
       , item
     ]
+    if (type == 'cuc') {
+      this.daiDienCuc = {}
+    } else if (type == 'chiCuc') {
+      this.daiDienChiCuc = {}
+    } else if (type == 'donVi') {
+      this.daiDienDonVi = {}
+    }
   }
 
   xoaDaiDien(index) {
@@ -299,6 +308,7 @@ export class ThongTinHoSoKyThuatComponent extends Base2Component implements OnIn
       }
       let body = this.formData.value;
       body.fileDinhKems = this.listFileDinhKem;
+      body.listCanCu = this.listCanCu;
       body.children = this.listDaiDien;
       let res;
       if (this.formData.get('id').value > 0) {
@@ -307,17 +317,16 @@ export class ThongTinHoSoKyThuatComponent extends Base2Component implements OnIn
         res = await this.hoSoBienBanService.create(body);
       }
       if (res.msg == MESSAGE.SUCCESS) {
+        this.id = res.data.id;
         if (isGuiDuyet) {
           await this.spinner.hide();
-          this.id = res.data.id;
           this.pheDuyet();
         } else {
           if (this.formData.get('id').value) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.back();
           } else {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            this.back();
+            this.formData.get('id').setValue(res.data.id);
           }
           await this.spinner.hide();
         }

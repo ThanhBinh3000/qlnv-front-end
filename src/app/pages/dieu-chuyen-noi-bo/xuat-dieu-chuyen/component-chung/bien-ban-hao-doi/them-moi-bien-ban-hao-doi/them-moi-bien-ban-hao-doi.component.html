@@ -79,7 +79,7 @@
         <div nz-col nzSpan="2">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">
-              Mã QHNS (mã quan hệ ngân sách)
+              Mã QHNS
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
@@ -301,8 +301,8 @@
               Tổng số lượng xuất ĐC theo quyết định
             </nz-form-label>
             <nz-form-control>
-              <span class="text-blue">{{formData.value.tongSlXuatTheoQd| number: '1.0-1': 'vi_VN'}}</span>
-              <span> ({{formData.value.donViTinh}})</span>
+              <span class="text-blue">{{formData.value.tongSlXuatTheoQd| number: '1.0-1': 'vi_VN'}}
+                {{formData.value.donViTinh? formData.value.donViTinh: ""}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -311,7 +311,7 @@
             <nz-form-label [nzNoColon]="true">
               Thời gian kết thúc nhập
             </nz-form-label>
-            <span></span>
+            <span>{{formData.value.ngayKtNhap|date: 'dd/MM/YYYY'}}</span>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="6">
@@ -320,8 +320,8 @@
               Tổng số lượng xuất ĐC thực tế
             </nz-form-label>
             <nz-form-control>
-              <span class="text-blue">{{formData.value.tongSlXuatTheoTt| number: '1.0-1': 'vi_VN'}}</span>
-              <span> ({{formData.value.donViTinh}})</span>
+              <span class="bold text-blue">{{formData.value.tongSlXuatTheoTt| number: '1.0-1': 'vi_VN'}}
+                {{formData.value.donViTinh? formData.value.donViTinh: ""}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -330,7 +330,7 @@
             <nz-form-label [nzNoColon]="true">
               Thời gian kết thúc xuất
             </nz-form-label>
-            <span>{{formData.value.ngayKetThucXuatTt}}</span>
+            <span>{{formData.value.ngayKetThucXuatTt| date:'dd/MM/YYYY'}}</span>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="12">
@@ -343,15 +343,15 @@
                 <nz-form-label [nzNoColon]="true">
                   <span class="color-grey">Số lượng</span>
                 </nz-form-label>
-                <!-- <span>
-                  {{formData.value.slHaoTt}}
-                </span> -->
                 <nz-form-control>
-                  <nz-input-group>
+                  <!-- <nz-input-group>
                     <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                      [nzParser]="globals.parserInput" [nzMin]="0" formControlName="slHaoTt"
-                      [nzDisabled]="isView"></nz-input-number>
-                  </nz-input-group>
+                    [nzParser]="globals.parserInput" [nzMin]="0" formControlName="slHaoTt"
+                    [nzDisabled]="isView"></nz-input-number>
+                  </nz-input-group> -->
+                  <span>
+                    {{formData.value.slHaoTt}}
+                  </span>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -360,13 +360,13 @@
                 <nz-form-label [nzNoColon]="true">
                   <span class="color-grey">Tỉ lệ</span>
                 </nz-form-label>
-                <!-- <span>{{formData.value.tiLeHaoTt}}</span> -->
                 <nz-form-control>
-                  <nz-input-group>
+                  <!-- <nz-input-group>
                     <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                      [nzParser]="globals.parserInput" [nzMin]="0" formControlName="tiLeHaoTt"
-                      [nzDisabled]="isView"></nz-input-number>
-                  </nz-input-group>
+                    [nzParser]="globals.parserInput" [nzMin]="0" formControlName="tiLeHaoTt"
+                    [nzDisabled]="isView"></nz-input-number>
+                  </nz-input-group> -->
+                  <span>{{formData.value.tiLeHaoTt}}</span>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -382,15 +382,15 @@
                 <nz-form-label [nzNoColon]="true">
                   <span class="color-grey">Số lượng</span>
                 </nz-form-label>
-                <!-- <span>
-                  {{formData.value.slHaoVuotDm}}
-                </span> -->
                 <nz-form-control>
-                  <nz-input-group>
+                  <!-- <nz-input-group>
                     <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                      [nzParser]="globals.parserInput" [nzMin]="0" formControlName="slHaoVuotDm"
-                      [nzDisabled]="isView"></nz-input-number>
-                  </nz-input-group>
+                    [nzParser]="globals.parserInput" [nzMin]="0" formControlName="slHaoVuotDm"
+                    [nzDisabled]="isView"></nz-input-number>
+                  </nz-input-group> -->
+                  <span>
+                    {{formData.value.slHaoVuotDm}}
+                  </span>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -399,13 +399,13 @@
                 <nz-form-label [nzNoColon]="true">
                   <span class="color-grey">Tỉ lệ</span>
                 </nz-form-label>
-                <!-- <span>{{formData.value.tiLeHaoVuotDm}}</span> -->
                 <nz-form-control>
-                  <nz-input-group>
+                  <!-- <nz-input-group>
                     <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                      [nzParser]="globals.parserInput" [nzMin]="0" formControlName="tiLeHaoVuotDm"
-                      [nzDisabled]="isView"></nz-input-number>
-                  </nz-input-group>
+                    [nzParser]="globals.parserInput" [nzMin]="0" formControlName="tiLeHaoVuotDm"
+                    [nzDisabled]="isView"></nz-input-number>
+                  </nz-input-group> -->
+                  <span>{{formData.value.tiLeHaoVuotDm}}</span>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -421,15 +421,15 @@
                 <nz-form-label [nzNoColon]="true">
                   <span class="color-grey">Số lượng</span>
                 </nz-form-label>
-                <!-- <span>
-                  {{formData.value.slHaoThanhLy}}
-                </span> -->
                 <nz-form-control>
-                  <nz-input-group>
+                  <!-- <nz-input-group>
                     <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                      [nzParser]="globals.parserInput" [nzMin]="0" formControlName="slHaoThanhLy"
-                      [nzDisabled]="isView"></nz-input-number>
-                  </nz-input-group>
+                    [nzParser]="globals.parserInput" [nzMin]="0" formControlName="slHaoThanhLy"
+                    [nzDisabled]="isView"></nz-input-number>
+                  </nz-input-group> -->
+                  <span>
+                    {{formData.value.slHaoThanhLy}}
+                  </span>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -443,11 +443,14 @@
                   </nz-option>
                 </nz-select> -->
                 <nz-form-control>
-                  <nz-input-group>
+                  <!-- <nz-input-group>
                     <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter"
                       [nzParser]="globals.parserInput" [nzMin]="0" formControlName="tiLeHaoThanhLy"
                       [nzDisabled]="isView"></nz-input-number>
-                  </nz-input-group>
+                  </nz-input-group> -->
+                  <span>
+                    {{formData.value.tiLeHaoThanhLy}}
+                  </span>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -461,15 +464,15 @@
                 <nz-form-label [nzNoColon]="true">
                   <span class="color-grey">Số lượng</span>
                 </nz-form-label>
-                <!-- <span>
-                  {{formData.value.slHaoDuoiDm}}
-                </span> -->
                 <nz-form-control>
-                  <nz-input-group>
+                  <!-- <nz-input-group>
                     <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter"
                       [nzParser]="globals.parserInput" [nzMin]="0" formControlName="slHaoDuoiDm"
                       [nzDisabled]="isView"></nz-input-number>
-                  </nz-input-group>
+                  </nz-input-group> -->
+                  <span>
+                    {{formData.value.slHaoDuoiDm}}
+                  </span>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -483,11 +486,14 @@
                   </nz-option>
                 </nz-select> -->
                 <nz-form-control>
-                  <nz-input-group>
+                  <!-- <nz-input-group>
                     <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter"
                       [nzParser]="globals.parserInput" [nzMin]="0" formControlName="tiLeHaoVuotDm"
                       [nzDisabled]="isView"></nz-input-number>
-                  </nz-input-group>
+                  </nz-input-group> -->
+                  <span>
+                    {{formData.value.tileHaoDuoiDm}}
+                  </span>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -500,22 +506,29 @@
               [nzShowPagination]="false">
               <thead>
                 <tr>
-                  <th>STT</th>
-                  <th>Thời gian bảo quản <br> (B)</th>
-                  <th>Số lượng bảo quản (kg)<br>(1)</th>
-                  <th>Định mức hao hụt <br>(2)</th>
-                  <th>Số lượng hao hụt theo định mức<br>(3=1*2)</th>
-
+                  <th [rowspan]="2">STT</th>
+                  <th [colspan]="2">Thời gian bảo quản <br> (B)</th>
+                  <th [rowspan]="2">Số lượng bảo quản (kg)<br>(1)</th>
+                  <th [rowspan]="2">Định mức hao hụt <br>(2)</th>
+                  <th [rowspan]="2">Số lượng hao hụt theo định mức<br>(3=1*2)</th>
+                </tr>
+                <tr>
+                  <th>Từ ngày đến ngày</th>
+                  <th>Số tháng bảo quản</th>
                 </tr>
               </thead>
               <tbody>
                 <ng-container>
                   <tr>
                     <td>1</td>
-                    <td>{{formData.value.ngayKetThucXuatTt}} </td>
-                    <td>{{formData.value.slBaoQuan}}</td>
-                    <td>{{formData.value.dinhMucHaoHut}}</td>
-                    <td>{{formData.value.slHao}}</td>
+                    <td class="text-center">{{formData.value.ngayKtNhap | date: 'dd/MM/YYYY' }}
+                      {{formData.value.ngayKtNhap && formData.value.ngayKetThucXuatTt? "-": ""}}
+                      {{formData.value.ngayKetThucXuatTt
+                      |date: 'dd/MM/YYYY' }} </td>
+                    <td>{{formData.value.soThangBaoQuanHang |number:'1.0-1' : 'vi_VN'}} </td>
+                    <td>{{formData.value.tongSlNhap|number:'1.0-1' : 'vi_VN'}}</td>
+                    <td>{{formData.value.dinhMucHaoHut|number:'1.0-1' : 'vi_VN'}}</td>
+                    <td>{{formData.value.slHao|number:'1.0-1' : 'vi_VN'}}</td>
                   </tr>
                 </ng-container>
               </tbody>

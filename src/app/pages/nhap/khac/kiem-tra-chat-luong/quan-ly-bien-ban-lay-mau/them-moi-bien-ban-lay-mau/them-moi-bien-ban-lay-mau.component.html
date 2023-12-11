@@ -5,23 +5,23 @@
       <span>Quay lại</span>
     </button>
     <button class="btn btn-sub xanh-nhat" type="button"
-      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC) "
+      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC) && (userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBLMBGM_THEM') || userService.isAccessPermisson('NHDTQG_NK_KTCL_VT_BBLMBGM_THEM')) "
       (click)="save(true)">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
     </button>
-    <button type="button" class="btn btn-sub do" *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC"
+    <button type="button" class="btn btn-sub do" *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && (userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBLMBGM_DUYET_LDCCUC') || userService.isAccessPermisson('NHDTQG_NK_KTCL_VT_BBLMBGM_DUYET_LDCCUC'))"
       (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>
-    <button class="btn btn-sub xanh-nhat" *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC"
+    <button class="btn btn-sub xanh-nhat" *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && (userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBLMBGM_DUYET_LDCCUC') || userService.isAccessPermisson('NHDTQG_NK_KTCL_VT_BBLMBGM_DUYET_LDCCUC'))"
       (click)="pheDuyet()">
       <i class="icon htvbdh_tcdt_pheduyet "></i>
       <span>Duyệt</span>
     </button>
     <button class="btn btn-sub xanh"
-      *ngIf="( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC ) "
+      *ngIf="( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC ) && (userService.isAccessPermisson('NHDTQG_NK_KTCL_LT_BBLMBGM_THEM') || userService.isAccessPermisson('NHDTQG_NK_KTCL_VT_BBLMBGM_THEM'))"
       (click)="save(false)">
       <i class="icon  htvbdh_tcdt_save"></i>
       <span>Lưu</span>

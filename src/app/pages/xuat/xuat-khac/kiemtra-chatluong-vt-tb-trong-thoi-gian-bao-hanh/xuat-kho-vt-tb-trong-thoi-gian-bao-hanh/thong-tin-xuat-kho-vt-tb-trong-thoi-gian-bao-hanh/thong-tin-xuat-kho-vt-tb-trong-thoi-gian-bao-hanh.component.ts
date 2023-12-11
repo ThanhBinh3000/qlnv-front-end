@@ -1,20 +1,20 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
 import dayjs from "dayjs";
-import { Validators } from "@angular/forms";
-import { Base2Component } from "../../../../../../components/base2/base2.component";
-import { StorageService } from "../../../../../../services/storage.service";
-import { DanhMucService } from "../../../../../../services/danhmuc.service";
-import { STATUS } from "../../../../../../constants/status";
-import { FileDinhKem } from "../../../../../../models/CuuTro";
-import { MESSAGE } from "../../../../../../constants/message";
+import {Validators} from "@angular/forms";
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {StorageService} from "../../../../../../services/storage.service";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
+import {STATUS} from "../../../../../../constants/status";
+import {FileDinhKem} from "../../../../../../models/CuuTro";
+import {MESSAGE} from "../../../../../../constants/message";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import { convertTienTobangChu } from "../../../../../../shared/commonFunction";
+import {convertTienTobangChu} from "../../../../../../shared/commonFunction";
 import {
   QdGiaoNvXuatHangTrongThoiGianBaoHanhService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/QdGiaoNvXuatHangTrongThoiGianBaoHanh.service";
@@ -74,12 +74,12 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
         idCanCu: [],
         soCanCu: [],
         soLanLm: ['', [Validators.required]],
-        maDiaDiem: [],
+        maDiaDiem: ['',[Validators.required]],
         ngayKyCanCu: [],
         maNhaKho: [],
         maNganKho: [],
         maLoKho: [],
-        slTonKho: ['', [Validators.required]],
+        slTonKho: ['',[Validators.required]],
         idPhieuKncl: [],
         soPhieuKncl: [''],
         ngayKn: [],
@@ -108,8 +108,8 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
         tenCloaiVthh: [],
         tenDiemKho: ['', [Validators.required]],
         tenNhaKho: ['', [Validators.required]],
-        tenNganKho: ['', [Validators.required]],
-        tenLoKho: [],
+        tenNganKho: [''],
+        tenLoKho: [''],
         fileDinhKems: [new Array<FileDinhKem>()],
         mauBiHuy: [],
         loaiPhieu: ['XUAT'],
@@ -249,7 +249,8 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
   async bindingDataQd(data) {
     try {
       await this.spinner.show();
-      this.listNganLoKho = data.qdGiaonvXhDtl.filter(i => i.maDiaDiem.substring(0, 8) == this.formData.value.maDvi);
+      this.listNganLoKho = data.qdGiaonvXhDtl.filter(i=>i.maDiaDiem.substring(0,8)==this.formData.value.maDvi);
+      console.log(this.listNganLoKho,'this.listNganLoKho')
       this.formData.patchValue({
         soCanCu: data.soQuyetDinh,
         idCanCu: data.id,
@@ -267,7 +268,8 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
   async listPheuXk(item) {
     await this.spinner.show();
     let body = {
-      soQdGiaoNvXh: item.soQuyetDinh,
+      soCanCu: item.soQuyetDinh,
+      soLanLm : this.formData.value.loai == "XUAT_MAU" ? item.soLanLm : null
     }
     let res = await this.phieuXuatKhoVtTbTrongThoiGianBaoHanhService.search(body)
     const data = res.data;
@@ -376,13 +378,13 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
 
   async save() {
     this.spinner.show();
-    this.formData.disable({ emitEvent: false });
+    this.formData.disable({emitEvent: false});
     try {
       let body = this.formData.value;
       body.fileDinhKems = this.fileDinhKems;
       console.log(body, 'bodybody');
       await this.createUpdate(body);
-      this.formData.enable({ emitEvent: false });
+      this.formData.enable({emitEvent: false});
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, e.msg);
     } finally {

@@ -40,7 +40,8 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BKCH_THEM')"
+        <button type="button" class="btn btn-main"
+          *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BKCH_THEM')"
           (click)="redirectToChiTiet(false, 0)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
@@ -93,8 +94,7 @@
                   <td [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>
                   <td colspan="3"></td>
                   <td>{{dataDdiem.tenDiemKho}}</td>
-                  <td>{{dataDdiem.tenLoKho? dataDdiem.tenNganKho + ' - ' + dataDdiem.tenLoKho : dataDdiem.tenNganKho}}
-                  </td>
+                  <td>{{dataDdiem.tenLoKho? dataDdiem.tenNganKho + ' - ' + dataDdiem.tenLoKho : dataDdiem.tenNganKho}}</td>
                   <td colspan="5"></td>
                 </tr>
                 <ng-container *ngIf="expandSet2.has(y)">
@@ -103,11 +103,12 @@
                     <td></td>
                     <td colspan="6"></td>
                     <td class="bold">{{dataPhieu.soBangKe}}</td>
-                    <td>{{dataPhieu.phieuNhapKho.soPhieuNhapKho}}</td>
-                    <td>{{dataPhieu.phieuNhapKho.ngayTao | date: 'dd/MM/YYYY'}}</td> <!-- //Data fake -->
+                    <td>{{dataPhieu.phieuNhapKho?.soPhieuNhapKho}}</td>
+                    <td>{{dataPhieu.phieuNhapKho?.ngayTao | date: 'dd/MM/YYYY'}}</td> <!-- //Data fake -->
                     <td>{{dataPhieu.tenTrangThai}}</td>
                     <td>
-                      <a *ngIf="hienThiXem(dataPhieu)" (click)="redirectToChiTiet(true, dataPhieu.id)">
+                      <a *ngIf="hienThiXem(dataPhieu)"
+                        (click)="redirectToChiTiet(true, dataPhieu.id)">
                         <i class="fa fa-eye" title="Xem chi tiết"></i>
                       </a>
                       <a *ngIf="(dataPhieu.trangThai == STATUS.DU_THAO
@@ -116,7 +117,7 @@
                         <i class="fa fa-pencil" title="Sửa"></i>
                       </a>
                       <a *ngIf="this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BKCH_DUYET_LDCCUC') && dataPhieu.trangThai == STATUS.CHO_DUYET_LDCC"
-                        (click)="redirectToChiTiet(true, dataPhieu.id)">
+                         (click)="redirectToChiTiet(true, dataPhieu.id)">
                         <i class="icon htvbdh_tcdt_pheduyet" title="Phê duyệt"></i>
                       </a>
                       <a

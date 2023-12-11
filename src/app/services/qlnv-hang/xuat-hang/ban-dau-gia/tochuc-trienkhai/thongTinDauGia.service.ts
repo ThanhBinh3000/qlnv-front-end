@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BaseService } from "../../../../base.service";
-import { PATH } from 'src/app/constants/path';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {BaseService} from "../../../../base.service";
+import {PATH} from 'src/app/constants/path';
 
 @Injectable({
   providedIn: 'root',

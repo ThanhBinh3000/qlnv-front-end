@@ -1,18 +1,17 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { MESSAGE } from 'src/app/constants/message';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
+import {Component, OnInit, Input} from '@angular/core';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {MESSAGE} from 'src/app/constants/message';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
 import {
   XhPhieuKnghiemCluongService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/xhPhieuKnghiemCluong.service';
 import * as uuid from "uuid";
-import { LOAI_HANG_DTQG } from 'src/app/constants/config';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import _ from 'lodash';
-import { STATUS } from "../../../../../constants/status";
 
 @Component({
   selector: 'app-quan-ly-phieu-kiem-nghiem-chat-luong',
@@ -52,19 +51,20 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
       loaiVthh: null,
     })
     this.filterTable = {
-      soQdNv: '',
-      nam: '',
-      ngayKyQdNv: '',
-      tenDiemKho: '',
-      tenLoKho: '',
-      tenNganKho: '',
-      soPhieuKiemNghiem: '',
-      ngayKiemNghiemMau: '',
-      soBbLayMau: '',
-      ngayLayMau: '',
-      soBbTinhKho: '',
-      ngayLapTinhKho: '',
-      tenTrangThai: '',
+      soQdNv: null,
+      nam: null,
+      tgianGiaoHang: null,
+      tenDiemKho: null,
+      tenNhakho: null,
+      tenNganKho: null,
+      tenLoKho: null,
+      soPhieuKiemNghiem: null,
+      ngayKiemNghiemMau: null,
+      soBbLayMau: null,
+      ngayLayMau: null,
+      soBbTinhKho: null,
+      ngayLapTinhKho: null,
+      tenTrangThai: null,
     };
   }
 
@@ -106,7 +106,7 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
         soQdNv: soQdNvKey || "",
         nam: firstRowInGroup.nam || "",
         idQdNv: firstRowInGroup.idQdNv || "",
-        ngayKyQdNv: firstRowInGroup.ngayKyQdNv || "",
+        tgianGiaoHang: firstRowInGroup.tgianGiaoHang || "",
         childData,
       };
     }).value();
@@ -135,15 +135,15 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
 
   openModal(id: number, modalType: string) {
     switch (modalType) {
-      case 'QdNv':
+      case 'QdNv' :
         this.idQdNv = id;
         this.isViewQdNv = true;
         break;
-      case 'layMau':
+      case 'layMau' :
         this.idLayMau = id;
         this.isViewLayMau = true;
         break;
-      case 'tinhKho':
+      case 'tinhKho' :
         this.idTinhKho = id;
         this.isViewTinhKho = true;
         break;
@@ -154,15 +154,15 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
 
   closeModal(modalType: string) {
     switch (modalType) {
-      case 'QdNv':
+      case 'QdNv' :
         this.idQdNv = null;
         this.isViewQdNv = false;
         break;
-      case 'layMau':
+      case 'layMau' :
         this.idLayMau = null;
         this.isViewLayMau = false;
         break;
-      case 'tinhKho':
+      case 'tinhKho' :
         this.idTinhKho = null;
         this.isViewTinhKho = false;
         break;
@@ -177,11 +177,11 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
     return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
   };
 
-  disabledStartngayKnghiem = (startValue: Date): boolean => {
+  disabledStartngayKnghiemTu = (startValue: Date): boolean => {
     return this.isInvalidDateRange(startValue, this.formData.value.ngayKiemNghiemMauDen, 'ngayKiemNghiemMau');
   };
 
-  disabledEndngayKnghiem = (endValue: Date): boolean => {
+  disabledStartngayKnghiemDen = (endValue: Date): boolean => {
     return this.isInvalidDateRange(endValue, this.formData.value.ngayKiemNghiemMauDen, 'ngayKiemNghiemMau');
   };
 
@@ -202,23 +202,23 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
         DUYET_LDCUC: 'XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_LDCUC',
       },
     };
-    const permissions = this.loaiVthh === LOAI_HANG_DTQG.VAT_TU ? permissionMapping.VT : permissionMapping.LT;
+    const permissions = this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? permissionMapping.VT : permissionMapping.LT;
     switch (action) {
       case 'XEM':
         return (
           this.userService.isAccessPermisson(permissions.XEM) && ((this.userService.isAccessPermisson(permissions.THEM) &&
-            [
-              this.STATUS.CHO_DUYET_TP,
-              this.STATUS.CHO_DUYET_LDC,
-              this.STATUS.CHO_DUYET_LDC,
-              this.STATUS.DA_DUYET_LDC,
-            ].includes(data.trangThai)) ||
+              [
+                this.STATUS.CHO_DUYET_TP,
+                this.STATUS.CHO_DUYET_LDC,
+                this.STATUS.CHO_DUYET_LDC,
+                this.STATUS.DA_DUYET_LDC,
+              ].includes(data.trangThai)) ||
             (!this.userService.isAccessPermisson(permissions.THEM) && [
-              this.STATUS.DU_THAO,
-              this.STATUS.TU_CHOI_TP,
-              this.STATUS.TU_CHOI_LDC,
-              this.STATUS.DA_DUYET_LDC
-            ].includes(data.trangThai) ||
+                this.STATUS.DU_THAO,
+                this.STATUS.TU_CHOI_TP,
+                this.STATUS.TU_CHOI_LDC,
+                this.STATUS.DA_DUYET_LDC
+              ].includes(data.trangThai) ||
               (data.trangThai === this.STATUS.CHO_DUYET_TP &&
                 !this.userService.isAccessPermisson(permissions.DUYET_TP)) ||
               (data.trangThai === this.STATUS.CHO_DUYET_LDC &&

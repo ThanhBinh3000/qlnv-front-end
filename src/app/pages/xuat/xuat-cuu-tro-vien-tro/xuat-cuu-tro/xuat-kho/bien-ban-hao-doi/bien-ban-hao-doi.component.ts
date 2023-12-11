@@ -14,6 +14,10 @@ import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-c
 import { BienBanHaoDoiService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanHaoDoi.service';
 import { CHUC_NANG } from "../../../../../../constants/status";
 import { CuuTroVienTroComponent } from "../../cuu-tro-vien-tro.component";
+import { STATUS } from 'src/app/constants/status'
+import { PhieuKiemNghiemChatLuongService } from 'src/app/services/qlnv-hang/xuat-hang/chung/kiem-tra-chat-luong/PhieuKiemNghiemChatLuong.service';
+import { QuyetDinhGiaoNvCuuTroService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service';
+import { BienBanLayMauService } from 'src/app/services/qlnv-hang/xuat-hang/chung/xuat-kho/PhieuXuatKho.service';
 
 @Component({
   selector: 'app-bien-ban-hao-doi',
@@ -26,7 +30,7 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
   loaiVthh: string;
   @Input()
   loaiVthhCache: string;
-
+  @Input() loaiXuat: string
   CHUC_NANG = CHUC_NANG;
   public vldTrangThai: CuuTroVienTroComponent;
 
@@ -39,6 +43,9 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
     private phieuXuatKhoService: PhieuXuatKhoService,
     private bienBanHaoDoiService: BienBanHaoDoiService,
     private cuuTroVienTroComponent: CuuTroVienTroComponent,
+    public phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
+    public quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
+    public bienBanLayMauService: BienBanLayMauService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanHaoDoiService);
     this.vldTrangThai = this.cuuTroVienTroComponent;
@@ -86,7 +93,7 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
   selectedId: number = 0;
   isVatTu: boolean = false;
   isView = false;
-  children: any = [];
+  dataView: any = [];
   expandSetString = new Set<string>();
 
   idBbTk: number = 0;
@@ -95,6 +102,8 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
   openPhieuXk = false;
   idBangKe: number = 0;
   openBangKe = false;
+  idPhieuKnCl: number = 0;
+  openPhieuKnCl: boolean = false;
 
   disabledStartNgayBd = (startValue: Date): boolean => {
     if (startValue && this.formData.value.ngayBatDauXuatDen) {
@@ -166,7 +175,7 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
     await this.spinner.show()
     this.formData.patchValue({
       // loaiVthh: this.loaiVthh,
-      type: "XUAT_CTVT"
+      type: this.loaiXuat
     });
     await super.search(roles);
     this.buildTableView();
@@ -176,6 +185,7 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
     this.userInfo = this.userService.getUserLogin();
     this.userdetail.maDvi = this.userInfo.MA_DVI;
     this.userdetail.tenDvi = this.userInfo.TEN_DVI;
+    this.formData.patchValue({ loaiVthh: this.loaiVthh })
   }
 
 
@@ -205,50 +215,110 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
     await this.spinner.hide();
   }
 
+  // buildTableView() {
+  //   let dataView = chain(this.dataTable)
+  //     .groupBy("soQdGiaoNvXh")
+  //     .map((value, key) => {
+  //       let quyetDinh = value.find(f => f.soQdGiaoNvXh === key)
+  //       let rs = chain(value)
+  //         .groupBy("soBbHaoDoi")
+  //         .map((v, k) => {
+  //           let soBb = v.find(s => s.soBbHaoDoi === k)
+  //           return {
+  //             idVirtual: uuid.v4(),
+  //             soBbHaoDoi: k != "null" ? k : '',
+  //             soBbTinhKho: soBb ? soBb.soBbTinhKho : null,
+  //             tenDiemKho: soBb ? soBb.tenDiemKho : null,
+  //             tenLoKho: soBb ? soBb.tenLoKho : null,
+  //             ngayBatDauXuat: soBb ? soBb.ngayBatDauXuat : null,
+  //             ngayKetThucXuat: soBb ? soBb.ngayKetThucXuat : null,
+  //             trangThai: soBb ? soBb.trangThai : null,
+  //             tenTrangThai: soBb ? soBb.tenTrangThai : null,
+  //             maDvi: soBb ? soBb.maDvi : null,
+  //             id: soBb ? soBb.id : null,
+  //             childData: v
+  //           }
+  //         }
+  //         ).value();
+  //       let nam = quyetDinh ? quyetDinh.nam : null;
+  //       let ngayQdGiaoNvXh = quyetDinh ? quyetDinh.ngayQdGiaoNvXh : null;
+  //       return {
+  //         idVirtual: uuid.v4(),
+  //         soQdGiaoNvXh: key != "null" ? key : '',
+  //         nam: nam,
+  //         ngayQdGiaoNvXh: ngayQdGiaoNvXh,
+  //         childData: rs
+  //       };
+  //     }).value();
+  //   this.children = dataView
+  //   console.log(this.children, "this.children")
+  //   this.expandAll()
+
+  // }
   buildTableView() {
-    let dataView = chain(this.dataTable)
+    const newData = this.dataTable.map(f => ({ ...f, maNganLoKho: f.maLoKho ? `${f.maLoKho}${f.maNganKho}` : f.maNganKho }))
+    this.dataView = chain(newData)
       .groupBy("soQdGiaoNvXh")
       .map((value, key) => {
-        let quyetDinh = value.find(f => f.soQdGiaoNvXh === key)
-        let rs = chain(value)
-          .groupBy("soBbHaoDoi")
+        const quyetDinh = value.find(f => f.soQdGiaoNvXh === key);
+        if (!quyetDinh) return;
+        const lv1 = chain(value)
+          .groupBy("maDiemKho")
           .map((v, k) => {
-            let soBb = v.find(s => s.soBbHaoDoi === k)
+            const diemKho = v.find(s => s.maDiemKho === k);
+            if (!diemKho) return;
+            const lv2 = chain(v).groupBy('maNganLoKho').map((v1, k1) => {
+              const nganLoKho = v1.find(f => f.maNganLoKho === k1);
+              if (!nganLoKho) return;
+              return {
+                idVirtual: uuid.v4(),
+                tenLoKho: nganLoKho.tenLoKho,
+                tenNganKho: nganLoKho.tenNganKho,
+                tenNhaKho: nganLoKho.tenNhaKho,
+                soBbHaoDoi: nganLoKho.soBbHaoDoi,
+                ngayTaoBb: nganLoKho.ngayTaoBb,
+                soBbTinhKho: nganLoKho.soBbTinhKho,
+                idBbTinhKho: nganLoKho.idBbTinhKho,
+                soPhieuKnCl: nganLoKho.soPhieuKnCl,
+                idPhieuKnCl: nganLoKho.idPhieuKnCl,
+                trangThai: nganLoKho.trangThai,
+                tenTrangThai: nganLoKho.tenTrangThai,
+                maDvi: nganLoKho.maDvi,
+                id: nganLoKho.id,
+                childData: v1
+              }
+
+            }).value().filter(f => !!f)
             return {
               idVirtual: uuid.v4(),
-              soBbHaoDoi: k != "null" ? k : '',
-              soBbTinhKho: soBb ? soBb.soBbTinhKho : null,
-              tenDiemKho: soBb ? soBb.tenDiemKho : null,
-              tenLoKho: soBb ? soBb.tenLoKho : null,
-              ngayBatDauXuat: soBb ? soBb.ngayBatDauXuat : null,
-              ngayKetThucXuat: soBb ? soBb.ngayKetThucXuat : null,
-              trangThai: soBb ? soBb.trangThai : null,
-              tenTrangThai: soBb ? soBb.tenTrangThai : null,
-              maDvi: soBb ? soBb.maDvi : null,
-              id: soBb ? soBb.id : null,
-              childData: v
+              tenDiemKho: diemKho.tenDiemKho,
+              childData: lv2,
             }
           }
-          ).value();
-        let nam = quyetDinh ? quyetDinh.nam : null;
-        let ngayQdGiaoNvXh = quyetDinh ? quyetDinh.ngayQdGiaoNvXh : null;
+          ).value().filter(f => !!f);
+        const nam = quyetDinh.nam;
+        const ngayQdGiaoNvXh = quyetDinh.ngayQdGiaoNvXh;
         return {
           idVirtual: uuid.v4(),
           soQdGiaoNvXh: key != "null" ? key : '',
           nam: nam,
           ngayQdGiaoNvXh: ngayQdGiaoNvXh,
-          childData: rs
+          childData: lv1
         };
-      }).value();
-    this.children = dataView
-    console.log(this.children, "this.children")
+      }).value().filter(f => !!f);
     this.expandAll()
 
   }
 
   expandAll() {
-    this.children.forEach(s => {
+    this.dataView.forEach(s => {
       this.expandSetString.add(s.idVirtual);
+      s.childData.forEach(s1 => {
+        this.expandSetString.add(s1.idVirtual);
+        s1.childData.forEach(s2 => {
+          this.expandSetString.add(s2.idVirtual);
+        })
+      })
     })
   }
 
@@ -267,7 +337,16 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
     this.isView = b;
     // this.isViewDetail = isView ?? false;
   }
+  openPhieuKnClModal(id: number) {
+    console.log(id, "id")
+    this.idPhieuKnCl = id;
+    this.openPhieuKnCl = true;
+  }
 
+  closePhieuKnClModal() {
+    this.idPhieuKnCl = null;
+    this.openPhieuKnCl = false;
+  }
   openBbTkModal(id: number) {
     console.log(id, "id")
     this.idBbTk = id;
@@ -300,5 +379,34 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
     this.idBangKe = null;
     this.openBangKe = false;
   }
-
+  checkRoleAdd() {
+    return this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_THEM') && this.userService.isChiCuc()
+  }
+  checkRoleExport() {
+    return this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_EXP')
+  }
+  checkRoleView(trangThai: STATUS): boolean {
+    if (!this.checkRoleEdit(trangThai) && !this.checkRoleApprove(trangThai) && !this.checkRoleDelete(trangThai) && this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_XEM')) {
+      return true
+    }
+    return false
+  }
+  checkRoleEdit(trangThai: STATUS): boolean {
+    if ([STATUS.DU_THAO, STATUS.TU_CHOI_KTVBQ, STATUS.TU_CHOI_LDCC].includes(trangThai) && this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_THEM') && this.userService.isChiCuc()) {
+      return true
+    }
+    return false
+  }
+  checkRoleApprove(trangThai: STATUS): boolean {
+    if (((STATUS.CHO_DUYET_KTVBQ === trangThai && this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_DUYET_KT')) || (STATUS.CHO_DUYET_LDCC === trangThai && this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_DUYET_LDCCUC'))) && this.userService.isChiCuc()) {
+      return true
+    }
+    return false
+  }
+  checkRoleDelete(trangThai: STATUS): boolean {
+    if ([STATUS.DU_THAO].includes(trangThai) && this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_XOA') && this.userService.isChiCuc()) {
+      return true
+    }
+    return false
+  }
 }

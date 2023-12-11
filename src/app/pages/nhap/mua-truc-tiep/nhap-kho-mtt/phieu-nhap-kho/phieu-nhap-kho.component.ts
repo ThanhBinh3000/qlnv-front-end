@@ -191,7 +191,7 @@ export class PhieuNhapKhoComponent implements OnInit {
       trangThai: STATUS.BAN_HANH,
       maDvi: this.userInfo.MA_DVI,
       tuNgayNkho: this.tuNgayNkho != null ? dayjs(this.tuNgayNkho).format('YYYY-MM-DD') + " 00:00:00" : null,
-      denNgayNkho: this.denNgayNkho != null ? dayjs(this.denNgayNkho).format('YYYY-MM-DD') + " 23:59:59" : null,
+      denNgayNkho: this.denNgayNkho != null ? dayjs(this.denNgayNkho).format('YYYY-MM-DD') + " 23:59:59": null,
       soPnk: this.searchFilter.soPhieuNhapKho,
       paggingReq: {
         limit: this.pageSize,

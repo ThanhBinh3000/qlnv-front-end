@@ -22,8 +22,9 @@ import {Router} from "@angular/router";
 export class TongHopPhuongAnGiaComponent implements OnInit {
   @Input() type: string;
   @Input() pagType: string;
-  @Output()
-  getCount = new EventEmitter<any>();
+  @Input() isChuyenTrang: boolean = false;
+  @Output() getCount = new EventEmitter<any>();
+  @Output() chuyenTrangEmit = new EventEmitter<any>();
   isAddNew = false;
   isTongHop = false;
   formData: FormGroup;
@@ -51,6 +52,7 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
   idSelected: number = 0;
   typeConst = TYPE_PAG
 
+
   listTrangThaiTt = [
     {ma: this.STATUS.DU_THAO, giaTri: "Dự thảo"},
     {ma: this.STATUS.CHO_DUYET_LDV, giaTri: "Chờ duyệt - LĐ Vụ"},
@@ -61,6 +63,10 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
   listTrangThaiTh = [
     {ma: this.STATUS.DA_TAO_TT, giaTri: "Đã tạo tờ trình"},
     {ma: this.STATUS.CHUA_TAO_TT, giaTri: "Chưa tạo tờ trình"}
+  ];
+  listKieuTongHop = [
+    {ma: "00", giaTri: "Đề xuất PAG lần đầu "},
+    {ma: "01", giaTri: "Đề xuất PAG điều chỉnh"}
   ];
   constructor(private readonly fb: FormBuilder,
     private spinner: NgxSpinnerService,
@@ -76,6 +82,7 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
       noiDung: [null],
       namKeHoach: [null],
       loaiVthh: [null],
+      kieuTongHop: [null],
     });
   }
   searchInTable = {
@@ -98,7 +105,8 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
     trangThaiTH: '',
     soToTrinh: '',
     trangThai: '',
-    ngayKy: ''
+    ngayKy: '',
+    kieuTongHop: ''
   };
 
   async ngOnInit() {
@@ -106,6 +114,9 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
       || ( this.type == this.typeConst.GIA_CU_THE  && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_TONGHOP'))
     ) {
       this.router.navigateByUrl('/error/401')
+    }
+    if (this.isChuyenTrang == true) {
+      this.themMoi();
     }
     this.loadDsNam();
     this.loadDsVthh();
@@ -247,6 +258,8 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
 
   async onClose() {
     this.isAddNew = false;
+    this.isChuyenTrang = false;
+    this.chuyenTrangEmit.emit();
     await this.search()
   }
 

@@ -13,6 +13,7 @@ import {
   KtKhSuaChuaBtcService
 } from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/kh-sc-lon-btc/kt-kh-sua-chua-btc.service";
 import { Router } from "@angular/router";
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-qd-thong-bao-sua-chua-lon',
@@ -22,7 +23,7 @@ import { Router } from "@angular/router";
 export class QdThongBaoSuaChuaLonComponent extends Base2Component implements OnInit {
   isViewDetail: boolean;
   listTrangThai: any[] = [
-    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
+    {ma: this.STATUS.DANG_NHAP_DU_LIEU, giaTri: 'Đang nhập dữ liệu'},
     {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'}
   ];
 

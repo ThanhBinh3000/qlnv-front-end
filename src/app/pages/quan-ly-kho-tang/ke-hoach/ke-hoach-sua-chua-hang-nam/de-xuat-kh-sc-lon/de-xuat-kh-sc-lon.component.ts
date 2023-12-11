@@ -29,14 +29,14 @@ export class DeXuatKhScLonComponent extends Base2Component implements OnInit {
 
   idTongHop: number = 0;
 
-  listTrangThai = [{ "ma": STATUS.DANG_NHAP_DU_LIEU, "giaTri": "Đang nhập dữ liệu" },
-  { "ma": STATUS.CHO_DUYET_TP, "giaTri": "Chờ duyệt TP" },
-  { "ma": STATUS.TU_CHOI_TP, "giaTri": "Từ chối TP" },
-  { "ma": STATUS.CHO_DUYET_LDC, "giaTri": "Chờ duyệt LĐ Cục" },
-  { "ma": STATUS.TU_CHOI_LDC, "giaTri": "Từ chối LĐ Cục" },
-  { "ma": STATUS.DA_DUYET_LDC, "giaTri": "Đã duyệt LĐ Cục" },
-  { "ma": STATUS.TU_CHOI_CBV, "giaTri": "Từ chối CB Vụ" },
-  { "ma": STATUS.DA_DUYET_CBV, "giaTri": "Đã duyệt CB Vụ" }];
+  listTrangThai = [{ "ma": STATUS.DU_THAO, "giaTri": "Dự thảo" },
+    { "ma": STATUS.CHO_DUYET_TP, "giaTri": "Chờ duyệt TP" },
+    { "ma": STATUS.TU_CHOI_TP, "giaTri": "Từ chối TP" },
+    { "ma": STATUS.CHO_DUYET_LDC, "giaTri": "Chờ duyệt LĐ Cục" },
+    { "ma": STATUS.TU_CHOI_LDC, "giaTri": "Từ chối LĐ Cục" },
+    { "ma": STATUS.DA_DUYET_LDC, "giaTri": "Đã duyệt LĐ Cục" },
+    { "ma": STATUS.TU_CHOI_CBV, "giaTri": "Từ chối CB Vụ" },
+    { "ma": STATUS.DA_DUYET_CBV, "giaTri": "Đã duyệt CB Vụ" }];
 
   constructor(
     private httpClient: HttpClient,
@@ -100,7 +100,7 @@ export class DeXuatKhScLonComponent extends Base2Component implements OnInit {
 
   async filter() {
     this.formData.patchValue({
-      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : this.formData.value.maDvi
+      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI :  this.formData.value.maDvi
     });
     await this.search();
   }

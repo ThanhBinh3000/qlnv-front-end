@@ -5,28 +5,26 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
+import {FormGroup, Validators} from '@angular/forms';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
 import * as dayjs from 'dayjs';
 import {
   DialogDanhSachHangHoaComponent
 } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
-import { DatePipe } from '@angular/common';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
+import {DatePipe} from '@angular/common';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
 import {
   TongHopKhBanTrucTiepService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/tong-hop-kh-ban-truc-tiep.service';
-import { STATUS } from 'src/app/constants/status';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { LOAI_HANG_DTQG } from "../../../../../../constants/config";
-import { PREVIEW } from "../../../../../../constants/fileType";
-import { saveAs } from 'file-saver';
-import printJS from "print-js";
+import {STATUS} from 'src/app/constants/status';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import {DataService} from "../../../../../../services/data.service";
 
 @Component({
   selector: 'app-them-moi-tong-hop-kh-ban-truc-tiep',
@@ -39,8 +37,11 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
   @Input() idInput: number;
   @Input() isView: boolean;
   @Input() isViewOnModal: boolean;
-  @Output()
-  showListEvent = new EventEmitter<any>();
+  @Output() showListEvent = new EventEmitter<any>();
+  @Output() taoQuyetDinh = new EventEmitter<any>();
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
+  templateNameVt = "Tổng hợp kế hoạch bán trực tiếp vật tư";
+  templateNameLt = "Tổng hợp kế hoạch bán trực tiếp lương thực";
   formTraCuu: FormGroup;
   isDetailDxCuc: boolean = false;
   isTongHop: boolean = false;
@@ -57,6 +58,7 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService: DanhMucService,
+    private dataService: DataService,
     private tongHopKhBanTrucTiepService: TongHopKhBanTrucTiepService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopKhBanTrucTiepService);
@@ -129,7 +131,7 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
     }
     this.isTongHop = true;
     this.helperService.bidingDataInFormGroup(this.formTraCuu, data);
-    this.formData.patchValue({ idTh: data.id });
+    this.formData.patchValue({idTh: data.id});
     if (data.children && data.children.length > 0) {
       this.showFirstRow(event, data.children[0].idDxHdr);
     }
@@ -180,20 +182,27 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
     }
   }
 
-  async save() {
+  async save(isQuyetDinh?) {
     try {
       await this.helperService.ignoreRequiredForm(this.formData);
-      this.formData.controls["noiDungThop"].setValidators([Validators.required])
+      this.formData.controls["noiDungThop"].setValidators([Validators.required]);
       const body = this.formData.value;
-      await this.createUpdate(body);
+      let data = null
+      if (!body.id && body.id === null) {
+        data = await this.createUpdate(body);
+        body.id = data.id
+      }
       await this.helperService.restoreRequiredForm(this.formData);
+      if (isQuyetDinh && body.id) {
+        this.taoQuyetDinhPd();
+      }
     } catch (error) {
       console.error('Error in save:', error);
     }
   }
 
-  async showFirstRow($event, data: any) {
-    await this.showDetail($event, data);
+  async showFirstRow($event, idDxKh: number) {
+    await this.showDetail($event, idDxKh);
   }
 
   disabledNgayDuyetTu = (startValue: Date): boolean => {
@@ -228,7 +237,7 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
     });
     modal.afterClose.subscribe(data => {
       if (data) {
-        const { ma, ten, parent } = data;
+        const {ma, ten, parent} = data;
         this.formTraCuu.patchValue({
           cloaiVthh: ma,
           tenCloaiVthh: ten,
@@ -241,13 +250,14 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
 
   async loadDsVthh() {
     const res = await this.danhMucService.loadDanhMucHangHoa().toPromise();
-    if (res.msg === MESSAGE.SUCCESS) {
-      const data = res.data.find(item => item.ma === this.loaiVthh);
-      this.listVatTuCha = data?.children || [];
-      if (this.formData.value.loaiVthh) {
-        const chungLoai = this.listVatTuCha.find(item => item.ma === this.formData.value.loaiVthh);
-        this.listVatTu = chungLoai?.children || [];
-      }
+    if (res.msg !== MESSAGE.SUCCESS || !res.data) {
+      return;
+    }
+    const data = res.data.find(item => item.ma === this.loaiVthh);
+    this.listVatTuCha = data?.children || [];
+    if (this.formData.value.loaiVthh) {
+      const listCloaiVthh = this.listVatTuCha.find(item => item.ma === this.formData.value.loaiVthh);
+      this.listVatTu = listCloaiVthh?.children || [];
     }
   }
 
@@ -264,99 +274,56 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
 
   async loadDsTenVthh() {
     const res = await this.danhMucService.loadDanhMucHangHoa().toPromise();
-    if (res.msg !== MESSAGE.SUCCESS) return;
-    if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
-      const tenLoaiVthh = res.data
-        .flatMap(item => item.children || [])
-        .find(s => s.ma === this.loaiVthh)?.ten;
-      this.formTraCuu.patchValue({ tenLoaiVthh });
+    if (res.msg !== MESSAGE.SUCCESS || !res.data) {
+      return;
+    }
+    if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.GAO) || this.loaiVthh.startsWith(LOAI_HANG_DTQG.THOC)) {
+      this.formTraCuu.patchValue({
+        tenLoaiVthh: res.data.flatMap(item => item.children || []).find(s => s.ma === this.loaiVthh)?.ten
+      });
     } else if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.MUOI)) {
-      const tenLoaiVthh = res.data.find(s => s.ma === this.loaiVthh)?.ten;
-      this.formTraCuu.patchValue({ tenLoaiVthh });
+      this.formTraCuu.patchValue({
+        tenLoaiVthh: res.data.find(s => s.ma === this.loaiVthh)?.ten
+      });
     }
   }
 
   setValidator() {
+    this.formTraCuu.controls["loaiVthh"].setValidators([Validators.required]);
     if (!this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
-      this.formTraCuu.controls["loaiVthh"].setValidators([Validators.required])
-      this.formTraCuu.controls["tenLoaiVthh"].setValidators([Validators.required])
-      this.formTraCuu.controls["cloaiVthh"].setValidators([Validators.required])
-      this.formTraCuu.controls["tenCloaiVthh"].setValidators([Validators.required])
+      this.formTraCuu.controls["tenLoaiVthh"].setValidators([Validators.required]);
+      this.formTraCuu.controls["cloaiVthh"].setValidators([Validators.required]);
+      this.formTraCuu.controls["tenCloaiVthh"].setValidators([Validators.required]);
     } else {
-      this.formTraCuu.controls["loaiVthh"].setValidators([Validators.required])
       this.formTraCuu.controls["tenLoaiVthh"].clearValidators();
       this.formTraCuu.controls["cloaiVthh"].clearValidators();
       this.formTraCuu.controls["tenCloaiVthh"].clearValidators();
     }
   }
 
-  taoQdinh() {
-    let elem = document.getElementById('mainTongCuc');
-    let tabActive = elem.getElementsByClassName('ant-menu-item')[0];
-    tabActive.classList.remove('ant-menu-item-selected')
-    let setActive = elem.getElementsByClassName('ant-menu-item')[2];
-    setActive.classList.add('ant-menu-item-selected');
-    this.isQuyetDinh = true;
+  taoQuyetDinhPd() {
+    const dataSend = {
+      ...this.formData.value,
+      isQuyetDinh: true
+    }
+    this.dataService.changeData(dataSend);
+    this.taoQuyetDinh.emit(2);
   }
 
-  showTongHop() {
-    this.loadChiTiet()
-    let elem = document.getElementById('mainTongCuc');
-    let tabActive = elem.getElementsByClassName('ant-menu-item')[2];
-    tabActive.classList.remove('ant-menu-item-selected')
-    let setActive = elem.getElementsByClassName('ant-menu-item')[0];
-    setActive.classList.add('ant-menu-item-selected');
-    this.isQuyetDinh = false;
-  }
 
   idRowSelect: number;
 
-  async showDetail($event, id: number) {
-    await this.spinner.show();
-    if ($event.type == 'click') {
-      this.selected = false
-      $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
-      $event.target.parentElement.classList.add('selectedRow')
-    } else {
-      this.selected = true
-    }
-    this.idRowSelect = id;
-    await this.spinner.hide();
-  }
-
-  async preview(id) {
-    await this.tongHopKhBanTrucTiepService.preview({
-      tenBaoCao: 'Tổng hợp kế hoạch bán đấu giá',
-      id: id
-    }).then(async res => {
-      if (res.data) {
-        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
-        this.printSrc = res.data.pdfSrc;
-        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
-        this.showDlgPreview = true;
-      } else {
-        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
+  async showDetail($event, idDxKh: number) {
+    if ($event.type === 'click') {
+      this.selected = false;
+      const selectedRow = $event.target.parentElement.parentElement.querySelector('.selectedRow');
+      if (selectedRow) {
+        selectedRow.classList.remove('selectedRow');
       }
-    });
-  }
-
-  downloadPdf() {
-    saveAs(this.pdfSrc, "tong-hop-ke-hoach-ban-truc-tiep.pdf");
-  }
-
-  downloadWord() {
-    saveAs(this.wordSrc, "tong-hop-ke-hoach-ban-truc-tiep.docx");
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
-  }
-
-  printPreview() {
-    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
+      $event.target.parentElement.classList.add('selectedRow');
+    } else {
+      this.selected = true;
+    }
+    this.idRowSelect = idDxKh;
   }
 }
-
-
-
-

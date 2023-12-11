@@ -14,7 +14,7 @@
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true">Mã dự án</nz-form-label>
-              <input [readonly]="isViewDetail" formControlName="maDuAn" class="search__input" nz-input />
+              <input [readonly]="isViewDetail" formControlName="maDuAn" class="search__input" nz-input/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -22,7 +22,7 @@
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true">Tên dự án</nz-form-label>
-              <input [readonly]="isViewDetail" formControlName="tenDuAn" class="search__input" nz-input />
+              <input [readonly]="isViewDetail" formControlName="tenDuAn" class="search__input" nz-input/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -41,7 +41,7 @@
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true">Địa điểm xây dựng</nz-form-label>
-              <input [readonly]="isViewDetail" formControlName="diaDiem" class="search__input" nz-input />
+              <input [readonly]="isViewDetail" formControlName="diaDiem" class="search__input" nz-input/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -61,7 +61,7 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true">Thuộc chi cục</nz-form-label>
               <nz-select [nzDisabled]="isViewDetail" nzShowSearch nzAllowClear formControlName="maChiCuc"
-                (ngModelChange)="changeChiCuc($event)">
+                         (ngModelChange)="changeChiCuc($event)">
                 <nz-option *ngFor="let p of dsChiCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
                 </nz-option>
               </nz-select>
@@ -110,8 +110,9 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true">Tổng mức đầu tư dự kiến (đ)</nz-form-label>
               <nz-input-group>
-                <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzSize]="'small'"
-                  nz-input [nzDisabled]="isViewDetail" formControlName="tmdtDuKien" [nzMin]="0" [nzStep]="1">
+                <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzSize]="'small'" nz-input
+                                 [nzDisabled]="isViewDetail" formControlName="tmdtDuKien"
+                                 [nzMin]="0" [nzStep]="1">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -122,8 +123,9 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true">Tổng mức đầu tư NSTW dự kiến (đ)</nz-form-label>
               <nz-input-group>
-                <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzSize]="'small'"
-                  nz-input [nzDisabled]="isViewDetail" formControlName="nstwDuKien" [nzMin]="0" [nzStep]="1">
+                <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzSize]="'small'" nz-input
+                                 [nzDisabled]="isViewDetail" formControlName="nstwDuKien"
+                                 [nzMin]="0" [nzStep]="1">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -134,8 +136,11 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true">Tổng mức đầu tư được duyệt (đ)</nz-form-label>
               <nz-input-group>
-                <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                  nz-input [nzDisabled]="isViewDetail" formControlName="tmdtDuyet" [nzMin]="0" [nzStep]="1">
+                <nz-input-number [nzSize]="'small'"
+                                 [nzFormatter]="globals.formatter"
+                                 [nzParser]="globals.parser" nz-input [nzDisabled]="isViewDetail"
+                                 formControlName="tmdtDuyet"
+                                 [nzMin]="0" [nzStep]="1">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -146,8 +151,11 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true">Tổng mức đầu tư NSTW được duyệt (đ)</nz-form-label>
               <nz-input-group>
-                <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                  nz-input [nzDisabled]="isViewDetail" formControlName="nstwDuyet" [nzMin]="0" [nzStep]="1">
+                <nz-input-number [nzSize]="'small'"
+                                 [nzFormatter]="globals.formatter"
+                                 [nzParser]="globals.parser" nz-input [nzDisabled]="isViewDetail"
+                                 formControlName="nstwDuyet"
+                                 [nzMin]="0" [nzStep]="1">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -158,7 +166,7 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label [nzNoColon]="true">Số QĐ PD tổng mức đầu tư</nz-form-label>
               <nz-input-group>
-                <input [readonly]="isViewDetail" formControlName="soQdPd" class="search__input" nz-input />
+                <input [readonly]="isViewDetail" formControlName="soQdPd" class="search__input" nz-input/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -169,7 +177,7 @@
               <nz-form-label [nzNoColon]="true">Ngày QĐ PD tổng mức đầu tư</nz-form-label>
               <nz-input-group>
                 <nz-date-picker [nzDisabled]="isViewDetail" class="search__input" nzFormat="dd/MM/YYYY"
-                  formControlName="ngayQdPd">
+                                formControlName="ngayQdPd">
                 </nz-date-picker>
               </nz-input-group>
             </nz-form-control>
@@ -191,7 +199,7 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label [nzNoColon]="true">Số QĐ điều chỉnh tổng mức đầu tư</nz-form-label>
               <nz-input-group>
-                <input [readonly]="isViewDetail" formControlName="soQdDcPd" class="search__input" nz-input />
+                <input [readonly]="isViewDetail" formControlName="soQdDcPd" class="search__input" nz-input/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -202,7 +210,7 @@
               <nz-form-label [nzNoColon]="true">Ngày QĐ điều chỉnh tổng mức đầu tư</nz-form-label>
               <nz-input-group>
                 <nz-date-picker [nzDisabled]="isViewDetail" class="search__input" nzFormat="dd/MM/YYYY"
-                  formControlName="ngayQdDc">
+                                formControlName="ngayQdDc">
                 </nz-date-picker>
               </nz-input-group>
             </nz-form-control>
@@ -224,7 +232,7 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label [nzNoColon]="true">Số QĐ PD dự án đầu tư xây dựng</nz-form-label>
               <nz-input-group>
-                <input [readonly]="true" formControlName="soQdPdDtxd" class="text-blue" nz-input />
+                <input [readonly]="true" formControlName="soQdPdDtxd" class="text-blue" nz-input/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -234,7 +242,7 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label [nzNoColon]="true">Tổng lũy kế vốn đã bố trí</nz-form-label>
               <nz-input-group>
-                <input [readonly]="true" formControlName="tongSoLuyKe" class="text-blue" nz-input />
+                <input [readonly]="true" formControlName="tongSoLuyKe" class="text-blue" nz-input/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -244,7 +252,7 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label [nzNoColon]="true">Lũy kế vốn NSTW đã bố trí</nz-form-label>
               <nz-input-group>
-                <input [readonly]="true" formControlName="luyKeNstw" class="text-blue" nz-input />
+                <input [readonly]="true" formControlName="luyKeNstw" class="text-blue" nz-input/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -263,7 +271,7 @@
         Đóng
       </button>
       <button nz-button (click)="handleOk('save')" class="modal__button--save ml-2"
-        *ngIf="!isViewDetail && userService.isAccessPermisson('QLKT_QHKHKT_DM_DUANDTXD_THEM')">
+              *ngIf="!isViewDetail && userService.isAccessPermisson('QLKT_QHKHKT_DM_DUANDTXD_THEM')">
         <i nz-icon nzType="save"></i>
         Lưu
       </button>

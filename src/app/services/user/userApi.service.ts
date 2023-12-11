@@ -6,22 +6,27 @@ import { environment } from 'src/environments/environment';
 import { BaseService } from '../base.service';
 
 @Injectable({
-    providedIn: 'root',
+  providedIn: 'root',
 })
 export class UserAPIService extends BaseService {
-    GATEWAY = '/qlnv-security';
-    ROUTER = 'user-info'
-    constructor(public httpClient: HttpClient) {
-        super(httpClient, 'user-info', '');
-    }
+  GATEWAY = '/qlnv-security';
+  ROUTER = 'user-info'
+  constructor(public httpClient: HttpClient) {
+    super(httpClient, 'user-info', '');
+  }
 
-    getPermission(): Promise<any> {
-        const url_ = `${environment.SERVICE_API}${this.GATEWAY}/${this.ROUTER}/permission`;
-        return this.httpClient.get<any>(url_).toPromise();
-    }
+  getPermission(): Promise<any> {
+    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/${this.ROUTER}/permission`;
+    return this.httpClient.get<any>(url_).toPromise();
+  }
 
-    getDvql(): Promise<any> {
-      const url_ = `${environment.SERVICE_API}/qlnv-category/dmuc-donvi/dvql`;
-      return this.httpClient.get<any>(url_).toPromise();
-    }
+  getDvql(): Promise<any> {
+    const url_ = `${environment.SERVICE_API}/qlnv-category/dmuc-donvi/dvql`;
+    return this.httpClient.get<any>(url_).toPromise();
+  }
+
+  logout(): Promise<any> {
+    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/${this.ROUTER}/logout`;
+    return this.httpClient.post<any>(url_, {}).toPromise();
+  }
 }

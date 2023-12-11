@@ -1,17 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { MESSAGE } from 'src/app/constants/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
+import {Component, Input, OnInit} from '@angular/core';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {MESSAGE} from 'src/app/constants/message';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
 import {
   QdPdKetQuaBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
-import { saveAs } from 'file-saver';
-import { STATUS } from "../../../../../constants/status";
-import { LOAI_HANG_DTQG } from 'src/app/constants/config';
+import {saveAs} from 'file-saver';
+import {STATUS} from "../../../../../constants/status";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-danh-sach-hop-dong-btt',
@@ -20,11 +20,15 @@ import { LOAI_HANG_DTQG } from 'src/app/constants/config';
 })
 export class DanhSachHopDongBttComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG
   isQuanLy: boolean;
   isAddNew: boolean;
-  LOAI_HANG_DTQG = LOAI_HANG_DTQG
   listTrangThaiHd: any = [];
   listTrangThaiXh: any = [];
+  idQdPd: number = 0;
+  isViewQdPd: boolean = false;
+  idQdKq: number = 0;
+  isViewQdKq: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -37,27 +41,26 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
     super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBttService);
     this.formData = this.fb.group({
       namKh: null,
-      soHd: null,
-      tenHd: null,
-      tenDviMua: null,
-      ngayPduyetTu: null,
-      ngayPduyetDen: null,
+      soHopDong: null,
+      tenHopDong: null,
+      tenBenMua: null,
+      ngayKyHopDongTu: null,
+      ngayKyHopDongDen: null,
       trangThai: null,
       loaiVthh: null,
-      maDvi: null,
-      maChiCuc: null,
     });
     this.filterTable = {
-      namKh: '',
-      soQdPd: '',
-      soQdKq: '',
-      ngayMkho: '',
-      loaiVthh: '',
-      tenLoaiVthh: '',
-      cloaiVthh: '',
-      tenCloaiVthh: '',
-      tenTrangThaiHd: '',
-      tenTrangThaiXh: '',
+      namKh: null,
+      soQdPd: null,
+      soQdKq: null,
+      slHdChuaKy: null,
+      slHdDaKy: null,
+      ngayKthuc: null,
+      tenLoaiVthh: null,
+      tenCloaiVthh: null,
+      tongGiaTriHdong: null,
+      tenTrangThaiHd: null,
+      tenTrangThaiXh: null,
     }
     this.listTrangThaiHd = [
       {
@@ -92,10 +95,11 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
   async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([
-        this.timKiem(),
-        this.search(),
-      ]);
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+        trangThai: STATUS.DA_DUYET_LDC
+      })
+      await this.search();
     } catch (e) {
       console.error('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -104,23 +108,7 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
     }
   }
 
-
-  async timKiem() {
-    this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
-      trangThai: STATUS.BAN_HANH
-    })
-  }
-
-  async clearFilter() {
-    this.formData.reset();
-    await Promise.all([
-      this.timKiem(),
-      this.search()
-    ]);
-  }
-
-  goDetail(id: number, boolean?: boolean) {
+  redirectDetail(id: number, boolean?: boolean) {
     this.idSelected = id;
     this.isDetail = true;
     this.isQuanLy = boolean;
@@ -145,17 +133,47 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
     );
   }
 
+  openModal(id: number, modalType: string) {
+    switch (modalType) {
+      case 'pheDuyet':
+        this.idQdPd = id;
+        this.isViewQdPd = true;
+        break;
+      case 'ketQua':
+        this.idQdKq = id;
+        this.isViewQdKq = true;
+        break;
+      default:
+        break;
+    }
+  }
+
+  closeModal(modalType: string) {
+    switch (modalType) {
+      case 'pheDuyet':
+        this.idQdPd = null;
+        this.isViewQdPd = false;
+        break;
+      case 'ketQua':
+        this.idQdKq = null;
+        this.isViewQdKq = false;
+        break;
+      default:
+        break;
+    }
+  }
+
   isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
     const startDate = this.formData.value[formDataKey + 'Tu'];
     const endDate = this.formData.value[formDataKey + 'Den'];
     return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
   };
 
-  disabledNgayPduyetTu = (startValue: Date): boolean => {
-    return this.isInvalidDateRange(startValue, this.formData.value.ngayPduyetDen, 'ngayPduyet');
+  disabledNgayKyHopDongTu = (startValue: Date): boolean => {
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayKyHopDongDen, 'ngayKyHopDong');
   };
 
-  disabledNgayPduyetDen = (endValue: Date): boolean => {
-    return this.isInvalidDateRange(endValue, this.formData.value.ngayPduyetTu, 'ngayPduyet');
+  disabledNgayKyHopDongDen = (endValue: Date): boolean => {
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayKyHopDongTu, 'ngayKyHopDong');
   };
 }

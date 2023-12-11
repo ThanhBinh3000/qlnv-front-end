@@ -145,7 +145,7 @@ export class SlGtriHangDtqgXcKhacComponent extends Base2Component implements OnI
     try {
       this.spinner.show();
       let body = this.formData.value;
-      body.idHdr = id;
+      body.id = id;
       body.typeFile = "xlsx";
       body.fileName = "bcbn_sl_gtri_hang_dtqg_xuat_cap_ct.jrxml";
       await this.bcBnTt108Service.ketXuat(body).then(async s => {

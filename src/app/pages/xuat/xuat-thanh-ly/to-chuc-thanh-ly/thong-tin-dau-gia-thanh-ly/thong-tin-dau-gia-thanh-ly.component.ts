@@ -33,10 +33,10 @@ export class ThongTinDauGiaThanhLyComponent extends Base3Component implements On
     this.defaultURL = '/xuat/xuat-thanh-ly/to-chuc/thong-tin-dau-gia'
     this.formData = this.fb.group({
       nam: null,
-      maSc: null,
-      maCc: null,
-      ngayTu: null,
-      ngayDen: null,
+      soHoSo: null,
+      soQd: null,
+      ngayKyTu: null,
+      ngayKyDen: null,
     })
     this.listTrangThai = [
       {

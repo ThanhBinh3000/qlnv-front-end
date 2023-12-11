@@ -1,13 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { BaseComponent } from 'src/app/components/base/base.component';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { STATUS } from 'src/app/constants/status';
@@ -16,15 +14,14 @@ import { QuanLyBangKeVatTuService } from 'src/app/services/qlnv-hang/nhap-hang/d
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
+import {Base2Component} from "../../../../../components/base2/base2.component";
 
 @Component({
   selector: 'app-bang-ke-nhap-vat-tu',
   templateUrl: './bang-ke-nhap-vat-tu.component.html',
   styleUrls: ['./bang-ke-nhap-vat-tu.component.scss']
 })
-export class BangKeNhapVatTuComponent extends BaseComponent implements OnInit {
+export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
 
   searchFilter = {
@@ -49,6 +46,7 @@ export class BangKeNhapVatTuComponent extends BaseComponent implements OnInit {
 
   isDetail: boolean = false;
   selectedId: number = 0;
+  idQdGiaoNvNh: number = 0;
   isView: boolean = false;
   isTatCa: boolean = false;
 
@@ -66,13 +64,16 @@ export class BangKeNhapVatTuComponent extends BaseComponent implements OnInit {
   };
 
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private quanLyBangKeVatTuService: QuanLyBangKeVatTuService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService
   ) {
-    super(httpClient, storageService, quanLyBangKeVatTuService);
+    super(httpClient, storageService, notification, spinner, modal, quanLyBangKeVatTuService);
     super.ngOnInit();
   }
 
@@ -146,27 +147,26 @@ export class BangKeNhapVatTuComponent extends BaseComponent implements OnInit {
   }
 
   convertDataTable() {
-    this.dataTable.forEach(item => {
+    for (let i = 0; i < this.dataTable.length; i++) {
       if (this.userService.isChiCuc()) {
-        item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+        this.dataTable[i].detail = this.dataTable[i].dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
       } else {
         let data = [];
-        item.dtlList.forEach(item => {
+        this.dataTable[i].dtlList.forEach(item => {
           data = [...data, ...item.children];
         })
-        item.detail = {
+        this.dataTable[i].detail = {
           children: data
         }
       };
-    });
-    this.dataTable.forEach(item => {
-      item.detail.children.forEach(ddNhap => {
-        ddNhap.listBangKeVt.forEach(x => {
-          x.phieuNhapKho = ddNhap.listPhieuNhapKho.filter(item => item.soPhieuNhapKho == x.soPhieuNhapKho)[0];
+      for (let j = 0; j < this.dataTable[i].detail.children.length; j++) {
+        this.dataTable[i].detail.children[j].listBangKeVt.forEach(x => {
+          x.phieuNhapKho = this.dataTable[i].detail.children[j].listPhieuNhapKho.filter(item => item.soPhieuNhapKho == x.soPhieuNhapKho)[0];
         });
-      })
-    });
-    console.log(this.dataTable);
+        this.expandSet2.add(j)
+      }
+      this.expandSet.add(i)
+    }
   }
 
 
@@ -296,6 +296,7 @@ export class BangKeNhapVatTuComponent extends BaseComponent implements OnInit {
 
   redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
     this.selectedId = id;
+    this.idQdGiaoNvNh = idQdGiaoNvNh;
     this.isDetail = true;
     this.isView = isView;
   }

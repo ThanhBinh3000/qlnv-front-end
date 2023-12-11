@@ -1,14 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
+import {Component, Input, OnInit} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
 import {
   QuyetDinhPdKhBdgService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import {DataService} from "../../../../../services/data.service";
+
 @Component({
   selector: 'app-quyet-dinh',
   templateUrl: './quyet-dinh.component.html',
@@ -17,6 +20,7 @@ import { StorageService } from 'src/app/services/storage.service';
 
 export class QuyetDinhComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   isView = false;
   idThop: number = 0;
   isViewThop: boolean = false;
@@ -30,6 +34,7 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private dataService: DataService,
     private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPdKhBdgService);
@@ -37,25 +42,24 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
       nam: null,
       soQdPd: null,
       trichYeu: null,
-      loaiVthh: null,
       ngayKyQdTu: null,
       ngayKyQdDen: null,
       soTrHdr: null,
-      lastest: null,
+      loaiVthh: null,
+      type: null,
     });
 
     this.filterTable = {
-      namKh: '',
-      soQdPd: '',
-      ngayKyQd: '',
-      trichYeu: '',
-      soTrHdr: '',
-      idThHdr: '',
-      tenLoaiVthh: '',
-      tenCloaiVthh: '',
-      soDviTsan: '',
-      slHdDaKy: '',
-      tenTrangThai: '',
+      nam: null,
+      soQdPd: null,
+      ngayKyQd: null,
+      trichYeu: null,
+      soTrHdr: null,
+      idThHdr: null,
+      tenLoaiVthh: null,
+      tenCloaiVthh: null,
+      soDviTsan: null,
+      tenTrangThai: null,
     };
 
     this.listTrangThai = [
@@ -73,28 +77,24 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([
-        this.timKiem(),
-        this.search(),
-      ]);
+      await this.dataService.currentData.subscribe(data => {
+        if (data && data.isQuyetDinh) {
+          this.redirectDetail(0, false);
+          this.dataInit = {...data};
+        }
+      });
+      await this.dataService.removeData();
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+        type: 'QDKH'
+      })
+      await this.search();
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
     }
-  }
-
-  timKiem() {
-    this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
-      lastest: 0,
-    })
-  }
-
-  async clearFilter() {
-    this.formData.reset();
-    await Promise.all([this.timKiem(), this.search()]);
   }
 
   redirectDetail(id, isView: boolean) {
@@ -136,4 +136,8 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
   disabledNgayKyQdDen = (endValue: Date): boolean => {
     return this.isInvalidDateRange(endValue, this.formData.value.ngayKyQdTu, 'ngayKyQd');
   };
+
+  removeDataInit() {
+    this.dataInit = {};
+  }
 }

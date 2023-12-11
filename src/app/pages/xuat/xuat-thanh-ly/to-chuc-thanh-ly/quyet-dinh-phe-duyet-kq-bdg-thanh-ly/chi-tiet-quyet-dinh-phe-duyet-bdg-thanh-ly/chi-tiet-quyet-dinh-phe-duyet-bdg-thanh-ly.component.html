@@ -184,7 +184,7 @@
               </nz-form-item>
               <nz-form-item>
                 <div class="list-file" nz-col>
-                  <file-list [isCanCuPL]="true" [data]="formData.value.canCu" [isViewDetail]=" isDisabled()">
+                  <file-list [isCanCuPL]="true" [data]="fileCanCu" [isViewDetail]=" isDisabled()">
                   </file-list>
                 </div>
               </nz-form-item>
@@ -196,7 +196,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error" nz-col>
                   <div class="list-file" nz-col>
-                    <file-list [data]="formData.value.fileDinhKem" [isViewDetail]=" isDisabled()">
+                    <file-list [data]="fileDinhKem" [isViewDetail]=" isDisabled()">
                     </file-list>
                   </div>
                 </nz-form-control>
@@ -254,17 +254,17 @@
                   <td></td>
                   <td></td>
                   <td>{{diemKho.xhTlDanhSachHdr.tenDiemKho}}</td>
-                  <td>{{diemKho.xhTlDanhSachHdr.tenNganKho}}{{diemKho.xhTlDanhSachHdr.tenLoKho}}</td>
+                  <td>{{diemKho.xhTlDanhSachHdr.tenNganKho}}-{{diemKho.xhTlDanhSachHdr.tenLoKho}}</td>
                   <td>{{diemKho.xhTlDanhSachHdr.tenCloaiVthh}}</td>
                   <td>{{diemKho.xhTlDanhSachHdr.maDviTsan}}</td>
                   <td>{{diemKho.xhTlDanhSachHdr.slDaDuyet|number:globals.numberFormat:globals.locale}}</td>
                   <td>{{diemKho.xhTlDanhSachHdr.donViTinh}}</td>
-                  <td>{{diemKho.xhTlDanhSachHdr.donGiaCaoNhat|number:globals.numberFormat:globals.locale}}</td>
-                  <td>{{diemKho.xhTlDanhSachHdr.giaKhoiDiem|number:globals.numberFormat:globals.locale}}</td>
-                  <td>{{diemKho.xhTlDanhSachHdr.soTienDatTruoc|number:globals.numberFormat:globals.locale}}</td>
+                  <td>{{diemKho.xhTlDanhSachHdr.donGiaPd|number:globals.numberFormat:globals.locale}}</td>
+                  <td>{{diemKho.xhTlDanhSachHdr.donGiaPd * diemKho.xhTlDanhSachHdr.slDaDuyet|number:globals.numberFormat:globals.locale}}</td>
+                  <td>{{diemKho.xhTlDanhSachHdr.donGiaPd * diemKho.xhTlDanhSachHdr.slDaDuyet|number:globals.numberFormat:globals.locale}}</td>
                   <td>{{diemKho.xhTlDanhSachHdr.soLanTraGia|number:globals.numberFormat:globals.locale}}</td>
                   <td>{{diemKho.xhTlDanhSachHdr.donGiaCaoNhat|number:globals.numberFormat:globals.locale}}</td>
-                  <td>{{diemKho.xhTlDanhSachHdr.thanhTien|number:globals.numberFormat:globals.locale}}</td>
+                  <td>{{diemKho.xhTlDanhSachHdr.slDaDuyet * diemKho.xhTlDanhSachHdr.donGiaPd | number:globals.numberFormat:globals.locale}}</td>
                   <td>{{diemKho.xhTlDanhSachHdr.toChucCaNhan}}</td>
                 </tr>
               </ng-container>

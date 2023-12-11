@@ -202,7 +202,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listSoQuyetDinh,
-        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
+        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng DTQG'],
         dataColumn: ['soQd', 'ngayQd', 'tenLoaiVthh'],
       },
     })
@@ -429,7 +429,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
       case STATUS.TU_CHOI_LDCC:
       case STATUS.DU_THAO: {
         trangThai = STATUS.CHO_DUYET_LDCC;
-        mess = 'Bạn có muối gửi duyệt ?'
+        mess = 'Bạn có muốn gửi duyệt ?'
         break;
       }
       case STATUS.CHO_DUYET_LDCC: {

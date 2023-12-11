@@ -4,7 +4,8 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="id > 0" type="button" class="btn btn-sub do" (click)="preview(previewName)">
+    <button *ngIf="id > 0"
+      type="button" class="btn btn-sub" (click)="xemTruoc(id,previewName)">
       <i class="icon htvbdh_tcdt_tuchoi"></i>
       <span>Xem trước</span>
     </button>
@@ -28,7 +29,7 @@
       <div class="title-chi-tieu">
         <span
           [ngClass]="formData.value.trangThai == STATUS.DA_HOAN_THANH ? 'status-xanh' : 'status-do' ">{{formData.value.tenTrangThai}}</span>
-        <span class="title-form">Phiếu nhập kho tạm gửi</span>
+        <span class="title-form">Phiếu tạm giao, nhận hàng chờ kết quả ktcl tại cơ quan chuyên môn</span>
       </div>
     </div>
   </div>
@@ -50,7 +51,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Năm kế hoạch</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-select formControlName="nam" [nzDisabled]="true">
+              <nz-select formControlName="nam" [nzDisabled]="isView">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
                 </nz-option>
               </nz-select>
@@ -75,7 +76,7 @@
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Số phiếu nhập kho</nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Số phiếu tạm giao, nhận hàng</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <input nz-input formControlName="soPhieuNhapKhoTamGui" [readonly]="true" />
             </nz-form-control>
@@ -83,7 +84,7 @@
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Ngày nhập kho</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Ngày lập phiếu</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayNhapKho" nzDisabled>
               </nz-date-picker>
@@ -190,7 +191,7 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <input nz-input formControlName="tenLoaiVthh" [readonly]="true" />
             </nz-form-control>
@@ -198,7 +199,7 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <input nz-input formControlName="tenCloaiVthh" [readonly]="true" />
             </nz-form-control>
@@ -282,7 +283,7 @@
         <thead>
           <tr>
             <th rowSpan="2" width="30px">STT (A)</th>
-            <th rowSpan="2">Tên, nhãn hiệu, quy cách phẩm chất hàng hóa (B)</th>
+            <th rowSpan="2">Tên, nhãn hiệu, quy cách phẩm chất hàng DTQG (B)</th>
             <th rowSpan="2">Mã số (C)</th>
             <th rowSpan="2">Đơn vị tính</th>
             <th colSpan="2">Số lượng</th>
@@ -352,7 +353,7 @@
               Chứng từ kèm theo
             </nz-form-label>
             <div class="list-file">
-              <file-list></file-list>
+              <file-list [data]="fileDinhKems" [disabled]="isView" [isViewDetail]="isView"></file-list>
             </div>
           </nz-form-item>
         </div>
@@ -369,7 +370,9 @@
 <ng-template #error let-control>
   <app-template-error #error [control]="control"></app-template-error>
 </ng-template>
-<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="PHIẾU NHẬP KHO TẠM GỬI" nzWidth="100%" (nzOnCancel)="closeDlg()">
+<nz-modal [(nzVisible)]="showDlgPreview" nzWidth="70%"
+          nzTitle="PHIẾU TẠM GIAO, NHẬN HÀNG CHỜ KẾT QUẢ KTCL TẠI CƠ QUAN CHUYÊN MÔN"
+          (nzOnCancel)="closeDlg()">
   <div *nzModalContent class="modal__content">
     <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
   </div>
@@ -378,11 +381,11 @@
       <i class="icon htvbdh_printer"></i>
       In
     </button>
-    <button nz-button (click)="downloadPdf(previewName)" class="modal__button--save">
+    <button nz-button (click)="downloadPdf(templateName)" class="modal__button--save">
       <i class="icon htvbdh_file-pdf"></i>
       Xuất .pdf
     </button>
-    <button nz-button (click)="downloadWord(previewName)" class="modal__button--save">
+    <button nz-button (click)="downloadWord(templateName)" class="modal__button--save">
       <i class="icon htvbdh_file-word"></i>
       Xuất .docx
     </button>

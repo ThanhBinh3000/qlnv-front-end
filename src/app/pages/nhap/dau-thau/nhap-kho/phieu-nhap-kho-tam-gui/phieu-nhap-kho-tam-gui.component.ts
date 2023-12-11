@@ -19,20 +19,22 @@ import { StorageService } from 'src/app/services/storage.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
+import {Base2Component} from "../../../../../components/base2/base2.component";
 @Component({
   selector: 'app-phieu-nhap-kho-tam-gui',
   templateUrl: './phieu-nhap-kho-tam-gui.component.html',
   styleUrls: ['./phieu-nhap-kho-tam-gui.component.scss']
 })
-export class PhieuNhapKhoTamGuiComponent extends BaseComponent implements OnInit {
+export class PhieuNhapKhoTamGuiComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
 
   qdTCDT: string = MESSAGE.QD_TCDT;
 
   searchFilter = {
+    namKh: '',
     soPhieu: '',
     soQuyetDinh: '',
-    ngayNhapKho: '',
+    // soBbGuiHang: ''
   };
 
   optionsDonVi: any[] = [];
@@ -51,11 +53,14 @@ export class PhieuNhapKhoTamGuiComponent extends BaseComponent implements OnInit
   userInfo: UserLogin;
   isDetail: boolean = false;
   selectedId: number = 0;
+  idQdGiaoNvNh: number = 0;
   isView: boolean = false;
   isTatCa: boolean = false;
 
   allChecked = false;
   indeterminate = false;
+  tuNgayNk: Date | null = null;
+  denNgayNk: Date | null = null;
 
   filterTable: any = {
     soPhieu: '',
@@ -68,13 +73,15 @@ export class PhieuNhapKhoTamGuiComponent extends BaseComponent implements OnInit
   };
 
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
+    httpClient: HttpClient,
+    spinner: NgxSpinnerService,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    modal: NzModalService,
     private phieuNhapKhoTamGuiService: PhieuNhapKhoTamGuiService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
   ) {
-    super(httpClient, storageService, quyetDinhGiaoNhapHangService);
-    super.ngOnInit();
+    super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNhapHangService);
   }
 
   async ngOnInit() {
@@ -112,6 +119,19 @@ export class PhieuNhapKhoTamGuiComponent extends BaseComponent implements OnInit
     }
   }
 
+  disabledTuNgayNk = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayNk) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayNk.getTime();
+  };
+
+  disabledDenNgayNk = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayNk) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayNk.getTime();
+  };
   updateSingleChecked(): void {
     if (this.dataTable.every(item => !item.checked)) {
       this.allChecked = false;
@@ -127,6 +147,11 @@ export class PhieuNhapKhoTamGuiComponent extends BaseComponent implements OnInit
   async search() {
     await this.spinner.show();
     let body = {
+      "ngayNhapKhoDen": this.denNgayNk != null ? dayjs(this.denNgayNk).format('YYYY-MM-DD') + " 24:59:59" : null,
+      "ngayNhapKhoTu": this.tuNgayNk != null ? dayjs(this.tuNgayNk).format('YYYY-MM-DD') + " 00:00:00" : null,
+      "soPhieu": this.searchFilter.soPhieu,
+      "soQdNhap": this.searchFilter.soQuyetDinh,
+      // "soBbGuiHang": this.searchFilter.soBbGuiHang,
       trangThai: this.STATUS.BAN_HANH,
       paggingReq: {
         "limit": this.pageSize,
@@ -147,19 +172,20 @@ export class PhieuNhapKhoTamGuiComponent extends BaseComponent implements OnInit
   }
 
   convertDataTable() {
-    this.dataTable.forEach(item => {
+    for (let i = 0; i < this.dataTable.length; i++) {
       if (this.userService.isChiCuc()) {
-        item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+        this.dataTable[i].detail = this.dataTable[i].dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
       } else {
         let data = [];
-        item.dtlList.forEach(item => {
+        this.dataTable[i].dtlList.forEach(item => {
           data = [...data, ...item.children];
         })
-        item.detail = {
+        this.dataTable[i].detail = {
           children: data
         }
       };
-    });
+      this.expandSet.add(i)
+    }
     // this.dataTable.forEach(item => {
     //   item.detail.children.forEach(ddNhap => {
     //     ddNhap.listPhieuNhapKho.forEach(x => {
@@ -167,7 +193,6 @@ export class PhieuNhapKhoTamGuiComponent extends BaseComponent implements OnInit
     //     });
     //   })
     // });
-    console.log(this.dataTable);
   }
 
   async changePageIndex(event) {
@@ -198,9 +223,10 @@ export class PhieuNhapKhoTamGuiComponent extends BaseComponent implements OnInit
 
   clearFilter() {
     this.searchFilter = {
+      namKh: '',
       soPhieu: '',
+      // soBbGuiHang: '',
       soQuyetDinh: '',
-      ngayNhapKho: '',
     };
     this.search();
   }
@@ -244,6 +270,7 @@ export class PhieuNhapKhoTamGuiComponent extends BaseComponent implements OnInit
 
   redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
     this.selectedId = id;
+    this.idQdGiaoNvNh = idQdGiaoNvNh;
     this.isDetail = true;
     this.isView = isView;
   }
@@ -260,12 +287,8 @@ export class PhieuNhapKhoTamGuiComponent extends BaseComponent implements OnInit
         let body = {
           "loaiVthh": this.loaiVthh,
           "maDvi": this.userInfo.MA_DVI,
-          "ngayNhapKhoDen": this.searchFilter.ngayNhapKho && this.searchFilter.ngayNhapKho.length > 1
-            ? dayjs(this.searchFilter.ngayNhapKho[1]).format('YYYY-MM-DD')
-            : null,
-          "ngayNhapKhoTu": this.searchFilter.ngayNhapKho && this.searchFilter.ngayNhapKho.length > 1
-            ? dayjs(this.searchFilter.ngayNhapKho[0]).format('YYYY-MM-DD')
-            : null,
+          "ngayNhapKhoDen": this.denNgayNk != null ? dayjs(this.denNgayNk).format('YYYY-MM-DD') + " 24:59:59" : null,
+          "ngayNhapKhoTu": this.tuNgayNk != null ? dayjs(this.tuNgayNk).format('YYYY-MM-DD') + " 00:00:00" : null,
           "orderBy": null,
           "orderDirection": null,
           "paggingReq": {
@@ -276,6 +299,7 @@ export class PhieuNhapKhoTamGuiComponent extends BaseComponent implements OnInit
           },
           "soPhieu": this.searchFilter.soPhieu,
           "soQdNhap": this.searchFilter.soQuyetDinh,
+          // "soBbGuiHang": this.searchFilter.soBbGuiHang,
           "str": null,
           "trangThai": null
         };

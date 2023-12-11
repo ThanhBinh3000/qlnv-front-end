@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { NzModalRef } from 'ng-zorro-antd/modal';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
@@ -10,6 +10,8 @@ import { DanhMucDungChungService } from '../../../services/danh-muc-dung-chung.s
 import { Router } from '@angular/router';
 import { QlNguoiSuDungService } from 'src/app/services/quantri-nguoidung/qlNguoiSuDung.service';
 import { DonviService } from 'src/app/services/donvi.service';
+import { DialogDoiMatKhauComponent } from '../dialog-doi-mat-khau/dialog-doi-mat-khau.component';
+import { CauHinhDangNhapService } from 'src/app/services/quantri-nguoidung/cau-hinh-dang-nhap';
 
 @Component({
   selector: 'dialog-thong-tin-can-bo',
@@ -19,6 +21,7 @@ import { DonviService } from 'src/app/services/donvi.service';
 export class DialogThongTinCanBoComponent implements OnInit {
   dataEdit: any;
   isView: boolean;
+  isOld: boolean;
   formData: FormGroup;
   totalRecord: number = 10;
   danhMucList: any[] = [];
@@ -36,6 +39,7 @@ export class DialogThongTinCanBoComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private _modalRef: NzModalRef,
+    private modal: NzModalService,
     private spinner: NgxSpinnerService,
     private dmService: DanhMucDungChungService,
     public globals: Globals,
@@ -43,6 +47,7 @@ export class DialogThongTinCanBoComponent implements OnInit {
     private notification: NzNotificationService,
     private qlNSDService: QlNguoiSuDungService,
     private donViService: DonviService,
+    private cauHinhDangNhapService: CauHinhDangNhapService,
   ) {
     this.formData = this.fb.group({
       id: [null],
@@ -98,7 +103,7 @@ export class DialogThongTinCanBoComponent implements OnInit {
           this.optionsDonVi.push(item);
           this.optionsPhongBan.push(item);
         }
-        this.optionsDonVi = this.optionsDonVi.filter(s => s.type != 'PB' || (s.type == 'PB' && s.capDvi == 3));
+        this.optionsDonVi = this.optionsDonVi.filter(s => s.type != 'MLK');
         this.optionsPhongBan = this.optionsPhongBan.filter(s => s.type == 'PB');
         // nếu dữ liệu detail có
         // if (this.dataEdit?.dvql && this.dataEdit?.department) {
@@ -279,5 +284,40 @@ export class DialogThongTinCanBoComponent implements OnInit {
       this.optionsPhongBanFilter = this.optionsPhongBan.filter(s => s.maDviCha == (this.formData.get('dvql').value.includes('-') ? this.formData.get('dvql').value.split('-')[0].trim() : this.formData.get('dvql').value));
     }
     this.suggestPhongBan = this.optionsPhongBanFilter;
+  }
+
+  async doiMK() {
+    let res = await this.cauHinhDangNhapService.chiTiet();
+    let data = {}
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data.length > 0) {
+        data = res.data[0]
+      }
+    }
+    let modal = this.modal.create({
+      nzTitle: 'ĐỔI MẬT KHẨU',
+      nzContent: DialogDoiMatKhauComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '500px',
+      nzFooter: null,
+      nzComponentParams: {
+        isOld: this.isOld,
+        username: this.formData.value.username,
+        pattern: data
+      },
+    });
+    modal.afterClose.subscribe(async (data) => {
+      if (data) {
+        console.log('doiMK', data)
+        let res = await this.qlNSDService.changePassword(data);
+        if (res.msg == MESSAGE.SUCCESS) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+        }
+      }
+
+    })
   }
 }

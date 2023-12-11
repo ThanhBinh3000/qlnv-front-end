@@ -29,6 +29,9 @@ export class BaoHiemComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (!this.userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.tabSelected = this.userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_DEXUATCC') ? 'dexuatbaohiemchicuc' : null
     this.currentUrl = window.location.href;
     this.$routerChange = this.router.events.subscribe((event) => {

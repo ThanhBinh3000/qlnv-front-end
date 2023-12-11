@@ -50,7 +50,7 @@
         <!--                    <span>Xóa</span>-->
         <!--                </button>-->
         <button type='button' class='btn btn-sub' (click)='exportData()'
-          *ngIf="userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_TDCAPPHI_EXP')">
+                *ngIf="userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_TDCAPPHI_EXP')">
           <i class='icon htvbdh_chuyen-xu-ly'></i>
           <span>Xuất file</span>
         </button>
@@ -63,106 +63,107 @@
     <div class='text-right mr-2' style='font-style: italic;'>Đơn vị:Đồng</div>
     <nz-card class='mt-2px flex-card data-table card-border-content table-card'>
       <nz-table #basicTable class='table__container-tt' [nzData]='dataTableTree' [nzFrontPagination]='false'
-        [nzShowPagination]='false' [nzScroll]="{ x: '1700px' }" nzBordered>
+                [nzShowPagination]='false'  [nzScroll]="{ x: '1700px' }" nzBordered>
         <thead>
-          <tr>
-            <th class="text-center" width="40px">STT</th>
-            <th class="text-center" width="40px"></th>
-            <th width="300px">Đơn vị</th>
-            <th width="200px">Năm kế hoạch</th>
-            <th width="200px">Số thông tri</th>
-            <th width="250px">Số lệnh chi tiền</th>
-            <th width="100px">Chương</th>
-            <th width="100px">Loại</th>
-            <th width="100px">Khoản</th>
-            <th width="150px">Số tiền</th>
-            <th width="200px">Đơn vị thụ hưởng</th>
-            <th width="200px">Trạng thái</th>
-            <th width="120px">Hành động</th>
-          </tr>
+        <tr>
+          <th class="text-center" width="40px">STT</th>
+          <th class="text-center" width="40px"></th>
+          <th width="300px">Đơn vị</th>
+          <th width="200px">Năm kế hoạch</th>
+          <th width="200px">Số thông tri</th>
+          <th width="250px">Số lệnh chi tiền</th>
+          <th width="100px">Chương</th>
+          <th width="100px">Loại</th>
+          <th width="100px">Khoản</th>
+          <th width="150px">Số tiền</th>
+          <th width="200px">Đơn vị thụ hưởng</th>
+          <th width="200px">Trạng thái</th>
+          <th width="120px">Hành động</th>
+        </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let item of basicTable.data, let i = index;">
-            <tr>
-              <td>{{i + 1}}</td>
-              <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
+        <ng-container *ngFor="let item of basicTable.data, let i = index;">
+          <tr>
+            <td>{{i + 1}}</td>
+            <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
-              <td class="bold">{{item.tenDviThongTri}}</td>
-              <td class="bold">{{item.nam}}</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <ng-container *ngIf="expandSetString.has(item.idVirtual) && expandSetString.has(item.idVirtual)">
-              <ng-container *ngFor="let lv1 of item.childData,let i2=index">
-                <tr>
-                  <td style="text-align: right;"></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td>{{lv1.soThongTri}}</td>
-                  <td>{{lv1.soLenhChiTien}}</td>
-                  <td>{{lv1.chuong}}</td>
-                  <td>{{lv1.loai}}</td>
-                  <td>{{lv1.khoan}}</td>
-                  <td>{{lv1.soTien | number:'1.0-1':'vi_VN'}}</td>
-                  <td>{{lv1.dviThuHuong}}</td>
-                  <td>{{lv1.tenTrangThai}}</td>
-                  <td>
-                    <a (click)="detail(lv1, true)" *ngIf="lv1.trangThai !== STATUS.DANG_THUC_HIEN">
-                      <i class="fa fa-eye" title="Xem chi tiết"></i>
-                    </a>
-                    <a *ngIf="(lv1.trangThai==STATUS.DANG_THUC_HIEN) && userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_TDCAPPHI_SUA')"
-                      (click)="detail(lv1, false)">
-                      <i class="fa fa-pencil" title="Sửa"></i>
-                    </a>
-                    <a *ngIf="lv1.trangThai== STATUS.DANG_THUC_HIEN" (click)="xoaItem(lv1.id)">
-                      <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                    </a>
-                  </td>
-                </tr>
-              </ng-container>
+            <td class="bold">{{item.tenDviThongTri}}</td>
+            <td class="bold">{{item.nam}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <ng-container *ngIf="expandSetString.has(item.idVirtual) && expandSetString.has(item.idVirtual)">
+            <ng-container *ngFor="let lv1 of item.childData,let i2=index">
+              <tr>
+                <td style="text-align: right;"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{lv1.soThongTri}}</td>
+                <td>{{lv1.soLenhChiTien}}</td>
+                <td>{{lv1.chuong}}</td>
+                <td>{{lv1.loai}}</td>
+                <td>{{lv1.khoan}}</td>
+                <td>{{lv1.soTien | number:'1.0-1':'vi_VN'}}</td>
+                <td>{{lv1.dviThuHuong}}</td>
+                <td>{{lv1.tenTrangThai}}</td>
+                <td>
+                  <a (click)="detail(lv1, true)" *ngIf="lv1.trangThai !== STATUS.DANG_THUC_HIEN">
+                    <i class="fa fa-eye" title="Xem chi tiết"></i>
+                  </a>
+                  <a
+                    *ngIf="(lv1.trangThai==STATUS.DANG_THUC_HIEN) && userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_TDCAPPHI_SUA')"
+                    (click)="detail(lv1, false)">
+                    <i class="fa fa-pencil" title="Sửa"></i>
+                  </a>
+<!--                  <a *ngIf="lv1.trangThai== STATUS.DANG_THUC_HIEN" (click)="xoaItem(lv1.id)">-->
+<!--                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
+<!--                  </a>-->
+                </td>
+              </tr>
             </ng-container>
           </ng-container>
+        </ng-container>
 
-          <!--        <tr *ngFor='let data of basicTable.data; let i = index'>-->
-          <!--          <th width='45px'>-->
-          <!--            <label nz-checkbox [(ngModel)]='data.checked' (ngModelChange)='updateSingleChecked()'-->
-          <!--                   [nzDisabled]='data.trangThai != globals.prop.NHAP_DU_THAO'></label>-->
-          <!--          </th>-->
-          <!--          <td class='text-center'>{{(page - 1) * pageSize + i + 1}}</td>-->
-          <!--          <td>{{ data.soThongTri }}</td>-->
-          <!--          <td>{{ data.tenDviDuocDuyet }}</td>-->
-          <!--          <td>{{ data.soLenhChiTien }}</td>-->
-          <!--          <td>{{ data.chuong }}</td>-->
-          <!--          <td>{{ data.loai }}</td>-->
-          <!--          <td>{{ data.khoan }}</td>-->
-          <!--          <td>{{ data.lyDoChi }}</td>-->
-          <!--          <td>{{ data.soTien }}</td>-->
-          <!--          <td>{{ data.dviThuHuong }}</td>-->
-          <!--          <td>{{ data.tenTrangThai }}</td>-->
-          <!--          <td class='text-left'>-->
-          <!--            <a (click)='detail(data, true)'>-->
-          <!--              <i class='fa fa-eye' title='Xem chi tiết'></i>-->
-          <!--            </a>-->
-          <!--            <a-->
-          <!--              *ngIf="(data.trangThai==globals.prop.NHAP_DU_THAO) && userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_TDCAPPHI_SUA')"-->
-          <!--              (click)='detail(data, false)'>-->
-          <!--              <i class='fa fa-pencil' title='Sửa'></i>-->
-          <!--            </a>-->
-          <!--            <a-->
-          <!--              *ngIf="data.trangThai==globals.prop.NHAP_DU_THAO && userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_TDCAPPHI_XEM')"-->
-          <!--              (click)='xoaItem(data.id)'>-->
-          <!--              <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>-->
-          <!--            </a>-->
-          <!--          </td>-->
-          <!--        </tr>-->
+<!--        <tr *ngFor='let data of basicTable.data; let i = index'>-->
+<!--          <th width='45px'>-->
+<!--            <label nz-checkbox [(ngModel)]='data.checked' (ngModelChange)='updateSingleChecked()'-->
+<!--                   [nzDisabled]='data.trangThai != globals.prop.NHAP_DU_THAO'></label>-->
+<!--          </th>-->
+<!--          <td class='text-center'>{{(page - 1) * pageSize + i + 1}}</td>-->
+<!--          <td>{{ data.soThongTri }}</td>-->
+<!--          <td>{{ data.tenDviDuocDuyet }}</td>-->
+<!--          <td>{{ data.soLenhChiTien }}</td>-->
+<!--          <td>{{ data.chuong }}</td>-->
+<!--          <td>{{ data.loai }}</td>-->
+<!--          <td>{{ data.khoan }}</td>-->
+<!--          <td>{{ data.lyDoChi }}</td>-->
+<!--          <td>{{ data.soTien }}</td>-->
+<!--          <td>{{ data.dviThuHuong }}</td>-->
+<!--          <td>{{ data.tenTrangThai }}</td>-->
+<!--          <td class='text-left'>-->
+<!--            <a (click)='detail(data, true)'>-->
+<!--              <i class='fa fa-eye' title='Xem chi tiết'></i>-->
+<!--            </a>-->
+<!--            <a-->
+<!--              *ngIf="(data.trangThai==globals.prop.NHAP_DU_THAO) && userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_TDCAPPHI_SUA')"-->
+<!--              (click)='detail(data, false)'>-->
+<!--              <i class='fa fa-pencil' title='Sửa'></i>-->
+<!--            </a>-->
+<!--            <a-->
+<!--              *ngIf="data.trangThai==globals.prop.NHAP_DU_THAO && userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_TDCAPPHI_XEM')"-->
+<!--              (click)='xoaItem(data.id)'>-->
+<!--              <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>-->
+<!--            </a>-->
+<!--          </td>-->
+<!--        </tr>-->
         </tbody>
       </nz-table>
       <div class='tab-content tab-menu' id='myTabContent'>
@@ -171,9 +172,9 @@
           </div>
           <div class='canphai'>
             <!-- begin phân trang  -->
-            <nz-pagination class='pagination-card' [nzPageIndex]='page' [nzTotal]='totalRecord' nzShowSizeChanger
-              [nzPageSize]='pageSize' [nzShowTotal]='rangeTemplate' (nzPageIndexChange)='changePageIndex($event)'
-              (nzPageSizeChange)='changePageSize($event)'>
+            <nz-pagination class='pagination-card' [nzPageIndex]='page' [nzTotal]='totalRecord'
+                           nzShowSizeChanger [nzPageSize]='pageSize' [nzShowTotal]='rangeTemplate'
+                           (nzPageIndexChange)='changePageIndex($event)' (nzPageSizeChange)='changePageSize($event)'>
               <ng-template #rangeTemplate let-range='range' let-total>
                 {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
               </ng-template>

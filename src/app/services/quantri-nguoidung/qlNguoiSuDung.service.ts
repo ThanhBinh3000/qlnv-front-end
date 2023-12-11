@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {environment} from 'src/environments/environment';
-import {BaseService} from '../base.service';
-import {OldResponseData} from 'src/app/interfaces/response';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+import { BaseService } from '../base.service';
+import { OldResponseData } from 'src/app/interfaces/response';
 
 
 @Injectable({
@@ -54,6 +54,11 @@ export class QlNguoiSuDungService extends BaseService {
 
   xoaquyen(body: any) {
     const url = `${environment.SERVICE_API}${this.gateway}/user/xoa-quyen`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
+  changePassword(body: any) {
+    const url = `${environment.SERVICE_API}${this.gateway}/user/changePassword`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
 

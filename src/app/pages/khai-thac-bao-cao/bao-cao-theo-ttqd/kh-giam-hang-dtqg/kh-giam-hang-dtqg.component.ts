@@ -49,6 +49,7 @@ export class KhGiamHangDtqgComponent extends Base2Component implements OnInit {
     this.formData = this.fb.group(
       {
         nam: [dayjs().get("year"), [Validators.required]],
+        namKh:[,[Validators.required]],
         maCuc: null,
         maChiCuc: null,
         loaiVthh: null,
@@ -66,7 +67,7 @@ export class KhGiamHangDtqgComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     await this.spinner.show();
     try {
-      for (let i = -3; i < 23; i++) {
+      for (let i = 0; i < 23; i++) {
         this.listNam.push({
           value: dayjs().get("year") - i,
           text: dayjs().get("year") - i
@@ -95,6 +96,10 @@ export class KhGiamHangDtqgComponent extends Base2Component implements OnInit {
   async preView() {
     try {
       this.spinner.show();
+      this.helperService.markFormGroupTouched(this.formData);
+      if (this.formData.invalid) {
+        return;
+      }
       if (this.formData.value.thoiGianSx) {
         this.formData.value.thoiGianSxTu = dayjs(this.formData.value.thoiGianSx[0]).format("YYYY-MM-DD");
         this.formData.value.thoiGianSxDen = dayjs(this.formData.value.thoiGianSx[1]).format("YYYY-MM-DD");
@@ -204,5 +209,11 @@ export class KhGiamHangDtqgComponent extends Base2Component implements OnInit {
 
   deleteRow(index: number) {
     this.rows.splice(index, 1)
+  }
+  clearFilter() {
+    this.formData.patchValue({
+      nam: null,
+      namKh:null,
+    })
   }
 }

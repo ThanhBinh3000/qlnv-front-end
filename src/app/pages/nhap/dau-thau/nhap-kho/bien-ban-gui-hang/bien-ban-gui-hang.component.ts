@@ -16,12 +16,13 @@ import { StorageService } from 'src/app/services/storage.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
+import {Base2Component} from "../../../../../components/base2/base2.component";
 @Component({
   selector: 'app-bien-ban-gui-hang',
   templateUrl: './bien-ban-gui-hang.component.html',
   styleUrls: ['./bien-ban-gui-hang.component.scss']
 })
-export class BienBanGuiHangComponent extends BaseComponent implements OnInit {
+export class BienBanGuiHangComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
 
   qdTCDT: string = MESSAGE.QD_TCDT;
@@ -50,6 +51,7 @@ export class BienBanGuiHangComponent extends BaseComponent implements OnInit {
   userInfo: UserLogin;
   isDetail: boolean = false;
   selectedId: number = 0;
+  idQdGiaoNvNh: number = 0;
   isView: boolean = false;
   isTatCa: boolean = false;
 
@@ -68,12 +70,15 @@ export class BienBanGuiHangComponent extends BaseComponent implements OnInit {
 
 
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private bienBanGuiHangService: BienBanGuiHangService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService
   ) {
-    super(httpClient, storageService, bienBanGuiHangService);
+    super(httpClient, storageService, notification, spinner, modal, bienBanGuiHangService);
     super.ngOnInit();
   }
   tuNgayNk: Date | null = null;
@@ -164,19 +169,20 @@ export class BienBanGuiHangComponent extends BaseComponent implements OnInit {
   }
 
   convertDataTable() {
-    this.dataTable.forEach(item => {
+    for (let i = 0; i < this.dataTable.length; i++) {
       if (this.userService.isChiCuc()) {
-        item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+        this.dataTable[i].detail = this.dataTable[i].dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
       } else {
         let data = [];
-        item.dtlList.forEach(item => {
+        this.dataTable[i].dtlList.forEach(item => {
           data = [...data, ...item.children];
         })
-        item.detail = {
+        this.dataTable[i].detail = {
           children: data
         }
       };
-    });
+      this.expandSet.add(i)
+    }
   }
 
   async changePageIndex(event) {
@@ -255,6 +261,7 @@ export class BienBanGuiHangComponent extends BaseComponent implements OnInit {
 
   redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
     this.selectedId = id;
+    this.idQdGiaoNvNh = idQdGiaoNvNh;
     this.isDetail = true;
     this.isView = isView;
   }

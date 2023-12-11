@@ -1,105 +1,279 @@
 <div class="bg-trang">
-    <nz-card class="mt16 flex-card p-lr16">
-        <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
-            <div nz-row [nzGutter]="20">
-                <div nz-col nzSpan="18">
-                    <nz-form-control>
-                        <nz-form-label>Đơn vị thực hiện</nz-form-label>
-                        <nz-form-item>
-                            <input nz-input formControlName="donViThien" />
-                        </nz-form-item>
-                    </nz-form-control>
-                </div>
-                <div nz-col nzSpan="3">
-                    <nz-form-control>
-                        <nz-form-label>Ngày chốt</nz-form-label>
-                        <nz-form-item>
-                            <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayDen" nzPlaceHolder="Ngày chốt">
-                            </nz-date-picker>
-                        </nz-form-item>
-                    </nz-form-control>
-                </div>
-                <div nz-col nzSpan="3">
-                    <nz-form-control>
-                        <nz-form-label>Ngày hiệu lực</nz-form-label>
-                        <nz-form-item>
-                            <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayTu"
-                                nzPlaceHolder="Ngày hiệu lực">
-                            </nz-date-picker>
-                        </nz-form-item>
-                    </nz-form-control>
-                </div>
-            </div>
-        </form>
-        <div nz-col class="cangiua group-button-search pt-16">
-            <div>
-                <button nz-button class="search__button--clear" (click)="clearForm()">
-                    <i class="icon  htvbdh_nhap-lai1"></i>
-                    Xóa điều kiện
-                </button>
-                <button nz-button class="search__button--search" (click)="searchPage()">
-                    <i nz-icon nzType="search"></i>
-                    Tìm kiếm
-                </button>
-            </div>
+  <nz-card class="mt16 flex-card p-lr16">
+    <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
+      <div nz-row [nzGutter]="18">
+        <div nz-col nzSpan="2">
+          <nz-form-item class="form-item">
+            <nz-form-label [nzNoColon]="true" nzRequired>
+              Năm kế hoạch
+            </nz-form-label>
+            <nz-select formControlName="nam">
+              <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"
+                         [nzDisabled]="true"></nz-option>
+            </nz-select>
+          </nz-form-item>
         </div>
-    </nz-card>
-    <div class="group-button">
-        <h3 class="text-uppercase">Danh sách bảng kê nhập vật tư sau khi hoàn thành sửa chữa</h3>
-        <div class="buttons">
-            <button type="button" class="btn btn-sub" (click)="exportData()">
-                <i class="icon htvbdh_chuyen-xu-ly"></i>
-                <span>Xuất file</span>
-            </button>
-            <button type="button" class="btn btn-main" *ngIf="this.userService.isChiCuc()" (click)="redirectCreate()">
-                <i class="icon htvbdh_dau-cong"></i>
-                <span>Thêm</span>
-            </button>
+        <div nz-col nzSpan="3">
+          <nz-form-item class="form-item">
+            <nz-form-label [nzNoColon]="true">
+              Tài khoản thực hiện chốt
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <input nz-input formControlName="tenNguoiTao" [readonly]="true"/>
+            </nz-form-control>
+          </nz-form-item>
         </div>
+        <div nz-col nzSpan="8">
+          <nz-form-item class="form-item">
+            <nz-form-label [nzNoColon]="true">
+              Đơn vị ra quyết định
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <input nz-input formControlName="tenDvi" [readonly]="true"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="3">
+          <nz-form-item class="form-item">
+            <nz-form-label [nzNoColon]="true">
+              Mã đơn vị
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <input nz-input formControlName="tenVietTat" [readonly]="true"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-control>
+            <nz-form-label>Thời gian chốt từ ngày</nz-form-label>
+            <nz-form-item>
+              <nz-date-picker nzShowTime nzFormat="HH:mm:ss dd/MM/yyyy" [nzDisabled]="true" formControlName="ngayTu"
+                              nzPlaceHolder="Ngày chốt từ ngày">
+              </nz-date-picker>
+            </nz-form-item>
+          </nz-form-control>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-control>
+            <nz-form-label>Thời gian chốt đến ngày</nz-form-label>
+            <nz-form-item>
+              <nz-date-picker nzShowTime nzFormat="HH:mm:ss dd/MM/yyyy"
+                              formControlName="ngayDen" nzPlaceHolder="Ngày chốt đến ngày" (ngModelChange)="getData()">
+              </nz-date-picker>
+            </nz-form-item>
+          </nz-form-control>
+        </div>
+      </div>
+    </form>
+    <div nz-col class="cangiua group-button-search pt-16">
+      <div>
+        <button nz-button class="search__button--clear" (click)="clearForm()">
+          <i class="icon  htvbdh_nhap-lai1"></i>
+          Hủy bỏ
+        </button>
+        <button nz-button class="search__button--search" (click)="save()">
+          <i class="icon htvbdh_tcdt_save"></i>
+          Chốt
+        </button>
+      </div>
     </div>
-    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-        <nz-table class="nowrap" [nzData]="dataTable" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
-            <thead>
+  </nz-card>
+  <div class="group-button">
+    <h3 class="text-uppercase">Chi tiết danh sách kết chuyển cuối năm</h3>
+    <div class="buttons">
+    </div>
+  </div>
+  <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+    <nz-table class="nowrap" [nzData]="dataTable" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
+      <thead>
+      <tr>
+        <th nzWidth="30px">STT</th>
+        <th nzWidth="90px">Năm</th>
+        <th nzWidth="200px" class="wrap">Chi cục DTNN</th>
+        <th nzWidth="30px">Mã đơn vị</th>
+        <th nzWidth="80px">Tài khoản thực hiện chốt</th>
+        <th nzWidth="200px">Thời gian chốt</th>
+        <th nzWidth="50px">Tên hàng DTQG</th>
+        <th nzWidth="50px">Chủng loại DTQG</th>
+        <th nzWidth="50px">Nước sản xuất</th>
+        <th nzWidth="50px">Đơn vị tính</th>
+        <th nzWidth="50px" class="wrap">Số lượng tồn kho theo sổ sách</th>
+        <th nzWidth="50px" class="wrap">Số lượng tồn kho thực tế</th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let nam of dataSaved.childrenGroup , let i = index">
+        <tr>
+          <td></td>
+          <td nzShowExpand="true" [nzExpand]="nam.expandSet"
+              (nzExpandChange)="onExpandChange(nam, $event)">{{nam.nam}}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <ng-container *ngIf="nam.expandSet">
+          <ng-container *ngFor="let chiCuc of nam.children , let i = index">
+            <tr>
+              <td></td>
+              <td></td>
+              <td nzShowExpand="true" [nzExpand]="chiCuc.expandSet"
+                  (nzExpandChange)="onExpandChange(chiCuc, $event)" class="wrap">{{chiCuc.tenChiCuc}}</td>
+              <td></td>
+              <td>{{dataSaved.tenNguoiTao}}</td>
+              <td>{{dataSaved.ngayTu | date: 'dd/MM/YYYY HH:mm:ss'}}
+                - {{dataSaved.ngayDen | date: 'dd/MM/YYYY HH:mm:ss'}}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <ng-container *ngIf="chiCuc.expandSet">
+              <ng-container *ngFor="let cloaiVthh of chiCuc.children , let i = index">
                 <tr>
-                    <th nzWidth="30px">STT</th>
-                    <th nzWidth="80px"> Mã đơn vị</th>
-                    <th nzWidth="200px">Tên đơn vị</th>
-                    <th nzWidth="50px">Tên hàng DTQG</th>
-                    <th nzWidth="50px">Chủng loại DTQG</th>
-                    <th nzWidth="50px">Nước sản xuất</th>
-                    <th nzWidth="50px">Đơn vị tính</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td nzShowExpand="true" [nzExpand]="chiCuc.expandSet"
+                      (nzExpandChange)="onExpandChange(chiCuc, $event)"
+                      class="wrap">{{cloaiVthh.tenLoaiVthh}}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                 </tr>
-            </thead>
-            <tbody>
-                <ng-container *ngFor="let item of dataTable , let i = index">
+                <ng-container *ngIf="cloaiVthh.expandSet">
+                  <ng-container *ngFor="let loaiVthh of cloaiVthh.children , let i = index">
                     <tr>
-                        <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td>{{(loaiVthh.tenCloaiVthh == 'null' || loaiVthh.tenCloaiVthh == null) ? cloaiVthh.tenLoaiVthh : loaiVthh.tenCloaiVthh}}</td>
+                      <td>Việt Nam</td>
+                      <td>{{loaiVthh.tenDonViTinh}}</td>
+                      <td>{{loaiVthh.slTonKhoSoSach | number : '1.0-1' : 'vi_VN'}}</td>
+                      <td>{{loaiVthh.slTonKhoThucTe | number : '1.0-1' : 'vi_VN'}}</td>
+                  </ng-container>
                 </ng-container>
-            </tbody>
-        </nz-table>
-        <div class="tab-content tab-menu" id="myTabContent">
-            <div class="tab-pane fade show active justify-content-between">
-                <div class="trai">
-                </div>
-                <div class="canphai">
-                    <!-- begin phân trang  -->
-                    <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord"
-                        nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
-                        (nzPageIndexChange)="changePageIndex($event)" (nzPageSizeChange)="changePageSize($event)">
-                        <ng-template #rangeTemplate let-range="range" let-total>
-                            {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
-                        </ng-template>
-                    </nz-pagination>
-                    <!-- end phân trang -->
-                </div>
-            </div>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngFor="let nam of dataTableAll , let i = index">
+        <tr>
+          <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
+          <td nzShowExpand="true" [nzExpand]="nam.expandSet"
+              (nzExpandChange)="onExpandChange(nam, $event)">{{nam.nam}}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <ng-container *ngIf="nam.expandSet">
+          <ng-container *ngFor="let chiCuc of nam.children , let i = index">
+            <tr>
+              <td></td>
+              <td></td>
+              <td nzShowExpand="true" [nzExpand]="chiCuc.expandSet"
+                  (nzExpandChange)="onExpandChange(chiCuc, $event)" class="wrap">{{chiCuc.tenChiCuc}}</td>
+              <td></td>
+              <td>{{chiCuc.tenNguoiTao}}</td>
+              <td>{{chiCuc.ngayTu }}
+                - {{chiCuc.ngayDen }}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <ng-container *ngIf="chiCuc.expandSet">
+              <ng-container *ngFor="let cloaiVthh of chiCuc.childrenGroup , let i = index">
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td nzShowExpand="true" [nzExpand]="chiCuc.expandSet"
+                      (nzExpandChange)="onExpandChange(chiCuc, $event)"
+                      class="wrap">{{cloaiVthh.tenLoaiVthh}}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <ng-container *ngIf="cloaiVthh.expandSet">
+                  <ng-container *ngFor="let loaiVthh of cloaiVthh.children , let i = index">
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td>{{(loaiVthh.tenCloaiVthh == 'null' || loaiVthh.tenCloaiVthh == null) ? cloaiVthh.tenLoaiVthh : loaiVthh.tenCloaiVthh}}</td>
+                      <td>Việt Nam</td>
+                      <td>{{loaiVthh.tenDonViTinh}}</td>
+                      <td>{{loaiVthh.slTonKhoSoSach | number : '1.0-1' : 'vi_VN'}}</td>
+                      <td>{{loaiVthh.slTonKhoThucTe | number : '1.0-1' : 'vi_VN'}}</td>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+      </tbody>
+    </nz-table>
+    <div class="tab-content tab-menu" id="myTabContent">
+      <div class="tab-pane fade show active justify-content-between">
+        <div class="trai">
         </div>
-    </nz-card>
+        <div class="canphai">
+          <!-- begin phân trang  -->
+          <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord"
+                         nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+                         (nzPageIndexChange)="changePageIndex($event)" (nzPageSizeChange)="changePageSize($event)">
+            <ng-template #rangeTemplate let-range="range" let-total>
+              {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
+            </ng-template>
+          </nz-pagination>
+          <!-- end phân trang -->
+        </div>
+      </div>
+    </div>
+  </nz-card>
+
 </div>
+
+<ng-template #error let-control>
+  <app-template-error #error [control]="control"></app-template-error>
+</ng-template>

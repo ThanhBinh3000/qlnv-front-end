@@ -130,29 +130,11 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
       s.idVirtual = uuidv4();
       this.expandSetString.add(s.idVirtual);
     });
-    console.log(this.dataTable, "789")
-    this.buildTableView();
   }
-
-  buildTableView() {
-    // let dataView = chain(this.dataTable)
-    //   .groupBy("soQdGiaoNvXh")
-    //   .map((value, key) => {
-    //     let quyetDinh = value.find(f => f.soQdGiaoNvXh === key)
-    //     let nam = quyetDinh.nam;
-    //     let idQdGiaoNvXh = quyetDinh.idQdGiaoNvXh;
-    //     let ngayQdGiaoNvXh = quyetDinh.ngayQdGiaoNvXh;
-    //     return {
-    //       idVirtual: uuid.v4(),
-    //       soQdGiaoNvXh: key != "null" ? key : '',
-    //       idQdGiaoNvXh: idQdGiaoNvXh,
-    //       nam: nam,
-    //       ngayQdGiaoNvXh: ngayQdGiaoNvXh,
-    //       childData: value };
-    //   }).value();
-    // this.children = dataView
-    // this.expandAll()
-
+  showList() {
+    this.isDetail = false;
+    this.timKiem();
+    this.showListEvent.emit();
   }
 
   expandAll() {

@@ -1,17 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { chain, cloneDeep } from 'lodash';
-import { NzSelectSizeType } from "ng-zorro-antd/select";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {chain, cloneDeep} from 'lodash';
+import {NzSelectSizeType} from "ng-zorro-antd/select";
 import dayjs from "dayjs";
-import { Validators } from "@angular/forms";
-import { isArray } from "rxjs/internal-compatibility";
-import { Base2Component } from "../../../../../../../components/base2/base2.component";
-import { CHUC_NANG, STATUS } from "../../../../../../../constants/status";
-import { StorageService } from "../../../../../../../services/storage.service";
-import { MESSAGE } from "../../../../../../../constants/message";
+import {Validators} from "@angular/forms";
+import {isArray} from "rxjs/internal-compatibility";
+import {Base2Component} from "../../../../../../../components/base2/base2.component";
+import {CHUC_NANG, STATUS} from "../../../../../../../constants/status";
+import {StorageService} from "../../../../../../../services/storage.service";
+import {MESSAGE} from "../../../../../../../constants/message";
 import {
   BaoCaoKdmVtTbTrongThoiGianBaoHanh
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/BaoCaoKdmVtTbTrongThoiGianBaoHanh.service";
@@ -25,8 +25,8 @@ import * as uuid from "uuid";
 import {
   PhieuKtclVtTbTrongThoiGianBaoHanhService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/PhieuKtclVtTbTrongThoiGianBaoHanh.service";
-import { DonviService } from "../../../../../../../services/donvi.service";
-import { FileDinhKem } from "../../../../../../../models/FileDinhKem";
+import {DonviService} from "../../../../../../../services/donvi.service";
+import {FileDinhKem} from "../../../../../../../models/FileDinhKem";
 
 @Component({
   selector: 'app-thong-tin-bao-cao-ket-qua-kiem-dinh-vt-tb',
@@ -54,14 +54,16 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
   itemSelected: any;
   dataTableChiTieu: any[] = [];
   LIST_DANH_GIA: any[] = [
-    { value: 0, label: "Không đạt" },
-    { value: 1, label: "Đạt" }
+    {value: 0, label: "Không đạt"},
+    {value: 1, label: "Đạt"}
   ]
   dataPhieuKncl: any;
   maBc: string;
   isViewModel: boolean = false;
   listPhieuKtcl: any;
   dviNhan: any;
+  templateName = "19.Báo cáo KQ kiểm định mẫu_trong thời gian BH theo HĐ_sau LM";
+  templateNameBh = "20.Báo cáo KQ kiểm định mẫu_trong thời gian BH theo HĐ_sau BH";
 
   constructor(
     httpClient: HttpClient,
@@ -92,7 +94,8 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
       soCanCu: [null, [Validators.required]],
       idCanCu: [null, [Validators.required]],
       ngayBaoCao: [null, [Validators.required]],
-      baoCaoDtl: [new Array()],
+      phieuKtcl: [new Array()],
+      qdGiaonvXn: [new Array()],
       fileDinhKems: [new Array<FileDinhKem>()],
     })
   }
@@ -101,7 +104,9 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
     try {
       this.spinner.show();
       this.maBc = "/" + this.userInfo.MA_QD
-      await Promise.all([])
+      await Promise.all([
+        this.loadDviNhan(this.userInfo?.DON_VI?.maDviCha)
+      ])
       await this.loadDetail(this.idInput)
       this.spinner.hide();
     } catch (e) {
@@ -117,7 +122,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
       await this.baoCaoKdmVtTbTrongThoiGianBaoHanh.getDetail(idInput)
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            await this.loadDviNhan(res.data.maDviNhan);
+            // await this.loadDviNhan(res.data.maDviNhan);
             this.formData.patchValue({
               ...res.data,
               id: res.data.id,
@@ -125,16 +130,20 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
               soCanCu: res.data?.soCanCu ? res.data.soCanCu.split(",") : [],
               tenDviNhan: this.dviNhan.title,
             });
-            this.dataTable = this.formData.value.baoCaoDtl.map(m => {
-              return m.qdGiaonvXhDtl
-                .filter(i => i.mauBiHuy == true)
-                .map(dtl => ({
-                  ...dtl,
-                  soQuyetDinh: m.soQuyetDinh,
-                  soLanLm: m.soLanLm,
-                  tenTrangThaiXh: m.tenTrangThaiXh
-                }));
-            }).flat();
+            if (res.data.loaiCanCu == "PHIEU_KTCL") {
+              this.dataTable = this.formData.value.phieuKtcl
+            }else {
+              this.dataTable = this.formData.value.qdGiaonvXn.map(m => {
+                return m.qdGiaonvXhDtl
+                  .filter(i => i.mauBiHuy == true)
+                  .map(dtl => ({
+                    ...dtl,
+                    soQuyetDinh: m.soQuyetDinh,
+                    soLanLm: m.soLanLm,
+                    tenTrangThaiXh: m.tenTrangThaiXh
+                  }));
+              }).flat();
+            }
             this.fileDinhKems = this.formData.value.fileDinhKems;
             this.buildTableView(this.dataTable)
           }
@@ -145,19 +154,19 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     } else {
-      let maDviNhan = this.userInfo?.DON_VI?.maDviCha;
-      await this.loadDviNhan(maDviNhan);
+      // let maDviNhan = this.userInfo?.DON_VI?.maDviCha;
+      // await this.loadDviNhan(maDviNhan);
       this.formData.patchValue({
         maDvi: this.userInfo.MA_DVI,
         tenDvi: this.userInfo.TEN_DVI,
-        maDviNhan,
+        maDviNhan: this.userInfo?.DON_VI?.maDviCha,
         tenDviNhan: this.dviNhan.title,
       });
     }
   }
 
   async loadDviNhan(event) {
-    let res = await this.donviService.getDonVi({ str: event });
+    let res = await this.donviService.getDonVi({str: event});
     if (res.msg == MESSAGE.SUCCESS) {
       this.dviNhan = res.data;
     }
@@ -201,7 +210,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
       case STATUS.TU_CHOI_LDC:
       case STATUS.DU_THAO: {
         trangThai = STATUS.CHO_DUYET_TP;
-        msg = 'Bạn có muối gửi duyệt ?'
+        msg = 'Bạn có muốn gửi duyệt ?'
         break;
       }
       case STATUS.CHO_DUYET_TP: {
@@ -330,10 +339,11 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
         this.listPhieuKtcl = cloneDeep(data)
         this.listPhieuKtcl = this.listPhieuKtcl.filter(f => f.checked);
         this.dataTable = this.listPhieuKtcl;
+        console.log(this.dataTable,'this.dataTable')
         this.formData.patchValue({
           soCanCu: this.listPhieuKtcl.map(m => m.soPhieu),
           idCanCu: this.listPhieuKtcl.map(m => m.id),
-          baoCaoDtl: this.dataTable,
+          phieuKtcl: this.dataTable,
         });
         this.buildTableView(this.dataTable);
 
@@ -342,13 +352,13 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
         this.listSoQuyetDinh = this.listSoQuyetDinh.filter(f => f.checked);
         this.dataTable = this.listSoQuyetDinh.map(m => {
           return m.qdGiaonvXhDtl
-            .map(dtl => ({ ...dtl, soQuyetDinh: m.soQuyetDinh, soLanLm: m.soLanLm, trangThaiXh: m.trangThaiXh }));
+            .map(dtl => ({...dtl, soQuyetDinh: m.soQuyetDinh, soLanLm: m.soLanLm, trangThaiXh: m.trangThaiXh}));
         }).flat();
 
         this.formData.patchValue({
           soCanCu: this.listSoQuyetDinh.map(m => m.soQuyetDinh),
           idCanCu: this.listSoQuyetDinh.map(m => m.id),
-          baoCaoDtl: this.dataTable,
+          qdGiaonvXn: this.dataTable,
         });
         this.buildTableView(this.dataTable);
       }
@@ -357,20 +367,37 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
   }
 
   buildTableView(data) {
-    let dataView = chain(data)
-      .groupBy("soQuyetDinh")
-      .map((value, key) => {
-        let parent = value.find(f => f.soQuyetDinh === key); // Sửa thành "soQuyetDinh"
-        let rs = chain(value)
-        return {
-          idVirtual: uuid.v4(),
-          soQuyetDinh: key != "null" ? key : '',
-          soLanLm: parent ? parent.soLanLm : null,
-          tenTrangThaiXh: parent ? parent.tenTrangThaiXh : null,
-          childData: value
-        };
-      }).value();
-    this.children = dataView;
+    if (this.formData.value.loaiCanCu == "PHIEU_KTCL") {
+      let dataView = chain(data)
+        .groupBy("soPhieu")
+        .map((value, key) => {
+          let parent = value.find(f => f.soPhieu === key);
+          let rs = chain(value)
+          return {
+            idVirtual: uuid.v4(),
+            soPhieu: key != "null" ? key : '',
+            tenChiCuc: parent ? parent.tenChiCuc : null,
+            tenTrangThaiXh: parent ? parent.tenTrangThaiXh : null,
+            childData: value
+          };
+        }).value();
+      this.children = dataView;
+    }else {
+      let dataView = chain(data)
+        .groupBy("soQuyetDinh")
+        .map((value, key) => {
+          let parent = value.find(f => f.soQuyetDinh === key);
+          let rs = chain(value)
+          return {
+            idVirtual: uuid.v4(),
+            soQuyetDinh: key != "null" ? key : '',
+            soLanLm: parent ? parent.soLanLm : null,
+            tenTrangThaiXh: parent ? parent.tenTrangThaiXh : null,
+            childData: value
+          };
+        }).value();
+      this.children = dataView;
+    }
     this.expandAll();
   }
 

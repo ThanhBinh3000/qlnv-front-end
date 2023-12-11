@@ -91,7 +91,7 @@
               <th class="text-center" *ngIf="!isVatTu">Số BB nhập đầy kho</th>
               <th class="text-center" *ngIf="!isVatTu">Ngày nhập đầy kho</th>
               <th class="text-center">Trạng thái</th>
-              <th class="text-center" *ngIf="isChiCuc()">Hành động</th>
+              <th class="text-center">Hành động</th>
             </tr>
           </thead>
           <tbody>
@@ -111,7 +111,7 @@
                 <td *ngIf="!isVatTu"></td>
                 <td *ngIf="!isVatTu"></td>
                 <td></td>
-                <td *ngIf="isChiCuc()"></td>
+                <td></td>
               </tr>
               <ng-container *ngIf="row1.expand">
                 <ng-container *ngFor="let row2 of row1.children, let y = index">
@@ -129,7 +129,7 @@
                     <td *ngIf="!isVatTu"></td>
                     <td *ngIf="!isVatTu"></td>
                     <td></td>
-                    <td *ngIf="isChiCuc()"></td>
+                    <td></td>
                   </tr>
                   <ng-container>
                     <ng-container *ngFor="let row3 of row2.children, let y = index">
@@ -170,6 +170,11 @@
                           </a>
                           <a *ngIf="row3.trangThai == STATUS.DU_THAO" (click)="xoa(row3)">
                             <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                          </a>
+                        </td>
+                        <td *ngIf="isCuc()">
+                          <a (click)="redirectDetail(row3.id, true)">
+                            <i class="fa fa-eye" title="Xem chi tiết"></i>
                           </a>
                         </td>
                       </tr>

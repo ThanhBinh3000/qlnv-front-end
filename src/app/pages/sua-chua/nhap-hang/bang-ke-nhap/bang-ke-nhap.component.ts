@@ -28,6 +28,7 @@ export class BangKeNhapComponent extends Base3Component implements OnInit {
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, bangKeNhapScService);
     this.defaultURL = 'sua-chua/nhap-hang/bang-ke-nhap'
+    this.defaultPermisson = 'SCHDTQG_NH_BKNVT'
     this.formData = this.fb.group({
       nam: null,
       soQdNh: null,

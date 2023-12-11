@@ -25,7 +25,7 @@ import {
 import {
   DialogThemMoiGoiThauComponent
 } from "../../../../../../components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component";
-import { CurrencyMaskInputMode } from "ngx-currency";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
   selector: "app-themmoi-kehoach-lcnt-vt",
@@ -296,7 +296,7 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
     }
     this.listQuy = [];
     for (const element of quarters) {
-      this.listQuy.push({ giaTri: "Quý " + element + "/" + this.formData.get("namKhoach").value, ma: element })
+      this.listQuy.push({ giaTri: "Quý " + element + "/" + this.formData.get("namKhoach").value, ma: element})
     }
   }
   disabledDate = (current: Date): boolean => {
@@ -475,7 +475,7 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
         return;
       }
       this.listOfData.forEach(item => {
-        if (item.donGiaVat == null) {
+        if (item.donGiaVat == null ) {
           this.notification.error(
             MESSAGE.ERROR,
             "Cần phải yêu cầu Vụ Kế hoạch phê duyệt giá cụ thể mua vật tư, thiết bị cho " + item.tenCloaiVthh + "!"
@@ -501,7 +501,6 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
     this.formData.controls["tgianThien"].setValidators([Validators.required]);
     this.formData.controls["hthucLcnt"].setValidators([Validators.required]);
     this.formData.controls["pthucLcnt"].setValidators([Validators.required]);
-    this.formData.controls["tgianBdauTchuc"].setValidators([Validators.required]);
     this.formData.controls["loaiHdong"].setValidators([Validators.required]);
     this.formData.controls["tgianThienHd"].setValidators([Validators.required]);
     this.formData.controls["quy"].setValidators([Validators.required]);
@@ -527,7 +526,7 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
       await this.modal.confirm({
         nzClosable: false,
         nzTitle: "Xác nhận",
-        nzContent: "Tổng mức đầu tư cao hơn Tổng dự toán các gói thầu, bạn vẫn muốn lưu ?",
+        nzContent: "Tổng giá trị gói thầu cao hơn Tổng mức đầu tư/dự toán. Bạn có muốn lưu không?",
         nzOkText: "Đồng ý",
         nzCancelText: "Không",
         nzOkDanger: true,

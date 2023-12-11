@@ -45,7 +45,7 @@ export class ThemMoiTongChiMuaHangComponent extends Base2Component implements On
   itemRowNgoaiNguonEdit: any[] = [];
   listNguonVon: any[] = [];
   ghiChu: string = "Dấu “x” tại các hàng trong biểu là nội dung không phải tổng hợp, báo cáo.";
-
+  templateName: any
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -74,6 +74,7 @@ export class ThemMoiTongChiMuaHangComponent extends Base2Component implements On
         tenTrangThai: ['Dự thảo'],
       }
     );
+    this.templateName = 'template_bcbn_tinh_chi_cho_mua_hang_dtqg.xlsx'
   }
 
   async ngOnInit() {
@@ -296,5 +297,13 @@ export class ThemMoiTongChiMuaHangComponent extends Base2Component implements On
   }
   deleteRowNgoaiNguon(index:number){
     this.dataNguonNgoaiNsnn.splice(index, 1)
+  }
+
+  async handleSelectFile(event: any){
+    await this.onFileSelected(event);
+    if(this.dataImport.length > 0){
+      this.dataNguonNsnn = this.dataImport.filter(obj => obj.loaiNguon === 1);
+      this.dataNguonNgoaiNsnn = this.dataImport.filter(obj => obj.loaiNguon === 2);
+    }
   }
 }

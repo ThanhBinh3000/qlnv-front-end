@@ -1,17 +1,19 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NzModalRef, NzModalService } from "ng-zorro-antd/modal";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { Globals } from "../../../shared/globals";
-import { MangLuoiKhoService } from "../../../services/qlnv-kho/mangLuoiKho.service";
-import { NgxSpinnerService } from "ngx-spinner";
-import { HelperService } from "../../../services/helper.service";
-import { MESSAGE } from "../../../constants/message";
-import { DanhMucService } from "../../../services/danhmuc.service";
-import { API_STATUS_CODE } from "../../../constants/config";
+import {Component, Input, OnInit} from '@angular/core';
+import {NzModalRef, NzModalService} from "ng-zorro-antd/modal";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Globals} from "../../../shared/globals";
+import {MangLuoiKhoService} from "../../../services/qlnv-kho/mangLuoiKho.service";
+import {NgxSpinnerService} from "ngx-spinner";
+import {HelperService} from "../../../services/helper.service";
+import {MESSAGE} from "../../../constants/message";
+import {DanhMucService} from "../../../services/danhmuc.service";
+import {API_STATUS_CODE} from "../../../constants/config";
 import * as dayjs from "dayjs";
-import { OldResponseData } from "../../../interfaces/response";
-import { TrangThaiHoatDong } from "../../../constants/status";
+import {OldResponseData} from "../../../interfaces/response";
+import {TrangThaiHoatDong} from "../../../constants/status";
+import moment from "moment";
+import {Utils} from "src/app/Utility/utils";
 
 @Component({
   selector: 'app-dialog-them-moi-so-du-dau-ky',
@@ -53,13 +55,12 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
       cloaiVthh: [''],
       slTon: ['', Validators.required],
       dviTinh: [''],
-      thanhTien: [0],
+      thanhTien: [0, [Validators.required, Validators.min(1)]],
       isKhoiTao: [true]
     })
   }
 
   async ngOnInit() {
-    console.log(this.loaiHang, 11)
     this.loadDsNam();
     await this.getAllLoaiVthh();
     await this.getDetail();
@@ -120,6 +121,7 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
     body.slTon = this.formData.value.slTon
     body.dviTinh = this.formData.value.dviTinh
     body.namNhap = this.formData.value.namNhap
+    body.ngayNhapDay = this.formData.value.ngayNhapDay
     body.trangThai = body.trangThai == true ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG
     this.khoService.updateKho(type, body).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {

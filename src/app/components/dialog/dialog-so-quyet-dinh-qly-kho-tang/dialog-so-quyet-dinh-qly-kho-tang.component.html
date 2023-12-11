@@ -1,30 +1,30 @@
 <nz-card class="mt16 flex-card p-lr16 mb16 table-card scroll-modal">
   <nz-table nzBordered #basicTable [nzData]="dsQdGoc" [nzFrontPagination]="false" [nzShowPagination]="false">
     <thead>
-      <tr>
-        <th nzWidth="45px">STT</th>
-        <th nzWidth="120px">Số quyết định gốc</th>
-        <th nzWidth="120px">Ngày ký</th>
-        <th nzWidth="120px">Năm bắt đầu</th>
-        <th nzWidth="120px">Năm kết thúc</th>
-        <th>Trích yếu</th>
-        <th nzWidth="120px" class=" text-center">Chọn</th>
-      </tr>
+    <tr>
+      <th nzWidth="45px">STT</th>
+      <th nzWidth="120px">Số quyết định gốc</th>
+      <th nzWidth="120px">Ngày ký</th>
+      <th nzWidth="120px">Năm bắt đầu</th>
+      <th nzWidth="120px">Năm kết thúc</th>
+      <th>Trích yếu</th>
+      <th nzWidth="120px" class=" text-center">Chọn</th>
+    </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let data of basicTable.data; let i = index">
-        <td class="text-center">{{i+1}}</td>
-        <td>{{ data.soQuyetDinh}}</td>
-        <td>{{ data.ngayKy | date : 'dd/MM/yyyy'}}</td>
-        <td>{{ data.namBatDau}}</td>
-        <td>{{ data.namKetThuc}}</td>
-        <td>{{ data.trichYeu}}</td>
-        <td class="text-center">
-          <a (click)="handleOk(data)">
-            <i class="icon htvbdh_dau-cong"></i>
-          </a>
-        </td>
-      </tr>
+    <tr *ngFor="let data of basicTable.data; let i = index">
+      <td class="text-center">{{i+1}}</td>
+      <td  >{{ data.soQuyetDinh}}</td>
+      <td  >{{ data.ngayKy | date : 'dd/MM/yyyy'}}</td>
+      <td  >{{ data.namBatDau}}</td>
+      <td  >{{ data.namKetThuc}}</td>
+      <td  >{{ data.trichYeu}}</td>
+      <td  class="text-center">
+        <a (click)="handleOk(data)">
+          <i class="icon htvbdh_dau-cong"></i>
+        </a>
+      </td>
+    </tr>
     </tbody>
   </nz-table>
 </nz-card>

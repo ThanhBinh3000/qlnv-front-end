@@ -24,8 +24,8 @@ import {Router} from "@angular/router";
 export class DeXuatPhuongAnGiaComponent implements OnInit {
   @Input() type: string;
   @Input() pagType: string;
-  @Output()
-  getCount = new EventEmitter<any>();
+  @Output() getCount = new EventEmitter<any>();
+  @Output() redirectToTongHop = new EventEmitter<any>();
   isAddNew = false;
   isViewModal: boolean = false;
   formData: FormGroup;
@@ -489,6 +489,10 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
   closeDxPaModal() {
     this.idSelected = null;
     this.isViewModal = false;
+  }
+
+  redirectToTongHopEmit() {
+    this.redirectToTongHop.emit();
   }
 }
 

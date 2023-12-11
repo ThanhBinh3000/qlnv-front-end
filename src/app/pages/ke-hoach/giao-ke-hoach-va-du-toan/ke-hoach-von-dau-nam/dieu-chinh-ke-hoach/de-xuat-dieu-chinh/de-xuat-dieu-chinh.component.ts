@@ -45,8 +45,8 @@ export class DeXuatDieuChinhComponent extends Base2Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, deXuatDieuChinhCTKHService);
     this.formData = this.fb.group({
       namKeHoach: [],
-      soDeXuat: [],
       tenDonVi: [],
+      soDeXuat: [],
       ngayKyTu: [],
       ngayKyDen: [],
       trichYeu: [],
@@ -54,14 +54,15 @@ export class DeXuatDieuChinhComponent extends Base2Component implements OnInit {
       cap: [],
     })
     this.filterTable = {
-      nam: '',
-      soQdinh: '',
-      ngayKyQdinh: '',
-      tenLoaiDc: '',
-      tenLoaiQdinh: '',
+      namKeHoach: '',
+      soDeXuat: '',
+      tenDonVi: '',
+      ngayKy: '',
       trichYeu: '',
-      soDxuat: '',
+      soQuyetDinhGiaoCuaTc: '',
+      // tenTrangThaiDX: '',
       tenTrangThai: '',
+      soQuyetDinh: '',
     };
   }
 
@@ -92,21 +93,21 @@ export class DeXuatDieuChinhComponent extends Base2Component implements OnInit {
     this.userInfo = this.userService.getUserLogin();
   }
 
-  disabledStartNgayQD = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayKyDen) {
-      return startValue.getTime() > this.formData.value.ngayKyDen.getTime();
-    } else {
-      return false;
-    }
-  };
+  // disabledStartNgayQD = (startValue: Date): boolean => {
+  //   if (startValue && this.formData.value.ngayKyDen) {
+  //     return startValue.getTime() > this.formData.value.ngayKyDen.getTime();
+  //   } else {
+  //     return false;
+  //   }
+  // };
 
-  disabledEndNgayQD = (endValue: Date): boolean => {
-    if (endValue && this.formData.value.ngayKyTu) {
-      return endValue.getTime() < this.formData.value.ngayKyTu.getTime();
-    } else {
-      return false;
-    }
-  };
+  // disabledEndNgayQD = (endValue: Date): boolean => {
+  //   if (endValue && this.formData.value.ngayKyTu) {
+  //     return endValue.getTime() < this.formData.value.ngayKyTu.getTime();
+  //   } else {
+  //     return false;
+  //   }
+  // };
 
   isShowDS() {
     if (this.isChiCuc()) return true
@@ -219,22 +220,19 @@ export class DeXuatDieuChinhComponent extends Base2Component implements OnInit {
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
-
+        if (this.formData.value.ngayKyTu) {
+          this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayDuyetTcTu).format('YYYY-MM-DD')
+        }
+        if (this.formData.value.ngayKyDen) {
+          this.formData.value.ngayKyDen = dayjs(this.formData.value.ngayKyDen).format('YYYY-MM-DD')
+        }
         let body = this.formData.value;
-        debugger
-        if (this.formData.value.ngayDuyetTc) {
-          body.ngayDuyetTcTu = body.ngayDuyetTc[0];
-          body.ngayDuyetTcDen = body.ngayDuyetTc[1];
-        }
-        if (this.formData.value.ngayHieuLuc) {
-          body.ngayHieuLucTu = body.ngayHieuLuc[0];
-          body.ngayHieuLucDen = body.ngayHieuLuc[1];
-        }
-        // this.deXuatDieuChinhCTKHService
-        //   .export(body)
-        //   .subscribe((blob) =>
-        //     saveAs(blob, 'quyet-dinh-dieu-chuyen-cuc.xlsx'),
-        //   );
+
+        this.deXuatDieuChinhCTKHService
+          .exportlist(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'de-xuat-dieu-chinh-chi-tieu-kh.xlsx'),
+          );
         this.spinner.hide();
       } catch (e) {
         console.log('error: ', e);

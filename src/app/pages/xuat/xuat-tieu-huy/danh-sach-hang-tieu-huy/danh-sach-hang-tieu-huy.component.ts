@@ -1,25 +1,31 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Base2Component } from "../../../../components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { DonviService } from "src/app/services/donvi.service";
-import { CHUC_NANG } from 'src/app/constants/status';
-import { MESSAGE } from "src/app/constants/message";
-import { chain, isEmpty } from "lodash";
-import { DanhMucService } from "src/app/services/danhmuc.service";
-import { v4 as uuidv4 } from "uuid";
-import { XuatTieuHuyComponent } from "../xuat-tieu-huy.component";
-import { DanhSachTieuHuyService } from "../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/DanhSachTieuHuy.service";
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Base2Component} from "../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {DonviService} from "src/app/services/donvi.service";
+import {CHUC_NANG} from 'src/app/constants/status';
+import {MESSAGE} from "src/app/constants/message";
+import {chain, isEmpty} from "lodash";
+import {DanhMucService} from "src/app/services/danhmuc.service";
+import {v4 as uuidv4} from "uuid";
+import {XuatTieuHuyComponent} from "../xuat-tieu-huy.component";
+import {DanhSachTieuHuyService} from "../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/DanhSachTieuHuy.service";
+import {Base3Component} from "../../../../components/base3/base3.component";
+import {ActivatedRoute, Router} from "@angular/router";
+import {
+  ChiTietDanhSachSuaChuaComponent
+} from "../../../sua-chua/danh-sach-sua-chua/chi-tiet-danh-sach-sua-chua/chi-tiet-danh-sach-sua-chua.component";
+import {ChiTietDsThComponent} from "./chi-tiet-ds-th/chi-tiet-ds-th.component";
 
 @Component({
   selector: 'app-danh-sach-hang-tieu-huy',
   templateUrl: './danh-sach-hang-tieu-huy.component.html',
   styleUrls: ['./danh-sach-hang-tieu-huy.component.scss']
 })
-export class DanhSachHangTieuHuyComponent extends Base2Component implements OnInit {
+export class DanhSachHangTieuHuyComponent extends Base3Component implements OnInit {
   CHUC_NANG = CHUC_NANG;
   dsDonvi: any[] = [];
   dsLoaiVthh: any[] = [];
@@ -31,15 +37,17 @@ export class DanhSachHangTieuHuyComponent extends Base2Component implements OnIn
   public vldTrangThai: XuatTieuHuyComponent;
 
   constructor(httpClient: HttpClient,
-    storageService: StorageService,
-    notification: NzNotificationService,
-    spinner: NgxSpinnerService,
-    modal: NzModalService,
-    private donviService: DonviService,
-    private danhMucService: DanhMucService,
-    private danhSachTieuHuyService: DanhSachTieuHuyService,
-    private XuatTieuHuyComponent: XuatTieuHuyComponent) {
-    super(httpClient, storageService, notification, spinner, modal, danhSachTieuHuyService);
+              storageService: StorageService,
+              notification: NzNotificationService,
+              spinner: NgxSpinnerService,
+              modal: NzModalService,
+              route: ActivatedRoute,
+              router: Router,
+              private donviService: DonviService,
+              private danhMucService: DanhMucService,
+              private danhSachTieuHuyService: DanhSachTieuHuyService,
+              private XuatTieuHuyComponent: XuatTieuHuyComponent) {
+    super(httpClient, storageService, notification, spinner, modal,route,router, danhSachTieuHuyService);
     this.vldTrangThai = XuatTieuHuyComponent;
     this.formData = this.fb.group({
       id: [],
@@ -73,6 +81,7 @@ export class DanhSachHangTieuHuyComponent extends Base2Component implements OnIn
       tenNhaKho: [],
       tenNganKho: [],
       tenLoKho: [],
+      maDviSr : []
     })
   }
 
@@ -146,16 +155,24 @@ export class DanhSachHangTieuHuyComponent extends Base2Component implements OnIn
   }
 
   async loadDsVthh() {
-    let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
+    let res = await this.danhMucService.getAllVthhByCap("2");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.dsLoaiVthh = res.data?.filter((x) => (x.ma.length == 2 && !x.ma.match("^01.*")) || (x.ma.length == 4 && x.ma.match("^01.*")));
+      if (res.data) {
+        this.dsLoaiVthh = res.data
+      }
     }
   }
 
   async changeHangHoa(event: any) {
-    this.formData.patchValue({ cloaiVthh: null })
     if (event) {
-      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
+      this.formData.patchValue({
+        tenHH: null
+      })
+      let body = {
+        "str": event
+      };
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
+      this.dsCloaiVthh = [];
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.dsCloaiVthh = res.data;
@@ -173,17 +190,17 @@ export class DanhSachHangTieuHuyComponent extends Base2Component implements OnIn
         let rs = chain(value)
           .groupBy("tenChiCuc")
           .map((v, k) => {
-            let rowItem = v.find(s => s.tenChiCuc === k);
-            let idVirtual = uuidv4();
-            this.expandSetString.add(idVirtual);
-            return {
-              idVirtual: idVirtual,
-              tenChiCuc: k,
-              maDiaDiem: rowItem.maDiaDiem,
-              tenCloaiVthh: rowItem.tenCloaiVthh,
-              childData: v
+              let rowItem = v.find(s => s.tenChiCuc === k);
+              let idVirtual = uuidv4();
+              this.expandSetString.add(idVirtual);
+              return {
+                idVirtual: idVirtual,
+                tenChiCuc: k,
+                maDiaDiem: rowItem.maDiaDiem,
+                tenCloaiVthh: rowItem.tenCloaiVthh,
+                childData: v
+              }
             }
-          }
           ).value();
         let rowItem = value.find(s => s.tenCuc === key);
         let idVirtual = uuidv4();
@@ -211,5 +228,22 @@ export class DanhSachHangTieuHuyComponent extends Base2Component implements OnIn
   openTongHop() {
     this.tongHop = !this.tongHop;
     this.emitTab(1);
+  }
+
+  showDetail(data) {
+    if (data) {
+      const modalGT = this.modal.create({
+        nzContent: ChiTietDsThComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          data: data
+        },
+      });
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.ACCESS_DENIED);
+    }
   }
 }

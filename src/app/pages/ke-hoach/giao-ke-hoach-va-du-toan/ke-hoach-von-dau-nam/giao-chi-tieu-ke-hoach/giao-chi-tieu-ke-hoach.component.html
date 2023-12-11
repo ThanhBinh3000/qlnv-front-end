@@ -1,6 +1,6 @@
 <nz-affix [nzOffsetTop]="98" class="level2">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected
+    <li nz-menu-item nzSelected *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_PA')"
         (click)="selectTab('PA')">
       Phương án giao chỉ tiêu kế hoạch
     </li>

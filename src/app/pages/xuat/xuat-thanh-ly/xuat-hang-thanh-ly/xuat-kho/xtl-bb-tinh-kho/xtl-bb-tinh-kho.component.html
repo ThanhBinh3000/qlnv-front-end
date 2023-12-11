@@ -65,12 +65,12 @@
   <div class="group-button">
     <h3 class="text-uppercase">Danh sách biên bản tịnh kho</h3>
     <div class="buttons">
-      <button type="button" class="btn btn-sub" (click)="exportData('SCHDTQG_KTCL_EXP')">
+      <button type="button" class="btn btn-sub" (click)="exportData()">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
       <button type="button" class="btn btn-main" *ngIf="this.userService.isChiCuc()"
-              (click)="redirectCreate('SCHDTQG_KTCL_THEM')">
+              (click)="redirectCreate()">
         <i class="icon htvbdh_dau-cong"></i>
         <span>Thêm</span>
       </button>
@@ -105,7 +105,7 @@
           <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
           <td>{{item.soBbQd}}</td>
           <td>{{item.nam}}</td>
-          <td>{{item.thoiHanXuat | date : 'dd/MM/yyyy' }}</td>
+          <td>{{item.thoiGianGiaoNhan | date : 'dd/MM/yyyy' }}</td>
           <td></td>
           <td></td>
           <td></td>
@@ -138,15 +138,15 @@
               <td>{{bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.tenTrangThai}}</td>
               <td>
                 <ng-container *ngIf="bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr">
-                  <a (click)="redirectDetail(bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.id,'SCHDTQG_KTCL_XEM')">
+                  <a (click)="redirectDetail(bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.id)">
                     <span class="icon htvbdh_eye"></span>
                   </a>
-                  <a *ngIf="this.userService.isCuc() && bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.trangThai == STATUS.DU_THAO"
-                     (click)="redirectDetail(bbTk.xhTlDanhSachHdr?.xlTlTinhKhoHdr?.id,'SCHDTQG_KTCL_THEM')">
+                  <a *ngIf="this.userService.isChiCuc() && bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.trangThai == STATUS.DU_THAO"
+                     (click)="redirectDetail(bbTk.xhTlDanhSachHdr?.xlTlTinhKhoHdr?.id)">
                     <span class="fa fa-pencil"></span>
                   </a>
-                  <a *ngIf="this.userService.isCuc() && bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.trangThai == STATUS.DU_THAO"
-                     (click)="delete(bbTk.xhTlDanhSachHdr?.xlTlTinhKhoHdr,'SCHDTQG_KTCL_XOA')">
+                  <a *ngIf="this.userService.isChiCuc() && bbTk.xhTlDanhSachHdr?.xhTlTinhKhoHdr?.trangThai == STATUS.DU_THAO"
+                     (click)="delete(bbTk.xhTlDanhSachHdr?.xlTlTinhKhoHdr)">
                     <i class="fa fa-trash-o do"></i>
                   </a>
                 </ng-container>

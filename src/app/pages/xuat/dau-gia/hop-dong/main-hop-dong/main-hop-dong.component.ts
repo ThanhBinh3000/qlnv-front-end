@@ -1,4 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {UserService} from 'src/app/services/user.service';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-main-hop-dong',
@@ -6,11 +8,14 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class MainHopDongComponent implements OnInit {
   @Input() loaiVthh: string;
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
 
-  constructor() { }
+  constructor(
+    public userService: UserService
+  ) {
+  }
 
-  ngOnInit(): void {
-
+  ngOnInit() {
   }
 
   tabSelected: number = 0;
@@ -18,5 +23,4 @@ export class MainHopDongComponent implements OnInit {
   selectTab(tab: number) {
     this.tabSelected = tab;
   }
-
 }

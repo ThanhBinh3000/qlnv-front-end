@@ -24,6 +24,7 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
   selectedId: number = 0;
   isView: boolean = false;
   STATUS = STATUS
+  dataDdiem: number;
   idQdGiaoNvNh: number;
   searchFilter = {
     soQd: '',
@@ -157,10 +158,11 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
     }
   }
 
-  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
+  redirectToChiTiet(isView: boolean, id: number, dataDdiem?: any, idQdGiaoNvNh?: number) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
+    this.dataDdiem = dataDdiem
     this.idQdGiaoNvNh = idQdGiaoNvNh
   }
 
@@ -182,7 +184,7 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
                 MESSAGE.SUCCESS,
                 MESSAGE.DELETE_SUCCESS,
               );
-              this.search();
+              this.timKiem();
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
             }

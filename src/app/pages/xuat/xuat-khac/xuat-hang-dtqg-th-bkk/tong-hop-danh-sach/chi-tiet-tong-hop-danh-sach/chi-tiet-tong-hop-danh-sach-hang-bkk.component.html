@@ -62,10 +62,10 @@
         <div nz-col nzSpan="8"><b>Thời gian tổng hợp</b></div>
         <div nz-col nzSpan="16"><span>{{selectedItem.ngayTao|date:globals.dateFormat}}</span></div>
       </div>
-      <div nz-row nzSpan="24" class="mg-t-16 flex-card p-lr16">
-        <div nz-col nzSpan="8"><b>File đính kèm biên bản lấy mẫu/bàn giao đã ký</b></div>
-        <div nz-col nzSpan="16"><span>{{selectedItem.fileDinhKems}}</span></div>
-      </div>
+<!--      <div nz-row nzSpan="24" class="mg-t-16 flex-card p-lr16">-->
+<!--        <div nz-col nzSpan="8"><b>File đính kèm biên bản lấy mẫu/bàn giao đã ký</b></div>-->
+<!--        <div nz-col nzSpan="16"><span>{{selectedItem.fileDinhKems}}</span></div>-->
+<!--      </div>-->
       <div nz-row nzSpan="24" class="mg-t-16 flex-card p-lr16">
         <div nz-col nzSpan="8"></div>
         <div nz-col nzSpan="16"><span style="color: blue">
@@ -133,8 +133,8 @@
                   <td>{{lv1.tenDiemKho}}</td>
                   <td>{{lv1.tenLoKho ? lv1.tenLoKho : lv1.tenNganKho}}</td>
                   <td>{{lv1.ngayNhapKho|date:globals.dateFormat}}</td>
-                  <td>{{lv1.slHetHan|number:globals.numberFormat}}</td>
-                  <td>{{lv1.slTonKho|number:globals.numberFormat}}</td>
+                  <td>{{lv1.slHetHan|number:globals.numberFormat:globals.locale}}</td>
+                  <td>{{lv1.slTonKho|number:globals.numberFormat:globals.locale}}</td>
                   <td>{{lv1.donViTinh}}</td>
                   <td>{{lv1.ngayDeXuat|date:globals.dateFormat}}</td>
                   <td>{{lv1.lyDo}}</td>

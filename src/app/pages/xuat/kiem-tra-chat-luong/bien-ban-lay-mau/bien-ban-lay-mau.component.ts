@@ -22,6 +22,8 @@ export class BienBanLayMauComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: any;
   @Input() inputService: any;
   @Input() inputServiceGnv: any;
+  @Input() loaiChon: string;
+  @Input() maQuyen: MA_QUYEN_BBLM = { XEM: '', THEM: '', XOA: '', EXPORT: '', IN: '', DUYET_LDCC: '' };
   inputData: any;
   expandSetString = new Set<string>();
   isView: any = false;
@@ -90,7 +92,6 @@ export class BienBanLayMauComponent extends Base2Component implements OnInit {
   }
 
   buildTableView() {
-    console.log(this.dataTable);
     this.tableDataView = chain(this.dataTable)
       .groupBy("soQdGnv")
       .map((value, key) => {
@@ -119,7 +120,6 @@ export class BienBanLayMauComponent extends Base2Component implements OnInit {
           childData: rs
         };
       }).value();
-    console.log(this.tableDataView, 'tableDataView')
     this.expandAll()
 
   }
@@ -224,4 +224,55 @@ export class BienBanLayMauComponent extends Base2Component implements OnInit {
       return false;
     }
   }
+  checkRoleEdit(trangThai: STATUS): boolean {
+    if (this.userService.isChiCuc() && [STATUS.DU_THAO, STATUS.TU_CHOI_LDCC].includes(trangThai) && this.userService.isAccessPermisson(this.maQuyen.THEM)) {
+      return true
+    }
+    return false
+  };
+  checkRoleApprove(trangThai: STATUS): boolean {
+    if (this.userService.isChiCuc() && (STATUS.CHO_DUYET_LDCC === trangThai && this.userService.isAccessPermisson(this.maQuyen.DUYET_LDCC))) {
+      return true
+    }
+    return false
+  }
+  checkRoleDelete(trangThai: STATUS): boolean {
+    if (this.userService.isChiCuc() && ([STATUS.DU_THAO].includes(trangThai) && this.userService.isAccessPermisson(this.maQuyen.XOA))) {
+      return true
+    }
+    return false
+  };
+  checkRoleView(trangThai: STATUS): boolean {
+    if (!this.checkRoleEdit(trangThai) && !this.checkRoleApprove(trangThai) && !this.checkRoleDelete(trangThai) && this.userService.isAccessPermisson(this.maQuyen.XEM)) {
+      return true
+    }
+    return false
+  }
+  checkRoleAdd(): boolean {
+    if (this.userService.isChiCuc() && this.userService.isAccessPermisson(this.maQuyen.THEM)) {
+      return true;
+    }
+    return false
+  }
+  checkRoleXoaDs(): boolean {
+    if (this.userService.isChiCuc() && this.userService.isAccessPermisson(this.maQuyen.XOA)) {
+      return true;
+    }
+    return false
+  }
+  checkRoleExport() {
+    if (this.userService.isAccessPermisson(this.maQuyen.EXPORT)) {
+      return true;
+    }
+    return false
+  }
 }
+export interface MA_QUYEN_BBLM {
+  THEM: string;
+  XOA: string;
+  XEM: string;
+  DUYET_LDCC: string;
+  IN: string;
+  EXPORT: string
+}
+

@@ -4,10 +4,10 @@
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
         </button>
-        <button type="button" class="btn btn-sub do" (click)="preview(previewName)">
-            <i class="icon htvbdh_tcdt_tuchoi"></i>
-            <span>Xem trước</span>
-        </button>
+      <button *ngIf="formData.value.id" type="button" class="btn btn-sub xanh-nhat" (click)="preview(previewName)">
+        <i class=" icon htvbdh_tcdt_print"></i>
+        <span>In/xem trước</span>
+      </button>
         <button class="btn btn-sub xanh-nhat" type="button"
             *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_KTVBQ) "
             (click)="save(true)">
@@ -149,37 +149,34 @@
                     </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true" nzRequired> Lô kho/Ngăn kho</nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-input-group nzAddOnAfterIcon="folder-open"
-                                (click)="isView ? '' : openDialogDdiemNhapHang()">
-                                <input [readonly]="true" nz-input formControlName="tenNganLoKho" />
-                            </nz-input-group>
-                        </nz-form-control>
-                    </nz-form-item>
+                  <nz-form-item>
+                    <nz-form-label [nzNoColon]="true" nzRequired> Lô kho/Ngăn kho</nz-form-label>
+                    <nz-form-control [nzErrorTip]="error">
+                      <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : openDialogDdiemNhapHang()">
+                        <input [readonly]="true" nz-input formControlName="tenNganLoKho"/>
+                      </nz-input-group>
+                    </nz-form-control>
+                  </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="3">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true"> Điểm kho</nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-input-group nzAddOnAfterIcon="folder-open"
-                                (click)="isView ? '' : openDialogDdiemNhapHang()">
-                                <input [readonly]="true" nz-input formControlName="tenDiemKho" readonly />
-                            </nz-input-group>
-                        </nz-form-control>
-                    </nz-form-item>
+                  <nz-form-item>
+                    <nz-form-label [nzNoColon]="true"> Điểm kho</nz-form-label>
+                    <nz-form-control [nzErrorTip]="error">
+                      <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : openDialogDdiemNhapHang()">
+                        <input [readonly]="true" nz-input formControlName="tenDiemKho" readonly/>
+                      </nz-input-group>
+                    </nz-form-control>
+                  </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="3">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true"> Nhà kho</nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-input-group nzAddOnAfterIcon="folder-open"
-                                (click)="isView ? '' : openDialogDdiemNhapHang()">
-                                <input [readonly]="true" nz-input formControlName="tenNhaKho" readonly />
-                            </nz-input-group>
-                        </nz-form-control>
-                    </nz-form-item>
+                  <nz-form-item>
+                    <nz-form-label [nzNoColon]="true"> Nhà kho</nz-form-label>
+                    <nz-form-control [nzErrorTip]="error">
+                      <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : openDialogDdiemNhapHang()">
+                        <input [readonly]="true" nz-input formControlName="tenNhaKho" readonly/>
+                      </nz-input-group>
+                    </nz-form-control>
+                  </nz-form-item>
                 </div>
                 <!-- <div nz-col [nzSpan]="2">
                     <nz-form-item>
@@ -214,34 +211,34 @@
                         <th>Số lượng nhập</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <ng-container *ngFor="let item of dataTable; let i = index">
-                        <tr>
-                            <td>
-                                <label nz-checkbox [nzValue]="true" nzDisabled></label>
-                            </td>
-                            <td>{{i + 1}}</td>
-                            <td class=" link">{{item.soPhieuKtraCl}}</td>
-                            <td class="link"></td>
-                            <td class="link"></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <ng-container *ngFor="let bkh of item.bcanKeHangHdr; let y = index">
-                            <tr>
-                                <td>
-                                    <label nz-checkbox [nzValue]="true" nzDisabled></label>
-                                </td>
-                                <td></td>
-                                <td></td>
-                                <td class="link">{{bkh.soPhieuNhapKho }}</td>
-                                <td class="link">{{bkh.soBangKeCanHang}}</td>
-                                <td>{{bkh.ngayNkho | date: 'dd/MM/YYYY'}}</td>
-                                <td>{{(bkh.tongSlCaBaoBi - bkh.tongSlBaoBi) | number : '1.0-1' : 'vi_VN' }}</td>
-                            </tr>
-                        </ng-container>
-                    </ng-container>
-                </tbody>
+              <tbody>
+              <ng-container *ngFor="let item of dataTable; let i = index">
+                <tr>
+                  <td>
+                    <label nz-checkbox [nzValue]="true" nzDisabled></label>
+                  </td>
+                  <td>{{i + 1}}</td>
+                  <td class=" link">{{item.soPhieuKtraCl}}</td>
+                  <td class="link"></td>
+                  <td class="link"></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <ng-container *ngFor="let bkh of item.bcanKeHangHdr; let y = index">
+                  <tr>
+                    <td>
+                      <label nz-checkbox [nzValue]="true" nzDisabled></label>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td class="link">{{bkh.soPhieuNhapKho }}</td>
+                    <td class="link">{{bkh.soBangKeCanHang}}</td>
+                    <td>{{bkh.ngayNkho | date: 'dd/MM/YYYY'}}</td>
+                    <td>{{(bkh.tongSlCaBaoBi - bkh.tongSlBaoBi) | number : '1.0-1' : 'vi_VN' }}</td>
+                  </tr>
+                </ng-container>
+              </ng-container>
+              </tbody>
                 <tfoot>
                     <tr>
                         <td colspan="6" class="text-right">TỔNG</td>
@@ -280,8 +277,8 @@
                             Tổng số lượng nhập
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <nz-input-number formControlName="soLuong" nzDisabled nzSize="small"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                            <nz-input-number formControlName="soLuong" nzDisabled
+                                nzSize="small" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                                 nzDisabled></nz-input-number>
                         </nz-form-control>
                     </nz-form-item>
@@ -350,16 +347,16 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col nzSpan="24">
-                    <nz-form-item>
-                        <nz-form-label required [nzNoColon]="true">
-                            File đính kèm biên bản đã ký
-                        </nz-form-label>
-                        <div class="list-file">
-                            <file-list [data]="fileDinhKems"></file-list>
-                        </div>
-                    </nz-form-item>
-                </div>
+              <div nz-col nzSpan="24">
+                <nz-form-item>
+                  <nz-form-label required [nzNoColon]="true">
+                    File đính kèm biên bản đã ký
+                  </nz-form-label>
+                  <div class="list-file">
+                    <file-list [data]="fileDinhKems"></file-list>
+                  </div>
+                </nz-form-item>
+              </div>
             </div>
         </form>
     </nz-card>
@@ -367,26 +364,30 @@
 <ng-template #error let-control>
     <app-template-error [control]="control"></app-template-error>
 </ng-template>
-<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="PHIẾU NHẬP KHO" nzWidth="100%" (nzOnCancel)="closeDlg()">
-    <div *nzModalContent class="modal__content">
-        <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
-    </div>
-    <div *nzModalFooter>
-        <button nz-button (click)="printPreview()" class="modal__button--save">
-            <i class="icon htvbdh_printer"></i>
-            In
-        </button>
-        <button nz-button (click)="downloadPdf(previewName)" class="modal__button--save">
-            <i class="icon htvbdh_file-pdf"></i>
-            Xuất .pdf
-        </button>
-        <button nz-button (click)="downloadWord(previewName)" class="modal__button--save">
-            <i class="icon htvbdh_file-word"></i>
-            Xuất .docx
-        </button>
-        <button nz-button (click)="closeDlg()" class="modal__button--cancel">
-            <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-            Đóng
-        </button>
-    </div>
+<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="BIÊN BẢN NHẬP ĐẦY KHO" nzWidth="100%"
+          (nzOnCancel)="closeDlg()">
+  <div *nzModalContent class="modal__content">
+    <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)="printPreview()"
+            class="modal__button--save">
+      <i class="icon htvbdh_printer"></i>
+      In
+    </button>
+    <button nz-button (click)="downloadPdf(previewName)"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-pdf"></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)="downloadWord(previewName)"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-word"></i>
+      Xuất .docx
+    </button>
+    <button nz-button (click)="closeDlg()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
 </nz-modal>

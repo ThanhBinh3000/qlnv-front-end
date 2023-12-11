@@ -5,16 +5,19 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button (click)="approve(id,STATUS.DA_KY,'Bạn có muốn xác nhận ?')" [disabled]="formData.value.kqKiemTra != 1"
-        class="btn btn-sub" type="button">
-        <i class="icon htvbdh_tcdt_pheduyet"></i>
-        <span>Duyệt</span>
+      <button type="button" class="btn btn-sub" (click)="inBienBan(id,'DCNBX','HS')">
+        <i class="icon htvbdh_totrinh"></i>
+        <span> In/Xem trước </span>
       </button>
-      <button type="button" class="btn btn-sub xanh"
-        *ngIf="( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) "
-        (click)="save()">
-        <i class="icon  htvbdh_tcdt_save"></i>
-        <span>Lưu</span>
+      <!--      <button (click)="approve(id,STATUS.DA_KY,'Bạn có muốn xác nhận ?')"-->
+      <!--              [disabled]="formData.value.kqKiemTra != 1"-->
+      <!--              class="btn btn-sub" type="button">-->
+      <!--        <i class="icon htvbdh_tcdt_pheduyet"></i>-->
+      <!--        <span>Xác nhận</span>-->
+      <!--      </button>-->
+      <button type="button" class="btn btn-sub xanh" [disabled]="formData.value.kqKiemTra != 1" (click)="save()">
+        <i class="icon htvbdh_tcdt_pheduyet"></i>
+        <span>Xác nhận</span>
       </button>
     </div>
   </nz-affix>
@@ -77,7 +80,7 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Cán bộ tạo HSKT</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                <input nz-input readonly formControlName="canBoTaoHoSo" />
+                <input nz-input readonly formControlName="canBoTaoHoSoNh" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -102,7 +105,8 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Ngày duyệt HSKT</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                <input nz-input readonly formControlName="ngayTaoNh" />
+                <nz-date-picker nzDisabled formControlName="ngayDuyetNh" [nzFormat]="globals.dateFormat">
+                </nz-date-picker>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -118,7 +122,12 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Lô kho</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                <input [readonly]="true" nz-input formControlName="tenLoKho" readonly />
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                  <input *ngIf="!this.formData.value.tenLoKho" [readonly]="true" nz-input formControlName="tenNganKho"
+                    readonly />
+                  <input *ngIf="this.formData.value.tenLoKho" [readonly]="true" nz-input formControlName="tenLoKho"
+                    readonly />
+                </nz-form-control>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -126,7 +135,7 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Cán bộ kiểm tra HSKT trước khi xuất</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                <input nz-input readonly formControlName="canBoTaoHoSo" />
+                <input nz-input formControlName="canBoTaoHoSo" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -329,7 +338,7 @@
             <a *ngIf="item.trangThai != STATUS.DA_KY" (click)="redirectToBienBan(false,item)">
               <i class="fa fa-edit" title="Chỉnh sửa"></i>
             </a>
-            <a (click)="inBienBan(id,'DCNB',item.loaiBb)">
+            <a (click)="inBienBan(id,'DCNBX',item.loaiBb)">
               <i class="fa fa-print" title="Xem biên bản"></i>
             </a>
           </td>
@@ -362,7 +371,32 @@
   </div>
 </ng-container>
 <ng-container *ngIf="isBienBan">
-  <app-chi-tiet-bien-ban-kiem-tra-dau-gia (showListEvent)="backMain($event)" [isView]="isViewBb" [data]="dataBb"
-    [dataHdr]="this.formData.value" (saveDtl)="saveDtl($event)">
-  </app-chi-tiet-bien-ban-kiem-tra-dau-gia>
+  <app-chi-tiet-bien-ban-kiem-tra-xuat-dieu-chuyen (showListEvent)="backMain($event)" [isView]="isViewBb"
+    [data]="dataBb" [dataHdr]="this.formData.value" (saveDtl)="saveDtl($event)">
+  </app-chi-tiet-bien-ban-kiem-tra-xuat-dieu-chuyen>
 </ng-container>
+
+
+<nz-modal [(nzVisible)]="showDlgPreview" nzWidth="70%" (nzOnCancel)="closeDlg()">
+  <div *nzModalContent class="modal__content">
+    <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)="printPreview()" class="modal__button--save">
+      <i class="icon htvbdh_printer"></i>
+      In
+    </button>
+    <button nz-button (click)="downloadPdf( templateName)" class="modal__button--save">
+      <i class="icon htvbdh_file-pdf"></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)="downloadWord( templateName)" class="modal__button--save">
+      <i class="icon htvbdh_file-word"></i>
+      Xuất .docx
+    </button>
+    <button nz-button (click)="closeDlg()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

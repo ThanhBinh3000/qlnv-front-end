@@ -13,6 +13,7 @@ import { DonviService } from "../../../../../services/donvi.service";
 import { cloneDeep } from "lodash";
 import { STATUS } from "../../../../../constants/status";
 import { DanhMucService } from "../../../../../services/danhmuc.service";
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: "app-them-moi-nguon-hinh-thanh-dtqg",
@@ -47,6 +48,7 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
   listNguonVon: any[] = [];
   ghiChu: string = "Dấu “x” tại các hàng trong biểu là nội dung không phải tổng hợp, báo cáo.";
 
+
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -75,6 +77,7 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
         tenTrangThai: ['Dự thảo'],
       }
     );
+    this.templateName = 'template_bcbn_nguon_hinh_thanh_dtqg.xlsx'
   }
 
   async ngOnInit() {
@@ -292,4 +295,22 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       });
   }
+
+
+
+  // downloadTemplate(templateName: any) {
+  //   this.bcBnTt108Service.downloadTemplate(templateName).then( s => {
+  //     const blob = new Blob([s], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  //     saveAs(blob, templateName);
+  //   });
+  // }
+  async handleSelectFile(event: any){
+    await this.onFileSelected(event);
+    if(this.dataImport.length > 0){
+      this.dataNguonNsnn = this.dataImport.filter(obj => obj.loaiNguon === 1);
+      this.dataNguonNgoaiNsnn = this.dataImport.filter(obj => obj.loaiNguon === 2);
+    }
+  }
+
+
 }

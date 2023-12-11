@@ -1,17 +1,16 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { MESSAGE } from "../../../../../constants/message";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { StorageService } from 'src/app/services/storage.service';
-import { HttpClient } from '@angular/common/http';
+import {Component, Input, OnInit} from '@angular/core';
+import {MESSAGE} from "../../../../../constants/message";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {StorageService} from 'src/app/services/storage.service';
+import {HttpClient} from '@angular/common/http';
 import {
   QuyetDinhGiaoNvXuatHangService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { LOAI_HANG_DTQG } from 'src/app/constants/config';
-import { STATUS } from "../../../../../constants/status";
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-table-giao-xh',
@@ -45,27 +44,25 @@ export class TableGiaoXh extends Base2Component implements OnInit {
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvXuatHangService);
     this.formData = this.fb.group({
-      nam: [null],
-      soQdNv: [null],
-      loaiVthh: [null],
-      trichYeu: [null],
-      ngayKyTu: [null],
-      ngayKyDen: [null],
+      nam: null,
+      soQdNv: null,
+      loaiVthh: null,
+      trichYeu: null,
+      ngayKyTu: null,
+      ngayKyDen: null,
     });
 
     this.filterTable = {
-      nam: '',
-      soQdNv: '',
-      ngayKy: '',
-      soHopDong: '',
-      tenLoaiVthh: '',
-      tenCloaiVthh: '',
-      tgianGiaoHang: '',
-      trichYeu: '',
-      BienBanTinhKho: '',
-      BienBanHaoDoi: '',
-      tenTrangThai: '',
-      tenTrangThaiXh: '',
+      nam: null,
+      soQdNv: null,
+      ngayKy: null,
+      soHopDong: null,
+      tenLoaiVthh: null,
+      tenCloaiVthh: null,
+      tgianGiaoHang: null,
+      trichYeu: null,
+      tenTrangThai: null,
+      tenTrangThaiXh: null,
     };
     this.listTrangThai = [
       {
@@ -112,30 +109,19 @@ export class TableGiaoXh extends Base2Component implements OnInit {
   async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([
-        this.timKiem(),
-        this.search(),
-      ]);
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+      })
+      if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+        await this.loadDsVthh();
+      }
+      await this.search();
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
     }
-  }
-
-  async timKiem() {
-    this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
-    })
-    if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
-      await this.loadDsVthh();
-    }
-  }
-
-  async clearFilter() {
-    this.formData.reset();
-    await Promise.all([this.timKiem(), this.search()]);
   }
 
   redirectDetail(id, isView: boolean) {
@@ -153,15 +139,15 @@ export class TableGiaoXh extends Base2Component implements OnInit {
 
   openModal(id: number, modalType: string) {
     switch (modalType) {
-      case 'hopDong':
+      case 'hopDong' :
         this.idHopDong = id;
         this.isViewHopDong = true;
         break;
-      case 'tinhKho':
+      case 'tinhKho' :
         this.idTinhKho = id;
         this.isViewTinhKho = true;
         break;
-      case 'haoDoi':
+      case 'haoDoi' :
         this.idHaoDoi = id;
         this.isViewHaoDoi = true;
         break;
@@ -172,15 +158,15 @@ export class TableGiaoXh extends Base2Component implements OnInit {
 
   closeModal(modalType: string) {
     switch (modalType) {
-      case 'hopDong':
+      case 'hopDong' :
         this.idHopDong = null;
         this.isViewHopDong = false;
         break;
-      case 'tinhKho':
+      case 'tinhKho' :
         this.idTinhKho = null;
         this.isViewTinhKho = false;
         break;
-      case 'haoDoi':
+      case 'haoDoi' :
         this.idHaoDoi = null;
         this.isViewHaoDoi = false;
         break;
@@ -215,18 +201,18 @@ export class TableGiaoXh extends Base2Component implements OnInit {
       case 'XEM':
         return (
           this.userService.isAccessPermisson(permissions.XEM) && ((this.userService.isAccessPermisson(permissions.THEM) &&
-            [
-              this.STATUS.CHO_DUYET_TP,
-              this.STATUS.CHO_DUYET_LDC,
-              this.STATUS.CHO_DUYET_LDC,
-              this.STATUS.BAN_HANH,
-            ].includes(data.trangThai)) ||
+              [
+                this.STATUS.CHO_DUYET_TP,
+                this.STATUS.CHO_DUYET_LDC,
+                this.STATUS.CHO_DUYET_LDC,
+                this.STATUS.BAN_HANH,
+              ].includes(data.trangThai)) ||
             (!this.userService.isAccessPermisson(permissions.THEM) && [
-              this.STATUS.DU_THAO,
-              this.STATUS.TU_CHOI_TP,
-              this.STATUS.TU_CHOI_LDC,
-              this.STATUS.BAN_HANH
-            ].includes(data.trangThai) ||
+                this.STATUS.DU_THAO,
+                this.STATUS.TU_CHOI_TP,
+                this.STATUS.TU_CHOI_LDC,
+                this.STATUS.BAN_HANH
+              ].includes(data.trangThai) ||
               (data.trangThai === this.STATUS.CHO_DUYET_TP &&
                 !this.userService.isAccessPermisson(permissions.DUYET_TP)) ||
               (data.trangThai === this.STATUS.CHO_DUYET_LDC &&

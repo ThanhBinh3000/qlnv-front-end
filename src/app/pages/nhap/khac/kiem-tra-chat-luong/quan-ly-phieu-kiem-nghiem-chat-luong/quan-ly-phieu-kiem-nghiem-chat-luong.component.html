@@ -16,12 +16,12 @@
           <div nz-row [nzGutter]="24">
             <div nz-col nzSpan="12" class="cus-start-date">
               <nz-date-picker [nzDisabledDate]="disabledTuNgayLm" nzFormat="dd/MM/yyyy" [(ngModel)]="tuNgayLm"
-                [ngModelOptions]="{standalone: true}" nzPlaceHolder="Ngày bắt đầu">
+                              [ngModelOptions]="{standalone: true}" nzPlaceHolder="Ngày bắt đầu">
               </nz-date-picker>
             </div>
             <div nz-col nzSpan="12" class="cus-end-date">
               <nz-date-picker [nzDisabledDate]="disabledDenNgayLm" nzFormat="dd/MM/yyyy" [(ngModel)]="denNgayLm"
-                [ngModelOptions]="{standalone: true}" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                              [ngModelOptions]="{standalone: true}" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
             </div>
           </div>
         </div>
@@ -51,15 +51,18 @@
     <div class="group-button">
       <h3>Danh sách lập và ký phiếu kiểm nghiệm chất lượng</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteSelect()">
+        <button type="button" class="btn btn-do"
+          (click)="deleteSelect()">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="export()">
+        <button
+          type="button" class="btn btn-sub" (click)="export()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)" *ngIf="userService.isCuc()">
+        <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)"
+          *ngIf="userService.isCuc()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -135,12 +138,10 @@
                     <td>{{lk.ngayNhapDayKho | date: 'dd/MM/YYYY' }}</td>
                     <td>{{lk.pknghiemClHang?.tenTrangThai}}</td>
                     <td>
-                      <a *ngIf="lk.pknghiemClHang?.trangThai == STATUS.DA_DUYET_LDCC"
-                        (click)="redirectToChiTiet(false, lk.pknghiemClHang?.id, item)">
+                      <a *ngIf="lk.pknghiemClHang?.trangThai == STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(false, lk.pknghiemClHang?.id, item)">
                         <i class="fa fa-eye" title="Xem chi tiết"></i>
                       </a>
-                      <a *ngIf="lk.pknghiemClHang?.trangThai != STATUS.DA_DUYET_LDCC"
-                        (click)="redirectToChiTiet(false, lk.pknghiemClHang?.id, item)">
+                      <a *ngIf="lk.pknghiemClHang?.trangThai != STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(false, lk.pknghiemClHang?.id, item)">
                         <i class="fa fa-pencil" title="Sửa"></i>
                       </a>
                       <a *ngIf="lk.pknghiemClHang?.trangThai == STATUS.DU_THAO" (click)="xoaItem(lk.pknghiemClHang)">
@@ -174,7 +175,7 @@
   </div>
 </ng-container>
 <ng-container class="chi-tiet" *ngIf="isDetail">
-  <app-them-moi-phieu-kiem-nghiem-chat-luong [qdGvuNh]="qdGvuNh" [typeVthh]="typeVthh" [id]="selectedId"
-    [isView]="isView" (showListEvent)="showList()">
+  <app-them-moi-phieu-kiem-nghiem-chat-luong [qdGvuNh]="qdGvuNh" [typeVthh]="typeVthh" [id]="selectedId" [isView]="isView"
+    (showListEvent)="showList()">
   </app-them-moi-phieu-kiem-nghiem-chat-luong>
 </ng-container>

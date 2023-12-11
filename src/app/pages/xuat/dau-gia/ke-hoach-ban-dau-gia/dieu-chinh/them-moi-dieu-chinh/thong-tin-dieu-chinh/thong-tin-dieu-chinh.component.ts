@@ -1,44 +1,43 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { Globals } from "../../../../../../../shared/globals";
-import { NgxSpinnerService } from "ngx-spinner";
-import { HelperService } from "../../../../../../../services/helper.service";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import {
-  DialogThemDiaDiemPhanLoComponent
-} from "../../../../../../../components/dialog/dialog-them-dia-diem-phan-lo/dialog-them-dia-diem-phan-lo.component";
-import {
-  QuyetDinhGiaTCDTNNService
-} from "../../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {cloneDeep} from 'lodash';
 import dayjs from "dayjs";
+import {LOAI_HANG_DTQG} from "../../../../../../../constants/config";
+import {Base2Component} from "../../../../../../../components/base2/base2.component";
+import {AMOUNT_ONE_DECIMAL} from "../../../../../../../Utility/utils";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../../../services/storage.service";
 
 @Component({
   selector: 'app-thong-tin-dieu-chinh',
   templateUrl: './thong-tin-dieu-chinh.component.html',
   styleUrls: ['./thong-tin-dieu-chinh.component.scss']
 })
-export class ThongTinDieuChinhComponent implements OnChanges {
+export class ThongTinDieuChinhComponent extends Base2Component implements OnChanges {
   @Input() title;
   @Input() dataInput;
   @Input() isView;
+  @Input() trangThaiDc;
   @Input() isCache;
+  @Input() loaiVthhCache;
   @Output() countChanged: EventEmitter<any> = new EventEmitter();
-  formData: FormGroup
-  dataTable: any[] = [];
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
+  amount = {...AMOUNT_ONE_DECIMAL};
 
   constructor(
-    private fb: FormBuilder,
-    public globals: Globals,
-    private spinner: NgxSpinnerService,
-    private helperService: HelperService,
-    private modal: NzModalService,
-    private notification: NzNotificationService,
-    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
   ) {
+    super(httpClient, storageService, notification, spinner, modal, null);
     this.formData = this.fb.group({
       id: [],
-      thoiGianDuKien: [''],
+      maDvi: [''],
+      tenDvi: [''],
       tgianDkienTu: [''],
       tgianDkienDen: [''],
       tgianTtoan: [],
@@ -48,12 +47,14 @@ export class ThongTinDieuChinhComponent implements OnChanges {
       tgianGnhan: [],
       tgianGnhanGhiChu: [''],
       pthucGnhan: [''],
-      thongBao: [],
+      thongBao: [''],
       khoanTienDatTruoc: [],
-      tongSoLuong: [null],
-      tongTienKhoiDiem: [null],
-      tongTienDatTruoc: [null],
       donViTinh: [''],
+      tongSoLuong: [],
+      tongTienKhoiDiemDx: [],
+      tongTienDuocDuyet: [],
+      tongTienDatTruocDx: [],
+      tongKtienDtruocDduyet: [],
     })
   }
 
@@ -63,79 +64,13 @@ export class ThongTinDieuChinhComponent implements OnChanges {
       const dataInput = changes.dataInput.currentValue;
       if (dataInput) {
         this.helperService.bidingDataInFormGroup(this.formData, dataInput);
-        const hasValidTime = dataInput.tgianDkienTu && dataInput.tgianDkienDen;
-        this.formData.patchValue({
-          thoiGianDuKien: hasValidTime ? [dataInput.tgianDkienTu, dataInput.tgianDkienDen] : null
-        });
-        this.dataTable = dataInput.children;
-        if (this.dataTable && this.dataTable.length > 0) {
-          await this.calculatorTable();
-        }
+        this.dataTableAll = dataInput.children;
+        this.dataTable = cloneDeep(dataInput.children);
       } else {
         this.formData.reset();
       }
       await this.spinner.hide();
     }
-  }
-
-  async themMoiBangPhanLoTaiSan(data?: any, index?: number) {
-    const modalGT = this.modal.create({
-      nzTitle: 'Thêm địa điểm giao nhận hàng',
-      nzContent: DialogThemDiaDiemPhanLoComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '2000px',
-      nzFooter: null,
-      nzComponentParams: {
-        dataEdit: data,
-        loaiVthh: this.dataInput.loaiVthh,
-        cloaiVthh: this.dataInput.cloaiVthh,
-      },
-    });
-    modalGT.afterClose.subscribe(async (updatedData) => {
-      if (updatedData && index >= 0) {
-        this.dataTable[index] = updatedData;
-        await this.calculatorTable();
-        await this.sendDataToParent();
-      }
-    });
-  }
-
-  deleteRow(i: number) {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn xóa?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 400,
-      nzOnOk: async () => {
-        try {
-          this.dataTable = this.dataTable.filter((item, index) => index != i);
-          await this.calculatorTable();
-          await this.sendDataToParent();
-        } catch (e) {
-          console.log('error', e);
-        }
-      },
-    });
-  }
-
-  async calculatorTable() {
-    for (const item of this.dataTable) {
-      item.children.forEach((child) => {
-        child.giaKhoiDiemDd = child.soLuongDeXuat * child.donGiaDuocDuyet;
-        child.soTienDtruocDd = child.soLuongDeXuat * child.donGiaDuocDuyet * this.formData.value.khoanTienDatTruoc / 100;
-      });
-      item.tongGiaKdiemDd = item.children.reduce((prev, cur) => prev + cur.giaKhoiDiemDd, 0);
-      item.tongTienDtruocDd = item.children.reduce((prev, cur) => prev + cur.soTienDtruocDd, 0);
-    }
-    this.formData.patchValue({
-      tongTienKhoiDiem: this.dataTable.reduce((acc, item) => acc + item.tongGiaKdiemDd, 0),
-      tongTienDatTruoc: this.dataTable.reduce((acc, item) => acc + item.tongTienDtruocDd, 0),
-      tongSoLuong: this.dataTable.reduce((acc, item) => acc + item.tongSlXuatBanDx, 0),
-    });
   }
 
   expandSet = new Set<number>();
@@ -144,21 +79,70 @@ export class ThongTinDieuChinhComponent implements OnChanges {
     checked ? this.expandSet.add(id) : this.expandSet.delete(id);
   }
 
-  async onChangeThoiGian(event) {
-    if (event) {
+  async changeTable(item: any, child: any) {
+    if (item && child) {
+      child.giaKhoiDiemDx = child.soLuongDeXuat * child.donGiaDeXuat;
+      child.soTienDtruocDx = child.soLuongDeXuat * (child.donGiaDeXuat * this.formData.value.khoanTienDatTruoc / 100);
+      child.thanhTienDuocDuyet = child.soLuongDeXuat * child.donGiaDuocDuyet;
+      child.tienDatTruocDuocDuyet = child.soLuongDeXuat * (child.donGiaDuocDuyet * this.formData.value.khoanTienDatTruoc / 100)
+      item.tongSlXuatBanDx = item.children.reduce((total, child) => total + child.soLuongDeXuat, 0);
+      item.tongTienDatTruocDx = item.children.reduce((total, child) => total + child.soTienDtruocDx, 0);
+      item.giaKhoiDiemDx = item.children.reduce((total, child) => total + child.giaKhoiDiemDx, 0);
+      item.soTienDuocDuyet = item.children.reduce((total, child) => total + child.thanhTienDuocDuyet, 0);
+      item.soTienDtruocDduyet = item.children.reduce((total, child) => total + child.tienDatTruocDuocDuyet, 0);
       this.formData.patchValue({
-        tgianDkienTu: this.formatDate(event, 0),
-        tgianDkienDen: this.formatDate(event, 1)
-      })
+        tongSoLuong: this.dataTable.reduce((prev, cur) => prev + cur.tongSlXuatBanDx, 0),
+        tongTienKhoiDiemDx: this.dataTable.reduce((prev, cur) => prev + cur.giaKhoiDiemDx, 0),
+        tongTienDuocDuyet: this.dataTable.reduce((prev, cur) => prev + cur.soTienDuocDuyet, 0),
+        tongTienDatTruocDx: this.dataTable.reduce((prev, cur) => prev + cur.tongTienDatTruocDx, 0),
+        tongKtienDtruocDduyet: this.dataTable.reduce((prev, cur) => prev + cur.soTienDtruocDduyet, 0),
+      });
+      this.dataTable = this.dataTableAll
+      await this.sendDataToParent();
     }
-    await this.sendDataToParent();
   }
 
-  formatDate(dateRange, index) {
-    return dateRange ? dayjs(dateRange[index]).format('YYYY-MM-DD') : null;
+  async onChangeThoiGian(event: Date, changeType: string) {
+    if (event && changeType) {
+      const formattedDate = this.formatDate(event);
+      if ((changeType === 'tu' && formattedDate !== this.formData.get('tgianDkienTu').value) ||
+        (changeType === 'den' && formattedDate !== this.formData.get('tgianDkienDen').value)) {
+        if (changeType === 'tu') {
+          this.formData.patchValue({tgianDkienTu: formattedDate});
+        } else if (changeType === 'den') {
+          this.formData.patchValue({tgianDkienDen: formattedDate});
+        }
+        await this.sendDataToParent();
+      }
+    }
+  }
+
+  formatDate(date: Date): string | null {
+    return date ? dayjs(date).format('YYYY-MM-DD') : null;
+
   }
 
   async sendDataToParent() {
     this.countChanged.emit(this.formData.value);
   }
+
+  isDisable() {
+    return false;
+  }
+
+  disabledTgianTocChucTu = (startValue: Date): boolean => {
+    const tgianDkienDen = this.formData.value.tgianDkienDen as Date;
+    if (!startValue || !tgianDkienDen || !(tgianDkienDen instanceof Date)) {
+      return false;
+    }
+    return startValue.getTime() > tgianDkienDen.getTime();
+  };
+
+  disabledTgianTocChucDen = (endValue: Date): boolean => {
+    const tgianDkienTu = this.formData.value.tgianDkienTu as Date;
+    if (!endValue || !tgianDkienTu || !(tgianDkienTu instanceof Date)) {
+      return false;
+    }
+    return endValue.getTime() <= tgianDkienTu.getTime();
+  };
 }

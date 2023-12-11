@@ -46,6 +46,9 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base3Component implem
   listPhuongThucGiaoNhanBDG: any[] = [];
   listPhuongThucThanhToan: any[] = [];
 
+  fileDinhKemDaKy: any[] = [];
+
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -138,6 +141,7 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base3Component implem
   async ngOnInit() {
     try {
       this.spinner.show();
+      await this.loadDataComboBox();
       // Is create
       if(this.idQdTl){
         let idThongBao = await this.helperService.getId("XH_TL_TO_CHUC_HDR_SEQ");
@@ -151,7 +155,6 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base3Component implem
       if (this.idInput > 0 && this.idInput) {
         this.getDetail(this.idInput)
       }
-      await this.loadDataComboBox();
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
       this.spinner.hide();
@@ -225,49 +228,13 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base3Component implem
             data.xhTlHoSoHdr.children.forEach( item => {
               let dsHdr = item.xhTlDanhSachHdr;
               dsHdr.idDsHdr = dsHdr.id;
-              // Nếu có mã đơn vị tài sản hoặc có nhân tổ chức r thì thôi không cho đấu giá lần sau nữa
-              if(dsHdr.toChucCaNhan || dsHdr.maDviTsan){
-
-              }else{
+              dsHdr.soLanTraGia = this.soLanDauGia + 1;
+              // Nếu không có kết quả đấu giá rồi thì mới thêm
+              if(dsHdr.ketQuaDauGia == null){
                 this.dataTable.push(dsHdr);
               }
             })
             await this.buildTableView();
-            // Nếu có thông tin đấu thầu thì sẽ lấy data laster => Set dataTable = children data lastest ý
-            // if (this.idQdTlDtl) {
-            //   let dataDtl = data.quyetDinhDtl.filter(s => s.id == this.idQdTlDtl);
-            //   for (const item of dataDtl) {
-            //     if (item.xhTlToChucHdr && item.xhTlToChucHdr.length > 0) {
-            //       let dataToChuc = item.xhTlToChucHdr.pop();
-            //       let tTinDthau = await this.toChucThucHienThanhLyService.getDetail(dataToChuc.id);
-            //       tTinDthau.data?.toChucDtl.forEach(s => {
-            //         s.idVirtual = uuid.v4();
-            //       });
-            //       this.buildTableView(tTinDthau.data.toChucDtl);
-            //       this.dataDauGia = tTinDthau.data.toChucDtl;
-            //     } else {
-            //       data.quyetDinhDtl.forEach(s => {
-            //         s.idVirtual = uuid.v4();
-            //       });
-            //       let dt = data.quyetDinhDtl.filter(s => s.maDiaDiem.substring(0, 6) === this.userInfo.MA_DVI)
-            //       this.buildTableView(dt);
-            //       this.calculatorTable();
-            //     }
-            //   }
-            // } else {
-            //   this.notification.error(MESSAGE.ERROR, res.msg);
-            // }
-            // // ( filter table sẽ không hiển thị mã đơn vị tàn sản của lần đấu giá trước;
-            // this.dataTable.forEach((item) => {
-            //   item.childData.forEach((child) => {
-            //     if (child.soLanTraGia) {
-            //       item.childData = item.childData.filter(x => x.soLanTraGia == null && x.maDviTsan == null && x.toChucCaNhan == null);
-            //     }
-            //   })
-            //   if (item.childData.length == 0) {
-            //     this.dataTable = this.dataTable.filter(x => x.id != item.id);
-            //   }
-            // });
           }
         }).catch((e) => {
           console.log('error: ', e);
@@ -284,35 +251,15 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base3Component implem
         expandSet : true
       })
     ).value()
-    console.log(this.dataTable)
   }
 
   onChangeKetQua($event){
     console.log($event);
   }
 
-  // calculatorTable() {
-  //   this.dataTable.forEach(item => {
-  //     item.childData.forEach(child => {
-  //       if (this.dataDetail) {
-  //         child.giaKhoiDiem = child.slDauGia * child.giaTlKhongVat
-  //       } else {
-  //         if (this.dataDauGia.length > 0) {
-  //           this.formData.value.ketQua == '1' ? child.soTienDatTruoc = null : child.soTienDatTruoc = child.slDauGia * child.giaTlKhongVat * this.formData.value.khoanTienDatTruoc / 100;
-  //         } else {
-  //           child.slDauGia = child.slDeXuat
-  //           child.thanhTien = 0;
-  //           child.giaTlKhongVat = child.donGia
-  //           this.formData.value.ketQua == '1' ? child.giaKhoiDiem = child.slDeXuat * child.donGia : child.giaKhoiDiem = null;
-  //           this.formData.value.ketQua == '1' ? child.soTienDatTruoc = null : child.soTienDatTruoc = child.slDeXuat * child.donGia * this.formData.value.khoanTienDatTruoc / 100;
-  //         }
-  //       }
-  //     })
-  //   })
-  // }
-
   async getDetail(id) {
     if (id > 0) {
+      this.dataTable = [];
       await this._service.getDetail(id)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
@@ -336,6 +283,9 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base3Component implem
               loai: key,
               dataChild: value
             })).value();
+            this.fileDinhKemDaKy = data.fileDinhKemDaKy;
+            this.fileDinhKem = data.fileDinhKem;
+            this.fileCanCu = data.fileCanCu;
           }
         })
       .catch((e) => {
@@ -362,57 +312,52 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base3Component implem
   }
 
   async save(isHoanThanh?) {
-    let body = this.formData.value;
-    if (this.formData.value.ketQua == 1) {
-      if (this.dataNguoiShow.length != 3) {
-        this.notification.error(MESSAGE.ERROR, "Vui lòng thêm các thành phần tham dự đấu giá");
-        return;
+    if(this.validateMaDviTsan()){
+      let body = this.formData.value;
+      if (this.formData.value.ketQua == 1) {
+        if (this.dataNguoiShow.length != 3) {
+          this.notification.error(MESSAGE.ERROR, "Vui lòng thêm các thành phần tham dự đấu giá");
+          return;
+        }
       }
-    }
-    if (this.formData.value.tgianDky) {
-      body.tgianDkyTu = body.tgianDky[0];
-      body.tgianDkyDen = body.tgianDky[1];
-    }
-    if (this.formData.value.tgianXem) {
-      body.tgianXemTu = this.formData.value.tgianXem[0];
-      body.tgianXemDen = this.formData.value.tgianXem[1];
-    }
-    if (this.formData.value.tgianNopTien) {
-      body.tgianNopTienTu = this.formData.value.tgianNopTien[0];
-      body.tgianNopTienDen = this.formData.value.tgianNopTien[1];
-    }
-    if (this.formData.value.tgianDauGia) {
-      body.tgianDauGiaTu = body.tgianDauGia[0];
-      body.tgianDauGiaDen = body.tgianDauGia[1];
-    }
-    let soLuongDviTsan = 0
-    let soLuongTrung = 0
-    let soLuongTruot = 0
-    let dataTableSaved = [];
-    this.dataTable.forEach(item => {
-      // if (this.formData.value.ketQua == 1) {
-      //   soLuongTrung += item.childData.filter(item => item.soLanTraGia > 0 && item.toChucCaNhan != null).length;
-      // } else {
-      //   item.childData.forEach(s => {
-      //     s.toChucCaNhan = null;
-      //     s.soLanTraGia = null;
-      //   })
-      //   soLuongTruot += item.childData.filter(item => item.soLanTraGia == null && item.toChucCaNhan == null).length;
-      // }
-      // soLuongDviTsan += item.childData.length;
-      dataTableSaved = [...dataTableSaved,...item.children]
-    });
-    body.childrenNlq = this.dataNguoiTgia;
-    body.trangThai = isHoanThanh ? this.STATUS.DA_HOAN_THANH : this.STATUS.DU_THAO
-    body.children = dataTableSaved;
-    if (this.formData.value.ketQua == 1) {
-      body.ketQuaSl = soLuongTrung + "/" + soLuongDviTsan;
-    } else {
-      body.ketQuaSl = soLuongTruot + "/" + soLuongDviTsan;
-    }
-    let res = await this.createUpdate(body);
-    if (res) {
-      this.modal.closeAll();
+      if (this.formData.value.tgianDky) {
+        body.tgianDkyTu = body.tgianDky[0];
+        body.tgianDkyDen = body.tgianDky[1];
+      }
+      if (this.formData.value.tgianXem) {
+        body.tgianXemTu = this.formData.value.tgianXem[0];
+        body.tgianXemDen = this.formData.value.tgianXem[1];
+      }
+      if (this.formData.value.tgianNopTien) {
+        body.tgianNopTienTu = this.formData.value.tgianNopTien[0];
+        body.tgianNopTienDen = this.formData.value.tgianNopTien[1];
+      }
+      if (this.formData.value.tgianDauGia) {
+        body.tgianDauGiaTu = body.tgianDauGia[0];
+        body.tgianDauGiaDen = body.tgianDauGia[1];
+      }
+      let soLuongDviTsan = 0
+      let soLuongTrung = 0
+      let soLuongTruot = 0
+      let dataTableSaved = [];
+      this.dataTable.forEach(item => {
+        dataTableSaved = [...dataTableSaved,...item.children]
+      });
+      body.childrenNlq = this.dataNguoiTgia;
+      body.trangThai = isHoanThanh ? this.STATUS.DA_HOAN_THANH : this.STATUS.DU_THAO
+      body.children = dataTableSaved;
+      body.fileDinhKemReq = this.fileDinhKem
+      body.fileCanCuReq = this.fileCanCu
+      body.fileDinhKemDaKyReq = this.fileDinhKemDaKy
+      if (this.formData.value.ketQua == 1) {
+        body.ketQuaSl = soLuongTrung + "/" + soLuongDviTsan;
+      } else {
+        body.ketQuaSl = soLuongTruot + "/" + soLuongDviTsan;
+      }
+      let res = await this.createUpdate(body);
+      if (res) {
+        this.modal.closeAll();
+      }
     }
   }
 
@@ -478,28 +423,26 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base3Component implem
   }
 
   confirmDone() {
-    if (this.validatemaDviTsan()) {
-      this.modal.confirm({
-        nzClosable: false,
-        nzTitle: 'Xác nhận',
-        nzContent: 'Bạn có chắc chắn hoàn thành thông tin đấu giá?',
-        nzOkText: 'Đồng ý',
-        nzCancelText: 'Không',
-        nzOkDanger: true,
-        nzWidth: 310,
-        nzOnOk: () => {
-          this.spinner.show();
-          try {
-            this.save(true);
-          } catch (e) {
-            console.log('error: ', e);
-            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-          } finally {
-            this.spinner.hide();
-          }
-        },
-      });
-    }
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn hoàn thành thông tin đấu giá?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          this.save(true);
+        } catch (e) {
+          console.log('error: ', e);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        } finally {
+          this.spinner.hide();
+        }
+      },
+    });
   }
 
   deleteRow(idVirtual) {
@@ -570,30 +513,33 @@ export class ThongTinChiTietDauGiaThanhLyComponent extends Base3Component implem
     }
   }
 
-  validatemaDviTsan(): boolean {
-    // if (this.dataTable && this.dataTable.length > 0) {
-    //   let data = this.dataTable.flatMap(s => s.childData)
-    //   const checkMaDviTsan = {};
-    //   data.forEach((item) => {
-    //     const maDviTsan = item.maDviTsan;
-    //     if (checkMaDviTsan[maDviTsan]) {
-    //       checkMaDviTsan[maDviTsan]++;
-    //     } else {
-    //       checkMaDviTsan[maDviTsan] = 1;
-    //     }
-    //   });
-    //   let result = '';
-    //   for (let prop in checkMaDviTsan) {
-    //     if (checkMaDviTsan[prop] > 1) {
-    //       result += `${prop} ( hiện đang bị lặp lại ${checkMaDviTsan[prop]} lần), `;
-    //     }
-    //   }
-    //   let rs = Object.values(checkMaDviTsan).some(value => +value > 1);
-    //   if (rs == true) {
-    //     this.notification.error(MESSAGE.ERROR, "Mã đơn vị tài sản " + result.slice(0, -2) + " vui lòng nhập lại");
-    //     return false;
-    //   }
-    // }
+  validateMaDviTsan(): boolean {
+    if (this.dataTable && this.dataTable.length > 0) {
+      let data = this.dataTable.flatMap(s => s.children)
+      const checkMaDviTsan = {};
+      data.forEach((item) => {
+        const maDviTsan = item.maDviTsan;
+        if (checkMaDviTsan[maDviTsan]) {
+          checkMaDviTsan[maDviTsan]++;
+        } else {
+          checkMaDviTsan[maDviTsan] = 1;
+        }
+      });
+      let result = '';
+      for (let prop in checkMaDviTsan) {
+        if (checkMaDviTsan[prop] > 1) {
+          result += `${prop} ( hiện đang bị lặp lại ${checkMaDviTsan[prop]} lần), `;
+        }
+      }
+      let rs = Object.values(checkMaDviTsan).some(value => +value > 1);
+      if (rs == true) {
+        this.notification.error(MESSAGE.ERROR, "Mã đơn vị tài sản " + result.slice(0, -2) + " vui lòng nhập lại");
+        return false;
+      }
+    }else{
+      this.notification.error(MESSAGE.ERROR, "Không có danh sách thông tin đấu giá");
+      return false;
+    }
     return true;
   }
 }

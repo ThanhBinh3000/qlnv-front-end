@@ -5,12 +5,11 @@ import {StorageService} from "../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {
-  QuyetDinhDcBanttService
-} from "../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/dieuchinh-kehoach-bantt/quyet-dinh-dc-bantt.service";
-import {UserService} from "../../../../../services/user.service";
 import {MESSAGE} from "../../../../../constants/message";
-import {STATUS} from "../../../../../constants/status";
+import {
+  QuyetDinhPdKhBanTrucTiepService
+} from "../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-dieu-chinh-ban-truc-tiep',
@@ -19,6 +18,7 @@ import {STATUS} from "../../../../../constants/status";
 })
 export class DieuChinhBanTrucTiepComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   isView = false;
   idQdPd: number = 0;
   isViewQdPd: boolean = false;
@@ -30,10 +30,9 @@ export class DieuChinhBanTrucTiepComponent extends Base2Component implements OnI
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private quyetDinhDcBanttService: QuyetDinhDcBanttService,
-    public userService: UserService,
+    private quyetDinhPdKhBanTrucTiepService: QuyetDinhPdKhBanTrucTiepService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhDcBanttService);
+    super(httpClient, storageService, notification, spinner, modal, quyetDinhPdKhBanTrucTiepService);
     this.formData = this.fb.group({
       namKh: null,
       soQdDc: null,
@@ -41,17 +40,20 @@ export class DieuChinhBanTrucTiepComponent extends Base2Component implements OnI
       ngayKyDcDen: null,
       trichYeu: null,
       loaiVthh: null,
+      maDvi: null,
+      type: null,
     })
 
     this.filterTable = {
-      namKh: '',
-      soQdDc: '',
-      ngayKyDc: '',
-      soQdPd: '',
-      trichYeu: '',
-      tenLoaiVthh: '',
-      tenCloaiVthh: '',
-      tenTrangThai: '',
+      namKh: null,
+      soQdDc: null,
+      ngayKyDc: null,
+      soQdPd: null,
+      trichYeu: null,
+      tenLoaiVthh: null,
+      tenCloaiVthh: null,
+      slDviTsan: null,
+      tenTrangThai: null,
     };
 
     this.listTrangThai = [
@@ -85,27 +87,17 @@ export class DieuChinhBanTrucTiepComponent extends Base2Component implements OnI
   async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([
-        this.timKiem(),
-        this.search(),
-      ]);
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+        type: 'QDDC',
+      })
+      await this.search();
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
     }
-  }
-
-  timKiem() {
-    this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
-    })
-  }
-
-  async clearFilter() {
-    this.formData.reset();
-    await Promise.all([this.timKiem(), this.search()]);
   }
 
   redirectDetail(id, isView: boolean) {
@@ -142,6 +134,7 @@ export class DieuChinhBanTrucTiepComponent extends Base2Component implements OnI
     const permissions = {
       XEM: 'XHDTQG_PTTT_DCKHBTT_XEM',
       THEM: 'XHDTQG_PTTT_DCKHBTT_THEM',
+      DUYET_LDV: 'XHDTQG_PTTT_DCKHBTT_DUYET_LDVU',
       BAN_HANH: 'XHDTQG_PTTT_DCKHBTT_BANHANH',
       XOA: 'XHDTQG_PTTT_DCKHBTT_XOA',
     };

@@ -142,11 +142,17 @@ export class ThemMoiQdDcBkComponent implements OnInit {
       type.tenCuc = chiCuc[0].tenDvi;
       type.maChiCuc = null;
       type.maDiemKho = null;
+      type.diaDiem = null;
+      type.dienTich = null;
+      type.tongTichLuong = null;
     } else {
       if (pa == "TL") {
         this.rowItemTL.tenCuc = chiCuc[0].tenDvi;
         this.rowItemTL.maChiCuc = null;
         this.rowItemTL.maDiemKho = null;
+        this.rowItemTL.diaDiem = null;
+        this.rowItemTL.dienTich = null;
+        this.rowItemTL.tongTichLuong = null;
       } else if (pa == "DTM") {
         this.rowItemDTM.tenCuc = chiCuc[0].tenDvi;
         this.rowItemDTM.maChiCuc = null;
@@ -173,10 +179,11 @@ export class ThemMoiQdDcBkComponent implements OnInit {
         this.rowItemTL.tenChiCuc = chiCuc[0].tenDvi;
         this.rowItemTL.maDiemKho = null;
         this.rowItemTL.diaDiem = null;
+        this.rowItemTL.dienTich = null;
+        this.rowItemTL.tongTichLuong = null;
       } else if (pa == "DTM") {
         this.rowItemDTM.tenChiCuc = chiCuc[0].tenDvi;
         this.rowItemDTM.maDiemKho = null;
-        this.rowItemTL.diaDiem = null;
       }
     }
   }
@@ -377,7 +384,7 @@ export class ThemMoiQdDcBkComponent implements OnInit {
     let arr = [];
     let check = true;
     arr.push(
-      rowItem.maCuc, rowItem.maChiCuc, rowItem.maDiemKho, rowItem.diaDiem, rowItem.dienTich, rowItem.tongTichLuong, rowItem.phuongAnQuyHoach, rowItem.ghiChu
+      rowItem.maCuc, rowItem.maChiCuc, rowItem.maDiemKho, rowItem.diaDiem, rowItem.dienTich, rowItem.tongTichLuong, rowItem.phuongAnQuyHoach,
     );
     if (arr && arr.length > 0) {
       for (let i = 0; i < arr.length; i++) {

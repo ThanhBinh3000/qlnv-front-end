@@ -8,3 +8,16 @@ th.header {
     width: 80px;
     text-align: center;
 }
+.input-file-custom {
+  display: none;
+}
+
+.label-file-custom {
+  height: 26px;
+  margin-bottom: 0;
+}
+
+.custom-file-label::after {
+  height: 26px;
+  margin-bottom: 0;
+}

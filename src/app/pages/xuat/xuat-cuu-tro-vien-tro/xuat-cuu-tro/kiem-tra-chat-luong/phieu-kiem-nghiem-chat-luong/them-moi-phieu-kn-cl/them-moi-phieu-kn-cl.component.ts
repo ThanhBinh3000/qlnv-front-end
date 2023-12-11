@@ -1,29 +1,29 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzModalService} from 'ng-zorro-antd/modal';
 import {
   BienBanLayMauBanGiaoMauService
 } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanLayMauBanGiaoMau.service';
-import { Base2Component } from 'src/app/components/base2/base2.component';
+import {Base2Component} from 'src/app/components/base2/base2.component';
 import dayjs from 'dayjs';
-import { FileDinhKem } from 'src/app/models/FileDinhKem';
-import { MESSAGE } from 'src/app/constants/message';
-import { STATUS } from 'src/app/constants/status';
+import {FileDinhKem} from 'src/app/models/FileDinhKem';
+import {MESSAGE} from 'src/app/constants/message';
+import {STATUS} from 'src/app/constants/status';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { PhuongPhapLayMau } from 'src/app/models/PhuongPhapLayMau';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { Validators } from '@angular/forms';
-import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
+import {PhuongPhapLayMau} from 'src/app/models/PhuongPhapLayMau';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {Validators} from '@angular/forms';
+import {DanhMucTieuChuanService} from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 import {
   PhieuKiemNghiemChatLuongService
 } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuKiemNghiemChatLuong.service';
-import { KhCnQuyChuanKyThuat } from "../../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
-import { PREVIEW } from "../../../../../../../constants/fileType";
+import {KhCnQuyChuanKyThuat} from "../../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
+import {PREVIEW} from "../../../../../../../constants/fileType";
 
 ;
 
@@ -198,6 +198,7 @@ export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit 
       }
     }
   }
+
   openDialogBbLayMau() {
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách biên bản lấy mẫu',
@@ -293,6 +294,7 @@ export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit 
       }
     }
   }
+
   setValidator(isGuiDuyet) {
     if (isGuiDuyet) {
       this.formData.controls["soBienBan"].setValidators([Validators.required]);
@@ -301,6 +303,7 @@ export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit 
       this.formData.controls["tenDiemKho"].setValidators([Validators.required]);
     }
   }
+
   pheDuyet() {
     let trangThai = '';
     let msg = '';
@@ -349,6 +352,7 @@ export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit 
     }
     return false;
   }
+
   async loadPhuongPhapLayMau() {
     this.danhMucService.danhMucChungGetAll("PP_LAY_MAU").then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
@@ -360,6 +364,7 @@ export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit 
       this.notification.error(MESSAGE.ERROR, err.msg);
     })
   }
+
   async loadTieuChuan() {
     let body = {
       maHang: this.maVthh,

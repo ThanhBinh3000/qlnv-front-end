@@ -14,14 +14,12 @@
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
     </button>
-    <button type="button" class="btn btn-sub do"
-      *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_DUYET_LDCCUC')"
+    <button type="button" class="btn btn-sub do" *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_DUYET_LDCCUC')"
       (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>
-    <button class="btn btn-sub xanh-nhat"
-      *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_DUYET_LDCCUC')"
+    <button class="btn btn-sub xanh-nhat" *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_DUYET_LDCCUC')"
       (click)="pheDuyet()">
       <i class="icon htvbdh_tcdt_pheduyet "></i>
       <span>Duyệt</span>
@@ -123,7 +121,7 @@
                   Số quyết định giao nhiệm vụ nhập hàng
                 </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQd()">
+                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView?'':openDialogSoQd()">
                     <input nz-input [readonly]="true" formControlName="soQdGiaoNvNh" />
                   </nz-input-group>
                 </nz-form-control>
@@ -194,7 +192,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired> Ngăn/Lô kho</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
+                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView?'':openDialogDdiemNhapHang()">
                     <input [readonly]="true" nz-input formControlName="tenNganLoKho" readonly />
                   </nz-input-group>
                 </nz-form-control>
@@ -204,7 +202,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired> Nhà kho</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
+                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView?'':openDialogDdiemNhapHang()">
                     <input [readonly]="true" nz-input formControlName="tenNhaKho" readonly />
                   </nz-input-group>
                 </nz-form-control>
@@ -214,7 +212,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired> Điểm kho</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
+                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView?'':openDialogDdiemNhapHang()">
                     <input [readonly]="true" nz-input formControlName="tenDiemKho" readonly />
                   </nz-input-group>
                 </nz-form-control>

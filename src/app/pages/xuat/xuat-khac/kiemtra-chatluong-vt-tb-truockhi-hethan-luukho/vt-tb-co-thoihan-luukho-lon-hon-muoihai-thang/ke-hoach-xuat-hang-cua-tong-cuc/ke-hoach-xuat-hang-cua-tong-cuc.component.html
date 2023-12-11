@@ -14,7 +14,7 @@
           <div nz-col nzSpan="4">
             <nz-form-item class="form-item">
               <nz-form-label>Số công văn/tờ trình</nz-form-label>
-              <input class="search__input" nz-input formControlName="soToTrinh" />
+              <input class="search__input" nz-input formControlName="soToTrinh"/>
             </nz-form-item>
           </div>
           <div nz-col nzSpan="4">
@@ -23,12 +23,12 @@
               <div nz-row>
                 <div nz-col nzSpan="12" class="cus-start-date">
                   <nz-date-picker [nzDisabledDate]="disabledNgayLapKhTu" nzFormat="dd/MM/yyyy"
-                    formControlName="ngayKeHoachTu" nzPlaceHolder="Ngày bắt đầu">
+                                  formControlName="ngayKeHoachTu" nzPlaceHolder="Ngày bắt đầu">
                   </nz-date-picker>
                 </div>
                 <div nz-col nzSpan="12" class="cus-end-date">
                   <nz-date-picker [nzDisabledDate]="disabledNgayLapKhDen" nzFormat="dd/MM/yyyy"
-                    formControlName="ngayKeHoachDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                                  formControlName="ngayKeHoachDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
                 </div>
               </div>
             </nz-form-item>
@@ -39,12 +39,14 @@
               <div nz-row>
                 <div nz-col nzSpan="12" class="cus-start-date">
                   <nz-date-picker [nzDisabledDate]="disabledNgayDuyetKhTu" nzFormat="dd/MM/yyyy"
-                    formControlName="ngayDuyetKeHoachTu" nzPlaceHolder="Ngày bắt đầu">
+                                  formControlName="ngayDuyetKeHoachTu"
+                                  nzPlaceHolder="Ngày bắt đầu">
                   </nz-date-picker>
                 </div>
                 <div nz-col nzSpan="12" class="cus-end-date">
                   <nz-date-picker [nzDisabledDate]="disabledNgayDuyetKhDen" nzFormat="dd/MM/yyyy"
-                    formControlName="ngayDuyetKeHoachDen" nzPlaceHolder="Ngày kết thúc">
+                                  formControlName="ngayDuyetKeHoachDen"
+                                  nzPlaceHolder="Ngày kết thúc">
                   </nz-date-picker>
                 </div>
               </div>
@@ -55,13 +57,15 @@
               <nz-form-label>Ngày duyệt kế hoạch của BTC</nz-form-label>
               <div nz-row>
                 <div nz-col nzSpan="12" class="cus-start-date">
-                  <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayDuyetKeHoachBtcTu"
-                    nzPlaceHolder="Ngày bắt đầu">
+                  <nz-date-picker nzFormat="dd/MM/yyyy"
+                                  formControlName="ngayDuyetKeHoachBtcTu"
+                                  nzPlaceHolder="Ngày bắt đầu">
                   </nz-date-picker>
                 </div>
                 <div nz-col nzSpan="12" class="cus-end-date">
-                  <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayDuyetKeHoachBtcDen"
-                    nzPlaceHolder="Ngày kết thúc">
+                  <nz-date-picker nzFormat="dd/MM/yyyy"
+                                  formControlName="ngayDuyetKeHoachBtcDen"
+                                  nzPlaceHolder="Ngày kết thúc">
                   </nz-date-picker>
                 </div>
               </div>
@@ -70,7 +74,7 @@
           <div nz-col nzSpan="4">
             <nz-form-item class="form-item">
               <nz-form-label>Trích yếu</nz-form-label>
-              <input class="search__input" nz-input formControlName="trichYeu" />
+              <input class="search__input" nz-input formControlName="trichYeu"/>
             </nz-form-item>
           </div>
         </div>
@@ -93,15 +97,18 @@
         cục DTNN
       </h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub btn-xoa">
+        <button
+          type="button" class="btn btn-sub btn-xoa">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="exportData()">
+        <button type="button"
+                class="btn btn-sub" (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button *ngIf="userService.isTongCuc()" (click)="themMoi(null,false)" type="button" class="btn btn-sub xanh">
+        <button *ngIf="userService.isTongCuc()" (click)="themMoi(null,false)"
+                type="button" class="btn btn-sub xanh">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -109,106 +116,108 @@
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
       <nz-table #rowSelectionTable nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
-        [nzShowPagination]="false">
+                [nzShowPagination]="false">
         <tbody>
-          <tr class="header-row">
-            <th width="40px">
-              <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
-                [nzIndeterminate]="indeterminate"></label>
-            </th>
-            <th class="text-left">STT</th>
-            <th class="text-left">Năm KH</th>
-            <th class="text-left">Số công văn/tờ trình</th>
-            <th class="text-left">Ngày lập KH</th>
-            <th class="text-left">Ngày duyệt KH của TC</th>
-            <th class="text-left">Ngày duyệt của BTC</th>
-            <th class="text-left">Trích yếu</th>
-            <!--          <th class="text-left">Số ĐV tài sản</th>-->
-            <th class="text-left">Trạng thái</th>
-            <th class="text-center" width="120px">Hành động</th>
-          </tr>
-          <tr class="header-row search">
-            <th></th>
-            <th></th>
-            <th>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
-                  (input)="filterInTable('namKeHoach',filterTable.namKeHoach)" size="small" />
-              </nz-input-group>
-            </th>
-            <th>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soToTrinh"
-                  (input)="filterInTable('soToTrinh',filterTable.soToTrinh)" size="small" />
-              </nz-input-group>
-            </th>
-            <th>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayKeHoach"
-                  (input)="filterInTable('ngayKeHoach',filterTable.ngayKeHoach)" size="small" />
-              </nz-input-group>
-            </th>
-            <th>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayDuyetKeHoach"
-                  (input)="filterInTable('ngayDuyetKeHoach',filterTable.ngayDuyetKeHoach)" size="small" />
-              </nz-input-group>
-            </th>
-            <th>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayDuyetKeHoachBtc"
-                  (input)="filterInTable('ngayDuyetKeHoachBtc',filterTable.ngayDuyetKeHoachBtc)" size="small" />
-              </nz-input-group>
-            </th>
-            <th>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
-                  (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
-              </nz-input-group>
-            </th>
-            <!--          <th>-->
-            <!--            <nz-input-group>-->
-            <!--              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soDviTaiSan"-->
-            <!--                     (input)="filterInTable('soDviTaiSan',filterTable.soDviTaiSan)" size="small"/>-->
-            <!--            </nz-input-group>-->
-            <!--          </th>-->
-            <th>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
-                  (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
-              </nz-input-group>
-            </th>
-            <th></th>
-          </tr>
-          <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
-            <td>
-              <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
-            </td>
-            <td>{{(page - 1) * pageSize + idx +
-              1}}</td>
-            <td> {{ data.namKeHoach }} </td>
-            <td>{{ data.soToTrinh }}</td>
-            <td>{{ data.ngayKeHoach | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.ngayDuyetKeHoach | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.ngayDuyetKeHoachBtc | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.trichYeu }}</td>
-            <!--          <td>{{ data.soDviTaiSan }}</td>-->
-            <td>{{ data.tenTrangThai }}</td>
-            <td class="text-left">
-              <a *ngIf="data.trangThai !== STATUS.DU_THAO && data.trangThai !==STATUS.TUCHOI_BTC &&  data.trangThai!==STATUS.TU_CHOI_LDV && data.trangThai!==STATUS.TU_CHOI_LDTC"
-                (click)="themMoi(data.id, true)">
-                <i class="fa fa-eye" title="Xem chi tiết"></i>
-              </a>
-              <a *ngIf="data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TUCHOI_BTC || data.trangThai==STATUS.TU_CHOI_LDV || data.trangThai==STATUS.TU_CHOI_LDTC"
-                (click)="themMoi(data.id, false)">
-                <i class="fa fa-pencil" title="Sửa"></i>
-              </a>
-              <a *ngIf="data.trangThai==STATUS.DU_THAO" (click)="delete(data)">
-                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-              </a>
-            </td>
-          </tr>
+        <tr class="header-row">
+          <th width="40px">
+            <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                   [nzIndeterminate]="indeterminate"></label>
+          </th>
+          <th class="text-left">STT</th>
+          <th class="text-left">Năm KH</th>
+          <th class="text-left">Số công văn/tờ trình</th>
+          <th class="text-left">Ngày lập KH</th>
+          <th class="text-left">Ngày duyệt KH của TC</th>
+          <th class="text-left">Ngày duyệt của BTC</th>
+          <th class="text-left">Trích yếu</th>
+<!--          <th class="text-left">Số ĐV tài sản</th>-->
+          <th class="text-left">Trạng thái</th>
+          <th class="text-center" width="120px">Hành động</th>
+        </tr>
+        <tr class="header-row search">
+          <th></th>
+          <th></th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
+                     (input)="filterInTable('namKeHoach',filterTable.namKeHoach)" size="small"/>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soToTrinh"
+                     (input)="filterInTable('soToTrinh',filterTable.soToTrinh)" size="small"/>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayKeHoach"
+                     (input)="filterInTable('ngayKeHoach',filterTable.ngayKeHoach)" size="small"/>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayDuyetKeHoach"
+                     (input)="filterInTable('ngayDuyetKeHoach',filterTable.ngayDuyetKeHoach)" size="small"/>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayDuyetKeHoachBtc"
+                     (input)="filterInTable('ngayDuyetKeHoachBtc',filterTable.ngayDuyetKeHoachBtc)" size="small"/>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
+                     (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small"/>
+            </nz-input-group>
+          </th>
+<!--          <th>-->
+<!--            <nz-input-group>-->
+<!--              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soDviTaiSan"-->
+<!--                     (input)="filterInTable('soDviTaiSan',filterTable.soDviTaiSan)" size="small"/>-->
+<!--            </nz-input-group>-->
+<!--          </th>-->
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
+                     (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small"/>
+            </nz-input-group>
+          </th>
+          <th></th>
+        </tr>
+        <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
+          <td>
+            <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
+                   [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
+          </td>
+          <td>{{(page - 1) * pageSize + idx +
+          1}}</td>
+          <td> {{ data.namKeHoach }} </td>
+          <td>{{ data.soToTrinh }}</td>
+          <td>{{ data.ngayKeHoach | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.ngayDuyetKeHoach | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.ngayDuyetKeHoachBtc | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.trichYeu }}</td>
+<!--          <td>{{ data.soDviTaiSan }}</td>-->
+          <td>{{ data.tenTrangThai }}</td>
+          <td class="text-left">
+            <a
+              *ngIf="data.trangThai !== STATUS.DU_THAO && data.trangThai !==STATUS.TUCHOI_BTC &&  data.trangThai!==STATUS.TU_CHOI_LDV && data.trangThai!==STATUS.TU_CHOI_LDTC"
+              (click)="themMoi(data.id, true)">
+              <i class="fa fa-eye" title="Xem chi tiết"></i>
+            </a>
+            <a
+              *ngIf="data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TUCHOI_BTC || data.trangThai==STATUS.TU_CHOI_LDV || data.trangThai==STATUS.TU_CHOI_LDTC"
+              (click)="themMoi(data.id, false)">
+              <i class="fa fa-pencil" title="Sửa"></i>
+            </a>
+            <a *ngIf="data.trangThai==STATUS.DU_THAO" (click)="delete(data)">
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+            </a>
+          </td>
+        </tr>
         </tbody>
       </nz-table>
       <div class="tab-content tab-menu" id="myTabContent">
@@ -217,8 +226,9 @@
           </div>
           <div class="canphai">
             <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
-              [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
-              (nzPageSizeChange)="changePageSize($event)">
+                           [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+                           (nzPageIndexChange)="changePageIndex($event)"
+                           (nzPageSizeChange)="changePageSize($event)">
               <ng-template #rangeTemplate let-range="range" let-total>
                 {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
               </ng-template>
@@ -231,6 +241,6 @@
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
   <app-thong-tin-ke-hoach-xuat-hang-cua-tong-cuc [isViewDetail]="isView" (showListEvent)="showList()"
-    [idInput]="selectedId" [dataTongHop]="dataTongHop">
+                                                 [idInput]="selectedId" [dataTongHop]="dataTongHop">
   </app-thong-tin-ke-hoach-xuat-hang-cua-tong-cuc>
 </div>

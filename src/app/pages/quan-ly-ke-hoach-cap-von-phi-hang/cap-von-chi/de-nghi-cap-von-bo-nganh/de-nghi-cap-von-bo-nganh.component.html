@@ -109,8 +109,6 @@
           </th>
           <th>
             <nz-input-group>
-              <!--              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nam"-->
-              <!--                     (input)="filterInTable('nam',filterTable.nam, false)" size="small"/>-->
               <nz-select nzAllowClear [(ngModel)]="filterTable.nam" [nzDisabled]="isView"
                          (ngModelChange)="filterInTable('nam',filterTable.nam, false)">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>

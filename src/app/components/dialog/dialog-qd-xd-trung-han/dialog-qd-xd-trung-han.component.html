@@ -1,26 +1,28 @@
 <nz-card class="mt16 flex-card p-lr16 mb16 table-card scroll-modal">
   <nz-table nzBordered #basicTable [nzData]="dsPhuongAn" [nzFrontPagination]="false" [nzShowPagination]="false">
     <thead>
-      <tr>
-        <th [width]="35">STT</th>
-        <th *ngIf="type == 'QDTX'">Số tờ trình của Tổng cục</th>
-        <th *ngIf="type == 'QDTH'">Số quyết định Tổng cục</th>
-        <th *ngIf="type == 'DXNC'">Số quyết định trung hạn</th>
-        <th [width]="35" class=" text-center">Chọn</th>
-      </tr>
+    <tr>
+      <th [width]="35">STT</th>
+      <th *ngIf="type == 'QDTX'">Số tờ trình của Tổng cục</th>
+      <th *ngIf="type == 'QDTH'">Số quyết định Tổng cục</th>
+      <th *ngIf="type == 'DXNC'">Số quyết định trung hạn</th>
+      <th *ngIf="type == 'QDBTC'">Số quyết định BTC</th>
+      <th [width]="35" class=" text-center">Chọn</th>
+    </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let data of basicTable.data; let i = index">
-        <td class="text-center">{{i+1}}</td>
-        <td *ngIf="type == 'QDTX'">{{ data.soQuyetDinh}}</td>
-        <td *ngIf="type == 'QDTH'">{{ data.soQuyetDinh}}</td>
-        <td *ngIf="type == 'DXNC'">{{ data.soQuyetDinh}}</td>
-        <td class="text-center">
-          <a (click)="handleOk(data)">
-            <i class="icon htvbdh_dau-cong"></i>
-          </a>
-        </td>
-      </tr>
+    <tr *ngFor="let data of basicTable.data; let i = index">
+      <td class="text-center">{{i+1}}</td>
+      <td *ngIf="type == 'QDTX'"  >{{ data.soQuyetDinh != null ? data.soQuyetDinh : data.soToTrinh}}</td>
+      <td *ngIf="type == 'QDTH'"  >{{ data.soQuyetDinh}}</td>
+      <td *ngIf="type == 'DXNC'"  >{{ data.soQuyetDinh}}</td>
+      <td *ngIf="type == 'QDBTC'"  >{{ data.soQuyetDinh}}</td>
+      <td  class="text-center">
+        <a (click)="handleOk(data)">
+          <i class="icon htvbdh_dau-cong"></i>
+        </a>
+      </td>
+    </tr>
     </tbody>
   </nz-table>
 </nz-card>
@@ -36,3 +38,4 @@
     </div>
   </div>
 </div>
+

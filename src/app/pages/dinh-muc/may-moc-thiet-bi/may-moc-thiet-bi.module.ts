@@ -15,14 +15,14 @@ import {
 } from "./mm-dinh-muc-trang-bi/mm-them-moi-dm-trang-bi/mm-them-moi-dm-trang-bi.component";
 import { MmHopDongComponent } from './mm-hop-dong/mm-hop-dong.component';
 import { MmTtPhanBoComponent } from './mm-tt-phan-bo/mm-tt-phan-bo.component';
-import { MmDxCucComponent } from "./mm-dx-cuc/mm-dx-cuc.component";
-import { ThemMoiMmDxCucComponent } from "./mm-dx-cuc/them-moi-mm-dx-cuc/them-moi-mm-dx-cuc.component";
+import {MmDxCucComponent} from "./mm-dx-cuc/mm-dx-cuc.component";
+import {ThemMoiMmDxCucComponent} from "./mm-dx-cuc/them-moi-mm-dx-cuc/them-moi-mm-dx-cuc.component";
 import { MmTongHopDxCucComponent } from './mm-tong-hop-dx-cuc/mm-tong-hop-dx-cuc.component';
 import { MmThemMoiTongHopDxCucComponent } from './mm-tong-hop-dx-cuc/mm-them-moi-tong-hop-dx-cuc/mm-them-moi-tong-hop-dx-cuc.component';
 import { MmQdMuaSamComponent } from './mm-qd-mua-sam/mm-qd-mua-sam.component';
 import { MmThemMoiQdMuaSamComponent } from './mm-qd-mua-sam/mm-them-moi-qd-mua-sam/mm-them-moi-qd-mua-sam.component';
-import { MmThemMoiTtPhanBoComponent } from "./mm-tt-phan-bo/mm-them-moi-tt-phan-bo/mm-them-moi-tt-phan-bo.component";
-import { MmThongTinHopDongComponent } from "./mm-hop-dong/mm-thong-tin-hop-dong/mm-thong-tin-hop-dong.component";
+import {MmThemMoiTtPhanBoComponent} from "./mm-tt-phan-bo/mm-them-moi-tt-phan-bo/mm-them-moi-tt-phan-bo.component";
+import {MmThongTinHopDongComponent} from "./mm-hop-dong/mm-thong-tin-hop-dong/mm-thong-tin-hop-dong.component";
 import { MmThongTinPhanBoCtComponent } from './mm-tt-phan-bo/mm-them-moi-tt-phan-bo/mm-thong-tin-phan-bo-ct/mm-thong-tin-phan-bo-ct.component';
 import {
     MmThemMoiPhuLucComponent
@@ -61,13 +61,13 @@ import { MmDialogThongBaoTuChoiComponent } from './mm-tong-hop-dx-cuc/mm-dialog-
         MmThongTinHienTrangComponent,
         MmDialogThongBaoTuChoiComponent
     ],
-    imports: [
-        CommonModule,
-        ComponentsModule,
-        MayMocThietBiRoutingModule,
-        DinhMucTrangBiCongCuModule,
-        HopDongMuaSamModule,
-    ],
+  imports: [
+    CommonModule,
+    ComponentsModule,
+    MayMocThietBiRoutingModule,
+    DinhMucTrangBiCongCuModule,
+    HopDongMuaSamModule,
+  ],
     exports: [
         MayMocThietBiComponent,
         DeXuatNhuCauChiCucComponent,

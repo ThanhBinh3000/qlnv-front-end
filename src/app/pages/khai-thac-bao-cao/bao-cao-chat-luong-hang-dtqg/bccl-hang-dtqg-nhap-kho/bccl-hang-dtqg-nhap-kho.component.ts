@@ -65,12 +65,27 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
       this.loadDsDonVi();
       this.loadDsVthh();
       this.loadDsLoaiBc();
+      await this.initForm();
     } catch (e) {
       console.log("error: ", e);
       await this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
     await this.spinner.hide();
+  }
+
+  async initForm() {
+    if (this.userService.isCuc()) {
+      this.formData.patchValue({
+        maCuc : this.userInfo.MA_DVI
+      })
+    }
+    if (this.userService.isChiCuc()) {
+      this.formData.patchValue({
+        maCuc : this.userInfo.MA_DVI.substring(0, 6),
+        maChiCuc : this.userInfo.MA_DVI,
+      })
+    }
   }
 
   downloadPdf() {
@@ -170,7 +185,6 @@ export class BcclHangDtqgNhapKhoComponent extends Base2Component implements OnIn
     let res = await this.donViService.layTatCaDonViByLevel(2);
     if (res && res.data) {
       this.dsDonVi = res.data
-      this.dsDonVi = this.dsDonVi.filter(item => item.type != "PB" && item.maDvi.startsWith(this.userInfo.MA_DVI))
     }
   }
 

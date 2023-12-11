@@ -53,7 +53,7 @@
             </div>
             <div nz-col [nzSpan]="24">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> số hồ sơ đền nghị thanh lý</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Số hồ sơ đề nghị thanh lý</nz-form-label>
                 <nz-form-control>
                   <input nz-input formControlName="soHoSo" readonly/>
                 </nz-form-control>
@@ -86,7 +86,7 @@
                 <nz-form-label [nzNoColon]="true"> Thời gian thanh lý được phê duyệt
                 </nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName="tgianThanhLy" nzFormat="dd/MM/yyyy" readonly/>
+                  <input nz-input formControlName="tgianThanhLy" readonly/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -139,7 +139,9 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Số DV tài sản đấu giá thành công</nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName="soLuongDviTsanTrung" readonly/>
+                  <nz-input-number [nzSize]="'small'" formControlName="soLuongDviTsanTrung"
+                                   [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
+                  </nz-input-number>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -147,7 +149,9 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Số DV tài sản đấu giá không thành công</nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName="soLuongDviTsanTruot" readonly/>
+                  <nz-input-number [nzSize]="'small'" formControlName="soLuongDviTsanTruot"
+                                   [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
+                  </nz-input-number>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -185,7 +189,7 @@
         </div>
       </div>
       <div class="buttons" *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH && userService.isCuc()">
-        <button type="button" class="btn btn-main" (click)="redirectCreate()">
+        <button type="button" class="btn btn-main" (click)="redirectCreate('XHDTQG_XTL_TCKHBDG_HDPL_THEM')">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -194,18 +198,17 @@
     <nz-card class="flex-card p-lr16 card-table">
       <nz-table #basicTable class="pd-10" [nzData]="dataTable" nzBordered>
         <thead>
-        <tr>
-          <th>STT</th>
-          <th>Số hợp đồng</th>
-          <th>Tên hợp đồng</th>
-          <th>Ngày ký hợp đồng</th>
-          <th>Số lượng (kg)</th>
-          <th>Giá trị (đ)</th>
-          <th>Trạng thái HĐ</th>
-          <th>Số QĐ giao NV Xh</th>
-          <th>Trạng thái Xh</th>
-          <th>Hành động</th>
-        </tr>
+          <tr>
+            <th>STT</th>
+            <th>Số hợp đồng</th>
+            <th>Tên hợp đồng</th>
+            <th>Ngày ký hợp đồng</th>
+            <th>Giá trị (đ)</th>
+            <th>Trạng thái HĐ</th>
+            <th>Số QĐ giao NV XH</th>
+            <th>Trạng thái XH</th>
+            <th>Hành động</th>
+          </tr>
         </thead>
         <tbody>
         <ng-container *ngFor="let data of dataTable,let i = index">
@@ -214,7 +217,6 @@
             <td class="text-left">{{data.soHd}}</td>
             <td class="text-left">{{data.tenHd}}</td>
             <td class="text-left">{{data.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
-            <td class="text-left">{{data.soLuong|number:globals.numberFormat:globals.locale}}</td>
             <td class="text-left">{{data.thanhTien|number:globals.numberFormat:globals.locale}}</td>
             <td class="text-left">{{data.tenTrangThai}}</td>
             <td class="text-left">

@@ -60,7 +60,7 @@ export class ThongTinBaoCaoKetQuaBaoHanhComponent extends Base2Component impleme
   ]
   dataPhieuKncl: any;
   maBc: string;
-  templateName = "Biên bản lấy mẫu bàn giao mẫu vật tư";
+  templateName = "21.Báo cáo KQ bảo hành_trong thời gian BH theo HĐ";
   dviNhan: any;
 
   constructor(
@@ -103,7 +103,10 @@ export class ThongTinBaoCaoKetQuaBaoHanhComponent extends Base2Component impleme
     try {
       this.spinner.show();
       this.maBc = "/" + this.userInfo.MA_QD
-      await Promise.all([])
+      console.log(this.userInfo,"dvi")
+      await Promise.all([
+        this.loadDviNhan(this.userInfo?.DON_VI?.maDviCha)
+      ])
       await this.loadDetail(this.idInput)
       this.spinner.hide();
     } catch (e) {
@@ -118,6 +121,7 @@ export class ThongTinBaoCaoKetQuaBaoHanhComponent extends Base2Component impleme
     if (idInput > 0) {
       await this.baoCaoKetQuaBaoHanhService.getDetail(idInput)
         .then((res) => {
+          console.log(1)
           if (res.msg == MESSAGE.SUCCESS) {
             this.formData.patchValue({
               ...res.data,
@@ -126,7 +130,7 @@ export class ThongTinBaoCaoKetQuaBaoHanhComponent extends Base2Component impleme
               soCanCu: res.data?.soCanCu ? res.data.soCanCu.split(",") : [],
               tenDviNhan: this.dviNhan.title,
             });
-            console.log(this.formData.value, 152)
+            this.maBc = res.data.soBaoCao.split("/")[1]
             this.dataTable = this.formData.value.bhBaoCaoKqDtl
             this.buildTableView(this.dataTable)
           }
@@ -137,12 +141,11 @@ export class ThongTinBaoCaoKetQuaBaoHanhComponent extends Base2Component impleme
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     } else {
-      let maDviNhan = this.userInfo?.DON_VI?.maDviCha;
-      await this.loadDviNhan(maDviNhan);
+      // let maDviNhan = this.userInfo?.DON_VI?.maDviCha;
       this.formData.patchValue({
         maDvi: this.userInfo.MA_DVI,
         tenDvi: this.userInfo.TEN_DVI,
-        maDviNhan,
+        maDviNhan: this.userInfo?.DON_VI?.maDviCha,
         tenDviNhan: this.dviNhan.title,
       });
     }
@@ -319,7 +322,7 @@ export class ThongTinBaoCaoKetQuaBaoHanhComponent extends Base2Component impleme
     this.formData.patchValue({
       soCanCu: this.listSoBaoCao.map(m => m.soBienBan),
       idCanCu: this.listSoBaoCao.map(m => m.id),
-      bhBaoCaoKqDtl: this.dataTable.map((item) => ({...item, id: null, trangThaiBh: item.trangThai})),
+      bhBaoCaoKqDtl: this.dataTable.map((item) => ({...item, id: null, trangThaiBh: item.trangThaiBh})),
     });
     console.log(this.dataTable, 5555)
     this.buildTableView(this.dataTable);

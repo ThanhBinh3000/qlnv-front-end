@@ -23,6 +23,7 @@ export class BienBanNghiemThuBaoQuanComponent extends Base2Component implements 
   isView: boolean = false;
   STATUS = STATUS
   idQdGiaoNvNh: number;
+  dataDdiem: number;
   searchFilter = {
     soQd: '',
     namKhoach: '',
@@ -158,11 +159,12 @@ export class BienBanNghiemThuBaoQuanComponent extends Base2Component implements 
     }
   }
 
-  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
+  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number, dataDdiem?: number) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
     this.idQdGiaoNvNh = idQdGiaoNvNh
+    this.dataDdiem = dataDdiem
   }
 
   xoaItem(item: any) {

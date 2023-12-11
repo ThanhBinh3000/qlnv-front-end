@@ -1,16 +1,16 @@
-import { Component, Input, OnInit, } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { QuyHoachKhoService } from "../../../../../services/quy-hoach-kho.service";
-import { Router } from "@angular/router";
-import { Base2Component } from "../../../../../components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../services/storage.service";
-import { DanhMucService } from "../../../../../services/danhmuc.service";
+import {Component, Input, OnInit,} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
+import {QuyHoachKhoService} from "../../../../../services/quy-hoach-kho.service";
+import {Router} from "@angular/router";
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {DanhMucService} from "../../../../../services/danhmuc.service";
 import dayjs from "dayjs";
-import { cloneDeep } from 'lodash';
+import {cloneDeep} from 'lodash';
 
 @Component({
   selector: 'app-quyet-dinh-quy-hoach',
@@ -23,8 +23,8 @@ export class QuyetDinhQuyHoachComponent extends Base2Component implements OnInit
   isDetail: boolean = false;
   listVungMien: any[] = [];
   listTrangThai: any[] = [
-    { ma: this.STATUS.DANG_NHAP_DU_LIEU, giaTri: "Đang nhập dữ liệu" },
-    { ma: this.STATUS.BAN_HANH, giaTri: "Ban hành" }
+    {ma: this.STATUS.DANG_NHAP_DU_LIEU, giaTri: "Đang nhập dữ liệu"},
+    {ma: this.STATUS.BAN_HANH, giaTri: "Ban hành"}
   ];
 
   constructor(
@@ -88,7 +88,7 @@ export class QuyetDinhQuyHoachComponent extends Base2Component implements OnInit
 
   async filter() {
     this.formData.patchValue({
-      loai: this.type
+      loai : this.type
     })
     await this.search();
   }

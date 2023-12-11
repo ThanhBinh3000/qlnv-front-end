@@ -75,7 +75,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
   dsHangPD = []
   typeData: string;
   typeAction: string;
-  previewName: string = 'nk_bb_cb_kho';
+  previewName: string = 'bien_ban_chuan_bi_kho';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -140,6 +140,8 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
         tongKinhPhiDaTh: [],
         tongKinhPhiDaThBc: [],
         tenNganLoKho: [],
+        soBbNhapDayKho: [],
+        tgianGiaoDuHang: [],
       }
     );
   }
@@ -215,11 +217,12 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       tenCloaiVthh: data.tenCloaiVthh,
       moTaHangHoa: data.moTaHangHoa,
       soHd: data.soHd,
+      tgianGiaoDuHang: data.tgianGiaoDuHang,
     });
     this.loadDataComboBox();
     let dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
     if (dataChiCuc.length > 0) {
-      this.listDiaDiemNhap = dataChiCuc[0].children;
+      this.listDiaDiemNhap = dataChiCuc[0].children.filter(i => i.bienBanChuanBiKho == null);
     }
     await this.spinner.hide();
   }
@@ -304,14 +307,16 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
   }
 
   async initForm() {
+    let maBb = 'BBCBK-' + this.userInfo.DON_VI.tenVietTat;
     let res = await this.userService.getId("BIEN_BAN_CHUAN_BI_KHO_SEQ");
     this.formData.patchValue({
-      soBienBan: `${res}/${this.formData.get('nam').value}/BBNTBQ-CCDTVP`,
+      soBienBan: `${res}/${this.formData.get('nam').value}/${maBb}`,
       maDvi: this.userInfo.MA_DVI,
       tenDvi: this.userInfo.TEN_DVI,
       maQhns: this.userInfo.DON_VI.maQhns,
       trangThai: this.STATUS.DU_THAO,
       tenTrangThai: 'Dự thảo',
+      tenKyThuatVien: this.userInfo.TEN_DAY_DU,
     });
     if (this.idQdGiaoNvNh) {
       await this.bindingDataQd(this.idQdGiaoNvNh);
@@ -503,7 +508,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
 
   tuChoi() {
     let trangThai = ''
-    switch (this.detail.trangThai) {
+    switch (this.formData.value.trangThai) {
       case this.STATUS.CHO_DUYET_TK: {
         trangThai = this.STATUS.TU_CHOI_TK;
         break;

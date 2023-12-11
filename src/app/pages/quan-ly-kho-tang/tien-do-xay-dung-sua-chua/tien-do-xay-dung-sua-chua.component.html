@@ -1,14 +1,14 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
   <ul nz-menu nzMode="horizontal">
     <li nz-menu-item nzSelected (click)="selectTab('dautu-xaydung')"
-      *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD')">
+        *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD')">
       Tiến độ đầu tư xây dựng
     </li>
     <li nz-menu-item (click)="selectTab('sua-chua-lon')" *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCL')">
       Tiến độ sửa chữa lớn hàng năm
     </li>
     <li nz-menu-item (click)="selectTab('sua-chua-thuong-xuyen')"
-      *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX')">
+        *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX')">
       Tiến độ sửa chữa thường xuyên
     </li>
   </ul>

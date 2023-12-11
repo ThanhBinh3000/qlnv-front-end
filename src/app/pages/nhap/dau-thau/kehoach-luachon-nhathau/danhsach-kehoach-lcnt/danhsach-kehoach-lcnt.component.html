@@ -253,7 +253,7 @@
             <td>{{ data.tenTrangThai }}</td>
             <td *ngIf="userService.isTongCuc() && loaiVthh != '02'">
               <span *ngIf="data.trangThaiTh == '24'">{{data.tenTrangThaiTh}}</span>
-              <a style="color: blue" *ngIf="data.trangThaiTh != '24'" (click)="openModalTh(data.maTh)">{{data.maTh}}</a>
+              <a style="color: blue" *ngIf="data.trangThaiTh != '24'" (click)="openModalTh(data.idTh)">{{data.maTh}}</a>
             </td>
             <td class="text-left">
               <a (click)="detail(data, true)"

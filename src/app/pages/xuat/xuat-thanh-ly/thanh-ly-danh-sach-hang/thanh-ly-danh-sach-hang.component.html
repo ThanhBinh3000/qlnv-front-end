@@ -5,9 +5,9 @@
         <div nz-row [nzGutter]="20">
           <div nz-col nzSpan="6">
             <nz-form-control>
-              <nz-form-label>Chi cục DTNN KV</nz-form-label>
+              <nz-form-label> {{ userService.isTongCuc() ? 'Cục DTNN KV' : 'Chi cục DTNN KV' }} </nz-form-label>
               <nz-form-item>
-                <nz-select formControlName="maDvi" nzShowSearch nzAllowClear>
+                <nz-select formControlName="maDviSr" nzShowSearch nzAllowClear>
                   <nz-option *ngFor="let p of dsDonvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
                 </nz-select>
               </nz-form-item>
@@ -15,7 +15,7 @@
           </div>
           <div nz-col nzSpan="5">
             <nz-form-control>
-              <nz-form-label>Loại hàng </nz-form-label>
+              <nz-form-label>Loại hàng DTQG</nz-form-label>
               <nz-form-item>
                 <nz-select formControlName="loaiVthh" nzShowSearch nzAllowClear (ngModelChange)="changeHangHoa($event)">
                   <nz-option *ngFor="let p of dsLoaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
@@ -26,7 +26,7 @@
           <div nz-col nzSpan="5">
             <nz-form-control>
               <nz-form-label>
-                Chủng loại hàng
+                Chủng loại hàng DTQG
               </nz-form-label>
               <nz-form-item>
                 <nz-select formControlName="cloaiVthh" nzShowSearch nzAllowClear>
@@ -105,21 +105,21 @@
             <thead>
               <tr>
                 <th style="min-width: 340px">Chi cục DTNN KV</th>
-                <th>Loại hàng </th>
-                <th>Chủng loại</th>
+                <th>Loại hàng DTQG</th>
+                <th>Chủng loại hàng DTQG</th>
                 <th>Điểm kho</th>
                 <th>Nhà kho / Ngăn kho / Lô kho</th>
                 <th>SL tồn</th>
                 <th>Ngày nhập kho</th>
                 <th>SL hỏng cần thanh lý</th>
-                <th>SL SC đã duyệt</th>
-                <th>SL còn lại cần SC</th>
+                <th>SL cần thanh lý đã duyệt</th>
+                <th>SL còn lại cần thanh lý</th>
                 <th>ĐVT</th>
                 <th>Ngày đề xuất</th>
                 <th>Ngày tổng hợp (chốt DS)</th>
                 <th>Trạng thái</th>
-                <th>Mã danh sách cần SC</th>
-                <th>Lý do cần SC</th>
+                <th>Mã danh sách cần thanh lý</th>
+                <th>Lý do cần thanh lý</th>
                 <th>Hành động</th>
               </tr>
             </thead>
@@ -193,7 +193,7 @@
                           <td>{{lv2.maTongHop}}</td>
                           <td>{{lv2.lyDo}}</td>
                           <td class="text-left">
-                            <a>
+                            <a (click)="showDetail(lv2)">
                               <i class="fa fa-eye" title="Xem chi tiết"></i>
                             </a>
                           </td>

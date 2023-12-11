@@ -14,6 +14,7 @@ import { MESSAGE } from "src/app/constants/message";
 import dayjs from "dayjs";
 import { isEmpty } from 'lodash';
 import { TEN_LOAI_VTHH } from "src/app/constants/config";
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-quyet-dinh-pd',
@@ -35,6 +36,7 @@ export class QuyetDinhPdComponent extends Base2Component implements OnInit {
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
     { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
   ];
+  dataInit: any = {};
 
   constructor(
     httpClient: HttpClient,
@@ -43,7 +45,8 @@ export class QuyetDinhPdComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private donviService: DonviService,
-    private quyetDinhPheDuyetPhuongAnCuuTroService: QuyetDinhPheDuyetPhuongAnCuuTroService
+    private quyetDinhPheDuyetPhuongAnCuuTroService: QuyetDinhPheDuyetPhuongAnCuuTroService,
+    private dataService: DataService
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPheDuyetPhuongAnCuuTroService);
     this.formData = this.fb.group({
@@ -119,6 +122,13 @@ export class QuyetDinhPdComponent extends Base2Component implements OnInit {
 
   async ngOnInit() {
     try {
+      await this.dataService.currentData.subscribe(data => {
+        if (data && data.isTaoQdPdPa) {
+          this.redirectDetail(0, false);
+          this.dataInit = { ...data };
+        }
+      });
+      await this.dataService.removeData();
       this.formData.patchValue({ type: this.loaiXuat, xuatCap: this.chuyenXuatCap, trangThai: (!!!this.chuyenXuatCap) ? null : '29' });
       if (this.chuyenXuatCap) {
         this.formData.patchValue({ tenVthh: TEN_LOAI_VTHH.GAO });
@@ -191,5 +201,8 @@ export class QuyetDinhPdComponent extends Base2Component implements OnInit {
   }
   taoQuyetDinhXc(data) {
     this.eventTaoQdXc.emit(data);
+  }
+  removeDataInit() {
+    this.dataInit = {};
   }
 }

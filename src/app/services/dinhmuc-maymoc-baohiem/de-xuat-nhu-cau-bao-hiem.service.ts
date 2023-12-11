@@ -22,4 +22,9 @@ export class DeXuatNhuCauBaoHiemService extends BaseService{
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/cuc-th/tra-cuu-dx-chi-cuc`
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
+
+  previewDx(body: any)  {
+    const url = `${environment.SERVICE_API}/qlnv-report/dinh-muc/xem-truoc-bao-hiem`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
 }

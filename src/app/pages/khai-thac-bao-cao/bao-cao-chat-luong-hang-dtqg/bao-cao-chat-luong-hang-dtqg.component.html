@@ -9,35 +9,40 @@
         <li nz-submenu nzOpen='true' nzTitle='&nbsp;&nbsp;&nbsp;Báo cáo chất lượng hàng DTQG'>
           <ul>
             <li nz-menu-item [nzSelected]='tabSelected==0' (click)='selectTab(0)'
-              *ngIf="userService.isAccessPermisson('KTBC_CLHDTQG_CLN')">
+                *ngIf="userService.isAccessPermisson('KTBC_CLHDTQG_CLN')"
+            >
               <span nz-icon nzType='fund'></span>
               <span>Báo cáo chất lượng công tác nhập</span>
             </li>
             <li nz-menu-item [nzSelected]='tabSelected==1' (click)='selectTab(1)'
-              *ngIf="userService.isAccessPermisson('KTBC_CLHDTQG_CLX')">
+                *ngIf="userService.isAccessPermisson('KTBC_CLHDTQG_CLX')"
+            >
               <span nz-icon nzType='fund'></span>
               <span>Báo cáo chất lượng hàng trước khi xuất</span>
             </li>
             <li nz-menu-item [nzSelected]='tabSelected==2' (click)='selectTab(2)'
-              *ngIf="userService.isAccessPermisson('KTBC_CLHDTQG_HH')">
+                *ngIf="userService.isAccessPermisson('KTBC_CLHDTQG_HH')"
+            >
               <span nz-icon nzType='fund'></span>
               <span>Báo cáo hao hụt hàng DTQG</span>
             </li>
             <li nz-menu-item [nzSelected]='tabSelected==3' (click)='selectTab(3)'
-              *ngIf="userService.isAccessPermisson('KTBC_CLHDTQG_BQTX')">
+                *ngIf="userService.isAccessPermisson('KTBC_CLHDTQG_BQTX')"
+            >
               <span nz-icon nzType='fund'></span>
               <span>Báo cáo công tác bảo quản thường xuyên/định kỳ</span>
             </li>
             <li nz-menu-item [nzSelected]='tabSelected==4' (click)='selectTab(4)'
-              *ngIf="userService.isAccessPermisson('KTBC_CLHDTQG_SLCLCCDC')">
+                *ngIf="userService.isAccessPermisson('KTBC_CLHDTQG_SLCLCCDC')"
+            >
               <span nz-icon nzType='fund'></span>
               <span>Tổng hợp BC số lượng, chất lượng công cụ dụng cụ</span>
             </li>
             <li nz-menu-item [nzSelected]='tabSelected==5' (click)='selectTab(5)' style='height: 100%'
-              *ngIf="userService.isAccessPermisson('KTBC_CLHDTQG_SLCLMMTB')">
+                *ngIf="userService.isAccessPermisson('KTBC_CLHDTQG_SLCLMMTB')"
+            >
               <span nz-icon nzType='fund'></span>
-              <span>Báo cáo thực trạng quản lý và đề xuất nhu cầu trang bị tài sản là máy móc, thiết bị chuyên dùng phục
-                vụ công tác nhập, xuất, bảo quản hàng DTQG</span>
+              <span>Báo cáo thực trạng quản lý và đề xuất nhu cầu trang bị tài sản là máy móc, thiết bị chuyên dùng phục vụ công tác nhập, xuất, bảo quản hàng DTQG</span>
             </li>
             <li nz-menu-item [nzSelected]='tabSelected==6' (click)='selectTab(6)'>
               <span nz-icon nzType='fund'></span>

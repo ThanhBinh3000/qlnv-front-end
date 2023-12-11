@@ -216,7 +216,9 @@ export class XtlThemBbLmComponent extends Base3Component implements OnInit {
       if (res.data) {
         console.log(res.data);
         res.data.children.forEach( item => {
-          dataDiemKho.push(item.xhTlDanhSachHdr);
+          if(item.phanLoai == this.phanLoai){
+             dataDiemKho.push(item.xhTlDanhSachHdr);
+          }
         })
         const modalQD = this.modal.create({
           nzTitle: 'Danh sách quyết định giao nhiệm vụ xuất hàng',
@@ -304,7 +306,7 @@ export class XtlThemBbLmComponent extends Base3Component implements OnInit {
 
   showSave() {
     let trangThai = this.formData.value.trangThai;
-    return (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_LDCC) && this.userService.isAccessPermisson('SCHDTQG_KTCL_THEM');
+    return (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_LDCC);
   }
 
   showPheDuyetTuChoi(){
@@ -342,7 +344,7 @@ export class XtlThemBbLmComponent extends Base3Component implements OnInit {
       case STATUS.TU_CHOI_LDCC:
       case STATUS.DU_THAO:
         msgConfirm = 'Bạn có muốn gửi duyệt ?'
-        msgSuceess = 'Gửi duyệt thành công'
+        msgSuceess = 'Thao tác thành công'
         trangThai = STATUS.CHO_DUYET_LDCC;
         break;
       case STATUS.CHO_DUYET_LDCC:

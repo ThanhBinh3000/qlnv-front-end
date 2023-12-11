@@ -4,7 +4,8 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button type="button" class="btn btn-sub do" (click)="preview()">
+    <button
+      type="button" class="btn btn-sub do" (click)="preview()">
       <i class="icon htvbdh_tcdt_tuchoi"></i>
       <span>Xem trước</span>
     </button>
@@ -62,7 +63,8 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-select formControlName="namKhoach" nzAllowClear [nzDisabled]="isView">
+              <nz-select formControlName="namKhoach" nzAllowClear
+                [nzDisabled]="isView">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -158,11 +160,20 @@
               Căn cứ pháp lý
             </nz-form-label>
             <div class="list-file">
+              <file-list [data]="listCcPhapLy" [isViewDetail]="isView"></file-list>
+            </div>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              File đính kèm QĐ phê duyệt kế hoạch lựa chọn nhà thầu của Tổng cục DTNN đã ký và đóng dấu
+            </nz-form-label>
+            <div class="list-file">
               <file-list [data]="listFileDinhKem" [isViewDetail]="isView"></file-list>
             </div>
           </nz-form-item>
         </div>
-
       </div>
     </form>
   </nz-card>
@@ -182,6 +193,22 @@
       </div>
       <form nz-form nzLayout="vertical" [formGroup]="formData">
         <div nz-row [nzGutter]="24">
+          <div nz-col [nzSpan]=6>
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true"> Kiểu nhập </nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                  <input [readonly]="true" nz-input formControlName="kieuNx"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]=6>
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true"> Loại hình nhập </nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <input [readonly]="true" nz-input formControlName="loaiHinhNx"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
           <div nz-col [nzSpan]=6>
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG </nz-form-label>
@@ -243,18 +270,22 @@
         <div nz-col [nzSpan]="12">
           <nz-card class="mg-t-10 flex-card p-lr16 ">
             <app-thongtin-dexuat [title]="'Nội dung đề xuất của Cục DTNN KV'" [dataInput]="dataInputCache"
-              [titlePl]="'Phụ lục đề xuất KH LCNT của Cục DTNN KV'" [isView]="true" [isCache]="true"
-              [isTongHop]="isTongHop">
+                                 [titlePl]="'Phụ lục đề xuất KH LCNT của Cục DTNN KV'"
+                                 [isView]="true" [isCache]="true" [isTongHop]="isTongHop">
             </app-thongtin-dexuat>
           </nz-card>
         </div>
         <div nz-col [nzSpan]="12">
           <nz-card class="mg-t-10 flex-card p-lr16 ">
-            <app-thongtin-dexuat #thongtinDexuatComponent [title]="'Quyết định của Tổng cục DTNN'"
-              [titlePl]="'Phụ lục kế hoạch lựa chọn nhà thầu'" [dataInput]="dataInput" [dataChiTieu]="dataChiTieu"
-              [maDvi]="maDviSelected" [trangThaiQd]="formData.value.trangThai"
-              [isView]="formData.value.trangThai == STATUS.BAN_HANH" [isTongHop]="isTongHop"
-              (dsDxChange)="setNewDanhsachDx($event)">
+            <app-thongtin-dexuat #thongtinDexuatComponent
+                                 [title]="'Quyết định của Tổng cục DTNN'"
+                                 [titlePl]="'Phụ lục kế hoạch lựa chọn nhà thầu'"
+                                 [dataInput]="dataInput"
+                                 [dataChiTieu]="dataChiTieu" [maDvi]="maDviSelected"
+                                 [trangThaiQd]="formData.value.trangThai"
+                                 [isView]="formData.value.trangThai == STATUS.BAN_HANH"
+                                 [isTongHop]="isTongHop"
+                                 (dsDxChange)="setNewDanhsachDx($event)">
             </app-thongtin-dexuat>
           </nz-card>
         </div>
@@ -267,20 +298,23 @@
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
 </ng-template>
 <nz-modal [(nzVisible)]="showDlgPreview" nzTitle="QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH LỰA CHỌN NHÀ THẦU" nzWidth="100%"
-  (nzOnCancel)="closeDlg()">
+          (nzOnCancel)="closeDlg()">
   <div *nzModalContent class="modal__content">
     <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
   </div>
   <div *nzModalFooter>
-    <button nz-button (click)="printPreview()" class="modal__button--save">
+    <button nz-button (click)="printPreview()"
+            class="modal__button--save">
       <i class="icon htvbdh_printer"></i>
       In
     </button>
-    <button nz-button (click)="downloadPdf()" class="modal__button--save">
+    <button nz-button (click)="downloadPdf()"
+            class="modal__button--save">
       <i class="icon htvbdh_file-pdf"></i>
       Xuất .pdf
     </button>
-    <button nz-button (click)="downloadWord()" class="modal__button--save">
+    <button nz-button (click)="downloadWord()"
+            class="modal__button--save">
       <i class="icon htvbdh_file-word"></i>
       Xuất .docx
     </button>

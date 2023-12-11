@@ -515,19 +515,21 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
                 maThuKhoNhan: detailThuKho.id,
                 thuKhoNhan: detailThuKho.fullName
               })
+
+              if (
+                this.formData.value.maThuKho === detailThuKho.id
+              ) {
+                this.formData.patchValue({
+                  thayDoiThuKho: false
+                })
+              } else {
+                this.formData.patchValue({
+                  thayDoiThuKho: true
+                })
+              }
             }
 
-            if (
-              this.formData.value.maThuKho === detailThuKho.id
-            ) {
-              this.formData.patchValue({
-                thayDoiThuKho: false
-              })
-            } else {
-              this.formData.patchValue({
-                thayDoiThuKho: true
-              })
-            }
+
 
             if (!this.formData.value.cloaiVthh) return
             const tichLuongKd = (this.formData.value.cloaiVthh.startsWith("01") || this.formData.value.cloaiVthh.startsWith("04")) ? detail.data.object.tichLuongKdLt : detail.data.object.tichLuongKdVt

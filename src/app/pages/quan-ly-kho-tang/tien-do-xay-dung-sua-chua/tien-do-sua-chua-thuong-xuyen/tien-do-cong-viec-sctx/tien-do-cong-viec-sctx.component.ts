@@ -1,21 +1,21 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { MESSAGE } from "../../../../../constants/message";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { FormGroup } from '@angular/forms';
-import { chain, cloneDeep } from "lodash";
-import { v4 as uuidv4 } from "uuid";
-import { AMOUNT_NO_DECIMAL } from "../../../../../Utility/utils";
-import { STATUS } from "../../../../../constants/status";
-import { Base2Component } from "../../../../../components/base2/base2.component";
-import { TienDoXayDungCt } from "../../tien-do-dau-tu-xay-dung/tien-do-cong-viec/tien-do-cong-viec.component";
+import {Component, Input, OnInit} from '@angular/core';
+import {MESSAGE} from "../../../../../constants/message";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {FormGroup} from '@angular/forms';
+import {chain, cloneDeep} from "lodash";
+import {v4 as uuidv4} from "uuid";
+import {AMOUNT_NO_DECIMAL} from "../../../../../Utility/utils";
+import {STATUS} from "../../../../../constants/status";
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {TienDoXayDungCt} from "../../tien-do-dau-tu-xay-dung/tien-do-cong-viec/tien-do-cong-viec.component";
 import {
   TienDoCongViecTdscService
 } from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/tien-do-cong-viec.service";
-import { HopdongTdscService } from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/hopdongTdsc.service";
+import {HopdongTdscService} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/hopdongTdsc.service";
 import {
   ThongTinTienDoCongViecSctxComponent
 } from "./thong-tin-tien-do-cong-viec-sctx/thong-tin-tien-do-cong-viec-sctx.component";
@@ -33,11 +33,11 @@ export class TienDoCongViecSctxComponent extends Base2Component implements OnIni
   dataTable: any[] = [];
   dataTableReq: any[] = [];
   dataKlcv: any[] = [];
-  formData: FormGroup;
+  formData : FormGroup;
   AMOUNT = AMOUNT_NO_DECIMAL;
   STATUS = STATUS;
   rowItemCha: TienDoXayDungCt = new TienDoXayDungCt();
-  itemHopDong: any;
+  itemHopDong : any;
   listThang: any[] = [];
   constructor(
     private httpClient: HttpClient,
@@ -52,8 +52,8 @@ export class TienDoCongViecSctxComponent extends Base2Component implements OnIni
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [null],
-      tenTrangThai: ['Chưa thực hiện'],
-      soQd: [null]
+      tenTrangThai : ['Chưa thực hiện'],
+      soQd : [null]
     })
   }
 
@@ -113,7 +113,7 @@ export class TienDoCongViecSctxComponent extends Base2Component implements OnIni
     }
   }
 
-  async loadCtCvHopDong(id: number) {
+  async loadCtCvHopDong(id : number) {
     this.spinner.show();
     try {
       let res = await this.hopdongService.getDetail(id);
@@ -135,13 +135,13 @@ export class TienDoCongViecSctxComponent extends Base2Component implements OnIni
     }
   }
 
-  async getDetailTienDo(id: number) {
+  async getDetailTienDo(id : number) {
     this.spinner.show();
     try {
       let res = await this.tienDoCongViecService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
-          console.log(res.data, 2222)
+          console.log(res.data,2222)
           const data = res.data;
           this.dataTableReq = cloneDeep(data);
           this.convertListToTree()
@@ -279,7 +279,7 @@ export class TienDoCongViecSctxComponent extends Base2Component implements OnIni
 
   convertListToTree() {
     this.dataTable = chain(this.dataTableReq).groupBy("thang")
-      .map((value, key) => ({ thang: key, dataChild: value, idVirtual: uuidv4() }))
+      .map((value, key) => ({ thang: key, dataChild: value, idVirtual : uuidv4() }))
       .value();
   }
 

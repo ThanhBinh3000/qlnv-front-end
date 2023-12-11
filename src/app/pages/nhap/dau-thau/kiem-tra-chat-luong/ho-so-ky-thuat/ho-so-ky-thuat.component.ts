@@ -16,11 +16,11 @@ import { StorageService } from 'src/app/services/storage.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
-import { STATUS } from "../../../../../constants/status";
-import { Base2Component } from "../../../../../components/base2/base2.component";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
+import {STATUS} from "../../../../../constants/status";
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
 @Component({
   selector: 'app-ho-so-ky-thuat',
   templateUrl: './ho-so-ky-thuat.component.html',
@@ -93,7 +93,7 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
     modal: NzModalService,
     private hoSoKyThuatService: HoSoKyThuatService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatService);
+    super(httpClient, storageService, notification, spinner, modal,  hoSoKyThuatService);
   }
 
   async ngOnInit() {
@@ -156,7 +156,7 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
       soBbKtraVanHanh: this.searchFilter.soBbKtraVanHanh,
       soBbKtraHskt: this.searchFilter.soBbKtraHskt,
       tuNgayTao: this.tuNgayTao != null ? dayjs(this.tuNgayTao).format('YYYY-MM-DD') + " 00:00:00" : null,
-      denNgayTao: this.denNgayTao != null ? dayjs(this.denNgayTao).format('YYYY-MM-DD') + " 23:59:59" : null,
+      denNgayTao: this.denNgayTao != null ? dayjs(this.denNgayTao).format('YYYY-MM-DD') + " 23:59:59": null,
     };
     let res = await this.hoSoKyThuatService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -229,7 +229,7 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.hoSoKyThuatService.delete({ id: item.id }).then((res) => {
+          this.hoSoKyThuatService.delete({id: item.id}).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -344,9 +344,9 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
     }
   }
 
-  hienThiXem(data) {
+  hienThiXem(data){
     if (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_HSKT_XEM') && data != null) {
-      if (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_HSKT_THEM')
+      if(this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_HSKT_THEM')
         && (data.trangThai == STATUS.DU_THAO
           || data.trangThai == STATUS.TU_CHOI_TP
           || data.trangThai == STATUS.TU_CHOI_LDC)) {

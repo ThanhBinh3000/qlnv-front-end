@@ -146,7 +146,7 @@ export class SlGtriHangDtqgXuatComponent extends Base2Component implements OnIni
     try {
       this.spinner.show();
       let body = this.formData.value;
-      body.idHdr = id;
+      body.id = id;
       body.typeFile = "xlsx";
       body.fileName = "bcbn_sl_gtri_hang_dtqg_xuat_trong_ky.jrxml";
       body.tenBaoCao = "Báo cáo số lượng và giá trị hàng DTQG xuất trong kỳ";

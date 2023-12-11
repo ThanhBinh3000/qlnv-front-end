@@ -1,24 +1,24 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { MESSAGE } from "../../../../../constants/message";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { FormGroup } from '@angular/forms';
-import { chain, cloneDeep } from "lodash";
-import { v4 as uuidv4 } from "uuid";
-import { AMOUNT_NO_DECIMAL } from "../../../../../Utility/utils";
-import { STATUS } from "../../../../../constants/status";
-import { Base2Component } from "../../../../../components/base2/base2.component";
-import { TienDoXayDungCt } from "../../tien-do-dau-tu-xay-dung/tien-do-cong-viec/tien-do-cong-viec.component";
+import {Component, Input, OnInit} from '@angular/core';
+import {MESSAGE} from "../../../../../constants/message";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {FormGroup} from '@angular/forms';
+import {chain, cloneDeep} from "lodash";
+import {v4 as uuidv4} from "uuid";
+import {AMOUNT_NO_DECIMAL} from "../../../../../Utility/utils";
+import {STATUS} from "../../../../../constants/status";
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {TienDoXayDungCt} from "../../tien-do-dau-tu-xay-dung/tien-do-cong-viec/tien-do-cong-viec.component";
 import {
   ThongTinTienDoCongViecSclComponent
 } from "./thong-tin-tien-do-cong-viec-scl/thong-tin-tien-do-cong-viec-scl.component";
 import {
   TienDoCongViecTdscService
 } from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/tien-do-cong-viec.service";
-import { HopdongTdscService } from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/hopdongTdsc.service";
+import {HopdongTdscService} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/hopdongTdsc.service";
 
 @Component({
   selector: 'app-tien-do-cong-viec-scl',
@@ -33,12 +33,13 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
   dataTable: any[] = [];
   dataTableReq: any[] = [];
   dataKlcv: any[] = [];
-  formData: FormGroup;
+  formData : FormGroup;
   AMOUNT = AMOUNT_NO_DECIMAL;
   STATUS = STATUS;
   rowItemCha: TienDoXayDungCt = new TienDoXayDungCt();
-  itemHopDong: any;
+  itemHopDong : any;
   listThang: any[] = [];
+  fileDinhKems: any[]=[];
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
@@ -52,8 +53,8 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [null],
-      tenTrangThai: ['Chưa thực hiện'],
-      soQd: [null]
+      tenTrangThai : ['Chưa thực hiện'],
+      soQd : [null]
     })
   }
 
@@ -113,7 +114,7 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
     }
   }
 
-  async loadCtCvHopDong(id: number) {
+  async loadCtCvHopDong(id : number) {
     this.spinner.show();
     try {
       let res = await this.hopdongService.getDetail(id);
@@ -121,7 +122,7 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
         if (res.data) {
           const data = res.data;
           this.dataKlcv = data.listKtTdscHopDongKlcv && data.listKtTdscHopDongKlcv.length > 0 ? data.listKtTdscHopDongKlcv : [];
-          console.log(this.dataKlcv, 3333)
+          console.log(this.dataKlcv,3333)
           this.expandAll();
         }
       } else {
@@ -136,7 +137,7 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
     }
   }
 
-  async getDetailTienDo(id: number) {
+  async getDetailTienDo(id : number) {
     this.spinner.show();
     try {
       let res = await this.tienDoCongViecService.getDetail(id);
@@ -144,6 +145,7 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
         if (res.data) {
           const data = res.data;
           this.dataTableReq = cloneDeep(data);
+          this.fileDinhKems= Array.isArray(data.fileDinhKems)? cloneDeep(data.fileDinhKems): [];
           this.convertListToTree()
           this.expandAll();
         }
@@ -279,7 +281,7 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
 
   convertListToTree() {
     this.dataTable = chain(this.dataTableReq).groupBy("thang")
-      .map((value, key) => ({ thang: key, dataChild: value, idVirtual: uuidv4() }))
+      .map((value, key) => ({ thang: key, dataChild: value, idVirtual : uuidv4() }))
       .value();
   }
 
@@ -359,7 +361,8 @@ export class TienDoCongViecSclComponent extends Base2Component implements OnInit
           let itemGoiThau = this.listHopDong.filter(item => item.selected == true)
           let body = {
             idGoiThau: itemGoiThau[0]?.id,
-            listKtTdscTiendoCongviec: this.dataTableReq
+            listKtTdscTiendoCongviec: this.dataTableReq,
+            fileDinhKems: this.fileDinhKems
           };
           let res = await this.tienDoCongViecService.create(body);
           if (res.msg == MESSAGE.SUCCESS) {

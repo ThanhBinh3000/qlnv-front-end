@@ -1,17 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
-import { HttpClient } from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { chain } from 'lodash';
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {chain} from 'lodash';
 import * as uuid from "uuid";
-import { StorageService } from "../../../../../../services/storage.service";
-import { Base2Component } from "../../../../../../components/base2/base2.component";
-import { UserLogin } from "../../../../../../models/userlogin";
-import { CHUC_NANG } from "../../../../../../constants/status";
-import { MESSAGE } from "../../../../../../constants/message";
+import {StorageService} from "../../../../../../services/storage.service";
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {UserLogin} from "../../../../../../models/userlogin";
+import {CHUC_NANG} from "../../../../../../constants/status";
+import {MESSAGE} from "../../../../../../constants/message";
 import dayjs from "dayjs";
 import {
   BienBanLayMauVtTbTrongThoiGianBaoHanhService
@@ -126,17 +126,17 @@ export class XkBienBanLayMauBanGiaoMauComponent extends Base2Component implement
         let rs = chain(value)
           .groupBy("maDiaDiem")
           .map((v, k) => {
-            let bb = v.find(s => s.maDiaDiem === k)
-            return {
-              idVirtual: uuid.v4(),
-              maDiaDiem: k != "null" ? k : '',
-              tenLoKho: bb.tenLoKho != "null" ? bb.tenLoKho : '',
-              tenNganKho: bb.tenNganKho != "null" ? bb.tenNganKho : '',
-              tenDiemKho: bb.tenDiemKho != "null" ? bb.tenDiemKho : '',
-              tenCloaiVthh: bb.tenCloaiVthh != "null" ? bb.tenCloaiVthh : '',
-              childData: v,
-            };
-          }
+              let bb = v.find(s => s.maDiaDiem === k)
+              return {
+                idVirtual: uuid.v4(),
+                maDiaDiem: k != "null" ? k : '',
+                tenLoKho: bb.tenLoKho != "null" ? bb.tenLoKho : '',
+                tenNganKho: bb.tenNganKho != "null" ? bb.tenNganKho : '',
+                tenDiemKho: bb.tenDiemKho != "null" ? bb.tenDiemKho : '',
+                tenCloaiVthh: bb.tenCloaiVthh != "null" ? bb.tenCloaiVthh : '',
+                childData: v,
+              };
+            }
           ).value();
         return {
           idVirtual: uuid.v4(),

@@ -20,6 +20,8 @@ import {
   TongHopDanhSachHangDTQGService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/TongHopDanhSachHangDTQG.service";
 import {LOAI_HH_XUAT_KHAC} from "../../../../../constants/config";
+import {DANH_MUC_LEVEL} from "../../../../luu-kho/luu-kho.constant";
+
 @Component({
   selector: 'app-tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat',
   templateUrl: './tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat.component.html',
@@ -45,9 +47,11 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
   step: any = 1;
   DanhSach: boolean = false;
   showDetail: boolean;
-  @Input()  openModal:boolean;
+  @Input() openModal: boolean;
   loaiHhXuatKhac = LOAI_HH_XUAT_KHAC;
   @Output() tabFocus = new EventEmitter<number>();
+  listChiCuc: any[];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -57,9 +61,9 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
     private donviService: DonviService,
     private danhMucService: DanhMucService,
     private tongHopDanhSachHangDTQGService: TongHopDanhSachHangDTQGService,
-    private kiemtraChatluongLtTruockhiHethanLuukhoComponent:KiemtraChatluongLtTruockhiHethanLuukhoComponent
+    private kiemtraChatluongLtTruockhiHethanLuukhoComponent: KiemtraChatluongLtTruockhiHethanLuukhoComponent
   ) {
-    super(httpClient, storageService, notification, spinner, modal,tongHopDanhSachHangDTQGService);
+    super(httpClient, storageService, notification, spinner, modal, tongHopDanhSachHangDTQGService);
     this.vldTrangThai = kiemtraChatluongLtTruockhiHethanLuukhoComponent;
     this.formData = this.fb.group({
       nam: [],
@@ -106,7 +110,7 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
         this.loadDsVthh()
       ]);
       await this.timKiem();
-      if (this.openModal){
+      if (this.openModal) {
         await this.showModal(true);
       }
     } catch (e) {
@@ -141,6 +145,7 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
   async timKiem() {
     this.formData.patchValue({
       loai: this.loaiHhXuatKhac.LT_6_THANG,
+      maCuc: this.formData.value.maChiCuc ? null : this.formData.value.maCuc,
     });
     await this.search();
 
@@ -156,6 +161,9 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
       } else return s;
 
     });
+    if(this.formData.value.maChiCuc){
+      this.flatDataTable = this.flatDataTable.filter(i=> i.maDiaDiem.substring(0,8) === this.formData.value.maChiCuc)
+    }
     this.buildTableView();
   }
 
@@ -169,6 +177,19 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
          this.dsDonvi = dsTong.data.filter(s => s.type === 'PB');
        }*/
     }
+    if (!this.userService.isTongCuc()) {
+      this.loadDsChiCuc();
+    }
+  }
+
+  async loadDsChiCuc() {
+    const body = {
+      maDviCha: this.userService.isTongCuc() ? this.formData.value.maCuc : this.userInfo.MA_DVI,
+      trangThai: '01',
+    };
+    const dsTong = await this.donviService.layDonViTheoCapDo(body);
+    this.listChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+    this.listChiCuc = this.listChiCuc.filter(item => item.type === 'DV')
   }
 
   async loadDsVthh() {
@@ -225,6 +246,7 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
           trangThai: rowItem.trangThai,
           tenTrangThai: rowItem.tenTrangThai,
           ngayTao: rowItem.ngayTao,
+          ngayDeXuat: rowItem.ngayDeXuat,
           childData: rs
         };
       }).value();
@@ -249,7 +271,7 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
   showModal(isVisibleModal: boolean, item?: any, showDetail?: boolean) {
     this.isVisibleModal = isVisibleModal;
     this.selectedItem = item;
-    this.modalWidth = showDetail? '80vw': (item? '40vw': '40vw');
+    this.modalWidth = showDetail ? '80vw' : (item ? '40vw' : '40vw');
     // this.step = item ? '1' : '2';
   }
 
@@ -262,10 +284,12 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
     }
     this.timKiem();
   }
-  async changeShowDetail($event:any){
+
+  async changeShowDetail($event: any) {
     console.log($event)
     this.showModal(true, $event.item, $event.showDetail);
   }
+
   async delete(item: any, roles?) {
     this.modal.confirm({
       nzClosable: false,
@@ -293,9 +317,11 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
       },
     });
   }
+
   emitTab(tab) {
     this.tabFocus.emit(tab);
   }
+
   danhSach() {
     this.DanhSach = true;
     this.emitTab(0)

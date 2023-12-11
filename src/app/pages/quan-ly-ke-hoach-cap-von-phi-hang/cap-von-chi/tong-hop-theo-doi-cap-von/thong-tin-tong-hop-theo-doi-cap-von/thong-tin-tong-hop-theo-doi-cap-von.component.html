@@ -9,7 +9,7 @@
       <span>Hoàn thành</span>
     </button>
     <button *ngIf="itemThTheoDoi.trangThai == STATUS.DANG_THUC_HIEN && !isView" type="button" class="btn btn-main"
-      [disabled]="!formData.valid" (click)="save(false)">
+            [disabled]="!formData.valid" (click)="save(false)">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
@@ -41,7 +41,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Số thông tri</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <input nz-input formControlName="soThongTri" [readonly]="true" />
+              <input nz-input formControlName="soThongTri" [readonly]="true"/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -59,7 +59,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Chương</nz-form-label>
             <nz-input-group nz-col [nzSpan]="24">
-              <input nz-input formControlName="chuong" [readonly]="true" />
+              <input nz-input formControlName="chuong" [readonly]="true"/>
             </nz-input-group>
           </nz-form-item>
         </div>
@@ -67,7 +67,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Loại</nz-form-label>
             <nz-input-group nz-col [nzSpan]="24">
-              <input nz-input formControlName="loai" [readonly]="true" />
+              <input nz-input formControlName="loai" [readonly]="true"/>
             </nz-input-group>
           </nz-form-item>
         </div>
@@ -75,7 +75,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Khoản</nz-form-label>
             <nz-input-group nz-col [nzSpan]="24">
-              <input nz-input formControlName="khoan" [readonly]="true" />
+              <input nz-input formControlName="khoan" [readonly]="true"/>
             </nz-input-group>
           </nz-form-item>
         </div>
@@ -83,7 +83,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Lý do chi</nz-form-label>
             <nz-input-group nz-col [nzSpan]="24">
-              <input nz-input formControlName="lyDoChi" [readonly]="true" />
+              <input nz-input formControlName="lyDoChi" [readonly]="true"/>
             </nz-input-group>
           </nz-form-item>
         </div>
@@ -91,7 +91,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Đơn vị thụ hưởng</nz-form-label>
             <nz-input-group nz-col [nzSpan]="24">
-              <input nz-input formControlName="tenDviThuHuong" [readonly]="true" />
+              <input nz-input formControlName="tenDviThuHuong" [readonly]="true"/>
             </nz-input-group>
           </nz-form-item>
         </div>
@@ -99,7 +99,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Số tài khoản</nz-form-label>
             <nz-input-group nz-col [nzSpan]="24">
-              <input nz-input formControlName="dviThuHuongStk" [readonly]="true" />
+              <input nz-input formControlName="dviThuHuongStk" [readonly]="true"/>
             </nz-input-group>
           </nz-form-item>
         </div>
@@ -107,27 +107,45 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Ngân hàng</nz-form-label>
             <nz-input-group nz-col [nzSpan]="24">
-              <input nz-input formControlName="dviThuHuongNganHang" [readonly]="true" />
+              <input nz-input formControlName="dviThuHuongNganHang" [readonly]="true"/>
             </nz-input-group>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4">
+        <div nz-col [nzSpan]="2">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true">Loại tiền</nz-form-label>
+            <nz-input-group nz-col [nzSpan]="24">
+              <input nz-input formControlName="tenLoaiTien" [readonly]="true"/>
+            </nz-input-group>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="2">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Số lệnh chi tiền</nz-form-label>
             <nz-input-group nz-col [nzSpan]="24">
-              <input nz-input formControlName="soLenhChiTien" [readonly]="isView" />
+              <input nz-input formControlName="soLenhChiTien" [readonly]="isView"/>
             </nz-input-group>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4">
+        <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Số tiền</nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Số tiền ngoại tệ</nz-form-label>
             <nz-input-group nz-col [nzSpan]="24">
-
-              <input class='money-input' [min]='1' [readOnly]="isView" currencyMask [options]='amount'
-                formControlName="soTien" />
-              <!--              <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" formControlName="soTien" [nzDisabled]="isView">-->
-              <!--              </nz-input-number>-->
+              <input class='money-input' [min]='1'
+                     [readOnly]="isView"
+                     currencyMask [options]='amount'
+                     formControlName="soTienNt" />
+            </nz-input-group>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="3">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Số tiền VNĐ</nz-form-label>
+            <nz-input-group nz-col [nzSpan]="24">
+              <input class='money-input' [min]='1'
+                     [readOnly]="isView"
+                     currencyMask [options]='amount'
+                     formControlName="soTien" />
             </nz-input-group>
           </nz-form-item>
         </div>
@@ -135,15 +153,15 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Căn cứ</nz-form-label>
             <nz-input-group nz-col [nzSpan]="24">
-              <input nz-input formControlName="canCu" [readonly]="isView" />
+              <input nz-input formControlName="canCu" [readonly]="isView"/>
             </nz-input-group>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4">
+        <div nz-col [nzSpan]="2">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Đợt thanh toán</nz-form-label>
             <nz-input-group nz-col [nzSpan]="24">
-              <input nz-input formControlName="dotTToan" [readonly]="isView" />
+              <input nz-input formControlName="dotTToan" [readonly]="isView"/>
             </nz-input-group>
           </nz-form-item>
         </div>

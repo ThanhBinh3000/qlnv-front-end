@@ -1,11 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Base2Component } from "../../../../../components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { ThongTinBienBanSclComponent } from "./thong-tin-bien-ban-scl/thong-tin-bien-ban-scl.component";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {ThongTinBienBanSclComponent} from "./thong-tin-bien-ban-scl/thong-tin-bien-ban-scl.component";
 import {
   BienBanNghiemThuTdscServiceService
 } from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/bien-ban-nghiem-thu-tdsc.service";
@@ -56,8 +56,8 @@ export class BienBanNghiemThuSclComponent extends Base2Component implements OnIn
       nzComponentParams: {
         itemDuAn: this.itemDuAn,
         itemQdPdKhLcnt: this.itemQdPdKhLcnt,
-        isView: isView,
-        id: id
+        isView : isView,
+        id : id
       }
     });
     modalQD.afterClose.subscribe(async (listData) => {

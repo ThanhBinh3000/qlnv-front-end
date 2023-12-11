@@ -3,7 +3,7 @@
     <div class="header-text">
       <div class="title-chi-tieu">
         <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'status-xanh' : 'status-do'">
-          {{ formData.value.tenTrangThai }}</span>
+        {{ formData.value.tenTrangThai }}</span>
         <span>Thông tin chung</span>
       </div>
     </div>
@@ -21,8 +21,8 @@
             <span>Ban hành</span>
           </button>
           <button *ngIf="formData.value.trangThai != STATUS.BAN_HANH && !isView
-          && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHTHNXHDTQG_LAP')" type="button" class="btn btn-main"
-            (click)="save()">
+          && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHTHNXHDTQG_LAP')"
+                  type="button" class="btn btn-main" (click)="save()">
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>
           </button>
@@ -91,6 +91,15 @@
           <span>Danh sách nhập, xuất hàng dự trữ quốc gia</span>
         </div>
       </div>
+    </div>
+    <div class="buttons d-flex justify-content-end">
+      <button
+        type="button" class="btn btn-sub xanh-nhat" (click)="downloadTemplate(templateName)">
+        <i class="icon htvbdh_download2"></i>
+        <span>Tải biểu mẫu import dữ liệu</span>
+      </button>
+      <input type="file" class="input-file-custom" id="importFile" (change)="handleSelectFile($event)">
+      <label class="label-file-custom btn btn-main" #labelImport for="importFile"><i class="icon htvbdh_upload1"></i>  Import dữ liệu</label>
     </div>
     <nz-card class="mg-t-16 flex-card p-lr16 table-card">
       <nz-table nzBordered class="nowrap" [nzData]="listDataDetail" [nzFrontPagination]="false"

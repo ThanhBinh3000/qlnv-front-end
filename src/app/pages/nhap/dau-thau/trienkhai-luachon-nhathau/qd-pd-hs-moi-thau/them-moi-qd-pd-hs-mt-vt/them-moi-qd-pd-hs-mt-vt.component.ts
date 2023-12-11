@@ -1,23 +1,24 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Base2Component } from "../../../../../../components/base2/base2.component";
-import { STATUS } from "../../../../../../constants/status";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {STATUS} from "../../../../../../constants/status";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
 import {
   QuyetDinhPheDuyetHsmtService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/quyetDinhPheDuyetHsmt.service";
 import * as dayjs from "dayjs";
-import { Validators } from "@angular/forms";
-import { MESSAGE } from "../../../../../../constants/message";
+import {Validators} from "@angular/forms";
+import {MESSAGE} from "../../../../../../constants/message";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import {
   QuyetDinhPheDuyetKeHoachLCNTService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service";
+import {DatePipe} from "@angular/common";
 
 @Component({
   selector: 'app-them-moi-qd-pd-hs-mt-vt',
@@ -66,6 +67,8 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
       tchuanCluong: [""],
       quy: [""],
       tgianBdauTchuc: [""],
+      tgianDthauTime: [],
+      tgianMthauTime: [],
     })
   }
 
@@ -128,6 +131,10 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
           tchuanCluong: data.dxKhlcntHdr?.tchuanCluong,
           quy: data.dxKhlcntHdr.quy,
           tgianBdauTchuc: data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.tgianBdauTchuc : data.tgianBdauTchuc,
+          gianDthauTime: data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.tgianDthauTime: data.tgianDthauTime,
+          tgianDthau: data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.tgianDthau: data.tgianDthau,
+          tgianMthauTime: data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.tgianMthauTime: data.tgianMthauTime,
+          tgianMthau: data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.tgianMthau: data.tgianMthau,
         })
         this.listOfData = data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.dsGthau : data.dsGthau;
       }
@@ -136,17 +143,34 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
 
   async save(isGuiDuyet?) {
     await this.spinner.show();
-    // this.setValidator(isGuiDuyet);
-    // this.helperService.markFormGroupTouched(this.formData);
-    // if (this.formData.invalid) {
-    //   await this.spinner.hide();
-    //   return;
-    // }
+    this.setValidator(isGuiDuyet);
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      await this.spinner.hide();
+      return;
+    }
+    let pipe = new DatePipe('en-US');
+    if (this.formData.value.tgianMthau != null) {
+      if (this.formData.value.tgianMthauTime != null) {
+        this.formData.value.tgianMthau = pipe.transform(this.formData.value.tgianMthau, 'yyyy-MM-dd') + " " + pipe.transform(this.formData.value.tgianMthauTime, 'HH:mm') + ":00"
+      } else {
+        this.formData.value.tgianMthau = pipe.transform(this.formData.value.tgianMthau, 'yyyy-MM-dd')  + " 00:00:00"
+      }
+    }
+    if (this.formData.value.tgianDthau != null) {
+      if (this.formData.value.tgianDthauTime != null) {
+        this.formData.value.tgianDthau =  pipe.transform(this.formData.value.tgianDthau, 'yyyy-MM-dd') + " " + pipe.transform(this.formData.value.tgianDthauTime, 'HH:mm') + ":00"
+      } else {
+        this.formData.value.tgianDthau =  pipe.transform(this.formData.value.tgianDthau, 'yyyy-MM-dd') + " 23:59:59"
+      }
+    }
     let body = this.formData.value;
     if (this.formData.value.soQd) {
       body.soQd = this.formData.value.soQd + "/" + this.maQd;
     }
     body.listCcPhapLy = this.listCcPhapLy;
+    body.tgianMthauTime = pipe.transform(body.tgianMthauTime, 'yyyy-MM-dd HH:mm')
+    body.tgianDthauTime = pipe.transform(body.tgianDthauTime, 'yyyy-MM-dd HH:mm')
     let res = null;
     if (this.formData.get("id").value) {
       res = await this.quyetDinhPheDuyetHsmtService.update(body);
@@ -172,8 +196,25 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
   }
 
   setValidator(isGuiDuyet?) {
-    if (!isGuiDuyet) {
-      this.formData.controls["nam"].clearValidators();
+    if (isGuiDuyet) {
+      this.formData.controls["namKhoach"].setValidators([Validators.required]);
+      this.formData.controls["soQd"].setValidators([Validators.required]);
+      this.formData.controls["ngayQd"].setValidators([Validators.required]);
+      this.formData.controls["ngayHluc"].setValidators([Validators.required]);
+      this.formData.controls["soQdPdKhlcnt"].setValidators([Validators.required]);
+      this.formData.controls["trichYeu"].setValidators([Validators.required]);
+      this.formData.controls["tenDuAn"].setValidators([Validators.required]);
+      this.formData.controls["quy"].setValidators([Validators.required]);
+      this.formData.controls["tgianMthau"].setValidators([Validators.required]);
+      this.formData.controls["tgianDthau"].setValidators([Validators.required]);
+    } else {
+      Object.keys(this.formData.controls).forEach(key => {
+        const control = this.formData.controls[key];
+        control.clearValidators();
+        control.updateValueAndValidity();
+      });
+      this.formData.updateValueAndValidity();
+      this.formData.controls["soQdPdKhlcnt"].setValidators([Validators.required]);
     }
   }
 
@@ -222,7 +263,7 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
     }
     this.listQuy = [];
     for (const element of quarters) {
-      this.listQuy.push({ giaTri: "Quý " + element + "/" + this.formData.get("namKhoach").value, ma: element })
+      this.listQuy.push({giaTri: "Quý " + element + "/" + this.formData.get("namKhoach").value, ma: element})
     }
   }
 
@@ -245,15 +286,21 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
         soQd: data.soQd?.split("/")[0],
         soQdPdKhlcnt: data.qdKhlcntHdr.soQd,
         idQdPdKhlcnt: data.qdKhlcntHdr.id,
-        tenDuAn: data.qdKhlcntHdr.dchinhDxKhLcntHdr ? data.qdKhlcntHdr.dchinhDxKhLcntHdr.tenDuAn : data.qdKhlcntHdr.tenDuAn,
+        tenDuAn: data.qdKhlcntHdr.dchinhDxKhLcntHdr? data.qdKhlcntHdr.dchinhDxKhLcntHdr.tenDuAn : data.qdKhlcntHdr.tenDuAn,
         tenLoaiVthh: data.qdKhlcntHdr.tenLoaiVthh,
         loaiVthh: data.qdKhlcntHdr.loaiVthh,
         tchuanCluong: data.qdKhlcntHdr.dxKhlcntHdr.tchuanCluong,
         quy: data.qdKhlcntHdr.dxKhlcntHdr?.quy,
-        tgianBdauTchuc: data.qdKhlcntHdr.dchinhDxKhLcntHdr ? data.qdKhlcntHdr.dchinhDxKhLcntHdr.tgianBdauTchuc : data.qdKhlcntHdr.tgianBdauTchuc,
+        tgianBdauTchuc: data.qdKhlcntHdr.dchinhDxKhLcntHdr? data.qdKhlcntHdr.dchinhDxKhLcntHdr.tgianBdauTchuc : data.qdKhlcntHdr.tgianBdauTchuc,
       });
-      this.listOfData = data.qdKhlcntHdr.dchinhDxKhLcntHdr ? data.qdKhlcntHdr.dchinhDxKhLcntHdr.dsGthau : data.qdKhlcntHdr.dsGthau;
+      this.listOfData = data.qdKhlcntHdr.dchinhDxKhLcntHdr? data.qdKhlcntHdr.dchinhDxKhLcntHdr.dsGthau : data.qdKhlcntHdr.dsGthau;
       this.listCcPhapLy = data.listCcPhapLy;
+      if (this.userService.isCuc()) {
+        for (let item of this.listOfData) {
+          item.children = item.children.filter(i => i.maDvi == this.userInfo.MA_DVI)
+        }
+        this.listOfData = this.listOfData.filter(k => k.children.length > 0)
+      }
     }
   }
 

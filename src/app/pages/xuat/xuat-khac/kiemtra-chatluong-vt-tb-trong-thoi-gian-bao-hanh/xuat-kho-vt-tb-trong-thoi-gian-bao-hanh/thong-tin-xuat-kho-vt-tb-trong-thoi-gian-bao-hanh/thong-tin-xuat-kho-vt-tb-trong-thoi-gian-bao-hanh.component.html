@@ -3,38 +3,42 @@
     <div class="header header-green-background">
       <div class="header-text">
         <div class="title-chi-tieu">
-          <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'status-xanh' : 'status-do'">
-            {{ formData.value.tenTrangThai }}
-          </span>
+                <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'status-xanh' : 'status-do'">
+                    {{ formData.value.tenTrangThai }}
+                </span>
           <span>Phiếu xuất kho</span>
         </div>
       </div>
       <div class="btn-group">
-        <button type="button" class="btn btn-sub" (click)="goBack()">
+        <button type="button" class="btn btn-sub mr-2" (click)="goBack()">
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
-        <button class="btn btn-sm ml-2" type="button"
-          *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC  "
-          (click)="saveAndSend(formData.value,STATUS.CHO_DUYET_LDCC,'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
+        <button type="button" class="btn btn-sub mr-2" *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PXK_IN')" (click)="xemTruoc(idInput,templateName)">
+          <i class="icon htvbdh_totrinh"></i>
+          <span> In/Xem trước </span>
+        </button>
+        <button *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PXK_THEM') && this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC"
+                class="btn btn-sub xanh-nhat mr-2" (click)="saveAndSend(formData.value,STATUS.CHO_DUYET_LDCC,'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Lưu và gửi duyệt</span>
-
         </button>
-        <button type="button" class="btn btn-sub do  ml-2" *ngIf="  this.userService.isChiCuc() && isDisabled()"
-          (click)="tuChoi()">
+        <button
+          *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PXK_DUYETLDCC') && this.userService.isChiCuc() && isDisabled()"
+          type="button" class="btn btn-sub do mr-2" (click)="tuChoi()">
           <i class="icon htvbdh_tcdt_tuchoi do"></i>
           <span>Từ chối</span>
         </button>
-        <button class="btn btn-sub xanh-nhat  ml-2" *ngIf="  this.userService.isChiCuc() && isDisabled()"
-          (click)="pheDuyet()">
-          <i class="icon htvbdh_tcdt_pheduyet "></i>
+        <button
+          *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PXK_DUYETLDCC') && this.userService.isChiCuc() && isDisabled() "
+          class="btn btn-sub xanh-nhat mr-2" (click)="pheDuyet()">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Duyệt</span>
         </button>
-        <button class="btn btn-main btn-sm waves-effect waves-light ml-2"
-          *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC "
-          (click)="save()">
-          <i class="icon  htvbdh_tcdt_save"></i>
+        <button
+          *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PXK_THEM') && this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC "
+          type="button" class="btn btn-main" (click)="save()">
+          <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
       </div>
@@ -43,7 +47,7 @@
 
 
   <nz-alert class="mg-t-10" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDCC " nzShowIcon nzType="error"
-    nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
+            nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
 
   <nz-card class="mg-t-16 flex-card p-lr16">
@@ -81,7 +85,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="tenDvi" readonly />
+                <input nz-input formControlName="tenDvi" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -93,7 +97,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="maQhns" readonly />
+                <input nz-input formControlName="maQhns" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -105,7 +109,7 @@
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="soPhieu" readonly />
+                <input nz-input formControlName="soPhieu" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -129,7 +133,7 @@
               Nợ
             </nz-form-label>
             <nz-input-number nz-input [nzSize]="'small'" formControlName="taiKhoanNo"
-              [nzDisabled]="isView"></nz-input-number>
+                             [nzDisabled]="isView"></nz-input-number>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="3">
@@ -142,14 +146,14 @@
           </nz-form-item>
         </div>
         <div nz-col *ngIf="this.formData.value.loai == 'XUAT_MAU'||this.formData.value.loai == 'XUAT_BH'"
-          [nzSpan]="(formData.value.loai == 'XUAT_MAU') ? 4 :( (formData.value.loai == 'XUAT_BH') ? 8 : null)">
+             [nzSpan]="(formData.value.loai == 'XUAT_MAU') ? 4 :( (formData.value.loai == 'XUAT_BH') ? 8 : null)">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
               Số QĐ giao NVXH
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQd()">
-                <input nz-input [readonly]="isView" formControlName="soCanCu" readonly />
+                <input nz-input [readonly]="isView" formControlName="soCanCu" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -158,7 +162,7 @@
           <nz-form-item>
             <nz-form-label nzRequired> Số lần lấy mẫu</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input [readonly]="true" formControlName="soLanLm" readonly />
+              <input nz-input [readonly]="true" formControlName="soLanLm" readonly/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -169,19 +173,19 @@
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQd()">
-                <input nz-input [readonly]="isView" formControlName="soCanCu" readonly />
+                <input nz-input [readonly]="isView" formControlName="soCanCu" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Ngăn/Lô kho</nz-form-label>
-            <nz-form-control>
+            <nz-form-label [nzNoColon]="true" nzRequired> Ngăn/Lô kho</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="maDiaDiem" [nzDisabled]="isView"
-                (ngModelChange)="changeValueNganLoKho($event)">
+                         (ngModelChange)="changeValueNganLoKho($event)">
                 <nz-option *ngFor="let p of listNganLoKho" [nzValue]="p.maDiaDiem"
-                  [nzLabel]="p.tenLoKho ? p.tenLoKho + ' - ' + p.tenNganKho : p.tenNganKho">
+                           [nzLabel]="p.tenLoKho ? p.tenLoKho + ' - ' + p.tenNganKho : p.tenNganKho">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -191,7 +195,7 @@
           <nz-form-item>
             <nz-form-label nzRequired> Tồn kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input [readonly]="true" formControlName="slTonKho" readonly />
+              <input nz-input [readonly]="true" formControlName="slTonKho" readonly/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -200,7 +204,7 @@
             <nz-form-label [nzNoColon]="true" nzRequired> Nhà kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input [readonly]="isView" nz-input formControlName="tenNhaKho" readonly />
+                <input [readonly]="true" nz-input formControlName="tenNhaKho" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -210,7 +214,7 @@
             <nz-form-label [nzNoColon]="true" nzRequired> Điểm kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input [readonly]="isView" nz-input formControlName="tenDiemKho" readonly />
+                <input [readonly]="true" nz-input formControlName="tenDiemKho" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -220,7 +224,7 @@
             <nz-form-label [nzNoColon]="true">Số phiếu kiểm nghiệm chất lượng</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input [readonly]="true" nz-input formControlName="soPhieuKncl" readonly />
+                <input [readonly]="true" nz-input formControlName="soPhieuKncl" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -232,7 +236,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="tenLoaiVthh" readonly />
+                <input nz-input formControlName="tenLoaiVthh" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -244,7 +248,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="tenCloaiVthh" readonly />
+                <input nz-input formControlName="tenCloaiVthh" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -256,7 +260,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="canBoLapPhieu" readonly />
+                <input nz-input formControlName="canBoLapPhieu" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -268,7 +272,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="ldChiCuc" readonly />
+                <input nz-input formControlName="ldChiCuc" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -280,7 +284,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="ktvBaoQuan" readonly />
+                <input nz-input formControlName="ktvBaoQuan" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -292,7 +296,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="keToanTruong" [readonly]="isView" />
+                <input nz-input formControlName="keToanTruong" [readonly]="isView"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -304,7 +308,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="hoTenNgh" [readonly]="isView" />
+                <input nz-input formControlName="hoTenNgh" [readonly]="isView"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -316,7 +320,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="cccdNgh" [readonly]="isView" />
+                <input nz-input formControlName="cccdNgh" [readonly]="isView"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -328,7 +332,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="donViNgh" [readonly]="isView" />
+                <input nz-input formControlName="donViNgh" [readonly]="isView"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -340,7 +344,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="diaChiNgh" [readonly]="isView" />
+                <input nz-input formControlName="diaChiNgh" [readonly]="isView"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -352,7 +356,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-date-picker formControlName="thoiGianGiaoHang" nzFormat="HH:mm dd/MM/yyyy"
-                [nzShowTime]="{ nzFormat: 'HH:mm' }" [nzDisabled]="isView">
+                              [nzShowTime]="{ nzFormat: 'HH:mm' }" [nzDisabled]="isView">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -362,63 +366,64 @@
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
       <nz-card class="mg-t-16 flex-card p-lr16 table-card">
         <nz-table nzBordered class="pd-10" [nzData]="dataTable" class="nowrap" [nzFrontPagination]="false"
-          [nzShowPagination]="false">
+                  [nzShowPagination]="false">
           <thead>
-            <tr>
-              <th rowSpan="2" width="30px">STT (A)</th>
-              <th rowSpan="2">Tên, nhãn hiệu, quy cách phẩm chất hàng hóa (B)</th>
-              <th rowSpan="2">Mã số (C)</th>
-              <th rowSpan="2">Đơn vị tính (D)</th>
-              <th colSpan="2">Số lượng xuất</th>
-            </tr>
-            <tr>
-              <th>Theo QĐ giao NV xuất hàng (1)</th>
-              <th>Thực Xuất (2)</th>
-              <th rowSpan="2">Hành động</th>
-            </tr>
-            <tr>
-            </tr>
+          <tr>
+            <th rowSpan="2" width="30px">STT (A)</th>
+            <th rowSpan="2">Tên, nhãn hiệu, quy cách phẩm chất hàng hóa (B)</th>
+            <th rowSpan="2">Mã số (C)</th>
+            <th rowSpan="2">Đơn vị tính (D)</th>
+            <th colSpan="2">Số lượng xuất</th>
+          </tr>
+          <tr>
+            <th>Theo QĐ giao NV xuất hàng (1)</th>
+            <th>Thực Xuất (2)</th>
+            <th rowSpan="2">Hành động</th>
+          </tr>
+          <tr>
+          </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>
-                {{!formData.value.tenCloaiVthh ? formData.value.tenLoaiVthh : formData.value.tenCloaiVthh}}
-              </td>
-              <td>
-                <nz-form-item>
-                  <nz-form-control [nzErrorTip]="error">
-                    <nz-input-group>
-                      <input nz-input formControlName="maSo" [readonly]="isView" />
-                    </nz-input-group>
-                  </nz-form-control>
-                </nz-form-item>
-              </td>
-              <td>
-                {{formData.value.donViTinh}}
-              </td>
-              <td>
+          <tr>
+            <td>1</td>
+            <td>
+              {{!formData.value.tenCloaiVthh ? formData.value.tenLoaiVthh : formData.value.tenCloaiVthh}}
+            </td>
+            <td>
+              <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input formControlName="slLayMau" [readonly]="true" />
+                    <input nz-input formControlName="maSo" [readonly]="isView"/>
                   </nz-input-group>
                 </nz-form-control>
-              </td>
-              <td>
-                <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group>
-                    <nz-input-number nz-input [nzSize]="'small'" formControlName="slThucTe" [nzDisabled]="isView"
-                      [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-                    </nz-input-number>
-                  </nz-input-group>
-                </nz-form-control>
-              </td>
-              <td>
-                <a (click)="clearItemRow()">
-                  <i class="fa fa-refresh"></i>
-                </a>
-              </td>
-            </tr>
+              </nz-form-item>
+            </td>
+            <td>
+              {{formData.value.donViTinh}}
+            </td>
+            <td>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-input-group>
+                  <input nz-input formControlName="slLayMau" [readonly]="true"/>
+                </nz-input-group>
+              </nz-form-control>
+            </td>
+            <td>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-input-group>
+                  <nz-input-number nz-input [nzSize]="'small'" formControlName="slThucTe"
+                                   [nzDisabled]="isView" [nzFormatter]="globals.formatter"
+                                   [nzParser]="globals.parser">
+                  </nz-input-number>
+                </nz-input-group>
+              </nz-form-control>
+            </td>
+            <td>
+              <a (click)="clearItemRow()">
+                <i class="fa fa-refresh"></i>
+              </a>
+            </td>
+          </tr>
           </tbody>
         </nz-table>
       </nz-card>
@@ -432,7 +437,8 @@
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <input nz-input [ngModelOptions]="{standalone: true}"
-                [ngModel]="formData.value.slThucTe > 0 ? convertTien(formData.value.slThucTe) : ''" readonly />
+                     [ngModel]="formData.value.slThucTe > 0 ? convertTien(formData.value.slThucTe) : ''"
+                     readonly/>
             </nz-form-control>
           </nz-form-item>
         </div>

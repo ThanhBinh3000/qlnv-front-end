@@ -128,7 +128,7 @@
               <th rowspan="2">Số phiếu nhập kho</th>
               <th rowspan="2">Ngày nhập kho</th>
               <th rowspan="2">Trạng thái</th>
-              <th rowspan="2" *ngIf="isChiCuc()">Hành động</th>
+              <th rowspan="2">Hành động</th>
             </tr>
             <tr>
               <th class="text-center">Lô kho</th>
@@ -160,7 +160,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td *ngIf="isChiCuc()"></td>
+                <td></td>
               </tr>
               <ng-container *ngIf="row1.expand">
                 <ng-container *ngFor="let row2 of row1.children, let y = index">
@@ -185,7 +185,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td *ngIf="isChiCuc()"></td>
+                    <td></td>
                   </tr>
                   <ng-container>
                     <ng-container *ngFor="let row3 of row2.children, let y = index">
@@ -207,7 +207,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td *ngIf="isChiCuc()"></td>
+                        <td></td>
                       </tr>
                       <ng-container *ngFor="let row4 of row3.children, let y = index">
                         <tr>
@@ -234,6 +234,9 @@
                             <a (click)="add(row4)" *ngIf="isChiCuc()">
                               <i class="icon htvbdh_dau-cong"></i>
                             </a>
+                          </td>
+                          <td *ngIf="isCuc()">
+
                           </td>
                         </tr>
                         <ng-container *ngFor="let row5 of row4.children, let y = index">
@@ -271,6 +274,12 @@
                               </a>
                               <a *ngIf="row5.trangThai == STATUS.DU_THAO" (click)="xoa(row5)">
                                 <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                              </a>
+                            </td>
+                            <td *ngIf="isCuc()">
+                              <a *ngIf="row5.trangThai === STATUS.DA_DUYET_LDCC"
+                                (click)="redirectDetail(row5.id, true)">
+                                <i class="fa fa-eye" title="Xem chi tiết"></i>
                               </a>
                             </td>
                           </tr>

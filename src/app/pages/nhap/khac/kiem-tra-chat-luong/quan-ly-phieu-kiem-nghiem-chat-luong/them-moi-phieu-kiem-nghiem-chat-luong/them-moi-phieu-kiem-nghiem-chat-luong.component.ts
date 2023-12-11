@@ -34,7 +34,7 @@ import {
 import {
   QuanLyBienBanLayMauKhacService
 } from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/quanLyBienBanLayMauKhac.service";
-import { KhCnQuyChuanKyThuat } from "../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
+import {KhCnQuyChuanKyThuat} from "../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
 
 @Component({
   selector: 'app-them-moi-phieu-kiem-nghiem-chat-luong',
@@ -276,7 +276,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       case STATUS.TU_CHOI_LDC:
       case STATUS.DU_THAO: {
         trangThai = STATUS.CHO_DUYET_TP;
-        mess = 'Bạn có muối gửi duyệt ?'
+        mess = 'Bạn có muốn gửi duyệt ?'
         break;
       }
       case STATUS.CHO_DUYET_TP: {
@@ -624,7 +624,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
           ngayLayMau: data.bbLayMau?.ngayLayMau,
           idBbLayMau: data.bbLayMau?.id
         });
-        await this.loadDsQcTheoCloaiVthh();
+          await this.loadDsQcTheoCloaiVthh();
       }
     });
   }

@@ -5,14 +5,12 @@
                 <i class="fa fa-arrow-left"></i>
                 <span>Quay lại</span>
             </button>
-            <button *ngIf="formData.value.idQdKq || formData.value.idQdGiaoNvNh" type="button"
-                class="btn btn-sub xanh-nhat" (click)="preview(previewName)">
-                <i class=" icon htvbdh_tcdt_print"></i>
-                <span>Xem trước</span>
-            </button>
-            <button
-                *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH && (userService.isCuc() || userService.isChiCuc()) "
-                type="button" class="btn btn-sub xanh-nhat" (click)="pheDuyet()">
+<!--          <button *ngIf="!userService.isTongCuc() && (formData.value.idQdKq || formData.value.idQdGiaoNvNh)" type="button" class="btn btn-sub xanh-nhat" (click)="preview(previewName)">-->
+<!--            <i class=" icon htvbdh_tcdt_print"></i>-->
+<!--            <span>In/xem trước</span>-->
+<!--          </button>-->
+            <button *ngIf="(formData.value.trangThaiHd != STATUS.DA_HOAN_THANH && (userService.isCuc() || userService.isChiCuc())) && userService.isAccessPermisson('NHDTQG_PTMTT_HDBKPM_LT_HDPL_THEM') " type="button"
+                class="btn btn-sub xanh-nhat" (click)="pheDuyet()">
                 <i class="icon htvbdh_checkfile2"></i>
                 <span>Hoàn thành thực hiện</span>
             </button>
@@ -90,7 +88,10 @@
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true"> Tổng mức đầu tư </nz-form-label>
                                     <nz-form-control>
-                                        <input class="blue-text" nz-input formControlName="tongMucDt" readonly />
+<!--                                        <input class="blue-text" nz-input formControlName="tongMucDt" readonly />-->
+                                      <nz-input-number class="text-blue" [nzSize]="'small'" formControlName="tongMucDt"
+                                                       [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
+                                      </nz-input-number>
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
@@ -108,7 +109,12 @@
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true"> Tổng số Lượng nhập </nz-form-label>
                                     <nz-form-control>
-                                        <input nz-input formControlName="tongSoLuong" readonly />
+                                      <nz-input-group nzAddOnAfter="(kg)">
+                                        <nz-input-number class="text-right" nz-input formControlName="tongSoLuong"
+                                                         [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                                         nzDisabled>
+                                        </nz-input-number>
+                                      </nz-input-group>
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
@@ -118,19 +124,17 @@
                         <div nz-row [nzGutter]="[24]" class="label-50 mg-t-10 ">
                             <div nz-col nzSpan="24">
                                 <nz-form-item>
-                                    <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
+                                    <nz-form-label [nzNoColon]="true"> Loại hàng DTQG </nz-form-label>
                                     <nz-form-control>
-                                        <input class="blue-text" nz-input formControlName="tenLoaiVthh"
-                                            readonly="true" />
+                                        <input class="blue-text" nz-input formControlName="tenLoaiVthh" readonly="true" />
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
                             <div nz-col nzSpan="24">
                                 <nz-form-item>
-                                    <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
+                                    <nz-form-label [nzNoColon]="true"> Chủng loại hàng DTQG </nz-form-label>
                                     <nz-form-control>
-                                        <input class="blue-text" nz-input formControlName="tenCloaiVthh"
-                                            readonly="true" />
+                                        <input class="blue-text" nz-input formControlName="tenCloaiVthh" readonly="true" />
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
@@ -160,188 +164,192 @@
                 </div>
             </form>
         </nz-card>
-        <!--        <nz-card class="mg-t-16 flex-card p-lr16 bg-xam">-->
-        <!--            <div class="header header-green-background mg-t-16">-->
-        <!--                <div class="header-text">-->
-        <!--                    <div class="title-chi-tieu">-->
-        <!--                        <span></span>-->
-        <!--                        <span>Danh sách hợp đồng</span>-->
-        <!--                    </div>-->
-        <!--                </div>-->
-        <!--                <div class="buttons"-->
-        <!--                    *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH && !userService.isTongCuc()">-->
-        <!--                    <button type="button" class="btn btn-main" (click)="redirectHopDong(true, null)">-->
-        <!--                        <i class="icon htvbdh_dau-cong"></i>-->
-        <!--                        <span>Thêm</span>-->
-        <!--                    </button>-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--            <nz-card class="flex-card p-lr16 card-table">-->
-        <!--                <nz-table #basicTable class="pd-10" [nzData]="dataTable" nzBordered>-->
-        <!--                    <thead>-->
-        <!--                        <tr>-->
-        <!--                            <th>STT</th>-->
-        <!--                            <th>Số hợp đồng</th>-->
-        <!--                            <th>Tên hợp đồng</th>-->
-        <!--                            <th>Ngày ký hợp đồng</th>-->
-        <!--                            <th>Đơn vị cung cấp được chọn</th>-->
-        <!--                            <th>Số lượng (Kg)</th>-->
-        <!--                            <th>Đơn giá</th>-->
-        <!--                            <th>Thành tiền đã bao gồm thuế VAT (đ)</th>-->
-        <!--                            <th>Trạng thái HĐ</th>-->
-        <!--                            <th>Số QĐ giao NV NH</th>-->
-        <!--                            <th>Trạng thái NH</th>-->
-        <!--                            <th>Hành động</th>-->
-        <!--                        </tr>-->
-        <!--                    </thead>-->
-        <!--                    <tbody>-->
-        <!--                        <tr *ngFor="let data of basicTable.data,let i = index">-->
-        <!--                            <td>{{ i + 1}}</td>-->
-        <!--                            <td>{{data.soHd}}</td>-->
-        <!--                            <td>{{data.tenHd}}</td>-->
-        <!--                            <td>{{data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>-->
-        <!--                            <td>{{data.tenDviMua }}</td>-->
-        <!--                            <td>{{data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>-->
-        <!--                            <td>{{data.donGiaGomThue | number : '1.0-1' : 'vi_VN' }}</td>-->
-        <!--                            <td>{{data.soLuong * data.donGiaGomThue | number : '1.0-1' : 'vi_VN' }}</td>-->
-        <!--                            <td>{{data.tenTrangThai}}</td>-->
-        <!--                            <td></td>-->
-        <!--                            <td>{{data.tenTrangThaiXh}}</td>-->
-        <!--                            <td>-->
-        <!--                                <a *ngIf="data.trangThai == STATUS.DA_KY" (click)="getDetailHopDong($event,data.id)">-->
-        <!--                                    <i class="fa fa-eye" title="Xem chi tiết"></i>-->
-        <!--                                </a>-->
-        <!--                                <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()"-->
-        <!--                                    (click)="redirectHopDong(true,data.id) ">-->
-        <!--                                    <i class="fa fa-pencil" title="Sửa"></i>-->
-        <!--                                </a>-->
-        <!--                                <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()"-->
-        <!--                                    (click)="deleteHd(data)">-->
-        <!--                                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
-        <!--                                </a>-->
-        <!--                            </td>-->
-        <!--                        </tr>-->
-        <!--                    </tbody>-->
-        <!--                </nz-table>-->
-        <!--            </nz-card>-->
-        <!--            <app-themmoi-hopdong-phuluc [idKqMtt]="id" [loaiVthh]="loaiVthh" *ngIf="idHopDong" [id]="idHopDong"-->
-        <!--                [isQuanLy]="true">-->
-        <!--            </app-themmoi-hopdong-phuluc>-->
-        <!--        </nz-card>-->
-        <!--      <nz-collapse>-->
-        <!--        <nz-collapse-panel nzActive="true" nzHeader="Địa điểm cung cấp hàng hóa">-->
-        <!--          <nz-card class="mg-t-16 flex-card p-lr16">-->
-        <!--            <nz-table class="nowrap pd-10" #tableData [nzData]="danhSachCtiet" class="nowrap" nzBordered>-->
-        <!--              <thead>-->
-        <!--              <tr>-->
-        <!--                <th style="width: 2%;">STT</th>-->
-        <!--                <th>Chi cục</th>-->
-        <!--                <th>Điểm kho</th>-->
-        <!--                <th>Số lượng mua trực tiếp đề xuất</th>-->
-        <!--                <th>ĐVT</th>-->
-        <!--                <th>Đơn giá được duyệt có VAT (đ/kg)</th>-->
-        <!--                <th>Thành tiền (đ)</th>-->
-        <!--              </tr>-->
-        <!--              </thead>-->
-        <!--              <tbody>-->
-        <!--              <ng-container *ngFor="let item of tableData.data , let i = index">-->
-        <!--                <tr [ngClass]="{'bg-selected': i == 0 && this.selected}" (click)="showDetail($event,item)">-->
-        <!--                  <td [nzExpand]="true"></td>-->
-        <!--                  <td colspan="2">{{item.tenDvi}}</td>-->
-        <!--                  <td class="text-bold">{{ calcTong() | number : '1.0-1' : 'vi_VN' }}</td>-->
-        <!--                  <td></td>-->
-        <!--                  <td></td>-->
-        <!--                  <td></td>-->
-        <!--                </tr>-->
-        <!--                <ng-container *ngFor="let diemKho of item.children, let y = index">-->
-        <!--                  <tr>-->
-        <!--                    <td></td>-->
-        <!--                    <td></td>-->
-        <!--                    <td>{{diemKho.tenDiemKho}}</td>-->
-        <!--                    <td>{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>-->
-        <!--                    <td>tấn</td>-->
-        <!--                    <td>{{diemKho.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>-->
-        <!--                    <td>{{diemKho.donGiaVat * diemKho.soLuong * 1000 | number : '1.0-1' : 'vi_VN'}}</td>-->
-        <!--                  </tr>-->
-        <!--                </ng-container>-->
-        <!--              </ng-container>-->
-        <!--              </tbody>-->
-        <!--            </nz-table>-->
-        <!--          </nz-card>-->
-        <!--        </nz-collapse-panel>-->
-        <!--      </nz-collapse>-->
-        <nz-collapse>
-            <div class="header header-green-background mg-t-16">
-                <div class="header-text">
-                    <div class="title-chi-tieu">
-                        <span></span>
-                        <span>DANH SÁCH HỢP ĐỒNG CẦN KÝ VỚI CÁC GÓI THẦU ĐÃ TRÚNG</span>
-                    </div>
-                </div>
-                <div class="buttons"
-                    *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH && !userService.isTongCuc()">
-                    <button type="button" class="btn btn-main" (click)="redirectHopDong(true, null)">
-                        <i class="icon htvbdh_dau-cong"></i>
-                        <span>Thêm</span>
-                    </button>
-                </div>
+<!--        <nz-card class="mg-t-16 flex-card p-lr16 bg-xam">-->
+<!--            <div class="header header-green-background mg-t-16">-->
+<!--                <div class="header-text">-->
+<!--                    <div class="title-chi-tieu">-->
+<!--                        <span></span>-->
+<!--                        <span>Danh sách hợp đồng</span>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="buttons"-->
+<!--                    *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH && !userService.isTongCuc()">-->
+<!--                    <button type="button" class="btn btn-main" (click)="redirectHopDong(true, null)">-->
+<!--                        <i class="icon htvbdh_dau-cong"></i>-->
+<!--                        <span>Thêm</span>-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <nz-card class="flex-card p-lr16 card-table">-->
+<!--                <nz-table #basicTable class="pd-10" [nzData]="dataTable" nzBordered>-->
+<!--                    <thead>-->
+<!--                        <tr>-->
+<!--                            <th>STT</th>-->
+<!--                            <th>Số hợp đồng</th>-->
+<!--                            <th>Tên hợp đồng</th>-->
+<!--                            <th>Ngày ký hợp đồng</th>-->
+<!--                            <th>Đơn vị cung cấp được chọn</th>-->
+<!--                            <th>Số lượng (Kg)</th>-->
+<!--                            <th>Đơn giá</th>-->
+<!--                            <th>Thành tiền đã bao gồm thuế VAT (đ)</th>-->
+<!--                            <th>Trạng thái HĐ</th>-->
+<!--                            <th>Số QĐ giao NV NH</th>-->
+<!--                            <th>Trạng thái NH</th>-->
+<!--                            <th>Hành động</th>-->
+<!--                        </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody>-->
+<!--                        <tr *ngFor="let data of basicTable.data,let i = index">-->
+<!--                            <td>{{ i + 1}}</td>-->
+<!--                            <td>{{data.soHd}}</td>-->
+<!--                            <td>{{data.tenHd}}</td>-->
+<!--                            <td>{{data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>-->
+<!--                            <td>{{data.tenDviMua }}</td>-->
+<!--                            <td>{{data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>-->
+<!--                            <td>{{data.donGiaGomThue | number : '1.0-1' : 'vi_VN' }}</td>-->
+<!--                            <td>{{data.soLuong * data.donGiaGomThue | number : '1.0-1' : 'vi_VN' }}</td>-->
+<!--                            <td>{{data.tenTrangThai}}</td>-->
+<!--                            <td></td>-->
+<!--                            <td>{{data.tenTrangThaiXh}}</td>-->
+<!--                            <td>-->
+<!--                                <a *ngIf="data.trangThai == STATUS.DA_KY" (click)="getDetailHopDong($event,data.id)">-->
+<!--                                    <i class="fa fa-eye" title="Xem chi tiết"></i>-->
+<!--                                </a>-->
+<!--                                <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()"-->
+<!--                                    (click)="redirectHopDong(true,data.id) ">-->
+<!--                                    <i class="fa fa-pencil" title="Sửa"></i>-->
+<!--                                </a>-->
+<!--                                <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()"-->
+<!--                                    (click)="deleteHd(data)">-->
+<!--                                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
+<!--                                </a>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                    </tbody>-->
+<!--                </nz-table>-->
+<!--            </nz-card>-->
+<!--            <app-themmoi-hopdong-phuluc [idKqMtt]="id" [loaiVthh]="loaiVthh" *ngIf="idHopDong" [id]="idHopDong"-->
+<!--                [isQuanLy]="true">-->
+<!--            </app-themmoi-hopdong-phuluc>-->
+<!--        </nz-card>-->
+<!--      <nz-collapse>-->
+<!--        <nz-collapse-panel nzActive="true" nzHeader="Địa điểm cung cấp hàng hóa">-->
+<!--          <nz-card class="mg-t-16 flex-card p-lr16">-->
+<!--            <nz-table class="nowrap pd-10" #tableData [nzData]="danhSachCtiet" class="nowrap" nzBordered>-->
+<!--              <thead>-->
+<!--              <tr>-->
+<!--                <th style="width: 2%;">STT</th>-->
+<!--                <th>Chi cục</th>-->
+<!--                <th>Điểm kho</th>-->
+<!--                <th>Số lượng mua trực tiếp đề xuất</th>-->
+<!--                <th>ĐVT</th>-->
+<!--                <th>Đơn giá được duyệt có VAT (đ/kg)</th>-->
+<!--                <th>Thành tiền (đ)</th>-->
+<!--              </tr>-->
+<!--              </thead>-->
+<!--              <tbody>-->
+<!--              <ng-container *ngFor="let item of tableData.data , let i = index">-->
+<!--                <tr [ngClass]="{'bg-selected': i == 0 && this.selected}" (click)="showDetail($event,item)">-->
+<!--                  <td [nzExpand]="true"></td>-->
+<!--                  <td colspan="2">{{item.tenDvi}}</td>-->
+<!--                  <td class="text-bold">{{ calcTong() | number : '1.0-1' : 'vi_VN' }}</td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                </tr>-->
+<!--                <ng-container *ngFor="let diemKho of item.children, let y = index">-->
+<!--                  <tr>-->
+<!--                    <td></td>-->
+<!--                    <td></td>-->
+<!--                    <td>{{diemKho.tenDiemKho}}</td>-->
+<!--                    <td>{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>-->
+<!--                    <td>tấn</td>-->
+<!--                    <td>{{diemKho.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>-->
+<!--                    <td>{{diemKho.donGiaVat * diemKho.soLuong * 1000 | number : '1.0-1' : 'vi_VN'}}</td>-->
+<!--                  </tr>-->
+<!--                </ng-container>-->
+<!--              </ng-container>-->
+<!--              </tbody>-->
+<!--            </nz-table>-->
+<!--          </nz-card>-->
+<!--        </nz-collapse-panel>-->
+<!--      </nz-collapse>-->
+      <nz-collapse>
+        <div class="header header-green-background mg-t-16">
+          <div class="header-text">
+            <div class="title-chi-tieu">
+              <span></span>
+              <span>DANH SÁCH HỢP ĐỒNG CẦN KÝ VỚI CÁC GÓI THẦU ĐÃ TRÚNG</span>
             </div>
-            <nz-card class="mg-t-16 flex-card p-lr16">
-                <nz-table class="nowrap pd-10" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
+          </div>
+          <div class="buttons"
+               *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH && !userService.isTongCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_HDBKPM_LT_HDPL_THEM')">
+            <button type="button" class="btn btn-main" (click)="redirectHopDong(true, null)">
+              <i class="icon htvbdh_dau-cong"></i>
+              <span>Thêm</span>
+            </button>
+          </div>
+        </div>
+        <nz-card class="mg-t-16 flex-card p-lr16">
+          <nz-table class="nowrap pd-10" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
                     [nzShowPagination]="false">
-                    <thead>
-                        <tr>
-                            <th style="width: 2%;">STT</th>
-                            <th>Số hợp đồng</th>
-                            <th>Tên hợp đồng</th>
-                            <th>Ngày ký hợp đồng</th>
-                            <th width="150px">Đơn vị cung cấp được chọn</th>
-                            <th width="100px">Số lượng (kg)</th>
-                            <th width="100px">Đơn giá</th>
-                            <th width="100px">Thành tiền đã bao gồm thuế (đ)</th>
-                            <th width="100px">Trạng thái HĐ</th>
-                            <th width="100px">Số QĐ giao NV NH</th>
-                            <th width="100px">Trạng thái NH</th>
-                            <th width="100px">Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let data of dataTable , let k = index"
-                            [ngClass]="{'bg-selected': k == 0 && this.selectedHd}" (click)="showDetailHd($event,data)">
-                            <ng-container>
-                                <td class="text-center">{{k + 1}}</td>
-                                <td>{{data.soHd}}</td>
-                                <td>{{data.tenHd}}</td>
-                                <td>{{data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
-                                <td nzLeft>{{data.dviCungCap}}</td>
-                                <td nzLeft>{{data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                                <td nzLeft>{{data.donGiaGomThue | number : '1.0-1' : 'vi_VN'}}</td>
-                                <td nzLeft>{{data.soLuong * data.donGiaGomThue * 1000 | number : '1.0-1' : 'vi_VN' }}
-                                </td>
-                                <td nzLeft>{{data.tenTrangThai}}</td>
-                                <td nzLeft>{{data.soQdGiaoNvNh}}</td> <!-- so qd giao nv nhap hang -->
-                                <td nzLeft>{{data.tenTrangThaiNh}}</td>
-                                <td class="text-center">
-                                    <a *ngIf="data.trangThai != STATUS.DA_KY" (click)="redirectHopDong(true,data.id) ">
-                                        <i class="fa fa-pencil" title="Sửa"></i>
-                                    </a>
-                                    <a *ngIf="data.trangThai != STATUS.DA_KY" (click)="deleteHd(data)">
-                                        <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                                    </a>
-                                </td>
-                            </ng-container>
-                        </tr>
-                    </tbody>
-                </nz-table>
-            </nz-card>
-            <div nz-col [nzSpan]="24">
-                <nz-card class="mg-t-10 flex-card p-lr16 ">
-                    <app-themmoi-hopdong-phuluc [idKqMtt]="id" [loaiVthh]="loaiVthh" *ngIf="idHopDong" [id]="idHopDong"
-                        [isQuanLy]="true">
-                    </app-themmoi-hopdong-phuluc>
-                </nz-card>
-            </div>
-        </nz-collapse>
+            <thead>
+            <tr>
+              <th style="width: 2%;">STT</th>
+              <th>Số hợp đồng</th>
+              <th>Tên hợp đồng</th>
+              <th>Ngày ký hợp đồng</th>
+              <th width="150px">Đơn vị cung cấp được chọn</th>
+              <th width="100px">Số lượng (tấn)</th>
+              <th width="100px">Đơn giá</th>
+              <th width="100px">Thành tiền đã bao gồm thuế (đ)</th>
+              <th width="100px">Trạng thái HĐ</th>
+              <th width="100px">Số QĐ giao NV NH</th>
+              <th width="100px">Trạng thái NH</th>
+              <th width="100px">Hành động</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let data of dataTable , let k = index" [ngClass]="{'bg-selected': k == 0 && this.selectedHd}" (click)="showDetailHd($event,data)">
+              <ng-container>
+                <td class="text-center">{{k + 1}}</td>
+                <td>{{data.soHd}}</td>
+                <td>{{data.tenHd}}</td>
+                <td>{{data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
+                <td nzLeft>{{data.dviCungCap}}</td>
+                <td nzLeft>{{data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                <td nzLeft>{{data.donGiaGomThue | number : '1.0-1' : 'vi_VN'}}</td>
+                <td nzLeft>{{data.soLuong * data.donGiaGomThue * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
+                <td nzLeft>{{data.tenTrangThai}}</td>
+                <td nzLeft>{{data.soQdGiaoNvNh}}</td> <!-- so qd giao nv nhap hang -->
+                <td nzLeft>{{data.tenTrangThaiNh}}</td>
+                <td class="text-center">
+                  <a *ngIf="data?.id > 0"
+                     (click)="preview(data.id)">
+                    <i class="icon htvbdh_tcdt_tuchoi" title="Xem trước"></i>
+                  </a>
+                  <a *ngIf="data.trangThai != STATUS.DA_KY && userService.isAccessPermisson('NHDTQG_PTMTT_HDBKPM_LT_HDPL_THEM')"
+                     (click)="redirectHopDong(true,data.id) ">
+                    <i class="fa fa-pencil" title="Sửa"></i>
+                  </a>
+                  <a *ngIf="data.trangThai != STATUS.DA_KY && userService.isAccessPermisson('NHDTQG_PTMTT_HDBKPM_LT_HDPL_XOA')"
+                     (click)="deleteHd(data)">
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                  </a>
+                </td>
+              </ng-container>
+            </tr>
+            </tbody>
+          </nz-table>
+        </nz-card>
+        <div nz-col [nzSpan]="24">
+          <nz-card class="mg-t-10 flex-card p-lr16 ">
+            <app-themmoi-hopdong-phuluc [idKqMtt]="id" [loaiVthh]="loaiVthh" *ngIf="idHopDong" [id]="idHopDong"
+                                        [isQuanLy]="true">
+            </app-themmoi-hopdong-phuluc>
+          </nz-card>
+        </div>
+      </nz-collapse>
 
 
 
@@ -352,26 +360,26 @@
         (showListEvent)="redirectHopDong(false,idHopDong)">
     </app-themmoi-hopdong-phuluc>
 </ng-template>
-<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="PHIẾU KIỂM TRA CHẤT LƯỢNG" nzWidth="100%" (nzOnCancel)="closeDlg()">
-    <div *nzModalContent class="modal__content">
-        <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
-    </div>
-    <div *nzModalFooter>
-        <button nz-button (click)="printPreview()" class="modal__button--save">
-            <i class="icon htvbdh_printer"></i>
-            In
-        </button>
-        <button nz-button (click)="downloadPdf(previewName)" class="modal__button--save">
-            <i class="icon htvbdh_file-pdf"></i>
-            Xuất .pdf
-        </button>
-        <button nz-button (click)="downloadWord(previewName)" class="modal__button--save">
-            <i class="icon htvbdh_file-word"></i>
-            Xuất .docx
-        </button>
-        <button nz-button (click)="closeDlg()" class="modal__button--cancel">
-            <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-            Đóng
-        </button>
-    </div>
+<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="HỢP ĐỒNG" nzWidth="100%" (nzOnCancel)="closeDlg()">
+  <div *nzModalContent class="modal__content">
+    <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)="printPreview()" class="modal__button--save">
+      <i class="icon htvbdh_printer"></i>
+      In
+    </button>
+    <button nz-button (click)="downloadPdf(previewName)" class="modal__button--save">
+      <i class="icon htvbdh_file-pdf"></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)="downloadWord(previewName)" class="modal__button--save">
+      <i class="icon htvbdh_file-word"></i>
+      Xuất .docx
+    </button>
+    <button nz-button (click)="closeDlg()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
 </nz-modal>

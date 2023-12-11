@@ -1,11 +1,11 @@
-import { NgModule } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
-import { DirectivesModule } from "../../../../directives/directives.module";
-import { NzStatisticModule } from "ng-zorro-antd/statistic";
-import { NzPipesModule } from "ng-zorro-antd/pipes";
-import { MainModule } from "../../../../layout/main/main.module";
-import { ComponentsModule } from "../../../../components/components.module";
-import { CuuTroVienTroModule } from "../../xuat-cuu-tro-vien-tro/xuat-cuu-tro/cuu-tro-vien-tro.module";
+import {NgModule} from '@angular/core';
+import {CommonModule, DatePipe} from '@angular/common';
+import {DirectivesModule} from "../../../../directives/directives.module";
+import {NzStatisticModule} from "ng-zorro-antd/statistic";
+import {NzPipesModule} from "ng-zorro-antd/pipes";
+import {MainModule} from "../../../../layout/main/main.module";
+import {ComponentsModule} from "../../../../components/components.module";
+import {CuuTroVienTroModule} from "../../xuat-cuu-tro-vien-tro/xuat-cuu-tro/cuu-tro-vien-tro.module";
 import {
   KiemtraChatluongVtTbTrongThoiGianBaoHanhComponent
 } from "./kiemtra-chatluong-vt-tb-trong-thoi-gian-bao-hanh.component";
@@ -21,7 +21,7 @@ import {
 import {
   ChiTietTongHopDsVtTbTrongThoiGianBaoHanhComponent
 } from "./tong-hop-ds-vt-tb-trong-thoi-gian-bao-hanh/chi-tiet-tong-hop-ds-hang-dtqg/chi-tiet-tong-hop-ds-vt-tb-trong-thoi-gian-bao-hanh.component";
-import { DieuChuyenNoiBoModule } from "../../../dieu-chuyen-noi-bo/dieu-chuyen-noi-bo.module";
+import {DieuChuyenNoiBoModule} from "../../../dieu-chuyen-noi-bo/dieu-chuyen-noi-bo.module";
 import {
   XuatKhoVtTbTrongThoiGianBaoHanhComponent
 } from "./xuat-kho-vt-tb-trong-thoi-gian-bao-hanh/xuat-kho-vt-tb-trong-thoi-gian-bao-hanh.component";
@@ -97,7 +97,7 @@ import {
 import {
   XkVtPhieuKiemTraChatLuongVtTbComponent
 } from "./kiem-tra-chat-luong-vt-tb-trong-thoi-gian-bao-hanh/phieu-kiem-tra-chat-luong/phieu-kiem-tra-chat-luong-vt-tb.component";
-import { BaoCaoKetQuaBaoHanhComponent } from "./bao-cao-ket-qua-bao-hanh/bao-cao-ket-qua-bao-hanh.component";
+import {BaoCaoKetQuaBaoHanhComponent} from "./bao-cao-ket-qua-bao-hanh/bao-cao-ket-qua-bao-hanh.component";
 import {
   ThongTinBaoCaoKetQuaBaoHanhComponent
 } from "./bao-cao-ket-qua-bao-hanh/thong-tin-bao-cao-ket-qua-bao-hanh/thong-tin-bao-cao-ket-qua-bao-hanh.component";

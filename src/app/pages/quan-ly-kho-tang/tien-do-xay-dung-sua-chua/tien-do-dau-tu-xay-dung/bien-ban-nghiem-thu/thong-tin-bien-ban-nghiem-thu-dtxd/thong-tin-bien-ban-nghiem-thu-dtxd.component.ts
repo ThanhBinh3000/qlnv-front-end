@@ -1,21 +1,21 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Validators } from '@angular/forms';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../../services/storage.service";
-import { Base2Component } from "../../../../../../components/base2/base2.component";
-import { MESSAGE } from "../../../../../../constants/message";
+import {Component, Input, OnInit} from '@angular/core';
+import {Validators} from '@angular/forms';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../../services/storage.service";
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {MESSAGE} from "../../../../../../constants/message";
 import dayjs from "dayjs";
-import { STATUS } from "../../../../../../constants/status";
+import {STATUS} from "../../../../../../constants/status";
 import {
   MmHopDongCt
 } from "../../../../../dinh-muc/may-moc-thiet-bi/mm-hop-dong/mm-thong-tin-hop-dong/mm-thong-tin-hop-dong.component";
 import {
   BienBanNghiemThuDtxdService
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/bien-ban-nghiem-thu-dtxd.service";
-import { HopdongService } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/hopdong.service";
+import {HopdongService} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/hopdong.service";
 import {
   DialogMmBbGiaoNhanComponent
 } from "../../../../../dinh-muc/may-moc-thiet-bi/mm-bien-ban-giao-nhan/mm-them-moi-bb-giao-nhan/dialog-mm-bb-giao-nhan/dialog-mm-bb-giao-nhan.component";
@@ -64,19 +64,19 @@ export class ThongTinBienBanNghiemThuDtxdComponent extends Base2Component implem
       maDvi: [null],
       namKeHoach: [dayjs().get('year')],
       soBienBan: [null, Validators.required],
-      soHopDong: [null, Validators.required],
+      soHopDong: [null , Validators.required],
       tenHopDong: [null],
       idHopDong: [null],
       tenDuAn: [null],
-      ngayKy: [null, Validators.required],
+      ngayKy: [null , Validators.required],
       chuDauTu: [null],
       dvGiamSat: [null],
       dvSuDung: [null],
       dvThiCong: [null],
       ngayKhoiCong: [null],
       ngayHoanThanh: [null],
-      thoiGianBatDau: [null, Validators.required],
-      thoiGianKetThuc: [null, Validators.required],
+      thoiGianBatDau: [null , Validators.required],
+      thoiGianKetThuc: [null , Validators.required],
       chatLuong: [null],
       ketLuan: [null],
       trangThai: ['00'],
@@ -108,13 +108,13 @@ export class ThongTinBienBanNghiemThuDtxdComponent extends Base2Component implem
     this.spinner.show();
     try {
       let body = {
-        "namKh": this.itemDuAn.namKeHoach,
-        "idDuAn": this.itemDuAn.id
+       "namKh" : this.itemDuAn.namKeHoach,
+        "idDuAn" : this.itemDuAn.id
       }
       let res = await this.hopdongService.listHopDong(body);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
-        this.listHopDong = data.filter(i => i.trangThaiTd == STATUS.DA_HOAN_THANH);
+        this.listHopDong = data.filter(i=>i.trangThaiTd==STATUS.DA_HOAN_THANH);
       }
       this.spinner.hide();
     } catch (e) {
@@ -133,12 +133,12 @@ export class ThongTinBienBanNghiemThuDtxdComponent extends Base2Component implem
         if (res.data) {
           const data = res.data;
           let dataSobb = data.soBienBan?.split('/');
-          this.maBb = dataSobb && dataSobb.length > 0 ? '/' + dataSobb[1] + '/' + dataSobb[2] : null
+          this.maBb = dataSobb && dataSobb.length > 0 ? '/' + dataSobb[1] + '/' +  dataSobb[2] : null
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.fileDinhKem = data.listFileDinhKems;
           this.formData.patchValue({
             soBienBan: dataSobb && dataSobb.length > 0 ? dataSobb[0] : null,
-            tenHopDong: data && data.hopDong && data.hopDong.tenHd ? data.hopDong.tenHd : ''
+            tenHopDong : data && data.hopDong && data.hopDong.tenHd ? data.hopDong.tenHd : ''
           })
           let dataList = data.listKtTdxdBienbanNghiemthuDtl;
           if (dataList && dataList.length > 0) {
@@ -195,7 +195,7 @@ export class ThongTinBienBanNghiemThuDtxdComponent extends Base2Component implem
                 id: res.id,
                 trangThai: STATUS.DA_KY,
               }
-              let resPd = await this.bienBanSv.approve(body);
+             let resPd =  await this.bienBanSv.approve(body);
               if (resPd) {
                 this.modal.closeAll()
               }
@@ -210,7 +210,7 @@ export class ThongTinBienBanNghiemThuDtxdComponent extends Base2Component implem
         },
       });
     } else {
-      await this.createUpdate(body);
+     await this.createUpdate(body);
     }
   }
 
@@ -248,7 +248,7 @@ export class ThongTinBienBanNghiemThuDtxdComponent extends Base2Component implem
         this.talbeChuDauTu.forEach((item, index) => {
           this.dataEditChuDauTu[index] = {
             edit: false,
-            data: { ...item },
+            data: {...item},
           };
         });
       }
@@ -257,7 +257,7 @@ export class ThongTinBienBanNghiemThuDtxdComponent extends Base2Component implem
         this.tableDvSuDung.forEach((item, index) => {
           this.dataEditDvSuDung[index] = {
             edit: false,
-            data: { ...item },
+            data: {...item},
           };
         });
       }
@@ -266,7 +266,7 @@ export class ThongTinBienBanNghiemThuDtxdComponent extends Base2Component implem
         this.talbeDvGiamSat.forEach((item, index) => {
           this.dataEditDvGiamSat[index] = {
             edit: false,
-            data: { ...item },
+            data: {...item},
           };
         });
       }
@@ -275,7 +275,7 @@ export class ThongTinBienBanNghiemThuDtxdComponent extends Base2Component implem
         this.talbeDvThiCong.forEach((item, index) => {
           this.dataEditDvThiCong[index] = {
             edit: false,
-            data: { ...item },
+            data: {...item},
           };
         });
       }
@@ -309,22 +309,22 @@ export class ThongTinBienBanNghiemThuDtxdComponent extends Base2Component implem
   cancelEditBgBn(stt: number, type): void {
     if (type == 'chuDauTu') {
       this.dataEditChuDauTu[stt] = {
-        data: { ...this.talbeChuDauTu[stt] },
+        data: {...this.talbeChuDauTu[stt]},
         edit: false
       };
     } else if (type == 'dvSuDung') {
       this.dataEditDvSuDung[stt] = {
-        data: { ...this.tableDvSuDung[stt] },
+        data: {...this.tableDvSuDung[stt]},
         edit: false
       };
     } else if (type == 'dvGiamSat') {
       this.dataEditDvGiamSat[stt] = {
-        data: { ...this.talbeDvGiamSat[stt] },
+        data: {...this.talbeDvGiamSat[stt]},
         edit: false
       };
     } else if (type == 'dvThiCong') {
       this.dataEditDvThiCong[stt] = {
-        data: { ...this.talbeDvThiCong[stt] },
+        data: {...this.talbeDvThiCong[stt]},
         edit: false
       };
     }
@@ -335,15 +335,15 @@ export class ThongTinBienBanNghiemThuDtxdComponent extends Base2Component implem
       this.dataEditChuDauTu[idx].edit = false;
       Object.assign(this.talbeChuDauTu[idx], this.dataEditChuDauTu[idx].data);
       this.updateEditCacheBgBn(type);
-    } else if (type == 'dvSuDung') {
+    } else   if (type == 'dvSuDung') {
       this.dataEditDvSuDung[idx].edit = false;
       Object.assign(this.tableDvSuDung[idx], this.dataEditDvSuDung[idx].data);
       this.updateEditCacheBgBn(type);
-    } if (type == 'dvGiamSat') {
+    }   if (type == 'dvGiamSat') {
       this.dataEditDvGiamSat[idx].edit = false;
       Object.assign(this.talbeDvGiamSat[idx], this.dataEditDvGiamSat[idx].data);
       this.updateEditCacheBgBn(type);
-    } if (type == 'dvThiCong') {
+    }   if (type == 'dvThiCong') {
       this.dataEditDvThiCong[idx].edit = false;
       Object.assign(this.talbeDvThiCong[idx], this.dataEditDvThiCong[idx].data);
       this.updateEditCacheBgBn(type);
@@ -402,9 +402,9 @@ export class ThongTinBienBanNghiemThuDtxdComponent extends Base2Component implem
           this.formData.patchValue({
             soHopDong: data.soHd,
             tenHopDong: data.tenHd,
-            tenDuAn: data.tenDuAn,
-            idHopDong: data.id,
-            chuDauTu: data.cdtTen
+            tenDuAn : data.tenDuAn,
+            idHopDong : data.id,
+            chuDauTu : data.cdtTen
           })
         }
       })

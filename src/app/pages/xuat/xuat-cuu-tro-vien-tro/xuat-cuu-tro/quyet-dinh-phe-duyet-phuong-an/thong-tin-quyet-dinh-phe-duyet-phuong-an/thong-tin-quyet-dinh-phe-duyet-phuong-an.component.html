@@ -105,7 +105,7 @@
                     </nz-form-control>
                   </nz-form-item>
                   <nz-form-item>
-                    <label nz-radio nzValue="TTr">Chọn Số công văn/đề xuất</label>
+                    <label nz-radio nzValue="TTr">Chọn Số công văn/tờ trình</label>
                     <nz-form-control [nzErrorTip]="error">
                       <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTr()">
                         <input [readonly]="true" nz-input formControlName="soDx" readonly="true" />
@@ -129,7 +129,7 @@
 
           <div nz-col [nzSpan]="6">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
+              <nz-form-label [nzNoColon]="true"> Loại hình xuất</nz-form-label>
               <nz-form-control>
                 <input nz-input [readonly]="true" formControlName="loaiNhapXuat" />
               </nz-form-control>

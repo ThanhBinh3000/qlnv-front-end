@@ -1,11 +1,10 @@
 <nz-affix [nzOffsetTop]='globals.prop.MENU_LV1' class='level1'>
   <ul nz-menu nzMode='horizontal'>
     <li nz-menu-item [nzSelected]='tabSelected==0' *ngIf='userService.isAccessPermisson("XHDTQG_XK_KTCLVTLK_12THANG")'
-      (click)='selectTab(0)'>
+        (click)='selectTab(0)'>
       Vật tư, thiết bị có thời hạn lưu kho lớn hơn 12 tháng
     </li>
-    <li [nzSelected]='tabSelected==1' *ngIf='userService.isAccessPermisson("XHDTQG_XK_KTCLVTLK_06THANG")' nz-menu-item
-      (click)='selectTab(1)'>
+    <li [nzSelected]='tabSelected==1' *ngIf='userService.isAccessPermisson("XHDTQG_XK_KTCLVTLK_06THANG")' nz-menu-item (click)='selectTab(1)'>
       Vật tư, thiết bị có thời gian lưu kho còn 6 tháng
     </li>
   </ul>

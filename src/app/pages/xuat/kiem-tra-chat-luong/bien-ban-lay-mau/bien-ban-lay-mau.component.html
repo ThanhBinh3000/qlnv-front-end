@@ -47,21 +47,22 @@
     <div class="group-button">
       <h3 class="text-uppercase">Danh sách biên bản lấy mẫu/bàn giao mẫu</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteMulti()"
-          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_XOA')">
+        <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="checkRoleXoaDs()">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="exportData()"
-          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_EXP')">
+        <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="checkRoleExport()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)"
-          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_THEM') && userService.isChiCuc()">
+        <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)" *ngIf="checkRoleAdd()">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Thêm</span>
         </button>
+        <!-- <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)" *ngIf="userService.isChiCuc()">
+          <i class="icon htvbdh_tcdt_tao-qd"></i>
+          <span>Thêm</span>
+        </button> -->
       </div>
     </div>
 
@@ -75,18 +76,18 @@
             <th width="60px" class="text-center">STT</th>
             <th width="">Số QĐ giao nhiệm vụ XH</th>
             <th width="">Năm KH</th>
-            <th width="">Thời hạn XH trước ngày</th>
+            <th width="">Thời hạn XH</th>
             <th width="">Điểm Kho</th>
+            <th width="">Ngăn/Lô kho</th>
             <th width="">Số BB LM/BGM</th>
             <th width="">Ngày lấy mẫu</th>
-            <th width="">Lô kho</th>
-            <th width="">Số BB tịnh kho</th>
+            <!-- <th width="">Số BB tịnh kho</th>
             <th width="">Ngày xuất dốc kho</th>
-            <th width="">Số BB hao dôi</th>
+            <th width="">Số BB hao dôi</th> -->
             <th width="">Trạng thái</th>
             <th width="90px">Hành động</th>
           </tr>
-          <tr class="search-table">
+          <!-- <tr class="search-table">
             <th></th>
             <th></th>
             <th>
@@ -107,6 +108,19 @@
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayQdGiaoNvXh"
                   (input)="filterInTable('ngayQdGiaoNvXh',filterTable.ngayQdGiaoNvXh)" size="small" />
               </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDiemKho"
+                  (input)="filterInTable('tenDiemKho',filterTable.tenDiemKho)" size="small" />
+              </nz-input-group>
+
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoKho"
+                  (input)="filterInTable('tenLoKho',filterTable.tenLoKho)" size="small" />
+              </nz-input-group>
 
             </th>
             <th>
@@ -125,21 +139,6 @@
                 <i nz-icon nzType="calendar"></i>
               </ng-template>
             </th>
-            <th>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDiemKho"
-                  (input)="filterInTable('tenDiemKho',filterTable.tenDiemKho)" size="small" />
-              </nz-input-group>
-
-            </th>
-            <th>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoKho"
-                  (input)="filterInTable('tenLoKho',filterTable.tenLoKho)" size="small" />
-              </nz-input-group>
-
-            </th>
-
             <th>
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBbTinhKho"
@@ -171,7 +170,7 @@
 
             </th>
             <th></th>
-          </tr>
+          </tr> -->
         </thead>
         <tbody>
           <ng-container *ngFor="let item of basicTable.data, let i = index;">
@@ -188,12 +187,12 @@
               <td></td>
               <td></td>
               <td></td>
+              <!-- <td></td>
               <td></td>
-              <td></td>
-              <td></td>
+              <td></td> -->
               <td></td>
               <td>
-                <a (click)="redirectDetail(0, false,item)">
+                <a (click)="redirectDetail(0, false,item)" *ngIf="checkRoleAdd()">
                   <i class="fa fa-plus" title="Thêm mới"></i>
                 </a>
               </td>
@@ -210,9 +209,9 @@
                   <td></td>
                   <td></td>
                   <td></td>
+                  <!-- <td></td>
                   <td></td>
-                  <td></td>
-                  <td></td>
+                  <td></td> -->
                   <td></td>
                   <td class="text-left">
                   </td>
@@ -226,30 +225,25 @@
                       <td></td>
                       <td></td>
                       <td></td>
+                      <td>{{lv2.tenLoKho ? lv2.tenLoKho + ' - ' + lv2.tenNganKho + ' - ' + lv2.tenNhaKho :
+                        lv2.tenNganKho + ' - ' + lv2.tenNhaKho}}</td>
                       <td>{{lv2.soBbQd}}</td>
-                      <td>{{lv2.ngayTao | date:globals.dateFormat}}</td>
-                      <td>{{lv2.tenLoKho ? lv2.tenLoKho + ' - ' + lv2.tenNganKho : lv2.tenLoKho}}</td>
-                      <td>{{lv2.soBbTinhKho}}</td>
+                      <td>{{lv2.ngayBbLayMau | date:globals.dateFormat}}</td>
+                      <!-- <td>{{lv2.soBbTinhKho}}</td>
                       <td>{{lv2.ngayXuatDocKho | date:globals.dateFormat}}</td>
-                      <td>{{lv2.soBbHaoDoi}}</td>
+                      <td>{{lv2.soBbHaoDoi}}</td> -->
                       <td>{{lv2.tenTrangThai}}</td>
                       <td>
-                        <a (click)="redirectDetail(lv2.id, true)" *ngIf="checkStatusPermission(lv2,CHUC_NANG.XEM) &&
-                          !(this.checkStatusPermission(lv2,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_THEM'))&&
-                          !(this.checkStatusPermission(lv2,CHUC_NANG.DUYET_LDCC)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_DUYET_LDCCUC')) &&
-                          userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_VT_BBBGM_XEM')">
+                        <a (click)="redirectDetail(lv2.id, true)" *ngIf="checkRoleView(lv2.trangThai)">
                           <i class="fa fa-eye" title="Xem chi tiết"></i>
                         </a>
-                        <a *ngIf="(this.checkStatusPermission(lv2,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_THEM'))"
-                          (click)="redirectDetail(lv2.id, false)">
+                        <a *ngIf="checkRoleEdit(lv2.trangThai)" (click)="redirectDetail(lv2.id, false)">
                           <i class="fa fa-pencil" title="Sửa"></i>
                         </a>
-                        <a *ngIf="(this.checkStatusPermission(lv2,CHUC_NANG.DUYET_LDCC)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_DUYET_LDCCUC'))"
-                          (click)="redirectDetail(lv2.id, true)">
+                        <a *ngIf="checkRoleApprove(lv2.trangThai)" (click)="redirectDetail(lv2.id, true)">
                           <i class="icon htvbdh_tcdt_pheduyet"></i>
                         </a>
-                        <a *ngIf="this.checkStatusPermission(lv2,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_XOA')"
-                          (click)="delete(lv2)">
+                        <a *ngIf="checkRoleDelete(lv2.trangThai)" (click)="delete(lv2)">
                           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                         </a>
                       </td>
@@ -283,13 +277,16 @@
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
   <app-chi-tiet-bien-ban-lay-mau [idSelected]="idSelected" [isView]="isView" [inputService]="inputService"
-    [loaiXuat]="loaiXuat" [inputServiceGnv]="inputServiceGnv" [inputData]="inputData" (showListEvent)="showList()">
+    [loaiXuat]="loaiXuat" [loaiVthh]="loaiVthh" [inputServiceGnv]="inputServiceGnv" [inputData]="inputData"
+    [loaiChon]="loaiChon" (showListEvent)="showList()">
   </app-chi-tiet-bien-ban-lay-mau>
 </div>
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="showQdGnv" (nzOnCancel)="closeQdGnvModal()">
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }" [(nzVisible)]="showQdGnv"
+  (nzOnCancel)="closeQdGnvModal()" *ngIf="loaiXuat ==='CTVT'">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <!--<app-thong-tin-qd-gnv-xuat-hang [id]="idQdGnv" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
-    </app-thong-tin-qd-gnv-xuat-hang>-->
+    <app-chi-tiet-quyet-dinh-gnv [idSelected]="idQdGnv" (showListEvent)="showList()" [isView]="true"
+      [isViewOnModal]="true">
+    </app-chi-tiet-quyet-dinh-gnv>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeQdGnvModal()" class="modal__button--cancel">

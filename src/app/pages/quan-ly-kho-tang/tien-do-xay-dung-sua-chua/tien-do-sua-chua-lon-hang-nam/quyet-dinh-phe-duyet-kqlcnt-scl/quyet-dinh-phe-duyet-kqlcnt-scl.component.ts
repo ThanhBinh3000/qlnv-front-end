@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "../../../../../services/storage.service";
 import { NzNotificationService } from "ng-zorro-antd/notification";
@@ -32,7 +32,8 @@ export class QuyetDinhPheDuyetKqlcntSclComponent extends Base2Component implemen
   ];
   openPopThongTin = false;
   trangThaiTtdt = false;
-
+  @Input("itemQdPdKqLcnt") itemQdPdKqLcnt: any;
+  @Output() dataItemKqLcnt = new EventEmitter<object>();
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -120,6 +121,14 @@ export class QuyetDinhPheDuyetKqlcntSclComponent extends Base2Component implemen
     } finally {
       this.spinner.hide();
     }
+  }
+
+  receivedData(data: any) {
+    this.itemQdPdKqLcnt = data;
+    this.emitDataKqLcnt(data);
+  }
+  emitDataKqLcnt(data) {
+    this.dataItemKqLcnt.emit(data);
   }
 
 }

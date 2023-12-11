@@ -1,6 +1,6 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix" >
   <div class="btn-group">
-    <button type="button" class="btn btn-sub" (click)="goBack()">
+    <button type="button" class="btn btn-sub" (click)="redirectDefault()">
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
@@ -121,7 +121,8 @@
                 <nz-form-label [nzNoColon]="true"> Thời gian giao nhận hàng</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input formControlName="thoiGianGiaoNhan" nzFormat="dd/MM/yyyy" [readonly]="true"/>
+                    <nz-date-picker formControlName="thoiGianGiaoNhan" [nzDisabled]="true" nzFormat="dd/MM/yyyy">
+                    </nz-date-picker>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -164,7 +165,7 @@
               </nz-form-item>
               <nz-form-item>
                 <div class="list-file" nz-col>
-                  <file-list [isCanCuPL]="true" [data]="formData.value.fileCanCu" [isViewDetail]=" isDisabled()">
+                  <file-list [isCanCuPL]="true" [data]="fileCanCu" [isViewDetail]=" isDisabled()">
                   </file-list>
                 </div>
               </nz-form-item>
@@ -176,7 +177,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error" nz-col>
                   <div class="list-file" nz-col>
-                    <file-list [data]="formData.value.fileDinhKem" [isViewDetail]=" isDisabled()">
+                    <file-list [data]="fileDinhKem" [isViewDetail]=" isDisabled()">
                     </file-list>
                   </div>
                 </nz-form-control>

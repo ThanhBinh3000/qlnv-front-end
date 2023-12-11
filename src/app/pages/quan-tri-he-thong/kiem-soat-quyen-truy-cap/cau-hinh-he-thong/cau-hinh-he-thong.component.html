@@ -1,0 +1,74 @@
+<div>
+  <div>
+    <form nz-form nzLayout="vertical" [formGroup]="formData">
+
+      <div nz-row [nzGutter]="24" class="mg-t-16">
+        <div nz-col [nzSpan]="14">
+          <span>Nhật ký hệ thống (tất cả)</span>
+        </div>
+        <div nz-col [nzSpan]="2">
+          <nz-switch formControlName="writeLogAll" (ngModelChange)="onAll($event)"></nz-switch>
+        </div>
+        <div nz-col [nzSpan]="8">
+
+        </div>
+      </div>
+
+      <div nz-row [nzGutter]="24" class="mg-t-16">
+        <div nz-col [nzSpan]="14">
+          <span>Nhật ký thời điểm đăng nhập hệ thống</span>
+        </div>
+        <div nz-col [nzSpan]="2">
+          <nz-switch formControlName="writeLogLogin" (ngModelChange)="onChange()"></nz-switch>
+        </div>
+        <div nz-col [nzSpan]="8">
+
+        </div>
+      </div>
+
+      <div nz-row [nzGutter]="24" class="mg-t-16">
+        <div nz-col [nzSpan]="14">
+          <span>Nhật ký thời điểm đăng xuất hệ thống</span>
+        </div>
+        <div nz-col [nzSpan]="2">
+          <nz-switch formControlName="writeLogLogout" (ngModelChange)="onChange()"></nz-switch>
+        </div>
+        <div nz-col [nzSpan]="8">
+
+        </div>
+      </div>
+
+      <div nz-row [nzGutter]="24" class="mg-t-16">
+        <div nz-col [nzSpan]="14">
+          <span>Nhật ký truy cập và sử dụng chức năng <br /> hệ thống của người dùng</span>
+        </div>
+        <div nz-col [nzSpan]="2">
+          <nz-switch formControlName="writeLogUserActivity" (ngModelChange)="onChange()"></nz-switch>
+        </div>
+        <div nz-col [nzSpan]="8">
+
+        </div>
+      </div>
+
+    </form>
+  </div>
+  <div class="modal-footer">
+    <div class="nut">
+      <div class="cantrai">
+      </div>
+      <div class="canphai">
+        <button nz-button (click)="onCancel()" class="modal__button--cancel">
+          <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+          Hủy bỏ
+        </button>
+        <button nz-button (click)="handleOk(formData.value)" class="modal__button--save">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          Lưu
+        </button>
+      </div>
+    </div>
+  </div>
+  <ng-template #error let-control>
+    <app-template-error #error [control]="control"></app-template-error>
+  </ng-template>
+</div>

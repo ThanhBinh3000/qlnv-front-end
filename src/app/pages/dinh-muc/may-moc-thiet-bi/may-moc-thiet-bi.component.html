@@ -7,25 +7,25 @@
     <li nz-menu-item [nzSelected]="tabSelected =='dexuatchicuc'"  (click)="selectTab('dexuatchicuc')" *ngIf="!userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_DEXUATCC')">
       Đề xuất nhu cầu của Chi cục
     </li>
-    <li nz-menu-item (click)="selectTab('dexuatcuc')" *ngIf="(!userService.isChiCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCC')">
+    <li nz-menu-item [nzSelected]="tabSelected =='dexuatcuc'" (click)="selectTab('dexuatcuc')" *ngIf="(!userService.isChiCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCC')">
       {{userService.isTongCuc() ? 'Đề xuất nhu cầu của các Cục' : 'Tổng hợp nhu cầu của Chi cục và đề xuất lên TC'}}
     </li>
-    <li nz-menu-item (click)="selectTab('tonghopdexuat')" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCUC')">
+    <li [nzSelected]="tabSelected =='tonghopdexuat'" nz-menu-item (click)="selectTab('tonghopdexuat')" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCUC')">
       Tổng hợp đề xuất nhu cầu của các cục
     </li>
-    <li nz-menu-item (click)="selectTab('quyetdinhmuasam')" *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_QDMUASAM')">
+    <li [nzSelected]="tabSelected =='quyetdinhmuasam'" nz-menu-item (click)="selectTab('quyetdinhmuasam')" *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_QDMUASAM')">
       Quyết định mua sắm
     </li>
-    <li nz-menu-item (click)="selectTab('thongtinphanbo')" >
+    <li [nzSelected]="tabSelected =='thongtinphanbo'" nz-menu-item (click)="selectTab('thongtinphanbo')" >
      Thông tin phân bổ
     </li>
-    <li nz-menu-item (click)="selectTab('hopdong')" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HDMUASAM')" >
+    <li [nzSelected]="tabSelected =='hopdong'" nz-menu-item (click)="selectTab('hopdong')" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HDMUASAM')" >
       Hợp đồng
     </li>
-    <li nz-menu-item (click)="selectTab('bienbangiaonhan')" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_BBGN')" >
+    <li [nzSelected]="tabSelected =='bienbangiaonhan'" nz-menu-item (click)="selectTab('bienbangiaonhan')" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_BBGN')" >
       Biên bản giao nhận
     </li>
-    <li nz-menu-item (click)="selectTab('hientrangmaymoc')" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HTMMTBCD')">
+    <li [nzSelected]="tabSelected =='hientrangmaymoc'" nz-menu-item (click)="selectTab('hientrangmaymoc')" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HTMMTBCD')">
       Hiện trạng máy móc, thiết bị
     </li>
   </ul>

@@ -4,51 +4,76 @@
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
         <div nz-row [nzGutter]="20">
           <div nz-col nzSpan="6">
-            <label>Cục DTNN KV</label>
-            <nz-select formControlName="maDvi" nzShowSearch nzAllowClear>
-              <nz-option *ngFor="let p of dsDonvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
-            </nz-select>
+            <nz-form-control>
+              <nz-form-label> {{ userService.isTongCuc() ? 'Cục DTNN KV' : 'Chi cục DTNN KV' }} </nz-form-label>
+              <nz-form-item>
+                <nz-select formControlName="maDviSr" nzShowSearch nzAllowClear>
+                  <nz-option *ngFor="let p of dsDonvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
+                </nz-select>
+              </nz-form-item>
+            </nz-form-control>
           </div>
           <div nz-col nzSpan="5">
-            <label>Loại hàng hóa</label>
-            <nz-select formControlName="loaiVthh" nzShowSearch nzAllowClear (ngModelChange)="changeHangHoa($event)">
-              <nz-option *ngFor="let p of dsLoaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
-            </nz-select>
+            <nz-form-control>
+              <nz-form-label>Loại hàng DTQG</nz-form-label>
+              <nz-form-item>
+                <nz-select formControlName="loaiVthh" nzShowSearch nzAllowClear
+                           (ngModelChange)="changeHangHoa($event)">
+                  <nz-option *ngFor="let p of dsLoaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
+                </nz-select>
+              </nz-form-item>
+            </nz-form-control>
           </div>
           <div nz-col nzSpan="5">
-            <label>Chủng loại hàng hóa</label>
-            <nz-select formControlName="cloaiVthh" nzShowSearch nzAllowClear>
-              <nz-option *ngFor="let p of dsCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
-            </nz-select>
+            <nz-form-control>
+              <nz-form-label>
+                Chủng loại hàng DTQG
+              </nz-form-label>
+              <nz-form-item>
+                <nz-select formControlName="cloaiVthh" nzShowSearch nzAllowClear>
+                  <nz-option *ngFor="let p of dsCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
+                </nz-select>
+              </nz-form-item>
+            </nz-form-control>
           </div>
           <div nz-col nzSpan="4">
-            <label>Ngày đề xuất</label>
-            <div nz-row>
-              <div nz-col nzSpan="12" class="cus-start-date">
-                <nz-date-picker [nzDisabledDate]="disabledNgayDeXuatTu" nzFormat="dd/MM/yyyy"
-                  formControlName="ngayDeXuatTu" nzPlaceHolder="Ngày bắt đầu">
-                </nz-date-picker>
-              </div>
-              <div nz-col nzSpan="12" class="cus-end-date">
-                <nz-date-picker [nzDisabledDate]="disabledNgayDeXuatDen" nzFormat="dd/MM/yyyy"
-                  formControlName="ngayDeXuatDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
-              </div>
-            </div>
+            <nz-form-control>
+              <nz-form-label>Ngày đề xuất</nz-form-label>
+              <nz-form-item>
+                <div nz-row>
+                  <div nz-col nzSpan="12" class="cus-start-date">
+                    <nz-date-picker [nzDisabledDate]="disabledNgayDeXuatTu" nzFormat="dd/MM/yyyy"
+                                    formControlName="ngayDeXuatTu" nzPlaceHolder="Ngày bắt đầu">
+                    </nz-date-picker>
+                  </div>
+                  <div nz-col nzSpan="12" class="cus-end-date">
+                    <nz-date-picker [nzDisabledDate]="disabledNgayDeXuatDen" nzFormat="dd/MM/yyyy"
+                                    formControlName="ngayDeXuatDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                  </div>
+                </div>
+              </nz-form-item>
+            </nz-form-control>
           </div>
           <div nz-col nzSpan="4">
-            <label>Ngày tổng hợp (chốt danh sách)</label>
-            <div nz-row>
-              <div nz-col nzSpan="12" class="cus-start-date">
-                <nz-date-picker [nzDisabledDate]="disabledNgayTongHopTu" nzFormat="dd/MM/yyyy"
-                  formControlName="ngayTongHopTu" nzPlaceHolder="Ngày bắt đầu">
-                </nz-date-picker>
-              </div>
-              <div nz-col nzSpan="12" class="cus-end-date">
-                <nz-date-picker [nzDisabledDate]="disabledNgayTongHopDen" nzFormat="dd/MM/yyyy"
-                  formControlName="ngayTongHopDen" nzPlaceHolder="Ngày kết thúc">
-                </nz-date-picker>
-              </div>
-            </div>
+            <nz-form-control>
+              <nz-form-label>Ngày tổng hợp (chốt danh sách)</nz-form-label>
+              <nz-form-item>
+                <div nz-row>
+                  <div nz-col nzSpan="12" class="cus-start-date">
+                    <nz-date-picker [nzDisabledDate]="disabledNgayTongHopTu" nzFormat="dd/MM/yyyy"
+                                    formControlName="ngayTongHopTu"
+                                    nzPlaceHolder="Ngày bắt đầu">
+                    </nz-date-picker>
+                  </div>
+                  <div nz-col nzSpan="12" class="cus-end-date">
+                    <nz-date-picker [nzDisabledDate]="disabledNgayTongHopDen" nzFormat="dd/MM/yyyy"
+                                    formControlName="ngayTongHopDen"
+                                    nzPlaceHolder="Ngày kết thúc">
+                    </nz-date-picker>
+                  </div>
+                </div>
+              </nz-form-item>
+            </nz-form-control>
           </div>
         </div>
       </form>
@@ -66,9 +91,10 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3 class="text-uppercase">Danh sách hàng cần tiêu hủy</h3>
+      <h3 class="text-uppercase">Danh sách hàng DTQG cần tiêu hủy</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-main" *ngIf="userService.isCuc()" (click)="openTongHop()">
+        <button type="button" class="btn btn-main"
+                *ngIf="userService.isCuc()" (click)="redirectUrl('xuat/xuat-tieu-huy/tong-hop')">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Tổng hợp DS hàng cần tiêu hủy</span>
         </button>
@@ -78,116 +104,116 @@
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
       <ng-container>
         <div class="mt-16">
-          <nz-table #tblData [nzData]="dataTableView" class="nowrap table-chi-tiet" nzBordered>
+          <nz-table #tblData [nzData]="dataTableView" class="nowrap table-chi-tiet" nzBordered >
             <thead>
-              <tr>
-                <th style="min-width: 340px">Cục DTNN KV</th>
-                <th>Loại hàng hóa</th>
-                <th>Chủng loại</th>
-                <th>Điểm kho</th>
-                <th>Nhà kho</th>
-                <th>Ngăn kho</th>
-                <th>Lô kho</th>
-                <th>SL tồn</th>
-                <th>Ngày nhập kho</th>
-                <th>SL cần thanh lý</th>
-                <th>SL cần thanh lý đã duyệt</th>
-                <th>SL còn lại cần thanh lý</th>
-                <th>ĐVT</th>
-                <th>Ngày đề xuất</th>
-                <th>Ngày tổng hợp (chốt DS)</th>
-                <th>Trạng thái</th>
-                <th>Mã danh sách</th>
-                <th>Lý do cần thanh lý</th>
-                <th>Hành động</th>
-              </tr>
+            <tr>
+              <th style="min-width: 340px">Chi cục DTNN KV</th>
+              <th>Loại hàng hóa</th>
+              <th>Chủng loại</th>
+              <th>Điểm kho</th>
+              <th>Nhà kho</th>
+              <th>Ngăn kho</th>
+              <th>Lô kho</th>
+              <th>SL tồn</th>
+              <th>Ngày nhập kho</th>
+              <th>SL cần tiêu hủy</th>
+              <th>SL cần tiêu hủy đã duyệt</th>
+              <th>SL còn lại cần tiêu hủy</th>
+              <th>ĐVT</th>
+              <th>Ngày đề xuất</th>
+              <th>Ngày tổng hợp (chốt DS)</th>
+              <th>Trạng thái</th>
+              <th>Mã danh sách</th>
+              <th>Lý do cần tiêu hủy</th>
+              <th>Hành động</th>
+            </tr>
             </thead>
             <tbody>
 
-              <ng-container *ngFor="let item of tblData.data, let i = index;">
-                <tr>
-                  <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
+            <ng-container *ngFor="let item of tblData.data, let i = index;">
+              <tr>
+                <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                     [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px">
-                    {{item.tenCuc}}
-                  </td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <ng-container *ngIf="expandSetString.has(item.idVirtual)">
-                  <ng-container *ngFor="let lv1 of item.childData,let i1=index">
-                    <tr>
-                      <td (nzExpandChange)="onExpandStringChange(lv1.idVirtual, $event)"
+                  {{item.tenCuc}}
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <ng-container *ngIf="expandSetString.has(item.idVirtual)">
+                <ng-container *ngFor="let lv1 of item.childData,let i1=index">
+                  <tr>
+                    <td (nzExpandChange)="onExpandStringChange(lv1.idVirtual, $event)"
                         [nzExpand]="expandSetString.has(lv1.idVirtual)" nzShowExpand="true"
                         style="padding-left:30px;width: 35px">
-                        {{lv1.tenChiCuc}}
-                      </td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                    <ng-container *ngIf="expandSetString.has(item.idVirtual) && expandSetString.has(lv1.idVirtual)">
-                      <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
-                        <tr>
-                          <td style="text-align: right;">{{i2 + 1}}</td>
-                          <td>{{lv2.tenLoaiVthh}}</td>
-                          <td>{{lv2.tenCloaiVthh}}</td>
-                          <td>{{lv2.tenDiemKho}}</td>
-                          <td>{{lv2.tenNhaKho}}</td>
-                          <td>{{lv2.tenNganKho}}</td>
-                          <td>{{lv2.tenLoKho}}</td>
-                          <td>{{lv2.slHienTai|number:globals.numberFormat}}</td>
-                          <td>{{lv2.ngayNhapKho|date:globals.dateFormat}}</td>
-                          <td>{{lv2.slDeXuat|number:globals.numberFormat}}</td>
-                          <td>{{lv2.slDaDuyet|number:globals.numberFormat}}</td>
-                          <td>{{lv2.slDeXuat - lv2.slDaDuyet|number:globals.numberFormat}}</td>
-                          <td>{{lv2.donViTinh}}</td>
-                          <td>{{lv2.ngayDeXuat|date:globals.dateFormat}}</td>
-                          <td>{{lv2.ngayTongHop|date:globals.dateFormat}}</td>
-                          <td>{{lv2.tenTrangThai}}</td>
-                          <td>{{lv2.maTongHop}}</td>
-                          <td>{{lv2.lyDo}}</td>
-                          <td class="text-left">
-                            <!--<a *ngIf="data.trangThaiId !== STATUS.DU_THAO" (click)="detail(data, true)">
+                      {{lv1.tenChiCuc}}
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <ng-container *ngIf="expandSetString.has(item.idVirtual) && expandSetString.has(lv1.idVirtual)">
+                    <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
+                      <tr>
+                        <td style="text-align: right;">{{i2 + 1}}</td>
+                        <td>{{lv2.tenLoaiVthh}}</td>
+                        <td>{{lv2.tenCloaiVthh}}</td>
+                        <td>{{lv2.tenDiemKho}}</td>
+                        <td>{{lv2.tenNhaKho}}</td>
+                        <td>{{lv2.tenNganKho}}</td>
+                        <td>{{lv2.tenLoKho}}</td>
+                        <td>{{lv2.slHienTai|number:globals.numberFormat}}</td>
+                        <td>{{lv2.ngayNhapKho|date:globals.dateFormat}}</td>
+                        <td>{{lv2.slDeXuat|number:globals.numberFormat}}</td>
+                        <td>{{lv2.slDaDuyet|number:globals.numberFormat}}</td>
+                        <td>{{lv2.slDeXuat - lv2.slDaDuyet|number:globals.numberFormat}}</td>
+                        <td>{{lv2.donViTinh}}</td>
+                        <td>{{lv2.ngayDeXuat|date:globals.dateFormat}}</td>
+                        <td>{{lv2.ngayTongHop|date:globals.dateFormat}}</td>
+                        <td>{{lv2.tenTrangThai}}</td>
+                        <td><a style="color: #001CFF;" (click)="redirectUrl('xuat/xuat-tieu-huy/tong-hop/chi-tiet/'+lv2.idTongHop)">{{ lv2.maTongHop}}</a>
+                        <td>{{lv2.lyDo}}</td>
+                        <td class="text-left">
+                          <a (click)="showDetail(lv2)">
                             <i class="fa fa-eye" title="Xem chi tiết"></i>
-                          </a>-->
-                          </td>
-                        </tr>
-                      </ng-container>
+                          </a>
+                        </td>
+                      </tr>
                     </ng-container>
                   </ng-container>
                 </ng-container>
               </ng-container>
+            </ng-container>
             </tbody>
           </nz-table>
         </div>
@@ -200,8 +226,9 @@
           <div class="canphai">
             <!-- begin phân trang  -->
             <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
-              [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
-              (nzPageSizeChange)="changePageSize($event)">
+                           [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+                           (nzPageIndexChange)="changePageIndex($event)"
+                           (nzPageSizeChange)="changePageSize($event)">
               <ng-template #rangeTemplate let-range="range" let-total>
                 {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
               </ng-template>
@@ -213,3 +240,4 @@
     </nz-card>
   </div>
 </div>
+

@@ -1,0 +1,118 @@
+<ng-container>
+  <div class="bg-trang">
+    <div class="header header-green-background">
+      <div class="header-text">
+        <div class="title-chi-tieu">
+          <span></span>
+          <span>DANH MỤC CHỈ TIÊU CHẤT LƯỢNG</span>
+        </div>
+      </div>
+    </div>
+    <nz-card class="mt16 flex-card p-lr16 mg-t-10">
+      <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
+        <div nz-row [nzGutter]="24">
+          <div nz-col nzSpan="6">
+            <label class="search__label">Mã chỉ tiêu</label>
+            <input class="search__input" placeholder="Nhập text" nz-input formControlName="maChiTieu"/>
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Tên chỉ tiêu</label>
+            <input class="search__input" placeholder="Nhập text" nz-input formControlName="tenChiTieu"/>
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Loại hàng DTQG</label>
+            <nz-select nzAllowClear formControlName="loaiVthh"
+                        nzShowSearch>
+              <nz-option *ngFor="let p of listLoaiVthh" [nzLabel]="p.ten" [nzValue]="p.ma"></nz-option>
+            </nz-select>
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Trạng thái</label>
+            <nz-select formControlName="trangThai" nzAllowClear>
+              <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
+      </form>
+      <div nz-col class="cangiua group-button-search">
+        <div>
+          <button nz-button class="search__button--clear" (click)="clearForm()">
+            <i class="icon  htvbdh_nhap-lai1"></i>
+            Xóa điều kiện
+          </button>
+          <button nz-button class="search__button--search" (click)="search()">
+            <i nz-icon nzType="search"></i>
+            Tìm kiếm
+          </button>
+        </div>
+      </div>
+    </nz-card>
+    <div class="group-button">
+      <h3> DANH SÁCH DANH CHỈ TIÊU CHẤT LƯỢNG</h3>
+      <div class="buttons">
+        <button type="button" class="btn btn-main" (click)="themMoi(null, false)" *ngIf="userService.isAccessPermisson('QTDM_DM_DVI_LIENQUAN_THEM')">
+          <i class="icon htvbdh_dau-cong"></i>
+          <span>Thêm</span>
+        </button>
+      </div>
+    </div>
+    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+      <nz-table #basicTable nzBordered class="wrap" [nzData]="dataTable" [nzFrontPagination]="false"
+                 [nzShowPagination]="false" nzBordered>
+        <thead>
+        <tr>
+          <th class="text-center" nzWidth="5%" >STT</th>
+          <th class="text-center" nzWidth="7%" >Mã chỉ tiêu</th>
+          <th class="text-center" nzWidth="17%" >Tên chỉ tiêu</th>
+          <th class="text-center" nzWidth="15%" >Loại hàng DTQG</th>
+          <th class="text-center" nzWidth="35%" >Mô tả</th>
+          <th class="text-center" nzWidth="7%" >Thứ tự hiển thị</th>
+          <th class="text-center" nzWidth="7%" >Trạng thái</th>
+          <th class="text-center" nzWidth="7%" nzRight>Hành động</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let data of basicTable.data; let i = index">
+          <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+          <td class="text-center">{{data.maChiTieu}}</td>
+          <td class="text-center">{{data.tenChiTieu}}</td>
+          <td class="text-center">{{data.tenLoaiVthh}}</td>
+          <td class="text-center">{{data.moTa}}</td>
+          <td class="text-center">{{data.thuTu}}</td>
+          <td class="text-center">{{data.tenTrangThai}}</td>
+          <td class="text-left">
+            <a (click)="themMoi(data.id, true)">
+              <i class="fa fa-eye" title="Xem chi tiết"></i>
+            </a>
+            <a (click)="themMoi(data.id, false)" *ngIf="userService.isAccessPermisson('QTDM_DM_DVI_LIENQUAN_THEM')">
+              <i class="fa fa-pencil" title="Sửa"></i>
+            </a>
+            <a (click)="delete(data.id)" *ngIf="userService.isAccessPermisson('QTDM_DM_DVI_LIENQUAN_XOA')">
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+            </a>
+          </td>
+        </tr>
+        </tbody>
+      </nz-table>
+      <div class="tab-content tab-menu" id="myTabContent">
+        <div class="tab-pane fade show active justify-content-between">
+          <div class="trai">
+          </div>
+          <div class="canphai">
+            <!-- begin phân trang  -->
+            <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                           [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+                           (nzPageIndexChange)="changePageIndex($event)"
+                           (nzPageSizeChange)="changePageSize($event)">
+              <ng-template #rangeTemplate let-range="range" let-total>
+                {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
+              </ng-template>
+            </nz-pagination>
+            <!-- end phân trang  -->
+          </div>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+</ng-container>

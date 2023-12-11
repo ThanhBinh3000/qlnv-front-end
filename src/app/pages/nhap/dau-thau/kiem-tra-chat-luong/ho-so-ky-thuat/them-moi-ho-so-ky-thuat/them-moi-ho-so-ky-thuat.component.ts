@@ -12,15 +12,15 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { HoSoKyThuatService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/hoSoKyThuat.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 import { UserService } from 'src/app/services/user.service';
-import { HSKT_LOAI_DOI_TUONG, LOAI_BIEN_BAN, STATUS } from 'src/app/constants/status';
+import {HSKT_LOAI_DOI_TUONG, LOAI_BIEN_BAN, STATUS} from 'src/app/constants/status';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { QuanLyBienBanLayMauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyBienBanLayMau.service';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
-import { FileDinhKem } from "../../../../../../models/FileDinhKem";
-import { saveAs } from 'file-saver';
-import { v4 as uuidv4 } from "uuid";
+import {FileDinhKem} from "../../../../../../models/FileDinhKem";
+import {saveAs} from 'file-saver';
+import {v4 as uuidv4} from "uuid";
 @Component({
   selector: 'app-them-moi-ho-so-ky-thuat',
   templateUrl: './them-moi-ho-so-ky-thuat.component.html',
@@ -33,7 +33,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
   @Input() loaiVthh: string;
   @Output()
   showListEvent = new EventEmitter<any>();
-
+  isViewChild: boolean;
   isBienBan: boolean = false;
   idBienBan: number;
   loaiBienBan: string;
@@ -74,7 +74,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       tenTrangThai: "Dự Thảo",
       fileDinhKems: "",
       loai: LOAI_BIEN_BAN.BB_KTRA_NGOAI_QUAN,
-      previewName: 'bien_ban_kiem_tra_ngoai_quan.docx'
+      previewName: 'bien_ban_kiem_tra_ngoai_quan'
     },
     {
       id: null,
@@ -83,7 +83,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       tenTrangThai: "Dự Thảo",
       fileDinhKems: "",
       loai: LOAI_BIEN_BAN.BB_KTRA_VAN_HANH,
-      previewName: 'bien_ban_kiem_tra_van_hanh.docx'
+      previewName: 'bien_ban_kiem_tra_van_hanh'
     },
     {
       id: null,
@@ -92,12 +92,12 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       tenTrangThai: "Dự Thảo",
       fileDinhKems: "",
       loai: LOAI_BIEN_BAN.BB_KTRA_HOSO_KYTHUAT,
-      previewName: 'bien_ban_kiem_tra_hskt.docx'
+      previewName: 'bien_ban_kiem_tra_hskt'
     }
   ];
   previewName: string = 'ho_so_ky_thuat';
   hoSoRow: any = {};
-  hoSoRowEdit: any[] = [];
+  hoSoRowEdit:any[] = [];
   viewTableHoSo: any[] = [];
   constructor(
     httpClient: HttpClient,
@@ -141,6 +141,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       truongPhong: [],
       lanhDaoCuc: [],
       dviCungCap: [],
+      idBbLayMau: [],
     });
   }
 
@@ -167,6 +168,18 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
         this.helperService.bidingDataInFormGroup(this.formData, data);
+        this.formData.patchValue({
+          soHd: data.qdGiaoNvuNhapxuatHdr?.hopDong?.soHd,
+          ngayKyHd: data.qdGiaoNvuNhapxuatHdr?.hopDong?.ngayKy,
+          dviCungCap: data.qdGiaoNvuNhapxuatHdr?.hopDong?.tenNhaThau,
+          tenLoaiVthh: data.qdGiaoNvuNhapxuatHdr?.tenLoaiVthh,
+          tenCloaiVthh: data.qdGiaoNvuNhapxuatHdr?.tenCloaiVthh,
+          dvt: data.qdGiaoNvuNhapxuatHdr?.donViTinh,
+          tenNganLoKho: data.bienBanLayMau?.tenNganLoKho,
+          tenNhaKho: data.bienBanLayMau?.tenNhaKho,
+          tenDiemKho: data.bienBanLayMau?.tenDiemKho,
+          tenChiCuc: data.bienBanLayMau?.tenDvi,
+        })
         this.dataTable = data.children;
         if (data.listHoSoBienBan) {
           this.dataTableBienBan.forEach(item => {
@@ -224,6 +237,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       if (dataChose) {
         this.formData.patchValue({
           soBbLayMau: dataChose.soBienBan,
+          idBbLayMau: dataChose.id,
           soHd: dataChose.soHd,
           soQdGiaoNvNh: dataChose.soQdGiaoNvNh,
           idQdGiaoNvNh: dataChose.idQdGiaoNvNh,
@@ -364,6 +378,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
     this.loaiBienBan = data.loai;
     this.isBienBan = true;
     this.previewNameBienBan = data.previewName;
+    this.isViewChild = isView;
   }
 
   async backMain() {
@@ -435,7 +450,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
     }
   }
 
-  async getNameFileEdit(i: number, event?: any) {
+  async getNameFileEdit(i:number, event?: any) {
     const element = event.currentTarget as HTMLInputElement;
     const fileList: FileList | null = element.files;
     if (fileList) {

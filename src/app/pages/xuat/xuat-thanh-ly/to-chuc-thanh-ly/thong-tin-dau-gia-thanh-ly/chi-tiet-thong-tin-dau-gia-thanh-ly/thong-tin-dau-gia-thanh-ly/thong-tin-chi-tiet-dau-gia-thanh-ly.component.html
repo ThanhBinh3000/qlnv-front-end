@@ -434,7 +434,7 @@
                         </nz-form-item>
                         <nz-form-item>
                           <div class="list-file" nz-col>
-                            <file-list [isCanCuPL]="true" [data]="formData.value.fileCanCu"
+                            <file-list [isCanCuPL]="true" [data]="fileCanCu"
                                        [isViewDetail]=" isDisabled()">
                             </file-list>
                           </div>
@@ -448,7 +448,7 @@
                         </nz-form-item>
                         <nz-form-item>
                           <div class="list-file" nz-col>
-                            <file-list [isCanCuPL]="true" [data]="formData.value.fileDinhKem"
+                            <file-list [isCanCuPL]="true" [data]="fileDinhKem"
                                        [isViewDetail]=" isDisabled()">
                             </file-list>
                           </div>
@@ -788,13 +788,13 @@
                         <th nzWidth="120px" class="text-center wrap"> Giá TL không VAT(đ)</th>
                         <th nzWidth="120px" class="text-center wrap"> Giá khởi điểm (đ)</th>
                         <th nzWidth="120px" class="text-center wrap"> Số tiền đặt trước (đ)</th>
-                        <th nzWidth="120px" class="text-center wrap"><span style='color: red;'>*</span> Số lần trả giá
+                        <th nzWidth="120px" class="text-center wrap">Số lần trả giá
                         </th>
-                        <th nzWidth="150px" class="text-center wrap"><span style='color: red;'>*</span> Đơn giá cao
+                        <th nzWidth="150px" class="text-center wrap">Đơn giá cao
                           nhất (đ)
                         </th>
                         <th nzWidth="120px" class="text-center wrap"> Thành tiền (đ)</th>
-                        <th nzWidth="200px" class="text-center wrap"><span style='color: red;'>*</span> Tổ chức/cá
+                        <th nzWidth="200px" class="text-center wrap"> Tổ chức/cá
                           nhân trúng đấu giá
                         </th>
                       </tr>
@@ -833,24 +833,26 @@
                               <td>{{chiCuc.donViTinh}} </td>
                               <td>{{chiCuc.donGiaPd | number : '1.0-1'
                                 : 'vi_VN'}} </td>
-                              <td>{{chiCuc.giaKhoiDiem | number : '1.0-1'
+                              <td>{{chiCuc.slDaDuyet * chiCuc.donGiaPd | number : '1.0-1'
                                 : 'vi_VN'}} </td>
-                              <td>{{chiCuc.soTienDatTruoc | number : '1.0-1'
+                              <td>{{chiCuc.slDaDuyet * chiCuc.donGiaPd * (formData.value.khoanTienDatTruoc / 100) | number : '1.0-1'
                                 : 'vi_VN'}} </td>
                               <td>
                                 <nz-input-number
+                                  [nzMin]="1"
                                   [nzDisabled]="isDisabled() || isDisable() || formData.value.ketQua == 0"
                                   [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
                                   [(ngModel)]="chiCuc.soLanTraGia"></nz-input-number>
                               </td>
                               <td>
                                 <nz-input-number
+                                  [nzMin]="1"
                                   [nzDisabled]="isDisabled() || isDisable() || formData.value.ketQua == 0"
                                   [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
                                   [(ngModel)]="chiCuc.donGiaCaoNhat"
                                 ></nz-input-number>
                               </td>
-                              <td>{{chiCuc.thanhTien | number : '1.0-1'
+                              <td>{{chiCuc.donGiaCaoNhat * chiCuc.slDaDuyet | number : '1.0-1'
                                 : 'vi_VN'}} </td>
                               <td>
                                 <nz-select [nzDisabled]="isDisabled() || isDisable() || formData.value.ketQua == 0"
@@ -889,7 +891,7 @@
                       <ng-container *ngFor="let item of dataTable , let i = index">
                         <tr>
                           <td [nzExpand]="item.expandSet" (nzExpandChange)="onExpandChange(i, $event)"></td>
-                          <td> {{item.tenChiCuc}} </td>
+                          <td> {{item.tenDonVi}} </td>
                           <td></td>
                           <td></td>
                           <td></td>
@@ -900,18 +902,18 @@
                           <td></td>
                         </tr>
                         <ng-container *ngIf="item.expandSet">
-                          <tr *ngFor="let lv1 of item.childData,let i1=index">
+                          <tr *ngFor="let lv1 of item.children,let i1=index">
                             <td></td>
                             <td></td>
                             <td>{{lv1.tenDiemKho}} </td>
                             <td>{{ (lv1.tenLoKho ? lv1.tenLoKho + ' - ' : '') + lv1.tenNganKho }}</td>
                             <td>{{lv1.tenCloaiVthh}}</td>
                             <td><input nz-input [(ngModel)]="lv1.maDviTsan"/></td>
-                            <td>{{lv1.slDauGia | number : '1.0-1' : 'vi_VN'}} </td>
+                            <td>{{lv1.slDaDuyet | number : '1.0-1' : 'vi_VN'}} </td>
                             <td>{{lv1.donViTinh}} </td>
-                            <td>{{lv1.giaTlKhongVat | number : '1.0-1'
+                            <td>{{lv1.donGiaPd | number : '1.0-1'
                               : 'vi_VN'}} </td>
-                            <td>{{lv1.soTienDatTruoc | number : '1.0-1'
+                            <td>{{lv1.slDaDuyet * lv1.donGiaPd * (formData.value.khoanTienDatTruoc / 100) | number : '1.0-1'
                               : 'vi_VN'}} </td>
                           </tr>
                         </ng-container>
@@ -929,7 +931,7 @@
                     </nz-form-item>
                     <nz-form-item>
                       <div class="list-file" nz-col>
-                        <file-list [isCanCuPL]="true" [data]="formData.value.fileDinhKemDaKy"
+                        <file-list [isCanCuPL]="true" [data]="fileDinhKemDaKy"
                                    [isViewDetail]=" isDisabled()">
                         </file-list>
                       </div>

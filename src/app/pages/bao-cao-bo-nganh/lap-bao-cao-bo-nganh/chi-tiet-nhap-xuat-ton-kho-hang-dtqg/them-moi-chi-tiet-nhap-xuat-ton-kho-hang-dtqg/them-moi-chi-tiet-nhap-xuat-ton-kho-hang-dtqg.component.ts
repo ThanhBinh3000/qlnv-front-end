@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef} from '@angular/core';
 import { Base2Component } from "../../../../../components/base2/base2.component";
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "../../../../../services/storage.service";
@@ -23,6 +23,7 @@ import { cTNhapXuatHangDtqg, slGtriHangDtqg } from 'src/app/models/BaoCaoBoNganh
   styleUrls: ['./them-moi-chi-tiet-nhap-xuat-ton-kho-hang-dtqg.component.scss']
 })
 export class ThemMoiChiTietNhapXuatTonKhoHangDtqgComponent extends Base2Component implements OnInit {
+  @ViewChild('labelImport') labelImport: ElementRef;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -78,6 +79,7 @@ export class ThemMoiChiTietNhapXuatTonKhoHangDtqgComponent extends Base2Componen
   async ngOnInit() {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
+    this.templateName = 'template_bcbn_ct_nhap_xuat_ton_kho_hang_dtqg.xlsx'
     this.now = dayjs(); // Lấy ngày giờ hiện tại
     if (this.idInput > 0) {
       await this.getDetail(this.idInput, null);
@@ -368,7 +370,6 @@ export class ThemMoiChiTietNhapXuatTonKhoHangDtqgComponent extends Base2Componen
       },
     });
     modalGT.afterClose.subscribe((res) => {
-      console.log(res)
       if (!res) {
         return;
       }
@@ -491,6 +492,26 @@ export class ThemMoiChiTietNhapXuatTonKhoHangDtqgComponent extends Base2Componen
     if (res && res.data) {
       this.dsChiCuc = res.data
       this.dsChiCuc = this.dsChiCuc.filter(item => item.type != "PB" && item.maDvi.startsWith(this.userInfo.MA_DVI))
+    }
+  }
+  async handleSelectFile(event: any){
+    this.labelImport.nativeElement.innerText = event.target.files[0].name;
+    await this.onFileSelected(event);
+    this.listDataGroup = this.dataImport
+    for (let i = 0; i < this.listDataGroup.length; i++) {
+      this.itemRow[i] = [];
+      this.itemRowEdit[i] = [];
+      for (let y = 0; y < this.listDataGroup[i].children.length; y++) {
+        this.itemRow[i][y] = [];
+        this.itemRowEdit[i][y] = [];
+        for (let z = 0; z < this.listDataGroup[i].children[y].children.length; z++) {
+          this.itemRow[i][y][z] = new cTNhapXuatHangDtqg();
+          this.itemRowEdit[i][y][z] = [];
+          if (this.listDataGroup[i].children[y].children[z].children.length > 0) {
+            this.listDataGroup[i].children[y].children[z].coNhieuMatHang = true;
+          }
+        }
+      }
     }
   }
 }

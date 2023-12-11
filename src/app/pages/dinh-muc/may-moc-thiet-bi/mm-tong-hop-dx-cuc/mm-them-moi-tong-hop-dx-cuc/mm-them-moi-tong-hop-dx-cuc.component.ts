@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { FormGroup, Validators } from "@angular/forms";
 import { Base2Component } from "../../../../../components/base2/base2.component";
 import dayjs from "dayjs";
+import { saveAs } from 'file-saver';
 import { MESSAGE } from "../../../../../constants/message";
 import { STATUS } from "../../../../../constants/status";
 import {
@@ -51,10 +52,14 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
       klLtNhap: [null],
       klLtXuat: [null],
       klLtBaoQuanCuc: [null],
+      slGaoDangBaoQuan: [null],
+      slThocDangBaoQuan: [null],
       klLtNhapCuc: [null],
       klLtXuatCuc: [null],
       trichYeu: [null, Validators.required],
       ngayKy: [null, Validators.required],
+      ngayTongHopNgayTrinh:[null],
+      soToTrinh:[null],
       soQdGiaoCt: [null],
       trangThai: ['00'],
       trangThaiTh: [],
@@ -120,7 +125,7 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
     body.ngayDxDen = body.ngayDx ? body.ngayDx[1] : null
     body.trangThai = STATUS.DA_DUYET_CBV;
     body.trangThaiTh = STATUS.CHUA_TONG_HOP;
-    body.MA_DVI = this.userInfo.MA_DVI;
+    body.maDvi = this.userInfo.MA_DVI;
     let res = await this.dxChiCucService.tongHopDxCc(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let detail = res.data;
@@ -129,7 +134,10 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
           namKeHoach: this.formDataTongHop.value.namKeHoach,
           klLtBaoQuanCuc: detail.klLtBaoQuan,
           klLtNhapCuc: detail.klLtNhap,
-          klLtXuatCuc: detail.klLtXuat
+          klLtXuatCuc: detail.klLtXuat,
+          slGaoDangBaoQuan: detail.slGaoDangBaoQuan,
+          slThocDangBaoQuan: detail.slThocDangBaoQuan,
+          ngayTongHopNgayTrinh: new Date()
         })
         this.dataTable = detail.listQlDinhMucDxTbmmTbcdDtl
         if (detail && detail.listQlDinhMucDxTbmmTbcd && detail.listQlDinhMucDxTbmmTbcd.length > 0) {
@@ -442,6 +450,31 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
           item.slTieuChuanTc = tongKl * detail.slChiCuc / detail.klChiCuc
         }
       }
+    }
+  }
+
+  exportDataDetail() {
+    if (this.dataTable.length > 0) {
+      this.spinner.show();
+      try {
+        let body = this.formData.value;
+        body.paggingReq = {
+          limit: this.pageSize,
+          page: this.page - 1
+        }
+        this.dxChiCucService
+          .exportDetail(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-chi-tiet-tong-hop-nhu-cau-mmtb-va-ccdc.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
   }
 }

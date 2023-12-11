@@ -10,6 +10,7 @@ import { LOAI_DON_VI, TrangThaiHoatDong } from 'src/app/constants/status';
 import {DanhMucService} from "../../../../services/danhmuc.service";
 import {NgxSpinnerService} from "ngx-spinner";
 import {DonviService} from "../../../../services/donvi.service";
+import {UserService} from "../../../../services/user.service";
 
 
 @Component({
@@ -45,6 +46,7 @@ export class NewHangHoaComponent implements OnInit {
     private dmHangService: DanhMucService,
     private dmDonVi: DonviService,
     private modal: NzModalRef,
+    public userService: UserService,
     private spinner: NgxSpinnerService
   ) {
     this.formHangHoa = this.fb.group({
@@ -57,6 +59,7 @@ export class NewHangHoaComponent implements OnInit {
       trangThai: [true],
       kyHieu: [null],
       maDviTinh: [null],
+      isLoaiKhoiDm: [false],
     })
   }
 

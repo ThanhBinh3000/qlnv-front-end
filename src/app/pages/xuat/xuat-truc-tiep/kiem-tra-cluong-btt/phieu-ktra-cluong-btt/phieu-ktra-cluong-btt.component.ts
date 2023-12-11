@@ -1,14 +1,17 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { MESSAGE } from 'src/app/constants/message';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { PhieuKtraCluongBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/phieu-ktra-cluong-btt.service';
-import { chain } from 'lodash';
+import {Component, OnInit, Input} from '@angular/core';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {MESSAGE} from 'src/app/constants/message';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {
+  PhieuKtraCluongBttService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/phieu-ktra-cluong-btt.service';
+import _ from 'lodash';
 import * as uuid from "uuid";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-phieu-ktra-cluong-btt',
@@ -17,14 +20,17 @@ import * as uuid from "uuid";
 })
 export class PhieuKtraCluongBttComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
-  children: any = [];
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG
+  isView: boolean = false;
+  tableDataView: any = [];
   expandSetString = new Set<string>();
   idQdNv: number = 0;
   isViewQdNv: boolean = false;
-  idBienBan: number = 0;
-  isViewBienBan: boolean = false;
-  selectedId: number = 0;
-  isView = false;
+  idLayMau: number = 0;
+  isViewLayMau: boolean = false;
+  idTinhKho: number = 0;
+  isViewTinhKho: boolean = false;
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -37,131 +43,205 @@ export class PhieuKtraCluongBttComponent extends Base2Component implements OnIni
     this.formData = this.fb.group({
       namKh: null,
       soQdNv: null,
-      soPhieu: null,
-      ngayKnghiemTu: null,
-      ngayKnghiemDen: null,
-      soBienBan: null,
-      soBbXuatDoc: null,
+      soPhieuKiemNghiem: null,
+      ngayKiemNghiemMauTu: null,
+      ngayKiemNghiemMauDen: null,
+      soBbLayMau: null,
+      soBbTinhKho: null,
       loaiVthh: null,
-      maDvi: null,
-      trangThai: null,
-      maChiCuc: null
     })
-
     this.filterTable = {
-      soQdNv: '',
-      namKh: '',
-      ngayTao: '',
-      soPhieu: '',
-      ngayKnghiem: '',
-      tenDiemKho: '',
-      tenLoKho: '',
-      soBienBan: '',
-      ngayLayMau: '',
-      tenTrangThai: '',
-
+      soQdNv: null,
+      namKh: null,
+      tgianGiaoNhan: null,
+      tenDiemKho: null,
+      tenNhakho: null,
+      tenNganKho: null,
+      tenLoKho: null,
+      soPhieuKiemNghiem: null,
+      ngayKiemNghiemMau: null,
+      soBbLayMau: null,
+      ngayLayMau: null,
+      soBbTinhKho: null,
+      ngayLapTinhKho: null,
+      tenTrangThai: null,
     };
   }
 
   async ngOnInit() {
-    await this.spinner.show();
     try {
+      await this.spinner.show();
       await this.search();
     } catch (e) {
-      console.log('error: ', e)
-      this.spinner.hide();
+      console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
   }
 
-  async search(roles?): Promise<void> {
+  async search(): Promise<void> {
+    await this.spinner.show();
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
-      maDvi: this.userInfo.MA_DVI,
-      trangThai : this.userService.isCuc() ? null :  this.STATUS.DA_DUYET_LDC
-    })
-    await super.search(roles);
+    });
+    await super.search();
+    this.dataTable.forEach(s => s.idVirtual = uuid.v4());
     this.buildTableView();
-  }
-
-  clearFilter() {
-    this.formData.reset();
-    this.search();
+    await this.spinner.hide();
   }
 
   buildTableView() {
-    let dataView = chain(this.dataTable).groupBy("soQdNv").map((value, key) => {
-      let quyetDinh = value.find(f => f.soQdNv === key)
-      let rs = chain(value).groupBy("maDiemKho").map((v, k) => {
-        let diaDiem = v.find(s => s.maDiemKho === k)
-        return {
-          idVirtual: uuid.v4(),
-          maDiemKho: k != null ? k : '',
-          tenDiemKho: diaDiem ? diaDiem.tenDiemKho : null,
-          childData: v
-        }
-      }).value();
-      let idQdNv = quyetDinh ? quyetDinh.idQdNv : null;
-      let namKh = quyetDinh ? quyetDinh.namKh : null;
-      let ngayQdNv = quyetDinh ? quyetDinh.ngayQdNv : null;
+    this.tableDataView = _(this.dataTable).groupBy("soQdNv").map((soQdNvGroup, soQdNvKey) => {
+      const firstRowInGroup = _.find(soQdNvGroup, (row) => row.tenDiemKho === soQdNvGroup[0].tenDiemKho);
+      firstRowInGroup.idVirtual = uuid.v4();
+      this.expandSetString.add(firstRowInGroup.idVirtual);
+      const childData = _(soQdNvGroup).groupBy("tenDiemKho").map((tenDiemKhoGroup, tenDiemKhoKey) => ({
+        idVirtual: firstRowInGroup.idVirtual,
+        tenDiemKho: tenDiemKhoKey || "",
+        childData: tenDiemKhoGroup,
+      })).value();
       return {
-        idVirtual: uuid.v4(),
-        idQdNv: idQdNv,
-        soQdNv: key != null ? key : '',
-        namKh: namKh,
-        ngayQdNv: ngayQdNv,
-        childData: rs
-      }
+        idVirtual: firstRowInGroup.idVirtual,
+        soQdNv: soQdNvKey || "",
+        namKh: firstRowInGroup.namKh || "",
+        idQdNv: firstRowInGroup.idQdNv || "",
+        tgianGiaoNhan: firstRowInGroup.tgianGiaoNhan || "",
+        childData,
+      };
     }).value();
-    this.children = dataView
-    this.expandAll()
+    this.expandAll();
   }
 
   expandAll() {
-    this.children.forEach(s => {
-      this.expandSetString.add(s.idVirtual);
-    })
+    this.dataTable.forEach(row => {
+      this.expandSetString.add(row.idVirtual);
+    });
   }
 
-  onExpandStringChange(id: string, checked: boolean): void {
-    if (checked) {
-      this.expandSetString.add(id);
+  onExpandStringChange(idVirtual: string, isExpanded: boolean): void {
+    if (isExpanded) {
+      this.expandSetString.add(idVirtual);
     } else {
-      this.expandSetString.delete(id);
+      this.expandSetString.delete(idVirtual);
     }
   }
 
-  openModalQdNv(id: number) {
-    this.idQdNv = id;
-    this.isViewQdNv = true;
+  redirectDetail(id, isView: boolean) {
+    this.idSelected = id;
+    this.isDetail = true;
+    this.isView = isView;
   }
 
-  closeModalQdNv() {
-    this.idQdNv = null;
-    this.isViewQdNv = false;
-  }
-
-  openModalSoBienBan(id: number) {
-    this.idBienBan = id;
-    this.isViewBienBan = true;
-  }
-
-  closeModaSoBienBan() {
-    this.idBienBan = null;
-    this.isViewBienBan = false;
-  }
-
-  disabledNgayKnghiemTu = (startValue: Date): boolean => {
-    if (!startValue || !this.formData.value.ngayKnghiemDen) {
-      return false;
+  openModal(id: number, modalType: string) {
+    switch (modalType) {
+      case 'QdNv' :
+        this.idQdNv = id;
+        this.isViewQdNv = true;
+        break;
+      case 'layMau' :
+        this.idLayMau = id;
+        this.isViewLayMau = true;
+        break;
+      case 'tinhKho' :
+        this.idTinhKho = id;
+        this.isViewTinhKho = true;
+        break;
+      default:
+        break;
     }
-    return startValue.getTime() > this.formData.value.ngayKnghiemDen.getTime();
+  }
+
+  closeModal(modalType: string) {
+    switch (modalType) {
+      case 'QdNv' :
+        this.idQdNv = null;
+        this.isViewQdNv = false;
+        break;
+      case 'layMau' :
+        this.idLayMau = null;
+        this.isViewLayMau = false;
+        break;
+      case 'tinhKho' :
+        this.idTinhKho = null;
+        this.isViewTinhKho = false;
+        break;
+      default:
+        break;
+    }
+  }
+
+  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
+    const startDate = this.formData.value[formDataKey + 'Tu'];
+    const endDate = this.formData.value[formDataKey + 'Den'];
+    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
   };
 
-  disabledNgayKnghiemDen = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayKnghiemTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayKnghiemTu.getTime();
+  disabledStartngayKnghiemTu = (startValue: Date): boolean => {
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayKiemNghiemMauDen, 'ngayKiemNghiemMau');
   };
+
+  disabledStartngayKnghiemDen = (endValue: Date): boolean => {
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayKiemNghiemMauDen, 'ngayKiemNghiemMau');
+  };
+
+  isActionAllowed(action: string, data: any): boolean {
+    const permissionMapping = {
+      VT: {
+        XEM: 'XHDTQG_PTTT_KTCL_VT_KNCL_XEM',
+        THEM: 'XHDTQG_PTTT_KTCL_VT_KNCL_THEM',
+        XOA: 'XHDTQG_PTTT_KTCL_VT_KNCL_XOA',
+        DUYET_TP: 'XHDTQG_PTTT_KTCL_VT_KNCL_DUYET_TP',
+        DUYET_LDCUC: 'XHDTQG_PTTT_KTCL_VT_KNCL_DUYET_LDCUC',
+      },
+      LT: {
+        XEM: 'XHDTQG_PTTT_KTCL_LT_KNCL_XEM',
+        THEM: 'XHDTQG_PTTT_KTCL_LT_KNCL_THEM',
+        XOA: 'XHDTQG_PTTT_KTCL_LT_KNCL_XOA',
+        DUYET_TP: 'XHDTQG_PTTT_KTCL_LT_KNCL_DUYET_TP',
+        DUYET_LDCUC: 'XHDTQG_PTTT_KTCL_LT_KNCL_DUYET_LDCUC',
+      },
+    };
+    const permissions = this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? permissionMapping.VT : permissionMapping.LT;
+    switch (action) {
+      case 'XEM':
+        return (
+          this.userService.isAccessPermisson(permissions.XEM) && ((this.userService.isAccessPermisson(permissions.THEM) &&
+              [
+                this.STATUS.CHO_DUYET_TP,
+                this.STATUS.CHO_DUYET_LDC,
+                this.STATUS.CHO_DUYET_LDC,
+                this.STATUS.DA_DUYET_LDC,
+              ].includes(data.trangThai)) ||
+            (!this.userService.isAccessPermisson(permissions.THEM) && [
+                this.STATUS.DU_THAO,
+                this.STATUS.TU_CHOI_TP,
+                this.STATUS.TU_CHOI_LDC,
+                this.STATUS.DA_DUYET_LDC
+              ].includes(data.trangThai) ||
+              (data.trangThai === this.STATUS.CHO_DUYET_TP &&
+                !this.userService.isAccessPermisson(permissions.DUYET_TP)) ||
+              (data.trangThai === this.STATUS.CHO_DUYET_LDC &&
+                !this.userService.isAccessPermisson(permissions.DUYET_LDCUC))))
+        );
+      case 'SUA':
+        return [
+          this.STATUS.DU_THAO,
+          this.STATUS.TU_CHOI_TP,
+          this.STATUS.TU_CHOI_LDC
+        ].includes(data.trangThai) && this.userService.isAccessPermisson(permissions.THEM);
+      case 'PHEDUYET':
+        return (
+          (this.userService.isAccessPermisson(permissions.DUYET_TP) &&
+            data.trangThai === this.STATUS.CHO_DUYET_TP) ||
+          (this.userService.isAccessPermisson(permissions.DUYET_LDCUC) &&
+            data.trangThai === this.STATUS.CHO_DUYET_LDC)
+        );
+      case 'XOA':
+        return data.trangThai === this.STATUS.DU_THAO &&
+          this.userService.isAccessPermisson(permissions.XOA);
+      default:
+        return false;
+    }
+  }
 }

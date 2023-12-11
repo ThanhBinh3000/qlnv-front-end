@@ -51,6 +51,7 @@ import { DauGiaModule } from "../dau-gia/dau-gia.module";
 import { ThemmoiThComponent } from './tong-hop-thanh-ly/themmoi-th/themmoi-th.component';
 import { ChitietThComponent } from './tong-hop-thanh-ly/chitiet-th/chitiet-th.component';
 import { XuatHangThanhLyModule } from './xuat-hang-thanh-ly/xuat-hang-thanh-ly.module';
+import { ChiTietHangTlComponent } from './thanh-ly-danh-sach-hang/chi-tiet-hang-tl/chi-tiet-hang-tl.component';
 
 
 @NgModule({
@@ -77,6 +78,7 @@ import { XuatHangThanhLyModule } from './xuat-hang-thanh-ly/xuat-hang-thanh-ly.m
     ThongTinHopDongThanhLyComponent,
     QuyetDinhGiaoNhiemVuThanhLyComponent,
     ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent,
+    ChiTietHangTlComponent,
   ],
   imports: [
     CommonModule,

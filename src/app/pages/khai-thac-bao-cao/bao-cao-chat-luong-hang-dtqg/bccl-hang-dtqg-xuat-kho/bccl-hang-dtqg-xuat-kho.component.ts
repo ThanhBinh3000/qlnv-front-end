@@ -67,12 +67,27 @@ export class BcclHangDtqgXuatKhoComponent extends Base2Component implements OnIn
       this.loadDsDonVi();
       this.loadDsVthh();
       this.loadDsLoaiBc();
+      await this.initForm();
     } catch (e) {
       console.log("error: ", e);
       await this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
     await this.spinner.hide();
+  }
+
+  async initForm() {
+    if (this.userService.isCuc()) {
+      this.formData.patchValue({
+        maCuc: this.userInfo.MA_DVI
+      })
+    }
+    if (this.userService.isChiCuc()) {
+      this.formData.patchValue({
+        maCuc: this.userInfo.MA_DVI.substring(0, 6),
+        maChiCuc: this.userInfo.MA_DVI,
+      })
+    }
   }
 
   downloadPdf() {
@@ -85,7 +100,7 @@ export class BcclHangDtqgXuatKhoComponent extends Base2Component implements OnIn
       let body = this.formData.value;
       body.typeFile = "xlsx";
       body.trangThai = "01";
-      body.maDonVi = !body.maChiCuc ? ( !body.maCuc ?  null : body.maCuc)  : body.maChiCuc
+      body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc
       if (body.loaiBc == '01') {
         if (body.loaiVthh.startsWith("0101")) {
           body.fileName = "bao_cao_cl_xuat_thoc_tong_hop.jrxml";
@@ -140,7 +155,7 @@ export class BcclHangDtqgXuatKhoComponent extends Base2Component implements OnIn
     try {
       this.spinner.show();
       let body = this.formData.value;
-      body.maDonVi = !body.maChiCuc ? ( !body.maCuc ?  null : body.maCuc)  : body.maChiCuc
+      body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc
       body.typeFile = "pdf";
       if (body.loaiBc == '01') {
         if (body.loaiVthh.startsWith("0101")) {
@@ -182,7 +197,6 @@ export class BcclHangDtqgXuatKhoComponent extends Base2Component implements OnIn
     let res = await this.donViService.layTatCaDonViByLevel(2);
     if (res && res.data) {
       this.dsDonVi = res.data
-      this.dsDonVi = this.dsDonVi.filter(item => item.type != "PB" && item.maDvi.startsWith(this.userInfo.MA_DVI))
     }
   }
 
@@ -207,7 +221,7 @@ export class BcclHangDtqgXuatKhoComponent extends Base2Component implements OnIn
   async changeLoaiVthh(event) {
     if (event) {
       this.formData.patchValue({
-        cloaiVthh : null
+        cloaiVthh: null
       })
       let res = await this.danhMucSv.loadDanhMucHangHoaTheoMaCha({str: event});
       if (res.msg == MESSAGE.SUCCESS) {

@@ -1,19 +1,19 @@
-import { Component, OnInit } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { ThongTu1452013Service } from "../../../../services/bao-cao/ThongTu1452013.service";
-import { UserService } from "../../../../services/user.service";
-import { DonviService } from "../../../../services/donvi.service";
-import { DanhMucService } from "../../../../services/danhmuc.service";
-import { Globals } from "../../../../shared/globals";
+import {Component, OnInit} from "@angular/core";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {ThongTu1452013Service} from "../../../../services/bao-cao/ThongTu1452013.service";
+import {UserService} from "../../../../services/user.service";
+import {DonviService} from "../../../../services/donvi.service";
+import {DanhMucService} from "../../../../services/danhmuc.service";
+import {Globals} from "../../../../shared/globals";
 import * as dayjs from "dayjs";
-import { Validators } from "@angular/forms";
-import { MESSAGE } from "../../../../constants/message";
-import { Base2Component } from "../../../../components/base2/base2.component";
-import { saveAs } from "file-saver";
+import {Validators} from "@angular/forms";
+import {MESSAGE} from "../../../../constants/message";
+import {Base2Component} from "../../../../components/base2/base2.component";
+import {saveAs} from "file-saver";
 
 @Component({
   selector: "app-thuc-hien-kh-nhap-xuat-ctvt-bao-quan",
@@ -34,21 +34,28 @@ export class ThucHienKhNhapXuatCtvtBaoQuanComponent extends Base2Component imple
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
   rows: any[] = [];
-
+  listQuy = [
+    {text: 'Quý I', value: 1},
+    {text: 'Quý II', value: 2},
+    {text: 'Quý III', value: 3},
+    {text: 'Quý IV', value: 4},
+  ];
+  selectedValue = 1;
   constructor(httpClient: HttpClient,
-    storageService: StorageService,
-    notification: NzNotificationService,
-    spinner: NgxSpinnerService,
-    modal: NzModalService,
-    private thongTu1452013Service: ThongTu1452013Service,
-    public userService: UserService,
-    private donViService: DonviService,
-    private danhMucService: DanhMucService,
-    public globals: Globals) {
+              storageService: StorageService,
+              notification: NzNotificationService,
+              spinner: NgxSpinnerService,
+              modal: NzModalService,
+              private thongTu1452013Service: ThongTu1452013Service,
+              public userService: UserService,
+              private donViService: DonviService,
+              private danhMucService: DanhMucService,
+              public globals: Globals) {
     super(httpClient, storageService, notification, spinner, modal, thongTu1452013Service);
     this.formData = this.fb.group(
       {
-        nam: [dayjs().get("year"), [Validators.required]],
+        nam: [, [Validators.required]],
+        quy: [],
         maCuc: [],
         maChiCuc: [],
         loaiVthh: [],
@@ -58,17 +65,30 @@ export class ThucHienKhNhapXuatCtvtBaoQuanComponent extends Base2Component imple
         stk: [],
       }
     );
+    // this.formData.controls['nam'].valueChanges.subscribe((namValue) => {
+    //   const month = dayjs().get("month");
+    //   this.listQuy = [];
+    //   for (let i = 0; i <= Math.floor(month / 3); i++) {
+    //     if (i >= 1) {
+    //       this.listQuy.push(this.quyData[i - 1]);
+    //     }
+    //   }
+    //   if (namValue < dayjs().get('year')) {
+    //     this.listQuy = this.quyData
+    //   }
+    // });
   }
 
   async ngOnInit() {
     await this.spinner.show();
     try {
-      for (let i = -3; i < 23; i++) {
+      for (let i = 0; i < 23; i++) {
         this.listNam.push({
           value: dayjs().get("year") - i,
           text: dayjs().get("year") - i
         });
       }
+      this.formData.controls['nam'].setValue(dayjs().get("year"))
       await Promise.all([
         this.loadDsDonVi(),
         this.loadDsVthh()
@@ -176,7 +196,7 @@ export class ThucHienKhNhapXuatCtvtBaoQuanComponent extends Base2Component imple
   }
 
   async changeLoaiVthh(event) {
-    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
+    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
         this.listCloaiVthh = res.data;
@@ -206,5 +226,12 @@ export class ThucHienKhNhapXuatCtvtBaoQuanComponent extends Base2Component imple
     });
     // this.formData.get("loaiVthh").setValue(listVthhCondition);
     this.formData.get("cloaiVthh").setValue(listCloaiVthhCondition);
+  }
+
+  clearFilter() {
+    this.formData.patchValue({
+      nam: null,
+      quy: null,
+    })
   }
 }

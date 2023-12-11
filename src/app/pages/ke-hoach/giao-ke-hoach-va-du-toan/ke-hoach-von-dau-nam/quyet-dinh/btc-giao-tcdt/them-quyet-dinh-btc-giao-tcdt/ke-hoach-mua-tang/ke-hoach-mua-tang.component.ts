@@ -7,23 +7,23 @@ import {
   IterableDiffers,
   DoCheck,
   OnChanges,
-  SimpleChanges
+  SimpleChanges,
 } from '@angular/core';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
-import {MESSAGE} from 'src/app/constants/message';
-import {ThongTinQuyetDinh} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {Globals} from 'src/app/shared/globals';
-import {chain} from "lodash";
-import {v4 as uuidv4} from "uuid";
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {STATUS} from 'src/app/constants/status';
-import {AMOUNT_NO_DECIMAL, AMOUNT_ONE_DECIMAL} from "../../../../../../../../Utility/utils";
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { MESSAGE } from 'src/app/constants/message';
+import { ThongTinQuyetDinh } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { Globals } from 'src/app/shared/globals';
+import { chain } from 'lodash';
+import { v4 as uuidv4 } from 'uuid';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { STATUS } from 'src/app/constants/status';
+import { AMOUNT_NO_DECIMAL, AMOUNT_ONE_DECIMAL } from '../../../../../../../../Utility/utils';
 import {
-  DialogThemDiaDiemPhanLoComponent
-} from "../../../../../../../../components/dialog/dialog-them-dia-diem-phan-lo/dialog-them-dia-diem-phan-lo.component";
-import {ThemSuaMuaTangComponent} from "./them-sua-mua-tang/them-sua-mua-tang.component";
+  DialogThemDiaDiemPhanLoComponent,
+} from '../../../../../../../../components/dialog/dialog-them-dia-diem-phan-lo/dialog-them-dia-diem-phan-lo.component';
+import { ThemSuaMuaTangComponent } from './them-sua-mua-tang/them-sua-mua-tang.component';
 
 @Component({
   selector: 'app-ke-hoach-mua-tang',
@@ -100,11 +100,11 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
 
   convertListData() {
     if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTable = chain(this.dataTable).groupBy("tenVthh").map((value, key) => ({
+      this.dataTable = chain(this.dataTable).groupBy('tenVthh').map((value, key) => ({
           tenVthh: key,
           dataChild: value,
-          idVirtual: uuidv4()
-        })
+          idVirtual: uuidv4(),
+        }),
       ).value();
     }
     //xử lý lại data thừa
@@ -139,8 +139,8 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
       if (this.dataTable && this.dataTable.length > 0) {
         let sum = 0;
         this.dataTable.forEach(item => {
-          sum += this.sumSoLuong(item, row)
-        })
+          sum += this.sumSoLuong(item, row);
+        });
         sl = sum;
       }
     }
@@ -154,7 +154,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
       if (item && item.dataChild && item.dataChild.length > 0) {
         item.dataChild.forEach(child => {
           tt += child.tongTien ? child.tongTien : 0;
-        })
+        });
       } else {
         tt += item.tongTien ? item.tongTien : 0;
       }
@@ -173,13 +173,13 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
 
   themMoiItem() {
     if (this.rowItem.loaiVthh && this.rowItem.soLuong && this.rowItem.donGia != null) {
-      this.rowItem.tongTien = this.rowItem.soLuong * this.rowItem.donGia
-      this.dataTable = [...this.dataTable, this.rowItem]
+      this.rowItem.tongTien = this.rowItem.soLuong * this.rowItem.donGia;
+      this.dataTable = [...this.dataTable, this.rowItem];
       this.rowItem = new ThongTinQuyetDinh();
       this.updateEditCache();
       this.emitDataTable();
     } else {
-      this.notification.error(MESSAGE.ERROR, "Vui lòng điền đầy đủ thông tin")
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đầy đủ thông tin');
     }
   }
 
@@ -201,7 +201,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   huyEdit(id: number): void {
     const index = this.dataTable.findIndex((item) => item.id == id);
     this.dataEdit[id] = {
-      data: {...this.dataTable[index]},
+      data: { ...this.dataTable[index] },
       edit: false,
     };
   }
@@ -222,15 +222,15 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
     if (this.dataTable) {
       let i = 0;
       this.dataTable.forEach((item) => {
-        const dataNd = this.dsChungLoaiHangHoaTable.filter(d => d.ma == item.cloaiVthh)
+        const dataNd = this.dsChungLoaiHangHoaTable.filter(d => d.ma == item.cloaiVthh);
         if (dataNd.length > 0) {
           item.tenCloaiVthh = dataNd[0].tenCloaiVthh;
         }
         this.dataEdit[i] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
-        i++
+        i++;
       });
     }
   }
@@ -255,7 +255,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
         dsHangHoa: this.dsHangHoa,
         actionType: type,
         soLuong: sl,
-        dsChungLoaiHangHoa: this.dsChungLoaiHangHoa
+        dsChungLoaiHangHoa: this.dsChungLoaiHangHoa,
       },
     });
     modalGT.afterClose.subscribe((detail) => {
@@ -266,7 +266,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
         if (!data.idVirtual) {
           data.idVirtual = uuidv4();
         }
-        if (type == "them") {
+        if (type == 'them') {
           if (index && this.dataTable[index] && this.dataTable[index].dataChild) {
             this.dataTable[index].dataChild.push(detail);
           }
@@ -287,10 +287,10 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   deleteItem(index: any, y: any) {
     this.modal.confirm({
       nzClosable: false,
-      nzTitle: "Xác nhận",
-      nzContent: "Bạn có chắc chắn muốn xóa?",
-      nzOkText: "Đồng ý",
-      nzCancelText: "Không",
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
       nzOkDanger: true,
       nzWidth: 400,
       nzOnOk: async () => {
@@ -302,9 +302,9 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
           }
           this.sumAllDataTable();
         } catch (e) {
-          console.log("error", e);
+          console.log('error', e);
         }
-      }
+      },
     });
   }
 

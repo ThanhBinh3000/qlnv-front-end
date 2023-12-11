@@ -122,6 +122,10 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
     else return false
   }
 
+  isCuc() {
+    return this.userService.isCuc()
+  }
+
   isChiCuc() {
     return this.userService.isChiCuc()
   }
@@ -131,7 +135,7 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
   }
 
   isEdit(row) {
-    return this.userService.isChiCuc() && (row.trangThai == STATUS.DU_THAO || row.trangThai == STATUS.TU_CHOI_TK || row.trangThai == STATUS.TU_CHOI_LDCC)
+    return this.userService.isChiCuc() && (row.trangThai == STATUS.DU_THAO || row.trangThai == STATUS.TU_CHOI_TK || row.trangThai == STATUS.TU_CHOI_KT || row.trangThai == STATUS.TU_CHOI_LDCC)
   }
 
   selectTab(tab: number) {

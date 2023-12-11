@@ -32,11 +32,11 @@
           <div nz-col nzSpan="4" *ngIf="isThuKho">
             <nz-form-label class="search__label">Số sổ kho</nz-form-label>
             <nz-form-control>
-              <input type="text" nz-input formControlName="tenSoKho" />
+              <input type="text" nz-input formControlName="soSoKho" />
             </nz-form-control>
           </div>
           <div nz-col nzSpan="5" *ngIf="isThuKho">
-            <nz-form-label class="search__label">Tên sổ kho</nz-form-label>
+            <nz-form-label class="search__label">Tên thẻ kho</nz-form-label>
             <nz-form-control>
               <input type="text" nz-input formControlName="tenTheKho" />
             </nz-form-control>
@@ -90,19 +90,19 @@
     <div class="group-button">
       <h3> DANH SÁCH SỔ KHO/THẺ KHO</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub" (click)="exportData()">
+        <button type="button" class="btn btn-sub" *ngIf="this.userService.isAccessPermisson('LKQLCL_QLSKTK_SKTK_EXP')" (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-sub xanh" (click)="openModalCreate(null, false)">
+        <button type="button" class="btn btn-sub xanh" *ngIf="this.userService.isAccessPermisson('LKQLCL_QLSKTK_SKTK_THEM')" (click)="openModalCreate(null, false)">
           <i class="icon htvbdh_dau-cong xanh"></i>
           <span>Tạo sổ kho/thẻ kho</span>
         </button>
       </div>
     </div>
     <nz-card class="flex-card p-lr16">
-      <nz-table nzBordered class="pd-10" [nzFrontPagination]="false" [nzShowPagination]="false"
-        [nzScroll]="dataTable && dataTable.length > 0 ? {x: '2500px'} : null">
+      <nz-table id="tableView" nzBordered class="pd-10" [nzFrontPagination]="false" [nzShowPagination]="false"
+        [nzScroll]="dataTable && dataTable.length > 0 ? {x: '2500px',y : offSetTop }: null">
         <thead>
           <tr>
             <th nzWidth="45px" rowSpan="2" class="text-center">STT</th>
@@ -250,7 +250,7 @@
                               <td></td>
                               <td></td>
                               <td class="bg-parent2 font-weight-bold" [nzExpand]="expandSet.has(nam.idVirtual)"
-                                (nzExpandChange)="onExpandChange(soKho.idVirtual, $event)">{{soKho.ten}}</td>
+                                (nzExpandChange)="onExpandChange(soKho.idVirtual, $event)">{{soKho.so}}</td>
                               <td class="bg-parent2 font-weight-bold"></td>
                               <td class="bg-parent2 font-weight-bold">{{soKho.ngayMo | date : 'dd/MM/yyyy' }}</td>
                               <td class="bg-parent2 font-weight-bold">{{soKho.ngayDong | date : 'dd/MM/yyyy' }}</td>
@@ -269,10 +269,13 @@
                                 <a (click)="openModalCreate(soKho.id, true)">
                                   <i class="fa fa-eye"></i>
                                 </a>
-                                <a *ngIf="soKho.trangThai == STATUS.DA_DUYET_LDCC" (click)="openModalCreate(null, false,true,soKho.id)">
+                                <a *ngIf="soKho.trangThai == STATUS.DA_DUYET_LDCC && this.userService.isAccessPermisson('LKQLCL_QLSKTK_SKTK_THEM')" (click)="openModalCreate(null, false,true,soKho.id)">
                                   <i class="fa fa-plus"></i>
                                 </a>
-                                <a *ngIf="soKho.trangThai == STATUS.DU_THAO" (click)="delete(soKho)">
+                                <a *ngIf="soKho.trangThai == STATUS.DA_DUYET_LDCC && this.userService.isAccessPermisson('LKQLCL_QLSKTK_SKTK_DONGSO')" (click)="this.approve(soKho.id,STATUS.DA_DONG,'Bạn có muốn đóng sổ ?',null,'Đóng sổ thành công')">
+                                  <i class="fa fa-book"></i>
+                                </a>
+                                <a *ngIf="soKho.trangThai == STATUS.DU_THAO  && this.userService.isAccessPermisson('LKQLCL_QLSKTK_SKTK_XOA')" (click)="delete(soKho)">
                                   <i class="fa fa-trash-o do"></i>
                                 </a>
                               </td>
@@ -306,6 +309,9 @@
                                     <a (click)="openModalCreate(theKho.id, true)">
                                       <i class="fa fa-eye"></i>
                                     </a>
+                                    <a *ngIf="theKho.trangThai == STATUS.DU_THAO  && this.userService.isAccessPermisson('LKQLCL_QLSKTK_SKTK_XOA')" (click)="delete(theKho)">
+                                      <i class="fa fa-trash-o do"></i>
+                                    </a>
                                   </td>
                                 </tr>
                                 <ng-container *ngIf="expandSet.has(theKho.idVirtual)">
@@ -324,13 +330,13 @@
                                       <td class="bg-parent2 font-weight-bold"></td>
                                       <td class="bg-parent2 font-weight-bold"></td>
                                       <td class="bg-parent2 font-weight-bold"></td>
-                                      <td class="bg-parent2 font-weight-bold"></td>
+                                      <td class="bg-parent2 font-weight-bold">{{phieuNhapXuat.soPhieu}}</td>
                                       <td class="bg-parent2 font-weight-bold">{{phieuNhapXuat.ngay | date : 'dd/MM/yyyy'
                                         }}</td>
-                                      <td class="bg-parent2 font-weight-bold"></td>
-                                      <td class="bg-parent2 font-weight-bold"></td>
-                                      <td class="bg-parent2 font-weight-bold"></td>
-                                      <td class="bg-parent2 font-weight-bold"></td>
+                                      <td class="bg-parent2 font-weight-bold">{{phieuNhapXuat.loaiPhieu == '1' ? (phieuNhapXuat.slChungTu | number : '1.0-1' : 'vi_VN' ): ''}}</td>
+                                      <td class="bg-parent2 font-weight-bold">{{phieuNhapXuat.loaiPhieu != '1' ? (phieuNhapXuat.slChungTu | number : '1.0-1' : 'vi_VN' ) : ''}}</td>
+                                      <td class="bg-parent2 font-weight-bold">{{phieuNhapXuat.loaiPhieu == '1' ? (phieuNhapXuat.slThucTe | number : '1.0-1' : 'vi_VN' ) : ''}}</td>
+                                      <td class="bg-parent2 font-weight-bold">{{phieuNhapXuat.loaiPhieu != '1' ? (phieuNhapXuat.slThucTe | number : '1.0-1' : 'vi_VN') : ''}}</td>
                                       <td class="bg-parent2 font-weight-bold"></td>
                                       <td class="bg-parent2 font-weight-bold"></td>
                                       <td class="bg-parent2 font-weight-bold" nzRight>
@@ -342,13 +348,10 @@
                                   </ng-container>
                                 </ng-container>
                               </ng-container>
-
                             </ng-container>
                           </ng-container>
-
                         </ng-container>
                       </ng-container>
-
                     </ng-container>
                   </ng-container>
                 </ng-container>

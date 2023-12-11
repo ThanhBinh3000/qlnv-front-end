@@ -2,39 +2,27 @@
   <nz-card class="mt16 flex-card p-lr16">
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
       <div nz-row [nzGutter]="20">
-        <div nz-col nzSpan="3">
+        <div nz-col nzSpan="4">
+          <nz-form-label nzFor="loai-hang-hoa">Loại hàng DTQG</nz-form-label>
           <nz-form-control>
-            <nz-form-label>Năm kế hoạch</nz-form-label>
-            <nz-form-item>
-              <nz-select formControlName="nam">
-                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-              </nz-select>
-            </nz-form-item>
+            <nz-select nzShowSearch formControlName="loaiVthh" (ngModelChange)="onChangeLoaiVthh($event)">
+              <nz-option *ngFor="let item of listLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
+              </nz-option>
+            </nz-select>
           </nz-form-control>
         </div>
-        <div nz-col nzSpan="5">
+        <div nz-col nzSpan="4">
+          <nz-form-label nzFor="chung-loai-hang-hoa">Chủng loại hàng DTQG</nz-form-label>
           <nz-form-control>
-            <nz-form-label>Mã danh sách cần SC</nz-form-label>
-            <nz-form-item>
-              <input nz-input formControlName="maSc" />
-            </nz-form-item>
+            <nz-select nzShowSearch formControlName="cloaiVthh">
+              <nz-option *ngFor="let item of listChungLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
+              </nz-option>
+            </nz-select>
           </nz-form-control>
         </div>
-        <div nz-col nzSpan="5">
+        <div nz-col nzSpan="4">
           <nz-form-control>
-            <nz-form-label>
-              Chi cục DTNN
-            </nz-form-label>
-            <nz-form-item>
-              <nz-select formControlName="maCc" nzShowSearch nzAllowClear>
-                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-              </nz-select>
-            </nz-form-item>
-          </nz-form-control>
-        </div>
-        <div nz-col nzSpan="6">
-          <nz-form-control>
-            <nz-form-label>Ngày tổng hợp</nz-form-label>
+            <nz-form-label>Ngày chốt danh sách của Cục</nz-form-label>
             <nz-form-item>
               <div nz-row>
                 <div nz-col nzSpan="12" class="cus-start-date">
@@ -49,6 +37,42 @@
                 </div>
               </div>
             </nz-form-item>
+          </nz-form-control>
+        </div>
+        <div nz-col nzSpan="3">
+          <nz-form-label >Điểm kho</nz-form-label>
+          <nz-form-control >
+            <nz-select formControlName="maDiemKho" nzAllowClear nzShowSearch (ngModelChange)="changeDonVi($event,5)">
+              <nz-option *ngFor="let item of dsDiemKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </div>
+        <div nz-col nzSpan="3">
+          <nz-form-label >Nhà kho</nz-form-label>
+          <nz-form-control >
+            <nz-select formControlName="maNhaKho" nzAllowClear nzShowSearch (ngModelChange)="changeDonVi($event,6)">
+              <nz-option *ngFor="let item of dsNhaKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </div>
+        <div nz-col nzSpan="3">
+          <nz-form-label>Ngăn kho</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="maNganKho" nzAllowClear nzShowSearch (ngModelChange)="changeDonVi($event,7)">
+              <nz-option *ngFor="let item of dsNganKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </div>
+        <div nz-col nzSpan="3">
+          <nz-form-label>Lô kho</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="maLoKho" nzAllowClear nzShowSearch >
+              <nz-option *ngFor="let item of dsLoKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+              </nz-option>
+            </nz-select>
           </nz-form-control>
         </div>
       </div>
@@ -67,7 +91,7 @@
     </div>
   </nz-card>
   <div class="group-button">
-    <h3 class="text-uppercase">Hàng thuộc diện {{title}} </h3>
+    <h3 class="text-uppercase">{{title}} </h3>
   </div>
   <nz-card class="mt-2px flex-card data-table card-border-content table-card">
     <nz-table class="nowrap" [nzData]="dataTableAll" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
@@ -77,17 +101,17 @@
         <th>Chủng loại hàng DTQG</th>
         <th>Ngăn/lô kho</th>
         <th>Nhà kho</th>
-        <th>Điềm kho</th>
+        <th>Điểm kho</th>
         <th>Ngày nhập kho</th>
         <th>Tồn kho</th>
-        <th>SL cần {{title}}</th>
-        <th>SL đã {{title}}</th>
+        <th>SL cần {{column}}</th>
+        <th>SL đã {{column}}</th>
         <th>ĐVT</th>
         <th>Lý do</th>
         <th>Trạng thái</th>
         <th>Trạng thái chốt DS của Cục</th>
         <th>Ngày chốt DS của Cục</th>
-        <th>Trạng thái {{title}}</th>
+        <th>Trạng thái {{column}}</th>
         <th nzWidth="35px">Hành động</th>
       </tr>
       </thead>
@@ -117,7 +141,7 @@
             <tr>
               <td></td>
               <td nzShowExpand="true" [nzExpand]="cloaiVthh.expandSet"
-                  (nzExpandChange)="onExpandChange(cloaiVthh, $event)">{{cloaiVthh.tenCloaiVthh}}</td>
+                  (nzExpandChange)="onExpandChange(cloaiVthh, $event)">{{cloaiVthh.tenCloaiVthh == 'null' ? loaiVthh.tenLoaiVthh : cloaiVthh.tenCloaiVthh}}</td>
               <td></td>
               <td></td>
               <td></td>

@@ -235,7 +235,7 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
       tuNgayKetThuc: this.tuNgayKetThuc != null ? dayjs(this.tuNgayKetThuc).format('YYYY-MM-DD') + " 00:00:00" : null,
       denNgayKetThuc: this.denNgayKetThuc != null ? dayjs(this.denNgayKetThuc).format('YYYY-MM-DD') + " 23:59:59" : null,
       tuNgayTao: this.tuNgayTao != null ? dayjs(this.tuNgayTao).format('YYYY-MM-DD') + " 00:00:00" : null,
-      denNgayTao: this.denNgayTao != null ? dayjs(this.denNgayTao).format('YYYY-MM-DD') + " 23:59:59" : null,
+      denNgayTao: this.denNgayTao != null ? dayjs(this.denNgayTao).format('YYYY-MM-DD') + " 23:59:59": null,
     };
     let res = await this.quyetDinhGiaoNvNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -389,7 +389,7 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
           tuNgayKetThuc: this.tuNgayKetThuc != null ? dayjs(this.tuNgayKetThuc).format('YYYY-MM-DD') + " 00:00:00" : null,
           denNgayKetThuc: this.denNgayKetThuc != null ? dayjs(this.denNgayKetThuc).format('YYYY-MM-DD') + " 23:59:59" : null,
           tuNgayTao: this.tuNgayTao != null ? dayjs(this.tuNgayTao).format('YYYY-MM-DD') + " 00:00:00" : null,
-          denNgayTao: this.denNgayTao != null ? dayjs(this.denNgayTao).format('YYYY-MM-DD') + " 23:59:59" : null,
+          denNgayTao: this.denNgayTao != null ? dayjs(this.denNgayTao).format('YYYY-MM-DD') + " 23:59:59": null,
         };
         this.bienBanNghiemThuBaoQuan
           .export(body)
@@ -539,13 +539,13 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
     return endValue.getTime() <= this.tuNgayKetThuc.getTime();
   };
 
-  hienThiXem(data) {
+  hienThiXem(data){
     if (this.userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_XEM')) {
-      if (this.userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_THEM') && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TK || data.trangThai == STATUS.TU_CHOI_KT || data.trangThai == STATUS.TU_CHOI_LDCC)) {
+      if(this.userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_THEM') && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TK || data.trangThai == STATUS.TU_CHOI_KT || data.trangThai == STATUS.TU_CHOI_LDCC)) {
         return false;
       } else if ((this.userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_DUYET_TK') && data.trangThai == STATUS.CHO_DUYET_TK)
         || (this.userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_DUYET_KT') && data.trangThai == STATUS.CHO_DUYET_KT)
-        || (this.userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_DUYET_LDCC') && data.trangThai == STATUS.CHO_DUYET_LDCC)) {
+        || (this.userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_DUYET_LDCC') && data.trangThai == STATUS.CHO_DUYET_LDCC) ) {
         return false;
       }
       return true;

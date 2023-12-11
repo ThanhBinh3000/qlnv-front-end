@@ -44,6 +44,7 @@ export class ThongTinHopDongThanhLyComponent extends Base3Component implements O
   maHopDongSuffix: string = '';
   listToChucTrungDg: any[] = [];
   listDviTsan: any[] = [];
+  listThongTinBenMua: any[] = [];
 
 
   constructor(
@@ -83,11 +84,11 @@ export class ThongTinHopDongThanhLyComponent extends Base3Component implements O
         soHd: ['',[Validators.required]],
         tenHd: ['',[Validators.required]],
         ngayHieuLuc: ['',[Validators.required]],
-        ghiChuNgayHluc: ['',[Validators.required]],
+        ghiChuNgayHluc: ['',],
         loaiHdong: ['',[Validators.required]],
-        ghiChuLoaiHdong: ['',[Validators.required]],
+        ghiChuLoaiHdong: ['',],
         tgianThienHd: ['',[Validators.required]],
-        tgianBhanh: ['',[Validators.required]],
+        tgianBhanh: [''],
         diaChiBenBan: [''],
         mstBenBan: [''],
         daiDienBenBan: [''],
@@ -143,9 +144,11 @@ export class ThongTinHopDongThanhLyComponent extends Base3Component implements O
   }
 
   initForm() {
+    console.log(this.userInfo);
     this.formData.patchValue({
       maDvi: this.userInfo.MA_DVI ?? null,
       tenDvi: this.userInfo.TEN_DVI ?? null,
+      diaChiBenBan: this.userInfo.DON_VI.diaChi ?? null,
       trangThai: STATUS.DU_THAO,
       tenTrangThai: 'Dự thảo',
     })
@@ -172,7 +175,11 @@ export class ThongTinHopDongThanhLyComponent extends Base3Component implements O
     this.formData.patchValue({
       soHd: data?.soHd?.split('/')[0],
     });
-    await this.onChangeKqBdg(data.idQdKqTl);
+    this.fileCanCu = data.fileCanCu;
+    this.fileDinhKem = data.fileDinhKem;
+    if(data.idQdKqTl){
+      await this.onChangeKqBdg(data.idQdKqTl);
+    }
     this.maDviTsan(data.toChucCaNhan);
     this.selectMaDviTsan(data.listMaDviTsan);
   }
@@ -187,6 +194,8 @@ export class ThongTinHopDongThanhLyComponent extends Base3Component implements O
         body.soHd = this.formData.value.soHd + this.maHopDongSuffix;
       }
       body.children = this.dataTable;
+      body.fileDinhKemReq = this.fileDinhKem;
+      body.fileCanCuReq = this.fileCanCu
       this.createUpdate(body).then((res) => {
         if (res) {
           if (isGuiDuyet) {
@@ -235,6 +244,7 @@ export class ThongTinHopDongThanhLyComponent extends Base3Component implements O
 
   async onChangeKqBdg(id) {
     if (id > 0) {
+      this.spinner.show()
       await this.quyetDinhPheDuyetKetQuaService.getDetail(id)
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
@@ -245,17 +255,17 @@ export class ThongTinHopDongThanhLyComponent extends Base3Component implements O
                 idQdKqTl: dataQdKq.id,
                 soQdKqTl: dataQdKq.soQd,
                 ngayKyQdkqTl: dataQdKq.ngayKy,
-                soQdTl: dataQdKq.soQdTl,
+                soQdTl: dataQdKq.xhTlQuyetDinhHdr.soQd,
                 loaiHinhNx: dataQdKq.loaiHinhNhapXuat,
                 tenLoaiHinhNx: dataQdKq.tenLoaiHinhNx,
                 kieuNx: dataQdKq.kieuNhapXuat,
                 tenKieuNx: dataQdKq.tenKieuNx,
               });
               const dataThongTin = resttin.data;
+              this.listThongTinBenMua = dataThongTin.childrenNlq.filter(item => item.loai == 'NTG');
               this.listToChucTrungDg = [];
               // Loop data children để lấy ra các teen tổ chức và mã đơn vị tài sản
               // Chỉ lấy ra những Ds HDR có tổ chức cá nhân != null và có id Hợp dồng == null hoặc trùng với id hiện tại
-              console.log(dataThongTin.children);
               dataThongTin.children.filter(x => x.toChucCaNhan != null && (x.idHopDongTl == null || x.idHopDongTl == this.id)).forEach( item => {
                 // Check nếu trùng tổ chức cá nhân sẽ thêm vào mã đơn vị tài sản
                 let find = this.listToChucTrungDg.filter(x => x.key == item.toChucCaNhan);
@@ -290,17 +300,26 @@ export class ThongTinHopDongThanhLyComponent extends Base3Component implements O
                   this.listToChucTrungDg.push(body);
                 }
               });
-              console.log(this.listToChucTrungDg)
             }
           }
+          this.spinner.hide()
         })
     }
   }
 
   maDviTsan(event) {
     let thongTin = this.listToChucTrungDg.find(f => f.key === event);
+    let ttBenMua = this.listThongTinBenMua.find(f => f.hoVaTen === event);
     if (thongTin) {
       this.listDviTsan = thongTin.value;
+    }
+    if (ttBenMua) {
+      console.log(ttBenMua)
+      this.formData.patchValue({
+        tenDviBenMua : ttBenMua.hoVaTen,
+        diaChiBenMua : ttBenMua.diaChi,
+        mstBenMua : ttBenMua.soCccd
+      })
     }
   }
 
@@ -391,6 +410,14 @@ export class ThongTinHopDongThanhLyComponent extends Base3Component implements O
       }, 0);
       return sum;
     }
+  }
+
+  onChangeNgayHl($event){
+    let day =  dayjs($event).add(15,'day')
+    console.log(day)
+      this.formData.patchValue({
+        thoiHanXuatKho : day.format("YYYY-MM-DD")
+      })
   }
 }
 

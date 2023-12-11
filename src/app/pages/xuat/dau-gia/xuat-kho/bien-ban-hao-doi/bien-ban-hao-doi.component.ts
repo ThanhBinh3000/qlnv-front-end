@@ -1,14 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import dayjs from 'dayjs';
-import { UserLogin } from 'src/app/models/userlogin';
-import { MESSAGE } from 'src/app/constants/message';
-import { chain } from 'lodash';
+import {Component, OnInit, Input} from '@angular/core';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {MESSAGE} from 'src/app/constants/message';
+import _ from 'lodash';
 import * as uuid from "uuid";
 import {
   PhieuXuatKhoService
@@ -16,9 +14,6 @@ import {
 import {
   BienBanHaoDoiService
 } from "src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/BienBanHaoDoi.service";
-import {CHUC_NANG} from "../../../../../constants/status";
-import {DauGiaComponent} from "../../dau-gia.component";
-
 
 @Component({
   selector: 'app-bdg-bien-ban-hao-doi',
@@ -26,13 +21,21 @@ import {DauGiaComponent} from "../../dau-gia.component";
   styleUrls: ['./bien-ban-hao-doi.component.scss']
 })
 export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
+  @Input() loaiVthh: string;
+  isView: boolean = false;
+  tableDataView: any = [];
+  expandSetString = new Set<string>();
+  idQdNv: number = 0;
+  isViewQdNv: boolean = false;
+  idTinhKho: number = 0;
+  isViewTinhKho: boolean = false;
+  idKiemnghiem: number = 0;
+  isViewKiemnghiem: boolean = false;
+  idBangKe: number = 0;
+  isViewBangKe: boolean = false;
+  idXuatKho: number = 0;
+  isViewXuatKho: boolean = false;
 
-  @Input()
-  loaiVthh: string;
-  @Input()
-  loaiVthhCache: string;
-  public vldTrangThai: DauGiaComponent;
-  public CHUC_NANG = CHUC_NANG;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -41,269 +44,245 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
     modal: NzModalService,
     private phieuXuatKhoService: PhieuXuatKhoService,
     private bienBanHaoDoiService: BienBanHaoDoiService,
-    private dauGiaComponent: DauGiaComponent
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanHaoDoiService);
-    this.vldTrangThai = dauGiaComponent;
     this.formData = this.fb.group({
-      tenDvi: null,
-      maDvi: null,
       nam: null,
-      soQdGiaoNvXh: null,
+      soQdNv: null,
       soBbHaoDoi: null,
-      ngayTaoBb: null,
-      ngayTaoBbTu: null,
-      ngayTaoBbDen: null,
-      ngayBatDauXuat: null,
-      ngayBatDauXuatTu: null,
-      ngayBatDauXuatDen: null,
-      ngayKetThucXuat: null,
-      ngayKetThucXuatTu: null,
-      ngayKetThucXuatDen: null,
-      ngayQdGiaoNvXh: null,
-      ngayQdGiaoNvXhTu: null,
-      ngayQdGiaoNvXhDen: null,
+      ngayLapBienBanTu: null,
+      ngayLapBienBanDen: null,
       loaiVthh: null,
-      type: null
     })
     this.filterTable = {
-      soQdGiaoNvXh: '',
-      nam: '',
-      ngayQdGiaoNvXh: '',
-      soBbHaoDoi: '',
-      soBbTinhKho: '',
-      ngayBatDauXuat: '',
-      ngayKetThucXuat: '',
-      tenDiemKho: '',
-      tenLoKho: '',
-      soBkCanHang: '',
-      soPhieuXuatKho: '',
-      ngayXuatKho: '',
-      tenTrangThai: '',
+      soQdNv: null,
+      nam: null,
+      thoiGianGiaoNhan: null,
+      tenDiemKho: null,
+      tenNhaKho: null,
+      tenNganKho: null,
+      tenLoKho: null,
+      soBbHaoDoi: null,
+      ngayLapBienBan: null,
+      soBbTinhKho: null,
+      soPhieuKiemNghiem: null,
+      tenTrangThai: null,
+      soBangKeHang: null,
+      soPhieuXuatKho: null,
+      ngayXuatKho: null,
     };
   }
 
-
-  userInfo: UserLogin;
-  userdetail: any = {};
-  selectedId: number = 0;
-  isVatTu: boolean = false;
-  isView = false;
-  children: any = [];
-  expandSetString = new Set<string>();
-
-  idBbTk: number = 0;
-  openBbTk = false;
-  idPhieuXk: number = 0;
-  openPhieuXk = false;
-  idBangKe: number = 0;
-  openBangKe = false;
-
-  disabledStartNgayBd = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayBatDauXuatDen) {
-      return startValue.getTime() >= this.formData.value.ngayBatDauXuatDen.getTime();
-    }
-    return false;
-  };
-
-  disabledEndNgayBd = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayBatDauXuatTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayBatDauXuatTu.getTime();
-  };
-
-  disabledStartNgayKt = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayKetThucXuatDen) {
-      return startValue.getTime() >= this.formData.value.ngayKetThucXuatDen.getTime();
-    }
-    return false;
-  };
-
-  disabledEndNgayKt = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayKetThucXuatTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayKetThucXuatTu.getTime();
-  };
-  disabledStartNgayBb = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayTaoBbDen) {
-      return startValue.getTime() >= this.formData.value.ngayTaoBbDen.getTime();
-    }
-    return false;
-  };
-
-  disabledEndNgayBb = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayTaoBbTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayTaoBbTu.getTime();
-  };
-
-  disabledStartNgayQd = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayQdGiaoNvXhDen) {
-      return startValue.getTime() >= this.formData.value.ngayQdGiaoNvXhDen.getTime();
-    }
-    return false;
-  };
-
-  disabledEndNgayQd = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayQdGiaoNvXhTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayQdGiaoNvXhTu.getTime();
-  };
-
-  ngOnInit(): void {
+  async ngOnInit() {
     try {
-      this.initData()
-      this.timKiem();
-    }
-    catch (e) {
-      console.log('error: ', e)
-      this.spinner.hide();
+      await this.spinner.show();
+      await this.search();
+    } catch (e) {
+      console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
   }
 
-  async search(roles?): Promise<void> {
-    await this.spinner.show()
+  async search(): Promise<void> {
+    await this.spinner.show();
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
     });
-    await super.search(roles);
+    await super.search();
+    this.dataTable.forEach(s => s.idVirtual = uuid.v4());
     this.buildTableView();
-  }
-
-
-  async initData() {
-    this.userInfo = this.userService.getUserLogin();
-    this.userdetail.maDvi = this.userInfo.MA_DVI;
-    this.userdetail.tenDvi = this.userInfo.TEN_DVI;
-  }
-
-
-  isOwner(maDvi: any) {
-    return this.userInfo.MA_PHONG_BAN == maDvi;
-  }
-
-  isBelong(maDvi: any) {
-    return this.userInfo.MA_DVI == maDvi;
-  }
-  async timKiem() {
-    await this.spinner.show();
-    try {
-      if (this.formData.value.ngayBatDauXuat) {
-        this.formData.value.ngayBatDauXuatTu = dayjs(this.formData.value.ngayBatDauXuat[0]).format('YYYY-MM-DD')
-        this.formData.value.ngayBatDauXuatDen = dayjs(this.formData.value.ngayBatDauXuat[1]).format('YYYY-MM-DD')
-      }
-      if (this.formData.value.ngayKetThucXuat) {
-        this.formData.value.ngayKetThucXuatTu = dayjs(this.formData.value.ngayKetThucXuat[0]).format('YYYY-MM-DD')
-        this.formData.value.ngayKetThucXuatDen = dayjs(this.formData.value.ngayKetThucXuat[1]).format('YYYY-MM-DD')
-      }
-      await this.search();
-    } catch (e) {
-      console.log(e)
-    }
     await this.spinner.hide();
   }
 
-
   buildTableView() {
-    let dataView = chain(this.dataTable)
-      .groupBy("soQdGiaoNvXh")
-      .map((value, key) => {
-        let quyetDinh = value.find(f => f.soQdGiaoNvXh === key)
-        let rs = chain(value)
-          .groupBy("soBbHaoDoi")
-          .map((v, k) => {
-              let soBb = v.find(s => s.soBbHaoDoi === k)
-              return {
-                idVirtual: uuid.v4(),
-                soBbHaoDoi: k != "null" ? k : '',
-                soBbTinhKho: soBb ? soBb.soBbTinhKho : null,
-                tenDiemKho: soBb ? soBb.tenDiemKho : null,
-                tenLoKho: soBb ? soBb.tenLoKho : null,
-                ngayBatDauXuat: soBb ? soBb.ngayBatDauXuat : null,
-                ngayKetThucXuat: soBb ? soBb.ngayKetThucXuat : null,
-                trangThai: soBb ? soBb.trangThai : null,
-                tenTrangThai: soBb ? soBb.tenTrangThai : null,
-                maDvi: soBb ? soBb.maDvi : null,
-                id: soBb ? soBb.id : null,
-                childData: v
-              }
-            }
-          ).value();
-        let nam = quyetDinh ? quyetDinh.nam : null;
-        let ngayQdGiaoNvXh = quyetDinh ? quyetDinh.ngayQdGiaoNvXh : null;
+    this.tableDataView = _(this.dataTable).groupBy("soQdNv").map((soQdNvGroup, soQdNvKey) => {
+      const firstRowInGroup = _.find(soQdNvGroup, (row) => row.tenDiemKho === soQdNvGroup[0].tenDiemKho);
+      firstRowInGroup.idVirtual = uuid.v4();
+      this.expandSetString.add(firstRowInGroup.idVirtual);
+      const childData = _(soQdNvGroup).groupBy("tenDiemKho").map((tenDiemKhoGroup, tenDiemKhoKey) => {
+        const lv1IdVirtual = uuid.v4();
+        this.expandSetString.add(lv1IdVirtual);
+        const lv1ChildData = _(tenDiemKhoGroup).groupBy((row) => row.soBbHaoDoi).map((group, key) => {
+          const lv2IdVirtual = uuid.v4();
+          this.expandSetString.add(lv2IdVirtual);
+          return {
+            idVirtual: lv2IdVirtual,
+            tenLoKho: group[0].tenLoKho || "",
+            tenNganKho: group[0].tenNganKho || "",
+            tenNhaKho: group[0].tenNhaKho || "",
+            soBbHaoDoi: key || "",
+            ngayLapBienBan: group[0].ngayLapBienBan || "",
+            idBbTinhKho: group[0].idBbTinhKho || "",
+            soBbTinhKho: group[0].soBbTinhKho || "",
+            idPhieuKiemNghiem: group[0].idPhieuKiemNghiem || "",
+            soPhieuKiemNghiem: group[0].soPhieuKiemNghiem || "",
+            id: group[0].id || "",
+            trangThai: group[0].trangThai || "",
+            tenTrangThai: group[0].tenTrangThai || "",
+            childData: group[0].children || "",
+          };
+        }).value();
         return {
-          idVirtual: uuid.v4(),
-          soQdGiaoNvXh: key != "null" ? key : '',
-          nam: nam,
-          ngayQdGiaoNvXh: ngayQdGiaoNvXh,
-          childData: rs
+          idVirtual: lv1IdVirtual,
+          tenDiemKho: tenDiemKhoKey || "",
+          childData: lv1ChildData || "",
         };
       }).value();
-    this.children = dataView
-    console.log(this.children, "this.children")
-    this.expandAll()
-
+      return {
+        idVirtual: firstRowInGroup.idVirtual,
+        soQdNv: soQdNvKey,
+        nam: firstRowInGroup.nam || "",
+        idQdNv: firstRowInGroup.idQdNv || "",
+        thoiGianGiaoNhan: firstRowInGroup.thoiGianGiaoNhan || "",
+        childData,
+      };
+    }).value();
+    this.expandAll();
   }
-
 
   expandAll() {
-    this.children.forEach(s => {
-      this.expandSetString.add(s.idVirtual);
-    })
+    this.dataTable.forEach(row => {
+      this.expandSetString.add(row.idVirtual);
+    });
   }
 
-  onExpandStringChange(id: string, checked: boolean): void {
-    if (checked) {
-      this.expandSetString.add(id);
+  onExpandStringChange(idVirtual: string, isExpanded: boolean): void {
+    if (isExpanded) {
+      this.expandSetString.add(idVirtual);
     } else {
-      this.expandSetString.delete(id);
+      this.expandSetString.delete(idVirtual);
     }
   }
 
-
-  redirectDetail(id, b: boolean) {
-    this.selectedId = id;
+  redirectDetail(id, isView: boolean) {
+    this.idSelected = id;
     this.isDetail = true;
-    this.isView = b;
-    // this.isViewDetail = isView ?? false;
+    this.isView = isView;
   }
 
-  openBbTkModal(id: number) {
-    console.log(id, "id")
-    this.idBbTk = id;
-    this.openBbTk = true;
+  openModal(id: number, modalType: string) {
+    switch (modalType) {
+      case 'QdNv' :
+        this.idQdNv = id;
+        this.isViewQdNv = true;
+        break;
+      case 'tinhKho' :
+        this.idTinhKho = id;
+        this.isViewTinhKho = true;
+        break;
+      case 'kiemNghiem' :
+        this.idKiemnghiem = id;
+        this.isViewKiemnghiem = true;
+        break;
+      case 'bangKe' :
+        this.idBangKe = id;
+        this.isViewBangKe = true;
+        break;
+      case 'xuatKho' :
+        this.idXuatKho = id;
+        this.isViewXuatKho = true;
+        break;
+      default:
+        break;
+    }
   }
 
-  closeBbTkModal() {
-    this.idBbTk = null;
-    this.openBbTk = false;
+  closeModal(modalType: string) {
+    switch (modalType) {
+      case 'QdNv' :
+        this.idQdNv = null;
+        this.isViewQdNv = false;
+        break;
+      case 'tinhKho' :
+        this.idTinhKho = null;
+        this.isViewTinhKho = false;
+        break;
+      case 'kiemNghiem' :
+        this.idKiemnghiem = null;
+        this.isViewKiemnghiem = false;
+        break;
+      case 'bangKe' :
+        this.idBangKe = null;
+        this.isViewBangKe = false;
+        break;
+      case 'xuatKho' :
+        this.idXuatKho = null;
+        this.isViewXuatKho = false;
+        break;
+      default:
+        break;
+    }
   }
 
-  openPhieuXkModal(id: number) {
-    console.log(id, "id")
-    this.idPhieuXk = id;
-    this.openPhieuXk = true;
-  }
+  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
+    const startDate = this.formData.value[formDataKey + 'Tu'];
+    const endDate = this.formData.value[formDataKey + 'Den'];
+    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
+  };
 
-  closePhieuXkModal() {
-    this.idPhieuXk = null;
-    this.openPhieuXk = false;
-  }
+  disabledStartNgayLapBbTu = (startValue: Date): boolean => {
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayLapBienBanTu, 'ngayLapBienBan');
+  };
 
-  openBangKeModal(id: number) {
-    console.log(id, "id")
-    this.idBangKe = id;
-    this.openBangKe = true;
-  }
+  disabledStartNgayLapBbDen = (endValue: Date): boolean => {
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayLapBienBanDen, 'ngayLapBienBan');
+  };
 
-  closeBangKeModal() {
-    this.idBangKe = null;
-    this.openBangKe = false;
+  isActionAllowed(action: string, data: any): boolean {
+    const permissions = {
+      XEM: 'XHDTQG_PTDG_XK_LT_BBHD_XEM',
+      THEM: 'XHDTQG_PTDG_XK_LT_BBHD_THEM',
+      XOA: 'XHDTQG_PTDG_XK_LT_BBHD_XOA',
+      DUYET_KTVBAOQUAN: 'XHDTQG_PTDG_XK_LT_BBHD_DUYET_KTVBQ',
+      DUYET_KETOAN: 'XHDTQG_PTDG_XK_LT_BBHD_DUYET_KT',
+      DUYET_LDCHICUC: 'XHDTQG_PTDG_XK_LT_BBHD_DUYET_LDCCUC',
+    };
+    switch (action) {
+      case 'XEM':
+        return (
+          this.userService.isAccessPermisson(permissions.XEM) && ((this.userService.isAccessPermisson(permissions.THEM) &&
+              [
+                this.STATUS.CHO_DUYET_KTVBQ,
+                this.STATUS.CHO_DUYET_KT,
+                this.STATUS.CHO_DUYET_LDCC,
+                this.STATUS.DA_DUYET_LDCC,
+              ].includes(data.trangThai)) ||
+            (!this.userService.isAccessPermisson(permissions.THEM) && [
+                this.STATUS.DU_THAO,
+                this.STATUS.TU_CHOI_KTVBQ,
+                this.STATUS.TU_CHOI_KT,
+                this.STATUS.TU_CHOI_LDCC,
+                this.STATUS.DA_DUYET_LDCC
+              ].includes(data.trangThai) ||
+              (data.trangThai === this.STATUS.CHO_DUYET_KTVBQ &&
+                !this.userService.isAccessPermisson(permissions.DUYET_KTVBAOQUAN)) ||
+              (data.trangThai === this.STATUS.CHO_DUYET_KT &&
+                !this.userService.isAccessPermisson(permissions.DUYET_KETOAN)) ||
+              (data.trangThai === this.STATUS.CHO_DUYET_LDCC &&
+                !this.userService.isAccessPermisson(permissions.DUYET_LDCHICUC))))
+        );
+      case 'SUA':
+        return [
+          this.STATUS.DU_THAO,
+          this.STATUS.TU_CHOI_KTVBQ,
+          this.STATUS.TU_CHOI_KT,
+          this.STATUS.TU_CHOI_LDCC
+        ].includes(data.trangThai) && this.userService.isAccessPermisson(permissions.THEM);
+      case 'PHEDUYET':
+        return (
+          (this.userService.isAccessPermisson(permissions.DUYET_KTVBAOQUAN) &&
+            data.trangThai === this.STATUS.CHO_DUYET_KTVBQ) ||
+          (this.userService.isAccessPermisson(permissions.DUYET_KETOAN) &&
+            data.trangThai === this.STATUS.CHO_DUYET_KT) ||
+          (this.userService.isAccessPermisson(permissions.DUYET_LDCHICUC) &&
+            data.trangThai === this.STATUS.CHO_DUYET_LDCC));
+      case 'XOA':
+        return data.trangThai === this.STATUS.DU_THAO &&
+          this.userService.isAccessPermisson(permissions.XOA);
+      default:
+        return false;
+    }
   }
-
 }

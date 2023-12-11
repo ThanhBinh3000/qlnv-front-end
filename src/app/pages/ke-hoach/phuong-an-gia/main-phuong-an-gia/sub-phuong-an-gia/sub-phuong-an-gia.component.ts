@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { TYPE_PAG } from 'src/app/constants/config';
 import { UserService } from 'src/app/services/user.service';
 import {Router} from "@angular/router";
+import {$e} from "@angular/compiler/src/chars";
 
 @Component({
   selector: 'app-sub-phuong-an-gia',
@@ -11,7 +12,7 @@ import {Router} from "@angular/router";
 export class SubPhuongAnGiaComponent implements OnInit {
   @Input() type: string;
   @Input() loaiVthh: string;
-
+  chuyenTrang:boolean = false;
   typeConst: any
   constructor(
     public userService: UserService,
@@ -44,4 +45,15 @@ export class SubPhuongAnGiaComponent implements OnInit {
     }
     return check;
   }
+
+  chuyenTrangTc() {
+    this.tabSelected = 1;
+    this.chuyenTrang = true;
+  }
+
+  backChuyenTrang() {
+    this.chuyenTrang = false;
+  }
+
+  protected readonly $e = $e;
 }

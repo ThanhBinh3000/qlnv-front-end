@@ -30,9 +30,9 @@ import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { STATUS } from '../../../../../constants/status';
 import { AMOUNT, AMOUNT_NO_DECIMAL, AMOUNT_TWO_DECIMAL } from '../../../../../Utility/utils';
-import { Base2Component } from "../../../../../components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../services/storage.service";
+import { Base2Component } from '../../../../../components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from '../../../../../services/storage.service';
 
 @Component({
   selector: 'app-thong-tin-de-nghi-cap-von-bo-nganh',
@@ -101,6 +101,10 @@ export class ThongTinDeNghiCapVonBoNganhComponent extends Base2Component impleme
     duToanDuocGiao: null,
     tongTien: null,
     tongTienNt: null,
+    tongTienHang: null,
+    tongTienHangNt: null,
+    tienThHd: null,
+    tienThHdNt: null,
     kinhPhiChuaCapNt: null,
     kinhPhiChuaCap: null,
     maVatTu: null,
@@ -147,6 +151,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent extends Base2Component impleme
     thanhTien: 0,
   };
   previewName: string = 'de_nghi_cap_von_dtqg';
+
   constructor(
     private danhMucService: DanhMucService,
     private deXuatKeHoachBanDauGiaService: DeXuatKeHoachBanDauGiaService,
@@ -356,6 +361,10 @@ export class ThongTinDeNghiCapVonBoNganhComponent extends Base2Component impleme
       this.rowItem.nganHang = hopDong.nganHang;
       this.rowItem.tongTienNt = hopDong.tongTienNt;
       this.rowItem.tongTien = hopDong.tongTien;
+      this.rowItem.tongTienHang = hopDong.tongTienHang;
+      this.rowItem.tongTienHangNt = hopDong.tongTienHangNt;
+      this.rowItem.tienThHd = hopDong.tienThHd;
+      this.rowItem.tienThHdNt = hopDong.tienThHdNt;
       this.rowItem.duToanDuocGiao = hopDong.duToanDuocGiao;
     }
   }
@@ -391,6 +400,18 @@ export class ThongTinDeNghiCapVonBoNganhComponent extends Base2Component impleme
       this.rowItem.kinhPhiChuaCapNt = this.rowItem.tongTienNt ? (this.rowItem.kinhPhiDaCapNt ? this.rowItem.tongTienNt - this.rowItem.kinhPhiDaCapNt : this.rowItem.tongTienNt) : this.rowItem.tongTienNt;
     }
   }
+
+  calCulateTongTienGiaTriHd(data?) {
+    if (data) {
+      data.tongTien = data.tongTienHang + data.tienThHd;
+      data.tongTienNt = data.tongTienHangNt + data.tienThHdNt;
+    } else {
+      this.rowItem.tongTien = this.rowItem.tongTienHang + this.rowItem.tienThHd;
+      this.rowItem.tongTienNt = this.rowItem.tongTienHangNt + this.rowItem.tienThHdNt;
+    }
+    this.calCulateKinhPhiChuaCap();
+  }
+
 
   changeThanhTienEdit(id) {
     if (this.itemHopDongSelected.chiTiet[id].slDeNghiCapVon && this.itemHopDongSelected.chiTiet[id].donGia) {
@@ -478,6 +499,10 @@ export class ThongTinDeNghiCapVonBoNganhComponent extends Base2Component impleme
       duToanDuocGiao: null,
       tongTien: null,
       tongTienNt: null,
+      tongTienHang: null,
+      tongTienHangNt: null,
+      tienThHd: null,
+      tienThHdNt: null,
       kinhPhiChuaCapNt: null,
       kinhPhiChuaCap: null,
       maVatTu: null,
@@ -641,6 +666,9 @@ export class ThongTinDeNghiCapVonBoNganhComponent extends Base2Component impleme
         let res = await this.deNghiCapVonBoNganhService.them(body);
         if (res.msg == MESSAGE.SUCCESS) {
           this.idInput = res.data.id;
+          this.formData.patchValue({
+            id: res.data.id
+          })
           if (isHoanThanh) {
             this.guiDuyet(this.idInput);
           } else
@@ -827,6 +855,10 @@ interface IDeNghiCapVon {
   duToanDuocGiao: number,
   tongTien: number,
   tongTienNt: number,
+  tongTienHang: number,
+  tongTienHangNt: number,
+  tienThHd: number,
+  tienThHdNt: number,
   kinhPhiChuaCapNt: number,
   kinhPhiChuaCap: number,
   maVatTu: string,

@@ -1,17 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { MESSAGE } from 'src/app/constants/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { STATUS } from 'src/app/constants/status';
+import {Component, Input, OnInit} from '@angular/core';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {MESSAGE} from 'src/app/constants/message';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {STATUS} from 'src/app/constants/status';
 import {
   ChaoGiaMuaLeUyQuyenService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service";
-import { saveAs } from 'file-saver';
-import { LOAI_HANG_DTQG } from "../../../../../../constants/config";
+import {saveAs} from 'file-saver';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-danh-sach-ban-truc-tiep-chi-cuc',
@@ -19,12 +19,14 @@ import { LOAI_HANG_DTQG } from "../../../../../../constants/config";
   styleUrls: ['./danh-sach-ban-truc-tiep-chi-cuc.component.scss']
 })
 export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implements OnInit {
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG
   @Input() loaiVthh: string;
   isQuanLy: boolean;
   isAddNew: boolean;
-  LOAI_HANG_DTQG = LOAI_HANG_DTQG
   listTrangThaiHd: any = [];
   listTrangThaiXh: any = [];
+  idQdPd: number = 0;
+  isViewQdPd: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -38,24 +40,26 @@ export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implement
     super.ngOnInit();
     this.formData = this.fb.group({
       namKh: null,
-      soHd: null,
-      tenHd: null,
+      soHopDong: null,
+      tenHopDong: null,
       ngayPduyetTu: null,
       ngayPduyetDen: null,
       loaiVthh: null,
       trangThai: null,
       pthucBanTrucTiep: null,
-      lastest: 1
+      lastest: null,
     });
     this.filterTable = {
-      namKh: '',
-      soQdPd: '',
-      ngayMkho: '',
-      loaiVthh: '',
-      tenLoaiVthh: '',
-      cloaiVthh: '',
-      tenCloaiVthh: '',
-      tenTrangThaiHd: '',
+      namKh: null,
+      soQdPd: null,
+      slHdChuaKy: null,
+      slHdDaKy: null,
+      tgianDkienDen: null,
+      tenLoaiVthh: null,
+      tenCloaiVthh: null,
+      thanhTienDuocDuyet: null,
+      tenTrangThaiHd: null,
+      tenTrangThaiXh: null,
     }
     this.listTrangThaiHd = [
       {
@@ -90,10 +94,13 @@ export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implement
   async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([
-        this.timKiem(),
-        this.search(),
-      ]);
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+        trangThai: STATUS.DA_HOAN_THANH,
+        pthucBanTrucTiep: ['02'],
+        lastest: 1
+      })
+      await this.search();
     } catch (e) {
       console.error('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -102,23 +109,7 @@ export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implement
     }
   }
 
-  async timKiem() {
-    this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
-      trangThai: STATUS.HOAN_THANH_CAP_NHAT,
-      pthucBanTrucTiep: ['02']
-    })
-  }
-
-  async clearFilter() {
-    this.formData.reset();
-    await Promise.all([
-      this.timKiem(),
-      this.search()
-    ]);
-  }
-
-  goDetail(id: number, boolean?: boolean) {
+  redirectDetail(id: number, boolean?: boolean) {
     this.idSelected = id;
     this.isDetail = true;
     this.isQuanLy = boolean;
@@ -141,6 +132,19 @@ export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implement
         this.spinner.hide();
       }
     );
+  }
+
+  openModal(id: number) {
+    this.updateQdPd(id, true)
+  }
+
+  closeModal() {
+    this.updateQdPd(null, false)
+  }
+
+  private updateQdPd(id: number | null, isView: boolean) {
+    this.idQdPd = id;
+    this.isViewQdPd = isView;
   }
 
   isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {

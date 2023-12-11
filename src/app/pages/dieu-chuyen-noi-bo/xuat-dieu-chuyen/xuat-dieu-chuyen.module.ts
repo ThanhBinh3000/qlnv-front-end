@@ -106,7 +106,7 @@ import { DCNBGHCKtclvtHoSoKyThuatComponent } from './giua-hai-cuc/kiem-tra-chat-
 import { ChiTietBangKeXuatVatTuDieuChuyenComponent } from './component-chung/bang-ke-xuat-vat-tu/chi-tiet-bang-ke-xuat-vat-tu/chi-tiet-bang-ke-xuat-vat-tu.component';
 import { HoSoKyThuatXuatDieuChuyenComponent } from './component-chung/ho-so-ky-thuat/ho-so-ky-thuat.component';
 import { ChiTietHoSoKyThuatXuatDieuChuyenComponent } from './component-chung/ho-so-ky-thuat/chi-tiet-ho-so-ky-thuat/chi-tiet-ho-so-ky-thuat.component';
-import { ChiTietBienBanKiemTraComponent } from './component-chung/ho-so-ky-thuat/chi-tiet-ho-so-ky-thuat/chi-tiet-bien-ban-kiem-tra/chi-tiet-bien-ban-kiem-tra.component';
+import { ChiTietBienBanKiemTraXuatDieuChuyenComponent } from './component-chung/ho-so-ky-thuat/chi-tiet-ho-so-ky-thuat/chi-tiet-bien-ban-kiem-tra/chi-tiet-bien-ban-kiem-tra.component';
 
 @NgModule({
   declarations: [
@@ -196,7 +196,7 @@ import { ChiTietBienBanKiemTraComponent } from './component-chung/ho-so-ky-thuat
     ThemMoiBienBanHaoDoiDieuChuyenComponent,
     BangKeXuatVatTuDieuChuyenComponent,
     ChiTietBangKeXuatVatTuDieuChuyenComponent,
-    ChiTietBienBanKiemTraComponent
+    ChiTietBienBanKiemTraXuatDieuChuyenComponent
   ],
   imports: [
     CommonModule,

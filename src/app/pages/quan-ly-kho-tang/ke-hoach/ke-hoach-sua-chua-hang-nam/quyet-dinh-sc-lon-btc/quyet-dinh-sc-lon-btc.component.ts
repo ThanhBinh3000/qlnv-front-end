@@ -1,6 +1,6 @@
 import {
-  Component,
-  OnInit,
+  Component, EventEmitter, Input,
+  OnInit, Output,
 } from '@angular/core';
 import {Base2Component} from "../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
@@ -25,7 +25,9 @@ export class QuyetDinhScLonBtcComponent extends Base2Component implements OnInit
     {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
     {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'}
   ];
-
+  idTongHop: number = 0;
+  @Input() dataTongHop: any;
+  @Output() removeData=new EventEmitter<any>();
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
@@ -55,6 +57,11 @@ export class QuyetDinhScLonBtcComponent extends Base2Component implements OnInit
     if (!this.userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDBTC')) {
       this.router.navigateByUrl('/error/401')
     }
+    if(this.dataTongHop && this.dataTongHop.id >0){
+      this.isDetail=this.dataTongHop.quyetDinh;
+      this.idTongHop=this.dataTongHop.id;
+    }
+    this.removeData.emit()
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
@@ -92,3 +99,4 @@ export class QuyetDinhScLonBtcComponent extends Base2Component implements OnInit
   }
 
 }
+

@@ -6,6 +6,16 @@ import {DanhMucService} from '../../../services/danhmuc.service';
 import {KeHoachLuongThucComponent} from './ke-hoach-luong-thuc/ke-hoach-luong-thuc.component';
 import {cloneDeep} from 'lodash';
 import {DonviService} from "../../../services/donvi.service";
+import {PREVIEW} from "../../../constants/fileType";
+import printJS from "print-js";
+import {NgxSpinnerService} from "ngx-spinner";
+import {QuyetDinhTtcpService} from "../../../services/quyetDinhTtcp.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {saveAs} from 'file-saver';
+import {chain} from "lodash";
+import {v4 as uuidv4} from "uuid";
+import {sumBy} from "lodash";
+
 
 @Component({
   selector: 'app-dialog-chi-tiet-ke-hoach-giao-bo-nganh',
@@ -20,6 +30,7 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   nam: any;
   keHoach: any = {
     id: null,
+    idQdTtcp: null,
     sapXep: null,
     maBoNganh: null,
     tenBoNganh: null,
@@ -33,26 +44,45 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
     ttXuatGiam: null,
     ltGaoTon: null,
     ltThocTon: null,
+    ghiChuLt :null,
     muaTangList: [],
+    ghiChuMuaTang :null,
     xuatGiamList: [],
+    ghiChuXuatGiam :null,
     xuatBanList: [],
+    ghiChuXuatBan :null,
     luanPhienList: [],
+    ghiChuLuanPhien :null,
   };
   dataTable: any[] = [];
   dsBoNganh: any[];
   dsHangHoa: any[] = [];
+  muaTangView: any[] = [];
+  xuatGiamView: any[] = [];
+  xuatBanView: any[] = [];
+  luanPhienView: any[] = [];
   dataEdit: any;
   dataToanBn: any;
   radioData: any;
   radioValue: any;
   errorInputRequired: string = 'Dữ liệu không được để trống.';
+  templateName : string;
+  pdfSrc: any;
+  wordSrc: any;
+  excelSrc: any;
+  printSrc: any;
+  showDlgPreview = false;
+
 
   constructor(
     private readonly _modalRef: NzModalRef,
     private danhMucService: DanhMucService,
     private donviService: DonviService,
+    private spinner: NgxSpinnerService,
+    private notification: NzNotificationService,
     public globals: Globals,
-  ) {
+    private quyetDinhTtcpService: QuyetDinhTtcpService,
+    ) {
     this.radioData = [
       {label: 'Bộ Tài chính', value: 'BTC'},
       {label: 'Bộ/Ngành khác', value: 'Khac'},
@@ -71,11 +101,14 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
     if (this.dataEdit) {
       if (this.dataEdit.tenBoNganh === 'Bộ Tài chính') {
         this.radioValue = 'BTC';
+        this.templateName = 'quyet-dinh-ttgcp-bo-tai-chinh';
       } else {
         this.radioValue = 'Khac';
+        this.templateName = 'quyet-dinh-ttgcp-bo-nganh';
       }
     } else {
       this.radioValue = 'BTC';
+      this.templateName = 'quyet-dinh-ttgcp-bo-tai-chinh';
     }
   }
 
@@ -98,7 +131,7 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
       }).subscribe((hangHoa) => {
         if (hangHoa.msg == MESSAGE.SUCCESS) {
           if (event == '0101') {
-            const dataVatTu = hangHoa.data.filter(item => (item.ma == "02" || item.ma == "04"));
+            const dataVatTu = hangHoa.data.filter(item => (item.ma == "02" || item.ma == "04" || item.ma == "03"));
             dataVatTu.forEach(item => {
               this.dsHangHoa = [...this.dsHangHoa, ...item.child]
             });
@@ -132,10 +165,10 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
       this.dsHangHoa = [];
       await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
         if (hangHoa.msg == MESSAGE.SUCCESS) {
-          const dataVatTu = hangHoa.data.filter(item => (item.ma == "02" || item.ma == "04"));
+          const dataVatTu = hangHoa.data.filter(item => (item.ma == "02" || item.ma == "04"   || item.ma == "03"));
           dataVatTu.forEach(item => {
             this.dsHangHoa = [...this.dsHangHoa, ...item.child]
-          })
+          });
         }
       })
     }
@@ -179,5 +212,101 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
       //this.keHoach.maBoNganh = [];
       this.onChangeBoNganh("");
     }
+  }
+
+  async preview() {
+    this.spinner.show();
+    this.muaTangView = this.convertDataPreview(this.keHoach.muaTangList)
+    this.xuatBanView = this.convertDataPreview(this.keHoach.xuatBanList)
+    this.xuatGiamView = this.convertDataPreview(this.keHoach.xuatGiamList)
+    this.luanPhienView = this.convertDataPreview(this.keHoach.luanPhienList)
+    await this.quyetDinhTtcpService.preview({
+      tenBaoCao: this.templateName+ '.docx',
+      id:this.keHoach.idQdTtcp,
+      loaiBaoCao : "01",
+      ltTon : this.keHoach.ltGaoTon * 2 + this.keHoach.ltThocTon,
+      ltGaoTon: this.keHoach.ltGaoTon,
+      ltThocTon: this.keHoach.ltThocTon,
+      ltMua : this.keHoach.ltGaoMua * 2 + this.keHoach.ltThocMua ,
+      ltGaoMua: this.keHoach.ltGaoMua,
+      ltThocMua: this.keHoach.ltThocMua,
+      ltXuat : this.keHoach.ltGaoXuat * 2 + this.keHoach.ltThocXuat ,
+      ltGaoXuat: this.keHoach.ltGaoXuat,
+      ltThocXuat: this.keHoach.ltThocXuat,
+      slDuTru: (+this.keHoach.ltThocMua + +(this.keHoach.ltGaoMua * 2)) - (+this.keHoach.ltThocXuat + +(this.keHoach.ltGaoXuat * 2)) + (+this.keHoach.ltThocTon + +(this.keHoach.ltGaoTon * 2)),
+      slDuTruThoc: +this.keHoach.ltThocMua - +this.keHoach.ltThocXuat + +this.keHoach.ltThocTon,
+      slDuTruGao: +this.keHoach.ltGaoMua - +this.keHoach.ltGaoXuat + +this.keHoach.ltGaoTon,
+      muaTangList: this.muaTangView,
+      xuatGiamList: this.xuatGiamView,
+      xuatBanList:  this.xuatBanView,
+      luanPhienList: this.luanPhienView,
+      tenBoNganh: this.keHoach.tenBoNganh,
+      ttMuaTang: this.keHoach.ttMuaTang,
+      ttXuatBan: this.keHoach.ttXuatBan,
+      ttXuatGiam: this.keHoach.ttXuatGiam
+    }).then(async res => {
+      if (res.data) {
+        this.printSrc = res.data.pdfSrc;
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
+      }
+    });
+    this.spinner.hide();
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, this.templateName + '.pdf');
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, this.templateName + '.docx');
+  }
+
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true });
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+  convertDataPreview(data: any[]): any[] {
+    let arr = [];
+    let result = [];
+    if (data && data.length > 0) {
+      arr = chain(data)
+        .groupBy('tenVthh')
+        .map((value, key) => ({
+          tenVthh: key,
+          isLeaf: (!value || (value.length == 1 && !value[0].cloaiVthh)) ? true : false,
+          soLuong: sumBy(value, 'soLuong'), // Tính tổng soLuong của các phần tử con
+          children: value,
+          idVirtual: uuidv4(),
+        }))
+        .value();
+    }
+    if (arr && arr.length > 0) {
+      arr.forEach((item, index) => {
+        if (item.children && item.children.length > 0) {
+          let itemClonePr = cloneDeep(item);
+          itemClonePr.stt = index + 1;
+          if (item.isLeaf) {
+            itemClonePr.dviTinh = item.children[0].dviTinh
+          }
+          result.push(itemClonePr)
+          if (!item.isLeaf) {
+            item.children.forEach(child => {
+              let itemCloneChild = cloneDeep(child);
+              itemCloneChild.tenVthh = itemCloneChild.tenCloaiVthh;
+              itemCloneChild.stt = '-'
+              result.push(itemCloneChild);
+            })
+          }
+        }
+      })
+    }
+    return result;
   }
 }

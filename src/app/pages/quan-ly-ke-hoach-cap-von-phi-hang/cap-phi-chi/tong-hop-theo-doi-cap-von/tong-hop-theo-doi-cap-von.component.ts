@@ -6,8 +6,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { chain, cloneDeep, isEmpty } from "lodash";
-import { v4 as uuidv4 } from "uuid";
+import {chain, cloneDeep, isEmpty} from "lodash";
+import {v4 as uuidv4} from "uuid";
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { TongHopTheoDoiCapPhiService } from 'src/app/services/ke-hoach/von-phi/tongHopTheoDoiCapPhi.service';
@@ -293,9 +293,13 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
           "khoan": this.searchFilter.khoan,
           "loai": this.searchFilter.loai,
           "maDviDuocDuyet": this.searchFilter.donViDuocDuyet,
+          "paggingReq": {
+            "limit": this.pageSize,
+            "page": this.page - 1
+          },
           "soLenhChiTien": this.searchFilter.soLenhChiTien,
           "soThongTri": this.searchFilter.soThongTri,
-        }
+        };
         this.tongHopTheoDoiCapVonService.exportList(body).subscribe((blob) => {
           saveAs(blob, 'danh-sach-tong-hop-theo-doi-cap-von.xlsx')
         });
@@ -386,20 +390,19 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
   }
 
   async buildTableView(data?: any) {
-    console.log(data, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
     this.dataTableTree = chain(data)
       .groupBy("tenDviThongTri")
       .map((v, k) => {
-        let rowItem = v.find(s => s.tenDviThongTri === k);
-        let idVirtual = uuidv4();
-        this.expandSetString.add(idVirtual);
-        return {
-          idVirtual: idVirtual,
-          tenDviThongTri: k,
-          nam: rowItem?.nam,
-          childData: v
+          let rowItem = v.find(s => s.tenDviThongTri === k);
+          let idVirtual = uuidv4();
+          this.expandSetString.add(idVirtual);
+          return {
+            idVirtual: idVirtual,
+            tenDviThongTri: k,
+            nam: rowItem?.nam,
+            childData: v
+          }
         }
-      }
       ).value();
   }
 

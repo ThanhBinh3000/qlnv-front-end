@@ -74,6 +74,7 @@ export class ThemMoiKhMuaHangDtqgComponent extends Base2Component implements OnI
         tenTrangThai: ['Dự thảo'],
       }
     );
+    this.templateName = 'template_bcbn_kh_mua_hang_dtqg.xlsx'
   }
   async ngOnInit() {
     this.spinner.show();
@@ -107,12 +108,12 @@ export class ThemMoiKhMuaHangDtqgComponent extends Base2Component implements OnI
     row2.children = []
     this.listDataGroup.push(row2);
     let row3 = new khMuaHangDtqg();
-    row3.danhMuc = "I. Kế hoạch mua bổ sung";
+    row3.danhMuc = "III. Kế hoạch mua bổ sung";
     row3.maSo = "03";
     row3.children = []
     this.listDataGroup.push(row3);
     let row4 = new khMuaHangDtqg();
-    row4.danhMuc = "I. Kế hoạch giao mua hàng trong trường hợp khác";
+    row4.danhMuc = "IV. Kế hoạch giao mua hàng trong trường hợp khác";
     row4.maSo = "04";
     row4.children = []
     this.listDataGroup.push(row4);
@@ -374,6 +375,13 @@ export class ThemMoiKhMuaHangDtqgComponent extends Base2Component implements OnI
           }
         }
       }
+    }
+  }
+
+  async handleSelectFile(event: any){
+    await this.onFileSelected(event);
+    if(this.dataImport.length > 0){
+      this.listDataGroup = this.dataImport
     }
   }
 

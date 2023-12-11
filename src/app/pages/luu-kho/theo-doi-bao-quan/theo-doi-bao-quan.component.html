@@ -1,36 +1,90 @@
 <div class="bg-trang">
   <nz-card class="mt16 flex-card p-lr16">
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
-      <div nz-row [nzGutter]="20">
-        <div nz-col nzSpan="2">
+      <div nz-row [nzGutter]="18">
+        <div nz-col nzSpan="3">
           <nz-form-label>Năm</nz-form-label>
           <nz-select formControlName="nam">
             <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
           </nz-select>
         </div>
-        <div nz-col nzSpan="4">
+        <div nz-col nzSpan="9">
           <nz-form-label>Số sổ</nz-form-label>
-          <input type="text" nz-input />
+          <nz-form-control>
+            <input type="text" nz-input formControlName="soSoTdbq" />
+          </nz-form-control>
         </div>
         <div nz-col nzSpan="4">
-          <nz-form-label>Tên đơn vị</nz-form-label>
-          <input type="text" nz-input />
+          <nz-form-label nzFor="loai-hang-hoa">Loại hàng DTQG</nz-form-label>
+          <nz-form-control>
+            <nz-select nzShowSearch formControlName="loaiVthh" (ngModelChange)="onChangeLoaiVthh($event)">
+              <nz-option *ngFor="let item of listLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
         </div>
         <div nz-col nzSpan="4">
-          <nz-form-label>Ngăn lô</nz-form-label>
-          <input type="text" nz-input />
+          <nz-form-label nzFor="chung-loai-hang-hoa">Chủng loại hàng DTQG</nz-form-label>
+          <nz-form-control>
+            <nz-select nzShowSearch formControlName="cloaiVthh">
+              <nz-option *ngFor="let item of listChungLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
         </div>
-        <div nz-col nzSpan="3">
-          <nz-form-label>Loại hàng DTQG</nz-form-label>
-          <input type="text" nz-input />
-        </div>
-        <div nz-col nzSpan="3">
-          <nz-form-label>Chủng loại hàng DTQG</nz-form-label>
-          <input type="text" nz-input />
-        </div>
-        <div nz-col nzSpan="3">
+        <div nz-col nzSpan="4">
           <nz-form-label>Trạng thái</nz-form-label>
-          <input type="text" nz-input />
+          <nz-form-control>
+            <nz-select nzShowSearch formControlName="trangThai">
+              <nz-option *ngFor="let item of listTrangThai" nzValue="{{item.key}}" nzLabel="{{item.value}}">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-label >Chi cục</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="maDviSr" nzAllowClear nzShowSearch (ngModelChange)="changeDonVi($event,4)">
+              <nz-option *ngFor="let item of dsChiCuc" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-label >Điểm kho</nz-form-label>
+          <nz-form-control >
+            <nz-select formControlName="maDiemKho" nzAllowClear nzShowSearch (ngModelChange)="changeDonVi($event,5)">
+              <nz-option *ngFor="let item of dsDiemKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-label >Nhà kho</nz-form-label>
+          <nz-form-control >
+            <nz-select formControlName="maNhaKho" nzAllowClear nzShowSearch (ngModelChange)="changeDonVi($event,6)">
+              <nz-option *ngFor="let item of dsNhaKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-label>Ngăn kho</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="maNganKho" nzAllowClear nzShowSearch (ngModelChange)="changeDonVi($event,7)">
+              <nz-option *ngFor="let item of dsNganKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-label>Lô kho</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="maLoKho" nzAllowClear nzShowSearch >
+              <nz-option *ngFor="let item of dsLoKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
         </div>
       </div>
     </form>
@@ -50,13 +104,13 @@
   <div class="group-button">
     <h3 class="text-uppercase">Danh sách sổ nhật trình bảo quản</h3>
     <div class="buttons">
-      <button type="button" class="btn btn-sub" (click)="exportData()">
+      <button type="button" class="btn btn-sub" (click)="exportData('LKQLCL_TDBQ_EXP')">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
-      <button type="button" class="btn btn-main" *ngIf="userService.isChiCuc()" (click)="redirectCreate()">
+      <button type="button" class="btn btn-main" *ngIf="userService.isChiCuc() && isAccessPermisson('LKQLCL_TDBQ_THEM')" (click)="redirectCreate()">
         <i class="icon htvbdh_dau-cong"></i>
-        <span>Tạo quyết định</span>
+        <span>Thêm</span>
       </button>
     </div>
   </div>
@@ -97,10 +151,10 @@
             <a (click)="redirectDetail(data.id)">
               <span class="icon htvbdh_eye"></span>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="redirectDetail(data.id)">
+            <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="redirectDetail(data.id,'LKQLCL_TDBQ_THEM')">
               <span class="fa fa-pencil"></span>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data)">
+            <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data,'LKQLCL_TDBQ_XOA')">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>

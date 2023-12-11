@@ -4,7 +4,8 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </a>
-    <button type="button" class="btn btn-sub do" (click)="preview(previewName)">
+    <button
+      type="button" class="btn btn-sub do" (click)="preview(previewName)">
       <i class="icon htvbdh_tcdt_tuchoi"></i>
       <span>Xem trước</span>
     </button>
@@ -164,14 +165,11 @@
             </div>
             <div nz-col nzSpan="24">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true" nzSpan="24">
-                  Căn cứ pháp lý
+                <nz-form-label [nzNoColon]="true">
+                  File đính kèm biên bản kiểm tra HSKT đã ký
                 </nz-form-label>
-              </nz-form-item>
-              <nz-form-item>
-                <div class="list-file" nz-col nzSpan="24">
-                  <file-list>
-                  </file-list>
+                <div class="list-file">
+                  <file-list [isViewDetail]="isView" [data]="listCanCu"></file-list>
                 </div>
               </nz-form-item>
             </div>
@@ -300,7 +298,7 @@
             <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Loại hàng hoá
+                  Loại hàng DTQG
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
@@ -312,7 +310,7 @@
             <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Chủng loại hàng hóa
+                  Chủng loại hàng DTQG
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
@@ -413,25 +411,39 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="24">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> File đính kèm biên bản đã ký </nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                  <div class="list-file">
-                    <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                      <input type="text" nz-input />
-                    </nz-input-group>
-                    <ng-template #suffixTemplateInfo>
-                      <div class="icon-file-dinh-kem">
-                        <i class="icon htvbdh_tcdt_tep"></i>
-                        <input class="input-file" (change)="getNameFile($event)" type="file" />
-                      </div>
-                    </ng-template>
-                  </div>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
           </div>
+<!--          <div class="pd-10"><strong>Các văn bản, tài liệu kỹ thuật đã kiểm tra</strong></div>-->
+<!--          <nz-table class="nowrap pd-10" #tblHoSo [nzData]="viewTableHoSo" nzBordered>-->
+<!--            <thead>-->
+<!--            <tr>-->
+<!--              <th class="text-center" nzWidth="50px">STT</th>-->
+<!--              <th>Tên hồ sơ, tài liệu</th>-->
+<!--              <th>Loại tài liệu</th>-->
+<!--              <th>Số lượng</th>-->
+<!--              <th>Ghi chú</th>-->
+<!--              <th>File đính kèm</th>-->
+<!--              <th nzWidth="100px" class="text-center">Trạng thái kiểm tra</th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--            <tr *ngFor="let data of tblHoSo.data;let i = index">-->
+<!--              <ng-container>-->
+<!--                <td class="text-center">{{i + 1}}</td>-->
+<!--                <td>{{data.ten}}</td>-->
+<!--                <td>{{data.loai}}</td>-->
+<!--                <td>{{data.soLuong}}</td>-->
+<!--                <td>{{data.ghiChu}}</td>-->
+<!--                <td>-->
+<!--                  <a nz-button nzType="link"-->
+<!--                     (click)="downloadFile(data.fileDinhKem[0])">-->
+<!--                    {{(data.fileDinhKem && data.fileDinhKem.length > 0) ? data.fileDinhKem[0].fileName : null}}-->
+<!--                  </a>-->
+<!--                </td>-->
+<!--                <td class="text-center"><label nz-checkbox [(ngModel)]="data.trangThai" disabled="true"></label></td>-->
+<!--              </ng-container>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--          </nz-table>-->
         </form>
       </nz-collapse-panel>
     </nz-collapse>
@@ -449,22 +461,14 @@
                 <textarea nz-input [rows]="3" formControlName="ketLuan" placeholder="Nhập nội dung kết luận"></textarea>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="18">
+            <div nz-col nzSpan="18">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> File đính kèm biên bản đã ký </nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                  <div class="list-file">
-                    <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                      <input type="text" nz-input />
-                    </nz-input-group>
-                    <ng-template #suffixTemplateInfo>
-                      <div class="icon-file-dinh-kem">
-                        <i class="icon htvbdh_tcdt_tep"></i>
-                        <input class="input-file" (change)="getNameFile($event)" type="file" />
-                      </div>
-                    </ng-template>
-                  </div>
-                </nz-form-control>
+                <nz-form-label [nzNoColon]="true">
+                  Chọn văn bản, tài liệu bổ sung (nếu có)
+                </nz-form-label>
+                <div class="list-file">
+                  <file-list [isViewDetail]="isView" [data]="listFileDinhKem"></file-list>
+                </div>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="6">
@@ -490,20 +494,24 @@
 <ng-template #error let-control>
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
 </ng-template>
-<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="{{title.toUpperCase()}}" nzWidth="100%" (nzOnCancel)="closeDlg()">
+<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="{{title.toUpperCase()}}" nzWidth="100%"
+          (nzOnCancel)="closeDlg()">
   <div *nzModalContent class="modal__content">
     <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
   </div>
   <div *nzModalFooter>
-    <button nz-button (click)="printPreview()" class="modal__button--save">
+    <button nz-button (click)="printPreview()"
+            class="modal__button--save">
       <i class="icon htvbdh_printer"></i>
       In
     </button>
-    <button nz-button (click)="downloadPdf(previewName)" class="modal__button--save">
+    <button nz-button (click)="downloadPdf(previewName)"
+            class="modal__button--save">
       <i class="icon htvbdh_file-pdf"></i>
       Xuất .pdf
     </button>
-    <button nz-button (click)="downloadWord(previewName)" class="modal__button--save">
+    <button nz-button (click)="downloadWord(previewName)"
+            class="modal__button--save">
       <i class="icon htvbdh_file-word"></i>
       Xuất .docx
     </button>

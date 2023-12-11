@@ -160,18 +160,19 @@ export class DanhSachHangDuTruTrongKhoNgoaiDanhMucComponent extends Base2Compone
         this.expandSetString.add(idVirtual);
         return {
           idVirtual: idVirtual,
-          id: rowItem.id,
-          nam: rowItem.nam,
-          tenCuc: rowItem.tenCuc,
-          maDanhSach: rowItem.maDanhSach,
-          tenDanhSach: rowItem.tenDanhSach,
-          trangThai: rowItem.trangThai,
-          tenTrangThai: rowItem.tenTrangThai,
-          ngayTao: rowItem.ngayTao,
+          id: rowItem?.id,
+          soQdXhKdm: rowItem?.soQdXhKdm,
+          tenCuc: rowItem?.tenCuc,
+          maDanhSach: rowItem?.maDanhSach,
+          tenDanhSach: rowItem?.tenDanhSach,
+          trangThai: rowItem?.trangThai,
+          tenTrangThai: rowItem?.tenTrangThai,
+          ngayTao: rowItem?.ngayTao,
           childData: rs
         };
       }).value();
   }
+
 
   onExpandStringChange(id: string, checked: boolean) {
     if (checked) {
@@ -234,14 +235,14 @@ export class DanhSachHangDuTruTrongKhoNgoaiDanhMucComponent extends Base2Compone
       },
     });
   }
-
-  exportExcel() {
-    if (this.selectedItem) {
-      this.formData.patchValue({
-        maDanhSach: this.selectedItem.maDanhSach
-      });
-      this.exportData("danh-sach-hang-dtqg-theo-chi-dao-cua-chinh-phu.xlsx");
-    }
-  }
-
 }
+
+  // exportExcel() {
+  //   if (this.selectedItem) {
+  //     this.formData.patchValue({
+  //       maDanhSach: this.selectedItem.maDanhSach
+  //     });
+  //     this.exportData("danh-sach-hang-dtqg-theo-chi-dao-cua-chinh-phu.xlsx");
+  //   }
+  // }
+

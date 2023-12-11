@@ -46,7 +46,7 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
       idPdKhDtl: [],
       idPdKhHdr: [],
       namKh: [dayjs().get('year'), [Validators.required]],
-      soQdKq: [],
+      soQdKq: [null, [Validators.required]],
       ngayHluc: [],
       ngayKy: [],
       soQd: ['', [Validators.required]],
@@ -90,8 +90,6 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
   async getDetail(idInput) {
     if (idInput) {
       let res = await this.detail(idInput);
-      console.log("1", res);
-
       if (res) {
         this.formData.patchValue({
           soQdKq: res.soQdKq?.split('/')[0],
@@ -117,7 +115,6 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
     body.ngayKy = body.ngayKy != null ? dayjs(body.ngayKy).format('YYYY-MM-DD') : null;
     body.fileDinhKems = this.fileDinhKem;
     body.danhSachCtiet = this.danhSachCtiet;
-    console.log(body)
     let res = await this.createUpdate(body);
     if (res) {
       if (isGuiDuyet) {
@@ -213,7 +210,6 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
     let res = await this.chaogiaUyquyenMualeService.search(body);
     if (res.data) {
       listTb = res.data.content.filter(x => x.soQdKq == null || x.soQdKq == "");
-      console.log(listTb)
     }
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách thông tin chào giá',
@@ -224,7 +220,7 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
       nzFooter: null,
       nzComponentParams: {
         dataTable: listTb,
-        dataHeader: ['Số quyết định phê duyệt KH MTT', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
+        dataHeader: ['Số quyết định phê duyệt KH MTT', 'Loại hàng DTQG', 'Chủng loại hàng DTQG'],
         dataColumn: ['soQd', 'tenLoaiVthh', 'tenCloaiVthh']
       },
     });
@@ -284,7 +280,6 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
       this.selected = true;
     }
     this.idRowSelect = data.id;
-    console.log(data, "345")
     this.dataTable = data.listChaoGia
     await this.spinner.hide();
   }

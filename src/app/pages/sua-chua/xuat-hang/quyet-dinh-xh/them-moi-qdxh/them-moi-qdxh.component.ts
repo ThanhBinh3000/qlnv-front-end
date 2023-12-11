@@ -100,9 +100,8 @@ export class ThemMoiQdxhComponent extends Base3Component implements OnInit {
       this.spinner.hide();
       if (res.data) {
         res.data?.forEach(item => {
-          item.ngayKyFr = moment(item.ngayKy).format('DD/MM/yyyy');
-          item.thoiHanNhapFr = moment(item.thoiHanNhap).format('DD/MM/yyyy');
-          item.thoiHanXuatFr = moment(item.thoiHanXuat).format('DD/MM/yyyy');
+          item.ngayNhap = item.thoiHanNhap
+          item.ngayXuat = item.thoiHanXuat
         })
         const modalQD = this.modal.create({
           nzTitle: 'Danh sách quyết định sửa chữa',
@@ -114,7 +113,7 @@ export class ThemMoiQdxhComponent extends Base3Component implements OnInit {
           nzComponentParams: {
             dataTable: res.data,
             dataHeader: ['Số quyết định sửa chữa', 'Trích yếu', 'Ngày ký', 'Thời hạn xuất', 'Thời hạn nhập'],
-            dataColumn: ['soQd', 'trichYeu', 'ngayKyFr', 'thoiHanXuatFr', 'thoiHanNhapFr']
+            dataColumn: ['soQd', 'trichYeu', 'ngayKy', 'ngayXuat', 'ngayNhap']
           },
         });
         modalQD.afterClose.subscribe(async (data) => {
@@ -176,8 +175,6 @@ export class ThemMoiQdxhComponent extends Base3Component implements OnInit {
     switch (this.formData.value.trangThai) {
       case STATUS.TU_CHOI_TP:
       case STATUS.TU_CHOI_LDC:
-        trangThai = STATUS.DU_THAO;
-        break;
       case STATUS.DU_THAO:
         trangThai = STATUS.CHO_DUYET_TP;
         break;

@@ -27,6 +27,7 @@ export class PhieuXuatKhoComponent extends Base3Component implements OnInit {
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, phieuXuatKhoScService);
     this.defaultURL = 'sua-chua/xuat-hang/phieu-xuat-kho'
+    this.defaultPermisson = 'SCHDTQG_XH_PXK';
     this.formData = this.fb.group({
       nam: null,
       soQdXh: null,

@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { STATUS } from "../../../../../constants/status";
-import { UserService } from "../../../../../services/user.service";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {STATUS} from "../../../../../constants/status";
+import {UserService} from "../../../../../services/user.service";
 
 @Component({
   selector: 'app-thong-tin-dau-thau-sctx',
@@ -13,12 +13,13 @@ export class ThongTinDauThauSctxComponent implements OnInit {
   isDetail: boolean = false;
   @Input() itemQdPdKhLcnt: any;
   @Input() itemDuAn: any;
-  STATUS = STATUS;
+  STATUS  = STATUS;
   listTrangThai: any[] = [
-    { ma: this.STATUS.DANG_CAP_NHAT, giaTri: 'Đang cập nhật' },
-    { ma: this.STATUS.CHUA_CAP_NHAT, giaTri: 'Chưa cập nhật' },
-    { ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Hoàn thành' },
+    {ma: this.STATUS.DANG_CAP_NHAT, giaTri: 'Đang cập nhật'},
+    {ma: this.STATUS.CHUA_CAP_NHAT, giaTri: 'Chưa cập nhật'},
+    {ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Hoàn thành'},
   ];
+  @Output() dataItemTtdt = new EventEmitter<object>();
 
   constructor(
     public userService: UserService,
@@ -36,7 +37,13 @@ export class ThongTinDauThauSctxComponent implements OnInit {
   showList() {
     this.isDetail = false;
   }
-
+  receivedData(data: any) {
+    this.itemQdPdKhLcnt = data;
+    this.emitDataTtdt(data);
+  }
+  emitDataTtdt(data) {
+    this.dataItemTtdt.emit(data);
+  }
 
   redirectToChiTiet(id: number, isView?: boolean) {
     this.selectedId = id;

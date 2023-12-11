@@ -27,7 +27,7 @@ import { chain, cloneDeep } from 'lodash';
 import {
   DialogTableSelectionComponent
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
-import { convertTienTobangChu } from 'src/app/shared/commonFunction';
+import { convertTienTobangChu, convertTienTobangChuThapPhan } from 'src/app/shared/commonFunction';
 import { PassDataXuatBangKeCanHang } from '../bang-ke-can.component';
 import { PREVIEW } from 'src/app/constants/fileType';
 
@@ -377,7 +377,7 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
       this.formData.patchValue({ dcnbBangKeCanHangDtl: [...this.formData.value.dcnbBangKeCanHangDtl, this.dcnbBangKeCanHangDtlCreate] });
       this.clearRow();
       this.tinhTong();
-      this.formData.patchValue({ tongTrongLuongBaoBi: 0, tongTrongLuongTruBi: this.formData.value.tongTrongLuongCabaoBi, tongTrongLuongTruBiText: convertTienTobangChu(this.formData.value.tongTrongLuongCabaoBi) })
+      this.formData.patchValue({ tongTrongLuongBaoBi: 0, tongTrongLuongTruBi: this.formData.value.tongTrongLuongCabaoBi, tongTrongLuongTruBiText: this.convertTienTobangChu(this.formData.value.tongTrongLuongCabaoBi, this.formData.value.donViTinh === "kg" ? "kilôgam" : this.formData.value.donViTinh) })
     }
   }
 
@@ -394,13 +394,13 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
   async deleteRow(i: number) {
     this.formData.value.dcnbBangKeCanHangDtl.splice(i, 1);
     this.tinhTong();
-    this.formData.patchValue({ tongTrongLuongBaoBi: 0, tongTrongLuongTruBi: this.formData.value.tongTrongLuongCabaoBi, tongTrongLuongTruBiText: convertTienTobangChu(this.formData.value.tongTrongLuongCabaoBi) })
+    this.formData.patchValue({ tongTrongLuongBaoBi: 0, tongTrongLuongTruBi: this.formData.value.tongTrongLuongCabaoBi, tongTrongLuongTruBiText: this.convertTienTobangChu(this.formData.value.tongTrongLuongCabaoBi, this.formData.value.donViTinh === "kg" ? "kilôgam" : this.formData.value.donViTinh) })
   }
 
   async saveRow(i: number) {
     this.formData.value.dcnbBangKeCanHangDtl[i].isEdit = false;
     this.tinhTong();
-    this.formData.patchValue({ tongTrongLuongBaoBi: 0, tongTrongLuongTruBi: this.formData.value.tongTrongLuongCabaoBi, tongTrongLuongTruBiText: convertTienTobangChu(this.formData.value.tongTrongLuongCabaoBi) })
+    this.formData.patchValue({ tongTrongLuongBaoBi: 0, tongTrongLuongTruBi: this.formData.value.tongTrongLuongCabaoBi, tongTrongLuongTruBiText: this.convertTienTobangChu(this.formData.value.tongTrongLuongCabaoBi, this.formData.value.donViTinh === "kg" ? "kilôgam" : this.formData.value.donViTinh) })
   }
 
   async cancelRow(i: number) {
@@ -620,18 +620,21 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
   }
   async trongLuongTruBi() {
     let data = cloneDeep(this.formData.value);
-    if (data.tongTrongLuongBaoBi) {
-      let tongTrongLuongTruBi = data.tongTrongLuongCabaoBi - data.tongTrongLuongBaoBi;
-      this.formData.patchValue({
-        tongTrongLuongTruBi,
-        tongTrongLuongTruBiText: convertTienTobangChu(tongTrongLuongTruBi),
-        tongTrongLuongBaoBi: data.tongTrongLuongBaoBi,
-      });
+    if (!!!data.tongTrongLuongBaoBi) {
+      data.tongTrongLuongBaoBi = 0;
     }
+    let tongTrongLuongTruBi = data.tongTrongLuongCabaoBi - data.tongTrongLuongBaoBi;
+    this.formData.patchValue({
+      tongTrongLuongTruBi,
+      tongTrongLuongTruBiText: this.convertTienTobangChu(tongTrongLuongTruBi, this.formData.value.donViTinh === "kg" ? "kilôgam" : this.formData.value.donViTinh),
+      tongTrongLuongBaoBi: data.tongTrongLuongBaoBi,
+    });
   }
 
-  convertTienTobangChu(tien: number) {
-    let rs = convertTienTobangChu(tien);
-    return rs.charAt(0).toUpperCase() + rs.slice(1);
+  convertTienTobangChu(tien: number, donVi?: string) {
+    if (tien > 0) {
+      let rs = convertTienTobangChuThapPhan(Number(tien.toFixed(1)));
+      return rs.charAt(0).toUpperCase() + rs.slice(1) + (donVi ? " " + donVi : "");
+    }
   }
 }

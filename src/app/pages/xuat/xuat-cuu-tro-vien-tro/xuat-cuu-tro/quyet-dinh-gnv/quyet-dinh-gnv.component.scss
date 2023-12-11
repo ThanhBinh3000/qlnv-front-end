@@ -1,0 +1,13 @@
+.break-2 p {
+    white-space: break-spaces !important;
+    min-width: 250px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.break {
+    white-space: break-spaces !important;
+    min-width: 150;
+}

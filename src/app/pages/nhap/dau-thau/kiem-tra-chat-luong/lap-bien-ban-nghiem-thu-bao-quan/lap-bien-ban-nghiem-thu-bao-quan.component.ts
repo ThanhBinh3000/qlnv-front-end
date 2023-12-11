@@ -271,9 +271,10 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      this.dataTable.forEach(item =>
-        item.detail = item.dtlList.filter(i => i.maDvi.startsWith(this.userInfo.MA_DVI))[0]
-      );
+      for (let i = 0; i < this.dataTable.length; i++) {
+        this.dataTable[i].detail = this.dataTable[i].dtlList.filter(i => i.maDvi.startsWith(this.userInfo.MA_DVI))[0]
+        this.expandSet.add(i)
+      }
       this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
     } else {
@@ -557,9 +558,9 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
     return endValue.getTime() <= this.tuNgayLP.getTime();
   };
 
-  hienThiXem(data) {
+  hienThiXem(data){
     if (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_XEM') && data != null) {
-      if (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_THEM') && (data.trangThai == STATUS.DU_THAO
+      if(this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_THEM') && (data.trangThai == STATUS.DU_THAO
         || data.trangThai == STATUS.TU_CHOI_KT
         || data.trangThai == STATUS.TU_CHOI_TK
         || data.trangThai == STATUS.TU_CHOI_LDCC)) {

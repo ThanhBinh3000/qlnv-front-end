@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { STATUS } from "../../../../../constants/status";
-import { UserService } from 'src/app/services/user.service';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {STATUS} from "../../../../../constants/status";
+import {UserService} from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-quyet-dinh-phe-duyet-du-an-dtxd',
@@ -17,8 +17,8 @@ export class QuyetDinhPheDuyetDuAnDtxdComponent implements OnInit {
   isDetail: boolean = false;
   STATUS = STATUS;
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
+    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
+    {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'},
   ];
   @Output() dataItemDaDtxd = new EventEmitter<object>();
 
@@ -28,9 +28,7 @@ export class QuyetDinhPheDuyetDuAnDtxdComponent implements OnInit {
   }
 
   async ngOnInit() {
-    console.log(this.itemQdPdDaDtxd, "this.1232")
     if (this.itemQdPdDaDtxd) {
-      console.log(this.itemQdPdDaDtxd, "this.itemQdPdDaDtxd")
       this.selectedId = this.itemQdPdDaDtxd.id;
       this.isDetail = true;
       this.isViewDetail = this.itemQdPdDaDtxd.trangThai == STATUS.BAN_HANH ? true : false;

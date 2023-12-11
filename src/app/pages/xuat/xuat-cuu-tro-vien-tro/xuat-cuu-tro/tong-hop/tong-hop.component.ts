@@ -1,18 +1,19 @@
-import {ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {CuuTroVienTroComponent} from "src/app/pages/xuat/xuat-cuu-tro-vien-tro/xuat-cuu-tro/cuu-tro-vien-tro.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "src/app/services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DonviService} from "src/app/services/donvi.service";
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { CuuTroVienTroComponent } from "src/app/pages/xuat/xuat-cuu-tro-vien-tro/xuat-cuu-tro/cuu-tro-vien-tro.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "src/app/services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DonviService } from "src/app/services/donvi.service";
 import {
   TongHopPhuongAnCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/TongHopPhuongAnCuuTro.service";
-import {UserLogin} from "src/app/models/userlogin";
-import {MESSAGE} from "src/app/constants/message";
-import {Base2Component} from "src/app/components/base2/base2.component";
-import {CHUC_NANG} from "src/app/constants/status";
+import { UserLogin } from "src/app/models/userlogin";
+import { MESSAGE } from "src/app/constants/message";
+import { Base2Component } from "src/app/components/base2/base2.component";
+import { CHUC_NANG } from "src/app/constants/status";
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-tong-hop',
@@ -33,10 +34,10 @@ export class TongHopComponent extends Base2Component implements OnInit {
   idQdPd: number = 0;
   isViewQdPd: boolean = false;
   listTrangThai: any[] = [
-    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
-    {ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ'},
-    {ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LĐ Vụ'},
-    {ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt - CĐ Vụ'},
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ' },
+    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LĐ Vụ' },
+    { ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt - CĐ Vụ' },
   ];
 
   constructor(
@@ -49,7 +50,8 @@ export class TongHopComponent extends Base2Component implements OnInit {
     private tongHopPhuongAnCuuTroService: TongHopPhuongAnCuuTroService,
     private cuuTroVienTroComponent: CuuTroVienTroComponent,
     private el: ElementRef,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private dataService: DataService
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopPhuongAnCuuTroService);
     this.vldTrangThai = cuuTroVienTroComponent;
@@ -108,7 +110,15 @@ export class TongHopComponent extends Base2Component implements OnInit {
   taoQuyetDinh(data) {
     this.eventTaoQd.emit(data);
   }
-
+  taoQuyetDinhPdPa(data) {
+    const dataSend = {
+      ...data,
+      type: "TH",
+      isTaoQdPdPa: true
+    }
+    this.dataService.changeData(dataSend);
+    this.eventTaoQd.emit(2);
+  }
   openModalQdPd(id: number) {
     this.idQdPd = id;
     this.isViewQdPd = true;

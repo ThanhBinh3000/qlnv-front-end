@@ -6,7 +6,7 @@
           <nz-form-label nzRequired [nzSpan]="24" [nzNoColon]="true"> Tên gói thầu</nz-form-label>
           <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
             <input nz-input formControlName="goiThau" [nzAutocomplete]="auto" [disabled]="isReadOnly"
-              [readonly]="isReadOnly">
+                   [readonly]="isReadOnly">
             <nz-autocomplete #auto (selectionChange)="changeGoiThau($event)">
               <nz-auto-option *ngFor="let option of listGoiThau" [nzValue]="option">{{
                 option }}
@@ -19,8 +19,8 @@
         <nz-form-item>
           <nz-form-label nzRequired [nzSpan]="24" [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
           <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-            <nz-select formControlName="cloaiVthh" [nzDisabled]="isReadOnly"
-              (ngModelChange)="onChangeCloaiVthh($event)">
+            <nz-select formControlName="cloaiVthh" [nzDisabled]="isReadOnly" nzShowSearch nzAllowClear
+                       (ngModelChange)="onChangeCloaiVthh($event)">
               <nz-option *ngFor="let p of listChungLoai" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
             </nz-select>
           </nz-form-control>
@@ -63,8 +63,8 @@
           <nz-form-label [nzSpan]="24" [nzNoColon]="true">Tổng giá trị gói thầu theo đơn giá có VAT được duyệt
           </nz-form-label>
           <nz-form-control [nzSpan]="24">
-            <span class="blue-text">{{formGoiThau.value.soLuong * formGoiThau.value.donGiaVat | number : '1.0-1'
-              :'vi_VN'}}
+            <span
+              class="blue-text">{{formGoiThau.value.soLuong * formGoiThau.value.donGiaVat | number : '1.0-1' :'vi_VN'}}
               (đ)</span>
           </nz-form-control>
         </nz-form-item>
@@ -73,186 +73,186 @@
   </form>
   <div class="mt-16">
     <nz-table nzBordered [nzFrontPagination]="false" [nzShowPagination]="false" [nzData]="dataTable"
-      [nzScroll]="{ x: 'scroll', y: 'scroll' }">
+              [nzScroll]="{ x: 'scroll', y: 'scroll' }">
       <thead>
-        <tr>
-          <!--        <th nzWidth="40px"></th>-->
-          <th nzWidth="235px" class="text-center">Cục DTNN KV</th>
-          <th nzWidth="235px" class="text-center">Chi cục DTNN</th>
-          <th nzWidth="160px" class="text-center">Điểm kho</th>
-          <th nzWidth="120px" class="text-center wrap-text">Chỉ tiêu kế hoạch được giao</th>
-          <th nzWidth="130px" class="text-center wrap-text">Số đã thực hiện</th>
-          <th nzWidth="120px" class="text-center wrap-text">Số lượng trình<br />phê duyệt</th>
-          <th nzWidth="150px" class="text-center wrap-text">Thành tiền theo đơn giá có VAT được duyệt (đ)</th>
-          <th nzWidth="80px" [nzRight]="true" class="text-center">Hành động</th>
-        </tr>
+      <tr>
+<!--        <th nzWidth="40px"></th>-->
+        <th nzWidth="235px" class="text-center">Cục DTNN KV</th>
+        <th nzWidth="235px" class="text-center">Chi cục DTNN</th>
+        <th nzWidth="160px" class="text-center">Điểm kho</th>
+        <th nzWidth="120px" class="text-center wrap-text">Chỉ tiêu kế hoạch được giao</th>
+        <th nzWidth="130px" class="text-center wrap-text">Số đã thực hiện</th>
+        <th nzWidth="120px" class="text-center wrap-text">Số lượng trình<br/>phê duyệt</th>
+        <th nzWidth="150px" class="text-center wrap-text">Thành tiền theo đơn giá có VAT được duyệt (đ)</th>
+        <th nzWidth="80px" [nzRight]="true" class="text-center">Hành động</th>
+      </tr>
       </thead>
       <tbody>
-        <tr class="root-input">
-          <!--        <td></td>-->
-          <td>
-            <nz-select [(ngModel)]="thongTinCuc.maDvi" (ngModelChange)="onChangeCuc($event)">
-              <nz-option *ngFor="let p of listCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
-            </nz-select>
-          </td>
-          <td></td>
-          <td></td>
-          <td>{{thongTinCuc.soLuongTheoChiTieu}}</td>
-          <td>{{thongTinCuc.soLuongDaMua}}</td>
-          <td>
-            <nz-input-number [(ngModel)]="thongTinCuc.soLuong" class="text-right" nz-input [nzMin]="1" [nzStep]="1"
-              [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-            </nz-input-number>
-          </td>
-          <td></td>
-          <td class="text-left">
-            <a (click)="addCuc()">
-              <i class="icon htvbdh_dau-cong xanhla"></i>
-            </a>
-            <a (click)="clearCuc()">
-              <i class="fa fa-refresh"></i>
-            </a>
-          </td>
-        </tr>
-        <ng-container *ngFor="let dataCuc of dataTable , let i = index">
-          <tr class="root-tree">
-            <ng-container *ngIf="!dataCuc.edit; else editCuc">
-              <!--            <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>-->
-              <td>{{ dataCuc.tenDvi }}</td>
-              <td></td>
-              <td></td>
-              <td>{{ dataCuc.soLuongTheoChiTieu }}</td>
-              <td>{{ dataCuc.soLuongDaMua}}</td>
-              <td>{{ dataCuc.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
-              <td>{{ dataCuc.soLuong * formGoiThau.value.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-left">
-                <a (click)="editRowCuc(i)">
-                  <i class="fa fa-pencil" title="Sửa"></i>
-                </a>
-                <a (click)="deleteRow(i,-1,-1)">
-                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                </a>
-              </td>
-            </ng-container>
-            <ng-template #editCuc>
-              <!--            <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>-->
-              <td>{{ dataCuc.tenDvi }}</td>
-              <td></td>
-              <td></td>
-              <td>{{ dataCuc.soLuongTheoChiTieu }}</td>
-              <td>{{ dataCuc.soLuongDaMua}}</td>
+      <tr class="root-input">
+<!--        <td></td>-->
+        <td>
+          <nz-select [(ngModel)]="thongTinCuc.maDvi" (ngModelChange)="onChangeCuc($event)" nzShowSearch nzAllowClear>
+            <nz-option *ngFor="let p of listCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
+          </nz-select>
+        </td>
+        <td></td>
+        <td></td>
+        <td class="text-right">{{thongTinCuc.soLuongTheoChiTieu}}</td>
+        <td class="text-right">{{thongTinCuc.soLuongDaMua}}</td>
+        <td>
+          <nz-input-number [(ngModel)]="thongTinCuc.soLuong" class="text-right" nz-input [nzMin]="1" [nzStep]="1"
+                           [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+          </nz-input-number>
+        </td>
+        <td></td>
+        <td class="text-left">
+          <a (click)="addCuc()">
+            <i class="icon htvbdh_dau-cong xanhla"></i>
+          </a>
+          <a (click)="clearCuc()">
+            <i class="fa fa-refresh"></i>
+          </a>
+        </td>
+      </tr>
+      <ng-container *ngFor="let dataCuc of dataTable , let i = index">
+        <tr class="root-tree">
+          <ng-container *ngIf="!dataCuc.edit; else editCuc">
+<!--            <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>-->
+            <td>{{ dataCuc.tenDvi }}</td>
+            <td></td>
+            <td></td>
+            <td class="text-right">{{ dataCuc.soLuongTheoChiTieu }}</td>
+            <td class="text-right">{{ dataCuc.soLuongDaMua}}</td>
+            <td class="text-right">{{ dataCuc.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
+            <td class="text-right">{{ dataCuc.soLuong * formGoiThau.value.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
+            <td class="text-left">
+              <a (click)="editRowCuc(i)">
+                <i class="fa fa-pencil" title="Sửa"></i>
+              </a>
+              <a (click)="deleteRow(i,-1,-1)">
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+              </a>
+            </td>
+          </ng-container>
+          <ng-template #editCuc>
+<!--            <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>-->
+            <td>{{ dataCuc.tenDvi }}</td>
+            <td></td>
+            <td></td>
+            <td class="text-right">{{ dataCuc.soLuongTheoChiTieu }}</td>
+            <td class="text-right">{{ dataCuc.soLuongDaMua}}</td>
 
-              <td>
-                <nz-input-number [(ngModel)]="thongTinCucEdit[i]" class="text-right" nz-input [nzMin]="1" [nzStep]="1"
-                  [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-                </nz-input-number>
-              </td>
-              <td>{{ thongTinCucEdit[i] * formGoiThau.value.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
-              <td>
-                <a (click)="saveEditCuc(i)" class="save">
-                  <i class="fa fa-save"></i>
-                </a>
-                <a (click)="cancelEditCuc(i)">
-                  <i class="fa fa-times do"></i>
-                </a>
-              </td>
-            </ng-template>
-          </tr>
-          <!--        <ng-container *ngIf="expandSet.has(i)">-->
-          <!--          <tr class="body-tree">-->
-          <!--            <td></td>-->
-          <!--            <td></td>-->
-          <!--            <td>-->
-          <!--              <nz-select [(ngModel)]="thongTinChiCuc[dataCuc.maDvi].maDvi"-->
-          <!--                         (ngModelChange)="onChangeChiCuc($event,dataCuc.maDvi)">-->
-          <!--                <nz-option *ngFor="let p of listChiCucMap[dataCuc.maDvi]" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">-->
-          <!--                </nz-option>-->
-          <!--              </nz-select>-->
-          <!--            </td>-->
-          <!--            <td></td>-->
-          <!--            <td></td>-->
-          <!--            <td></td>-->
-          <!--            <td>-->
-          <!--              <nz-input-number [(ngModel)]="thongTinChiCuc[dataCuc.maDvi].soLuong" class="text-right" nz-input-->
-          <!--                               [nzMin]="1" [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"-->
-          <!--                               [nzParser]="globals.parser">-->
-          <!--              </nz-input-number>-->
-          <!--            </td>-->
-          <!--            <td></td>-->
-          <!--            <td class="text-left">-->
-          <!--              <a (click)="addChiCuc(i,dataCuc.maDvi)">-->
-          <!--                <i class="icon htvbdh_dau-cong xanhla"></i>-->
-          <!--              </a>-->
-          <!--              <a (click)="clearChiCuc(dataCuc.maDvi)">-->
-          <!--                <i class="fa fa-refresh"></i>-->
-          <!--              </a>-->
-          <!--            </td>-->
-          <!--          </tr>-->
-          <!--          <ng-container *ngFor="let dataChiCuc of dataCuc.children , let y = index">-->
-          <!--            <tr>-->
-          <!--              <td></td>-->
-          <!--              <td [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>-->
-          <!--              <td>{{dataChiCuc.tenDvi}}</td>-->
-          <!--              <td></td>-->
-          <!--              <td></td>-->
-          <!--              <td></td>-->
-          <!--              <td>{{dataChiCuc.soLuong}}</td>-->
-          <!--              <td></td>-->
-          <!--              <td class="text-left">-->
-          <!--                <a (click)="deleteRow(i,y,-1)">-->
-          <!--                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
-          <!--                </a>-->
-          <!--              </td>-->
-          <!--            </tr>-->
-          <!--            <ng-container *ngIf="expandSet2.has(y)">-->
-          <!--              <tr class="body-input">-->
-          <!--                <td></td>-->
-          <!--                <td></td>-->
-          <!--                <td></td>-->
-          <!--                <td>-->
-          <!--                  <nz-select [(ngModel)]="thongTinDiemKho[dataChiCuc.maDvi].maDvi">-->
-          <!--                    <nz-option *ngFor="let p of listDiemKhoMap[dataChiCuc.maDvi]" [nzValue]="p.maDvi"-->
-          <!--                               [nzLabel]="p.tenDvi">-->
-          <!--                    </nz-option>-->
-          <!--                  </nz-select>-->
-          <!--                </td>-->
-          <!--                <td></td>-->
-          <!--                <td></td>-->
-          <!--                <td>-->
-          <!--                  <nz-input-number [(ngModel)]="thongTinDiemKho[dataChiCuc.maDvi].soLuong" class="text-right" nz-input-->
-          <!--                                   [nzMin]="1" [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"-->
-          <!--                                   [nzParser]="globals.parser">-->
-          <!--                  </nz-input-number>-->
-          <!--                </td>-->
-          <!--                <td></td>-->
-          <!--                <td class="text-left">-->
-          <!--                  <a (click)="addDiemKho(i,y,dataChiCuc.maDvi)">-->
-          <!--                    <i class="icon htvbdh_dau-cong xanhla"></i>-->
-          <!--                  </a>-->
-          <!--                  <a (click)="clearDiemKho(dataChiCuc.maDvi)">-->
-          <!--                    <i class="fa fa-refresh"></i>-->
-          <!--                  </a>-->
-          <!--                </td>-->
-          <!--              </tr>-->
-          <!--              <tr *ngFor="let itemChild of dataChiCuc.children , let z = index">-->
-          <!--                <td></td>-->
-          <!--                <td></td>-->
-          <!--                <td></td>-->
-          <!--                <td>{{itemChild.tenDvi}}</td>-->
-          <!--                <td></td>-->
-          <!--                <td></td>-->
-          <!--                <td>{{itemChild.soLuong}}</td>-->
-          <!--                <td></td>-->
-          <!--                <td>-->
-          <!--                  <a (click)="deleteRow(i,y,z)">-->
-          <!--                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
-          <!--                  </a>-->
-          <!--                </td>-->
-          <!--              </tr>-->
-          <!--            </ng-container>-->
-          <!--          </ng-container>-->
-          <!--        </ng-container>-->
-        </ng-container>
+            <td>
+              <nz-input-number [(ngModel)]="thongTinCucEdit[i]" class="text-right" nz-input [nzMin]="1" [nzStep]="1"
+                               [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+              </nz-input-number>
+            </td>
+            <td class="text-right">{{ thongTinCucEdit[i] * formGoiThau.value.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
+            <td>
+              <a (click)="saveEditCuc(i)" class="save">
+                <i class="fa fa-save"></i>
+              </a>
+              <a (click)="cancelEditCuc(i)">
+                <i class="fa fa-times do"></i>
+              </a>
+            </td>
+          </ng-template>
+        </tr>
+<!--        <ng-container *ngIf="expandSet.has(i)">-->
+<!--          <tr class="body-tree">-->
+<!--            <td></td>-->
+<!--            <td></td>-->
+<!--            <td>-->
+<!--              <nz-select [(ngModel)]="thongTinChiCuc[dataCuc.maDvi].maDvi"-->
+<!--                         (ngModelChange)="onChangeChiCuc($event,dataCuc.maDvi)">-->
+<!--                <nz-option *ngFor="let p of listChiCucMap[dataCuc.maDvi]" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">-->
+<!--                </nz-option>-->
+<!--              </nz-select>-->
+<!--            </td>-->
+<!--            <td></td>-->
+<!--            <td></td>-->
+<!--            <td></td>-->
+<!--            <td>-->
+<!--              <nz-input-number [(ngModel)]="thongTinChiCuc[dataCuc.maDvi].soLuong" class="text-right" nz-input-->
+<!--                               [nzMin]="1" [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"-->
+<!--                               [nzParser]="globals.parser">-->
+<!--              </nz-input-number>-->
+<!--            </td>-->
+<!--            <td></td>-->
+<!--            <td class="text-left">-->
+<!--              <a (click)="addChiCuc(i,dataCuc.maDvi)">-->
+<!--                <i class="icon htvbdh_dau-cong xanhla"></i>-->
+<!--              </a>-->
+<!--              <a (click)="clearChiCuc(dataCuc.maDvi)">-->
+<!--                <i class="fa fa-refresh"></i>-->
+<!--              </a>-->
+<!--            </td>-->
+<!--          </tr>-->
+<!--          <ng-container *ngFor="let dataChiCuc of dataCuc.children , let y = index">-->
+<!--            <tr>-->
+<!--              <td></td>-->
+<!--              <td [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>-->
+<!--              <td>{{dataChiCuc.tenDvi}}</td>-->
+<!--              <td></td>-->
+<!--              <td></td>-->
+<!--              <td></td>-->
+<!--              <td>{{dataChiCuc.soLuong}}</td>-->
+<!--              <td></td>-->
+<!--              <td class="text-left">-->
+<!--                <a (click)="deleteRow(i,y,-1)">-->
+<!--                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
+<!--                </a>-->
+<!--              </td>-->
+<!--            </tr>-->
+<!--            <ng-container *ngIf="expandSet2.has(y)">-->
+<!--              <tr class="body-input">-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td>-->
+<!--                  <nz-select [(ngModel)]="thongTinDiemKho[dataChiCuc.maDvi].maDvi">-->
+<!--                    <nz-option *ngFor="let p of listDiemKhoMap[dataChiCuc.maDvi]" [nzValue]="p.maDvi"-->
+<!--                               [nzLabel]="p.tenDvi">-->
+<!--                    </nz-option>-->
+<!--                  </nz-select>-->
+<!--                </td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td>-->
+<!--                  <nz-input-number [(ngModel)]="thongTinDiemKho[dataChiCuc.maDvi].soLuong" class="text-right" nz-input-->
+<!--                                   [nzMin]="1" [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"-->
+<!--                                   [nzParser]="globals.parser">-->
+<!--                  </nz-input-number>-->
+<!--                </td>-->
+<!--                <td></td>-->
+<!--                <td class="text-left">-->
+<!--                  <a (click)="addDiemKho(i,y,dataChiCuc.maDvi)">-->
+<!--                    <i class="icon htvbdh_dau-cong xanhla"></i>-->
+<!--                  </a>-->
+<!--                  <a (click)="clearDiemKho(dataChiCuc.maDvi)">-->
+<!--                    <i class="fa fa-refresh"></i>-->
+<!--                  </a>-->
+<!--                </td>-->
+<!--              </tr>-->
+<!--              <tr *ngFor="let itemChild of dataChiCuc.children , let z = index">-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td>{{itemChild.tenDvi}}</td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td>{{itemChild.soLuong}}</td>-->
+<!--                <td></td>-->
+<!--                <td>-->
+<!--                  <a (click)="deleteRow(i,y,z)">-->
+<!--                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
+<!--                  </a>-->
+<!--                </td>-->
+<!--              </tr>-->
+<!--            </ng-container>-->
+<!--          </ng-container>-->
+<!--        </ng-container>-->
+      </ng-container>
       </tbody>
     </nz-table>
   </div>

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import { Base2Component } from "../../../../../components/base2/base2.component";
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "../../../../../services/storage.service";
@@ -16,7 +16,7 @@ import { cloneDeep } from "lodash";
 import {
   QuyetDinhPheDuyetPhuongAnCuuTroService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhPheDuyetPhuongAnCuuTro.service";
-import { LOAI_HANG_DTQG, TEN_LOAI_VTHH } from "../../../../../constants/config";
+import {LOAI_HANG_DTQG, TEN_LOAI_VTHH} from "../../../../../constants/config";
 
 @Component({
   selector: "app-quyet-dinh-phuong-an",
@@ -31,13 +31,13 @@ export class QuyetDinhPhuongAnComponent extends Base2Component implements OnInit
   loaiVthhCache: string;
   @Output() eventTaoQd: EventEmitter<any> = new EventEmitter<any>();
   constructor(httpClient: HttpClient,
-    storageService: StorageService,
-    notification: NzNotificationService,
-    spinner: NgxSpinnerService,
-    modal: NzModalService,
-    private datePipe: DatePipe,
-    private donviService: DonviService,
-    private quyetDinhPheDuyetPhuongAnCuuTroService: QuyetDinhPheDuyetPhuongAnCuuTroService) {
+              storageService: StorageService,
+              notification: NzNotificationService,
+              spinner: NgxSpinnerService,
+              modal: NzModalService,
+              private datePipe: DatePipe,
+              private donviService: DonviService,
+              private quyetDinhPheDuyetPhuongAnCuuTroService: QuyetDinhPheDuyetPhuongAnCuuTroService) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPheDuyetPhuongAnCuuTroService);
     this.formData = this.fb.group({
       nam: null,

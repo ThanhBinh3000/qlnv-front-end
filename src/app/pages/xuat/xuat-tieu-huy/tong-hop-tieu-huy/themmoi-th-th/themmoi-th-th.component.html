@@ -1,0 +1,65 @@
+<div class="bg-trang">
+  <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
+    <div nz-row [nzGutter]="18">
+      <div nz-col [nzSpan]="24">
+        <nz-form-control [nzErrorTip]="error">
+          <nz-form-label>Mã danh sách</nz-form-label>
+          <nz-form-item>
+            <nz-input-group>
+              <input nz-input formControlName="maDanhSach" readonly />
+            </nz-input-group>
+          </nz-form-item>
+        </nz-form-control>
+      </div>
+      <div nz-col [nzSpan]="24">
+        <nz-form-control [nzErrorTip]="error">
+          <nz-form-label nzRequired>Tên danh sách</nz-form-label>
+          <nz-form-item>
+            <input nz-input formControlName="tenDanhSach" />
+          </nz-form-item>
+        </nz-form-control>
+      </div>
+      <div nz-col [nzSpan]="24">
+        <nz-form-control [nzErrorTip]="error">
+          <nz-form-label>Thời gian tổng hợp</nz-form-label>
+          <nz-form-item>
+            <nz-date-picker nzFormat="dd/MM/yyyy HH:mm:ss" formControlName="ngayTao" nzDisabled="true">
+            </nz-date-picker>
+          </nz-form-item>
+        </nz-form-control>
+      </div>
+      <div nz-col [nzSpan]="24">
+        <nz-form-control [nzErrorTip]="error">
+          <nz-form-label [nzNoColon]="true"> Tài liệu đính kèm</nz-form-label>
+          <file-list [data]="fileDinhKem" [isViewDetail]="false"></file-list>
+        </nz-form-control>
+      </div>
+      <div nz-col [nzSpan]="24">
+        <nz-form-control [nzErrorTip]="error">
+          <nz-form-label nzRequired >Thời gian đề xuất tiêu hủy</nz-form-label>
+          <nz-range-picker [nzRanges]="ranges" ngModel formControlName="thoiGianTh" [nzFormat]="globals.dateFormat"
+                           (ngModelChange)="chonNgayDeXuat($event)"></nz-range-picker>
+        </nz-form-control>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button nz-button (click)="onCancel()" class="modal__button--cancel ml-2">
+        <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+        Đóng
+      </button>
+      <button nz-button (click)="handleOk()" class="modal__button--save ml-2">
+        <i nz-icon nzType="save"></i>
+        Lưu
+      </button>
+    </div>
+  </div>
+</div>
+<ng-template #error let-control>
+  <app-template-error #error [control]="control"></app-template-error>
+</ng-template>

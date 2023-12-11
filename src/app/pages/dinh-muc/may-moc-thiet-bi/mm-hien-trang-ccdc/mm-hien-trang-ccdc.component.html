@@ -12,11 +12,11 @@
           </div>
           <div nz-col nzSpan="3">
             <label class="search__label">Tên CCDC</label>
-            <input formControlName="tenCcdc" class="search__input" placeholder="Nhập text" nz-input />
+            <input formControlName="tenCcdc" class="search__input" placeholder="Nhập text" nz-input/>
           </div>
           <div nz-col nzSpan="3">
             <label class="search__label">Mã CCDC</label>
-            <input class="search__input" formControlName="maCcdc" placeholder="Nhập text" nz-input />
+            <input class="search__input" formControlName="maCcdc" placeholder="Nhập text" nz-input/>
           </div>
           <div nz-col nzSpan="5" *ngIf="userService.isTongCuc()">
             <label class="search__label">Cục DTNN KV</label>
@@ -46,69 +46,67 @@
       </form>
     </nz-card>
     <div class="group-button">
-      <h3>DANH SÁCH CÔNG CỤ DỤNG CỤ</h3>
+      <h3>DANH SÁCH TÀI SẢN LÀ MÁY MÓC, THIẾT BỊ CHUYÊN DÙNG</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub ml-2" (click)="exportData()"
-          *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HTMMTBCD_EXP')">
+        <button type="button" class="btn btn-sub ml-2" (click)="exportData()" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HTMMTBCD_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-sub xanh-nhat" (click)="chotDuLieu()"
-          *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HTMMTBCD_THEM')">
+        <button type="button"  class="btn btn-sub xanh-nhat" (click)="chotDuLieu()" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HTMMTBCD_THEM')">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Chốt dữ liệu năm</span>
         </button>
       </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-      <nz-table #basicTable nzBordered [nzFrontPagination]="false" [nzShowPagination]="false"
-        [nzScroll]="dataTable && dataTable.length ? { x: '2500px' } : null" [nzData]="dataTable">
+      <nz-table #basicTable nzBordered  [nzFrontPagination]="false" [nzShowPagination]="false"
+                [nzScroll]="dataTable && dataTable.length ? { x: '2500px' } : null"
+                [nzData]="dataTable">
         <thead>
-          <tr>
-            <th nzWidth="40px">STT</th>
-            <th nzWidth="250px" *ngIf="userService.isTongCuc()">Cục DTNN KV</th>
-            <th nzWidth="250px" *ngIf="!userService.isChiCuc()">Chi cục DTNN</th>
-            <th nzWidth="120px">Mã CCDC</th>
-            <th nzWidth="120px">Tên CCDC</th>
-            <th nzWidth="100px">Đơn vị tính</th>
-            <th nzWidth="120px">Năm kế hoạch</th>
-            <th nzWidth="200px">Số dư năm trước(1)</th>
-            <th nzWidth="200px">Số lượng nhập(2)</th>
-            <th nzWidth="200px">Số lượng điều chỉnh tăng(3)</th>
-            <th nzWidth="200px">Số lượng điều chỉnh giảm(4)</th>
-            <th nzWidth="200px">Số lượng cần sửa chữa(5)</th>
-            <th nzWidth="200px">Số lượng phải thanh lý(6)</th>
-            <th nzWidth="200px">Số lượng tồn(7)=1+2+3-4-6</th>
-            <th nzWidth="100px" nzRight>Hành động</th>
-          </tr>
+        <tr>
+          <th nzWidth="40px">STT</th>
+          <th nzWidth="250px" *ngIf="userService.isTongCuc()">Cục DTNN KV</th>
+          <th nzWidth="250px" *ngIf="!userService.isChiCuc()">Chi cục DTNN</th>
+          <th nzWidth="120px">Mã CCDC</th>
+          <th nzWidth="120px">Tên CCDC</th>
+          <th nzWidth="100px">Đơn vị tính</th>
+          <th nzWidth="120px">Năm kế hoạch</th>
+          <th nzWidth="200px">Số dư năm trước (1)</th>
+          <th nzWidth="200px">Số lượng nhập (2)</th>
+          <th nzWidth="200px">Số lượng điều chỉnh tăng (3)</th>
+          <th nzWidth="200px">Số lượng điều chỉnh giảm (4)</th>
+          <th nzWidth="200px">Số lượng cần sửa chữa (5)</th>
+          <th nzWidth="200px">Số lượng phải thanh lý (6)</th>
+          <th nzWidth="200px">Số lượng tồn (7)=1+2+3-4-6</th>
+          <th nzWidth="100px" nzRight>Hành động</th>
+        </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let data of basicTable.data; let i = index">
-            <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-            <td *ngIf="userService.isTongCuc()">{{ data.tenDviCha }}</td>
-            <td *ngIf="!userService.isChiCuc()">{{ data.tenDvi }}</td>
-            <td>{{ data.maTaiSan }}</td>
-            <td>{{ data.tenTaiSan}}</td>
-            <td>{{ data.donViTinh }}</td>
-            <td>{{ data.namKeHoach }}</td>
-            <td class="text-right">{{ data.soDuNamTruoc | number : '1.0-1' : 'vi_VN' }}</td>
-            <td class="text-right">{{ data.slNhap | number : '1.0-1' : 'vi_VN' }}</td>
-            <td class="text-right">{{ data.dieuChinhTang | number : '1.0-1' : 'vi_VN' }}</td>
-            <td class="text-right">{{ data.dieuChinhGiam | number : '1.0-1' : 'vi_VN' }}</td>
-            <td class="text-right">{{ data.slCanSuaChua | number : '1.0-1' : 'vi_VN' }}</td>
-            <td class="text-right">{{ data.slCanThanhLy | number : '1.0-1' : 'vi_VN' }}</td>
-            <td class="text-right">{{ data.slTon | number : '1.0-1' : 'vi_VN' }}</td>
-            <td nzRight>
-              <a (click)="openDialog(data, true)"
-                *ngIf="(data.trangThai == statusMm.DA_CHOT) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HTMMTBCD_XEM')">
-                <i class="fa fa-eye" title="Xem chi tiết"></i>
-              </a>
-              <a (click)="openDialog(data, false)"
-                *ngIf="(data.trangThai == statusMm.CHUA_CHOT) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HTMMTBCD_SUA') ">
-                <i class="fa fa-pencil" title="Sửa"></i>
-              </a>
-            </td>
-          </tr>
+        <tr *ngFor="let data of basicTable.data; let i = index">
+          <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+          <td *ngIf="userService.isTongCuc()">{{ data.tenDviCha }}</td>
+          <td *ngIf="!userService.isChiCuc()">{{ data.tenDvi }}</td>
+          <td>{{ data.maTaiSan }}</td>
+          <td>{{ data.tenTaiSan}}</td>
+          <td>{{ data.donViTinh }}</td>
+          <td>{{ data.namKeHoach }}</td>
+          <td class="text-right">{{ data.soDuNamTruoc | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-right">{{ data.slNhap | number : '1.0-1' : 'vi_VN' }}</td>
+          <td  class="text-right">{{ data.dieuChinhTang | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-right">{{ data.dieuChinhGiam | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-right">{{ data.slCanSuaChua | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-right">{{ data.slCanThanhLy | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-right">{{ data.slTon | number : '1.0-1' : 'vi_VN' }}</td>
+          <td nzRight>
+            <a  (click)="openDialog(data, true)"  *ngIf="(data.trangThai == statusMm.DA_CHOT) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HTMMTBCD_XEM')" >
+              <i class="fa fa-eye" title="Xem chi tiết"></i>
+            </a>
+            <a
+              (click)="openDialog(data, false)" *ngIf="(data.trangThai == statusMm.CHUA_CHOT) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HTMMTBCD_SUA') ">
+              <i class="fa fa-pencil" title="Sửa"></i>
+            </a>
+          </td>
+        </tr>
         </tbody>
       </nz-table>
       <div class="tab-content tab-menu">
@@ -117,8 +115,9 @@
           <div class="canphai">
             <!-- begin phân trang  -->
             <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
-              [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
-              (nzPageSizeChange)="changePageSize($event)">
+                           [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+                           (nzPageIndexChange)="changePageIndex($event)"
+                           (nzPageSizeChange)="changePageSize($event)">
               <ng-template #rangeTemplate let-range="range" let-total>
                 {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
               </ng-template>

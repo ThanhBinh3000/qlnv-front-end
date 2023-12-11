@@ -13,6 +13,7 @@ import { Validators } from "@angular/forms";
 import { Base3Component } from 'src/app/components/base3/base3.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
+import {MESSAGE} from "../../../../../constants/message";
 
 @Component({
   selector: 'app-chi-tiet-ho-so-thanh-ly',
@@ -53,7 +54,6 @@ export class ChiTietHoSoThanhLyComponent extends Base3Component implements OnIni
       thoiGianTlTu: [null],
       thoiGianTlDen: [null],
     });
-    this.symbol = '/' + this.userInfo.DON_VI.tenVietTat + "-KH&QLHDT";
   }
 
   async ngOnInit() {
@@ -67,11 +67,12 @@ export class ChiTietHoSoThanhLyComponent extends Base3Component implements OnIni
     if (this.id) {
       this.detail(this.id).then((res) => {
         if (res) {
-          let ttr = res.soHoSo.split('/')[0];
+          let ttr = res.soHoSo.split('/')
           this.formData.patchValue({
-            soHoSo: ttr,
+            soHoSo: ttr[0],
             thoiGianTl: [res.thoiGianTlTu, res.thoiGianTlDen]
           })
+          this.symbol = '/'+ttr[1];
           this.dataTable = chain(res.children).groupBy('xhTlDanhSachHdr.tenChiCuc').map((value, key) => ({
             expandSet: true,
             tenDonVi: key,
@@ -80,13 +81,17 @@ export class ChiTietHoSoThanhLyComponent extends Base3Component implements OnIni
           ).value()
         }
       })
+    }else{
+      if(this.userService.isCuc()){
+        this.symbol = '/'+this.userInfo.DON_VI.tenVietTat+"-KH&QLHDT";
+      }
     }
   }
 
   showSave() {
     let trangThai = this.formData.value.trangThai;
     if (this.userService.isCuc()) {
-      return (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDV || trangThai == STATUS.TU_CHOI_CBV) && this.userService.isAccessPermisson('XHDTQG_XTL_HSTL_THEM');
+      return (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDC || trangThai == STATUS.TU_CHOI_LDV || trangThai == STATUS.TU_CHOI_CBV) && this.userService.isAccessPermisson('XHDTQG_XTL_HSTL_THEM');
     }
     if (this.userService.isTongCuc()) {
       return (trangThai == STATUS.DA_DUYET_LDC || trangThai == STATUS.DANG_DUYET_CB_VU) && this.userService.isAccessPermisson('XHDTQG_XTL_HSTL_THEM');
@@ -95,7 +100,7 @@ export class ChiTietHoSoThanhLyComponent extends Base3Component implements OnIni
   }
 
   save(isGuiDuyet?) {
-    this.spinner.show();
+    // this.spinner.show();
     let body = this.formData.value;
     body.fileDinhKemReq = this.fileDinhKem;
     body.fileCanCuReq = this.fileCanCu;
@@ -106,23 +111,57 @@ export class ChiTietHoSoThanhLyComponent extends Base3Component implements OnIni
       })
     })
     body.children = children;
-    if (this.formData.value.soHoSo) {
-      body.soHoSo = this.formData.value.soHoSo + '/' + this.symbol
-    }
-    this.createUpdate(body).then((res) => {
-      if (res) {
-        if (isGuiDuyet) {
-          this.id = res.id;
-          this.formData.patchValue({
-            trangThai: res.trangThai,
-            tenTrangThai: res.tenTrangThai
-          })
-          this.pheDuyet();
-        } else {
-          this.redirectDefault();
-        }
+    body.soHoSo = this.formData.value.soHoSo + this.symbol
+    let validateDataTable = true;
+    if(isGuiDuyet){
+      if(this.userService.isCuc()){
+        body.children.forEach(item => {
+          console.log(item);
+          if(item.donGiaDk == null || item.donGiaDk == 0){
+            this.notification.error(MESSAGE.ERROR, "Vui lòng điền đơn giá thanh lý dự kiến tại " + item.tenNhaKho + " - "  + item.tenNganKho + " - " + item.tenLoKho);
+            validateDataTable = false;
+            return;
+          }
+          if(item.ketQua == null){
+            this.notification.error(MESSAGE.ERROR, "Vui lòng điền kết quả đánh giá chất lượng tại " + item.tenNhaKho + " - "  + item.tenNganKho + " - " + item.tenLoKho);
+            validateDataTable = false;
+            return;
+          }
+        });
       }
-    })
+      if(this.userService.isTongCuc()){
+        body.children.forEach(item => {
+          console.log(item);
+          if(item.slDaDuyet == null || item.slDaDuyet == 0){
+            this.notification.error(MESSAGE.ERROR, "Vui lòng điền số lượng phê duyệt tại " + item.tenNhaKho + " - "  + item.tenNganKho + " - " + item.tenLoKho);
+            validateDataTable = false;
+            return;
+          }
+          if(item.donGiaPd == null || item.donGiaPd == 0){
+            this.notification.error(MESSAGE.ERROR, "Vui lòng điền đơn giá thanh lý phê duyệt tại " + item.tenNhaKho + " - "  + item.tenNganKho + " - " + item.tenLoKho);
+            validateDataTable = false;
+            return;
+          }
+        });
+      }
+    }
+    if(validateDataTable){
+      this.createUpdate(body).then((res) => {
+        if (res) {
+          if (isGuiDuyet) {
+            this.id = res.id;
+            this.formData.patchValue({
+              id : res.id,
+              trangThai: res.trangThai,
+              tenTrangThai: res.tenTrangThai
+            })
+            this.pheDuyet();
+          } else {
+            this.redirectDefault();
+          }
+        }
+      })
+    }
   }
 
   openDialogDanhSach() {

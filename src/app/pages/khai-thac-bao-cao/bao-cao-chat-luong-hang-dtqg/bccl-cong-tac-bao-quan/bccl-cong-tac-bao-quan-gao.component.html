@@ -75,7 +75,7 @@
           </div>
           <div nz-col [nzSpan]="formData.value.loaiKyBc == '03' ? 9 : formData.value.loaiKyBc == '04' ? 6 : 7" *ngIf="!userService.isChiCuc()">
             <nz-form-item>
-              <nz-form-label>Chi Cục DTNN KV</nz-form-label>
+              <nz-form-label>Chi Cục DTNN</nz-form-label>
               <nz-form-control nz-col >
                 <nz-select  [nzDisabled]="formData.value.loaiBc == '01'" nzShowSearch formControlName="maChiCuc" nzAllowClear>
                   <nz-option *ngFor="let p of listChiCuc" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>

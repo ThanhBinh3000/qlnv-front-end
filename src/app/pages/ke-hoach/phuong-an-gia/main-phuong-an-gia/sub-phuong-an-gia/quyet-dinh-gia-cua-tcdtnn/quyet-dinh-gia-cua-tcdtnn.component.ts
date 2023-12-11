@@ -70,6 +70,7 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
       namKeHoach: [null],
       loaiVthh: [null],
       cloaiVthh: [null],
+      loaiDeXuat: [null],
     });
   }
 
@@ -84,6 +85,11 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
     tenCloaiVthh: '',
     tenTrangThai: '',
   };
+
+  listLoaiDx= [
+    {ma: "00", giaTri: "Lần đầu"},
+    {ma: "01", giaTri: "Điều chỉnh"}
+  ];
 
   async ngOnInit() {
     if ((this.pagType == 'LT' && !this.userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_GCT_QDTC'))

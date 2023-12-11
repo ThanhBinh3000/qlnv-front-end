@@ -258,7 +258,7 @@ export class XtlThemPhieuKtraClComponent extends Base3Component implements OnIni
 
   showSave() {
     let trangThai = this.formData.value.trangThai;
-    return (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDC) && this.userService.isAccessPermisson('SCHDTQG_KTCL_THEM');
+    return (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDC);
   }
 
   save(isGuiDuyet?) {
@@ -337,8 +337,8 @@ export class XtlThemPhieuKtraClComponent extends Base3Component implements OnIni
 
   showPheDuyetTuChoi() {
     let trangThai = this.formData.value.trangThai;
-    return (trangThai == STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson('SCHDTQG_KTCL_DUYET_TP'))
-      || (trangThai == STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson('SCHDTQG_KTCL_DUYET_LDCCUC'));
+    return (trangThai == STATUS.CHO_DUYET_TP )
+      || (trangThai == STATUS.CHO_DUYET_LDC);
   }
 
   calTongSlThucTe() {

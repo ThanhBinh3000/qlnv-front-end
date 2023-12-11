@@ -30,7 +30,6 @@ import {ActivatedRoute, Router} from "@angular/router";
 export class ChiTietThongTinDauGiaThanhLyComponent extends Base3Component implements OnInit {
   dataDetail: any;
   selected: boolean = false;
-  dsQuyetDinhTl: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -84,10 +83,25 @@ export class ChiTietThongTinDauGiaThanhLyComponent extends Base3Component implem
     if (this.id) {
       await this.detail(this.id).then((res) => {
         if (res) {
+          this.formData.patchValue({
+            thoiGianTlDuocDuyet : 'Từ ' + dayjs(res.thoiGianTlTu).format('DD/MM/YYYY') + ' đến ' + dayjs(res.thoiGianTlDen).format('DD/MM/YYYY'),
+            tongDviTsan : res.tongDviTsan,
+            soDviTsanThanhCong : res.tongDviTsanThanhCong,
+            soDviTsanKhongThanh : res.tongDviTsanKhongThanhCong,
+            tongTienGiaKhoiDiem : res.tongGiaKhoiDiem
+          })
           this.loadThongTinDauGia();
         }
       })
     }
+    this.formData.patchValue({
+      tenDvi : this.userInfo.TEN_DVI,
+      tgianTtoan : '3',
+      tgianGnhan : '15',
+      pthucGnhan : 'Giao hàng tại cửa kho',
+      loaiHinhNx : 'Xuất bán đấu giá',
+      kieuNx : 'Xuất bán'
+    })
   }
 
   async loadThongTinDauGia() {
@@ -145,39 +159,6 @@ export class ChiTietThongTinDauGiaThanhLyComponent extends Base3Component implem
     });
   }
 
-  async detailQuyetDinhThanhLy(id) {
-    await this.spinner.show();
-    if (id > 0) {
-      await this._service.getDetail(id)
-        .then(async (res) => {
-          if (res.msg == MESSAGE.SUCCESS) {
-            const data = res.data
-            const dataDtl = data.quyetDinhDtl.filter(item => item.id == this.id)[0];
-            this.formData.patchValue({
-              trangThai: dataDtl.trangThaiThucHien,
-              tenTrangThai: dataDtl.tenTrangThaiThucHien,
-              nam: data.nam,
-              idQdTl: data.id,
-              soQdTl: data.soQd,
-              soHoSoTl: data.soHoSo,
-              tenDvi: dataDtl.tenCuc,
-              tongTienGiaKhoiDiem: data.tongThanhTien,
-              thoiGianTlDuocDuyet: ['Từ' + ' ' + dayjs(data.thoiGianTlTu).format('DD/MM/YYYY') + ' ' + 'Đến' + ' ' + dayjs(data.thoiGianTlDen).format('DD/MM/YYYY')],
-            });
-            this.dataTable = cloneDeep(dataDtl.xhTlToChucHdr);
-            if (this.dataTable && this.dataTable.length > 0) {
-              await this.showFirstRow(event, this.dataTable[0]);
-            }
-          }
-        }).catch((e) => {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        });
-    }
-    await this.spinner.hide();
-  }
-
   async showFirstRow($event, data: any) {
     await this.showDetail($event, data);
   }
@@ -225,12 +206,30 @@ export class ChiTietThongTinDauGiaThanhLyComponent extends Base3Component implem
 
   themMoiPhienDauGia($event, data?: any) {
     $event.stopPropagation();
-    if (!data && this.dataTable?.length > 0) {
+    if (data) {
+      const modalQD = this.modal.create({
+        nzTitle: '',
+        nzContent: ThongTinChiTietDauGiaThanhLyComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '2000px',
+        nzFooter: null,
+        nzBodyStyle: { 'overflow-y': 'auto' },
+        nzComponentParams: {
+          isModal: true,
+          idInput : data?.id,
+          soLanDauGia: this.dataTable ? this.dataTable.length : 0
+        },
+      });
+      modalQD.afterClose.subscribe((data) => {
+        this.loadThongTinDauGia()
+      });
+    }else{
       let dataCheck = this.dataTable.filter(item => {
         return item.trangThai == this.STATUS.DU_THAO
       })
       if (dataCheck.length > 0) {
-        this.notification.error(MESSAGE.ERROR, "Không thể thêm mới, vì đang có thông tin đấu giá chưa hoàn thành cập nhập, xin viu lòng hoàn thành cập nhập");
+        this.notification.info(MESSAGE.ERROR, "Không thể thêm mới vì đang có thông tin đấu giá chưa hoàn thành cập nhập. Vui lòng hoàn thành cập nhập thông tin đấu giá");
         return;
       }
       const modalQD = this.modal.create({
@@ -244,24 +243,6 @@ export class ChiTietThongTinDauGiaThanhLyComponent extends Base3Component implem
         nzComponentParams: {
           isModal: true,
           idQdTl: this.id,
-          soLanDauGia: this.dataTable ? this.dataTable.length : 0
-        },
-      });
-      modalQD.afterClose.subscribe((data) => {
-        this.loadThongTinDauGia()
-      });
-    }else{
-      const modalQD = this.modal.create({
-        nzTitle: '',
-        nzContent: ThongTinChiTietDauGiaThanhLyComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '2000px',
-        nzFooter: null,
-        nzBodyStyle: { 'overflow-y': 'auto' },
-        nzComponentParams: {
-          isModal: true,
-          idInput : data?.id,
           soLanDauGia: this.dataTable ? this.dataTable.length : 0
         },
       });

@@ -1,21 +1,21 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { Base2Component } from "../../../../../components/base2/base2.component";
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Base2Component} from "../../../../../components/base2/base2.component";
 import {
   ThemmoiThongtinDauthauVtComponent
 } from "../../trienkhai-luachon-nhathau/thongtin-dauthau/themmoi-thongtin-dauthau-vt/themmoi-thongtin-dauthau-vt.component";
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { FileDinhKem } from "../../../../../models/FileDinhKem";
-import { UserLogin } from "../../../../../models/userlogin";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { DanhMucService } from "../../../../../services/danhmuc.service";
-import { NgxSpinnerService } from "ngx-spinner";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { UploadFileService } from "../../../../../services/uploaFile.service";
-import { Globals } from "../../../../../shared/globals";
-import { UserService } from "../../../../../services/user.service";
-import { HelperService } from "../../../../../services/helper.service";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FileDinhKem} from "../../../../../models/FileDinhKem";
+import {UserLogin} from "../../../../../models/userlogin";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {DanhMucService} from "../../../../../services/danhmuc.service";
+import {NgxSpinnerService} from "ngx-spinner";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {UploadFileService} from "../../../../../services/uploaFile.service";
+import {Globals} from "../../../../../shared/globals";
+import {UserService} from "../../../../../services/user.service";
+import {HelperService} from "../../../../../services/helper.service";
 import {
   QuyetDinhPheDuyetKetQuaLCNTService
 } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/quyetDinhPheDuyetKetQuaLCNT.service";
@@ -23,8 +23,8 @@ import {
   ThongTinDauThauService
 } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/thongTinDauThau.service";
 import * as dayjs from "dayjs";
-import { MESSAGE } from "../../../../../constants/message";
-import { FILETYPE, PREVIEW } from "../../../../../constants/fileType";
+import {MESSAGE} from "../../../../../constants/message";
+import {FILETYPE, PREVIEW} from "../../../../../constants/fileType";
 import {
   DialogTableSelectionComponent
 } from "../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
@@ -104,7 +104,10 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
         tenTrangThai: ["Đang nhập dữ liệu"],
         loaiVthh: [''],
         cloaiVthh: [''],
+        noiDungQd: [''],
         fileDinhKems: new FormControl([]),
+        tgianTrinhKqTcg: [''],
+        tgianTrinhTtd: [''],
       }
     );
   }
@@ -177,12 +180,13 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
     if (this.formData.value.soQd) {
       body.soQd = this.formData.value.soQd + this.maQd;
     }
+    let duocBanHanh = true;
     if (this.loaiVthh.startsWith('02')) {
       body.fileDinhKems = this.danhSachFileDinhKem;
       body.listCcPhapLy = this.danhSachFileCanCuPL;
       let detail = [];
       let type = "GOC";
-      if (this.thongTinDauThauVt.isDieuChinh) {
+      if(this.thongTinDauThauVt.isDieuChinh) {
         type = "DC"
       }
       this.thongTinDauThauVt.danhsachDx.forEach(item => {
@@ -195,25 +199,35 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
           tenNhaThau: item.kqlcntDtl?.tenNhaThau
         }
         detail.push(dtl)
+        if (item.kqlcntDtl?.trangThai == null) {
+          duocBanHanh = false
+        }
       })
       body.detailList = detail;
     } else {
       body.fileDinhKems = this.danhSachFileDinhKem;
       body.listCcPhapLy = this.danhSachFileCanCuPL;
       let detail = [];
-      // this.thongTinDauThau.listOfData.forEach(item => {
-      //   let dtl = {
-      //     idGoiThau: item.id,
-      //     idNhaThau: item.kqlcntDtl?.idNhaThau,
-      //     donGiaVat: item.kqlcntDtl?.donGiaVat,
-      //     trangThai: item.kqlcntDtl?.trangThai,
-      //     tenNhaThau: item.kqlcntDtl?.tenNhaThau
-      //   }
-      //   detail.push(dtl)
-      // })
+      this.thongTinDauThau.listOfData.forEach(item => {
+        let dtl = {
+          idGoiThau: item.id,
+          idNhaThau: item.kqlcntDtl?.idNhaThau,
+          donGiaVat: item.kqlcntDtl?.donGiaVat,
+          trangThai: item.kqlcntDtl?.trangThai,
+          tenNhaThau: item.kqlcntDtl?.tenNhaThau,
+          dienGiaiNhaThau: item.kqlcntDtl?.dienGiaiNhaThau
+        }
+        detail.push(dtl)
+        if (item.kqlcntDtl?.trangThai == null) {
+          duocBanHanh = false
+        }
+      })
       body.detailList = detail;
     }
-
+    if (isBanHanh && !duocBanHanh) {
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng cập nhật kết quả đấu thầu cho các gói thầu.');
+      return;
+    }
     let res;
     if (this.formData.get('id').value > 0) {
       res = await this.quyetDinhPheDuyetKetQuaLCNTService.update(body);
@@ -221,8 +235,9 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
       res = await this.quyetDinhPheDuyetKetQuaLCNTService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
+      this.idInput = res.data.id;
+      this.formData.get('id').setValue(res.data.id);
       if (isBanHanh) {
-        this.idInput = res.data.id;
         this.pheDuyet();
       } else {
         if (this.formData.get('id').value) {
@@ -240,7 +255,9 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
     if (isBanHanh) {
       this.formData.controls["soQd"].setValidators([Validators.required]);
       this.formData.controls["ngayKy"].setValidators([Validators.required]);
-      this.formData.controls["ngayHluc"].setValidators([Validators.required]);
+      if (!this.loaiVthh.startsWith('02')) {
+        this.formData.controls["ngayHluc"].setValidators([Validators.required]);
+      }
     } else {
       this.formData.controls["soQd"].clearValidators();
       this.formData.controls["ngayKy"].clearValidators();
@@ -343,7 +360,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
       }
     });
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách số quyết định kế hoạch lựa chọn nhà thầu',
+      nzTitle: 'DANH SÁCH SỐ QUYẾT ĐỊNH KẾ HOẠCH LỰA CHỌN NHÀ THẦU',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -351,8 +368,8 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listQdPdKhlcnt,
-        dataHeader: ['Số Đề Xuất KHLCNT', 'Số QĐ PD KHLCNT', 'Loại hàng DTQG', 'Chủng loại hàng DTQG', 'Tổng số gói thầu', 'Số gói thầu trúng', 'Số gói thầu trượt'],
-        dataColumn: ['soDxuat', 'soQdPdKhlcnt', 'tenLoaiVthh', 'tenCloaiVthh', 'soGthau', 'soGthauTrung', 'soGthauTruot']
+        dataHeader: ['Số Đề Xuất KHLCNT', 'Số QĐ PD KHLCNT', 'Số QĐ điều chỉnh KHLCNT', 'Loại hàng DTQG', 'Chủng loại hàng DTQG', 'Tổng số gói thầu'],
+        dataColumn: ['soDxuat', 'soQdPdKhlcnt', 'soQdDc', 'tenLoaiVthh', 'tenCloaiVthh', 'soGthau']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -392,7 +409,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
   }
 
   async preview() {
-    if (this.loaiVthh.startsWith('02')) {
+    if(this.loaiVthh.startsWith('02')) {
       this.previewName = "qd_pd_kqlcnt_vt.docx";
     } else {
       this.previewName = "qd_pd_kqlcnt_lt.docx"

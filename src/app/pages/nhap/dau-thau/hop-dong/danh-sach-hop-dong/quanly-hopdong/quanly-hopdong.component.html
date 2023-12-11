@@ -5,10 +5,10 @@
                 <i class="fa fa-arrow-left"></i>
                 <span>Quay lại</span>
             </button>
-            <button
-                *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH
+            <button *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH
             && (loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_VT_HDPL_THEM') : userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_THEM'))"
-                type="button" class="btn btn-sub xanh-nhat" (click)="approve()">
+                    type="button"
+                class="btn btn-sub xanh-nhat" (click)="approve()">
                 <i class="icon htvbdh_checkfile2"></i>
                 <span>Hoàn thành thực hiện</span>
             </button>
@@ -198,8 +198,8 @@
                                     <nz-form-control>
                                         <nz-input-group>
                                             <nz-input-number [nzSize]="'small'" formControlName="soLuongNhapKh"
-                                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled
-                                                class="blue-text">
+                                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                                nzDisabled class="blue-text">
                                             </nz-input-number>
                                         </nz-input-group>
                                     </nz-form-control>
@@ -232,10 +232,9 @@
                         <span>Danh sách hợp đồng cần ký với các gói thầu đã trúng</span>
                     </div>
                 </div>
-                <div class="buttons"
-                    *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH
+                <div class="buttons" *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH
 && (loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_VT_HDPL_THEM') : userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_THEM'))">
-                    <button type="button" class="btn btn-main" (click)="redirectHopDong(true, null)">
+                    <button type="button" class="btn btn-main" (click)="redirectHopDong(true, null, false)">
                         <i class="icon htvbdh_dau-cong"></i>
                         <span>Thêm</span>
                     </button>
@@ -269,18 +268,21 @@
                             <td>{{data.goiThau}}</td>
                             <td class="text-right">{{data.hopDong?.soLuong | number :'1.0-1' : 'vi_VN'}}</td>
                             <td class="text-right">{{data.hopDong?.donGia | number :'1.0-1' : 'vi_VN'}}</td>
-                            <td class="text-right">{{data.hopDong?.donGia * data.hopDong?.soLuong | number :'1.0-1' :
+                            <td class="text-right">{{data.hopDong?.donGia * data.hopDong?.soLuong * 1000 | number :'1.0-1' :
                                 'vi_VN' }}</td>
                             <td>{{data.hopDong?.tenTrangThai}}</td>
                             <td></td>
                             <td></td>
                             <td>
-                                <a *ngIf="data.hopDong?.id > 0" (click)="preview(data.hopDong?.id)">
-                                    <i class="icon htvbdh_tcdt_tuchoi" title="Xem trước"></i>
+                              <a *ngIf="data.hopDong?.id > 0"
+                                (click)="preview(data.hopDong?.id)">
+                                <i class="icon htvbdh_tcdt_tuchoi" title="Xem trước"></i>
+                              </a>
+                                <a *ngIf=" data.hopDong?.trangThai == STATUS.DA_KY" (click)="redirectHopDong(true,data.hopDong.id, true)">
+                                    <i class="fa fa-eye" title="Xem chi tiết"></i>
                                 </a>
-                                <a *ngIf="data.hopDong?.trangThai == STATUS.DU_THAO ||
-                                    (data.hopDong?.trangThai == STATUS.DA_KY && formData.value.trangThaiHd != STATUS.DA_HOAN_THANH)"
-                                    (click)="redirectHopDong(true,data.hopDong.id)">
+                              <a *ngIf="data.hopDong?.trangThai == STATUS.DU_THAO && formData.value.trangThaiHd != STATUS.DA_HOAN_THANH"
+                                 (click)="redirectHopDong(true,data.hopDong.id, false)">
                                     <i class="fa fa-pencil" title="Sửa"></i>
                                 </a>
                                 <a *ngIf="data.hopDong?.trangThai == STATUS.DU_THAO"
@@ -304,37 +306,41 @@
                     </tr>
                 </nz-table>
             </nz-card>
-            <app-thong-tin [loaiVthh]="loaiVthh" *ngIf="idHopDong" [id]="idHopDong" [isView]="true" [isQuanLy]="true"
-                (showListEvent)="redirectHopDong(false,idHopDong)" [dataBinding]="formData.value">
+            <app-thong-tin [loaiVthh]="loaiVthh" *ngIf="idHopDong" [id]="idHopDong" [isView]="true" [isQuanLy]="true" (showListEvent)="redirectHopDong(false,idHopDong, true)"
+                           [dataBinding]="formData.value">
             </app-thong-tin>
         </nz-card>
     </div>
 </ng-container>
 <ng-template #tempHopDong>
-    <app-thong-tin [id]="idHopDong" [loaiVthh]="loaiVthh" (showListEvent)="redirectHopDong(false,null)"
-        [dataBinding]="formData.value">
+    <app-thong-tin [id]="idHopDong" [loaiVthh]="loaiVthh" (showListEvent)="redirectHopDong(false,null, true)"
+        [dataBinding]="formData.value" [isView]="isView">
     </app-thong-tin>
 </ng-template>
-<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="THÔNG TIN HỢP ĐỒNG" nzWidth="100%" (nzOnCancel)="closeDlg()">
-    <div *nzModalContent class="modal__content">
-        <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 650px;"></pdf-viewer>
-    </div>
-    <div *nzModalFooter>
-        <button nz-button (click)="printPreview()" class="modal__button--save">
-            <i class="icon htvbdh_printer"></i>
-            In
-        </button>
-        <button nz-button (click)="downloadPdf(previewName)" class="modal__button--save">
-            <i class="icon htvbdh_file-pdf"></i>
-            Xuất .pdf
-        </button>
-        <button nz-button (click)="downloadWord(previewName)" class="modal__button--save">
-            <i class="icon htvbdh_file-word"></i>
-            Xuất .docx
-        </button>
-        <button nz-button (click)="closeDlg()" class="modal__button--cancel">
-            <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-            Đóng
-        </button>
-    </div>
+<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="THÔNG TIN HỢP ĐỒNG" nzWidth="100%"
+          (nzOnCancel)="closeDlg()">
+  <div *nzModalContent class="modal__content">
+    <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 650px;"></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)="printPreview()"
+            class="modal__button--save">
+      <i class="icon htvbdh_printer"></i>
+      In
+    </button>
+    <button nz-button (click)="downloadPdf(previewName)"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-pdf"></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)="downloadWord(previewName)"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-word"></i>
+      Xuất .docx
+    </button>
+    <button nz-button (click)="closeDlg()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
 </nz-modal>

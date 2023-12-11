@@ -24,7 +24,8 @@ export class DialogDxScLonComponent implements OnInit {
   @Input() sum: number;
   @Input() dataTable: any;
   @Input() page: string;
-  @Input() isQd: boolean = false;
+  @Input()isQd: boolean = false;
+  @Input() nam: number;
   item: KhSuaChuaLonDtl = new KhSuaChuaLonDtl();
   listDmScLon: any[] = [];
   listLoaiDuAn: any[] = [];
@@ -83,9 +84,9 @@ export class DialogDxScLonComponent implements OnInit {
       msgRequired = "Không được để trống danh mục sửa chữa lớn";
     } else if (!item.loaiCongTrinh) {
       msgRequired = "Không được để trống loại công trình";
-    } else if (!item.nguonVon) {
+    }else if (!item.nguonVon) {
       msgRequired = "Không được để trống nguồn vốn";
-    } else if (!item.vonDauTu) {
+    }else if (!item.vonDauTu) {
       msgRequired = "Không được để trống kế hoạch vốn đầu tư";
     }
     return msgRequired;
@@ -107,19 +108,26 @@ export class DialogDxScLonComponent implements OnInit {
 
   async getAllDmKho() {
     let body = {
-      "maDvi": this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+      "maDvi" : this.userService.isCuc() ? this.userInfo.MA_DVI  :null,
       "paggingReq": {
         limit: 999999,
         page: 0
       },
-      "type": '00'
+      "type" : '00',
+      "namKh" : this.nam
     };
     let res = await this.dmSuaChuaService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listDmScLon = res.data.content;
-      if (this.type == 'them' && this.listDmScLon && this.listDmScLon.length > 0 && !this.isQd) {
-        this.listDmScLon = this.listDmScLon.filter(item => (item.trangThai == STATUS.CHUA_THUC_HIEN) && item.khoi == this.dataInput.khoi && (this.page == 'tren' ? item.tmdt > 15000000000 : item.tmdt <= 15000000000));
-      }
+      console.log(this.dataInput.khoi,this.page,this.type,this.isQd);
+      this.listDmScLon = this.listDmScLon.filter(item =>
+        (item.trangThai == STATUS.CHUA_THUC_HIEN) && item.khoi == this.dataInput.khoi
+        && (this.page == 'tren' ? item.tmdt > 15000000000 : item.tmdt <= 15000000000));
+
+      // if (this.type == 'them' && this.listDmScLon && this.listDmScLon.length > 0 && !this.isQd) {
+      //
+      // }
+      console.log(this.listDmScLon);
     }
   }
 

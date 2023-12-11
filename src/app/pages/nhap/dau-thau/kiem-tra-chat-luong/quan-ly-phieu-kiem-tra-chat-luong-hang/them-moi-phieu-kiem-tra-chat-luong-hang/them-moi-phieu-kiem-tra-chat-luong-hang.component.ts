@@ -17,7 +17,7 @@ import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMu
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
-import { formatNumber } from "@angular/common";
+import {formatNumber} from "@angular/common";
 
 
 @Component({
@@ -153,9 +153,10 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
   }
 
   async initForm() {
+    let maBb = 'KTCL-' + this.userInfo.DON_VI.tenVietTat;
     let res = await this.userService.getId("PHIEU_KT_CHAT_LUONG_SEQ");
     this.formData.patchValue({
-      soPhieu: `${res}/${this.formData.get('nam').value}/KTCL-CCDTKVVP`,
+      soPhieu: `${res}/${this.formData.get('nam').value}/${maBb}`,
       maDvi: this.userInfo.MA_DVI,
       tenDvi: this.userInfo.TEN_DVI,
       maQhns: this.userInfo.DON_VI.maQhns,
@@ -231,7 +232,12 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
       soHd: data.soHd,
       ngayHd: data.hopDong?.ngayHlucHd,
     });
-    let dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
+    let dataChiCuc;
+    if (this.userService.isChiCuc()) {
+      dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
+    } else {
+      dataChiCuc = data.dtlList
+    }
     if (dataChiCuc.length > 0) {
       this.listDiaDiemNhap = dataChiCuc[0].children;
     }
@@ -282,8 +288,8 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
         soLuongQdGiaoNvNh: data.soLuong * 1000,
         soLuongDaNhap: soLuongNhap.data,
         soLuongNhapKho: data.soLuong,
-        soBbNtbq: data.listBbNtbqld?.find(item => item.id === Math.min(...data.listBbNtbqld?.map(item => item.id))).soBbNtBq,
-        hthucBquan: data.listBbNtbqld?.find(item => item.id === Math.min(...data.listBbNtbqld?.map(item => item.id))).hthucBquan,
+        soBbNtbq: data.listBbNtbqld?.find(item => item.id === Math.min(...data.listBbNtbqld?.map(item => item.id)))?.soBbNtBq,
+        hthucBquan: data.listBbNtbqld?.find(item => item.id === Math.min(...data.listBbNtbqld?.map(item => item.id)))?.hthucBquan,
         tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
       })
       this.formattedSlNhapKho = this.formData.get('soLuongNhapKho') ? formatNumber(this.formData.get('soLuongNhapKho').value * 1000, 'vi_VN', '1.0-99') : '0';
@@ -333,7 +339,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
     }
   }
 
-  async loadDsHthucBquan() {
+  async loadDsHthucBquan () {
     if (this.formData.value.cloaiVthh) {
       let res = await this.danhMucService.getDetail(this.formData.value.cloaiVthh);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -368,7 +374,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
       this.formData.controls["maDiemKho"].setValidators([Validators.required]);
       this.formData.controls["maNhaKho"].setValidators([Validators.required]);
       this.formData.controls["maNganKho"].setValidators([Validators.required]);
-      this.formData.controls["maLoKho"].setValidators([Validators.required]);
+      // this.formData.controls["maLoKho"].setValidators([Validators.required]);
       this.formData.controls["soBbNtbq"].setValidators([Validators.required]);
       this.formData.controls["nguoiGiaoHang"].setValidators([Validators.required]);
       this.formData.controls["donViGiaoHang"].setValidators([Validators.required]);
@@ -444,7 +450,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
       case STATUS.TU_CHOI_LDCC:
       case STATUS.DU_THAO: {
         trangThai = STATUS.CHO_DUYET_LDCC;
-        mess = 'Bạn có muối gửi duyệt ?'
+        mess = 'Bạn có muốn gửi duyệt ?'
         break;
       }
       case STATUS.CHO_DUYET_LDCC: {

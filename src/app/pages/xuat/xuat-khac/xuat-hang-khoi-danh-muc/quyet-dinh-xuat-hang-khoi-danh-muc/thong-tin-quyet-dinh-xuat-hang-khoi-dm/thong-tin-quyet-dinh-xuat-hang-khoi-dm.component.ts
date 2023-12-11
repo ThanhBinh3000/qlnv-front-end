@@ -98,6 +98,7 @@ export class ThongTinQuyetDinhXuatHangKhoiDmComponent extends Base2Component imp
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
   openDialogDsHangNgoaiMuc() {
     this.dataTable = [];
     const modalQD = this.modal.create({
@@ -206,20 +207,19 @@ export class ThongTinQuyetDinhXuatHangKhoiDmComponent extends Base2Component imp
     let mess = '';
     switch (this.formData.get('trangThai').value) {
       case STATUS.DU_THAO:
-      case STATUS.TU_CHOI_LDTC:
+      case STATUS.TU_CHOI_LDTC: {
+        trangThai = STATUS.CHO_DUYET_LDV;
+        mess = 'Bạn có muốn gửi duyệt?';
+        break;
+      }
       case STATUS.CHO_DUYET_LDV: {
         trangThai = STATUS.CHO_DUYET_LDTC;
-        mess = 'Bạn có muối gửi duyệt?';
+        mess = 'Bạn có chắc chắn muốn phê duyệt ?';
         break;
       }
       case STATUS.CHO_DUYET_LDTC: {
         trangThai = STATUS.DA_DUYET_LDTC;
         mess = 'Bạn có chắc chắn muốn phê duyệt ?';
-        break;
-      }
-      case STATUS.CHO_DUYET_LDTC: {
-        trangThai = STATUS.TU_CHOI_LDTC;
-        mess = 'Bạn có chắc chắn muốn từ chối ?';
         break;
       }
     }

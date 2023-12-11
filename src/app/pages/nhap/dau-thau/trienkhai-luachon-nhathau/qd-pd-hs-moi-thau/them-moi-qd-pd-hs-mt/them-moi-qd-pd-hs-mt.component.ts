@@ -18,6 +18,7 @@ import {MESSAGE} from "../../../../../../constants/message";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
+import {DatePipe} from "@angular/common";
 @Component({
   selector: 'app-them-moi-qd-pd-hs-mt',
   templateUrl: './them-moi-qd-pd-hs-mt.component.html',
@@ -60,10 +61,15 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
       ghiChu: [""],
       tenDuAn: [""],
       tenLoaiVthh: [""],
+      tenCloaiVthh: [""],
       loaiVthh: [""],
       tchuanCluong: [""],
       quy: [""],
-      tgianBdauTchuc: [""],
+      tgianBdauTchuc: [],
+      tgianDthauTime: [],
+      tgianMthauTime: [],
+      gtriDthau: [],
+      idQdPdKhlcntDtl: [],
     })
   }
 
@@ -103,7 +109,7 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
     }
     await this.spinner.hide();
     const modalQD = this.modal.create({
-      nzTitle: "Danh sách đề xuất kế hoạch lựa chọn nhà thầu",
+      nzTitle: "DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT/ĐIỀU CHỈNH KHLCNT",
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -111,40 +117,76 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
       nzFooter: null,
       nzComponentParams: {
         dataTable: listQdPdKhlcnt,
-        dataHeader: ["Số quyết định", "Số quyết định điều chỉnh", "Loại hàng DTQG"],
-        dataColumn: ["soQd", "soQdDc", "tenLoaiVthh"]
+        dataHeader: ["Số quyết định", "Số quyết định điều chỉnh", "Loại hàng DTQG", "Chủng loại hàng DTQG"],
+        dataColumn: ["soQd", "soQdDc", "tenLoaiVthh", "tenCloaiVthh"]
       }
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
-        this.formData.patchValue({
-          soQdPdKhlcnt: data.soQd,
-          idQdPdKhlcnt: data.id,
-          tenDuAn: data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.tenDuAn : data.tenDuAn,
-          tenLoaiVthh: data.tenLoaiVthh,
-          loaiVthh: data.loaiVthh,
-          tchuanCluong: data.dxKhlcntHdr?.tchuanCluong,
-          quy: data.dxKhlcntHdr?.quy,
-          tgianBdauTchuc: data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.tgianBdauTchuc : data.tgianBdauTchuc,
+        data.children.forEach(chiCuc => {
+          if (chiCuc.maDvi == this.userInfo.MA_DVI) {
+            this.formData.patchValue({
+              soQdPdKhlcnt: data.soQd,
+              idQdPdKhlcnt: data.id,
+              idQdPdKhlcntDtl: chiCuc.id,
+              tenDuAn: chiCuc.tenDuAn,
+              tenLoaiVthh: chiCuc.dxuatKhLcntHdr?.tenLoaiVthh,
+              tenCloaiVthh: chiCuc.dxuatKhLcntHdr?.tenCloaiVthh,
+              loaiVthh: chiCuc.dxuatKhLcntHdr?.loaiVthh,
+              cloaiVthh: chiCuc.dxuatKhLcntHdr?.cloaiVthh,
+              tchuanCluong: chiCuc.dxuatKhLcntHdr?.tchuanCluong,
+              quy: chiCuc.dxuatKhLcntHdr?.quy,
+              gtriDthau: chiCuc.dxuatKhLcntHdr?.gtriDthau,
+              tgianBdauTchuc: chiCuc.tgianBdauTchuc,
+              tgianDthauTime: chiCuc.tgianDthauTime,
+              tgianDthau: chiCuc.tgianDthau,
+              tgianMthauTime: chiCuc.tgianMthauTime,
+              tgianMthau: chiCuc.tgianMthau,
+            })
+            this.listOfData = chiCuc.children
+            for (let i = 0; i < this.listOfData.length; i++) {
+              this.expandSet.add(i)
+              for (let j = 0; j < this.listOfData[i].children.length; j++) {
+                this.expandSet2.add(j)
+              }
+            }
+            this.tinhTongMucDtDx()
+          }
         })
-        this.listOfData = data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.dsGthau : data.dsGthau;
       }
     });
   }
 
   async save(isGuiDuyet?) {
     await this.spinner.show();
-    // this.setValidator(isGuiDuyet);
-    // this.helperService.markFormGroupTouched(this.formData);
-    // if (this.formData.invalid) {
-    //   await this.spinner.hide();
-    //   return;
-    // }
+    this.setValidator(isGuiDuyet);
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      await this.spinner.hide();
+      return;
+    }
+    let pipe = new DatePipe('en-US');
+    if (this.formData.value.tgianMthau != null) {
+      if (this.formData.value.tgianMthauTime != null) {
+        this.formData.value.tgianMthau = pipe.transform(this.formData.value.tgianMthau, 'yyyy-MM-dd') + " " + pipe.transform(this.formData.value.tgianMthauTime, 'HH:mm') + ":00"
+      } else {
+        this.formData.value.tgianMthau = pipe.transform(this.formData.value.tgianMthau, 'yyyy-MM-dd')  + " 00:00:00"
+      }
+    }
+    if (this.formData.value.tgianDthau != null) {
+      if (this.formData.value.tgianDthauTime != null) {
+        this.formData.value.tgianDthau =  pipe.transform(this.formData.value.tgianDthau, 'yyyy-MM-dd') + " " + pipe.transform(this.formData.value.tgianDthauTime, 'HH:mm') + ":00"
+      } else {
+        this.formData.value.tgianDthau =  pipe.transform(this.formData.value.tgianDthau, 'yyyy-MM-dd') + " 23:59:59"
+      }
+    }
     let body = this.formData.value;
     if (this.formData.value.soQd) {
       body.soQd = this.formData.value.soQd + "/" + this.maQd;
     }
     body.listCcPhapLy = this.listCcPhapLy;
+    body.tgianMthauTime = pipe.transform(body.tgianMthauTime, 'yyyy-MM-dd HH:mm')
+    body.tgianDthauTime = pipe.transform(body.tgianDthauTime, 'yyyy-MM-dd HH:mm')
     let res = null;
     if (this.formData.get("id").value) {
       res = await this.quyetDinhPheDuyetHsmtService.update(body);
@@ -170,8 +212,26 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
   }
 
   setValidator(isGuiDuyet?) {
-    if (!isGuiDuyet) {
-      this.formData.controls["nam"].clearValidators();
+    if (isGuiDuyet) {
+      this.formData.controls["namKhoach"].setValidators([Validators.required]);
+      this.formData.controls["soQd"].setValidators([Validators.required]);
+      this.formData.controls["ngayQd"].setValidators([Validators.required]);
+      this.formData.controls["ngayHluc"].setValidators([Validators.required]);
+      this.formData.controls["soQdPdKhlcnt"].setValidators([Validators.required]);
+      this.formData.controls["trichYeu"].setValidators([Validators.required]);
+      this.formData.controls["noiDungQd"].setValidators([Validators.required]);
+      this.formData.controls["tenDuAn"].setValidators([Validators.required]);
+      this.formData.controls["quy"].setValidators([Validators.required]);
+      this.formData.controls["tgianMthau"].setValidators([Validators.required]);
+      this.formData.controls["tgianDthau"].setValidators([Validators.required]);
+    } else {
+      Object.keys(this.formData.controls).forEach(key => {
+        const control = this.formData.controls[key];
+        control.clearValidators();
+        control.updateValueAndValidity();
+      });
+      this.formData.updateValueAndValidity();
+      this.formData.controls["soQdPdKhlcnt"].setValidators([Validators.required]);
     }
   }
 
@@ -243,14 +303,29 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
         soQd: data.soQd?.split("/")[0],
         soQdPdKhlcnt: data.qdKhlcntHdr.soQd,
         idQdPdKhlcnt: data.qdKhlcntHdr.id,
-        tenDuAn: data.qdKhlcntHdr.dchinhDxKhLcntHdr? data.qdKhlcntHdr.dchinhDxKhLcntHdr.tenDuAn : data.qdKhlcntHdr.tenDuAn,
         tenLoaiVthh: data.qdKhlcntHdr.tenLoaiVthh,
         loaiVthh: data.qdKhlcntHdr.loaiVthh,
-        tchuanCluong: data.qdKhlcntHdr.dxKhlcntHdr.tchuanCluong,
-        quy: data.qdKhlcntHdr.dxKhlcntHdr.quy,
-        tgianBdauTchuc: data.qdKhlcntHdr.dchinhDxKhLcntHdr? data.qdKhlcntHdr.dchinhDxKhLcntHdr.tgianBdauTchuc : data.qdKhlcntHdr.tgianBdauTchuc,
+        tenCloaiVthh: data.qdKhlcntHdr.tenCloaiVthh,
+        cloaiVthh: data.qdKhlcntHdr.cloaiVthh,
+        tgianBdauTchuc: data.tgianBdauTchuc
       });
-      this.listOfData = data.qdKhlcntHdr.dchinhDxKhLcntHdr? data.qdKhlcntHdr.dchinhDxKhLcntHdr.dsGthau : data.qdKhlcntHdr.dsGthau;
+      data.qdKhlcntHdr.children.forEach(cuc => {
+        if (cuc.maDvi == data.maDvi) {
+          this.formData.patchValue({
+            tenDuAn: cuc.dxuatKhLcntHdr?.tenDuAn,
+            tchuanCluong: cuc.dxuatKhLcntHdr?.tchuanCluong,
+            quy: cuc.dxuatKhLcntHdr?.quy,
+          });
+          this.listOfData = cuc.children
+          for (let i = 0; i < this.listOfData.length; i++) {
+           this.expandSet.add(i)
+            for (let j = 0; j < this.listOfData[i].children.length; j++) {
+              this.expandSet2.add(j)
+            }
+          }
+          this.tinhTongMucDtDx()
+        }
+      })
       this.listCcPhapLy = data.listCcPhapLy;
     }
   }
@@ -259,4 +334,32 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
     this.initListQuy();
   }
 
+  tinhTongMucDtDx () {
+    let tongMucDt: number = 0;
+    let tongMucDtDx: number = 0;
+    let tongSlChiTieu: number = 0;
+    let tongSl: number = 0;
+    this.listOfData.forEach((item) => {
+      let thanhTien: number = 0;
+      let thanhTienDx: number = 0;
+      item.children.forEach(i => {
+        tongMucDt = tongMucDt + (i.soLuong * i.donGia *1000);
+        tongMucDtDx = tongMucDtDx + (i.soLuong * i.donGiaTamTinh * 1000);
+        thanhTien = thanhTien + (i.soLuong * i.donGia *1000);
+        thanhTienDx = thanhTienDx + (i.soLuong * i.donGiaTamTinh * 1000);
+        tongSl += i.soLuong
+        tongSlChiTieu += i.soLuongChiTieu
+      })
+      item.thanhTien = thanhTien;
+      item.thanhTienDx = thanhTienDx;
+    });
+    this.formData.patchValue({
+      tongMucDtLamTron: parseFloat((tongMucDt/1000000000).toFixed(2)),
+      tongMucDtDxLamTron: parseFloat((tongMucDtDx/1000000000).toFixed(2)),
+      tongMucDt: tongMucDt,
+      tongMucDtDx: tongMucDtDx,
+      tongSlChiTieu: tongSlChiTieu,
+      soLuong: tongSl,
+    });
+  }
 }

@@ -12,14 +12,13 @@
           </div>
         </div>
         <nz-input-group [nzSuffix]="suffixIcon">
-          <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchValue" />
+          <input type="text" nz-input placeholder="Tìm kiếm" [value]="inputSearch" (change)="beforeSearch($event)"/>
         </nz-input-group>
         <ng-template #suffixIcon>
           <i nz-icon nzType="search"></i>
         </ng-template>
         <nz-tree #nzTreeSelectComponent [nzData]="nodes" (nzClick)="nzClickNodeTree($event)"
-          (nzExpandChange)="loadChildren($event)" (nzContextMenu)="nzClickNodeTree($event)"
-          [nzSearchValue]="searchValue">
+                 [nzSearchValue]="searchValue">
         </nz-tree>
       </nz-card>
     </div>
@@ -42,7 +41,8 @@
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               Xóa
             </button>
-            <button nz-button class="btn btn-sub xanh-nhat ml-2" (click)="themSoDuDauKy()" *ngIf="checkStatusSurplus()">
+            <button nz-button class="btn btn-sub xanh-nhat ml-2" (click)="themSoDuDauKy()"
+                    *ngIf="checkStatusSurplus()">
               <i class="icon htvbdh_dau-cong"></i>
               Khởi tạo số dư đầu kỳ
             </button>
@@ -62,47 +62,47 @@
           <nz-card *ngIf="levelNode != 0">
             <nz-collapse>
               <nz-collapse-panel nzActive="true"
-                [nzHeader]="levelNode == 2 ? 'THÔNG TIN CỤC DTNN KV' : levelNode == 3 ? 'THÔNG TIN CHI CỤC DTNN' : levelNode == 4 ? 'THÔNG TIN ĐIỂM KHO' :  levelNode == 5 ? ' THÔNG TIN NHÀ KHO' : levelNode == 6 ? 'THÔNG TIN NGĂN KHO' : 'THÔNG TIN LÔ KHO'">
+                                 [nzHeader]="levelNode == 2 ? 'THÔNG TIN CỤC DTNN KV' : levelNode == 3 ? 'THÔNG TIN CHI CỤC DTNN' : levelNode == 4 ? 'THÔNG TIN ĐIỂM KHO' :  levelNode == 5 ? ' THÔNG TIN NHÀ KHO' : levelNode == 6 ? 'THÔNG TIN NGĂN KHO' : 'THÔNG TIN LÔ KHO'">
                 <div class="mg-t-10 text-left"
-                  *ngIf="this.levelNode == 7 || (this.levelNode == 6 && !detailDonVi.value.coLoKho)" nz-row
-                  [nzGutter]="24">
+                     *ngIf="this.levelNode == 7 || (this.levelNode == 6 && !detailDonVi.value.coLoKho)" nz-row
+                     [nzGutter]="24">
                   <div nz-col nzSpan="3">
                     <label class="font-weight-bold">Ngăn/lô kho chứa:</label>
                   </div>
                   <div nz-col nzSpan="3">
                     <nz-select [(ngModel)]="loaiHangHoa.type" [ngModelOptions]="{standalone: true}"
-                      [nzDisabled]="!(detailDonVi.value.slTon == 0 && !isEditData)">
+                               [nzDisabled]="!(detailDonVi.value.slTon == 0 && !isEditData)">
                       <nz-option nzValue="LT" nzLabel="Lương thực"></nz-option>
                       <nz-option nzValue="VT" nzLabel="Vật tư"></nz-option>
                     </nz-select>
                   </div>
                   <div nz-col nzSpan="9" *ngIf="loaiHangHoa.type == 'LT'">
                     <label [ngModelOptions]="{standalone: true}"
-                      [nzDisabled]="!(detailDonVi.value.slTon == 0 && !isEditData)" [(ngModel)]="loaiHangHoa.thoc"
-                      class="font-weight-bold" nz-checkbox>Thóc</label>
+                           [nzDisabled]="!(detailDonVi.value.slTon == 0 && !isEditData)"
+                           [(ngModel)]="loaiHangHoa.thoc" class="font-weight-bold" nz-checkbox>Thóc</label>
                     <label [ngModelOptions]="{standalone: true}"
-                      [nzDisabled]="!(detailDonVi.value.slTon == 0 && !isEditData)" [(ngModel)]="loaiHangHoa.gao"
-                      class="font-weight-bold" nz-checkbox>Gạo</label>
+                           [nzDisabled]="!(detailDonVi.value.slTon == 0 && !isEditData)"
+                           [(ngModel)]="loaiHangHoa.gao" class="font-weight-bold" nz-checkbox>Gạo</label>
                     <label [ngModelOptions]="{standalone: true}"
-                      [nzDisabled]="!(detailDonVi.value.slTon == 0 && !isEditData)" [(ngModel)]="loaiHangHoa.muoi"
-                      class="font-weight-bold" nz-checkbox>Muối</label>
+                           [nzDisabled]="!(detailDonVi.value.slTon == 0 && !isEditData)"
+                           [(ngModel)]="loaiHangHoa.muoi" class="font-weight-bold" nz-checkbox>Muối</label>
                   </div>
                   <div nz-col nzSpan="2" *ngIf="loaiHangHoa.type == 'VT'">
-                    <label class="font-weight-bold">Loại hàng hóa</label>
+                    <label class="font-weight-bold">Loại hàng DTQG</label>
                   </div>
                   <div nz-col nzSpan="5" *ngIf="loaiHangHoa.type == 'VT'">
                     <nz-select [nzDisabled]="!(detailDonVi.value.slTon == 0 && !isEditData)"
-                      [(ngModel)]="loaiHangHoa.loaiVthh" [ngModelOptions]="{standalone: true}"
-                      (ngModelChange)="onChangeLoaiVthh($event)">
+                               [(ngModel)]="loaiHangHoa.loaiVthh" [ngModelOptions]="{standalone: true}"
+                               (ngModelChange)="onChangeLoaiVthh($event)">
                       <nz-option *ngFor="let p of listVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
                     </nz-select>
                   </div>
                   <div nz-col nzSpan="3" *ngIf="loaiHangHoa.type == 'VT'">
-                    <label class="font-weight-bold">Chủng loại hàng hóa</label>
+                    <label class="font-weight-bold">Chủng loại hàng DTQG</label>
                   </div>
                   <div nz-col nzSpan="5" *ngIf="loaiHangHoa.type == 'VT'">
                     <nz-select [nzDisabled]="!(detailDonVi.value.slTon == 0 && !isEditData)"
-                      [(ngModel)]="loaiHangHoa.cloaiVthh" [ngModelOptions]="{standalone: true}">
+                               [(ngModel)]="loaiHangHoa.cloaiVthh" [ngModelOptions]="{standalone: true}">
                       <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
                     </nz-select>
                   </div>
@@ -142,7 +142,7 @@
                 <!--                    </div>-->
                 <!--                    <div nz-col [nzSpan]="3" *ngIf="loaiHangHoa.type == 'VT'">-->
                 <!--                      <nz-form-item>-->
-                <!--                        <nz-form-label nzRequired nzNoColon>Loại hàng hóa</nz-form-label>-->
+                <!--                        <nz-form-label nzRequired nzNoColon>Loại hàng DTQG</nz-form-label>-->
                 <!--                      </nz-form-item>-->
                 <!--                    </div>-->
                 <!--                    <div nz-col [nzSpan]="6" *ngIf="loaiHangHoa.type == 'VT'">-->
@@ -158,7 +158,7 @@
                 <!--                    </div>-->
                 <!--                    <div nz-col [nzSpan]="4" *ngIf="loaiHangHoa.type == 'VT'">-->
                 <!--                      <nz-form-item>-->
-                <!--                        <nz-form-label nzNoColon>Chủng loại hàng hóa</nz-form-label>-->
+                <!--                        <nz-form-label nzNoColon>Chủng loại hàng DTQG</nz-form-label>-->
                 <!--                      </nz-form-item>-->
                 <!--                    </div>-->
                 <!--                    <div nz-col [nzSpan]="6" *ngIf="loaiHangHoa.type == 'VT'">-->
@@ -179,7 +179,7 @@
                         <nz-form-item>
                           <nz-form-label>Mã cục</nz-form-label>
                           <nz-form-control>
-                            <input formControlName="maDtqgkv" nz-input [readonly]="true" />
+                            <input formControlName="maDtqgkv" nz-input [readonly]="true"/>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -187,7 +187,7 @@
                         <nz-form-item>
                           <nz-form-label>Tên cục</nz-form-label>
                           <nz-form-control>
-                            <input formControlName="tenDtqgkv" nz-input [readonly]="true" />
+                            <input formControlName="tenDtqgkv" nz-input [readonly]="true"/>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -195,7 +195,7 @@
                         <nz-form-item>
                           <nz-form-label>Địa điểm</nz-form-label>
                           <nz-form-control>
-                            <input formControlName="diaChi" nz-input [readonly]="true" />
+                            <input formControlName="diaChi" nz-input [readonly]="true"/>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -204,8 +204,9 @@
                           <nz-form-label>Số lượng chi cục</nz-form-label>
                           <nz-form-control>
                             <nz-input-group>
-                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser" formControlName="soChiCuc"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'"
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="soChiCuc"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -215,8 +216,9 @@
                           <nz-form-label>Số lượng điểm kho</nz-form-label>
                           <nz-form-control>
                             <nz-input-group>
-                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser" formControlName="soDiemkho"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'"
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="soDiemkho"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -226,8 +228,9 @@
                           <nz-form-label>Số lượng nhà kho</nz-form-label>
                           <nz-form-control>
                             <nz-input-group>
-                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser" formControlName="soNhakho"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'"
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="soNhakho"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -237,8 +240,9 @@
                           <nz-form-label>Số lượng ngăn kho</nz-form-label>
                           <nz-form-control>
                             <nz-input-group>
-                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser" formControlName="soNgankho"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'"
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="soNgankho"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -248,8 +252,9 @@
                           <nz-form-label>Số lượng lô kho</nz-form-label>
                           <nz-form-control>
                             <nz-input-group>
-                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser" formControlName="soLokho"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'"
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="soLokho"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -260,8 +265,8 @@
                           <nz-form-control>
                             <nz-input-group [nzAddOnAfter]="dvi">
                               <nz-input-number [nzDisabled]="isEditData" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                formControlName="tichLuongTkLt"></nz-input-number>
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="tichLuongTkLt"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -272,8 +277,8 @@
                           <nz-form-control>
                             <nz-input-group [nzAddOnAfter]="dvi">
                               <nz-input-number [nzDisabled]="isEditData" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                formControlName="tichLuongTkVt"></nz-input-number>
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="tichLuongTkVt"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -283,8 +288,9 @@
                           <nz-form-label>Tổng tích lượng đã sử dụng - LT</nz-form-label>
                           <nz-form-control>
                             <nz-input-group [nzAddOnAfter]="dvi">
-                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser" formControlName="tichLuongSdLt"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'"
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="tichLuongSdLt"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -294,8 +300,9 @@
                           <nz-form-label>Tổng tích lượng đã sử dụng - VT</nz-form-label>
                           <nz-form-control>
                             <nz-input-group [nzAddOnAfter]="dvi">
-                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser" formControlName="tichLuongSdLt"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'"
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="tichLuongSdLt"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -305,8 +312,9 @@
                           <nz-form-label>Tổng tích lượng khả dụng - LT</nz-form-label>
                           <nz-form-control>
                             <nz-input-group [nzAddOnAfter]="dvi">
-                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser" formControlName="tichLuongKdLt"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'"
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="tichLuongKdLt"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -316,8 +324,9 @@
                           <nz-form-label>Tổng tích lượng khả dụng - VT</nz-form-label>
                           <nz-form-control>
                             <nz-input-group [nzAddOnAfter]="dvi">
-                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser" formControlName="tichLuongKdVt"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'"
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="tichLuongKdVt"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -326,8 +335,9 @@
                         <nz-form-item>
                           <nz-form-label>Mô tả</nz-form-label>
                           <nz-form-control>
-                            <textarea formControlName="ghiChu" [readOnly]="isEditData" rows="3" class="search__input"
-                              nz-input placeholder="Nhập text"></textarea>
+                        <textarea formControlName="ghiChu" [readOnly]="isEditData" rows="3" class="search__input"
+                                  nz-input
+                                  placeholder="Nhập text"></textarea>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -347,7 +357,7 @@
                         <nz-form-item>
                           <nz-form-label>Mã chi cục</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <input formControlName="maTongKho" nz-input [readonly]="true" />
+                            <input formControlName="maTongKho" nz-input [readonly]="true"/>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -355,7 +365,7 @@
                         <nz-form-item>
                           <nz-form-label>Tên chi cục</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <input formControlName="tenTongKho" nz-input [readonly]="true" />
+                            <input formControlName="tenTongKho" nz-input [readonly]="true"/>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -363,7 +373,7 @@
                         <nz-form-item>
                           <nz-form-label>Địa điểm chi cục</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <input formControlName="diaChi" nz-input [readonly]="true" />
+                            <input formControlName="diaChi" nz-input [readonly]="true"/>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -372,8 +382,9 @@
                           <nz-form-label>Số lượng điểm kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser" formControlName="soDiemkho"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'"
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="soDiemkho"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -383,8 +394,9 @@
                           <nz-form-label>Số lượng nhà kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser" formControlName="soNhakho"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'"
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="soNhakho"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -394,8 +406,9 @@
                           <nz-form-label>Số lượng ngăn kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser" formControlName="soNgankho"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'"
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="soNgankho"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -405,8 +418,9 @@
                           <nz-form-label>Số lượng lô kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser" formControlName="soLokho"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'"
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="soLokho"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -416,8 +430,9 @@
                           <nz-form-label>Tổng tích lượng thiết kế - LT</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="dvi">
-                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser" formControlName="tichLuongTkLt"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'"
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="tichLuongTkLt"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -427,8 +442,9 @@
                           <nz-form-label>Tổng tích lượng thiết kế - VT</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="dvi">
-                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser" formControlName="tichLuongTkVt"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'"
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="tichLuongTkVt"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -438,8 +454,9 @@
                           <nz-form-label>Tổng tích lượng đã sử dụng - LT</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="dvi">
-                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser" formControlName="tichLuongSdLt"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'"
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="tichLuongSdLt"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -449,8 +466,9 @@
                           <nz-form-label>Tổng tích lượng đã sử dụng - VT</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="dvi">
-                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser" formControlName="tichLuongSdVt"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'"
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="tichLuongSdVt"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -460,8 +478,9 @@
                           <nz-form-label>Tổng tích lượng khả dụng - LT</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="dvi">
-                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser" formControlName="tichLuongKdLt"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'"
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="tichLuongKdLt"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -471,8 +490,9 @@
                           <nz-form-label>Tổng tích lượng khả dụng - VT</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="dvi">
-                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser" formControlName="tichLuongKdVt"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'"
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="tichLuongKdVt"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -481,8 +501,9 @@
                         <nz-form-item>
                           <nz-form-label>Mô tả</nz-form-label>
                           <nz-form-control>
-                            <textarea formControlName="ghiChu" [readOnly]="isEditData" rows="3" class="search__input"
-                              nz-input placeholder="Nhập text"></textarea>
+                        <textarea formControlName="ghiChu" [readOnly]="isEditData" rows="3" class="search__input"
+                                  nz-input
+                                  placeholder="Nhập text"></textarea>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -502,7 +523,7 @@
                         <nz-form-item>
                           <nz-form-label>Mã điểm kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <input formControlName="maDiemkho" nz-input [readonly]="true" />
+                            <input formControlName="maDiemkho" nz-input [readonly]="true"/>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -510,7 +531,7 @@
                         <nz-form-item>
                           <nz-form-label>Tên điểm kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <input formControlName="tenDiemkho" nz-input [readonly]="isEditData" />
+                            <input formControlName="tenDiemkho" nz-input [readonly]="isEditData"/>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -518,7 +539,7 @@
                         <nz-form-item>
                           <nz-form-label>Địa chỉ</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <input formControlName="diaChi" nz-input [readonly]="isEditData" />
+                            <input formControlName="diaChi" nz-input [readonly]="isEditData"/>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -526,7 +547,7 @@
                         <nz-form-item>
                           <nz-form-label>Thuộc chi cục</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <input nz-input formControlName="tenTongKho" [readonly]="true" />
+                            <input nz-input formControlName="tenTongKho" [readonly]="true"/>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -536,8 +557,9 @@
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
                               <nz-input-number [nzDisabled]="isEditData" formControlName="dienTichDat"
-                                [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser"></nz-input-number>
+                                               [nzSize]="'small'"
+                                               [nzFormatter]="globals.formatter"
+                                               [nzParser]="globals.parser"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -548,7 +570,8 @@
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
                               <nz-input-number [nzDisabled]="true" formControlName="soNhakho" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+                                               [nzFormatter]="globals.formatter"
+                                               [nzParser]="globals.parser"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -559,7 +582,8 @@
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
                               <nz-input-number [nzDisabled]="true" formControlName="soNgankho" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+                                               [nzFormatter]="globals.formatter"
+                                               [nzParser]="globals.parser"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -570,7 +594,8 @@
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
                               <nz-input-number [nzDisabled]="true" formControlName="soLokho" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+                                               [nzFormatter]="globals.formatter"
+                                               [nzParser]="globals.parser"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -581,7 +606,8 @@
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="dvi">
                               <nz-input-number [nzDisabled]="true" formControlName="tichLuongTkLt" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+                                               [nzFormatter]="globals.formatter"
+                                               [nzParser]="globals.parser"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -592,7 +618,8 @@
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="dvi">
                               <nz-input-number [nzDisabled]="true" formControlName="tichLuongTkVt" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+                                               [nzFormatter]="globals.formatter"
+                                               [nzParser]="globals.parser"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -603,7 +630,8 @@
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="dvi">
                               <nz-input-number [nzDisabled]="true" formControlName="tichLuongSdLt" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+                                               [nzFormatter]="globals.formatter"
+                                               [nzParser]="globals.parser"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -614,7 +642,8 @@
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="dvi">
                               <nz-input-number [nzDisabled]="true" formControlName="tichLuongSdVt" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+                                               [nzFormatter]="globals.formatter"
+                                               [nzParser]="globals.parser"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -625,7 +654,8 @@
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="dvi">
                               <nz-input-number [nzDisabled]="true" formControlName="tichLuongKdLt" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+                                               [nzFormatter]="globals.formatter"
+                                               [nzParser]="globals.parser"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -636,7 +666,8 @@
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="dvi">
                               <nz-input-number [nzDisabled]="true" formControlName="tichLuongKdVt" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+                                               [nzFormatter]="globals.formatter"
+                                               [nzParser]="globals.parser"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -645,8 +676,9 @@
                         <nz-form-item>
                           <nz-form-label>Mô tả</nz-form-label>
                           <nz-form-control>
-                            <textarea formControlName="ghiChu" [readOnly]="isEditData" rows="3" class="search__input"
-                              nz-input placeholder="Nhập text"></textarea>
+                        <textarea formControlName="ghiChu" [readOnly]="isEditData" rows="3" class="search__input"
+                                  nz-input
+                                  placeholder="Nhập text"></textarea>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -666,7 +698,7 @@
                         <nz-form-item>
                           <nz-form-label>Mã nhà kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <input formControlName="maNhakho" nz-input [readonly]="true" />
+                            <input formControlName="maNhakho" nz-input [readonly]="true"/>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -674,7 +706,7 @@
                         <nz-form-item>
                           <nz-form-label>Tên nhà kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <input formControlName="tenNhakho" nz-input [readonly]="isEditData" />
+                            <input formControlName="tenNhakho" nz-input [readonly]="isEditData"/>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -683,7 +715,7 @@
                         <nz-form-control [nzErrorTip]="error">
                           <nz-input-group>
                             <nz-date-picker formControlName="namSudung" [nzDisabled]="isEditData"
-                              nzFormat="dd/MM/YYYY"></nz-date-picker>
+                                            nzFormat="dd/MM/YYYY"></nz-date-picker>
                           </nz-input-group>
                         </nz-form-control>
                       </div>
@@ -696,7 +728,7 @@
                                 <nz-input-group>
                                   <nz-select formControlName="loaikhoId" [nzDisabled]="isEditData">
                                     <nz-option *ngFor="let item of listLoaiKho" [nzValue]="item.ma"
-                                      [nzLabel]="item.giaTri">
+                                               [nzLabel]="item.giaTri">
                                     </nz-option>
                                   </nz-select>
                                 </nz-input-group>
@@ -712,7 +744,7 @@
                               <nz-form-label>Số ngăn kho thiết kế</nz-form-label>
                               <nz-form-control [nzErrorTip]="error">
                                 <nz-input-group>
-                                  <input formControlName="soNganKhoTk" [readonly]="isEditData" nz-input />
+                                  <input formControlName="soNganKhoTk" [readonly]="isEditData" nz-input/>
                                 </nz-input-group>
                               </nz-form-control>
                             </nz-form-item>
@@ -727,8 +759,8 @@
                               <nz-form-control [nzErrorTip]="error">
                                 <nz-input-group>
                                   <nz-input-number [nzDisabled]="isEditData" formControlName="dienTichNganKhoTk"
-                                    [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                    [nzParser]="globals.parser"></nz-input-number>
+                                                   [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                                   [nzParser]="globals.parser"></nz-input-number>
                                 </nz-input-group>
                               </nz-form-control>
                             </nz-form-item>
@@ -740,7 +772,7 @@
                           <nz-form-label>Thuộc điểm kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <input nz-input formControlName="tenDiemkho" [readOnly]="true" />
+                              <input nz-input formControlName="tenDiemkho" [readOnly]="true"/>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -750,7 +782,7 @@
                           <nz-form-label>Chi cục</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <input nz-input formControlName="tenTongKho" [readOnly]="true" />
+                              <input nz-input formControlName="tenTongKho" [readOnly]="true"/>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -760,7 +792,7 @@
                           <nz-form-label>Địa điểm</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <input nz-input formControlName="diaChi" [readOnly]="true" />
+                              <input nz-input formControlName="diaChi" [readOnly]="true"/>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -782,7 +814,7 @@
                           <nz-form-control [nzErrorTip]="error">
                             <nz-select formControlName="chatluongId" [nzDisabled]="isEditData">
                               <nz-option *ngFor="let item of listChatLuongKho" [nzValue]="item.ma"
-                                [nzLabel]="item.giaTri">
+                                         [nzLabel]="item.giaTri">
                               </nz-option>
                             </nz-select>
                           </nz-form-control>
@@ -794,8 +826,8 @@
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
                               <nz-input-number [nzDisabled]="isEditData" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                formControlName="dienTichDat"></nz-input-number>
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="dienTichDat"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -805,7 +837,7 @@
                           <nz-form-label>Tổng tích lượng thiết kế - LT</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="dvi">
-                              <input nz-input formControlName="tichLuongTkLt" [readOnly]="true" />
+                              <input nz-input formControlName="tichLuongTkLt" [readOnly]="true"/>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -815,7 +847,7 @@
                           <nz-form-label>Tổng tích lượng thiết kế - VT</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="dvi" p>
-                              <input nz-input formControlName="tichLuongTkVt" [readOnly]="true" />
+                              <input nz-input formControlName="tichLuongTkVt" [readOnly]="true"/>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -825,7 +857,7 @@
                           <nz-form-label>Tổng tích lượng đã SD - LT</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="dvi">
-                              <input nz-input formControlName="tichLuongSdLt" [readOnly]="true" />
+                              <input nz-input formControlName="tichLuongSdLt" [readOnly]="true"/>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -835,7 +867,7 @@
                           <nz-form-label>Tổng tích lượng đã SD - VT</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="dvi">
-                              <input nz-input formControlName="tichLuongSdVt" [readOnly]="true" />
+                              <input nz-input formControlName="tichLuongSdVt" [readOnly]="true"/>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -845,7 +877,7 @@
                           <nz-form-label>Tổng tích lượng khả dụng - LT</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="dvi">
-                              <input nz-input formControlName="tichLuongKdLt" [readOnly]="true" />
+                              <input nz-input formControlName="tichLuongKdLt" [readOnly]="true"/>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -855,7 +887,19 @@
                           <nz-form-label>Tổng tích lượng khả dụng - VT</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="dvi">
-                              <input nz-input formControlName="tichLuongKdVt" [readOnly]="true" />
+                              <input nz-input formControlName="tichLuongKdVt" [readOnly]="true"/>
+                            </nz-input-group>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <div nz-col [nzSpan]="6">
+                        <nz-form-item>
+                          <nz-form-label>Khối tích</nz-form-label>
+                          <nz-form-control>
+                            <nz-input-group>
+                              <nz-input-number [nzDisabled]="!isEditData" [nzSize]="'small'"
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="khoiTich"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -865,8 +909,9 @@
                           <nz-form-label>Số lượng ngăn kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <nz-input-number [nzDisabled]="true" formControlName="soNgankho" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" formControlName="soNgankho"
+                                               [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                               [nzParser]="globals.parser"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -876,8 +921,9 @@
                           <nz-form-label>Số lượng lô kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <nz-input-number [nzDisabled]="true" formControlName="soLokho" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" formControlName="soLokho"
+                                               [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                               [nzParser]="globals.parser"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -887,17 +933,16 @@
                           <nz-form-label>Tên thủ kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <input nz-input formControlName="tenThuKho" [readOnly]="isEditData" />
+                              <input nz-input formControlName="tenThuKho" [readOnly]="isEditData"/>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
-                      <div nz-col [nzSpan]="6" *ngIf="!isEditData">
+                      <div nz-col [nzSpan]="6" *ngIf="isEditData">
                         <nz-form-item>
                           <nz-form-label></nz-form-label>
                           <nz-form-control>
-                            <button type="button" class="btn btn-main" (click)="openDialogGiaoKho()"
-                              style="margin-top: -6px">
+                            <button type="button" class="btn btn-main" (click)="openDialogGiaoKho()" style="margin-top: -6px">
                               <i class="icon htvbdh_dau-cong"></i>
                               <span>Giao kho</span>
                             </button>
@@ -908,8 +953,8 @@
                         <nz-form-item>
                           <nz-form-label>Nhiệm vụ</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <textarea formControlName="nhiemVu" [readonly]="isEditData" rows="3" class="search__input"
-                              nz-input placeholder="Nhập text"></textarea>
+                        <textarea formControlName="nhiemVu" [readonly]="isEditData" rows="3" class="search__input"
+                                  nz-input placeholder="Nhập text"></textarea>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -931,7 +976,7 @@
                         <nz-form-item>
                           <nz-form-label>Mã ngăn kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <input formControlName="maNgankho" nz-input [readonly]="true" />
+                            <input formControlName="maNgankho" nz-input [readonly]="true"/>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -939,7 +984,7 @@
                         <nz-form-item>
                           <nz-form-label>Tên ngăn kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <input formControlName="tenNgankho" nz-input [readonly]="isEditData" />
+                            <input formControlName="tenNgankho" nz-input [readonly]="isEditData"/>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -960,8 +1005,9 @@
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
                               <nz-input-number [nzDisabled]="isEditData" formControlName="dienTichDat"
-                                [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser"></nz-input-number>
+                                               [nzSize]="'small'"
+                                               [nzFormatter]="globals.formatter"
+                                               [nzParser]="globals.parser"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -971,8 +1017,9 @@
                           <nz-form-label>Số lượng lô kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <nz-input-number [nzDisabled]="true" formControlName="soLokho" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" formControlName="soLokho"
+                                               [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                               [nzParser]="globals.parser"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -982,7 +1029,7 @@
                           <nz-form-label>Thuộc nhà kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <input formControlName="tenNhakho" nz-input [readonly]="true" />
+                              <input formControlName="tenNhakho" nz-input [readonly]="true"/>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -992,7 +1039,7 @@
                           <nz-form-label>Thuộc điểm kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <input formControlName="tenDiemkho" nz-input [readonly]="true" />
+                              <input formControlName="tenDiemkho" nz-input [readonly]="true"/>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1002,7 +1049,7 @@
                           <nz-form-label>Thuộc chi cục</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <input nz-input formControlName="tenTongKho" [readonly]="true" />
+                              <input nz-input formControlName="tenTongKho" [readonly]="true"/>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1012,7 +1059,7 @@
                           <nz-form-label>Địa điểm</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <input formControlName="diaChi" nz-input [readonly]="true" />
+                              <input formControlName="diaChi" nz-input [readonly]="true"/>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1034,8 +1081,8 @@
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
                               <label nz-checkbox formControlName="coLoKho"
-                                [nzDisabled]="isEditData || detailDonVi.value.coLoKho == true"
-                                (ngModelChange)="changeLoKho()">Có lô kho</label>
+                                     [nzDisabled]="isEditData || detailDonVi.value.coLoKho == true"
+                                     (ngModelChange)="changeLoKho()">Có lô kho</label>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1046,8 +1093,8 @@
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="dvi">
                               <nz-input-number [nzDisabled]="isEditData" formControlName="tichLuongTkLt"
-                                [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser"></nz-input-number>
+                                               [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                               [nzParser]="globals.parser"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1058,8 +1105,8 @@
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="dvi" p>
                               <nz-input-number [nzDisabled]="isEditData" formControlName="tichLuongTkVt"
-                                [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser"></nz-input-number>
+                                               [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                               [nzParser]="globals.parser"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1069,8 +1116,9 @@
                           <nz-form-label>Tổng tích lượng đã SD - LT</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="dvi">
-                              <nz-input-number [nzDisabled]="true" formControlName="tichLuongSdLt" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" formControlName="tichLuongSdLt"
+                                               [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                               [nzParser]="globals.parser"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1080,8 +1128,9 @@
                           <nz-form-label>Tổng tích lượng đã SD - VT</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="dvi">
-                              <nz-input-number [nzDisabled]="true" formControlName="tichLuongSdVt" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" formControlName="tichLuongSdVt"
+                                               [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                               [nzParser]="globals.parser"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1092,8 +1141,8 @@
                           <nz-form-control>
                             <nz-input-group [nzAddOnAfter]="dvi">
                               <nz-input-number [nzDisabled]="isEditData" formControlName="tichLuongKdLt"
-                                [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser"></nz-input-number>
+                                               [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                               [nzParser]="globals.parser"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1104,8 +1153,8 @@
                           <nz-form-control>
                             <nz-input-group [nzAddOnAfter]="dvi">
                               <nz-input-number [nzDisabled]="isEditData" formControlName="tichLuongKdVt"
-                                [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser"></nz-input-number>
+                                               [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                               [nzParser]="globals.parser"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1116,8 +1165,8 @@
                           <nz-form-control>
                             <nz-input-group [nzAddOnAfter]="theTich">
                               <nz-input-number [nzDisabled]="isEditData" formControlName="theTichTkLt"
-                                [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser"></nz-input-number>
+                                               [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                               [nzParser]="globals.parser"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1128,8 +1177,8 @@
                           <nz-form-control>
                             <nz-input-group [nzAddOnAfter]="theTich">
                               <nz-input-number [nzDisabled]="isEditData" formControlName="theTichTkVt"
-                                [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser"></nz-input-number>
+                                               [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                               [nzParser]="globals.parser"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1139,8 +1188,9 @@
                           <nz-form-label>Tổng thế tích đã sử dụng - LT</nz-form-label>
                           <nz-form-control>
                             <nz-input-group [nzAddOnAfter]="theTich">
-                              <nz-input-number [nzDisabled]="true" formControlName="theTichSdLt" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" formControlName="theTichSdLt"
+                                               [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                               [nzParser]="globals.parser"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1150,8 +1200,9 @@
                           <nz-form-label>Tổng thế tích đã sử dụng - VT</nz-form-label>
                           <nz-form-control>
                             <nz-input-group [nzAddOnAfter]="theTich">
-                              <nz-input-number [nzDisabled]="true" formControlName="theTichSdVt" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" formControlName="theTichSdVt"
+                                               [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                               [nzParser]="globals.parser"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1162,8 +1213,8 @@
                           <nz-form-control>
                             <nz-input-group [nzAddOnAfter]="theTich">
                               <nz-input-number [nzDisabled]="isEditData" formControlName="theTichKdLt"
-                                [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser"></nz-input-number>
+                                               [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                               [nzParser]="globals.parser"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1174,8 +1225,8 @@
                           <nz-form-control>
                             <nz-input-group [nzAddOnAfter]="theTich">
                               <nz-input-number [nzDisabled]="isEditData" formControlName="theTichKdVt"
-                                [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser"></nz-input-number>
+                                               [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                               [nzParser]="globals.parser"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1185,7 +1236,7 @@
                           <nz-form-label>Thời điểm nhập kho (năm)</nz-form-label>
                           <nz-form-control>
                             <nz-input-group>
-                              <input formControlName="namNhap" nz-input [readOnly]="true" />
+                              <input formControlName="namNhap" nz-input [readOnly]="true"/>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1195,30 +1246,30 @@
                       </div>
                       <div nz-col [nzSpan]="6" *ngIf="!checkLoKho">
                         <nz-form-item>
-                          <nz-form-label>Loại hàng hóa</nz-form-label>
+                          <nz-form-label>Loại hàng DTQG</nz-form-label>
                           <nz-form-control>
-                            <input nz-input formControlName="tenLoaiVthh" [readOnly]="true" />
+                            <input nz-input formControlName="tenLoaiVthh" [readOnly]="true"/>
                             <!--<nz-input-group>
-                  <nz-select formControlName="loaiVthh" [nzDisabled]="true"
-                             (ngModelChange)="onChangeLoaiVthh($event)">
-                    <nz-option *ngFor="let item of listVthh" [nzLabel]="item.giaTri"
-                               [nzValue]="item.ma"></nz-option>
-                  </nz-select>
-                </nz-input-group>-->
+                              <nz-select formControlName="loaiVthh" [nzDisabled]="true"
+                                         (ngModelChange)="onChangeLoaiVthh($event)">
+                                <nz-option *ngFor="let item of listVthh" [nzLabel]="item.giaTri"
+                                           [nzValue]="item.ma"></nz-option>
+                              </nz-select>
+                            </nz-input-group>-->
                           </nz-form-control>
                         </nz-form-item>
                       </div>
                       <div nz-col [nzSpan]="6" *ngIf="!checkLoKho">
                         <nz-form-item>
-                          <nz-form-label>Chủng loại hàng hóa</nz-form-label>
+                          <nz-form-label>Chủng loại hàng DTQG</nz-form-label>
                           <nz-form-control>
                             <nz-input-group>
                               <!-- <nz-select [nzDisabled]="true" formControlName="cloaiVthh"
-                             (ngModelChange)="onChangCloaiVthh($event)">
-                    <nz-option *ngFor="let item of listCloaiVthh" [nzLabel]="item.ten"
-                               [nzValue]="item.ma"></nz-option>
-                  </nz-select>-->
-                              <input nz-input formControlName="tenCloaiVthh" [readOnly]="true" />
+                                          (ngModelChange)="onChangCloaiVthh($event)">
+                                 <nz-option *ngFor="let item of listCloaiVthh" [nzLabel]="item.ten"
+                                            [nzValue]="item.ma"></nz-option>
+                               </nz-select>-->
+                              <input nz-input formControlName="tenCloaiVthh" [readOnly]="true"/>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1228,8 +1279,9 @@
                           <nz-form-label>Số lượng tồn kho</nz-form-label>
                           <nz-form-control>
                             <nz-input-group>
-                              <nz-input-number [nzDisabled]="true" formControlName="slTon" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" formControlName="slTon"
+                                               [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                               [nzParser]="globals.parser"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1239,7 +1291,7 @@
                           <nz-form-label>Đơn vị tính</nz-form-label>
                           <nz-form-control>
                             <nz-input-group>
-                              <input nz-input formControlName="dviTinh" [readOnly]="true" />
+                              <input nz-input formControlName="dviTinh" [readOnly]="true"/>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1249,8 +1301,9 @@
                           <nz-form-label>Ngày nhập đầy</nz-form-label>
                           <nz-form-control>
                             <nz-input-group>
-                              <nz-date-picker formControlName="ngayNhapDay" [nzDisabled]="true" nzFormat="dd/MM/yyyy"
-                                [nzDisabled]="true"></nz-date-picker>
+                              <nz-date-picker formControlName="ngayNhapDay" [nzDisabled]="true"
+                                              nzFormat="dd/MM/yyyy"
+                                              [nzDisabled]="true"></nz-date-picker>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1259,8 +1312,8 @@
                         <nz-form-item>
                           <nz-form-label>Nhiệm vụ</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <textarea formControlName="nhiemVu" [readonly]="true" rows="3" class="search__input"
-                              nz-input placeholder="Nhập text"></textarea>
+                        <textarea formControlName="nhiemVu" [readonly]="true" rows="3" class="search__input"
+                                  nz-input placeholder="Nhập text"></textarea>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -1268,8 +1321,8 @@
                         <nz-form-item>
                           <nz-form-label>Ghi chú</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <textarea formControlName="ghiChu" [readonly]="isEditData" rows="3" class="search__input"
-                              nz-input placeholder="Nhập text"></textarea>
+                        <textarea formControlName="ghiChu" [readonly]="isEditData" rows="3" class="search__input"
+                                  nz-input placeholder="Nhập text"></textarea>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -1289,7 +1342,7 @@
                         <nz-form-item>
                           <nz-form-label>Mã lô kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <input formControlName="maNganlo" nz-input [readonly]="true" />
+                            <input formControlName="maNganlo" nz-input [readonly]="true"/>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -1297,7 +1350,7 @@
                         <nz-form-item>
                           <nz-form-label>Tên lô kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <input formControlName="tenNganlo" nz-input [readonly]="isEditData" />
+                            <input formControlName="tenNganlo" nz-input [readonly]="isEditData"/>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -1307,7 +1360,7 @@
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
                               <nz-date-picker formControlName="namSudung" nzDisabled="true"
-                                nzFormat="dd/MM/yyyy"></nz-date-picker>
+                                              nzFormat="dd/MM/yyyy"></nz-date-picker>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1328,7 +1381,7 @@
                           <nz-form-label>Địa điểm</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <input nz-input formControlName="diaChi" [readonly]="true" />
+                              <input nz-input formControlName="diaChi" [readonly]="true"/>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1338,7 +1391,7 @@
                           <nz-form-label>Thuộc ngăn kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <input nz-input formControlName="tenNgankho" [readonly]="true" />
+                              <input nz-input formControlName="tenNgankho" [readonly]="true"/>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1347,7 +1400,7 @@
                         <nz-form-item>
                           <nz-form-label>Thuộc nhà kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <input nz-input formControlName="tenNhakho" [readonly]="true" />
+                            <input nz-input formControlName="tenNhakho" [readonly]="true"/>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -1355,7 +1408,7 @@
                         <nz-form-item>
                           <nz-form-label>Thuộc điểm kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <input nz-input formControlName="tenDiemkho" [readonly]="true" />
+                            <input nz-input formControlName="tenDiemkho" [readonly]="true"/>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -1364,7 +1417,7 @@
                           <nz-form-label>Thuộc chi cục</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <input nz-input formControlName="tenTongKho" [readonly]="true" />
+                              <input nz-input formControlName="tenTongKho" [readonly]="true"/>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1375,8 +1428,8 @@
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
                               <nz-input-number [nzDisabled]="isEditData" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                formControlName="dienTichDat"></nz-input-number>
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="dienTichDat"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1387,8 +1440,8 @@
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="dvi">
                               <nz-input-number [nzDisabled]="isEditData" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                formControlName="tichLuongTkLt"></nz-input-number>
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="tichLuongTkLt"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1399,8 +1452,8 @@
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="dvi">
                               <nz-input-number [nzDisabled]="isEditData" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                formControlName="tichLuongTkVt"></nz-input-number>
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="tichLuongTkVt"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1410,8 +1463,9 @@
                           <nz-form-label>Tích lượng đã SD - LT</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="dvi">
-                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser" formControlName="tichLuongSdLt"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'"
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="tichLuongSdLt"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1421,8 +1475,9 @@
                           <nz-form-label>Tích lượng đã SD - VT</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="dvi">
-                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser" formControlName="tichLuongSdVt"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'"
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="tichLuongSdVt"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1433,8 +1488,8 @@
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="dvi">
                               <nz-input-number [nzDisabled]="isEditData" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                formControlName="tichLuongKdLt"></nz-input-number>
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="tichLuongKdLt"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1445,8 +1500,8 @@
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="dvi">
                               <nz-input-number [nzDisabled]="isEditData" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                formControlName="tichLuongKdVt"></nz-input-number>
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="tichLuongKdVt"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1457,7 +1512,7 @@
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
                               <nz-date-picker [nzDisabled]="isEditData" formControlName="namSudung"
-                                nzFormat="dd/MM/yyyy"></nz-date-picker>
+                                              nzFormat="dd/MM/yyyy"></nz-date-picker>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1468,8 +1523,8 @@
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="theTich">
                               <nz-input-number [nzDisabled]="isEditData" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                formControlName="theTichTkLt"></nz-input-number>
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="theTichTkLt"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1480,8 +1535,8 @@
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="theTich">
                               <nz-input-number [nzDisabled]="isEditData" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                formControlName="theTichTkVt"></nz-input-number>
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="theTichTkVt"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1491,8 +1546,9 @@
                           <nz-form-label>Thể tích đã sử dụng - LT</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="theTich">
-                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser" formControlName="theTichSdLt"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'"
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="theTichSdLt"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1502,8 +1558,9 @@
                           <nz-form-label>Thể tích đã sử dụng - VT</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="theTich">
-                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser" formControlName="theTichSdVt"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'"
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="theTichSdVt"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1514,8 +1571,8 @@
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="theTich">
                               <nz-input-number [nzDisabled]="isEditData" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                formControlName="theTichKdLt"></nz-input-number>
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="theTichKdLt"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1526,37 +1583,40 @@
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group [nzAddOnAfter]="theTich">
                               <nz-input-number [nzDisabled]="isEditData" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                formControlName="theTichKdVt"></nz-input-number>
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="theTichKdVt"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
                       <div nz-col [nzSpan]="4">
                         <nz-form-item>
-                          <nz-form-label>Loại hàng hóa</nz-form-label>
+                          <nz-form-label>Loại hàng DTQG</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <nz-input-group>
+                            <!--<nz-input-group>
                               <nz-select formControlName="loaiVthh" [nzDisabled]="true"
-                                (ngModelChange)="onChangeLoaiVthh($event)">
+                                         (ngModelChange)="onChangeLoaiVthh($event)">
                                 <nz-option *ngFor="let item of listVthh" [nzLabel]="item.giaTri"
-                                  [nzValue]="item.ma"></nz-option>
+                                           [nzValue]="item.ma"></nz-option>
                               </nz-select>
-                            </nz-input-group>
+                            </nz-input-group>-->
+                            <input nz-input formControlName="tenLoaiVthh" [readOnly]="true"/>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
                       <div nz-col [nzSpan]="4">
                         <nz-form-item>
-                          <nz-form-label>Chủng loại hàng hóa</nz-form-label>
+                          <nz-form-label>Chủng loại hàng DTQG</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <nz-input-group>
-                              <nz-select [nzDisabled]="true" formControlName="cloaiVthh"
-                                (ngModelChange)="onChangCloaiVthh($event)">
+                            <!--<nz-input-group>
+                              <nz-select [nzDisabled]="true"
+                                         formControlName="cloaiVthh"
+                                         (ngModelChange)="onChangCloaiVthh($event)">
                                 <nz-option *ngFor="let item of listCloaiVthh" [nzLabel]="item.ten"
-                                  [nzValue]="item.ma"></nz-option>
+                                           [nzValue]="item.ma"></nz-option>
                               </nz-select>
-                            </nz-input-group>
+                            </nz-input-group>-->
+                            <input nz-input formControlName="tenCloaiVthh" [readOnly]="true"/>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -1565,8 +1625,9 @@
                           <nz-form-label>Số lượng</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser" formControlName="slTon"></nz-input-number>
+                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'"
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="slTon"></nz-input-number>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1576,7 +1637,7 @@
                           <nz-form-label>Đơn vị tính</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <input formControlName="dviTinh" nz-input [readonly]="true" />
+                              <input formControlName="dviTinh" nz-input [readonly]="true"/>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1598,7 +1659,7 @@
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
                               <nz-date-picker formControlName="ngayNhapDay" [nzDisabled]="true"
-                                nzFormat="dd/MM/yyyy"></nz-date-picker>
+                                              nzFormat="dd/MM/yyyy"></nz-date-picker>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -1607,8 +1668,8 @@
                         <nz-form-item>
                           <nz-form-label>Nhiệm vụ</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <textarea formControlName="nhiemVu" [readOnly]="isEditData" rows="3" class="search__input"
-                              nz-input placeholder="Nhập text"></textarea>
+                        <textarea formControlName="nhiemVu" [readOnly]="isEditData" rows="3" class="search__input"
+                                  nz-input placeholder="Nhập text"></textarea>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -1616,8 +1677,8 @@
                         <nz-form-item>
                           <nz-form-label>Ghi chú</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <textarea formControlName="ghiChu" [readOnly]="isEditData" rows="3" class="search__input"
-                              nz-input placeholder="Nhập text"></textarea>
+                        <textarea formControlName="ghiChu" [readOnly]="isEditData" rows="3" class="search__input"
+                                  nz-input placeholder="Nhập text"></textarea>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -1644,181 +1705,180 @@
               *ngIf="levelNode == 2 || levelNode == 3 || levelNode == 4 || levelNode == 5 || (levelNode == 6 && detailDonVi.value.coLoKho) ">
               <nz-collapse>
                 <nz-collapse-panel nzActive="true"
-                  [nzHeader]="levelNode == 2 ? 'DANH SÁCH CHI CỤC' : levelNode == 3 ? 'DANH SÁCH ĐIỂM KHO' : levelNode == 4 ? 'DANH SÁCH NHÀ KHO' :  levelNode == 5 ? 'DANH SÁCH NGĂN KHO' : 'DANH SÁCH LÔ KHO' ">
+                                   [nzHeader]="levelNode == 2 ? 'DANH SÁCH CHI CỤC' : levelNode == 3 ? 'DANH SÁCH ĐIỂM KHO' : levelNode == 4 ? 'DANH SÁCH NHÀ KHO' :  levelNode == 5 ? 'DANH SÁCH NGĂN KHO' : 'DANH SÁCH LÔ KHO' ">
                   <nz-table class="pd-10" [nzData]="dataTable" nzBordered [nzFrontPagination]="false"
-                    [nzShowPagination]="false">
+                            [nzShowPagination]="false">
                     <thead>
-                      <tr>
-                        <th rowspan="2">STT</th>
-                        <th rowspan="2" *ngIf="levelNode == 2">Tên chi cục</th>
-                        <th rowspan="2" *ngIf="levelNode == 3">Tên điểm kho</th>
-                        <th rowspan="2" *ngIf="levelNode == 4">Tên nhà kho</th>
-                        <th rowspan="2" *ngIf="levelNode == 5">Tên ngăn kho</th>
-                        <th rowspan="2" *ngIf="levelNode == 6">Tên lô kho</th>
-                        <th colspan="3">Tổng tích lượng thiết kế (tấn kho)</th>
-                        <th colspan="3">Tổng tích lượng đã sử dụng (tấn kho)</th>
-                        <th colspan="3">Tổng tích lượng khả dụng (tấn kho)</th>
-                      </tr>
-                      <tr>
-                        <th colspan="1">Tổng cộng</th>
-                        <th colspan="1">Lương thực</th>
-                        <th colspan="1">Vật tư</th>
-                        <th colspan="1">Tổng cộng</th>
-                        <th colspan="1">Lương thực</th>
-                        <th colspan="1">Vật tư</th>
-                        <th colspan="1">Tổng cộng</th>
-                        <th colspan="1">Lương thực</th>
-                        <th colspan="1">Vật tư</th>
-                      <tr>
+                    <tr>
+                      <th rowspan="2">STT</th>
+                      <th rowspan="2" *ngIf="levelNode == 2">Tên chi cục</th>
+                      <th rowspan="2" *ngIf="levelNode == 3">Tên điểm kho</th>
+                      <th rowspan="2" *ngIf="levelNode == 4">Tên nhà kho</th>
+                      <th rowspan="2" *ngIf="levelNode == 5">Tên ngăn kho</th>
+                      <th rowspan="2" *ngIf="levelNode == 6">Tên lô kho</th>
+                      <th colspan="3">Tổng tích lượng thiết kế (tấn kho)</th>
+                      <th colspan="3">Tổng tích lượng đã sử dụng (tấn kho)</th>
+                      <th colspan="3">Tổng tích lượng khả dụng (tấn kho)</th>
+                    </tr>
+                    <tr>
+                      <th colspan="1">Tổng cộng</th>
+                      <th colspan="1">Lương thực</th>
+                      <th colspan="1">Vật tư</th>
+                      <th colspan="1">Tổng cộng</th>
+                      <th colspan="1">Lương thực</th>
+                      <th colspan="1">Vật tư</th>
+                      <th colspan="1">Tổng cộng</th>
+                      <th colspan="1">Lương thực</th>
+                      <th colspan="1">Vật tư</th>
+                    <tr>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let data of dataTable; let idx = index">
-                        <td class="text-center">{{ idx + 1 }}</td>
-                        <td>{{ data.tenDvi }}</td>
-                        <td class="text-right">{{ data.tichLuongTkLt + data.tichLuongTkVt | number : '1.0-1' : 'vi_VN'
-                          }}</td>
-                        <td class="text-right">{{ data.tichLuongTkLt | number : '1.0-1' : 'vi_VN' }}</td>
-                        <td class="text-right">{{ data.tichLuongTkVt | number : '1.0-1' : 'vi_VN' }}</td>
-                        <td class="text-right">{{ data.tichLuongTkLt + data.tichLuongTkVt | number : '1.0-1' : 'vi_VN'
-                          }}</td>
-                        <td class="text-right">{{ data.tichLuongTkLt | number : '1.0-1' : 'vi_VN' }}</td>
-                        <td class="text-right">{{ data.tichLuongTkVt | number : '1.0-1' : 'vi_VN' }}</td>
-                        <td class="text-right">{{ data.tichLuongKdLt + data.tichLuongKdVt | number : '1.0-1' : 'vi_VN'
-                          }}</td>
-                        <td class="text-right">{{ data.tichLuongKdLt | number : '1.0-1' : 'vi_VN' }}</td>
-                        <td class="text-right">{{ data.tichLuongKdVt | number : '1.0-1' : 'vi_VN' }}</td>
-                      </tr>
+                    <tr *ngFor="let data of dataTable; let idx = index">
+                      <td class="text-center">{{ idx + 1 }}</td>
+                      <td>{{ data.tenDvi }}</td>
+                      <td
+                        class="text-right">{{ data.tichLuongTkLt + data.tichLuongTkVt | number : '1.0-1' : 'vi_VN' }}</td>
+                      <td class="text-right">{{ data.tichLuongTkLt | number : '1.0-1' : 'vi_VN' }}</td>
+                      <td class="text-right">{{ data.tichLuongTkVt | number : '1.0-1' : 'vi_VN' }}</td>
+                      <td
+                        class="text-right">{{ data.tichLuongTkLt + data.tichLuongTkVt | number : '1.0-1' : 'vi_VN' }}</td>
+                      <td class="text-right">{{ data.tichLuongTkLt | number : '1.0-1' : 'vi_VN' }}</td>
+                      <td class="text-right">{{ data.tichLuongTkVt | number : '1.0-1' : 'vi_VN' }}</td>
+                      <td
+                        class="text-right">{{ data.tichLuongKdLt + data.tichLuongKdVt | number : '1.0-1' : 'vi_VN' }}</td>
+                      <td class="text-right">{{ data.tichLuongKdLt | number : '1.0-1' : 'vi_VN' }}</td>
+                      <td class="text-right">{{ data.tichLuongKdVt | number : '1.0-1' : 'vi_VN' }}</td>
+                    </tr>
                     </tbody>
                     <tfoot>
-                      <tr>
-                        <td></td>
-                        <td class="text-uppercase font-weight-bold">Tổng</td>
-                        <td class="font-weight-bold text-right">{{ calcTong('tichLuongTkLt') +
-                          calcTong('tichLuongTkVt')| number : '1.0-1' : 'vi_VN' }}</td>
-                        <td class="font-weight-bold text-right">{{ calcTong('tichLuongTkLt') | number : '1.0-1' :'vi_VN'
-                          }}</td>
-                        <td class="font-weight-bold text-right">{{ calcTong('tichLuongTkVt') | number : '1.0-1' :
-                          'vi_VN' }}</td>
-                        <td class="font-weight-bold text-right">{{ calcTong('tichLuongTkLt') +
-                          calcTong('tichLuongTkVt')| number : '1.0-1' : 'vi_VN' }}</td>
-                        <td class="font-weight-bold text-right">{{ calcTong('tichLuongTkLt') | number : '1.0-1' :'vi_VN'
-                          }}</td>
-                        <td class="font-weight-bold text-right">{{ calcTong('tichLuongTkVt') | number : '1.0-1' :
-                          'vi_VN' }}</td>
-                        <td class="font-weight-bold text-right">{{ calcTong('tichLuongKdLt') +
-                          calcTong('tichLuongKdVt')| number : '1.0-1' : 'vi_VN' }}</td>
-                        <td class="font-weight-bold text-right">{{ calcTong('tichLuongKdLt') | number : '1.0-1' :'vi_VN'
-                          }}</td>
-                        <td class="font-weight-bold text-right">{{ calcTong('tichLuongKdVt') | number : '1.0-1' :
-                          'vi_VN' }}</td>
-                      </tr>
+                    <tr>
+                      <td></td>
+                      <td class="text-uppercase font-weight-bold">Tổng</td>
+                      <td
+                        class="font-weight-bold text-right">{{ calcTong('tichLuongTkLt') + calcTong('tichLuongTkVt')| number : '1.0-1' : 'vi_VN' }}</td>
+                      <td
+                        class="font-weight-bold text-right">{{ calcTong('tichLuongTkLt') | number : '1.0-1' :'vi_VN' }}</td>
+                      <td
+                        class="font-weight-bold text-right">{{ calcTong('tichLuongTkVt') | number : '1.0-1' : 'vi_VN' }}</td>
+                      <td
+                        class="font-weight-bold text-right">{{ calcTong('tichLuongTkLt') + calcTong('tichLuongTkVt')| number : '1.0-1' : 'vi_VN' }}</td>
+                      <td
+                        class="font-weight-bold text-right">{{ calcTong('tichLuongTkLt') | number : '1.0-1' :'vi_VN' }}</td>
+                      <td
+                        class="font-weight-bold text-right">{{ calcTong('tichLuongTkVt') | number : '1.0-1' : 'vi_VN' }}</td>
+                      <td
+                        class="font-weight-bold text-right">{{ calcTong('tichLuongKdLt') + calcTong('tichLuongKdVt')| number : '1.0-1' : 'vi_VN' }}</td>
+                      <td
+                        class="font-weight-bold text-right">{{ calcTong('tichLuongKdLt') | number : '1.0-1' :'vi_VN' }}</td>
+                      <td
+                        class="font-weight-bold text-right">{{ calcTong('tichLuongKdVt') | number : '1.0-1' : 'vi_VN' }}</td>
+                    </tr>
                     </tfoot>
                   </nz-table>
                 </nz-collapse-panel>
               </nz-collapse>
               <nz-collapse>
-                <nz-collapse-panel nzActive="true" nzHeader="THÔNG TIN CHUNG HÀNG HÓA">
+                <nz-collapse-panel nzActive="true" nzHeader="THÔNG TIN CHUNG HÀNG DTQG">
                   <nz-table class="pd-10" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
                     <thead>
-                      <tr>
-                        <th nzWidth="40px">STT</th>
-                        <th nzWidth="150px">Tên hàng hóa</th>
-                        <th>Tên chủng loại hàng hóa</th>
-                        <th nzWidth="150px">Số lượng tồn kho</th>
-                        <th nzWidth="150px">ĐVT</th>
-                      </tr>
+                    <tr>
+                      <th nzWidth="40px">STT</th>
+                      <th nzWidth="150px">Tên hàng DTQG</th>
+                      <th>Tên chủng loại hàng DTQG</th>
+                      <th nzWidth="150px">Số lượng tồn kho</th>
+                      <th nzWidth="150px">ĐVT</th>
+                    </tr>
                     </thead>
                     <tbody>
-                      <ng-container *ngFor="let item of dataTableHh, let i = index;">
-                        <tr>
-                          <td>{{i + 1}}</td>
-                          <td (nzExpandChange)="onExpandChange(item.idVirtual, $event)"
-                            [nzExpand]="expandSet.has(item.idVirtual)" class="font-weight-bold" nzShowExpand="true">
-                            {{item.tenLoaiVthh}}</td>
-                          <td></td>
-                          <td class="font-weight-bold text-right">{{sumTableDanhSachHh(item) | number : '1.0-1' :
-                            'vi-VN'}}</td>
-                          <td></td>
-                        </tr>
-                        <ng-container *ngIf="expandSet.has(item.idVirtual)">
-                          <ng-container *ngFor="let item1 of item.dataChild, let y = index">
-                            <tr>
-                              <td></td>
-                              <td class="text-right">{{i + 1}}.{{y + 1}}</td>
-                              <td>{{ item1.tenCloaiVthh }}</td>
-                              <td class="text-right">{{ item1.slHienThoi | number : '1.0-1' : 'vi-VN' }}</td>
-                              <td>{{ item1.tenDonViTinh }}</td>
-                            </tr>
-                          </ng-container>
+                    <ng-container *ngFor="let item of dataTableHh, let i = index;">
+                      <tr>
+                        <td>{{i + 1}}</td>
+                        <td (nzExpandChange)="onExpandChange(item.idVirtual, $event)"
+                            [nzExpand]="expandSet.has(item.idVirtual)" class="font-weight-bold"
+                            nzShowExpand="true">{{item.tenLoaiVthh}}</td>
+                        <td></td>
+                        <td
+                          class="font-weight-bold text-right">{{sumTableDanhSachHh(item)  | number : '1.0-1' : 'vi-VN'}}</td>
+                        <td></td>
+                      </tr>
+                      <ng-container *ngIf="expandSet.has(item.idVirtual)">
+                        <ng-container *ngFor="let item1 of item.dataChild, let y = index">
+                          <tr>
+                            <td></td>
+                            <td class="text-right">{{i + 1}}.{{y + 1}}</td>
+                            <td>{{ item1.tenCloaiVthh }}</td>
+                            <td class="text-right">{{ item1.slHienThoi | number : '1.0-1' : 'vi-VN' }}</td>
+                            <td>{{ item1.tenDonViTinh }}</td>
+                          </tr>
                         </ng-container>
                       </ng-container>
+                    </ng-container>
                     </tbody>
                   </nz-table>
                 </nz-collapse-panel>
               </nz-collapse>
               <nz-collapse>
-                <nz-collapse-panel nzActive="true" nzHeader="THÔNG TIN CHI TIẾT HÀNG HÓA">
+                <nz-collapse-panel nzActive="true" nzHeader="THÔNG TIN CHI TIẾT HÀNG DTQG">
                   <nz-table class="pd-10" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
                     <thead>
-                      <tr>
-                        <th nzWidth="40px"></th>
-                        <th>Tên hàng hóa</th>
-                        <th nzWidth="100px">Số lượng</th>
-                        <th nzWidth="90px">ĐVT</th>
-                      </tr>
+                    <tr>
+                      <th nzWidth="40px"></th>
+                      <th>Tên hàng DTQG</th>
+                      <th nzWidth="100px">Số lượng</th>
+                      <th nzWidth="90px">ĐVT</th>
+                    </tr>
                     </thead>
                     <tbody id="haha">
-                      <ng-container *ngFor="let item of dataTableHhCtiet">
-                        <tr>
-                          <td (nzExpandChange)="onExpandChange(item.idVirtual, $event)"
+                    <ng-container *ngFor="let item of dataTableHhCtiet">
+                      <tr>
+                        <td (nzExpandChange)="onExpandChange(item.idVirtual, $event)"
                             [nzExpand]="expandSet.has(item.idVirtual)" nzShowExpand="true"></td>
-                          <td>{{item.tenDviCha}}</td>
-                          <td></td>
-                          <td></td>
-                        </tr>
-                        <ng-container *ngIf="expandSet.has(item.idVirtual)">
-                          <ng-container *ngFor="let item1 of item.childData">
-                            <tr>
-                              <td></td>
-                              <td style="padding-left: 25px" (nzExpandChange)="onExpandChange(item1.idVirtual, $event)"
-                                [nzExpand]="expandSet.has(item1.idVirtual)" nzShowExpand="true"> {{item1.tenDviCha}}
-                              </td>
-                              <td></td>
-                              <td></td>
-                            </tr>
-                            <ng-container *ngIf="expandSet.has(item1.idVirtual)">
-                              <ng-container *ngFor="let item2 of item1.childData">
-                                <tr>
-                                  <td></td>
-                                  <td style="padding-left: 50px"
+                        <td>{{item.tenDviCha}}</td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                      <ng-container *ngIf="expandSet.has(item.idVirtual)">
+                        <ng-container *ngFor="let item1 of item.childData">
+                          <tr>
+                            <td></td>
+                            <td style="padding-left: 25px" (nzExpandChange)="onExpandChange(item1.idVirtual, $event)"
+                                [nzExpand]="expandSet.has(item1.idVirtual)" nzShowExpand="true"
+                            > {{item1.tenDviCha}}</td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          <ng-container *ngIf="expandSet.has(item1.idVirtual)">
+                            <ng-container *ngFor="let item2 of item1.childData">
+                              <tr>
+                                <td></td>
+                                <td style="padding-left: 50px"
                                     (nzExpandChange)="onExpandChange(item2.idVirtual, $event)"
-                                    [nzExpand]="expandSet.has(item2.idVirtual)" nzShowExpand="true"> {{item2.tenDviCha}}
-                                  </td>
-                                  <td></td>
-                                  <td></td>
-                                </tr>
-                                <ng-container *ngIf="expandSet.has(item2.idVirtual)">
-                                  <ng-container *ngFor="let item3 of item2.childData">
-                                    <tr>
-                                      <td></td>
-                                      <td style="padding-left: 75px"
+                                    [nzExpand]="expandSet.has(item2.idVirtual)" nzShowExpand="true"
+                                >   {{item2.tenDviCha}}</td>
+                                <td></td>
+                                <td></td>
+                              </tr>
+                              <ng-container *ngIf="expandSet.has(item2.idVirtual)">
+                                <ng-container *ngFor="let item3 of item2.childData">
+                                  <tr>
+                                    <td></td>
+                                    <td style="padding-left: 75px"
                                         (nzExpandChange)="onExpandChange(item3.idVirtual, $event)"
-                                        [nzExpand]="expandSet.has(item3.idVirtual)" nzShowExpand="true">
-                                        {{item3.tenDviCha}}</td>
-                                      <td></td>
-                                      <td></td>
-                                    </tr>
-                                    <ng-container *ngIf="expandSet.has(item3.idVirtual)">
-                                      <ng-container *ngFor="let item4 of item3.childData">
-                                        <tr>
-                                          <td class="bg-selected"></td>
-                                          <td class="font-weight-bold bg-selected" style="padding-left: 125px">
-                                            {{item4.tenCloaiVthh}}</td>
-                                          <td class="font-weight-bold text-right bg-selected">{{item4.slHienThoi |
-                                            number : '1.0-1' : 'vi-VN'}}</td>
-                                          <td class="font-weight-bold bg-selected">{{item4.tenDonViTinh}}</td>
-                                        </tr>
-                                      </ng-container>
+                                        [nzExpand]="expandSet.has(item3.idVirtual)"
+                                        nzShowExpand="true">  {{item3.tenDviCha}}</td>
+                                    <td></td>
+                                    <td></td>
+                                  </tr>
+                                  <ng-container *ngIf="expandSet.has(item3.idVirtual)">
+                                    <ng-container *ngFor="let item4 of item3.childData">
+                                      <tr>
+                                        <td class="bg-selected"></td>
+                                        <td class="font-weight-bold bg-selected"
+                                            style="padding-left: 125px">{{item4.tenCloaiVthh}}</td>
+                                        <td
+                                          class="font-weight-bold text-right bg-selected">{{item4.slHienThoi | number : '1.0-1' : 'vi-VN'}}</td>
+                                        <td class="font-weight-bold bg-selected">{{item4.tenDonViTinh}}</td>
+                                      </tr>
                                     </ng-container>
                                   </ng-container>
                                 </ng-container>
@@ -1827,6 +1887,7 @@
                           </ng-container>
                         </ng-container>
                       </ng-container>
+                    </ng-container>
                     </tbody>
                   </nz-table>
                 </nz-collapse-panel>
@@ -1854,16 +1915,16 @@
             </div>
             <div nz-col [nzSpan]="16">
               <nz-form-item>
-                <nz-form-label>{{detailTcdtnn.soCuc | number : '1.0-1' : 'vi-VN' }}</nz-form-label>
-                <nz-form-label>{{detailTcdtnn.soChiCuc | number : '1.0-1' : 'vi-VN' }}</nz-form-label>
-                <nz-form-label>{{detailTcdtnn.soDiemKho | number : '1.0-1' : 'vi-VN'}}</nz-form-label>
-                <nz-form-label>{{detailTcdtnn.soNhaKho | number : '1.0-1' : 'vi-VN' }}</nz-form-label>
-                <nz-form-label>{{detailTcdtnn.soNganKho | number : '1.0-1' : 'vi-VN'}}</nz-form-label>
-                <nz-form-label>{{detailTcdtnn.tichLuongTk | number : '1.0-1' : 'vi-VN'}}</nz-form-label>
-                <nz-form-label>{{detailTcdtnn.tichLuongSd | number : '1.0-1' : 'vi-VN'}}</nz-form-label>
-                <nz-form-label>{{detailTcdtnn.tichLuongSd | number : '1.0-1' : 'vi-VN'}}</nz-form-label>
+                <nz-form-label>{{detailTcdtnn.soCuc  | number : '1.0-1' : 'vi-VN' }}</nz-form-label>
+                <nz-form-label>{{detailTcdtnn.soChiCuc  | number : '1.0-1' : 'vi-VN' }}</nz-form-label>
+                <nz-form-label>{{detailTcdtnn.soDiemKho  | number : '1.0-1' : 'vi-VN'}}</nz-form-label>
+                <nz-form-label>{{detailTcdtnn.soNhaKho  | number : '1.0-1' : 'vi-VN' }}</nz-form-label>
+                <nz-form-label>{{detailTcdtnn.soNganKho  | number : '1.0-1' : 'vi-VN'}}</nz-form-label>
+                <nz-form-label>{{detailTcdtnn.tichLuongTk  | number : '1.0-1' : 'vi-VN'}}</nz-form-label>
+                <nz-form-label>{{detailTcdtnn.tichLuongSd  | number : '1.0-1' : 'vi-VN'}}</nz-form-label>
+                <nz-form-label>{{detailTcdtnn.tichLuongSd  | number : '1.0-1' : 'vi-VN'}}</nz-form-label>
                 <nz-form-label>{{detailTcdtnn.diaChi }}</nz-form-label>
-                <nz-form-label>{{detailTcdtnn.sdt }}</nz-form-label>
+                <nz-form-label>{{detailTcdtnn.sdt  }}</nz-form-label>
               </nz-form-item>
             </div>
           </div>

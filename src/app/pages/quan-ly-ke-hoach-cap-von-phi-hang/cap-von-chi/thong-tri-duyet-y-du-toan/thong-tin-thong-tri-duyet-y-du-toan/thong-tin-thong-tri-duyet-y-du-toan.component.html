@@ -4,24 +4,31 @@
       <i class='fa fa-arrow-left'></i>
       <span>Quay lại</span>
     </button>
+    <button *ngIf='itemThongTri.id' type='button' class='btn btn-sub do mr-2' (click)='preview(idInput)'>
+      <i class='icon htvbdh_totrinh'></i>
+      <span> In/Xem trước </span>
+    </button>
     <button class='btn btn-sub btn-sm waves-effect waves-light'
-      *ngIf='(!itemThongTri || itemThongTri.trangThai == STATUS.DU_THAO || itemThongTri.trangThai == STATUS.TU_CHOI_LDV || itemThongTri.trangThai == STATUS.TU_CHOI_LDTC ) && !isView'
-      (click)='save(true)' [disabled]='!formData.valid'>
+            *ngIf='(!itemThongTri || itemThongTri.trangThai == STATUS.DU_THAO || itemThongTri.trangThai == STATUS.TU_CHOI_LDV || itemThongTri.trangThai == STATUS.TU_CHOI_LDTC ) && !isView && userService.isAccessPermisson("VONPHIHANG_VONCHIDTQG_THONGTRI_THEM")'
+            (click)='save(true)' [disabled]='!formData.valid'>
       <i class='icon htvbdh_tcdt_guiduyet'></i>
       <span>Lưu và gửi duyệt</span>
     </button>
-    <button class='btn btn-sub btn-sm waves-effect waves-light' *ngIf='itemThongTri.trangThai == STATUS.CHO_DUYET_LDV ||
-             itemThongTri.trangThai == STATUS.CHO_DUYET_LDTC' (click)='pheDuyet()'>
+    <button class='btn btn-sub btn-sm waves-effect waves-light'
+            *ngIf='(itemThongTri.trangThai == STATUS.CHO_DUYET_LDV || itemThongTri.trangThai == STATUS.CHO_DUYET_LDTC) && ( userService.isAccessPermisson("VONPHIHANG_VONCHIDTQG_THONGTRI_DUYET_LDVU") || userService.isAccessPermisson("VONPHIHANG_VONCHIDTQG_THONGTRI_DUYET_LDTC")  )'
+            (click)='pheDuyet()'>
       <i class='icon htvbdh_tcdt_pheduyet'></i>
       <span>Duyệt</span>
     </button>
     <button type='button' class='btn btn-sub'
-      *ngIf='itemThongTri.trangThai == STATUS.CHO_DUYET_LDV || itemThongTri.trangThai == STATUS.CHO_DUYET_LDTC'
-      (click)='tuChoi()'>
+            *ngIf='(itemThongTri.trangThai == STATUS.CHO_DUYET_LDV || itemThongTri.trangThai == STATUS.CHO_DUYET_LDTC) &&( userService.isAccessPermisson("VONPHIHANG_VONCHIDTQG_THONGTRI_DUYET_LDVU") ||userService.isAccessPermisson("VONPHIHANG_VONCHIDTQG_THONGTRI_DUYET_LDTC")  )'
+            (click)='tuChoi()'>
       <i class='icon htvbdh_tcdt_tuchoi do'></i>
       <span>Từ chối</span>
     </button>
-    <button *ngIf='formData.get("trangThai").value == STATUS.DU_THAO && !isView' (click)='save(false)'
+    <button
+      *ngIf='(formData.get("trangThai").value == STATUS.DU_THAO || formData.get("trangThai").value == STATUS.TU_CHOI_LDTC || formData.get("trangThai").value == STATUS.TU_CHOI_LDV) && !isView && userService.isAccessPermisson("VONPHIHANG_VONCHIDTQG_THONGTRI_THEM")'
+      (click)='save(false)'
       class='btn btn-main btn-sm waves-effect waves-light' [disabled]='!formData.valid'>
       <i class='icon htvbdh_tcdt_save'></i>
       <span>Lưu</span>
@@ -37,11 +44,16 @@
             Dự Thảo
           </span>
           <span *ngIf='itemThongTri.id'
-            [ngClass]='thongTinTrangThai(itemThongTri.trangThai)'>{{itemThongTri.tenTrangThai}}</span>
+                [ngClass]='thongTinTrangThai(itemThongTri.trangThai)'>{{itemThongTri.tenTrangThai}}</span>
           <span>Thông tri duyệt y dự toán</span>
         </div>
       </div>
     </div>
+    <nz-alert *ngIf='itemThongTri.trangThai == STATUS.TU_CHOI_LDV || itemThongTri.trangThai == STATUS.TU_CHOI_LDTC '
+              nzShowIcon nzType='error' class='mg-t-10'
+              nzMessage='Lý do từ chối'
+              nzDescription='{{itemThongTri.lyDoTuChoi}}'>
+    </nz-alert>
     <form nzLayout='vertical' nz-form [formGroup]='formData'>
       <div nz-row [nzGutter]='[24]'>
         <div nz-col [nzSpan]='2'>
@@ -68,7 +80,7 @@
             <nz-form-control nz-col [nzSpan]='24' [nzErrorTip]='error'>
               <nz-input-group>
                 <nz-date-picker class='search__input' nzFormat='dd/MM/yyyy' formControlName='ngayLap'
-                  [nzDisabled]='isView'>
+                                [nzDisabled]='isView'>
                 </nz-date-picker>
               </nz-input-group>
             </nz-form-control>
@@ -79,7 +91,7 @@
             <nz-form-label nzRequired [nzNoColon]='true'>Mã tổng hợp</nz-form-label>
             <nz-form-control nz-col [nzSpan]='24' [nzErrorTip]='error'>
               <nz-select formControlName='soDnCapVon' nzAllowClear [nzDisabled]='isView'
-                (ngModelChange)='changeMaTongHop()' nzAllowClear>
+                         (ngModelChange)='changeMaTongHop()' nzAllowClear>
                 <nz-option *ngFor='let p of listTongHop' [nzValue]='p.id' [nzLabel]='p.id'></nz-option>
               </nz-select>
             </nz-form-control>
@@ -90,7 +102,7 @@
             <nz-form-label nzRequired [nzNoColon]='true'> Đơn vị</nz-form-label>
             <nz-form-control nz-col [nzSpan]='24' [nzErrorTip]='error'>
               <nz-select nzAllowClear formControlName='dviThongTri' nzAllowClear [nzDisabled]='isView'
-                (ngModelChange)='changeDonVi()'>
+                         (ngModelChange)='changeDonVi()'>
                 <nz-option *ngFor='let p of dsBoNganh' [nzValue]='p.code' [nzLabel]='p.tenDvi'></nz-option>
               </nz-select>
             </nz-form-control>
@@ -127,9 +139,9 @@
             <nz-form-label nzRequired [nzNoColon]='true'>Đơn vị thụ hưởng</nz-form-label>
             <nz-form-control nz-col [nzSpan]='24' [nzErrorTip]='error'>
               <nz-select formControlName='dviThuHuong' [nzDisabled]='isView' (ngModelChange)='changeDonViThuHuong()'
-                nzAllowClear>
+                         nzAllowClear>
                 <nz-option *ngFor='let p of listDviThuHuong' [nzValue]='p.id'
-                  [nzLabel]="p.dvCungCapHang + ' - ' +  p.maHopDong"></nz-option>
+                           [nzLabel]="p.dvCungCapHang + ' - ' +  p.maHopDong"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -152,7 +164,7 @@
         </div>
         <div nz-col [nzSpan]='4'>
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]='true'> Loại tiền {{formData.get('loaiTien').value}}</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]='true'> Loại tiền</nz-form-label>
             <nz-form-control nz-col [nzSpan]='24' [nzErrorTip]='error'>
               <input nz-input formControlName='tenLoaiTien' [readonly]='true' />
             </nz-form-control>
@@ -178,133 +190,141 @@
     <nz-card class='mt-16 flex-card data-table card-border-content table-card'>
       <nz-table #phanBo class='nowrap mt-16 table-chi-tiet' nzBordered [nzData]='chiTietList'>
         <thead>
-          <tr>
-            <th style='width: 35px'>STT</th>
-            <th>Mục</th>
-            <th>Tiểu mục</th>
-            <th *ngIf="formData.get('loaiTien').value != '01'">Số tiền (Ngoại tệ)</th>
-            <th>Số tiền (VNĐ)</th>
-            <th>Chú thích</th>
-            <th>Hành động</th>
-          </tr>
-          <tr>
-            <th></th>
-            <th>
+        <tr>
+          <th style='width: 35px'>STT</th>
+          <th>Mục</th>
+          <th>Tiểu mục</th>
+          <th *ngIf="formData.get('loaiTien').value != '01'">Số tiền (Ngoại tệ)</th>
+          <th>Số tiền (VNĐ)</th>
+          <th>Chú thích</th>
+          <th>Hành động</th>
+        </tr>
+        <tr>
+          <th></th>
+          <th>
+            <nz-input-group>
+              <input type='text' nz-input [(ngModel)]='rowItem.muc' />
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type='text' nz-input [(ngModel)]='rowItem.tieuMuc' />
+            </nz-input-group>
+          </th>
+          <th *ngIf="formData.get('loaiTien').value != '01'">
+            <nz-input-group>
+              <input class='money-input' [min]='1'
+                     currencyMask [options]='amount'
+                     [(ngModel)]='rowItem.soTienNt' />
+              <!--              <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [(ngModel)]="rowItem.soTienNt">-->
+              <!--              </nz-input-number>-->
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input class='money-input' [min]='1'
+                     currencyMask [options]='amount'
+                     [(ngModel)]='rowItem.soTien' />
+              <!--              <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [(ngModel)]="rowItem.soTien">-->
+              <!--              </nz-input-number>-->
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type='text' nz-input [(ngModel)]='rowItem.chuThich' />
+            </nz-input-group>
+          </th>
+          <th>
+            <a *ngIf='!isDisableField() && !isView' (click)='them()'>
+              <i class='table-icon icon htvbdh_dau-cong'></i>
+            </a>
+            <a *ngIf='!isDisableField() && !isView' (click)='clear()'>
+              <i class='table-icon icon  htvbdh_nhap-lai1'></i>
+            </a>
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor='let item of chiTietList, let idx = index'>
+          <ng-container *ngIf='!item.edit; else editTemplate'>
+            <td>{{idx + 1}}</td>
+            <td>{{item.muc}}</td>
+            <td>{{item.tieuMuc}}</td>
+            <td *ngIf="formData.get('loaiTien').value != '01'"
+                class='text-right'>{{item.soTienNt | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{item.soTien | number : '1.0-1' : 'vi_VN'}}</td>
+            <td>{{item.chuThich}}</td>
+            <td>
+              <a *ngIf='!isDisableField() && !isView' (click)="showEditItem(idx, 'show')">
+                <i class='fa fa-pencil' title='Sửa'></i>
+              </a>
+              <a *ngIf='!isDisableField() && !isView' (click)='xoaItem(idx)'>
+                <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
+              </a>
+            </td>
+          </ng-container>
+          <ng-template #editTemplate>
+            <td>{{idx + 1}}</td>
+            <td>
               <nz-input-group>
-                <input type='text' nz-input [(ngModel)]='rowItem.muc' />
+                <input type='text' nz-input [(ngModel)]='item.muc' />
               </nz-input-group>
-            </th>
+            </td>
             <th>
               <nz-input-group>
-                <input type='text' nz-input [(ngModel)]='rowItem.tieuMuc' />
+                <input type='text' nz-input [(ngModel)]='item.tieuMuc' />
               </nz-input-group>
             </th>
             <th *ngIf="formData.get('loaiTien').value != '01'">
               <nz-input-group>
-                <input class='money-input' [min]='1' currencyMask [options]='amount' [(ngModel)]='rowItem.soTienNt' />
-                <!--              <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [(ngModel)]="rowItem.soTienNt">-->
-                <!--              </nz-input-number>-->
+                <input class='money-input' [min]='1'
+                       currencyMask [options]='amount'
+                       [(ngModel)]='item.soTienNt' />
               </nz-input-group>
             </th>
             <th>
               <nz-input-group>
-                <input class='money-input' [min]='1' currencyMask [options]='amount' [(ngModel)]='rowItem.soTien' />
-                <!--              <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [(ngModel)]="rowItem.soTien">-->
-                <!--              </nz-input-number>-->
+                <input class='money-input' [min]='1'
+                       currencyMask [options]='amount'
+                       [(ngModel)]='item.soTien' />
               </nz-input-group>
             </th>
             <th>
               <nz-input-group>
-                <input type='text' nz-input [(ngModel)]='rowItem.chuThich' />
+                <input type='text' nz-input [(ngModel)]='item.chuThich' />
               </nz-input-group>
             </th>
-            <th>
-              <a *ngIf='!isDisableField() && !isView' (click)='them()'>
-                <i class='table-icon icon htvbdh_dau-cong'></i>
-              </a>
-              <a *ngIf='!isDisableField() && !isView' (click)='clear()'>
-                <i class='table-icon icon  htvbdh_nhap-lai1'></i>
-              </a>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor='let item of chiTietList, let idx = index'>
-            <ng-container *ngIf='!item.edit; else editTemplate'>
-              <td>{{idx + 1}}</td>
-              <td>{{item.muc}}</td>
-              <td>{{item.tieuMuc}}</td>
-              <td *ngIf="formData.get('loaiTien').value != '01'" class='text-right'>{{item.soTienNt | number : '1.0-1' :
-                'vi_VN'}}</td>
-              <td class='text-right'>{{item.soTien | number : '1.0-1' : 'vi_VN'}}</td>
-              <td>{{item.chuThich}}</td>
-              <td>
-                <a *ngIf='!isDisableField() && !isView' (click)="showEditItem(idx, 'show')">
-                  <i class='fa fa-pencil' title='Sửa'></i>
-                </a>
-                <a *ngIf='!isDisableField() && !isView' (click)='xoaItem(idx)'>
-                  <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
-                </a>
-              </td>
-            </ng-container>
-            <ng-template #editTemplate>
-              <td>{{idx + 1}}</td>
-              <td>
-                <nz-input-group>
-                  <input type='text' nz-input [(ngModel)]='item.muc' />
-                </nz-input-group>
-              </td>
-              <th>
-                <nz-input-group>
-                  <input type='text' nz-input [(ngModel)]='item.tieuMuc' />
-                </nz-input-group>
-              </th>
-              <th *ngIf="formData.get('loaiTien').value != '01'">
-                <nz-input-group>
-                  <input class='money-input' [min]='1' currencyMask [options]='amount' [(ngModel)]='item.soTienNt' />
-                </nz-input-group>
-              </th>
-              <th>
-                <nz-input-group>
-                  <input class='money-input' [min]='1' currencyMask [options]='amount' [(ngModel)]='item.soTien' />
-                </nz-input-group>
-              </th>
-              <th>
-                <nz-input-group>
-                  <input type='text' nz-input [(ngModel)]='item.chuThich' />
-                </nz-input-group>
-              </th>
-              <td>
-                <a class='save' (click)="showEditItem(idx, 'save')">
-                  <i class='fa fa-save'></i>
-                </a>
-                <a (click)="showEditItem(idx, 'huy')">
-                  <i class='fa fa-times do'></i>
-                </a>
-              </td>
-            </ng-template>
-          </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td class='bold'>Tổng tiền</td>
-            <td *ngIf="formData.get('loaiTien').value != '01'" class='text-danger text-right'>
-              {{totalTableNt(chiTietList) | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class='text-danger text-right'>{{totalTable(chiTietList) |number : '1.0-1' : 'vi_VN'}}</td>
-            <td></td>
             <td>
+              <a class='save' (click)="showEditItem(idx, 'save')">
+                <i class='fa fa-save'></i>
+              </a>
+              <a (click)="showEditItem(idx, 'huy')">
+                <i class='fa fa-times do'></i>
+              </a>
             </td>
-          </tr>
-          <!--        <tr>-->
-          <!--          <td></td>-->
-          <!--          <td></td>-->
-          <!--          <td>Tổng tiền TCDT duyệt</td>-->
-          <!--          <td class="text-primary">{{totalTableNt(chiTietList) | number : '1.0-1' : 'vi_VN'}}</td>-->
-          <!--          <td class="text-primary">{{totalTable(chiTietList) | number : '1.0-1' : 'vi_VN'}}</td>-->
-          <!--          <td></td>-->
-          <!--          <td>-->
-          <!--          </td>-->
-          <!--        </tr>-->
+          </ng-template>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class='bold'>Tổng tiền</td>
+          <td *ngIf="formData.get('loaiTien').value != '01'"
+              class='text-danger text-right'>{{totalTableNt(chiTietList) | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-danger text-right'>{{totalTable(chiTietList) |number : '1.0-1' : 'vi_VN'}}</td>
+          <td></td>
+          <td>
+          </td>
+        </tr>
+        <!--        <tr>-->
+        <!--          <td></td>-->
+        <!--          <td></td>-->
+        <!--          <td>Tổng tiền TCDT duyệt</td>-->
+        <!--          <td class="text-primary">{{totalTableNt(chiTietList) | number : '1.0-1' : 'vi_VN'}}</td>-->
+        <!--          <td class="text-primary">{{totalTable(chiTietList) | number : '1.0-1' : 'vi_VN'}}</td>-->
+        <!--          <td></td>-->
+        <!--          <td>-->
+        <!--          </td>-->
+        <!--        </tr>-->
         </tbody>
       </nz-table>
     </nz-card>
@@ -332,3 +352,30 @@
     </div>
   </form>
 </div>
+<nz-modal [(nzVisible)]='showDlgPreview' nzTitle='THÔNG TIN TỔNG HỢP CẤP VỐN BỘ NGÀNH' nzWidth='100%'
+          (nzOnCancel)='closeDlg()'>
+  <div *nzModalContent class='modal__content'>
+    <pdf-viewer [src]='pdfSrc' [render-text]='true' style='width: 100%; height: 650px;'></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)='printPreview()'
+            class='modal__button--save'>
+      <i class='icon htvbdh_printer'></i>
+      In
+    </button>
+    <button nz-button (click)='downloadPdf()'
+            class='modal__button--save'>
+      <i class='icon htvbdh_file-pdf'></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)='downloadWord()'
+            class='modal__button--save'>
+      <i class='icon htvbdh_file-word'></i>
+      Xuất .docx
+    </button>
+    <button nz-button (click)='closeDlg()' class='modal__button--cancel'>
+      <i nz-icon nzType='close-circle' nzTheme='fill' class='icon-cancel'></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

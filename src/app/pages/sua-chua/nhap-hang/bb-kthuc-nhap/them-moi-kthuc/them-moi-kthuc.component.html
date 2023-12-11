@@ -271,8 +271,13 @@
           <tbody>
             <tr *ngFor="let data of dataTableAll ;let i = index">
               <td class="text-center">{{i + 1}}</td>
-              <td>{{data.hoVaTen}}</td>
-              <td>{{data.chucVu}}</td>
+              <th><input nz-input [(ngModel)]="data.hoVaTen" /></th>
+              <td>
+                <nz-select [(ngModel)]="data.chucVu">
+                <nz-option *ngFor="let p of dropdownLoaiDaiDien" [nzValue]="p.giaTri" [nzLabel]="p.giaTri">
+                </nz-option>
+              </nz-select>
+              </td>
               <td>
                 <a *ngIf="!disabled()">
                   <i class="fa fa-trash-o do" nz-popconfirm nz-button nzPopconfirmTitle="Bạn có chắc muốn xóa ?"

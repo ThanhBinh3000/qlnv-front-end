@@ -17,4 +17,9 @@ export class ApiService {
     const url = `${environment.AUTHEN_API}/TokenRefresh`;
     return this.httpClient.post(url, body);
   }
+
+  captcha() {
+    const url = `${environment.AUTHEN_API}/qlnv-security/captcha/get-captcha`;
+    return this.httpClient.get(url);
+  }
 }
