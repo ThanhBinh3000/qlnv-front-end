@@ -135,7 +135,7 @@
           <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.soQdGiaoCt }}</td>
-          <td>{{ data.tenTrangThai == 'Đã duyệt - CB Cục' ? 'Đã tiếp nhận - CB Cục': data.tenTrangThai}}</td>
+          <td>{{ data.tenTrangThai == 'ĐÃ DUYỆT - CÁN BỘ CỤC' ? 'ĐÃ TIẾP NHẬN - CÁN BỘ CỤC': data.tenTrangThai}}</td>
           <td>
             <a (click)='redirectToChiTiet(true, data.id)' *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_DEXUATCC_XEM') &&
                  !((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TUCHOI_CB_CUC) && data.nguoiTaoId == userInfo.ID)">
