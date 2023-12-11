@@ -161,7 +161,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     if (this.dataChiTieu) {
       for (let index = 0; index < this.dataChiTieu.khVatTuNhap.length; index++) {
         if (this.formGoiThau.get('cloaiVthh').value == null) {
-          if (this.dataChiTieu.khVatTuNhap[index].maVatTuCha == this.loaiVthh || this.dataChiTieu.khVatTuNhap[index].maVatTu == this.loaiVthh) {
+          if (this.dataChiTieu.khVatTuNhap[index].maVatTuCha == this.loaiVthh && this.dataChiTieu.khVatTuNhap[index].maVatTu == null) {
             this.loadThongTinCuc(index);
           }
         } else {

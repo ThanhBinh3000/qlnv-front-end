@@ -61,6 +61,7 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
       soHopDong: [null, Validators.required],
       tenHopDong: [null, Validators.required],
       ngayKy: [null, Validators.required],
+      ngayHieuLuc: [null, Validators.required],
       loaiHopDong: [null, Validators.required],
       thoiGianThucHien: [null, Validators.required],
       giaTri: [null],

@@ -76,7 +76,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="3">
+            <div nz-col [nzSpan]="3" *ngIf="!loaiVthh.startsWith('02')">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Ngày hiệu lực
                 </nz-form-label>
@@ -133,6 +133,28 @@
                 </nz-form-label>
                 <nz-form-control>
                   <textarea [readonly]="isViewDetail" rows="3" nz-input formControlName="noiDungQd"></textarea>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="6" *ngIf="loaiVthh.startsWith('02')">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true"> Thời gian tổ chuyên gia trình kết quả lựa chọn nhà thầu</nz-form-label>
+                <nz-form-control>
+                  <nz-date-picker
+                    [nzDisabled]="isViewDetail"
+                    formControlName="tgianTrinhKqTcg" nzFormat="dd/MM/yyyy">
+                  </nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="6" *ngIf="loaiVthh.startsWith('02')">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true"> Thời gian hoàn thành báo cáo thẩm định</nz-form-label>
+                <nz-form-control>
+                  <nz-date-picker
+                    [nzDisabled]="isViewDetail"
+                    formControlName="tgianTrinhTtd" nzFormat="dd/MM/yyyy">
+                  </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
             </div>

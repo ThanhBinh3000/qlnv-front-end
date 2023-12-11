@@ -5,7 +5,9 @@
       <span>Quay lại</span>
     </button>
     <button
-      *ngIf="(formData.value.trangThai == STATUS.DA_LAP || formData.value.trangThai == STATUS.TU_CHOI_LDV ) && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_THEM')"
+      *ngIf="(formData.value.trangThai == STATUS.DA_LAP
+      || formData.value.trangThai == STATUS.TU_CHOI_LDTC
+      || formData.value.trangThai == STATUS.TU_CHOI_LDV ) && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_THEM')"
       type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
@@ -22,7 +24,21 @@
       <i [class]="'icon htvbdh_chuyenvanthu'"></i>
       <span>Duyệt</span>
     </button>
-    <button *ngIf="(formData.value.trangThai == STATUS.DA_LAP || formData.value.trangThai == STATUS.TU_CHOI_LDV ) && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_THEM')"
+    <button
+      *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDV ) "
+      class="btn btn-sub do" (click)="tuChoi()">
+      <i [class]="'icon htvbdh_chuyenvanthu'"></i>
+      <span>Từ chối - lĐ Tổng cục</span>
+    </button>
+    <button
+      *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDV ) "
+      class="btn btn-sub xanh-nhat" (click)="save(true)">
+      <i [class]="'icon htvbdh_chuyenvanthu'"></i>
+      <span>Ban hành</span>
+    </button>
+    <button *ngIf="(formData.value.trangThai == STATUS.DA_LAP
+    || formData.value.trangThai == STATUS.TU_CHOI_LDV
+    || formData.value.trangThai == STATUS.TU_CHOI_LDTC ) && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_THEM')"
             class="btn btn-main btn-sm waves-effect waves-light" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
@@ -36,11 +52,13 @@
                 <span [ngClass]=" formData.value.trangThai == STATUS.BAN_HANH  ? 'status-xanh' : 'status-do' ">
                     {{formData.value.tenTrangThai}}
                 </span>
-        <span>PHƯƠNG ÁN/QUYẾT ĐỊNH ĐIỀU CHỈNH KẾ HOẠCH LỰA CHỌN NHÀ THẦU</span>
+        <span>TỜ TRÌNH PHƯƠNG ÁN VÀ QUYẾT ĐỊNH ĐIỀU CHỈNH KẾ HOẠCH LỰA CHỌN NHÀ THẦU</span>
       </div>
     </div>
   </div>
   <nz-card class="mt16 flex-card p-lr16">
+    <nz-collapse nzAccordion>
+      <nz-collapse-panel nzHeader="THÔNG TIN TỜ TRÌNH" [nzActive]="true">
     <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
       <div nz-row [nzGutter]="20">
         <div nz-col [nzSpan]="4">
@@ -126,6 +144,16 @@
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              Nội dung tờ trình
+            </nz-form-label>
+            <nz-form-control>
+              <textarea [readonly]="isViewDetail" rows="3" nz-input formControlName="noiDungTtr"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">
               File đính kèm tờ trình/công văn phương án điều chỉnh
             </nz-form-label>
@@ -134,9 +162,18 @@
             </div>
           </nz-form-item>
         </div>
+      </div>
+    </form>
+      </nz-collapse-panel>
+    </nz-collapse>
+    <nz-collapse nzAccordion>
+      <nz-collapse-panel nzHeader="THÔNG TIN QĐ ĐIỀU CHỈNH" [nzActive]="true">
+        <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
+          <div nz-row [nzGutter]="20">
         <div nz-col [nzSpan]="4">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" nzRequired> Số QĐ điều chỉnh
+            <nz-form-label [nzNoColon]="true" *ngIf="checkDisableQdDc()"> Số QĐ điều chỉnh </nz-form-label>
+            <nz-form-label [nzNoColon]="true" *ngIf="!checkDisableQdDc()" nzRequired> Số QĐ điều chỉnh
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}">
@@ -148,7 +185,8 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" nzRequired> Ngày ký QĐ điều chỉnh</nz-form-label>
+            <nz-form-label [nzNoColon]="true" *ngIf="checkDisableQdDc()"> Ngày ký QĐ điều chỉnh</nz-form-label>
+            <nz-form-label [nzNoColon]="true" *ngIf="!checkDisableQdDc()" nzRequired> Ngày ký QĐ điều chỉnh</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-date-picker formControlName="ngayQdDc" nzFormat="dd/MM/yyyy"
                               [nzDisabled]="checkDisableQdDc()">
@@ -158,7 +196,8 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" nzRequired> Ngày hiệu lực của QĐ điều chỉnh</nz-form-label>
+            <nz-form-label [nzNoColon]="true" *ngIf="checkDisableQdDc()"> Ngày hiệu lực của QĐ điều chỉnh</nz-form-label>
+            <nz-form-label [nzNoColon]="true" *ngIf="!checkDisableQdDc()" nzRequired> Ngày hiệu lực của QĐ điều chỉnh</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-date-picker formControlName="ngayHluc" nzFormat="dd/MM/yyyy"
                               [nzDisabled]="checkDisableQdDc()">
@@ -167,7 +206,25 @@
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="12">
+          <nz-form-item class="form-item">
+            <nz-form-label [nzNoColon]="true"> Trích yếu</nz-form-label>
+            <nz-form-control>
+              <input
+                [readonly]="checkDisableQdDc()"
+                nz-input formControlName="trichYeuQd" />
+            </nz-form-control>
+          </nz-form-item>
         </div>
+            <div nz-col [nzSpan]="24">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Nội dung quyết định điều chỉnh
+                </nz-form-label>
+                <nz-form-control>
+                  <textarea [readonly]="checkDisableQdDc()" rows="3" nz-input formControlName="noiDungQd"></textarea>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">
@@ -188,19 +245,17 @@
             </div>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="24">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true">
-              Nội dung quyết định điều chỉnh
-            </nz-form-label>
-            <nz-form-control>
-              <textarea [readonly]="checkDisableQdDc()" rows="3" nz-input formControlName="noiDungQd"></textarea>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
+          </div>
+        </form>
+      </nz-collapse-panel>
+    </nz-collapse>
+    <nz-collapse nzAccordion>
+      <nz-collapse-panel nzHeader="NỘI DUNG CHI TIẾT" [nzActive]="true">
+        <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
+          <div nz-row [nzGutter]="20">
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Loại hình nhập</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="loaiHinhNx" (ngModelChange)="onChangeLhNx($event)"
                          [nzDisabled]="true">
@@ -212,7 +267,7 @@
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Kiểu nhập xuất</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Kiểu nhập</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="kieuNx" [nzDisabled]="true">
                 <nz-option *ngFor="let p of listKieuNx" [nzValue]="p.ma" [nzLabel]="p.giaTri">
@@ -239,8 +294,10 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-      </div>
-    </form>
+          </div>
+        </form>
+      </nz-collapse-panel>
+    </nz-collapse>
   </nz-card>
   <nz-card class="mg-t-10 flex-card p-lr16">
     <div nz-row [nzGutter]="24">
