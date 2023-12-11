@@ -47,20 +47,20 @@
         </div>
         <div nz-col nzSpan="3">
           <nz-form-item>
-            <nz-form-label nzRequired>Số văn bản</nz-form-label>
+            <nz-form-label nzRequired>Căn cứ trên quyết định mua sắm</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group [nzAddOnAfter]="maQd">
-                <input nz-input formControlName="soVb" [readonly]="isView"/>
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonMaTongHop()">
+                <input nz-input formControlName="soQdMs" [readonly]="true"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="3">
           <nz-form-item>
-            <nz-form-label nzRequired>Số quyết định mua sắm</nz-form-label>
+            <nz-form-label nzRequired>Số văn bản</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonMaTongHop()">
-                <input nz-input formControlName="soQdMs" [readonly]="true"/>
+              <nz-input-group [nzAddOnAfter]="maQd">
+                <input nz-input formControlName="soVb" [readonly]="isView"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -83,6 +83,26 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label nzRequired>Nội dung văn bản</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group>
+                <input nz-input formControlName="noiDung" [readonly]="isView"/>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label nzRequired>Ghi chú</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group>
+                <input nz-input formControlName="ghiChu" [readonly]="isView"/>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">Tài liệu đính kèm</nz-form-label>
@@ -96,6 +116,15 @@
       </div>
     </form>
   </nz-card>
+  <div class='group-button'>
+    <h3 class='text-uppercase'></h3>
+    <div class='buttons'>
+      <button type="button" class="btn btn-sub" (click)="exportDataDetail()">
+        <i class="icon htvbdh_chuyen-xu-ly"></i>
+        <span>Xuất file</span>
+      </button>
+    </div>
+  </div>
   <nz-table class="nowrap mg-t-10" [nzData]="dataTable" [nzFrontPagination]="false"
             [nzShowPagination]="false" nzBordered>
     <thead>
