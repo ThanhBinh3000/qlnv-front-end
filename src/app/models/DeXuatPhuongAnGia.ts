@@ -13,6 +13,7 @@ export class ThongTinKhaoSatGia {
   maDvi: string;
   maChiCuc: string;
   tenChiCuc: string;
+  diaBan: string;
   ttThamKhao : string;
   chiSoCpi : string;
   tenDviThamDinh: string;
