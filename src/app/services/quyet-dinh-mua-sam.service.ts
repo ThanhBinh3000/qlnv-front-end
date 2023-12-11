@@ -23,4 +23,8 @@ export class QuyetDinhMuaSamService extends BaseService{
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ket-xuat-detail`;
     return this._httpClient.post(url, body, { responseType: 'blob' });
   }
+  exportDetailTtPhanBo(body: any) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ket-xuat-detail-tt-phanbo`;
+    return this._httpClient.post(url, body, { responseType: 'blob' });
+  }
 }
