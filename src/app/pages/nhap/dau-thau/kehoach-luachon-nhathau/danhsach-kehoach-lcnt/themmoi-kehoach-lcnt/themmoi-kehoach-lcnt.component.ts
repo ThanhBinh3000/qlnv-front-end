@@ -813,7 +813,9 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   }
 
   onChangeNamKh() {
-    this.getDataChiTieu();
+    if (this.formData.get('trangThai').value == STATUS.TU_CHOI_LDV || this.formData.get('trangThai').value == STATUS.DU_THAO) {
+      this.getDataChiTieu();
+    }
     this.initListQuy()
   }
 

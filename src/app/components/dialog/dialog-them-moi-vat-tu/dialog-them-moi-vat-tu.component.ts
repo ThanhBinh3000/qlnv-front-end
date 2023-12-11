@@ -427,10 +427,10 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, "Đơn vị đã tồn tại, xin vui lòng thêm đơn vị khác")
         return false
       }
-      if (this.thongTinChiCuc.donGiaTamTinh > this.thongTinChiCuc.giaToiDa) {
-        this.notification.error(MESSAGE.ERROR, "Đơn giá đề xuất không được lớn hơn giá tối đa (" + this.thongTinChiCuc.giaToiDa + " đ)")
-        return false
-      }
+      // if (this.thongTinChiCuc.donGiaTamTinh > this.thongTinChiCuc.giaToiDa) {
+      //   this.notification.error(MESSAGE.ERROR, "Đơn giá đề xuất không được lớn hơn giá tối đa (" + this.thongTinChiCuc.giaToiDa + " đ)")
+      //   return false
+      // }
       if (this.thongTinChiCuc.donGiaTamTinh == null) {
         this.notification.error(MESSAGE.ERROR, "Đơn giá đề xuất không được để trống.")
         return false;

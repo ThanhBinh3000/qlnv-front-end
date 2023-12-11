@@ -431,7 +431,7 @@ export class ThemmoiQuyetdinhKhlcntVtComponent extends Base2Component implements
     };
     let resToTrinh = await this.dauThauService.search(bodyToTrinh);
     if (resToTrinh.msg == MESSAGE.SUCCESS) {
-      this.listToTrinh = resToTrinh.data.content;
+      this.listToTrinh = resToTrinh.data.content.filter(x => x.trangThaiTh == null);
     }
     await this.spinner.hide();
 
