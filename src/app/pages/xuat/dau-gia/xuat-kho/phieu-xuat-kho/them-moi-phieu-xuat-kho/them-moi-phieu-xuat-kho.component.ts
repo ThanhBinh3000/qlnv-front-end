@@ -50,7 +50,6 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   maTuSinh: number;
   maHauTo: any;
   flagInit: Boolean = false;
-  isViewBangKe: boolean = false
   dataQuyetDinh: any[] = [];
   danhSachKghiemCluong: any[] = [];
 
@@ -188,10 +187,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     if (!id) return;
     const data = await this.detail(id);
     this.maTuSinh = this.idInput;
-    if (data.soBangKeHang) {
-      this.isViewBangKe = true;
-    }
-    if (!this.isView && !this.isViewBangKe) {
+    if (!this.isView) {
       await this.onChange(data.idQdNv);
     }
   }

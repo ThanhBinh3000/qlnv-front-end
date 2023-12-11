@@ -53,7 +53,6 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
   maTuSinh: number;
   maHauTo: any;
   flagInit: Boolean = false;
-  isViewBangKe: boolean = false
   danhSachQuyetDinh: any[] = [];
   danhSachKghiemCluong: any[] = [];
 
@@ -199,10 +198,7 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
     if (!id) return;
     const data = await this.detail(id);
     this.maTuSinh = this.idInput;
-    if (data.soBangKeHang) {
-      this.isViewBangKe = true;
-    }
-    if (!this.isView && !this.isViewBangKe) {
+    if (!this.isView) {
       await this.onChange(data.idQdNv);
     }
   }
