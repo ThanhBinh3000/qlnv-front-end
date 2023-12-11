@@ -1,41 +1,8 @@
-.rdo-input {
-    display: flex;
-
-    .ant-form-item {
-        margin-right: 20px;
-
-        &:last-child {
-            margin-right: 0px;
-        }
-    }
-
-    label {
-        padding-top: 8px;
-        font-size: 13px;
-        font-weight: 500;
-    }
+.rdo-input.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
-.icon-file-dinh-kem {
-    display: flex;
-    align-items: center;
-    position: relative;
-
-    .input-file {
-        width: 20px;
-        height: 20px;
-        position: absolute;
-        opacity: 0;
-        cursor: pointer;
-    }
-}
-
-.list-file {
-    .ant-input-affix-wrapper {
-        padding: 0px 11px !important;
-    }
-}
-
-.bg-selected td {
-    background-color: #ebedff;
+.rdo-input .ant-form-item {
+  padding-top: 10px;
 }

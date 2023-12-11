@@ -1,13 +1,13 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NzModalRef, NzModalService } from "ng-zorro-antd/modal";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { UserLogin } from "../../../../../../models/userlogin";
-import { DanhMucService } from "../../../../../../services/danhmuc.service";
-import { UserService } from "../../../../../../services/user.service";
-import { Globals } from "../../../../../../shared/globals";
-import { MESSAGE } from "../../../../../../constants/message";
-import { TienDoXayDungCt } from "../../../tien-do-dau-tu-xay-dung/tien-do-cong-viec/tien-do-cong-viec.component";
+import {Component, Input, OnInit} from '@angular/core';
+import {NzModalRef, NzModalService} from "ng-zorro-antd/modal";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {UserLogin} from "../../../../../../models/userlogin";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
+import {UserService} from "../../../../../../services/user.service";
+import {Globals} from "../../../../../../shared/globals";
+import {MESSAGE} from "../../../../../../constants/message";
+import {TienDoXayDungCt} from "../../../tien-do-dau-tu-xay-dung/tien-do-cong-viec/tien-do-cong-viec.component";
 @Component({
   selector: 'app-thong-tin-tien-do-cong-viec-sctx',
   templateUrl: './thong-tin-tien-do-cong-viec-sctx.component.html',
@@ -19,7 +19,7 @@ export class ThongTinTienDoCongViecSctxComponent implements OnInit {
   @Input() sum: number
   @Input() dataTable: any[] = []
   @Input() tableCongViec: any[] = []
-  dataTableRes: any[] = []
+  dataTableRes : any[] = []
   item: TienDoXayDungCt = new TienDoXayDungCt();
   userInfo: UserLogin
   valueLabel: boolean = true;
@@ -59,7 +59,7 @@ export class ThongTinTienDoCongViecSctxComponent implements OnInit {
   }
 
   filterData() {
-    if (this.dataInput && this.dataInput.dataChild && this.dataInput.dataChild.length > 0) {
+    if(this.dataInput && this.dataInput.dataChild && this.dataInput.dataChild.length > 0) {
       this.tableCongViec = this.dataTable.filter(item => item.loai == "00");
       this.tableCvMoi = this.dataTable.filter(item => item.loai == "01");
     } else {

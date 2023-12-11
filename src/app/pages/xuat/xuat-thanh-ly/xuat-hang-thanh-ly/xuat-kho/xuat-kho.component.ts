@@ -27,22 +27,22 @@ export class XuatKhoComponent implements OnInit {
             {
               url: '/xtl-phieu-xk',
               name: 'Phiếu xuất kho',
-              accessPermisson: 'XHDTQG_XTL_XTL_KTCL_LT'
+              accessPermisson: 'XHDTQG_XTL_XTL_XK_LT_PXK'
             },
             {
               url: '/xtl-bang-ke-ch',
               name: 'Bảng kê cân hàng',
-              accessPermisson: 'XHDTQG_XTL_XTL_KTCL_VT'
+              accessPermisson: 'XHDTQG_XTL_XTL_XK_LT_BKCH'
             },
             {
               url: '/xtl-bb-tinh-kho',
               name: 'Biên bản tịnh kho',
-              accessPermisson: 'XHDTQG_XTL_XTL_XK_LT'
+              accessPermisson: 'XHDTQG_XTL_XTL_XK_LT_BBTK'
             },
             {
               url: '/xtl-bb-hao-doi',
               name: 'Biên bản hao dôi',
-              accessPermisson: 'XHDTQG_XTL_XTL_XK_LT'
+              accessPermisson: 'XHDTQG_XTL_XTL_XK_LT_BBHD'
             },
           ]
       }else{
@@ -50,17 +50,17 @@ export class XuatKhoComponent implements OnInit {
           {
             url: '/xtl-phieu-xk',
             name: 'Phiếu xuất kho',
-            accessPermisson: 'XHDTQG_XTL_XTL_KTCL_LT'
+            accessPermisson: 'XHDTQG_XTL_XTL_XK_VT_PXK'
           },
           {
             url: '/xtl-bang-ke-ch',
             name: 'Bảng kê cân hàng',
-            accessPermisson: 'XHDTQG_XTL_XTL_KTCL_VT'
+            accessPermisson: 'XHDTQG_XTL_XTL_XK_VT_BKXVT'
           },
           {
             url: '/xtl-bb-tinh-kho',
             name: 'Biên bản tịnh kho',
-            accessPermisson: 'XHDTQG_XTL_XTL_XK_LT'
+            accessPermisson: 'XHDTQG_XTL_XTL_XK_VT_BBTK'
           }]
       };
     })

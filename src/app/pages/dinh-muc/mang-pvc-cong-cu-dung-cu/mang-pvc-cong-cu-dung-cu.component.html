@@ -1,7 +1,7 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
   <ul nz-menu nzMode="horizontal">
     <li nz-menu-item [nzSelected]="tabSelected == 'dexuatnhucau'" (click)="selectTab('dexuatnhucau')">
-      {{userService.isChiCuc() ? 'Đề xuất nhu cầu' : 'Đề xuất nhu cầu của Chi cục'}}
+      Đề xuất nhu cầu của Chi cục
     </li>
     <li nz-menu-item (click)="selectTab('dexuatcuc')" *ngIf="!userService.isChiCuc()">
       {{userService.isTongCuc() ? 'Đề xuất nhu cầu của các Cục' : 'Tổng hợp nhu cầu của Chi cục và đề xuất lên TC'}}
@@ -22,7 +22,7 @@
       Biên bản giao nhận
     </li>
     <li nz-menu-item (click)="selectTab('hientrangmaymoc')">
-      Hiện trạng công cụ,dụng cụ
+      Hiện trạng công cụ, dụng cụ
     </li>
   </ul>
 </nz-affix>

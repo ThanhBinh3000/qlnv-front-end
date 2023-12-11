@@ -35,20 +35,20 @@ export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit
   rows: any[] = [];
 
   constructor(httpClient: HttpClient,
-    storageService: StorageService,
-    notification: NzNotificationService,
-    spinner: NgxSpinnerService,
-    modal: NzModalService,
-    private thongTu1452013Service: ThongTu1452013Service,
-    public userService: UserService,
-    private donViService: DonviService,
-    private danhMucService: DanhMucService,
-    public globals: Globals) {
+              storageService: StorageService,
+              notification: NzNotificationService,
+              spinner: NgxSpinnerService,
+              modal: NzModalService,
+              private thongTu1452013Service: ThongTu1452013Service,
+              public userService: UserService,
+              private donViService: DonviService,
+              private danhMucService: DanhMucService,
+              public globals: Globals) {
     super(httpClient, storageService, notification, spinner, modal, thongTu1452013Service);
     this.formData = this.fb.group(
       {
         nam: [dayjs().get("year"), [Validators.required]],
-        namKh: [dayjs().get("year"), [Validators.required]],
+        namKh: [, [Validators.required]],
         maCuc: [],
         maChiCuc: [],
         loaiVthh: '',
@@ -60,7 +60,7 @@ export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit
   async ngOnInit() {
     await this.spinner.show();
     try {
-      for (let i = -3; i < 23; i++) {
+      for (let i = 0; i < 23; i++) {
         this.listNam.push({
           value: dayjs().get("year") - i,
           text: dayjs().get("year") - i
@@ -109,6 +109,10 @@ export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit
   async preView() {
     try {
       this.spinner.show();
+      this.helperService.markFormGroupTouched(this.formData);
+      if (this.formData.invalid) {
+        return;
+      }
       this.setListCondition();
       let body = this.formData.value;
       body.typeFile = "pdf";
@@ -196,5 +200,10 @@ export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit
     // this.formData.get("loaiVthh").setValue(listVthhCondition);
     this.formData.get("cloaiVthh").setValue(listCloaiVthhCondition);
   }
-
+  clearFilter() {
+    this.formData.patchValue({
+      nam: null,
+      namKh:null,
+    })
+  }
 }

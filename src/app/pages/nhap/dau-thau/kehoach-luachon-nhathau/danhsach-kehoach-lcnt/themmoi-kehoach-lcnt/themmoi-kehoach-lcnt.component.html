@@ -5,11 +5,11 @@
       <span>Quay lại</span>
     </button>
     <ng-container>
-      <!--      <button-->
-      <!--        type="button" class="btn btn-sub do" (click)="preview()">-->
-      <!--        <i class="icon htvbdh_tcdt_tuchoi"></i>-->
-      <!--        <span>Xem trước</span>-->
-      <!--      </button>-->
+<!--      <button-->
+<!--        type="button" class="btn btn-sub do" (click)="preview()">-->
+<!--        <i class="icon htvbdh_tcdt_tuchoi"></i>-->
+<!--        <span>Xem trước</span>-->
+<!--      </button>-->
       <button
         *ngIf="loaiVthhInput === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_DUYET_LDVU') && formData.value.trangThai == STATUS.CHO_DUYET_LDV :
         ( userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_DUYET_TP') && formData.value.trangThai == STATUS.CHO_DUYET_TP
@@ -82,7 +82,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Loại hình nhập xuất </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="loaiHinhNx" (ngModelChange)="onChangeLhNx($event)"
-                [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView">
+                         [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView">
                 <nz-option *ngFor="let p of listLoaiHinhNx" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
@@ -248,7 +248,7 @@
                 <nz-form-label [nzNoColon]="true">Năm sản xuất</nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                   <nz-select formControlName="namSxuat"
-                    [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView">
+                             [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView">
                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -259,7 +259,7 @@
                 <nz-form-label [nzNoColon]="true">Thu hoạch vụ</nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                   <nz-select formControlName="thuHoachVu"
-                    [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView">
+                             [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView">
                     <nz-option *ngFor="let p of listThuHoachVu" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -270,7 +270,7 @@
                 <nz-form-label [nzNoColon]="true">Năm thu hoạch</nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                   <nz-select formControlName="namThuHoach"
-                    [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView">
+                             [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView">
                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -283,7 +283,7 @@
                 <nz-form-label [nzNoColon]="true">Vụ</nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                   <nz-select formControlName="vu"
-                    [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView">
+                             [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView">
                     <nz-option *ngFor="let p of listThuHoachVu" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -294,7 +294,7 @@
                 <nz-form-label [nzNoColon]="true">Quốc gia</nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                   <nz-select formControlName="quocGiaSx"
-                    [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView">
+                             [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView">
                     <nz-option *ngFor="let p of listQuocGia" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -374,15 +374,15 @@
               <div nz-row [nzGutter]="24">
                 <div nz-col nzSpan="12">
                   <nz-select formControlName="quy" nzAllowClear (ngModelChange)="onChangeQuy()"
-                    [nzDisabled]="(formData.value.trangThai != globals.prop.NHAP_DU_THAO && formData.value.trangThai != globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai != '') || isView">
+                             [nzDisabled]="(formData.value.trangThai != globals.prop.NHAP_DU_THAO && formData.value.trangThai != globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai != '') || isView">
                     <nz-option *ngFor="let p of listQuy" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                     </nz-option>
                   </nz-select>
                 </div>
                 <div nz-col nzSpan="12">
-                  <nz-date-picker formControlName="tgianBdauTchuc" nzFormat="dd/MM/yyyy" [nzDisabledDate]="disabledDate"
-                    nzAllowClear
-                    [nzDisabled]="(formData.value.trangThai != globals.prop.NHAP_DU_THAO && formData.value.trangThai != globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai != '') || isView">
+                  <nz-date-picker formControlName="tgianBdauTchuc" nzFormat="dd/MM/yyyy"
+                                  [nzDisabledDate]="disabledDate" nzAllowClear
+                                  [nzDisabled]="(formData.value.trangThai != globals.prop.NHAP_DU_THAO && formData.value.trangThai != globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai != '') || isView">
                   </nz-date-picker>
                 </div>
               </div>
@@ -392,36 +392,67 @@
         <div nz-col [nzSpan]="6">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Thời điểm mở thầu</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
-                <nz-date-picker [nzShowTime]="{ nzFormat: 'HH:mm' }" formControlName="tgianMthau"
-                  nzFormat="HH:mm dd/MM/yyyy"
-                  [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView">
-                </nz-date-picker>
-              </nz-input-group>
-            </nz-form-control>
+            <div nz-row>
+              <div nz-col nzSpan="7">
+                <nz-time-picker
+                  [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView"
+                  nzFormat="HH:mm" formControlName="tgianMthauTime"></nz-time-picker>
+              </div>
+              <div nz-col nzSpan="1">
+              </div>
+              <div nz-col nzSpan="16">
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-date-picker formControlName="tgianMthau"
+                                  nzFormat="dd/MM/yyyy"
+                                  [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView">
+                  </nz-date-picker>
+                </nz-form-control>
+              </div>
+            </div>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Thời điểm đóng thầu </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker [nzShowTime]="{ nzFormat: 'HH:mm' }" formControlName="tgianDthau"
-                nzFormat="HH:mm dd/MM/yyyy"
-                [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView">
-              </nz-date-picker>
-            </nz-form-control>
+            <nz-form-label nzRequired [nzNoColon]="true"> Thời điểm đóng thầu</nz-form-label>
+            <div nz-row>
+              <div nz-col nzSpan="7">
+                <nz-time-picker
+                  [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView"
+                  nzFormat="HH:mm" formControlName="tgianDthauTime"></nz-time-picker>
+              </div>
+              <div nz-col nzSpan="1">
+              </div>
+              <div nz-col nzSpan="16">
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-date-picker formControlName="tgianDthau"
+                                  nzFormat="dd/MM/yyyy"
+                                  [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView">
+                  </nz-date-picker>
+                </nz-form-control>
+              </div>
+            </div>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="6" *ngIf="!this.loaiVthhInput.startsWith('02')">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Thời điểm mở hồ sơ đề xuất về kỹ thuật </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker [nzShowTime]="{ nzFormat: 'HH:mm' }" formControlName="tgianMoHoSo"
-                nzFormat="HH:mm dd/MM/yyyy"
-                [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView">
-              </nz-date-picker>
-            </nz-form-control>
+            <nz-form-label nzRequired [nzNoColon]="true"> Thời điểm mở hồ sơ đề xuất về kỹ thuật</nz-form-label>
+            <div nz-row>
+              <div nz-col nzSpan="7">
+                <nz-time-picker
+                  [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView"
+                  nzFormat="HH:mm" formControlName="tgianMoHoSoTime"></nz-time-picker>
+              </div>
+              <div nz-col nzSpan="1">
+              </div>
+              <div nz-col nzSpan="16">
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-date-picker formControlName="tgianMoHoSo"
+                                  nzFormat="dd/MM/yyyy"
+                                  [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView">
+                  </nz-date-picker>
+                </nz-form-control>
+              </div>
+            </div>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="3" *ngIf="!this.loaiVthhInput.startsWith('02')">
@@ -449,14 +480,15 @@
         </div>
         <div nz-col [nzSpan]="3" *ngIf="!this.loaiVthhInput.startsWith('02')">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Giá bán hồ sơ (đ/bộ)
+            <nz-form-label [nzNoColon]="true"> Giá bán hồ sơ (đ/bộ)
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input formControlName="giaBanHoSo" class="money-input" currencyMask [options]="amount">
+              <input nz-input [readonly]="isView"
+                     formControlName="giaBanHoSo" class="money-input" currencyMask [options]="amount">
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="3">
+        <div nz-col [nzSpan]="6">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> % bảo lãnh dự thầu </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -464,28 +496,6 @@
                 <nz-input-number formControlName="gtriDthau" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
                   [nzStep]="1" [nzSize]="'small'"
                   [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView">
-                </nz-input-number>
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="1">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> </nz-form-label>
-            <nz-form-control class="text-center">
-              <i class="icon htvbdh_tcdt_lien-ket icon-lien-ket"></i>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="2">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true"></nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfter="đ">
-                <nz-input-number [ngModel]="formData.value.tongMucDtDx * (formData.value.gtriDthau / 100) "
-                  [ngModelOptions]="{standalone: true}" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-                  [nzStep]="1" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -574,7 +584,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">Nguồn vốn</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="nguonVon">
+              <nz-select formControlName="nguonVon" [nzDisabled]="isView" nzAllowClear>
                 <nz-option *ngFor="let p of listNguonVon" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
@@ -634,16 +644,18 @@
         <tr>
           <th style="width: 2%;">STT</th>
           <th>Tên gói thầu</th>
-          <th>Chi cục</th>
+          <th>Chi cục DTNN</th>
           <th>Điểm kho</th>
           <th>Địa điểm nhập kho</th>
-          <th>Chỉ tiêu kế hoạch đuợc giao<br />(Tấn)</th>
-          <th>Số đã thực hiện<br />(Tấn)</th>
+          <th>Chỉ tiêu kế hoạch đuợc giao<br/>(Tấn)</th>
+          <th>Số đã thực hiện<br/>(Tấn)</th>
           <th>Số đề xuất (Tấn)</th>
           <th>Đơn giá đề xuất có VAT (đ/kg)</th>
-          <th>Thành tiền tạm tính theo giá đề xuất (đ)</th>
-          <th>Đơn giá được duyệt có VAT (đ/kg)</th>
-          <th>Thành tiền theo đơn giá được duyệt có VAT (đ)</th>
+          <th>Thành tiền tạm tính <br/>theo giá đề xuất (đ)</th>
+          <th>Đơn giá được duyệt <br/>có VAT (đ/kg)</th>
+          <th>Thành tiền theo đơn giá <br/>được duyệt có VAT (đ)</th>
+          <th>Tiền bão lãnh <br/>dự thầu (đ)</th>
+          <th>Trạng thái <br/>đấu thầu</th>
           <th style="width: 5%;" *ngIf="userService.isCuc() && !isView">Hành động</th>
         </tr>
       </thead>
@@ -658,11 +670,12 @@
             <td></td>
             <td></td>
             <td class="text-right blue-text bold-700">{{ dtGoiThau.soLuong | number : '1.0-99' : 'vi_VN' }}</td>
-            <td class="text-right">{{dtGoiThau.donGiaTamTinh | number : '1.0-99' : 'vi_VN'}}</td>
-            <td class="text-right bold-700">{{ dtGoiThau.soLuong * dtGoiThau.donGiaTamTinh *1000| number :'1.0-99' :
-              'vi_VN' }}</td>
+            <td class="text-right"></td>
+            <td class="text-right bold-700">{{ dtGoiThau.thanhTienDx | number : '1.0-99' : 'vi_VN'}}</td>
             <td></td>
-            <td></td>
+            <td class="text-right bold-700">{{ dtGoiThau.thanhTien | number : '1.0-99' : 'vi_VN'}}</td>
+            <td class="text-right bold-700">{{ dtGoiThau.thanhTienDx * formData.value.gtriDthau / 100 | number : '1.0-99' : 'vi_VN'}}</td>
+            <td>{{ dtGoiThau.trangThaiDt}}</td>
             <td class="text-right" *ngIf="userService.isCuc() && !isView">
               <a *ngIf="!isDisbleForm()" (click)="themMoiCuc(dtGoiThau.goiThau)">
                 <i class="fa fa-pencil" title="Sửa"></i>
@@ -683,10 +696,11 @@
                 <td class="text-right red-text">{{chiCuc.soLuongTheoChiTieu| number : '1.0-99' : 'vi_VN'}}</td>
                 <td class="text-right red-text">{{chiCuc.soLuongDaMua| number : '1.0-99' : 'vi_VN'}}</td>
                 <td class="text-right blue-text bold-700">{{ chiCuc.soLuong | number : '1.0-99' : 'vi_VN' }}</td>
-                <td class="text-right">{{dtGoiThau.donGiaTamTinh | number : '1.0-99' : 'vi_VN'}}</td>
-                <td class="text-right bold-700">{{ chiCuc.soLuong * dtGoiThau.donGiaTamTinh *1000| number :'1.0-99' :
-                  'vi_VN' }}</td>
-                <td></td>
+                <td class="text-right">{{chiCuc.donGiaTamTinh | number : '1.0-99' : 'vi_VN'}}</td>
+                <td class="text-right">{{ chiCuc.soLuong * chiCuc.donGiaTamTinh *1000| number :'1.0-99' : 'vi_VN' }}</td>
+                <td class="text-right">{{chiCuc.donGia | number : '1.0-99' : 'vi_VN'}}</td>
+                <td class="text-right">{{ chiCuc.soLuong * chiCuc.donGia *1000| number :'1.0-99' : 'vi_VN' }}</td>
+                <td class="text-right">{{ chiCuc.soLuong * chiCuc.donGiaTamTinh *1000 * formData.value.gtriDthau / 100| number :'1.0-99' : 'vi_VN' }}</td>
                 <td></td>
                 <td *ngIf="userService.isCuc() && !isView"></td>
               </tr>
@@ -701,12 +715,12 @@
                     <td></td>
                     <td></td>
                     <td class="text-right blue-text">{{diemKho.soLuong | number : '1.0-99' : 'vi_VN'}}</td>
-                    <td class="text-right">{{dtGoiThau.donGiaTamTinh | number : '1.0-99' : 'vi_VN'}}</td>
-                    <td class="text-right">{{diemKho.soLuong * dtGoiThau.donGiaTamTinh * 1000 | number : '1.0-99' :
-                      'vi_VN'}}</td>
-                    <td class="text-right">{{dtGoiThau.donGiaVat | number : '1.0-99' : 'vi_VN'}}</td>
-                    <td class="text-right">{{diemKho.soLuong * dtGoiThau.donGiaVat * 1000 | number: '1.0-99' : 'vi_VN'}}
-                    </td>
+                    <td class="text-right">{{chiCuc.donGiaTamTinh | number : '1.0-99' : 'vi_VN'}}</td>
+                    <td class="text-right">{{diemKho.soLuong * chiCuc.donGiaTamTinh * 1000 | number : '1.0-99' : 'vi_VN'}}</td>
+                    <td class="text-right">{{chiCuc.donGia | number : '1.0-99' : 'vi_VN'}}</td>
+                    <td class="text-right">{{diemKho.soLuong * chiCuc.donGia * 1000 | number: '1.0-99' : 'vi_VN'}}</td>
+                    <td class="text-right">{{ diemKho.soLuong * chiCuc.donGiaTamTinh *1000 * formData.value.gtriDthau / 100| number :'1.0-99' : 'vi_VN' }}</td>
+                    <td></td>
                     <td class="text-right" *ngIf="userService.isCuc() && !isView">
                       <a *ngIf="!isDisbleForm()" (click)="themMoiCuc(dtGoiThau.goiThau)">
                         <i class="fa fa-pencil" title="Sửa"></i>
@@ -731,8 +745,10 @@
           <td></td>
           <td class="text-right blue-text bold-700">{{ calcTongSl() | number : '1.0-99' : 'vi_VN' }}</td>
           <td></td>
-          <td class="text-right blue-text bold-700">{{ calcTongThanhTien() | number : '1.0-99' : 'vi_VN' }}</td>
+          <td class="text-right blue-text bold-700">{{ calcTongThanhTienDx() | number : '1.0-99' : 'vi_VN' }}</td>
           <td></td>
+          <td class="text-right blue-text bold-700">{{ calcTongThanhTien() | number : '1.0-99' : 'vi_VN' }}</td>
+          <td class="text-right blue-text bold-700">{{ calcTongThanhTienBaoLanh() | number : '1.0-99' : 'vi_VN' }}</td>
           <td></td>
           <td *ngIf="userService.isCuc() && !isView">
         </tr>
@@ -786,7 +802,7 @@
           </td>
         </tr>
         <tr *ngFor="let data of baoGiaThiTruongList, let i = index" class="editable-row">
-          <ng-container>
+          <ng-container *ngIf="!editBaoGiaCache[data.id]?.edit; else editBaoGiaTemplate">
             <td>{{i + 1}}</td>
             <td>{{data.tenTlieu}}</td>
             <td>{{data.children && data.children.length > 0 ? data.children[0].fileName : ''}}</td>
@@ -807,7 +823,7 @@
           <ng-template #editBaoGiaTemplate>
             <td></td>
             <td>
-              <input nz-input [(ngModel)]="editBaoGiaCache[data.id].data.noiDung" />
+              <input nz-input [(ngModel)]="editBaoGiaCache[data.id].data.tenTlieu" />
             </td>
             <td>
               <multiple-tag buttonName="" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
@@ -891,7 +907,7 @@
           <ng-template #editCoSoTemplate>
             <td></td>
             <td>
-              <input nz-input [(ngModel)]="editCoSoCache[data.id].data.noiDung" />
+              <input nz-input [(ngModel)]="editCoSoCache[data.id].data.tenTlieu" />
             </td>
             <td>
               <multiple-tag buttonName="" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
@@ -912,37 +928,36 @@
         </tr>
       </tbody>
     </nz-table>
-    <div nz-row [nzGutter]="24">
-      <div nz-col [nzSpan]="24" *ngIf="loaiVthhInput.startsWith('02')">
-        <nz-form-item>
-          <nz-form-label [nzNoColon]="true"> Ý kiến tham gia của các Vụ </nz-form-label>
-          <textarea [readonly]="isView" rows="3" nz-input [(ngModel)]="ykienThamGia"></textarea>
-        </nz-form-item>
+    <form nzLayout="vertical" nz-form [formGroup]="formData">
+      <div nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Ghi chú</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <textarea [readonly]="isView" rows="3" nz-input formControlName="ghiChu"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
       </div>
-      <div nz-col [nzSpan]="24" *ngIf="loaiVthhInput.startsWith('02')">
-        <nz-form-item>
-          <nz-form-label [nzNoColon]="true"> Ghi chú </nz-form-label>
-          <textarea [readonly]="isView" rows="3" nz-input [(ngModel)]="ghiChu"></textarea>
-        </nz-form-item>
-      </div>
-    </div>
+    </form>
   </nz-card>
 </div>
 
 <ng-template #error let-control>
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
 </ng-template>
-<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="THÔNG TIN ĐỀ XUẤT KẾ HOẠCH KẾT QUẢ LỰA CHỌN NHÀ THẦU" nzWidth="100%"
-  (nzOnCancel)="closeDlg()">
+<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="THÔNG TIN ĐỀ XUẤT KẾ HOẠCH KẾT QUẢ LỰA CHỌN NHÀ THẦU" nzWidth="100%" (nzOnCancel)="closeDlg()">
   <div *nzModalContent class="modal__content">
     <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
   </div>
   <div *nzModalFooter>
-    <button nz-button (click)="downloadPdf()" class="modal__button--save">
+    <button nz-button (click)="downloadPdf()"
+            class="modal__button--save">
       <i class="icon htvbdh_file-pdf"></i>
       Xuất .pdf
     </button>
-    <button nz-button (click)="downloadWord()" class="modal__button--save">
+    <button nz-button (click)="downloadWord()"
+            class="modal__button--save">
       <i class="icon htvbdh_file-word"></i>
       Xuất .docx
     </button>

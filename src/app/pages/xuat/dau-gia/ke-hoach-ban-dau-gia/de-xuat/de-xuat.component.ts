@@ -1,15 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
+import {Component, Input, OnInit} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
 import {
   DeXuatKhBanDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { LOAI_HANG_DTQG } from 'src/app/constants/config';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-de-xuat',
@@ -39,32 +39,32 @@ export class DeXuatComponent extends Base2Component implements OnInit {
   ) {
     super(httpClient, storageService, notification, spinner, modal, deXuatKhBanDauGiaService);
     this.formData = this.fb.group({
-      namKh: '',
-      soDxuat: '',
-      ngayTaoTu: '',
-      ngayTaoDen: '',
-      ngayDuyetTu: '',
-      ngayDuyetDen: '',
-      trichYeu: '',
-      loaiVthh: '',
-      trangThaiList: '',
+      namKh: null,
+      soDxuat: null,
+      ngayTaoTu: null,
+      ngayTaoDen: null,
+      ngayDuyetTu: null,
+      ngayDuyetDen: null,
+      trichYeu: null,
+      loaiVthh: null,
+      trangThaiList: null,
     });
 
     this.filterTable = {
-      namKh: '',
-      soDxuat: '',
-      ngayTao: '',
-      ngayPduyet: '',
-      soQdPd: '',
-      ngayKyQd: '',
-      trichYeu: '',
-      tenCloaiVthh: '',
-      slDviTsan: '',
-      slHdDaKy: '',
-      soQdCtieu: '',
-      tenTrangThai: '',
-      tenTrangThaiTh: '',
-      idThop: '',
+      namKh: null,
+      soDxuat: null,
+      ngayTao: null,
+      ngayPduyet: null,
+      soQdPd: null,
+      ngayKyQd: null,
+      trichYeu: null,
+      tenLoaiVthh: null,
+      tenCloaiVthh: null,
+      slDviTsan: null,
+      soQdCtieu: null,
+      tenTrangThai: null,
+      tenTrangThaiTh: null,
+      idThop: null,
     };
 
     this.listTrangThai = [
@@ -106,28 +106,17 @@ export class DeXuatComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([
-        this.timKiem(),
-        this.search(),
-      ]);
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+        trangThaiList: this.userService.isTongCuc() ? [this.STATUS.DA_DUYET_LDC, this.STATUS.DA_DUYET_CBV, this.STATUS.TU_CHOI_CBV] : null
+      })
+      await this.search();
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
     }
-  }
-
-  async timKiem() {
-    this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
-      trangThaiList: this.userService.isTongCuc() ? [this.STATUS.DA_DUYET_LDC, this.STATUS.DA_DUYET_CBV, this.STATUS.TU_CHOI_CBV] : null
-    })
-  }
-
-  async clearFilter() {
-    this.formData.reset();
-    await Promise.all([this.timKiem(), this.search()]);
   }
 
   redirectDetail(id, isView: boolean) {
@@ -220,19 +209,19 @@ export class DeXuatComponent extends Base2Component implements OnInit {
       case 'XEM':
         return (
           this.userService.isAccessPermisson(permissions.XEM) && ((this.userService.isAccessPermisson(permissions.THEM) &&
-            [
-              this.STATUS.CHO_DUYET_TP,
-              this.STATUS.CHO_DUYET_LDC,
-              this.STATUS.DA_DUYET_LDC,
-              this.STATUS.DA_DUYET_CBV
-            ].includes(data.trangThai)) ||
+              [
+                this.STATUS.CHO_DUYET_TP,
+                this.STATUS.CHO_DUYET_LDC,
+                this.STATUS.DA_DUYET_LDC,
+                this.STATUS.DA_DUYET_CBV
+              ].includes(data.trangThai)) ||
             (!this.userService.isAccessPermisson(permissions.THEM) && [
-              this.STATUS.DU_THAO,
-              this.STATUS.TU_CHOI_TP,
-              this.STATUS.TU_CHOI_LDC,
-              this.STATUS.TU_CHOI_CBV,
-              this.STATUS.DA_DUYET_CBV
-            ].includes(data.trangThai) ||
+                this.STATUS.DU_THAO,
+                this.STATUS.TU_CHOI_TP,
+                this.STATUS.TU_CHOI_LDC,
+                this.STATUS.TU_CHOI_CBV,
+                this.STATUS.DA_DUYET_CBV
+              ].includes(data.trangThai) ||
               (data.trangThai === this.STATUS.CHO_DUYET_TP &&
                 !this.userService.isAccessPermisson(permissions.DUYET_TP)) ||
               (data.trangThai === this.STATUS.CHO_DUYET_LDC &&

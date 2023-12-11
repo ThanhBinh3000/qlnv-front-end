@@ -18,7 +18,9 @@ import {saveAs} from 'file-saver';
 import {
   HoSoKyThuatCtvtService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/HoSoKyThuatCtvt.service";
-import { HoSoKyThuatBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/HoSoKyThuatBdg.service';
+import {
+  HoSoKyThuatBdgService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/HoSoKyThuatBdg.service';
 
 @Component({
   selector: 'app-chi-tiet-bien-ban-kiem-tra-dau-gia',
@@ -184,6 +186,10 @@ export class ChiTietBienBanKiemTraComponent extends Base2Component implements On
     this.data.maDviNhapHskt = this.data.maDviNhapHskt ? this.userInfo.MA_DVI : this.data.maDviNhapHskt;
     this.data.tenDviNhapHskt = this.data.tenDviNhapHskt ? this.userInfo.TEN_DVI : this.data.tenDviNhapHskt;
     this.formData.patchValue(data);
+    this.formData.patchValue({
+      idBbLayMau: this.dataHdr.idBbLayMau,
+      soBbLayMau: this.dataHdr.soBbLayMau
+    });
     this.listCanCu = this.data.canCu ? this.data.canCu : [];
     this.listVanBanBsung = this.data.listVanBanBsung ? this.data.listVanBanBsung : [];
     await this.buildTableView();
@@ -195,7 +201,8 @@ export class ChiTietBienBanKiemTraComponent extends Base2Component implements On
 
   async save() {
     try {
-      this.dataHdr.dtl = this.formData.value;
+      // this.dataHdr.dtl = this.formData.value;
+      Object.assign(this.dataHdr.xhHoSoKyThuatDtl.find(s => s.idVirtual == this.formData.value.idVirtual), this.formData.value)
       await this.createUpdate(this.dataHdr);
       // this.saveDtl.emit(this.formData.value);
       /*this.data.xhHoSoKyThuatDtl = this.formData.value;

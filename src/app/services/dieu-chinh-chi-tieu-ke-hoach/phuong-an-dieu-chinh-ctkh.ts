@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BaseService } from "../base.service";
 import { OldResponseData } from 'src/app/interfaces/response';
 import { environment } from 'src/environments/environment';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -39,6 +40,21 @@ export class PhuongAnDieuChinhCTKHService extends BaseService {
 
   xoa(body): Promise<OldResponseData> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/delete/multiple`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
+  exportlist(body: any): Observable<Blob> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/export/list`;
+    return this._httpClient.post(url, body, { responseType: 'blob' });
+  }
+
+  search(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tra-cuu`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
+  getPhuongAn(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 

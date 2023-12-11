@@ -5,12 +5,13 @@ import { NzNotificationService } from "ng-zorro-antd/notification";
 import { NgxSpinnerService } from "ngx-spinner";
 import { NzModalService } from "ng-zorro-antd/modal";
 import { MESSAGE } from "src/app/constants/message";
-import { chain } from "lodash";
+import { chain , isEmpty } from "lodash";
 import { TongHopThanhLyService } from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/TongHopThanhLy.service";
 import { ChitietThComponent } from './chitiet-th/chitiet-th.component';
 import { ThemmoiThComponent } from './themmoi-th/themmoi-th.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Base3Component } from 'src/app/components/base3/base3.component';
+import {DonviService} from "../../../../services/donvi.service";
 
 @Component({
   selector: 'app-tong-hop-thanh-ly',
@@ -28,20 +29,22 @@ export class TongHopThanhLyComponent extends Base3Component implements OnInit {
     route: ActivatedRoute,
     router: Router,
     private _service: TongHopThanhLyService,
+    private donviService : DonviService
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, _service);
     this.formData = this.fb.group({
       nam: null,
-      maSc: null,
-      maCc: null,
-      ngayTu: null,
-      ngayDen: null,
+      maDanhSach: null,
+      maDviSr: null,
+      ngayTaoTu: null,
+      ngayTaoDen: null,
     })
   }
 
   async ngOnInit() {
     await this.spinner.show();
     await Promise.all([
+      this.loadDsDonVi(),
       this.search(),
     ])
     this.buildTableView()
@@ -58,6 +61,14 @@ export class TongHopThanhLyComponent extends Base3Component implements OnInit {
       })
       ).value()
     })
+  }
+
+  dsDonvi: any[] = [];
+  async loadDsDonVi() {
+    const dsTong = await this.donviService.layDonViCon();
+    if (!isEmpty(dsTong)) {
+      this.dsDonvi = dsTong.data.filter(s => s.type === 'DV');
+    }
   }
 
   openDialogDs(roles?) {

@@ -59,7 +59,8 @@ export class ThongTinBienBanGuiHangComponent extends Base2Component implements O
   listFileDinhKem: any[] = [];
   listDiaDiemNhap: any[] = [];
   dataTable: any[] = [];
-  previewName: string = 'bien_ban_gui_hang';
+  previewName: string = '13. Biên bản gửi hàng';
+  templateName = "Biên bản gửi hàng";
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -358,10 +359,12 @@ export class ThongTinBienBanGuiHangComponent extends Base2Component implements O
       } else {
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          this.back();
+          // this.back();
         } else {
+          this.formData.get('id').setValue(res.data.id);
+          this.id = res.data.id;
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-          this.back();
+          // this.back();
         }
         this.spinner.hide();
       }
@@ -383,30 +386,26 @@ export class ThongTinBienBanGuiHangComponent extends Base2Component implements O
     return thongTinTrangThaiNhap(trangThai);
   }
 
-  addDaiDien(bienBan: ChiTiet, type: string) {
-    // if ((type == '00' && (!this.chiTietBienBanGuiHangBenNhan.daiDien || !this.chiTietBienBanGuiHangBenNhan.chucVu))
-    //   || (type == '01' && (!this.chiTietBienBanGuiHangBenGiao.daiDien || !this.chiTietBienBanGuiHangBenGiao.chucVu))) {
-    //   return;
-    // }
-
-    const chiTiet = new ChiTiet();
-    chiTiet.loaiBen = type;
-    chiTiet.chucVu = bienBan.chucVu;
-    chiTiet.daiDien = bienBan.daiDien;
-    this.dataTable.push(chiTiet);
+  addDaiDien(type: string) {
+    if (type === '00') {
+      this.benNhan.loaiBen = type;
+      this.dataTable.push(this.benNhan);
+    } else {
+      this.benGiao.loaiBen = type;
+      this.dataTable.push(this.benGiao);
+    }
     this.clearDaiDien(type);
-    console.log(this.dataTable);
   }
 
   clearDaiDien(type: string) {
     if (type === '00') {
-      this.benGiao = new ChiTiet();
-    } else {
       this.benNhan = new ChiTiet();
+    } else {
+      this.benGiao = new ChiTiet();
     }
   }
-  deleteBienBan(id: number) {
-    // this.bienBanGuiHang.chiTiets = this.bienBanGuiHang.chiTiets.filter(bienBan => bienBan.id !== id);
+  deleteBienBan(i: number) {
+    this.dataTable.splice(i, 1);
   }
 
   async openDialogSoQd() {

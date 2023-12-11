@@ -3,9 +3,9 @@
     <div class='header header-green-background'>
       <div class='header-text'>
         <div class='title-chi-tieu'>
-          <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC ? 'status-xanh' : 'status-do'">
-            {{ formData.value.tenTrangThai }}
-          </span>
+                <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC ? 'status-xanh' : 'status-do'">
+                    {{ formData.value.tenTrangThai }}
+                </span>
           <span>Phiếu kiểm định chất lượng DTQG</span>
         </div>
       </div>
@@ -15,21 +15,24 @@
           <span>Quay lại</span>
         </button>
         <button *ngIf='this.userService.isCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDC'
-          class='btn btn-sub xanh-nhat mr-2' (click)='save(true)'>
+                class='btn btn-sub xanh-nhat mr-2' (click)='save(true)'>
           <i class='icon htvbdh_tcdt_guiduyet'></i>
           <span>Lưu và gửi duyệt</span>
         </button>
-        <button *ngIf='this.userService.isCuc() && isDisabled()' type='button' class='btn btn-sub do mr-2'
-          (click)='tuChoi()'>
+        <button
+          *ngIf='this.userService.isCuc() && isDisabled()'
+          type='button' class='btn btn-sub do mr-2' (click)='tuChoi()'>
           <i class='icon htvbdh_tcdt_tuchoi do'></i>
           <span>Từ chối</span>
         </button>
-        <button *ngIf='this.userService.isCuc() && isDisabled() ' class='btn btn-sub xanh-nhat mr-2'
-          (click)='pheDuyet()'>
+        <button
+          *ngIf='this.userService.isCuc() && isDisabled() '
+          class='btn btn-sub xanh-nhat mr-2' (click)='pheDuyet()'>
           <i class='icon htvbdh_tcdt_pheduyet'></i>
           <span>Duyệt</span>
         </button>
-        <button *ngIf='this.userService.isCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDC '
+        <button
+          *ngIf='this.userService.isCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDC '
           type='button' class='btn btn-main' (click)='save()'>
           <i class='icon htvbdh_tcdt_save'></i>
           <span>Lưu</span>
@@ -38,7 +41,7 @@
     </div>
   </nz-affix>
   <nz-alert class='mg-t-10' *ngIf='formData.value.trangThai == STATUS.TU_CHOI_LDC' nzShowIcon nzType='error'
-    nzMessage='Lý do từ chối' nzDescription='{{formData.value.lyDoTuChoi}}'>
+            nzMessage='Lý do từ chối' nzDescription='{{formData.value.lyDoTuChoi}}'>
   </nz-alert>
   <nz-card class='mt16 flex-card p-lr16'>
     <!-- Thông tin chung -->
@@ -53,7 +56,8 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]='error'>
                   <nz-select formControlName='nam' nzDisabled>
-                    <nz-option *ngFor='let p of listNam' [nzValue]='p.value' [nzLabel]='p.text'></nz-option>
+                    <nz-option *ngFor='let p of listNam' [nzValue]='p.value'
+                               [nzLabel]='p.text'></nz-option>
                   </nz-select>
                 </nz-form-control>
               </nz-form-item>
@@ -91,7 +95,8 @@
                 <nz-form-label [nzNoColon]='true'>
                   Ngày lập phiếu
                 </nz-form-label>
-                <nz-date-picker nzFormat='dd/MM/YYYY' formControlName='ngayLapPhieu' [nzDisabled]='isView'>
+                <nz-date-picker nzFormat='dd/MM/YYYY' formControlName='ngayLapPhieu'
+                                [nzDisabled]='isView'>
                 </nz-date-picker>
               </nz-form-item>
             </div>
@@ -112,8 +117,9 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]='error'>
                   <nz-select formControlName='soBbLayMau' [nzDisabled]='isView'
-                    (ngModelChange)='changeValueBienBanLayMau($event)'>
-                    <nz-option *ngFor='let p of listBbLayMau' [nzValue]='p.soBienBan' [nzLabel]='p.soBienBan'>
+                             (ngModelChange)='changeValueBienBanLayMau($event)'>
+                    <nz-option *ngFor='let p of listBbLayMau' [nzValue]='p.soBienBan'
+                               [nzLabel]='p.soBienBan'>
                     </nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -198,7 +204,8 @@
                 <nz-form-label [nzNoColon]='true'>
                   Ngày lấy mẫu
                 </nz-form-label>
-                <nz-date-picker nzFormat='dd/MM/YYYY' formControlName='ngayLayMau' [nzDisabled]='true'>
+                <nz-date-picker nzFormat='dd/MM/YYYY' formControlName='ngayLayMau'
+                                [nzDisabled]='true'>
                 </nz-date-picker>
               </nz-form-item>
             </div>
@@ -216,7 +223,8 @@
                   Ngày kiểm định mẫu
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]='error'>
-                  <nz-date-picker nzFormat='dd/MM/YYYY' formControlName='ngayKiemDinh' [nzDisabled]='isView'>
+                  <nz-date-picker nzFormat='dd/MM/YYYY' formControlName='ngayKiemDinh'
+                                  [nzDisabled]='isView'>
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -228,7 +236,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]='error'>
                   <nz-checkbox-group style='display: inline-grid;' formControlName='ppLayMauList'
-                    [nzDisabled]='true'></nz-checkbox-group>
+                                     [nzDisabled]='true'></nz-checkbox-group>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -259,33 +267,34 @@
       <nz-collapse-panel [nzHeader]="'KẾT QUẢ PHÂN TÍCH CHỈ TIÊU CHẤT LƯỢNG'" [nzActive]='true'>
         <nz-card class='mg-t-16 flex-card p-lr16 table-card'>
           <nz-table class='pd-10' #basicTable class='nowrap' [nzBordered] [nzFrontPagination]='false'
-            [nzShowPagination]='false' [nzData]='dataTableChiTieu'>
+                    [nzShowPagination]='false'
+                    [nzData]='dataTableChiTieu'>
             <thead>
-              <tr>
-                <th width='30px'>STT</th>
-                <th><span class='do'>* </span>Chỉ tiêu chất lượng</th>
-                <th width='60px'>Chỉ số chất lượng theo QCVN 14:2020/BTC</th>
-                <th width='400px'><span class='do'>* </span>Kết quả phân tích</th>
-                <th><span class='do'>* </span>Phương pháp kiểm tra chất lượng</th>
-                <th><span class='do'>* </span>Đánh giá</th>
-              </tr>
+            <tr>
+              <th width='30px'>STT</th>
+              <th><span class='do'>* </span>Chỉ tiêu chất lượng</th>
+              <th width='60px'>Chỉ số chất lượng theo QCVN 14:2020/BTC</th>
+              <th width='400px'><span class='do'>* </span>Kết quả phân tích</th>
+              <th><span class='do'>* </span>Phương pháp kiểm tra chất lượng</th>
+              <th><span class='do'>* </span>Đánh giá</th>
+            </tr>
             </thead>
             <tbody>
-              <tr *ngFor='let data of basicTable.data; let i = index'>
-                <td>{{i + 1}}</td>
-                <td>{{data.tenChiTieu}}</td>
-                <td>{{data.chiSo}}</td>
-                <td>
-                  <input type='text' nz-input class='w-400' [(ngModel)]='data.ketQua' [readOnly]='isView' />
-                </td>
-                <td>{{data.phuongPhap}}</td>
-                <td>
-                  <nz-select [(ngModel)]='data.danhGia' [disabled]='isView'>
-                    <nz-option *ngFor='let item of LIST_DANH_GIA' [nzValue]='item.value' [nzLabel]='item.label'>
-                    </nz-option>
-                  </nz-select>
-                </td>
-              </tr>
+            <tr *ngFor='let data of basicTable.data; let i = index'>
+              <td>{{i + 1}}</td>
+              <td>{{data.tenChiTieu}}</td>
+              <td>{{data.chiSo}}</td>
+              <td>
+                <input type='text' nz-input class='w-400' [(ngModel)]='data.ketQua' [readOnly]='isView' />
+              </td>
+              <td>{{data.phuongPhap}}</td>
+              <td>
+                <nz-select [(ngModel)]='data.danhGia' [disabled]='isView'>
+                  <nz-option *ngFor='let item of LIST_DANH_GIA' [nzValue]='item.value' [nzLabel]='item.label'>
+                  </nz-option>
+                </nz-select>
+              </td>
+            </tr>
             </tbody>
           </nz-table>
         </nz-card>
@@ -298,7 +307,8 @@
             <nz-form-label [nzNoColon]='true' nzRequired>
               Nhận xét kết luận
             </nz-form-label>
-            <textarea [readonly]='isView' nz-input [rows]='3' formControlName='nhanXetKetLuan'></textarea>
+            <textarea [readonly]='isView' nz-input [rows]='3'
+                      formControlName='nhanXetKetLuan'></textarea>
           </nz-form-item>
         </div>
         <div nz-col nzSpan='4'>

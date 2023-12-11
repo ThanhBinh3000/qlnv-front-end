@@ -213,9 +213,25 @@ export class TongHopKhmttComponent extends Base2Component implements OnInit {
     return endValue.getTime() <= this.tuNgayTh.getTime();
   };
   async taoQdinh(data: any) {
+    console.log(data, 12)
     this.id = data.id
     this.idSelected = data.id;
     this.qdPdMttId = data.qdPdMttId
+    await this.loadChiTiet()
+    let elem = document.getElementById('mainTongCuc');
+    let tabActive = elem.getElementsByClassName('ant-menu-item')[0];
+    tabActive.classList.remove('ant-menu-item-selected')
+    let setActive = elem.getElementsByClassName('ant-menu-item')[2];
+    setActive.classList.add('ant-menu-item-selected');
+    this.isQuyetDinh = true;
+    this.disableField = true;
+  }
+
+  async showQd(data: any) {
+    console.log(data, 11)
+    this.id = data.id
+    this.idSelected = data.id;
+    this.qdPdMttId = data.idQdPduyet
     await this.loadChiTiet()
     let elem = document.getElementById('mainTongCuc');
     let tabActive = elem.getElementsByClassName('ant-menu-item')[0];
@@ -234,7 +250,7 @@ export class TongHopKhmttComponent extends Base2Component implements OnInit {
     tabActive.classList.remove('ant-menu-item-selected')
     let setActive = elem.getElementsByClassName('ant-menu-item')[1];
     setActive.classList.add('ant-menu-item-selected');
-    this.qdPdMttId = 0;
+    // this.qdPdMttId = 0;
     this.isQuyetDinh = false;
   }
   //

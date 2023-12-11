@@ -21,10 +21,10 @@
     <div class="header header-green-background ">
       <div class="header-text">
         <div class="title-chi-tieu">
-        <span
-          [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDV ? 'status-xanh' : 'status-do'">
-          {{ formData.value.tenTrangThai }}
-        </span>
+<!--        <span-->
+<!--          [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDV ? 'status-xanh' : 'status-do'">-->
+<!--          {{ formData.value.tenTrangThai }}-->
+<!--        </span>-->
           <span>Tổng hợp đề xuất kế hoạch nhập khác</span>
         </div>
       </div>
@@ -45,7 +45,7 @@
           </div>
           <div nz-col [nzSpan]="6">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
+              <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-select formControlName="loaiVthh" nzShowSearch nzAllowClear [nzDisabled]="isView">
                   <nz-option *ngFor="let p of listLoaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>

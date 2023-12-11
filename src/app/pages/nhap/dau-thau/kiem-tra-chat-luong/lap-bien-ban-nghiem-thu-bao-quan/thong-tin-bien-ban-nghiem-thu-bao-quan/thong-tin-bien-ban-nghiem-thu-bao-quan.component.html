@@ -30,11 +30,13 @@
       <span>Duyệt</span>
     </button>
     <button class="btn btn-sub xanh"
-      *ngIf="( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_TK ) "
+      *ngIf="( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_TK )
+       && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_THEM')"
       (click)="save(false)">
       <i class="icon  htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
+
   </div>
 </nz-affix>
 <div class="bg-trang">
@@ -405,7 +407,7 @@
         </button>
       </div>
     </div>
-    <nz-table #tblDatadsHangTH class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="dsHangTH">
+    <nz-table #tblDatadsHangTH class="nowrap mt-16 table-chi-tiet" nzBordered [nzFrontPagination]="false" [nzPageSize]="9999" [nzData]="dsHangTH">
       <thead>
         <tr>
           <th rowspan="2" style="width: 35px">STT</th>

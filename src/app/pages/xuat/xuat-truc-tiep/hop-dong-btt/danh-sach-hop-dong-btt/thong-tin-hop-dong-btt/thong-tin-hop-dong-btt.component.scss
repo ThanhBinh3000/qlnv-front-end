@@ -1,5 +1,14 @@
-.list-file {
-    .ant-input-affix-wrapper {
-        padding: 0px 11px !important;
+::ng-deep {
+  .hd-custom-label {
+    margin-top: -20px;
+
+    .ant-form-item-label {
+      padding-top: 0 !important;
     }
+  }
+
+  .hidden-label > label {
+    opacity: 0;
+    visibility: hidden;
+  }
 }

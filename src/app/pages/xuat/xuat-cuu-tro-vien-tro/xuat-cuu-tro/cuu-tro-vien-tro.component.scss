@@ -1,0 +1,16 @@
+.xuat_ctvt::ng-deep {
+    tr th {
+        text-align: center;
+    }
+
+    .ant-table-cell {
+        .ant-input-number input {
+            text-align: right;
+        }
+
+        .ant-input-number:not(.ant-input-number-disabled):hover input,
+        .ant-input-number:not(.ant-input-number-disabled) input:focus {
+            padding-right: 28px;
+        }
+    }
+}

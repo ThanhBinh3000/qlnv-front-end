@@ -2,6 +2,19 @@
   <nz-card class="mt16 flex-card p-lr16 mg-t-10">
     <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
       <div nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+            </nz-form-label>
+            <nz-form-control>
+              <nz-radio-group [nzDisabled]="true" [(ngModel)]="radioValue" nzName="radiogroup"
+                              [ngModelOptions]="{standalone: true}">
+                <label nz-radio nzValue="01"> Đề xuất lần đầu </label>
+                <label nz-radio nzValue="02"> Đề xuất điều chỉnh </label>
+              </nz-radio-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
         <div nz-col nzSpan="6" class="mt-1">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" [nzRequired]="true">Năm kế hoạch</nz-form-label>
@@ -32,7 +45,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" [nzRequired]="true">Loại nhu cầu đề xuất dt/sc</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select nzAllowClear formControlName="loaiDeXuat">
+              <nz-select [nzDisabled]="typeKh == 'TH'" nzAllowClear formControlName="loaiDeXuat">
                 <nz-option *ngFor="let item of listLoaiNhuCauDx" [nzLabel]="item.giaTri" [nzValue]="item.ma">
                 </nz-option>
               </nz-select>
@@ -63,7 +76,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" [nzRequired]="true">Nguồn kinh phí</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select nzAllowClear formControlName="nguonKinhPhi">
+              <nz-select [nzDisabled]="typeKh == 'TH'" nzAllowClear formControlName="nguonKinhPhi">
                 <nz-option *ngFor="let item of listNguonKinhPhi" [nzLabel]="item.giaTri" [nzValue]="item.ma">
                 </nz-option>
               </nz-select>
@@ -106,16 +119,28 @@
           <nz-form-item>
             <nz-form-control>
               <nz-form-label [nzNoColon]="true">Danh mục đề nghị (đ)</nz-form-label>
-              <input class="ant-input-number" currencyMask [options]="amount" formControlName="giaTriDn" readonly/>
+              <input [readOnly]="isUsing ? true : (typeKh == 'TH' ? true : false)" class="money-input" currencyMask [options]="amount" formControlName="giaTriDn"/>
             </nz-form-control>
           </nz-form-item>
         </div>
+
+<!--        <div nz-col nzSpan="12" class="mt-1">-->
+<!--          <nz-form-item>-->
+<!--            <nz-form-label [nzNoColon]="true">Danh mục đề nghị (đ)-->
+<!--            </nz-form-label>-->
+<!--            <nz-form-control [nzErrorTip]="error">-->
+<!--              <input class="ant-input-number" currencyMask [options]="amount"-->
+<!--                     formControlName="giaTriDn"/>-->
+<!--            </nz-form-control>-->
+<!--          </nz-form-item>-->
+<!--        </div>-->
+
         <div nz-col nzSpan="12" class="mt-1">
           <nz-form-item>
             <nz-form-control>
-              <nz-form-label [nzNoColon]="true">Danh mục đã được phê duyệt (đ)</nz-form-label>
-              <input class="money-input" currencyMask [options]="amount" class="ant-input-number"
-                     formControlName="giaTriDuocDuyet" readonly/>
+              <nz-form-label [nzNoColon]="true" [nzRequired]="true">Danh mục đã được phê duyệt (đ)</nz-form-label>
+              <input [readOnly]="isUsing ? (typeKh == 'TH' ? true : false) : true" class="money-input" currencyMask [options]="amount"
+                     formControlName="giaTriDuocDuyet" (ngModelChange)="calDmChuaPd()"/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -133,7 +158,7 @@
             <nz-form-label [nzNoColon]="true" [nzRequired]="true">Danh mục đã thực hiện/giá trị ước thực hiện(đ)
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input class="money-input" currencyMask [options]="amount"
+              <input [readOnly]="isUsing ? (typeKh == 'TH' ? true : false) : true" class="money-input" currencyMask [options]="amount"
                      formControlName="giaTriUocTh" (ngModelChange)="changGiaTriUocTh()"/>
             </nz-form-control>
           </nz-form-item>
@@ -200,9 +225,9 @@
         </div>
         <div nz-col nzSpan="8" class="mt-1">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true">Danh mục đề nghị bổ sung đợt này</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true">Danh mục đề nghị sửa đổi, bổ sung đợt này</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input class="money-input" currencyMask [options]="amount" formControlName="giaTriDnBs"/>
+              <input [readOnly]="isUsing ? (typeKh == 'TH' ? true : false) : true" class="money-input" currencyMask [options]="amount" formControlName="giaTriDnBs"/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -210,7 +235,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">Danh mục không có nhu cầu bổ sung</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input class="money-input" currencyMask [options]="amount" formControlName="giaTriKbs"/>
+              <input [readOnly]="isUsing ? (typeKh == 'TH' ? true : false) : true" class="money-input" currencyMask [options]="amount" formControlName="giaTriKbs"/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -219,20 +244,100 @@
             <nz-form-label nzRequired [nzNoColon]="true">KH cải tạo, sctx hàng năm hiện tại(đ)
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input class="money-input" currencyMask [options]="amount" formControlName="giaTriCtScHienTai"/>
+              <input [readOnly]="isUsing ? (typeKh == 'TH' ? true : false) : true" class="money-input" currencyMask [options]="amount" formControlName="giaTriCtScHienTai"/>
             </nz-form-control>
           </nz-form-item>
         </div>
+
+        <div *ngIf="typeKh == 'TH'" nz-col nzSpan="12" class="mt-1">
+          <nz-form-item>
+            <nz-form-control>
+              <nz-form-label [nzNoColon]="true">Tổng mức đầu tư/khái toán</nz-form-label>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div *ngIf="typeKh == 'TH'" nz-col nzSpan="12" class="mt-1">
+          <nz-form-item>
+            <nz-form-control>
+              <nz-form-label [nzNoColon]="true">Kế hoạch vốn năm</nz-form-label>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div *ngIf="typeKh == 'TH'" nz-col nzSpan="12" class="mt-1">
+          <nz-form-item>
+            <nz-form-control>
+              <nz-form-label [nzNoColon]="true">Kết quả tổng hợp của Chuyên viên (đ)</nz-form-label>
+              <input [readOnly]="dataHeader.trangThai != STATUS.DU_THAO" class="money-input" currencyMask
+                     [options]="amount"
+                     formControlName="tongMucDtuCvien" (ngModelChange)="calDmChuaPd()"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div *ngIf="typeKh == 'TH'" nz-col nzSpan="12" class="mt-1">
+          <nz-form-item>
+            <nz-form-control>
+              <nz-form-label [nzNoColon]="true">Kết quả tổng hợp của Chuyên viên (đ)</nz-form-label>
+              <input [readOnly]="dataHeader.trangThai != STATUS.DU_THAO" class="money-input" currencyMask
+                     [options]="amount"
+                     formControlName="khVonCvien" (ngModelChange)="calDmChuaPd()"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+
+        <div *ngIf="typeKh == 'TH'" nz-col nzSpan="12" class="mt-1">
+          <nz-form-item>
+            <nz-form-control>
+              <nz-form-label [nzNoColon]="true">Kết quả tổng hợp của Vụ Tài vụ Quản trị (đ)</nz-form-label>
+              <input [readOnly]="dataHeader.trangThai != STATUS.CHO_DUYET_LDV" class="money-input" currencyMask
+                     [options]="amount"
+                     formControlName="tongMucDtuLdVu" (ngModelChange)="calDmChuaPd()"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div *ngIf="typeKh == 'TH'" nz-col nzSpan="12" class="mt-1">
+          <nz-form-item>
+            <nz-form-control>
+              <nz-form-label [nzNoColon]="true">Kết quả tổng hợp của Vụ Tài vụ Quản trị (đ)</nz-form-label>
+              <input [readOnly]="dataHeader.trangThai != STATUS.CHO_DUYET_LDV" class="money-input" currencyMask
+                     [options]="amount"
+                     formControlName="khVonLdVu" (ngModelChange)="calDmChuaPd()"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div *ngIf="typeKh == 'TH'" nz-col nzSpan="12" class="mt-1">
+          <nz-form-item>
+            <nz-form-control>
+              <nz-form-label [nzNoColon]="true">Giá trị phê duyệt (đ)</nz-form-label>
+              <input [readOnly]="dataHeader.trangThai != STATUS.CHO_DUYET_LDTC" class="money-input" currencyMask
+                     [options]="amount"
+                     formControlName="tongMucDtuLdTc" (ngModelChange)="calDmChuaPd()"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div *ngIf="typeKh == 'TH'" nz-col nzSpan="12" class="mt-1">
+          <nz-form-item>
+            <nz-form-control>
+              <nz-form-label [nzNoColon]="true">Giá trị phê duyệt (đ)</nz-form-label>
+              <input [readOnly]="dataHeader.trangThai != STATUS.CHO_DUYET_LDTC" class="money-input" currencyMask
+                     [options]="amount"
+                     formControlName="khVonLdTc" (ngModelChange)="calDmChuaPd()"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
         <div nz-col nzSpan="24" class="mt-1">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">Ghi chú</nz-form-label>
-            <textarea rows="3" nz-input formControlName="ghiChu"></textarea>
+            <textarea [readOnly]="typeKh == 'TH'" rows="3" nz-input formControlName="ghiChu"></textarea>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="24" class="mt-1">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">Lý do, mục tiêu, khối lượng sửa chữa</nz-form-label>
-            <textarea rows="3" nz-input formControlName="lyDo"></textarea>
+            <textarea [readOnly]="typeKh == 'TH'" rows="3" nz-input formControlName="lyDo"></textarea>
           </nz-form-item>
         </div>
       </div>

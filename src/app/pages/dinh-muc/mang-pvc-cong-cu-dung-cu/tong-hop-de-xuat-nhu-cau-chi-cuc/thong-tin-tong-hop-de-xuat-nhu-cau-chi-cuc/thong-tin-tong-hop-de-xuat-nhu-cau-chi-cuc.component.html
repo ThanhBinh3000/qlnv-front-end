@@ -15,8 +15,8 @@
         <i class='fa fa-arrow-left'></i>
         <span>Quay lại</span>
       </button>
-      <button class='btn btn-sub ml-2' (click)='pheDuyet()'
-        *ngIf="(id && id > 0) && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_CBV)  && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_THDEXUATCC_THEM')">
+      <button class='btn btn-sub ml-2' (click)="saveAndSend(STATUS.DA_KY, 'Bạn có muốn ký?','Bạn đã ký thành công!')"
+        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_CBV)  && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_THDEXUATCC_THEM')">
         <i class='icon htvbdh_trinh'></i>
         <span>Đã ký</span>
       </button>
@@ -55,7 +55,7 @@
           </nz-form-control>
         </div>
         <div nz-col nzSpan='4'>
-          <nz-form-label>Số công văn</nz-form-label>
+          <nz-form-label>Số công văn đề xuất của các Chi cục</nz-form-label>
           <nz-form-control [nzErrorTip]='error'>
             <nz-select [nzDisabled]='isTongHop' nzMode='multiple' nzPlaceHolder='Chọn số công văn' nzAllowClear
               formControlName='listSoCv'>
@@ -122,21 +122,89 @@
         <span class='text-uppercase font-weight-bold'>CHI TIẾT ĐỀ XUẤT</span>
       </div>
     </div>
+    <div class='btn-group'>
+      <button type="button" class="btn btn-sub" (click)="exportDataDetail()">
+        <i class="icon htvbdh_chuyen-xu-ly"></i>
+        <span>Xuất file</span>
+      </button>
+    </div>
   </div>
+  <!-- <nz-table class='nowrap' [nzData]='dataTable' [nzFrontPagination]='false' *ngIf='isTongHop'
+            [nzShowPagination]='false' nzBordered>
+    <thead>
+    <tr>
+      <th nzWidth='20px'></th>
+      <th nzWidth='40px'>STT</th>
+      <th nzWidth='150px'>Nội dung</th>
+      <th nzWidth='120px'>Đơn vị tính</th>
+      <th nzWidth='100px'>Số lượng hiện có (1)</th>
+      <th nzWidth='100px'>Số lượng sẽ nhập <br> thêm năm {{formData.value.namKeHoach - 1 }} (2)</th>
+      <th nzWidth='100px'>Tổng cộng (3=1+2)</th>
+      <th nzWidth='100px'>SL theo tiêu chuẩn <br> định mức (4)</th>
+      <th nzWidth='200px'>Nhu cầu trang bị</th>
+      <th nzWidth='200px'>Ghi chú</th>
+    </tr>
+    </thead>
+    <tbody>
+    <ng-container *ngFor='let data of dataTable , let idx = index'>
+      <tr>
+        <td [nzExpand]='expandSet.has(data.idVirtual)' (nzExpandChange)='onExpandChange(data.idVirtual, $event)'></td>
+        <td class='font-weight-bold'>{{idx + 1}}</td>
+        <td class='font-weight-bold'>{{data.tenCcdc}}</td>
+        <td class='font-weight-bold'>{{data.donViTinh}}</td>
+        <td
+          class='font-weight-bold text-right'>{{sumSoLuong('slHienCo', data.tenCcdc) | number: '1.0-1': 'vi_VN' }}</td>
+        <td class='font-weight-bold text-right'>{{sumSoLuong('slNhapThem', data.tenCcdc) | number: '1.0-1': 'vi_VN'}}</td>
+        <td
+          class='font-weight-bold text-right'>{{sumSoLuong('slNhapThem', data.tenCcdc) + sumSoLuong('slHienCo', data.tenCcdc) | number: '1.0-1': 'vi_VN'}}</td>
+        <td
+          class='font-weight-bold text-right'>{{sumSoLuong('slTieuChuan', data.tenCcdc) | number: '1.0-1': 'vi_VN'}}</td>
+        <td class='font-weight-bold text-right'>{{sumSoLuong('nhuCauTb', data.tenCcdc) | number: '1.0-1': 'vi_VN'}}</td>
+        <td></td>
+      </tr>
+      <ng-container *ngIf='expandSet.has(data.idVirtual)'>
+        <tr *ngFor='let item of data.dataChild, let y = index'>
+          <td></td>
+          <td>{{idx + 1}}.{{y + 1}}</td>
+          <td>{{item.tenDvi}}</td>
+          <td>{{item.donViTinh}}</td>
+          <td class='text-right'>{{item.slHienCo | number: '1.0-1': 'vi_VN' }}</td>
+          <td class='text-right'>{{item.slNhapThem | number: '1.0-1': 'vi_VN' }}</td>
+          <td class='text-right'>{{item.slHienCo + item.slNhapThem | number: '1.0-1': 'vi_VN' }}</td>
+          <td class='text-right'>{{item.slTieuChuan | number: '1.0-1': 'vi_VN' }}</td>
+          <td>
+            <nz-input-number [(ngModel)]='item.nhuCauTb' [nzSize]="'small'" [nzDisabled]='isView'
+                             [nzFormatter]='globals.formatter'
+                             [nzParser]='globals.parser'></nz-input-number>
+          </td>
+          <td><input nz-input [(ngModel)]='item.ghiChu'></td>
+        </tr>
+      </ng-container>
+    </ng-container>
+    </tbody>
+  </nz-table> -->
   <nz-table class='nowrap' [nzData]='dataTable' [nzFrontPagination]='false' *ngIf='isTongHop' [nzShowPagination]='false'
     nzBordered>
     <thead>
       <tr>
-        <th nzWidth='20px'></th>
-        <th nzWidth='40px'>STT</th>
-        <th nzWidth='150px'>Nội dung</th>
-        <th nzWidth='120px'>Đơn vị tính</th>
-        <th nzWidth='100px'>Số lượng hiện có (1)</th>
-        <th nzWidth='100px'>Số lượng sẽ nhập <br> thêm năm {{formData.value.namKeHoach - 1 }} (2)</th>
-        <th nzWidth='100px'>Tổng cộng (3=1+2)</th>
-        <th nzWidth='100px'>SL theo tiêu chuẩn <br> định mức (4)</th>
-        <th nzWidth='200px'>Nhu cầu trang bị</th>
-        <th nzWidth='200px'>Ghi chú</th>
+        <th rowspan="2" nzWidth="40px">STT</th>
+        <th rowspan="2" nzWidth="150px">Tên CCDC</th>
+        <th rowspan="2" nzWidth="200px">Mô tả</th>
+        <th rowspan="2" nzWidth="120px">Đơn vị tính</th>
+        <th colspan="2" nzWidth="100px">SL lương thực nhập theo chỉ tiêu KH</th>
+        <th rowspan="2" nzWidth="100px" nzAlign="center">SL sử dụng được <br /> tại thời điểm để xuất <br /> (3)</th>
+        <th rowspan="2" nzWidth="100px" nzAlign="center">SL sẽ nhập thêm từ <br /> năm trước <br /> (4)</th>
+        <th rowspan="2" nzWidth="100px" nzAlign="center">SL đã sử dụng một lần thu hồi <br /> tái sử dụng được <br />
+          (5)</th>
+        <th rowspan="2" nzWidth="100px" nzAlign="center">Tổng <br /> (6) = (3) + (4) + (5)</th>
+        <th rowspan="2" nzWidth="100px" nzAlign="center">SL định mức theo <br /> chỉ tiêu KH năm <br /> (7)</th>
+        <th rowspan="2" nzWidth="200px" nzAlign="center">Nhu cầu trang bị <br /> đề xuất <br /> (8)= (7) - (6)</th>
+        <th rowspan="2" nzWidth="200px">Ghi chú</th>
+      </tr>
+      <tr>
+        <th nzWidth="50px">Gạo tẻ (1)</th>
+        <th nzWidth="50px">Thóc tẻ (2)</th>
+
       </tr>
     </thead>
     <tbody>
@@ -146,12 +214,21 @@
           <td class='font-weight-bold'>{{idx + 1}}</td>
           <td class='font-weight-bold'>{{data.tenCcdc}}</td>
           <td class='font-weight-bold'>{{data.donViTinh}}</td>
+          <td class='font-weight-bold text-right'>{{sumSoLuong('slChiTieuGao', data.tenCcdc) | number: '1.0-1': 'vi_VN'
+            }}
+          </td>
+          <td class='font-weight-bold text-right'>{{sumSoLuong('slChiTieuThoc', data.tenCcdc) | number: '1.0-1': 'vi_VN'
+            }}
+          </td>
           <td class='font-weight-bold text-right'>{{sumSoLuong('slHienCo', data.tenCcdc) | number: '1.0-1': 'vi_VN' }}
           </td>
           <td class='font-weight-bold text-right'>{{sumSoLuong('slNhapThem', data.tenCcdc) | number: '1.0-1': 'vi_VN'}}
           </td>
+          <td class='font-weight-bold text-right'>{{sumSoLuong('slThuHoiTaiSuDung', data.tenCcdc) | number: '1.0-1':
+            'vi_VN'}}
+          </td>
           <td class='font-weight-bold text-right'>{{sumSoLuong('slNhapThem', data.tenCcdc) + sumSoLuong('slHienCo',
-            data.tenCcdc) | number: '1.0-1': 'vi_VN'}}</td>
+            data.tenCcdc) + sumSoLuong('slThuHoiTaiSuDung', data.tenCcdc) | number: '1.0-1': 'vi_VN'}}</td>
           <td class='font-weight-bold text-right'>{{sumSoLuong('slTieuChuan', data.tenCcdc) | number: '1.0-1': 'vi_VN'}}
           </td>
           <td class='font-weight-bold text-right'>{{sumSoLuong('nhuCauTb', data.tenCcdc) | number: '1.0-1': 'vi_VN'}}
@@ -164,15 +241,19 @@
             <td>{{idx + 1}}.{{y + 1}}</td>
             <td>{{item.tenDvi}}</td>
             <td>{{item.donViTinh}}</td>
+            <td class='text-right'>{{item.slChiTieuGao | number: '1.0-1': 'vi_VN' }}</td>
+            <td class='text-right'>{{item.slChiTieuThoc | number: '1.0-1': 'vi_VN' }}</td>
             <td class='text-right'>{{item.slHienCo | number: '1.0-1': 'vi_VN' }}</td>
             <td class='text-right'>{{item.slNhapThem | number: '1.0-1': 'vi_VN' }}</td>
-            <td class='text-right'>{{item.slHienCo + item.slNhapThem | number: '1.0-1': 'vi_VN' }}</td>
+            <td class='text-right'>{{item.slThuHoiTaiSuDung | number: '1.0-1': 'vi_VN' }}</td>
+            <td class='text-right'>{{item.slHienCo + item.slNhapThem + item.slThuHoiTaiSuDung | number: '1.0-1': 'vi_VN'
+              }}</td>
             <td class='text-right'>{{item.slTieuChuan | number: '1.0-1': 'vi_VN' }}</td>
             <td>
               <nz-input-number [(ngModel)]='item.nhuCauTb' [nzSize]="'small'" [nzDisabled]='isView'
                 [nzFormatter]='globals.formatter' [nzParser]='globals.parser'></nz-input-number>
             </td>
-            <td><input nz-input [(ngModel)]='item.ghiChu'></td>
+            <td><input nz-input [(ngModel)]='item.ghiChu' [readOnly]="isView"></td>
           </tr>
         </ng-container>
       </ng-container>
@@ -187,7 +268,7 @@
               Tài liệu đính kèm
             </nz-form-label>
             <div class='list-file'>
-              <file-list [data]='fileDinhKem'></file-list>
+              <file-list [data]='fileDinhKem' [isViewDetail]="isView" [disabled]="isView"></file-list>
             </div>
           </nz-form-item>
         </div>

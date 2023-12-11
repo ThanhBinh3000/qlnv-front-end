@@ -65,12 +65,12 @@
   <div class="group-button">
     <h3 class="text-uppercase">Danh sách bảng kê cân hàng</h3>
     <div class="buttons">
-      <button type="button" class="btn btn-sub" (click)="exportData('SCHDTQG_KTCL_EXP')">
+      <button type="button" class="btn btn-sub" (click)="exportData()">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
       <button type="button" class="btn btn-main" *ngIf="this.userService.isChiCuc()"
-              (click)="redirectCreate('SCHDTQG_KTCL_THEM')">
+              (click)="redirectCreate()">
         <i class="icon htvbdh_dau-cong"></i>
         <span>Thêm</span>
       </button>
@@ -89,7 +89,7 @@
         <th nzWidth="50px">Loại hàng hóa</th>
         <th nzWidth="50px">Chủng loại hàng hóa</th>
         <th nzWidth="50px">Số phiếu xuất kho</th>
-        <th nzWidth="50px">Số bảng kê xuất DC</th>
+        <th nzWidth="50px">Số bảng kê xuất TL</th>
         <th nzWidth="50px">Ngày xuất kho</th>
         <th nzWidth="50px">Trạng thái</th>
         <th nzWidth="55px">Hành động</th>
@@ -102,7 +102,7 @@
           <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
           <td>{{item.soBbQd}}</td>
           <td>{{item.nam}}</td>
-          <td>{{item.thoiHanXuat | date : 'dd/MM/yyyy' }}</td>
+          <td>{{item.thoiGianGiaoNhan | date : 'dd/MM/yyyy' }}</td>
           <td></td>
           <td></td>
           <td></td>
@@ -144,15 +144,15 @@
                 <td>{{pxk?.ngayXuatKho | date: 'dd/MM/YYYY'}}</td>
                 <td>{{pxk?.xhTlBangKeHdr?.tenTrangThai}}</td>
                 <td>
-                  <a (click)="redirectDetail(pxk?.xhTlBangKeHdr?.id,'SCHDTQG_KTCL_XEM')">
+                  <a (click)="redirectDetail(pxk?.xhTlBangKeHdr?.id)">
                     <span class="icon htvbdh_eye"></span>
                   </a>
                   <a *ngIf="this.userService.isCuc() && pxk?.xhTlBangKeHdr?.trangThai == STATUS.DU_THAO"
-                     (click)="redirectDetail(pxk?.xhTlBangKeHdr?.id,'SCHDTQG_KTCL_THEM')">
+                     (click)="redirectDetail(pxk?.xhTlBangKeHdr?.id)">
                     <span class="fa fa-pencil"></span>
                   </a>
                   <a *ngIf="this.userService.isCuc() && pxk?.xhTlBangKeHdr?.trangThai == STATUS.DU_THAO"
-                     (click)="delete(pxk?.xhTlBangKeHdr,'SCHDTQG_KTCL_XOA')">
+                     (click)="delete(pxk?.xhTlBangKeHdr)">
                     <i class="fa fa-trash-o do"></i>
                   </a>
                 </td>

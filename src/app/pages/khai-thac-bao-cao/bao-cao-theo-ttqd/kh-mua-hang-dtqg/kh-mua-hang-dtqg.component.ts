@@ -14,8 +14,8 @@ import { Validators } from "@angular/forms";
 import { MESSAGE } from "../../../../constants/message";
 import { Base2Component } from "../../../../components/base2/base2.component";
 import { saveAs } from "file-saver";
-import { BcBnTt130Service } from "../../../../services/bao-cao/BcBnTt130.service";
-import { ThongTu1302018Service } from "../../../../services/bao-cao/ThongTu1302018.service";
+import {BcBnTt130Service} from "../../../../services/bao-cao/BcBnTt130.service";
+import {ThongTu1302018Service} from "../../../../services/bao-cao/ThongTu1302018.service";
 
 @Component({
   selector: 'app-kh-mua-hang-dtqg',
@@ -38,15 +38,15 @@ export class KhMuaHangDtqgComponent extends Base2Component implements OnInit {
   rows: any[] = [];
 
   constructor(httpClient: HttpClient,
-    storageService: StorageService,
-    notification: NzNotificationService,
-    spinner: NgxSpinnerService,
-    modal: NzModalService,
-    private thongTu1302018Service: ThongTu1302018Service,
-    public userService: UserService,
-    private donViService: DonviService,
-    private danhMucService: DanhMucService,
-    public globals: Globals) {
+              storageService: StorageService,
+              notification: NzNotificationService,
+              spinner: NgxSpinnerService,
+              modal: NzModalService,
+              private thongTu1302018Service: ThongTu1302018Service,
+              public userService: UserService,
+              private donViService: DonviService,
+              private danhMucService: DanhMucService,
+              public globals: Globals) {
     super(httpClient, storageService, notification, spinner, modal, thongTu1302018Service);
     this.formData = this.fb.group(
       {
@@ -190,7 +190,7 @@ export class KhMuaHangDtqgComponent extends Base2Component implements OnInit {
   changeCloaiVthh(event) {
 
   }
-  addRow() {
+  addRow () {
     this.rows.push({})
   }
 

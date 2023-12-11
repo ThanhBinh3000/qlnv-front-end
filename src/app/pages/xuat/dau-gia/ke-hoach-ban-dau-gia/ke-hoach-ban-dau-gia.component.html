@@ -5,7 +5,7 @@
     </li>
   </ul>
 </nz-affix>
-<ng-container *ngFor="let tab of tabs, let i = index">
+<ng-container *ngFor="let tab of tabs,let i = index">
   <app-main-ke-hoach-ban-dau-gia *ngIf="tab.ma == loaiVthhSelected" [inputLoaiVthh]="tab.ma" [listVthh]="tabs">
   </app-main-ke-hoach-ban-dau-gia>
 </ng-container>

@@ -5,7 +5,7 @@
         <div nz-row [nzGutter]="[24]">
           <div nz-col nzSpan="4">
             <nz-form-item class="form-item">
-              <nz-form-label>Năm kế hoạch </nz-form-label>
+              <nz-form-label>Năm kế hoạch</nz-form-label>
               <nz-select formControlName="nam">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
@@ -36,7 +36,7 @@
                 <div nz-col nzSpan="12" class="cus-start-date">
                   <nz-date-picker [nzDisabledDate]="disabledStartNgayKdcl" nzFormat="dd/MM/yyyy"
                                   formControlName="ngayKdclTu" nzPlaceHolder="Ngày bắt đầu">
-                   </nz-date-picker>
+                  </nz-date-picker>
                 </div>
                 <div nz-col nzSpan="12" class="cus-end-date">
                   <nz-date-picker [nzDisabledDate]="disabledEndNgayKdcl" nzFormat="dd/MM/yyyy"
@@ -63,12 +63,12 @@
     <div class="group-button">
       <h3 class="text-uppercase">Danh sách biên bản yêu cầu nhà cung cấp bảo hành</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub" (click)="exportData()">
+        <button type="button" class="btn btn-sub" *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BBYCBH_EXP')" (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)"
-                *ngIf="userService.isCuc()">
+                *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BBYCBH_THEM') && userService.isCuc()">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Thêm</span>
         </button>
@@ -101,15 +101,18 @@
           <td>{{ data.soPhieuKtcl }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
-            <a *ngIf="data.trangThai ==STATUS.DA_HOAN_THANH" (click)="redirectDetail(data.id, true)">
+            <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BBYCBH_XEM')
+            && !(data.trangThai ==STATUS.DU_THAO && data.nguoiTaoId == userInfo.ID)"
+               (click)="redirectDetail(data.id, true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a
-              *ngIf="data.trangThai ==STATUS.DU_THAO"
+              *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BBYCBH_THEM') && data.trangThai ==STATUS.DU_THAO"
               (click)="redirectDetail(data.id, false)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a *ngIf="data.trangThai ==STATUS.DU_THAO" (click)="delete(data)">
+            <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BBYCBH_XOA') && data.trangThai ==STATUS.DU_THAO"
+               (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
@@ -139,6 +142,6 @@
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
   <app-thong-tin-bien-ban-yeu-cau-bao-hanh [idInput]="selectedId" [isView]="isView"
-                                             (showListEvent)="showList()">
+                                           (showListEvent)="showList()">
   </app-thong-tin-bien-ban-yeu-cau-bao-hanh>
 </div>

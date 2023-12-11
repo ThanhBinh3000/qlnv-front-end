@@ -1,25 +1,25 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
 
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { chain, cloneDeep } from "lodash";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {chain, cloneDeep} from "lodash";
 import * as uuid from "uuid";
-import { Base2Component } from "../../../../../../components/base2/base2.component";
-import { CHUC_NANG, STATUS } from "../../../../../../constants/status";
-import { StorageService } from "../../../../../../services/storage.service";
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {CHUC_NANG, STATUS} from "../../../../../../constants/status";
+import {StorageService} from "../../../../../../services/storage.service";
 import {
   PhieuXuatNhapKhoService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatNhapKho.service";
-import { DanhMucService } from "../../../../../../services/danhmuc.service";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {
   QuyetDinhGiaoNvXuatHangService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/QuyetDinhGiaoNvXuatHang.service";
-import { Validators } from "@angular/forms";
+import {Validators} from "@angular/forms";
 import dayjs from "dayjs";
-import { MESSAGE } from "../../../../../../constants/message";
-import { FILETYPE } from "../../../../../../constants/fileType";
+import {MESSAGE} from "../../../../../../constants/message";
+import {FILETYPE} from "../../../../../../constants/fileType";
 import {
   QuyetDinhXuatGiamVtBaoHanhService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/QuyetDinhXuatGiamVtBaoHanh.service";
@@ -29,7 +29,7 @@ import {
 import {
   BaoCaoKdmVtTbTrongThoiGianBaoHanh
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/BaoCaoKdmVtTbTrongThoiGianBaoHanh.service";
-import { DonviService } from "../../../../../../services/donvi.service";
+import {DonviService} from "../../../../../../services/donvi.service";
 
 
 @Component({
@@ -55,13 +55,13 @@ export class ThongTinQuyetDinhXuatGiamVatTuBaoHanhComponent extends Base2Compone
   listFile: any[] = [];
   listPhieuXuatKho: any[] = [];
   listLoaiHinhNhapXuat: any[] = [
-    { value: 'XUAT_GIAM', label: "Xuất mẫu bị hủy khỏi kho" },
+    {value: 'XUAT_GIAM', label: "Xuất mẫu bị hủy khỏi kho"},
   ]
   dataThTree: any[] = [];
   expandSetString = new Set<string>();
   LIST_DANH_GIA: any[] = [
-    { value: 0, label: "Không đạt" },
-    { value: 1, label: "Đạt" }
+    {value: 0, label: "Không đạt"},
+    {value: 1, label: "Đạt"}
   ]
   maQd: string;
   dviNhan: any;
@@ -204,7 +204,7 @@ export class ThongTinQuyetDinhXuatGiamVatTuBaoHanhComponent extends Base2Compone
       case STATUS.TU_CHOI_LDV:
       case STATUS.TU_CHOI_LDTC: {
         trangThai = STATUS.CHO_DUYET_LDV;
-        mess = 'Bạn có muối gửi duyệt?'
+        mess = 'Bạn có muốn gửi duyệt?'
         break;
       }
       case STATUS.CHO_DUYET_LDV: {
@@ -295,15 +295,16 @@ export class ThongTinQuyetDinhXuatGiamVatTuBaoHanhComponent extends Base2Compone
       const responseData = dataRes.data;
       this.dataTable = responseData.baoCaoDtl.map(m => {
         return m.qdGiaonvXhDtl
-          .filter(i => i.mauBiHuy == true);
+          .filter(i=> i.mauBiHuy==true);
       }).flat();
+
       this.formData.patchValue({
         soCanCu: responseData.soBaoCao,
         idCanCu: responseData.id,
         listSoQdGiaoNvXh: responseData.soCanCu,
         listIdQdGiaoNvXh: responseData.idCanCu,
         maDviNhan: responseData.maDvi,
-        qdXuatGiamVtDtl: this.dataTable,
+        qdXuatGiamVtDtl:this.dataTable,
       });
       this.buildTableView(this.dataTable)
     } catch (e) {
@@ -315,7 +316,7 @@ export class ThongTinQuyetDinhXuatGiamVatTuBaoHanhComponent extends Base2Compone
   async loadDsCuc() {
     const dsTong = await this.donviService.layTatCaDonViByLevel(2);
     this.dviNhan = dsTong && Array.isArray(dsTong.data) ? dsTong.data.filter(item => item.type != "PB") : []
-    console.log(this.dviNhan, "111")
+    console.log(this.dviNhan,"111")
   }
   buildTableView(data) {
     let dataView = chain(this.dataTable)

@@ -16,6 +16,7 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { FormGroup, Validators } from "@angular/forms";
+import {DonviService} from "../../../../../services/donvi.service";
 
 @Component({
   selector: 'app-tong-hop-khlcnt',
@@ -33,6 +34,7 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
   qdPdKhlcntId: number = 0;
   isQdPdKhlcntId: number = 0;
   dataTableDanhSachDX: any[] = [];
+  dsDonVi: any[] = [];
   formTraCuu: FormGroup;
   formDataQd: FormGroup;
   isTongHop: boolean = false;
@@ -54,6 +56,7 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
+    private donViService: DonviService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopDeXuatKHLCNTService);
     this.formData = this.fb.group({
@@ -63,7 +66,8 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
       tenVthh: '',
       cloaiVthh: '',
       tenCloaiVthh: '',
-      noiDung: ''
+      noiDung: '',
+      maCuc: '',
     });
     this.formTraCuu = this.fb.group({
       loaiVthh: [null, [Validators.required]],
@@ -130,6 +134,7 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
       this.formData.patchValue({
         loaiVthh: this.loaiVthh
       })
+      await this.loadDsDonVi();
       await this.search();
       this.spinner.hide();
     }
@@ -137,6 +142,22 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async loadDsDonVi() {
+    let body = {
+      trangThai: "01",
+      maDviCha: this.userInfo.MA_DVI,
+      type: "DV"
+    };
+    let res = await this.donViService.getDonViTheoMaCha(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (this.userService.isTongCuc()) {
+        this.dsDonVi = res.data;
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
@@ -151,6 +172,7 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
       tenVthh: this.formData.get('tenVthh').value,
       tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
       noiDung: this.formData.get('noiDung').value,
+      maDvi: this.formData.get('maCuc').value,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,

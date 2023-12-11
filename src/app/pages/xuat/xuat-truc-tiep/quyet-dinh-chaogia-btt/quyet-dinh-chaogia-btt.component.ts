@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {DanhMucService} from "../../../../services/danhmuc.service";
-import {NgxSpinnerService} from "ngx-spinner";
-import {Globals} from "../../../../shared/globals";
 import {MESSAGE} from "../../../../constants/message";
+import {UserService} from "../../../../services/user.service";
 
 @Component({
   selector: 'app-quyet-dinh-chaogia-btt',
@@ -11,35 +10,28 @@ import {MESSAGE} from "../../../../constants/message";
 })
 export class QuyetDinhChaogiaBttComponent implements OnInit {
   tabs: any[] = [];
-  count: Array<number> = [];
+  loaiVthhSelected: string
 
   constructor(
+    public userService: UserService,
     private danhMucService: DanhMucService,
-    private spinner: NgxSpinnerService,
-    public globals: Globals,
   ) {
   }
 
-  ngOnInit() {
-    this.spinner.show();
-    this.loaiVTHHGetAll();
+  async ngOnInit() {
+    await this.loaiVTHHGetAll();
   }
 
   async loaiVTHHGetAll() {
     this.tabs = [];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.length > 0) {
-        res.data.forEach((element) => {
-          element.count = 0;
-          this.tabs.push(element);
-        });
-        this.selectTab(this.tabs[0].ma)
-      }
+    if (res.msg === MESSAGE.SUCCESS && res.data && res.data.length > 0) {
+      this.tabs = res.data.map(element => {
+        return {...element, count: 0};
+      });
+      this.selectTab(this.tabs[0].ma);
     }
   }
-
-  loaiVthhSelected: string;
 
   selectTab(loaiVthh) {
     this.loaiVthhSelected = loaiVthh;

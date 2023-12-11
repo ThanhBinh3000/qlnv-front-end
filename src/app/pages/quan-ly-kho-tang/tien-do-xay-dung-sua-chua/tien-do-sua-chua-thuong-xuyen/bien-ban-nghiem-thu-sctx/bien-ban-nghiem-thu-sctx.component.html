@@ -1,61 +1,57 @@
 <div class="bg-trang">
   <div class="cangiua group-button-search">
-    <button type="button" class="btn btn-sub btn-xoa" (click)="deleteMulti()"
-      *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_BBNT_XEM')">
+    <button
+      type="button" class="btn btn-sub btn-xoa" (click)="deleteMulti()" *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_BBNT_XEM')">
       <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
       <span>Xóa</span>
     </button>
-    <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, null)"
-      *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_BBNT_THEM')">
+    <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, null)" *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_BBNT_THEM')">
       <i class="icon htvbdh_dau-cong"></i>
       <span>Thêm</span>
     </button>
   </div>
   <nz-card class="mt16 flex-card p-lr16 mg-t-10">
-    <nz-table #basicTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered
-      class="mt-2">
+    <nz-table #basicTable [nzData]="dataTable" [nzFrontPagination]="false"
+              [nzShowPagination]="false" nzBordered class="mt-2">
       <thead>
-        <tr>
-          <th nzWidth="45px">
-            <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
-              [nzIndeterminate]="indeterminate"></label>
-          </th>
-          <th width="40px" class="text-center">STT</th>
-          <th nzWidth="200px">Số biên bản</th>
-          <th nzWidth="200px">Số hợp đồng</th>
-          <th>Tên hợp đồng</th>
-          <th width="130px">Ngày ký biên bản</th>
-          <th width="130px">Trạng thái</th>
-          <th width="130px">Hành động</th>
-        </tr>
+      <tr>
+        <th nzWidth="45px">
+          <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                 [nzIndeterminate]="indeterminate"></label>
+        </th>
+        <th width="40px" class="text-center">STT</th>
+        <th nzWidth="200px">Số biên bản</th>
+        <th nzWidth="200px">Số hợp đồng</th>
+        <th >Tên hợp đồng</th>
+        <th width="130px">Ngày ký biên bản</th>
+        <th width="130px">Trạng thái</th>
+        <th width="130px">Hành động</th>
+      </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let data of dataTable; let i = index">
-          <th nzWidth="45px">
-            <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-              [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
-          </th>
-          <td>{{ i + 1}}</td>
-          <td>{{ data.soBienBan }}</td>
-          <td>{{ data.soHopDong }}</td>
-          <td>{{ data.tenHopDong}}</td>
-          <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
-          <td>{{ data.tenTrangThai }}</td>
-          <td>
-            <a (click)="redirectToChiTiet(true, data.id)"
-              *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_BBNT_XEM')">
-              <i class="fa fa-eye" title="Xem chi tiết"></i>
-            </a>
-            <a (click)="redirectToChiTiet(false, data.id)"
-              *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_BBNT_THEM')">
-              <i class="fa fa-pencil" title="Sửa"></i>
-            </a>
-            <a (click)="delete(data)"
-              *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_BBNT_XOA')">
-              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-            </a>
-          </td>
-        </tr>
+      <tr *ngFor="let data of dataTable; let i = index">
+        <th nzWidth="45px">
+          <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
+                 [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
+        </th>
+        <td>{{ i + 1}}</td>
+        <td>{{ data.soBienBan }}</td>
+        <td>{{ data.soHopDong }}</td>
+        <td>{{ data.tenHopDong}}</td>
+        <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
+        <td>{{  data.tenTrangThai  }}</td>
+        <td>
+          <a (click)="redirectToChiTiet(true, data.id)" *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_BBNT_XEM')">
+            <i class="fa fa-eye" title="Xem chi tiết"></i>
+          </a>
+          <a (click)="redirectToChiTiet(false, data.id)" *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_BBNT_THEM')"  >
+            <i class="fa fa-pencil" title="Sửa"></i>
+          </a>
+          <a (click)="delete(data)" *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_BBNT_XOA')" >
+            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+          </a>
+        </td>
+      </tr>
       </tbody>
     </nz-table>
   </nz-card>

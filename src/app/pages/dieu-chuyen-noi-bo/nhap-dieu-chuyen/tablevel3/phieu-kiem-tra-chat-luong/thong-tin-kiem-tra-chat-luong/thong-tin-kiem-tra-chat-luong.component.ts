@@ -16,6 +16,7 @@ import { DanhMucService } from "src/app/services/danhmuc.service";
 import { BienBanNghiemThuBaoQuanLanDauService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/bien-ban-nghiem-thu-bao-quan-lan-dau.service";
 import { PhieuKiemTraChatLuongService } from "src/app/services/dieu-chuyen-noi-bo/nhap-dieu-chuyen/phieu-kiem-tra-chat-luong";
 import { QuyetDinhDieuChuyenCucService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service";
+import { KhCnQuyChuanKyThuat } from "src/app/services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
 import { BbNghiemThuBaoQuanService } from "src/app/services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
 import { DanhMucTieuChuanService } from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
 import { StorageService } from "src/app/services/storage.service";
@@ -63,6 +64,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
     private dmService: DanhMucDungChungService,
     private bbNghiemThuBaoQuanService: BbNghiemThuBaoQuanService,
     private bienBanNghiemThuBaoQuanLanDauService: BienBanNghiemThuBaoQuanLanDauService,
+    private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
     private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
     private phieuKiemTraChatLuongService: PhieuKiemTraChatLuongService,
   ) {
@@ -151,7 +153,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
       thayDoiThuKho: true
     })
-    this.getPPKTCL()
+    // this.getPPKTCL()
 
     if (this.idInput) {
       await this.loadChiTiet(this.idInput)
@@ -191,15 +193,15 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
         keHoachDcDtlId: this.data.keHoachDcDtlId
       });
       await this.loadChiTietQdinh(this.data.qdinhDccId);
-      let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(this.data.maChLoaiHangHoa);
+      let dmTieuChuan = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(this.data.maChLoaiHangHoa);
       if (dmTieuChuan.data) {
-        this.dataTableChiTieu = dmTieuChuan.data.children;
+        this.dataTableChiTieu = dmTieuChuan.data;
         this.dataTableChiTieu = this.dataTableChiTieu.map(element => {
           return {
             ...element,
             edit: true,
-            chiSoCl: element.tenTchuan,
-            chiTieuCl: element.chiSoNhap,
+            chiSoCl: element.mucYeuCauXuat,
+            chiTieuCl: element.tenChiTieu,
             ketQuaPt: element.ketQuaPt,
             danhGia: element.danhGia
           }
@@ -237,10 +239,11 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
     await this.spinner.hide();
   }
 
-  async getPPKTCL() {
-    let data = await this.dmService.danhMucChungGetAll("PP_KIEM_TRA_CL");
-    this.ppKtrCL = data.data;
-  }
+
+  // async getPPKTCL() {
+  //   let data = await this.dmService.danhMucChungGetAll("PP_KIEM_TRA_CL");
+  //   this.ppKtrCL = data.data;
+  // }
 
 
 
@@ -398,15 +401,15 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
           keHoachDcDtlId: data.id,
         });
 
-        let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
+        let dmTieuChuan = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(data.cloaiVthh);
         if (dmTieuChuan.data) {
-          this.dataTableChiTieu = dmTieuChuan.data.children;
+          this.dataTableChiTieu = dmTieuChuan.data;
           this.dataTableChiTieu = this.dataTableChiTieu.map(element => {
             return {
               ...element,
               edit: true,
-              chiSoCl: element.tenTchuan,
-              chiTieuCl: element.chiSoNhap,
+              chiSoCl: element.mucYeuCauXuat,
+              chiTieuCl: element.tenChiTieu,
               ketQuaPt: element.ketQuaPt,
               danhGia: element.danhGia
             }
@@ -414,7 +417,6 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
         }
 
         await this.getDataKho(data.maLoKhoNhan || data.maNganKhoNhan)
-        // await this.dsBBNTBQLD(this.formData.value.qdDcId, this.formData.value.soQdinhDc, data.maLoKhoNhan, data.maNganKhoNhan)
       }
     });
   }

@@ -4,13 +4,16 @@
       <span>QUẢN TRỊ DANH MỤC</span>
       <img src="../../../assets/images/mui-ten.png" alt="" srcset="" (click)="openNav()" class="img-collapse-close">
     </a>
-    <a [ngClass]="{'d-flex align-items-center justify-content-between activeMenu': routerUrlActive === route.idHover,'d-flex align-items-center justify-content-between': routerUrlActive !== route.idHover }" *ngFor="let route of routes, let i = index"
-      (click)="routerNavigate(route.url)">
-      <span>
+    <div *ngFor="let route of routes, let i = index">
+      <a *ngIf="route.permission" [ngClass]="{'d-flex align-items-center justify-content-between activeMenu': routerUrlActive === route.idHover,'d-flex align-items-center justify-content-between': routerUrlActive !== route.idHover }"
+         (click)="routerNavigate(route.url)">
+        <!--      <span *ngIf="route.permission">-->
+        <span>
         <i class="icon htvbdh_tree mr-2 icon-menu"></i>
         <span>{{route.title}}</span>
       </span>
-    </a>
+      </a>
+    </div>
   </div>
   <div id="main">
     <img src="../../../assets/images/mui-ten.png" alt="" srcset="" (click)="openNav()" *ngIf="!isCollapsed"

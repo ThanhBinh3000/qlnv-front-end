@@ -18,20 +18,20 @@
                     <input class="search__input" placeholder="Số bảng kê" nz-input
                         [(ngModel)]="searchFilter.soBangKeCanHang" />
                 </div>
-                <div nz-col nzSpan="4">
-                    <label class="search__label">Ngày nhập kho</label>
-                    <div nz-row [nzGutter]="24">
-                        <div nz-col nzSpan="12" class="cus-start-date">
-                            <nz-date-picker [nzDisabledDate]="disabledStartDate" nzFormat="dd/MM/yyyy"
-                                [(ngModel)]="tuNgayNkho" nzPlaceHolder="Ngày bắt đầu">
-                            </nz-date-picker>
-                        </div>
-                        <div nz-col nzSpan="12" class="cus-end-date">
-                            <nz-date-picker [nzDisabledDate]="disabledEndDate" nzFormat="dd/MM/yyyy"
-                                [(ngModel)]="denNgayNkho" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
-                        </div>
-                    </div>
+              <div nz-col nzSpan="4">
+                <label class="search__label">Ngày nhập kho</label>
+                <div nz-row [nzGutter]="24">
+                  <div nz-col nzSpan="12" class="cus-start-date">
+                    <nz-date-picker [nzDisabledDate]="disabledStartDate" nzFormat="dd/MM/yyyy" [(ngModel)]="tuNgayNkho"
+                                    nzPlaceHolder="Ngày bắt đầu">
+                    </nz-date-picker>
+                  </div>
+                  <div nz-col nzSpan="12" class="cus-end-date">
+                    <nz-date-picker [nzDisabledDate]="disabledEndDate" nzFormat="dd/MM/yyyy" [(ngModel)]="denNgayNkho"
+                                    nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                  </div>
                 </div>
+              </div>
             </div>
             <div class="cangiua group-button-search">
                 <button nz-button class="search__button--clear" (click)="clearFilter()">
@@ -83,73 +83,69 @@
                     <ng-container *ngFor="let item of dataTable , let i = index">
                         <tr class="level-1">
                             <td>{{(page - 1) * pageSize + i + 1}}</td>
-                            <!--                            <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>-->
-                            <td [nzExpand]="item.expand"
-                                (nzExpandChange)="item.expand=!item.expand; item.children=setExpand(item.expand, item.children)">
-                            </td>
+<!--                            <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>-->
+                          <td [nzExpand]="item.expand"
+                              (nzExpandChange)="item.expand=!item.expand; item.children=setExpand(item.expand, item.children)">
+                          </td>
                             <td class="link bold">{{ item.soQd }}</td>
                             <td class="bold">{{ item.namNhap }}</td>
                             <td class="bold">{{ item.tgianNkho }}</td>
                             <td colspan="6"></td>
                             <td>
-                                <a *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BKCH_THEM')"
-                                    (click)="redirectToChiTiet(false, 0,item.id)">
+                                <a *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BKCH_THEM')" (click)="redirectToChiTiet(false, 0,item.id)">
                                     <i class="fa fa-plus"></i>
                                 </a>
                             </td>
                         </tr>
                         <ng-container *ngIf="item.expand">
-                            <ng-container class="level-2"
-                                *ngFor="let dataDdiem of item.detail.children , let y = index">
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>{{dataDdiem.tenDiemKho}}</td>
-                                    <td>{{dataDdiem.tenLoKho}} - {{dataDdiem.tenNganKho}}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <ng-container class="level-2"
-                                    *ngFor="let bk of dataDdiem.bcanKeHangHdr , let y = index">
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td class="bold">{{bk.soBangKeCanHang}}</td>
-                                        <td>{{bk.soPhieuNhapKho}}</td>
-                                        <td>{{bk.ngayNkho}}</td>
-                                        <td>{{bk.tenTrangThai}}</td>
-                                        <td>
-                                            <a *ngIf="bk.trangThai == STATUS.DA_DUYET_LDCC "
-                                                (click)="redirectToChiTiet(true, bk.id)">
-                                                <i class="fa fa-eye" title="Xem chi tiết"></i>
-                                            </a>
-                                            <a *ngIf="(bk.trangThai == STATUS.DU_THAO || bk.trangThai == STATUS.TU_CHOI_LDCC) && userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BKCH_THEM')"
-                                                (click)="redirectToChiTiet(false, bk.id)">
-                                                <i class="fa fa-pencil" title="Sửa"></i>
-                                            </a>
-                                            <a *ngIf="bk.trangThai == STATUS.CHO_DUYET_LDCC && userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BKCH_DUYET')"
-                                                (click)="redirectToChiTiet(false, bk.id)">
-                                                <i class="icon htvbdh_tcdt_pheduyet" title="Phê duyệt"></i>
-                                            </a>
-                                            <a *ngIf="bk.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BKCH_XOA')"
-                                                (click)="xoaItem(bk)">
-                                                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                </ng-container>
+                          <ng-container class="level-2" *ngFor="let dataDdiem of item.detail.children , let y = index">
+                            <tr>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td>{{dataDdiem.tenDiemKho}}</td>
+                              <td>{{dataDdiem.tenLoKho}} - {{dataDdiem.tenNganKho}}</td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                            </tr>
+                            <ng-container class="level-2" *ngFor="let bk of dataDdiem.bcanKeHangHdr , let y = index">
+                              <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="bold">{{bk.soBangKeCanHang}}</td>
+                                <td>{{bk.soPhieuNhapKho}}</td>
+                                <td>{{bk.ngayNkho}}</td>
+                                <td>{{bk.tenTrangThai}}</td>
+                                <td>
+                                  <a *ngIf="userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BKCH_XEM')"
+                                     (click)="redirectToChiTiet(true, bk.id)">
+                                    <i class="fa fa-eye" title="Xem chi tiết"></i>
+                                  </a>
+                                  <a *ngIf="(bk.trangThai == STATUS.DU_THAO || bk.trangThai == STATUS.TU_CHOI_LDCC) && userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BKCH_THEM')"
+                                     (click)="redirectToChiTiet(false, bk.id)">
+                                    <i class="fa fa-pencil" title="Sửa"></i>
+                                  </a>
+                                  <a *ngIf="bk.trangThai == STATUS.CHO_DUYET_LDCC && userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BKCH_DUYET')"
+                                     (click)="redirectToChiTiet(false, bk.id)">
+                                    <i class="icon htvbdh_tcdt_pheduyet" title="Phê duyệt"></i>
+                                  </a>
+                                  <a *ngIf="bk.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BKCH_XOA')" (click)="xoaItem(bk)">
+                                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                                  </a>
+                                </td>
+                              </tr>
                             </ng-container>
+                          </ng-container>
                         </ng-container>
                     </ng-container>
                 </tbody>
@@ -174,7 +170,7 @@
     </div>
 </ng-container>
 <ng-container *ngIf="isDetail">
-    <app-them-moi-bang-ke-can-hang [id]="selectedId" [idQdGiaoNvNh]="idQdGiaoNvNh" (showListEvent)="showList()"
-        [isView]="isView" [typeVthh]="loaiVthh">
+    <app-them-moi-bang-ke-can-hang [id]="selectedId" [idQdGiaoNvNh]="idQdGiaoNvNh" (showListEvent)="showList()" [isView]="isView"
+        [typeVthh]="loaiVthh">
     </app-them-moi-bang-ke-can-hang>
 </ng-container>

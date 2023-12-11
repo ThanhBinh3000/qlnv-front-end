@@ -56,15 +56,15 @@ export class ThongTinQuyetDinhGiaoNhiemVuXuatHangComponent extends Base2Componen
   templateName = 'xuat_khac_ktcl_vat_tu_6_thang_qd_giao_nv_xuat_hang';
 
   constructor(httpClient: HttpClient,
-    storageService: StorageService,
-    notification: NzNotificationService,
-    spinner: NgxSpinnerService,
-    modal: NzModalService,
-    private donviService: DonviService,
-    private danhMucService: DanhMucService,
-    private tongHopDanhSachVttbService: TongHopDanhSachVttbService,
-    private quyetDinhXuatGiamVattuService: QuyetDinhXuatGiamVattuService,
-    private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService) {
+              storageService: StorageService,
+              notification: NzNotificationService,
+              spinner: NgxSpinnerService,
+              modal: NzModalService,
+              private donviService: DonviService,
+              private danhMucService: DanhMucService,
+              private tongHopDanhSachVttbService: TongHopDanhSachVttbService,
+              private quyetDinhXuatGiamVattuService: QuyetDinhXuatGiamVattuService,
+              private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvXuatHangService);
     this.formData = this.fb.group({
       id: [],
@@ -229,37 +229,37 @@ export class ThongTinQuyetDinhGiaoNhiemVuXuatHangComponent extends Base2Componen
       this.dataThTree = chain(data)
         .groupBy('tenChiCuc')
         .map((v, k) => {
-          let rowItem = v.find(s => s.tenChiCuc === k);
-          let idVirtual = uuidv4();
-          this.expandSetString.add(idVirtual);
-          return {
-            idVirtual: idVirtual,
-            tenChiCuc: k,
-            tenCuc: rowItem?.tenCuc,
-            maDiaDiem: rowItem?.maDiaDiem,
-            tenCloaiVthh: rowItem?.tenCloaiVthh,
-            tenLoaiVthh: rowItem?.tenLoaiVthh,
-            childData: v,
-          };
-        },
+            let rowItem = v.find(s => s.tenChiCuc === k);
+            let idVirtual = uuidv4();
+            this.expandSetString.add(idVirtual);
+            return {
+              idVirtual: idVirtual,
+              tenChiCuc: k,
+              tenCuc: rowItem?.tenCuc,
+              maDiaDiem: rowItem?.maDiaDiem,
+              tenCloaiVthh: rowItem?.tenCloaiVthh,
+              tenLoaiVthh: rowItem?.tenLoaiVthh,
+              childData: v,
+            };
+          },
         ).value();
     } else {
       this.dataThTreeXuatHuy = chain(data)
         .groupBy('tenChiCuc')
         .map((v, k) => {
-          let rowItem = v.find(s => s.tenChiCuc === k);
-          let idVirtual = uuidv4();
-          this.expandSetString.add(idVirtual);
-          return {
-            idVirtual: idVirtual,
-            tenChiCuc: k,
-            tenCuc: rowItem?.tenCuc,
-            maDiaDiem: rowItem?.maDiaDiem,
-            tenCloaiVthh: rowItem?.tenCloaiVthh,
-            tenLoaiVthh: rowItem?.tenLoaiVthh,
-            childData: v,
-          };
-        },
+            let rowItem = v.find(s => s.tenChiCuc === k);
+            let idVirtual = uuidv4();
+            this.expandSetString.add(idVirtual);
+            return {
+              idVirtual: idVirtual,
+              tenChiCuc: k,
+              tenCuc: rowItem?.tenCuc,
+              maDiaDiem: rowItem?.maDiaDiem,
+              tenCloaiVthh: rowItem?.tenCloaiVthh,
+              tenLoaiVthh: rowItem?.tenLoaiVthh,
+              childData: v,
+            };
+          },
         ).value();
     }
   }
@@ -370,12 +370,12 @@ export class ThongTinQuyetDinhGiaoNhiemVuXuatHangComponent extends Base2Componen
       case STATUS.TU_CHOI_TP:
       case STATUS.TU_CHOI_LDC: {
         trangThai = STATUS.CHO_DUYET_TP;
-        mess = 'Bạn có muối gửi duyệt?';
+        mess = 'Bạn có muốn gửi duyệt?';
         break;
       }
       case STATUS.CHO_DUYET_TP: {
         trangThai = STATUS.CHO_DUYET_LDC;
-        mess = 'Bạn có muối gửi duyệt?';
+        mess = 'Bạn có muốn gửi duyệt?';
         break;
       }
       case STATUS.CHO_DUYET_LDC: {

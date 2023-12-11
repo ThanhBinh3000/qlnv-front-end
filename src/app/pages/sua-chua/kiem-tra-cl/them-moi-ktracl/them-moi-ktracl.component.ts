@@ -271,20 +271,28 @@ export class ThemMoiKtraclComponent extends Base3Component implements OnInit {
 
   pheDuyet() {
     let trangThai
+    let confirm
+    let msg
     switch (this.formData.value.trangThai) {
       case STATUS.TU_CHOI_TP:
       case STATUS.TU_CHOI_LDC:
       case STATUS.DU_THAO:
+        confirm = 'Bạn có muốn gửi duyệt ?';
+        msg = 'Thao tác thành công';
         trangThai = STATUS.CHO_DUYET_TP;
         break;
       case STATUS.CHO_DUYET_TP:
+        confirm = 'Bạn có muốn phê duyệt ?'
+        msg = 'Phê duyệt thành công'
         trangThai = STATUS.CHO_DUYET_LDC;
         break;
       case STATUS.CHO_DUYET_LDC:
+        confirm = 'Bạn có muốn phê duyệt ?'
+        msg = 'Phê duyệt thành công'
         trangThai = STATUS.DA_DUYET_LDC;
         break;
     }
-    this.approve(this.id, trangThai, 'Bạn có muốn gửi duyệt', null, 'Phê duyệt thành công');
+    this.approve(this.id, trangThai, confirm , null, msg);
   }
 
   tuChoi() {
@@ -315,7 +323,6 @@ export class ThemMoiKtraclComponent extends Base3Component implements OnInit {
   onChangeKetQua($event, data) {
     console.log(+$event, data);
     if ((+$event || +$event == 0) && (data.mucYeuCauNhapToiDa || data.mucYeuCauNhapToiThieu)) {
-      console.log('ádoasdasd');
       if (+$event >= +data.mucYeuCauNhapToiThieu && +$event <= +data.mucYeuCauNhapToiDa) {
         data.danhGia = 'Đạt';
       } else {

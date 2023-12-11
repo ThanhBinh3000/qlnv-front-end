@@ -1,304 +1,110 @@
 <div>
   <div>
-    <span class="text-right">
-      <h2 style="font-size: 100%; margin-top: 0.5%;">ĐƠN VỊ : TRIỆU ĐỒNG</h2>
+    <span class='text-right'>
+      <h2 style='font-size: 100%; margin-top: 0.5%;'>ĐƠN VỊ : TRIỆU ĐỒNG</h2>
     </span>
   </div>
-  <!--  <nz-table #editRowTable [nzData]="dataTable" [nzFrontPagination]="false" nzBordered [nzShowPagination]="false">-->
-  <!--    <thead>-->
-  <!--    <tr>-->
-  <!--      <th class="text-center" style="width: 5%;">STT</th>-->
-  <!--      <th style="width: 25%;">Loại hàng hóa</th>-->
-  <!--      <th style="width: 25%;">Chủng loại hàng hóa</th>-->
-  <!--      <th style="width: 10%;">Đơn vị tính</th>-->
-  <!--      <th style="width: 10%;">Số lượng</th>-->
-  <!--      <th style="width: 10%;">Đơn giá (triệu đồng)</th>-->
-  <!--      <th style="width: 10%;">Dự toán (triệu đồng)</th>-->
-  <!--&lt;!&ndash;      <th *ngIf="trangThai != STATUS.BAN_HANH " style="width: 10%;">Hành động</th>&ndash;&gt;-->
-  <!--    </tr>-->
-  <!--    </thead>-->
-  <!--    <tbody>-->
-  <!--    <tr class="row-add">-->
-  <!--      <td></td>-->
-  <!--      <td>-->
-  <!--        <nz-input-group>-->
-  <!--          <nz-select nzShowSearch nzAllowClear [nzDisabled]="!isView" [(ngModel)]="rowItem.loaiVthh"-->
-  <!--                     [nzShowArrow]="false" nzAllowClear (ngModelChange)="onChangeLoaiVthh($event,'add')">-->
-  <!--            <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsHangHoa">-->
-  <!--            </nz-option>-->
-  <!--          </nz-select>-->
-  <!--        </nz-input-group>-->
-  <!--      </td>-->
-  <!--      <td>-->
-  <!--        <nz-input-group>-->
-  <!--          <nz-select [nzDisabled]="!isView" [(ngModel)]="rowItem.cloaiVthh" [nzShowArrow]="false"-->
-  <!--                     (ngModelChange)="onChangeCloaiVthh($event)">-->
-  <!--            <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChungLoaiHangHoa">-->
-  <!--            </nz-option>-->
-  <!--          </nz-select>-->
-  <!--        </nz-input-group>-->
-  <!--      </td>-->
-  <!--      <td>-->
-  <!--        <nz-input-group>-->
-  <!--          <input nz-input [(ngModel)]="rowItem.dviTinh" [readonly]="true"/>-->
-  <!--        </nz-input-group>-->
-  <!--      </td>-->
-  <!--      <td>-->
-  <!--        <nz-input-group>-->
-  <!--          <input class="money-input" (ngModelChange)="calcularTongTien(rowItem)"  [disabled]="!isView" currencyMask [(ngModel)]="rowItem.soLuong"  [options]="amount_no_decimal"/>-->
-  <!--&lt;!&ndash;          <nz-input-number [nzDisabled]="!isView" [nzSize]="'small'" nz-input [(ngModel)]="rowItem.soLuong"&ndash;&gt;-->
-  <!--&lt;!&ndash;                           (ngModelChange)="calcularTongTien(rowItem)" [nzMin]="0" [nzStep]="0.1">&ndash;&gt;-->
-  <!--&lt;!&ndash;          </nz-input-number>&ndash;&gt;-->
-  <!--        </nz-input-group>-->
-  <!--      </td>-->
-  <!--      <td>-->
-  <!--        <nz-input-group>-->
-  <!--          <input class="money-input" (ngModelChange)="calcularTongTien(rowItem)"  [disabled]="!isView" currencyMask [(ngModel)]="rowItem.donGia"  [options]="amount"/>-->
-  <!--&lt;!&ndash;          <nz-input-number (ngModelChange)="calcularTongTien(rowItem)" [nzStep]="0.1" [nzDisabled]="!isView"&ndash;&gt;-->
-  <!--&lt;!&ndash;                           [nzSize]="'small'" nz-input [(ngModel)]="rowItem.donGia" [nzMin]="0">&ndash;&gt;-->
-  <!--&lt;!&ndash;          </nz-input-number>&ndash;&gt;-->
-  <!--        </nz-input-group>-->
-  <!--      </td>-->
-  <!--      <td>-->
-  <!--        <nz-input-group>-->
-  <!--          <input class="money-input" currencyMask [(ngModel)]="rowItem.tongTien" disabled="true" [options]="amount"/>-->
-  <!--&lt;!&ndash;          <nz-input-number [nzDisabled]="!isView" [nzSize]="'small'" nz-input [nzDisabled]="true"&ndash;&gt;-->
-  <!--&lt;!&ndash;                           [(ngModel)]="rowItem.tongTien"&ndash;&gt;-->
-  <!--&lt;!&ndash;                           [nzMin]="0" [nzStep]="0.1">&ndash;&gt;-->
-  <!--&lt;!&ndash;          </nz-input-number>&ndash;&gt;-->
-  <!--        </nz-input-group>-->
-  <!--      </td>-->
-  <!--      <td style="text-align: center;">-->
-  <!--        <a (click)="themMoiItem()" *ngIf="isView">-->
-  <!--          <i class="fa fa-plus"></i>-->
-  <!--        </a>-->
-  <!--        <a (click)="clearData()" *ngIf="isView">-->
-  <!--          <i class="fa fa-refresh"></i>-->
-  <!--        </a>-->
-  <!--      </td>-->
-  <!--    </tr>-->
-  <!--    </tbody>-->
-  <!--    <tbody>-->
-  <!--    <tr *ngFor="let data of dataTable; let idx = index">-->
-  <!--      <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">-->
-  <!--        <td class="text-center">{{ idx + 1 }}</td>-->
-  <!--        <td>{{ data.tenVthh }}</td>-->
-  <!--        <td>{{ data.tenCloaiVthh }}</td>-->
-  <!--        <td>{{ data.dviTinh }}</td>-->
-  <!--        <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>-->
-  <!--        <td>{{ data.donGia | number : '1.0-1' : 'vi_VN' }}</td>-->
-  <!--        <td>{{ data.tongTien | number : '1.0-1' : 'vi_VN' }}</td>-->
-  <!--        <td style="text-align: center;">-->
-  <!--          <a (click)="editItem(idx)" *ngIf="isView">-->
-  <!--            <i class=" fa fa-pencil"></i>-->
-  <!--          </a>-->
-  <!--          <a (click)="xoaItem(idx)" *ngIf="isView">-->
-  <!--            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
-  <!--          </a>-->
-  <!--        </td>-->
-  <!--      </ng-container>-->
-  <!--      <ng-template #editTemplate>-->
-  <!--        <td></td>-->
-  <!--        <td>-->
-  <!--          <nz-input-group>-->
-  <!--            <nz-select [nzDisabled]="!isView" [(ngModel)]="dataEdit[idx].data.loaiVthh"-->
-  <!--                       (ngModelChange)="onChangeLoaiVthh($event,'edit',idx)" [nzShowArrow]="false">-->
-  <!--              <nz-option nzValue="null" nzDisabled nzHide></nz-option>-->
-  <!--              <nz-option [nzValue]="item.ma" [nzLabel]="item.ten" *ngFor="let item of dsHangHoa">-->
-  <!--              </nz-option>-->
-  <!--            </nz-select>-->
-  <!--          </nz-input-group>-->
-  <!--        </td>-->
-  <!--        <td>-->
-  <!--          <nz-input-group>-->
-  <!--            <nz-select [nzDisabled]="!isView" [(ngModel)]="dataEdit[idx].data.cloaiVthh">-->
-  <!--              <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChungLoaiHangHoaTable">-->
-  <!--              </nz-option>-->
-  <!--            </nz-select>-->
-  <!--          </nz-input-group>-->
-  <!--        </td>-->
-  <!--        <td>-->
-  <!--          &lt;!&ndash; <nz-input-group>-->
-  <!--            <input nz-input [(ngModel)]="dataEdit[idx].data.dviTinh" [readonly]="true" />-->
-  <!--          </nz-input-group> &ndash;&gt;-->
-  <!--          <nz-input-group>-->
-  <!--            <input nz-input [(ngModel)]="dataEdit[idx].data.dviTinh" [readonly]="true"/>-->
-  <!--          </nz-input-group>-->
-  <!--        </td>-->
-  <!--        <td>-->
-  <!--          <nz-input-group>-->
-  <!--            <input class="money-input" (change)="calcularTongTien(dataEdit[idx].data)" currencyMask [disabled]="!isView" [(ngModel)]="dataEdit[idx].data.soLuong" [options]="amount_no_decimal"/>-->
-  <!--&lt;!&ndash;            <nz-input-number (change)="calcularTongTien(dataEdit[idx].data)" [nzDisabled]="!isView" [nzSize]="'small'"&ndash;&gt;-->
-  <!--&lt;!&ndash;                             nz-input [(ngModel)]="dataEdit[idx].data.soLuong" [nzMin]="0" [nzParser]="globals.parser">&ndash;&gt;-->
-  <!--&lt;!&ndash;            </nz-input-number>&ndash;&gt;-->
-  <!--          </nz-input-group>-->
-  <!--        </td>-->
-  <!--        <td>-->
-  <!--          <nz-input-group>-->
-  <!--            <input class="money-input" (change)="calcularTongTien(dataEdit[idx].data)" [disabled]="!isView" currencyMask [(ngModel)]="dataEdit[idx].data.donGia" [options]="amount"/>-->
-  <!--&lt;!&ndash;            <nz-input-number (change)="calcularTongTien(dataEdit[idx].data)" [nzStep]="0.1" [nzDisabled]="!isView"&ndash;&gt;-->
-  <!--&lt;!&ndash;                             [nzSize]="'small'" nz-input [(ngModel)]="dataEdit[idx].data.donGia" [nzMin]="0">&ndash;&gt;-->
-  <!--&lt;!&ndash;            </nz-input-number>&ndash;&gt;-->
-  <!--          </nz-input-group>-->
-  <!--        </td>-->
-  <!--        <td>-->
-  <!--          <nz-input-group>-->
-  <!--            <input class="money-input" disabled="true" currencyMask [(ngModel)]="dataEdit[idx].data.tongTien" [options]="amount"/>-->
-  <!--&lt;!&ndash;            <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" nz-input&ndash;&gt;-->
-  <!--            &lt;!&ndash;                             [(ngModel)]="dataEdit[idx].data.tongTien" [nzMin]="0" [nzStep]="0.1">&ndash;&gt;-->
-  <!--            &lt;!&ndash;            </nz-input-number>&ndash;&gt;-->
-  <!--          </nz-input-group>-->
-  <!--        </td>-->
-  <!--        <td class="text-center">-->
-  <!--          <a (click)="luuEdit(idx)" *ngIf="isView" class="save">-->
-  <!--            <i class="fa fa-save"></i>-->
-  <!--          </a>-->
-  <!--          <a (click)="huyEdit(idx)" *ngIf="isView">-->
-  <!--            <i class="fa fa-ban do"></i> </a>-->
-  <!--        </td>-->
-  <!--      </ng-template>-->
-  <!--    </tr>-->
-  <!--    </tbody>-->
-  <!--    <tfoot>-->
-  <!--    <tr>-->
-  <!--      <td></td>-->
-  <!--      <td></td>-->
-  <!--      <td></td>-->
-  <!--      <td></td>-->
-  <!--      <td style="text-align: right; font-weight: 700" colspan="2">Cộng</td>-->
-  <!--      <td>{{ calcTong() | number : '1.0-1' : 'vi_VN' }}</td>-->
-  <!--      <td></td>-->
-  <!--    </tr>-->
-  <!--    </tfoot>-->
-  <!--  </nz-table>-->
-
-  <nz-table nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
+  <nz-table nzBordered [nzFrontPagination]='false' [nzShowPagination]='false'>
     <thead>
-      <tr>
-        <th class="text-center" width="2%"></th>
-        <th class="text-center" width="2%"></th>
-        <th class="text-center" width="18%">Loại hàng hóa</th>
-        <th class="text-center">Chủng loại hàng hóa</th>
-        <th class="text-center" width="8%">Đơn vị tính</th>
-        <th class="text-center" width="8%">SL TTCP giao</th>
-        <th class="text-center" width="8%">SL dự toán</th>
-        <th class="text-center" width="8%">Đơn giá</th>
-        <th class="text-center" width="8%">Dự toán (Triệu đồng)</th>
-        <th class="text-center" width="8%" *ngIf="isView">Hành động</th>
-      </tr>
-      <!--    <tr>-->
-      <!--      <th></th>-->
-      <!--      <th>-->
-      <!--        <nz-select nzAllowClear [(ngModel)]="rowItemCha.khoi">-->
-      <!--          <nz-option *ngFor="let p of listKhoi" [nzValue]="p.giaTri" [nzLabel]="p.giaTri">-->
-      <!--          </nz-option>-->
-      <!--        </nz-select>-->
-      <!--      </th>-->
-      <!--      <th></th>-->
-      <!--      <th></th>-->
-      <!--      <th></th>-->
-      <!--      <th></th>-->
-      <!--      <th></th>-->
-      <!--      <th></th>-->
-      <!--      <th></th>-->
-      <!--      <th></th>-->
-      <!--      <th></th>-->
-      <!--      <th></th>-->
-      <!--      <th></th>-->
-      <!--      <th></th>-->
-      <!--      <th class="text-center" *ngIf="!isViewDetail" nzRight>-->
-      <!--        <a (click)="themItemcha()">-->
-      <!--          <i class="icon htvbdh_dau-cong"></i>-->
-      <!--        </a>-->
-
-      <!--      </th>-->
-      <!--    </tr>-->
+    <tr>
+      <th class='text-center' width='2%'></th>
+      <th class='text-center' width='2%'></th>
+      <th class='text-center' width='18%'>Loại hàng hóa</th>
+      <th class='text-center'>Chủng loại hàng hóa</th>
+      <th class='text-center' width='8%'>Đơn vị tính</th>
+      <th class='text-center' width='8%'>SL TTCP giao</th>
+      <th class='text-center' width='8%'>SL dự toán</th>
+      <th class='text-center' width='8%'>Đơn giá</th>
+      <th class='text-center' width='8%'>Dự toán (Triệu đồng)</th>
+      <th class='text-center' width='8%' *ngIf='isView'>Hành động</th>
+    </tr>
     </thead>
     <tbody>
-      <ng-container *ngFor="let data of dataTable , let idx = index">
-        <tr>
-          <td>{{idx + 1}}</td>
-          <td [nzExpand]="expandSet.has(data.idVirtual)" (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
-          <td class="font-weight-bold">{{data.tenVthh}}</td>
-          <td>{{data.tenCloaiVthh}}</td>
-          <td class="font-weight-bold">{{data.dviTinh}}</td>
-          <ng-container *ngIf="!data.dataChild || data.dataChild.length == 0">
-            <td class="font-weight-bold">{{data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="font-weight-bold">{{data.soLuongDuToan | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="font-weight-bold">{{data.donGia | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="font-weight-bold text-danger">{{data.tongTien | number: '1.0-1' : 'vi_VN'}}</td>
-          </ng-container>
-          <ng-container *ngIf="data.dataChild && data.dataChild.length > 0">
-            <td class="font-weight-bold">{{sumSoLuong(data, 'soLuong') | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="font-weight-bold">{{sumSoLuong(data, 'soLuongDuToan') | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="font-weight-bold">{{sumSoLuong(data, 'donGia') | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="font-weight-bold font-weight-bold text-danger">{{sumSoLuong(data, 'tongTien') | number : '1.0-1'
-              : 'vi_VN'}}</td>
-          </ng-container>
-          <td class="font-weight-bold text-left" nzRight *ngIf="isView">
-            <a *ngIf="!data.dataChild || data.dataChild.length == 0" (click)="themMoiMuaTang(data, 'sua', idx)">
-              <i class="fa fa-pencil" title="Sửa"></i>
+    <ng-container *ngFor='let data of dataTable , let idx = index'>
+      <tr>
+        <td>{{idx + 1}}</td>
+        <td [nzExpand]='expandSet.has(data.idVirtual)' (nzExpandChange)='onExpandChange(data.idVirtual, $event)'></td>
+        <td class='font-weight-bold'>{{data.tenVthh}}</td>
+        <td>{{data.tenCloaiVthh}}</td>
+        <td class='font-weight-bold'>{{data.dviTinh}}</td>
+        <ng-container *ngIf='!data.dataChild || data.dataChild.length == 0'>
+          <td class='font-weight-bold text-right'>{{data.soLuong  | number : '1.0-3' : 'vi_VN'}}</td>
+          <td class='font-weight-bold text-right'>{{data.soLuongDuToan  | number : '1.0-3' : 'vi_VN'}}</td>
+          <td class='font-weight-bold text-right'>{{data.donGia  | number : '1.0-3' : 'vi_VN'}}</td>
+          <td class='font-weight-bold text-right'>{{data.tongTien | number: '1.0-3' : 'vi_VN'}}</td>
+        </ng-container>
+        <ng-container *ngIf='data.dataChild && data.dataChild.length > 0'>
+          <td class='font-weight-bold text-right'>{{sumSoLuong(data, 'soLuong') | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='font-weight-bold text-right'></td>
+          <!--          <td class="font-weight-bold">{{sumSoLuong(data, 'donGia') | number : '1.0-1' : 'vi_VN'}}</td>-->
+          <td class='font-weight-bold text-right'></td>
+          <td
+            class='font-weight-bold font-weight-bold text-danger text-right'>{{sumSoLuong(data, 'tongTien') | number : '1.0-3' : 'vi_VN'}}</td>
+        </ng-container>
+        <td class='font-weight-bold text-left' nzRight *ngIf='isView'>
+          <a *ngIf='!data.dataChild || data.dataChild.length == 0' (click)="themMoiMuaTang(data, 'sua', idx)">
+            <i class='fa fa-pencil' title='Sửa'></i>
+          </a>
+          <a>
+            <i class='icon htvbdh_dau-cong' *ngIf="data.loaiVthh != '0401'  && !data.cloaiVthh"
+               (click)="themMoiMuaTang(data,'them',idx, dataTable[idx])"></i>
+          </a>
+        </td>
+      </tr>
+      <ng-container *ngIf='expandSet.has(data.idVirtual)'>
+        <tr *ngFor='let item of data.dataChild, let y = index'>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>{{item.tenCloaiVthh}}</td>
+          <td>{{item.dviTinh}}</td>
+          <td class='text-right'>{{item.soLuong | number : '1.0-3' : 'vi_VN'}}</td>
+          <td class='text-right'>
+            {{item.soLuongDuToan | number : '1.0-3' : 'vi_VN'}}
+          </td>
+          <td class='text-right'>
+            {{item.donGia | number : '1.0-3' : 'vi_VN'}}
+          </td>
+          <td class='text-danger text-right'>
+            {{item.tongTien | number : '1.0-3' : 'vi_VN'}}
+          </td>
+          <td class='text-left' nzRight *ngIf='isView'>
+            <a (click)="themMoiMuaTang(item, 'sua', y, dataTable[idx])">
+              <i class='fa fa-pencil' title='Sửa'></i>
             </a>
-            <a>
-              <i class="icon htvbdh_dau-cong" *ngIf="data.loaiVthh != '0401'  && !data.cloaiVthh"
-                (click)="themMoiMuaTang(data,'them',idx, dataTable[idx])"></i>
+            <a (click)='deleteItem(idx, y)' *ngIf='data.dataChild.length >= 1'>
+              <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
             </a>
           </td>
         </tr>
-        <ng-container *ngIf="expandSet.has(data.idVirtual)">
-          <tr *ngFor="let item of data.dataChild, let y = index">
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>{{item.tenCloaiVthh}}</td>
-            <td>{{item.dviTinh}}</td>
-            <td>{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-            <td>
-              {{item.soLuongDuToan | number : '1.0-1' : 'vi_VN'}}
-            </td>
-            <td>
-              {{item.donGia | number : '1.0-1' : 'vi_VN'}}
-            </td>
-            <td class='bold text-danger'>
-              {{item.tongTien | number : '1.0-1' : 'vi_VN'}}
-            </td>
-            <td class="text-left" nzRight *ngIf="isView">
-              <a (click)="themMoiMuaTang(item, 'sua', y, dataTable[idx])">
-                <i class="fa fa-pencil" title="Sửa"></i>
-              </a>
-              <a (click)="deleteItem(idx, y)" *ngIf="data.dataChild.length >= 1">
-                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-              </a>
-            </td>
-          </tr>
-        </ng-container>
       </ng-container>
+    </ng-container>
     </tbody>
     <tfoot *ngIf="dataTable && dataTable.length > 0 && tabName != 'LPDH'">
-      <tr class="text-blue">
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th class="text-right">Tổng dự toán</th>
-        <th></th>
-        <th></th>
-        <th class="text-left">{{dataDuToanSumByDataTable | number : '1.0-1' : 'vi_VN'}}</th>
-        <th></th>
-      </tr>
-      <tr class="text-blue">
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th class="text-right">Tổng TTCP giao</th>
-        <th></th>
-        <th></th>
-        <th>{{dataQdTtcpGiaoBn | number : '1.0-1' : 'vi_VN'}}</th>
-        <th></th>
-      </tr>
+    <tr class='text-blue'>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th class='text-right'>Tổng dự toán</th>
+      <th></th>
+      <th></th>
+      <th class='text-right'>{{dataDuToanSumByDataTable | number : '1.0-3' : 'vi_VN'}}</th>
+      <th></th>
+    </tr>
+    <tr class='text-blue'>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th class='text-right'>Tổng TTCP giao</th>
+      <th></th>
+      <th></th>
+      <th class='text-right'>{{dataQdTtcpGiaoBn | number : '1.0-3' : 'vi_VN'}}</th>
+      <th></th>
+    </tr>
     </tfoot>
   </nz-table>
 

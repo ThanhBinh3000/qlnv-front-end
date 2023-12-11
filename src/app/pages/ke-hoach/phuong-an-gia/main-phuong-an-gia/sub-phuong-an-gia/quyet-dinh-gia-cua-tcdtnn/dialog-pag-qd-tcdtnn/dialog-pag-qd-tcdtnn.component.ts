@@ -20,9 +20,11 @@ export class DialogPagQdTcdtnnComponent implements OnInit {
   type: string;
   namKeHoach: any;
   dataTableToTrinh: any[] = [];
+  dataTableToTrinhView: any[] = [];
   pagType : string
   loaiGia : string
-  dataTablleDxCs: any[] = [];
+  dataTableDxVt: any[] = [];
+  dataTableDxVtView: any[] = [];
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
   formData: FormGroup;
@@ -53,7 +55,11 @@ export class DialogPagQdTcdtnnComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadDsToTrinh();
+    if (this.pagType && this.pagType == 'LT') {
+      this.loadDsToTrinh();
+    } else {
+      this.loadDsDxPagVT();
+    }
     this.loadDsVthh();
     this.loadDsLoaiGia();
   }
@@ -121,16 +127,35 @@ export class DialogPagQdTcdtnnComponent implements OnInit {
   }
 
 
+  async loadDsDxPagVT() {
+    this.spinner.show();
+    try {
+      let body = {
+        namKh: this.namKeHoach,
+        type: this.type,
+        pagType: this.pagType,
+        loaiVthh: this.formData.value.loaiVthh,
+        cloaiVthh: this.formData.value.cloaiVthh,
+        loaiGia: this.loaiGia,
+        loaiDeXuat : "00"
+      }
+      let res = await this.tongHopPhuongAnGiaService.loadToTrinhDeXuat(body);
+      if (res.msg = MESSAGE.SUCCESS) {
+        this.dataTableDxVt  =res.data;
+        if (this.dataTableDxVt && this.dataTableDxVt.length > 0) {
+          this.dataTableDxVtView = this.dataTableDxVt.filter(item => item.lanDeXuat == 1);
+        }
+      }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+
   async loadDsToTrinh() {
     this.spinner.show();
-    if (this.formData.value.loaiQd == '01' && this.pagType == 'LT') {
-      this.helperService.markFormGroupTouched(this.formData);
-      if (this.formData.invalid) {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
-        this.spinner.hide()
-        return;
-      }
-    }
     try {
       let body = {
         namKh: this.namKeHoach,
@@ -141,13 +166,9 @@ export class DialogPagQdTcdtnnComponent implements OnInit {
         loaiGia: this.pagType == 'LT' ? this.formData.value.loaiGia : this.loaiGia,
         pagType : this.pagType
       }
-      let res = await this.tongHopPhuongAnGiaService.loadToTrinhDeXuat(body);
-      if (res.msg = MESSAGE.SUCCESS) {
-        if (this.formData.value.loaiQd == '00' && this.pagType == 'LT') {
-          this.dataTableToTrinh = res.data;
-        } else {
-          this.dataTablleDxCs = res.data;
-        }
+      let res = await this.tongHopPhuongAnGiaService.loadToTrinhDeXuat(body); if (res.msg = MESSAGE.SUCCESS) {
+        this.dataTableToTrinh = res.data;
+        this.dataTableToTrinhView = this.dataTableToTrinh.filter(item => item.kieuTongHop == this.formData.value.loaiQd);
       }
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -161,6 +182,19 @@ export class DialogPagQdTcdtnnComponent implements OnInit {
       this.listData.push(data);
     } else {
       this.listData.splice(idx, 1);
+    }
+  }
+
+  changLoaiQd(event) {
+    if (event && this.pagType == 'LT') {
+      this.dataTableToTrinhView = this.dataTableToTrinh.filter(item => item.kieuTongHop == event);
+    }
+    if (event && this.pagType == 'VT') {
+      if (event == '00') {
+        this.dataTableDxVtView =this.dataTableDxVt.filter(item => item.lanDeXuat == 1);
+      } else {
+        this.dataTableDxVtView =this.dataTableDxVt.filter(item => item.lanDeXuat > 1);
+      }
     }
   }
 }

@@ -1,20 +1,19 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Base2Component } from "src/app/components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "src/app/services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { DonviService } from "src/app/services/donvi.service";
+import {Component, Input, OnInit} from '@angular/core';
+import {Base2Component} from "src/app/components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "src/app/services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {DonviService} from "src/app/services/donvi.service";
 import {
   DeXuatPhuongAnCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
-import { MESSAGE } from "src/app/constants/message";
-import { BangKeCanService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/BangKeCan.service';
+import {MESSAGE} from "src/app/constants/message";
+import {BangKeCanService} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/BangKeCan.service';
 import _ from 'lodash';
 import * as uuid from "uuid";
-import { LOAI_HANG_DTQG } from 'src/app/constants/config';
-import { STATUS } from "../../../../../constants/status";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-bdg-bang-ke-can',
@@ -58,18 +57,19 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
       loaiVthh: null,
     })
     this.filterTable = {
-      soQdNv: '',
-      nam: '',
-      ngayKyQdNv: '',
-      tenDiemKho: '',
-      tenNganKho: '',
-      tenLoKho: '',
-      soPhieuKiemNghiem: '',
-      ngayKiemNghiemMau: '',
-      soPhieuXuatKho: '',
-      soBangKeHang: '',
-      ngayLapPhieu: '',
-      tenTrangThai: '',
+      soQdNv: null,
+      nam: null,
+      thoiGianGiaoNhan: null,
+      tenDiemKho: null,
+      tenNhaKho: null,
+      tenNganKho: null,
+      tenLoKho: null,
+      soPhieuKiemNghiem: null,
+      ngayKiemNghiemMau: null,
+      soBangKeHang: null,
+      soPhieuXuatKho: null,
+      ngayLapPhieu: null,
+      tenTrangThai: null,
     };
   }
 
@@ -104,14 +104,15 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
       const childData = _(soQdNvGroup).groupBy("tenDiemKho").map((tenDiemKhoGroup, tenDiemKhoKey) => {
         const lv1IdVirtual = uuid.v4();
         this.expandSetString.add(lv1IdVirtual);
-        const lv1ChildData = _(tenDiemKhoGroup).groupBy((row) => row.tenLoKho || row.tenNganKho).map((group, key) => {
+        const lv1ChildData = _(tenDiemKhoGroup).groupBy((row) => row.soPhieuKiemNghiem).map((group, key) => {
           const lv2IdVirtual = uuid.v4();
           this.expandSetString.add(lv2IdVirtual);
           return {
             idVirtual: lv2IdVirtual,
-            tenLoKho: key || "",
+            tenLoKho: group[0].tenLoKho || "",
             tenNganKho: group[0].tenNganKho || "",
-            soPhieuKiemNghiem: group[0].soPhieuKiemNghiem || "",
+            tenNhaKho: group[0].tenNhaKho || "",
+            soPhieuKiemNghiem: key || "",
             idPhieuKiemNghiem: group[0].idPhieuKiemNghiem || "",
             ngayKiemNghiemMau: group[0].ngayKiemNghiemMau || "",
             childData: group,
@@ -128,7 +129,7 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
         soQdNv: soQdNvKey,
         nam: firstRowInGroup.nam || "",
         idQdNv: firstRowInGroup.idQdNv || "",
-        ngayKyQdNv: firstRowInGroup.ngayKyQdNv || "",
+        thoiGianGiaoNhan: firstRowInGroup.thoiGianGiaoNhan || "",
         childData,
       };
     }).value();
@@ -157,15 +158,15 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
 
   openModal(id: number, modalType: string) {
     switch (modalType) {
-      case 'QdNv':
+      case 'QdNv' :
         this.idQdNv = id;
         this.isViewQdNv = true;
         break;
-      case 'kiemNghiem':
+      case 'kiemNghiem' :
         this.idKiemnghiem = id;
         this.isViewKiemnghiem = true;
         break;
-      case 'xuatKho':
+      case 'xuatKho' :
         this.idXuatKho = id;
         this.isViewXuatKho = true;
         break;
@@ -176,15 +177,15 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
 
   closeModal(modalType: string) {
     switch (modalType) {
-      case 'QdNv':
+      case 'QdNv' :
         this.idQdNv = null;
         this.isViewQdNv = false;
         break;
-      case 'kiemNghiem':
+      case 'kiemNghiem' :
         this.idKiemnghiem = null;
         this.isViewKiemnghiem = false;
         break;
-      case 'xuatKho':
+      case 'xuatKho' :
         this.idXuatKho = null;
         this.isViewXuatKho = false;
         break;
@@ -238,20 +239,20 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
         DUYET_LDCHICUC: 'XHDTQG_PTDG_XK_LT_BKCH_DUYET_LDCCUC',
       },
     };
-    const permissions = this.loaiVthh === LOAI_HANG_DTQG.VAT_TU ? permissionMapping.VT : permissionMapping.LT;
+    const permissions = this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? permissionMapping.VT : permissionMapping.LT;
     switch (action) {
       case 'XEM':
         return (
           this.userService.isAccessPermisson(permissions.XEM) && ((this.userService.isAccessPermisson(permissions.THEM) &&
-            [
-              this.STATUS.CHO_DUYET_LDCC,
-              this.STATUS.DA_DUYET_LDCC,
-            ].includes(data.trangThai)) ||
+              [
+                this.STATUS.CHO_DUYET_LDCC,
+                this.STATUS.DA_DUYET_LDCC,
+              ].includes(data.trangThai)) ||
             (!this.userService.isAccessPermisson(permissions.THEM) && [
-              this.STATUS.DU_THAO,
-              this.STATUS.TU_CHOI_LDCC,
-              this.STATUS.DA_DUYET_LDCC
-            ].includes(data.trangThai) ||
+                this.STATUS.DU_THAO,
+                this.STATUS.TU_CHOI_LDCC,
+                this.STATUS.DA_DUYET_LDCC
+              ].includes(data.trangThai) ||
               (data.trangThai === this.STATUS.CHO_DUYET_LDCC &&
                 !this.userService.isAccessPermisson(permissions.DUYET_LDCHICUC))))
         );

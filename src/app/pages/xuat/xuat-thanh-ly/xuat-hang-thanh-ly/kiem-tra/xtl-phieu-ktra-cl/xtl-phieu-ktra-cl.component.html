@@ -65,12 +65,12 @@
   <div class="group-button">
     <h3 class="text-uppercase">Danh sách phiếu kiểm nghiệm chất lượng</h3>
     <div class="buttons">
-      <button type="button" class="btn btn-sub" (click)="exportData('SCHDTQG_KTCL_EXP')">
+      <button type="button" class="btn btn-sub" (click)="exportData()">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
       <button type="button" class="btn btn-main" *ngIf="this.userService.isCuc()"
-              (click)="redirectCreate('SCHDTQG_KTCL_THEM')">
+              (click)="redirectCreate()">
         <i class="icon htvbdh_dau-cong"></i>
         <span>Thêm</span>
       </button>
@@ -84,7 +84,7 @@
         <th nzWidth="30px">STT</th>
         <th nzWidth="80px"> Số QĐ xuất hàng của Cục</th>
         <th nzWidth="30px">Năm xuất</th>
-        <th nzWidth="50px"> Thời hạn xuất sửa chữa</th>
+        <th nzWidth="50px"> Thời hạn xuất thanh lý</th>
         <th nzWidth="200px">Điểm kho / Nhà kho / Ngăn kho / Lô kho</th>
         <th nzWidth="50px">Số phiếu KNCL</th>
         <th nzWidth="50px">Ngày kiểm định</th>
@@ -103,7 +103,7 @@
           <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
           <td>{{item.soBbQd}}</td>
           <td>{{item.nam}}</td>
-          <td>{{item.thoiHanXuat | date : 'dd/MM/yyyy' }}</td>
+          <td>{{item.thoiGianGiaoNhan | date : 'dd/MM/yyyy' }}</td>
           <td></td>
           <td></td>
           <td></td>
@@ -131,15 +131,15 @@
               <td></td>
               <td>{{ktraCl.tenTrangThai}}</td>
               <td>
-                <a (click)="redirectDetail(ktraCl.id,'SCHDTQG_KTCL_XEM')">
+                <a (click)="redirectDetail(ktraCl.id)">
                   <span class="icon htvbdh_eye"></span>
                 </a>
                 <a *ngIf="this.userService.isCuc() && ktraCl.trangThai == STATUS.DU_THAO"
-                   (click)="redirectDetail(ktraCl.id,'SCHDTQG_KTCL_THEM')">
+                   (click)="redirectDetail(ktraCl.id)">
                   <span class="fa fa-pencil"></span>
                 </a>
                 <a *ngIf="this.userService.isCuc() && ktraCl.trangThai == STATUS.DU_THAO"
-                   (click)="delete(ktraCl,'SCHDTQG_KTCL_XOA')">
+                   (click)="delete(ktraCl)">
                   <i class="fa fa-trash-o do"></i>
                 </a>
               </td>

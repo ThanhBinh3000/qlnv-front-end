@@ -88,7 +88,8 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
       loai: ['00'],
-      ngayMoSoKho : []
+      ngayMoSoKho : [],
+      lyDoTuChoi : []
     });
   }
 
@@ -144,7 +145,7 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
     let body = this.formData.value;
     body.maDvi = this.userInfo.MA_DVI
     if (body.loai == '01') {
-      this.loadDsNhapXuat()
+      await this.loadDsNhapXuat()
     }
     body.theKhoCtList = this.listDsNhapXuat;
     let res = await this.createUpdate(body);
@@ -184,7 +185,7 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
       case STATUS.DU_THAO:
         trangThai = STATUS.CHO_DUYET_KT;
         msgConfirm = "Bạn có muốn gửi duyệt ?";
-        msgSucess = "Gửi duyệt thành công"
+        msgSucess = "Thao tác thành công"
         break;
       case STATUS.CHO_DUYET_KT:
         trangThai = STATUS.CHO_DUYET_LDCC;
@@ -207,6 +208,10 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
 
   goBack() {
     this._modalRef.close();
+  }
+
+  showDongSo(){
+    return this.formData.value.trangThai == STATUS.DA_DUYET_LDCC && this.formData.value.loai == '00' && this.userService.isAccessPermisson('LKQLCL_QLSKTK_SKTK_DONGSO')
   }
 
   tuChoi() {
@@ -406,6 +411,7 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
       denNgay: this.formData.value.ngayTaoDen,
       cloaiVthh: this.formData.value.cloaiVthh,
       loaiVthh: this.formData.value.loaiVthh,
+      maKho : this.formData.value.maLoKho ? this.formData.value.maLoKho : this.formData.value.maNganKho
     }
     let res = await this.quanLySoKhoTheKhoService.loadDsNhapXuat(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -484,9 +490,7 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
 
   showPheDuyetTuChoi() {
     let trangThai = this.formData.value.trangThai;
-    // && this.userService.isAccessPermisson('LKQLCL_QLSKTK_SKTK_DUYET_KT')
-  // && this.userService.isAccessPermisson('LKQLCL_QLSKTK_SKTK_DUYET_LDCCUC')
-    return (trangThai == STATUS.CHO_DUYET_KT )
-      || (trangThai == STATUS.CHO_DUYET_LDCC)
+    return (trangThai == STATUS.CHO_DUYET_KT && this.userService.isAccessPermisson('LKQLCL_QLSKTK_SKTK_DUYET_KT') )
+      || (trangThai == STATUS.CHO_DUYET_LDCC && this.userService.isAccessPermisson('LKQLCL_QLSKTK_SKTK_DUYET_LDCCUC'))
   }
 }

@@ -1,25 +1,30 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import dayjs from 'dayjs';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { STATUS } from "src/app/constants/status";
-import { UserLogin } from 'src/app/models/userlogin';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
+import {STATUS} from "src/app/constants/status";
+import {UserLogin} from 'src/app/models/userlogin';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {HelperService} from 'src/app/services/helper.service';
+import {QuyetDinhGiaTCDTNNService} from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
+import {UserService} from 'src/app/services/user.service';
+import {Globals} from 'src/app/shared/globals';
 import {
   TongHopPhuongAnGiaService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
-import { chain } from "lodash";
-import { v4 as uuidv4 } from "uuid";
-import { DonviService } from "../../../../../../../services/donvi.service";
-import { DialogPagQdTcdtnnComponent } from "../dialog-pag-qd-tcdtnn/dialog-pag-qd-tcdtnn.component";
-
+import {chain} from "lodash";
+import {v4 as uuidv4} from "uuid";
+import {DonviService} from "../../../../../../../services/donvi.service";
+import {DialogPagQdTcdtnnComponent} from "../dialog-pag-qd-tcdtnn/dialog-pag-qd-tcdtnn.component";
+import {saveAs} from "file-saver";
+import printJS from "print-js";
+import { cloneDeep } from 'lodash';
+import {
+  QuyetDinhGiaCuaBtcService
+} from "../../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
 @Component({
   selector: 'app-them-moi-qd-gia-tcdtnn-lt',
   templateUrl: './them-moi-qd-gia-tcdtnn-lt.component.html',
@@ -38,8 +43,15 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
   dataTable: any[] = [];
   dataTableView: any[] = [];
   fileDinhKem: any[] = [];
+  canCuPhapLys: any[] = [];
   STATUS = STATUS;
   expandSet = new Set<number>();
+  pdfSrc: any;
+  excelSrc: any;
+  pdfBlob: any;
+  excelBlob: any;
+  printSrc: any
+  showDlgPreview = false;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -50,6 +62,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
     public globals: Globals,
     private helperService: HelperService,
     private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
+    private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService,
     private danhMucService: DanhMucService,
     private tongHopPhuongAnGiaService: TongHopPhuongAnGiaService,
     private notification: NzNotificationService
@@ -62,7 +75,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
         ngayKy: [null, [Validators.required]],
         ngayHieuLuc: [null, [Validators.required]],
         soToTrinh: [null],
-        soQdCanDc: [null],
+        soQdDc: [null],
         loaiVthh: [null],
         tenLoaiVthh: [null],
         loaiDeXuat: [null],
@@ -84,7 +97,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
     this.userInfo = this.userService.getUserLogin();
     this.loadDsNam();
     this.maQd = "/QĐ-TCDT"
-    this.getDataDetail(this.idInput)
+    await this.getDataDetail(this.idInput)
     this.spinner.hide();
   }
 
@@ -110,10 +123,12 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
         ghiChu: data.noiDung,
         soToTrinh: data.soToTrinh,
         loaiDeXuat: data.loaiDeXuat,
+        soQdDc  :data.soQdDc
       });
       this.dataTable = data.thongTinGiaLt;
       this.buildTreePagCt();
       this.fileDinhKem = data.fileDinhKems;
+      this.canCuPhapLys = data.canCuPhapLys;
     }
   }
 
@@ -130,7 +145,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
     this.onClose.emit();
   }
 
-  banHanh() {
+  async banHanh() {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: "Xác nhận",
@@ -143,7 +158,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            id: this.idInput,
+            id: this.formData.value.id,
             lyDoTuChoi: null,
             trangThai: STATUS.BAN_HANH
           };
@@ -189,11 +204,25 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
       return;
     }
     this.convertTreeToList();
+    if (this.dataTable && this.dataTable.length > 0) {
+      if (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03') {
+        this.dataTable.forEach(item => {
+          if (item.vat) {
+            if (this.formData.value.loaiDeXuat == '00') {
+              item.giaQdTcdtVat = item.giaQdTcdt + item.giaQdTcdt * item.vat
+            } else {
+              item.giaQdDcTcdtVat = item.giaQdDcTcdt + item.giaQdDcTcdt * item.vat
+            }
+          }
+        })
+      }
+    }
     let body = this.formData.value;
     body.soQd = body.soQd + this.maQd;
     body.pagType = this.pagType;
     body.thongTinGiaLt = this.dataTable;
     body.fileDinhKemReq = this.fileDinhKem;
+    body.canCuPhapLys = this.canCuPhapLys;
     let res;
     if (this.idInput > 0) {
       res = await this.quyetDinhGiaTCDTNNService.update(body);
@@ -201,6 +230,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
       res = await this.quyetDinhGiaTCDTNNService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
+      this.idInput = res.data.id;
       if (isBanHanh) {
         this.formData.patchValue({
           id: res.data.id,
@@ -233,10 +263,11 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
             tenDvi: value && value[0] && value[0].tenDvi ? value[0].tenDvi : null,
             soDx: value && value[0] && value[0].soDx ? value[0].soDx : null,
             children: value,
-            apDungTatCa: value && value[0] && value[0].apDungTatCa ? value[0].apDungTatCa : null,
-            vat: value && value[0] && value[0].vat ? value[0].vat : null,
-            giaQdBtc: value && value[0] && value[0].giaQdBtc ? value[0].giaQdBtc : null,
-            giaQdTcdt: value && value[0] && value[0].giaQdTcdt ? value[0].giaQdTcdt : null,
+            apDungTatCa : value && value[0] && value[0].apDungTatCa ? value[0].apDungTatCa : null,
+            vat : value && value[0] && value[0].vat ? value[0].vat : null,
+            giaQdBtc : value && value[0] && value[0].giaQdBtc ? value[0].giaQdBtc : null,
+            giaQdTcdt : value && value[0] && value[0].giaQdTcdt ? value[0].giaQdTcdt : null,
+            giaQdDcTcdt : value && value[0] && value[0].giaQdDcTcdt ? value[0].giaQdDcTcdt : null,
           };
         }).value();
     }
@@ -250,9 +281,10 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
         if (item.children && item.children.length > 0) {
           item.children.forEach(child => {
             if (child.apDungTatCa) {
-              child.giaQdTcdt = item.giaQdTcdt;
-              if (child.vat && (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03')) {
-                child.giaQdTcdtVat = child.giaQdTcdt + child.giaQdTcdt * child.vat
+              if (this.formData.value.loaiDeXuat == '00') {
+                child.giaQdTcdt = item.giaQdTcdt;
+              } else {
+                child.giaQdDcTcdt = item.giaQdDcTcdt;
               }
             }
             this.dataTable.push(child);
@@ -290,14 +322,25 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
         nzComponentParams: {
           type: this.type,
           namKeHoach: this.formData.value.namKeHoach,
-          pagType: this.pagType,
+          pagType : this.pagType,
         },
       });
       modalQD.afterClose.subscribe((data) => {
         if (data) {
           let chiTietToTrinh = data.data;
-          if (data.formData && data.formData.loaiQd == '00') {
             if (chiTietToTrinh) {
+              this.dataTable = chiTietToTrinh && chiTietToTrinh.pagChiTiets ? chiTietToTrinh.pagChiTiets : [];
+              const uniqueSoDeXuat = new Set<string>();
+              for (const record of this.dataTable) {
+                record.giaQdTcdt =  record.giaQdTcdtCu;
+                record.giaQdTcdtVat =  record.giaQdTcdtCuVat;
+                // Sử dụng trường "type" làm key trong Set để kiểm tra sự trùng lặp
+                if (!uniqueSoDeXuat.has(record.soQdTcdt)) {
+                  // Nếu trường "type" chưa tồn tại trong Set, thêm giá trị "soDeXuat" vào Set
+                  uniqueSoDeXuat.add(record.soQdTcdt ? record.soQdTcdt.toString() : "");
+                }
+              }
+              const uniqueSoDeXuatArray = Array.from(uniqueSoDeXuat);
               this.formData.patchValue({
                 loaiDeXuat: data.formData.loaiQd,
                 loaiVthh: chiTietToTrinh.loaiVthh ? chiTietToTrinh.loaiVthh : null,
@@ -308,55 +351,102 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
                 tenLoaiGia: chiTietToTrinh.tenLoaiGia ? chiTietToTrinh.tenLoaiGia : null,
                 soToTrinh: chiTietToTrinh.soToTrinh ? chiTietToTrinh.soToTrinh : null,
                 tchuanCluong: chiTietToTrinh.tchuanCluong ? chiTietToTrinh.tchuanCluong : null,
+                soQdDc : uniqueSoDeXuatArray && data.formData?.loaiQd == '01' ? uniqueSoDeXuatArray.join(', ') : ""
               })
               this.dataTable = chiTietToTrinh && chiTietToTrinh.pagChiTiets ? chiTietToTrinh.pagChiTiets : [];
             }
             this.buildTreePagCt();
-          } else {
-            let thRes = data.listDx;
-            let body = {
-              namTongHop: this.formData.value.namKeHoach,
-              loaiVthh: data.formData.loaiVthh ? data.formData.loaiVthh : null,
-              cloaiVthh: data.formData.cloaiVthh ? data.formData.cloaiVthh : null,
-              loaiGia: data.formData.loaiGia ? data.formData.loaiGia : null,
-              listIdPag: thRes && thRes.length > 0 ? thRes.map(item => item.id) : [],
-              loai: "01"
-            }
-            this.tongHopData(body);
-          }
         }
       });
     }
   }
 
-  async tongHopData(body) {
+  async previewQdGia() {
     try {
       this.spinner.show();
-      let res = await this.tongHopPhuongAnGiaService.tongHop(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        let pagTh = res.data;
-        if (pagTh) {
-          this.formData.patchValue({
-            loaiVthh: pagTh.loaiVthh ? pagTh.loaiVthh : null,
-            cloaiVthh: pagTh.cloaiVthh ? pagTh.cloaiVthh : null,
-            tenLoaiVthh: pagTh.tenLoaiVthh ? pagTh.tenLoaiVthh : null,
-            tenCloaiVthh: pagTh.tenCloaiVthh ? pagTh.tenCloaiVthh : null,
-            loaiGia: pagTh.loaiGia ? pagTh.loaiGia : null,
-            tenLoaiGia: pagTh.tenLoaiGia ? pagTh.tenLoaiGia : null
+      let arr = [];
+      this.dataTableView.forEach((item, index) => {
+        if (item.children && item.children.length > 0) {
+          let itemClonePr = cloneDeep(item);
+          itemClonePr.giaQdTcdt = null;
+          itemClonePr.giaQdDcTcdt = null;
+          itemClonePr.stt = index + 1;
+          arr.push(itemClonePr)
+          item.children.forEach(child => {
+            let itemCloneChild = cloneDeep(child);
+            itemCloneChild.tenDvi = "";
+            arr.push(itemCloneChild);
           })
-          this.dataTable = res.data?.pagChiTiets;
-          this.buildTreePagCt();
         }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-      this.spinner.hide();
+      });
+      let body = cloneDeep(this.formData.value);
+      body.typeFile = "pdf";
+      body.trangThai = "01";
+      body.listDto = arr;
+      body.pagType = this.pagType;
+      body.type = this.type;
+      body.ngayHieuLuc = this.formData.value.ngayHieuLuc ? dayjs(this.formData.value.ngayHieuLuc).format("DD/MM/YYYY") : "";
+      await this.quyetDinhGiaCuaBtcService.previewQdGia(body).then(async s => {
+        this.pdfBlob = s;
+        this.pdfSrc = await new Response(s).arrayBuffer();
+      });
+      this.showDlgPreview = true;
     } catch (e) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      console.log(e);
     } finally {
-      await this.spinner.hide();
+      this.spinner.hide();
     }
   }
+
+  async downloadExcel() {
+    try {
+      this.spinner.show();
+      let arr = [];
+      this.dataTableView.forEach(item => {
+        if (item.children && item.children.length > 0) {
+          item.children.forEach(child => {
+            child.loai = "00";
+            arr.push(child);
+          })
+        }
+      });
+      let body = cloneDeep(this.formData.value);
+      body.typeFile = "xlsx";
+      body.trangThai = "01";
+      body.listDto = arr;
+      body.pagType = this.pagType;
+      body.type = this.type;
+      body.ngayHieuLuc = this.formData.value.ngayHieuLuc ? dayjs(this.formData.value.ngayHieuLuc).format("DD/MM/YYYY") : "";
+      await this.quyetDinhGiaCuaBtcService.previewQdGia(body).then(async s => {
+        this.excelBlob = s;
+        this.excelSrc = await new Response(s).arrayBuffer();
+        saveAs(this.excelBlob, "quyet_dinh_gia_tcdtnn.xlsx");
+      });
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  async downloadPdf() {
+    saveAs(this.pdfBlob, 'quyet_dinh_gia_tcdtnn.pdf');
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+
+  printPreview() {
+    const blobUrl = URL.createObjectURL(this.pdfBlob);
+    printJS({
+      printable: blobUrl,
+      type: 'pdf',
+      base64: false
+    })
+  }
+
 
 
 

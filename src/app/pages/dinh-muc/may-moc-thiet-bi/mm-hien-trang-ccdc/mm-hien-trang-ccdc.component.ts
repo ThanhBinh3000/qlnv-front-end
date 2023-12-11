@@ -61,6 +61,9 @@ export class MmHienTrangCcdcComponent extends Base2Component implements OnInit {
   }
 
   async searchData() {
+    this.formData.patchValue({
+      maDvi : this.userInfo.MA_DVI
+    })
     await this.search();
     if (this.dataTable && this.dataTable.length >0) {
       this.dataTable.forEach(item => {
@@ -179,6 +182,15 @@ export class MmHienTrangCcdcComponent extends Base2Component implements OnInit {
         }
       },
     });
+  }
+  async changePageIndex(event) {
+    this.page = event;
+    await this.searchData();
+  }
+
+  async changePageSize(event) {
+    this.pageSize = event;
+    await this.searchData();
   }
 }
 

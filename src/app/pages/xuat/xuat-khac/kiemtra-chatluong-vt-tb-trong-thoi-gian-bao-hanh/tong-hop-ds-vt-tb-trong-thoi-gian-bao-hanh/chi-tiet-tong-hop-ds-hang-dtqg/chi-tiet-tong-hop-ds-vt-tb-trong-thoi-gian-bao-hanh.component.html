@@ -13,7 +13,7 @@
             <nz-form-control>
               <nz-input-group nzAddOnAfter="{{maHauTo}}">
                 <nz-input-number [nzDisabled]="true" [nzMax]="999999999999" [nzMin]="1" [nzSize]="'small'"
-                  [nzPlaceHolder]="'Tự động sinh'" [nzStep]="1" formControlName="maDanhSach">
+                                 [nzPlaceHolder]="'Tự động sinh'" [nzStep]="1" formControlName="maDanhSach">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -28,13 +28,14 @@
           <nz-form-item>
             <nz-form-label>Thời gian tổng hợp</nz-form-label>
             <nz-form-control>
-              <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayTao" [nzDisabled]="true">
+              <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayTao"
+                              [nzDisabled]="true">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nzSpan="24">
-              File đính kèm biên bản lấy mẫu/bàn giao đã ký
+              Tài liệu đính kèm
             </nz-form-label>
           </nz-form-item>
           <nz-form-item>
@@ -64,26 +65,28 @@
         <div nz-col nzSpan="8"><b>Thời gian tổng hợp</b></div>
         <div nz-col nzSpan="16"><span>{{selectedItem.ngayTao|date:globals.dateTimeFormat}}</span></div>
       </div>
-      <div nz-row nzSpan="24" class="mg-t-16 flex-card p-lr16">
-        <!--        <div nz-col nzSpan="8"><b>File đính kèm biên bản lấy mẫu/bàn giao đã ký</b></div>-->
-        <!--        <div nz-col nzSpan="16" *ngIf="selectedItem.fileDinhKems.length>0"><span>{{selectedItem.fileDinhKems[0].fileName}}</span></div>-->
-        <nz-form-item>
-          <nz-form-label [nzNoColon]="true" nzSpan="24">
-            File đính kèm biên bản lấy mẫu/bàn giao đã ký
-          </nz-form-label>
-        </nz-form-item>
-        <nz-form-item>
-          <div class="list-file" nz-col nzSpan="24">
-            <file-list [data]=selectedItem.fileDinhKems [isViewDetail]="isView">
-            </file-list>
-          </div>
-        </nz-form-item>
-      </div>
+<!--      <div nz-row nzSpan="24" class="mg-t-16 flex-card p-lr16">-->
+<!--                <div nz-col nzSpan="8"><b>File đính kèm biên bản lấy mẫu/bàn giao đã ký</b></div>-->
+<!--                <div nz-col nzSpan="16" *ngIf="selectedItem.fileDinhKems.length>0"><span>{{selectedItem.fileDinhKems[0].fileName}}</span></div>-->
+<!--      </div>-->
+        <form nzLayout="vertical" nz-form [formGroup]="formData">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" nzSpan="24">
+              Tài liệu đính kèm
+            </nz-form-label>
+          </nz-form-item>
+          <nz-form-item>
+            <div class="list-file" nz-col nzSpan="24">
+              <file-list [data]=selectedItem.fileDinhKems [isViewDetail]="isView">
+              </file-list>
+            </div>
+          </nz-form-item>
+        </form>
       <div nz-row nzSpan="24" class="mg-t-16 flex-card p-lr16">
         <div nz-col nzSpan="8"></div>
         <div nz-col nzSpan="16"><span style="color: blue">
-            <a (click)="onClickShowDetail()"><b>Xem toàn bộ danh sách hàng cần kiểm tra chất lượng
-                {{selectedItem.maDanhSach}} </b></a></span>
+          <a
+            (click)="onClickShowDetail()"><b>Xem toàn bộ danh sách hàng cần kiểm tra chất lượng {{selectedItem.maDanhSach}} </b></a></span>
         </div>
       </div>
     </ng-container>
@@ -97,60 +100,59 @@
       <div class="d-flex justify-content-center">
         <div style="width: fit-content;border-style: none none dotted none">
           <p style="font-size: 16px;margin: 0px">
-            <strong>{{selectedItem.tenCuc ? selectedItem.tenCuc : selectedItem.tenDvql}}</strong>
-          </p>
+            <strong>{{selectedItem.tenCuc ? selectedItem.tenCuc : selectedItem.tenDvql}}</strong></p>
         </div>
       </div>
 
       <nz-card class="mg-t-16">
         <nz-table #tblData [nzData]="selectedItem.childData" class="nowrap table-chi-tiet" nzBordered>
           <thead>
-            <tr>
-              <th>STT</th>
-              <th>Chi cục DTNN KV</th>
-              <th>Loại hàng hóa</th>
-              <th>Chủng loại</th>
-              <th>Điểm kho</th>
-              <th>Ngăn/lô kho</th>
-              <th>Ngày nhập kho</th>
-              <th>SL tồn</th>
-              <th>ĐVT</th>
-              <th>Ngày đề xuất</th>
-              <th class="text-center">Trạng thái <br> kiểm tra chất lượng</th>
-            </tr>
+          <tr>
+            <th>STT</th>
+            <th>Chi cục DTNN KV</th>
+            <th>Loại hàng hóa</th>
+            <th>Chủng loại</th>
+            <th>Điểm kho</th>
+            <th>Ngăn/lô kho</th>
+            <th>Ngày nhập kho</th>
+            <th>SL tồn</th>
+            <th>ĐVT</th>
+            <th>Ngày đề xuất</th>
+            <th class="text-center">Trạng thái <br> kiểm tra chất lượng</th>
+          </tr>
           </thead>
           <tbody>
 
-            <ng-container *ngFor="let item of tblData.data, let i = index;">
+          <ng-container *ngFor="let item of tblData.data, let i = index;">
+            <tr>
+              <td>{{numberToRoman(i + 1)}}</td>
+              <td>{{item.tenChiCuc}}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <ng-container *ngFor="let lv1 of item.childData,let i1=index">
               <tr>
-                <td>{{numberToRoman(i + 1)}}</td>
-                <td>{{item.tenChiCuc}}</td>
+                <td style="text-align: right;">{{i1 + 1}}</td>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{lv1.tenLoaiVthh}}</td>
+                <td>{{lv1.tenCloaiVthh}}</td>
+                <td>{{lv1.tenDiemKho}}</td>
+                <td>{{lv1.tenLoKho ? lv1.tenLoKho : lv1.tenNganKho}}</td>
+                <td>{{lv1.ngayNhapKho|date:globals.dateFormat}}</td>
+                <td>{{lv1.slHienTai|number:globals.numberFormat}}</td>
+                <td>{{lv1.donViTinh}}</td>
+                <td>{{lv1.ngayDeXuat|date:globals.dateFormat}}</td>
+                <td>{{lv1.tenTrangThaiKtCl}}</td>
               </tr>
-              <ng-container *ngFor="let lv1 of item.childData,let i1=index">
-                <tr>
-                  <td style="text-align: right;">{{i1 + 1}}</td>
-                  <td></td>
-                  <td>{{lv1.tenLoaiVthh}}</td>
-                  <td>{{lv1.tenCloaiVthh}}</td>
-                  <td>{{lv1.tenDiemKho}}</td>
-                  <td>{{lv1.tenLoKho ? lv1.tenLoKho : lv1.tenNganKho}}</td>
-                  <td>{{lv1.ngayNhapKho|date:globals.dateFormat}}</td>
-                  <td>{{lv1.slHienTai|number:globals.numberFormat}}</td>
-                  <td>{{lv1.donViTinh}}</td>
-                  <td>{{lv1.ngayDeXuat|date:globals.dateFormat}}</td>
-                  <td>{{lv1.tenTrangThaiKtCl}}</td>
-                </tr>
-              </ng-container>
             </ng-container>
+          </ng-container>
           </tbody>
         </nz-table>
       </nz-card>

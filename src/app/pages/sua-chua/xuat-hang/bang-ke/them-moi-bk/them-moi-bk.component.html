@@ -283,8 +283,13 @@
             <ng-container *ngFor="let item of dataTable , let i = index">
               <tr>
                 <td>{{ i+1 }}</td>
-                <td>{{ item.soSerial }}</td>
-                <td>{{ item.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
+                <td>
+                  <input [(ngModel)]="item.soSerial" />
+                </td>
+                <td>
+                  <nz-input-number [nzSize]="'small'" [(ngModel)]="item.soLuong" [nzFormatter]="globals.formatter"
+                                   [nzParser]="globals.parser"></nz-input-number>
+                </td>
                 <td>
                   <a *ngIf="!disabled()" (click)="deleteRow(i)">
                     <i class="fa fa-trash-o do"></i>

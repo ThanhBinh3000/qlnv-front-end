@@ -1,90 +1,60 @@
-.file-list {
-    width: 50%;
-    overflow: unset;
-}
-
 ::ng-deep {
-    .header-file {
-        display: flex;
-        gap: 10px;
-    }
+  .ant-checkbox-group {
+    display: inline-grid;
+    grid-template-columns: auto auto auto;
+  }
 
-    .header-file,
-    .body-file {
-        .ant-input-group-addon {
-            position: relative;
+  .ant-checkbox-group.grid-1 {
+    display: grid;
+    grid-template-columns: 1fr
+  }
 
-            .input-file {
-                left: 0;
-                position: absolute;
-                width: 100%;
-                opacity: 0;
-                top: -2px;
-            }
-        }
+  .ant-radio-group.grid-1 {
+    display: grid;
+    grid-template-columns: 1fr
+  }
+
+  .border-label-left {
+    position: relative;
+    font-size: 16px;
+
+    label {
+      font-size: 16px !important;
+      margin-left: 10px !important;
     }
+  }
+
+  .border-label-left::before {
+    content: "";
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
+    height: 24px;
+    border-left: 2px solid black;
+  }
+
+  .bg-bblm {
+    position: relative
+  }
+
+  .bg-bblm::before {
+    position: absolute;
+    content: "";
+    top: 15px;
+    left: 0;
+    bottom: 0;
+    right: 12px;
+    background-color: rgba(240, 240, 240, 0.7);
+    opacity: 0.7;
+  }
 }
 
-.icon-plus,
-.icon-download,
-.icon-edit,
-.icon-empty {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #F8F9FA;
-    border: 1px solid #C4C9CC;
-    font-size: 12px;
-    cursor: pointer;
-    padding: 0px 7px;
+.rdo-input.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
-.icon-download {
-    padding: 4px 7px;
-}
-
-.icon-xoa {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #FFF3F3;
-    border: 1px solid #FF4D4F;
-    font-size: 12px;
-    cursor: pointer;
-    padding: 0px 8px;
-}
-
-.body-file {
-    margin-top: 10px;
-    display: flex;
-    gap: 10px;
-
-    .ten-file {
-        font-size: 13px;
-        color: #2196F3;
-    }
-
-    .stt-file {
-        width: 10%;
-    }
-
-    .content-text {
-        width: 51%;
-    }
-
-    .content-data {
-        width: 91%;
-    }
-
-    .name-file {
-        width: 50%;
-    }
-}
-
-::ng-deep {
-    .list-file {
-        .ant-input-group-addon:last-child {
-            padding: 0px 8px !important;
-        }
-    }
+.rdo-input .ant-form-item {
+  padding-top: 10px;
 }

@@ -28,6 +28,9 @@ import { Globals } from 'src/app/shared/globals';
 import { Ct1sTonghop } from './../../../../../models/TongHopDeNghiCapVon';
 import { STATUS } from '../../../../../constants/status';
 import { AMOUNT_NO_DECIMAL } from '../../../../../Utility/utils';
+import {PREVIEW} from "../../../../../constants/fileType";
+import printJS from "print-js";
+import {saveAs} from 'file-saver';
 
 @Component({
   selector: 'app-thong-tin-tong-hop',
@@ -82,6 +85,13 @@ export class ThongTinTongHopComponent implements OnInit {
   listLoaiHangHoa: any[] = [];
   listChungLoaiHangHoa: any[] = [];
   listLoaiChiPhi: any[] = [];
+
+  templateName : string = 'tong-hop-tinh-hinh-cap-von-bo-nganh';
+  pdfSrc: any;
+  wordSrc: any;
+  excelSrc: any;
+  printSrc: any;
+  showDlgPreview = false;
 
   constructor(
     private modal: NzModalService,
@@ -533,7 +543,7 @@ export class ThongTinTongHopComponent implements OnInit {
     this.sortTableId('ct2s');
     let item = cloneDeep(this.create);
     item.stt = this.rowEdit.ct2s.length + 1;
-    item.tenLoaiChiPhi = this.listLoaiChiPhi.find(chiphi => chiphi.ma == item.loaiChiPhi)?.giaTri;
+    item.tenLoaiChiPhi = this.listLoaiChiPhi.find(chiphi => chiphi.ma ==item.loaiChiPhi)?.giaTri;
     this.rowEdit.ct2s = [
       ...this.rowEdit.ct2s,
       item,
@@ -708,5 +718,39 @@ export class ThongTinTongHopComponent implements OnInit {
     } else {
       return 0;
     }
+  }
+
+  async preview() {
+    this.spinner.show();
+    await this.tongHopDeNghiCapVonService.preview({
+      tenBaoCao: this.templateName+ '.docx',
+      id : this.idInput
+    }).then(async res => {
+      if (res.data) {
+        this.printSrc = res.data.pdfSrc;
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
+      }
+    });
+    this.spinner.hide();
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, this.templateName + '.pdf');
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, this.templateName + '.docx');
+  }
+
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true });
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
   }
 }

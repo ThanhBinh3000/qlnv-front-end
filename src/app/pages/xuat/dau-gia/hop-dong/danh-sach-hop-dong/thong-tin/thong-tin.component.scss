@@ -1,13 +1,11 @@
-::ng-deep {
+::ng-deep{
   .hd-custom-label {
     margin-top: -20px;
-
-    .ant-form-item-label {
+    .ant-form-item-label{
       padding-top: 0 !important;
     }
   }
-
-  .hidden-label>label {
+  .hidden-label >label{
     opacity: 0;
     visibility: hidden;
   }

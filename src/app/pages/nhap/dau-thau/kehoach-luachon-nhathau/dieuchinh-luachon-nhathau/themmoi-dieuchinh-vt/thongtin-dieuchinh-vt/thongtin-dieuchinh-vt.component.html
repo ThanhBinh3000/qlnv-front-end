@@ -5,9 +5,10 @@
         <div nz-row [nzGutter]="24">
           <div nz-col [nzSpan]="12">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true" nzRequired> Tên dự án</nz-form-label>
+              <nz-form-label [nzNoColon]="true" nzRequired> Tên dự án/dự toán</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <input nz-input formControlName="tenDuAn" [readonly]="isView" />
+                <input nz-input formControlName="tenDuAn"
+                       [readonly]="isView" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -34,12 +35,12 @@
           </div>
           <div nz-col [nzSpan]="6">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư (tỷ đồng)
+              <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư/dự toán (tỷ đồng)
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-number formControlName="tongMucDtDx" [nzMin]="0" [nzDisabled]="isView"
-                  [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser">
+                                 [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'"
+                                 [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                 </nz-input-number>
               </nz-form-control>
             </nz-form-item>
@@ -55,9 +56,10 @@
           <div nz-col [nzSpan]="6">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Thời gian thực hiện dự án (ngày)</nz-form-label>
-              <nz-form-control nz-col [nzSpan]="24">
+              <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                 <nz-input-number formControlName="tgianThien" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-                  [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isView">
+                                 [nzStep]="1" [nzSize]="'small'"
+                                 [nzDisabled]="isView">
                 </nz-input-number>
               </nz-form-control>
             </nz-form-item>
@@ -92,7 +94,8 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Hình thức lựa chọn nhà thầu</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-select formControlName="hthucLcnt" [nzDisabled]="isView">
+                <nz-select formControlName="hthucLcnt"
+                           [nzDisabled]="isView">
                   <nz-option *ngFor="let p of listHinhThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                   </nz-option>
                 </nz-select>
@@ -103,7 +106,8 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Phương thức lựa chọn nhà thầu</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-select formControlName="pthucLcnt" [nzDisabled]="isView">
+                <nz-select formControlName="pthucLcnt"
+                           [nzDisabled]="isView">
                   <nz-option *ngFor="let p of listPhuongThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                   </nz-option>
                 </nz-select>
@@ -119,14 +123,16 @@
               <nz-form-control [nzErrorTip]="error">
                 <div nz-row [nzGutter]="24">
                   <div nz-col nzSpan="12">
-                    <nz-select formControlName="quy" nzAllowClear [nzDisabled]="true">
+                    <nz-select formControlName="quy" nzAllowClear
+                               [nzDisabled]="true">
                       <nz-option *ngFor="let p of listQuy" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                       </nz-option>
                     </nz-select>
                   </div>
                   <div nz-col nzSpan="12">
                     <nz-date-picker formControlName="tgianBdauTchuc" nzFormat="dd/MM/yyyy"
-                      [nzDisabledDate]="disabledDate" nzAllowClear [nzDisabled]="isView">
+                                    [nzDisabledDate]="disabledDate" nzAllowClear
+                                    [nzDisabled]="isView">
                     </nz-date-picker>
                   </div>
                 </div>
@@ -137,7 +143,8 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Loại hợp đồng</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-select formControlName="loaiHdong" [nzDisabled]="isView">
+                <nz-select formControlName="loaiHdong"
+                           [nzDisabled]="isView">
                   <nz-option *ngFor="let p of listLoaiHopDong" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                   </nz-option>
                 </nz-select>
@@ -149,7 +156,8 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Thời gian thực hiện hợp đồng (ngày)</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24">
                 <nz-input-number formControlName="tgianThienHd" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-                  [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isView">
+                                 [nzStep]="1" [nzSize]="'small'"
+                                 [nzDisabled]="isView">
                 </nz-input-number>
               </nz-form-control>
             </nz-form-item>
@@ -209,126 +217,123 @@
     <nz-collapse-panel [nzHeader]="titleDx" [nzActive]="true" [nzExtra]="themMoiGt">
       <nz-table [nzData]="listOfData" class="nowrap pd-10" nzBordered [nzScroll]="{ x: '1000px' }">
         <thead>
-          <tr>
-            <th class="text-center" nzWidth="40px" nzLeft></th>
-            <th class="text-center multi-line" nzWidth="100px" nzLeft>Tên gói thầu</th>
-            <th class="text-center multi-line" nzWidth="100px" nzLeft>Chủng loại hàng DTQG</th>
-            <th class="text-center multi-line" nzWidth="100px">Đơn vị tính</th>
-            <th class="text-center multi-line" nzWidth="100px" nzLeft>Cục DTNN KV</th>
-            <th class="text-center multi-line" nzWidth="100px">Chỉ tiêu kế hoạch<br />được giao</th>
-            <th class="text-center multi-line" nzWidth="100px">Số đã thực hiện</th>
-            <th class="text-center multi-line" nzWidth="100px">Số lượng trình phê duyệt</th>
-            <th class="text-center multi-line" nzWidth="130px">Đơn giá cụ thể<br /> có VAT được duyệt (đ)</th>
-            <th class="text-center multi-line" nzWidth="180px">Thành tiền theo đơn giá cụ thể<br /> có VAT được duyệt
-              (đ)</th>
-            <th class="text-center multi-line" nzWidth="100px">Số còn lại chưa thực hiện</th>
-            <th class="text-center multi-line" nzWidth="100px" *ngIf="!isView">Hành động</th>
-          </tr>
+        <tr>
+          <th class="text-center" nzWidth="40px" nzLeft></th>
+          <th class="text-center multi-line" nzWidth="100px"  nzLeft>Tên gói thầu</th>
+          <th class="text-center multi-line" nzWidth="100px"  nzLeft>Chủng loại hàng DTQG</th>
+          <th class="text-center multi-line" nzWidth="100px"  >Đơn vị tính</th>
+          <th class="text-center multi-line" nzWidth="100px"  nzLeft>Cục DTNN KV</th>
+          <th class="text-center multi-line" nzWidth="100px"  >Chỉ tiêu kế hoạch<br/>được giao</th>
+          <th class="text-center multi-line" nzWidth="100px"  >Số đã thực hiện</th>
+          <th class="text-center multi-line" nzWidth="100px"  >Số lượng trình phê duyệt</th>
+          <th class="text-center multi-line" nzWidth="130px"  >Đơn giá cụ thể<br/> có VAT được duyệt (đ)</th>
+          <th class="text-center multi-line" nzWidth="180px"  >Thành tiền theo đơn giá cụ thể<br/> có VAT được duyệt (đ)</th>
+          <th class="text-center multi-line" nzWidth="100px"  >Số còn lại chưa thực hiện</th>
+          <th class="text-center multi-line" nzWidth="100px"  *ngIf="!isView">Hành động</th>
+        </tr>
         </thead>
         <tbody>
-          <ng-container *ngIf="isCache;else quyetDinh">
-            <ng-container *ngFor="let item of listOfDataCache , let i = index">
-              <tr>
-                <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)" nzLeft></td>
-                <td nzLeft class="multi-line">{{item.goiThau}}</td>
-                <td nzLeft class="multi-line">{{item.tenCloaiVthh}}</td>
-                <td class="text-center">{{item.dviTinh}}</td>
-                <td nzLeft></td>
-                <td></td>
-                <td></td>
-                <td class="text-right blue-text bold-700">{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-right bold-700">{{item.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                <td></td>
-                <td *ngIf="!isView">
-                  <a (click)="themMoiGoiThau($event, item,i)">
-                    <i class="fa fa-pencil" title="Sửa"></i>
-                  </a>
-                  <a (click)="deleteRow(i)">
-                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                  </a>
-                </td>
-              </tr>
-              <ng-container *ngIf="expandSet.has(i)">
-                <ng-container *ngFor="let cuc of item.children, let y = index">
-                  <tr>
-                    <td nzLeft></td>
-                    <td nzLeft></td>
-                    <td class="text-center">{{item.dviTinh}}</td>
-                    <td nzLeft></td>
-                    <td nzLeft class="multi-line">{{cuc.tenDvi}}</td>
-                    <td class="text-right red-text">{{cuc.soLuongTheoChiTieu | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td class="text-right red-text">{{cuc.soLuongDaMua | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td class="text-right blue-text">{{cuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td class="text-right">{{cuc.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td class="text-right">{{cuc.soLuongTheoChiTieu - item.soLuongDaMua | number : '1.0-1' : 'vi_VN'}}
-                    </td>
-                    <td class="text-right" *ngIf="!isView"></td>
-                  </tr>
-                </ng-container>
+        <ng-container *ngIf="isCache;else quyetDinh">
+          <ng-container *ngFor="let item of listOfDataCache , let i = index">
+            <tr>
+              <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)" nzLeft></td>
+              <td nzLeft class="multi-line">{{item.goiThau}}</td>
+              <td nzLeft class="multi-line">{{item.tenCloaiVthh}}</td>
+              <td class="text-center">{{item.dviTinh}}</td>
+              <td nzLeft></td>
+              <td></td>
+              <td></td>
+              <td class="text-right blue-text bold-700">{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+              <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+              <td class="text-right bold-700">{{item.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+              <td></td>
+              <td *ngIf="!isView">
+                <a (click)="themMoiGoiThau($event, item,i)">
+                  <i class="fa fa-pencil" title="Sửa"></i>
+                </a>
+                <a (click)="deleteRow(i)">
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                </a>
+              </td>
+            </tr>
+            <ng-container *ngIf="expandSet.has(i)">
+              <ng-container *ngFor="let cuc of item.children, let y = index">
+                <tr>
+                  <td nzLeft></td>
+                  <td nzLeft></td>
+                  <td class="text-center">{{item.dviTinh}}</td>
+                  <td nzLeft></td>
+                  <td nzLeft class="multi-line">{{cuc.tenDvi}}</td>
+                  <td class="text-right red-text">{{cuc.soLuongTheoChiTieu | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td class="text-right red-text">{{cuc.soLuongDaMua | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td class="text-right blue-text">{{cuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td class="text-right">{{cuc.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td class="text-right">{{cuc.soLuongTheoChiTieu - item.soLuongDaMua | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td class="text-right" *ngIf="!isView"></td>
+                </tr>
               </ng-container>
             </ng-container>
           </ng-container>
-          <ng-template #quyetDinh>
-            <ng-container *ngFor="let item of listOfData , let i = index">
-              <tr>
-                <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)" nzLeft></td>
-                <td nzLeft class="multi-line">{{item.goiThau}}</td>
-                <td nzLeft class="multi-line">{{item.tenCloaiVthh}}</td>
-                <td class="text-center">{{item.dviTinh}}</td>
-                <td nzLeft></td>
-                <td></td>
-                <td></td>
-                <td class="text-right blue-text bold-700">{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-right bold-700">{{item.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                <td></td>
-                <td *ngIf="!isView">
-                  <a (click)="themMoiGoiThau($event, item,i)">
-                    <i class="fa fa-pencil" title="Sửa"></i>
-                  </a>
-                  <a (click)="deleteRow(i)">
-                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                  </a>
-                </td>
-              </tr>
-              <ng-container *ngIf="expandSet.has(i)">
-                <ng-container *ngFor="let cuc of item.children, let y = index">
-                  <tr>
-                    <td nzLeft></td>
-                    <td nzLeft></td>
-                    <td nzLeft></td>
-                    <td class="text-center">{{item.dviTinh}}</td>
-                    <td nzLeft class="multi-line">{{cuc.tenDvi}}</td>
-                    <td class="text-right red-text">{{cuc.soLuongTheoChiTieu | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td class="text-right red-text">{{cuc.soLuongDaMua | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td class="text-right blue-text">{{cuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td class="text-right">{{cuc.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td class="text-right">{{cuc.soLuongTheoChiTieu - item.soLuongDaMua | number : '1.0-1' : 'vi_VN'}}
-                    </td>
-                    <td class="text-right" *ngIf="!isView"></td>
-                  </tr>
-                </ng-container>
+        </ng-container>
+        <ng-template #quyetDinh >
+          <ng-container *ngFor="let item of listOfData , let i = index">
+            <tr>
+              <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)" nzLeft></td>
+              <td nzLeft class="multi-line">{{item.goiThau}}</td>
+              <td nzLeft class="multi-line">{{item.tenCloaiVthh}}</td>
+              <td class="text-center">{{item.dviTinh}}</td>
+              <td nzLeft></td>
+              <td></td>
+              <td></td>
+              <td class="text-right blue-text bold-700">{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+              <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+              <td class="text-right bold-700">{{item.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+              <td></td>
+              <td *ngIf="!isView">
+                <a (click)="themMoiGoiThau($event, item,i)">
+                  <i class="fa fa-pencil" title="Sửa"></i>
+                </a>
+                <a (click)="deleteRow(i)">
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                </a>
+              </td>
+            </tr>
+            <ng-container *ngIf="expandSet.has(i)">
+              <ng-container *ngFor="let cuc of item.children, let y = index">
+                <tr>
+                  <td nzLeft></td>
+                  <td nzLeft></td>
+                  <td nzLeft></td>
+                  <td class="text-center">{{item.dviTinh}}</td>
+                  <td nzLeft class="multi-line">{{cuc.tenDvi}}</td>
+                  <td class="text-right red-text">{{cuc.soLuongTheoChiTieu | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td class="text-right red-text">{{cuc.soLuongDaMua | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td class="text-right blue-text">{{cuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td class="text-right">{{cuc.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td class="text-right">{{cuc.soLuongTheoChiTieu - item.soLuongDaMua | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td class="text-right" *ngIf="!isView"></td>
+                </tr>
               </ng-container>
             </ng-container>
-          </ng-template>
-          <tr *ngIf="listOfData.length > 0">
-            <td nzLeft></td>
-            <td nzLeft></td>
-            <td nzLeft></td>
-            <td></td>
-            <td nzLeft class="first-last-row-table background-last-row text-right blue-text">Tổng</td>
-            <td></td>
-            <td></td>
-            <td class="background-last-row text-right blue-text">{{ calcTongSl() | number : '1.0-1' : 'vi_VN' }}</td>
-            <td></td>
-            <td class="background-last-row text-right blue-text">{{ calcTongThanhTien() | number : '1.0-1' :
-              'vi_VN'}}</td>
-            <td></td>
-            <td *ngIf="!isView"></td>
-          </tr>
+          </ng-container>
+        </ng-template>
+        <tr *ngIf="listOfData.length > 0">
+          <td nzLeft></td>
+          <td nzLeft></td>
+          <td nzLeft></td>
+          <td></td>
+          <td nzLeft class="first-last-row-table background-last-row text-right blue-text">Tổng</td>
+          <td></td>
+          <td></td>
+          <td class="background-last-row text-right blue-text">{{ calcTongSl() | number : '1.0-1' : 'vi_VN' }}</td>
+          <td></td>
+          <td class="background-last-row text-right blue-text">{{ calcTongThanhTien() | number : '1.0-1' :
+            'vi_VN'}}</td>
+          <td></td>
+          <td *ngIf="!isView"></td>
+        </tr>
         </tbody>
       </nz-table>
     </nz-collapse-panel>

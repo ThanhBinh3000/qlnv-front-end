@@ -48,6 +48,15 @@
         </nz-input-group>
       </div>
       <div nz-col nzSpan="6">
+        <label class="search__label">Nhóm đinh mức</label>
+        <nz-input-group>
+          <nz-select nzAllowClear [(ngModel)]="searchFilter.nhomDinhMuc">
+            <nz-option *ngFor="let p of listNhomDinhMuc" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+            </nz-option>
+          </nz-select>
+        </nz-input-group>
+      </div>
+      <div nz-col nzSpan="6">
         <label class="search__label">Loại hình bảo quản</label>
         <nz-input-group>
           <nz-select nzAllowClear [(ngModel)]="searchFilter.loaiHinhBq">
@@ -80,11 +89,11 @@
   <div class="group-button">
     <h3 class="label_dm">DANH SÁCH ĐỊNH MỨC PHÍ NHẬP, XUẤT, BẢO QUẢN</h3>
     <div class="buttons">
-      <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
+      <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()"*ngIf="userService.isAccessPermisson('QTDM_DM_DMPHI_NXBQ_XOA')">
         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
         <span>Xóa</span>
       </button>
-      <button type="button" class="btn btn-sub" (click)="export()">
+      <button type="button" class="btn btn-sub" (click)="export()" *ngIf="userService.isAccessPermisson('QTDM_DM_DMPHI_NXBQ_EXP')">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
@@ -92,26 +101,27 @@
   </div>
   <nz-card class="mt-2px flex-card data-table card-border-content table-card">
     <form nz-form nzLayout="vertical" [formGroup]="formData">
-      <nz-table #basicTable nzBordered class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
-                [nzShowPagination]="false" nzBordered>
+      <nz-table  class="wrap"  [nzFrontPagination]="false"
+                [nzShowPagination]="false" nzBordered  [nzScroll]="dataTable && dataTable.length > 0 ? { x: '2500px' } : null">
         <thead>
         <tr>
-          <th class="text-center" style="width: 2%;">
+          <th class="text-center" nzWidth="45px">
             <label nz-checkbox [ngModelOptions]="{standalone: true}" [(ngModel)]="allChecked"
                    (ngModelChange)="updateAllChecked()"
                    [nzIndeterminate]="indeterminate"></label>
           </th>
-          <th class="text-center" style="width: 2%;">STT</th>
-          <th class="text-center" style="width: 8%;">Mã định mức</th>
-          <th class="text-center" style="width: 15%;">Tên định mức</th>
-          <th class="text-center" style="width: 17%;">Loại hàng hóa</th>
-          <th class="text-center" style="width: 17%;">Chủng loại hàng hóa</th>
-          <th class="text-center" style="width: 10%;">Loại định mức</th>
-          <th class="text-center" style="width: 13%;">Loại hình bảo quản</th>
-          <th class="text-center" style="width: 13%;">Hình thức bảo quản</th>
-          <th class="text-center" style="width: 8%;">Đơn vị tính</th>
-          <th class="text-center" style="width: 8%;">Trạng thái</th>
-          <th class="text-center" style="width: 8%;">Hành động</th>
+          <th class="text-center" nzWidth="45px">STT</th>
+          <th class="text-center" nzWidth="150px"  >Mã định mức</th>
+          <th class="text-center" >Tên định mức</th>
+          <th class="text-center" nzWidth="200px" >Nhóm định mức</th>
+          <th class="text-center" nzWidth="400px" >Loại hàng hóa</th>
+          <th class="text-center" nzWidth="400px" >Chủng loại hàng hóa</th>
+          <th class="text-center " nzWidth="200px" >Loại định mức</th>
+          <th class="text-center" nzWidth="200px" >Loại hình bảo quản</th>
+          <th class="text-center" nzWidth="200px" >Hình thức bảo quản</th>
+          <th class="text-center" nzWidth="100px" >Đơn vị tính</th>
+          <th class="text-center" nzWidth="100px" >Trạng thái</th>
+          <th class="text-center" nzWidth="120px" nzRight >Hành động</th>
         </tr>
         <tr class="search-table">
           <th></th>
@@ -127,6 +137,16 @@
             <nz-form-control>
               <nz-input-group>
                 <input type="text" nz-input formControlName="tenDinhMuc"/>
+              </nz-input-group>
+            </nz-form-control>
+          </th>
+          <th>
+            <nz-form-control>
+              <nz-input-group>
+                <nz-select nzAllowClear formControlName="nhomDinhMuc">
+                  <nz-option *ngFor="let p of listNhomDinhMuc" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                  </nz-option>
+                </nz-select>
               </nz-input-group>
             </nz-form-control>
           </th>
@@ -197,18 +217,18 @@
               </nz-input-group>
             </nz-form-control>
           </th>
-          <th class="text-left">
-            <a (click)="themmoi()" [ngClass]="{'isDisabled': formData.invalid}">
+          <th class="text-center" nzRight>
+            <a (click)="themmoi()" [ngClass]="{'isDisabled': formData.invalid}" *ngIf="userService.isAccessPermisson('QTDM_DM_DMPHI_NXBQ_THEM')">
               <i class="icon htvbdh_dau-cong"></i>
             </a>
             <a>
-              <i (click)="refresh()" class="icon  htvbdh_nhap-lai1 "></i>
+              <i (click)="refresh()" class="icon  htvbdh_nhap-lai1 " *ngIf="userService.isAccessPermisson('QTDM_DM_DMPHI_NXBQ_THEM')"></i>
             </a>
           </th>
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let data of basicTable.data; let i = index">
+        <tr *ngFor="let data of dataTable; let i = index">
           <ng-container *ngIf="!dataEdit[i].edit; else editTemplate">
             <td width="45px">
               <label nz-checkbox [ngModelOptions]="{standalone: true}" [(ngModel)]="data.checked"
@@ -217,6 +237,7 @@
             <td class="text-center">{{i + 1}}</td>
             <td>{{ data.maDinhMuc }}</td>
             <td>{{ data.tenDinhMuc }}</td>
+            <td>{{ data.tenNhomDinhMuc }}</td>
             <td>{{ data.tenLoaiVthh }}</td>
             <td>{{ data.tencLoaiVthh }}</td>
             <td>{{data.tenLoaiDinhMuc}}</td>
@@ -224,11 +245,11 @@
             <td>{{ data.tenHinhThucBq }}</td>
             <td>{{ data.dviTinh }}</td>
             <td>{{ data.trangThai == '01' ? 'Hoạt động' : 'Không hoạt động'}}</td>
-            <td style="text-align: center;">
-              <a (click)="startEdit(i)">
+            <td style="text-align: center;" nzRight>
+              <a (click)="startEdit(i)" *ngIf="userService.isAccessPermisson('QTDM_DM_DMPHI_NXBQ_THEM')">
                 <i class="table-icon fa fa-pencil"></i>
               </a>
-              <a (click)="xoaItem(data)">
+              <a (click)="xoaItem(data)" *ngIf="userService.isAccessPermisson('QTDM_DM_DMPHI_NXBQ_XOA')">
                 <i class="table-icon fa fa-trash-o do"></i>
               </a>
             </td>
@@ -239,13 +260,22 @@
             <th>
               <nz-input-group>
                 <input [ngModelOptions]="{standalone: true}"
-                       type="text" nz-input [(ngModel)]=dataEdit[i].data.maDinhMuc/>
+                       type="text" nz-input [(ngModel)]=dataEdit[i].data.maDinhMuc>
               </nz-input-group>
             </th>
             <th>
               <nz-input-group>
                 <input [ngModelOptions]="{standalone: true}"
-                       type="text" nz-input [(ngModel)]=dataEdit[i].data.tenDinhMuc/>
+                       type="text" nz-input [(ngModel)]=dataEdit[i].data.tenDinhMuc>
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <nz-select [ngModelOptions]="{standalone: true}" nzAllowClear
+                           [(ngModel)]=dataEdit[i].data.nhomDinhMuc>
+                  <nz-option *ngFor="let p of listNhomDinhMuc" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                  </nz-option>
+                </nz-select>
               </nz-input-group>
             </th>
             <th>
@@ -307,11 +337,11 @@
                 </nz-select>
               </nz-input-group>
             </th>
-            <th style="text-align: center;">
-              <a (click)="themmoi(dataEdit[i].data, data.id)" [ngClass]="{'isDisabled': formDataChinhSua.invalid}">
+            <th style="text-align: center;" nzRight>
+              <a (click)="themmoi(dataEdit[i].data, data.id)" [ngClass]="{'isDisabled': formDataChinhSua.invalid}" *ngIf="userService.isAccessPermisson('QTDM_DM_DMPHI_NXBQ_THEM')">
                 <i class="fa fa-save mr-3"></i>
               </a>
-              <a (click)="huyEdit(i)">
+              <a (click)="huyEdit(i)" *ngIf="userService.isAccessPermisson('QTDM_DM_DMPHI_NXBQ_XOA')">
                 <i class="fa fa-times do mr-3"></i>
               </a>
             </th>

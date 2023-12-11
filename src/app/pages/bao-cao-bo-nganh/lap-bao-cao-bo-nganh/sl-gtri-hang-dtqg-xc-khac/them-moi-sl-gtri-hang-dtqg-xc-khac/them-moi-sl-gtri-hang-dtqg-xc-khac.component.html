@@ -2,11 +2,11 @@
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'status-xanh' : 'status-do'">
+        <span
+          [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'status-xanh' : 'status-do'">
           {{ formData.value.tenTrangThai }}
         </span>
-        <span>BÁO CÁO SỐ LƯỢNG VÀ GIÁ TRỊ HÀNG DTQG XUẤT CẤP CỨU TRỢ, HỖ TRỢ, PHỤC VỤ QUỐC PHÒNG, AN NINH VÀ NHIỆM VỤ
-          KHÁC TRONG KỲ</span>
+        <span>BÁO CÁO SỐ LƯỢNG VÀ GIÁ TRỊ HÀNG DTQG XUẤT CẤP CỨU TRỢ, HỖ TRỢ, PHỤC VỤ QUỐC PHÒNG, AN NINH VÀ NHIỆM VỤ KHÁC TRONG KỲ</span>
       </div>
     </div>
     <div class="btn-group">
@@ -16,14 +16,14 @@
       </button>
       <ng-container>
         <button *ngIf="formData.value.trangThai == STATUS.DU_THAO
-         && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_SLGTHDTQGXCTVT_DUYET')" type="button"
-          class="btn btn-sub xanh-nhat" (click)="guiDuyet(idInput)">
+         && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_SLGTHDTQGXCTVT_DUYET')"
+                type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet(idInput)">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Ban hành</span>
         </button>
         <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && !isView
-         && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_SLGTHDTQGXCTVT_LAP')" type="button"
-          class="btn btn-main" (click)="save()">
+         && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_SLGTHDTQGXCTVT_LAP')"
+                type="button" class="btn btn-main" (click)="save()">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
@@ -131,9 +131,15 @@
     </form>
   </nz-card>
   <div class="group-button">
-    <h3>DANH SÁCH BÁO CÁO SỐ LƯỢNG VÀ GIÁ TRỊ HÀNG DTQG XUẤT CẤP CỨU TRỢ, HỖ TRỢ, PHỤC VỤ QUỐC PHÒNG, AN NINH VÀ NHIỆM
-      VỤ KHÁC TRONG KỲ</h3>
+    <h3>DANH SÁCH BÁO CÁO SỐ LƯỢNG VÀ GIÁ TRỊ HÀNG DTQG XUẤT CẤP CỨU TRỢ, HỖ TRỢ, PHỤC VỤ QUỐC PHÒNG, AN NINH VÀ NHIỆM VỤ KHÁC TRONG KỲ</h3>
     <div class="buttons" *ngIf="!isView">
+      <button
+        type="button" class="btn btn-sub xanh-nhat" (click)="downloadTemplate(templateName)">
+        <i class="icon htvbdh_download2"></i>
+        <span>Tải biểu mẫu import dữ liệu</span>
+      </button>
+      <input type="file" (change)="handleSelectFile($event)"/>
+
       <button type="button" class="btn btn-main" (click)="themMoiDanhMuc()">
         <i class="icon htvbdh_dau-cong"></i>
         <span>Thêm</span>
@@ -141,762 +147,761 @@
     </div>
   </div>
   <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-    <nz-table class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered
-      [nzScroll]="{ x: '1700px' }">
+    <nz-table class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
+              [nzShowPagination]="false" nzBordered [nzScroll]="{ x: '1700px' }">
       <thead>
-        <tr>
-          <th rowSpan="3" class="text-center multi-line" nzLeft nzWidth="60px">STT</th>
-          <th rowSpan="3" class="text-center multi-line" nzLeft nzWidth="200px">Danh mục/<br />Đơn vị bảo quản</th>
-          <th rowSpan="3" class="text-center multi-line" nzLeft nzWidth="150px">Mặt hàng</th>
-          <th rowSpan="3" class="text-center multi-line" nzWidth="100px">Mã số</th>
-          <th rowSpan="3" class="text-center multi-line" nzWidth="100px">ĐVT</th>
-          <th colSpan="17" class="text-center multi-line" nzWidth="100px">Số lượng và giá trị hàng DTQG xuất cấp cứu
-            trợ, hỗ trợ, phục vụ quốc phòng, an ninh và nhiệm vụ khác trong kỳ</th>
-          <th colSpan="17" class="text-center multi-line" nzWidth="100px">Lũy kế từ đầu năm</th>
-          <th rowSpan="3" class="text-center multi-line" nzRight nzWidth="100px" *ngIf="!isView">Hành động</th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-          <th nzWidth="100px" style="display: none"></th>
-        </tr>
-        <tr>
-          <th colSpan="3" class="text-center multi-line">Cứu trợ</th>
-          <th colSpan="3" class="text-center multi-line">Hỗ trợ</th>
-          <th colSpan="3" class="text-center multi-line">Phục vụ<br />quốc phòng</th>
-          <th colSpan="3" class="text-center multi-line">Phục vụ an ninh</th>
-          <th colSpan="3" class="text-center multi-line">Trong trường<br />hợp khác</th>
-          <th colSpan="2" class="text-center multi-line">Tổng</th>
-          <th colSpan="3" class="text-center multi-line">Cứu trợ</th>
-          <th colSpan="3" class="text-center multi-line">Hỗ trợ</th>
-          <th colSpan="3" class="text-center multi-line">Phục vụ<br />quốc phòng</th>
-          <th colSpan="3" class="text-center multi-line">Phục vụ an ninh</th>
-          <th colSpan="3" class="text-center multi-line">Trong trường<br />hợp khác</th>
-          <th colSpan="2" class="text-center multi-line">Tổng</th>
-        </tr>
-        <tr>
-          <th class="text-center multi-line">Số lượng</th>
-          <th class="text-center multi-line">Giá trị<br />(tỷ đồng)</th>
-          <th class="text-center multi-line">Đơn vị nhận</th>
-          <th class="text-center multi-line">Số lượng</th>
-          <th class="text-center multi-line">Giá trị<br />(tỷ đồng)</th>
-          <th class="text-center multi-line">Đơn vị nhận</th>
-          <th class="text-center multi-line">Số lượng</th>
-          <th class="text-center multi-line">Giá trị<br />(tỷ đồng)</th>
-          <th class="text-center multi-line">Đơn vị nhận</th>
-          <th class="text-center multi-line">Số lượng</th>
-          <th class="text-center multi-line">Giá trị<br />(tỷ đồng)</th>
-          <th class="text-center multi-line">Đơn vị nhận</th>
-          <th class="text-center multi-line">Số lượng</th>
-          <th class="text-center multi-line">Giá trị<br />(tỷ đồng)</th>
-          <th class="text-center multi-line">Đơn vị nhận</th>
-          <th class="text-center multi-line">Số lượng</th>
-          <th class="text-center multi-line">Giá trị<br />(tỷ đồng)</th>
-          <th class="text-center multi-line">Số lượng</th>
-          <th class="text-center multi-line">Giá trị<br />(tỷ đồng)</th>
-          <th class="text-center multi-line">Đơn vị nhận</th>
-          <th class="text-center multi-line">Số lượng</th>
-          <th class="text-center multi-line">Giá trị<br />(tỷ đồng)</th>
-          <th class="text-center multi-line">Đơn vị nhận</th>
-          <th class="text-center multi-line">Số lượng</th>
-          <th class="text-center multi-line">Giá trị<br />(tỷ đồng)</th>
-          <th class="text-center multi-line">Đơn vị nhận</th>
-          <th class="text-center multi-line">Số lượng</th>
-          <th class="text-center multi-line">Giá trị<br />(tỷ đồng)</th>
-          <th class="text-center multi-line">Đơn vị nhận</th>
-          <th class="text-center multi-line">Số lượng</th>
-          <th class="text-center multi-line">Giá trị<br />(tỷ đồng)</th>
-          <th class="text-center multi-line">Đơn vị nhận</th>
-          <th class="text-center multi-line">Số lượng</th>
-          <th class="text-center multi-line">Giá trị<br />(tỷ đồng)</th>
-        </tr>
-        <tr class="grey-bg">
-          <th nzLeft></th>
-          <th class="text-center" nzLeft>A</th>
-          <th class="text-center" nzLeft>B</th>
-          <th class="text-center">C</th>
-          <th class="text-center">1</th>
-          <th class="text-center">2</th>
-          <th class="text-center">3</th>
-          <th class="text-center">4</th>
-          <th class="text-center">5</th>
-          <th class="text-center">6</th>
-          <th class="text-center">7</th>
-          <th class="text-center">8</th>
-          <th class="text-center">9</th>
-          <th class="text-center">10</th>
-          <th class="text-center">11</th>
-          <th class="text-center">12</th>
-          <th class="text-center">13</th>
-          <th class="text-center">14</th>
-          <th class="text-center">15</th>
-          <th class="text-center">16</th>
-          <th class="text-center">17</th>
-          <th class="text-center">18</th>
-          <th class="text-center">19</th>
-          <th class="text-center">20</th>
-          <th class="text-center">21</th>
-          <th class="text-center">22</th>
-          <th class="text-center">23</th>
-          <th class="text-center">24</th>
-          <th class="text-center">25</th>
-          <th class="text-center">26</th>
-          <th class="text-center">27</th>
-          <th class="text-center">28</th>
-          <th class="text-center">29</th>
-          <th class="text-center">30</th>
-          <th class="text-center">31</th>
-          <th class="text-center">32</th>
-          <th class="text-center">33</th>
-          <th class="text-center">34</th>
-          <th class="text-center">35</th>
-          <th class="text-center" nzRight *ngIf="!isView"></th>
-        </tr>
+      <tr>
+        <th rowSpan="3" class="text-center multi-line" nzLeft nzWidth="60px">STT</th>
+        <th rowSpan="3" class="text-center multi-line" nzLeft nzWidth="200px">Danh mục/<br/>Đơn vị bảo quản</th>
+        <th rowSpan="3" class="text-center multi-line" nzLeft nzWidth="150px">Mặt hàng</th>
+        <th rowSpan="3" class="text-center multi-line" nzWidth="100px">Mã số</th>
+        <th rowSpan="3" class="text-center multi-line" nzWidth="100px">ĐVT</th>
+        <th colSpan="17" class="text-center multi-line" nzWidth="100px">Số lượng và giá trị hàng DTQG xuất cấp cứu trợ, hỗ trợ, phục vụ quốc phòng, an ninh và nhiệm vụ khác trong kỳ</th>
+        <th colSpan="17" class="text-center multi-line" nzWidth="100px">Lũy kế từ đầu năm</th>
+        <th rowSpan="3" class="text-center multi-line" nzRight nzWidth="100px" *ngIf="!isView">Hành động</th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+        <th nzWidth="100px" style="display: none"></th>
+      </tr>
+      <tr>
+        <th colSpan="3" class="text-center multi-line">Cứu trợ</th>
+        <th colSpan="3" class="text-center multi-line">Hỗ trợ</th>
+        <th colSpan="3" class="text-center multi-line">Phục vụ<br/>quốc phòng</th>
+        <th colSpan="3" class="text-center multi-line">Phục vụ an ninh</th>
+        <th colSpan="3" class="text-center multi-line">Trong trường<br/>hợp khác</th>
+        <th colSpan="2" class="text-center multi-line">Tổng</th>
+        <th colSpan="3" class="text-center multi-line">Cứu trợ</th>
+        <th colSpan="3" class="text-center multi-line">Hỗ trợ</th>
+        <th colSpan="3" class="text-center multi-line">Phục vụ<br/>quốc phòng</th>
+        <th colSpan="3" class="text-center multi-line">Phục vụ an ninh</th>
+        <th colSpan="3" class="text-center multi-line">Trong trường<br/>hợp khác</th>
+        <th colSpan="2" class="text-center multi-line">Tổng</th>
+      </tr>
+      <tr>
+        <th class="text-center multi-line">Số lượng</th>
+        <th class="text-center multi-line">Giá trị<br/>(tỷ đồng)</th>
+        <th class="text-center multi-line">Đơn vị nhận</th>
+        <th class="text-center multi-line">Số lượng</th>
+        <th class="text-center multi-line">Giá trị<br/>(tỷ đồng)</th>
+        <th class="text-center multi-line">Đơn vị nhận</th>
+        <th class="text-center multi-line">Số lượng</th>
+        <th class="text-center multi-line">Giá trị<br/>(tỷ đồng)</th>
+        <th class="text-center multi-line">Đơn vị nhận</th>
+        <th class="text-center multi-line">Số lượng</th>
+        <th class="text-center multi-line">Giá trị<br/>(tỷ đồng)</th>
+        <th class="text-center multi-line">Đơn vị nhận</th>
+        <th class="text-center multi-line">Số lượng</th>
+        <th class="text-center multi-line">Giá trị<br/>(tỷ đồng)</th>
+        <th class="text-center multi-line">Đơn vị nhận</th>
+        <th class="text-center multi-line">Số lượng</th>
+        <th class="text-center multi-line">Giá trị<br/>(tỷ đồng)</th>
+        <th class="text-center multi-line">Số lượng</th>
+        <th class="text-center multi-line">Giá trị<br/>(tỷ đồng)</th>
+        <th class="text-center multi-line">Đơn vị nhận</th>
+        <th class="text-center multi-line">Số lượng</th>
+        <th class="text-center multi-line">Giá trị<br/>(tỷ đồng)</th>
+        <th class="text-center multi-line">Đơn vị nhận</th>
+        <th class="text-center multi-line">Số lượng</th>
+        <th class="text-center multi-line">Giá trị<br/>(tỷ đồng)</th>
+        <th class="text-center multi-line">Đơn vị nhận</th>
+        <th class="text-center multi-line">Số lượng</th>
+        <th class="text-center multi-line">Giá trị<br/>(tỷ đồng)</th>
+        <th class="text-center multi-line">Đơn vị nhận</th>
+        <th class="text-center multi-line">Số lượng</th>
+        <th class="text-center multi-line">Giá trị<br/>(tỷ đồng)</th>
+        <th class="text-center multi-line">Đơn vị nhận</th>
+        <th class="text-center multi-line">Số lượng</th>
+        <th class="text-center multi-line">Giá trị<br/>(tỷ đồng)</th>
+      </tr>
+      <tr class="grey-bg">
+        <th nzLeft></th>
+        <th class="text-center" nzLeft>A</th>
+        <th class="text-center" nzLeft>B</th>
+        <th class="text-center">C</th>
+        <th class="text-center">1</th>
+        <th class="text-center">2</th>
+        <th class="text-center">3</th>
+        <th class="text-center">4</th>
+        <th class="text-center">5</th>
+        <th class="text-center">6</th>
+        <th class="text-center">7</th>
+        <th class="text-center">8</th>
+        <th class="text-center">9</th>
+        <th class="text-center">10</th>
+        <th class="text-center">11</th>
+        <th class="text-center">12</th>
+        <th class="text-center">13</th>
+        <th class="text-center">14</th>
+        <th class="text-center">15</th>
+        <th class="text-center">16</th>
+        <th class="text-center">17</th>
+        <th class="text-center">18</th>
+        <th class="text-center">19</th>
+        <th class="text-center">20</th>
+        <th class="text-center">21</th>
+        <th class="text-center">22</th>
+        <th class="text-center">23</th>
+        <th class="text-center">24</th>
+        <th class="text-center">25</th>
+        <th class="text-center">26</th>
+        <th class="text-center">27</th>
+        <th class="text-center">28</th>
+        <th class="text-center">29</th>
+        <th class="text-center">30</th>
+        <th class="text-center">31</th>
+        <th class="text-center">32</th>
+        <th class="text-center">33</th>
+        <th class="text-center">34</th>
+        <th class="text-center">35</th>
+        <th class="text-center" nzRight *ngIf="!isView"></th>
+      </tr>
       </thead>
       <tbody>
-        <ng-container *ngFor="let data of listDataGroup; let i = index">
+      <ng-container *ngFor="let data of listDataGroup; let i = index">
+        <tr>
+          <ng-container *ngIf="!data.edit; else editTemplateDvi">
+            <td nzLeft class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+            <td nzLeft class="dm-title">{{ data.danhMuc }}</td>
+            <td nzLeft></td>
+            <td class="dm-title">{{ data.maSo }}</td>
+            <td></td>
+            <td></td>
+            <td>{{ data.gtriXuatCuuTro }}</td>
+            <td></td>
+            <td></td>
+            <td>{{ data.gtriXuatHoTro }}</td>
+            <td></td>
+            <td></td>
+            <td>{{ data.gtriXuatPvuQp }}</td>
+            <td></td>
+            <td></td>
+            <td>{{ data.gtriXuatPvuAnNinh }}</td>
+            <td></td>
+            <td></td>
+            <td>{{ data.gtriXuatKhac }}</td>
+            <td></td>
+            <td></td>
+            <td>{{ data.gtriXuatTong }}</td>
+            <td></td>
+            <td>{{ data.gtriLuyKeCuuTro }}</td>
+            <td></td>
+            <td></td>
+            <td>{{ data.gtriLuyKeHoTro }}</td>
+            <td></td>
+            <td></td>
+            <td>{{ data.gtriLuyKePvuQp }}</td>
+            <td></td>
+            <td></td>
+            <td>{{ data.gtriLuyKePvuAnNinh }}</td>
+            <td></td>
+            <td></td>
+            <td>{{ data.gtriLuyKeKhac }}</td>
+            <td></td>
+            <td></td>
+            <td>{{ data.gtriLuyKeTong }}</td>
+            <td nzRight *ngIf="!isView">
+              <a (click)="editRowDvi(i)">
+                <i class=" fa fa-pencil"></i>
+              </a>
+              <a (click)="deleteRowDvi(i)">
+                <i class=" fa fa-trash-o do"></i>
+              </a>
+              <a (click)="themMoiDanhMuc(data.danhMuc)">
+                <i class="fa fa-plus"></i>
+              </a>
+            </td>
+          </ng-container>
+          <ng-template #editTemplateDvi>
+            <td nzLeft class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+            <td nzLeft class="dm-title"><input nz-input [(ngModel)]="itemRowDonViEdit[i].danhMuc" /></td>
+            <td nzLeft></td>
+            <td class="dm-title"><input nz-input [(ngModel)]="itemRowDonViEdit[i].maSo" /></td>
+            <td></td>
+            <td></td>
+            <td>{{ data.gtriXuatCuuTro }}</td>
+            <td></td>
+            <td></td>
+            <td>{{ data.gtriXuatHoTro }}</td>
+            <td></td>
+            <td></td>
+            <td>{{ data.gtriXuatPvuQp }}</td>
+            <td></td>
+            <td></td>
+            <td>{{ data.gtriXuatPvuAnNinh }}</td>
+            <td></td>
+            <td></td>
+            <td>{{ data.gtriXuatKhac }}</td>
+            <td></td>
+            <td></td>
+            <td>{{ data.gtriXuatTong }}</td>
+            <td></td>
+            <td>{{ data.gtriLuyKeCuuTro }}</td>
+            <td></td>
+            <td></td>
+            <td>{{ data.gtriLuyKeHoTro }}</td>
+            <td></td>
+            <td></td>
+            <td>{{ data.gtriLuyKePvuQp }}</td>
+            <td></td>
+            <td></td>
+            <td>{{ data.gtriLuyKePvuAnNinh }}</td>
+            <td></td>
+            <td></td>
+            <td>{{ data.gtriLuyKeKhac }}</td>
+            <td></td>
+            <td></td>
+            <td>{{ data.gtriLuyKeTong }}</td>
+            <td nzRight>
+              <a (click)="saveEditRowDvi(i)">
+                <i class="icon htvbdh_tcdt_save"></i>
+              </a>
+              <a (click)="cancelEditRowDvi(i)">
+                <i class="fa fa-ban do"></i>
+              </a>
+            </td>
+          </ng-template>
+        </tr>
+        <ng-container *ngFor="let nhomMatHang of data.children, let y = index">
           <tr>
-            <ng-container *ngIf="!data.edit; else editTemplateDvi">
-              <td nzLeft class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-              <td nzLeft class="dm-title">{{ data.danhMuc }}</td>
+            <ng-container *ngIf="!nhomMatHang.edit; else editTemplateNhomMh">
+              <td nzLeft class="text-center">{{(page - 1) * pageSize + y + 1}}</td>
+              <td nzLeft class="dm-title">{{ nhomMatHang.danhMuc }}</td>
               <td nzLeft></td>
-              <td class="dm-title">{{ data.maSo }}</td>
-              <td></td>
-              <td></td>
-              <td>{{ data.gtriXuatCuuTro }}</td>
-              <td></td>
-              <td></td>
-              <td>{{ data.gtriXuatHoTro }}</td>
-              <td></td>
-              <td></td>
-              <td>{{ data.gtriXuatPvuQp }}</td>
-              <td></td>
-              <td></td>
-              <td>{{ data.gtriXuatPvuAnNinh }}</td>
-              <td></td>
-              <td></td>
-              <td>{{ data.gtriXuatKhac }}</td>
-              <td></td>
-              <td></td>
-              <td>{{ data.gtriXuatTong }}</td>
-              <td></td>
-              <td>{{ data.gtriLuyKeCuuTro }}</td>
-              <td></td>
-              <td></td>
-              <td>{{ data.gtriLuyKeHoTro }}</td>
-              <td></td>
-              <td></td>
-              <td>{{ data.gtriLuyKePvuQp }}</td>
-              <td></td>
-              <td></td>
-              <td>{{ data.gtriLuyKePvuAnNinh }}</td>
-              <td></td>
-              <td></td>
-              <td>{{ data.gtriLuyKeKhac }}</td>
-              <td></td>
-              <td></td>
-              <td>{{ data.gtriLuyKeTong }}</td>
+              <td class="dm-title">{{ nhomMatHang.maSo }}</td>
+              <td>{{ nhomMatHang.dvt }}</td>
+              <td>{{ nhomMatHang.slXuatCuuTro }}</td>
+              <td>{{ nhomMatHang.gtriXuatCuuTro }}</td>
+              <td>{{ nhomMatHang.dviNhanXuatCuuTro }}</td>
+              <td>{{ nhomMatHang.slXuatHoTro }}</td>
+              <td>{{ nhomMatHang.gtriXuatHoTro }}</td>
+              <td>{{ nhomMatHang.dviNhanXuatHoTro }}</td>
+              <td>{{ nhomMatHang.slXuatPvuQp }}</td>
+              <td>{{ nhomMatHang.gtriXuatPvuQp }}</td>
+              <td>{{ nhomMatHang.dviNhanXuatPvuQp }}</td>
+              <td>{{ nhomMatHang.slXuatPvuAnNinh }}</td>
+              <td>{{ nhomMatHang.gtriXuatPvuAnNinh }}</td>
+              <td>{{ nhomMatHang.dviNhanXuatPvuAnNinh }}</td>
+              <td>{{ nhomMatHang.slXuatKhac }}</td>
+              <td>{{ nhomMatHang.gtriXuatKhac }}</td>
+              <td>{{ nhomMatHang.dviNhanXuatKhac }}</td>
+              <td>{{ nhomMatHang.slXuatTong }}</td>
+              <td>{{ nhomMatHang.gtriXuatTong }}</td>
+              <td>{{ nhomMatHang.slLuyKeCuuTro }}</td>
+              <td>{{ nhomMatHang.gtriLuyKeCuuTro }}</td>
+              <td>{{ nhomMatHang.dviNhanLuyKeCuuTro }}</td>
+              <td>{{ nhomMatHang.slLuyKeHoTro }}</td>
+              <td>{{ nhomMatHang.gtriLuyKeHoTro }}</td>
+              <td>{{ nhomMatHang.dviNhanLuyKeHoTro }}</td>
+              <td>{{ nhomMatHang.slLuyKePvuQp }}</td>
+              <td>{{ nhomMatHang.gtriLuyKePvuQp }}</td>
+              <td>{{ nhomMatHang.dviNhanLuyKePvuQp }}</td>
+              <td>{{ nhomMatHang.slLuyKePvuAnNinh }}</td>
+              <td>{{ nhomMatHang.gtriLuyKePvuAnNinh }}</td>
+              <td>{{ nhomMatHang.dviNhanLuyKePvuAnNinh }}</td>
+              <td>{{ nhomMatHang.slLuyKeKhac }}</td>
+              <td>{{ nhomMatHang.gtriLuyKeKhac }}</td>
+              <td>{{ nhomMatHang.dviNhanLuyKeKhac }}</td>
+              <td>{{ nhomMatHang.slLuyKeTong }}</td>
+              <td>{{ nhomMatHang.gtriLuyKeTong }}</td>
               <td nzRight *ngIf="!isView">
-                <a (click)="editRowDvi(i)">
+                <a *ngIf="!isView" (click)="editRowNhomMh(i, y)">
                   <i class=" fa fa-pencil"></i>
                 </a>
-                <a (click)="deleteRowDvi(i)">
+                <a *ngIf="!isView" (click)="deleteRowNhomMh(i, y)">
                   <i class=" fa fa-trash-o do"></i>
-                </a>
-                <a (click)="themMoiDanhMuc(data.danhMuc)">
-                  <i class="fa fa-plus"></i>
                 </a>
               </td>
             </ng-container>
-            <ng-template #editTemplateDvi>
+            <ng-template #editTemplateNhomMh>
               <td nzLeft class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-              <td nzLeft class="dm-title"><input nz-input [(ngModel)]="itemRowDonViEdit[i].danhMuc" /></td>
+              <td nzLeft class="dm-title"><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].danhMuc" /></td>
               <td nzLeft></td>
-              <td class="dm-title"><input nz-input [(ngModel)]="itemRowDonViEdit[i].maSo" /></td>
-              <td></td>
-              <td></td>
-              <td>{{ data.gtriXuatCuuTro }}</td>
-              <td></td>
-              <td></td>
-              <td>{{ data.gtriXuatHoTro }}</td>
-              <td></td>
-              <td></td>
-              <td>{{ data.gtriXuatPvuQp }}</td>
-              <td></td>
-              <td></td>
-              <td>{{ data.gtriXuatPvuAnNinh }}</td>
-              <td></td>
-              <td></td>
-              <td>{{ data.gtriXuatKhac }}</td>
-              <td></td>
-              <td></td>
-              <td>{{ data.gtriXuatTong }}</td>
-              <td></td>
-              <td>{{ data.gtriLuyKeCuuTro }}</td>
-              <td></td>
-              <td></td>
-              <td>{{ data.gtriLuyKeHoTro }}</td>
-              <td></td>
-              <td></td>
-              <td>{{ data.gtriLuyKePvuQp }}</td>
-              <td></td>
-              <td></td>
-              <td>{{ data.gtriLuyKePvuAnNinh }}</td>
-              <td></td>
-              <td></td>
-              <td>{{ data.gtriLuyKeKhac }}</td>
-              <td></td>
-              <td></td>
-              <td>{{ data.gtriLuyKeTong }}</td>
+              <td class="dm-title"><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].maSo" /></td>
+              <td><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].dvt" /></td>
+              <td>
+                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slXuatCuuTro"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriXuatCuuTro"></nz-input-number>
+              </td>
+              <td><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].dviNhanXuatCuuTro" /></td>
+              <td>
+                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slXuatHoTro"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriXuatHoTro"></nz-input-number>
+              </td>
+              <td><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].dviNhanXuatHoTro" /></td>
+              <td>
+                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slXuatPvuQp"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriXuatPvuQp"></nz-input-number>
+              </td>
+              <td><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].dviNhanXuatPvuQp" /></td>
+              <td>
+                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slXuatPvuAnNinh"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriXuatPvuAnNinh"></nz-input-number>
+              </td>
+              <td><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].dviNhanXuatPvuAnNinh" /></td>
+              <td>
+                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slXuatKhac"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriXuatKhac"></nz-input-number>
+              </td>
+              <td><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].dviNhanXuatKhac" /></td>
+              <td>
+                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slXuatTong"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriXuatTong"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slLuyKeCuuTro"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriLuyKeCuuTro"></nz-input-number>
+              </td>
+              <td><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].dviNhanLuyKeCuuTro" /></td>
+              <td>
+                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slLuyKeHoTro"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriLuyKeHoTro"></nz-input-number>
+              </td>
+              <td><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].dviNhanLuyKeHoTro" /></td>
+              <td>
+                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slLuyKePvuQp"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriLuyKePvuQp"></nz-input-number>
+              </td>
+              <td><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].dviNhanLuyKePvuQp" /></td>
+              <td>
+                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slLuyKePvuAnNinh"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriLuyKePvuAnNinh"></nz-input-number>
+              </td>
+              <td><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].dviNhanLuyKePvuAnNinh" /></td>
+              <td>
+                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slLuyKeKhac"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriLuyKeKhac"></nz-input-number>
+              </td>
+              <td><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].dviNhanLuyKeKhac" /></td>
+              <td>
+                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slLuyKeTong"></nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriLuyKeTong"></nz-input-number>
+              </td>
               <td nzRight>
-                <a (click)="saveEditRowDvi(i)">
+                <a (click)="saveEditRowNhomMh(i, y)">
                   <i class="icon htvbdh_tcdt_save"></i>
                 </a>
-                <a (click)="cancelEditRowDvi(i)">
+                <a (click)="cancelEditRowNhomMh(i, y)">
                   <i class="fa fa-ban do"></i>
                 </a>
               </td>
             </ng-template>
           </tr>
-          <ng-container *ngFor="let nhomMatHang of data.children, let y = index">
+          <ng-container *ngFor="let matHang of nhomMatHang.children, let z = index">
             <tr>
-              <ng-container *ngIf="!nhomMatHang.edit; else editTemplateNhomMh">
-                <td nzLeft class="text-center">{{(page - 1) * pageSize + y + 1}}</td>
-                <td nzLeft class="dm-title">{{ nhomMatHang.danhMuc }}</td>
+              <ng-container *ngIf="!matHang.edit; else editTemplate">
+                <td nzLeft class="text-center">{{(page - 1) * pageSize + z + 1}}</td>
                 <td nzLeft></td>
-                <td class="dm-title">{{ nhomMatHang.maSo }}</td>
-                <td>{{ nhomMatHang.dvt }}</td>
-                <td>{{ nhomMatHang.slXuatCuuTro }}</td>
-                <td>{{ nhomMatHang.gtriXuatCuuTro }}</td>
-                <td>{{ nhomMatHang.dviNhanXuatCuuTro }}</td>
-                <td>{{ nhomMatHang.slXuatHoTro }}</td>
-                <td>{{ nhomMatHang.gtriXuatHoTro }}</td>
-                <td>{{ nhomMatHang.dviNhanXuatHoTro }}</td>
-                <td>{{ nhomMatHang.slXuatPvuQp }}</td>
-                <td>{{ nhomMatHang.gtriXuatPvuQp }}</td>
-                <td>{{ nhomMatHang.dviNhanXuatPvuQp }}</td>
-                <td>{{ nhomMatHang.slXuatPvuAnNinh }}</td>
-                <td>{{ nhomMatHang.gtriXuatPvuAnNinh }}</td>
-                <td>{{ nhomMatHang.dviNhanXuatPvuAnNinh }}</td>
-                <td>{{ nhomMatHang.slXuatKhac }}</td>
-                <td>{{ nhomMatHang.gtriXuatKhac }}</td>
-                <td>{{ nhomMatHang.dviNhanXuatKhac }}</td>
-                <td>{{ nhomMatHang.slXuatTong }}</td>
-                <td>{{ nhomMatHang.gtriXuatTong }}</td>
-                <td>{{ nhomMatHang.slLuyKeCuuTro }}</td>
-                <td>{{ nhomMatHang.gtriLuyKeCuuTro }}</td>
-                <td>{{ nhomMatHang.dviNhanLuyKeCuuTro }}</td>
-                <td>{{ nhomMatHang.slLuyKeHoTro }}</td>
-                <td>{{ nhomMatHang.gtriLuyKeHoTro }}</td>
-                <td>{{ nhomMatHang.dviNhanLuyKeHoTro }}</td>
-                <td>{{ nhomMatHang.slLuyKePvuQp }}</td>
-                <td>{{ nhomMatHang.gtriLuyKePvuQp }}</td>
-                <td>{{ nhomMatHang.dviNhanLuyKePvuQp }}</td>
-                <td>{{ nhomMatHang.slLuyKePvuAnNinh }}</td>
-                <td>{{ nhomMatHang.gtriLuyKePvuAnNinh }}</td>
-                <td>{{ nhomMatHang.dviNhanLuyKePvuAnNinh }}</td>
-                <td>{{ nhomMatHang.slLuyKeKhac }}</td>
-                <td>{{ nhomMatHang.gtriLuyKeKhac }}</td>
-                <td>{{ nhomMatHang.dviNhanLuyKeKhac }}</td>
-                <td>{{ nhomMatHang.slLuyKeTong }}</td>
-                <td>{{ nhomMatHang.gtriLuyKeTong }}</td>
+                <td nzLeft>{{ matHang.matHang }}</td>
+                <td>{{ matHang.maSo }}</td>
+                <td>{{ matHang.dvt }}</td>
+                <td>{{ matHang.slXuatCuuTro }}</td>
+                <td>{{ matHang.gtriXuatCuuTro }}</td>
+                <td>{{ matHang.dviNhanXuatCuuTro }}</td>
+                <td>{{ matHang.slXuatHoTro }}</td>
+                <td>{{ matHang.gtriXuatHoTro }}</td>
+                <td>{{ matHang.dviNhanXuatHoTro }}</td>
+                <td>{{ matHang.slXuatPvuQp }}</td>
+                <td>{{ matHang.gtriXuatPvuQp }}</td>
+                <td>{{ matHang.dviNhanXuatPvuQp }}</td>
+                <td>{{ matHang.slXuatPvuAnNinh }}</td>
+                <td>{{ matHang.gtriXuatPvuAnNinh }}</td>
+                <td>{{ matHang.dviNhanXuatPvuAnNinh }}</td>
+                <td>{{ matHang.slXuatKhac }}</td>
+                <td>{{ matHang.gtriXuatKhac }}</td>
+                <td>{{ matHang.dviNhanXuatKhac }}</td>
+                <td>{{ matHang.slXuatTong }}</td>
+                <td>{{ matHang.gtriXuatTong }}</td>
+                <td>{{ matHang.slLuyKeCuuTro }}</td>
+                <td>{{ matHang.gtriLuyKeCuuTro }}</td>
+                <td>{{ matHang.dviNhanLuyKeCuuTro }}</td>
+                <td>{{ matHang.slLuyKeHoTro }}</td>
+                <td>{{ matHang.gtriLuyKeHoTro }}</td>
+                <td>{{ matHang.dviNhanLuyKeHoTro }}</td>
+                <td>{{ matHang.slLuyKePvuQp }}</td>
+                <td>{{ matHang.gtriLuyKePvuQp }}</td>
+                <td>{{ matHang.dviNhanLuyKePvuQp }}</td>
+                <td>{{ matHang.slLuyKePvuAnNinh }}</td>
+                <td>{{ matHang.gtriLuyKePvuAnNinh }}</td>
+                <td>{{ matHang.dviNhanLuyKePvuAnNinh }}</td>
+                <td>{{ matHang.slLuyKeKhac }}</td>
+                <td>{{ matHang.gtriLuyKeKhac }}</td>
+                <td>{{ matHang.dviNhanLuyKeKhac }}</td>
+                <td>{{ matHang.slLuyKeTong }}</td>
+                <td>{{ matHang.gtriLuyKeTong }}</td>
                 <td nzRight *ngIf="!isView">
-                  <a *ngIf="!isView" (click)="editRowNhomMh(i, y)">
+                  <a *ngIf="!isView" (click)="editRowMatHang(i, y, z)">
                     <i class=" fa fa-pencil"></i>
                   </a>
-                  <a *ngIf="!isView" (click)="deleteRowNhomMh(i, y)">
+                  <a *ngIf="!isView" (click)="deleteRowMatHang(i, y, z)">
                     <i class=" fa fa-trash-o do"></i>
                   </a>
                 </td>
               </ng-container>
-              <ng-template #editTemplateNhomMh>
-                <td nzLeft class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-                <td nzLeft class="dm-title"><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].danhMuc" /></td>
+              <ng-template #editTemplate>
                 <td nzLeft></td>
-                <td class="dm-title"><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].maSo" /></td>
-                <td><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].dvt" /></td>
+                <td nzLeft></td>
+                <td nzLeft><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].matHang" /></td>
+                <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].maSo" /></td>
+                <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].dvt" /></td>
                 <td>
                   <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].slXuatCuuTro"></nz-input-number>
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slXuatCuuTro"></nz-input-number>
                 </td>
                 <td>
                   <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].gtriXuatCuuTro"></nz-input-number>
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriXuatCuuTro"></nz-input-number>
                 </td>
-                <td><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].dviNhanXuatCuuTro" /></td>
+                <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].dviNhanXuatCuuTro" /></td>
                 <td>
                   <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].slXuatHoTro"></nz-input-number>
-                </td>
-                <td>
-                  <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].gtriXuatHoTro"></nz-input-number>
-                </td>
-                <td><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].dviNhanXuatHoTro" /></td>
-                <td>
-                  <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].slXuatPvuQp"></nz-input-number>
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slXuatHoTro"></nz-input-number>
                 </td>
                 <td>
                   <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].gtriXuatPvuQp"></nz-input-number>
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriXuatHoTro"></nz-input-number>
                 </td>
-                <td><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].dviNhanXuatPvuQp" /></td>
+                <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].dviNhanXuatHoTro" /></td>
                 <td>
                   <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].slXuatPvuAnNinh"></nz-input-number>
-                </td>
-                <td>
-                  <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].gtriXuatPvuAnNinh"></nz-input-number>
-                </td>
-                <td><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].dviNhanXuatPvuAnNinh" /></td>
-                <td>
-                  <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].slXuatKhac"></nz-input-number>
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slXuatPvuQp"></nz-input-number>
                 </td>
                 <td>
                   <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].gtriXuatKhac"></nz-input-number>
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriXuatPvuQp"></nz-input-number>
                 </td>
-                <td><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].dviNhanXuatKhac" /></td>
+                <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].dviNhanXuatPvuQp" /></td>
                 <td>
                   <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].slXuatTong"></nz-input-number>
-                </td>
-                <td>
-                  <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].gtriXuatTong"></nz-input-number>
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slXuatPvuAnNinh"></nz-input-number>
                 </td>
                 <td>
                   <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].slLuyKeCuuTro"></nz-input-number>
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriXuatPvuAnNinh"></nz-input-number>
+                </td>
+                <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].dviNhanXuatPvuAnNinh" /></td>
+                <td>
+                  <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slXuatKhac"></nz-input-number>
                 </td>
                 <td>
                   <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].gtriLuyKeCuuTro"></nz-input-number>
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriXuatKhac"></nz-input-number>
                 </td>
-                <td><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].dviNhanLuyKeCuuTro" /></td>
+                <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].dviNhanXuatKhac" /></td>
                 <td>
                   <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].slLuyKeHoTro"></nz-input-number>
-                </td>
-                <td>
-                  <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].gtriLuyKeHoTro"></nz-input-number>
-                </td>
-                <td><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].dviNhanLuyKeHoTro" /></td>
-                <td>
-                  <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].slLuyKePvuQp"></nz-input-number>
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slXuatTong"></nz-input-number>
                 </td>
                 <td>
                   <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].gtriLuyKePvuQp"></nz-input-number>
-                </td>
-                <td><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].dviNhanLuyKePvuQp" /></td>
-                <td>
-                  <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].slLuyKePvuAnNinh"></nz-input-number>
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriXuatTong"></nz-input-number>
                 </td>
                 <td>
                   <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].gtriLuyKePvuAnNinh"></nz-input-number>
-                </td>
-                <td><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].dviNhanLuyKePvuAnNinh" /></td>
-                <td>
-                  <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].slLuyKeKhac"></nz-input-number>
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slLuyKeCuuTro"></nz-input-number>
                 </td>
                 <td>
                   <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].gtriLuyKeKhac"></nz-input-number>
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriLuyKeCuuTro"></nz-input-number>
                 </td>
-                <td><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].dviNhanLuyKeKhac" /></td>
+                <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].dviNhanLuyKeCuuTro" /></td>
                 <td>
                   <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].slLuyKeTong"></nz-input-number>
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slLuyKeHoTro"></nz-input-number>
                 </td>
                 <td>
                   <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                    [(ngModel)]="itemRowNhomMhEdit[i][y].gtriLuyKeTong"></nz-input-number>
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriLuyKeHoTro"></nz-input-number>
+                </td>
+                <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].dviNhanLuyKeHoTro" /></td>
+                <td>
+                  <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slLuyKePvuQp"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriLuyKePvuQp"></nz-input-number>
+                </td>
+                <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].dviNhanLuyKePvuQp" /></td>
+                <td>
+                  <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slLuyKePvuAnNinh"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriLuyKePvuAnNinh"></nz-input-number>
+                </td>
+                <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].dviNhanLuyKePvuAnNinh" /></td>
+                <td>
+                  <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slLuyKeKhac"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriLuyKeKhac"></nz-input-number>
+                </td>
+                <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].dviNhanLuyKeKhac" /></td>
+                <td>
+                  <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slLuyKeTong"></nz-input-number>
+                </td>
+                <td>
+                  <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriLuyKeTong"></nz-input-number>
                 </td>
                 <td nzRight>
-                  <a (click)="saveEditRowNhomMh(i, y)">
+                  <a (click)="saveEditRowMatHang(i, y, z)">
                     <i class="icon htvbdh_tcdt_save"></i>
                   </a>
-                  <a (click)="cancelEditRowNhomMh(i, y)">
+                  <a (click)="cancelEditRowMatHang(i, y, z)">
                     <i class="fa fa-ban do"></i>
                   </a>
                 </td>
               </ng-template>
             </tr>
-            <ng-container *ngFor="let matHang of nhomMatHang.children, let z = index">
-              <tr>
-                <ng-container *ngIf="!matHang.edit; else editTemplate">
-                  <td nzLeft class="text-center">{{(page - 1) * pageSize + z + 1}}</td>
-                  <td nzLeft></td>
-                  <td nzLeft>{{ matHang.matHang }}</td>
-                  <td>{{ matHang.maSo }}</td>
-                  <td>{{ matHang.dvt }}</td>
-                  <td>{{ matHang.slXuatCuuTro }}</td>
-                  <td>{{ matHang.gtriXuatCuuTro }}</td>
-                  <td>{{ matHang.dviNhanXuatCuuTro }}</td>
-                  <td>{{ matHang.slXuatHoTro }}</td>
-                  <td>{{ matHang.gtriXuatHoTro }}</td>
-                  <td>{{ matHang.dviNhanXuatHoTro }}</td>
-                  <td>{{ matHang.slXuatPvuQp }}</td>
-                  <td>{{ matHang.gtriXuatPvuQp }}</td>
-                  <td>{{ matHang.dviNhanXuatPvuQp }}</td>
-                  <td>{{ matHang.slXuatPvuAnNinh }}</td>
-                  <td>{{ matHang.gtriXuatPvuAnNinh }}</td>
-                  <td>{{ matHang.dviNhanXuatPvuAnNinh }}</td>
-                  <td>{{ matHang.slXuatKhac }}</td>
-                  <td>{{ matHang.gtriXuatKhac }}</td>
-                  <td>{{ matHang.dviNhanXuatKhac }}</td>
-                  <td>{{ matHang.slXuatTong }}</td>
-                  <td>{{ matHang.gtriXuatTong }}</td>
-                  <td>{{ matHang.slLuyKeCuuTro }}</td>
-                  <td>{{ matHang.gtriLuyKeCuuTro }}</td>
-                  <td>{{ matHang.dviNhanLuyKeCuuTro }}</td>
-                  <td>{{ matHang.slLuyKeHoTro }}</td>
-                  <td>{{ matHang.gtriLuyKeHoTro }}</td>
-                  <td>{{ matHang.dviNhanLuyKeHoTro }}</td>
-                  <td>{{ matHang.slLuyKePvuQp }}</td>
-                  <td>{{ matHang.gtriLuyKePvuQp }}</td>
-                  <td>{{ matHang.dviNhanLuyKePvuQp }}</td>
-                  <td>{{ matHang.slLuyKePvuAnNinh }}</td>
-                  <td>{{ matHang.gtriLuyKePvuAnNinh }}</td>
-                  <td>{{ matHang.dviNhanLuyKePvuAnNinh }}</td>
-                  <td>{{ matHang.slLuyKeKhac }}</td>
-                  <td>{{ matHang.gtriLuyKeKhac }}</td>
-                  <td>{{ matHang.dviNhanLuyKeKhac }}</td>
-                  <td>{{ matHang.slLuyKeTong }}</td>
-                  <td>{{ matHang.gtriLuyKeTong }}</td>
-                  <td nzRight *ngIf="!isView">
-                    <a *ngIf="!isView" (click)="editRowMatHang(i, y, z)">
-                      <i class=" fa fa-pencil"></i>
-                    </a>
-                    <a *ngIf="!isView" (click)="deleteRowMatHang(i, y, z)">
-                      <i class=" fa fa-trash-o do"></i>
-                    </a>
-                  </td>
-                </ng-container>
-                <ng-template #editTemplate>
-                  <td nzLeft></td>
-                  <td nzLeft></td>
-                  <td nzLeft><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].matHang" /></td>
-                  <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].maSo" /></td>
-                  <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].dvt" /></td>
-                  <td>
-                    <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].slXuatCuuTro"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriXuatCuuTro"></nz-input-number>
-                  </td>
-                  <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].dviNhanXuatCuuTro" /></td>
-                  <td>
-                    <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].slXuatHoTro"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriXuatHoTro"></nz-input-number>
-                  </td>
-                  <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].dviNhanXuatHoTro" /></td>
-                  <td>
-                    <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].slXuatPvuQp"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriXuatPvuQp"></nz-input-number>
-                  </td>
-                  <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].dviNhanXuatPvuQp" /></td>
-                  <td>
-                    <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].slXuatPvuAnNinh"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriXuatPvuAnNinh"></nz-input-number>
-                  </td>
-                  <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].dviNhanXuatPvuAnNinh" /></td>
-                  <td>
-                    <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].slXuatKhac"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriXuatKhac"></nz-input-number>
-                  </td>
-                  <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].dviNhanXuatKhac" /></td>
-                  <td>
-                    <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].slXuatTong"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriXuatTong"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].slLuyKeCuuTro"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriLuyKeCuuTro"></nz-input-number>
-                  </td>
-                  <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].dviNhanLuyKeCuuTro" /></td>
-                  <td>
-                    <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].slLuyKeHoTro"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriLuyKeHoTro"></nz-input-number>
-                  </td>
-                  <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].dviNhanLuyKeHoTro" /></td>
-                  <td>
-                    <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].slLuyKePvuQp"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriLuyKePvuQp"></nz-input-number>
-                  </td>
-                  <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].dviNhanLuyKePvuQp" /></td>
-                  <td>
-                    <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].slLuyKePvuAnNinh"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriLuyKePvuAnNinh"></nz-input-number>
-                  </td>
-                  <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].dviNhanLuyKePvuAnNinh" /></td>
-                  <td>
-                    <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].slLuyKeKhac"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriLuyKeKhac"></nz-input-number>
-                  </td>
-                  <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].dviNhanLuyKeKhac" /></td>
-                  <td>
-                    <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].slLuyKeTong"></nz-input-number>
-                  </td>
-                  <td>
-                    <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriLuyKeTong"></nz-input-number>
-                  </td>
-                  <td nzRight>
-                    <a (click)="saveEditRowMatHang(i, y, z)">
-                      <i class="icon htvbdh_tcdt_save"></i>
-                    </a>
-                    <a (click)="cancelEditRowMatHang(i, y, z)">
-                      <i class="fa fa-ban do"></i>
-                    </a>
-                  </td>
-                </ng-template>
-              </tr>
-            </ng-container>
-            <tr *ngIf="!isView && nhomMatHang.coNhieuMatHang">
-              <td nzLeft></td>
-              <td nzLeft></td>
-              <td nzLeft><input nz-input [(ngModel)]="itemRowMatHang[i][y].matHang" /></td>
-              <td><input nz-input [(ngModel)]="itemRowMatHang[i][y].maSo" /></td>
-              <td><input nz-input [(ngModel)]="itemRowMatHang[i][y].dvt" /></td>
-              <td>
-                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                  [(ngModel)]="itemRowMatHang[i][y].slXuatCuuTro"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                  [(ngModel)]="itemRowMatHang[i][y].gtriXuatCuuTro"></nz-input-number>
-              </td>
-              <td><input nz-input [(ngModel)]="itemRowMatHang[i][y].dviNhanXuatCuuTro" /></td>
-              <td>
-                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                  [(ngModel)]="itemRowMatHang[i][y].slXuatHoTro"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                  [(ngModel)]="itemRowMatHang[i][y].gtriXuatHoTro"></nz-input-number>
-              </td>
-              <td><input nz-input [(ngModel)]="itemRowMatHang[i][y].dviNhanXuatHoTro" /></td>
-              <td>
-                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                  [(ngModel)]="itemRowMatHang[i][y].slXuatPvuQp"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                  [(ngModel)]="itemRowMatHang[i][y].gtriXuatPvuQp"></nz-input-number>
-              </td>
-              <td><input nz-input [(ngModel)]="itemRowMatHang[i][y].dviNhanXuatPvuQp" /></td>
-              <td>
-                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                  [(ngModel)]="itemRowMatHang[i][y].slXuatPvuAnNinh"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                  [(ngModel)]="itemRowMatHang[i][y].gtriXuatPvuAnNinh"></nz-input-number>
-              </td>
-              <td><input nz-input [(ngModel)]="itemRowMatHang[i][y].dviNhanXuatPvuAnNinh" /></td>
-              <td>
-                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                  [(ngModel)]="itemRowMatHang[i][y].slXuatKhac"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                  [(ngModel)]="itemRowMatHang[i][y].gtriXuatKhac"></nz-input-number>
-              </td>
-              <td><input nz-input [(ngModel)]="itemRowMatHang[i][y].dviNhanXuatKhac" /></td>
-              <td>
-                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                  [(ngModel)]="itemRowMatHang[i][y].slXuatTong"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                  [(ngModel)]="itemRowMatHang[i][y].gtriXuatTong"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                  [(ngModel)]="itemRowMatHang[i][y].slLuyKeCuuTro"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                  [(ngModel)]="itemRowMatHang[i][y].gtriLuyKeCuuTro"></nz-input-number>
-              </td>
-              <td><input nz-input [(ngModel)]="itemRowMatHang[i][y].dviNhanLuyKeCuuTro" /></td>
-              <td>
-                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                  [(ngModel)]="itemRowMatHang[i][y].slLuyKeHoTro"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                  [(ngModel)]="itemRowMatHang[i][y].gtriLuyKeHoTro"></nz-input-number>
-              </td>
-              <td><input nz-input [(ngModel)]="itemRowMatHang[i][y].dviNhanLuyKeHoTro" /></td>
-              <td>
-                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                  [(ngModel)]="itemRowMatHang[i][y].slLuyKePvuQp"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                  [(ngModel)]="itemRowMatHang[i][y].gtriLuyKePvuQp"></nz-input-number>
-              </td>
-              <td><input nz-input [(ngModel)]="itemRowMatHang[i][y].dviNhanLuyKePvuQp" /></td>
-              <td>
-                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                  [(ngModel)]="itemRowMatHang[i][y].slLuyKePvuAnNinh"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                  [(ngModel)]="itemRowMatHang[i][y].gtriLuyKePvuAnNinh"></nz-input-number>
-              </td>
-              <td><input nz-input [(ngModel)]="itemRowMatHang[i][y].dviNhanLuyKePvuAnNinh" /></td>
-              <td>
-                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                  [(ngModel)]="itemRowMatHang[i][y].slLuyKeKhac"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                  [(ngModel)]="itemRowMatHang[i][y].gtriLuyKeKhac"></nz-input-number>
-              </td>
-              <td><input nz-input [(ngModel)]="itemRowMatHang[i][y].dviNhanLuyKeKhac" /></td>
-              <td>
-                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                  [(ngModel)]="itemRowMatHang[i][y].slLuyKeTong"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                  [(ngModel)]="itemRowMatHang[i][y].gtriLuyKeTong"></nz-input-number>
-              </td>
-              <td nzRight>
-                <a (click)="addRowMatHang(i, y)">
-                  <i class="fa fa-plus"></i>
-                </a>
-                <a (click)="clearItemRowMatHang(i, y)">
-                  <i class="fa fa-refresh"></i>
-                </a>
-              </td>
-            </tr>
           </ng-container>
+          <tr *ngIf="!isView && nhomMatHang.coNhieuMatHang">
+            <td nzLeft></td>
+            <td nzLeft></td>
+            <td nzLeft><input nz-input [(ngModel)]="itemRowMatHang[i][y].matHang" /></td>
+            <td><input nz-input [(ngModel)]="itemRowMatHang[i][y].maSo" /></td>
+            <td><input nz-input [(ngModel)]="itemRowMatHang[i][y].dvt" /></td>
+            <td>
+              <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].slXuatCuuTro"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].gtriXuatCuuTro"></nz-input-number>
+            </td>
+            <td><input nz-input [(ngModel)]="itemRowMatHang[i][y].dviNhanXuatCuuTro" /></td>
+            <td>
+              <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].slXuatHoTro"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].gtriXuatHoTro"></nz-input-number>
+            </td>
+            <td><input nz-input [(ngModel)]="itemRowMatHang[i][y].dviNhanXuatHoTro" /></td>
+            <td>
+              <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].slXuatPvuQp"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].gtriXuatPvuQp"></nz-input-number>
+            </td>
+            <td><input nz-input [(ngModel)]="itemRowMatHang[i][y].dviNhanXuatPvuQp" /></td>
+            <td>
+              <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].slXuatPvuAnNinh"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].gtriXuatPvuAnNinh"></nz-input-number>
+            </td>
+            <td><input nz-input [(ngModel)]="itemRowMatHang[i][y].dviNhanXuatPvuAnNinh" /></td>
+            <td>
+              <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].slXuatKhac"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].gtriXuatKhac"></nz-input-number>
+            </td>
+            <td><input nz-input [(ngModel)]="itemRowMatHang[i][y].dviNhanXuatKhac" /></td>
+            <td>
+              <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].slXuatTong"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].gtriXuatTong"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].slLuyKeCuuTro"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].gtriLuyKeCuuTro"></nz-input-number>
+            </td>
+            <td><input nz-input [(ngModel)]="itemRowMatHang[i][y].dviNhanLuyKeCuuTro" /></td>
+            <td>
+              <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].slLuyKeHoTro"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].gtriLuyKeHoTro"></nz-input-number>
+            </td>
+            <td><input nz-input [(ngModel)]="itemRowMatHang[i][y].dviNhanLuyKeHoTro" /></td>
+            <td>
+              <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].slLuyKePvuQp"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].gtriLuyKePvuQp"></nz-input-number>
+            </td>
+            <td><input nz-input [(ngModel)]="itemRowMatHang[i][y].dviNhanLuyKePvuQp" /></td>
+            <td>
+              <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].slLuyKePvuAnNinh"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].gtriLuyKePvuAnNinh"></nz-input-number>
+            </td>
+            <td><input nz-input [(ngModel)]="itemRowMatHang[i][y].dviNhanLuyKePvuAnNinh" /></td>
+            <td>
+              <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].slLuyKeKhac"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].gtriLuyKeKhac"></nz-input-number>
+            </td>
+            <td><input nz-input [(ngModel)]="itemRowMatHang[i][y].dviNhanLuyKeKhac" /></td>
+            <td>
+              <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].slLuyKeTong"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                               [(ngModel)]="itemRowMatHang[i][y].gtriLuyKeTong"></nz-input-number>
+            </td>
+            <td nzRight>
+              <a (click)="addRowMatHang(i, y)">
+                <i class="fa fa-plus"></i>
+              </a>
+              <a (click)="clearItemRowMatHang(i, y)">
+                <i class="fa fa-refresh"></i>
+              </a>
+            </td>
+          </tr>
         </ng-container>
-        <tr>
-          <td nzLeft></td>
-          <td nzLeft></td>
-          <td nzLeft class="first-last-row-table background-last-row text-right">Tổng</td>
-          <td class="text-center">X</td>
-          <td class="text-center">X</td>
-          <td class="text-center">X</td>
-          <td class="text-center"></td>
-          <td class="text-center">X</td>
-          <td class="text-center">X</td>
-          <td class="text-center"></td>
-          <td class="text-center">X</td>
-          <td class="text-center">X</td>
-          <td class="text-center"></td>
-          <td class="text-center">X</td>
-          <td class="text-center">X</td>
-          <td class="text-center"></td>
-          <td class="text-center">X</td>
-          <td class="text-center">X</td>
-          <td class="text-center"></td>
-          <td class="text-center">X</td>
-          <td class="text-center">X</td>
-          <td class="text-center"></td>
-          <td class="text-center">X</td>
-          <td class="text-center"></td>
-          <td class="text-center">X</td>
-          <td class="text-center">X</td>
-          <td class="text-center"></td>
-          <td class="text-center">X</td>
-          <td class="text-center">X</td>
-          <td class="text-center"></td>
-          <td class="text-center">X</td>
-          <td class="text-center">X</td>
-          <td class="text-center"></td>
-          <td class="text-center">X</td>
-          <td class="text-center">X</td>
-          <td class="text-center"></td>
-          <td class="text-center">X</td>
-          <td class="text-center">X</td>
-          <td class="text-center"></td>
-          <td nzRight class="text-center" *ngIf="!isView"></td>
-        </tr>
+      </ng-container>
+      <tr>
+        <td nzLeft></td>
+        <td nzLeft></td>
+        <td nzLeft class="first-last-row-table background-last-row text-right">Tổng</td>
+        <td class="text-center">X</td>
+        <td class="text-center">X</td>
+        <td class="text-center">X</td>
+        <td class="text-center"></td>
+        <td class="text-center">X</td>
+        <td class="text-center">X</td>
+        <td class="text-center"></td>
+        <td class="text-center">X</td>
+        <td class="text-center">X</td>
+        <td class="text-center"></td>
+        <td class="text-center">X</td>
+        <td class="text-center">X</td>
+        <td class="text-center"></td>
+        <td class="text-center">X</td>
+        <td class="text-center">X</td>
+        <td class="text-center"></td>
+        <td class="text-center">X</td>
+        <td class="text-center">X</td>
+        <td class="text-center"></td>
+        <td class="text-center">X</td>
+        <td class="text-center"></td>
+        <td class="text-center">X</td>
+        <td class="text-center">X</td>
+        <td class="text-center"></td>
+        <td class="text-center">X</td>
+        <td class="text-center">X</td>
+        <td class="text-center"></td>
+        <td class="text-center">X</td>
+        <td class="text-center">X</td>
+        <td class="text-center"></td>
+        <td class="text-center">X</td>
+        <td class="text-center">X</td>
+        <td class="text-center"></td>
+        <td class="text-center">X</td>
+        <td class="text-center">X</td>
+        <td class="text-center"></td>
+        <td nzRight class="text-center" *ngIf="!isView"></td>
+      </tr>
       </tbody>
     </nz-table>
     <label><span style="color: red">* </span> Ghi chú</label>

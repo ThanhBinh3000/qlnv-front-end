@@ -5,7 +5,7 @@
         <div class="group-button">
           <h3>Danh sách đơn vị</h3>
           <div class="buttons">
-            <button type="button" class="btn btn-main" (click)="create()">
+            <button type="button" class="btn btn-main" (click)="create()" *ngIf="userService.isAccessPermisson('QTDM_DM_DON_VI_THEM')">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
             </button>
@@ -27,11 +27,11 @@
         <div class="group-button">
           <h3>Thông tin chi tiết đơn vị</h3>
           <div class="buttons">
-            <button nz-button class="btn btn-sub do" (click)="delete(detailDonVi.value.id)">
+            <button nz-button class="btn btn-sub do" (click)="delete(detailDonVi.value.id)" *ngIf="userService.isAccessPermisson('QTDM_DM_DON_VI_XOA')">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               Xóa
             </button>
-            <button nz-button class="btn btn-sub xanh-nhat" (click)="showEdit(true)" *ngIf="!isEditData">
+            <button nz-button class="btn btn-sub xanh-nhat" (click)="showEdit(true)" *ngIf="!isEditData && userService.isAccessPermisson('QTDM_DM_DON_VI_THEM')">
               <i class="icon htvbdh_bosungfile"></i>
               Sửa
             </button>
@@ -39,7 +39,7 @@
               <i class="fa fa-times"></i>
               Hủy bỏ
             </button>
-            <button nz-button class="btn btn-sub xanh-nhat" (click)="update()" *ngIf="isEditData">
+            <button nz-button class="btn btn-sub xanh-nhat" (click)="update()" *ngIf="isEditData && userService.isAccessPermisson('QTDM_DM_DON_VI_THEM')">
               <i class="fa fa-save"></i>
               Lưu
             </button>

@@ -1,0 +1,72 @@
+<form nz-form nzLayout="vertical" [formGroup]="formData">
+  <div nz-row [nzGutter]="24">
+
+    <div nz-col [nzSpan]="24">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Tài khoản</nz-form-label>
+        <nz-form-control [nzErrorTip]="error">
+          <nz-input-group>
+            <input nz-input formControlName="username" [readOnly]="true">
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div nz-col [nzSpan]="24" *ngIf="isOld">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Nhập mật khẩu cũ</nz-form-label>
+        <nz-form-control [nzErrorTip]="error">
+          <nz-input-group>
+            <input nz-input type="password" formControlName="oldPassword" [readOnly]="false">
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div nz-col [nzSpan]="24">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Nhập mật khẩu mới</nz-form-label>
+        <nz-form-control [nzErrorTip]="error">
+          <nz-input-group>
+            <input nz-input type="password" formControlName="newPassword" [readOnly]="false">
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div nz-col [nzSpan]="24">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Nhập lại mật khẩu mới</nz-form-label>
+        <nz-form-control [nzErrorTip]="error">
+          <nz-input-group>
+            <input nz-input type="password" formControlName="renewPassword" [readOnly]="false">
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+  </div>
+
+  <ng-template #error let-control>
+    <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
+    <!-- <ng-container *ngIf="control.hasError('pattern')">{{globals.prop.PASSWORD_INVALID}}</ng-container> -->
+    <ng-container *ngIf="control.hasError('pattern')">{{regexComplex}}</ng-container>
+  </ng-template>
+
+</form>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="handleCancel()">
+        <i aria-hidden="true" class="fa fa-close"></i>
+        Hủy
+      </button>
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="save() ">
+        <i aria-hidden="true" class="fa fa-save"></i>
+        Lưu
+      </button>
+    </div>
+  </div>
+</div>

@@ -99,7 +99,7 @@ export class ThongTinDmScLonComponent extends Base2Component implements OnInit {
 
   async loadDsLoaiCongTrinh() {
     this.listLoaiCongTrinh = [];
-    let res = await this.danhMucService.danhMucChungGetAll('LOAI_CT_SUA_CHUA_KT');
+    let res = await this.danhMucService.danhMucChungGetAll('LOAI_CONG_TRINH_SCL_KT');
     if (res.msg == MESSAGE.SUCCESS) {
       this.listLoaiCongTrinh = res.data;
     }

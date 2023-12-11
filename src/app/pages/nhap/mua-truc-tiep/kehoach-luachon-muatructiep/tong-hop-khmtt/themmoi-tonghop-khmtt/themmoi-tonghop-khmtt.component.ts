@@ -192,7 +192,7 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
   selectHangHoa() {
     let data = this.loaiVthh;
     const modalTuChoi = this.modal.create({
-      nzTitle: 'Danh sách hàng hóa',
+      nzTitle: 'Danh sách hàng DTQG',
       nzContent: DialogDanhSachHangHoaComponent,
       nzMaskClosable: false,
       nzClosable: false,

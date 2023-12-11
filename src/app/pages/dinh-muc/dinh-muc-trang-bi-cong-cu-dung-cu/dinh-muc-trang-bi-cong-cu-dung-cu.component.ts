@@ -8,6 +8,7 @@ import { NzModalService } from "ng-zorro-antd/modal";
 import { QlDinhMucPhiService } from "../../../services/qlnv-kho/QlDinhMucPhi.service";
 import dayjs from "dayjs";
 import { MESSAGE } from "../../../constants/message";
+import {Route, Router} from "@angular/router";
 
 @Component({
   selector: 'app-dinh-muc-trang-bi-cong-cu-dung-cu',
@@ -25,7 +26,8 @@ export class DinhMucTrangBiCongCuDungCuComponent extends Base2Component implemen
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    qlDinhMucPhiService: QlDinhMucPhiService
+    qlDinhMucPhiService: QlDinhMucPhiService,
+    public router: Router
   ) {
     super(httpClient, storageService, notification, spinner, modal, qlDinhMucPhiService)
     super.ngOnInit()
@@ -33,6 +35,9 @@ export class DinhMucTrangBiCongCuDungCuComponent extends Base2Component implemen
   }
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QLĐMNXBQ_ĐMTBCCDC')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.formData = this.fb.group({
       soQd: [''],
       trangThai: [''],
@@ -61,5 +66,13 @@ export class DinhMucTrangBiCongCuDungCuComponent extends Base2Component implemen
     this.selectedId = id;
     this.isDetail = true;
     this.isViewDetail = isView ?? false;
+  }
+
+  async xoaDieuKien() {
+    this.formData.reset();
+    this.formData.patchValue({
+      loai : '01'
+    })
+    await this.search();
   }
 }

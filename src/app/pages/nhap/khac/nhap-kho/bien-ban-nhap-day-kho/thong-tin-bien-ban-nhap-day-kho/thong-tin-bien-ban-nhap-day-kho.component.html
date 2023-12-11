@@ -16,25 +16,23 @@
         <span>Quay lại</span>
       </button>
 
-      <button
-        *ngIf="!isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_KTVBQ || formData.value.trangThai == STATUS.TU_CHOI_KT) && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_THEM')"
-        type="button" class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
+      <button *ngIf="!isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_KTVBQ || formData.value.trangThai == STATUS.TU_CHOI_KT) && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_THEM')" type="button"
+        class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
 
-      <button
-        *ngIf="!isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_KTVBQ || formData.value.trangThai == STATUS.TU_CHOI_KT) && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_THEM')"
-        type="button" class="btn btn-main ml-2" (click)="save()">
+      <button *ngIf="!isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_KTVBQ || formData.value.trangThai == STATUS.TU_CHOI_KT) && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_THEM')" type="button" class="btn btn-main ml-2"
+        (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
 
-      <!--      <button *ngIf="isView && formData.value.trangThai == STATUS.DU_THAO" type="button" class="btn btn-sub"-->
-      <!--        (click)="guiDuyet()">-->
-      <!--        <i class="icon htvbdh_tcdt_pheduyet"></i>-->
-      <!--        <span>Gửi duyệt</span>-->
-      <!--      </button>-->
+<!--      <button *ngIf="isView && formData.value.trangThai == STATUS.DU_THAO" type="button" class="btn btn-sub"-->
+<!--        (click)="guiDuyet()">-->
+<!--        <i class="icon htvbdh_tcdt_pheduyet"></i>-->
+<!--        <span>Gửi duyệt</span>-->
+<!--      </button>-->
 
       <button *ngIf="isTuChoi()" type="button" class="btn btn-sub" (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>

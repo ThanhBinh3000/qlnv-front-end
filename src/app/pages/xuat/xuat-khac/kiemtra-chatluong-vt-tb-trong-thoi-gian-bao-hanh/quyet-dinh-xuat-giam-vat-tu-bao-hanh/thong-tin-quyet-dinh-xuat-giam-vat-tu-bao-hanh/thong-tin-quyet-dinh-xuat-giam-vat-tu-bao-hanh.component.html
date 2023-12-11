@@ -1,11 +1,11 @@
-<div class="bg-trang">
+ <div class="bg-trang">
   <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
     <div class="header header-green-background">
       <div class="header-text">
         <div class="title-chi-tieu">
-          <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'status-xanh' : 'status-do'">
-            {{ formData.value.tenTrangThai }}
-          </span>
+                <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'status-xanh' : 'status-do'">
+                    {{ formData.value.tenTrangThai }}
+                </span>
           <span>Quyết định xuất giảm vật tư</span>
         </div>
       </div>
@@ -15,33 +15,39 @@
           <span>Quay lại</span>
         </button>
         <button type="button" (click)="save(true)" class="btn btn-sm ml-2"
-          *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC )">
+                *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC ) && userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_QDXG_THEM') ">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Lưu và gửi duyệt</span>
         </button>
         <button class="btn btn-sub do ml-2" (click)="tuChoi()"
-          *ngIf="(formData.value.trangThai  == STATUS.CHO_DUYET_LDV || formData.value.trangThai  == STATUS.CHO_DUYET_LDTC)">
+                *ngIf="formData.value.trangThai  == STATUS.CHO_DUYET_LDV || formData.value.trangThai  == STATUS.CHO_DUYET_LDTC "
+                (click)="pheDuyet()">
+<!--                *ngIf="(formData.value.trangThai  == STATUS.CHO_DUYET_LDV && userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_QDXG_DUYETLDV'))-->
+<!--                || (formData.value.trangThai  == STATUS.CHO_DUYET_LDTC && userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_QDXG_DUYETLDTC'))">-->
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </button>
         <button class="btn btn-sub xanh-nhat ml-2"
-          *ngIf="(formData.value.trangThai  == STATUS.CHO_DUYET_LDV || formData.value.trangThai  == STATUS.CHO_DUYET_LDTC)"
-          (click)="pheDuyet()">
+                *ngIf="formData.value.trangThai  == STATUS.CHO_DUYET_LDV || formData.value.trangThai  == STATUS.CHO_DUYET_LDTC "
+                (click)="pheDuyet()">
+<!--          *ngIf="(formData.value.trangThai  == STATUS.CHO_DUYET_LDV && userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_QDXG_DUYETLDV'))-->
+<!--          || (formData.value.trangThai  == STATUS.CHO_DUYET_LDTC && userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_QDXG_DUYETLDTC'))">-->
+<!--          (click)="pheDuyet()">-->
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Duyệt</span>
         </button>
         <button (click)="save(false)"
-          *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC && !isView)  "
-          class="btn btn-main btn-sm waves-effect waves-light ml-2">
+                *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC && !isView)
+                 &&  userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_QDXG_THEM') "
+                class="btn btn-main btn-sm waves-effect waves-light ml-2">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
       </div>
     </div>
   </nz-affix>
-  <nz-alert class="mg-t-10"
-    *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC" nzShowIcon
-    nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
+  <nz-alert class="mg-t-10" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC" nzShowIcon nzType="error"
+            nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
   <nz-card class="mt16 flex-card p-lr16">
     <!-- Thông tin chung -->
@@ -56,7 +62,8 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-select formControlName="namKeHoach" nzDisabled>
-                    <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                    <nz-option *ngFor="let p of listNam" [nzValue]="p.value"
+                               [nzLabel]="p.text"></nz-option>
                   </nz-select>
                 </nz-form-control>
               </nz-form-item>
@@ -67,7 +74,7 @@
                   <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Số QĐ xuất giảm vật tư
                   </nz-form-label>
                   <nz-input-group [nzAddOnAfter]="maQd">
-                    <input nz-input formControlName="soQuyetDinh" [readonly]="isView" />
+                    <input nz-input formControlName="soQuyetDinh" [readonly]="isView"/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -78,7 +85,8 @@
                   <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Ngày ký QĐ xuất giảm vật tư
                   </nz-form-label>
                   <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd/MM/YYYY"
-                    nzPlaceHolder="Ngày ký QĐ xuất hàng" formControlName="ngayKy">
+                                  nzPlaceHolder="Ngày ký QĐ xuất hàng"
+                                  formControlName="ngayKy">
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -88,7 +96,7 @@
                 <nz-form-label [nzNoColon]="true" nzRequired>Căn cứ trên báo cáo KQKĐ mẫu</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="!isView?openDialogSoQd():''">
-                    <input nz-input formControlName="soCanCu" [readonly]="isView" />
+                    <input nz-input formControlName="soCanCu" [readonly]="isView"/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -99,7 +107,8 @@
                   <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Loại hình nhập xuất
                   </nz-form-label>
                   <nz-select formControlName="loai" [nzDisabled]="true">
-                    <nz-option *ngFor="let p of listLoaiHinhNhapXuat" [nzValue]="p.value" [nzLabel]="p.label">
+                    <nz-option *ngFor="let p of listLoaiHinhNhapXuat" [nzValue]="p.value"
+                               [nzLabel]="p.label">
                     </nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -111,7 +120,7 @@
                   Đơn vị ra quyết định
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input nz-input readonly formControlName="tenDvi" />
+                  <input nz-input readonly formControlName="tenDvi"/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -122,7 +131,8 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-select formControlName="maDviNhan" nzDisabled>
-                    <nz-option *ngFor="let p of dviNhan" [nzValue]="p.maDvi" [nzLabel]="p.title"></nz-option>
+                    <nz-option *ngFor="let p of dviNhan" [nzValue]="p.maDvi"
+                               [nzLabel]="p.title"></nz-option>
                   </nz-select>
                 </nz-form-control>
               </nz-form-item>
@@ -133,7 +143,8 @@
                   <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Thời hạn xuất giảm vật tư
                   </nz-form-label>
                   <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd/MM/YYYY"
-                    nzPlaceHolder="Ngày ký QĐ xuất hàng" formControlName="thoiHanXuatGiam">
+                                  nzPlaceHolder="Ngày ký QĐ xuất hàng"
+                                  formControlName="thoiHanXuatGiam">
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -143,7 +154,7 @@
                 <nz-form-control [nzErrorTip]="error">
                   <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Trích yếu
                   </nz-form-label>
-                  <input nz-input [readonly]="isView" formControlName="trichYeu" />
+                  <input nz-input  [readonly]="isView" formControlName="trichYeu"/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -175,62 +186,62 @@
   <nz-card class="mt-2 flex-card data-table card-border-content table-card">
     <nz-table #tblData [nzData]="dataThTree" class="nowrap table-chi-tiet" nzBordered>
       <thead>
-        <tr>
-          <th>STT</th>
-          <th></th>
-          <th>Chi cục DTNN</th>
-          <th>Loại hàng</th>
-          <th>Chủng loại</th>
-          <th>Điểm kho</th>
-          <th>Ngăn/lô kho</th>
-          <th>ĐVT</th>
-          <th>Mã đơn vị tài sản</th>
-          <th>SL lấy mẫu đã xuất</th>
-          <th>Kết quả kiểm định</th>
-          <th>Số phiếu KĐCL</th>
-          <th class="text-center">Mẫu có bị hủy?</th>
-        </tr>
+      <tr>
+        <th>STT</th>
+        <th></th>
+        <th>Chi cục DTNN</th>
+        <th>Loại hàng</th>
+        <th>Chủng loại</th>
+        <th>Điểm kho</th>
+        <th>Ngăn/lô kho</th>
+        <th>ĐVT</th>
+        <th>Mã đơn vị tài sản</th>
+        <th>SL lấy mẫu đã xuất</th>
+        <th>Kết quả kiểm định</th>
+        <th>Số phiếu KĐCL</th>
+        <th class="text-center">Mẫu có bị hủy?</th>
+      </tr>
       </thead>
       <tbody>
-        <ng-container *ngFor="let item of tblData.data, let i = index;">
-          <tr>
-            <td class="bold">{{i + 1}}</td>
-            <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
+      <ng-container *ngFor="let item of tblData.data, let i = index;">
+        <tr>
+          <td class="bold">{{i + 1}}</td>
+          <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
               [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"></td>
-            <td class="bold">{{item.tenChiCuc}}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <ng-container *ngIf="expandSetString.has(item.idVirtual) && expandSetString.has(item.idVirtual)">
-            <ng-container *ngFor="let lv1 of item.childData,let i1=index">
-              <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>{{lv1.tenLoaiVthh}}</td>
-                <td>{{lv1.tenCloaiVthh}}</td>
-                <td>{{lv1.tenDiemKho}}</td>
-                <td>{{lv1.tenLoKho ? lv1.tenNganKho + '-' + lv1.tenLoKho : lv1.tenNganKho}}</td>
-                <td>{{lv1.donViTinh}}</td>
-                <td>{{lv1.maDviTsan}}</td>
-                <td>{{lv1.slLayMau}}</td>
-                <td>{{lv1.isDat == 1 ? 'Đạt' : 'Không đạt'}}</td>
-                <td>{{lv1.soPhieuKdcl}}</td>
-                <td class="text-center">
-                  <label nz-checkbox [(ngModel)]="lv1.mauBiHuy" [nzDisabled]="true"></label>
-                </td>
-              </tr>
-            </ng-container>
+          <td class="bold">{{item.tenChiCuc}}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <ng-container *ngIf="expandSetString.has(item.idVirtual) && expandSetString.has(item.idVirtual)">
+          <ng-container *ngFor="let lv1 of item.childData,let i1=index">
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>{{lv1.tenLoaiVthh}}</td>
+              <td>{{lv1.tenCloaiVthh}}</td>
+              <td>{{lv1.tenDiemKho}}</td>
+              <td>{{lv1.tenLoKho ? lv1.tenNganKho + '-' + lv1.tenLoKho : lv1.tenNganKho}}</td>
+              <td>{{lv1.donViTinh}}</td>
+              <td>{{lv1.maDviTsan}}</td>
+              <td>{{lv1.slLayMau}}</td>
+              <td>{{lv1.isDat == 1 ? 'Đạt' : 'Không đạt'}}</td>
+              <td>{{lv1.soPhieuKdcl}}</td>
+              <td class="text-center">
+                <label nz-checkbox [(ngModel)]="lv1.mauBiHuy" [nzDisabled]="true"></label>
+              </td>
+            </tr>
           </ng-container>
         </ng-container>
+      </ng-container>
       </tbody>
     </nz-table>
   </nz-card>

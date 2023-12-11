@@ -17,6 +17,7 @@ import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { saveAs } from 'file-saver';
 import { DieuChinhQuyetDinhPdKhmttService } from 'src/app/services/qlnv-hang/nhap-hang/mua-truc-tiep/dieuchinh-khmtt/DieuChinhQuyetDinhPdKhmtt.service';
+import {STATUS} from "../../../../../constants/status";
 @Component({
   selector: 'app-dieuchinh-luachon-muatt',
   templateUrl: './dieuchinh-luachon-muatt.component.html',
@@ -29,6 +30,7 @@ export class DieuchinhLuachonMuattComponent implements OnInit {
   isView: boolean = false;
   searchValue = '';
   listNam: any[] = [];
+  STATUS = STATUS;
 
   searchFilter = {
     soQdDc: '',
@@ -143,7 +145,7 @@ export class DieuchinhLuachonMuattComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == STATUS.DA_LAP) {
             item.checked = true;
           }
         });

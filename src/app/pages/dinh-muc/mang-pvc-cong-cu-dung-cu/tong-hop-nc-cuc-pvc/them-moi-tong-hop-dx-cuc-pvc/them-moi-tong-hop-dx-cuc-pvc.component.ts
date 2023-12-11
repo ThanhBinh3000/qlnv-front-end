@@ -12,6 +12,7 @@ import { MESSAGE } from '../../../../../constants/message';
 import dayjs from 'dayjs';
 import { STATUS } from '../../../../../constants/status';
 import { DxChiCucPvcService } from '../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/dx-chi-cuc-pvc.service';
+import { saveAs } from 'file-saver';
 import {
   PvcDxChiCucCtiet,
 } from '../../de-xuat-nc-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc.component';
@@ -102,6 +103,8 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
     body.ngayDxTu = body.ngayDx ? body.ngayDx[0] : null;
     body.ngayDxDen = body.ngayDx ? body.ngayDx[1] : null;
     body.trangThai = STATUS.DA_DUYET_CBV;
+    body.maDvi =this.userInfo.MA_DVI;
+    // body.capDvi =this.userInfo.CAP_DVI;
     body.trangThaiTh = STATUS.CHUA_TONG_HOP;
     let res = await this.dxChiCucService.tongHopDxCc(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -164,17 +167,19 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
   }
 
   async getCtieuKhTc(event) {
-    let res = await this.dxChiCucService.getCtieuKhTc({
-      namKeHoach: event,
-    });
-    if (res.data) {
-      this.formData.patchValue({
-        soQdGiaoCt: res.data.soQuyetDinh,
-      });
-    }
+    // let res = await this.dxChiCucService.getCtieuKhTc({
+    //   namKeHoach: event,
+    // });
+    // if (res.data) {
+    //   this.formData.patchValue({
+    //     soQdGiaoCt: res.data.soQuyetDinh,
+    //   });
+    // }
   }
 
   async save() {
+    // console.log("dataTable", this.dataTable);
+    // return
     this.formData.patchValue({
       namKeHoach: this.formDataTongHop.value.namKeHoach,
     });
@@ -254,7 +259,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
   convertListData() {
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable = chain(this.dataTable).groupBy('tenCcdc')
-        .map((value, key) => ({ tenCcdc: key, dataChild: value, idVirtual: uuidv4() }),
+        .map((value, key) => ({ tenCcdc: key, dataChild: value, donGia: value[0].donGia, idVirtual: uuidv4() }),
         ).value();
     }
     console.log(this.dataTable, 'this.dataTable this.dataTable this.dataTable ');
@@ -266,7 +271,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
     this.dataTable.forEach(item => {
       if (item.dataChild && item.dataChild.length > 0) {
         item.dataChild.forEach(data => {
-          arr.push(data);
+          arr.push({ ...data, donGia: item.donGia });
         });
       }
     });
@@ -333,4 +338,29 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
   }
 
   protected readonly AMOUNT_ONE_DECIMAL = AMOUNT_ONE_DECIMAL;
+
+  exportDataDetail() {
+    if (this.dataTable.length > 0) {
+      this.spinner.show();
+      try {
+        let body = this.formData.value;
+        body.paggingReq = {
+          limit: this.pageSize,
+          page: this.page - 1
+        }
+        this.dxChiCucService
+          .exportDetail(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-chi-tiet-tong-hop-nhu-cau-mang-pvc-va-ccdc.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
+  }
 }

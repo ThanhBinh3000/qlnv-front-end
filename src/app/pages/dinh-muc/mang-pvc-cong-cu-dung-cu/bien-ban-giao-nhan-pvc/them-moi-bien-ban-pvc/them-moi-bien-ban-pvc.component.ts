@@ -1,23 +1,23 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Validators } from '@angular/forms';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../services/storage.service";
-import { Base2Component } from "../../../../../components/base2/base2.component";
-import { MESSAGE } from "../../../../../constants/message";
+import {Component, Input, OnInit} from '@angular/core';
+import {Validators} from '@angular/forms';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {MESSAGE} from "../../../../../constants/message";
 import dayjs from "dayjs";
-import { STATUS } from "../../../../../constants/status";
-import { MmHopDongCt } from "../../../may-moc-thiet-bi/mm-hop-dong/mm-thong-tin-hop-dong/mm-thong-tin-hop-dong.component";
+import {STATUS} from "../../../../../constants/status";
+import {MmHopDongCt} from "../../../may-moc-thiet-bi/mm-hop-dong/mm-thong-tin-hop-dong/mm-thong-tin-hop-dong.component";
 import {
   MmBbGiaoNhanCt
 } from "../../../may-moc-thiet-bi/mm-bien-ban-giao-nhan/mm-them-moi-bb-giao-nhan/mm-them-moi-bb-giao-nhan.component";
-import { DialogPvcBbGiaoNhanComponent } from "./dialog-pvc-bb-giao-nhan/dialog-pvc-bb-giao-nhan.component";
+import {DialogPvcBbGiaoNhanComponent} from "./dialog-pvc-bb-giao-nhan/dialog-pvc-bb-giao-nhan.component";
 import {
   BienBanGiaoNhanPvcService
 } from "../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/bien-ban-giao-nhan-pvc.service";
-import { HopDongPvcService } from "../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/hop-dong-pvc.service";
+import {HopDongPvcService} from "../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/hop-dong-pvc.service";
 
 @Component({
   selector: 'app-them-moi-bien-ban-pvc',
@@ -154,7 +154,7 @@ export class ThemMoiBienBanPvcComponent extends Base2Component implements OnInit
     body.fileDinhKems = this.fileDinhKem
     let data = await this.createUpdate(body);
     this.id = data.id;
-    if (isGuiDuyet) {
+    if(isGuiDuyet){
       await this.pheDuyet();
     }
     if (data && !isGuiDuyet) {
@@ -165,12 +165,12 @@ export class ThemMoiBienBanPvcComponent extends Base2Component implements OnInit
   async pheDuyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.DANG_NHAP_DU_LIEU:
-      case STATUS.TUCHOI_CB_CUC: {
+      case STATUS.DANG_NHAP_DU_LIEU :
+      case STATUS.TUCHOI_CB_CUC : {
         trangThai = STATUS.DA_KY;
         break;
       }
-      case STATUS.DA_KY: {
+      case STATUS.DA_KY : {
         trangThai = STATUS.DADUYET_CB_CUC
       }
     }
@@ -234,7 +234,7 @@ export class ThemMoiBienBanPvcComponent extends Base2Component implements OnInit
         nzContent: DialogPvcBbGiaoNhanComponent,
         nzMaskClosable: false,
         nzClosable: false,
-        nzWidth: '700px',
+        nzWidth: '1000px',
         nzFooter: null,
         nzComponentParams: {
           dataTable: this.listHopDong,
@@ -254,34 +254,26 @@ export class ThemMoiBienBanPvcComponent extends Base2Component implements OnInit
   }
 
   async chagneHopDong(soHd) {
-    let filter = this.listHopDong.filter(item => item.soHopDong = soHd)
-    if (filter && filter.length > 0) {
-      let res = await this.hopDongService.getDetail(filter[0].id);
+    let filter = this.listHopDong.find(item => item.soHopDong == soHd)
+    if (filter) {
+      let res = await this.hopDongService.getDetail(filter.id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           const data = res.data;
           this.formData.patchValue({
             benGiaoHang: data.banTenDvi
           })
-          this.listHangHoa = data.listQlDinhMucPvcHdLoaiHh;
-          const ddNh: any[] = data.listQlDinhMucPvcHdDiaDiemNh;
-          if (this.listHangHoa && this.listHangHoa.length > 0) {
-            this.listHangHoa.forEach(item => {
-              item.id = null;
-              if (ddNh && ddNh.length > 0) {
-                let detailDdnh = ddNh.find(data => data.maDvi == this.userInfo.MA_DVI);
-                if (detailDdnh) {
-                  item.soLuong = detailDdnh.soLuong
-                }
-              }
-            })
+            this.listHangHoa = data.listQlDinhMucPvcHdLoaiHh;
+            if (this.listHangHoa && this.listHangHoa.length > 0) {
+              this.listHangHoa.forEach(item => {
+                item.id = null;
+                item.soLuong = 0;
+              })
+            }
           }
         }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg)
       }
     }
-  }
 
   changHangHoa(event, type?: any) {
     let result = this.listHangHoa.filter(item => item.maHangHoa === event)
@@ -348,7 +340,7 @@ export class ThemMoiBienBanPvcComponent extends Base2Component implements OnInit
       this.dataTable.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
-          data: { ...item },
+          data: {...item},
         };
       });
     }
@@ -364,7 +356,7 @@ export class ThemMoiBienBanPvcComponent extends Base2Component implements OnInit
 
   cancelEdit(stt: number): void {
     this.dataEdit[stt] = {
-      data: { ...this.dataTable[stt] },
+      data: {...this.dataTable[stt]},
       edit: false
     };
   }
@@ -423,7 +415,7 @@ export class ThemMoiBienBanPvcComponent extends Base2Component implements OnInit
         this.tableBenGiao.forEach((item, index) => {
           this.dataEditBg[index] = {
             edit: false,
-            data: { ...item },
+            data: {...item},
           };
         });
       }
@@ -432,7 +424,7 @@ export class ThemMoiBienBanPvcComponent extends Base2Component implements OnInit
         this.tableBenNhan.forEach((item, index) => {
           this.dataEditBn[index] = {
             edit: false,
-            data: { ...item },
+            data: {...item},
           };
         });
       }
@@ -458,12 +450,12 @@ export class ThemMoiBienBanPvcComponent extends Base2Component implements OnInit
   cancelEditBgBn(stt: number, type): void {
     if (type == 'benGiao') {
       this.dataEditBg[stt] = {
-        data: { ...this.tableBenGiao[stt] },
+        data: {...this.tableBenGiao[stt]},
         edit: false
       };
     } else {
       this.dataEditBn[stt] = {
-        data: { ...this.tableBenNhan[stt] },
+        data: {...this.tableBenNhan[stt]},
         edit: false
       };
     }

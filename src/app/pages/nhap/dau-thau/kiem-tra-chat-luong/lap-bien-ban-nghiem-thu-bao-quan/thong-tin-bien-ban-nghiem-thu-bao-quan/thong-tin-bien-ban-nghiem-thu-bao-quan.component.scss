@@ -1,15 +1,15 @@
 .icon-file-dinh-kem {
-  display: flex;
-  align-items: center;
-  position: relative;
+    display: flex;
+    align-items: center;
+    position: relative;
 
-  .input-file {
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-  }
+    .input-file {
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
 }
 
 .blue-text {

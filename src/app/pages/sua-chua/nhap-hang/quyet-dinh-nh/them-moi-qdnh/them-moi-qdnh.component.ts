@@ -64,7 +64,7 @@ export class ThemMoiQdnhComponent extends Base3Component implements OnInit {
       soQdXh: [null, [Validators.required]],
       thoiHanXuat: [null],
       thoiHanNhap: [null],
-      duToanKinhPhi: [null],
+      duToanChiPhi: [null],
       loaiHinhNhapXuat: ['Xuất sửa chữa'],
       kieuNhapXuat: ['Xuất không thu tiền'],
       trichYeu: [null],

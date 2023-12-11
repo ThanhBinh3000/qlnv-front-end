@@ -1,24 +1,25 @@
-import { Component, EventEmitter, Input, OnInit, Output, } from '@angular/core';
-import { Validators } from '@angular/forms';
+import {Component, EventEmitter, Input, OnInit, Output,} from '@angular/core';
+import {Validators} from '@angular/forms';
 import * as dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { STATUS } from 'src/app/constants/status';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
+import {MESSAGE} from 'src/app/constants/message';
+import {STATUS} from 'src/app/constants/status';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
 import {
   QuyetDinhGiaoNvXuatHangService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service';
 import {
   HopDongXuatHangService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
-import { FileDinhKem } from "../../../../../models/CuuTro";
+import {FileDinhKem} from "../../../../../models/CuuTro";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-create-giao-xh',
@@ -31,11 +32,12 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
   @Input() idInput: number;
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
+  templateNameVt = "Quyết định giao nhiệm vụ bán đấu giá vật tư";
+  templateNameLt = "Quyết định giao nhiệm vụ bán đấu giá lương thực";
   maHauTo: any;
   loadDanhSachQdGiaoNv: any[] = [];
   dataHopDong: any[] = [];
-  templateName = "Quyết định giao nhiệm vụ";
-  templateNameVt = "Quyết định giao nhiệm vụ vật tư";
 
   constructor(
     httpClient: HttpClient,
@@ -116,15 +118,10 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
   async getDetail(id: number) {
     if (!id) return;
     const data = await this.detail(id);
-    if (!data) {
-      console.error('Không tìm thấy dữ liệu');
-      return;
-    }
-    const { soQdNv, children } = data;
     this.formData.patchValue({
-      soQdNv: soQdNv?.split('/')[0]
+      soQdNv: data.soQdNv?.split('/')[0]
     });
-    this.dataTable = this.userService.isChiCuc() ? children.filter(item => item.maDvi === this.userInfo.MA_DVI) : children;
+    this.dataTable = this.userService.isChiCuc() ? data.children.filter(item => item.maDvi === this.userInfo.MA_DVI) : data.children;
   }
 
   async openDialog() {
@@ -140,10 +137,6 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
       if (res && res.msg === MESSAGE.SUCCESS) {
         const soHopDongSet = new Set(this.loadDanhSachQdGiaoNv.map(item => item.soHopDong));
         this.dataHopDong = res.data.content.filter(item => !soHopDongSet.has(item.soHopDong));
-      } else if (res && res.msg) {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      } else {
-        this.notification.error(MESSAGE.ERROR, 'Unknown error occurred.');
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH HỢP ĐỒNG BÁN ĐẤU GIÁ',
@@ -171,7 +164,9 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
   }
 
   async onChange(id) {
-    if (id <= 0) return;
+    if (id <= 0) {
+      return;
+    }
     try {
       await this.spinner.show();
       const res = await this.hopDongXuatHangService.getDetail(id);
@@ -201,6 +196,8 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.map(item => {
           item.tonKho = item.children.reduce((total, child) => total + child.tonKho, 0);
+          item.tenTrangThai = data.tenTrangThaiXh
+          item.trangThai = data.trangThaiXh
         })
       }
     } catch (e) {
@@ -218,20 +215,20 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
       maDvi: this.userInfo.MA_DVI,
     }
     let res = await this.quyetDinhGiaoNvXuatHangService.search(body)
-    if (res.msg == MESSAGE.SUCCESS) {
-      const data = res.data
-      if (data && data.content && data.content.length > 0) {
-        this.loadDanhSachQdGiaoNv = data.content
-      }
-    } else {
+    if (res.msg !== MESSAGE.SUCCESS) {
       this.notification.error(MESSAGE.ERROR, res.msg);
+      return;
     }
+    const data = res.data.content;
+    if (!data || data.length === 0) {
+      return;
+    }
+    this.loadDanhSachQdGiaoNv = data
   }
 
   async save() {
     try {
       await this.helperService.ignoreRequiredForm(this.formData);
-      this.formData.controls["soQdNv"].setValidators([Validators.required]);
       this.formData.controls["soHopDong"].setValidators([Validators.required]);
       const soQdNv = this.formData.value.soQdNv;
       const body = {
@@ -270,15 +267,12 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
   }
 
   setValidForm() {
-    this.formData.controls["nam"].setValidators([Validators.required]);
-    this.formData.controls["tenDvi"].setValidators([Validators.required]);
-    this.formData.controls["ngayKy"].setValidators([Validators.required]);
-    this.formData.controls["toChucCaNhan"].setValidators([Validators.required]);
-    this.formData.controls["tenLoaiHinhNx"].setValidators([Validators.required]);
-    this.formData.controls["tenKieuNhapXuat"].setValidators([Validators.required]);
-    this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
-    this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
-    this.formData.controls["tgianGiaoHang"].setValidators([Validators.required]);
-    this.formData.controls["trichYeu"].setValidators([Validators.required]);
+    const fieldsToValidate = [
+      "soQdNv",
+      "soHopDong",
+    ];
+    fieldsToValidate.forEach(field => {
+      this.formData.controls[field].setValidators([Validators.required]);
+    });
   }
 }

@@ -18,6 +18,11 @@ export class DinhMucPhiNxBq {
   nvChuyenMonKv: number = 0;
   ttCaNhanKv: number = 0;
   tcDieuHanhKv: number = 0;
+  tongCongMucChiVpCuc: number = 0;
+  congMucChiVpCuc: number = 0;
+  tongCongMucChiCuc: number = 0;
+  congMucChiCuc: number = 0;
+  tongDinhMucChiDonVi: number = 0;
   ngayHieuLuc: string;
   trangThai: string = '00';
   loaiVthh:string;

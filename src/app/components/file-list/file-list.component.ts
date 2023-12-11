@@ -6,7 +6,7 @@ import { Globals } from 'src/app/shared/globals';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
-import { NzModalService } from "ng-zorro-antd/modal";
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'file-list',
@@ -35,7 +35,7 @@ export class FileListComponent implements OnInit {
     if (this.data && this.data.length > 0) {
       this.data.forEach((item: FileDinhKem) => {
         item.idVirtual = item.id;
-      })
+      });
     }
   }
 
@@ -53,10 +53,11 @@ export class FileListComponent implements OnInit {
       const itemFile = {
         name: fileList[0].name,
         file: event.target.files[0] as File,
-        time: new Date().getTime()
+        time: new Date().getTime(),
       };
+      const folder = new Date().getFullYear() + '/' + (new Date().getMonth() + 1) + '/' + this.getCurrentWeek();
       this.uploadFileService
-        .uploadFile(itemFile.file, itemFile.name,itemFile.time)
+        .uploadFile(itemFile.file, itemFile.name, folder)
         .then((resUpload) => {
           if (item) {
             item.fileName = resUpload.filename;
@@ -66,7 +67,7 @@ export class FileListComponent implements OnInit {
             if (!this.fileAdd) {
               this.fileAdd = new FileDinhKem();
             }
-            const lastPeriodIndex = resUpload.filename.lastIndexOf(".");
+            const lastPeriodIndex = resUpload.filename.lastIndexOf('.');
             if (lastPeriodIndex !== -1) {
               this.fileAdd.noiDung = resUpload.filename.slice(0, lastPeriodIndex);
             } else {
@@ -83,7 +84,7 @@ export class FileListComponent implements OnInit {
 
   addFile() {
     if (this.isCanCuPL == false && (!this.fileAdd || !this.fileAdd.noiDung || this.fileAdd.noiDung == '' || !this.fileAdd.fileName || this.fileAdd.fileName == '')) {
-      this.notification.error(MESSAGE.ERROR, "Vui lòng nhập file");
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng nhập file');
       return;
     }
     if (!this.data) {
@@ -95,6 +96,14 @@ export class FileListComponent implements OnInit {
 
   clearAdd() {
     this.fileAdd = new FileDinhKem();
+  }
+
+  getCurrentWeek(): number {
+    const currentDate = new Date();
+    const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const daysSinceFirstDay = (currentDate.getDate() - 1);
+    const weekOfMonth = Math.ceil((daysSinceFirstDay + firstDayOfMonth.getDay() + 1) / 7);
+    return weekOfMonth;
   }
 
   downloadFile(item: FileDinhKem) {
@@ -115,7 +124,7 @@ export class FileListComponent implements OnInit {
         nzWidth: 310,
         nzOnOk: async () => {
           this.data.splice(index, 1);
-        }
+        },
       });
       // this.data = this.data.filter(x => x.idVirtual != item.idVirtual);
     }
@@ -124,7 +133,7 @@ export class FileListComponent implements OnInit {
   updateFile(index) {
     let curRow = this.data[index];
     if ((!this.isCanCuPL) && (!curRow || !curRow.noiDung || curRow.noiDung == '' || !curRow.fileName || curRow.fileName == '')) {
-      this.notification.warning(MESSAGE.WARNING, "Vui lòng nhập file");
+      this.notification.warning(MESSAGE.WARNING, 'Vui lòng nhập file');
       return;
     }
     this.data.splice(index, 1, curRow);

@@ -15,7 +15,7 @@ const routes: Routes = [
         children: [
             {
                 path: '',
-                redirectTo: 'dinh-muc-phi',
+                redirectTo: '',
                 pathMatch: 'full'
             },
             {

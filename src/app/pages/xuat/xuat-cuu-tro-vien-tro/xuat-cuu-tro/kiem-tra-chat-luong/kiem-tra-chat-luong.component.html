@@ -10,7 +10,7 @@
     <app-main *ngIf="tab.ma == loaiVthhSelected" [loaiVthh]="tab.ma"></app-main>
 </ng-container>-->
 
-<nz-affix [nzOffsetTop]="98" class="level2">
+<nz-affix [nzOffsetTop]="globals.prop.MN_LV3" class="level1">
   <ul nz-menu nzMode="horizontal">
     <li nz-menu-item nzSelected (click)="selectTab(0)">
       Biên bản lấy mẫu/bàn giao mẫu
@@ -18,22 +18,23 @@
     <li nz-menu-item (click)="selectTab(1)">
       Phiếu kiểm nghiệm chất lượng
     </li>
-    <li nz-menu-item (click)="selectTab(2)">
+    <li nz-menu-item (click)="selectTab(2)" *ngIf="typeVthh ==='02'">
       Hồ sơ kỹ thuật
     </li>
   </ul>
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
-  <app-bien-ban-lay-mau [loaiVthh]="" [loaiXuat]="'CTVT'" [inputService]="bienBanLayMauService"
-    [inputServiceGnv]="quyetDinhGiaoNvCuuTroService">
+  <app-bien-ban-lay-mau [loaiVthh]="typeVthh" [loaiXuat]="'CTVT'" [inputService]="bienBanLayMauService"
+    [inputServiceGnv]="quyetDinhGiaoNvCuuTroService" [loaiChon]="'radio'" [maQuyen]="maQuyenBBLM">
   </app-bien-ban-lay-mau>
 </ng-container>
 <ng-container *ngIf="tabSelected == 1">
-  <app-phieu-kiem-nghiem-chat-luong [loaiVthh]="" [loaiXuat]="'CTVT'" [inputService]="phieuKiemNghiemChatLuongService"
-    [inputServiceGnv]="quyetDinhGiaoNvCuuTroService" [inputServiceBbLayMau]="bienBanLayMauService">
+  <app-phieu-kiem-nghiem-chat-luong [loaiVthh]="typeVthh" [loaiXuat]="'CTVT'"
+    [inputService]="phieuKiemNghiemChatLuongService" [inputServiceGnv]="quyetDinhGiaoNvCuuTroService"
+    [inputServiceBbLayMau]="bienBanLayMauService" [maQuyen]="maQuyenPKNCL">
   </app-phieu-kiem-nghiem-chat-luong>
 </ng-container>
-<ng-container *ngIf="tabSelected == 2">
+<ng-container *ngIf="tabSelected == 2 && typeVthh ==='02'">
   <app-ho-so-ky-thuat-cuu-tro>
   </app-ho-so-ky-thuat-cuu-tro>
 </ng-container>

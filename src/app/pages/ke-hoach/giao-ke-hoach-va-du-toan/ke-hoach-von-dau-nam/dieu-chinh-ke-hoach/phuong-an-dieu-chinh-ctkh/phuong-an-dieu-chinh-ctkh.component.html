@@ -14,9 +14,10 @@
             <div nz-col nzSpan="3">
               <label class="search__label">Số công văn/tờ trình</label>
               <!-- <nz-input-group nzAddOnAfter="/DCNB"> -->
-              <nz-input-number formControlName="soCongVan" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
-                [nzSize]="'small'" [nzDisabled]="isView">
-              </nz-input-number>
+              <!-- <nz-input-number formControlName="soCongVan" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
+                [nzSize]="'small'">
+              </nz-input-number> -->
+              <input nz-input formControlName="soCongVan" />
               <!-- </nz-input-group> -->
             </div>
 
@@ -24,12 +25,11 @@
               <label class="search__label">Ngày ký</label>
               <div nz-row>
                 <div nz-col nzSpan="12" class="cus-start-date">
-                  <nz-date-picker [nzDisabledDate]="disabledEndNgayQD" nzFormat="dd/MM/yyyy" formControlName="ngayKyTu"
-                    nzPlaceHolder="Ngày bắt đầu">
+                  <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayKyTu" nzPlaceHolder="Ngày bắt đầu">
                   </nz-date-picker>
                 </div>
                 <div nz-col nzSpan="12" class="cus-end-date">
-                  <nz-date-picker [nzDisabledDate]="disabledEndNgayQD" nzFormat="dd/MM/yyyy" formControlName="ngayKyDen"
+                  <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayKyDen"
                     nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
                 </div>
               </div>
@@ -58,17 +58,20 @@
       <div class="group-button">
         <h3 class="text-uppercase">Danh sách phương án điều chỉnh chỉ tiêu kế hoạch năm</h3>
         <div class="buttons">
-          <button type="button" class="btn btn-do" (click)="xoaMulti()">
+          <button type="button" class="btn btn-do" (click)="xoaMulti()"
+            *ngIf="isTongCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_PA_TCGIAO_XOA')">
             <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             <span>Xóa</span>
           </button>
-          <button type="button" class="btn btn-sub" (click)="exportDataCuc()">
+          <button type="button" class="btn btn-sub" (click)="exportDataCuc()"
+            *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_PA_TCGIAO_EXP')">
             <i class="icon htvbdh_chuyen-xu-ly"></i>
             <span>Xuất file</span>
           </button>
-          <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)">
+          <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)"
+            *ngIf="isTongCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_PA_TCGIAO_THEM')">
             <i class="icon htvbdh_tcdt_tao-qd"></i>
-            <span>Tạo quyết định</span>
+            <span>Thêm</span>
           </button>
         </div>
       </div>
@@ -92,8 +95,7 @@
               <th>Trích yếu</th>
               <th>Số QĐ giao chỉ tiêu</th>
               <th>Số VB đề xuất điều chỉnh</th>
-              <th>Trạng thái xử lý của TC</th>
-              <!-- <th>Số QĐ điều chỉnh</th> -->
+              <th>Trạng thái</th>
               <th width="90px">Hành động</th>
             </tr>
             <tr class="search-table">
@@ -102,8 +104,8 @@
               <th>
                 <nz-input-group>
                   <nz-input-group>
-                    <nz-select nzAllowClear [(ngModel)]="filterTable.nam"
-                      (ngModelChange)="filterInTable('nam',filterTable.nam)">
+                    <nz-select nzAllowClear [(ngModel)]="filterTable.namKeHoach"
+                      (ngModelChange)="filterInTable('namKeHoach',filterTable.namKeHoach)">
                       <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                     </nz-select>
                   </nz-input-group>
@@ -111,30 +113,16 @@
               </th>
               <th>
                 <nz-input-group>
-                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdinh"
-                    (input)="filterInTable('soQdinh',filterTable.soQdinh)" size="small" />
+                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soCongVan"
+                    (input)="filterInTable('soCongVan',filterTable.soCongVan)" size="small" />
                 </nz-input-group>
 
               </th>
               <th>
                 <nz-input-group>
-                  <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayKyQdinh"
-                    (ngModelChange)="filterInTable('ngayKyQdinh', convertDateToString(filterTable.ngayKyQdinh))">
+                  <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayKy"
+                    (ngModelChange)="filterInTable('ngayKy', convertDateToString(filterTable.ngayKy))">
                   </nz-date-picker>
-                </nz-input-group>
-              </th>
-              <th>
-                <nz-input-group>
-                  <nz-select nzAllowClear [(ngModel)]="filterTable.tenLoaiDc"
-                    (ngModelChange)="filterInTable('tenLoaiDc',filterTable.tenLoaiDc)">
-                    <nz-option *ngFor="let p of listLoaiDieuChuyen" [nzValue]="p.ten" [nzLabel]="p.ten"></nz-option>
-                  </nz-select>
-                </nz-input-group>
-              </th>
-              <th>
-                <nz-input-group>
-                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiQdinh"
-                    (input)="filterInTable('tenLoaiQdinh',filterTable.tenLoaiQdinh)" size="small" />
                 </nz-input-group>
               </th>
               <th>
@@ -145,8 +133,15 @@
               </th>
               <th>
                 <nz-input-group>
-                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soDxuat"
-                    (input)="filterInTable('soDxuat',filterTable.soDxuat)" size="small" />
+                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQuyetDinhGiaoNamTruoc"
+                    (input)="filterInTable('soQuyetDinhGiaoNamTruoc',filterTable.soQuyetDinhGiaoNamTruoc)"
+                    size="small" />
+                </nz-input-group>
+              </th>
+              <th>
+                <nz-input-group>
+                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQuyetDinhDcCuaC"
+                    (input)="filterInTable('soQuyetDinhDcCuaC',filterTable.soQuyetDinhDcCuaC)" size="small" />
                 </nz-input-group>
               </th>
               <th>
@@ -155,6 +150,7 @@
                     (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
                 </nz-input-group>
               </th>
+
               <th></th>
             </tr>
           </thead>
@@ -169,22 +165,31 @@
               <td>{{ data.soCongVan }}</td>
               <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
               <td>{{ data.trichYeu}}</td>
-              <td>{{ data.soQuyetDinh }}</td>
-              <td>{{ data.soCanCu }}</td>
-              <!-- <td>{{ data.soDxuat }}</td> -->
+              <td>{{ data.soQuyetDinhGiaoNamTruoc }}</td>
+              <td>{{ data.soQuyetDinhDcCuaC }}</td>
               <td>{{ data.tenTrangThai }}</td>
-              <td class="text-center">
-                <a *ngIf="data.trangThai === STATUS.CHO_DUYET_LDV" (click)="redirectDetail(data.id, true)">
+              <td class="text-center" *ngIf="isTongCuc()">
+                <a *ngIf="data.trangThai === STATUS.CHO_DUYET_LDV && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_PA_TCGIAO_DUYET_LDVU')"
+                  (click)="redirectDetail(data.id, true)">
                   <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
                 </a>
-                <a *ngIf="data.trangThai === STATUS.DA_DUYET_LDC" (click)="redirectDetail(data.id, true)">
+                <a *ngIf="(data.trangThai === STATUS.DA_DUYET_LDV || data.trangThai === STATUS.KHONG_BAN_HANH) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_PA_TCGIAO_XEM')"
+                  (click)="redirectDetail(data.id, true)">
                   <i class="fa fa-eye" title="Xem chi tiết"></i>
                 </a>
-                <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="redirectDetail(data.id, false)">
+                <a *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDV) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_PA_TCGIAO_THEM')"
+                  (click)="redirectDetail(data.id, false)">
                   <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
-                <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="xoa(data, '')">
+                <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_PA_TCGIAO_XOA')"
+                  (click)="xoa(data, '')">
                   <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                </a>
+              </td>
+              <td class="text-center"
+                *ngIf="isCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_PA_TCGIAO_XEM')">
+                <a (click)="redirectDetail(data.id, true)">
+                  <i class="fa fa-eye" title="Xem chi tiết"></i>
                 </a>
               </td>
             </tr>

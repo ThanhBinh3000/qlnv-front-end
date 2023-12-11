@@ -1,23 +1,23 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
 import dayjs from "dayjs";
-import { Base2Component } from "../../../../../../../components/base2/base2.component";
-import { StorageService } from "../../../../../../../services/storage.service";
-import { DanhMucService } from "../../../../../../../services/danhmuc.service";
+import {Base2Component} from "../../../../../../../components/base2/base2.component";
+import {StorageService} from "../../../../../../../services/storage.service";
+import {DanhMucService} from "../../../../../../../services/danhmuc.service";
 import {
   QuyetDinhGiaoNvXuatHangService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/QuyetDinhGiaoNvXuatHang.service";
-import { Validators } from "@angular/forms";
-import { STATUS } from "../../../../../../../constants/status";
-import { FileDinhKem } from "../../../../../../../models/FileDinhKem";
-import { MESSAGE } from "../../../../../../../constants/message";
+import {Validators} from "@angular/forms";
+import {STATUS} from "../../../../../../../constants/status";
+import {FileDinhKem} from "../../../../../../../models/FileDinhKem";
+import {MESSAGE} from "../../../../../../../constants/message";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import { convertTienTobangChu } from "../../../../../../../shared/commonFunction";
+import {convertTienTobangChu} from "../../../../../../../shared/commonFunction";
 import {
   QdGiaoNvNhapHangTrongThoiGianBaoHanhService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/QdGiaoNvNhapHangTrongThoiGianBaoHanh.service";
@@ -225,10 +225,10 @@ export class ThongTinPhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent extends Base2
 
     if (this.formData.value.loai === "NHAP_MAU") {
       title = "Danh sách số quyết định giao nhiệm vụ nhập mẫu không bị hủy";
-      dataTable = this.listSoQuyetDinh.filter(i => i.loai == "NHAP_MAU");
-    } else {
+      dataTable = this.listSoQuyetDinh.filter(i=>i.loai=="NHAP_MAU");
+    }  else {
       title = "Danh sách số quyết định giao nhiệm vụ nhập sau bảo hành";
-      dataTable = this.listSoQuyetDinh.filter(i => i.loai == "NHAP_SAU_BH");
+      dataTable = this.listSoQuyetDinh.filter(i=>i.loai=="NHAP_SAU_BH");
     }
 
     const modalQD = this.modal.create({
@@ -253,9 +253,9 @@ export class ThongTinPhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent extends Base2
         tenLoKho: null,
       });
       if (data) {
-        this.bindingDataQd(data.id);
-        this.phieuKdcl(data);
-        this.phieuKtcl(data);
+         this.bindingDataQd(data.id);
+         this.phieuKdcl(data);
+         this.phieuKtcl(data);
       }
     });
   };
@@ -268,7 +268,7 @@ export class ThongTinPhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent extends Base2
     this.formData.patchValue({
       soCanCu: data.soQuyetDinh,
       idCanCu: data.id,
-      ngayKyCanCu: data.ngayKy,
+      ngayKyCanCu:data.ngayKy,
     });
     let diaDiem = data.qdGiaonvXhDtl.filter(item =>
       item.maDiaDiem.substring(0, 8) == this.userInfo.MA_DVI
@@ -336,15 +336,15 @@ export class ThongTinPhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent extends Base2
   }
   async bindingSoPhieuKdcl(data) {
     if (data) {
-      let soPhieu = this.listPhieuKdcl.find(
-        item => item.maDiaDiem == data.maDiaDiem
+      let soPhieu=this.listPhieuKdcl.find(
+        item=>item.maDiaDiem==data.maDiaDiem
       )
       if (soPhieu) {
         this.formData.patchValue({
           soPhieuKdcl: soPhieu.soPhieu,
           idPhieuKdcl: soPhieu.id,
           ngayKdcl: soPhieu.ngayKiemDinh,
-          idBbLayMau: soPhieu.idBbLayMau,
+          idBbLayMau : soPhieu.idBbLayMau,
           soBbLayMau: soPhieu.soBbLayMau,
         })
       }
@@ -368,15 +368,15 @@ export class ThongTinPhieuNhapKhoVtTbTrongThoiGianBaoHanhComponent extends Base2
 
   async bindingSoPhieuKtcl(data) {
     if (data) {
-      let soPhieu = this.listPhieuKtcl.find(
-        item => item.maDiaDiem == data.maDiaDiem
+      let soPhieu=this.listPhieuKtcl.find(
+        item=>item.maDiaDiem==data.maDiaDiem
       )
       if (soPhieu) {
         this.formData.patchValue({
           soPhieuKdcl: soPhieu.soPhieu,
           idPhieuKdcl: soPhieu.id,
           ngayKdcl: soPhieu.ngayKiemDinh,
-          idBbLayMau: soPhieu.idBbLayMau,
+          idBbLayMau : soPhieu.idBbLayMau,
           soBbLayMau: soPhieu.soBbLayMau,
         })
       }

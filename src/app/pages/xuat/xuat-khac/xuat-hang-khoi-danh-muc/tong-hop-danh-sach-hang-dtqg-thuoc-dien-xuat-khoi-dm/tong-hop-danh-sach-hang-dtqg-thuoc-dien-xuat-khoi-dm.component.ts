@@ -9,8 +9,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { DonviService } from '../../../../../services/donvi.service';
 import { DanhMucService } from '../../../../../services/danhmuc.service';
-import { chain, isEmpty } from "lodash";
-import { v4 as uuidv4 } from "uuid";
+import {chain, isEmpty} from "lodash";
+import {v4 as uuidv4} from "uuid";
 import {
   TongHopDanhSachVttbService
 } from '../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/TongHopDanhSachVttb.service';
@@ -150,7 +150,6 @@ export class TongHopDanhSachHangDtqgThuocDienXuatKhoiDmComponent extends Base2Co
           return Object.assign(s1, s);
         })
       } else return s;
-
     });
     this.buildTableView();
   }
@@ -170,9 +169,9 @@ export class TongHopDanhSachHangDtqgThuocDienXuatKhoiDmComponent extends Base2Co
   }
 
   async changeHangHoa(event: any) {
-    this.formData.patchValue({ cloaiVthh: null })
+    this.formData.patchValue({cloaiVthh: null})
     if (event) {
-      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.dsCloaiVthh = res.data;
@@ -190,32 +189,32 @@ export class TongHopDanhSachHangDtqgThuocDienXuatKhoiDmComponent extends Base2Co
         let rs = chain(value)
           .groupBy("tenChiCuc")
           .map((v, k) => {
-            let rowItem = v.find(s => s.tenChiCuc === k);
-            let idVirtual = uuidv4();
-            this.expandSetString.add(idVirtual);
-            return {
-              idVirtual: idVirtual,
-              tenChiCuc: k,
-              tenCuc: rowItem?.tenCuc,
-              maDiaDiem: rowItem?.maDiaDiem,
-              tenCloaiVthh: rowItem?.tenCloaiVthh,
-              childData: v
+              let rowItem = v.find(s => s.tenChiCuc === k);
+              let idVirtual = uuidv4();
+              this.expandSetString.add(idVirtual);
+              return {
+                idVirtual: idVirtual,
+                tenChiCuc: k,
+                tenCuc: rowItem?.tenCuc,
+                maDiaDiem: rowItem?.maDiaDiem,
+                tenCloaiVthh: rowItem?.tenCloaiVthh,
+                childData: v
+              }
             }
-          }
           ).value();
         let rowItem = value.find(s => s.header === key);
         let idVirtual = uuidv4();
         this.expandSetString.add(idVirtual);
         return {
           idVirtual: idVirtual,
-          id: rowItem.id,
-          soQdXhKdm: rowItem.soQdXhKdm,
-          tenCuc: rowItem.tenCuc,
-          maDanhSach: rowItem.maDanhSach,
-          tenDanhSach: rowItem.tenDanhSach,
-          trangThai: rowItem.trangThai,
-          tenTrangThai: rowItem.tenTrangThai,
-          ngayTao: rowItem.ngayTao,
+          id: rowItem?.id,
+          soQdXhKdm: rowItem?.soQdXhKdm,
+          tenCuc: rowItem?.tenCuc,
+          maDanhSach: rowItem?.maDanhSach,
+          tenDanhSach: rowItem?.tenDanhSach,
+          trangThai: rowItem?.trangThai,
+          tenTrangThai: rowItem?.tenTrangThai,
+          ngayTao: rowItem?.ngayTao,
           childData: rs
         };
       }).value();

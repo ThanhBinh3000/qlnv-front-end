@@ -10,7 +10,7 @@
     <nz-card class="mt16 flex-card p-lr16">
       <form nzLayout="vertical" nz-form [formGroup]="formData">
         <div nz-row [nzGutter]="24">
-          <div nz-col [nzSpan]="4" *ngIf="!userService.isChiCuc()">
+          <div nz-col [nzSpan]="4">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Năm
               </nz-form-label>
@@ -21,12 +21,12 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="8" *ngIf="userService.isTongCuc()">
+          <div nz-col [nzSpan]="8">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Loại báo cáo
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-select nzAllowClear formControlName="loaiBc">
+                <nz-select nzAllowClear formControlName="loaiBc" [nzDisabled]="!userService.isTongCuc()">
                   <nz-option *ngFor="let p of listLoaiBc" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -36,7 +36,7 @@
             <nz-form-item>
               <nz-form-label>Cục DTNN KV</nz-form-label>
               <nz-form-control [nzErrorTip]="error" >
-                <nz-select nzShowSearch formControlName="maCuc" (ngModelChange)="changeCuc($event)" nzAllowClear>
+                <nz-select nzShowSearch formControlName="maCuc" (ngModelChange)="changeCuc($event)" nzAllowClear [nzDisabled]="!userService.isTongCuc()">
                   <nz-option *ngFor="let p of dsDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -44,9 +44,9 @@
           </div>
           <div nz-col [nzSpan]="6" *ngIf="formData.value.loaiBc == '02'">
             <nz-form-item>
-              <nz-form-label>Chi Cục DTNN KV</nz-form-label>
+              <nz-form-label>Chi Cục DTNN</nz-form-label>
               <nz-form-control nz-col >
-                <nz-select nzShowSearch formControlName="maChiCuc" nzAllowClear>
+                <nz-select nzShowSearch formControlName="maChiCuc" nzAllowClear [nzDisabled]="userService.isChiCuc()">
                   <nz-option *ngFor="let p of listChiCuc" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -78,7 +78,7 @@
       </form>
     </nz-card>
     <div class="cangiua group-button-search">
-      <button nz-button class="search__button--clear" (click)="clearFilter()">
+      <button nz-button class="search__button--clear" (click)="clearFilter()" *ngIf="userService.isTongCuc()">
         <i class="icon  htvbdh_nhap-lai1"></i>
         Xóa điều kiện
       </button>

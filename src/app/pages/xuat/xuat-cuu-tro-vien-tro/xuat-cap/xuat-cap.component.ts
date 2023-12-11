@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { UserService } from "../../../../services/user.service";
-import { Globals } from "../../../../shared/globals";
-import { Subject } from "rxjs";
+import {Component, Input, OnInit} from '@angular/core';
+import {UserService} from "../../../../services/user.service";
+import {Globals} from "../../../../shared/globals";
+import {Subject} from "rxjs";
 
 @Component({
   selector: 'app-xuat-cap',

@@ -11,6 +11,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { MESSAGE } from "../../../../../constants/message";
 import dayjs from "dayjs";
 import { STATUS } from "../../../../../constants/status";
+import { saveAs } from 'file-saver';
 import { DxChiCucPvcService } from "../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/dx-chi-cuc-pvc.service";
 import { PvcDxChiCucCtiet } from "../../de-xuat-nc-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc.component";
 
@@ -100,6 +101,8 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent extends Base2Component i
     body.ngayDxDen = body.ngayDx ? body.ngayDx[1] : null
     body.trangThai = STATUS.DADUYET_CB_CUC;
     body.trangThaiTh = STATUS.CHUA_TONG_HOP;
+    body.maDvi =this.userInfo.MA_DVI;
+    // body.capDvi =this.userInfo.CAP_DVI;
     let res = await this.dxChiCucService.tongHopDxCc(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let detail = res.data;
@@ -160,6 +163,30 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent extends Base2Component i
       this.spinner.hide();
     }
   }
+
+  async saveAndSend(status: string, msg: string, msgSuccess?: string) {
+    try {
+      this.formData.patchValue({
+        namKeHoach: this.formDataTongHop.value.namKeHoach
+      })
+      this.helperService.markFormGroupTouched(this.formData)
+      if (this.formData.invalid) {
+        return;
+      }
+      if (this.fileDinhKem && this.fileDinhKem.length > 0) {
+        this.formData.value.fileDinhKems = this.fileDinhKem;
+      }
+      this.conVertTreToList();
+      this.formData.value.listQlDinhMucPvcDxCcdcDtl = this.dataTable;
+      this.formData.value.maDvi = this.userInfo.MA_DVI;
+      this.formData.value.capDvi = this.userInfo.CAP_DVI;
+      this.formData.value.soCv = this.formData.value.soCv + this.maQd;
+      await super.saveAndSend( this.formData.value, status, msg, msgSuccess);
+    } catch (error) {
+      console.error("Lỗi khi lưu và gửi dữ liệu:", error);
+    }
+  }
+
 
   async save() {
     this.formData.patchValue({
@@ -300,6 +327,31 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent extends Base2Component i
       this.expandSet.add(id);
     } else {
       this.expandSet.delete(id);
+    }
+  }
+
+  exportDataDetail() {
+    if (this.dataTable.length > 0) {
+      this.spinner.show();
+      try {
+        let body = this.formData.value;
+        body.paggingReq = {
+          limit: this.pageSize,
+          page: this.page - 1
+        }
+        this.dxChiCucService
+          .exportDetail(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-chi-tiet-tong-hop-nhu-cau-mang-pvc-va-ccdc.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
   }
 }

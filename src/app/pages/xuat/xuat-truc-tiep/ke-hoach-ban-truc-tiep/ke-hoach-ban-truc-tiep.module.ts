@@ -1,9 +1,9 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ComponentsModule } from "../../../../components/components.module";
-import { MainModule } from "../../../../layout/main/main.module";
-import { MainKeHoachBanTrucTiepComponent } from './main-ke-hoach-ban-truc-tiep/main-ke-hoach-ban-truc-tiep.component';
-import { DeXuatKhBanTrucTiepComponent } from './de-xuat-kh-ban-truc-tiep/de-xuat-kh-ban-truc-tiep.component';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {ComponentsModule} from "../../../../components/components.module";
+import {MainModule} from "../../../../layout/main/main.module";
+import {MainKeHoachBanTrucTiepComponent} from './main-ke-hoach-ban-truc-tiep/main-ke-hoach-ban-truc-tiep.component';
+import {DeXuatKhBanTrucTiepComponent} from './de-xuat-kh-ban-truc-tiep/de-xuat-kh-ban-truc-tiep.component';
 import {
   ThemMoiDeXuatKhBanTrucTiepComponent
 } from './de-xuat-kh-ban-truc-tiep/them-moi-de-xuat-kh-ban-truc-tiep/them-moi-de-xuat-kh-ban-truc-tiep.component';
@@ -25,14 +25,14 @@ import {
 import {
   KeHoachVonDauNamModule
 } from "../../../ke-hoach/giao-ke-hoach-va-du-toan/ke-hoach-von-dau-nam/ke-hoach-von-dau-nam.module";
-import { DieuChinhBanTrucTiepComponent } from './dieu-chinh-ban-truc-tiep/dieu-chinh-ban-truc-tiep.component';
+import {DieuChinhBanTrucTiepComponent} from './dieu-chinh-ban-truc-tiep/dieu-chinh-ban-truc-tiep.component';
 import {
   ChiTietDieuChinhBanTrucTiepComponent
 } from './dieu-chinh-ban-truc-tiep/chi-tiet-dieu-chinh-ban-truc-tiep/chi-tiet-dieu-chinh-ban-truc-tiep.component';
 import {
   ThongTinChiTietDieuChinhComponent
 } from './dieu-chinh-ban-truc-tiep/chi-tiet-dieu-chinh-ban-truc-tiep/thong-tin-chi-tiet-dieu-chinh/thong-tin-chi-tiet-dieu-chinh.component';
-import { KeHoachBanDauGiaModule } from "../../dau-gia/ke-hoach-ban-dau-gia/ke-hoach-ban-dau-gia.module";
+import {KeHoachBanDauGiaModule} from "../../dau-gia/ke-hoach-ban-dau-gia/ke-hoach-ban-dau-gia.module";
 
 @NgModule({
   declarations: [

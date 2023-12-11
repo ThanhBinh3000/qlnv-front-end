@@ -146,7 +146,7 @@ export class SlGtriHangDtqgXcKThuTienComponent extends Base2Component implements
     try {
       this.spinner.show();
       let body = this.formData.value;
-      body.idHdr = id;
+      body.id = id;
       body.typeFile = "xlsx";
       body.fileName = "bcbn_sl_gtri_hang_dtqg_xc_khong_thu_tien.jrxml";
       body.tenBaoCao = "Báo cáo số lượng và giá trị hàng DTQG xuất cấp không thu tiền trong kỳ";

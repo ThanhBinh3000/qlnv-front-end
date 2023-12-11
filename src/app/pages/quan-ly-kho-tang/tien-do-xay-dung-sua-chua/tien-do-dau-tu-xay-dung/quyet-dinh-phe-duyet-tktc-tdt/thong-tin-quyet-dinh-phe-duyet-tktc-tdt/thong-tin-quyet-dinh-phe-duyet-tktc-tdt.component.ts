@@ -123,6 +123,7 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
         soQdKhDtxdNam: this.itemDuAn.soQdPdKhNam,
         soQdPdDaDtxd: this.itemQdPdDaDtxd.soQd,
         soQdPdDtxd: this.itemQdPdDaDtxd.soQd,
+        soQdPdDtxdNam: this.itemQdPdDaDtxd.soQdKhDtxd,
         idQdPdDaDtxd: this.itemQdPdDaDtxd.id,
         loaiDuAn: this.itemDuAn.loaiDuAn,
         loaiCapCt: this.itemQdPdDaDtxd.loaiCapCt,

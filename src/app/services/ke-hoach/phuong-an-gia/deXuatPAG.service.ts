@@ -13,4 +13,9 @@ export class DeXuatPAGService extends BaseService {
     super(httpClient, 'phuong-an-gia/dx-pag', '/qlnv-khoach')
 
   }
+
+  getDetailGct(id): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet-gct/${id}`;
+    return this._httpClient.get<OldResponseData>(url).toPromise();
+  }
 }

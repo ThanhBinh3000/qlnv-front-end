@@ -61,6 +61,7 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
       soHopDong: [null, Validators.required],
       tenHopDong: [null, Validators.required],
       ngayKy: [null, Validators.required],
+      ngayHieuLuc: [null, Validators.required],
       loaiHopDong: [null, Validators.required],
       thoiGianThucHien: [null, Validators.required],
       giaTri: [null],
@@ -175,6 +176,31 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
     }
   }
 
+  async saveAndSend(status: string, msg: string, msgSuccess?: string) {
+    try {
+      this.helperService.markFormGroupTouched(this.formData);
+      if (this.formData.invalid) {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
+        this.spinner.hide();
+        return;
+      }
+      this.convertListDiaDiem()
+      if (this.fileDinhKem && this.fileDinhKem.length > 0) {
+        this.formData.value.listFileDinhKems = this.fileDinhKem;
+      }
+      this.formData.value.giaTri = this.calcTong();
+      this.formData.value.maDvi = this.userInfo.MA_DVI
+      this.formData.value.capDvi = this.userInfo.CAP_DVI
+      this.formData.value.listQlDinhMucPvcHdLoaiHh = this.dataTable
+      this.formData.value.listQlDinhMucPvcHdDiaDiemNh = this.listDiaDiem
+      this.formData.value.soHopDong = this.formData.value.soHopDong + this.maQd
+      let body = this.formData.value;
+      await super.saveAndSend(this.formData.value, status, msg, msgSuccess);
+    } catch (error) {
+      console.error("Lỗi khi lưu và gửi dữ liệu:", error);
+    }
+  }
+
   async save() {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
@@ -231,41 +257,6 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
     }
   }
 
-  async pheDuyet() {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn ký?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 350,
-      nzOnOk: async () => {
-        this.spinner.show();
-        try {
-          let body = {
-            id: this.id,
-            trangThai: STATUS.DA_KY,
-          }
-          let res = await this.hopDongService.approve(body);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, 'Ký thành công!');
-            this.spinner.hide();
-            this.goBack();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-            this.spinner.hide();
-          }
-        } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        } finally {
-          this.spinner.hide();
-        }
-      },
-    });
-  }
 
   async themMoiCtiet() {
     let msgRequired = this.required(this.rowItem);
@@ -476,6 +467,7 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
             item.tenHangHoa = item.tenCcdc
             item.donViTinh = data.donViTinh
             item.donGia = data.donGiaTd
+            item.slMetQuyCuon = data.slMetQuyCuon
             item.soLuong = item.soLuong + data.soLuongTc
             item.maHangHoa = data.maCcdc
           })
@@ -543,8 +535,50 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
       this.rowItem.tenHangHoa = result[0].tenHangHoa;
       this.rowItem.donViTinh = result[0].donViTinh;
       this.rowItem.soLuong = result[0].soLuong;
+      this.rowItem.slMetQuyCuon = result[0].slMetQuyCuon;
+      this.rowItem.slCuon = result[0].slCuon;
       this.rowItem.donGia = result[0].donGia;
     }
+  }
+
+  changSoLuong(event, item) {
+    if (event && item.slMetQuyCuon) {
+      let cuon = event / item.slMetQuyCuon;
+      if (cuon.toString().includes(".")) {
+        let cut = cuon.toString().split(".")
+        let cuon0 = Number(cut[0])
+        let check = cuon0 + 0.35
+        if (check > cuon) {
+          item.slCuon = cuon0
+        } else {
+          item.slCuon = cuon0 + 1
+        }
+
+      } else {
+        item.slCuon = cuon
+      }
+
+    } else item.slCuon = undefined
+  }
+
+  changMetQuyCuon(event, item) {
+    if (event && item.soLuong) {
+      let cuon = item.soLuong / event;
+      if (cuon.toString().includes(".")) {
+        let cut = cuon.toString().split(".")
+        let cuon0 = Number(cut[0])
+        let check = cuon0 + 0.35
+        if (check > cuon) {
+          item.slCuon = cuon0
+        } else {
+          item.slCuon = cuon0 + 1
+        }
+
+      } else {
+        item.slCuon = cuon
+      }
+
+    } else item.slCuon = undefined
   }
 
   deleteDetail(item: any, roles?) {

@@ -22,10 +22,10 @@ import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-
 import { CanCuXacDinh, FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
 import { DatePipe } from '@angular/common';
-import { STATUS } from "../../../../../constants/status";
-import { QuyetDinhPheDuyetKeHoachMTTService } from "../../../../../services/quyet-dinh-phe-duyet-ke-hoach-mtt.service";
-import { ChaogiaUyquyenMualeService } from "../../../../../services/chaogia-uyquyen-muale.service";
-import { convertTienTobangChu } from 'src/app/shared/commonFunction';
+import {STATUS} from "../../../../../constants/status";
+import {QuyetDinhPheDuyetKeHoachMTTService} from "../../../../../services/quyet-dinh-phe-duyet-ke-hoach-mtt.service";
+import {ChaogiaUyquyenMualeService} from "../../../../../services/chaogia-uyquyen-muale.service";
+import {convertTienTobangChu} from 'src/app/shared/commonFunction';
 import {
   DialogThemMoiBangKeThuMuaLeComponent
 } from "../../../../../components/dialog/dialog-them-moi-bang-ke-thu-mua-le/dialog-them-moi-bang-ke-thu-mua-le.component";
@@ -87,7 +87,7 @@ export class ThemmoiQdKhUyQuyenMuaLeComponent extends Base2Component implements 
     this.formData = this.fb.group({
       id: [],
       idQdDtl: [],
-      namKh: ['', [Validators.required]],
+      namKh: ['',[Validators.required]],
       soQd: ['', [Validators.required]],
       maDvi: [''],
       tenDvi: ['', [Validators.required]],
@@ -146,7 +146,7 @@ export class ThemmoiQdKhUyQuyenMuaLeComponent extends Base2Component implements 
           // this.danhSachCtiet = dataDtl.children.length > 0 ? dataDtl.children : dataDtl.children2
           this.formData.patchValue({
             idQdDtl: id,
-            soQd: dataDtl.hhQdPheduyetKhMttHdr.soQd,
+            soQd: dataDtl.hhQdPheduyetKhMttHdr.isChange ? dataDtl.hhQdPheduyetKhMttHdr.soQdDc : dataDtl.hhQdPheduyetKhMttHdr.soQd,
             trangThai: dataDtl.trangThai,
             tenTrangThai: dataDtl.tenTrangThai,
             tenCloaiVthh: dataDtl.hhQdPheduyetKhMttHdr.tenCloaiVthh,
@@ -193,17 +193,17 @@ export class ThemmoiQdKhUyQuyenMuaLeComponent extends Base2Component implements 
     }
   }
 
-  convertTien(data: any) {
+  convertTien(data: any){
     return convertTienTobangChu(data);
   }
-  redirectHopDong() {
+  redirectHopDong(){
     let elem = document.getElementById('muatt');
     let tabActive = elem.getElementsByClassName('ant-menu-item')[0];
     tabActive.classList.remove('ant-menu-item-selected')
     let setActive = elem.getElementsByClassName('ant-menu-item')[1];
     setActive.classList.add('ant-menu-item-selected');
     this.isHopDong = true
-    this.idSelected = this.formData.value.id
+    this.idSelected = this.formData.value.idQdDtl
   }
   async themMoiBangKeMuaLe($event, data?: null, index?: number) {
     let res = await this.quyetDinhGiaoNvNhapHangService.getDetail(this.idQdGnvu);

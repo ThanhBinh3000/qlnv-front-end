@@ -16,6 +16,8 @@ import { CurrencyMaskInputMode } from 'ngx-currency';
 import { saveAs } from 'file-saver';
 import { PREVIEW } from '../../../../constants/fileType';
 import printJS from 'print-js';
+import { TRANG_THAI_CTNC } from '../../../../constants/status';
+import { DonviService } from '../../../../services/donvi.service';
 
 @Component({
   selector: 'app-thong-tin-quan-ly-cong-trinh-nghien-cuu-bao-quan',
@@ -39,7 +41,9 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
   listNguonVon: any[] = [];
   fileDinhKem: any[] = [];
   fileTienDoTh: any[] = [];
-  fileNghiemThuTl: any[] = [];
+  fileNghiemThu: any[] = [];
+  fileThanhLy: any[] = [];
+  listDonVi: any[] = [];
   options = {
     allowZero: true,
     allowNegative: true,
@@ -52,12 +56,13 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
     inputMode: CurrencyMaskInputMode.FINANCIAL,
   };
   templateName = 'thong_tin_cong_trinh_nghien_cuu';
+  STATUS_KHCN = TRANG_THAI_CTNC;
   listTrangThai1: any[] = [
     { ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện' },
     { ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
     { ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành' },
   ];
-  trangThaiSave: string = this.STATUS.DU_THAO;
+  trangThaiSave: string = this.STATUS_KHCN.PHE_DUYET_NV_KHCN;
   hasError: boolean = false;
   dataTable: any[] = [];
   rowItem: TienDoThucHien = new TienDoThucHien;
@@ -77,6 +82,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService: DanhMucService,
+    private donviService: DonviService,
     private khCnCongTrinhNghienCuu: KhCnCongTrinhNghienCuu,
   ) {
     super(httpClient, storageService, notification, spinner, modal, khCnCongTrinhNghienCuu);
@@ -94,11 +100,13 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
       chucVu: [''],
       email: [null],
       sdt: [null],
-      dviPhoiHop: ['', [Validators.required]],
-      dviChuTri: ['', [Validators.required]],
-      dviThucHien: ['', [Validators.required]],
-      nguonVon: ['', [Validators.required]],
-      soQdPd: [''],
+      dviPhoiHop: [null],
+      dviChuTri: [null, [Validators.required]],
+      dviThucHien: [null, [Validators.required]],
+      tenDviThucHien: [null],
+      tenDviChuTri: [null],
+      nguonVon: [null, [Validators.required]],
+      soQdPd: [null],
       suCanThiet: [null],
       mucTieu: [null],
       phamVi: [null],
@@ -107,20 +115,19 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
       tongChiPhi: [null, [Validators.required]],
       phuongPhap: [null],
       noiDung: [null],
-      ngayNghiemThu: ['', [Validators.required]],
-      diaDiem: ['', [Validators.required]],
-      danhGia: ['', [Validators.required]],
-      tongDiem: ['', [Validators.required]],
-      xepLoai: ['', [Validators.required]],
+      ngayNghiemThu: [null],
+      diaDiem: [null],
+      danhGia: [null],
+      tongDiem: [null],
+      xepLoai: [null],
+      dkThanhLy: [null],
+      hsThanhLy: [null],
+      tnCnNvKhcn: [null],
     });
   }
 
-  listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    // { ma: this.STATUS.DA_DUYET, giaTri: 'Đã duyệt' },
-    { ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
-    { ma: this.STATUS.DA_NGHIEM_THU, giaTri: 'Đã nghiệm thu' },
-  ];
+  listTrangThai: any[] = [];
+  listDkThanhLy: any[] = [];
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes) {
@@ -136,6 +143,9 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
     }
     this.getListCapDt();
     this.getListXepLoai();
+    this.getListTrangThai();
+    this.getListDonViTheoCap();
+    this.getListDkThanhLy();
   }
 
   async getDetail(id) {
@@ -143,13 +153,15 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
       this.trangThaiSave = data.trangThai;
+      data.dkThanhLy = data.dkThanhLy ? data.dkThanhLy.split(',') : [];
       this.helperService.bidingDataInFormGroup(this.formData, data);
       this.formData.patchValue({
         ngayKy: data.ngayKyTu && data.ngayKyDen ? [data.ngayKyTu, data.ngayKyDen] : null,
       });
       this.fileDinhKem = data.fileDinhKem;
       this.fileTienDoTh = data.fileTienDoTh;
-      this.fileNghiemThuTl = data.fileNghiemThuTl;
+      this.fileNghiemThu = data.fileNghiemThu;
+      this.fileThanhLy = data.fileThanhLy;
       this.dataTable = data.tienDoThucHien;
       this.dataTable.forEach(item => {
         const tt = this.listTrangThai1.filter(d => d.ma == item.trangThaiTd);
@@ -174,7 +186,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
   }
 
   isDisable(): boolean {
-    if (this.trangThaiSave == this.STATUS.DU_THAO || this.trangThaiSave == this.STATUS.DANG_THUC_HIEN) {
+    if (this.trangThaiSave == this.STATUS_KHCN.PHE_DUYET_NV_KHCN || this.trangThaiSave == this.STATUS_KHCN.DANG_THUC_HIEN_NV_KHCN) {
       return false;
     } else {
       return true;
@@ -183,8 +195,8 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
 
   async initForm() {
     this.formData.patchValue({
-      trangThai: '00',
-      tenTrangThai: 'Dự Thảo',
+      trangThai: '01',
+      tenTrangThai: 'Phê duyệt Nhiệm vụ KHCN',
     });
   }
 
@@ -201,6 +213,32 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
     }
   }
 
+  async getListTrangThai() {
+    this.listTrangThai = [];
+    let res = await this.danhMucService.danhMucChungGetAll('TRANG_THAI_CTNC');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listTrangThai = res.data;
+    }
+  }
+
+  async getListDkThanhLy() {
+    this.listDkThanhLy = [];
+    let res = await this.danhMucService.danhMucChungGetAll('DIEU_KIEN_THANH_LY');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listDkThanhLy = res.data;
+    }
+  }
+
+  async getListDonViTheoCap() {
+    let res = await this.donviService.layTatCaDonViByLevel(2);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listDonVi = res.data;
+      this.listDonVi.forEach(item => {
+        item.fullname = item.key + ' - ' + item.title;
+      });
+    }
+  }
+
   async getListXepLoai() {
     this.listXepLoai = [];
     let res = await this.danhMucService.danhMucChungGetAll('XEP_LOAI');
@@ -210,7 +248,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
   }
 
   calculateXepLoai() {
-    if (this.formData.value.tongDiem) {
+    if (this.formData.value.tongDiem >= 0) {
       let tongDiem = this.formData.value.tongDiem;
       if (tongDiem < 60) {
         this.formData.patchValue({
@@ -245,12 +283,14 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
   }
 
   async save(isGuiDuyet?) {
-    this.setValidator(isGuiDuyet);
+    this.setValidator();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       return;
     }
     let body = this.formData.value;
+    body.tenDviThucHien = this.listDonVi.find(item => item.key == body.dviThucHien)?.title;
+    body.tenDviChuTri = this.listDonVi.find(item => item.key == body.dviChuTri)?.title;
     body.tienDoThucHien = this.dataTable;
     body.children = this.dataTable1;
     body.nam = dayjs().get('year');
@@ -266,7 +306,9 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
       : null;
     body.fileDinhKem = this.fileDinhKem;
     body.fileTienDoTh = this.fileTienDoTh;
-    body.fileNghiemThuTl = this.fileNghiemThuTl;
+    body.fileNghiemThu = this.fileNghiemThu;
+    body.fileThanhLy = this.fileThanhLy;
+    body.dkThanhLy = (body.dkThanhLy && body.dkThanhLy.length > 0) ? body.dkThanhLy.toString() : null;
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.khCnCongTrinhNghienCuu.update(body);
@@ -288,33 +330,32 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
     }
   }
 
-  setValidator(isGuiDuyet) {
-    if (isGuiDuyet) {
-
-      if (this.formData.value.trangThai == this.STATUS.DA_NGHIEM_THU) {
-        this.formData.controls['ngayNghiemThu'].setValidators([Validators.required]);
-        this.formData.controls['diaDiem'].setValidators([Validators.required]);
-        this.formData.controls['danhGia'].setValidators([Validators.required]);
-        this.formData.controls['tongDiem'].setValidators([Validators.required]);
-        this.formData.controls['xepLoai'].setValidators([Validators.required]);
-      } else {
-
-        this.formData.controls['ngayNghiemThu'].clearValidators();
-        this.formData.controls['diaDiem'].clearValidators();
-        this.formData.controls['danhGia'].clearValidators();
-        this.formData.controls['tongDiem'].clearValidators();
-        this.formData.controls['xepLoai'].clearValidators();
-      }
+  setValidator() {
+    if (this.formData.value.trangThai == this.STATUS_KHCN.DA_NGHIEM_THU_NV_KHCN) {
+      // this.formData.controls['ngayNghiemThu'].setValidators([Validators.required]);
+      // this.formData.controls['diaDiem'].setValidators([Validators.required]);
+      this.formData.controls['danhGia'].setValidators([Validators.required]);
+      this.formData.controls['tongDiem'].setValidators([Validators.required]);
+      this.formData.controls['xepLoai'].setValidators([Validators.required]);
+    } else if (this.formData.value.trangThai == this.STATUS_KHCN.DA_THANH_LY_NV_KHCN) {
+      this.formData.controls['dkThanhLy'].setValidators([Validators.required]);
+      this.formData.controls['hsThanhLy'].setValidators([Validators.required]);
+      this.formData.controls['tnCnNvKhcn'].setValidators([Validators.required]);
     } else {
-
+      // this.formData.controls['ngayNghiemThu'].clearValidators();
+      // this.formData.controls['diaDiem'].clearValidators();
+      this.formData.controls['danhGia'].clearValidators();
+      this.formData.controls['tongDiem'].clearValidators();
+      this.formData.controls['xepLoai'].clearValidators();
+      this.formData.controls['dkThanhLy'].clearValidators();
+      this.formData.controls['hsThanhLy'].clearValidators();
+      this.formData.controls['tnCnNvKhcn'].clearValidators();
     }
   }
 
 
   // tiến độ thực hiện
   themMoiItem() {
-
-
     if (!this.dataTable) {
       this.dataTable = [];
     }
@@ -408,7 +449,6 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
 
   clearData() {
     this.rowItem = new TienDoThucHien();
-    this.dataTable = [];
   }
 
   emitDataTable() {
@@ -417,8 +457,6 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
 
   //Nghiệm thu
   themMoiItem1() {
-
-
     if (!this.dataTable1) {
       this.dataTable1 = [];
     }
@@ -441,7 +479,6 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
 
   clearData1() {
     this.rowItem1 = new NghiemThuThanhLy();
-    this.dataTable1 = [];
   }
 
   sortTableId1() {
@@ -528,7 +565,28 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
   }
 
   doPrint() {
-    console.log('aaaaaaaaa');
     printJS({ printable: this.printSrc, type: 'pdf', base64: true });
+  }
+
+  changeCapDeTai(val) {
+    if (val) {
+      if (val == '02') {
+        if (this.listDonVi && !this.listDonVi.find(item => item.key == '0101')) {
+          this.listDonVi.push({ key: '0101', title: 'Tổng cục DTNN', fullname: '0101 - Tổng cục DTNN' });
+        }
+        this.formData.patchValue({
+          dviChuTri: '0101',
+          tenDviChuTri: 'Tổng cục DTNN',
+        });
+      } else {
+        this.formData.patchValue({
+          dviChuTri: null,
+        });
+        let indexTc = this.listDonVi.findIndex(item => item.key == '0101');
+        if (indexTc != -1) {
+          this.listDonVi.splice(indexTc, 1);
+        }
+      }
+    }
   }
 }

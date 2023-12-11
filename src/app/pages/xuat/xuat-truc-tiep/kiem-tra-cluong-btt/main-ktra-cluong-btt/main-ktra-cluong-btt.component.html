@@ -1,22 +1,29 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="level2">
-    <ul nz-menu nzMode="horizontal">
-        <li nz-menu-item nzSelected (click)="selectTab(0)">
-            Biên bản lấy mẫu/bàn giao mẫu
-        </li>
-        <li nz-menu-item (click)="selectTab(1)">
-            Phiếu kiểm nghiệm chất lượng
-        </li>
-        <li *ngIf="loaiVthh.startsWith('02')" nz-menu-item (click)="selectTab(2)">
-            Hồ sơ kỹ thuật
-        </li>
-    </ul>
+<nz-affix [nzOffsetTop]="98" class="level2-border">
+  <ul nz-menu nzMode="horizontal">
+    <li [nzSelected]="tabSelected==0" nz-menu-item (click)="selectTab(0)"
+        *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_KTCL_VT_BBLMBGM') : userService.isAccessPermisson('XHDTQG_PTTT_KTCL_LT_BBLMBGM')">
+      Biên bản lấy mẫu/bàn giao mẫu
+    </li>
+    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)"
+        *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_KTCL_VT_KNCL') : userService.isAccessPermisson('XHDTQG_PTTT_KTCL_LT_KNCL')">
+      Phiếu kiểm nghiệm chất lượng
+    </li>
+    <li [nzSelected]="tabSelected==2" nz-menu-item (click)="selectTab(2)"
+        *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) && userService.isAccessPermisson('XHDTQG_PTTT_KTCL_VT_HSKT')">
+      Hồ sơ kỹ thuật
+    </li>
+  </ul>
 </nz-affix>
-<ng-container *ngIf="tabSelected == 0">
-    <app-bien-ban-lay-mau-btt [loaiVthh]="loaiVthh"></app-bien-ban-lay-mau-btt>
-</ng-container>
-<ng-container *ngIf="tabSelected == 1">
-    <app-phieu-ktra-cluong-btt [loaiVthh]="loaiVthh"></app-phieu-ktra-cluong-btt>
-</ng-container>
-<ng-container *ngIf="tabSelected == 2">
-    <app-ho-so-ky-thuat-btt [loaiVthh]="loaiVthh"></app-ho-so-ky-thuat-btt>
-</ng-container>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 0">
+      <app-bien-ban-lay-mau-btt [loaiVthh]="loaiVthh"></app-bien-ban-lay-mau-btt>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 1">
+      <app-phieu-ktra-cluong-btt [loaiVthh]="loaiVthh"></app-phieu-ktra-cluong-btt>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 2">
+      <app-ho-so-ky-thuat-btt [loaiVthh]="loaiVthh"></app-ho-so-ky-thuat-btt>
+    </ng-container>
+  </div>
+</div>

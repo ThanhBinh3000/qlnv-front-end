@@ -1,21 +1,21 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Base2Component } from "../../../../../../components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { DanhMucService } from "../../../../../../services/danhmuc.service";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {
   QuyetdinhpheduyetKhlcntService
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKhlcnt.service";
 import {
   QuyetdinhpheduyetKqLcntService
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKqLcnt.service";
-import { HopdongService } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/hopdong.service";
-import { MESSAGE } from "../../../../../../constants/message";
-import { CurrencyMaskInputMode } from "ngx-currency";
-import { STATUS } from "../../../../../../constants/status";
+import {HopdongService} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/hopdong.service";
+import {MESSAGE} from "../../../../../../constants/message";
+import {CurrencyMaskInputMode} from "ngx-currency";
+import {CHUC_NANG, STATUS} from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-thong-tin-hop-dong',
@@ -158,7 +158,7 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
           this.tongTien = this.listHopDong.reduce((prev, cur) => {
             prev += cur.hopDong?.thanhTien;
             return prev;
-          }, 0)
+          },0)
         }
       } else {
         //Load lại page thông tin hợp đồng khi back lại từ trang thêm mới hợp đồng.
@@ -179,7 +179,7 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
               this.tongTien = this.listHopDong.reduce((prev, cur) => {
                 prev += cur.hopDong?.thanhTien;
                 return prev;
-              }, 0)
+              },0)
             }
           } else {
             this.notification.warning(MESSAGE.WARNING, "Không tìm thấy thông tin hợp đồng cho dự án này, vui lòng kiểm tra lại.");
@@ -189,7 +189,7 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
         }
       }
     } catch
-    (e) {
+      (e) {
       this.notification.error(MESSAGE.ERROR, e);
       this.spinner.hide();
     } finally {
@@ -229,8 +229,8 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
   }
 
   delete(item
-    :
-    any
+           :
+           any
   ) {
     this.modal.confirm({
       nzClosable: false,
@@ -265,4 +265,6 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
   themMoiHopDong() {
 
   }
+
+  protected readonly CHUC_NANG = CHUC_NANG;
 }

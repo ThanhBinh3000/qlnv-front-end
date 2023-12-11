@@ -1,24 +1,24 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { Validators } from "@angular/forms";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { QuyHoachKhoService } from "../../../../../../services/quy-hoach-kho.service";
-import { Base2Component } from "../../../../../../components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { chain } from 'lodash';
-import { StorageService } from "../../../../../../services/storage.service";
+import {Component, Input, OnInit} from '@angular/core';
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {Validators} from "@angular/forms";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {QuyHoachKhoService} from "../../../../../../services/quy-hoach-kho.service";
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {chain} from 'lodash';
+import {StorageService} from "../../../../../../services/storage.service";
 import {
   PopUpChiTietQuyHoachKhoComponent
 } from "../pop-up-chi-tiet-quy-hoach-kho/pop-up-chi-tiet-quy-hoach-kho.component";
-import { NumberToRoman } from "../../../../../../shared/commonFunction";
+import {NumberToRoman} from "../../../../../../shared/commonFunction";
 import dayjs from "dayjs";
-import { MESSAGE } from "../../../../../../constants/message";
+import {MESSAGE} from "../../../../../../constants/message";
 import * as uuidv4 from "uuid";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import { STATUS } from "../../../../../../constants/status";
+import {STATUS} from "../../../../../../constants/status";
 
 
 @Component({
@@ -128,7 +128,7 @@ export class ThemMoiQdComponent extends Base2Component implements OnInit {
     let data = await this.createUpdate(body);
     if (data) {
       this.idInput = data.id;
-      this.formData.patchValue({ id: data.id })
+      this.formData.patchValue({id: data.id})
     }
   }
 
@@ -184,8 +184,8 @@ export class ThemMoiQdComponent extends Base2Component implements OnInit {
       nzContent: PopUpChiTietQuyHoachKhoComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzBodyStyle: { 'overflow-y': 'auto' },
-      nzStyle: { top: '100px' },
+      nzBodyStyle: {'overflow-y': 'auto'},
+      nzStyle: {top: '100px'},
       nzWidth: '1000px',
       nzFooter: null,
       nzComponentParams: {
@@ -251,6 +251,7 @@ export class ThemMoiQdComponent extends Base2Component implements OnInit {
   convertToRoman(number): string {
     return NumberToRoman(number).toString();
   }
+
   xoaData(idx: number, type: string) {
     this.modal.confirm({
       nzClosable: false,

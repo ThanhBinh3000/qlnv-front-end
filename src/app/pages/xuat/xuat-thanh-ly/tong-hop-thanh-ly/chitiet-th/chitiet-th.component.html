@@ -14,7 +14,8 @@
         <nz-form-label [nzSm]="6" [nzXs]="24">Thời gian tổng hợp</nz-form-label>
         <nz-form-control [nzSm]="14" [nzXs]="24">
           <nz-input-group>
-            <input nz-input formControlName="ngayTao" readonly>
+            <nz-date-picker nzFormat="dd/MM/yyyy HH:mm:ss" formControlName="ngayTao" nzDisabled="true">
+            </nz-date-picker>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>

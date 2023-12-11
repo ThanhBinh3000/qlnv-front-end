@@ -167,7 +167,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         ngayTaoBb: dayjs().format('YYYY-MM-DD'),
         thuKho: this.userInfo.TEN_DAY_DU,
         type: "XUAT_CAP",
-        loaiVThh: this.loaiVthh
+        loaiVThh:this.loaiVthh
 
       });
     }
@@ -292,11 +292,11 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
       this.dataTable = bienBan.listPhieuXuatKho
     }
     this.tongSoLuongXk = this.dataTable.reduce((prev, cur) => prev + cur.slXuat, 0);
-    let slHaoHut = this.formData.value.tongSlNhap * this.formData.value.dinhMucHaoHut;
+    let slHaoHut= this.formData.value.tongSlNhap*this.formData.value.dinhMucHaoHut;
     this.formData.patchValue({
       ngayKetThucXuat: this.dataTable[0].ngayXuatKho,
       ngayBatDauXuat: this.dataTable[this.dataTable.length - 1].ngayXuatKho,
-      tongSlXuat: this.tongSoLuongXk,
+      tongSlXuat:this.tongSoLuongXk,
       sLHaoHutTheoDm: slHaoHut,
     })
   }

@@ -376,6 +376,10 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
     let body = {
       trangThai: STATUS.DU_THAO,
       soQdinhDcc: this.formData.value.soQdinhDcc,
+      maLoKho: this.formData.value.maLoKho,
+      maNganKho: this.formData.value.maNganKho,
+      maNhaKho: this.formData.value.maNhaKho,
+      maDiemKho: this.formData.value.maDiemKho,
       loaiDc: this.loaiDc,
       isVatTu: true
     }

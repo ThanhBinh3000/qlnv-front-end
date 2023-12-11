@@ -1,22 +1,23 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { Validators } from "@angular/forms";
-import { Base2Component } from "../../../../../components/base2/base2.component";
-import { chain } from 'lodash';
-import { v4 as uuidv4 } from 'uuid';
+import {Component, Input, OnInit} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {Validators} from "@angular/forms";
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {chain} from 'lodash';
+import {v4 as uuidv4} from 'uuid';
 import {
   MmThongTinNcChiCuc
 } from "../../de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc.component";
-import { MmDxChiCucService } from "../../../../../services/mm-dx-chi-cuc.service";
-import { MESSAGE } from "../../../../../constants/message";
+import {MmDxChiCucService} from "../../../../../services/mm-dx-chi-cuc.service";
+import {MESSAGE} from "../../../../../constants/message";
 import dayjs from "dayjs";
-import { STATUS } from "../../../../../constants/status";
-import { QuyetDinhMuaSamService } from "../../../../../services/quyet-dinh-mua-sam.service";
-import { DialogMmMuaSamComponent } from "../../../../../components/dialog/dialog-mm-mua-sam/dialog-mm-mua-sam.component";
+import { saveAs } from 'file-saver';
+import {STATUS} from "../../../../../constants/status";
+import {QuyetDinhMuaSamService} from "../../../../../services/quyet-dinh-mua-sam.service";
+import {DialogMmMuaSamComponent} from "../../../../../components/dialog/dialog-mm-mua-sam/dialog-mm-mua-sam.component";
 
 @Component({
   selector: 'app-mm-them-moi-qd-mua-sam',
@@ -32,7 +33,7 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
   rowItem: MmThongTinNcChiCuc = new MmThongTinNcChiCuc();
   dataEdit: { [key: string]: { edit: boolean; data: MmThongTinNcChiCuc } } = {};
   expandSet = new Set<number>();
-  typeQd: string
+  typeQd: string = "TH";
 
   constructor(
     httpClient: HttpClient,
@@ -49,13 +50,13 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
       id: [null],
       maDvi: [null],
       namKeHoach: [dayjs().get('year'), Validators.required],
-      maTh: [null],
+      maTh: [null, Validators.required],
       maDx: [null],
       soQd: [null, Validators.required],
       trichYeu: [null, Validators.required],
       ngayKy: [null, Validators.required],
-      trangThai: ['00'],
-      tenTrangThai: ['Dự thảo'],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
+      tenTrangThai: ['Đang nhập dữ liệu'],
       fileDinhKems: [null],
       lyDoTuChoi: [null],
       listQlDinhMucQdMuaSamDtlReq: [null],
@@ -68,7 +69,7 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
     try {
       this.maQd = '/QĐ-TCDT'
       await this.loadDsDxCc();
-      await this.loadDxCuc();
+      // await this.loadDxCuc();
       if (this.id > 0) {
         await this.detail(this.id);
       }
@@ -113,37 +114,37 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
     }
   }
 
-  async loadDxCuc() {
-    this.spinner.show();
-    try {
-      let body = {
-        "capDvi": "2",
-        "paggingReq": {
-          "limit": 10,
-          "page": 0
-        }
-      }
-      let res = await this.dxChiCucService.search(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        let data = res.data;
-        this.listDxCuc = data.content;
-        if (this.listDxCuc) {
-          this.listDxCuc = this.listDxCuc.filter(
-            (item) => (item.trangThai == this.STATUS.DA_DUYET_CBV && !item.qdMuaSamId && item.trangThaiTh == STATUS.CHUA_TONG_HOP)
-          )
-        }
-      } else {
-        this.listDxCuc = [];
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-      this.spinner.hide();
-    } catch (e) {
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    } finally {
-      this.spinner.hide();
-    }
-  }
+  // async loadDxCuc() {
+  //   this.spinner.show();
+  //   try {
+  //     let body = {
+  //       "capDvi": "2",
+  //       "paggingReq": {
+  //         "limit": 10,
+  //         "page": 0
+  //       }
+  //     }
+  //     let res = await this.dxChiCucService.search(body);
+  //     if (res.msg == MESSAGE.SUCCESS) {
+  //       let data = res.data;
+  //       this.listDxCuc = data.content;
+  //       if (this.listDxCuc) {
+  //         this.listDxCuc = this.listDxCuc.filter(
+  //           (item) => (item.trangThai == this.STATUS.DA_DUYET_CBV && !item.qdMuaSamId && item.trangThaiTh == STATUS.CHUA_TONG_HOP)
+  //         )
+  //       }
+  //     } else {
+  //       this.listDxCuc = [];
+  //       this.notification.error(MESSAGE.ERROR, res.msg);
+  //     }
+  //     this.spinner.hide();
+  //   } catch (e) {
+  //     this.spinner.hide();
+  //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+  //   } finally {
+  //     this.spinner.hide();
+  //   }
+  // }
 
   async save(isOther: boolean) {
     this.helperService.markFormGroupTouched(this.formData);
@@ -212,12 +213,12 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
   async pheDuyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.DU_THAO:
-      case STATUS.TU_CHOI_LDTC: {
+      case STATUS.DANG_NHAP_DU_LIEU :
+      case STATUS.TU_CHOI_LDTC : {
         trangThai = STATUS.CHO_DUYET_LDTC;
         break;
       }
-      case STATUS.CHO_DUYET_LDTC: {
+      case STATUS.CHO_DUYET_LDTC : {
         trangThai = STATUS.BAN_HANH
       }
     }
@@ -227,10 +228,10 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
   convertListData() {
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable = chain(this.dataTable).groupBy('tenTaiSan').map((value, key) => ({
-        tenTaiSan: key,
-        dataChild: value,
-        idVirtual: uuidv4(),
-      })
+          tenTaiSan: key,
+          dataChild: value,
+          idVirtual: uuidv4(),
+        })
       ).value()
     }
     if (this.dataTable && this.dataTable.length > 0) {
@@ -347,31 +348,31 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
     }
   }
 
-  chonSoDxCuc() {
-    if (!this.isView && this.typeQd == 'DX') {
-      let modalQD = this.modal.create({
-        nzTitle: 'DANH SÁCH ĐỀ XUẤT CỦA CỤC',
-        nzContent: DialogMmMuaSamComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '700px',
-        nzFooter: null,
-        nzComponentParams: {
-          listTh: this.listDxCuc,
-          type: "02"
-        },
-      });
-      modalQD.afterClose.subscribe(async (data) => {
-        if (data) {
-          this.formData.patchValue({
-            maDx: data.soCv,
-            maTh: null,
-          })
-          await this.changSoTh(data.id, 'DX');
-        }
-      })
-    }
-  }
+  // chonSoDxCuc() {
+  //   if (!this.isView && this.typeQd == 'DX') {
+  //     let modalQD = this.modal.create({
+  //       nzTitle: 'DANH SÁCH ĐỀ XUẤT CỦA CỤC',
+  //       nzContent: DialogMmMuaSamComponent,
+  //       nzMaskClosable: false,
+  //       nzClosable: false,
+  //       nzWidth: '700px',
+  //       nzFooter: null,
+  //       nzComponentParams: {
+  //         listTh: this.listDxCuc,
+  //         type: "02"
+  //       },
+  //     });
+  //     modalQD.afterClose.subscribe(async (data) => {
+  //       if (data) {
+  //         this.formData.patchValue({
+  //           maDx: data.soCv,
+  //           maTh: null,
+  //         })
+  //         await this.changSoTh(data.id, 'DX');
+  //       }
+  //     })
+  //   }
+  // }
 
   async loadSlThuaThieu(item: MmThongTinNcChiCuc) {
     if ((item.slTieuChuan - item.slNhapThem - item.slHienCo) >= 0) {
@@ -386,5 +387,30 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
     }
   }
 
+  exportDataDetail() {
+    if (this.dataTable.length > 0) {
+      this.spinner.show();
+      try {
+        let body = this.formData.value;
+        body.listQlDinhMucQdMuaSamDtl = this.dataTable;
+        body.paggingReq = {
+          limit: this.pageSize,
+          page: this.page - 1
+        }
+        this.qdMuaSamService
+          .exportDetail(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-chi-tiet-tong-hop-nhu-cau-mmtb-va-ccdc.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
+  }
 }
 

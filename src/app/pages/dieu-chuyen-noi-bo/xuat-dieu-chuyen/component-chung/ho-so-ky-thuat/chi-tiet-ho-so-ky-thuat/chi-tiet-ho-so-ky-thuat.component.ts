@@ -11,20 +11,16 @@ import { Subject } from "rxjs";
 import { UserLogin } from "src/app/models/userlogin";
 import { UserService } from "src/app/services/user.service";
 import { MESSAGE } from "src/app/constants/message";
-
 import { v4 as uuidv4 } from "uuid";
 import { cloneDeep } from 'lodash';
 import { FileDinhKem } from "src/app/models/FileDinhKem";
 import { saveAs } from 'file-saver';
 import {
-  BienBanLayMauBanGiaoMauService
-} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanLayMauBanGiaoMau.service";
-import {
   DialogTableSelectionComponent
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
-import { HoSoKyThuatBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/HoSoKyThuatBdg.service';
-import { BienBanLayMauDieuChuyenService } from '../../services/dcnb-bien-ban-lay-mau.service';
 import { PREVIEW } from "src/app/constants/fileType";
+import { HoSoKyThuatXuatDieuChuyenService } from '../../services/dcnb-ho-so-ky-thuat.service';
+import { BienBanLayMauDieuChuyenService } from '../../services/dcnb-bien-ban-lay-mau.service';
 
 @Component({
   selector: 'app-chi-tiet-ho-so-ky-thuat-xuat-dieu-chuyen',
@@ -33,11 +29,12 @@ import { PREVIEW } from "src/app/constants/fileType";
 })
 export class ChiTietHoSoKyThuatXuatDieuChuyenComponent extends Base2Component implements OnInit {
 
-  @Input() loaiDc: string
+
   @Input() id: number;
   @Input() isView: boolean;
   @Input() isViewDetail: boolean;
   @Input() loaiVthh: string;
+  @Input() loaiDc: string;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -108,7 +105,7 @@ export class ChiTietHoSoKyThuatXuatDieuChuyenComponent extends Base2Component im
   viewTableHoSo: any[] = [];
   viewTableBienBan: any[] = [];
   bienBanRow: any = {};
-  templateName: string = "Hồ sơ kỹ thuật";
+  templateName = "Hồ sơ kỹ thuật";
 
   constructor(
     httpClient: HttpClient,
@@ -118,11 +115,10 @@ export class ChiTietHoSoKyThuatXuatDieuChuyenComponent extends Base2Component im
     modal: NzModalService,
     public userService: UserService,
     // private bienBanLayMauService: QuanLyBienBanLayMauService,
-    private bienBanLayMauBanGiaoMauService: BienBanLayMauBanGiaoMauService,
-    private hoSoKyThuatBdgService: HoSoKyThuatBdgService,
-    private bienBanLayMauDieuChuyenService: BienBanLayMauDieuChuyenService
+    private bienBanLayMauDieuChuyenService: BienBanLayMauDieuChuyenService,
+    private hoSoKyThuatXuatDieuChuyenService: HoSoKyThuatXuatDieuChuyenService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatBdgService);
+    super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatXuatDieuChuyenService);
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [],
@@ -158,6 +154,7 @@ export class ChiTietHoSoKyThuatXuatDieuChuyenComponent extends Base2Component im
       tenNganKho: [],
       tenLoKho: [],
       canBoTaoHoSo: [],
+      canBoTaoHoSoNh: [],
       soBbKtNgoaiQuan: [],
       soBbKtVanHanh: [],
       soBbKtHskt: [],
@@ -172,6 +169,9 @@ export class ChiTietHoSoKyThuatXuatDieuChuyenComponent extends Base2Component im
       if (this.id) {
         await this.loadDetail(this.id);
       }
+      else {
+        await this.save(true)
+      }
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -181,7 +181,7 @@ export class ChiTietHoSoKyThuatXuatDieuChuyenComponent extends Base2Component im
   }
 
   async loadDetail(id) {
-    let res = await this.hoSoKyThuatBdgService.getDetail({ id: id, type: "DCNBX" });
+    let res = await this.hoSoKyThuatXuatDieuChuyenService.getDetail({ id: id, type: "DCNBX" });
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.formData.patchValue(data);
@@ -201,6 +201,12 @@ export class ChiTietHoSoKyThuatXuatDieuChuyenComponent extends Base2Component im
           })
         }
       })
+    }
+    if (!this.formData.value.id) {
+      this.formData.patchValue({
+        trangThai: STATUS.DA_DUYET_LDC
+      })
+      await this.save(true);
     }
   }
 
@@ -228,11 +234,12 @@ export class ChiTietHoSoKyThuatXuatDieuChuyenComponent extends Base2Component im
     }
   }
 
-  async save() {
+  async save(isHideMessage?: boolean) {
     try {
-      this.formData.patchValue({ type: 'DCNBX' });
+      this.formData.patchValue({ type: "DCNBX" });
       let body = this.formData.value;
-      let rs = await this.createUpdate(body);
+      let rs = await this.createUpdate(body, null, isHideMessage);
+      this.formData.patchValue(rs);
     } catch (e) {
       console.log(e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -403,13 +410,8 @@ export class ChiTietHoSoKyThuatXuatDieuChuyenComponent extends Base2Component im
         limit: this.globals.prop.MAX_INTERGER,
         page: 0
       },
-      loaiDc: this.loaiDc,
-      isVatTu: true,
-      type: "00",
-      thayDoiThuKho: true,
       trangThai: STATUS.DA_DUYET_LDCC,
     }
-    // let res = await this.bienBanLayMauBanGiaoMauService.search(body);
     let res = await this.bienBanLayMauDieuChuyenService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -427,7 +429,7 @@ export class ChiTietHoSoKyThuatXuatDieuChuyenComponent extends Base2Component im
       nzComponentParams: {
         dataTable: this.listBanGiaoMau,
         dataHeader: ['Số biên bản', 'Loại hàng hóa'],
-        dataColumn: ['soBBLayMau', 'tenHangHoa'],
+        dataColumn: ['soBienBan', 'tenLoaiVthh'],
       },
     })
     modalQD.afterClose.subscribe(async (dataChose) => {
@@ -435,13 +437,14 @@ export class ChiTietHoSoKyThuatXuatDieuChuyenComponent extends Base2Component im
       if (dataChose) {
         this.formData.patchValue({
           idBbLayMau: dataChose.id,
-          soBbLayMau: dataChose.soBBLayMau
+          soBbLayMau: dataChose.soBienBan
         });
       }
     });
   };
+
   async inBienBan(id, type, loai) {
-    await this.hoSoKyThuatBdgService.preview({
+    await this.hoSoKyThuatXuatDieuChuyenService.preview({
       id: id,
       type: type,
       loai: loai

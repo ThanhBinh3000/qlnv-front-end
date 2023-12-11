@@ -1,21 +1,21 @@
-import { Component, Input, OnInit, } from '@angular/core';
+import {Component, Input, OnInit,} from '@angular/core';
 import dayjs from 'dayjs';
-import { cloneDeep } from 'lodash';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
+import {cloneDeep} from 'lodash';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
+import {MESSAGE} from 'src/app/constants/message';
+import {UserLogin} from 'src/app/models/userlogin';
 import {
   DanhSachDauThauService
 } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
-import { UserService } from 'src/app/services/user.service';
-import { convertTrangThai } from 'src/app/shared/commonFunction';
-import { Globals } from 'src/app/shared/globals';
-import { saveAs } from 'file-saver';
-import { QuyetDinhKhTrungHanService } from "../../../../../services/quyet-dinh-kh-trung-han.service";
-import { STATUS } from "../../../../../constants/status";
+import {UserService} from 'src/app/services/user.service';
+import {convertTrangThai} from 'src/app/shared/commonFunction';
+import {Globals} from 'src/app/shared/globals';
+import {saveAs} from 'file-saver';
+import {QuyetDinhKhTrungHanService} from "../../../../../services/quyet-dinh-kh-trung-han.service";
+import {STATUS} from "../../../../../constants/status";
 import { TongHopKhTrungHanService } from "../../../../../services/tong-hop-kh-trung-han.service";
 import { Router } from "@angular/router";
 
@@ -33,28 +33,30 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
   STATUS = STATUS;
   selectedId: number = 0;
   idTongHop: number = 0;
-  isViewTh: boolean;
+  isViewTh : boolean;
   isViewDetail: boolean;
   tabSelected: string = 'phuong-an-tong-hop';
   searchValue = '';
   listNam: any[] = [];
 
   searchFilter = {
-    namKeHoach: '',
+    namKeHoach  :'',
     soQuyetDinh: '',
     ngayKyTu: '',
     ngayKyDen: '',
-    ngayHieuLucTu: '',
-    ngayHieuLucDen: '',
-    tgKhoiCong: '',
-    tgHoanThanh: '',
+    ngayHieuLucTu : '',
+    ngayHieuLucDen : '',
+    tgKhoiCong : '',
+    tgHoanThanh : '',
   };
 
   filterTable: any = {
     namKeHoach: '',
-    giaiDoan: '',
+    giaiDoan : '' ,
     soQuyetDinh: '',
     ngayKyBtc: '',
+    soQdCanDieuChinh: '',
+    soLanDieuChinh: '',
     trichYeu: '',
     phuongAnTc: '',
     tenTrangThai: '',
@@ -65,7 +67,7 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
   dataTableAll: any[] = [];
   dataTable: any[] = [];
 
-  listTrangThai = [{ "ma": "00", "giaTri": "Dự thảo" }, { "ma": "29", "giaTri": "Ban hành" }];
+  listTrangThai = [{"ma": "78", "giaTri": "Đang nhập dữ liệu"}, {"ma": "29", "giaTri": "Ban hành"}];
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
@@ -80,7 +82,7 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
     private quyetDinhService: QuyetDinhKhTrungHanService,
     public globals: Globals,
     private tongHopTrungHanService: TongHopKhTrungHanService,
-    private router: Router
+    private router  :Router
   ) {
   }
 
@@ -121,15 +123,15 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      namKeHoach: this.searchFilter.namKeHoach,
-      soQuyetDinh: this.searchFilter.soQuyetDinh,
-      ngayKyTu: this.searchFilter.ngayKyTu,
-      ngayKyDen: this.searchFilter.ngayKyDen,
-      ngayHieuLucTu: this.searchFilter.ngayHieuLucTu,
-      ngayHieuLucDen: this.searchFilter.ngayHieuLucDen,
-      tgKhoiCong: this.searchFilter.tgKhoiCong,
-      tgHoanThanh: this.searchFilter.tgHoanThanh,
-      maDvi: this.userInfo.MA_DVI,
+      namKeHoach : this.searchFilter.namKeHoach,
+      soQuyetDinh : this.searchFilter.soQuyetDinh,
+      ngayKyTu : this.searchFilter.ngayKyTu,
+      ngayKyDen : this.searchFilter.ngayKyDen,
+      ngayHieuLucTu : this.searchFilter.ngayHieuLucTu,
+      ngayHieuLucDen : this.searchFilter.ngayHieuLucDen,
+      tgKhoiCong : this.searchFilter.tgKhoiCong,
+      tgHoanThanh  : this.searchFilter.tgHoanThanh,
+      maDvi : this.userInfo.MA_DVI,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
@@ -226,14 +228,14 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter = {
-      namKeHoach: '',
+      namKeHoach  :'',
       soQuyetDinh: '',
       ngayKyTu: '',
       ngayKyDen: '',
-      ngayHieuLucTu: '',
-      ngayHieuLucDen: '',
-      tgKhoiCong: '',
-      tgHoanThanh: '',
+      ngayHieuLucTu : '',
+      ngayHieuLucDen : '',
+      tgKhoiCong : '',
+      tgHoanThanh : '',
     }
     this.search();
   }
@@ -290,7 +292,7 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quyetDinhService.deleteMuti({ ids: dataDelete });
+            let res = await this.quyetDinhService.deleteMuti({ids: dataDelete});
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -317,15 +319,15 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          namKeHoach: this.searchFilter.namKeHoach,
-          soQuyetDinh: this.searchFilter.soQuyetDinh,
-          ngayKyTu: this.searchFilter.ngayKyTu,
-          ngayKyDen: this.searchFilter.ngayKyDen,
-          ngayHieuLucTu: this.searchFilter.ngayHieuLucTu,
-          ngayHieuLucDen: this.searchFilter.ngayHieuLucDen,
-          tgKhoiCong: this.searchFilter.tgKhoiCong,
-          tgHoanThanh: this.searchFilter.tgHoanThanh,
-          maDvi: this.userInfo.MA_DVI,
+          namKeHoach : this.searchFilter.namKeHoach,
+          soQuyetDinh : this.searchFilter.soQuyetDinh,
+          ngayKyTu : this.searchFilter.ngayKyTu,
+          ngayKyDen : this.searchFilter.ngayKyDen,
+          ngayHieuLucTu : this.searchFilter.ngayHieuLucTu,
+          ngayHieuLucDen : this.searchFilter.ngayHieuLucDen,
+          tgKhoiCong : this.searchFilter.tgKhoiCong,
+          tgHoanThanh  : this.searchFilter.tgHoanThanh,
+          maDvi : this.userInfo.MA_DVI,
           paggingReq: {
             limit: this.pageSize,
             page: this.page - 1,
@@ -379,9 +381,9 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
     return result;
   }
 
-  async openModalCttongHop(data: any) {
+  async openModalCttongHop(data : any) {
     let body = {
-      namKeHoach: data.namKeHoach,
+      namKeHoach : data.namKeHoach,
       paggingReq: {
         limit: 100,
         page: this.page - 1,

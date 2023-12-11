@@ -12,8 +12,8 @@
             <nz-form-label>Mã danh sách</nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <nz-input-number [nzDisabled]="true" [nzMin]="1" [nzSize]="'small'" [nzPlaceHolder]="'Tự động sinh'"
-                  [nzStep]="1" formControlName="maDanhSach">
+                <nz-input-number [nzDisabled]="true" [nzMin]="1" [nzSize]="'small'"
+                                 [nzPlaceHolder]="'Tự động sinh'" [nzStep]="1" formControlName="maDanhSach">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -74,8 +74,8 @@
       <div nz-row nzSpan="24" class="mg-t-16 flex-card p-lr16">
         <div nz-col nzSpan="8"></div>
         <div nz-col nzSpan="16"><span style="color: blue">
-            <a (click)="onClickShowDetail()"><b>Xem toàn bộ danh sách hàng dự trữ theo chỉ đạo của Chính
-                Phủ</b></a></span>
+          <a
+            (click)="onClickShowDetail()"><b>Xem toàn bộ danh sách hàng dự trữ theo chỉ đạo của Chính Phủ</b></a></span>
         </div>
       </div>
     </ng-container>
@@ -89,58 +89,57 @@
       <div class="d-flex justify-content-center">
         <div style="width: fit-content;border-style: none none dotted none">
           <p style="font-size: 16px;margin: 0px">
-            <strong>{{selectedItem.tenCuc ? selectedItem.tenCuc : selectedItem.tenDvql}}</strong>
-          </p>
+            <strong>{{selectedItem.tenCuc ? selectedItem.tenCuc : selectedItem.tenDvql}}</strong></p>
         </div>
       </div>
 
       <nz-card class="mg-t-16">
         <nz-table #tblData [nzData]="dataTable" class="table-chi-tiet" [nzScroll]="{ x: '1700px' }" nzBordered>
           <thead>
-            <tr>
-              <th class="text-center" width="40px">STT</th>
-              <th width="200px">Nhóm hàng DTQG</th>
-              <th width="250px">Loại hàng DTQG</th>
-              <th width="250px">Chủng loại hàng DTQG</th>
-              <th width="250px">Mô tả</th>
-              <th width="100px">ĐVT</th>
-              <th width="200px">Đơn vị quản lý</th>
-            </tr>
+          <tr>
+            <th class="text-center" width="40px">STT</th>
+            <th width="200px">Nhóm hàng DTQG</th>
+            <th width="250px">Loại hàng DTQG</th>
+            <th width="250px">Chủng loại hàng DTQG</th>
+            <th width="250px">Mô tả</th>
+            <th width="100px">ĐVT</th>
+            <th width="200px">Đơn vị quản lý</th>
+          </tr>
           </thead>
           <tbody>
-            <ng-container *ngFor="let item of tblData.data, let i = index;">
+          <ng-container *ngFor="let item of tblData.data, let i = index;">
+            <tr>
+              <td>{{numberToRoman(i + 1)!}}</td>
+              <td class="bold">{{item.tenNhomHang}}</td>
+              <td  class="bold">{{item.ten}}</td>
+              <td></td>
+              <td></td>
+              <td>{{item.maDviTinh}}</td>
+              <td>TCDT</td>
+            </tr>
+            <ng-container *ngFor="let lv1 of item.children,let i2=index">
               <tr>
-                <td>{{numberToRoman(i + 1)!}}</td>
-                <td class="bold">{{item.tenNhomHang}}</td>
-                <td class="bold">{{item.ten}}</td>
+                <td style="text-align: right;">{{i2 + 1}}</td>
                 <td></td>
                 <td></td>
-                <td>{{item.maDviTinh}}</td>
+                <td class="bold">{{lv1.ten}}</td>
+                <td></td>
+                <td>{{lv1.maDviTinh}}</td>
                 <td>TCDT</td>
               </tr>
-              <ng-container *ngFor="let lv1 of item.children,let i2=index">
-                <tr>
-                  <td style="text-align: right;">{{i2 + 1}}</td>
-                  <td></td>
-                  <td></td>
-                  <td class="bold">{{lv1.ten}}</td>
-                  <td></td>
-                  <td>{{lv1.maDviTinh}}</td>
-                  <td>TCDT</td>
-                </tr>
-                <!--              <ng-container *ngFor="let lv2 of lv1.children,let i3=index">-->
-                <!--                <tr>-->
-                <!--                  <td style="text-align: right;">{{i3 + 1}}</td>-->
-                <!--                  <td></td>-->
-                <!--                  <td></td>-->
-                <!--                  <td>{{lv2.ten}}</td>-->
-                <!--                  <td></td>-->
-                <!--                  <td>{{lv2.maDviTinh}}</td>-->
-                <!--                  <td>TCDT</td>-->
-                <!--                </tr>-->
-                <!--              </ng-container>-->
-              </ng-container>
+<!--              <ng-container *ngFor="let lv2 of lv1.children,let i3=index">-->
+<!--                <tr>-->
+<!--                  <td style="text-align: right;">{{i3 + 1}}</td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td>{{lv2.ten}}</td>-->
+<!--                  <td></td>-->
+<!--                  <td>{{lv2.maDviTinh}}</td>-->
+<!--                  <td>TCDT</td>-->
+<!--                </tr>-->
+<!--              </ng-container>-->
             </ng-container>
+          </ng-container>
           </tbody>
         </nz-table>
       </nz-card>

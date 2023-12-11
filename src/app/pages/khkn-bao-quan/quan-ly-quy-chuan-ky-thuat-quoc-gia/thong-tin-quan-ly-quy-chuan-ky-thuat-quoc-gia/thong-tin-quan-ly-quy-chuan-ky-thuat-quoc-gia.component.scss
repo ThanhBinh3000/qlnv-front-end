@@ -106,4 +106,16 @@
             opacity: 0.5;
         }
     }
+  .icon-download,
+  .icon-xoa {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #F8F9FA;
+    border: 1px solid #C4C9CC;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 0px 7px;
+  }
 }
+

@@ -4,6 +4,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucThuKhoService } from 'src/app/services/danh-muc-thu-kho.service';
 import { DonviService } from 'src/app/services/donvi.service';
+import {UserService} from "../../../../services/user.service";
 
 @Component({
   selector: 'app-themmoi-thukho',
@@ -17,6 +18,7 @@ export class ThemmoiThukhoComponent implements OnInit {
   dataTree: any[] = [];
 
   constructor(
+    public userService: UserService,
     private _modalRef: NzModalRef,
     private donViService: DonviService,
     private danhMucThuKhoService: DanhMucThuKhoService,
@@ -81,7 +83,7 @@ export class ThemmoiThukhoComponent implements OnInit {
     switch (level) {
       // Cấp ngăn kho
       case '6':
-        this.setOfCheckedId.add(data.maDvi);
+        isAdd ? this.setOfCheckedId.add(data.maDvi) : this.setOfCheckedId.delete(data.maDvi);;
         // Add toàn bộ cấp 7 ( Lô Kho ).
         data.children.forEach(element => {
           isAdd ? this.setOfCheckedId.add(element.maDvi) : this.setOfCheckedId.delete(element.maDvi);

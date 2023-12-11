@@ -17,10 +17,11 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import dayjs from 'dayjs';
 import { StorageService } from 'src/app/services/storage.service';
-import { convertIdToLoaiVthh, convertIdToTenLoaiVthh, convertTrangThai } from "../../../../../../shared/commonFunction";
+import {convertIdToLoaiVthh, convertIdToTenLoaiVthh, convertTrangThai} from "../../../../../../shared/commonFunction";
 import { saveAs } from "file-saver";
-import { PREVIEW } from "../../../../../../constants/fileType";
+import {PREVIEW} from "../../../../../../constants/fileType";
 import printJS from "print-js";
+import {DonviService} from "../../../../../../services/donvi.service";
 
 @Component({
   selector: 'app-themmoi-tonghop-khlcnt',
@@ -50,6 +51,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
   listFileDinhKem: any[] = [];
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
+  dsDonVi: any;
   reportTemplate: any = {
     typeFile: "",
     fileName: "tong_hop_kh_lcnt.docx",
@@ -67,7 +69,8 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
-    private danhMucService: DanhMucService
+    private danhMucService: DanhMucService,
+    private donViService: DonviService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopDeXuatKHLCNTService);
     this.formTraCuu = this.fb.group(
@@ -81,6 +84,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
         pthucLcnt: [''],
         loaiHdong: [''],
         nguonVon: [''],
+        listMaDvi: null,
       }
     );
     this.formData = this.fb.group({
@@ -102,6 +106,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
       soQdCc: [''],
       kieuNx: [''],
       loaiHinhNx: [''],
+      maTh: [],
     })
 
   }
@@ -112,6 +117,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
       await Promise.all([
         this.loadDataComboBox(),
         this.loadChiTiet(),
+        this.loadDsDonVi(),
         this.convertTenVthh()
       ]);
       await this.spinner.hide();
@@ -122,7 +128,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
     }
   }
 
-  convertTenVthh() {
+  convertTenVthh(){
     let data = convertIdToTenLoaiVthh(this.loaiVthh);
     this.formTraCuu.get('tenLoaiVthh').setValue(data)
     this.formTraCuu.get('loaiVthh').setValue(this.loaiVthh)
@@ -149,6 +155,21 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
 
   async showFirstRow($event, data: any) {
     await this.showDetail($event, data);
+  }
+  async loadDsDonVi() {
+    let body = {
+      trangThai: "01",
+      maDviCha: this.userInfo.MA_DVI,
+      type: "DV"
+    };
+    let res = await this.donViService.getDonViTheoMaCha(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (this.userService.isTongCuc()) {
+        this.dsDonVi = res.data;
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
   }
 
   async loadDataComboBox() {
@@ -203,10 +224,10 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
       let res = await this.tongHopDeXuatKHLCNTService.deXuatCuc(body);
       if (res.msg == MESSAGE.SUCCESS && res.data && res.data.hhDxKhLcntThopDtlList.length > 0) {
         const dataDetail = res.data
-        let idTh = await this.userService.getId("HH_DX_KHLCNT_THOP_HDR_SEQ");
+        let maTh = await this.userService.getId("HH_DX_KHLCNT_THOP_HDR_SEQ");
         this.helperService.bidingDataInFormGroup(this.formData, dataDetail)
         this.formData.patchValue({
-          id: idTh,
+          maTh: maTh,
           ngayTao: dayjs().format("YYYY-MM-DD"),
         })
         this.dataTableDanhSachDX = dataDetail.hhDxKhLcntThopDtlList;
@@ -333,8 +354,8 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
   closeDlg() {
     this.showDlgPreview = false;
   }
-  printPreview() {
-    printJS({ printable: this.printSrc, type: 'pdf', base64: true })
+  printPreview(){
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 }
 

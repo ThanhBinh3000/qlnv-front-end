@@ -111,9 +111,9 @@
                     <td colspan="8"></td>
                     <td>{{ dataPhieu.soBangKe }}</td>
                     <td>{{ dataPhieu.soPhieuNhapKho }}</td>
-                    <td>{{ dataPhieu.phieuNhapKho.ngayNhapKho | date : 'dd/MM/yyyy' }}</td>
-                    <td>{{ dataDdiem.bienBanLayMau.soBienBan }}</td>
-                    <td>{{ dataDdiem.bienBanGuiHang.soBienBanGuiHang }}</td>
+                    <td>{{ dataPhieu.phieuNhapKho?.ngayNhapKho | date : 'dd/MM/yyyy' }}</td>
+                    <td>{{ dataDdiem.bienBanLayMau?.soBienBan }}</td>
+                    <td>{{ dataDdiem.bienBanGuiHang?.soBienBanGuiHang }}</td>
                     <td>{{ dataPhieu.tenTrangThai }}</td>
                     <td>
                       <a *ngIf="dataPhieu.trangThai == STATUS.DA_DUYET_LDCC "
@@ -155,7 +155,7 @@
   </div>
 </ng-container>
 <ng-container *ngIf="isDetail">
-  <app-thong-tin-bang-ke-nhap-vat-tu [id]="selectedId" (showListEvent)="showList()" [isView]="isView"
+  <app-thong-tin-bang-ke-nhap-vat-tu [id]="selectedId" (showListEvent)="showList()" [isView]="isView" [idQdGiaoNvNh]="idQdGiaoNvNh"
     [loaiVthh]="loaiVthh">
   </app-thong-tin-bang-ke-nhap-vat-tu>
 </ng-container>

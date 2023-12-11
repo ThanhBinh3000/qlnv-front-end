@@ -88,8 +88,8 @@
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
-      <button type="button" class="btn btn-main" *ngIf="this.userService.isChiCuc()"
-        (click)="redirectCreate('SCHDTQG_XH_BKXVT_THEM')">
+      <button type="button" class="btn btn-main" *ngIf="this.userService.isChiCuc() && showCreate()"
+        (click)="redirectCreate()">
         <i class="icon htvbdh_dau-cong"></i>
         <span>Thêm</span>
       </button>
@@ -140,7 +140,11 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
+                <td>
+                  <a *ngIf="this.userService.isChiCuc() && showCreate()" (click)="redirectCreate()">
+                    <i class="fa fa-plus"></i>
+                  </a>
+                </td>
               </tr>
               <ng-container *ngFor="let pxk of dsHdr.scBangKeXuatVatTuList , let i = index">
                 <tr>

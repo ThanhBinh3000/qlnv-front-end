@@ -29,12 +29,12 @@
               <div nz-row>
                 <div nz-col nzSpan='12' class='cus-start-date'>
                   <nz-date-picker [nzDisabledDate]='disabledStartNgayLayMau' nzFormat='dd/MM/yyyy'
-                    formControlName='ngayKiemDinhTu' nzPlaceHolder='Ngày bắt đầu'>
+                                  formControlName='ngayKiemDinhTu' nzPlaceHolder='Ngày bắt đầu'>
                   </nz-date-picker>
                 </div>
                 <div nz-col nzSpan='12' class='cus-end-date'>
                   <nz-date-picker [nzDisabledDate]='disabledEndNgayLayMau' nzFormat='dd/MM/yyyy'
-                    formControlName='ngayKiemDinhDen' nzPlaceHolder='Ngày kết thúc'></nz-date-picker>
+                                  formControlName='ngayKiemDinhDen' nzPlaceHolder='Ngày kết thúc'></nz-date-picker>
                 </div>
               </div>
             </nz-form-item>
@@ -67,7 +67,8 @@
           <i class='icon htvbdh_chuyen-xu-ly'></i>
           <span>Xuất file</span>
         </button>
-        <button type='button' class='btn btn-main' (click)='redirectDetail(0,false)' *ngIf='userService.isCuc()'>
+        <button type='button' class='btn btn-main' (click)='redirectDetail(0,false)'
+                *ngIf='userService.isCuc()'>
           <i class='icon htvbdh_tcdt_tao-qd'></i>
           <span>Thêm</span>
         </button>
@@ -77,109 +78,111 @@
 
     <nz-card class='mt-2px flex-card data-table card-border-content table-card'>
       <nz-table #basicTable class='nowrap table__container-tt' [nzData]='children' [nzFrontPagination]='false'
-        [nzShowPagination]='false' nzBordered>
+                [nzShowPagination]='false' nzBordered>
         <thead>
-          <tr>
-            <th width='60px' class='text-center'>STT</th>
-            <th></th>
-            <th width=''>Số QĐ giao nhiệm vụ XH</th>
-            <th width=''>Năm</th>
-            <th width=''>Thời gian xuất lấy mẫu</th>
-            <th width=''>Điểm kho</th>
-            <th width=''>Ngăn/Lô kho</th>
-            <th width=''>Chủng loại hàng</th>
-            <th width=''>Số phiếu kiểm định CL</th>
-            <th width=''>Ngày kiểm định</th>
-            <th width=''>Số BB LM/BGM</th>
-            <th width=''>Ngày lấy mẫu</th>
-            <th width=''>Trạng thái</th>
-            <th width='90px'>Hành động</th>
-          </tr>
+        <tr>
+          <th width='60px' class='text-center'>STT</th>
+          <th></th>
+          <th width=''>Số QĐ giao nhiệm vụ XH</th>
+          <th width=''>Năm</th>
+          <th width=''>Thời gian xuất lấy mẫu</th>
+          <th width=''>Điểm kho</th>
+          <th width=''>Ngăn/Lô kho</th>
+          <th width=''>Chủng loại hàng</th>
+          <th width=''>Số phiếu kiểm định CL</th>
+          <th width=''>Ngày kiểm định</th>
+          <th width=''>Số BB LM/BGM</th>
+          <th width=''>Ngày lấy mẫu</th>
+          <th width=''>Trạng thái</th>
+          <th width='90px'>Hành động</th>
+        </tr>
         </thead>
         <tbody>
 
-          <ng-container *ngFor='let item of basicTable.data, let i = index;'>
-            <tr>
-              <td class='bold'>{{i + 1}}</td>
-              <td (nzExpandChange)='onExpandStringChange(item.idVirtual, $event)'
+        <ng-container *ngFor='let item of basicTable.data, let i = index;'>
+          <tr>
+            <td class='bold'>{{i + 1}}</td>
+            <td (nzExpandChange)='onExpandStringChange(item.idVirtual, $event)'
                 [nzExpand]='expandSetString.has(item.idVirtual)' nzShowExpand='true' style='width: 35px'></td>
-              <td class='bold'>{{ item.soQdGiaoNvXh }}</td>
-              <td class='bold'>{{ item.nam }}</td>
-              <td class='bold'>{{ item.ngayXuatLayMau | date: 'dd/MM/YYYY' }}</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td class='text-left'>
-                <button type='button' class='btn btn-outline-info' *ngIf='userService.isCuc()'>
-                  <span>Tạo BCKQ kiểm định mẫu</span>
-                </button>
-              </td>
-            </tr>
-            <ng-container *ngIf='expandSetString.has(item.idVirtual)'>
-              <ng-container *ngFor='let lv1 of item.childData,let i1=index'>
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td class='bold'>{{lv1.tenDiemKho}}</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td class='text-left'>
-                    <a (click)='redirectDetail(item.id, false,item.soQdGiaoNvXh)'>
-                      <i class='icon htvbdh_dau-cong' title='Thêm mới'></i>
-                    </a>
-                  </td>
-                </tr>
-                <ng-container *ngIf='expandSetString.has(item.idVirtual)'>
-                  <ng-container *ngFor='let lv2 of lv1.childData,let i2=index'>
-                    <tr>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td>{{lv2.tenLoKho ? lv2.tenNganKho + ' - ' + lv2.tenLoKho : lv2.tenNganKho}}</td>
-                      <td>{{lv2.tenCloaiVthh }}</td>
-                      <td>{{lv2.soPhieu}}</td>
-                      <td>{{lv2.ngayKiemDinh | date: 'dd/MM/YYYY' }}</td>
-                      <td class='bold'>{{lv2.soBbLayMau }}</td>
-                      <td>{{lv2.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
-                      <td>{{lv2.tenTrangThai}}</td>
-                      <td class='text-left'>
-                        <a *ngIf='lv2.trangThai == STATUS.DA_DUYET_LDC' (click)='redirectDetail(lv2.id, true)'>
-                          <i class='fa fa-eye' title='Xem chi tiết'></i>
-                        </a>
-                        <a *ngIf='lv2.trangThai ==STATUS.TU_CHOI_LDC || lv2.trangThai ==STATUS.DU_THAO || lv2.trangThai ==STATUS.TU_CHOI_TP'
-                          (click)='redirectDetail(lv2.id, false)'>
-                          <i class='fa fa-pencil' title='Sửa'></i>
-                        </a>
-                        <a *ngIf='lv2.trangThai ==STATUS.CHO_DUYET_LDC || lv2.trangThai ==STATUS.CHO_DUYET_TP'
-                          (click)='redirectDetail(lv2.id, true)'>
-                          <i class='icon htvbdh_tcdt_pheduyet'></i>
-                        </a>
-                        <a *ngIf='lv2.trangThai ==STATUS.DU_THAO' (click)='delete(lv2)'>
-                          <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
-                        </a>
-                      </td>
-                    </tr>
-                  </ng-container>
+            <td class='bold'>{{ item.soQdGiaoNvXh }}</td>
+            <td class='bold'>{{ item.nam }}</td>
+            <td class='bold'>{{ item.ngayXuatLayMau | date: 'dd/MM/YYYY' }}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class='text-left'>
+              <button type='button' class='btn btn-outline-info'
+                      *ngIf='userService.isCuc()'>
+                <span>Tạo BCKQ kiểm định mẫu</span>
+              </button>
+            </td>
+          </tr>
+          <ng-container *ngIf='expandSetString.has(item.idVirtual)'>
+            <ng-container *ngFor='let lv1 of item.childData,let i1=index'>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class='bold'>{{lv1.tenDiemKho}}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class='text-left'>
+                  <a (click)='redirectDetail(item.id, false,item.soQdGiaoNvXh)'>
+                    <i class='icon htvbdh_dau-cong' title='Thêm mới'></i>
+                  </a>
+                </td>
+              </tr>
+              <ng-container *ngIf='expandSetString.has(item.idVirtual)'>
+                <ng-container *ngFor='let lv2 of lv1.childData,let i2=index'>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>{{lv2.tenLoKho ? lv2.tenNganKho + ' - ' + lv2.tenLoKho : lv2.tenNganKho}}</td>
+                    <td>{{lv2.tenCloaiVthh }}</td>
+                    <td>{{lv2.soPhieu}}</td>
+                    <td>{{lv2.ngayKiemDinh | date: 'dd/MM/YYYY' }}</td>
+                    <td class='bold'>{{lv2.soBbLayMau }}</td>
+                    <td>{{lv2.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
+                    <td>{{lv2.tenTrangThai}}</td>
+                    <td class='text-left'>
+                      <a *ngIf='lv2.trangThai == STATUS.DA_DUYET_LDC' (click)='redirectDetail(lv2.id, true)'>
+                        <i class='fa fa-eye' title='Xem chi tiết'></i>
+                      </a>
+                      <a
+                        *ngIf='lv2.trangThai ==STATUS.TU_CHOI_LDC || lv2.trangThai ==STATUS.DU_THAO || lv2.trangThai ==STATUS.TU_CHOI_TP'
+                        (click)='redirectDetail(lv2.id, false)'>
+                        <i class='fa fa-pencil' title='Sửa'></i>
+                      </a>
+                      <a *ngIf='lv2.trangThai ==STATUS.CHO_DUYET_LDC || lv2.trangThai ==STATUS.CHO_DUYET_TP'
+                         (click)='redirectDetail(lv2.id, true)'>
+                        <i class='icon htvbdh_tcdt_pheduyet'></i>
+                      </a>
+                      <a *ngIf='lv2.trangThai ==STATUS.DU_THAO' (click)='delete(lv2)'>
+                        <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
+                      </a>
+                    </td>
+                  </tr>
                 </ng-container>
               </ng-container>
             </ng-container>
           </ng-container>
+        </ng-container>
         </tbody>
       </nz-table>
       <div class='tab-content tab-menu' id='myTabContent'>
@@ -189,8 +192,9 @@
           <div class='canphai'>
             <!-- begin phân trang  -->
             <nz-pagination class='pagination-card' [nzPageIndex]='page' [nzTotal]='totalRecord' nzShowSizeChanger
-              [nzPageSize]='pageSize' [nzShowTotal]='rangeTemplate' (nzPageIndexChange)='changePageIndex($event)'
-              (nzPageSizeChange)='changePageSize($event)'>
+                           [nzPageSize]='pageSize' [nzShowTotal]='rangeTemplate'
+                           (nzPageIndexChange)='changePageIndex($event)'
+                           (nzPageSizeChange)='changePageSize($event)'>
               <ng-template #rangeTemplate let-range='range' let-total>
                 {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
               </ng-template>
@@ -204,6 +208,7 @@
 </div>
 <div class='chi-tiet' *ngIf='isDetail'>
   <app-thong-tin-phieu-kiem-nghiem-chat-luong [idInput]='selectedId' [isView]='isView'
-    [soQdGiaoNvXh]='soQdGiaoNvXhSelected' (showListEvent)='showList()'>
+                                              [soQdGiaoNvXh]='soQdGiaoNvXhSelected'
+                                              (showListEvent)='showList()'>
   </app-thong-tin-phieu-kiem-nghiem-chat-luong>
 </div>

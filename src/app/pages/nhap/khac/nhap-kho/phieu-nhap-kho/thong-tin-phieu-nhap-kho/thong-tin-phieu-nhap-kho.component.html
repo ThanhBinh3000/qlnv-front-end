@@ -18,8 +18,8 @@
 
       <button *ngIf="!isView && (formData.value.trangThai == STATUS.DU_THAO
       || formData.value.trangThai == STATUS.TU_CHOI_LDCC)
-      && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_THEM')" type="button" class="btn btn-sub xanh-nhat ml-2"
-        (click)="save(true)">
+      && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_THEM')" type="button"
+        class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
@@ -32,20 +32,17 @@
         <span>Lưu</span>
       </button>
 
-      <button *ngIf="isTuChoi() && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_DUYET')" type="button"
-        class="btn btn-sub" (click)="tuChoi()">
+      <button *ngIf="isTuChoi() && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_DUYET')" type="button" class="btn btn-sub" (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span>Từ chối</span>
       </button>
 
-      <button *ngIf="isPheDuyet() && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_DUYET')" type="button"
-        class="btn btn-sub" (click)="pheDuyet()">
+      <button *ngIf="isPheDuyet() && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_DUYET')" type="button" class="btn btn-sub" (click)="pheDuyet()">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
 
-      <button *ngIf="formData.value.id && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_IN')" type="button"
-        class="btn btn-sub xanh-nhat" (click)="preview(previewName)">
+      <button *ngIf="formData.value.id && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_IN')" type="button" class="btn btn-sub xanh-nhat" (click)="preview(previewName)">
         <i class=" icon htvbdh_tcdt_print"></i>
         <span>In/xem trước</span>
       </button>
@@ -204,7 +201,7 @@
             </nz-form-item>
           </div>
 
-          <div nz-col [nzSpan]="4">
+          <div nz-col [nzSpan]="4" *ngIf="!loaiVthh.startsWith('02')">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Số phiếu kiểm tra chất lượng</nz-form-label>
               <nz-form-control [nzErrorTip]="error">

@@ -1,57 +1,58 @@
-<div class="list-file">
-    <div class="header-file">
-        <input type="text" [(ngModel)]="fileAdd.noiDung" nz-input [disabled]="isViewDetail || disabled" />
-        <nz-input-group nzSize="large" [nzAddOnAfter]="suffixIcon">
-            <input placeholder="Chọn file" [(ngModel)]="fileAdd.fileName" nz-input disabled />
-        </nz-input-group>
-        <ng-template #suffixIcon>
-            <i class="icon htvbdh_tcdt_tep"></i>
-            <input class="input-file" (change)="getNameFile($event)"
-                [readonly]="trangThai === globals.prop.BAN_HANH || trangThai === globals.prop.LANH_DAO_DUYET || trangThai === globals.prop.DU_THAO_TRINH_DUYET || trangThai === 'view-detail' || isViewDetail"
-                type="file" />
-        </ng-template>
-        <div class="icon-plus" (click)="addFile()" *ngIf="!isViewDetail">
-            <i class="icon htvbdh_dau-cong "></i>
-        </div>
-        <div class="icon-empty" (click)="clearAdd()" *ngIf="!isViewDetail">
-            <i class="icon  htvbdh_nhap-lai1 "></i>
-        </div>
+<div class='list-file'>
+  <div class='header-file'>
+
+    <input type='text' [(ngModel)]='fileAdd.noiDung' nz-input [disabled]='isViewDetail || disabled' />
+    <nz-input-group nzSize='large' [nzAddOnAfter]='suffixIcon'>
+      <input placeholder='Chọn file' [(ngModel)]='fileAdd.fileName' nz-input disabled />
+    </nz-input-group>
+    <ng-template #suffixIcon>
+      <i class='icon htvbdh_tcdt_tep'></i>
+      <input class='input-file' (change)='getNameFile($event)'
+             [readonly]="trangThai === globals.prop.BAN_HANH || trangThai === globals.prop.LANH_DAO_DUYET || trangThai === globals.prop.DU_THAO_TRINH_DUYET || trangThai === 'view-detail' || isViewDetail"
+             type='file' />
+    </ng-template>
+    <div class='icon-plus' (click)='addFile()' *ngIf='!isViewDetail'>
+      <i class='icon htvbdh_dau-cong '></i>
     </div>
-    <div class="body-file" *ngFor="let item of data;let i = index">
-        <ng-container *ngIf="!item.isEdit">
-            <div class="content-text d-flex align-items-center">
-                <div class="nd-text">{{item.noiDung}}</div>
-            </div>
-            <div class="name-file d-flex align-items-center justify-content-between">
-                <div class="ten-file">{{item.fileName}}</div>
-                <div class="icon-download" (click)="downloadFile(item)">
-                    <i class="icon htvbdh_tcdt_import "></i>
-                </div>
-            </div>
-            <div class="icon-edit" (click)="!disabled ? item.isEdit = true : item.isEdit = false" *ngIf="!isViewDetail">
-                <i class="fa fa-pencil "></i>
-            </div>
-            <div class="icon-xoa" (click)="deleteFile(i)" *ngIf="!isViewDetail">
-                <i class="fa fa-trash-o do "></i>
-            </div>
-        </ng-container>
-        <ng-container *ngIf="item.isEdit">
-            <input type="text" [(ngModel)]="item.noiDung" placeholder="Nhập tên file" nz-input />
-            <nz-input-group nzSize="large" [nzAddOnAfter]="suffixIcon">
-                <input placeholder="Chọn file" nz-input [(ngModel)]="item.fileName" nz-input disabled />
-            </nz-input-group>
-            <ng-template #suffixIcon>
-                <i class="icon htvbdh_tcdt_tep"></i>
-                <input class="input-file" (change)="getNameFile($event, item)"
-                    [readonly]="trangThai === globals.prop.BAN_HANH || trangThai === globals.prop.LANH_DAO_DUYET || trangThai === globals.prop.DU_THAO_TRINH_DUYET || trangThai === 'view-detail'"
-                    type="file" />
-            </ng-template>
-            <div class="icon-plus" (click)="updateFile(i)">
-                <i class="icon htvbdh_tcdt_save "></i>
-            </div>
-            <div class="icon-empty" (click)="item.isEdit = false">
-                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-            </div>
-        </ng-container>
+    <div class='icon-empty' (click)='clearAdd()' *ngIf='!isViewDetail'>
+      <i class='icon  htvbdh_nhap-lai1 '></i>
     </div>
+  </div>
+  <div class='body-file' *ngFor='let item of data;let i = index'>
+    <ng-container *ngIf='!item.isEdit'>
+      <div class='content-text d-flex align-items-center'>
+        <div class='nd-text'><b>{{i + 1}} - </b>    {{item.noiDung}}</div>
+      </div>
+      <div class='name-file d-flex align-items-center justify-content-between'>
+        <div class='ten-file'>{{item.fileName}}</div>
+        <div class='icon-download' (click)='downloadFile(item)'>
+          <i class='icon htvbdh_tcdt_import '></i>
+        </div>
+      </div>
+      <div class='icon-edit' (click)='!disabled ? item.isEdit = true : item.isEdit = false' *ngIf='!isViewDetail'>
+        <i class='fa fa-pencil '></i>
+      </div>
+      <div class='icon-xoa' (click)='deleteFile(i)' *ngIf='!isViewDetail'>
+        <i class='fa fa-trash-o do '></i>
+      </div>
+    </ng-container>
+    <ng-container *ngIf='item.isEdit'>
+      <input type='text' [(ngModel)]='item.noiDung' placeholder='Nhập tên file' nz-input />
+      <nz-input-group nzSize='large' [nzAddOnAfter]='suffixIcon'>
+        <input placeholder='Chọn file' nz-input [(ngModel)]='item.fileName' nz-input disabled />
+      </nz-input-group>
+      <ng-template #suffixIcon>
+        <i class='icon htvbdh_tcdt_tep'></i>
+        <input class='input-file' (change)='getNameFile($event, item)'
+               [readonly]="trangThai === globals.prop.BAN_HANH || trangThai === globals.prop.LANH_DAO_DUYET || trangThai === globals.prop.DU_THAO_TRINH_DUYET || trangThai === 'view-detail'"
+               type='file' />
+      </ng-template>
+      <div class='icon-plus' (click)='updateFile(i)'>
+        <i class='icon htvbdh_tcdt_save '></i>
+      </div>
+      <div class='icon-empty' (click)='item.isEdit = false'>
+        <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
+      </div>
+    </ng-container>
+  </div>
 </div>

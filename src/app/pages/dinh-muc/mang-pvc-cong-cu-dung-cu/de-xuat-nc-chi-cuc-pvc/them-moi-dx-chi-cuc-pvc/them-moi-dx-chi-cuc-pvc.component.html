@@ -4,7 +4,7 @@
       <div class="title-chi-tieu">
         <span
           [ngClass]="formData.value.trangThai == STATUS.DA_KY || formData.value.trangThai == STATUS.DADUYET_CB_CUC  ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
-          {{ formData.value.tenTrangThai }}
+          {{ formData.value.tenTrangThai == 'Đã duyệt - CB Cục' ? 'Đã tiếp nhận - CB Cục': formData.value.tenTrangThai}}
         </span>
         <span class="text-uppercase">ĐỀ XUẤT NHU CẦU TRANG BỊ MÀNG PVC VÀ CÔNG CỤ, DỤNG CỤ PHỤC VỤ BẢO QUẢN</span>
       </div>
@@ -14,8 +14,8 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button class="btn btn-sub ml-2" (click)="pheDuyet()"
-        *ngIf="(id && id > 0) && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_DEXUATCC_THEM') && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TUCHOI_CB_CUC)">
+      <button class="btn btn-sub ml-2" (click)="saveAndSend(STATUS.DA_KY, 'Bạn có muốn ký?','Bạn đã ký thành công!')"
+        *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_DEXUATCC_THEM') && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TUCHOI_CB_CUC)">
         <i class="icon htvbdh_trinh"></i>
         <span>Đã ký</span>
       </button>
@@ -29,7 +29,8 @@
         *ngIf="formData.value.trangThai == STATUS.DA_KY && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_DEXUATCC_DUYETCBCUC')"
         (click)="pheDuyet()">
         <i class="icon htvbdh_dakyduyet"></i>
-        <span>Duyệt</span>
+        <span *ngIf="!checkCbCuc()">Duyệt</span>
+        <span *ngIf="checkCbCuc()">Tiếp nhận</span>
       </button>
       <button (click)="save()"
         *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TUCHOI_CB_CUC) && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_DEXUATCC_THEM') "
@@ -68,13 +69,10 @@
         <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
-              <nz-form-label [nzNoColon]="true" class="label-color-kh">Số quyết định giao chỉ tiêu của Cục
+              <nz-form-label [nzNoColon]="true" class="label-color-kh">Số quyết
+                định giao chỉ tiêu của Cục
               </nz-form-label>
-              <nz-select nzAllowClear (ngModelChange)="changeSoQdGiaoCt($event)" formControlName="soQdGiaoCt"
-                [nzDisabled]="isView">
-                <nz-option *ngFor="let p of listCtieuKh" [nzValue]="p.soQuyetDinh"
-                  [nzLabel]="p.soQuyetDinh"></nz-option>
-              </nz-select>
+              <input nz-input formControlName="soQdGiaoCt" [readonly]="true" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -106,7 +104,7 @@
       </div>
     </div>
   </div>
-  <nz-table class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
+  <!-- <nz-table class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
     <thead>
       <tr>
         <th nzWidth="40px">STT</th>
@@ -151,15 +149,11 @@
         <th>
           <input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="rowItem.slTieuChuan"
             (ngModelChange)="changeSlTieuChuan($event)" />
-          <!--        <nz-input-number [(ngModel)]="rowItem.slTieuChuan" [nzSize]="'small'" [nzFormatter]="globals.formatter"-->
-          <!--                          [nzMin]="0"-->
-          <!--                         [nzParser]="globals.parser"></nz-input-number>-->
+
         </th>
         <th>
           <input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="rowItem.nhuCauTb" />
-          <!--        <nz-input-number [(ngModel)]="rowItem.nhuCauTb" [nzSize]="'small'" [nzFormatter]="globals.formatter"-->
-          <!--                         [nzMin]="0"-->
-          <!--                         [nzParser]="globals.parser"></nz-input-number>-->
+
         </th>
         <th>
           <input type="text" [(ngModel)]="rowItem.ghiChu" nz-input />
@@ -227,16 +221,11 @@
           <th>
             <input class="money-input" currencyMask [options]="amount" [min]="0"
               [(ngModel)]="dataEdit[idx].data.slTieuChuan" />
-            <!--          <nz-input-number [(ngModel)]="dataEdit[idx].data.slTieuChuan" [nzSize]="'small'"-->
-            <!--                           [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0"-->
-            <!--                           [nzParser]="globals.parser"></nz-input-number>-->
-            <!--        </th>-->
+
           <th>
             <input class="money-input" currencyMask [options]="amount" [min]="0"
               [(ngModel)]="dataEdit[idx].data.nhuCauTb" />
-            <!--          <nz-input-number [(ngModel)]="dataEdit[idx].data.nhuCauTb" [nzSize]="'small'"-->
-            <!--                           [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0"-->
-            <!--                           [nzParser]="globals.parser"></nz-input-number>-->
+
           </th>
           <th>
             <input type="text" [(ngModel)]="dataEdit[idx].data.ghiChu" nz-input />
@@ -251,8 +240,184 @@
         </ng-template>
       </tr>
     </tbody>
+  </nz-table> -->
+  <nz-table class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
+    <thead>
+      <tr>
+        <th rowspan="2" nzWidth="40px">STT</th>
+        <th rowspan="2" nzWidth="150px">Tên CCDC</th>
+        <th rowspan="2" nzWidth="200px">Mô tả</th>
+        <th rowspan="2" nzWidth="120px">Đơn vị tính</th>
+        <th colspan="2" nzWidth="100px">SL lương thực nhập theo chỉ tiêu KH</th>
+        <th rowspan="2" nzWidth="100px" nzAlign="center">SL sử dụng được <br /> tại thời điểm để xuất <br /> (3)</th>
+        <th rowspan="2" nzWidth="100px" nzAlign="center">SL sẽ nhập thêm từ <br /> năm trước <br /> (4)</th>
+        <th rowspan="2" nzWidth="100px" nzAlign="center">SL đã sử dụng một lần thu hồi <br /> tái sử dụng được <br />
+          (5)</th>
+        <th rowspan="2" nzWidth="100px" nzAlign="center">Tổng <br /> (6) = (3) + (4) + (5)</th>
+        <th rowspan="2" nzWidth="100px" nzAlign="center">SL định mức theo <br /> chỉ tiêu KH năm <br /> (7)</th>
+        <th rowspan="2" nzWidth="200px" nzAlign="center">Nhu cầu trang bị <br /> đề xuất <br /> (8)= (7) - (6)</th>
+        <th rowspan="2" nzWidth="200px">Ghi chú</th>
+        <th rowspan="2" nzWidth="140px" *ngIf="!isView">Hành động</th>
+      </tr>
+      <tr>
+        <th nzWidth="50px">Gạo tẻ (1)</th>
+        <th nzWidth="50px">Thóc tẻ (2)</th>
+
+      </tr>
+      <tr *ngIf="!isView">
+        <th></th>
+        <th>
+          <nz-select [(ngModel)]="rowItem.maCcdc" [nzDisabled]="isView" (ngModelChange)="changeDm($event)" nzShowSearch
+            nzAllowClear="true">
+            <nz-option *ngFor="let p of listCcdc" [nzValue]="p.maCcdc" [nzLabel]="p.tenCcdc">
+            </nz-option>
+          </nz-select>
+        </th>
+        <th>
+          <input type="text" [(ngModel)]="rowItem.moTaCcdc" readonly nz-input />
+        </th>
+        <th>
+          <input type="text" [(ngModel)]="rowItem.donViTinh" readonly nz-input />
+        </th>
+        <th>
+          <nz-input-number [(ngModel)]="rowItem.slChiTieuGao" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+            nzDisabled [nzMin]="0" [nzParser]="globals.parser"></nz-input-number>
+        </th>
+        <th>
+          <nz-input-number [(ngModel)]="rowItem.slChiTieuThoc" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+            nzDisabled [nzMin]="0" [nzParser]="globals.parser"></nz-input-number>
+        </th>
+        <th>
+          <nz-input-number [(ngModel)]="rowItem.slHienCo" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+            nzDisabled [nzMin]="0" [nzParser]="globals.parser"></nz-input-number>
+        </th>
+        <th>
+          <input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="rowItem.slNhapThem" />
+        </th>
+        <th>
+          <input class="money-input" currencyMask [options]="amount" [min]="0"
+            [(ngModel)]="rowItem.slThuHoiTaiSuDung" />
+        </th>
+        <th>
+          <nz-input-number [(ngModel)]="rowItem.slHienCo + rowItem.slNhapThem + rowItem.slThuHoiTaiSuDung"
+            [nzSize]="'small'" [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0"
+            [nzParser]="globals.parser"></nz-input-number>
+        </th>
+        <th>
+          <input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="rowItem.slTieuChuan"
+            (ngModelChange)="changeSlTieuChuan($event)" />
+
+        </th>
+        <th>
+          <nz-input-number [(ngModel)]="rowItem.nhuCauTb" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+            nzDisabled [nzMin]="0" [nzParser]="globals.parser"></nz-input-number>
+        </th>
+        <th>
+          <input type="text" [(ngModel)]="rowItem.ghiChu" nz-input />
+        </th>
+        <th class="text-center" *ngIf="!isView">
+          <a (click)="themMoiCtiet()">
+            <i class="icon htvbdh_dau-cong"></i>
+          </a>
+          <a (click)="refresh()">
+            <i class="fa fa-refresh"></i>
+          </a>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of dataTable; let idx = index">
+        <ng-container *ngIf="!dataEdit[idx].edit ; else editTemplate">
+          <td>{{idx + 1}}</td>
+          <td>{{data.tenCcdc}}</td>
+          <td>{{data.moTaCcdc}}</td>
+          <td>{{data.donViTinh}}</td>
+          <td class="text-right">{{data.slChiTieuGao | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-right">{{data.slChiTieuThoc | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-right">{{data.slHienCo |number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-right">{{data.slNhapThem |number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-right">{{data.slThuHoiTaiSuDung |number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-right">{{data.slHienCo + data.slNhapThem + data.slThuHoiTaiSuDung |number : '1.0-1' : 'vi_VN'
+            }}</td>
+          <td class="text-right">{{data.slTieuChuan |number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-right">{{data.nhuCauTb | number : '1.0-1' : 'vi_VN'}}</td>
+          <td>{{data.ghiChu}}</td>
+          <td class="text-center" *ngIf="!isView">
+            <a (click)="editRow(idx)">
+              <i class="fa fa-pencil" title="Sửa"></i>
+            </a>
+            <a (click)="deleteItem(idx)">
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+            </a>
+          </td>
+        </ng-container>
+        <ng-template #editTemplate>
+          <th></th>
+          <th>
+            <nz-select [(ngModel)]="dataEdit[idx].data.tenCcdc" [nzDisabled]="isView" (ngModelChange)="changeDm($event)"
+              nzAllowClear="true">
+              <nz-option *ngFor="let p of listCcdc" [nzValue]="p.maCcdc" [nzLabel]="p.tenCcdc">
+              </nz-option>
+            </nz-select>
+          </th>
+          <th>
+            <input type="text" [(ngModel)]="dataEdit[idx].data.moTaCcdc" readonly nz-input />
+          </th>
+          <th>
+            <input type="text" [(ngModel)]="dataEdit[idx].data.donViTinh" readonly nz-input />
+          </th>
+          <th>
+            <nz-input-number [(ngModel)]="dataEdit[idx].data.slChiTieuGao" [nzSize]="'small'"
+                             [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0" [nzParser]="globals.parser"></nz-input-number>
+          </th>
+          <th>
+            <nz-input-number [(ngModel)]="dataEdit[idx].data.slChiTieuThoc" [nzSize]="'small'"
+                             [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0" [nzParser]="globals.parser"></nz-input-number>
+          </th>
+          <th>
+            <input class="money-input" currencyMask [options]="amount" [disabled]='true' [min]="0" [(ngModel)]="rowItem.slHienCo" />
+<!--            <nz-input-number [(ngModel)]="dataEdit[idx].data.slHienCo" [nzSize]="'small'"-->
+<!--              [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0" [nzParser]="globals.parser"></nz-input-number>-->
+          </th>
+          <th>
+            <input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="rowItem.slNhapThem" />
+<!--            <nz-input-number [(ngModel)]="dataEdit[idx].data.slNhapThem" [nzSize]="'small'"-->
+<!--              [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0" [nzParser]="globals.parser"></nz-input-number>-->
+          </th>
+          <th>
+            <input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="rowItem.slThuHoiTaiSuDung" />
+<!--            <nz-input-number [(ngModel)]="dataEdit[idx].data.slThuHoiTaiSuDung" [nzSize]="'small'"-->
+<!--                             [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0" [nzParser]="globals.parser"></nz-input-number>-->
+          </th>
+          <th>
+            <nz-input-number [(ngModel)]="dataEdit[idx].data.slNhapThem + dataEdit[idx].data.slHienCo"
+              [nzSize]="'small'" [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0"
+              [nzParser]="globals.parser"></nz-input-number>
+          </th>
+          <th>
+            <input class="money-input" currencyMask [options]="amount" [min]="0"
+              [(ngModel)]="dataEdit[idx].data.slTieuChuan" />
+
+          <th>
+            <input class="money-input" currencyMask [options]="amount" [disabled]='true' [min]="0"
+              [(ngModel)]="dataEdit[idx].data.nhuCauTb" />
+
+          </th>
+          <th>
+            <input type="text" [(ngModel)]="dataEdit[idx].data.ghiChu" nz-input [readOnly]="isView" />
+          </th>
+          <td class="text-center" *ngIf="!isView">
+            <a class="save" (click)="saveDinhMuc(idx)">
+              <i class="fa fa-save"></i>
+            </a>
+            <a (click)="cancelEdit(idx)">
+              <i class="fa fa-ban do"></i> </a>
+          </td>
+        </ng-template>
+      </tr>
+    </tbody>
   </nz-table>
-  <nz-card class="mt16 flex-card p-lr16 mg-t-10">
+  <!-- <nz-card class="mt16 flex-card p-lr16 mg-t-10">
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
       <div nz-row [nzGutter]="24">
         <div nz-col [nzSpan]="24">
@@ -267,7 +432,7 @@
         </div>
       </div>
     </form>
-  </nz-card>
+  </nz-card> -->
   <form nz-form nzLayout="vertical" [formGroup]="formData">
     <div nz-row [nzGutter]="24">
       <div nz-col [nzSpan]="24">

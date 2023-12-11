@@ -231,9 +231,6 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
   }
 
   convertDataTable() {
-    // this.dataTable.forEach(item => {
-    //   item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0];
-    // });
     this.dataTable.forEach(item => {
       if (this.userService.isChiCuc()) {
         item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
@@ -247,19 +244,23 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
         }
       };
     });
-    this.dataTable.forEach(item => {
-      item.detail.children.forEach(ddNhap => {
+    for (let i = 0; i < this.dataTable.length; i++) {
+      this.expandSet.add(i)
+      for (let j = 0; j < this.dataTable[i].detail.children.length; j++) {
+        if (this.dataTable[i].detail.children[j].listPhieuNhapKho.length > 0) {
+          this.expandSet2.add(j)
+        }
         let soBbNtbqld = []
-        ddNhap.listBbNtbqld.forEach(z => {
+        this.dataTable[i].detail.children[j].listBbNtbqld.forEach(z => {
           soBbNtbqld.push(z.soBbNtBq)
         })
-        ddNhap.soBbNtbqld = soBbNtbqld.join(', ')
-        ddNhap.listPhieuNhapKho.forEach(x => {
-          x.phieuKiemTraCl = ddNhap.listPhieuKtraCl.filter(item => item.soPhieu == x.soPhieuKtraCl)[0];
-          x.bienBanGuiHang = ddNhap.bienBanGuiHang
+        this.dataTable[i].detail.children[j].soBbNtbqld = soBbNtbqld.join(', ')
+        this.dataTable[i].detail.children[j].listPhieuNhapKho.forEach(x => {
+          x.phieuKiemTraCl = this.dataTable[i].detail.children[j].listPhieuKtraCl.filter(item => item.soPhieu == x.soPhieuKtraCl)[0];
+          x.bienBanGuiHang = this.dataTable[i].detail.children[j].bienBanGuiHang
         });
-      })
-    });
+      }
+    }
   }
 
   export() {
@@ -316,9 +317,9 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
     }
   }
 
-  hienThiXem(data) {
+  hienThiXem(data){
     if (this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_XEM') && data != null) {
-      if (this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_THEM') && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDCC)) {
+      if(this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_THEM') && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDCC)) {
         return false;
       } else if (this.userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_DUYET') && data.trangThai == STATUS.CHO_DUYET_LDCC) {
         return false;

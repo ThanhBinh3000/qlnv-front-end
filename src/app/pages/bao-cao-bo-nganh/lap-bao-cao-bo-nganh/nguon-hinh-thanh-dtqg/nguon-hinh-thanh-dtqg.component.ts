@@ -145,7 +145,7 @@ export class NguonHinhThanhDtqgComponent extends Base2Component implements OnIni
     try {
       this.spinner.show();
       let body = this.formData.value;
-      body.idHdr = id;
+      body.id = id;
       body.typeFile = "xlsx";
       body.fileName = "bcbn_nguon_hinh_thanh_dtqg.jrxml";
       body.tenBaoCao = "Báo cáo nguồn hình thành DTQG";

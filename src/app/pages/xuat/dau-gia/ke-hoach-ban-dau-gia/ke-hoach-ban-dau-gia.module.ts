@@ -46,13 +46,14 @@ import {
     DeXuatComponent,
     MainKeHoachBanDauGiaComponent,
     ThemQuyetDinhBanDauGiaComponent,
+    ThemMoiDieuChinhComponent,
     ThemDeXuatKeHoachBanDauGiaComponent
   ],
   imports: [
     CommonModule,
     ComponentsModule,
     MainModule,
-    KeHoachVonDauNamModule
+    KeHoachVonDauNamModule,
   ]
 })
 export class KeHoachBanDauGiaModule {

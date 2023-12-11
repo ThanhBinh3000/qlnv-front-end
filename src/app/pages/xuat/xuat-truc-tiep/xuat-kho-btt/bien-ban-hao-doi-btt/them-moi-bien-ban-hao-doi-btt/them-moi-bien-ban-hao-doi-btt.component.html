@@ -1,596 +1,635 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
-    <div class="btn-group">
-        <button class="btn btn-sub" (click)="goBack()">
-            <i class="fa fa-arrow-left"></i>
-            <span>Quay lại</span>
-        </button>
-        <button
-            *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBHD_DUYET_KTVBQ') && formData.value.trangThai===STATUS.CHO_DUYET_KTVBQ
-            ||userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBHD_DUYET_KT') && formData.value.trangThai===STATUS.CHO_DUYET_KT
-            ||userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBHD_DUYET_LDCCUC') && formData.value.trangThai===STATUS.CHO_DUYET_LDCC"
-            type="button" class="btn btn-sub do" (click)="pheDuyet(false)">
-            <i class="icon htvbdh_tcdt_tuchoi"></i>
-            <span>Từ chối</span>
-        </button>
-        <button
-            *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBHD_DUYET_KTVBQ') && formData.value.trangThai===STATUS.CHO_DUYET_KTVBQ
-            ||userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBHD_DUYET_KT') && formData.value.trangThai===STATUS.CHO_DUYET_KT
-            ||userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBHD_DUYET_LDCCUC') && formData.value.trangThai===STATUS.CHO_DUYET_LDCC"
-            type="button" class="btn btn-sub xanh-nhat" (click)="pheDuyet(true)">
-            <i class="icon htvbdh_tcdt_pheduyet"></i>
-            <span>Duyệt</span>
-        </button>
-        <button
-            *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBHD_THEM') && formData.value.trangThai===STATUS.DU_THAO
-            ||formData.value.trangThai===STATUS.TU_CHOI_KTVBQ || formData.value.trangThai ===STATUS.TU_CHOI_KT || formData.value.trangThai===STATUS.TU_CHOI_LDCC "
-            type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
-            <i class="icon htvbdh_tcdt_guiduyet"></i>
-            <span>Lưu và gửi duyệt</span>
-        </button>
-        <button
-            *ngIf=" userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBHD_THEM') && formData.value.trangThai===STATUS.DU_THAO
-            ||formData.value.trangThai===STATUS.TU_CHOI_KTVBQ || formData.value.trangThai ===STATUS.TU_CHOI_KT || formData.value.trangThai===STATUS.TU_CHOI_LDCC "
-            type="button" class="btn btn-main" (click)="save()">
-            <i class="icon htvbdh_tcdt_save"></i>
-            <span>Lưu</span>
-        </button>
-    </div>
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix" xmlns="http://www.w3.org/1999/html">
+  <div class="btn-group">
+    <button type="button" class="btn btn-sub" (click)="goBack()">
+      <i class="fa fa-arrow-left"></i>
+      <span>Quay lại</span>
+    </button>
+    <button *ngIf="idInput" type="button" class="btn btn-sub"
+            (click)="xemTruoc(idInput,'Biên bản hao dôi')">
+      <i class="icon htvbdh_totrinh"></i>
+      <span> Xem trước </span>
+    </button>
+    <ng-container>
+      <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDCC) && isView
+               &&  userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBHD_DUYET_LDCCUC')"
+              type="button" class="btn btn-sub do"
+              (click)="reject(idInput,STATUS.TU_CHOI_LDCC)">
+        <i class="icon htvbdh_tcdt_tuchoi do"></i>
+        <span> Từ chối </span>
+      </button>
+      <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDCC) && isView
+               &&  userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBHD_DUYET_LDCCUC')"
+              type="button" class="btn btn-sub xanh-nhat"
+              (click)="approve(idInput,STATUS.DA_DUYET_LDCC,'Bạn có muốn duyệt biên bản này này')">
+        <i class="icon htvbdh_tcdt_pheduyet"></i>
+        <span> Duyệt </span>
+      </button>
+      <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_KT) && isView
+               &&  userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBHD_DUYET_KT')"
+              type="button" class="btn btn-sub do"
+              (click)="reject(idInput,STATUS.TU_CHOI_KT)">
+        <i class="icon htvbdh_tcdt_tuchoi do"></i>
+        <span> Từ chối </span>
+      </button>
+      <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_KT) && isView
+               &&  userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBHD_DUYET_KT')"
+              type="button" class="btn btn-sub xanh-nhat"
+              (click)="approve(idInput,STATUS.CHO_DUYET_LDCC,'Bạn có muốn duyệt biên bản này này')">
+        <i class="icon htvbdh_tcdt_pheduyet"></i>
+        <span> Duyệt </span>
+      </button>
+      <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ) && isView
+               &&  userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBHD_DUYET_KTVBQ')"
+              type="button" class="btn btn-sub do"
+              (click)="reject(idInput,STATUS.TU_CHOI_KTVBQ)">
+        <i class="icon htvbdh_tcdt_tuchoi do"></i>
+        <span> Từ chối </span>
+      </button>
+      <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ) && isView
+               && userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBHD_DUYET_KTVBQ')"
+              type="button" class="btn btn-sub xanh-nhat"
+              (click)="approve(idInput,STATUS.CHO_DUYET_KT,'Bạn có muốn duyệt biên bản này này')">
+        <i class="icon htvbdh_tcdt_pheduyet"></i>
+        <span> Duyệt </span>
+      </button>
+      <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_KTVBQ ||
+       formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_LDCC) && !isView
+              && userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBHD_THEM')"
+              type="button" class="btn btn-sub xanh-nhat"
+              (click)="saveAndSend(STATUS.CHO_DUYET_KTVBQ, 'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
+        <i class="icon htvbdh_tcdt_guiduyet"></i>
+        <span>Lưu và gửi duyệt</span>
+      </button>
+      <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_KTVBQ ||
+       formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_LDCC)  && !isView
+              && userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BBHD_THEM')"
+              type="button" class="btn btn-main"
+              (click)="save()">
+        <i class="icon htvbdh_tcdt_save"></i>
+        <span>Lưu</span>
+      </button>
+    </ng-container>
+  </div>
 </nz-affix>
 <div class="bg-trang">
-    <div class="header header-green-background">
-        <div class="header-text">
-            <div class="title-chi-tieu">
-                <span
-                    [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
-                    {{ formData.value.tenTrangThai }}
-                </span>
-                <span> BIÊN BẢN HAO DÔI </span>
-            </div>
-        </div>
+  <div class="header header-green-background">
+    <div class="header-text">
+      <div class="title-chi-tieu">
+        <span
+          [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+          {{ formData.value.tenTrangThai }}
+        </span>
+        <span> BIÊN BẢN HAO DÔI </span>
+      </div>
     </div>
-    <nz-alert class="mg-t-10"
-        *ngIf="formData.value.trangThai == STATUS.TU_CHOI_KTVBQ || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_LDCC"
-        nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
-    </nz-alert>
-    <nz-card class="mg-t-16 flex-card p-lr16">
-        <form nzLayout="vertical" nz-form [formGroup]="formData">
-            <div nz-row [nzGutter]="[24]">
-                <div nz-col [nzSpan]="2">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true">Năm kế hoạch</nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-select formControlName="namKh" [nzDisabled]="isDisabled()">
-                                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-                            </nz-select>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="3">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true">
-                            Đơn vị
-                        </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <input nz-input readonly formControlName="tenDvi" />
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="2">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true">
-                            Mã QHNS
-                        </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <input nz-input readonly formControlName="maQhns" />
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="3">
-                    <nz-form-item>
-                        <nz-form-label nzRequired [nzNoColon]="true">
-                            Số BB hao dôi
-                        </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-input-group nzAddOnAfterIcon="folder-open">
-                                <input nz-input [readonly]="true" formControlName="soBbHaoDoi" />
-                            </nz-input-group>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="2">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true">
-                            Ngày lập BB hao dôi
-                        </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayTao" nzDisabled>
-                            </nz-date-picker>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="3">
-                    <nz-form-item>
-                        <nz-form-label nzRequired [nzNoColon]="true">
-                            Số QĐ giao NV xuất hàng
-                        </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-input-group nzAddOnAfterIcon="folder-open"
-                                (click)="isDisabledQD() ? null :openDialogSoQdNvXh()">
-                                <input nz-input [readonly]="true" formControlName="soQdNv" />
-                            </nz-input-group>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="6">
-                    <nz-radio-group [nzDisabled]="true" nzSize="small" class="rdo-input" formControlName="phanLoai">
-                        <nz-form-item>
-                            <label nz-radio nzValue="HĐ"> Căn cứ vào hợp đồng
-                            </label>
-                            <nz-form-control [nzErrorTip]="error">
-                                <nz-input-group nzAddOnAfterIcon="folder-open"
-                                    (click)="isDisabledQD() ? null : searchHopDong()">
-                                    <input [readonly]="true" nz-input formControlName="soHd" readonly />
-                                </nz-input-group>
-                            </nz-form-control>
-                        </nz-form-item>
-                        <nz-form-item>
-                            <label nz-radio nzValue="BL"> Căn cứ vào bảng Kê
-                            </label>
-                            <nz-form-control [nzErrorTip]="error">
-                                <nz-input-group nzAddOnAfterIcon="folder-open"
-                                    (click)="isDisabledQD() ? null : searchBangKeBanLe()">
-                                    <input [readonly]="true" nz-input formControlName="soBangKeBanLe" readonly />
-                                </nz-input-group>
-                            </nz-form-control>
-                        </nz-form-item>
-                    </nz-radio-group>
-                </div>
-                <div nz-col [nzSpan]="3" *ngIf="this.formData.value.phanLoai == 'HĐ'">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true">
-                            Ngày ký hợp đồng
-                        </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayKyHd" nzDisabled>
-                            </nz-date-picker>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="3" *ngIf="this.formData.value.phanLoai == 'BL'">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true">
-                            Ngày tạo bảng kê
-                        </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayTaoBangKe" nzDisabled>
-                            </nz-date-picker>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true" nzRequired> Điểm kho</nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-input-group nzAddOnAfterIcon="folder-open"
-                                (click)="isDisabledQD() ? null :openDialogDdiemNhapHang()">
-                                <input nz-input formControlName="tenDiemKho" readonly />
-                            </nz-input-group>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true" nzRequired> Nhà kho</nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-input-group nzAddOnAfterIcon="folder-open"
-                                (click)="isDisabledQD() ? null :openDialogDdiemNhapHang()">
-                                <input nz-input formControlName="tenNhaKho" readonly />
-                            </nz-input-group>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true" nzRequired> Ngăn kho</nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-input-group nzAddOnAfterIcon="folder-open"
-                                (click)="isDisabledQD() ? null :openDialogDdiemNhapHang()">
-                                <input nz-input formControlName="tenNganKho" readonly />
-                            </nz-input-group>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true"> Lô kho</nz-form-label>
-                        <nz-form-control>
-                            <nz-input-group nzAddOnAfterIcon="folder-open"
-                                (click)="isDisabledQD() ? null :openDialogDdiemNhapHang()">
-                                <input nz-input formControlName="tenLoKho" readonly />
-                            </nz-input-group>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="24">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true">
-                            Số BB tịnh kho
-                        </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-select formControlName="soBbTinhKho" [nzDisabled]="isView"
-                                (ngModelChange)="onSelectSoBbTinhKho($event)" [nzDisabled]="isDisabled()">
-                                <nz-option *ngFor="let p of listBbTinhKho" [nzValue]="p.soBbTinhKho"
-                                    [nzLabel]="p.soBbTinhKho">
-                                </nz-option>
-                            </nz-select>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
+  </div>
+  <nz-alert class="mg-t-10"
+            *ngIf=" formData.value.trangThai == STATUS.TU_CHOI_KTVBQ || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_LDCC"
+            nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{ formData.value.lyDoTuChoi }}">
+  </nz-alert>
+  <nz-card class="mg-t-16 flex-card p-lr16">
+    <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
+      <div nz-row [nzGutter]="[18, 6]">
+        <div nz-col [nzSpan]="2">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Năm kế hoạch</nz-form-label>
+            <nz-form-control nz-col [nzErrorTip]="error">
+              <nz-select formControlName="namKh" (ngModelChange)="isView ? null : onChangeNam($event)"
+                         [nzDisabled]="isView">
+                <nz-option *ngFor="let item of listNam" [nzValue]="item.value" [nzLabel]="item.text"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Đơn vị</nz-form-label>
+            <nz-form-control nz-col>
+              <input nz-input formControlName="tenDvi" readonly/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Mã QHNS</nz-form-label>
+            <nz-form-control nz-col>
+              <input nz-input formControlName="maQhNs" readonly/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Số BB hao dôi</nz-form-label>
+            <nz-form-control nz-col>
+              <input nz-input formControlName="soBbHaoDoi" readonly/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Ngày lập BB hao dôi</nz-form-label>
+            <nz-form-control nz-col>
+              <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayLapBienBan" [nzDisabled]="isView">
+              </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Số QĐ giao NV xuất hàng</nz-form-label>
+            <nz-form-control nz-col [nzErrorTip]="error">
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? null : openDialog()">
+                <input nz-input formControlName="soQdNv"
+                       (ngModelChange)="isView ? null : changeSoQdNv($event)" readonly/>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Số BB tịnh kho</nz-form-label>
+            <nz-form-control nz-col [nzErrorTip]="error">
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? null : openDialogTinhKho()">
+                <input nz-input formControlName="soBbTinhKho"
+                       (ngModelChange)="isView ? null : changeBbTinhKho($event)" readonly/>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Ngăn/Lô kho</nz-form-label>
+            <nz-form-control nz-col [nzErrorTip]="error">
+              <nz-input-group nzAddOnAfterIcon="folder-open">
+                <input nz-input formControlName="tenNganLoKho" readonly/>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Nhà kho</nz-form-label>
+            <nz-form-control nz-col [nzErrorTip]="error">
+              <nz-input-group nzAddOnAfterIcon="folder-open">
+                <input nz-input formControlName="tenNhaKho" readonly/>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Điểm kho</nz-form-label>
+            <nz-form-control nz-col [nzErrorTip]="error">
+              <nz-input-group nzAddOnAfterIcon="folder-open">
+                <input nz-input formControlName="tenDiemKho" readonly/>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Ngày bắt đầu xuất</nz-form-label>
+            <nz-form-control nz-col>
+              <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayBatDauXuat" nzDisabled>
+              </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Ngày kết thúc xuất</nz-form-label>
+            <nz-form-control nz-col>
+              <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayKetThucXuat" nzDisabled>
+              </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="8" *ngIf="formData.value.phanLoai === TRUC_TIEP.HOP_DONG">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Số hợp đồng</nz-form-label>
+            <nz-form-control nz-col>
+               <span style="color: blue" *ngIf="formData.value.soHopDong">
+                {{formData.value.soHopDong}}
+              </span>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4" *ngIf="formData.value.phanLoai === TRUC_TIEP.HOP_DONG">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Ngày ký hợp đồng</nz-form-label>
+            <nz-form-control nz-col>
+              <span *ngIf="formData.value.ngayKyHopDong">
+                {{formData.value.ngayKyHopDong|date: 'dd/MM/YYYY'}}
+              </span>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="12" *ngIf="formData.value.phanLoai === TRUC_TIEP.HOP_DONG">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Số lượng theo hợp đồng</nz-form-label>
+            <nz-form-control nz-col>
+              <span style="color: blue" *ngIf="formData.value.soLuongHopDong">
+                {{formData.value.soLuongHopDong|number:globals.numberFormat:globals.locale}} {{formData.value.donViTinh}}
+              </span>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="8" *ngIf="formData.value.phanLoai === TRUC_TIEP.BAN_LE">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Số bảng kê bảng kê bán lẻ</nz-form-label>
+            <nz-form-control nz-col>
+              <span style="color: blue" *ngIf="formData.value.soBangKeBanLe">
+               {{formData.value.soBangKeBanLe}}
+              </span>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4" *ngIf="formData.value.phanLoai === TRUC_TIEP.BAN_LE">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Ngày tạo bảng kê bán lẻ</nz-form-label>
+            <nz-form-control nz-col>
+              <span *ngIf="formData.value.ngayTaoBkeBanLe">
+                {{formData.value.ngayTaoBkeBanLe|date: 'dd/MM/YYYY'}}
+              </span>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="12" *ngIf="formData.value.phanLoai === TRUC_TIEP.BAN_LE">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Số lượng theo bảng kê bảng kê bán lẻ</nz-form-label>
+            <nz-form-control nz-col>
+              <span style="color: blue" *ngIf="formData.value.soLuongBkeBanLe">
+                {{formData.value.soLuongBkeBanLe|number:globals.numberFormat:globals.locale}} {{formData.value.donViTinh}}
+              </span>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <br>
+      <span style="color: black"> Thông tin bảng kê cân hàng và phiếu xuất kho </span>
+      <nz-card class="mg-t-16 flex-card p-lr16 table-card">
+        <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered [nzFrontPagination]="false"
+                  [nzShowPagination]="false">
+          <thead>
+          <tr>
+            <th nzWidth="50px" class="text-center wrap">STT</th>
+            <th class="text-left"> Phiếu xuất kho</th>
+            <th class="text-left"> Bảng kê cân hàng</th>
+            <th class="text-left"> Ngày xuất kho</th>
+            <th class="text-left"> Số lượng xuất</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let data of dataTable;let i = index">
+            <td class="text-center">{{ i + 1}}</td>
+            <td class="text-left">
+              <a *ngIf="data.soPhieuXuatKho && data.idPhieuXuatKho" (click)="openModal(data.idPhieuXuatKho, 'xuatKho')"
+                 style="color: blue">{{ data.soPhieuXuatKho }}
+              </a>
+            </td>
+            <td class="text-left">
+              <a *ngIf="data.soBangKeHang && data.idBangKeHang" (click)="openModal(data.idBangKeHang, 'bangKe')"
+                 style="color: blue">{{ data.soBangKeHang }}
+              </a>
+            </td>
+            <td class="text-left">{{ data.ngayXuatKho|date: 'dd/MM/YYYY' }}</td>
+            <td class="text-left">{{ data.soLuongXuat|number:globals.numberFormat:globals.locale }} </td>
+          </tr>
+          </tbody>
+          <ng-container *ngIf="dataTable.length > 0">
+            <tfoot>
+            <tr>
+              <th class="text-right text-blue" colspan="4"> Tổng</th>
+              <th class="text-right text-blue">
+                {{ calcTong('soLuongXuat')|number:globals.numberFormat:globals.locale }}
+              </th>
+            </tr>
+            </tfoot>
+          </ng-container>
+        </nz-table>
+      </nz-card>
+    </form>
+    <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
+      <div nz-row [nzGutter]="[18, 6]">
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Tổng số lượng nhập</nz-form-label>
+            <nz-form-control nz-col>
+              <span style="color: blue" *ngIf="formData.value.tongSlNhap">
+                {{formData.value.tongSlNhap|number:globals.numberFormat:globals.locale}} {{formData.value.donViTinh}}
+              </span>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Thời gian kết thúc nhập</nz-form-label>
+            <nz-form-control nz-col>
+              <span style="color: blue" *ngIf="formData.value.thoiGianKthucNhap">
+                 {{ formData.value.thoiGianKthucNhap|date: 'dd/MM/YYYY' }}
+              </span>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất</nz-form-label>
+            <nz-form-control nz-col>
+              <span style="color: blue" *ngIf="formData.value.tongSlXuat">
+                {{formData.value.tongSlXuat|number:globals.numberFormat:globals.locale}} {{formData.value.donViTinh}}
+              </span>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Thời gian kết thúc xuất</nz-form-label>
+            <nz-form-control nz-col>
+              <span style="color: blue" *ngIf="formData.value.thoiGianKthucXuat">
+                {{ formData.value.thoiGianKthucXuat|date: 'dd/MM/YYYY' }}
+              </span>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Số lượng hao thực tế</nz-form-label>
+            <div nz-row>
+              <div nz-col [nzSpan]="24" style="color: gray"> Số lượng <br>
+                <span style="color: blue" *ngIf="formData.value.slHaoThucTe">
+                  {{formData.value.slHaoThucTe|number:globals.numberFormat:globals.locale}}
+                </span>
+              </div>
             </div>
-        </form>
-        <nz-card class="mg-t-16 flex-card p-lr16 table-card">
-            <span>Thông tin bảng kê cân hàng và phiếu nhập kho</span>
-            <nz-table class="pd-10" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
-                [nzShowPagination]="false">
-                <thead>
-                    <tr>
-                        <th [width]="35">STT</th>
-                        <th>Phiếu kiểm nghiệm chất lượng</th>
-                        <th>Phiếu xuất kho</th>
-                        <th>Bảng kê cân hàng</th>
-                        <th>Ngày xuất kho</th>
-                        <th>Số lượng xuất</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let data of dataTable; let i = index">
-                        <td>{{ i + 1 }}</td>
-                        <td>
-                            <a *ngIf="data.soPhieu && data.idPhieu" nz-button nzType="link"
-                                (click)="openModalPhieuKtCl(data.idPhieu)">{{
-                                data.soPhieu}}</a>
-                        </td>
-                        <td>
-                            <a *ngIf="data.soPhieuXuat && data.idPhieuXuat" nz-button nzType="link"
-                                (click)="openModalPhieuXuatKho(data.idPhieuXuat)">{{
-                                data.soPhieuXuat}}</a>
-                        </td>
-
-                        <td>
-                            <a *ngIf="data.soBangKe && data.idBangKe" nz-button nzType="link"
-                                (click)="openModalBangKe(data.idBangKe)">{{
-                                data.soBangKe}}</a>
-                        </td>
-                        <td>{{data.ngayXuatKho | date: 'dd/MM/YYYY'}}</td>
-                        <td>{{data.soLuongThucXuat | number : '1.0-1' : 'vi_VN'}}</td>
-                    </tr>
-                </tbody>
-                <tfoot *ngIf="dataTable.length > 0">
-                    <tr>
-                        <td colspan="4"></td>
-                        <td style="color: blue ;font-weight: bold;">TỔNG</td>
-                        <td style="color: blue ;font-weight: bold;">{{ calcTong('soLuongThucXuat') | number : '1.0-1' :
-                            'vi_VN' }}</td>
-                    </tr>
-                </tfoot>
-            </nz-table>
-        </nz-card>
-        <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
-            <div nz-row [nzGutter]="[18, 6]">
-                <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true"> Tổng số Lượng nhập
-                        </nz-form-label>
-                        <nz-form-control nz-col>
-                            <span class="text-green">{{formData.value.tongSlNhap | number :
-                                '1.0-1'
-                                :
-                                'vi_VN'
-                                }} (Kg)</span>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true"> Thời gian kết thúc nhập
-                        </nz-form-label>
-                        <nz-form-control nz-col>
-                            <span>{{formData.value.ngayKthucNhap |date: 'dd/MM/YYYY'
-                                }}</span>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất
-                        </nz-form-label>
-                        <nz-form-control nz-col>
-                            <span class="text-green">{{formData.value.tongSlXuat | number :
-                                '1.0-1'
-                                :
-                                'vi_VN'
-                                }} (Kg)</span>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true"> Thời gian kết thúc xuất
-                        </nz-form-label>
-                        <nz-form-control nz-col>
-                            <span>{{formData.value.ngayKthucXuat |date: 'dd/MM/YYYY'
-                                }}</span>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true"> Số lượng hao thực tế
-                        </nz-form-label>
-                        <div nz-col [nzSpan]="24" class="text-grey">Số Lượng
-                            <nz-form-item>
-                                <nz-form-control nz-col>
-                                    <span class="text-green">{{formData.value.slHaoThucTe | number :
-                                        '1.0-1'
-                                        :
-                                        'vi_VN'
-                                        }}</span>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true"></nz-form-label>
-                        <div nz-col [nzSpan]="24" class="text-grey">Tỉ lệ
-                            <nz-form-item>
-                                <nz-form-control nz-col>
-                                    <nz-select formControlName="tiLeHaoThucTe">
-                                        <nz-option *ngFor="let p of listTiLe" [nzValue]="p.value" [nzLabel]="p.text">
-                                        </nz-option>
-                                    </nz-select>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true"> Số lượng hao vượt định mức
-                        </nz-form-label>
-                        <div nz-col [nzSpan]="24" class="text-grey">Số Lượng
-                            <nz-form-item>
-                                <nz-form-control nz-col>
-                                    <span class="text-green">{{formData.value.slHaoVuotMuc | number :
-                                        '1.0-1'
-                                        :
-                                        'vi_VN'
-                                        }}</span>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true"></nz-form-label>
-                        <div nz-col [nzSpan]="24" class="text-grey">Tỉ lệ
-                            <nz-form-item>
-                                <nz-form-control nz-col>
-                                    <nz-select formControlName="tiLeHaoVuotMuc">
-                                        <nz-option *ngFor="let p of listTiLe" [nzValue]="p.value" [nzLabel]="p.text">
-                                        </nz-option>
-                                    </nz-select>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true"> Số lượng hao được thanh lý
-                        </nz-form-label>
-                        <div nz-col [nzSpan]="24" class="text-grey">Số Lượng
-                            <nz-form-item>
-                                <nz-form-control nz-col>
-                                    <span class="text-green">{{formData.value.slHaoThanhLy | number :
-                                        '1.0-1'
-                                        :
-                                        'vi_VN'
-                                        }}</span>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true"></nz-form-label>
-                        <div nz-col [nzSpan]="24" class="text-grey">Tỉ lệ
-                            <nz-form-item>
-                                <nz-form-control nz-col>
-                                    <nz-select formControlName="tiLeHaoThanhLy">
-                                        <nz-option *ngFor="let p of listTiLe" [nzValue]="p.value" [nzLabel]="p.text">
-                                        </nz-option>
-                                    </nz-select>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true"> Số lượng hao dưới định mức
-                        </nz-form-label>
-                        <div nz-col [nzSpan]="24" class="text-grey">Số Lượng
-                            <nz-form-item>
-                                <nz-form-control nz-col>
-                                    <span class="text-green">{{formData.value.slHaoDuoiDinhMuc | number :
-                                        '1.0-1'
-                                        :
-                                        'vi_VN'
-                                        }}</span>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true"></nz-form-label>
-                        <div nz-col [nzSpan]="24" class="text-grey">Tỉ lệ
-                            <nz-form-item>
-                                <nz-form-control nz-col>
-                                    <nz-select formControlName="tiLeHaoDuoiDinhMuc">
-                                        <nz-option *ngFor="let p of listTiLe" [nzValue]="p.value" [nzLabel]="p.text">
-                                        </nz-option>
-                                    </nz-select>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                    </nz-form-item>
-                </div>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"></nz-form-label>
+            <div nz-row>
+              <div nz-col [nzSpan]="24" style="color: gray"> Tỷ lệ<br>
+                <span style="color: blue" *ngIf="formData.value.tileHaoThucTe">
+                  {{formData.value.tileHaoThucTe}}
+                </span>
+              </div>
             </div>
-        </form>
-        <nz-card class="mg-t-16 flex-card p-lr16 table-card">
-            <nz-table #basicTable nzBordered class=" pd-10" class="nowrap" [nzFrontPagination]="false"
-                [nzShowPagination]="false">
-                <thead>
-                    <tr>
-                        <th>STT</th>
-                        <th>Thời gian bảo quản <br> (B)</th>
-                        <th>Số lượng bảo quản(kg)<br>(1)</th>
-                        <th>Định mức hao hụt <br>(2)</th>
-                        <th>Số lượng hao hụt theo định mức<br>(3=1*2)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <ng-container>
-                        <tr>
-                            <td>1</td>
-                            <td>{{formData.value.ngayKthucXuat | date: 'dd/MM/YYYY' }} </td>
-                            <td>{{formData.value.tongSlXuat |number:'1.0-1' : 'vi_VN'}}</td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </ng-container>
-                </tbody>
-            </nz-table>
-        </nz-card>
-        <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
-            <div nz-row [nzGutter]="[18, 6]">
-                <div nz-col [nzSpan]="12">
-                    <nz-form-item>
-                        <nz-form-label nzRequired [nzNoColon]="true"> Nguyên nhân
-                        </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <textarea [readonly]="isDisabled()" nz-input [rows]="3"
-                                formControlName="nguyenNhan"></textarea>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="12">
-                    <nz-form-item>
-                        <nz-form-label nzRequired [nzNoColon]="true"> Kiến nghị
-                        </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <textarea [readonly]="isDisabled()" nz-input [rows]="3"
-                                formControlName="kienNghi"></textarea>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="24">
-                    <nz-form-item>
-                        <nz-form-label nzRequired [nzNoColon]="true"> Ghi chú
-                        </nz-form-label>
-                        <nz-form-control nz-col>
-                            <textarea [readonly]="isDisabled()" nz-input [rows]="3" formControlName="ghiChu"></textarea>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true"> Thủ kho </nz-form-label>
-                        <nz-form-control>
-                            <input nz-input formControlName="tenThuKho" readonly />
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true"> KTV bảo quản </nz-form-label>
-                        <nz-form-control>
-                            <input nz-input formControlName="tenKtv" readonly />
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true"> Kế toán/kế toán trưởng </nz-form-label>
-                        <nz-form-control>
-                            <input nz-input formControlName="tenKeToan" readonly />
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true"> Lãnh đạo chi cục </nz-form-label>
-                        <nz-form-control>
-                            <input nz-input formControlName="tenNguoiPduyet" readonly />
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="24">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true">
-                            File đính kèm biên bản hao đôi hàng hóa đã ký
-                        </nz-form-label>
-                        <div class="list-file">
-                            <file-list [disabled]="isDisabled()" [isCanCuPL]="true" [data]="fileDinhKem"></file-list>
-                        </div>
-                    </nz-form-item>
-                </div>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Số lượng hao vượt định mức</nz-form-label>
+            <div nz-row>
+              <div nz-col [nzSpan]="24" style="color: gray"> Số lượng <br>
+                <span style="color: blue" *ngIf="formData.value.slHaoVuotMuc">
+                  {{formData.value.slHaoVuotMuc|number:globals.numberFormat:globals.locale}}
+                </span>
+              </div>
             </div>
-        </form>
-    </nz-card>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"></nz-form-label>
+            <div nz-row>
+              <div nz-col [nzSpan]="24" style="color: gray"> Tỷ lệ<br>
+                <span style="color: blue" *ngIf="formData.value.tileHaoVuotMuc">
+                  {{formData.value.tileHaoVuotMuc}}
+                </span>
+              </div>
+            </div>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Số lượng hao được thanh lý</nz-form-label>
+            <div nz-row>
+              <div nz-col [nzSpan]="24" style="color: gray"> Số lượng <br>
+                <span style="color: blue" *ngIf="formData.value.slHaoThanhLy">
+                  {{formData.value.slHaoThanhLy|number:globals.numberFormat:globals.locale}}
+                </span>
+              </div>
+            </div>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"></nz-form-label>
+            <div nz-row>
+              <div nz-col [nzSpan]="24" style="color: gray"> Tỷ lệ<br>
+                <span style="color: blue" *ngIf="formData.value.tileHaoThanhLy">
+                  {{formData.value.tileHaoThanhLy}}
+                </span>
+              </div>
+            </div>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Số lượng hao dưới dịnh mức</nz-form-label>
+            <div nz-row>
+              <div nz-col [nzSpan]="24" style="color: gray"> Số lượng <br>
+                <span style="color: blue" *ngIf="formData.value.slHaoDuoiMuc">
+                  {{formData.value.slHaoDuoiMuc|number:globals.numberFormat:globals.locale}}
+                </span>
+              </div>
+            </div>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"></nz-form-label>
+            <div nz-row>
+              <div nz-col [nzSpan]="24" style="color: gray"> Tỷ lệ<br>
+                <span style="color: blue" *ngIf="formData.value.tileHaoDuoiMuc">
+                  {{formData.value.tileHaoDuoiMuc}}
+                </span>
+              </div>
+            </div>
+          </nz-form-item>
+        </div>
+      </div>
+      <nz-card class="mg-t-16 flex-card p-lr16 table-card">
+        <nz-table nzBordered class="pd-10" class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
+          <thead>
+          <tr>
+            <th rowSpan="2" nzWidth="50px" class="text-center wrap">STT <br>(A)</th>
+            <th rowSpan="2" class="text-center">Thời gian bảo quản <br>(B)</th>
+            <th rowSpan="2" class="text-center">Số Lượng bảo quản (Kg) <br>(1)</th>
+            <th rowSpan="2" class="text-center">Định mức hao hụt <br>(2)</th>
+            <th rowSpan="2" class="text-center">Số lượng hao theo định mức <br>(3) = (1) x (2)</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="text-center">1</td>
+            <td class="text-center">
+              <ng-container *ngIf="formData.value.thoiGianKthucNhap && formData.value.thoiGianKthucXuat">
+                Từ {{ formData.value.thoiGianKthucNhap | date: 'dd/MM/YYYY' }}
+                đến {{ formData.value.thoiGianKthucXuat | date: 'dd/MM/YYYY' }}
+              </ng-container>
+            </td>
+            <td class="text-center">{{formData.value.tongSlNhap|number:globals.numberFormat:globals.locale}}</td>
+            <td class="text-center">{{formData.value.dinhMucHaoHut}}</td>
+            <td class="text-center">{{formData.value.slHaoTheoDinhMuc|number:globals.numberFormat:globals.locale}}</td>
+          </tr>
+          </tbody>
+        </nz-table>
+      </nz-card>
+    </form>
+    <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
+      <div nz-row [nzGutter]="[18, 6]">
+        <div nz-col [nzSpan]="12">
+          <nz-form-item class="form-item display-block">
+            <nz-form-label nzRequired [nzNoColon]="true"> Nguyên nhân</nz-form-label>
+            <nz-form-control nz-col [nzErrorTip]="error">
+              <textarea nz-input [rows]="3" formControlName="nguyenNhan" [readonly]="isView"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="12">
+          <nz-form-item class="form-item display-block">
+            <nz-form-label nzRequired [nzNoColon]="true"> Kiến nghị</nz-form-label>
+            <nz-form-control nz-col [nzErrorTip]="error">
+              <textarea nz-input [rows]="3" formControlName="kienNghi" [readonly]="isView"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="24">
+          <nz-form-item class="form-item display-block">
+            <nz-form-label [nzNoColon]="true"> ghi chú</nz-form-label>
+            <nz-form-control nz-col>
+              <textarea nz-input [rows]="3" formControlName="ghiChu" [readonly]="isView"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Thủ kho (Cán bộ thủ kho)</nz-form-label>
+            <nz-form-control nz-col>
+              <input nz-input formControlName="tenThuKho" readonly/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> KTV bảo quản</nz-form-label>
+            <nz-form-control nz-col>
+              <input nz-input formControlName="tenKtvBaoQuan" readonly/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Kế toán/Kế toán trưởng</nz-form-label>
+            <nz-form-control nz-col>
+              <input nz-input formControlName="tenKeToan" readonly/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Lãnh đạo Chi cục</nz-form-label>
+            <nz-form-control nz-col>
+              <input nz-input formControlName="tenLanhDaoChiCuc" readonly/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> File đính kèm bảng kê đã ký</nz-form-label>
+            <nz-form-control nz-col>
+              <div class="list-file" nz-col>
+                <file-list [data]="formData.value.fileDinhKem" [isViewDetail]="isView">
+                </file-list>
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </nz-card>
 </div>
 <ng-template #error let-control>
-    <app-template-error #error [control]="control"></app-template-error>
+  <app-template-error #error [control]="control"></app-template-error>
 </ng-template>
-<nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewPhieu" (nzOnCancel)="closeModalPhieuKtCl()">
-    <ng-container *nzModalContent class="modal__content">
-        <app-them-phieu-ktra-cluong-btt [id]="idPhieu" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
-        </app-them-phieu-ktra-cluong-btt>
-    </ng-container>
-    <div *nzModalFooter>
-        <button nz-button (click)="closeModalPhieuKtCl()" class="modal__button--cancel">
-            <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-            Đóng
-        </button>
-    </div>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewXuatKho" (nzOnCancel)="closeModal('xuatKho')">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-them-moi-phieu-xuat-kho-btt [idInput]="idXuatKho" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
+                                     [isView]="true">
+    </app-them-moi-phieu-xuat-kho-btt>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModal('xuatKho')" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
 </nz-modal>
-<nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewPhieuXuat" (nzOnCancel)="closeModalPhieuXuatKho()">
-    <ng-container *nzModalContent class="modal__content">
-        <app-them-moi-phieu-xuat-kho-btt [id]="idPhieuXuat" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
-        </app-them-moi-phieu-xuat-kho-btt>
-    </ng-container>
-    <div *nzModalFooter>
-        <button nz-button (click)="closeModalPhieuXuatKho()" class="modal__button--cancel">
-            <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-            Đóng
-        </button>
-    </div>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewBangKe" (nzOnCancel)="closeModal('bangKe')">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-them-moi-bang-ke-can-hang-btt [idInput]="idBangKe" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
+                                       [isView]="true">
+    </app-them-moi-bang-ke-can-hang-btt>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModal('bangKe')" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
 </nz-modal>
-<nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewBangKe" (nzOnCancel)="closeModalBangKe()">
-    <ng-container *nzModalContent class="modal__content">
-        <app-them-moi-bang-ke-can-hang-btt [id]="idBangKe" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
-        </app-them-moi-bang-ke-can-hang-btt>
-    </ng-container>
-    <div *nzModalFooter>
-        <button nz-button (click)="closeModalBangKe()" class="modal__button--cancel">
-            <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-            Đóng
-        </button>
-    </div>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewXuatKho" (nzOnCancel)="closeModal('xuatKho')">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-them-moi-phieu-xuat-kho-btt [idInput]="idXuatKho" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
+                                     [isView]="true">
+    </app-them-moi-phieu-xuat-kho-btt>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModal('xuatKho')" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewBangKe" (nzOnCancel)="closeModal('bangKe')">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-them-moi-bang-ke-can-hang-btt [idInput]="idBangKe" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
+                                       [isView]="true">
+    </app-them-moi-bang-ke-can-hang-btt>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModal('bangKe')" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+<nz-modal [nzWidth]="'75%'" [nzClosable]="false" [(nzVisible)]="showDlgPreview" nzWidth="100%"
+          (nzOnCancel)="closeDlg()">
+  <div *nzModalContent class="modal__content">
+    <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 600px;"></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)="printPreview()"
+            class="modal__button--save">
+      <i class="icon htvbdh_printer"></i>
+      In
+    </button>
+    <button nz-button
+            (click)="downloadPdf('Biên bản hao dôi')"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-pdf"></i>
+      Xuất .pdf
+    </button>
+    <button nz-button
+            (click)="downloadWord('Biên bản hao dôi')"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-word"></i>
+      Xuất .docx
+    </button>
+    <button nz-button (click)="closeDlg()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
 </nz-modal>

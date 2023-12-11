@@ -1,4 +1,4 @@
-import { ChiTietMenu } from "src/app/models/ChiTietMenu";
+import { ChiTietMenu } from 'src/app/models/ChiTietMenu';
 
 export const MAIN_ROUTE_KE_HOACH = 'kehoach';
 export const CHI_TIEU_KE_HOACH_NAM = 'chi-tieu-ke-hoach-nam';
@@ -18,7 +18,7 @@ export const ROUTE_LIST_KE_HOACH: Array<any> = [
     dropdown: 'giao-chi-tieu',
     idHover: 'giao-chi-tieu',
     hasTab: false,
-    code: 'KHVDTNSNN_GKHDT'
+    code: 'KHVDTNSNN_GKHDT',
   },
   {
     icon: 'htvbdh_tcdt_tochucthuchien',
@@ -27,7 +27,7 @@ export const ROUTE_LIST_KE_HOACH: Array<any> = [
     dropdown: 'de-xuat-dieu-chinh-chi-tieu',
     idHover: 'giao-chi-tieu',
     hasTab: false,
-    code: 'KHVDTNSNN_DTNSNN'
+    code: 'KHVDTNSNN_DTNSNN',
   },
   // {
   //   icon: 'htvbdh_tcdt_tochucthuchien',
@@ -52,7 +52,7 @@ export const ROUTE_LIST_KE_HOACH: Array<any> = [
     // dropdown: 'dieu-chinh-chi-tieu',
     // idHover: 'giao-chi-tieu',
     hasTab: false,
-    code: 'KHVDTNSNN_PAGIA'
+    code: 'KHVDTNSNN_PAGIA',
   },
   {
     icon: 'htvbdh_tcdt_baocao2',
@@ -62,6 +62,6 @@ export const ROUTE_LIST_KE_HOACH: Array<any> = [
     idHover: 'giao-chi-tieu',
     hasTab: false,
     code: 'KHVDTNSNN_BAOCAO',
-    children: []
+    children: [],
   },
 ];

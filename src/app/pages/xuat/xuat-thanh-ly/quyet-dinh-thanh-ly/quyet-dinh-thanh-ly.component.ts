@@ -38,10 +38,11 @@ export class QuyetDinhThanhLyComponent extends Base3Component implements OnInit 
     this.defaultURL = 'xuat/xuat-thanh-ly/quyet-dinh'
     this.formData = this.fb.group({
       nam: null,
-      maSc: null,
-      maCc: null,
-      ngayTu: null,
-      ngayDen: null,
+      soQd: null,
+      soHoSo: null,
+      ngayKyTu: null,
+      ngayKyDen: null,
+      trangThai: null,
     })
     this.listTrangThai = [
       {

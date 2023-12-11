@@ -1,28 +1,35 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected (click)="selectTab(0)" *ngIf="!userService.isChiCuc()">
+    <li [nzSelected]="tabSelected==0" nz-menu-item (click)="selectTab(0)"
+        *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_KHBTT') && !userService.isChiCuc()">
       Kế hoạch bán trực tiếp
     </li>
-    <li nz-menu-item (click)="selectTab(1)"
-      *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG')">
+    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)"
+        *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT') && !userService.isChiCuc()">
       Tổ chức triển khai KH bán trực tiếp
     </li>
-    <li nz-menu-item (click)="selectTab(2)" *ngIf="!userService.isChiCuc()">
+    <li [nzSelected]="tabSelected==2" nz-menu-item (click)="selectTab(2)"
+        *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT') && !userService.isChiCuc()">
       Quyết định phê duyệt kết quả chào giá
     </li>
-    <li nz-menu-item (click)="selectTab(3)" *ngIf="userService.isChiCuc()">
+    <li [nzSelected]="tabSelected==3" nz-menu-item (click)="selectTab(3)"
+        *ngIf="userService.isChiCuc()">
       QĐ KH bán trực tiếp được Ủy quyền/Bán lẻ
     </li>
-    <li nz-menu-item (click)="selectTab(4)">
+    <li [nzSelected]="tabSelected==4" nz-menu-item (click)="selectTab(4)"
+        *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB')">
       Hợp đồng/Bảng kê, phiếu bán hàng
     </li>
-    <li nz-menu-item (click)="selectTab(5)" *ngIf="!userService.isTongCuc()">
+    <li [nzSelected]="tabSelected==5" nz-menu-item (click)="selectTab(5)"
+        *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_QDGNVXH')">
       Quyết định giao nhiệm vụ xuất hàng
     </li>
-    <li nz-menu-item (click)="selectTab(6)" *ngIf="!userService.isTongCuc()">
+    <li [nzSelected]="tabSelected==6" nz-menu-item (click)="selectTab(6)"
+        *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_KTCL') && !userService.isTongCuc()">
       Kiểm tra chất lượng
     </li>
-    <li nz-menu-item (click)="selectTab(7)" *ngIf="!userService.isTongCuc()">
+    <li [nzSelected]="tabSelected==7" nz-menu-item (click)="selectTab(7)"
+        *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_XK') && !userService.isTongCuc()">
       Xuất kho
     </li>
   </ul>
@@ -32,26 +39,26 @@
     <ng-container *ngIf="tabSelected == 0">
       <app-ke-hoach-ban-truc-tiep></app-ke-hoach-ban-truc-tiep>
     </ng-container>
+    <ng-container *ngIf="tabSelected == 1">
+      <app-to-chuc-trien-khai-ban-truc-tiep></app-to-chuc-trien-khai-ban-truc-tiep>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 2">
+      <app-quyet-dinh-chaogia-btt></app-quyet-dinh-chaogia-btt>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 3">
+      <app-quyet-dinh-uyquen-banle-btt></app-quyet-dinh-uyquen-banle-btt>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 4">
+      <app-hop-dong-btt></app-hop-dong-btt>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 5">
+      <app-giao-nv-xuat-hang-btt></app-giao-nv-xuat-hang-btt>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 6">
+      <app-kiem-tra-cluong-btt></app-kiem-tra-cluong-btt>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 7">
+      <app-xuat-kho-btt></app-xuat-kho-btt>
+    </ng-container>
   </div>
-  <ng-container *ngIf="tabSelected == 1">
-    <app-to-chuc-trien-khai-ban-truc-tiep></app-to-chuc-trien-khai-ban-truc-tiep>
-  </ng-container>
-  <ng-container *ngIf="tabSelected == 2">
-    <app-quyet-dinh-chaogia-btt></app-quyet-dinh-chaogia-btt>
-  </ng-container>
-  <ng-container *ngIf="tabSelected == 3">
-    <app-quyet-dinh-uyquen-banle-btt></app-quyet-dinh-uyquen-banle-btt>
-  </ng-container>
-  <ng-container *ngIf="tabSelected == 4">
-    <app-hop-dong-btt></app-hop-dong-btt>
-  </ng-container>
-  <ng-container *ngIf="tabSelected == 5">
-    <app-giao-nv-xuat-hang-btt></app-giao-nv-xuat-hang-btt>
-  </ng-container>
-  <ng-container *ngIf="tabSelected == 6">
-    <app-kiem-tra-cluong-btt></app-kiem-tra-cluong-btt>
-  </ng-container>
-  <ng-container *ngIf="tabSelected == 7">
-    <app-xuat-kho-btt></app-xuat-kho-btt>
-  </ng-container>
 </div>

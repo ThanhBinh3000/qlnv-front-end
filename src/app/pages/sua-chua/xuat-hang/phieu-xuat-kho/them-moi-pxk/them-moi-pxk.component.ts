@@ -174,7 +174,10 @@ export class ThemMoiPxkComponent extends Base3Component implements OnInit {
         })
         this.dataTableDiaDiem = []
         data.scQuyetDinhSc.scTrinhThamDinhHdr.children.forEach(item => {
-          this.dataTableDiaDiem.push(item.scDanhSachHdr);
+          // Filter các đơn vị chi cục
+          if(item.scDanhSachHdr.maDiaDiem.includes(this.userInfo.MA_DVI)){
+            this.dataTableDiaDiem.push(item.scDanhSachHdr);
+          }
         })
       }
     });

@@ -138,7 +138,8 @@ export class ThemMoiKhoComponent implements OnInit {
       soLoKho: [''],
       tenThuKho: [''],
       isKhoiTao: [false],
-      loaiHangHoa: []
+      loaiHangHoa: [],
+      khoiTich: [0]
     })
     this.formKho.controls['maCha'].valueChanges.subscribe(value => {
       let node = this.treeSelect.getTreeNodeByKey(value);

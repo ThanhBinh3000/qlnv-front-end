@@ -21,11 +21,11 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col nzSpan="6">
+          <div nz-col nzSpan="6" *ngIf="userService.isTongCuc()">
             <nz-form-item>
               <nz-form-label>Cục DTNN KV</nz-form-label>
               <nz-form-control>
-                <nz-select formControlName="maCuc" nzShowSearch nzAllowClear>
+                <nz-select formControlName="maCuc" (ngModelChange)="loadDsChiCuc()" nzShowSearch nzAllowClear>
                   <nz-option *ngFor="let p of dsDonvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -36,7 +36,7 @@
               <nz-form-label>Chi cục DTNN KV</nz-form-label>
               <nz-form-control>
                 <nz-select formControlName="maChiCuc" nzShowSearch nzAllowClear>
-                  <nz-option *ngFor="let p of dsDonvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
+                  <nz-option *ngFor="let p of listChiCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
@@ -77,10 +77,10 @@
     <div class="group-button">
       <h3 class="text-uppercase">Danh sách hàng DTQG (Lương thực) còn 6 tháng hết hạn lưu kho nhưng chưa có kế hoạch xuất</h3>
       <div>
-        <a (click)="danhSach()" style="color: blue">
+        <a (click)="danhSach()"  *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_TBDS_XEM')" style="color: blue">
           Xem toàn bộ danh sách
         </a>
-        <button type="button" class="btn btn-main" (click)="showModal(true)">
+        <button type="button" class="btn btn-main" *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_THDS_THEM')"  (click)="showModal(true)">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Tổng hợp DS kiểm tra chất lượng LT trước khi hết hạn lưu kho</span>
         </button>
@@ -133,11 +133,11 @@
                 <td></td>
                 <td>{{item.ngayTao|date:globals.dateTimeFormat}}</td>
                 <td></td>
-                <td>{{item.ngayDeXuat|date:globals.dateTimeFormat}}</td>
+                <td>{{item.ngayDeXuat|date:globals.dateFormat}}</td>
                 <td>{{item.tenTrangThai}}</td>
                 <td></td>
                 <td class="text-left">
-                  <a (click)="showModal(true, item)">
+                  <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_THDS_XEM')" (click)="showModal(true, item)">
                     <i class="fa fa-eye" title="Xem chi tiết"></i>
                   </a>
                   <a *ngIf="item.trangThai==STATUS.DU_THAO" (click)="delete(item)">
@@ -179,14 +179,14 @@
                         <td>{{lv2.tenDiemKho}}</td>
                         <td>{{lv2.tenLoKho ? (lv2.tenLoKho +' '+ lv2.tenNganKho): lv2.tenNganKho}}</td>
                         <td>{{lv2.ngayNhapKho}}</td>
-                        <td>{{lv2.slTon}}</td>
-                        <td>{{lv2.slHetHan}}</td>
+                        <td class="text-right">{{lv2.slTonKho}}</td>
+                        <td class="text-right">{{lv2.slHetHan}}</td>
                         <td>{{lv2.donViTinh}}</td>
                         <td></td>
-                        <td>{{lv2.thoiHanLk|number:globals.numberFormat}}</td>
+                        <td class="text-right">{{lv2.thoiHanLk|number:globals.numberFormat:globals.locale }}</td>
                         <td></td>
                         <td></td>
-                        <td>{{lv2.soPhieuKnCl ? (lv2.kqThamDinh == true ? "Đạt" : "Không đạt") : ''}}</td>
+                        <td>{{lv2.tenTrangThaiKtCl}}</td>
                         <td></td>
                       </tr>
                     </ng-container>

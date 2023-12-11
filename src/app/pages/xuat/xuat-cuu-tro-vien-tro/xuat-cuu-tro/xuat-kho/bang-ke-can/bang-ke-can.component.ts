@@ -12,7 +12,7 @@ import {
 import dayjs from "dayjs";
 import { UserLogin } from "src/app/models/userlogin";
 import { MESSAGE } from "src/app/constants/message";
-import { chain, isEmpty } from 'lodash';
+import { chain, isEmpty, groupBy } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import {
   BangKeCanCtvtService
@@ -27,6 +27,7 @@ import { CuuTroVienTroComponent } from "../../cuu-tro-vien-tro.component";
 })
 export class BangKeCanComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
+  @Input() loaiXuat: string;
   CHUC_NANG = CHUC_NANG;
   public vldTrangThai: CuuTroVienTroComponent;
   dsDonvi: any[] = [];
@@ -38,8 +39,9 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
   expandSetString = new Set<string>();
   dataView: any = [];
   idPhieuXk: number = 0;
-  openPhieuXk = false;
-
+  openPhieuXk: boolean = false;
+  idPhieuKnCl: number = 0;
+  openPhieuKnCl: boolean = false;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -121,6 +123,7 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     this.userInfo = this.userService.getUserLogin();
     this.userdetail.maDvi = this.userInfo.MA_DVI;
     this.userdetail.tenDvi = this.userInfo.TEN_DVI;
+    this.formData.patchValue({ loaiVthh: this.loaiVthh })
     await this.loadDsTong();
   }
 
@@ -148,7 +151,7 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     await this.spinner.show()
     this.formData.patchValue({
       // loaiVthh: this.loaiVthh,
-      type: "XUAT_CTVT"
+      type: this.loaiXuat
     });
     await super.search(roles);
     this.buildTableView();
@@ -166,7 +169,6 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
         this.formData.value.ngayKetThucTu = dayjs(this.formData.value.ngayKetThuc[0]).format('YYYY-MM-DD')
         this.formData.value.ngayKetThucDen = dayjs(this.formData.value.ngayKetThuc[1]).format('YYYY-MM-DD')
       }
-
       await this.search();
     } catch (e) {
       console.log(e)
@@ -190,27 +192,39 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
   }
 
   buildTableView() {
-    console.log(JSON.stringify(this.dataTable), 'raw')
-    let dataView = chain(this.dataTable)
+    const newData = this.dataTable.map(f => ({ ...f, maNganLoKho: f.maLoKho ? `${f.maLoKho}${f.maNganKho}` : f.maNganKho }))
+    let dataView = chain(newData)
       .groupBy("soQdGiaoNvXh")
       .map((value, key) => {
         let rs = chain(value)
           .groupBy("maDiemKho")
           .map((v, k) => {
             let rowLv2 = v.find(s => s.maDiemKho === k);
+            const rowLv3 = chain(v).groupBy("maNganLoKho").map((v1, k1) => {
+              const nganLoKho = v1.find(f => f.maNganLoKho == k1);
+              if (!nganLoKho) return;
+              return {
+                idVirtual: uuidv4(),
+                tenDiemKho: rowLv2 ? rowLv2.tenDiemKho : '',
+                tenNhaKho: rowLv2 ? rowLv2.tenNhaKho : '',
+                tenNganKho: rowLv2 ? rowLv2.tenNganKho : '',
+                tenLoKho: rowLv2 ? rowLv2.tenLoKho : '',
+                soPhieuKnCl: nganLoKho.soPhieuKnCl,
+                idPhieuKnCl: nganLoKho.idPhieuKnCl,
+                ngayKn: nganLoKho.ngayKn,
+                childData: v1
+              }
+            }).value().filter(f => !!f);
+            if (!rowLv2) return;
             return {
               id: rowLv2 ? rowLv2.id : null,
               idVirtual: uuidv4(),
-              maDiemKho: k != "null" ? k : '',
-              tenDiemKho: rowLv2 ? rowLv2.tenDiemKho : null,
-              tenNhaKho: rowLv2 ? rowLv2.tenNhaKho : null,
-              tenNganKho: rowLv2 ? rowLv2.tenNganKho : null,
-              tenLoKho: rowLv2 ? rowLv2.tenLoKho : null,
-              childData: v
+              tenDiemKho: rowLv2.tenDiemKho,
+              childData: rowLv3
             }
-          }
-          ).value();
+          }).value().filter(f => !!f);
         let rowLv1 = value.find(s => s.soQdGiaoNvXh === key);
+        if (!rowLv1) return;
         return {
           idVirtual: uuidv4(),
           soQdGiaoNvXh: key != "null" ? key : '',
@@ -218,7 +232,7 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
           thoiGianGiaoNhan: rowLv1 ? rowLv1.thoiGianGiaoNhan : null,
           childData: rs
         };
-      }).value();
+      }).value().filter(f => !!f);
     this.dataView = dataView
     this.expandAll()
   }
@@ -239,7 +253,15 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
   async deleteRow(lv2: any) {
     await this.delete(lv2);
   }
+  openPhieuKnClModal(id: number) {
+    this.idPhieuKnCl = id;
+    this.openPhieuKnCl = true;
+  }
 
+  closePhieuKnClModal() {
+    this.idPhieuKnCl = null;
+    this.openPhieuKnCl = false;
+  }
   openPhieuXkModal(id: number) {
     console.log(id, 'id');
     this.idPhieuXk = id;

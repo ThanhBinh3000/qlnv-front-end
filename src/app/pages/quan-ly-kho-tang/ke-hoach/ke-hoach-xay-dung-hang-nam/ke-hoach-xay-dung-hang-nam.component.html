@@ -1,14 +1,12 @@
 <nz-affix [nzOffsetTop]="69" class="level1">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected (click)="selectTab('dxnc')"
-      *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX')">
+    <li nz-menu-item [nzSelected]=" tabSelected=='dxnc'" (click)="selectTab('dxnc')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX')">
       Đề xuất nhu cầu đầu tư xây dựng kho tàng DTQG hàng năm
     </li>
-    <li nz-menu-item (click)="selectTab('thnc')"
-      *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_TH')">
+    <li nz-menu-item [nzSelected]=" tabSelected=='thnc'" (click)="selectTab('thnc')" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_TH')">
       Tổng hợp phương án đề xuất nhu cầu đầu tư xây dựng kho tàng DTQG hàng năm
     </li>
-    <li nz-menu-item (click)="selectTab('qdpd')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_QD')">
+    <li nz-menu-item [nzSelected]=" tabSelected=='qdpd'" (click)="selectTab('qdpd')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_QD')">
       Quyết định PD KH đầu tư xây dựng kho tàng DTQG hàng năm của BTC/Bộ KHĐT
     </li>
   </ul>
@@ -17,8 +15,8 @@
   <app-de-xuat-nhu-cau></app-de-xuat-nhu-cau>
 </ng-container>
 <ng-container *ngIf="tabSelected == 'thnc'">
-  <app-tong-hop-dx-nhu-cau></app-tong-hop-dx-nhu-cau>
+  <app-tong-hop-dx-nhu-cau (tabFocus)="selectData($event)"></app-tong-hop-dx-nhu-cau>
 </ng-container>
 <ng-container *ngIf="tabSelected == 'qdpd'">
-  <app-quyet-dinh-phe-duyet-khxd></app-quyet-dinh-phe-duyet-khxd>
+  <app-quyet-dinh-phe-duyet-khxd [dataTongHop]="dataObject" (removeData)="removeData()"></app-quyet-dinh-phe-duyet-khxd>
 </ng-container>

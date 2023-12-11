@@ -21,9 +21,9 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="formData.value.loaiBc == '02' ?4: 6">
+          <div nz-col  [nzSpan]="formData.value.loaiBc == '02' ?4: 6">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Loại hàng DTQG
+              <nz-form-label  nzRequired [nzNoColon]="true" class="label-color-kh"> Loại hàng DTQG
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-select nzShowSearch nzAllowClear formControlName="loaiVthh">
@@ -32,43 +32,43 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="formData.value.loaiBc == '02' ? 4: 6 ">
+          <div nz-col  [nzSpan]="formData.value.loaiBc == '02' ? 4: 6 ">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Nhập năm
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-select formControlName="namNhap" nzMode='tags'>
-                  <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                  <nz-option  *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="formData.value.loaiBc == '02' ? 4: 6 ">
+          <div nz-col  [nzSpan]="formData.value.loaiBc == '02' ? 4: 6 ">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Xuất năm
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-select formControlName="namXuat" nzMode='tags'>
-                  <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                  <nz-option  *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="formData.value.loaiBc == '02' ? 4: 6 " *ngIf="formData.value.loaiBc == '02'">
+          <div nz-col  [nzSpan]="formData.value.loaiBc == '02' ? 4: 6 " *ngIf="formData.value.loaiBc == '02'">
             <nz-form-item>
               <nz-form-label>Cục DTNN KV</nz-form-label>
-              <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select nzShowSearch formControlName="maCuc" (ngModelChange)="changeCuc($event)" nzAllowClear>
+              <nz-form-control nz-col [nzErrorTip]="error" >
+                <nz-select nzShowSearch formControlName="maCuc" (ngModelChange)="changeCuc($event)" nzAllowClear [nzDisabled]="!userService.isTongCuc()">
                   <nz-option *ngFor="let p of dsDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="formData.value.loaiBc == '02' ? 4: 6 " *ngIf="formData.value.loaiBc == '02'">
+          <div nz-col  [nzSpan]="formData.value.loaiBc == '02' ? 4: 6 " *ngIf="formData.value.loaiBc == '02'">
             <nz-form-item>
-              <nz-form-label>Chi Cục DTNN KV</nz-form-label>
-              <nz-form-control nz-col>
-                <nz-select nzShowSearch formControlName="maChiCuc" nzAllowClear>
+              <nz-form-label>Chi Cục DTNN</nz-form-label>
+              <nz-form-control nz-col >
+                <nz-select nzShowSearch formControlName="maChiCuc" nzAllowClear [nzDisabled]="userService.isChiCuc()">
                   <nz-option *ngFor="let p of listChiCuc" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -78,7 +78,7 @@
       </form>
     </nz-card>
     <div class="cangiua group-button-search">
-      <button nz-button class="search__button--clear" (click)="clearFilter()">
+      <button nz-button class="search__button--clear" (click)="clearFilter()" *ngIf="userService.isTongCuc()">
         <i class="icon  htvbdh_nhap-lai1"></i>
         Xóa điều kiện
       </button>

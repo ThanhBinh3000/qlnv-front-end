@@ -170,7 +170,6 @@ export class ThemSuaKeHoachVatTuComponent implements OnInit {
   }
 
   async onChangeLoaiVthh(event, type?) {
-    console.log(event, 'hahhaa');
     let vatTuCha = this.dataVatTuChaShow.find(item => item.maHang == event);
     this.dataVatTuConShow = [];
     if (vatTuCha) {

@@ -1,0 +1,11 @@
+<!-- <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="level1"> -->
+<nz-affix [nzOffsetTop]="globals.prop.MN_LV2" class="level1">
+    <ul nz-menu nzMode="horizontal">
+        <li *ngFor="let tab of tabs,let i = index" [nzSelected]="i == 0" nz-menu-item (click)="selectTab(tab.ma)">
+            {{tab.giaTri}}
+        </li>
+    </ul>
+</nz-affix>
+<ng-container *ngFor="let tab of tabs,let i = index">
+    <app-kiem-tra-chat-luong *ngIf="tab.ma == loaiVthhSelected" [typeVthh]="loaiVthhSelected"></app-kiem-tra-chat-luong>
+</ng-container>

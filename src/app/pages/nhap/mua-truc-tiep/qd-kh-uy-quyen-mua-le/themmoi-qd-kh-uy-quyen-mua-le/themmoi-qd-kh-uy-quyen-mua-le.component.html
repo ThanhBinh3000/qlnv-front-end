@@ -6,15 +6,17 @@
         <span>Quay lại</span>
       </button>
       <ng-container>
-        <button *ngIf="formData.value.pthucMuaTrucTiep == '02'" type="button" (click)="redirectHopDong()"
-          class="btn btn-main">
+        <button
+          *ngIf="formData.value.pthucMuaTrucTiep == '02'"
+          type="button" (click)="redirectHopDong()" class="btn btn-main">
           <i class="fa fa-plus"></i>
           <span>Thêm hợp đồng</span>
         </button>
       </ng-container>
       <ng-container>
-        <button *ngIf="formData.value.pthucMuaTrucTiep == '03'" type="button" (click)="themMoiBangKeMuaLe($event)"
-          class="btn btn-main">
+        <button
+          *ngIf="formData.value.pthucMuaTrucTiep == '03'"
+          type="button" (click)="themMoiBangKeMuaLe($event)" class="btn btn-main">
           <i class="fa fa-plus"></i>
           <span>Thêm bảng kê</span>
         </button>
@@ -25,9 +27,10 @@
     <div class="header header-green-background" *ngIf="!showFromTH">
       <div class="header-text">
         <div class="title-chi-tieu">
-          <span [ngClass]="formData.value.trangThai == STATUS.HOAN_THANH_CAP_NHAT ? 'status-xanh' : ''">
-            {{ formData.value.tenTrangThai }}
-          </span>
+                <span
+                  [ngClass]="formData.value.trangThai == STATUS.HOAN_THANH_CAP_NHAT ? 'status-xanh' : ''">
+                    {{ formData.value.tenTrangThai }}
+                </span>
           <span>quyết định kế hoạch ủy quyền/mua lẻ</span>
         </div>
       </div>
@@ -40,7 +43,7 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group>
-                  <input nz-input readonly formControlName="namKh" />
+                  <input nz-input readonly formControlName="namKh"/>
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -50,7 +53,7 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group>
-                  <input nz-input readonly formControlName="soQd" />
+                  <input nz-input readonly formControlName="soQd"/>
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -59,7 +62,8 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Ngày ký quyết định</nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-date-picker formControlName="ngayPduyet" [nzDisabled]="true" nzFormat="dd/MM/yyyy">
+                <nz-date-picker formControlName="ngayPduyet" [nzDisabled]="true"
+                                nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
               </nz-form-control>
             </nz-form-item>
@@ -68,7 +72,8 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Ngày hiệu lực</nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-date-picker formControlName="ngayHluc" [nzDisabled]="true" nzFormat="dd/MM/yyyy">
+                <nz-date-picker formControlName="ngayHluc" [nzDisabled]="true"
+                                nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
               </nz-form-control>
             </nz-form-item>
@@ -78,7 +83,7 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Phương thức mua trực tiếp</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group>
-                  <input nz-input readonly formControlName="tenPthucMuaTrucTiep" />
+                  <input nz-input readonly formControlName="tenPthucMuaTrucTiep"/>
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -87,7 +92,7 @@
             <nz-form-item>
               <nz-form-label [nzNoColon]="true"> Trích yếu</nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <input placeholder="" nz-input formControlName="trichYeu" [readonly]="true" />
+                <input placeholder="" nz-input formControlName="trichYeu" [readonly]="true"/>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -121,7 +126,7 @@
                       <nz-form-label nzRequired [nzNoColon]="true"> Tên chủ đầu tư</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input nz-input readonly formControlName="tenDvi" />
+                          <input nz-input readonly formControlName="tenDvi"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -131,7 +136,7 @@
                       <nz-form-label nzRequired [nzNoColon]="true"> Tên dự án</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input nz-input readonly formControlName="tenDvi" />
+                          <input nz-input readonly formControlName="tenDvi"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -141,8 +146,10 @@
                       <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group nzAddOnAfter="đ">
-                          <nz-input-number class="text-right" nz-input formControlName="tongMucDt" [nzSize]="'small'"
-                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
+                          <nz-input-number class="text-right" nz-input formControlName="tongMucDt"
+                                           [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                           [nzParser]="globals.parser"
+                                           nzDisabled>
                           </nz-input-number>
                         </nz-input-group>
                       </nz-form-control>
@@ -153,36 +160,36 @@
                       <nz-form-label nzRequired [nzNoColon]="true"> Nguồn vốn</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input nz-input readonly formControlName="tenDvi" />
+                          <input nz-input readonly formControlName="tenDvi"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="6">
                     <nz-form-item>
-                      <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
+                      <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group nzAddOnAfterIcon="folder-open">
-                          <input [readonly]="true" nz-input formControlName="tenLoaiVthh" readonly="true" />
+                          <input [readonly]="true" nz-input formControlName="tenLoaiVthh" readonly="true"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="18">
                     <nz-form-item>
-                      <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
+                      <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group nzAddOnAfterIcon="folder-open">
-                          <input [readonly]="true" nz-input formControlName="tenCloaiVthh" readonly="true" />
+                          <input [readonly]="true" nz-input formControlName="tenCloaiVthh" readonly="true"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="6">
                     <nz-form-item>
-                      <nz-form-label [nzNoColon]="true" nzRequired> Tên hàng hóa</nz-form-label>
+                      <nz-form-label [nzNoColon]="true" nzRequired> Tên hàng DTQG</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
-                        <input nz-input readonly formControlName="moTaHangHoa" />
+                        <input nz-input readonly formControlName="moTaHangHoa"/>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
@@ -209,19 +216,19 @@
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group nzAddOnAfter="đ/kg">
                           <nz-input-number formControlName="donGia" nz-input [nzMin]="1"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'">
+                                           [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'">
                           </nz-input-number>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
-                  <div nz-col [nzSpan]="3">
-                    <nz-form-item>
-                      <nz-form-label [nzNoColon]="true"></nz-form-label>
-                      <input class="text-green" [ngModel]="convertTien(formData.value.donGia)" nz-input readonly
-                        [ngModelOptions]="{standalone: true}" />
-                    </nz-form-item>
-                  </div>
+<!--                  <div nz-col [nzSpan]="3">-->
+<!--                    <nz-form-item>-->
+<!--                      <nz-form-label [nzNoColon]="true"></nz-form-label>-->
+<!--                      <input class="text-green" [ngModel]="convertTien(formData.value.donGia)" nz-input-->
+<!--                             readonly [ngModelOptions]="{standalone: true}"/>-->
+<!--                    </nz-form-item>-->
+<!--                  </div>-->
                   <div nz-col [nzSpan]="3">
                     <nz-form-item>
                       <nz-form-label nzRequired [nzNoColon]="true"> Giá được duyệt có VAT
@@ -229,19 +236,19 @@
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group nzAddOnAfter="đ/kg">
                           <nz-input-number formControlName="donGiaVat" nz-input [nzMin]="1"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'">
+                                           [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'">
                           </nz-input-number>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
-                  <div nz-col [nzSpan]="3">
-                    <nz-form-item>
-                      <nz-form-label [nzNoColon]="true"></nz-form-label>
-                      <input class="text-green" [ngModel]="convertTien(formData.value.donGiaVat)" nz-input readonly
-                        [ngModelOptions]="{standalone: true}" />
-                    </nz-form-item>
-                  </div>
+<!--                  <div nz-col [nzSpan]="3">-->
+<!--                    <nz-form-item>-->
+<!--                      <nz-form-label [nzNoColon]="true"></nz-form-label>-->
+<!--                      <input class="text-green" [ngModel]="convertTien(formData.value.donGiaVat)" nz-input-->
+<!--                             readonly [ngModelOptions]="{standalone: true}"/>-->
+<!--                    </nz-form-item>-->
+<!--                  </div>-->
                   <div nz-col [nzSpan]="7">
                     <nz-form-item>
                       <nz-form-label [nzNoColon]="true"> %Thuế GTGT</nz-form-label>
@@ -256,7 +263,7 @@
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
                           <nz-date-picker formControlName="tgianMkho" nzFormat="dd/MM/yyyy"
-                            [nzDisabled]="isView"></nz-date-picker>
+                                          [nzDisabled]="isView"></nz-date-picker>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -267,7 +274,7 @@
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
                           <nz-date-picker formControlName="tgianKthuc" nzFormat="dd/MM/yyyy"
-                            [nzDisabled]="isView"></nz-date-picker>
+                                          [nzDisabled]="isView"></nz-date-picker>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -295,30 +302,30 @@
             </div>
             <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered>
               <thead>
-                <tr>
-                  <th nzWidth="50px" class="text-center wrap">STT</th>
-                  <th nzWidth="150px" class="text-center wrap">Điểm kho</th>
-                  <th nzWidth="150px" class="text-center wrap">Chỉ tiêu kế hoạch được giao (tấn)</th>
-                  <th nzWidth="100px" class="text-center wrap">Số đã thực hiện (tấn)</th>
-                  <th nzWidth="100px" class="text-center wrap">SL mua trực tiếp (tấn)</th>
-                  <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt có VAT (đ/kg)</th>
-                  <th nzWidth="100px" class="text-center wrap">Thành tiền theo đơn giá đã duyệt (đ)</th>
-                </tr>
+              <tr>
+                <th nzWidth="50px" class="text-center wrap">STT</th>
+                <th nzWidth="150px" class="text-center wrap">Điểm kho</th>
+                <th nzWidth="150px" class="text-center wrap">Chỉ tiêu kế hoạch được giao (tấn)</th>
+                <th nzWidth="100px" class="text-center wrap">Số đã thực hiện (tấn)</th>
+                <th nzWidth="100px" class="text-center wrap">SL mua trực tiếp (tấn)</th>
+                <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt có VAT (đ/kg)</th>
+                <th nzWidth="100px" class="text-center wrap">Thành tiền theo đơn giá đã duyệt (đ)</th>
+              </tr>
               </thead>
               <tbody>
-                <ng-container *ngFor="let item of dataTable , let i = index">
-                  <ng-container *ngFor="let data of item.children , let y = index">
-                    <tr>
-                      <td>{{y + 1}}</td>
-                      <td>{{data.tenDiemKho}}</td>
-                      <td>{{item.soLuongChiTieu | number : '1.0-1' : 'vi_VN'}}</td>
-                      <td>{{item.tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                      <td>{{data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                      <td>{{data.donGia | number : '1.0-1' : 'vi_VN'}}</td>
-                      <td>{{data.soLuong * data.donGia * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
-                    </tr>
-                  </ng-container>
+              <ng-container *ngFor="let item of dataTable , let i = index">
+                <ng-container *ngFor="let data of item.children , let y = index">
+                  <tr>
+                    <td>{{y + 1}}</td>
+                    <td>{{data.tenDiemKho}}</td>
+                    <td>{{item.soLuongChiTieu | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td>{{item.tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td>{{data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td>{{data.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td>{{data.soLuong * data.donGia * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
+                  </tr>
                 </ng-container>
+              </ng-container>
               </tbody>
             </nz-table>
           </nz-collapse>
@@ -331,6 +338,7 @@
   <app-template-error #error [control]="control"></app-template-error>
 </ng-template>
 <ng-container *ngIf="isHopDong">
-  <app-themmoi-hopdong-phuluc [idQdKh]="idSelected" [loaiVthh]="loaiVthhInput" (showListEvent)="showList()">
+  <app-themmoi-hopdong-phuluc [idQdKh]="idSelected" [loaiVthh]="loaiVthhInput"
+                              (showListEvent)="showList()">
   </app-themmoi-hopdong-phuluc>
 </ng-container>

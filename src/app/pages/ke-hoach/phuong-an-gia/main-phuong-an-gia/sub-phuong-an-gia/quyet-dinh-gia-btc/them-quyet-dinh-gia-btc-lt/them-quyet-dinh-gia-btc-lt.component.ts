@@ -1,21 +1,26 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from "@angular/core";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import dayjs from "dayjs";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { MESSAGE } from "src/app/constants/message";
-import { UserLogin } from "src/app/models/userlogin";
-import { HelperService } from "src/app/services/helper.service";
-import { UserService } from "src/app/services/user.service";
-import { Globals } from "src/app/shared/globals";
-import { STATUS } from "src/app/constants/status";
-import { QuyetDinhGiaCuaBtcService } from "src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
-import { DanhMucService } from "src/app/services/danhmuc.service";
-import { TongHopPhuongAnGiaService } from "src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
-import { DialogPagQdBtcComponent } from "../dialog-pag-qd-btc/dialog-pag-qd-btc.component";
-import { chain } from "lodash";
-import { v4 as uuidv4 } from "uuid";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {MESSAGE} from "src/app/constants/message";
+import {UserLogin} from "src/app/models/userlogin";
+import {HelperService} from "src/app/services/helper.service";
+import {UserService} from "src/app/services/user.service";
+import {Globals} from "src/app/shared/globals";
+import {STATUS} from "src/app/constants/status";
+import {QuyetDinhGiaCuaBtcService} from "src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
+import {DanhMucService} from "src/app/services/danhmuc.service";
+import {TongHopPhuongAnGiaService} from "src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
+import {DialogPagQdBtcComponent} from "../dialog-pag-qd-btc/dialog-pag-qd-btc.component";
+import {chain} from "lodash";
+import {v4 as uuidv4} from "uuid";
+import {saveAs} from "file-saver";
+import printJS from "print-js";
+import { cloneDeep } from 'lodash';
+import {PdfViewerComponent} from "ng2-pdf-viewer";
+import {style} from "@angular/animations";
 
 @Component({
   selector: "app-them-quyet-dinh-gia-btc-lt",
@@ -23,6 +28,7 @@ import { v4 as uuidv4 } from "uuid";
   styleUrls: ["./them-quyet-dinh-gia-btc-lt.component.scss"]
 })
 export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
+  @ViewChild('pdfViewer') pdfViewer: PdfViewerComponent;
   @Input("type") type: string;
   @Input("pagType") pagType: string;
   @Input("isView") isView: boolean;
@@ -35,8 +41,15 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
   dataTable: any[] = [];
   dataTableView: any[] = [];
   fileDinhKem: any[] = [];
+  canCuPhapLys: any[] = [];
   STATUS = STATUS;
   expandSet = new Set<number>();
+  pdfSrc: any;
+  excelSrc: any;
+  pdfBlob: any;
+  excelBlob: any;
+  printSrc: any
+  showDlgPreview = false;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -57,7 +70,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
         soQd: [null],
         ngayKy: [null],
         ngayHieuLuc: [null],
-        soQdCanDc: [null],
+        soQdDc: [null],
         tenLoaiGia: [null],
         soToTrinh: [null],
         loaiVthh: [null],
@@ -118,8 +131,10 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
         ghiChu: data.ghiChu,
         soToTrinh: data.soToTrinh,
         loaiDeXuat: data.loaiDeXuat,
+        soQdDc: data.soQdDc
       });
       this.fileDinhKem = data.fileDinhKems;
+      this.canCuPhapLys = data.canCuPhapLys;
       this.dataTable = data.thongTinGiaLt;
       this.buildTreePagCt();
     }
@@ -138,7 +153,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
     this.onClose.emit();
   }
 
-  banHanh() {
+  async banHanh() {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: "Xác nhận",
@@ -188,7 +203,11 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       if (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03') {
         this.dataTable.forEach(item => {
           if (item.vat) {
-            item.giaQdBtcVat = item.giaQdBtc + item.giaQdBtc * item.vat
+            if (this.formData.value.loaiDeXuat == '00') {
+              item.giaQdBtcVat = item.giaQdBtc + item.giaQdBtc * item.vat
+            } else {
+              item.giaQdDcBtcVat = item.giaQdDcBtc + item.giaQdDcBtc * item.vat
+            }
           }
         })
       }
@@ -200,6 +219,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
     body.pagType = this.pagType;
     body.thongTinGiaLt = this.dataTable
     body.fileDinhKemReq = this.fileDinhKem;
+    body.canCuPhapLys = this.canCuPhapLys;
     let res;
     if (this.idInput > 0) {
       res = await this.quyetDinhGiaCuaBtcService.update(body);
@@ -207,12 +227,13 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       res = await this.quyetDinhGiaCuaBtcService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
+      this.idInput = res.data.id;
       if (isBanHanh) {
         this.formData.patchValue({
           id: res.data.id,
           trangThai: res.data.trangThai
         })
-        this.banHanh();
+       await this.banHanh();
       }
       if (!isBanHanh) {
         if (this.idInput > 0) {
@@ -246,34 +267,33 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       modalQD.afterClose.subscribe((data) => {
         if (data) {
           let chiTietToTrinh = data.data;
-          if (data.formData && data.formData.loaiQd == '00') {
-            if (chiTietToTrinh) {
-              this.formData.patchValue({
-                loaiDeXuat: data.formData.loaiQd,
-                loaiVthh: chiTietToTrinh.loaiVthh ? chiTietToTrinh.loaiVthh : null,
-                cloaiVthh: chiTietToTrinh.cloaiVthh ? chiTietToTrinh.cloaiVthh : null,
-                tenLoaiVthh: chiTietToTrinh.tenLoaiVthh ? chiTietToTrinh.tenLoaiVthh : null,
-                tenCloaiVthh: chiTietToTrinh.tenCloaiVthh ? chiTietToTrinh.tenCloaiVthh : null,
-                loaiGia: chiTietToTrinh.loaiGia ? chiTietToTrinh.loaiGia : null,
-                tenLoaiGia: chiTietToTrinh.tenLoaiGia ? chiTietToTrinh.tenLoaiGia : null,
-                soToTrinh: chiTietToTrinh.soToTrinh ? chiTietToTrinh.soToTrinh : null,
-                tieuChuanCl: chiTietToTrinh.tchuanCluong ? chiTietToTrinh.tchuanCluong : null,
-              })
-              this.dataTable = chiTietToTrinh && chiTietToTrinh.pagChiTiets ? chiTietToTrinh.pagChiTiets : [];
+          if (chiTietToTrinh) {
+            this.dataTable = chiTietToTrinh && chiTietToTrinh.pagChiTiets ? chiTietToTrinh.pagChiTiets : [];
+            const uniqueSoDeXuat = new Set<string>();
+            for (const record of this.dataTable) {
+              record.giaQdBtc =  record.giaQdBtcCu;
+              record.giaQdBtcVat =  record.giaQdBtcCuVat;
+              // Sử dụng trường "type" làm key trong Set để kiểm tra sự trùng lặp
+              if (!uniqueSoDeXuat.has(record.soDx)) {
+                // Nếu trường "type" chưa tồn tại trong Set, thêm giá trị "soDeXuat" vào Set
+                uniqueSoDeXuat.add(record.soQdBtc ? record.soQdBtc.toString() : "");
+              }
             }
-            this.buildTreePagCt();
-          } else {
-            let thRes = data.listDx;
-            let body = {
-              namTongHop: this.formData.value.namKeHoach,
-              loaiVthh: data.formData.loaiVthh ? data.formData.loaiVthh : null,
-              cloaiVthh: data.formData.cloaiVthh ? data.formData.cloaiVthh : null,
-              loaiGia: data.formData.loaiGia ? data.formData.loaiGia : null,
-              listIdPag: thRes && thRes.length > 0 ? thRes.map(item => item.id) : [],
-              loai: "01"
-            }
-            this.tongHopData(body);
+            const uniqueSoDeXuatArray = Array.from(uniqueSoDeXuat);
+            this.formData.patchValue({
+              loaiDeXuat: data.formData.loaiQd,
+              loaiVthh: chiTietToTrinh.loaiVthh ? chiTietToTrinh.loaiVthh : null,
+              cloaiVthh: chiTietToTrinh.cloaiVthh ? chiTietToTrinh.cloaiVthh : null,
+              tenLoaiVthh: chiTietToTrinh.tenLoaiVthh ? chiTietToTrinh.tenLoaiVthh : null,
+              tenCloaiVthh: chiTietToTrinh.tenCloaiVthh ? chiTietToTrinh.tenCloaiVthh : null,
+              loaiGia: chiTietToTrinh.loaiGia ? chiTietToTrinh.loaiGia : null,
+              tenLoaiGia: chiTietToTrinh.tenLoaiGia ? chiTietToTrinh.tenLoaiGia : null,
+              soToTrinh: chiTietToTrinh.soToTrinh ? chiTietToTrinh.soToTrinh : null,
+              tieuChuanCl: chiTietToTrinh.tchuanCluong ? chiTietToTrinh.tchuanCluong : null,
+              soQdDc: uniqueSoDeXuatArray && data.formData?.loaiQd == '01' ? uniqueSoDeXuatArray.join(', ') : ""
+            })
           }
+          this.buildTreePagCt();
         }
       });
     }
@@ -293,6 +313,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
             apDungTatCa: value && value[0] && value[0].apDungTatCa ? value[0].apDungTatCa : null,
             vat: value && value[0] && value[0].vat ? value[0].vat : null,
             giaQdBtc: value && value[0] && value[0].giaQdBtc ? value[0].giaQdBtc : 0,
+            giaQdDcBtc: value && value[0] && value[0].giaQdDcBtc ? value[0].giaQdDcBtc : 0,
           };
         }).value();
     }
@@ -306,9 +327,10 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
         if (item.children && item.children.length > 0) {
           item.children.forEach(child => {
             if (child.apDungTatCa) {
-              child.giaQdBtc = item.giaQdBtc;
-              if (child.vat && (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03')) {
-                child.giaQdBtcVat = child.giaQdBtc + child.giaQdBtc * child.vat
+              if (this.formData.value.loaiDeXuat == '00') {
+                child.giaQdBtc = item.giaQdBtc;
+              } else {
+                child.giaQdDcBtc = item.giaQdDcBtc;
               }
             }
             this.dataTable.push(child);
@@ -334,34 +356,95 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
     }
   }
 
-  async tongHopData(body) {
+
+  async previewQdGia() {
     try {
       this.spinner.show();
-      let res = await this.tongHopPhuongAnGiaService.tongHop(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        let pagTh = res.data;
-        if (pagTh) {
-          this.formData.patchValue({
-            loaiVthh: pagTh.loaiVthh ? pagTh.loaiVthh : null,
-            cloaiVthh: pagTh.cloaiVthh ? pagTh.cloaiVthh : null,
-            tenLoaiVthh: pagTh.tenLoaiVthh ? pagTh.tenLoaiVthh : null,
-            tenCloaiVthh: pagTh.tenCloaiVthh ? pagTh.tenCloaiVthh : null,
-            loaiGia: pagTh.loaiGia ? pagTh.loaiGia : null,
-            tenLoaiGia: pagTh.tenLoaiGia ? pagTh.tenLoaiGia : null
+      let arr = [];
+      this.dataTableView.forEach((item, index) => {
+        if (item.children && item.children.length > 0) {
+          let itemClonePr = cloneDeep(item);
+          itemClonePr.giaQdBtc = null;
+          itemClonePr.giaQdDcBtc = null;
+          itemClonePr.stt = index + 1;
+          arr.push(itemClonePr)
+          item.children.forEach(child => {
+            let itemCloneChild = cloneDeep(child);
+            itemCloneChild.tenDvi = "";
+            arr.push(itemCloneChild);
           })
-          this.dataTable = res.data?.pagChiTiets;
-          this.buildTreePagCt();
         }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-      this.spinner.hide();
+      });
+      let body = cloneDeep(this.formData.value);
+      body.typeFile = "pdf";
+      body.trangThai = "01";
+      body.listDto = arr;
+      body.pagType = this.pagType;
+      body.type = this.type;
+      body.ngayHieuLuc = this.formData.value.ngayHieuLuc ? dayjs(this.formData.value.ngayHieuLuc).format("DD/MM/YYYY") : "";
+      await this.quyetDinhGiaCuaBtcService.previewQdGia(body).then(async s => {
+        this.printSrc = s;
+        this.pdfBlob = s;
+        this.pdfSrc = await new Response(s).arrayBuffer();
+      });
+      this.showDlgPreview = true;
     } catch (e) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      console.log(e);
     } finally {
-      await this.spinner.hide();
+      this.spinner.hide();
     }
   }
+
+  async downloadExcel() {
+    try {
+      this.spinner.show();
+      let arr = [];
+      this.dataTableView.forEach(item => {
+        if (item.children && item.children.length > 0) {
+          arr.push(item)
+          item.children.forEach(child => {
+            child.tenDvi = "";
+            arr.push(child);
+          })
+        }
+      });
+      let body = cloneDeep(this.formData.value);
+      body.typeFile = "xlsx";
+      body.trangThai = "01";
+      body.listDto = arr;
+      body.pagType = this.pagType;
+      body.type = this.type;
+      body.ngayHieuLuc = this.formData.value.ngayHieuLuc ? dayjs(this.formData.value.ngayHieuLuc).format("DD/MM/YYYY") : "";
+      await this.quyetDinhGiaCuaBtcService.previewQdGia(body).then(async s => {
+        this.excelBlob = s;
+        this.excelSrc = await new Response(s).arrayBuffer();
+        saveAs(this.excelBlob, "quyet_dinh_gia_btc.xlsx");
+      });
+      this.showDlgPreview = true
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  async downloadPdf() {
+    saveAs(this.pdfBlob, 'quyet_dinh_gia_btc.pdf');
+  }
+
+    closeDlg() {
+    this.showDlgPreview = false;
+  }
+
+  printPreview() {
+    const blobUrl = URL.createObjectURL(this.pdfBlob);
+    printJS({
+      printable: blobUrl,
+      type: 'pdf',
+      base64: false
+    })
+  }
+
 }
 
 

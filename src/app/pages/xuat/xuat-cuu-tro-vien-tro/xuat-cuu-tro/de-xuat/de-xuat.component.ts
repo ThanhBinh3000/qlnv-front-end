@@ -1,20 +1,21 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {CuuTroVienTroComponent} from "src/app/pages/xuat/xuat-cuu-tro-vien-tro/xuat-cuu-tro/cuu-tro-vien-tro.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "src/app/services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DonviService} from "src/app/services/donvi.service";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { CuuTroVienTroComponent } from "src/app/pages/xuat/xuat-cuu-tro-vien-tro/xuat-cuu-tro/cuu-tro-vien-tro.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "src/app/services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DonviService } from "src/app/services/donvi.service";
 import {
   DeXuatPhuongAnCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
-import {UserLogin} from "src/app/models/userlogin";
-import {MESSAGE} from "src/app/constants/message";
+import { UserLogin } from "src/app/models/userlogin";
+import { MESSAGE } from "src/app/constants/message";
 import dayjs from "dayjs";
-import {isEmpty} from 'lodash';
-import {CHUC_NANG, STATUS} from 'src/app/constants/status';
-import {Base2Component} from "src/app/components/base2/base2.component";
+import { isEmpty } from 'lodash';
+import { CHUC_NANG, STATUS } from 'src/app/constants/status';
+import { Base2Component } from "src/app/components/base2/base2.component";
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-de-xuat',
@@ -29,25 +30,25 @@ export class DeXuatComponent extends Base2Component implements OnInit {
   @Output() eventTaoQd: EventEmitter<any> = new EventEmitter<any>();
   CHUC_NANG = CHUC_NANG;
   listTrangThai: any[] = [
-    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
-    {ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP'},
-    {ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP'},
-    {ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục'},
-    {ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục'},
-    {ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục'},
-    {ma: this.STATUS.DA_TAO_CBV, giaTri: 'Đã tạo - CB Vụ'},
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
+    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
+    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
+    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
+    { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
+    { ma: this.STATUS.DA_TAO_CBV, giaTri: 'Đã tạo - CB Vụ' },
   ];
   listTrangThaiTh: any[] = [
-    {ma: this.STATUS.CHUA_TONG_HOP, giaTri: 'Chưa tổng hợp'},
-    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
-    {ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ'},
-    {ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LĐ Vụ'},
-    {ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt - CĐ Vụ'},
+    { ma: this.STATUS.CHUA_TONG_HOP, giaTri: 'Chưa tổng hợp' },
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ' },
+    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LĐ Vụ' },
+    { ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt - CĐ Vụ' },
   ];
 
   listTrangThaiQd: any[] = [
-    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
-    {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'},
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
   ];
   public vldTrangThai: CuuTroVienTroComponent;
 
@@ -60,7 +61,8 @@ export class DeXuatComponent extends Base2Component implements OnInit {
     modal: NzModalService,
     private donviService: DonviService,
     private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
-    private cuuTroVienTroComponent: CuuTroVienTroComponent
+    private cuuTroVienTroComponent: CuuTroVienTroComponent,
+    private dataService: DataService
   ) {
     super(httpClient, storageService, notification, spinner, modal, deXuatPhuongAnCuuTroService);
     this.vldTrangThai = cuuTroVienTroComponent;
@@ -195,5 +197,14 @@ export class DeXuatComponent extends Base2Component implements OnInit {
 
   taoQuyetDinh(data) {
     this.eventTaoQd.emit(data);
+  }
+  taoQuyetDinhPdPa(data) {
+    const dataSend = {
+      ...data,
+      type: "TTr",
+      isTaoQdPdPa: true
+    }
+    this.dataService.changeData(dataSend);
+    this.eventTaoQd.emit(2);
   }
 }

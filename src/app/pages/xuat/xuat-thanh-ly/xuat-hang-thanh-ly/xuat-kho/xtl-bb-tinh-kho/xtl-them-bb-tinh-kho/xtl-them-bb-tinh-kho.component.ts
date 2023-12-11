@@ -252,7 +252,7 @@ export class XtlThemBbTinhKhoComponent extends Base3Component implements OnInit 
   showSave() {
     let trangThai = this.formData.value.trangThai;
     return (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_KTVBQ
-      || trangThai == STATUS.TU_CHOI_KT || trangThai == STATUS.TU_CHOI_LDCC) && this.userService.isAccessPermisson('SCHDTQG_NH_BBGN_THEM');
+      || trangThai == STATUS.TU_CHOI_KT || trangThai == STATUS.TU_CHOI_LDCC);
   }
 
   save(isGuiDuyet?) {
@@ -332,9 +332,9 @@ export class XtlThemBbTinhKhoComponent extends Base3Component implements OnInit 
 
   showPheDuyetTuChoi() {
     let trangThai = this.formData.value.trangThai;
-    return (trangThai == STATUS.CHO_DUYET_LDCC && this.userService.isAccessPermisson('SCHDTQG_NH_BBGN_DUYETLDCCUC'))
-      || (trangThai == STATUS.CHO_DUYET_KTVBQ && this.userService.isAccessPermisson('SCHDTQG_NH_BBGN_DUYETKTVBQ'))
-      || (trangThai == STATUS.CHO_DUYET_KT && this.userService.isAccessPermisson('SCHDTQG_NH_BBGN_DUYETKT'));
+    return (trangThai == STATUS.CHO_DUYET_LDCC)
+      || (trangThai == STATUS.CHO_DUYET_KTVBQ )
+      || (trangThai == STATUS.CHO_DUYET_KT);
   }
 
   addRow() {

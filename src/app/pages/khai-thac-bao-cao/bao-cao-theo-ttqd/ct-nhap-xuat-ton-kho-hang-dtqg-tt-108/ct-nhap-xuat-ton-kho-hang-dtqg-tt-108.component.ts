@@ -24,29 +24,26 @@ import { ThongTu1082018Service } from 'src/app/services/bao-cao/ThongTu1082018.s
 export class CtNhapXuatTonKhoHangDtqgTt108Component extends Base2Component implements OnInit {
   pdfSrc: any;
   pdfBlob: any;
-  quy: any;
-  loaiVthh: any;
-  maCuc: any;
-  maChiCuc: any;
-  cLoaiVthh: any;
-  cLoaiVthhListData: any;
-  dsBoNganh: any[] = [];
-  selectedVthhCache: any;
-  selectedCloaiVthhCache: any;
   showDlgPreview = false;
   listNam: any[] = [];
-  dsDonVi: any;
   listChiCuc: any[] = [];
-  listVthh: any[] = [];
-  listCloaiVthh: any[] = [];
-  rows: any[] = [];
-  ngayBatDauQuy: any;
-  ngayKetThucQuy: any;
+  dsDonVi: any;
+  maChiCuc: any;
+  maCuc: any;
   listQuy: any[] = [
     { id: 1, giaTri: 'Quý 1' },
     { id: 2, giaTri: 'Quý 2' },
     { id: 3, giaTri: 'Quý 3' },
     { id: 4, giaTri: 'Quý 4' }
+  ];
+  listLoaiBc: any[] = [
+    {
+      text: "Báo cáo năm",
+      value: 1,
+    },
+    { text: "Báo cáo quý",
+      value: 2,
+    }
   ];
   constructor(httpClient: HttpClient,
     storageService: StorageService,
@@ -56,20 +53,15 @@ export class CtNhapXuatTonKhoHangDtqgTt108Component extends Base2Component imple
     private thongTu1082018Service: ThongTu1082018Service,
     public userService: UserService,
     private donViService: DonviService,
-    private danhMucService: DanhMucService,
-
-    private donviService: DonviService,
     public globals: Globals) {
     super(httpClient, storageService, notification, spinner, modal, thongTu1082018Service);
     this.formData = this.fb.group(
       {
         nam: [dayjs().get("year"), [Validators.required]],
-        boNganh: null,
-        dviBaoCao: null,
-
-        loaiHangHoa: null,
-        nuocSanXuat: null,
-        chungLoaiHangHoa: null
+        loaiBaoCao: null,
+        kyBc: null,
+        listMaCuc: null,
+        listMaChiCuc: null,
       }
     );
   }
@@ -83,10 +75,9 @@ export class CtNhapXuatTonKhoHangDtqgTt108Component extends Base2Component imple
           text: dayjs().get("year") - i
         });
       }
+      this.initListQuy()
       await Promise.all([
         this.loadDsDonVi(),
-        this.loadDsVthh(),
-        this.getListBoNganh()
       ]);
 
     } catch (e) {
@@ -107,23 +98,33 @@ export class CtNhapXuatTonKhoHangDtqgTt108Component extends Base2Component imple
 
   async preView() {
     try {
-      debugger
       this.spinner.show();
       let body = this.formData.value;
       body.typeFile = "pdf";
       body.fileName = "bc_ct_nhap_xuat_ton_kho_hang_dtqg_108.jrxml";
       body.tenBaoCao = "Báo cáo chi tiết nhập xuất tồn kho hàng DTQG";
       body.trangThai = "01";
-      body.ngayBatDauQuy = this.convertDateToString(this.ngayBatDauQuy);
-      body.ngayKetThucQuy = this.convertDateToString(this.ngayKetThucQuy);
-      body.cloaiVthh = this.cLoaiVthh;
-      body.loaiVthh = this.loaiVthh;
       if (this.userService.isTongCuc) {
         body.maDvi = this.maChiCuc ? this.maChiCuc : this.maCuc;
       } else if (this.userService.isCuc) {
         body.maDvi = this.maChiCuc;
       } else {
         body.maDvi = null;
+      }
+      if (body.kyBc) {
+        if (body.kyBc == 1) {
+          body.tuNgay = '1/1/' + body.nam
+          body.denNgay = '31/3/' + body.nam
+        } else if (body.kyBc == 2) {
+          body.tuNgay = '1/4/' + body.nam
+          body.denNgay = '30/6/' + body.nam
+        } else if (body.kyBc == 3) {
+          body.tuNgay = '1/7/' + body.nam
+          body.denNgay = '30/9/' + body.nam
+        } else if (body.kyBc == 4) {
+          body.tuNgay = '1/10/' + body.nam
+          body.denNgay = '31/12/' + body.nam
+        }
       }
       await this.thongTu1082018Service.bcCtNhapXuatTonKhoHangDTQG(body).then(async s => {
         this.pdfBlob = s;
@@ -137,93 +138,70 @@ export class CtNhapXuatTonKhoHangDtqgTt108Component extends Base2Component imple
     }
   }
 
-  getStartAndEndDatesOfQuarter(quarter: any) {
-    debugger
-    const today = new Date();
-    const currentYear = today.getFullYear();
-    this.ngayBatDauQuy = new Date(currentYear, (quarter - 1) * 3, 1);
-    this.ngayKetThucQuy = new Date(currentYear, (quarter - 1) * 3 + 3, 0);
-  }
-
-  convertDateToString(event: any): string {
-    let result = '';
-    if (event) {
-      result = dayjs(event).format('YYYY/MM/DD').toString()
-    }
-    return result;
-  }
-
   async loadDsDonVi() {
     let body = {
       trangThai: "01",
-      maDviCha: this.userInfo.MA_DVI.substring(0, 4),
+      maDviCha: this.userInfo.MA_DVI,
       type: "DV"
     };
     let res = await this.donViService.getDonViTheoMaCha(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.dsDonVi = res.data;
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
-
-  async getListBoNganh() {
-    this.dsBoNganh = [];
-    let res = await this.donviService.layTatCaDonViByLevel(0);
-    // let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.dsBoNganh = res.data;
-    }
-  }
-
-  async changeCuc(event: any) {
-    if (event) {
-      let body = {
-        trangThai: "01",
-        maDviCha: event,
-        type: "DV"
-      };
-      let res = await this.donViService.getDonViTheoMaCha(body);
-      if (res.msg == MESSAGE.SUCCESS) {
+      if (this.userService.isTongCuc()) {
+        this.dsDonVi = res.data;
+      } else if (this.userService.isCuc()) {
         this.listChiCuc = res.data;
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-    }
-  }
-
-  async loadDsVthh() {
-    this.listVthh = [];
-    let res = await this.danhMucService.danhMucChungGetAll("LOAI_HHOA");
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listVthh = res.data.filter(item => item.ma != "02");
-    }
-  }
-
-  async changeLoaiVthh(event) {
-    debugger
-    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data) {
-        this.listCloaiVthh = res.data;
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
-
-  changeCloaiVthh(event) {
-    this.cLoaiVthh.push(event)
+  clearFilter() {
+    this.formData.patchValue({
+      nam: dayjs().get("year"),
+      quy: null
+    })
+    if (this.userService.isTongCuc()) {
+      this.formData.patchValue({
+        listMaCuc: null,
+      })
+    } else if (this.userService.isCuc()) {
+      this.formData.patchValue({
+        listMaChiCuc: null,
+        listMaCuc: [this.userInfo.MA_DVI],
+      })
+    } else if (this.userService.isChiCuc()) {
+      this.formData.patchValue({
+        listMaChiCuc: [this.userInfo.MA_DVI],
+        listMaCuc: [this.userInfo.MA_DVI.substring(0,6)]
+      })
+    }
   }
 
-  changeNuocSX(event) {
+  initListQuy() {
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth();
+    const quarters = [];
 
-  }
-  addRow() {
-    this.rows.push({})
+    for (let quarter = 1; quarter <= 4; quarter++) {
+      if (this.formData.get('nam').value < currentYear || (this.formData.get('nam').value === currentYear && quarter <= Math.ceil((currentMonth + 1) / 3))) {
+        quarters.push(quarter);
+      }
+    }
+    this.listQuy = [];
+    for (const element of quarters) {
+      this.listQuy.push({ giaTri: "Quý " + element + "/" + this.formData.get("nam").value, ma: element})
+    }
   }
 
-  deleteRow(index: number) {
-    this.rows.splice(index, 1)
+  changeKyBc (event){
+    if (this.formData.get("kyBc").value != null) {
+      this.formData.get("loaiBaoCao").setValue(2)
+    }
+  }
+  changeNam (event){
+    this.formData.patchValue({
+      kyBc: null,
+    })
+    this.initListQuy();
   }
 }

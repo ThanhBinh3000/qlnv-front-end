@@ -152,9 +152,9 @@ export class ThemMoiQdBkComponent implements OnInit {
         this.rowItemDTM.tenCuc = chiCuc[0].tenDvi;
         this.rowItemDTM.maChiCuc = null;
         this.rowItemDTM.maDiemKho = null;
-        this.rowItemDTM.diaDiem = null;
-        this.rowItemDTM.dienTich = null;
-        this.rowItemDTM.tongTichLuong = null;
+        // this.rowItemDTM.diaDiem = null;
+        // this.rowItemDTM.dienTich = null;
+        // this.rowItemDTM.tongTichLuong = null;
       }
     }
   }
@@ -185,9 +185,6 @@ export class ThemMoiQdBkComponent implements OnInit {
       } else if (pa == 'DTM') {
         this.rowItemDTM.tenChiCuc = chiCuc[0].tenDvi;
         this.rowItemDTM.maDiemKho = null
-        this.rowItemDTM.diaDiem = null
-        this.rowItemDTM.dienTich = null;
-        this.rowItemDTM.tongTichLuong = null;
       }
     }
   }
@@ -485,14 +482,6 @@ export class ThemMoiQdBkComponent implements OnInit {
             this.rowItemTL.dienTich = res.dienTichDat;
             this.rowItemTL.tongTichLuong = res.tichLuongKdLt+res.tichLuongKdVt;
           }
-        } else if (pa == "DTM") {
-          this.rowItemDTM.tenDiemKho = diemKho[0].tenDvi;
-          this.rowItemDTM.diaDiem = diemKho[0].diaChi;
-          const res= await this.getDetailMlkByKey(diemKho[0].maDvi, diemKho[0].capDvi);
-          if(res){
-            this.rowItemDTM.dienTich = res.dienTichDat;
-            this.rowItemDTM.tongTichLuong = res.tichLuongKdLt+res.tichLuongKdVt;
-          }
         }
       }
     }
@@ -542,6 +531,7 @@ export class ThemMoiQdBkComponent implements OnInit {
       rowItem.maCuc, rowItem.maChiCuc, rowItem.maDiemKho, rowItem.diaDiem, rowItem.dienTich, rowItem.tongTichLuong, rowItem.phuongAnQuyHoach
     )
     if (arr && arr.length > 0) {
+      console.log(arr,'55')
       for (let i = 0; i < arr.length; i++) {
         if (arr[i] == '' || arr[i] == null || arr[i] == undefined) {
           check = false;

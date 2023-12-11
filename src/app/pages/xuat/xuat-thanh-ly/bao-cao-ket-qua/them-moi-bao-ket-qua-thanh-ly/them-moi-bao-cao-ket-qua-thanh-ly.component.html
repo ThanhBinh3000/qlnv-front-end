@@ -2,7 +2,7 @@
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span [ngClass]="formData.value.trangThai == STATUS.CHO_DUYET_LDC ? 'status-xanh' : 'status-do'">
+        <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC ? 'status-xanh' : 'status-do'">
           {{ formData.value.tenTrangThai }}
         </span>
         <span>Báo cáo kết quả bán đấu giá thanh lý hàng DTQG</span>
@@ -13,7 +13,9 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button *ngIf="showPheDuyetTuChoi()" type="button" class="btn btn-sub do ml-2" (click)="tuChoi()">
+      <button
+        *ngIf="showPheDuyetTuChoi()"
+        type="button" class="btn btn-sub do ml-2" (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span>Từ chối</span>
       </button>
@@ -48,12 +50,12 @@
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="7">
-              <nz-form-item>
-                <nz-form-label>Đơn vị báo cáo</nz-form-label>
-                <nz-input-group>
-                  <input nz-input formControlName="tenDvi" readonly />
-                </nz-input-group>
-              </nz-form-item>
+                <nz-form-item>
+                  <nz-form-label>Đơn vị báo cáo</nz-form-label>
+                  <nz-input-group>
+                    <input nz-input formControlName="tenDvi" readonly />
+                  </nz-input-group>
+                </nz-form-item>
             </div>
             <div nz-col [nzSpan]="5">
               <nz-form-item>
@@ -61,7 +63,7 @@
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfter="/QĐ-TCDT">
                     <nz-input-number [nzSize]="'small'" nz-input formControlName="soBaoCao"
-                      [nzDisabled]="disabled()"></nz-input-number>
+                                     [nzDisabled]="disabled()"></nz-input-number>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -80,7 +82,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Ngày ký QĐ thanh lý</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker formControlName="ngayThamDinh" nzFormat="dd/MM/yyyy" nzDisabled>
+                  <nz-date-picker formControlName="ngayQd" nzFormat="dd/MM/yyyy" nzDisabled>
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -89,7 +91,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Ngày báo cáo</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker formControlName="ngayThamDinh" nzFormat="dd/MM/yyyy" nzDisabled>
+                  <nz-date-picker formControlName="ngayBaoCao" nzFormat="dd/MM/yyyy" nzDisabled>
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>

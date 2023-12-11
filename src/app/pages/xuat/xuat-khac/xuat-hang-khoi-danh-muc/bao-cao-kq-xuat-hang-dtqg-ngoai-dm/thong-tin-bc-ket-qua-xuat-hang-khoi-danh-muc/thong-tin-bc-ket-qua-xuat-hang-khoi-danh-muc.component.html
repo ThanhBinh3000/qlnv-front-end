@@ -15,13 +15,13 @@
           <span>Quay lại</span>
         </button>
         <button
-          *ngIf='this.userService.isCuc() && isDisabled() '
+          *ngIf='this.userService.isCuc() && isDisabled()  && idInput > 0'
           class='btn btn-sub xanh-nhat mr-2' (click)='pheDuyet()'>
           <i class='icon htvbdh_tcdt_pheduyet'></i>
           <span>Hoàn thành</span>
         </button>
         <button
-          *ngIf='this.userService.isCuc() && !isDisabled()'
+          *ngIf='this.userService.isCuc() && isDisabled()'
           type='button' class='btn btn-main' (click)='save()'>
           <i class='icon htvbdh_tcdt_save'></i>
           <span>Lưu</span>
@@ -107,11 +107,11 @@
                   Mã danh sách hàng thuộc diện xuất khỏi danh mục
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]='error'>
-                  <nz-select formControlName='soQdGiaoNvXh' [nzSize]='size'
-                             (ngModelChange)='changeValueMaDsTongHop($event)' nzMode='multiple'
+                  <nz-select formControlName='maDsTh' [nzSize]='size'
+                             (ngModelChange)='changeValueMaDsTongHop($event)'
                              nzPlaceHolder='Chọn số QĐ giao nhiệm vụ xuất hàng' [nzDisabled]='idInput > 0'>
-                    <nz-option *ngFor='let option of listDsTongTop' [nzLabel]='option.soQuyetDinh'
-                               [nzValue]='option.soQuyetDinh'></nz-option>
+                    <nz-option *ngFor='let option of listDsTongTop' [nzLabel]='option.maDanhSach'
+                               [nzValue]='option.maDanhSach'></nz-option>
                   </nz-select>
                 </nz-form-control>
               </nz-form-item>
@@ -157,7 +157,7 @@
           <td class='bold'>{{i + 1}}</td>
           <td (nzExpandChange)='onExpandStringChange(item.idVirtual, $event)'
               [nzExpand]='expandSetString.has(item.idVirtual)' nzShowExpand='true' style='width: 35px'></td>
-          <td class='bold'>{{ item.soQdGiaoNvXh }}</td>
+          <td class='bold'>{{ item.tenChiCuc }}</td>
           <td></td>
           <td></td>
           <td></td>
@@ -168,7 +168,7 @@
         </tr>
         <ng-container *ngIf='expandSetString.has(item.idVirtual)'>
           <ng-container *ngFor='let lv1 of item.childData,let i1=index'>
-            <tr (click)='selectRow(lv1)' style='cursor: pointer' [ngClass]="{'bg-selected': lv1.selected}">
+            <tr>
               <td></td>
               <td></td>
               <td></td>
@@ -176,9 +176,11 @@
               <td>{{lv1.tenCloaiVthh}}</td>
               <td>{{lv1.tenDiemKho}}</td>
               <td>{{lv1.tenLoKho ? lv1.tenNganKho + ' - ' + lv1.tenLoKho : lv1.tenNganKho}}</td>
+              <td>
+                <input nz-input class="money-input" currencyMask [options]="amount"  [(ngModel)]='lv1.slDaXuat' />
+              </td>
+              <td class='text-right'>{{lv1.slTonKho}}</td>
               <td>{{lv1.donViTinh}}</td>
-              <td>{{lv1.slLayMau}}</td>
-              <td></td>
             </tr>
           </ng-container>
         </ng-container>

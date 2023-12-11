@@ -1,23 +1,22 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { FormGroup, Validators } from "@angular/forms";
-import { Base2Component } from "../../../../../components/base2/base2.component";
-import { chain } from 'lodash';
+import {Component, Input, OnInit} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {FormGroup, Validators} from "@angular/forms";
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {chain} from 'lodash';
 import * as uuid from "uuid";
-import { MESSAGE } from "../../../../../constants/message";
+import {MESSAGE} from "../../../../../constants/message";
 import dayjs from "dayjs";
-import { STATUS } from "../../../../../constants/status";
+import {STATUS} from "../../../../../constants/status";
 import {
   DeXuatNhuCauBaoHiemService
 } from "../../../../../services/dinhmuc-maymoc-baohiem/de-xuat-nhu-cau-bao-hiem.service";
 import {
   BaoHiemKhoDangChuaHang
 } from "../../de-xuat-hop-dong-chi-cuc/them-moi-de-xuat-bao-hiem-cc/them-moi-de-xuat-bao-hiem-cc.component";
-
 @Component({
   selector: 'app-thong-tin-tong-hop-de-xuat-nhu-cau-bao-hiem-chi-cuc',
   templateUrl: './thong-tin-tong-hop-de-xuat-nhu-cau-bao-hiem-chi-cuc.component.html',
@@ -33,7 +32,9 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
   formDataTongHop: FormGroup
   expandSet = new Set<number>();
   maCv: string;
-  tableHangDtqg: any[] = [];
+  tableHangDtqgView: any[] = [];
+  tableHangDtqgReq: any[] = [];
+  tableGtriBHiem: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -63,7 +64,8 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
     });
     this.formDataTongHop = this.fb.group({
       namKeHoach: [dayjs().get('year'), Validators.required],
-      ngayDx: [null],
+      ngayDxTu: [null],
+      ngayDxDen: [null],
       listSoCv: [null]
     });
   }
@@ -92,18 +94,11 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
     }
     let body = this.formDataTongHop.value;
     if (!body.listSoCv || body.listSoCv.length == 0) {
-      let arr = []
-      if (this.listDxChiCuc && this.listDxChiCuc.length > 0) {
-        this.listDxChiCuc.forEach(item => {
-          arr.push(item.soCv)
-        })
-      }
-      body.listSoCv = arr.toString();
+      let arr = this.listDxChiCuc.map(item => item.soCv);
+      body.listSoCv = arr && arr.length > 0 ?  arr.toString() : [];
     } else {
       body.listSoCv = body.listSoCv.toString();
     }
-    body.ngayDxTu = body.ngayDx ? body.ngayDx[0] : null
-    body.ngayDxDen = body.ngayDx ? body.ngayDx[1] : null
     body.trangThai = STATUS.DADUYET_CB_CUC;
     body.trangThaiTh = STATUS.CHUA_TONG_HOP;
     body.maDvi = this.userInfo.MA_DVI
@@ -114,40 +109,20 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
         this.formData.patchValue({
           namKeHoach: this.formDataTongHop.value.namKeHoach,
         })
-        this.dataTable = detail.listQlDinhMucDxBhKhoChua
-        this.dataTable.forEach(item => {
-          let arr = detail.listQlDinhMucDxBaoHiemHdr;
-          if (arr && arr.length > 0) {
-            arr.forEach(dtl => {
-              if (dtl.id == item.bhHdrId) {
-                item.maDvi = dtl.maDvi
-              }
-            })
-          }
-          item.id = null;
-          item.ghiChu = null;
-          idVirtual: uuid.v4()
+        this.dataTable = detail.listQlDinhMucDxBhKhoChua;
+        this.dataTable.forEach(it => {
+          it.id = null
         })
-        this.convertListData()
+        this.convertListData();
       }
       if (detail && detail.listQlDinhMucDxBhHdtqg) {
-        this.tableHangDtqg = detail.listQlDinhMucDxBhHdtqg
-        this.tableHangDtqg.forEach(item => {
-          let arr = detail.listQlDinhMucDxBaoHiemHdr;
-          if (arr && arr.length > 0) {
-            arr.forEach(dtl => {
-              if (dtl.id == item.bhHdrId) {
-                item.maDvi = dtl.maDvi
-              }
-            })
-          }
-          item.id = null;
-          item.ghiChu = null;
-          idVirtual: uuid.v4()
+        this.tableHangDtqgView = detail.listQlDinhMucDxBhHdtqgTheoDvi;
+        this.tableHangDtqgReq = detail.listQlDinhMucDxBhHdtqg;
+        this.tableHangDtqgReq.forEach(it => {
+          it.id = null
         })
-        this.buildDiaDiemTc()
       }
-
+      this.tableGtriBHiem = detail.listQlDinhMucThGiaTriBaoHiem;
       this.isTongHop = true;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg)
@@ -185,6 +160,31 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
     }
   }
 
+  async saveAndSend(status: string, msg: string, msgSuccess?: string) {
+    try {
+      this.formData.patchValue({
+        namKeHoach: this.formDataTongHop.value.namKeHoach,
+        giaTriDx: this.sumslKho('giaTriBhDx', null, 'tong')
+      })
+      this.helperService.markFormGroupTouched(this.formData)
+      if (this.formData.invalid) {
+        return;
+      }
+      if (this.fileDinhKem && this.fileDinhKem.length > 0) {
+        this.formData.value.fileDinhKems = this.fileDinhKem;
+      }
+      this.conVertTreToList();
+      this.formData.value.listQlDinhMucDxBhKhoChua = this.dataTable;
+      this.formData.value.listQlDinhMucDxBhHdtqg = this.tableHangDtqgReq;
+      this.formData.value.maDvi = this.userInfo.MA_DVI;
+      this.formData.value.capDvi = this.userInfo.CAP_DVI;
+      this.formData.value.soCv = this.formData.value.soCv + this.maCv
+      await super.saveAndSend( this.formData.value, status, msg, msgSuccess);
+    } catch (error) {
+      console.error("Lỗi khi lưu và gửi dữ liệu:", error);
+    }
+  }
+
   async save() {
     this.formData.patchValue({
       namKeHoach: this.formDataTongHop.value.namKeHoach,
@@ -198,9 +198,8 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
       this.formData.value.fileDinhKems = this.fileDinhKem;
     }
     this.conVertTreToList();
-    this.convertListHangDtqg();
     this.formData.value.listQlDinhMucDxBhKhoChua = this.dataTable;
-    this.formData.value.listQlDinhMucDxBhHdtqg = this.tableHangDtqg;
+    this.formData.value.listQlDinhMucDxBhHdtqg = this.tableHangDtqgReq;
     this.formData.value.maDvi = this.userInfo.MA_DVI;
     this.formData.value.capDvi = this.userInfo.CAP_DVI;
     this.formData.value.soCv = this.formData.value.soCv + this.maCv
@@ -218,14 +217,17 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
         if (res.data) {
           this.isTongHop = true;
           const data = res.data;
+          this.maCv =  "/" + data.soCv?.split("/")[1];
           this.helperService.bidingDataInFormGroup(this.formData, data);
+          this.formData.patchValue({
+            soCv : data.soCv ?data.soCv.split("/")[0] : '',
+          })
           this.fileDinhKem = data.listFileDinhKems;
           this.dataTable = data.listQlDinhMucDxBhKhoChua;
-          this.tableHangDtqg = data.listQlDinhMucDxBhHdtqg;
-          await this.convertListData()
-          await this.buildDiaDiemTc()
-          await this.expandAll('kho');
-          await this.expandAll('dtqg');
+          this.tableHangDtqgView = data.listQlDinhMucDxBhHdtqgTheoDvi;
+          this.tableHangDtqgReq = data.listQlDinhMucDxBhHdtqg;
+          this.tableGtriBHiem = data.listQlDinhMucThGiaTriBaoHiem;
+          this.convertListData();
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -263,7 +265,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
       })
       ).value()
     }
-    this.expandAll('kho');
+    this.expandAll()
   }
 
   conVertTreToList() {
@@ -277,140 +279,6 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
     })
     this.dataTable = arr
   }
-
-  convertListHangDtqg() {
-    let arr = [];
-    if (this.tableHangDtqg) {
-      this.tableHangDtqg.forEach(item => {
-        if (item.childData && item.childData.length > 0) {
-          item.childData.forEach(data => {
-            if (data.childData && data.childData.length > 0) {
-              data.childData.forEach(dtl => {
-                if (dtl.childData && dtl.childData.length > 0) {
-                  dtl.childData.forEach(dtl1 => {
-                    arr.push(dtl1)
-                  })
-                }
-              })
-            }
-          })
-        }
-      })
-      this.tableHangDtqg = arr
-    }
-  }
-
-  conVertArrayHang(): any[] {
-    let arr = [];
-    if (this.tableHangDtqg) {
-      this.tableHangDtqg.forEach(item => {
-        if (item.childData && item.childData.length > 0) {
-          item.childData.forEach(data => {
-            if (data.childData && data.childData.length > 0) {
-              data.childData.forEach(dtl => {
-                if (dtl.childData && dtl.childData.length > 0) {
-                  dtl.childData.forEach(dtl1 => {
-                    arr.push(dtl1)
-                  })
-                }
-              })
-            }
-          })
-        }
-      })
-    }
-    return arr;
-  }
-
-  buildDiaDiemTc() {
-    if (this.tableHangDtqg && this.tableHangDtqg.length > 0) {
-      this.tableHangDtqg = chain(this.tableHangDtqg)
-        .groupBy("tenLoaiVthh")
-        .map((value, key) => {
-          let rs = chain(value)
-            .groupBy("tenNhomTiLeBaoHiem")
-            .map((v, k) => {
-              let res = chain(v)
-                .groupBy("tenHangHoa")
-                .map((v1, k1) => {
-                  return {
-                    idVirtual: uuid.v4(),
-                    tenHangHoa: k1,
-                    childData: v1
-                  }
-                }).value();
-              return {
-                idVirtual: uuid.v4(),
-                tenNhomTiLeBaoHiem: k,
-                childData: res
-              };
-            }
-            ).value();
-          return {
-            idVirtual: uuid.v4(),
-            tenLoaiVthh: key,
-            childData: rs
-          };
-        }).value();
-    }
-    this.expandAll('dtqg');
-  }
-
-  sumSoLuongHang(column?: string, tenLoaiVthh?: string, tenNhomTiLeBaoHiem?: string, tenHangHoa?: string, type?: string): number {
-    let array = this.conVertArrayHang();
-    let result = 0;
-    if (array && array.length > 0) {
-      switch (type) {
-        case 'tenHangHoa': {
-          if (array) {
-            let arr = array.filter(item => item.tenHangHoa == tenHangHoa)
-            if (arr && arr.length > 0) {
-              const sum = arr.reduce((prev, cur) => {
-                prev += cur[column];
-                return prev;
-              }, 0);
-              result = sum
-            }
-          }
-          break;
-        }
-        case 'tenNhomTiLeBaoHiem': {
-          if (array) {
-            let arr = array.filter(item => item.tenNhomTiLeBaoHiem == tenNhomTiLeBaoHiem)
-            const sum = arr.reduce((prev, cur) => {
-              prev += cur[column];
-              return prev;
-            }, 0);
-            result = sum
-          }
-          break;
-        }
-        case 'tenLoaiVthh': {
-          if (array) {
-            let arr = array.filter(item => item.tenLoaiVthh == tenLoaiVthh)
-            const sum = arr.reduce((prev, cur) => {
-              prev += cur[column];
-              return prev;
-            }, 0);
-            result = sum
-          }
-          break;
-        }
-        case 'tong': {
-          if (array) {
-            const sum = array.reduce((prev, cur) => {
-              prev += cur[column];
-              return prev;
-            }, 0);
-            result = sum
-          }
-          break;
-        }
-      }
-    }
-    return result;
-  }
-
   sumslKho(column?: string, tenDvi?: string, type?: string): number {
     let result = 0;
     let arr = [];
@@ -442,6 +310,17 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
     return result;
   }
 
+  sumSlHang(row: string, table : any[]) : number {
+    let result = 0;
+    let arr = table.filter(it => it.nhomCha);
+    const sum = arr.reduce((prev, cur) => {
+      prev += cur[row];
+      return prev;
+    }, 0);
+    result = sum;
+    return result;
+  }
+
   disableForm() {
     let check = false;
     if (this.isView) {
@@ -456,35 +335,19 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
     return check;
   }
 
-
-  expandAll(type: string) {
-    if (type == 'kho') {
-      this.dataTable.forEach(s => {
-        this.expandSet.add(s.idVirtual);
-      })
-    } else {
-      this.tableHangDtqg.forEach(s => {
-        this.expandSet.add(s.idVirtual);
-        if (s.childData && s.childData.length > 0) {
-          s.childData.forEach(item => {
-            this.expandSet.add(item.idVirtual);
-            if (item.childData && item.childData.length > 0) {
-              item.childData.forEach(item1 => {
-                this.expandSet.add(item1.idVirtual);
-              })
-            }
-          })
-        }
-      })
-    }
-  }
-
-
   onExpandChange(id: number, checked: boolean): void {
     if (checked) {
       this.expandSet.add(id);
     } else {
       this.expandSet.delete(id);
+    }
+  }
+
+  expandAll() {
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach(s => {
+        this.expandSet.add(s.idVirtual);
+      });
     }
   }
 }

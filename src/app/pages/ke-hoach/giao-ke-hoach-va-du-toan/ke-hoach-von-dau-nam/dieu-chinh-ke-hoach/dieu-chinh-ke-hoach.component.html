@@ -4,7 +4,8 @@
       nz-menu-item nzSelected (click)="selectTab('DXDC')">
       Đề xuất điều chỉnh chỉ tiêu kế hoạch
     </li>
-    <li [nzSelected]="tabSelected=='PADC'" *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT')"
+    <li [nzSelected]="tabSelected=='PADC'"
+      *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_PA') && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_PA_TCGIAO')"
       nz-menu-item (click)="selectTab('PADC')">
       Phương án điều chỉnh chỉ tiêu kế hoạch
     </li>

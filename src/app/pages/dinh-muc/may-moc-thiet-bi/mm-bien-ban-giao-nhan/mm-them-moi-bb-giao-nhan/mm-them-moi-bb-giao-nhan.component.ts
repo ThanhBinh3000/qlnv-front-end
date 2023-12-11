@@ -225,7 +225,7 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
         nzContent: DialogMmBbGiaoNhanComponent,
         nzMaskClosable: false,
         nzClosable: false,
-        nzWidth: '700px',
+        nzWidth: '1000px',
         nzFooter: null,
         nzComponentParams: {
           dataTable: this.listHopDong,
@@ -251,15 +251,21 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           const data = res.data;
-          console.log(data, 222)
           this.formData.patchValue({
             benGiaoHang: data.banTenDvi
           })
-          this.listHangHoa = data.listQlDinhMucHdLoaiHh;
-          if (this.listHangHoa && this.listHangHoa.length > 0) {
-            this.listHangHoa.forEach(item => {
-              item.id = null;
-            })
+          let listDdnh : any[] = data?.listQlDinhMucHdDiaDiemNh;
+          if (listDdnh && listDdnh.length > 0) {
+            listDdnh = listDdnh.filter(dd => dd.maDvi == this.userInfo.MA_DVI);
+            let listHh = listDdnh.map(item => item.maTaiSan);
+            this.listHangHoa = data.listQlDinhMucHdLoaiHh;
+            if (this.listHangHoa && this.listHangHoa.length > 0) {
+              this.listHangHoa = this.listHangHoa.filter(it => listHh.includes(it.maHangHoa));
+              this.listHangHoa.forEach(item => {
+                item.id = null;
+                item.soLuong = 0
+              })
+            }
           }
         }
       } else {

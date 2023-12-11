@@ -1,19 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { UserService } from "../../../../services/user.service";
-import { DonviService } from "../../../../services/donvi.service";
-import { Globals } from "../../../../shared/globals";
+import {Component, OnInit} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {UserService} from "../../../../services/user.service";
+import {DonviService} from "../../../../services/donvi.service";
+import {Globals} from "../../../../shared/globals";
 import * as dayjs from "dayjs";
-import { Validators } from "@angular/forms";
-import { MESSAGE } from "../../../../constants/message";
-import { Base2Component } from "../../../../components/base2/base2.component";
-import { saveAs } from "file-saver";
-import { BcCLuongHangDTQGService } from 'src/app/services/bao-cao/BcCLuongHangDTQG.service';
-import { DanhMucService } from "../../../../services/danhmuc.service";
+import {Validators} from "@angular/forms";
+import {MESSAGE} from "../../../../constants/message";
+import {Base2Component} from "../../../../components/base2/base2.component";
+import {saveAs} from "file-saver";
+import {BcCLuongHangDTQGService} from 'src/app/services/bao-cao/BcCLuongHangDTQG.service';
+import {DanhMucService} from "../../../../services/danhmuc.service";
 
 @Component({
   selector: 'app-bao-cao-hao-hut-hang-dtqg',
@@ -39,15 +39,15 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
   nameFile: any;
 
   constructor(httpClient: HttpClient,
-    storageService: StorageService,
-    notification: NzNotificationService,
-    spinner: NgxSpinnerService,
-    modal: NzModalService,
-    private bcCLuongHangDTQGService: BcCLuongHangDTQGService,
-    public userService: UserService,
-    private donViService: DonviService,
-    private danhMucSv: DanhMucService,
-    public globals: Globals) {
+              storageService: StorageService,
+              notification: NzNotificationService,
+              spinner: NgxSpinnerService,
+              modal: NzModalService,
+              private bcCLuongHangDTQGService: BcCLuongHangDTQGService,
+              public userService: UserService,
+              private donViService: DonviService,
+              private danhMucSv: DanhMucService,
+              public globals: Globals) {
     super(httpClient, storageService, notification, spinner, modal, bcCLuongHangDTQGService);
     this.formData = this.fb.group(
       {
@@ -67,6 +67,7 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
       this.loadDsDonVi();
       this.loadDsVthh();
       this.loadDsLoaiBc();
+      await this.initForm()
     } catch (e) {
       console.log("error: ", e);
       await this.spinner.hide();
@@ -79,6 +80,20 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
     saveAs(this.pdfBlob, this.nameFile + ".pdf");
   }
 
+  async initForm() {
+    if (this.userService.isCuc()) {
+      this.formData.patchValue({
+        maCuc : this.userInfo.MA_DVI
+      })
+    }
+    if (this.userService.isChiCuc()) {
+      this.formData.patchValue({
+        maCuc : this.userInfo.MA_DVI.substring(0, 6),
+        maChiCuc : this.userInfo.MA_DVI,
+      })
+    }
+    }
+
   async downloadExcel() {
     try {
       this.spinner.show();
@@ -86,7 +101,7 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
       this.formData.value.namXuat = this.formData.value.namXuat && this.formData.value.namXuat.length > 0 ? this.formData.value.namNhap.toString() : ""
       let body = this.formData.value;
       body.maDvi = this.userInfo.MA_DVI;
-      body.nam = 2023;
+      body.nam  = 2023;
       body.typeFile = "xlsx";
       if (body.loaiBc == '01') {
         if (body.loaiVthh.startsWith("0101")) {
@@ -132,7 +147,7 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
       this.formData.value.namXuat = this.formData.value.namXuat && this.formData.value.namXuat.length > 0 ? this.formData.value.namNhap.toString() : ""
       let body = this.formData.value;
       body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc
-      body.nam = 2023;
+      body.nam  = 2023;
       body.typeFile = "pdf";
       if (body.loaiBc == '01') {
         if (body.loaiVthh.startsWith("0101")) {
@@ -160,7 +175,7 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
     let res = await this.donViService.layTatCaDonViByLevel(2);
     if (res && res.data) {
       this.dsDonVi = res.data
-      this.dsDonVi = this.dsDonVi.filter(item => item.type != "PB" && item.maDvi.startsWith(this.userInfo.MA_DVI))
+      this.dsDonVi = this.dsDonVi.filter(item => item.type != "PB")
     }
   }
 

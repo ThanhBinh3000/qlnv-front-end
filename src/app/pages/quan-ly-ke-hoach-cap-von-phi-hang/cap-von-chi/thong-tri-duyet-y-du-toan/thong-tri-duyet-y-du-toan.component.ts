@@ -46,7 +46,7 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
   searchFilter = {
     soThongChi: null,
     tenDvi: null,
-    namKh: dayjs().get('year'),
+    namKh: null,
     ngayKyTu: null,
     ngayKyDen: null,
     lyDoChi: null,

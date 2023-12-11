@@ -3,9 +3,9 @@
     <div class='header header-green-background'>
       <div class='header-text'>
         <div class='title-chi-tieu'>
-          <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'status-xanh' : 'status-do'">
-            {{ formData.value.tenTrangThai }}
-          </span>
+                <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'status-xanh' : 'status-do'">
+                    {{ formData.value.tenTrangThai }}
+                </span>
           <span>Quyết định xuất giảm vật tư</span>
         </div>
       </div>
@@ -18,19 +18,21 @@
           <i class='icon htvbdh_totrinh'></i>
           <span> In/Xem trước </span>
         </button>
-        <button *ngIf='this.userService.isTongCuc() && idInput > 0 && formData.value.trangThai != STATUS.BAN_HANH'
+        <button
+          *ngIf='this.userService.isTongCuc() && idInput > 0 && formData.value.trangThai != STATUS.BAN_HANH'
           class='btn btn-sub xanh-nhat mr-2' (click)='pheDuyet()'>
           <i class='icon htvbdh_tcdt_pheduyet'></i>
           <span>Ban hành</span>
         </button>
-        <!--        <button class='btn btn-sub xanh-nhat  ml-2' type='button'-->
-        <!--                *ngIf=' this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC  '-->
-        <!--                (click)="saveAndSend(formData.value,STATUS.CHO_DUYET_LDCC,'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">-->
-        <!--          <i class='icon htvbdh_tcdt_guiduyet'></i>-->
-        <!--          <span>Lưu và gửi duyệt</span>-->
-        <!--        </button>-->
-        <button *ngIf='this.userService.isTongCuc() && formData.value.trangThai != STATUS.BAN_HANH' type='button'
-          class='btn btn-main' (click)='save()'>
+<!--        <button class='btn btn-sub xanh-nhat  ml-2' type='button'-->
+<!--                *ngIf=' this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC  '-->
+<!--                (click)="saveAndSend(formData.value,STATUS.CHO_DUYET_LDCC,'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">-->
+<!--          <i class='icon htvbdh_tcdt_guiduyet'></i>-->
+<!--          <span>Lưu và gửi duyệt</span>-->
+<!--        </button>-->
+        <button
+          *ngIf='this.userService.isTongCuc() && formData.value.trangThai != STATUS.BAN_HANH'
+          type='button' class='btn btn-main' (click)='save()'>
           <i class='icon htvbdh_tcdt_save'></i>
           <span>Lưu</span>
         </button>
@@ -50,7 +52,8 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]='error'>
                   <nz-select formControlName='namKeHoach' nzDisabled>
-                    <nz-option *ngFor='let p of listNam' [nzValue]='p.value' [nzLabel]='p.text'></nz-option>
+                    <nz-option *ngFor='let p of listNam' [nzValue]='p.value'
+                               [nzLabel]='p.text'></nz-option>
                   </nz-select>
                 </nz-form-control>
               </nz-form-item>
@@ -72,7 +75,8 @@
                   <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Ngày ký QĐ xuất giảm vật tư
                   </nz-form-label>
                   <nz-date-picker [nzDisabled]='isView' class='search__input' nzFormat='dd/MM/YYYY'
-                    nzPlaceHolder='Ngày ký QĐ xuất hàng' formControlName='ngayKy'>
+                                  nzPlaceHolder='Ngày ký QĐ xuất hàng'
+                                  formControlName='ngayKy'>
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -83,10 +87,11 @@
                   Căn cứ trên báo cáo KQKĐ mẫu
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]='error'>
-                  <nz-select formControlName='soCanCu' (ngModelChange)='changeValueBcKqKdMau($event)'
-                    nzPlaceHolder='Chọn số báo cáo KQKĐ mẫu' [nzDisabled]='idInput > 0'>
+                  <nz-select formControlName='soCanCu'
+                             (ngModelChange)='changeValueBcKqKdMau($event)'
+                             nzPlaceHolder='Chọn số báo cáo KQKĐ mẫu' [nzDisabled]='idInput > 0'>
                     <nz-option *ngFor='let option of listBcKqKdMauOption' [nzLabel]='option.soBaoCao'
-                      [nzValue]='option.soBaoCao'></nz-option>
+                               [nzValue]='option.soBaoCao'></nz-option>
                   </nz-select>
                 </nz-form-control>
               </nz-form-item>
@@ -97,7 +102,8 @@
                   <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Loại hình nhập xuất
                   </nz-form-label>
                   <nz-select formControlName='loai' [nzDisabled]='true'>
-                    <nz-option *ngFor='let p of listLoaiHinhNhapXuat' [nzValue]='p.value' [nzLabel]='p.label'>
+                    <nz-option *ngFor='let p of listLoaiHinhNhapXuat' [nzValue]='p.value'
+                               [nzLabel]='p.label'>
                     </nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -127,7 +133,8 @@
                   <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Thời hạn xuất giảm vật tư
                   </nz-form-label>
                   <nz-date-picker [nzDisabled]='isView' class='search__input' nzFormat='dd/MM/YYYY'
-                    nzPlaceHolder='Ngày ký QĐ xuất hàng' formControlName='thoiHanXuatGiam'>
+                                  nzPlaceHolder='Ngày ký QĐ xuất hàng'
+                                  formControlName='thoiHanXuatGiam'>
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -169,83 +176,86 @@
   <nz-card class='mt-2 flex-card data-table card-border-content table-card'>
     <nz-table #tblData [nzData]='dataThTree' class='nowrap table-chi-tiet' nzBordered>
       <thead>
-        <tr>
-          <th>STT</th>
-          <th></th>
-          <th>Chi cục DTNN</th>
-          <th>Loại hàng</th>
-          <th>Chủng loại</th>
-          <th>Điểm kho</th>
-          <th>Ngăn/lô kho</th>
-          <th>ĐVT</th>
-          <th>Mã đơn vị tài sản</th>
-          <th>Số lượng xuất để lấy mẫu</th>
-          <th>Số phiếu KĐCL</th>
-          <th class='text-center'>Mẫu có bị hủy?</th>
-        </tr>
+      <tr>
+        <th>STT</th>
+        <th></th>
+        <th>Chi cục DTNN</th>
+        <th>Loại hàng</th>
+        <th>Chủng loại</th>
+        <th>Điểm kho</th>
+        <th>Ngăn/lô kho</th>
+        <th>ĐVT</th>
+        <th>Mã đơn vị tài sản</th>
+        <th>Số lượng xuất để lấy mẫu</th>
+        <th>Số phiếu KĐCL</th>
+        <th class='text-center'>Mẫu có bị hủy?</th>
+      </tr>
       </thead>
       <tbody>
-        <ng-container *ngFor='let item of tblData.data, let i = index;'>
-          <tr>
-            <td class='bold'>{{i + 1}}</td>
-            <td (nzExpandChange)='onExpandStringChange(item.idVirtual, $event)'
+      <ng-container *ngFor='let item of tblData.data, let i = index;'>
+        <tr>
+          <td class='bold'>{{i + 1}}</td>
+          <td (nzExpandChange)='onExpandStringChange(item.idVirtual, $event)'
               [nzExpand]='expandSetString.has(item.idVirtual)' nzShowExpand='true'></td>
-            <td class='bold'>{{item.tenChiCuc}}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <ng-container *ngIf='expandSetString.has(item.idVirtual) && expandSetString.has(item.idVirtual)'>
-            <ng-container *ngFor='let lv1 of item.childData,let i1=index'>
-              <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>{{lv1.tenLoaiVthh}}</td>
-                <td>{{lv1.tenCloaiVthh}}</td>
-                <td>{{lv1.tenDiemKho}}</td>
-                <td>{{lv1.tenLoKho ? lv1.tenNganKho + '-' + lv1.tenLoKho : lv1.tenNganKho}}</td>
-                <td>{{lv1.donViTinh}}</td>
-                <td>{{lv1.maSo}}
-                </td>
-                <td>
-                  {{lv1.slThucTe}}
-                </td>
-                <td>
-                  {{lv1.soPhieuKncl}}
-                </td>
-                <td>
-                  <label nz-checkbox [(ngModel)]='lv1.mauBiHuy' [nzDisabled]='true'></label>
-                </td>
-              </tr>
-            </ng-container>
+          <td class='bold'>{{item.tenChiCuc}}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <ng-container *ngIf='expandSetString.has(item.idVirtual) && expandSetString.has(item.idVirtual)'>
+          <ng-container *ngFor='let lv1 of item.childData,let i1=index'>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>{{lv1.tenLoaiVthh}}</td>
+              <td>{{lv1.tenCloaiVthh}}</td>
+              <td>{{lv1.tenDiemKho}}</td>
+              <td>{{lv1.tenLoKho ? lv1.tenNganKho + '-' + lv1.tenLoKho : lv1.tenNganKho}}</td>
+              <td>{{lv1.donViTinh}}</td>
+              <td>{{lv1.maSo}}
+              </td>
+              <td>
+                {{lv1.slThucTe}}
+              </td>
+              <td>
+                {{lv1.soPhieuKncl}}
+              </td>
+              <td>
+                <label nz-checkbox [(ngModel)]='lv1.mauBiHuy' [nzDisabled]='true'></label>
+              </td>
+            </tr>
           </ng-container>
         </ng-container>
+      </ng-container>
       </tbody>
     </nz-table>
   </nz-card>
 </div>
 <nz-modal [(nzVisible)]='showDlgPreview' nzTitle='THÔNG TIN QUYẾT ĐỊNH XUẤT GIẢM VẬT TƯ' nzWidth='100%'
-  (nzOnCancel)='closeDlg()'>
+          (nzOnCancel)='closeDlg()'>
   <div *nzModalContent class='modal__content'>
     <pdf-viewer [src]='pdfSrc' [render-text]='true' style='width: 100%; height: 650px;'></pdf-viewer>
   </div>
   <div *nzModalFooter>
-    <button nz-button (click)='printPreview()' class='modal__button--save'>
+    <button nz-button (click)='printPreview()'
+            class='modal__button--save'>
       <i class='icon htvbdh_printer'></i>
       In
     </button>
-    <button nz-button (click)='downloadPdf()' class='modal__button--save'>
+    <button nz-button (click)='downloadPdf()'
+            class='modal__button--save'>
       <i class='icon htvbdh_file-pdf'></i>
       Xuất .pdf
     </button>
-    <button nz-button (click)='downloadWord()' class='modal__button--save'>
+    <button nz-button (click)='downloadWord()'
+            class='modal__button--save'>
       <i class='icon htvbdh_file-word'></i>
       Xuất .docx
     </button>

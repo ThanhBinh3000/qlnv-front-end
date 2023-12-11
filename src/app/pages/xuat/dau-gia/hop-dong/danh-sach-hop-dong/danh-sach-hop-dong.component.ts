@@ -1,18 +1,19 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { MESSAGE } from 'src/app/constants/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
+import {Component, Input, OnInit} from '@angular/core';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {MESSAGE} from 'src/app/constants/message';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
 import {
   QdPdKetQuaBanDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
-import { saveAs } from 'file-saver';
-import { LOAI_HANG_DTQG } from 'src/app/constants/config';
-import { DonviService } from "../../../../../services/donvi.service";
-import { isEmpty } from 'lodash';
+import {saveAs} from 'file-saver';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import {DonviService} from "../../../../../services/donvi.service";
+import {isEmpty} from 'lodash';
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-danh-sach-hop-dong',
@@ -43,32 +44,32 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
   ) {
     super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBanDauGiaService);
     this.formData = this.fb.group({
-      nam: '',
-      soHopDong: '',
-      tenHopDong: '',
-      maDvi: '',
-      toChucCaNhan: '',
-      ngayKyTu: '',
-      ngayKyDen: '',
-      trangThai: this.STATUS.BAN_HANH,
-      loaiVthh: '',
+      nam: null,
+      soHopDong: null,
+      tenHopDong: null,
+      maDvi: null,
+      toChucCaNhan: null,
+      ngayKyTu: null,
+      ngayKyDen: null,
+      trangThai: null,
+      loaiVthh: null,
 
     });
     this.filterTable = {
-      nam: '',
-      soQdPd: '',
-      soQdKq: '',
-      tongDviTsan: '',
-      slDviTsanThanhCong: '',
-      slHopDongDaKy: '',
-      ngayKy: '',
-      tenLoaiVthh: '',
-      tenCloaiVthh: '',
-      tenDvi: '',
-      tongSlXuat: '',
-      thanhTien: '',
-      tenTrangThaiHd: '',
-      tenTrangThaiXh: '',
+      nam: null,
+      soQdPd: null,
+      soQdKq: null,
+      tongDviTsan: null,
+      slDviTsanThanhCong: null,
+      slHopDongDaKy: null,
+      ngayKy: null,
+      tenLoaiVthh: null,
+      tenCloaiVthh: null,
+      tenDvi: null,
+      tongSlXuat: null,
+      thanhTien: null,
+      tenTrangThaiHd: null,
+      tenTrangThaiXh: null,
     }
     this.listTrangThaiHd = [
       {
@@ -103,23 +104,18 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([
-        this.timKiem(),
-        this.search(),
-        this.loadDsTong(),
-      ]);
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+        trangThai: STATUS.BAN_HANH
+      });
+      await this.search();
+      await this.loadDsTong();
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       this.spinner.hide();
     }
-  }
-
-  async timKiem() {
-    this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
-    });
   }
 
   async loadDsTong() {

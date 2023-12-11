@@ -1,3 +1,12 @@
 .bg-selected td {
-    background-color: #ebedff;
+  background-color: #d8dcfe;
+}
+
+.rdo-input.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.rdo-input .ant-form-item {
+  padding-top: 10px;
 }

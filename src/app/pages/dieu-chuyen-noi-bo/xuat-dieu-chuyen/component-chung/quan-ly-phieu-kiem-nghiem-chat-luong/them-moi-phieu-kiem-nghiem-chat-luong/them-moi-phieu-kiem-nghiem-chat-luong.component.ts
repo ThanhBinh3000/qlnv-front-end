@@ -360,7 +360,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       case STATUS.TU_CHOI_LDC:
       case STATUS.DU_THAO: {
         trangThai = STATUS.CHO_DUYET_TP;
-        mess = 'Bạn có muối gửi duyệt ?';
+        mess = 'Bạn có muốn gửi duyệt ?';
         MSG = MESSAGE.GUI_DUYET_SUCCESS;
         break;
       }
@@ -498,6 +498,9 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     }
   };
   async openDialogQuyetDinhDC() {
+    if(this.isView){
+      return;
+    }
     // await this.loadBbLayMau();
     await this.loadSoQuyetDinh();
     const modalQD = this.modal.create({
@@ -567,6 +570,9 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     }
   }
   async openDialogBbLayMau() {
+    if(this.isView){
+      return;
+    }
     if (!this.formData.value.qdDcId) return;
     await this.loadBbLayMau();
     const modalQD = this.modal.create({

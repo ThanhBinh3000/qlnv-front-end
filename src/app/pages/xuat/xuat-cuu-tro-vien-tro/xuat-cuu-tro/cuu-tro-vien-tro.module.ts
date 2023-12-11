@@ -73,6 +73,7 @@ import { QuyetDinhGnvComponent } from './quyet-dinh-gnv/quyet-dinh-gnv.component
 import { ChiTietQuyetDinhPdComponent } from './quyet-dinh-pd/chi-tiet-quyet-dinh-pd/chi-tiet-quyet-dinh-pd.component';
 import { ChiTietQuyetDinhGnvComponent } from './quyet-dinh-gnv/chi-tiet-quyet-dinh-gnv/chi-tiet-quyet-dinh-gnv.component';
 import { XuatModule } from "src/app/pages/xuat/xuat.module";
+import { ChucNangKiemTraChatLuongComponent } from './chuc-nang-kiem-tra-chat-luong/chuc-nang-kiem-tra-chat-luong.component';
 
 @NgModule({
   declarations: [
@@ -92,6 +93,7 @@ import { XuatModule } from "src/app/pages/xuat/xuat.module";
     KiemTraChatLuongComponent,
     HoSoKyThuatComponent,
     ChiTietHoSoKyThuatComponent,
+    ChucNangKiemTraChatLuongComponent,
 
     QuyetDinhGnvXuatHangComponent,
     ThongTinQdGnvXuatHangComponent,
@@ -117,8 +119,7 @@ import { XuatModule } from "src/app/pages/xuat/xuat.module";
     ChiTietTongHopComponent,
     QuyetDinhPdComponent,
     QuyetDinhGnvComponent,
-    ChiTietQuyetDinhPdComponent,
-    ChiTietQuyetDinhGnvComponent
+    // ChiTietQuyetDinhPdComponent,
   ],
   imports: [
     CommonModule,
@@ -146,6 +147,7 @@ import { XuatModule } from "src/app/pages/xuat/xuat.module";
     KiemTraChatLuongComponent,
     HoSoKyThuatComponent,
     ChiTietHoSoKyThuatComponent,
+    ChucNangKiemTraChatLuongComponent,
 
     QuyetDinhGnvXuatHangComponent,
     ThongTinQdGnvXuatHangComponent,

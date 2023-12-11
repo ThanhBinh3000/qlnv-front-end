@@ -2,7 +2,7 @@
   <nz-table #editRowTable [nzData]="dataTable" [nzFrontPagination]="false" nzBordered [nzShowPagination]="false">
     <thead>
     <tr>
-      <th class="text-center" width="40px">STT</th>
+      <th class="text-center" width="5%">STT</th>
       <th>Nội dung dự toán</th>
       <th width="20%">Nguồn chi</th>
       <th width="10%">Dự toán</th>
@@ -24,10 +24,7 @@
       <td>{{rowItem.tenNguonChi}}</td>
       <td>
         <nz-input-group>
-          <input class="money-input" currencyMask [(ngModel)]="rowItem.sluongDtoan" [options]="amount"/>
-          <!--          <nz-input-number nz-input [(ngModel)]="rowItem.sluongDtoan" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"-->
-          <!--                           [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="isView">-->
-          <!--          </nz-input-number>-->
+          <input class="money-input" currencyMask [(ngModel)]="rowItem.sluongDtoan"  [disabled]="isView"  [options]="amount"/>
         </nz-input-group>
       </td>
       <td style="text-align: center;" *ngIf="trangThai != STATUS.BAN_HANH">
@@ -46,7 +43,7 @@
         <td>{{ idx + 1 }}</td>
         <td>{{ data.tenLoaiChi }}</td>
         <td>{{ data.tenNguonChi }}</td>
-        <td>{{ data.sluongDtoan | number : '1.0-1' : 'vi_VN' }}</td>
+        <td class='text-right'>{{ data.sluongDtoan | number : '1.0-1' : 'vi_VN' }}</td>
         <td style="text-align: center;" *ngIf="trangThai != STATUS.BAN_HANH">
           <a (click)="editItem(idx)" *ngIf="!isView">
             <i class=" fa fa-pencil"></i>
@@ -68,7 +65,7 @@
           </nz-input-group>
         </td>
         <td>{{dataEdit[idx].data.tenNguonChi}}</td>
-        <td>
+        <td  class='text-right'>
           <nz-input-group>
             <input class="money-input" currencyMask [(ngModel)]="dataEdit[idx].data.sluongDtoan" [options]="amount"/>
           </nz-input-group>
@@ -86,8 +83,8 @@
     <tfoot>
     <tr class="text-blue">
       <td style="text-align: right; font-weight: 700" colspan="2">Tổng</td>
-      <td>{{ calcTong() | number : '1.0-1' : 'vi_VN' }}</td>
-      <td>{{ calcTong() | number : '1.0-1' : 'vi_VN' }}</td>
+      <td class='text-right'></td>
+      <td class='text-right'>{{ calcTong() | number : '1.0-1' : 'vi_VN' }}</td>
       <td></td>
     </tr>
     <!--    <tr>-->

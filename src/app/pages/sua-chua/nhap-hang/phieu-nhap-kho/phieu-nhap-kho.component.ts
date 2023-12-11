@@ -28,6 +28,7 @@ export class PhieuNhapKhoComponent extends Base3Component implements OnInit {
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, phieuNhapKhoScService);
     this.defaultURL = 'sua-chua/nhap-hang/phieu-nhap-kho'
+    this.defaultPermisson = 'SCHDTQG_NH_PNK'
     this.formData = this.fb.group({
       nam: null,
       soQdNh: null,

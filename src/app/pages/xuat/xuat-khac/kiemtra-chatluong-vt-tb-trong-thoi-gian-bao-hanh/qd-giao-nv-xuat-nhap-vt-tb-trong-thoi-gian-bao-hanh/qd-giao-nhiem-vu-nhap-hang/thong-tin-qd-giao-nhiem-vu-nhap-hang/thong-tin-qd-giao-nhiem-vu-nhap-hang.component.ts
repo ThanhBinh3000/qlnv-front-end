@@ -78,6 +78,7 @@ export class ThongTinQdGiaoNhiemVuNhapHangComponent extends Base2Component imple
       lyDoTuChoi: [],
       trichYeu: [],
       trangThai: [STATUS.DU_THAO],
+      trangThaiXh: [STATUS.CHUA_THUC_HIEN],
       tenTrangThai: ['Dự thảo'],
       qdGiaonvXhDtl: [new Array<ItemXhXkVtQdGiaonvXhDtl>()],
       loaiCanCu: [],
@@ -204,7 +205,7 @@ export class ThongTinQdGiaoNhiemVuNhapHangComponent extends Base2Component imple
       case STATUS.TU_CHOI_LDC:
       case STATUS.DU_THAO: {
         trangThai = STATUS.CHO_DUYET_TP;
-        mess = 'Bạn có muối gửi duyệt ?'
+        mess = 'Bạn có muốn gửi duyệt ?'
         break;
       }
       case STATUS.CHO_DUYET_TP: {

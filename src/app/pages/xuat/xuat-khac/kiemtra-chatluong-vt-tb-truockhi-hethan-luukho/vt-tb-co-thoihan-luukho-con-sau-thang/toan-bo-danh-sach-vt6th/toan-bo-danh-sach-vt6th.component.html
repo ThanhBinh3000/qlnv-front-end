@@ -85,7 +85,7 @@
         <button type="button" class="btn btn-main"
                 *ngIf="userService.isCuc()" (click)="openTongHop()">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
-          <span>Tổng hợp DS kiểm tra chất lượng LT trước khi hết hạn lưu kho</span>
+          <span>Tổng hợp DS kiểm tra chất lượng VT, TB trước khi hết hạn lưu kho</span>
         </button>
       </div>
     </div>
@@ -139,8 +139,8 @@
                     <td>{{lv1.tenCloaiVthh}}</td>
                     <td>{{lv1.tenDiemKho}}</td>
                     <td>{{lv1.tenLoKho == null ? lv1.tenNganKho : lv1.tenLoKho}}</td>
-                    <td>{{lv1.slHetHan|number:globals.numberFormat}}</td>
-                    <td>{{lv1.slTonKho|number:globals.numberFormat}}</td>
+                    <td>{{lv1.slHetHan|number:globals.numberFormat:globals.locale}}</td>
+                    <td>{{lv1.slTonKho|number:globals.numberFormat:globals.locale}}</td>
                     <td>{{lv1.ngayNhapKho|date:globals.dateFormat}}</td>
                     <td>{{lv1.donViTinh}}</td>
                     <td>{{lv1.ngayDeXuat|date:globals.dateFormat}}</td>

@@ -28,7 +28,7 @@ import {
   DialogThemMoiDmNhomHangComponent
 } from "../../../../../../components/dialog/dialog-them-moi-dm-nhom-hang/dialog-them-moi-dm-nhom-hang.component";
 import * as uuidv4 from "uuid";
-import { formatNumber } from "@angular/common";
+import {formatNumber} from "@angular/common";
 @Component({
   selector: 'app-thong-tin-bien-ban-nghiem-thu-bao-quan',
   templateUrl: './thong-tin-bien-ban-nghiem-thu-bao-quan.component.html',
@@ -176,9 +176,10 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
   }
 
   async initForm() {
+    let maBb = 'BBNTBQ-' + this.userInfo.DON_VI.tenVietTat;
     let res = await this.userService.getId("BB_NGHIEM_THU_SEQ");
     this.formData.patchValue({
-      soBbNtBq: `${res}/${this.formData.get('nam').value}/BBNTBQ-CCDTKVVP`,
+      soBbNtBq: `${res}/${this.formData.get('nam').value}/${maBb}`,
       maDvi: this.userInfo.MA_DVI,
       tenDvi: this.userInfo.TEN_DVI,
       maQhns: this.userInfo.DON_VI.maQhns,
@@ -246,7 +247,12 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
       tenCloaiVthh: data.tenCloaiVthh,
       moTaHangHoa: data.moTaHangHoa,
     });
-    let dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
+    let dataChiCuc;
+    if (this.userService.isChiCuc()) {
+      dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
+    } else {
+      dataChiCuc = data.dtlList
+    }
     if (dataChiCuc.length > 0) {
       this.listDiaDiemNhap = dataChiCuc[0].children;
     }
@@ -680,7 +686,6 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
   }
 
   async save(isGuiDuyet: boolean) {
-    if (this.validateSave()) {
       try {
         this.spinner.show();
         this.helperService.markFormGroupTouched(this.formData);
@@ -710,10 +715,12 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
           } else {
             if (this.formData.get('id').value) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-              this.back();
+              // this.back();
             } else {
+              this.formData.get('id').setValue(res.data.id)
+              this.id = res.data.id;
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-              this.back();
+              // this.back();
             }
             await this.spinner.hide();
           }
@@ -728,8 +735,6 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
       } finally {
         this.spinner.hide();
       }
-    }
-
   }
 
   validateSave() {
@@ -837,7 +842,8 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
         data: row,
         typeData: this.typeData,
         typeAction: this.typeAction,
-        isChildren: isChildren
+        isChildren: isChildren,
+        nhomCcdc: [1, 2]
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -1101,4 +1107,5 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
     }
     this.updateDataTable()
   }
+
 }

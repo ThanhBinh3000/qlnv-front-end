@@ -366,12 +366,12 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     }
     // xử lý pp lấy mẫu và tiêu chuẩn cần lấy mẫu kiểm tra
     if (body.ppLayMauList && body.ppLayMauList.length > 0) {
-      body.ppLayMau = body.ppLayMauList.map(function (item) {
+      body.ppLayMau = body.ppLayMauList.map(function(item) {
         return item['label'];
       }).join(',');
     }
     if (body.chiTieuKiemTraList && body.chiTieuKiemTraList.length > 0) {
-      body.chiTieuKiemTra = body.chiTieuKiemTraList.map(function (item) {
+      body.chiTieuKiemTra = body.chiTieuKiemTraList.map(function(item) {
         return item['label'];
       }).join(',');
     }

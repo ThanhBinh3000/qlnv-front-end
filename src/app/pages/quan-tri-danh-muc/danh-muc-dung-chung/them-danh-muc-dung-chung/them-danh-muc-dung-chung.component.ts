@@ -11,6 +11,7 @@ import { QlNguoiSuDungService } from 'src/app/services/quantri-nguoidung/qlNguoi
 import { NzModalRef } from 'ng-zorro-antd/modal';
 
 import { QlTShethongService } from 'src/app/services/quantri-nguoidung/qlTshethong.service';
+import {UserService} from "../../../../services/user.service";
 
 
 interface FlatNode {
@@ -42,6 +43,7 @@ export class ThemDanhMucDungChungComponent implements OnInit {
     private donViService: DonviService,
     private notification: NzNotificationService,
     private modal: NzModalRef,
+    public userService: UserService,
     private _qlTShethongService: QlTShethongService
 
   ) {

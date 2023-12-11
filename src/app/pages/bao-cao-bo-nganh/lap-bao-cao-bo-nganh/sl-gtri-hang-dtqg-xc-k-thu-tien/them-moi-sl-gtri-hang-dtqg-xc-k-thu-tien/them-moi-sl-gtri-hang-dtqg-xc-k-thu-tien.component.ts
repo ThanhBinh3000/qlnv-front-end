@@ -74,6 +74,8 @@ export class ThemMoiSlGtriHangDtqgXcKThuTienComponent extends Base2Component imp
         tenTrangThai: ['Dự thảo'],
       }
     );
+    this.templateName = 'template_sl_gtri_hang_dtqg_xc_khong_thu_tien.xlsx'
+
   }
   async ngOnInit() {
     this.spinner.show();
@@ -371,6 +373,13 @@ export class ThemMoiSlGtriHangDtqgXcKThuTienComponent extends Base2Component imp
           }
         }
       }
+    }
+  }
+
+  async handleSelectFile(event: any){
+    await this.onFileSelected(event);
+    if(this.dataImport.length > 0){
+      this.listDataGroup = this.dataImport
     }
   }
 }

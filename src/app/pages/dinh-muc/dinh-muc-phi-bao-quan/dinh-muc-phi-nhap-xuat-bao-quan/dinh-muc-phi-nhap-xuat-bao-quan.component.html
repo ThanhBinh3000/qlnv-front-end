@@ -1,163 +1,169 @@
-<div class="luong-thuc__danh-sach" *ngIf="!isDetail; else templateThemmoi">
-  <div class="bg-trang">
-    <h3 class="mt-16">ĐỊNH MỨC NHẬP XUẤT BẢO QUẢN {{capDvi == 1 ? 'TỔNG CỤC' : 'CỤC DTNN KV' }} GIAO</h3>
-    <nz-card class="flex-card p-lr16">
-      <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
-        <div class="search__body mt-2" nz-row [nzGutter]="[18, 12]">
-          <div nz-col nzSpan="4">
-            <label class="search__label">Số QĐ</label>
+<div class='luong-thuc__danh-sach' *ngIf='!isDetail; else templateThemmoi'>
+  <div class='bg-trang'>
+    <h3 class='mt-16'>ĐỊNH MỨC NHẬP, XUẤT, BẢO QUẢN {{capDvi == 1 ? 'ĐƯỢC CẤP CÓ THẨM QUYỀN' : 'CỤC DTNN KV ' }} GIAO</h3>
+    <nz-card class='flex-card p-lr16'>
+      <form [nzLayout]="'vertical'" [formGroup]='formData' nz-form>
+        <div class='search__body mt-2' nz-row [nzGutter]='[18, 12]'>
+          <div nz-col nzSpan='4'>
+            <label class='search__label'>Số văn bản</label>
             <nz-input-group>
-              <input nz-input formControlName="soQd" />
+              <input nz-input formControlName='soQd' />
             </nz-input-group>
           </div>
-          <div nz-col nzSpan="8">
-            <label class="search__label">Trích yếu</label>
+          <div nz-col nzSpan='8'>
+            <label class='search__label'>Trích yếu</label>
             <nz-input-group>
-              <input nz-input formControlName="trichYeu" />
+              <input nz-input formControlName='trichYeu' />
             </nz-input-group>
           </div>
-          <div nz-col nzSpan="4">
-            <label class="search__label">Ngày hiệu lực</label>
-            <nz-range-picker nzFormat="yyyy-MM-dd" formControlName="ngayHieuLuc"></nz-range-picker>
+          <div nz-col nzSpan='4'>
+            <label class='search__label'>Ngày hiệu lực</label>
+            <nz-range-picker nzFormat='yyyy-MM-dd' formControlName='ngayHieuLuc'></nz-range-picker>
           </div>
-          <div nz-col nzSpan="4">
-            <label class="search__label">Ngày ký</label>
-            <nz-range-picker nzFormat="yyyy-MM-dd" formControlName="ngayKy"></nz-range-picker>
+          <div nz-col nzSpan='4'>
+            <label class='search__label'>Ngày ký văn bản</label>
+            <nz-range-picker nzFormat='yyyy-MM-dd' formControlName='ngayKy'></nz-range-picker>
           </div>
-          <div nz-col nzSpan="4">
-            <label class="search__label">Trạng thái</label>
-            <nz-select formControlName="trangThai">
-              <nz-option nzValue="00" nzLabel="Dự thảo"></nz-option>
-              <nz-option nzValue="29" nzLabel="Ban hành"></nz-option>
-              <nz-option nzValue="56" nzLabel="Hết hiệu lực"></nz-option>
+          <div nz-col nzSpan='4'>
+            <label class='search__label'>Trạng thái</label>
+            <nz-select formControlName='trangThai'>
+              <nz-option nzValue='00' nzLabel='Dự thảo'></nz-option>
+              <nz-option nzValue='29' nzLabel='Ban hành'></nz-option>
+              <nz-option nzValue='56' nzLabel='Hết hiệu lực'></nz-option>
             </nz-select>
           </div>
         </div>
       </form>
-      <div class="cangiua group-button-search">
-        <button nz-button class="search__button--clear" (click)="clearForm()">
-          <i class="icon  htvbdh_nhap-lai1"></i>
+      <div class='cangiua group-button-search'>
+        <button nz-button class='search__button--clear' (click)='clearForm()'>
+          <i class='icon  htvbdh_nhap-lai1'></i>
           Xóa điều kiện
         </button>
-        <button nz-button class="search__button--search" (click)="filter()">
-          <i nz-icon nzType="search"></i>
+        <button nz-button class='search__button--search' (click)='filter()'>
+          <i nz-icon nzType='search'></i>
           Tìm kiếm
         </button>
       </div>
     </nz-card>
-    <div class="group-button">
-      <h3 class="text-uppercase">Danh sách quyết định định mức phí nhập xuất bảo
-        quản {{capDvi == 1 ? 'tổng cục' : 'cục'}} giao</h3>
-      <div class="buttons">
-        <button type="button" class="btn btn-sub" (click)="exportData()"
-          *ngIf="(userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_TC_EXP') && capDvi == 1) || ((userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_CUC_EXP') && capDvi == 2)) ">
-          <i class="icon htvbdh_chuyen-xu-ly"></i>
+    <div class='group-button'>
+      <h3 class='text-uppercase'>Danh sách quyết định định mức phí nhập, xuất, bảo
+        quản {{capDvi == 1 ? 'được cấp có thẩm quyền ' : 'cục'}} giao</h3>
+      <div class='buttons'>
+        <button type='button'
+                class='btn btn-sub' (click)='exportData()'
+                *ngIf="(userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_TC_EXP') && capDvi == 1) || ((userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_CUC_EXP') && capDvi == 2)) ">
+          <i class='icon htvbdh_chuyen-xu-ly'></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main"
+        <button type='button' (click)='deleteMulti()' class='btn btn-sub btn-xoa'>
+          <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
+          <span>Xóa</span>
+        </button>
+        <button
+          type='button' class='btn btn-main'
           *ngIf="(userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_TC_THEM') && userService.isTongCuc() && capDvi == 1) || (userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_CUC_THEM') && userService.isCuc() && capDvi == 2)"
-          (click)="redirectToChiTiet(0,false)">
-          <i class="icon htvbdh_dau-cong"></i>
+          (click)='redirectToChiTiet(0,false)'>
+          <i class='icon htvbdh_dau-cong'></i>
           <span>Thêm</span>
         </button>
-        <!--            <button type="button" (click)="deleteMulti()" class="btn btn-sub btn-xoa">-->
-        <!--              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
-        <!--              <span>Xóa</span>-->
-        <!--            </button>-->
       </div>
     </div>
-    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-      <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false"
-        nzBordered>
+    <nz-card class='mt-2px flex-card data-table card-border-content table-card'>
+      <nz-table #basicTable class='nowrap' [nzData]='dataTable' [nzFrontPagination]='false'
+                [nzShowPagination]='false' nzBordered>
         <thead>
-          <tr>
-            <th width="45px">
-              <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
-                [nzIndeterminate]="indeterminate"></label>
-            </th>
-            <th width="60px">STT</th>
-            <th width="130px">Số quyết định</th>
-            <th width="">Trích yếu</th>
-            <th width="175px">Ngày ký</th>
-            <th width="175px">Ngày hiệu lực</th>
-            <th [width]=" checkRolesTemplate() ? '175px' : '305px'">Trạng thái</th>
-            <th width="130px" class="text-center">Hành động</th>
-          </tr>
+        <tr>
+          <th width='45px'>
+            <label nz-checkbox [(ngModel)]='allChecked' (ngModelChange)='updateAllChecked()'
+                   [nzIndeterminate]='indeterminate'></label>
+          </th>
+          <th width='60px'>STT</th>
+          <th width='130px'>Số văn bản</th>
+          <th width=''>Trích yếu</th>
+          <th width='175px'>Ngày ký</th>
+          <th width='175px'>Ngày hiệu lực</th>
+          <th [width]=" checkRolesTemplate() ? '175px' : '305px'">Trạng thái</th>
+          <th width='130px' class='text-center'>Hành động</th>
+        </tr>
         </thead>
         <tbody>
-          <tr class="search-table">
-            <td></td>
-            <td></td>
-            <td>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
-                  (input)="filterInTable('soQd',filterTable.soQd)" />
-              </nz-input-group>
-            </td>
-            <td>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
-                  (input)="filterInTable('trichYeu',filterTable.trichYeu)" />
-              </nz-input-group>
-            </td>
-            <td>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayKy"
-                  (input)="filterInTable('ngayKy',filterTable.ngayKy)" />
-              </nz-input-group>
-            </td>
-            <td>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayHieuLuc"
-                  (input)="filterInTable('ngayHieuLuc',filterTable.ngayHieuLuc)" />
-              </nz-input-group>
-            </td>
-            <td>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
-                  (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" />
-              </nz-input-group>
-            </td>
-            <td>
-            </td>
-          </tr>
-          <tr *ngFor="let data of basicTable.data; let i = index">
-            <td>
-              <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
-            </td>
-            <td>{{(page - 1) * pageSize + i + 1}}</td>
-            <td>{{ data.soQd }}</td>
-            <td>{{ data.trichYeu }}</td>
-            <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
-            <td class="text-left">{{ data.tenTrangThai }}</td>
-            <td class="text-center">
-              <a *ngIf="(userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_TC_XEM') && capDvi == 1) || (userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_CUC_XEM') && capDvi == 2) &&  !((data.trangThai == STATUS.DU_THAO) && data.nguoiTaoId == userInfo.ID)"
-                (click)="redirectToChiTiet(data.id, true)">
-                <i class=" icon htvbdh_eye"></i>
-              </a>
-              <a *ngIf="data.trangThai == STATUS.DU_THAO && (userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_TC_THEM') && userService.isTongCuc() && capDvi == 1) || (userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_CUC_THEM') && userService.isCuc() && capDvi == 2)  "
-                (click)="redirectToChiTiet(data.id)">
-                <i class="fa fa-pencil" title="Sửa"></i>
-              </a>
-              <a *ngIf="data.trangThai == STATUS.DU_THAO && (userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_TC_XOA') && userService.isTongCuc() && capDvi == 1) || (userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_CUC_XOA') && userService.isCuc() && capDvi == 2)  "
-                (click)="delete(data)">
-                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-              </a>
-            </td>
-          </tr>
+        <tr class='search-table'>
+          <td></td>
+          <td></td>
+          <td>
+            <nz-input-group>
+              <input type='text' nz-input placeholder='Tìm kiếm' [(ngModel)]='filterTable.soQd'
+                     (input)="filterInTable('soQd',filterTable.soQd)" />
+            </nz-input-group>
+          </td>
+          <td>
+            <nz-input-group>
+              <input type='text' nz-input placeholder='Tìm kiếm' [(ngModel)]='filterTable.trichYeu'
+                     (input)="filterInTable('trichYeu',filterTable.trichYeu)" />
+            </nz-input-group>
+          </td>
+          <td>
+            <nz-input-group>
+              <input type='text' nz-input placeholder='Tìm kiếm' [(ngModel)]='filterTable.ngayKy'
+                     (input)="filterInTable('ngayKy',filterTable.ngayKy)" />
+            </nz-input-group>
+          </td>
+          <td>
+            <nz-input-group>
+              <input type='text' nz-input placeholder='Tìm kiếm' [(ngModel)]='filterTable.ngayHieuLuc'
+                     (input)="filterInTable('ngayHieuLuc',filterTable.ngayHieuLuc)" />
+            </nz-input-group>
+          </td>
+          <td>
+            <nz-input-group>
+              <input type='text' nz-input placeholder='Tìm kiếm' [(ngModel)]='filterTable.tenTrangThai'
+                     (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" />
+            </nz-input-group>
+          </td>
+          <td>
+          </td>
+        </tr>
+        <tr *ngFor='let data of basicTable.data; let i = index'>
+          <td>
+            <label nz-checkbox [(ngModel)]='data.checked' (ngModelChange)='updateSingleChecked()'
+                   [nzDisabled]='data.trangThai != STATUS.DANG_NHAP_DU_LIEU'></label>
+          </td>
+          <td>{{(page - 1) * pageSize + i + 1}}</td>
+          <td>{{ data.soQd }}</td>
+          <td>{{ data.trichYeu }}</td>
+          <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
+          <td class='text-left'>{{ data.tenTrangThai }}</td>
+          <td class='text-center'>
+            <a
+              *ngIf="(userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_TC_XEM') && capDvi == 1) || (userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_CUC_XEM') && capDvi == 2) &&  !((data.trangThai == STATUS.DANG_NHAP_DU_LIEU) && data.nguoiTaoId == userInfo.ID)"
+              (click)='redirectToChiTiet(data.id, true)'>
+              <i class=' icon htvbdh_eye'></i>
+            </a>
+            <a
+              *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU && ((userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_TC_THEM') && userService.isTongCuc() && capDvi == 1) || (userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_CUC_THEM') && userService.isCuc() && capDvi == 2))"
+              (click)='redirectToChiTiet(data.id)'>
+              <i class='fa fa-pencil' title='Sửa'></i>
+            </a>
+            <a
+              *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU && ((userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_TC_XOA') && userService.isTongCuc() && capDvi == 1) || (userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_CUC_XOA') && userService.isCuc() && capDvi == 2))"
+              (click)='delete(data)'>
+              <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
+            </a>
+          </td>
+        </tr>
         </tbody>
       </nz-table>
-      <div class="tab-content tab-menu">
-        <div class="tab-pane fade show active justify-content-between">
-          <div class="trai"></div>
-          <div class="canphai">
+      <div class='tab-content tab-menu'>
+        <div class='tab-pane fade show active justify-content-between'>
+          <div class='trai'></div>
+          <div class='canphai'>
             <!-- begin phân trang  -->
-            <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
-              [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
-              (nzPageSizeChange)="changePageSize($event)">
-              <ng-template #rangeTemplate let-range="range" let-total>
+            <nz-pagination class='pagination-card' [nzPageIndex]='page' [nzTotal]='totalRecord' nzShowSizeChanger
+                           [nzPageSize]='pageSize' [nzShowTotal]='rangeTemplate'
+                           (nzPageIndexChange)='changePageIndex($event)'
+                           (nzPageSizeChange)='changePageSize($event)'>
+              <ng-template #rangeTemplate let-range='range' let-total>
                 {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
               </ng-template>
             </nz-pagination>
@@ -169,7 +175,8 @@
   </div>
 </div>
 <ng-template #templateThemmoi>
-  <app-thong-tin-dinh-muc-phi-nhap-xuat-bao-quan [id]="selectedId" (showListEvent)="showList()"
-    [isViewDetail]="isViewDetail" [idInput]="selectedId"
-    [capDvi]="capDvi"></app-thong-tin-dinh-muc-phi-nhap-xuat-bao-quan>
+  <app-thong-tin-dinh-muc-phi-nhap-xuat-bao-quan [id]='selectedId' (showListEvent)='showList()'
+                                                 [isViewDetail]='isViewDetail'
+                                                 [idInput]='selectedId'
+                                                 [capDvi]='capDvi'></app-thong-tin-dinh-muc-phi-nhap-xuat-bao-quan>
 </ng-template>

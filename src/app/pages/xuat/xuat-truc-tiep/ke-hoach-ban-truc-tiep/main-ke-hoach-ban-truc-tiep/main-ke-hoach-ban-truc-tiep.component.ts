@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
-import { UserService } from 'src/app/services/user.service';
+import {Component, Input, OnInit} from '@angular/core';
+import {UserService} from 'src/app/services/user.service';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-main-ke-hoach-ban-truc-tiep',
@@ -7,23 +8,20 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./main-ke-hoach-ban-truc-tiep.component.scss']
 })
 export class MainKeHoachBanTrucTiepComponent implements OnInit {
-  @Input() id: number;
-  @Input() isView: boolean;
   @Input() inputLoaiVthh: string;
-  @Input() idInput: number;
-  @Output()
-  showListEvent = new EventEmitter<any>();
-  @Input()
-  listVthh: any[] = [];
+  @Input() listVthh: any[] = [];
+  LOAI_HANG_DTQG = LOAI_HANG_DTQG;
+
   constructor(
     public userService: UserService
   ) {
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
   }
 
   tabSelected: number = 0;
+
   selectTab(tab: number) {
     this.tabSelected = tab;
   }

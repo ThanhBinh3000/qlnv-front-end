@@ -22,9 +22,9 @@ export class HelperService {
   ) {
   }
 
-  async markFormGroupTouched(formGroup) {
+  async markFormGroupTouched(formGroup, ignoreFields: Array<string> = []) {
     for (const i in formGroup.controls) {
-      if (formGroup.controls.hasOwnProperty(i) && formGroup.controls[i].enabled) {
+      if (formGroup.controls.hasOwnProperty(i) && formGroup.controls[i].enabled && !ignoreFields.includes(i)) {
 
         formGroup.controls[i].markAsDirty();
         formGroup.controls[i].updateValueAndValidity();
@@ -139,6 +139,28 @@ export class HelperService {
       const control = formGroup.controls[controlsKey];
       if (control.validator) {
         control.setValidators(Validators.required);
+      }
+    }
+  }
+  bidingDataInFormGroupAndIgnore(formGroup: FormGroup, dataBinding: any, ignoreFields: Array<string> = []) {
+    if (dataBinding) {
+      for (const name in dataBinding) {
+        if (formGroup.controls.hasOwnProperty(name) && !ignoreFields.includes(name)) {
+          formGroup.controls[name].setValue(dataBinding[name]);
+        }
+      }
+    }
+  }
+  bidingDataInFormGroupAndNotTrigger(formGroup: FormGroup, dataBinding: any, fiedlNotTrigger: Array<string> = []) {
+    if (dataBinding) {
+      for (const name in dataBinding) {
+        if (formGroup.controls.hasOwnProperty(name)) {
+          if (fiedlNotTrigger.includes(name)) {
+            formGroup.controls[name].setValue(dataBinding[name], { emitEvent: false });
+          } else {
+            formGroup.controls[name].setValue(dataBinding[name]);
+          }
+        }
       }
     }
   }

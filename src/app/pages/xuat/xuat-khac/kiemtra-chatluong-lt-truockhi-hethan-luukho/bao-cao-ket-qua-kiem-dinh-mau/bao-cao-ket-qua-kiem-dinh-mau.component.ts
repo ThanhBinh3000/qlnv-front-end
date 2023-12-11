@@ -56,6 +56,7 @@ export class BaoCaoKetQuaKiemDinhMauComponent extends Base2Component implements 
   userInfo: UserLogin;
   userdetail: any = {};
   selectedId: number = 0;
+  idTongHop: number = 0;
   isView = false;
   children: any = [];
   expandSetString = new Set<string>();
@@ -130,8 +131,9 @@ export class BaoCaoKetQuaKiemDinhMauComponent extends Base2Component implements 
   }
 
 
-  redirectDetail(id, b: boolean) {
+  redirectDetail(id,idTongHop, b: boolean) {
     this.selectedId = id;
+    this.idTongHop = idTongHop;
     this.isDetail = true;
     this.isView = b;
     // this.isViewDetail = isView ?? false;

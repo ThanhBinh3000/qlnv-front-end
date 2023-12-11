@@ -1,0 +1,120 @@
+<div class="bg-trang">
+  <div class="header header-green-background">
+    <div class="header-text">
+      <div class="title-chi-tieu">
+        <span></span>
+        <span>THÊM MỚI DANH MỤC CHỈ TIÊU CHẤT LƯỢNG</span>
+      </div>
+    </div>
+  </div>
+  <nz-card class="mt16 p-lr16 card-table mg-t-10">
+    <form nz-form [formGroup]="formData" [nzLayout]="'vertical'">
+      <div nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" nzRequired>Mã chỉ tiêu</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group>
+                <input type="text" nz-input formControlName="maChiTieu" [readOnly]="isView"/>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" nzRequired>Tên chỉ tiêu</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group>
+                <input type="text" nz-input formControlName="tenChiTieu" [readOnly]="isView"/>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" nzRequired>Áp dụng cho loại hàng DTQG</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group>
+                <nz-select nzAllowClear formControlName="loaiVthh" (ngModelChange)="selectLoaiHangHoa($event)"
+                           nzShowSearch [nzDisabled]="isView">
+                  <nz-option *ngFor="let p of listLoaiVthh" [nzLabel]="p.ten" [nzValue]="p.ma"></nz-option>
+                </nz-select>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">Áp dụng cho chủng loại hàng DTQG</nz-form-label>
+            <nz-form-control>
+              <nz-input-group>
+                <nz-select [(ngModel)]="listCloaiSelected" [nzMaxTagCount]="2" [ngModelOptions]="{standalone: true}"
+                           nzShowSearch
+                           [nzMaxTagPlaceholder]="tagPlaceHolder3"
+                           nzMode="multiple">
+                  <nz-option *ngFor="let item of listCloaiVthh" [nzLabel]="item.ten" [nzDisabled]="isView"
+                             [nzValue]="item.ma">
+                  </nz-option>
+                  <ng-template #tagPlaceHolder3 let-selectedList3>và {{ selectedList3.length }} chủng loại hàng hóa nữa
+                  </ng-template>
+                </nz-select>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" nzRequired>Trạng thái</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group>
+                <nz-select formControlName="trangThai" nzAllowClear [nzDisabled]="isView">
+                  <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                  </nz-option>
+                </nz-select>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" nzRequired>Thứ tự hiển thị</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group>
+                <input type="text" nz-input formControlName="thuTu" [readOnly]="isView"/>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label [nzNoColon]="true"> Mô tả</nz-form-label>
+              <textarea nz-row="4" class="search__input" nz-input formControlName="moTa" [readOnly]="isView"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </nz-card>
+</div>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light ml-2" (click)="handleCancel()">
+        <i class="icon htvbdh_tcdt_delete"></i>
+        Hủy
+      </button>
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active ml-2" (click)="save() "
+              *ngIf="userService.isAccessPermisson('QTDM_DM_DVI_LIENQUAN_THEM')">
+        <i aria-hidden="true" class="fa fa-save"></i>
+        Lưu
+      </button>
+    </div>
+  </div>
+</div>
+
+<ng-template #error let-control>
+  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
+</ng-template>

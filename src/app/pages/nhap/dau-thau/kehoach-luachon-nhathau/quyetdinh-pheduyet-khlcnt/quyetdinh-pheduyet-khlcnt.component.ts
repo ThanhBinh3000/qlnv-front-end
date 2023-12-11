@@ -257,12 +257,11 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
         limit: this.pageSize,
         page: this.page - 1,
       },
-      maDvi: this.userService.isTongCuc() ? '' : this.userInfo.MA_DVI
+      // maDvi: this.userService.isTongCuc() ? '' : this.userInfo.MA_DVI
     };
     let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
-      console.log(data)
       this.dataTable = data.content;
       if (data && data.content && data.content.length > 0) {
         this.dataTable = data.content;

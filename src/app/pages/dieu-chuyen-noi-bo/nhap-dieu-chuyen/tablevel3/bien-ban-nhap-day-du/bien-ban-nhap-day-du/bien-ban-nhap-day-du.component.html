@@ -124,7 +124,7 @@
               <th class="text-center">Số bảng kê</th>
               <th class="text-center">Ngày nhập kho</th>
               <th class="text-center">Trạng thái</th>
-              <th class="text-center" *ngIf="isChiCuc()">Hành động</th>
+              <th class="text-center">Hành động</th>
             </tr>
           </thead>
           <tbody>
@@ -147,7 +147,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td *ngIf="isChiCuc()"></td>
+                <td></td>
 
               </tr>
               <ng-container *ngIf="row1.expand">
@@ -169,10 +169,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td *ngIf="isChiCuc()">
-                      <!-- <a (click)="add(row2)">
-                        <i class="icon htvbdh_dau-cong"></i>
-                      </a> -->
+                    <td>
                     </td>
                   </tr>
                   <ng-container>
@@ -214,6 +211,11 @@
                             <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                           </a>
                         </td>
+                        <td *ngIf="isCuc()">
+                          <a (click)="redirectDetail(row3.id, true)">
+                            <i class="fa fa-eye" title="Xem chi tiết"></i>
+                          </a>
+                        </td>
                       </tr>
                       <ng-container *ngFor="let row4 of row3.children, let y = index">
                         <tr *ngIf="row4.soPhieuNhapKho">
@@ -232,7 +234,7 @@
                           <td class="bold">{{row4.soBangKe || ""}}</td>
                           <td class="bold">{{row4.ngayNhapDayKho|date: "dd/MM/yyyy"}}</td>
                           <td></td>
-                          <td *ngIf="isChiCuc()">
+                          <td>
 
                           </td>
                         </tr>

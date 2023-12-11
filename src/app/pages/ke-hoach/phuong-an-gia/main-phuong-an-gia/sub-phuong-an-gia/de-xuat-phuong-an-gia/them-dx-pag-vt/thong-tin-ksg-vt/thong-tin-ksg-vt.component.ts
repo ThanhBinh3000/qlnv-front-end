@@ -12,6 +12,9 @@ import {DonviService} from "../../../../../../../../services/donvi.service";
 import {UserLogin} from "../../../../../../../../models/userlogin";
 import {UserService} from "../../../../../../../../services/user.service";
 import {DanhMucService} from "../../../../../../../../services/danhmuc.service";
+import {
+  QuyetDinhGiaCuaBtcService
+} from "../../../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
 
 @Component({
   selector: 'app-thong-tin-ksg-vt',
@@ -25,7 +28,8 @@ export class ThongTinKsgVtComponent implements OnInit, OnChanges {
   @Output() dataTableChange = new EventEmitter<any>();
   @Input() isView: boolean;
   @Input() dataParent: any;
-  @Input()  listCloaiVthh: any[];
+  @Input() listCloaiVthh: any[];
+  @Input() type: string;
   isVat: boolean;
   vat: any;
   userInfo: UserLogin
@@ -41,6 +45,7 @@ export class ThongTinKsgVtComponent implements OnInit, OnChanges {
     public notification: NzNotificationService,
     public spinner: NgxSpinnerService,
     public danhMucService: DanhMucService,
+    private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService,
   ) {
   }
 
@@ -66,11 +71,29 @@ export class ThongTinKsgVtComponent implements OnInit, OnChanges {
   }
 
   async onChangeCloaiVthh(event) {
-    let list = this.listCloaiVthh.filter(item => item.ma == event)
-    this.rowItem.tenCloaiVthh = list && list.length > 0 ? list[0].ten : ''
-    let resp = await this.danhMucService.getDetail(event);
-    if (resp.msg == MESSAGE.SUCCESS) {
-      this.rowItem.tieuChuanCl = resp.data && resp.data.tieuChuanCl ? resp.data.tieuChuanCl : ""
+    if (event) {
+      let list = this.listCloaiVthh.filter(item => item.ma == event)
+      this.rowItem.tenCloaiVthh = list && list.length > 0 ? list[0].ten : ''
+      let resp = await this.danhMucService.getDetail(event);
+      if (resp.msg == MESSAGE.SUCCESS) {
+        this.rowItem.tieuChuanCl = resp.data && resp.data.tieuChuanCl ? resp.data.tieuChuanCl : ""
+      }
+      if (this.isVat) {
+        this.rowItem.vat = null;
+        let body = {
+          namKeHoach: this.dataParent.namKeHoach,
+          loaiGia: this.dataParent.loaiGia == 'LG03' ? 'LG01' : 'LG02',
+          loaiVthh: this.dataParent.loaiVthh,
+          cloaiVthh: event
+        }
+        let res = await this.quyetDinhGiaCuaBtcService.getQdGiaVattu(body);
+        if (res.msg == MESSAGE.SUCCESS) {
+          let qdBtc = res.data
+          if (qdBtc) {
+            this.rowItem.vat = qdBtc.vat;
+          }
+        }
+      }
     }
   }
 
@@ -81,13 +104,23 @@ export class ThongTinKsgVtComponent implements OnInit, OnChanges {
     }
     let msgRequired = this.required(this.rowItem);
     if (msgRequired) {
-      this.notification.error(MESSAGE.ERROR, msgRequired);
+      this.notification.warning(MESSAGE.WARNING, msgRequired);
       this.spinner.hide();
       return;
     }
+    if (this.type == 'GCT' && this.isVat) {
+      if (!this.rowItem.vat && !this.isTabNdKhac) {
+        this.notification.warning(MESSAGE.WARNING, 'Không tìm thây quyết định của BTC cho loại hàng hóa');
+        this.spinner.hide();
+        return;
+      }
+    }
     this.rowItem.maDvi = this.userInfo.MA_DVI;
-    if (this.dataParent && this.dataParent.loaiGia && (this.dataParent.loaiGia == 'LG01' || this.dataParent.loaiGia == 'LG03')) {
+    if (this.isVat && this.type == 'GMTDBTT') {
       this.rowItem.donGiaVat = this.rowItem.donGia * this.vat + this.rowItem.donGia
+    }
+    if (this.isVat && this.type == 'GCT') {
+      this.rowItem.donGiaVat = this.rowItem.donGia * this.rowItem.vat + this.rowItem.donGia
     }
     this.dataTable = [...this.dataTable, this.rowItem];
     this.rowItem = new ThongTinKhaoSatGia();
@@ -98,7 +131,7 @@ export class ThongTinKsgVtComponent implements OnInit, OnChanges {
   required(item: ThongTinKhaoSatGia) {
     let msgRequired = "";
     //validator
-    if (!item.cloaiVthh && !this.isTabNdKhac) {
+    if ((!item.cloaiVthh && this.listCloaiVthh.length > 0) && !this.isTabNdKhac) {
       msgRequired = "Không được để trống chủng loại hàng hóa";
     } else if (!item.donGia) {
       msgRequired = "Không được để trống đơn giá";
@@ -185,7 +218,12 @@ export class ThongTinKsgVtComponent implements OnInit, OnChanges {
   }
 
   saveEdit(idx: number): void {
-    this.dataEdit[idx].data.donGiaVat = this.dataEdit[idx].data.donGia * this.vat + this.dataEdit[idx].data.donGia
+    if (this.type == 'GMTDBTT' && this.isVat) {
+      this.dataEdit[idx].data.donGiaVat = this.dataEdit[idx].data.donGia * this.vat + this.dataEdit[idx].data.donGia
+    }
+    if (this.type == 'GCT' && this.isVat) {
+      this.dataEdit[idx].data.donGiaVat = this.dataEdit[idx].data.donGia * this.dataEdit[idx].data.vat + this.dataEdit[idx].data.donGia
+    }
     Object.assign(this.dataTable[idx], this.dataEdit[idx].data);
     this.dataEdit[idx].edit = false;
   }

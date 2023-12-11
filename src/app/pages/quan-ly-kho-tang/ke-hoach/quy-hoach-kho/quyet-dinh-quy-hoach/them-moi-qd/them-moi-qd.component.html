@@ -2,9 +2,9 @@
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span [ngClass]=" formData.value.trangThai == globals.prop.NHAP_BAN_HANH  ? 'status-xanh' : 'status-do' ">
-          {{formData.value.tenTrangThai}}
-        </span>
+          <span [ngClass]=" formData.value.trangThai == globals.prop.NHAP_BAN_HANH  ? 'status-xanh' : 'status-do' ">
+                    {{formData.value.tenTrangThai}}
+                </span>
         <span>QUYẾT ĐỊNH QUY HOẠCH</span>
       </div>
     </div>
@@ -14,14 +14,14 @@
         <span>Quay lại</span>
       </button>
       <button type="button" class="btn btn-sub btn-xanh  ml-2"
-        *ngIf="!isViewDetail && formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && ((userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDQH_THEM') && type == '00') || (userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDDCQH_THEM') && type == '01'))"
-        (click)="saveAndSend(STATUS.BAN_HANH, 'Bạn có chắc chắn muốn ban hành?', 'Ban hành thành công!')">
+              *ngIf="!isViewDetail && formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && ((userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDQH_THEM') && type == '00') || (userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDDCQH_THEM') && type == '01'))"
+              (click)="saveAndSend(STATUS.BAN_HANH, 'Bạn có chắc chắn muốn ban hành?', 'Ban hành thành công!')">
         <i class="icon htvbdh_chuyenvanthu"></i>
         <span>Ban hành</span>
       </button>
       <button type="button" class="btn btn-sub btn-xanh  ml-2"
-        *ngIf="!isViewDetail && formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && ((userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDQH_THEM') && type == '00') || (userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDDCQH_THEM') && type == '01'))"
-        (click)="save()">
+              *ngIf="!isViewDetail && formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && ((userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDQH_THEM') && type == '00') || (userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDDCQH_THEM') && type == '01'))"
+              (click)="save()">
         <i class="fa fa-save"></i>
         <span>Lưu</span>
       </button>
@@ -56,7 +56,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}">
-                <input [readOnly]="isViewDetail" formControlName="soQuyetDinh" class="search__input" nz-input />
+                <input [readOnly]="isViewDetail" formControlName="soQuyetDinh" class="search__input" nz-input/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -67,7 +67,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openModalQdGoc()">
-                <input [readOnly]="true" formControlName="soQdGoc" class="search__input" nz-input />
+                <input [readOnly]="true" formControlName="soQdGoc" class="search__input" nz-input/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -78,17 +78,17 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}">
-                <input [readOnly]="isViewDetail" formControlName="soQdBtc" class="search__input" nz-input />
+                <input [readOnly]="isViewDetail" formControlName="soQdBtc" class="search__input" nz-input/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="type == '00' ? 12 : 8">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true">Trích yếu</nz-form-label>
+            <nz-form-label [nzNoColon]="true" >Trích yếu</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input [readOnly]="isViewDetail" formControlName="trichYeu" class="search__input" nz-input />
+                <input [readOnly]="isViewDetail" formControlName="trichYeu" class="search__input" nz-input/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -98,7 +98,7 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label [nzNoColon]="true" nzRequired> Ngày ký</nz-form-label>
               <nz-date-picker [nzDisabled]="isViewDetail" formControlName="ngayKy"
-                nzFormat="dd/MM/yyyy"></nz-date-picker>
+                              nzFormat="dd/MM/yyyy"></nz-date-picker>
             </nz-form-control>
 
           </nz-form-item>
@@ -109,7 +109,7 @@
             <div nz-col nzSpan="10">
               <nz-form-control [nzErrorTip]="error">
                 <nz-select [nzDisabled]="isViewDetail" nzPlaceHolder="Năm bắt đầu" nzSpan="11" nzAllowClear
-                  formControlName="namBatDau">
+                           formControlName="namBatDau">
                   <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
                   </nz-option>
                 </nz-select>
@@ -122,7 +122,7 @@
             <div nz-col nzSpan="11">
               <nz-form-control [nzErrorTip]="error">
                 <nz-select [nzDisabled]="isViewDetail" nzPlaceHolder="Năm kết thúc" nzSpan="2" nzAllowClear
-                  formControlName="namKetThuc">
+                           formControlName="namKetThuc">
                   <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
                   </nz-option>
                 </nz-select>
@@ -136,7 +136,7 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label [nzNoColon]="true" nzRequired> Mô tả thông tin quy hoạch
               </nz-form-label>
-              <input [readOnly]="isViewDetail" class="search__input" formControlName="moTa" nz-input />
+              <input [readOnly]="isViewDetail" class="search__input" formControlName="moTa" nz-input/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -165,8 +165,7 @@
     <div class="header header-green-background mg-t-10">
       <div class="header-text">
         <div class="title-chi-tieu">
-          <span class="text-uppercase font-weight-bold">PHỤ LỤC 1 - BẢNG TỔNG HỢP CÁC ĐIỂM KHO LƯƠNG THỰC, VẬT TƯ QUY
-            HOẠCH</span>
+          <span class="text-uppercase font-weight-bold">PHỤ LỤC 1 - BẢNG TỔNG HỢP CÁC ĐIỂM KHO LƯƠNG THỰC, VẬT TƯ QUY HOẠCH</span>
         </div>
       </div>
       <div class="group-button" *ngIf="!isViewDetail">
@@ -178,70 +177,69 @@
     </div>
     <nz-table nzBordered class="pd-10" [nzFrontPagination]="false" [nzShowPagination]="false">
       <thead>
-        <tr>
-          <th class="text-center" rowSpan="2" nzWidth="45px">STT</th>
-          <th class="text-center" rowSpan="2">Vùng/địa điểm kho</th>
-          <th class="text-center" colSpan="2">Tổng số điểm kho</th>
-          <th class="text-center" rowSpan="2">Trong đó số điểm <br> kho đã duyệt</th>
-          <th class="text-center" rowSpan="2">Diện tích đất dự kiến <br>mở rộng, xin mới (ha)</th>
-          <th class="text-center" colSpan="2">Diện tích kho (m2)</th>
-          <th class="text-center" rowSpan="2">Tích lượng (tấn)</th>
-          <th class="text-center" rowSpan="2">Ghi chú</th>
-          <th class="text-center" rowSpan="2" *ngIf="!isViewDetail">Hành động</th>
-        </tr>
-        <tr>
-          <th class="text-center">Tuyến I</th>
-          <th class="text-center">Tuyến II</th>
-          <th class="text-center">Tuyến I</th>
-          <th class="text-center">Tuyến II</th>
-        </tr>
+      <tr>
+        <th class="text-center" rowSpan="2" nzWidth="45px">STT</th>
+        <th class="text-center" rowSpan="2">Vùng/địa điểm kho</th>
+        <th class="text-center" colSpan="2">Tổng số điểm kho</th>
+        <th class="text-center" rowSpan="2">Trong đó số điểm <br> kho đã duyệt</th>
+        <th class="text-center" rowSpan="2">Diện tích đất dự kiến <br>mở rộng, xin mới (ha)</th>
+        <th class="text-center" colSpan="2">Diện tích kho (m2)</th>
+        <th class="text-center" rowSpan="2">Tích lượng (tấn)</th>
+        <th class="text-center" rowSpan="2">Ghi chú</th>
+        <th class="text-center" rowSpan="2" *ngIf="!isViewDetail">Hành động</th>
+      </tr>
+      <tr>
+        <th class="text-center">Tuyến I</th>
+        <th class="text-center">Tuyến II</th>
+        <th class="text-center">Tuyến I</th>
+        <th class="text-center">Tuyến II</th>
+      </tr>
       </thead>
       <tbody>
-        <ng-container *ngFor="let data of tablePhuLucIView , let i = index">
+      <ng-container *ngFor="let data of tablePhuLucIView , let i = index">
+        <tr>
+          <td class="font-weight-bold">{{convertToRoman(i + 1)}}</td>
+          <td class="font-weight-bold">{{data.tenVungMien}}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td *ngIf="!isViewDetail"></td>
+        </tr>
+        <ng-container *ngFor="let item of data.children ,  let y = index">
           <tr>
-            <td class="font-weight-bold">{{convertToRoman(i + 1)}}</td>
-            <td class="font-weight-bold">{{data.tenVungMien}}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td *ngIf="!isViewDetail"></td>
+            <td>{{y + 1}}</td>
+            <td>{{item.diaDiemKho}}</td>
+            <td class="text-right">{{item.slKhoTuyenI  | number : '1.0-1' : 'vi-VN'}}</td>
+            <td class="text-right">{{item.slKhoTuyenII  | number : '1.0-1' : 'vi-VN'}}</td>
+            <td class="text-right">{{item.slKhoDaDuyet  | number : '1.0-1' : 'vi-VN'}}</td>
+            <td class="text-right">{{item.dienTichDk  | number : '1.0-4' : 'vi-VN'}}</td>
+            <td class="text-right">{{item.dtKhoTuyenI  | number : '1.0-4' : 'vi-VN'}}</td>
+            <td class="text-right">{{item.dtKhoTuyenII  | number : '1.0-4' : 'vi-VN'}}</td>
+            <td class="text-right">{{item.tichLuong  | number : '1.0-4' : 'vi-VN'}}</td>
+            <td class="text-center">{{item.ghiChu}}</td>
+            <td class="text-center" *ngIf="!isViewDetail">
+              <a (click)="openModalCreate(item.idVirtual, '00')">
+                <i class="fa fa-pencil" title="Sửa"></i>
+              </a>
+              <a (click)="xoaData(item.idVirtual, '01')">
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+              </a>
+            </td>
           </tr>
-          <ng-container *ngFor="let item of data.children ,  let y = index">
-            <tr>
-              <td>{{y + 1}}</td>
-              <td>{{item.diaDiemKho}}</td>
-              <td class="text-right">{{item.slKhoTuyenI | number : '1.0-1' : 'vi-VN'}}</td>
-              <td class="text-right">{{item.slKhoTuyenII | number : '1.0-1' : 'vi-VN'}}</td>
-              <td class="text-right">{{item.slKhoDaDuyet | number : '1.0-1' : 'vi-VN'}}</td>
-              <td class="text-right">{{item.dienTichDk | number : '1.0-4' : 'vi-VN'}}</td>
-              <td class="text-right">{{item.dtKhoTuyenI | number : '1.0-4' : 'vi-VN'}}</td>
-              <td class="text-right">{{item.dtKhoTuyenII | number : '1.0-4' : 'vi-VN'}}</td>
-              <td class="text-right">{{item.tichLuong | number : '1.0-4' : 'vi-VN'}}</td>
-              <td class="text-center">{{item.ghiChu}}</td>
-              <td class="text-center" *ngIf="!isViewDetail">
-                <a (click)="openModalCreate(item.idVirtual, '00')">
-                  <i class="fa fa-pencil" title="Sửa"></i>
-                </a>
-                <a (click)="xoaData(item.idVirtual, '01')">
-                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                </a>
-              </td>
-            </tr>
-          </ng-container>
         </ng-container>
+      </ng-container>
       </tbody>
 
     </nz-table>
     <div class="header header-green-background mg-t-10">
       <div class="header-text">
         <div class="title-chi-tieu">
-          <span class="text-uppercase font-weight-bold">PHỤ LỤC 2 - BẢNG TỔNG HỢP CÁC ĐIỂM KHO LƯƠNG THỰC, VẬT TƯ QUY
-            HOẠCH TUYẾN I</span>
+          <span class="text-uppercase font-weight-bold">PHỤ LỤC 2 - BẢNG TỔNG HỢP CÁC ĐIỂM KHO LƯƠNG THỰC, VẬT TƯ QUY HOẠCH TUYẾN I</span>
         </div>
       </div>
       <div class="group-button" *ngIf="!isViewDetail">
@@ -253,55 +251,55 @@
     </div>
     <nz-table nzBordered class="pd-10" [nzFrontPagination]="false" [nzShowPagination]="false">
       <thead>
-        <tr>
-          <th class="text-center" nzWidth="45px">STT</th>
-          <th class="text-center">Vùng/địa điểm kho</th>
-          <th class="text-center">Tổng số điểm kho</th>
-          <th class="text-center">Trong đó số điểm <br> kho đã duyệt</th>
-          <th class="text-center">Hình thức đầu tư</th>
-          <th class="text-center">Diện tích đất dự kiến <br>mở rộng, xin mới (ha)</th>
-          <th class="text-center">Diện tích kho (m2)</th>
-          <th class="text-center">Tích lượng (tấn)</th>
-          <th class="text-center">Ghi chú</th>
-          <th class="text-center" *ngIf="!isViewDetail">Hành động</th>
-        </tr>
+      <tr>
+        <th class="text-center" nzWidth="45px">STT</th>
+        <th class="text-center">Vùng/địa điểm kho</th>
+        <th class="text-center">Tổng số điểm kho</th>
+        <th class="text-center">Trong đó số điểm <br> kho đã duyệt</th>
+        <th class="text-center">Hình thức đầu tư</th>
+        <th class="text-center">Diện tích đất dự kiến <br>mở rộng, xin mới (ha)</th>
+        <th class="text-center">Diện tích kho (m2)</th>
+        <th class="text-center">Tích lượng (tấn)</th>
+        <th class="text-center">Ghi chú</th>
+        <th class="text-center" *ngIf="!isViewDetail">Hành động</th>
+      </tr>
       </thead>
       <tbody>
-        <ng-container *ngFor="let data of tablePhuLucIIView , let i = index">
+      <ng-container *ngFor="let data of tablePhuLucIIView , let i = index">
+        <tr>
+          <td class="font-weight-bold">{{convertToRoman(i + 1)}}</td>
+          <td class="font-weight-bold">{{data.tenVungMien}}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td *ngIf="!isViewDetail"></td>
+        </tr>
+        <ng-container *ngFor="let item of data.children ,  let y = index">
           <tr>
-            <td class="font-weight-bold">{{convertToRoman(i + 1)}}</td>
-            <td class="font-weight-bold">{{data.tenVungMien}}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td *ngIf="!isViewDetail"></td>
+            <td>{{y + 1}}</td>
+            <td>{{item.diaDiemKho}}</td>
+            <td class="text-right">{{item.slKho | number : '1.0-1' : 'vi-VN'}}</td>
+            <td class="text-right">{{item.slKhoDaDuyet | number : '1.0-1' : 'vi-VN'}}</td>
+            <td class="text-center">{{item.hinhThuc}}</td>
+            <td class="text-right">{{item.dienTichDk | number : '1.0-4' : 'vi-VN'}}</td>
+            <td class="text-right">{{item.dtKho | number : '1.0-4' : 'vi-VN'}}</td>
+            <td class="text-right">{{item.tichLuong | number : '1.0-4' : 'vi-VN'}}</td>
+            <td class="text-center">{{item.ghiChu}}</td>
+            <td class="text-center" *ngIf="!isViewDetail">
+              <a (click)="openModalCreate(item.idVirtual, '01')">
+                <i class="fa fa-pencil" title="Sửa"></i>
+              </a>
+              <a (click)="xoaData(item.idVirtual, '01')">
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+              </a>
+            </td>
           </tr>
-          <ng-container *ngFor="let item of data.children ,  let y = index">
-            <tr>
-              <td>{{y + 1}}</td>
-              <td>{{item.diaDiemKho}}</td>
-              <td class="text-right">{{item.slKho | number : '1.0-1' : 'vi-VN'}}</td>
-              <td class="text-right">{{item.slKhoDaDuyet | number : '1.0-1' : 'vi-VN'}}</td>
-              <td class="text-center">{{item.hinhThuc}}</td>
-              <td class="text-right">{{item.dienTichDk | number : '1.0-4' : 'vi-VN'}}</td>
-              <td class="text-right">{{item.dtKho | number : '1.0-4' : 'vi-VN'}}</td>
-              <td class="text-right">{{item.tichLuong | number : '1.0-4' : 'vi-VN'}}</td>
-              <td class="text-center">{{item.ghiChu}}</td>
-              <td class="text-center" *ngIf="!isViewDetail">
-                <a (click)="openModalCreate(item.idVirtual, '01')">
-                  <i class="fa fa-pencil" title="Sửa"></i>
-                </a>
-                <a (click)="xoaData(item.idVirtual, '01')">
-                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                </a>
-              </td>
-            </tr>
-          </ng-container>
         </ng-container>
+      </ng-container>
       </tbody>
     </nz-table>
   </nz-card>

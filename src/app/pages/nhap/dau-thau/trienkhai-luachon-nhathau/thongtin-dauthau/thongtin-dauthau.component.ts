@@ -165,7 +165,7 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
           limit: this.pageSize,
           page: this.page - 1,
         },
-        maDvi: this.userService.isTongCuc() ? '' : this.userInfo.MA_DVI
+        // maDvi: this.userService.isTongCuc() ? '' : this.userInfo.MA_DVI
       };
     } else {
       body = {
@@ -189,6 +189,7 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
+      console.log(this.dataTable )
       this.totalRecord = data.totalElements;
       if (data && data.content && data.content.length > 0) {
         this.dataTable.forEach((item) => {
@@ -318,20 +319,41 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
-        let body = {
-          tuNgayQd: this.tuNgayQd != null ? dayjs(this.tuNgayQd).format('YYYY-MM-DD') + " 00:00:00" : null,
-          denNgayQd: this.denNgayQd != null ? dayjs(this.denNgayQd).format('YYYY-MM-DD') + " 23:59:59" : null,
-          loaiVthh: this.loaiVthh,
-          soQdPdKhlcnt: this.searchFilter.soQdPdKhlcnt,
-          soQdPdKqlcnt: this.searchFilter.soQdPdKqlcnt,
-          namKhoach: this.searchFilter.namKhoach,
-          trichYeu: this.searchFilter.trichYeu,
-          soQd: this.searchFilter.soQd,
-          lastest: 1,
-          maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null
-        }
+        let body = {};
         if (this.loaiVthh.startsWith('02')) {
-          body.lastest = 0
+          body = {
+            tuNgayQd: this.tuNgayQd != null ? dayjs(this.tuNgayQd).format('YYYY-MM-DD') + " 00:00:00" : null,
+            denNgayQd: this.denNgayQd != null ? dayjs(this.denNgayQd).format('YYYY-MM-DD') + " 23:59:59" : null,
+            loaiVthh: this.loaiVthh,
+            namKhoach: this.searchFilter.namKhoach,
+            soQd: this.searchFilter.soQd,
+            soQdPdKhlcnt: this.searchFilter.soQdPdKhlcnt,
+            soQdPdKqlcnt: this.searchFilter.soQdPdKqlcnt,
+            trangThai: this.STATUS.BAN_HANH,
+            lastest: 0,
+            paggingReq: {
+              limit: this.pageSize,
+              page: this.page - 1,
+            },
+            maDvi: this.userService.isTongCuc() ? '' : this.userInfo.MA_DVI
+          };
+        } else {
+          body = {
+            tuNgayQd: this.tuNgayQd != null ? dayjs(this.tuNgayQd).format('YYYY-MM-DD') + " 00:00:00" : null,
+            denNgayQd: this.denNgayQd != null ? dayjs(this.denNgayQd).format('YYYY-MM-DD') + " 23:59:59" : null,
+            loaiVthh: this.loaiVthh,
+            soQdPdKhlcnt: this.searchFilter.soQdPdKhlcnt,
+            soQdPdKqlcnt: this.searchFilter.soQdPdKqlcnt,
+            namKhoach: this.searchFilter.namKhoach,
+            trichYeu: this.searchFilter.trichYeu,
+            soQd: this.searchFilter.soQd,
+            lastest: 1,
+            paggingReq: {
+              limit: this.pageSize,
+              page: this.page - 1,
+            },
+            maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null
+          };
         }
         this.thongTinDauThauService
           .export(body)

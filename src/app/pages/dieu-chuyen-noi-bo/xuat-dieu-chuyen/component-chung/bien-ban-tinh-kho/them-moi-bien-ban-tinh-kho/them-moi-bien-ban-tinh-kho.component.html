@@ -378,7 +378,7 @@
                             <div nz-col nzSpan="12">Thừa: {{formData.value.chenhLechSlConLai >=0 ?
                                 makePositive(formData.value.chenhLechSlConLai): "" |number:'1.0-1' : 'vi_VN'}}
                             </div>
-                            <div nz-col nzSpan="12">Thiếu: {{formData.value.chenhLechSlConLai <= 0?
+                            <div nz-col nzSpan="12">Thiếu: {{formData.value.chenhLechSlConLai <0?
                                     makePositive(formData.value.chenhLechSlConLai): "" |number:'1.0-1' : 'vi_VN' }}
                                     </div>
 

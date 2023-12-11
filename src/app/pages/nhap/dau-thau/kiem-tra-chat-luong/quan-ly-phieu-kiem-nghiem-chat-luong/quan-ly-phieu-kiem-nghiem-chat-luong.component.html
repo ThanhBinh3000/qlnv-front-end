@@ -2,28 +2,46 @@
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
       <div class="search__body" nz-row [nzGutter]="20">
-        <div nz-col nzSpan="4">
-          <label class="search__label">Số QĐ</label>
-          <input class="search__input" placeholder="Nhập số quyết định" nz-input
-            [(ngModel)]="this.searchFilter.soQdNhap" />
+        <div nz-col nzSpan="3">
+          <label class="search__label"> Năm kế hoạch </label>
+          <nz-select [(ngModel)]="searchFilter.namKhoach">
+            <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+          </nz-select>
         </div>
         <div nz-col nzSpan="4">
-          <label class="search__label">Số phiếu</label>
-          <input class="search__input" placeholder="Nhập số phiếu" nz-input [(ngModel)]="this.searchFilter.soPhieu" />
+          <label class="search__label">Số QĐ giao NV nhập hàng</label>
+          <input [(ngModel)]="searchFilter.soQuyetDinh" nz-input nzSize="small" placeholder="Nhập số"
+                 appNumberOnly />
         </div>
         <div nz-col nzSpan="4">
-          <label class="search__label">Ngày lấy mẫu</label>
-          <nz-range-picker [(ngModel)]="searchFilter.ngayBanGiaoMau" nzFormat="dd/MM/yyyy">
-          </nz-range-picker>
+          <label class="search__label">Số phiếu kiểm nghiệm chất lượng</label>
+          <input class="search__input" placeholder="Nhập Số phiếu" nz-input [(ngModel)]="searchFilter.soPhieuKncl" />
         </div>
-        <div nz-col nzSpan="4">
-          <label class="search__label">Số hợp đồng</label>
-          <input class="search__input" placeholder="Nhập số hợp đồng" nz-input [(ngModel)]="searchFilter.soHopDong" />
+        <div nz-col nzSpan="5">
+          <label class="search__label">Ngày kiểm nghiệm</label>
+          <div nz-row [nzGutter]="24">
+            <div nz-col nzSpan="12" class="cus-start-date">
+              <nz-date-picker [nzDisabledDate]="disabledTuNgayKn" nzFormat="dd/MM/yyyy"
+                              [(ngModel)]="tuNgayKncl"
+                              nzPlaceHolder="Ngày bắt đầu">
+              </nz-date-picker>
+            </div>
+            <div nz-col nzSpan="12" class="cus-end-date">
+              <nz-date-picker [nzDisabledDate]="disabledDenNgayKn" nzFormat="dd/MM/yyyy"
+                              [(ngModel)]="denNgayKncl"
+                              nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+            </div>
+          </div>
         </div>
         <div nz-col nzSpan="4">
           <label class="search__label">Số biên bản lấy mẫu</label>
           <input class="search__input" placeholder="Nhập số biên bản lấy mẫu" nz-input
             [(ngModel)]="searchFilter.soBbBanGiao" />
+        </div>
+        <div nz-col nzSpan="4">
+          <label class="search__label">Số biên bản nhập đầy kho</label>
+          <input class="search__input" placeholder="Nhập số biên bản nhập đầy kho" nz-input
+            [(ngModel)]="searchFilter.soBbNhapDayKho" />
         </div>
       </div>
       <div class="cangiua group-button-search">
@@ -42,11 +60,6 @@
     <div class="group-button">
       <h3>DANH SÁCH PHIẾU KIỂM NGHIỆM CHẤT LƯỢNG</h3>
       <div class="buttons">
-        <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_XOA')" type="button" class="btn btn-do"
-          (click)="deleteSelect()">
-          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-          <span>Xóa</span>
-        </button>
         <button
           *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_THEM') && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_EXP')"
           type="button" class="btn btn-sub" (click)="export()">
@@ -115,20 +128,23 @@
                   <td>{{bb.ngayNhapDayKho | date: 'dd/MM/YYYY' }}</td>
                   <td>{{bb.tenTrangThai}}</td>
                   <td>
-                    <a *ngIf="hienThiXem(bb)" (click)="redirectToChiTiet(true, bb.id)">
+                    <a *ngIf="hienThiXem(bb)"
+                       (click)="redirectToChiTiet(true, bb.id)">
                       <i class="fa fa-eye" title="Xem chi tiết"></i>
                     </a>
                     <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_THEM') && (bb.trangThai == STATUS.DU_THAO
         || bb.trangThai == STATUS.TU_CHOI_LDC
-      || bb.trangThai == STATUS.TU_CHOI_TP)" (click)="redirectToChiTiet(false, bb.id)">
+      || bb.trangThai == STATUS.TU_CHOI_TP)"
+                       (click)="redirectToChiTiet(false, bb.id)">
                       <i class="fa fa-pencil" title="Sửa"></i>
                     </a>
                     <a *ngIf="(this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_DUYET_TP') && bb.trangThai == STATUS.CHO_DUYET_TP)
       || (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_DUYET_LDCUC') && bb.trangThai == STATUS.CHO_DUYET_LDC)"
-                      (click)="redirectToChiTiet(true, bb.id)">
+                       (click)="redirectToChiTiet(true, bb.id)">
                       <i class="icon htvbdh_tcdt_pheduyet"></i>
                     </a>
-                    <a *ngIf="bb.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_XOA')"
+                    <a
+                      *ngIf="bb.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_XOA')"
                       (click)="xoaItem(bb)">
                       <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     </a>

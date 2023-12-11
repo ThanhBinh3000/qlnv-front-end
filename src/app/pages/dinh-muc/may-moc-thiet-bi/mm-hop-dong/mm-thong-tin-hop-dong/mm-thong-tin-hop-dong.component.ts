@@ -1,20 +1,20 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {Validators} from "@angular/forms";
-import {Base2Component} from "../../../../../components/base2/base2.component";
-import {MESSAGE} from "../../../../../constants/message";
-import {STATUS} from "../../../../../constants/status";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { Validators } from "@angular/forms";
+import { Base2Component } from "../../../../../components/base2/base2.component";
+import { MESSAGE } from "../../../../../constants/message";
+import { STATUS } from "../../../../../constants/status";
 import dayjs from "dayjs";
-import {DialogMmMuaSamComponent} from "../../../../../components/dialog/dialog-mm-mua-sam/dialog-mm-mua-sam.component";
-import {QuyetDinhMuaSamService} from "../../../../../services/quyet-dinh-mua-sam.service";
-import {chain} from 'lodash';
+import { DialogMmMuaSamComponent } from "../../../../../components/dialog/dialog-mm-mua-sam/dialog-mm-mua-sam.component";
+import { QuyetDinhMuaSamService } from "../../../../../services/quyet-dinh-mua-sam.service";
+import { chain } from 'lodash';
 import * as uuid from "uuid";
-import {DanhMucService} from "../../../../../services/danhmuc.service";
-import {HopDongMmTbcdService} from "../../../../../services/hop-dong-mm-tbcd.service";
+import { DanhMucService } from "../../../../../services/danhmuc.service";
+import { HopDongMmTbcdService } from "../../../../../services/hop-dong-mm-tbcd.service";
 
 @Component({
   selector: 'app-mm-thong-tin-hop-dong',
@@ -286,7 +286,7 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
       this.dataTable.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
     }
@@ -302,7 +302,7 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
 
   cancelEdit(stt: number): void {
     this.dataEdit[stt] = {
-      data: {...this.dataTable[stt]},
+      data: { ...this.dataTable[stt] },
       edit: false
     };
   }
@@ -426,9 +426,9 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
   convertListData() {
     if (this.listHangHoa && this.listHangHoa.length > 0) {
       this.listHangHoa = chain(this.listHangHoa).groupBy('tenTaiSan').map((value, key) => ({
-          tenTaiSan: key,
-          dataChild: value
-        })
+        tenTaiSan: key,
+        dataChild: value
+      })
       ).value()
     }
     if (this.listHangHoa && this.listHangHoa.length > 0) {
@@ -474,12 +474,12 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
           let rs = chain(value)
             .groupBy("tenDviCha")
             .map((v, k) => {
-                return {
-                  idVirtual: uuid.v4(),
-                  tenDviCha: k,
-                  childData: v
-                }
+              return {
+                idVirtual: uuid.v4(),
+                tenDviCha: k,
+                childData: v
               }
+            }
             ).value();
           return {
             idVirtual: uuid.v4(),
@@ -570,6 +570,8 @@ export class MmHopDongCt {
   soLuong: number = 0;
   donViTinh: string;
   donGia: number = 0;
+  slMetQuyCuon?: number;
+  slCuon?: number;
   thanhTien: number = 0;
 }
 

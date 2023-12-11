@@ -1,27 +1,27 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { Base2Component } from 'src/app/components/base2/base2.component';
+import {Component, Input, OnInit} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {Base2Component} from 'src/app/components/base2/base2.component';
 import dayjs from 'dayjs';
-import { FileDinhKem } from 'src/app/models/FileDinhKem';
-import { MESSAGE } from 'src/app/constants/message';
-import { STATUS } from 'src/app/constants/status';
-import { Validators } from '@angular/forms';
+import {FileDinhKem} from 'src/app/models/FileDinhKem';
+import {MESSAGE} from 'src/app/constants/message';
+import {STATUS} from 'src/app/constants/status';
+import {Validators} from '@angular/forms';
 import {
   TongHopDanhSachHangDTQGService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/TongHopDanhSachHangDTQG.service";
 import {
   BaoCaoKqKdLuongThucHangDTQGService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/BaoCaoKqKdLuongThucHangDTQG.service";
-import { LOAI_HH_XUAT_KHAC } from "../../../../../../constants/config";
+import {LOAI_HH_XUAT_KHAC} from "../../../../../../constants/config";
 import {
   PhieuKiemNgiemClLuongThucHangDTQGService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/PhieuKiemNgiemClLuongThucHangDTQG.service";
 import { PREVIEW } from '../../../../../../constants/fileType';
-import { saveAs } from 'file-saver';
+import {saveAs} from 'file-saver';
 @Component({
   selector: 'them-moi-bao-cao-ket-qua-kiem-dinh-mau',
   templateUrl: './them-moi-bao-cao-ket-qua-kiem-dinh-mau.component.html',
@@ -30,6 +30,7 @@ import { saveAs } from 'file-saver';
 export class ThemMoiBaoCaoKetQuaKiemDinhMauComponent extends Base2Component implements OnInit {
   @Input() isView: boolean;
   @Input() idInput: number;
+  @Input() idTongHop: number;
   @Input() loaiVthh: string;
 
   expandSetString = new Set<string>();
@@ -108,7 +109,7 @@ export class ThemMoiBaoCaoKetQuaKiemDinhMauComponent extends Base2Component impl
               ...res.data,
               soBaoCao: res.data.soBaoCao?.split('/')[0] ?? null,
 
-            }, { emitEvent: false });
+            }, {emitEvent: false});
 
           }
         })
@@ -136,7 +137,7 @@ export class ThemMoiBaoCaoKetQuaKiemDinhMauComponent extends Base2Component impl
     }).then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
-        if (data && data.content && data.content.length > 0 && this.formData.value.maDanhSach == null) {
+        if (data && data.content && data.content.length > 0 && this.idTongHop == null) {
           this.listMaDs = data.content.filter(item => item.soBaoCao == null);
         } else {
           this.listMaDs = data.content
@@ -149,23 +150,63 @@ export class ThemMoiBaoCaoKetQuaKiemDinhMauComponent extends Base2Component impl
   }
 
   async save() {
-    this.formData.disable({ emitEvent: false });
+    this.formData.disable({emitEvent: false});
     let body = {
       ...this.formData.value,
       soBaoCao: this.formData.value.soBaoCao ? this.formData.value.soBaoCao + this.maHauTo : this.maHauTo,
     };
     let rs = await this.createUpdate(body)
-    this.formData.enable({ emitEvent: false });
+    this.formData.enable({emitEvent: false});
   }
 
   async saveAndSend(body: any, trangThai: string, msg: string, msgSuccess?: string) {
-    body = { ...body, soBaoCao: this.formData.value.soBaoCao + this.maHauTo }
+    body = {...body, soBaoCao: this.formData.value.soBaoCao + this.maHauTo}
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
   }
 
   quayLai() {
     this.showListEvent.emit();
   }
+  pheDuyet() {
+    let trangThai = '';
+    let msg = '';
+    switch (this.formData.get('trangThai').value) {
+      case STATUS.TU_CHOI_TP:
+      case STATUS.TU_CHOI_LDC:
+      case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_TP;
+        msg = 'Bạn có muốn gửi duyệt ?'
+        break;
+      }
+      case STATUS.CHO_DUYET_TP: {
+        trangThai = STATUS.CHO_DUYET_LDC;
+        msg = 'Bạn có chắc chắn muốn phê duyệt ?'
+        break;
+      }
+      case STATUS.CHO_DUYET_LDC: {
+        trangThai = STATUS.DA_DUYET_LDC;
+        msg = 'Bạn có chắc chắn muốn phê duyệt ?'
+        break;
+      }
+    }
+    this.approve(this.idInput, trangThai, msg);
+  }
+
+  tuChoi() {
+    let trangThai = '';
+    switch (this.formData.value.trangThai) {
+      case STATUS.CHO_DUYET_LDC: {
+        trangThai = STATUS.TU_CHOI_LDC;
+        break;
+      }
+      case STATUS.CHO_DUYET_TP: {
+        trangThai = STATUS.TU_CHOI_TP;
+        break;
+      }
+    }
+    this.reject(this.idInput, trangThai)
+  }
+
 
   async changeMaDs($event: any) {
     try {
@@ -239,7 +280,7 @@ export class ThemMoiBaoCaoKetQuaKiemDinhMauComponent extends Base2Component impl
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
-    } else {
+    }else {
       this.kiemTraCl = false;
     }
   }

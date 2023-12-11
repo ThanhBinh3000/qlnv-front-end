@@ -104,10 +104,10 @@
                   (click)="redirectToChiTiet(false, 0,item.id)">
                   <i class="fa fa-plus"></i>
                 </a>
-                <!--                <a *ngIf="item.trangThai != STATUS.DA_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_THEM')"-->
-                <!--                  (click)="redirectToChiTiet(false, item.id)">-->
-                <!--                  <i class="fa fa-pencil" title="Sửa"></i>-->
-                <!--                </a>-->
+<!--                <a *ngIf="item.trangThai != STATUS.DA_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_THEM')"-->
+<!--                  (click)="redirectToChiTiet(false, item.id)">-->
+<!--                  <i class="fa fa-pencil" title="Sửa"></i>-->
+<!--                </a>-->
                 <!-- <a *ngIf="item.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_XOA')"
                   (click)="xoaItem(item)">
                   <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
@@ -168,7 +168,8 @@
                       <td>{{phieuKtraCl.phieuNhapKho?.ngayNhapKho}}</td>
                       <td>{{phieuKtraCl.tenTrangThai}}</td>
                       <td nzRight>
-                        <a *ngIf="hienThiXem(phieuKtraCl)" (click)="redirectToChiTiet(true, phieuKtraCl.id)">
+                        <a *ngIf="hienThiXem(phieuKtraCl)"
+                          (click)="redirectToChiTiet(true, phieuKtraCl.id)">
                           <i class="fa fa-eye" title="Xem chi tiết"></i>
                         </a>
                         <a *ngIf="(phieuKtraCl.trangThai == STATUS.DU_THAO || phieuKtraCl.trangThai == STATUS.TU_CHOI_LDCC) && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_THEM')"
@@ -176,7 +177,7 @@
                           <i class="fa fa-pencil" title="Sửa"></i>
                         </a>
                         <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_DUYET_LDCCUC') && phieuKtraCl.trangThai == STATUS.CHO_DUYET_LDCC "
-                          (click)="redirectToChiTiet(true, phieuKtraCl.id)">
+                           (click)="redirectToChiTiet(true, phieuKtraCl.id)">
                           <i class="icon htvbdh_tcdt_pheduyet"></i>
                         </a>
                         <a *ngIf="phieuKtraCl.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_XOA')"

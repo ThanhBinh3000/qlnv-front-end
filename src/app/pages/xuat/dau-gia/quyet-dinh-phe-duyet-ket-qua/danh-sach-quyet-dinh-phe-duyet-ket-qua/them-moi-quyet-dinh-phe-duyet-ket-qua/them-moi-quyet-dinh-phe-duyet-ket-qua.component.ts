@@ -1,11 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Base2Component } from "../../../../../../components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { DanhMucService } from "../../../../../../services/danhmuc.service";
+import {Component, Input, OnInit} from '@angular/core';
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
 import {
   QdPdKetQuaBanDauGiaService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service";
@@ -16,17 +15,15 @@ import {
   QuyetDinhPdKhBdgService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service";
 import * as dayjs from "dayjs";
-import { Validators } from "@angular/forms";
-import { STATUS } from "../../../../../../constants/status";
-import { MESSAGE } from "../../../../../../constants/message";
+import {Validators} from "@angular/forms";
+import {STATUS} from "../../../../../../constants/status";
+import {MESSAGE} from "../../../../../../constants/message";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import { cloneDeep } from 'lodash';
-import { PREVIEW } from "../../../../../../constants/fileType";
-import { saveAs } from 'file-saver';
-import { FileDinhKem } from "../../../../../../models/CuuTro";
-import { LOAI_HANG_DTQG } from 'src/app/constants/config';
+import {cloneDeep} from 'lodash';
+import {FileDinhKem} from "../../../../../../models/CuuTro";
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 
 @Component({
   selector: 'app-them-moi-quyet-dinh-phe-duyet-ket-qua',
@@ -39,18 +36,14 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
   @Input() isView: boolean;
   @Input() isViewOnModal: boolean;
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
+  templateNameVt = "Quyết định kết quả bán đấu giá vật tư";
+  templateNameLt = "Quyết định kết quả bán đấu giá lương thực";
   fileDinhKems: any[] = []
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
   loadDsQuyetDinhKq: any[] = [];
   dataMaThongBao: any[] = [];
   maTrinh: String;
-  templateName = "quyet_dinh_phe_duyet_ket_qua";
-  templateNameVt = "quyet_dinh_phe_duyet_ket_qua_vat_tu";
-  showDlgPreview = false;
-  pdfBlob: any;
-  pdfSrc: any;
-  wordSrc: any;
   maHauTo: any;
 
   constructor(
@@ -59,10 +52,9 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private danhMucService: DanhMucService,
-    private qdPdKetQuaBanDauGiaService: QdPdKetQuaBanDauGiaService,
     private thongTinDauGiaService: ThongTinDauGiaService,
     private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
+    private qdPdKetQuaBanDauGiaService: QdPdKetQuaBanDauGiaService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBanDauGiaService);
     this.formData = this.fb.group({
@@ -161,7 +153,6 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
   async save() {
     try {
       await this.helperService.ignoreRequiredForm(this.formData);
-      this.formData.controls["soQdKq"].setValidators([Validators.required]);
       this.formData.controls["maThongBao"].setValidators([Validators.required]);
       const soQdKq = this.formData.value.soQdKq;
       const body = {
@@ -187,6 +178,8 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
       await super.saveAndSend(body, trangThai, msg, msgSuccess);
     } catch (e) {
       console.error('Error: ', e);
+    } finally {
+      await this.helperService.restoreRequiredForm(this.formData);
     }
   }
 
@@ -203,10 +196,6 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
       if (res && res.msg === MESSAGE.SUCCESS) {
         const maThongBaoSet = new Set(this.loadDsQuyetDinhKq.map(item => item.maThongBao));
         this.dataMaThongBao = res.data.content.filter(item => !maThongBaoSet.has(item.maThongBao));
-      } else if (res && res.msg) {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      } else {
-        this.notification.error(MESSAGE.ERROR, 'Unknown error occurred.');
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH THÔNG BÁO BÁN ĐẤU GIÁ',
@@ -250,14 +239,14 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
       }
       const dataQd = resQd.data;
       this.formData.patchValue({
-        loaiHinhNx: dataQd.xhQdPdKhBdg ? dataQd.xhQdPdKhBdg.loaiHinhNx : dataQd.xhQdDchinhKhBdgHdr.loaiHinhNx,
-        tenLoaiHinhNx: dataQd.xhQdPdKhBdg ? dataQd.xhQdPdKhBdg.tenLoaiHinhNx : dataQd.xhQdDchinhKhBdgHdr.tenLoaiHinhNx,
-        kieuNhapXuat: dataQd.xhQdPdKhBdg ? dataQd.xhQdPdKhBdg.kieuNx : dataQd.xhQdDchinhKhBdgHdr.kieuNx,
-        tenKieuNhapXuat: dataQd.xhQdPdKhBdg ? dataQd.xhQdPdKhBdg.tenKieuNx : dataQd.xhQdDchinhKhBdgHdr.tenKieuNx,
-        idQdPd: data.idQdPd,
+        loaiHinhNx: dataQd.xhQdPdKhBdg.loaiHinhNx,
+        tenLoaiHinhNx: dataQd.xhQdPdKhBdg.tenLoaiHinhNx,
+        kieuNhapXuat: dataQd.xhQdPdKhBdg.kieuNx,
+        tenKieuNhapXuat: dataQd.xhQdPdKhBdg.tenKieuNx,
+        idQdPd: dataQd.xhQdPdKhBdg.type === 'QDDC' ? dataQd.xhQdPdKhBdg.idQdPd : dataQd.idHdr,
         idQdPdDtl: data.idQdPdDtl,
         soQdPd: data.soQdPd,
-        idQdDc: data.idQdDc,
+        idQdDc: dataQd.xhQdPdKhBdg.type === 'QDDC' ? dataQd.idHdr : null,
         soQdDc: data.soQdDc,
         idThongBao: data.id,
         maThongBao: data.maThongBao,
@@ -266,7 +255,7 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
         tenLoaiVthh: data.tenLoaiVthh,
         cloaiVthh: data.cloaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
-        moTaHangHoa: dataQd.xhQdPdKhBdg ? dataQd.xhQdPdKhBdg.moTaHangHoa : dataQd.xhQdDchinhKhBdgHdr.moTaHangHoa,
+        moTaHangHoa: data.moTaHangHoa,
         phuongThucGiaoNhan: dataQd.pthucGnhan,
         tgianGiaoNhanNgay: dataQd.tgianGnhan,
         tgianGnhanGhiChu: dataQd.tgianGnhanGhiChu,
@@ -279,7 +268,7 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
       this.dataTable.forEach(s => {
         s.children = s.children.filter(f => f.toChucCaNhan);
       });
-      this.calculatorTable(this.dataTable);
+      this.calculatorTable(dataQd);
     } catch (e) {
       console.error('Error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -289,22 +278,20 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
   }
 
   calculatorTable(data) {
-    let slDviTsanThanhCong: number = 0;
-    data.forEach((item) => {
+    this.dataTable.forEach((item) => {
       item.children.forEach((child) => {
         child.thanhTien = child.soLuongDeXuat * child.donGiaTraGia
+        child.giaKhoiDiem = child.soLuongDeXuat * child.donGiaDeXuat
       })
       item.tongSoLuong = item.children.reduce((total, child) => total + child.soLuongDeXuat, 0);
-      item.tongGiaKhoiDiem = item.children.reduce((total, child) => total + child.donGiaDeXuat, 0);
       item.tongTienDatTruoc = item.children.reduce((total, child) => total + child.soTienDatTruoc, 0);
       item.tongThanhTien = item.children.reduce((total, child) => total + child.thanhTien, 0);
-      slDviTsanThanhCong += item.children.length;
     });
     this.formData.patchValue({
-      slDviTsanThanhCong: slDviTsanThanhCong,
-      slDviTsanKhongThanh: this.formData.value.tongDviTsan - slDviTsanThanhCong,
-      tongSlXuat: data.reduce((total, child) => total + child.tongSoLuong, 0),
-      thanhTien: data.reduce((total, child) => total + child.tongThanhTien, 0),
+      slDviTsanThanhCong: data.soDviTsanThanhCong,
+      slDviTsanKhongThanh: data.slDviTsanKhongThanh,
+      tongSlXuat: this.dataTable.reduce((total, child) => total + child.tongSoLuong, 0),
+      thanhTien: this.dataTable.reduce((total, child) => total + child.tongThanhTien, 0),
     })
   }
 
@@ -315,75 +302,26 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
       maDvi: this.userInfo.MA_DVI,
     }
     let res = await this.qdPdKetQuaBanDauGiaService.search(body)
-    if (res.msg == MESSAGE.SUCCESS) {
-      const data = res.data
-      if (data && data.content && data.content.length > 0) {
-        this.loadDsQuyetDinhKq = data.content
-      }
-    } else {
+    if (res.msg !== MESSAGE.SUCCESS) {
       this.notification.error(MESSAGE.ERROR, res.msg);
+      return;
     }
+    const data = res.data.content;
+    if (!data || data.length === 0) {
+      return;
+    }
+    this.loadDsQuyetDinhKq = data
   }
 
   setValidForm() {
-    this.formData.controls["nam"].setValidators([Validators.required]);
-    this.formData.controls["trichYeu"].setValidators([Validators.required]);
-    this.formData.controls["ngayHieuLuc"].setValidators([Validators.required]);
-    this.formData.controls["ngayKy"].setValidators([Validators.required]);
-    this.formData.controls["loaiHinhNx"].setValidators([Validators.required]);
-    this.formData.controls["tenLoaiHinhNx"].setValidators([Validators.required]);
-    this.formData.controls["kieuNhapXuat"].setValidators([Validators.required]);
-    this.formData.controls["tenKieuNhapXuat"].setValidators([Validators.required]);
-    this.formData.controls["soBienBan"].setValidators([Validators.required]);
-    this.formData.controls["loaiVthh"].setValidators([Validators.required]);
-    this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
-    this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
-    this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
-  }
-
-  async preview(id) {
-    let tenBaoCao;
-    if (this.loaiVthh == "02") {
-      tenBaoCao = this.templateNameVt
-    } else {
-      tenBaoCao = this.templateName
-    }
-    await this.qdPdKetQuaBanDauGiaService.preview({
-      tenBaoCao: tenBaoCao,
-      id: id
-    }).then(async res => {
-      if (res.data) {
-        this.printSrc = res.data.pdfSrc;
-        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
-        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
-        this.showDlgPreview = true;
-      } else {
-        this.notification.error(MESSAGE.ERROR, "Lỗi trong quá trình tải file.");
-      }
+    const fieldsToValidate = [
+      "soQdKq",
+      "trichYeu",
+      "maThongBao",
+      "soBienBan",
+    ];
+    fieldsToValidate.forEach(field => {
+      this.formData.controls[field].setValidators([Validators.required]);
     });
-  }
-
-  downloadPdf() {
-    let tenBaoCao;
-    if (this.loaiVthh == "02") {
-      tenBaoCao = this.templateNameVt
-    } else {
-      tenBaoCao = this.templateName
-    }
-    saveAs(this.pdfSrc, tenBaoCao + ".pdf");
-  }
-
-  downloadWord() {
-    let tenBaoCao;
-    if (this.loaiVthh == "02") {
-      tenBaoCao = this.templateNameVt
-    } else {
-      tenBaoCao = this.templateName
-    }
-    saveAs(this.wordSrc, tenBaoCao + ".docx");
-  }
-
-  closeDlg() {
-    this.showDlgPreview = false;
   }
 }

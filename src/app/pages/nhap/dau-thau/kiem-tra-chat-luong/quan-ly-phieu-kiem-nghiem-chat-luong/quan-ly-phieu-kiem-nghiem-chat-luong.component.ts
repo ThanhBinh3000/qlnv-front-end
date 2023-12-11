@@ -6,27 +6,23 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuanLyPhieuKiemNghiemChatLuongHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyPhieuKiemNghiemChatLuongHang.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
-import { UserService } from 'src/app/services/user.service';
 import { MESSAGE } from 'src/app/constants/message';
 import * as dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
-import { Globals } from 'src/app/shared/globals';
-import { BaseComponent } from 'src/app/components/base/base.component';
-import { QuyetDinhGiaoNvNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/mua-truc-tiep/qdinh-giao-nvu-nh/quyetDinhGiaoNvNhapHang.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
-import { STATUS } from "../../../../../constants/status";
+import {STATUS} from "../../../../../constants/status";
+import {Base2Component} from "../../../../../components/base2/base2.component";
 
 @Component({
   selector: 'app-quan-ly-phieu-kiem-nghiem-chat-luong',
   templateUrl: './quan-ly-phieu-kiem-nghiem-chat-luong.component.html',
   styleUrls: ['./quan-ly-phieu-kiem-nghiem-chat-luong.component.scss'],
 })
-export class QuanLyPhieuKiemNghiemChatLuongComponent extends BaseComponent implements OnInit {
+export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component implements OnInit {
   @Input() typeVthh: string;
   toDay = new Date();
   last30Day = new Date(
@@ -36,35 +32,11 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends BaseComponent imple
   dataTable: any[] = [];
   dataTableAll: any[] = [];
   searchFilter = {
-    soQdNhap: '',
-    ngayBanGiaoMau: [this.last30Day, this.toDay],
-    soHopDong: '',
-    diemkho: '',
-    nhaKho: '',
-    nganLoBaoQuan: '',
-    maDvi: '',
-    maHhoa: '',
-    maKho: '',
-    maNgan: '',
-    ngayKnghiemDenNgay: '',
-    ngayKnghiemTuNgay: '',
-    orderBy: '',
-    orderDirection: '',
-    soPhieu: '',
-    str: '',
-    trangThai: '',
-    pageNumber: '',
-    pageSize: '',
+    namKhoach: '',
+    soQuyetDinh: '',
+    soPhieuKncl: '',
     soBbBanGiao: '',
-  };
-  filterTable = {
-    soQuyetDinhNhap: '',
-    soPhieu: '',
-    ngayBanGiaoMau: null,
-    tenDiemKho: '',
-    tenDvi: '',
-    soLuongMauHangKt: '',
-    trangThaiDuyet: '',
+    soBbNhapDayKho: '',
   };
   listDiemKho: any[] = [];
   listNganKho: any[] = [];
@@ -86,16 +58,20 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends BaseComponent imple
 
   allChecked = false;
   indeterminate = false;
-
+  tuNgayKncl: Date | null = null;
+  denNgayKncl: Date | null = null;
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private donViService: DonviService,
     private phieuKiemNghiemChatLuongHangService: QuanLyPhieuKiemNghiemChatLuongHangService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService
   ) {
-    super(httpClient, storageService, phieuKiemNghiemChatLuongHangService);
+    super(httpClient, storageService, notification, spinner, modal, phieuKiemNghiemChatLuongHangService);
   }
 
   async ngOnInit() {
@@ -154,7 +130,14 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends BaseComponent imple
         "page": this.page - 1
       },
       loaiVthh: this.typeVthh,
-      trangThai: this.STATUS.BAN_HANH
+      trangThai: this.STATUS.BAN_HANH,
+      namNhap: this.searchFilter.namKhoach,
+      soQd: this.searchFilter.soQuyetDinh,
+      soPhieuKncl: this.searchFilter.soPhieuKncl,
+      soBbBanGiao: this.searchFilter.soBbBanGiao,
+      soBbNhapDayKho: this.searchFilter.soBbNhapDayKho,
+      tuNgayKncl: this.tuNgayKncl != null ? dayjs(this.tuNgayKncl).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayKncl: this.denNgayKncl != null ? dayjs(this.denNgayKncl).format('YYYY-MM-DD') + " 24:59:59" : null,
     };
     let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -175,7 +158,7 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends BaseComponent imple
       // });
       this.dataTableAll = cloneDeep(this.dataTable);
       for (let i = 0; i < this.dataTable.length; i++) {
-        if (this.dataTable[i].listPhieuKiemNghiemCl != null && this.dataTable[i].listPhieuKiemNghiemCl.length > 0) {
+        if (this.dataTable[i].listPhieuKiemNghiemCl !=null && this.dataTable[i].listPhieuKiemNghiemCl.length > 0) {
           this.expandSet.add(i);
         }
       }
@@ -216,27 +199,14 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends BaseComponent imple
 
   clearFilter() {
     this.searchFilter = {
-      soQdNhap: '',
-      ngayBanGiaoMau: null,
-      soHopDong: '',
-      diemkho: '',
-      nhaKho: '',
-      nganLoBaoQuan: '',
-      maDvi: '',
-      maHhoa: '',
-      maKho: '',
-      maNgan: '',
-      ngayKnghiemDenNgay: '',
-      ngayKnghiemTuNgay: '',
-      orderBy: '',
-      orderDirection: '',
-      soPhieu: '',
-      str: '',
-      trangThai: '',
-      pageNumber: '',
-      pageSize: '',
+      namKhoach: '',
+      soQuyetDinh: '',
+      soPhieuKncl: '',
       soBbBanGiao: '',
+      soBbNhapDayKho: '',
     };
+    this.tuNgayKncl = null;
+    this.denNgayKncl = null;
     this.search();
   }
 
@@ -342,34 +312,20 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends BaseComponent imple
     }
   }
 
-  clearFilterTable() {
-    this.filterTable = {
-      soQuyetDinhNhap: '',
-      soPhieu: '',
-      ngayBanGiaoMau: null,
-      tenDiemKho: '',
-      tenDvi: '',
-      soLuongMauHangKt: '',
-      trangThaiDuyet: '',
-    };
-  }
-
   async export() {
     if (this.totalRecord && this.totalRecord > 0) {
       this.spinner.show();
       try {
         let body = {
-          maDvi: this.userInfo.MA_DVI,
-          maVatTuCha: this.isTatCa ? null : this.typeVthh,
-          ngayBanGiaoMauTu: this.searchFilter.ngayBanGiaoMau
-            ? dayjs(this.searchFilter.ngayBanGiaoMau[0]).format('YYYY-MM-DD')
-            : null,
-          ngayBanGiaoMauDen: this.searchFilter.ngayBanGiaoMau
-            ? dayjs(this.searchFilter.ngayBanGiaoMau[1]).format('YYYY-MM-DD')
-            : null,
-          soPhieu: this.searchFilter.soPhieu || null,
-          soQdNhap: this.searchFilter.soQdNhap || null,
-          soBbBanGiao: this.searchFilter.soBbBanGiao || null,
+          loaiVthh: this.typeVthh,
+          trangThai: this.STATUS.BAN_HANH,
+          namNhap: this.searchFilter.namKhoach,
+          soQd: this.searchFilter.soQuyetDinh,
+          soPhieuKncl: this.searchFilter.soPhieuKncl,
+          soBbBanGiao: this.searchFilter.soBbBanGiao,
+          soBbNhapDayKho: this.searchFilter.soBbNhapDayKho,
+          tuNgayKncl: this.tuNgayKncl != null ? dayjs(this.tuNgayKncl).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denNgayKncl: this.denNgayKncl != null ? dayjs(this.denNgayKncl).format('YYYY-MM-DD') + " 24:59:59" : null,
           pageNumber: this.page,
           pageSize: this.pageSize,
         };
@@ -415,18 +371,32 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends BaseComponent imple
     }
   }
 
-  hienThiXem(data) {
+  hienThiXem(data){
     if (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_XEM') && data != null) {
-      if (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_THEM') && (data.trangThai == STATUS.DU_THAO
+      if(this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_THEM') && (data.trangThai == STATUS.DU_THAO
         || data.trangThai == STATUS.TU_CHOI_LDC
-        || data.trangThai == STATUS.TU_CHOI_TP)) {
+      || data.trangThai == STATUS.TU_CHOI_TP)) {
         return false;
       } else if ((this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
-        || (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC)) {
+      || (this.userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC)) {
         return false;
       }
       return true;
     }
     return false;
   }
+
+  disabledTuNgayKn = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayKncl) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayKncl.getTime();
+  };
+
+  disabledDenNgayKn = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayKncl) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayKncl.getTime();
+  };
 }

@@ -1,24 +1,24 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { STATUS } from 'src/app/constants/status';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { TongHopPhuongAnGiaService } from 'src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
-import { chain } from "lodash";
-import { v4 as uuidv4 } from "uuid";
-import { PAGE_SIZE_DEFAULT, TYPE_PAG } from 'src/app/constants/config';
-import { saveAs } from 'file-saver';
-import { PREVIEW } from "../../../../../../../constants/fileType";
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
+import {STATUS} from 'src/app/constants/status';
+import {UserLogin} from 'src/app/models/userlogin';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {DanhMucTieuChuanService} from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
+import {DonviService} from 'src/app/services/donvi.service';
+import {HelperService} from 'src/app/services/helper.service';
+import {TongHopPhuongAnGiaService} from 'src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service';
+import {UserService} from 'src/app/services/user.service';
+import {Globals} from 'src/app/shared/globals';
+import {chain} from "lodash";
+import {v4 as uuidv4} from "uuid";
+import {PAGE_SIZE_DEFAULT, TYPE_PAG} from 'src/app/constants/config';
+import {saveAs} from 'file-saver';
+import {PREVIEW} from "../../../../../../../constants/fileType";
 import printJS from "print-js";
 
 @Component({
@@ -92,7 +92,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         ngayDxTu: [],
         ngayDxDen: [],
         ngayTongHop: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
-        noiDung: [null, [Validators.required]],
+        noiDung: [null],
         ghiChu: [],
         giaKsTt: [],
         giaKsTtVat: [],
@@ -105,6 +105,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         trangThaiTt: [],
         tenTrangThaiTh: [],
         tenTrangThaiTt: [],
+        kieuTongHop: [],
       }
     );
     this.formTraCuu = this.fb.group(
@@ -114,10 +115,10 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         loaiVthh: [null, [Validators.required]],
         cloaiVthh: [null, [Validators.required]],
         loaiGia: [null, [Validators.required]],
-        maDvis: [[]],
         ngayDxTu: [null],
         ngayDxDen: [null],
         loai: ['00'],
+        kieuTongHop: ['00'],
       }
     );
   }
@@ -125,14 +126,12 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     this.isMuaToiDa = this.type == TYPE_PAG.GIA_MUA_TOI_DA ? true : false;
-    await Promise.all([
-      this.userInfo = this.userService.getUserLogin(),
-      this.loadDsNam(),
-      this.getListCuc(),
-      this.loadDsVthh(),
-      this.loadDsLoaiGia(),
-      this.getDataDetail(this.idInput),
-    ])
+    this.userInfo = this.userService.getUserLogin();
+    this.loadDsNam();
+    this.getListCuc();
+    this.loadDsVthh();
+    this.loadDsLoaiGia();
+    await this.getDataDetail(this.idInput);
     this.spinner.hide();
   }
 
@@ -141,7 +140,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     const res = await this.donviService.layTatCaDonViByLevel(2);
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.length > 0) {
-        this.listCuc.push({ tenDvi: "Tất cả", maDvi: "all", type: "DV" })
+        this.listCuc.push({tenDvi: "Tất cả", maDvi: "all", type: "DV"})
         this.listCuc = [...this.listCuc, res.data].flat();
         if (this.listCuc && this.listCuc.length > 0) {
           this.listCuc = this.listCuc.filter(item => item.type != 'PB')
@@ -164,7 +163,8 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         maDvis: data.maDvis,
         ngayDxTu: data.ngayDxTu,
         ngayDxDen: data.ngayDxDen,
-        loaiGia: data.loaiGia
+        loaiGia: data.loaiGia,
+        kieuTongHop: data.kieuTongHop,
       });
       this.listCucSelected = data.maDvis && data.maDvis.length > 0 ? data.maDvis : []
       this.bindingDataTongHop(res.data, null)
@@ -216,11 +216,18 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       this.spinner.hide();
       return;
     }
+    if (this.validateGiaBTc() && this.type == 'GCT') {
+      this.notification.warning(MESSAGE.WARNING, "Không tìm thấy quyết định của BTC cho loại hàng hóa!")
+      this.spinner.hide();
+      return;
+    }
     let body = this.formData.value;
     body.fileDinhKemReq = this.fileDinhKem;
     body.type = this.type;
-    body.pagChiTiets = this.dataTable
-    body.tchuanCluong = this.tieuChuanCl
+    body.pagChiTiets = this.dataTable;
+    body.tchuanCluong = this.tieuChuanCl;
+    body.kieuTongHop = this.formTraCuu.value.kieuTongHop;
+    body.maDvis = this.listCucSelected.toString();
     let res = await this.tongHopPhuongAnGiaService.create(body);
     if (res.msg == MESSAGE.SUCCESS) {
       if (this.idInput > 0) {
@@ -234,6 +241,19 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     }
 
     this.spinner.hide();
+  }
+
+  validateGiaBTc() {
+      let rs = false;
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach(it => {
+          if (! it.giaQdBtc || it.giaQdBtc == 0) {
+            rs = true;
+            return;
+          }
+        });
+      }
+      return rs;
   }
 
   async loadDsVthh() {
@@ -272,13 +292,18 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       this.spinner.show();
       this.helperService.markFormGroupTouched(this.formTraCuu);
       if (this.formTraCuu.invalid) {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
+        this.notification.warning(MESSAGE.WARNING, MESSAGE.FORM_REQUIRED_ERROR);
         this.spinner.hide();
         return;
       }
+      if (this.listCucSelected.length == 0) {
+          this.notification.warning(MESSAGE.WARNING,'Chưa nhập danh sách Cục DTNNKV');
+          this.spinner.hide();
+          return;
+      }
       let body = this.formTraCuu.value;
       body.type = this.type;
-      body.maDvis = this.listCucSelected
+      body.maDvis = this.listCucSelected && this.listCucSelected.length > 0 ? this.listCucSelected.toString() : null;
       let res = await this.tongHopPhuongAnGiaService.tongHop(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.isTongHop = true;
@@ -299,6 +324,8 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   }
 
   bindingDataTongHop(data, reqBody) {
+    console.log(data,111)
+    console.log(reqBody,222)
     let giaKsTt = data.giaKsTtTu && data.giaKsTtDen ? Intl.NumberFormat('vi-VN').format(data.giaKsTtTu) + " - " + Intl.NumberFormat('vi-VN').format(data.giaKsTtDen) : null;
     let giaKsTtVat = data.giaKsTtVatTu && data.giaKsTtVatDen ? Intl.NumberFormat('vi-VN').format(data.giaKsTtVatTu) + " - " + Intl.NumberFormat('vi-VN').format(data.giaKsTtVatDen) : null;
     let kqTd = data.giaTdTu && data.giaTdDen ? Intl.NumberFormat('vi-VN').format(data.giaTdTu) + " - " + Intl.NumberFormat('vi-VN').format(data.giaTdDen) : null;
@@ -311,7 +338,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       loaiVthh: data.loaiVthh ?? reqBody.loaiVthh,
       cloaiVthh: data.cloaiVthh ?? reqBody.cloaiVthh,
       loaiGia: data.loaiGia ?? reqBody.loaiGia,
-      maDvis: data.maDvis ?? reqBody.maDvis,
+      maDvis:  data && data.maDvis ? data.maDvis : (reqBody && reqBody.maDvis ) ? reqBody.maDvis : null ,
       ngayDxTu: data.ngayDxTu ? data.ngayDxTu : (reqBody && reqBody.ngayDxTu ? reqBody.ngayDxTu : null),
       ngayDxDen: data.ngayDxDen ? data.ngayDxDen : (reqBody && reqBody.ngayDxDen ? reqBody.ngayDxDen : null),
       noiDung: data.noiDung,
@@ -439,7 +466,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   }
 
   doPrint() {
-    printJS({ printable: this.printSrc, type: 'pdf', base64: true });
+    printJS({printable: this.printSrc, type: 'pdf', base64: true});
   }
 
   downloadWord() {
@@ -447,6 +474,22 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       saveAs(this.wordSrc, "tong_hop_phuong_an_gia_gct.docx");
     } else {
       saveAs(this.wordSrc, "tong_hop_phuong_an_gia_gmtdbtt.docx");
+    }
+  }
+
+  calcTong(tenDvi?: string) {
+    if (this.dataTable && this.dataTable.length > 0) {
+      let arr: any[]  = [];
+      if (tenDvi) {
+        arr = this.dataTable.filter(item => item.tenDvi == tenDvi);
+      } else {
+        arr = this.dataTable
+      }
+      const sum = arr.reduce((prev, cur) => {
+        prev += cur.soLuong;
+        return prev;
+      }, 0);
+      return sum;
     }
   }
 }

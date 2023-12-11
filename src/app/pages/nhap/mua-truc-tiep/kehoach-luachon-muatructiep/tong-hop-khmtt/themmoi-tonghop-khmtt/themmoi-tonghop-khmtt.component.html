@@ -4,19 +4,16 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button type="button" class="btn btn-sub do" (click)="preview(previewName)">
-      <i class="icon htvbdh_tcdt_tuchoi"></i>
-      <span>Xem trước</span>
+    <button *ngIf="formData.value.id" type="button" class="btn btn-sub xanh-nhat" (click)="preview(previewName)">
+      <i class=" icon htvbdh_tcdt_print"></i>
+      <span>In/xem trước</span>
     </button>
-    <button
-      *ngIf="!isView && formData.value.trangThai == STATUS.CHUA_TAO_QD && formData.value.trangThai != null && isTongHop"
-      type="button" class="btn btn-sub xanh-nhat" (click)="taoQdinh()">
+    <button *ngIf="!isView && formData.value.trangThai == STATUS.CHUA_TAO_QD && formData.value.trangThai != null && isTongHop" type="button"
+      class="btn btn-sub xanh-nhat" (click)="taoQdinh()">
       <i class="icon htvbdh_tcdt_tao-qd"></i>
       <span>Tạo quyết định</span>
     </button>
-    <button
-      *ngIf="(!isView && formData.value.trangThai == STATUS.CHUA_TAO_QD && formData.value.trangThai != null && isTongHop)"
-      type="button" class="btn btn-main" (click)="save()">
+    <button *ngIf="(!isView && formData.value.trangThai == STATUS.CHUA_TAO_QD && formData.value.trangThai != null && isTongHop)" type="button" class="btn btn-main" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
@@ -51,7 +48,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng DTQG </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : selectHangHoa()">
                 <input [readonly]="isView" nz-input formControlName="tenLoaiVthh" />
@@ -61,7 +58,7 @@
         </div>
         <div nz-col [nzSpan]="18">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : selectHangHoa()">
                 <input [readonly]="isView" nz-input formControlName="tenCloaiVthh" />
@@ -170,8 +167,7 @@
               <td>{{ data.trichYeu }}</td>
               <td>{{ data.tenDuAn }}</td>
               <td class="text-right">{{ data.tongSoLuong | number: '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ (data.tongMucDt ? data.tongMucDt : (data.tongSoLuong * data.donGiaVat * 1000)) |
-                number: '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-right">{{ (data.tongMucDt ? data.tongMucDt : (data.tongSoLuong * data.donGiaVat * 1000)) | number: '1.0-1' : 'vi_VN' }}</td>
             </tr>
           </tbody>
         </nz-table>
@@ -189,25 +185,28 @@
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
 </ng-template>
 <div *ngIf="isQuyetDinh" class="chi-tiet">
-  <app-themmoi-quyetdinh-khmtt [id]="idSelected" [dataTongHop]="formData.value" [disableField]="disableField"
-    [isView]="isView" (showListEvent)="showTongHop()">
+  <app-themmoi-quyetdinh-khmtt [id]="idSelected" [dataTongHop]="formData.value" [disableField]="disableField" [isView]="isView"
+    (showListEvent)="showTongHop()">
   </app-themmoi-quyetdinh-khmtt>
 </div>
 <nz-modal [(nzVisible)]="showDlgPreview" nzTitle="TỔNG HỢP ĐỀ XUẤT KẾ HOẠCH MUA TRỰC TIẾP" nzWidth="100%"
-  (nzOnCancel)="closeDlg()">
+          (nzOnCancel)="closeDlg()">
   <div *nzModalContent class="modal__content">
     <pdf-viewer [src]="pdfSrc" [render-text]="true" style="width: 100%; height: 650px;"></pdf-viewer>
   </div>
   <div *nzModalFooter>
-    <button nz-button (click)="printPreview()" class="modal__button--save">
+    <button nz-button (click)="printPreview()"
+            class="modal__button--save">
       <i class="icon htvbdh_printer"></i>
       In
     </button>
-    <button nz-button (click)="downloadPdf(previewName)" class="modal__button--save">
+    <button nz-button (click)="downloadPdf(previewName)"
+            class="modal__button--save">
       <i class="icon htvbdh_file-pdf"></i>
       Xuất .pdf
     </button>
-    <button nz-button (click)="downloadWord(previewName)" class="modal__button--save">
+    <button nz-button (click)="downloadWord(previewName)"
+            class="modal__button--save">
       <i class="icon htvbdh_file-word"></i>
       Xuất .docx
     </button>

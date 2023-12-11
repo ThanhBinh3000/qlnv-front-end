@@ -1,35 +1,36 @@
 <div class="bg-trang">
   <nz-card class="mt16 flex-card p-lr16 mg-t-10">
-    <nz-table #basicTable [nzData]="listHopDong" [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered
-      class="mt-2">
+    <nz-table #basicTable [nzData]="listHopDong" [nzFrontPagination]="false"
+              [nzShowPagination]="false" nzBordered class="mt-2">
       <thead>
-        <tr>
-          <th width="40px" class="text-center">STT</th>
-          <th>Số hợp đồng</th>
-          <th width="200px">Tên hợp đồng</th>
-          <th>Gói thầu</th>
-          <th>Chủ đầu tư</th>
-          <th>Nhà thầu</th>
-          <th width="130px">Ngày ký hợp đồng</th>
-          <th width="130px">Giá trị hợp đồng</th>
-          <th width="130px">Trạng thái HĐ</th>
-          <th width="100px" class="text-center">Tiến độ thực hiện</th>
-        </tr>
+      <tr>
+        <th width="40px" class="text-center">STT</th>
+        <th>Số hợp đồng</th>
+        <th width="200px">Tên hợp đồng</th>
+        <th>Gói thầu</th>
+        <th>Chủ đầu tư</th>
+        <th>Nhà thầu</th>
+        <th width="130px">Ngày ký hợp đồng</th>
+        <th width="130px">Giá trị hợp đồng</th>
+        <th width="130px">Trạng thái HĐ</th>
+        <th width="100px" class="text-center">Tiến độ thực hiện</th>
+      </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let data of listHopDong; let i = index" style="cursor: pointer"
-          [ngClass]="{'bg-selected': data.selected}" (click)="selectRow(data)">
-          <td>{{ i + 1}}</td>
-          <td>{{ data.hopDong?.soHd }}</td>
-          <td>{{ data.hopDong?.tenHd }}</td>
-          <td>{{ data.noiDung }}</td>
-          <td>{{ data.chuDauTu }}</td>
-          <td>{{ data.nhaThauTrung }}</td>
-          <td>{{ data.hopDong?.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
-          <td>{{ data.hopDong?.thanhTien | number : '1.0-1' : 'vi_VN'}}</td>
-          <td class="text-left">{{ data.hopDong?.tenTrangThai }}</td>
-          <td class="text-left">{{ data.tenTrangThaiTd }}</td>
-        </tr>
+      <tr *ngFor="let data of listHopDong; let i = index"
+          style="cursor: pointer" [ngClass]="{'bg-selected': data.selected}"
+          (click)="selectRow(data)">
+        <td>{{ i + 1}}</td>
+        <td>{{ data.hopDong?.soHd }}</td>
+        <td>{{ data.hopDong?.tenHd }}</td>
+        <td>{{ data.noiDung }}</td>
+        <td>{{ data.chuDauTu }}</td>
+        <td>{{ data.nhaThauTrung }}</td>
+        <td>{{ data.hopDong?.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
+        <td>{{ data.hopDong?.thanhTien | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-left">{{  data.hopDong?.tenTrangThai  }}</td>
+        <td class="text-left">{{  data.tenTrangThaiTd  }}</td>
+      </tr>
       </tbody>
     </nz-table>
   </nz-card>
@@ -37,22 +38,19 @@
     <div class="header header-green-background">
       <div class="header-text">
         <div class="title-chi-tieu">
-          <span
-            [ngClass]="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)  ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
-            {{(itemHopDong && itemHopDong.trangThaiTd && itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH) ? 'ĐÃ HOÀN
-            THÀNH' : 'CHƯA THỰC HIỆN' }}
-          </span>
+      <span
+        [ngClass]="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)  ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+        {{(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)  ? 'ĐÃ HOÀN THÀNH' : 'CHƯA THỰC HIỆN' }}
+      </span>
           <span>TIẾN ĐỘ CÔNG VIỆC</span>
         </div>
       </div>
       <div class="btn-group">
-        <button class="btn btn-sub xanh-nhat ml-2" (click)="hoanThanh()"
-          *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH) && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_TDCV_THEM')">
+        <button class="btn btn-sub xanh-nhat ml-2" (click)="hoanThanh()" *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH) && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_TDCV_THEM')">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Hoàn thành</span>
         </button>
-        <button class="btn btn-main btn-sm waves-effect waves-light ml-2" (click)="save()"
-          *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH) && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_TDCV_THEM')">
+        <button class="btn btn-main btn-sm waves-effect waves-light ml-2" (click)="save()" *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH) && userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_TDCV_THEM')">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
@@ -75,8 +73,7 @@
         <div nz-col nzSpan="6">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Số QĐ phê duyệt KQ LCNT</nz-form-label>
-            <span class="text-blue">{{itemHopDong && itemHopDong.hopDong && itemHopDong.hopDong.soQdPdKqlcnt ?
-              itemHopDong.hopDong.soQdPdKqlcnt : ''}}</span>
+            <span class="text-blue">{{itemHopDong && itemHopDong.hopDong && itemHopDong.hopDong.soQdPdKqlcnt ? itemHopDong.hopDong.soQdPdKqlcnt : ''}}</span>
           </nz-form-item>
         </div>
       </div>
@@ -91,214 +88,195 @@
       </button>
     </div>
   </div>
-  <nz-table class="nowrap mg-t-10" [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false"
-    nzBordered [nzScroll]="dataTable && dataTable.length ? { x: '2500px' } : null">
+  <nz-table class="nowrap mg-t-10"  [nzData]="dataTable" [nzFrontPagination]="false"
+            [nzShowPagination]="false" nzBordered [nzScroll]="dataTable && dataTable.length ? { x: '2500px' } : null">
     <thead>
-      <tr>
-        <th nzWidth="40px" rowSpan="3" class="text-center">STT</th>
-        <th class="text-center" rowSpan="3">Tháng</th>
-        <th class="text-center" rowSpan="3" nzWidth="250px">Tên công tác/hạng mục công việc</th>
-        <th class="text-center" rowSpan="3" nzWidth="100px">ĐVT</th>
-        <th class="text-center" colSpan="5">Khối lượng</th>
-        <th class="text-center" colSpan="2">Đơn giá thanh toán</th>
-        <th class="text-center" colSpan="5">Thành tiền</th>
-        <th class="text-center" rowSpan="3">Ghi chú</th>
-        <!--      <th class="text-center" rowSpan="3" nzWidth="100px" nzRight *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">Hành động</th>-->
-        <th class="text-center" rowSpan="3" nzWidth="100px" nzRight>Hành động</th>
-      </tr>
-      <tr>
-        <th class="text-center" colSpan="2">Tổng số</th>
-        <th class="text-center" colSpan="3">Thực hiện</th>
-        <th class="text-center" rowSpan="2">Theo hợp đồng</th>
-        <th class="text-center" rowSpan="2">Đơn giá bổ sung</th>
-        <th class="text-center" colSpan="2">Tổng số</th>
-        <th class="text-center" colSpan="3">Thực hiện</th>
-      </tr>
-      <tr>
-        <th class="text-center">KL theo HĐ <br> ban đầu</th>
-        <th class="text-center">KL phát sinh so <br> với HĐ ban đầu</th>
-        <th class="text-center">Lũy kế đến <br> hết kì trước</th>
-        <th class="text-center">Thực hiện <br> kỳ này</th>
-        <th class="text-center">Lũy kế đến <br> hết kỳ này</th>
-        <th class="text-center">Theo HĐ <br> ban đầu</th>
-        <th class="text-center">Phát sinh so <br> với HĐ ban đầu</th>
-        <th class="text-center">Lũy kế đến <br> hết kỳ trước</th>
-        <th class="text-center">Thực hiện <br> kỳ này</th>
-        <th class="text-center">Lũy kế đến <br> hết kỳ này</th>
-      </tr>
-      <tr>
-        <th></th>
-        <th>
-          <nz-select [(ngModel)]="rowItemCha.thang">
-            <nz-option *ngFor="let p of listThang" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
-          </nz-select>
-        </th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <!--      <th class="text-center" nzRight *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">-->
-        <th class="text-center" nzRight>
-          <a (click)="themItemcha()">
-            <i class="table-icon icon htvbdh_dau-cong"></i>
-          </a>
-          <a>
-            <i class="table-icon fa fa-trash-o do"></i>
-          </a>
-        </th>
-      </tr>
+    <tr>
+      <th nzWidth="40px" rowSpan="3" class="text-center">STT</th>
+      <th class="text-center" rowSpan="3">Tháng</th>
+      <th class="text-center" rowSpan="3" nzWidth="250px">Tên công tác/hạng mục công việc</th>
+      <th class="text-center" rowSpan="3" nzWidth="100px">ĐVT</th>
+      <th class="text-center" colSpan="5">Khối lượng</th>
+      <th class="text-center" colSpan="2">Đơn giá thanh toán</th>
+      <th class="text-center" colSpan="5">Thành tiền</th>
+      <th class="text-center" rowSpan="3">Ghi chú</th>
+      <!--      <th class="text-center" rowSpan="3" nzWidth="100px" nzRight *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">Hành động</th>-->
+      <th class="text-center" rowSpan="3" nzWidth="100px" nzRight >Hành động</th>
+    </tr>
+    <tr>
+      <th class="text-center" colSpan="2">Tổng số</th>
+      <th class="text-center" colSpan="3">Thực hiện</th>
+      <th class="text-center" rowSpan="2">Theo hợp đồng</th>
+      <th class="text-center" rowSpan="2">Đơn giá bổ sung</th>
+      <th class="text-center" colSpan="2">Tổng số</th>
+      <th class="text-center" colSpan="3">Thực hiện</th>
+    </tr>
+    <tr>
+      <th class="text-center">KL theo HĐ <br> ban đầu</th>
+      <th class="text-center">KL phát sinh so <br> với HĐ ban đầu</th>
+      <th class="text-center">Lũy kế đến <br> hết kì trước</th>
+      <th class="text-center">Thực hiện <br> kỳ này</th>
+      <th class="text-center">Lũy kế đến <br> hết kỳ này</th>
+      <th class="text-center">Theo HĐ <br> ban đầu</th>
+      <th class="text-center">Phát sinh so <br> với HĐ ban đầu</th>
+      <th class="text-center">Lũy kế đến <br> hết kỳ trước</th>
+      <th class="text-center">Thực hiện <br> kỳ này</th>
+      <th class="text-center">Lũy kế đến <br> hết kỳ này</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th>
+        <nz-select [(ngModel)]="rowItemCha.thang">
+          <nz-option *ngFor="let p of listThang" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+        </nz-select>
+      </th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th ></th>
+      <!--      <th class="text-center" nzRight *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">-->
+      <th class="text-center" nzRight>
+        <a (click)="themItemcha()">
+          <i class="table-icon icon htvbdh_dau-cong"></i>
+        </a>
+        <a>
+          <i class="table-icon fa fa-trash-o do"></i>
+        </a>
+      </th>
+    </tr>
     </thead>
     <tbody>
-      <ng-container *ngFor="let data of dataTable , let idx = index">
-        <tr>
-          <td [nzExpand]="expandSet.has(data.idVirtual)" (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
-          <td class="font-weight-bold">{{data.thang}}</td>
+    <ng-container *ngFor="let data of dataTable , let idx = index">
+      <tr>
+        <td [nzExpand]="expandSet.has(data.idVirtual)" (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
+        <td class="font-weight-bold">{{data.thang}}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <!--        <td class="text-center" nzRight *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">-->
+        <td class="text-center" nzRight>
+          <a (click)="themMoiItem(data, idx, dataTable[idx])">
+            <i class="table-icon icon htvbdh_dau-cong"></i>
+          </a>
+          <a (click)="deleteItemCha(idx)">
+            <i class="table-icon fa fa-trash-o do"></i>
+          </a>
+        </td>
+      </tr>
+      <ng-container *ngIf="expandSet.has(data.idVirtual)">
+        <tr *ngFor="let item of data.dataChild, let y = index">
           <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <!--        <td class="text-center" nzRight *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">-->
-          <td class="text-center" nzRight>
-            <a (click)="themMoiItem(data, idx, dataTable[idx])">
-              <i class="table-icon icon htvbdh_dau-cong"></i>
+          <td class="text-right font-weight-bold">{{y + 1}}</td>
+          <td>{{item.tenCongViec}}</td>
+          <td>{{item.donViTinh}}</td>
+          <td class="text-right">{{item.klTheoHd | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right" *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">{{item.klPhatSinh | number : '1.0-1' : 'vi_VN'}}</td>
+          <td *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="item.klPhatSinh" [nzMin]="0"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </td>
+          <td class="text-right" *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">{{item.klLuyKeTruoc | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right" *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="item.klLuyKeTruoc" [nzMin]="0"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </td>
+          <td class="text-right" *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">{{item.klThucHien | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right" *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="item.klThucHien" [nzMin]="0"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </td>
+          <td class="text-right" *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">{{item.klLuyKeCuoi | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right" *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="item.klLuyKeCuoi" [nzMin]="0"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </td>
+          <td class="text-right" *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">{{item.giaTheoHd | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right" *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="item.giaTheoHd" [nzMin]="0"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </td>
+          <td class="text-right" *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">{{item.giaBoSung | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right" *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="item.giaBoSung" [nzMin]="0"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </td>
+          <td class="text-right">{{item.ttTheoHd | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right" *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">{{item.ttPhatSinh | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right" *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="item.ttPhatSinh" [nzMin]="0"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </td>
+          <td class="text-right" *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">{{item.ttLuyKeTruoc | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right" *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="item.ttLuyKeTruoc" [nzMin]="0"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </td>
+          <td class="text-right" *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">{{item.ttThucHien | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right" *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="item.ttThucHien" [nzMin]="0"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </td>
+          <td class="text-right" *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">{{item.ttLuyKeCuoi | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-right" *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="item.ttLuyKeCuoi" [nzMin]="0"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </td>
+          <td>{{item.ghiChu}}</td>
+          <!--          <td class="text-center" nzRight *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)" >-->
+          <td class="text-center" nzRight >
+            <a (click)="themMoiItem(item, y, dataTable[idx])">
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a (click)="deleteItemCha(idx)">
-              <i class="table-icon fa fa-trash-o do"></i>
+            <a (click)="deleteItem(idx, y)">
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>
-        <ng-container *ngIf="expandSet.has(data.idVirtual)">
-          <tr *ngFor="let item of data.dataChild, let y = index">
-            <td></td>
-            <td class="text-right font-weight-bold">{{y + 1}}</td>
-            <td>{{item.tenCongViec}}</td>
-            <td>{{item.donViTinh}}</td>
-            <td class="text-right">{{item.klTheoHd | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="text-right"
-              *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
-              {{item.klPhatSinh | number : '1.0-1' : 'vi_VN'}}</td>
-            <td *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
-              <nz-input-number [nzSize]="'small'" [(ngModel)]="item.klPhatSinh" [nzMin]="0"
-                [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-              </nz-input-number>
-            </td>
-            <td class="text-right"
-              *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
-              {{item.klLuyKeTruoc | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="text-right"
-              *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
-              <nz-input-number [nzSize]="'small'" [(ngModel)]="item.klLuyKeTruoc" [nzMin]="0"
-                [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-              </nz-input-number>
-            </td>
-            <td class="text-right"
-              *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
-              {{item.klThucHien | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="text-right"
-              *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
-              <nz-input-number [nzSize]="'small'" [(ngModel)]="item.klThucHien" [nzMin]="0"
-                [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-              </nz-input-number>
-            </td>
-            <td class="text-right"
-              *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
-              {{item.klLuyKeCuoi | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="text-right"
-              *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
-              <nz-input-number [nzSize]="'small'" [(ngModel)]="item.klLuyKeCuoi" [nzMin]="0"
-                [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-              </nz-input-number>
-            </td>
-            <td class="text-right"
-              *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
-              {{item.giaTheoHd | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="text-right"
-              *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
-              <nz-input-number [nzSize]="'small'" [(ngModel)]="item.giaTheoHd" [nzMin]="0"
-                [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-              </nz-input-number>
-            </td>
-            <td class="text-right"
-              *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
-              {{item.giaBoSung | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="text-right"
-              *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
-              <nz-input-number [nzSize]="'small'" [(ngModel)]="item.giaBoSung" [nzMin]="0"
-                [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-              </nz-input-number>
-            </td>
-            <td class="text-right">{{item.ttTheoHd | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="text-right"
-              *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
-              {{item.ttPhatSinh | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="text-right"
-              *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
-              <nz-input-number [nzSize]="'small'" [(ngModel)]="item.ttPhatSinh" [nzMin]="0"
-                [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-              </nz-input-number>
-            </td>
-            <td class="text-right"
-              *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
-              {{item.ttLuyKeTruoc | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="text-right"
-              *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
-              <nz-input-number [nzSize]="'small'" [(ngModel)]="item.ttLuyKeTruoc" [nzMin]="0"
-                [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-              </nz-input-number>
-            </td>
-            <td class="text-right"
-              *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
-              {{item.ttThucHien | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="text-right"
-              *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
-              <nz-input-number [nzSize]="'small'" [(ngModel)]="item.ttThucHien" [nzMin]="0"
-                [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-              </nz-input-number>
-            </td>
-            <td class="text-right"
-              *ngIf="(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
-              {{item.ttLuyKeCuoi | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="text-right"
-              *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)">
-              <nz-input-number [nzSize]="'small'" [(ngModel)]="item.ttLuyKeCuoi" [nzMin]="0"
-                [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-              </nz-input-number>
-            </td>
-            <td>{{item.ghiChu}}</td>
-            <!--          <td class="text-center" nzRight *ngIf="!(itemHopDong && itemHopDong.trangThaiTd &&  itemHopDong.trangThaiTd == STATUS.DA_HOAN_THANH)" >-->
-            <td class="text-center" nzRight>
-              <a (click)="themMoiItem(item, y, dataTable[idx])">
-                <i class="fa fa-pencil" title="Sửa"></i>
-              </a>
-              <a (click)="deleteItem(idx, y)">
-                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-              </a>
-            </td>
-          </tr>
-        </ng-container>
       </ng-container>
+    </ng-container>
     </tbody>
   </nz-table>
 </div>

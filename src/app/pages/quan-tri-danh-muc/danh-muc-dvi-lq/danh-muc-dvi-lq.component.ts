@@ -11,6 +11,7 @@ import {MESSAGE} from "../../../constants/message";
 import {DanhMucService} from "../../../services/danhmuc.service";
 import {ThemMoiDmDviLqComponent} from "./them-moi-dm-dvi-lq/them-moi-dm-dvi-lq.component";
 import {DanhMucDviLqService} from "../../../services/quantri-danhmuc/danh-muc-dvi-lq.service";
+import {Router} from "@angular/router";
 @Component({
   selector: 'app-danh-muc-dvi-lq',
   templateUrl: './danh-muc-dvi-lq.component.html',
@@ -28,7 +29,8 @@ export class DanhMucDviLqComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private dmDviLqService : DanhMucDviLqService,
-    private dmService : DanhMucService
+    private dmService : DanhMucService,
+    private router : Router
   ) {
     super(httpClient, storageService, notification, spinner, modal, dmDviLqService);
     super.ngOnInit()
@@ -43,6 +45,9 @@ export class DanhMucDviLqComponent extends Base2Component implements OnInit {
   }
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QTDM_DM_DVI_LIENQUAN')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();

@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import {Router} from '@angular/router';
 import {DINH_MUC_ROUTE_LIST} from './dinh-muc.constant';
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-dinh-muc',
@@ -22,6 +23,7 @@ export class DinhMucComponent implements OnInit {
 
   constructor(
     private router: Router,
+    public  userService : UserService
   ) {
   }
 

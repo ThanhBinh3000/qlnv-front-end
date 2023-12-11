@@ -32,6 +32,9 @@ import { includes } from 'lodash';
 import { kmr_IQ } from 'ng-zorro-antd/i18n';
 import { STATUS } from '../../../../../constants/status';
 import { AMOUNT_NO_DECIMAL } from '../../../../../Utility/utils';
+import { PREVIEW } from '../../../../../constants/fileType';
+import printJS from 'print-js';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-thong-tin-thong-tri-duyet-y-du-toan',
@@ -80,6 +83,17 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   chiTietList: any[] = [];
   STATUS = STATUS;
   amount = AMOUNT_NO_DECIMAL;
+  showDlgPreview = false;
+  pdfSrc: any;
+  wordSrc: any;
+  excelSrc: any;
+  printSrc: any;
+  reportTemplate: any = {
+    typeFile: '',
+    fileName: '',
+    tenBaoCao: '',
+    trangThai: '',
+  };
 
   constructor(
     private modal: NzModalService,
@@ -123,7 +137,6 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   }
 
   initForm() {
-    console.log(this.itemThongTri, 'this.itemThongTrithis.itemThongTrithis.itemThongTri');
     this.formData = this.fb.group({
       id: [this.itemThongTri ? this.itemThongTri.id : null, []],
       nam: [this.itemThongTri ? this.itemThongTri.nam : null, [Validators.required]],
@@ -144,6 +157,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
       tenDviThuHuong: [this.itemThongTri ? this.itemThongTri.tenDviThuHuong : null],
       dviThuHuongStk: [this.itemThongTri ? this.itemThongTri.dviThuHuongStk : null],
       dviThuHuongNganHang: [this.itemThongTri ? this.itemThongTri.dviThuHuongNganHang : null],
+      lyDoTuChoi: [this.itemThongTri ? this.itemThongTri.lyDoTuChoi : null],
     });
   }
 
@@ -273,7 +287,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             // this.back();
           } else {
-            console.log(res.data, 'res.datares.datares.data');
+            console.log(res.data,'res.datares.datares.data');
             this.guiDuyet(res.data.id);
           }
         } else {
@@ -480,19 +494,22 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         let item = {
           'dvCungCapHang': 'Tổng cục dự trữ nhà nước',
           'nganHang': null,
-          'id': 'BTC',
+          'id': 9999,
           'soTaiKhoan': null,
           'maHopDong': '',
         };
         this.listDviThuHuong.push(item);
         this.formData.patchValue({
           'dviThuHuong': this.listDviThuHuong[0].id,
+          'tenLoaiTien': 'VNĐ',
+          'loaiTien': '01'
         });
       } else {
         let res = await this.deNghiCapPhiBoNganhService.dsThuHuong({
           maBoNganh: this.formData.value.dviThongTri,
           maTh: this.formData.value.soDnCapVon,
         });
+        console.log();
         if (res.msg == MESSAGE.SUCCESS && res.data) {
           this.listDviThuHuong = res.data;
         }
@@ -512,6 +529,39 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
       });
     }
   }
+  templateName = 'cap-von-thong-tri-duyet-y-du-toan';
 
-  protected readonly AMOUNT_NO_DECIMAL = AMOUNT_NO_DECIMAL;
+  async preview(id) {
+    this.spinner.show();
+    await this.thongTriDuyetYCapVonService.preview({
+      tenBaoCao: this.templateName + '.docx',
+      id: id,
+    }).then(async res => {
+      if (res.data) {
+        this.printSrc = res.data.pdfSrc;
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
+      }
+    });
+    this.spinner.hide();
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, this.templateName + '.pdf');
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, this.templateName + '.docx');
+  }
+
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true });
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
 }

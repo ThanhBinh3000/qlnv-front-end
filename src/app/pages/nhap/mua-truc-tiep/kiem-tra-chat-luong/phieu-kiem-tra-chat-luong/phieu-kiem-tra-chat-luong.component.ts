@@ -159,7 +159,7 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
       tuNgayGiamDinh: this.tuNgayGiamDinh != null ? dayjs(this.tuNgayGiamDinh).format('YYYY-MM-DD') + " 00:00:00" : null,
       denNgayGiamDinh: this.denNgayGiamDinh != null ? dayjs(this.denNgayGiamDinh).format('YYYY-MM-DD') + " 23:59:59" : null,
       tuLapPhieu: this.tuLapPhieu != null ? dayjs(this.tuLapPhieu).format('YYYY-MM-DD') + " 00:00:00" : null,
-      denNgayTao: this.denLapPhieu != null ? dayjs(this.denLapPhieu).format('YYYY-MM-DD') + " 23:59:59" : null,
+      denNgayTao: this.denLapPhieu != null ? dayjs(this.denLapPhieu).format('YYYY-MM-DD') + " 23:59:59": null,
       trangThai: STATUS.BAN_HANH
     };
     let res = await this.quyetDinhGiaoNvNhapHangService.search(body);
@@ -301,7 +301,7 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
           tuNgayGiamDinh: this.tuNgayGiamDinh != null ? dayjs(this.tuNgayGiamDinh).format('YYYY-MM-DD') + " 00:00:00" : null,
           denNgayGiamDinh: this.denNgayGiamDinh != null ? dayjs(this.denNgayGiamDinh).format('YYYY-MM-DD') + " 23:59:59" : null,
           tuLapPhieu: this.tuLapPhieu != null ? dayjs(this.tuLapPhieu).format('YYYY-MM-DD') + " 00:00:00" : null,
-          denLapPhieu: this.denLapPhieu != null ? dayjs(this.denLapPhieu).format('YYYY-MM-DD') + " 23:59:59" : null,
+          denLapPhieu: this.denLapPhieu != null ? dayjs(this.denLapPhieu).format('YYYY-MM-DD') + " 23:59:59": null,
           "ngayKiemTraDenNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 1
             ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
             : null,

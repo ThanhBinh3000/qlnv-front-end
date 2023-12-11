@@ -5,6 +5,8 @@ import { UserService } from 'src/app/services/user.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserLogin } from 'src/app/models/userlogin';
+import { DialogThongTinCanBoComponent } from 'src/app/components/dialog/dialog-thong-tin-can-bo/dialog-thong-tin-can-bo.component';
+import { UserAPIService } from 'src/app/services/user/userApi.service';
 
 @Component({
   selector: 'app-header',
@@ -20,10 +22,11 @@ export class HeaderComponent implements OnInit {
     private modal: NzModalService,
     private authService: AuthService,
     private userService: UserService,
+    private userAPIService: UserAPIService,
     private notification: NzNotificationService,
     private _modalService: NzModalService,
     private router: Router,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.userInfo = this.userService.getUserLogin();
@@ -106,20 +109,40 @@ export class HeaderComponent implements OnInit {
       nzStyle: { top: '50px' },
       nzWidth: 600,
     });
-    modal.afterClose.subscribe((b) => {});
+    modal.afterClose.subscribe((b) => { });
   }
 
   showModalThongTinCaNhan() {
-    let modal = this._modalService.create({
-      // nzContent: ModalThongTinCaNhanComponent,
-      nzComponentParams: {},
-      // nzClosable: false,
-      nzTitle: 'Thông tin cá nhân',
+    let data = {
+      id: this.userInfo.ID,
+      userType: this.userInfo.CAP_DVI === "0" ? "BN" : "DT",
+      fullName: this.userInfo.TEN_DAY_DU,
+      email: "",
+      username: this.userInfo.sub,
+      position: this.userInfo.POSITION,
+      phoneNo: this.userInfo.DON_VI.sdt,
+      status: this.userInfo.DON_VI.active,
+      sysType: "",
+      dvql: this.userInfo.MA_DVI,
+      department: this.userInfo.MA_PHONG_BAN,
+      ghiChu: this.userInfo.DON_VI.ghiChu
+    }
+    let modal = this.modal.create({
+      nzTitle: 'THÔNG TIN CÁN BỘ',
+      nzContent: DialogThongTinCanBoComponent,
+      nzMaskClosable: false,
+      nzClosable: true,
+      nzWidth: '900px',
       nzFooter: null,
-      nzStyle: { top: '50px' },
-      nzWidth: 800,
+      nzComponentParams: {
+        dataEdit: data,
+        isView: true,
+        isOld: true
+      },
     });
-    modal.afterClose.subscribe((b) => {});
+    modal.afterClose.subscribe((data) => {
+
+    })
   }
 
   logOut() {
@@ -131,6 +154,7 @@ export class HeaderComponent implements OnInit {
       nzOkDanger: true,
       nzWidth: '350px',
       nzOnOk: () => {
+        this.userAPIService.logout()
         this.authService.logout();
       },
     });

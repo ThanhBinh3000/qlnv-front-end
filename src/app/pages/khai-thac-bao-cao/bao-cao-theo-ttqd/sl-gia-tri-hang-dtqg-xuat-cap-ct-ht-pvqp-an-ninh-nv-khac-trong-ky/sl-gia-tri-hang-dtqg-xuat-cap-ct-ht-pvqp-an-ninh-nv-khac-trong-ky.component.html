@@ -1,7 +1,6 @@
 <div class="luong-thuc__danh-sach">
   <div class="bg-trang">
-    <h3 class="text-uppercase">Số lượng và giá trị hàng xuất cứu trợ, hỗ trợ, phục vụ quốc phòng, an ninh và nv khác
-      trong kỳ</h3>
+    <h3 class="text-uppercase">Số lượng và giá trị hàng xuất cứu trợ, hỗ trợ, phục vụ quốc phòng, an ninh và nv khác trong kỳ</h3>
     <nz-card class="mt16 flex-card p-lr16">
       <form nzLayout="vertical" nz-form [formGroup]="formData">
         <ng-template #error let-control>
@@ -10,7 +9,7 @@
         <div nz-row [nzGutter]="24">
           <div nz-col [nzSpan]="3">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Năm
+              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Năm
               </nz-form-label>
               <nz-select formControlName="nam">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
@@ -19,37 +18,59 @@
           </div>
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Loại báo cáo
+              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Loại kỳ báo cáo
               </nz-form-label>
-              <nz-select formControlName="loaiBc">
-                <nz-option *ngFor="let p of dsLoaiBc" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-              </nz-select>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-select formControlName="loaiKyBc" (ngModelChange)="changLoaiKyBc($event)">
+                  <nz-option *ngFor="let p of listLoaiKyBc" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+                </nz-select>
+              </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="6">
+
+          <div nz-col [nzSpan]="4" *ngIf="formData.value.loaiKyBc && formData.value.loaiKyBc == '02' ">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Cục DTNN KV
+              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Kỳ báo cáo
               </nz-form-label>
-              <nz-select formControlName="dviBaoCao">
-                <nz-option *ngFor="let p of dsDonVi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
-              </nz-select>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-select formControlName="quy">
+                  <nz-option *ngFor="let p of listKyBc" [nzValue]="p.giaTri" [nzLabel]="p.ma"></nz-option>
+                </nz-select>
+              </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="6">
+
+          <div nz-col [nzSpan]="6" *ngIf="userService.isTongCuc()">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Chi cục DTNN
-              </nz-form-label>
-              <nz-select formControlName="dviNhanBaoCao">
-                <nz-option *ngFor="let p of dsDonVi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
-              </nz-select>
+              <nz-form-label [nzXs]="6">Cục DTNN KV</nz-form-label>
+              <nz-form-control nz-col [nzErrorTip]="error">
+                <nz-select [(ngModel)]="maCuc" [ngModelOptions]="{standalone: true}"
+                           (ngModelChange)="changeCuc($event)">
+                  <nz-option *ngFor="let p of dsDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="6" *ngIf="!userService.isTongCuc() || userService.isCuc()">
+            <nz-form-item>
+              <nz-form-label [nzXs]="6">Chi Cục DTNN</nz-form-label>
+              <nz-form-control nz-col [nzErrorTip]="error">
+                <nz-select [(ngModel)]="maChiCuc" [ngModelOptions]="{standalone: true}">
+                  <nz-option *ngFor="let p of listChiCuc" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
+                </nz-select>
+              </nz-form-control>
             </nz-form-item>
           </div>
         </div>
       </form>
     </nz-card>
-    <div class="group-button">
-      <button type="button" class="btn btn-sub" (click)="preView()"
-        *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_EXP1')">
+    <div class="text-right">
+      <button nz-button class="search__button--clear" (click)="clearFilter()">
+        <i class="icon  htvbdh_nhap-lai1"></i>
+        Xóa điều kiện
+      </button>
+      <button nz-button class="search__button--search" (click)="preView()"
+              *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_EXP1')">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Kết xuất báo cáo</span>
       </button>
@@ -64,7 +85,8 @@
     </pdf-viewer>
   </div>
   <div *nzModalFooter>
-    <button nz-button (click)="downloadPdf()" class="modal__button--save">
+    <button nz-button (click)="downloadPdf()"
+            class="modal__button--save">
       <i class="icon htvbdh_tcdt_tuchoi"></i>
       Tải báo cáo
     </button>

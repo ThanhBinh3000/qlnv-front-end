@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
+<nz-affix [nzOffsetTop]="globals.prop.MN_LV1" class="btn-affix">
   <div class="btn-group">
     <button type="button" class="btn btn-sub" (click)="quayLai()">
       <i class="fa fa-arrow-left"></i>
@@ -47,8 +47,8 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfter="/{{maQd}}">
-                  <nz-input-number formControlName="soQd" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1" [nzSize]="'small'"
-                                   [nzDisabled]="isDisabled()">
+                  <nz-input-number formControlName="soQd" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
+                    [nzSize]="'small'" [nzDisabled]="isDisabled()">
                   </nz-input-number>
                 </nz-input-group>
               </nz-form-control>
@@ -78,7 +78,7 @@
                 <label nz-radio nzValue="TH">Chọn mã tổng hợp</label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTh()">
-                    <input [readonly]="true" nz-input formControlName="idTongHop" readonly="true"/>
+                    <input [readonly]="true" nz-input formControlName="idTongHop" readonly="true" />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -86,7 +86,7 @@
                 <label nz-radio nzValue="TTr">Chọn số đề xuất/ tờ trình</label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTr()">
-                    <input [readonly]="true" nz-input formControlName="idDx" readonly="true"/>
+                    <input [readonly]="true" nz-input formControlName="idDx" readonly="true" />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -105,7 +105,7 @@
 
           <div nz-col [nzSpan]="6">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
+              <nz-form-label [nzNoColon]="true"> Loại hình xuất</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24">
                 <nz-input-group>
                   <input [readonly]="true" nz-input formControlName="loaiNhapXuat" readonly="true" />
@@ -170,39 +170,39 @@
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
       <nz-table #quyetDinhPdDtl class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="formData.value.quyetDinhPdDtl">
         <thead>
-        <tr>
-          <th style="width: 35px">STT</th>
-          <th>Đơn vị đề xuất</th>
-          <th>Số công văn / đề xuất</th>
-          <th>Ngày ký</th>
-          <th>Trích yếu</th>
-          <th>SL xuất cứu trợ, viện trợ</th>
-          <th>Thành tiền (đ)</th>
-        </tr>
+          <tr>
+            <th style="width: 35px">STT</th>
+            <th>Đơn vị đề xuất</th>
+            <th>Số công văn / đề xuất</th>
+            <th>Ngày ký</th>
+            <th>Trích yếu</th>
+            <th>SL xuất cứu trợ, viện trợ</th>
+            <th>Thành tiền (đ)</th>
+          </tr>
         </thead>
         <tbody>
-        <ng-container *ngFor="let item of quyetDinhPdDtl.data, let i = index;">
-          <tr [ngClass]="{'bg-selected': item.selected}" (click)="selectRow(item)">
-            <td>{{i + 1}}</td>
-            <td>{{item.tenDviDx}}</td>
-            <td>{{item.soDx}}</td>
-            <td>{{item.ngayPduyetDx}}</td>
-            <td>{{item.trichYeuDx}}</td>
-            <td>{{item.tongSoLuongDx|number: '1.0-1'}}</td>
-            <td>{{item.thanhTienDx|number: '1.0-1'}}</td>
-          </tr>
-        </ng-container>
+          <ng-container *ngFor="let item of quyetDinhPdDtl.data, let i = index;">
+            <tr [ngClass]="{'bg-selected': item.selected}" (click)="selectRow(item)">
+              <td>{{i + 1}}</td>
+              <td>{{item.tenDviDx}}</td>
+              <td>{{item.soDx}}</td>
+              <td>{{item.ngayPduyetDx}}</td>
+              <td>{{item.trichYeuDx}}</td>
+              <td>{{item.tongSoLuongDx|number: '1.0-1'}}</td>
+              <td>{{item.thanhTienDx|number: '1.0-1'}}</td>
+            </tr>
+          </ng-container>
         </tbody>
         <tfoot>
-        <tr>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th class="text-blue">Tổng</th>
-          <th class="text-blue">{{tongSoLuongDxuat|number: '1.0-1'}}</th>
-          <th class="text-blue">{{tongThanhTienDxuat|number: '1.0-1'}}</th>
-        </tr>
+          <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th class="text-blue">Tổng</th>
+            <th class="text-blue">{{tongSoLuongDxuat|number: '1.0-1'}}</th>
+            <th class="text-blue">{{tongThanhTienDxuat|number: '1.0-1'}}</th>
+          </tr>
         </tfoot>
       </nz-table>
       <div nz-row [nzGutter]="24">
@@ -246,95 +246,95 @@
                     </div>
                   </form>
                   <nz-table #tblDataCache [nzData]="phuongAnViewCache" class="nowrap table-chi-tiet" nzBordered
-                            [nzFrontPagination]="false" [nzShowPagination]="false">
+                    [nzFrontPagination]="false" [nzShowPagination]="false">
                     <thead>
-                    <tr>
-                      <th [rowspan]="2"></th>
-                      <th [rowspan]="2" style="width: 35px">STT</th>
-                      <th [rowspan]="2">Địa phương nhận cứu trợ, viện trợ</th>
-                      <th [rowspan]="2">SL xuất CT, VT (kg)</th>
-                      <th [colspan]="2">Cục DTNN</th>
-                      <th [colspan]="2">Chi cục DTNN</th>
-                      <th [colspan]="2">Chủng loại hàng hóa</th>
-                      <th [colspan]="4">SL xuất CT, VT của từng chi cục</th>
-                      <!--          <th [rowspan]="2" style="width: 10%">Hành động</th>-->
-                    </tr>
-                    <tr>
-                      <th>Tên cục</th>
-                      <th>Tồn kho</th>
-                      <th>Tên chi cục</th>
-                      <th>Tồn kho</th>
-                      <th>Tên chủng loại hàng hóa</th>
-                      <th>Tồn kho</th>
-                      <th>Số lượng (kg)</th>
-                      <th>Đơn vị tính</th>
-                      <th>Đơn giá không VAT đ/kg</th>
-                      <th>Thành tiền (đ)</th>
-                    </tr>
+                      <tr>
+                        <th [rowspan]="2"></th>
+                        <th [rowspan]="2" style="width: 35px">STT</th>
+                        <th [rowspan]="2">Địa phương nhận cứu trợ, viện trợ</th>
+                        <th [rowspan]="2">SL xuất CT, VT (kg)</th>
+                        <th [colspan]="2">Cục DTNN</th>
+                        <th [colspan]="2">Chi cục DTNN</th>
+                        <th [colspan]="2">Chủng loại hàng hóa</th>
+                        <th [colspan]="4">SL xuất CT, VT của từng chi cục</th>
+                        <!--          <th [rowspan]="2" style="width: 10%">Hành động</th>-->
+                      </tr>
+                      <tr>
+                        <th>Tên cục</th>
+                        <th>Tồn kho</th>
+                        <th>Tên chi cục</th>
+                        <th>Tồn kho</th>
+                        <th>Tên chủng loại hàng hóa</th>
+                        <th>Tồn kho</th>
+                        <th>Số lượng (kg)</th>
+                        <th>Đơn vị tính</th>
+                        <th>Đơn giá không VAT đ/kg</th>
+                        <th>Thành tiền (đ)</th>
+                      </tr>
                     </thead>
                     <tbody>
 
-                    <ng-container *ngFor="let item of tblDataCache.data, let i = index;">
-                      <tr>
-                        <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
+                      <ng-container *ngFor="let item of tblDataCache.data, let i = index;">
+                        <tr>
+                          <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                             [nzExpand]="expandSetStringCache.has(item.idVirtual)" nzShowExpand="true"
                             style="width: 35px">
-                        </td>
-                        <td>{{i + 1}}</td>
-                        <td>{{ item.noiDung }}</td>
-                        <td>{{ item.soLuongXuat |number:'1.0-1'}}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>{{item.thanhTien|number:'1.0-1'}}</td>
-                      </tr>
-                      <ng-container *ngIf="expandSetStringCache.has(item.idVirtual)">
-                        <ng-container *ngFor="let lv1 of item.childData,let i1=index">
-                          <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>{{lv1.tenCuc}}</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                          </tr>
-                          <ng-container *ngIf="expandSetStringCache.has(item.idVirtual)">
-                            <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
-                              <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>{{lv2.tenChiCuc}}</td>
-                                <td>{{lv2.tonKhoChiCuc|number:'1.0-1'}}</td>
-                                <td>{{lv2.tenCloaiVthh}}</td>
-                                <td>{{lv2.tonKhoCloaiVthh|number:'1.0-1'}}</td>
-                                <td>{{lv2.soLuongXuatChiCuc|number:'1.0-1'}}</td>
-                                <td>{{lv2.donViTinh}}</td>
-                                <td>{{lv2.donGiaKhongVat|number:'1.0-1'}}</td>
-                                <td>{{lv2.thanhTien|number:'1.0-1'}}</td>
-                              </tr>
+                          </td>
+                          <td>{{i + 1}}</td>
+                          <td>{{ item.noiDung }}</td>
+                          <td>{{ item.soLuongXuat |number:'1.0-1'}}</td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td>{{item.thanhTien|number:'1.0-1'}}</td>
+                        </tr>
+                        <ng-container *ngIf="expandSetStringCache.has(item.idVirtual)">
+                          <ng-container *ngFor="let lv1 of item.childData,let i1=index">
+                            <tr>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td>{{lv1.tenCuc}}</td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                            </tr>
+                            <ng-container *ngIf="expandSetStringCache.has(item.idVirtual)">
+                              <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
+                                <tr>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td>{{lv2.tenChiCuc}}</td>
+                                  <td>{{lv2.tonKhoChiCuc|number:'1.0-1'}}</td>
+                                  <td>{{lv2.tenCloaiVthh}}</td>
+                                  <td>{{lv2.tonKhoCloaiVthh|number:'1.0-1'}}</td>
+                                  <td>{{lv2.soLuongXuatChiCuc|number:'1.0-1'}}</td>
+                                  <td>{{lv2.donViTinh}}</td>
+                                  <td>{{lv2.donGiaKhongVat|number:'1.0-1'}}</td>
+                                  <td>{{lv2.thanhTien|number:'1.0-1'}}</td>
+                                </tr>
+                              </ng-container>
                             </ng-container>
                           </ng-container>
                         </ng-container>
                       </ng-container>
-                    </ng-container>
                     </tbody>
                   </nz-table>
                 </nz-card>
@@ -362,8 +362,7 @@
                           Tổng số lượng viện trợ, cứu trợ
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                          <nz-statistic
-                            [nzValue]="listSoLuong | nzAggregate: 'sum'|number: '1.0-1'"></nz-statistic>
+                          <nz-statistic [nzValue]="listSoLuong | nzAggregate: 'sum'|number: '1.0-1'"></nz-statistic>
                         </nz-form-control>
                       </nz-form-item>
                     </div>
@@ -380,94 +379,93 @@
                   </div>
                 </form>
                 <nz-table #tblData [nzData]="phuongAnView" class="nowrap table-chi-tiet" [nzFrontPagination]="false"
-                          nzBordered
-                          [nzShowPagination]="false">
+                  nzBordered [nzShowPagination]="false">
                   <thead>
-                  <tr>
-                    <th [rowspan]="2"></th>
-                    <th [rowspan]="2">STT</th>
-                    <th [rowspan]="2">Địa phương nhận cứu trợ, viện trợ</th>
-                    <th [rowspan]="2">SL xuất CT, VT (kg)</th>
-                    <th [colspan]="2">Cục DTNN</th>
-                    <th [colspan]="2">Chi cục DTNN</th>
-                    <th [colspan]="2">Chủng loại hàng hóa</th>
-                    <th [colspan]="4">SL xuất CT, VT của từng chi cục</th>
-                  </tr>
-                  <tr>
-                    <th>Tên cục</th>
-                    <th>Tồn kho</th>
-                    <th>Tên chi cục</th>
-                    <th>Tồn kho</th>
-                    <th>Tên chủng loại hàng hóa</th>
-                    <th>Tồn kho</th>
-                    <th>Số lượng (kg)</th>
-                    <th>Đơn vị tính</th>
-                    <th>Đơn giá không VAT đ/kg</th>
-                    <th>Thành tiền (đ)</th>
-                  </tr>
+                    <tr>
+                      <th [rowspan]="2"></th>
+                      <th [rowspan]="2">STT</th>
+                      <th [rowspan]="2">Địa phương nhận cứu trợ, viện trợ</th>
+                      <th [rowspan]="2">SL xuất CT, VT (kg)</th>
+                      <th [colspan]="2">Cục DTNN</th>
+                      <th [colspan]="2">Chi cục DTNN</th>
+                      <th [colspan]="2">Chủng loại hàng hóa</th>
+                      <th [colspan]="4">SL xuất CT, VT của từng chi cục</th>
+                    </tr>
+                    <tr>
+                      <th>Tên cục</th>
+                      <th>Tồn kho</th>
+                      <th>Tên chi cục</th>
+                      <th>Tồn kho</th>
+                      <th>Tên chủng loại hàng hóa</th>
+                      <th>Tồn kho</th>
+                      <th>Số lượng (kg)</th>
+                      <th>Đơn vị tính</th>
+                      <th>Đơn giá không VAT đ/kg</th>
+                      <th>Thành tiền (đ)</th>
+                    </tr>
                   </thead>
                   <tbody>
 
-                  <ng-container *ngFor="let item of tblData.data, let i = index;">
-                    <tr>
-                      <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
+                    <ng-container *ngFor="let item of tblData.data, let i = index;">
+                      <tr>
+                        <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                           [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px">
-                      </td>
-                      <td>{{i + 1}}</td>
-                      <td>{{ item.noiDung }}</td>
-                      <td>{{ item.soLuongXuat |number:'1.0-1'}}</td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td>{{item.thanhTien|number:'1.0-1'}}</td>
-                    </tr>
-                    <ng-container *ngIf="expandSetString.has(item.idVirtual)">
-                      <ng-container *ngFor="let lv1 of item.childData,let i1=index">
-                        <tr>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td>{{lv1.tenCuc}}</td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                        </tr>
-                        <ng-container *ngIf="expandSetString.has(item.idVirtual)">
-                          <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
-                            <tr>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td>{{lv2.tenChiCuc}}</td>
-                              <td>{{lv2.tonKhoChiCuc|number:'1.0-1'}}</td>
-                              <td>{{lv2.tenCloaiVthh}}</td>
-                              <td>{{lv2.tonKhoCloaiVthh|number:'1.0-1'}}</td>
-                              <td>{{lv2.soLuongXuatChiCuc|number:'1.0-1'}}</td>
-                              <td>{{lv2.donViTinh}}</td>
-                              <td>{{lv2.donGiaKhongVat|number:'1.0-1'}}</td>
-                              <td>{{lv2.thanhTien|number:'1.0-1'}}</td>
-                            </tr>
+                        </td>
+                        <td>{{i + 1}}</td>
+                        <td>{{ item.noiDung }}</td>
+                        <td>{{ item.soLuongXuat |number:'1.0-1'}}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>{{item.thanhTien|number:'1.0-1'}}</td>
+                      </tr>
+                      <ng-container *ngIf="expandSetString.has(item.idVirtual)">
+                        <ng-container *ngFor="let lv1 of item.childData,let i1=index">
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>{{lv1.tenCuc}}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          <ng-container *ngIf="expandSetString.has(item.idVirtual)">
+                            <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
+                              <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>{{lv2.tenChiCuc}}</td>
+                                <td>{{lv2.tonKhoChiCuc|number:'1.0-1'}}</td>
+                                <td>{{lv2.tenCloaiVthh}}</td>
+                                <td>{{lv2.tonKhoCloaiVthh|number:'1.0-1'}}</td>
+                                <td>{{lv2.soLuongXuatChiCuc|number:'1.0-1'}}</td>
+                                <td>{{lv2.donViTinh}}</td>
+                                <td>{{lv2.donGiaKhongVat|number:'1.0-1'}}</td>
+                                <td>{{lv2.thanhTien|number:'1.0-1'}}</td>
+                              </tr>
+                            </ng-container>
                           </ng-container>
                         </ng-container>
                       </ng-container>
                     </ng-container>
-                  </ng-container>
                   </tbody>
                 </nz-table>
                 <label nz-checkbox [(ngModel)]="formData.value.xuatCap">Đồng ý duyệt xuất cấp</label>

@@ -195,9 +195,12 @@ export class ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent extends Base3Component 
     let data = await this.createUpdate(body);
     if (data) {
       if (isGuiDuyet) {
+        this.formData.patchValue({
+          id : data.id
+        })
         this.pheDuyet();
       } else {
-        this.goBack()
+        this.redirectDefault()
       }
     }
   }
@@ -211,6 +214,8 @@ export class ChiTietQuyetDinhGiaoNhiemVuThanhLyComponent extends Base3Component 
               this.maHauTo = '/' + res.data.soBbQd?.split("/")[1];
               res.data.soBbQd = res.data.soBbQd?.split("/")[0];
             }
+            this.fileCanCu = res.data.fileCanCu;
+            this.fileDinhKem = res.data.fileDinhKem;
             this.formData.patchValue(res.data);
             this.formData.value.quyetDinhDtl.forEach(s => {
               s.idVirtual = uuid.v4()
