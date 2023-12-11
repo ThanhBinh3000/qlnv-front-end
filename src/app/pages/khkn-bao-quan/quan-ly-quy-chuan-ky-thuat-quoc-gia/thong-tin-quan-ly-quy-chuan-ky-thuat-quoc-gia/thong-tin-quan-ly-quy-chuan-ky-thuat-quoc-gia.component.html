@@ -296,27 +296,32 @@
             </nz-radio-group>
           </div>
         </form>
-        <nz-table class="wrap pd-10" style="overflow: auto" [nzData]="dataTable" [nzFrontPagination]="false"  [nzScroll]="dataTable && dataTable.length ? { x: '2500px' } : null"
-                  [nzShowPagination]="false">
+        <nz-table nzBordered
+          class="wrap pd-10"
+          style="overflow: auto"
+          [nzData]="dataTableView"
+          [nzShowPagination]="false"
+          [nzFrontPagination]="false"
+          [nzScroll]="dataTableView && dataTableView.length ? { x: '3000px', y: '500px' } : null"
+        >
           <thead>
           <tr>
-            <th nzWidth='45px'>STT</th>
-            <th>Nhóm chỉ tiêu chất lượng</th>
-            <th>Chỉ tiêu chất lượng</th>
-            <th *ngIf='formData.value.apDungCloaiVthh == false'>Chủng loại hàng hóa</th>
-            <th>TT hiển thị</th>
-            <th>Mức yêu cầu nhập</th>
-            <th>Toán tử</th>
-            <th>Mức yêu cầu nhập tối thiểu</th>
-            <th>Mức yêu cầu nhập tối đa</th>
-            <th>Mức yêu cầu xuất</th>
-            <th>Mức yêu cầu xuất tối thiểu</th>
-            <th>Mức yêu cầu xuất tối đa</th>
-            <th>Phương pháp xác định</th>
-            <th>File đính kèm</th>
-            <th>Ghi chú</th>
-            <th nzWidth='120px' nzRight
-                *ngIf='formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV'>
+            <th class="text-center" nzWidth='45px'>STT</th>
+            <th class="text-center" >Nhóm chỉ tiêu chất lượng</th>
+            <th class="text-center" >Chỉ tiêu chất lượng</th>
+            <th class="text-center"  *ngIf='formData.value.apDungCloaiVthh == false'>Chủng loại hàng hóa</th>
+            <th class="text-center" >TT hiển thị</th>
+            <th class="text-center" >Mức yêu cầu nhập</th>
+            <th class="text-center" >Toán tử</th>
+            <th class="text-center" >Mức yêu cầu nhập tối thiểu</th>
+            <th class="text-center" >Mức yêu cầu nhập tối đa</th>
+            <th class="text-center" >Mức yêu cầu xuất</th>
+            <th class="text-center" >Mức yêu cầu xuất tối thiểu</th>
+            <th class="text-center" >Mức yêu cầu xuất tối đa</th>
+            <th class="text-center" >Phương pháp xác định</th>
+            <th class="text-center" >File đính kèm</th>
+            <th class="text-center" >Ghi chú</th>
+            <th class="text-center"  nzWidth='120px' nzRight>
               Hành động
             </th>
           </tr>
@@ -393,8 +398,7 @@
               <!--                       (input)="searchInTable('ghiChu',filterTable.ghiChu)" size="small"/>-->
               <!--              </nz-input-group>-->
             </th>
-            <th nzRight
-              *ngIf='formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV'></th>
+            <th nzRight></th>
           </tr>
           <tr *ngIf='!isView'>
             <th></th>
@@ -489,11 +493,11 @@
                 <input nz-input [(ngModel)]='rowItem.ghiChu' [ngModelOptions]='{standalone: true}'/>
               </nz-input-group>
             </th>
-            <th *ngIf='formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV' nzRight>
-              <a [ngClass]="{'disabled': isView}" (click)='themMoiItem()'>
+            <th nzRight>
+              <a *ngIf="!isView"  (click)='themMoiItem()'>
                 <i class='fa fa-plus mr-2'></i>
               </a>
-              <a [ngClass]="{'disabled': isView}" (click)='clearData()'>
+              <a *ngIf="!isView" (click)='clearData()'>
                 <i class='fa fa-refresh'></i>
               </a>
             </th>
@@ -517,15 +521,14 @@
               <td>{{ data.phuongPhapXd }}</td>
               <td>{{data.fileDinhKem?.fileName }}</td>
               <td>{{ data.ghiChu }}</td>
-              <td nzRight
-                *ngIf='formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV'>
+              <td nzRight>
                 <a (click)="downloadFile(data.fileDinhKem)">
                   <i class="icon htvbdh_tcdt_import "></i>
                 </a>
-                <a [ngClass]="{'disabled': isView}" (click)='editItem(idx)'>
+                <a *ngIf="!isView || userService.isAccessPermisson('KHCNBQ_QCKTTCCS_SUA_BAN_HANH')" (click)='editItem(idx)'>
                   <i class='fa fa-pencil' title='Sửa'></i>
                 </a>
-                <a [ngClass]="{'disabled': isView}" (click)='xoaItem(idx)'>
+                <a *ngIf="!isView || userService.isAccessPermisson('KHCNBQ_QCKTTCCS_SUA_BAN_HANH')" (click)='xoaItem(idx)'>
                   <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
                 </a>
               </td>
@@ -640,10 +643,10 @@
                 <a (click)="downloadFile(dataEdit[idx].data.fileDinhKem)">
                   <i class="icon htvbdh_tcdt_import "></i>
                 </a>
-                <a (click)='luuEdit(idx)' class='save'>
+                <a *ngIf="!isView || userService.isAccessPermisson('KHCNBQ_QCKTTCCS_SUA_BAN_HANH')" (click)='luuEdit(idx)' class='save'>
                   <i class='fa fa-save'></i>
                 </a>
-                <a (click)='huyEdit(idx)'>
+                <a *ngIf="!isView || userService.isAccessPermisson('KHCNBQ_QCKTTCCS_SUA_BAN_HANH')" (click)='huyEdit(idx)'>
                   <i class='fa fa-ban do'></i> </a>
               </td>
             </ng-template>

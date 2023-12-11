@@ -4,7 +4,7 @@
       <div class="title-chi-tieu">
         <span
           [ngClass]="formData.value.trangThai == STATUS.DA_KY || formData.value.trangThai == STATUS.DADUYET_CB_CUC  ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
-          {{ formData.value.tenTrangThai == 'Đã duyệt - CB Cục' ? 'Đã tiếp nhận - CB Cục': formData.value.tenTrangThai}}
+          {{ formData.value.tenTrangThai == 'ĐÃ DUYỆT - CÁN BỘ CỤC' ? 'ĐÃ TIẾP NHẬN - CÁN BỘ CỤC': formData.value.tenTrangThai}}
         </span>
         <span class="text-uppercase">ĐỀ XUẤT NHU CẦU TRANG BỊ MÀNG PVC VÀ CÔNG CỤ, DỤNG CỤ PHỤC VỤ BẢO QUẢN</span>
       </div>
@@ -17,7 +17,7 @@
       <button class="btn btn-sub ml-2" (click)="saveAndSend(STATUS.DA_KY, 'Bạn có muốn ký?','Bạn đã ký thành công!')"
         *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_DEXUATCC_THEM') && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TUCHOI_CB_CUC)">
         <i class="icon htvbdh_trinh"></i>
-        <span>Đã ký</span>
+        <span>Đã duyệt - LĐ Chi cục</span>
       </button>
       <button type="button" class="btn btn-sub btn-xoa  ml-2"
         *ngIf="formData.value.trangThai == STATUS.DA_KY && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_DEXUATCC_DUYETCBCUC')"

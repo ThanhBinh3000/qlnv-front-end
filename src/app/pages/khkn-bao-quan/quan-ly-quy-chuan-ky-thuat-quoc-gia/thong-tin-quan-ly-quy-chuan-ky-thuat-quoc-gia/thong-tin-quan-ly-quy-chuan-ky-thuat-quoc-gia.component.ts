@@ -615,7 +615,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     let rs = false;
     if (dataItem && dataItem.length > 0) {
       dataItem.forEach(it => {
-        if (it.maChiTieu == item.maChiTieu) {
+        if ((it.maChiTieu == item.maChiTieu && this.formData.value.apDungCloaiVthh) || (it.cloaiVthh == item.cloaiVthh && it.maChiTieu == item.maChiTieu && !this.formData.value.apDungCloaiVthh)) {
           rs = true;
           return;
         }
@@ -626,16 +626,16 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
 
   themMoiItem() {
     if (this.dataTable) {
+      if (this.checkExitsData(this.rowItem, this.dataTable)) {
+        this.notification.warning(MESSAGE.WARNING, 'Vui lòng không nhập trùng chỉ tiêu');
+        return;
+      }
       if (this.formData.value.apDungCloaiVthh == true) {
         if (this.rowItem.tenChiTieu) {
           this.sortTableId();
           let item = cloneDeep(this.rowItem);
           // item.stt = this.dataTable.length + 1;
           item.edit = false;
-          if (this.checkExitsData(this.rowItem, this.dataTable)) {
-            this.notification.error(MESSAGE.ERROR, 'Vui lòng không nhập trùng tên chỉ tiêu');
-            return;
-          }
           this.dataTable = [
             ...this.dataTable,
             item,
@@ -690,29 +690,42 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   }
 
   huyEdit(idx: number): void {
-    const index = this.dataTable.findIndex(item => item.tenChiTieu == this.dataTableView[idx].tenChiTieu);
-    this.dataEdit[idx] = {
-      data: {...this.dataTable[index]},
-      edit: false,
-    };
+    let index: number;
+    if (this.formData.value.apDungCloaiVthh) {
+      index = this.dataTable.findIndex(item => item.tenChiTieu == this.dataTableView[idx].tenChiTieu);
+    } else {
+      index = this.dataTable.findIndex(item => item.tenChiTieu == this.dataTableView[idx].tenChiTieu && item.cloaiVthh == this.dataTableView[idx].cloaiVthh);
+    }
+    if (index > -1) {
+      this.dataEdit[idx] = {
+        data: {...this.dataTable[index]},
+        edit: false,
+      };
+    }
   }
 
   luuEdit(index: number): void {
     this.hasError = (false);
-    let listCtEdit = this.dataTable.filter(item => item.maChiTieu == this.dataEdit[index].data.maChiTieu);
-    const idx = this.dataTable.findIndex(item => item.maChiTieu == this.dataTableView[index].maChiTieu);
-    if (this.formData.value.apDungCloaiVthh == true && !this.formData.value.soVanBanSuaDoi && !this.formData.value.soVanBanThayThe) {
-      if (listCtEdit && listCtEdit.length > 0) {
-        const idxEdit = this.dataTable.findIndex(item => item.maChiTieu == listCtEdit[0].maChiTieu);
-        if (idxEdit != idx) {
-          this.notification.error(MESSAGE.ERROR, 'Vui lòng không nhập trùng tên chỉ tiêu');
-          return;
+    let listCtEdit : any[] = [];
+    let idx: number;
+    if (this.formData.value.apDungCloaiVthh) {
+       listCtEdit = this.dataTable.filter(item => item.maChiTieu == this.dataEdit[index].data.maChiTieu);
+      idx = this.dataTable.findIndex(item => item.maChiTieu == this.dataTableView[index].maChiTieu);
+    } else {
+      listCtEdit = this.dataTable.filter(item => item.maChiTieu == this.dataEdit[index].data.maChiTieu && item.cloaiVthh == this.dataTableView[index].cloaiVthh);
+      idx = this.dataTable.findIndex(item => item.tenChiTieu == this.dataTableView[index].tenChiTieu && item.cloaiVthh == this.dataTableView[index].cloaiVthh);
+    }
+    if (idx > -1) {
+      if ( !this.formData.value.soVanBanSuaDoi && !this.formData.value.soVanBanThayThe) {
+        if (listCtEdit && listCtEdit.length == 1) {
+            this.notification.warning(MESSAGE.WARNING, 'Vui lòng không nhập trùng chỉ tiêu');
+            return;
         }
       }
+      Object.assign(this.dataTable[idx], this.dataEdit[index].data);
+      this.dataTableView = cloneDeep(this.dataTable);
+      this.dataEdit[index].edit = false;
     }
-    Object.assign(this.dataTable[idx], this.dataEdit[index].data);
-    this.dataTableView = cloneDeep(this.dataTable);
-    this.dataEdit[index].edit = false;
   }
 
 
@@ -727,11 +740,17 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       nzWidth: 400,
       nzOnOk: async () => {
         try {
-          const index = this.dataTable.findIndex(item => item.tenChiTieu == this.dataTableView[idx].tenChiTieu);
-          this.dataTable.splice(index, 1);
-          this.dataTableView = cloneDeep(this.dataTable);
-          this.updateEditCache();
-          this.dataTable;
+          let index: number;
+          if (this.formData.value.apDungCloaiVthh) {
+            index = this.dataTable.findIndex(item => item.maChiTieu == this.dataTableView[idx].maChiTieu);
+          } else {
+            index = this.dataTable.findIndex(item => item.tenChiTieu == this.dataTableView[idx].tenChiTieu && item.cloaiVthh == this.dataTableView[idx].cloaiVthh);
+          }
+          if (idx > -1) {
+            this.dataTable.splice(index, 1);
+            this.dataTableView = cloneDeep(this.dataTable);
+            this.updateEditCache();
+          }
         } catch (e) {
           console.log('error', e);
         }
@@ -952,7 +971,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     this.loadLoaiHangHoa(this.formData.get('maBn').value);
   }
 
-  getNameFile(event: any, loai: string,  dataEdit: FileDinhKem) {
+  getNameFile(event: any, loai: string, dataEdit: FileDinhKem) {
     if (event) {
       const element = event.currentTarget as HTMLInputElement;
       const fileList: FileList | null = element.files;

@@ -184,6 +184,18 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
   }
 
 
+  clearForm(currentSearch?: any) {
+    this.formData.reset();
+    this.formData.patchValue({
+      "trangThaiHl" : "01"
+    })
+    this.search();
+    if (this.formData.get('trangThaiHl').value) {
+      this.filterTable.trangThaiHl = this.formData.get('trangThaiHl').value;
+      this.filterInTable('trangThaiHl', this.formData.get('trangThaiHl').value);
+    }
+  }
+
   async getListBoNganh() {
     this.dsBoNganh = [];
     let res = await this.donviService.layTatCaDonViByLevel(0);
