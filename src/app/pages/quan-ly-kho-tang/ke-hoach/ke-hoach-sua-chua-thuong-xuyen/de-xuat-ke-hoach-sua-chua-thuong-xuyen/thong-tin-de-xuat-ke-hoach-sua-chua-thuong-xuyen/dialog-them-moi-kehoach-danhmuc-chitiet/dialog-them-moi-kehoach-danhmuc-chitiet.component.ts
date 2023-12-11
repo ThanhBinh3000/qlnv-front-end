@@ -109,6 +109,7 @@ export class DialogThemMoiKehoachDanhmucChitietComponent extends Base2Component 
       khVonCvien: [null],
       khVonLdVu: [null],
       khVonLdTc: [null],
+      loaiNhuCau: [null],
     });
   }
 
