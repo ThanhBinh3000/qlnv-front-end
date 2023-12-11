@@ -706,21 +706,20 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
 
   luuEdit(index: number): void {
     this.hasError = (false);
-    let listCtEdit = this.dataTable.filter(item => item.maChiTieu == this.dataEdit[index].data.maChiTieu);
+    let listCtEdit : any[] = [];
     let idx: number;
     if (this.formData.value.apDungCloaiVthh) {
+       listCtEdit = this.dataTable.filter(item => item.maChiTieu == this.dataEdit[index].data.maChiTieu);
       idx = this.dataTable.findIndex(item => item.maChiTieu == this.dataTableView[index].maChiTieu);
     } else {
+      listCtEdit = this.dataTable.filter(item => item.maChiTieu == this.dataEdit[index].data.maChiTieu && item.cloaiVthh == this.dataTableView[index].cloaiVthh);
       idx = this.dataTable.findIndex(item => item.tenChiTieu == this.dataTableView[index].tenChiTieu && item.cloaiVthh == this.dataTableView[index].cloaiVthh);
     }
     if (idx > -1) {
-      if (this.formData.value.apDungCloaiVthh == true && !this.formData.value.soVanBanSuaDoi && !this.formData.value.soVanBanThayThe) {
-        if (listCtEdit && listCtEdit.length > 0) {
-          const idxEdit = this.dataTable.findIndex(item => item.maChiTieu == listCtEdit[0].maChiTieu);
-          if (idxEdit != idx) {
-            this.notification.error(MESSAGE.ERROR, 'Vui lòng không nhập trùng chỉ tiêu');
+      if ( !this.formData.value.soVanBanSuaDoi && !this.formData.value.soVanBanThayThe) {
+        if (listCtEdit && listCtEdit.length == 1) {
+            this.notification.warning(MESSAGE.WARNING, 'Vui lòng không nhập trùng chỉ tiêu');
             return;
-          }
         }
       }
       Object.assign(this.dataTable[idx], this.dataEdit[index].data);
