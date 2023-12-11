@@ -231,9 +231,9 @@
       <td></td>
       <td></td>
       <td *ngIf="isVat"></td>
+      <td *ngIf="!isTabNdKhac && isTableKetQua"></td>
       <td *ngIf="!isTabNdKhac"></td>
       <td *ngIf="isTabNdKhac"></td>
-      <td *ngIf="!isTabNdKhac && isTableKetQua"></td>
       <td></td>
       <td></td>
       <td nzRight ></td>
@@ -251,8 +251,8 @@
           <td class="text-right">{{item.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
           <td class="text-right">{{item.donGia | number : '1.0-1' : 'vi_VN' }}</td>
           <td class="text-right" *ngIf="isVat">{{item.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
-          <td *ngIf="!isTabNdKhac">{{item.thoiHanBaoGia }}</td>
           <td *ngIf="!isTabNdKhac && isTableKetQua" class="text-center">{{item.ngayBaoGia | date : 'dd/MM/yyyy' }}</td>
+          <td *ngIf="!isTabNdKhac">{{item.thoiHanBaoGia }}</td>
           <td *ngIf="isTabNdKhac">{{item.chiSoCpi }}</td>
           <td>{{item.fileDinhKem?.fileName }}</td>
           <td>{{item.ghiChu }}</td>

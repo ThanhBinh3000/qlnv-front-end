@@ -137,7 +137,7 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
     let msgRequired = "";
     //validator
     if (!this.isTabNdKhac && ((this.isTableKetQua && (!item.tenDviBaoGia || !item.ngayBaoGia)) || (!this.isTableKetQua && !item.tenDviThamDinh)
-      || !item.cloaiVthh || !item.soLuong || !item.donGia || !item.thoiHanBaoGia || !item.fileDinhKem.fileName || (!this.isApDung && !item.maChiCuc ))) {
+      || !item.cloaiVthh || !item.soLuong || !item.donGia || !item.thoiHanBaoGia || (!this.isApDung && !item.maChiCuc ))) {
       msgRequired = "Vui lòng nhập đủ thông tin";
     }
     return msgRequired;
@@ -146,42 +146,45 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
 
 
   getNameFile(event?: any, tableName?: string, item?: FileDinhKem, type? : any) {
-    const element = event.currentTarget as HTMLInputElement;
-    const fileList: FileList | null = element.files;
-    if (fileList) {
-      const itemFile = {
-        name: fileList[0].name,
-        file: event.target.files[0] as File,
-      };
-      this.uploadFileService
-        .uploadFile(itemFile.file, itemFile.name)
-        .then((resUpload) => {
-          if (item) {
-            item.fileName = resUpload.filename;
-            item.fileSize = resUpload.size;
-            item.fileUrl = resUpload.url;
-          }
-          else {
-            if (!type) {
-              if (!this.rowItem.fileDinhKem ) {
-                this.rowItem.fileDinhKem = new FileDinhKem();
-              }
-              this.rowItem.fileDinhKem.fileName = resUpload.filename;
-              this.rowItem.fileDinhKem.fileSize = resUpload.size;
-              this.rowItem.fileDinhKem.fileUrl = resUpload.url;
-              this.rowItem.fileDinhKem.idVirtual = new Date().getTime();
-            } else {
-              if (!type.fileDinhKem ) {
-                type.fileDinhKem  = new FileDinhKem();
-              }
-              type.fileDinhKem.fileName = resUpload.filename;
-              type.fileDinhKem.fileSize = resUpload.size;
-              type.fileDinhKem.fileUrl = resUpload.url;
-              type.fileDinhKem.idVirtual = new Date().getTime();
+    if (event) {
+      const element = event.currentTarget as HTMLInputElement;
+      const fileList: FileList | null = element.files;
+      if (fileList) {
+        const itemFile = {
+          name: fileList[0].name,
+          file: event.target.files[0] as File,
+        };
+        this.uploadFileService
+          .uploadFile(itemFile.file, itemFile.name)
+          .then((resUpload) => {
+            if (item) {
+              item.fileName = resUpload.filename;
+              item.fileSize = resUpload.size;
+              item.fileUrl = resUpload.url;
             }
-          }
-        });
+            else {
+              if (!type) {
+                if (!this.rowItem.fileDinhKem ) {
+                  this.rowItem.fileDinhKem = new FileDinhKem();
+                }
+                this.rowItem.fileDinhKem.fileName = resUpload.filename;
+                this.rowItem.fileDinhKem.fileSize = resUpload.size;
+                this.rowItem.fileDinhKem.fileUrl = resUpload.url;
+                this.rowItem.fileDinhKem.idVirtual = new Date().getTime();
+              } else {
+                if (!type.fileDinhKem ) {
+                  type.fileDinhKem  = new FileDinhKem();
+                }
+                type.fileDinhKem.fileName = resUpload.filename;
+                type.fileDinhKem.fileSize = resUpload.size;
+                type.fileDinhKem.fileUrl = resUpload.url;
+                type.fileDinhKem.idVirtual = new Date().getTime();
+              }
+            }
+          });
+      }
     }
+
   }
 
 
