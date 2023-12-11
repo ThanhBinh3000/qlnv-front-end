@@ -168,7 +168,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="3">
+            <div nz-col [nzSpan]="formData.value.phanLoai === 'TH' ? 9 : 3">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
@@ -178,7 +178,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="6">
+            <div nz-col [nzSpan]="6" *ngIf="formData.value.phanLoai === 'TTr'">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Tên hàng DTQG</nz-form-label>
                 <nz-form-control nz-col>
