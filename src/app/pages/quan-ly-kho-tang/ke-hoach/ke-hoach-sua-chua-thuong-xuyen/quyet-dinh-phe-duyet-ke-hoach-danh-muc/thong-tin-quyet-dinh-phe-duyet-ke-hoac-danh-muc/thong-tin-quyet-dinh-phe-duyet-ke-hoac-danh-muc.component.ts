@@ -24,6 +24,10 @@ import {
 import {
   TongHopScThuongXuyenService,
 } from '../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-thuong-xuyen/tong-hop-sc-thuong-xuyen.service';
+import {
+  ReportKhScThuongXuyenService
+} from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-thuong-xuyen/report-kh-sc-thuong-xuyen.service";
+import { saveAs } from "file-saver";
 
 @Component({
   selector: 'app-thong-tin-quyet-dinh-phe-duyet-ke-hoac-danh-muc',
@@ -53,6 +57,11 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
   listDmSuaChua: any[] = [];
   listNam: any[] = [];
   userInfo: UserLogin;
+  pdfBlob: any;
+  pdfSrc: any;
+  excelBlob: any;
+  excelSrc: any
+  showDlgPreview = false;
 
   STATUS = STATUS;
 
@@ -65,6 +74,7 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
     private danhMucService: DanhMucService,
     private tongHopDxXdTh: TongHopKhTrungHanService,
     private quyetDinhService: TongHopScThuongXuyenService,
+    private reportKhScThuongXuyenService: ReportKhScThuongXuyenService,
     private fb: FormBuilder,
     private modal: NzModalService,
     private helperService: HelperService,
@@ -493,6 +503,58 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
         }
       });
     }
+  }
+
+  async preview() {
+    try {
+      this.spinner.show();
+      this.helperService.markFormGroupTouched(this.formData);
+      if (this.formData.invalid) {
+        return;
+      }
+      let body = this.formData.value;
+      body.typeFile = "pdf";
+      body.fileName = "qd_pd_sua_chua_thuong_xuyen.jrxml";
+      body.tenBaoCao = "Thông tin quyết định phê duyệt kế hoạch, danh mục sửa chữa lớn thường xuyên";
+      await this.reportKhScThuongXuyenService.thKhSuaChuaTXuyen(body).then(async s => {
+        this.pdfBlob = s;
+        this.pdfSrc = await new Response(s).arrayBuffer();
+      });
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfBlob, "qd_pd_sua_chua_thuong_xuyen.pdf");
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+
+  async downloadExcel() {
+    try {
+      this.spinner.show();
+      let body = this.formData.value;
+      body.typeFile = "xlsx";
+      body.fileName = "qd_pd_sua_chua_thuong_xuyen.jrxml";
+      body.tenBaoCao = "Thông tin quyết định phê duyệt kế hoạch, danh mục sửa chữa lớn thường xuyên";
+      await this.reportKhScThuongXuyenService.thKhSuaChuaTXuyen(body).then(async s => {
+        this.excelBlob = s;
+        this.excelSrc = await new Response(s).arrayBuffer();
+        saveAs(this.excelBlob, "qd_pd_sua_chua_thuong_xuyen.xlsx");
+      });
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+
   }
 
 }
