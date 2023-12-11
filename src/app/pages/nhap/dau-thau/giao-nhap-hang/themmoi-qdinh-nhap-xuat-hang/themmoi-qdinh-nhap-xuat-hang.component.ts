@@ -866,36 +866,42 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
   }
 
   async saveDdiemNhap(statusSave) {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn hoàn thành cập nhật?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: async () => {
-        this.spinner.show();
-        this.dataTable.forEach(item => {
-          item.trangThai = statusSave
-          if(item.children.length == 0){
-            this.notification.success(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
+    let daPhanBo = true
+    this.dataTable.forEach(item => {
+      if(item.children.length == 0){
+        this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
+        daPhanBo = false;
+      }
+    })
+    if (daPhanBo) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn hoàn thành cập nhật?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          this.dataTable.forEach(item => {
+            item.trangThai = statusSave
+          });
+          let body = {
+            detailList: this.dataTable
           }
-        })
-        let body = {
-          detailList: this.dataTable
-        }
-        let res = await this.quyetDinhGiaoNhapHangService.updateDdiemNhap(body);
-        if (res.msg == MESSAGE.SUCCESS) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          this.redirectQdNhapXuat();
-          this.spinner.hide();
-        } else {
-          this.notification.error(MESSAGE.ERROR, res.msg);
-          this.spinner.hide();
-        }
-      },
-    });
+          let res = await this.quyetDinhGiaoNhapHangService.updateDdiemNhap(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.redirectQdNhapXuat();
+            this.spinner.hide();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+            this.spinner.hide();
+          }
+        },
+      });
+    }
   }
 
   isDisableForm() {

@@ -252,7 +252,9 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     }
     let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listQdGoc = res.data.content
+      this.listQdGoc = res.data.content.filter(item =>
+        !item.children.every(child => child.qdPdHsmt?.trangThai == this.STATUS.BAN_HANH)
+      );
     }
     this.spinner.hide();
     const modalQD = this.modal.create({
@@ -298,7 +300,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
           // this.dataInputCache = cloneDeep(this.dataInput);
           this.danhsachDx = data.children
         } else {
-          this.danhsachDx = data.children
+          this.danhsachDx = data.children.filter(x => (x.qdPdHsmt == null || x.qdPdHsmt?.trangThai != this.STATUS.BAN_HANH))
           this.danhsachDxCache = cloneDeep(this.danhsachDx);
           this.formData.patchValue({
             hthucLcnt: data.hthucLcnt,
