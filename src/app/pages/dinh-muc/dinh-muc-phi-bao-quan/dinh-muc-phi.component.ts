@@ -19,7 +19,7 @@ export class DinhMucPhiComponent implements OnInit {
     public router: Router,
   ) {
   }
-  tabSelected = '01';
+  tabSelected = '';
   selectTab(tab) {
     this.tabSelected = tab;
     if (tab == '01') {

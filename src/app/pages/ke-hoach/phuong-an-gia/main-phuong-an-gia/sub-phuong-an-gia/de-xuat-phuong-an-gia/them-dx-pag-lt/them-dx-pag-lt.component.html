@@ -278,9 +278,9 @@
         </tr>
         <tr>
           <th></th>
-          <th class="text-right do">Cộng</th>
-          <th class="text-right"> {{calcTong('soLuongCtieu') | number : '1.0-1' : 'vi-VN'}}</th>
-          <th class="text-right"> {{calcTong('soLuong') | number : '1.0-1' : 'vi-VN'}}</th>
+          <th></th>
+          <th></th>
+          <th></th>
           <th>
             <div nz-row [nzGutter]="24">
               <div nz-col [nzSpan]="8">
@@ -328,6 +328,16 @@
               *ngIf="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'">{{ formData.value.vat ? (data.giaDn + data.giaDn * formData.value.vat | number : '1.0-1' : 'vi-VN') : 0   }}</td>
         </tr>
         </tbody>
+        <tfoot *ngIf="pagTtChungs.length > 0">
+        <tr>
+          <th></th>
+          <th class="text-right font-weight-bold">Tổng</th>
+          <th class="text-right"> {{calcTong('soLuongCtieu') | number : '1.0-1' : 'vi-VN'}}</th>
+          <th class="text-right"> {{calcTong('soLuong') | number : '1.0-1' : 'vi-VN'}}</th>
+          <th></th>
+          <th *ngIf="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'"></th>
+        </tr>
+        </tfoot>
       </nz-table>
 
     </nz-tab>
@@ -510,16 +520,16 @@
     <nz-tab [nzTitle]="'Thông tin khảo sát giá'" *ngIf="isGiaMuaToiDa">
       <nz-card class="mt16 p-lr16 card-table pd-10">
         <span class="sub-title mb-10">KẾT QUẢ KHẢO SÁT GIÁ THỊ TRƯỜNG</span>
-        <app-thong-tin-ksg [dataParent]="formData.value" [isView]="isView" *ngIf="dataTableKsGia || !idInput"
+        <app-thong-tin-ksg [dataParent]="formData.value" [isView]="isView" *ngIf="dataTableKsGia || !idInput" [type]="type"
                            [isTabNdKhac]="false"
                            [isTableKetQua]="true" [(dataTable)]="dataTableKsGia">
         </app-thong-tin-ksg>
         <span class="sub-title mb-10">KẾT QUẢ THẨM ĐỊNH GIÁ</span>
-        <app-thong-tin-ksg [dataParent]="formData.value" [isView]="isView" *ngIf="dataTableKsGia || !idInput"
+        <app-thong-tin-ksg [dataParent]="formData.value" [isView]="isView" *ngIf="dataTableKsGia || !idInput" [type]="type"
                            [isTabNdKhac]="false"
                            [isTableKetQua]="false" [(dataTable)]="dataTableKqGia"></app-thong-tin-ksg>
         <span class="sub-title mb-10">CÁC THÔNG TIN KHÁC</span>
-        <app-thong-tin-ksg [dataParent]="formData.value" [isView]="isView" *ngIf="dataTableKsGia || !idInput"
+        <app-thong-tin-ksg [dataParent]="formData.value" [isView]="isView" *ngIf="dataTableKsGia || !idInput" [type]="type"
                            [isTabNdKhac]="true"
                            [isTableKetQua]="false" [(dataTable)]="dataTableTtThamKhao"
         ></app-thong-tin-ksg>
@@ -637,18 +647,18 @@
             </div>
           </div>
         </form>
-        <span class="sub-title mb-10">GIÁ THỊ TRUỜNG</span>
-        <app-thong-tin-ksg  [dataParent]="formData.value" [isView]="isView" *ngIf="dataTableKsGia || !idInput"
-                            [isTabNdKhac]="false"
-                            [isTableKetQua]="true" [(dataTable)]="dataTableKsGia">
-        </app-thong-tin-ksg>
         <span class="sub-title mb-10">GIÁ CỦA SỞ TÀI CHÍNH</span>
-        <app-thong-tin-ksg [dataParent]="formData.value" [isView]="isView" *ngIf="dataTableKsGia || !idInput"
+        <app-thong-tin-ksg [dataParent]="formData.value" [isView]="isView" *ngIf="dataTableKsGia || !idInput" [type]="type"
                            [isTabNdKhac]="false"
                            [isTableKetQua]="false" [(dataTable)]="dataTableKqGia">
         </app-thong-tin-ksg>
+        <span class="sub-title mb-10">GIÁ THỊ TRUỜNG</span>
+        <app-thong-tin-ksg  [dataParent]="formData.value" [isView]="isView" *ngIf="dataTableKsGia || !idInput" [type]="type"
+                            [isTabNdKhac]="false"
+                            [isTableKetQua]="true" [(dataTable)]="dataTableKsGia">
+        </app-thong-tin-ksg>
         <span class="sub-title mb-10">CÁC THÔNG TIN KHÁC</span>
-        <app-thong-tin-ksg [dataParent]="formData.value" [isView]="isView" *ngIf="dataTableKsGia || !idInput"
+        <app-thong-tin-ksg [dataParent]="formData.value" [isView]="isView" *ngIf="dataTableKsGia || !idInput" [type]="type"
                            [isTabNdKhac]="true"
                            [isTableKetQua]="false" [(dataTable)]="dataTableTtThamKhao"
         ></app-thong-tin-ksg>

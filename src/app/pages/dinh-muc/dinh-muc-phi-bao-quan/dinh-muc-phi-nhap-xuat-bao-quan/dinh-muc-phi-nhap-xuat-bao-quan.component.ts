@@ -1,11 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { QlDinhMucPhiService } from '../../../../services/qlnv-kho/QlDinhMucPhi.service';
-import { Base2Component } from '../../../../components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from '../../../../services/storage.service';
+import {Component, Input, OnInit} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {QlDinhMucPhiService} from '../../../../services/qlnv-kho/QlDinhMucPhi.service';
+import {Base2Component} from '../../../../components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from '../../../../services/storage.service';
 
 ;
 
@@ -30,10 +30,6 @@ export class DinhMucPhiNhapXuatBaoQuanComponent extends Base2Component implement
   ) {
     super(httpClient, storageService, notification, spinner, modal, qlDinhMucPhiService);
     super.ngOnInit();
-    this.filterTable = {};
-  }
-
-  async ngOnInit() {
     this.formData = this.fb.group({
       soQd: [''],
       trangThai: [''],
@@ -41,12 +37,17 @@ export class DinhMucPhiNhapXuatBaoQuanComponent extends Base2Component implement
       ngayHieuLuc: [''],
       trichYeu: [''],
       capDvi: [this.capDvi],
+      maDvi: [''],
       loai: ['00'],
     });
-    this.filter();
+    this.filterTable = {};
   }
 
-  filter() {
+  async ngOnInit() {
+    await this.filter();
+  }
+
+  async filter() {
     if (this.formData.value.ngayKy && this.formData.value.ngayKy.length > 0) {
       this.formData.value.ngayKyTu = this.formData.value.ngayKy[0];
       this.formData.value.ngayKyDen = this.formData.value.ngayKy[1];
@@ -56,7 +57,8 @@ export class DinhMucPhiNhapXuatBaoQuanComponent extends Base2Component implement
       this.formData.value.ngayHieuLucDen = this.formData.value.ngayHieuLuc[1];
     }
     this.formData.value.capDvi = this.capDvi;
-    this.search();
+    this.formData.value.maDvi = this.userInfo.MA_DVI;
+    await this.search();
   }
 
   clearForm() {
@@ -65,6 +67,7 @@ export class DinhMucPhiNhapXuatBaoQuanComponent extends Base2Component implement
     this.formData.patchValue({
       capDvi: this.capDvi,
       loai: '00',
+      maDvi: this.userInfo.MA_DVI
     });
     this.search();
   }

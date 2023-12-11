@@ -26,6 +26,7 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
   @Output() dataTableChange = new EventEmitter<any>();
   @Input() isView: boolean;
   @Input() dataParent : any;
+  @Input() type : string;
   dataTableView : any[] = [];
   isVat: boolean;
   vat: any;
@@ -63,7 +64,7 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (this.dataParent) {
       this.rowItem.cloaiVthh = (this.dataParent.tenCloaiVthh ? this.dataParent.tenCloaiVthh  + '; ' : '') + (this.dataParent.moTa ? this.dataParent.moTa + '; ' : '') + (this.dataParent.tchuanCluong ? this.dataParent.tchuanCluong : '' )
-      this.isApDung = this.dataParent.apDungTatCa
+      this.isApDung = this.dataParent.apDungTatCa;
       this.isVat = this.dataParent && this.dataParent.loaiGia && (this.dataParent.loaiGia == 'LG01' || this.dataParent.loaiGia == 'LG03');
       this.vat = this.dataParent && this.dataParent.vat ? this.dataParent.vat  : 0
     }
@@ -136,7 +137,7 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
     let msgRequired = "";
     //validator
     if (!this.isTabNdKhac && ((this.isTableKetQua && (!item.tenDviBaoGia || !item.ngayBaoGia)) || (!this.isTableKetQua && !item.tenDviThamDinh)
-      || !item.cloaiVthh || !item.soLuong || !item.donGia || !item.thoiHanBaoGia || !item.fileDinhKem.fileName)) {
+      || !item.cloaiVthh || !item.soLuong || !item.donGia || !item.thoiHanBaoGia || !item.fileDinhKem.fileName || (!this.isApDung && !item.maChiCuc ))) {
       msgRequired = "Vui lòng nhập đủ thông tin";
     }
     return msgRequired;
@@ -185,9 +186,11 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
 
 
   downloadFile(item: FileDinhKem) {
-    this.uploadFileService.downloadFile(item.fileUrl).subscribe((blob) => {
-      saveAs(blob, item.fileName);
-    });
+    if (item && item.fileName) {
+      this.uploadFileService.downloadFile(item.fileUrl).subscribe((blob) => {
+        saveAs(blob, item.fileName);
+      });
+    }
   }
 
   deleteItem(index: any, data?: any) {
