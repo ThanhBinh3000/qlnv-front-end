@@ -59,7 +59,7 @@ export class ThemMoiTongHopKhnkComponent extends Base2Component implements OnIni
       trangThai: [],
       tenTrangThai: [],
       maTh: [""],
-      noiDungTh: [""],
+      noiDungTh: ["", [Validators.required]],
       dxHdr: []
     });
   }

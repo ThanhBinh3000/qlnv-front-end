@@ -200,8 +200,13 @@
               (click)="taoQdinh(data)">
               <i class="icon htvbdh_tcdt_tao-qd"></i>
             </a>
+            <a *ngIf="userService.isAccessPermisson('NHDTQG_NK_QDNH_THEM')
+            && data.trangThai != STATUS.CHUA_TAO_QD"
+               (click)="showQd(data)">
+              <i class="icon htvbdh_tcdt_tao-qd"></i>
+            </a>
             <a *ngIf="userService.isAccessPermisson('NHDTQG_NK_THKHNK_XOA')
-            && data.trangThai == STATUS.CHUA_TAO_QD"
+            && data.trangThai != STATUS.DA_BAN_HANH_QD"
                (click)="xoaItem(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
@@ -236,6 +241,6 @@
   </app-them-moi-tong-hop-khnk>
 </div>
 <div class="chi-tiet" *ngIf="isQuyetDinh">
-  <app-themmoi-quyet-dinh-pd-khnk [dataTongHop]="dataTongHop" (showListEvent)="showList()">
+  <app-themmoi-quyet-dinh-pd-khnk [dataTongHop]="dataTongHop" [idInput]="this.idQd" (showListEvent)="showList()">
   </app-themmoi-quyet-dinh-pd-khnk>
 </div>
