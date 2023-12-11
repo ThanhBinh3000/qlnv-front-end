@@ -45,7 +45,7 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3> DANH SÁCH QUYẾT ĐỊNH ĐIỀU CHỈNH KẾ HOẠCH BÁN ĐẤU GIÁ </h3>
+      <h3> DANH SÁCH PHƯƠNG ÁN VÀ QUYẾT ĐỊNH ĐIỀU CHỈNH KẾ HOẠCH BÁN ĐẤU GIÁ </h3>
       <div class="buttons">
         <button *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_DCKHBDG_XOA')"
                 type="button" class="btn btn-do" (click)="deleteMulti()">
@@ -76,10 +76,11 @@
           </th>
           <th class="text-center" nzWidth="50px"> STT</th>
           <th class="text-left"> Năm KH</th>
+          <th class="text-left"> Số QĐ công văn/tờ trình</th>
           <th class="text-left"> Số QĐ điều chỉnh KH BĐG</th>
           <th class="text-left"> Ngày ký QĐ điều chỉnh</th>
           <th class="text-left"> Số QĐ cần điều chỉnh</th>
-          <th class="text-left"> Số QĐ công văn/tờ trình</th>
+          <th class="text-left"> Số QĐ trước điều chỉnh</th>
           <th class="text-left"> Trích yếu</th>
           <th class="text-left" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)"> Loại hàng DTQG</th>
           <th class="text-left"> Chủng loại hàng DTQG</th>
@@ -100,6 +101,12 @@
           </th>
           <th>
             <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soCongVan"
+                     (input)="filterInTable('soCongVan',filterTable.soCongVan)" size="small"/>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdDc"
                      (input)="filterInTable('soQdDc',filterTable.soQdDc)" size="small"/>
             </nz-input-group>
@@ -113,23 +120,23 @@
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdPd"
-                     (input)="filterInTable('soQdPd',filterTable.soQdPd)" size="small"/>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdCanDc"
+                     (input)="filterInTable('soQdCanDc',filterTable.soQdCanDc)" size="small"/>
             </nz-input-group>
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soCongVan"
-                     (input)="filterInTable('soCongVan',filterTable.soCongVan)" size="small"/>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdPd"
+                     (input)="filterInTable('soQdPd',filterTable.soQdPd)" size="small"/>
             </nz-input-group>
           </th>
-          <th>
+          <th *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
                      (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small"/>
             </nz-input-group>
           </th>
-          <th *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
+          <th>
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
                      (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small"/>
@@ -166,16 +173,17 @@
           </td>
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td class="text-left">{{ data.nam }}</td>
+          <td class="text-left">{{ data.soCongVan }}</td>
           <td class="text-left">{{ data.soQdDc }}</td>
           <td class="text-left">{{ data.ngayKyDc|date:'dd/MM/YYYY' }}</td>
+          <td class="text-left">{{ data.soQdCanDc }}</td>
           <td class="text-left">
             <a *ngIf="data.soQdPd && data.idQdPd" (click)="openModal(data.idQdPd)"
                style="color: blue">{{data.soQdPd}}
             </a>
           </td>
-          <td class="text-left">{{ data.soCongVan }}</td>
           <td class="text-left" style="max-width: 300px; min-width: 250px;  white-space: break-spaces;">
-            {{ data.trichYeu }}
+            {{ data.trichYeuDieuChinh }}
           </td>
           <td class="text-left" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">{{ data.tenLoaiVthh }}</td>
           <td class="text-left">{{ data.tenCloaiVthh }}</td>
