@@ -148,9 +148,7 @@ export class Base2Component implements OnInit {
   clearForm(currentSearch?: any) {
     this.formData.reset();
     if (currentSearch) {
-      this.formData.patchValue({
-        loaiVthh: currentSearch,
-      })
+      this.formData.patchValue(currentSearch)
     }
     this.search();
   }

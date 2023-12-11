@@ -105,7 +105,7 @@ export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnIni
           if (this.dataTableDetail && this.dataTableDetail.length > 0) {
             this.dataTableDetail.forEach(item => {
               item.tenLoaiHinh = this.getStrTenLoaiHinh(item.loaiHinh)
-              item.loaiHinh = item.loaiHinh.split(",");
+              item.loaiHinh = item.loaiHinh ? item.loaiHinh.split(",") : [];
             })
           }
           this.updateEditCache();
@@ -391,5 +391,5 @@ export class DinhMucTrangBiMm {
   klChiCuc: number;
   loaiHinh: any;
   tenLoaiHinh: string;
-  isCanCu : boolean;
+  isCanCu : boolean = false;
 }
