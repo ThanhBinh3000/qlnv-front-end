@@ -275,7 +275,13 @@
         <div nz-row [nzGutter]="24">
           <div nz-col [nzSpan]="formData.value.trangThai == STATUS.DU_THAO ? 24  : 24 ">
             <nz-collapse nzAccordion>
-              <nz-collapse-panel [nzHeader]="'ĐỀ XUẤT CỦA CÁC CỤC'" [nzActive]="true">
+              <nz-collapse-panel [nzHeader]="'ĐỀ XUẤT CỦA CÁC CỤC'" [nzActive]="true" [nzExtra]="extraTpl">
+                <ng-template #extraTpl>
+                  <button type="button" class="btn btn-sub" (click)="exportDetailDx($event)">
+                    <i class="icon htvbdh_chuyen-xu-ly" ></i>
+                    <span>Xuất file</span>
+                  </button>
+                </ng-template>
                 <nz-card class="mt-2px flex-card data-table card-border-content table-card">
                   <div>
     <span class="text-right">
@@ -367,7 +373,13 @@
           </div>
           <div nz-col nzSpan="24">
             <nz-collapse nzAccordion *ngIf="formData.value.trangThai != STATUS.DU_THAO">
-              <nz-collapse-panel [nzHeader]="'PHƯƠNG ÁN CỦA TỔNG CỤC'" [nzActive]="true">
+              <nz-collapse-panel [nzHeader]="'PHƯƠNG ÁN CỦA TỔNG CỤC'" [nzActive]="true" [nzExtra]="extraTpl">
+                <ng-template #extraTpl>
+                  <button type="button" class="btn btn-sub" (click)="exportDetail($event)">
+                    <i class="icon htvbdh_chuyen-xu-ly" ></i>
+                    <span>Xuất file</span>
+                  </button>
+                </ng-template>
                 <nz-card class="mt-2px flex-card data-table card-border-content table-card">
                   <div>
     <span class="text-right">

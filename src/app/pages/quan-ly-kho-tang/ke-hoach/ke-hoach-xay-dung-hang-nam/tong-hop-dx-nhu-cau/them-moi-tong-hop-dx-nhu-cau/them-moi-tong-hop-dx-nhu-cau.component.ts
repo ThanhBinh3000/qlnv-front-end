@@ -12,6 +12,7 @@ import {HelperService} from "../../../../../../services/helper.service";
 import dayjs from "dayjs";
 import {MESSAGE} from "../../../../../../constants/message";
 import {v4 as uuidv4} from "uuid";
+import { saveAs } from 'file-saver';
 import {UserLogin} from "../../../../../../models/userlogin";
 import {KeHoachXayDungTrungHan} from "../../../../../../models/QuyHoachVaKeHoachKhoTang";
 import {STATUS} from "../../../../../../constants/status";
@@ -39,8 +40,10 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
   formData: FormGroup;
   listDx: any[] = [];
   dataTable: any[] = [];
+  dataTableList: any[] = [];
   dataTableReq: any[] = [];
   dataTableDx: any[] = [];
+  dataTableDxList: any[] = [];
   dataTableDxAll: any[] = [];
   dsCuc: any[] = [];
   dsChiCuc: any[] = [];
@@ -397,6 +400,7 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
           this.dataTableDx.forEach(item => {
             item.tgKcHt = item.tgKhoiCong + " - " + item.tgHoanThanh;
           });
+          this.dataTableDxList = this.dataTableDx;
           this.dataTableDx = this.convertListData(this.dataTableDx);
           this.expandAll(this.dataTableDx);
         }
@@ -408,6 +412,7 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
         this.dataTable.forEach(item => {
           item.tgKcHt = item.tgKhoiCong + " - " + item.tgHoanThanh;
         });
+        this.dataTableList = this.dataTable;
         this.dataTable = this.convertListData(this.dataTable);
         this.expandAll(this.dataTable);
       }
@@ -543,5 +548,51 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
     this.idTongHop=id
     this.quyetDinh = !this.quyetDinh;
     this.emitTab({tab: "qdpd", id: this.idTongHop,quyetDinh:this.quyetDinh});
+  }
+
+  exportDetailDx($event: MouseEvent) {
+    $event.stopPropagation()
+    if (this.dataTableDxList.length > 0) {
+      this.spinner.show();
+      try {
+        let body = this.formData.value;
+        body.ctiets = this.dataTableDxList;
+        this.tongHopDxXdTh
+          .exportDetail(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-chi-tiet-dx.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
+  }
+
+  exportDetail($event: MouseEvent) {
+    $event.stopPropagation()
+    if (this.dataTableList.length > 0) {
+      this.spinner.show();
+      try {
+        let body = this.formData.value;
+        body.ctiets = this.dataTableList;
+        this.tongHopDxXdTh
+          .exportDetail(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-chi-tiet-tong-hop.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 }

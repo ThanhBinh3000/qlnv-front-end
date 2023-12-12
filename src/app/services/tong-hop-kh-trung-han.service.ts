@@ -17,4 +17,9 @@ export class TongHopKhTrungHanService extends BaseService{
     const url = `${environment.SERVICE_API}${this.GATEWAY}/dt-xd-trung-han/tong-hop/danh-sach-dx`;
     return this.httpClient.post(url, body).toPromise();
   }
+
+  exportDetail(body: any) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ket-xuat-detail`;
+    return this._httpClient.post(url, body, { responseType: 'blob' });
+  }
 }
