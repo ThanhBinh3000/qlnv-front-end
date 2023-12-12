@@ -345,7 +345,7 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent extends Base2Component i
           page: this.page - 1
         }
         this.dxChiCucService
-          .exportDetail(body)
+          .exportDetailCc(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-chi-tiet-tong-hop-nhu-cau-mang-pvc-va-ccdc.xlsx'),
           );
