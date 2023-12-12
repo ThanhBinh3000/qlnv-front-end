@@ -116,168 +116,6 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   ngayKetThucDx: string;
   ngayKetThuc: string;
   soDxTh: string;
-  fakeData = [
-    {
-      idVirtual: "12900dc0-f467-4ac4-9070-334866ec3fa4",
-      noiDungOld: null,
-      id: null,
-      noiDung: "An Giang",
-      noiDungDx: "An Giang",
-      loaiVthh: "0102",
-      cloaiVthh: null,
-      maDvi: "010102",
-      tonKhoDvi: 2000,
-      tonKhoLoaiVthh: null,
-      tonKhoCloaiVthh: null,
-      donViTinh: "kg",
-      soLuong: 2000,
-      soLuongDx: 2000,
-      mapVthh: null,
-      tenLoaiVthh: "Gạo tẻ",
-      tenCloaiVthh: null,
-      mapDmucDvi: null,
-      tenDvi: "Cục DTNNKV Vĩnh Phú",
-      edit: null,
-      soLuongNhuCauXuat: 100000,
-      soLuongConThieu: 13000,
-      soLuongChuyenCapThoc: 13000,
-      soLuongXc: 13000,
-      idDonViNhan: 89,
-      editNhuCauXuat: true,
-      namNhap: 2019,
-      loaiNhapXuat: "Xuất cứu trợ",
-      kieuNhapXuat: "Xuất không thu tiền",
-      mucDichXuat: "Xuất hỗ trợ ăn tết"
-    },
-    {
-      idVirtual: "02a5e038-a866-4b8f-b2e9-955341f59716",
-      noiDungOld: null,
-      id: null,
-      noiDung: "An Giang",
-      noiDungDx: "An Giang",
-      loaiVthh: "0102",
-      cloaiVthh: null,
-      maDvi: "010102",
-      tonKhoDvi: 5000,
-      tonKhoLoaiVthh: null,
-      tonKhoCloaiVthh: null,
-      donViTinh: "kg",
-      soLuong: 5000,
-      soLuongDx: 5000,
-      mapVthh: null,
-      tenLoaiVthh: "Gạo tẻ",
-      tenCloaiVthh: null,
-      mapDmucDvi: null,
-      tenDvi: "Cục DTNNKV Vĩnh Phú",
-      edit: null,
-      soLuongNhuCauXuat: 100000,
-      soLuongConThieu: 13000,
-      soLuongChuyenCapThoc: 13000,
-      soLuongXc: 13000,
-      idDonViNhan: 89,
-      editNhuCauXuat: false,
-      namNhap: 2013,
-      loaiNhapXuat: "Xuất cứu trợ",
-      kieuNhapXuat: "Xuất không thu tiền",
-      mucDichXuat: "Xuất hỗ trợ ăn tết"
-    },
-    {
-      idVirtual: "e671e784-af41-4930-a8e3-c93d3af134a7",
-      noiDungOld: null,
-      id: null,
-      noiDung: "An Giang",
-      noiDungDx: "An Giang",
-      loaiVthh: "0102",
-      cloaiVthh: null,
-      maDvi: "010102",
-      tonKhoDvi: 270000,
-      tonKhoLoaiVthh: null,
-      tonKhoCloaiVthh: null,
-      donViTinh: "kg",
-      soLuong: 80000,
-      soLuongDx: 8000,
-      mapVthh: null,
-      tenLoaiVthh: "Gạo tẻ",
-      tenCloaiVthh: null,
-      mapDmucDvi: null,
-      tenDvi: "Cục DTNNKV Vĩnh Phú",
-      edit: null,
-      soLuongNhuCauXuat: 100000,
-      soLuongConThieu: 13000,
-      soLuongChuyenCapThoc: 13000,
-      soLuongXc: 13000,
-      idDonViNhan: 89,
-      editNhuCauXuat: false,
-      namNhap: 2021,
-      loaiNhapXuat: "Xuất cứu trợ",
-      kieuNhapXuat: "Xuất không thu tiền",
-      mucDichXuat: "Xuất hỗ trợ ăn tết"
-    },
-    {
-      idVirtual: "474fe1f4-ccf8-4567-8d8e-28b16425d968",
-      noiDungOld: null,
-      id: null,
-      noiDung: "Bà Rịa - Vũng Tàu",
-      noiDungDx: "Bà Rịa - Vũng Tàu",
-      loaiVthh: "0102",
-      cloaiVthh: null,
-      maDvi: "010102",
-      tonKhoDvi: 270000,
-      tonKhoLoaiVthh: null,
-      tonKhoCloaiVthh: null,
-      donViTinh: "kg",
-      soLuong: 10000,
-      soLuongDx: 10000,
-      mapVthh: null,
-      tenLoaiVthh: "Gạo tẻ",
-      tenCloaiVthh: null,
-      mapDmucDvi: null,
-      tenDvi: "Cục DTNNKV Vĩnh Phú",
-      edit: null,
-      soLuongNhuCauXuat: 20000,
-      soLuongConThieu: 0,
-      soLuongChuyenCapThoc: 0,
-      soLuongXc: 0,
-      idDonViNhan: 77,
-      editNhuCauXuat: true,
-      namNhap: 2021,
-      loaiNhapXuat: "Xuất cứu trợ",
-      kieuNhapXuat: "Xuất không thu tiền",
-      mucDichXuat: "Xuất hỗ trợ ăn tết"
-    },
-    {
-      idVirtual: "d141c2f5-2dbc-4c31-8ce3-f0fe224ed5cb",
-      noiDungOld: null,
-      id: null,
-      noiDung: "Bà Rịa - Vũng Tàu",
-      noiDungDx: "Bà Rịa - Vũng Tàu",
-      loaiVthh: "0102",
-      cloaiVthh: null,
-      maDvi: "010101",
-      tonKhoDvi: 1900005,
-      tonKhoLoaiVthh: null,
-      tonKhoCloaiVthh: null,
-      donViTinh: "kg",
-      soLuong: 15000,
-      soLuongDx: 15000,
-      mapVthh: null,
-      tenLoaiVthh: "Gạo tẻ",
-      tenCloaiVthh: null,
-      mapDmucDvi: null,
-      tenDvi: "Cục DTNNKV Hoàng Liên Sơn",
-      edit: null,
-      soLuongNhuCauXuat: 20000,
-      soLuongConThieu: 0,
-      soLuongChuyenCapThoc: 0,
-      soLuongXc: 0,
-      idDonViNhan: 77,
-      editNhuCauXuat: false,
-      namNhap: 2022,
-      loaiNhapXuat: "Xuất cứu trợ",
-      kieuNhapXuat: "Xuất không thu tiền",
-      mucDichXuat: "Xuất hỗ trợ ăn tết"
-    }
-  ]
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -372,7 +210,8 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       type: [""],
       ghiChu: [""],
       edit: true,
-      namNhap: [""]
+      namNhap: [""],
+      xuatCap: false
     })
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
@@ -444,284 +283,17 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               this.maHauTo = '/' + res.data.soBbQd?.split("/")[1];
               res.data.soBbQd = res.data.soBbQd?.split("/")[0];
             }
-            //TODO: Xóa dữ liệu test này đi
-            res.data = {
-              ngayTao: "2023-11-27T11:11:43.677",
-              nguoiTaoId: 1,
-              ngaySua: "2023-11-27T11:11:43.677",
-              nguoiSuaId: 1,
-              id: 3264,
-              maDvi: "010130",
-              nam: 2023,
-              soBbQd: "71/QĐPDCTVT-TCDT",
-              ngayKy: "2023-11-27",
-              ngayHluc: "2023-11-29",
-              idTongHop: null,
-              maTongHop: null,
-              ngayThop: null,
-              idDx: 4722,
-              soDx: "80/TTr-QLHDT",
-              idXc: null,
-              soXc: null,
-              ngayDx: "2023-11-24",
-              tongSoLuongDx: null,
-              tongSoLuong: null,
-              thanhTien: null,
-              soLuongXuatCap: 60000,
-              loaiVthh: "0102",
-              cloaiVthh: null,
-              tenVthh: "Gạo tẻ",
-              loaiNhapXuat: "Xuất cứu trợ",
-              kieuNhapXuat: "Xuất không thu tiền",
-              mucDichXuat: "Học kỳ II năm học 2021 - 2022",
-              trichYeu: "qeqweqe",
-              trangThai: "78",
-              lyDoTuChoi: null,
-              xuatCap: true,
-              type: "TTr",
-              ngayPduyet: "2023-11-24",
-              nguoiPduyetId: 1,
-              donViTinh: "kg",
-              paXuatGaoChuyenXc: null,
-              qdPaXuatCapId: null,
-              qdPaXuatCap: null,
-              idQdGiaoNv: null,
-              soQdGiaoNv: null,
-              ngayKetThuc: "2023-11-29",
-              tenDvi: null,
-              tenLoaiVthh: null,
-              tenCloaiVthh: null,
-              tenTrangThai: "Đang nhập dữ liệu",
-              ngayHieuLucQdcxc: null,
-              slGaoChuyenXuatCap: null,
-              quyetDinhPdDtl: [
-                {
-                  id: 3039,
-                  idDx: null,
-                  soDx: "80/TTr-QLHDT",
-                  ngayKyDx: "2023-11-24",
-                  trichYeuDx: "test",
-                  soLuongDx: 20000,
-                  loaiHinhNhapXuat: null,
-                  loaiNhapXuat: "Xuất cứu trợ",
-                  kieuNhapXuat: "Xuất không thu tiền",
-                  mucDichXuat: "Học kỳ II năm học 2021 - 2022",
-                  noiDungDx: "An Giang",
-                  idDonViNhan: "89",
-                  loaiVthh: "0102",
-                  cloaiVthh: null,
-                  maDvi: "010101",
-                  soLuong: 20000,
-                  soLuongXc: 50000,
-                  soLuongNhuCauXuat: 100000,
-                  tonKhoDvi: null,
-                  tonKhoLoaiVthh: 9900005,
-                  tonKhoCloaiVthh: 9900005,
-                  donViTinh: "kg",
-                  idQdGnv: null,
-                  soQdGnv: null,
-                  ngayKetThuc: "2023-11-29",
-                  tenLoaiVthh: "Gạo tẻ",
-                  tenCloaiVthh: null,
-                  tenDvi: "Cục DTNNKV Hoàng Liên Sơn"
-                },
-                {
-                  id: 3040,
-                  idDx: null,
-                  soDx: "80/TTr-QLHDT",
-                  ngayKyDx: "2023-11-24",
-                  trichYeuDx: "test",
-                  soLuongDx: 30000,
-                  loaiHinhNhapXuat: null,
-                  loaiNhapXuat: "Xuất cứu trợ",
-                  kieuNhapXuat: "Xuất không thu tiền",
-                  mucDichXuat: "Học kỳ II năm học 2021 - 2022",
-                  noiDungDx: "An Giang",
-                  idDonViNhan: "89",
-                  loaiVthh: "0102",
-                  cloaiVthh: null,
-                  maDvi: "010102",
-                  soLuong: 30000,
-                  soLuongXc: 50000,
-                  soLuongNhuCauXuat: 100000,
-                  tonKhoDvi: null,
-                  tonKhoLoaiVthh: 1287120,
-                  tonKhoCloaiVthh: 1287120,
-                  donViTinh: "kg",
-                  idQdGnv: null,
-                  soQdGnv: null,
-                  ngayKetThuc: "2023-11-29",
-                  tenLoaiVthh: "Gạo tẻ",
-                  tenCloaiVthh: null,
-                  tenDvi: "Cục DTNNKV Vĩnh Phú"
-                },
-                {
-                  id: 3041,
-                  idDx: null,
-                  soDx: "80/TTr-QLHDT",
-                  ngayKyDx: "2023-11-24",
-                  trichYeuDx: "test",
-                  soLuongDx: 30000,
-                  loaiHinhNhapXuat: null,
-                  loaiNhapXuat: "Xuất cứu trợ",
-                  kieuNhapXuat: "Xuất không thu tiền",
-                  mucDichXuat: "Học kỳ II năm học 2021 - 2022",
-                  noiDungDx: "Bà Rịa - Vũng Tàu",
-                  idDonViNhan: "77",
-                  loaiVthh: "0102",
-                  cloaiVthh: null,
-                  maDvi: "010101",
-                  soLuong: 30000,
-                  soLuongXc: 10000,
-                  soLuongNhuCauXuat: 60000,
-                  tonKhoDvi: null,
-                  tonKhoLoaiVthh: 9900005,
-                  tonKhoCloaiVthh: 9900005,
-                  donViTinh: "kg",
-                  idQdGnv: null,
-                  soQdGnv: null,
-                  ngayKetThuc: "2023-11-29",
-                  tenLoaiVthh: "Gạo tẻ",
-                  tenCloaiVthh: null,
-                  tenDvi: "Cục DTNNKV Hoàng Liên Sơn"
-                },
-                {
-                  id: 3042,
-                  idDx: null,
-                  soDx: "80/TTr-QLHDT",
-                  ngayKyDx: "2023-11-24",
-                  trichYeuDx: "test",
-                  soLuongDx: 20000,
-                  loaiHinhNhapXuat: null,
-                  loaiNhapXuat: "Xuất cứu trợ",
-                  kieuNhapXuat: "Xuất không thu tiền",
-                  mucDichXuat: "Học kỳ II năm học 2021 - 2022",
-                  noiDungDx: "Bà Rịa - Vũng Tàu",
-                  idDonViNhan: "77",
-                  loaiVthh: "0102",
-                  cloaiVthh: null,
-                  maDvi: "010102",
-                  soLuong: 20000,
-                  soLuongXc: 10000,
-                  soLuongNhuCauXuat: 60000,
-                  tonKhoDvi: null,
-                  tonKhoLoaiVthh: 1287120,
-                  tonKhoCloaiVthh: 1287120,
-                  donViTinh: "kg",
-                  idQdGnv: null,
-                  soQdGnv: null,
-                  ngayKetThuc: "2023-11-29",
-                  tenLoaiVthh: "Gạo tẻ",
-                  tenCloaiVthh: null,
-                  tenDvi: "Cục DTNNKV Vĩnh Phú"
-                },
-                {
-                  id: 3043,
-                  idDx: null,
-                  soDx: "80/TTr-QLHDT",
-                  ngayKyDx: "2023-11-24",
-                  trichYeuDx: "test",
-                  soLuongDx: 20000,
-                  loaiHinhNhapXuat: null,
-                  loaiNhapXuat: "Xuất cứu trợ",
-                  kieuNhapXuat: "Xuất không thu tiền",
-                  mucDichXuat: "Học kỳ II năm học 2021 - 2022",
-                  noiDungDx: "An Giang",
-                  idDonViNhan: "89",
-                  loaiVthh: "0102",
-                  cloaiVthh: null,
-                  maDvi: "010101",
-                  soLuong: 5,
-                  soLuongXc: 50000,
-                  soLuongNhuCauXuat: 100000,
-                  tonKhoDvi: 10,
-                  tonKhoLoaiVthh: null,
-                  tonKhoCloaiVthh: null,
-                  donViTinh: "kg",
-                  idQdGnv: null,
-                  soQdGnv: null,
-                  ngayKetThuc: "2023-11-29",
-                  tenLoaiVthh: "Gạo tẻ",
-                  tenCloaiVthh: null,
-                  tenDvi: "Cục DTNNKV Hoàng Liên Sơn",
-                  type: "XC"
-                },
-                {
-                  id: 3044,
-                  idDx: null,
-                  soDx: "80/TTr-QLHDT",
-                  ngayKyDx: "2023-11-24",
-                  trichYeuDx: "test",
-                  soLuongDx: 40000,
-                  loaiHinhNhapXuat: null,
-                  loaiNhapXuat: "Xuất cứu trợ",
-                  kieuNhapXuat: "Xuất không thu tiền",
-                  mucDichXuat: "Học kỳ II năm học 2021 - 2022",
-                  noiDungDx: "An Giang",
-                  idDonViNhan: "89",
-                  loaiVthh: "0102",
-                  cloaiVthh: null,
-                  maDvi: "010102",
-                  soLuong: 10,
-                  soLuongXc: 50000,
-                  soLuongNhuCauXuat: 100000,
-                  tonKhoDvi: 5329366,
-                  tonKhoLoaiVthh: null,
-                  tonKhoCloaiVthh: null,
-                  donViTinh: "kg",
-                  idQdGnv: null,
-                  soQdGnv: null,
-                  ngayKetThuc: "2023-11-29",
-                  tenLoaiVthh: "Gạo tẻ",
-                  tenCloaiVthh: null,
-                  tenDvi: "Cục DTNNKV Vĩnh Phú",
-                  type: "XC"
-                },
-                {
-                  id: 3045,
-                  idDx: null,
-                  soDx: "80/TTr-QLHDT",
-                  ngayKyDx: "2023-11-24",
-                  trichYeuDx: "test",
-                  soLuongDx: 30000,
-                  loaiHinhNhapXuat: null,
-                  loaiNhapXuat: "Xuất cứu trợ",
-                  kieuNhapXuat: "Xuất không thu tiền",
-                  mucDichXuat: "Học kỳ II năm học 2021 - 2022",
-                  noiDungDx: "Bà Rịa - Vũng Tàu",
-                  idDonViNhan: "77",
-                  loaiVthh: "0102",
-                  cloaiVthh: null,
-                  maDvi: "010102",
-                  soLuong: 20,
-                  soLuongXc: 10000,
-                  soLuongNhuCauXuat: 60000,
-                  tonKhoDvi: 5329366,
-                  tonKhoLoaiVthh: null,
-                  tonKhoCloaiVthh: null,
-                  donViTinh: "kg",
-                  idQdGnv: null,
-                  soQdGnv: null,
-                  ngayKetThuc: "2023-11-29",
-                  tenLoaiVthh: "Gạo tẻ",
-                  tenCloaiVthh: null,
-                  tenDvi: "Cục DTNNKV Vĩnh Phú",
-                  type: "XC"
-                }
-              ],
-              fileDinhKem: [],
-              canCu: []
-            }
-            const quyetDinhPdDtl = res.data.quyetDinhPdDtl.filter(f => f.type !== "XC").map(s => ({ ...s, idVirtual: uuidv4() }));
+            const quyetDinhPdDtl = res.data.quyetDinhPdDtl.filter(f => !f.xuatCap).map(s => ({ ...s, idVirtual: uuidv4() }));
             this.helperService.bidingDataInFormGroupAndNotTrigger(this.formData, { ...res.data, quyetDinhPdDtl }, ['type', 'tenVthh']);
-
             //get cache
+            this.ngayKetThuc = res.data.type === 'TTr' ? res.data.ngayKetThuc : '';
             if (this.formData.value.type == 'TTr') {
               let res = await this.deXuatPhuongAnCuuTroService.getDetail(this.formData.value.idDx);
               let detail = res.data;
               detail.deXuatPhuongAn.forEach(s => {
                 s.noiDungDx = s.noiDung;
                 s.soDx = detail.soDx;
+                s.idDx = detail.idDx;
                 s.ngayKyDx = detail.ngayDx;
                 s.trichYeuDx = detail.trichYeu;
                 // s.soLuongDx = s.soLuong;
@@ -734,7 +306,6 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
                 ...element, soLuongXc: element.soLuongXc ? element.soLuongXc : element.soLuongChuyenCapThoc,
                 soLuongDx: element.soLuongDx ? element.soLuongDx : element.soLuong
               })));
-              this.ngayKetThuc = detail.ngayKetThuc;
               this.ngayKetThucDx = detail.ngayKetThuc
             } else {
               let res = await this.tongHopPhuongAnCuuTroService.getDetail(this.formData.value.idTongHop);
@@ -746,7 +317,9 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
 
             }
             if (res.data.xuatCap) {
-              this.dataPhanBoXuatCap = cloneDeep(res.data.quyetDinhPdDtl).filter(f => f.type === "XC").map(f => ({ ...f, mId: uuidv4() }));
+              const dataGocKhongXoa = uniqBy(res.data.quyetDinhPdDtl.filter(f => f.soLuongXc > 0), 'noiDungDx')
+                .map(f => ({ ...f, tenDvi: '', maDvi: '', id: null, mId: uuidv4(), xuatCap: true, soLuong: "", tonKhoDvi: "", tonKhoLoaiVthh: "", tonKhoCloaiVthh: "" }));
+              this.dataPhanBoXuatCap = cloneDeep(res.data.quyetDinhPdDtl).filter(f => !!f.xuatCap).map(f => ({ ...f, mId: uuidv4() })).concat(dataGocKhongXoa);
               this.buildTableViewXuatCap();
             }
             await this.buildTableView();
@@ -793,10 +366,11 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
     }
     if (this.formData.value.xuatCap) {
       const soLuongXuatCap = this.dataPhanBoXuatCap.filter(f => !f.maDvi).reduce((sum, cur) => sum += cur.soLuongXc, 0);
-      this.formData.patchValue({ soLuongXuatCap, quyetDinhPdDtl: [...this.formData.value.quyetDinhPdDtl, ...this.dataPhanBoXuatCap.filter(f => !!f.maDvi)] })
+      this.formData.patchValue({ soLuongXuatCap })
     }
     let body = {
       ...this.formData.value,
+      quyetDinhPdDtl: [...this.formData.value.quyetDinhPdDtl, ...this.dataPhanBoXuatCap.filter(f => !!f.maDvi)],
       soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null
     }
     await this.createUpdate(body, null, null, ['tenVthh', 'type']);
@@ -807,9 +381,13 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
     if (!this.checkHoanThanhPhanBoXuatCap()) return;
     if (this.formData.value.xuatCap) {
       const soLuongXuatCap = this.dataPhanBoXuatCap.filter(f => !f.maDvi).reduce((sum, cur) => sum += cur.soLuongXc, 0);
-      this.formData.patchValue({ soLuongXuatCap, quyetDinhPdDtl: [...this.formData.value.quyetDinhPdDtl, ...this.dataPhanBoXuatCap.filter(f => !!f.maDvi)] })
+      this.formData.patchValue({ soLuongXuatCap })
     }
-    let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd + this.maHauTo }
+    let body = {
+      ...this.formData.value,
+      soBbQd: this.formData.value.soBbQd + this.maHauTo,
+      quyetDinhPdDtl: [...this.formData.value.quyetDinhPdDtl, ...this.dataPhanBoXuatCap.filter(f => !!f.maDvi)]
+    }
     await super.saveAndSend(body, trangThai, msg, msgSuccess, ['tenVthh', 'type']);
   }
 
@@ -964,7 +542,10 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
     delete data.canCu;
     delete data.fileDinhKem;
     delete data.trichYeu;
-    this.formData.value.quyetDinhPdDtl.forEach(s => delete s.id);
+    this.formData.value.quyetDinhPdDtl.forEach(s => {
+      delete s.id;
+      s.idDx = data.idDx
+    });
     this.helperService.bidingDataInFormGroupAndIgnore(this.formData, data, ['tenVthh', 'quyetDinhPdDtl']);
     this.ngayKetThuc = detail.ngayKetThuc;
     this.ngayKetThucDx = detail.ngayKetThuc;
@@ -1202,7 +783,6 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               childData: rs1,
             };
           }).value().filter(f => !!f);
-        console.log("phuongAnHdrViewCache", this.phuongAnHdrViewCache, this.quyetDinhPdDtlCache)
       }
     } else {
       if (this.isVthhVatuThietBi()) {
@@ -1250,8 +830,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
             };
           }).value();
       } else {
-        // this.phuongAnHdrView = chain(this.formData.value.quyetDinhPdDtl)
-        this.phuongAnHdrView = chain(this.fakeData)
+        this.phuongAnHdrView = chain(this.formData.value.quyetDinhPdDtl)
           .groupBy("noiDungDx")
           .map((value, key) => {
             let row = value.find(s => s.noiDungDx === key);
@@ -1329,8 +908,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
             };
           }).value();
       } else {
-        //TODO: fake data this.phuongAnHdrViewCache = chain(this.quyetDinhPdDtlCache)
-        this.phuongAnHdrViewCache = chain(this.fakeData)
+        this.phuongAnHdrViewCache = chain(this.quyetDinhPdDtlCache)
           .groupBy("noiDungDx")
           .map((value, key) => {
             let row = value.find(s => s.noiDungDx === key);
@@ -1363,7 +941,6 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
     if (this.formData.value.type !== "TH") {
       this.phuongAnView = this.phuongAnHdrView;
       this.phuongAnViewCache = this.phuongAnHdrViewCache;
-      console.log("this.phuongAnView", this.phuongAnView)
       await this.tinhTong();
     };
     // await this.tinhTong();
@@ -1413,7 +990,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       this.phuongAnView = this.phuongAnHdrView[findndex]?.childData ? this.phuongAnHdrView[findndex].childData : [];
       this.phuongAnViewCache = this.phuongAnHdrViewCache[findCacheIndex]?.childData ? this.phuongAnHdrViewCache[findCacheIndex].childData : [];
       this.ngayKetThuc = this.phuongAnHdrView[findndex]?.ngayKetThuc;
-      this.ngayKetThucDx = this.phuongAnHdrView[findndex]?.ngayKetThuc;
+      this.ngayKetThucDx = this.phuongAnHdrViewCache[findCacheIndex]?.ngayKetThuc;
       await this.tinhTong();
     }
   }
@@ -1559,21 +1136,13 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
     }
   }
   handleChangeXuatCap() {
-    // if (this.formData.value.type === "TTr") {
-    //   if (this.formData.value.xuatCap) {
-    //     this.dataPhanBoXuatCap = uniqBy(this.formData.value.quyetDinhPdDtl.filter(f => f.soLuongXc > 0), 'noiDungDx')
-    //       .map(f => ({ ...f, tenDvi: '', maDvi: '', id: null, mId: uuidv4(), type: "XC", soLuong: "", tonKhoDvi: "", tonKhoLoaiVthh: "", tonKhoCloaiVthh: "" }));
-    //     this.buildTableViewXuatCap();
-    //   }
-    // }
-    //TODO: Dang fake data
-    // if (this.formData.value.type === "TTr") {
-    if (this.formData.value.xuatCap) {
-      this.dataPhanBoXuatCap = uniqBy(this.formData.value.quyetDinhPdDtl.filter(f => f.soLuongXc > 0), 'noiDungDx')
-        .map(f => ({ ...f, tenDvi: '', maDvi: '', id: null, mId: uuidv4(), type: "XC", soLuong: "", tonKhoDvi: "", tonKhoLoaiVthh: "", tonKhoCloaiVthh: "" }));
-      this.buildTableViewXuatCap();
+    if (this.formData.value.type === "TTr") {
+      if (this.formData.value.xuatCap) {
+        this.dataPhanBoXuatCap = uniqBy(this.formData.value.quyetDinhPdDtl.filter(f => f.soLuongXc > 0), 'noiDungDx')
+          .map(f => ({ ...f, tenDvi: '', maDvi: '', id: null, mId: uuidv4(), xuatCap: true, soLuong: "", tonKhoDvi: "", tonKhoLoaiVthh: "", tonKhoCloaiVthh: "" }));
+        this.buildTableViewXuatCap();
+      }
     }
-    // }
   }
   async loadDsDonVi() {
     let body = {
@@ -1662,8 +1231,8 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   };
   checkHoanThanhPhanBoXuatCap() {
     if (this.formData.value.xuatCap) {
-      const tongSoLuongXc = this.dataPhanBoXuatCap.filter(f => !f.maDvi).reduce((sum, cur) => sum += cur.soLuongXc);
-      const tongSoLuongPhanBoXuatCap = this.dataPhanBoXuatCap.filter(f => !!f.maDvi).reduce((sum, cur) => sum += cur.soLuong);
+      const tongSoLuongXc = this.dataPhanBoXuatCap.filter(f => !f.maDvi).reduce((sum, cur) => sum += cur.soLuongXc, 0);
+      const tongSoLuongPhanBoXuatCap = this.dataPhanBoXuatCap.filter(f => !!f.maDvi).reduce((sum, cur) => sum += cur.soLuong, 0);
       if (tongSoLuongPhanBoXuatCap === tongSoLuongXc) {
         return true
       }
@@ -1730,7 +1299,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       })
     } else {
       this.dataPhanBoXuatCap.push(row);
-    }
+    };
     this.huyPhuongAnXc()
   }
   xoaPhuongAnXc(data: any) {

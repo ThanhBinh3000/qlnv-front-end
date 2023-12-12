@@ -809,15 +809,6 @@
             </div>
             <form nzLayout="vertical" nz-form [formGroup]="formData">
               <div nz-row [nzGutter]="24">
-                <div nz-col>
-                  <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">Tổng SL xuất cứu trợ<br />giao cục thực hiện</nz-form-label>
-                    <nz-form-control nz-col [nzSpan]="24">
-                      <span style="color: #001CFF"><strong>{{tongSoLuong|number:globals.numberFormat:globals.locale}}
-                          {{formData.value.donViTinh? formData.value.donViTinh : ""}}</strong></span>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
                 <div nz-col *ngIf="isVthhGao()">
                   <nz-form-item>
                     <nz-form-label [nzNoColon]="true">SL đề xuất cứu trợ<br />chuyển sang xuất cấp</nz-form-label>
@@ -825,30 +816,6 @@
                       <span
                         style="color: red;"><strong>{{tongSoLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}
                           {{formData.value.donViTinh? formData.value.donViTinh : ""}}</strong></span>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <!-- <div nz-col *ngIf="formData.value.loaiNhapXuat==='Xuất cứu trợ'">
-                  <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">Thời gian thực hiện<br />xuất cứu trợ, viện trợ đến
-                      ngày</nz-form-label>
-                    <nz-form-control nz-col [nzSpan]="24">
-                      <span style="color: #001CFF"><strong>{{ngayKetThuc|date:
-                          globals.dateFormat}}</strong></span>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div> -->
-                <div nz-col [nzSpan]="6" *ngIf="formData.value.loaiNhapXuat==='Xuất cứu trợ'">
-                  <nz-form-item class="form-item">
-                    <nz-form-label nzRequired [nzNoColon]="true"> Thời gian thực hiện<br />xuất cứu trợ, viện trợ đến
-                      ngày</nz-form-label>
-                    <nz-form-control nz-col [nzSpan]="24">
-                      <nz-input-group>
-                        <nz-date-picker class="search__input blue" nzFormat="dd/MM/yyyy" [(ngModel)]="ngayKetThuc"
-                          [ngModelOptions]="{standalone: true}" (ngModelChange)="changeNgayKetThuc($event)"
-                          nzPlaceHolder="Thời gian thực hiện" [nzDisabled]="isView">
-                        </nz-date-picker>
-                      </nz-input-group>
                     </nz-form-control>
                   </nz-form-item>
                 </div>
