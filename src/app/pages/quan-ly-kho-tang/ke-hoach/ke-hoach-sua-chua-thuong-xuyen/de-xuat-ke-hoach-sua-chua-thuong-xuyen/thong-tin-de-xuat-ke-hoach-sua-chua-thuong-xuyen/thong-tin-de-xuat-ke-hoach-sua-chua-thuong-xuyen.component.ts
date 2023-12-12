@@ -208,7 +208,7 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
   async save(isGuiDuyet?) {
     this.spinner.show();
     this.helperService.removeValidators(this.formData);
-    if (isGuiDuyet || this.idInput > 0) {
+    if (isGuiDuyet && this.idInput > 0) {
       this.setValidators();
     }
     this.conVertTreToList();
