@@ -114,7 +114,7 @@ export class CapNhatThongTinDauThauSctxComponent extends Base2Component implemen
             soQdPdKhlcnt: data.soQd,
             tenCongTrinh: this.itemDuAn.tenCongTrinh,
             loaiCongTrinh: this.itemDuAn.tenLoaiCongTrinh,
-            tongMucDt: data.tongTien,
+            tongMucDt: data.tongMucDt,
             chuDauTu: data.chuDauTu,
             trangThaiDt: data.trangThaiDt,
             tenTrangThaiDt: data.tenTrangThaiDt,
