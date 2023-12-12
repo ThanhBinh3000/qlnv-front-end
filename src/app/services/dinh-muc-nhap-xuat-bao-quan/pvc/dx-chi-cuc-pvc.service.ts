@@ -43,4 +43,9 @@ export class DxChiCucPvcService extends BaseService{
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ket-xuat-detail`;
     return this._httpClient.post(url, body, { responseType: 'blob' });
   }
+
+  exportDetailCc(body: any) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ket-xuat-detail-cc`;
+    return this._httpClient.post(url, body, { responseType: 'blob' });
+  }
 }
