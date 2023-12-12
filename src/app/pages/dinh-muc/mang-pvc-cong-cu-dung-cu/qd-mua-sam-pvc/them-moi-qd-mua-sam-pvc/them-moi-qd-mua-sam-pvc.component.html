@@ -321,9 +321,9 @@
               <td>
                 <!-- <input class='money-input' currencyMask [options]='amount' [min]='35' [(ngModel)]='item.slMetQuyCuon'
                   (ngModelChange)="changeSlQuyDoi($event, item)" /> -->
-                <nz-input-number [(ngModel)]='item.slMetQuyCuon' [nzMin]="35" [nzMax]="999999999" [nzStep]="1"
-                  [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                  (ngModelChange)="changeSlQuyDoi($event, item)" [nzDisabled]="isView">
+                <nz-input-number *ngIf="item.maCcdc == '02.03'" [(ngModel)]='item.slMetQuyCuon' [nzMin]="35"
+                  [nzMax]="999999999" [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                  [nzParser]="globals.parser" (ngModelChange)="changeSlQuyDoi($event, item)" [nzDisabled]="isView">
                 </nz-input-number>
               </td>
               <td class='text-right'>
