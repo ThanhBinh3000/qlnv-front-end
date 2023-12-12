@@ -222,6 +222,7 @@
     [nzScroll]="{ x: '2500px' }">
     <thead>
       <tr>
+        <th rowSpan='2' width='40px'></th>
         <th rowspan="2" width="40px">STT</th>
         <th rowspan="2" width="150px">Tên CCDC</th>
         <th rowspan="2" width="200px">Mô tả</th>
@@ -251,6 +252,7 @@
           <td [nzExpand]='expandSet.has(data.idVirtual)' (nzExpandChange)='onExpandChange(data.idVirtual, $event)'></td>
           <td class='font-weight-bold'>{{idx + 1}}</td>
           <td class='font-weight-bold'>{{data.tenCcdc}}</td>
+          <td class='font-weight-bold'>{{data.moTaCcdc}}</td>
           <td class='font-weight-bold'>{{data.donViTinh}}</td>
           <td class='font-weight-bold text-right'>{{sumSoLuong('slChiTieuGao', data.tenCcdc) | number: '1.0-1': 'vi_VN'
             }}
@@ -289,6 +291,7 @@
             <td></td>
             <td>{{idx + 1}}.{{y + 1}}</td>
             <td>{{item.tenDvi}}</td>
+            <td></td>
             <td>{{item.donViTinh}}</td>
             <td class='text-right'>{{item.slChiTieuGao | number: '1.0-1': 'vi_VN' }}</td>
             <td class='text-right'>{{item.slChiTieuThoc | number: '1.0-1': 'vi_VN' }}</td>
