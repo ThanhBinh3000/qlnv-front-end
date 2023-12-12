@@ -33,6 +33,7 @@ import { AMOUNT, AMOUNT_NO_DECIMAL, AMOUNT_TWO_DECIMAL } from '../../../../../Ut
 import { Base2Component } from '../../../../../components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from '../../../../../services/storage.service';
+import { TongHopTheoDoiCapVonService } from '../../../../../services/ke-hoach/von-phi/tongHopTheoDoiCapVon.service';
 
 @Component({
   selector: 'app-thong-tin-de-nghi-cap-von-bo-nganh',
@@ -162,6 +163,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent extends Base2Component impleme
     modal: NzModalService,
     public userService: UserService,
     private donviService: DonviService,
+    private tongHopTheoDoiCapVonService: TongHopTheoDoiCapVonService,
     private deNghiCapVonBoNganhService: DeNghiCapVonBoNganhService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, deNghiCapVonBoNganhService);
@@ -366,6 +368,18 @@ export class ThongTinDeNghiCapVonBoNganhComponent extends Base2Component impleme
       this.rowItem.tienThHd = hopDong.tienThHd;
       this.rowItem.tienThHdNt = hopDong.tienThHdNt;
       this.rowItem.duToanDuocGiao = hopDong.duToanDuocGiao;
+      //get thông tin tổng tiền đã cấp
+      let body = {
+        maHd: hopDong.soHopDong,
+        maBn: this.formData.value.boNganh,
+        trangThai: STATUS.DA_HOAN_THANH,
+      };
+      let mes = await this.tongHopTheoDoiCapVonService.getTongTienDaCapTheoHopDong(body);
+      if (mes.msg == MESSAGE.SUCCESS) {
+        this.rowItem.kinhPhiDaCap = this.rowItem.loaiTien == '01' ? mes.data : 0;
+        this.rowItem.kinhPhiDaCapNt = this.rowItem.loaiTien != '01' ? mes.data : 0;
+        this.calCulateKinhPhiChuaCap();
+      }
     }
   }
 
@@ -667,8 +681,8 @@ export class ThongTinDeNghiCapVonBoNganhComponent extends Base2Component impleme
         if (res.msg == MESSAGE.SUCCESS) {
           this.idInput = res.data.id;
           this.formData.patchValue({
-            id: res.data.id
-          })
+            id: res.data.id,
+          });
           if (isHoanThanh) {
             this.guiDuyet(this.idInput);
           } else
