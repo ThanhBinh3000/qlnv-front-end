@@ -151,7 +151,7 @@
           <td class="text-center">{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.tenTrangThai }}</td>
-          <td *ngIf="userService.isTongCuc()">{{ data.maTongHop ? data.maTongHop : 'Bản ghi chưa tổng hợp'}}</td>
+          <td *ngIf="userService.isTongCuc()">{{ data.maTongHop ? data.maTongHop : 'Chưa tổng hợp'}}</td>
           <td class="text-left" *ngIf="userService.isCuc">
             <a
               *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_DX_XEM') && !((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDV) && data.nguoiTaoId == userInfo.ID)"

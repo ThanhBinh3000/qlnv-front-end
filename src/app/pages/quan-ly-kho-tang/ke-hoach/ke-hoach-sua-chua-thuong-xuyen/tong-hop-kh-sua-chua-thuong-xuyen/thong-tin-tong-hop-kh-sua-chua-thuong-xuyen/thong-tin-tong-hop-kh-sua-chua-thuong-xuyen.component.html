@@ -165,29 +165,29 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="4">
-              <nz-form-item class="form-item">
-                <nz-form-label [nzNoColon]="true">Số quyết định
-                </nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group [nzAddOnAfter]="soQd">
-                    <input formControlName="soQuyetDinh" [readonly]="formData.value.trangThai != STATUS.CHO_DUYET_LDTC"
-                           type="text" nz-input size="small"/>
-                  </nz-input-group>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col nzSpan="4">
-              <nz-form-item class="form-item">
-                <nz-form-label [nzNoColon]="true">Ngày ký quyết định
-                </nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker [nzDisabled]="formData.value.trangThai != STATUS.CHO_DUYET_LDTC"
-                                  formControlName="ngayKy"
-                                  nzFormat="dd/MM/yyyy"></nz-date-picker>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
+<!--            <div nz-col nzSpan="4">-->
+<!--              <nz-form-item class="form-item">-->
+<!--                <nz-form-label [nzNoColon]="true">Số quyết định-->
+<!--                </nz-form-label>-->
+<!--                <nz-form-control [nzErrorTip]="error">-->
+<!--                  <nz-input-group [nzAddOnAfter]="soQd">-->
+<!--                    <input formControlName="soQuyetDinh" [readonly]="formData.value.trangThai != STATUS.CHO_DUYET_LDTC"-->
+<!--                           type="text" nz-input size="small"/>-->
+<!--                  </nz-input-group>-->
+<!--                </nz-form-control>-->
+<!--              </nz-form-item>-->
+<!--            </div>-->
+<!--            <div nz-col nzSpan="4">-->
+<!--              <nz-form-item class="form-item">-->
+<!--                <nz-form-label [nzNoColon]="true">Ngày ký quyết định-->
+<!--                </nz-form-label>-->
+<!--                <nz-form-control [nzErrorTip]="error">-->
+<!--                  <nz-date-picker [nzDisabled]="formData.value.trangThai != STATUS.CHO_DUYET_LDTC"-->
+<!--                                  formControlName="ngayKy"-->
+<!--                                  nzFormat="dd/MM/yyyy"></nz-date-picker>-->
+<!--                </nz-form-control>-->
+<!--              </nz-form-item>-->
+<!--            </div>-->
             <div nz-col [nzSpan]="24">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
@@ -217,13 +217,13 @@
         <nz-table #dataTbl class="nowrap mt-16 table-chi-tiet pd-10" [nzData]="listDx" nzBordered>
           <thead>
           <tr>
-            <th style="width: 35px">STT</th>
-            <th>Cục DTNN KV</th>
-            <th>Số đề xuất/công văn</th>
-            <th>Ngày tiếp nhận cán bộ vụ</th>
-            <th>Tổng danh mục đề nghị</th>
-            <th>Tổng danh mục đã được phê duyệt</th>
-            <th>Trích yếu</th>
+            <th style="width: 35px; text-align: center">STT</th>
+            <th class='text-center'>Cục DTNN KV</th>
+            <th class='text-center'>Số đề xuất/công văn</th>
+            <th class='text-center'>Ngày tiếp nhận Cán bộ Vụ</th>
+            <th class='text-center'>Tổng danh mục đề nghị</th>
+            <th class='text-center'>Tổng danh mục đã được phê duyệt</th>
+            <th class='text-center'>Trích yếu</th>
           </tr>
           </thead>
           <tbody>

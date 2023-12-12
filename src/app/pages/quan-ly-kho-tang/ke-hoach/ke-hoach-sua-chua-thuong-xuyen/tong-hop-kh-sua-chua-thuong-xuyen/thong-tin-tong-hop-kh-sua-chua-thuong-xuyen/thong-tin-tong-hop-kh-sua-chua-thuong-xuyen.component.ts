@@ -493,6 +493,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
           typeKh: 'TH',
           listDmSuaChua: this.listDmSuaChua,
           dataHeader: this.formData.value,
+          trangThaiTh: this.formData.value.trangThai,
         }
       });
       modalQD.afterClose.subscribe(async (detail) => {

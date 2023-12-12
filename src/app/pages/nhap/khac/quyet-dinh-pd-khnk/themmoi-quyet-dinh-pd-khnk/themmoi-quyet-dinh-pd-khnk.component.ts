@@ -228,6 +228,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
           text: dayjs().get('year') + i,
         });
       }
+      debugger
       if (this.idInput) {
         await this.loadChiTiet(this.idInput)
       } else {
@@ -603,7 +604,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       nzComponentParams: {
         dataTable: this.listDanhSachTongHop,
         dataHeader: ['Mã tổng hợp', 'Nội dung tổng hợp'],
-        dataColumn: ['maTh', 'noiDung']
+        dataColumn: ['maTh', 'noiDungTh']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
