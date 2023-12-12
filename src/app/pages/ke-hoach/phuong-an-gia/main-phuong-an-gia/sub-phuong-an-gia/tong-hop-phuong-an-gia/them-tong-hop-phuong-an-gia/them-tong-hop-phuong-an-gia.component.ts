@@ -20,6 +20,7 @@ import {PAGE_SIZE_DEFAULT, TYPE_PAG} from 'src/app/constants/config';
 import {saveAs} from 'file-saver';
 import {PREVIEW} from "../../../../../../../constants/fileType";
 import printJS from "print-js";
+import {cloneDeep} from 'lodash';
 
 @Component({
   selector: 'app-them-tong-hop-phuong-an-gia',
@@ -146,7 +147,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
           this.listCuc = this.listCuc.filter(item => item.type != 'PB')
         }
       } else {
-        this.listCuc = []
+        this.listCuc = [];
       }
     }
   }
@@ -244,16 +245,16 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   }
 
   validateGiaBTc() {
-      let rs = false;
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach(it => {
-          if (! it.giaQdBtc || it.giaQdBtc == 0) {
-            rs = true;
-            return;
-          }
-        });
-      }
-      return rs;
+    let rs = false;
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach(it => {
+        if (!it.giaQdBtc || it.giaQdBtc == 0) {
+          rs = true;
+          return;
+        }
+      });
+    }
+    return rs;
   }
 
   async loadDsVthh() {
@@ -297,9 +298,9 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         return;
       }
       if (this.listCucSelected.length == 0) {
-          this.notification.warning(MESSAGE.WARNING,'Chưa nhập danh sách Cục DTNNKV');
-          this.spinner.hide();
-          return;
+        this.notification.warning(MESSAGE.WARNING, 'Chưa nhập danh sách Cục DTNNKV');
+        this.spinner.hide();
+        return;
       }
       let body = this.formTraCuu.value;
       body.type = this.type;
@@ -313,7 +314,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.TONG_HOP_SUCCESS);
       } else {
         this.isTongHop = false;
-        this.notification.error(MESSAGE.ERROR, res.msg);
+        this.notification.error('', res.msg);
       }
       this.spinner.hide();
     } catch (e) {
@@ -324,8 +325,6 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   }
 
   bindingDataTongHop(data, reqBody) {
-    console.log(data,111)
-    console.log(reqBody,222)
     let giaKsTt = data.giaKsTtTu && data.giaKsTtDen ? Intl.NumberFormat('vi-VN').format(data.giaKsTtTu) + " - " + Intl.NumberFormat('vi-VN').format(data.giaKsTtDen) : null;
     let giaKsTtVat = data.giaKsTtVatTu && data.giaKsTtVatDen ? Intl.NumberFormat('vi-VN').format(data.giaKsTtVatTu) + " - " + Intl.NumberFormat('vi-VN').format(data.giaKsTtVatDen) : null;
     let kqTd = data.giaTdTu && data.giaTdDen ? Intl.NumberFormat('vi-VN').format(data.giaTdTu) + " - " + Intl.NumberFormat('vi-VN').format(data.giaTdDen) : null;
@@ -338,7 +337,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       loaiVthh: data.loaiVthh ?? reqBody.loaiVthh,
       cloaiVthh: data.cloaiVthh ?? reqBody.cloaiVthh,
       loaiGia: data.loaiGia ?? reqBody.loaiGia,
-      maDvis:  data && data.maDvis ? data.maDvis : (reqBody && reqBody.maDvis ) ? reqBody.maDvis : null ,
+      maDvis: data && data.maDvis ? data.maDvis : (reqBody && reqBody.maDvis) ? reqBody.maDvis : null,
       ngayDxTu: data.ngayDxTu ? data.ngayDxTu : (reqBody && reqBody.ngayDxTu ? reqBody.ngayDxTu : null),
       ngayDxDen: data.ngayDxDen ? data.ngayDxDen : (reqBody && reqBody.ngayDxDen ? reqBody.ngayDxDen : null),
       noiDung: data.noiDung,
@@ -353,7 +352,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       trangThaiTt: data.trangThaiTt,
       tenTrangThaiTt: data.tenTrangThaiTt,
       tenTrangThaiTh: data.tenTrangThaiTh ? data.tenTrangThaiTh : 'Chưa tạo tờ trình',
-    })
+    });
     this.dataTable = data.pagChiTiets;
     this.buildTreePagCt();
   }
@@ -369,9 +368,28 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
             tenDvi: value && value[0] && value[0].tenDvi ? value[0].tenDvi : null,
             pagId: value && value[0] && value[0].pagId ? value[0].pagId : null,
             soDx: value && value[0] && value[0].soDx ? value[0].soDx : null,
-            children: value
+            children: value,
+            maDvi : key
           };
         }).value();
+      if (this.listCuc.length > 0 && this.listCucSelected.length == this.listCuc.length - 1) {
+        let arrCuc: any[] = cloneDeep(this.listCuc);
+        arrCuc.splice(0, 1);
+        let mapMadvi = this.dataTableView.map(item => item.maDvi);
+        arrCuc.forEach(item => {
+          if (!mapMadvi.includes(item.maDvi)) {
+            this.dataTableView.push(item);
+          } else {
+            let index = this.dataTableView.findIndex(it => it.maDvi == item.maDvi);
+            if (index > -1) {
+              this.dataTableView[index].sapXep = item.sapXep
+            }
+          }
+        })
+      }
+      this.dataTableView = chain(this.dataTableView)
+        .orderBy(['sapXep'])  // Sắp xếp dựa trên trường sapXep
+        .value();
     }
     this.expandAll()
   }
@@ -388,7 +406,9 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   expandAll() {
     if (this.dataTableView && this.dataTableView.length > 0) {
       this.dataTableView.forEach(s => {
-        this.expandSet.add(s.idVirtual);
+        if (s.children && s.children.length > 0) {
+          this.expandSet.add(s.idVirtual);
+        }
       });
     }
   }
@@ -479,7 +499,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
 
   calcTong(tenDvi?: string) {
     if (this.dataTable && this.dataTable.length > 0) {
-      let arr: any[]  = [];
+      let arr: any[] = [];
       if (tenDvi) {
         arr = this.dataTable.filter(item => item.tenDvi == tenDvi);
       } else {

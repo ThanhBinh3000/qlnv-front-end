@@ -25,7 +25,7 @@ import {
 import {
   QuyetDinhGiaCuaBtcService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
-import {PREVIEW} from "../../../../../../../constants/fileType";
+import {FILETYPE, PREVIEW} from "../../../../../../../constants/fileType";
 import printJS from "print-js";
 import {
   TongHopPhuongAnGiaService
@@ -73,7 +73,9 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   dsPhuongAnGia: any[] = [];
   dsLoaiHangXdg: any[] = [];
   STATUS = STATUS;
+  listFile: any[] = [];
   fileDinhKemList: any[] = [];
+  filePhanTichs: any[] = [];
   dataTableTtThamKhao: any[] = [];
   typeConst = TYPE_PAG;
   tenLoaiVthh: string;
@@ -114,6 +116,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         nguoiKy: [null],
         loaiGia: [null],
         trichYeu: [null],
+        nguoiLap: [null],
         trangThai: ['00'],
         tenTrangThai: ['Dự Thảo'],
         ghiChu: [],
@@ -152,7 +155,13 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     this.loadDsLoaiDx();
     this.loadTiLeThue();
     this.loadDsDxCanSua();
-    await this.getDataDetail(this.idInput);
+    if (this.idInput > 0) {
+      await this.getDataDetail(this.idInput);
+    } else {
+      this.formData.patchValue({
+        nguoiLap: this.userInfo.TEN_DAY_DU
+      })
+    }
     this.spinner.hide();
   }
 
@@ -466,6 +475,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         loaiVthh: data.loaiVthh,
         ngayKy: data.ngayKy,
         nguoiKy: data.nguoiKy,
+        nguoiLap: data.nguoiLap,
         loaiGia: data.loaiGia,
         trichYeu: data.trichYeu,
         trangThai: data.trangThai,
@@ -487,10 +497,11 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.dataTableKsGia = data.ketQuaKhaoSatGiaThiTruong;
       this.dataTableTtThamKhao = data.ketQuaKhaoSatTtThamKhao;
       this.dataTableCanCuXdg = data.canCuPhapLy;
-      this.fileDinhKemList = data.fileDinhKems;
-      this.updateEditCache('ttc')
-      this.updateEditCache('ccXdg')
-      this.updateEditCache('ppxdg')
+      this.fileDinhKemList = data.fileDinhKems && data.fileDinhKems.length ? data.fileDinhKems.filter(item => !item.fileType) : [];
+      this.filePhanTichs = data.fileDinhKems && data.fileDinhKems.length ? data.fileDinhKems.filter(item => item.fileType == FILETYPE.FILE_DINH_KEM) : [];
+      this.updateEditCache('ttc');
+      this.updateEditCache('ccXdg');
+      this.updateEditCache('ppxdg');
     }
   }
 
@@ -787,7 +798,14 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     body.ketQuaKhaoSatTtThamKhao = this.dataTableTtThamKhao;
     body.type = this.type;
     body.soDeXuat = body.soDeXuat + this.maDx;
-    body.fileDinhKemReqs = this.fileDinhKemList;
+    this.listFile = this.fileDinhKemList;
+    if (this.filePhanTichs.length > 0) {
+      this.filePhanTichs.forEach(element => {
+        element.fileType = FILETYPE.FILE_DINH_KEM
+        this.listFile.push(element)
+      })
+    }
+    body.fileDinhKemReqs = this.listFile;
     let res
     if (this.idInput > 0) {
       res = await this.giaDeXuatGiaService.update(body);

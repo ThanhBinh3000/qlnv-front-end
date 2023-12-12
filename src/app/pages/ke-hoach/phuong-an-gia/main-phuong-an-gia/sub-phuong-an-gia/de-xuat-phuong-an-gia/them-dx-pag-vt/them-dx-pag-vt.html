@@ -88,7 +88,18 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6">
+        <div nz-col [nzSpan]="3">
+          <nz-form-item class="form-item">
+            <nz-form-label nzRequired [nzNoColon]="true">Người lập
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group>
+                <input type="text" [readOnly]="isView" nz-input formControlName="nguoiLap"/>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="3">
           <nz-form-item class="form-item">
             <nz-form-label nzRequired [nzNoColon]="true">Người ký
             </nz-form-label>
@@ -635,6 +646,20 @@
             <nz-form-label [nzNoColon]="true">Nội dung</nz-form-label>
             <textarea rows="3" class="search__input" nz-input placeholder="Nhập text" formControlName="noiDung"
                       [readOnly]="isView"></textarea>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" nzSpan="24">
+              File đính kèm
+            </nz-form-label>
+          </nz-form-item>
+          <nz-form-item>
+            <div class="list-file" nz-col nzSpan="24">
+              <file-list   [data]="filePhanTichs"
+                          [disabled]="isView">
+              </file-list>
+            </div>
           </nz-form-item>
         </div>
       </form>

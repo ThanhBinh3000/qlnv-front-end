@@ -315,7 +315,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <ng-container *ngFor="let data of dataTable , let idx = index">
+                    <ng-container *ngFor="let data of dataTableDx , let idx = index">
                       <tr>
                         <td [nzExpand]="expandSet.has(data.idVirtual)"
                             (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>

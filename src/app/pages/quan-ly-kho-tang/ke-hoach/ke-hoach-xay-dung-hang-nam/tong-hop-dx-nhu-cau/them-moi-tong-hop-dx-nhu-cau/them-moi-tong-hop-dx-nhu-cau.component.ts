@@ -469,8 +469,13 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
 
   sumSoLuong(tenChiCuc: string, row: string, khoi: string) {
     let sl = 0;
+    let sumList :any[];
+    let itemSelected = this.listDx.find(item => item.selected == true);
+    if (itemSelected) {
+      sumList = this.dataTableReq.filter(item => item.soCv == itemSelected.soCongVan)
+    }
     if (tenChiCuc && khoi) {
-      let arr = this.dataTableReq.filter(item => item.tenChiCuc == tenChiCuc && item.khoi == khoi);
+      let arr = sumList.filter(item => item.tenChiCuc == tenChiCuc && item.khoi == khoi);
       if (arr && arr.length > 0) {
         const sum = arr.reduce((prev, cur) => {
           prev += cur[row];
@@ -479,7 +484,7 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
         sl = sum;
       }
     } else {
-      const sum = this.dataTableReq.reduce((prev, cur) => {
+      const sum = sumList.reduce((prev, cur) => {
         prev += cur[row];
         return prev;
       }, 0);
