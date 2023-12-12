@@ -761,4 +761,36 @@ export class Base2Component implements OnInit {
     }
 
   }
+
+  onKetQuaChange(event: any, index: number, dataTable: any): void {
+    if (event.length == 0){
+      dataTable[index].danhGia = "";
+      return;
+    }
+    let kq = parseFloat(event.replace(",", "."));
+    if (dataTable[index].chiSoClToiThieu && dataTable[index].chiSoClToiDa && kq !== null && index !== null) {
+      let toiThieu = parseFloat(dataTable[index].chiSoClToiThieu.replace(",", "."));
+      let toiDa = parseFloat(dataTable[index].chiSoClToiDa.replace(",", "."));
+      let tt = parseFloat(dataTable[index].toanTu);
+
+      if ((tt === 1 || tt === 2) && toiThieu < kq && kq < toiDa) {
+        dataTable[index].danhGia = "Đạt";
+      } else {
+        dataTable[index].danhGia = "Không đạt";
+      }
+
+      if (tt === 3 && toiThieu == kq && kq == toiDa) {
+        dataTable[index].danhGia = "Đạt";
+      } else {
+        dataTable[index].danhGia = "Không đạt";
+      }
+
+      if ((tt === 4 || tt === 5) && toiThieu <= kq && kq <= toiDa) {
+        dataTable[index].danhGia = "Đạt";
+      } else {
+        dataTable[index].danhGia = "Không đạt";
+      }
+
+    }
+  }
 }

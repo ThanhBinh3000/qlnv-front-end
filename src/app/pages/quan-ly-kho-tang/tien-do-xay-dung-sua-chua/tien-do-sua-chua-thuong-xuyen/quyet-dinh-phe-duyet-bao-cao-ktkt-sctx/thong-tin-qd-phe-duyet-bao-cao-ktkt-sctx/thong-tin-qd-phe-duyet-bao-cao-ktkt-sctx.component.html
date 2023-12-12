@@ -195,7 +195,7 @@
                     thuật sửa chữa
                   </nz-form-label>
                   <textarea formControlName="tieuChuanDm" rows="3" nz-input placeholder="Nhập text"
-                            [readonly]="true"></textarea>
+                            [readonly]="isViewDetail"></textarea>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -283,7 +283,7 @@
                   {{ item.chiMuc }}
                 </td>
                 <td>{{ item.noiDung }}</td>
-                <td>{{ item.giaTri |  number: '1.0-1'  }}</td>
+                <td>{{ item.giaTri | number: '1.0-1': 'vi_VN' }}</td>
                 <td>{{ item.kyHieu }}</td>
                 <td class="text-center" *ngIf="!isViewDetail">
                   <a (click)="themMoiCtiet(item)" *ngIf="item.capChiMuc < 3">
