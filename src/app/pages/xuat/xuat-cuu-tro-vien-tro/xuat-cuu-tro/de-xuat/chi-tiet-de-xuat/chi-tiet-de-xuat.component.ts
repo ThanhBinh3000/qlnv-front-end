@@ -114,6 +114,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         type: [''],
         mapDmucDvi: [''],
         tenDvi: [''],
+        tenDviDx: [''],
         tenLoaiVthh: [''],
         tenCloaiVthh: [''],
         tenTrangThai: ['Dự Thảo'],
@@ -227,7 +228,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
               this.maHauTo = '/' + res.data.soDx?.split("/")[1];
               res.data.soDx = res.data.soDx?.split("/")[0];
             }
-            this.formData.patchValue({ ...res.data, tenDvi: res.data.tenDvi ? res.data.tenDvi : res.data.tenDviDx, maDviDx: res.data.maDvi.slice(0, -2) });
+            this.formData.patchValue({ ...res.data, maDviDx: res.data.maDvi.slice(0, -2) });
             if (!this.isVthhVatuThietBi()) {
               this.formData.patchValue({ donViTinh: "kg" })
             }
@@ -246,13 +247,13 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         tenVthh: TEN_LOAI_VTHH.GAO,
         loaiVthh: LOAI_HANG_DTQG.GAO,
         maDvi: this.userInfo.MA_PHONG_BAN,
-        maDviDx: this.userInfo.MA_PHONG_BAN,
-        tenDvi: !this.userInfo.MA_PHONG_BAN || this.userInfo.MA_PHONG_BAN.length <= 6 ? this.userInfo.TEN_PHONG_BAN : this.userInfo.TEN_DVI,
+        maDviDx: this.userInfo.MA_DVI,
+        tenDvi: this.userInfo.TEN_PHONG_BAN,
+        tenDviDx: this.userInfo.TEN_DVI,
         kieuNhapXuat: 'Xuất không thu tiền',
         loaiNhapXuat: 'Xuất cứu trợ',
         donViTinh: 'kg'
       });
-      console.log(" this.userInfo", this.userInfo)
       if (this.userService.isCuc) {
         this.checkTonKhoDonViTaoDeXuat()
       }
@@ -351,12 +352,14 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         this.modalChiTiet = true;
       } else {
         data.edit = true;
+        console.log("dataa", data)
         this.formDataDtl.patchValue({ ...data, editNhuCauXuat: false });
         // await this.changeLoaiVthh(this.formDataDtl.value.loaiVthh);
-        if (this.userService.isCuc()) {
-          this.formDataDtl.patchValue({ maDvi: this.userInfo.MA_DVI });
-          await this.changeMaDviDtl(this.userInfo.MA_DVI);
-        }
+
+        // if (this.userService.isCuc()) {
+        //   this.formDataDtl.patchValue({ maDvi: this.userInfo.MA_DVI });
+        //   await this.changeMaDviDtl(this.userInfo.MA_DVI);
+        // }
         this.modalChiTiet = true;
 
         this.listDiaDanh.forEach(f => {
@@ -418,7 +421,6 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         }
       });
     }
-    console.log("deXuatPhuongAn", deXuatPhuongAn)
     this.formData.patchValue({ deXuatPhuongAn });
     await this.buildTableView();
     await this.huyPhuongAn();
@@ -483,7 +485,6 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         this.listNamNhap = Object.entries(newObject).map(([namNhap, soLuong]) => {
           return { value: Number(namNhap), text: Number(namNhap), soLuong: Number(soLuong) };
         });
-        console.log("listaNamNhap", this.listNamNhap,)
       }
     } catch (error) {
       console.log("error", error)
@@ -513,7 +514,18 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     let dataView = [];
     if (this.formData.value.tenVthh !== "Vật tư thiết bị") {
       if (!this.userService.isTongCuc()) {
-        dataView = cloneDeep(this.formData.value.deXuatPhuongAn)
+        // dataView = cloneDeep(this.formData.value.deXuatPhuongAn)
+        dataView = chain(this.formData.value.deXuatPhuongAn).groupBy("noiDung").map((value, key) => {
+          const rs = value.find(f => f.noiDung === key);
+          if (!rs) return;
+          const soLuong = value.reduce((sum, cur) => sum += cur.soLuong, 0);
+          return {
+            ...rs,
+            soLuong,
+            childData: value
+          }
+
+        }).value().filter(f => !!f)
       } else {
         dataView = chain(this.formData.value.deXuatPhuongAn)
           .groupBy("noiDung")
@@ -556,8 +568,8 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
             .map((v1, k1) => {
               let row = v1.find(s => s.loaiVthh === k1);
               if (!row) return;
-              const lv2 = chain(v1).groupBy("maDvi").map((v2, k2) => {
-                const row1 = v2.find(f => f.maDvi === k2);
+              const lv2 = chain(v1).groupBy("cloaiVthh").map((v2, k2) => {
+                const row1 = v2.find(f => f.cloaiVthh === k2);
                 if (!row1) return;
                 const soLuong = v2.reduce((sum, cur) => sum += cur.soLuong, 0);
                 return {
@@ -591,7 +603,6 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
           };
         }).value().filter(f => !!f);
     }
-    console.log("dataView", dataView)
     this.phuongAnView = dataView;
     this.expandAll();
   }
@@ -875,5 +886,11 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     }
     this.dataService.changeData(dataSend);
     this.taoQuyetDinh.emit(2);
+  }
+  isTongCuc() {
+    return this.formData.value.maDvi.length === 6
+  }
+  isCuc() {
+    return this.formData.value.maDvi.length === 8
   }
 }
