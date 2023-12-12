@@ -763,11 +763,12 @@ export class Base2Component implements OnInit {
   }
 
   onKetQuaChange(event: any, index: number, dataTable: any): void {
-    let kq = parseFloat(event.replace(",", "."));
     if (event.length == 0){
       dataTable[index].danhGia = "";
-
-    }else if (dataTable[index].chiSoClToiThieu && dataTable[index].chiSoClToiDa && kq !== null && index !== null) {
+      return;
+    }
+    let kq = parseFloat(event.replace(",", "."));
+    if (dataTable[index].chiSoClToiThieu && dataTable[index].chiSoClToiDa && kq !== null && index !== null) {
       let toiThieu = parseFloat(dataTable[index].chiSoClToiThieu.replace(",", "."));
       let toiDa = parseFloat(dataTable[index].chiSoClToiDa.replace(",", "."));
       let tt = parseFloat(dataTable[index].toanTu);
