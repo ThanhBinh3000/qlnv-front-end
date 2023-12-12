@@ -161,7 +161,7 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
         if (this.userService.isChiCuc()) {
           item.detail = item.hhQdGiaoNvNhangDtlList.filter(y => y.maDvi == this.userInfo.MA_DVI)[0]
           item.detail = {
-            children: item.detail.children.filter(x => x.maDiemKho.includes(this.userInfo.MA_DVI))
+            children: item.detail.children.filter(x => x.maDiemKho.substring(0, x.maDiemKho.length - 2) == this.userInfo.MA_DVI)
           }
           item.expand = true;
         } else {
