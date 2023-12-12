@@ -243,7 +243,12 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
       tenBoNganh: this.keHoach.tenBoNganh,
       ttMuaTang: this.keHoach.ttMuaTang,
       ttXuatBan: this.keHoach.ttXuatBan,
-      ttXuatGiam: this.keHoach.ttXuatGiam
+      ttXuatGiam: this.keHoach.ttXuatGiam,
+      ghiChuLt: this.keHoach.ghiChuLt,
+      ghiChuMuaTang: this.keHoach.ghiChuMuaTang,
+      ghiChuXuatGiam: this.keHoach.ghiChuXuatGiam,
+      ghiChuXuatBan: this.keHoach.ghiChuXuatBan,
+      ghiChuLuanPhien: this.keHoach.ghiChuLuanPhien
     }).then(async res => {
       if (res.data) {
         this.printSrc = res.data.pdfSrc;

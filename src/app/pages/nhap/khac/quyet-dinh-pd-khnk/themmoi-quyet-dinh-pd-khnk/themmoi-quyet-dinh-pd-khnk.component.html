@@ -107,7 +107,7 @@
           <nz-radio-group
             [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== '' || isView"
             nzSize="small" class="rdo-input" formControlName="phanLoai">
-            <nz-form-item *ngIf="loaiVthh != '02' && this.idInput == 0">
+            <nz-form-item *ngIf="this.idInput == 0">
               <label nz-radio nzValue="TH">Chọn mã tổng hợp</label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : openDialogTh()">
@@ -125,7 +125,7 @@
             </nz-form-item>
           </nz-radio-group>
           <nz-radio-group [nzDisabled]="true" nzSize="small" class="rdo-input" formControlName="phanLoai">
-            <nz-form-item *ngIf="this.idInput != 0">
+            <nz-form-item *ngIf="this.idInput != 0 || this.dataTongHop">
               <label nz-radio nzValue="TH">Chọn mã tổng hợp</label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open">
@@ -133,7 +133,7 @@
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
-            <nz-form-item *ngIf="this.idInput != 0">
+            <nz-form-item *ngIf="this.idInput != 0 || this.dataTongHop">
               <label nz-radio nzValue="TTr">Chọn số công văn tờ trình</label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : openDialogTr()">

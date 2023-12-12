@@ -1010,6 +1010,13 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       });
     }
   }
+  isTongCuc() {
+    return this.userService.isTongCuc()
+  }
+
+  isCuc() {
+    return this.userService.isCuc()
+  }
 
   getListVatTuThietBi(dataCon: any, dataReturn: any) {
     if (!dataReturn) {
@@ -1056,18 +1063,48 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
               this.listCcPhapLy.push(item);
             }
           });
-          this.dsKeHoachLuongThucClone = cloneDeep(
-            this.thongTinChiTieuKeHoachNam.khLuongThuc,
-          );
+
+          const maDV = this.userInfo.MA_DVI;
+          let dsKHLT = [];
+            if (this.userService.isTongCuc())
+              dsKHLT = this.thongTinChiTieuKeHoachNam.khLuongThuc;
+            else {
+              if (this.thongTinChiTieuKeHoachNam.capDvi == '1') {
+                dsKHLT = this.thongTinChiTieuKeHoachNam.khLuongThuc.filter((item) => item.maDonVi == maDV);
+              } else {
+                dsKHLT = this.thongTinChiTieuKeHoachNam.khLuongThuc;
+              }
+            }
+          this.dsKeHoachLuongThucClone = cloneDeep(dsKHLT);
+          let keHoachMuoi = () => {
+            if (this.isTongCuc())
+              return this.thongTinChiTieuKeHoachNam.khMuoiDuTru
+            else {
+              if (this.thongTinChiTieuKeHoachNam.capDvi == '1') {
+                return this.thongTinChiTieuKeHoachNam.khMuoiDuTru.filter((item) => item.maDonVi == maDV)
+              } else {
+                return this.thongTinChiTieuKeHoachNam.khMuoiDuTru
+              }
+            }
+          }
           this.dsMuoiClone = cloneDeep(
-            this.thongTinChiTieuKeHoachNam.khMuoiDuTru,
+            keHoachMuoi()
           );
+          // this.dsMuoiClone = cloneDeep(
+          //   this.thongTinChiTieuKeHoachNam.khMuoiDuTru,
+          // );
           if (this.thongTinChiTieuKeHoachNam.soQuyetDinh && this.thongTinChiTieuKeHoachNam.soQuyetDinh.split('/').length > 1) {
             this.qdTCDT = this.thongTinChiTieuKeHoachNam.soQuyetDinh.split('/')[1];
           }
           // Xử lý vật tư to tree
           this.dataVatTuNhap = cloneDeep(this.thongTinChiTieuKeHoachNam.khVatTuNhap);
           this.dataVatTuXuat = cloneDeep(this.thongTinChiTieuKeHoachNam.khVatTuXuat);
+          if (this.userService.isCuc()) {
+            if (this.thongTinChiTieuKeHoachNam.capDvi == '1') {
+              this.dataVatTuNhap = this.dataVatTuNhap.filter((item) => item.maDonVi == maDV)
+              this.dataVatTuXuat = this.dataVatTuXuat.filter((item) => item.maDonVi == maDV)
+            }
+          }
           this.convertListDataVatTuNhap(this.dataVatTuNhap);
           this.convertListDataVatTuXuat(this.dataVatTuXuat);
           this.expandAll(this.dataVatTuNhapTree);
@@ -1091,7 +1128,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             chiTieuId: this.thongTinChiTieuKeHoachNam.qdGocId,
           });
           this.findCanCuByYear(this.thongTinChiTieuKeHoachNam.namKeHoach, this.thongTinChiTieuKeHoachNam);
-          this.loadData();
+          // this.loadData();
           this.formData.patchValue({
             soQD: this.formData.get('soQd').value?.split('/')[0],
           });
@@ -3614,6 +3651,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.spinner.hide();
     }
   }
+
   //
   // downloadPdf() {
   //   saveAs(this.pdfBlob, 'baocao.pdf');

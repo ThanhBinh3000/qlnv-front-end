@@ -1177,7 +1177,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
               if (this.thongTinChiTieuKeHoachNam.cap == 1) {
                 return this.thongTinChiTieuKeHoachNam.dcKeHoachNamLtDtl.filter((item) => item.maDvi == maDV)
               } else {
-                return this.thongTinChiTieuKeHoachNam.dcKeHoachNamLtDtl
+                return this.thongTinChiTieuKeHoachNam.dcKeHoachNamLtDtl;
               }
             }
           }

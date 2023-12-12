@@ -493,6 +493,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
           typeKh: 'TH',
           listDmSuaChua: this.listDmSuaChua,
           dataHeader: this.formData.value,
+          trangThaiTh: this.formData.value.trangThai,
         }
       });
       modalQD.afterClose.subscribe(async (detail) => {
@@ -560,6 +561,28 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
     return table;
   }
 
+  // sumSoLuong(tenChiCuc: string, row: string, khoi: string) {
+  //   let sl = 0;
+  //   if (tenChiCuc && khoi) {
+  //     let arr = this.dataTableReq.filter(item => item.tenChiCuc == tenChiCuc && item.khoi == khoi);
+  //     if (arr && arr.length > 0) {
+  //       const sum = arr.reduce((prev, cur) => {
+  //         prev += cur[row];
+  //         return prev;
+  //       }, 0);
+  //       sl = sum;
+  //     }
+  //   } else {
+  //     let arr = this.dataTableReq.filter(item => item.tenDvi == this.itemSelected.tenDvi);
+  //     const sum = arr.reduce((prev, cur) => {
+  //       prev += cur[row];
+  //       return prev;
+  //     }, 0);
+  //     sl = sum;
+  //   }
+  //   return sl;
+  // }
+
   sumSoLuong(tenChiCuc: string, row: string, khoi: string) {
     let sl = 0;
     if (tenChiCuc && khoi) {
@@ -572,8 +595,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
         sl = sum;
       }
     } else {
-      let arr = this.dataTableReq.filter(item => item.tenDvi == this.itemSelected.tenDvi);
-      const sum = arr.reduce((prev, cur) => {
+      const sum = this.dataTableReq.reduce((prev, cur) => {
         prev += cur[row];
         return prev;
       }, 0);

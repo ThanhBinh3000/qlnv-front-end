@@ -102,8 +102,8 @@
             </div>
             <div nz-col nzSpan="4">
               <nz-form-item class="form-item">
-                <nz-form-label [nzNoColon]="true" nzRequired> Ngày tiếp nhận của cán bộ Vụ</nz-form-label>
-                <nz-date-picker [nzDisabled]="!(userService.isCuc() && formData.value.trangThai == STATUS.DA_DUYET_LDC)"
+                <nz-form-label [nzNoColon]="true" nzRequired> Ngày tiếp nhận của Cán bộ Vụ</nz-form-label>
+                <nz-date-picker [nzDisabled]="userService.isCuc() || (userService.isTongCuc() && formData.value.trangThai != STATUS.DA_DUYET_LDC)"
                                 formControlName="ngayDuyet"
                                 nzFormat="dd/MM/yyyy"></nz-date-picker>
               </nz-form-item>
@@ -165,7 +165,7 @@
             </th>
             <th class="text-center" width="5%" rowSpan="2">Chênh lệch<br/> kế hoạch -<br/> thực hiện<br/>(5)=(2)-(4)
             </th>
-            <th class="text-center" width="13%" colSpan="2">Danh mục chưa được phê duyệt năm 2020</th>
+            <th class="text-center" width="13%" colSpan="2">Danh mục chưa được phê duyệt năm {{formData.value.namKh}}</th>
             <th class="text-center" width="7%" rowSpan="2">Ghi chú</th>
             <th class="text-center" *ngIf="!isViewDetail" width="5%" rowSpan="2" nzRight>Hành động</th>
           </tr>

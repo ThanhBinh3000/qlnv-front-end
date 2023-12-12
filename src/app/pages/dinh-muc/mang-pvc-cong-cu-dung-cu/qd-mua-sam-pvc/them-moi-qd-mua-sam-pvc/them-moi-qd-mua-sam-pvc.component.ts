@@ -208,7 +208,7 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
   }
 
   changeSl(event: number, item: any) {
-    if (event && item.slMetQuyCuon) {
+    if (event && item.slMetQuyCuon && item.maCcdc == '02.03') {
       let cuon = event / item.slMetQuyCuon;
       if (cuon.toString().includes(".")) {
         let cut = cuon.toString().split(".")
@@ -228,7 +228,7 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
   }
 
   changeSlQuyDoi(event: number, item: any) {
-    if (event && item.soLuong) {
+    if (event && item.soLuong && item.maCcdc == '02.03') {
       let cuon = item.soLuong / event;
       if (cuon.toString().includes(".")) {
         let cut = cuon.toString().split(".")
@@ -248,10 +248,17 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
   }
 
   convertListData() {
-    if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTable = chain(this.dataTable).groupBy('tenCcdc')
-        .map((value, key) => ({ tenCcdc: key, dataChild: value, donGia: value[0].donGia || value[0].donGiaTd, idVirtual: uuidv4() }),
-        ).value();
+    if (this.dataTable?.length > 0) {
+      this.dataTable = chain(this.dataTable)
+        .groupBy('tenCcdc')
+        .map((value, key) => ({
+          tenCcdc: key,
+          donGia: value[0].donGia || value[0].donGiaTd,
+          moTaCcdc: value?.find(item => item.tenCcdc === key)?.moTaCcdc || "",
+          dataChild: value,
+          idVirtual: uuidv4(),
+        }))
+        .value();
     }
     this.expandAll();
   }
@@ -423,8 +430,16 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
     if (this.dataTable.length > 0) {
       this.spinner.show();
       try {
+        let arr = [];
+        this.dataTable.forEach(item => {
+          if (item.dataChild && item.dataChild.length > 0) {
+            item.dataChild.forEach(data => {
+              arr.push({ ...data, donGia: item.donGia });
+            });
+          }
+        });
         let body = this.formData.value;
-        body.listQlDinhMucPvcQdMuaSamDtl = this.dataTable;
+        body.listQlDinhMucPvcQdMuaSamDtl = arr;
         body.paggingReq = {
           limit: this.pageSize,
           page: this.page - 1
