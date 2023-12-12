@@ -59,7 +59,7 @@ import { STATUS } from '../../../../../constants/status';
       fileDinhKems: [null],
       lyDoTuChoi: [null],
       listQlDinhMucQdMuaSamDtlReq: [null],
-      listQlDinhMucQdMuaSamDtl: [null],
+      // listQlDinhMucQdMuaSamDtl: [null],
       loai : ['01'],
       noiDung : [null],
       ghiChu : [null]
@@ -392,7 +392,7 @@ import { STATUS } from '../../../../../constants/status';
           //     })
           //   }
           // })
-          // body.listQlDinhMucQdMuaSamDtl = arrDtl;
+          body.listQlDinhMucExportDetailTtpb = this.dataTable;
           // console.log(body,'bodybodybody');return;
           this.qdMuaSamService
             .exportDetailTtPhanBo(body)
@@ -409,5 +409,5 @@ import { STATUS } from '../../../../../constants/status';
         this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
       }
     }
-}
+  }
 

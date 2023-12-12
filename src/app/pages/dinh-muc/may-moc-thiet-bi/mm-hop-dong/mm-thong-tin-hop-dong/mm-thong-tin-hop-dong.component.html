@@ -55,7 +55,7 @@
           </div>
           <div nz-col nzSpan="4">
             <nz-form-item>
-              <nz-form-label nzRequired>Số quyết định phê duyệt KH mua sắm</nz-form-label>
+              <nz-form-label nzRequired>Căn cứ trên quyết định mua sắm</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonMaTongHop()">
                   <input nz-input formControlName="soQdpdKhMuaSam" [readonly]="true"/>
@@ -117,13 +117,9 @@
           </div>
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label nzRequired>Giá trị hợp đồng (trđ)</nz-form-label>
+              <nz-form-label>Giá trị hợp đồng (trđ)</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-input-number nzDisabled [ngModel]="calcTong()" [nzFormatter]="globals.formatter"
-                                 [nzParser]="globals.parser"
-                                 [ngModelOptions]="{standalone: true}" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
-                                 [nzSize]="'small'">
-                </nz-input-number>
+                <span class="text-blue" nzDisabled>{{calcTong()|  number: '1.0-1':'vi-VN'}}</span>
               </nz-form-control>
             </nz-form-item>
           </div>
