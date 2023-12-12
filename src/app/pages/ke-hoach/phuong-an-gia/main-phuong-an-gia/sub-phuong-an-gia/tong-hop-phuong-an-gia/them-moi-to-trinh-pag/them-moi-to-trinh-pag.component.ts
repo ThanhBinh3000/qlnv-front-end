@@ -15,7 +15,8 @@ import {TongHopPhuongAnGiaService} from 'src/app/services/ke-hoach/phuong-an-gia
 import {ToTrinhPAGService} from 'src/app/services/ke-hoach/phuong-an-gia/toTrinhPAG.service';
 import {Globals} from 'src/app/shared/globals';
 import {UserService} from "../../../../../../../services/user.service";
-
+import {DonviService} from "../../../../../../../services/donvi.service";
+import {cloneDeep} from 'lodash';
 @Component({
   selector: 'app-them-moi-to-trinh-pag',
   templateUrl: './them-moi-to-trinh-pag.component.html',
@@ -33,6 +34,8 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
   expandSet = new Set<number>();
   formData: FormGroup;
   maSuffix: string = '/TCDT-KH';
+  listCuc: any[] = [];
+  listCucSelected: any[] = [];
   dataTable: any[] = [];
   dataTableView: any[] = [];
   dsLoaiGia: any[] = [];
@@ -50,6 +53,7 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
     private tongHopPhuongAnGiaService: TongHopPhuongAnGiaService,
     private toTrinhPAGService: ToTrinhPAGService,
     private danhMucService: DanhMucService,
+    private donviService: DonviService,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private helperService: HelperService
@@ -88,10 +92,23 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
 
   async ngOnInit() {
     this.isMuaToiDa = this.type == TYPE_PAG.GIA_MUA_TOI_DA ? true : false;
-    await Promise.all([
-      this.loadDsLoaiGia(),
-      this.getDataDetail(this.idInput),
-    ])
+    this.loadDsLoaiGia();
+    this.getListCuc();
+    await this.getDataDetail(this.idInput);
+  }
+
+  async getListCuc() {
+    const res = await this.donviService.layTatCaDonViByLevel(2);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data && res.data.length > 0) {
+        this.listCuc = res.data;
+        if (this.listCuc && this.listCuc.length > 0) {
+          this.listCuc = this.listCuc.filter(item => item.type != 'PB')
+        }
+      } else {
+        this.listCuc = [];
+      }
+    }
   }
 
   async loadDsLoaiGia() {
@@ -115,6 +132,7 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
     if (id > 0) {
       let res = await this.tongHopPhuongAnGiaService.getDetail(id);
       const data = res.data;
+      this.listCucSelected = data.maDvis && data.maDvis.length > 0 ? data.maDvis : []
       this.bindingDataTongHop(data)
     }
   }
@@ -157,7 +175,7 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
     this.buildTreePagCt();
   }
 
-   checkGiaTcdt() {
+  checkGiaTcdt() {
     let rs = false;
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach(it => {
@@ -315,9 +333,28 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
             vat: value && value[0] && value[0].vat ? value[0].vat : null,
             giaQdBtc: value && value[0] && value[0].giaQdBtc ? value[0].giaQdBtc : null,
             giaQdTcdt: value && value[0] && value[0].giaQdTcdt ? value[0].giaQdTcdt : 0,
+            maDvi : key
           };
         }).value();
     }
+    if (this.listCuc.length > 0 && this.listCucSelected.length == this.listCuc.length) {
+      let arrCuc: any[] = cloneDeep(this.listCuc);
+      arrCuc.splice(0, 1);
+      let mapMadvi = this.dataTableView.map(item => item.maDvi);
+      arrCuc.forEach(item => {
+        if (!mapMadvi.includes(item.maDvi)) {
+          this.dataTableView.push(item);
+        } else {
+          let index = this.dataTableView.findIndex(it => it.maDvi == item.maDvi);
+          if (index > -1) {
+            this.dataTableView[index].sapXep = item.sapXep
+          }
+        }
+      })
+    }
+    this.dataTableView = chain(this.dataTableView)
+      .orderBy(['sapXep'])  // Sắp xếp dựa trên trường sapXep
+      .value();
     this.expandAll()
   }
 
@@ -333,7 +370,9 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
   expandAll() {
     if (this.dataTableView && this.dataTableView.length > 0) {
       this.dataTableView.forEach(s => {
-        this.expandSet.add(s.idVirtual);
+        if (s.children && s.children.length > 0) {
+          this.expandSet.add(s.idVirtual);
+        }
       });
     }
   }
@@ -372,8 +411,8 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
     let sum = 0
     if (this.dataTableView && this.dataTableView.length > 0) {
       let item = this.dataTableView.find(item => item.tenDvi == tenDvi);
-      if (item && item.children && item.children.length>0) {
-         sum = item.children.reduce((prev, cur) => {
+      if (item && item.children && item.children.length > 0) {
+        sum = item.children.reduce((prev, cur) => {
           prev += cur.soLuong;
           return prev;
         }, 0);

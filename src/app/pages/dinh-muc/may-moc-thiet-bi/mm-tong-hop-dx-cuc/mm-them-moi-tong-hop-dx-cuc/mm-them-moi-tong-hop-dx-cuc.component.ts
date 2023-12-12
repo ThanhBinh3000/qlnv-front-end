@@ -26,11 +26,11 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
   @Input() id: number;
   @Input() isView: boolean;
   listDxCuc: any[] = [];
+  listDxCucList: any[] = [];
   detailCtieuKh: any
   isTongHop: boolean = false;
   rowItem: MmThongTinNcChiCuc = new MmThongTinNcChiCuc();
   dataEdit: { [key: string]: { edit: boolean; data: MmThongTinNcChiCuc } } = {};
-  formDataTongHop: FormGroup
   expandSet = new Set<number>();
 
   constructor(
@@ -48,6 +48,10 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
       id: [null],
       maDvi: [null],
       namKeHoach: [dayjs().get('year')],
+      ngayDx: [],
+      ngayDxTu: [null],
+      ngayDxDen: [null],
+      listSoCv: [null],
       klLtBaoQuan: [null],
       klLtNhap: [null],
       klLtXuat: [null],
@@ -57,9 +61,9 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
       klLtNhapCuc: [null],
       klLtXuatCuc: [null],
       trichYeu: [null, Validators.required],
-      ngayKy: [null, Validators.required],
-      ngayTongHopNgayTrinh:[null],
-      soToTrinh:[null],
+      ngayKy: [null],
+      ngayTongHopNgayTrinh:[null, Validators.required],
+      soToTrinh:[null, Validators.required],
       soQdGiaoCt: [null],
       trangThai: ['00'],
       trangThaiTh: [],
@@ -67,11 +71,6 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
       fileDinhKems: [null],
       lyDoTuChoi: [null],
       listQlDinhMucDxTbmmTbcdDtl: [null],
-    });
-    this.formDataTongHop = this.fb.group({
-      namKeHoach: [dayjs().get('year')],
-      ngayDx: [],
-      listSoCv: [null]
     });
   }
 
@@ -99,30 +98,27 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
       this.formData.patchValue({
         soQdGiaoCt: res.data.soQuyetDinh
       })
-      this.detailCtieuKh = res.data
+      this.detailCtieuKh = res.data;
     }
   }
 
   async tongHop() {
-    this.helperService.markFormGroupTouched(this.formDataTongHop);
-    if (this.formDataTongHop.invalid) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
-      return;
-    }
-    let body = this.formDataTongHop.value;
+    let body = this.formData.value;
     if (!body.listSoCv || body.listSoCv.length == 0) {
-      let arr = []
+      let arr = [];
       if (this.listDxCuc && this.listDxCuc.length > 0) {
         this.listDxCuc.forEach(item => {
-          arr.push(item.soCv)
+          arr.push(item.soCv);
         })
       }
       body.listSoCv = arr.toString();
     } else {
-      body.listSoCv = body.listSoCv.toString();
+      const foundObjects = this.listDxCuc.filter(obj => body.listSoCv.includes(obj.id));
+      const soDeXuats = foundObjects.map(obj => obj.soCv);
+      body.listSoCv = soDeXuats.toString();
     }
-    body.ngayDxTu = body.ngayDx ? body.ngayDx[0] : null
-    body.ngayDxDen = body.ngayDx ? body.ngayDx[1] : null
+    body.ngayDxTu = body.ngayDx ? body.ngayDx[0] : null;
+    body.ngayDxDen = body.ngayDx ? body.ngayDx[1] : null;
     body.trangThai = STATUS.DA_DUYET_CBV;
     body.trangThaiTh = STATUS.CHUA_TONG_HOP;
     body.maDvi = this.userInfo.MA_DVI;
@@ -131,13 +127,13 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
       let detail = res.data;
       if (detail && detail.listQlDinhMucDxTbmmTbcdDtl) {
         this.formData.patchValue({
-          namKeHoach: this.formDataTongHop.value.namKeHoach,
+          ngayDxTu: body.ngayDx ? body.ngayDx[0] : null,
+          ngayDxDen: body.ngayDx ? body.ngayDx[1] : null,
           klLtBaoQuanCuc: detail.klLtBaoQuan,
           klLtNhapCuc: detail.klLtNhap,
           klLtXuatCuc: detail.klLtXuat,
           slGaoDangBaoQuan: detail.slGaoDangBaoQuan,
-          slThocDangBaoQuan: detail.slThocDangBaoQuan,
-          ngayTongHopNgayTrinh: new Date()
+          slThocDangBaoQuan: detail.slThocDangBaoQuan
         })
         this.dataTable = detail.listQlDinhMucDxTbmmTbcdDtl
         if (detail && detail.listQlDinhMucDxTbmmTbcd && detail.listQlDinhMucDxTbmmTbcd.length > 0) {
@@ -185,6 +181,7 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
         this.listDxCuc = data.content;
         if (this.listDxCuc) {
           this.listDxCuc = this.listDxCuc.filter(item => item.trangThai == this.STATUS.DA_DUYET_CBV)
+          this.listDxCucList = [...this.listDxCuc];
         }
       } else {
         this.listDxCuc = [];
@@ -200,9 +197,6 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
   }
 
   async save() {
-    this.formData.patchValue({
-      namKeHoach: this.formDataTongHop.value.namKeHoach
-    })
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
@@ -222,6 +216,9 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
     this.formData.value.maDvi = this.userInfo.MA_DVI;
     this.formData.value.capDvi = this.userInfo.CAP_DVI;
     let body = this.formData.value;
+    body.listSoCv = this.listDxCucList
+      .filter(obj => body.listSoCv.includes(obj.id))
+      .map(obj => ({ soDeXuat: obj.soCv, deXuatId: obj.id }));
     let data = await this.createUpdate(body);
     if (data) {
       this.goBack()
@@ -256,6 +253,15 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
           this.isTongHop = true;
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
+          let ngayDx = [];
+          ngayDx[0] = res.data.ngayDxTu
+          ngayDx[1] = res.data.ngayDxDen;
+          this.listDxCuc = [...data.listSoCv].map(item => ({id:item.deXuatId, soCv:item.soDeXuat }));
+          this.listDxCucList = [...data.listSoCv].map(item => ({id:item.deXuatId, soCv:item.soDeXuat }));
+          this.formData.patchValue({
+            ngayDx: ngayDx,
+            listSoCv: data.listSoCv.map(obj => obj.deXuatId)
+          })
           this.fileDinhKem = data.listFileDinhKems;
           this.dataTable = data.listQlDinhMucDxTbmmTbcdDtl;
           this.dataTable.forEach(item => {

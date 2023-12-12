@@ -54,4 +54,9 @@ export class TongHopTheoDoiCapVonService extends BaseService {
         const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.router}/export/list`;
         return this.httpClient.post(url, body, { responseType: 'blob' });
     }
+
+    getTongTienDaCapTheoHopDong(body: any): Promise<any> {
+     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.router}/tongtien-da-cap-theo-hopdong`;
+      return this.httpClient.post(url, body).toPromise();
+    }
 }

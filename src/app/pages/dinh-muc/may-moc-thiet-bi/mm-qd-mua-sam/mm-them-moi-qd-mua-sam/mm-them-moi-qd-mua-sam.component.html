@@ -45,7 +45,7 @@
   <nz-card class="mt16 flex-card p-lr16 mg-t-10">
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
       <div nz-row [nzGutter]="24">
-        <div nz-col nzSpan="3">
+        <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-label>Năm kế hoạch</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -57,7 +57,30 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="3">
+        <div nz-col nzSpan="4">
+          <!--          <nz-radio-group-->
+          <!--            [nzDisabled]="formData.value.trangThai !== '00'"-->
+          <!--            nzSize="small" class="rdo-input" [(ngModel)]="typeQd"   [ngModelOptions]="{standalone: true}">-->
+          <nz-form-item >
+            <!--              <label nz-radio nzValue="TH">Số tổng hợp</label>-->
+            <nz-form-label nzRequired>Căn cứ bản tổng hợp</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonMaTongHop()">
+                <input [readonly]="true" nz-input formControlName="maTh" readonly="true" />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+          <!--            <nz-form-item>-->
+          <!--              <label nz-radio nzValue="DX">Số đề xuất của Cục</label>-->
+          <!--              <nz-form-control [nzErrorTip]="error">-->
+          <!--                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonSoDxCuc()">-->
+          <!--                  <input [readonly]="true" nz-input formControlName="maDx" readonly="true" />-->
+          <!--                </nz-input-group>-->
+          <!--              </nz-form-control>-->
+          <!--            </nz-form-item>-->
+          <!--          </nz-radio-group>-->
+        </div>
+        <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-label nzRequired>Số quyết định</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -67,38 +90,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="6">
-<!--          <nz-radio-group-->
-<!--            [nzDisabled]="formData.value.trangThai !== '00'"-->
-<!--            nzSize="small" class="rdo-input" [(ngModel)]="typeQd"   [ngModelOptions]="{standalone: true}">-->
-            <nz-form-item >
-<!--              <label nz-radio nzValue="TH">Số tổng hợp</label>-->
-              <nz-form-label nzRequired>Căn cứ bản tổng hợp</nz-form-label>
-              <nz-form-control [nzErrorTip]="error">
-                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonMaTongHop()">
-                  <input [readonly]="true" nz-input formControlName="maTh" readonly="true" />
-                </nz-input-group>
-              </nz-form-control>
-            </nz-form-item>
-<!--            <nz-form-item>-->
-<!--              <label nz-radio nzValue="DX">Số đề xuất của Cục</label>-->
-<!--              <nz-form-control [nzErrorTip]="error">-->
-<!--                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonSoDxCuc()">-->
-<!--                  <input [readonly]="true" nz-input formControlName="maDx" readonly="true" />-->
-<!--                </nz-input-group>-->
-<!--              </nz-form-control>-->
-<!--            </nz-form-item>-->
-<!--          </nz-radio-group>-->
-        </div>
-        <div nz-col [nzSpan]="9">
-          <nz-form-item>
-            <nz-form-label nzRequired>Trích yếu</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <input nz-input formControlName="trichYeu" [readonly]="isView"/>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col nzSpan="3">
+        <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-label nzRequired>Ngày ký</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -110,11 +102,28 @@
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
+            <nz-form-label nzRequired>Trích yếu</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <input nz-input formControlName="trichYeu" [readonly]="isView"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
             <nz-form-label [nzNoColon]="true">Tài liệu đính kèm</nz-form-label>
             <nz-form-control>
               <div class="list-file">
                 <file-list [data]="fileDinhKem"></file-list>
               </div>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-label nzRequired>Nội dung quyết định</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <input nz-input formControlName="noiDung" [readonly]="isView"/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -207,6 +216,14 @@
     </ng-container>
     </tbody>
   </nz-table>
+  <div nz-col [nzSpan]="24">
+    <nz-form-item>
+      <nz-form-label nzRequired>Ghi chú</nz-form-label>
+      <nz-form-control [nzErrorTip]="error">
+        <input nz-input formControlName="ghiChu" [readonly]="isView"/>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
 </div>
 <ng-template #error let-control>
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}

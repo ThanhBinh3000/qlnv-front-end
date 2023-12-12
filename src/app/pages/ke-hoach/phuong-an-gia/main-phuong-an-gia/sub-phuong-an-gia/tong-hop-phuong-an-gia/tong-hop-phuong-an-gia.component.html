@@ -210,10 +210,10 @@
         </thead>
         <tbody>
         <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
-          <th width="45px">
+          <td width="45px">
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                    [nzDisabled]="data.trangThai != '00'"></label>
-          </th>
+          </td>
           <td class="text-center">{{(page - 1) * pageSize + idx + 1}}</td>
           <td>{{ data.namTongHop }}</td>
           <td>{{ data.id }}</td>

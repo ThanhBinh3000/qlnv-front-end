@@ -176,7 +176,8 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
         console.log(this.formData.value)
         this.idQdKh = res.data.idQdPdKh
         this.idQdGnvu = res.data.id
-        this.dataTable.push(...res.data.hopDongMttHdrs)
+        let dsHd = res.data.hopDongMttHdrs.filter(x => x.maDvi.includes(this.userInfo.MA_DVI))
+        this.dataTable.push(...dsHd)
         this.showDetailHd(event, this.dataTable[0])
       }
     }

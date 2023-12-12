@@ -20,6 +20,8 @@ import {
 import { ThongTinPhanBoCtPvcComponent } from './thong-tin-phan-bo-ct-pvc/thong-tin-phan-bo-ct-pvc.component';
 import { QdMuaSamPvcService } from '../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/qd-mua-sam-pvc.service';
 import { DxChiCucPvcService } from '../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/dx-chi-cuc-pvc.service';
+import { DonviService } from 'src/app/services/donvi.service';
+import { DANH_MUC_LEVEL } from 'src/app/pages/luu-kho/luu-kho.constant';
 
 @Component({
   selector: 'app-them-moi-tt-phan-bo-pvc',
@@ -31,6 +33,7 @@ export class ThemMoiTtPhanBoPvcComponent extends Base2Component implements OnIni
   @Input() isView: boolean;
   listTongHop: any[] = [];
   listDxChiCuc: any[];
+  listChiCuc: any[] = [];
   maQd: string;
   rowItem: MmThongTinNcChiCuc = new MmThongTinNcChiCuc();
   dataEdit: { [key: string]: { edit: boolean; data: MmThongTinNcChiCuc } } = {};
@@ -42,6 +45,7 @@ export class ThemMoiTtPhanBoPvcComponent extends Base2Component implements OnIni
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     private dxChiCucService: DxChiCucPvcService,
+    private dmDviService: DonviService,
     modal: NzModalService,
     private qdMuaSamService: QdMuaSamPvcService,
   ) {
@@ -68,6 +72,7 @@ export class ThemMoiTtPhanBoPvcComponent extends Base2Component implements OnIni
     this.spinner.show();
     try {
       this.maQd = '/' + this.userInfo.MA_QD;
+      this.loadDsChiCuc();
       await this.loadDsDxCc();
       if (this.id > 0) {
         await this.detail(this.id);
@@ -121,10 +126,11 @@ export class ThemMoiTtPhanBoPvcComponent extends Base2Component implements OnIni
       return;
     }
     if (this.checkTableHhSave(this.dataTable)) {
-      this.notification.warning(MESSAGE.WARNING, 'Vui lòng phân bổ hết hàng hóa');
+      this.notification.warning(MESSAGE.WARNING, 'Vui lòng phân bổ đủ hàng hóa');
       this.spinner.hide();
       return;
     }
+
     this.conVertTreToList();
     if (this.fileDinhKem && this.fileDinhKem.length > 0) {
       this.formData.value.fileDinhKems = this.fileDinhKem;
@@ -133,6 +139,7 @@ export class ThemMoiTtPhanBoPvcComponent extends Base2Component implements OnIni
     this.formData.value.maDvi = this.userInfo.MA_DVI;
     let body = this.formData.value;
     body.soVb = body.soVb + this.maQd;
+
     let data = await this.createUpdate(body);
     if (data) {
       this.goBack();
@@ -143,7 +150,7 @@ export class ThemMoiTtPhanBoPvcComponent extends Base2Component implements OnIni
     let check = false;
     if (dataTable && dataTable.length > 0) {
       dataTable.forEach(item => {
-        if (!item.dataChild || this.sumSlPb(item) > 0) {
+        if (!item.dataChild || this.sumSlPb(item) > 0 || this.sumSlPb(item) < 0) {
           check = true;
         }
       });
@@ -195,6 +202,10 @@ export class ThemMoiTtPhanBoPvcComponent extends Base2Component implements OnIni
             item.soLuongTc = data.soLuongTc;
             item.maCcdc = data.maCcdc;
             item.donViTinh = data.donViTinh;
+            item.slHienCo = data.slHienCo;
+            item.slNhapThem = data.slNhapThem;
+            item.slThuHoiTaiSuDung = data.slThuHoiTaiSuDung;
+            item.slTieuChuan = data.slTieuChuan;
           });
         }
       });
@@ -265,7 +276,7 @@ export class ThemMoiTtPhanBoPvcComponent extends Base2Component implements OnIni
   }
 
   sumSlPb(item: any) {
-    let slPb = item.soLuongTc ? item.soLuongTc : 0;
+    let slPb = item.slTieuChuan - (item.slHienCo + item.slNhapThem + item.slThuHoiTaiSuDung)//item.soLuongTc ? item.soLuongTc : 0;
     let slChild = 0;
     let result = 0;
     if (item.dataChild && item.dataChild.length > 0) {
@@ -305,51 +316,136 @@ export class ThemMoiTtPhanBoPvcComponent extends Base2Component implements OnIni
     }
   }
 
+  async loadDsChiCuc() {
+    const body = {
+      maDviCha: this.userInfo.MA_DVI,
+      trangThai: '01',
+    };
+
+    const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
+    this.listChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+    this.listChiCuc = this.listChiCuc.filter(item => item.type != 'PB');
+  }
+
   openModalCt(data: any, type: string, idx: number, list?: any) {
     if (!this.isView) {
-      let arr = [];
-      this.dataTable.forEach(item => {
-        if (item.dataChild && item.dataChild.length > 0) {
-          item.dataChild.forEach(data => {
-            arr.push(data);
-          });
-        }
-      });
-      let modalQD = this.modal.create({
-        nzTitle: type == 'them' ? 'Thêm mới chi tiết thông tin phân bổ' : 'Chỉnh sửa chi tiết thông tin phân bổ',
-        nzContent: ThongTinPhanBoCtPvcComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '1000px',
-        nzStyle: { top: '200px' },
-        nzFooter: null,
-        nzComponentParams: {
-          dataInput: data,
-          type: type,
-          listDxChiCuc : this.listDxChiCuc,
-          sum: this.sumSlPb(list),
-          listData: arr,
-        },
-      });
-      modalQD.afterClose.subscribe(async (detail) => {
-        if (detail) {
-          if (!data.dataChild) {
-            data.dataChild = [];
-          }
-          if (!data.idVirtual) {
-            data.idVirtual = uuidv4();
-          }
-          if (type == 'them') {
-            data.dataChild.push(detail);
-          } else {
-            if (list) {
-              Object.assign(list.dataChild[idx], detail);
-            }
-          }
-          this.expandAll();
-        }
-      });
+      if (!data.dataChild) {
+        data.dataChild = [];
+      }
+      if (!data.idVirtual) {
+        data.idVirtual = uuidv4();
+      }
+      const dsCC = this.listChiCuc.filter(cc => !data.dataChild.find((item) => item.maDvi === cc.maDvi))
+
+      if (dsCC.length > 0) {
+        data.dataChild.push({
+          donViTinh: data.donViTinh,
+          ghiChu: "",
+          maCcdc: data.maCcdc,
+          maDvi: dsCC[0].maDvi,
+          slHienCo: data.slHienCo,
+          slNhapThem: data.slNhapThem,
+          slThuHoiTaiSuDung: data.slThuHoiTaiSuDung,
+          slMetQuyCuon: data.slMetQuyCuon,
+          slTieuChuan: data.slTieuChuan,
+          tenCcdc: data.tenCcdc,
+          tenDvi: dsCC[0].tenDvi,
+        });
+      }
+
+      this.expandAll();
+
+
+      // let arr = [];
+      // this.dataTable.forEach(item => {
+      //   if (item.dataChild && item.dataChild.length > 0) {
+      //     item.dataChild.forEach(data => {
+      //       arr.push(data);
+      //     });
+      //   }
+      // });
+      // let modalQD = this.modal.create({
+      //   nzTitle: type == 'them' ? 'Thêm mới chi tiết thông tin phân bổ' : 'Chỉnh sửa chi tiết thông tin phân bổ',
+      //   nzContent: ThongTinPhanBoCtPvcComponent,
+      //   nzMaskClosable: false,
+      //   nzClosable: false,
+      //   nzWidth: '1000px',
+      //   nzStyle: { top: '200px' },
+      //   nzFooter: null,
+      //   nzComponentParams: {
+      //     dataInput: data,
+      //     type: type,
+      //     listDxChiCuc: this.listDxChiCuc,
+      //     sum: this.sumSlPb(list),
+      //     listData: arr,
+      //   },
+      // });
+      // modalQD.afterClose.subscribe(async (detail) => {
+      //   if (detail) {
+
+      //     if (!data.dataChild) {
+      //       data.dataChild = [];
+      //     }
+      //     if (!data.idVirtual) {
+      //       data.idVirtual = uuidv4();
+      //     }
+      //     if (type == 'them') {
+      //       data.dataChild.push(detail);
+      //     } else {
+      //       if (list) {
+      //         Object.assign(list.dataChild[idx], detail);
+      //       }
+      //     }
+
+      //     this.expandAll();
+      //   }
+      // });
     }
+  }
+
+  disabled(child, maDvi) {
+    const check = child.find((item) => item.maDvi === maDvi)
+    return !!check
+  }
+
+  changeSl(event: number, item: any) {
+    if (event && item.slMetQuyCuon && item.maCcdc == '02.03') {
+      let cuon = event / item.slMetQuyCuon;
+      if (cuon.toString().includes(".")) {
+        let cut = cuon.toString().split(".")
+        let cuon0 = Number(cut[0])
+        let check = cuon0 + 0.35
+        if (check > cuon) {
+          item.slCuon = cuon0
+        } else {
+          item.slCuon = cuon0 + 1
+        }
+
+      } else {
+        item.slCuon = cuon
+      }
+
+    } else item.slCuon = undefined
+  }
+
+  changeSlQuyDoi(event: number, item: any) {
+    if (event && item.soLuong && item.maCcdc == '02.03') {
+      let cuon = item.soLuong / event;
+      if (cuon.toString().includes(".")) {
+        let cut = cuon.toString().split(".")
+        let cuon0 = Number(cut[0])
+        let check = cuon0 + 0.35
+        if (check > cuon) {
+          item.slCuon = cuon0
+        } else {
+          item.slCuon = cuon0 + 1
+        }
+
+      } else {
+        item.slCuon = cuon
+      }
+
+    } else item.slCuon = undefined
   }
 
   deleteItem(index: any, y: any) {

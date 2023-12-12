@@ -270,7 +270,7 @@
                 </th>
                 <th class="text-center" width="5%" rowSpan="2">Chênh lệch<br/> kế hoạch -<br/> thực hiện
                 </th>
-                <th class="text-center" width="13%" colSpan="2">Danh mục chưa được phê duyệt năm 2020</th>
+                <th class="text-center" width="13%" colSpan="2">Danh mục chưa được phê duyệt năm {{formData.value.namKh}}</th>
                 <th class="text-center" width="13%" colSpan="3">Kết quả PD tổng mức đầu tư</th>
                 <th class="text-center" width="13%" colSpan="3">Kết quả PD kế hoạch vốn năm</th>
                 <th class="text-center" width="7%" rowSpan="2">Ghi chú</th>
@@ -348,6 +348,12 @@
                         class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'khVonLdVu', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
                       <td
                         class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'khVonLdTc', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
+                      <td class='font-weight-bold text-right'>{{sumSoLuong(data.tenChiCuc, 'tongMucDtuCvien', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
+                      <td class='font-weight-bold text-right'>{{sumSoLuong(data.tenChiCuc, 'tongMucDtuLdTc', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
+                      <td class='font-weight-bold text-right'>{{sumSoLuong(data.tenChiCuc, 'tongMucDtuLdVu', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
+                      <td class='font-weight-bold text-right'>{{sumSoLuong(data.tenChiCuc, 'khVonCvien', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
+                      <td class='font-weight-bold text-right'>{{sumSoLuong(data.tenChiCuc, 'khVonLdTc', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
+                      <td class='font-weight-bold text-right'>{{sumSoLuong(data.tenChiCuc, 'khVonLdVu', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
                     </tr>
                     <ng-container *ngIf="expandSet.has(item.idVirtual)">
                       <ng-container *ngFor="let children of item.dataChild, let y1 = index">
@@ -403,12 +409,18 @@
                     style="color: blue">{{sumSoLuong(null, 'giaTriDnBs', null) | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="font-weight-bold text-right"
                     style="color: blue">{{sumSoLuong(null, 'giaTriKbs', null) | number : '1.0-1' : 'vi_VN'}}</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td class='font-weight-bold text-right'
+                    style='color: blue'>{{sumSoLuong(null, 'tongMucDtuCvien', null) | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class='font-weight-bold text-right'
+                    style='color: blue'>{{sumSoLuong(null, 'tongMucDtuLdVu', null) | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class='font-weight-bold text-right'
+                    style='color: blue'>{{sumSoLuong(null, 'tongMucDtuLdTc', null) | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class='font-weight-bold text-right'
+                    style='color: blue'>{{sumSoLuong(null, 'khVonCvien', null) | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class='font-weight-bold text-right'
+                    style='color: blue'>{{sumSoLuong(null, 'khVonLdVu', null) | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class='font-weight-bold text-right'
+                    style='color: blue'>{{sumSoLuong(null, 'khVonLdTc', null) | number : '1.0-1' : 'vi_VN'}}</td>
                 <td></td>
               </tr>
               </tfoot>
@@ -443,7 +455,7 @@
                 </th>
                 <th class="text-center" width="5%" rowSpan="2">Chênh lệch<br/> kế hoạch -<br/> thực hiện
                 </th>
-                <th class="text-center" width="13%" colSpan="2">Danh mục chưa được phê duyệt năm 2020</th>
+                <th class="text-center" width="13%" colSpan="2">Danh mục chưa được phê duyệt năm {{formData.value.namKh}}</th>
                 <th class="text-center" width="13%" colSpan="3">Kết quả PD tổng mức đầu tư</th>
                 <th class="text-center" width="13%" colSpan="3">Kết quả PD kế hoạch vốn năm</th>
                 <th class="text-center" width="7%" rowSpan="2">Ghi chú</th>
@@ -592,12 +604,18 @@
                     style="color: blue">{{sumSoLuong(null, 'giaTriDnBs', null) | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="font-weight-bold text-right"
                     style="color: blue">{{sumSoLuong(null, 'giaTriKbs', null) | number : '1.0-1' : 'vi_VN'}}</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td class='font-weight-bold text-right'
+                    style='color: blue'>{{sumSoLuong(null, 'tongMucDtuCvien', null) | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class='font-weight-bold text-right'
+                    style='color: blue'>{{sumSoLuong(null, 'tongMucDtuLdVu', null) | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class='font-weight-bold text-right'
+                    style='color: blue'>{{sumSoLuong(null, 'tongMucDtuLdTc', null) | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class='font-weight-bold text-right'
+                    style='color: blue'>{{sumSoLuong(null, 'khVonCvien', null) | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class='font-weight-bold text-right'
+                    style='color: blue'>{{sumSoLuong(null, 'khVonLdVu', null) | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class='font-weight-bold text-right'
+                    style='color: blue'>{{sumSoLuong(null, 'khVonLdTc', null) | number : '1.0-1' : 'vi_VN'}}</td>
                 <td></td>
               </tr>
               </tfoot>

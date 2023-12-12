@@ -124,6 +124,7 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
       khoan: [this.itemThTheoDoi ? this.itemThTheoDoi.khoan : null],
       lyDoChi: [this.itemThTheoDoi ? this.itemThTheoDoi.lyDoChi : null],
       soTien: [this.itemThTheoDoi ? this.itemThTheoDoi.soTien : null],
+      soTienNt: [this.itemThTheoDoi ? this.itemThTheoDoi.soTienNt : null],
       loaiTien: [this.itemThTheoDoi ? this.itemThTheoDoi.loaiTien : null],
       tenLoaiTien: [this.itemThTheoDoi ? this.itemThTheoDoi.tenLoaiTien : null],
       dviThuHuong: [this.itemThTheoDoi ? this.itemThTheoDoi.dviThuHuong : null, [Validators.required]],
