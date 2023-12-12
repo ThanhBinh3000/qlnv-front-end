@@ -32,6 +32,7 @@ export class TongHopKhnkComponent implements OnInit {
   isView: boolean = false;
   isQuyetDinh: boolean = false;
   dataTongHop: any;
+  idQd: any;
   searchFilter = {
     namKhoach: "",
     maTh: "",
@@ -389,6 +390,10 @@ export class TongHopKhnkComponent implements OnInit {
 
   async taoQdinh(data: any) {
     this.dataTongHop = data;
+    this.isQuyetDinh = true;
+  }
+  async showQd(data: any) {
+    this.idQd = data.idQd;
     this.isQuyetDinh = true;
   }
 }
