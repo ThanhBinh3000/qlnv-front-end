@@ -113,6 +113,14 @@
             </nz-date-picker>
           </nz-form-control>
         </div>
+        <div nz-col [nzSpan]='24'>
+          <nz-form-item>
+            <nz-form-label nz-col [nzSpan]='24' [nzNoColon]='true'>Ghi chú</nz-form-label>
+            <nz-form-control nz-col [nzSpan]='24'>
+              <textarea rows='3' class='search__input' formControlName='ghiChu' nz-input></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
       </div>
     </form>
   </nz-card>
@@ -187,6 +195,7 @@
     nzBordered>
     <thead>
       <tr>
+        <th rowspan="2" nzWidth='20px'></th>
         <th rowspan="2" nzWidth="40px">STT</th>
         <th rowspan="2" nzWidth="150px">Tên CCDC</th>
         <th rowspan="2" nzWidth="200px">Mô tả</th>
@@ -213,6 +222,7 @@
           <td [nzExpand]='expandSet.has(data.idVirtual)' (nzExpandChange)='onExpandChange(data.idVirtual, $event)'></td>
           <td class='font-weight-bold'>{{idx + 1}}</td>
           <td class='font-weight-bold'>{{data.tenCcdc}}</td>
+          <td class='font-weight-bold'>{{data.moTaCcdc}}</td>
           <td class='font-weight-bold'>{{data.donViTinh}}</td>
           <td class='font-weight-bold text-right'>{{sumSoLuong('slChiTieuGao', data.tenCcdc) | number: '1.0-1': 'vi_VN'
             }}
@@ -240,6 +250,7 @@
             <td></td>
             <td>{{idx + 1}}.{{y + 1}}</td>
             <td>{{item.tenDvi}}</td>
+            <td></td>
             <td>{{item.donViTinh}}</td>
             <td class='text-right'>{{item.slChiTieuGao | number: '1.0-1': 'vi_VN' }}</td>
             <td class='text-right'>{{item.slChiTieuThoc | number: '1.0-1': 'vi_VN' }}</td>
@@ -272,14 +283,6 @@
             </div>
           </nz-form-item>
         </div>
-      </div>
-      <div nz-col [nzSpan]='24'>
-        <nz-form-item>
-          <nz-form-label nz-col [nzSpan]='24' [nzNoColon]='true'>Ghi chú</nz-form-label>
-          <nz-form-control nz-col [nzSpan]='24'>
-            <textarea rows='3' class='search__input' formControlName='ghiChu' nz-input></textarea>
-          </nz-form-control>
-        </nz-form-item>
       </div>
     </form>
   </nz-card>

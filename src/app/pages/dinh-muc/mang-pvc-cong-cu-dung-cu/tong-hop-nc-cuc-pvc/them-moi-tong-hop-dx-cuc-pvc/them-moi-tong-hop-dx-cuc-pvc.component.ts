@@ -257,12 +257,18 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
   }
 
   convertListData() {
-    if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTable = chain(this.dataTable).groupBy('tenCcdc')
-        .map((value, key) => ({ tenCcdc: key, dataChild: value, donGia: value[0].donGia, idVirtual: uuidv4() }),
-        ).value();
+    if (this.dataTable?.length > 0) {
+      this.dataTable = chain(this.dataTable)
+        .groupBy('tenCcdc')
+        .map((value, key) => ({
+          tenCcdc: key,
+          donGia: value[0].donGia,
+          moTaCcdc: value?.find(item => item.tenCcdc === key)?.moTaCcdc || "",
+          dataChild: value,
+          idVirtual: uuidv4(),
+        }))
+        .value();
     }
-    console.log(this.dataTable, 'this.dataTable this.dataTable this.dataTable ');
     this.expandAll();
   }
 
