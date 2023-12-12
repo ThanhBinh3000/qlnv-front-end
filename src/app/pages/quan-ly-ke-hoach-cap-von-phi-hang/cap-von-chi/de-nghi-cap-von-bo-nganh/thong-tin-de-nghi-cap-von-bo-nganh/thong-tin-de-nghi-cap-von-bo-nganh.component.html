@@ -226,7 +226,7 @@
       </th>
       <th>
         <nz-input-group>
-          <input class='money-input' [readOnly]="rowItem.loaiTien == '01'"
+          <input class='money-input'   [readOnly]='true'
                  currencyMask [options]='amount' (keyup)='calCulateKinhPhiChuaCap()'
                  (keydown)='calCulateKinhPhiChuaCap()'
                  [(ngModel)]='rowItem.kinhPhiDaCapNt' />
@@ -236,6 +236,7 @@
         <nz-input-group>
           <input class='money-input' currencyMask (keyup)='calCulateKinhPhiChuaCap()'
                  (keydown)='calCulateKinhPhiChuaCap()' [options]='amount'
+                 [readOnly]='true'
                  [(ngModel)]='rowItem.kinhPhiDaCap' />
         </nz-input-group>
       </th>
