@@ -426,7 +426,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
 
   async updateProcess(trangThai: STATUS, tenTrangThai: string) {
     this.formData.value.dataDtl.forEach(s => {
-      if (s.maDvi.match(this.userInfo.MA_DVI + ".*")) {
+      if (s.maDvi.match("^" + this.userInfo.MA_DVI + ".*")) {
         s.trangThai = trangThai;
         s.tenTrangThai = tenTrangThai;
       }
@@ -434,7 +434,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     // if (trangThai === STATUS.DA_HOAN_THANH && this.formData.value.dataDtl.some(f => !f.tenNganKho)) {
     //   return this.notification.error(MESSAGE.ERROR, "Bạn chưa hoàn thành phân bổ.")
     // }
-    if (this.formData.value.trangThai === STATUS.BAN_HANH && this.formData.value.dataDtl.filter(s => s.maDvi.match(this.userInfo.MA_DVI + ".*")).some(f => !f.tenNganKho)) {
+    if (this.formData.value.trangThai === STATUS.BAN_HANH && this.formData.value.dataDtl.filter(s => s.maDvi.match("^" + this.userInfo.MA_DVI + ".*")).some(f => !f.tenNganKho)) {
       return this.notification.error(MESSAGE.ERROR, "Bạn chưa hoàn thành phân bổ.")
     }
     if (trangThai === STATUS.DA_HOAN_THANH) {
@@ -611,7 +611,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       });
       let data = this.formData.value.dataDtl;
       if (this.userInfo.CAP_DVI == DANH_MUC_LEVEL.CHI_CUC || this.userInfo.CAP_DVI == DANH_MUC_LEVEL.CUC) {
-        data = this.formData.value.dataDtl.filter(s => s.maDvi.match(this.userInfo.MA_DVI + ".*"));
+        data = this.formData.value.dataDtl.filter(s => s.maDvi.match("^" + this.userInfo.MA_DVI + ".*"));
       };
       this.phuongAnView = chain(data)
         .groupBy("noiDungDxTheoDx")
@@ -675,7 +675,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       });
       let data = this.formData.value.dataDtl;
       if (this.userInfo.CAP_DVI == DANH_MUC_LEVEL.CHI_CUC || this.userInfo.CAP_DVI == DANH_MUC_LEVEL.CUC) {
-        data = this.formData.value.dataDtl.filter(s => s.maDvi.match(this.userInfo.MA_DVI + ".*"));
+        data = this.formData.value.dataDtl.filter(s => s.maDvi.match("^" + this.userInfo.MA_DVI + ".*"));
       };
       this.phuongAnView = chain(data)
         .groupBy("noiDungDxTheoDx")
@@ -740,7 +740,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       });
       let data = this.formData.value.dataDtl;
       if (this.userInfo.CAP_DVI == DANH_MUC_LEVEL.CHI_CUC || this.userInfo.CAP_DVI == DANH_MUC_LEVEL.CUC) {
-        data = this.formData.value.dataDtl.filter(s => s.maDvi.match(this.userInfo.MA_DVI + ".*"));
+        data = this.formData.value.dataDtl.filter(s => s.maDvi.match("^" + this.userInfo.MA_DVI + ".*"));
       };
       this.phuongAnView = chain(data)
         .groupBy("noiDungDxTheoDx")
