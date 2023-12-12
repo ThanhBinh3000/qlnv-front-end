@@ -227,7 +227,8 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
     };
     let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listQdGoc = res.data.content;
+      this.listQdGoc = res.data.content.filter(item => item.qdPdHsmt == null
+      || item.qdPdHsmt?.trangThai != this.STATUS.BAN_HANH);
     }
     this.spinner.hide();
     const modalQD = this.modal.create({

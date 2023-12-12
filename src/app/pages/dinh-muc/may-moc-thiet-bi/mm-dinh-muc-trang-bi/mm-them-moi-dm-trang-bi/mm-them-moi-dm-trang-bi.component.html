@@ -131,7 +131,7 @@
         <th>
           <nz-input-number [nzSize]="'small'" [nzMin]="0" [(ngModel)]="rowItem.slVpCucKv"></nz-input-number>
         </th>
-        <th *ngIf="!rowItem.isCanCu">
+        <th *ngIf="rowItem.isCanCu">
           <div class="chi-cuc-sl">
             <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.slChiCuc" [nzMin]="0"
                              class="w-50"></nz-input-number>
@@ -148,12 +148,8 @@
             </nz-select>
           </div>
         </th>
-        <th *ngIf="rowItem.isCanCu">
-            <nz-select nzPlaceHolder="Nhập loại hình" nzMode="tags" style="width: 100%" [(ngModel)]="rowItem.loaiHinh">
-              <nz-option nzValue="00" nzLabel="Nhập"></nz-option>
-              <nz-option nzValue="01" nzLabel="Xuất"></nz-option>
-              <nz-option nzValue="02" nzLabel="Bảo quản"></nz-option>
-            </nz-select>
+        <th *ngIf="!rowItem.isCanCu">
+          <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.slChiCuc" [nzMin]="0"></nz-input-number>
         </th>
         <th>
           <nz-input-number [nzSize]="'small'" [nzMin]="0" [(ngModel)]="rowItem.donGiaTd"></nz-input-number>
@@ -179,8 +175,8 @@
           <td>{{data.donViTinh}}</td>
           <td class="text-center"><label nz-checkbox nzDisabled [(ngModel)]="data.isCanCu"></label></td>
           <td class="text-right">{{data.slVpCucKv | number : '1.0-1' : 'vi_VN'}} </td>
-          <td *ngIf="!data.isCanCu">{{data.slChiCuc ? data.slChiCuc : ''}}/{{data.klChiCuc ? data.klChiCuc + ' tấn lương thực' : ''}}  {{data.tenLoaiHinh ? ' ('+ data.tenLoaiHinh + ')' : ''}}</td>
-          <td *ngIf="data.isCanCu">{{data.tenLoaiHinh ? ' ('+ data.tenLoaiHinh + ')' : ''}}</td>
+          <td *ngIf="data.isCanCu">{{data.slChiCuc ? data.slChiCuc : ''}}/{{data.klChiCuc ? data.klChiCuc + ' tấn lương thực' : ''}}  {{data.tenLoaiHinh ? ' ('+ data.tenLoaiHinh + ')' : ''}}</td>
+          <td  *ngIf="!data.isCanCu" class="text-right">{{data.slChiCuc | number : '1.0-1' : 'vi_VN'}} </td>
           <td class="text-right">{{data.donGiaTd | number : '1.0-1' : 'vi_VN'}}</td>
           <td>{{data.ghiChu}}</td>
           <td class="text-center" *ngIf="!isViewDetail">
@@ -213,14 +209,13 @@
                              [(ngModel)]="dataEdit[idx].data.slVpCucKv"></nz-input-number>
           </td>
           <td>
-            <div class="chi-cuc-sl" *ngIf="!dataEdit[idx].data.isCanCu">
+            <div class="chi-cuc-sl" *ngIf="dataEdit[idx].data.isCanCu">
               <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.slChiCuc" [nzMin]="0"
                                class="w-50"></nz-input-number>
               &nbsp;
               &nbsp; <span>/</span>
               &nbsp;
-              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.klChiCuc" [nzMin]="0"
-                               class="w-50"></nz-input-number>
+              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.klChiCuc" [nzMin]="0"></nz-input-number>
               &nbsp; <span>tấn lương thực</span> &nbsp;
               <nz-select nzMode="tags" class="w-300" [(ngModel)]="dataEdit[idx].data.loaiHinh">
                 <nz-option nzValue="00" nzLabel="Nhập"></nz-option>
@@ -228,12 +223,9 @@
                 <nz-option nzValue="02" nzLabel="Bảo quản"></nz-option>
               </nz-select>
             </div>
-            <div class="chi-cuc-sl" *ngIf="dataEdit[idx].data.isCanCu">
-              <nz-select nzMode="tags" class="w-300" [(ngModel)]="dataEdit[idx].data.loaiHinh">
-                <nz-option nzValue="00" nzLabel="Nhập"></nz-option>
-                <nz-option nzValue="01" nzLabel="Xuất"></nz-option>
-                <nz-option nzValue="02" nzLabel="Bảo quản"></nz-option>
-              </nz-select>
+            <div class="chi-cuc-sl" *ngIf="!dataEdit[idx].data.isCanCu">
+              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.slChiCuc" [nzMin]="0"
+                               class="w-50"></nz-input-number>
             </div>
           </td>
           <td>

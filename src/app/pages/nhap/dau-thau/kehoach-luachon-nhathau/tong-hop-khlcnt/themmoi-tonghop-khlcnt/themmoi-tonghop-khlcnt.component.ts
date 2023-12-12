@@ -62,6 +62,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
   pdfSrc: any;
   printSrc: any;
   wordSrc: any;
+  maTrinh: string = '';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -107,12 +108,16 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
       kieuNx: [''],
       loaiHinhNx: [''],
       maTh: [],
+      ngayTrinh: [, [Validators.required]],
+      soTtr: [, [Validators.required]],
     })
 
   }
 
   async ngOnInit() {
     await this.spinner.show();
+    this.userInfo = this.userService.getUserLogin();
+    this.maTrinh = '/' + this.userInfo.MA_TR;
     try {
       await Promise.all([
         this.loadDataComboBox(),

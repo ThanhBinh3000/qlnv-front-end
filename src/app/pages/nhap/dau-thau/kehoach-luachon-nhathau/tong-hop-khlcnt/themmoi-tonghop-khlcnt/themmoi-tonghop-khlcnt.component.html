@@ -82,7 +82,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Hình thức lựa chọn nhà thầu</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select [nzDisabled]="isView" formControlName="hthucLcnt" nzPlaceHolder="">
+              <nz-select [nzDisabled]="isView" formControlName="hthucLcnt" nzPlaceHolder="" nzAllowClear>
                 <nz-option *ngFor="let p of listHinhThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
@@ -93,7 +93,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Phương thức lựa chọn nhà thầu</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select [nzDisabled]="isView" formControlName="pthucLcnt" nzPlaceHolder="">
+              <nz-select [nzDisabled]="isView" formControlName="pthucLcnt" nzPlaceHolder="" nzAllowClear>
                 <nz-option *ngFor="let p of listPhuongThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
@@ -104,7 +104,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Loại hợp đồng</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select [nzDisabled]="isView" formControlName="loaiHdong" nzPlaceHolder="">
+              <nz-select [nzDisabled]="isView" formControlName="loaiHdong" nzPlaceHolder="" nzAllowClear>
                 <nz-option *ngFor="let p of listLoaiHopDong" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
@@ -115,7 +115,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Nguồn vốn</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select [nzDisabled]="isView" formControlName="nguonVon" nzPlaceHolder="">
+              <nz-select [nzDisabled]="isView" formControlName="nguonVon" nzPlaceHolder="" nzAllowClear>
                 <nz-option *ngFor="let p of listNguonVon" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -141,7 +141,7 @@
       <nz-collapse-panel [nzHeader]="'THÔNG TIN CHUNG'" [nzActive]="true">
         <form nzLayout="vertical" nz-form [formGroup]="formData">
           <div nz-row [nzGutter]="20">
-            <div nz-col [nzSpan]="6">
+            <div nz-col [nzSpan]="4">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true">
                   Mã tổng hợp
@@ -152,7 +152,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="6">
+            <div nz-col [nzSpan]="4">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true">
                   Ngày tổng hợp
@@ -163,14 +163,38 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="12">
+            <div nz-col [nzSpan]="8">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true">
-                  Nội dung tổng hợp
+                  Nội dung tờ trình
                 </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <textarea formControlName="noiDung" nz-input [rows]="3"
                         [readonly]="isView"></textarea>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="4">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  Số tờ trình
+                </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                  <nz-input-group nzAddOnAfter="{{maTrinh}}">
+                    <input nz-input formControlName="soTtr"
+                           [readonly]="isView">
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="4">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  Ngày trình
+                </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                  <nz-date-picker formControlName="ngayTrinh" nzFormat="dd/MM/yyyy" [nzDisabled]="isView">
+                  </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
             </div>
