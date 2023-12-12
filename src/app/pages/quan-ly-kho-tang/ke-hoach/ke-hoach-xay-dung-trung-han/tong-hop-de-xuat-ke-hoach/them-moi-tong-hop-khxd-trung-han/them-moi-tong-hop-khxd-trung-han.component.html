@@ -288,15 +288,14 @@
                     <thead>
                     <tr>
                       <th class="text-center" width="2%" rowSpan="2">STT</th>
-                      <th class="text-center" width="8%%" rowSpan="2">Danh mục khối</th>
+                      <th class="text-center" width="8%%" rowSpan="2">Khối dự án/công trình</th>
                       <th class="text-center" width="8%%" rowSpan="2">Danh mục dự án</th>
                       <th class="text-center" width="8%%" rowSpan="2">Địa điểm xây dựng</th>
                       <th class="text-center" width="7%%" rowSpan="2">Loại dự án</th>
-                      <th class="text-center" width="5%" rowSpan="2">Thời gian KC-HT</th>
-                      <th class="text-center" width="5%" rowSpan="2">Khối</th>
+                      <th class="text-center" width="5%" rowSpan="2">Thời gian <br> khởi công - hoàn thành</th>
                       <th class="text-center" width="5%" rowSpan="2">Số QĐ phê duyệt/ <br> điều chỉnh TMĐT</th>
-                      <th class="text-center" width="13%" colSpan="2">TMĐT</th>
-                      <th class="text-center" width="13%" colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 2021-2025</th>
+                      <th class="text-center" width="13%" colSpan="2">Tổng mức đầu tư (TMĐT) (đ)</th>
+                      <th class="text-center" width="13%" colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 5 năm (đ)</th>
                     </tr>
                     <tr>
                       <th class="text-center">Tổng số</th>
@@ -311,7 +310,6 @@
                         <td [nzExpand]="expandSet.has(data.idVirtual)"
                             (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
                         <td class="font-weight-bold">{{data.tenKhoi}}</td>
-                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -334,7 +332,6 @@
                           <td>{{item.diaDiem}}</td>
                           <td>{{item.loaiDuAn}}</td>
                           <td>{{item.tgKcHt}}</td>
-                          <td>{{item.tenKhoi}}</td>
                           <td>{{ item.soQdPd }}</td>
                           <td class="text-right">{{ item.tmdtDuKien | number : '1.0-1' : 'vi_VN' }}</td>
                           <td class="text-right">{{ item.nstwDuKien | number : '1.0-1' : 'vi_VN' }}</td>
@@ -349,7 +346,6 @@
                       <td></td>
                       <td></td>
                       <td class="font-weight-bold" style="color: blue">Tổng</td>
-                      <td></td>
                       <td></td>
                       <td></td>
                       <td></td>
@@ -371,7 +367,7 @@
           </div>
           <div nz-col nzSpan="24">
             <nz-collapse nzAccordion *ngIf="formData.value.trangThai != STATUS.DU_THAO">
-              <nz-collapse-panel [nzHeader]="'QUYẾT ĐỊNH CỦA TỔNG CỤC DTNN'" [nzActive]="true">
+              <nz-collapse-panel [nzHeader]="'PHƯƠNG ÁN CỦA TỔNG CỤC'" [nzActive]="true">
                 <nz-card class="mt-2px flex-card data-table card-border-content table-card">
                   <div>
     <span class="text-right">
@@ -384,15 +380,14 @@
                     <thead>
                     <tr>
                       <th class="text-center" width="2%" rowSpan="2">STT</th>
-                      <th class="text-center" width="8%" rowSpan="2">Danh mục khối</th>
+                      <th class="text-center" width="8%" rowSpan="2">Khối dự án/ công trình</th>
                       <th class="text-center" width="8%" rowSpan="2">Danh mục dự án</th>
                       <th class="text-center" width="8%" rowSpan="2">Địa điểm xây dựng</th>
                       <th class="text-center" width="7%" rowSpan="2">Loại dự án</th>
-                      <th class="text-center" width="5%" rowSpan="2">Thời gian KC-HT</th>
-                      <th class="text-center" width="5%" rowSpan="2">Khối</th>
+                      <th class="text-center" width="5%" rowSpan="2">Thời gian <br> khởi công - hoàn thành</th>
                       <th class="text-center" width="5%" rowSpan="2">Số QĐ phê duyệt/ <br> điều chỉnh TMĐT</th>
-                      <th class="text-center" width="13%" colSpan="2">TMĐT</th>
-                      <th class="text-center" width="13%" colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 2021-2025</th>
+                      <th class="text-center" width="13%" colSpan="2">Tổng mức đầu tư (TMĐT) (đ)</th>
+                      <th class="text-center" width="13%" colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 5 năm (đ)</th>
                       <th class="text-center" width="5%" rowSpan="2"
                           *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC"
                           nzRight>Hành động
@@ -411,7 +406,6 @@
                         <td [nzExpand]="expandSet.has(data.idVirtual)"
                             (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
                         <td class="font-weight-bold">{{data.tenKhoi}}</td>
-                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -436,7 +430,6 @@
                           <td>{{item.diaDiem}}</td>
                           <td>{{item.loaiDuAn}}</td>
                           <td>{{item.tgKcHt}}</td>
-                          <td>{{item.tenKhoi}}</td>
                           <td>{{ item.soQdPd }}</td>
                           <td class="text-right">{{ item.tmdtDuKien | number : '1.0-1' : 'vi_VN' }}</td>
                           <td class="text-right">{{ item.nstwDuKien | number : '1.0-1' : 'vi_VN' }}</td>
@@ -460,7 +453,6 @@
                       <td></td>
                       <td></td>
                       <td class="font-weight-bold" style="color: blue">Tổng</td>
-                      <td></td>
                       <td></td>
                       <td></td>
                       <td></td>
