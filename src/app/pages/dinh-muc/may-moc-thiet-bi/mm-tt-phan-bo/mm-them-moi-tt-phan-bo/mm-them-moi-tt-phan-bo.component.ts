@@ -8,6 +8,7 @@ import { Validators} from "@angular/forms";
 import {Base2Component} from "../../../../../components/base2/base2.component";
 import {chain} from 'lodash';
 import {v4 as uuidv4} from 'uuid';
+import { saveAs } from 'file-saver';
 import {
   MmThongTinNcChiCuc
 } from "../../de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc.component";
@@ -58,7 +59,10 @@ import { STATUS } from '../../../../../constants/status';
       fileDinhKems: [null],
       lyDoTuChoi: [null],
       listQlDinhMucQdMuaSamDtlReq: [null],
-      loai : ['01']
+      // listQlDinhMucQdMuaSamDtl: [null],
+      loai : ['01'],
+      noiDung : [null],
+      ghiChu : [null]
     });
   }
 
@@ -370,5 +374,40 @@ import { STATUS } from '../../../../../constants/status';
         },
       });
     }
-}
+    exportDataDetail() {
+      if (this.dataTable.length > 0) {
+        this.spinner.show();
+        try {
+          let body = this.formData.value;
+          body.paggingReq = {
+            limit: this.pageSize,
+            page: this.page - 1
+          }
+          // let arrDtl = [];
+          // this.dataTable.forEach(item => {
+          //   if (item.dataChild && item.dataChild.length > 0) {
+          //     item.dataChild.forEach(data => {
+          //       data.thanhTienNc = data.donGiaTd * data.soLuong
+          //       arrDtl.push(data)
+          //     })
+          //   }
+          // })
+          body.listQlDinhMucExportDetailTtpb = this.dataTable;
+          // console.log(body,'bodybodybody');return;
+          this.qdMuaSamService
+            .exportDetailTtPhanBo(body)
+            .subscribe((blob) =>
+              saveAs(blob, 'danh-sach-chi-tiet-thong-tin-phan-bo-may-moc-thiet-bi-chuyen-dung.xlsx'),
+            );
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+      }
+    }
+  }
 

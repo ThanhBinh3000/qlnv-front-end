@@ -66,7 +66,7 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
       tenDviDeXuat: [this.userInfo.TEN_DVI],
       namKh: [dayjs().get('year'), Validators.required],
       ngayKy: [null],
-      soCv: [null, Validators.required],
+      soCv: [null],
       trichYeu: [null, Validators.required],
       ngayDuyet: [null],
       lyDoTuChoi: [null],
@@ -108,7 +108,7 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.formData.patchValue({
             soCv: data.soCv ? data.soCv.split('/')[0] : null,
-            ngayDuyet: data.trangThai == STATUS.CHO_DUYET_LDTC ? dayjs().format('YYYY-MM-DDTHH:mm:ss') : data.ngayDuyet,
+            ngayDuyet: data.trangThai == STATUS.DA_DUYET_LDC ? dayjs().format('YYYY-MM-DDTHH:mm:ss') : data.ngayDuyet,
           })
           data.fileDinhKems.forEach(item => {
             if (item.fileType == FILETYPE.FILE_DINH_KEM) {
@@ -208,7 +208,7 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
   async save(isGuiDuyet?) {
     this.spinner.show();
     this.helperService.removeValidators(this.formData);
-    if (isGuiDuyet || this.idInput > 0) {
+    if (isGuiDuyet && this.idInput > 0) {
       this.setValidators();
     }
     this.conVertTreToList();

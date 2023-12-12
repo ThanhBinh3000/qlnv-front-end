@@ -126,6 +126,12 @@
           <span class='text-uppercase font-weight-bold'>CHI TIẾT QUYẾT ĐỊNH MUA SẮM</span>
         </div>
       </div>
+      <div class='btn-group'>
+        <button type="button" class="btn btn-sub" (click)="exportDataDetail()">
+          <i class="icon htvbdh_chuyen-xu-ly"></i>
+          <span>Xuất file</span>
+        </button>
+      </div>
     </div>
     <!-- <nz-table class='nowrap mg-t-10 pd-10' [nzFrontPagination]='false'
               [nzShowPagination]='false' nzBordered>
@@ -205,6 +211,7 @@
       [nzScroll]="{ x: '2500px' }">
       <thead>
         <tr>
+          <th rowspan="2" nzWidth='40px'></th>
           <th rowspan="2" width="40px">STT</th>
           <th rowspan="2" width="150px">Tên CCDC</th>
           <th rowspan="2" width="200px" nzAlign="center">Mô tả</th>
@@ -237,6 +244,7 @@
             </td>
             <td class='font-weight-bold'>{{idx + 1}}</td>
             <td class='font-weight-bold'>{{data.tenCcdc}}</td>
+            <td class='font-weight-bold'>{{data.moTaCcdc}}</td>
             <td class='font-weight-bold'>{{data.donViTinh}}</td>
             <td class='font-weight-bold text-right'>{{sumSoLuong('slChiTieuGao', data.tenCcdc) | number: '1.0-1':
               'vi_VN'
@@ -282,6 +290,7 @@
               <td></td>
               <td>{{idx + 1}}.{{y + 1}}</td>
               <td>{{item.tenDvi}}</td>
+              <td></td>
               <td>{{item.donViTinh}}</td>
               <td class='text-right'>{{item.slChiTieuGao | number: '1.0-1': 'vi_VN' }}</td>
               <td class='text-right'>{{item.slChiTieuThoc | number: '1.0-1': 'vi_VN' }}</td>

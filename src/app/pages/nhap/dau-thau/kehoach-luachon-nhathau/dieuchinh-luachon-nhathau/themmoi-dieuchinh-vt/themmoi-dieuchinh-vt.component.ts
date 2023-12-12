@@ -93,6 +93,8 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
       soTtrDc: [""],
       soQdCc: [""],
       noiDungQd: [""],
+      noiDungTtr: [""],
+      trichYeuQd: [""],
       loaiHinhNx: [""],
       kieuNx: [""],
       tenDuAn: [""],
@@ -225,7 +227,8 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
     };
     let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listQdGoc = res.data.content;
+      this.listQdGoc = res.data.content.filter(item => item.qdPdHsmt == null
+      || item.qdPdHsmt?.trangThai != this.STATUS.BAN_HANH);
     }
     this.spinner.hide();
     const modalQD = this.modal.create({
@@ -385,7 +388,7 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
         this.thongtinDieuchinhComponent.formData.controls["pthucLcnt"].setValidators([Validators.required]);
         this.thongtinDieuchinhComponent.formData.controls["loaiHdong"].setValidators([Validators.required]);
         this.thongtinDieuchinhComponent.formData.controls["tgianThienHd"].setValidators([Validators.required]);
-      } else if (this.formData.get('trangThai').value == this.STATUS.CHO_DUYET_LDV) {
+      } else if (this.formData.get('trangThai').value == this.STATUS.DA_DUYET_LDV) {
         this.formData.controls["soQdDc"].setValidators([Validators.required]);
         this.formData.controls["ngayQdDc"].setValidators([Validators.required]);
         this.formData.controls["ngayHluc"].setValidators([Validators.required]);
@@ -423,7 +426,17 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
         mesg = "Bạn có chắc chắn muốn gửi duyệt?";
         break;
       }
+      case STATUS.TU_CHOI_LDV: {
+        trangThai = STATUS.CHO_DUYET_LDV;
+        mesg = "Bạn có chắc chắn muốn gửi duyệt?";
+        break;
+      }
       case STATUS.CHO_DUYET_LDV: {
+        trangThai = STATUS.DA_DUYET_LDV;
+        mesg = "Bạn có chắc chắn muốn phê duyệt?";
+        break;
+      }
+      case STATUS.DA_DUYET_LDV: {
         trangThai = STATUS.BAN_HANH;
         mesg = "Bạn muốn ban hành quyết định?";
         break;
@@ -475,10 +488,21 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
       if (text) {
         this.spinner.show();
         try {
+          let trangThai = null;
+          switch (this.formData.get("trangThai").value) {
+            case STATUS.CHO_DUYET_LDV: {
+              trangThai = STATUS.TU_CHOI_LDV
+              break;
+            }
+            case STATUS.DA_DUYET_LDV: {
+              trangThai = STATUS.TU_CHOI_LDTC
+              break;
+            }
+          }
           let body = {
             id: this.formData.get("id").value,
             lyDo: text,
-            trangThai: STATUS.TU_CHOI_LDV,
+            trangThai: trangThai,
           };
           const res = await this.dieuChinhQuyetDinhPdKhlcntService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {

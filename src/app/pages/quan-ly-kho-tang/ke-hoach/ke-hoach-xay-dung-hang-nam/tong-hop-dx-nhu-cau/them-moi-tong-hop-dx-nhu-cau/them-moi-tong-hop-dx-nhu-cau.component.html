@@ -246,7 +246,7 @@
       </nz-collapse-panel>
     </nz-collapse>
     <nz-collapse nzAccordion>
-      <nz-collapse-panel [nzHeader]="'NỘI DUNG CHI TIẾT'" [nzActive]="true">
+      <nz-collapse-panel [nzHeader]="'THÔNG TIN CHI TIẾT'" [nzActive]="true">
         <nz-table #dataTbl class="nowrap mt-16 table-chi-tiet pd-10" [nzData]="listDx" nzBordered>
           <thead>
           <tr>
@@ -276,7 +276,13 @@
         <div nz-row [nzGutter]="24">
           <div nz-col [nzSpan]="formData.value.trangThai == STATUS.DU_THAO ? 24  : 24 ">
             <nz-collapse nzAccordion>
-              <nz-collapse-panel [nzHeader]="'ĐỀ XUẤT CỦA CÁC CỤC'" [nzActive]="true">
+              <nz-collapse-panel [nzHeader]="'ĐỀ XUẤT CỦA CÁC CỤC'" [nzActive]="true" [nzExtra]="extraTpl">
+                <ng-template #extraTpl>
+                  <button type="button" class="btn btn-sub" (click)="exportDetailDx($event)">
+                    <i class="icon htvbdh_chuyen-xu-ly" ></i>
+                    <span>Xuất file</span>
+                  </button>
+                </ng-template>
                 <nz-card class="mt-2px flex-card data-table card-border-content table-card">
                   <div>
     <span class="text-right">
@@ -291,21 +297,20 @@
                       <th class="text-center" width="2%" rowSpan="2"></th>
                       <th class="text-center" width="8%" rowSpan="2">Chi cục</th>
                       <th class="text-center" width="2%" rowSpan="2">STT</th>
-                      <th class="text-center" width="8%" rowSpan="2">Danh mục khối</th>
+                      <th class="text-center" width="8%" rowSpan="2">Khối dự án/ công trinh</th>
                       <th class="text-center" width="8%" rowSpan="2">Danh mục dự án</th>
                       <th class="text-center" width="8%" rowSpan="2">Địa điểm xây dựng</th>
                       <th class="text-center" width="7%" rowSpan="2">Loại dự án</th>
-                      <th class="text-center" width="5%" rowSpan="2">Thời gian KC-HT</th>
-                      <th class="text-center" width="5%" rowSpan="2">Khối</th>
+                      <th class="text-center" width="5%" rowSpan="2">Thời gian <br> khởi công - hoàn thành</th>
                       <th class="text-center" width="5%" rowSpan="2">Số QĐ phê duyệt/ <br> điều chỉnh TMĐT</th>
                       <th class="text-center" width="13%" colSpan="2">Tổng mức đầu tư theo QĐ PD/ĐC TMĐT (đ)</th>
                       <th class="text-center" width="13%" colSpan="2">TMĐT theo kế hoạch trung hạn giai đoạn 5 năm</th>
-                      <th class="text-center" width="7%" rowSpan="2" nzRight>KH vốn đầu tư <br> nguồn NSNN năm hiện tại</th>
+                      <th class="text-center" width="7%" rowSpan="2">KH vốn đầu tư <br> nguồn NSNN năm hiện tại (đ)</th>
                     </tr>
                     <tr>
-                      <th class="text-center">Tổng số</th>
+                      <th class="text-center">Tổng số (tất cả nguồn vốn)</th>
                       <th class="text-center">Trong đó vốn NSTW</th>
-                      <th class="text-center">Tổng số</th>
+                      <th class="text-center">Tổng số (tất cả nguồn vốn)</th>
                       <th class="text-center">Trong đó vốn NSTW</th>
                     </tr>
                     </thead>
@@ -327,7 +332,6 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td nzRight></td>
                       </tr>
                       <ng-container *ngIf="expandSet.has(data.idVirtual)">
                         <ng-container *ngFor="let item of data.dataChild, let y = index">
@@ -351,8 +355,6 @@
                               class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'ncKhTongSo', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
                             <td
                               class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'ncKhNstw', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
-                            <td nzRight
-                                class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'vonDauTu', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
                           </tr>
                           <ng-container *ngIf="expandSet.has(item.idVirtual)">
                             <ng-container *ngFor="let children of item.dataChild, let y1 = index">
@@ -365,13 +367,12 @@
                                 <td>{{children.diaDiem}}</td>
                                 <td>{{children.loaiDuAn}}</td>
                                 <td>{{children.tgKcHt}}</td>
-                                <td>{{children.tenKhoi}}</td>
                                 <td>{{ children.soQdPd }}</td>
                                 <td class="text-right">{{ children.tmdtDuKien | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td class="text-right">{{ children.nstwDuKien | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td class="text-right">{{ children.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td class="text-right">{{ children.ncKhNstw | number : '1.0-1' : 'vi_VN' }}</td>
-                                <td class="text-right" nzRight>{{ children.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>
+                                <td class="text-right">{{ children.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>
                               </tr>
                             </ng-container>
                           </ng-container>
@@ -399,8 +400,6 @@
                           style="color: blue">{{sumSoLuong(null, 'ncKhTongSo', null) | number : '1.0-1' : 'vi_VN'}}</td>
                       <td class="font-weight-bold text-right"
                           style="color: blue">{{sumSoLuong(null, 'ncKhNstw', null) | number : '1.0-1' : 'vi_VN'}}</td>
-                      <td nzRight class="font-weight-bold text-right"
-                          style="color: blue">{{sumSoLuong(null, 'vonDauTu', null) | number : '1.0-1' : 'vi_VN'}}</td>
                     </tr>
                     </tfoot>
                   </nz-table>
@@ -410,7 +409,13 @@
           </div>
           <div nz-col nzSpan="24">
             <nz-collapse nzAccordion *ngIf="formData.value.trangThai != STATUS.DU_THAO">
-              <nz-collapse-panel [nzHeader]="'PHƯƠNG ÁN CỦA TỔNG CỤC'" [nzActive]="true">
+              <nz-collapse-panel [nzHeader]="'PHƯƠNG ÁN CỦA TỔNG CỤC'" [nzActive]="true" [nzExtra]="extraTpl">
+                <ng-template #extraTpl>
+                  <button type="button" class="btn btn-sub" (click)="exportDetail($event)">
+                    <i class="icon htvbdh_chuyen-xu-ly" ></i>
+                    <span>Xuất file</span>
+                  </button>
+                </ng-template>
                 <nz-card class="mt-2px flex-card data-table card-border-content table-card">
                   <div>
     <span class="text-right">
@@ -425,25 +430,24 @@
                       <th class="text-center" width="2%" rowSpan="2"></th>
                       <th class="text-center" width="8%" rowSpan="2">Chi cục</th>
                       <th class="text-center" width="2%" rowSpan="2">STT</th>
-                      <th class="text-center" width="8%" rowSpan="2">Danh mục khối</th>
+                      <th class="text-center" width="8%" rowSpan="2">Khối dự án/ công trinh</th>
                       <th class="text-center" width="8%" rowSpan="2">Danh mục dự án</th>
                       <th class="text-center" width="8%" rowSpan="2">Địa điểm xây dựng</th>
                       <th class="text-center" width="7%" rowSpan="2">Loại dự án</th>
-                      <th class="text-center" width="5%" rowSpan="2">Thời gian KC-HT</th>
-                      <th class="text-center" width="5%" rowSpan="2">Khối</th>
+                      <th class="text-center" width="5%" rowSpan="2">Thời gian <br> khởi công - hoàn thành</th>
                       <th class="text-center" width="5%" rowSpan="2">Số QĐ phê duyệt/ <br> điều chỉnh TMĐT</th>
                       <th class="text-center" width="13%" colSpan="2">Tổng mức đầu tư theo QĐ PD/ĐC TMĐT (đ)</th>
                       <th class="text-center" width="13%" colSpan="2">TMĐT theo kế hoạch trung hạn giai đoạn 5 năm</th>
-                      <th class="text-center" width="7%" rowSpan="2" nzRight>KH vốn đầu tư <br> nguồn NSNN năm hiện tại</th>
+                      <th class="text-center" width="7%" rowSpan="2" >KH vốn đầu tư <br> nguồn NSNN năm hiện tại (đ)</th>
                       <th class="text-center" width="5%" rowSpan="2"
                           *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC)"
                       nzRight >Hành động
                       </th>
                     </tr>
                     <tr>
-                      <th class="text-center">Tổng số</th>
+                      <th class="text-center">Tổng số (tất cả nguồn vốn)</th>
                       <th class="text-center">Trong đó vốn NSTW</th>
-                      <th class="text-center">Tổng số</th>
+                      <th class="text-center">Tổng số (tất cả nguồn vốn)</th>
                       <th class="text-center">Trong đó vốn NSTW</th>
                     </tr>
                     </thead>
@@ -465,7 +469,6 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td nzRight></td>
                         <td *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC)" nzRight></td>
                       </tr>
                       <ng-container *ngIf="expandSet.has(data.idVirtual)">
@@ -490,8 +493,6 @@
                               class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'ncKhTongSo', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
                             <td
                               class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'ncKhNstw', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
-                            <td nzRight
-                                class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'vonDauTu', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
                             <td nzRight *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC)"></td>
                           </tr>
                           <ng-container *ngIf="expandSet.has(item.idVirtual)">
@@ -505,13 +506,12 @@
                                 <td>{{children.diaDiem}}</td>
                                 <td>{{children.loaiDuAn}}</td>
                                 <td>{{children.tgKcHt}}</td>
-                                <td>{{children.tenKhoi}}</td>
                                 <td>{{ children.soQdPd }}</td>
                                 <td class="text-right">{{ children.tmdtDuKien | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td class="text-right">{{ children.nstwDuKien | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td class="text-right">{{ children.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td class="text-right">{{ children.ncKhNstw | number : '1.0-1' : 'vi_VN' }}</td>
-                                <td class="text-right" nzRight>{{ children.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>
+                                <td class="text-right">{{ children.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td class="text-center" nzRight
                                     *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC)">
                                   <a (click)="themMoiItem(children, 'sua', y,  item.dataChild)">
@@ -548,8 +548,6 @@
                           style="color: blue">{{sumSoLuong(null, 'ncKhTongSo', null) | number : '1.0-1' : 'vi_VN'}}</td>
                       <td class="font-weight-bold text-right"
                           style="color: blue">{{sumSoLuong(null, 'ncKhNstw', null) | number : '1.0-1' : 'vi_VN'}}</td>
-                      <td nzRight class="font-weight-bold text-right"
-                          style="color: blue">{{sumSoLuong(null, 'vonDauTu', null) | number : '1.0-1' : 'vi_VN'}}</td>
                       <td nzRight *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC)"></td>
                     </tr>
                     </tfoot>

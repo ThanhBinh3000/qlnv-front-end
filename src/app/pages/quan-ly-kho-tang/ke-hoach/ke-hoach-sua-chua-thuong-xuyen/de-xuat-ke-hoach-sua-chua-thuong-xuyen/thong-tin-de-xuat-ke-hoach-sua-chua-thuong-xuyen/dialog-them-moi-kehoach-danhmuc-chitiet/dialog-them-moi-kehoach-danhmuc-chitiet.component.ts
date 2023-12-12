@@ -29,6 +29,7 @@ export class DialogThemMoiKehoachDanhmucChitietComponent extends Base2Component 
   @Input() dataHeader: any
   @Input() listDmSuaChua: any[]
   @Input() typeKh: any
+  @Input() trangThaiTh: any
   listNguonKinhPhi: any[] = [];
   listLoaiNhuCauDx: any[] = [];
   radioValue: string = '01';
@@ -109,12 +110,18 @@ export class DialogThemMoiKehoachDanhmucChitietComponent extends Base2Component 
       khVonCvien: [null],
       khVonLdVu: [null],
       khVonLdTc: [null],
+      loaiNhuCau: [null],
     });
   }
 
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
     try {
+      console.log(this.dataTable, "dataTable")
+      console.log(this.dataInput, "dataInput")
+      console.log(this.type, "type")
+      console.log(this.listDmSuaChua, "listDmSuaChua")
+      console.log(this.trangThaiTh, "trangThaiTh")
       await this.getNguonKinhPhi();
       await this.getLoaiNhuCauDeXuat();
       this.formData.patchValue({

@@ -60,7 +60,7 @@ export class ThongTinBaoCaoKetQuaBaoHanhComponent extends Base2Component impleme
   ]
   dataPhieuKncl: any;
   maBc: string;
-  templateName = "20.Báo cáo KQ kiểm định mẫu_trong thời gian BH theo HĐ_sau BH";
+  templateName = "21.Báo cáo KQ bảo hành_trong thời gian BH theo HĐ";
   dviNhan: any;
 
   constructor(
@@ -103,8 +103,10 @@ export class ThongTinBaoCaoKetQuaBaoHanhComponent extends Base2Component impleme
     try {
       this.spinner.show();
       this.maBc = "/" + this.userInfo.MA_QD
+      console.log(this.userInfo,"dvi")
       await Promise.all([
-        this.loadDviNhan(this.userInfo.MA_DVI)])
+        this.loadDviNhan(this.userInfo?.DON_VI?.maDviCha)
+      ])
       await this.loadDetail(this.idInput)
       this.spinner.hide();
     } catch (e) {
@@ -128,7 +130,7 @@ export class ThongTinBaoCaoKetQuaBaoHanhComponent extends Base2Component impleme
               soCanCu: res.data?.soCanCu ? res.data.soCanCu.split(",") : [],
               tenDviNhan: this.dviNhan.title,
             });
-            console.log(this.formData.value, 152)
+            this.maBc = res.data.soBaoCao.split("/")[1]
             this.dataTable = this.formData.value.bhBaoCaoKqDtl
             this.buildTableView(this.dataTable)
           }
@@ -139,11 +141,11 @@ export class ThongTinBaoCaoKetQuaBaoHanhComponent extends Base2Component impleme
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     } else {
-      let maDviNhan = this.userInfo?.DON_VI?.maDviCha;
+      // let maDviNhan = this.userInfo?.DON_VI?.maDviCha;
       this.formData.patchValue({
         maDvi: this.userInfo.MA_DVI,
         tenDvi: this.userInfo.TEN_DVI,
-        maDviNhan,
+        maDviNhan: this.userInfo?.DON_VI?.maDviCha,
         tenDviNhan: this.dviNhan.title,
       });
     }

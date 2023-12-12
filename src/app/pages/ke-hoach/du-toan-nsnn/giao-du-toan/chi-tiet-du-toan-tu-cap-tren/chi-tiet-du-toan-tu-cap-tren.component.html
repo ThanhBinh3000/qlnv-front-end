@@ -106,7 +106,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td>{{Op.fmtVal(item.soTien)}}</td>
+                                <td>{{item.soTien!=0 ? Op.fmtVal(item.soTien) : null}}</td>
                             </tr>
                         </tbody>
                     </nz-table>

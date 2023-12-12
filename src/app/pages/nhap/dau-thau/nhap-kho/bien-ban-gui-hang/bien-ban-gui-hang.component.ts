@@ -51,6 +51,7 @@ export class BienBanGuiHangComponent extends Base2Component implements OnInit {
   userInfo: UserLogin;
   isDetail: boolean = false;
   selectedId: number = 0;
+  idQdGiaoNvNh: number = 0;
   isView: boolean = false;
   isTatCa: boolean = false;
 
@@ -168,19 +169,20 @@ export class BienBanGuiHangComponent extends Base2Component implements OnInit {
   }
 
   convertDataTable() {
-    this.dataTable.forEach(item => {
+    for (let i = 0; i < this.dataTable.length; i++) {
       if (this.userService.isChiCuc()) {
-        item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+        this.dataTable[i].detail = this.dataTable[i].dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
       } else {
         let data = [];
-        item.dtlList.forEach(item => {
+        this.dataTable[i].dtlList.forEach(item => {
           data = [...data, ...item.children];
         })
-        item.detail = {
+        this.dataTable[i].detail = {
           children: data
         }
       };
-    });
+      this.expandSet.add(i)
+    }
   }
 
   async changePageIndex(event) {
@@ -259,6 +261,7 @@ export class BienBanGuiHangComponent extends Base2Component implements OnInit {
 
   redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
     this.selectedId = id;
+    this.idQdGiaoNvNh = idQdGiaoNvNh;
     this.isDetail = true;
     this.isView = isView;
   }

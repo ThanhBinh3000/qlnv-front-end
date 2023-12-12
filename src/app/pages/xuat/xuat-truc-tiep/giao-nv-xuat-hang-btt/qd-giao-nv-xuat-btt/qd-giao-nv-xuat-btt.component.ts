@@ -48,8 +48,8 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
       soQdNv: null,
       loaiVthh: null,
       trichYeu: null,
-      ngayTaoTu: null,
-      ngayTaoDen: null,
+      ngayKyQdNvTu: null,
+      ngayKyQdNvDen: null,
     })
 
     this.filterTable = {
@@ -182,12 +182,12 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
     return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
   };
 
-  disabledNgayTaoTu = (startValue: Date): boolean => {
-    return this.isInvalidDateRange(startValue, this.formData.value.ngayTaoDen, 'ngayTao');
+  disabledNgayKyQdNvTu = (startValue: Date): boolean => {
+    return this.isInvalidDateRange(startValue, this.formData.value.ngayKyQdNvDen, 'ngayKyQdNv');
   };
 
-  disabledNgayTaoDen = (endValue: Date): boolean => {
-    return this.isInvalidDateRange(endValue, this.formData.value.ngayTaoTu, 'ngayTao');
+  disabledNgayKyQdNvDen = (endValue: Date): boolean => {
+    return this.isInvalidDateRange(endValue, this.formData.value.ngayKyQdNvTu, 'ngayKyQdNv');
   };
 
   isActionAllowed(action: string, data: any): boolean {

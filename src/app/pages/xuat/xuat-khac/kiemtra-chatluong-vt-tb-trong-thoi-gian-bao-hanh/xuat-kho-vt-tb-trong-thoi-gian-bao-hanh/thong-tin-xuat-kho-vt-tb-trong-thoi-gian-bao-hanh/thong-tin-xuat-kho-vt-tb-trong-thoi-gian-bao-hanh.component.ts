@@ -250,6 +250,7 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
     try {
       await this.spinner.show();
       this.listNganLoKho = data.qdGiaonvXhDtl.filter(i=>i.maDiaDiem.substring(0,8)==this.formData.value.maDvi);
+      console.log(this.listNganLoKho,'this.listNganLoKho')
       this.formData.patchValue({
         soCanCu: data.soQuyetDinh,
         idCanCu: data.id,
@@ -267,7 +268,8 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
   async listPheuXk(item) {
     await this.spinner.show();
     let body = {
-      soQdGiaoNvXh: item.soQuyetDinh,
+      soCanCu: item.soQuyetDinh,
+      soLanLm : this.formData.value.loai == "XUAT_MAU" ? item.soLanLm : null
     }
     let res = await this.phieuXuatKhoVtTbTrongThoiGianBaoHanhService.search(body)
     const data = res.data;

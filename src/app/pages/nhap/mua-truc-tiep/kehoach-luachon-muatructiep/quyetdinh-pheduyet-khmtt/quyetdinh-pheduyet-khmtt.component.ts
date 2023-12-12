@@ -88,6 +88,21 @@ export class QuyetdinhPheduyetKhmttComponent extends Base2Component implements O
     await this.search();
   }
 
+  async clearForm() {
+    if(this.userService.isCuc()){
+      this.formData.value.trangThai = this.STATUS.BAN_HANH;
+    }
+    this.tuNgayKy = null;
+    this.denNgayKy = null;
+    this.formData.patchValue({
+      trichYeu: null,
+      soQd: null,
+      namKh: null,
+    })
+    this.formData.value.maDvi = this.userInfo.MA_DVI;
+    await this.search();
+  }
+
   export() {
     if (this.totalRecord > 0) {
       this.spinner.show();

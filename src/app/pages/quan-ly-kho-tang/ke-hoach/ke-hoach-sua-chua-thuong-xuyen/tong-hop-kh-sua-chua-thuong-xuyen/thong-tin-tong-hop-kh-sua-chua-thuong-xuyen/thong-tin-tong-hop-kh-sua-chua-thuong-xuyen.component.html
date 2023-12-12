@@ -15,6 +15,11 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
+      <button
+        type="button" class="btn btn-sub do" (click)="preview()">
+        <i class="icon htvbdh_tcdt_tuchoi"></i>
+        <span>Xem trước</span>
+      </button>
       <button type="button" class="btn btn-sub xanh-nhat ml-2"
               *ngIf="!isViewQd && !isViewDetail && isTongHop && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC) "
               (click)="save(true)">
@@ -160,29 +165,29 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="4">
-              <nz-form-item class="form-item">
-                <nz-form-label [nzNoColon]="true">Số quyết định
-                </nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group [nzAddOnAfter]="soQd">
-                    <input formControlName="soQuyetDinh" [readonly]="formData.value.trangThai != STATUS.CHO_DUYET_LDTC"
-                           type="text" nz-input size="small"/>
-                  </nz-input-group>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col nzSpan="4">
-              <nz-form-item class="form-item">
-                <nz-form-label [nzNoColon]="true">Ngày ký quyết định
-                </nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker [nzDisabled]="formData.value.trangThai != STATUS.CHO_DUYET_LDTC"
-                                  formControlName="ngayKy"
-                                  nzFormat="dd/MM/yyyy"></nz-date-picker>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
+<!--            <div nz-col nzSpan="4">-->
+<!--              <nz-form-item class="form-item">-->
+<!--                <nz-form-label [nzNoColon]="true">Số quyết định-->
+<!--                </nz-form-label>-->
+<!--                <nz-form-control [nzErrorTip]="error">-->
+<!--                  <nz-input-group [nzAddOnAfter]="soQd">-->
+<!--                    <input formControlName="soQuyetDinh" [readonly]="formData.value.trangThai != STATUS.CHO_DUYET_LDTC"-->
+<!--                           type="text" nz-input size="small"/>-->
+<!--                  </nz-input-group>-->
+<!--                </nz-form-control>-->
+<!--              </nz-form-item>-->
+<!--            </div>-->
+<!--            <div nz-col nzSpan="4">-->
+<!--              <nz-form-item class="form-item">-->
+<!--                <nz-form-label [nzNoColon]="true">Ngày ký quyết định-->
+<!--                </nz-form-label>-->
+<!--                <nz-form-control [nzErrorTip]="error">-->
+<!--                  <nz-date-picker [nzDisabled]="formData.value.trangThai != STATUS.CHO_DUYET_LDTC"-->
+<!--                                  formControlName="ngayKy"-->
+<!--                                  nzFormat="dd/MM/yyyy"></nz-date-picker>-->
+<!--                </nz-form-control>-->
+<!--              </nz-form-item>-->
+<!--            </div>-->
             <div nz-col [nzSpan]="24">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
@@ -212,13 +217,13 @@
         <nz-table #dataTbl class="nowrap mt-16 table-chi-tiet pd-10" [nzData]="listDx" nzBordered>
           <thead>
           <tr>
-            <th style="width: 35px">STT</th>
-            <th>Cục DTNN KV</th>
-            <th>Số đề xuất/công văn</th>
-            <th>Ngày duyệt cán bộ vụ</th>
-            <th>Tổng danh mục đề nghị</th>
-            <th>Tổng danh mục đã được phê duyệt</th>
-            <th>Trích yếu</th>
+            <th style="width: 35px; text-align: center">STT</th>
+            <th class='text-center'>Cục DTNN KV</th>
+            <th class='text-center'>Số đề xuất/công văn</th>
+            <th class='text-center'>Ngày tiếp nhận Cán bộ Vụ</th>
+            <th class='text-center'>Tổng danh mục đề nghị</th>
+            <th class='text-center'>Tổng danh mục đã được phê duyệt</th>
+            <th class='text-center'>Trích yếu</th>
           </tr>
           </thead>
           <tbody>
@@ -261,17 +266,24 @@
                 <th class="text-center" width="5%" rowSpan="2">Danh mục<br/> đã được<br/> phê duyệt</th>
                 <th class="text-center" width="5%" rowSpan="2">Danh mục<br/> chưa được<br/> phê duyệt
                 </th>
-                <th class="text-center" width="5%" rowSpan="2">Danh mục đã<br/> thực hiện<br/> giá trị ước<br/>thực
-                  hiện
+                <th class="text-center" width="5%" rowSpan="2">Danh mục đã<br/> thực hiện/Giá <br/>trị ước thực<br/>hiện
                 </th>
                 <th class="text-center" width="5%" rowSpan="2">Chênh lệch<br/> kế hoạch -<br/> thực hiện
                 </th>
                 <th class="text-center" width="13%" colSpan="2">Danh mục chưa được phê duyệt năm 2020</th>
+                <th class="text-center" width="13%" colSpan="3">Kết quả PD tổng mức đầu tư</th>
+                <th class="text-center" width="13%" colSpan="3">Kết quả PD kế hoạch vốn năm</th>
                 <th class="text-center" width="7%" rowSpan="2">Ghi chú</th>
               </tr>
               <tr>
                 <th class="text-center">Danh mục<br/> đề nghị bổ sung đợt này</th>
                 <th class="text-center">Danh mục<br/> không có nhu cầu bổ sung</th>
+                <th class="text-center">Chuyên viên</th>
+                <th class="text-center">Lãnh đạo vụ</th>
+                <th class="text-center">Lãnh đạo TC</th>
+                <th class="text-center">Chuyên viên</th>
+                <th class="text-center">Lãnh đạo vụ</th>
+                <th class="text-center">Lãnh đạo TC</th>
               </tr>
               </thead>
               <tbody>
@@ -281,6 +293,11 @@
                       (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
                   <td></td>
                   <td class="font-weight-bold">{{data.tenChiCuc}}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -319,7 +336,18 @@
                         class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'giaTriDnBs', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
                       <td
                         class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'giaTriKbs', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
-                      <td></td>
+                      <td
+                        class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'tongMucDtuCvien', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
+                      <td
+                        class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'tongMucDtuLdVu', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
+                      <td
+                        class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'tongMucDtuLdTc', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
+                      <td
+                        class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'khVonCvien', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
+                      <td
+                        class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'khVonLdVu', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
+                      <td
+                        class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'khVonLdTc', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
                     </tr>
                     <ng-container *ngIf="expandSet.has(item.idVirtual)">
                       <ng-container *ngFor="let children of item.dataChild, let y1 = index">
@@ -338,6 +366,12 @@
                           <td class="text-right">{{ children.giaTriChenhLech  | number : '1.0-1' : 'vi_VN' }}</td>
                           <td class="text-right">{{ children.giaTriDnBs  | number : '1.0-1' : 'vi_VN' }}</td>
                           <td class="text-right">{{ children.giaTriKbs  | number : '1.0-1' : 'vi_VN' }}</td>
+                          <td class="text-right">{{children.tongMucDtuCvien | number : '1.0-1' : 'vi_VN' }}</td>
+                          <td class="text-right">{{children.tongMucDtuLdVu| number : '1.0-1' : 'vi_VN' }}</td>
+                          <td class="text-right">{{ children.tongMucDtuLdTc  | number : '1.0-1' : 'vi_VN' }}</td>
+                          <td class="text-right">{{ children.khVonCvien  | number : '1.0-1' : 'vi_VN' }}</td>
+                          <td class="text-right">{{ children.khVonLdVu  | number : '1.0-1' : 'vi_VN' }}</td>
+                          <td class="text-right">{{ children.khVonLdTc  | number : '1.0-1' : 'vi_VN' }}</td>
                           <td>{{ children.ghiChu  }}</td>
                         </tr>
                       </ng-container>
@@ -370,6 +404,12 @@
                 <td class="font-weight-bold text-right"
                     style="color: blue">{{sumSoLuong(null, 'giaTriKbs', null) | number : '1.0-1' : 'vi_VN'}}</td>
                 <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
               </tr>
               </tfoot>
             </nz-table>
@@ -399,14 +439,13 @@
                 <th class="text-center" width="5%" rowSpan="2">Danh mục<br/> đã được<br/> phê duyệt</th>
                 <th class="text-center" width="5%" rowSpan="2">Danh mục<br/> chưa được<br/> phê duyệt
                 </th>
-                <th class="text-center" width="5%" rowSpan="2">Danh mục đã<br/> thực hiện<br/> giá trị ước<br/>thực
-                  hiện
+                <th class="text-center" width="5%" rowSpan="2">Danh mục đã<br/> thực hiện/Giá<br/> trị ước thực<br/> hiện
                 </th>
                 <th class="text-center" width="5%" rowSpan="2">Chênh lệch<br/> kế hoạch -<br/> thực hiện
                 </th>
                 <th class="text-center" width="13%" colSpan="2">Danh mục chưa được phê duyệt năm 2020</th>
-                <th class="text-center" width="13%" colSpan="3">Kết quả PD TM ĐT</th>
-                <th class="text-center" width="13%" colSpan="3">Kế hoạch vốn năm</th>
+                <th class="text-center" width="13%" colSpan="3">Kết quả PD tổng mức đầu tư</th>
+                <th class="text-center" width="13%" colSpan="3">Kết quả PD kế hoạch vốn năm</th>
                 <th class="text-center" width="7%" rowSpan="2">Ghi chú</th>
                 <th class="text-center" width="5%" rowSpan="2">Hành động</th>
               </tr>
@@ -573,3 +612,30 @@
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
   </ng-container>
 </ng-template>
+<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="THÔNG TIN TỔNG HỢP KẾ HOẠCH SỬA CHỮA THƯỜNG XUYÊN" nzWidth="100%" (nzOnCancel)="closeDlg()">
+  <div *nzModalContent class="modal__content">
+    <pdf-viewer [src]="pdfSrc" [original-size]="false" [render-text]="true" style="width: 100%; height: 600px;">
+    </pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)="downloadPdf()"
+            class="modal__button--save">
+      <i class="icon htvbdh_file-pdf"></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)="downloadExcel()"
+            class="modal__button--save">
+      <i class="icon htvbdh_nhap-excel"></i>
+      Xuất Excel
+    </button>
+    <!--    <button nz-button (click)="printPreview()"-->
+    <!--            class="modal__button&#45;&#45;save">-->
+    <!--      <i class="icon htvbdh_printer"></i>-->
+    <!--      In-->
+    <!--    </button>-->
+    <button nz-button (click)="closeDlg()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

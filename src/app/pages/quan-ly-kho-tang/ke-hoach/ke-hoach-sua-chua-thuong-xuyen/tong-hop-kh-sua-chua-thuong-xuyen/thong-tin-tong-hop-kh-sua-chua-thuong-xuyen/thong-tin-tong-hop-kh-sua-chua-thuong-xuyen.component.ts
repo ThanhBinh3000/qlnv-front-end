@@ -30,6 +30,11 @@ import {FILETYPE} from "../../../../../../constants/fileType";
 import {
   TongHopScThuongXuyenService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-thuong-xuyen/tong-hop-sc-thuong-xuyen.service";
+import {ThongTu1452013Service} from "../../../../../../services/bao-cao/ThongTu1452013.service";
+import {
+  ReportKhScThuongXuyenService
+} from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-thuong-xuyen/report-kh-sc-thuong-xuyen.service";
+import { saveAs } from "file-saver";
 
 @Component({
   selector: 'app-thong-tin-tong-hop-kh-sua-chua-thuong-xuyen',
@@ -68,6 +73,11 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
   soQd: string;
   isEdit: string = "";
   listFile: any[] = []
+  pdfBlob: any;
+  pdfSrc: any;
+  excelBlob: any;
+  excelSrc: any
+  showDlgPreview = false;
 
   ncKhTongSoEdit: number;
   ncKhNstwEdit: number;
@@ -80,6 +90,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
     public globals: Globals,
     private danhMucService: DanhMucService,
     private tongHopDxScThuongXuyen: TongHopScThuongXuyenService,
+    private reportKhScThuongXuyenService: ReportKhScThuongXuyenService,
     private deXuatScThuongXuyenService: DeXuatScThuongXuyenService,
     private danhMucSuaChuaService: DanhMucSuaChuaService,
     private fb: FormBuilder,
@@ -482,6 +493,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
           typeKh: 'TH',
           listDmSuaChua: this.listDmSuaChua,
           dataHeader: this.formData.value,
+          trangThaiTh: this.formData.value.trangThai,
         }
       });
       modalQD.afterClose.subscribe(async (detail) => {
@@ -597,6 +609,58 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
         }
       }
     });
+  }
+
+  async preview() {
+    try {
+      this.spinner.show();
+      this.helperService.markFormGroupTouched(this.formData);
+      if (this.formData.invalid) {
+        return;
+      }
+      let body = this.formData.value;
+      body.typeFile = "pdf";
+      body.fileName = "th_kh_sua_chua_thuong_xuyen.jrxml";
+      body.tenBaoCao = "Thông tin tổng hợp kế hoạch sửa chữa thường xuyên";
+      await this.reportKhScThuongXuyenService.thKhSuaChuaTXuyen(body).then(async s => {
+        this.pdfBlob = s;
+        this.pdfSrc = await new Response(s).arrayBuffer();
+      });
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfBlob, "th_kh_sua_chua_thuong_xuyen.pdf");
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+
+  async downloadExcel() {
+    try {
+      this.spinner.show();
+      let body = this.formData.value;
+      body.typeFile = "xlsx";
+      body.fileName = "th_kh_sua_chua_thuong_xuyen.jrxml";
+      body.tenBaoCao = "Thông tin tổng hợp kế hoạch sửa chữa thường xuyên";
+      await this.reportKhScThuongXuyenService.thKhSuaChuaTXuyen(body).then(async s => {
+        this.excelBlob = s;
+        this.excelSrc = await new Response(s).arrayBuffer();
+        saveAs(this.excelBlob, "th_kh_sua_chua_thuong_xuyen.xlsx");
+      });
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+
   }
 
 }

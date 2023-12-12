@@ -508,7 +508,7 @@ export class PhuLuc05Component implements OnInit {
 			fieldOrder = ['stt', 'tenCongTrinh', 'cucKhuVuc', 'diaDiemXd', 'lyDo', 'mucTieu', 'khoiLuong', 'thoiGianThucHien', 'giaTriCongTrinh',
 				'qdPdBcaoTgianBanHanh', 'qdPdBcaoGtriDtoanKtoanTmdt', 'qdPdQtoanTgianBanHanh', 'qdPdQtoanGtriQtoan', 'luyKeVapVon', 'keHoachVon', 'keHoachVonTd',
 				'chenhLech', 'keHoachNamDtN1', 'keHoachNamDtN2', 'ghiChu', 'ykienDviCtren'];
-			calHeader = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '15A', '16=15-15A', '17', '18', '19', '20'];
+			calHeader = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', '1', '2', '3', '4', '5', '6', '7', '8', '9=8-7', '10', '11', '12', '13'];
 		} else {
 			header = [
 				{ t: 0, b: 5, l: 0, r: 17, val: null },
@@ -540,7 +540,7 @@ export class PhuLuc05Component implements OnInit {
 			fieldOrder = ['stt', 'tenCongTrinh', 'cucKhuVuc', 'diaDiemXd', 'lyDo', 'mucTieu', 'khoiLuong', 'thoiGianThucHien', 'giaTriCongTrinh',
 				'qdPdBcaoTgianBanHanh', 'qdPdBcaoGtriDtoanKtoanTmdt', 'qdPdQtoanTgianBanHanh', 'qdPdQtoanGtriQtoan', 'luyKeVapVon', 'keHoachVon', 'keHoachNamDtN1',
 				'keHoachNamDtN2', 'ghiChu'];
-			calHeader = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '17', '18', '19'];
+			calHeader = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', '1', '2', '3', '4', '5', '6', '7', '10', '11', '12'];
 		}
 
 

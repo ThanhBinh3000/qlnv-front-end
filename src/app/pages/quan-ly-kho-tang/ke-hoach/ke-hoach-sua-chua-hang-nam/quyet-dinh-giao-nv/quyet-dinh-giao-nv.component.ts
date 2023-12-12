@@ -122,7 +122,7 @@ export class QuyetDinhGiaoNvComponent extends Base2Component implements OnInit {
         this._service
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'tong-hop-sua-chua-lon.xlsx'),
+            saveAs(blob, 'danh-sach-quyet-dinh-gnv.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {

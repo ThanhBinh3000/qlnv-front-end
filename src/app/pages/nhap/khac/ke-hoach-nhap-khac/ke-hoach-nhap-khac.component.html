@@ -223,7 +223,7 @@
               (click)="detail(data, true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a *ngIf="userService.isAccessPermisson('NHDTQG_NK_KHNK_THEM')
+            <a *ngIf="userService.isAccessPermisson('NHDTQG_NK_KHNK_THEM') && (userService.isTongCuc() ? data.maDviDxuat == userInfo.MA_PHONG_BAN : data.maDviDxuat == userInfo.MA_DVI)
             && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP
             || data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_CBV)"
               (click)="detail(data, false)">
@@ -233,7 +233,7 @@
               (click)="detail(data, true)">
               <i class="icon htvbdh_tcdt_pheduyet"></i>
             </a>
-            <a *ngIf="userService.isAccessPermisson('NHDTQG_NK_KHNK_XOA')
+            <a *ngIf="userService.isAccessPermisson('NHDTQG_NK_KHNK_XOA') && (userService.isTongCuc() ? data.maDviDxuat == userInfo.MA_PHONG_BAN : data.maDviDxuat == userInfo.MA_DVI)
             && data.trangThai == STATUS.DU_THAO"
               (click)="xoaItem(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>

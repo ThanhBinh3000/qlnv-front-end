@@ -477,9 +477,14 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     }
   }
 
-  calcTong(tenDvi: string) {
+  calcTong(tenDvi?: string) {
     if (this.dataTable && this.dataTable.length > 0) {
-      let arr = this.dataTable.filter(item => item.tenDvi == tenDvi)
+      let arr: any[]  = [];
+      if (tenDvi) {
+        arr = this.dataTable.filter(item => item.tenDvi == tenDvi);
+      } else {
+        arr = this.dataTable
+      }
       const sum = arr.reduce((prev, cur) => {
         prev += cur.soLuong;
         return prev;

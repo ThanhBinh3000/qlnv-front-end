@@ -365,7 +365,8 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
   }
 
   checkCbCuc() {
-    if (this.formData.value.trangThai == STATUS.DA_DUYET_LDC && this.userService.isTongCuc()) {
+    if ((this.formData.value.trangThai == STATUS.DA_DUYET_LDC && this.userService.isTongCuc()) ||
+      (this.formData.value.trangThai == STATUS.DA_KY && this.userService.isCuc())) {
       return true;
     }
     return false;

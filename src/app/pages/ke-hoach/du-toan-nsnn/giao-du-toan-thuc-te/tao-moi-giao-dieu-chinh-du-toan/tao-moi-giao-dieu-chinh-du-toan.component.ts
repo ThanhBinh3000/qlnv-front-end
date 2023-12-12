@@ -586,13 +586,25 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 	}
 
 	// đóng
+	// back() {
+	// 	const obj = {
+	// 		id: this.data?.idPaBTC ? this.data?.idPaBTC : this.data?.preData && this.data?.preData?.id,
+	// 		tabSelected: this.data?.preTab,
+	// 	}
+	// 	this.dataChange.emit(obj);
+	// };
+
 	back() {
-		const obj = {
-			id: this.data?.idPaBTC,
-			tabSelected: this.data?.preTab,
+		if (this.data?.preData) {
+			this.dataChange.emit(this.data?.preData)
+		} else {
+			const obj = {
+				id: this.data?.idPaBTC,
+				tabSelected: this.data?.preTab,
+			}
+			this.dataChange.emit(obj);
 		}
-		this.dataChange.emit(obj);
-	};
+	}
 
 	// in
 	doPrint() {

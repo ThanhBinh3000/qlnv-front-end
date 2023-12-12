@@ -57,9 +57,11 @@ export class ItemData {
 		const n: number = chiSo.length - 1;
 		switch (n) {
 			case 0:
-				return chiSo[n];
+				return Utils.laMa(parseInt(chiSo[n]));
 			case 1:
-				return '';
+				return chiSo[n];
+      case 2:
+        return "-";
 		}
 	}
 
@@ -182,9 +184,19 @@ export class BieuMau1310Component implements OnInit {
 					maNdung: e.ma,
 				}))
 			})
+      if (this.dataInfo.capDvi == 3) {
+        this.lstCtietBcao.push(new ItemData({
+          id: uuid.v4() + 'FE',
+          stt: '0.1.2.1',
+          maNdung: this.dataInfo.maDvi,
+          tenDmuc: this.dataInfo.tenDvi,
+        }))
+      }
 		} else if (!this.lstCtietBcao[0]?.stt) {
 			this.lstCtietBcao.forEach(item => {
-				item.stt = item.maNdung;
+        if (!item.stt) {
+          item.stt = item.maNdung;
+        }
 			})
 		}
 		this.lstCtietBcao = Table.sortByIndex(this.lstCtietBcao);
@@ -385,7 +397,7 @@ export class BieuMau1310Component implements OnInit {
 	}
 
 	checkAdd(data: ItemData) {
-		if ((data.level == 0 && data.maNdung)) {
+		if ((data.level == 1 && data.maNdung && data.maNdung != '0.1.2')) {
 			return true;
 		}
 		return false;

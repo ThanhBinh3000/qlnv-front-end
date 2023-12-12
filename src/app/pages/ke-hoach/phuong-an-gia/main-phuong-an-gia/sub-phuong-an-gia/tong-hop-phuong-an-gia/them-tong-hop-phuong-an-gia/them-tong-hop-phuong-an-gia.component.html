@@ -321,8 +321,8 @@
               </td>
               <td>{{ data.tenDvi}}</td>
               <td>{{ data.tenVungMien}}</td>
-              <td class="text-right do">Cộng</td>
-              <td class="text-right"> {{calcTong(data.tenDvi) | number : '1.0-1' : 'vi-VN'}}</td>
+              <td></td>
+              <td class="text-right font-weight-bold"> {{calcTong(data.tenDvi) | number : '1.0-1' : 'vi-VN'}}</td>
               <td></td>
               <td></td>
               <td></td>
@@ -375,6 +375,24 @@
             </ng-container>
           </ng-container>
           </tbody>
+          <tfoot>
+          <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th class="text-right font-weight-bold">Tổng</th>
+            <th class="text-right font-weight-bold"> {{calcTong() | number : '1.0-1' : 'vi-VN'}}</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+          </tfoot>
         </nz-table>
         <nz-table #rowSelectionTable class="nowrap" nzBordered [nzData]="dataTableView" [nzFrontPagination]="false" *ngIf="(this.formData.value.loaiGia == 'LG02' || this.formData.value.loaiGia == 'LG04')"
                   [nzShowPagination]="false">
@@ -403,8 +421,8 @@
               </td>
               <td>{{ data.tenDvi}}</td>
               <td>{{ data.tenVungMien}}</td>
-              <td class="text-right do">Cộng</td>
-              <td class="text-right"> {{calcTong(data.tenDvi) | number : '1.0-1' : 'vi-VN'}}</td>
+              <td></td>
+              <td class="text-right font-weight-bold"> {{calcTong(data.tenDvi) | number : '1.0-1' : 'vi-VN'}}</td>
               <td></td>
               <td></td>
               <td *ngIf="!isMuaToiDa"></td>
@@ -431,6 +449,20 @@
             </ng-container>
           </ng-container>
           </tbody>
+          <tfoot>
+          <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th class="text-right font-weight-bold">Tổng</th>
+            <th class="text-right font-weight-bold"> {{calcTong() | number : '1.0-1' : 'vi-VN'}}</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+          </tfoot>
         </nz-table>
       </nz-card>
       <form nzLayout="vertical" nz-form [formGroup]="formData">

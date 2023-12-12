@@ -53,16 +53,6 @@
           </div>
           <div nz-col nzSpan="4">
             <nz-form-item>
-              <nz-form-label nzRequired>Số quyết định phê duyệt KH mua sắm</nz-form-label>
-              <nz-form-control [nzErrorTip]="error">
-                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonMaTongHop()">
-                  <input nz-input formControlName="soQdpdKhMuaSam" [readonly]="true" />
-                </nz-input-group>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div nz-col nzSpan="4">
-            <nz-form-item>
               <nz-form-label nzRequired>Số hợp đồng</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group [nzAddOnAfter]="maQd">
@@ -71,7 +61,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="9">
+          <div nz-col [nzSpan]="5">
             <nz-form-item>
               <nz-form-label nzRequired>Tên hợp đồng</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
@@ -81,11 +71,31 @@
           </div>
           <div nz-col nzSpan="4">
             <nz-form-item>
-              <nz-form-label nzRequired>Ngày ký</nz-form-label>
+              <nz-form-label nzRequired>Ngày ký HĐ</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd/MM/YYYY"
-                  nzPlaceHolder="Ngày ký" formControlName="ngayKy">
+                  nzPlaceHolder="Ngày ký HĐ" formControlName="ngayKy">
                 </nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="4">
+            <nz-form-item>
+              <nz-form-label nzRequired>Ngày hiệu lực HĐ</nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd/MM/YYYY"
+                                nzPlaceHolder="Ngày hiệu lực HĐ" formControlName="ngayHieuLuc">
+                </nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="4">
+            <nz-form-item>
+              <nz-form-label nzRequired>Căn cứ trên QĐ mua sắm</nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonMaTongHop()">
+                  <input nz-input formControlName="soQdpdKhMuaSam" [readonly]="true" />
+                </nz-input-group>
               </nz-form-control>
             </nz-form-item>
           </div>

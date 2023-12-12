@@ -46,6 +46,7 @@ export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
 
   isDetail: boolean = false;
   selectedId: number = 0;
+  idQdGiaoNvNh: number = 0;
   isView: boolean = false;
   isTatCa: boolean = false;
 
@@ -146,27 +147,26 @@ export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
   }
 
   convertDataTable() {
-    this.dataTable.forEach(item => {
+    for (let i = 0; i < this.dataTable.length; i++) {
       if (this.userService.isChiCuc()) {
-        item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+        this.dataTable[i].detail = this.dataTable[i].dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
       } else {
         let data = [];
-        item.dtlList.forEach(item => {
+        this.dataTable[i].dtlList.forEach(item => {
           data = [...data, ...item.children];
         })
-        item.detail = {
+        this.dataTable[i].detail = {
           children: data
         }
       };
-    });
-    this.dataTable.forEach(item => {
-      item.detail.children.forEach(ddNhap => {
-        ddNhap.listBangKeVt.forEach(x => {
-          x.phieuNhapKho = ddNhap.listPhieuNhapKho.filter(item => item.soPhieuNhapKho == x.soPhieuNhapKho)[0];
+      for (let j = 0; j < this.dataTable[i].detail.children.length; j++) {
+        this.dataTable[i].detail.children[j].listBangKeVt.forEach(x => {
+          x.phieuNhapKho = this.dataTable[i].detail.children[j].listPhieuNhapKho.filter(item => item.soPhieuNhapKho == x.soPhieuNhapKho)[0];
         });
-      })
-    });
-    console.log(this.dataTable);
+        this.expandSet2.add(j)
+      }
+      this.expandSet.add(i)
+    }
   }
 
 
@@ -296,6 +296,7 @@ export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
 
   redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
     this.selectedId = id;
+    this.idQdGiaoNvNh = idQdGiaoNvNh;
     this.isDetail = true;
     this.isView = isView;
   }

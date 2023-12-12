@@ -58,7 +58,7 @@
               Năm kế hoạch
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-select formControlName="nam" [nzDisabled]="true">
+              <nz-select formControlName="nam" [nzDisabled]="isView">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
                 </nz-option>
               </nz-select>
@@ -373,23 +373,15 @@
       </div>
     </form>
   </nz-card>
-  <div nz-col [nzSpan]="24">
-    <div class="header header-green-background mg-t-16">
-      <div class="header-text">
-        <div class="title-chi-tieu">
-          <span></span>
-          <span>BÊN NHẬN</span>
-        </div>
-      </div>
-    </div>
-  </div>
 
+  <nz-collapse nzAccordion>
+    <nz-collapse-panel nzHeader="BÊN NHẬN" [nzActive]="true">
   <div nz-col [nzSpan]="24">
     <nz-table #tbldanhSachDDNhan class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="danhSachDDNhan">
       <thead>
       <tr>
         <th style="width: 35px">STT</th>
-        <th style="width: 30%">Tên</th>
+        <th style="width: 30%">Họ và tên</th>
         <th style="width: 30%">Chức vụ</th>
         <th style="width: 30%">Đại diện</th>
         <th *ngIf="!isView" style="width: 35px">Hành động</th>
@@ -460,24 +452,17 @@
 
     </nz-table>
   </div>
+    </nz-collapse-panel>
+  </nz-collapse>
 
-  <div nz-col [nzSpan]="24">
-    <div class="header header-green-background mg-t-16">
-      <div class="header-text">
-        <div class="title-chi-tieu">
-          <span></span>
-          <span>BÊN GIAO</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
+  <nz-collapse nzAccordion>
+    <nz-collapse-panel nzHeader="BÊN GIAO" [nzActive]="true">
   <div nz-col [nzSpan]="24">
     <nz-table #tbldanhSachDDGiao class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="danhSachDDGiao">
       <thead>
       <tr>
         <th style="width: 35px">STT</th>
-        <th style="width: 30%">Tên</th>
+        <th style="width: 30%">Họ và tên</th>
         <th style="width: 30%">Chức vụ</th>
         <th style="width: 30%">Đại diện</th>
         <th *ngIf="!isView" style="width: 35px">Hành động</th>
@@ -547,6 +532,8 @@
       </tbody>
     </nz-table>
   </div>
+    </nz-collapse-panel>
+  </nz-collapse>
   <nz-card class="mg-t-10 flex-card p-lr16 ">
     <form nzLayout="vertical" nz-form [formGroup]="formData">
       <div nz-row [nzGutter]="24">

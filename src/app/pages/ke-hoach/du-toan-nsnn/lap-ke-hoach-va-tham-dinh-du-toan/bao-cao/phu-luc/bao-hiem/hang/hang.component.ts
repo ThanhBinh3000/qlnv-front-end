@@ -541,6 +541,6 @@ export class HangComponent implements OnInit {
         }
 
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');
-        XLSX.writeFile(workbook, 'bao_hiem_hang.xlsx');
+        XLSX.writeFile(workbook, this.dataInfo.maBcao + '_bh_hang.xlsx');
     }
 }

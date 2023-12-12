@@ -18,4 +18,9 @@ export class QdMuaSamPvcService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet-tt-phan-bo`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
+
+  exportDetail(body: any) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ket-xuat-detail`;
+    return this._httpClient.post(url, body, { responseType: 'blob' });
+  }
 }

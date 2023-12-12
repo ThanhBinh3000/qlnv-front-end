@@ -11,6 +11,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { MESSAGE } from '../../../../../constants/message';
 import dayjs from 'dayjs';
 import { STATUS } from '../../../../../constants/status';
+import { saveAs } from 'file-saver';
 import {
   DialogMmMuaSamComponent,
 } from '../../../../../components/dialog/dialog-mm-mua-sam/dialog-mm-mua-sam.component';
@@ -247,10 +248,17 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
   }
 
   convertListData() {
-    if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTable = chain(this.dataTable).groupBy('tenCcdc')
-        .map((value, key) => ({ tenCcdc: key, dataChild: value, donGia: value[0].donGia || value[0].donGiaTd, idVirtual: uuidv4() }),
-        ).value();
+    if (this.dataTable?.length > 0) {
+      this.dataTable = chain(this.dataTable)
+        .groupBy('tenCcdc')
+        .map((value, key) => ({
+          tenCcdc: key,
+          donGia: value[0].donGia || value[0].donGiaTd,
+          moTaCcdc: value?.find(item => item.tenCcdc === key)?.moTaCcdc || "",
+          dataChild: value,
+          idVirtual: uuidv4(),
+        }))
+        .value();
     }
     this.expandAll();
   }
@@ -417,4 +425,38 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
   // }
 
   protected readonly AMOUNT_NO_DECIMAL = AMOUNT_NO_DECIMAL;
+
+  exportDataDetail() {
+    if (this.dataTable.length > 0) {
+      this.spinner.show();
+      try {
+        let arr = [];
+        this.dataTable.forEach(item => {
+          if (item.dataChild && item.dataChild.length > 0) {
+            item.dataChild.forEach(data => {
+              arr.push({ ...data, donGia: item.donGia });
+            });
+          }
+        });
+        let body = this.formData.value;
+        body.listQlDinhMucPvcQdMuaSamDtl = arr;
+        body.paggingReq = {
+          limit: this.pageSize,
+          page: this.page - 1
+        }
+        this.qdMuaSamService
+          .exportDetail(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-chi-tiet-quyet-dinh-mua-sam.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
+  }
 }

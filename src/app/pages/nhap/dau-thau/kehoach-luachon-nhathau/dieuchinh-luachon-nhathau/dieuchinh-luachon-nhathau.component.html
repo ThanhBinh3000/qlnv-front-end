@@ -49,7 +49,7 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3> DANH SÁCH PHƯƠNG ÁN/QUYẾT ĐỊNH ĐIỀU CHỈNH KẾ HOẠCH LỰA CHỌN NHÀ THẦU</h3>
+      <h3> DANH SÁCH PHƯƠNG ÁN VÀ QUYẾT ĐỊNH ĐIỀU CHỈNH KẾ HOẠCH LỰA CHỌN NHÀ THẦU</h3>
       <div class="buttons">
         <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_XOA')"
                 type="button" class="btn btn-sub btn-xoa" (click)="deleteMulti()">
@@ -78,11 +78,11 @@
                    [nzIndeterminate]="indeterminate"></label>
           </th>
           <th class="text-center" style="width: 2%;">STT</th>
+          <th class="text-center" style="width: 15%;">Số công văn/tờ trình</th>
           <th class="text-center" style="width: 7%;">Năm kế hoạch</th>
           <th class="text-center" style="width: 10%;">Số QĐ điều chỉnh KH LCNT</th>
           <th class="text-center" style="width: 7%;">Ngày ký QĐ điều chỉnh</th>
-          <th class="text-center" style="width: 15%;">Số QĐ cần điều chỉnh</th>
-          <th class="text-center" style="width: 15%;">Số công văn/tờ trình</th>
+          <th class="text-center" style="width: 15%;">Số QĐ trước điều chỉnh</th>
           <th class="text-center" style="width: 30%;">Trích yếu</th>
           <th class="text-center" style="width: 7%;">Loại hàng DTQG</th>
           <th class="text-center" style="width: 7%;" *ngIf="!loaiVthh.startsWith('02')">Chủng loại hàng DTQG</th>
@@ -96,6 +96,12 @@
         <tr class="search-table">
           <th></th>
           <th></th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soTtrDc"
+                     (input)="filterInTable('soTtrDc',filterTable.soTtrDc)" size="small" />
+            </nz-input-group>
+          </th>
           <th>
             <nz-input-group>
               <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.nam"
@@ -119,12 +125,6 @@
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdGoc"
                      (input)="filterInTable('soQdGoc',filterTable.soQdGoc)" size="small" />
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soTtrDc"
-                     (input)="filterInTable('soTtrDc',filterTable.soTtrDc)" size="small" />
             </nz-input-group>
           </th>
           <th>
@@ -187,11 +187,11 @@
                    [nzDisabled]="data.trangThai != '80'"></label>
           </td>
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+          <td>{{ data.soTtrDc }}</td>
           <td>{{ data.nam }}</td>
           <td>{{ data.soQdDc }}</td>
           <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.soQdGoc }}</td>
-          <td>{{ data.soTtrDc }}</td>
           <td>{{data.trichYeu}}</td>
           <td>{{data.tenLoaiVthh}}</td>
           <td *ngIf="!loaiVthh.startsWith('02')">{{data.tenCloaiVthh}}</td>

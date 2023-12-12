@@ -148,9 +148,7 @@ export class Base2Component implements OnInit {
   clearForm(currentSearch?: any) {
     this.formData.reset();
     if (currentSearch) {
-      this.formData.patchValue({
-        loaiVthh: currentSearch,
-      })
+      this.formData.patchValue(currentSearch)
     }
     this.search();
   }
@@ -717,10 +715,12 @@ export class Base2Component implements OnInit {
   }
 
   async onFileSelected(event: any) {
+    await this.spinner.show();
     this.selectedFile = event.target.files[0] as File;
     if (await this.isExcelFile(this.selectedFile)) {
       await this.uploadFile();
-    } else {
+    } else{
+      await this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, 'Chọn file đuôi .xlsx');
     }
   }

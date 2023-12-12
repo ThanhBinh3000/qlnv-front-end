@@ -19,7 +19,7 @@
         <nz-form-item>
           <nz-form-label nzRequired [nzSpan]="24" [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
           <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-            <nz-select formControlName="cloaiVthh" [nzDisabled]="isReadOnly"
+            <nz-select formControlName="cloaiVthh" [nzDisabled]="isReadOnly" nzShowSearch nzAllowClear
                        (ngModelChange)="onChangeCloaiVthh($event)">
               <nz-option *ngFor="let p of listChungLoai" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
             </nz-select>
@@ -91,7 +91,7 @@
       <tr class="root-input">
 <!--        <td></td>-->
         <td>
-          <nz-select [(ngModel)]="thongTinCuc.maDvi" (ngModelChange)="onChangeCuc($event)">
+          <nz-select [(ngModel)]="thongTinCuc.maDvi" (ngModelChange)="onChangeCuc($event)" nzShowSearch nzAllowClear>
             <nz-option *ngFor="let p of listCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
           </nz-select>
         </td>

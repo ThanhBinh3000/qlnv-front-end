@@ -67,6 +67,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   maQd: string = null;
   fileDinhKem: Array<FileDinhKem> = [];
   listFileDinhKem: any[] = [];
+  listCcPhapLy: any[] = [];
 
   listPhuongThucDauThau: any[] = [];
   listNguonVon: any[] = [];
@@ -166,6 +167,8 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       tenDvi: [''],
       tgianThien: [''],
       ykienThamGia: [''],
+      loaiHinhNx: 'Mua đấu thầu',
+      kieuNx: 'Nhập mua'
     })
   }
 
@@ -388,6 +391,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     this.danhsachDx[this.index].giaBanHoSo = this.thongtinDexuatComponent.formData.value.giaBanHoSo
     body.children = this.danhsachDx;
     body.fileDinhKems = this.listFileDinhKem;
+    body.listCcPhapLy = this.listCcPhapLy;
     if (isGuiDuyet && !this.isValidate(body.children)) {
       await this.spinner.hide();
       return;
@@ -515,6 +519,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.listDanhSachTongHop = [];
       const data = res.data;
       this.listFileDinhKem = data.fileDinhKems;
+      this.listCcPhapLy = data.listCcPhapLy;
       this.helperService.bidingDataInFormGroup(this.formData, data);
       this.formData.patchValue({
         soQd: data.soQd?.split("/")[0],
@@ -708,7 +713,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         this.danhsachDxCache = cloneDeep(this.danhsachDx);
         this.dataInput = null;
         this.dataInputCache = null;
-        this.showFirstRow(event, this.danhsachDx[0]);
+        this.showFirstRow(event, 0);
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -728,7 +733,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.dataInput = this.danhsachDx[index];
       this.dataInputCache = this.danhsachDxCache[index];
       this.index = index;
-      await this.getDataChiTieu(this.danhsachDx[index].dxuatKhLcntHdr.idChiTieuKhNam)
+      await this.getDataChiTieu(this.danhsachDx[index].idChiTieuKhNam)
       await this.spinner.hide();
     } else {
       this.selected = true
@@ -737,7 +742,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.dataInputCache = this.danhsachDxCache[0];
       this.index = 0;
       this.maDviSelected = this.danhsachDx[0].maDvi
-      await this.getDataChiTieu(this.danhsachDx[0].dxuatKhLcntHdr.idChiTieuKhNam)
+      await this.getDataChiTieu(this.danhsachDx[0].idChiTieuKhNam)
       await this.spinner.hide();
     }
   }

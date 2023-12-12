@@ -60,6 +60,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       ngayHluc: [''],
       trichYeu: [''],
       soQdCc: [''],
+      noiDungToTrinh: [''],
       loaiVthh: [''],
       cloaiVthh: [''],
       moTaHangHoa: [''],
@@ -85,6 +86,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       soQdDc: [''],
       ngayKyDc: [''],
       ngayHlucDc: [''],
+      trichYeuDieuChinh: [''],
       noiDungDieuChinh: [''],
       type: [''],
       idQdPd: [],
@@ -120,6 +122,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       nam: dayjs().get('year'),
       trangThai: STATUS.DA_LAP,
       tenTrangThai: 'Đã lập',
+      phanLoai: 'TH',
       type: 'QDDC',
     })
   }
@@ -226,7 +229,15 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
         moTaHangHoa: data.moTaHangHoa,
         tchuanCluong: data.tchuanCluong,
         slDviTsan: data.slDviTsan,
+        phanLoai: data.phanLoai,
       })
+      data.children.forEach(item => {
+        item.id = null;
+        item.children.forEach(child => {
+          child.id = null;
+          child.children.forEach(s => s.id = null);
+        });
+      });
       this.dataTable = data.children.filter(item => item.idQdKq === null && item.soQdKq === null)
       this.dataTableAll = data.children.filter(item => item.idQdKq === null && item.soQdKq === null)
       if (this.dataTable && this.dataTable.length > 0) {
@@ -289,7 +300,9 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
     try {
-      this.setValidForm();
+      if (trangThai === STATUS.BAN_HANH) {
+        this.setValidForm();
+      }
       const soCongVan = this.formData.value.soCongVan;
       const soQdDc = this.formData.value.soQdDc;
       const body = {
@@ -358,6 +371,9 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       "tenLoaiVthh",
       "tenCloaiVthh",
       "tchuanCluong",
+      "soQdDc",
+      "ngayKyDc",
+      "ngayHlucDc"
     ];
     requiredFields.forEach(fieldName => {
       this.formData.controls[fieldName].setValidators([Validators.required]);

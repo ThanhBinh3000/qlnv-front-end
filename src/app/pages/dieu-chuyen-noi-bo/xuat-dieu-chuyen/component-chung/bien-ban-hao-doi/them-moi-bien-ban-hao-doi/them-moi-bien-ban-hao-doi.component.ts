@@ -36,6 +36,7 @@ import { PREVIEW } from 'src/app/constants/fileType';
 import { PhieuKiemNghiemChatLuongDieuChuyenService } from '../../services/dcnb-phieu-kiem-nghiem-chat-luong.service';
 import { MangLuoiKhoService } from 'src/app/services/qlnv-kho/mangLuoiKho.service';
 import { DanhMucDinhMucHaoHutService } from 'src/app/services/danh-muc-dinh-muc-hao-hut.service';
+import { LOAI_HANG_DTQG } from 'src/app/constants/config';
 
 export const LIST_TRANG_THAI_BBHD = {
   [STATUS.DU_THAO]: "Dự thảo",
@@ -479,7 +480,31 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
       }
     }
   }
+  tinhDinhMucHaoHut(dsDinhMuc: any[] = [], soThangBaoQuanHang: number, loaiVthh: string) {
+    const minTgBaoQuanTu = dsDinhMuc.reduce((min, cur) => min > cur.tgBaoQuanTu ? cur.tgBaoQuanTu : min, dsDinhMuc[0].tgBaoQuanTu);
+    const maxTgBaoQuanDen = dsDinhMuc.reduce((max, cur) => max > cur.tgBaoQuanDen ? max : cur.tgBaoQuanDen, dsDinhMuc[0].tgBaoQuanDen);
+    if (loaiVthh === LOAI_HANG_DTQG.GAO) {
+      if (soThangBaoQuanHang < minTgBaoQuanTu) {
+        return dsDinhMuc.find(f => f.tgBaoQuanTu === minTgBaoQuanTu) ? dsDinhMuc.find(f => f.tgBaoQuanTu === minTgBaoQuanTu).dinhMuc : 0;
+      } else if (soThangBaoQuanHang < maxTgBaoQuanDen) {
+        return dsDinhMuc.find(f => soThangBaoQuanHang >= f.tgBaoQuanTu && soThangBaoQuanHang < f.tgBaoQuanDen) ? dsDinhMuc.find(f => soThangBaoQuanHang >= f.tgBaoQuanTu && soThangBaoQuanHang < f.tgBaoQuanDen).dinhMuc : 0
+      } else {
+        return dsDinhMuc.find(f => f.tgBaoQuanTu === maxTgBaoQuanDen) ? dsDinhMuc.find(f => f.tgBaoQuanTu === maxTgBaoQuanDen).dinhMuc : 0
+      }
+    } else {
+      if (soThangBaoQuanHang <= minTgBaoQuanTu) {
+        return dsDinhMuc.find(f => f.tgBaoQuanTu === minTgBaoQuanTu) ? dsDinhMuc.find(f => f.tgBaoQuanTu === minTgBaoQuanTu).dinhMuc : 0;
+      } else if (soThangBaoQuanHang <= maxTgBaoQuanDen) {
+        return dsDinhMuc.find(f => soThangBaoQuanHang > f.tgBaoQuanTu && soThangBaoQuanHang <= f.tgBaoQuanDen) ? dsDinhMuc.find(f => soThangBaoQuanHang > f.tgBaoQuanTu && soThangBaoQuanHang <= f.tgBaoQuanDen).dinhMuc : 0
+      } else {
+        const dinhMuc = dsDinhMuc.find(f => f.tgBaoQuanDen === maxTgBaoQuanDen) ? dsDinhMuc.find(f => f.tgBaoQuanDen === maxTgBaoQuanDen).dinhMuc : 0
+        const dinhMucThem = dsDinhMuc.find(f => f.tgBaoQuanTu === maxTgBaoQuanDen) ? dsDinhMuc.find(f => f.tgBaoQuanTu === maxTgBaoQuanDen).dinhMuc : 0
+        return dinhMuc + Math.ceil((soThangBaoQuanHang - maxTgBaoQuanDen)) * dinhMucThem
+      }
+    }
+  }
   async getDinhMucHaoHut(cloaiVthh: string, loaiVthh: string, soThangBaoQuanHang: number) {
+    if (!soThangBaoQuanHang && ![0, "0"].includes(soThangBaoQuanHang)) return;
     const body = {
       loaiVthh, cloaiVthh
     }
@@ -499,22 +524,8 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
           loaiHinhBq.some(item => f.loaiHinhBq.split(",").includes(item.ma)) &&
           phuongPhapBq.some(item => f.phuongThucBq.split(",").includes(item.ma)) &&
           f.apDungTai.split(",").includes(this.userInfo.MA_DVI.slice(0, -2));
-      })
-      let dataDmhh = listDmhh.find(f => {
-        if (soThangBaoQuanHang <= 3) {
-          return f.tgBaoQuanDen === 3
-        } else if (soThangBaoQuanHang > 3 && soThangBaoQuanHang <= 18) {
-          return soThangBaoQuanHang > f.tgBaoQuanTu && soThangBaoQuanHang <= f.tgBaoQuanDen
-        } else {
-          return f.tgBaoQuanTu === 18
-        }
-      })?.dinhMuc || 0;
-      let dinhMucHaoHut = 0;
-      if (soThangBaoQuanHang > 18) {
-        dinhMucHaoHut = (listDmhh.find(f => f.tgBaoQuanDen === 18)?.dinhMuc || 0) + (Math.ceil(soThangBaoQuanHang) - 18) * dataDmhh
-      } else {
-        dinhMucHaoHut = dataDmhh
-      }
+      }).sort((a, b) => a.tgBaoQuanTu - b.tgBaoQuanTu);
+      const dinhMucHaoHut = Array.isArray(listDmhh) && listDmhh.length > 0 ? this.tinhDinhMucHaoHut(listDmhh, soThangBaoQuanHang, loaiVthh) : ""
       this.formData.patchValue({ dinhMucHaoHut })
     }
   }

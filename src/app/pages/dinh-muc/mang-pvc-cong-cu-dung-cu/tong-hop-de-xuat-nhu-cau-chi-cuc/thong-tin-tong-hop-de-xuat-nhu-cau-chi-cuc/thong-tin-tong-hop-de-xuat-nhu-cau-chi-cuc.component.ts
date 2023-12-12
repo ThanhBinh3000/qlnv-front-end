@@ -1,18 +1,19 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { FormGroup, Validators } from "@angular/forms";
-import { Base2Component } from "../../../../../components/base2/base2.component";
-import { chain } from 'lodash';
-import { v4 as uuidv4 } from 'uuid';
-import { MESSAGE } from "../../../../../constants/message";
+import {Component, Input, OnInit} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {FormGroup, Validators} from "@angular/forms";
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {chain} from 'lodash';
+import {v4 as uuidv4} from 'uuid';
+import {MESSAGE} from "../../../../../constants/message";
 import dayjs from "dayjs";
-import { STATUS } from "../../../../../constants/status";
-import { DxChiCucPvcService } from "../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/dx-chi-cuc-pvc.service";
-import { PvcDxChiCucCtiet } from "../../de-xuat-nc-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc.component";
+import {STATUS} from "../../../../../constants/status";
+import {saveAs} from 'file-saver';
+import {DxChiCucPvcService} from "../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/dx-chi-cuc-pvc.service";
+import {PvcDxChiCucCtiet} from "../../de-xuat-nc-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc.component";
 
 @Component({
   selector: 'app-thong-tin-tong-hop-de-xuat-nhu-cau-chi-cuc',
@@ -100,7 +101,7 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent extends Base2Component i
     body.ngayDxDen = body.ngayDx ? body.ngayDx[1] : null
     body.trangThai = STATUS.DADUYET_CB_CUC;
     body.trangThaiTh = STATUS.CHUA_TONG_HOP;
-    body.maDvi =this.userInfo.MA_DVI;
+    body.maDvi = this.userInfo.MA_DVI;
     // body.capDvi =this.userInfo.CAP_DVI;
     let res = await this.dxChiCucService.tongHopDxCc(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -180,7 +181,7 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent extends Base2Component i
       this.formData.value.maDvi = this.userInfo.MA_DVI;
       this.formData.value.capDvi = this.userInfo.CAP_DVI;
       this.formData.value.soCv = this.formData.value.soCv + this.maQd;
-      await super.saveAndSend( this.formData.value, status, msg, msgSuccess);
+      await super.saveAndSend(this.formData.value, status, msg, msgSuccess);
     } catch (error) {
       console.error("Lỗi khi lưu và gửi dữ liệu:", error);
     }
@@ -206,8 +207,7 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent extends Base2Component i
     let res = await this.createUpdate(this.formData.value)
     if (res) {
       this.goBack()
-    }
-    else {
+    } else {
       this.convertListData()
     }
   }
@@ -257,10 +257,16 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent extends Base2Component i
   }
 
   convertListData() {
-    if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTable = chain(this.dataTable).groupBy('tenCcdc')
-        .map((value, key) => ({ tenCcdc: key, dataChild: value, idVirtual: uuidv4(), })
-        ).value()
+    if (this.dataTable?.length > 0) {
+      this.dataTable = chain(this.dataTable)
+        .groupBy('tenCcdc')
+        .map((value, key) => ({
+          tenCcdc: key,
+          moTaCcdc: value?.find(item => item.tenCcdc === key)?.moTaCcdc || "",
+          dataChild: value,
+          idVirtual: uuidv4(),
+        }))
+        .value();
     }
     this.expandAll();
   }
@@ -326,6 +332,31 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent extends Base2Component i
       this.expandSet.add(id);
     } else {
       this.expandSet.delete(id);
+    }
+  }
+
+  exportDataDetail() {
+    if (this.dataTable.length > 0) {
+      this.spinner.show();
+      try {
+        let body = this.formData.value;
+        body.paggingReq = {
+          limit: this.pageSize,
+          page: this.page - 1
+        }
+        this.dxChiCucService
+          .exportDetail(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-chi-tiet-tong-hop-nhu-cau-mang-pvc-va-ccdc.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
   }
 }

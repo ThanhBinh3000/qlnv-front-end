@@ -894,6 +894,18 @@
                       </div>
                       <div nz-col [nzSpan]="6">
                         <nz-form-item>
+                          <nz-form-label>Khối tích</nz-form-label>
+                          <nz-form-control>
+                            <nz-input-group>
+                              <nz-input-number [nzDisabled]="!isEditData" [nzSize]="'small'"
+                                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                               formControlName="khoiTich"></nz-input-number>
+                            </nz-input-group>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <div nz-col [nzSpan]="6">
+                        <nz-form-item>
                           <nz-form-label>Số lượng ngăn kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
@@ -926,7 +938,7 @@
                           </nz-form-control>
                         </nz-form-item>
                       </div>
-                      <div nz-col [nzSpan]="6" *ngIf="!isEditData">
+                      <div nz-col [nzSpan]="6" *ngIf="isEditData">
                         <nz-form-item>
                           <nz-form-label></nz-form-label>
                           <nz-form-control>

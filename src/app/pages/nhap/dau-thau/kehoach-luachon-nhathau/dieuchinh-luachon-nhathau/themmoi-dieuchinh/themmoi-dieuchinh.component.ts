@@ -96,6 +96,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       soQd: [''],
       ngayQdDc: [''],
       noiDungQd: [''],
+      noiDungTtr: [''],
       loaiHinhNx: [''],
       kieuNx: [''],
       idHhQdKhlcntDtl: [''],
@@ -251,7 +252,9 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     }
     let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listQdGoc = res.data.content
+      this.listQdGoc = res.data.content.filter(item =>
+        !item.children.every(child => child.qdPdHsmt?.trangThai == this.STATUS.BAN_HANH)
+      );
     }
     this.spinner.hide();
     const modalQD = this.modal.create({
@@ -297,7 +300,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
           // this.dataInputCache = cloneDeep(this.dataInput);
           this.danhsachDx = data.children
         } else {
-          this.danhsachDx = data.children
+          this.danhsachDx = data.children.filter(x => (x.qdPdHsmt == null || x.qdPdHsmt?.trangThai != this.STATUS.BAN_HANH))
           this.danhsachDxCache = cloneDeep(this.danhsachDx);
           this.formData.patchValue({
             hthucLcnt: data.hthucLcnt,
@@ -336,6 +339,11 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
         break;
       }
       case STATUS.CHO_DUYET_LDV: {
+        trangThai = STATUS.DA_DUYET_LDV;
+        mesg = "Bạn có chắc chắn muốn phê duyệt?";
+        break;
+      }
+      case STATUS.DA_DUYET_LDV: {
         trangThai = STATUS.BAN_HANH;
         mesg = "Bạn muốn ban hành quyết định?";
         break;
@@ -387,10 +395,21 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       if (text) {
         this.spinner.show();
         try {
+          let trangThai = null;
+          switch (this.formData.get("trangThai").value) {
+            case STATUS.CHO_DUYET_LDV: {
+              trangThai = STATUS.TU_CHOI_LDV
+              break;
+            }
+            case STATUS.DA_DUYET_LDV: {
+              trangThai = STATUS.TU_CHOI_LDTC
+              break;
+            }
+          }
           let body = {
             id: this.formData.get("id").value,
             lyDo: text,
-            trangThai: STATUS.TU_CHOI_LDV,
+            trangThai: trangThai,
           };
           const res = await this.dieuChinhQuyetDinhPdKhlcntService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {

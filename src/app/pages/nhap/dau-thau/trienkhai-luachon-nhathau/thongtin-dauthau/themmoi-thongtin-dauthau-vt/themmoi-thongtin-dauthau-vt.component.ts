@@ -236,8 +236,8 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
     // this.itemRow.soLuong = dataGoiThau.soLuong
     if (res.msg == MESSAGE.SUCCESS) {
       this.formData.patchValue({
-        tgianTrinhKqTcg: res.data.tgianTrinhKqTcg,
-        tgianTrinhTtd: res.data.tgianTrinhTtd,
+        // tgianTrinhKqTcg: res.data.tgianTrinhKqTcg,
+        // tgianTrinhTtd: res.data.tgianTrinhTtd,
         ghiChuTtdt: res.data.ghiChuTtdt,
       })
       this.fileDinhKems = res.data.fileDinhKems
@@ -339,7 +339,16 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
     }
     let res = await this.thongTinDauThauService.getDetailThongTinVt(this.danhsachDx[i].id, this.loaiVthh, type);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listNthauNopHs = res.data;
+      this.formData.patchValue({
+        // tgianTrinhKqTcg: res.data.tgianTrinhKqTcg,
+        // tgianTrinhTtd: res.data.tgianTrinhTtd,
+        ghiChuTtdt: res.data.ghiChuTtdt,
+      })
+      this.fileDinhKems = res.data.fileDinhKems
+      this.listNthauNopHs = res.data.dsNhaThauDthau;
+      this.listNthauNopHs.forEach(item => {
+        item.edit = false;
+      })
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -358,8 +367,12 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
   }
   async saveEditRowNt(i) {
     this.danhsachDx[i].kqlcntDtl = this.itemRowQd[i];
-    this.danhsachDx[i].kqlcntDtl.tenTrangThai = this.dsTrangThai.find(item => item.value == this.itemRowQd[i].trangThai).text;
-    this.danhsachDx[i].kqlcntDtl.tenNhaThau = this.listNthauNopHs.find(item => item.id == this.itemRowQd[i].idNhaThau)?.tenNhaThau;
+    if (this.itemRowQd[i].trangThai != null) {
+      this.danhsachDx[i].kqlcntDtl.tenTrangThai = this.dsTrangThai.find(item => item.value == this.itemRowQd[i].trangThai).text;
+    }
+    if (this.itemRowQd[i].idNhaThau != null) {
+      this.danhsachDx[i].kqlcntDtl.tenNhaThau = this.listNthauNopHs.find(item => item.id == this.itemRowQd[i].idNhaThau)?.tenNhaThau;
+    }
     this.danhsachDx[i].edit = false;
   }
 
@@ -455,8 +468,8 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
     let body = {
       idGoiThau: this.idGoiThau,
       ghiChuTtdt: this.formData.value.ghiChuTtdt,
-      tgianTrinhKqTcg: this.formData.value.tgianTrinhKqTcg,
-      tgianTrinhTtd: this.formData.value.tgianTrinhTtd,
+      // tgianTrinhKqTcg: this.formData.value.tgianTrinhKqTcg,
+      // tgianTrinhTtd: this.formData.value.tgianTrinhTtd,
       fileDinhKems: this.fileDinhKems,
       loaiVthh: this.loaiVthh,
       type: type

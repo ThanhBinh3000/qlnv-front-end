@@ -3,7 +3,7 @@
     <div class="header-text">
       <div class="title-chi-tieu">
         <span
-          [ngClass]="formData.value.trangThai == STATUS.DA_KY ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+          [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
         {{ formData.value.tenTrangThai }}
       </span>
         <span>THÔNG TIN PHÂN BỔ MÁY MÓC, THIẾT BỊ CHUYÊN DÙNG</span>
@@ -14,10 +14,10 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button class="btn btn-sub ml-2" (click)="approve(this.id, STATUS.DA_KY, 'Bạn có chắc chắn muốn ký?')"
+      <button class="btn btn-sub ml-2" (click)="approve(this.id, STATUS.DA_DUYET_LDC, 'Bạn có chắc chắn muốn duyệt LĐ-Cục?')"
               *ngIf="(formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && id > 0 ) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_PHANBO_THEM')">
         <i class="icon htvbdh_trinh "></i>
-        <span>Đã ký</span>
+        <span>Đã duyệt - LĐ Cục</span>
       </button>
       <button type="button" class="btn btn-sub xanh ml-2" (click)="save()"
               *ngIf=" !isView && (formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU ) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_PHANBO_THEM')">
@@ -47,20 +47,20 @@
         </div>
         <div nz-col nzSpan="3">
           <nz-form-item>
-            <nz-form-label nzRequired>Số văn bản</nz-form-label>
+            <nz-form-label nzRequired>Căn cứ trên quyết định mua sắm</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group [nzAddOnAfter]="maQd">
-                <input nz-input formControlName="soVb" [readonly]="isView"/>
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonMaTongHop()">
+                <input nz-input formControlName="soQdMs" [readonly]="true"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="3">
           <nz-form-item>
-            <nz-form-label nzRequired>Số quyết định mua sắm</nz-form-label>
+            <nz-form-label nzRequired>Số văn bản</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonMaTongHop()">
-                <input nz-input formControlName="soQdMs" [readonly]="true"/>
+              <nz-input-group [nzAddOnAfter]="maQd">
+                <input nz-input formControlName="soVb" [readonly]="isView"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -83,6 +83,26 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label nzRequired>Nội dung văn bản</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group>
+                <input nz-input formControlName="noiDung" [readonly]="isView"/>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label nzRequired>Ghi chú</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group>
+                <input nz-input formControlName="ghiChu" [readonly]="isView"/>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">Tài liệu đính kèm</nz-form-label>
@@ -96,6 +116,15 @@
       </div>
     </form>
   </nz-card>
+  <div class='group-button'>
+    <h3 class='text-uppercase'></h3>
+    <div class='buttons'>
+      <button type="button" class="btn btn-sub" (click)="exportDataDetail()">
+        <i class="icon htvbdh_chuyen-xu-ly"></i>
+        <span>Xuất file</span>
+      </button>
+    </div>
+  </div>
   <nz-table class="nowrap mg-t-10" [nzData]="dataTable" [nzFrontPagination]="false"
             [nzShowPagination]="false" nzBordered>
     <thead>
@@ -104,10 +133,10 @@
       <th width="40px">STT</th>
       <th width="200px">Nội dung</th>
       <th width="100px">ĐVT</th>
-      <th width="100px">Số lượng hiện có</th>
-      <th width="100px">Số lượng sẽ nhập <br> thêm năm {{formData.value.namKeHoach -1}}</th>
+      <th width="100px">SL sử dụng được tại thời điểm đề xuất</th>
+      <th width="100px">Số lượng sẽ nhập thêm từ năm trước</th>
       <th width="100px">Tổng cộng</th>
-      <th width="100px">Số lượng phân bổ</th>
+      <th width="100px">SL phân bổ</th>
       <th width="200px">Ghi chú</th>
       <th width="100px" class="text-center" *ngIf="!isView">Hành động</th>
     </tr>

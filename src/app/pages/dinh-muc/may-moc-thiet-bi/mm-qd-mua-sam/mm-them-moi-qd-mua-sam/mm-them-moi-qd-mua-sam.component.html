@@ -121,6 +121,18 @@
       </div>
     </form>
   </nz-card>
+  <div class='header header-green-background mg-t-10' >
+    <div class='header-text'>
+      <div class='title-chi-tieu'>
+      </div>
+    </div>
+    <div class='btn-group'>
+      <button type="button" class="btn btn-sub" (click)="exportDataDetail()">
+        <i class="icon htvbdh_chuyen-xu-ly"></i>
+        <span>Xuất file</span>
+      </button>
+    </div>
+  </div>
   <nz-table class="nowrap mg-t-10" [nzData]="dataTable" [nzFrontPagination]="false"
             [nzShowPagination]="false" nzBordered>
     <thead>
@@ -129,15 +141,18 @@
       <th rowSpan="2" nzWidth="40px">STT</th>
       <th rowSpan="2" nzWidth="200px">Tên tài sản</th>
       <th rowSpan="2" nzWidth="100px">Đơn vị tính</th>
-      <th rowSpan="2" nzWidth="100px">Số lượng hiện có</th>
-      <th rowSpan="2" nzWidth="100px">Số lượng sẽ nhập <br> thêm năm {{formData.value.namKeHoach -1}}</th>
+      <th colSpan="2" nzWidth="100px">SL lương thực nhập <br> theo chỉ tiêu KH</th>
+      <th rowSpan="2" nzWidth="100px">SL sử dụng được tại thời điểm đề xuất</th>
+      <th rowSpan="2" nzWidth="100px">Số lượng sẽ nhập thêm từ năm trước</th>
       <th rowSpan="2" nzWidth="100px">Tổng cộng</th>
-      <th rowSpan="2" nzWidth="100px">SL theo tiêu chuẩn <br> định mức</th>
+      <th rowSpan="2" nzWidth="100px">SL định mức theo chỉ điêu KH năm</th>
       <th colSpan="2" nzWidth="150px">Chênh lệch</th>
-      <th colSpan="3" nzWidth="200px">Nhu cầu trang bị năm {{formData.value.namKeHoach}}</th>
+      <th colSpan="3" nzWidth="200px">Nhu cầu trang bị cho đơn vị</th>
       <th rowSpan="2" nzWidth="200px">Ghi chú</th>
     </tr>
     <tr>
+      <th nzWidth="75px">Gạo tẻ</th>
+      <th nzWidth="75px">Thóc tẻ</th>
       <th nzWidth="75px">Còn thiếu</th>
       <th nzWidth="75px">Thừa</th>
       <th nzWidth="100px">Số lượng</th>
@@ -152,6 +167,8 @@
         <td class="font-weight-bold">{{idx + 1}}</td>
         <td class="font-weight-bold"> {{data.tenTaiSan}}</td>
         <td class="font-weight-bold">{{data.donViTinh}}</td>
+        <td>{{data.slChiTieuGao | number : '1.0-1' : 'vi_VN'}}</td>
+        <td>{{data.slChiTieuThoc | number : '1.0-1' : 'vi_VN'}}</td>
         <td></td>
         <td></td>
         <td></td>
@@ -168,7 +185,9 @@
           <td></td>
           <td>{{idx + 1}}.{{y + 1}}</td>
           <td>{{item.tenDvi}}</td>
-          <td></td>
+          <td class="font-weight-bold">{{data.donViTinh}}</td>
+          <td>{{item.slChiTieuGao | number : '1.0-1' : 'vi_VN'}}</td>
+          <td>{{item.slChiTieuThoc | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="text-right">{{item.slHienCo | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="text-right">{{item.slNhapThem | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="text-right">{{item.slHienCo + item.slNhapThem | number : '1.0-1' : 'vi_VN'}}</td>

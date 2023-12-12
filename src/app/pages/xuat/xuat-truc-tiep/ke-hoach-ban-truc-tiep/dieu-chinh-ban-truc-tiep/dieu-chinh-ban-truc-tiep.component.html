@@ -11,7 +11,7 @@
           </div>
           <div nz-col [nzSpan]="4">
             <label class="search__label"> Số QĐ điều chỉnh KH bán trực tiếp </label>
-            <input placeholder="Nhập số quyết định" nz-input formControlName="soQdDc"/>
+            <input  nz-input formControlName="soQdDc"/>
           </div>
           <div nz-col [nzSpan]="6">
             <label class="search__label"> Ngày Ký QĐ điều chỉnh KH bán trực tiếp </label>
@@ -23,18 +23,18 @@
               </div>
               <div nz-col [nzSpan]="12" class="cus-end-date">
                 <nz-date-picker [nzDisabledDate]="disabledNgayKyQdDcDen" nzFormat="dd/MM/yyyy"
-                                formControlName="ngayKyDcTu" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                                formControlName="ngayKyDcDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
               </div>
             </div>
           </div>
           <div nz-col [nzSpan]="12">
             <label class="search__label">Trích yếu</label>
-            <input placeholder="Nhập nội dung" nz-input formControlName="trichYeu"/>
+            <input nz-input formControlName="trichYeu"/>
           </div>
         </div>
       </form>
       <div class="cangiua group-button-search">
-        <button nz-button class="search__button--clear" (click)="clearForm()">
+        <button nz-button class="search__button--clear" (click)="clearForm(loaiVthh)">
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
@@ -54,7 +54,7 @@
         </button>
         <button *ngIf=" userService.isAccessPermisson('XHDTQG_PTTT_DCKHBTT_EXP')"
                 type="button" class="btn btn-sub"
-                (click)="exportData('Danh-sach-quyet-dinh-dieu-chinh-quyet-dinh-phe-duyet-ke-hoach-ban-truc-tiep.xlsx')">
+                (click)="exportData('danh-sach-dieu-chinh-quyet-dinh-phe-duyet-ke-hoach-ban-truc-tiep-hang-DTQG.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span> Xuất file </span>
         </button>

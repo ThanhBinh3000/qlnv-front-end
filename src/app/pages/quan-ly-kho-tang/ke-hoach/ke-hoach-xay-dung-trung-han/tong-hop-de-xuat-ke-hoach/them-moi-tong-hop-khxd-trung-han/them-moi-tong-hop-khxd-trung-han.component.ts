@@ -13,6 +13,7 @@ import dayjs from "dayjs";
 import { MESSAGE } from "../../../../../../constants/message";
 import { chain } from "lodash";
 import { v4 as uuidv4 } from "uuid";
+import { saveAs } from 'file-saver';
 import { TongHopKhTrungHanService } from "../../../../../../services/tong-hop-kh-trung-han.service";
 import { UserLogin } from "../../../../../../models/userlogin";
 import { KeHoachXayDungTrungHan } from "../../../../../../models/QuyHoachVaKeHoachKhoTang";
@@ -40,8 +41,10 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
   formData: FormGroup;
   listDx: any[] = [];
   dataTable: any[] = [];
+  dataTableList: any[] = [];
   dataTableReq: any[] = [];
   dataTableDx: any[] = [];
+  dataTableDxList: any[] = [];
   dataTableDxAll: any[] = [];
   dsCuc: any[] = [];
   dsChiCuc: any[] = [];
@@ -391,12 +394,13 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
         let arr = this.dataTableDxAll.filter(data => data.idType == item.id);
         if (arr && arr.length > 0) {
           this.dataTableDx = arr;
+          this.dataTableDxList = arr;
           if (this.dataTableDx && this.dataTableDx.length > 0) {
             this.dataTableDx.forEach(item => {
               item.tgKcHt = item.tgKhoiCong + " - " + item.tgHoanThanh;
             });
           }
-          this.dataTableDx = this.convertListData(this.dataTableDx);
+          this.dataTableDx = cloneDeep(this.convertListData(this.dataTableDx));
           this.expandAll(this.dataTableDx);
         }
       }
@@ -407,6 +411,7 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
         this.dataTable.forEach(item => {
           item.tgKcHt = item.tgKhoiCong + " - " + item.tgHoanThanh;
         });
+        this.dataTableList = this.dataTable;
         this.dataTable = this.convertListData(this.dataTable);
         this.expandAll(this.dataTable);
       }
@@ -540,6 +545,52 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
 
   redirectToDuThao(event) {
     this.redirectToQd.emit(event)
+  }
+
+  exportDetailDx($event: MouseEvent) {
+    $event.stopPropagation()
+    if (this.dataTableDxList.length > 0) {
+      this.spinner.show();
+      try {
+        let body = this.formData.value;
+        body.ctiets = this.dataTableDxList;
+        this.tongHopDxXdTh
+          .exportDetail(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-chi-tiet-dx.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
+  }
+
+  exportDetail($event: MouseEvent) {
+    $event.stopPropagation()
+    if (this.dataTableList.length > 0) {
+      this.spinner.show();
+      try {
+        let body = this.formData.value;
+        body.ctiets = this.dataTableList;
+        this.tongHopDxXdTh
+          .exportDetail(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-chi-tiet-tong-hop.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 }
 

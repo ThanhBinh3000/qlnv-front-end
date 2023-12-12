@@ -140,6 +140,8 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
         tongKinhPhiDaTh: [],
         tongKinhPhiDaThBc: [],
         tenNganLoKho: [],
+        soBbNhapDayKho: [],
+        tgianGiaoDuHang: [],
       }
     );
   }
@@ -215,11 +217,12 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       tenCloaiVthh: data.tenCloaiVthh,
       moTaHangHoa: data.moTaHangHoa,
       soHd: data.soHd,
+      tgianGiaoDuHang: data.tgianGiaoDuHang,
     });
     this.loadDataComboBox();
     let dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
     if (dataChiCuc.length > 0) {
-      this.listDiaDiemNhap = dataChiCuc[0].children;
+      this.listDiaDiemNhap = dataChiCuc[0].children.filter(i => i.bienBanChuanBiKho == null);
     }
     await this.spinner.hide();
   }
@@ -313,6 +316,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       maQhns: this.userInfo.DON_VI.maQhns,
       trangThai: this.STATUS.DU_THAO,
       tenTrangThai: 'Dự thảo',
+      tenKyThuatVien: this.userInfo.TEN_DAY_DU,
     });
     if (this.idQdGiaoNvNh) {
       await this.bindingDataQd(this.idQdGiaoNvNh);
@@ -504,7 +508,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
 
   tuChoi() {
     let trangThai = ''
-    switch (this.detail.trangThai) {
+    switch (this.formData.value.trangThai) {
       case this.STATUS.CHO_DUYET_TK: {
         trangThai = this.STATUS.TU_CHOI_TK;
         break;

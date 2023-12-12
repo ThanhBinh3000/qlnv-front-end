@@ -133,13 +133,15 @@ export class QuanLyBangKeCanHangComponent extends Base2Component implements OnIn
         }
       };
     });
-    this.dataTable.forEach(item => {
-      item.detail.children.forEach(ddNhap => {
-        ddNhap.listBangKeCanHang.forEach(x => {
-          x.phieuNhapKho = ddNhap.listPhieuNhapKho.filter(item => item.soPhieuNhapKho == x.soPhieuNhapKho)[0];
+    for (let i = 0; i < this.dataTable.length; i++) {
+      this.expandSet.add(i)
+      for (let j = 0; j < this.dataTable[i].detail.children.length; j++) {
+        this.expandSet2.add(j)
+        this.dataTable[i].detail.children[j].listBangKeCanHang.forEach(x => {
+          x.phieuNhapKho = this.dataTable[i].detail.children[j].listPhieuNhapKho.filter(item => item.soPhieuNhapKho == x.soPhieuNhapKho)[0];
         });
-      })
-    });
+      }
+    }
   }
 
   clearFilter() {

@@ -573,11 +573,11 @@ export class PhuLucPhanBoComponent implements OnInit {
             { t: 2, b: 2, l: 0, r: 8, val: this.dataInfo.congVan },
             { t: 3, b: 3, l: 0, r: 8, val: 'Trạng thái báo cáo: ' + this.dataInfo.tenTrangThai },
 
-            { t: 5, b: 7, l: 0, r: 0, val: 'STT' },
-            { t: 5, b: 7, l: 1, r: 1, val: 'Nội dung' },
-            { t: 5, b: 7, l: 2, r: 2, val: 'Số trần chi đơn vị cấp trên giao' },
-            { t: 5, b: 7, l: 3, r: 3, val: 'Tổng cộng' },
-            { t: 5, b: 6, l: 4, r: 3 + this.lstDvi.length, val: 'Chi tiết theo các đơn vị sử dụng' },
+            { t: 6, b: 7, l: 0, r: 0, val: 'STT' },
+            { t: 6, b: 7, l: 1, r: 1, val: 'Nội dung' },
+            { t: 6, b: 7, l: 2, r: 2, val: 'Số trần chi đơn vị cấp trên giao' },
+            { t: 6, b: 7, l: 3, r: 3, val: 'Tổng cộng' },
+            { t: 6, b: 6, l: 4, r: 3 + this.lstDvi.length, val: 'Chi tiết theo các đơn vị sử dụng' },
         ]
         this.lstDvi.forEach((item, index) => {
             const left = 4 + index
@@ -603,7 +603,7 @@ export class PhuLucPhanBoComponent implements OnInit {
         const worksheet = Table.initExcel(header);
         // XLSX.utils.sheet_add_json(worksheet, filterData, { skipHeader: true, origin: Table.coo(header[0].l, header[0].b + 1) })
         for (const cell in worksheet) {
-            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 5) continue;
+            if (cell.startsWith('!') || XLSX.utils.decode_cell(cell).r < 6) continue;
             worksheet[cell].s = Table.borderStyle;
         }
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ liệu');

@@ -1,9 +1,9 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected (click)="selectTab('01')" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP')">
+    <li nz-menu-item [nzSelected]="tabSelected == '01'" (click)="selectTab('01')" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_TC')">
       Định mức phí nhập, xuất, bảo quản được cấp có thẩm quyền giao
     </li>
-    <li nz-menu-item (click)="selectTab('02')" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP')">
+    <li nz-menu-item [nzSelected]="tabSelected == '02'" (click)="selectTab('02')" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_ĐMPNXBP_CUC')">
       Định mức phí nhập, xuất, bảo quản Cục DTNN KV giao
     </li>
   </ul>
