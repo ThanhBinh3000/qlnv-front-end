@@ -215,7 +215,7 @@
               &nbsp;
               &nbsp; <span>/</span>
               &nbsp;
-              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.klChiCuc" [nzMin]="0"></nz-input-number>
+              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.klChiCuc" class="w-50" [nzMin]="0"></nz-input-number>
               &nbsp; <span>tấn lương thực</span> &nbsp;
               <nz-select nzMode="tags" class="w-300" [(ngModel)]="dataEdit[idx].data.loaiHinh">
                 <nz-option nzValue="00" nzLabel="Nhập"></nz-option>
@@ -224,8 +224,7 @@
               </nz-select>
             </div>
             <div class="chi-cuc-sl" *ngIf="!dataEdit[idx].data.isCanCu">
-              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.slChiCuc" [nzMin]="0"
-                               class="w-50"></nz-input-number>
+              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.slChiCuc" [nzMin]="0"></nz-input-number>
             </div>
           </td>
           <td>
