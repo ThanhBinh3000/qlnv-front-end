@@ -524,6 +524,14 @@
                            [isTabNdKhac]="false"
                            [isTableKetQua]="true" [(dataTable)]="dataTableKsGia">
         </app-thong-tin-ksg>
+        <span class="sub-title mb-10">QUYẾT ĐỊNH CỦA CẤP CÓ THẨM QUYỀN</span>
+        <app-thong-tin-ksg [dataParent]="formData.value" [isView]="isView" *ngIf="dataTableKsGia || !idInput" [type]="type"
+                           [isTabNdKhac]="false"
+                           [isTableKetQua]="false" [(dataTable)]="dataTableKqGia"></app-thong-tin-ksg>
+        <span class="sub-title mb-10">KẾT QUẢ GIAO DỊCH THÀNH CÔNG</span>
+        <app-thong-tin-ksg [dataParent]="formData.value" [isView]="isView" *ngIf="dataTableKsGia || !idInput" [type]="type"
+                           [isTabNdKhac]="false"
+                           [isTableKetQua]="false" [(dataTable)]="dataTableKqGia"></app-thong-tin-ksg>
         <span class="sub-title mb-10">KẾT QUẢ THẨM ĐỊNH GIÁ</span>
         <app-thong-tin-ksg [dataParent]="formData.value" [isView]="isView" *ngIf="dataTableKsGia || !idInput" [type]="type"
                            [isTabNdKhac]="false"
