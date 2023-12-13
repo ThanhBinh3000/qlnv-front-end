@@ -101,18 +101,20 @@
             </th>
             <th class="text-center" style="width: 2%;">STT</th>
             <th class="text-center" style="width: 7%;">Số công văn/tờ trình</th>
+            <th *ngIf="loaiVthh != '02'" class="text-center" style="width: 7%;">Cục DTNN KV</th>
             <th class="text-center" style="width: 7%;">Năm KH</th>
             <th class="text-center" style="width: 7%;">Ngày lập KH</th>
             <th class="text-center" style="width: 7%;">Ngày duyệt KH</th>
             <th class="text-center" style="width: 9%;">Số QĐ giao chỉ tiêu</th>
-            <th class="text-center" style="width: 10%;">Loại hàng DTQG</th>
-            <th *ngIf="loaiVthh != '02'" class="text-center" style="width: 12%;">Chủng loại
-              hàng DTQG</th>
+            <th *ngIf="loaiVthh.startsWith('02')" class="text-center" style="width: 10%;">Loại hàng DTQG</th>
+            <th *ngIf="loaiVthh != '02'" class="text-center" style="width: 12%;">Chủng loại hàng DTQG</th>
             <th class="text-center" style="width: 5%;">Tổng số gói thầu</th>
-            <th class="text-center" style="width: 5%;">Số gói thầu đã trúng</th>
-            <th class="text-center" style="width: 5%;">SL HĐ đã ký</th>
             <th class="text-center" style="width: 5%;">Số QĐ PD KHLCNT</th>
+            <th *ngIf="loaiVthh != '02'" class="text-center" style="width: 7%;">Thời điểm đóng thầu</th>
+            <th *ngIf="loaiVthh != '02'" class="text-center" style="width: 7%;">Thời điểm mở thầu</th>
             <th *ngIf="loaiVthh != '02'" class="text-center" style="width: 7%;">Thời hạn nhập kho</th>
+            <th *ngIf="loaiVthh == '02'" class="text-center" style="width: 7%;">Thời gian đóng - mở thầu</th>
+            <th *ngIf="loaiVthh == '02'" class="text-center" style="width: 7%;">Thời gian thực hiện hợp đồng</th>
             <th *ngIf="loaiVthh == '02'" class="text-center" style="width: 7%;">Thời hạn thực hiện dự án</th>
             <th class="text-center" style="width: 7%;">{{ loaiVthh == '02' ? 'Trạng thái đề xuất' : 'Trạng thái'}} </th>
             <th *ngIf="userService.isTongCuc() && loaiVthh != '02'" class="text-center" style="width: 7%;">Mã tổng hợp
@@ -126,6 +128,12 @@
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soDxuat"
                   (input)="filterInTable('soDxuat',filterTable.soDxuat)" size="small" />
+              </nz-input-group>
+            </th>
+            <th *ngIf="loaiVthh != '02'">
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDvi"
+                  (input)="filterInTable('tenDvi',filterTable.tenDvi)" size="small" />
               </nz-input-group>
             </th>
             <th>
@@ -157,7 +165,7 @@
                   (input)="filterInTable('soQd',filterTable.soQd)" size="small" />
               </nz-input-group>
             </th>
-            <th>
+            <th *ngIf="loaiVthh.startsWith('02')">
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
                   (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small" />
@@ -177,26 +185,38 @@
             </th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soGthauTrung"
-                  (input)="filterInTable('soGthauTrung',filterTable.soGthauTrung)" size="small" />
-              </nz-input-group>
-            </th>
-            <th>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.slHdDaKy"
-                  (input)="filterInTable('slHdDaKy',filterTable.slHdDaKy)" size="small" />
-              </nz-input-group>
-            </th>
-            <th>
-              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdPdKqLcnt"
                   (input)="filterInTable('soQdPdKqLcnt',filterTable.soQdPdKqLcnt)" size="small" />
               </nz-input-group>
             </th>
             <th *ngIf="loaiVthh != '02'">
               <nz-input-group>
+                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.tgianDthau"
+                                (ngModelChange)="filterInTable('tgianDthau', convertDateToString(filterTable.tgianDthau))"></nz-date-picker>
+              </nz-input-group>
+            </th>
+            <th *ngIf="loaiVthh != '02'">
+              <nz-input-group>
+                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.tgianMthau"
+                                (ngModelChange)="filterInTable('tgianMthau', convertDateToString(filterTable.tgianMthau))"></nz-date-picker>
+              </nz-input-group>
+            </th>
+            <th *ngIf="loaiVthh != '02'">
+              <nz-input-group>
                 <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.tgianNhang"
                   (ngModelChange)="filterInTable('tgianNhang', convertDateToString(filterTable.tgianNhang))"></nz-date-picker>
+              </nz-input-group>
+            </th>
+            <th *ngIf="loaiVthh == '02'">
+              <nz-input-group>
+                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.tgianDongMothau"
+                  (ngModelChange)="filterInTable('tgianDongMothau', convertDateToString(filterTable.tgianDongMothau))"></nz-date-picker>
+              </nz-input-group>
+            </th>
+            <th *ngIf="loaiVthh == '02'">
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tgianThienHd"
+                  (input)="filterInTable('tgianThienHd',filterTable.tgianThienHd)" size="small" />
               </nz-input-group>
             </th>
             <th *ngIf="loaiVthh == '02'">
@@ -234,20 +254,23 @@
             </td>
             <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
             <td>{{ data.soDxuat }}</td>
+            <td *ngIf="loaiVthh != '02'">{{ data.tenDvi }}</td>
             <td>{{ data.namKhoach }}</td>
             <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
             <td>
               <a style="color: blue" (click)="openQdGiaoModal(data.qdGiaoChiTieuId)">{{ data.soQd}}</a>
             </td>
-            <td>{{ data.tenLoaiVthh }}</td>
+            <td *ngIf="loaiVthh.startsWith('02')">{{ data.tenLoaiVthh }}</td>
             <td *ngIf=" loaiVthh != '02'">{{ data.tenCloaiVthh }}</td>
             <td>{{ data.soGoiThau}}</td>
-            <td>{{ data.soGthauTrung}}</td>
-            <td></td>
             <td>
-              <a style="color: blue" (click)="openQdPdKhlcntModal(data.idQdPdKqLcnt)">{{ data.soQdPdKqLcnt}}</a>
+              <a style="color: blue" (click)="openQdPdKhlcntModal(data.idQdPdKhLcnt)">{{ data.soQdPdKhLcnt}}</a>
             </td>
+            <td *ngIf="loaiVthh != '02'">{{ data.tgianDthau | date: 'dd/MM/YYYY'}}</td>
+            <td *ngIf="loaiVthh != '02'">{{ data.tgianMthau | date: 'dd/MM/YYYY'}}</td>
+            <td *ngIf="loaiVthh == '02'">{{ data.tgianDongMothau}}</td>
+            <td *ngIf="loaiVthh == '02'">{{ data.tgianThienHd}}</td>
             <td *ngIf="loaiVthh == '02'">{{ data.tgianThien}}</td>
             <td *ngIf="loaiVthh != '02'">{{ data.tgianNhang | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.tenTrangThai }}</td>

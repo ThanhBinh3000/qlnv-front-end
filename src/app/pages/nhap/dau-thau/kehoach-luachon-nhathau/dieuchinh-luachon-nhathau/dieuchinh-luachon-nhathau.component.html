@@ -205,8 +205,8 @@
                (click)="redirectToChiTiet(data.id,true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a *ngIf="data.trangThai == STATUS.CHO_DUYET_LDV
-              && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_DUYET_LDVU')"
+            <a *ngIf="(data.trangThai == STATUS.CHO_DUYET_LDV && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_DUYET_LDVU'))
+            || (data.trangThai == STATUS.DA_DUYET_LDV && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_BANHANH_TUCHOI_TC'))"
               (click)="redirectToChiTiet(data.id,true)">
               <i class="icon htvbdh_tcdt_pheduyet" title="Phê duyệt"></i>
             </a>

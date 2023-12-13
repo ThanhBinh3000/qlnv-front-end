@@ -58,6 +58,8 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     tenCloaiVthh: '',
     soGoiThau: '',
     tenTrangThai: '',
+    tenDvi: '',
+    tgianDongMothau: '',
   };
 
   listTrangThai: any[] = [
