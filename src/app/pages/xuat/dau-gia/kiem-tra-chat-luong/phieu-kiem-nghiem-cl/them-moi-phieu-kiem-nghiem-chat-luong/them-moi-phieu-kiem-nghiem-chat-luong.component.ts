@@ -392,6 +392,21 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     }
   }
 
+  async onChangeKetQua(event, index) {
+    if (event.length === 0 || index < 0) {
+      return;
+    }
+    const ketQua = parseFloat(event.replace(",", "."));
+    if (!isNaN(ketQua) && this.dataTable[index].mucYeuCauXuat.length > 0 && this.dataTable[index].mucYeuCauXuat.length < 10) {
+      const data = this.dataTable[index];
+      const match = data.mucYeuCauXuat.match(/≤\s*([\d.,-]+)/);
+      const chiTieu = match ? parseFloat(match[1].replace(",", ".")) : 0;
+      if (!isNaN(chiTieu) && !isNaN(ketQua)) {
+        data.danhGia = ketQua <= chiTieu && ketQua > 0 ? "Đạt" : "Không đạt";
+      }
+    }
+  }
+
   async loadDanhSachKiemNghiemCluong(event) {
     let body = {
       nam: this.formData.value.nam,

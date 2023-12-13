@@ -34,4 +34,9 @@ export class QuyetDinhPdKhBdgService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/dtl-chi-tiet/ket-xuat`;
     return this._httpClient.post(url, body, {responseType: 'blob'});
   }
+
+  getDonGiaDuocDuyet(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/gia-duoc-duyet`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
 }

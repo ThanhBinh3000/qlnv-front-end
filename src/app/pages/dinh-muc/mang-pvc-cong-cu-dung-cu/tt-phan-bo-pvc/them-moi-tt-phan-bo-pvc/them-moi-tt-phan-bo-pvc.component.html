@@ -78,11 +78,14 @@
                 <input nz-input formControlName="soQdMs" [readonly]="true" />
               </nz-input-group>
             </nz-form-control>
-            <nz-form-control>
-              <div class="list-file">
-                <file-list [data]="fileDinhKem"></file-list>
-              </div>
-            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]='24'>
+          <nz-form-item class='form-item'>
+            <nz-form-label [nzNoColon]='true' class='label-color-kh'> Tài liệu đính kèm</nz-form-label>
+            <div class='list-file'>
+              <file-list [disabled]='isView' [data]='fileDinhKem'></file-list>
+            </div>
           </nz-form-item>
         </div>
       </div>

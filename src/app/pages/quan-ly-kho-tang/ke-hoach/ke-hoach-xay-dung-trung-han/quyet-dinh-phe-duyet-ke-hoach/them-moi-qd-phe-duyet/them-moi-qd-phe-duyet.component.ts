@@ -151,6 +151,9 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
       // let listDx = data.ctRes;
       if (data.ctRes) {
         this.dataTableReq = data.ctRes.ctietList;
+        if(this.userService.isCuc() || this.userService.isChiCuc()){
+          this.dataTableReq = this.dataTableReq.filter(item => item.maChiCuc.includes(this.userInfo.MA_DVI));
+        }
         this.dataTable = this.convertListData(this.dataTableReq);
         this.expandAll(this.dataTable);
         // console.log(this.dataTableReq,'dataTableReqdataTableReq');

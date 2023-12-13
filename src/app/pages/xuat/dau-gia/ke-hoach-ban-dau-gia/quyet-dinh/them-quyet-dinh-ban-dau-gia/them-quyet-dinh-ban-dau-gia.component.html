@@ -256,7 +256,7 @@
           <div nz-row [nzGutter]="24">
             <div nz-col [nzSpan]="12">
               <nz-card class="mg-t-10 flex-card p-lr16 bg-trang">
-                <app-thongtin-dexuat-khbdg [title]="'Nội dung đề xuất của Cục DTNN KV'" [dataInput]="dataInputCache"
+                <app-thongtin-dexuat-khbdg [title]="'Nội dung đề xuất của Cục DTNN KV'" [dataInputCache]="dataInputCache"
                                            [isView]="true" [isCache]="true" [loaiVthhCache]="loaiVthh">
                 </app-thongtin-dexuat-khbdg>
               </nz-card>
@@ -264,7 +264,7 @@
             <div nz-col [nzSpan]="12">
               <nz-card class="mg-t-10 flex-card p-lr16 bg-trang">
                 <app-thongtin-dexuat-khbdg [title]="'Quyết định của TCDTNN'" [dataInput]="dataInput" [isView]="false"
-                                           [trangThaiQd]="formData.value.trangThai == STATUS.BAN_HANH"
+                                           [idInput]="idInput" [trangThaiQd]="formData.value.trangThai == STATUS.BAN_HANH"
                                            [loaiVthhCache]="loaiVthh" (countChanged)="receiveDataFromChild($event)">
                 </app-thongtin-dexuat-khbdg>
               </nz-card>
