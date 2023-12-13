@@ -15,7 +15,7 @@
         <span>Quay lại</span>
       </button>
       <button class="btn btn-sub ml-2" (click)="saveAndSend(STATUS.DA_KY, 'Bạn có muốn ký?','Bạn đã ký thành công!')"
-        *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_DEXUATCC_THEM') && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TUCHOI_CB_CUC)">
+        *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_DEXUATCC_THEM') && (formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU || formData.value.trangThai == STATUS.TUCHOI_CB_CUC)">
         <i class="icon htvbdh_trinh"></i>
         <span>Đã duyệt - LĐ Chi cục</span>
       </button>
@@ -33,7 +33,7 @@
         <span *ngIf="checkCbCuc()">Tiếp nhận</span>
       </button>
       <button (click)="save()"
-        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TUCHOI_CB_CUC) && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_DEXUATCC_THEM') "
+        *ngIf="(formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU || formData.value.trangThai == STATUS.TUCHOI_CB_CUC) && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_DEXUATCC_THEM') "
         class="btn btn-main btn-sm waves-effect waves-light ml-2">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
