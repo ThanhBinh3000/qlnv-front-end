@@ -119,7 +119,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
         this.dataTable = data.listBoNganh;
         if (data.listChiTangToanBoNganh.length > 0) {
           this.dataTableAllBn.push({
-            "stt": 2,
+            "stt": 1,
             "maCha": null,
             "maBn": '01',
             "tenBn": "Bộ Tài Chính",
@@ -128,7 +128,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
           })
           for (let item of data.listChiTangToanBoNganh) {
             var obj = {
-              "stt": item.maBn == '01' ? 2 : item.stt,
+              "stt": item.maBn == '01' ? 1 : item.stt,
               "maCha": item.maBn == '01' ? item.maBn : null,
               "maBn": item.maBn,
               "tenBn": item.tenBn,
@@ -138,6 +138,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
             this.dataTableAllBn.push(obj);
           }
           this.dataTableAllBn.sort((a, b) => (a.stt - b.stt));
+          this.dataTable.sort((a, b) => (a.sapXep - b.sapXep));
           this.onInputNumberBNChange();
         }
         data.fileDinhkems.forEach(item => {
