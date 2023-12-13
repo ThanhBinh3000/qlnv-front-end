@@ -319,7 +319,8 @@
               <td class="text-left">{{ data.tenChiTieu }}</td>
               <td class="text-left">{{ data.mucYeuCauXuat }}</td>
               <td class="text-left">
-                <input nz-input [disabled]="isView" [(ngModel)]="data.ketQua"/>
+                <input nz-input [disabled]="isView" [(ngModel)]="data.ketQua"
+                       (ngModelChange)="onChangeKetQua($event, i)"/>
               </td>
               <td class="text-left">{{ data.phuongPhapXd }}</td>
               <td class="text-left">

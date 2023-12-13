@@ -3038,5 +3038,23 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
 
-
+  async baoCaoNhapVt() {
+    try {
+      await this.spinner.show();
+      await this.quyetDinhDieuChinhCTKHService.xuatBaoCaoNhapVt({
+        id: this.id,
+        namKeHoach: this.formData.value.namKeHoach,
+      }).then(async (response) => {
+        if (response && response.status == 200) {
+          const contentDisposition = response.headers.get('content-disposition');
+          const fileName = contentDisposition.split(';')[1].split('filename')[1].split('=')[1].trim();
+          saveAs(response.body, JSON.parse(fileName));
+        }
+      });
+    } catch (e) {
+      console.log(e);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
 }

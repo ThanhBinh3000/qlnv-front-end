@@ -181,7 +181,69 @@
 </nz-collapse>
 <nz-collapse nzAccordion class="pd-10">
   <nz-collapse-panel [nzHeader]="'DANH MỤC ĐƠN VỊ TÀI SẢN ĐẤU GIÁ'" [nzActive]="true">
-    <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered>
+    <nz-table [nzData]="dataTableAll" class="nowrap pd-10" nzBordered *ngIf="isCache">
+      <thead>
+      <tr>
+        <th nzWidth="50px" class="text-center wrap"></th>
+        <th nzWidth="150px" class="text-left wrap"> Chi cục</th>
+        <th class="text-left"> Điểm kho</th>
+        <th class="text-left"> Lô kho</th>
+        <th class="text-left"> Mã ĐVTS</th>
+        <th nzWidth="100px" class="text-center wrap"
+            [innerHTML]="isView ? 'SL xuất bán <br>đề xuất' : 'SL xuất bán'"></th>
+        <th class="text-left"> ĐVT</th>
+        <th class="text-center">Đơn giá được <br>duyệt
+          {{loaiVthhCache.startsWith(LOAI_HANG_DTQG.VAT_TU) ? '(đ)' : '(đ/kg)'}}
+        </th>
+        <th class="text-center"> Giá <br>khởi điểm (đ)</th>
+        <th class="text-center"> Số tiền <br>đặt trước (đ)</th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let item of dataTableAll , let i = index">
+        <tr>
+          <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+          <td class="text-left" colspan="4">{{ item.tenDvi }}</td>
+          <td class="text-right bold">{{ item.tongSlXuatBanDx|number:globals.numberFormat:globals.locale }}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td class="text-right bold">
+            <span *ngIf="item.soTienDtruocDduyet">
+              {{ item.soTienDtruocDduyet|number:globals.numberFormat:globals.locale }}
+            </span>
+          </td>
+        </tr>
+        <ng-container *ngIf="expandSet.has(i)">
+          <tr *ngFor="let children of item.children, let y = index">
+            <td></td>
+            <td></td>
+            <td class="text-left">{{ children.tenDiemKho}}</td>
+            <td class="text-left">
+              {{(children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") + (children.tenNhaKho ? children.tenNhaKho : "")}}
+            </td>
+            <td class="text-left">{{ children.maDviTsan}}</td>
+            <td class="text-right">
+              {{ children.soLuongDeXuat|number:globals.numberFormat:globals.locale }}
+            </td>
+            <td class="text-left">{{ children.donViTinh}}</td>
+            <td class="text-right">
+              <span *ngIf="children.donGiaDuocDuyet">
+                {{ children.donGiaDuocDuyet | number:globals.numberFormat:globals.locale }}
+              </span>
+            </td>
+            <td class="text-right">{{ children.giaKhoiDiemDx|number:globals.numberFormat:globals.locale }}</td>
+            <td class="text-right">
+               <span *ngIf="children.tienDatTruocDuocDuyet">
+                {{ children.tienDatTruocDuocDuyet | number:globals.numberFormat:globals.locale }}
+              </span>
+            </td>
+          </tr>
+        </ng-container>
+      </ng-container>
+      </tbody>
+    </nz-table>
+    <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered *ngIf="!isCache">
       <thead>
       <tr>
         <th nzWidth="50px" class="text-center wrap"></th>
@@ -223,12 +285,9 @@
               {{(children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") + (children.tenNhaKho ? children.tenNhaKho : "")}}
             </td>
             <td class="text-left">{{ children.maDviTsan}}</td>
-            <td class="text-right" *ngIf="!isCache">
+            <td class="text-right">
               <input currencyMask class="money-input" [(ngModel)]="children.soLuongDeXuat"
-                     (ngModelChange)="changeTable(item, children)" [options]="amount" [readOnly]="trangThaiQd"/>
-            </td>
-            <td class="text-right" *ngIf="isCache">
-              {{ children.soLuongDeXuat|number:globals.numberFormat:globals.locale }}
+                     (ngModelChange)="changeTable($event, i, y)" [options]="amount" [readOnly]="trangThaiQd"/>
             </td>
             <td class="text-left">{{ children.donViTinh}}</td>
             <td class="text-right">

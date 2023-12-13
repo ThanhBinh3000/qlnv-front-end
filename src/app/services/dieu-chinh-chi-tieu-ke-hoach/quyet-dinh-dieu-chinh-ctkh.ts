@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpResponse} from '@angular/common/http';
 import { BaseService } from "../base.service";
 import { OldResponseData } from 'src/app/interfaces/response';
 import { environment } from 'src/environments/environment';
@@ -77,5 +77,8 @@ export class QuyetDinhDieuChinhCTKHService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/preview/xem-truoc-ct-kh-theo-cuc`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
-
+  xuatBaoCaoNhapVt(body: any): Promise<HttpResponse<Blob>> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/quyet-dinh-dieu-chinh-ke-hoach-nam/report-nhap-vt`;
+    return this.httpClient.post(url, body, {responseType: 'blob', observe: 'response'}).toPromise();
+  }
 }

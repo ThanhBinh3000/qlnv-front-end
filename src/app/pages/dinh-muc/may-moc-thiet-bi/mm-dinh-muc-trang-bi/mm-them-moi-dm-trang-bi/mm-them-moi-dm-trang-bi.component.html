@@ -101,11 +101,11 @@
       <thead>
       <tr>
         <th rowspan="2" nzWidth="45px">STT</th>
-        <th rowspan="2" nzWidth="300px">Loại tài sản</th>
+        <th rowspan="2" nzWidth="200px">Loại tài sản</th>
         <th rowspan="2" nzWidth="120px">ĐVT</th>
         <th colspan="3" nzWidth="">Số lượng tối đa</th>
         <th rowspan="2" nzWidth="120px">Đơn giá tối đa (triệu đồng)</th>
-        <th rowspan="2" nzWidth="300px">Ghi chú</th>
+        <th rowspan="2" nzWidth="500px">Ghi chú</th>
         <th rowspan="2" nzWidth="150px" *ngIf="!isViewDetail">Hành động</th>
       </tr>
       <tr>
@@ -141,7 +141,7 @@
             <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.klChiCuc" [nzMin]="0"
                              class="w-50"></nz-input-number>
             &nbsp; <span>tấn lương thực</span> &nbsp;
-            <nz-select nzPlaceHolder="Nhập loại hình" nzMode="tags" style="width: 55%" [(ngModel)]="rowItem.loaiHinh">
+            <nz-select nzPlaceHolder="Nhập loại hình" nzMode="tags" style="width: 60%" [(ngModel)]="rowItem.loaiHinh">
               <nz-option nzValue="00" nzLabel="Nhập"></nz-option>
               <nz-option nzValue="01" nzLabel="Xuất"></nz-option>
               <nz-option nzValue="02" nzLabel="Bảo quản"></nz-option>
@@ -152,7 +152,8 @@
           <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.slChiCuc" [nzMin]="0"></nz-input-number>
         </th>
         <th>
-          <nz-input-number [nzSize]="'small'" [nzMin]="0" [(ngModel)]="rowItem.donGiaTd"></nz-input-number>
+          <input class="money-input" currencyMask [options]="amount" [min]="0"
+                 [(ngModel)]="rowItem.donGiaTd"/>
         </th>
         <th>
           <input type="text" [(ngModel)]="rowItem.ghiChu" nz-input/>
@@ -174,10 +175,10 @@
           <td>{{data.tenTaiSan}}</td>
           <td>{{data.donViTinh}}</td>
           <td class="text-center"><label nz-checkbox nzDisabled [(ngModel)]="data.isCanCu"></label></td>
-          <td class="text-right">{{data.slVpCucKv | number : '1.0-1' : 'vi_VN'}} </td>
-          <td *ngIf="data.isCanCu">{{data.slChiCuc ? data.slChiCuc : ''}}/{{data.klChiCuc ? data.klChiCuc + ' tấn lương thực' : ''}}  {{data.tenLoaiHinh ? ' ('+ data.tenLoaiHinh + ')' : ''}}</td>
-          <td  *ngIf="!data.isCanCu" class="text-right">{{data.slChiCuc | number : '1.0-1' : 'vi_VN'}} </td>
-          <td class="text-right">{{data.donGiaTd | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-center">{{data.slVpCucKv | number : '1.0-1' : 'vi_VN'}} </td>
+          <td class="text-center" *ngIf="data.isCanCu">{{data.slChiCuc ? (data.slChiCuc | number : '1.0-1' : 'vi_VN') : ''}}/{{data.klChiCuc ? (data.klChiCuc | number : '1.0-1' : 'vi_VN') + ' tấn lương thực' : ''}}  {{data.tenLoaiHinh ? ' ('+ data.tenLoaiHinh + ')' : ''}}</td>
+          <td class="text-center"  *ngIf="!data.isCanCu" class="text-right">{{data.slChiCuc | number : '1.0-1' : 'vi_VN'}} </td>
+          <td class="text-right">{{data.donGiaTd | number : '1.0-3' : 'vi_VN'}}</td>
           <td>{{data.ghiChu}}</td>
           <td class="text-center" *ngIf="!isViewDetail">
             <a (click)="editRow(idx)">
@@ -228,7 +229,8 @@
             </div>
           </td>
           <td>
-            <nz-input-number [nzSize]="'small'" [nzMin]="0" [(ngModel)]="dataEdit[idx].data.donGiaTd"></nz-input-number>
+            <input class="money-input" currencyMask [options]="amount" [min]="0"
+                   [(ngModel)]="dataEdit[idx].data.donGiaTd"/>
           </td>
           <td>
             <input type="text" [(ngModel)]="dataEdit[idx].data.ghiChu" nz-input/>
@@ -244,5 +246,16 @@
       </tr>
       </tbody>
     </nz-table>
+    <form nzLayout="vertical" nz-form [formGroup]="formData">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true">
+          Ghi chú
+        </nz-form-label>
+        <nz-form-control>
+        <textarea nz-input [rows]="3" formControlName="ghiChu"
+                  [readonly]="isViewDetail"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
   </nz-card>
 </div>

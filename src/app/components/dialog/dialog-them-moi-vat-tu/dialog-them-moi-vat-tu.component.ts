@@ -120,7 +120,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, "Địa điểm nhập hàng và số lượng không được để trống.")
       return;
     }
-    if (this.validateGiaDeXuat()) {
+    // if (this.validateGiaDeXuat()) {
       this.listOfData.forEach(item => {
         item.goiThau = this.formData.get('goiThau').value;
       })
@@ -128,7 +128,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         children: this.listOfData,
       })
       this._modalRef.close(this.formData);
-    }
+    // }
   }
 
   onCancel() {

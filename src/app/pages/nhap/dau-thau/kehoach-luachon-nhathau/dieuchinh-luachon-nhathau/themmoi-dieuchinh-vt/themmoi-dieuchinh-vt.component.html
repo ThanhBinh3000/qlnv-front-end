@@ -25,13 +25,13 @@
       <span>Duyệt</span>
     </button>
     <button
-      *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDV ) "
+      *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDV ) && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_BANHANH_TUCHOI_TC')"
       class="btn btn-sub do" (click)="tuChoi()">
       <i [class]="'icon htvbdh_chuyenvanthu'"></i>
       <span>Từ chối - lĐ Tổng cục</span>
     </button>
     <button
-      *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDV ) "
+      *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDV ) && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_BANHANH_TUCHOI_TC')"
       class="btn btn-sub xanh-nhat" (click)="save(true)">
       <i [class]="'icon htvbdh_chuyenvanthu'"></i>
       <span>Ban hành</span>
