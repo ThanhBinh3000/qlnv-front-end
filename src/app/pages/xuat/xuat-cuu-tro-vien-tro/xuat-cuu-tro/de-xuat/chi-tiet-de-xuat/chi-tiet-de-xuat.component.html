@@ -8,56 +8,57 @@
       <i class="icon htvbdh_totrinh"></i>
       <span> In/Xem trước </span>
     </button>
-    <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV && isTongCuc()" type="button" class="btn btn-sub"
-      (click)="reject(formData.value.id,STATUS.TU_CHOI_LDV)">
+    <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isTongCuc()" type="button"
+      class="btn btn-sub" (click)="reject(formData.value.id,STATUS.TU_CHOI_LDV)">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>
     <button
-      *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDC && isCuc() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_DUYET_LDC')"
+      *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_DUYET_LDC')"
       type="button" class="btn btn-sub" (click)="reject(formData.value.id,STATUS.TU_CHOI_LDC)">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>
     <button
-      *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP && isCuc()  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_DUYET_TP')"
+      *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isCuc()  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_DUYET_TP')"
       type="button" class="btn btn-sub" (click)="reject(formData.value.id,STATUS.TU_CHOI_TP)">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>
 
 
-    <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV && isTongCuc()" type="button" class="btn btn-sub"
-      (click)="approve(formData.value.id,STATUS.DA_DUYET_LDV,'Bạn có muốn duyệt đề xuất này')">
+    <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isTongCuc()" type="button"
+      class="btn btn-sub" (click)="approve(formData.value.id,STATUS.DA_DUYET_LDV,'Bạn có muốn duyệt đề xuất này')">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Duyệt</span>
     </button>
     <button
-      *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDC && isCuc() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_DUYET_LDC')"
+      *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_DUYET_LDC')"
       type="button" class="btn btn-sub"
       (click)="approve(formData.value.id,STATUS.DA_DUYET_LDC,'Bạn có muốn duyệt đề xuất này')">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Duyệt</span>
     </button>
     <button
-      *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP && isCuc()  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_DUYET_TP')"
+      *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isCuc()  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_DUYET_TP')"
       type="button" class="btn btn-sub"
       (click)="approve(formData.value.id,STATUS.CHO_DUYET_LDC,'Bạn có muốn duyệt đề xuất này')">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Duyệt</span>
     </button>
-    <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && isTongCuc()" type="button" class="btn btn-sub"
+    <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isTongCuc()" type="button"
+      class="btn btn-sub"
       (click)="saveAndSend(STATUS.DA_TAO_CBV,'Bạn có muốn hoàn thành đề xuất này ?','Đề xuất đã hoàn thành.')">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Hoàn thành</span>
     </button>
     <button type="button" class="btn btn-sub xanh" (click)="taoQuyetDinhPdPa()"
-      *ngIf="formData.value.trangThai == STATUS.DA_TAO_CBV && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_THEM')&& !formData.value.soQdPd && isTongCuc()">
+      *ngIf="formData.value.trangThai == STATUS.DA_TAO_CBV && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_THEM')&& !formData.value.soQdPd && userService.isTongCuc()">
       <i class="icon htvbdh_dau-cong"></i>
       <span>Tạo quyết định</span>
     </button>
     <button
-      *ngIf="formData.value.trangThai == STATUS.DA_TAO_CBV && isTongCuc() && !formData.value.idQdPd && !formData.value.idThop"
+      *ngIf="formData.value.trangThai == STATUS.DA_TAO_CBV && userService.isTongCuc() && !formData.value.idQdPd && !formData.value.idThop"
       type="button" class="btn btn-sub"
       (click)="approve(formData.value.id,STATUS.DU_THAO,'Bạn có muốn đổi trạng thái để chỉnh sửa đề xuất này ?')">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
@@ -66,7 +67,7 @@
     <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO ||
        formData.value.trangThai == STATUS.TU_CHOI_LDV ||
         formData.value.trangThai == STATUS.TU_CHOI_LDC ||
-         formData.value.trangThai == STATUS.TU_CHOI_TP)&& isCuc()" type="button" class="btn btn-sub"
+         formData.value.trangThai == STATUS.TU_CHOI_TP)&& userService.isCuc()" type="button" class="btn btn-sub"
       (click)="saveAndSend(STATUS.CHO_DUYET_TP,'Bạn có muốn gửi duyệt đề xuất này ?','Thao tác thành công.')">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
@@ -391,7 +392,7 @@
                     <th class="text-center" [rowspan]="1">Nhu cầu xuất cứu trợ</th>
                   </ng-container>
                   <ng-container *ngIf="isCuc()">
-                    <th>Năm nhập</th>
+                    <th>Năm nhập kho</th>
                   </ng-container>
                   <th>SL xuất cứu trợ đề xuất</th>
                   <ng-container *ngIf="isVthhGao()">
@@ -407,7 +408,7 @@
               <ng-container *ngIf="isTongCuc()">
                 <tr>
                   <th class="text-center">Cục DTNN KV</th>
-                  <th class="text-center">Năm nhập</th>
+                  <th class="text-center">Năm nhập kho</th>
                   <th class="text-center">Tồn kho</th>
                   <th class="text-center">{{isVthhGao()? "Số lượng gạo giao Cục thực hiện": "SL xuất" + " "+
                     genCuuTroVienTro() + " "+ "giao Cục thực hiện"}}</th>
@@ -594,7 +595,7 @@
                 </ng-container>
                 <ng-container *ngIf="!isTongCuc()">
                   <th class="text-center">Chủng loại hàng</th>
-                  <th class="text-center">Năm nhập</th>
+                  <th class="text-center">Năm nhập kho</th>
                   <th class="text-center">SL xuất cứu trợ đề xuất</th>
                   <th class="text-center">ĐVT</th>
                 </ng-container>
@@ -608,7 +609,7 @@
                   <th class="text-center">ĐVT</th>
                   <!-- <th class="text-center">Tồn kho</th> -->
                   <th class="text-center">Cục DTNN KV</th>
-                  <th class="text-center">Năm nhập</th>
+                  <th class="text-center">Năm nhập kho</th>
                   <th class="text-center">Tồn kho</th>
                 </tr>
               </ng-container>
@@ -919,8 +920,8 @@
               </nz-form-control>
             </nz-form-item>
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Chọn năm nhập</nz-form-label>
-              <nz-form-control [nzErrorTip]="'Vui lòng chọn năm nhập'">
+              <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Chọn Năm nhập kho</nz-form-label>
+              <nz-form-control [nzErrorTip]="'Vui lòng chọn Năm nhập kho'">
                 <div nz-row [nzGutter]="48">
                   <div nz-col [nzSpan]="8">
                     <nz-select formControlName="namNhap" [nzDisabled]="isView" (ngModelChange)="handleChangeNamNhap()">

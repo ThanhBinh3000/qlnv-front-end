@@ -262,15 +262,16 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
             // this.formData.patchValue(res.data);
             this.helperService.bidingDataInFormGroupAndNotTrigger(this.formData, res.data, ['paXuatGaoChuyenXc', 'mucDichXuat']);
             this.formData.value.quyetDinhPdDtl.forEach(s => s.idVirtual = uuidv4());
-            if (this.formData.value.paXuatGaoChuyenXc) {
-              await this.buildTableViewChuyenXc();
-              if (this.phuongAnHdrView[0]) {
-                await this.selectRow(this.phuongAnHdrView[0])
-              }
-            }
-            else {
-              await this.buildTableView();
-            }
+            await this.buildTableView();
+            // if (this.formData.value.paXuatGaoChuyenXc) {
+            //   await this.buildTableViewChuyenXc();
+            //   if (this.phuongAnHdrView[0]) {
+            //     await this.selectRow(this.phuongAnHdrView[0])
+            //   }
+            // }
+            // else {
+            //   await this.buildTableView();
+            // }
           }
         })
         .catch((e) => {
@@ -429,19 +430,32 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     let dataView = chain(this.formData.value.quyetDinhPdDtl)
       .groupBy("noiDungDx")
       .map((value, key) => {
-        const rs = value.find(f => f.noiDungDx === key);
-        if (!rs) return;
+        const row = value.find(f => f.noiDungDx === key);
+        if (!row) return;
+        const rs = chain(value).groupBy("maDvi").map((v, k) => {
+          const row1 = v.find(f => f.maDvi === k);
+          if (!row1) return;
+          const soLuong = v.reduce((sum, cur) => sum += cur.soLuong, 0);
+          return {
+            ...row1,
+            idVirtual: uuidv4(),
+            soLuong,
+            childData: v
+          }
+
+        }).value().filter(f => !!f)
         return {
           idVirtual: uuidv4(),
           noiDungDx: key,
           soLuong: 0,
-          childData: value,
-          idDonViNhan: rs.idDonViNhan,
-          loaiVthh: rs.loaiVthh,
-          tenLoaiVthh: rs.tenLoaiVthh
+          childData: rs,
+          idDonViNhan: row.idDonViNhan,
+          loaiVthh: row.loaiVthh,
+          tenLoaiVthh: row.tenLoaiVthh
         };
       }).value().filter(f => !!f);
     this.phuongAnView = dataView
+    console.log("dataView", dataView)
     this.expandAll();
   }
   async buildTableViewChuyenXc() {
@@ -450,7 +464,19 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
       .map((value, key) => {
         const row = value.find(f => f.soDx === key);
         if (!row) return;
-        const soLuong = value.reduce((sum, cur) => sum += cur.soLuong, 0);
+        const rs = chain(value).groupBy("maDvi").map((v, k) => {
+          const row1 = v.find(f => f.maDvi === k);
+          if (!row1) return;
+          const soLuong = v.reduce((sum, cur) => sum += cur.soLuong, 0);
+          return {
+            ...row1,
+            idVirtual: uuidv4(),
+            soLuong,
+            childData: v
+          }
+
+        }).value().filter(f => !!f)
+        const soLuong = rs.reduce((sum, cur) => sum += cur.soLuong, 0);
         return {
           idVirtual: uuidv4(),
           soDx: key,

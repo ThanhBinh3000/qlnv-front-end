@@ -411,7 +411,7 @@
                         <!-- <th>Tồn kho</th> -->
                       </ng-container>
                       <th>Cục DTNN KV</th>
-                      <th>Năm nhập</th>
+                      <th>Năm nhập kho</th>
                       <th>Tồn kho</th>
                     </tr>
                   </thead>
@@ -636,7 +636,7 @@
                       <!-- <th>Tồn kho</th> -->
                     </ng-container>
                     <th>Cục DTNN KV</th>
-                    <th>Năm nhập</th>
+                    <th>Năm nhập kho</th>
                     <th>Tồn kho</th>
                   </tr>
                 </thead>
@@ -836,7 +836,7 @@
                     </tr>
                     <tr>
                       <th>Cục DTNN KV</th>
-                      <th>Năm nhập</th>
+                      <th>Năm nhập kho</th>
                       <th>Tồn kho thóc (kg)</th>
                     </tr>
                   </thead>
@@ -1005,7 +1005,7 @@
                       <ng-container *ngIf="isVthhGao()">
                         <th>Nhu cầu cứu trợ</th>
                       </ng-container>
-                      <th>Năm nhập</th>
+                      <th>Năm nhập kho</th>
                       <th>SL cứu trợ đề xuất</th>
                       <ng-container *ngIf="isVthhGao()">
                         <!-- <th>Nhu cầu cứu trợ</th> -->
@@ -1213,7 +1213,7 @@
                     <ng-container *ngIf="isVthhGao()">
                       <th>Nhu cầu cứu trợ</th>
                     </ng-container>
-                    <th>Năm nhập</th>
+                    <th>Năm nhập kho</th>
                     <th>SL phê duyệt giao<br />Cục xuất cứu trợ</th>
                     <ng-container *ngIf="isVthhGao()">
                       <!-- <th>Nhu cầu cứu trợ</th> -->
@@ -1377,7 +1377,7 @@
               </tr>
               <tr>
                 <th>Cục DTNN KV</th>
-                <th>Năm nhập</th>
+                <th>Năm nhập kho</th>
                 <th>Tồn kho thóc (kg)</th>
               </tr>
             </thead>
@@ -1493,8 +1493,8 @@
             </nz-form-control>
           </nz-form-item>
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Chọn năm nhập</nz-form-label>
-            <nz-form-control [nzErrorTip]="'Vui lòng chọn năm nhập'">
+            <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Chọn Năm nhập kho</nz-form-label>
+            <nz-form-control [nzErrorTip]="'Vui lòng chọn Năm nhập kho'">
               <div nz-row [nzGutter]="48">
                 <div nz-col [nzSpan]="8">
                   <nz-select formControlName="namNhap" [nzDisabled]="isView" (ngModelChange)="handleChangeNamNhap()">
@@ -1527,7 +1527,7 @@
               </div>
             </nz-form-control>
           </nz-form-item>
-          <nz-form-item>
+          <!-- <nz-form-item>
             <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Ghi chú</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <div nz-row [nzGutter]="48">
@@ -1536,7 +1536,7 @@
                 </div>
               </div>
             </nz-form-control>
-          </nz-form-item>
+          </nz-form-item> -->
         </nz-card>
       </div>
     </form>
