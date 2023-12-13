@@ -285,6 +285,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
         page: 0,
       },
     };
+    this.listDmDinhMuc = [];
     let res;
     if (this.capDvi == 1) {
       res = await this.danhMucDinhMucService.searchDsChuaSuDung(body);
