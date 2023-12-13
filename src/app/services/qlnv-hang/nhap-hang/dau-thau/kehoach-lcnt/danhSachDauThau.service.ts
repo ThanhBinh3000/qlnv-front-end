@@ -39,5 +39,9 @@ export class DanhSachDauThauService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/xem-truoc/vt`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
+  danhSachGthauTruot(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ds-gthau-truot`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
 
 }
