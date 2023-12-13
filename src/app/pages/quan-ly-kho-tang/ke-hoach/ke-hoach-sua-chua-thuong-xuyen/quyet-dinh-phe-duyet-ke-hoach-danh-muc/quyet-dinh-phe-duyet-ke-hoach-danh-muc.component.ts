@@ -63,15 +63,52 @@ export class QuyetDinhPheDuyetKeHoachDanhMucComponent extends Base2Component imp
       loai : ['01'],
 
     });
-    this.filter();
+    await this.search();
   }
 
-  filter() {
-    if (this.formData.value.thoiGianTh && this.formData.value.thoiGianTh.length > 0) {
-      this.formData.value.ngayThTu = this.formData.value.thoiGianTh[0];
-      this.formData.value.ngayThDen = this.formData.value.thoiGianTh[1];
+  // filter() {
+  //   if (this.formData.value.thoiGianTh && this.formData.value.thoiGianTh.length > 0) {
+  //     this.formData.value.ngayThTu = this.formData.value.thoiGianTh[0];
+  //     this.formData.value.ngayThDen = this.formData.value.thoiGianTh[1];
+  //   }
+  //   this.formData.value.maDvi = this.userInfo.MA_DVI
+  //   this.search();
+  // }
+
+  async search() {
+    await this.spinner.show();
+    try {
+      if (this.formData.value.thoiGianTh && this.formData.value.thoiGianTh.length > 0) {
+        this.formData.value.ngayThTu = this.formData.value.thoiGianTh[0];
+        this.formData.value.ngayThDen = this.formData.value.thoiGianTh[1];
+      }
+      let body = this.formData.value
+      body.maDvi = this.userInfo.MA_DVI
+      body.paggingReq = {
+        limit: this.pageSize,
+        page: this.page - 1
+      }
+      let res = await this.qdScThuongXuyen.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        this.dataTable = data.content;
+        this.totalRecord = data.totalElements;
+        if (this.dataTable && this.dataTable.length > 0) {
+          this.dataTable.forEach((item) => {
+            item.checked = false;
+          });
+        }
+        this.dataTableAll = cloneDeep(this.dataTable);
+      } else {
+        this.dataTable = [];
+        this.totalRecord = 0;
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
     }
-    this.search();
   }
 
   redirectToChiTiet(id: number, isView?: boolean) {
