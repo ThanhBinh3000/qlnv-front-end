@@ -986,6 +986,10 @@
 
       <ng-template #extraTemplate>
         <div class='btn-group mt-2'>
+          <button *ngIf="subTabVatTu==0" type="button" class="btn btn-main" (click)="baoCaoNhapVt()">
+            <i class="icon htvbdh_baocao"></i>
+            <span>Tải báo cáo</span>
+          </button>
           <button type="button" class="btn btn-main" (click)="preView('VT')">
             <i class="icon htvbdh_tcdt_print"></i>
             <span>In/xem trước</span>

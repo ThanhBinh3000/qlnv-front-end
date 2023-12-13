@@ -78,11 +78,14 @@
                 <input nz-input formControlName="soQdMs" [readonly]="true" />
               </nz-input-group>
             </nz-form-control>
-            <nz-form-control>
-              <div class="list-file">
-                <file-list [data]="fileDinhKem"></file-list>
-              </div>
-            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]='24'>
+          <nz-form-item class='form-item'>
+            <nz-form-label [nzNoColon]='true' class='label-color-kh'> Tài liệu đính kèm</nz-form-label>
+            <div class='list-file'>
+              <file-list [disabled]='isView' [data]='fileDinhKem'></file-list>
+            </div>
           </nz-form-item>
         </div>
       </div>
@@ -139,7 +142,7 @@
             <td>{{idx + 1}}.{{y + 1}}</td>
             <td>
               <!-- {{item.tenDvi}} -->
-              <nz-select nzShowSearch [(ngModel)]="item.maDvi">
+              <nz-select nzShowSearch [(ngModel)]="item.maDvi" [nzDisabled]="isView">
                 <nz-option *ngFor="let cc of listChiCuc" [nzValue]="cc.maDvi" [nzLabel]="cc.tenDvi"
                   [nzDisabled]="disabled(data.dataChild, cc.maDvi)"></nz-option>
               </nz-select>
@@ -166,7 +169,7 @@
               {{item.slCuon | number: '1.0-2': 'vi_VN' }}
             </td>
             <td>
-              <input nz-input [(ngModel)]="item.ghiChu">
+              <input nz-input [(ngModel)]="item.ghiChu" [readOnly]="isView">
             </td>
             <td class="text-center" *ngIf="!isView">
               <!-- <a (click)="openModalCt(item, 'sua', y, dataTable[idx])">

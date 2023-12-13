@@ -391,28 +391,6 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Thời điểm mở thầu</nz-form-label>
-            <div nz-row>
-              <div nz-col nzSpan="7">
-                <nz-time-picker
-                  [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView"
-                  nzFormat="HH:mm" formControlName="tgianMthauTime"></nz-time-picker>
-              </div>
-              <div nz-col nzSpan="1">
-              </div>
-              <div nz-col nzSpan="16">
-                <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker formControlName="tgianMthau"
-                                  nzFormat="dd/MM/yyyy"
-                                  [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView">
-                  </nz-date-picker>
-                </nz-form-control>
-              </div>
-            </div>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="6">
-          <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Thời điểm đóng thầu</nz-form-label>
             <div nz-row>
               <div nz-col nzSpan="7">
@@ -425,6 +403,28 @@
               <div nz-col nzSpan="16">
                 <nz-form-control [nzErrorTip]="error">
                   <nz-date-picker formControlName="tgianDthau"
+                                  nzFormat="dd/MM/yyyy"
+                                  [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView">
+                  </nz-date-picker>
+                </nz-form-control>
+              </div>
+            </div>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Thời điểm mở thầu</nz-form-label>
+            <div nz-row>
+              <div nz-col nzSpan="7">
+                <nz-time-picker
+                  [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView"
+                  nzFormat="HH:mm" formControlName="tgianMthauTime"></nz-time-picker>
+              </div>
+              <div nz-col nzSpan="1">
+              </div>
+              <div nz-col nzSpan="16">
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-date-picker formControlName="tgianMthau"
                                   nzFormat="dd/MM/yyyy"
                                   [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView">
                   </nz-date-picker>

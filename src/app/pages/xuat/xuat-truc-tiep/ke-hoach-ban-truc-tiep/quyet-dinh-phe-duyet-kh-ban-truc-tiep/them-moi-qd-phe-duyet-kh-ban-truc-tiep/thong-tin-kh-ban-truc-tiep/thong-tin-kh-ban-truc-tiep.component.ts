@@ -9,6 +9,9 @@ import {Base2Component} from "../../../../../../../components/base2/base2.compon
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../../../services/storage.service";
 import {cloneDeep} from 'lodash';
+import {
+  QuyetDinhPdKhBanTrucTiepService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service";
 
 @Component({
   selector: 'app-thong-tin-kh-ban-truc-tiep',
@@ -17,7 +20,9 @@ import {cloneDeep} from 'lodash';
 })
 export class ThongTinKhBanTrucTiepComponent extends Base2Component implements OnChanges {
   @Input() title;
+  @Input() idInput;
   @Input() dataInput;
+  @Input() dataInputCache;
   @Input() isView;
   @Input() isCache: boolean = false;
   @Input() trangThaiQd;
@@ -32,6 +37,7 @@ export class ThongTinKhBanTrucTiepComponent extends Base2Component implements On
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private quyetDinhPdKhBanTrucTiepService: QuyetDinhPdKhBanTrucTiepService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, null);
     this.formData = this.fb.group({
@@ -56,18 +62,56 @@ export class ThongTinKhBanTrucTiepComponent extends Base2Component implements On
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-    if (changes.dataInput) {
+    const processChange = async (data: any) => {
       await this.spinner.show();
-      const dataInput = changes.dataInput.currentValue;
-      if (dataInput) {
-        this.helperService.bidingDataInFormGroup(this.formData, dataInput);
-        this.dataTableAll = dataInput.children;
-        this.dataTable = cloneDeep(dataInput.children);
+      if (data) {
+        this.helperService.bidingDataInFormGroup(this.formData, data);
       } else {
         this.formData.reset();
       }
       await this.spinner.hide();
+    };
+    const handleDataTableAll = async (dataInputCache: any) => {
+      if (dataInputCache) {
+        await processChange(dataInputCache);
+        this.dataTableAll = cloneDeep(dataInputCache.children);
+      }
+    };
+    const handleDataTable = async (dataInput: any) => {
+      if (dataInput) {
+        await processChange(dataInput);
+        this.dataTable = dataInput.children;
+        if (!this.idInput) {
+          await this.getdonGiaDuocDuyet(dataInput);
+        }
+      }
+    };
+    if (changes.dataInputCache) {
+      await handleDataTableAll(changes.dataInputCache.currentValue);
     }
+    if (changes.dataInput) {
+      await handleDataTable(changes.dataInput.currentValue);
+    }
+  }
+
+  async getdonGiaDuocDuyet(data) {
+    const getChildGiaDuyet = async (item, child) => {
+      const giaDuyet = await this.quyetDinhPdKhBanTrucTiepService.getDonGiaDuocDuyet({
+        nam: data.namKh,
+        loaiVthh: data.loaiVthh,
+        cloaiVthh: data.cloaiVthh,
+        maDvi: item.maDvi,
+        typeLoaiVthh: this.loaiVthhCache,
+      });
+      if (giaDuyet.data) {
+        child.donGiaDuocDuyet = giaDuyet.data;
+      }
+    };
+    const giaDuyetPromises = this.dataTable.flatMap(item =>
+      item.children.map(child => getChildGiaDuyet(item, child))
+    );
+    await Promise.all(giaDuyetPromises);
+    await this.changeTable();
   }
 
 
@@ -78,20 +122,33 @@ export class ThongTinKhBanTrucTiepComponent extends Base2Component implements On
   }
 
 
-  async changeTable(item: any, child: any) {
-    if (item && child) {
+  async changeTable(event?, index?, index1?) {
+    const updateChild = (child) => {
+      child.soLuongDeXuat = event ? event : child.soLuongDeXuat;
       child.thanhTienDeXuat = child.soLuongDeXuat * child.donGiaDeXuat;
       child.thanhTienDuocDuyet = child.soLuongDeXuat * child.donGiaDuocDuyet;
+    }
+    const updateItem = (item) => {
       item.soLuongChiCuc = item.children.reduce((total, child) => total + child.soLuongDeXuat, 0);
       item.thanhTien = item.children.reduce((total, child) => total + child.thanhTienDeXuat, 0);
       item.tienDuocDuyet = item.children.reduce((total, child) => total + child.thanhTienDuocDuyet, 0);
-      this.formData.patchValue({
-        tongSoLuong: this.dataTable.reduce((prev, cur) => prev + cur.soLuongChiCuc, 0),
-        thanhTien: this.dataTable.reduce((prev, cur) => prev + cur.thanhTien, 0),
-        thanhTienDuocDuyet: this.dataTable.reduce((prev, cur) => prev + cur.tienDuocDuyet, 0),
+    };
+    if (index >= 0 && index1 >= 0) {
+      const item = this.dataTable[index];
+      const child = this.dataTable[index].children[index1];
+      updateChild(child);
+      updateItem(item);
+    } else {
+      this.dataTable.forEach((item) => {
+        item.children.forEach(updateChild);
+        updateItem(item);
       });
-      this.dataTable = this.dataTableAll
     }
+    this.formData.patchValue({
+      tongSoLuong: this.dataTable.reduce((prev, cur) => prev + cur.soLuongChiCuc, 0),
+      thanhTien: this.dataTable.reduce((prev, cur) => prev + cur.thanhTien, 0),
+      thanhTienDuocDuyet: this.dataTable.reduce((prev, cur) => prev + cur.tienDuocDuyet, 0),
+    });
     await this.sendDataToParent();
   }
 

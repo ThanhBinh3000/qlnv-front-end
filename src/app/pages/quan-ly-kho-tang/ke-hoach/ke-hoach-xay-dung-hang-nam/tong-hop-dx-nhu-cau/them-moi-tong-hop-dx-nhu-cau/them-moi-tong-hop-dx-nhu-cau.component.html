@@ -179,7 +179,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group [nzAddOnAfter]="maTt">
-                    <input formControlName="maToTrinh"
+                    <input formControlName="maToTrinh" [readonly]="isViewDetail"
                            [readonly]="formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.DA_DUYET_LDTC"
                            type="text" nz-input size="small" />
                   </nz-input-group>
@@ -227,7 +227,7 @@
                   Căn cứ pháp lý
                 </nz-form-label>
                 <div class="list-file">
-                  <file-list [disabled]="isViewDetail" [data]="canCuPhapLys"></file-list>
+                  <file-list [isViewDetail]="isViewDetail" [data]="canCuPhapLys"></file-list>
                 </div>
               </nz-form-item>
             </div>
@@ -237,7 +237,7 @@
                   File đính kèm QĐ đã ký của Tổng cục DTNN
                 </nz-form-label>
                 <div class="list-file">
-                  <file-list [disabled]="isViewDetail" [data]="fileDinhKems"></file-list>
+                  <file-list [isViewDetail]="isViewDetail" [data]="fileDinhKems"></file-list>
                 </div>
               </nz-form-item>
             </div>
@@ -439,8 +439,7 @@
                       <th class="text-center" width="13%" colSpan="2">Tổng mức đầu tư theo QĐ PD/ĐC TMĐT (đ)</th>
                       <th class="text-center" width="13%" colSpan="2">TMĐT theo kế hoạch trung hạn giai đoạn 5 năm</th>
                       <th class="text-center" width="7%" rowSpan="2" >KH vốn đầu tư <br> nguồn NSNN năm hiện tại (đ)</th>
-                      <th class="text-center" width="5%" rowSpan="2"
-                          *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC)"
+                      <th class="text-center" width="5%" rowSpan="2" *ngIf="isViewDetail"
                       nzRight >Hành động
                       </th>
                     </tr>
@@ -469,7 +468,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC)" nzRight></td>
+                        <td *ngIf="isViewDetail" nzRight></td>
                       </tr>
                       <ng-container *ngIf="expandSet.has(data.idVirtual)">
                         <ng-container *ngFor="let item of data.dataChild, let y = index">
@@ -493,7 +492,7 @@
                               class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'ncKhTongSo', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
                             <td
                               class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'ncKhNstw', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
-                            <td nzRight *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC)"></td>
+                            <td nzRight *ngIf="isViewDetail"></td>
                           </tr>
                           <ng-container *ngIf="expandSet.has(item.idVirtual)">
                             <ng-container *ngFor="let children of item.dataChild, let y1 = index">
@@ -513,7 +512,7 @@
                                 <td class="text-right">{{ children.ncKhNstw | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td class="text-right">{{ children.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td class="text-center" nzRight
-                                    *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC)">
+                                    *ngIf="isViewDetail">
                                   <a (click)="themMoiItem(children, 'sua', y,  item.dataChild)">
                                     <i class="fa fa-pencil" title="Sửa"></i>
                                   </a>
@@ -548,7 +547,7 @@
                           style="color: blue">{{sumSoLuong(null, 'ncKhTongSo', null) | number : '1.0-1' : 'vi_VN'}}</td>
                       <td class="font-weight-bold text-right"
                           style="color: blue">{{sumSoLuong(null, 'ncKhNstw', null) | number : '1.0-1' : 'vi_VN'}}</td>
-                      <td nzRight *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC)"></td>
+                      <td nzRight *ngIf="isViewDetail"></td>
                     </tr>
                     </tfoot>
                   </nz-table>

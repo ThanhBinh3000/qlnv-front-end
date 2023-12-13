@@ -562,6 +562,7 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
       try {
         let body = this.formData.value;
         body.ctiets = this.dataTableDxList;
+        body.title = "TỔNG HỢP PHƯƠNG ÁN ĐỀ XUẤT KẾ HOẠCH ĐẦU TƯ XÂY DỰNG KHO TÀNG DTQG HÀNG NĂM - ĐỀ XUẤT CỦA CÁC CỤC"
         this.tongHopDxXdTh
           .exportDetail(body)
           .subscribe((blob) =>
@@ -585,6 +586,7 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
       try {
         let body = this.formData.value;
         body.ctiets = this.dataTableList;
+        body.title = "TỔNG HỢP PHƯƠNG ÁN ĐỀ XUẤT KẾ HOẠCH ĐẦU TƯ XÂY DỰNG KHO TÀNG DTQG HÀNG NĂM - PHƯƠNG ÁN CỦA TỔNG CỤC"
         this.tongHopDxXdTh
           .exportDetail(body)
           .subscribe((blob) =>

@@ -60,6 +60,7 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
       ngayHluc: [''],
       trichYeu: [''],
       soQdCc: [''],
+      noiDungToTrinh: [''],
       loaiVthh: [''],
       cloaiVthh: [''],
       moTaHangHoa: [''],
@@ -67,6 +68,7 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
       kieuNx: [''],
       tchuanCluong: [''],
       slDviTsan: [''],
+      phanLoai: [''],
       slHdongDaKy: [''],
       trangThai: [''],
       lyDoTuChoi: [''],
@@ -77,6 +79,7 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
       soQdDc: [''],
       ngayKyDc: [''],
       ngayHlucDc: [''],
+      trichYeuDieuChinh: [''],
       noiDungDieuChinh: [''],
       type: [''],
       idQdPd: [],
@@ -112,6 +115,7 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
       namKh: dayjs().get('year'),
       trangThai: STATUS.DA_LAP,
       tenTrangThai: 'Đã lập',
+      phanLoai: 'TH',
       type: 'QDDC',
     })
   }
@@ -217,6 +221,13 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
         tchuanCluong: data.tchuanCluong,
         slDviTsan: data.slDviTsan,
       });
+      data.children.forEach(item => {
+        item.id = null;
+        item.children.forEach(child => {
+          child.id = null;
+          child.children.forEach(s => s.id = null);
+        });
+      });
       this.dataTable = data.children.filter(item => item.idQdKq === null && item.soQdKq === null && item.idQdNv === null && item.soQdNv === null)
       this.dataTableAll = data.children.filter(item => item.idQdKq === null && item.soQdKq === null && item.idQdNv === null && item.soQdNv === null)
       if (this.dataTable && this.dataTable.length > 0) {
@@ -278,7 +289,9 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
     try {
-      this.setValidForm();
+      if (trangThai === STATUS.BAN_HANH) {
+        this.setValidForm();
+      }
       const soCongVan = this.formData.value.soCongVan;
       const soQdDc = this.formData.value.soQdDc;
       const body = {
@@ -337,10 +350,12 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
       "namKh",
       "soCongVan",
       "ngayTaoCongVan",
-      "soQdCanDc",
       "tenLoaiVthh",
       "tenCloaiVthh",
       "tchuanCluong",
+      "soQdDc",
+      "ngayKyDc",
+      "ngayHlucDc"
     ];
     requiredFields.forEach(fieldName => {
       this.formData.controls[fieldName].setValidators([Validators.required]);

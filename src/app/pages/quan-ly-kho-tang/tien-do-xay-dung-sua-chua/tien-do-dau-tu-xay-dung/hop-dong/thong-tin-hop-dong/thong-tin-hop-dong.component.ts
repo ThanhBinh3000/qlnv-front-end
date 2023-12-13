@@ -153,6 +153,7 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
         this.helperService.bidingDataInFormGroup(this.formData, this.itemQdPdKhLcnt);
         //chỉ lấy những gói thầu có trạng thái pd kqlcnt thành công
         this.listHopDong = this.itemQdPdKhLcnt.listKtTdxdQuyetDinhPdKhlcntCvKh.filter(item => item.trangThai == STATUS.THANH_CONG);
+        console.log(this.listHopDong,"this.listHopDong")
         if (this.listHopDong && this.listHopDong.length > 0) {
           this.selectRow(this.listHopDong[0]);
           this.tongTien = this.listHopDong.reduce((prev, cur) => {

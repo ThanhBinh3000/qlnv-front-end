@@ -143,14 +143,14 @@ export class DieuChinhBanTrucTiepComponent extends Base2Component implements OnI
         return (
           this.userService.isAccessPermisson(permissions.XEM) && ((this.userService.isAccessPermisson(permissions.THEM) &&
               [
-                this.STATUS.CHO_DUYET_LDV, this.STATUS.CHO_DUYET_LDTC, this.STATUS.BAN_HANH
+                this.STATUS.CHO_DUYET_LDV, this.STATUS.DA_DUYET_LDV, this.STATUS.BAN_HANH
               ].includes(data.trangThai)) ||
             (!this.userService.isAccessPermisson(permissions.THEM) && [
                 this.STATUS.DA_LAP, this.STATUS.TU_CHOI_LDV, this.STATUS.TU_CHOI_LDTC,
                 this.STATUS.BAN_HANH
               ].includes(data.trangThai) ||
               (data.trangThai === this.STATUS.CHO_DUYET_LDV) ||
-              (data.trangThai === this.STATUS.CHO_DUYET_LDTC && !this.userService.isAccessPermisson(permissions.BAN_HANH))))
+              (data.trangThai === this.STATUS.DA_DUYET_LDV && !this.userService.isAccessPermisson(permissions.BAN_HANH))))
         );
       case 'SUA':
         return [
@@ -159,7 +159,7 @@ export class DieuChinhBanTrucTiepComponent extends Base2Component implements OnI
       case 'PHEDUYET':
         return (
           (data.trangThai === this.STATUS.CHO_DUYET_LDV) ||
-          (this.userService.isAccessPermisson(permissions.BAN_HANH) && data.trangThai === this.STATUS.CHO_DUYET_LDTC)
+          (this.userService.isAccessPermisson(permissions.BAN_HANH) && data.trangThai === this.STATUS.DA_DUYET_LDV)
         );
       case 'XOA':
         return data.trangThai === this.STATUS.DA_LAP && this.userService.isAccessPermisson(permissions.XOA);

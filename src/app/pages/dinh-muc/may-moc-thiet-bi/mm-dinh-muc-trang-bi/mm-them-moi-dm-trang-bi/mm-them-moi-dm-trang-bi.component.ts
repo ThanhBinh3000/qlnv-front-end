@@ -13,6 +13,7 @@ import {DonviService} from "../../../../../services/donvi.service";
 import {DanhMucTaiSanService} from "../../../../../services/danh-muc-tai-san.service";
 import { STATUS } from '../../../../../constants/status';
 import dayjs from "dayjs";
+import {AMOUNT} from "../../../../../Utility/utils";
 
 @Component({
   selector: 'app-mm-them-moi-dm-trang-bi',
@@ -27,7 +28,7 @@ export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnIni
   dataEdit: { [key: string]: { edit: boolean; data: DinhMucTrangBiMm } } = {};
   dsQtNsChiTw: any[] = [];
   listDmTaiSan: any[] = [];
-
+  amount = AMOUNT;
   constructor(
     httpClient: HttpClient,
     private donViService: DonviService,
@@ -50,6 +51,7 @@ export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnIni
       ngayHieuLuc: ['', [Validators.required]],
       ngayHetHieuLuc: [''],
       capDvi: [''],
+      ghiChu: [''],
       loai: ['02'],
       trichYeu: ['', [Validators.required]],
       listQlDinhMucPhiTbMmtbCd: [null],
@@ -173,9 +175,7 @@ export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnIni
       }
       if (this.dataTableDetail && this.dataTableDetail.length > 0) {
         this.dataTableDetail.forEach(item => {
-          if (item.loaiHinh && item.loaiHinh.length > 0) {
-            item.loaiHinh = item.loaiHinh.toString();
-          }
+          item.loaiHinh = item.loaiHinh && item.loaiHinh.length ? item.loaiHinh.toString() : "";
         })
       }
       this.formData.value.listQlDinhMucPhiTbMmtbCd = this.dataTableDetail;
@@ -201,9 +201,7 @@ export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnIni
     }
     if (this.dataTableDetail && this.dataTableDetail.length > 0) {
       this.dataTableDetail.forEach(item => {
-        if (item.loaiHinh && item.loaiHinh.length > 0) {
-          item.loaiHinh = item.loaiHinh.toString();
-        }
+          item.loaiHinh = item.loaiHinh && item.loaiHinh.length ? item.loaiHinh.toString() : "";
       })
     }
     this.formData.value.listQlDinhMucPhiTbMmtbCd = this.dataTableDetail;

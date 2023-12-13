@@ -14,6 +14,15 @@
           </div>
           <div nz-col [nzSpan]="4">
             <nz-form-item>
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Quý
+              </nz-form-label>
+              <nz-select formControlName="nam">
+                <nz-option *ngFor="let p of listQuy" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              </nz-select>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="4">
+            <nz-form-item>
               <nz-form-label [nzNoColon]="true" class="label-color-kh">Thời gian tạo</nz-form-label>
               <div nz-row [nzGutter]="24">
                 <div nz-col nzSpan="12" class="cus-start-date">

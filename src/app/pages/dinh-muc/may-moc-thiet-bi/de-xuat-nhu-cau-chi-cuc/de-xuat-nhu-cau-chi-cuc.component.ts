@@ -21,7 +21,7 @@ export class DeXuatNhuCauChiCucComponent extends Base2Component implements OnIni
   isViewDetail: boolean;
   isDetail: boolean = false;
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.DANG_NHAP_DU_LIEU, giaTri: 'Đang nhập dữ liệu' },
     { ma: this.STATUS.DA_KY, giaTri: 'Đã ký' },
     { ma: this.STATUS.DADUYET_CB_CUC, giaTri: 'Đã duyệt - Cán bộ cục' },
     { ma: this.STATUS.TUCHOI_CB_CUC, giaTri: 'Từ chối - Cán bộ cục' }
