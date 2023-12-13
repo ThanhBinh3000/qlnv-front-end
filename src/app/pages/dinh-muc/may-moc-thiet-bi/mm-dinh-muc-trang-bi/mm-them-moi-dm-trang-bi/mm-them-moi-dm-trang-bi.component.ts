@@ -175,9 +175,7 @@ export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnIni
       }
       if (this.dataTableDetail && this.dataTableDetail.length > 0) {
         this.dataTableDetail.forEach(item => {
-          if (item.loaiHinh && item.loaiHinh.length > 0) {
-            item.loaiHinh = item.loaiHinh.toString();
-          }
+          item.loaiHinh = item.loaiHinh && item.loaiHinh.length ? item.loaiHinh.toString() : "";
         })
       }
       this.formData.value.listQlDinhMucPhiTbMmtbCd = this.dataTableDetail;
@@ -203,9 +201,7 @@ export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnIni
     }
     if (this.dataTableDetail && this.dataTableDetail.length > 0) {
       this.dataTableDetail.forEach(item => {
-        if (item.loaiHinh && item.loaiHinh.length > 0) {
-          item.loaiHinh = item.loaiHinh.toString();
-        }
+          item.loaiHinh = item.loaiHinh && item.loaiHinh.length ? item.loaiHinh.toString() : "";
       })
     }
     this.formData.value.listQlDinhMucPhiTbMmtbCd = this.dataTableDetail;
