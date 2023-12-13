@@ -9,6 +9,7 @@ import { QlDinhMucPhiService } from '../../../../../services/qlnv-kho/QlDinhMucP
 import { FormGroup, Validators } from '@angular/forms';
 import { DinhMucPhiNxBq } from '../../../../../models/DinhMucPhi';
 import { MESSAGE } from '../../../../../constants/message';
+import { saveAs } from 'file-saver';
 import { DanhMucDinhMucService } from '../../../../../services/danh-muc-dinh-muc.service';
 import { DanhMucService } from '../../../../../services/danhmuc.service';
 import { DonviService } from '../../../../../services/donvi.service';
@@ -1032,5 +1033,26 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       ...item,
       level,
     });
+  }
+
+  exportDataDetail() {
+    if (this.dataTableDetailTqd.length > 0) {
+      this.spinner.show();
+      try {
+        let body = this.formData.value;
+        this.qlDinhMucPhiService
+          .exportDetail(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-chi-tiet-dinh-muc-phi-nhap-xuat-bao-quan.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 }

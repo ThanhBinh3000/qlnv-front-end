@@ -13,24 +13,24 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button class="btn btn-sub ml-2" (click)="saveAndSend(STATUS.DA_KY, 'Bạn có muốn ký?','Bạn đã ký thành công!')"
-              *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TUCHOI_CB_CUC)  && userService.isChiCuc()">
+      <button class="btn btn-sub ml-2" (click)="saveAndSend(STATUS.DA_DUYET_LDCC, 'Bạn có muốn Duyệt lãnh đạo Chi cục?','Bạn đã Duyệt lãnh đạo Chi cục thành công!')"
+              *ngIf="(formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU || formData.value.trangThai == STATUS.TUCHOI_CB_CUC)  && userService.isChiCuc()">
         <i class="icon htvbdh_trinh"></i>
-        <span>Đã ký</span>
+        <span>Đã duyệt - LĐ Chi cục</span>
       </button>
       <button type="button" class="btn btn-sub btn-xoa  ml-2"
-              *ngIf=" (formData.value.trangThai == STATUS.DA_KY && userService.isCuc())"
+              *ngIf=" (formData.value.trangThai == STATUS.DA_DUYET_LDCC && userService.isCuc())"
               (click)="reject(id, STATUS.TUCHOI_CB_CUC)">
       <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
       </button>
       <button type="button" class="btn btn-sub xanh-nhat  ml-2"
-              *ngIf="(formData.value.trangThai == STATUS.DA_KY && userService.isCuc())"
+              *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDCC && userService.isCuc())"
               (click)="pheDuyet()">
         <i class="icon htvbdh_dakyduyet"></i>
-        <span>Duyệt</span>
+        <span>Tiếp nhận</span>
       </button>
-      <button (click)="save()" *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TUCHOI_CB_CUC) && userService.isChiCuc() "
+      <button (click)="save()" *ngIf="(formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU || formData.value.trangThai == STATUS.TUCHOI_CB_CUC) && userService.isChiCuc() "
         class="btn btn-main btn-sm waves-effect waves-light ml-2">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
