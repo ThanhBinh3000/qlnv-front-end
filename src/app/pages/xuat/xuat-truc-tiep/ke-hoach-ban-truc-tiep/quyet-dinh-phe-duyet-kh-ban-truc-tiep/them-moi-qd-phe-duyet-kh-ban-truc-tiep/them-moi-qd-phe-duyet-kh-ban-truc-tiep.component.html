@@ -169,7 +169,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="3">
+            <div nz-col [nzSpan]="formData.value.phanLoai === 'TH' ? 9 : 3">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng DTQG</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
@@ -179,7 +179,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="6">
+            <div nz-col [nzSpan]="6" *ngIf="formData.value.phanLoai === 'TTr'">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Tên hàng DTQG</nz-form-label>
                 <nz-form-control nz-col>
@@ -258,17 +258,16 @@
             <div nz-col [nzSpan]="12">
               <nz-card class="mg-t-10 flex-card p-lr16 bg-trang">
                 <app-thong-tin-kh-ban-truc-tiep [title]="'Nội dung đề xuất của Cục DTNN KV'"
-                                                [dataInput]="dataInputCache" [isView]="true" [isCache]="true"
-                                                [loaiVthhCache]="loaiVthh">
+                                                [dataInputCache]="dataInputCache"
+                                                [isView]="true" [isCache]="true" [loaiVthhCache]="loaiVthh">
                 </app-thong-tin-kh-ban-truc-tiep>
               </nz-card>
             </div>
             <div nz-col [nzSpan]="12">
               <nz-card class="mg-t-10 flex-card p-lr16 bg-trang">
                 <app-thong-tin-kh-ban-truc-tiep [title]="'Quyết định của TCDTNN'" [dataInput]="dataInput"
-                                                [isView]="false"
                                                 [trangThaiQd]="formData.value.trangThai == STATUS.BAN_HANH"
-                                                [loaiVthhCache]="loaiVthh"
+                                                [isView]="false" [loaiVthhCache]="loaiVthh" [idInput]="idInput"
                                                 (countChanged)="receiveDataFromChild($event)">
                 </app-thong-tin-kh-ban-truc-tiep>
               </nz-card>
