@@ -970,4 +970,27 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
     this.editCoSoCache[id].edit = false;
     this.checkDataExistCoSo(this.editCoSoCache[id].data);
   }
+
+  async danhSachGthauTruot($event) {
+    $event.stopPropagation();
+    if (this.formData.value.loaiVthh == null) {
+      this.notification.error(MESSAGE.ERROR, "Vui lòng chọn loại hàng DTQG.");
+      return;
+    }
+    let body = {
+      loaiVthh: this.formData.value.loaiVthh,
+      cloaiVthh: this.formData.value.cloaiVthh,
+    }
+    await this.dauThauService.danhSachGthauTruot(body).then((res) => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        console.log(res)
+        this.listOfData = res.data
+      }
+    })
+      .catch((e) => {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      });
+  }
 }

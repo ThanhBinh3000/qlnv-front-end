@@ -56,7 +56,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   @Input() isView: boolean;
   formData: FormGroup;
   formThongTinChung: FormGroup;
-
+  fileDinhKemDtl: any[] = [];
   selectedCanCu: any = {};
   listOfMapData: VatTu[];
   listOfMapDataClone: VatTu[];
@@ -389,6 +389,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     this.danhsachDx[this.index].tgianDthauTime = pipe.transform(this.thongtinDexuatComponent.formData.value.tgianDthauTime, 'yyyy-MM-dd HH:mm')
     this.danhsachDx[this.index].tgianMoHoSoTime = pipe.transform(this.thongtinDexuatComponent.formData.value.tgianMoHoSoTime, 'yyyy-MM-dd HH:mm')
     this.danhsachDx[this.index].giaBanHoSo = this.thongtinDexuatComponent.formData.value.giaBanHoSo
+    this.danhsachDx[this.index].fileDinhKem = this.thongtinDexuatComponent.fileDinhKem
     body.children = this.danhsachDx;
     body.fileDinhKems = this.listFileDinhKem;
     body.listCcPhapLy = this.listCcPhapLy;
@@ -533,7 +534,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
           }
         })
       }
-      this.showFirstRow(event, this.danhsachDx[0]);
+      this.showFirstRow(event, 0);
     };
   }
 
@@ -732,8 +733,13 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.isTongHop = this.formData.value.phanLoai == 'TH';
       this.dataInput = this.danhsachDx[index];
       this.dataInputCache = this.danhsachDxCache[index];
+      this.fileDinhKemDtl = this.danhsachDx[index].fileDinhKem
       this.index = index;
-      await this.getDataChiTieu(this.danhsachDx[index].idChiTieuKhNam)
+      if (this.formData.get('id').value) {
+        await this.getDataChiTieu(this.danhsachDx[index].dxuatKhLcntHdr?.idChiTieuKhNam)
+      } else {
+        await this.getDataChiTieu(this.danhsachDx[index].idChiTieuKhNam)
+      }
       await this.spinner.hide();
     } else {
       this.selected = true
@@ -742,7 +748,12 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.dataInputCache = this.danhsachDxCache[0];
       this.index = 0;
       this.maDviSelected = this.danhsachDx[0].maDvi
-      await this.getDataChiTieu(this.danhsachDx[0].idChiTieuKhNam)
+      this.fileDinhKemDtl = this.danhsachDx[0].fileDinhKem
+      if (this.formData.get('id').value) {
+        await this.getDataChiTieu(this.danhsachDx[index].dxuatKhLcntHdr?.idChiTieuKhNam)
+      } else {
+        await this.getDataChiTieu(this.danhsachDx[index].idChiTieuKhNam)
+      }
       await this.spinner.hide();
     }
   }

@@ -44,7 +44,8 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
   @Input() dataChiTieu;
   @Input() maDvi;
   @Input() trangThaiQd;
-
+  @Input() isQdTongCuc: boolean = false;
+  @Input() fileDinhKem: any[] = [];
   formData: FormGroup
   listNguonVon: any[] = [];
   listThuHoachVu: any[] = [];
