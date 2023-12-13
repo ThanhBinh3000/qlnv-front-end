@@ -315,25 +315,27 @@ export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnIni
       this.spinner.hide();
       return;
     }
-    let listTenLh = []
-    this.dataEdit[idx].data.loaiHinh.forEach(item => {
-      switch (item) {
-        case '00' : {
-          listTenLh.push('Nhập');
-          break;
+    let listTenLh = [];
+    if (this.dataEdit[idx].data.loaiHinh && this.dataEdit[idx].data.loaiHinh.length > 0) {
+      this.dataEdit[idx].data.loaiHinh.forEach(item => {
+        switch (item) {
+          case '00' : {
+            listTenLh.push('Nhập');
+            break;
+          }
+          case '01' : {
+            listTenLh.push('Xuất');
+            break;
+          }
+          case '02' : {
+            listTenLh.push('Bảo quản');
+            break;
+          }
         }
-        case '01' : {
-          listTenLh.push('Xuất');
-          break;
-        }
-        case '02' : {
-          listTenLh.push('Bảo quản');
-          break;
-        }
-      }
-    })
+      });
+      this.dataEdit[idx].data.loaiHinh = this.dataEdit[idx].data.loaiHinh.toString();
+    }
     this.dataEdit[idx].data.tenLoaiHinh = listTenLh.toString();
-    this.dataEdit[idx].data.loaiHinh = this.dataEdit[idx].data.loaiHinh.toString();
     Object.assign(this.dataTableDetail[idx], this.dataEdit[idx].data);
     this.dataEdit[idx].edit = false;
     this.updateEditCache();

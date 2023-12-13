@@ -22,7 +22,6 @@ import {v4 as uuidv4} from "uuid";
 export class ThongTinKsgComponent implements OnInit, OnChanges {
   @Input() isTableKetQua: boolean;
   @Input() isTabNdKhac: boolean;
-  @Input() isQdThamQuyen: boolean;
   @Input() dataTable : any[] = [];
   @Output() dataTableChange = new EventEmitter<any>();
   @Input() isView: boolean;
