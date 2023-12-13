@@ -147,7 +147,7 @@
           <td>{{ data.soQdBtc }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
-            <a (click)="redirectToChiTiet(data.id,true)" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDTCDT_XEM')">
+            <a (click)="redirectToChiTiet(data.id,true)" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDTCDT_XEM') && !((data.trangThai == STATUS.DANG_NHAP_DU_LIEU) && data.nguoiTaoId == userInfo.ID)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a

@@ -4,7 +4,7 @@
       <div class='title-chi-tieu'>
       <span
         [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC || formData.value.trangThai == STATUS.DA_DUYET_CBV  ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
-        {{ formData.value.tenTrangThai == 'Đã duyệt - CB Vụ' ? 'Đã tiếp nhận - CB Vụ': formData.value.tenTrangThai}}
+        {{ formData.value.tenTrangThai == 'Đã duyệt - CB Vụ' ? 'Đã tiếp nhận - CB Vụ' : formData.value.tenTrangThai}}
       </span>
         <span>ĐỀ XUẤT NHU CẦU XÂY DỰNG KHO TÀNG DTQG HÀNG NĂM</span>
       </div>
@@ -76,7 +76,7 @@
             </nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input class='search__input' formControlName='tenDvi' [readonly]='true' nz-input />
+                <input class='search__input' formControlName='tenDvi' [readonly]='true' nz-input/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -97,7 +97,7 @@
             <nz-form-label [nzNoColon]='true' nzRequired>Trích yếu
             </nz-form-label>
             <nz-form-control [nzErrorTip]='error'>
-              <input [readonly]='isViewDetail' formControlName='trichYeu' class='search__input' nz-input />
+              <input [readonly]='isViewDetail' formControlName='trichYeu' class='search__input' nz-input/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -126,7 +126,7 @@
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]='24' [nzErrorTip]='error'>
               <nz-input-group nzAddOnAfterIcon='folder-open' (click)='openDialogToTrinh()'>
-                <input class='search__input' nz-input readonly formControlName='soQdTrunghan' />
+                <input class='search__input' nz-input readonly formControlName='soQdTrunghan'/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -214,9 +214,7 @@
         <th class='text-center' width='13%' colSpan='2'>Tổng mức đầu tư theo QĐ PD/ĐC TMĐT (đ)</th>
         <th class='text-center' width='13%' colSpan='2'>TMĐT theo kế hoạch trung hạn giai đoạn 5 năm</th>
         <th class='text-center' width='7%' rowSpan='2' nzRight>KH vốn đầu tư <br> nguồn NSNN năm hiện tại</th>
-        <th class='text-center'
-            *ngIf='formData.value.trangThai != STATUS.DA_DUYET_CBV && formData.value.trangThai != STATUS.DA_DUYET_LDC'
-            width='5%' rowSpan='2' nzRight>Hành động
+        <th class='text-center' *ngIf='isDetail' width='5%' rowSpan='2' nzRight>Hành động
         </th>
       </tr>
       <tr>
@@ -244,7 +242,7 @@
           <td nzRight
               class='font-weight-bold text-right'>{{sumSoLuong(data, 'vonDauTu') | number : '1.0-1' : 'vi_VN'}}</td>
           <td class='font-weight-bold text-right' class='text-center'
-              *ngIf='formData.value.trangThai != STATUS.DA_DUYET_CBV && formData.value.trangThai != STATUS.DA_DUYET_LDC'
+              *ngIf='isDetail'
               nzRight>
           </td>
         </tr>
@@ -263,8 +261,7 @@
             <td class='text-right'>{{ item.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
             <td class='text-right'>{{ item.ncKhNstw | number : '1.0-1' : 'vi_VN' }}</td>
             <td nzRight class='text-right'>{{ item.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>
-            <td class='text-center' nzRight
-                *ngIf='formData.value.trangThai != STATUS.DA_DUYET_CBV && formData.value.trangThai != STATUS.DA_DUYET_LDC'>
+            <td class='text-center' nzRight *ngIf='isDetail'>
               <a (click)="themMoiItem('sua', item)">
                 <i class='fa fa-pencil' title='Sửa'></i>
               </a>
@@ -296,8 +293,7 @@
             style='color: blue'>{{sumSoLuong(null, 'ncKhNstw', true) | number : '1.0-1' : 'vi_VN'}}</td>
         <td nzRight class='font-weight-bold text-right'
             style='color: blue'>{{sumSoLuong(null, 'vonDauTu', true) | number : '1.0-1' : 'vi_VN'}}</td>
-        <td *ngIf='formData.value.trangThai != STATUS.DA_DUYET_CBV && formData.value.trangThai != STATUS.DA_DUYET_LDC'
-            nzRight>
+        <td *ngIf='isDetail' nzRight>
       </tr>
       </tfoot>
     </nz-table>

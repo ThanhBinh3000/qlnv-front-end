@@ -174,7 +174,7 @@
             </div>
             <div nz-col nzSpan="4">
               <nz-form-item class="form-item">
-                <nz-form-label [nzNoColon]="true">Số quyết định
+                <nz-form-label [nzNoColon]="true">Số văn bản
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group [nzAddOnAfter]="soQd">
@@ -186,7 +186,7 @@
             </div>
             <div nz-col nzSpan="4">
               <nz-form-item class="form-item">
-                <nz-form-label [nzNoColon]="true">Ngày ký quyết định
+                <nz-form-label [nzNoColon]="true">Ngày ký văn bản
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-date-picker [nzDisabled]="formData.value.trangThai != STATUS.CHO_DUYET_LDTC"
@@ -232,51 +232,51 @@
                   <span>Xuất file</span>
                 </button>
               </ng-template>
-            <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
-              <div nz-row [nzGutter]="20">
-                <div nz-col nzSpan="24">
-                  <nz-form-label nzNoColon="true">Nhu cầu đối với công trình có TMĐT dưới 15 tỷ đồng: &nbsp; <span
-                    class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span></nz-form-label>
-                </div>
-                <div nz-col nzSpan="4">
-                  <nz-form-item>
-                    <nz-form-label nzNoColon="true">Trả nợ công trình hoàn thành thước 2019 (11 công trình)
-                    </nz-form-label>
-                    <nz-form-control>
-                  <span
-                    class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col nzSpan="4">
-                  <nz-form-item>
-                    <nz-form-label nzNoColon="true">Trả nợ công trình khởi công mới 2020 (20 công trình)</nz-form-label>
-                    <nz-form-control>
-                  <span
-                    class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col nzSpan="4">
-                  <nz-form-item>
-                    <nz-form-label nzNoColon="true">Trả nợ công trình khởi công mới 2021 (11 công trình)</nz-form-label>
-                    <nz-form-control>
-                  <span
-                    class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col nzSpan="4">
-                  <nz-form-item>
-                    <nz-form-label nzNoColon="true">Khởi công mới 2022 (13 công trình)</nz-form-label>
-                    <nz-form-control>
-                  <span
-                    class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-              </div>
-            </form>
+<!--            <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">-->
+<!--              <div nz-row [nzGutter]="20">-->
+<!--                <div nz-col nzSpan="24">-->
+<!--                  <nz-form-label nzNoColon="true">Nhu cầu đối với công trình có TMĐT dưới 15 tỷ đồng: &nbsp; <span-->
+<!--                    class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span></nz-form-label>-->
+<!--                </div>-->
+<!--                <div nz-col nzSpan="4">-->
+<!--                  <nz-form-item>-->
+<!--                    <nz-form-label nzNoColon="true">Trả nợ công trình hoàn thành thước 2019 (11 công trình)-->
+<!--                    </nz-form-label>-->
+<!--                    <nz-form-control>-->
+<!--                  <span-->
+<!--                    class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span>-->
+<!--                    </nz-form-control>-->
+<!--                  </nz-form-item>-->
+<!--                </div>-->
+<!--                <div nz-col nzSpan="4">-->
+<!--                  <nz-form-item>-->
+<!--                    <nz-form-label nzNoColon="true">Trả nợ công trình khởi công mới 2020 (20 công trình)</nz-form-label>-->
+<!--                    <nz-form-control>-->
+<!--                  <span-->
+<!--                    class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span>-->
+<!--                    </nz-form-control>-->
+<!--                  </nz-form-item>-->
+<!--                </div>-->
+<!--                <div nz-col nzSpan="4">-->
+<!--                  <nz-form-item>-->
+<!--                    <nz-form-label nzNoColon="true">Trả nợ công trình khởi công mới 2021 (11 công trình)</nz-form-label>-->
+<!--                    <nz-form-control>-->
+<!--                  <span-->
+<!--                    class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span>-->
+<!--                    </nz-form-control>-->
+<!--                  </nz-form-item>-->
+<!--                </div>-->
+<!--                <div nz-col nzSpan="4">-->
+<!--                  <nz-form-item>-->
+<!--                    <nz-form-label nzNoColon="true">Khởi công mới 2022 (13 công trình)</nz-form-label>-->
+<!--                    <nz-form-control>-->
+<!--                  <span-->
+<!--                    class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span>-->
+<!--                    </nz-form-control>-->
+<!--                  </nz-form-item>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </form>-->
             <div>
               <span class="text-right">
                 <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Đồng</h2>
@@ -446,51 +446,51 @@
               </button>
               <!-- You can use stopPropagation if you don't want the panel to toggle -->
             </ng-template>
-            <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
-              <div nz-row [nzGutter]="20">
-                <div nz-col nzSpan="24">
-                  <nz-form-label nzNoColon="true">Nhu cầu đối với công trình có TMĐT dưới 15 tỷ đồng: &nbsp; <span
-                    class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span></nz-form-label>
-                </div>
-                <div nz-col nzSpan="4">
-                  <nz-form-item>
-                    <nz-form-label nzNoColon="true">Trả nợ công trình hoàn thành thước 2019 (11 công trình)
-                    </nz-form-label>
-                    <nz-form-control>
-                  <span
-                    class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col nzSpan="4">
-                  <nz-form-item>
-                    <nz-form-label nzNoColon="true">Trả nợ công trình khởi công mới 2020 (20 công trình)</nz-form-label>
-                    <nz-form-control>
-                  <span
-                    class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col nzSpan="4">
-                  <nz-form-item>
-                    <nz-form-label nzNoColon="true">Trả nợ công trình khởi công mới 2021 (11 công trình)</nz-form-label>
-                    <nz-form-control>
-                  <span
-                    class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col nzSpan="4">
-                  <nz-form-item>
-                    <nz-form-label nzNoColon="true">Khởi công mới 2022 (13 công trình)</nz-form-label>
-                    <nz-form-control>
-                  <span
-                    class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-              </div>
-            </form>
+<!--            <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">-->
+<!--              <div nz-row [nzGutter]="20">-->
+<!--                <div nz-col nzSpan="24">-->
+<!--                  <nz-form-label nzNoColon="true">Nhu cầu đối với công trình có TMĐT dưới 15 tỷ đồng: &nbsp; <span-->
+<!--                    class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span></nz-form-label>-->
+<!--                </div>-->
+<!--                <div nz-col nzSpan="4">-->
+<!--                  <nz-form-item>-->
+<!--                    <nz-form-label nzNoColon="true">Trả nợ công trình hoàn thành thước 2019 (11 công trình)-->
+<!--                    </nz-form-label>-->
+<!--                    <nz-form-control>-->
+<!--                  <span-->
+<!--                    class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span>-->
+<!--                    </nz-form-control>-->
+<!--                  </nz-form-item>-->
+<!--                </div>-->
+<!--                <div nz-col nzSpan="4">-->
+<!--                  <nz-form-item>-->
+<!--                    <nz-form-label nzNoColon="true">Trả nợ công trình khởi công mới 2020 (20 công trình)</nz-form-label>-->
+<!--                    <nz-form-control>-->
+<!--                  <span-->
+<!--                    class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span>-->
+<!--                    </nz-form-control>-->
+<!--                  </nz-form-item>-->
+<!--                </div>-->
+<!--                <div nz-col nzSpan="4">-->
+<!--                  <nz-form-item>-->
+<!--                    <nz-form-label nzNoColon="true">Trả nợ công trình khởi công mới 2021 (11 công trình)</nz-form-label>-->
+<!--                    <nz-form-control>-->
+<!--                  <span-->
+<!--                    class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span>-->
+<!--                    </nz-form-control>-->
+<!--                  </nz-form-item>-->
+<!--                </div>-->
+<!--                <div nz-col nzSpan="4">-->
+<!--                  <nz-form-item>-->
+<!--                    <nz-form-label nzNoColon="true">Khởi công mới 2022 (13 công trình)</nz-form-label>-->
+<!--                    <nz-form-control>-->
+<!--                  <span-->
+<!--                    class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span>-->
+<!--                    </nz-form-control>-->
+<!--                  </nz-form-item>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </form>-->
             <div>
             <span class="text-right">
               <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Đồng</h2>
