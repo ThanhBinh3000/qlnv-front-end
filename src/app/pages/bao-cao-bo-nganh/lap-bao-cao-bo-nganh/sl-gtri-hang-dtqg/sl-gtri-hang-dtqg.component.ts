@@ -128,6 +128,7 @@ export class SlGtriHangDtqgComponent extends Base2Component implements OnInit {
     this.tuNgayKyGui = null;
     this.denNgayTao = null;
     this.denNgayKyGui = null;
+    await this.search();
   }
 
   redirectDetail(isView, data?) {

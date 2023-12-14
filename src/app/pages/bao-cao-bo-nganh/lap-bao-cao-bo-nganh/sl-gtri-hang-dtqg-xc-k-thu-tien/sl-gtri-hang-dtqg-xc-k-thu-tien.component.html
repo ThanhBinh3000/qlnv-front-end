@@ -88,6 +88,7 @@
         <tr>
           <th class="text-center" nzWidth="5%">STT</th>
           <th class="text-center" nzWidth="10%">Năm</th>
+          <th class="text-center" nzWidth="10%">Quý</th>
           <th class="text-center" nzWidth="40%">Bộ/Ngành</th>
           <th class="text-center" nzWidth="10%">Thời gian tạo</th>
           <th class="text-center" nzWidth="10%">Thời gian ban hành</th>
@@ -99,6 +100,7 @@
         <tr *ngFor="let data of dataTable; let i = index">
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td>{{ data.namBc }}</td>
+          <td>{{data.kyBc? 'Quý ' +  convertToRoman(data.kyBc) : '' }}</td>
           <td>{{ data.tenDonViGui }}</td>
           <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.ngayBanHanh | date: 'dd/MM/YYYY' }}</td>

@@ -16,6 +16,7 @@ import {
   DialogThemMoiSlGtriHangDtqgComponent
 } from "../../sl-gtri-hang-dtqg/dialog-them-moi-sl-gtri-hang-dtqg/dialog-them-moi-sl-gtri-hang-dtqg.component";
 import { cloneDeep } from 'lodash';
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
   selector: 'app-them-moi-sl-gtri-hang-dtqg-xuat-vt',
@@ -36,7 +37,7 @@ export class ThemMoiSlGtriHangDtqgXuatVtComponent extends Base2Component impleme
     {
       text: "Báo cáo năm",
       value: 1,
-      thoiHanGuiBc: "Sau 05 ngày kết thúc thời gian chỉnh lý quyết toán ngân sách nhà nước"
+      thoiHanGuiBc: "Sau 25 ngày kết thúc năm"
     },
     { text: "Báo cáo quý", value: 2, thoiHanGuiBc: "Ngày 20 của tháng đầu quý sau" }
   ];
@@ -47,6 +48,19 @@ export class ThemMoiSlGtriHangDtqgXuatVtComponent extends Base2Component impleme
   itemRowDonViEdit: any[] = [];
   itemRowNhomMhEdit: any[] = [];
   itemRowMatHang: any[] = [];
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "right",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -341,5 +355,15 @@ export class ThemMoiSlGtriHangDtqgXuatVtComponent extends Base2Component impleme
     if(this.dataImport.length > 0){
       this.listDataGroup = this.dataImport
     }
+  }
+
+  calTongTrongKy(){
+    return 0;
+  }
+  calTongLuyKe(){
+    return 0;
+  }
+  calTong(){
+    return 0;
   }
 }
