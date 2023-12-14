@@ -129,6 +129,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       nhomDinhMuc: ['1'],
       trichYeu: ['', [Validators.required]],
       listQlDinhMucPhis: [null],
+      listQlDinhMucPhisKtqd: [null],
       fileDinhKems: [null],
     });
     this.formDataDtl = this.fb.group({
@@ -1038,7 +1039,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
   }
 
   exportDataDetail() {
-    if (this.dataTableDetailTqd.length > 0) {
+    if ((this.formData.get("nhomDinhMuc").value == "1" && this.dataTableDetailTqd.length > 0) || (this.formData.get("nhomDinhMuc").value == "2" && this.dataTableDetailKtqd.length > 0) ) {
       this.spinner.show();
       try {
         let body = this.formData.value;
