@@ -266,6 +266,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
             apDungTatCa : value && value[0] && value[0].apDungTatCa ? value[0].apDungTatCa : null,
             vat : value && value[0] && value[0].vat ? value[0].vat : null,
             giaQdBtc : value && value[0] && value[0].giaQdBtc ? value[0].giaQdBtc : null,
+            giaCucDn : value && value[0] && value[0].giaCucDn ? value[0].giaCucDn : null,
             giaQdTcdt : value && value[0] && value[0].giaQdTcdt ? value[0].giaQdTcdt : null,
             giaQdDcTcdt : value && value[0] && value[0].giaQdDcTcdt ? value[0].giaQdDcTcdt : null,
           };

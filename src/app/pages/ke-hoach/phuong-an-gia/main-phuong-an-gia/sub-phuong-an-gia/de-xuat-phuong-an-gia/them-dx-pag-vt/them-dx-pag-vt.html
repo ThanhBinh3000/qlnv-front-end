@@ -90,7 +90,7 @@
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true">Người lập
+            <nz-form-label  [nzNoColon]="true">Người lập
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
@@ -101,7 +101,7 @@
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true">Người ký
+            <nz-form-label  [nzNoColon]="true">Người ký
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
@@ -622,18 +622,28 @@
     <nz-tab [nzTitle]="'Thông tin khảo sát giá'">
       <nz-card class="mt16 p-lr16 card-table pd-10">
         <span class="sub-title mb-10">KẾT QUẢ KHẢO SÁT GIÁ THỊ TRƯỜNG</span>
-        <app-thong-tin-ksg-vt [dataParent]="formData.value" [isView]="isView" *ngIf="dataTableKsGia || !idInput"
-                              [isTabNdKhac]="false" [type]="type"
+        <app-thong-tin-ksg-vt [dataParent]="formData.value" [isView]="isView"
+                              [isTabNdKhac]="false" [type]="type" [isQdThamQuyen]="false"
                               [listCloaiVthh]="listCloaiVthh && listCloaiVthh.length > 0 ? listCloaiVthh : []"
                               [isTableKetQua]="true" [(dataTable)]="dataTableKsGia"></app-thong-tin-ksg-vt>
+        <span class="sub-title mb-10">QUYẾT ĐỊNH CỦA CẤP CÓ THẨM QUYỀN</span>
+        <app-thong-tin-ksg-vt [dataParent]="formData.value" [isView]="isView"
+                              [isTabNdKhac]="false" [type]="type" [isQdThamQuyen]="true"
+                              [listCloaiVthh]="listCloaiVthh && listCloaiVthh.length > 0 ? listCloaiVthh : []"
+                              [isTableKetQua]="false" [(dataTable)]="dataQdThamQuyen"></app-thong-tin-ksg-vt>
+        <span class="sub-title mb-10">KẾT QUẢ GIAO DỊCH THÀNH CÔNG</span>
+        <app-thong-tin-ksg-vt [dataParent]="formData.value" [isView]="isView"
+                               [isTabNdKhac]="false" [type]="type" [isQdThamQuyen]="true"
+                               [listCloaiVthh]="listCloaiVthh && listCloaiVthh.length > 0 ? listCloaiVthh : []"
+                               [isTableKetQua]="false" [(dataTable)]="dataGdThanhCong"></app-thong-tin-ksg-vt>
         <span class="sub-title mb-10">KẾT QUẢ THẨM ĐỊNH GIÁ</span>
-        <app-thong-tin-ksg-vt [dataParent]="formData.value" [isView]="isView" *ngIf="dataTableKsGia || !idInput"
-                              [isTableKetQua]="false" [type]="type"
+        <app-thong-tin-ksg-vt [dataParent]="formData.value" [isView]="isView" [isTabNdKhac]="false"
+                              [isTableKetQua]="false" [type]="type" [isQdThamQuyen]="false"
                               [listCloaiVthh]="listCloaiVthh && listCloaiVthh.length > 0 ? listCloaiVthh : []"
                               [(dataTable)]="dataTableKqGia"></app-thong-tin-ksg-vt>
         <span class="sub-title mb-10">CÁC THÔNG TIN KHÁC</span>
-        <app-thong-tin-ksg-vt [dataParent]="formData.value" [isView]="isView" *ngIf="dataTableKsGia || !idInput"
-                              [isTabNdKhac]="true" [type]="type"
+        <app-thong-tin-ksg-vt [dataParent]="formData.value" [isView]="isView"
+                              [isTabNdKhac]="true" [type]="type" [isQdThamQuyen]="false"
                               [listCloaiVthh]="listCloaiVthh && listCloaiVthh.length > 0 ? listCloaiVthh : []"
                               [isTableKetQua]="false" [(dataTable)]="dataTableTtThamKhao"
         ></app-thong-tin-ksg-vt>

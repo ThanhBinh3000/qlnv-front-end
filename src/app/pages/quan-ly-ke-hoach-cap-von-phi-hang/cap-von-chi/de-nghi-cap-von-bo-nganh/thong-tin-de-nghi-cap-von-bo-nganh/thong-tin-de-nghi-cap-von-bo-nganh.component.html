@@ -37,7 +37,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]='true'> Năm ngân sách</nz-form-label>
             <nz-form-control nz-col [nzSpan]='24' [nzErrorTip]='error'>
-              <nz-select formControlName='nam' [nzDisabled]='isView'>
+              <nz-select formControlName='nam' (ngModelChange)='changYear($event)' [nzDisabled]='isView'>
                 <nz-option *ngFor='let p of listNam' [nzValue]='p.value' [nzLabel]='p.text'></nz-option>
               </nz-select>
             </nz-form-control>
@@ -480,15 +480,16 @@
     <thead>
     <tr>
       <th width='40px'>STT</th>
-      <th>Loại</th>
-      <th>Chủng loại hàng</th>
-      <th>Tên hàng</th>
+      <th width='350px'>Loại</th>
+      <th width='350px'>Chủng loại hàng</th>
+      <th width='350px'>Tên hàng</th>
+      <th width='200px'>Số lượng theo QĐ của TTCP</th>
       <th width='200px'>Số lượng đề nghị cấp vốn</th>
-      <th>Đơn vị tính</th>
-      <th>Đơn giá</th>
-      <th>Thành tiền (Ngoại tệ)</th>
-      <th>Thành tiền (VNĐ)</th>
-      <th *ngIf='!isView'> Hành động</th>
+      <th width='100px'>Đơn vị tính</th>
+      <th width='200px'>Đơn giá</th>
+      <th width='200px'>Thành tiền (Ngoại tệ)</th>
+      <th width='200px'>Thành tiền (VNĐ)</th>
+      <th *ngIf='!isView' width='150px'> Hành động</th>
     </tr>
     <tr *ngIf='!isView && itemHopDongSelected' class='search-table'>
       <th></th>
@@ -517,7 +518,14 @@
       </th>
       <th>
         <nz-input-group>
-          <nz-input-number [nzMin]='1' [nzMax]='' [nzSize]="'small'" [(ngModel)]='rowItemDetailHhh.slDeNghiCapVon'
+          <nz-input-number [nzMin]='1' [nzMax]='' [nzSize]="'small'" [(ngModel)]='rowItemDetailHhh.slTheoQdTtcp'
+                           (ngModelChange)='changeThanhTien()'>
+          </nz-input-number>
+        </nz-input-group>
+      </th>
+      <th>
+        <nz-input-group>
+          <nz-input-number [nzMin]='1' [nzMax]='rowItemDetailHhh.slTheoQdTtcp' [nzSize]="'small'" [(ngModel)]='rowItemDetailHhh.slDeNghiCapVon'
                            (ngModelChange)='changeThanhTien()'>
           </nz-input-number>
         </nz-input-group>
@@ -563,6 +571,7 @@
         <td>{{item.tenLoaiVthh}}</td>
         <td>{{item.tenCloaiVthh}}</td>
         <td>{{item.tenHang}}</td>
+        <td>{{item.slTheoQdTtcp}}</td>
         <td>{{item.slDeNghiCapVon}}</td>
         <td>{{item.donViTinh}}</td>
         <td>{{item.donGia |number : '1.0-1' : 'vi_VN'}}</td>
@@ -586,6 +595,11 @@
           <input type='text' nz-input [readOnly]='true' [(ngModel)]='item.tenCloaiVthh' />
         </td>
         <td><input type='text' nz-input [(ngModel)]='item.tenHang' /></td>
+        <td>
+          <input class='money-input' currencyMask [options]='amount'
+                 [(ngModel)]='item.slTheoQdTtcp'
+                  />
+        </td>
         <td>
           <input class='money-input' currencyMask [options]='amount'
                  [(ngModel)]='item.slDeNghiCapVon'
