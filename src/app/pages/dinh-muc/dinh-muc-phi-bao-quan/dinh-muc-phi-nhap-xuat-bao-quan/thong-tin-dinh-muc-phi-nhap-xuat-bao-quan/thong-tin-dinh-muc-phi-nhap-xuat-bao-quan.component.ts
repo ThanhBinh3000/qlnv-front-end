@@ -35,11 +35,18 @@ export interface TreeNodeInterface {
   soLuong?: number;
   chiPhiTheoDinhMucNhapToiDa?: number;
   chiPhiTheoDinhMucXuatToiDa?: number;
+  chiPhiTheoDinhMucBqToiDa?: number;
   chiPhiNhapToiDa?: number;
   chiPhiXuatToiDa?: number;
+  chiPhiBqToiDa?: number;
   thanhToanTheoVnd?: number;
   tyGia?: number;
   thanhToanTheoUsd?: number;
+  thanhToanTheoVndKt?: number;
+  tyGiaKt?: number;
+  thanhToanTheoUsdKt?: number;
+  chechLechVnd?: number;
+  chechLechUsd?: number;
   level?: number;
   expand?: boolean;
   children?: TreeNodeInterface[];

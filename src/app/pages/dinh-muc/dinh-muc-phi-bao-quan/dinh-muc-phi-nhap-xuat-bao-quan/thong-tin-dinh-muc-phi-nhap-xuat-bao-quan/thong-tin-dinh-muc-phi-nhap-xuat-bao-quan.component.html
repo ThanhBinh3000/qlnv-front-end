@@ -466,18 +466,30 @@
           <th rowspan='2' width='200px'>Áp dụng tại {{capDvi == 1 ? 'cục' : 'chi cục'}}</th>
           <th rowspan='2' width='100px'>Đơn vị tính</th>
           <th rowspan='2' width='150px'>Số lượng</th>
-          <th rowspan='1' colspan='2' width='500px'>Chi phí theo định mức (đ)</th>
-          <th rowspan='1' colspan='2' width='500px'>Chi phí không theo định mức</th>
-          <th rowspan='1' colspan='3' width='750'>Chi phí không theo định mức với trường hợp xuất viện trợ</th>
+          <th rowspan='1' colspan='3' width='500px'>Chi phí theo định mức (đ)</th>
+          <th rowspan='1' colspan='3' width='500px'>Chi phí không theo định mức</th>
+          <th rowspan='1' colspan='3' width='750'>Chi phí không theo định mức <br />với trường hợp xuất viện trợ - Đơn
+            vị đề nghị(đ)</th>
+          <th rowspan='1' colspan='3' width='750'>Chi phí không theo định mức <br />với trường hợp xuất viện trợ - Số
+            kiểm tra, tổng hợp(đ)</th>
+          <th rowspan='1' colspan='2' width='750'>Chi phí không theo định mức <br />với trường hợp xuất viện trợ - Chênh
+            lệch(đ)</th>
           <th rowspan='2' width='120px'>Hành động</th>
         </tr>
         <tr>
           <th rowspan='1' width='250px'>Chi phí nhập tối đa</th>
           <th rowspan='1' width='250px'>Chi phí xuất tối đa</th>
+          <th rowspan='1' width='250px'>Chi phí bảo quản tối đa</th>
           <th rowspan='1' width='250px'>Chi phí nhập tối đa</th>
           <th rowspan='1' width='250px'>Chi phí xuất tối đa</th>
+          <th rowspan='1' width='250px'>Chi phí bảo quản tối đa</th>
           <th rowspan='1' width='250px'>Thanh toán theo VNĐ (đ)</th>
           <th rowspan='1' width='250px'>Tỷ giá (đ)</th>
+          <th rowspan='1' width='250px'>Thanh toán theo USD</th>
+          <th rowspan='1' width='250px'>Thanh toán theo VNĐ (đ)</th>
+          <th rowspan='1' width='250px'>Tỷ giá (đ)</th>
+          <th rowspan='1' width='250px'>Thanh toán theo USD</th>
+          <th rowspan='1' width='250px'>Thanh toán theo VNĐ (đ)</th>
           <th rowspan='1' width='250px'>Thanh toán theo USD</th>
         </tr>
         <tr>
@@ -535,12 +547,22 @@
           </th>
           <th>
             <input type='money-input' currencyMask [options]='amount' [disabled]='true'
+              [(ngModel)]='rowItem.chiPhiTheoDinhMucBqToiDa' nz-input />
+          </th>
+
+          <th>
+            <input type='money-input' currencyMask [options]='amount' [disabled]='true'
               [(ngModel)]='rowItem.chiPhiNhapToiDa' nz-input />
           </th>
           <th>
             <input class='money-input' currencyMask [options]='amount' [disabled]='true'
               [(ngModel)]='rowItem.chiPhiXuatToiDa' />
           </th>
+          <th>
+            <input class='money-input' currencyMask [options]='amount' [disabled]='true'
+              [(ngModel)]='rowItem.chiPhiBqToiDa' />
+          </th>
+
           <th>
             <input class='money-input' currencyMask [options]='amount' (ngModelChange)='tinhTyGiaVndUsd($event)'
               [(ngModel)]='rowItem.thanhToanTheoVnd' nz-input />
@@ -554,6 +576,30 @@
               (ngModelChange)='tinhTyGiaUsdVnd($event)' [nzFormatter]='formatterDollar'
               [nzParser]='parserDollar'></nz-input-number>
           </th>
+
+          <th>
+            <input class='money-input' currencyMask [options]='amount' (ngModelChange)='tinhTyGiaVndUsd($event)'
+              [(ngModel)]='rowItem.thanhToanTheoVndKt' nz-input />
+          </th>
+          <th>
+            <input class='money-input' currencyMask [options]='amount' (ngModelChange)='tinhTyGia($event)'
+              [(ngModel)]='rowItem.tyGiaKt' nz-input />
+          </th>
+          <th>
+            <nz-input-number [(ngModel)]='rowItem.thanhToanTheoUsdKt' [nzStep]='1'
+              (ngModelChange)='tinhTyGiaUsdVnd($event)' [nzFormatter]='formatterDollar'
+              [nzParser]='parserDollar'></nz-input-number>
+          </th>
+
+          <th>
+            <input class='money-input' currencyMask [options]='amount' (ngModelChange)='tinhTyGiaVndUsd($event)'
+              [(ngModel)]='rowItem.chechLechVnd' nz-input />
+          </th>
+          <th>
+            <nz-input-number [(ngModel)]='rowItem.chechLechUsd' [nzStep]='1' (ngModelChange)='tinhTyGiaUsdVnd($event)'
+              [nzFormatter]='formatterDollar' [nzParser]='parserDollar'></nz-input-number>
+          </th>
+
           <th class='text-center'>
             <a (click)='addDetailDinhMucKtqd()' [ngClass]="{'isDisabled' : !isAddDetail}">
               <i class='icon htvbdh_dau-cong'></i>
@@ -586,11 +632,18 @@
               <td class='text-right'>{{item.soLuong | number : '1.0-3' : 'vi_VN'}}</td>
               <td class='text-right'>{{item.chiPhiTheoDinhMucNhapToiDa | number : '1.0-1' : 'vi_VN'}}</td>
               <td class='text-right'>{{item.chiPhiTheoDinhMucXuatToiDa | number : '1.0-1' : 'vi_VN'}}</td>
+              <td class='text-right'>{{item.chiPhiTheoDinhMucBqToiDa | number : '1.0-1' : 'vi_VN'}}</td>
               <td class='text-right'>{{item.chiPhiNhapToiDa | number : '1.0-1' : 'vi_VN'}}</td>
               <td class='text-right'>{{item.chiPhiXuatToiDa | number : '1.0-1' : 'vi_VN'}}</td>
+              <td class='text-right'>{{item.chiPhiBqToiDa | number : '1.0-1' : 'vi_VN'}}</td>
               <td class='text-right'>{{item.thanhToanTheoVnd | number : '1.0-1' : 'vi_VN'}}</td>
               <td class='text-right'>{{item.tyGia | number : '1.0-1' : 'vi_VN'}}</td>
               <td class='text-right'>{{item.thanhToanTheoUsd | number : '1.2-2' : 'vi_VN'}}</td>
+              <td class='text-right'>{{item.thanhToanTheoVndKt | number : '1.0-1' : 'vi_VN'}}</td>
+              <td class='text-right'>{{item.tyGiaKt | number : '1.0-1' : 'vi_VN'}}</td>
+              <td class='text-right'>{{item.thanhToanTheoUsdKt | number : '1.2-2' : 'vi_VN'}}</td>
+              <td class='text-right'>{{item.chechLechVnd | number : '1.0-1' : 'vi_VN'}}</td>
+              <td class='text-right'>{{item.chechLechUsd | number : '1.2-2' : 'vi_VN'}}</td>
               <td>
                 <a *ngIf='isViewDetail' (click)='viewRow(item,item.level)'>
                   <i class='fa fa-eye' title='Xem'></i>
