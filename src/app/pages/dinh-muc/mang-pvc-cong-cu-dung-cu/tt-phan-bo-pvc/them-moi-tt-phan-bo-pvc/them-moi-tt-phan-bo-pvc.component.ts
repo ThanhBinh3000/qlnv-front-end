@@ -277,7 +277,7 @@ export class ThemMoiTtPhanBoPvcComponent extends Base2Component implements OnIni
   }
 
   sumSlPb(item: any) {
-    let slPb = item.slTieuChuan - (item.slHienCo + item.slNhapThem + item.slThuHoiTaiSuDung)//item.soLuongTc ? item.soLuongTc : 0;
+    let slPb = item.soLuongTc ? item.soLuongTc : 0;
     let slChild = 0;
     let result = 0;
     if (item.dataChild && item.dataChild.length > 0) {
