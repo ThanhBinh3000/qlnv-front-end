@@ -97,6 +97,36 @@
       </div>
       <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
         <nz-form-item>
+          <nz-form-label>Mã số thuế</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-input-group>
+              <input nz-input formControlName="mst" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
+        <nz-form-item>
+          <nz-form-label>Số tài khoản</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-input-group>
+              <input nz-input formControlName="stk" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
+        <nz-form-item>
+          <nz-form-label>Mở tại</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-input-group>
+              <input nz-input formControlName="moTai" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
+        <nz-form-item>
           <nz-form-label>Trạng thái</nz-form-label>
           <label nz-checkbox formControlName="trangThai">Hoạt động</label>
         </nz-form-item>
