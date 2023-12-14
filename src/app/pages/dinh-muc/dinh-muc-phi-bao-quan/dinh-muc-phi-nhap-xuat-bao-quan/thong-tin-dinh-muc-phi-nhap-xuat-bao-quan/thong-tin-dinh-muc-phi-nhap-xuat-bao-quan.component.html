@@ -718,7 +718,7 @@
           <div nz-col nzSpan='12'>
             <nz-form-item>
               <nz-form-control [nzErrorTip]='error'>
-                <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Chi phí nhập tối đa
+                <nz-form-label [nzNoColon]='true' class='label-color-kh'> Chi phí nhập tối đa
                 </nz-form-label>
                 <input class="money-input" *ngIf='formDataDtl.value.level != 0' currencyMask
                   formControlName='chiPhiTheoDinhMucNhapToiDa' [options]="AMOUNT_THREE_DECIMAL"
@@ -731,7 +731,7 @@
           <div nz-col nzSpan='12'>
             <nz-form-item>
               <nz-form-control [nzErrorTip]='error'>
-                <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Chi phí xuất tối đa
+                <nz-form-label [nzNoColon]='true' class='label-color-kh'> Chi phí xuất tối đa
                 </nz-form-label>
                 <input class="money-input" *ngIf='formDataDtl.value.level != 0' currencyMask
                   formControlName='chiPhiTheoDinhMucXuatToiDa' [options]="AMOUNT_THREE_DECIMAL"
@@ -747,7 +747,7 @@
           <div nz-col nzSpan='12'>
             <nz-form-item>
               <nz-form-control [nzErrorTip]='error'>
-                <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Chi phí nhập tối đa
+                <nz-form-label [nzNoColon]='true' class='label-color-kh'> Chi phí nhập tối đa
                 </nz-form-label>
                 <input class="money-input" *ngIf='formDataDtl.value.level != 0' currencyMask
                   formControlName='chiPhiNhapToiDa' [options]="AMOUNT_THREE_DECIMAL" [readonly]='isViewDetail' />
@@ -759,7 +759,7 @@
           <div nz-col nzSpan='12'>
             <nz-form-item>
               <nz-form-control [nzErrorTip]='error'>
-                <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Chi phí xuất tối đa
+                <nz-form-label [nzNoColon]='true' class='label-color-kh'> Chi phí xuất tối đa
                 </nz-form-label>
                 <input class="money-input" *ngIf='formDataDtl.value.level != 0' currencyMask
                   formControlName='chiPhiXuatToiDa' [options]="AMOUNT_THREE_DECIMAL" [readonly]='isViewDetail' />
@@ -774,7 +774,7 @@
           <div nz-col nzSpan='10'>
             <nz-form-item>
               <nz-form-control [nzErrorTip]='error'>
-                <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Thanh toán theo VND (đồng)
+                <nz-form-label [nzNoColon]='true' class='label-color-kh'> Thanh toán theo VND (đồng)
                 </nz-form-label>
                 <input class="money-input" currencyMask formControlName='thanhToanTheoVnd' [readonly]='isViewDetail'
                   [options]="AMOUNT_THREE_DECIMAL" (ngModelChange)='changeTinhTyGiaVndUsd($event)' />
@@ -784,7 +784,7 @@
           <div nz-col nzSpan='7'>
             <nz-form-item>
               <nz-form-control [nzErrorTip]='error'>
-                <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Tỷ giá (đồng)
+                <nz-form-label [nzNoColon]='true' class='label-color-kh'> Tỷ giá (đồng)
                 </nz-form-label>
                 <input class="money-input" currencyMask formControlName='tyGia' [readonly]='isViewDetail'
                   (ngModelChange)='changeTinhTyGia($event)' [options]="AMOUNT_THREE_DECIMAL" />
@@ -794,7 +794,7 @@
           <div nz-col nzSpan='7'>
             <nz-form-item>
               <nz-form-control [nzErrorTip]='error'>
-                <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Thanh toán theo USD
+                <nz-form-label [nzNoColon]='true' class='label-color-kh'> Thanh toán theo USD
                 </nz-form-label>
                 <nz-input-number (change)='changeTinhTyGiaUsdVnd($event)' nz-input formControlName='thanhToanTheoUsd'
                   [nzStep]='1' [nzDisabled]='true' (ngModelChange)='tinhTyGiaUsdVnd($event)'
