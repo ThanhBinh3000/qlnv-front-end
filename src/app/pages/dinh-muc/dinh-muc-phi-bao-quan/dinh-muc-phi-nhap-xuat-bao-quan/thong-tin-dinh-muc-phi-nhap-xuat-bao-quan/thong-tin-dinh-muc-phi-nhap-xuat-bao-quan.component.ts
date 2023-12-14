@@ -147,13 +147,13 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       apDungTaiStr: [, [Validators.required]],
       donViTinh: [, [Validators.required]],
       soLuong: [, [Validators.required]],
-      chiPhiTheoDinhMucNhapToiDa: [, [Validators.required]],
-      chiPhiTheoDinhMucXuatToiDa: [, [Validators.required]],
-      chiPhiNhapToiDa: [, [Validators.required]],
-      chiPhiXuatToiDa: [, [Validators.required]],
-      thanhToanTheoVnd: [, [Validators.required]],
-      tyGia: [, [Validators.required]],
-      thanhToanTheoUsd: [, [Validators.required]],
+      chiPhiTheoDinhMucNhapToiDa: [],
+      chiPhiTheoDinhMucXuatToiDa: [],
+      chiPhiNhapToiDa: [],
+      chiPhiXuatToiDa: [],
+      thanhToanTheoVnd: [],
+      tyGia: [],
+      thanhToanTheoUsd: [],
     });
     this.filterTable = {};
     this.dataTableDetailKtqd.forEach(item => {
@@ -970,21 +970,22 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       msgRequired = 'Mã định mức không được để trống';
     } else if (!this.formDataDtl.value.apDungTaiStr) {
       msgRequired = 'Áp dụng tại cục không được để trống';
-    } else if (!this.formDataDtl.value.thanhToanTheoVnd) {
-      msgRequired = 'Thanh toán theo VNĐ không được để trống';
-    } else if (!this.formDataDtl.value.tyGia) {
-      msgRequired = 'Tỷ giá không được để trống';
-    } else if (!this.formDataDtl.value.thanhToanTheoUsd) {
-      msgRequired = 'Thanh toán theo USD không được để trống';
-    } else if (!this.formDataDtl.value.chiPhiTheoDinhMucNhapToiDa) {
-      msgRequired = 'Chi phí theo định mức không được để trống';
-    } else if (!this.formDataDtl.value.chiPhiTheoDinhMucXuatToiDa) {
-      msgRequired = 'Chi phí theo định mức không được để trống';
-    } else if (!this.formDataDtl.value.chiPhiNhapToiDa) {
-      msgRequired = 'Chi phí không theo định mức - chi phí nhập tối đa không được để trống';
-    } else if (!this.formDataDtl.value.chiPhiXuatToiDa) {
-      msgRequired = 'Chi phí không theo định mức - chi phí xuất tối đa không được để trống';
     }
+    // else if (!this.formDataDtl.value.thanhToanTheoVnd) {
+    //   msgRequired = 'Thanh toán theo VNĐ không được để trống';
+    // } else if (!this.formDataDtl.value.tyGia) {
+    //   msgRequired = 'Tỷ giá không được để trống';
+    // } else if (!this.formDataDtl.value.thanhToanTheoUsd) {
+    //   msgRequired = 'Thanh toán theo USD không được để trống';
+    // } else if (!this.formDataDtl.value.chiPhiTheoDinhMucNhapToiDa) {
+    //   msgRequired = 'Chi phí theo định mức không được để trống';
+    // } else if (!this.formDataDtl.value.chiPhiTheoDinhMucXuatToiDa) {
+    //   msgRequired = 'Chi phí theo định mức không được để trống';
+    // } else if (!this.formDataDtl.value.chiPhiNhapToiDa) {
+    //   msgRequired = 'Chi phí không theo định mức - chi phí nhập tối đa không được để trống';
+    // } else if (!this.formDataDtl.value.chiPhiXuatToiDa) {
+    //   msgRequired = 'Chi phí không theo định mức - chi phí xuất tối đa không được để trống';
+    // }
     if (this.formDataDtl.value.level == 0) {
       if (!this.formDataDtl.value.soLuong) {
         msgRequired = 'Số lượng không được để trống';
