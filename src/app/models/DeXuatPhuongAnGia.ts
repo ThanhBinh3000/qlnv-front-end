@@ -18,10 +18,12 @@ export class ThongTinKhaoSatGia {
   chiSoCpi : string;
   tenDviThamDinh: string;
   cloaiVthh: string;
+  donViTinh: string;
   tieuChuanCl: string;
   tenCloaiVthh: string;
   vat: number = 0;
   soLuong: number;
+  trichYeu: string;
   donGia: number;
   donGiaVat: number;
   thoiHanBaoGia: string;

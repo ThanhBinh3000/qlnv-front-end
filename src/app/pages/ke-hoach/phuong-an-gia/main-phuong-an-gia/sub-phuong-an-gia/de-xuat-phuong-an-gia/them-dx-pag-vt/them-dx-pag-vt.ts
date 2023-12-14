@@ -55,6 +55,8 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   dataTableKsGia: any[];
   dataTableCanCuXdg: any[] = [];
   dataTableKqGia: any[];
+  dataGdThanhCong: any[];
+  dataQdThamQuyen: any[];
   taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
   dsBoNganh: any[] = [];
@@ -757,7 +759,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     this.formData.controls["soDeXuat"].setValidators([Validators.required]);
     this.formData.controls["loaiVthh"].setValidators([Validators.required]);
     this.formData.controls["ngayKy"].setValidators([Validators.required]);
-    this.formData.controls["nguoiKy"].setValidators([Validators.required]);
     this.formData.controls["loaiGia"].setValidators([Validators.required]);
     this.formData.controls["maPphapXdg"].setValidators([Validators.required]);
     if ((this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03') && this.type == 'GMTDBTT') {

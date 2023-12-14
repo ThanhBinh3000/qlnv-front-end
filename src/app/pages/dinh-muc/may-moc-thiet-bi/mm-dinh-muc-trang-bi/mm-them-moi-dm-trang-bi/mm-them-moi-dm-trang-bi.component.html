@@ -177,7 +177,7 @@
           <td class="text-center"><label nz-checkbox nzDisabled [(ngModel)]="data.isCanCu"></label></td>
           <td class="text-center">{{data.slVpCucKv | number : '1.0-1' : 'vi_VN'}} </td>
           <td class="text-center" *ngIf="data.isCanCu">{{data.slChiCuc ? (data.slChiCuc | number : '1.0-1' : 'vi_VN') : ''}}/{{data.klChiCuc ? (data.klChiCuc | number : '1.0-1' : 'vi_VN') + ' tấn lương thực' : ''}}  {{data.tenLoaiHinh ? ' ('+ data.tenLoaiHinh + ')' : ''}}</td>
-          <td class="text-center"  *ngIf="!data.isCanCu" class="text-right">{{data.slChiCuc | number : '1.0-1' : 'vi_VN'}} </td>
+          <td class="text-center"  *ngIf="!data.isCanCu">{{data.slChiCuc | number : '1.0-1' : 'vi_VN'}} </td>
           <td class="text-right">{{data.donGiaTd | number : '1.0-3' : 'vi_VN'}}</td>
           <td>{{data.ghiChu}}</td>
           <td class="text-center" *ngIf="!isViewDetail">

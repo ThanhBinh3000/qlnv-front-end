@@ -2,30 +2,33 @@
   <thead>
   <tr>
     <th class="text-center" nzWidth="45px">STT</th>
-    <th *ngIf="!isTableKetQua && !isTabNdKhac" class="text-center"> Đơn vị thẩm định</th>
-    <th *ngIf="isTableKetQua && !isTabNdKhac" class="text-center"> Đơn vị báo giá, khảo sát giá</th>
-    <th *ngIf="isTabNdKhac" class="text-center"> Thông tin tham khảo</th>
+    <th class="text-center"> {{ isTableKetQua ? 'Đơn vị báo giá, khảo sát giá' : (isQdThamQuyen ? 'Đơn vị' : (isTabNdKhac ?'Thông tin tham khảo' : 'Đơn vị thẩm định')) }}</th>
+    <th *ngIf="isQdThamQuyen" class="text-center">Trích yếu</th>
     <th *ngIf="!isTabNdKhac" class="text-center">Chủng loại hàng DTQG - Tiêu chuẩn, quy chuẩn</th>
+    <th *ngIf="!isTabNdKhac" class="text-center">Đơn vị tính</th>
     <th class="text-center">Số lượng</th>
     <th class="text-center">Đơn giá chưa VAT (đồng)</th>
     <th *ngIf="isVat" class="text-center">Đơn giá có VAT (đồng)</th>
     <th *ngIf="isTabNdKhac" class="text-center">Chỉ số CPI</th>
-    <th *ngIf="isTableKetQua && !isTabNdKhac" class="text-center">Thời hạn báo giá</th>
-    <th *ngIf="!isTableKetQua && !isTabNdKhac" class="text-center">Thời hạn thẩm định</th>
-    <th class="text-center">File đính kèm</th>
+    <th *ngIf="isTableKetQua" class="text-center">Ngày báo giá</th>
+    <th *ngIf="!isQdThamQuyen && !isTabNdKhac" class="text-center">{{isTableKetQua ? 'Thời hạn báo giá' : 'Thời hạn thẩm định'}}</th>
     <th  class="text-center">Ghi chú</th>
+    <th class="text-center">File đính kèm</th>
     <th class="text-center" nzWidth="120px">Hành động</th>
   </tr>
   <tr *ngIf="!isView">
-    <th class="text-center"></th>
+    <th></th>
     <th *ngIf="!isTableKetQua && !isTabNdKhac">
       <input [readonly]="isView" type="text" [(ngModel)]="rowItem.tenDviThamDinh" nz-input/>
     </th>
-    <th *ngIf="isTableKetQua && !isTabNdKhac">
+    <th *ngIf="isTableKetQua">
       <input [readonly]="isView" type="text" [(ngModel)]="rowItem.tenDviBaoGia" nz-input/>
     </th>
     <th *ngIf="isTabNdKhac">
       <input [readonly]="isView" type="text" [(ngModel)]="rowItem.ttThamKhao" nz-input/>
+    </th>
+    <th *ngIf="isQdThamQuyen">
+      <input [readonly]="isView" type="text" [(ngModel)]="rowItem.trichYeu" nz-input/>
     </th>
     <th *ngIf="!isTabNdKhac">
       <nz-select [nzDisabled]="isView" [(ngModel)]="rowItem.cloaiVthh"
@@ -33,6 +36,12 @@
         <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of listCloaiVthh">
         </nz-option>
       </nz-select>
+    </th>
+    <th *ngIf="!isTabNdKhac">
+      <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="rowItem.donViTinh"
+                       [nzFormatter]="globals.formatter"
+                       [nzParser]="globals.parser">
+      </nz-input-number>
     </th>
     <th>
       <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="rowItem.soLuong"
@@ -46,19 +55,7 @@
                        [nzParser]="globals.parser">
       </nz-input-number>
     </th>
-    <th *ngIf="isVat && type =='GMTDBTT'">
-      <nz-input-number disabled [nzSize]="'small'" [(ngModel)]=" rowItem.donGia + rowItem.donGia * vat"
-                       [nzFormatter]="globals.formatter"
-                       [nzParser]="globals.parser">
-      </nz-input-number>
-    </th>
-    <th *ngIf="isVat && type =='GCT' && !isTabNdKhac">
-      <nz-input-number disabled [nzSize]="'small'" [(ngModel)]=" rowItem.donGia + rowItem.donGia * rowItem.vat"
-                       [nzFormatter]="globals.formatter"
-                       [nzParser]="globals.parser">
-      </nz-input-number>
-    </th>
-    <th *ngIf="isVat && type =='GCT' && isTabNdKhac">
+    <th *ngIf="isVat">
       <nz-input-number  [nzSize]="'small'" [(ngModel)]=" rowItem.donGiaVat"
                        [nzFormatter]="globals.formatter"
                        [nzParser]="globals.parser">
@@ -67,8 +64,16 @@
     <th *ngIf="isTabNdKhac">
       <input [readonly]="isView" type="text" [(ngModel)]="rowItem.chiSoCpi" nz-input/>
     </th>
-    <th *ngIf="!isTabNdKhac">
+    <th *ngIf="isTableKetQua">
+      <nz-date-picker [nzDisabled]="isView" [(ngModel)]="rowItem.ngayBaoGia" nzFormat="dd/MM/yyyy"
+                      class="search__input">
+      </nz-date-picker>
+    </th>
+    <th *ngIf="!isTabNdKhac && !isQdThamQuyen">
       <input [readonly]="isView" type="text" [(ngModel)]="rowItem.thoiHanBaoGia" nz-input/>
+    </th>
+    <th >
+      <input [readonly]="isView" type="text" [(ngModel)]="rowItem.ghiChu" nz-input/>
     </th>
     <th>
       <nz-form-control>
@@ -80,10 +85,6 @@
           <input class="input-file" (change)="getNameFile($event)" type="file"/>
         </ng-template>
       </nz-form-control>
-    </th>
-
-    <th >
-      <input [readonly]="isView" type="text" [(ngModel)]="rowItem.ghiChu" nz-input/>
     </th>
     <th style="text-align: center">
       <a *ngIf="!isView">
@@ -99,17 +100,20 @@
   <tr *ngFor="let data of dataTable; let idx = index">
     <ng-container *ngIf="!dataEdit[idx].edit ; else editTemplate ">
       <td class="text-center">{{ idx + 1 }}</td>
-      <td *ngIf="isTableKetQua && !isTabNdKhac">{{ data.tenDviBaoGia }}</td>
       <td *ngIf="!isTableKetQua && !isTabNdKhac">{{ data.tenDviThamDinh }}</td>
+      <td *ngIf="isTableKetQua">{{ data.tenDviBaoGia }}</td>
       <td *ngIf="isTabNdKhac">{{ data.ttThamKhao }}</td>
+      <td *ngIf="isQdThamQuyen">{{ data.trichYeu }}</td>
       <td *ngIf="!isTabNdKhac">{{ (data.tenCloaiVthh ? data.tenCloaiVthh : '' ) + (data.tieuChuanCl ? '; ' + data.tieuChuanCl : '' )}}</td>
+      <td *ngIf="!isTabNdKhac">{{data.tenCloaiVthh}}</td>
       <td class="text-right">{{data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
       <td class="text-right">{{data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
       <td class="text-right" *ngIf="isVat">{{data.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
-      <td *ngIf="!isTabNdKhac">{{data.thoiHanBaoGia }}</td>
+      <td *ngIf="isTableKetQua">{{data.ngayBaoGia | date: 'dd/MM/YYYY' }}</td>
+      <td *ngIf="!isTabNdKhac && !isQdThamQuyen">{{data.thoiHanBaoGia }}</td>
       <td *ngIf="isTabNdKhac">{{data.chiSoCpi }}</td>
-      <td>{{data.fileDinhKem?.fileName }}</td>
       <td>{{data.ghiChu }}</td>
+      <td>{{data.fileDinhKem?.fileName }}</td>
       <td style="text-align: center">
         <a (click)="downloadFile(data.fileDinhKem)">
           <i class="icon htvbdh_tcdt_import "></i>
@@ -123,68 +127,75 @@
       </td>
     </ng-container>
     <ng-template #editTemplate>
-      <td class="text-center"></td>
-      <td *ngIf="!isTableKetQua && !isTabNdKhac">
-        <input type="text" [(ngModel)]="dataEdit[idx].data.tenDviThamDinh" nz-input/>
-      </td>
-      <td *ngIf="isTableKetQua && !isTabNdKhac">
-        <input type="text" [(ngModel)]="dataEdit[idx].data.tenDviBaoGia" nz-input/>
-      </td>
-      <td *ngIf="isTabNdKhac">
-        <input type="text" [(ngModel)]="dataEdit[idx].data.ttThamKhao" nz-input/>
-      </td>
-      <td *ngIf="!isTabNdKhac">
-        <input type="text" [(ngModel)]="dataEdit[idx].data.cloaiVthh" nz-input/>
-      </td>
-      <td>
-        <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.soLuong" [nzFormatter]="globals.formatter"
-                         [nzParser]="globals.parser">
-        </nz-input-number>
-      </td>
-      <td>
-        <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.donGia" [nzFormatter]="globals.formatter"
-                         [nzParser]="globals.parser">
-        </nz-input-number>
-      </td>
-      <td *ngIf="isVat && type =='GMTDBTT'">
-        <nz-input-number disabled [nzSize]="'small'"
-                         [(ngModel)]="dataEdit[idx].data.donGia * vat + dataEdit[idx].data.donGia"
-                         [nzFormatter]="globals.formatter"
-                         [nzParser]="globals.parser">
-        </nz-input-number>
-      </td>
-      <th *ngIf="isVat && type =='GCT' && !isTabNdKhac">
-        <nz-input-number disabled [nzSize]="'small'" [(ngModel)]=" dataEdit[idx].data.donGia + dataEdit[idx].data.donGia * dataEdit[idx].data.vat"
+      <th></th>
+      <th *ngIf="!isTableKetQua && !isTabNdKhac">
+        <input [readonly]="isView" type="text" [(ngModel)]="dataEdit[idx].data.tenDviThamDinh" nz-input/>
+      </th>
+      <th *ngIf="isTableKetQua">
+        <input [readonly]="isView" type="text" [(ngModel)]="dataEdit[idx].data.tenDviBaoGia" nz-input/>
+      </th>
+      <th *ngIf="isTabNdKhac">
+        <input [readonly]="isView" type="text" [(ngModel)]="dataEdit[idx].data.ttThamKhao" nz-input/>
+      </th>
+      <th *ngIf="isQdThamQuyen">
+        <input [readonly]="isView" type="text" [(ngModel)]="dataEdit[idx].data.trichYeu" nz-input/>
+      </th>
+      <th *ngIf="!isTabNdKhac">
+        <nz-select [nzDisabled]="isView" [(ngModel)]="dataEdit[idx].data.cloaiVthh"
+                   (ngModelChange)="onChangeCloaiVthh($event)">
+          <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of listCloaiVthh">
+          </nz-option>
+        </nz-select>
+      </th>
+      <th *ngIf="!isTabNdKhac">
+        <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.donViTinh"
                          [nzFormatter]="globals.formatter"
                          [nzParser]="globals.parser">
         </nz-input-number>
       </th>
-      <th *ngIf="isVat && type =='GCT' && isTabNdKhac">
+      <th>
+        <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.soLuong"
+                         [nzFormatter]="globals.formatter"
+                         [nzParser]="globals.parser">
+        </nz-input-number>
+      </th>
+      <th>
+        <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.donGia"
+                         [nzFormatter]="globals.formatter"
+                         [nzParser]="globals.parser">
+        </nz-input-number>
+      </th>
+      <th *ngIf="isVat">
         <nz-input-number  [nzSize]="'small'" [(ngModel)]=" dataEdit[idx].data.donGiaVat"
                           [nzFormatter]="globals.formatter"
                           [nzParser]="globals.parser">
         </nz-input-number>
       </th>
-      <td *ngIf="!isTabNdKhac">
-        <input type="text" [(ngModel)]="dataEdit[idx].data.thoiHanBaoGia" nz-input/>
-      </td>
-      <td *ngIf="isTabNdKhac">
-        <input type="text" [(ngModel)]="dataEdit[idx].data.chiSoCpi" nz-input/>
-      </td>
-      <td>
+      <th *ngIf="isTabNdKhac">
+        <input [readonly]="isView" type="text" [(ngModel)]="dataEdit[idx].data.chiSoCpi" nz-input/>
+      </th>
+      <th *ngIf="isTableKetQua">
+        <nz-date-picker [nzDisabled]="isView" [(ngModel)]="dataEdit[idx].data.ngayBaoGia" nzFormat="dd/MM/yyyy"
+                        class="search__input">
+        </nz-date-picker>
+      </th>
+      <th *ngIf="!isTabNdKhac && !isQdThamQuyen">
+        <input [readonly]="isView" type="text" [(ngModel)]="dataEdit[idx].data.thoiHanBaoGia" nz-input/>
+      </th>
+      <th >
+        <input [readonly]="isView" type="text" [(ngModel)]="dataEdit[idx].data.ghiChu" nz-input/>
+      </th>
+      <th>
         <nz-form-control>
           <nz-input-group nzSize="large" [nzAddOnAfter]="suffixIcon">
             <input placeholder="Chọn file" [(ngModel)]="dataEdit[idx].data.fileDinhKem.fileName" nz-input disabled/>
           </nz-input-group>
           <ng-template #suffixIcon>
             <i class="icon htvbdh_tcdt_tep"></i>
-            <input class="input-file" (change)="getNameFile($event, '',null,dataEdit[idx].data )" type="file"/>
+            <input class="input-file" (change)="getNameFile($event)" type="file"/>
           </ng-template>
         </nz-form-control>
-      </td>
-      <td>
-        <input type="text" [(ngModel)]="dataEdit[idx].data.ghiChu" nz-input/>
-      </td>
+      </th>
       <td style="text-align: center">
         <a (click)="downloadFile(dataEdit[idx].data.fileDinhKem)">
           <i class="icon htvbdh_tcdt_import "></i>
