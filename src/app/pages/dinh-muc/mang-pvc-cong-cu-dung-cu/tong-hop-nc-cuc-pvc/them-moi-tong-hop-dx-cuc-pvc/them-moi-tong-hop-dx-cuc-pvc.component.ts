@@ -369,4 +369,30 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
   }
+
+  async luuVapheDuyet() {
+    this.formData.patchValue({
+      namKeHoach: this.formDataTongHop.value.namKeHoach,
+    });
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      return;
+    }
+    if (this.fileDinhKem && this.fileDinhKem.length > 0) {
+      this.formData.value.fileDinhKems = this.fileDinhKem;
+    }
+    this.conVertTreToList();
+    this.formData.value.listQlDinhMucPvcDxCcdcDtl = this.dataTable;
+    this.formData.value.maDvi = this.userInfo.MA_DVI;
+    this.formData.value.capDvi = this.userInfo.CAP_DVI;
+    let res = await this.createUpdate(this.formData.value);
+    if(res){
+      this.formData.patchValue({
+        id: res.id
+      });
+      this.id = res.id;
+      this.convertListData();
+      this.pheDuyet();
+    }
+  }
 }
