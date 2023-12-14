@@ -34,6 +34,7 @@ import { Base2Component } from '../../../../../components/base2/base2.component'
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from '../../../../../services/storage.service';
 import { TongHopTheoDoiCapVonService } from '../../../../../services/ke-hoach/von-phi/tongHopTheoDoiCapVon.service';
+import { QuyetDinhTtcpService } from '../../../../../services/quyetDinhTtcp.service';
 
 @Component({
   selector: 'app-thong-tin-de-nghi-cap-von-bo-nganh',
@@ -62,6 +63,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent extends Base2Component impleme
   listLoaiHangHoa: any[] = [];
   listLoaiTien: any[] = [];
   errorInputRequired: string = 'Dữ liệu không được để trống.';
+  dataQdTtcp: any;
   listPhuongThucThanhToan: any[] = [
     {
       ma: '1',
@@ -136,6 +138,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent extends Base2Component impleme
     thanhTien: null,
     thanhTienNt: null,
     slDeNghiCapVon: null,
+    slTheoQdTtcp: 0,
     donViTinh: null,
   };
 
@@ -163,6 +166,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent extends Base2Component impleme
     modal: NzModalService,
     public userService: UserService,
     private donviService: DonviService,
+    private quyetDinhTtcpService: QuyetDinhTtcpService,
     private tongHopTheoDoiCapVonService: TongHopTheoDoiCapVonService,
     private deNghiCapVonBoNganhService: DeNghiCapVonBoNganhService,
   ) {
@@ -342,6 +346,25 @@ export class ThongTinDeNghiCapVonBoNganhComponent extends Base2Component impleme
     if (hangHoa) {
       this.rowItemDetailHhh.tenLoaiVthh = hangHoa.tenHangHoa;
       this.rowItemDetailHhh.donViTinh = hangHoa.maDviTinh;
+      // lấy số theo qd của ttcp
+      let bn = this.dsBoNganh.find(item => item.code == this.formData.get('boNganh').value);
+      if (bn && this.dataQdTtcp && this.dataQdTtcp.listBoNganh) {
+        let dataTtcp = this.dataQdTtcp.listBoNganh.find(it => it.maBoNganh == bn.key);
+        if (dataTtcp && dataTtcp.muaTangList && dataTtcp.muaTangList.length > 0) {
+          let itemHangs = dataTtcp.muaTangList.filter(hang => hang.loaiVthh == this.rowItemDetailHhh.loaiVthh);
+          if (itemHangs && itemHangs.length == 1) {
+            this.rowItemDetailHhh.slTheoQdTtcp = itemHangs ? itemHangs[0].soLuong : 0;
+          }
+        }
+      }
+    }
+  }
+
+  async loadDataQdTtcp() {
+    this.dataQdTtcp = {};
+    let res = await this.quyetDinhTtcpService.chiTietTheoNam(this.formData.value.nam);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dataQdTtcp = res.data;
     }
   }
 
@@ -350,6 +373,14 @@ export class ThongTinDeNghiCapVonBoNganhComponent extends Base2Component impleme
     if (item) {
       this.rowItemDetailHhh.tenCloaiVthh = item.tenHangHoa;
       this.rowItemDetailHhh.donViTinh = item.maDviTinh;
+      let bn = this.dsBoNganh.find(item => item.code == this.formData.get('boNganh').value);
+      if (bn && this.dataQdTtcp && this.dataQdTtcp.listBoNganh) {
+        let dataTtcp = this.dataQdTtcp.listBoNganh.find(it => it.maBoNganh == bn.key);
+        if (dataTtcp && dataTtcp.muaTangList && dataTtcp.muaTangList.length > 0) {
+          let itemHangs = dataTtcp.muaTangList.filter(hang => hang.loaiVthh == this.rowItemDetailHhh.loaiVthh && hang.cloaiVthh == this.rowItemDetailHhh.cloaiVthh);
+          this.rowItemDetailHhh.slTheoQdTtcp = (itemHangs && itemHangs.length > 0) ? itemHangs[0].soLuong : 0;
+        }
+      }
     }
   }
 
@@ -558,6 +589,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent extends Base2Component impleme
       thanhTien: null,
       thanhTienNt: null,
       slDeNghiCapVon: null,
+      slTheoQdTtcp: null,
       donViTinh: null,
     };
   }
@@ -855,6 +887,10 @@ export class ThongTinDeNghiCapVonBoNganhComponent extends Base2Component impleme
   thongTinTrangThai(trangThai: string): string {
     return thongTinTrangThaiNhap(trangThai);
   }
+
+  changYear($event: Event) {
+    this.loadDataQdTtcp();
+  }
 }
 
 interface IDeNghiCapVon {
@@ -903,6 +939,7 @@ export class ItemDetailHh {
   thanhTien: number;
   thanhTienNt: number;
   slDeNghiCapVon: number;
+  slTheoQdTtcp: number;
   donViTinh: number;
 }
 
