@@ -173,7 +173,7 @@
           <td>{{ data.namKeHoach }}</td>
           <td>{{ data.soCongVan }}</td>
           <td *ngIf="userService.isTongCuc()">{{ data.tenDvi }}</td>
-          <td>{{ data.ngayDuyet | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.ngayDuyet | date: 'dd/MM/yyyy' }}</td>
           <td>{{ data.namBatDau && data.namKetThuc ? data.namBatDau + ' - ' + data.namKetThuc : '' }}</td>
           <td class="text-right">{{ data.tmdt | number: '1.0-1' : 'vi-VN' }}</td>
           <td>{{data.trichYeu}}</td>
