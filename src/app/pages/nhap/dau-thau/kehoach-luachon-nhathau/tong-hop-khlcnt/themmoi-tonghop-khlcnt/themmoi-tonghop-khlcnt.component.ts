@@ -111,6 +111,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
       maTh: [],
       ngayTrinh: [, [Validators.required]],
       soTtr: [, [Validators.required]],
+      listMaDvi: null,
     })
 
   }
@@ -256,6 +257,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
   async save() {
     let pipe = new DatePipe('en-US');
     let body = this.formData.value;
+    body.listMaDvi = this.formTraCuu.value.listMaDvi
     body.ngayTrinh = pipe.transform(body.ngayTrinh, 'yyyy-MM-dd HH:mm')
     body.fileDinhKems = this.listFileDinhKem;
     let data = await this.createUpdate(body, 'NHDTQG_PTDT_KHLCNT_TONGHOP_TONGHOP');
