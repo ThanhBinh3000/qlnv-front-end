@@ -483,15 +483,17 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td></td>
                             <td
-                              class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'tmdtDuKien', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
+                              class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'tmdtDuKien', item.khoi,true) | number : '1.0-1' : 'vi_VN'}}
+                            </td>
                             <td
-                              class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'nstwDuKien', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
+                              class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'nstwDuKien', item.khoi,true) | number : '1.0-1' : 'vi_VN'}}</td>
                             <td
-                              class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'ncKhTongSo', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
+                              class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'ncKhTongSo', item.khoi,true) | number : '1.0-1' : 'vi_VN'}}</td>
                             <td
-                              class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'ncKhNstw', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
+                              class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'ncKhNstw', item.khoi,true) | number : '1.0-1' : 'vi_VN'}}</td>
+                            <td
+                              class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'vonDauTu', item.khoi,true) | number : '1.0-1' : 'vi_VN'}}</td>
                             <td nzRight *ngIf="isViewDetail"></td>
                           </tr>
                           <ng-container *ngIf="expandSet.has(item.idVirtual)">
@@ -538,15 +540,16 @@
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td></td>
                       <td class="font-weight-bold text-right"
-                          style="color: blue">{{sumSoLuong(null, 'tmdtDuKien', null) | number : '1.0-1' : 'vi_VN'}}</td>
+                          style="color: blue">{{sumSoLuong(null, 'tmdtDuKien', null,true) | number : '1.0-1' : 'vi_VN'}}</td>
                       <td class="font-weight-bold text-right"
-                          style="color: blue">{{sumSoLuong(null, 'nstwDuKien', null) | number : '1.0-1' : 'vi_VN'}}</td>
+                          style="color: blue">{{sumSoLuong(null, 'nstwDuKien', null,true) | number : '1.0-1' : 'vi_VN'}}</td>
                       <td class="font-weight-bold text-right"
-                          style="color: blue">{{sumSoLuong(null, 'ncKhTongSo', null) | number : '1.0-1' : 'vi_VN'}}</td>
+                          style="color: blue">{{sumSoLuong(null, 'ncKhTongSo', null,true) | number : '1.0-1' : 'vi_VN'}}</td>
                       <td class="font-weight-bold text-right"
-                          style="color: blue">{{sumSoLuong(null, 'ncKhNstw', null) | number : '1.0-1' : 'vi_VN'}}</td>
+                          style="color: blue">{{sumSoLuong(null, 'ncKhNstw', null,true) | number : '1.0-1' : 'vi_VN'}}</td>
+                      <td class="font-weight-bold text-right"
+                          style="color: blue">{{sumSoLuong(null, 'vonDauTu', null,true) | number : '1.0-1' : 'vi_VN'}}</td>
                       <td nzRight *ngIf="isViewDetail"></td>
                     </tr>
                     </tfoot>
