@@ -492,20 +492,26 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       body.soTtrDc = this.formData.value.soTtrDc + this.maTrinh;
     }
     let pipe = new DatePipe('en-US');
-    if (this.thongtinDieuchinhComponent.formData.value.tgianMthauTime != null) {
-      this.danhsachDx[this.index].tgianMthau = pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianMthau, 'yyyy-MM-dd') + " " + pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianMthauTime, 'HH:mm') + ":00"
-    } else {
-      this.danhsachDx[this.index].tgianMthau = pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianMthau, 'yyyy-MM-dd')  + " 00:00:00"
+    if (this.thongtinDieuchinhComponent.formData.value.tgianMthau != null) {
+      if (this.thongtinDieuchinhComponent.formData.value.tgianMthauTime != null) {
+        this.danhsachDx[this.index].tgianMthau = pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianMthau, 'yyyy-MM-dd') + " " + pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianMthauTime, 'HH:mm') + ":00"
+      } else {
+        this.danhsachDx[this.index].tgianMthau = pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianMthau, 'yyyy-MM-dd')  + " 00:00:00"
+      }
     }
-    if (this.thongtinDieuchinhComponent.formData.value.tgianDthauTime != null) {
-      this.danhsachDx[this.index].tgianDthau =  pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianDthau, 'yyyy-MM-dd') + " " + pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianDthauTime, 'HH:mm') + ":00"
-    } else {
-      this.danhsachDx[this.index].tgianDthau =  pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianDthau, 'yyyy-MM-dd') + " 23:59:59"
+    if (this.thongtinDieuchinhComponent.formData.value.tgianDthau) {
+      if (this.thongtinDieuchinhComponent.formData.value.tgianDthauTime != null) {
+        this.danhsachDx[this.index].tgianDthau =  pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianDthau, 'yyyy-MM-dd') + " " + pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianDthauTime, 'HH:mm') + ":00"
+      } else {
+        this.danhsachDx[this.index].tgianDthau =  pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianDthau, 'yyyy-MM-dd') + " 23:59:59"
+      }
     }
-    if (this.thongtinDieuchinhComponent.formData.value.tgianMoHoSoTime != null) {
-      this.danhsachDx[this.index].tgianMoHoSo = pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianMoHoSo, 'yyyy-MM-dd') + " " + pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianMoHoSoTime, 'HH:mm') + ":00"
-    } else {
-      this.danhsachDx[this.index].tgianMoHoSo =   pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianMoHoSo, 'yyyy-MM-dd') + " 23:59:59"
+    if (this.thongtinDieuchinhComponent.formData.value.tgianMoHoSo != null) {
+      if (this.thongtinDieuchinhComponent.formData.value.tgianMoHoSoTime != null) {
+        this.danhsachDx[this.index].tgianMoHoSo = pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianMoHoSo, 'yyyy-MM-dd') + " " + pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianMoHoSoTime, 'HH:mm') + ":00"
+      } else {
+        this.danhsachDx[this.index].tgianMoHoSo =   pipe.transform(this.thongtinDieuchinhComponent.formData.value.tgianMoHoSo, 'yyyy-MM-dd') + " 23:59:59"
+      }
     }
     this.danhsachDx[this.index].tgianBdauTchuc = this.thongtinDieuchinhComponent.formData.value.tgianBdauTchuc
     this.danhsachDx[this.index].tgianNhang = this.thongtinDieuchinhComponent.formData.value.tgianNhang

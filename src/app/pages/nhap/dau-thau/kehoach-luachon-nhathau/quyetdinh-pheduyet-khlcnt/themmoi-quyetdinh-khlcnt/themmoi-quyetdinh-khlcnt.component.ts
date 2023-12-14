@@ -539,16 +539,18 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   }
 
   async getDataChiTieu(id) {
-    await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachNam(id).then((res) => {
-      if (res.msg == MESSAGE.SUCCESS) {
-        this.dataChiTieu = res.data;
-      }
-    }).catch((e) => {
-      this.dataChiTieu = null;
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    });
+    if (id > 0) {
+      await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachNam(id).then((res) => {
+        if (res.msg == MESSAGE.SUCCESS) {
+          this.dataChiTieu = res.data;
+        }
+      }).catch((e) => {
+        this.dataChiTieu = null;
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      });
+    }
   }
 
   async openDialogTh() {
@@ -602,13 +604,14 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
           await this.dauThauService.getDetail(item.idDxHdr).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               item.children = res.data.dsGtDtlList;
+              item.idChiTieuKhNam = res.data.idChiTieuKhNam;
             }
           })
         };
         this.danhsachDxCache = cloneDeep(this.danhsachDx);
         this.dataInput = null;
         this.dataInputCache = null;
-        await this.showFirstRow(event, this.danhsachDx[0])
+        await this.showFirstRow(event, 0)
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -752,6 +755,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       if (this.formData.get('id').value) {
         await this.getDataChiTieu(this.danhsachDx[index].dxuatKhLcntHdr?.idChiTieuKhNam)
       } else {
+        console.log(this.danhsachDx[index])
         await this.getDataChiTieu(this.danhsachDx[index].idChiTieuKhNam)
       }
       await this.spinner.hide();

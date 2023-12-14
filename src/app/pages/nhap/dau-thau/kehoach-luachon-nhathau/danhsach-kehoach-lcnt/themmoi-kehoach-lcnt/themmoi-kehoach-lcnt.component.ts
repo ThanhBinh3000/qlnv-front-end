@@ -764,10 +764,12 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     if (tgianBdauTchuc >= tgianMthau) {
       this.notification.error(MESSAGE.ERROR, "Thời gian bắt đầu tổ chức không được vượt quá thời gian mở thầu")
       return false
-    } else if (tgianMthau >= tgianDthau) {
-      this.notification.error(MESSAGE.ERROR, "Thời gian mở thầu không được vượt quá thời gian đóng thầu")
-      return false
-    } else if (tgianDthau >= tgianNhang) {
+    }
+    // else if (tgianMthau >= tgianDthau) {
+    //   this.notification.error(MESSAGE.ERROR, "Thời gian mở thầu không được vượt quá thời gian đóng thầu")
+    //   return false
+    // }
+    else if (tgianDthau >= tgianNhang) {
       this.notification.error(MESSAGE.ERROR, "Thời gian đóng thầu không được vượt quá thời gian nhập hàng")
       return false
     }
