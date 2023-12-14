@@ -155,11 +155,18 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       soLuong: [, [Validators.required]],
       chiPhiTheoDinhMucNhapToiDa: [],
       chiPhiTheoDinhMucXuatToiDa: [],
+      chiPhiTheoDinhMucBqToiDa: [],
       chiPhiNhapToiDa: [],
       chiPhiXuatToiDa: [],
+      chiPhiBqToiDa: [],
       thanhToanTheoVnd: [],
       tyGia: [],
       thanhToanTheoUsd: [],
+      thanhToanTheoVndKt: [],
+      tyGiaKt: [],
+      thanhToanTheoUsdKt: [],
+      chechLechVnd: [],
+      chechLechUsd: [],
     });
     this.filterTable = {};
     this.dataTableDetailKtqd.forEach(item => {
@@ -743,16 +750,23 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       soLuong: undefined,
       chiPhiTheoDinhMucNhapToiDa: undefined,
       chiPhiTheoDinhMucXuatToiDa: undefined,
+      chiPhiTheoDinhMucBqToiDa: undefined,
       // loaiVthh: undefined,
       // tenLoaiVthh: undefined,
       // cloaiVthh: undefined,
       // tenCloaiVthh: undefined,
       loaiDinhMuc: undefined,
+      chiPhiNhapToiDa: undefined,
+      chiPhiXuatToiDa: undefined,
+      chiPhiBqToiDa: undefined,
       thanhToanTheoVnd: undefined,
       tyGia: undefined,
       thanhToanTheoUsd: undefined,
-      chiPhiNhapToiDa: undefined,
-      chiPhiXuatToiDa: undefined,
+      thanhToanTheoVndKt: undefined,
+      tyGiaKt: undefined,
+      thanhToanTheoUsdKt: undefined,
+      chechLechVnd: undefined,
+      chechLechUsd: undefined,
     });
   }
 
@@ -818,6 +832,8 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
   }
 
   tinhTyGiaVndUsd($event: any) {
+    if (this.rowItem.thanhToanTheoVndKt)
+      this.rowItem.chechLechVnd = this.rowItem.thanhToanTheoVndKt - $event;
     if (!this.rowItem.tyGia) {
       this.rowItem.tyGia = 0;
     }
@@ -828,6 +844,9 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       this.rowItem.thanhToanTheoUsd = 0;
     } else {
       this.rowItem.thanhToanTheoUsd = $event / this.rowItem.tyGia;
+      if (this.rowItem.thanhToanTheoUsdKt)
+        this.rowItem.chechLechUsd = this.rowItem.thanhToanTheoUsdKt - this.rowItem.thanhToanTheoUsd;
+
     }
   }
 
@@ -842,6 +861,10 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       this.rowItem.thanhToanTheoVnd = 0;
     }
     this.rowItem.thanhToanTheoVnd = $event * this.rowItem.tyGia;
+    if (this.rowItem.thanhToanTheoUsdKt)
+      this.rowItem.chechLechUsd = this.rowItem.thanhToanTheoUsdKt - $event;
+    if (this.rowItem.thanhToanTheoVndKt)
+      this.rowItem.chechLechVnd = this.rowItem.thanhToanTheoVndKt - this.rowItem.thanhToanTheoVnd;
   }
 
   tinhTyGia($event: any) {
@@ -856,9 +879,15 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     }
     this.rowItem.thanhToanTheoUsd = this.rowItem.thanhToanTheoVnd / $event;
     this.rowItem.thanhToanTheoVnd = this.rowItem.thanhToanTheoUsd * $event;
+    if (this.rowItem.thanhToanTheoVndKt)
+      this.rowItem.chechLechVnd = this.rowItem.thanhToanTheoVndKt - this.rowItem.thanhToanTheoVnd;
+    if (this.rowItem.thanhToanTheoUsdKt)
+      this.rowItem.chechLechUsd = this.rowItem.thanhToanTheoUsdKt - this.rowItem.thanhToanTheoUsd;
   }
 
   tinhTyGiaVndUsdKT($event: any) {
+    if (this.rowItem.thanhToanTheoVnd)
+      this.rowItem.chechLechVnd = $event - this.rowItem.thanhToanTheoVnd;
     if (!this.rowItem.tyGiaKt) {
       this.rowItem.tyGiaKt = 0;
     }
@@ -869,6 +898,9 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       this.rowItem.thanhToanTheoUsdKt = 0;
     } else {
       this.rowItem.thanhToanTheoUsdKt = $event / this.rowItem.tyGiaKt;
+      if (this.rowItem.thanhToanTheoUsd)
+        this.rowItem.chechLechUsd = this.rowItem.thanhToanTheoUsdKt - this.rowItem.thanhToanTheoUsd;
+
     }
   }
 
@@ -883,6 +915,10 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       this.rowItem.thanhToanTheoVndKt = 0;
     }
     this.rowItem.thanhToanTheoVndKt = $event * this.rowItem.tyGiaKt;
+    if (this.rowItem.thanhToanTheoUsd)
+      this.rowItem.chechLechUsd = this.rowItem.thanhToanTheoUsdKt - $event;
+    if (this.rowItem.thanhToanTheoVnd)
+      this.rowItem.chechLechVnd = this.rowItem.thanhToanTheoVndKt - this.rowItem.thanhToanTheoVnd;
   }
 
   tinhTyGiaKT($event: any) {
@@ -897,6 +933,10 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     }
     this.rowItem.thanhToanTheoUsdKt = this.rowItem.thanhToanTheoVndKt / $event;
     this.rowItem.thanhToanTheoVndKt = this.rowItem.thanhToanTheoUsdKt * $event;
+    if (this.rowItem.thanhToanTheoVnd)
+      this.rowItem.chechLechVnd = this.rowItem.thanhToanTheoVndKt - this.rowItem.thanhToanTheoVnd;
+    if (this.rowItem.thanhToanTheoUsd)
+      this.rowItem.chechLechUsd = this.rowItem.thanhToanTheoUsdKt - this.rowItem.thanhToanTheoUsd;
   }
 
   changeMaDinhMuc(value: string, attr: any): void {
@@ -941,6 +981,11 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
   }
 
   changeTinhTyGiaVndUsd(event: any) {
+    if (this.formDataDtl.value.thanhToanTheoVndKt) {
+      this.formDataDtl.patchValue({
+        chechLechVnd: this.formDataDtl.value.thanhToanTheoVndKt - event,
+      });
+    }
     if (!this.formDataDtl.value.tyGia) {
       this.formDataDtl.value.tyGia = 0;
     }
@@ -953,6 +998,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       this.formDataDtl.patchValue({
         thanhToanTheoUsd: event / this.formDataDtl.value.tyGia,
       });
+
     }
   }
 
@@ -971,22 +1017,6 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     });
   }
 
-  calcuLateTong(type, idx?) {
-    if (type === 'ADD') {
-      this.rowItem.tongCongMucChiVpCuc = (this.rowItem.nvChuyenMonTc ? this.rowItem.nvChuyenMonTc : 0) + (this.rowItem.ttCaNhanTc ? this.rowItem.ttCaNhanTc : 0) + (this.rowItem.tcDieuHanhTc ? this.rowItem.tcDieuHanhTc : 0);
-      this.rowItem.congMucChiVpCuc = (this.rowItem.nvChuyenMonTc ? this.rowItem.nvChuyenMonTc : 0) + (this.rowItem.ttCaNhanTc ? this.rowItem.ttCaNhanTc : 0);
-      this.rowItem.tongCongMucChiCuc = (this.rowItem.nvChuyenMonKv ? this.rowItem.nvChuyenMonKv : 0) + (this.rowItem.ttCaNhanKv ? this.rowItem.ttCaNhanKv : 0) + (this.rowItem.tcDieuHanhKv ? this.rowItem.tcDieuHanhKv : 0);
-      this.rowItem.congMucChiCuc = (this.rowItem.nvChuyenMonKv ? this.rowItem.nvChuyenMonKv : 0) + (this.rowItem.ttCaNhanKv ? this.rowItem.ttCaNhanKv : 0);
-      this.rowItem.tongDinhMucChiDonVi = (this.rowItem.tongCongMucChiVpCuc ? this.rowItem.tongCongMucChiVpCuc : 0) + (this.rowItem.tcDieuHanhTc ? this.rowItem.tcDieuHanhTc : 0);
-    } else {
-      this.dataEdit[idx].data.tongCongMucChiVpCuc = (this.dataEdit[idx].data.nvChuyenMonTc ? this.dataEdit[idx].data.nvChuyenMonTc : 0) + (this.dataEdit[idx].data.ttCaNhanTc ? this.dataEdit[idx].data.ttCaNhanTc : 0) + (this.dataEdit[idx].data.tcDieuHanhTc ? this.dataEdit[idx].data.tcDieuHanhTc : 0);
-      this.dataEdit[idx].data.congMucChiVpCuc = (this.dataEdit[idx].data.nvChuyenMonTc ? this.dataEdit[idx].data.nvChuyenMonTc : 0) + (this.dataEdit[idx].data.ttCaNhanTc ? this.dataEdit[idx].data.ttCaNhanTc : 0);
-      this.dataEdit[idx].data.tongCongMucChiCuc = (this.dataEdit[idx].data.nvChuyenMonKv ? this.dataEdit[idx].data.nvChuyenMonKv : 0) + (this.dataEdit[idx].data.ttCaNhanKv ? this.dataEdit[idx].data.ttCaNhanKv : 0) + (this.dataEdit[idx].data.tcDieuHanhKv ? this.dataEdit[idx].data.tcDieuHanhKv : 0);
-      this.dataEdit[idx].data.congMucChiCuc = (this.dataEdit[idx].data.nvChuyenMonKv ? this.dataEdit[idx].data.nvChuyenMonKv : 0) + (this.dataEdit[idx].data.ttCaNhanKv ? this.dataEdit[idx].data.ttCaNhanKv : 0);
-      this.dataEdit[idx].data.tongDinhMucChiDonVi = (this.dataEdit[idx].data.tongCongMucChiVpCuc ? this.dataEdit[idx].data.tongCongMucChiVpCuc : 0) + (this.dataEdit[idx].data.tcDieuHanhTc ? this.dataEdit[idx].data.tcDieuHanhTc : 0);
-    }
-  }
-
   changeTinhTyGia(event: any) {
     if (!this.formDataDtl.value.tyGia) {
       this.formDataDtl.value.tyGia = 0;
@@ -1003,7 +1033,91 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     // this.formDataDtl.patchValue({
     //   thanhToanTheoVnd: this.formDataDtl.value.thanhToanTheoUsd * event,
     // });
+    if (this.formDataDtl.value.thanhToanTheoUsdKt) {
+      this.formDataDtl.patchValue({
+        chechLechUsd: this.formData.value.thanhToanTheoUsdKt - (this.formDataDtl.value.thanhToanTheoVnd / event),
+      });
+    }
   }
+
+  changeTinhTyGiaVndUsdKt(event: any) {
+    if (this.formDataDtl.value.thanhToanTheoVnd) {
+      this.formDataDtl.patchValue({
+        chechLechVnd: event - this.formDataDtl.value.thanhToanTheoVnd,
+      });
+    }
+    if (!this.formDataDtl.value.tyGiaKt) {
+      this.formDataDtl.value.tyGiaKt = 0;
+    }
+    if (!this.formDataDtl.value.thanhToanTheoUsdKt) {
+      this.formDataDtl.value.thanhToanTheoUsdKt = 0;
+    }
+    if (this.formDataDtl.value.tyGiaKt == 0) {
+      this.formDataDtl.value.thanhToanTheoUsdKt = 0;
+    } else {
+      this.formDataDtl.patchValue({
+        thanhToanTheoUsdKt: event / this.formDataDtl.value.tyGiaKt,
+      });
+
+    }
+  }
+
+  changeTinhTyGiaUsdVndKt($event: any) {
+    if (!this.formDataDtl.value.tyGiaKt) {
+      this.formDataDtl.value.tyGiaKt = 0;
+    }
+    if (!this.formDataDtl.value.thanhToanTheoVndKt) {
+      this.formDataDtl.value.thanhToanTheoVndKt = 0;
+    }
+    if (this.formDataDtl.value.tyGiaKt == 0) {
+      this.formDataDtl.value.thanhToanTheoVndKt = 0;
+    }
+    this.formDataDtl.patchValue({
+      thanhToanTheoVndKt: $event.target.value * this.formDataDtl.value.tyGiaKt,
+    });
+
+  }
+
+  changeTinhTyGiaKt(event: any) {
+    if (!this.formDataDtl.value.tyGiaKt) {
+      this.formDataDtl.value.tyGiaKt = 0;
+    }
+    if (!this.formDataDtl.value.thanhToanTheoVndKt) {
+      this.formDataDtl.value.thanhToanTheoVndKt = 0;
+    }
+    if (!this.formDataDtl.value.thanhToanTheoUsdKt) {
+      this.formDataDtl.value.thanhToanTheoUsdKt = 0;
+    }
+    this.formDataDtl.patchValue({
+      thanhToanTheoUsdKt: this.formDataDtl.value.thanhToanTheoVndKt / event,
+    });
+    // this.formDataDtl.patchValue({
+    //   thanhToanTheoVnd: this.formDataDtl.value.thanhToanTheoUsd * event,
+    // });
+    if (this.formDataDtl.value.thanhToanTheoUsd) {
+      this.formDataDtl.patchValue({
+        chechLechUsd: (this.formDataDtl.value.thanhToanTheoVndKt / event) - this.formDataDtl.value.thanhToanTheoUsd,
+      });
+    }
+  }
+
+  calcuLateTong(type, idx?) {
+    if (type === 'ADD') {
+      this.rowItem.tongCongMucChiVpCuc = (this.rowItem.nvChuyenMonTc ? this.rowItem.nvChuyenMonTc : 0) + (this.rowItem.ttCaNhanTc ? this.rowItem.ttCaNhanTc : 0) + (this.rowItem.tcDieuHanhTc ? this.rowItem.tcDieuHanhTc : 0);
+      this.rowItem.congMucChiVpCuc = (this.rowItem.nvChuyenMonTc ? this.rowItem.nvChuyenMonTc : 0) + (this.rowItem.ttCaNhanTc ? this.rowItem.ttCaNhanTc : 0);
+      this.rowItem.tongCongMucChiCuc = (this.rowItem.nvChuyenMonKv ? this.rowItem.nvChuyenMonKv : 0) + (this.rowItem.ttCaNhanKv ? this.rowItem.ttCaNhanKv : 0) + (this.rowItem.tcDieuHanhKv ? this.rowItem.tcDieuHanhKv : 0);
+      this.rowItem.congMucChiCuc = (this.rowItem.nvChuyenMonKv ? this.rowItem.nvChuyenMonKv : 0) + (this.rowItem.ttCaNhanKv ? this.rowItem.ttCaNhanKv : 0);
+      this.rowItem.tongDinhMucChiDonVi = (this.rowItem.tongCongMucChiVpCuc ? this.rowItem.tongCongMucChiVpCuc : 0) + (this.rowItem.tcDieuHanhTc ? this.rowItem.tcDieuHanhTc : 0);
+    } else {
+      this.dataEdit[idx].data.tongCongMucChiVpCuc = (this.dataEdit[idx].data.nvChuyenMonTc ? this.dataEdit[idx].data.nvChuyenMonTc : 0) + (this.dataEdit[idx].data.ttCaNhanTc ? this.dataEdit[idx].data.ttCaNhanTc : 0) + (this.dataEdit[idx].data.tcDieuHanhTc ? this.dataEdit[idx].data.tcDieuHanhTc : 0);
+      this.dataEdit[idx].data.congMucChiVpCuc = (this.dataEdit[idx].data.nvChuyenMonTc ? this.dataEdit[idx].data.nvChuyenMonTc : 0) + (this.dataEdit[idx].data.ttCaNhanTc ? this.dataEdit[idx].data.ttCaNhanTc : 0);
+      this.dataEdit[idx].data.tongCongMucChiCuc = (this.dataEdit[idx].data.nvChuyenMonKv ? this.dataEdit[idx].data.nvChuyenMonKv : 0) + (this.dataEdit[idx].data.ttCaNhanKv ? this.dataEdit[idx].data.ttCaNhanKv : 0) + (this.dataEdit[idx].data.tcDieuHanhKv ? this.dataEdit[idx].data.tcDieuHanhKv : 0);
+      this.dataEdit[idx].data.congMucChiCuc = (this.dataEdit[idx].data.nvChuyenMonKv ? this.dataEdit[idx].data.nvChuyenMonKv : 0) + (this.dataEdit[idx].data.ttCaNhanKv ? this.dataEdit[idx].data.ttCaNhanKv : 0);
+      this.dataEdit[idx].data.tongDinhMucChiDonVi = (this.dataEdit[idx].data.tongCongMucChiVpCuc ? this.dataEdit[idx].data.tongCongMucChiVpCuc : 0) + (this.dataEdit[idx].data.tcDieuHanhTc ? this.dataEdit[idx].data.tcDieuHanhTc : 0);
+    }
+  }
+
+
 
   saveAddEdit() {
     if (!this.formDataDtl.value.uuid) {
