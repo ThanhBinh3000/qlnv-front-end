@@ -578,26 +578,25 @@
           </th>
 
           <th>
-            <input class='money-input' currencyMask [options]='amount' (ngModelChange)='tinhTyGiaVndUsd($event)'
+            <input class='money-input' currencyMask [options]='amount' (ngModelChange)='tinhTyGiaVndUsdKT($event)'
               [(ngModel)]='rowItem.thanhToanTheoVndKt' nz-input />
           </th>
           <th>
-            <input class='money-input' currencyMask [options]='amount' (ngModelChange)='tinhTyGia($event)'
+            <input class='money-input' currencyMask [options]='amount' (ngModelChange)='tinhTyGiaKT($event)'
               [(ngModel)]='rowItem.tyGiaKt' nz-input />
           </th>
           <th>
             <nz-input-number [(ngModel)]='rowItem.thanhToanTheoUsdKt' [nzStep]='1'
-              (ngModelChange)='tinhTyGiaUsdVnd($event)' [nzFormatter]='formatterDollar'
+              (ngModelChange)='tinhTyGiaUsdVndKT($event)' [nzFormatter]='formatterDollar'
               [nzParser]='parserDollar'></nz-input-number>
           </th>
 
           <th>
-            <input class='money-input' currencyMask [options]='amount' (ngModelChange)='tinhTyGiaVndUsd($event)'
-              [(ngModel)]='rowItem.chechLechVnd' nz-input />
+            <input class='money-input' currencyMask [options]='amount' [(ngModel)]='rowItem.chechLechVnd' nz-input />
           </th>
           <th>
-            <nz-input-number [(ngModel)]='rowItem.chechLechUsd' [nzStep]='1' (ngModelChange)='tinhTyGiaUsdVnd($event)'
-              [nzFormatter]='formatterDollar' [nzParser]='parserDollar'></nz-input-number>
+            <nz-input-number [(ngModel)]='rowItem.chechLechUsd' [nzStep]='1' [nzFormatter]='formatterDollar'
+              [nzParser]='parserDollar'></nz-input-number>
           </th>
 
           <th class='text-center'>

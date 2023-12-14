@@ -858,6 +858,47 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     this.rowItem.thanhToanTheoVnd = this.rowItem.thanhToanTheoUsd * $event;
   }
 
+  tinhTyGiaVndUsdKT($event: any) {
+    if (!this.rowItem.tyGiaKt) {
+      this.rowItem.tyGiaKt = 0;
+    }
+    if (!this.rowItem.thanhToanTheoUsdKt) {
+      this.rowItem.thanhToanTheoUsdKt = 0;
+    }
+    if (this.rowItem.tyGiaKt == 0) {
+      this.rowItem.thanhToanTheoUsdKt = 0;
+    } else {
+      this.rowItem.thanhToanTheoUsdKt = $event / this.rowItem.tyGiaKt;
+    }
+  }
+
+  tinhTyGiaUsdVndKT($event: any) {
+    if (!this.rowItem.tyGiaKt) {
+      this.rowItem.tyGiaKt = 0;
+    }
+    if (!this.rowItem.thanhToanTheoVndKt) {
+      this.rowItem.thanhToanTheoVndKt = 0;
+    }
+    if (this.rowItem.tyGiaKt == 0) {
+      this.rowItem.thanhToanTheoVndKt = 0;
+    }
+    this.rowItem.thanhToanTheoVndKt = $event * this.rowItem.tyGiaKt;
+  }
+
+  tinhTyGiaKT($event: any) {
+    if (!this.rowItem.tyGiaKt) {
+      this.rowItem.tyGiaKt = 0;
+    }
+    if (!this.rowItem.thanhToanTheoVndKt) {
+      this.rowItem.thanhToanTheoVndKt = 0;
+    }
+    if (!this.rowItem.thanhToanTheoUsdKt) {
+      this.rowItem.thanhToanTheoUsdKt = 0;
+    }
+    this.rowItem.thanhToanTheoUsdKt = this.rowItem.thanhToanTheoVndKt / $event;
+    this.rowItem.thanhToanTheoVndKt = this.rowItem.thanhToanTheoUsdKt * $event;
+  }
+
   changeMaDinhMuc(value: string, attr: any): void {
     let item;
     if (attr == 'ma') {
