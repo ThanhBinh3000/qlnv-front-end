@@ -16,6 +16,8 @@ import {
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
 import {QuyetDinhGiaTCDTNNService} from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
 import {AMOUNT_ONE_DECIMAL} from "../../../Utility/utils";
+import * as uuid from "uuid";
+import {cloneDeep} from 'lodash';
 
 @Component({
   selector: 'app-dialog-them-dia-diem-phan-lo',
@@ -34,6 +36,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   giaToiDa: any;
   dataEdit: any;
   listOfData: any[] = [];
+  listOfDataClone: any[] = [];
   selectedChiCuc: boolean = false;
   isValid: boolean = false;
   userInfo: UserLogin;
@@ -306,7 +309,6 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   }
 
   async changeLoKho(index?, isboolean?) {
-    console.log(this.listLoKho, 999)
     const dataToUpdate = index >= 0 ? this.editCache[index].data : this.thongtinPhanLo;
     if (index >= 0) {
       if (isboolean) await this.closeKho('loKho', index);
@@ -400,7 +402,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   }
 
   async addDiemKho() {
-    if (this.validateDiemKho() && this.validateSoLuong()) {
+    if (this.validateKho() && this.validate()) {
       this.listOfData.push(this.thongtinPhanLo);
       this.thongtinPhanLo = new DanhSachPhanLo();
       this.updateEditCache();
@@ -416,21 +418,14 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     });
   }
 
-  validateDiemKho(): boolean {
-    const {maDiemKho, maNhaKho, maNganKho, maDviTsan, soLuongDeXuat, donGiaDeXuat,} = this.thongtinPhanLo;
-    if (maDiemKho && maNhaKho && maNganKho && maDviTsan && soLuongDeXuat && donGiaDeXuat) {
-      const data = this.listOfData.find(
-        item => item.maDiemKho === maDiemKho && item.maNhaKho === maNhaKho && item.maNganKho === maNganKho);
-      if (data && (!this.thongtinPhanLo.maLoKho || !data.maLoKho)) {
-        this.notification.error(MESSAGE.ERROR, "Điểm kho, ngăn kho, lô kho đã tồn tại. Xin vui lòng chọn lại");
+  validateKho() {
+    const data = this.thongtinPhanLo;
+    if (data.maDiemKho && data.maNhaKho && data.maNganKho && data.maDviTsan && data.soLuongDeXuat && data.donGiaDeXuat) {
+      const {maDiemKho, maNhaKho, maNganKho, maLoKho} = data;
+      const existingData = this.listOfData.find(item => item.maDiemKho === maDiemKho && item.maNhaKho === maNhaKho && item.maNganKho === maNganKho);
+      if (existingData && (!maLoKho || !existingData.maLoKho || existingData.maLoKho === maLoKho)) {
+        this.notification.error(MESSAGE.ERROR, "Điểm kho, nhà kho, ngăn kho, lô kho đã tồn tại. Xin vui lòng chọn lại!");
         return false;
-      }
-      if (this.thongtinPhanLo.maLoKho && data) {
-        const loKho = data.maLoKho === this.thongtinPhanLo.maLoKho;
-        if (loKho) {
-          this.notification.error(MESSAGE.ERROR, "Điểm kho, ngăn kho, lô kho đã tồn tại. Xin vui lòng chọn lại");
-          return false;
-        }
       }
       return true;
     } else {
@@ -439,30 +434,46 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     }
   }
 
-  validateSoLuong() {
+  validate(index?: number) {
     const {slChiTieu, tongSlKeHoachDd} = this.formData.value;
-    const {tonKho, soLuongDeXuat, donGiaDeXuat, maDviTsan} = this.thongtinPhanLo;
-    const tongSoLuong = this.listOfData.reduce((total, item) => total + item.soLuongDeXuat, 0);
-    // const maDonViTsan = this.listOfData.find(item => item.maDviTsan)?.maDviTsan;
-    // if (maDonViTsan == maDviTsan) {
-    //   this.notification.error(MESSAGE.ERROR, `Mã đơn vị tài sản (${maDonViTsan}) đã bị trùng với mã đơn vị tài sản trước đó vui lòng nhập lại`);
-    //   return false;
-    // } else
-    if (soLuongDeXuat > tonKho) {
-      this.notification.error(MESSAGE.ERROR, "Số lượng đề xuất đã vượt quá số lượng tồn kho. Xin vui lòng nhập lại");
-      return false;
-    } else if (soLuongDeXuat > slChiTieu - tongSlKeHoachDd) {
-      this.notification.error(MESSAGE.ERROR, "Số lượng đề xuất đã vượt quá số lượng chỉ tiêu. Xin vui lòng nhập lại");
-      return false;
-    } else if (tongSoLuong > slChiTieu - tongSlKeHoachDd) {
-      this.notification.error(MESSAGE.ERROR, "Tổng số lượng đã vượt quá số lượng chỉ tiêu. Xin vui lòng nhập lại");
-      return false;
-    } else if (donGiaDeXuat < this.giaToiDa) {
-      this.notification.error(MESSAGE.ERROR, `Đơn giá đề xuất phải lớn hơn hoặc bằng giá bán tối thiểu (${this.giaToiDa.toLocaleString()} đ)`);
-      return false;
+    if (index !== undefined && index >= 0) {
+      this.listOfDataClone = cloneDeep(this.listOfData)
+      const data = this.listOfDataClone[index];
+      const dataEdit = this.editCache[index].data;
+      if (data.soLuongDeXuat !== dataEdit.soLuongDeXuat) {
+        data.soLuongDeXuat = dataEdit.soLuongDeXuat;
+      }
+      const totalSoLuongDeXuat = this.listOfDataClone.reduce((prev, cur) => prev + cur.soLuongDeXuat, 0);
+      if (dataEdit.soLuongDeXuat > dataEdit.tonKho || dataEdit.soLuongDeXuat > slChiTieu - tongSlKeHoachDd || totalSoLuongDeXuat > slChiTieu - tongSlKeHoachDd || dataEdit.donGiaDeXuat < this.giaToiDa) {
+        this.notification.error(MESSAGE.ERROR, this.getErrorNotificationMessage(dataEdit, slChiTieu, tongSlKeHoachDd, totalSoLuongDeXuat));
+        return false;
+      }
     } else {
-      return true;
+      this.thongtinPhanLo.idVirtual = uuid.v4();
+      const exists = this.listOfDataClone.find(item => item.idVirtual === this.thongtinPhanLo.idVirtual);
+      if (!exists) {
+        this.listOfDataClone.push(this.thongtinPhanLo);
+      }
+      const totalSoLuongDeXuat = this.listOfDataClone.reduce((prev, cur) => prev + cur.soLuongDeXuat, 0);
+      if (this.thongtinPhanLo.soLuongDeXuat > this.thongtinPhanLo.tonKho || this.thongtinPhanLo.soLuongDeXuat > slChiTieu - tongSlKeHoachDd || totalSoLuongDeXuat > slChiTieu - tongSlKeHoachDd || this.thongtinPhanLo.donGiaDeXuat < this.giaToiDa) {
+        this.notification.error(MESSAGE.ERROR, this.getErrorNotificationMessage(this.thongtinPhanLo, slChiTieu, tongSlKeHoachDd, totalSoLuongDeXuat));
+        return false;
+      }
     }
+    return true;
+  }
+
+  getErrorNotificationMessage(data: any, slChiTieu: number, tongSlKeHoachDd: number, totalSoLuongDeXuat: number): string {
+    if (data.soLuongDeXuat > data.tonKho) {
+      return "Số lượng đề xuất đã vượt quá số lượng tồn kho. Xin vui lòng nhập lại!";
+    } else if (data.soLuongDeXuat > slChiTieu - tongSlKeHoachDd) {
+      return "Số lượng đề xuất đã vượt quá số lượng chỉ tiêu. Xin vui lòng nhập lại!";
+    } else if (totalSoLuongDeXuat > slChiTieu - tongSlKeHoachDd) {
+      return "Tổng số lượng đã vượt quá số lượng chỉ tiêu. Xin vui lòng nhập lại!";
+    } else if (data.donGiaDeXuat < this.giaToiDa) {
+      return `Đơn giá đề xuất phải lớn hơn hoặc bằng giá bán tối thiểu (${this.giaToiDa.toLocaleString()} đ)`;
+    }
+    return "";
   }
 
   async clearDiemKho() {
@@ -478,13 +489,11 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   }
 
   async cancelEdit(index: number) {
-    if (this.validateSoLuongEdit(index)) {
-      this.editCache[index].edit = false
-    }
+    this.editCache[index].edit = false
   }
 
   async saveEdit(index: number) {
-    if (this.validateSoLuongEdit(index)) {
+    if (this.validate(index)) {
       const editedData = this.editCache[index].data;
       if (!this.isDataEqual(this.listOfData[index], editedData)) {
         Object.assign(this.listOfData[index], editedData);
@@ -496,26 +505,6 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
 
   isDataEqual(obj1: any, obj2: any): boolean {
     return JSON.stringify(obj1) === JSON.stringify(obj2);
-  }
-
-  validateSoLuongEdit(index) {
-    const soLuongConLai = this.formData.value.slChiTieu - this.formData.value.tongSlKeHoachDd
-    if (this.listOfData[index].soLuongDeXuat != this.editCache[index].data.soLuongDeXuat) {
-      this.listOfData[index].soLuongDeXuat = this.editCache[index].data.soLuongDeXuat;
-    }
-    const tongSoLuong = this.listOfData.reduce((total, item) => total + item.soLuongDeXuat, 0);
-    if (this.editCache[index].data.soLuongDeXuat > soLuongConLai) {
-      this.notification.error(MESSAGE.ERROR, "Số lượng đã vượt quá chỉ tiêu. Xin vui lòng nhập lại.");
-      return false;
-    } else if (tongSoLuong > soLuongConLai) {
-      this.notification.error(MESSAGE.ERROR, "Tổng số lượng đã vượt quá chỉ tiêu. Xin vui lòng nhập lại.");
-      return false;
-    } else if (this.editCache[index].data.donGiaDeXuat < this.giaToiDa) {
-      this.notification.error(MESSAGE.ERROR, `Đơn giá đề xuất phải lớn hơn hoặc bằng giá bán tối thiểu (${this.giaToiDa.toLocaleString()} đ)`);
-      return false;
-    } else {
-      return true;
-    }
   }
 
   async deleteRow(i: number) {

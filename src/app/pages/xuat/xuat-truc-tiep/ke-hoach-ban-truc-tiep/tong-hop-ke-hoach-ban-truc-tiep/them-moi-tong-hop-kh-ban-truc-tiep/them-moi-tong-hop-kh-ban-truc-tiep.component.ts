@@ -187,11 +187,8 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
       await this.helperService.ignoreRequiredForm(this.formData);
       this.formData.controls["noiDungThop"].setValidators([Validators.required]);
       const body = this.formData.value;
-      let data = null
-      if (!body.id && body.id === null) {
-        data = await this.createUpdate(body);
-        body.id = data.id
-      }
+      let data = await this.createUpdate(body);
+      body.id = data.id
       await this.helperService.restoreRequiredForm(this.formData);
       if (isQuyetDinh && body.id) {
         this.taoQuyetDinhPd();
