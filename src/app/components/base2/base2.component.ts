@@ -719,6 +719,7 @@ export class Base2Component implements OnInit {
     this.selectedFile = event.target.files[0] as File;
     if (await this.isExcelFile(this.selectedFile)) {
       await this.uploadFile();
+      await this.spinner.hide();
     } else{
       await this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, 'Chọn file đuôi .xlsx');

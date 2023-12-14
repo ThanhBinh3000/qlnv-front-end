@@ -13,6 +13,7 @@ import { MESSAGE } from "../../../../../constants/message";
 import { cloneDeep } from "lodash";
 import { Base2Component } from "../../../../../components/base2/base2.component";
 import { DanhMucService } from "../../../../../services/danhmuc.service";
+import {CurrencyMaskInputMode} from "ngx-currency";
 @Component({
   selector: 'app-them-moi-tong-chi-mua-hang',
   templateUrl: './them-moi-tong-chi-mua-hang.component.html',
@@ -46,6 +47,19 @@ export class ThemMoiTongChiMuaHangComponent extends Base2Component implements On
   listNguonVon: any[] = [];
   ghiChu: string = "Dấu “x” tại các hàng trong biểu là nội dung không phải tổng hợp, báo cáo.";
   templateName: any
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "right",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -163,10 +177,10 @@ export class ThemMoiTongChiMuaHangComponent extends Base2Component implements On
 
   addRowNgoaiNguon(): void {
     if (this.validateItemNnSave(this.itemRowNgoaiNguon)) {
-      this.itemRowNgoaiNguon.tongTrongKy = this.nvl(this.itemRowNgoaiNguon.muaTangTrongKy) + this.nvl(this.itemRowNgoaiNguon.muaBuTrongKy)
-        + this.nvl(this.itemRowNgoaiNguon.muaBsungTrongKy) + this.nvl(this.itemRowNgoaiNguon.khacTrongKy);
-      this.itemRowNgoaiNguon.tongLuyKe = this.nvl(this.itemRowNgoaiNguon.muaTangLuyKe) + this.nvl(this.itemRowNgoaiNguon.muaBuLuyKe)
-        + this.nvl(this.itemRowNgoaiNguon.muaBsungLuyKe) + this.nvl(this.itemRowNgoaiNguon.khacLuyKe);
+      // this.itemRowNgoaiNguon.tongTrongKy = this.nvl(this.itemRowNgoaiNguon.muaTangTrongKy) + this.nvl(this.itemRowNgoaiNguon.muaBuTrongKy)
+      //   + this.nvl(this.itemRowNgoaiNguon.muaBsungTrongKy) + this.nvl(this.itemRowNgoaiNguon.khacTrongKy);
+      // this.itemRowNgoaiNguon.tongLuyKe = this.nvl(this.itemRowNgoaiNguon.muaTangLuyKe) + this.nvl(this.itemRowNgoaiNguon.muaBuLuyKe)
+      //   + this.nvl(this.itemRowNgoaiNguon.muaBsungLuyKe) + this.nvl(this.itemRowNgoaiNguon.khacLuyKe);
       this.itemRowNgoaiNguon.dmLevel = 2;
       this.dataNguonNgoaiNsnn = [
         ...this.dataNguonNgoaiNsnn,
@@ -217,10 +231,10 @@ export class ThemMoiTongChiMuaHangComponent extends Base2Component implements On
 
   saveEditRowNgoaiNguon(index: number) {
     if (this.validateItemSave(this.itemRowNgoaiNguonEdit[index])) {
-      this.itemRowNgoaiNguonEdit[index].tongTrongKy = this.nvl(this.itemRowNgoaiNguonEdit[index].muaTangTrongKy) + this.nvl(this.itemRowNgoaiNguonEdit[index].muaBuTrongKy)
-        + this.nvl(this.itemRowNgoaiNguonEdit[index].muaBsungTrongKy) + this.nvl(this.itemRowNgoaiNguonEdit[index].khacTrongKy);
-      this.itemRowNgoaiNguonEdit[index].tongLuyKe = this.nvl(this.itemRowNgoaiNguonEdit[index].muaTangLuyKe) + this.nvl(this.itemRowNgoaiNguonEdit[index].muaBuLuyKe)
-        + this.nvl(this.itemRowNgoaiNguonEdit[index].muaBsungLuyKe) + this.nvl(this.itemRowNgoaiNguonEdit[index].khacLuyKe);
+      // this.itemRowNgoaiNguonEdit[index].tongTrongKy = this.nvl(this.itemRowNgoaiNguonEdit[index].muaTangTrongKy) + this.nvl(this.itemRowNgoaiNguonEdit[index].muaBuTrongKy)
+      //   + this.nvl(this.itemRowNgoaiNguonEdit[index].muaBsungTrongKy) + this.nvl(this.itemRowNgoaiNguonEdit[index].khacTrongKy);
+      // this.itemRowNgoaiNguonEdit[index].tongLuyKe = this.nvl(this.itemRowNgoaiNguonEdit[index].muaTangLuyKe) + this.nvl(this.itemRowNgoaiNguonEdit[index].muaBuLuyKe)
+      //   + this.nvl(this.itemRowNgoaiNguonEdit[index].muaBsungLuyKe) + this.nvl(this.itemRowNgoaiNguonEdit[index].khacLuyKe);
       this.dataNguonNgoaiNsnn[index] = this.itemRowNgoaiNguonEdit[index];
       this.dataNguonNgoaiNsnn[index].edit = false;
     }
@@ -265,6 +279,7 @@ export class ThemMoiTongChiMuaHangComponent extends Base2Component implements On
       res = await this.bcBnTt108Service.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
+      this.idInput = res.data.id;
       if (this.formData.get("id").value) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
       } else {
