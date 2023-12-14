@@ -59,9 +59,9 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
       slGaoDangBaoQuan: [0, Validators.required],
       slThocDangBaoQuan: [0, Validators.required],
       trichYeu: [null, Validators.required],
-      trangThai: ['00'],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
       trangThaiTh: [],
-      tenTrangThai: ['Dự thảo'],
+      tenTrangThai: ['Đang nhập dữ liệu'],
       fileDinhKems: [null],
       lyDoTuChoi: [null],
       listQlDinhMucDxTbmmTbcdDtl: [null],
@@ -172,12 +172,12 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
   async pheDuyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.DU_THAO:
+      case STATUS.DANG_NHAP_DU_LIEU:
       case STATUS.TUCHOI_CB_CUC: {
         trangThai = STATUS.DA_KY;
         break;
       }
-      case STATUS.DA_KY: {
+      case STATUS.DA_DUYET_LDCC: {
         trangThai = STATUS.DADUYET_CB_CUC
       }
     }

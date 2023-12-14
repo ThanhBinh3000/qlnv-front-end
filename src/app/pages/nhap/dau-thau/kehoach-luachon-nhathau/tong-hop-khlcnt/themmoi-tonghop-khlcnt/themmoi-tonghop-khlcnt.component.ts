@@ -22,6 +22,7 @@ import { saveAs } from "file-saver";
 import {PREVIEW} from "../../../../../../constants/fileType";
 import printJS from "print-js";
 import {DonviService} from "../../../../../../services/donvi.service";
+import {DatePipe} from "@angular/common";
 
 @Component({
   selector: 'app-themmoi-tonghop-khlcnt',
@@ -253,12 +254,14 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
 
 
   async save() {
+    let pipe = new DatePipe('en-US');
     let body = this.formData.value;
+    body.ngayTrinh = pipe.transform(body.ngayTrinh, 'yyyy-MM-dd HH:mm')
     body.fileDinhKems = this.listFileDinhKem;
     let data = await this.createUpdate(body, 'NHDTQG_PTDT_KHLCNT_TONGHOP_TONGHOP');
     if (data) {
       this.id = data.id;
-      await this.loadChiTiet();
+      // await this.loadChiTiet();
       this.isView = true
       this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
     }

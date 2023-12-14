@@ -729,6 +729,10 @@
   </div>
 </nz-modal>
 <ng-template #themMoiGt>
+  <button type="button" class="btn btn-sub xanh" *ngIf="!isDisbleForm()" (click)="danhSachGthauTruot($event)">
+    <i class="icon htvbdh_coppy"></i>
+    <span>Lấy thông tin các gói thầu đã trượt</span>
+  </button>
   <button type="button" class="btn btn-sub xanh" *ngIf="!isDisbleForm()" (click)="themMoiGoiThau($event)">
     <i class="icon htvbdh_dau-cong"></i>
     <span>Thêm</span>

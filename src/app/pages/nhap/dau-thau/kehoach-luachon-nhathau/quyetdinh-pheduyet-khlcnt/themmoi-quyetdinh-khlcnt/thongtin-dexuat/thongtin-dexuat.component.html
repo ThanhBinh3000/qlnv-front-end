@@ -285,6 +285,16 @@
         </nz-form-control>
       </nz-form-item>
     </div>
+    <div nz-col nzSpan="24" *ngIf="isQdTongCuc">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true">
+          File đính kèm quyết định PD KH LCNT cho Cục DTNN
+        </nz-form-label>
+        <div class="list-file">
+          <file-list [isViewDetail]="isView" [data]="fileDinhKem"></file-list>
+        </div>
+      </nz-form-item>
+    </div>
   </div>
 </form>
   </nz-collapse-panel>

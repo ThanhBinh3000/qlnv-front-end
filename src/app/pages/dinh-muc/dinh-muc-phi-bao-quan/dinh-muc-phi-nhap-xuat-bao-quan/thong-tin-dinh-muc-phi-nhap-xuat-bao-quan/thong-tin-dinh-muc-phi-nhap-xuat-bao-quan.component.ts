@@ -9,10 +9,11 @@ import { QlDinhMucPhiService } from '../../../../../services/qlnv-kho/QlDinhMucP
 import { FormGroup, Validators } from '@angular/forms';
 import { DinhMucPhiNxBq } from '../../../../../models/DinhMucPhi';
 import { MESSAGE } from '../../../../../constants/message';
+import { saveAs } from 'file-saver';
 import { DanhMucDinhMucService } from '../../../../../services/danh-muc-dinh-muc.service';
 import { DanhMucService } from '../../../../../services/danhmuc.service';
 import { DonviService } from '../../../../../services/donvi.service';
-import { AMOUNT_NO_DECIMAL, AMOUNT_ONE_DECIMAL } from '../../../../../Utility/utils';
+import { AMOUNT_NO_DECIMAL, AMOUNT_ONE_DECIMAL, AMOUNT_THREE_DECIMAL } from '../../../../../Utility/utils';
 import { STATUS } from '../../../../../constants/status';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -87,6 +88,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
   showDlgAddEdit: boolean = false;
   sttEdit: number;
   AMOUNT = AMOUNT_NO_DECIMAL;
+  AMOUNT_THREE_DECIMAL = AMOUNT_THREE_DECIMAL
   formatterDollar = (value: number): string => {
     if (value) {
       let valueStr = value.toFixed(2);
@@ -462,13 +464,14 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       msgRequired = 'Áp dụng tại cục không được để trống';
     } else if (!this.rowItem.soLuong) {
       msgRequired = 'Số lượng không được để trống';
-    } else if (!this.rowItem.thanhToanTheoVnd) {
-      msgRequired = 'Thanh toán theo VNĐ không được để trống';
-    } else if (!this.rowItem.tyGia) {
-      msgRequired = 'Tỷ giá không được để trống';
-    } else if (!this.rowItem.thanhToanTheoUsd) {
-      msgRequired = 'Thanh toán theo USD không được để trống';
     }
+    // else if (!this.rowItem.thanhToanTheoVnd) {
+    //   msgRequired = 'Thanh toán theo VNĐ không được để trống';
+    // } else if (!this.rowItem.tyGia) {
+    //   msgRequired = 'Tỷ giá không được để trống';
+    // } else if (!this.rowItem.thanhToanTheoUsd) {
+    //   msgRequired = 'Thanh toán theo USD không được để trống';
+    // }
 
     if (msgRequired) {
       this.notification.error(MESSAGE.ERROR, msgRequired);
@@ -621,7 +624,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
 
   editRowTqd(stt: number) {
     this.dataEdit[stt].edit = true;
-    this.calcuLateTong('EDIT',stt);
+    this.calcuLateTong('EDIT', stt);
   }
 
   editRowKtqd(item: any, level: number) {
@@ -733,10 +736,10 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       soLuong: undefined,
       chiPhiTheoDinhMucNhapToiDa: undefined,
       chiPhiTheoDinhMucXuatToiDa: undefined,
-      loaiVthh: undefined,
-      tenLoaiVthh: undefined,
-      cloaiVthh: undefined,
-      tenCloaiVthh: undefined,
+      // loaiVthh: undefined,
+      // tenLoaiVthh: undefined,
+      // cloaiVthh: undefined,
+      // tenCloaiVthh: undefined,
       loaiDinhMuc: undefined,
       thanhToanTheoVnd: undefined,
       tyGia: undefined,
@@ -889,7 +892,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     }
   }
 
-  changeTinhTyGiaVndUsd($event: any) {
+  changeTinhTyGiaVndUsd(event: any) {
     if (!this.formDataDtl.value.tyGia) {
       this.formDataDtl.value.tyGia = 0;
     }
@@ -900,7 +903,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       this.formDataDtl.value.thanhToanTheoUsd = 0;
     } else {
       this.formDataDtl.patchValue({
-        thanhToanTheoUsd: $event.target.value / this.formDataDtl.value.tyGia,
+        thanhToanTheoUsd: event / this.formDataDtl.value.tyGia,
       });
     }
   }
@@ -920,14 +923,14 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     });
   }
 
-  calcuLateTong(type,idx?) {
+  calcuLateTong(type, idx?) {
     if (type === 'ADD') {
       this.rowItem.tongCongMucChiVpCuc = (this.rowItem.nvChuyenMonTc ? this.rowItem.nvChuyenMonTc : 0) + (this.rowItem.ttCaNhanTc ? this.rowItem.ttCaNhanTc : 0) + (this.rowItem.tcDieuHanhTc ? this.rowItem.tcDieuHanhTc : 0);
       this.rowItem.congMucChiVpCuc = (this.rowItem.nvChuyenMonTc ? this.rowItem.nvChuyenMonTc : 0) + (this.rowItem.ttCaNhanTc ? this.rowItem.ttCaNhanTc : 0);
       this.rowItem.tongCongMucChiCuc = (this.rowItem.nvChuyenMonKv ? this.rowItem.nvChuyenMonKv : 0) + (this.rowItem.ttCaNhanKv ? this.rowItem.ttCaNhanKv : 0) + (this.rowItem.tcDieuHanhKv ? this.rowItem.tcDieuHanhKv : 0);
       this.rowItem.congMucChiCuc = (this.rowItem.nvChuyenMonKv ? this.rowItem.nvChuyenMonKv : 0) + (this.rowItem.ttCaNhanKv ? this.rowItem.ttCaNhanKv : 0);
       this.rowItem.tongDinhMucChiDonVi = (this.rowItem.tongCongMucChiVpCuc ? this.rowItem.tongCongMucChiVpCuc : 0) + (this.rowItem.tcDieuHanhTc ? this.rowItem.tcDieuHanhTc : 0);
-    }else{
+    } else {
       this.dataEdit[idx].data.tongCongMucChiVpCuc = (this.dataEdit[idx].data.nvChuyenMonTc ? this.dataEdit[idx].data.nvChuyenMonTc : 0) + (this.dataEdit[idx].data.ttCaNhanTc ? this.dataEdit[idx].data.ttCaNhanTc : 0) + (this.dataEdit[idx].data.tcDieuHanhTc ? this.dataEdit[idx].data.tcDieuHanhTc : 0);
       this.dataEdit[idx].data.congMucChiVpCuc = (this.dataEdit[idx].data.nvChuyenMonTc ? this.dataEdit[idx].data.nvChuyenMonTc : 0) + (this.dataEdit[idx].data.ttCaNhanTc ? this.dataEdit[idx].data.ttCaNhanTc : 0);
       this.dataEdit[idx].data.tongCongMucChiCuc = (this.dataEdit[idx].data.nvChuyenMonKv ? this.dataEdit[idx].data.nvChuyenMonKv : 0) + (this.dataEdit[idx].data.ttCaNhanKv ? this.dataEdit[idx].data.ttCaNhanKv : 0) + (this.dataEdit[idx].data.tcDieuHanhKv ? this.dataEdit[idx].data.tcDieuHanhKv : 0);
@@ -936,7 +939,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     }
   }
 
-  changeTinhTyGia($event: any) {
+  changeTinhTyGia(event: any) {
     if (!this.formDataDtl.value.tyGia) {
       this.formDataDtl.value.tyGia = 0;
     }
@@ -947,11 +950,11 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       this.formDataDtl.value.thanhToanTheoUsd = 0;
     }
     this.formDataDtl.patchValue({
-      thanhToanTheoUsd: this.formDataDtl.value.thanhToanTheoVnd / $event.target.value,
+      thanhToanTheoUsd: this.formDataDtl.value.thanhToanTheoVnd / event,
     });
-    this.formDataDtl.patchValue({
-      thanhToanTheoVnd: this.formDataDtl.value.thanhToanTheoUsd * $event.target.value,
-    });
+    // this.formDataDtl.patchValue({
+    //   thanhToanTheoVnd: this.formDataDtl.value.thanhToanTheoUsd * event,
+    // });
   }
 
   saveAddEdit() {
@@ -1032,5 +1035,26 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       ...item,
       level,
     });
+  }
+
+  exportDataDetail() {
+    if (this.dataTableDetailTqd.length > 0) {
+      this.spinner.show();
+      try {
+        let body = this.formData.value;
+        this.qlDinhMucPhiService
+          .exportDetail(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-chi-tiet-dinh-muc-phi-nhap-xuat-bao-quan.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 }

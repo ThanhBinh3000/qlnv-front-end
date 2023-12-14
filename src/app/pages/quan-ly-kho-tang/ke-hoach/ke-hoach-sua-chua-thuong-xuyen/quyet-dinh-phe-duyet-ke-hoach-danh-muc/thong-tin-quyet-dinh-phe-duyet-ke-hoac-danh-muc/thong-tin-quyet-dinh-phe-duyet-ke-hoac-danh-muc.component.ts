@@ -129,9 +129,16 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
       this.fileDinhKems = data.fileDinhKems;
       this.canCuPhapLys = data.canCuPhapLys;
       // this.listDx = data.listDx;
-      this.dataTableReq = data.listKtKhThkhScThuongXuyenDtl;
+      let listDataTable = null;
+      if(!this.userService.isTongCuc()){
+        listDataTable = data.listKtKhThkhScThuongXuyenDtl.filter(x => x.maChiCuc.substring(0, x.maChiCuc.length - 2) == this.userInfo.MA_DVI);
+      }else{
+        listDataTable = data.listKtKhThkhScThuongXuyenDtl
+      }
+      this.dataTableReq = listDataTable;
       this.dataTable = this.convertListData(this.dataTableReq);
       this.expandAll(this.dataTable);
+      console.log(this.dataTableReq, "dataTable")
       // if (this.listDx && this.listDx.length > 0) {
       //   this.selectRow(this.listDx[0]);
       // }
