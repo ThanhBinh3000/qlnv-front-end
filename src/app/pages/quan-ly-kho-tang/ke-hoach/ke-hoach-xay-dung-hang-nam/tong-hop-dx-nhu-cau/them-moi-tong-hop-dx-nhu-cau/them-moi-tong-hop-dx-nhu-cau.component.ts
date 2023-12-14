@@ -467,12 +467,16 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
   }
 
 
-  sumSoLuong(tenChiCuc: string, row: string, khoi: string) {
+  sumSoLuong(tenChiCuc: string, row: string, khoi: string,type?: any) {
     let sl = 0;
     let sumList :any[];
     let itemSelected = this.listDx.find(item => item.selected == true);
     if (itemSelected) {
-      sumList = this.dataTableReq.filter(item => item.soCv == itemSelected.soCongVan)
+      if (type===true){
+        sumList = this.dataTableList.filter(item => item.soCv == itemSelected.soCongVan)
+      }else {
+        sumList = this.dataTableDxList.filter(item => item.soCv == itemSelected.soCongVan)
+      }
     }
     if (tenChiCuc && khoi) {
       let arr = sumList.filter(item => item.tenChiCuc == tenChiCuc && item.khoi == khoi);
