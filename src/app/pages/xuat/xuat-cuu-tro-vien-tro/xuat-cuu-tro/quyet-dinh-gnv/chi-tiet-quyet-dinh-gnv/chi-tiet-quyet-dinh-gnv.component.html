@@ -443,13 +443,18 @@
               <th *ngIf="formData.value.type === 'XC' && formData.value.paXuatGaoChuyenXc">SL gạo sau xay xát<br />giao
                 Cục thực hiện</th>
               <th>Chi cục DTNN</th>
-              <th>SL giao chi cục</th>
+              <ng-container *ngIf="formData.value.paXuatGaoChuyenXc; else giaoGaoChiCuc">
+                <th>SL gạo giao <br />Chi cục thực hiện</th>
+              </ng-container>
+              <ng-template #giaoGaoChiCuc>
+                <th>SL giao chi cục</th>
+              </ng-template>
               <th>Địa điểm xuất</th>
               <th>Đơn vị tính</th>
-              <th>Tồn kho</th>
+              <th>Tồn kho (thóc)</th>
+              <th>SL thóc xuất<br /> để xay xát</th>
               <th>Tỉ lệ thu hồi<br /> được sau xay xát(%)</th>
               <th>SL gạo thu hồi<br /> sau xay xát</th>
-              <th>SL thóc xuất<br /> để xay xát</th>
               <ng-container *ngIf="showAction()">
                 <th>Hành động</th>
               </ng-container>
@@ -495,7 +500,6 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
                     <ng-container *ngIf="showAction()">
                       <td class="text-center">
                         <a *ngIf="userService.isCuc() && item.soLuongDx > item.soLuongGiao">
@@ -517,11 +521,11 @@
                       <td></td>
                       <td class="text-right bold">{{lv1.tonKhoDvi|number:globals.numberFormat:globals.locale}}</td>
                       <!-- <td></td> -->
+                      <td class="text-right bold">{{lv1.slThocDeXayXat|number:globals.numberFormat:globals.locale}}</td>
                       <td></td>
                       <td class="text-right bold">
                         {{lv1.slGaoThuHoiSauXayXat|number:globals.numberFormat:globals.locale}}
                       </td>
-                      <td class="text-right bold">{{lv1.slThocDeXayXat|number:globals.numberFormat:globals.locale}}</td>
                       <ng-container *ngIf="showAction()">
                         <td class="text-center">
                           <a *ngIf="userService.isCuc()">
@@ -552,11 +556,11 @@
                         <td>{{lv2.tenDiaDiem}}</td>
                         <td>{{lv2.donViTinh}}</td>
                         <td class="text-right">{{lv2.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</td>
+                        <td class="text-right">{{lv2.slThocDeXayXat|number:globals.numberFormat:globals.locale}}</td>
                         <td class="text-right">{{lv2.tyLeThuHoiSauXayXat|number:globals.numberFormat:globals.locale}}
                         </td>
                         <td class="text-right">{{lv2.slGaoThuHoiSauXayXat|number:globals.numberFormat:globals.locale}}
                         </td>
-                        <td class="text-right">{{lv2.slThocDeXayXat|number:globals.numberFormat:globals.locale}}</td>
                         <ng-container *ngIf="showAction()">
                           <td class="text-center">
                             <ng-container *ngIf="userService.isChiCuc()">
@@ -635,10 +639,10 @@
                       <td></td>
                       <td></td>
                       <td class="text-right bold">{{lv1.tonKhoDvi|number:globals.numberFormat:globals.locale}}</td>
+                      <td class="text-right">{{lv1.slThocDeXayXat|number:globals.numberFormat:globals.locale}}</td>
                       <td></td>
                       <td class="text-right">{{lv1.slGaoThuHoiSauXayXat|number:globals.numberFormat:globals.locale}}
                       </td>
-                      <td class="text-right">{{lv1.slThocDeXayXat|number:globals.numberFormat:globals.locale}}</td>
                       <ng-container *ngIf="showAction()">
                         <td class="text-center">
                           <a *ngIf="userService.isCuc()">
@@ -669,11 +673,11 @@
                         <td>{{lv2.tenDiaDiem}}</td>
                         <td>{{lv2.donViTinh}}</td>
                         <td class="text-right">{{lv2.tonKhoCloaiVthh|number:globals.numberFormat:globals.locale}}</td>
+                        <td class="text-right">{{lv2.slThocDeXayXat|number:globals.numberFormat:globals.locale}}</td>
                         <td class="text-right">{{lv2.tyLeThuHoiSauXayXat|number:globals.numberFormat:globals.locale}}
                         </td>
                         <td class="text-right">{{lv2.slGaoThuHoiSauXayXat|number:globals.numberFormat:globals.locale}}
                         </td>
-                        <td class="text-right">{{lv2.slThocDeXayXat|number:globals.numberFormat:globals.locale}}</td>
                         <ng-container *ngIf="showAction()">
                           <td>
                             <ng-container *ngIf="userService.isChiCuc()">
@@ -869,6 +873,17 @@
           <ng-container
             *ngIf="userService.isChiCuc() && formData.value.type =='XC' && formData.value.paXuatGaoChuyenXc">
             <nz-form-item>
+              <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Số lượng thóc xuất để xay
+                xát</nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <!-- <nz-input-number formControlName="slThocDeXayXat" [nzMin]="0" [nzMax]="999999999999" [nzStep]="3"
+                  [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="true">
+                </nz-input-number> -->
+                <input currencyMask class="money-input" formControlName="slThocDeXayXat"
+                  [readOnly]="formData.value.trangThaiXh === STATUS.DA_HOAN_THANH" [options]="amount1" />
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
               <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Tỉ lệ thu hồi sau xay xát
                 (%)</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
@@ -884,32 +899,13 @@
                   [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                   [nzDisabled]="formData.value.trangThaiXh === STATUS.DA_HOAN_THANH">
                 </nz-input-number> -->
-                <input class="money-input" currencyMask formControlName="slGaoThuHoiSauXayXat"
-                  [readOnly]="formData.value.trangThaiXh === STATUS.DA_HOAN_THANH" [options]="amount1" />
-              </nz-form-control>
-            </nz-form-item>
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Số lượng thóc xuất để xay
-                xát</nz-form-label>
-              <nz-form-control [nzErrorTip]="error">
-                <!-- <nz-input-number formControlName="slThocDeXayXat" [nzMin]="0" [nzMax]="999999999999" [nzStep]="3"
-                  [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="true">
-                </nz-input-number> -->
-                <input currencyMask class="money-input" formControlName="slThocDeXayXat" [readOnly]="true"
+                <input class="money-input" currencyMask formControlName="slGaoThuHoiSauXayXat" [readOnly]="true"
                   [options]="amount1" />
               </nz-form-control>
             </nz-form-item>
           </ng-container>
           <ng-container
             *ngIf="userService.isChiCuc() && formData.value.type =='XC' && !formData.value.paXuatGaoChuyenXc">
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Tỉ lệ thu hồi sau xay xát
-                (%)</nz-form-label>
-              <nz-form-control [nzErrorTip]="error">
-                <input currencyMask class="money-input" formControlName="tyLeThuHoiSauXayXat" [options]="amount"
-                  [readOnly]="formData.value.trangThaiXh === STATUS.DA_HOAN_THANH" />
-              </nz-form-control>
-            </nz-form-item>
             <nz-form-item>
               <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Số lượng thóc xuất để xay
                 xát</nz-form-label>
@@ -920,6 +916,14 @@
                 </nz-input-number> -->
                 <input currencyMask class="money-input" formControlName="slThocDeXayXat"
                   [readOnly]="formData.value.trangThaiXh === STATUS.DA_HOAN_THANH" [options]="amount1" />
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Tỉ lệ thu hồi sau xay xát
+                (%)</nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <input currencyMask class="money-input" formControlName="tyLeThuHoiSauXayXat" [options]="amount"
+                  [readOnly]="formData.value.trangThaiXh === STATUS.DA_HOAN_THANH" />
               </nz-form-control>
             </nz-form-item>
             <nz-form-item>

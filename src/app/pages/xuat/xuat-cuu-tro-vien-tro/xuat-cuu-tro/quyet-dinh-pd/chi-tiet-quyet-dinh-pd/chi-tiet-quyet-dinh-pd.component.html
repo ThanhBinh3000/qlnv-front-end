@@ -933,7 +933,10 @@
               <div nz-row [nzGutter]="24">
                 <div nz-col>
                   <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">Tổng số lượng<br />đề xuất cứu trợ</nz-form-label>
+                    <nz-form-label [nzNoColon]="true">
+                      <span *ngIf="!isVthhGao()">Tổng số lượng<br />đề xuất cứu trợ</span>
+                      <span *ngIf="isVthhGao()">Tổng số lượng gạo giao Cục thực hiện</span>
+                    </nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
                       <span style="color: #001CFF"><strong>{{tongSoLuongDx|number:globals.numberFormat:globals.locale}}
                           {{formData.value.donViTinh? formData.value.donViTinh : ""}}</strong></span>
@@ -942,7 +945,7 @@
                 </div>
                 <div nz-col *ngIf="isVthhGao()">
                   <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">SL đề xuất cứu trợ<br />chuyển sang xuất cấp</nz-form-label>
+                    <nz-form-label [nzNoColon]="true">SL gạo đề xuất<br />gia công từ thóc</nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
                       <span
                         style="color: red;"><strong>{{tongSoLuongChuyenCapThocDx|number:globals.numberFormat:globals.locale}}
@@ -1006,10 +1009,14 @@
                         <th>Nhu cầu cứu trợ</th>
                       </ng-container>
                       <th>Năm nhập kho</th>
-                      <th>SL cứu trợ đề xuất</th>
+                      <ng-container *ngIf="!isVthhGao(); else slGiaoGao">
+                        <th>SL phê duyệt giao<br />Cục xuất cứu trợ</th>
+                      </ng-container>
+                      <ng-template #slGiaoGao>
+                        <th>SL gạo giao<br />Cục thực hiện</th>
+                      </ng-template>
                       <ng-container *ngIf="isVthhGao()">
-                        <!-- <th>Nhu cầu cứu trợ</th> -->
-                        <th>SL gạo cần chuyển<br />xuất cấp thóc</th>
+                        <th>SL gạo gia<br>công từ thóc</th>
                       </ng-container>
                     </tr>
                   </thead>
@@ -1134,7 +1141,9 @@
               <ng-container *ngIf="!isVthhVatuThietBi()">
                 <div nz-col>
                   <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">Tổng SL phê duyệt<br />giao Cục xuất cứu trợ</nz-form-label>
+                    <nz-form-label [nzNoColon]="true">
+                      <span *ngIf="!isVthhGao()">Tổng số lượng<br />đề xuất cứu trợ</span>
+                      <span *ngIf="isVthhGao()">Tổng số lượng gạo giao Cục thực hiện</span></nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
                       <span style="color: #001CFF"><strong>{{tongSoLuong|number:globals.numberFormat:globals.locale}}
                           {{formData.value.donViTinh? formData.value.donViTinh : ""}}</strong></span>
@@ -1144,7 +1153,7 @@
               </ng-container>
               <div nz-col *ngIf="isVthhGao()">
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true">SL đề xuất cứu trợ<br />chuyển sang xuất cấp</nz-form-label>
+                  <nz-form-label [nzNoColon]="true">SL gạo đề xuất<br />gia công từ thóc</nz-form-label>
                   <nz-form-control nz-col [nzSpan]="24">
                     <span
                       style="color: red;"><strong>{{tongSoLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}
@@ -1214,10 +1223,14 @@
                       <th>Nhu cầu cứu trợ</th>
                     </ng-container>
                     <th>Năm nhập kho</th>
-                    <th>SL phê duyệt giao<br />Cục xuất cứu trợ</th>
+                    <ng-container *ngIf="!isVthhGao(); else slGiaoGao">
+                      <th>SL phê duyệt giao<br />Cục xuất cứu trợ</th>
+                    </ng-container>
+                    <ng-template #slGiaoGao>
+                      <th>SL gạo giao<br />Cục thực hiện</th>
+                    </ng-template>
                     <ng-container *ngIf="isVthhGao()">
-                      <!-- <th>Nhu cầu cứu trợ</th> -->
-                      <th>SL gạo cần chuyển<br>xuất cấp thóc</th>
+                      <th>SL gạo gia<br>công từ thóc</th>
                     </ng-container>
                   </tr>
                 </thead>
