@@ -259,6 +259,7 @@ export class ThemMoiTtPhanBoPvcComponent extends Base2Component implements OnIni
           const data = res.data;
           if (data && data.listQlDinhMucPvcQdMuaSamDtl && data.listQlDinhMucPvcQdMuaSamDtl.length > 0) {
             this.dataTable = data.listQlDinhMucPvcQdMuaSamDtl.filter(item => item.maDvi == this.userInfo.MA_DVI);
+            console.log("this.dataTable", this.dataTable, this.userInfo.MA_DVI)
           }
           if (this.dataTable && this.dataTable.length > 0) {
             this.dataTable.forEach(item => {

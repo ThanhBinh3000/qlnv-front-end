@@ -35,11 +35,18 @@ export interface TreeNodeInterface {
   soLuong?: number;
   chiPhiTheoDinhMucNhapToiDa?: number;
   chiPhiTheoDinhMucXuatToiDa?: number;
+  chiPhiTheoDinhMucBqToiDa?: number;
   chiPhiNhapToiDa?: number;
   chiPhiXuatToiDa?: number;
+  chiPhiBqToiDa?: number;
   thanhToanTheoVnd?: number;
   tyGia?: number;
   thanhToanTheoUsd?: number;
+  thanhToanTheoVndKt?: number;
+  tyGiaKt?: number;
+  thanhToanTheoUsdKt?: number;
+  chechLechVnd?: number;
+  chechLechUsd?: number;
   level?: number;
   expand?: boolean;
   children?: TreeNodeInterface[];
@@ -850,6 +857,47 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     }
     this.rowItem.thanhToanTheoUsd = this.rowItem.thanhToanTheoVnd / $event;
     this.rowItem.thanhToanTheoVnd = this.rowItem.thanhToanTheoUsd * $event;
+  }
+
+  tinhTyGiaVndUsdKT($event: any) {
+    if (!this.rowItem.tyGiaKt) {
+      this.rowItem.tyGiaKt = 0;
+    }
+    if (!this.rowItem.thanhToanTheoUsdKt) {
+      this.rowItem.thanhToanTheoUsdKt = 0;
+    }
+    if (this.rowItem.tyGiaKt == 0) {
+      this.rowItem.thanhToanTheoUsdKt = 0;
+    } else {
+      this.rowItem.thanhToanTheoUsdKt = $event / this.rowItem.tyGiaKt;
+    }
+  }
+
+  tinhTyGiaUsdVndKT($event: any) {
+    if (!this.rowItem.tyGiaKt) {
+      this.rowItem.tyGiaKt = 0;
+    }
+    if (!this.rowItem.thanhToanTheoVndKt) {
+      this.rowItem.thanhToanTheoVndKt = 0;
+    }
+    if (this.rowItem.tyGiaKt == 0) {
+      this.rowItem.thanhToanTheoVndKt = 0;
+    }
+    this.rowItem.thanhToanTheoVndKt = $event * this.rowItem.tyGiaKt;
+  }
+
+  tinhTyGiaKT($event: any) {
+    if (!this.rowItem.tyGiaKt) {
+      this.rowItem.tyGiaKt = 0;
+    }
+    if (!this.rowItem.thanhToanTheoVndKt) {
+      this.rowItem.thanhToanTheoVndKt = 0;
+    }
+    if (!this.rowItem.thanhToanTheoUsdKt) {
+      this.rowItem.thanhToanTheoUsdKt = 0;
+    }
+    this.rowItem.thanhToanTheoUsdKt = this.rowItem.thanhToanTheoVndKt / $event;
+    this.rowItem.thanhToanTheoVndKt = this.rowItem.thanhToanTheoUsdKt * $event;
   }
 
   changeMaDinhMuc(value: string, attr: any): void {
