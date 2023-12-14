@@ -417,19 +417,19 @@
         <td class="text-center">X</td>
         <td class="text-center">X</td>
         <td class="text-center">X</td>
-        <td class="text-center"></td>
+        <td class="text-center">{{calTongChi() | number : '1.0-99' : 'vi_VN'}}</td>
         <td class="text-center">X</td>
         <td class="text-center">X</td>
         <td class="text-center">X</td>
         <td class="text-center">X</td>
-        <td class="text-center"></td>
+        <td class="text-center">{{calTongLuyKe() | number : '1.0-99' : 'vi_VN'}}</td>
         <td class="text-center"></td>
         <td class="text-center"></td>
       </tr>
       </tbody>
     </nz-table>
     <label><span style="color: red">* </span> Ghi chú</label>
-    <textarea rows="3" readonly nz-input [(ngModel)]="ghiChu"></textarea>
+    <textarea rows="3" [readonly]="isView" nz-input [(ngModel)]="ghiChu"></textarea>
   </nz-card>
   </nz-card>
 </div>

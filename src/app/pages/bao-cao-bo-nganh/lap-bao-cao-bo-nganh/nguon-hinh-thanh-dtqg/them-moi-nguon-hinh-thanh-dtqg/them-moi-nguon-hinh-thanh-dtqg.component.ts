@@ -14,6 +14,7 @@ import { cloneDeep } from "lodash";
 import { STATUS } from "../../../../../constants/status";
 import { DanhMucService } from "../../../../../services/danhmuc.service";
 import { saveAs } from 'file-saver';
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
   selector: "app-them-moi-nguon-hinh-thanh-dtqg",
@@ -34,7 +35,7 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
     {
       text: "Báo cáo năm",
       value: 1,
-      thoiHanGuiBc: "Sau 05 ngày kết thúc thời gian chỉnh lý quyết toán ngân sách nhà nước"
+      thoiHanGuiBc: "Sau 25 ngày kết thúc năm"
     },
     { text: "Báo cáo quý", value: 2, thoiHanGuiBc: "Ngày 20 của tháng đầu quý sau" }
   ];
@@ -47,7 +48,19 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
   itemRowNgoaiNguonEdit: any[] = [];
   listNguonVon: any[] = [];
   ghiChu: string = "Dấu “x” tại các hàng trong biểu là nội dung không phải tổng hợp, báo cáo.";
-
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "right",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -167,15 +180,23 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
 
   addRowNgoaiNguon(): void {
     if (this.validateItemNnSave(this.itemRowNgoaiNguon)) {
-      this.itemRowNgoaiNguon.tongTrongKy = this.nvl(this.itemRowNgoaiNguon.muaTangTrongKy) + this.nvl(this.itemRowNgoaiNguon.muaBuTrongKy)
-        + this.nvl(this.itemRowNgoaiNguon.muaBsungTrongKy) + this.nvl(this.itemRowNgoaiNguon.khacTrongKy);
-      this.itemRowNgoaiNguon.tongLuyKe = this.nvl(this.itemRowNgoaiNguon.muaTangLuyKe) + this.nvl(this.itemRowNgoaiNguon.muaBuLuyKe)
-        + this.nvl(this.itemRowNgoaiNguon.muaBsungLuyKe) + this.nvl(this.itemRowNgoaiNguon.khacLuyKe);
       this.itemRowNgoaiNguon.dmLevel = 2;
       this.dataNguonNgoaiNsnn = [
         ...this.dataNguonNgoaiNsnn,
         this.itemRowNgoaiNguon
       ];
+      if (this.dataNguonNgoaiNsnn.length > 1) {
+        let tongChi = 0;
+        let tongLuyKe = 0;
+        for (let item of this.dataNguonNgoaiNsnn) {
+          if (item.dmLevel == 2) {
+            tongChi += item.tongTrongKy;
+            tongLuyKe += item.tongLuyKe;
+          }
+        }
+        this.dataNguonNgoaiNsnn[0].tongTrongKy = tongChi;
+        this.dataNguonNgoaiNsnn[0].tongLuyKe = tongLuyKe;
+      }
       this.clearItemRowNn();
     }
   }
@@ -227,12 +248,20 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
 
   saveEditRowNgoaiNguon(index: number) {
     if (this.validateItemSave(this.itemRowNgoaiNguonEdit[index])) {
-      this.itemRowNgoaiNguonEdit[index].tongTrongKy = this.nvl(this.itemRowNgoaiNguonEdit[index].muaTangTrongKy) + this.nvl(this.itemRowNgoaiNguonEdit[index].muaBuTrongKy)
-        + this.nvl(this.itemRowNgoaiNguonEdit[index].muaBsungTrongKy) + this.nvl(this.itemRowNgoaiNguonEdit[index].khacTrongKy);
-      this.itemRowNgoaiNguonEdit[index].tongLuyKe = this.nvl(this.itemRowNgoaiNguonEdit[index].muaTangLuyKe) + this.nvl(this.itemRowNgoaiNguonEdit[index].muaBuLuyKe)
-        + this.nvl(this.itemRowNgoaiNguonEdit[index].muaBsungLuyKe) + this.nvl(this.itemRowNgoaiNguonEdit[index].khacLuyKe);
       this.dataNguonNgoaiNsnn[index] = this.itemRowNgoaiNguonEdit[index];
       this.dataNguonNgoaiNsnn[index].edit = false;
+      if (this.dataNguonNgoaiNsnn.length > 1) {
+        let tongChi = 0;
+        let tongLuyKe = 0;
+        for (let item of this.dataNguonNgoaiNsnn) {
+          if (item.dmLevel == 2) {
+            tongChi += item.tongTrongKy;
+            tongLuyKe += item.tongLuyKe;
+          }
+        }
+        this.dataNguonNgoaiNsnn[0].tongTrongKy = tongChi;
+        this.dataNguonNgoaiNsnn[0].tongLuyKe = tongLuyKe;
+      }
     }
   }
 
@@ -312,6 +341,42 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
       this.dataNguonNgoaiNsnn = this.dataImport.filter(obj => obj.loaiNguon === 2);
     }
   }
+  calTongChi() {
+    let sum = 0
+    if (this.dataNguonNsnn) {
+      this.dataNguonNsnn.forEach(item => {
+        if (item.dmLevel == 2) {
+          sum += this.nvl(item.tongTrongKy);
+        }
+      })
+    }
+    if (this.dataNguonNgoaiNsnn) {
+      this.dataNguonNgoaiNsnn.forEach(item => {
+        if (item.dmLevel == 2) {
+          sum += this.nvl(item.tongTrongKy);
+        }
+      })
+    }
+    return sum;
+  }
 
+  calTongLuyKe() {
+    let sum = 0
+    if (this.dataNguonNsnn) {
+      this.dataNguonNsnn.forEach(item => {
+        if (item.dmLevel == 2) {
+          sum += this.nvl(item.tongLuyKe);
+        }
+      })
+    }
+    if (this.dataNguonNgoaiNsnn) {
+      this.dataNguonNgoaiNsnn.forEach(item => {
+        if (item.dmLevel == 2) {
+          sum += this.nvl(item.tongLuyKe);
+        }
+      })
+    }
+    return sum;
+  }
 
 }
