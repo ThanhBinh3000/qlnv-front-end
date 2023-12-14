@@ -129,7 +129,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="5">
+        <!-- <div nz-col [nzSpan]="5">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
             </nz-form-label>
@@ -149,7 +149,7 @@
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
-        </div>
+        </div> -->
         <div nz-col [nzSpan]="24">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
@@ -187,7 +187,8 @@
     </form>
   </nz-card>
   <!-- Tạo quyết định trực tiếp -->
-  <ng-container *ngIf="!formData.value.paXuatGaoChuyenXc">
+  <!-- <ng-container *ngIf="!formData.value.paXuatGaoChuyenXc"> -->
+  <ng-container>
     <div class="mt16 flex-card p-lr16">
       <div class="header header-green-background mg-t-16">
         <div class="title-card">
@@ -236,12 +237,22 @@
                   </nz-form-control>
                 </nz-form-item>
               </div>
-              <div nz-col>
+              <div nz-col *ngIf="!this.formData.value.paXuatGaoChuyenXc">
                 <nz-form-item>
                   <nz-form-label nzRequired [nzNoColon]="true"> SL thóc cần xuất gia công để cứu trợ, viện
                     trợ</nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <span></span>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col *ngIf="this.formData.value.paXuatGaoChuyenXc">
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true">SL gạo được chuyển xuất cấp thóc</nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24">
+                    <span style="color: red;">
+                      <strong>{{formData.value.soLuongXuatCap|number:globals.numberFormat:globals.locale}} kg</strong>
+                    </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -286,13 +297,18 @@
                     <th [rowspan]="2"></th>
                     <th [rowspan]="2" style="width: 35px">STT</th>
                     <th [rowspan]="2">Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
-                    <th [colspan]="3">Cục DTNN KV</th>
+                    <th [colspan]="4">Cục DTNN KV</th>
                     <th [rowspan]="2" style="width: 10%" *ngIf="!isView">Hành động</th>
                   </tr>
                   <tr>
                     <th>Cục DTNN KV</th>
-                    <th>Tồn kho</th>
-                    <th>Số lượng thóc xuất cấp</th>
+                    <th>Năm nhập kho</th>
+                    <th>Tồn kho thóc</th>
+                    <th *ngIf="this.formData.value.paXuatGaoChuyenXc; else thXcTt">SL gạo được chuyển<br />xuất cấp thóc
+                    </th>
+                    <ng-template #thXcTt>
+                      <th>Số lượng thóc xuất cấp</th>
+                    </ng-template>
                   </tr>
                 </thead>
                 <tbody>
@@ -305,11 +321,11 @@
                       <td></td>
                       <td></td>
                       <td></td>
+                      <td></td>
                       <td *ngIf="!isView" class="text-center">
-                        <a>
-                          <i class="fa fa-plus" *ngIf="!isView && !this.formData.value.paXuatGaoChuyenXc"
-                            (click)="themPhuongAn(item,0)"></i>
-                        </a>
+                        <!-- <a>
+                        <i class="fa fa-plus" (click)="themPhuongAn(item,0)"></i>
+                      </a> -->
                         <!--<a>
                   <i class="fa fa-trash-o do" *ngIf="!isView" nz-popconfirm nz-button
                      nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
@@ -317,24 +333,37 @@
                 </a>-->
                       </td>
                     </tr>
-                    <ng-container *ngIf="expandSetString.has(item.idVirtual)">
-                      <ng-container *ngFor="let lv1 of item.childData,let i1=index">
-                        <tr class="level-2">
+                    <ng-container *ngFor="let lv0 of item.childData,let i1=index">
+                      <tr class="level-2">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>{{lv0.tenDvi}}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td *ngIf="!isView" class="text-center">
+                          <a>
+                            <i class="fa fa-plus" (click)="themPhuongAn(lv0,0)"></i>
+                          </a>
+                        </td>
+                      </tr>
+                      <ng-container *ngFor="let lv1 of lv0.childData,let i1=index">
+                        <tr class="level-3">
                           <td></td>
                           <td></td>
                           <td></td>
-                          <td>{{lv1.tenDvi}}</td>
-                          <td class="text-right">{{lv1.tonKhoLoaiVthh|number:globals.numberFormat:globals.locale}}</td>
+                          <td></td>
+                          <td>{{lv1.namNhap}}</td>
+                          <td class="text-right">{{lv1.tonKhoDvi|number:globals.numberFormat:globals.locale}}</td>
                           <td class="text-right">{{lv1.soLuong|number:globals.numberFormat:globals.locale}}</td>
                           <td *ngIf="!isView" class="text-center">
                             <a>
-                              <i class="fa fa-pencil" *ngIf="!isView && !this.formData.value.paXuatGaoChuyenXc"
-                                (click)="themPhuongAn(lv1,1)"></i>
+                              <i class="fa fa-pencil" (click)="themPhuongAn(lv1,1)"></i>
                             </a>
                             <a>
-                              <i class="fa fa-trash-o do" *ngIf="!isView && !this.formData.value.paXuatGaoChuyenXc"
-                                nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
-                                (nzOnConfirm)="xoaPhuongAn(lv1,item)"></i>
+                              <i class="fa fa-trash-o do" nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
+                                (nzOnConfirm)="xoaPhuongAn(lv1,lv0)"></i>
                             </a>
                           </td>
                         </tr>
@@ -349,8 +378,9 @@
       </div>
     </div>
   </ng-container>
+
   <!-- Tạo quyết định từ quyết định phê duyệt xuất cứu trợ, viện trợ -->
-  <ng-container *ngIf="formData.value.paXuatGaoChuyenXc">
+  <!-- <ng-container *ngIf="formData.value.paXuatGaoChuyenXc">
     <div class="header header-green-background mg-t-16">
       <div class="title-card">
         <div class="title-chi-tieu">
@@ -553,16 +583,6 @@
               </div>
             </div>
             <div nz-row [nzGutter]="24">
-              <!-- <div nz-col>
-                <nz-form-item>
-                  <nz-form-label [nzNoColon]="true">Tổng số lượng đề xuất cứu trợ</nz-form-label>
-                  <nz-form-control nz-col [nzSpan]="24">
-                    <span style="color: #001CFF">
-                      <strong>{{tongSoLuong|number:globals.numberFormat:globals.locale}} kg</strong>
-                    </span>
-                  </nz-form-control>
-                </nz-form-item>
-              </div> -->
               <div nz-col>
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true">SL gạo được chuyển xuất cấp thóc</nz-form-label>
@@ -591,7 +611,6 @@
                   <tr>
                     <th style="width: 35px" class="text-center">STT</th>
                     <th class="text-center">Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
-                    <!-- <th>SL gạo phê duyệt <br />giao Cục xuất cứu trợ</th> -->
                     <th class="text-center">Nhu cầu cứu trợ</th>
                     <th class="text-center">SL gạo được chuyển<br />xuất cấp thóc</th>
                   </tr>
@@ -601,7 +620,6 @@
                     <tr>
                       <td class="text-center">{{i+1}}</td>
                       <td>{{item.noiDungDx}}</td>
-                      <!-- <td>{{item.soLuong|number:globals.numberFormat:globals.locale}}</td> -->
                       <td class="text-right">{{item.soLuongNhuCauXuat|number:globals.numberFormat:globals.locale}}</td>
                       <td class="text-right">{{item.soLuongXc|number:globals.numberFormat:globals.locale}}</td>
                     </tr>
@@ -609,7 +627,6 @@
                   <tr>
                     <td></td>
                     <td class="text-blue bold text-right uppercase">Tổng</td>
-                    <!-- <td class="text-blue">{{tongSoLuong|number:globals.numberFormat:globals.locale}}</td> -->
                     <td class="text-blue text-right bold">{{tongNhuCauXuat|number:globals.numberFormat:globals.locale}}
                     </td>
                     <td class="text-blue text-right bold">{{tongSlXuatCap|number:globals.numberFormat:globals.locale}}
@@ -622,7 +639,7 @@
         </nz-card>
       </div>
     </div>
-  </ng-container>
+  </ng-container> -->
 </div>
 
 <!--tong cuc-->
@@ -653,7 +670,7 @@
                 </div>
                 <div nz-col [nzSpan]="8">
                   <p style="font-size: 13px;font-weight: 500">Tồn kho: <span
-                      style="color: #001CFF">{{formDataDtl.value.tonKhoLoaiVthh|number:globals.numberFormat:globals.locale}}</span>
+                      style="color: #001CFF">{{formDataDtl.value.tonKhoDvi|number:globals.numberFormat:globals.locale}}</span>
                   </p>
                 </div>
               </div>
