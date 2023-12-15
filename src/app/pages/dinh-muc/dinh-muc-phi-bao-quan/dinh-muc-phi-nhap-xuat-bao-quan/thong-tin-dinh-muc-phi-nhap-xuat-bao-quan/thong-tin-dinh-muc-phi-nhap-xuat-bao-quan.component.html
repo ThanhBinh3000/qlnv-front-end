@@ -630,20 +630,20 @@
               <td>{{item.apDungTaiStr}}</td>
               <td>{{item.donViTinh}}</td>
               <td class='text-right'>{{item.soLuong | number : '1.0-3' : 'vi_VN'}}</td>
-              <td class="{{item.children.length > 0 ? 'text-right font-weight-bold' : 'text-right'}}">
+              <td class="{{(item.level == 0 || item.level == 1) ? 'text-right font-weight-bold' : 'text-right'}}">
                 {{item.chiPhiTheoDinhMucNhapToiDa | number : '1.0-1' : 'vi_VN'}}
               </td>
-              <td class="{{item.children.length > 0 ? 'text-right font-weight-bold' : 'text-right'}}">
+              <td class="{{(item.level == 0 || item.level == 1) ? 'text-right font-weight-bold' : 'text-right'}}">
                 {{item.chiPhiTheoDinhMucXuatToiDa | number : '1.0-1' : 'vi_VN'}}
               </td>
-              <td class="{{item.children.length > 0 ? 'text-right font-weight-bold' : 'text-right'}}">
+              <td class="{{(item.level == 0 || item.level == 1) ? 'text-right font-weight-bold' : 'text-right'}}">
                 {{item.chiPhiTheoDinhMucBqToiDa | number : '1.0-1' : 'vi_VN'}}
               </td>
-              <td class="{{item.children.length > 0 ? 'text-right font-weight-bold' : 'text-right'}}">
+              <td class="{{(item.level == 0 || item.level == 1) ? 'text-right font-weight-bold' : 'text-right'}}">
                 {{item.chiPhiNhapToiDa | number : '1.0-1' : 'vi_VN'}}</td>
-              <td class="{{item.children.length > 0 ? 'text-right font-weight-bold' : 'text-right'}}">
+              <td class="{{(item.level == 0 || item.level == 1) ? 'text-right font-weight-bold' : 'text-right'}}">
                 {{item.chiPhiXuatToiDa | number : '1.0-1' : 'vi_VN'}}</td>
-              <td class="{{item.children.length > 0 ? 'text-right font-weight-bold' : 'text-right'}}">
+              <td class="{{(item.level == 0 || item.level == 1) ? 'text-right font-weight-bold' : 'text-right'}}">
                 {{item.chiPhiBqToiDa | number : '1.0-1' : 'vi_VN'}}</td>
               <td class='text-right'>{{(item.thanhToanTheoVnd || 0) | number : '1.0-1' : 'vi_VN'}}</td>
               <td class='text-right'>{{(item.tyGia || 0) | number : '1.0-1' : 'vi_VN'}}</td>
