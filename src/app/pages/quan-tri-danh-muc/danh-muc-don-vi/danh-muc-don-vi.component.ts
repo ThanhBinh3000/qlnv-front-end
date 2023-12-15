@@ -1,19 +1,19 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { Router } from "@angular/router";
-import { DonviService } from "src/app/services/donvi.service";
-import { OldResponseData } from "src/app/interfaces/response";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { MESSAGE } from "src/app/constants/message";
-import { HelperService } from "src/app/services/helper.service";
-import { NzTreeSelectComponent } from "ng-zorro-antd/tree-select";
-import { LOAI_DON_VI, TrangThaiHoatDong } from "src/app/constants/status";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { NewDonViComponent } from "./new-don-vi/new-don-vi.component";
-import { NgxSpinnerService } from "ngx-spinner";
-import { UserLogin } from "../../../models/userlogin";
-import { UserService } from "../../../services/user.service";
-import { DanhMucService } from "../../../services/danhmuc.service";
+import {Component, OnInit, ViewChild} from "@angular/core";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Router} from "@angular/router";
+import {DonviService} from "src/app/services/donvi.service";
+import {OldResponseData} from "src/app/interfaces/response";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {MESSAGE} from "src/app/constants/message";
+import {HelperService} from "src/app/services/helper.service";
+import {NzTreeSelectComponent} from "ng-zorro-antd/tree-select";
+import {LOAI_DON_VI, TrangThaiHoatDong} from "src/app/constants/status";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {NewDonViComponent} from "./new-don-vi/new-don-vi.component";
+import {NgxSpinnerService} from "ngx-spinner";
+import {UserLogin} from "../../../models/userlogin";
+import {UserService} from "../../../services/user.service";
+import {DanhMucService} from "../../../services/danhmuc.service";
 
 
 @Component({
@@ -22,7 +22,7 @@ import { DanhMucService } from "../../../services/danhmuc.service";
   styleUrls: ["./danh-muc-don-vi.component.scss"]
 })
 export class DanhMucDonViComponent implements OnInit {
-  @ViewChild("nzTreeSelectComponent", { static: false }) nzTreeSelectComponent!: NzTreeSelectComponent;
+  @ViewChild("nzTreeSelectComponent", {static: false}) nzTreeSelectComponent!: NzTreeSelectComponent;
   searchValue = "";
   searchFilter = {
     soQD: "",
@@ -43,6 +43,7 @@ export class DanhMucDonViComponent implements OnInit {
   listQuanHuyen: any[] = [];
   listPhuongXa: any[] = [];
   listAllDiaDanh: any[] = [];
+
   constructor(
     private router: Router,
     private donviService: DonviService,
@@ -75,7 +76,13 @@ export class DanhMucDonViComponent implements OnInit {
       tinhThanhList: [],
       tinhThanh: [""],
       quanHuyen: [""],
-      phuongXa: [""]
+      phuongXa: [""],
+      maKhqlh: [""],
+      maKtbq: [""],
+      maQd: [""],
+      maTr: [""],
+      maTckt: [""],
+      maQhns: [""],
     });
   }
 
@@ -154,17 +161,17 @@ export class DanhMucDonViComponent implements OnInit {
 
   async getDetailDiaDanh(data: any) {
     this.detailDonVi.patchValue({
-      tinhThanhList : [],
-      tinhThanh : null,
-      quanHuyen : null,
-      phuongXa : null,
+      tinhThanhList: [],
+      tinhThanh: null,
+      quanHuyen: null,
+      phuongXa: null,
     })
     if (data && data.diaDanhList && data.diaDanhList.length > 0) {
       let result = data.diaDanhList;
       if (result && result.length > 0) {
         if (data.capDvi == "2") {
           this.detailDonVi.patchValue({
-          tinhThanhList : result.map(item => item.idDiaDanh)
+            tinhThanhList: result.map(item => item.idDiaDanh)
           })
         }
         if (data.capDvi == "3") {
@@ -172,9 +179,9 @@ export class DanhMucDonViComponent implements OnInit {
           let quanHuyen = result.filter(item => item.capDiaDanh == 2);
           let phuongXa = result.filter(item => item.capDiaDanh == 3);
           this.detailDonVi.patchValue({
-            tinhThanh : tinhThanh && tinhThanh.length > 0 ? tinhThanh[0].idDiaDanh : null,
-            quanHuyen : quanHuyen && quanHuyen.length > 0 ? quanHuyen[0].idDiaDanh : null,
-            phuongXa : phuongXa && phuongXa.length > 0 ? phuongXa[0].idDiaDanh : null,
+            tinhThanh: tinhThanh && tinhThanh.length > 0 ? tinhThanh[0].idDiaDanh : null,
+            quanHuyen: quanHuyen && quanHuyen.length > 0 ? quanHuyen[0].idDiaDanh : null,
+            phuongXa: phuongXa && phuongXa.length > 0 ? phuongXa[0].idDiaDanh : null,
           })
           await this.changeTinhThanh(this.detailDonVi.value.tinhThanh)
           await this.changeQuanHuyen(this.detailDonVi.value.quanHuyen)
@@ -204,6 +211,12 @@ export class DanhMucDonViComponent implements OnInit {
             stk: res.data.stk,
             mst: res.data.mst,
             moTai: res.data.moTai,
+            maQd: res.data.maQd,
+            maTr: res.data.maTr,
+            maKhqlh: res.data.maKhqlh,
+            maKtbq: res.data.maKtbq,
+            maTckt: res.data.maTckt,
+            maQhns: res.data.maQhns,
             maTuDinhNghia: res.data.maTuDinhNghia,
             trangThai: res.data.trangThai == TrangThaiHoatDong.HOAT_DONG,
             type: res.data.type == LOAI_DON_VI.PB,
@@ -298,7 +311,7 @@ export class DanhMucDonViComponent implements OnInit {
       nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: () => {
-        this.donviService.delete({id : id}).then((res: OldResponseData) => {
+        this.donviService.delete({id: id}).then((res: OldResponseData) => {
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
             // xét node về không
@@ -319,9 +332,9 @@ export class DanhMucDonViComponent implements OnInit {
       nzContent: NewDonViComponent,
       nzClosable: true,
       nzFooter: null,
-      nzStyle: { top: "50px" },
+      nzStyle: {top: "50px"},
       nzWidth: 900,
-      nzComponentParams: { nodesTree }
+      nzComponentParams: {nodesTree}
     });
     modal.afterClose.subscribe(res => {
       if (res) {
