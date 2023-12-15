@@ -116,6 +116,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       kieuNhapXuat: [],
       mucDichXuat: [, [Validators.required]],
       tenDvi: [, [Validators.required]],
+      tenDviCha: [, [Validators.required]],
       tenLoaiVthh: [],
       tenCloaiVthh: [],
       tenTrangThai: [],
@@ -124,7 +125,9 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       dataDtl: [new Array(), [Validators.required, Validators.minLength(1)]],
       fileDinhKem: [new Array<FileDinhKem>()],
       canCu: [new Array<FileDinhKem>()],
-      paXuatGaoChuyenXc: []
+      paXuatGaoChuyenXc: [],
+      ngayTapKet: [],
+      ngayGiaoHang: []
     }
     );
 
@@ -180,42 +183,20 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
         text: dayjs().get('year') - i,
       });
     }
-    this.formDataDtl.controls["tyLeThuHoiSauXayXat"].valueChanges.subscribe((value) => {
-      // Vẫn quy đổi từ thóc sang gạo theo yêu cầu của cán bộ Vụ QLH
-      // if (this.formData.value.type === 'XC' && this.formData.value.paXuatGaoChuyenXc) {
-      //   const slGaoThuHoiSauXayXat = this.formDataDtl.value.slGaoThuHoiSauXayXat || 0;
-      //   const slThocDeXayXat = value ? slGaoThuHoiSauXayXat * 100 / value : 0;  
-      //   this.formDataDtl.controls['slThocDeXayXat'].setValue(slThocDeXayXat, { emitEvent: false })
-      // } else if (this.formData.value.type === 'XC' && !this.formData.value.paXuatGaoChuyenXc) {
-      // const slThocDeXayXat = this.formDataDtl.value.slThocDeXayXat || 0;
-      // const slGaoThuHoiSauXayXat = value ? slThocDeXayXat * value / 100 : 0;
-      // this.formDataDtl.controls['slGaoThuHoiSauXayXat'].setValue(slGaoThuHoiSauXayXat, { emitEvent: false })
-      // }
-      const slThocDeXayXat = this.formDataDtl.value.slThocDeXayXat || 0;
-      const slGaoThuHoiSauXayXat = value ? slThocDeXayXat * value / 100 : 0;
-      this.formDataDtl.controls['slGaoThuHoiSauXayXat'].setValue(slGaoThuHoiSauXayXat, { emitEvent: false })
+    this.formDataDtl.get("tyLeThuHoiSauXayXat").valueChanges.subscribe((value) => {
+      if (this.formData.value.type === "XC") {
+        const slThocDeXayXat = this.formDataDtl.value.slThocDeXayXat || 0;
+        const slGaoThuHoiSauXayXat = value ? slThocDeXayXat * value / 100 : 0;
+        this.formDataDtl.get('slGaoThuHoiSauXayXat').setValue(slGaoThuHoiSauXayXat, { emitEvent: false })
+      }
     })
-    // Vẫn quy đổi từ thóc sang gạo theo yêu cầu của cán bộ Vụ QLH
-    // this.formDataDtl.controls["slGaoThuHoiSauXayXat"].valueChanges.subscribe((value) => {
-    //   if (this.formData.value.type === 'XC' && this.formData.value.paXuatGaoChuyenXc) {
-    //     const tyLeThuHoiSauXayXat = this.formDataDtl.value.tyLeThuHoiSauXayXat || 0;
-    //     const slThocDeXayXat = value && tyLeThuHoiSauXayXat ? value * 100 / tyLeThuHoiSauXayXat : 0;
-    //     this.formDataDtl.controls['slThocDeXayXat'].setValue(slThocDeXayXat, { emitEvent: false });
-    //     this.formDataDtl.controls['soLuong'].setValue(slThocDeXayXat, { emitEvent: false })
-    //   }
-    // });
-    this.formDataDtl.controls["slThocDeXayXat"].valueChanges.subscribe((value) => {
-      // Vẫn quy đổi từ thóc sang gạo theo yêu cầu của cán bộ Vụ QLH nên không cần quan tâm đến xuất cấp trực tiếp thóc hay gạo
-      // if (this.formData.value.type === 'XC' && !this.formData.value.paXuatGaoChuyenXc) {
-      //   const tyLeThuHoiSauXayXat = this.formDataDtl.value.tyLeThuHoiSauXayXat || 0;
-      //   const slGaoThuHoiSauXayXat = (value || 0) * tyLeThuHoiSauXayXat / 100;
-      //   this.formDataDtl.controls['slGaoThuHoiSauXayXat'].setValue(slGaoThuHoiSauXayXat, { emitEvent: false });
-      //   this.formDataDtl.controls['soLuong'].setValue(value, { emitEvent: false })
-      // }
-      const tyLeThuHoiSauXayXat = this.formDataDtl.value.tyLeThuHoiSauXayXat || 0;
-      const slGaoThuHoiSauXayXat = (value || 0) * tyLeThuHoiSauXayXat / 100;
-      this.formDataDtl.controls['slGaoThuHoiSauXayXat'].setValue(slGaoThuHoiSauXayXat, { emitEvent: false });
-      this.formDataDtl.controls['soLuong'].setValue(value, { emitEvent: false })
+    this.formDataDtl.get("slThocDeXayXat").valueChanges.subscribe((value) => {
+      if (this.formData.value.type === "XC") {
+        const tyLeThuHoiSauXayXat = this.formDataDtl.value.tyLeThuHoiSauXayXat || 0;
+        const slGaoThuHoiSauXayXat = (value || 0) * tyLeThuHoiSauXayXat / 100;
+        this.formDataDtl.get('slGaoThuHoiSauXayXat').setValue(slGaoThuHoiSauXayXat, { emitEvent: false });
+        this.formDataDtl.get('soLuong').setValue(value, { emitEvent: false })
+      }
     })
   }
 
@@ -271,7 +252,8 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       this.formData.patchValue({
         trangThai: STATUS.DU_THAO,
         tenTrangThai: 'Dự thảo',
-        tenDvi: this.userInfo.TEN_DVI,
+        tenDvi: this.userInfo.TEN_PHONG_BAN,
+        tenDviCha: this.userInfo.TEN_DVI,
         maDvi: this.userInfo.MA_DVI
       });
     }
@@ -366,7 +348,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     // }
     // const res = await this.mangLuoiKhoService.dsNganLoKhoTheoCloaiVthh(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listDiaDiemKho = [...this.listDiaDiemKho, res.data];
+      this.listDiaDiemKho = res.data ? cloneDeep([res.data]) : [];
       this.listDiaDiemKho[0].expanded = true;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -1059,10 +1041,10 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
 
     if (this.userService.isCuc()) {
       this.loadDsDonViTheoNamNhap(+data.namNhap)
-    } else if (this.userService.isChiCuc()) {
-      await this.changeLoaiVthh(this.formDataDtl.value.loaiVthh);
-      await this.loadDsDiemKho(this.userInfo.MA_DVI, this.formDataDtl.value.loaiVthh, this.formDataDtl.value.cloaiVthh, +data.namNhap);
     }
+    await this.changeLoaiVthh(this.formDataDtl.value.loaiVthh);
+    await this.loadDsDiemKho(this.userInfo.MA_DVI, this.formDataDtl.value.loaiVthh, this.formDataDtl.value.cloaiVthh, +data.namNhap);
+
     this.modalChiTiet = true;
   }
   checkSlConLaiGiao(data: any, level: number, edit: boolean, parentData: any) {
@@ -1304,7 +1286,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           tenNhaKho: nhaKhoNode.origin.tenDvi,
           tenNganKho: current.tenDvi,
           cloaiVthh: current.cloaiVthh,
-          tenCloaiVthh: current.tencLoaiVthh
+          tenCloaiVthh: current.tenCloaiVthh
         });
       }
       this.kiemTraTonKho();

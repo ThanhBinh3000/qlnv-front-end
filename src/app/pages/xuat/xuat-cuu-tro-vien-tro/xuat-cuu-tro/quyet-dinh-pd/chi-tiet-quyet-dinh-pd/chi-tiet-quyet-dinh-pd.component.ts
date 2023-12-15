@@ -116,6 +116,8 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   ngayKetThucDx: string;
   ngayKetThuc: string;
   soDxTh: string;
+  phuongAnViewVttb: any[] = [];
+  openViewVttb: boolean = false;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -786,31 +788,52 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       }
     } else {
       if (this.isVthhVatuThietBi()) {
+        this.formData.value.quyetDinhPdDtl.forEach(element => {
+          element.vthh = element.cloaiVthh ? `${element.loaiVthh}-${element.cloaiVthh}` : element.loaiVthh;
+          element.tenVthh = element.tenCloaiVthh ? `${element.tenLoaiVthh}-${element.tenCloaiVthh}` : element.tenLoaiVthh;
+        });
         this.phuongAnHdrView = chain(this.formData.value.quyetDinhPdDtl)
           .groupBy("noiDungDx")
           .map((value, key) => {
-            let row = value.find(s => s.noiDungDx === key);
-            let rs = chain(value)
-              .groupBy("loaiVthh")
+            const row = value.find(s => s.noiDungDx === key);
+            if (!row) return;
+            const rs = chain(value)
+              .groupBy("vthh")
               .map((v, k) => {
-                let row1 = v.find(s => s.loaiVthh === k);
-                let tonKhoCloaiVthh = v.reduce((prev, next) => prev += next.tonKhoCloaiVthh, 0);
-                let soLuongDx = v.reduce((prev, next) => prev += next.soLuongDx, 0);
-                let soLuong = v.reduce((prev, next) => prev += next.soLuong, 0);
+                const row1 = v.find(s => s.vthh === k);
+                if (!row1) return;
+                const rs1 = chain(v).groupBy("maDvi").map((v1, k1) => {
+                  const row2 = v1.find(f => f.maDvi === k1);
+                  if (!row2) return;
+                  const soLuongDx = v1.reduce((prev, next) => prev += next.soLuongDx, 0);
+                  const soLuong = v1.reduce((prev, next) => prev += next.soLuong, 0);
+                  return {
+                    ...row2,
+                    idVirtual: uuidv4(),
+                    soLuongDx,
+                    soLuong,
+                    childData: v1
+                  }
+
+                }).value().filter(f => !!f)
+                const soLuongDx = rs1.reduce((prev, next) => prev += next.soLuongDx, 0);
+                const soLuong = rs1.reduce((prev, next) => prev += next.soLuong, 0);
                 return {
                   idVirtual: uuidv4(),
                   noiDungDx: k,
                   tenLoaiVthh: row1.tenLoaiVthh,
+                  tenVthh: row1.tenVthh,
+                  donViTinh: row1.donViTinh,
                   soLuong,
                   soLuongDx,
-                  tonKhoCloaiVthh,
-                  childData: row1 ? v : [],
+                  tonKhoCloaiVthh: row1.tonKhoCloaiVthh,
+                  childData: rs1,
                   loaiNhapXuat: row1.loaiNhapXuat,
                   kieuNhapXuat: row1.kieuNhapXuat,
                 }
-              }).value();
-            let soLuongDx = rs.reduce((prev, next) => prev += next.soLuongDx, 0);
-            let soLuong = rs.reduce((prev, next) => prev += next.soLuong, 0);
+              }).value().filter(f => !!f);
+            const soLuongDx = rs.reduce((prev, next) => prev += next.soLuongDx, 0);
+            const soLuong = rs.reduce((prev, next) => prev += next.soLuong, 0);
             return {
               idVirtual: uuidv4(),
               noiDungDx: row.noiDungDx,
@@ -828,7 +851,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               kieuNhapXuat: row.kieuNhapXuat,
               childData: rs
             };
-          }).value();
+          }).value().filter(f => !!f);
       } else {
         this.phuongAnHdrView = chain(this.formData.value.quyetDinhPdDtl)
           .groupBy("noiDungDx")
@@ -864,30 +887,46 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
 
       //
       if (this.isVthhVatuThietBi()) {
-
+        this.quyetDinhPdDtlCache.forEach(element => {
+          element.vthh = element.cloaiVthh ? `${element.loaiVthh}-${element.cloaiVthh}` : element.loaiVthh;
+          element.tenVthh = element.tenCloaiVthh ? `${element.tenLoaiVthh}-${element.tenCloaiVthh}` : element.tenLoaiVthh;
+        });
         this.phuongAnHdrViewCache = chain(this.quyetDinhPdDtlCache)
           .groupBy("noiDungDx")
           .map((value, key) => {
             let row = value.find(s => s.noiDungDx === key);
+            if (!row) return;
             let rs = chain(value)
-              .groupBy("loaiVthh")
+              .groupBy("vthh")
               .map((v, k) => {
-                let row1 = v.find(s => s.loaiVthh === k);
-                let soLuongDx = v.reduce((prev, next) => prev += next.soLuongDx, 0);
-                let soLuong = v.reduce((prev, next) => prev += next.soLuong, 0);
-                let tonKhoLoaiVthh = v.reduce((prev, next) => prev += next.tonKhoLoaiVthh, 0);
-                let tonKhoCloaiVthh = v.reduce((prev, next) => prev += next.tonKhoCloaiVthh, 0);
+                let row1 = v.find(s => s.vthh === k);
+                if (!row1) return;
+                const rs1 = chain(v).groupBy("maDvi").map((v1, k1) => {
+                  const row2 = v1.find(f => f.maDvi === k1);
+                  if (!row2) return;
+                  let soLuongDx = v1.reduce((prev, next) => prev += next.soLuongDx, 0);
+                  let soLuong = v1.reduce((prev, next) => prev += next.soLuong, 0);
+                  return {
+                    ...row2,
+                    idVirtual: uuidv4(),
+                    soLuong,
+                    soLuongDx,
+                    childData: v1
+                  }
+                }).value().filter(f => !!f)
+                let soLuongDx = rs1.reduce((prev, next) => prev += next.soLuongDx, 0);
+                let soLuong = rs1.reduce((prev, next) => prev += next.soLuong, 0);
                 return {
                   idVirtual: uuidv4(),
-                  noiDungDx: k,
+                  noiDungDx: row1.noiDungDx,
                   tenLoaiVthh: row1.tenLoaiVthh,
+                  tenVthh: row1.tenVthh,
+                  donViTinh: row1.donViTinh,
                   soLuong,
                   soLuongDx,
-                  tonKhoCloaiVthh,
-                  tonKhoLoaiVthh,
-                  childData: row1 ? v : [],
+                  childData: rs1,
                 }
-              }).value();
+              }).value().filter(f => !!f);
             let soLuongDx = rs.reduce((prev, next) => prev += next.soLuongDx, 0);
             let soLuong = rs.reduce((prev, next) => prev += next.soLuong, 0);
             return {
@@ -906,7 +945,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               soLuongDx,
               childData: rs
             };
-          }).value();
+          }).value().filter(f => !!f);
       } else {
         this.phuongAnHdrViewCache = chain(this.quyetDinhPdDtlCache)
           .groupBy("noiDungDx")
@@ -994,7 +1033,27 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       await this.tinhTong();
     }
   }
-
+  buildTableViewVttb() {
+    this.phuongAnViewVttb = chain(this.formData.value.quyetDinhPdDtl).groupBy("maDvi").map((value, k) => {
+      const row = value.find(f => f.maDvi === k);
+      if (!row) return;
+      const rs = chain(value).groupBy("vthh").map((v1, k1) => {
+        const row1 = v1.find(f => f.vthh === k1);
+        if (!row1) return;
+        return {
+          ...row1,
+          idVirtual: uuidv4(),
+          childData: v1
+        }
+      }).value().filter(f => !!f)
+      return {
+        ...row,
+        idVirtual: uuidv4(),
+        childData: rs
+      }
+    }).value().filter(f => !!f);
+    this.expandAllVttb();
+  }
   expandAll(type?: string) {
     if (type === 'XC') {
       Array.isArray(this.dataPhanBoXuatCapView) && this.dataPhanBoXuatCapView.forEach(s => {
@@ -1015,6 +1074,14 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       this.expandSetStringCache.add(s.idVirtual);
       Array.isArray(s.childData) && s.childData.forEach(s1 => {
         this.expandSetStringCache.add(s1.idVirtual);
+      })
+    });
+  }
+  expandAllVttb() {
+    Array.isArray(this.phuongAnViewVttb) && this.phuongAnViewVttb.forEach(s => {
+      this.expandSetString.add(s.idVirtual);
+      Array.isArray(s.childData) && s.childData.forEach(s1 => {
+        this.expandSetString.add(s1.idVirtual);
       })
     });
   }
@@ -1329,5 +1396,13 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   }
   isDisabled() {
     return this.isView || this.formData.value.xuatCap
+  }
+  openVttbModal() {
+    this.openViewVttb = true;
+    this.buildTableViewVttb();
+  }
+  closeVttbModal() {
+    this.openViewVttb = false;
+    this.phuongAnViewVttb = [];
   }
 }
