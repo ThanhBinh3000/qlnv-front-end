@@ -646,14 +646,20 @@
                 {{(item.chiPhiXuatToiDa || 0) | number : '1.0-1' : 'vi_VN'}}</td>
               <td class="{{(item.level == 0 || item.level == 1) ? 'text-right font-weight-bold' : 'text-right'}}">
                 {{(item.chiPhiBqToiDa || 0) | number : '1.0-1' : 'vi_VN'}}</td>
-              <td class='text-right'>{{(item.thanhToanTheoVnd || 0) | number : '1.0-1' : 'vi_VN'}}</td>
+              <td class="{{(item.level == 0 || item.level == 1) ? 'text-right font-weight-bold' : 'text-right'}}">
+                {{(item.thanhToanTheoVnd || 0) | number : '1.0-1' : 'vi_VN'}}</td>
               <td class='text-right'>{{(item.tyGia || 0) | number : '1.0-1' : 'vi_VN'}}</td>
-              <td class='text-right'>{{(item.thanhToanTheoUsd || 0) | number : '1.2-2' : 'vi_VN'}}</td>
-              <td class='text-right'>{{(item.thanhToanTheoVndKt || 0) | number : '1.0-1' : 'vi_VN'}}</td>
+              <td class="{{(item.level == 0 || item.level == 1) ? 'text-right font-weight-bold' : 'text-right'}}">
+                {{(item.thanhToanTheoUsd || 0) | number : '1.2-2' : 'vi_VN'}}</td>
+              <td class="{{(item.level == 0 || item.level == 1) ? 'text-right font-weight-bold' : 'text-right'}}">
+                {{(item.thanhToanTheoVndKt || 0) | number : '1.0-1' : 'vi_VN'}}</td>
               <td class='text-right'>{{(item.tyGiaKt || 0) | number : '1.0-1' : 'vi_VN'}}</td>
-              <td class='text-right'>{{(item.thanhToanTheoUsdKt || 0) | number : '1.2-2' : 'vi_VN'}}</td>
-              <td class='text-right'>{{(item.chechLechVnd || 0) | number : '1.0-1' : 'vi_VN'}}</td>
-              <td class='text-right'>{{(item.chechLechUsd || 0) | number : '1.2-2' : 'vi_VN'}}</td>
+              <td class="{{(item.level == 0 || item.level == 1) ? 'text-right font-weight-bold' : 'text-right'}}">
+                {{(item.thanhToanTheoUsdKt || 0) | number : '1.2-2' : 'vi_VN'}}</td>
+              <td class="{{(item.level == 0 || item.level == 1) ? 'text-right font-weight-bold' : 'text-right'}}">
+                {{(item.chechLechVnd || 0) | number : '1.0-1' : 'vi_VN'}}</td>
+              <td class="{{(item.level == 0 || item.level == 1) ? 'text-right font-weight-bold' : 'text-right'}}">
+                {{(item.chechLechUsd || 0) | number : '1.2-2' : 'vi_VN'}}</td>
               <td>
                 <a *ngIf='isViewDetail' (click)='viewRow(item,item.level)'>
                   <i class='fa fa-eye' title='Xem'></i>
