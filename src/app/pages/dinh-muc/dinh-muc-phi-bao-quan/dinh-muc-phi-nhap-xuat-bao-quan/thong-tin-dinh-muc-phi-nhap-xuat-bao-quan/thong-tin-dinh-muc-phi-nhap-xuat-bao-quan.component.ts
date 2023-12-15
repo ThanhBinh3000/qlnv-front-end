@@ -467,7 +467,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       return;
     }
     if (!this.rowItem.uuid) {
-      this.rowItem.uuid = uuidv4();
+      this.rowItem.uuid = Date.now()//uuidv4();
     }
     let msgRequired = '';
     //validator
@@ -637,8 +637,9 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
         this.dataTableDetailKtqd.push(map.get(item.uuid));
       }
     });
-
+    console.log("this.dataTableDetailKtqd", this.dataTableDetailKtqd)
   }
+
 
   saveEdit(idx: number): void {
     Object.assign(this.dataTableDetailTqd[idx], this.dataEdit[idx].data);
@@ -860,6 +861,9 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
   }
 
   tinhTyGiaUsdVnd($event: any) {
+    if (this.rowItem.thanhToanTheoUsdKt)
+      this.rowItem.chechLechUsd = this.rowItem.thanhToanTheoUsdKt - $event;
+
     if (!this.rowItem.tyGia) {
       this.rowItem.tyGia = 0;
     }
@@ -870,8 +874,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       this.rowItem.thanhToanTheoVnd = 0;
     }
     this.rowItem.thanhToanTheoVnd = $event * this.rowItem.tyGia;
-    if (this.rowItem.thanhToanTheoUsdKt)
-      this.rowItem.chechLechUsd = this.rowItem.thanhToanTheoUsdKt - $event;
+
     if (this.rowItem.thanhToanTheoVndKt)
       this.rowItem.chechLechVnd = this.rowItem.thanhToanTheoVndKt - this.rowItem.thanhToanTheoVnd;
   }
@@ -914,6 +917,8 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
   }
 
   tinhTyGiaUsdVndKT($event: any) {
+    if (this.rowItem.thanhToanTheoUsd)
+      this.rowItem.chechLechUsd = this.rowItem.thanhToanTheoUsdKt - $event;
     if (!this.rowItem.tyGiaKt) {
       this.rowItem.tyGiaKt = 0;
     }
@@ -924,8 +929,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       this.rowItem.thanhToanTheoVndKt = 0;
     }
     this.rowItem.thanhToanTheoVndKt = $event * this.rowItem.tyGiaKt;
-    if (this.rowItem.thanhToanTheoUsd)
-      this.rowItem.chechLechUsd = this.rowItem.thanhToanTheoUsdKt - $event;
+
     if (this.rowItem.thanhToanTheoVnd)
       this.rowItem.chechLechVnd = this.rowItem.thanhToanTheoVndKt - this.rowItem.thanhToanTheoVnd;
   }
@@ -1012,6 +1016,11 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
   }
 
   changeTinhTyGiaUsdVnd($event: any) {
+    if (this.formDataDtl.value.thanhToanTheoUsdKt) {
+      this.formDataDtl.patchValue({
+        chechLechUsd: this.formDataDtl.value.thanhToanTheoUsdKt - $event.target.value
+      });
+    }
     if (!this.formDataDtl.value.tyGia) {
       this.formDataDtl.value.tyGia = 0;
     }
@@ -1072,6 +1081,11 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
   }
 
   changeTinhTyGiaUsdVndKt($event: any) {
+    if (this.formDataDtl.value.thanhToanTheoUsd) {
+      this.formDataDtl.patchValue({
+        chechLechUsd: $event.target.value - this.formDataDtl.value.thanhToanTheoUsd
+      });
+    }
     if (!this.formDataDtl.value.tyGiaKt) {
       this.formDataDtl.value.tyGiaKt = 0;
     }
@@ -1130,7 +1144,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
 
   saveAddEdit() {
     if (!this.formDataDtl.value.uuid) {
-      this.formDataDtl.patchValue({ uuid: uuidv4() });
+      this.formDataDtl.patchValue({ uuid: Date.now() });
     }
     let msgRequired = '';
     //validator
