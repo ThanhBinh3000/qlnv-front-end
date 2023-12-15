@@ -549,6 +549,7 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
                       return {
                         children: value2,
                         tenDiemKho: key2,
+                        diemKho : value2 && value2.length > 0 && value2[0].nhaKho?  value2[0].nhaKho.substring(0, 10) : '',
                         khoiTich: null
                       }
                     }
@@ -556,17 +557,46 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
             return {
               children: children1,
               tenChiCuc: key1,
+              chiCuc : children1 && children1.length > 0 && children1[0].diemKho?  children1[0].diemKho.substring(0, 8) : '',
               khoiTich: null
             };
           }).value();
       arr.forEach((item, index) => {
         item.stt = index + 1;
         if (item.children && item.children.length > 0) {
+          let ccGt5000 = this.dataTable.filter(item =>  item.khoiTich &&  item.khoiTich > 5000);
+          let ccLt5000 = this.dataTable.filter(item => item.khoiTich &&  item.khoiTich <= 5000);
+          item.khoiTichGt5000 = this.sumTable(ccGt5000, 'khoiTich');
+          item.khoiTichLt5000 = this.sumTable(ccLt5000, 'khoiTich');
+          item.slKhoGt5000 = ccGt5000.length;
+          item.slKhoLt5000 = ccLt5000.length;
+          item.giaTriHtGt5000 = this.sumTable(ccGt5000, 'giaTriHtKhoHt');
+          item.giaTriHtLt5000 = this.sumTable(ccLt5000, 'giaTriHtKhoHt');
+          item.giaTriKhGt5000 = this.sumTable(ccGt5000, 'giaTriHtKhoKh');
+          item.giaTriKhLt5000 = this.sumTable(ccLt5000, 'giaTriHtKhoKh');
           arrResult.push(item)
           item.children.forEach(child1 => {
+            let dkGt5000 = this.dataTable.filter(item =>  item.khoiTich  &&  child1.diemKho &&  item.khoiTich > 5000  && item.nhaKho.startsWith(child1.diemKho) );
+            let dkLt5000 = this.dataTable.filter(item =>  item.khoiTich  &&  child1.diemKho &&  item.khoiTich <= 5000  && item.nhaKho.startsWith(child1.diemKho) );
+            child1.khoiTichGt5000 = this.sumTable(dkGt5000, 'khoiTich');
+            child1.khoiTichLt5000 = this.sumTable(dkLt5000, 'khoiTich');
+            child1.slKhoGt5000 = dkGt5000.length;
+            child1.slKhoLt5000 = dkLt5000.length;
+            child1.giaTriHtGt5000 = this.sumTable(dkGt5000, 'giaTriHtKhoHt');
+            child1.giaTriHtLt5000 = this.sumTable(dkLt5000, 'giaTriHtKhoHt');
+            child1.giaTriKhGt5000 = this.sumTable(dkGt5000, 'giaTriHtKhoKh');
+            child1.giaTriKhLt5000 = this.sumTable(dkLt5000, 'giaTriHtKhoKh');
             arrResult.push(child1);
             child1.children.forEach(child2 => {
               child2.tenDiemKho = '';
+              child2.khoiTichGt5000 = child2.khoiTich && child2.khoiTich > 5000 ? child2.khoiTich : 0
+              child2.khoiTichLt5000 = child2.khoiTich && child2.khoiTich <= 5000 ? child2.khoiTich : 0
+              child2.slKhoGt5000 = child2.khoiTich && child2.khoiTich > 5000 ? 1 : 0
+              child2.slKhoLt5000 = child2.khoiTich && child2.khoiTich <= 5000 ? 1 : 0
+              child2.giaTriHtGt5000 = child2.khoiTich && child2.khoiTich > 5000 ? child2.giaTriHtKhoHt : 0
+              child2.giaTriHtLt5000 = child2.khoiTich && child2.khoiTich <= 5000 ? child2.giaTriHtKhoHt : 0
+              child2.giaTriKhGt5000 = child2.khoiTich && child2.khoiTich > 5000 ? child2.giaTriHtKhoKh : 0
+              child2.giaTriKhLt5000 = child2.khoiTich && child2.khoiTich <= 5000 ? child2.giaTriHtKhoKh : 0
               arrResult.push(child2);
             })
           })
@@ -583,7 +613,7 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
       let body = {
         typeFile : "pdf",
         trangThai : "01",
-        nam: 2023,
+        nam: this.formData.value.namKeHoach,
         baoHiemDxChiCucDTOS: arr
       }
       await this.deXuatBaoHiemSv.previewDx(body).then(async s => {
@@ -600,7 +630,7 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
   }
 
   async downloadPdf() {
-    saveAs(this.pdfBlob, 'quyet_dinh_gia_btc.pdf');
+    saveAs(this.pdfBlob, 'de-xuat-bao-hiem.pdf');
   }
 
   closeDlg() {
@@ -616,8 +646,27 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
     })
   }
 
-  downloadExcel() {
-
+  async downloadExcel() {
+    try {
+      this.spinner.show();
+      let arr = this.convertDataPreview();
+      let body = {
+        typeFile : "xlsx",
+        trangThai : "01",
+        nam: this.formData.value.namKeHoach,
+        baoHiemDxChiCucDTOS: arr
+      }
+      await this.deXuatBaoHiemSv.previewDx(body).then(async s => {
+        this.excelBlob = s;
+        this.excelSrc = await new Response(s).arrayBuffer();
+        saveAs(this.excelBlob, "de-xuat-bao-hiem.xlsx");
+      });
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
   }
 }
 
