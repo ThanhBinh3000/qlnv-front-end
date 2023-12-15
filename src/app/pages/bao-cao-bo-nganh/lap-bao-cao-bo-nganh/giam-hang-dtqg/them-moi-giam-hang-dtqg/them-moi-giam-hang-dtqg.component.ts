@@ -205,7 +205,7 @@ export class ThemMoiGiamHangDtqgComponent extends Base2Component implements OnIn
   async save(isBanHanh?: boolean) {
     await this.spinner.show();
     if (this.listDataDetail.length == 0) {
-      this.notification.error(MESSAGE.ERROR, "Vui lòng cập nhật thông tin báo cáo");
+      this.notification.error(MESSAGE.ERROR, "Lỗi!!! Vui lòng cập nhật thông tin danh sách báo cáo");
       await this.spinner.hide();
       return
     }
@@ -228,6 +228,7 @@ export class ThemMoiGiamHangDtqgComponent extends Base2Component implements OnIn
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
         } else {
+          this.idInput = res.data.id
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         }
       }
@@ -301,7 +302,7 @@ export class ThemMoiGiamHangDtqgComponent extends Base2Component implements OnIn
       if (type) {
         const sum = arr.reduce((prev, cur) => {
           if (cur[column]) {
-            prev += Number.parseInt(cur[column]);
+            prev += Number.parseFloat(cur[column]);
           }
           return prev;
         }, 0);

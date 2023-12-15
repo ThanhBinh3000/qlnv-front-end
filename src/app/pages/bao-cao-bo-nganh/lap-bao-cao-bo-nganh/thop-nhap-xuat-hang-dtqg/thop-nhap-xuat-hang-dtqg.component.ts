@@ -50,7 +50,7 @@ export class ThopNhapXuatHangDTQGComponent extends Base2Component implements OnI
     super(httpClient, storageService, notification, spinner, modal, bcBnTt145Service);
     this.formData = this.fb.group(
       {
-        nam: [dayjs().get("year"), [Validators.required]],
+        nam: [null],
         quy: [null],
         tuNgayTao: [null],
         tuNgayKyGui: [null],
@@ -62,17 +62,17 @@ export class ThopNhapXuatHangDTQGComponent extends Base2Component implements OnI
 
 
   disabledTuNgayTao = (startValue: Date): boolean => {
-    if (!startValue || !this.tGianTaoTuNgay) {
+    if (!startValue || !this.tGianTaoDenNgay) {
       return false;
     }
-    return startValue.getTime() > this.tGianTaoTuNgay.getTime();
+    return startValue.getTime() > this.tGianTaoDenNgay.getTime();
   };
 
   disabledDenNgayTao = (endValue: Date): boolean => {
-    if (!endValue || !this.tGianTaoDenNgay) {
+    if (!endValue || !this.tGianTaoTuNgay) {
       return false;
     }
-    return endValue.getTime() <= this.tGianTaoDenNgay.getTime();
+    return endValue.getTime() <= this.tGianTaoTuNgay.getTime();
   };
   disabledTuNgayKyGui = (startValue: Date): boolean => {
     if (!startValue || !this.tGianBanHanhDenNgay) {
@@ -93,7 +93,7 @@ export class ThopNhapXuatHangDTQGComponent extends Base2Component implements OnI
   }
 
   async clearFilter() {
-    this.formData.get('nam').setValue(dayjs().get("year"));
+    this.formData.get('nam').setValue(null);
     this.tGianTaoTuNgay = null;
     this.tGianTaoDenNgay = null;
     this.tGianBanHanhTuNgay = null;
@@ -128,14 +128,16 @@ export class ThopNhapXuatHangDTQGComponent extends Base2Component implements OnI
       tGianTaoDenNgay: this.tGianTaoDenNgay != null ? dayjs(this.tGianTaoDenNgay).format('YYYY-MM-DD') : null,
       tGianBanHanhTuNgay: this.tGianBanHanhTuNgay != null ? dayjs(this.tGianBanHanhTuNgay).format('YYYY-MM-DD') : null,
       tGianBanHanhDenNgay: this.tGianBanHanhDenNgay != null ? dayjs(this.tGianBanHanhDenNgay).format('YYYY-MM-DD') : null,
-      maDvi: null,
+      dviGui: null,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
       },
     };
-    if (this.userService.isCuc()) {
-      body.maDvi = this.userInfo.MA_DVI
+    if (!this.userService.isTongCuc()) {
+      body.dviGui = this.userInfo.MA_DVI
+    }else{
+      body.dviGui = null
     }
     let res = await this.bcBnTt145Service.search(body);
     if (res.msg == MESSAGE.SUCCESS) {

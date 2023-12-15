@@ -32,6 +32,8 @@ export class ThemMoiThopNhapXuatHangDtqgComponent extends Base2Component impleme
   itemRowUpdate: any = {};
   itemRow: any = {};
   listData: any;
+  listDsDvi: any;
+  tenBoNganh: any;
   listDataDetail: any[] = [];
   listCloaiVthh: any[] = [];
   now: any;
@@ -80,7 +82,8 @@ export class ThemMoiThopNhapXuatHangDtqgComponent extends Base2Component impleme
     await Promise.all([
       this.getUserInfor(),
       this.loadDsVthh(),
-      this.loadDsDonVi()
+      this.loadDsDonVi(),
+      this.layTatCaDonViByLevel()
     ]);
     await this.spinner.hide();
   }
@@ -95,6 +98,7 @@ export class ThemMoiThopNhapXuatHangDtqgComponent extends Base2Component impleme
             bieuSo: this.listData.bieuSo,
             thongTuSo: this.listData.thongTuSo,
             boNganh: this.listData.boNganh,
+            dviGui: this.userService.isTongCuc() ? this.listData.dviGui : this.userInfo.MA_DVI,
             nam: this.listData.nam,
             trangThai: this.listData.trangThai,
             tenTrangThai: this.listData.tenTrangThai,
@@ -126,7 +130,7 @@ export class ThemMoiThopNhapXuatHangDtqgComponent extends Base2Component impleme
 
   async getUserInfor() {
     this.formData.patchValue({
-      dviGui: this.userInfo.TEN_DVI,
+      dviGui: this.userService.isTongCuc() ? this.formData.value.dviGui : this.userInfo.TEN_DVI,
       tenBieuSo: this.TEN_BIEU_SO,
     })
   }
@@ -174,6 +178,7 @@ export class ThemMoiThopNhapXuatHangDtqgComponent extends Base2Component impleme
   }
 
   addRow(): void {
+    this.setDataTable(this.itemRow)
     // if (this.validateItemSave(this.itemRow)) {
     this.listDataDetail = [
       ...this.listDataDetail,
@@ -200,18 +205,27 @@ export class ThemMoiThopNhapXuatHangDtqgComponent extends Base2Component impleme
     })
   }
 
+  handleChoose(event){
+    let data = this.listDsDvi.find(x => x.maDvi == event)
+    this.tenBoNganh = data.tenDvi
+  }
+
   async save(isBanHanh?: boolean) {
     await this.spinner.show();
     if (this.listDataDetail.length == 0) {
-      this.notification.error(MESSAGE.ERROR, "Vui lòng cập nhật thông tin các gói thầu");
+      this.notification.error(MESSAGE.ERROR, "Lỗi!!! Vui lòng cập nhật thông tin danh sách báo cáo");
       await this.spinner.hide();
       return
     }
     let body = this.formData.value
     body.id = this.idInput
-    body.dviGui = this.userInfo.MA_DVI
+    if(!this.userService.isTongCuc()){
+      body.dviGui = this.userInfo.MA_DVI
+      body.boNganh = this.userInfo.TEN_DVI
+    }else{
+      body.boNganh = this.tenBoNganh
+    }
     body.detail = this.listDataDetail
-    body.boNganh = this.userInfo.TEN_DVI
     console.log(body)
     let res = null;
     if (this.idInput > 0) {
@@ -227,6 +241,7 @@ export class ThemMoiThopNhapXuatHangDtqgComponent extends Base2Component impleme
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
         } else {
+          this.idInput = res.data.id
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         }
       }
@@ -282,8 +297,18 @@ export class ThemMoiThopNhapXuatHangDtqgComponent extends Base2Component impleme
       type: "DV"
     };
     let res = await this.donViService.getDonViTheoMaCha(body); if (res.msg == MESSAGE.SUCCESS) {
-      console.log(res.data)
       this.formData.get('dviNhan').setValue(res.data[0].tenDvi);
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async layTatCaDonViByLevel() {
+    let res = await this.donViService.layTatCaDonViByLevel(0);
+    if (res.msg == MESSAGE.SUCCESS) {
+      console.log(res.data, 1234)
+      this.listDsDvi = res.data
+      // this.formData.get('dviNhan').setValue(res.data[0].tenDvi);
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -315,5 +340,15 @@ export class ThemMoiThopNhapXuatHangDtqgComponent extends Base2Component impleme
     this.labelImport.nativeElement.innerText = event.target.files[0].name;
     await this.onFileSelected(event);
     this.listDataDetail = this.dataImport
+  }
+
+  setDataTable(data: any){
+    console.log(data)
+    data.nhapTsSl = data.nhapTSl + data.nhapLpSl;
+    data.nhapTsTt = data.nhapTTt + data.nhapLpTt;
+    data.xuatTsSl = data.xuatTSl + data.xuatLpSl;
+    data.xuatTsTt = data.xuatTTt + data.xuatLpTt;
+    data.tonKhoNamKhSl = data.tonKhoNamBcSl + data.nhapTsSl - data.xuatTsSl;
+    data.tonKhoNamKhTt = data.tonKhoNamBcTt + data.nhapTsTt - data.xuatTsTt;
   }
 }

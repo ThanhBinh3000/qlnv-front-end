@@ -128,14 +128,16 @@ export class TangHangDtqgComponent extends Base2Component implements OnInit {
       tGianTaoDenNgay: this.tGianTaoDenNgay != null ? dayjs(this.tGianTaoDenNgay).format('YYYY-MM-DD') : null,
       tGianBanHanhTuNgay: this.tGianBanHanhTuNgay != null ? dayjs(this.tGianBanHanhTuNgay).format('YYYY-MM-DD') : null,
       tGianBanHanhDenNgay: this.tGianBanHanhDenNgay != null ? dayjs(this.tGianBanHanhDenNgay).format('YYYY-MM-DD') : null,
-      maDvi: null,
+      dviGui: null,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
       },
     };
-    if (this.userService.isCuc()) {
-      body.maDvi = this.userInfo.MA_DVI
+    if (!this.userService.isTongCuc()) {
+      body.dviGui = this.userInfo.MA_DVI
+    }else{
+      body.dviGui = null
     }
     let res = await this.bcBnTt145Service.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
