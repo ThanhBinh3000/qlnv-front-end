@@ -14,6 +14,7 @@ import { cloneDeep, chain } from 'lodash';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { formatDate } from '@angular/common';
 import { DonviService } from 'src/app/services/donvi.service';
+import {convertTienTobangChu} from "../../../../../shared/commonFunction";
 
 @Component({
   selector: 'app-them-moi-kh-nhap-xuat-ct-vt-bq-hang-dtqg',
@@ -36,6 +37,20 @@ export class ThemMoiKhNhapXuatCtVtBqHangDtqgComponent extends Base2Component imp
   listDataDetail: any[] = [];
   listCloaiVthh: any[] = [];
   now: any;
+  listQuy: any[] = [
+    { text: "Quý I", value: 1 },
+    { text: "Quý II", value: 2 },
+    { text: "Quý III", value: 3 },
+    { text: "Quý IV", value: 4 }
+  ];
+  listLoaiBc: any[] = [
+    {
+      text: "Báo cáo năm",
+      value: 1,
+      thoiHanGuiBc: "Sau 05 ngày kết thúc thời gian chỉnh lý quyết toán ngân sách nhà nước"
+    },
+    { text: "Báo cáo quý", value: 2, thoiHanGuiBc: "Ngày 20 của tháng đầu quý sau" }
+  ];
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
@@ -66,8 +81,11 @@ export class ThemMoiKhNhapXuatCtVtBqHangDtqgComponent extends Base2Component imp
         donVi: [null],
         tkTienGuiCuaDvi: [null],
         moTai: [null],
-        soTien: [null],
+        loaiBc: [null],
+        kyBc: [null],
         bangChu: [null],
+        soTien: [null],
+        donViNhan: [null],
         detail: [],
       }
     );
@@ -108,6 +126,9 @@ export class ThemMoiKhNhapXuatCtVtBqHangDtqgComponent extends Base2Component imp
             tGianBanHanhTuNgay: this.listData.tGianBanHanhTuNgay,
             tGianBanHanhDenNgay: this.listData.tGianBanHanhDenNgay,
             donVi: this.listData.donVi,
+            kyBc: this.listData.kyBc,
+            loaiBc: this.listData.loaiBc,
+            donViNhan: this.listData.donViNhan,
             tkTienGuiCuaDvi: this.listData.tkTienGuiCuaDvi,
             moTai: this.listData.moTai,
             soTien: this.listData.soTien,
@@ -241,6 +262,7 @@ export class ThemMoiKhNhapXuatCtVtBqHangDtqgComponent extends Base2Component imp
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
         } else {
+          this.idInput = res.data.id
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         }
       }
@@ -295,7 +317,9 @@ export class ThemMoiKhNhapXuatCtVtBqHangDtqgComponent extends Base2Component imp
       trangThai: "01", maDviCha: "01",
       type: "DV"
     };
-    let res = await this.donViService.getDonViTheoMaCha(body); if (res.msg == MESSAGE.SUCCESS) {
+    let res = await this.donViService.getDonViTheoMaCha(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      console.log(res, "123")
       this.formData.get('dviNhan').setValue(res.data[0].tenDvi);
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -305,5 +329,8 @@ export class ThemMoiKhNhapXuatCtVtBqHangDtqgComponent extends Base2Component imp
     this.labelImport.nativeElement.innerText = event.target.files[0].name;
     await this.onFileSelected(event);
     this.listDataDetail = this.dataImport
+  }
+  changeNumberToString(event: any){
+    return convertTienTobangChu(event);
   }
 }

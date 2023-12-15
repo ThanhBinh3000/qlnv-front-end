@@ -94,6 +94,7 @@ export class ChiTietNhapXuatTonKhoHangDtqgComponent extends Base2Component imple
 
   async clearFilter() {
     this.formData.get('nam').setValue(dayjs().get("year"));
+    this.formData.get('quy').setValue(null);
     this.tGianTaoTuNgay = null;
     this.tGianTaoDenNgay = null;
     this.tGianBanHanhTuNgay = null;
@@ -123,19 +124,22 @@ export class ChiTietNhapXuatTonKhoHangDtqgComponent extends Base2Component imple
     this.spinner.show();
     let body = {
       nam: this.formData.get('nam').value,
+      kyBc: this.formData.get('quy').value,
       bieuSo: this.BIEU_SO,
       tGianTaoTuNgay: this.tGianTaoTuNgay != null ? dayjs(this.tGianTaoTuNgay).format('YYYY-MM-DD') : null,
       tGianTaoDenNgay: this.tGianTaoDenNgay != null ? dayjs(this.tGianTaoDenNgay).format('YYYY-MM-DD') : null,
       tGianBanHanhTuNgay: this.tGianBanHanhTuNgay != null ? dayjs(this.tGianBanHanhTuNgay).format('YYYY-MM-DD') : null,
       tGianBanHanhDenNgay: this.tGianBanHanhDenNgay != null ? dayjs(this.tGianBanHanhDenNgay).format('YYYY-MM-DD') : null,
-      maDvi: null,
+      dviGui: null,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
       },
     };
-    if (this.userService.isCuc()) {
-      body.maDvi = this.userInfo.MA_DVI
+    if (!this.userService.isTongCuc()) {
+      body.dviGui = this.userInfo.MA_DVI
+    }else{
+      body.dviGui = null
     }
     let res = await this.bcBnTt145Service.search(body);
     if (res.msg == MESSAGE.SUCCESS) {

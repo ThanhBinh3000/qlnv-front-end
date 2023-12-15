@@ -44,6 +44,20 @@ export class ThemMoiChiTietNhapXuatTonKhoHangDtqgComponent extends Base2Componen
   itemRowEdit: any = {};
   now: any;
   dsChiCuc: any[] = []
+  listQuy: any[] = [
+    { text: "Quý I", value: 1 },
+    { text: "Quý II", value: 2 },
+    { text: "Quý III", value: 3 },
+    { text: "Quý IV", value: 4 }
+  ];
+  listLoaiBc: any[] = [
+    {
+      text: "Báo cáo năm",
+      value: 1,
+      thoiHanGuiBc: "Sau 05 ngày kết thúc thời gian chỉnh lý quyết toán ngân sách nhà nước"
+    },
+    { text: "Báo cáo quý", value: 2, thoiHanGuiBc: "Ngày 20 của tháng đầu quý sau" }
+  ];
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
@@ -71,6 +85,8 @@ export class ThemMoiChiTietNhapXuatTonKhoHangDtqgComponent extends Base2Componen
         cloaiVthh: [null],
         trangThai: "00",
         tenTrangThai: "Dự thảo",
+        loaiBc: [null],
+        kyBc: [null],
         detail: [],
       }
     );
@@ -105,6 +121,8 @@ export class ThemMoiChiTietNhapXuatTonKhoHangDtqgComponent extends Base2Componen
             bieuSo: this.listData.bieuSo,
             thongTuSo: this.listData.thongTuSo,
             boNganh: this.listData.boNganh,
+            kyBc: this.listData.kyBc,
+            loaiBc: this.listData.loaiBc,
             nam: this.listData.nam,
             tenTrangThai: this.listData.tenTrangThai,
             trangThai: this.listData.trangThai,
@@ -279,7 +297,9 @@ export class ThemMoiChiTietNhapXuatTonKhoHangDtqgComponent extends Base2Componen
     let body = this.formData.value
     body.id = this.idInput
     body.dviGui = this.userInfo.MA_DVI
+    console.log(this.listDataGroup, "this.listDataGroup")
     body.detail = this.listDataGroup
+    console.log(body.detail, "body.detail")
     body.thoiGianTao = this.formData.get('thoiGianTao').value
     body.boNganh = this.userInfo.TEN_DVI
     let res = null;
@@ -295,6 +315,7 @@ export class ThemMoiChiTietNhapXuatTonKhoHangDtqgComponent extends Base2Componen
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
         } else {
+          this.idInput = res.data.id
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         }
       }
@@ -356,7 +377,8 @@ export class ThemMoiChiTietNhapXuatTonKhoHangDtqgComponent extends Base2Componen
     }
   }
 
-  themMoiDanhMuc() {
+  themMoiDanhMuc(index1?: any, index2?: any, index3?: any, index4?: any) {
+    debugger
     const modalGT = this.modal.create({
       nzTitle: '',
       nzContent: DialogThemMoiChiTietNhapXuatTonKhoHangDtqgComponent,
@@ -367,6 +389,9 @@ export class ThemMoiChiTietNhapXuatTonKhoHangDtqgComponent extends Base2Componen
       nzClassName: '',
       nzComponentParams: {
         listDataGroup: this.listDataGroup,
+        index1: index1,
+        index2: index2,
+        index3: index3,
       },
     });
     modalGT.afterClose.subscribe((res) => {
@@ -514,4 +539,8 @@ export class ThemMoiChiTietNhapXuatTonKhoHangDtqgComponent extends Base2Componen
       }
     }
   }
+
+  // changeLoaiBc(event) {
+  //   this.formData.get("thoiHanGuiBc").setValue(this.listLoaiBc.find(item => item.value == event).thoiHanGuiBc);
+  // }
 }

@@ -92,6 +92,33 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Năm báo cáo
+            </nz-form-label>
+            <nz-select formControlName="nam" [nzDisabled]="isView">
+              <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+            </nz-select>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Kỳ báo cáo
+            </nz-form-label>
+            <nz-select formControlName="kyBc" [nzDisabled]="isView">
+              <nz-option *ngFor="let p of listQuy" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+            </nz-select>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Loại báo cáo
+            </nz-form-label>
+            <nz-select formControlName="loaiBc" [nzDisabled]="isView">
+              <nz-option *ngFor="let p of listLoaiBc" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+            </nz-select>
+          </nz-form-item>
+        </div>
       </div>
       <div class="header header-green-background mg-t-10">
         <div class="header-text">
@@ -107,10 +134,9 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Đơn vị </nz-form-label>
             <nz-form-control>
-              <nz-select [nzDisabled]="isView" formControlName="donVi">
-                <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
-                </nz-option>
-              </nz-select>
+              <nz-input-group>
+                <input nz-input [readonly]="isView" formControlName="donViNhan" />
+              </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -138,8 +164,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Số tiền </nz-form-label>
             <nz-form-control>
-              <nz-input-number [nzDisabled]="isView" class="search__input" [nzSize]="'small'" [nzMin]="1" [nzMax]="12"
-                formControlName="soTien">
+              <nz-input-number formControlName="soTien" [nzDisabled]="isView" class="search__input" [nzSize]="'small'">
               </nz-input-number>
             </nz-form-control>
           </nz-form-item>
@@ -148,7 +173,8 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Bằng chữ </nz-form-label>
             <nz-form-control>
-              <input nz-input [readonly]="isView" formControlName="bangChu" />
+              <input nz-input [ngModel]="changeNumberToString(formData.value.soTien)"
+                     [ngModelOptions]="{standalone: true}" [readonly]="true" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -233,36 +259,21 @@
               </nz-select>
             </th>
             <th>{{itemRow.dvt}}</th>
-            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.tongCpNhap"
-                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number></th>
-            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.tongCpXuat"
-                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number></th>
-            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.tongCpCt"
-                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number></th>
-            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.tongCpVt"
-                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number></th>
-            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.tongCpBq"
-                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number></th>
-            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.daChiNhap"
-                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number></th>
-            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.daChiXuat"
-                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number></th>
-            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.daChiCt"
-                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number></th>
-            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.daChiVt"
-                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number></th>
-            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.daChiBq"
-                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number></th>
-            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.tkPhiNhap"
-                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number></th>
-            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.tkPhiXuat"
-                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number></th>
-            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.tkPhiCt"
-                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number></th>
-            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.tkPhiVt"
-                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number></th>
-            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.tkPhiBq"
-                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number></th>
+            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.tongCpNhap"></nz-input-number></th>
+            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.tongCpXuat"></nz-input-number></th>
+            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.tongCpCt"></nz-input-number></th>
+            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.tongCpVt"></nz-input-number></th>
+            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.tongCpBq"></nz-input-number></th>
+            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.daChiNhap"></nz-input-number></th>
+            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.daChiXuat"></nz-input-number></th>
+            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.daChiCt"></nz-input-number></th>
+            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.daChiVt"></nz-input-number></th>
+            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.daChiBq"></nz-input-number></th>
+            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.tkPhiNhap"></nz-input-number></th>
+            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.tkPhiXuat"></nz-input-number></th>
+            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.tkPhiCt"></nz-input-number></th>
+            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.tkPhiVt"></nz-input-number></th>
+            <th><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRow.tkPhiBq"></nz-input-number></th>
             <th>
               <a *ngIf="!isView" (click)="addRow()" [class.disabled]="!itemRow">
                 <i class="fa fa-plus"></i>
@@ -279,21 +290,21 @@
               <td class="text-center">{{i+1}}</td>
               <td>{{ data.tenHang }}</td>
               <td>{{ data.dvt }}</td>
-              <td class="text-right">{{ data.tongCpNhap | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.tongCpXuat | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.tongCpCt | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.tongCpVt | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.tongCpBq | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.daChiNhap | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.daChiXuat | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.daChiCt | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.daChiVt | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.daChiBq | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.tkPhiNhap | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.tkPhiXuat | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.tkPhiCt | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.tkPhiVt | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.tkPhiBq | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.tongCpNhap | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.tongCpXuat | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.tongCpCt | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.tongCpVt | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.tongCpBq | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.daChiNhap | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.daChiXuat | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.daChiCt | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.daChiVt | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.daChiBq | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.tkPhiNhap | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.tkPhiXuat | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.tkPhiCt | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.tkPhiVt | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.tkPhiBq | number : '1.2-2' : 'vi_VN' }}</td>
               <td class="text-center">
                 <a *ngIf="!isView" (click)="startEdit(i)">
                   <i class=" fa fa-pencil"></i>
@@ -314,44 +325,30 @@
               </td>
               <td>{{itemRowUpdate.dvt}}</td>
               <td><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'"
-                  [(ngModel)]="itemRowUpdate.tongCpNhap" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser"></nz-input-number></td>
+                  [(ngModel)]="itemRowUpdate.tongCpNhap" ></nz-input-number></td>
               <td><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'"
-                  [(ngModel)]="itemRowUpdate.tongCpXuat" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser"></nz-input-number></td>
+                  [(ngModel)]="itemRowUpdate.tongCpXuat" ></nz-input-number></td>
               <td><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'"
-                  [(ngModel)]="itemRowUpdate.tongCpCt" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser"></nz-input-number></td>
+                  [(ngModel)]="itemRowUpdate.tongCpCt" ></nz-input-number></td>
               <td><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'"
-                  [(ngModel)]="itemRowUpdate.tongCpVt" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser"></nz-input-number></td>
+                  [(ngModel)]="itemRowUpdate.tongCpVt" ></nz-input-number></td>
               <td><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'"
-                  [(ngModel)]="itemRowUpdate.tongCpBq" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser"></nz-input-number></td>
+                  [(ngModel)]="itemRowUpdate.tongCpBq" ></nz-input-number></td>
               <td><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'"
-                  [(ngModel)]="itemRowUpdate.daChiNhap" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser"></nz-input-number></td>
+                  [(ngModel)]="itemRowUpdate.daChiNhap" ></nz-input-number></td>
               <td><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'"
-                  [(ngModel)]="itemRowUpdate.daChiXuat" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser"></nz-input-number></td>
-              <td><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRowUpdate.daChiCt"
-                  [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number></td>
-              <td><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRowUpdate.daChiVt"
-                  [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number></td>
-              <td><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRowUpdate.daChiBq"
-                  [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number></td>
+                  [(ngModel)]="itemRowUpdate.daChiXuat" ></nz-input-number></td>
+              <td><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRowUpdate.daChiCt"></nz-input-number></td>
+              <td><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRowUpdate.daChiVt"></nz-input-number></td>
+              <td><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRowUpdate.daChiBq"></nz-input-number></td>
               <td><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'"
-                  [(ngModel)]="itemRowUpdate.tkPhiNhap" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser"></nz-input-number></td>
+                  [(ngModel)]="itemRowUpdate.tkPhiNhap" ></nz-input-number></td>
               <td><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'"
-                  [(ngModel)]="itemRowUpdate.tkPhiXuat" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser"></nz-input-number></td>
+                  [(ngModel)]="itemRowUpdate.tkPhiXuat" ></nz-input-number></td>
               <td><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRowUpdate.tkPhiCt"
-                  [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number></td>
-              <td><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRowUpdate.tkPhiVt"
-                  [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number></td>
-              <td><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRowUpdate.tkPhiBq"
-                  [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number></td>
+                  ></nz-input-number></td>
+              <td><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRowUpdate.tkPhiVt"></nz-input-number></td>
+              <td><nz-input-number [nzDisabled]="isView" nz-input [nzSize]="'small'" [(ngModel)]="itemRowUpdate.tkPhiBq"></nz-input-number></td>
               <td class="text-center">
                 <a (click)="saveEdit(itemRowUpdate,i)" class="save">
                   <i class="icon htvbdh_tcdt_save"></i>
