@@ -95,10 +95,8 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
 
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
-    // if (!this.idInput) {
     this.maTt = "/TTr-TVQT";
     this.soQd = "/TCDT-TVQT";
-    // }
     this.loadDsNam();
     await this.getDataDetail(this.idInput);
     await this.getAllLoaiDuAn();
@@ -126,8 +124,6 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
       let res = await this.tongHopDxXdTh.getDetail(id);
       const data = res.data;
       this.dataDetail = cloneDeep(data)
-      // this.maTt = data.maToTrinh ? "/" + data.maToTrinh.split("/")[1] : null,
-      //   this.soQd = data.soQuyetDinh ? "/" + data.soQuyetDinh.split("/")[1] : null,
       this.formData.patchValue({
         id: data.id,
         namBatDau: data.namBatDau,

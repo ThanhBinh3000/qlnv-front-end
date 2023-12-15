@@ -24,7 +24,7 @@ import {
 import {
   KtKhSuaChuaBtcService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/kh-sc-lon-btc/kt-kh-sua-chua-btc.service";
-import { saveAs } from 'file-saver';
+import {saveAs} from 'file-saver';
 
 @Component({
   selector: "app-them-moi-sc-tcdt",
@@ -88,10 +88,8 @@ export class ThemMoiScTcdtComponent implements OnInit {
 
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
-    if (!this.idInput) {
-      this.maTt = "/TTr-TVQT";
-      this.soQd = "/TCDT-TVQT";
-    }
+    this.maTt = "/TTr-TVQT";
+    this.soQd = "/TCDT-TVQT";
     this.loadDsNam();
     await this.getDataDetail(this.idInput);
   }
@@ -106,7 +104,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
   }
 
   onExpandChange(item: any, checked: boolean): void {
-    console.log(item,checked);
+    console.log(item, checked);
     item.expandSet = checked
   }
 
@@ -115,25 +113,23 @@ export class ThemMoiScTcdtComponent implements OnInit {
       this.isTongHop = true;
       let res = await this.tongHopDxScLon.getDetail(id);
       const data = res.data;
-      this.maTt = data.maToTrinh ? "/" + data.maToTrinh.split("/")[1] : null,
-        this.soQd = data.soQuyetDinh ? "/" + data.soQuyetDinh.split("/")[1] : null,
-        this.formData.patchValue({
-          id: data.id,
-          namKeHoach: data.namKeHoach,
-          namBatDau: data.namBatDau,
-          namKetThuc: data.namKetThuc,
-          ngayTaoTt: data.ngayTaoTt,
-          ngayKyQd: data.ngayKyQd,
-          noiDung: data.noiDung,
-          maToTrinh: data.maToTrinh ? data.maToTrinh.split("/")[0] : null,
-          soQuyetDinh: data.soQuyetDinh ? data.soQuyetDinh.split("/")[0] : null,
-          trangThai: data.trangThai,
-          tenTrangThai: data.tenTrangThai,
-          lyDoTuChoi: data.lyDoTuChoi,
-          loaiDuAn: data.loaiDuAn,
-          tgTongHop: data.tgTongHop,
-          loaiTmdt: data.loaiTmdt,
-        });
+      this.formData.patchValue({
+        id: data.id,
+        namKeHoach: data.namKeHoach,
+        namBatDau: data.namBatDau,
+        namKetThuc: data.namKetThuc,
+        ngayTaoTt: data.ngayTaoTt,
+        ngayKyQd: data.ngayKyQd,
+        noiDung: data.noiDung,
+        maToTrinh: data.maToTrinh ? data.maToTrinh.split("/")[0] : null,
+        soQuyetDinh: data.soQuyetDinh ? data.soQuyetDinh.split("/")[0] : null,
+        trangThai: data.trangThai,
+        tenTrangThai: data.tenTrangThai,
+        lyDoTuChoi: data.lyDoTuChoi,
+        loaiDuAn: data.loaiDuAn,
+        tgTongHop: data.tgTongHop,
+        loaiTmdt: data.loaiTmdt,
+      });
       this.fileDinhKem = data.fileDinhKem;
       this.fileCanCu = data.fileCanCu;
 
@@ -181,7 +177,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-    if(this.dataTable && this.dataTable.length == 0){
+    if (this.dataTable && this.dataTable.length == 0) {
       this.notification.error(MESSAGE.ERROR, 'Danh sách dự án công trình không được để trống');
       this.spinner.hide();
       return;
@@ -350,7 +346,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
       if (list && list.listDxCuc.length > 0) {
         this.isTongHop = true;
         this.dataTable = res.data.listDxCuc;
-        this.dataTable.forEach( item => {
+        this.dataTable.forEach(item => {
           item.vonDauTuTcdt = item.vonDauTu;
         })
         await this.buildDataTable();
@@ -367,33 +363,33 @@ export class ThemMoiScTcdtComponent implements OnInit {
     this.spinner.hide();
   }
 
-  async buildDataTable(){
+  async buildDataTable() {
     this.dataTableExpand = await chain(this.dataTable).groupBy("tenCuc").map((value, key) => {
-        let rs = chain(value)
-          .groupBy("tenChiCuc")
-          .map((v, k) => {
-            let rs1 = chain(v)
-              .groupBy("tenKhoi")
-              .map((v1, k1) => {
-                  return {
-                    tenKhoi: k1,
-                    expandSet : true,
-                    children: v1
-                  };
-                }
-              ).value();
-            return {
-              tenChiCuc: k,
-              children: rs1,
-              expandSet : true,
-            };
-          }).value();
-        return {
-          tenCuc: key,
-          children: rs,
-          expandSet : true,
-        };
-      }).value();
+      let rs = chain(value)
+        .groupBy("tenChiCuc")
+        .map((v, k) => {
+          let rs1 = chain(v)
+            .groupBy("tenKhoi")
+            .map((v1, k1) => {
+                return {
+                  tenKhoi: k1,
+                  expandSet: true,
+                  children: v1
+                };
+              }
+            ).value();
+          return {
+            tenChiCuc: k,
+            children: rs1,
+            expandSet: true,
+          };
+        }).value();
+      return {
+        tenCuc: key,
+        children: rs,
+        expandSet: true,
+      };
+    }).value();
   }
 
   expandAll(table: any[]) {
@@ -505,7 +501,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
     this.emitTab({tab: "qdbtc", id: this.idTongHop, quyetDinh: this.quyetDinh});
   }
 
-  deleteRow(data){
+  deleteRow(data) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -526,18 +522,18 @@ export class ThemMoiScTcdtComponent implements OnInit {
     });
   }
 
-  exportDetail($event){
+  exportDetail($event) {
     $event.stopPropagation()
     let body = {
-      id : this.idInput,
-      title : this.formData.value.loaiTmdt == 'TREN15TY' ? 'TRÊN 15 TỶ' : 'DƯỚI 15 TỶ'
+      id: this.idInput,
+      title: this.formData.value.loaiTmdt == 'TREN15TY' ? 'TRÊN 15 TỶ' : 'DƯỚI 15 TỶ'
     }
     this.spinner.show();
-      this.tongHopDxScLon
-        .exportDetail(body)
-        .subscribe((blob) =>
-          saveAs(blob,'data.xlsx'),
-        );
-      this.spinner.hide();
+    this.tongHopDxScLon
+      .exportDetail(body)
+      .subscribe((blob) =>
+        saveAs(blob, 'data.xlsx'),
+      );
+    this.spinner.hide();
   }
 }
