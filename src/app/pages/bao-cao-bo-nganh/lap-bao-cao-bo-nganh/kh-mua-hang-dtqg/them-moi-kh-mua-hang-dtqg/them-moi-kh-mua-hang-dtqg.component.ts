@@ -16,6 +16,7 @@ import { cloneDeep } from 'lodash';
 import {
   DialogThemMoiKhMuaHangDtqgComponent
 } from "../dialog-them-moi-kh-mua-hang-dtqg/dialog-them-moi-kh-mua-hang-dtqg.component";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
   selector: 'app-them-moi-kh-mua-hang-dtqg',
@@ -47,6 +48,19 @@ export class ThemMoiKhMuaHangDtqgComponent extends Base2Component implements OnI
   itemRowDonViEdit: any[] = [];
   itemRowNhomMhEdit: any[] = [];
   itemRowMatHang: any[] = [];
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "right",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -189,6 +203,7 @@ export class ThemMoiKhMuaHangDtqgComponent extends Base2Component implements OnI
       res = await this.bcBnTt108Service.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
+      this.idInput = res.data.id;
       if (this.formData.get("id").value) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
       } else {

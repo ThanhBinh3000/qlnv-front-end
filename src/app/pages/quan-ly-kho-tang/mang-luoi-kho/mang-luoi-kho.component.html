@@ -897,7 +897,7 @@
                           <nz-form-label>Khối tích</nz-form-label>
                           <nz-form-control>
                             <nz-input-group>
-                              <nz-input-number [nzDisabled]="!isEditData" [nzSize]="'small'"
+                              <nz-input-number [nzDisabled]="isEditData" [nzSize]="'small'"
                                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                                                formControlName="khoiTich"></nz-input-number>
                             </nz-input-group>

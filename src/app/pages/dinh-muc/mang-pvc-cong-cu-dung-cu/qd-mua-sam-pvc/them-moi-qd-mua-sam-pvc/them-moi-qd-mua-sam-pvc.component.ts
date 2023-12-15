@@ -342,7 +342,7 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
     if (type == 'DX') {
       result = this.listDxCuc.filter(item => item.id = event);
     } else {
-      result = this.listTongHop.filter(item => item.id = event);
+      result = [{ id: event }] //this.listTongHop.filter(item => item.id == event);
     }
     if (result && result.length > 0) {
       let detailTh = result[0];

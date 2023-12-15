@@ -177,11 +177,11 @@
             <i class=" icon htvbdh_eye"></i>
           </a>
           <a (click)="openThemMoiHd(data.idHopDong)"
-             *ngIf="(data.hopDong?.trangThai == STATUS.DU_THAO ) && userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_HD_THEM')">
+             *ngIf="(data.hopDong?.trangThai != STATUS.DA_KY ) && userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_HD_THEM')">
             <i class="fa fa-pencil" title="Sửa"></i>
           </a>
           <a
-            *ngIf="(data.hopDong?.trangThai == STATUS.DU_THAO) && userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_HD_XOA')"
+            *ngIf="(data.hopDong?.trangThai != STATUS.DA_KY) && userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_HD_XOA')"
             (click)="delete(data)">
             <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           </a>

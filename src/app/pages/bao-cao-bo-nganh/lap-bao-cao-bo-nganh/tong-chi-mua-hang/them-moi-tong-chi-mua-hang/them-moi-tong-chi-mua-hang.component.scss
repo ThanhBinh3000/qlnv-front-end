@@ -10,3 +10,17 @@
 .btn-group > .btn-group:not(:first-child), .btn-group > .btn:not(:first-child) {
   margin-left: 6px;
 }
+
+.input-file-custom {
+  display: none;
+}
+
+.label-file-custom {
+  height: 26px;
+  margin-bottom: 0;
+}
+
+.custom-file-label::after {
+  height: 26px;
+  margin-bottom: 0;
+}

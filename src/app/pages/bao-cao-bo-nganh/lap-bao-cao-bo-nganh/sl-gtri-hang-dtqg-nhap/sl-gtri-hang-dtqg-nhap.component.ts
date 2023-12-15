@@ -124,6 +124,7 @@ export class SlGtriHangDtqgNhapComponent extends Base2Component implements OnIni
     this.tuNgayKyGui = null;
     this.denNgayTao = null;
     this.denNgayKyGui = null;
+    await this.search();
   }
 
   redirectDetail(isView, data?) {

@@ -15,7 +15,7 @@
         <i class='fa fa-arrow-left'></i>
         <span>Quay lại</span>
       </button>
-      <button type='button' class='btn btn-sub xanh ml-2' (click)='pheDuyet()'
+      <button type='button' class='btn btn-sub xanh ml-2' (click)='luuVapheDuyet()'
         *ngIf=" !isView && isTongHop && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV) && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_THDEXUATCUC_THEM') ">
         <i class='icon htvbdh_tcdt_guiduyet'></i>
         <span>Lưu và gửi duyệt</span>
