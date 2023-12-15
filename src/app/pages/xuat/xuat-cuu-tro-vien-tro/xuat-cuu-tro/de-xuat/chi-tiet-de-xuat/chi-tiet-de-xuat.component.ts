@@ -513,7 +513,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
   async buildTableView() {
     let dataView = [];
     if (this.formData.value.tenVthh !== "Vật tư thiết bị") {
-      if (!this.userService.isTongCuc()) {
+      if (!this.isTongCuc()) {
         // dataView = cloneDeep(this.formData.value.deXuatPhuongAn)
         dataView = chain(this.formData.value.deXuatPhuongAn).groupBy("noiDung").map((value, key) => {
           const rs = value.find(f => f.noiDung === key);

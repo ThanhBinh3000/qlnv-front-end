@@ -247,24 +247,24 @@
             <td></td>
             <td></td>
             <td></td>
-            <td class="dm-title">{{ data.gtriKhNamTruoc }}</td>
+            <td class="dm-title">{{ data.gtriKhNamTruoc | number : '1.0-99' : 'vi_VN' }}</td>
             <td></td>
-            <td class="dm-title">{{ data.gtriKhGiaoTrongNam }}</td>
+            <td class="dm-title">{{ data.gtriKhGiaoTrongNam | number : '1.0-99' : 'vi_VN' }}</td>
             <td></td>
-            <td class="dm-title">{{ data.gtriTongKhDuocGiao }}</td>
+            <td class="dm-title">{{ data.gtriTongKhDuocGiao | number : '1.0-99' : 'vi_VN' }}</td>
             <td></td>
             <td></td>
-            <td class="dm-title">{{ data.gtriThucHienNamTruoc }}</td>
+            <td class="dm-title">{{ data.gtriThucHienNamTruoc | number : '1.0-99' : 'vi_VN' }}</td>
             <td></td>
-            <td class="dm-title">{{ data.gtriThucHienGiaoTrongNam }}</td>
+            <td class="dm-title">{{ data.gtriThucHienGiaoTrongNam | number : '1.0-99' : 'vi_VN' }}</td>
             <td></td>
-            <td class="dm-title">{{ data.gtriTongThucHienTrongNam }}</td>
+            <td class="dm-title">{{ data.gtriTongThucHienTrongNam | number : '1.0-99' : 'vi_VN' }}</td>
             <td></td>
-            <td class="dm-title">{{ data.gtriChuyenSangNamSau }}</td>
+            <td class="dm-title">{{ data.gtriChuyenSangNamSau | number : '1.0-99' : 'vi_VN' }}</td>
             <td></td>
-            <td class="dm-title">{{ data.gtriHuyDuToan }}</td>
+            <td class="dm-title">{{ data.gtriHuyDuToan | number : '1.0-99' : 'vi_VN' }}</td>
             <td></td>
-            <td class="dm-title">{{ data.gtriTongDuToanConLai }}</td>
+            <td class="dm-title">{{ data.gtriTongDuToanConLai | number : '1.0-99' : 'vi_VN' }}</td>
             <td nzRight *ngIf="!isView">
               <a (click)="editRowDvi(i)">
                 <i class=" fa fa-pencil"></i>
@@ -281,24 +281,24 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>{{ data.gtriKhNamTruoc }}</td>
+            <td>{{ data.gtriKhNamTruoc| number : '1.0-99' : 'vi_VN' }}</td>
             <td></td>
-            <td>{{ data.gtriKhGiaoTrongNam }}</td>
+            <td>{{ data.gtriKhGiaoTrongNam| number : '1.0-99' : 'vi_VN' }}</td>
             <td></td>
-            <td>{{ data.gtriTongKhDuocGiao }}</td>
+            <td>{{ data.gtriTongKhDuocGiao| number : '1.0-99' : 'vi_VN' }}</td>
             <td></td>
             <td></td>
-            <td>{{ data.gtriThucHienNamTruoc }}</td>
+            <td>{{ data.gtriThucHienNamTruoc| number : '1.0-99' : 'vi_VN' }}</td>
             <td></td>
-            <td>{{ data.gtriThucHienGiaoTrongNam }}</td>
+            <td>{{ data.gtriThucHienGiaoTrongNam| number : '1.0-99' : 'vi_VN' }}</td>
             <td></td>
-            <td>{{ data.gtriTongThucHienTrongNam }}</td>
+            <td>{{ data.gtriTongThucHienTrongNam| number : '1.0-99' : 'vi_VN' }}</td>
             <td></td>
-            <td>{{ data.gtriChuyenSangNamSau }}</td>
+            <td>{{ data.gtriChuyenSangNamSau| number : '1.0-99' : 'vi_VN' }}</td>
             <td></td>
-            <td>{{ data.gtriHuyDuToan }}</td>
+            <td>{{ data.gtriHuyDuToan| number : '1.0-99' : 'vi_VN' }}</td>
             <td></td>
-            <td>{{ data.gtriTongDuToanConLai }}</td>
+            <td>{{ data.gtriTongDuToanConLai| number : '1.0-99' : 'vi_VN' }}</td>
             <td nzRight>
               <a (click)="saveEditRowDvi(i)">
                 <i class="icon htvbdh_tcdt_save"></i>
@@ -317,25 +317,25 @@
               <td class="dm-title">{{ nhomMatHang.maSo }}</td>
               <td>{{ nhomMatHang.dvt }}</td>
               <td>{{ nhomMatHang.namKhNamTruoc }}</td>
-              <td>{{ nhomMatHang.slKhNamTruoc }}</td>
-              <td>{{ nhomMatHang.gtriKhNamTruoc }}</td>
-              <td>{{ nhomMatHang.slKhGiaoTrongNam }}</td>
-              <td>{{ nhomMatHang.gtriKhGiaoTrongNam }}</td>
-              <td>{{ nhomMatHang.slTongKhDuocGiao }}</td>
-              <td>{{ nhomMatHang.gtriTongKhDuocGiao }}</td>
-              <td>{{ nhomMatHang.namThucHienNamTruoc }}</td>
-              <td>{{ nhomMatHang.slThucHienNamTruoc }}</td>
-              <td>{{ nhomMatHang.gtriThucHienNamTruoc }}</td>
-              <td>{{ nhomMatHang.slThucHienGiaoTrongNam }}</td>
-              <td>{{ nhomMatHang.gtriThucHienGiaoTrongNam }}</td>
-              <td>{{ nhomMatHang.slTongThucHienTrongNam }}</td>
-              <td>{{ nhomMatHang.gtriTongThucHienTrongNam }}</td>
-              <td>{{ nhomMatHang.slChuyenSangNamSau }}</td>
-              <td>{{ nhomMatHang.gtriChuyenSangNamSau }}</td>
-              <td>{{ nhomMatHang.slHuyDuToan }}</td>
-              <td>{{ nhomMatHang.gtriHuyDuToan }}</td>
-              <td>{{ nhomMatHang.slTongDuToanConLai }}</td>
-              <td>{{ nhomMatHang.gtriTongDuToanConLai }}</td>
+              <td>{{ nhomMatHang.slKhNamTruoc| number : '1.0-99' : 'vi_VN' }}</td>
+              <td>{{ nhomMatHang.gtriKhNamTruoc| number : '1.0-99' : 'vi_VN' }}</td>
+              <td>{{ nhomMatHang.slKhGiaoTrongNam| number : '1.0-99' : 'vi_VN' }}</td>
+              <td>{{ nhomMatHang.gtriKhGiaoTrongNam| number : '1.0-99' : 'vi_VN' }}</td>
+              <td>{{ nhomMatHang.slTongKhDuocGiao| number : '1.0-99' : 'vi_VN' }}</td>
+              <td>{{ nhomMatHang.gtriTongKhDuocGiao| number : '1.0-99' : 'vi_VN' }}</td>
+              <td>{{ nhomMatHang.namThucHienNamTruoc}}</td>
+              <td>{{ nhomMatHang.slThucHienNamTruoc| number : '1.0-99' : 'vi_VN' }}</td>
+              <td>{{ nhomMatHang.gtriThucHienNamTruoc| number : '1.0-99' : 'vi_VN' }}</td>
+              <td>{{ nhomMatHang.slThucHienGiaoTrongNam| number : '1.0-99' : 'vi_VN' }}</td>
+              <td>{{ nhomMatHang.gtriThucHienGiaoTrongNam| number : '1.0-99' : 'vi_VN' }}</td>
+              <td>{{ nhomMatHang.slTongThucHienTrongNam| number : '1.0-99' : 'vi_VN' }}</td>
+              <td>{{ nhomMatHang.gtriTongThucHienTrongNam| number : '1.0-99' : 'vi_VN' }}</td>
+              <td>{{ nhomMatHang.slChuyenSangNamSau| number : '1.0-99' : 'vi_VN' }}</td>
+              <td>{{ nhomMatHang.gtriChuyenSangNamSau| number : '1.0-99' : 'vi_VN' }}</td>
+              <td>{{ nhomMatHang.slHuyDuToan| number : '1.0-99' : 'vi_VN' }}</td>
+              <td>{{ nhomMatHang.gtriHuyDuToan| number : '1.0-99' : 'vi_VN' }}</td>
+              <td>{{ nhomMatHang.slTongDuToanConLai| number : '1.0-99' : 'vi_VN' }}</td>
+              <td>{{ nhomMatHang.gtriTongDuToanConLai| number : '1.0-99' : 'vi_VN' }}</td>
               <td nzRight *ngIf="!isView">
                 <a *ngIf="!isView" (click)="editRowNhomMh(i, y)">
                   <i class=" fa fa-pencil"></i>
@@ -355,80 +355,80 @@
                                  [(ngModel)]="itemRowNhomMhEdit[i][y].namKhNamTruoc"></nz-input-number>
               </td>
               <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slKhNamTruoc"></nz-input-number>
+                <input class="money-input" currencyMask [options]="amount" [min]="0"
+                       [(ngModel)]="itemRowNhomMhEdit[i][y].slKhNamTruoc"/>
               </td>
               <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriKhNamTruoc"></nz-input-number>
+                <input class="money-input" currencyMask [options]="amount" [min]="0"
+                       [(ngModel)]="itemRowNhomMhEdit[i][y].gtriKhNamTruoc"/>
               </td>
               <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slKhGiaoTrongNam"></nz-input-number>
+                <input class="money-input" currencyMask [options]="amount" [min]="0"
+                       [(ngModel)]="itemRowNhomMhEdit[i][y].slKhGiaoTrongNam"/>
               </td>
               <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriKhGiaoTrongNam"></nz-input-number>
+                <input class="money-input" currencyMask [options]="amount" [min]="0"
+                       [(ngModel)]="itemRowNhomMhEdit[i][y].gtriKhGiaoTrongNam"/>
               </td>
               <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slTongKhDuocGiao"></nz-input-number>
+                <input class="money-input" currencyMask [options]="amount" [min]="0"
+                       [(ngModel)]="itemRowNhomMhEdit[i][y].slTongKhDuocGiao"/>
               </td>
               <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriTongKhDuocGiao"></nz-input-number>
+                <input class="money-input" currencyMask [options]="amount" [min]="0"
+                       [(ngModel)]="itemRowNhomMhEdit[i][y].gtriTongKhDuocGiao"/>
               </td>
               <td>
                 <nz-input-number [nzMin]="0" *ngIf="!nhomMatHang.coNhieuMatHang"
                                  [(ngModel)]="itemRowNhomMhEdit[i][y].namThucHienNamTruoc"></nz-input-number>
               </td>
               <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slThucHienNamTruoc"></nz-input-number>
+                <input class="money-input" currencyMask [options]="amount" [min]="0"
+                       [(ngModel)]="itemRowNhomMhEdit[i][y].slThucHienNamTruoc"/>
               </td>
               <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriThucHienNamTruoc"></nz-input-number>
+                <input class="money-input" currencyMask [options]="amount" [min]="0"
+                       [(ngModel)]="itemRowNhomMhEdit[i][y].gtriThucHienNamTruoc"/>
               </td>
               <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slThucHienGiaoTrongNam"></nz-input-number>
+                <input class="money-input" currencyMask [options]="amount" [min]="0"
+                       [(ngModel)]="itemRowNhomMhEdit[i][y].slThucHienGiaoTrongNam"/>
               </td>
               <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriThucHienGiaoTrongNam"></nz-input-number>
+                <input class="money-input" currencyMask [options]="amount" [min]="0"
+                       [(ngModel)]="itemRowNhomMhEdit[i][y].gtriThucHienGiaoTrongNam"/>
               </td>
               <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slTongThucHienTrongNam"></nz-input-number>
+                <input class="money-input" currencyMask [options]="amount" [min]="0"
+                       [(ngModel)]="itemRowNhomMhEdit[i][y].slTongThucHienTrongNam"/>
               </td>
               <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriTongThucHienTrongNam"></nz-input-number>
+                <input class="money-input" currencyMask [options]="amount" [min]="0"
+                       [(ngModel)]="itemRowNhomMhEdit[i][y].gtriTongThucHienTrongNam"/>
               </td>
               <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slChuyenSangNamSau"></nz-input-number>
+                <input class="money-input" currencyMask [options]="amount" [min]="0"
+                       [(ngModel)]="itemRowNhomMhEdit[i][y].slChuyenSangNamSau"/>
               </td>
               <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriChuyenSangNamSau"></nz-input-number>
+                <input class="money-input" currencyMask [options]="amount" [min]="0"
+                       [(ngModel)]="itemRowNhomMhEdit[i][y].gtriChuyenSangNamSau"/>
               </td>
               <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slHuyDuToan"></nz-input-number>
+                <input class="money-input" currencyMask [options]="amount" [min]="0"
+                       [(ngModel)]="itemRowNhomMhEdit[i][y].slHuyDuToan"/>
               </td>
               <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriHuyDuToan"></nz-input-number>
+                <input class="money-input" currencyMask [options]="amount" [min]="0"
+                       [(ngModel)]="itemRowNhomMhEdit[i][y].gtriHuyDuToan"/>
               </td>
               <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slTongDuToanConLai"></nz-input-number>
+                <input class="money-input" currencyMask [options]="amount" [min]="0"
+                       [(ngModel)]="itemRowNhomMhEdit[i][y].muaTangTrongKy"/>
               </td>
               <td>
-                <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriTongDuToanConLai"></nz-input-number>
+                <input class="money-input" currencyMask [options]="amount" [min]="0"
+                       [(ngModel)]="itemRowNhomMhEdit[i][y].gtriTongDuToanConLai"/>
               </td>
               <td nzRight>
                 <a (click)="saveEditRowNhomMh(i, y)">
@@ -478,7 +478,6 @@
               </ng-container>
               <ng-template #editTemplate>
                 <td nzLeft></td>
-                <td nzLeft></td>
                 <td nzLeft><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].matHang" /></td>
                 <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].maSo" /></td>
                 <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].dvt" /></td>
@@ -487,81 +486,80 @@
                                    [(ngModel)]="itemRowMatHangEdit[i][y][z].namKhNamTruoc"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slKhNamTruoc"></nz-input-number>
+                  <input class="money-input" currencyMask [options]="amount" [min]="0"
+                         [(ngModel)]="itemRowMatHangEdit[i][y][z].slKhNamTruoc"/>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriKhNamTruoc"></nz-input-number>
+                  <input class="money-input" currencyMask [options]="amount" [min]="0"
+                         [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriKhNamTruoc"/>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slKhGiaoTrongNam"></nz-input-number>
+                  <input class="money-input" currencyMask [options]="amount" [min]="0"
+                         [(ngModel)]="itemRowMatHangEdit[i][y][z].slKhGiaoTrongNam"/>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriKhGiaoTrongNam"></nz-input-number>
+                  <input class="money-input" currencyMask [options]="amount" [min]="0"
+                         [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriKhGiaoTrongNam"/>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slTongKhDuocGiao"></nz-input-number>
+                  <input class="money-input" currencyMask [options]="amount" [min]="0"
+                         [(ngModel)]="itemRowMatHangEdit[i][y][z].slTongKhDuocGiao"/>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriTongKhDuocGiao"></nz-input-number>
+                  <input class="money-input" currencyMask [options]="amount" [min]="0"
+                         [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriTongKhDuocGiao"/>
                 </td>
                 <td>
-                  <nz-input-number [nzMin]="0"
+                  <nz-input-number [nzMin]="0" *ngIf="!nhomMatHang.coNhieuMatHang"
                                    [(ngModel)]="itemRowMatHangEdit[i][y][z].namThucHienNamTruoc"></nz-input-number>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slThucHienNamTruoc"></nz-input-number>
+                  <input class="money-input" currencyMask [options]="amount" [min]="0"
+                         [(ngModel)]="itemRowMatHangEdit[i][y][z].slThucHienNamTruoc"/>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriThucHienNamTruoc"></nz-input-number>
+                  <input class="money-input" currencyMask [options]="amount" [min]="0"
+                         [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriThucHienNamTruoc"/>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slThucHienGiaoTrongNam"></nz-input-number>
-                </td>
-
-                <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriThucHienGiaoTrongNam"></nz-input-number>
+                  <input class="money-input" currencyMask [options]="amount" [min]="0"
+                         [(ngModel)]="itemRowMatHangEdit[i][y][z].slThucHienGiaoTrongNam"/>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slTongThucHienTrongNam"></nz-input-number>
+                  <input class="money-input" currencyMask [options]="amount" [min]="0"
+                         [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriThucHienGiaoTrongNam"/>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriTongThucHienTrongNam"></nz-input-number>
+                  <input class="money-input" currencyMask [options]="amount" [min]="0"
+                         [(ngModel)]="itemRowMatHangEdit[i][y][z].slTongThucHienTrongNam"/>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slChuyenSangNamSau"></nz-input-number>
+                  <input class="money-input" currencyMask [options]="amount" [min]="0"
+                         [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriTongThucHienTrongNam"/>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriChuyenSangNamSau"></nz-input-number>
+                  <input class="money-input" currencyMask [options]="amount" [min]="0"
+                         [(ngModel)]="itemRowMatHangEdit[i][y][z].slChuyenSangNamSau"/>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slHuyDuToan"></nz-input-number>
+                  <input class="money-input" currencyMask [options]="amount" [min]="0"
+                         [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriChuyenSangNamSau"/>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriHuyDuToan"></nz-input-number>
+                  <input class="money-input" currencyMask [options]="amount" [min]="0"
+                         [(ngModel)]="itemRowMatHangEdit[i][y][z].slHuyDuToan"/>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slTongDuToanConLai"></nz-input-number>
+                  <input class="money-input" currencyMask [options]="amount" [min]="0"
+                         [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriHuyDuToan"/>
                 </td>
                 <td>
-                  <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriTongDuToanConLai"></nz-input-number>
+                  <input class="money-input" currencyMask [options]="amount" [min]="0"
+                         [(ngModel)]="itemRowMatHangEdit[i][y][z].muaTangTrongKy"/>
+                </td>
+                <td>
+                  <input class="money-input" currencyMask [options]="amount" [min]="0"
+                         [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriTongDuToanConLai"/>
                 </td>
                 <td nzRight>
                   <a (click)="saveEditRowMatHang(i, y, z)">
@@ -584,81 +582,80 @@
                                [(ngModel)]="itemRowMatHang[i][y].namKhNamTruoc"></nz-input-number>
             </td>
             <td>
-              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                               [(ngModel)]="itemRowMatHang[i][y].slKhNamTruoc"></nz-input-number>
+              <input class="money-input" currencyMask [options]="amount" [min]="0"
+                     [(ngModel)]="itemRowMatHang[i][y].slKhNamTruoc"/>
             </td>
             <td>
-              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                               [(ngModel)]="itemRowMatHang[i][y].gtriKhNamTruoc"></nz-input-number>
+              <input class="money-input" currencyMask [options]="amount" [min]="0"
+                     [(ngModel)]="itemRowMatHang[i][y].gtriKhNamTruoc"/>
             </td>
             <td>
-              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                               [(ngModel)]="itemRowMatHang[i][y].slKhGiaoTrongNam"></nz-input-number>
+              <input class="money-input" currencyMask [options]="amount" [min]="0"
+                     [(ngModel)]="itemRowMatHang[i][y].slKhGiaoTrongNam"/>
             </td>
             <td>
-              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                               [(ngModel)]="itemRowMatHang[i][y].gtriKhGiaoTrongNam"></nz-input-number>
+              <input class="money-input" currencyMask [options]="amount" [min]="0"
+                     [(ngModel)]="itemRowMatHang[i][y].gtriKhGiaoTrongNam"/>
             </td>
             <td>
-              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                               [(ngModel)]="itemRowMatHang[i][y].slTongKhDuocGiao"></nz-input-number>
+              <input class="money-input" currencyMask [options]="amount" [min]="0"
+                     [(ngModel)]="itemRowMatHang[i][y].slTongKhDuocGiao"/>
             </td>
             <td>
-              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                               [(ngModel)]="itemRowMatHang[i][y].gtriTongKhDuocGiao"></nz-input-number>
+              <input class="money-input" currencyMask [options]="amount" [min]="0"
+                     [(ngModel)]="itemRowMatHang[i][y].gtriTongKhDuocGiao"/>
             </td>
             <td>
-              <nz-input-number [nzMin]="0"
+              <nz-input-number [nzMin]="0" *ngIf="!nhomMatHang.coNhieuMatHang"
                                [(ngModel)]="itemRowMatHang[i][y].namThucHienNamTruoc"></nz-input-number>
             </td>
             <td>
-              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                               [(ngModel)]="itemRowMatHang[i][y].slThucHienNamTruoc"></nz-input-number>
+              <input class="money-input" currencyMask [options]="amount" [min]="0"
+                     [(ngModel)]="itemRowMatHang[i][y].slThucHienNamTruoc"/>
             </td>
             <td>
-              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                               [(ngModel)]="itemRowMatHang[i][y].gtriThucHienNamTruoc"></nz-input-number>
+              <input class="money-input" currencyMask [options]="amount" [min]="0"
+                     [(ngModel)]="itemRowMatHang[i][y].gtriThucHienNamTruoc"/>
             </td>
             <td>
-              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                               [(ngModel)]="itemRowMatHang[i][y].slThucHienGiaoTrongNam"></nz-input-number>
-            </td>
-
-            <td>
-              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                               [(ngModel)]="itemRowMatHang[i][y].gtriThucHienGiaoTrongNam"></nz-input-number>
+              <input class="money-input" currencyMask [options]="amount" [min]="0"
+                     [(ngModel)]="itemRowMatHang[i][y].slThucHienGiaoTrongNam"/>
             </td>
             <td>
-              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                               [(ngModel)]="itemRowMatHang[i][y].slTongThucHienTrongNam"></nz-input-number>
+              <input class="money-input" currencyMask [options]="amount" [min]="0"
+                     [(ngModel)]="itemRowMatHang[i][y].gtriThucHienGiaoTrongNam"/>
             </td>
             <td>
-              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                               [(ngModel)]="itemRowMatHang[i][y].gtriTongThucHienTrongNam"></nz-input-number>
+              <input class="money-input" currencyMask [options]="amount" [min]="0"
+                     [(ngModel)]="itemRowMatHang[i][y].slTongThucHienTrongNam"/>
             </td>
             <td>
-              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                               [(ngModel)]="itemRowMatHang[i][y].slChuyenSangNamSau"></nz-input-number>
+              <input class="money-input" currencyMask [options]="amount" [min]="0"
+                     [(ngModel)]="itemRowMatHang[i][y].gtriTongThucHienTrongNam"/>
             </td>
             <td>
-              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                               [(ngModel)]="itemRowMatHang[i][y].gtriChuyenSangNamSau"></nz-input-number>
+              <input class="money-input" currencyMask [options]="amount" [min]="0"
+                     [(ngModel)]="itemRowMatHang[i][y].slChuyenSangNamSau"/>
             </td>
             <td>
-              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                               [(ngModel)]="itemRowMatHang[i][y].slHuyDuToan"></nz-input-number>
+              <input class="money-input" currencyMask [options]="amount" [min]="0"
+                     [(ngModel)]="itemRowMatHang[i][y].gtriChuyenSangNamSau"/>
             </td>
             <td>
-              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                               [(ngModel)]="itemRowMatHang[i][y].gtriHuyDuToan"></nz-input-number>
+              <input class="money-input" currencyMask [options]="amount" [min]="0"
+                     [(ngModel)]="itemRowMatHang[i][y].slHuyDuToan"/>
             </td>
             <td>
-              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                               [(ngModel)]="itemRowMatHang[i][y].slTongDuToanConLai"></nz-input-number>
+              <input class="money-input" currencyMask [options]="amount" [min]="0"
+                     [(ngModel)]="itemRowMatHang[i][y].gtriHuyDuToan"/>
             </td>
             <td>
-              <nz-input-number [nzStep]="0.1" [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                               [(ngModel)]="itemRowMatHang[i][y].gtriTongDuToanConLai"></nz-input-number>
+              <input class="money-input" currencyMask [options]="amount" [min]="0"
+                     [(ngModel)]="itemRowMatHang[i][y].muaTangTrongKy"/>
+            </td>
+            <td>
+              <input class="money-input" currencyMask [options]="amount" [min]="0"
+                     [(ngModel)]="itemRowMatHang[i][y].gtriTongDuToanConLai"/>
             </td>
             <td nzRight>
               <a (click)="addRowMatHang(i, y)">

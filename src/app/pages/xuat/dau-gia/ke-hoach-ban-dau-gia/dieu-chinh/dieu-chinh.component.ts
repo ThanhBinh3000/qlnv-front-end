@@ -137,6 +137,7 @@ export class DieuChinhComponent extends Base2Component implements OnInit {
       XEM: 'XHDTQG_PTDG_DCKHBDG_XEM',
       THEM: 'XHDTQG_PTDG_DCKHBDG_THEM',
       XOA: 'XHDTQG_PTDG_DCKHBDG_XOA',
+      DUYET_LDVU: 'XHDTQG_PTDG_DCKHBDG_DUYET_LDVU',
       BAN_HANH: 'XHDTQG_PTDG_DCKHBDG_BANHANH',
     };
     switch (action) {
@@ -144,26 +145,37 @@ export class DieuChinhComponent extends Base2Component implements OnInit {
         return (
           this.userService.isAccessPermisson(permissions.XEM) && ((this.userService.isAccessPermisson(permissions.THEM) &&
               [
-                this.STATUS.CHO_DUYET_LDV, this.STATUS.DA_DUYET_LDV, this.STATUS.BAN_HANH
+                this.STATUS.CHO_DUYET_LDV,
+                this.STATUS.DA_DUYET_LDV,
+                this.STATUS.BAN_HANH
               ].includes(data.trangThai)) ||
             (!this.userService.isAccessPermisson(permissions.THEM) && [
-                this.STATUS.DA_LAP, this.STATUS.TU_CHOI_LDV, this.STATUS.TU_CHOI_LDTC,
+                this.STATUS.DA_LAP,
+                this.STATUS.TU_CHOI_LDV,
+                this.STATUS.TU_CHOI_LDTC,
                 this.STATUS.BAN_HANH
               ].includes(data.trangThai) ||
-              (data.trangThai === this.STATUS.CHO_DUYET_LDV) ||
-              (data.trangThai === this.STATUS.DA_DUYET_LDV && !this.userService.isAccessPermisson(permissions.BAN_HANH))))
+              (data.trangThai === this.STATUS.CHO_DUYET_LDV &&
+                !this.userService.isAccessPermisson(permissions.DUYET_LDVU)) ||
+              (data.trangThai === this.STATUS.DA_DUYET_LDV &&
+                !this.userService.isAccessPermisson(permissions.BAN_HANH))))
         );
       case 'SUA':
         return [
-          this.STATUS.DA_LAP, this.STATUS.TU_CHOI_LDV, this.STATUS.TU_CHOI_LDTC
+          this.STATUS.DA_LAP,
+          this.STATUS.TU_CHOI_LDV,
+          this.STATUS.TU_CHOI_LDTC
         ].includes(data.trangThai) && this.userService.isAccessPermisson(permissions.THEM);
       case 'PHEDUYET':
         return (
-          (data.trangThai === this.STATUS.CHO_DUYET_LDV) ||
-          (this.userService.isAccessPermisson(permissions.BAN_HANH) && data.trangThai === this.STATUS.DA_DUYET_LDV)
+          (this.userService.isAccessPermisson(permissions.DUYET_LDVU) &&
+            data.trangThai === this.STATUS.CHO_DUYET_LDV) ||
+          (this.userService.isAccessPermisson(permissions.BAN_HANH) &&
+            data.trangThai === this.STATUS.DA_DUYET_LDV)
         );
       case 'XOA':
-        return data.trangThai === this.STATUS.DA_LAP && this.userService.isAccessPermisson(permissions.XOA);
+        return data.trangThai === this.STATUS.DA_LAP &&
+          this.userService.isAccessPermisson(permissions.XOA);
       default:
         return false;
     }

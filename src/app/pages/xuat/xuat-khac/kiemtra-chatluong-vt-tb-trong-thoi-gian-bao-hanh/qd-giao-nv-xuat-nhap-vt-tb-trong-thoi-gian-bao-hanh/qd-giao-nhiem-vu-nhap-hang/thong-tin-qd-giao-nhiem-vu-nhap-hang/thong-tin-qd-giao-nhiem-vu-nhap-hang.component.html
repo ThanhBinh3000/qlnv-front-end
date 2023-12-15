@@ -7,7 +7,7 @@
           [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC  ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
           {{ formData.value.tenTrangThai }}
         </span>
-          <span class="text-uppercase">Quyết định giao nhiệm vụ xuất hàng</span>
+          <span class="text-uppercase">Quyết định giao nhiệm vụ nhập hàng</span>
         </div>
       </div>
       <div class="btn-group">
@@ -52,7 +52,7 @@
       <div nz-row [nzGutter]="24">
         <div nz-col [nzSpan]="24">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Loại hình nhập xuất</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Loại hình nhập nhập</nz-form-label>
             <nz-form-control>
               <nz-radio-group formControlName="loai" [nzDisabled]="isViewDetail" nzName="radiogroup">
                 <label nz-radio nzValue="NHAP_MAU"> Nhập mẫu không bị hủy vào kho</label>
@@ -76,7 +76,7 @@
         <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
-              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Số quyết định
+              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Số QĐ giao NV nhập hàng
               </nz-form-label>
               <nz-input-group [nzAddOnAfter]="maQd">
                 <nz-input-number formControlName="soQuyetDinh" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
@@ -90,9 +90,9 @@
         <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
-              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Ngày ký QĐ xuất hàng</nz-form-label>
+              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Ngày ký QĐ nhập hàng</nz-form-label>
               <nz-date-picker [nzDisabled]="isViewDetail" class="search__input" nzFormat="dd/MM/YYYY"
-                              nzPlaceHolder="Ngày ký QĐ xuất hàng"
+                              nzPlaceHolder="Ngày ký QĐ nhập hàng"
                               formControlName="ngayKy">
               </nz-date-picker>
             </nz-form-control>
@@ -142,7 +142,7 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Thời hạn nhập hàng</nz-form-label>
               <nz-date-picker [nzDisabled]="isViewDetail" class="search__input" nzFormat="dd/MM/YYYY"
-                              nzPlaceHolder="Thời hạn xuất hàng"
+                              nzPlaceHolder="Thời hạn nhập hàng"
                               formControlName="thoiHanXuatHang">
               </nz-date-picker>
             </nz-form-control>
@@ -170,7 +170,7 @@
         <div nz-col nzSpan="24">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
-              File đính kèm kế hoạch đã được phê duyệt
+              File đính kèm QĐ giao nhiệm vụ nhập hàng đã ký
             </nz-form-label>
             <div class="list-file">
               <file-list [data]="listFileDinhKem" [isViewDetail]="isViewDetail"></file-list>
@@ -187,14 +187,14 @@
         <th>STT</th>
         <th></th>
         <th>Chi cục DTNN KV</th>
-        <th>Loại hàng hóa</th>
+        <th>Loại hàng </th>
         <th>Chủng loại</th>
         <th>Điểm kho</th>
         <th>Ngăn/lô kho</th>
         <th>ĐVT</th>
         <th *ngIf="this.formData.value?.loai == 'NHAP_SAU_BH'" >SL nhập sau bảo hành</th>
         <th *ngIf="this.formData.value?.loai == 'NHAP_MAU'" >SL mẫu không bị hủy</th>
-        <th>Trạng thái xuất hàng</th>
+        <th>Trạng thái nhập hàng</th>
       </tr>
       </thead>
       <tbody>

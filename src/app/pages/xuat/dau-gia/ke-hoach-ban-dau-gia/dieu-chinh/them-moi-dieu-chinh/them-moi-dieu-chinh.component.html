@@ -6,26 +6,28 @@
     </button>
     <ng-container>
       <button *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDV) && isView
-              && userService.isAccessPermisson('XHDTQG_PTTT_DCKHBTT_BANHANH')"
+              && userService.isAccessPermisson('XHDTQG_PTDG_DCKHBDG_BANHANH')"
               type="button" class="btn btn-sub do"
               (click)="reject(idInput,STATUS.TU_CHOI_LDTC)">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span> Từ chối </span>
       </button>
       <button *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDV) && isView
-              && userService.isAccessPermisson('XHDTQG_PTTT_DCKHBTT_BANHANH') "
+              && userService.isAccessPermisson('XHDTQG_PTDG_DCKHBDG_BANHANH') "
               type="button" class="btn btn-sub xanh-nhat"
               (click)="saveAndSend(STATUS.BAN_HANH, 'Bạn có muốn ban hành quyết định điều chỉnh ?','Bạn đã ban hành quyết định điều chỉnh thành công!')">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span> Ban Hành </span>
       </button>
-      <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV) && isView"
+      <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV) && isView
+              && userService.isAccessPermisson('XHDTQG_PTDG_DCKHBDG_DUYET_LDVU')"
               type="button" class="btn btn-sub do"
               (click)="reject(idInput,STATUS.TU_CHOI_LDV)">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span> Từ chối </span>
       </button>
-      <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV) && isView"
+      <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV) && isView
+              && userService.isAccessPermisson('XHDTQG_PTDG_DCKHBDG_DUYET_LDVU')"
               type="button" class="btn btn-sub xanh-nhat"
               (click)="approve(idInput,STATUS.DA_DUYET_LDV,'Bạn có muốn duyệt quyết định này')">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
@@ -68,7 +70,7 @@
   </nz-alert>
   <nz-card class="mg-t-16 flex-card p-lr16">
     <nz-collapse nzAccordion>
-      <nz-collapse-panel [nzHeader]="'THÔNG TIN CHUNG'" [nzActive]="true">
+      <nz-collapse-panel [nzHeader]="'THÔNG TIN TỜ TRÌNH'" [nzActive]="true">
         <form nz-form nzLayout="vertical" [formGroup]="formData">
           <div nz-row [nzGutter]="24">
             <div nz-col [nzSpan]="2">
@@ -364,7 +366,7 @@
               <nz-card class="mg-t-10 flex-card p-lr16 bg-trang">
                 <app-thong-tin-dieu-chinh [title]="'Quyết định điều chỉnh'" [dataInput]="dataInput"
                                           [isView]="false" [idInput]="idInput"
-                                          [trangThaiDc]="formData.value.trangThai === STATUS.DA_LAP ? false : true"
+                                          [trangThaiDc]="isView"
                                           [loaiVthhCache]="loaiVthh"
                                           (countChanged)="receiveDataFromChild($event)">
                 </app-thong-tin-dieu-chinh>

@@ -16,7 +16,7 @@
       <button class="btn btn-sub ml-2" (click)="approve(this.id, STATUS.DA_KY, 'Bạn có chắc chắn muốn ký?')"
         *ngIf="(formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && id > 0 )  && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_THEM')">
         <i class="icon htvbdh_trinh "></i>
-        <span>Đã ký</span>
+        <span>Đã duyệt - LĐ Cục</span>
       </button>
       <button type="button" class="btn btn-sub xanh ml-2" (click)="save()"
         *ngIf=" !isView && (formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU ) && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_PHANBO_THEM')">
@@ -124,9 +124,7 @@
           <td class="text-right">{{data.slHienCo + data.slNhapThem + data.slThuHoiTaiSuDung | number : '1.0-1' :
             'vi_VN'}}</td>
           <td class="text-right">{{data.slTieuChuan | number : '1.0-1' : 'vi_VN'}}</td>
-          <td class="text-right">{{ data.slTieuChuan - (data.slHienCo + data.slNhapThem + data.slThuHoiTaiSuDung) |
-            number : '1.0-1' :
-            'vi_VN'}}</td>
+          <td class="text-right">{{ data.soLuongTc | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="text-right"></td>
           <td class="text-right"></td>
           <td>{{data.ghiChu}}</td>

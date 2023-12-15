@@ -166,6 +166,7 @@ export class ThemMoiSlGtriHangDtqgXcKThuTienComponent extends Base2Component imp
       res = await this.bcBnTt108Service.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
+      this.idInput = res.data.id;
       if (this.formData.get("id").value) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
       } else {

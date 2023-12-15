@@ -259,6 +259,7 @@ export class ThemMoiTtPhanBoPvcComponent extends Base2Component implements OnIni
           const data = res.data;
           if (data && data.listQlDinhMucPvcQdMuaSamDtl && data.listQlDinhMucPvcQdMuaSamDtl.length > 0) {
             this.dataTable = data.listQlDinhMucPvcQdMuaSamDtl.filter(item => item.maDvi == this.userInfo.MA_DVI);
+            console.log("this.dataTable", this.dataTable, this.userInfo.MA_DVI)
           }
           if (this.dataTable && this.dataTable.length > 0) {
             this.dataTable.forEach(item => {
@@ -276,7 +277,7 @@ export class ThemMoiTtPhanBoPvcComponent extends Base2Component implements OnIni
   }
 
   sumSlPb(item: any) {
-    let slPb = item.slTieuChuan - (item.slHienCo + item.slNhapThem + item.slThuHoiTaiSuDung)//item.soLuongTc ? item.soLuongTc : 0;
+    let slPb = item.soLuongTc ? item.soLuongTc : 0;
     let slChild = 0;
     let result = 0;
     if (item.dataChild && item.dataChild.length > 0) {
