@@ -15,6 +15,11 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
+      <button
+        type="button" class="btn btn-sub do ml-2" (click)="preview()" *ngIf="id > 0">
+        <i class="icon htvbdh_tcdt_tuchoi"></i>
+        <span>Xem trước</span>
+      </button>
       <button class="btn btn-sub ml-2" (click)="saveAndSend(STATUS.DA_KY, 'Bạn có muốn ký?','Bạn đã ký thành công!')"
               *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_CBV)  && userService.isCuc() && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_THDEXUATCC_THEM')">
         <i class="icon htvbdh_trinh"></i>
@@ -364,3 +369,29 @@
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
   </ng-container>
 </ng-template>
+
+<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="ĐỀ XUẤT NHU CẦU BẢO HIỂM" nzWidth="100%" (nzOnCancel)="closeDlg()">
+  <div *nzModalContent class="modal__content">
+    <pdf-viewer #pdfViewer [render-text]="true"
+                [external-link-target]="'blank'" [src]="pdfSrc" [original-size]="false"  style="width: 100%; height: 600px;">
+    </pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)="downloadPdf()" class="modal__button--save">
+      <i class="icon htvbdh_tcdt_tuchoi"></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)="downloadExcel()" class="modal__button--save">
+      <i class="icon htvbdh_tcdt_tuchoi"></i>
+      Xuất Excel
+    </button>
+    <button nz-button (click)="printPreview()" class="modal__button--save">
+      <i class="icon htvbdh_tcdt_print"></i>
+      In
+    </button>
+    <button nz-button (click)="closeDlg()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

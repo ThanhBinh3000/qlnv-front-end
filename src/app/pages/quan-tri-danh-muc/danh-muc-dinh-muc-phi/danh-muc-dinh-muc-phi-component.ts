@@ -310,7 +310,6 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
           });
         }
       }
-      console.log(this.formDataChinhSua.value);
       this.helperService.markFormGroupTouched(this.formDataChinhSua);
       if (this.formDataChinhSua.invalid) {
         return;

@@ -12,7 +12,7 @@ import {HelperService} from "../../../../../../services/helper.service";
 import dayjs from "dayjs";
 import {MESSAGE} from "../../../../../../constants/message";
 import {v4 as uuidv4} from "uuid";
-import { saveAs } from 'file-saver';
+import {saveAs} from 'file-saver';
 import {UserLogin} from "../../../../../../models/userlogin";
 import {KeHoachXayDungTrungHan} from "../../../../../../models/QuyHoachVaKeHoachKhoTang";
 import {STATUS} from "../../../../../../constants/status";
@@ -63,6 +63,7 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
   quyetDinh = false;
   hidden = false;
   @Output() tabFocus = new EventEmitter<object>();
+
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -96,10 +97,8 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
 
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
-    if (!this.idInput) {
-      this.maTt = "/" + this.userInfo.MA_TR;
-      this.soQd = "/" + this.userInfo.MA_QD;
-    }
+    this.maTt = "/TTr-TVQT";
+    this.soQd = "/TCDT-TVQT";
     this.loadDsNam();
     await this.getDataDetail(this.idInput);
     await this.getAllLoaiDuAn();
@@ -126,24 +125,22 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
       this.isTongHop = true;
       let res = await this.tongHopDxXdTh.getDetail(id);
       const data = res.data;
-      this.maTt = data.maToTrinh ? "/" + data.maToTrinh.split("/")[1] : null,
-        this.soQd = data.soQuyetDinh ? "/" + data.soQuyetDinh.split("/")[1] : null,
-        this.formData.patchValue({
-          id: data.id,
-          namBatDau: data.namBatDau,
-          namKeHoach: data.namKeHoach,
-          namKetThuc: data.namKetThuc,
-          ngayTaoTt: data.ngayTaoTt,
-          ngayKyQd: data.ngayKyQd,
-          noiDung: data.noiDung,
-          maToTrinh: data.maToTrinh ? data.maToTrinh.split("/")[0] : null,
-          soQuyetDinh: data.soQuyetDinh ? data.soQuyetDinh.split("/")[0] : null,
-          trangThai: data.trangThai,
-          tenTrangThai: data.tenTrangThai,
-          lyDoTuChoi: data.lyDoTuChoi,
-          loaiDuAn: data.loaiDuAn,
-          tgTongHop: data.tgTongHop
-        });
+      this.formData.patchValue({
+        id: data.id,
+        namBatDau: data.namBatDau,
+        namKeHoach: data.namKeHoach,
+        namKetThuc: data.namKetThuc,
+        ngayTaoTt: data.ngayTaoTt,
+        ngayKyQd: data.ngayKyQd,
+        noiDung: data.noiDung,
+        maToTrinh: data.maToTrinh ? data.maToTrinh.split("/")[0] : null,
+        soQuyetDinh: data.soQuyetDinh ? data.soQuyetDinh.split("/")[0] : null,
+        trangThai: data.trangThai,
+        tenTrangThai: data.tenTrangThai,
+        lyDoTuChoi: data.lyDoTuChoi,
+        loaiDuAn: data.loaiDuAn,
+        tgTongHop: data.tgTongHop
+      });
       this.dataTableReq = data.ctiets;
       this.fileDinhKems = data.fileDinhKems;
       this.canCuPhapLys = data.canCuPhapLys;
@@ -157,14 +154,14 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
       }
       let body = {
         maDvi: this.userInfo.MA_DVI,
-        soTt : data.soQuyetDinh,
+        soTt: data.soQuyetDinh,
         paggingReq: {
           "limit": 999,
           "page": 0
         }
       };
       let dataQd = await this.quyetDinhService.search(body);
-      if (dataQd.data.content && dataQd.data.content.length>0){
+      if (dataQd.data.content && dataQd.data.content.length > 0) {
         this.hidden = !this.hidden;
       }
     }
@@ -191,7 +188,7 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
 
   async save(isGuiDuyet?) {
     this.spinner.show();
-    if (isGuiDuyet ) {
+    if (isGuiDuyet) {
       this.setValidators();
     }
     this.helperService.markFormGroupTouched(this.formData);
@@ -467,14 +464,14 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
   }
 
 
-  sumSoLuong(tenChiCuc: string, row: string, khoi: string,type?: any) {
+  sumSoLuong(tenChiCuc: string, row: string, khoi: string, type?: any) {
     let sl = 0;
-    let sumList :any[];
+    let sumList: any[];
     let itemSelected = this.listDx.find(item => item.selected == true);
     if (itemSelected) {
-      if (type===true){
+      if (type === true) {
         sumList = this.dataTableList.filter(item => item.soCv == itemSelected.soCongVan)
-      }else {
+      } else {
         sumList = this.dataTableDxList.filter(item => item.soCv == itemSelected.soCongVan)
       }
     }
@@ -553,10 +550,11 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
   emitTab(tab) {
     this.tabFocus.emit(tab);
   }
+
   openQdPheDuyet(id, b: boolean) {
-    this.idTongHop=id
+    this.idTongHop = id
     this.quyetDinh = !this.quyetDinh;
-    this.emitTab({tab: "qdpd", id: this.idTongHop,quyetDinh:this.quyetDinh});
+    this.emitTab({tab: "qdpd", id: this.idTongHop, quyetDinh: this.quyetDinh});
   }
 
   exportDetailDx($event: MouseEvent) {
