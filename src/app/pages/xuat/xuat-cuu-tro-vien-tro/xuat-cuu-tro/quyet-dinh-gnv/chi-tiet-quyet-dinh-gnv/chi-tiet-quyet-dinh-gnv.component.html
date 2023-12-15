@@ -124,7 +124,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Đơn vị ra QĐ giao nv xuất hàng</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
-              <input nz-input formControlName="tenDvi" [readonly]="true" />
+              <input nz-input formControlName="tenDviCha" [readonly]="true" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -223,6 +223,28 @@
           </nz-form-item>
         </div>
       </div>
+      <ng-container *ngIf="formData.value.loaiNhapXuat === 'Xuất viện trợ'">
+        <div nz-col [nzSpan]="8">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Thời gian tập kết</nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24">
+              <nz-date-picker class="search__input" formControlName="ngayTapKet" [nzDisabled]="isView"
+                [nzFormat]="globals.dateFormat">
+              </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="8">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Thời gian giao hàng cho đơn vị nhận</nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24">
+              <nz-date-picker class="search__input" formControlName="ngayGiaoHang" [nzDisabled]="isView"
+                [nzFormat]="globals.dateFormat">
+              </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </ng-container>
       <div nz-row [nzGutter]="24">
         <div nz-col [nzSpan]="24">
           <nz-form-item>
@@ -739,13 +761,14 @@
               <nz-form-control [nzErrorTip]="'Vui lòng nhập loại hàng'">
                 <div nz-row [nzGutter]="48">
                   <div nz-col [nzSpan]="16">
-                    <!--                    <nz-input-group>-->
-                    <!--                      <input [readonly]="true" nz-input formControlName="tenVthh" readonly="true"/>-->
-                    <!--                    </nz-input-group>-->
-                    <nz-select nzAllowClear formControlName="loaiVthh" [nzDisabled]="true"
+                    <nz-input-group>
+                      <input [readonly]="true" nz-input formControlName="tenLoaiVthh" readonly="true" />
+                    </nz-input-group>
+
+                    <!-- <nz-select nzAllowClear formControlName="loaiVthh" [nzDisabled]="true"
                       nzPlaceHolder="Chọn loại hàng" nzShowSearch>
                       <nz-option *ngFor="let p of listLoaiHangHoa" [nzLabel]="p.ten" [nzValue]="p.ma"></nz-option>
-                    </nz-select>
+                    </nz-select> -->
                   </div>
                   <div nz-col [nzSpan]="8">
                     <!-- <p style="font-size: 13px;font-weight: 500">Tồn kho: <span
@@ -755,15 +778,18 @@
                 </div>
               </nz-form-control>
             </nz-form-item>
-            <nz-form-item *ngIf="isVthhVatuThietBi()">
+            <nz-form-item *ngIf="isVthhVatuThietBi() && listChungLoaiHangHoa.length>0">
               <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Chủng loại hàng DTQG</nz-form-label>
               <nz-form-control [nzErrorTip]="'Vui lòng nhập chủng loại hàng'">
                 <div nz-row [nzGutter]="48">
                   <div nz-col [nzSpan]="16">
-                    <nz-select nzAllowClear formControlName="cloaiVthh" nzPlaceHolder="Chọn chủng loại hàng"
+                    <!-- <nz-select nzAllowClear formControlName="cloaiVthh" nzPlaceHolder="Chọn chủng loại hàng"
                       nzShowSearch [nzDisabled]="true">
                       <nz-option *ngFor="let p of listChungLoaiHangHoa" [nzLabel]="p.ten" [nzValue]="p.ma"></nz-option>
-                    </nz-select>
+                    </nz-select> -->
+                    <nz-input-group>
+                      <input [readonly]="true" nz-input formControlName="tenCloaiVthh" readonly="true" />
+                    </nz-input-group>
                   </div>
                   <div nz-col [nzSpan]="8">
                     <!--<p style="font-size: 13px;font-weight: 500">Tồn kho: <span

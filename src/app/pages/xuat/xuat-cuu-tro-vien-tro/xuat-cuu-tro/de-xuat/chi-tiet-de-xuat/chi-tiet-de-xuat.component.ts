@@ -57,6 +57,8 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
   editSoLuongNhuCauXuat: boolean = false;
   amount1 = { ...AMOUNT_ONE_DECIMAL, align: "left" };
   listNamNhap: Array<{ value: number, text: number, soLuong: number }> = [];
+  openViewVttb: boolean = false;
+  phuongAnViewVttb: any[] = [];
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
@@ -284,6 +286,11 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     this.phuongAnView.forEach(s => {
       this.expandSetString.add(s.idVirtual);
     })
+  };
+  expandAllVttb() {
+    this.phuongAnViewVttb.forEach(s => {
+      this.expandSetString.add(s.idVirtual);
+    })
   }
 
   onExpandStringChange(id: string, checked: boolean): void {
@@ -299,7 +306,6 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
   }
 
   async themPhuongAn(data?: any, level?: any) {
-    console.log("data", data)
     this.formDataDtl.reset();
     if (data) {
       if (level == 0) {
@@ -352,7 +358,6 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         this.modalChiTiet = true;
       } else {
         data.edit = true;
-        console.log("dataa", data)
         this.formDataDtl.patchValue({ ...data, editNhuCauXuat: false });
         // await this.changeLoaiVthh(this.formDataDtl.value.loaiVthh);
 
@@ -558,18 +563,21 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
           }).value().filter(f => !!f);
       }
     } else {
-
+      this.formData.value.deXuatPhuongAn.forEach(element => {
+        element.vthh = element.cloaiVthh ? `${element.loaiVthh}-${element.cloaiVthh}` : element.loaiVthh;
+        element.tenVthh = element.tenCloaiVthh ? `${element.tenLoaiVthh}-${element.tenCloaiVthh}` : element.tenLoaiVthh;
+      })
       dataView = chain(this.formData.value.deXuatPhuongAn)
         .groupBy("noiDung")
         .map((value, key) => {
           const rx = value.find(f => f.noiDung === key);
           const lv1 = chain(value)
-            .groupBy("loaiVthh")
+            .groupBy("vthh")
             .map((v1, k1) => {
-              let row = v1.find(s => s.loaiVthh === k1);
+              let row = v1.find(s => s.vthh === k1);
               if (!row) return;
-              const lv2 = chain(v1).groupBy("cloaiVthh").map((v2, k2) => {
-                const row1 = v2.find(f => f.cloaiVthh === k2);
+              const lv2 = chain(v1).groupBy("maDvi").map((v2, k2) => {
+                const row1 = v2.find(f => f.maDvi === k2);
                 if (!row1) return;
                 const soLuong = v2.reduce((sum, cur) => sum += cur.soLuong, 0);
                 return {
@@ -582,8 +590,10 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
               let soLuong = lv2.reduce((prev, next) => prev + next.soLuong, 0);
               return {
                 idVirtual: uuidv4(),
-                loaiVthh: k1,
+                loaiVthh: row.loaiVthh,
+                cloaiVthh: row.cloaiVthh,
                 tenLoaiVthh: row.tenLoaiVthh,
+                tenVthh: row.tenVthh,
                 // cloaiVthh: row.cloaiVthh,
                 // tenCloaiVthh: row.tenCloaiVthh,
                 noiDung: row.noiDung,
@@ -606,7 +616,27 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     this.phuongAnView = dataView;
     this.expandAll();
   }
-
+  buildTableViewVttb() {
+    this.phuongAnViewVttb = chain(this.formData.value.deXuatPhuongAn).groupBy("maDvi").map((value, k) => {
+      const row = value.find(f => f.maDvi === k);
+      if (!row) return;
+      const rs = chain(value).groupBy("vthh").map((v1, k1) => {
+        const row1 = v1.find(f => f.vthh === k1);
+        if (!row1) return;
+        return {
+          ...row1,
+          idVirtual: uuidv4(),
+          childData: v1
+        }
+      }).value().filter(f => !!f)
+      return {
+        ...row,
+        idVirtual: uuidv4(),
+        childData: rs
+      }
+    }).value().filter(f => !!f);
+    this.expandAllVttb();
+  }
   async loadDsDiaDanh() {
     let body = {
       capDiaDanh: 1
@@ -892,5 +922,13 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
   }
   isCuc() {
     return this.formData.value.maDvi.length === 8
+  }
+  openVttbModal() {
+    this.openViewVttb = true;
+    this.buildTableViewVttb();
+  }
+  closeVttbModal() {
+    this.openViewVttb = false;
+    this.phuongAnViewVttb = [];
   }
 }
