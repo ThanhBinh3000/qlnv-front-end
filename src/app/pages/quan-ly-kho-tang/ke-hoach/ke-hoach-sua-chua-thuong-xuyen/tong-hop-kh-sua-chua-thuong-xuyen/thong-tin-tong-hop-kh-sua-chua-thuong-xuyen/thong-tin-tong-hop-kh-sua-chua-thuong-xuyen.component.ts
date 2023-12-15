@@ -118,8 +118,8 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
     console.log(this.isViewDetail, "isViewDetail")
     console.log(this.isViewQd, "isViewQd")
     this.userInfo = this.userService.getUserLogin();
-    this.maTt = "/TTr-TCDT";
-    this.soQd = "/QĐ-TCDT";
+    this.maTt = "/TTr-TVQT";
+    this.soQd = "/TCDT-TVQT";
     this.loadDsNam();
     await this.getDmSuaChuaThuongXuyen();
     await this.getDataDetail(this.idInput);
