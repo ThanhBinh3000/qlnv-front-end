@@ -218,6 +218,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
           this.updateEditCacheTqd();
           this.buildDataTableDetailKtqd();
           this.updateEditCacheKtqd();
+
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -518,7 +519,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     let rs = false;
     if (dataItem && dataItem.length > 0) {
       dataItem.forEach(it => {
-        if (it.maDinhMuc == item.maDinhMuc) {
+        if (it.maDinhMuc == item.maDinhMuc && it.apDungTai == item.apDungTai) {
           rs = true;
           return;
         }
@@ -585,6 +586,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       this.dataTableDetailKtqd.forEach(item => {
         this.mapOfExpandedData[item.uuid] = this.convertTreeToList(item);
       });
+
     }
   }
 
@@ -596,7 +598,6 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     this.dataListDetailKtqd.forEach(item => {
       map.set(item.uuid, { ...item, children: [] });
     });
-
     // Then, organize the items into a tree structure.
     this.dataListDetailKtqd.forEach(item => {
       if (item.parentUuid) {
@@ -604,32 +605,40 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
         map.get(item.parentUuid).children.push(map.get(item.uuid));
         map.get(item.parentUuid).chiPhiTheoDinhMucNhapToiDa = map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiTheoDinhMucNhapToiDa), 0);
         map.get(item.parentUuid).chiPhiTheoDinhMucXuatToiDa = map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiTheoDinhMucXuatToiDa), 0);
+        map.get(item.parentUuid).chiPhiTheoDinhMucBqToiDa = map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiTheoDinhMucBqToiDa), 0);
         map.get(item.parentUuid).chiPhiNhapToiDa = map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiNhapToiDa), 0);
         map.get(item.parentUuid).chiPhiXuatToiDa = map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiXuatToiDa), 0);
+        map.get(item.parentUuid).chiPhiBqToiDa = map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiBqToiDa), 0);
 
         // update vào list
         let p = this.dataListDetailKtqd.find(item1 => item1.uuid == item.parentUuid);
         if (p) {
           p.chiPhiTheoDinhMucNhapToiDa = map.get(item.parentUuid).chiPhiTheoDinhMucNhapToiDa;
           p.chiPhiTheoDinhMucXuatToiDa = map.get(item.parentUuid).chiPhiTheoDinhMucXuatToiDa;
+          p.chiPhiTheoDinhMucBqToiDa = map.get(item.parentUuid).chiPhiTheoDinhMucBqToiDa;
           p.chiPhiNhapToiDa = map.get(item.parentUuid).chiPhiNhapToiDa;
           p.chiPhiXuatToiDa = map.get(item.parentUuid).chiPhiXuatToiDa;
+          p.chiPhiBqToiDa = map.get(item.parentUuid).chiPhiBqToiDa;
         }
       } else {
         // If the item has no parent, it's a root item, so add it to the main tree.
         map.get(item.uuid).chiPhiNhapToiDa = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiNhapToiDa), 0);
         map.get(item.uuid).chiPhiXuatToiDa = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiXuatToiDa), 0);
+        map.get(item.uuid).chiPhiBqToiDa = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiBqToiDa), 0);
         // update vào list
         let p = this.dataListDetailKtqd.find(item1 => item1.uuid == item.uuid);
         if (p) {
           p.chiPhiTheoDinhMucNhapToiDa = map.get(item.uuid).chiPhiTheoDinhMucNhapToiDa;
           p.chiPhiTheoDinhMucXuatToiDa = map.get(item.uuid).chiPhiTheoDinhMucXuatToiDa;
+          p.chiPhiTheoDinhMucBqToiDa = map.get(item.uuid).chiPhiTheoDinhMucBqToiDa;
           p.chiPhiNhapToiDa = map.get(item.uuid).chiPhiNhapToiDa;
           p.chiPhiXuatToiDa = map.get(item.uuid).chiPhiXuatToiDa;
+          p.chiPhiBqToiDa = map.get(item.uuid).chiPhiBqToiDa;
         }
         this.dataTableDetailKtqd.push(map.get(item.uuid));
       }
     });
+
   }
 
   saveEdit(idx: number): void {
