@@ -56,7 +56,7 @@
                   <nz-form-item>
                     <nz-form-label [nzNoColon]="true"> Số QĐ phê duyệt KH LCNT</nz-form-label>
                     <nz-form-control>
-                      <input nz-input formControlName="soQdPdKhlcnt" readonly/>
+                      <input nz-input formControlName="ttinQdKhlcnt" readonly/>
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -309,14 +309,17 @@
                 <td>{{item.goiThau}}</td>
                 <td>{{item.tenCloaiVthh}}</td>
                 <td></td>
-                <td class="text-right">{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right">{{item.soLuong | number : '1.0-99' : 'vi_VN'}}</td>
                 <td class="text-center">{{item.dviTinh}}</td>
-                <td class="text-right">{{item.donGiaVat | number : '1.0-1': 'vi_VN'}}</td>
-                <td class="text-right">{{item.soLuong * item.donGiaVat | number: '1.0-1' : 'vi_VN'}}
+                <td class="text-right">{{item.donGiaVat | number : '1.0-99': 'vi_VN'}}</td>
+                <td class="text-right">{{item.soLuong * item.donGiaVat | number: '1.0-99' : 'vi_VN'}}
                 <td>{{item.tenNhaThau}}</td>
-                <td class="text-right">{{item.donGiaNhaThau | number: '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-right">{{item.donGiaNhaThau * item.soLuong | number: '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-right">{{item.donGiaNhaThau?((item.soLuong * item.donGiaVat) - (item.donGiaNhaThau * item.soLuong) | number: '1.0-1' : 'vi_VN'): ''}}</td>
+                <td class="text-right" *ngIf="item.trangThaiDt == STATUS.THANH_CONG">{{item.donGiaNhaThau | number: '1.0-99' : 'vi_VN'}}</td>
+                <td class="text-right" *ngIf="item.trangThaiDt == STATUS.THANH_CONG">{{item.donGiaNhaThau * item.soLuong | number: '1.0-99' : 'vi_VN'}}</td>
+                <td class="text-right" *ngIf="item.trangThaiDt == STATUS.THANH_CONG">{{item.donGiaNhaThau?((item.soLuong * item.donGiaVat) - (item.donGiaNhaThau * item.soLuong) | number: '1.0-99' : 'vi_VN'): ''}}</td>
+                <td *ngIf="item.trangThaiDt != STATUS.THANH_CONG"></td>
+                <td *ngIf="item.trangThaiDt != STATUS.THANH_CONG"></td>
+                <td *ngIf="item.trangThaiDt != STATUS.THANH_CONG"></td>
                 <td>{{item.tenTrangThaiDt}}</td>
                 <td>{{item.dienGiaiNhaThau}}</td>
               </tr>
@@ -328,14 +331,17 @@
                   <td>{{item.goiThau}}</td>
                   <td>{{item.tenCloaiVthh}}</td>
                   <td></td>
-                  <td class="text-right">{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td class="text-right">{{item.soLuong | number : '1.0-99' : 'vi_VN'}}</td>
                   <td class="text-center">{{item.dviTinh}}</td>
-                  <td class="text-right">{{item.donGiaVat | number : '1.0-1': 'vi_VN'}}</td>
-                  <td class="text-right">{{item.soLuong * item.donGiaVat | number: '1.0-1' : 'vi_VN'}}
+                  <td class="text-right">{{item.donGiaVat | number : '1.0-99': 'vi_VN'}}</td>
+                  <td class="text-right">{{item.soLuong * item.donGiaVat | number: '1.0-99' : 'vi_VN'}}
                   <td>{{item.kqlcntDtl?.tenNhaThau}}</td>
-                  <td class="text-right">{{item.kqlcntDtl?.donGiaVat | number: '1.0-1' : 'vi_VN'}}</td>
-                  <td class="text-right">{{item.kqlcntDtl?.donGiaVat * item.soLuong | number : '1.0-1': 'vi_VN'}}</td>
-                  <td class="text-right">{{item.kqlcntDtl?.donGiaVat?((item.soLuong * item.donGiaVat) - (item.kqlcntDtl?.donGiaVat * item.soLuong)  | number : '1.0-1': 'vi_VN'): ''}}</td>
+                  <td class="text-right" *ngIf="item.kqlcntDtl?.trangThai == STATUS.THANH_CONG">{{item.kqlcntDtl?.donGiaVat | number: '1.0-99' : 'vi_VN'}}</td>
+                  <td class="text-right" *ngIf="item.kqlcntDtl?.trangThai == STATUS.THANH_CONG">{{item.kqlcntDtl?.donGiaVat * item.soLuong | number : '1.0-99': 'vi_VN'}}</td>
+                  <td class="text-right" *ngIf="item.kqlcntDtl?.trangThai == STATUS.THANH_CONG">{{item.kqlcntDtl?.donGiaVat?((item.soLuong * item.donGiaVat) - (item.kqlcntDtl?.donGiaVat * item.soLuong)  | number : '1.0-99': 'vi_VN'): ''}}</td>
+                  <td *ngIf="item.kqlcntDtl?.trangThai != STATUS.THANH_CONG"></td>
+                  <td *ngIf="item.kqlcntDtl?.trangThai != STATUS.THANH_CONG"></td>
+                  <td *ngIf="item.kqlcntDtl?.trangThai != STATUS.THANH_CONG"></td>
                   <td>{{item.kqlcntDtl?.tenTrangThai}}</td>
                   <td>{{item.kqlcntDtl?.dienGiaiNhaThau}}</td>
                   <td *ngIf="isShowFromKq && isKqDaBh">
@@ -349,18 +355,20 @@
                   <td>{{item.goiThau}}</td>
                   <td>{{item.tenCloaiVthh}}</td>
                   <td></td>
-                  <td class="text-right">{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td class="text-right">{{item.soLuong | number : '1.0-99' : 'vi_VN'}}</td>
                   <td class="text-center">{{item.dviTinh}}</td>
-                  <td class="text-right">{{item.donGiaVat | number : '1.0-1': 'vi_VN'}}</td>
-                  <td class="text-right">{{item.soLuong * item.donGiaVat | number: '1.0-1' : 'vi_VN'}}
+                  <td class="text-right">{{item.donGiaVat | number : '1.0-99': 'vi_VN'}}</td>
+                  <td class="text-right">{{item.soLuong * item.donGiaVat | number: '1.0-99' : 'vi_VN'}}
                   <td>
-                    <nz-select [(ngModel)]=itemRowQd[i].idNhaThau (ngModelChange)="selectNhaThau(i, $event)">
+                    <nz-select [(ngModel)]="itemRowQd[i].idNhaThau" (ngModelChange)="selectNhaThau(i, $event)">
                       <nz-option *ngFor="let p of listNthauNopHs" [nzValue]="p.id"
                                  [nzLabel]="p.tenNhaThau"></nz-option>
                     </nz-select>
                   </td>
-                  <td><input nz-input [(ngModel)]="itemRowQd[i].donGiaVat"></td>
                   <td></td>
+                  <td>
+                    <input class="money-input" currencyMask [options]="amount" [min]="0"
+                           [(ngModel)]="itemRowQd[i].thanhTienNhaThau"/>
                   <td></td>
                   <td>
                     <nz-select [(ngModel)]=itemRowQd[i].trangThai>
@@ -385,10 +393,10 @@
                 <td></td>
                 <td></td>
                 <td>{{cuc.tenDvi}}</td>
-                <td class="text-right">{{cuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right">{{cuc.soLuong | number : '1.0-99' : 'vi_VN'}}</td>
                 <td class="text-center">{{item.dviTinh}}</td>
-                <td class="text-right">{{item.donGiaVat | number :'1.0-1' : 'vi_VN'}}</td>
-                <td class="text-right">{{cuc.soLuong * item.donGiaVat | number: '1.0-1' : 'vi_VN'}}
+                <td class="text-right">{{item.donGiaVat | number :'1.0-99' : 'vi_VN'}}</td>
+                <td class="text-right">{{cuc.soLuong * item.donGiaVat | number: '1.0-99' : 'vi_VN'}}
                 <td></td>
                 <td></td>
                 <td></td>
@@ -404,13 +412,13 @@
             <td></td>
             <td></td>
             <td nzLeft class="blue-text">TỔNG</td>
-            <td class="text-right blue-text">{{ calcTongSl() | number : '1.0-1' : 'vi_VN' }}</td>
+            <td class="text-right blue-text">{{ calcTongSl() | number : '1.0-99' : 'vi_VN' }}</td>
             <td></td>
             <td></td>
-            <td class="text-right blue-text">{{ calcTongThanhTien() | number : '1.0-1' :'vi_VN'}}</td>
+            <td class="text-right blue-text">{{ calcTongThanhTien() | number : '1.0-99' :'vi_VN'}}</td>
             <td></td>
             <td></td>
-            <td class="text-right blue-text">{{ calcTongThanhTienKq() | number : '1.0-1' :'vi_VN'}}</td>
+            <td class="text-right blue-text">{{ calcTongThanhTienKq() | number : '1.0-99' :'vi_VN'}}</td>
             <td></td>
             <td></td>
             <td></td>

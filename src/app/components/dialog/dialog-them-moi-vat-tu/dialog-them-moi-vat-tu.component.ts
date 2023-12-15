@@ -20,7 +20,7 @@ import {CurrencyMaskInputMode} from "ngx-currency";
 import {STATUS} from "../../../constants/status";
 import {QuyetDinhGiaTCDTNNService} from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
 import {SoLuongNhapHangService} from "../../../services/qlnv-hang/nhap-hang/sl-nhap-hang.service";
-
+import {cloneDeep} from 'lodash';
 @Component({
   selector: 'dialog-them-moi-vat-tu',
   templateUrl: './dialog-them-moi-vat-tu.component.html',
@@ -52,6 +52,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   listGoiThau = [];
   dataAll: any[] = [];
   selectedGoiThau: any;
+  showFromQd: boolean = false;
 
   constructor(
     private _modalRef: NzModalRef,
@@ -565,5 +566,33 @@ export class DialogThemMoiVatTuComponent implements OnInit {
 
   cancelEdit(i, y) {
     this.listOfData[i].children[y].edit = false;
+  }
+
+  editRowCc(i) {
+    this.listOfData[i].donGiaTamTinhEdit = cloneDeep(this.listOfData[i].donGiaTamTinh);
+    this.listOfData[i].edit = true;
+  }
+
+  saveEditCc(i) {
+    if (this.validateEditCc(i)) {
+      this.listOfData[i].donGiaTamTinh = cloneDeep(this.listOfData[i].donGiaTamTinhEdit);
+      this.listOfData[i].edit = false;
+    }
+  }
+
+  cancelEditCc(i) {
+    this.listOfData[i].edit = false;
+  }
+
+  validateEditCc (i) {
+    if (this.listOfData[i].donGiaTamTinhEdit > this.listOfData[i].giaToiDa) {
+      this.notification.error(MESSAGE.ERROR, "Đơn giá đề xuất không được lớn hơn giá tối đa (" + this.listOfData[i].giaToiDa + " đ)")
+      return false
+    }
+    if (this.listOfData[i].donGiaTamTinhEdit == null) {
+      this.notification.error(MESSAGE.ERROR, "Đơn giá đề xuất không được để trống.")
+      return false;
+    }
+    return true
   }
 }

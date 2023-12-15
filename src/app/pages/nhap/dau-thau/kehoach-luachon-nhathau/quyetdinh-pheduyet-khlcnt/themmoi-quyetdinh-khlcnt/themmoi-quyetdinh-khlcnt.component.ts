@@ -39,6 +39,7 @@ import {PREVIEW} from "../../../../../../constants/fileType";
 import {ThongtinDexuatComponent} from "./thongtin-dexuat/thongtin-dexuat.component";
 import printJS from "print-js";
 import {QuyetDinhGiaTCDTNNService} from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
+import {QuyetDinhGiaCuaBtcService} from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
 
 @Component({
   selector: 'app-themmoi-quyetdinh-khlcnt',
@@ -127,6 +128,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     private dauThauService: DanhSachDauThauService,
     public globals: Globals,
     private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
+    private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService,
   ) {
     this.formData = this.fb.group({
       id: [null],
@@ -176,11 +178,11 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     if (isGuiDuyet) {
       this.formData.controls["soQd"].setValidators([Validators.required]);
       this.formData.controls["ngayQd"].setValidators([Validators.required]);
-      this.formData.controls["ngayHluc"].setValidators([Validators.required]);
+      // this.formData.controls["ngayHluc"].setValidators([Validators.required]);
     } else {
       this.formData.controls["soQd"].clearValidators();
       this.formData.controls["ngayQd"].clearValidators();
-      this.formData.controls["ngayHluc"].clearValidators();
+      // this.formData.controls["ngayHluc"].clearValidators();
     }
     if (this.formData.get('phanLoai').value == 'TH') {
       this.formData.controls["idThHdr"].setValidators([Validators.required]);
@@ -197,12 +199,40 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   isValidate(data: any) {
     let shouldStop = false;
     data.forEach(item => {
-      item.children.forEach(res => {
-        res.children.forEach(elm => {
+      item.children.forEach(async res => {
+        for (const elm of res.children) {
           if (elm.donGia == null) {
             this.notification.error(MESSAGE.ERROR, elm.tenDvi + " chưa được phê duyệt giá mua cụ thể.");
             shouldStop = true;
-            return;
+            continue;
+          }
+          let body = {
+            loaiGia: "LG01",
+            namKeHoach: this.formData.value.namKhoach,
+            loaiVthh: item.loaiVthh,
+            cloaiVthh: item.cloaiVthh,
+            trangThai: STATUS.BAN_HANH,
+            maDvi: elm.maDvi,
+          }
+          let res = await this.quyetDinhGiaCuaBtcService.getQdGiaLastestBtc(body);
+          if (res.msg === MESSAGE.SUCCESS) {
+            if (res.data && res.data.length > 0) {
+              let data = res.data[0];
+              if (data.giaQdDcBtcVat != null && data.giaQdDcBtcVat > 0) {
+                elm.giaToiDa = data.giaQdDcBtcVat
+              } else {
+                elm.giaToiDa = data.giaQdBtcVat
+              }
+            }
+          }
+          if (elm.giaToiDa == null) {
+            this.notification.error(MESSAGE.ERROR, elm.tenDvi + " chưa được phê duyệt giá mua tối đa.");
+            shouldStop = true;
+            continue;
+          } else if (elm.donGiaTamTinh > elm.giaToiDa ) {
+            this.notification.error(MESSAGE.ERROR, elm.tenDvi + ": Đơn giá đề xuất không được lớn hơn giá tối đa.");
+            shouldStop = true;
+            continue;
           }
           elm.children.forEach(i => {
             if (i.soLuong > res.soLuong) {
@@ -214,7 +244,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
           if (shouldStop) {
             return;
           }
-        });
+        }
         if (shouldStop) {
           return;
         }

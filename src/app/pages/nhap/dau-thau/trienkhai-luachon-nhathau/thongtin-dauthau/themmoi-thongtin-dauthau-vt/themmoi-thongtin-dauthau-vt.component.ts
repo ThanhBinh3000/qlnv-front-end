@@ -94,6 +94,7 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
       tgianTrinhKqTcg: [''],
       tgianTrinhTtd: [''],
       ghiChuTtdt: [''],
+      ttinQdKhlcnt: [''],
     })
   }
 
@@ -172,6 +173,7 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
         tenTrangThaiDt: data.tenTrangThaiDt,
         namKhoach: data.namKhoach,
         soQdPdKhlcnt: data.soQd,
+        ttinQdKhlcnt: data.soQd + ', ngày ' + formatDate(data.ngayPduyet, "dd/MM/yyyy", 'en-US'),
         soQdPdKqLcnt: data.soQdPdKqLcnt,
         tenDuAn: data.tenDuAn,
         tenDvi: data.tenDvi,
@@ -366,6 +368,10 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
     this.danhsachDx[i].edit = false;
   }
   async saveEditRowNt(i) {
+    if (this.itemRowQd[i].thanhTienNhaThau != null) {
+      this.itemRowQd[i].donGiaVat = this.itemRowQd[i].thanhTienNhaThau /  this.danhsachDx[i].soLuong;
+    }
+
     this.danhsachDx[i].kqlcntDtl = this.itemRowQd[i];
     if (this.itemRowQd[i].trangThai != null) {
       this.danhsachDx[i].kqlcntDtl.tenTrangThai = this.dsTrangThai.find(item => item.value == this.itemRowQd[i].trangThai).text;
@@ -453,7 +459,7 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
   selectNhaThau(i, event) {
     this.listNthauNopHs.forEach(item => {
       if (item.id == event) {
-        this.itemRowQd[i].donGiaVat = item.donGia
+        this.itemRowQd[i].thanhTienNhaThau = item.donGia
       }
     })
   }

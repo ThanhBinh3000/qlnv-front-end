@@ -296,53 +296,55 @@ export class QuanlyHopdongComponent implements OnInit {
   }
 
   async approve() {
+    let mess = 'Bạn có chắc chắn muốn hoàn thành cập nhật hợp đồng ?'
     if (this.validateData()) {
-      this.modal.confirm({
-        nzClosable: false,
-        nzTitle: 'Xác nhận',
-        nzContent: 'Bạn có chắc chắn muốn hoàn thành cập nhật hợp đồng ?',
-        nzOkText: 'Đồng ý',
-        nzCancelText: 'Không',
-        nzOkDanger: true,
-        nzWidth: 350,
-        nzOnOk: async () => {
-          this.spinner.show();
-          try {
-            let body = {
-              id: this.id,
-              trangThai: STATUS.DA_HOAN_THANH
-            }
-            let res = await this.kqLcnt.approve(body);
-            if (res.msg == MESSAGE.SUCCESS) {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
-              this.back();
-            } else {
-              this.notification.error(MESSAGE.ERROR, res.msg);
-            }
-          } catch (e) {
-            console.log('error: ', e);
-            this.spinner.hide();
-            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-          } finally {
-            this.spinner.hide();
-          }
-        },
-      });
+      mess = 'Còn gói thầu chưa tạo hợp đồng hoặc hợp đồng chưa được ký, bạn có chắc chắn muốn hoàn thành cập nhật hợp đồng ?'
     }
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: mess,
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 350,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.id,
+            trangThai: STATUS.DA_HOAN_THANH
+          }
+          let res = await this.kqLcnt.approve(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
+            this.back();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        } finally {
+          this.spinner.hide();
+        }
+      },
+    });
   }
 
   validateData(): boolean {
-    let result = true;
+    let result = false;
     this.dataTable.forEach(item => {
       if (item.hopDong) {
         if (item.hopDong.trangThai != STATUS.DA_KY) {
-          this.notification.error(MESSAGE.ERROR, "Vui lòng ký tất cả hợp đồng cho các gói thầu");
-          result = false;
+          // this.notification.error(MESSAGE.ERROR, "Vui lòng ký tất cả hợp đồng cho các gói thầu");
+          result = true;
           return
         }
       } else {
-        this.notification.error(MESSAGE.ERROR, "Vui lòng thêm các hợp đồng cho các gói thầu");
-        result = false;
+        // this.notification.error(MESSAGE.ERROR, "Vui lòng thêm các hợp đồng cho các gói thầu");
+        result = true;
         return
       }
     });
