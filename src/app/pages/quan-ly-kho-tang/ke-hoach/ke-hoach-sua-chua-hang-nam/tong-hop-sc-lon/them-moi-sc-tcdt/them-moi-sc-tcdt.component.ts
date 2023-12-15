@@ -89,8 +89,8 @@ export class ThemMoiScTcdtComponent implements OnInit {
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
     if (!this.idInput) {
-      this.maTt = "/" + this.userInfo.MA_TR;
-      this.soQd = "/" + this.userInfo.MA_QD;
+      this.maTt = "/TTr-TVQT";
+      this.soQd = "/TCDT-TVQT";
     }
     this.loadDsNam();
     await this.getDataDetail(this.idInput);

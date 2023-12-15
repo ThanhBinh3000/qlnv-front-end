@@ -24,7 +24,8 @@ export class DeXuatNhuCauBaoHiemService extends BaseService{
   }
 
   previewDx(body: any)  {
-    const url = `${environment.SERVICE_API}/qlnv-report/dinh-muc/xem-truoc-bao-hiem`;
+    // const url = `${environment.SERVICE_API}/qlnv-report/dinh-muc/xem-truoc-bao-hiem`;
+    const url = `${environment.SERVICE_API_LOCAL}/dinh-muc/xem-truoc-bao-hiem`;
     return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
   }
 }
