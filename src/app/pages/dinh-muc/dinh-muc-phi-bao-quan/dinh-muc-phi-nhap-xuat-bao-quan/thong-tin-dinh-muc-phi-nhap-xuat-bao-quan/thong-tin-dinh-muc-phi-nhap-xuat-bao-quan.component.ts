@@ -16,7 +16,7 @@ import { DonviService } from '../../../../../services/donvi.service';
 import { AMOUNT_NO_DECIMAL, AMOUNT_ONE_DECIMAL, AMOUNT_THREE_DECIMAL } from '../../../../../Utility/utils';
 import { STATUS } from '../../../../../constants/status';
 import { v4 as uuidv4 } from 'uuid';
-
+import { chain } from 'lodash';
 export interface TreeNodeInterface {
   id?: number;
   uuid?: string;
@@ -211,7 +211,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
           this.dataTableDetailTqd.forEach(item => {
             item.apDungTaiStr = this.getStrTenDonVi(item.apDungTai);
           });
-          this.dataListDetailKtqd = data.listQlDinhMucPhisKtqd;
+          this.dataListDetailKtqd = data.listQlDinhMucPhisKtqd.sort((a: any, b: any) => a.uuid - b.uuid);;
           this.dataListDetailKtqd.forEach(item => {
             item.apDungTaiStr = this.getStrTenDonVi(item.apDungTai);
           });
@@ -270,7 +270,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       this.formData.value.fileDinhKems = this.fileDinhKem;
     }
     this.formData.value.listQlDinhMucPhis = this.dataTableDetailTqd;
-    this.formData.value.listQlDinhMucPhisKtqd = this.dataListDetailKtqd;
+    this.formData.value.listQlDinhMucPhisKtqd = this.dataListDetailKtqd.sort((a: any, b: any) => a.uuid - b.uuid);
     this.formData.value.capDvi = this.capDvi;
     this.formData.value.maDvi = this.userInfo.MA_DVI;
     let res = await this.createUpdate(this.formData.value);
@@ -468,7 +468,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       return;
     }
     if (!this.rowItem.uuid) {
-      this.rowItem.uuid = uuidv4();
+      this.rowItem.uuid = Date.now()//uuidv4();
     }
     let msgRequired = '';
     //validator
@@ -588,6 +588,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       });
 
     }
+    console.log("this.updateEditCacheKtqd", this.dataTableDetailKtqd)
   }
 
   buildDataTableDetailKtqd() {
@@ -603,12 +604,18 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       if (item.parentUuid) {
         // If the item has a parent, add it as a child of the parent.
         map.get(item.parentUuid).children.push(map.get(item.uuid));
-        map.get(item.parentUuid).chiPhiTheoDinhMucNhapToiDa = map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiTheoDinhMucNhapToiDa), 0);
-        map.get(item.parentUuid).chiPhiTheoDinhMucXuatToiDa = map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiTheoDinhMucXuatToiDa), 0);
-        map.get(item.parentUuid).chiPhiTheoDinhMucBqToiDa = map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiTheoDinhMucBqToiDa), 0);
-        map.get(item.parentUuid).chiPhiNhapToiDa = map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiNhapToiDa), 0);
-        map.get(item.parentUuid).chiPhiXuatToiDa = map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiXuatToiDa), 0);
-        map.get(item.parentUuid).chiPhiBqToiDa = map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiBqToiDa), 0);
+        map.get(item.parentUuid).chiPhiTheoDinhMucNhapToiDa = map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiTheoDinhMucNhapToiDa || 0), 0);
+        map.get(item.parentUuid).chiPhiTheoDinhMucXuatToiDa = map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiTheoDinhMucXuatToiDa || 0), 0);
+        map.get(item.parentUuid).chiPhiTheoDinhMucBqToiDa = map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiTheoDinhMucBqToiDa || 0), 0);
+        map.get(item.parentUuid).chiPhiNhapToiDa = map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiNhapToiDa || 0), 0);
+        map.get(item.parentUuid).chiPhiXuatToiDa = map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiXuatToiDa || 0), 0);
+        map.get(item.parentUuid).chiPhiBqToiDa = map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiBqToiDa || 0), 0);
+        map.get(item.parentUuid).thanhToanTheoVnd = map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.thanhToanTheoVnd || 0), 0);
+        map.get(item.parentUuid).thanhToanTheoUsd = map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.thanhToanTheoUsd || 0), 0);
+        map.get(item.parentUuid).thanhToanTheoVndKt = map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.thanhToanTheoVndKt || 0), 0);
+        map.get(item.parentUuid).thanhToanTheoUsdKt = map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.thanhToanTheoUsdKt || 0), 0);
+        map.get(item.parentUuid).chechLechVnd = map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chechLechVnd || 0), 0);
+        map.get(item.parentUuid).chechLechUsd = map.get(item.parentUuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chechLechUsd || 0), 0);
 
         // update vào list
         let p = this.dataListDetailKtqd.find(item1 => item1.uuid == item.parentUuid);
@@ -619,12 +626,65 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
           p.chiPhiNhapToiDa = map.get(item.parentUuid).chiPhiNhapToiDa;
           p.chiPhiXuatToiDa = map.get(item.parentUuid).chiPhiXuatToiDa;
           p.chiPhiBqToiDa = map.get(item.parentUuid).chiPhiBqToiDa;
+          p.thanhToanTheoVnd = map.get(item.parentUuid).thanhToanTheoVnd;
+          p.thanhToanTheoUsd = map.get(item.parentUuid).thanhToanTheoUsd;
+          p.thanhToanTheoVndKt = map.get(item.parentUuid).thanhToanTheoVndKt;
+          p.thanhToanTheoUsdKt = map.get(item.parentUuid).thanhToanTheoUsdKt;
+          p.chechLechVnd = map.get(item.parentUuid).chechLechVnd;
+          p.chechLechUsd = map.get(item.parentUuid).chechLechUsd;
         }
       } else {
+        // const children = this.dataListDetailKtqd.filter(v => v.parentUuid == item.uuid)
+        // map.set(item.uuid, { ...item, children: children });
+        // console.log("item", item)
+        // // If the item has no parent, it's a root item, so add it to the main tree.
+        // map.get(item.uuid).chiPhiNhapToiDa = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiNhapToiDa), 0);
+        // map.get(item.uuid).chiPhiXuatToiDa = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiXuatToiDa), 0);
+        // map.get(item.uuid).chiPhiBqToiDa = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiBqToiDa), 0);
+        // // update vào list
+        // let p = this.dataListDetailKtqd.find(item1 => item1.uuid == item.uuid);
+        // if (p) {
+        //   p.chiPhiTheoDinhMucNhapToiDa = map.get(item.uuid).chiPhiTheoDinhMucNhapToiDa;
+        //   p.chiPhiTheoDinhMucXuatToiDa = map.get(item.uuid).chiPhiTheoDinhMucXuatToiDa;
+        //   p.chiPhiTheoDinhMucBqToiDa = map.get(item.uuid).chiPhiTheoDinhMucBqToiDa;
+        //   p.chiPhiNhapToiDa = map.get(item.uuid).chiPhiNhapToiDa;
+        //   p.chiPhiXuatToiDa = map.get(item.uuid).chiPhiXuatToiDa;
+        //   item.chiPhiBqToiDa = map.get(item.uuid).chiPhiBqToiDa;
+        // }
+        // this.dataTableDetailKtqd.push(map.get(item.uuid));
+      }
+    });
+
+    this.dataListDetailKtqd.forEach(item => {
+      if (!item.parentUuid) {
         // If the item has no parent, it's a root item, so add it to the main tree.
-        map.get(item.uuid).chiPhiNhapToiDa = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiNhapToiDa), 0);
-        map.get(item.uuid).chiPhiXuatToiDa = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiXuatToiDa), 0);
-        map.get(item.uuid).chiPhiBqToiDa = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiBqToiDa), 0);
+        // map.get(item.uuid).chiPhiNhapToiDa = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiNhapToiDa), 0);
+        // map.get(item.uuid).chiPhiXuatToiDa = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiXuatToiDa), 0);
+        // map.get(item.uuid).chiPhiBqToiDa = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiBqToiDa), 0);
+        // // update vào list
+        // let p = this.dataListDetailKtqd.find(item1 => item1.uuid == item.uuid);
+        // if (p) {
+        //   p.chiPhiTheoDinhMucNhapToiDa = map.get(item.uuid).chiPhiTheoDinhMucNhapToiDa;
+        //   p.chiPhiTheoDinhMucXuatToiDa = map.get(item.uuid).chiPhiTheoDinhMucXuatToiDa;
+        //   p.chiPhiTheoDinhMucBqToiDa = map.get(item.uuid).chiPhiTheoDinhMucBqToiDa;
+        //   p.chiPhiNhapToiDa = map.get(item.uuid).chiPhiNhapToiDa;
+        //   p.chiPhiXuatToiDa = map.get(item.uuid).chiPhiXuatToiDa;
+        //   p.chiPhiBqToiDa = map.get(item.uuid).chiPhiBqToiDa;
+        // }
+
+        map.get(item.uuid).chiPhiTheoDinhMucNhapToiDa = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiTheoDinhMucNhapToiDa || 0), 0);
+        map.get(item.uuid).chiPhiTheoDinhMucXuatToiDa = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiTheoDinhMucXuatToiDa || 0), 0);
+        map.get(item.uuid).chiPhiTheoDinhMucBqToiDa = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiTheoDinhMucBqToiDa || 0), 0);
+        map.get(item.uuid).chiPhiNhapToiDa = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiNhapToiDa || 0), 0);
+        map.get(item.uuid).chiPhiXuatToiDa = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiXuatToiDa || 0), 0);
+        map.get(item.uuid).chiPhiBqToiDa = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiBqToiDa || 0), 0);
+        map.get(item.uuid).thanhToanTheoVnd = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.thanhToanTheoVnd || 0), 0);
+        map.get(item.uuid).thanhToanTheoUsd = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.thanhToanTheoUsd || 0), 0);
+        map.get(item.uuid).thanhToanTheoVndKt = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.thanhToanTheoVndKt || 0), 0);
+        map.get(item.uuid).thanhToanTheoUsdKt = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.thanhToanTheoUsdKt || 0), 0);
+        map.get(item.uuid).chechLechVnd = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chechLechVnd || 0), 0);
+        map.get(item.uuid).chechLechUsd = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chechLechUsd || 0), 0);
+
         // update vào list
         let p = this.dataListDetailKtqd.find(item1 => item1.uuid == item.uuid);
         if (p) {
@@ -634,12 +694,19 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
           p.chiPhiNhapToiDa = map.get(item.uuid).chiPhiNhapToiDa;
           p.chiPhiXuatToiDa = map.get(item.uuid).chiPhiXuatToiDa;
           p.chiPhiBqToiDa = map.get(item.uuid).chiPhiBqToiDa;
+          p.thanhToanTheoVnd = map.get(item.uuid).thanhToanTheoVnd;
+          p.thanhToanTheoUsd = map.get(item.uuid).thanhToanTheoUsd;
+          p.thanhToanTheoVndKt = map.get(item.uuid).thanhToanTheoVndKt;
+          p.thanhToanTheoUsdKt = map.get(item.uuid).thanhToanTheoUsdKt;
+          p.chechLechVnd = map.get(item.uuid).chechLechVnd;
+          p.chechLechUsd = map.get(item.uuid).chechLechUsd;
         }
         this.dataTableDetailKtqd.push(map.get(item.uuid));
       }
     });
-
+    console.log("this.buildDataTableDetailKtqd", this.dataTableDetailKtqd)
   }
+
 
   saveEdit(idx: number): void {
     Object.assign(this.dataTableDetailTqd[idx], this.dataEdit[idx].data);
@@ -861,6 +928,9 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
   }
 
   tinhTyGiaUsdVnd($event: any) {
+    if (this.rowItem.thanhToanTheoUsdKt)
+      this.rowItem.chechLechUsd = this.rowItem.thanhToanTheoUsdKt - $event;
+
     if (!this.rowItem.tyGia) {
       this.rowItem.tyGia = 0;
     }
@@ -871,8 +941,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       this.rowItem.thanhToanTheoVnd = 0;
     }
     this.rowItem.thanhToanTheoVnd = $event * this.rowItem.tyGia;
-    if (this.rowItem.thanhToanTheoUsdKt)
-      this.rowItem.chechLechUsd = this.rowItem.thanhToanTheoUsdKt - $event;
+
     if (this.rowItem.thanhToanTheoVndKt)
       this.rowItem.chechLechVnd = this.rowItem.thanhToanTheoVndKt - this.rowItem.thanhToanTheoVnd;
   }
@@ -915,6 +984,8 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
   }
 
   tinhTyGiaUsdVndKT($event: any) {
+    if (this.rowItem.thanhToanTheoUsd)
+      this.rowItem.chechLechUsd = this.rowItem.thanhToanTheoUsdKt - $event;
     if (!this.rowItem.tyGiaKt) {
       this.rowItem.tyGiaKt = 0;
     }
@@ -925,8 +996,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       this.rowItem.thanhToanTheoVndKt = 0;
     }
     this.rowItem.thanhToanTheoVndKt = $event * this.rowItem.tyGiaKt;
-    if (this.rowItem.thanhToanTheoUsd)
-      this.rowItem.chechLechUsd = this.rowItem.thanhToanTheoUsdKt - $event;
+
     if (this.rowItem.thanhToanTheoVnd)
       this.rowItem.chechLechVnd = this.rowItem.thanhToanTheoVndKt - this.rowItem.thanhToanTheoVnd;
   }
@@ -1013,6 +1083,11 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
   }
 
   changeTinhTyGiaUsdVnd($event: any) {
+    if (this.formDataDtl.value.thanhToanTheoUsdKt) {
+      this.formDataDtl.patchValue({
+        chechLechUsd: this.formDataDtl.value.thanhToanTheoUsdKt - $event.target.value
+      });
+    }
     if (!this.formDataDtl.value.tyGia) {
       this.formDataDtl.value.tyGia = 0;
     }
@@ -1073,6 +1148,11 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
   }
 
   changeTinhTyGiaUsdVndKt($event: any) {
+    if (this.formDataDtl.value.thanhToanTheoUsd) {
+      this.formDataDtl.patchValue({
+        chechLechUsd: $event.target.value - this.formDataDtl.value.thanhToanTheoUsd
+      });
+    }
     if (!this.formDataDtl.value.tyGiaKt) {
       this.formDataDtl.value.tyGiaKt = 0;
     }
@@ -1131,7 +1211,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
 
   saveAddEdit() {
     if (!this.formDataDtl.value.uuid) {
-      this.formDataDtl.patchValue({ uuid: uuidv4() });
+      this.formDataDtl.patchValue({ uuid: Date.now() });
     }
     let msgRequired = '';
     //validator
