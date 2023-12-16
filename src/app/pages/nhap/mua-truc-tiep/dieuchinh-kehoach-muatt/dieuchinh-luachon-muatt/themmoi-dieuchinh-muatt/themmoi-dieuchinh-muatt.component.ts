@@ -87,6 +87,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
       tenLoaiHinhNx: [''],
       kieuNx: [''],
       tenKieuNx: [''],
+      trichYeuDc: [''],
 
     });
   }
@@ -177,10 +178,10 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
               body.trangThai = STATUS.TU_CHOI_LDV;
               break;
             }
-            // case STATUS.DA_DUYET_LDV: {
-            //   body.trangThai = STATUS.TU_CHOI_LDV;
-            //   break;
-            // }
+            case STATUS.DA_DUYET_LDV: {
+              body.trangThai = STATUS.TU_CHOI_LDTC;
+              break;
+            }
           }
           const res = await this.dieuChinhQuyetDinhPdKhmttService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -459,6 +460,15 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     this.formData.controls["ngayTaoCv"].setValidators([Validators.required]);
     this.formData.controls["soQdDc"].setValidators([Validators.required]);
     this.formData.controls["ngayHluc"].setValidators([Validators.required]);
+    if (this.formData.get("trangThai").value == STATUS.DA_DUYET_LDV) {
+      this.formData.controls["soQdDc"].setValidators([Validators.required]);
+      this.formData.controls["ngayKyDc"].setValidators([Validators.required]);
+      this.formData.controls["ngayHluc"].setValidators([Validators.required]);
+    } else {
+      this.formData.controls["soQdDc"].clearValidators();
+      this.formData.controls["ngayKyDc"].clearValidators();
+      this.formData.controls["ngayHluc"].clearValidators();
+    }
   }
 
   async guiDuyet() {
@@ -476,12 +486,12 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
         mesg = 'Bạn có muốn gửi duyệt ?'
         break;
       }
-      // case STATUS.CHO_DUYET_LDV: {
-      //   trangThai = STATUS.DA_DUYET_LDV;
-      //   mesg = 'Bạn có muốn gửi duyệt ?'
-      //   break;
-      // }
       case STATUS.CHO_DUYET_LDV: {
+        trangThai = STATUS.DA_DUYET_LDV;
+        mesg = 'Bạn có muốn gửi duyệt ?'
+        break;
+      }
+      case STATUS.DA_DUYET_LDV: {
         trangThai = STATUS.BAN_HANH
         mesg = 'Bạn có muốn ban hành ?'
         break;
@@ -572,5 +582,12 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
   //     });
   //   }
   // }
+
+  checkDisableQdDc() {
+    if (this.isView) {
+      return !(this.formData.get('trangThai').value == STATUS.DA_DUYET_LDV && this.userService.isAccessPermisson("NHDTQG_PTMTT_DCKHLCNT_BANHANH_TUCHOI_TC"));
+    }
+    return true;
+  }
 
 }

@@ -36,7 +36,7 @@
             </div>
         </nz-card>
         <div class="group-button">
-            <h3> DANH SÁCH QUYẾT ĐỊNH ĐIỀU CHỈNH KẾ HOẠCH MUA TRỰC TIẾP </h3>
+            <h3> DANH SÁCH PHƯƠNG ÁN VÀ QUYẾT ĐỊNH ĐIỀU CHỈNH KẾ HOẠCH MUA TRỰC TIẾP </h3>
             <div class="buttons">
                 <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_DCKHMTT_XOA')"
                     type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
@@ -65,10 +65,11 @@
                                 [nzIndeterminate]="indeterminate"></label>
                         </th>
                         <th class="text-center" style="width: 2%;">STT</th>
+                        <th class="text-center" style="width: 10%;">Số công văn/tờ trình</th>
                         <th class="text-center" style="width: 8%;">Năm kế hoạch</th>
                         <th class="text-center" style="width: 15%;">Số QĐ điều chỉnh KH mua trực tiếp</th>
                         <th class="text-center" style="width: 10%;">Ngày ký QĐ điều chỉnh</th>
-                        <th class="text-center" style="width: 10%;">Số quyết định gốc</th>
+                        <th class="text-center" style="width: 10%;">Số QĐ trước điều chỉnh</th>
                         <th class="text-center" style="width: 30%;">Trích yếu</th>
                         <th class="text-center" style="width: 7%;">Loại hàng DTQG</th>
                         <th class="text-center" style="width: 7%;">Chủng loại hàng DTQG</th>
@@ -79,6 +80,12 @@
                         <th></th>
                         <th></th>
                         <th>
+                            <nz-input-group>
+                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soToTrinh"
+                                    (input)="filterInTable('soToTrinh',filterTable.soToTrinh)" size="small" />
+                            </nz-input-group>
+                        </th>
+                      <th>
                             <nz-input-group>
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKh"
                                     (input)="filterInTable('namKh',filterTable.namKh)" size="small" />
@@ -142,6 +149,7 @@
                                 [nzDisabled]="data.trangThai != STATUS.DA_LAP"></label>
                         </td>
                         <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
+                        <td>{{data.soToTrinh}}</td>
                         <td>{{data.namKh}}</td>
                         <td>{{data.soQdDc}}</td>
                         <td>{{data.ngayKyDc}}</td>
