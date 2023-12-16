@@ -88,6 +88,33 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Năm báo cáo
+            </nz-form-label>
+            <nz-select formControlName="nam" [nzDisabled]="isView">
+              <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+            </nz-select>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Kỳ báo cáo
+            </nz-form-label>
+            <nz-select formControlName="kyBc" [nzDisabled]="isView">
+              <nz-option *ngFor="let p of listQuy" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+            </nz-select>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Loại báo cáo
+            </nz-form-label>
+            <nz-select formControlName="loaiBc" [nzDisabled]="isView">
+              <nz-option *ngFor="let p of listLoaiBc" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+            </nz-select>
+          </nz-form-item>
+        </div>
       </div>
     </form>
 
@@ -151,16 +178,16 @@
             <th class="text-center multi-line">Dôi thừa</th>
             <th class="text-center multi-line">Khác</th>
             <th class="text-center multi-line">Tổng số</th>
-            <th class="text-center multi-line">Mua tăng</th>
-            <th class="text-center multi-line">Đổi hàng</th>
-            <th class="text-center multi-line">Điều chuyển</th>
-            <th class="text-center multi-line">Dôi thừa</th>
+            <th class="text-center multi-line">Không thu tiền</th>
+            <th class="text-center multi-line">Bán đổi hàng</th>
+            <th class="text-center multi-line">Luân phiên <br>đổi hàng <br>không bù<br>giá </th>
+            <th class="text-center multi-line">Hao hụt</th>
             <th class="text-center multi-line">Khác</th>
             <th class="text-center multi-line">Tổng số</th>
-            <th class="text-center multi-line">Mua tăng</th>
-            <th class="text-center multi-line">Đổi hàng</th>
-            <th class="text-center multi-line">Điều chuyển</th>
-            <th class="text-center multi-line">Dôi thừa</th>
+            <th class="text-center multi-line">Không thu tiền</th>
+            <th class="text-center multi-line">Bán đổi hàng</th>
+            <th class="text-center multi-line">Luân phiên <br>đổi hàng <br>không bù<br>giá </th>
+            <th class="text-center multi-line">Hao hụt</th>
             <th class="text-center multi-line">Khác</th>
           </tr>
           <tr>
@@ -202,7 +229,7 @@
         <tbody>
           <ng-container *ngFor="let data of listDataGroup; let i = index">
             <tr>
-              <ng-container *ngIf="!data.edit; else editTemplateMHang">
+              <ng-container>
                 <td nzLeft class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
                 <td nzLeft class="dm-title">{{ data.matHang }}</td>
                 <td nzLeft></td>
@@ -236,60 +263,60 @@
                 <td></td>
                 <td></td>
                 <td nzRight *ngIf="!isView">
-                  <a (click)="editRowMatHang(i)">
-                    <i class=" fa fa-pencil"></i>
+                  <a (click)="themMoiDanhMuc(i)">
+                    <i class="fa fa-plus"></i>
                   </a>
                   <a (click)="deleteRowMatHang(i)">
-                    <i class=" fa fa-trash-o do"></i>
+                    <i class="fa fa-trash-o do"></i>
                   </a>
                 </td>
               </ng-container>
-              <ng-template #editTemplateMHang>
-                <td nzLeft class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-                <td nzLeft class="dm-title"><input nz-input [(ngModel)]="itemRowMatHangEdit[i].matHang" /></td>
-                <td nzLeft></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td nzRight>
-                  <a (click)="saveEditRowMatHang(i)">
-                    <i class="icon htvbdh_tcdt_save"></i>
-                  </a>
-                  <a (click)="cancelEditRowMatHang(i)">
-                    <i class="fa fa-ban do"></i>
-                  </a>
-                </td>
-              </ng-template>
+<!--              <ng-template #editTemplateMHang>-->
+<!--                <td nzLeft class="text-center">{{(page - 1) * pageSize + i + 1}}</td>-->
+<!--                <td nzLeft class="dm-title"><input nz-input [(ngModel)]="itemRowMatHangEdit[i].matHang" /></td>-->
+<!--                <td nzLeft></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td nzRight>-->
+<!--                  <a (click)="saveEditRowMatHang(i)">-->
+<!--                    <i class="icon htvbdh_tcdt_save"></i>-->
+<!--                  </a>-->
+<!--                  <a (click)="cancelEditRowMatHang(i)">-->
+<!--                    <i class="fa fa-ban do"></i>-->
+<!--                  </a>-->
+<!--                </td>-->
+<!--              </ng-template>-->
             </tr>
             <ng-container *ngFor="let loaiHangHoa of data.children, let y = index">
               <tr>
-                <ng-container *ngIf="!loaiHangHoa.edit; else editTemplateLoaiVthh">
+                <ng-container>
                   <td nzLeft class="text-center">{{(page - 1) * pageSize + y + 1}}</td>
                   <td nzLeft class="dm-title" style="padding-left: 20px">{{ loaiHangHoa.tenLoaiVthh }}</td>
                   <td nzLeft></td>
@@ -323,56 +350,56 @@
                   <td></td>
                   <td></td>
                   <td nzRight *ngIf="!isView">
-                    <a *ngIf="!isView" (click)="editRowLoaiVthh(i, y)">
-                      <i class=" fa fa-pencil"></i>
+                    <a *ngIf="!isView" (click)="themMoiDanhMuc(i, y)">
+                      <i class="fa fa-plus"></i>
                     </a>
                     <a *ngIf="!isView" (click)="deleteRowLoaiVthh(i, y)">
-                      <i class=" fa fa-trash-o do"></i>
+                      <i class="fa fa-trash-o do"></i>
                     </a>
                   </td>
                 </ng-container>
-                <ng-template #editTemplateLoaiVthh>
-                  <td nzLeft class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-                  <td nzLeft class="dm-title" style="padding-left: 20px"><input nz-input [(ngModel)]="itemRowLoaiVthhEdit[i][y].tenLoaiVthh" /></td>
-                  <td nzLeft></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td nzRight>
-                    <a (click)="saveEditRowLoaiVthh(i, y)">
-                      <i class="icon htvbdh_tcdt_save"></i>
-                    </a>
-                    <a (click)="cancelEditRowLoaiVthh(i, y)">
-                      <i class="fa fa-ban do"></i>
-                    </a>
-                  </td>
-                </ng-template>
+<!--                <ng-template #editTemplateLoaiVthh>-->
+<!--                  <td nzLeft class="text-center">{{(page - 1) * pageSize + i + 1}}</td>-->
+<!--                  <td nzLeft class="dm-title" style="padding-left: 20px"><input nz-input [(ngModel)]="itemRowLoaiVthhEdit[i][y].tenLoaiVthh" /></td>-->
+<!--                  <td nzLeft></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td></td>-->
+<!--                  <td nzRight>-->
+<!--                    <a (click)="saveEditRowLoaiVthh(i, y)">-->
+<!--                      <i class="icon htvbdh_tcdt_save"></i>-->
+<!--                    </a>-->
+<!--                    <a (click)="cancelEditRowLoaiVthh(i, y)">-->
+<!--                      <i class="fa fa-ban do"></i>-->
+<!--                    </a>-->
+<!--                  </td>-->
+<!--                </ng-template>-->
               </tr>
               <ng-container *ngFor="let cloaiVthh of loaiHangHoa.children, let z = index">
                 <tr>
@@ -414,7 +441,7 @@
                         <i class=" fa fa-pencil"></i>
                       </a>
                       <a *ngIf="!isView" (click)="deleteRowCLoaiVthh(i, y, z)">
-                        <i class=" fa fa-trash-o do"></i>
+                        <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>
                   </ng-container>
@@ -471,32 +498,32 @@
                       <td>{{ chiCuc.dvt }}</td>
                       <td>{{ chiCuc.nuocSanXuat }}</td>
                       <td>{{ chiCuc.donViBaoQuan }}</td>
-                      <td>{{ chiCuc.tonKhoDauNam }}</td>
-                      <td>{{ chiCuc.nhapKnTs }}</td>
-                      <td>{{ chiCuc.nhapKnMt }}</td>
-                      <td>{{ chiCuc.nhapKnDh }}</td>
-                      <td>{{ chiCuc.nhapKnDc }}</td>
-                      <td>{{ chiCuc.nhapKnDt }}</td>
-                      <td>{{ chiCuc.nhapKnK }}</td>
-                      <td>{{ chiCuc.nhapLkTs }}</td>
-                      <td>{{ chiCuc.nhapLkMt }}</td>
-                      <td>{{ chiCuc.nhapLkDh }}</td>
-                      <td>{{ chiCuc.nhapLkDc }}</td>
-                      <td>{{ chiCuc.nhapLkDt }}</td>
-                      <td>{{ chiCuc.nhapLkK }}</td>
-                      <td>{{ chiCuc.xuatKnTs }}</td>
-                      <td>{{ chiCuc.xuatKnKtt }}</td>
-                      <td>{{ chiCuc.xuatKnBdh }}</td>
-                      <td>{{ chiCuc.xuatKnLpdh }}</td>
-                      <td>{{ chiCuc.xuatKnHh }}</td>
-                      <td>{{ chiCuc.xuatKnK }}</td>
-                      <td>{{ chiCuc.xuatLkTs }}</td>
-                      <td>{{ chiCuc.xuatLkKtt }}</td>
-                      <td>{{ chiCuc.xuatLkBdh }}</td>
-                      <td>{{ chiCuc.xuatLkLpdh }}</td>
-                      <td>{{ chiCuc.xuatLkHh }}</td>
-                      <td>{{ chiCuc.xuatLkK }}</td>
-                      <td>{{ chiCuc.tonKhoCuoiKy }}</td>
+                      <td class="text-right">{{ chiCuc.tonKhoDauNam | number: '1.0-1': 'vi_VN'}}</td>
+                      <td class="text-right">{{ chiCuc.nhapKnTs | number: '1.0-1': 'vi_VN'}}</td>
+                      <td class="text-right">{{ chiCuc.nhapKnMt | number: '1.0-1': 'vi_VN'}}</td>
+                      <td class="text-right">{{ chiCuc.nhapKnDh | number: '1.0-1': 'vi_VN'}}</td>
+                      <td class="text-right">{{ chiCuc.nhapKnDc | number: '1.0-1': 'vi_VN'}}</td>
+                      <td class="text-right">{{ chiCuc.nhapKnDt | number: '1.0-1': 'vi_VN'}}</td>
+                      <td class="text-right">{{ chiCuc.nhapKnK | number: '1.0-1': 'vi_VN'}}</td>
+                      <td class="text-right">{{ chiCuc.nhapLkTs | number: '1.0-1': 'vi_VN'}}</td>
+                      <td class="text-right">{{ chiCuc.nhapLkMt | number: '1.0-1': 'vi_VN'}}</td>
+                      <td class="text-right">{{ chiCuc.nhapLkDh | number: '1.0-1': 'vi_VN'}}</td>
+                      <td class="text-right">{{ chiCuc.nhapLkDc | number: '1.0-1': 'vi_VN'}}</td>
+                      <td class="text-right">{{ chiCuc.nhapLkDt | number: '1.0-1': 'vi_VN'}}</td>
+                      <td class="text-right">{{ chiCuc.nhapLkK | number: '1.0-1': 'vi_VN'}}</td>
+                      <td class="text-right">{{ chiCuc.xuatKnTs | number: '1.0-1': 'vi_VN'}}</td>
+                      <td class="text-right">{{ chiCuc.xuatKnKtt | number: '1.0-1': 'vi_VN'}}</td>
+                      <td class="text-right">{{ chiCuc.xuatKnBdh | number: '1.0-1': 'vi_VN'}}</td>
+                      <td class="text-right">{{ chiCuc.xuatKnLpdh | number: '1.0-1': 'vi_VN'}}</td>
+                      <td class="text-right">{{ chiCuc.xuatKnHh | number: '1.0-1': 'vi_VN'}}</td>
+                      <td class="text-right">{{ chiCuc.xuatKnK | number: '1.0-1': 'vi_VN'}}</td>
+                      <td class="text-right">{{ chiCuc.xuatLkTs | number: '1.0-1': 'vi_VN'}}</td>
+                      <td class="text-right">{{ chiCuc.xuatLkKtt | number: '1.0-1': 'vi_VN'}}</td>
+                      <td class="text-right">{{ chiCuc.xuatLkBdh | number: '1.0-1': 'vi_VN'}}</td>
+                      <td class="text-right">{{ chiCuc.xuatLkLpdh | number: '1.0-1': 'vi_VN'}}</td>
+                      <td class="text-right">{{ chiCuc.xuatLkHh | number: '1.0-1': 'vi_VN'}}</td>
+                      <td class="text-right">{{ chiCuc.xuatLkK | number: '1.0-1': 'vi_VN'}}</td>
+                      <td class="text-right">{{ chiCuc.tonKhoCuoiKy | number: '1.0-1': 'vi_VN'}}</td>
                       <td nzRight *ngIf="!isView">
                         <a *ngIf="!isView" (click)="startEdit(i, y, z, k)">
                           <i class=" fa fa-pencil"></i>

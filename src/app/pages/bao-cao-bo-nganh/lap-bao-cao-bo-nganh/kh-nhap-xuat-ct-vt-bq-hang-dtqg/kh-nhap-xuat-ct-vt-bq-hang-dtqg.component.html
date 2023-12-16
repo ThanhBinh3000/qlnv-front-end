@@ -14,6 +14,15 @@
           </div>
           <div nz-col [nzSpan]="4">
             <nz-form-item>
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Quý
+              </nz-form-label>
+              <nz-select formControlName="nam">
+                <nz-option *ngFor="let p of listQuy" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              </nz-select>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="4">
+            <nz-form-item>
               <nz-form-label [nzNoColon]="true" class="label-color-kh">Thời gian tạo</nz-form-label>
               <div nz-row [nzGutter]="24">
                 <div nz-col nzSpan="12" class="cus-start-date">
@@ -82,6 +91,7 @@
           <tr>
             <th class="text-center" nzWidth="5%">STT</th>
             <th class="text-center" nzWidth="10%">Năm</th>
+            <th class="text-center" nzWidth="10%">Quý</th>
             <th class="text-center" nzWidth="40%">Bộ/Ngành</th>
             <th class="text-center" nzWidth="10%">Thời gian tạo</th>
             <th class="text-center" nzWidth="10%">Thời gian ban hành</th>
@@ -93,6 +103,7 @@
           <tr *ngFor="let data of dataTable; let i = index">
             <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
             <td>{{ data.nam }}</td>
+            <td>{{ data.kyBcStr }}</td>
             <td>{{ data.boNganh }}</td>
             <td>{{ data.tgianTao | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.tgianBanHanh | date: 'dd/MM/YYYY' }}</td>

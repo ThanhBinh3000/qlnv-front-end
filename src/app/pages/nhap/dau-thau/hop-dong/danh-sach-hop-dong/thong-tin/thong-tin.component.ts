@@ -303,7 +303,9 @@ export class ThongTinComponent implements OnInit, OnChanges {
             diaChi: res.data.diaChi,
             sdt: res.data.sdt,
             fax: res.data.fax,
-            mst: res.data.mst
+            mst: res.data.mst,
+            stk: res.data.stk,
+            moTai: res.data.moTai
         })
         if (this.dataBinding) {
             await this.bindingDataKqLcnt(this.dataBinding.id);

@@ -4,7 +4,7 @@
       <div class="title-chi-tieu">
         <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'status-xanh' : 'status-do'">
         {{ formData.value.tenTrangThai }}</span>
-        <span>Thông tin chung</span>
+        <span>Báo cáo kế hoạch tăng hàng dự trữ quốc gia</span>
       </div>
     </div>
     <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
@@ -30,6 +30,15 @@
       </div>
     </nz-affix>
   </div>
+  <nz-card class="mg-t-16 flex-card p-lr16">
+    <div class="header header-green-background mg-t-16">
+      <div class="header-text">
+        <div class="title-chi-tieu">
+          <span></span>
+          <span>Thông tin chung</span>
+        </div>
+      </div>
+    </div>
   <form nzLayout="vertical" nz-form [formGroup]="formData">
     <div nz-row [nzGutter]="24">
       <div nz-col [nzSpan]="4">
@@ -83,6 +92,7 @@
       </div>
     </div>
   </form>
+  </nz-card>
   <nz-card class="mg-t-16 flex-card p-lr16">
     <div class="header header-green-background mg-t-16">
       <div class="header-text">
@@ -100,6 +110,11 @@
       </button>
       <input type="file" class="input-file-custom" id="importFile" (change)="handleSelectFile($event)">
       <label class="label-file-custom btn btn-main" #labelImport for="importFile"><i class="icon htvbdh_upload1"></i>  Import dữ liệu</label>
+    </div>
+    <div class='mt-2'>
+        <span class='text-right'>
+          <h2 style='font-size: 100%;'>Đơn vị: Triệu đồng</h2>
+        </span>
     </div>
     <nz-card class="mg-t-16 flex-card p-lr16 table-card">
       <nz-table nzBordered class="nowrap" [nzData]="listDataDetail" [nzFrontPagination]="false"
@@ -179,13 +194,13 @@
               <nz-date-picker [nzDisabled]="isView" nzFormat="dd/MM/yyyy" [(ngModel)]="itemRow.thoiGianNk">
               </nz-date-picker>
             </th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.keHoachSl" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.keHoachTt" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.uocThienSl" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.uocThienTt" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.namKhSl" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.namKhDt" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.ghiChu" /></th>
+            <th><nz-input-number nz-input [nzDisabled]="isView" [nzPrecision]="2" [(ngModel)]="itemRow.keHoachSl" ></nz-input-number></th>
+            <th><nz-input-number nz-input [nzDisabled]="isView" [nzPrecision]="2" [(ngModel)]="itemRow.keHoachTt" ></nz-input-number></th>
+            <th><nz-input-number nz-input [nzDisabled]="isView" [nzPrecision]="2" [(ngModel)]="itemRow.uocThienSl" ></nz-input-number></th>
+            <th><nz-input-number nz-input [nzDisabled]="isView" [nzPrecision]="2" [(ngModel)]="itemRow.uocThienTt" ></nz-input-number></th>
+            <th><nz-input-number nz-input [nzDisabled]="isView" [nzPrecision]="2" [(ngModel)]="itemRow.namKhSl" ></nz-input-number></th>
+            <th><nz-input-number nz-input [nzDisabled]="isView" [nzPrecision]="2" [(ngModel)]="itemRow.namKhDt" ></nz-input-number></th>
+            <th><nz-input-number nz-input [nzDisabled]="isView" [nzPrecision]="2" [(ngModel)]="itemRow.ghiChu" ></nz-input-number></th>
             <th>
               <a *ngIf="!isView" (click)="addRow()" [class.disabled]="!itemRow">
                 <i class="fa fa-plus"></i>
@@ -204,13 +219,13 @@
               <td>{{ data.dvt }}</td>
               <td class="text-right">{{ data.thoiGianSx | date: 'dd/MM/YYYY' }}</td>
               <td class="text-right">{{ data.thoiGianNk | date: 'dd/MM/YYYY' }}</td>
-              <td class="text-right">{{ data.keHoachSl | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.keHoachTt | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.uocThienSl | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.uocThienTt | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.namKhSl | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.namKhDt | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.ghiChu | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.keHoachSl | number: '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.keHoachTt | number: '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.uocThienSl | number: '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.uocThienTt | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.namKhSl | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.namKhDt | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.ghiChu | number : '1.2-2' : 'vi_VN' }}</td>
               <td class="text-center">
                 <a *ngIf="!isView" (click)="startEdit(i)">
                   <i class=" fa fa-pencil"></i>
@@ -238,13 +253,13 @@
                 <nz-date-picker [nzDisabled]="isView" nzFormat="dd/MM/yyyy" [(ngModel)]="itemRowUpdate.thoiGianNk">
                 </nz-date-picker>
               </th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.keHoachSl" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.keHoachTt" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.uocThienSl" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.uocThienTt" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.namKhSl" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.namKhDt" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.ghiChu" /></th>
+              <th><nz-input-number nz-input [nzDisabled]="isView" [nzPrecision]="2" [(ngModel)]="itemRowUpdate.keHoachSl" ></nz-input-number></th>
+              <th><nz-input-number nz-input [nzDisabled]="isView" [nzPrecision]="2" [(ngModel)]="itemRowUpdate.keHoachTt" ></nz-input-number></th>
+              <th><nz-input-number nz-input [nzDisabled]="isView" [nzPrecision]="2" [(ngModel)]="itemRowUpdate.uocThienSl" ></nz-input-number></th>
+              <th><nz-input-number nz-input [nzDisabled]="isView" [nzPrecision]="2" [(ngModel)]="itemRowUpdate.uocThienTt" ></nz-input-number></th>
+              <th><nz-input-number nz-input [nzDisabled]="isView" [nzPrecision]="2" [(ngModel)]="itemRowUpdate.namKhSl" ></nz-input-number></th>
+              <th><nz-input-number nz-input [nzDisabled]="isView" [nzPrecision]="2" [(ngModel)]="itemRowUpdate.namKhDt" ></nz-input-number></th>
+              <th><nz-input-number nz-input [nzDisabled]="isView" [nzPrecision]="2" [(ngModel)]="itemRowUpdate.ghiChu" ></nz-input-number></th>
               <td class="text-center">
                 <a (click)="saveEdit(itemRowUpdate,i)" class="save">
                   <i class="icon htvbdh_tcdt_save"></i>
@@ -263,20 +278,16 @@
             <td></td>
             <td></td>
             <td></td>
-            <td class="text-blue" style="text-align: right;">{{sumslKho('keHoachSl', null,
-              'tong') |
-              number:
-              '1.0-3'}}</td>
             <td></td>
-            <td class="text-blue" style="text-align: right;">{{sumslKho('uocThienSl', null,
-              'tong') |
-              number: '1.0-3'}}</td>
+            <td class="text-blue" style="text-align: right;">{{sumslKho('keHoachTt', null,
+              'tong') | number: '1.2-2' : 'vi_VN'}}</td>
             <td></td>
-            <td class="text-blue" style="text-align: right;">{{sumslKho('namKhSl', null,
-              'tong') |
-              number: '1.0-3'}}
+            <td class="text-blue" style="text-align: right;">{{sumslKho('uocThienTt', null,
+              'tong') | number: '1.2-2' : 'vi_VN'}}</td>
+            <td></td>
+            <td class="text-blue" style="text-align: right;">{{sumslKho('namKhDt', null,
+              'tong') | number: '1.2-2' : 'vi_VN'}}
             </td>
-            <td></td>
             <td></td>
           </tr>
         </tfoot>

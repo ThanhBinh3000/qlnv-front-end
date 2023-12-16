@@ -302,6 +302,7 @@ export class ThemMoiLuanPhienDoiHangDtqgComponent extends Base2Component impleme
     if (this.idInput > 0) {
       res = await this.bcBnTt145Service.update(body);
     } else {
+      this.idInput = res.data.id
       // body.tgianTao = formatDate(this.now, "dd-MM-yyyy", 'en-US')
       res = await this.bcBnTt145Service.create(body);
     }
@@ -396,7 +397,7 @@ export class ThemMoiLuanPhienDoiHangDtqgComponent extends Base2Component impleme
       if (type) {
         const sum = arr.reduce((prev, cur) => {
           if (cur[column]) {
-            prev += Number.parseInt(cur[column]);
+            prev += Number.parseFloat(cur[column]);
           }
           return prev;
         }, 0);
@@ -418,7 +419,7 @@ export class ThemMoiLuanPhienDoiHangDtqgComponent extends Base2Component impleme
       if (type) {
         const sum = arr.reduce((prev, cur) => {
           if (cur[column]) {
-            prev += Number.parseInt(cur[column]);
+            prev += Number.parseFloat(cur[column]);
           }
           return prev;
         }, 0);

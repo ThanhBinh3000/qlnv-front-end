@@ -93,7 +93,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
         id: [],
         soQd: [],
         ngayKy: [],
-        ngayHluc: [],
+        // ngayHluc: [],
         namKhoach: [dayjs().get('year')],
         trichYeu: [null],
         soQdPdKhlcnt: [''],
@@ -255,13 +255,13 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
     if (isBanHanh) {
       this.formData.controls["soQd"].setValidators([Validators.required]);
       this.formData.controls["ngayKy"].setValidators([Validators.required]);
-      if (!this.loaiVthh.startsWith('02')) {
-        this.formData.controls["ngayHluc"].setValidators([Validators.required]);
-      }
+      // if (!this.loaiVthh.startsWith('02')) {
+      //   this.formData.controls["ngayHluc"].setValidators([Validators.required]);
+      // }
     } else {
       this.formData.controls["soQd"].clearValidators();
       this.formData.controls["ngayKy"].clearValidators();
-      this.formData.controls["ngayHluc"].clearValidators();
+      // this.formData.controls["ngayHluc"].clearValidators();
     };
   }
 

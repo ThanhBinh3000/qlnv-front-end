@@ -4,7 +4,7 @@
       <div class="title-chi-tieu">
         <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'status-xanh' : 'status-do'">
         {{ formData.value.tenTrangThai }}</span>
-        <span>Thông tin chung</span>
+        <span>báo cáo kế hoạch tổng hợp nhập, xuất hàng dự trữ quốc gia</span>
       </div>
     </div>
     <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
@@ -30,7 +30,16 @@
       </div>
     </nz-affix>
   </div>
+  <nz-card class="mg-t-16 flex-card p-lr16">
   <form nzLayout="vertical" nz-form [formGroup]="formData">
+    <div class="header header-green-background mg-t-16">
+      <div class="header-text">
+        <div class="title-chi-tieu">
+          <span></span>
+          <span>Thông tin chung</span>
+        </div>
+      </div>
+    </div>
     <div nz-row [nzGutter]="24">
       <div nz-col [nzSpan]="4">
         <nz-form-item>
@@ -52,7 +61,7 @@
           </nz-form-control>
         </nz-form-item>
       </div>
-      <div nz-col [nzSpan]="6">
+      <div *ngIf="!userService.isTongCuc()" nz-col [nzSpan]="6">
         <nz-form-item>
           <nz-form-label [nzNoColon]="true"> Đơn vị gửi báo cáo </nz-form-label>
           <nz-form-control>
@@ -60,6 +69,15 @@
               <input nz-input readonly formControlName="dviGui" />
             </nz-input-group>
           </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div *ngIf="userService.isTongCuc()" nz-col [nzSpan]="4">
+        <nz-form-item>
+          <nz-form-label [nzNoColon]="true" class="label-color-kh"> Đơn vị gửi báo cáo
+          </nz-form-label>
+          <nz-select formControlName="dviGui" (ngModelChange)="handleChoose($event)" [nzDisabled]="isView">
+            <nz-option *ngFor="let p of listDsDvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
+          </nz-select>
         </nz-form-item>
       </div>
       <div nz-col [nzSpan]="6">
@@ -83,6 +101,7 @@
       </div>
     </div>
   </form>
+  </nz-card>
   <nz-card class="mg-t-16 flex-card p-lr16">
     <div class="header header-green-background mg-t-16">
       <div class="header-text">
@@ -100,6 +119,11 @@
       </button>
       <input type="file" class="input-file-custom" id="importFile" (change)="handleSelectFile($event)">
       <label class="label-file-custom btn btn-main" #labelImport for="importFile"><i class="icon htvbdh_upload1"></i>  Import dữ liệu</label>
+    </div>
+    <div class='mt-2'>
+        <span class='text-right'>
+          <h2 style='font-size: 100%;'>Đơn vị: Triệu đồng</h2>
+        </span>
     </div>
     <nz-card class="mg-t-16 flex-card p-lr16 table-card">
       <nz-table nzBordered class="nowrap" [nzData]="listDataDetail" [nzFrontPagination]="false"
@@ -135,10 +159,10 @@
           </tr>
           <tr>
             <th colspan="2">Tăng</th>
-            <th colspan="2">Luân phiên <br> đổi hành</th>
+            <th colspan="2">Luân phiên <br> đổi hàng</th>
 
-            <th colspan="2">Tăng</th>
-            <th colspan="2">Luân phiên <br> đổi hành</th>
+            <th colspan="2">Giảm, bán</th>
+            <th colspan="2">Luân phiên <br> đổi hàng</th>
           </tr>
           <tr>
             <th>Số lượng</th>
@@ -187,23 +211,23 @@
               </nz-select>
             </th>
             <th>{{itemRow.dvt}}</th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.mucDuTruCpDuyet" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.tonKhoNamBcSl" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.tonKhoNamBcTt" /></th>
-            <th>{{itemRow.nhapTsSl}}</th>
-            <th>{{itemRow.nhapTsTt}}</th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.nhapTSl" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.nhapTTt" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.nhapLpSl" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.nhapLpTt" /></th>
-            <th>{{itemRow.xuatTsSl}}</th>
-            <th>{{itemRow.xuatTsTt}}</th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.xuatTSl" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.xuatTTt" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.xuatLpSl" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.xuatLpTt" /></th>
-            <th>{{itemRow.tonKhoNamKhSl}}</th>
-            <th>{{itemRow.tonKhoNamKhTt}}</th>
+            <th><nz-input-number [nzDisabled]="isView" [(ngModel)]="itemRow.mucDuTruCpDuyet" ></nz-input-number></th>
+            <th><nz-input-number [nzDisabled]="isView" [(ngModel)]="itemRow.tonKhoNamBcSl" ></nz-input-number></th>
+            <th><nz-input-number [nzDisabled]="isView" [(ngModel)]="itemRow.tonKhoNamBcTt" ></nz-input-number></th>
+            <th>{{(itemRow.nhapTSl + itemRow.nhapLpSl) ? (itemRow.nhapTSl + itemRow.nhapLpSl) : 0}}</th>
+            <th>{{(itemRow.nhapTTt + itemRow.nhapLpTt) ? (itemRow.nhapTTt + itemRow.nhapLpTt) : 0}}</th>
+            <th><nz-input-number [nzDisabled]="isView" [(ngModel)]="itemRow.nhapTSl" ></nz-input-number></th>
+            <th><nz-input-number [nzDisabled]="isView" [(ngModel)]="itemRow.nhapTTt" ></nz-input-number></th>
+            <th><nz-input-number [nzDisabled]="isView" [(ngModel)]="itemRow.nhapLpSl" ></nz-input-number></th>
+            <th><nz-input-number [nzDisabled]="isView" [(ngModel)]="itemRow.nhapLpTt" ></nz-input-number></th>
+            <th>{{(itemRow.xuatTSl + itemRow.xuatLpSl) ? (itemRow.xuatTSl + itemRow.xuatLpSl) : 0}}</th>
+            <th>{{(itemRow.xuatTTt + itemRow.xuatLpTt) ? (itemRow.xuatTTt + itemRow.xuatLpTt) : 0}}</th>
+            <th><nz-input-number [nzDisabled]="isView" [(ngModel)]="itemRow.xuatTSl" ></nz-input-number></th>
+            <th><nz-input-number [nzDisabled]="isView" [(ngModel)]="itemRow.xuatTTt" ></nz-input-number></th>
+            <th><nz-input-number [nzDisabled]="isView" [(ngModel)]="itemRow.xuatLpSl" ></nz-input-number></th>
+            <th><nz-input-number [nzDisabled]="isView" [(ngModel)]="itemRow.xuatLpTt" ></nz-input-number></th>
+            <th>{{((itemRow.tonKhoNamBcSl + itemRow.nhapTSl + itemRow.nhapLpSl) - (itemRow.xuatTSl + itemRow.xuatLpSl)) ? (itemRow.tonKhoNamBcSl + itemRow.nhapTSl + itemRow.nhapLpSl) - (itemRow.xuatTSl + itemRow.xuatLpSl) : 0}}</th>
+            <th>{{((itemRow.tonKhoNamBcTt + itemRow.nhapTTt + itemRow.nhapLpTt) - (itemRow.xuatTTt + itemRow.xuatLpTt)) ? (itemRow.tonKhoNamBcTt + itemRow.nhapTTt + itemRow.nhapLpTt) - (itemRow.xuatTTt + itemRow.xuatLpTt) : 0}}</th>
             <th>
               <a *ngIf="!isView" (click)="addRow()" [class.disabled]="!itemRow">
                 <i class="fa fa-plus"></i>
@@ -222,21 +246,21 @@
               <td>{{ data.dvt }}</td>
               <td>{{ data.mucDuTruCpDuyet }}</td>
               <td class="text-right">{{ data.tonKhoNamBcSl }}</td>
-              <td class="text-right">{{ data.tonKhoNamBcTt | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.nhapTsSl | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.nhapTsTt | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.nhapTSl | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.nhapTTt | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.nhapLpSl | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.nhapLpTt | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.xuatTsSl | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.xuatTsTt | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.xuatTSl | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.xuatTTt | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.xuatLpSl | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.xuatLpTt | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.tonKhoNamKhSl | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.tonKhoNamKhTt | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.tonKhoNamBcTt | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.nhapTsSl | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.nhapTsTt | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.nhapTSl | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.nhapTTt | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.nhapLpSl | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.nhapLpTt | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.xuatTsSl | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.xuatTsTt | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.xuatTSl | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.xuatTTt | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.xuatLpSl | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.xuatLpTt | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.tonKhoNamKhSl | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.tonKhoNamKhTt | number : '1.2-2' : 'vi_VN' }}</td>
               <td class="text-center">
                 <a *ngIf="!isView" (click)="startEdit(i)">
                   <i class=" fa fa-pencil"></i>
@@ -256,23 +280,23 @@
                 </nz-select>
               </th>
               <th>{{itemRowUpdate.dvt}}</th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.mucDuTruCpDuyet" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.tonKhoNamBcSl" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.tonKhoNamBcTt" /></th>
-              <th>{{itemRowUpdate.nhapTsSl}}</th>
-              <th>{{itemRowUpdate.nhapTsTt}}</th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.nhapTSl" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.nhapTTt" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.nhapLpSl" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.nhapLpTt" /></th>
-              <th>{{itemRowUpdate.xuatTsSl}}</th>
-              <th>{{itemRowUpdate.xuatTsTt}}</th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.xuatTSl" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.xuatTTt" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.xuatLpSl" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.xuatLpTt" /></th>
-              <th>{{itemRowUpdate.tonKhoNamKhSl}}</th>
-              <th>{{itemRowUpdate.tonKhoNamKhTt}}</th>
+              <th><nz-input-number [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.mucDuTruCpDuyet" ></nz-input-number></th>
+              <th><nz-input-number [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.tonKhoNamBcSl" ></nz-input-number></th>
+              <th><nz-input-number [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.tonKhoNamBcTt" ></nz-input-number></th>
+              <th>{{(itemRowUpdate.nhapTSl + itemRowUpdate.nhapLpSl) ? (itemRowUpdate.nhapTSl + itemRowUpdate.nhapLpSl) : 0}}</th>
+              <th>{{(itemRowUpdate.nhapTTt + itemRowUpdate.nhapLpTt) ? (itemRowUpdate.nhapTTt + itemRowUpdate.nhapLpTt) : 0}}</th>
+              <th><nz-input-number [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.nhapTSl" ></nz-input-number></th>
+              <th><nz-input-number [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.nhapTTt" ></nz-input-number></th>
+              <th><nz-input-number [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.nhapLpSl" ></nz-input-number></th>
+              <th><nz-input-number [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.nhapLpTt" ></nz-input-number></th>
+              <th>{{(itemRowUpdate.xuatTSl + itemRow.xuatLpSl) ? (itemRowUpdate.xuatTSl + itemRowUpdate.xuatLpSl) : 0}}</th>
+              <th>{{(itemRowUpdate.xuatTTt + itemRow.xuatLpTt) ? (itemRowUpdate.xuatTTt + itemRowUpdate.xuatLpTt) : 0}}</th>
+              <th><nz-input-number [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.xuatTSl" ></nz-input-number></th>
+              <th><nz-input-number [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.xuatTTt" ></nz-input-number></th>
+              <th><nz-input-number [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.xuatLpSl" ></nz-input-number></th>
+              <th><nz-input-number [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.xuatLpTt" ></nz-input-number></th>
+              <th>{{((itemRowUpdate.tonKhoNamBcSl + itemRowUpdate.nhapTSl + itemRowUpdate.nhapLpSl) - (itemRowUpdate.xuatTSl + itemRowUpdate.xuatLpSl)) ? (itemRowUpdate.tonKhoNamBcSl + itemRowUpdate.nhapTSl + itemRowUpdate.nhapLpSl) - (itemRowUpdate.xuatTSl + itemRowUpdate.xuatLpSl) : 0}}</th>
+              <th>{{((itemRowUpdate.tonKhoNamBcTt + itemRowUpdate.nhapTTt + itemRowUpdate.nhapLpTt) - (itemRowUpdate.xuatTTt + itemRowUpdate.xuatLpTt)) ? (itemRowUpdate.tonKhoNamBcTt + itemRowUpdate.nhapTTt + itemRowUpdate.nhapLpTt) - (itemRowUpdate.xuatTTt + itemRowUpdate.xuatLpTt) : 0}}</th>
               <td class="text-center">
                 <a (click)="saveEdit(itemRowUpdate,i)" class="save">
                   <i class="icon htvbdh_tcdt_save"></i>
@@ -290,45 +314,45 @@
             <td class=" text-blue">Cộng</td>
             <td></td>
             <td></td>
-            <td class="text-blue" style="text-align: right;">{{sumSl('tonKhoNamBcSl', null,
+            <td></td>
+            <td class="text-blue" style="text-align: right;">{{sumSl('tonKhoNamBcTt', null,
               'tong') |
               number:
-              '1.0-3'}}</td>
+              '1.2-2' : 'vi_VN'}}</td>
             <td></td>
-            <td class="text-blue" style="text-align: right;">{{sumSl('nhapTsSl', null,
+            <td class="text-blue" style="text-align: right;">{{sumSl('nhapTsTt', null,
               'tong') |
-              number: '1.0-3'}}</td>
+              number: '1.2-2' : 'vi_VN'}}</td>
             <td></td>
-            <td class="text-blue" style="text-align: right;">{{sumSl('nhapTSl', null,
+            <td class="text-blue" style="text-align: right;">{{sumSl('nhapTTt', null,
               'tong') |
-              number: '1.0-3'}}
+              number: '1.2-2' : 'vi_VN'}}
             </td>
             <td></td>
-            <td class="text-blue" style="text-align: right;">{{sumSl('nhapLpSl', null,
+            <td class="text-blue" style="text-align: right;">{{sumSl('nhapLpTt', null,
               'tong') |
-              number: '1.0-3'}}
+              number: '1.2-2' : 'vi_VN'}}
             </td>
             <td></td>
-            <td class="text-blue" style="text-align: right;">{{sumSl('xuatTsSl', null,
+            <td class="text-blue" style="text-align: right;">{{sumSl('xuatTsTt', null,
               'tong') |
-              number: '1.0-3'}}
+              number: '1.2-2' : 'vi_VN'}}
             </td>
             <td></td>
-            <td class="text-blue" style="text-align: right;">{{sumSl('xuatTSl', null,
+            <td class="text-blue" style="text-align: right;">{{sumSl('xuatTTt', null,
               'tong') |
-              number: '1.0-3'}}
+              number: '1.2-2' : 'vi_VN'}}
             </td>
             <td></td>
-            <td class="text-blue" style="text-align: right;">{{sumSl('xuatLpSl', null,
+            <td class="text-blue" style="text-align: right;">{{sumSl('xuatLpTt', null,
               'tong') |
-              number: '1.0-3'}}
+              number: '1.2-2' : 'vi_VN'}}
             </td>
             <td></td>
-            <td class="text-blue" style="text-align: right;">{{sumSl('tonKhoNamKhSl', null,
+            <td class="text-blue" style="text-align: right;">{{sumSl('tonKhoNamKhTt', null,
               'tong') |
-              number: '1.0-3'}}
+              number: '1.2-2' : 'vi_VN'}}
             </td>
-            <td></td>
             <td></td>
           </tr>
         </tfoot>

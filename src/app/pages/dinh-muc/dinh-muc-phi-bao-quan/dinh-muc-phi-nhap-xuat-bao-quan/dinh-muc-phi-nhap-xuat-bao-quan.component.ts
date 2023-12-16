@@ -44,6 +44,7 @@ export class DinhMucPhiNhapXuatBaoQuanComponent extends Base2Component implement
   }
 
   async ngOnInit() {
+    console.log(this.capDvi)
     await this.filter();
   }
 
@@ -56,8 +57,11 @@ export class DinhMucPhiNhapXuatBaoQuanComponent extends Base2Component implement
       this.formData.value.ngayHieuLucTu = this.formData.value.ngayHieuLuc[0];
       this.formData.value.ngayHieuLucDen = this.formData.value.ngayHieuLuc[1];
     }
-    this.formData.value.capDvi = this.capDvi;
-    this.formData.value.maDvi = this.userInfo.MA_DVI;
+    this.formData.patchValue({
+      capDvi: this.capDvi,
+      loai: '00',
+      maDvi: this.userInfo.MA_DVI
+    });
     await this.search();
   }
 

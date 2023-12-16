@@ -89,6 +89,33 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Năm báo cáo
+            </nz-form-label>
+            <nz-select formControlName="nam" [nzDisabled]="isView">
+              <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+            </nz-select>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Kỳ báo cáo
+            </nz-form-label>
+            <nz-select formControlName="kyBc" [nzDisabled]="isView">
+              <nz-option *ngFor="let p of listQuy" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+            </nz-select>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Loại báo cáo
+            </nz-form-label>
+            <nz-select formControlName="loaiBc" [nzDisabled]="isView">
+              <nz-option *ngFor="let p of listLoaiBc" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+            </nz-select>
+          </nz-form-item>
+        </div>
       </div>
     </form>
 
@@ -171,18 +198,18 @@
               </nz-select>
             </th>
             <th>{{itemRow.dvt}}</th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.tonKhoDauNamSl" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.tonKhoDauNamTt" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.nhapKnSl" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.nhapKnTt" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.nhapLkSl" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.nhapLkTt" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.xuatKnSl" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.xuatKnTt" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.xuatLkSl" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.xuatLkTt" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.tonKhoCuoiKySl" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.tonKhoCuoiKyTt" /></th>
+            <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRow.tonKhoDauNamSl" ></nz-input-number></th>
+            <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRow.tonKhoDauNamTt" ></nz-input-number></th>
+            <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRow.nhapKnSl" ></nz-input-number></th>
+            <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRow.nhapKnTt" ></nz-input-number></th>
+            <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRow.nhapLkSl" ></nz-input-number></th>
+            <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRow.nhapLkTt" ></nz-input-number></th>
+            <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRow.xuatKnSl" ></nz-input-number></th>
+            <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRow.xuatKnTt" ></nz-input-number></th>
+            <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRow.xuatLkSl" ></nz-input-number></th>
+            <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRow.xuatLkTt" ></nz-input-number></th>
+            <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRow.tonKhoCuoiKySl" ></nz-input-number></th>
+            <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRow.tonKhoCuoiKyTt" ></nz-input-number></th>
             <th>
               <a *ngIf="!isView" (click)="addRow()" [class.disabled]="!itemRow">
                 <i class="fa fa-plus"></i>
@@ -199,18 +226,18 @@
               <td class="text-center">{{i+1}}</td>
               <td>{{ data.tenHang }}</td>
               <td>{{ data.dvt }}</td>
-              <td class="text-right">{{ data.tonKhoDauNamSl | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.tonKhoDauNamTt | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.nhapKnSl | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.nhapKnTt | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.nhapLkSl | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.nhapLkTt | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.xuatKnSl | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.xuatKnTt | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.xuatLkSl | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.xuatLkTt | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.tonKhoCuoiKySl | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.tonKhoCuoiKyTt | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.tonKhoDauNamSl | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.tonKhoDauNamTt | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.nhapKnSl | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.nhapKnTt | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.nhapLkSl | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.nhapLkTt | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.xuatKnSl | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.xuatKnTt | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.xuatLkSl | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.xuatLkTt | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.tonKhoCuoiKySl | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.tonKhoCuoiKyTt | number : '1.2-2' : 'vi_VN' }}</td>
               <td class="text-center">
                 <a *ngIf="!isView" (click)="startEdit(i)">
                   <i class=" fa fa-pencil"></i>
@@ -230,18 +257,18 @@
                 </nz-select>
               </th>
               <th>{{itemRowUpdate.dvt}}</th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.tonKhoDauNamSl" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.tonKhoDauNamTt" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.nhapKnSl" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.nhapKnTt" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.nhapLkSl" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.nhapLkTt" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.xuatKnSl" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.xuatKnTt" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.xuatLkSl" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.xuatLkTt" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.tonKhoCuoiKySl" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.tonKhoCuoiKyTt" /></th>
+              <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.tonKhoDauNamSl" ></nz-input-number></th>
+              <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.tonKhoDauNamTt" ></nz-input-number></th>
+              <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.nhapKnSl" ></nz-input-number></th>
+              <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.nhapKnTt" ></nz-input-number></th>
+              <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.nhapLkSl" ></nz-input-number></th>
+              <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.nhapLkTt" ></nz-input-number></th>
+              <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.xuatKnSl" ></nz-input-number></th>
+              <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.xuatKnTt" ></nz-input-number></th>
+              <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.xuatLkSl" ></nz-input-number></th>
+              <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.xuatLkTt" ></nz-input-number></th>
+              <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.tonKhoCuoiKySl" ></nz-input-number></th>
+              <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.tonKhoCuoiKyTt" ></nz-input-number></th>
               <td class="text-center">
                 <a (click)="saveEdit(itemRowUpdate,i)" class="save">
                   <i class="icon htvbdh_tcdt_save"></i>
