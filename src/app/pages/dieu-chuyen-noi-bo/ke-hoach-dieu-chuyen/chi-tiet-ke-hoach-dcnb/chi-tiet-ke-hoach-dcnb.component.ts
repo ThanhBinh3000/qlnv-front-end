@@ -190,7 +190,8 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
         thuKhoNhan: ['', []],
         thuKhoId: [undefined, []],
         thuKhoNhanId: [undefined, []],
-        thayDoiThuKho: [false, []]
+        thayDoiThuKho: [false, []],
+        namNhap: [undefined, [Validators.required]]
       }
     );
     this.tableForm = this.fb.group({
@@ -432,7 +433,8 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       cloaiVthh: "",
       tenCloaiVthh: "",
       donViTinh: "",
-      tonKho: 0
+      tonKho: 0,
+      namNhap: undefined
     });
     this.getListNhaKhoBq(value)
   }
@@ -454,7 +456,8 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       cloaiVthh: "",
       tenCloaiVthh: "",
       donViTinh: "",
-      tonKho: 0
+      tonKho: 0,
+      namNhap: undefined
     });
     this.getListNganKhoBq(value);
   }
@@ -482,7 +485,8 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
             cloaiVthh: res.data.object.cloaiVthh,
             tenCloaiVthh: res.data.object.tenCloaiVthh,
             donViTinh: res.data.object.dviTinh,
-            tonKho: res.data.object.slTon
+            tonKho: res.data.object.slTon,
+            namNhap: res.data.object.namNhap
           });
         }
         this.listLoKhoBq = [];
@@ -515,7 +519,8 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
             cloaiVthh: res.data.object.cloaiVthh,
             tenCloaiVthh: res.data.object.tenCloaiVthh,
             donViTinh: res.data.object.dviTinh,
-            tonKho: res.data.object.slTon
+            tonKho: res.data.object.slTon,
+            namNhap: res.data.object.namNhap,
           });
           this.formDataChiTiet.patchValue({
             thuKho: thuKho,
@@ -569,7 +574,8 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       cloaiVthh: "",
       tenCloaiVthh: "",
       donViTinh: "",
-      tonKho: 0
+      tonKho: 0,
+      namNhap: undefined
     });
   }
 
@@ -1276,6 +1282,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     data.soLuongPhanBo = undefined;
     data.tichLuongKd = undefined;
     data.slDcConLai = undefined;
+    data.namNhap = undefined;
     this.formDataChiTiet.patchValue(data);
     this.getListNhaKhoBq(data.maDiemKho);
     this.getListNganKhoBq(data.maNhaKho);
@@ -1302,7 +1309,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       soLuongPhanBo: 0,
       tichLuongKd: 0,
       slDcConLai: 0,
-      thayDoiThuKho: false
+      thayDoiThuKho: false,
     });
     this.getListNhaKhoNhanBq(value);
   }
