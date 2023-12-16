@@ -32,6 +32,7 @@ export interface TreeNodeInterface {
   apDungTai?: any[];
   apDungTaiStr?: string;
   donViTinh?: string;
+  ghiChu?: string;
   soLuong?: number;
   chiPhiTheoDinhMucNhapToiDa?: number;
   chiPhiTheoDinhMucXuatToiDa?: number;
@@ -167,6 +168,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       thanhToanTheoUsdKt: [],
       chechLechVnd: [],
       chechLechUsd: [],
+      ghiChu: [],
     });
     this.filterTable = {};
     this.dataTableDetailKtqd.forEach(item => {
@@ -1060,11 +1062,9 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
   }
 
   changeTinhTyGiaVndUsd(event: any) {
-    if (this.formDataDtl.value.thanhToanTheoVndKt) {
-      this.formDataDtl.patchValue({
-        chechLechVnd: this.formDataDtl.value.thanhToanTheoVndKt - event,
-      });
-    }
+    this.formDataDtl.patchValue({
+      chechLechVnd: (this.formDataDtl.value.thanhToanTheoVndKt || 0) - event,
+    });
     if (!this.formDataDtl.value.tyGia) {
       this.formDataDtl.value.tyGia = 0;
     }
@@ -1082,11 +1082,9 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
   }
 
   changeTinhTyGiaUsdVnd($event: any) {
-    if (this.formDataDtl.value.thanhToanTheoUsdKt) {
-      this.formDataDtl.patchValue({
-        chechLechUsd: this.formDataDtl.value.thanhToanTheoUsdKt - $event.target.value
-      });
-    }
+    this.formDataDtl.patchValue({
+      chechLechUsd: (this.formDataDtl.value.thanhToanTheoUsdKt || 0) - $event.target.value
+    });
     if (!this.formDataDtl.value.tyGia) {
       this.formDataDtl.value.tyGia = 0;
     }
@@ -1125,11 +1123,9 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
   }
 
   changeTinhTyGiaVndUsdKt(event: any) {
-    if (this.formDataDtl.value.thanhToanTheoVnd) {
-      this.formDataDtl.patchValue({
-        chechLechVnd: event - this.formDataDtl.value.thanhToanTheoVnd,
-      });
-    }
+    this.formDataDtl.patchValue({
+      chechLechVnd: event - (this.formDataDtl.value.thanhToanTheoVnd || 0)
+    });
     if (!this.formDataDtl.value.tyGiaKt) {
       this.formDataDtl.value.tyGiaKt = 0;
     }
@@ -1147,11 +1143,9 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
   }
 
   changeTinhTyGiaUsdVndKt($event: any) {
-    if (this.formDataDtl.value.thanhToanTheoUsd) {
-      this.formDataDtl.patchValue({
-        chechLechUsd: $event.target.value - this.formDataDtl.value.thanhToanTheoUsd
-      });
-    }
+    this.formDataDtl.patchValue({
+      chechLechUsd: $event.target.value - (this.formDataDtl.value.thanhToanTheoUsd || 0)
+    });
     if (!this.formDataDtl.value.tyGiaKt) {
       this.formDataDtl.value.tyGiaKt = 0;
     }
