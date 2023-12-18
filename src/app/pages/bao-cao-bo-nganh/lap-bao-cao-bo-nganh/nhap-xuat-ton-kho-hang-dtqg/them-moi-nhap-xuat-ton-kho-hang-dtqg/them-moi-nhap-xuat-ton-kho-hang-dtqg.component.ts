@@ -240,11 +240,11 @@ export class ThemMoiNhapXuatTonKhoHangDtqgComponent extends Base2Component imple
     if (this.idInput > 0) {
       res = await this.bcBnTt145Service.update(body);
     } else {
-      this.idInput = res.data.id
       // body.thoiGianTao = formatDate(this.now, "dd-MM-yyyy", 'en-US')
       res = await this.bcBnTt145Service.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
+      this.idInput = res.data.id
       if (isBanHanh) {
         this.pheDuyet(body);
       } else {

@@ -162,6 +162,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   async ngOnInit() {
     this.spinner.show();
     super.ngOnInit()
+    debugger
     try {
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
@@ -213,7 +214,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         const data = res.data;
         console.log(data)
         this.helperService.bidingDataInFormGroup(this.formData, data);
-        console.log(this.formData.value)
+        console.log(this.formData.value, "123")
         this.bindingDataBbLayMau(data.idBbLayMau, true);
         this.dataTableChiTieu = data.listKquaKngiem;
       }
@@ -714,7 +715,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       // if (this.loaiVthh.startsWith('02')) {
       //   this.listDiaDiemNhap = dataChiCuc.children.filter(item => !isEmpty(item.bienBanGuiHang));
       // } else {
-      this.listDiaDiemNhap = dataChiCuc.filter(item => item.maCuc == this.userInfo.MA_DVI);
+      this.listDiaDiemNhap = dataChiCuc.filter(item => item.maChiCuc.includes(this.userInfo.MA_DVI));
       // }
     }
     await this.spinner.hide();

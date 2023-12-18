@@ -65,6 +65,7 @@ export class ThongTinBienBanNhapDayKhoComponent extends Base2Component implement
       tenTrangThai: ['Dự thảo'],
       nam: [dayjs().get("year"), [Validators.required]],
       tenDvi: [],
+      id: [],
       maQhns: [],
       soBb: [],
       ngayLap: [dayjs().format('YYYY-MM-DD')],
