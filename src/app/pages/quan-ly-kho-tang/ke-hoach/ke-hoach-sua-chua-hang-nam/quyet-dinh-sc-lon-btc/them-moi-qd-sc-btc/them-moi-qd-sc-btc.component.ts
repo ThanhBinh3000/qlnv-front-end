@@ -144,8 +144,10 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
           let data = item.ktKhDxSuaChuaLonCtiet;
           data.keHoachVon = item.keHoachVon;
           data.idDxSc = item.idDxSc;
-          data.phanLoai = item.phanLoai
-          this.dataTable.push(data);
+          data.phanLoai = item.phanLoai;
+          if(data.maDvi.startsWith(this.userInfo.MA_DVI)){
+            this.dataTable.push(data);
+          }
         })
       });
     }
@@ -352,6 +354,20 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
         }
       },
     });
+  }
+
+  sumslXuat(column?: string): number {
+    let result = 0;
+    if (this.dataTable && this.dataTable.length > 0) {
+      const sum = this.dataTable.reduce((prev, cur) => {
+        if (cur[column]) {
+          prev += Number.parseInt(cur[column]);
+        }
+        return prev;
+      }, 0);
+      result = sum
+    }
+    return result;
   }
 
 }

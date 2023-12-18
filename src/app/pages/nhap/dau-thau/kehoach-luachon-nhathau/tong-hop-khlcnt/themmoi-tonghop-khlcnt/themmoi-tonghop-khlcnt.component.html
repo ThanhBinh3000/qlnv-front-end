@@ -9,7 +9,7 @@
       <i class="icon htvbdh_tcdt_tuchoi"></i>
       <span>Xem trước</span>
     </button>
-    <button *ngIf="formData.value.trangThai == globals.prop.NHAP_CHUA_TAO_QD || !formData.value.trangThai && isTongHop"
+    <button *ngIf="formData.value.trangThai == globals.prop.NHAP_CHUA_TAO_QD || !formData.value.trangThai && id > 0 && isTongHop"
       type="button" class="btn btn-sub xanh-nhat" (click)="taoQdinh()">
       <i class="icon htvbdh_tcdt_tao-qd"></i>
       <span>Tạo quyết định</span>

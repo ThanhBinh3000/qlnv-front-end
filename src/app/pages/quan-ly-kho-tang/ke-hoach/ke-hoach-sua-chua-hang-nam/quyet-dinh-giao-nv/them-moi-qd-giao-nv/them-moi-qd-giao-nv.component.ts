@@ -91,6 +91,11 @@ export class ThemMoiQdGiaoNvComponent extends Base2Component implements OnInit {
   }
 
   async save(isOther: boolean) {
+    if(isOther){
+      this.formData.controls["soQdGiaoNv"].setValidators([Validators.required]);
+    }else{
+      this.formData.controls["soQdGiaoNv"].clearValidators();
+    }
     if(this.dataTable && this.dataTable.length == 0){
       this.notification.error(MESSAGE.ERROR, 'Danh mục sửa chữa không được để trống');
       return;

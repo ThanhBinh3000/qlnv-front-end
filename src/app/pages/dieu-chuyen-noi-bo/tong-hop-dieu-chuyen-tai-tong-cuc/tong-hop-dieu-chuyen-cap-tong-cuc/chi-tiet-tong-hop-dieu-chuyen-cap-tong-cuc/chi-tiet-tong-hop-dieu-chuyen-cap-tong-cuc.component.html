@@ -400,7 +400,8 @@
                                         style="max-width: 90px; min-width: 90px;  white-space: break-spaces;"
                                         class="text-center">Thời gian dự
                                         kiến điều chuyển</th>
-                                    <th colspan="5" class="text-center">Chi cục nhận điều chuyển đến</th>
+                                    <th rowspan="2">Lý do điều chuyển</th>
+                                    <th colspan="6" class="text-center">Chi cục nhận điều chuyển đến</th>
                                     <th rowspan="2" class="text-center break max-w-90 min-w-90">Trạng thái xác định điểm
                                         nhập
                                     </th>
@@ -411,6 +412,7 @@
                                     <th>Lô kho</th>
                                     <th class="text-center">Loại HH</th>
                                     <th class="text-center">Chủng loại hàng hóa</th>
+                                    <th class="text-center">Năm nhập kho</th>
                                     <th class="text-center">ĐVT</th>
                                     <th class="text-center">Tồn kho</th>
                                     <th class="text-center">SL điều chuyển</th>
@@ -438,9 +440,11 @@
                                         <td></td>
                                         <td></td>
                                         <td></td>
+                                        <td></td>
                                         <td class="text-right">{{item.duToanKphi|number: '1.0-1':
                                             'vi_VN'}}</td>
                                         <td></td>
+                                        <td class="bold break max-w-120">{{item.lyDoDc}}</td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -474,6 +478,8 @@
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
+                                                <td></td>
+                                                <td></td>
                                             </tr>
                                             <ng-container *ngIf="bb.expand">
                                                 <ng-container *ngFor="let c of bb.children, let y = index">
@@ -491,7 +497,8 @@
                                                         </td>
                                                         <td>{{c.tenLoaiVthh || ""}}</td>
                                                         <td>{{c.tenCloaiVthh || ""}}</td>
-                                                        <td>{{c.tenDonViTinh || ""}}</td>
+                                                        <td>{{c.namNhap || ""}}</td>
+                                                        <td>{{c.donViTinh || ""}}</td>
                                                         <td class="text-right">{{c.tonKho|number: '1.0-1': 'vi_VN'}}
                                                         </td>
                                                         <td class="text-right">{{c.soLuongDc|number: '1.0-1':
@@ -506,6 +513,7 @@
                                                         <td>{{c.tenLoKhoNhan}}</td>
                                                         <td>{{c.tichLuongKd}}</td>
                                                         <td>{{c.soLuongPhanBo}}</td> -->
+                                                        <td></td>
                                                         <td></td>
                                                         <td></td>
                                                         <td></td>
@@ -531,7 +539,9 @@
                                                             <td></td>
                                                             <td></td>
                                                             <td></td>
+                                                            <td></td>
                                                             <td>{{d.thoiGianDkDc|date: "dd/MM/yyyy"}}</td>
+                                                            <td></td>
                                                             <td>{{d.tenChiCucNhan || ""}}</td>
                                                             <td></td>
                                                             <td></td>
@@ -549,6 +559,8 @@
                                                                 <!-- <td [nzExpand]="expandSet.has(bb.key)"
                                                                 (nzExpandChange)="onExpandChange(bb.key, $event)">
                                                             </td> -->
+                                                                <td></td>
+                                                                <td></td>
                                                                 <td></td>
                                                                 <td></td>
                                                                 <td></td>
@@ -634,10 +646,11 @@
                                 <tr>
                                     <th rowspan="2" width="60px" class="text-center">STT</th>
                                     <th rowspan="2"></th>
-                                    <th colspan="9">Chi cục đề xuất điều chuyển</th>
+                                    <th colspan="10">Chi cục đề xuất điều chuyển</th>
                                     <th rowspan="2" class="text-center"
                                         style="max-width: 90px; min-width: 90px;  white-space: break-spaces;">Thời
                                         gian dự kiến điều chuyển</th>
+                                    <th rowspan="2">Lý do điều chuyển</th>
                                     <th>Chi cục nhận điều chuyển đến</th>
                                 </tr>
                                 <tr>
@@ -646,6 +659,7 @@
                                     <th>Lô kho</th>
                                     <th>Loại HH</th>
                                     <th>Chủng loại hàng hóa</th>
+                                    <th>Năm nhập kho</th>
                                     <th>ĐVT</th>
                                     <th>Tồn kho</th>
                                     <th>SL điều chuyển</th>
@@ -663,9 +677,11 @@
                                         <td><a nz-button nzType="link"
                                                 (click)="openModalKeHoachDC($event, item.hdrId)">{{
                                                 item.soDxuat }}</a></td>
-                                        <td colspan="6"></td>
+                                        <td colspan="7"></td>
                                         <td class="text-right">{{item.duToanKphi|number:'1.0-1':'vi_VN'}}</td>
-                                        <td colspan="3"></td>
+                                        <td></td>
+                                        <td class="bold break max-w-120">{{item.lyDoDc || ""}}</td>
+                                        <td colspan="2"></td>
                                         <ng-template #tdNormal>
                                             <td></td>
                                         </ng-template>
@@ -682,11 +698,13 @@
                                                 </td>
                                                 <td>{{bb.tenLoaiVthh}}</td>
                                                 <td>{{bb.tenCloaiVthh}}</td>
-                                                <td>{{bb.tenDonViTinh}}</td>
+                                                <td>{{bb.namNhap}}</td>
+                                                <td>{{bb.donViTinh}}</td>
                                                 <td class="text-right">{{bb.tonKho|number:'1.0-1':'vi_VN'}}</td>
                                                 <td class="text-right">{{bb.soLuongDc|number:'1.0-1':'vi_VN'}}</td>
                                                 <td class="text-right">{{bb.duToanKphi|number:'1.0-1':'vi_VN'}}</td>
                                                 <td>{{bb.thoiGianDkDc}}</td>
+                                                <td></td>
                                                 <td>{{bb.tenChiCucNhan}}</td>
                                             </tr>
                                         </ng-container>
