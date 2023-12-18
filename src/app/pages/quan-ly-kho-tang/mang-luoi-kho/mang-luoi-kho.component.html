@@ -1642,7 +1642,17 @@
                           </nz-form-control>
                         </nz-form-item>
                       </div>
-                      <div nz-col [nzSpan]="6">
+                      <div nz-col [nzSpan]="4">
+                        <nz-form-item>
+                          <nz-form-label>Thời điểm nhập kho (năm)</nz-form-label>
+                          <nz-form-control>
+                            <nz-input-group>
+                              <input formControlName="namNhap" nz-input [readOnly]="true"/>
+                            </nz-input-group>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <div nz-col [nzSpan]="4">
                         <nz-form-item>
                           <nz-form-label> Tình trạng lô kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
@@ -1653,7 +1663,7 @@
                           </nz-form-control>
                         </nz-form-item>
                       </div>
-                      <div nz-col [nzSpan]="6">
+                      <div nz-col [nzSpan]="4">
                         <nz-form-item>
                           <nz-form-label>Ngày nhập đầy</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
