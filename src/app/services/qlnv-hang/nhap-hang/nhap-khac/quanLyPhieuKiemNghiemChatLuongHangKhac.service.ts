@@ -8,10 +8,10 @@ import {BaseService} from "../../../base.service";
   providedIn: 'root',
 })
 export class QuanLyPhieuKiemNghiemChatLuongHangKhacService extends BaseService {
-  GATEWAY = '';
+  GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'knghiem-cluong-khac', '');
+    super(httpClient, 'knghiem-cluong-khac', '/qlnv-hang');
   }
 
 }
