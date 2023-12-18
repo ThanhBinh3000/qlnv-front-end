@@ -15,7 +15,8 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button class="btn btn-sub ml-2" (click)="saveAndSend(STATUS.DA_DUYET_LDC, 'Bạn có muốn duyệt?','Bạn đã duyệt thành công!')"
+      <button class="btn btn-sub ml-2"
+              (click)="saveAndSend(STATUS.DA_DUYET_LDC, 'Bạn có muốn duyệt?','Bạn đã duyệt thành công!')"
               *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCC_THEM') && (formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU || formData.value.trangThai == STATUS.TU_CHOI_CBV)">
         <i class="icon htvbdh_trinh"></i>
         <span>Đã duyệt - LĐ cục</span>
@@ -43,7 +44,7 @@
             nzMessage="Lý do từ chối"
             nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
-  <nz-card class="mt16 flex-card p-lr16 mg-t-10" *ngIf="!disableForm()" >
+  <nz-card class="mt16 flex-card p-lr16 mg-t-10" *ngIf="!disableForm()">
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formDataTongHop">
       <div nz-row [nzGutter]="24">
         <div nz-col nzSpan="4">
@@ -59,7 +60,8 @@
         <div nz-col nzSpan="4">
           <nz-form-label>Số công văn</nz-form-label>
           <nz-form-control [nzErrorTip]="error">
-            <nz-select [nzDisabled]="isTongHop" nzMode="multiple" nzPlaceHolder="Chọn số công văn" nzAllowClear formControlName="listSoCv">
+            <nz-select [nzDisabled]="isTongHop" nzMode="multiple" nzPlaceHolder="Chọn số công văn" nzAllowClear
+                       formControlName="listSoCv">
               <nz-option *ngFor="let option of listDxChiCuc" [nzValue]="option.soCv"
                          [nzLabel]="option.soCv"></nz-option>
             </nz-select>
@@ -81,7 +83,7 @@
     </div>
   </nz-card>
   <nz-card class="mt16 flex-card p-lr16 mg-t-10" *ngIf="isTongHop">
-    <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" >
+    <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
       <div nz-row [nzGutter]="20">
         <div nz-col nzSpan="4" *ngIf="isView">
           <nz-form-label>Năm kế hoạch</nz-form-label>
@@ -100,7 +102,7 @@
           </nz-form-control>
         </div>
         <div nz-col [nzSpan]="isView ? 12 : 16">
-          <nz-form-label nzRequired >Trích yếu</nz-form-label>
+          <nz-form-label nzRequired>Trích yếu</nz-form-label>
           <nz-form-control [nzErrorTip]="error">
             <input nz-input formControlName="trichYeu" [readonly]="isView"/>
           </nz-form-control>
@@ -195,22 +197,22 @@
       </button>
     </div>
   </div>
-  <nz-table class="wrap mg-t-10 pd-10"  [nzData]="dataTable" [nzFrontPagination]="false" *ngIf="isTongHop" style="overflow: auto"
-            [nzShowPagination]="false" nzBordered [nzScroll]="dataTable && dataTable.length ? { x: '3200px' } : null">
+  <nz-table class="nowrap mg-t-10 pd-10" [nzData]="dataTable" [nzFrontPagination]="false" *ngIf="isTongHop"
+            [nzShowPagination]="false" nzBordered>
     <thead>
     <tr>
-      <th class="text-center" rowSpan="2"></th>
+      <th class="text-center" rowSpan="2" nzWidth="40px"></th>
       <th class="text-center" rowSpan="2" nzWidth="40px">STT</th>
-      <th class="text-center" rowSpan="2" nzWidth="200px">Tên tài sản</th>
-      <th class="text-center" rowSpan="2" nzWidth="100px">Đơn vị tính</th>
-      <th class="text-center" class="text-center" colspan="3" width="500px" >Số lượng tối đa</th>
-      <th class="text-center" rowSpan="2" nzWidth="150px">SL sử dụng được <br> tại thời điểm đề xuất </th>
-      <th class="text-center" rowSpan="2" nzWidth="150px">Số lượng sẽ nhập <br> thêm năm trước</th>
-      <th class="text-center" rowSpan="2" nzWidth="150px">Tổng cộng</th>
-      <th class="text-center" rowSpan="2" nzWidth="150px">SL định mức theo <br> chỉ tiêu KH năm</th>
-      <th class="text-center" colSpan="2" nzWidth="300px">Chênh lệch</th>
-      <th class="text-center" colSpan="3" nzWidth="500px">Nhu cầu trang bị đề xuất</th>
-      <th class="text-center" rowSpan="2" nzWidth="200px">Ghi chú</th>
+      <th class="text-center" rowSpan="2">Tên tài sản</th>
+      <th class="text-center" rowSpan="2">Đơn vị tính</th>
+      <th class="text-center" class="text-center" colspan="3" width="500px">Số lượng tối đa</th>
+      <th class="text-center" rowSpan="2">SL sử dụng được <br> tại thời điểm đề xuất</th>
+      <th class="text-center" rowSpan="2">Số lượng sẽ nhập <br> thêm năm trước</th>
+      <th class="text-center" rowSpan="2">Tổng cộng</th>
+      <th class="text-center" rowSpan="2">SL định mức theo <br> chỉ tiêu KH năm</th>
+      <th class="text-center" colSpan="2">Chênh lệch</th>
+      <th class="text-center" colSpan="3">Nhu cầu trang bị đề xuất</th>
+      <th class="text-center" rowSpan="2">Ghi chú</th>
     </tr>
     <tr>
       <th class="text-center">Căn cứ SL nhập, xuất</th>
@@ -220,13 +222,13 @@
       <th class="text-center">Thừa (6) = (3) - (4)</th>
       <th class="text-center">Số lượng (7)</th>
       <th class="text-center">Đơn giá (trđ) (8)</th>
-      <th class="text-center">Thành tiền (trđ)<br/>(9) = (7) * (8) </th>
+      <th class="text-center">Thành tiền (trđ)<br/>(9) = (7) * (8)</th>
     </tr>
     </thead>
     <tbody>
     <ng-container *ngFor="let data of dataTable , let idx = index">
       <tr>
-        <td [nzExpand]="expandSet.has(data.idVirtual)"  (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
+        <td [nzExpand]="expandSet.has(data.idVirtual)" (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
         <td class="font-weight-bold">{{idx + 1}}</td>
         <td class="font-weight-bold">{{data.tenTaiSan}}</td>
         <td class="font-weight-bold">{{data.donViTinh}}</td>
@@ -239,9 +241,9 @@
         <td></td>
         <td></td>
         <td></td>
-        <td  class="font-weight-bold text-right">{{sumSoLuong(data)}}</td>
+        <td class="font-weight-bold text-right">{{sumSoLuong(data)}}</td>
         <td class="font-weight-bold text-right">{{data.donGiaTd | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="font-weight-bold text-right">{{sumSoLuong(data)  * data.donGiaTd | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="font-weight-bold text-right">{{sumSoLuong(data) * data.donGiaTd | number : '1.0-1' : 'vi_VN'}}</td>
         <td></td>
       </tr>
       <ng-container *ngIf="expandSet.has(data.idVirtual)">
@@ -252,8 +254,10 @@
           <td>{{item.donViTinh}}</td>
           <td class="text-center"><label nz-checkbox disabled [(ngModel)]="item.isCanCu"></label></td>
           <td class="text-center">{{item.slVpCucKv | number : '1.0-1' : 'vi_VN'}} </td>
-          <td class="text-center" *ngIf="item.isCanCu">{{item.slChiCuc ? (item.slChiCuc | number : '1.0-1' : 'vi_VN') : ''}}/{{item.klChiCuc ? (item.klChiCuc | number : '1.0-1' : 'vi_VN') + ' tấn lương thực' : ''}}  {{item.tenLoaiHinh ? ' ('+ item.tenLoaiHinh + ')' : ''}}</td>
-          <td class="text-center"  *ngIf="!item.isCanCu">{{item.slChiCuc | number : '1.0-1' : 'vi_VN'}} </td>
+          <td class="text-center"
+              *ngIf="item.isCanCu">{{item.slChiCuc ? (item.slChiCuc | number : '1.0-1' : 'vi_VN') : ''}}
+            /{{item.klChiCuc ? (item.klChiCuc | number : '1.0-1' : 'vi_VN') + ' tấn lương thực' : ''}}  {{item.tenLoaiHinh ? ' (' + item.tenLoaiHinh + ')' : ''}}</td>
+          <td class="text-center" *ngIf="!item.isCanCu">{{item.slChiCuc | number : '1.0-1' : 'vi_VN'}} </td>
           <td class="text-right">{{item.slHienCo | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="text-right">{{item.slNhapThem | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="text-right">{{item.slHienCo + item.slNhapThem | number : '1.0-1' : 'vi_VN'}}</td>

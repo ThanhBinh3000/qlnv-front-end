@@ -142,22 +142,21 @@
       </button>
     </div>
   </div>
-  <nz-table class="wrap mg-t-10" [nzData]="dataTable" [nzFrontPagination]="false"
-            [nzShowPagination]="false" nzBordered [nzScroll]="dataTable && dataTable.length ? { x: '3000px' } : null"
-            style="overflow: auto">
+  <nz-table class="nowrap mg-t-10" [nzData]="dataTable" [nzFrontPagination]="false"
+            [nzShowPagination]="false" nzBordered>
     <thead>
     <tr>
-      <th class="text-center" rowSpan="2" nzWidth="40px"></th>
-      <th class="text-center" rowSpan="2" nzWidth="40px">STT</th>
-      <th class="text-center" rowSpan="2" nzWidth="200px">Tên tài sản</th>
-      <th class="text-center" rowSpan="2" nzWidth="100px">Đơn vị tính</th>
-      <th class="text-center" colspan="3" nzWidth="500px">Số lượng tối đa</th>
-      <th class="text-center" rowSpan="2" nzWidth="150px">SL sử dụng được <br> tại thời điểm đề xuất</th>
-      <th class="text-center" rowSpan="2" nzWidth="150px">Số lượng sẽ nhập <br> thêm từ năm trước</th>
-      <th class="text-center" rowSpan="2" nzWidth="150px">Tổng cộng</th>
-      <th class="text-center" rowSpan="2" nzWidth="150px">SL định mức theo <br> chỉ điêu KH năm</th>
-      <th class="text-center" colSpan="2" nzWidth="200px">Chênh lệch</th>
-      <th class="text-center" colSpan="3" nzWidth="500px">Nhu cầu trang bị <br> cho đơn vị</th>
+      <th class="text-center" rowSpan="2" width="40px"></th>
+      <th class="text-center" rowSpan="2" width="40px">STT</th>
+      <th class="text-center" rowSpan="2">Tên tài sản</th>
+      <th class="text-center" rowSpan="2">Đơn vị tính</th>
+      <th class="text-center" colspan="3" >Số lượng tối đa</th>
+      <th class="text-center" rowSpan="2" >SL sử dụng được <br> tại thời điểm đề xuất</th>
+      <th class="text-center" rowSpan="2" >Số lượng sẽ nhập <br> thêm từ năm trước</th>
+      <th class="text-center" rowSpan="2" >Tổng cộng</th>
+      <th class="text-center" rowSpan="2" width="140px"  >SL định mức theo <br> chỉ điêu KH năm</th>
+      <th class="text-center" colSpan="2">Chênh lệch</th>
+      <th class="text-center" colSpan="3">Nhu cầu trang bị <br> cho đơn vị</th>
       <th class="text-center" rowSpan="2">Ghi chú</th>
     </tr>
     <tr>
