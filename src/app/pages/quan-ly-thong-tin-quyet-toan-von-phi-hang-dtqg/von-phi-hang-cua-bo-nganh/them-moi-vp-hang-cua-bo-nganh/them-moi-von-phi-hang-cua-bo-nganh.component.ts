@@ -14,6 +14,9 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { HelperService } from '../../../../services/helper.service';
 import { QuyetToanVonPhiService } from '../../../../services/ke-hoach/von-phi/quyetToanVonPhi.service';
 import { DialogTuChoiComponent } from '../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { PREVIEW } from '../../../../constants/fileType';
+import printJS from 'print-js';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-them-moi-von-phi-hang-cua-bo-nganh',
@@ -54,6 +57,11 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
     trangThai: '',
     trangThaiPdBtc: '',
   };
+  templateName = 'bao-cao-so-lieu-quyet-toan-toan-nganh.docx';
+  pdfSrc: any;
+  printSrc: any;
+  wordSrc: any;
+  showDlgPreview = false;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -412,6 +420,39 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
         text: thisYear + i,
       });
     }
+  }
+
+  async preview(id) {
+    this.spinner.show();
+    await this.vonPhiService.preview({
+      tenBaoCao: this.templateName,
+      id: id,
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
+      }
+    });
+    this.spinner.hide();
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, this.templateName + '.pdf');
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, this.templateName + '.docx');
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true });
   }
 
 }

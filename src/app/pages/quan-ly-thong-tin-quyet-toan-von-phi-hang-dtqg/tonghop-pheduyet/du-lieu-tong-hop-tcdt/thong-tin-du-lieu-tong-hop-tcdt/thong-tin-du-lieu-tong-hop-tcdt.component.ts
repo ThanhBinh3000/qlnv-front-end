@@ -57,7 +57,7 @@ export class ThongTinDuLieuTongHopTcdtComponent implements OnInit {
     trangThai: '',
     trangThaiPdBtc: '',
   };
-  templateName = 'bao-cao-so-lieu-quyet-toan-toan-nganh';
+  templateName = 'du-lieu-tong-hop-cua-tcdt.docx';
   pdfSrc: any;
   printSrc: any;
   wordSrc: any;
