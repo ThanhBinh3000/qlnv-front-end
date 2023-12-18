@@ -445,7 +445,6 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
       let tongKl = 0;
       let listLoaiHinh = detail.loaiHinh ? detail.loaiHinh.split(",") : null;
       if (listLoaiHinh && listLoaiHinh.length > 0) {
-        console.log(12222)
         if (listLoaiHinh.includes("00")) {
           tongKl = tongKl + this.formData.value.slGaoNhap * 2 + this.formData.value.slThocNhap
         }

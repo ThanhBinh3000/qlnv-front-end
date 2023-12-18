@@ -141,7 +141,7 @@
         <tr *ngFor="let data of basicTable.data; let i = index">
           <td width="45px">
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                   [nzDisabled]="data.trangThai != globals.prop.NHAP_DU_THAO"></label>
+                   [nzDisabled]="data.trangThai != STATUS.DANG_NHAP_DU_LIEU"></label>
           </td>
           <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
           <td>{{ data.id }}</td>
@@ -153,10 +153,10 @@
           <td>{{ data.soTbTuChoi }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>
-            <a (click)="redirectToChiTiet(true, data.id)" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCUC_XEM') && !((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDTC) && data.nguoiTaoId == userInfo.ID  )">
+            <a (click)="redirectToChiTiet(true, data.id)" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCUC_XEM') && !((data.trangThai == STATUS.DANG_NHAP_DU_LIEU || data.trangThai == STATUS.TU_CHOI_LDTC) && data.nguoiTaoId == userInfo.ID  )">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a *ngIf="((data.trangThai == STATUS.DU_THAO  || data.trangThai == STATUS.TU_CHOI_LDTC) && userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCUC_SUA')"
+            <a *ngIf="((data.trangThai == STATUS.DANG_NHAP_DU_LIEU  || data.trangThai == STATUS.TU_CHOI_LDTC) && userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCUC_SUA')"
                (click)="redirectToChiTiet(false, data.id)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
@@ -164,7 +164,7 @@
                (click)="openDialogThongBao(data.id)">
               <i class="icon htvbdh_bullhorn" title="Thông báo"></i>
             </a>
-            <a *ngIf="(data.trangThai == STATUS.DU_THAO && userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCUC_XOA')" (click)="delete(data)">
+            <a *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCUC_XOA')" (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
