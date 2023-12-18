@@ -285,7 +285,7 @@
 
     </nz-collapse>
   </nz-card>
-  <div nz-col class="cangiua group-button-search">
+  <div nz-col class="cangiua group-button-search" *ngIf="isVthhVatuThietBi()">
     <button type="button" class="btn btn-main" (click)="openVttbModal()">
       <i class="icon htvbdh_richtextconverter"></i>
       <span>Xem quyết định phê duyệt cứu trợ viện trợ theo Cục DTNN KV</span>
@@ -1624,7 +1624,6 @@
           <th>Hàng - chủng loại hàng DTQG</th>
           <th>Đơn vị tính</th>
           <th>Năm nhập kho</th>
-          <th>Tồn kho</th>
           <th>Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
           <th>SL xuất cứu trợ<br />giao Cục thực hiện</th>
         </tr>
