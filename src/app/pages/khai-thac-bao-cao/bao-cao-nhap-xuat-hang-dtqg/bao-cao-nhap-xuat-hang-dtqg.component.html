@@ -4,7 +4,7 @@
       <ul nz-menu nzMode='inline' style='max-width: 300px'>
         <li nz-submenu nzOpen='true' nzTitle='&nbsp;&nbsp;&nbsp;Báo cáo nhập-xuất, mua-bán hàng DTQG'>
           <ul>
-            <li nz-menu-item (click)='selectTab(0)'>
+            <li nz-menu-item [nzSelected]='tabSelected==0' (click)='selectTab(0)'>
               <span nz-icon nzType='fund'></span>
               <span>Báo cáo tiến độ nhập gạo theo yêu cầu</span>
             </li>
