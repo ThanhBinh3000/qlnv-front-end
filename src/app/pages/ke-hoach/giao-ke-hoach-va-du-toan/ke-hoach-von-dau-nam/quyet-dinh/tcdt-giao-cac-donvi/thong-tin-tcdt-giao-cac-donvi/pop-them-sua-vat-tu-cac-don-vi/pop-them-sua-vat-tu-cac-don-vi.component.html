@@ -1,0 +1,93 @@
+<div class="bg-trang">
+  <form nz-form nzLayout="vertical" [formGroup]="formItem">
+    <div nz-row [nzGutter]="24">
+      <div nz-col nzSpan="24" class="mt-2">
+        <nz-form-item>
+          <nz-form-label nzRequired
+                         nzNoColon="true">Cục DTNN</nz-form-label>
+          <input nz-input formControlName="tenDvi" [readonly]="true"/>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="24" class="mt-2">
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-form-label nzRequired nzNoColon="true">Tên hàng</nz-form-label>
+            <nz-select nzAllowClear nzShowSearch [nzDisabled]="!isRoot"
+                       formControlName="maVatTuCha"
+                       (ngModelChange)="onChangeLoaiVthh($event)">
+              <nz-option nzValue="{{item.maHang}}" nzLabel="{{item.ten}}" *ngFor="let item of dataVatTuChaShow">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="24" class="mt-2">
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-form-label nzNoColon="true">Chủng loại hàng hóa</nz-form-label>
+            <nz-select formControlName="maVatTu" nzShowSearch [nzDisabled]="!isRoot && formItem.value.maVatTu"
+                       nzAllowClear
+                       (ngModelChange)="onChangeCloaiVthh($event)">
+              <nz-option nzValue="{{item.maHang}}" nzLabel="{{item.ten}}" *ngFor="let item of dataVatTuConShow">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="24" class="mt-2">
+        <nz-form-item>
+          <nz-form-label nzNoColon="true">Đơn vị tính</nz-form-label>
+          <input nz-input formControlName="donViTinh" [readonly]="true"/>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="24" class="mt-2">
+        <nz-form-item >
+          <nz-form-control [nzErrorTip]="error">
+            <nz-form-label [nzNoColon]="true" class="label-color-kh">Số lượng
+            </nz-form-label>
+            <input class="money-input" currencyMask (ngModelChange)="calcularTongTienDuToan()"
+                   formControlName="soLuong" [options]="amount"/>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="24" class="mt-2">
+        <nz-form-item >
+          <nz-form-control [nzErrorTip]="error">
+            <nz-form-label [nzNoColon]="true" class="label-color-kh">Đơn giá
+            </nz-form-label>
+            <input class="money-input" currencyMask (ngModelChange)="calcularTongTienDuToan()"
+                   formControlName="donGia" [options]="amount"/>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="24" class="mt-2">
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-form-label nzNoColon="true">Dự toán (Triệu đồng)</nz-form-label>
+            <input class="money-input" currencyMask formControlName="duToan" [readOnly]='true' [options]="amount"/>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  </form>
+</div>
+<ng-template #error let-control>
+  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+  </ng-container>
+</ng-template>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button nz-button (click)="onCancel()" class="modal__button--cancel ml-2">
+        <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+        Đóng
+      </button>
+      <button nz-button (click)="handleOk()" class="modal__button--save ml-2">
+        <i nz-icon nzType="save"></i>
+        Lưu
+      </button>
+    </div>
+  </div>
+</div>

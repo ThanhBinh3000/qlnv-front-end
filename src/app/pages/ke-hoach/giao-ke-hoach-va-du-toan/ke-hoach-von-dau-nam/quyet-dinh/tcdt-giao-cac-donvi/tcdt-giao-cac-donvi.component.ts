@@ -57,9 +57,7 @@ export class TcdtGiaoCacDonviComponent extends Base2Component implements OnInit 
   setOfCheckedId = new Set<number>();
   dataTable: any[] = [];
   dataTableAll: any[] = [];
-  boTaiChinh: number = 100;
   listBoNganh: any[] = [];
-  namDataSelect: number;
   userInfo: UserLogin;
   STATUS = STATUS;
   rowSelected: number = 0;
@@ -144,12 +142,9 @@ export class TcdtGiaoCacDonviComponent extends Base2Component implements OnInit 
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
           item.checked = false;
-          // item.statusConvert = this.convertTrangThai(item.trangThai);
         });
-        this.getDetailRow(this.dataTable[0].id);
       }
       this.dataTableAll = cloneDeep(this.dataTable);
-
     } else {
       this.dataTable = [];
       this.totalRecord = 0;
@@ -202,20 +197,6 @@ export class TcdtGiaoCacDonviComponent extends Base2Component implements OnInit 
     }
   }
 
-  // exportReportDemo() {
-  //   let body = {
-  //     typeFile: 'PDF',
-  //     fileName: 'bc_nhap_xuat_ton_kho_hang_dtnn.jrxml',
-  //     tenBaoCao: 'Hoa_test',
-  //     nam: 2023,
-  //   };
-  //   this.quyetDinhTtcpService
-  //     .exportReport(body)
-  //     .subscribe((blob) =>
-  //       saveAs(blob, body.tenBaoCao + '.pdf'),
-  //     );
-  // }
-
   exportData() {
     if (this.totalRecord > 0) {
       this.spinner.show();
@@ -226,7 +207,7 @@ export class TcdtGiaoCacDonviComponent extends Base2Component implements OnInit 
         this.quyetDinhTCDTGiaoDonviService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'quyet-dinh-thu-tuong-chinh-phu.xlsx'),
+            saveAs(blob, 'quyet-dinh-tcdt-giao-cac-donvi.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -384,7 +365,7 @@ export class TcdtGiaoCacDonviComponent extends Base2Component implements OnInit 
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == STATUS.DANG_NHAP_DU_LIEU) {
             item.checked = true;
           }
         });
@@ -408,29 +389,6 @@ export class TcdtGiaoCacDonviComponent extends Base2Component implements OnInit 
     } else {
       this.indeterminate = true;
     }
-  }
-
-  async getDetailRow(id) {
-    // if (id) {
-    //   let res = await this.quyetDinhTCDTGiaoDonviService.getDetail(id);
-    //   if (res.msg == MESSAGE.SUCCESS) {
-    //     this.listBoNganh = res.data.listChiTangToanBoNganh ? res.data.listChiTangToanBoNganh : [];
-    //     //gộp 2 dòng vt, lt thành btc
-    //     const mergedItems: itemBn[] = this.listBoNganh.reduce((result: itemBn[], currentItem: itemBn) => {
-    //       const lastIndex = result.length - 1;
-    //       if (lastIndex >= 0 && result[lastIndex].maBn === currentItem.maBn) {
-    //         result[lastIndex].tenBn = 'Bộ Tài Chính';
-    //         result[lastIndex].tongSo += currentItem.tongSo;
-    //       } else {
-    //         result.push(currentItem);
-    //       }
-    //       return result;
-    //     }, []);
-    //     this.listBoNganh = cloneDeep(mergedItems.filter(item => item.tongSo));
-    //     this.namDataSelect = res.data.namQd;
-    //     this.rowSelected = id;
-    //   }
-    // }
   }
 
   calcTong() {

@@ -207,23 +207,22 @@
       </button>
     </div>
   </div>
-  <nz-table class="wrap mg-t-10 pd-10" [nzData]="dataTable" [nzFrontPagination]="false" *ngIf="isTongHop"
-            [nzScroll]="dataTable && dataTable.length ? { x: '3200px' } : null" style="overflow: auto"
+  <nz-table class="nowrap pd-10" [nzData]="dataTable" [nzFrontPagination]="false" *ngIf="isTongHop"
             [nzShowPagination]="false" nzBordered>
     <thead>
     <tr>
-      <th class="text-center" rowSpan="3"></th>
+      <th class="text-center" rowSpan="3" nzWidth="40px"></th>
       <th class="text-center" rowSpan="3" nzWidth="40px">STT</th>
-      <th class="text-center" rowSpan="3" nzWidth="200px">Nội dung</th>
-      <th class="text-center" rowSpan="3" nzWidth="90px">ĐVT</th>
-      <th class="text-center" colspan="3" nzWidth="500px">Số lượng tối đa</th>
-      <th class="text-center" rowSpan="3" nzWidth="150px">SL sử dụng được <br> tại thời điểm đề xuất</th>
-      <th class="text-center" rowSpan="3" nzWidth="150px">Số lượng sẽ nhập <br> thêm từ năm trước</th>
-      <th class="text-center" rowSpan="3" nzWidth="150px">Tổng cộng</th>
-      <th class="text-center" rowSpan="3" nzWidth="150px">SL định mức theo <br> chỉ tiêu KH năm</th>
-      <th class="text-center" colSpan="5" nzWidth="600px">Nhu cầu theo đề xuất của Cục</th>
-      <th class="text-center" colSpan="3" nzWidth="500px">Số lượng trang bị cho đơn vị</th>
-      <th class="text-center" rowSpan="3" nzWidth="">Ghi chú</th>
+      <th class="text-center" rowSpan="3">Nội dung</th>
+      <th class="text-center" rowSpan="3">ĐVT</th>
+      <th class="text-center" colspan="3">Số lượng tối đa</th>
+      <th class="text-center" rowSpan="3">SL sử dụng được <br> tại thời điểm đề xuất</th>
+      <th class="text-center" rowSpan="3">Số lượng sẽ nhập <br> thêm từ năm trước</th>
+      <th class="text-center" rowSpan="3">Tổng cộng</th>
+      <th class="text-center" rowSpan="3">SL định mức theo <br> chỉ tiêu KH năm</th>
+      <th class="text-center" colSpan="5">Nhu cầu theo đề <br> xuất của Cục</th>
+      <th class="text-center" colSpan="3">Số lượng trang bị <br> cho đơn vị</th>
+      <th class="text-center" rowSpan="3">Ghi chú</th>
     </tr>
     <tr>
       <th rowSpan="2" class="text-center">Căn cứ SL nhập, xuất</th>
@@ -233,7 +232,6 @@
       <th colSpan="1" rowSpan="2" class="text-center">Số lượng</th>
       <th colSpan="1" rowSpan="2" class="text-center">Đơn giá (trđ)</th>
       <th colSpan="1" rowSpan="2" class="text-center">Thành tiền (trđ)</th>
-      <!--          <th colSpan="2"  class="text-center">Chênh lệch</th>-->
       <th colSpan="1" rowSpan="2" class="text-center">Số lượng</th>
       <th colSpan="1" rowSpan="2" class="text-center">Đơn giá (trđ)</th>
       <th colSpan="1" rowSpan="2" class="text-center">Thành tiền (trđ)</th>

@@ -8,14 +8,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { chain, cloneDeep } from 'lodash';
 import { saveAs } from 'file-saver';
-import { Globals } from '../../../../../../../shared/globals';
-import { QuyetDinhBtcTcdtService } from '../../../../../../../services/quyetDinhBtcTcdt.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { UserService } from '../../../../../../../services/user.service';
-import { HelperService } from '../../../../../../../services/helper.service';
 import { DanhMucService } from '../../../../../../../services/danhmuc.service';
-import { QuyetDinhTtcpService } from '../../../../../../../services/quyetDinhTtcp.service';
 import * as dayjs from 'dayjs';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from '../../../../../../../services/storage.service';
@@ -48,7 +43,6 @@ export class ThongTinTcdtGiaoCacDonviComponent extends Base2Component implements
   listCcPhapLy: any[] = [];
   dsNam: any[] = [];
   listFile: any[] = [];
-  muaTangList: any[] = [];
   xuatGiamList: any[] = [];
   xuatBanList: any[] = [];
   luanPhienList: any = [];
@@ -61,9 +55,15 @@ export class ThongTinTcdtGiaoCacDonviComponent extends Base2Component implements
   xuatGiam: number = 0;
   xuatBan: number = 0;
   yearCurrentView: number = 0;
-  dataVatTuXuatGiam :any[] = [];
-  dataVatTuXuatBan :any[] = [];
-  dataVatTuXuatLpdh :any[] = [];
+  // dataVatTuXuatGiam :any[] = [];
+  // dataVatTuXuatBan :any[] = [];
+  // dataVatTuXuatLpdh :any[] = [];
+
+  dataVatTuCha: any[] = [];
+  dataVatTuChaShow: any[] = [];
+  dataVatTuCon: any[] = [];
+  dataVatTuConClone: any[] = [];
+
   showDlgPreview = false;
   pdfSrc: any;
   wordSrc: any;
@@ -83,6 +83,7 @@ export class ThongTinTcdtGiaoCacDonviComponent extends Base2Component implements
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private danhMucService: DanhMucService,
     private donViService: DonviService,
     private quyetDinhTCDTGiaoDonviService: QuyetDinhTCDTGiaoDonviService,
   ) {
@@ -99,15 +100,13 @@ export class ThongTinTcdtGiaoCacDonviComponent extends Base2Component implements
         this.userInfo = this.userService.getUserLogin(),
         await this.loadDonVi(),
         this.loadDsNam(),
-        this.getDataDetail(this.idInput),
         this.loadDanhMucHang(),
       ]);
     if (this.idInput) {
-      // await this.loadQdTtcpGiaoBoNganh(dayjs().get('year'));
+      await  this.getDataDetail(this.idInput);
     }else {
-      // this.initForm();
+      await this.newObjectVatTu();
     }
-    // this.sumAllDataTable();
     await this.spinner.hide();
   }
 
@@ -126,47 +125,83 @@ export class ThongTinTcdtGiaoCacDonviComponent extends Base2Component implements
   }
 
   async loadDanhMucHang() {
-    // await this.quyetDinhTCDTGiaoDonviService.loadDanhMucHangHoa().subscribe((hangHoa) => {
-    //   if (hangHoa.msg == MESSAGE.SUCCESS) {
-    //     const dataVatTu = hangHoa.data.filter(item => (item.ma == '02' || item.ma == '04'));
-    //     dataVatTu.forEach(item => {
-    //       this.dsHangHoa = [...this.dsHangHoa, ...item.child];
-    //     });
-    //   }
-    // });
+    let res = await this.danhMucService.loadDanhMucHangGiaoChiTieu();
+    let data = res.data;
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].cap == 2) {
+        let child = [];
+        if (data[i].child && data[i].child.length > 0) {
+          for (let j = 0; j < data[i].child.length; j++) {
+            let itemChild = {
+              id: data[i].child[j].id,
+              ten: data[i].child[j].ten,
+              idParent: data[i].id,
+              tenParent: data[i].ten,
+              donViTinh: data[i].child[j].maDviTinh,
+              maHang: data[i].child[j].ma,
+              kyHieu: data[i].kyHieu,
+            };
+            child.push(itemChild);
+            this.dataVatTuCon.push(itemChild);
+          }
+        }
+        let item = {
+          id: data[i].id,
+          ten: data[i].ten,
+          child: child,
+          maHang: data[i].ma,
+          kyHieu: data[i].kyHieu,
+          donViTinh: data[i].maDviTinh,
+        };
+        this.dataVatTuCha.push(item);
+      } else if (data[i].cap == 3) {
+        let itemCon = {
+          id: data[i].id,
+          ten: data[i].ten,
+          idParent: 0,
+          tenParent: '',
+          donViTinh: data[i].maDviTinh,
+          maHang: data[i].ma,
+          kyHieu: data[i].kyHieu,
+        };
+        this.dataVatTuCon.push(itemCon);
+      }
+    }
+    this.dataVatTuConClone = cloneDeep(this.dataVatTuCon);
+    this.dataVatTuChaShow = this.dataVatTuCha;
   }
 
-  async loadQdTtcpGiaoBoNganh(nam) {
-    const res = await this.quyetDinhTCDTGiaoDonviService.chiTietTheoNam(nam);
-    if (res.msg == MESSAGE.SUCCESS) {
-      // lấy chỉ tiêu ttcp giao bộ tài chính : maBoNganh = 01
-      this.dataQdTtcpGiaoBTC = res.data.listBoNganh ? res.data.listBoNganh.find(item => item.maBoNganh == '01') : null;
-      if (!this.yearCurrentView || (this.yearCurrentView && this.yearCurrentView != nam)) {
-        this.muaTangList = this.dataQdTtcpGiaoBTC?.muaTangList ? cloneDeep(this.dataQdTtcpGiaoBTC.muaTangList) : [];
-        this.xuatGiamList = this.dataQdTtcpGiaoBTC?.xuatGiamList ? cloneDeep(this.dataQdTtcpGiaoBTC.xuatGiamList) : [];
-        this.xuatBanList = this.dataQdTtcpGiaoBTC?.xuatBanList ? cloneDeep(this.dataQdTtcpGiaoBTC.xuatBanList) : [];
-        this.luanPhienList = this.dataQdTtcpGiaoBTC?.luanPhienList ? cloneDeep(this.dataQdTtcpGiaoBTC.luanPhienList) : [];
-      }
-      //Chi tăng,xuat giam, xuat ban vật tư ttcp giao bộ tài chính
-      this.chiTang = res.data.listChiTangToanBoNganh.find(item => item.maBn == '01' && item.tenBn == 'Vật tư, thiết bị').tongSo;
-      this.xuatBan = this.dataQdTtcpGiaoBTC.ttXuatBan;
-      this.xuatGiam = this.dataQdTtcpGiaoBTC.ttXuatGiam;
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
+  //
+  // async loadQdTtcpGiaoBoNganh(nam) {
+  //   const res = await this.quyetDinhTCDTGiaoDonviService.chiTietTheoNam(nam);
+  //   if (res.msg == MESSAGE.SUCCESS) {
+  //     // lấy chỉ tiêu ttcp giao bộ tài chính : maBoNganh = 01
+  //     this.dataQdTtcpGiaoBTC = res.data.listBoNganh ? res.data.listBoNganh.find(item => item.maBoNganh == '01') : null;
+  //     if (!this.yearCurrentView || (this.yearCurrentView && this.yearCurrentView != nam)) {
+  //       this.muaTangList = this.dataQdTtcpGiaoBTC?.muaTangList ? cloneDeep(this.dataQdTtcpGiaoBTC.muaTangList) : [];
+  //       this.xuatGiamList = this.dataQdTtcpGiaoBTC?.xuatGiamList ? cloneDeep(this.dataQdTtcpGiaoBTC.xuatGiamList) : [];
+  //       this.xuatBanList = this.dataQdTtcpGiaoBTC?.xuatBanList ? cloneDeep(this.dataQdTtcpGiaoBTC.xuatBanList) : [];
+  //       this.luanPhienList = this.dataQdTtcpGiaoBTC?.luanPhienList ? cloneDeep(this.dataQdTtcpGiaoBTC.luanPhienList) : [];
+  //     }
+  //     //Chi tăng,xuat giam, xuat ban vật tư ttcp giao bộ tài chính
+  //     this.chiTang = res.data.listChiTangToanBoNganh.find(item => item.maBn == '01' && item.tenBn == 'Vật tư, thiết bị').tongSo;
+  //     this.xuatBan = this.dataQdTtcpGiaoBTC.ttXuatBan;
+  //     this.xuatGiam = this.dataQdTtcpGiaoBTC.ttXuatGiam;
+  //   } else {
+  //     this.notification.error(MESSAGE.ERROR, res.msg);
+  //   }
+  // }
 
   async getDataDetail(id) {
     if (id > 0) {
       let res = await this.quyetDinhTCDTGiaoDonviService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
-        this.yearCurrentView = data.namQd;
         this.formData.patchValue({
           id: data.id,
           namQd: data.namQd,
           ngayQd: data.ngayQd,
-          soQd: data.soQd.split('/')[0],
+          soQd: data.soQd,
           trangThai: data.trangThai,
           trichYeu: data.trichYeu,
           ghiChu: data.ghiChu,
@@ -178,8 +213,6 @@ export class ThongTinTcdtGiaoCacDonviComponent extends Base2Component implements
             this.listCcPhapLy.push(item);
           }
         });
-        // this.keHoachNhapXuat = data.keHoachNhapXuat;
-        this.muaTangList = data.muaTangList;
         this.xuatGiamList = data.xuatGiamList;
         this.xuatBanList = data.xuatBanList;
         this.luanPhienList = data.luanPhienList;
@@ -198,9 +231,6 @@ export class ThongTinTcdtGiaoCacDonviComponent extends Base2Component implements
     }
   }
 
-  changeNam($event) {
-    this.loadQdTtcpGiaoBoNganh($event);
-  }
 
   deleteTaiLieuDinhKemTag(data: any) {
     if (!this.isView) {
@@ -252,7 +282,6 @@ export class ThongTinTcdtGiaoCacDonviComponent extends Base2Component implements
   }
 
   async save(isGuiDuyet?) {
-    this.keHoachNhapXuatLtComponent.emitData();
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
@@ -276,13 +305,11 @@ export class ThongTinTcdtGiaoCacDonviComponent extends Base2Component implements
     if (this.listFile && this.listFile.length > 0) {
       body.fileDinhKems = this.listFile;
     }
-    body.soQd = body.soQd + this.maQd;
-    body.muaTangList = this.conVertTreeToList(this.muaTangList);
     body.xuatGiamList = this.conVertTreeToList(this.xuatGiamList);
     body.xuatBanList = this.conVertTreeToList(this.xuatBanList);
     body.luanPhienList = this.conVertTreeToList(this.luanPhienList);
-    // body.keHoachNhapXuat = this.keHoachNhapXuat;
     let res;
+    // console.log(body,'bodybody');return;
     if (this.idInput > 0) {
       res = await this.quyetDinhTCDTGiaoDonviService.update(body);
     } else {
@@ -313,27 +340,6 @@ export class ThongTinTcdtGiaoCacDonviComponent extends Base2Component implements
     this.spinner.hide();
   }
 
-  validKeHoachNhapXuatLT(dataNhapXuatLt) {
-    let valid = true;
-    let vonChi = 0;
-    let vonCo = 0;
-    if (dataNhapXuatLt) {
-      if (dataNhapXuatLt.nhapCtMua) {
-        vonChi = dataNhapXuatLt.tienMuaThoc + dataNhapXuatLt.tienMuaGaoXcht + dataNhapXuatLt.tienMuaGaoLpdh;
-      } else {
-        vonChi = dataNhapXuatLt.tienMuaThoc + dataNhapXuatLt.tongTienMuaGao;
-      }
-      if (dataNhapXuatLt.nhapCtBan) {
-        vonCo = dataNhapXuatLt.tienBanThoc + dataNhapXuatLt.tienBanGao + dataNhapXuatLt.tienGaoCtro + dataNhapXuatLt.tongTienVonNsnn + dataNhapXuatLt.tongTienVonTx;
-      } else {
-        vonCo = dataNhapXuatLt.tongTienBan + dataNhapXuatLt.tienGaoCtro + dataNhapXuatLt.tongTienVonNsnn + dataNhapXuatLt.tongTienVonTx;
-      }
-      if (vonChi != vonCo) {
-        valid = false;
-      }
-    }
-    return valid;
-  }
 
   conVertTreeToList(data) {
     let arr = [];
@@ -349,41 +355,9 @@ export class ThongTinTcdtGiaoCacDonviComponent extends Base2Component implements
     return arr;
   }
 
-  receivedData(data: any) {
-    this.muaTangList = data;
-    this.sumAllDataTable();
-  }
-
-  sumAllDataTable() {
-    let ttVatTu = 0;
-    let ttVatTuCn = 0;
-    let ttMuoi = 0;
-    this.muaTangList.forEach(item => {
-      if (item && item.dataChild && item.dataChild.length > 0) {
-        item.dataChild.forEach(child => {
-          if (!child.loaiVthh.startsWith('04') && !child.loaiVthh.startsWith('03')) {
-            ttVatTu += child.tongTien ? child.tongTien : 0;
-          } else if (child.loaiVthh.startsWith('03')) {
-            ttVatTu += child.tongTien ? child.tongTien : 0;
-          } else {
-            ttMuoi += child.tongTien ? child.tongTien : 0;
-          }
-        });
-      } else {
-        if (!item.loaiVthh.startsWith('04') && !item.loaiVthh.startsWith('03')) {
-          ttVatTu += item.tongTien ? item.tongTien : 0;
-        } else if (item.loaiVthh.startsWith('03')) {
-          ttVatTuCn += item.tongTien ? item.tongTien : 0;
-        } else {
-          ttMuoi += item.tongTien ? item.tongTien : 0;
-        }
-      }
-    });
-    // this.dtMuaVatTu = ttVatTu;
-    // this.dtMuaMuoi = ttMuoi;
-    // this.dtMuaVatCn = ttVatTuCn;
-    // this.tongTable1 = this.dtMuaVatTu + this.dtMuaMuoi + this.dtMuaVatCn + (this.keHoachNhapXuat.nhapCtMua ? (this.keHoachNhapXuat.tienMuaThoc + this.keHoachNhapXuat.tienMuaGaoXcht + this.keHoachNhapXuat.tienMuaGaoLpdh) : (this.keHoachNhapXuat.tienMuaThoc + this.keHoachNhapXuat.tongTienMuaGao));
-  }
+  // receivedData(data: any) {
+  //   this.sumAllDataTable();
+  // }
 
   templateName = 'danh-sach-quyet-dinh-cua-bo-tai-chinh-giao-tong-cuc-du-tru';
 
@@ -424,9 +398,9 @@ export class ThongTinTcdtGiaoCacDonviComponent extends Base2Component implements
   async newObjectVatTu() {
     if (this.options && this.options.length > 0) {
       let i = 1;
-      this.dataVatTuXuatGiam = [];
-      this.dataVatTuXuatBan = [];
-      this.dataVatTuXuatLpdh = [];
+      this.xuatBanList = [];
+      this.xuatGiamList = [];
+      this.luanPhienList = [];
       for (let donVi of this.options) {
         let khVatTu = new KhVatTu();
         khVatTu.donViId = donVi.id;
@@ -444,9 +418,9 @@ export class ThongTinTcdtGiaoCacDonviComponent extends Base2Component implements
         khVatTu.soLuongXuat = 0;
         khVatTu.namNhap = null;
         khVatTu.soLuongChuyenSang = 0;
-        this.dataVatTuXuatGiam.push(khVatTu);
-        this.dataVatTuXuatBan.push(khVatTu);
-        this.dataVatTuXuatLpdh.push(khVatTu);
+        this.xuatGiamList.push(khVatTu);
+        this.xuatBanList.push(khVatTu);
+        this.luanPhienList.push(khVatTu);
         i++;
       }
     }
