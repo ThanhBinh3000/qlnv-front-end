@@ -219,7 +219,7 @@
             <td><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRow.uocThienTt" ></nz-input-number></td>
             <td><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRow.namKhSl" ></nz-input-number></td>
             <td><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRow.namKhDt" ></nz-input-number></td>
-            <td><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRow.ghiChu" ></nz-input-number></td>
+            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.ghiChu" /></th>
             <td>
               <a *ngIf="!isView" (click)="addRow()" [class.disabled]="!itemRow">
                 <i class="fa fa-plus"></i>
@@ -277,7 +277,7 @@
               <td><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.uocThienTt" ></nz-input-number></td>
               <td><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.namKhSl" ></nz-input-number></td>
               <td><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.namKhDt" ></nz-input-number></td>
-              <td><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.ghiChu" ></nz-input-number></td>
+              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.ghiChu" /></th>
               <td class="text-center">
                 <a (click)="saveEdit(itemRowUpdate,i)" class="save">
                   <i class="icon htvbdh_tcdt_save"></i>

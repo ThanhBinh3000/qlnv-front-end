@@ -244,8 +244,8 @@
               <td class="text-center">{{i+1}}</td>
               <td>{{ data.tenHang }}</td>
               <td>{{ data.dvt }}</td>
-              <td>{{ data.mucDuTruCpDuyet }}</td>
-              <td class="text-right">{{ data.tonKhoNamBcSl }}</td>
+              <td>{{ data.mucDuTruCpDuyet | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.tonKhoNamBcSl | number : '1.2-2' : 'vi_VN' }}</td>
               <td class="text-right">{{ data.tonKhoNamBcTt | number : '1.2-2' : 'vi_VN' }}</td>
               <td class="text-right">{{ data.nhapTsSl | number : '1.2-2' : 'vi_VN' }}</td>
               <td class="text-right">{{ data.nhapTsTt | number : '1.2-2' : 'vi_VN' }}</td>
