@@ -60,25 +60,25 @@
     </nz-card>
 
     <div class='group-button'>
-      <h3 class='text-uppercase'>Danh sách quyết định giao kế hoac và phân bổ dự toán chi tiết của TCDT</h3>
+      <h3 class='text-uppercase'>Danh sách quyết định giao kế hoạch và phân bổ dự toán chi tiết của TCDT</h3>
       <div class='buttons'>
         <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_XOA')"
                 type='button' class='btn btn-sub btn-xoa' (click)='xoa()'>
           <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
           <span>Xóa</span>
         </button>
-        <button
-          type='button' *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_EXP')" class='btn btn-sub'
-          (click)='print()'>
-          <i class='icon htvbdh_tcdt_print'></i>
-          <span>In</span>
-        </button>
-        <button *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_EXP')" type='button'
+<!--        <button-->
+<!--          type='button' *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_EXP')" class='btn btn-sub'-->
+<!--          (click)='print()'>-->
+<!--          <i class='icon htvbdh_tcdt_print'></i>-->
+<!--          <span>In</span>-->
+<!--        </button>-->
+        <button type='button'
                 class='btn btn-sub' (click)='exportData()'>
           <i class='icon htvbdh_chuyen-xu-ly'></i>
           <span>Xuất file</span>
         </button>
-        <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_THEM')"
+        <button *ngIf="userService.isTongCuc()"
                 type='button' class='btn btn-sub xanh' (click)='themMoi()'>
           <i class='icon htvbdh_dau-cong'></i>
           <span>Thêm</span>
@@ -195,6 +195,6 @@
 </ng-container>
 
 <ng-template #templateThemmoi>
-  <app-thong-tin-tcdt-giao-cac-donvi [id]="idSelected" (showListEvent)="showList()" [isView]="isView">
+  <app-thong-tin-tcdt-giao-cac-donvi [idInput]="idSelected" (onClose)='onClose()' [isView]="isView">
   </app-thong-tin-tcdt-giao-cac-donvi>
 </ng-template>

@@ -15,10 +15,10 @@
     <li [nzSelected]="tabSelected==4" nz-menu-item (click)="selectTab(4)">
       Kiểm tra chất lượng
     </li>
-    <li [nzSelected]="tabSelected==5" *ngIf="userService.isChiCuc()" nz-menu-item (click)="selectTab(5)">
+    <li [nzSelected]="tabSelected==5" *ngIf="userService.isChiCuc() || userService.isCuc()" nz-menu-item (click)="selectTab(5)">
       Xuất kho
     </li>
-    <li [nzSelected]="tabSelected==6" *ngIf="userService.isChiCuc()" nz-menu-item (click)="selectTab(6)">
+    <li [nzSelected]="tabSelected==6" *ngIf="userService.isChiCuc() || userService.isCuc()" nz-menu-item (click)="selectTab(6)">
       Nhập kho
     </li>
   </ul>
