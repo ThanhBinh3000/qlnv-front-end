@@ -259,16 +259,14 @@
                                 <td *ngIf="i2===0 && checkLoaiBc('CUC')" [rowSpan]="item.childData.length">
                                     {{lv2.tenChiCucXuat}}</td>
                                 <td *ngIf="i2===0" [rowSpan]="item.childData.length">{{lv2.tenDiemKho}}</td>
-                                <td *ngIf="i2===0" [rowSpan]="item.childData.length">{{lv2.tenLoKho || ""}} -
-                                    {{lv2.tenNganKho ||
-                                    ""}} -
-                                    {{lv2.tenNhaKho || ""}}</td>
+                                <td *ngIf="i2===0" [rowSpan]="item.childData.length">{{lv2.tenLoKho + " - " || ""}}
+                                    {{lv2.tenNganKho + " - " ||""}}{{lv2.tenNhaKho || ""}}</td>
                                 <td *ngIf="i2===0" [rowSpan]="item.childData.length" class="text-right">
                                     {{lv2.slTon}}</td>
 
                                 <td>{{lv2.tenDviNhan}}</td>
                                 <td>{{lv2.tenDiemKhoNhan}}</td>
-                                <td>{{lv2.tenLoKhoNhan || ""}} - {{lv2.tenNganKhoNhan || ""}} -
+                                <td>{{lv2.tenLoKhoNhan + " - " || ""}}{{lv2.tenNganKhoNhan + " - "|| ""}}
                                     {{lv2.tenNhaKhoNhan || ""}}</td>
 
                                 <td *ngIf="i2===0" [rowSpan]="item.childData.length" class="text-right">
