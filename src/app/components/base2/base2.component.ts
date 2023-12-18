@@ -794,4 +794,41 @@ export class Base2Component implements OnInit {
 
     }
   }
+
+  getStrTenLoaiHinh(strMaLoaiHinh) {
+    let str = '';
+    if (strMaLoaiHinh) {
+      let arrLoaiHinh = strMaLoaiHinh.split(",");
+      arrLoaiHinh.forEach((item) => {
+        switch (item) {
+          case '00' : {
+            if (arrLoaiHinh.indexOf(item) == arrLoaiHinh.length - 1) {
+              str = str + 'Nhập'
+            } else {
+              str = str + 'Nhập' + ', '
+            }
+            break;
+          }
+          case '01' : {
+            if (arrLoaiHinh.indexOf(item) == arrLoaiHinh.length - 1) {
+              str = str + 'Xuất'
+            } else {
+              str = str + 'Xuất' + ', '
+            }
+            break;
+          }
+          case '02' : {
+            if (arrLoaiHinh.indexOf(item) == arrLoaiHinh.length - 1) {
+              str = str + 'Bảo quản'
+            } else {
+              str = str + 'Bảo quản' + ', '
+            }
+            break;
+          }
+        }
+      })
+    }
+    return str;
+  }
+
 }

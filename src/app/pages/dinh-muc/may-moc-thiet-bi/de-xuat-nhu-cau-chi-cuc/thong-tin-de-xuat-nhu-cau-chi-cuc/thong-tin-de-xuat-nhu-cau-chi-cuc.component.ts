@@ -11,13 +11,13 @@ import dayjs from "dayjs";
 import {MmDxChiCucService} from "../../../../../services/mm-dx-chi-cuc.service";
 import {STATUS} from "../../../../../constants/status";
 import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
-import {of} from "rxjs";
-import {
-  HienTrangMayMocService
-} from "../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/hien-trang-may-moc.service";
 import {MmHienTrangMmService} from "../../../../../services/mm-hien-trang-mm.service";
 import {MangLuoiKhoService} from "../../../../../services/qlnv-kho/mangLuoiKho.service";
+import {
+  MmThemMoiDmTrangBiComponent
+} from "../../mm-dinh-muc-trang-bi/mm-them-moi-dm-trang-bi/mm-them-moi-dm-trang-bi.component";
 
+// @ts-ignore
 @Component({
   selector: 'app-thong-tin-de-xuat-nhu-cau-chi-cuc',
   templateUrl: './thong-tin-de-xuat-nhu-cau-chi-cuc.component.html',
@@ -41,7 +41,7 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
     private dxChiCucService: MmDxChiCucService,
     private ctieuKhService: ChiTieuKeHoachNamCapTongCucService,
     private hienTrangSv: MmHienTrangMmService,
-    private mangLuoiKhoService: MangLuoiKhoService
+    private mangLuoiKhoService: MangLuoiKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, dxChiCucService)
     super.ngOnInit()
@@ -53,9 +53,10 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
       ngayKy: [null, Validators.required],
       namKeHoach: [dayjs().get('year'), Validators.required],
       soQdGiaoCt: [null],
-      klLtBaoQuan: [0],
-      klLtNhap: [0],
-      klLtXuat: [0],
+      slGaoXuat: [0],
+      slThocXuat: [0],
+      slGaoNhap: [0],
+      slThocNhap: [0],
       slGaoDangBaoQuan: [0, Validators.required],
       slThocDangBaoQuan: [0, Validators.required],
       trichYeu: [null, Validators.required],
@@ -79,12 +80,12 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
         let body = {maDvi: this.userInfo.DON_VI.maDvi, maVthh: "0101"};
         let res = await this.mangLuoiKhoService.slTon(body);
         if (res.msg === MESSAGE.SUCCESS) {
-          this.formData.patchValue({slGaoDangBaoQuan: (res.data/1000)});
+          this.formData.patchValue({slGaoDangBaoQuan: (res.data / 1000)});
         }
         body = {maDvi: this.userInfo.DON_VI.maDvi, maVthh: "0102"};
         res = await this.mangLuoiKhoService.slTon(body);
         if (res.msg === MESSAGE.SUCCESS) {
-          this.formData.patchValue({slThocDangBaoQuan: (res.data/1000)});
+          this.formData.patchValue({slThocDangBaoQuan: (res.data / 1000)});
         }
         this.changeNamKh(this.formData.value.namKeHoach)
       }
@@ -112,11 +113,11 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
   }
 
   async changeDm(event, type?: any) {
-    let result = this.listDmTaiSan.filter(item => item.maTaiSan == event)
-    if (result && result.length > 0) {
+    let result = this.listDmTaiSan.find(item => item.maTaiSan == event)
+    if (result) {
       let itemQdGiaoChiTieuChiCuc = this.qdGiaoChiTieu.khLuongThuc.find(it => it.maDonVi === this.userInfo.MA_DVI);
       let body = {
-        maCcdc: result[0].maTaiSan,
+        maCcdc: result.maTaiSan,
         namKeHoach: this.formData.value.namKeHoach,
         maDvi: this.userInfo.MA_DVI,
         paggingReq: {limit: 999, page: 0}
@@ -133,26 +134,27 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
       if (!type) {
-        this.rowItem.tenTaiSan = result[0].tenTaiSan;
-        this.rowItem.donViTinh = result[0].dviTinh;
-        this.rowItem.donGiaTd = result[0].donGiaTd;
+        this.rowItem.tenTaiSan = result.tenTaiSan;
+        this.rowItem.donViTinh = result.dviTinh;
+        this.rowItem.donGiaTd = result.donGiaTd;
         if (itemQdGiaoChiTieuChiCuc) {
           this.rowItem.slChiTieuGao = itemQdGiaoChiTieuChiCuc.ntnGao;
           this.rowItem.slChiTieuThoc = itemQdGiaoChiTieuChiCuc.ntnThoc;
         }
       } else {
-        type.tenTaiSan = result[0].tenTaiSan
-        type.donViTinh = result[0].dviTinh;
-        type.donGiaTd = result[0].donGiaTd;
+        type.tenTaiSan = result.tenTaiSan
+        type.donViTinh = result.dviTinh;
+        type.donGiaTd = result.donGiaTd;
       }
     }
     await this.getSLHienCo(event)
     await this.getSlNhapThem(event)
-    await this.getDinhMuc(event)
     if (type) {
-      await this.loadSlThuaThieu(type)
+      await this.loadSlThuaThieu(type);
+      await this.getDinhMuc(event,type )
     } else {
-      await this.loadSlThuaThieu(this.rowItem)
+      await this.loadSlThuaThieu(this.rowItem);
+      await this.getDinhMuc(event,this.rowItem )
     }
   }
 
@@ -348,9 +350,9 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
           if (this.dataTable && this.dataTable.length > 0) {
             this.dataTable.forEach(item => {
               this.loadSlThuaThieu(item)
-              let result = this.listDmTaiSan.filter(p => p.maTaiSan == item.maTaiSan)
-              if (result && result.length > 0) {
-                item.tenTaiSan = result[0].tenTaiSan
+              let result = this.listDmTaiSan.find(p => p.maTaiSan == item.maTaiSan)
+              if (result) {
+                item.tenTaiSan = result.tenTaiSan
               }
             })
           }
@@ -374,34 +376,21 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.qdGiaoChiTieu = res.data;
-          this.changeSoQdGiaoCt(res.data);
+          if (this.qdGiaoChiTieu && this.qdGiaoChiTieu.khLuongThuc) {
+            let detailLt = this.qdGiaoChiTieu.khLuongThuc.find(item => item.maDonVi = this.userInfo.MA_DVI)
+            if (detailLt) {
+              this.formData.patchValue({
+                slGaoNhap: detailLt.ntnGao,
+                slThocNhap: detailLt.ntnThoc,
+                slGaoXuat: detailLt.xtnTongThoc,
+                slThocXuat: detailLt.xtnTongGao,
+                soQdGiaoCt: this.qdGiaoChiTieu.soQuyetDinh,
+              })
+            }
+          }
         }
       }
     }
-  }
-
-  changeSoQdGiaoCt(detail) {
-    let ctieuKhNhap = 0
-    let ctieuKhXuat = 0
-    let ctieuTkdn = 0
-    let ctieuKhBq = 0
-    if (detail.khLuongThuc && detail.khLuongThuc.length > 0) {
-      let listLt = detail.khLuongThuc.filter(item => item.maDonVi = this.userInfo.MA_DVI)
-      if (listLt && listLt.length > 0) {
-        let detailLt = listLt[0]
-        ctieuKhNhap = detailLt.ntnTongSoQuyThoc ? detailLt.ntnTongSoQuyThoc : 0
-        ctieuKhXuat = detailLt.xtnTongSoQuyThoc ? detailLt.xtnTongSoQuyThoc : 0
-        ctieuTkdn = detailLt.tkdnTongSoQuyThoc ? detailLt.tkdnTongSoQuyThoc : 0
-        ctieuKhBq = ctieuTkdn + ctieuKhNhap - ctieuKhXuat
-      }
-    }
-
-    this.formData.patchValue({
-      soQdGiaoCt: detail.soQuyetDinh,
-      klLtBaoQuan: ctieuKhBq,
-      klLtNhap: ctieuKhNhap,
-      klLtXuat: ctieuKhXuat,
-    })
   }
 
   async getSLHienCo(maHH) {
@@ -437,13 +426,9 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
   }
 
 
-  async getDinhMuc(maHH) {
+  async getDinhMuc(maHH, item: MmThongTinNcChiCuc) {
     let body = {
       maHangHoa: maHH
-    }
-    if (!this.formData.value.klLtNhap || !this.formData.value.klLtXuat || !this.formData.value.klLtBaoQuan) {
-      this.notification.error(MESSAGE.ERROR, 'Vui lòng nhập khối lượng nhập, xuất, bảo quản!');
-      return
     }
     if (!this.formData.value.slGaoDangBaoQuan || !this.formData.value.slThocDangBaoQuan) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng nhập khối lượng bảo quản hiện tại!');
@@ -452,21 +437,28 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
     let res = await this.dxChiCucService.getDinhMuc(body);
     if (res.data) {
       let detail = res.data;
+      item.isCanCu = detail.isCanCu;
+      item.slVpCucKv = detail.slVpCucKv;
+      item.slChiCuc = detail.slChiCuc;
+      item.klChiCuc = detail.klChiCuc;
+      item.tenLoaiHinh = this.getStrTenLoaiHinh(detail.loaiHinh);
       let tongKl = 0;
-      let listLoaiHinh = detail.loaiHinh.split(",")
+      let listLoaiHinh = detail.loaiHinh ? detail.loaiHinh.split(",") : null;
       if (listLoaiHinh && listLoaiHinh.length > 0) {
+        console.log(12222)
         if (listLoaiHinh.includes("00")) {
-          tongKl = tongKl + this.formData.value.klLtNhap
+          tongKl = tongKl + this.formData.value.slGaoNhap * 2 + this.formData.value.slThocNhap
         }
         if (listLoaiHinh.includes("01")) {
-          tongKl = tongKl + this.formData.value.klLtXuat
+          tongKl = tongKl + this.formData.value.slGaoXuat * 2 + this.formData.value.slThocXuat
         }
         if (listLoaiHinh.includes("02")) {
-          tongKl = tongKl + this.formData.value.klLtBaoQuan
+          tongKl = tongKl + this.formData.value.slGaoDangBaoQuan * 2 + this.formData.value.slThocDangBaoQuan
         }
+        item.slTieuChuan = tongKl * detail.slChiCuc / detail.klChiCuc
+      } else {
+        item.slTieuChuan =detail.slChiCuc
       }
-
-      this.rowItem.slTieuChuan = tongKl * detail.slChiCuc / detail.klChiCuc
     }
   }
 }
@@ -494,5 +486,10 @@ export class MmThongTinNcChiCuc {
   ghiChu: number;
   slChiTieuGao?: number;
   slChiTieuThoc?: number;
+  isCanCu : boolean = false
+  tenLoaiHinh: string;
+  klChiCuc: number = 0;
+  slChiCuc: number = 0;
+  slVpCucKv: number = 0;
 }
 
