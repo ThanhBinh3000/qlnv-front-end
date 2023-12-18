@@ -111,5 +111,11 @@ export class BcTienDoNhapGaoTheoGoiThauComponent extends Base2Component implemen
     }
   }
 
+  async clearFilter() {
+    this.formData.reset();
+    this.formData.patchValue({
+      nam: dayjs().get('year')
+    })
+  }
 
 }
