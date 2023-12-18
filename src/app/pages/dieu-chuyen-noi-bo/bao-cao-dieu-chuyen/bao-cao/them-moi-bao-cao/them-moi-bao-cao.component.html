@@ -221,6 +221,7 @@
                         <th rowspan="2">STT</th>
                         <th rowspan="2">Loại hàng hóa</th>
                         <th rowspan="2">Chủng loại</th>
+                        <th rowspan="2">Năm nhập kho</th>
                         <th rowspan="2">ĐVT</th>
                         <th [colSpan]="checkLoaiBc('CUC')? 4: 3">Ngăn/lô xuất điều chuyển</th>
                         <th colspan="3">Ngăn/lô nhập điều chuyển</th>
@@ -253,6 +254,7 @@
                                     1}}</td>
                                 <td *ngIf="i2===0" [rowSpan]="item.childData.length">{{lv2.tenLoaiVthh}}</td>
                                 <td *ngIf="i2===0" [rowSpan]="item.childData.length">{{lv2.tenCloaiVthh}}</td>
+                                <td *ngIf="i2===0" [rowSpan]="item.childData.length">{{lv2.namNhap}}</td>
                                 <td *ngIf="i2===0" [rowSpan]="item.childData.length">{{lv2.tenDonViTinh}}</td>
                                 <td *ngIf="i2===0 && checkLoaiBc('CUC')" [rowSpan]="item.childData.length">
                                     {{lv2.tenChiCucXuat}}</td>
@@ -286,6 +288,7 @@
                         </ng-container>
                     </ng-container>
                     <tr>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
