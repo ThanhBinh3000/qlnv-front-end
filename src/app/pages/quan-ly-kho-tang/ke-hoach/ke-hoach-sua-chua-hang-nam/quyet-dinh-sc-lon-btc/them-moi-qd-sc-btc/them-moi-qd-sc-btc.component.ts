@@ -144,8 +144,10 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
           let data = item.ktKhDxSuaChuaLonCtiet;
           data.keHoachVon = item.keHoachVon;
           data.idDxSc = item.idDxSc;
-          data.phanLoai = item.phanLoai
-          this.dataTable.push(data);
+          data.phanLoai = item.phanLoai;
+          if(data.maDvi.startsWith(this.userInfo.MA_DVI)){
+            this.dataTable.push(data);
+          }
         })
       });
     }
