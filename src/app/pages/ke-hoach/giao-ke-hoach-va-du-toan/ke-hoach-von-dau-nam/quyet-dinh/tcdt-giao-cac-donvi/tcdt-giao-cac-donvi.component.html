@@ -60,25 +60,25 @@
     </nz-card>
 
     <div class='group-button'>
-      <h3 class='text-uppercase'>Danh sách quyết định giao kế hoac và phân bổ dự toán chi tiết của TCDT</h3>
+      <h3 class='text-uppercase'>Danh sách quyết định giao kế hoạch và phân bổ dự toán chi tiết của TCDT</h3>
       <div class='buttons'>
         <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_XOA')"
                 type='button' class='btn btn-sub btn-xoa' (click)='xoa()'>
           <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
           <span>Xóa</span>
         </button>
-        <button
-          type='button' *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_EXP')" class='btn btn-sub'
-          (click)='print()'>
-          <i class='icon htvbdh_tcdt_print'></i>
-          <span>In</span>
-        </button>
-        <button *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_EXP')" type='button'
+<!--        <button-->
+<!--          type='button' *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_EXP')" class='btn btn-sub'-->
+<!--          (click)='print()'>-->
+<!--          <i class='icon htvbdh_tcdt_print'></i>-->
+<!--          <span>In</span>-->
+<!--        </button>-->
+        <button type='button'
                 class='btn btn-sub' (click)='exportData()'>
           <i class='icon htvbdh_chuyen-xu-ly'></i>
           <span>Xuất file</span>
         </button>
-        <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_THEM')"
+        <button *ngIf="userService.isTongCuc()"
                 type='button' class='btn btn-sub xanh' (click)='themMoi()'>
           <i class='icon htvbdh_dau-cong'></i>
           <span>Thêm</span>
@@ -141,20 +141,19 @@
           </th>
           <th></th>
         </tr>
-        <tr *ngFor='let data of rowSelectionTable.data; let idx = index' (click)='getDetailRow(data.id)'>
-          <td [ngClass]="(rowSelected==data.id)?'bg-selected':''" width='45px'>
+        <tr *ngFor='let data of rowSelectionTable.data; let idx = index'>
+          <td width='45px'>
             <label nz-checkbox [(ngModel)]='data.checked' (ngModelChange)='updateSingleChecked()'
                    [nzDisabled]='data.trangThai != STATUS.DANG_NHAP_DU_LIEU'></label>
           </td>
-          <td [ngClass]="(rowSelected==data.id)?'bg-selected':''" class='text-center'>{{(page - 1) * pageSize + idx +
+          <td class='text-center'>{{(page - 1) * pageSize + idx +
           1}}</td>
-          <td class='text-left' [ngClass]="(rowSelected==data.id)?'bg-selected':''"> {{ data.soQd }} </td>
-          <td class='text-center' [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.namQd }}</td>
-          <td class='text-center'
-              [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
-          <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.trichYeu }}</td>
-          <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.tenTrangThai }}</td>
-          <td [ngClass]="(rowSelected==data.id)?'bg-selected':''" style='text-align: left; white-space: nowrap;'>
+          <td class='text-left'> {{ data.soQd }} </td>
+          <td class='text-center' >{{ data.namQd }}</td>
+          <td class='text-center' >{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
+          <td >{{ data.trichYeu }}</td>
+          <td >{{ data.tenTrangThai }}</td>
+          <td style='text-align: left; white-space: nowrap;'>
             <a (click)='viewDetail(data.id, true)'
                *ngIf="data.trangThai != STATUS.DANG_NHAP_DU_LIEU && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_XEM')">
               <i class='fa fa-eye' title='Xem chi tiết'></i>
@@ -195,6 +194,6 @@
 </ng-container>
 
 <ng-template #templateThemmoi>
-  <app-thong-tin-tcdt-giao-cac-donvi [id]="idSelected" (showListEvent)="showList()" [isView]="isView">
+  <app-thong-tin-tcdt-giao-cac-donvi [idInput]="idSelected" (onClose)='onClose()' [isView]="isView">
   </app-thong-tin-tcdt-giao-cac-donvi>
 </ng-template>

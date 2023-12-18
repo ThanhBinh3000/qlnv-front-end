@@ -9,9 +9,10 @@ import { BtcGiaoTcdtModule } from './btc-giao-tcdt/btc-giao-tcdt.module';
 import { TcdtGiaoCacDonviComponent } from './tcdt-giao-cac-donvi/tcdt-giao-cac-donvi.component';
 import { ThongTinTcdtGiaoCacDonviComponent } from './tcdt-giao-cac-donvi/thong-tin-tcdt-giao-cac-donvi/thong-tin-tcdt-giao-cac-donvi.component';
 import { ThemSuaVatTuChiTietComponent } from './tcdt-giao-cac-donvi/thong-tin-tcdt-giao-cac-donvi/them-sua-vat-tu-chi-tiet/them-sua-vat-tu-chi-tiet.component';
+import { PopThemSuaVatTuCacDonViComponent } from './tcdt-giao-cac-donvi/thong-tin-tcdt-giao-cac-donvi/pop-them-sua-vat-tu-cac-don-vi/pop-them-sua-vat-tu-cac-don-vi.component';
 
 @NgModule({
-  declarations: [QuyetDinhComponent, TcdtGiaoCacDonviComponent, ThongTinTcdtGiaoCacDonviComponent, ThemSuaVatTuChiTietComponent],
+  declarations: [QuyetDinhComponent, TcdtGiaoCacDonviComponent, ThongTinTcdtGiaoCacDonviComponent, ThemSuaVatTuChiTietComponent, PopThemSuaVatTuCacDonViComponent],
   imports: [
     CommonModule,
     ComponentsModule,
