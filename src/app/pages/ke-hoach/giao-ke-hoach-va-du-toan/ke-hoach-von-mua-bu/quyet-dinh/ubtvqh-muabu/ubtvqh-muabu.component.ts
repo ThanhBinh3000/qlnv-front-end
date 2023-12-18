@@ -142,7 +142,7 @@ export class UbtvqhMuabuComponent implements OnInit {
   }
 
 
-  xoa() {
+ xoa() {
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach((item) => {
@@ -163,7 +163,6 @@ export class UbtvqhMuabuComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            console.log(dataDelete,'dataDeletedataDelete');return
             let res = await this.quyetDinhUbtvqhMuBuBoSung.deleteMuti({idList: dataDelete});
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
