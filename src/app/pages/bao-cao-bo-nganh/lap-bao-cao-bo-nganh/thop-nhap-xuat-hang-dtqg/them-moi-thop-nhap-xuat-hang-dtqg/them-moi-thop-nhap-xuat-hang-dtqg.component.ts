@@ -149,6 +149,7 @@ export class ThemMoiThopNhapXuatHangDtqgComponent extends Base2Component impleme
   }
 
   saveEdit(dataUpdate, index: any): void {
+    this.setDataTable(this.itemRowUpdate)
     // if (this.validateItemSave(this.itemRowUpdate, index)) {
     this.listDataDetail[index] = this.itemRowUpdate;
     this.listDataDetail[index].edit = false;
@@ -326,7 +327,7 @@ export class ThemMoiThopNhapXuatHangDtqgComponent extends Base2Component impleme
       if (type) {
         const sum = arr.reduce((prev, cur) => {
           if (cur[column]) {
-            prev += Number.parseInt(cur[column]);
+            prev += Number.parseFloat(cur[column]);
           }
           return prev;
         }, 0);

@@ -42,7 +42,7 @@
         <span>Duyệt</span>
       </button>
 
-      <button *ngIf="formData.value.id && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_IN')" type="button" class="btn btn-sub xanh-nhat" (click)="preview(previewName)">
+      <button *ngIf="formData.value.id" type="button" class="btn btn-sub xanh-nhat" (click)="preview(previewName)">
         <i class=" icon htvbdh_tcdt_print"></i>
         <span>In/xem trước</span>
       </button>

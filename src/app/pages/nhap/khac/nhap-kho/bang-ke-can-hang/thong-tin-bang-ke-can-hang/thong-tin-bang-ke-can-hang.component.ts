@@ -67,6 +67,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       nam: [dayjs().get("year"), [Validators.required]],
       maDvi: [],
       tenDvi: [],
+      id: [],
       maQhns: [],
       soBangKe: [],
       ngayNhap: [dayjs().format('YYYY-MM-DD')],
@@ -174,6 +175,8 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
         ...data,
         tenLoNganKho: `${data.tenLoKho} ${data.tenNganKho}`,
       });
+      console.log(this.formData.value, "formData")
+      console.log(data, "data")
       this.fileDinhKemReq = data.fileDinhKems
     }
     await this.spinner.hide();
