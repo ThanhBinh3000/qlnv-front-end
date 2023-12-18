@@ -72,6 +72,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
   taiLieuDinhKemList: any[] = [];
   isAddDetail: boolean = false;
   rowItem: any = {};
+  rowTotal: any = {};
   dataTableDetailTqd: any[] = [];
   dataTableDetailKtqd: TreeNodeInterface[] = [];
   dataListDetailKtqd: TreeNodeInterface[] = [];
@@ -658,20 +659,6 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
 
     this.dataListDetailKtqd.forEach(item => {
       if (!item.parentUuid) {
-        // If the item has no parent, it's a root item, so add it to the main tree.
-        // map.get(item.uuid).chiPhiNhapToiDa = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiNhapToiDa), 0);
-        // map.get(item.uuid).chiPhiXuatToiDa = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiXuatToiDa), 0);
-        // map.get(item.uuid).chiPhiBqToiDa = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiBqToiDa), 0);
-        // // update vào list
-        // let p = this.dataListDetailKtqd.find(item1 => item1.uuid == item.uuid);
-        // if (p) {
-        //   p.chiPhiTheoDinhMucNhapToiDa = map.get(item.uuid).chiPhiTheoDinhMucNhapToiDa;
-        //   p.chiPhiTheoDinhMucXuatToiDa = map.get(item.uuid).chiPhiTheoDinhMucXuatToiDa;
-        //   p.chiPhiTheoDinhMucBqToiDa = map.get(item.uuid).chiPhiTheoDinhMucBqToiDa;
-        //   p.chiPhiNhapToiDa = map.get(item.uuid).chiPhiNhapToiDa;
-        //   p.chiPhiXuatToiDa = map.get(item.uuid).chiPhiXuatToiDa;
-        //   p.chiPhiBqToiDa = map.get(item.uuid).chiPhiBqToiDa;
-        // }
 
         map.get(item.uuid).chiPhiTheoDinhMucNhapToiDa = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiTheoDinhMucNhapToiDa || 0), 0);
         map.get(item.uuid).chiPhiTheoDinhMucXuatToiDa = map.get(item.uuid).children.reduce((accumulator, currentValue) => parseFloat(accumulator) + parseFloat(currentValue.chiPhiTheoDinhMucXuatToiDa || 0), 0);
@@ -701,6 +688,19 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
           p.thanhToanTheoUsdKt = map.get(item.uuid).thanhToanTheoUsdKt;
           p.chechLechVnd = map.get(item.uuid).chechLechVnd;
           p.chechLechUsd = map.get(item.uuid).chechLechUsd;
+
+          this.rowTotal.chiPhiTheoDinhMucNhapToiDa = (this.rowTotal.chiPhiTheoDinhMucNhapToiDa || 0) + p.chiPhiTheoDinhMucNhapToiDa
+          this.rowTotal.chiPhiTheoDinhMucXuatToiDa = (this.rowTotal.chiPhiTheoDinhMucXuatToiDa || 0) + p.chiPhiTheoDinhMucXuatToiDa
+          this.rowTotal.chiPhiTheoDinhMucBqToiDa = (this.rowTotal.chiPhiTheoDinhMucBqToiDa || 0) + p.chiPhiTheoDinhMucBqToiDa
+          this.rowTotal.chiPhiNhapToiDa = (this.rowTotal.chiPhiNhapToiDa || 0) + p.chiPhiNhapToiDa
+          this.rowTotal.chiPhiXuatToiDa = (this.rowTotal.chiPhiXuatToiDa || 0) + p.chiPhiXuatToiDa
+          this.rowTotal.chiPhiBqToiDa = (this.rowTotal.chiPhiBqToiDa || 0) + p.chiPhiBqToiDa
+          this.rowTotal.thanhToanTheoVnd = (this.rowTotal.thanhToanTheoVnd || 0) + p.thanhToanTheoVnd
+          this.rowTotal.thanhToanTheoUsd = (this.rowTotal.thanhToanTheoUsd || 0) + p.thanhToanTheoUsd
+          this.rowTotal.thanhToanTheoVndKt = (this.rowTotal.thanhToanTheoVndKt || 0) + p.thanhToanTheoVndKt
+          this.rowTotal.thanhToanTheoUsdKt = (this.rowTotal.thanhToanTheoUsdKt || 0) + p.thanhToanTheoUsdKt
+          this.rowTotal.chechLechVnd = (this.rowTotal.chechLechVnd || 0) + p.chechLechVnd
+          this.rowTotal.chechLechUsd = (this.rowTotal.chechLechUsd || 0) + p.chechLechUsd
         }
         this.dataTableDetailKtqd.push(map.get(item.uuid));
       }
