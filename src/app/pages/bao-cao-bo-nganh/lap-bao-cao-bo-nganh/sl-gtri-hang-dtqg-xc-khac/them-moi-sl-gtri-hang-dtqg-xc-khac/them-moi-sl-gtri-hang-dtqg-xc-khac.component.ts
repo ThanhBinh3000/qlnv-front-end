@@ -16,6 +16,7 @@ import {
 } from "../../sl-gtri-hang-dtqg/dialog-them-moi-sl-gtri-hang-dtqg/dialog-them-moi-sl-gtri-hang-dtqg.component";
 import { cloneDeep } from 'lodash';
 import { Base2Component } from "../../../../../components/base2/base2.component";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
   selector: 'app-them-moi-sl-gtri-hang-dtqg-xc-khac',
@@ -47,6 +48,19 @@ export class ThemMoiSlGtriHangDtqgXcKhacComponent extends Base2Component impleme
   itemRowDonViEdit: any[] = [];
   itemRowNhomMhEdit: any[] = [];
   itemRowMatHang: any[] = [];
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "right",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -379,4 +393,50 @@ export class ThemMoiSlGtriHangDtqgXcKhacComponent extends Base2Component impleme
     }
   }
 
+  calTongGtri(field: string) {
+    if (this.listDataGroup) {
+      let sum = 0
+      this.listDataGroup.forEach(item => {
+        switch (field) {
+          case 'gtriXuatCuuTro':
+            sum += this.nvl(item.gtriXuatCuuTro);
+            break;
+          case 'gtriXuatHoTro':
+            sum += this.nvl(item.gtriXuatHoTro);
+            break;
+          case 'gtriXuatPvuQp':
+            sum += this.nvl(item.gtriXuatPvuQp);
+            break;
+          case 'gtriXuatPvuAnNinh':
+            sum += this.nvl(item.gtriXuatPvuAnNinh);
+            break;
+          case 'gtriXuatKhac':
+            sum += this.nvl(item.gtriXuatKhac);
+            break;
+          case 'gtriXuatTong':
+            sum += this.nvl(item.gtriXuatTong);
+            break;
+          case 'gtriLuyKeCuuTro':
+            sum += this.nvl(item.gtriLuyKeCuuTro);
+            break;
+          case 'gtriLuyKeHoTro':
+            sum += this.nvl(item.gtriLuyKeHoTro);
+            break;
+          case 'gtriLuyKePvuQp':
+            sum += this.nvl(item.gtriLuyKePvuQp);
+            break;
+          case 'gtriLuyKePvuAnNinh':
+            sum += this.nvl(item.gtriLuyKePvuAnNinh);
+            break;
+          case 'gtriLuyKeKhac':
+            sum += this.nvl(item.gtriLuyKeKhac);
+            break;
+          case 'gtriLuyKeTong':
+            sum += this.nvl(item.gtriLuyKeTong);
+            break;
+        }
+      })
+      return sum;
+    }
+  }
 }

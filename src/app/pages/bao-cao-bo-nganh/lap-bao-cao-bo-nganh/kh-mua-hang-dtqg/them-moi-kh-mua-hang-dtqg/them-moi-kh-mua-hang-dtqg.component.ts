@@ -400,4 +400,41 @@ export class ThemMoiKhMuaHangDtqgComponent extends Base2Component implements OnI
     }
   }
 
+  calTongGtri (field: string) {
+    if (this.listDataGroup) {
+      let sum = 0
+      this.listDataGroup.forEach(item => {
+        switch (field) {
+          case 'gtriKhNamTruoc':
+            sum += this.nvl(item.gtriKhNamTruoc);
+            break;
+          case 'gtriKhGiaoTrongNam':
+            sum += this.nvl(item.gtriKhGiaoTrongNam);
+            break;
+          case 'gtriTongKhDuocGiao':
+            sum += this.nvl(item.gtriTongKhDuocGiao);
+            break;
+          case 'gtriThucHienNamTruoc':
+            sum += this.nvl(item.gtriThucHienNamTruoc);
+            break;
+          case 'gtriThucHienGiaoTrongNam':
+            sum += this.nvl(item.gtriThucHienGiaoTrongNam);
+            break;
+          case 'gtriTongThucHienTrongNam':
+            sum += this.nvl(item.gtriTongThucHienTrongNam);
+            break;
+          case 'gtriChuyenSangNamSau':
+            sum += this.nvl(item.gtriChuyenSangNamSau);
+            break;
+          case 'gtriHuyDuToan':
+            sum += this.nvl(item.gtriHuyDuToan);
+            break;
+          case 'gtriTongDuToanConLai':
+            sum += this.nvl(item.gtriTongDuToanConLai);
+            break;
+        }
+      })
+      return sum;
+    }
+  }
 }

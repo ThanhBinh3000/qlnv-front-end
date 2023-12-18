@@ -16,6 +16,7 @@ import {
 import { cloneDeep } from 'lodash';
 import { slGtriHangDtqg } from "../../../../../models/BaoCaoBoNganh";
 import { Base2Component } from "../../../../../components/base2/base2.component";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
   selector: 'app-them-moi-sl-gtri-hang-dtqg',
@@ -36,7 +37,7 @@ export class ThemMoiSlGtriHangDtqgComponent extends Base2Component implements On
     {
       text: "Báo cáo năm",
       value: 1,
-      thoiHanGuiBc: "Sau 05 ngày kết thúc thời gian chỉnh lý quyết toán ngân sách nhà nước"
+      thoiHanGuiBc: "Sau 25 ngày kết thúc năm"
     },
     { text: "Báo cáo quý", value: 2, thoiHanGuiBc: "Ngày 20 của tháng đầu quý sau" }
   ];
@@ -47,6 +48,19 @@ export class ThemMoiSlGtriHangDtqgComponent extends Base2Component implements On
   itemRowDonViEdit: any[] = [];
   itemRowNhomMhEdit: any[] = [];
   itemRowMatHang: any[] = [];
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "right",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,

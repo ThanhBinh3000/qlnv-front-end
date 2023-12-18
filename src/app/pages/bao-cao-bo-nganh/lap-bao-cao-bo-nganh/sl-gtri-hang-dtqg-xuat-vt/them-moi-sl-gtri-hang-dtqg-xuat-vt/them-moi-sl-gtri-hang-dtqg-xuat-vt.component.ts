@@ -358,12 +358,31 @@ export class ThemMoiSlGtriHangDtqgXuatVtComponent extends Base2Component impleme
   }
 
   calTongTrongKy(){
+    if (this.listDataGroup) {
+      let sum = 0
+      this.listDataGroup.forEach(item => {
+        sum += this.nvl(item.gtriTrongKy);
+      })
+      return sum;
+    }
     return 0;
   }
   calTongLuyKe(){
-    return 0;
+    if (this.listDataGroup) {
+      let sum = 0
+      this.listDataGroup.forEach(item => {
+        sum += this.nvl(item.gtriLuyKe);
+      })
+      return sum;
+    }
   }
   calTong(){
-    return 0;
+    if (this.listDataGroup) {
+      let sum = 0
+      this.listDataGroup.forEach(item => {
+        sum += this.nvl(item.gtriTong);
+      })
+      return sum;
+    }
   }
 }
