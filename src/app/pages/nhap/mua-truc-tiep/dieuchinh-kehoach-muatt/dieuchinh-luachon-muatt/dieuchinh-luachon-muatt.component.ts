@@ -48,6 +48,7 @@ export class DieuchinhLuachonMuattComponent implements OnInit {
     tenLoaiVthh: '',
     tenCloaiVthh: '',
     tenTrangThai: '',
+    soToTrinh: '',
   };
 
   allChecked = false;
