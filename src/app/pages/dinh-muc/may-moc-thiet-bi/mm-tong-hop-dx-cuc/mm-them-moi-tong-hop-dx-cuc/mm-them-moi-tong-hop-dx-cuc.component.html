@@ -181,6 +181,7 @@
     </div>
   </div>
   <nz-table class="wrap mg-t-10 pd-10" [nzData]="dataTable" [nzFrontPagination]="false" *ngIf="isTongHop"
+            [nzScroll]="dataTable && dataTable.length ? { x: '3200px' } : null" style="overflow: auto"
             [nzShowPagination]="false" nzBordered>
     <thead>
     <tr>
@@ -188,16 +189,19 @@
       <th rowSpan="3" width="40px">STT</th>
       <th rowSpan="3" width="200px">Nội dung</th>
       <th rowSpan="3" width="90px">ĐVT</th>
-      <th colspan="2" rowSpan="2" width="200px" nzAlign="center">SL lương thực nhập <br/> theo chỉ tiêu KH</th>
-      <th rowSpan="3" width="100px">SL sử dụng được <br> tại thời điểm đề xuất</th>
-      <th rowSpan="3" width="100px">Số lượng sẽ nhập <br> thêm từ năm trước</th>
-      <th rowSpan="3" width="100px">Tổng cộng</th>
+      <th class="text-center" colspan="3" width="500px" >Số lượng tối đa</th>
+      <th rowSpan="3" width="150px">SL sử dụng được <br> tại thời điểm đề xuất</th>
+      <th rowSpan="3" width="150px">Số lượng sẽ nhập <br> thêm từ năm trước</th>
+      <th rowSpan="3" width="150px">Tổng cộng</th>
       <th rowSpan="3" class="text-center">SL định mức theo <br> chỉ tiêu <br> KH năm</th>
       <th colSpan="5" width="500px">Nhu cầu theo đề xuất của Cục</th>
       <th colSpan="3" width="500px">Số lượng trang bị cho đơn vị</th>
       <th rowSpan="3" width="">Ghi chú</th>
     </tr>
     <tr>
+      <th rowSpan="2"  class="text-center">Căn cứ SL nhập, xuất</th>
+      <th rowSpan="2"  class="text-center">VP Cục DTNN KV</th>
+      <th rowSpan="2"  class="text-center">Chi cục DTNN</th>
       <th colSpan="2" class="text-center">Chênh lệch</th>
       <th colSpan="1"  rowSpan="2" class="text-center">Số lượng</th>
       <th colSpan="1" rowSpan="2" class="text-center">Đơn giá (trđ)</th>
@@ -208,12 +212,8 @@
       <th colSpan="1" rowSpan="2" class="text-center">Thành tiền (trđ)</th>
     </tr>
     <tr>
-      <th class="text-center" width="100px">Gạo tẻ</th>
-      <th class="text-center" width="100px">Thóc tẻ</th>
       <th class="text-center">Còn thiếu</th>
       <th class="text-center">Thừa</th>
-      <!--          <th class="text-center">Còn thiếu</th>-->
-      <!--          <th class="text-center">Thừa</th>-->
     </tr>
     </thead>
     <tbody>
@@ -224,8 +224,9 @@
         <td class="font-weight-bold">{{idx + 1}}</td>
         <td class="font-weight-bold">{{data.tenTaiSan}}</td>
         <td class="font-weight-bold">{{data.donViTinh}}</td>
-        <td class="font-weight-bold">{{data.slChiTieuGao | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="font-weight-bold">{{data.slChiTieuThoc | number : '1.0-1' : 'vi_VN'}}</td>
+        <td></td>
+        <td></td>
+        <td></td>
         <td></td>
         <td></td>
         <td></td>
@@ -248,21 +249,23 @@
           <td>{{idx + 1}}.{{y + 1}}</td>
           <td>{{item.tenDvi}}</td>
           <td>{{item.donViTinh}}</td>
-          <td>{{item.slChiTieuGao | number: '1.0-1': 'vi_VN' }}</td>
-          <td>{{item.slChiTieuThoc | number: '1.0-1': 'vi_VN' }}</td>
-          <td>{{item.slHienCo | number: '1.0-1': 'vi_VN' }}</td>
-          <td>{{item.slNhapThem | number: '1.0-1': 'vi_VN' }}</td>
-          <td>{{item.slHienCo + item.slNhapThem | number: '1.0-1': 'vi_VN' }}</td>
-          <td>{{item.slTieuChuan | number: '1.0-1': 'vi_VN' }}</td>
-          <td>{{item.chenhLechThieu | number: '1.0-1': 'vi_VN' }}</td>
-          <td>{{item.chenhLechThua | number: '1.0-1': 'vi_VN' }}</td>
+          <td class="text-center"><label nz-checkbox disabled [(ngModel)]="item.isCanCu"></label></td>
+          <td class="text-center">{{item.slVpCucKv | number : '1.0-1' : 'vi_VN'}} </td>
+          <td class="text-center" *ngIf="item.isCanCu">{{item.slChiCuc ? (item.slChiCuc | number : '1.0-1' : 'vi_VN') : ''}}/{{item.klChiCuc ? (item.klChiCuc | number : '1.0-1' : 'vi_VN') + ' tấn lương thực' : ''}}  {{item.tenLoaiHinh ? ' ('+ item.tenLoaiHinh + ')' : ''}}</td>
+          <td class="text-center"  *ngIf="!item.isCanCu">{{item.slChiCuc | number : '1.0-1' : 'vi_VN'}} </td>
+          <td class="text-right">{{item.slHienCo | number: '1.0-1': 'vi_VN' }}</td>
+          <td class="text-right">{{item.slNhapThem | number: '1.0-1': 'vi_VN' }}</td>
+          <td class="text-right">{{item.slHienCo + item.slNhapThem | number: '1.0-1': 'vi_VN' }}</td>
+          <td class="text-right">{{item.slTieuChuan | number: '1.0-1': 'vi_VN' }}</td>
+          <td class="text-right">{{item.chenhLechThieu | number: '1.0-1': 'vi_VN' }}</td>
+          <td class="text-right">{{item.chenhLechThua | number: '1.0-1': 'vi_VN' }}</td>
           <td>
             <nz-input-number [(ngModel)]="item.soLuong" [nzSize]="'small'" [nzDisabled]="true"
                              [nzFormatter]="globals.formatter"
                              [nzParser]="globals.parser"></nz-input-number>
           </td>
-          <td>{{item.donGiaTd  | number: '1.0-1': 'vi_VN' }}</td>
-          <td>{{item.donGiaTd * item.soLuong   | number: '1.0-1': 'vi_VN' }}</td>
+          <td class="text-right">{{item.donGiaTd  | number: '1.0-1': 'vi_VN' }}</td>
+          <td class="text-right">{{item.donGiaTd * item.soLuong   | number: '1.0-1': 'vi_VN' }}</td>
           <!--              <td>{{item.chenhLechThieuTc | number: '1.0-1': 'vi_VN' }}</td>-->
           <!--              <td>{{item.chenhLechThuaTc | number: '1.0-1': 'vi_VN' }}</td>-->
           <td>
@@ -270,8 +273,8 @@
                              [nzFormatter]="globals.formatter"
                              [nzParser]="globals.parser"></nz-input-number>
           </td>
-          <td>{{item.donGiaTd  | number: '1.0-1': 'vi_VN' }}</td>
-          <td>{{item.donGiaTd * item.soLuongTc   | number: '1.0-1': 'vi_VN' }}</td>
+          <td class="text-right">{{item.donGiaTd  | number: '1.0-1': 'vi_VN' }}</td>
+          <td class="text-right">{{item.donGiaTd * item.soLuongTc   | number: '1.0-1': 'vi_VN' }}</td>
           <td>{{item.ghiChu}}</td>
         </tr>
       </ng-container>
