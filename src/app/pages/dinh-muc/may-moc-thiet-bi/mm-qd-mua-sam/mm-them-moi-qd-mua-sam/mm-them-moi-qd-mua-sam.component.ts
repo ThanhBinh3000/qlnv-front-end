@@ -61,8 +61,8 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
       lyDoTuChoi: [null],
       listQlDinhMucQdMuaSamDtlReq: [null],
       loai: ['00'],
-      ghiChu: [null, Validators.required],
-      noiDung: [null, Validators.required]
+      ghiChu: [null],
+      noiDung: [null]
     });
   }
 
