@@ -354,4 +354,18 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
     });
   }
 
+  sumslXuat(column?: string): number {
+    let result = 0;
+    if (this.dataTable && this.dataTable.length > 0) {
+      const sum = this.dataTable.reduce((prev, cur) => {
+        if (cur[column]) {
+          prev += Number.parseInt(cur[column]);
+        }
+        return prev;
+      }, 0);
+      result = sum
+    }
+    return result;
+  }
+
 }

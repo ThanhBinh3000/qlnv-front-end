@@ -88,8 +88,10 @@ export class ThemMoiScTcdtComponent implements OnInit {
 
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
-    this.maTt = "/TTr-TVQT";
-    this.soQd = "/TCDT-TVQT";
+    if (!this.idInput) {
+      this.maTt = "/" + this.userInfo.MA_TR;
+      this.soQd = "/" + this.userInfo.MA_QD;
+    }
     this.loadDsNam();
     await this.getDataDetail(this.idInput);
   }
@@ -113,6 +115,8 @@ export class ThemMoiScTcdtComponent implements OnInit {
       this.isTongHop = true;
       let res = await this.tongHopDxScLon.getDetail(id);
       const data = res.data;
+      this.maTt = data.maToTrinh ? "/" + data.maToTrinh.split("/")[1] : null,
+      this.soQd = data.soQuyetDinh ? "/" + data.soQuyetDinh.split("/")[1] : null,
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
@@ -177,7 +181,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-    if (this.dataTable && this.dataTable.length == 0) {
+    if(this.dataTable && this.dataTable.length == 0){
       this.notification.error(MESSAGE.ERROR, 'Danh sách dự án công trình không được để trống');
       this.spinner.hide();
       return;
@@ -346,7 +350,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
       if (list && list.listDxCuc.length > 0) {
         this.isTongHop = true;
         this.dataTable = res.data.listDxCuc;
-        this.dataTable.forEach(item => {
+        this.dataTable.forEach( item => {
           item.vonDauTuTcdt = item.vonDauTu;
         })
         await this.buildDataTable();
@@ -363,33 +367,33 @@ export class ThemMoiScTcdtComponent implements OnInit {
     this.spinner.hide();
   }
 
-  async buildDataTable() {
+  async buildDataTable(){
     this.dataTableExpand = await chain(this.dataTable).groupBy("tenCuc").map((value, key) => {
-      let rs = chain(value)
-        .groupBy("tenChiCuc")
-        .map((v, k) => {
-          let rs1 = chain(v)
-            .groupBy("tenKhoi")
-            .map((v1, k1) => {
-                return {
-                  tenKhoi: k1,
-                  expandSet: true,
-                  children: v1
-                };
-              }
-            ).value();
-          return {
-            tenChiCuc: k,
-            children: rs1,
-            expandSet: true,
-          };
-        }).value();
-      return {
-        tenCuc: key,
-        children: rs,
-        expandSet: true,
-      };
-    }).value();
+        let rs = chain(value)
+          .groupBy("tenChiCuc")
+          .map((v, k) => {
+            let rs1 = chain(v)
+              .groupBy("tenKhoi")
+              .map((v1, k1) => {
+                  return {
+                    tenKhoi: k1,
+                    expandSet : true,
+                    children: v1
+                  };
+                }
+              ).value();
+            return {
+              tenChiCuc: k,
+              children: rs1,
+              expandSet : true,
+            };
+          }).value();
+        return {
+          tenCuc: key,
+          children: rs,
+          expandSet : true,
+        };
+      }).value();
   }
 
   expandAll(table: any[]) {
@@ -501,7 +505,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
     this.emitTab({tab: "qdbtc", id: this.idTongHop, quyetDinh: this.quyetDinh});
   }
 
-  deleteRow(data) {
+  deleteRow(data){
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -522,18 +526,19 @@ export class ThemMoiScTcdtComponent implements OnInit {
     });
   }
 
-  exportDetail($event) {
-    $event.stopPropagation()
+  exportDetail($event){
+    $event.stopPropagation();
+    let title = this.formData.value.loaiTmdt == 'TREN15TY' ? 'du_an_tren_15_ty.xlsx' : 'du_an_duoi_15_ty.xlsx'
     let body = {
-      id: this.idInput,
-      title: this.formData.value.loaiTmdt == 'TREN15TY' ? 'TRÊN 15 TỶ' : 'DƯỚI 15 TỶ'
+      id : this.idInput,
+      title : this.formData.value.loaiTmdt == 'TREN15TY' ? 'TRÊN 15 TỶ' : 'DƯỚI 15 TỶ'
     }
     this.spinner.show();
-    this.tongHopDxScLon
-      .exportDetail(body)
-      .subscribe((blob) =>
-        saveAs(blob, 'data.xlsx'),
-      );
-    this.spinner.hide();
+      this.tongHopDxScLon
+        .exportDetail(body)
+        .subscribe((blob) =>
+          saveAs(blob,title),
+        );
+      this.spinner.hide();
   }
 }
