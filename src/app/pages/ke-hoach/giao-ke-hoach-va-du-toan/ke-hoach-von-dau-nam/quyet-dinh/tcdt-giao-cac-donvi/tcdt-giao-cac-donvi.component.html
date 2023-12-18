@@ -141,20 +141,19 @@
           </th>
           <th></th>
         </tr>
-        <tr *ngFor='let data of rowSelectionTable.data; let idx = index' (click)='getDetailRow(data.id)'>
-          <td [ngClass]="(rowSelected==data.id)?'bg-selected':''" width='45px'>
+        <tr *ngFor='let data of rowSelectionTable.data; let idx = index'>
+          <td width='45px'>
             <label nz-checkbox [(ngModel)]='data.checked' (ngModelChange)='updateSingleChecked()'
                    [nzDisabled]='data.trangThai != STATUS.DANG_NHAP_DU_LIEU'></label>
           </td>
-          <td [ngClass]="(rowSelected==data.id)?'bg-selected':''" class='text-center'>{{(page - 1) * pageSize + idx +
+          <td class='text-center'>{{(page - 1) * pageSize + idx +
           1}}</td>
-          <td class='text-left' [ngClass]="(rowSelected==data.id)?'bg-selected':''"> {{ data.soQd }} </td>
-          <td class='text-center' [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.namQd }}</td>
-          <td class='text-center'
-              [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
-          <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.trichYeu }}</td>
-          <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.tenTrangThai }}</td>
-          <td [ngClass]="(rowSelected==data.id)?'bg-selected':''" style='text-align: left; white-space: nowrap;'>
+          <td class='text-left'> {{ data.soQd }} </td>
+          <td class='text-center' >{{ data.namQd }}</td>
+          <td class='text-center' >{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
+          <td >{{ data.trichYeu }}</td>
+          <td >{{ data.tenTrangThai }}</td>
+          <td style='text-align: left; white-space: nowrap;'>
             <a (click)='viewDetail(data.id, true)'
                *ngIf="data.trangThai != STATUS.DANG_NHAP_DU_LIEU && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_XEM')">
               <i class='fa fa-eye' title='Xem chi tiết'></i>
