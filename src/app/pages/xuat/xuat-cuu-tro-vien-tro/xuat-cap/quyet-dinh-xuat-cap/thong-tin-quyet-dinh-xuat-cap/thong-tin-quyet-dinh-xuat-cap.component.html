@@ -644,7 +644,7 @@
 
 <!--tong cuc-->
 <nz-modal [nzWidth]="'60%'" [(nzVisible)]="modalChiTiet" [nzFooter]="modalFooter" [nzClosable]="false"
-  nzTitle="CHI TIẾT PHƯƠNG ÁN CỨU TRỢ, VIỆN TRỢ">
+  nzTitle="CHI TIẾT PHƯƠNG ÁN CỨU TRỢ, VIỆN TRỢ" (nzAfterOpen)="changeNamNhap()">
   <ng-container *nzModalContent>
     <form nz-form [formGroup]="formDataDtl">
       <div class="modal-card">
@@ -662,10 +662,22 @@
             <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Cục DTNN</nz-form-label>
             <nz-form-control [nzErrorTip]="'Vui lòng nhập đơn vị'">
               <div nz-row [nzGutter]="48">
-                <div nz-col [nzSpan]="16">
+                <div nz-col [nzSpan]="24">
                   <nz-select nzAllowClear formControlName="maDvi" (ngModelChange)="changeMaDviDtl($event)"
                     [nzDisabled]="isView || userService.isCuc()" nzPlaceHolder="Chọn đơn vị" nzShowSearch>
                     <nz-option *ngFor="let p of listDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
+                  </nz-select>
+                </div>
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Chọn Năm nhập kho</nz-form-label>
+            <nz-form-control [nzErrorTip]="'Vui lòng chọn Năm nhập kho'">
+              <div nz-row [nzGutter]="48">
+                <div nz-col [nzSpan]="8">
+                  <nz-select formControlName="namNhap" [nzDisabled]="isView" (ngModelChange)="handleChangeNamNhap()">
+                    <nz-option *ngFor="let p of listNamNhap" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                   </nz-select>
                 </div>
                 <div nz-col [nzSpan]="8">

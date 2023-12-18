@@ -90,7 +90,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       id: [],
       maDvi: [],
       nam: [dayjs().get("year"), [Validators.required]],
-      soBbQd: [, [Validators.required]],
+      soBbQd: [],
       ngayKy: [dayjs().format("YYYY-MM-DD"), [Validators.required]],
       idQdPd: [],
       soQdPd: [, [Validators.required]],
@@ -449,6 +449,11 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
     if (!this.checkHoanTatPhanBo()) return;
+    if (trangThai === STATUS.DA_DUYET_LDC) {
+      this.formData.get("soQdPd").setValidators([Validators.required]);
+    } else {
+      this.formData.get("soQdPd").clearValidators();
+    }
     let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd + this.maHauTo }
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
   }
