@@ -5,7 +5,9 @@
             <span>Quay lại</span>
         </button>
         <button
-            *ngIf="(formData.value.trangThai == STATUS.DA_LAP || formData.value.trangThai == STATUS.TU_CHOI_LDV) && userService.isAccessPermisson('NHDTQG_PTMTT_DCKHMTT_THEM') && userService.isTongCuc()"
+            *ngIf="(formData.value.trangThai == STATUS.DA_LAP
+            || formData.value.trangThai == STATUS.TU_CHOI_LDTC
+            || formData.value.trangThai == STATUS.TU_CHOI_LDV) && userService.isAccessPermisson('NHDTQG_PTMTT_DCKHMTT_THEM') && userService.isTongCuc()"
             class="btn btn-sub xanh-nhat" (click)="save(true)">
             <span>Lưu và gửi duyệt</span>
         </button>
@@ -21,8 +23,22 @@
             <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>
         </button>
+      <button
+        *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDV ) && userService.isAccessPermisson('NHDTQG_PTMTT_DCKHLCNT_BANHANH_TUCHOI_TC')"
+        class="btn btn-sub do" (click)="tuChoi()">
+        <i [class]="'icon htvbdh_chuyenvanthu'"></i>
+        <span>Từ chối - lĐ Tổng cục</span>
+      </button>
+      <button
+        *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDV ) && userService.isAccessPermisson('NHDTQG_PTMTT_DCKHLCNT_BANHANH_TUCHOI_TC')"
+        class="btn btn-sub xanh-nhat" (click)="save(true)">
+        <i [class]="'icon htvbdh_chuyenvanthu'"></i>
+        <span>Ban hành</span>
+      </button>
         <button
-            *ngIf="(formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.DA_LAP ) && userService.isAccessPermisson('NHDTQG_PTMTT_DCKHMTT_THEM') && userService.isTongCuc()"
+            *ngIf="(formData.value.trangThai == STATUS.TU_CHOI_LDV
+            || formData.value.trangThai == STATUS.TU_CHOI_LDTC
+            || formData.value.trangThai == STATUS.DA_LAP ) && userService.isAccessPermisson('NHDTQG_PTMTT_DCKHMTT_THEM') && userService.isTongCuc()"
             class="btn btn-main btn-sm waves-effect waves-light" (click)="save()">
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>
@@ -56,10 +72,6 @@
                                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
                                 </nz-option>
                             </nz-select>
-                            <ng-template #error let-control>
-                                <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}
-                                </ng-container>
-                            </ng-template>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -83,10 +95,6 @@
                     <nz-date-picker formControlName="ngayTaoCv" nzFormat="yyyy-MM-dd"
                                     [nzDisabled]="formData.value.trangThai !== STATUS.DA_LAP && formData.value.trangThai !==globals.prop.NHAP_CHO_DUYET_LD_CUC">
                     </nz-date-picker>
-                    <ng-template #error let-control>
-                      <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}
-                      </ng-container>
-                    </ng-template>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -151,49 +159,47 @@
                   </div>
                 </nz-form-item>
               </div>
-              <div nz-col nzSpan="3">
+              <div nz-col nzSpan="4">
                 <nz-form-item class="form-item">
-                  <nz-form-label [nzNoColon]="true" nzRequired> Số QĐ điều chỉnh
+                  <nz-form-label [nzNoColon]="true" > Số QĐ điều chỉnh
                   </nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-input-group nzAddOnAfter="{{soQdDc}}">
                       <nz-input-number formControlName="soQdDc" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
                                        [nzSize]="'small'"
-                                       [nzDisabled]="formData.value.trangThai !== STATUS.DA_LAP && formData.value.trangThai !==globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
+                                       [nzDisabled]="checkDisableQdDc()">
                       </nz-input-number>
                     </nz-input-group>
-                    <ng-template #error let-control>
-                      <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}
-                      </ng-container>
-                    </ng-template>
                   </nz-form-control>
                 </nz-form-item>
               </div>
-              <div nz-col nzSpan="3">
+              <div nz-col nzSpan="4">
                 <nz-form-item class="form-item">
-                  <nz-form-label [nzNoColon]="true" nzRequired> Ngày Ký QĐ điều chỉnh </nz-form-label>
+                  <nz-form-label [nzNoColon]="true" > Ngày Ký QĐ điều chỉnh </nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-date-picker formControlName="ngayKyDc" nzFormat="yyyy-MM-dd"
-                                    [nzDisabled]="formData.value.trangThai !== STATUS.DA_LAP && formData.value.trangThai !==globals.prop.NHAP_CHO_DUYET_LD_CUC">
+                                    [nzDisabled]="checkDisableQdDc()">
                     </nz-date-picker>
-                    <ng-template #error let-control>
-                      <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}
-                      </ng-container>
-                    </ng-template>
                   </nz-form-control>
                 </nz-form-item>
               </div>
-              <div nz-col nzSpan="3">
+              <div nz-col nzSpan="4">
                 <nz-form-item class="form-item">
                   <nz-form-label [nzNoColon]="true" nzRequired> Ngày hiệu lực của QĐ điều chỉnh </nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-date-picker formControlName="ngayHluc" nzFormat="yyyy-MM-dd"
-                                    [nzDisabled]="formData.value.trangThai !== STATUS.DA_LAP && formData.value.trangThai !==globals.prop.NHAP_CHO_DUYET_LD_CUC">
+                                    [nzDisabled]="checkDisableQdDc()">
                     </nz-date-picker>
-                    <ng-template #error let-control>
-                      <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}
-                      </ng-container>
-                    </ng-template>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true" nzRequired> Trích yếu </nz-form-label>
+                  <nz-form-control nz-col [nzSpan]="24">
+                    <nz-input-group>
+                      <input [readonly]="formData.value.trangThai !== STATUS.DA_LAP && formData.value.trangThai !==globals.prop.NHAP_CHO_DUYET_LD_CUC" class="search__input" nz-input formControlName="trichYeuDc" />
+                    </nz-input-group>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -219,7 +225,7 @@
               </div>
               <div nz-col [nzSpan]="3">
                 <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true"> Loại hình nhập xuất </nz-form-label>
+                  <nz-form-label nzRequired [nzNoColon]="true"> Loại hình nhập</nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-input-group>
                       <input [readonly]="true" nz-input formControlName="tenLoaiHinhNx" readonly="true" />
@@ -229,7 +235,7 @@
               </div>
               <div nz-col [nzSpan]="3">
                 <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true"> Kiểu nhập xuất </nz-form-label>
+                  <nz-form-label nzRequired [nzNoColon]="true"> Kiểu nhập</nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-input-group>
                       <input [readonly]="true" nz-input formControlName="tenKieuNx" readonly="true" />
@@ -266,9 +272,6 @@
                 </nz-form-item>
               </div>
             </div>
-            <ng-template #error let-control>
-                <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
-            </ng-template>
         </form>
     </nz-card>
     <nz-card class="mg-t-16 flex-card p-lr16">
@@ -337,3 +340,7 @@
 
     </nz-card>
 </div>
+<ng-template #error let-control>
+  <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}
+  </ng-container>
+</ng-template>

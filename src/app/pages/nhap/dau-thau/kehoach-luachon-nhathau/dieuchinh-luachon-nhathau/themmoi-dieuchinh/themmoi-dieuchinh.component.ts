@@ -478,7 +478,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
 
   async save(isGuiDuyet?) {
     await this.spinner.show();
-    this.setValidator();
+    this.setValidator(isGuiDuyet);
     await this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       await this.spinner.hide();
@@ -553,33 +553,16 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
   }
 
 
-  setValidator() {
-    // if (this.formData.get('loaiVthh').value.startsWith('02')) {
-    //   this.formData.controls["hthucLcnt"].clearValidators();
-    //   this.formData.controls["pthucLcnt"].clearValidators();
-    //   this.formData.controls["loaiHdong"].clearValidators();
-    //   this.formData.controls["nguonVon"].clearValidators();
-    //   this.formData.controls["tgianBdauTchuc"].clearValidators();
-    //   this.formData.controls["tgianDthau"].clearValidators();
-    //   this.formData.controls["tgianMthau"].clearValidators();
-    //   this.formData.controls["tgianNhang"].clearValidators();
-    //   this.formData.controls["cloaiVthh"].clearValidators();
-    //   this.formData.controls["tenCloaiVthh"].clearValidators();
-    //   this.formData.controls["moTaHangHoa"].clearValidators();
-
-    // } else {
-    //   this.formData.controls["hthucLcnt"].setValidators([Validators.required]);
-    //   this.formData.controls["pthucLcnt"].setValidators([Validators.required]);
-    //   this.formData.controls["loaiHdong"].setValidators([Validators.required]);
-    //   this.formData.controls["nguonVon"].setValidators([Validators.required]);
-    //   this.formData.controls["tgianBdauTchuc"].setValidators([Validators.required]);
-    //   this.formData.controls["tgianDthau"].setValidators([Validators.required]);
-    //   this.formData.controls["tgianMthau"].setValidators([Validators.required]);
-    //   this.formData.controls["tgianNhang"].setValidators([Validators.required]);
-    //   this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
-    //   this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
-    //   this.formData.controls["moTaHangHoa"].setValidators([Validators.required]);
-    // }
+  setValidator(isGuiDuyet: boolean) {
+    if (this.formData.get("trangThai").value == STATUS.DA_DUYET_LDV && isGuiDuyet) {
+        this.formData.controls["soQdDc"].setValidators([Validators.required]);
+        this.formData.controls["ngayQdDc"].setValidators([Validators.required]);
+        this.formData.controls["ngayHluc"].setValidators([Validators.required]);
+    } else {
+      this.formData.controls["soQdDc"].clearValidators();
+      this.formData.controls["ngayQdDc"].clearValidators();
+      this.formData.controls["ngayHluc"].clearValidators();
+    }
   }
 
   getNameFile($event) {
@@ -623,7 +606,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
 
   checkDisableQdDc() {
     if (this.isViewDetail) {
-      return !(this.formData.get('trangThai').value == STATUS.CHO_DUYET_LDV && this.userService.isAccessPermisson("NHDTQG_PTDT_DCKHLCNT_DUYET_LDVU"));
+      return !(this.formData.get('trangThai').value == STATUS.DA_DUYET_LDV && this.userService.isAccessPermisson("NHDTQG_PTDT_DCKHLCNT_BANHANH_TUCHOI_TC"));
     }
     return true;
   }

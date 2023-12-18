@@ -1040,7 +1040,6 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
 
   expandAll(table: any[]) {
     if (table && table.length > 0) {
-      console.log(table, 'tabletabletable');
       table.forEach(s => {
         this.expandSetNhap.add(s.idVirtual);
         if (s.dataChild && s.dataChild.length > 0) {

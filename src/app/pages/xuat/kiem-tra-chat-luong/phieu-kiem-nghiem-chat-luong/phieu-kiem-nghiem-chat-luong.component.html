@@ -103,7 +103,7 @@
             <th width="">Số phiếu KNCL</th>
             <th width="">Ngày kiểm nghiệm</th>
             <th width="">Điểm Kho</th>
-            <th width="">Lô kho</th>
+            <th width="">Ngăn/Lô kho</th>
             <ng-container *ngIf="!hiddenField('bblm', ['XC'], loaiXuat)">
               <th width="">Số BB LM/BGM</th>
               <th width="">Ngày lấy mẫu</th>
@@ -153,7 +153,8 @@
                   <td class="bold">{{lv1.soBbQd}}</td>
                   <td>{{ lv1.ngayKiemNghiem | date:globals.dateFormat }}</td>
                   <td>{{lv1.tenDiemKho}}</td>
-                  <td>{{lv1.tenLoKho ? lv1.tenLoKho + ' - ' + lv1.tenNganKho : lv1.tenLoKho}}</td>
+                  <td>{{(lv1.tenLoKho ? lv1.tenLoKho + ' - ': "") + (lv1.tenNganKho ? lv1.tenLoKho + " - ": "") +
+                    (lv1.tenNhaKho? lv1.tenNhaKho: "")}}</td>
                   <ng-container *ngIf="!hiddenField('bblm', ['XC'], loaiXuat)">
                     <td>{{lv1.soBbLayMau}}</td>
                     <td>{{lv1.ngayBbLayMau}}</td>

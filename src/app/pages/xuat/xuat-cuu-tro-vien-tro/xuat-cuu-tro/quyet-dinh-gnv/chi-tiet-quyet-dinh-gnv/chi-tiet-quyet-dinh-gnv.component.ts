@@ -90,7 +90,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       id: [],
       maDvi: [],
       nam: [dayjs().get("year"), [Validators.required]],
-      soBbQd: [, [Validators.required]],
+      soBbQd: [],
       ngayKy: [dayjs().format("YYYY-MM-DD"), [Validators.required]],
       idQdPd: [],
       soQdPd: [, [Validators.required]],
@@ -312,7 +312,6 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
             this.listDonVi.push({ ...element, maDvi: element.maDonVi.length >= 8 ? element.maDonVi.slice(0, 8) : "", tenDvi: element.tenChiCuc, tonKhoDvi: element.slHienThoi })
           }
         });
-        console.log("formDataa", this.formDataDtl.value)
         const tenHang = this.formData.value.loaiVthh !== LOAI_HANG_DTQG.VAT_TU ? this.formDataDtl.value.tenLoaiVthh : this.formDataDtl.value.tenCloaiVthh ? this.formDataDtl.value.tenLoaiVthh + " - " + this.formDataDtl.value.tenCloaiVthh : this.formDataDtl.value.tenLoaiVthh;
         this.listDonVi.forEach(s => {
           s.disable = this.formData.value.dataDtl.some(s1 => s1.maDvi === s.maDvi && s1.noiDungDx === this.formDataDtl.value.noiDungDx && s1.idDx === this.formDataDtl.value.idDx && s1.tenHang === tenHang && s1.namNhap === this.formDataDtl.value.namNhap) && !(s.maDvi === this.formDataDtl.value.maDvi && this.formDataDtl.value.edit);
@@ -450,6 +449,11 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
     if (!this.checkHoanTatPhanBo()) return;
+    if (trangThai === STATUS.DA_DUYET_LDC) {
+      this.formData.get("soQdPd").setValidators([Validators.required]);
+    } else {
+      this.formData.get("soQdPd").clearValidators();
+    }
     let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd + this.maHauTo }
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
   }

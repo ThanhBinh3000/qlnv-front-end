@@ -158,6 +158,7 @@
                         <th rowspan="3">STT</th>
                         <th rowspan="3">Loại hàng hóa</th>
                         <th rowspan="3">Chủng loại</th>
+                        <th rowspan="3">Năm nhập kho</th>
                         <th rowspan="3">ĐVT</th>
                         <th colSpan="2">Ngăn/lô xuất điều chuyển</th>
                         <th colspan="3">Ngăn/lô nhập điều chuyển</th>
@@ -195,6 +196,7 @@
                                     1}}</td>
                                 <td *ngIf="i2===0" [rowSpan]="item.childData.length">{{lv2.tenLoaiVthh}}</td>
                                 <td *ngIf="i2===0" [rowSpan]="item.childData.length">{{lv2.tenCloaiVthh}}</td>
+                                <td *ngIf="i2===0" [rowSpan]="item.childData.length">{{lv2.namNhap}}</td>
                                 <td *ngIf="i2===0" [rowSpan]="item.childData.length">{{lv2.tenDonViTinh}}</td>
                                 <td *ngIf="i2===0" [rowSpan]="item.childData.length">{{lv2.tenDiemKho}}</td>
                                 <td *ngIf="i2===0" [rowSpan]="item.childData.length">{{lv2.tenLoKho || ""}} -
@@ -231,6 +233,7 @@
                         </ng-container>
                     </ng-container>
                     <tr>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>

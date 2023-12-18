@@ -50,13 +50,17 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
       klLtBaoQuan: [null],
       klLtNhap: [null],
       klLtXuat: [null],
-      slGaoDangBaoQuan: [null],
-      slThocDangBaoQuan: [null],
+      slGaoDangBaoQuan: [0],
+      slThocDangBaoQuan: [0],
+      slGaoXuat: [0],
+      slThocXuat: [0],
+      slGaoNhap: [0],
+      slThocNhap: [0],
       trichYeu: [null, Validators.required],
       ngayKy: [null, Validators.required],
-      trangThai: ['00'],
+      trangThai: ['78'],
       trangThaiTh: [],
-      tenTrangThai: ['Dự thảo'],
+      tenTrangThai: ['Đang nhập dữ liệu'],
       fileDinhKems: [null],
       lyDoTuChoi: [null],
       listQlDinhMucDxTbmmTbcdDtl: [null],
@@ -71,7 +75,7 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-      await this.loadDsDxCc();
+      await this.loadDsDxCc(this.formDataTongHop.value.namKeHoach);
       if (this.id > 0) {
         await this.detail(this.id);
       }
@@ -112,11 +116,12 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
       if (detail && detail.listQlDinhMucDxTbmmTbcdDtl) {
         this.formData.patchValue({
           namKeHoach: this.formDataTongHop.value.namKeHoach,
-          klLtBaoQuan: detail.klLtBaoQuan,
-          klLtNhap: detail.klLtNhap,
-          klLtXuat: detail.klLtXuat,
           slGaoDangBaoQuan: detail.slGaoDangBaoQuan,
-          slThocDangBaoQuan: detail.slThocDangBaoQuan
+          slThocDangBaoQuan: detail.slThocDangBaoQuan,
+          slGaoNhap: detail.slGaoNhap,
+          slGaoXuat: detail.slGaoXuat,
+          slThocNhap: detail.slThocNhap,
+          slThocXuat: detail.slThocXuat,
         })
         this.dataTable = detail.listQlDinhMucDxTbmmTbcdDtl
         this.dataTable.forEach(item => {
@@ -136,7 +141,7 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
       }
       this.isTongHop = true;
     } else {
-      this.notification.error(MESSAGE.ERROR, res.msg)
+      this.notification.warning('',res.msg);
       return;
     }
   }
@@ -154,11 +159,13 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     }
   }
 
-  async loadDsDxCc() {
+  async loadDsDxCc(namKh) {
     this.spinner.show();
     try {
       let body = {
         "capDvi": "3",
+        "namKeHoach" : namKh,
+        "trangThaiTh" : "24",
         "paggingReq": {
           "limit": 10,
           "page": 0
@@ -166,6 +173,9 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
       }
       let res = await this.dxChiCucService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
+        this.formDataTongHop.patchValue({
+          listSoCv : []
+        })
         let data = res.data;
         this.listDxChiCuc = data.content;
         if (this.listDxChiCuc) {
@@ -370,5 +380,9 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
+  }
+
+  changeNamKh(event) {
+    this.loadDsDxCc(event);
   }
 }

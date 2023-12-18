@@ -2,10 +2,10 @@
 <!-- menu xuat cap -->
 <nz-affix [nzOffsetTop]="globals.prop.MN_LV1" class="level1">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)"
+    <!-- <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)"
       *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDPACHUYENXC') && userService.isTongCuc()">
       Quyết định PA cứu trợ, viện trợ được chuyển xuất cấp
-    </li>
+    </li> -->
     <li nz-menu-item [nzSelected]="tabSelected==1" (click)="selectTab(1)"
       *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC')">
       Quyết định xuất cấp
@@ -32,9 +32,9 @@
     <!-- <ng-container *ngIf="tabSelected == 0">
       <app-quyet-dinh-phuong-an (eventTaoQd)="taoQd($event)"></app-quyet-dinh-phuong-an>
     </ng-container>-->
-    <ng-container *ngIf="tabSelected == 0">
+    <!-- <ng-container *ngIf="tabSelected == 0">
       <app-quyet-dinh-pd [chuyenXuatCap]="true" (eventTaoQdXc)="taoQd($event)"></app-quyet-dinh-pd>
-    </ng-container>
+    </ng-container> -->
     <ng-container *ngIf="tabSelected == 1">
       <app-quyet-dinh-xuat-cap [isDetail]="isDetail" [dataInit]="dataInit"
         (showListEvent)="quayLai()"></app-quyet-dinh-xuat-cap>

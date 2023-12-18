@@ -1,6 +1,6 @@
 <nz-affix [nzOffsetTop]='globals.prop.MENU_LV2' class='btn-affix'>
   <div class='btn-group'>
-    <button type='button' class='btn btn-sub' (click)='goBack()'>
+    <button type='button' class='btn btn-sub' (click)='quayLai()'>
       <i class='fa fa-arrow-left'></i>
       <span>Quay lại</span>
     </button>
@@ -30,7 +30,7 @@
             [ngClass]="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
             {{ formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU ? 'Đang nhập dữ liệu' : 'Ban Hành' }}
           </span>
-          <span>Quyết định của giao kế hoạch và phân bổ dự toán chi tiết của TCDT</span>
+          <span>Quyết định giao kế hoạch và phân bổ dự toán chi tiết của TCDT</span>
         </div>
       </div>
     </div>
@@ -40,7 +40,7 @@
           <nz-form-item class='form-item'>
             <nz-form-label nzRequired [nzNoColon]='true' [nzNoColon]='true' nzFor='nam-qd'>Năm kế hoạch</nz-form-label>
             <nz-form-control [nzErrorTip]='error'>
-              <nz-select formControlName='namQd' (ngModelChange)='changeNam($event)' [nzDisabled]='isView'
+              <nz-select formControlName='namQd' [nzDisabled]='isView'
                          nzAllowClear>
                 <nz-option *ngFor='let p of dsNam' [nzValue]='p.value' [nzLabel]='p.text'>
                 </nz-option>
@@ -56,9 +56,7 @@
             <nz-form-label nzRequired [nzNoColon]='true' [nzNoColon]='true' nzFor='so-qd'>Số quyết định</nz-form-label>
             <nz-form-control [nzErrorTip]='error'>
               <nz-input-group  id='so-qd'>
-                <nz-input-number [nzDisabled]='isView' type='text' nz-input formControlName='soQd' [nzMin]='1'
-                                 [nzMax]='9999999' [nzStep]='1' [nzSize]="'small'">
-                </nz-input-number>
+                <input nz-input formControlName="soQd" [readOnly]='isView'/>
               </nz-input-group>
               <ng-template #error let-control>
                 <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
@@ -98,7 +96,7 @@
         </div>
         <div nz-col [nzSpan]='24'>
           <nz-form-item class='form-item'>
-            <nz-form-label [nzNoColon]='true' class='label-color-kh'> File đính kèm quyết định của BTC giao TCDT
+            <nz-form-label [nzNoColon]='true' class='label-color-kh'> Tài liệu đính kèm
             </nz-form-label>
             <div class='list-file'>
               <file-list [data]='taiLieuDinhKemList' [isViewDetail]='false'></file-list>
@@ -110,17 +108,17 @@
   </nz-card>
   <nz-tabset nzType='card'>
     <nz-tab [nzTitle]="'Xuất giảm không thu tiền'">
-      <app-them-sua-vat-tu-chi-tiet  [isViewDetail]='isView' [(dataVatTu)]='dataVatTuXuatGiam' >
+      <app-them-sua-vat-tu-chi-tiet  [isViewDetail]='isView' [(dataVatTu)]='xuatGiamList'>
       </app-them-sua-vat-tu-chi-tiet>
     </nz-tab>
 
     <nz-tab [nzTitle]="'Xuất bán thu tiền'">
-      <app-them-sua-vat-tu-chi-tiet  [isViewDetail]='isView' [(dataVatTu)]='dataVatTuXuatBan' >
+      <app-them-sua-vat-tu-chi-tiet  [isViewDetail]='isView' [(dataVatTu)]='xuatBanList' >
       </app-them-sua-vat-tu-chi-tiet>
     </nz-tab>
 
     <nz-tab [nzTitle]="'Xuất luân phiên đổi hàng'">
-      <app-them-sua-vat-tu-chi-tiet  [isViewDetail]='isView' [(dataVatTu)]='dataVatTuXuatLpdh' >
+      <app-them-sua-vat-tu-chi-tiet  [isViewDetail]='isView' [(dataVatTu)]='luanPhienList' >
       </app-them-sua-vat-tu-chi-tiet>
     </nz-tab>
   </nz-tabset>

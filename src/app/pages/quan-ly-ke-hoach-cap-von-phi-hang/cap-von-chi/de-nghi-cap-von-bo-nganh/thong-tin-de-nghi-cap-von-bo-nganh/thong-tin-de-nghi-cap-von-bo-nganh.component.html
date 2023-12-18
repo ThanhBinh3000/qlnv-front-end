@@ -603,6 +603,7 @@
         <td>
           <input class='money-input' currencyMask [options]='amount'
                  [(ngModel)]='item.slDeNghiCapVon'
+                 [max]='item.slTheoQdTtcp'
                  (ngModelChange)='changeThanhTienEdit(idx)' />
         </td>
         <td><input type='text' nz-input [(ngModel)]='item.donViTinh' /></td>

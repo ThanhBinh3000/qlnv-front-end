@@ -416,46 +416,60 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
           return {
             children: children1,
             tenChiCuc: key1,
-            chiCuc : children1 && children1.length > 0 && children1[0].chiCuc?  children1[0].chiCuc.substring(0, 6) : ''
+            cuc : children1 && children1.length > 0 && children1[0].chiCuc?  children1[0].chiCuc.substring(0, 6) : ''
           };
         }).value();
       arr.forEach((item, index) => {
-        item.stt = index + 1;
+        item.stt = this.convertToRoman(index + 1);
         if (item.children && item.children.length > 0) {
-          let ccGt5000 = arrCopy.filter(it =>  it.khoiTich &&  item.chiCuc &&  it.khoiTich > 5000 &&  it.diemKho.startsWith(item.chiCuc) );
-          let ccLt5000 = arrCopy.filter(it =>  it.khoiTich &&  item.chiCuc &&  it.khoiTich <= 5000 &&  it.diemKho.startsWith(item.chiCuc) );
-          item.khoiTichGt5000 = this.sumTable(ccGt5000, 'khoiTich');
-          item.khoiTichLt5000 = this.sumTable(ccLt5000, 'khoiTich');
-          item.slKhoGt5000 = ccGt5000.length;
-          item.slKhoLt5000 = ccLt5000.length;
-          item.giaTriHtGt5000 = this.sumTable(ccGt5000, 'giaTriHtKhoHt');
-          item.giaTriHtLt5000 = this.sumTable(ccLt5000, 'giaTriHtKhoHt');
-          item.giaTriKhGt5000 = this.sumTable(ccGt5000, 'giaTriHtKhoKh');
-          item.giaTriKhLt5000 = this.sumTable(ccLt5000, 'giaTriHtKhoKh');
-          arrResult.push(item)
-          item.children.forEach(child1 => {
-            let dkGt5000 = arrCopy.filter(item =>  item.khoiTich  &&  child1.diemKho &&  item.khoiTich > 5000  && item.nhaKho.startsWith(child1.diemKho) );
-            let dkLt5000 = arrCopy.filter(item =>  item.khoiTich  &&  child1.diemKho &&  item.khoiTich <= 5000  && item.nhaKho.startsWith(child1.diemKho) );
-            child1.khoiTichGt5000 = this.sumTable(dkGt5000, 'khoiTich');
-            child1.khoiTichLt5000 = this.sumTable(dkLt5000, 'khoiTich');
-            child1.slKhoGt5000 = dkGt5000.length;
-            child1.slKhoLt5000 = dkLt5000.length;
-            child1.giaTriHtGt5000 = this.sumTable(dkGt5000, 'giaTriHtKhoHt');
-            child1.giaTriHtLt5000 = this.sumTable(dkLt5000, 'giaTriHtKhoHt');
-            child1.giaTriKhGt5000 = this.sumTable(dkGt5000, 'giaTriHtKhoKh');
-            child1.giaTriKhLt5000 = this.sumTable(dkLt5000, 'giaTriHtKhoKh');
+          let cucGt5000 = arrCopy.filter(it =>  it.khoiTich &&  item.cuc &&  it.khoiTich > 5000 &&  it.nhaKho.startsWith(item.cuc) );
+          let cucLt5000 = arrCopy.filter(it =>  it.khoiTich &&  item.cuc &&  it.khoiTich <= 5000 &&  it.nhaKho.startsWith(item.cuc) );
+          item.khoiTichGt5000 = this.sumTable(cucGt5000, 'khoiTich');
+          item.khoiTichLt5000 = this.sumTable(cucLt5000, 'khoiTich');
+          item.slKhoGt5000 = cucGt5000.length;
+          item.slKhoLt5000 = cucLt5000.length;
+          item.giaTriHtGt5000 = this.sumTable(cucGt5000, 'giaTriHtKhoHt');
+          item.giaTriHtLt5000 = this.sumTable(cucLt5000, 'giaTriHtKhoHt');
+          item.giaTriKhGt5000 = this.sumTable(cucGt5000, 'giaTriHtKhoKh');
+          item.giaTriKhLt5000 = this.sumTable(cucLt5000, 'giaTriHtKhoKh');
+          arrResult.push(item);
+          item.children.forEach((child1, index) => {
+            child1.stt = index + 1;
+            let ccGt5000 = arrCopy.filter(item =>  item.khoiTich  &&  child1.chiCuc &&  item.khoiTich > 5000  && item.nhaKho.startsWith(child1.chiCuc) );
+            let ccLt5000 = arrCopy.filter(item =>  item.khoiTich  &&  child1.chiCuc &&  item.khoiTich <= 5000  && item.nhaKho.startsWith(child1.chiCuc) );
+            child1.khoiTichGt5000 = this.sumTable(ccGt5000, 'khoiTich');
+            child1.khoiTichLt5000 = this.sumTable(ccLt5000, 'khoiTich');
+            child1.slKhoGt5000 = ccGt5000.length;
+            child1.slKhoLt5000 = ccLt5000.length;
+            child1.giaTriHtGt5000 = this.sumTable(ccGt5000, 'giaTriHtKhoHt');
+            child1.giaTriHtLt5000 = this.sumTable(ccLt5000, 'giaTriHtKhoHt');
+            child1.giaTriKhGt5000 = this.sumTable(ccGt5000, 'giaTriHtKhoKh');
+            child1.giaTriKhLt5000 = this.sumTable(ccLt5000, 'giaTriHtKhoKh');
             arrResult.push(child1);
             child1.children.forEach(child2 => {
-              child2.tenDiemKho = '';
-              child2.khoiTichGt5000 = child2.khoiTich && child2.khoiTich > 5000 ? child2.khoiTich : 0
-              child2.khoiTichLt5000 = child2.khoiTich && child2.khoiTich <= 5000 ? child2.khoiTich : 0
-              child2.slKhoGt5000 = child2.khoiTich && child2.khoiTich > 5000 ? 1 : 0
-              child2.slKhoLt5000 = child2.khoiTich && child2.khoiTich <= 5000 ? 1 : 0
-              child2.giaTriHtGt5000 = child2.khoiTich && child2.khoiTich > 5000 ? child2.giaTriHtKhoHt : 0
-              child2.giaTriHtLt5000 = child2.khoiTich && child2.khoiTich <= 5000 ? child2.giaTriHtKhoHt : 0
-              child2.giaTriKhGt5000 = child2.khoiTich && child2.khoiTich > 5000 ? child2.giaTriHtKhoKh : 0
-              child2.giaTriKhLt5000 = child2.khoiTich && child2.khoiTich <= 5000 ? child2.giaTriHtKhoKh : 0
+              let dkGt5000 = arrCopy.filter(item =>  item.khoiTich  &&  child2.diemKho &&  item.khoiTich > 5000  && item.nhaKho.startsWith(child2.diemKho) );
+              let dkLt5000 = arrCopy.filter(item =>  item.khoiTich  &&  child2.diemKho &&  item.khoiTich <= 5000  && item.nhaKho.startsWith(child2.diemKho) );
+              child2.khoiTichGt5000 = this.sumTable(dkGt5000, 'khoiTich');
+              child2.khoiTichLt5000 = this.sumTable(dkLt5000, 'khoiTich');
+              child2.slKhoGt5000 = dkGt5000.length;
+              child2.slKhoLt5000 = dkLt5000.length;
+              child2.giaTriHtGt5000 = this.sumTable(dkGt5000, 'giaTriHtKhoHt');
+              child2.giaTriHtLt5000 = this.sumTable(dkLt5000, 'giaTriHtKhoHt');
+              child2.giaTriKhGt5000 = this.sumTable(dkGt5000, 'giaTriHtKhoKh');
+              child2.giaTriKhLt5000 = this.sumTable(dkLt5000, 'giaTriHtKhoKh');
               arrResult.push(child2);
+              child2.children.forEach(child3 => {
+                child3.tenDiemKho = '';
+                child3.khoiTichGt5000 = child3.khoiTich && child3.khoiTich > 5000 ? child3.khoiTich : 0
+                child3.khoiTichLt5000 = child3.khoiTich && child3.khoiTich <= 5000 ? child3.khoiTich : 0
+                child3.slKhoGt5000 = child3.khoiTich && child3.khoiTich > 5000 ? 1 : 0
+                child3.slKhoLt5000 = child3.khoiTich && child3.khoiTich <= 5000 ? 1 : 0
+                child3.giaTriHtGt5000 = child3.khoiTich && child3.khoiTich > 5000 ? child3.giaTriHtKhoHt : 0
+                child3.giaTriHtLt5000 = child3.khoiTich && child3.khoiTich <= 5000 ? child3.giaTriHtKhoHt : 0
+                child3.giaTriKhGt5000 = child3.khoiTich && child3.khoiTich > 5000 ? child3.giaTriHtKhoKh : 0
+                child3.giaTriKhLt5000 = child3.khoiTich && child3.khoiTich <= 5000 ? child3.giaTriHtKhoKh : 0
+                arrResult.push(child3);
+              })
             })
           })
         }

@@ -67,9 +67,9 @@
             <th width="60px" class="text-center">STT</th>
             <th width="" class="text-center">Số QĐ xuất cấp</th>
             <th width="" class="text-center">Ngày hiệu lực QĐ xuất cấp</th>
-            <th width="" class="text-center">Số QĐ chuyển xuất cấp</th>
-            <th width="" class="text-center">Ngày hiệu lực<br />QĐ chuyển xuất cấp</th>
-            <th class="text-center">Số lượng gạo<br />chuyển sang xuất cấp</th>
+            <!-- <th width="" class="text-center">Số QĐ chuyển xuất cấp</th>
+            <th width="" class="text-center">Ngày hiệu lực<br />QĐ chuyển xuất cấp</th> -->
+            <th class="text-center">Số lượng gạo<br />chuyển sang xuất cấp (kg)</th>
             <th width="" class="text-center">Trích yếu</th>
             <th width="" class="text-center">Trạng thái QĐ xuất cấp</th>
             <th width="90px" class="text-center">Hành động</th>
@@ -86,9 +86,11 @@
             <td class="text-center">{{ data.ngayHluc | date: 'dd/MM/YYYY' }}</td>
             <!-- <td>{{ data.soXc }}</td> -->
             <!-- <td>{{data.qdPaXuatCap}}</td> -->
-            <td><a nz-button nzType="link" (click)="openQdPdModal(data.qdPaXuatCapId)">{{ data.qdPaXuatCap}}</a></td>
+
+            <!-- <td><a nz-button nzType="link" (click)="openQdPdModal(data.qdPaXuatCapId)">{{ data.qdPaXuatCap}}</a></td>
             <td class="text-center">{{data.ngayHieuLucQdcxc| date: 'dd/MM/YYYY'}}</td>
-            <td class="text-right">{{data.slGaoChuyenXuatCap| number : '1.0-1' : 'vi_VN'}}</td>
+            <td class="text-right">{{data.slGaoChuyenXuatCap| number : '1.0-1' : 'vi_VN'}}</td> -->
+            <td class="text-right">{{ getSlGaoChuyenXuatCap(data)| number : '1.0-1' : 'vi_VN'}}</td>
             <td class="break-2">
               <p>{{ data.trichYeu }}</p>
             </td>
