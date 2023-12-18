@@ -63,7 +63,7 @@ export class ThongTinQdPheduyetQuyetToanBtcComponent implements OnInit {
     trangThai: '',
     trangThaiPdBtc: '',
   };
-  templateName = 'bao-cao-so-lieu-quyet-toan-toan-nganh';
+  templateName = 'quyet-dinh-phe-duyet-quyet-toan-cua-btc.docx';
   pdfSrc: any;
   printSrc: any;
   wordSrc: any;
