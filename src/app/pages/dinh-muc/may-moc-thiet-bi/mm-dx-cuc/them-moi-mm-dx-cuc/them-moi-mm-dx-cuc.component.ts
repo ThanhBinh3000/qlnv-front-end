@@ -50,8 +50,12 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
       klLtBaoQuan: [null],
       klLtNhap: [null],
       klLtXuat: [null],
-      slGaoDangBaoQuan: [null],
-      slThocDangBaoQuan: [null],
+      slGaoDangBaoQuan: [0],
+      slThocDangBaoQuan: [0],
+      slGaoXuat: [0],
+      slThocXuat: [0],
+      slGaoNhap: [0],
+      slThocNhap: [0],
       trichYeu: [null, Validators.required],
       ngayKy: [null, Validators.required],
       trangThai: ['78'],
@@ -112,11 +116,12 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
       if (detail && detail.listQlDinhMucDxTbmmTbcdDtl) {
         this.formData.patchValue({
           namKeHoach: this.formDataTongHop.value.namKeHoach,
-          klLtBaoQuan: detail.klLtBaoQuan,
-          klLtNhap: detail.klLtNhap,
-          klLtXuat: detail.klLtXuat,
           slGaoDangBaoQuan: detail.slGaoDangBaoQuan,
-          slThocDangBaoQuan: detail.slThocDangBaoQuan
+          slThocDangBaoQuan: detail.slThocDangBaoQuan,
+          slGaoNhap: detail.slGaoNhap,
+          slGaoXuat: detail.slGaoXuat,
+          slThocNhap: detail.slThocNhap,
+          slThocXuat: detail.slThocXuat,
         })
         this.dataTable = detail.listQlDinhMucDxTbmmTbcdDtl
         this.dataTable.forEach(item => {

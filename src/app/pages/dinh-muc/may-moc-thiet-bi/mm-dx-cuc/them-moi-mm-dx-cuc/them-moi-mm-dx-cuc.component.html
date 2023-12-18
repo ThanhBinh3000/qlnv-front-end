@@ -83,20 +83,6 @@
   <nz-card class="mt16 flex-card p-lr16 mg-t-10" *ngIf="isTongHop">
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" >
       <div nz-row [nzGutter]="20">
-        <div nz-col nzSpan="4">
-          <nz-form-label class="text-wrap">Khối lượng gạo đang bảo quản (tấn)</nz-form-label>
-          <nz-form-control>
-            <input nz-input formControlName="slGaoDangBaoQuan" [readonly]="true"/>
-          </nz-form-control>
-        </div>
-        <div nz-col nzSpan="4">
-          <nz-form-label class="text-wrap">Khối lượng thóc đang bảo quản (tấn)</nz-form-label>
-          <nz-form-control>
-            <input nz-input formControlName="slThocDangBaoQuan" [readonly]="true"/>
-          </nz-form-control>
-        </div>
-        <div nz-col nzSpan="16">
-        </div>
         <div nz-col nzSpan="4" *ngIf="isView">
           <nz-form-label>Năm kế hoạch</nz-form-label>
           <nz-form-control [nzErrorTip]="error">
@@ -126,6 +112,72 @@
                             formControlName="ngayKy">
             </nz-date-picker>
           </nz-form-control>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-control>
+              <nz-form-label [nzNoColon]="true" class="label-color-kh">KL gạo đang bảo quản (tấn)
+              </nz-form-label>
+              <nz-input-group>
+                <span class="text-blue">{{formData.value.slGaoDangBaoQuan|number:'1.0-3':'vi_VN'}}</span>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-control>
+              <nz-form-label [nzNoColon]="true" class="label-color-kh">KL thóc đang bảo quản (tấn)
+              </nz-form-label>
+              <nz-input-group>
+                <span class="text-blue">{{formData.value.slThocDangBaoQuan|number:'1.0-3':'vi_VN'}}</span>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-control>
+              <nz-form-label [nzNoColon]="true" class="label-color-kh">KL gạo nhập theo chỉ tiêu KH (tấn)
+              </nz-form-label>
+              <nz-input-group>
+                <span class="text-blue">{{formData.value.slGaoNhap|number:'1.0-3':'vi_VN'}}</span>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-control>
+              <nz-form-label [nzNoColon]="true" class="label-color-kh">KL thóc nhập theo chỉ tiêu KH (tấn)
+              </nz-form-label>
+              <nz-input-group>
+                <span class="text-blue">{{formData.value.slThocNhap|number:'1.0-3':'vi_VN'}}</span>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-control>
+              <nz-form-label [nzNoColon]="true" class="label-color-kh">KL gạo xuất theo chỉ tiêu KH (tấn)
+              </nz-form-label>
+              <nz-input-group>
+                <span class="text-blue">{{formData.value.slGaoXuat|number:'1.0-3':'vi_VN'}}</span>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-control>
+              <nz-form-label [nzNoColon]="true" class="label-color-kh">KL thóc xuất theo chỉ tiêu KH (tấn)
+              </nz-form-label>
+              <nz-input-group>
+                <span class="text-blue">{{formData.value.slThocXuat|number:'1.0-3':'vi_VN'}}</span>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
         </div>
       </div>
     </form>
