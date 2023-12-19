@@ -608,7 +608,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     if (this.isViewDetail) {
       return !(this.formData.get('trangThai').value == STATUS.DA_DUYET_LDV && this.userService.isAccessPermisson("NHDTQG_PTDT_DCKHLCNT_BANHANH_TUCHOI_TC"));
     }
-    return true;
+    return this.isViewDetail;
   }
 
   async getDataChiTieu() {
