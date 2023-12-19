@@ -24,7 +24,10 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">Phân loại</nz-form-label>
             <nz-form-control>
-              <input nz-input formControlName="classify" [readonly]="isView" />
+              <!-- <input nz-input formControlName="classify" [readonly]="isView" /> -->
+              <nz-select formControlName="classify" nzAllowClear>
+                <nz-option *ngFor="let p of dsPLTT" [nzValue]="p.giaTri" [nzLabel]="p.giaTri"></nz-option>
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
