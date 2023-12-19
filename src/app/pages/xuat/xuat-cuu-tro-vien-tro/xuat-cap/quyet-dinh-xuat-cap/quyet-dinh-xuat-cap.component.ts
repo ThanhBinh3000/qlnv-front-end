@@ -118,6 +118,12 @@ export class QuyetDinhXuatCapComponent extends Base2Component implements OnInit 
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   };
+  getSlGaoChuyenXuatCap(data: any): number {
+    if (data.loaiVthh === LOAI_HANG_DTQG.GAO) {
+      return data.soLuongXuatCap
+    }
+    return null
+  }
   openQdPdModal(id: number) {
     this.idQdPd = id;
     this.openQdPd = true;

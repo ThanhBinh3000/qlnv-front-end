@@ -522,7 +522,7 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
     body.dsGtReq = this.listOfData;
     body.ccXdgReq = [...this.baoGiaThiTruongList, ...this.canCuKhacList];
     let res = null;
-    if (this.formData.value.tongMucDtDx > this.formData.value.tongMucDt) {
+    if (this.formData.value.tongMucDt > this.formData.value.tongMucDtDx) {
       await this.modal.confirm({
         nzClosable: false,
         nzTitle: "Xác nhận",
@@ -973,13 +973,14 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
 
   async danhSachGthauTruot($event) {
     $event.stopPropagation();
-    if (this.formData.value.loaiVthh == null) {
+    if (this.formData.value.loaiVthh == null || this.formData.value.loaiVthh == '02') {
       this.notification.error(MESSAGE.ERROR, "Vui lòng chọn loại hàng DTQG.");
       return;
     }
     let body = {
       loaiVthh: this.formData.value.loaiVthh,
       cloaiVthh: this.formData.value.cloaiVthh,
+      namKhoach: this.formData.value.namKhoach,
     }
     await this.dauThauService.danhSachGthauTruot(body).then((res) => {
       if (res.msg == MESSAGE.SUCCESS) {

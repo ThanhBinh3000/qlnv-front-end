@@ -3,3 +3,10 @@
   font-weight: 500;
   font-size: 12px;
 }
+
+.modal__content {
+  max-height: calc(100vh - 150px);
+  padding-left: 15px;
+  padding-right: 15px;
+  overflow-y: auto;
+}

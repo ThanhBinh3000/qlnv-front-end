@@ -285,6 +285,12 @@
 
     </nz-collapse>
   </nz-card>
+  <div nz-col class="cangiua group-button-search" *ngIf="isVthhVatuThietBi()">
+    <button type="button" class="btn btn-main" (click)="openVttbModal()">
+      <i class="icon htvbdh_richtextconverter"></i>
+      <span>Xem quyết định phê duyệt cứu trợ viện trợ theo Cục DTNN KV</span>
+    </button>
+  </div>
   <div class="mt16 flex-card p-lr16">
     <ng-container *ngIf="formData.value.type == 'TH'">
       <div class="header header-green-background mg-t-16">
@@ -352,7 +358,10 @@
               <div nz-row [nzGutter]="24">
                 <div nz-col>
                   <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">Tổng số lượng<br />đề xuất cứu trợ</nz-form-label>
+                    <nz-form-label [nzNoColon]="true">
+                      <span *ngIf="!isVthhGao()">Tổng số lượng<br />đề xuất cứu trợ</span>
+                      <span *ngIf="isVthhGao()">Tổng số lượng gạo<br />giao Cục thực hiện</span>
+                    </nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
                       <span style="color: #001CFF"><strong>{{tongSoLuongDx|number:globals.numberFormat:globals.locale}}
                           {{formData.value.donViTinh? formData.value.donViTinh : ""}}</strong></span>
@@ -361,7 +370,7 @@
                 </div>
                 <div nz-col *ngIf="isVthhGao()">
                   <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">SL đề xuất cứu trợ<br />chuyển sang xuất cấp</nz-form-label>
+                    <nz-form-label [nzNoColon]="true">SL gạo đề xuất <br />gia công từ thóc</nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
                       <span
                         style="color: red;"><strong>{{tongSoLuongChuyenCapThocDx|number:globals.numberFormat:globals.locale}}
@@ -394,22 +403,18 @@
                         <th rowspan="2">Nhu cầu cứu trợ</th>
                       </ng-container>
                       <ng-container *ngIf="isVthhVatuThietBi()">
-                        <th rowspan="2">Loại hàng DTQG</th>
-                        <th colspan="2">Chủng loại hàng DTQG</th>
+                        <th rowspan="2">Hàng - chủng loại <br />hàng DTQG</th>
+                        <th rowspan="2">ĐVT</th>
                       </ng-container>
                       <th colspan="3">Cục DTNN KV</th>
-                      <th rowspan="2">SL xuất cứu<br />trợ đề xuất</th>
+                      <th rowspan="2" *ngIf="!isVthhGao()">SL xuất cứu<br />trợ đề xuất</th>
+                      <th rowspan="2" *ngIf="isVthhGao()">SL gạo giao <br />Cục thực hiện</th>
                       <ng-container *ngIf="isVthhGao()">
                         <!-- <th rowspan="2">Nhu cầu cứu trợ</th> -->
-                        <th rowspan="2">SL gạo cần chuyển<br />xuất cấp thóc</th>
+                        <th rowspan="2">SL gạo gia<br />công từ thóc</th>
                       </ng-container>
                     </tr>
                     <tr>
-                      <ng-container *ngIf="isVthhVatuThietBi()">
-                        <th>Chủng loại hàng</th>
-                        <th>ĐVT</th>
-                        <!-- <th>Tồn kho</th> -->
-                      </ng-container>
                       <th>Cục DTNN KV</th>
                       <th>Năm nhập kho</th>
                       <th>Tồn kho</th>
@@ -506,34 +511,47 @@
                               <td></td>
                               <td></td>
                               <td></td>
-                              <td>{{lv1.tenLoaiVthh}}</td>
-                              <td></td>
-                              <td></td>
+                              <td>{{lv1.tenVthh}}</td>
+                              <td>{{lv1.donViTinh}}</td>
                               <!-- <td class="text-right">
                                   <strong>{{lv1.tonKhoDvi|number:globals.numberFormat:globals.locale}}</strong>
                                 </td> -->
                               <td></td>
                               <td></td>
-                              <td class="text-right">
+                              <td></td>
+                              <td class="text-right bold">
                                 <strong>{{lv1.soLuongDx|number:globals.numberFormat:globals.locale}}</strong>
                               </td>
                             </tr>
-                            <ng-container *ngIf="expandSetStringCache.has(item.idVirtual)">
-                              <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
+                            <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
+                              <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <!-- <td class="text-right">
+                                      {{lv2.tonKhoDvi|number:globals.numberFormat:globals.locale}}</td> -->
+                                <td>{{lv2.tenDvi}}</td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-right bold">
+                                  <strong>{{lv2.soLuongDx|number:globals.numberFormat:globals.locale}}</strong>
+                                </td>
+                              </tr>
+                              <ng-container *ngFor="let lv3 of lv2.childData,let i3=index">
                                 <tr>
                                   <td></td>
                                   <td></td>
                                   <td></td>
                                   <td></td>
-                                  <td>{{lv2.tenCloaiVthh}}</td>
-                                  <td>{{lv2.donViTinh}}</td>
-                                  <!-- <td class="text-right">
-                                      {{lv2.tonKhoDvi|number:globals.numberFormat:globals.locale}}</td> -->
-                                  <td>{{lv2.tenDvi}}</td>
+                                  <td></td>
+                                  <td></td>
+                                  <td>{{lv3.namNhap}}</td>
                                   <td class="text-right">
-                                    {{lv2.tonKhoDvi|number:globals.numberFormat:globals.locale}}</td>
+                                    {{lv3.tonKhoDvi|number:globals.numberFormat:globals.locale}}</td>
                                   <td style="height: 31.5px" class="text-right">
-                                    {{lv2.soLuongDx|number:globals.numberFormat:globals.locale}}
+                                    {{lv3.soLuongDx|number:globals.numberFormat:globals.locale}}
                                   </td>
                                 </tr>
                               </ng-container>
@@ -563,7 +581,10 @@
             <div nz-row [nzGutter]="24">
               <div nz-col>
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true">Tổng SL xuất cứu trợ<br />giao cục thực hiện</nz-form-label>
+                  <nz-form-label [nzNoColon]="true">
+                    <span *ngIf="!isVthhGao()">Tổng SL xuất cứu trợ<br />giao cục thực hiện</span>
+                    <span *ngIf="isVthhGao()">Tổng số lượng gạo<br />giao Cục thực hiện</span>
+                  </nz-form-label>
                   <nz-form-control nz-col [nzSpan]="24">
                     <span style="color: #001CFF"><strong>{{tongSoLuong|number:globals.numberFormat:globals.locale}}
                         {{formData.value.donViTinh? formData.value.donViTinh : ""}}</strong></span>
@@ -572,7 +593,7 @@
               </div>
               <div nz-col *ngIf="isVthhGao()">
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true">SL đề xuất cứu trợ<br />chuyển sang xuất cấp</nz-form-label>
+                  <nz-form-label [nzNoColon]="true">SL gạo đề xuất<br>gia công từ thóc</nz-form-label>
                   <nz-form-control nz-col [nzSpan]="24">
                     <span
                       style="color: red;"><strong>{{tongSoLuongChuyenCapThoc|number:globals.numberFormat:globals.locale}}
@@ -619,22 +640,18 @@
                       <th rowspan="2">Nhu cầu cứu trợ</th>
                     </ng-container>
                     <ng-container *ngIf="isVthhVatuThietBi()">
-                      <th rowspan="2">Loại hàng DTQG</th>
-                      <th colspan="2">Chủng loại hàng DTQG</th>
+                      <th rowspan="2">Hàng - chủng loại <br />hàng DTQG</th>
+                      <th rowspan="2">ĐVT</th>
                     </ng-container>
                     <th colspan="3">Cục DTNN KV</th>
-                    <th rowspan="2">SL xuất cứu trợ<br />giao Cục thực hiện</th>
+                    <th rowspan="2" *ngIf="!isVthhGao()">SL xuất cứu trợ<br />giao Cục thực hiện</th>
+                    <th rowspan="2" *ngIf="isVthhGao()">SL gạo giao <br />Cục thực hiện</th>
                     <ng-container *ngIf="isVthhGao()">
                       <!-- <th rowspan="2">Nhu cầu cứu trợ</th> -->
-                      <th rowspan="2">SL gạo cần chuyển<br />xuất cấp thóc</th>
+                      <th rowspan="2">SL gạo gia<br />công từ thóc</th>
                     </ng-container>
                   </tr>
                   <tr>
-                    <ng-container *ngIf="isVthhVatuThietBi()">
-                      <th>Chủng loại hàng</th>
-                      <th>ĐVT</th>
-                      <!-- <th>Tồn kho</th> -->
-                    </ng-container>
                     <th>Cục DTNN KV</th>
                     <th>Năm nhập kho</th>
                     <th>Tồn kho</th>
@@ -734,43 +751,53 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td>{{lv1.tenLoaiVthh}}</td>
-                            <td></td>
-                            <td></td>
+                            <td>{{lv1.tenVthh}}</td>
+                            <td>{{lv1.donViTinh}}</td>
                             <!-- <td class="text-right">
                                 <strong>{{lv1.tonKhoDvi|number:globals.numberFormat:globals.locale}}</strong>
                               </td> -->
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td class="text-right">
                               <strong>{{lv1.soLuong|number:globals.numberFormat:globals.locale}}</strong>
                             </td>
                           </tr>
-                          <ng-container *ngIf="expandSetString.has(item.idVirtual)">
-                            <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
+                          <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
+                            <tr>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <!-- <td class="text-right">
+                                    {{lv2.tonKhoDvi|number:globals.numberFormat:globals.locale}}</td> -->
+                              <!--                              <td>-->
+                              <!--                                <nz-input-number nzSize="small" [(ngModel)]="lv2.soLuong"></nz-input-number>-->
+                              <!--                              </td>-->
+                              <!--                              <td></td>-->
+                              <td>{{lv2.tenDvi}}</td>
+                              <td></td>
+                              <td></td>
+                              <td class="text-right bold">
+                                <strong>{{lv2.soLuong|number:globals.numberFormat:globals.locale}}</strong>
+                              </td>
+                            </tr>
+                            <ng-container *ngFor="let lv3 of lv2.childData,let i3=index">
                               <tr>
                                 <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td>{{lv2.tenCloaiVthh}}</td>
-                                <td>{{lv2.donViTinh}}</td>
-                                <!-- <td class="text-right">
-                                    {{lv2.tonKhoDvi|number:globals.numberFormat:globals.locale}}</td> -->
-                                <!--                              <td>-->
-                                <!--                                <nz-input-number nzSize="small" [(ngModel)]="lv2.soLuong"></nz-input-number>-->
-                                <!--                              </td>-->
-                                <!--                              <td></td>-->
-                                <td>{{lv2.tenDvi}}</td>
+                                <td></td>
+                                <td></td>
+                                <td>{{lv3.namNhap}}</td>
                                 <td class="text-right">
-                                  {{lv2.tonKhoDvi|number:globals.numberFormat:globals.locale}}
+                                  {{lv3.tonKhoDvi|number:globals.numberFormat:globals.locale}}
                                 </td>
                                 <td>
-                                  <!-- <nz-input-number nzSize="small"
-                                      (ngModelChange)="tinhTongVthh(lv2,$event, lv1, item)" [(ngModel)]="lv2.soLuong"
-                                      [nzDisabled]="isView"></nz-input-number> -->
                                   <input currencyMask class="money-input"
-                                    (ngModelChange)="tinhTongVthh(lv2,$event, lv1, item)" [(ngModel)]="lv2.soLuong"
+                                    (ngModelChange)="tinhTongVthh(lv3,$event, lv2, lv1, item)" [(ngModel)]="lv3.soLuong"
                                     [readOnly]="isDisabled()" [options]="amount1" />
 
                                 </td>
@@ -831,7 +858,7 @@
                       <th rowspan="2" style="width: 35px">STT</th>
                       <th rowspan="2">Địa phương/cơ quan/<br />đơn vị nhận cứu trợ</th>
                       <th colspan="3">Cục DTNN KV</th>
-                      <th rowspan="2">SL gạo cần chuyển<br />xuất cấp thóc</th>
+                      <th rowspan="2">SL gạo gia<br />công từ thóc</th>
                       <th rowspan="2" *ngIf="!isView">Hành động</th>
                     </tr>
                     <tr>
@@ -935,7 +962,7 @@
                   <nz-form-item>
                     <nz-form-label [nzNoColon]="true">
                       <span *ngIf="!isVthhGao()">Tổng số lượng<br />đề xuất cứu trợ</span>
-                      <span *ngIf="isVthhGao()">Tổng số lượng gạo giao Cục thực hiện</span>
+                      <span *ngIf="isVthhGao()">Tổng số lượng gạo<br />giao Cục thực hiện</span>
                     </nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
                       <span style="color: #001CFF"><strong>{{tongSoLuongDx|number:globals.numberFormat:globals.locale}}
@@ -1143,7 +1170,7 @@
                   <nz-form-item>
                     <nz-form-label [nzNoColon]="true">
                       <span *ngIf="!isVthhGao()">Tổng số lượng<br />đề xuất cứu trợ</span>
-                      <span *ngIf="isVthhGao()">Tổng số lượng gạo giao Cục thực hiện</span></nz-form-label>
+                      <span *ngIf="isVthhGao()">Tổng số lượng gạo<br />giao Cục thực hiện</span></nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
                       <span style="color: #001CFF"><strong>{{tongSoLuong|number:globals.numberFormat:globals.locale}}
                           {{formData.value.donViTinh? formData.value.donViTinh : ""}}</strong></span>
@@ -1285,6 +1312,8 @@
                         <td></td>
                         <td></td>
                         <td></td>
+                        <td></td>
+                        <td></td>
                       </tr>
                       <ng-container *ngIf="expandSetString.has(item.idVirtual)">
                         <ng-container *ngFor="let lv1 of item.childData,let i1=index">
@@ -1293,6 +1322,8 @@
                             <td></td>
                             <td></td>
                             <td>{{lv1.tenLoaiVthh}}</td>
+                            <td></td>
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -1306,6 +1337,8 @@
                               <td></td>
                               <td></td>
                               <td></td>
+                              <td></td>
+                              <td></td>
                               <td>{{lv2.tenCloaiVthh}}</td>
                               <td>{{lv2.donViTinh}}</td>
                               <td>{{lv2.namNhap}}</td>
@@ -1314,6 +1347,8 @@
                             </tr>
                             <ng-container *ngFor="let lv3 of lv2.childData,let i3=index">
                               <tr>
+                                <td></td>
+                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -1578,6 +1613,78 @@
       Xuất .docx
     </button>
     <button nz-button (click)="closeDlg()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }" nzMaskClosable="true"
+  [(nzVisible)]="openViewVttb" (nzOnCancel)="closeVttbModal()"
+  nzTitle="Chi tiết quyết định phê duyệt phương án xuất cứu trợ, viện trợ">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <nz-table #vttbTable [nzData]="phuongAnViewVttb" class="nowrap table-chi-tiet" nzBordered
+      [nzFrontPagination]="false" [nzShowPagination]="false">
+      <thead>
+        <tr>
+          <th></th>
+          <th>STT</th>
+          <th>Cục DTNN KV</th>
+          <th>Hàng - chủng loại hàng DTQG</th>
+          <th>Đơn vị tính</th>
+          <th>Năm nhập kho</th>
+          <th>Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
+          <th>SL xuất cứu trợ<br />giao Cục thực hiện</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let item of vttbTable.data, let i=index">
+          <tr>
+            <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
+              [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"
+              class="text-center"></td>
+            <td>{{i + 1}}</td>
+            <td>{{item.tenDvi}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <!-- <td></td> -->
+            <td></td>
+            <td></td>
+          </tr>
+          <ng-container *ngIf="expandSetString.has(item.idVirtual)">
+            <ng-container *ngFor="let lv1 of item.childData, let i1=index">
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{lv1.tenVthh}}</td>
+                <td>{{lv1.donViTinh}}</td>
+                <td></td>
+                <!-- <td></td> -->
+                <td></td>
+                <td></td>
+              </tr>
+              <ng-container *ngFor="let lv2 of lv1.childData, let i2=index">
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>{{lv2.namNhap}}</td>
+                  <!-- <td>{{lv2.tonKhoDvi|number:globals.numberFormat:globals.locale}}</td> -->
+                  <td>{{lv2.noiDungDx}}</td>
+                  <td class="text-right">{{lv2.soLuong |number:globals.numberFormat:globals.locale}}</td>
+                </tr>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </tbody>
+    </nz-table>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeVttbModal()" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>

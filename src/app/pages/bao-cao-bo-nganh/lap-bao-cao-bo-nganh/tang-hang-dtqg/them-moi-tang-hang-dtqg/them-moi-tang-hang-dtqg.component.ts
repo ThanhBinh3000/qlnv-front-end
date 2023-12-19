@@ -223,6 +223,7 @@ export class ThemMoiTangHangDtqgComponent extends Base2Component implements OnIn
     } else {
       // body.tgianTao = formatDate(this.now, "dd-MM-yyyy", 'en-US')
       res = await this.bcBnTt145Service.create(body);
+      this.idInput = res.data.id
     }
     if (res.msg == MESSAGE.SUCCESS) {
       if (isBanHanh) {
@@ -304,7 +305,7 @@ export class ThemMoiTangHangDtqgComponent extends Base2Component implements OnIn
       if (type) {
         const sum = arr.reduce((prev, cur) => {
           if (cur[column]) {
-            prev += Number.parseInt(cur[column]);
+            prev += Number.parseFloat(cur[column]);
           }
           return prev;
         }, 0);

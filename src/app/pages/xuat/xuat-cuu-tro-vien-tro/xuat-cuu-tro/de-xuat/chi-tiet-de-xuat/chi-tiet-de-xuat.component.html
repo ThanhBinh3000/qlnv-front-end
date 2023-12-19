@@ -337,10 +337,10 @@
       </div>
     </div>
     <!--    CHI TIET PA TONG CUC #1-->
-    <ng-container *ngIf="formData.value.tenVthh !== 'Vật tư thiết bị' ">
+    <ng-container *ngIf="formData.value.tenVthh !== 'Vật tư thiết bị'; else viewVttb ">
       <form nzLayout="vertical" nz-form [formGroup]="formData">
         <div nz-row [nzGutter]="24">
-          <div nz-col [nzSpan]="6">
+          <div nz-col [nzSpan]="12">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true">
                 {{isTongCuc() ? "Tổng SL giao Cục thực hiện": "Tổng SL đề xuất cứu trợ"}}</nz-form-label>
@@ -351,7 +351,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="8" *ngIf="isVthhGao()">
+          <div nz-col [nzSpan]="12" *ngIf="isVthhGao()">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true">SL đề xuất cứu trợ trong kho không đáp ứng chuyển sang xuất
                 cấp</nz-form-label>
@@ -365,6 +365,16 @@
         </div>
       </form>
     </ng-container>
+    <ng-template #viewVttb>
+      <div nz-col class="cangiua group-button-search">
+        <div>
+          <button type="button" class="btn btn-main" (click)="openVttbModal()">
+            <i class="icon htvbdh_richtextconverter"></i>
+            <span>Xem phương án xuất cứu trợ viện trợ theo Cục DTNN KV</span>
+          </button>
+        </div>
+      </div>
+    </ng-template>
     <ng-container>
       <div class="mt-16">
         <ng-container *ngIf="formData.value.tenVthh !== 'Vật tư thiết bị'">
@@ -587,14 +597,13 @@
                 <th class="text-center" [rowspan]="2"></th>
                 <th class="text-center" [rowspan]="2" style="width: 35px">STT</th>
                 <th class="text-center" [rowspan]="2">Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
-                <th class="text-center" [rowspan]="2">Loại hàng DTQG</th>
+                <th class="text-center" [rowspan]="2">Loại hàng - chủng loại hàng DTQG</th>
                 <ng-container *ngIf="isTongCuc()">
-                  <th class="text-center" [colspan]="2">Chủng loại hàng DTQG</th>
+                  <th class="text-center" [rowspan]="2">ĐVT</th>
                   <th class="text-center" [colspan]="3">Giao Cục DTNN KV thực hiện</th>
                   <th class="text-center" [rowspan]="2">SL xuất cứu trợ giao Cục thực hiện</th>
                 </ng-container>
                 <ng-container *ngIf="!isTongCuc()">
-                  <th class="text-center">Chủng loại hàng</th>
                   <th class="text-center">Năm nhập kho</th>
                   <th class="text-center">SL xuất cứu trợ đề xuất</th>
                   <th class="text-center">ĐVT</th>
@@ -605,8 +614,6 @@
               </tr>
               <ng-container *ngIf="isTongCuc()">
                 <tr>
-                  <th class="text-center">Chủng loại hàng</th>
-                  <th class="text-center">ĐVT</th>
                   <!-- <th class="text-center">Tồn kho</th> -->
                   <th class="text-center">Cục DTNN KV</th>
                   <th class="text-center">Năm nhập kho</th>
@@ -630,7 +637,6 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
                     <ng-container *ngIf="!isView">
                       <td class="text-center">
                         <a>
@@ -650,15 +656,14 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td>{{lv1.tenLoaiVthh}}</td>
-                        <td></td>
-                        <td></td>
+                        <td>{{lv1.tenVthh}}</td>
+                        <td>{{lv1.donViTinh}}</td>
                         <!-- <td></td> -->
                         <td></td>
                         <!-- <td class="text-right">{{lv1.tonKhoLoaiVthh |number:globals.numberFormat:globals.locale}}</td> -->
                         <td></td>
                         <td></td>
-                        <td class="text-right">{{lv1.soLuong |number:globals.numberFormat:globals.locale}}</td>
+                        <td class="text-right bold">{{lv1.soLuong |number:globals.numberFormat:globals.locale}}</td>
                         <ng-container *ngIf="!isView">
                           <td class="text-center">
                             <a>
@@ -679,12 +684,11 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td>{{lv2.tenCloaiVthh}}</td>
-                            <td>{{lv2.donViTinh}}</td>
+                            <td></td>
                             <td>{{lv2.tenDvi}}</td>
                             <td></td>
                             <td></td>
-                            <td class="text-right">{{lv2.soLuong |number:globals.numberFormat:globals.locale}}</td>
+                            <td class="text-right bold">{{lv2.soLuong |number:globals.numberFormat:globals.locale}}</td>
                             <ng-container *ngIf="!isView">
                               <td class="text-center">
                                 <!-- <a>
@@ -703,7 +707,6 @@
                           </tr>
                           <ng-container *ngFor="let lv3 of lv2.childData,let i3=index">
                             <tr class="level-3">
-                              <td></td>
                               <td></td>
                               <td></td>
                               <td></td>
@@ -858,7 +861,7 @@
             </nz-form-control>
           </nz-form-item>
           <nz-form-item *ngIf="isVthhGao()">
-            <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Nhập tổng nhu cầu xuất cho đơn vị nhận
+            <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Nhu cầu xuất cứu trợ, viện trợ
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <div nz-row [nzGutter]="48">
@@ -907,7 +910,7 @@
               </nz-form-item>
             </ng-container>
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Cục DTNN</nz-form-label>
+              <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Cục DTNN KV</nz-form-label>
               <nz-form-control [nzErrorTip]="'Vui lòng nhập đơn vị'">
                 <div nz-row [nzGutter]="48">
                   <div nz-col [nzSpan]="24">
@@ -938,7 +941,7 @@
             </nz-form-item>
             <nz-form-item>
               <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">
-                {{isTongCuc() ? 'Số lượng giao cục' : 'Số lượng đề xuất'}}</nz-form-label>
+                {{isTongCuc() ? 'Số lượng giao Cục DTNN KV' : 'Số lượng đề xuất'}}</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <div nz-row [nzGutter]="48">
                   <div nz-col [nzSpan]="16">
@@ -982,6 +985,78 @@
       Xuất .docx
     </button>
     <button nz-button (click)="closeDlg()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }" nzMaskClosable="true"
+  [(nzVisible)]="openViewVttb" (nzOnCancel)="closeVttbModal()" nzTitle="Chi tiết phương án xuất cứu trợ, viện trợ">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <nz-table #vttbTable [nzData]="phuongAnViewVttb" class="nowrap table-chi-tiet" nzBordered
+      [nzFrontPagination]="false" [nzShowPagination]="false">
+      <thead>
+        <tr>
+          <th></th>
+          <th>STT</th>
+          <th>Cục DTNN KV</th>
+          <th>Hàng - chủng loại hàng DTQG</th>
+          <th>Đơn vị tính</th>
+          <th>Năm nhập kho</th>
+          <!-- <th>Tồn kho</th> -->
+          <th>Địa phương/cơ quan/đơn vị nhận cứu trợ</th>
+          <th>SL xuất cứu trợ<br />giao Cục thực hiện</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let item of vttbTable.data, let i=index">
+          <tr>
+            <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
+              [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"
+              class="text-center"></td>
+            <td>{{i + 1}}</td>
+            <td>{{item.tenDvi}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <!-- <td></td> -->
+            <td></td>
+            <td></td>
+          </tr>
+          <ng-container *ngIf="expandSetString.has(item.idVirtual)">
+            <ng-container *ngFor="let lv1 of item.childData, let i1=index">
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{lv1.tenVthh}}</td>
+                <td>{{lv1.donViTinh}}</td>
+                <td></td>
+                <!-- <td></td> -->
+                <td></td>
+                <td></td>
+              </tr>
+              <ng-container *ngFor="let lv2 of lv1.childData, let i2=index">
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>{{lv2.namNhap}}</td>
+                  <!-- <td>{{lv2.tonKhoDvi}}</td> -->
+                  <td>{{lv2.noiDung}}</td>
+                  <td class="text-right">{{lv2.soLuong |number:globals.numberFormat:globals.locale}}</td>
+                </tr>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </tbody>
+    </nz-table>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeVttbModal()" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>

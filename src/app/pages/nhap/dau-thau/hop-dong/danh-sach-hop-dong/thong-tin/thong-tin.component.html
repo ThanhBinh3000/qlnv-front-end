@@ -252,7 +252,7 @@
               </div>
               <div nz-col [nzSpan]="6">
                 <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true">Thời gian giao hàng thực tế</nz-form-label>
+                  <nz-form-label [nzNoColon]="true">Thời gian giao hàng thực tế</nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-date-picker [nzDisabled]="isDisableForm()" nzFormat="dd/MM/yyyy" (nzOnOpenChange)="onChangeTgianGiaoThucTe()"
                                     nzPlaceHolder="Thời gian giao hàng thực tế" formControlName="tgianGiaoThucTe">
@@ -278,7 +278,7 @@
               </div>
               <div nz-col [nzSpan]="6">
                 <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true"> Số tiền tính phạt</nz-form-label>
+                  <nz-form-label [nzNoColon]="true"> Số tiền tính phạt</nz-form-label>
                   <nz-form-control>
                     <input nz-input formControlName="soTienTinhPhat" [readonly]="isDisableForm()"/>
                   </nz-form-control>
@@ -341,7 +341,7 @@
               </div>
               <div nz-col [nzSpan]="24">
                 <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true">
+                  <nz-form-label [nzNoColon]="true">
                     Căn cứ pháp lý
                   </nz-form-label>
                   <div class="list-file">
@@ -909,7 +909,7 @@
           </div>
           <div nz-col [nzSpan]="12">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true" nzRequired>Mô tả hàng hóa</nz-form-label>
+              <nz-form-label [nzNoColon]="true">Mô tả hàng hóa</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
               <textarea rows="3" class="search__input" nz-input formControlName="moTaHangHoa"
                         [readOnly]="isView"></textarea>

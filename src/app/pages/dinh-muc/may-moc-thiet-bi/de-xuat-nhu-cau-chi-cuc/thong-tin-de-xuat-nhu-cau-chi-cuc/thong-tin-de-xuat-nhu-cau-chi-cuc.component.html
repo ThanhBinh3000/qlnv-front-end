@@ -95,12 +95,10 @@
         <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-control>
-              <nz-form-label [nzNoColon]="true" class="label-color-kh">Khối lượng gạo đang bảo quản (tấn)
+              <nz-form-label [nzNoColon]="true" class="label-color-kh">KL gạo đang bảo quản (tấn)
               </nz-form-label>
               <nz-input-group>
-                <nz-input-number [nzDisabled]="isView || formData.value.soQdGiaoCt"  [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzSize]="'small'" nz-input
-                                 formControlName="slGaoDangBaoQuan" [nzMin]="0">
-                </nz-input-number>
+                <span class="text-blue">{{formData.value.slGaoDangBaoQuan|number:'1.0-3':'vi_VN'}}</span>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -108,12 +106,54 @@
         <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-control>
-              <nz-form-label [nzNoColon]="true" class="label-color-kh">Khối lượng thóc đang bảo quản (tấn)
+              <nz-form-label [nzNoColon]="true" class="label-color-kh">KL thóc đang bảo quản (tấn)
               </nz-form-label>
               <nz-input-group>
-                <nz-input-number [nzDisabled]="isView || formData.value.soQdGiaoCt" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzSize]="'small'" nz-input
-                                 formControlName="slThocDangBaoQuan" [nzMin]="0">
-                </nz-input-number>
+                <span class="text-blue">{{formData.value.slThocDangBaoQuan|number:'1.0-3':'vi_VN'}}</span>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-control>
+              <nz-form-label [nzNoColon]="true" class="label-color-kh">KL gạo nhập theo chỉ tiêu KH (tấn)
+              </nz-form-label>
+              <nz-input-group>
+                <span class="text-blue">{{formData.value.slGaoNhap|number:'1.0-3':'vi_VN'}}</span>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-control>
+              <nz-form-label [nzNoColon]="true" class="label-color-kh">KL thóc nhập theo chỉ tiêu KH (tấn)
+              </nz-form-label>
+              <nz-input-group>
+                <span class="text-blue">{{formData.value.slThocNhap|number:'1.0-3':'vi_VN'}}</span>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-control>
+              <nz-form-label [nzNoColon]="true" class="label-color-kh">KL gạo xuất theo chỉ tiêu KH (tấn)
+              </nz-form-label>
+              <nz-input-group>
+                <span class="text-blue">{{formData.value.slGaoXuat|number:'1.0-3':'vi_VN'}}</span>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-control>
+              <nz-form-label [nzNoColon]="true" class="label-color-kh">KL thóc xuất theo chỉ tiêu KH (tấn)
+              </nz-form-label>
+              <nz-input-group>
+                <span class="text-blue">{{formData.value.slThocXuat|number:'1.0-3':'vi_VN'}}</span>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -121,197 +161,197 @@
       </div>
     </form>
   </nz-card>
-  <div class="header header-green-background mg-t-10">
-    <div class="header-text">
-      <div class="title-chi-tieu">
-        <span class="text-uppercase font-weight-bold">CHI TIẾT ĐỀ XUẤT</span>
-      </div>
-    </div>
-  </div>
-  <nz-table class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
-            [nzShowPagination]="false" nzBordered>
-    <thead>
-    <tr>
-      <th rowSpan="2" nzWidth="40px">STT</th>
-      <th rowSpan="2" nzWidth="200px">Tên tài sản</th>
-      <th rowSpan="2" nzWidth="100px">Đơn vị tính</th>
-      <th colspan="2" width="200px" nzAlign="center">SL lương thực nhập <br /> theo chỉ tiêu KH</th>
-      <th rowSpan="2" nzWidth="100px">SL sử dụng được <br /> tại thời điểm đề xuất (1)</th>
-      <th rowSpan="2" nzWidth="100px">Số lượng sẽ nhập <br> thêm năm trước (2)</th>
-      <th rowSpan="2" nzWidth="100px">Tổng cộng (3=1+2)</th>
-      <th rowSpan="2" nzWidth="100px">SL định mức theo <br> chỉ tiêu KH năm (4)</th>
-      <th colSpan="2" nzWidth="150px">Chênh lệch</th>
-      <th colSpan="3" nzWidth="200px">Nhu cầu trang bị đề xuất</th>
-      <th rowSpan="2" nzWidth="200px">Ghi chú</th>
-      <th rowSpan="2" nzWidth="140px" *ngIf="!isView">Hành động</th>
-    </tr>
-    <tr>
-      <th width="100px">Gạo tẻ (1)</th>
-      <th width="100px">Thóc tẻ (2)</th>
-      <th nzWidth="75px">Còn thiếu (5=4-3)</th>
-      <th nzWidth="75px">Thừa (6=3-4)</th>
-      <th nzWidth="100px">Số lượng (7)</th>
-      <th nzWidth="100px">Đơn giá (trđ) <br/> (8)</th>
-      <th nzWidth="100px">Thành tiền (trđ)<br/>(9=7*8) </th>
-    </tr>
-    <tr *ngIf="!isView">
-      <th></th>
-      <th>
-        <nz-select [(ngModel)]="rowItem.maTaiSan" [nzDisabled]="isView" (ngModelChange)="changeDm($event)"
-                   nzAllowClear="true">
-          <nz-option *ngFor="let p of listDmTaiSan" [nzValue]="p.maTaiSan" [nzLabel]="p.tenTaiSan">
-          </nz-option>
-        </nz-select>
-      </th>
-      <th>
-        <input type="text" [(ngModel)]="rowItem.donViTinh" readonly nz-input/>
-      </th>
-      <th>
-        <nz-input-number [(ngModel)]="rowItem.slChiTieuGao" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                         nzDisabled [nzMin]="0" [nzParser]="globals.parser"></nz-input-number>
-      </th>
-      <th>
-        <nz-input-number [(ngModel)]="rowItem.slChiTieuThoc" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                         nzDisabled [nzMin]="0" [nzParser]="globals.parser"></nz-input-number>
-      </th>
-      <th>
-        <nz-input-number  [(ngModel)]="rowItem.slHienCo" [nzSize]="'small'" [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0"
-                          [nzParser]="globals.parser"></nz-input-number>
-      </th>
-      <th>
-        <nz-input-number  [(ngModel)]="rowItem.slNhapThem" [nzSize]="'small'" [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0"
-                          [nzParser]="globals.parser"></nz-input-number>
-      </th>
-      <th>
-        <nz-input-number  [(ngModel)]="rowItem.slNhapThem + rowItem.slHienCo" [nzSize]="'small'" [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0"
-                          [nzParser]="globals.parser"></nz-input-number>
-      </th>
-      <th>
-        <nz-input-number  [(ngModel)]="rowItem.slTieuChuan" [nzSize]="'small'" [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0"
-                          [nzParser]="globals.parser"></nz-input-number>
-      </th>
-      <th>
-        <nz-input-number  [(ngModel)]="rowItem.chenhLechThieu" [nzSize]="'small'" [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0"
-                          [nzParser]="globals.parser"></nz-input-number>
-      </th>
-      <th>
-        <nz-input-number  [(ngModel)]="rowItem.chenhLechThua" [nzSize]="'small'" [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0"
-                          [nzParser]="globals.parser"></nz-input-number>
-      </th>
-      <th>
-        <nz-input-number  [(ngModel)]="rowItem.soLuong" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzMin]="0" [nzMax]="rowItem.slTieuChuan ? rowItem.slTieuChuan : 9999999999999"
-                          [nzParser]="globals.parser"></nz-input-number>
-      </th>
-      <th>
-        <nz-input-number  [(ngModel)]="rowItem.donGiaTd" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter" [nzMin]="0"
-                          [nzParser]="globals.parser"></nz-input-number>
-      </th>
-      <th>
-        <nz-input-number  [(ngModel)]="rowItem.soLuong * rowItem.donGiaTd" nzDisabled [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzMin]="0"
-                          [nzParser]="globals.parser"></nz-input-number>
-      </th>
-      <th>
-        <input type="text" [(ngModel)]="rowItem.ghiChu" nz-input/>
-      </th>
-      <th class="text-center" *ngIf="!isView">
-        <a (click)="themMoiCtiet()">
-          <i class="icon htvbdh_dau-cong"></i>
-        </a>
-        <a (click)="refresh()">
-          <i class="fa fa-refresh"></i>
-        </a>
-      </th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let data of dataTable; let idx = index">
-      <ng-container *ngIf="!dataEdit[idx].edit ; else editTemplate">
-        <td>{{idx + 1}}</td>
-        <td>{{data.tenTaiSan}}</td>
-        <td>{{data.donViTinh}}</td>
-        <td>{{data.slChiTieuGao | number : '1.0-1' : 'vi_VN'}}</td>
-        <td>{{data.slChiTieuThoc | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="text-right">{{data.slHienCo | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="text-right">{{data.slNhapThem | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="text-right">{{data.slHienCo + data.slNhapThem | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="text-right">{{data.slTieuChuan | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="text-right">{{data.chenhLechThieu | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="text-right">{{data.chenhLechThua | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="text-right">{{data.soLuong  | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="text-right">{{data.donGiaTd  | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="text-right">{{data.soLuong * data.donGiaTd    | number : '1.0-1' : 'vi_VN'}}</td>
-        <td>{{data.ghiChu}}</td>
-        <td class="text-center" *ngIf="!isView">
-          <a (click)="editRow(idx)">
-            <i class="fa fa-pencil" title="Sửa"></i>
-          </a>
-          <a (click)="deleteItem(idx)">
-            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-          </a>
-        </td>
-      </ng-container>
-      <ng-template #editTemplate>
-        <th></th>
-        <th>
-          <nz-select [(ngModel)]="dataEdit[idx].data.maTaiSan" [nzDisabled]="true"
-                     nzAllowClear="true" (ngModelChange)="changeDm($event)">
-            <nz-option *ngFor="let p of listDmTaiSan" [nzValue]="p.maTaiSan" [nzLabel]="p.tenTaiSan">
-            </nz-option>
-          </nz-select>
-        </th>
-        <th>
-          <input type="text" [(ngModel)]="dataEdit[idx].data.donViTinh" readonly nz-input/>
-        </th>
-        <th>
-          <nz-input-number  [(ngModel)]="dataEdit[idx].data.slHienCo" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter" [nzMin]="0"
-                            [nzParser]="globals.parser"></nz-input-number>
-        </th>
-        <th>
-          <nz-input-number  [(ngModel)]="dataEdit[idx].data.slNhapThem" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter" [nzMin]="0"
-                            [nzParser]="globals.parser"></nz-input-number>
-        </th>
-        <th>
-          <nz-input-number [nzMin]="0"  [(ngModel)]="dataEdit[idx].data.slNhapThem + dataEdit[idx].data.slHienCo" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter"
-                            [nzParser]="globals.parser"></nz-input-number>
-        </th>
-        <th>
-          <nz-input-number  [(ngModel)]="dataEdit[idx].data.slTieuChuan" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter" [nzMin]="0"
-                            [nzParser]="globals.parser"></nz-input-number>
-        </th>
-        <th>
-          <nz-input-number [nzMin]="0"  [(ngModel)]="dataEdit[idx].data.chenhLechThieu" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter"
-                            [nzParser]="globals.parser"></nz-input-number>
-       </th>
-        <th>
-          <nz-input-number [nzMin]="0"  [(ngModel)]="dataEdit[idx].data.chenhLechThua" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter"
-                            [nzParser]="globals.parser"></nz-input-number>
-        </th>
-        <th>
-          <nz-input-number [nzMin]="0"  [(ngModel)]="dataEdit[idx].data.soLuong" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzMax]="dataEdit[idx].data.slTieuChuan ? dataEdit[idx].data.slTieuChuan : 9999999999999"
-                            [nzParser]="globals.parser"></nz-input-number>
-        </th>
-        <th>
-          <nz-input-number [nzMin]="0"  [(ngModel)]="dataEdit[idx].data.donGiaTd" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter"
-                            [nzParser]="globals.parser"></nz-input-number>
-        </th>
-        <th>
-          <nz-input-number [nzMin]="0"  [(ngModel)]="dataEdit[idx].data.soLuong * rowItem.donGiaTd" nzDisabled [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                            [nzParser]="globals.parser"></nz-input-number>
-        </th>
-        <th>
-          <input type="text" [(ngModel)]="dataEdit[idx].data.ghiChu" nz-input/>
-        </th>
-        <td class="text-center" *ngIf="!isView">
-          <a class="save" (click)="saveDinhMuc(idx)">
-            <i class="fa fa-save"></i>
-          </a>
-          <a (click)="cancelEdit(idx)">
-            <i class="fa fa-ban do"></i> </a>
-        </td>
-      </ng-template>
-    </tr>
-    </tbody>
-  </nz-table>
+  <nz-collapse nzAccordion>
+    <nz-collapse-panel nzHeader="CHI TIẾT ĐỀ XUẤT" [nzActive]="true">
+      <nz-table class="wrap pd-10" [nzData]="dataTable" [nzFrontPagination]="false" style="overflow: auto"
+                [nzShowPagination]="false" nzBordered  [nzScroll]="dataTable && dataTable.length ? { x: '3200px' } : null">
+        <thead>
+        <tr>
+          <th class="text-center" rowSpan="2" width="40px">STT</th>
+          <th class="text-center" rowSpan="2" width="200px">Tên tài sản</th>
+          <th class="text-center" rowSpan="2" width="100px">Đơn vị tính</th>
+          <th class="text-center" colspan="3" width="500px" >Số lượng tối đa</th>
+          <th class="text-center" rowSpan="2" width="160px">SL sử dụng được <br /> tại thời điểm đề xuất (1)</th>
+          <th class="text-center" rowSpan="2" width="160px">Số lượng sẽ nhập <br> thêm năm trước (2)</th>
+          <th class="text-center" rowSpan="2" width="150px">Tổng cộng (3=1+2)</th>
+          <th class="text-center" rowSpan="2" width="150px">SL định mức theo <br> chỉ tiêu KH năm (4)</th>
+          <th class="text-center" colSpan="2" width="300px">Chênh lệch</th>
+          <th class="text-center" colSpan="3" width="500px">Nhu cầu trang bị đề xuất</th>
+          <th class="text-center" rowSpan="2">Ghi chú</th>
+          <th class="text-center" rowSpan="2" width="90px" nzRight>Hành động</th>
+        </tr>
+        <tr>
+          <th class="text-center">Căn cứ SL nhập, xuất</th>
+          <th class="text-center">VP Cục DTNN KV</th>
+          <th class="text-center">Chi cục DTNN</th>
+          <th class="text-center">Thiếu (5) = (4) - (3)</th>
+          <th class="text-center">Thừa (6) = (3) - (4)</th>
+          <th class="text-center">Số lượng (7)</th>
+          <th class="text-center">Đơn giá (trđ) (8)</th>
+          <th class="text-center">Thành tiền (trđ)<br/>(9) = (7) * (8) </th>
+        </tr>
+        <tr *ngIf="!isView">
+          <th></th>
+          <th>
+            <nz-select [(ngModel)]="rowItem.maTaiSan" [nzDisabled]="isView" (ngModelChange)="changeDm($event)"
+                       nzShowSearch>
+              <nz-option *ngFor="let p of listDmTaiSan" [nzValue]="p.maTaiSan" [nzLabel]="p.tenTaiSan">
+              </nz-option>
+            </nz-select>
+          </th>
+          <th>
+            <input type="text" [(ngModel)]="rowItem.donViTinh" readonly nz-input/>
+          </th>
+          <th class="text-center"><label nz-checkbox disabled [(ngModel)]="rowItem.isCanCu"></label></th>
+          <th class="text-center">{{rowItem.slVpCucKv | number : '1.0-1' : 'vi_VN'}} </th>
+          <th class="text-center" *ngIf="rowItem.isCanCu">{{rowItem.slChiCuc ? (rowItem.slChiCuc | number : '1.0-1' : 'vi_VN') : ''}}/{{rowItem.klChiCuc ? (rowItem.klChiCuc | number : '1.0-1' : 'vi_VN') + ' tấn lương thực' : ''}}  {{rowItem.tenLoaiHinh ? ' ('+ rowItem.tenLoaiHinh + ')' : ''}}</th>
+          <th class="text-center"  *ngIf="!rowItem.isCanCu">{{rowItem.slChiCuc | number : '1.0-1' : 'vi_VN'}} </th>
+          <th>
+            <nz-input-number  [(ngModel)]="rowItem.slHienCo" [nzSize]="'small'" [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0"
+                              [nzParser]="globals.parser"></nz-input-number>
+          </th>
+          <th>
+            <nz-input-number  [(ngModel)]="rowItem.slNhapThem" [nzSize]="'small'" [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0"
+                              [nzParser]="globals.parser"></nz-input-number>
+          </th>
+          <th>
+            <nz-input-number  [(ngModel)]="rowItem.slNhapThem + rowItem.slHienCo" [nzSize]="'small'" [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0"
+                              [nzParser]="globals.parser"></nz-input-number>
+          </th>
+          <th>
+            <nz-input-number  [(ngModel)]="rowItem.slTieuChuan" [nzSize]="'small'" [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0"
+                              [nzParser]="globals.parser"></nz-input-number>
+          </th>
+          <th>
+            <nz-input-number  [(ngModel)]="rowItem.chenhLechThieu" [nzSize]="'small'" [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0"
+                              [nzParser]="globals.parser"></nz-input-number>
+          </th>
+          <th>
+            <nz-input-number  [(ngModel)]="rowItem.chenhLechThua" [nzSize]="'small'" [nzFormatter]="globals.formatter" nzDisabled [nzMin]="0"
+                              [nzParser]="globals.parser"></nz-input-number>
+          </th>
+          <th>
+            <nz-input-number  [(ngModel)]="rowItem.soLuong" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzMin]="0" [nzMax]="rowItem.slTieuChuan ? rowItem.slTieuChuan : 9999999999999"
+                              [nzParser]="globals.parser"></nz-input-number>
+          </th>
+          <th>
+            <nz-input-number  [(ngModel)]="rowItem.donGiaTd" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter" [nzMin]="0"
+                              [nzParser]="globals.parser"></nz-input-number>
+          </th>
+          <th>
+            <nz-input-number  [(ngModel)]="rowItem.soLuong * rowItem.donGiaTd" nzDisabled [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzMin]="0"
+                              [nzParser]="globals.parser"></nz-input-number>
+          </th>
+          <th>
+            <input type="text" [(ngModel)]="rowItem.ghiChu" nz-input/>
+          </th>
+          <th class="text-center" nzRight >
+            <a (click)="themMoiCtiet()" *ngIf="!isView">
+              <i class="icon htvbdh_dau-cong"></i>
+            </a>
+            <a (click)="refresh()" *ngIf="!isView">
+              <i class="fa fa-refresh"></i>
+            </a>
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let data of dataTable; let idx = index">
+          <ng-container *ngIf="!dataEdit[idx].edit ; else editTemplate">
+            <td>{{idx + 1}}</td>
+            <td>{{data.tenTaiSan}}</td>
+            <td>{{data.donViTinh}}</td>
+            <td class="text-center"><label nz-checkbox disabled [(ngModel)]="data.isCanCu"></label></td>
+            <td class="text-center">{{data.slVpCucKv | number : '1.0-1' : 'vi_VN'}} </td>
+            <td class="text-center" *ngIf="data.isCanCu">{{data.slChiCuc ? (data.slChiCuc | number : '1.0-1' : 'vi_VN') : ''}}/{{data.klChiCuc ? (data.klChiCuc | number : '1.0-1' : 'vi_VN') + ' tấn lương thực' : ''}}  {{data.tenLoaiHinh ? ' ('+ data.tenLoaiHinh + ')' : ''}}</td>
+            <td class="text-center"  *ngIf="!data.isCanCu">{{data.slChiCuc | number : '1.0-1' : 'vi_VN'}} </td>
+            <td class="text-right">{{data.slHienCo | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class="text-right">{{data.slNhapThem | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class="text-right">{{data.slHienCo + data.slNhapThem | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class="text-right">{{data.slTieuChuan | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class="text-right">{{data.chenhLechThieu | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class="text-right">{{data.chenhLechThua | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class="text-right">{{data.soLuong  | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class="text-right">{{data.donGiaTd  | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class="text-right">{{data.soLuong * data.donGiaTd    | number : '1.0-1' : 'vi_VN'}}</td>
+            <td>{{data.ghiChu}}</td>
+            <td class="text-center" nzRight >
+              <a (click)="editRow(idx)" *ngIf="!isView">
+                <i class="fa fa-pencil" title="Sửa"></i>
+              </a>
+              <a (click)="deleteItem(idx)" *ngIf="!isView">
+                <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+              </a>
+            </td>
+          </ng-container>
+          <ng-template #editTemplate>
+            <td></td>
+            <td>
+              <nz-select [(ngModel)]="dataEdit[idx].data.maTaiSan" [nzDisabled]="true"
+                         nzAllowClear="true" (ngModelChange)="changeDm($event)">
+                <nz-option *ngFor="let p of listDmTaiSan" [nzValue]="p.maTaiSan" [nzLabel]="p.tenTaiSan">
+                </nz-option>
+              </nz-select>
+            </td>
+            <th class="text-center"><label nz-checkbox disabled [(ngModel)]="dataEdit[idx].data.isCanCu"></label></th>
+            <td class="text-center">{{dataEdit[idx].data.slVpCucKv | number : '1.0-1' : 'vi_VN'}} </td>
+            <td class="text-center" *ngIf="dataEdit[idx].data.isCanCu">{{dataEdit[idx].data.slChiCuc ? (dataEdit[idx].data.slChiCuc | number : '1.0-1' : 'vi_VN') : ''}}/{{dataEdit[idx].data.klChiCuc ? (dataEdit[idx].data.klChiCuc | number : '1.0-1' : 'vi_VN') + ' tấn lương thực' : ''}}  {{dataEdit[idx].data.tenLoaiHinh ? ' ('+ dataEdit[idx].data.tenLoaiHinh + ')' : ''}}</td>
+            <td class="text-center"  *ngIf="!dataEdit[idx].data.isCanCu">{{dataEdit[idx].data.slChiCuc | number : '1.0-1' : 'vi_VN'}} </td>
+            <td>
+              <input type="text" [(ngModel)]="dataEdit[idx].data.donViTinh" readonly nz-input/>
+            </td>
+            <td>
+              <nz-input-number  [(ngModel)]="dataEdit[idx].data.slHienCo" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter" [nzMin]="0"
+                                [nzParser]="globals.parser"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number  [(ngModel)]="dataEdit[idx].data.slNhapThem" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter" [nzMin]="0"
+                                [nzParser]="globals.parser"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzMin]="0"  [(ngModel)]="dataEdit[idx].data.slNhapThem + dataEdit[idx].data.slHienCo" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number  [(ngModel)]="dataEdit[idx].data.slTieuChuan" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter" [nzMin]="0"
+                                [nzParser]="globals.parser"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzMin]="0"  [(ngModel)]="dataEdit[idx].data.chenhLechThieu" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzMin]="0"  [(ngModel)]="dataEdit[idx].data.chenhLechThua" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzMin]="0"  [(ngModel)]="dataEdit[idx].data.soLuong" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzMax]="dataEdit[idx].data.slTieuChuan ? dataEdit[idx].data.slTieuChuan : 9999999999999"
+                               [nzParser]="globals.parser"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzMin]="0"  [(ngModel)]="dataEdit[idx].data.donGiaTd" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzMin]="0"  [(ngModel)]="dataEdit[idx].data.soLuong * dataEdit[idx].data.donGiaTd" nzDisabled [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser"></nz-input-number>
+            </td>
+            <td>
+              <input type="text" [(ngModel)]="dataEdit[idx].data.ghiChu" nz-input/>
+            </td>
+            <td class="text-center" nzRight >
+              <a class="save" (click)="saveDinhMuc(idx)" *ngIf="!isView">
+                <i class="fa fa-save"></i>
+              </a>
+              <a (click)="cancelEdit(idx)" *ngIf="!isView">
+                <i class="fa fa-ban do"></i> </a>
+            </td>
+          </ng-template>
+        </tr>
+        </tbody>
+      </nz-table>
+    </nz-collapse-panel>
+  </nz-collapse>
   <nz-card class="mt16 flex-card p-lr16 mg-t-10">
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
       <div nz-row [nzGutter]="24">

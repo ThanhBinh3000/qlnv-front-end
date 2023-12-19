@@ -535,4 +535,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
     });
   }
 
+  openDialogSoBbGuiHang() {
+
+  }
 }

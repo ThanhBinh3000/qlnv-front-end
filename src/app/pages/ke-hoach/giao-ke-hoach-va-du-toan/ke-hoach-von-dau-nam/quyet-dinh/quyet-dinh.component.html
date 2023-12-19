@@ -9,6 +9,9 @@
     <li *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_BTCTCDT')" nz-menu-item (click)="selectTab(2)">
       BTC giao TCDT
     </li>
+    <li nz-menu-item (click)="selectTab(3)">
+      TCDT giao dự toán xuất giảm, xuất bán, xuất luân phiên đổi hàng cho các đơn vị
+    </li>
   </ul>
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
@@ -19,6 +22,9 @@
 </ng-container>
 <ng-container *ngIf="tabSelected == 2">
   <app-btc-giao-tcdt></app-btc-giao-tcdt>
+</ng-container>
+<ng-container *ngIf="tabSelected == 3">
+  <app-tcdt-giao-cac-donvi></app-tcdt-giao-cac-donvi>
 </ng-container>
 
 

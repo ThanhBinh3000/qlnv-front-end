@@ -24,7 +24,7 @@ import {
 import {
   KtKhSuaChuaBtcService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/kh-sc-lon-btc/kt-kh-sua-chua-btc.service";
-import { saveAs } from 'file-saver';
+import {saveAs} from 'file-saver';
 
 @Component({
   selector: "app-them-moi-sc-tcdt",
@@ -106,7 +106,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
   }
 
   onExpandChange(item: any, checked: boolean): void {
-    console.log(item,checked);
+    console.log(item, checked);
     item.expandSet = checked
   }
 
@@ -116,24 +116,24 @@ export class ThemMoiScTcdtComponent implements OnInit {
       let res = await this.tongHopDxScLon.getDetail(id);
       const data = res.data;
       this.maTt = data.maToTrinh ? "/" + data.maToTrinh.split("/")[1] : null,
-        this.soQd = data.soQuyetDinh ? "/" + data.soQuyetDinh.split("/")[1] : null,
-        this.formData.patchValue({
-          id: data.id,
-          namKeHoach: data.namKeHoach,
-          namBatDau: data.namBatDau,
-          namKetThuc: data.namKetThuc,
-          ngayTaoTt: data.ngayTaoTt,
-          ngayKyQd: data.ngayKyQd,
-          noiDung: data.noiDung,
-          maToTrinh: data.maToTrinh ? data.maToTrinh.split("/")[0] : null,
-          soQuyetDinh: data.soQuyetDinh ? data.soQuyetDinh.split("/")[0] : null,
-          trangThai: data.trangThai,
-          tenTrangThai: data.tenTrangThai,
-          lyDoTuChoi: data.lyDoTuChoi,
-          loaiDuAn: data.loaiDuAn,
-          tgTongHop: data.tgTongHop,
-          loaiTmdt: data.loaiTmdt,
-        });
+      this.soQd = data.soQuyetDinh ? "/" + data.soQuyetDinh.split("/")[1] : null,
+      this.formData.patchValue({
+        id: data.id,
+        namKeHoach: data.namKeHoach,
+        namBatDau: data.namBatDau,
+        namKetThuc: data.namKetThuc,
+        ngayTaoTt: data.ngayTaoTt,
+        ngayKyQd: data.ngayKyQd,
+        noiDung: data.noiDung,
+        maToTrinh: data.maToTrinh ? data.maToTrinh.split("/")[0] : null,
+        soQuyetDinh: data.soQuyetDinh ? data.soQuyetDinh.split("/")[0] : null,
+        trangThai: data.trangThai,
+        tenTrangThai: data.tenTrangThai,
+        lyDoTuChoi: data.lyDoTuChoi,
+        loaiDuAn: data.loaiDuAn,
+        tgTongHop: data.tgTongHop,
+        loaiTmdt: data.loaiTmdt,
+      });
       this.fileDinhKem = data.fileDinhKem;
       this.fileCanCu = data.fileCanCu;
 
@@ -527,7 +527,8 @@ export class ThemMoiScTcdtComponent implements OnInit {
   }
 
   exportDetail($event){
-    $event.stopPropagation()
+    $event.stopPropagation();
+    let title = this.formData.value.loaiTmdt == 'TREN15TY' ? 'du_an_tren_15_ty.xlsx' : 'du_an_duoi_15_ty.xlsx'
     let body = {
       id : this.idInput,
       title : this.formData.value.loaiTmdt == 'TREN15TY' ? 'TRÊN 15 TỶ' : 'DƯỚI 15 TỶ'
@@ -536,7 +537,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
       this.tongHopDxScLon
         .exportDetail(body)
         .subscribe((blob) =>
-          saveAs(blob,'data.xlsx'),
+          saveAs(blob,title),
         );
       this.spinner.hide();
   }

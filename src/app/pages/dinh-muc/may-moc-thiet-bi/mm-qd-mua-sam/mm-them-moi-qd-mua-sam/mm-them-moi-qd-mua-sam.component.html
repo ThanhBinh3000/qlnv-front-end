@@ -61,12 +61,12 @@
           <!--          <nz-radio-group-->
           <!--            [nzDisabled]="formData.value.trangThai !== '00'"-->
           <!--            nzSize="small" class="rdo-input" [(ngModel)]="typeQd"   [ngModelOptions]="{standalone: true}">-->
-          <nz-form-item >
+          <nz-form-item>
             <!--              <label nz-radio nzValue="TH">Số tổng hợp</label>-->
             <nz-form-label nzRequired>Căn cứ bản tổng hợp</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonMaTongHop()">
-                <input [readonly]="true" nz-input formControlName="maTh" readonly="true" />
+                <input [readonly]="true" nz-input formControlName="maTh" readonly="true"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -121,16 +121,16 @@
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
-            <nz-form-label nzRequired>Nội dung quyết định</nz-form-label>
+            <nz-form-label>Nội dung quyết định</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input formControlName="noiDung" [readonly]="isView"/>
+              <textarea rows="3" class="search__input" nz-input formControlName="noiDung" [readonly]="isView"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
       </div>
     </form>
   </nz-card>
-  <div class='header header-green-background mg-t-10' >
+  <div class='header header-green-background mg-t-10'>
     <div class='header-text'>
       <div class='title-chi-tieu'>
       </div>
@@ -146,27 +146,28 @@
             [nzShowPagination]="false" nzBordered>
     <thead>
     <tr>
-      <th rowSpan="2"></th>
-      <th rowSpan="2" nzWidth="40px">STT</th>
-      <th rowSpan="2" nzWidth="200px">Tên tài sản</th>
-      <th rowSpan="2" nzWidth="100px">Đơn vị tính</th>
-      <th colSpan="2" nzWidth="100px">SL lương thực nhập <br> theo chỉ tiêu KH</th>
-      <th rowSpan="2" nzWidth="100px">SL sử dụng được tại thời điểm đề xuất</th>
-      <th rowSpan="2" nzWidth="100px">Số lượng sẽ nhập thêm từ năm trước</th>
-      <th rowSpan="2" nzWidth="100px">Tổng cộng</th>
-      <th rowSpan="2" nzWidth="100px">SL định mức theo chỉ điêu KH năm</th>
-      <th colSpan="2" nzWidth="150px">Chênh lệch</th>
-      <th colSpan="3" nzWidth="200px">Nhu cầu trang bị cho đơn vị</th>
-      <th rowSpan="2" nzWidth="200px">Ghi chú</th>
+      <th class="text-center" rowSpan="2" width="40px"></th>
+      <th class="text-center" rowSpan="2" width="40px">STT</th>
+      <th class="text-center" rowSpan="2">Tên tài sản</th>
+      <th class="text-center" rowSpan="2">Đơn vị tính</th>
+      <th class="text-center" colspan="3" >Số lượng tối đa</th>
+      <th class="text-center" rowSpan="2" >SL sử dụng được <br> tại thời điểm đề xuất</th>
+      <th class="text-center" rowSpan="2" >Số lượng sẽ nhập <br> thêm từ năm trước</th>
+      <th class="text-center" rowSpan="2" >Tổng cộng</th>
+      <th class="text-center" rowSpan="2" width="140px"  >SL định mức theo <br> chỉ điêu KH năm</th>
+      <th class="text-center" colSpan="2">Chênh lệch</th>
+      <th class="text-center" colSpan="3">Nhu cầu trang bị <br> cho đơn vị</th>
+      <th class="text-center" rowSpan="2">Ghi chú</th>
     </tr>
     <tr>
-      <th nzWidth="75px">Gạo tẻ</th>
-      <th nzWidth="75px">Thóc tẻ</th>
-      <th nzWidth="75px">Còn thiếu</th>
-      <th nzWidth="75px">Thừa</th>
-      <th nzWidth="100px">Số lượng</th>
-      <th nzWidth="100px">Đơn giá (trđ)</th>
-      <th nzWidth="100px">Thành tiền (trđ)</th>
+      <th class="text-center">Căn cứ SL nhập, xuất</th>
+      <th class="text-center">VP Cục DTNN KV</th>
+      <th class="text-center">Chi cục DTNN</th>
+      <th class="text-center">Còn thiếu</th>
+      <th class="text-center">Thừa</th>
+      <th class="text-center">Số lượng</th>
+      <th class="text-center">Đơn giá (trđ)</th>
+      <th class="text-center">Thành tiền (trđ)</th>
     </tr>
     </thead>
     <tbody>
@@ -176,8 +177,9 @@
         <td class="font-weight-bold">{{idx + 1}}</td>
         <td class="font-weight-bold"> {{data.tenTaiSan}}</td>
         <td class="font-weight-bold">{{data.donViTinh}}</td>
-        <td>{{data.slChiTieuGao | number : '1.0-1' : 'vi_VN'}}</td>
-        <td>{{data.slChiTieuThoc | number : '1.0-1' : 'vi_VN'}}</td>
+        <td></td>
+        <td></td>
+        <td></td>
         <td></td>
         <td></td>
         <td></td>
@@ -195,8 +197,12 @@
           <td>{{idx + 1}}.{{y + 1}}</td>
           <td>{{item.tenDvi}}</td>
           <td class="font-weight-bold">{{data.donViTinh}}</td>
-          <td>{{item.slChiTieuGao | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>{{item.slChiTieuThoc | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="text-center"><label nz-checkbox disabled [(ngModel)]="item.isCanCu"></label></td>
+          <td class="text-center">{{item.slVpCucKv | number : '1.0-1' : 'vi_VN'}} </td>
+          <td class="text-center"
+              *ngIf="item.isCanCu">{{item.slChiCuc ? (item.slChiCuc | number : '1.0-1' : 'vi_VN') : ''}}
+            /{{item.klChiCuc ? (item.klChiCuc | number : '1.0-1' : 'vi_VN') + ' tấn lương thực' : ''}}  {{item.tenLoaiHinh ? ' (' + item.tenLoaiHinh + ')' : ''}}</td>
+          <td class="text-center" *ngIf="!item.isCanCu">{{item.slChiCuc | number : '1.0-1' : 'vi_VN'}} </td>
           <td class="text-right">{{item.slHienCo | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="text-right">{{item.slNhapThem | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="text-right">{{item.slHienCo + item.slNhapThem | number : '1.0-1' : 'vi_VN'}}</td>
@@ -216,14 +222,18 @@
     </ng-container>
     </tbody>
   </nz-table>
-  <div nz-col [nzSpan]="24">
-    <nz-form-item>
-      <nz-form-label nzRequired>Ghi chú</nz-form-label>
-      <nz-form-control [nzErrorTip]="error">
-        <input nz-input formControlName="ghiChu" [readonly]="isView"/>
-      </nz-form-control>
-    </nz-form-item>
-  </div>
+  <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
+    <div nz-row [nzGutter]="24">
+      <div nz-col [nzSpan]="24">
+        <nz-form-item>
+          <nz-form-label>Ghi chú</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <textarea rows="3" class="search__input" nz-input formControlName="ghiChu" [readonly]="isView"></textarea>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  </form>
 </div>
 <ng-template #error let-control>
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}

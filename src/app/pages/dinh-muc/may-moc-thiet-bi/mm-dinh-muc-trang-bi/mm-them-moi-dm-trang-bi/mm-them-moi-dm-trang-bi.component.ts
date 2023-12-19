@@ -124,41 +124,6 @@ export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnIni
     }
   }
 
-  getStrTenLoaiHinh(strMaLoaiHinh) {
-    let str = '';
-    if (strMaLoaiHinh) {
-      let arrLoaiHinh = strMaLoaiHinh.split(",");
-      arrLoaiHinh.forEach((item) => {
-        switch (item) {
-          case '00' : {
-            if (arrLoaiHinh.indexOf(item) == arrLoaiHinh.length - 1) {
-              str = str + 'Nhập'
-            } else {
-              str = str + 'Nhập' + ', '
-            }
-            break;
-          }
-          case '01' : {
-            if (arrLoaiHinh.indexOf(item) == arrLoaiHinh.length - 1) {
-              str = str + 'Xuất'
-            } else {
-              str = str + 'Xuất' + ', '
-            }
-            break;
-          }
-          case '02' : {
-            if (arrLoaiHinh.indexOf(item) == arrLoaiHinh.length - 1) {
-              str = str + 'Bảo quản'
-            } else {
-              str = str + 'Bảo quản' + ', '
-            }
-            break;
-          }
-        }
-      })
-    }
-    return str;
-  }
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
     try {
@@ -248,25 +213,31 @@ export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnIni
       this.spinner.hide();
       return;
     }
-    if (this.rowItem.loaiHinh && this.rowItem.loaiHinh.length > 0) {
-      let listTenLh = []
-      this.rowItem.loaiHinh.forEach(item => {
-        switch (item) {
-          case '00' : {
-            listTenLh.push('Nhập');
-            break;
+    if (this.rowItem.isCanCu) {
+      if (this.rowItem.loaiHinh && this.rowItem.loaiHinh.length > 0) {
+        let listTenLh = []
+        this.rowItem.loaiHinh.forEach(item => {
+          switch (item) {
+            case '00' : {
+              listTenLh.push('Nhập');
+              break;
+            }
+            case '01' : {
+              listTenLh.push('Xuất');
+              break;
+            }
+            case '02' : {
+              listTenLh.push('Bảo quản');
+              break;
+            }
           }
-          case '01' : {
-            listTenLh.push('Xuất');
-            break;
-          }
-          case '02' : {
-            listTenLh.push('Bảo quản');
-            break;
-          }
-        }
-      })
-      this.rowItem.tenLoaiHinh = listTenLh.toString();
+        })
+        this.rowItem.tenLoaiHinh = listTenLh.toString();
+      } else {
+        this.notification.warning(MESSAGE.WARNING, "Vui lòng nhập loại hình.");
+        this.spinner.hide();
+        return;
+      }
     }
     this.dataTableDetail = [...this.dataTableDetail, this.rowItem];
     this.rowItem = new DinhMucTrangBiMm();
@@ -316,24 +287,30 @@ export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnIni
       return;
     }
     let listTenLh = [];
-    if (this.dataEdit[idx].data.loaiHinh && this.dataEdit[idx].data.loaiHinh.length > 0) {
-      this.dataEdit[idx].data.loaiHinh.forEach(item => {
-        switch (item) {
-          case '00' : {
-            listTenLh.push('Nhập');
-            break;
+    if (this.dataEdit[idx].data.isCanCu) {
+      if (this.dataEdit[idx].data.loaiHinh && this.dataEdit[idx].data.loaiHinh.length > 0) {
+        this.dataEdit[idx].data.loaiHinh.forEach(item => {
+          switch (item) {
+            case '00' : {
+              listTenLh.push('Nhập');
+              break;
+            }
+            case '01' : {
+              listTenLh.push('Xuất');
+              break;
+            }
+            case '02' : {
+              listTenLh.push('Bảo quản');
+              break;
+            }
           }
-          case '01' : {
-            listTenLh.push('Xuất');
-            break;
-          }
-          case '02' : {
-            listTenLh.push('Bảo quản');
-            break;
-          }
-        }
-      });
-      this.dataEdit[idx].data.loaiHinh = this.dataEdit[idx].data.loaiHinh.toString();
+        });
+        this.dataEdit[idx].data.loaiHinh = this.dataEdit[idx].data.loaiHinh.toString();
+      } else {
+        this.notification.warning(MESSAGE.WARNING, "Vui lòng nhập loại hình.");
+        this.spinner.hide();
+        return;
+      }
     }
     this.dataEdit[idx].data.tenLoaiHinh = listTenLh.toString();
     Object.assign(this.dataTableDetail[idx], this.dataEdit[idx].data);

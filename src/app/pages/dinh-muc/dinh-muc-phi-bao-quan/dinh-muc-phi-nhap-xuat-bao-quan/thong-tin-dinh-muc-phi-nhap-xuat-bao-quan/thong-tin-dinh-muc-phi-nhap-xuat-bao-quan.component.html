@@ -465,32 +465,43 @@
           <th rowspan='2' width='200px' class='text-center'>Loại hàng/Chủng loại hàng <br />DTQG</th>
           <th rowspan='2' width='300px'>Áp dụng tại {{capDvi == 1 ? 'cục' : 'chi cục'}}</th>
           <th rowspan='2' width='100px'>Đơn vị tính</th>
-          <th rowspan='2' width='150px'>Số lượng</th>
-          <th rowspan='1' colspan='3' width='600px'>Chi phí theo định mức (đ)</th>
-          <th rowspan='1' colspan='3' width='600px'>Chi phí không theo định mức</th>
-          <th rowspan='1' colspan='3' width='600'>Chi phí không theo định mức <br />với trường hợp xuất viện trợ - Đơn
-            vị đề nghị(đ)</th>
-          <th rowspan='1' colspan='3' width='600'>Chi phí không theo định mức <br />với trường hợp xuất viện trợ - Số
-            kiểm tra, tổng hợp(đ)</th>
-          <th rowspan='1' colspan='2' width='400'>Chi phí không theo định mức <br />với trường hợp xuất viện trợ - Chênh
-            lệch(đ)</th>
+          <th rowspan='2' width='120px'>Số lượng</th>
+          <th rowspan='1' colspan='3' width='360px'>Chi phí theo định mức (đ)</th>
+          <th rowspan='1' colspan='3' width='360px'>Chi phí không theo định mức</th>
+          <th rowspan='1' colspan='3' width='360px' class='text-center'>Chi phí không theo định mức <br />với trường hợp
+            xuất viện trợ
+            <br />- Đơn
+            vị đề nghị(đ)
+          </th>
+          <th rowspan='1' colspan='3' width='360px' class='text-center'>Chi phí không theo định mức <br />với trường hợp
+            xuất viện trợ
+            <br />- Số
+            kiểm tra, tổng hợp(đ)
+          </th>
+          <th rowspan='1' colspan='2' width='240px' class='text-center'>Chi phí không theo định mức <br />với trường hợp
+            xuất viện trợ
+            <br />-
+            Chênh
+            lệch(đ)
+          </th>
+          <th rowspan='2' width='300px' class='text-center'>Ghi chú</th>
           <th rowspan='2' width='120px'>Hành động</th>
         </tr>
         <tr>
-          <th rowspan='1' width='200px'>Chi phí nhập tối đa</th>
-          <th rowspan='1' width='200px'>Chi phí xuất tối đa</th>
-          <th rowspan='1' width='200px'>Chi phí bảo quản tối đa</th>
-          <th rowspan='1' width='200px'>Chi phí nhập tối đa</th>
-          <th rowspan='1' width='200px'>Chi phí xuất tối đa</th>
-          <th rowspan='1' width='200px'>Chi phí bảo quản tối đa</th>
-          <th rowspan='1' width='200px'>Thanh toán theo VNĐ (đ)</th>
-          <th rowspan='1' width='200px'>Tỷ giá (đ)</th>
-          <th rowspan='1' width='200px'>Thanh toán theo USD</th>
-          <th rowspan='1' width='200px'>Thanh toán theo VNĐ (đ)</th>
-          <th rowspan='1' width='200px'>Tỷ giá (đ)</th>
-          <th rowspan='1' width='200px'>Thanh toán theo USD</th>
-          <th rowspan='1' width='200px'>Thanh toán theo VNĐ (đ)</th>
-          <th rowspan='1' width='200px'>Thanh toán theo USD</th>
+          <th rowspan='1' width='120px' class='text-center'>Chi phí nhập <br /> tối đa</th>
+          <th rowspan='1' width='120px' class='text-center'>Chi phí xuất <br />tối đa</th>
+          <th rowspan='1' width='120px' class='text-center'>Chi phí bảo <br />quản tối đa</th>
+          <th rowspan='1' width='120px' class='text-center'>Chi phí nhập <br />tối đa</th>
+          <th rowspan='1' width='120px' class='text-center'>Chi phí xuất <br />tối đa</th>
+          <th rowspan='1' width='120px' class='text-center'>Chi phí bảo <br />quản tối đa</th>
+          <th rowspan='1' width='120px' class='text-center'>Thanh toán <br />theo VNĐ (đ)</th>
+          <th rowspan='1' width='120px' class='text-center'>Tỷ giá (đ)</th>
+          <th rowspan='1' width='120px' class='text-center'>Thanh toán <br />theo USD</th>
+          <th rowspan='1' width='120px' class='text-center'>Thanh toán <br />theo VNĐ (đ)</th>
+          <th rowspan='1' width='120px' class='text-center'>Tỷ giá (đ)</th>
+          <th rowspan='1' width='120px' class='text-center'>Thanh toán <br />theo USD</th>
+          <th rowspan='1' width='120px' class='text-center'>Thanh toán <br />theo VNĐ (đ)</th>
+          <th rowspan='1' width='120px' class='text-center'>Thanh toán <br />theo USD</th>
         </tr>
         <tr>
           <th></th>
@@ -599,7 +610,9 @@
             <nz-input-number [(ngModel)]='rowItem.chechLechUsd' [nzStep]='1' [nzFormatter]='formatterDollar'
               [nzParser]='parserDollar' [nzDisabled]="true"></nz-input-number>
           </th>
-
+          <th>
+            <input type='text' [(ngModel)]='rowItem.ghiChu' nz-input />
+          </th>
           <th class='text-center'>
             <a (click)='addDetailDinhMucKtqd()' [ngClass]="{'isDisabled' : !isAddDetail}">
               <i class='icon htvbdh_dau-cong'></i>
@@ -614,46 +627,55 @@
         <ng-container *ngFor='let data of expandTable.data; let idx = index'>
           <ng-container *ngFor='let item of mapOfExpandedData[data.uuid]'>
             <tr *ngIf='(item.parent && item.parent.expand) || !item.parent'>
-              <td class='text-center' *ngIf='item.level == 0' [nzIndentSize]='item.level! * 20'
+              <td class='text-center' *ngIf='item.level == 0' [nzIndentSize]='item.level! * 30'
                 [nzShowExpand]='!!item.children' [(nzExpand)]='item.expand'
                 (nzExpandChange)='collapse(mapOfExpandedData[data.uuid], item, $event)'>
               </td>
               <td *ngIf='item.level == 0'>{{item.maDinhMuc}}</td>
               <td *ngIf='item.level != 0'></td>
-              <td class='text-center' *ngIf='item.level != 0' [nzIndentSize]='item.level! * 20'
+              <td class='text-center' *ngIf='item.level == 1' [nzIndentSize]='item.level == 1 ? 80 : 60'
                 [nzShowExpand]='!!item.children' [(nzExpand)]='item.expand'
                 (nzExpandChange)='collapse(mapOfExpandedData[data.uuid], item, $event)'>
                 {{item.maDinhMuc}}
               </td>
+              <td class='text-right' *ngIf='item.level == 2'>{{item.maDinhMuc}}</td>
               <td>{{item.tenDinhMuc}}</td>
               <td>{{item.tenLoaiVthh}}</td>
               <td>{{item.apDungTaiStr}}</td>
               <td>{{item.donViTinh}}</td>
               <td class='text-right'>{{item.soLuong | number : '1.0-3' : 'vi_VN'}}</td>
               <td class="{{(item.level == 0 || item.level == 1) ? 'text-right font-weight-bold' : 'text-right'}}">
-                {{item.chiPhiTheoDinhMucNhapToiDa | number : '1.0-1' : 'vi_VN'}}
+                {{(item.chiPhiTheoDinhMucNhapToiDa || 0) | number : '1.0-1' : 'vi_VN'}}
               </td>
               <td class="{{(item.level == 0 || item.level == 1) ? 'text-right font-weight-bold' : 'text-right'}}">
-                {{item.chiPhiTheoDinhMucXuatToiDa | number : '1.0-1' : 'vi_VN'}}
+                {{(item.chiPhiTheoDinhMucXuatToiDa || 0) | number : '1.0-1' : 'vi_VN'}}
               </td>
               <td class="{{(item.level == 0 || item.level == 1) ? 'text-right font-weight-bold' : 'text-right'}}">
-                {{item.chiPhiTheoDinhMucBqToiDa | number : '1.0-1' : 'vi_VN'}}
+                {{(item.chiPhiTheoDinhMucBqToiDa || 0) | number : '1.0-1' : 'vi_VN'}}
               </td>
               <td class="{{(item.level == 0 || item.level == 1) ? 'text-right font-weight-bold' : 'text-right'}}">
-                {{item.chiPhiNhapToiDa | number : '1.0-1' : 'vi_VN'}}</td>
+                {{(item.chiPhiNhapToiDa || 0) | number : '1.0-1' : 'vi_VN'}}</td>
               <td class="{{(item.level == 0 || item.level == 1) ? 'text-right font-weight-bold' : 'text-right'}}">
-                {{item.chiPhiXuatToiDa | number : '1.0-1' : 'vi_VN'}}</td>
+                {{(item.chiPhiXuatToiDa || 0) | number : '1.0-1' : 'vi_VN'}}</td>
               <td class="{{(item.level == 0 || item.level == 1) ? 'text-right font-weight-bold' : 'text-right'}}">
-                {{item.chiPhiBqToiDa | number : '1.0-1' : 'vi_VN'}}</td>
-              <td class='text-right'>{{(item.thanhToanTheoVnd || 0) | number : '1.0-1' : 'vi_VN'}}</td>
+                {{(item.chiPhiBqToiDa || 0) | number : '1.0-1' : 'vi_VN'}}</td>
+              <td class="{{(item.level == 0 || item.level == 1) ? 'text-right font-weight-bold' : 'text-right'}}">
+                {{(item.thanhToanTheoVnd || 0) | number : '1.0-1' : 'vi_VN'}}</td>
               <td class='text-right'>{{(item.tyGia || 0) | number : '1.0-1' : 'vi_VN'}}</td>
-              <td class='text-right'>{{(item.thanhToanTheoUsd || 0) | number : '1.2-2' : 'vi_VN'}}</td>
-              <td class='text-right'>{{(item.thanhToanTheoVndKt || 0) | number : '1.0-1' : 'vi_VN'}}</td>
+              <td class="{{(item.level == 0 || item.level == 1) ? 'text-right font-weight-bold' : 'text-right'}}">
+                {{(item.thanhToanTheoUsd || 0) | number : '1.2-2' : 'vi_VN'}}</td>
+              <td class="{{(item.level == 0 || item.level == 1) ? 'text-right font-weight-bold' : 'text-right'}}">
+                {{(item.thanhToanTheoVndKt || 0) | number : '1.0-1' : 'vi_VN'}}</td>
               <td class='text-right'>{{(item.tyGiaKt || 0) | number : '1.0-1' : 'vi_VN'}}</td>
-              <td class='text-right'>{{(item.thanhToanTheoUsdKt || 0) | number : '1.2-2' : 'vi_VN'}}</td>
-              <td class='text-right'>{{(item.chechLechVnd || 0) | number : '1.0-1' : 'vi_VN'}}</td>
-              <td class='text-right'>{{(item.chechLechUsd || 0) | number : '1.2-2' : 'vi_VN'}}</td>
-              <td>
+              <td class="{{(item.level == 0 || item.level == 1) ? 'text-right font-weight-bold' : 'text-right'}}">
+                {{(item.thanhToanTheoUsdKt || 0) | number : '1.2-2' : 'vi_VN'}}</td>
+              <td class="{{(item.level == 0 || item.level == 1) ? 'text-right font-weight-bold' : 'text-right'}}">
+                {{(item.chechLechVnd || 0) | number : '1.0-1' : 'vi_VN'}}</td>
+              <td class="{{(item.level == 0 || item.level == 1) ? 'text-right font-weight-bold' : 'text-right'}}">
+                {{(item.chechLechUsd || 0) | number : '1.2-2' : 'vi_VN'}}</td>
+              <td *ngIf="!item.edit">{{item.ghiChu}}</td>
+              <td *ngIf="item.edit"><input type='text' [(ngModel)]='item.ghiChu' nz-input /></td>
+              <td *ngIf="!item.edit">
                 <a *ngIf='isViewDetail' (click)='viewRow(item,item.level)'>
                   <i class='fa fa-eye' title='Xem'></i>
                 </a>
@@ -663,14 +685,65 @@
                 <a *ngIf='item.children.length ==0 && !isViewDetail' (click)='editRowKtqd(item,item.level)'>
                   <i class='fa fa-pencil' title='Sửa'></i>
                 </a>
+                <a *ngIf='item.children.length > 0 && !isViewDetail' (click)='editGhiChu(item,item.level)'>
+                  <i class='fa fa-pencil' title='Sửa'></i>
+                </a>
                 <a *ngIf='item.children.length ==0 && !isViewDetail' (click)='deleteItemKtqd(item,item.level)'>
                   <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
+                </a>
+              </td>
+              <td *ngIf="item.edit">
+                <a (click)='saveEditGC(item)' class='save'>
+                  <i class='fa fa-save'></i>
+                </a>
+                <a *ngIf="item.edit" (click)='cancelEditGC(item)'>
+                  <i class='fa fa-times do'></i>
                 </a>
               </td>
             </tr>
           </ng-container>
         </ng-container>
-
+        <tr>
+          <td class='text-center'>
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td class='text-right font-weight-bold'>Tổng</td>
+          <td class='text-right'></td>
+          <td class='text-right font-weight-bold'>
+            {{(rowTotal.chiPhiTheoDinhMucNhapToiDa || 0) | number : '1.0-1' : 'vi_VN'}}
+          </td>
+          <td class='text-right font-weight-bold'>
+            {{(rowTotal.chiPhiTheoDinhMucXuatToiDa || 0) | number : '1.0-1' : 'vi_VN'}}
+          </td>
+          <td class='text-right font-weight-bold'>
+            {{(rowTotal.chiPhiTheoDinhMucBqToiDa || 0) | number : '1.0-1' : 'vi_VN'}}
+          </td>
+          <td class='text-right font-weight-bold'>
+            {{(rowTotal.chiPhiNhapToiDa || 0) | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right font-weight-bold'>
+            {{(rowTotal.chiPhiXuatToiDa || 0) | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right font-weight-bold'>
+            {{(rowTotal.chiPhiBqToiDa || 0) | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right font-weight-bold'>
+            {{(rowTotal.thanhToanTheoVnd || 0) | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right'></td>
+          <td class='text-right font-weight-bold'>
+            {{(rowTotal.thanhToanTheoUsd || 0) | number : '1.2-2' : 'vi_VN'}}</td>
+          <td class='text-right font-weight-bold'>
+            {{(rowTotal.thanhToanTheoVndKt || 0) | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right'></td>
+          <td class='text-right font-weight-bold'>
+            {{(rowTotal.thanhToanTheoUsdKt || 0) | number : '1.2-2' : 'vi_VN'}}</td>
+          <td class='text-right font-weight-bold'>
+            {{(rowTotal.chechLechVnd || 0) | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right font-weight-bold'>
+            {{(rowTotal.chechLechUsd || 0) | number : '1.2-2' : 'vi_VN'}}</td>
+          <td></td>
+          <td></td>
+        </tr>
       </tbody>
     </nz-table>
     <div class='tab-content tab-menu'>
@@ -904,9 +977,8 @@
                           <nz-form-label [nzNoColon]='true' class='label-color-kh'> Thanh toán theo USD
                           </nz-form-label>
                           <nz-input-number (change)='changeTinhTyGiaUsdVnd($event)' nz-input
-                            formControlName='thanhToanTheoUsd' [nzStep]='1' [nzDisabled]='true'
-                            (ngModelChange)='tinhTyGiaUsdVnd($event)' [nzFormatter]='formatterDollar'
-                            [nzParser]='parserDollar'></nz-input-number>
+                            formControlName='thanhToanTheoUsd' [nzStep]='1' (ngModelChange)='tinhTyGiaUsdVnd($event)'
+                            [nzFormatter]='formatterDollar' [nzParser]='parserDollar'></nz-input-number>
                         </nz-form-control>
                       </nz-form-item>
                     </div>
@@ -945,7 +1017,7 @@
                           <nz-form-label [nzNoColon]='true' class='label-color-kh'> Thanh toán theo USD
                           </nz-form-label>
                           <nz-input-number (change)='changeTinhTyGiaUsdVndKt($event)' nz-input
-                            formControlName='thanhToanTheoUsdKt' [nzStep]='1' [nzDisabled]='true'
+                            formControlName='thanhToanTheoUsdKt' [nzStep]='1'
                             (ngModelChange)='tinhTyGiaUsdVndKT($event)' [nzFormatter]='formatterDollar'
                             [nzParser]='parserDollar'></nz-input-number>
                         </nz-form-control>
@@ -989,7 +1061,15 @@
 
 
 
-
+          <div nz-col nzSpan='24'>
+            <nz-form-item>
+              <nz-form-control [nzErrorTip]='error'>
+                <nz-form-label [nzNoColon]='true' class='label-color-kh'> Ghi chú
+                </nz-form-label>
+                <input nz-input formControlName='ghiChu' />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
 
 
         </div>

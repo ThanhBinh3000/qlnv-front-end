@@ -36,6 +36,20 @@ export class ThemMoiNhapXuatTonKhoHangDtqgComponent extends Base2Component imple
   listDataDetail: any[] = [];
   listCloaiVthh: any[] = [];
   now: any;
+  listQuy: any[] = [
+    { text: "Quý I", value: 1 },
+    { text: "Quý II", value: 2 },
+    { text: "Quý III", value: 3 },
+    { text: "Quý IV", value: 4 }
+  ];
+  listLoaiBc: any[] = [
+    {
+      text: "Báo cáo năm",
+      value: 1,
+      thoiHanGuiBc: "Sau 05 ngày kết thúc thời gian chỉnh lý quyết toán ngân sách nhà nước"
+    },
+    { text: "Báo cáo quý", value: 2, thoiHanGuiBc: "Ngày 20 của tháng đầu quý sau" }
+  ];
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
@@ -63,6 +77,8 @@ export class ThemMoiNhapXuatTonKhoHangDtqgComponent extends Base2Component imple
         cloaiVthh: [null],
         trangThai: "00",
         tenTrangThai: "Dự thảo",
+        loaiBc: [null],
+        kyBc: [null],
         detail: [],
       }
     );
@@ -97,6 +113,8 @@ export class ThemMoiNhapXuatTonKhoHangDtqgComponent extends Base2Component imple
             thongTuSo: this.listData.thongTuSo,
             boNganh: this.listData.boNganh,
             nam: this.listData.nam,
+            kyBc: this.listData.kyBc,
+            loaiBc: this.listData.loaiBc,
             tenTrangThai: this.listData.tenTrangThai,
             tGianTaoTuNgay: this.listData.tGianTaoTuNgay,
             tGianTaoDenNgay: this.listData.tGianTaoDenNgay,
@@ -226,6 +244,7 @@ export class ThemMoiNhapXuatTonKhoHangDtqgComponent extends Base2Component imple
       res = await this.bcBnTt145Service.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
+      this.idInput = res.data.id
       if (isBanHanh) {
         this.pheDuyet(body);
       } else {

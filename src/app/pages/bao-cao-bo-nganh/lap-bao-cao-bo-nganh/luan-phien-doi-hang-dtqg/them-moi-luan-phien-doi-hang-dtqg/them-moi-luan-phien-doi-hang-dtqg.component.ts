@@ -306,6 +306,7 @@ export class ThemMoiLuanPhienDoiHangDtqgComponent extends Base2Component impleme
       res = await this.bcBnTt145Service.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
+      this.idInput = res.data.id
       if (isBanHanh) {
         this.pheDuyet(body);
       } else {
@@ -396,7 +397,7 @@ export class ThemMoiLuanPhienDoiHangDtqgComponent extends Base2Component impleme
       if (type) {
         const sum = arr.reduce((prev, cur) => {
           if (cur[column]) {
-            prev += Number.parseInt(cur[column]);
+            prev += Number.parseFloat(cur[column]);
           }
           return prev;
         }, 0);
@@ -418,7 +419,7 @@ export class ThemMoiLuanPhienDoiHangDtqgComponent extends Base2Component impleme
       if (type) {
         const sum = arr.reduce((prev, cur) => {
           if (cur[column]) {
-            prev += Number.parseInt(cur[column]);
+            prev += Number.parseFloat(cur[column]);
           }
           return prev;
         }, 0);

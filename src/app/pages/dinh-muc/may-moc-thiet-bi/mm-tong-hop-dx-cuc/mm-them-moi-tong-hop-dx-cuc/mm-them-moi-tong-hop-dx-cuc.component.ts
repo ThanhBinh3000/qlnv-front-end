@@ -55,9 +55,13 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
       klLtBaoQuan: [null],
       klLtNhap: [null],
       klLtXuat: [null],
-      klLtBaoQuanCuc: [null],
-      slGaoDangBaoQuan: [null],
-      slThocDangBaoQuan: [null],
+      klLtBaoQuanCuc: [0],
+      slGaoDangBaoQuan: [0],
+      slThocDangBaoQuan: [0],
+      slGaoXuat: [0],
+      slThocXuat: [0],
+      slGaoNhap: [0],
+      slThocNhap: [0],
       klLtNhapCuc: [null],
       klLtXuatCuc: [null],
       trichYeu: [null, Validators.required],
@@ -65,9 +69,9 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
       ngayTongHopNgayTrinh:[null, Validators.required],
       soToTrinh:[null, Validators.required],
       soQdGiaoCt: [null],
-      trangThai: ['00'],
+      trangThai: ['78'],
       trangThaiTh: [],
-      tenTrangThai: ['Dự thảo'],
+      tenTrangThai: ['Đang nhập dữ liệu'],
       fileDinhKems: [null],
       lyDoTuChoi: [null],
       listQlDinhMucDxTbmmTbcdDtl: [null],
@@ -77,7 +81,7 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
   async ngOnInit() {
     this.spinner.show();
     try {
-      await this.loadDsDxCc();
+      await this.loadDsDxCc(this.formData.value.namKeHoach);
       await this.getCtieuKhTc(this.formData.value.namKeHoach);
       if (this.id > 0) {
         await this.detail(this.id);
@@ -100,6 +104,7 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
       })
       this.detailCtieuKh = res.data;
     }
+    this.loadDsDxCc(event);
   }
 
   async tongHop() {
@@ -133,7 +138,11 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
           klLtNhapCuc: detail.klLtNhap,
           klLtXuatCuc: detail.klLtXuat,
           slGaoDangBaoQuan: detail.slGaoDangBaoQuan,
-          slThocDangBaoQuan: detail.slThocDangBaoQuan
+          slThocDangBaoQuan: detail.slThocDangBaoQuan,
+          slGaoNhap: detail.slGaoNhap,
+          slGaoXuat: detail.slGaoXuat,
+          slThocNhap: detail.slThocNhap,
+          slThocXuat: detail.slThocXuat,
         })
         this.dataTable = detail.listQlDinhMucDxTbmmTbcdDtl
         if (detail && detail.listQlDinhMucDxTbmmTbcd && detail.listQlDinhMucDxTbmmTbcd.length > 0) {
@@ -165,11 +174,12 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
     }
   }
 
-  async loadDsDxCc() {
+  async loadDsDxCc(namKh) {
     this.spinner.show();
     try {
       let body = {
         "capDvi": "2",
+        "namKeHoach": namKh,
         "paggingReq": {
           "limit": 10,
           "page": 0
@@ -177,6 +187,9 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
       }
       let res = await this.dxChiCucService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
+        this.formData.patchValue({
+          listSoCv : []
+        })
         let data = res.data;
         this.listDxCuc = data.content;
         if (this.listDxCuc) {
@@ -285,7 +298,7 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
   async pheDuyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.DU_THAO:
+      case STATUS.DANG_NHAP_DU_LIEU:
       case STATUS.TU_CHOI_LDTC: {
         trangThai = STATUS.CHO_DUYET_LDTC;
         break;

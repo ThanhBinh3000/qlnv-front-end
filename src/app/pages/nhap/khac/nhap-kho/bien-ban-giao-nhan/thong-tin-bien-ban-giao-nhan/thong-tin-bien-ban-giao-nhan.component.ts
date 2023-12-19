@@ -86,6 +86,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
       nam: [dayjs().get("year"), [Validators.required]],
       maDvi: [],
       tenDvi: [],
+      id: [],
       maQhns: [],
       soBb: [],
       ngayLap: [dayjs().format('YYYY-MM-DD')],

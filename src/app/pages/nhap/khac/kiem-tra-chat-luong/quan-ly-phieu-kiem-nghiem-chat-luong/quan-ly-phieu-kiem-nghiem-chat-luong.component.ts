@@ -184,8 +184,9 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      this.convertDataTable();
-      this.convertListDataLuongThuc();
+      console.log(this.dataTable, "this.dataTable")
+      await this.convertDataTable();
+      await this.convertListDataLuongThuc();
       this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
     } else {
@@ -194,7 +195,7 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
     await this.spinner.hide();
   }
 
-  convertDataTable() {
+  async convertDataTable() {
     this.dataTable.forEach(item => {
       if (this.userService.isChiCuc()) {
         item.detail = item.dtlList.filter(item => item.maChiCuc == this.userInfo.MA_DVI)
@@ -207,7 +208,7 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
     });
   }
 
-  convertListDataLuongThuc() {
+  async convertListDataLuongThuc() {
     this.helperService.setIndexArray(this.dataTable);
     console.log(this.dataTable)
     if (this.dataTable) {
@@ -380,6 +381,7 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
   }
 
   redirectToChiTiet(isView: boolean, id: number, qdGiaoNvNh?: any) {
+    debugger
     this.selectedId = id;
     this.qdGvuNh = qdGiaoNvNh;
     this.isDetail = true;
