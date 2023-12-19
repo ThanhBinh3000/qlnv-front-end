@@ -377,7 +377,7 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
         if (res.data) {
           this.qdGiaoChiTieu = res.data;
           if (this.qdGiaoChiTieu && this.qdGiaoChiTieu.khLuongThuc) {
-            let detailLt = this.qdGiaoChiTieu.khLuongThuc.find(item => item.maDonVi = this.userInfo.MA_DVI)
+            let detailLt = this.qdGiaoChiTieu.khLuongThuc.find(item => item.maDonVi == this.userInfo.MA_DVI)
             if (detailLt) {
               this.formData.patchValue({
                 slGaoNhap: detailLt.ntnGao,

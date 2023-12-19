@@ -1,5 +1,5 @@
-<nz-table nzBordered [nzData]="dataTable" [nzFrontPagination]="false" style="overflow: auto"
-          [nzShowPagination]="false" [nzScroll]="dataTable && dataTable.length > 0 ? { x: '2500px' } : null">
+<nz-table nzBordered [nzData]="dataTable" [nzFrontPagination]="false"class="nowrap pd-10"
+          [nzShowPagination]="false" >
   <thead>
   <tr>
     <th class="text-center" nzWidth="45px">STT</th>
@@ -18,7 +18,7 @@
     <th *ngIf="!isTableKetQua && !isTabNdKhac" class="text-center"> {{type == 'GCT' ? 'Thời điểm xác định' : 'Thời hạn thẩm định'}}</th>
     <th class="text-center">File đính kèm</th>
     <th class="text-center">Ghi chú</th>
-    <th class="text-center" nzWidth="120px" nzRight>Hành động</th>
+    <th class="text-center" nzWidth="120px" >Hành động</th>
   </tr>
   <tr *ngIf="!isView">
     <th class="text-center"></th>
@@ -102,7 +102,7 @@
     <th>
       <input [readonly]="isView" type="text" [(ngModel)]="rowItem.ghiChu" nz-input/>
     </th>
-    <th style="text-align: center" nzRight>
+    <th style="text-align: center" >
       <a *ngIf="!isView">
         <i class="icon htvbdh_dau-cong" (click)="themDataTable()"></i>
       </a>
@@ -130,7 +130,7 @@
         <td *ngIf="isTabNdKhac">{{data.chiSoCpi }}</td>
         <td>{{data.fileDinhKem?.fileName }}</td>
         <td>{{data.ghiChu }}</td>
-        <td style="text-align: center" nzRight>
+        <td style="text-align: center" >
           <a (click)="downloadFile(data.fileDinhKem)">
             <i class="icon htvbdh_tcdt_import "></i>
           </a>
@@ -204,7 +204,7 @@
         <td>
           <input type="text" [(ngModel)]="dataEdit[idx].data.ghiChu" nz-input/>
         </td>
-        <td style="text-align: center" nzRight>
+        <td style="text-align: center" >
           <a (click)="downloadFile(dataEdit[idx].data.fileDinhKem)">
             <i class="icon htvbdh_tcdt_import "></i>
           </a>
@@ -225,9 +225,9 @@
           (nzExpandChange)="onExpandChange(data.idVirtual, $event)">{{ data.tenDviBaoGia }}</td>
       <td *ngIf="!isTableKetQua && !isTabNdKhac" [nzExpand]="expandSet.has(data.idVirtual)"
           (nzExpandChange)="onExpandChange(data.idVirtual, $event)">{{ data.tenDviThamDinh }}</td>
-      <td *ngIf="!isTabNdKhac"></td>
+      <td></td>
       <td *ngIf="!isTabNdKhac && !isApDung"></td>
-      <td *ngIf="isTableKetQua && !isTabNdKhac"></td>
+      <td *ngIf="isTableKetQua && !isTabNdKhac && type == 'GCT'"></td>
       <td></td>
       <td></td>
       <td *ngIf="isVat"></td>
@@ -236,7 +236,7 @@
       <td *ngIf="isTabNdKhac"></td>
       <td></td>
       <td></td>
-      <td nzRight ></td>
+      <td></td>
     </tr>
     <ng-container *ngIf="expandSet.has(data.idVirtual)">
       <ng-container *ngFor="let item of data.children, let y = index">
@@ -256,13 +256,13 @@
           <td *ngIf="isTabNdKhac">{{item.chiSoCpi }}</td>
           <td>{{item.fileDinhKem?.fileName }}</td>
           <td>{{item.ghiChu }}</td>
-          <td style="text-align: center" nzRight>
+          <td style="text-align: center" >
             <a (click)="downloadFile(item.fileDinhKem)">
               <i class="icon htvbdh_tcdt_import "></i>
             </a>
-            <a>
-              <i class="fa fa-pencil" title="Sửa"></i>
-            </a>
+<!--            <a>-->
+<!--              <i class="fa fa-pencil" title="Sửa"></i>-->
+<!--            </a>-->
             <a (click)="deleteItem(y, item)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>

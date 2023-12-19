@@ -310,11 +310,8 @@
           <td>{{ data.tenChiCuc }}</td>
           <td class="text-right">{{ data.soLuongCtieu | number : '1.0-1' : 'vi-VN'}}</td>
           <td class="text-right" *ngIf="!isView">
-            <nz-input-number [(ngModel)]="data.soLuong" [nzSize]="'small'" nz-input [nzMin]="0"
-                             [nzFormatter]="globals.formatter"
-                             [nzMax]="data.soLuongCtieu > 0 ? data.soLuongCtieu : 0"
-                             [nzParser]="globals.parser" [nzDisabled]="isView">
-            </nz-input-number>
+            <input class="money-input" currencyMask [options]="amount" [(ngModel)]="data.soLuong" (ngModelChange)="checkMaxValue(data)"
+                   [readOnly]="isView" />
           </td>
           <td class="text-right" *ngIf="isView">{{ data.soLuong | number : '1.0-1' : 'vi-VN' }}</td>
           <td class="text-right" *ngIf="isApDungTatCa == true">{{ data.giaDn | number : '1.0-1' : 'vi-VN' }}</td>
