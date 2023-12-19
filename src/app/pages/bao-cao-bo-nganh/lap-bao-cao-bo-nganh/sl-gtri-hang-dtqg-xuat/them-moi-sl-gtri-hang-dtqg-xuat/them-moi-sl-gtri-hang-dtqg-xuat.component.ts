@@ -16,6 +16,7 @@ import {
 } from "../../sl-gtri-hang-dtqg/dialog-them-moi-sl-gtri-hang-dtqg/dialog-them-moi-sl-gtri-hang-dtqg.component";
 import { cloneDeep } from 'lodash';
 import { Base2Component } from "../../../../../components/base2/base2.component";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
   selector: 'app-them-moi-sl-gtri-hang-dtqg-xuat',
@@ -36,7 +37,7 @@ export class ThemMoiSlGtriHangDtqgXuatComponent extends Base2Component implement
     {
       text: "Báo cáo năm",
       value: 1,
-      thoiHanGuiBc: "Sau 05 ngày kết thúc thời gian chỉnh lý quyết toán ngân sách nhà nước"
+      thoiHanGuiBc: "Sau 25 ngày kết thúc năm"
     },
     { text: "Báo cáo quý", value: 2, thoiHanGuiBc: "Ngày 20 của tháng đầu quý sau" }
   ];
@@ -47,6 +48,19 @@ export class ThemMoiSlGtriHangDtqgXuatComponent extends Base2Component implement
   itemRowDonViEdit: any[] = [];
   itemRowNhomMhEdit: any[] = [];
   itemRowMatHang: any[] = [];
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "right",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -376,6 +390,53 @@ export class ThemMoiSlGtriHangDtqgXuatComponent extends Base2Component implement
     await this.onFileSelected(event);
     if(this.dataImport.length > 0){
       this.listDataGroup = this.dataImport
+    }
+  }
+
+  calTongGtri(field: string) {
+    if (this.listDataGroup) {
+      let sum = 0
+      this.listDataGroup.forEach(item => {
+        switch (field) {
+          case 'gtriXuatTheoTtcp':
+            sum += this.nvl(item.gtriXuatTheoTtcp);
+            break;
+          case 'gtriXuatCapBach':
+            sum += this.nvl(item.gtriXuatCapBach);
+            break;
+          case 'gtriXuatLuanPhien':
+            sum += this.nvl(item.gtriXuatLuanPhien);
+            break;
+          case 'gtriXuatDcNoiBo':
+            sum += this.nvl(item.gtriXuatDcNoiBo);
+            break;
+          case 'gtriXuatKhac':
+            sum += this.nvl(item.gtriXuatKhac);
+            break;
+          case 'gtriXuatTong':
+            sum += this.nvl(item.gtriXuatTong);
+            break;
+          case 'gtriLuyKeTheoTtcp':
+            sum += this.nvl(item.gtriLuyKeTheoTtcp);
+            break;
+          case 'gtriLuyKeCapBach':
+            sum += this.nvl(item.gtriLuyKeCapBach);
+            break;
+          case 'gtriLuyKeLuanPhien':
+            sum += this.nvl(item.gtriLuyKeLuanPhien);
+            break;
+          case 'gtriLuyKeDcNoiBo':
+            sum += this.nvl(item.gtriLuyKeDcNoiBo);
+            break;
+          case 'gtriLuyKeKhac':
+            sum += this.nvl(item.gtriLuyKeKhac);
+            break;
+          case 'gtriLuyKeTong':
+            sum += this.nvl(item.gtriLuyKeTong);
+            break;
+        }
+      })
+      return sum;
     }
   }
 }

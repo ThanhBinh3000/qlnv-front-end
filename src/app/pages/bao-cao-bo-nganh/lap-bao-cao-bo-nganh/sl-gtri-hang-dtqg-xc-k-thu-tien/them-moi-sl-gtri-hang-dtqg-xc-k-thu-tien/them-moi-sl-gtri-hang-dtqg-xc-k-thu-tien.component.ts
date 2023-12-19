@@ -16,6 +16,7 @@ import {
   DialogThemMoiSlGtriHangDtqgComponent
 } from "../../sl-gtri-hang-dtqg/dialog-them-moi-sl-gtri-hang-dtqg/dialog-them-moi-sl-gtri-hang-dtqg.component";
 import { cloneDeep } from 'lodash';
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
   selector: 'app-them-moi-sl-gtri-hang-dtqg-xc-k-thu-tien',
@@ -36,7 +37,7 @@ export class ThemMoiSlGtriHangDtqgXcKThuTienComponent extends Base2Component imp
     {
       text: "Báo cáo năm",
       value: 1,
-      thoiHanGuiBc: "Sau 05 ngày kết thúc thời gian chỉnh lý quyết toán ngân sách nhà nước"
+      thoiHanGuiBc: "Sau 25 ngày kết thúc năm"
     },
     { text: "Báo cáo quý", value: 2, thoiHanGuiBc: "Ngày 20 của tháng đầu quý sau" }
   ];
@@ -47,6 +48,19 @@ export class ThemMoiSlGtriHangDtqgXcKThuTienComponent extends Base2Component imp
   itemRowDonViEdit: any[] = [];
   itemRowNhomMhEdit: any[] = [];
   itemRowMatHang: any[] = [];
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "right",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -310,6 +324,7 @@ export class ThemMoiSlGtriHangDtqgXcKThuTienComponent extends Base2Component imp
 
   tinhTongGtriDvi (){
     for (let dvi of this.listDataGroup) {
+      dvi.gtriXuatCuuTro = 0
       dvi.gtriXuatHoTro = 0
       dvi.gtriXuatVienTro = 0
       dvi.gtriXuatPvuQp = 0
@@ -324,6 +339,7 @@ export class ThemMoiSlGtriHangDtqgXcKThuTienComponent extends Base2Component imp
       dvi.gtriLuyKeKhac = 0
       dvi.gtriLuyKeTong = 0
       for (let nhomMh of dvi.children) {
+        dvi.gtriXuatCuuTro += this.nvl(nhomMh.gtriXuatCuuTro)
         dvi.gtriXuatHoTro += this.nvl(nhomMh.gtriXuatHoTro)
         dvi.gtriXuatVienTro += this.nvl(nhomMh.gtriXuatVienTro)
         dvi.gtriXuatPvuQp += this.nvl(nhomMh.gtriXuatPvuQp)
@@ -344,6 +360,7 @@ export class ThemMoiSlGtriHangDtqgXcKThuTienComponent extends Base2Component imp
     for (let dvi of this.listDataGroup) {
       for (let nhomMh of dvi.children) {
         if (nhomMh.coNhieuMatHang == true) {
+          nhomMh.gtriXuatCuuTro = 0
           nhomMh.gtriXuatHoTro = 0
           nhomMh.gtriXuatVienTro = 0
           nhomMh.gtriXuatPvuQp = 0
@@ -358,6 +375,7 @@ export class ThemMoiSlGtriHangDtqgXcKThuTienComponent extends Base2Component imp
           nhomMh.gtriLuyKeKhac = 0
           nhomMh.gtriLuyKeTong = 0
           for (let matHang of nhomMh.children) {
+            nhomMh.gtriXuatCuuTro += this.nvl(matHang.gtriXuatCuuTro)
             nhomMh.gtriXuatHoTro += this.nvl(matHang.gtriXuatHoTro)
             nhomMh.gtriXuatVienTro += this.nvl(matHang.gtriXuatVienTro)
             nhomMh.gtriXuatPvuQp += this.nvl(matHang.gtriXuatPvuQp)
@@ -381,6 +399,59 @@ export class ThemMoiSlGtriHangDtqgXcKThuTienComponent extends Base2Component imp
     await this.onFileSelected(event);
     if(this.dataImport.length > 0){
       this.listDataGroup = this.dataImport
+    }
+  }
+
+  calTongGtri (field: string) {
+    if (this.listDataGroup) {
+      let sum = 0
+      this.listDataGroup.forEach(item => {
+        switch (field) {
+          case 'gtriXuatCuuTro':
+            sum += this.nvl(item.gtriXuatCuuTro);
+            break;
+          case 'gtriXuatHoTro':
+              sum += this.nvl(item.gtriXuatHoTro);
+              break;
+          case 'gtriXuatVienTro':
+              sum += this.nvl(item.gtriXuatVienTro);
+              break;
+          case 'gtriXuatPvuQp':
+            sum += this.nvl(item.gtriXuatPvuQp);
+            break;
+          case 'gtriXuatPvuAnNinh':
+            sum += this.nvl(item.gtriXuatPvuAnNinh);
+            break;
+          case 'gtriXuatKhac':
+            sum += this.nvl(item.gtriXuatKhac);
+            break;
+          case 'gtriXuatTong':
+            sum += this.nvl(item.gtriXuatTong);
+            break;
+          case 'gtriLuyKeCuuTro':
+            sum += this.nvl(item.gtriLuyKeCuuTro);
+            break;
+          case 'gtriLuyKeHoTro':
+            sum += this.nvl(item.gtriLuyKeHoTro);
+            break;
+          case 'gtriLuyKeVienTro':
+            sum += this.nvl(item.gtriLuyKeVienTro);
+            break;
+          case 'gtriLuyKePvuQp':
+            sum += this.nvl(item.gtriLuyKePvuQp);
+            break;
+          case 'gtriLuyKePvuAnNinh':
+            sum += this.nvl(item.gtriLuyKePvuAnNinh);
+            break;
+          case 'gtriLuyKeKhac':
+            sum += this.nvl(item.gtriLuyKeKhac);
+            break;
+          case 'gtriLuyKeTong':
+            sum += this.nvl(item.gtriLuyKeTong);
+            break;
+        }
+      })
+      return sum;
     }
   }
 }

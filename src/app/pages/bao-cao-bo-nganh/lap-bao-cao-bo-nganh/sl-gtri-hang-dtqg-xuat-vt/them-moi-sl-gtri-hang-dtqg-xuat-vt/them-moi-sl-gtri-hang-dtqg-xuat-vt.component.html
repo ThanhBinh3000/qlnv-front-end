@@ -210,7 +210,7 @@
       <ng-container *ngFor="let data of listDataGroup; let i = index">
         <tr>
           <ng-container *ngIf="!data.edit; else editTemplateDvi">
-            <td nzLeft class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+            <td nzLeft class="text-center">{{convertToRoman(i+1)}}.</td>
             <td nzLeft class="dm-title">{{ data.danhMuc }}</td>
             <td nzLeft></td>
             <td class="dm-title">{{ data.maSo }}</td>
@@ -220,15 +220,15 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>{{ data.gtriTrongKy | number : '1.0-99' : 'vi_VN'  }}</td>
+            <td class="text-right">{{ data.gtriTrongKy | number : '1.0-99' : 'vi_VN'  }}</td>
             <td></td>
             <td></td>
             <td></td>
-            <td>{{ data.gtriLuyKe | number : '1.0-99' : 'vi_VN'  }}</td>
+            <td class="text-right">{{ data.gtriLuyKe | number : '1.0-99' : 'vi_VN'  }}</td>
             <td></td>
             <td></td>
             <td></td>
-            <td>{{ data.gtriTong | number : '1.0-99' : 'vi_VN'  }}</td>
+            <td class="text-right">{{ data.gtriTong | number : '1.0-99' : 'vi_VN'  }}</td>
             <td nzRight *ngIf="!isView">
               <a (click)="editRowDvi(i)">
                 <i class=" fa fa-pencil"></i>
@@ -242,7 +242,7 @@
             </td>
           </ng-container>
           <ng-template #editTemplateDvi>
-            <td nzLeft class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+            <td nzLeft class="text-center">{{convertToRoman(i+1)}}.</td>
             <td nzLeft class="dm-title"><input nz-input [(ngModel)]="itemRowDonViEdit[i].danhMuc" /></td>
             <td nzLeft></td>
             <td class="dm-title"><input nz-input [(ngModel)]="itemRowDonViEdit[i].maSo" /></td>
@@ -252,15 +252,15 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>{{ data.gtriTrongKy | number : '1.0-99' : 'vi_VN'  }}</td>
+            <td class="text-right">{{ data.gtriTrongKy | number : '1.0-99' : 'vi_VN'  }}</td>
             <td></td>
             <td></td>
             <td></td>
-            <td>{{ data.gtriLuyKe | number : '1.0-99' : 'vi_VN'  }}</td>
+            <td class="text-right">{{ data.gtriLuyKe | number : '1.0-99' : 'vi_VN'  }}</td>
             <td></td>
             <td></td>
             <td></td>
-            <td>{{ data.gtriTong | number : '1.0-99' : 'vi_VN'  }}</td>
+            <td class="text-right">{{ data.gtriTong | number : '1.0-99' : 'vi_VN'  }}</td>
             <td nzRight>
               <a (click)="saveEditRowDvi(i)">
                 <i class="icon htvbdh_tcdt_save"></i>
@@ -274,7 +274,7 @@
         <ng-container *ngFor="let nhomMatHang of data.children, let y = index">
           <tr>
             <ng-container *ngIf="!nhomMatHang.edit; else editTemplateNhomMh">
-              <td nzLeft class="text-center">{{(page - 1) * pageSize + y + 1}}</td>
+              <td nzLeft class="text-center">{{y + 1}}.</td>
               <td nzLeft class="dm-title">{{ nhomMatHang.danhMuc }}</td>
               <td nzLeft></td>
               <td class="dm-title">{{ nhomMatHang.maSo }}</td>
@@ -283,16 +283,16 @@
               <td>{{ nhomMatHang.diaDiem }}</td>
               <td>{{ nhomMatHang.tgianSx }}</td>
               <td>{{ nhomMatHang.thanLuuKho }}</td>
-              <td>{{ nhomMatHang.slTrongKy | number : '1.0-99' : 'vi_VN'  }}</td>
-              <td>{{ nhomMatHang.gtriTrongKy | number : '1.0-99' : 'vi_VN'  }}</td>
-              <td>{{ nhomMatHang.quocGiaTrongKy | number : '1.0-99' : 'vi_VN'  }}</td>
-              <td>{{ nhomMatHang.diaDiemTrongKy | number : '1.0-99' : 'vi_VN'  }}</td>
-              <td>{{ nhomMatHang.slLuyKe | number : '1.0-99' : 'vi_VN'  }}</td>
-              <td>{{ nhomMatHang.gtriLuyKe | number : '1.0-99' : 'vi_VN'  }}</td>
-              <td>{{ nhomMatHang.quocGiaLuyKe | number : '1.0-99' : 'vi_VN'  }}</td>
-              <td>{{ nhomMatHang.diaDiemLuyKe | number : '1.0-99' : 'vi_VN'  }}</td>
-              <td>{{ nhomMatHang.slTong | number : '1.0-99' : 'vi_VN'  }}</td>
-              <td>{{ nhomMatHang.gtriTong | number : '1.0-99' : 'vi_VN'  }}</td>
+              <td class="text-right">{{ nhomMatHang.slTrongKy | number : '1.0-99' : 'vi_VN'  }}</td>
+              <td class="text-right">{{ nhomMatHang.gtriTrongKy | number : '1.0-99' : 'vi_VN'  }}</td>
+              <td>{{ nhomMatHang.quocGiaTrongKy}}</td>
+              <td>{{ nhomMatHang.diaDiemTrongKy}}</td>
+              <td class="text-right">{{ nhomMatHang.slLuyKe | number : '1.0-99' : 'vi_VN'  }}</td>
+              <td class="text-right">{{ nhomMatHang.gtriLuyKe | number : '1.0-99' : 'vi_VN'  }}</td>
+              <td>{{ nhomMatHang.quocGiaLuyKe}}</td>
+              <td>{{ nhomMatHang.diaDiemLuyKe}}</td>
+              <td class="text-right">{{ nhomMatHang.slTong | number : '1.0-99' : 'vi_VN'  }}</td>
+              <td class="text-right">{{ nhomMatHang.gtriTong | number : '1.0-99' : 'vi_VN'  }}</td>
               <td nzRight *ngIf="!isView">
                 <a *ngIf="!isView" (click)="editRowNhomMh(i, y)">
                   <i class=" fa fa-pencil"></i>
@@ -303,7 +303,7 @@
               </td>
             </ng-container>
             <ng-template #editTemplateNhomMh>
-              <td nzLeft class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+              <td nzLeft class="text-center">{{y + 1}}.</td>
               <td nzLeft class="dm-title"><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].danhMuc" /></td>
               <td nzLeft></td>
               <td class="dm-title"><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].maSo" /></td>
@@ -320,18 +320,16 @@
               </td>
               <td>
                 <input class="money-input" currencyMask [options]="amount" [min]="0"
-                       [(ngModel)]="itemRowNhomMhEdit[i][y].muaTangTrongKy"/>
+                       [(ngModel)]="itemRowNhomMhEdit[i][y].slTrongKy"/>
               </td>
               <td>
                 <input class="money-input" currencyMask [options]="amount" [min]="0"
                        [(ngModel)]="itemRowNhomMhEdit[i][y].gtriTrongKy"/>
               </td>
               <td>
-                <input class="money-input" currencyMask [options]="amount" [min]="0"
-                       [(ngModel)]="itemRowNhomMhEdit[i][y].quocGiaTrongKy"/>
+                <input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].quocGiaTrongKy"/>
               <td>
-                <input class="money-input" currencyMask [options]="amount" [min]="0"
-                       [(ngModel)]="itemRowNhomMhEdit[i][y].diaDiemTrongKy"/>
+                <input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].diaDiemTrongKy"/>
 
               <td>
                 <input class="money-input" currencyMask [options]="amount" [min]="0"
@@ -340,16 +338,14 @@
               </td>
               <td>
                 <input class="money-input" currencyMask [options]="amount" [min]="0"
-                       [(ngModel)]="itemRowNhomMhEdit[i][y].muaTangTrongKy"/>
+                       [(ngModel)]="itemRowNhomMhEdit[i][y].gtriLuyKe"/>
 
               </td>
               <td>
-                <input class="money-input" currencyMask [options]="amount" [min]="0"
-                       [(ngModel)]="itemRowNhomMhEdit[i][y].quocGiaLuyKe"/>
+                <input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].quocGiaLuyKe"/>
 
               <td>
-                <input class="money-input" currencyMask [options]="amount" [min]="0"
-                       [(ngModel)]="itemRowNhomMhEdit[i][y].diaDiemLuyKe"/>
+                <input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].diaDiemLuyKe"/>
               <td>
                 <input class="money-input" currencyMask [options]="amount" [min]="0"
                        [(ngModel)]="itemRowNhomMhEdit[i][y].slTong"/>
@@ -371,7 +367,7 @@
           <ng-container *ngFor="let matHang of nhomMatHang.children, let z = index">
             <tr>
               <ng-container *ngIf="!matHang.edit; else editTemplate">
-                <td nzLeft class="text-center">{{(page - 1) * pageSize + z + 1}}</td>
+                <td nzLeft class="text-center">{{y+1}}.{{z+1}}.</td>
                 <td nzLeft></td>
                 <td nzLeft>{{ matHang.matHang }}</td>
                 <td>{{ matHang.maSo }}</td>
@@ -382,12 +378,12 @@
                 <td>{{ matHang.thanLuuKho }}</td>
                 <td>{{ matHang.slTrongKy | number : '1.0-99' : 'vi_VN'  }}</td>
                 <td>{{ matHang.gtriTrongKy | number : '1.0-99' : 'vi_VN'  }}</td>
-                <td>{{ matHang.quocGiaTrongKy | number : '1.0-99' : 'vi_VN'  }}</td>
-                <td>{{ matHang.diaDiemTrongKy | number : '1.0-99' : 'vi_VN'  }}</td>
+                <td>{{ matHang.quocGiaTrongKy  }}</td>
+                <td>{{ matHang.diaDiemTrongKy }}</td>
                 <td>{{ matHang.slLuyKe | number : '1.0-99' : 'vi_VN'  }}</td>
                 <td>{{ matHang.gtriLuyKe | number : '1.0-99' : 'vi_VN'  }}</td>
-                <td>{{ matHang.quocGiaLuyKe | number : '1.0-99' : 'vi_VN'  }}</td>
-                <td>{{ matHang.diaDiemLuyKe | number : '1.0-99' : 'vi_VN'  }}</td>
+                <td>{{ matHang.quocGiaLuyKe   }}</td>
+                <td>{{ matHang.diaDiemLuyKe  }}</td>
                 <td>{{ matHang.slTong | number : '1.0-99' : 'vi_VN'  }}</td>
                 <td>{{ matHang.gtriTong | number : '1.0-99' : 'vi_VN'  }}</td>
                 <td nzRight *ngIf="!isView">
@@ -417,18 +413,16 @@
                 </td>
                 <td>
                   <input class="money-input" currencyMask [options]="amount" [min]="0"
-                         [(ngModel)]="itemRowMatHangEdit[i][y][z].muaTangTrongKy"/>
+                         [(ngModel)]="itemRowMatHangEdit[i][y][z].slTrongKy"/>
                 </td>
                 <td>
                   <input class="money-input" currencyMask [options]="amount" [min]="0"
                          [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriTrongKy"/>
                 </td>
                 <td>
-                  <input class="money-input" currencyMask [options]="amount" [min]="0"
-                         [(ngModel)]="itemRowMatHangEdit[i][y][z].quocGiaTrongKy"/>
+                  <input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].quocGiaTrongKy"/>
                 <td>
-                  <input class="money-input" currencyMask [options]="amount" [min]="0"
-                         [(ngModel)]="itemRowMatHangEdit[i][y][z].diaDiemTrongKy"/>
+                  <input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].diaDiemTrongKy"/>
 
                 <td>
                   <input class="money-input" currencyMask [options]="amount" [min]="0"
@@ -437,16 +431,14 @@
                 </td>
                 <td>
                   <input class="money-input" currencyMask [options]="amount" [min]="0"
-                         [(ngModel)]="itemRowMatHangEdit[i][y][z].muaTangTrongKy"/>
+                         [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriLuyKe"/>
 
                 </td>
                 <td>
-                  <input class="money-input" currencyMask [options]="amount" [min]="0"
-                         [(ngModel)]="itemRowMatHangEdit[i][y][z].quocGiaLuyKe"/>
+                  <input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].quocGiaLuyKe"/>
 
                 <td>
-                  <input class="money-input" currencyMask [options]="amount" [min]="0"
-                         [(ngModel)]="itemRowMatHangEdit[i][y][z].diaDiemLuyKe"/>
+                  <input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].diaDiemLuyKe"/>
                 <td>
                   <input class="money-input" currencyMask [options]="amount" [min]="0"
                          [(ngModel)]="itemRowMatHangEdit[i][y][z].slTong"/>
@@ -484,18 +476,16 @@
             </td>
             <td>
               <input class="money-input" currencyMask [options]="amount" [min]="0"
-                     [(ngModel)]="itemRowMatHang[i][y].muaTangTrongKy"/>
+                     [(ngModel)]="itemRowMatHang[i][y].slTrongKy"/>
             </td>
             <td>
               <input class="money-input" currencyMask [options]="amount" [min]="0"
                      [(ngModel)]="itemRowMatHang[i][y].gtriTrongKy"/>
             </td>
             <td>
-              <input class="money-input" currencyMask [options]="amount" [min]="0"
-                     [(ngModel)]="itemRowMatHang[i][y].quocGiaTrongKy"/>
+              <input nz-input [(ngModel)]="itemRowMatHang[i][y].quocGiaTrongKy"/>
             <td>
-              <input class="money-input" currencyMask [options]="amount" [min]="0"
-                     [(ngModel)]="itemRowMatHang[i][y].diaDiemTrongKy"/>
+              <input nz-input [(ngModel)]="itemRowMatHang[i][y].diaDiemTrongKy"/>
 
             <td>
               <input class="money-input" currencyMask [options]="amount" [min]="0"
@@ -504,16 +494,14 @@
             </td>
             <td>
               <input class="money-input" currencyMask [options]="amount" [min]="0"
-                     [(ngModel)]="itemRowMatHang[i][y].muaTangTrongKy"/>
+                     [(ngModel)]="itemRowMatHang[i][y].gtriLuyKe"/>
 
             </td>
             <td>
-              <input class="money-input" currencyMask [options]="amount" [min]="0"
-                     [(ngModel)]="itemRowMatHang[i][y].quocGiaLuyKe"/>
+              <input nz-input [(ngModel)]="itemRowMatHang[i][y].quocGiaLuyKe"/>
 
             <td>
-              <input class="money-input" currencyMask [options]="amount" [min]="0"
-                     [(ngModel)]="itemRowMatHang[i][y].diaDiemLuyKe"/>
+              <input nz-input [(ngModel)]="itemRowMatHang[i][y].diaDiemLuyKe"/>
             <td>
               <input class="money-input" currencyMask [options]="amount" [min]="0"
                      [(ngModel)]="itemRowMatHang[i][y].slTong"/>
@@ -544,15 +532,15 @@
         <td class="text-center">X</td>
         <td class="text-center">X</td>
         <td class="text-center">X</td>
-        <td class="text-center">{{calTongTrongKy() | number : '1.0-99' : 'vi_VN'}}</td>
+        <td class="text-right">{{calTongTrongKy() | number : '1.0-99' : 'vi_VN'}}</td>
         <td class="text-center">X</td>
         <td class="text-center">X</td>
         <td class="text-center">X</td>
-        <td class="text-center">{{calTongLuyKe() | number : '1.0-99' : 'vi_VN'}}</td>
+        <td class="text-right">{{calTongLuyKe() | number : '1.0-99' : 'vi_VN'}}</td>
         <td class="text-center">X</td>
         <td class="text-center">X</td>
         <td class="text-center">X</td>
-        <td class="text-center">{{calTong() | number : '1.0-99' : 'vi_VN'}}</td>
+        <td class="text-right">{{calTong() | number : '1.0-99' : 'vi_VN'}}</td>
         <td nzRight class="text-center" *ngIf="!isView"></td>
       </tr>
       </tbody>

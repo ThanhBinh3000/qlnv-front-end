@@ -210,7 +210,7 @@
               (click)="redirectToChiTiet(data.id,true)">
               <i class="icon htvbdh_tcdt_pheduyet" title="Phê duyệt"></i>
             </a>
-            <a *ngIf="(data.trangThai == STATUS.DA_LAP || data.trangThai == STATUS.TU_CHOI_LDV)
+            <a *ngIf="(data.trangThai == STATUS.DA_LAP || data.trangThai == STATUS.TU_CHOI_LDV || data.trangThai == STATUS.TU_CHOI_LDTC)
               && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_THEM')" (click)="redirectToChiTiet(data.id,false)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>

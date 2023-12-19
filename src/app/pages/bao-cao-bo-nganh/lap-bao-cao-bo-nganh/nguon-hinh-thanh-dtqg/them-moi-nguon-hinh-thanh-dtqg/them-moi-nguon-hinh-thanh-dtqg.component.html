@@ -190,8 +190,8 @@
     <tbody>
     <tr *ngFor="let data of dataNguonNsnn; let i = index" class="bold-first-child">
       <ng-container *ngIf="!data.edit; else editTemplate">
-        <td class="text-right">{{ data.noiDung | number : '1.0-99' : 'vi_VN' }}</td>
-        <td class="text-right">{{ data.maSo | number : '1.0-99' : 'vi_VN' }}</td>
+        <td>{{ data.noiDung | number : '1.0-99' : 'vi_VN' }}</td>
+        <td>{{ data.maSo | number : '1.0-99' : 'vi_VN' }}</td>
         <td class="text-right">{{ data.muaTangTrongKy | number : '1.0-99' : 'vi_VN' }}</td>
         <td class="text-right">{{ data.muaBuTrongKy | number : '1.0-99' : 'vi_VN' }}</td>
         <td class="text-right">{{ data.muaBsungTrongKy | number : '1.0-99' : 'vi_VN' }}</td>
@@ -314,8 +314,8 @@
     </tr>
     <tr *ngFor="let data of dataNguonNgoaiNsnn; let i = index" class="bold-first-child">
       <ng-container *ngIf="!data.edit; else editNnTemplate">
-        <td class="text-right">{{ data.noiDung | number : '1.0-99' : 'vi_VN' }}</td>
-        <td class="text-right">{{ data.maSo | number : '1.0-99' : 'vi_VN' }}</td>
+        <td>{{ data.noiDung | number : '1.0-99' : 'vi_VN' }}</td>
+        <td>{{ data.maSo | number : '1.0-99' : 'vi_VN' }}</td>
         <td class="text-right">{{ data.muaTangTrongKy | number : '1.0-99' : 'vi_VN' }}</td>
         <td class="text-right">{{ data.muaBuTrongKy | number : '1.0-99' : 'vi_VN' }}</td>
         <td class="text-right">{{ data.muaBsungTrongKy | number : '1.0-99' : 'vi_VN' }}</td>
@@ -408,12 +408,12 @@
       <td class="text-center">X</td>
       <td class="text-center">X</td>
       <td class="text-center">X</td>
-      <td class="text-center">{{calTongChi() | number : '1.0-99' : 'vi_VN'}}</td>
+      <td class="text-right">{{calTongChi() | number : '1.0-99' : 'vi_VN'}}</td>
       <td class="text-center">X</td>
       <td class="text-center">X</td>
       <td class="text-center">X</td>
       <td class="text-center">X</td>
-      <td class="text-center">{{calTongLuyKe() | number : '1.0-99' : 'vi_VN'}}</td>
+      <td class="text-right">{{calTongLuyKe() | number : '1.0-99' : 'vi_VN'}}</td>
       <td class="text-center"></td>
       <td class="text-center"></td>
     </tr>
