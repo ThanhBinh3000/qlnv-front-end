@@ -88,7 +88,7 @@ export class ToanBoDsVtTbTrongThoiGianBaoHanhComponent extends Base2Component im
         this.loadDsDonVi(),
         this.loadDsVthh()
       ]);
-      await this.timKiem();
+      await this.search();
     } catch (e) {
       console.log('error: ', e)
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -126,8 +126,8 @@ export class ToanBoDsVtTbTrongThoiGianBaoHanhComponent extends Base2Component im
     return endValue.getTime() <= this.formData.value.ngayTongHopTu.getTime();
   };
 
-  async timKiem() {
-    await this.search();
+  async search() {
+    await super.search();
     this.dataTable.forEach(s => {
       s.idVirtual = uuidv4();
       this.expandSetString.add(s.idVirtual);
