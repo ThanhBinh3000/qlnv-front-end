@@ -107,8 +107,9 @@
           <td>{{ data.tenTrangThai }}</td>
           <td>
             <a (click)="redirectDetail(true, data)"
-               *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_SLGTHDTQGN_XEM')
-                 && !(userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_SLGTHDTQGN_LAP') && data.trangThai != STATUS.BAN_HANH)">
+               *ngIf="(userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_SLGTHDTQGN_XEM')
+                 && !(userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_SLGTHDTQGN_LAP') && data.trangThai != STATUS.BAN_HANH))
+                 || userService.isAccessPermisson('BCBN_NHANBAOCAO_TT130_SLGTHDTQGN')">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_SLGTHDTQGN_LAP')"
