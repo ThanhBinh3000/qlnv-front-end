@@ -673,8 +673,9 @@
                 {{(item.chechLechVnd || 0) | number : '1.0-1' : 'vi_VN'}}</td>
               <td class="{{(item.level == 0 || item.level == 1) ? 'text-right font-weight-bold' : 'text-right'}}">
                 {{(item.chechLechUsd || 0) | number : '1.2-2' : 'vi_VN'}}</td>
-              <td>{{item.ghiChu}}</td>
-              <td>
+              <td *ngIf="!item.edit">{{item.ghiChu}}</td>
+              <td *ngIf="item.edit"><input type='text' [(ngModel)]='item.ghiChu' nz-input /></td>
+              <td *ngIf="!item.edit">
                 <a *ngIf='isViewDetail' (click)='viewRow(item,item.level)'>
                   <i class='fa fa-eye' title='Xem'></i>
                 </a>
@@ -684,8 +685,19 @@
                 <a *ngIf='item.children.length ==0 && !isViewDetail' (click)='editRowKtqd(item,item.level)'>
                   <i class='fa fa-pencil' title='Sửa'></i>
                 </a>
+                <a *ngIf='item.children.length > 0 && !isViewDetail' (click)='editGhiChu(item,item.level)'>
+                  <i class='fa fa-pencil' title='Sửa'></i>
+                </a>
                 <a *ngIf='item.children.length ==0 && !isViewDetail' (click)='deleteItemKtqd(item,item.level)'>
                   <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
+                </a>
+              </td>
+              <td *ngIf="item.edit">
+                <a (click)='saveEditGC(item)' class='save'>
+                  <i class='fa fa-save'></i>
+                </a>
+                <a *ngIf="item.edit" (click)='cancelEditGC(item)'>
+                  <i class='fa fa-times do'></i>
                 </a>
               </td>
             </tr>
