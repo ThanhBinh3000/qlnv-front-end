@@ -75,6 +75,7 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
       idDuAn: [null, Validators.required],
       chuDauTu: [this.userInfo.TEN_DVI, Validators.required],
       diaChi: [this.userInfo.DON_VI.diaChi],
+      maSoThue: [this.userInfo.DON_VI.mst],
       toChucTvtk: [null],
       chuNhiemDuAn: [null],
       mucTieuDt: [null],
@@ -105,6 +106,7 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
   async ngOnInit() {
     this.spinner.show();
     try {
+      console.log(this.formData.value.maSoThue,1)
       // await Promise.all([
       //   this.loadQdKhĐtxd(),
       //   this.loadListDuAn()
