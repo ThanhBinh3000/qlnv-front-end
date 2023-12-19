@@ -8,12 +8,14 @@ import { MainModule } from '../../../layout/main/main.module';
 import { NzTreeViewModule } from 'ng-zorro-antd/tree-view';
 import { DirectivesModule } from '../../../directives/directives.module';
 import { BcTienDoNhapGaoTheoGoiThauComponent } from './bc-tien-do-nhap-gao-theo-goi-thau/bc-tien-do-nhap-gao-theo-goi-thau.component';
+import { BaoCaoChitietXuatGaoHotroDiaphuongComponent } from './bao-cao-chitiet-xuat-gao-hotro-diaphuong/bao-cao-chitiet-xuat-gao-hotro-diaphuong.component';
 
 
 @NgModule({
   declarations: [
     BaoCaoNhapXuatHangDtqgComponent,
-    BcTienDoNhapGaoTheoGoiThauComponent
+    BcTienDoNhapGaoTheoGoiThauComponent,
+    BaoCaoChitietXuatGaoHotroDiaphuongComponent
   ],
   imports: [
     CommonModule,

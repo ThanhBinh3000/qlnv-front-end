@@ -8,6 +8,10 @@
               <span nz-icon nzType='fund'></span>
               <span>Báo cáo tiến độ nhập gạo theo yêu cầu</span>
             </li>
+            <li nz-menu-item [nzSelected]='tabSelected==1' (click)='selectTab(1)'>
+              <span nz-icon nzType='fund'></span>
+              <span>Báo cáo chi tiết xuất gạo hỗ trợ cho các địa phương</span>
+            </li>
           </ul>
         </li>
       </ul>
@@ -16,6 +20,9 @@
       <div class='contentDetail'>
         <ng-container *ngIf='tabSelected == 0'>
           <app-bc-tien-do-nhap-gao-theo-goi-thau></app-bc-tien-do-nhap-gao-theo-goi-thau>
+        </ng-container>
+        <ng-container *ngIf='tabSelected == 1'>
+          <app-bao-cao-chitiet-xuat-gao-hotro-diaphuong></app-bao-cao-chitiet-xuat-gao-hotro-diaphuong>
         </ng-container>
       </div>
     </div>
