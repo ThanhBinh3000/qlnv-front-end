@@ -26,7 +26,7 @@ export class BaoCaoChitietXuatGaoHotroDiaphuongComponent extends Base2Component 
   excelSrc: any;
   pdfBlob: any;
   excelBlob: any;
-  nameFile: any;
+  nameFile = "bao-cao-chi-tiet-xuat-gao-hotro-diaphuong";
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
