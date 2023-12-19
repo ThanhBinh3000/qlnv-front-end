@@ -13,6 +13,7 @@ import { NzNotificationService } from "ng-zorro-antd/notification";
 import { Base2Component } from "src/app/components/base2/base2.component";
 import moment from "moment";
 import dayjs from "dayjs";
+import { DanhMucService } from "src/app/services/danhmuc.service";
 
 @Component({
   selector: 'app-them-thong-tin-tien-ich',
@@ -25,6 +26,7 @@ export class ThemThongTinTienIchComponent extends Base2Component implements OnIn
   fb: FormBuilder = new FormBuilder();
   isView = false
   fileDinhKems: any[] = [];
+  dsPLTT: any[] = [];
   data?: any
 
   constructor(
@@ -34,6 +36,7 @@ export class ThemThongTinTienIchComponent extends Base2Component implements OnIn
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private _modalRef: NzModalRef,
+    private danhMucService: DanhMucService,
     private donViService: DonviService,
     private mangLuoiKhoService: MangLuoiKhoService,
     private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
@@ -44,9 +47,9 @@ export class ThemThongTinTienIchComponent extends Base2Component implements OnIn
       createBy: [],
       dateCreated: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
       classify: [, [Validators.required]],
-      title: [],
-      link: [],
-      linkName: [],
+      title: [, [Validators.required]],
+      link: [, [Validators.required]],
+      linkName: [, [Validators.required]],
       content: [],
       status: [true],
     }
@@ -59,7 +62,14 @@ export class ThemThongTinTienIchComponent extends Base2Component implements OnIn
       this.fileDinhKems = this.data.fileDinhKems
       this.formData.patchValue({ ...this.data, dateCreated: moment(this.data.dateCreated, 'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD') })
     }
+    this.loadDsPLTT()
+  }
 
+  async loadDsPLTT() {
+    let res = await this.danhMucService.danhMucChungGetAll("PHAN_LOAI_THONG_TIN");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dsPLTT = res.data
+    }
   }
 
   handleOk(item: any) {
