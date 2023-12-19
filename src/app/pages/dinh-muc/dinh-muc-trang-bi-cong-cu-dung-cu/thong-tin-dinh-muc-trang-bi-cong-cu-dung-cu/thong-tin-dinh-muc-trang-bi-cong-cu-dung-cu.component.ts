@@ -426,11 +426,12 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
         return ten.join(',');
       }
     }
-
-    for (let l of loaiHhBq) {
-      let t = this.listHangHoaAll.find(item => item.ma == l);
-      if (t) {
-        ten.push(t.ten);
+    if (loaiHhBq && loaiHhBq.length > 0) {
+      for (let l of loaiHhBq) {
+        let t = this.listHangHoaAll.find(item => item.ma == l);
+        if (t) {
+          ten.push(t.ten);
+        }
       }
     }
     return ten.join(',');
