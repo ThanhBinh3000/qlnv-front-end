@@ -112,12 +112,13 @@
       <tr>
         <th rowspan='2'>STT</th>
         <th rowspan='2'>Công cụ dụng cụ</th>
+        <th rowspan='2' class='text-center'>ĐVT</th>
+        <th rowspan='2'>Nhóm công cụ dụng cụ</th>
         <th rowspan='2'>Áp dụng tại cục</th>
         <th rowspan='2'>Căn cứ để ra định mức</th>
         <th rowspan='2'>Loại hàng DTQG</th>
         <th rowspan='2'>Trang bị</th>
         <th colspan='3' class='text-center'>Số lượng tối đa</th>
-        <th rowspan='2' class='text-center'>ĐVT</th>
         <th rowspan='2'>Ghi chú</th>
         <th rowspan='2' class='text-center'>Hành động</th>
       </tr>
@@ -131,6 +132,8 @@
       <tr *ngFor='let data of dataTableDetail; let idx = index'>
         <td>{{idx + 1}}</td>
         <td>{{data.tenCcdc}}</td>
+        <td>{{data.donViTinh}}</td>
+        <td>{{data.tenNhomCcdc}}</td>
         <td>{{data.apDungTai ? data.apDungTaiStr : 'Tất cả'}}</td>
         <td>{{data.ccRaDm=='DK' ? 'Điểm kho bảo quản' : data.ccRaDm=='KL' ? 'Khối lượng hàng nhập, xuất, bảo quản' : '' }}</td>
         <td>{{getTenLoaiHang(data.loaiHhBq)}}</td>
@@ -138,7 +141,6 @@
         <td>{{data.dmVpCuc}}</td>
         <td>{{data.dmVpChiCuc | number}}</td>
         <td>{{data.ccRaDm == 'DK' ? data.dmTheoDiemKho + '/điểm kho bảo quản lương thực' : data.dmTrangBi + '/' + data.khoiLuong + ' kg lương thực bảo quản theo kế hoạch năm'}}</td>
-        <td>{{data.donViTinh}}</td>
         <td>{{data.ycKyThuat}}</td>
         <td class='text-center'>
           <a *ngIf='isViewDetail'(click)='viewRow(data)'>

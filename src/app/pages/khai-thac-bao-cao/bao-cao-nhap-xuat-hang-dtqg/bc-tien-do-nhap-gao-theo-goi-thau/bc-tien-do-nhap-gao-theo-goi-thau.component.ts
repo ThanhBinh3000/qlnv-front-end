@@ -65,8 +65,8 @@ export class BcTienDoNhapGaoTheoGoiThauComponent extends Base2Component implemen
       this.spinner.show();
       let body = this.formData.value;
       body.typeFile = "xlsx";
-      body.trangThai = "01";
-      body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc
+      // body.trangThai = "01";
+      // body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc
       await this.bcNhapXuatMuaBanHangDTQGService.baoCaoTienDoNhapHang(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
@@ -86,10 +86,10 @@ export class BcTienDoNhapGaoTheoGoiThauComponent extends Base2Component implemen
   }
 
   async preView() {
-    this.formData.controls["maCuc"].clearValidators();
-    if (this.formData.value.loaiBc == '02') {
-      this.formData.controls["maCuc"].setValidators(Validators.required);
-    }
+    // this.formData.controls["maCuc"].clearValidators();
+    // if (this.formData.value.loaiBc == '02') {
+    //   this.formData.controls["maCuc"].setValidators(Validators.required);
+    // }
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide();
@@ -98,7 +98,7 @@ export class BcTienDoNhapGaoTheoGoiThauComponent extends Base2Component implemen
     try {
       this.spinner.show();
       let body = this.formData.value;
-      body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc
+      // body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc
       body.typeFile = "pdf";
       await this.bcNhapXuatMuaBanHangDTQGService.baoCaoTienDoNhapHang(body).then(async s => {
         this.pdfBlob = s;
