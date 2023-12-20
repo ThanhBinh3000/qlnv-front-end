@@ -4,7 +4,7 @@
       <div class="title-chi-tieu">
         <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'status-xanh' : 'status-do'">
         {{ formData.value.tenTrangThai }}</span>
-        <span>Báo cáo kế hoạch tăng hàng dự trữ quốc gia</span>
+        <span>Báo cáo kế hoạch giảm hàng dự trữ quốc gia</span>
       </div>
     </div>
     <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
@@ -61,7 +61,7 @@
           </nz-form-control>
         </nz-form-item>
       </div>
-      <div nz-col [nzSpan]="6">
+      <div *ngIf="!userService.isTongCuc()" nz-col [nzSpan]="6">
         <nz-form-item>
           <nz-form-label [nzNoColon]="true"> Đơn vị gửi báo cáo </nz-form-label>
           <nz-form-control>
@@ -69,6 +69,15 @@
               <input nz-input readonly formControlName="dviGui" />
             </nz-input-group>
           </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div *ngIf="userService.isTongCuc()" nz-col [nzSpan]="4">
+        <nz-form-item>
+          <nz-form-label [nzNoColon]="true" class="label-color-kh"> Đơn vị gửi báo cáo
+          </nz-form-label>
+          <nz-select formControlName="dviGui" (ngModelChange)="handleChoose($event)" [nzDisabled]="isView">
+            <nz-option *ngFor="let p of listDsDvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
+          </nz-select>
         </nz-form-item>
       </div>
       <div nz-col [nzSpan]="6">
@@ -179,11 +188,19 @@
           <tr>
             <th></th>
             <th>
-              <nz-select [nzDisabled]="isView" [(ngModel)]="itemRow.cloaiVthh"
-                (ngModelChange)="changeCloaiVthh($event)">
-                <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
-                </nz-option>
-              </nz-select>
+              <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
+                <input nz-input [(ngModel)]="itemRow.tenHang" (input)="onInputDonVi($event)"
+                       [nzAutocomplete]="auto" />
+              </nz-input-group>
+              <ng-template #suffixIcon>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
+              <nz-autocomplete #auto>
+                <nz-auto-option *ngFor="let p of optionsCloaiVthh" [nzValue]="p.maHangHoa"
+                                (click)="selectDonVi(p)">
+                  {{ p.tenHangHoa }}
+                </nz-auto-option>
+              </nz-autocomplete>
             </th>
             <th>{{itemRow.dvt}}</th>
             <th>
@@ -194,12 +211,12 @@
               <nz-date-picker [nzDisabled]="isView" nzFormat="dd/MM/yyyy" [(ngModel)]="itemRow.thoiGianNk">
               </nz-date-picker>
             </th>
-            <th><nz-input-number nz-input [nzDisabled]="isView" [nzPrecision]="2" [(ngModel)]="itemRow.keHoachSl" ></nz-input-number></th>
-            <th><nz-input-number nz-input [nzDisabled]="isView" [nzPrecision]="2" [(ngModel)]="itemRow.keHoachTt" ></nz-input-number></th>
-            <th><nz-input-number nz-input [nzDisabled]="isView" [nzPrecision]="2" [(ngModel)]="itemRow.uocThienSl" ></nz-input-number></th>
-            <th><nz-input-number nz-input [nzDisabled]="isView" [nzPrecision]="2" [(ngModel)]="itemRow.uocThienTt" ></nz-input-number></th>
-            <th><nz-input-number nz-input [nzDisabled]="isView" [nzPrecision]="2" [(ngModel)]="itemRow.namKhSl" ></nz-input-number></th>
-            <th><nz-input-number nz-input [nzDisabled]="isView" [nzPrecision]="2" [(ngModel)]="itemRow.namKhDt" ></nz-input-number></th>
+            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow.keHoachSl"/></th>
+            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow.keHoachTt"/></th>
+            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow.uocThienSl"/></th>
+            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow.uocThienTt"/></th>
+            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow.namKhSl"/></th>
+            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow.namKhDt"/></th>
             <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.ghiChu" /></th>
             <th>
               <a *ngIf="!isView" (click)="addRow()" [class.disabled]="!itemRow">
@@ -219,13 +236,13 @@
               <td>{{ data.dvt }}</td>
               <td class="text-right">{{ data.thoiGianSx | date: 'dd/MM/YYYY' }}</td>
               <td class="text-right">{{ data.thoiGianNk | date: 'dd/MM/YYYY' }}</td>
-              <td class="text-right">{{ data.keHoachSl | number: '1.2-2' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.keHoachTt | number: '1.2-2' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.uocThienSl | number: '1.2-2' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.uocThienTt | number : '1.2-2' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.namKhSl | number : '1.2-2' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.namKhDt | number : '1.2-2' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.ghiChu | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.keHoachSl | number: '1.3-3' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.keHoachTt | number: '1.3-3' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.uocThienSl | number: '1.3-3' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.uocThienTt | number: '1.3-3' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.namKhSl | number: '1.3-3' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.namKhDt | number: '1.3-3' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.ghiChu | number: '1.3-3' : 'vi_VN' }}</td>
               <td class="text-center">
                 <a *ngIf="!isView" (click)="startEdit(i)">
                   <i class=" fa fa-pencil"></i>
@@ -238,11 +255,19 @@
             <ng-template #editTemplate>
               <td class="text-center">{{i+1}}</td>
               <th>
-                <nz-select [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.cloaiVthh"
-                  (ngModelChange)="changeCloaiVthh($event)">
-                  <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
-                  </nz-option>
-                </nz-select>
+                <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
+                  <input nz-input [(ngModel)]="itemRowUpdate.tenHang" (input)="onInputDonVi($event)"
+                         [nzAutocomplete]="auto" />
+                </nz-input-group>
+                <ng-template #suffixIcon>
+                  <i nz-icon nzType="search"></i>
+                </ng-template>
+                <nz-autocomplete #auto>
+                  <nz-auto-option *ngFor="let p of optionsCloaiVthh" [nzValue]="p.maHangHoa"
+                                  (click)="selectCloaiVthhUpdate(p)">
+                    {{ p.tenHangHoa }}
+                  </nz-auto-option>
+                </nz-autocomplete>
               </th>
               <th>{{itemRowUpdate.dvt}}</th>
               <th>
@@ -253,12 +278,12 @@
                 <nz-date-picker [nzDisabled]="isView" nzFormat="dd/MM/yyyy" [(ngModel)]="itemRowUpdate.thoiGianNk">
                 </nz-date-picker>
               </th>
-              <th><nz-input-number nz-input [nzDisabled]="isView" [nzPrecision]="2" [(ngModel)]="itemRowUpdate.keHoachSl" ></nz-input-number></th>
-              <th><nz-input-number nz-input [nzDisabled]="isView" [nzPrecision]="2" [(ngModel)]="itemRowUpdate.keHoachTt" ></nz-input-number></th>
-              <th><nz-input-number nz-input [nzDisabled]="isView" [nzPrecision]="2" [(ngModel)]="itemRowUpdate.uocThienSl" ></nz-input-number></th>
-              <th><nz-input-number nz-input [nzDisabled]="isView" [nzPrecision]="2" [(ngModel)]="itemRowUpdate.uocThienTt" ></nz-input-number></th>
-              <th><nz-input-number nz-input [nzDisabled]="isView" [nzPrecision]="2" [(ngModel)]="itemRowUpdate.namKhSl" ></nz-input-number></th>
-              <th><nz-input-number nz-input [nzDisabled]="isView" [nzPrecision]="2" [(ngModel)]="itemRowUpdate.namKhDt" ></nz-input-number></th>
+              <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.keHoachSl"/></th>
+              <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.keHoachTt"/></th>
+              <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.uocThienSl"/></th>
+              <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.uocThienTt"/></th>
+              <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.namKhSl"/></th>
+              <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.namKhDt"/></th>
               <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.ghiChu" /></th>
               <td class="text-center">
                 <a (click)="saveEdit(itemRowUpdate,i)" class="save">
@@ -280,13 +305,13 @@
             <td></td>
             <td></td>
             <td class="text-blue" style="text-align: right;">{{sumslKho('keHoachTt', null,
-              'tong') | number: '1.2-2' : 'vi_VN'}}</td>
+              'tong') | number: '1.3-3' : 'vi_VN'}}</td>
             <td></td>
             <td class="text-blue" style="text-align: right;">{{sumslKho('uocThienTt', null,
-              'tong') | number: '1.2-2' : 'vi_VN'}}</td>
+              'tong') | number: '1.3-3' : 'vi_VN'}}</td>
             <td></td>
             <td class="text-blue" style="text-align: right;">{{sumslKho('namKhDt', null,
-              'tong') | number: '1.2-2' : 'vi_VN'}}
+              'tong') | number: '1.3-3' : 'vi_VN'}}
             </td>
             <td></td>
           </tr>

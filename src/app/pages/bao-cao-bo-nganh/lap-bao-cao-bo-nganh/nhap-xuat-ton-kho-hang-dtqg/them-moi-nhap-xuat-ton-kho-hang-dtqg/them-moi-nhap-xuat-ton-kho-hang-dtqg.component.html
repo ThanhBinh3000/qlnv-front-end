@@ -60,7 +60,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6">
+        <div *ngIf="!userService.isTongCuc()" nz-col [nzSpan]="6">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Đơn vị gửi báo cáo </nz-form-label>
             <nz-form-control>
@@ -68,6 +68,15 @@
                 <input nz-input readonly formControlName="dviGui" />
               </nz-input-group>
             </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div *ngIf="userService.isTongCuc()" nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Đơn vị gửi báo cáo
+            </nz-form-label>
+            <nz-select formControlName="dviGui" (ngModelChange)="handleChoose($event)" [nzDisabled]="isView">
+              <nz-option *ngFor="let p of listDsDvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
+            </nz-select>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="6">
@@ -191,25 +200,33 @@
           <tr>
             <th></th>
             <th>
-              <nz-select [nzDisabled]="isView" [(ngModel)]="itemRow.cloaiVthh"
-                (ngModelChange)="changeCloaiVthh($event)">
-                <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
-                </nz-option>
-              </nz-select>
+              <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
+                <input nz-input [(ngModel)]="itemRow.tenHang" (input)="onInputDonVi($event)"
+                       [nzAutocomplete]="auto" />
+              </nz-input-group>
+              <ng-template #suffixIcon>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
+              <nz-autocomplete #auto>
+                <nz-auto-option *ngFor="let p of optionsCloaiVthh" [nzValue]="p.maHangHoa"
+                                (click)="selectDonVi(p)">
+                  {{ p.tenHangHoa }}
+                </nz-auto-option>
+              </nz-autocomplete>
             </th>
             <th>{{itemRow.dvt}}</th>
-            <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRow.tonKhoDauNamSl" ></nz-input-number></th>
-            <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRow.tonKhoDauNamTt" ></nz-input-number></th>
-            <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRow.nhapKnSl" ></nz-input-number></th>
-            <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRow.nhapKnTt" ></nz-input-number></th>
-            <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRow.nhapLkSl" ></nz-input-number></th>
-            <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRow.nhapLkTt" ></nz-input-number></th>
-            <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRow.xuatKnSl" ></nz-input-number></th>
-            <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRow.xuatKnTt" ></nz-input-number></th>
-            <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRow.xuatLkSl" ></nz-input-number></th>
-            <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRow.xuatLkTt" ></nz-input-number></th>
-            <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRow.tonKhoCuoiKySl" ></nz-input-number></th>
-            <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRow.tonKhoCuoiKyTt" ></nz-input-number></th>
+            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.tonKhoDauNamSl"/></th>
+            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.tonKhoDauNamTt"/></th>
+            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.nhapKnSl"/></th>
+            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.nhapKnTt"/></th>
+            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.nhapLkSl"/></th>
+            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.nhapLkTt"/></th>
+            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.xuatKnSl"/></th>
+            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.xuatKnTt"/></th>
+            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.xuatLkSl"/></th>
+            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.xuatLkTt"/></th>
+            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.tonKhoCuoiKySl"/></th>
+            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.tonKhoCuoiKyTt"/></th>
             <th>
               <a *ngIf="!isView" (click)="addRow()" [class.disabled]="!itemRow">
                 <i class="fa fa-plus"></i>
@@ -226,18 +243,18 @@
               <td class="text-center">{{i+1}}</td>
               <td>{{ data.tenHang }}</td>
               <td>{{ data.dvt }}</td>
-              <td class="text-right">{{ data.tonKhoDauNamSl | number : '1.2-2' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.tonKhoDauNamTt | number : '1.2-2' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.nhapKnSl | number : '1.2-2' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.nhapKnTt | number : '1.2-2' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.nhapLkSl | number : '1.2-2' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.nhapLkTt | number : '1.2-2' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.xuatKnSl | number : '1.2-2' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.xuatKnTt | number : '1.2-2' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.xuatLkSl | number : '1.2-2' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.xuatLkTt | number : '1.2-2' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.tonKhoCuoiKySl | number : '1.2-2' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.tonKhoCuoiKyTt | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.tonKhoDauNamSl | number : '1.3-3' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.tonKhoDauNamTt | number : '1.3-3' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.nhapKnSl | number : '1.3-3' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.nhapKnTt | number : '1.3-3' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.nhapLkSl | number : '1.3-3' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.nhapLkTt | number : '1.3-3' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.xuatKnSl | number : '1.3-3' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.xuatKnTt | number : '1.3-3' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.xuatLkSl | number : '1.3-3' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.xuatLkTt | number : '1.3-3' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.tonKhoCuoiKySl | number : '1.3-3' : 'vi_VN' }}</td>
+              <td class="text-right">{{ data.tonKhoCuoiKyTt | number : '1.3-3' : 'vi_VN' }}</td>
               <td class="text-center">
                 <a *ngIf="!isView" (click)="startEdit(i)">
                   <i class=" fa fa-pencil"></i>
@@ -250,25 +267,33 @@
             <ng-template #editTemplate>
               <td class="text-center">{{i+1}}</td>
               <th>
-                <nz-select [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.cloaiVthh"
-                  (ngModelChange)="changeCloaiVthh($event)">
-                  <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
-                  </nz-option>
-                </nz-select>
+                <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
+                  <input nz-input [(ngModel)]="itemRowUpdate.tenHang" (input)="onInputDonVi($event)"
+                         [nzAutocomplete]="auto" />
+                </nz-input-group>
+                <ng-template #suffixIcon>
+                  <i nz-icon nzType="search"></i>
+                </ng-template>
+                <nz-autocomplete #auto>
+                  <nz-auto-option *ngFor="let p of optionsCloaiVthh" [nzValue]="p.maHangHoa"
+                                  (click)="selectCloaiVthhUpdate(p)">
+                    {{ p.tenHangHoa }}
+                  </nz-auto-option>
+                </nz-autocomplete>
               </th>
               <th>{{itemRowUpdate.dvt}}</th>
-              <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.tonKhoDauNamSl" ></nz-input-number></th>
-              <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.tonKhoDauNamTt" ></nz-input-number></th>
-              <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.nhapKnSl" ></nz-input-number></th>
-              <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.nhapKnTt" ></nz-input-number></th>
-              <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.nhapLkSl" ></nz-input-number></th>
-              <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.nhapLkTt" ></nz-input-number></th>
-              <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.xuatKnSl" ></nz-input-number></th>
-              <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.xuatKnTt" ></nz-input-number></th>
-              <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.xuatLkSl" ></nz-input-number></th>
-              <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.xuatLkTt" ></nz-input-number></th>
-              <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.tonKhoCuoiKySl" ></nz-input-number></th>
-              <th><nz-input-number nz-input [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.tonKhoCuoiKyTt" ></nz-input-number></th>
+              <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.tonKhoDauNamSl"/></th>
+              <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.tonKhoDauNamTt"/></th>
+              <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.nhapKnSl"/></th>
+              <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.nhapKnTt"/></th>
+              <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.nhapLkSl"/></th>
+              <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.nhapLkTt"/></th>
+              <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.xuatKnSl"/></th>
+              <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.xuatKnTt"/></th>
+              <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.xuatLkSl"/></th>
+              <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.xuatLkTt"/></th>
+              <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.tonKhoCuoiKySl"/></th>
+              <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.tonKhoCuoiKyTt"/></th>
               <td class="text-center">
                 <a (click)="saveEdit(itemRowUpdate,i)" class="save">
                   <i class="icon htvbdh_tcdt_save"></i>

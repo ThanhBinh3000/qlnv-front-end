@@ -15,6 +15,7 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { formatDate } from '@angular/common';
 import { DonviService } from 'src/app/services/donvi.service';
 import {convertTienTobangChu} from "../../../../../shared/commonFunction";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
   selector: 'app-them-moi-kh-nhap-xuat-ct-vt-bq-hang-dtqg',
@@ -51,6 +52,25 @@ export class ThemMoiKhNhapXuatCtVtBqHangDtqgComponent extends Base2Component imp
     },
     { text: "Báo cáo quý", value: 2, thoiHanGuiBc: "Ngày 20 của tháng đầu quý sau" }
   ];
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 3,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "right",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
+  listDsDvi: any;
+  optionsCloaiVthh: any[] = [];
+  inputCloaiVthh: string = '';
+  optionsDonViShow: any[] = [];
+  selectedCloaiVthh: any = {};
+  tenBoNganh: any;
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
@@ -85,7 +105,7 @@ export class ThemMoiKhNhapXuatCtVtBqHangDtqgComponent extends Base2Component imp
         kyBc: [null],
         bangChu: [null],
         soTien: [null],
-        donViNhan: [null],
+        donViNhanTien: [null],
         detail: [],
       }
     );
@@ -96,16 +116,17 @@ export class ThemMoiKhNhapXuatCtVtBqHangDtqgComponent extends Base2Component imp
     this.userInfo = this.userService.getUserLogin();
     this.templateName = 'template_bcbn_thuc_hien_kh_hoach_nhap_xuat_ct_vt_bao_quan_hang_dtqg.xlsx'
     this.now = dayjs(); // Lấy ngày giờ hiện tại
+    await Promise.all([
+      this.getUserInfor(),
+      // this.loadDsVthh(),
+      this.loadDsDonVi(),
+      this.layTatCaDonViByLevel()
+    ]);
     if (this.idInput > 0) {
       await this.getDetail(this.idInput, null);
     } else {
       this.initForm();
     }
-    await Promise.all([
-      this.getUserInfor(),
-      this.loadDsVthh(),
-      this.loadDsDonVi()
-    ]);
     await this.spinner.hide();
   }
 
@@ -126,9 +147,10 @@ export class ThemMoiKhNhapXuatCtVtBqHangDtqgComponent extends Base2Component imp
             tGianBanHanhTuNgay: this.listData.tGianBanHanhTuNgay,
             tGianBanHanhDenNgay: this.listData.tGianBanHanhDenNgay,
             donVi: this.listData.donVi,
+            dviGui: this.userService.isTongCuc() ? this.listData.dviGui : this.userInfo.MA_DVI,
             kyBc: this.listData.kyBc,
             loaiBc: this.listData.loaiBc,
-            donViNhan: this.listData.donViNhan,
+            donViNhanTien: this.listData.donViNhanTien,
             tkTienGuiCuaDvi: this.listData.tkTienGuiCuaDvi,
             moTai: this.listData.moTai,
             soTien: this.listData.soTien,
@@ -244,10 +266,13 @@ export class ThemMoiKhNhapXuatCtVtBqHangDtqgComponent extends Base2Component imp
     }
     let body = this.formData.value
     body.id = this.idInput
-    body.dviGui = this.userInfo.MA_DVI
+    if(!this.userService.isTongCuc()){
+      body.dviGui = this.userInfo.MA_DVI
+      body.boNganh = this.userInfo.TEN_DVI
+    }else{
+      body.boNganh = this.tenBoNganh
+    }
     body.detail = this.listDataDetail
-
-    body.boNganh = this.userInfo.TEN_DVI
     let res = null;
     if (this.idInput > 0) {
       res = await this.bcBnTt145Service.update(body);
@@ -331,6 +356,54 @@ export class ThemMoiKhNhapXuatCtVtBqHangDtqgComponent extends Base2Component imp
     this.listDataDetail = this.dataImport
   }
   changeNumberToString(event: any){
+    this.formData.value.bangChu = convertTienTobangChu(event);
     return convertTienTobangChu(event);
+  }
+
+
+  async handleChoose(event) {
+    let data = this.listDsDvi.find(x => x.maDvi == event)
+    this.tenBoNganh = data.tenDvi
+    let res = await this.danhMucService.getDanhMucHangHoaDvql({
+      'maDvi': data.maDvi ? (data.maDvi == '01' ? '0101' : data.maDvi) : this.userInfo.MA_DVI,
+    }).toPromise();
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listCloaiVthh = res.data;
+      this.optionsCloaiVthh = this.listCloaiVthh
+    }
+  }
+
+  onInputDonVi(e: Event): void {
+    const value = (e.target as HTMLInputElement).value;
+    if (!value || value.indexOf('@') >= 0) {
+      this.optionsCloaiVthh = this.listCloaiVthh;
+    } else {
+      this.optionsCloaiVthh = this.listCloaiVthh.filter(
+        (x) => x.tenHangHoa.toLowerCase().indexOf(value.toLowerCase()) != -1,
+      );
+    }
+  }
+
+  async selectDonVi(donVi) {
+    this.itemRow.cloaiVthh = donVi.maHangHoa;
+    this.itemRow.tenHang = donVi.tenHangHoa;
+    this.selectedCloaiVthh = donVi;
+  }
+
+  async selectCloaiVthhUpdate(donVi) {
+    this.itemRowUpdate.cloaiVthh = donVi.maHangHoa;
+    this.itemRowUpdate.tenHang = donVi.tenHangHoa;
+    this.selectedCloaiVthh = donVi;
+  }
+
+  async layTatCaDonViByLevel() {
+    let res = await this.donViService.layTatCaDonViByLevel(0);
+    if (res.msg == MESSAGE.SUCCESS) {
+      console.log(res.data, 1234)
+      this.listDsDvi = res.data
+      // this.formData.get('dviNhan').setValue(res.data[0].tenDvi);
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
   }
 }

@@ -50,8 +50,8 @@ export class NhapXuatTonKhoHangDtqgComponent extends Base2Component implements O
     super(httpClient, storageService, notification, spinner, modal, bcBnTt145Service);
     this.formData = this.fb.group(
       {
-        nam: [dayjs().get("year"), [Validators.required]],
-        quy: [null],
+        nam: [null],
+        kyBc: [null],
         tuNgayTao: [null],
         tuNgayKyGui: [null],
         denNgayTao: [null],
@@ -93,7 +93,8 @@ export class NhapXuatTonKhoHangDtqgComponent extends Base2Component implements O
   }
 
   async clearFilter() {
-    this.formData.get('nam').setValue(dayjs().get("year"));
+    this.formData.get('nam').setValue(null);
+    this.formData.get('kyBc').setValue(null);
     this.tGianTaoTuNgay = null;
     this.tGianTaoDenNgay = null;
     this.tGianBanHanhTuNgay = null;
@@ -129,6 +130,7 @@ export class NhapXuatTonKhoHangDtqgComponent extends Base2Component implements O
       tGianBanHanhTuNgay: this.tGianBanHanhTuNgay != null ? dayjs(this.tGianBanHanhTuNgay).format('YYYY-MM-DD') : null,
       tGianBanHanhDenNgay: this.tGianBanHanhDenNgay != null ? dayjs(this.tGianBanHanhDenNgay).format('YYYY-MM-DD') : null,
       dviGui: null,
+      kyBc: this.formData.get('kyBc').value,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,

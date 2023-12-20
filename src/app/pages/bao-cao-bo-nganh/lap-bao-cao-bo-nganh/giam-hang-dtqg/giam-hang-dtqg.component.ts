@@ -50,7 +50,7 @@ export class GiamHangDtqgComponent extends Base2Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, bcBnTt145Service);
     this.formData = this.fb.group(
       {
-        nam: [dayjs().get("year"), [Validators.required]],
+        nam: [null],
         quy: [null],
         tuNgayTao: [null],
         tuNgayKyGui: [null],
@@ -93,7 +93,7 @@ export class GiamHangDtqgComponent extends Base2Component implements OnInit {
   }
 
   async clearFilter() {
-    this.formData.get('nam').setValue(dayjs().get("year"));
+    this.formData.get('nam').setValue(null);
     this.tGianTaoTuNgay = null;
     this.tGianTaoDenNgay = null;
     this.tGianBanHanhTuNgay = null;

@@ -16,6 +16,7 @@ import { formatDate } from '@angular/common';
 import { DonviService } from 'src/app/services/donvi.service';
 import { DialogThemMoiChiTietNhapXuatTonKhoHangDtqgComponent } from '../dialog-them-moi-chi-tiet-nhap-xuat-ton-kho-hang-dtqg/dialog-them-moi-chi-tiet-nhap-xuat-ton-kho-hang-dtqg.component';
 import { cTNhapXuatHangDtqg, slGtriHangDtqg } from 'src/app/models/BaoCaoBoNganh';
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
   selector: 'app-them-moi-chi-tiet-nhap-xuat-ton-kho-hang-dtqg',
@@ -58,6 +59,25 @@ export class ThemMoiChiTietNhapXuatTonKhoHangDtqgComponent extends Base2Componen
     },
     { text: "Báo cáo quý", value: 2, thoiHanGuiBc: "Ngày 20 của tháng đầu quý sau" }
   ];
+  listDsDvi: any;
+  optionsCloaiVthh: any[] = [];
+  inputCloaiVthh: string = '';
+  optionsDonViShow: any[] = [];
+  selectedCloaiVthh: any = {};
+  tenBoNganh: any;
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 3,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "right",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
@@ -97,17 +117,17 @@ export class ThemMoiChiTietNhapXuatTonKhoHangDtqgComponent extends Base2Componen
     this.userInfo = this.userService.getUserLogin();
     this.templateName = 'template_bcbn_ct_nhap_xuat_ton_kho_hang_dtqg.xlsx'
     this.now = dayjs(); // Lấy ngày giờ hiện tại
+    await Promise.all([
+      this.getUserInfor(),
+      // this.loadDsVthh(),
+      this.loadDsDonVi(),
+      this.layTatCaDonViByLevel()
+    ]);
     if (this.idInput > 0) {
       await this.getDetail(this.idInput, null);
     } else {
       this.initForm();
     }
-    await Promise.all([
-      this.getUserInfor(),
-      this.loadDsVthh(),
-      this.loadDsDonVi(),
-      this.loadDsChiCuc()
-    ]);
     await this.spinner.hide();
   }
 
@@ -267,18 +287,18 @@ export class ThemMoiChiTietNhapXuatTonKhoHangDtqgComponent extends Base2Componen
         }
       }
     }
-
+debugger
     if (k == undefined) {
       this.itemRow[i][y][z].diaDiemDeNhapHang = ddDeNhapHang[0].key;
       this.itemRow[i][y][z].tenDiaDiem = ddDeNhapHang[0].tenDvi;
-      this.itemRow[i][y][z].nuocSanXuat = "Việt Nam";
+      // this.itemRow[i][y][z].nuocSanXuat = "Việt Nam";
       this.itemRowEdit[i][y][z].diaDiemDeNhapHang = ddDeNhapHang[0].key;
       this.itemRowEdit[i][y][z].tenDiaDiem = ddDeNhapHang[0].tenDvi;
-      this.itemRowEdit[i][y][z].nuocSanXuat = "Việt Nam";
+      // this.itemRowEdit[i][y][z].nuocSanXuat = "Việt Nam";
     } else {
       this.itemRowEdit[i][y][z][k].diaDiemDeNhapHang = ddDeNhapHang[0].key;
       this.itemRowEdit[i][y][z][k].tenDiaDiem = ddDeNhapHang[0].tenDvi;
-      this.itemRowEdit[i][y][z][k].nuocSanXuat = "Việt Nam";
+      // this.itemRowEdit[i][y][z][k].nuocSanXuat = "Việt Nam";
     }
 
   }
@@ -296,12 +316,16 @@ export class ThemMoiChiTietNhapXuatTonKhoHangDtqgComponent extends Base2Componen
     // }
     let body = this.formData.value
     body.id = this.idInput
-    body.dviGui = this.userInfo.MA_DVI
+    if(!this.userService.isTongCuc()){
+      body.dviGui = this.userInfo.MA_DVI
+      body.boNganh = this.userInfo.TEN_DVI
+    }else{
+      body.boNganh = this.tenBoNganh
+    }
     console.log(this.listDataGroup, "this.listDataGroup")
     body.detail = this.listDataGroup
     console.log(body.detail, "body.detail")
     body.thoiGianTao = this.formData.get('thoiGianTao').value
-    body.boNganh = this.userInfo.TEN_DVI
     let res = null;
     if (this.idInput > 0) {
       res = await this.bcBnTt145Service.update(body);
@@ -543,4 +567,27 @@ export class ThemMoiChiTietNhapXuatTonKhoHangDtqgComponent extends Base2Componen
   // changeLoaiBc(event) {
   //   this.formData.get("thoiHanGuiBc").setValue(this.listLoaiBc.find(item => item.value == event).thoiHanGuiBc);
   // }
+
+  async handleChoose(event) {
+    let data = this.listDsDvi.find(x => x.maDvi == event)
+    this.tenBoNganh = data.tenDvi
+    let res = await this.danhMucService.getDanhMucHangHoaDvql({
+      'maDvi': data.maDvi ? (data.maDvi == '01' ? '0101' : data.maDvi) : this.userInfo.MA_DVI,
+    }).toPromise();
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listCloaiVthh = res.data;
+      this.optionsCloaiVthh = this.listCloaiVthh
+    }
+  }
+
+  async layTatCaDonViByLevel() {
+    let res = await this.donViService.layTatCaDonViByLevel(0);
+    if (res.msg == MESSAGE.SUCCESS) {
+      console.log(res.data, 1234)
+      this.listDsDvi = res.data
+      // this.formData.get('dviNhan').setValue(res.data[0].tenDvi);
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
 }
