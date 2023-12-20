@@ -59,7 +59,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6">
+        <div *ngIf="!userService.isTongCuc()" nz-col [nzSpan]="6">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Đơn vị gửi báo cáo </nz-form-label>
             <nz-form-control>
@@ -67,6 +67,15 @@
                 <input nz-input readonly formControlName="dviGui" />
               </nz-input-group>
             </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div *ngIf="userService.isTongCuc()" nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Đơn vị gửi báo cáo
+            </nz-form-label>
+            <nz-select formControlName="dviGui" (ngModelChange)="handleChoose($event)" [nzDisabled]="isView">
+              <nz-option *ngFor="let p of listDsDvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
+            </nz-select>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="6">
@@ -406,7 +415,8 @@
                   <ng-container *ngIf="!cloaiVthh.edit; else editTemplateCLoaiVthh">
                     <td nzLeft class="text-center">{{(page - 1) * pageSize + z + 1}}</td>
                     <td nzLeft class="dm-title" style="padding-left: 40px">{{ cloaiVthh.tenCloaiVthh }}</td>
-                    <td nzLeft></td>
+                    <td>{{ cloaiVthh.dvt }}</td>
+                    <td>{{ cloaiVthh.nuocSanXuat }}</td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -447,9 +457,9 @@
                   </ng-container>
                   <ng-template #editTemplateCLoaiVthh>
                     <td nzLeft class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-                    <td nzLeft class="dm-title" style="padding-left: 40px"><input nz-input [(ngModel)]="itemRowCLoaiVthhEdit[i][y][z].tenCloaiVthh" />
-                    </td>
-                    <td nzLeft></td>
+                    <td nzLeft class="dm-title" style="padding-left: 40px"><input nz-input [(ngModel)]="itemRowCLoaiVthhEdit[i][y][z].tenCloaiVthh" /></td>
+                    <td><input nz-input [(ngModel)]="itemRowCLoaiVthhEdit[i][y][z].dvt" /></td>
+                    <td><input nz-input [(ngModel)]="itemRowCLoaiVthhEdit[i][y][z].nuocSanXuat" /></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -495,8 +505,8 @@
                       <td nzLeft class="text-center">{{(page - 1) * pageSize + z + 1}}</td>
                       <td nzLeft></td>
                       <td nzLeft class="dm-title">{{ chiCuc.tenDiaDiem }}</td>
-                      <td>{{ chiCuc.dvt }}</td>
-                      <td>{{ chiCuc.nuocSanXuat }}</td>
+                      <td></td>
+                      <td></td>
                       <td>{{ chiCuc.donViBaoQuan }}</td>
                       <td class="text-right">{{ chiCuc.tonKhoDauNam | number: '1.0-1': 'vi_VN'}}</td>
                       <td class="text-right">{{ chiCuc.nhapKnTs | number: '1.0-1': 'vi_VN'}}</td>
@@ -543,35 +553,35 @@
                           </nz-option>
                         </nz-select>
                       </td>
-                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].dvt" /></td>
-                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].nuocSanXuat" /></td>
-                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].donViBaoQuan" /></td>
-                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].tonKhoDauNam" /></td>
-                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].nhapKnTs" /></td>
-                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].nhapKnMt" /></td>
-                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].nhapKnDh" /></td>
-                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].nhapKnDc" /></td>
-                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].nhapKnDt" /></td>
-                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].nhapKnK" /></td>
-                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].nhapLkTs" /></td>
-                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].nhapLkMt" /></td>
-                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].nhapLkDh" /></td>
-                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].nhapLkDc" /></td>
-                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].nhapLkDt" /></td>
-                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].nhapLkK" /></td>
-                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].xuatKnTs" /></td>
-                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].xuatKnKtt" /></td>
-                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].xuatKnBdh" /></td>
-                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].xuatKnLpdh" /></td>
-                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].xuatKnHh" /></td>
-                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].xuatKnK" /></td>
-                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].xuatLkTs" /></td>
-                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].xuatLkKtt" /></td>
-                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].xuatLkBdh" /></td>
-                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].xuatLkLpdh" /></td>
-                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].xuatLkHh" /></td>
-                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].xuatLkK" /></td>
-                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].tonKhoCuoiKy" /></td>
+                      <td></td>
+                      <td></td>
+                      <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowEdit[i][y][z][k].donViBaoQuan"/></th>
+                      <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowEdit[i][y][z][k].tonKhoDauNam"/></th>
+                      <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowEdit[i][y][z][k].nhapKnTs"/></th>
+                      <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowEdit[i][y][z][k].nhapKnMt"/></th>
+                      <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowEdit[i][y][z][k].nhapKnDh"/></th>
+                      <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowEdit[i][y][z][k].nhapKnDc"/></th>
+                      <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowEdit[i][y][z][k].nhapKnDt"/></th>
+                      <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowEdit[i][y][z][k].nhapKnK"/></th>
+                      <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowEdit[i][y][z][k].nhapLkTs"/></th>
+                      <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowEdit[i][y][z][k].nhapLkMt"/></th>
+                      <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowEdit[i][y][z][k].nhapLkDh"/></th>
+                      <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowEdit[i][y][z][k].nhapLkDc"/></th>
+                      <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowEdit[i][y][z][k].nhapLkDt"/></th>
+                      <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowEdit[i][y][z][k].nhapLkK"/></th>
+                      <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowEdit[i][y][z][k].xuatKnTs"/></th>
+                      <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowEdit[i][y][z][k].xuatKnKtt"/></th>
+                      <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowEdit[i][y][z][k].xuatKnBdh"/></th>
+                      <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowEdit[i][y][z][k].xuatKnLpdh"/></th>
+                      <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowEdit[i][y][z][k].xuatKnHh"/></th>
+                      <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowEdit[i][y][z][k].xuatKnK"/></th>
+                      <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowEdit[i][y][z][k].xuatLkTs"/></th>
+                      <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowEdit[i][y][z][k].xuatLkKtt"/></th>
+                      <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowEdit[i][y][z][k].xuatLkBdh"/></th>
+                      <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowEdit[i][y][z][k].xuatLkLpdh"/></th>
+                      <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowEdit[i][y][z][k].xuatLkHh"/></th>
+                      <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowEdit[i][y][z][k].xuatLkK"/></th>
+                      <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowEdit[i][y][z][k].tonKhoCuoiKy"/></th>
                       <td nzRight>
                         <a (click)="saveEdit(i, y, z, k)">
                           <i class="icon htvbdh_tcdt_save"></i>
@@ -593,35 +603,35 @@
                       </nz-option>
                     </nz-select>
                   </td>
-                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].dvt" /></td>
-                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].nuocSanXuat" /></td>
-                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].donViBaoQuan" /></td>
-                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].tonKhoDauNam" /></td>
-                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].nhapKnTs" /></td>
-                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].nhapKnMt" /></td>
-                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].nhapKnDh" /></td>
-                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].nhapKnDc" /></td>
-                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].nhapKnDt" /></td>
-                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].nhapKnK" /></td>
-                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].nhapLkTs" /></td>
-                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].nhapLkMt" /></td>
-                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].nhapLkDh" /></td>
-                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].nhapLkDc" /></td>
-                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].nhapLkDt" /></td>
-                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].nhapLkK" /></td>
-                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].xuatKnTs" /></td>
-                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].xuatKnKtt" /></td>
-                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].xuatKnBdh" /></td>
-                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].xuatKnLpdh" /></td>
-                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].xuatKnHh" /></td>
-                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].xuatKnK" /></td>
-                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].xuatLkTs" /></td>
-                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].xuatLkKtt" /></td>
-                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].xuatLkBdh" /></td>
-                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].xuatLkLpdh" /></td>
-                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].xuatLkHh" /></td>
-                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].xuatLkK" /></td>
-                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].tonKhoCuoiKy" /></td>
+                  <td></td>
+                  <td></td>
+                  <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow[i][y][z].donViBaoQuan"/></th>
+                  <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow[i][y][z].tonKhoDauNam"/></th>
+                  <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow[i][y][z].nhapKnTs"/></th>
+                  <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow[i][y][z].nhapKnMt"/></th>
+                  <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow[i][y][z].nhapKnDh"/></th>
+                  <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow[i][y][z].nhapKnDc"/></th>
+                  <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow[i][y][z].nhapKnDt"/></th>
+                  <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow[i][y][z].nhapKnK"/></th>
+                  <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow[i][y][z].nhapLkTs"/></th>
+                  <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow[i][y][z].nhapLkMt"/></th>
+                  <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow[i][y][z].nhapLkDh"/></th>
+                  <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow[i][y][z].nhapLkDc"/></th>
+                  <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow[i][y][z].nhapLkDt"/></th>
+                  <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow[i][y][z].nhapLkK"/></th>
+                  <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow[i][y][z].xuatKnTs"/></th>
+                  <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow[i][y][z].xuatKnKtt"/></th>
+                  <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow[i][y][z].xuatKnBdh"/></th>
+                  <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow[i][y][z].xuatKnLpdh"/></th>
+                  <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow[i][y][z].xuatKnHh"/></th>
+                  <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow[i][y][z].xuatKnK"/></th>
+                  <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow[i][y][z].xuatLkTs"/></th>
+                  <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow[i][y][z].xuatLkKtt"/></th>
+                  <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow[i][y][z].xuatLkBdh"/></th>
+                  <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow[i][y][z].xuatLkLpdh"/></th>
+                  <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow[i][y][z].xuatLkHh"/></th>
+                  <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow[i][y][z].xuatLkK"/></th>
+                  <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow[i][y][z].tonKhoCuoiKy"/></th>
                   <td nzRight>
                     <a (click)="addRow(i, y, z)">
                       <i class="fa fa-plus"></i>
