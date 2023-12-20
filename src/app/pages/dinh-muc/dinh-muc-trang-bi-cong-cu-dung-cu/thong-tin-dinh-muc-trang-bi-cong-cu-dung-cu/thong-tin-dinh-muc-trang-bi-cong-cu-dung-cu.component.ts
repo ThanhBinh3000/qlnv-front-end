@@ -101,6 +101,8 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
       apDungTai: [[]],
       dmVpCuc: [''],
       dmVpChiCuc: [''],
+      cucKtbq: [''],
+      chiCucKtbq: [''],
       ccRaDm: ['', [Validators.required]],
       loaiHhBq: [[]],
       htBaoQuan: [''],
