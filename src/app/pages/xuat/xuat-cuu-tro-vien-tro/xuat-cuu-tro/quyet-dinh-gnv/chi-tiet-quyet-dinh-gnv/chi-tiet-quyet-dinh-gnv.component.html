@@ -134,7 +134,8 @@
             <nz-form-control nz-col [nzSpan]="24">
               <nz-input-group nzAddOnAfter="{{maHauTo}}">
                 <nz-input-number formControlName="soBbQd" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
-                  [nzSize]="'small'" [nzDisabled]="isView">
+                  [nzSize]="'small'"
+                  [nzDisabled]="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_THEM') && STATUS.BAN_HANH">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
