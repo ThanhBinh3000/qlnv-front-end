@@ -520,6 +520,7 @@
                   <th>Lô kho</th>
                   <th class="text-center">Loại HH</th>
                   <th class="text-center">Chủng loại hàng</th>
+                  <th class="text-center">Năm nhập kho</th>
                   <th class="text-center">ĐVT</th>
                   <th class="text-center">Tồn kho</th>
                   <th class="text-center">SL điều chuyển</th>
@@ -541,6 +542,7 @@
                     </td>
                     <td></td>
                     <td class="bold">{{ chiCuc.tenChiCucNhan || "" }}</td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -581,6 +583,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
+                        <td></td>
                         <td class="bold">{{diemKho.thoiGianDkDc|date: "dd/MM/yyyy"}}</td>
                         <td></td>
                         <td></td>
@@ -608,6 +611,7 @@
                               {{loNganKho.tenNhaKho || ""}}</td>
                             <td class="bold">{{loNganKho.tenLoaiVthh || ""}}</td>
                             <td class="bold">{{loNganKho.tenCloaiVthh || ""}}</td>
+                            <td class="bold">{{loNganKho.namNhap || ""}}</td>
                             <td class="bold">{{loNganKho.donViTinh || ""}}</td>
                             <td class="text-right bold">{{loNganKho.tonKho|number: '1.0-1':
                               'vi_VN'}}
@@ -646,6 +650,7 @@
                               <td></td>
                               <td></td>
                               <td></td>
+                              <td></td>
                               <td>{{(diemKhoNhan.tenDiemKhoNhan || "")}}</td>
                               <td></td>
                               <td></td>
@@ -662,6 +667,7 @@
                             </tr>
                             <ng-container *ngFor="let loNganKhoNhan of diemKhoNhan.children, let y = index">
                               <tr>
+                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -725,6 +731,7 @@
                   <th>Lô kho</th>
                   <th class="text-center">Loại HH</th>
                   <th class="text-center">Chủng loại hàng</th>
+                  <th class="text-center">Năm nhập kho</th>
                   <th class="text-center">ĐVT</th>
                   <th class="text-center">Tồn kho</th>
                   <th class="text-center">SL điều chuyển</th>
@@ -745,6 +752,7 @@
                     </td>
                     <td></td>
                     <td class="bold">{{ item.tenDvi || "" }}</td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -787,6 +795,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
+                        <td></td>
                         <!-- <td></td> -->
                       </tr>
                       <ng-container *ngIf="bb.expand">
@@ -803,6 +812,7 @@
                             <td class="bold">{{c.tenLoKho || ""}} - {{c.tenNganKho || ""}} - {{c.tenNhaKho || ""}}</td>
                             <td class="bold">{{c.tenLoaiVthh || ""}}</td>
                             <td class="bold">{{c.tenCloaiVthh || ""}}</td>
+                            <td class="bold">{{c.namNhap || ""}}</td>
                             <td class="bold">{{c.donViTinh || ""}}</td>
                             <td class="text-right bold">{{c.tonKho|number: '1.0-1':
                               'vi_VN'}}
@@ -844,6 +854,7 @@
                               <td></td>
                               <td></td>
                               <td></td>
+                              <td></td>
                               <td class="bold">{{d.thoiGianDkDc|date: "dd/MM/yyyy"}}</td>
                               <td class="bold">{{d.tenChiCucNhan || ""}}</td>
                               <td></td>
@@ -873,6 +884,7 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
+                                <td></td>
                                 <td>{{(e.tenDiemKhoNhan || "")}}</td>
                                 <td></td>
                                 <td></td>
@@ -886,6 +898,7 @@
                                   <!-- <td [nzExpand]="expandSet.has(bb.key)"
                                               (nzExpandChange)="onExpandChange(bb.key, $event)">
                                           </td> -->
+                                  <td></td>
                                   <td></td>
                                   <td></td>
                                   <td></td>
@@ -939,6 +952,7 @@
                   <th>Lô kho</th>
                   <th class="text-center">Loại HH</th>
                   <th class="text-center">Chủng loại hàng</th>
+                  <th class="text-center">Năm nhập kho</th>
                   <th class="text-center">ĐVT</th>
                   <th class="text-center">Tồn kho</th>
                   <th class="text-center">SL điều chuyển</th>
@@ -961,6 +975,7 @@
                     <td></td>
                     <td class="bold">{{ item.tenDvi || "" }}</td>
                     <td class="bold text-blue">{{ item.soDxuat || "" }}</td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -1000,6 +1015,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
+                        <td></td>
                       </tr>
                       <ng-container *ngIf="bb.expand">
                         <ng-container *ngFor="let c of bb.children, let y = index">
@@ -1013,6 +1029,7 @@
                             <td class="bold">{{c.tenLoKho || ""}} - {{c.tenNganKho || ""}} - {{c.tenNhaKho || ""}}</td>
                             <td class="bold">{{c.tenLoaiVthh || ""}}</td>
                             <td class="bold">{{c.tenCloaiVthh || ""}}</td>
+                            <td class="bold">{{c.namNhap || ""}}</td>
                             <td class="bold">{{c.donViTinh || ""}}</td>
                             <td class="text-right bold">{{c.tonKho|number: '1.0-1':
                               'vi_VN'}}
@@ -1030,6 +1047,7 @@
                           </tr>
                           <ng-container *ngFor="let d of c.children, let y = index">
                             <tr>
+                              <td></td>
                               <td></td>
                               <td></td>
                               <td></td>
@@ -1069,6 +1087,7 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
+                                <td></td>
                                 <td>{{(diemKhoNhan.tenDiemKhoNhan || "")}}</td>
                                 <td></td>
                                 <td></td>
@@ -1077,6 +1096,7 @@
                               </tr>
                               <ng-container *ngFor="let f of diemKhoNhan.children, let y = index">
                                 <tr *ngIf="f.tenNganKhoNhan">
+                                  <td></td>
                                   <td></td>
                                   <td></td>
                                   <td></td>
@@ -1134,6 +1154,7 @@
                   <th class="text-center">Lô kho</th>
                   <th class="text-center">Loại HH</th>
                   <th class="text-center">Chủng loại hàng</th>
+                  <th class="text-center">Năm nhập kho</th>
                   <th class="text-center">ĐVT</th>
                   <th class="text-center">Tồn kho</th>
                   <th class="text-center">Sl điều chuyển</th>
@@ -1154,6 +1175,7 @@
                     </td>
                     <td></td>
                     <td class="bold">{{ chicuc.tenDvi || "" }}</td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -1193,6 +1215,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
+                        <td></td>
                         <td *ngIf="formData.value.trangThai == STATUS.YC_CHICUC_PHANBO_DC"></td>
                       </tr>
                       <ng-container *ngIf="diemkho.expand">
@@ -1206,6 +1229,7 @@
                             <td>{{loNganKho.tenLoKho}} - {{loNganKho.tenNganKho}} - {{loNganKho.tenNhaKho}}</td>
                             <td class="bold">{{loNganKho.tenLoaiVthh || ""}}</td>
                             <td class="bold">{{loNganKho.tenCloaiVthh || ""}}</td>
+                            <td class="bold">{{loNganKho.namNhap || ""}}</td>
                             <td class="bold">{{loNganKho.donViTinh || ""}}</td>
                             <td class="text-right bold">{{loNganKho.tonKho|number: '1.0-1':
                               'vi_VN'}}
@@ -1224,6 +1248,7 @@
                           </tr>
                           <ng-container *ngFor="let chiCucNhan of loNganKho.children, let y = index">
                             <tr>
+                              <td></td>
                               <td></td>
                               <td></td>
                               <td></td>
@@ -1264,6 +1289,7 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
+                                <td></td>
                                 <td>{{(diemKhoNhan.tenDiemKhoNhan || "")}}</td>
                                 <td></td>
                                 <td></td>
@@ -1279,6 +1305,7 @@
                               </tr>
                               <ng-container *ngFor="let f of diemKhoNhan.children, let y = index">
                                 <tr *ngIf="f.tenNganKhoNhan">
+                                  <td></td>
                                   <td></td>
                                   <td></td>
                                   <td></td>

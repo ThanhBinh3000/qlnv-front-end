@@ -194,7 +194,7 @@ export class QuyetDinhGnvComponent extends Base2Component implements OnInit {
     return false
   }
   checkRoleApprove(trangThai: STATUS): boolean {
-    if ([this.STATUS.CHO_DUYET_TP, this.STATUS.CHO_DUYET_LDC].includes(trangThai) && this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_THEM')) {
+    if ((trangThai === this.STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_TP')) || (trangThai === this.STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC'))) {
       return true
     }
     return false

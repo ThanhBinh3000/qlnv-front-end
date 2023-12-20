@@ -134,8 +134,7 @@
             <nz-form-control nz-col [nzSpan]="24">
               <nz-input-group nzAddOnAfter="{{maHauTo}}">
                 <nz-input-number formControlName="soBbQd" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
-                  [nzSize]="'small'"
-                  [nzDisabled]="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_THEM') && STATUS.BAN_HANH">
+                  [nzSize]="'small'" [nzDisabled]="formData.value.trangThai === STATUS.BAN_HANH">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -145,8 +144,8 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">Ngày ký QĐ xuất hàng</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
-              <nz-date-picker class="search__input" formControlName="ngayKy" [nzDisabled]="isView"
-                [nzFormat]="globals.dateFormat">
+              <nz-date-picker class="search__input" formControlName="ngayKy"
+                [nzDisabled]="formData.value.trangThai === STATUS.BAN_HANH" [nzFormat]="globals.dateFormat">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
