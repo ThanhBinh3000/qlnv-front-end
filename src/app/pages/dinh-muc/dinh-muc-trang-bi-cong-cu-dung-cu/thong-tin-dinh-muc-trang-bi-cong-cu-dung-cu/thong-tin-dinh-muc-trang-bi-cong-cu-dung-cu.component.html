@@ -148,7 +148,7 @@
         <td>{{data.cucKtbq | number}}</td>
         <td>{{data.dmVpChiCuc | number}}</td>
         <td>{{data.chiCucKtbq | number}}</td>
-        <td>{{data.ccRaDm == 'DK' ? data.dmTheoDiemKho + '/điểm kho bảo quản lương thực' : data.dmTrangBi + '/' + data.khoiLuong + ' kg lương thực bảo quản theo kế hoạch năm'}}</td>
+        <td>{{data.ccRaDm == 'DK' ? (data.dmTheoDiemKho | number:'1.0-2':'vi_VN') + '/điểm kho bảo quản' : (data.dmTrangBi | number:'1.0-2':'vi_VN') + '/' + (data.khoiLuong | number:'1.0-0':'vi_VN') + ' kg lương thực bảo quản theo kế hoạch năm'}}</td>
         <td>{{data.ghiChu}}</td>
         <td class='text-center'>
           <a *ngIf='isViewDetail'(click)='viewRow(data)'>
