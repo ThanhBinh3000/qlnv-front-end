@@ -103,6 +103,7 @@ export class DialogThemMoiChiTietNhapXuatTonKhoHangDtqgComponent implements OnIn
         coNhieuMatHang: this.formData.get('coNhieuMatHang').value,
         edit: !this.formData.get('coNhieuMatHang').value,
         tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
+        nuocSanXuat: "Việt Nam",
         children: []
       }
     ]
