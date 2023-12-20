@@ -712,9 +712,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent extends Base2Component impleme
         let res = await this.deNghiCapVonBoNganhService.them(body);
         if (res.msg == MESSAGE.SUCCESS) {
           this.idInput = res.data.id;
-          this.formData.patchValue({
-            id: res.data.id,
-          });
+          this.formData.value.id = res.data.id;
           if (isHoanThanh) {
             this.guiDuyet(this.idInput);
           } else

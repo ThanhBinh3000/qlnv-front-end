@@ -107,7 +107,7 @@ export class ThemmoiQuyetdinhKhlcntVtComponent extends Base2Component implements
       namKhoach: [dayjs().get("year"), Validators.required],
       soQd: [""],
       ngayQd: [""],
-      ngayHluc: [""],
+      // ngayHluc: [""],
       idTrHdr: [""],
       soTrHdr: [""],
       trichYeu: [""],
@@ -157,13 +157,13 @@ export class ThemmoiQuyetdinhKhlcntVtComponent extends Base2Component implements
       this.formData.controls["soTrHdr"].setValidators([Validators.required]);
       this.formData.controls["soQd"].setValidators([Validators.required]);
       this.formData.controls["ngayQd"].setValidators([Validators.required]);
-      this.formData.controls["ngayHluc"].setValidators([Validators.required]);
+      // this.formData.controls["ngayHluc"].setValidators([Validators.required]);
     } else {
       this.formData.controls["namKhoach"].clearValidators();
       this.formData.controls["soTrHdr"].clearValidators();
       this.formData.controls["soQd"].clearValidators();
       this.formData.controls["ngayQd"].clearValidators();
-      this.formData.controls["ngayHluc"].clearValidators();
+      // this.formData.controls["ngayHluc"].clearValidators();
     }
   }
 

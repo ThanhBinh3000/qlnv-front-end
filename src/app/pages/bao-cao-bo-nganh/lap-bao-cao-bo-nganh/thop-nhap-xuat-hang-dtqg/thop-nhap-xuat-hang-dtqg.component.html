@@ -97,8 +97,9 @@
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
               <a (click)="goDetail(data.id, true)"
-                 *ngIf="userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHTHNXHDTQG_XEM')
-                 && !(userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHTHNXHDTQG_LAP') && data.trangThai != STATUS.BAN_HANH)">
+                 *ngIf="(userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHTHNXHDTQG_XEM')
+                 && !(userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHTHNXHDTQG_LAP') && data.trangThai != STATUS.BAN_HANH))
+                 || userService.isAccessPermisson('BCBN_NHANBAOCAO_TT145_KHTHNXHDTQG')">
                 <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
               <a *ngIf="data.trangThai == STATUS.BAN_HANH" (click)="download(data.id, 'pdf')">

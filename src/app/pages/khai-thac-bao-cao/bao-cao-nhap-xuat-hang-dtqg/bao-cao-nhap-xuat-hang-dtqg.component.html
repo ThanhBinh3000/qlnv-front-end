@@ -4,9 +4,17 @@
       <ul nz-menu nzMode='inline' style='max-width: 300px'>
         <li nz-submenu nzOpen='true' nzTitle='&nbsp;&nbsp;&nbsp;Báo cáo nhập-xuất, mua-bán hàng DTQG'>
           <ul>
-            <li nz-menu-item (click)='selectTab(0)'>
+            <li nz-menu-item [nzSelected]='tabSelected==0' (click)='selectTab(0)'>
               <span nz-icon nzType='fund'></span>
               <span>Báo cáo tiến độ nhập gạo theo yêu cầu</span>
+            </li>
+            <li nz-menu-item [nzSelected]='tabSelected==1' (click)='selectTab(1)'>
+              <span nz-icon nzType='fund'></span>
+              <span>Báo cáo chi tiết xuất gạo hỗ trợ cho các địa phương</span>
+            </li>
+            <li nz-menu-item [nzSelected]='tabSelected==2' (click)='selectTab(2)'>
+              <span nz-icon nzType='fund'></span>
+              <span>Báo cáo nhập xuất tồn thóc, gạo, muối</span>
             </li>
           </ul>
         </li>
@@ -16,6 +24,12 @@
       <div class='contentDetail'>
         <ng-container *ngIf='tabSelected == 0'>
           <app-bc-tien-do-nhap-gao-theo-goi-thau></app-bc-tien-do-nhap-gao-theo-goi-thau>
+        </ng-container>
+        <ng-container *ngIf='tabSelected == 1'>
+          <app-bao-cao-chitiet-xuat-gao-hotro-diaphuong></app-bao-cao-chitiet-xuat-gao-hotro-diaphuong>
+        </ng-container>
+        <ng-container *ngIf='tabSelected == 2'>
+          <app-bao-cao-nhap-xuat-ton></app-bao-cao-nhap-xuat-ton>
         </ng-container>
       </div>
     </div>

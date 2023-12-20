@@ -12,6 +12,10 @@
           <i class='fa fa-arrow-left'></i>
           <span>Quay lại</span>
         </button>
+        <button *ngIf="formData.value.id > 0" type="button" class="btn btn-sub xanh-nhat ml-2" (click)="preview(previewName)">
+          <i class=" icon htvbdh_tcdt_print"></i>
+          <span>In/xem trước</span>
+        </button>
         <button
           *ngIf='(!itemDnCapVonBn.trangThai || itemDnCapVonBn.trangThai == STATUS.DANG_NHAP_DU_LIEU) && !isView'
           type='button' class='btn btn-sub  ml-2' (click)='save(true)' [disabled]='!formData.valid'>
@@ -23,16 +27,12 @@
           <i class='icon htvbdh_tcdt_save'></i>
           <span>Lưu</span>
         </button>
-        <button *ngIf="formData.value.id" type="button" class="btn btn-sub xanh-nhat ml-2" (click)="preview(previewName)">
-          <i class=" icon htvbdh_tcdt_print"></i>
-          <span>In/xem trước</span>
-        </button>
       </div>
     </div>
   </nz-affix>
   <nz-card class='mt16 flex-card p-lr16'>
     <form nzLayout='vertical' nz-form [formGroup]='formData'>
-      <div nz-row [nzGutter]='[24]'>
+      <div nz-row [nzGutter]='24'>
         <div nz-col [nzSpan]='3'>
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]='true'> Năm ngân sách</nz-form-label>
@@ -603,6 +603,7 @@
         <td>
           <input class='money-input' currencyMask [options]='amount'
                  [(ngModel)]='item.slDeNghiCapVon'
+                 [max]='item.slTheoQdTtcp'
                  (ngModelChange)='changeThanhTienEdit(idx)' />
         </td>
         <td><input type='text' nz-input [(ngModel)]='item.donViTinh' /></td>

@@ -17,11 +17,11 @@ import { MESSAGE } from '../../../../constants/message';
 import { BcNhapXuatMuaBanHangDTQGService } from '../../../../services/bao-cao/BcNhapXuatMuaBanHangDTQG.service';
 
 @Component({
-  selector: 'app-bc-tien-do-nhap-gao-theo-goi-thau',
-  templateUrl: './bc-tien-do-nhap-gao-theo-goi-thau.component.html',
-  styleUrls: ['./bc-tien-do-nhap-gao-theo-goi-thau.component.scss']
+  selector: 'app-bao-cao-nhap-xuat-ton',
+  templateUrl: './bao-cao-nhap-xuat-ton.component.html',
+  styleUrls: ['./bao-cao-nhap-xuat-ton.component.scss']
 })
-export class BcTienDoNhapGaoTheoGoiThauComponent extends Base2Component implements OnInit {
+export class BaoCaoNhapXuatTonComponent extends Base2Component implements OnInit {
   pdfSrc: any;
   excelSrc: any;
   pdfBlob: any;
@@ -42,9 +42,25 @@ export class BcTienDoNhapGaoTheoGoiThauComponent extends Base2Component implemen
     this.formData = this.fb.group(
       {
         nam: [dayjs().get("year"), [Validators.required]],
+        ngayBatDau: '',
+        ngayKetThuc: '',
       }
     );
   }
+  disabledStartNgay = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayKetThuc) {
+      return startValue.getTime() > this.formData.value.ngayKetThuc.getTime();
+    }
+    return false;
+  };
+
+  disabledEndNgay = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayBatDau) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayBatDau.getTime();
+  };
+
 
   async ngOnInit() {
     await this.spinner.show();
@@ -65,9 +81,9 @@ export class BcTienDoNhapGaoTheoGoiThauComponent extends Base2Component implemen
       this.spinner.show();
       let body = this.formData.value;
       body.typeFile = "xlsx";
-      // body.trangThai = "01";
-      // body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc
-      await this.bcNhapXuatMuaBanHangDTQGService.baoCaoTienDoNhapHang(body).then(async s => {
+      body.trangThai = "01";
+      body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc
+      await this.bcNhapXuatMuaBanHangDTQGService.baoCaoNhapXuatTon(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
         saveAs(this.excelBlob, this.nameFile + ".xlsx");
@@ -86,10 +102,7 @@ export class BcTienDoNhapGaoTheoGoiThauComponent extends Base2Component implemen
   }
 
   async preView() {
-    // this.formData.controls["maCuc"].clearValidators();
-    // if (this.formData.value.loaiBc == '02') {
-    //   this.formData.controls["maCuc"].setValidators(Validators.required);
-    // }
+
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide();
@@ -98,9 +111,9 @@ export class BcTienDoNhapGaoTheoGoiThauComponent extends Base2Component implemen
     try {
       this.spinner.show();
       let body = this.formData.value;
-      // body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc
+      body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc
       body.typeFile = "pdf";
-      await this.bcNhapXuatMuaBanHangDTQGService.baoCaoTienDoNhapHang(body).then(async s => {
+      await this.bcNhapXuatMuaBanHangDTQGService.baoCaoNhapXuatTon(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });

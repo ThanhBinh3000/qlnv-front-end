@@ -221,9 +221,9 @@ export class ThemMoiTangHangDtqgComponent extends Base2Component implements OnIn
     if (this.idInput > 0) {
       res = await this.bcBnTt145Service.update(body);
     } else {
-      this.idInput = res.data.id
       // body.tgianTao = formatDate(this.now, "dd-MM-yyyy", 'en-US')
       res = await this.bcBnTt145Service.create(body);
+      this.idInput = res.data.id
     }
     if (res.msg == MESSAGE.SUCCESS) {
       if (isBanHanh) {

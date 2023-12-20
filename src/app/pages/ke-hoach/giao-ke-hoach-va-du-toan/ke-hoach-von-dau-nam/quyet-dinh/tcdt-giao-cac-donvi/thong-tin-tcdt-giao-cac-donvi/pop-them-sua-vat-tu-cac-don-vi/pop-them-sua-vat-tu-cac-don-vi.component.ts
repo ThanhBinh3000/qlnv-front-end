@@ -10,6 +10,7 @@ import { Globals } from '../../../../../../../../shared/globals';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import * as dayjs from 'dayjs';
+import { AMOUNT_NO_DECIMAL, AMOUNT_TWO_DECIMAL } from '../../../../../../../../Utility/utils';
 
 @Component({
   selector: 'app-pop-them-sua-vat-tu-cac-don-vi',
@@ -42,19 +43,8 @@ export class PopThemSuaVatTuCacDonViComponent implements OnInit {
   fb: FormBuilder = new FormBuilder();
   helperService: HelperService
   modal: NzModalService
-  amount = {
-    allowZero: true,
-    allowNegative: false,
-    precision: 0,
-    prefix: '',
-    thousands: '.',
-    decimal: ',',
-    align: "left",
-    nullable: true,
-    min: 0,
-    max: 1000000000000,
-    inputMode: CurrencyMaskInputMode.NATURAL,
-  };
+  amount = AMOUNT_NO_DECIMAL;
+  amount2De = AMOUNT_TWO_DECIMAL;
 
   constructor(httpClient: HttpClient,
               modal: NzModalService,
@@ -193,6 +183,10 @@ export class PopThemSuaVatTuCacDonViComponent implements OnInit {
       this.formItem.patchValue({
         duToan: this.formItem.value.donGia * this.formItem.value.soLuong
       })
+    }else{
+      this.formItem.patchValue({
+        duToan: 0
+      });
     }
   }
 

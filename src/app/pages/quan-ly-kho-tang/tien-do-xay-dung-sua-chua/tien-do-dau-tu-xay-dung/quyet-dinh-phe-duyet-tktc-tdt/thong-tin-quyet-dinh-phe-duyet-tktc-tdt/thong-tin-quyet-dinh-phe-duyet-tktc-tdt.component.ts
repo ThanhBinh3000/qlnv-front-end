@@ -71,6 +71,7 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
       trichYeu: [null, Validators.required],
       tenDuAn: [null, Validators.required],
       chuDauTu: [null],
+      maSoThue: [null],
       tenCongTrinh: [null, Validators.required],
       diaDiem: [null],
       nhaThauBc: [null, Validators.required],
@@ -130,6 +131,7 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
         khoi: this.itemDuAn.tenKhoi,
         chuDauTu: this.itemQdPdDaDtxd.chuDauTu,
         diaDiem: this.itemQdPdDaDtxd.diaDiem,
+        maSoThue: this.itemQdPdDaDtxd.maSoThue,
         giaTriDt: this.itemQdPdDaDtxd.tongMucDt,
         nhaThauTk: this.itemQdPdDaDtxd.toChucTvtk
       })
@@ -316,6 +318,7 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
           tenDuAn: item.tenDuAn,
           chuDauTu: item.chuDauTu,
           diaDiem: item.diaDiem,
+          maSoThue: item.maSoThue,
         });
       }
     }

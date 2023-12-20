@@ -276,7 +276,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         nzFooter: null,
         nzComponentParams: {
           dataTable: this.listDxCanSua,
-          dataHeader: ['Số công văn', 'Ngày ký', 'Loại hàng hoa'],
+          dataHeader: ['Số công văn', 'Ngày ký', 'Loại hàng hóa'],
           dataColumn: ['soDeXuat', 'ngayKy', 'tenLoaiVthh'],
         },
       })

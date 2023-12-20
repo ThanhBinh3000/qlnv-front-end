@@ -28,7 +28,7 @@
         *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDV ) && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_BANHANH_TUCHOI_TC')"
         class="btn btn-sub do" (click)="tuChoi()">
         <i [class]="'icon htvbdh_chuyenvanthu'"></i>
-        <span>Từ chối - lĐ Tổng cục</span>
+        <span>Từ chối - LĐ Tổng cục</span>
       </button>
       <button
         *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDV ) && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_BANHANH_TUCHOI_TC')"
@@ -69,11 +69,7 @@
                 <nz-form-label [nzNoColon]="true" nzRequired>Năm kế hoạch</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-select formControlName="nam" nzAllowClear
-                             [nzDisabled]="formData.value.trangThai !==STATUS.DA_LAP
-                                     && formData.value.trangThai !==STATUS.CHO_DUYET_LDC
-                                     && formData.value.trangThai !==STATUS.TU_CHOI_LDV
-                                     && formData.value.trangThai !== ''
-                                     && !isViewDetail">
+                             [nzDisabled]="isViewDetail">
                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
                     </nz-option>
                   </nz-select>
@@ -88,11 +84,7 @@
                   <nz-input-group nzAddOnAfter="{{maTrinh}}">
                     <nz-input-number formControlName="soTtrDc" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
                                      [nzSize]="'small'"
-                                     [nzDisabled]="formData.value.trangThai !==STATUS.DA_LAP
-                                     && formData.value.trangThai !==STATUS.CHO_DUYET_LDC
-                                     && formData.value.trangThai !==STATUS.TU_CHOI_LDV
-                                     && formData.value.trangThai !== ''
-                                     && !isViewDetail">
+                                     [nzDisabled]="isViewDetail">
                     </nz-input-number>
                   </nz-input-group>
                 </nz-form-control>
@@ -103,11 +95,7 @@
                 <nz-form-label [nzNoColon]="true" nzRequired> Ngày tạo công văn/tờ trình</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-date-picker formControlName="ngayQd" nzFormat="dd/MM/yyyy"
-                                  [nzDisabled]="formData.value.trangThai !==STATUS.DA_LAP
-                                     && formData.value.trangThai !==STATUS.CHO_DUYET_LDC
-                                     && formData.value.trangThai !==STATUS.TU_CHOI_LDV
-                                     && formData.value.trangThai !== ''
-                                     && !isViewDetail">
+                                  [nzDisabled]="isViewDetail">
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -117,11 +105,7 @@
                 <nz-form-label [nzNoColon]="true"> Trích yếu</nz-form-label>
                 <nz-form-control>
                   <input
-                    [readonly]="formData.value.trangThai !==STATUS.DA_LAP
-                                     && formData.value.trangThai !==STATUS.CHO_DUYET_LDC
-                                     && formData.value.trangThai !==STATUS.TU_CHOI_LDV
-                                     && formData.value.trangThai !== ''
-                                     && !isViewDetail"
+                    [readonly]="isViewDetail"
                     nz-input formControlName="trichYeu"/>
                 </nz-form-control>
               </nz-form-item>
@@ -169,7 +153,7 @@
                   Nội dung tờ trình
                 </nz-form-label>
                 <nz-form-control>
-                  <textarea [readonly]="checkDisableQdDc()" rows="3" nz-input formControlName="noiDungTtr"></textarea>
+                  <textarea [readonly]="isViewDetail" rows="3" nz-input formControlName="noiDungTtr"></textarea>
                 </nz-form-control>
               </nz-form-item>
             </div>

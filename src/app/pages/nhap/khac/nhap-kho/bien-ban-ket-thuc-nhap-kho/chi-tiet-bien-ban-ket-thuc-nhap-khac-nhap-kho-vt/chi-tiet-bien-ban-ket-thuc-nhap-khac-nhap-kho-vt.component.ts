@@ -62,6 +62,7 @@ export class ThongTinBienBanKetThucNhapKhacNhapKhoVatTuComponent extends Base2Co
             tenTrangThai: ['Dự thảo'],
             nam: [dayjs().get("year"), [Validators.required]],
             maDvi: [],
+            id: [],
             tenDvi: [],
             maQhns: [],
             soBb: [],
@@ -71,6 +72,8 @@ export class ThongTinBienBanKetThucNhapKhacNhapKhoVatTuComponent extends Base2Co
             qdPdNkId: [],
 
             tenNganLoKho: [],
+            soBBLayMau: [],
+            soBBChuanBiKho: [],
 
             tenLoKho: [],
             maLoKho: [],

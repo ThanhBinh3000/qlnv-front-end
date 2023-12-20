@@ -140,7 +140,7 @@ export class PhieuKtraCluongComponent implements OnInit {
       namKhoach: this.searchFilter.namKh,
       soPhieu: this.searchFilter.soPhieu,
       kqDanhGia: this.searchFilter.ketLuan,
-      trangThai: STATUS.BAN_HANH,
+      // trangThai: STATUS.BAN_HANH,
       tuNgayLP: this.tuNgayLP != null ? dayjs(this.tuNgayLP).format('YYYY-MM-DD') + " 00:00:00" : null,
       denNgayLP: this.denNgayLP != null ? dayjs(this.denNgayLP).format('YYYY-MM-DD') + " 24:59:59" : null,
       tuNgayGd: this.tuNgayGd != null ? dayjs(this.tuNgayGd).format('YYYY-MM-DD') + " 00:00:00" : null,

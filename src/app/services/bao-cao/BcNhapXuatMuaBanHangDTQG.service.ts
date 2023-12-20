@@ -6,7 +6,7 @@ import { environment } from '../../../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
-export class BcCLuongHangDTQGService extends BaseService {
+export class BcNhapXuatMuaBanHangDTQGService extends BaseService {
   GATEWAY = '/qlnv-report';
 
   constructor(public httpClient: HttpClient) {
@@ -18,4 +18,13 @@ export class BcCLuongHangDTQGService extends BaseService {
     return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
   }
 
+  baoCaoChiTietXuatGaoHotro(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bc-chi-tiet-xuat-gao-hotro-diaphuong`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
+
+  baoCaoNhapXuatTon(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/nhap-xuat-ton-gao`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
 }

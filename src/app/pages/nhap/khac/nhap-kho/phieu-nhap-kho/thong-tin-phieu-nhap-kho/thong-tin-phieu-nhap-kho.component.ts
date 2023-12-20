@@ -73,6 +73,7 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       tenTrangThai: ['Dự thảo'],
       nam: [dayjs().get("year"), [Validators.required]],
       maDvi: [],
+      id: [],
       tenDvi: [],
       maQhns: [],
       soPhieuNhapKho: [],
@@ -223,7 +224,9 @@ export class ThongTinPhieuNhapKhoComponent extends Base2Component implements OnI
       this.formData.patchValue({
         ...data,
         tenLoNganKho: `${data.tenLoKho} ${data.tenNganKho}`,
+        id: data.id
       });
+      console.log(this.formData.value, "00000")
       this.dsTH = data.children || []
       this.chungTuDinhKem = data.chungTuDinhKem
       this.fileDinhKemReq = data.fileDinhKems

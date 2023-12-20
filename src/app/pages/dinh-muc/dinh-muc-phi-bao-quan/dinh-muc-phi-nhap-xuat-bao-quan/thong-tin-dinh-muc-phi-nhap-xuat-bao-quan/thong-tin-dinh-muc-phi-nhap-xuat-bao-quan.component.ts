@@ -50,6 +50,7 @@ export interface TreeNodeInterface {
   chechLechUsd?: number;
   level?: number;
   expand?: boolean;
+  edit?: boolean;
   children?: TreeNodeInterface[];
   parent?: TreeNodeInterface;
 }
@@ -738,6 +739,50 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       data: { ...this.dataTableDetailTqd[stt] },
       edit: false,
     };
+  }
+
+  editGhiChu(item: any, level: number) {
+    this.sttEdit = this.dataListDetailKtqd.findIndex(element => element.uuid === item.uuid);
+    item.edit = true
+    // this.isAddDetail = false;
+    // this.openDlgAddEdit();
+    // if (!item.apDungTai) {
+    //   item.apDungTai = [''];
+    // }
+    // this.formDataDtl.patchValue({
+    //   ...item,
+    //   level,
+    // });
+  }
+
+  saveEditGC(item: any) {
+    item.edit = false
+    this.dataListDetailKtqd[this.sttEdit].ghiChu = item.ghiChu
+    // this.isAddDetail = false;
+    // this.sttEdit = this.dataListDetailKtqd.findIndex(element => element.uuid === item.uuid);
+    // this.openDlgAddEdit();
+    // if (!item.apDungTai) {
+    //   item.apDungTai = [''];
+    // }
+    // this.formDataDtl.patchValue({
+    //   ...item,
+    //   level,
+    // });
+  }
+
+  cancelEditGC(item: any) {
+    item.ghiChu = this.dataListDetailKtqd[this.sttEdit].ghiChu || ""
+    item.edit = false
+    // this.isAddDetail = false;
+    // this.sttEdit = this.dataListDetailKtqd.findIndex(element => element.uuid === item.uuid);
+    // this.openDlgAddEdit();
+    // if (!item.apDungTai) {
+    //   item.apDungTai = [''];
+    // }
+    // this.formDataDtl.patchValue({
+    //   ...item,
+    //   level,
+    // });
   }
 
   async saveDinhMuc(idx: number) {

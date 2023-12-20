@@ -28,6 +28,7 @@ import {AMOUNT} from "../../../../../../../Utility/utils";
 import {
   TongHopPhuongAnGiaService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 
 @Component({
@@ -44,7 +45,17 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   @Input() type: string;
   isDieuChinh: boolean = true;
 
-  amount = AMOUNT;
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 1,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "right",
+    nullable: true,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
   rowItemTtc: ThongTinChungPag = new ThongTinChungPag();
   dataEditTtc: { [key: string]: { edit: boolean; data: ThongTinChungPag } } = {};
   STATUS = STATUS;
@@ -326,13 +337,13 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
             if (ctieuChiCuc) {
               if ((this.formData.value.loaiGia && (this.formData.value.loaiGia == 'LG02' || this.formData.value.loaiGia == 'LG04'))) {
                 if (event.startsWith("0101")) {
-                  pagTtChung.soLuongCtieu = ctieuChiCuc.xtnTongThoc ?  ctieuChiCuc.xtnTongThoc : 0
+                  pagTtChung.soLuongCtieu = ctieuChiCuc.xtnTongThoc ? ctieuChiCuc.xtnTongThoc : 0
                 }
                 if (event.startsWith("0102")) {
                   pagTtChung.soLuongCtieu = ctieuChiCuc.xtnTongGao ? ctieuChiCuc.xtnTongGao : 0
                 }
                 if (event.startsWith("04")) {
-                  pagTtChung.soLuongCtieu = ctieuChiCuc.xuatTrongNamMuoi ? ctieuChiCuc.xuatTrongNamMuoi  :0
+                  pagTtChung.soLuongCtieu = ctieuChiCuc.xuatTrongNamMuoi ? ctieuChiCuc.xuatTrongNamMuoi : 0
                 }
               }
               if ((this.formData.value.loaiGia && (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03'))) {
@@ -354,7 +365,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
               }
             }
           })
-          this.pagTtChungs = this.pagTtChungs.filter(pagTtChung => !(pagTtChung.soLuongCtieu == null || pagTtChung.soLuongCtieu == 0 || pagTtChung.soLuongCtieu == '' ));
+          this.pagTtChungs = this.pagTtChungs.filter(pagTtChung => !(pagTtChung.soLuongCtieu == null || pagTtChung.soLuongCtieu == 0 || pagTtChung.soLuongCtieu == ''));
         }
       }
       let body = {
@@ -831,6 +842,13 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         return prev;
       }, 0);
       return sum;
+    }
+  }
+
+  checkMaxValue(data: any): void {
+    const maxAllowedValue = data.soLuongCtieu ? data.soLuongCtieu : 0;
+    if (data.soLuong > maxAllowedValue) {
+      data.soLuong = maxAllowedValue;
     }
   }
 }

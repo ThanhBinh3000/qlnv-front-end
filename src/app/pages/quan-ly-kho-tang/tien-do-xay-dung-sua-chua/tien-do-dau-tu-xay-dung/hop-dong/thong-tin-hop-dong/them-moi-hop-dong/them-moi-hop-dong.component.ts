@@ -185,6 +185,7 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
         tenLoaiHopDong: this.itemGoiThau.tenLoaiHopDong,
         cdtTen: this.itemGoiThau.ktTdxdQuyetDinhPdKqlcnt?.chuDauTu,
         cdtDiaChi: this.itemGoiThau.ktTdxdQuyetDinhPdKqlcnt?.diaChi,
+        cdtMst: this.itemGoiThau.ktTdxdQuyetDinhPdKqlcnt?.maSoThue,
         dvccTen: goiThau?.ktTdxdQuyetDinhPdKhlcntDsnt?.tenNhaThau,
         dvccDiaChi: goiThau?.ktTdxdQuyetDinhPdKhlcntDsnt?.diaChi,
         dvccMst: goiThau?.ktTdxdQuyetDinhPdKhlcntDsnt?.maSoThue,
