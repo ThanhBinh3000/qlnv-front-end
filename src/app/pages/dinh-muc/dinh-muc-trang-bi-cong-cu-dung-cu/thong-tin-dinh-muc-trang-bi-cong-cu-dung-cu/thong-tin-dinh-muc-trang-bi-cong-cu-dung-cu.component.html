@@ -149,7 +149,7 @@
         <td>{{data.dmVpChiCuc | number}}</td>
         <td>{{data.chiCucKtbq | number}}</td>
         <td>{{data.ccRaDm == 'DK' ? data.dmTheoDiemKho + '/điểm kho bảo quản lương thực' : data.dmTrangBi + '/' + data.khoiLuong + ' kg lương thực bảo quản theo kế hoạch năm'}}</td>
-        <td>{{data.ycKyThuat}}</td>
+        <td>{{data.ghiChu}}</td>
         <td class='text-center'>
           <a *ngIf='isViewDetail'(click)='viewRow(data)'>
             <i class=" icon htvbdh_eye"  title='Xem'></i>
@@ -414,6 +414,14 @@
           <nz-form-control>
             <nz-form-label [nzNoColon]='true' class='label-color-kh'>Yêu cầu kỹ thuật cơ bản</nz-form-label>
             <textarea rows='5' nz-input formControlName='ycKyThuat' [readOnly]='true' class='search__input'></textarea>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan='24' class='mt-3'>
+        <nz-form-item>
+          <nz-form-control>
+            <nz-form-label [nzNoColon]='true' class='label-color-kh'>Ghi chú</nz-form-label>
+            <textarea rows='2' nz-input formControlName='ghiChu' [readOnly]='isViewDetail' class='search__input'></textarea>
           </nz-form-control>
         </nz-form-item>
       </div>
