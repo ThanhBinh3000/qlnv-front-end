@@ -15,15 +15,6 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-<!--      <button-->
-<!--        type="button" class="btn btn-sub do ml-2" (click)="preview()" *ngIf="id > 0">-->
-<!--        <i class="icon htvbdh_tcdt_tuchoi"></i>-->
-<!--        <span>Xem trước</span>-->
-<!--      </button>-->
-      <button class="btn btn-sub btn-sm waves-effect waves-light" (click)="downloadExcel(3, $event)" *ngIf="id > 0">
-        <i class="icon htvbdh_trinh"></i>
-        <span>Xuất Excel</span>
-      </button>
       <button class="btn btn-sub ml-2" (click)="saveAndSend(STATUS.DA_KY, 'Bạn có muốn ký?','Bạn đã ký thành công!')"
               *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_CBV)  && userService.isCuc() && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_THDEXUATCC_THEM')">
         <i class="icon htvbdh_trinh"></i>
@@ -159,9 +150,9 @@
     </form>
   </nz-card>
   <nz-collapse *ngIf="isTongHop">
-    <nz-collapse-panel [nzHeader]="'TỔNG HỢP GIÁ TRỊ MUA BẢO HIỂM'" [nzActive]="true" >
-      <ng-template #previewHang>
-        <button class="btn btn-sub btn-sm waves-effect waves-light" (click)="downloadExcel(2, $event)" *ngIf="id > 0">
+    <nz-collapse-panel [nzHeader]="'TỔNG HỢP GIÁ TRỊ MUA BẢO HIỂM'" [nzActive]="true" [nzExtra]="previewTh">
+      <ng-template #previewTh>
+        <button class="btn btn-sub btn-sm waves-effect waves-light" (click)="downloadExcel(3, $event)" *ngIf="id > 0">
           <i class="icon htvbdh_trinh"></i>
           <span>Xuất Excel</span>
         </button>
@@ -189,19 +180,32 @@
           <td [class]="!data.nhomCha ? 'font-weight-bold text-center' : 'text-center'">{{data.stt}}</td>
           <td [class]="!data.nhomCha ? 'font-weight-bold text-left' : 'text-left'">{{data.tenTsHh}}</td>
           <td [class]="!data.nhomCha ? 'font-weight-bold text-center' : 'text-center'">{{data.donViTinh}}</td>
-          <td [class]="!data.nhomCha ? 'font-weight-bold text-right': 'text-right'">{{data.slGt5000 | number : '1.0-1' : 'vi_VN'}}</td>
-          <td [class]="!data.nhomCha ? 'font-weight-bold text-right': 'text-right'">{{data.slLt5000 | number : '1.0-1' : 'vi_VN'}}</td>
-          <td [class]="!data.nhomCha ? 'font-weight-bold text-right': 'text-right'">{{ data.slGt5000 || data.slLt5000 ?  (data.slGt5000 + data.slLt5000 | number : '1.0-1' : 'vi_VN') : ''}}</td>
-          <td [class]="!data.nhomCha ? 'font-weight-bold text-right': 'text-right'">{{data.giaTriGt5000 | number : '1.0-1' : 'vi_VN'}}</td>
-          <td [class]="!data.nhomCha ? 'font-weight-bold text-right': 'text-right'">{{data.giaTriLt5000 | number : '1.0-1' : 'vi_VN'}}</td>
-          <td [class]="!data.nhomCha ? 'font-weight-bold text-right': 'text-right'">{{ data.giaTriGt5000 || data.giaTriLt5000 ? (data.giaTriGt5000 + data.giaTriLt5000 | number : '1.0-1' : 'vi_VN') : ''}}</td>
+          <td
+            [class]="!data.nhomCha ? 'font-weight-bold text-right': 'text-right'">{{data.slGt5000 | number : '1.0-1' : 'vi_VN'}}</td>
+          <td
+            [class]="!data.nhomCha ? 'font-weight-bold text-right': 'text-right'">{{data.slLt5000 | number : '1.0-1' : 'vi_VN'}}</td>
+          <td
+            [class]="!data.nhomCha ? 'font-weight-bold text-right': 'text-right'">{{ data.slGt5000 || data.slLt5000 ? (data.slGt5000 + data.slLt5000 | number : '1.0-1' : 'vi_VN') : ''}}</td>
+          <td
+            [class]="!data.nhomCha ? 'font-weight-bold text-right': 'text-right'">{{data.giaTriGt5000 | number : '1.0-1' : 'vi_VN'}}</td>
+          <td
+            [class]="!data.nhomCha ? 'font-weight-bold text-right': 'text-right'">{{data.giaTriLt5000 | number : '1.0-1' : 'vi_VN'}}</td>
+          <td
+            [class]="!data.nhomCha ? 'font-weight-bold text-right': 'text-right'">{{ data.giaTriGt5000 || data.giaTriLt5000 ? (data.giaTriGt5000 + data.giaTriLt5000 | number : '1.0-1' : 'vi_VN') : ''}}</td>
         </tr>
         </tbody>
       </nz-table>
     </nz-collapse-panel>
   </nz-collapse>
   <nz-collapse *ngIf="isTongHop">
-    <nz-collapse-panel [nzActive]="true" nzHeader="KHO ĐANG CHỨA HÀNG VÀ DỰ KIẾN CHỨA HÀNG" class="mg-t-10">
+    <nz-collapse-panel [nzActive]="true" nzHeader="KHO ĐANG CHỨA HÀNG VÀ DỰ KIẾN CHỨA HÀNG" class="mg-t-10"
+                       [nzExtra]="previewkho">
+      <ng-template #previewkho>
+        <button class="btn btn-sub btn-sm waves-effect waves-light" (click)="downloadExcel(1, $event)" *ngIf="id > 0">
+          <i class="icon htvbdh_trinh"></i>
+          <span>Xuất Excel</span>
+        </button>
+      </ng-template>
       <nz-table class="wrap pd-15" [nzData]="dataTable" [nzFrontPagination]="false" *ngIf="isTongHop"
                 [nzShowPagination]="false" nzBordered>
         <thead>
@@ -295,7 +299,13 @@
     </nz-collapse-panel>
   </nz-collapse>
   <nz-collapse *ngIf="isTongHop">
-    <nz-collapse-panel [nzActive]="true" nzHeader="HÀNG DỰ TRỮ QUỐC GIA" class="mg-t-10">
+    <nz-collapse-panel [nzActive]="true" nzHeader="HÀNG DỰ TRỮ QUỐC GIA" class="mg-t-10" [nzExtra]="previewHang">
+      <ng-template #previewHang>
+        <button class="btn btn-sub btn-sm waves-effect waves-light" (click)="downloadExcel(4, $event)" *ngIf="id > 0">
+          <i class="icon htvbdh_trinh"></i>
+          <span>Xuất Excel</span>
+        </button>
+      </ng-template>
       <nz-card class="mt16 flex-card p-lr16 mg-t-10" *ngFor="let data of tableHangDtqgView, let idx = index">
         <nz-collapse *ngIf="isTongHop">
           <nz-collapse-panel [nzActive]="true" [nzHeader]="data.tenDvi" class="mg-t-10">
@@ -354,18 +364,30 @@
                 <th></th>
                 <th class="font-weight-bold text-left">Tổng cộng</th>
                 <th></th>
-                <th class="font-weight-bold text-right">{{sumSlHang('slHtGt5000', data.listQlDinhMucThHangDtqgBh ) | number: '1.0-1': 'vi_VN'}}</th>
-                <th class="font-weight-bold text-right">{{sumSlHang('slHtLt5000' , data.listQlDinhMucThHangDtqgBh ) | number: '1.0-1': 'vi_VN'}}</th>
-                <th class="font-weight-bold text-right">{{sumSlHang('slHtGt5000' , data.listQlDinhMucThHangDtqgBh ) + sumSlHang('slHtLt5000' , data.listQlDinhMucThHangDtqgBh ) | number: '1.0-1': 'vi_VN'}}</th>
-                <th class="font-weight-bold text-right">{{sumSlHang('giaTriHtGt5000' , data.listQlDinhMucThHangDtqgBh ) | number: '1.0-1': 'vi_VN'}}</th>
-                <th class="font-weight-bold text-right">{{sumSlHang('giaTriHtLt5000' , data.listQlDinhMucThHangDtqgBh ) | number: '1.0-1': 'vi_VN'}}</th>
-                <th class="font-weight-bold text-right">{{sumSlHang('giaTriHtGt5000' , data.listQlDinhMucThHangDtqgBh ) + sumSlHang('giaTriHtLt5000' , data.listQlDinhMucThHangDtqgBh ) | number: '1.0-1': 'vi_VN'}}</th>
-                <th class="font-weight-bold text-right">{{sumSlHang('slDkGt5000' , data.listQlDinhMucThHangDtqgBh ) | number: '1.0-1': 'vi_VN'}}</th>
-                <th class="font-weight-bold text-right">{{sumSlHang('slDkLt5000' , data.listQlDinhMucThHangDtqgBh ) | number: '1.0-1': 'vi_VN'}}</th>
-                <th class="font-weight-bold text-right">{{sumSlHang('slDkGt5000' , data.listQlDinhMucThHangDtqgBh ) + sumSlHang('slDkLt5000' , data.listQlDinhMucThHangDtqgBh ) | number: '1.0-1': 'vi_VN'}}</th>
-                <th class="font-weight-bold text-right">{{sumSlHang('giaTriDkGt5000' , data.listQlDinhMucThHangDtqgBh ) | number: '1.0-1': 'vi_VN'}}</th>
-                <th class="font-weight-bold text-right">{{sumSlHang('giaTriDkLt5000' , data.listQlDinhMucThHangDtqgBh ) | number: '1.0-1': 'vi_VN'}}</th>
-                <th class="font-weight-bold text-right">{{sumSlHang('giaTriDkGt5000' , data.listQlDinhMucThHangDtqgBh ) + sumSlHang('giaTriDkLt5000' , data.listQlDinhMucThHangDtqgBh )  | number: '1.0-1': 'vi_VN'}}</th>
+                <!--                <th class="font-weight-bold text-right">{{sumSlHang('slHtGt5000', data.listQlDinhMucThHangDtqgBh ) | number: '1.0-1': 'vi_VN'}}</th>-->
+                <!--                <th class="font-weight-bold text-right">{{sumSlHang('slHtLt5000' , data.listQlDinhMucThHangDtqgBh ) | number: '1.0-1': 'vi_VN'}}</th>-->
+                <!--                <th class="font-weight-bold text-right">{{sumSlHang('slHtGt5000' , data.listQlDinhMucThHangDtqgBh ) + sumSlHang('slHtLt5000' , data.listQlDinhMucThHangDtqgBh ) | number: '1.0-1': 'vi_VN'}}</th>-->
+                <th></th>
+                <th></th>
+                <th></th>
+                <th
+                  class="font-weight-bold text-right">{{sumSlHang('giaTriHtGt5000', data.listQlDinhMucThHangDtqgBh) | number: '1.0-1': 'vi_VN'}}</th>
+                <th
+                  class="font-weight-bold text-right">{{sumSlHang('giaTriHtLt5000', data.listQlDinhMucThHangDtqgBh) | number: '1.0-1': 'vi_VN'}}</th>
+                <th
+                  class="font-weight-bold text-right">{{sumSlHang('giaTriHtGt5000', data.listQlDinhMucThHangDtqgBh) + sumSlHang('giaTriHtLt5000', data.listQlDinhMucThHangDtqgBh) | number: '1.0-1': 'vi_VN'}}</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <!--                <th class="font-weight-bold text-right">{{sumSlHang('slDkGt5000' , data.listQlDinhMucThHangDtqgBh ) | number: '1.0-1': 'vi_VN'}}</th>-->
+                <!--                <th class="font-weight-bold text-right">{{sumSlHang('slDkLt5000' , data.listQlDinhMucThHangDtqgBh ) | number: '1.0-1': 'vi_VN'}}</th>-->
+                <!--                <th class="font-weight-bold text-right">{{sumSlHang('slDkGt5000' , data.listQlDinhMucThHangDtqgBh ) + sumSlHang('slDkLt5000' , data.listQlDinhMucThHangDtqgBh ) | number: '1.0-1': 'vi_VN'}}</th>-->
+                <th
+                  class="font-weight-bold text-right">{{sumSlHang('giaTriDkGt5000', data.listQlDinhMucThHangDtqgBh) | number: '1.0-1': 'vi_VN'}}</th>
+                <th
+                  class="font-weight-bold text-right">{{sumSlHang('giaTriDkLt5000', data.listQlDinhMucThHangDtqgBh) | number: '1.0-1': 'vi_VN'}}</th>
+                <th
+                  class="font-weight-bold text-right">{{sumSlHang('giaTriDkGt5000', data.listQlDinhMucThHangDtqgBh) + sumSlHang('giaTriDkLt5000', data.listQlDinhMucThHangDtqgBh)  | number: '1.0-1': 'vi_VN'}}</th>
               </tr>
               </tfoot>
             </nz-table>
