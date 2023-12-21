@@ -28,6 +28,8 @@ export class DialogThemMoiChiTietNhapXuatTonKhoHangDtqgComponent implements OnIn
       matHang: [null],
       tenLoaiVthh: [null],
       tenCloaiVthh: [null],
+      dvt: [null],
+      nuocSanXuat: [null],
       coNhieuMatHang: [false]
     });
   }
@@ -103,7 +105,8 @@ export class DialogThemMoiChiTietNhapXuatTonKhoHangDtqgComponent implements OnIn
         coNhieuMatHang: this.formData.get('coNhieuMatHang').value,
         edit: !this.formData.get('coNhieuMatHang').value,
         tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
-        nuocSanXuat: "Việt Nam",
+        nuocSanXuat: this.formData.get('nuocSanXuat').value,
+        dvt: this.formData.get('dvt').value,
         children: []
       }
     ]
