@@ -14,11 +14,6 @@
         <i class='fa fa-arrow-left'></i>
         <span>Quay lại</span>
       </button>
-      <button
-              type="button" class="btn btn-sub do ml-2" (click)="preview()" *ngIf="id > 0">
-        <i class="icon htvbdh_tcdt_tuchoi"></i>
-        <span>Xem trước</span>
-      </button>
       <button class='btn btn-sub ml-2' (click)="saveAndSend(STATUS.DA_KY, 'Bạn có muốn ký?','Bạn đã ký thành công!')"
               *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TUCHOI_CB_CUC)  && userService.isChiCuc() && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_DEXUATCC_THEM')">
         <i class='icon htvbdh_trinh'></i>
@@ -119,7 +114,14 @@
     </form>
   </nz-card>
   <nz-collapse nzAccordion>
-    <nz-collapse-panel [nzHeader]="'KHO ĐANG CHỨA HÀNG'" [nzActive]="true">
+    <nz-collapse-panel [nzHeader]="'KHO ĐANG CHỨA HÀNG'" [nzActive]="true" [nzExtra]="previewKho">
+      <ng-template #previewKho>
+        <button
+          type="button" class="btn btn-sub do ml-2" (click)="previewBh(1, $event)" *ngIf="id > 0">
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Xem trước</span>
+        </button>
+      </ng-template>
       <nz-table class='wrap pd-10 mg-t-10' [nzData]='dataTable' [nzFrontPagination]='false'
                 [nzShowPagination]='false' nzBordered  [nzScroll]="dataTable && dataTable.length ? { x: '2500px' } : null" style='overflow: auto'>
         <thead>
@@ -339,7 +341,14 @@
     </nz-collapse-panel>
   </nz-collapse>
   <nz-collapse nzAccordion>
-    <nz-collapse-panel [nzHeader]="'HÀNG DỰ TRỮ QUỐC GIA'" [nzActive]="true">
+    <nz-collapse-panel [nzHeader]="'HÀNG DỰ TRỮ QUỐC GIA'" [nzActive]="true" [nzExtra]="previewHang">
+      <ng-template #previewHang>
+        <button
+          type="button" class="btn btn-sub do ml-2" (click)="previewBh(2, $event)" *ngIf="id > 0">
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Xem trước</span>
+        </button>
+      </ng-template>
       <nz-table class='wrap pd-10 mg-t-10' [nzFrontPagination]='false'
                 [nzShowPagination]='false' nzBordered>
         <thead>

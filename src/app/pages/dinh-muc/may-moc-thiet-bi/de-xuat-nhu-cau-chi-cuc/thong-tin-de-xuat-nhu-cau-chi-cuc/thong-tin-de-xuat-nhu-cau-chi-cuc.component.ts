@@ -150,11 +150,11 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
     await this.getSLHienCo(event)
     await this.getSlNhapThem(event)
     if (type) {
-      await this.loadSlThuaThieu(type);
       await this.getDinhMuc(event,type )
+      await this.loadSlThuaThieu(type);
     } else {
-      await this.loadSlThuaThieu(this.rowItem);
       await this.getDinhMuc(event,this.rowItem )
+      await this.loadSlThuaThieu(this.rowItem);
     }
   }
 
