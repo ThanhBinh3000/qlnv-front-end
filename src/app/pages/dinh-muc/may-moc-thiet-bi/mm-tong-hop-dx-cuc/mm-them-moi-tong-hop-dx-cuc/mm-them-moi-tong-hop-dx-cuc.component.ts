@@ -82,7 +82,7 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
     this.spinner.show();
     try {
       await this.loadDsDxCc(this.formData.value.namKeHoach);
-      await this.getCtieuKhTc(this.formData.value.namKeHoach);
+      // await this.getCtieuKhTc(this.formData.value.namKeHoach);
       if (this.id > 0) {
         await this.detail(this.id);
       }
@@ -134,9 +134,6 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
         this.formData.patchValue({
           ngayDxTu: body.ngayDx ? body.ngayDx[0] : null,
           ngayDxDen: body.ngayDx ? body.ngayDx[1] : null,
-          klLtBaoQuanCuc: detail.klLtBaoQuan,
-          klLtNhapCuc: detail.klLtNhap,
-          klLtXuatCuc: detail.klLtXuat,
           slGaoDangBaoQuan: detail.slGaoDangBaoQuan,
           slThocDangBaoQuan: detail.slThocDangBaoQuan,
           slGaoNhap: detail.slGaoNhap,
@@ -148,8 +145,8 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
         if (detail && detail.listQlDinhMucDxTbmmTbcd && detail.listQlDinhMucDxTbmmTbcd.length > 0) {
           this.listDxCuc = [];
           this.listDxCuc = detail.listQlDinhMucDxTbmmTbcd.map(item => item.maDvi)
-          await this.changeSoQdGiaoCt()
-          await this.getDinhMuc()
+          // await this.changeSoQdGiaoCt()
+          // await this.getDinhMuc()
         }
         this.dataTable.forEach(item => {
           this.loadSlThuaThieu(item)
@@ -165,7 +162,7 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
           item.ghiChu = null;
           idVirtual: uuidv4();
         })
-        this.convertListData()
+        this.convertListData();
       }
       this.isTongHop = true;
     } else {
@@ -180,6 +177,7 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
       let body = {
         "capDvi": "2",
         "namKeHoach": namKh,
+        "trangThaiTh" : "24",
         "paggingReq": {
           "limit": 10,
           "page": 0
@@ -416,61 +414,57 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
     }
   }
 
-  changeSoQdGiaoCt() {
-    let ctieuKhNhap = 0
-    let ctieuKhXuat = 0
-    let ctieuTkdn = 0
-    let ctieuKhBq = 0
-    if (this.detailCtieuKh) {
-      if (this.detailCtieuKh.khLuongThuc && this.detailCtieuKh.khLuongThuc.length > 0) {
-        let listLt = this.detailCtieuKh.khLuongThuc.filter(item => this.listDxCuc.includes(item.maDonVi))
-        if (listLt && listLt.length > 0) {
-          let detailLt = listLt[0]
-          ctieuKhNhap = detailLt.ntnTongSoQuyThoc ? detailLt.ntnTongSoQuyThoc : 0
-          ctieuKhXuat = detailLt.xtnTongSoQuyThoc ? detailLt.xtnTongSoQuyThoc : 0
-          ctieuTkdn = detailLt.tkdnTongSoQuyThoc ? detailLt.tkdnTongSoQuyThoc : 0
-          ctieuKhBq = ctieuTkdn + ctieuKhNhap - ctieuKhXuat
-        }
-      }
-    }
-    this.formData.patchValue({
-      klLtBaoQuan: ctieuKhBq,
-      klLtNhap: ctieuKhNhap,
-      klLtXuat: ctieuKhXuat,
-    })
-  }
+  // changeSoQdGiaoCt() {
+  //   let ctieuKhNhap = 0
+  //   let ctieuKhXuat = 0
+  //   let ctieuTkdn = 0
+  //   let ctieuKhBq = 0
+  //   if (this.detailCtieuKh) {
+  //     if (this.detailCtieuKh.khLuongThuc && this.detailCtieuKh.khLuongThuc.length > 0) {
+  //       let listLt = this.detailCtieuKh.khLuongThuc.filter(item => this.listDxCuc.includes(item.maDonVi))
+  //       if (listLt && listLt.length > 0) {
+  //         let detailLt = listLt[0]
+  //         ctieuKhNhap = detailLt.ntnTongSoQuyThoc ? detailLt.ntnTongSoQuyThoc : 0
+  //         ctieuKhXuat = detailLt.xtnTongSoQuyThoc ? detailLt.xtnTongSoQuyThoc : 0
+  //         ctieuTkdn = detailLt.tkdnTongSoQuyThoc ? detailLt.tkdnTongSoQuyThoc : 0
+  //         ctieuKhBq = ctieuTkdn + ctieuKhNhap - ctieuKhXuat
+  //       }
+  //     }
+  //   }
+  //   this.formData.patchValue({
+  //     klLtBaoQuan: ctieuKhBq,
+  //     klLtNhap: ctieuKhNhap,
+  //     klLtXuat: ctieuKhXuat,
+  //   })
+  // }
 
-  async getDinhMuc() {
-    if (this.dataTable && this.dataTable.length > 0) {
-      for (const item of this.dataTable) {
-        let body = {
-          maHangHoa: item.maTaiSan
-        }
-        if (!this.formData.value.klLtNhap || !this.formData.value.klLtXuat || !this.formData.value.klLtBaoQuan) {
-          this.notification.error(MESSAGE.ERROR, 'Vui lòng nhập khối lượng nhập, xuất, bảo quản!');
-          return
-        }
-        let res = await this.dxChiCucService.getDinhMuc(body);
-        if (res.data) {
-          let detail = res.data;
-          let tongKl = 0;
-          let listLoaiHinh = detail.loaiHinh.split(",")
-          if (listLoaiHinh && listLoaiHinh.length > 0) {
-            if (listLoaiHinh.includes("00")) {
-              tongKl = tongKl + this.formData.value.klLtNhap
-            }
-            if (listLoaiHinh.includes("01")) {
-              tongKl = tongKl + this.formData.value.klLtXuat
-            }
-            if (listLoaiHinh.includes("02")) {
-              tongKl = tongKl + this.formData.value.klLtBaoQuan
-            }
-          }
-          item.slTieuChuanTc = tongKl * detail.slChiCuc / detail.klChiCuc
-        }
-      }
-    }
-  }
+  // async getDinhMuc() {
+  //   if (this.dataTable && this.dataTable.length > 0) {
+  //     for (const item of this.dataTable) {
+  //       let body = {
+  //         maHangHoa: item.maTaiSan
+  //       }
+  //       let res = await this.dxChiCucService.getDinhMuc(body);
+  //       if (res.data) {
+  //         let detail = res.data;
+  //         let tongKl = 0;
+  //         let listLoaiHinh = detail.loaiHinh.split(",")
+  //         if (listLoaiHinh && listLoaiHinh.length > 0) {
+  //           if (listLoaiHinh.includes("00")) {
+  //             tongKl = tongKl + this.formData.value.klLtNhap
+  //           }
+  //           if (listLoaiHinh.includes("01")) {
+  //             tongKl = tongKl + this.formData.value.klLtXuat
+  //           }
+  //           if (listLoaiHinh.includes("02")) {
+  //             tongKl = tongKl + this.formData.value.klLtBaoQuan
+  //           }
+  //         }
+  //         item.slTieuChuanTc = tongKl * detail.slChiCuc / detail.klChiCuc
+  //       }
+  //     }
+  //   }
+  // }
 
   exportDataDetail() {
     if (this.dataTable.length > 0) {

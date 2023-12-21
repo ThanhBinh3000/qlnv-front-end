@@ -40,6 +40,7 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
   dsNhaKho: any[] = [];
   tableHangDtqgView: any[] = [];
   tableHangDtqgReq: any[] = [];
+  tableTongHop: any[] = [];
   listHangHoa: any[] = [];
   amount = AMOUNT_NO_DECIMAL;
   expandSetString = new Set<string>();
@@ -332,6 +333,7 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
           this.fileDinhKem = data.listFileDinhKems;
           this.dataTable = data.listQlDinhMucDxBhKhoChua;
           this.tableHangDtqgReq = data.listQlDinhMucDxBhHdtqg;
+          this.tableTongHop = data.listQlDinhMucThGiaTriBaoHiem;
           this.updateEditCache();
           this.buildTableView(this.tableHangDtqgReq);
         }
@@ -685,7 +687,13 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
         arr = this.convertPreviewHang();
       }
       if (loai == 3) {
-        arr = this.convertPreviewKho();
+        this.tableTongHop.forEach(item => {
+          item.giaTriHtGt5000 = item.giaTriGt5000 ?  item.giaTriGt5000 : 0
+          item.giaTriHtLt5000 = item.giaTriLt5000 ? item.giaTriLt5000  :0
+          item.slKhoGt5000 = item.slGt5000 ? item.slGt5000 : 0
+          item.slKhoLt5000 = item.slLt5000 ?  item.slLt5000 : 0
+        })
+        arr = this.tableTongHop;
       }
       let body = {
         typeFile: "pdf",
@@ -724,18 +732,26 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
     })
   }
 
-  async downloadExcel() {
+  async downloadExcel(loai: number, event: any) {
     try {
+      event.stopPropagation();
       this.spinner.show();
+      this.loai = loai;
       let arr = []
-      if (this.loai == 1) {
+      if (loai == 1) {
         arr = this.convertPreviewKho();
       }
-      if (this.loai == 2) {
+      if (loai == 2) {
         arr = this.convertPreviewHang();
       }
-      if (this.loai == 3) {
-        arr = this.convertPreviewKho();
+      if (loai == 3) {
+        this.tableTongHop.forEach(item => {
+          item.giaTriHtGt5000 = item.giaTriGt5000 ?  item.giaTriGt5000 : 0
+          item.giaTriHtLt5000 = item.giaTriLt5000 ? item.giaTriLt5000  :0
+          item.slKhoGt5000 = item.slGt5000 ? item.slGt5000 : 0
+          item.slKhoLt5000 = item.slLt5000 ?  item.slLt5000 : 0
+        })
+        arr = this.tableTongHop;
       }
       let body = {
         typeFile: "xlsx",

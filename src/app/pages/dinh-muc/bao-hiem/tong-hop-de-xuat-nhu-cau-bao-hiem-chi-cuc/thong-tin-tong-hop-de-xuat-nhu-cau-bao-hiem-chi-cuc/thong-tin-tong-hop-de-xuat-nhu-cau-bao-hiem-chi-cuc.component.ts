@@ -496,7 +496,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
     })
   }
 
-  async downloadExcel() {
+  async downloadExcel(loai: number, event: any) {
     try {
       this.spinner.show();
       let arr = this.convertDataPreview();
