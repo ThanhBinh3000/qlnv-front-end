@@ -532,8 +532,8 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         } else if (res.data) {
           let data = res.data;
           data.xhBienBanLayMauDtl.forEach(s => {
-            delete s.id,
-              s.danhGia = 'Đạt';
+            delete s.id;
+            // s.danhGia = 'Đạt';
           });
           this.formData.patchValue({
             idBbLayMau: data.id,
