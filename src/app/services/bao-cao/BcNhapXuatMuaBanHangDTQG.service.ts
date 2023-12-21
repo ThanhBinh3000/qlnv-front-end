@@ -33,4 +33,13 @@ export class BcNhapXuatMuaBanHangDTQGService extends BaseService {
     return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
   }
 
+
+  bcThongTinDthauMuaVt(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bc_thong_tin_dau_thau_mua_vt`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
+  kquaNhapVt(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/kqua-nhap-vt`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
 }
