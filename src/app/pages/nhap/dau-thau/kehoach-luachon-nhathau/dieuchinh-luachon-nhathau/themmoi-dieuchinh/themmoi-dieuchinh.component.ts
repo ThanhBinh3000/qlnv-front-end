@@ -338,6 +338,11 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
         mesg = "Bạn có chắc chắn muốn gửi duyệt?";
         break;
       }
+      case STATUS.TU_CHOI_LDTC: {
+        trangThai = STATUS.CHO_DUYET_LDV;
+        mesg = "Bạn có chắc chắn muốn gửi duyệt?";
+        break;
+      }
       case STATUS.CHO_DUYET_LDV: {
         trangThai = STATUS.DA_DUYET_LDV;
         mesg = "Bạn có chắc chắn muốn phê duyệt?";
