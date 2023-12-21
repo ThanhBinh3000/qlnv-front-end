@@ -186,10 +186,9 @@ export class ThemMoiNhapXuatTonKhoHangDtqgComponent extends Base2Component imple
   }
 
   saveEdit(dataUpdate, index: any): void {
-    // if (this.validateItemSave(this.itemRowUpdate, index)) {
+    this.setDataTable(this.itemRowUpdate)
     this.listDataDetail[index] = this.itemRowUpdate;
     this.listDataDetail[index].edit = false;
-    // };
   }
 
   clearItemRow() {
@@ -216,13 +215,18 @@ export class ThemMoiNhapXuatTonKhoHangDtqgComponent extends Base2Component imple
   }
 
   addRow(): void {
-    // if (this.validateItemSave(this.itemRow)) {
+    this.setDataTable(this.itemRow)
     this.listDataDetail = [
       ...this.listDataDetail,
       this.itemRow
     ];
     this.clearItemRow();
-    // }
+  }
+
+  setDataTable(data: any){
+    console.log(data)
+    data.tonKhoCuoiKySl = data.tonKhoDauNamSl + data.nhapLkSl - data.xuatLkSl;
+    data.tonKhoCuoiKyTt = data.tonKhoDauNamTt + data.nhapLkTt - data.xuatLkTt;
   }
 
   async loadDsVthh() {
