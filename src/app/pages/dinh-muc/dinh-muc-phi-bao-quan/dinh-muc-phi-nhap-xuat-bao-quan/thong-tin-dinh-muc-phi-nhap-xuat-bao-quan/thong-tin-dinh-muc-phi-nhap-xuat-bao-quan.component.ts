@@ -595,6 +595,18 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
   }
 
   buildDataTableDetailKtqd() {
+    this.rowTotal.chiPhiTheoDinhMucNhapToiDa = 0
+    this.rowTotal.chiPhiTheoDinhMucXuatToiDa = 0
+    this.rowTotal.chiPhiTheoDinhMucBqToiDa = 0
+    this.rowTotal.chiPhiNhapToiDa = 0
+    this.rowTotal.chiPhiXuatToiDa = 0
+    this.rowTotal.chiPhiBqToiDa = 0
+    this.rowTotal.thanhToanTheoVnd = 0
+    this.rowTotal.thanhToanTheoUsd = 0
+    this.rowTotal.thanhToanTheoVndKt = 0
+    this.rowTotal.thanhToanTheoUsdKt = 0
+    this.rowTotal.chechLechVnd = 0
+    this.rowTotal.chechLechUsd = 0
     this.dataTableDetailKtqd = [];
     const map = new Map(); // Use a map to efficiently store items by their IDs.
 
