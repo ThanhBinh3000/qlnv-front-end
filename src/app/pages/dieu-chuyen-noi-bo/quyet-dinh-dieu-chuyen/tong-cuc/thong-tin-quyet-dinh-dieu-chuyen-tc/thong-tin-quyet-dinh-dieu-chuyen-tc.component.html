@@ -302,6 +302,7 @@
                   <th>Lô kho</th>
                   <th class="text-center">Loại HH</th>
                   <th class="text-center">Chủng loại hàng hóa</th>
+                  <th class="text-center">Năm nhập kho</th>
                   <th class="text-center">ĐVT</th>
                   <th class="text-center">Tồn kho</th>
                   <th class="text-center">Sl điều chuyển</th>
@@ -322,6 +323,7 @@
                     </td>
                     <td></td>
                     <td class="bold">{{ item.tenDvi || "" }}</td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -362,6 +364,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
+                        <td></td>
                       </tr>
                       <ng-container *ngIf="bb.expand">
                         <ng-container *ngFor="let c of bb.children, let y = index">
@@ -374,6 +377,7 @@
                             <td class="bold">{{c.tenLoKho || ""}} - {{c.tenNganKho || ""}} - {{c.tenNhaKho || ""}}</td>
                             <td class="bold">{{c.tenLoaiVthh || ""}}</td>
                             <td class="bold">{{c.tenCloaiVthh || ""}}</td>
+                            <td class="bold">{{c.namNhap || ""}}</td>
                             <td class="bold">{{c.donViTinh || ""}}</td>
                             <td class="text-right bold">{{c.tonKho|number: '1.0-1':
                               'vi_VN'}}
@@ -392,6 +396,7 @@
                           </tr>
                           <ng-container *ngFor="let d of c.children, let y = index">
                             <tr>
+                              <td></td>
                               <td></td>
                               <td></td>
                               <td></td>
@@ -430,6 +435,7 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
+                                <td></td>
                                 <td>{{(e.tenDiemKhoNhan || "")}}</td>
                                 <td></td>
                                 <td></td>
@@ -438,6 +444,7 @@
                               </tr>
                               <ng-container *ngFor="let e of d.children, let y = index">
                                 <tr>
+                                  <td></td>
                                   <td></td>
                                   <td></td>
                                   <td></td>
@@ -491,6 +498,7 @@
                   <th>Lô kho</th>
                   <th class="text-center">Loại HH</th>
                   <th class="text-center">Chủng loại hàng hóa</th>
+                  <th class="text-center">Năm nhập kho</th>
                   <th class="text-center">ĐVT</th>
                   <th class="text-center">Tồn kho</th>
                   <th class="text-center">Sl điều chuyển</th>
@@ -513,6 +521,7 @@
                     </td>
                     <td></td>
                     <td class="bold">{{ item.tenDvi || "" }}</td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -555,6 +564,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
+                        <td></td>
                       </tr>
                       <ng-container *ngIf="bb.expand">
                         <ng-container *ngFor="let c of bb.children, let y = index">
@@ -567,6 +577,7 @@
                             <td class="bold">{{c.tenLoKho || ""}} - {{c.tenNganKho || ""}} - {{c.tenNhaKho || ""}}</td>
                             <td class="bold">{{c.tenLoaiVthh || ""}}</td>
                             <td class="bold">{{c.tenCloaiVthh || ""}}</td>
+                            <td class="bold">{{c.namNhap || ""}}</td>
                             <td class="bold">{{c.donViTinh || ""}}</td>
                             <td class="text-right bold">{{c.tonKho|number: '1.0-1':
                               'vi_VN'}}
@@ -586,6 +597,7 @@
                           </tr>
                           <ng-container *ngFor="let d of c.children, let y = index">
                             <tr>
+                              <td></td>
                               <td></td>
                               <td></td>
                               <td></td>
