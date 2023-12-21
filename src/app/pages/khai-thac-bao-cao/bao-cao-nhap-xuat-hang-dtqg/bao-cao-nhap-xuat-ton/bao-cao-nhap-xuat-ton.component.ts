@@ -73,7 +73,7 @@ export class BaoCaoNhapXuatTonComponent extends Base2Component implements OnInit
     await this.spinner.hide();
   }
   downloadPdf() {
-    saveAs(this.pdfBlob, this.nameFile + ".pdf");
+    saveAs(this.pdfBlob, "bao-cao-nhap-xuat-ton.pdf");
   }
 
   async downloadExcel() {
@@ -81,12 +81,14 @@ export class BaoCaoNhapXuatTonComponent extends Base2Component implements OnInit
       this.spinner.show();
       let body = this.formData.value;
       body.typeFile = "xlsx";
-      body.trangThai = "01";
+      body.fileName = "1.nhap_xuat_ton_thoc_gao_muoi.jrxml";
+      body.tenBaoCao = "Báo cáo nhập xuất tồn thóc, gạo, muối";
+      // body.trangThai = "01";
       body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc
       await this.bcNhapXuatMuaBanHangDTQGService.baoCaoNhapXuatTon(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
-        saveAs(this.excelBlob, this.nameFile + ".xlsx");
+        saveAs(this.excelBlob,"1.nhap_xuat_ton_thoc_gao_muoi.xlsx");
       });
       this.showDlgPreview = true;
     } catch (e) {
