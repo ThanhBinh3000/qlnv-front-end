@@ -10,6 +10,7 @@ import { DirectivesModule } from '../../../directives/directives.module';
 import { BcTienDoNhapGaoTheoGoiThauComponent } from './bc-tien-do-nhap-gao-theo-goi-thau/bc-tien-do-nhap-gao-theo-goi-thau.component';
 import { BaoCaoChitietXuatGaoHotroDiaphuongComponent } from './bao-cao-chitiet-xuat-gao-hotro-diaphuong/bao-cao-chitiet-xuat-gao-hotro-diaphuong.component';
 import {BaoCaoNhapXuatTonComponent} from "./bao-cao-nhap-xuat-ton/bao-cao-nhap-xuat-ton.component";
+import { BaoCaoTienDoBdgThocGaoTheoNamComponent } from './bao-cao-tien-do-bdg-thoc-gao-theo-nam/bao-cao-tien-do-bdg-thoc-gao-theo-nam.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import {BaoCaoNhapXuatTonComponent} from "./bao-cao-nhap-xuat-ton/bao-cao-nhap-x
     BaoCaoNhapXuatHangDtqgComponent,
     BcTienDoNhapGaoTheoGoiThauComponent,
     BaoCaoChitietXuatGaoHotroDiaphuongComponent,
-    BaoCaoNhapXuatTonComponent
+    BaoCaoNhapXuatTonComponent,
+    BaoCaoTienDoBdgThocGaoTheoNamComponent
   ],
   imports: [
     CommonModule,

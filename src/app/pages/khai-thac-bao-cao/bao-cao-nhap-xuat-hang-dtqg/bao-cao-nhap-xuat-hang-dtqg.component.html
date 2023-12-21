@@ -16,6 +16,10 @@
               <span nz-icon nzType='fund'></span>
               <span>Báo cáo nhập xuất tồn thóc, gạo, muối</span>
             </li>
+            <li nz-menu-item [nzSelected]='tabSelected==3' (click)='selectTab(3)'>
+              <span nz-icon nzType='fund'></span>
+              <span>Báo cáo tiến độ bán đấu giá thóc, gạo theo năm</span>
+            </li>
           </ul>
         </li>
       </ul>
@@ -30,6 +34,9 @@
         </ng-container>
         <ng-container *ngIf='tabSelected == 2'>
           <app-bao-cao-nhap-xuat-ton></app-bao-cao-nhap-xuat-ton>
+        </ng-container>
+        <ng-container *ngIf='tabSelected == 3'>
+          <app-bao-cao-tien-do-bdg-thoc-gao-theo-nam></app-bao-cao-tien-do-bdg-thoc-gao-theo-nam>
         </ng-container>
       </div>
     </div>
