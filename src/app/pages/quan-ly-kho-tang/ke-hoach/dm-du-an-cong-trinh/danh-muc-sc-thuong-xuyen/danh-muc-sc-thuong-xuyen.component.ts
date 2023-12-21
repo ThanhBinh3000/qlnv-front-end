@@ -126,7 +126,7 @@ export class DanhMucScThuongXuyenComponent extends Base2Component implements OnI
         this.danhMucService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-danh-muc-sua-chua-lon.xlsx'),
+            saveAs(blob, 'danh-sach-danh-muc-sua-chua-thuong-xuyen.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
