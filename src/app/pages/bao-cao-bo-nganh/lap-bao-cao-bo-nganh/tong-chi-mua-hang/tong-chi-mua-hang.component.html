@@ -109,7 +109,7 @@
             <a (click)="redirectDetail(true, data)"
                *ngIf="(userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_TCMHDTQG_XEM')
                  && !(userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_TCMHDTQG_LAP') && data.trangThai != STATUS.BAN_HANH))
-                 || userService.isAccessPermisson('BCBN_NHANBAOCAO_TT130_TCMHDTQG')">
+                 || (userService.isAccessPermisson('BCBN_NHANBAOCAO_TT130_TCMHDTQG') && data.trangThai == STATUS.BAN_HANH)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_TCMHDTQG_LAP')"

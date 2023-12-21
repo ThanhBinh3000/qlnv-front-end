@@ -215,18 +215,18 @@
               </nz-autocomplete>
             </th>
             <th>{{itemRow.dvt}}</th>
-            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.tonKhoDauNamSl"/></th>
-            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.tonKhoDauNamTt"/></th>
-            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.nhapKnSl"/></th>
-            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.nhapKnTt"/></th>
-            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.nhapLkSl"/></th>
-            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.nhapLkTt"/></th>
-            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.xuatKnSl"/></th>
-            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.xuatKnTt"/></th>
-            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.xuatLkSl"/></th>
-            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.xuatLkTt"/></th>
-            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.tonKhoCuoiKySl"/></th>
-            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.tonKhoCuoiKyTt"/></th>
+            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow.tonKhoDauNamSl"/></th>
+            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow.tonKhoDauNamTt"/></th>
+            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow.nhapKnSl"/></th>
+            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow.nhapKnTt"/></th>
+            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow.nhapLkSl"/></th>
+            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow.nhapLkTt"/></th>
+            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow.xuatKnSl"/></th>
+            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow.xuatKnTt"/></th>
+            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow.xuatLkSl"/></th>
+            <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRow.xuatLkTt"/></th>
+            <th>{{(itemRow.tonKhoDauNamSl + itemRow.nhapLkSl - itemRow.xuatLkSl) ? itemRow.tonKhoDauNamSl + itemRow.nhapLkSl - itemRow.xuatLkSl : 0}}</th>
+            <th>{{(itemRow.tonKhoDauNamTt + itemRow.nhapLkTt - itemRow.xuatLkTt) ? itemRow.tonKhoDauNamTt + itemRow.nhapLkTt - itemRow.xuatLkTt : 0}}</th>
             <th>
               <a *ngIf="!isView" (click)="addRow()" [class.disabled]="!itemRow">
                 <i class="fa fa-plus"></i>
@@ -292,8 +292,8 @@
               <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.xuatKnTt"/></th>
               <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.xuatLkSl"/></th>
               <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.xuatLkTt"/></th>
-              <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.tonKhoCuoiKySl"/></th>
-              <th><input class="money-input" currencyMask [options]="amount" [min]="0" [(ngModel)]="itemRowUpdate.tonKhoCuoiKyTt"/></th>
+              <th>{{(itemRowUpdate.tonKhoDauNamSl + itemRowUpdate.nhapLkSl - itemRowUpdate.xuatLkSl) ? itemRowUpdate.tonKhoDauNamSl + itemRowUpdate.nhapLkSl - itemRowUpdate.xuatLkSl : 0}}</th>
+              <th>{{(itemRowUpdate.tonKhoDauNamTt + itemRowUpdate.nhapLkTt - itemRowUpdate.xuatLkTt) ? itemRowUpdate.tonKhoDauNamTt + itemRowUpdate.nhapLkTt - itemRowUpdate.xuatLkTt : 0}}</th>
               <td class="text-center">
                 <a (click)="saveEdit(itemRowUpdate,i)" class="save">
                   <i class="icon htvbdh_tcdt_save"></i>

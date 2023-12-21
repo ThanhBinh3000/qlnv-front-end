@@ -42,6 +42,22 @@
         </nz-form-control>
       </nz-form-item>
     </div>
+    <div nz-col [nzSpan]="12">
+      <nz-form-item>
+      <nz-form-label nz-col [nzSpan]="24" nzRequired [nzNoColon]="true">Đơn vị tính</nz-form-label>
+      <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+        <input nz-input formControlName="dvt">
+      </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="12">
+      <nz-form-item>
+      <nz-form-label nz-col [nzSpan]="24" nzRequired [nzNoColon]="true">Nước sản xuất</nz-form-label>
+      <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+        <input nz-input formControlName="nuocSanXuat">
+      </nz-form-control>
+      </nz-form-item>
+    </div>
     <div nz-col [nzSpan]="24" class="pd-t-10">
       <label nz-checkbox formControlName="coNhieuMatHang" class="bold-text">Có nhiều mặt hàng</label>
     </div>

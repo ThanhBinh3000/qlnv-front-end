@@ -192,22 +192,22 @@
       <ng-container *ngIf="!data.edit; else editTemplate">
         <td>{{ data.noiDung }}</td>
         <td>{{ data.maSo }}</td>
-        <td class="text-right">{{ data.muaTangTrongKy | number : '1.0-99' : 'vi_VN' }}</td>
-        <td class="text-right">{{ data.muaBuTrongKy | number : '1.0-99' : 'vi_VN' }}</td>
-        <td class="text-right">{{ data.muaBsungTrongKy | number : '1.0-99' : 'vi_VN' }}</td>
-        <td class="text-right">{{ data.khacTrongKy | number : '1.0-99' : 'vi_VN' }}</td>
-        <td class="text-right">{{ data.tongTrongKy | number : '1.0-99' : 'vi_VN' }}</td>
-        <td class="text-right">{{ data.muaTangLuyKe | number : '1.0-99' : 'vi_VN' }}</td>
-        <td class="text-right">{{ data.muaBuLuyKe | number : '1.0-99' : 'vi_VN' }}</td>
-        <td class="text-right">{{ data.muaBsungLuyKe | number : '1.0-99' : 'vi_VN' }}</td>
-        <td class="text-right">{{ data.khacLuyKe | number : '1.0-99' : 'vi_VN' }}</td>
-        <td class="text-right">{{ data.tongLuyKe | number : '1.0-99' : 'vi_VN' }}</td>
-        <td class="text-right">{{ data.tiLe | number : '1.0-99' : 'vi_VN' }}</td>
+        <td class="text-right">{{ data.muaTangTrongKy | number : '1.2-2' : 'vi_VN' }}</td>
+        <td class="text-right">{{ data.muaBuTrongKy | number : '1.2-2' : 'vi_VN' }}</td>
+        <td class="text-right">{{ data.muaBsungTrongKy | number : '1.2-2' : 'vi_VN' }}</td>
+        <td class="text-right">{{ data.khacTrongKy | number : '1.2-2' : 'vi_VN' }}</td>
+        <td class="text-right">{{ data.tongTrongKy | number : '1.2-2' : 'vi_VN' }}</td>
+        <td class="text-right">{{ data.muaTangLuyKe | number : '1.2-2' : 'vi_VN' }}</td>
+        <td class="text-right">{{ data.muaBuLuyKe | number : '1.2-2' : 'vi_VN' }}</td>
+        <td class="text-right">{{ data.muaBsungLuyKe | number : '1.2-2' : 'vi_VN' }}</td>
+        <td class="text-right">{{ data.khacLuyKe | number : '1.2-2' : 'vi_VN' }}</td>
+        <td class="text-right">{{ data.tongLuyKe | number : '1.2-2' : 'vi_VN' }}</td>
+        <td class="text-right">{{ data.tiLe | number : '1.2-2' : 'vi_VN' }}</td>
         <td>
-          <a (click)="editRowNguon(i)" *ngIf="!isView">
+          <a (click)="editRowNguon(i)" *ngIf="!isView && data.dmLevel == 2">
             <i class=" fa fa-pencil"></i>
           </a>
-          <a (click)="deleteRowNguon(i)" *ngIf="!isView">
+          <a (click)="deleteRowNguon(i)" *ngIf="!isView && data.dmLevel == 2">
             <i class=" fa fa-trash-o do"></i>
           </a>
         </td>
@@ -316,17 +316,17 @@
       <ng-container *ngIf="!data.edit; else editNnTemplate">
         <td>{{ data.noiDung }}</td>
         <td>{{ data.maSo }}</td>
-        <td class="text-right">{{ data.muaTangTrongKy | number : '1.0-99' : 'vi_VN' }}</td>
-        <td class="text-right">{{ data.muaBuTrongKy | number : '1.0-99' : 'vi_VN' }}</td>
-        <td class="text-right">{{ data.muaBsungTrongKy | number : '1.0-99' : 'vi_VN' }}</td>
-        <td class="text-right">{{ data.khacTrongKy | number : '1.0-99' : 'vi_VN' }}</td>
-        <td class="text-right">{{ data.tongTrongKy | number : '1.0-99' : 'vi_VN' }}</td>
-        <td class="text-right">{{ data.muaTangLuyKe | number : '1.0-99' : 'vi_VN' }}</td>
-        <td class="text-right">{{ data.muaBuLuyKe | number : '1.0-99' : 'vi_VN' }}</td>
-        <td class="text-right">{{ data.muaBsungLuyKe | number : '1.0-99' : 'vi_VN' }}</td>
-        <td class="text-right">{{ data.khacLuyKe | number : '1.0-99' : 'vi_VN' }}</td>
-        <td class="text-right">{{ data.tongLuyKe | number : '1.0-99' : 'vi_VN' }}</td>
-        <td class="text-right">{{ data.tiLe | number : '1.0-99' : 'vi_VN' }}</td>
+        <td class="text-right">{{ data.muaTangTrongKy | number : '1.2-2' : 'vi_VN' }}</td>
+        <td class="text-right">{{ data.muaBuTrongKy | number : '1.2-2' : 'vi_VN' }}</td>
+        <td class="text-right">{{ data.muaBsungTrongKy | number : '1.2-2' : 'vi_VN' }}</td>
+        <td class="text-right">{{ data.khacTrongKy | number : '1.2-2' : 'vi_VN' }}</td>
+        <td class="text-right">{{ data.tongTrongKy | number : '1.2-2' : 'vi_VN' }}</td>
+        <td class="text-right">{{ data.muaTangLuyKe | number : '1.2-2' : 'vi_VN' }}</td>
+        <td class="text-right">{{ data.muaBuLuyKe | number : '1.2-2' : 'vi_VN' }}</td>
+        <td class="text-right">{{ data.muaBsungLuyKe | number : '1.2-2' : 'vi_VN' }}</td>
+        <td class="text-right">{{ data.khacLuyKe | number : '1.2-2' : 'vi_VN' }}</td>
+        <td class="text-right">{{ data.tongLuyKe | number : '1.2-2' : 'vi_VN' }}</td>
+        <td class="text-right">{{ data.tiLe | number : '1.2-2' : 'vi_VN' }}</td>
         <td>
           <a (click)="editRowNgoaiNguon(i)" *ngIf="!isView">
             <i class=" fa fa-pencil"></i>
@@ -408,12 +408,12 @@
       <td class="text-center">X</td>
       <td class="text-center">X</td>
       <td class="text-center">X</td>
-      <td class="text-right">{{calTongChi() | number : '1.0-99' : 'vi_VN'}}</td>
+      <td class="text-right">{{calTongChi() | number : '1.2-2' : 'vi_VN'}}</td>
       <td class="text-center">X</td>
       <td class="text-center">X</td>
       <td class="text-center">X</td>
       <td class="text-center">X</td>
-      <td class="text-right">{{calTongLuyKe() | number : '1.0-99' : 'vi_VN'}}</td>
+      <td class="text-right">{{calTongLuyKe() | number : '1.2-2' : 'vi_VN'}}</td>
       <td class="text-center"></td>
       <td class="text-center"></td>
     </tr>

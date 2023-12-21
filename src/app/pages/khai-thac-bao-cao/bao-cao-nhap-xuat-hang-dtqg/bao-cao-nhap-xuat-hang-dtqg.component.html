@@ -16,6 +16,18 @@
               <span nz-icon nzType='fund'></span>
               <span>Báo cáo nhập xuất tồn thóc, gạo, muối</span>
             </li>
+            <li nz-menu-item [nzSelected]='tabSelected==3' (click)='selectTab(3)'>
+              <span nz-icon nzType='fund'></span>
+              <span>Báo cáo tiến độ bán đấu giá thóc, gạo theo năm</span>
+            </li>
+            <li nz-menu-item [nzSelected]='tabSelected==15' (click)='selectTab(15)'>
+              <span nz-icon nzType='fund'></span>
+              <span>Thông tin đấu thầu mua vật tư, thiết bị</span>
+            </li>
+            <li nz-menu-item [nzSelected]='tabSelected==17' (click)='selectTab(17)'>
+              <span nz-icon nzType='fund'></span>
+              <span>Kết quả nhập vật tư, thiết bị</span>
+            </li>
           </ul>
         </li>
       </ul>
@@ -28,8 +40,17 @@
         <ng-container *ngIf='tabSelected == 1'>
           <app-bao-cao-chitiet-xuat-gao-hotro-diaphuong></app-bao-cao-chitiet-xuat-gao-hotro-diaphuong>
         </ng-container>
+        <ng-container *ngIf='tabSelected == 15'>
+          <app-thong-tin-dau-thau-mua-vt></app-thong-tin-dau-thau-mua-vt>
+        </ng-container>
+        <ng-container *ngIf='tabSelected == 17'>
+          <app-kqua-nhap-vt></app-kqua-nhap-vt>
+        </ng-container>
         <ng-container *ngIf='tabSelected == 2'>
           <app-bao-cao-nhap-xuat-ton></app-bao-cao-nhap-xuat-ton>
+        </ng-container>
+        <ng-container *ngIf='tabSelected == 3'>
+          <app-bao-cao-tien-do-bdg-thoc-gao-theo-nam></app-bao-cao-tien-do-bdg-thoc-gao-theo-nam>
         </ng-container>
       </div>
     </div>
