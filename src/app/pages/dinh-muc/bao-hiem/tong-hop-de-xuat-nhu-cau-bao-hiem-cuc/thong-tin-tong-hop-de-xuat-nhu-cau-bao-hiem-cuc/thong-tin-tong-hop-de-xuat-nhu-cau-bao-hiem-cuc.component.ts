@@ -371,7 +371,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     return result;
   }
 
-  convertDataPreview(): any[] {
+  convertPreviewKho(): any[] {
     let arrResult: any[] = [];
     let arrCopy = this.conVertTreToList();
     if (arrCopy && arrCopy.length > 0) {
@@ -478,28 +478,75 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     return arrResult;
   }
 
-  async preview() {
-    try {
-      this.spinner.show();
-      let arr = this.convertDataPreview();
-      let body = {
-        typeFile : "pdf",
-        trangThai : "01",
-        nam: this.formData.value.namKeHoach,
-        baoHiemDxChiCucDTOS: arr
+  // async preview() {
+  //   try {
+  //     this.spinner.show();
+  //     let arr = this.convertDataPreview();
+  //     let body = {
+  //       typeFile : "pdf",
+  //       trangThai : "01",
+  //       nam: this.formData.value.namKeHoach,
+  //       baoHiemDxChiCucDTOS: arr
+  //     }
+  //     await this.deXuatBaoHiemSv.previewDx(body).then(async s => {
+  //       this.printSrc = s;
+  //       this.pdfBlob = s;
+  //       this.pdfSrc = await new Response(s).arrayBuffer();
+  //     });
+  //     this.showDlgPreview = true;
+  //   } catch (e) {
+  //     console.log(e);
+  //   } finally {
+  //     this.spinner.hide();
+  //   }
+  // }
+
+  convertPreviewHang() : any[] {
+    let result = [];
+    if (this.tableHangDtqgView && this.tableHangDtqgView.length > 0) {
+      let tongCuc = {
+        tenChiCuc : "Tổng cộng",
+        giaTriHtGt5000: 0,
+        giaTriHtLt5000: 0,
+        slKhoGt5000: 0,
+        slKhoLt5000: 0
       }
-      await this.deXuatBaoHiemSv.previewDx(body).then(async s => {
-        this.printSrc = s;
-        this.pdfBlob = s;
-        this.pdfSrc = await new Response(s).arrayBuffer();
-      });
-      this.showDlgPreview = true;
-    } catch (e) {
-      console.log(e);
-    } finally {
-      this.spinner.hide();
+      result.push(tongCuc);
+      this.tableHangDtqgView.forEach((cuc, index) => {
+        let itemCuc = {
+          tenChiCuc : cuc.tenDvi,
+          stt: this.convertToRoman(index + 1),
+          giaTriHtGt5000: 0,
+          giaTriHtLt5000: 0,
+          slKhoGt5000: 0,
+          slKhoLt5000: 0
+        }
+        result.push(itemCuc);
+        if (cuc.listQlDinhMucThHangDtqgBh && cuc.listQlDinhMucThHangDtqgBh.length > 0) {
+          cuc.listQlDinhMucThHangDtqgBh.forEach(child => {
+            child.tenChiCuc = ""
+            child.giaTriHtGt5000 = child.giaTriDkGt5000 ?  child.giaTriDkGt5000 : 0
+            child.giaTriHtLt5000 = child.giaTriDkLt5000 ? child.giaTriDkLt5000  :0
+            child.slKhoGt5000 = child.slDkGt5000 ? child.slDkGt5000 : 0
+            child.slKhoLt5000 = child.slDkLt5000 ?  child.slDkLt5000 : 0
+            result.push(child);
+          })
+          let sumList = cuc.listQlDinhMucThHangDtqgBh.filter(item => item.nhomCha)
+          itemCuc.giaTriHtGt5000 = this.sumTable(sumList, 'giaTriHtGt5000');
+          itemCuc.giaTriHtLt5000 = this.sumTable(sumList, 'giaTriHtLt5000');
+          itemCuc.slKhoGt5000 = this.sumTable(sumList, 'slKhoGt5000');
+          itemCuc.slKhoLt5000 = this.sumTable(sumList, 'slKhoLt5000');
+          //sumcuc
+          tongCuc.giaTriHtGt5000 += itemCuc.giaTriHtGt5000;
+          tongCuc.giaTriHtLt5000 += itemCuc.giaTriHtLt5000;
+          tongCuc.slKhoGt5000 += itemCuc.slKhoGt5000;
+          tongCuc.slKhoLt5000 += itemCuc.slKhoLt5000;
+        }
+      })
     }
+    return result;
   }
+
 
   async downloadPdf() {
     saveAs(this.pdfBlob, 'de-xuat-bao-hiem.pdf');
@@ -518,15 +565,33 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     })
   }
 
-  async downloadExcel() {
+  async downloadExcel(loai: number, event: any) {
     try {
       this.spinner.show();
-      let arr = this.convertDataPreview();
+      event.stopPropagation();
+      this.spinner.show();
+      let arr = []
+      if (loai == 1) {
+        arr = this.convertPreviewKho();
+      }
+      if (loai == 4) {
+        arr = this.convertPreviewHang();
+      }
+      if (loai == 3) {
+        this.tableGtriBHiem.forEach(item => {
+          item.giaTriHtGt5000 = item.giaTriGt5000 ?  item.giaTriGt5000 : 0
+          item.giaTriHtLt5000 = item.giaTriLt5000 ? item.giaTriLt5000  :0
+          item.slKhoGt5000 = item.slGt5000 ? item.slGt5000 : 0
+          item.slKhoLt5000 = item.slLt5000 ?  item.slLt5000 : 0
+        })
+        arr = this.tableGtriBHiem;
+      }
       let body = {
-        typeFile : "xlsx",
-        trangThai : "01",
+        typeFile: "xlsx",
+        trangThai: "01",
         nam: this.formData.value.namKeHoach,
-        baoHiemDxChiCucDTOS: arr
+        baoHiemDxChiCucDTOS: arr,
+        loai: loai
       }
       await this.deXuatBaoHiemSv.previewDx(body).then(async s => {
         this.excelBlob = s;
