@@ -275,7 +275,7 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
               chiSoClToiDa: item.mucYeuCauXuatToiDa,
               toanTu: item.toanTu,
               phuongPhap: item.phuongPhapXd,
-              type: item.maChiTieu,
+              ma: item.maChiTieu,
               checked: true,
             };
             this.dsCtChatLuong.push(option);
@@ -406,7 +406,8 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
               ten: s.label,
               phuongPhap: s.phuongPhap,
               chiSoCl: s.chiSoCl,
-              type: BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG
+              type: BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG,
+              ma: s.ma
             }
           });
           filter.push(...defaultCt);
@@ -421,7 +422,8 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
               ten: s.label,
               phuongPhap: s.phuongPhap,
               chiSoCl: s.chiSoCl,
-              type: BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG
+              type: BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG,
+              ma: s.ma
             }
           });
           filter.push(...defaultPp, ...defaultCt);
