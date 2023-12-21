@@ -544,11 +544,12 @@
                       <td nzLeft class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
                       <td nzLeft></td>
                       <td nzLeft class="dm-title">
-                        <nz-select [nzDisabled]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].diaDiemDeNhapHang"
-                                   (ngModelChange)="changeDiaDiemDeNhapHang($event, i, y, z, k)">
-                          <nz-option *ngFor="let p of dsChiCuc" [nzValue]="p.key" [nzLabel]="p.tenDvi">
-                          </nz-option>
-                        </nz-select>
+<!--                        <nz-select [nzDisabled]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].diaDiemDeNhapHang"-->
+<!--                                   (ngModelChange)="changeDiaDiemDeNhapHang($event, i, y, z, k)">-->
+<!--                          <nz-option *ngFor="let p of dsChiCuc" [nzValue]="p.key" [nzLabel]="p.tenDvi">-->
+<!--                          </nz-option>-->
+<!--                        </nz-select>-->
+                        <input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z].tenDiaDiem" />
                       </td>
                       <td></td>
                       <td></td>
@@ -594,11 +595,12 @@
                   <td nzLeft></td>
                   <td nzLeft></td>
                   <td nzLeft>
-                    <nz-select [nzDisabled]="isView" [(ngModel)]="itemRow[i][y][z].diaDiemDeNhapHang"
-                               (ngModelChange)="changeDiaDiemDeNhapHang($event, i, y, z)">
-                      <nz-option *ngFor="let p of dsChiCuc" [nzValue]="p.key" [nzLabel]="p.tenDvi">
-                      </nz-option>
-                    </nz-select>
+<!--                    <nz-select [nzDisabled]="isView" [(ngModel)]="itemRow[i][y][z].diaDiemDeNhapHang"-->
+<!--                               (ngModelChange)="changeDiaDiemDeNhapHang($event, i, y, z)">-->
+<!--                      <nz-option *ngFor="let p of dsChiCuc" [nzValue]="p.key" [nzLabel]="p.tenDvi">-->
+<!--                      </nz-option>-->
+<!--                    </nz-select>-->
+                    <input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].tenDiaDiem" />
                   </td>
                   <td></td>
                   <td></td>
