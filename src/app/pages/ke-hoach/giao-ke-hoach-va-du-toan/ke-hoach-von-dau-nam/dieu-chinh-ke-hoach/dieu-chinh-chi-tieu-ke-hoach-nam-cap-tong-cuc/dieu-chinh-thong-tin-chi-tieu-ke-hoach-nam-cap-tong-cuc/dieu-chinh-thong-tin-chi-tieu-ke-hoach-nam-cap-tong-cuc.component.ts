@@ -911,7 +911,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       slNhapTrongNam: [],
       slXuatTrongNam: [],
       slTonKhoCuoiNam: [],
-
+      lyDoTuChoi: [],
     });
     this.formData.markAsPristine();
   }
@@ -1972,17 +1972,17 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
               trangThai = STATUS.TU_CHOI_LDC
               break;
             }
-            case STATUS.CHO_DUYET_LDV: {
-              trangThai = STATUS.TU_CHOI_LDV
-              break;
-            }
+            // case STATUS.CHO_DUYET_LDV: {
+            //   trangThai = STATUS.TU_CHOI_LDV
+            //   break;
+            // }
           }
           let body = {
             id: this.id,
             lyDoTuChoi: text,
             trangThai: trangThai,
           };
-          const res = await this.chiTieuKeHoachNamService.updateStatus(body);
+          const res = await this.quyetDinhDieuChinhCTKHService.duyet(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
             this.redirectChiTieuKeHoachNam();

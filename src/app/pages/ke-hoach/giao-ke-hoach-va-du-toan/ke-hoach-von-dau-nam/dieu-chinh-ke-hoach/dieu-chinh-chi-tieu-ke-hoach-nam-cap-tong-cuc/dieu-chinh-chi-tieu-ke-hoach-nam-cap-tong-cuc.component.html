@@ -312,7 +312,7 @@
                         (click)="redirectDetail(data.id, true)">
                         <i class="fa fa-eye" title="Xem chi tiết"></i>
                       </a>
-                      <a *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU || data.trangThai == STATUS.DU_THAO) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_CUC_THEM')"
+                      <a *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU || data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_CUC_THEM')"
                         (click)="redirectDetail(data.id, false)">
                         <i class="fa fa-pencil" title="Sửa"></i>
                       </a>
