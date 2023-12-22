@@ -58,7 +58,7 @@
                   Cấp đề tài
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]='error'>
-                  <nz-select [nzDisartổbled]='isDisable()' (ngModelChange)='changeCapDeTai($event)'
+                  <nz-select [nzDisabled]='isDisable()' (ngModelChange)='changeCapDeTai($event)'
                              formControlName='capDeTai'>
                     <nz-option *ngFor='let item of listCapDt' [nzValue]='item.ma' [nzLabel]='item.giaTri'>
                     </nz-option>
