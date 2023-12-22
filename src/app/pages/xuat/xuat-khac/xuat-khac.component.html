@@ -1,7 +1,7 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
   <ul nz-menu nzMode="horizontal">
     <li nz-menu-item [nzSelected]="tabSelected==0" *ngIf='userService.isAccessPermisson("XHDTQG_XK_KTCLVTBH")' (click)="selectTab(0)">
-      Kiểm tra chất lượng VT, TB trong thời gian bảo hành theo HĐ
+      Kiểm tra chất lượng VT, TB trước thời gian hết hạn bảo hành theo hợp đồng
     </li>
     <li nz-menu-item [nzSelected]="tabSelected==1" *ngIf='userService.isAccessPermisson("XHDTQG_XK_KTCLVTLK")' (click)="selectTab(1)">
       Kiểm tra chất lượng VT, TB trước khi hết hạn lưu kho

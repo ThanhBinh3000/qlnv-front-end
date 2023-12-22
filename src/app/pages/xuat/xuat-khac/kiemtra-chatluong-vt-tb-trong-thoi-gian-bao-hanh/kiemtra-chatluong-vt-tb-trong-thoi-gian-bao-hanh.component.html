@@ -1,10 +1,10 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="level1">
   <ul nz-menu nzMode="horizontal">
     <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)">
-      Toàn bộ DS VT, TB trong thời gian bảo hành theo HĐ cần xuất để kiểm tra
+      Toàn bộ DS VT, TB trước thời gian hết hạn bảo hành theo hợp đồng cần xuất để kiểm tra
     </li>
     <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)">
-      Tổng hợp DS VT, TB trong thời gian bảo hành theo HĐ cần xuất để kiểm tra
+      Tổng hợp DS VT, TB trước thời gian hết hạn bảo hành theo hợp đồng cần xuất để kiểm tra
     </li>
     <li [nzSelected]="tabSelected==2" nz-menu-item (click)="selectTab(2)">
       Quyết định xuất giảm vật tư

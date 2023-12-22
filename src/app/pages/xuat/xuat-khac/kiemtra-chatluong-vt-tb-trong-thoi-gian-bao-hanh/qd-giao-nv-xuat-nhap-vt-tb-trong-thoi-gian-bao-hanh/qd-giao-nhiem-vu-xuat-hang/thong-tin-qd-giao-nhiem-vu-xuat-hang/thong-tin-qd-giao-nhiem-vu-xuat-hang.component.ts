@@ -38,6 +38,7 @@ import {
 import {
   DialogTableCheckBoxComponent
 } from "../../../../../../../components/dialog/dialog-table-check-box/dialog-table-check-box.component";
+import {MangLuoiKhoService} from "../../../../../../../services/qlnv-kho/mangLuoiKho.service";
 
 @Component({
   selector: 'app-thong-tin-qd-giao-nhiem-vu-xuat-hang',
@@ -74,6 +75,7 @@ export class ThongTinQdGiaoNhiemVuXuatHangComponent extends Base2Component imple
               modal: NzModalService,
               private donviService: DonviService,
               private danhMucService: DanhMucService,
+              private mangLuoiKhoService: MangLuoiKhoService,
               private tongHopDanhSachVtTbTrongThoiGIanBaoHanh: TongHopDanhSachVtTbTrongThoiGIanBaoHanh,
               private phieuKdclVtTbTrongThoiGianBaoHanhService: PhieuKdclVtTbTrongThoiGianBaoHanhService,
               private quyetDinhXuatGiamVtBaoHanhService: QuyetDinhXuatGiamVtBaoHanhService,
@@ -226,8 +228,6 @@ export class ThongTinQdGiaoNhiemVuXuatHangComponent extends Base2Component imple
           body.idCanCu = body.idCanCu.join(",");
         }
         this.formData.value.qdGiaonvXhDtl = this.conVertTreeToList(this.dataThTree);
-        console.log(this.formData.value,"log")
-
       }
     }
     if (this.formData.value.loai == "XUAT_BH") {
@@ -238,7 +238,7 @@ export class ThongTinQdGiaoNhiemVuXuatHangComponent extends Base2Component imple
       if (body.idCanCu && isArray(body.idCanCu)) {
         body.idCanCu = body.idCanCu.join(",");
       }
-        this.formData.value.qdGiaonvXhDtl = this.conVertTreeToList(this.dataThTree);
+      this.formData.value.qdGiaonvXhDtl = this.conVertTreeToList(this.dataThTree);
     }
     let data = await this.createUpdate(this.formData.value);
     if (data) {
@@ -253,6 +253,7 @@ export class ThongTinQdGiaoNhiemVuXuatHangComponent extends Base2Component imple
       this.notification.error(MESSAGE.ERROR, data.msg);
     }
   }
+
   conVertTreeToList(data) {
     let arr = [];
     data.forEach(item => {
@@ -400,7 +401,7 @@ export class ThongTinQdGiaoNhiemVuXuatHangComponent extends Base2Component imple
             } else if (this.formData.value.loai == "XUAT_HUY") {
               let dataXg = cloneDeep(dataDetail.qdGiaonvXhDtl);
               this.buildTableView(dataXg);
-            }else {
+            } else {
               this.dataTh = cloneDeep(dataDetail.qdGiaonvXhDtl);
               this.dataTh.forEach((item) => {
                 this.dataThEdit[item.id] = {...item};
@@ -426,7 +427,18 @@ export class ThongTinQdGiaoNhiemVuXuatHangComponent extends Base2Component imple
     this.isViewModel = false;
   }
 
-  handleOk(data) {
+  async NamNhapKHo(event) {
+    let body = {
+      maDvi: event,
+      capDvi: (event?.length / 2 - 1),
+    };
+    const detail = await this.mangLuoiKhoService.getDetailByMa(body);
+    if (detail.statusCode == 0) {
+      return detail.data.object.namNhap ? detail.data.object.namNhap : null;
+    }
+  }
+
+  async handleOk(data) {
     this.isViewModel = false;
     if (data) {
       if (this.formData.value.loaiCanCu == "TONG_HOP") {
@@ -434,14 +446,17 @@ export class ThongTinQdGiaoNhiemVuXuatHangComponent extends Base2Component imple
           idCanCu: data.id,
           soCanCu: data.maDanhSach
         });
-        console.log(data.tongHopDtl, ' data.tongHopDtl data.tongHopDtl')
-        this.dataTh=[],
-        data.tongHopDtl.forEach(item => {
+        this.dataTh = [];
+        const promises = data.tongHopDtl.map(async (item) => {
+          let namNhapKHo = await this.NamNhapKHo(item.maDiaDiem);
           let it = new ItemXhXkVtQdGiaonvXhDtl();
           it.id = item.id;
           it.maDiaDiem = item.maDiaDiem;
           it.loaiVthh = item.loaiVthh;
           it.cloaiVthh = item.cloaiVthh;
+          it.tenLoaiVthh = item.tenLoaiVthh;
+          it.tenCloaiVthh = item.tenCloaiVthh;
+          it.namNhap = namNhapKHo;
           it.donViTinh = item.donViTinh;
           it.tenCuc = item.tenCuc;
           it.tenChiCuc = item.tenChiCuc;
@@ -454,15 +469,17 @@ export class ThongTinQdGiaoNhiemVuXuatHangComponent extends Base2Component imple
           it.slLayMau = 0;
           this.dataTh.push(it);
         });
+
+        await Promise.all(promises);
         this.dataTh.forEach((item) => {
-          this.dataThEdit[item.id] = {...item};
+          this.dataThEdit[item.id] = { ...item };
         });
+
         this.buildTableView(this.dataTh);
       } else if (this.formData.value.loaiCanCu == "PHIEU_KDCL") {
         this.listPhieuKdcl = cloneDeep(data)
         this.listPhieuKdcl = this.listPhieuKdcl.filter(f => f.checked);
         this.dataTable = this.listPhieuKdcl;
-        console.log(this.listPhieuKdcl,"this.listPhieuKdcl")
         this.formData.patchValue({
           soCanCu: this.listPhieuKdcl.map(m => m.soPhieu),
           idCanCu: this.listPhieuKdcl.map(m => m.id),
@@ -595,13 +612,14 @@ export class ThongTinQdGiaoNhiemVuXuatHangComponent extends Base2Component imple
       }
     });
   }
+
   bindingDataBb(data: any) {
     this.listSoBbBaoHanh = cloneDeep(data.data);
     this.allChecked = data.allChecked;
 
     this.listSoBbBaoHanh = this.listSoBbBaoHanh.filter(f => f.checked);
     this.dataTable = this.listSoBbBaoHanh
-    console.log(this.dataTable,"this.dataTable")
+    console.log(this.dataTable, "this.dataTable")
     this.formData.patchValue({
       soCanCu: this.listSoBbBaoHanh.map(m => m.soBienBan),
       idCanCu: this.listSoBbBaoHanh.map(m => m.id),
@@ -617,6 +635,9 @@ export class ItemXhXkVtQdGiaonvXhDtl {
   maDiaDiem: string;
   loaiVthh: string;
   cloaiVthh: string;
+  tenLoaiVthh: string;
+  tenCloaiVthh: string;
+  namNhap: number;
   donViTinh: string;
   tenCuc: string;
   tenChiCuc: string;
