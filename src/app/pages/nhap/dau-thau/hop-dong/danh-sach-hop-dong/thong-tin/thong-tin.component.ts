@@ -133,6 +133,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
   }
   rowItem: any[] = [];
   rowItemEdit: any[] = [];
+  editRowTinhPhat: any[] = [];
   listDiemKho: any[] = [];
   listType = ["MLK", "DV"]
     constructor(
@@ -227,6 +228,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
               tgianBdamThienHd: [],
               slGiaoCham: [],
               namKhoach: [],
+              thoiDiemTinhPhat: [],
             }
         );
         this.formData.controls['donGiaVat'].valueChanges.subscribe(value => {
@@ -443,6 +445,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
             control.updateValueAndValidity();
           });
           this.formData.updateValueAndValidity();
+          this.formData.controls["maHdong"].setValidators([Validators.required]);
         }
     }
 
@@ -926,8 +929,10 @@ export class ThongTinComponent implements OnInit, OnChanges {
       }
       if(this.formData.get('soNgayThien').value != null) {
         let tgianGiaoDuHang = addDays(ngayKy, this.formData.get('soNgayThien').value)
+        let thoiDiemTinhPhat = addDays(tgianGiaoDuHang, 1)
         this.formData.patchValue({
           tgianGiaoDuHang: tgianGiaoDuHang,
+          thoiDiemTinhPhat: thoiDiemTinhPhat,
         })
         if(this.formData.get('tgianGiaoThucTe').value != null) {
           let tgianGiaoThucTe = dayjs(this.formData.get('tgianGiaoThucTe').value).toDate();
@@ -1064,4 +1069,38 @@ export class ThongTinComponent implements OnInit, OnChanges {
     this.dataTable[0].children[y].children[z].edit = false
     this.rowItemEdit[z] = new DanhSachGoiThau();
   }
+
+  editRowTp(index) {
+    this.dataTable.forEach(i => {
+      i.editTinhPhat = false;
+    })
+    this.dataTable[index].editTinhPhat = true;
+    this.editRowTinhPhat[index] = cloneDeep(this.dataTable[index])
+  }
+
+  onChangeNgayGiaoThucTe(i) {
+    if(this.editRowTinhPhat[i].tgianGiaoThucTe != null) {
+      let tgianGiaoThucTe = dayjs(this.editRowTinhPhat[i].tgianGiaoThucTe).toDate();
+      let tgianGiaoDuHang = dayjs(this.formData.get('thoiDiemTinhPhat').value).toDate();
+      let soNgayGiaoCham = differenceInCalendarDays(tgianGiaoThucTe, tgianGiaoDuHang)
+      if (soNgayGiaoCham > 0) {
+        this.editRowTinhPhat[i].soNgayGiaoCham = soNgayGiaoCham
+      } else {
+        this.editRowTinhPhat[i].soNgayGiaoCham = 0
+      }
+    }
+  }
+  saveRowTp(i) {
+    this.editRowTinhPhat[i].thanhTienTinhPhat = this.editRowTinhPhat[i].soNgayGiaoCham * this.editRowTinhPhat[i].slGiaoCham * this.editRowTinhPhat[i].donGiaVat * this.editRowTinhPhat[i].mucPhat;
+    this.dataTable[i].thanhTienTinhPhat = this.editRowTinhPhat[i].thanhTienTinhPhat;
+    this.dataTable[i].soNgayGiaoCham = this.editRowTinhPhat[i].soNgayGiaoCham;
+    this.dataTable[i].slGiaoCham = this.editRowTinhPhat[i].slGiaoCham;
+    this.dataTable[i].mucPhat = this.editRowTinhPhat[i].mucPhat;
+    this.dataTable[i].tgianGiaoThucTe = this.editRowTinhPhat[i].tgianGiaoThucTe;
+    this.dataTable[i].editTinhPhat = false;
+  }
+  cancelEditRowTp(i) {
+    this.dataTable[i].editTinhPhat = false;
+  }
+
 }
