@@ -1488,6 +1488,9 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
         alert("Ký số thành công!");
         console.log(received_msg.Signature);
         // luu lai received_msg.Signature
+        this.helperService.exc_verify_xml(this.helperService.decodeStringToBase64(received_msg.Signature), (rv)=>{
+          console.log(rv);
+        });
       } else {
         alert("Ký số không thành công:" + received_msg.Status + ":" + received_msg.Error);
       }

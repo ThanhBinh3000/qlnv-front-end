@@ -181,7 +181,10 @@ export class HelperService {
   }
 
   encodeStringToBase64(input: string): string {
-    return btoa(encodeURIComponent(input).replace(/%([0-9A-F]{2})/g, (match, p1) => String.fromCharCode(parseInt(p1, 16))));
+    return btoa(unescape(encodeURIComponent(input)));
+  }
+  decodeStringToBase64(input: string): string {
+    return decodeURIComponent(escape(window.atob(input)));
   }
 
   exc_sign_xml(sendToCallBack, data, signCallBack) {
@@ -194,6 +197,14 @@ export class HelperService {
     prms["XmlDsigForm"] = "false";//"DSign";
     var json_prms = JSON.stringify(prms);
     this.mywindow.vgca_sign_xml(sendToCallBack, json_prms, signCallBack);
+  }
+
+  exc_verify_xml(data,signCallBack) {
+    var prms = {};
+    prms["Data"] = data;
+    prms["Format"] = "XML";
+    var json_prms = JSON.stringify(prms);
+    this.mywindow.vgca_verify_xml(json_prms, signCallBack);
   }
 
   // Lãnh đạo ký phê duyệt
