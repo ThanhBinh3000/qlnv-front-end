@@ -23,7 +23,13 @@
           *ngIf="isCuc() && (thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_CUC_BANHANH') || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_BANHANH'))"
           type="button" class="btn btn-sub" (click)="pheDuyet()">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
-          <span>Phê Duyệt</span>
+          <span>Duyệt</span>
+        </button>
+        <button
+          *ngIf="isCuc() && (thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_CUC_BANHANH') || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_BANHANH'))"
+          type="button" class="btn btn-sub" (click)="tuChoi()">
+          <i class="icon htvbdh_tcdt_tuchoi do"></i>
+          <span>Từ chối</span>
         </button>
         <button
           *ngIf="isCuc() && thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDC && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_CUC_BANHANH') || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_BANHANH'))"
@@ -41,6 +47,10 @@
     </div>
   </div>
 </nz-affix>
+<nz-alert class="mg-t-16"
+  *ngIf="formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC" nzShowIcon
+  nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
+</nz-alert>
 <div class="bg-trang">
   <nz-card class="mt16 flex-card p-lr16">
     <div class="header">
