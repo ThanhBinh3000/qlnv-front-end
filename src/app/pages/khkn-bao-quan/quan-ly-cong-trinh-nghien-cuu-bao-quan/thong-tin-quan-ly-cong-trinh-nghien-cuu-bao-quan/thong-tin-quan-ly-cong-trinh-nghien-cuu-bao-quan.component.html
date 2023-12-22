@@ -58,7 +58,7 @@
                   Cấp đề tài
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]='error'>
-                  <nz-select [nzDisabled]='isDisable()' (ngModelChange)='changeCapDeTai($event)'
+                  <nz-select [nzDisartổbled]='isDisable()' (ngModelChange)='changeCapDeTai($event)'
                              formControlName='capDeTai'>
                     <nz-option *ngFor='let item of listCapDt' [nzValue]='item.ma' [nzLabel]='item.giaTri'>
                     </nz-option>
@@ -552,7 +552,7 @@
             <div nz-col nzSpan='3'>
               <nz-form-item>
                 <nz-form-label [nzNoColon]='true'>
-                  Tổng điểm
+                  Điểm trung bình cộng
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]='error'>
                   <nz-input-number [nzDisabled]='isDisable()' (change)='calculateXepLoai()'
