@@ -147,7 +147,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="6">
+            <div nz-col [nzSpan]="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired> Nhà kho</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -157,7 +157,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="6">
+            <div nz-col [nzSpan]="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired> Điểm kho</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -180,6 +180,18 @@
                 <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <input nz-input formControlName="tenCloaiVthh" readonly="true"/>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="4">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Năm nhập kho
+                </nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-input-group>
+                    <input nz-input formControlName="namNhap" readonly/>
+                  </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
             </div>

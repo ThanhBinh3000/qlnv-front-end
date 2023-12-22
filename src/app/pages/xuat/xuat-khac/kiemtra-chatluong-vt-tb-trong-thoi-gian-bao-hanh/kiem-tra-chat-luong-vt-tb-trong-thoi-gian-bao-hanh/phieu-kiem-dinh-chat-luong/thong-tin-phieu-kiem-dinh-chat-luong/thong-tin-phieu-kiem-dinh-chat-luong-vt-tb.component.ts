@@ -102,6 +102,7 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
         dviKiemDinh: [null],
         loaiVthh: [null],
         cloaiVthh: [null],
+        namNhap: [null],
         maDiaDiem: [null, [Validators.required]],
         maDiemKho: [null],
         maNhaKho: [null],
@@ -444,6 +445,7 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
           soLuongMau:item.soLuongMau,
           slTonKho:item.slTonKho,
           donViTinh:item.donViTinh,
+          namNhap: item.namNhap
         });
         await this.loadPhuongPhapLayMau(item.cloaiVthh);
         // await this.tenThuKho(item.maDiaDiem);

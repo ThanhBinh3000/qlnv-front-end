@@ -78,7 +78,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="6">
+        <div nz-col nzSpan="5">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
               Đơn vị
@@ -90,7 +90,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="3">
+        <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
               Mã QHNS (mã quan hệ ngân sách)
@@ -102,7 +102,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="3">
+        <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
               Số phiếu xuất kho
@@ -114,7 +114,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="3">
+        <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">
               Ngày xuất kho (Ngày tạo phiếu)
@@ -127,21 +127,21 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="3">
+        <div nz-col nzSpan="4">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true">
               Nợ
             </nz-form-label>
-            <nz-input-number nz-input [nzSize]="'small'" formControlName="taiKhoanNo"
+            <nz-input-number nz-input [nzSize]="'small'" formControlName="duNo"
                              [nzDisabled]="isView"></nz-input-number>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="3">
+        <div nz-col nzSpan="4">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true">
               Có
             </nz-form-label>
-            <nz-input-number nz-input [nzSize]="'small'" formControlName="taiKhoanCo" [nzDisabled]="isView">
+            <nz-input-number nz-input [nzSize]="'small'" formControlName="duCo" [nzDisabled]="isView">
             </nz-input-number>
           </nz-form-item>
         </div>
@@ -249,6 +249,18 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
                 <input nz-input formControlName="tenCloaiVthh" readonly/>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              Năm nhập kho
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group>
+                <input nz-input formControlName="namNhap" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -454,7 +466,7 @@
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Ghi chú</nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Ghi chú</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <textarea rows="3" nz-input formControlName="ghiChu" [readOnly]="isView"></textarea>
             </nz-form-control>

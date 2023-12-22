@@ -179,7 +179,7 @@
                         <td>{{lv3.tenTrangThai}}</td>
                         <td class="text-left">
                           <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PXK_XEM')
-                              && !((lv3.trangThai ==STATUS.TU_CHOI_LDCC || lv2.trangThai ==STATUS.DU_THAO) && lv3.nguoiTaoId == userInfo.ID)"
+                              && !((lv3.trangThai ==STATUS.TU_CHOI_LDCC || lv3.trangThai ==STATUS.DU_THAO) && lv3.nguoiTaoId == userInfo.ID)"
                              (click)="redirectDetail(lv3.id, true)">
                             <i class="fa fa-eye" title="Xem chi tiết"></i>
                           </a>

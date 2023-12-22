@@ -94,12 +94,19 @@ export class ThongTinQuyetDinhXuatGiamVatTuBaoHanhComponent extends Base2Compone
       trichYeu: [],
       soCanCu: [null, [Validators.required]],
       idCanCu: [null, [Validators.required]],
-      ngayKy: [dayjs().format("YYYY-MM-DD"), [Validators.required]],
-      thoiHanXuatGiam: [],
+      ngayKy: [dayjs().format("YYYY-MM-DD")],
+      ngayHieuLuc: [dayjs().format("YYYY-MM-DD")],
       listSoQdGiaoNvXh: [],
       listIdQdGiaoNvXh: [],
       qdXuatGiamVtDtl: [new Array()],
       fileDinhKems: [new Array()],
+    })
+    this.formData.controls['ngayKy'].valueChanges.subscribe((ngayKy) => {
+      if (ngayKy) {
+        this.formData.patchValue({
+          ngayHieuLuc: ngayKy,
+        });
+      }
     })
   }
 
@@ -159,7 +166,6 @@ export class ThongTinQuyetDinhXuatGiamVatTuBaoHanhComponent extends Base2Compone
       });
     }
   }
-
 
   async save(isGuiDuyet?) {
     let body = this.formData.value;
@@ -293,10 +299,15 @@ export class ThongTinQuyetDinhXuatGiamVatTuBaoHanhComponent extends Base2Compone
       await this.spinner.show();
       let dataRes = await this.baoCaoKdmVtTbTrongThoiGianBaoHanh.getDetail(data.id)
       const responseData = dataRes.data;
-      this.dataTable = responseData.baoCaoDtl.map(m => {
+      // this.dataTable = responseData.baoCaoDtl.map(m => {
+      //   return m.qdGiaonvXhDtl
+      //     .filter(i=> i.mauBiHuy==true);
+      // }).flat();
+      this.dataTable = responseData.qdGiaonvXn.map(m => {
         return m.qdGiaonvXhDtl
-          .filter(i=> i.mauBiHuy==true);
+          .filter(i => i.mauBiHuy == true);
       }).flat();
+      console.log(this.dataTable,'this.dataTable')
 
       this.formData.patchValue({
         soCanCu: responseData.soBaoCao,
@@ -308,6 +319,7 @@ export class ThongTinQuyetDinhXuatGiamVatTuBaoHanhComponent extends Base2Compone
       });
       this.buildTableView(this.dataTable)
     } catch (e) {
+      console.log(`1`)
       this.notification.error(MESSAGE.ERROR, e.msg);
     } finally {
       await this.spinner.hide();
