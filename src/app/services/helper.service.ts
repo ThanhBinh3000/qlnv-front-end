@@ -1,13 +1,14 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import * as moment from 'moment';
 import Cleave from 'cleave.js';
 import * as XLSX from 'xlsx';
-import { environment } from 'src/environments/environment';
-import { ResponseData } from '../interfaces/response';
-import { MESSAGE } from "../constants/message";
-import { NzNotificationService } from "ng-zorro-antd/notification";
+import {environment} from 'src/environments/environment';
+import {ResponseData} from '../interfaces/response';
+import {MESSAGE} from "../constants/message";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import * as JsonToXML from "js2xmlparser";
 
 declare var vgcapluginObject: any;
 
@@ -16,10 +17,13 @@ declare var vgcapluginObject: any;
 })
 
 export class HelperService {
+  mywindow: any;
+
   constructor(
     private httpClient: HttpClient,
     private notification: NzNotificationService,
   ) {
+    this.mywindow = window;
   }
 
   async markFormGroupTouched(formGroup, ignoreFields: Array<string> = []) {
@@ -48,14 +52,14 @@ export class HelperService {
   }
 
   EnumToSelectList(key): Promise<ResponseData<any>> {
-    const url = `${environment.SERVICE_API}api/InitApp/EnumToSelectList?key=${key}`;
+    const url = `${environment.SERVICE_API}/InitApp/EnumToSelectList?key=${key}`;
     return this.httpClient.get<ResponseData<any>>(url).toPromise();
   }
 
 
   dateValidator = (control: FormControl): { [s: string]: boolean } => {
     if (control.value && !moment(control.value, 'DD/MM/YYYY', true).isValid()) {
-      return { invalid: true };
+      return {invalid: true};
     }
     return;
   };
@@ -77,6 +81,15 @@ export class HelperService {
     var received_msg = JSON.parse(rv);
     if (received_msg.Status == 0) {
       location.reload()
+    }
+  }
+
+  SignFileCallBack2(sender, rv) {
+    var received_msg = JSON.parse(rv);
+    if (received_msg.Status == 0) {
+      console.log(received_msg.Signature);
+    } else {
+      alert("Ký số không thành công:" + received_msg.Status + ":" + received_msg.Error);
     }
   }
 
@@ -142,6 +155,7 @@ export class HelperService {
       }
     }
   }
+
   bidingDataInFormGroupAndIgnore(formGroup: FormGroup, dataBinding: any, ignoreFields: Array<string> = []) {
     if (dataBinding) {
       for (const name in dataBinding) {
@@ -151,17 +165,155 @@ export class HelperService {
       }
     }
   }
+
   bidingDataInFormGroupAndNotTrigger(formGroup: FormGroup, dataBinding: any, fiedlNotTrigger: Array<string> = []) {
     if (dataBinding) {
       for (const name in dataBinding) {
         if (formGroup.controls.hasOwnProperty(name)) {
           if (fiedlNotTrigger.includes(name)) {
-            formGroup.controls[name].setValue(dataBinding[name], { emitEvent: false });
+            formGroup.controls[name].setValue(dataBinding[name], {emitEvent: false});
           } else {
             formGroup.controls[name].setValue(dataBinding[name]);
           }
         }
       }
     }
+  }
+
+  encodeStringToBase64(input: string): string {
+    return btoa(encodeURIComponent(input).replace(/%([0-9A-F]{2})/g, (match, p1) => String.fromCharCode(parseInt(p1, 16))));
+  }
+
+  exc_sign_xml(sendToCallBack, data, signCallBack) {
+    data = JsonToXML.parse("data", data)
+    var prms = {};
+
+    prms["Base64Content"] = this.encodeStringToBase64(data);
+    prms["ReturnSignatureOnly"] = "false";
+    prms["HashAlg"] = "Sha256";
+    prms["XmlDsigForm"] = "false";//"DSign";
+    var json_prms = JSON.stringify(prms);
+    this.mywindow.vgca_sign_xml(sendToCallBack, json_prms, signCallBack);
+  }
+
+  // Lãnh đạo ký phê duyệt
+  exc_sign_approved(data, idVanBan, type, userName) {
+    var prms = {};
+
+    prms["FileUploadHandler"] = `${environment.SERVICE_API}/QuanLyFilesServer/UploadFileKySo?id=${idVanBan}&fileName=${data.fileName}&type=${type}&loaiKy=${1}&userName=${userName}&fileId=${data.id}`;
+    prms["SessionId"] = "";
+    prms["FileName"] = `${environment.SERVICE_API}/QuanLyFilesServer/DownloadFilePdf?fileId=${data.id}`;
+
+    var json_prms = JSON.stringify(prms);
+    this.mywindow.vgca_sign_file(json_prms, this.SignFileCallBack1);
+
+  }
+
+  // Ký nháy
+  exc_sign_approved_kynhay(data, idVanBan, type, userName) {
+    var prms = {};
+    var scv = [{"Key": "abc", "Value": "abc"}];
+    prms["FileUploadHandler"] = `${environment.SERVICE_API}/QuanLyFilesServer/UploadFileKySo?id=${idVanBan}&fileName=${data.fileName}&type=${type}&loaiKy=${3}&userName=${userName}&fileId=${data.id}`;
+    prms["SessionId"] = "";
+    prms["FileName"] = `${environment.SERVICE_API}/QuanLyFilesServer/DownloadFilePdf?fileId=${data.id}`;
+    prms["MetaData"] = scv;
+    var json_prms = JSON.stringify(prms);
+    // this.mywindow.vgca_sign_file(json_prms, this.SignFileCallBack1);
+    this.mywindow.vgca_sign_file(json_prms, this.SignFileCallBack1);
+
+    //vgca_sign_file(json_prms, SignFileCallBack1);
+
+  }
+
+  // Văn thư ký phát hành
+  exc_sign_issued(data, idVanBan, type, userName) {
+    var prms = {};
+
+    prms["FileUploadHandler"] = `${environment.SERVICE_API}/QuanLyFilesServer/UploadFileKySo?id=${idVanBan}&fileName=${data.fileName}&type=${type}&loaiKy=${2}&userName=${userName}`;
+    prms["SessionId"] = "";
+    prms["FileName"] = `${environment.SERVICE_API}/QuanLyFilesServer/DownloadFilePdf?fileId=${data.id}`;
+    prms["DocNumber"] = "123";
+    prms["IssuedDate"] = new Date();
+
+    var json_prms = JSON.stringify(prms);
+    this.mywindow.vgca_sign_file(json_prms, this.SignFileCallBack1);
+
+  }
+
+  // Văn thư ký công văn đến
+  vgca_sign_income(data, idVanBan, type, userName) {
+    var prms = {};
+    var scv = [];
+
+    prms["FileUploadHandler"] = `${environment.SERVICE_API}/QuanLyFilesServer/UploadFileKySo?id=${idVanBan}&fileName=${data.fileName}&type=${type}&userName=${userName}`;
+    prms["SessionId"] = "";
+    prms["FileName"] = `${environment.SERVICE_API}/QuanLyFilesServer/DownloadFilePdf?fileId=${data.id}`;
+    prms["MetaData"] = scv;
+
+    var json_prms = JSON.stringify(prms);
+    this.mywindow.vgca_sign_file(json_prms, this.SignFileCallBack1);
+
+  }
+
+  // Add Comment
+  exc_comment(data, idVanBan, type) {
+    var prms = {};
+    var scv = [{"Key": "abc", "Value": "abc"}];
+
+    prms["FileUploadHandler"] = `${environment.SERVICE_API}/QuanLyFilesServer/UploadFileKySo?id=${idVanBan}&fileName=${data.fileName}&type=${type}`;
+    prms["SessionId"] = "";
+    prms["FileName"] = `${environment.SERVICE_API}/QuanLyFilesServer/DownloadFilePdf?fileId=${data.id}`;
+    prms["MetaData"] = scv;
+
+    var json_prms = JSON.stringify(prms);
+    this.mywindow.vgca_comment(json_prms, this.SignFileCallBack1);
+  }
+
+  // Ký tài liệu đính kèm
+  exc_appendix(data, idVanBan, type) {
+    var prms = {};
+    var scv = [{"Key": "abc", "Value": "abc"}];
+
+    prms["FileUploadHandler"] = `${environment.SERVICE_API}/QuanLyFilesServer/UploadFileKySo?id=${idVanBan}&fileName=${data.fileName}&type=${type}`;
+    prms["SessionId"] = "";
+    prms["FileName"] = `${environment.SERVICE_API}/QuanLyFilesServer/DownloadFilePdf?fileId=${data.id}`;
+    prms["DocNumber"] = "123/BCY-CTSBMTT";
+    prms["MetaData"] = scv;
+
+    var json_prms = JSON.stringify(prms);
+    this.mywindow.vgca_sign_appendix(json_prms, this.SignFileCallBack1);
+  }
+
+  // Sao văn bản điện tử
+  exc_sign_copy(data, idVanBan, type) {
+    var prms = {};
+    var scv = [{"Key": "abc", "Value": "abc"}];
+
+    prms["FileUploadHandler"] = `${environment.SERVICE_API}/QuanLyFilesServer/UploadFileKySo?id=${idVanBan}&fileName=${data.fileName}&type=${type}`;
+    prms["SessionId"] = "";
+    prms["FileName"] = `${environment.SERVICE_API}/QuanLyFilesServer/DownloadFilePdfPdf?fileId=${data.id}`;
+    prms["DocNumber"] = "123/BCY-CTSBMTT";
+    prms["MetaData"] = scv;
+
+    var json_prms = JSON.stringify(prms);
+    this.mywindow.vgca_sign_copy(json_prms, this.SignFileCallBack1);
+  }
+
+  convertSlug(str) {
+    str = str.replace(/^\s+|\s+$/g, ''); // trim
+    str = str.toLowerCase();
+
+    // remove accents, swap ñ for n, etc
+    var from = "ãàáäâẽèéëêìíïîõòóöôùúüûñç·/_,:;";
+    var to = "aaaaaeeeeeiiiiooooouuuunc------";
+    for (var i = 0, l = from.length; i < l; i++) {
+      str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+    }
+
+    str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+      .replace(/\s+/g, '-') // collapse whitespace and replace by -
+      .replace(/-+/g, '-'); // collapse dashes
+
+    return str;
   }
 }
