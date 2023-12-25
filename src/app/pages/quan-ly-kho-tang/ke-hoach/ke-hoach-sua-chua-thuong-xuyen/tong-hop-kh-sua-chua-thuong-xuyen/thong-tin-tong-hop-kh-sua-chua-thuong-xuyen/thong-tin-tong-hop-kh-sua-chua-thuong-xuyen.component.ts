@@ -195,10 +195,10 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
     if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDV) {
       this.formData.controls["soToTrinh"].setValidators([Validators.required]);
     }
-    if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDTC) {
-      this.formData.controls["soQuyetDinh"].setValidators([Validators.required]);
-      this.formData.controls["ngayKy"].setValidators([Validators.required]);
-    }
+    // if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDTC) {
+    //   this.formData.controls["soQuyetDinh"].setValidators([Validators.required]);
+    //   this.formData.controls["ngayKy"].setValidators([Validators.required]);
+    // }
   }
 
 

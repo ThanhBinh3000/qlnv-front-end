@@ -120,6 +120,11 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
           this.listFile = data.fileDinhKems;
           this.dataTable = data.listKtKhDxkhScThuongXuyenDtl;
           this.convertListData();
+          if (data.trangThai == STATUS.CHO_DUYET_LDC) {
+                this.formData.patchValue({
+                  ngayKy: dayjs().format('YYYY-MM-DD')
+                });
+          }
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -426,9 +431,9 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
   setValidators() {
     this.formData.controls["soCv"].setValidators(Validators.required);
     this.formData.controls["trichYeu"].setValidators(Validators.required);
-    this.formData.controls["ngayKy"].setValidators(Validators.required);
-    if (this.formData.value.trangThai == STATUS.DA_DUYET_LDC) {
-      this.formData.controls["ngayDuyet"].setValidators(Validators.required);
+    // this.formData.controls["ngayKy"].setValidators(Validators.required);
+    if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC) {
+      this.formData.controls["ngayKy"].setValidators(Validators.required);
     }
   }
 
