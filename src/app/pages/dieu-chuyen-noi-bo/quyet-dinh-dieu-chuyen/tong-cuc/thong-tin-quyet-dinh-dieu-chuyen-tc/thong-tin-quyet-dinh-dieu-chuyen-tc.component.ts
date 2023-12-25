@@ -621,15 +621,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
   }
 
   async pheDuyet() {
-    if (this.formData.get('trangThai').value !== STATUS.DA_DUYET_LDV) {
-      this.formData.controls["soQdinh"].clearValidators();
-      this.formData.controls["ngayKyQdinh"].clearValidators();
-      this.formData.controls["ngayPduyet"].clearValidators();
-    } else {
-      this.formData.controls["soQdinh"].setValidators([Validators.required]);
-      this.formData.controls["ngayKyQdinh"].setValidators([Validators.required]);
-      this.formData.controls["ngayPduyet"].setValidators([Validators.required]);
-    }
+    this.setValidator()
     this.helperService.markFormGroupTouched(this.formData);
     if (!this.formData.valid) return
     let trangThai = this.formData.value.trangThai == STATUS.CHO_DUYET_LDV ? STATUS.DA_DUYET_LDV : STATUS.BAN_HANH;
