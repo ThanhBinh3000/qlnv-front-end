@@ -42,7 +42,8 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
   dataChildOnChanges: any[] = [];
   selected: boolean;
   dataChiTieu: any
-
+  listLoaiHinhNx: any[] = [];
+  listKieuNx: any[] = [];
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -64,7 +65,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
       idQdGoc: ['', Validators.required],
       soQdGoc: ['', [Validators.required]],
       ngayKyQdGoc: [''],
-      ngayKyDc: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
+      ngayKyDc: [],
       ngayHluc: [''],
       trichYeu: [''],
       trangThai: [STATUS.DA_LAP],
@@ -82,7 +83,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
       soQdCc: [''],
       idSoQdCc: [''],
       soToTrinh: [''],
-      ngayTaoCv: [''],
+      ngayTaoCv: [dayjs().format('YYYY-MM-DD')],
       loaiHinhNx: [''],
       tenLoaiHinhNx: [''],
       kieuNx: [''],
@@ -139,6 +140,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
         });
       }
       await Promise.all([
+        this.loadDataComboBox(),
         await this.nguonVonGetAll(),
         await this.getDetail(),
         await this.getQdGocList(),
@@ -150,6 +152,32 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async loadDataComboBox() {
+    this.spinner.show();
+    this.listLoaiHinhNx = [];
+    let resNx = await this.danhMucService.danhMucChungGetAll("LOAI_HINH_NHAP_XUAT");
+    if (resNx.msg == MESSAGE.SUCCESS) {
+      this.listLoaiHinhNx = resNx.data.filter(item => item.apDung == "NHAP_TT");
+      this.formData.get("loaiHinhNx").setValue(this.listLoaiHinhNx[0].ma);
+    }
+    // kiểu nhập xuất
+    this.listKieuNx = [];
+    let resKieuNx = await this.danhMucService.danhMucChungGetAll("KIEU_NHAP_XUAT");
+    if (resKieuNx.msg == MESSAGE.SUCCESS) {
+      this.listKieuNx = resKieuNx.data;
+    }
+    this.spinner.hide();
+  }
+
+  onChangeLhNx($event) {
+    let dataNx = this.listLoaiHinhNx.filter(item => item.ma == $event);
+    if (dataNx.length > 0) {
+      this.formData.patchValue({
+        kieuNx: dataNx[0].ghiChu
+      });
     }
   }
 
