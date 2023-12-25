@@ -266,17 +266,32 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   }
 
   async onChangeLoaiVthh(event) {
-    let body = {
-      "str": event
-    };
-    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
-    this.listCloaiVthh = [];
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data) {
-        this.listCloaiVthh = res.data;
+    if (event) {
+      this.formTraCuu.patchValue({
+        cloaiVthh: null
+      })
+      let body = {
+        "str": event
+      };
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
+      this.listCloaiVthh = [];
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.listCloaiVthh = res.data;
+          if (event == '0101') {
+            this.formTraCuu.patchValue({
+              cloaiVthh: '010102'
+            })
+          }
+          if (event == '0102') {
+            this.formTraCuu.patchValue({
+              cloaiVthh: '010203'
+            })
+          }
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
       }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
@@ -357,11 +372,29 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     this.buildTreePagCt();
   }
 
+  getMinMax(data: any[],row : string): any[] {
+    let result = [];
+    if (data && data.length > 0) {
+      const map = data.map((child) => child[row]);
+      // Lấy hai giá trị bé nhất và lớn nhất
+      const min = Math.min(...map);
+      const max = Math.max(...map);
+     result.push(min,max);
+    }
+    return result;
+  }
+
   buildTreePagCt() {
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTableView = chain(this.dataTable)
         .groupBy("maDvi")
         .map((value, key) => {
+          let giaCucDn = this.getMinMax(value, 'giaCucDn');
+          let giaCucDnVat = this.getMinMax(value, 'giaCucDnVat');
+          let giaQdTcdt = this.getMinMax(value, 'giaQdTcdt');
+          let giaQdTcdtVat = this.getMinMax(value, 'giaQdTcdtVat');
+          let giaQdBtc = this.getMinMax(value, 'giaQdBtc');
+          let giaQdBtcVat = this.getMinMax(value, 'giaQdBtcVat');
           return {
             idVirtual: uuidv4(),
             tenVungMien: value && value[0] && value[0].tenVungMien ? value[0].tenVungMien : null,
@@ -369,7 +402,19 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
             pagId: value && value[0] && value[0].pagId ? value[0].pagId : null,
             soDx: value && value[0] && value[0].soDx ? value[0].soDx : null,
             children: value,
-            maDvi : key
+            maDvi: key,
+            giaCucDnMin : giaCucDn && giaCucDn.length > 0 ? giaCucDn[0] : 0 ,
+            giaCucDnMax : giaCucDn && giaCucDn.length > 0 ? giaCucDn[1] : 0,
+            giaCucDnMinVat : giaCucDnVat && giaCucDnVat.length > 0 ? giaCucDnVat[0] : 0,
+            giaCucDnMaxVat : giaCucDnVat && giaCucDnVat.length > 0 ? giaCucDnVat[1] : 0,
+            giaQdTcdtMin : giaQdTcdt && giaQdTcdt.length > 0 ? giaQdTcdt[0] : 0,
+            giaQdTcdtMax : giaQdTcdt && giaQdTcdt.length > 0 ? giaQdTcdt[1] : 0,
+            giaQdTcdtMinVat : giaQdTcdtVat && giaQdTcdtVat.length > 0 ? giaQdTcdtVat[0] : 0,
+            giaQdTcdtMaxVat : giaQdTcdtVat && giaQdTcdtVat.length > 0 ? giaQdTcdtVat[1] : 0,
+            giaQdBtcMin : giaQdBtc && giaQdBtc.length > 0 ? giaQdBtc[0] : 0,
+            giaQdBtcMax : giaQdBtc && giaQdBtc.length > 0 ? giaQdBtc[1] : 0,
+            giaQdBtcMinVat : giaQdBtcVat && giaQdBtcVat.length > 0 ? giaQdBtcVat[0] : 0,
+            giaQdBtcMaxVat : giaQdBtcVat && giaQdBtcVat.length > 0 ? giaQdBtcVat[1] : 0,
           };
         }).value();
       if (this.listCuc.length > 0 && this.listCucSelected.length == this.listCuc.length - 1) {
