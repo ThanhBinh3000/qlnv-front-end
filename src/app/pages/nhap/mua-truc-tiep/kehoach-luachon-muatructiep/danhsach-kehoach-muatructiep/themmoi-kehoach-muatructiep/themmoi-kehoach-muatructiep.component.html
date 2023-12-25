@@ -81,7 +81,7 @@
                         </div>
                         <div nz-col [nzSpan]="6">
                             <nz-form-item>
-                                <nz-form-label nzRequired [nzNoColon]="true"> Loại hình nhập xuất </nz-form-label>
+                                <nz-form-label nzRequired [nzNoColon]="true"> Loại hình nhập</nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
                                     <nz-select formControlName="loaiHinhNx" (ngModelChange)="onChangeLhNx($event)"
                                         [nzDisabled]="isDisable()">
@@ -94,7 +94,7 @@
                         </div>
                         <div nz-col [nzSpan]="6">
                             <nz-form-item>
-                                <nz-form-label nzRequired [nzNoColon]="true"> Kiểu nhập xuất </nz-form-label>
+                                <nz-form-label nzRequired [nzNoColon]="true"> Kiểu nhập</nz-form-label>
                                 <nz-form-control>
                                     <nz-select formControlName="kieuNx" [nzDisabled]="true">
                                         <nz-option *ngFor="let p of listKieuNx" [nzValue]="p.ma" [nzLabel]="p.giaTri">
