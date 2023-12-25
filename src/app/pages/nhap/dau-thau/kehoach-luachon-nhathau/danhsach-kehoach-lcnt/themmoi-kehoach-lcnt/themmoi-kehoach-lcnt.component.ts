@@ -484,7 +484,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     });
   }
 
-  themMoiCuc(goiThau?: string) {
+  themMoiCuc(event, goiThau?: string) {
     if (!this.formData.get('loaiVthh').value) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng DTQG');
       return;
@@ -1347,5 +1347,28 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
 
   onChangeQuy() {
     this.formData.get("tgianBdauTchuc").setValue(null);
+  }
+
+  async danhSachGthauTruot($event) {
+    $event.stopPropagation();
+    if (this.formData.value.loaiVthh == null) {
+      this.notification.error(MESSAGE.ERROR, "Vui lòng chọn loại hàng DTQG.");
+      return;
+    }
+    let body = {
+      loaiVthh: this.formData.value.loaiVthh,
+      cloaiVthh: this.formData.value.cloaiVthh,
+      namKhoach: this.formData.value.namKhoach,
+    }
+    await this.dauThauService.danhSachGthauTruot(body).then((res) => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.listOfData = res.data
+      }
+    })
+      .catch((e) => {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      });
   }
 }
