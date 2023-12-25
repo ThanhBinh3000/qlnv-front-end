@@ -38,10 +38,7 @@
       </nz-select>
     </th>
     <th *ngIf="!isTabNdKhac">
-      <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="rowItem.donViTinh"
-                       [nzFormatter]="globals.formatter"
-                       [nzParser]="globals.parser">
-      </nz-input-number>
+      <input type='text' [disabled]='true' [(ngModel)]='rowItem.donViTinh' nz-input />
     </th>
     <th>
       <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="rowItem.soLuong"
@@ -105,7 +102,7 @@
       <td *ngIf="isTabNdKhac">{{ data.ttThamKhao }}</td>
       <td *ngIf="isQdThamQuyen">{{ data.trichYeu }}</td>
       <td *ngIf="!isTabNdKhac">{{ (data.tenCloaiVthh ? data.tenCloaiVthh : '' ) + (data.tieuChuanCl ? '; ' + data.tieuChuanCl : '' )}}</td>
-      <td *ngIf="!isTabNdKhac">{{data.tenCloaiVthh}}</td>
+      <td *ngIf="!isTabNdKhac">{{data.donViTinh}}</td>
       <td class="text-right">{{data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
       <td class="text-right">{{data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
       <td class="text-right" *ngIf="isVat">{{data.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
@@ -141,17 +138,15 @@
         <input [readonly]="isView" type="text" [(ngModel)]="dataEdit[idx].data.trichYeu" nz-input/>
       </th>
       <th *ngIf="!isTabNdKhac">
-        <nz-select [nzDisabled]="isView" [(ngModel)]="dataEdit[idx].data.cloaiVthh"
-                   (ngModelChange)="onChangeCloaiVthh($event)">
-          <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of listCloaiVthh">
-          </nz-option>
-        </nz-select>
+<!--        <nz-select [nzDisabled]="true" [(ngModel)]="dataEdit[idx].data.cloaiVthh"-->
+<!--                   (ngModelChange)="onChangeCloaiVthh($event)">-->
+<!--          <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of listCloaiVthh">-->
+<!--          </nz-option>-->
+<!--        </nz-select>-->
+        <input [readonly]="isView" type="text" [(ngModel)]="dataEdit[idx].data.tenCloaiVthh" nz-input/>
       </th>
       <th *ngIf="!isTabNdKhac">
-        <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.donViTinh"
-                         [nzFormatter]="globals.formatter"
-                         [nzParser]="globals.parser">
-        </nz-input-number>
+        <input type='text' [disabled]='true' [(ngModel)]="dataEdit[idx].data.donViTinh" nz-input />
       </th>
       <th>
         <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.soLuong"
