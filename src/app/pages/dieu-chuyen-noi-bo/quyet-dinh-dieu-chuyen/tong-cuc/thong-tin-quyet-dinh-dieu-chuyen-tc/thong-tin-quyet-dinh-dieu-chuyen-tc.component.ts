@@ -236,7 +236,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       this.formData.patchValue({
         ...data,
         quyetDinhPdDtl: listDeXuat,
-        soQdinh: data.soQdinh.split('/')[0]
+        soQdinh: data.soQdinh ? data.soQdinh.split('/')[0] : ''
       });
 
       if (data.idThop) {
@@ -647,7 +647,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     if (!this.formData.valid) return
     await this.spinner.show();
     let body = this.formData.value;
-    body.soQdinh = `${this.formData.value.soQdinh.toString().split("/")[0]}/${this.maQd}`
+    body.soQdinh = this.formData.value.soQdinh ? `${this.formData.value.soQdinh.toString().split("/")[0]}/${this.maQd}` : ''
     if (this.idInput) {
       body.id = this.idInput
     }
