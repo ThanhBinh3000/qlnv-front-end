@@ -220,7 +220,7 @@
                   (click)="redirectDetail(data.id, true)">
                   <i class="fa fa-eye" title="Xem chi tiết"></i>
                 </a>
-                <a *ngIf="(data.trangThai === STATUS.CHO_DUYET_LDV || data.trangThai === STATUS.CHO_DUYET_LDTC) && userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM')"
+                <a *ngIf="(data.trangThai === STATUS.CHO_DUYET_LDV || data.trangThai === STATUS.DA_DUYET_LDV) && userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM')"
                   (click)="redirectDetail(data.id, true)">
                   <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
                 </a>
