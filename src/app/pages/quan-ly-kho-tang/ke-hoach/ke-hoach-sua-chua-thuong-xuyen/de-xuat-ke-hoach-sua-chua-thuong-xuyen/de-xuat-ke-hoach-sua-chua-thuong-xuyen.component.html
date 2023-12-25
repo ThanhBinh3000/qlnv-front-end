@@ -33,11 +33,11 @@
         </div>
       </form>
       <div class="cangiua group-button-search">
-        <button nz-button class="search__button--clear" *ngIf="userService.isCuc()" (click)="clearFilter()">
+        <button nz-button class="search__button--clear" (click)="clearFilter()">
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
-        <button nz-button class="search__button--search" *ngIf="userService.isCuc()" (click)="filter()">
+        <button nz-button class="search__button--search" (click)="filter()">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
