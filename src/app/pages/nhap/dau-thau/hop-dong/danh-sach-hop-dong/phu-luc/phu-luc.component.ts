@@ -17,6 +17,8 @@ import { ThongTinPhuLucHopDongService } from 'src/app/services/thongTinPhuLucHop
 import { HelperService } from "../../../../../../services/helper.service";
 import { STATUS } from "../../../../../../constants/status";
 import { convertTienTobangChu } from "../../../../../../shared/commonFunction";
+import * as dayjs from "dayjs";
+import {differenceInCalendarDays} from "date-fns";
 
 
 @Component({
@@ -43,7 +45,10 @@ export class PhuLucComponent implements OnInit {
   listAllChiCuc: any[] = [];
   maPhuLucSuffix: any;
   STATUS = STATUS;
-
+  tuNgayHlucTrc: Date | null = null;
+  denNgayHlucTrc: Date | null = null;
+  tuNgayHlucDc: Date | null = null;
+  denNgayHlucDc: Date | null = null;
   constructor(
     private modal: NzModalService,
     public userService: UserService,
@@ -58,7 +63,7 @@ export class PhuLucComponent implements OnInit {
     this.formPhuLuc = this.fb.group({
       loaiVthh: [null],
       cloaiVthh: [null],
-      soPluc: [null, [Validators.required]],
+      soPluc: [null],
       maPluc: [null, [Validators.required]],
       ngayKy: [null],
       ngayHlucHd: [null],
@@ -76,6 +81,33 @@ export class PhuLucComponent implements OnInit {
       tenTrangThai: ['Dự thảo'],
     });
   }
+
+  disabledTuNgayHlucTrc = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayHlucTrc) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayHlucTrc.getTime();
+  };
+
+  disabledDenNgayHlucTrc = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayHlucTrc) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayHlucTrc.getTime();
+  };
+  disabledTuNgayHlucSau = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayHlucDc) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayHlucDc.getTime();
+  };
+
+  disabledDenNgayHlucSau = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayHlucDc) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayHlucDc.getTime();
+  };
 
   ngOnInit() {
     this.errorInputRequired = MESSAGE.ERROR_NOT_EMPTY;
@@ -111,10 +143,15 @@ export class PhuLucComponent implements OnInit {
             noiDungPl: data.noiDungPl ?? null,
             ngayHlucDc: data.ngayHlucDc ?? null,
             tgianThienHdDc: data.tgianThienHdDc ?? null,
+            tgianThienHdTrc: data.tgianThienHdTrc ?? null,
             noiDung: data.noiDung ?? null,
             ghiChu: data.ghiChu ?? null,
           });
           this.fileDinhKem = data.fileDinhKems ?? null;
+          this.tuNgayHlucTrc = data.tuNgayHlucTrc ?? null;
+          this.denNgayHlucTrc = data.denNgayHlucTrc ?? null;
+          this.tuNgayHlucDc = data.tuNgayHlucDc ?? null;
+          this.denNgayHlucDc = data.denNgayHlucDc ?? null;
         }
       }
     }
@@ -180,6 +217,10 @@ export class PhuLucComponent implements OnInit {
         let body = this.formPhuLuc.value;
         body.soPluc = `${this.formPhuLuc.value.maPluc}${this.maPhuLucSuffix}`
         body.fileDinhKems = this.fileDinhKem;
+        body.tuNgayHlucTrc = this.tuNgayHlucTrc != null ? dayjs(this.tuNgayHlucTrc).format('YYYY-MM-DD') : null;
+        body.denNgayHlucTrc = this.denNgayHlucTrc != null ? dayjs(this.denNgayHlucTrc).format('YYYY-MM-DD') : null;
+        body.tuNgayHlucDc = this.tuNgayHlucDc != null ? dayjs(this.tuNgayHlucDc).format('YYYY-MM-DD') : null;
+        body.denNgayHlucDc = this.denNgayHlucDc != null ? dayjs(this.denNgayHlucDc).format('YYYY-MM-DD') : null;
         //sua+ky
         if (this.idPhuLuc > 0 && isKy) {
           // this.formPhuLuc.controls['ngayKy'].setValidators(Validators.required);
@@ -279,10 +320,10 @@ export class PhuLucComponent implements OnInit {
 
   checkValidForm() {
     // this.formPhuLuc.get('noiDung').setValidators(null);
-    // this.helperService.markFormGroupTouched(this.formPhuLuc);
-    // if (this.formPhuLuc.invalid) {
-    //   return false;
-    // }
+    this.helperService.markFormGroupTouched(this.formPhuLuc);
+    if (this.formPhuLuc.invalid) {
+      return false;
+    }
     // if (
     //   !this.formPhuLuc.get('tgianThienHdDc').value &&
     //   !this.formPhuLuc.get('noiDung').value
@@ -304,6 +345,28 @@ export class PhuLucComponent implements OnInit {
   convertTien(tien: number): string {
     if (tien) {
       return convertTienTobangChu(tien);
+    }
+  }
+
+  tinhNgayThienTrc() {
+    if (this.tuNgayHlucTrc != null && this.denNgayHlucTrc != null) {
+      let tuNgayHlucTrcDate = dayjs(this.tuNgayHlucTrc).toDate();
+      let denNgayHlucTrcDate = dayjs(this.denNgayHlucTrc).toDate();
+      let soNgayThien = differenceInCalendarDays(denNgayHlucTrcDate, tuNgayHlucTrcDate)
+      this.formPhuLuc.patchValue({
+        tgianThienHdTrc: soNgayThien,
+      })
+    }
+  }
+
+  tinhNgayThienSau() {
+    if (this.tuNgayHlucDc != null && this.denNgayHlucDc != null) {
+      let tuNgayHlucTrcDate = dayjs(this.tuNgayHlucDc).toDate();
+      let denNgayHlucTrcDate = dayjs(this.denNgayHlucDc).toDate();
+      let soNgayThien = differenceInCalendarDays(denNgayHlucTrcDate, tuNgayHlucTrcDate)
+      this.formPhuLuc.patchValue({
+        tgianThienHdDc: soNgayThien,
+      })
     }
   }
 }

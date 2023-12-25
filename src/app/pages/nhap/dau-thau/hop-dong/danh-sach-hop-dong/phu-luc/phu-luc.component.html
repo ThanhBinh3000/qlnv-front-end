@@ -103,26 +103,36 @@
       <div nz-row [nzGutter]="24">
         <div nz-col nzSpan="6">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="false">Ngày hiệu lực trước khi điều chỉnh</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker nzFormat="dd/MM/yyyy" nzDisabled
-                                nzPlaceHolder="Ngày hiệu lực trước khi điều chỉnh" formControlName="ngayHlucTrc">
+            <nz-form-label [nzNoColon]="true" class="label-color-kh">Ngày hiệu lực trước khi điều chỉnh(từ ngày - đến ngày)</nz-form-label>
+            <div nz-row [nzGutter]="24">
+              <div nz-col nzSpan="12" class="cus-start-date">
+                <nz-date-picker [nzDisabledDate]="disabledTuNgayHlucTrc" nzFormat="dd/MM/yyyy" (nzOnOpenChange)="tinhNgayThienTrc()"
+                                [(ngModel)]="tuNgayHlucTrc" [ngModelOptions]="{standalone: true}" nzPlaceHolder="Ngày bắt đầu">
                 </nz-date-picker>
-              </nz-form-control>
-            </nz-form-control>
+              </div>
+              <div nz-col nzSpan="12" class="cus-end-date">
+                <nz-date-picker [nzDisabledDate]="disabledDenNgayHlucTrc" nzFormat="dd/MM/yyyy" (nzOnOpenChange)="tinhNgayThienTrc()"
+                                [(ngModel)]="denNgayHlucTrc" [ngModelOptions]="{standalone: true}"
+                                nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+              </div>
+            </div>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="6">
           <nz-form-item>
-            <nz-form-label>Ngày hiệu lực sau khi điều chỉnh</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker nzFormat="dd/MM/yyyy" [nzDisabled]="isView"
-                                nzPlaceHolder="Ngày hiệu lực sau khi điều chỉnh" formControlName="ngayHlucDc">
+            <nz-form-label [nzNoColon]="true" class="label-color-kh">Ngày hiệu lực sau khi điều chỉnh(từ ngày - đến ngày)</nz-form-label>
+            <div nz-row [nzGutter]="24">
+              <div nz-col nzSpan="12" class="cus-start-date">
+                <nz-date-picker [nzDisabledDate]="disabledTuNgayHlucSau" nzFormat="dd/MM/yyyy" (nzOnOpenChange)="tinhNgayThienSau()"
+                                [(ngModel)]="tuNgayHlucDc" [ngModelOptions]="{standalone: true}" nzPlaceHolder="Ngày bắt đầu">
                 </nz-date-picker>
-              </nz-form-control>
-            </nz-form-control>
+              </div>
+              <div nz-col nzSpan="12" class="cus-end-date">
+                <nz-date-picker [nzDisabledDate]="disabledDenNgayHlucSau" nzFormat="dd/MM/yyyy" (nzOnOpenChange)="tinhNgayThienSau()"
+                                [(ngModel)]="denNgayHlucDc" [ngModelOptions]="{standalone: true}"
+                                nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+              </div>
+            </div>
           </nz-form-item>
         </div>
       </div>
@@ -140,7 +150,7 @@
           <nz-form-item>
             <nz-form-label>Số ngày thực hiện sau khi điều chỉnh</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input placeholder="Số ngày thực hiện sau điều chỉnh" nz-input [readOnly]="isView"
+              <input placeholder="Số ngày thực hiện sau điều chỉnh" nz-input [readOnly]="true"
                      formControlName="tgianThienHdDc" />
             </nz-form-control>
           </nz-form-item>
