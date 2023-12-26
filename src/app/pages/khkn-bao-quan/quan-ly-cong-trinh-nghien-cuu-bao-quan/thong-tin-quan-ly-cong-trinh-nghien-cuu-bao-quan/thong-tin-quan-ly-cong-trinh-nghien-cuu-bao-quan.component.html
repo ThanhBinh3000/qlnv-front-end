@@ -130,7 +130,7 @@
                 <nz-form-control [nzErrorTip]='error'>
                   <nz-select nzShowSearch nzAllowClear [nzDisabled]='isDisable() || this.formData.get("capDeTai").value == "02" '
                              formControlName='dviChuTri'>
-                    <nz-option *ngFor='let item of listDonVi' [nzValue]='item.key' [nzLabel]='item.fullname'>
+                    <nz-option *ngFor='let item of listDviChuTri' [nzValue]='item.key' [nzLabel]='item.fullname'>
                     </nz-option>
                   </nz-select>
                   <!--              <input nz-input [readonly]='isDisable()' formControlName='dviChuTri' />-->
@@ -145,7 +145,7 @@
                 <nz-form-control [nzErrorTip]='error'>
                   <!--              <input nz-input [readonly]='isDisable()' formControlName='dviThucHien' />-->
                   <nz-select nzShowSearch nzAllowClear [nzDisabled]='isDisable()' formControlName='dviThucHien'>
-                    <nz-option *ngFor='let item of listDonVi' [nzValue]='item.key' [nzLabel]='item.fullname'>
+                    <nz-option *ngFor='let item of listDviThucHien' [nzValue]='item.key' [nzLabel]='item.fullname'>
                     </nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -552,7 +552,7 @@
             <div nz-col nzSpan='3'>
               <nz-form-item>
                 <nz-form-label [nzNoColon]='true'>
-                  Tổng điểm
+                  Điểm trung bình cộng
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]='error'>
                   <nz-input-number [nzDisabled]='isDisable()' (change)='calculateXepLoai()'

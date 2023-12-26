@@ -25,6 +25,7 @@ export class ThongTinKsgVtComponent implements OnInit, OnChanges {
   @Input() isTableKetQua: boolean;
   @Input() isTabNdKhac: boolean;
   @Input() isQdThamQuyen: boolean;
+  @Input() isGiaoDich: boolean;
   @Input() dataTable: any[] = [];
   @Output() dataTableChange = new EventEmitter<any>();
   @Input() isView: boolean;
@@ -73,11 +74,12 @@ export class ThongTinKsgVtComponent implements OnInit, OnChanges {
 
   async onChangeCloaiVthh(event) {
     if (event) {
-      let list = this.listCloaiVthh.filter(item => item.ma == event)
-      this.rowItem.tenCloaiVthh = list && list.length > 0 ? list[0].ten : ''
+      let cloaiVthh = this.listCloaiVthh.find(item => item.ma == event)
+      this.rowItem.tenCloaiVthh = cloaiVthh ? cloaiVthh.ten : ''
+      this.rowItem.donViTinh = cloaiVthh ? cloaiVthh.maDviTinh : ''
       let resp = await this.danhMucService.getDetail(event);
       if (resp.msg == MESSAGE.SUCCESS) {
-        this.rowItem.tieuChuanCl = resp.data && resp.data.tieuChuanCl ? resp.data.tieuChuanCl : ""
+        this.rowItem.tieuChuanCl = resp.data && resp.data.tieuChuanCl ? resp.data.tieuChuanCl : "";
       }
       if (this.isVat) {
         this.rowItem.vat = null;

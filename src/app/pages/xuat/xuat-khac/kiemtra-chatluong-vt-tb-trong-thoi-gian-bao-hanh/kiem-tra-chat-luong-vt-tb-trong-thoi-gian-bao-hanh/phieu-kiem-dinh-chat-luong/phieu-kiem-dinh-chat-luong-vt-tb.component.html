@@ -62,7 +62,7 @@
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)"
-                *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PKDCL_THEM') && userService.isCuc()">
+                *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PKDCL_THEM')">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Thêm</span>
         </button>
@@ -194,12 +194,12 @@
                             <i class="fa fa-eye" title="Xem chi tiết"></i>
                           </a>
                           <a
-                            *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_QDGNVXH_THEM') && (lv3.trangThai ==STATUS.TU_CHOI_LDC ||lv3.trangThai ==STATUS.TU_CHOI_TP || lv3.trangThai ==STATUS.DU_THAO)"
+                            *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PKDCL_THEM') && (lv3.trangThai ==STATUS.TU_CHOI_LDC ||lv3.trangThai ==STATUS.TU_CHOI_TP || lv3.trangThai ==STATUS.DU_THAO)"
                             (click)="redirectDetail(lv3.id, false)">
                             <i class="fa fa-pencil" title="Sửa"></i>
                           </a>
                           <a *ngIf="(userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PKDCL_DUYETLDC') && lv3.trangThai ==STATUS.CHO_DUYET_LDC)
-                             && (userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PKDCL_DUYETTP') && lv3.trangThai ==STATUS.CHO_DUYET_TP)"
+                             || (userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PKDCL_DUYETTP') && lv3.trangThai ==STATUS.CHO_DUYET_TP)"
                              (click)="redirectDetail(lv3.id, true)">
                             <i class="icon htvbdh_tcdt_pheduyet"></i>
                           </a>

@@ -24,6 +24,7 @@ import { MangLuoiKhoService } from "../../../../services/qlnv-kho/mangLuoiKho.se
 import { OldResponseData } from "../../../../interfaces/response";
 import { AMOUNT_THREE_DECIMAL, AMOUNT_TWO_DECIMAL } from "../../../../Utility/utils";
 import { CurrencyMaskInputMode } from "ngx-currency";
+import {HelperService} from "../../../../services/helper.service";
 
 @Component({
   selector: 'app-chi-tiet-ke-hoach-dcnb',
@@ -1477,5 +1478,22 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     this.removeValidateFormChiTiet("soLuongPhanBo");
     this.removeValidateFormChiTiet("tichLuongKd");
     this.removeValidateFormChiTiet("slDcConLai");
+  }
+
+  signXml() {
+    let data = this.formData.value;
+    this.helperService.exc_sign_xml(this, data, (sender, rv)=>{
+      var received_msg = JSON.parse(rv);
+      if (received_msg.Status == 0) {
+        alert("Ký số thành công!");
+        console.log(received_msg.Signature);
+        // luu lai received_msg.Signature
+        this.helperService.exc_verify_xml(this.helperService.decodeStringToBase64(received_msg.Signature), (rv)=>{
+          console.log(rv);
+        });
+      } else {
+        alert("Ký số không thành công:" + received_msg.Status + ":" + received_msg.Error);
+      }
+    })
   }
 }

@@ -166,15 +166,16 @@
         <th width="">Số lần lấy mẫu</th>
         <th width="">Loại hàng hóa</th>
         <th width="">Chủng loại</th>
+        <th width="">Năm nhập kho</th>
         <th width="">Điểm kho</th>
         <th width="">Ngăn/Lô kho</th>
         <th width="">ĐVT</th>
         <th width="">Mã đơn vị tài sản</th>
-        <th width="">SL lấy mẫu đã xuất</th>
+        <th width="">SL lấy mẫu</th>
         <th width="">Kết quả kiểm định</th>
         <th width="">Số phiếu KĐCL</th>
         <th width="">Mẫu có bị hủy?</th>
-        <th width="">Trạng thái xuất hàng</th>
+<!--        <th width="">Trạng thái xuất hàng</th>-->
       </tr>
       </thead>
       <tbody>
@@ -196,6 +197,7 @@
           <td></td>
           <td></td>
           <td></td>
+<!--          <td></td>-->
         </tr>
         <ng-container *ngIf="expandSetString.has(item.idVirtual)">
           <ng-container *ngFor="let lv1 of item.childData,let i1=index">
@@ -206,6 +208,7 @@
               <td></td>
               <td>{{lv1.tenLoaiVthh}}</td>
               <td>{{lv1.tenCloaiVthh}}</td>
+              <td>{{lv1.namNhap}}</td>
               <td>{{lv1.tenDiemKho}}</td>
               <td>{{lv1.tenLoKho ? lv1.tenNganKho + ' - ' + lv1.tenLoKho : lv1.tenNganKho}}</td>
               <td>{{lv1.donViTinh}}</td>
@@ -217,7 +220,7 @@
               <td class="text-center">
                 <label nz-checkbox [(ngModel)]="lv1.mauBiHuy" [disabled]="true"></label>
               </td>
-              <td>{{lv1.tenTrangThaiXh}}</td>
+<!--              <td>{{lv1.tenTrangThaiXh}}</td>-->
             </tr>
           </ng-container>
         </ng-container>

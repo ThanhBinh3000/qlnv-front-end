@@ -348,6 +348,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
         this.buildTableView(this.dataTable);
 
       } else if (this.formData.value.loaiCanCu == "QD_GNV") {
+        console.log(data,'data')
         this.listSoQuyetDinh = cloneDeep(data);
         this.listSoQuyetDinh = this.listSoQuyetDinh.filter(f => f.checked);
         this.dataTable = this.listSoQuyetDinh.map(m => {

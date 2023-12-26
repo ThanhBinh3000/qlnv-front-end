@@ -984,7 +984,6 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
     }
     await this.dauThauService.danhSachGthauTruot(body).then((res) => {
       if (res.msg == MESSAGE.SUCCESS) {
-        console.log(res)
         this.listOfData = res.data
       }
     })

@@ -76,7 +76,7 @@
     </div>
 
     <form nzLayout="vertical" nz-form [formGroup]="formData">
-      <div nz-row [nzGutter]="[24]">
+      <div nz-row [nzGutter]="24">
         <div nz-col [nzSpan]="6">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Loại hình nhập xuất </nz-form-label>
@@ -327,7 +327,7 @@
       </div>
     </div>
     <form nzLayout="vertical" nz-form [formGroup]="formData">
-      <div nz-row [nzGutter]="[12]">
+      <div nz-row [nzGutter]="24">
         <div nz-col [nzSpan]="6">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Loại hợp đồng </nz-form-label>
@@ -624,20 +624,9 @@
 
   <!-- START PHỤ LỤC   -->
   <nz-card class="mg-t-16 flex-card p-lr16 table-card">
-    <div class="header header-green-background mg-t-16">
-      <div class="header-text">
-        <div class="title-chi-tieu">
-          <span></span>
-          <span>Phụ lục đề xuất kế hoạch lựa chọn nhà thầu</span>
-        </div>
-      </div>
-      <div class="buttons" *ngIf="!isView">
-        <button type="button" class="btn btn-main" *ngIf="!isDisbleForm()" (click)="themMoiCuc()">
-          <i class="icon htvbdh_dau-cong"></i>
-          <span>Thêm</span>
-        </button>
-      </div>
-    </div>
+    <nz-collapse nzAccordion>
+      <nz-collapse-panel [nzHeader]="'PHỤ LỤC ĐỀ XUẤT KẾ HOẠCH LỰA CHỌN NHÀ THẦU'"
+                         [nzActive]="true" [nzExtra]="themMoiGt">
     <!-- START TABLE LƯƠNG THỰC -->
     <nz-table class="nowrap pd-10" nzBordered>
       <thead>
@@ -677,7 +666,7 @@
             <td class="text-right bold-700">{{ dtGoiThau.thanhTienDx * formData.value.gtriDthau / 100 | number : '1.0-99' : 'vi_VN'}}</td>
             <td>{{ dtGoiThau.trangThaiDt}}</td>
             <td class="text-right" *ngIf="userService.isCuc() && !isView">
-              <a *ngIf="!isDisbleForm()" (click)="themMoiCuc(dtGoiThau.goiThau)">
+              <a *ngIf="!isDisbleForm()" (click)="themMoiCuc($event, dtGoiThau.goiThau)">
                 <i class="fa fa-pencil" title="Sửa"></i>
               </a>
               <a *ngIf="!isDisbleForm()" (click)="deleteGoiThau(i)">
@@ -722,7 +711,7 @@
                     <td class="text-right">{{ diemKho.soLuong * chiCuc.donGiaTamTinh *1000 * formData.value.gtriDthau / 100| number :'1.0-99' : 'vi_VN' }}</td>
                     <td></td>
                     <td class="text-right" *ngIf="userService.isCuc() && !isView">
-                      <a *ngIf="!isDisbleForm()" (click)="themMoiCuc(dtGoiThau.goiThau)">
+                      <a *ngIf="!isDisbleForm()" (click)="themMoiCuc($event, dtGoiThau.goiThau)">
                         <i class="fa fa-pencil" title="Sửa"></i>
                       </a>
                       <a *ngIf="!isDisbleForm()" (click)="deleteDiemKho(i, y, z)">
@@ -754,6 +743,8 @@
         </tr>
       </tbody>
     </nz-table>
+      </nz-collapse-panel>
+    </nz-collapse>
     <!-- END TABLE LƯƠNG THỰC  -->
   </nz-card>
   <!-- END PHỤ LỤC   -->
@@ -967,3 +958,13 @@
     </button>
   </div>
 </nz-modal>
+<ng-template #themMoiGt>
+  <button type="button" class="btn btn-sub xanh" *ngIf="!isDisbleForm()" (click)="danhSachGthauTruot($event)">
+    <i class="icon htvbdh_coppy"></i>
+    <span>Lấy thông tin các gói thầu đã trượt</span>
+  </button>
+  <button type="button" class="btn btn-sub xanh" *ngIf="!isDisbleForm()" (click)="themMoiCuc($event)">
+    <i class="icon htvbdh_dau-cong"></i>
+    <span>Thêm</span>
+  </button>
+</ng-template>

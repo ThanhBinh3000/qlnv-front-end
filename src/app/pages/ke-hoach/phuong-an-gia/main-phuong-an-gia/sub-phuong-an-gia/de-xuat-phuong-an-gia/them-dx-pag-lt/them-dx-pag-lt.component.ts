@@ -29,6 +29,8 @@ import {
   TongHopPhuongAnGiaService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
 import {CurrencyMaskInputMode} from "ngx-currency";
+import {PREVIEW} from "../../../../../../../constants/fileType";
+import printJS from "print-js";
 
 
 @Component({
@@ -44,7 +46,12 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   @Output('onClose') onClose = new EventEmitter<any>();
   @Input() type: string;
   isDieuChinh: boolean = true;
-
+  templateName = 'de-xuat-phuong-an-gia';
+  pdfSrc: any;
+  wordSrc: any;
+  excelSrc: any;
+  printSrc: any;
+  showDlgPreview = false;
   amount = {
     allowZero: true,
     allowNegative: false,
@@ -851,6 +858,8 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       data.soLuong = maxAllowedValue;
     }
   }
+
+
 }
 
 

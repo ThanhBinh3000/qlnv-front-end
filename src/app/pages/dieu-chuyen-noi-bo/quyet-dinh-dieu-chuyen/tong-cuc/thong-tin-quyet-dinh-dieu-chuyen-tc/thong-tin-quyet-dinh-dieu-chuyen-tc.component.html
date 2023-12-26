@@ -33,7 +33,7 @@
       </button>
 
       <button
-        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC"
+        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.DA_DUYET_LDV"
         type="button" class="btn btn-sub" (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span>Từ chối</span>
@@ -46,10 +46,10 @@
         <span>Duyệt</span>
       </button>
 
-      <!-- <button *ngIf="isBanHanh()" type="button" class="btn btn-info ml-2" (click)="banHanh()">
+      <button *ngIf="isBanHanh()" type="button" class="btn btn-info ml-2" (click)="pheDuyet()">
         <i class="icon htvbdh_chuyenvanthu"></i>
         <span>Ban hành</span>
-      </button> -->
+      </button>
 
     </div>
   </div>
@@ -103,7 +103,7 @@
             </div>
             <div nz-col [nzSpan]="3">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Số quyết định</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfter="/{{maQd}}">
                     <nz-input-number [nzDisabled]="(isView && !isBanHanh()) || isViewOnModal" formControlName="soQdinh"
@@ -115,7 +115,7 @@
             </div>
             <div nz-col [nzSpan]="3">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Ngày ký quyết định</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Ngày ký quyết định</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-date-picker [nzDisabled]="(isView && !isBanHanh()) || isViewOnModal" formControlName="ngayKyQdinh"
                     nzFormat="dd/MM/yyyy">
@@ -125,7 +125,7 @@
             </div>
             <div nz-col [nzSpan]="3">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Ngày hiệu lực</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Ngày hiệu lực</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-date-picker [nzDisabled]="(isView && !isBanHanh()) || isViewOnModal" formControlName="ngayPduyet"
                     nzFormat="dd/MM/yyyy">
@@ -159,7 +159,7 @@
 
 
 
-            <div nz-col [nzSpan]="17">
+            <div nz-col [nzSpan]="18">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Trích yếu
@@ -188,6 +188,18 @@
                 </nz-form-label>
                 <nz-form-control>
                   <input nz-input formControlName="tenKieuNhapXuat" [readonly]="true" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div nz-col [nzSpan]="24">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Ý kiến của các Vụ nghiệp vụ
+                </nz-form-label>
+                <nz-form-control>
+                  <textarea rows="3" nz-input placeholder="Nhập nội dung" [readonly]="isView"
+                    formControlName="yKienVuKhac"></textarea>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -240,7 +252,7 @@
                 <th *ngIf="formData.value.loaiDc == 'CUC'">Cục DTNN KV nhận ĐC</th>
                 <th>Số đề xuất/ Công văn</th>
                 <th>Ngày trình duyệt Tổng cục</th>
-                <th>Tổng dự toán kinh phí(triệu đồng)</th>
+                <th>Tổng dự toán kinh phí (triệu đồng)</th>
                 <th>Trích yếu</th>
               </tr>
             </thead>
@@ -286,7 +298,7 @@
                   <th rowspan="2" width="60px" class="text-center">STT</th>
                   <th rowspan="2"></th>
                   <th rowspan="2"></th>
-                  <th colspan="9" class="text-center">Chi cục đề xuất điều chuyển</th>
+                  <th colspan="10" class="text-center">Chi cục đề xuất điều chuyển</th>
                   <th rowspan="2" style="max-width: 90px; min-width: 90px;  white-space: break-spaces;"
                     class="text-center">
                     Thời gian dự
@@ -485,7 +497,7 @@
                   <th rowspan="2" width="60px" class="text-center">STT</th>
                   <th rowspan="2"></th>
                   <th rowspan="2"></th>
-                  <th colspan="9" class="text-center">Chi cục đề xuất điều chuyển</th>
+                  <th colspan="10" class="text-center">Chi cục đề xuất điều chuyển</th>
                   <th rowspan="2" style="max-width: 90px; min-width: 90px;  white-space: break-spaces;"
                     class="text-center">
                     Thời gian dự

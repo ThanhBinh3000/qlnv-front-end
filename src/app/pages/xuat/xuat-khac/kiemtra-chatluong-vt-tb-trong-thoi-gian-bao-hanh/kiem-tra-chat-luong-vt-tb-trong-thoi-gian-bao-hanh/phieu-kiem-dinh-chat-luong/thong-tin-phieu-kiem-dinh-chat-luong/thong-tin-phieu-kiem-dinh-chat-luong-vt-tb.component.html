@@ -228,6 +228,18 @@
             <div nz-col nzSpan="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
+                  Năm nhập kho
+                </nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-input-group>
+                    <input nz-input formControlName="namNhap" readonly/>
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="4">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
                   Ngày lấy mẫu
                 </nz-form-label>
                 <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayLayMau"

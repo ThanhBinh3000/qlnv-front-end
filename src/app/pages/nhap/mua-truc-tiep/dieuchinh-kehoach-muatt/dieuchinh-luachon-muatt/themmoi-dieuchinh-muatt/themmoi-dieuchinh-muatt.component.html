@@ -61,6 +61,8 @@
     </nz-alert>
 
     <nz-card class="mg-t-16 flex-card p-lr16">
+      <nz-collapse nzAccordion>
+        <nz-collapse-panel nzHeader="THÔNG TIN TỜ TRÌNH" [nzActive]="true">
         <form nzLayout="vertical" nz-form [formGroup]="formData">
             <div nz-row [nzGutter]="20">
                 <div nz-col nzSpan="2">
@@ -159,6 +161,14 @@
                   </div>
                 </nz-form-item>
               </div>
+            </div>
+        </form>
+        </nz-collapse-panel>
+      </nz-collapse>
+      <nz-collapse nzAccordion>
+        <nz-collapse-panel nzHeader="THÔNG TIN QĐ ĐIỀU CHỈNH" [nzActive]="true">
+          <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
+            <div nz-row [nzGutter]="24">
               <div nz-col nzSpan="4">
                 <nz-form-item class="form-item">
                   <nz-form-label [nzNoColon]="true" > Số QĐ điều chỉnh
@@ -227,9 +237,11 @@
                 <nz-form-item>
                   <nz-form-label nzRequired [nzNoColon]="true"> Loại hình nhập</nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
-                    <nz-input-group>
-                      <input [readonly]="true" nz-input formControlName="tenLoaiHinhNx" readonly="true" />
-                    </nz-input-group>
+                    <nz-select formControlName="loaiHinhNx" (ngModelChange)="onChangeLhNx($event)"
+                               [nzDisabled]="true">
+                      <nz-option *ngFor="let p of listLoaiHinhNx" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                      </nz-option>
+                    </nz-select>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -237,9 +249,10 @@
                 <nz-form-item>
                   <nz-form-label nzRequired [nzNoColon]="true"> Kiểu nhập</nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
-                    <nz-input-group>
-                      <input [readonly]="true" nz-input formControlName="tenKieuNx" readonly="true" />
-                    </nz-input-group>
+                    <nz-select formControlName="kieuNx" [nzDisabled]="true">
+                      <nz-option *ngFor="let p of listKieuNx" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                      </nz-option>
+                    </nz-select>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -273,18 +286,13 @@
               </div>
             </div>
         </form>
+        </nz-collapse-panel>
+      </nz-collapse>
     </nz-card>
     <nz-card class="mg-t-16 flex-card p-lr16">
+      <nz-collapse nzAccordion>
+        <nz-collapse-panel nzHeader="THÔNG TIN ĐỀ XUẤT CỦA CÁC CỤC DTNN KV" [nzActive]="true">
         <form nzLayout="vertical" nz-form [formGroup]="formData">
-            <div class="mt16 flex-card p-lr16">
-                <div class="header header-green-background mg-t-16">
-                    <div class="header-text">
-                        <div class="title-chi-tieu">
-                            <span></span>
-                            <span> Thông tin đề xuất của các cục DTNN KV </span>
-                        </div>
-                    </div>
-                </div>
                 <nz-table #phanBo class="nowrap pd-10" nzBordered>
                     <thead>
                         <tr>
@@ -315,21 +323,23 @@
                         </tr>
                     </tbody>
                 </nz-table>
-            </div>
         </form>
+        </nz-collapse-panel>
+      </nz-collapse>
+
 
         <form nz-form nzLayout="vertical" [formGroup]="formData">
             <div nz-row nzGutter="8">
                 <div nz-col nzSpan="12">
                     <nz-card class="mg-t-10 flex-card p-lr16 ">
-                        <app-thongtin-dieuchinh [title]="'Nội dung Quyết định gốc'" [dataInput]="dataInputCache"
+                        <app-thongtin-dieuchinh [title]="'Quyết định cần điều chỉnh'" [dataInput]="dataInputCache"
                             [isCache]="true" [isView]="true">
                         </app-thongtin-dieuchinh>
                     </nz-card>
                 </div>
                 <div nz-col nzSpan="12">
                     <nz-card class="mg-t-10 flex-card p-lr16 ">
-                        <app-thongtin-dieuchinh [title]="'Nội dung Quyết định điều chỉnh'" [dataInput]="dataInput"
+                        <app-thongtin-dieuchinh [title]="'Quyết định điều chỉnh'" [dataInput]="dataInput"
                             [isCache]="false" [isView]="formData.value.trangThai != STATUS.DA_LAP"
                             (data)="onChangesData($event)" (dataChild)="onChangesDataChild($event)" [dataChiTieu]="this.dataChiTieu" (dataTableChange)="setNewTableData($event)" (objectChange)="objectChange($event)">
                         </app-thongtin-dieuchinh>

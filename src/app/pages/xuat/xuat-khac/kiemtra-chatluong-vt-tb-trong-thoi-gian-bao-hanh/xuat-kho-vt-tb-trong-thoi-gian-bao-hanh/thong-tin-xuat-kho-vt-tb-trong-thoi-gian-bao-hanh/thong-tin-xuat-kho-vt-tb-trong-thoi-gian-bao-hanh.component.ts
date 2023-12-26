@@ -21,6 +21,7 @@ import {
 import {
   PhieuXuatNhapKhoVtTbTrongThoiGianBaoHanhService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/PhieuXuatNhapKhoVtTbTrongThoiGianBaoHanh.service";
+import {MangLuoiKhoService} from "../../../../../../services/qlnv-kho/mangLuoiKho.service";
 
 @Component({
   selector: 'app-thong-tin-xuat-kho-vt-tb-trong-thoi-gian-bao-hanh',
@@ -69,22 +70,23 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
         maQhns: [],
         soPhieu: [],
         ngayXuatNhap: ['', [Validators.required]],
-        taiKhoanNo: [],
-        taiKhoanCo: [],
+        duNo: [],
+        duCo: [],
         idCanCu: [],
         soCanCu: [],
         soLanLm: ['', [Validators.required]],
-        maDiaDiem: ['',[Validators.required]],
+        maDiaDiem: ['', [Validators.required]],
         ngayKyCanCu: [],
         maNhaKho: [],
         maNganKho: [],
         maLoKho: [],
-        slTonKho: ['',[Validators.required]],
+        slTonKho: ['', [Validators.required]],
         idPhieuKncl: [],
         soPhieuKncl: [''],
         ngayKn: [],
         loaiVthh: [],
         cloaiVthh: [],
+        namNhap: [],
         canBoLapPhieu: [],
         ldChiCuc: [],
         ktvBaoQuan: [],
@@ -249,8 +251,7 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
   async bindingDataQd(data) {
     try {
       await this.spinner.show();
-      this.listNganLoKho = data.qdGiaonvXhDtl.filter(i=>i.maDiaDiem.substring(0,8)==this.formData.value.maDvi);
-      console.log(this.listNganLoKho,'this.listNganLoKho')
+      this.listNganLoKho = data.qdGiaonvXhDtl.filter(i => i.maDiaDiem.substring(0, 8) == this.formData.value.maDvi);
       this.formData.patchValue({
         soCanCu: data.soQuyetDinh,
         idCanCu: data.id,
@@ -269,7 +270,7 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
     await this.spinner.show();
     let body = {
       soCanCu: item.soQuyetDinh,
-      soLanLm : this.formData.value.loai == "XUAT_MAU" ? item.soLanLm : null
+      soLanLm: this.formData.value.loai == "XUAT_MAU" ? item.soLanLm : null
     }
     let res = await this.phieuXuatKhoVtTbTrongThoiGianBaoHanhService.search(body)
     const data = res.data;
@@ -295,6 +296,7 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
           tenLoaiVthh: item.tenLoaiVthh,
           loaiVthh: item.loaiVthh,
           cloaiVthh: item.cloaiVthh,
+          namNhap: item.namNhap,
           tenCloaiVthh: item.tenCloaiVthh,
           donViTinh: item.donViTinh,
           maDviTsan: item.maDviTsan,
@@ -304,24 +306,25 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
     }
   }
 
-  openDialogDdiemNhapHang() {
-    const modalQD = this.modal.create({
-      nzTitle: 'Danh sách địa điểm xuất hàng',
-      nzContent: DialogTableSelectionComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {
-        dataTable: this.listDiaDiemNhap,
-        dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho'],
-        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho']
-      },
-    });
-    modalQD.afterClose.subscribe(async (data) => {
-      // this.bindingDataDdNhap(data);
-    });
-  }
+
+  // openDialogDdiemNhapHang() {
+  //   const modalQD = this.modal.create({
+  //     nzTitle: 'Danh sách địa điểm xuất hàng',
+  //     nzContent: DialogTableSelectionComponent,
+  //     nzMaskClosable: false,
+  //     nzClosable: false,
+  //     nzWidth: '900px',
+  //     nzFooter: null,
+  //     nzComponentParams: {
+  //       dataTable: this.listDiaDiemNhap,
+  //       dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho'],
+  //       dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho']
+  //     },
+  //   });
+  //   modalQD.afterClose.subscribe(async (data) => {
+  //     this.bindingDataDdNhap(data);
+  //   });
+  // }
 
   // async bindingDataDdNhap(data) {
   //   if (data) {
