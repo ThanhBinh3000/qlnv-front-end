@@ -321,7 +321,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     try {
 
       await this.spinner.show();
-      // this.setValidator(isGuiDuyet);
+      this.setValidator(isGuiDuyet);
       if (!Array.isArray(this.dataTableChiTieu) || this.dataTableChiTieu.length <= 0) {
         return this.notification.error(MESSAGE.ERROR, "Không có dữ liệu kết quả phân tích chỉ tiêu chất lượng")
       } else if (!this.dataTableChiTieu.find(f => f.ketQuaPt && [0, 1].includes(f.danhGia))) {
@@ -498,7 +498,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     }
   };
   async openDialogQuyetDinhDC() {
-    if(this.isView){
+    if (this.isView) {
       return;
     }
     // await this.loadBbLayMau();
@@ -570,7 +570,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     }
   }
   async openDialogBbLayMau() {
-    if(this.isView){
+    if (this.isView) {
       return;
     }
     if (!this.formData.value.qdDcId) return;
@@ -803,16 +803,21 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
   editRow(index: number) {
     this.dataTableChiTieu[index].edit = true;
   }
-  // setValidator(isGuiDuyet) {
-  //   if (isGuiDuyet) {
-  //     // this.formData.controls['soPhieu'].setValidators([Validators.required]);
-  //     this.formData.controls['danhGiaCamQuan'].setValidators([Validators.required]);
-  //     this.formData.controls['nhanXetKetLuan'].setValidators([Validators.required]);
+  setValidator(isGuiDuyet) {
+    // if (isGuiDuyet) {
+    //   // this.formData.controls['soPhieu'].setValidators([Validators.required]);
+    //   this.formData.controls['danhGiaCamQuan'].setValidators([Validators.required]);
+    //   this.formData.controls['nhanXetKetLuan'].setValidators([Validators.required]);
 
-  //   } else {
-  //     // this.formData.controls['soPhieu'].clearValidators();
-  //     this.formData.controls['danhGiaCamQuan'].clearValidators();
-  //     this.formData.controls['nhanXetKetLuan'].clearValidators();
-  //   }
-  // }
+    // } else {
+    //   // this.formData.controls['soPhieu'].clearValidators();
+    //   this.formData.controls['danhGiaCamQuan'].clearValidators();
+    //   this.formData.controls['nhanXetKetLuan'].clearValidators();
+    // }
+    if (this.isVatTu) {
+      this.formData.get('danhGiaCamQuan').clearValidators();
+    } else {
+      this.formData.get('danhGiaCamQuan').setValidators([Validators.required])
+    }
+  }
 }
