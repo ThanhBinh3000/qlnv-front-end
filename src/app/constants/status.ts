@@ -83,6 +83,7 @@ export enum STATUS {
   CHUATAO_KH = '81',
   DADUTHAO_KH = '82',
   DAGUIDUYET_KH = '83',
+  KHONG_KY_HD = '84',
 
   DA_DONG = '87'
 }

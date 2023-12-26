@@ -1195,10 +1195,8 @@
         <nz-collapse-panel nzActive="true" [nzExtra]="themMoiPl"
                            nzHeader="PHỤ LỤC HỢP ĐỒNG">
           <ng-template #themMoiPl>
-            <button type="button" class="btn btn-sub xanh" (click)="redirectPhuLuc(false)" *ngIf="formData.value.trangThai == STATUS.DA_KY
-                        && (loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_VT_HDPL_THEM') :
-                        userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_THEM'))
-                        && !isQuanLy">
+            <button type="button" class="btn btn-sub xanh" (click)="redirectPhuLuc(false)"
+                    >
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm PL hợp đồng</span>
             </button>
@@ -1207,13 +1205,17 @@
                     [nzFrontPagination]="false" [nzShowPagination]="false">
             <thead>
             <tr>
-              <th [width]="35">STT</th>
-              <th>Số phụ lục hợp đồng</th>
-              <th width="300px">Ngày ký</th>
-              <th width="300px">Ngày hiệu lực</th>
-              <th width="300px">Về việc</th>
-              <th width="300px">Trạng thái</th>
-              <th width="175px" class="text-right"></th>
+              <th width="50px" class="multi-line text-center">STT</th>
+              <th width="150px" class="multi-line text-center">Số phụ lục hợp đồng</th>
+              <th width="150px" class="multi-line text-center">Ngày ký PL HĐ</th>
+              <th width="150px" class="multi-line text-center">Ngày hiệu lực PL HĐ</th>
+              <th width="200px" class="multi-line text-center">Về việc</th>
+              <th width="150px" class="multi-line text-center" *ngIf="loaiVthh.startsWith('02')"> Ngày hiệu lực HĐ trước điều chỉnh</th>
+              <th width="150px" class="multi-line text-center" *ngIf="loaiVthh.startsWith('02')"> Ngày hiệu lực HĐ sau điều chỉnh</th>
+              <th width="150px" class="multi-line text-center" *ngIf="loaiVthh.startsWith('02')"> Số ngày thực hiện trước khi điều chỉnh</th>
+              <th width="150px" class="multi-line text-center" *ngIf="loaiVthh.startsWith('02')"> Số ngày thực hiện sau khi điều chỉnh</th>
+              <th width="100px" class="multi-line text-center">Trạng thái</th>
+              <th width="100px" class="multi-line text-center"></th>
             </tr>
             </thead>
             <tbody>
@@ -1223,15 +1225,19 @@
               <td>{{data.ngayKy | date: 'dd/MM/yyyy'}}</td>
               <td>{{data.ngayHluc | date: 'dd/MM/yyyy'}}</td>
               <td>{{data.noiDungPl}}</td>
+              <td *ngIf="loaiVthh.startsWith('02')">{{data.ngayKy | date: 'dd/MM/yyyy'}}</td>
+              <td *ngIf="loaiVthh.startsWith('02')">{{data.ngayHluc | date: 'dd/MM/yyyy'}}</td>
+              <td *ngIf="loaiVthh.startsWith('02')"></td>
+              <td *ngIf="loaiVthh.startsWith('02')"></td>
               <td>{{data.tenTrangThai}}</td>
               <td>
                 <a (click)="redirectPhuLuc(true, data.id)" *ngIf="data.trangThai!=globals.prop.DU_THAO">
                   <i class="fa fa-eye" title="Xem chi tiết"></i>
                 </a>
-                <a (click)="redirectPhuLuc(false, data.id)" *ngIf="data.trangThai==globals.prop.DU_THAO && !isView">
+                <a (click)="redirectPhuLuc(false, data.id)" *ngIf="data.trangThai==globals.prop.DU_THAO">
                   <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
-                <a (click)="xoaPhuLuc(data.id)" *ngIf="data.trangThai==globals.prop.DU_THAO && !isView">
+                <a (click)="xoaPhuLuc(data.id)" *ngIf="data.trangThai==globals.prop.DU_THAO">
                   <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
