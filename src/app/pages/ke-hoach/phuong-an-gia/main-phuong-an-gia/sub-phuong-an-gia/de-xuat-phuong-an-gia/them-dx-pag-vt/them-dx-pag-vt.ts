@@ -81,7 +81,8 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   dataTableTtThamKhao: any[] = [];
   typeConst = TYPE_PAG;
   tenLoaiVthh: string;
-  templateName = 'de-xuat-phuong-an-gia';
+  templateNameMua = 'de-xuat-phuong-an-gia-mua';
+  templateNameBan = 'de-xuat-phuong-an-gia-ban';
   pdfSrc: any;
   wordSrc: any;
   excelSrc: any;
@@ -868,7 +869,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   async preview() {
     this.spinner.show();
     await this.giaDeXuatGiaService.previewPag({
-      tenBaoCao: this.templateName+ '.docx',
+      tenBaoCao: this.formData.value.loaiGia && (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03' ) ? this.templateNameMua+ '.docx' : this.templateNameBan+ '.docx',
       id: this.formData.value.id,
     }).then(async res => {
       if (res.data) {
@@ -884,11 +885,11 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   }
 
   downloadPdf() {
-    saveAs(this.pdfSrc, this.templateName + '.pdf');
+    saveAs(this.pdfSrc,this.formData.value.loaiGia && (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03' ) ? this.templateNameMua+ '.pdf' : this.templateNameBan+ '.pdf');
   }
 
   downloadWord() {
-    saveAs(this.wordSrc, this.templateName + '.docx');
+    saveAs(this.wordSrc,this.formData.value.loaiGia && (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03' ) ? this.templateNameMua+ '.docx' : this.templateNameBan+ '.docx');
   }
 
   printPreview() {
