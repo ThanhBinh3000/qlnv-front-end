@@ -32,6 +32,8 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   LOAI_HANG_DTQG = LOAI_HANG_DTQG
   amount = {...AMOUNT_ONE_DECIMAL};
   TRUC_TIEP = THONG_TIN_BAN_TRUC_TIEP
+  templateNameVt = "Thông tin bán trực tiếp chào giá vật tư";
+  templateNameLt = "Thông tin bán trực tiếp chào giá lương thực";
   listOfData: any[] = [];
   showFromTT: boolean = false;
   listLoaiHinhNx: any[] = [];

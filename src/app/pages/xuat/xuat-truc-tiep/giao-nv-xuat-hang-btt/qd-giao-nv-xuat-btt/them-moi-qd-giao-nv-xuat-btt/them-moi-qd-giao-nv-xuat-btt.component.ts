@@ -161,7 +161,7 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
     this.formData.patchValue({
       soQdNv: soQdNv?.split('/')[0] || null,
       soHopDong: idChaoGia ? null : soHopDong,
-      soQd: soQdDc || soQdDc
+      soQd: soQdDc || soQdPd
     });
     if (data.idChaoGia > 0) {
       await this.onChangeThongTin(data.idChaoGia);

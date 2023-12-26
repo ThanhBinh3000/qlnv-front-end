@@ -24,6 +24,7 @@ import {StorageService} from 'src/app/services/storage.service';
 import {Base2Component} from 'src/app/components/base2/base2.component';
 import {FileDinhKem} from "../../../../../../models/CuuTro";
 import {QuyetDinhGiaCuaBtcService} from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
+import {AMOUNT_ONE_DECIMAL} from "../../../../../../Utility/utils";
 
 @Component({
   selector: 'app-them-de-xuat-ke-hoach-ban-dau-gia',
@@ -39,6 +40,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
+  amount = { ...AMOUNT_ONE_DECIMAL, align: "left" };
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
   listPhuongThucThanhToan: any[] = [];
