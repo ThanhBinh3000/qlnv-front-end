@@ -108,8 +108,8 @@
             </div>
             <div nz-col [nzSpan]="12">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true">Trích yếu</nz-form-label>
-                <nz-form-control nz-col>
+                <nz-form-label nzRequired [nzNoColon]="true">Trích yếu</nz-form-label>
+                <nz-form-control nz-col [nzErrorTip]="error">
                   <input nz-input formControlName="trichYeu" [readonly]="isView"/>
                 </nz-form-control>
               </nz-form-item>
@@ -215,7 +215,8 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Trích yếu</nz-form-label>
                 <nz-form-control nz-col>
-                  <input nz-input formControlName="trichYeuDieuChinh" [readonly]="isView"/>
+                  <input nz-input formControlName="trichYeuDieuChinh"
+                         [readonly]="formData.value.trangThai === STATUS.BAN_HANH"/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -223,7 +224,8 @@
               <nz-form-item class="form-item display-block">
                 <nz-form-label [nzNoColon]="true"> Nội dung quyết định điều chỉnh</nz-form-label>
                 <nz-form-control nz-col>
-                  <textarea nz-input [rows]="3" formControlName="noiDungDieuChinh" [readonly]="isView"></textarea>
+                  <textarea nz-input [rows]="3" formControlName="noiDungDieuChinh"
+                            [readonly]="formData.value.trangThai === STATUS.BAN_HANH"></textarea>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -239,7 +241,8 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Căn cứ pháp lý</nz-form-label>
                 <div class="list-file">
-                  <file-list [data]="canCuPhapLy" [isCanCuPL]="true" [isViewDetail]="isView"></file-list>
+                  <file-list [data]="canCuPhapLy" [isCanCuPL]="true"
+                             [isViewDetail]="formData.value.trangThai === STATUS.BAN_HANH"></file-list>
                 </div>
               </nz-form-item>
             </div>
