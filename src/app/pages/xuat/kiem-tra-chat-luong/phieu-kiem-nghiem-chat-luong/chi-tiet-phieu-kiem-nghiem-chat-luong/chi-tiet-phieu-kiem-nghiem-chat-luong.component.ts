@@ -303,7 +303,6 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
           };
           this.dsPpLayMau.push(option);
         });
-        console.log("this.dsPpLayMau", this.dsPpLayMau)
         const xhPhieuKnclDtl = this.formData.value.xhPhieuKnclDtl.filter(f => f.type !== BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU).concat(this.dsPpLayMau)
         this.formData.patchValue({ xhPhieuKnclDtl })
       }
