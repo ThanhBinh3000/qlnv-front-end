@@ -313,10 +313,11 @@
                 <td class="text-center">{{item.dviTinh}}</td>
                 <td class="text-right">{{item.donGiaVat | number : '1.0-99': 'vi_VN'}}</td>
                 <td class="text-right">{{item.soLuong * item.donGiaVat | number: '1.0-99' : 'vi_VN'}}
-                <td>{{item.tenNhaThau}}</td>
+                <td *ngIf="item.trangThaiDt == STATUS.THANH_CONG">{{item.tenNhaThau}}</td>
                 <td class="text-right" *ngIf="item.trangThaiDt == STATUS.THANH_CONG">{{item.donGiaNhaThau | number: '1.0-99' : 'vi_VN'}}</td>
                 <td class="text-right" *ngIf="item.trangThaiDt == STATUS.THANH_CONG">{{item.donGiaNhaThau * item.soLuong | number: '1.0-99' : 'vi_VN'}}</td>
                 <td class="text-right" *ngIf="item.trangThaiDt == STATUS.THANH_CONG">{{item.donGiaNhaThau?((item.soLuong * item.donGiaVat) - (item.donGiaNhaThau * item.soLuong) | number: '1.0-99' : 'vi_VN'): ''}}</td>
+                <td *ngIf="item.trangThaiDt != STATUS.THANH_CONG"></td>
                 <td *ngIf="item.trangThaiDt != STATUS.THANH_CONG"></td>
                 <td *ngIf="item.trangThaiDt != STATUS.THANH_CONG"></td>
                 <td *ngIf="item.trangThaiDt != STATUS.THANH_CONG"></td>

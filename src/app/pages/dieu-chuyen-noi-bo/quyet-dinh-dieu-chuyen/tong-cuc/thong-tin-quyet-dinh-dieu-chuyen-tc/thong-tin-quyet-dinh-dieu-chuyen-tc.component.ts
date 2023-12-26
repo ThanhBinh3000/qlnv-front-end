@@ -625,7 +625,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     this.helperService.markFormGroupTouched(this.formData);
     if (!this.formData.valid) return
     let trangThai = this.formData.value.trangThai == STATUS.CHO_DUYET_LDV ? STATUS.DA_DUYET_LDV : STATUS.BAN_HANH;
-    let mesg = 'Bạn muốn phê duyệt văn bản?'
+    let mesg = this.formData.value.trangThai == STATUS.DA_DUYET_LDV ? 'Bạn muốn ban hành văn bản?' : 'Bạn muốn phê duyệt văn bản?'
     this.approve(this.idInput, trangThai, mesg);
   }
 
