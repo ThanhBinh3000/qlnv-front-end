@@ -247,6 +247,31 @@
                 </nz-date-picker>
               </nz-form-item>
             </div>
+            <div nz-col nzSpan="4">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true" nzRequired>
+                  Số lượng mẫu
+                </nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-input-number type="text" nz-input [nzSize]="'small'" formControlName="soLuongMau"
+                                   [nzDisabled]="true" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
+                                   [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                  </nz-input-number>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="4" *ngIf="formData.value.soLuongMau != null">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true" nzRequired>
+                  Số lượng mẫu kiểm định
+                </nz-form-label>
+                <nz-form-control [nzErrorTip]="'Số lượng kiểm định mẫu không hợp lệ'">
+                  <nz-input-number  nz-input type="text" nz-input [nzSize]="'small'" formControlName="soLuongMauKd" (ngModelChange)="chekSlMau($event)"
+                                   [nzDisabled]="isView" [nzMax]="globals.prop.MAX_INPUT">
+                  </nz-input-number>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
             <div nz-col [nzSpan]="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Đơn vị kiểm định</nz-form-label>

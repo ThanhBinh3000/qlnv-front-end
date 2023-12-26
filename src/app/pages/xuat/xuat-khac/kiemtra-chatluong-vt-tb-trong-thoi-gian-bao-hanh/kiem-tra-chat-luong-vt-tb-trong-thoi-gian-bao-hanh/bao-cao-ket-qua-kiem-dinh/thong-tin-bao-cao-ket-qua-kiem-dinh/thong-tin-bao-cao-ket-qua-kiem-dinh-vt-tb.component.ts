@@ -64,6 +64,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
   dviNhan: any;
   templateName = "19.Báo cáo KQ kiểm định mẫu_trong thời gian BH theo HĐ_sau LM";
   templateNameBh = "20.Báo cáo KQ kiểm định mẫu_trong thời gian BH theo HĐ_sau BH";
+  listSoPhieuKd: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -95,7 +96,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
       idCanCu: [null, [Validators.required]],
       ngayBaoCao: [null, [Validators.required]],
       phieuKtcl: [new Array()],
-      qdGiaonvXn: [new Array()],
+      phieuKdcl: [new Array()],
       fileDinhKems: [new Array<FileDinhKem>()],
     })
   }
@@ -132,17 +133,8 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
             });
             if (res.data.loaiCanCu == "PHIEU_KTCL") {
               this.dataTable = this.formData.value.phieuKtcl
-            }else {
-              this.dataTable = this.formData.value.qdGiaonvXn.map(m => {
-                return m.qdGiaonvXhDtl
-                  .filter(i => i.mauBiHuy == true)
-                  .map(dtl => ({
-                    ...dtl,
-                    soQuyetDinh: m.soQuyetDinh,
-                    soLanLm: m.soLanLm,
-                    tenTrangThaiXh: m.tenTrangThaiXh
-                  }));
-              }).flat();
+            } else {
+              this.dataTable = this.formData.value.phieuKdcl
             }
             this.fileDinhKems = this.formData.value.fileDinhKems;
             this.buildTableView(this.dataTable)
@@ -308,20 +300,20 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
     }
     let res = await this.qdGiaoNvXuatHangTrongThoiGianBaoHanhService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      this.listSoQuyetDinh = this.idInput > 0 ? data.content : data.content.filter(item => !item.soBaoCaoKdm);
-      this.listSoQuyetDinh = this.listSoQuyetDinh.filter(item => {
-        item.qdGiaonvXhDtl = item.qdGiaonvXhDtl.filter(i => i.mauBiHuy == true);
+      let data = cloneDeep(res.data.content);
+      // this.listSoQuyetDinh =  data.filter(item => !item.soBaoCaoKdm);
+
+      this.listSoQuyetDinh = data.filter(item => {
+        item.qdGiaonvXhDtl = item.qdGiaonvXhDtl.filter(i => i.idPhieuKdcl != null);
         return item.qdGiaonvXhDtl.length > 0;
       });
-
-
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
   showModal(isViewModel: boolean) {
+    this.dataTable=[];
     this.loadSoQuyetDinhGiaoNvXh();
     this.loadSoPhieuKtcl();
     this.isViewModel = isViewModel;
@@ -331,15 +323,14 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
     this.isViewModel = false;
   }
 
-  handleOk(data) {
-    console.log(data, "data")
+  async handleOk(data) {
     this.isViewModel = false;
+    console.log(this.dataTable,1)
     if (data) {
       if (this.formData.value.loaiCanCu == "PHIEU_KTCL") {
         this.listPhieuKtcl = cloneDeep(data)
         this.listPhieuKtcl = this.listPhieuKtcl.filter(f => f.checked);
         this.dataTable = this.listPhieuKtcl;
-        console.log(this.dataTable,'this.dataTable')
         this.formData.patchValue({
           soCanCu: this.listPhieuKtcl.map(m => m.soPhieu),
           idCanCu: this.listPhieuKtcl.map(m => m.id),
@@ -348,22 +339,46 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
         this.buildTableView(this.dataTable);
 
       } else if (this.formData.value.loaiCanCu == "QD_GNV") {
-        console.log(data,'data')
         this.listSoQuyetDinh = cloneDeep(data);
         this.listSoQuyetDinh = this.listSoQuyetDinh.filter(f => f.checked);
-        this.dataTable = this.listSoQuyetDinh.map(m => {
-          return m.qdGiaonvXhDtl
-            .map(dtl => ({...dtl, soQuyetDinh: m.soQuyetDinh, soLanLm: m.soLanLm, trangThaiXh: m.trangThaiXh}));
-        }).flat();
+
+        await Promise.all(this.listSoQuyetDinh.map(async m => {
+          return await this.listPhieuKdMau(m.soQuyetDinh);
+        }));
+        // console.log(this.listSoPhieuKd,'this.listSoPhieuKd')
+        // this.dataTable = [...this.dataTable,...this.listSoPhieuKd];
+        // console.log(this.dataTable,2)
+
+        // this.dataTable = this.listSoQuyetDinh.map(m => {
+        //   return m.qdGiaonvXhDtl
+        //     .map(dtl => ({...dtl, soQuyetDinh: m.soQuyetDinh, soLanLm: m.soLanLm, trangThaiXh: m.trangThaiXh}));
+        // }).flat();
 
         this.formData.patchValue({
           soCanCu: this.listSoQuyetDinh.map(m => m.soQuyetDinh),
           idCanCu: this.listSoQuyetDinh.map(m => m.id),
-          qdGiaonvXn: this.dataTable,
+          phieuKdcl: this.dataTable,
         });
         this.buildTableView(this.dataTable);
       }
 
+    }
+  }
+
+  async listPhieuKdMau(soQd?) {
+    let body = {
+      soQdGiaoNvXh: soQd,
+      // trangThai: STATUS.DA_DUYET_LDC
+    }
+    let res = await this.phieuKdclVtTbTrongThoiGianBaoHanhService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.listSoPhieuKd = data.content;
+      console.log(this.listSoPhieuKd,'this.listSoPhieuKd')
+      this.dataTable = [...this.dataTable,...this.listSoPhieuKd];
+      console.log(this.dataTable,2)
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
@@ -383,21 +398,22 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
           };
         }).value();
       this.children = dataView;
-    }else {
+    } else {
       let dataView = chain(data)
-        .groupBy("soQuyetDinh")
+        .groupBy("soQdGiaoNvXh")
         .map((value, key) => {
-          let parent = value.find(f => f.soQuyetDinh === key);
+          let parent = value.find(f => f.soQdGiaoNvXh === key);
           let rs = chain(value)
           return {
             idVirtual: uuid.v4(),
-            soQuyetDinh: key != "null" ? key : '',
+            soQdGiaoNvXh: key != "null" ? key : '',
             soLanLm: parent ? parent.soLanLm : null,
             tenTrangThaiXh: parent ? parent.tenTrangThaiXh : null,
             childData: value
           };
         }).value();
       this.children = dataView;
+      console.log(this.children,'this.children')
     }
     this.expandAll();
   }
