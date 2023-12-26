@@ -25,6 +25,7 @@ export class ThongTinKsgVtComponent implements OnInit, OnChanges {
   @Input() isTableKetQua: boolean;
   @Input() isTabNdKhac: boolean;
   @Input() isQdThamQuyen: boolean;
+  @Input() isGiaoDich: boolean;
   @Input() dataTable: any[] = [];
   @Output() dataTableChange = new EventEmitter<any>();
   @Input() isView: boolean;
