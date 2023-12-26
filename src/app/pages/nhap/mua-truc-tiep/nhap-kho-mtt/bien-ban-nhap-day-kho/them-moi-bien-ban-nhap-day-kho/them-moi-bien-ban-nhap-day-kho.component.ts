@@ -338,7 +338,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
   }
 
   validateSave(): boolean {
-    if (this.calcTong() != this.formData.value.soLuong) {
+    if (this.calcTong() != this.formData.value.tongSoLuongNhap) {
       // this.notification.error(MESSAGE.ERROR, "Số lượng bảng kê cân hàng và phiếu nhập kho không đủ số lượng đầy kho")
       // return false
     }
@@ -540,7 +540,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
         }, 0);
       })
       this.formData.patchValue({
-        soLuong: sum
+        tongSoLuongNhap: sum
       })
       return sum;
       // const sum = this.dataTable.reduce((prev, cur) => {
