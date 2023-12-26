@@ -6,7 +6,7 @@
     </button>
     <button *ngIf="idDviDtl && formData.value.pthucBanTrucTiep === TRUC_TIEP.CHAO_GIA"
             type="button" class="btn btn-sub"
-            (click)="xemTruoc(idInput, 'Thông tin bán trực tiếp chào giá')">
+            (click)="xemTruoc(idInput,loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? templateNameVt: templateNameLt)">
       <i class="icon htvbdh_totrinh"></i>
       <span> Xem trước </span>
     </button>
@@ -406,12 +406,14 @@
       <i class="icon htvbdh_printer"></i>
       In
     </button>
-    <button nz-button (click)="downloadPdf('Thông tin bán trực tiếp chào giá')"
+    <button nz-button
+            (click)="downloadPdf(loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? templateNameVt : templateNameLt)"
             class="modal__button--save">
       <i class="icon htvbdh_file-pdf"></i>
       Xuất .pdf
     </button>
-    <button nz-button (click)="downloadWord('Thông tin bán trực tiếp chào giá')"
+    <button nz-button
+            (click)="downloadWord(loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? templateNameVt : templateNameLt)"
             class="modal__button--save">
       <i class="icon htvbdh_file-word"></i>
       Xuất .docx

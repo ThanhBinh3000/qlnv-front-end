@@ -46,7 +46,7 @@
         <span>Duyệt</span>
       </button>
 
-      <button *ngIf="isBanHanh()" type="button" class="btn btn-info ml-2" (click)="pheDuyet()">
+      <button *ngIf="isBanHanh()" type="button" class="btn btn-info ml-2" (click)="save(true)">
         <i class="icon htvbdh_chuyenvanthu"></i>
         <span>Ban hành</span>
       </button>
@@ -199,7 +199,7 @@
                 </nz-form-label>
                 <nz-form-control>
                   <textarea rows="3" nz-input placeholder="Nhập nội dung" [readonly]="isView"
-                    formControlName="yKienVuKhac"></textarea>
+                    formControlName="ysKienVuKhac"></textarea>
                 </nz-form-control>
               </nz-form-item>
             </div>

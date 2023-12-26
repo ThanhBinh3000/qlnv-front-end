@@ -132,7 +132,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       lyDoTuChoi: [],
       tenLoaiHinhNhapXuat: [],
       tenKieuNhapXuat: [],
-      yKienVuKhac: [],
+      ysKienVuKhac: [],
       quyetDinhPdDtl: [new Array<QuyetDinhPdDtl>(),],
       danhSachQuyetDinh: [new Array<any>(),],
     }
@@ -604,9 +604,17 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
   }
 
   async guiDuyet() {
-    let trangThai = STATUS.CHO_DUYET_LDV;
-    let mesg = 'Bạn muốn gửi duyệt văn bản?'
-    this.approve(this.idInput, trangThai, mesg);
+    let trangThai = () => {
+      if (this.formData.value.trangThai == STATUS.DU_THAO)
+        return STATUS.CHO_DUYET_LDV
+      if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDV)
+        return STATUS.DA_DUYET_LDV
+      if (this.formData.value.trangThai == STATUS.DA_DUYET_LDV)
+        return STATUS.BAN_HANH
+    };
+    // let trangThai = STATUS.CHO_DUYET_LDV;
+    let mesg = this.formData.value.trangThai == STATUS.DA_DUYET_LDV ? 'Bạn muốn ban hành văn bản?' : 'Bạn muốn phê duyệt văn bản?'
+    this.approve(this.idInput, trangThai(), mesg);
   }
 
   async tuChoi() {

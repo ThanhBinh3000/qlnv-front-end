@@ -577,7 +577,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       let body = {
         "str": event
       };
-      let loaiHangHoa = this.listVthh.filter(item => item.ma == event);
       let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
       this.listCloaiVthh = [];
       let resp = await this.danhMucService.getDetail(event);
@@ -587,10 +586,29 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.listCloaiVthh = res.data;
-          if (this.listCloaiVthh.length == 0 && loaiHangHoa && loaiHangHoa.length > 0) {
+          if (this.listCloaiVthh.length == 0 && this.formData.value.loaiVthh) {
             if (resp.msg == MESSAGE.SUCCESS) {
               this.rowItemTtc.tchuanCluong = resp.data && resp.data.tieuChuanCl ? resp.data.tieuChuanCl : ""
               this.rowItemTtc.donViTinh = resp.data && resp.data.maDviTinh ? resp.data.maDviTinh : "";
+              if (this.type == 'GCT' && this.formData.value.loaiGia) {
+                let body = {
+                  namKeHoach: this.formData.value.namKeHoach,
+                  loaiGia: this.formData.value.loaiGia == 'LG03' ? 'LG01' : 'LG02',
+                  loaiVthh: this.formData.value.loaiVthh
+                }
+                let resQdBtc = await this.quyetDinhGiaCuaBtcService.getQdGiaVattu(body);
+                if (resQdBtc.msg == MESSAGE.SUCCESS) {
+                  let qdBtc = resQdBtc.data
+                  if (qdBtc ) {
+                        this.rowItemTtc.giaQdBtc = qdBtc.giaQdBtc;
+                        this.rowItemTtc.giaQdBtcVat = qdBtc.giaQdBtcVat;
+                        this.rowItemTtc.vat = qdBtc.vat;
+                  }
+                } else {
+                  this.notification.warning(MESSAGE.WARNING, 'Không tìm thấy giá BTC cho loại hàng này')
+                  return;
+                }
+              }
             }
           }
         }
@@ -599,6 +617,30 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       }
     } else {
       this.listCloaiVthh = [];
+    }
+  }
+
+  async changeLoaiGia(event) {
+    if (event) {
+      if (this.type == 'GCT' && this.formData.value.loaiVthh && this.listCloaiVthh.length == 0) {
+        let body = {
+          namKeHoach: this.formData.value.namKeHoach,
+          loaiGia: this.formData.value.loaiGia == 'LG03' ? 'LG01' : 'LG02',
+          loaiVthh: this.formData.value.loaiVthh
+        }
+        let resQdBtc = await this.quyetDinhGiaCuaBtcService.getQdGiaVattu(body);
+        if (resQdBtc.msg == MESSAGE.SUCCESS) {
+          let qdBtc = resQdBtc.data
+          if (qdBtc ) {
+            this.rowItemTtc.giaQdBtc = qdBtc.giaQdBtc;
+            this.rowItemTtc.giaQdBtcVat = qdBtc.giaQdBtcVat;
+            this.rowItemTtc.vat = qdBtc.vat;
+          }
+        } else {
+          this.notification.warning(MESSAGE.WARNING, 'Không tìm thấy giá BTC cho loại hàng này')
+          return;
+        }
+      }
     }
   }
 
@@ -632,25 +674,13 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
           let qdBtc = res.data
           if (qdBtc ) {
             if (item) {
-              if (qdBtc.giaQdDcBtc && qdBtc.giaQdDcBtc > 0) {
-                item.giaQdBtc = qdBtc.giaQdDcBtc;
-                item.giaQdBtcVat = qdBtc.giaQdDcBtcVat;
-                item.vat = qdBtc.vat;
-              } else {
                 item.giaQdBtc = qdBtc.giaQdBtc;
                 item.giaQdBtcVat = qdBtc.giaQdBtcVat;
                 item.vat = qdBtc.vat;
-              }
             } else {
-              if (qdBtc.giaQdDcBtc && qdBtc.giaQdDcBtc > 0) {
-                this.rowItemTtc.giaQdBtc = qdBtc.giaQdDcBtc;
-                this.rowItemTtc.giaQdBtcVat = qdBtc.giaQdDcBtcVat;
-                this.rowItemTtc.vat = qdBtc.vat;
-              } else {
                 this.rowItemTtc.giaQdBtc = qdBtc.giaQdBtc;
                 this.rowItemTtc.giaQdBtcVat = qdBtc.giaQdBtcVat;
                 this.rowItemTtc.vat = qdBtc.vat;
-              }
             }
           }
         } else {
@@ -899,4 +929,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   closeDlg() {
     this.showDlgPreview = false;
   }
+
+
 }
