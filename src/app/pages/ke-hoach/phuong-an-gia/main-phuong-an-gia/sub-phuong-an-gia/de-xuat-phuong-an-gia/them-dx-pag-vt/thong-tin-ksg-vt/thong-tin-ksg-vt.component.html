@@ -2,7 +2,7 @@
   <thead>
   <tr>
     <th class="text-center" nzWidth="45px">STT</th>
-    <th class="text-center"> {{ isTableKetQua ? 'Đơn vị báo giá, khảo sát giá' : (isQdThamQuyen ? 'Đơn vị' : (isTabNdKhac ?'Thông tin tham khảo' : 'Đơn vị thẩm định')) }}</th>
+    <th class="text-center"> {{ isTableKetQua ? 'Đơn vị báo giá, khảo sát giá' : (isQdThamQuyen ? (isGiaoDich? 'Nội dung' : 'Đơn vị') : (isTabNdKhac ?'Thông tin tham khảo' : 'Đơn vị thẩm định')) }}</th>
     <th *ngIf="isQdThamQuyen" class="text-center">Trích yếu</th>
     <th *ngIf="!isTabNdKhac" class="text-center">Chủng loại hàng DTQG - Tiêu chuẩn, quy chuẩn</th>
     <th *ngIf="!isTabNdKhac" class="text-center">Đơn vị tính</th>
