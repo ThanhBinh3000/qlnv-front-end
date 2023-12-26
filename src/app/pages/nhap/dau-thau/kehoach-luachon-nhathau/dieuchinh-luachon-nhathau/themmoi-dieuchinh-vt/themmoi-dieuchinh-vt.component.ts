@@ -411,9 +411,9 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
 
   checkDisableQdDc() {
     if (this.isViewDetail) {
-      return !(this.formData.get('trangThai').value == STATUS.CHO_DUYET_LDV && this.userService.isAccessPermisson("NHDTQG_PTDT_DCKHLCNT_DUYET_LDVU"));
+      return !(this.formData.get('trangThai').value == STATUS.DA_DUYET_LDV && this.userService.isAccessPermisson("NHDTQG_PTDT_DCKHLCNT_BANHANH_TUCHOI_TC"));
     }
-    return true;
+    return this.isViewDetail;
   }
 
   async guiDuyet() {
@@ -427,6 +427,11 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
         break;
       }
       case STATUS.TU_CHOI_LDV: {
+        trangThai = STATUS.CHO_DUYET_LDV;
+        mesg = "Bạn có chắc chắn muốn gửi duyệt?";
+        break;
+      }
+      case STATUS.TU_CHOI_LDTC: {
         trangThai = STATUS.CHO_DUYET_LDV;
         mesg = "Bạn có chắc chắn muốn gửi duyệt?";
         break;
