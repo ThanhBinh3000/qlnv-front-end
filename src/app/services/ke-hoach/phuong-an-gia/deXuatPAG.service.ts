@@ -18,4 +18,9 @@ export class DeXuatPAGService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet-gct/${id}`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
+
+  previewPag(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/xem-truoc`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
 }
