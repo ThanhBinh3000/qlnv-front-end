@@ -368,7 +368,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
   async listPhieuKdMau(soQd?) {
     let body = {
       soQdGiaoNvXh: soQd,
-      // trangThai: STATUS.DA_DUYET_LDC
+      trangThai: STATUS.DA_DUYET_LDC
     }
     let res = await this.phieuKdclVtTbTrongThoiGianBaoHanhService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
