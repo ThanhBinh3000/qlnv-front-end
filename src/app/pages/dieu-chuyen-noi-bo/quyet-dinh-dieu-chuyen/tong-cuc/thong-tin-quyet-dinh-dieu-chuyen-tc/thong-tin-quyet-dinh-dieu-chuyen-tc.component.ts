@@ -132,7 +132,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       lyDoTuChoi: [],
       tenLoaiHinhNhapXuat: [],
       tenKieuNhapXuat: [],
-      yKienVuKhac: [],
+      ysKienVuKhac: [],
       quyetDinhPdDtl: [new Array<QuyetDinhPdDtl>(),],
       danhSachQuyetDinh: [new Array<any>(),],
     }
