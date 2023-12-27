@@ -15,7 +15,7 @@
           </div>
           <div nz-col nzSpan="5">
             <nz-form-control>
-              <nz-form-label>Loại hàng </nz-form-label>
+              <nz-form-label>Loại hàng</nz-form-label>
               <nz-form-item>
                 <nz-select formControlName="loaiVthh" nzShowSearch nzAllowClear (ngModelChange)="changeHangHoa($event)">
                   <nz-option *ngFor="let p of dsLoaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
@@ -44,12 +44,12 @@
                 <div nz-row>
                   <div nz-col nzSpan="12" class="cus-start-date">
                     <nz-date-picker [nzDisabledDate]="disabledNgayDeXuatTu" nzFormat="dd/MM/yyyy"
-                      formControlName="ngayDeXuatTu" nzPlaceHolder="Ngày bắt đầu">
+                                    formControlName="ngayDeXuatTu" nzPlaceHolder="Ngày bắt đầu">
                     </nz-date-picker>
                   </div>
                   <div nz-col nzSpan="12" class="cus-end-date">
                     <nz-date-picker [nzDisabledDate]="disabledNgayDeXuatDen" nzFormat="dd/MM/yyyy"
-                      formControlName="ngayDeXuatDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                                    formControlName="ngayDeXuatDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
                   </div>
                 </div>
               </nz-form-item>
@@ -62,12 +62,12 @@
                 <div nz-row>
                   <div nz-col nzSpan="12" class="cus-start-date">
                     <nz-date-picker [nzDisabledDate]="disabledNgayTongHopTu" nzFormat="dd/MM/yyyy"
-                      formControlName="ngayTongHopTu" nzPlaceHolder="Ngày bắt đầu">
+                                    formControlName="ngayTongHopTu" nzPlaceHolder="Ngày bắt đầu">
                     </nz-date-picker>
                   </div>
                   <div nz-col nzSpan="12" class="cus-end-date">
                     <nz-date-picker [nzDisabledDate]="disabledNgayTongHopDen" nzFormat="dd/MM/yyyy"
-                      formControlName="ngayTongHopDen" nzPlaceHolder="Ngày kết thúc">
+                                    formControlName="ngayTongHopDen" nzPlaceHolder="Ngày kết thúc">
                     </nz-date-picker>
                   </div>
                 </div>
@@ -93,7 +93,7 @@
       <h3 class="text-uppercase">Danh sách hàng DTQG cần sửa chữa</h3>
       <div class="buttons">
         <button type="button" class="btn btn-main" (click)="redirectUrl('/sua-chua/tong-hop')"
-          *ngIf="userService.isTongCuc()">
+                *ngIf="userService.isTongCuc()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Tổng hợp DS hàng cần sửa chữa</span>
         </button>
@@ -105,106 +105,110 @@
         <div class="mt-16">
           <nz-table #tblData [nzData]="dataTableView" class="nowrap table-chi-tiet" nzBordered>
             <thead>
-              <tr>
-                <th style="min-width: 340px">Chi cục DTNN KV</th>
-                <th>Loại hàng </th>
-                <th>Chủng loại</th>
-                <th>Điểm kho</th>
-                <th>Nhà kho / Ngăn kho / Lô kho</th>
-                <th>SL tồn</th>
-                <th>Ngày nhập kho</th>
-                <th>SL hỏng cần sửa chữa</th>
-                <th>SL SC đã duyệt</th>
-                <th>SL còn lại cần SC</th>
-                <th>ĐVT</th>
-                <th>Ngày đề xuất</th>
-                <th>Ngày tổng hợp (chốt DS)</th>
-                <th>Trạng thái</th>
-                <th>Mã danh sách cần SC</th>
-                <th>Lý do cần SC</th>
-                <th>Hành động</th>
-              </tr>
+            <tr>
+              <th style="min-width: 340px">Chi cục DTNN KV</th>
+              <th>Loại hàng</th>
+              <th>Chủng loại</th>
+              <th>Năm nhập</th>
+              <th>Điểm kho</th>
+              <th>Nhà kho / Ngăn kho / Lô kho</th>
+              <th>SL tồn</th>
+              <th>Ngày nhập kho</th>
+              <th>SL hỏng cần sửa chữa</th>
+              <th>SL SC đã duyệt</th>
+              <th>SL còn lại cần SC</th>
+              <th>ĐVT</th>
+              <th>Ngày đề xuất</th>
+              <th>Ngày tổng hợp (chốt DS)</th>
+              <th>Trạng thái</th>
+              <th>Mã danh sách cần SC</th>
+              <th>Lý do cần SC</th>
+              <th>Hành động</th>
+            </tr>
             </thead>
             <tbody>
 
-              <ng-container *ngFor="let item of tblData.data, let i = index;">
-                <tr>
-                  <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
+            <ng-container *ngFor="let item of tblData.data, let i = index;">
+              <tr>
+                <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                     [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px">
-                    {{item.tenCuc}}
-                  </td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <ng-container *ngIf="expandSetString.has(item.idVirtual)">
-                  <ng-container *ngFor="let lv1 of item.childData,let i1=index">
-                    <tr>
-                      <td (nzExpandChange)="onExpandStringChange(lv1.idVirtual, $event)"
+                  {{item.tenCuc}}
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <ng-container *ngIf="expandSetString.has(item.idVirtual)">
+                <ng-container *ngFor="let lv1 of item.childData,let i1=index">
+                  <tr>
+                    <td (nzExpandChange)="onExpandStringChange(lv1.idVirtual, $event)"
                         [nzExpand]="expandSetString.has(lv1.idVirtual)" nzShowExpand="true"
                         style="padding-left:30px;width: 35px">
-                        {{lv1.tenChiCuc}}
-                      </td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                    <ng-container *ngIf="expandSetString.has(item.idVirtual) && expandSetString.has(lv1.idVirtual)">
-                      <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
-                        <tr>
-                          <td style="text-align: right;">{{i2 + 1}}</td>
-                          <td>{{lv2.tenLoaiVthh}}</td>
-                          <td>{{lv2.tenCloaiVthh}}</td>
-                          <td>{{lv2.tenDiemKho}}</td>
-                          <td>{{lv2.tenNhaKho}} / {{lv2.tenNganKho}} / {{lv2.tenLoKho}}</td>
-                          <td>{{lv2.slHienTai|number:globals.numberFormat}}</td>
-                          <td>{{lv2.ngayNhapKho|date:globals.dateFormat}}</td>
-                          <td>{{lv2.slDeXuat|number:globals.numberFormat}}</td>
-                          <td>{{lv2.slDaDuyet|number:globals.numberFormat}}</td>
-                          <td>{{lv2.slDeXuat - lv2.slDaDuyet|number:globals.numberFormat}}</td>
-                          <td>{{lv2.donViTinh}}</td>
-                          <td>{{lv2.ngayDeXuat|date:globals.dateFormat}}</td>
-                          <td>{{lv2.ngayTongHop|date:globals.dateFormat}}</td>
-                          <td>{{lv2.tenTrangThai}}</td>
-                          <td>{{lv2.maTongHop}}</td>
-                          <td>{{lv2.lyDo}}</td>
-                          <td class="text-left">
-                            <a (click)="showDetail(lv2)">
-                              <i class="fa fa-eye" title="Xem chi tiết"></i>
-                            </a>
-                          </td>
-                        </tr>
-                      </ng-container>
+                      {{lv1.tenChiCuc}}
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <ng-container *ngIf="expandSetString.has(item.idVirtual) && expandSetString.has(lv1.idVirtual)">
+                    <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
+                      <tr>
+                        <td style="text-align: right;">{{i2 + 1}}</td>
+                        <td>{{lv2.tenLoaiVthh}}</td>
+                        <td>{{lv2.tenCloaiVthh}}</td>
+                        <td>{{lv2.namNhap}}</td>
+                        <td>{{lv2.tenDiemKho}}</td>
+                        <td>{{lv2.tenNhaKho}} / {{lv2.tenNganKho}} / {{lv2.tenLoKho}}</td>
+                        <td>{{lv2.slHienTai|number:globals.numberFormat}}</td>
+                        <td>{{lv2.ngayNhapKho|date:globals.dateFormat}}</td>
+                        <td>{{lv2.slDeXuat|number:globals.numberFormat}}</td>
+                        <td>{{lv2.slDaDuyet|number:globals.numberFormat}}</td>
+                        <td>{{lv2.slDeXuat - lv2.slDaDuyet|number:globals.numberFormat}}</td>
+                        <td>{{lv2.donViTinh}}</td>
+                        <td>{{lv2.ngayDeXuat|date:globals.dateFormat}}</td>
+                        <td>{{lv2.ngayTongHop|date:globals.dateFormat}}</td>
+                        <td>{{lv2.tenTrangThai}}</td>
+                        <td>{{lv2.maTongHop}}</td>
+                        <td>{{lv2.lyDo}}</td>
+                        <td class="text-left">
+                          <a (click)="showDetail(lv2)">
+                            <i class="fa fa-eye" title="Xem chi tiết"></i>
+                          </a>
+                        </td>
+                      </tr>
                     </ng-container>
                   </ng-container>
                 </ng-container>
               </ng-container>
+            </ng-container>
             </tbody>
           </nz-table>
         </div>
@@ -217,8 +221,9 @@
           <div class="canphai">
             <!-- begin phân trang  -->
             <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
-              [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
-              (nzPageSizeChange)="changePageSize($event)">
+                           [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+                           (nzPageIndexChange)="changePageIndex($event)"
+                           (nzPageSizeChange)="changePageSize($event)">
               <ng-template #rangeTemplate let-range="range" let-total>
                 {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
               </ng-template>

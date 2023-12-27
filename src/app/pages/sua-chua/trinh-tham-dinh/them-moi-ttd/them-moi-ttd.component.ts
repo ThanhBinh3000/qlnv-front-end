@@ -42,7 +42,7 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
       id: [null],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
-      soTtr: [null, [Validators.required]],
+      soTtr: [null,],
       ngayTao: [dayjs().format("YYYY-MM-DD"), [Validators.required]],
       maThHdr: [null, [Validators.required]],
       idThHdr: [null, [Validators.required]],
