@@ -186,7 +186,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   }
 
   async getDetail(id: number) {
-    this.spinner.show()
+    await this.spinner.show()
     let res = await this.phieuKiemNghiemChatLuongHangService.getDetail(id);
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
@@ -197,9 +197,9 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         this.dataTableChiTieu.forEach(item => {
           item.tenDanhGia = this.dsDanhGia.find(i => i.ma == item.danhGia)?.giaTri;
         })
-        console.log(this.dataTableChiTieu)
       }
     }
+    await this.spinner.hide()
   }
 
   isDisableField() {
@@ -404,7 +404,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
-        this.bindingDataBbLayMau(data.id, false);
+        await this.bindingDataBbLayMau(data.id, false);
       }
     });
   }
@@ -437,7 +437,9 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         ngayNhapDayKho: data.bbNhapDayKho?.ngayKetThucNhap,
         tenThuKho: data.bbNhapDayKho?.tenNguoiTao
       })
-      await this.loadDsQcTheoCloaiVthh();
+      if (this.id == null) {
+        await this.loadDsQcTheoCloaiVthh();
+      }
     }
   }
 

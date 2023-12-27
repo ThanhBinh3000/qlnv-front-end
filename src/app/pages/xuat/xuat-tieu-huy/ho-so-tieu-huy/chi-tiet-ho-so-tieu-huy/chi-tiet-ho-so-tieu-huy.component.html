@@ -108,7 +108,7 @@
             </div>
             <div nz-col [nzSpan]="4" *ngIf="this.userService.isTongCuc()">
               <nz-form-item>
-                <nz-form-label nzRequired >Thời gian phê duyệt tiêu hủy</nz-form-label>
+                <nz-form-label nzRequired>Thời gian phê duyệt tiêu hủy</nz-form-label>
                 <nz-form-control>
                   <nz-range-picker [nzRanges]="ranges" ngModel formControlName="thoiGianPd"
                                    (ngModelChange)="onChangeTimeQd($event)" [nzDisabled]="disabledThamDinh()"
@@ -127,13 +127,10 @@
               </nz-form-item>
             </div>
             <div *ngIf="viewTongCuc()" nz-col [nzSpan]="24">
-              <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true">Kết quả đánh giá của Cán bộ Vụ QLHDT
-                </nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group>
-                    <input nz-input formControlName="ketQua" [readOnly]="disabledThamDinh()"/>
-                  </nz-input-group>
+              <nz-form-item class="form-item display-block">
+                <nz-form-label [nzNoColon]="true"> Kết quả đánh giá của Cán bộ Vụ QLHDT</nz-form-label>
+                <nz-form-control nz-col [nzErrorTip]="error">
+                  <textarea nz-input [rows]="3" formControlName="ketQua" [readOnly]="disabledThamDinh()"></textarea>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -180,7 +177,7 @@
             <th>SL đề xuất tiêu hủy</th>
             <th>ĐVT</th>
             <th>Đơn giá tiêu hủy dự kiến</th>
-            <th>Giá trị</th>
+            <th>Thành tiền dự kiến (đồng)</th>
             <th>Lý do cần tiêu hủy</th>
             <th>Kết quả đánh giá chất lượng</th>
           </tr>
@@ -251,11 +248,11 @@
             <th>Điểm kho</th>
             <th>Nhà kho/Ngăn kho/Lô kho</th>
             <th>Ngày nhập kho</th>
-            <th>Tồn kho</th>
-            <th>SL tiêu hủy phê duyệt</th>
+            <th>Đề xuất tiêu hủy của Cục</th>
+            <th>SL tiêu hủy thẩm định</th>
             <th>ĐVT</th>
-            <th>Đơn giá tiêu hủy phê duyệt</th>
-            <th>Giá trị tiêu hủy phê duyệt</th>
+            <th>Đơn giá tiêu hủy thẩm định</th>
+            <th>Thành tiền(đồng)</th>
             <th>Lý do cần tiêu hủy</th>
             <th>Kết quả đánh giá chất lượng</th>
           </tr>
@@ -293,7 +290,7 @@
                   /{{data.xhThDanhSachHdr.tenLoKho}}
                 </td>
                 <td>{{data.xhThDanhSachHdr.ngayNhapKho | date : 'dd/MM/yyyy'}}</td>
-                <td>{{data.xhThDanhSachHdr.slHienTai | number : '1.0-1' : 'vi_VN' }}</td>
+                <td>{{data.xhThDanhSachHdr.slDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
                 <td>
                   <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                                    nz-input [(ngModel)]="data.xhThDanhSachHdr.slDaDuyet"

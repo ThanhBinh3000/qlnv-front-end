@@ -184,7 +184,7 @@
           <td class="bold">{{i + 1}}</td>
           <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
               [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
-          <td class="bold">{{ item.soQuyetDinh }}</td>
+          <td class="bold">{{ item.soQdGiaoNvXh }}</td>
           <td>{{ item.soLanLm }}</td>
           <td></td>
           <td></td>
@@ -213,10 +213,10 @@
               <td>{{lv1.tenLoKho ? lv1.tenNganKho + ' - ' + lv1.tenLoKho : lv1.tenNganKho}}</td>
               <td>{{lv1.donViTinh}}</td>
               <td>{{lv1.maDviTsan}}</td>
-              <td>{{lv1.slLayMau}}</td>
+              <td>{{lv1.soLuongMauKd}}</td>
               <td>{{lv1.isDat == 1 ? 'Đạt' : 'Không đạt'}}</td>
-              <td><a *ngIf="lv1.idPhieuKdcl" nzType="link"
-                     (click)="openPhieuKnClModal(lv1.idPhieuKdcl)">{{lv1.soPhieuKdcl}}</a></td>
+              <td><a *ngIf="lv1.id" nzType="link"
+                     (click)="openPhieuKnClModal(lv1.id)">{{lv1.soPhieu}}</a></td>
               <td class="text-center">
                 <label nz-checkbox [(ngModel)]="lv1.mauBiHuy" [disabled]="true"></label>
               </td>

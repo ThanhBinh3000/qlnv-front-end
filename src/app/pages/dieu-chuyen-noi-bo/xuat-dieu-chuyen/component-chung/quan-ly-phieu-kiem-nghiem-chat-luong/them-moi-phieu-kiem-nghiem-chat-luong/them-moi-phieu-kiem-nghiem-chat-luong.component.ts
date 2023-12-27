@@ -213,9 +213,15 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
   async initForm() {
     if (this.passData.maHangHoa) {
       // let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(this.passData.maChLoaiHangHoa);
-      let dmTieuChuan = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(this.passData.maChLoaiHangHoa);
+      let dmTieuChuan = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(this.passData.maChLoaiHangHoa || this.passData.maHangHoa);
       if (dmTieuChuan.data) {
-        this.dataTableChiTieu = Array.isArray(dmTieuChuan.data) ? dmTieuChuan.data.map(element => ({ edit: false, chiSoCl: element.mucYeuCauXuat, chiTieuCl: element.tenChiTieu, danhGia: element.danhGia, hdrId: element.hdrId, id: element.id, ketQuaPt: element.ketQuaPt, phuongPhap: element.phuongPhap })) : [];
+        this.dataTableChiTieu = Array.isArray(dmTieuChuan.data) ?
+          dmTieuChuan.data.map(element => ({
+            edit: false, chiSoCl: element.mucYeuCauXuat,
+            chiSoClToiThieu: !isNaN(element.mucYeuCauXuatToiThieu?.replace(",", ".")) ? parseFloat(element.mucYeuCauXuatToiThieu.replace(",", ".")) : element.mucYeuCauXuatToiThieu,
+            chiSoClToiDa: !isNaN(element.mucYeuCauXuatToiDa?.replace(",", ".")) ? parseFloat(element.mucYeuCauXuatToiDa.replace(",", ".")) : element.mucYeuCauXuatToiDa,
+            toanTu: element.toanTu, chiTieuCl: element.tenChiTieu, danhGia: element.danhGia, hdrId: element.hdrId, id: element.id, ketQuaPt: element.ketQuaPt, phuongPhap: element.phuongPhap
+          })) : [];
       }
     }
     this.formData.patchValue({
@@ -250,8 +256,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       ngayHieuLuc: this.passData.ngayHieuLuc,
       ngayQdinhDc: this.passData.ngayQdinhDc
     });
-    if (this.passData.maChLoaiHangHoa) {
-      this.getChiTietHangHoa(this.passData.maChLoaiHangHoa)
+    if (this.passData.maChLoaiHangHoa || this.passData.maHangHoa) {
+      this.getChiTietHangHoa(this.passData.maChLoaiHangHoa || this.passData.maHangHoa)
     }
     if (this.passData.qdinhDccId) {
       this.getDetailQuyetDinhCuc(this.passData.qdinhDccId)
@@ -321,7 +327,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     try {
 
       await this.spinner.show();
-      // this.setValidator(isGuiDuyet);
+      this.setValidator(isGuiDuyet);
       if (!Array.isArray(this.dataTableChiTieu) || this.dataTableChiTieu.length <= 0) {
         return this.notification.error(MESSAGE.ERROR, "Không có dữ liệu kết quả phân tích chỉ tiêu chất lượng")
       } else if (!this.dataTableChiTieu.find(f => f.ketQuaPt && [0, 1].includes(f.danhGia))) {
@@ -498,7 +504,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     }
   };
   async openDialogQuyetDinhDC() {
-    if(this.isView){
+    if (this.isView) {
       return;
     }
     // await this.loadBbLayMau();
@@ -570,7 +576,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     }
   }
   async openDialogBbLayMau() {
-    if(this.isView){
+    if (this.isView) {
       return;
     }
     if (!this.formData.value.qdDcId) return;
@@ -656,12 +662,17 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
           // moTaHangHoa: data.moTaHangHoa,
           // tenThuKho: data.bbNhapDayKho.tenNguoiTao
         })
-        if (data.cloaiVthh) {
-          this.getChiTietHangHoa(data.cloaiVthh)
+        if (data.cloaiVthh || data.loaiVthh) {
+          this.getChiTietHangHoa(data.cloaiVthh || data.loaiVthh)
         }
-        const dmTieuChuan = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(data.cloaiVthh);
+        const dmTieuChuan = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(data.cloaiVthh || data.loaiVthh);
         if (dmTieuChuan.data) {
-          this.dataTableChiTieu = Array.isArray(dmTieuChuan.data) ? dmTieuChuan.data.map(element => ({ edit: false, chiSoCl: element.mucYeuCauXuat, chiTieuCl: element.tenChiTieu, danhGia: element.danhGia, hdrId: element.hdrId, id: element.id, ketQuaPt: element.ketQuaPt, phuongPhap: element.phuongPhapXd })) : [];
+          this.dataTableChiTieu = Array.isArray(dmTieuChuan.data) ? dmTieuChuan.data.map(element => ({
+            edit: false, chiSoCl: element.mucYeuCauXuat,
+            chiSoClToiThieu: !isNaN(element.mucYeuCauXuatToiThieu?.replace(",", ".")) ? parseFloat(element.mucYeuCauXuatToiThieu.replace(",", ".")) : element.mucYeuCauXuatToiThieu,
+            chiSoClToiDa: !isNaN(element.mucYeuCauXuatToiDa?.replace(",", ".")) ? parseFloat(element.mucYeuCauXuatToiDa.replace(",", ".")) : element.mucYeuCauXuatToiDa,
+            toanTu: element.toanTu, chiTieuCl: element.tenChiTieu, danhGia: element.danhGia, hdrId: element.hdrId, id: element.id, ketQuaPt: element.ketQuaPt, phuongPhap: element.phuongPhapXd
+          })) : [];
         };
       }
       // if (!isChiTiet) {
@@ -673,8 +684,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       // }
     }
   }
-  async getChiTietHangHoa(cloaiVthh: string) {
-    const res = await this.danhMucService.loadDanhMucHangChiTiet(cloaiVthh);
+  async getChiTietHangHoa(vthh: string) {
+    const res = await this.danhMucService.loadDanhMucHangChiTiet(vthh);
     if (res.msg === MESSAGE.SUCCESS) {
       this.listHinhThucBaoQuan = Array.isArray(res.data.hinhThucBq) ? res.data.hinhThucBq : [];
     }
@@ -761,6 +772,39 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       },
     });
   }
+  onKetQuaChange(event: any, index: number, dataTable: any): void {
+    if (event.length == 0) {
+      dataTable[index].danhGia = "";
+      return;
+    }
+    let kq = parseFloat(event.replace(",", "."));
+    if (dataTable[index].chiSoClToiThieu >= 0 && dataTable[index].chiSoClToiDa && kq !== null && index !== null) {
+      // let toiThieu = parseFloat(dataTable[index].chiSoClToiThieu.replace(",", "."));
+      // let toiDa = parseFloat(dataTable[index].chiSoClToiDa.replace(",", "."));
+      let toiThieu = dataTable[index].chiSoClToiThieu;
+      let toiDa = dataTable[index].chiSoClToiDa;
+      let tt = parseFloat(dataTable[index].toanTu);
+
+      if ((tt === 1 || tt === 2) && toiThieu < kq && kq < toiDa) {
+        dataTable[index].danhGia = 1;
+      } else {
+        dataTable[index].danhGia = 0;
+      }
+
+      if (tt === 3 && toiThieu == kq && kq == toiDa) {
+        dataTable[index].danhGia = 1;
+      } else {
+        dataTable[index].danhGia = 0;
+      }
+
+      if ((tt === 4 || tt === 5) && toiThieu <= kq && kq <= toiDa) {
+        dataTable[index].danhGia = 1;
+      } else {
+        dataTable[index].danhGia = 0;
+      }
+
+    }
+  }
 
   saveEditPhieuKiemNghiem(i: number): void {
     this.dsKetQuaKiemNghiemHangClone[i].isEdit = false;
@@ -803,16 +847,21 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
   editRow(index: number) {
     this.dataTableChiTieu[index].edit = true;
   }
-  // setValidator(isGuiDuyet) {
-  //   if (isGuiDuyet) {
-  //     // this.formData.controls['soPhieu'].setValidators([Validators.required]);
-  //     this.formData.controls['danhGiaCamQuan'].setValidators([Validators.required]);
-  //     this.formData.controls['nhanXetKetLuan'].setValidators([Validators.required]);
+  setValidator(isGuiDuyet) {
+    // if (isGuiDuyet) {
+    //   // this.formData.controls['soPhieu'].setValidators([Validators.required]);
+    //   this.formData.controls['danhGiaCamQuan'].setValidators([Validators.required]);
+    //   this.formData.controls['nhanXetKetLuan'].setValidators([Validators.required]);
 
-  //   } else {
-  //     // this.formData.controls['soPhieu'].clearValidators();
-  //     this.formData.controls['danhGiaCamQuan'].clearValidators();
-  //     this.formData.controls['nhanXetKetLuan'].clearValidators();
-  //   }
-  // }
+    // } else {
+    //   // this.formData.controls['soPhieu'].clearValidators();
+    //   this.formData.controls['danhGiaCamQuan'].clearValidators();
+    //   this.formData.controls['nhanXetKetLuan'].clearValidators();
+    // }
+    if (this.isVatTu) {
+      this.formData.get('danhGiaCamQuan').clearValidators();
+    } else {
+      this.formData.get('danhGiaCamQuan').setValidators([Validators.required])
+    }
+  }
 }

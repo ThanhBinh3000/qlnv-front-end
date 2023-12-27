@@ -83,6 +83,7 @@ export class ThemMoiLuanPhienDoiHangDtqgComponent extends Base2Component impleme
         bieuSo: [null],
         tenBieuSo: [null],
         dviGui: [null],
+        tenDviGui: [null],
         boNganh: [null],
         dviNhan: [null],
         denNgayKyGui: [null],
@@ -126,6 +127,7 @@ export class ThemMoiLuanPhienDoiHangDtqgComponent extends Base2Component impleme
             boNganh: this.listData.boNganh,
             nam: this.listData.nam,
             dviGui: this.userService.isTongCuc() ? this.listData.dviGui : this.userInfo.MA_DVI,
+            tenDviGui: this.userService.isTongCuc() ? this.listData.tenDviGui : this.userInfo.TEN_DVI,
             tenTrangThai: this.listData.tenTrangThai,
             tGianTaoTuNgay: this.listData.tGianTaoTuNgay,
             tGianTaoDenNgay: this.listData.tGianTaoDenNgay,
@@ -151,14 +153,19 @@ export class ThemMoiLuanPhienDoiHangDtqgComponent extends Base2Component impleme
       tenBieuSo: this.TEN_BIEU_SO,
       bieuSo: this.BIEU_SO,
       dviGui: this.userInfo.MA_DVI,
+      tenDviGui: this.userInfo.TEN_DVI,
       trangThai: "00",
       tenTrangThai: "Dự thảo"
     })
+    if(!this.userService.isTongCuc()){
+      this.handleChoose(this.userInfo.MA_DVI).then();
+    }
   }
 
   async getUserInfor() {
     this.formData.patchValue({
-      dviGui: this.userInfo.TEN_DVI,
+      dviGui: this.userService.isTongCuc() ? this.formData.value.dviGui : this.userInfo.MA_DVI,
+      tenDviGui: this.userInfo.TEN_DVI,
       tenBieuSo: this.TEN_BIEU_SO,
     })
   }
@@ -489,22 +496,26 @@ export class ThemMoiLuanPhienDoiHangDtqgComponent extends Base2Component impleme
   async selectDonVi(donVi) {
     this.itemRow.cloaiVthh = donVi.maHangHoa;
     this.itemRow.tenHang = donVi.tenHangHoa;
+    this.itemRow.dvt = donVi.maDviTinh;
   }
 
   async selectDonViXuat(donVi) {
     console.log(1)
     this.itemRowXuat.cloaiVthh = donVi.maHangHoa;
     this.itemRowXuat.tenHang = donVi.tenHangHoa;
+    this.itemRowXuat.dvt = donVi.maDviTinh;
   }
 
   async selectCloaiVthhUpdate(donVi) {
     this.itemRowUpdate.cloaiVthh = donVi.maHangHoa;
     this.itemRowUpdate.tenHang = donVi.tenHangHoa;
+    this.itemRowUpdate.dvt = donVi.maDviTinh;
   }
 
   async selectCloaiVthhUpdateXuat(donVi) {
     this.itemRowUpdateXuat.cloaiVthh = donVi.maHangHoa;
     this.itemRowUpdateXuat.tenHang = donVi.tenHangHoa;
+    this.itemRowUpdateXuat.dvt = donVi.maDviTinh;
   }
 
   async layTatCaDonViByLevel() {
