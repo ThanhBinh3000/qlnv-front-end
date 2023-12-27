@@ -8,6 +8,7 @@ import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../services/storage.service";
 import { saveAs } from 'file-saver';
 import {DeXuatNhuCauBaoHiemService} from "../../../../services/dinhmuc-maymoc-baohiem/de-xuat-nhu-cau-bao-hiem.service";
+import {STATUS} from "../../../../constants/status";
 
 @Component({
   selector: 'app-de-xuat-hop-dong-chi-cuc',
@@ -36,24 +37,7 @@ export class DeXuatHopDongChiCucComponent extends Base2Component implements OnIn
     private deXuatBaoHiemSv : DeXuatNhuCauBaoHiemService
   ) {
     super(httpClient, storageService, notification, spinner, modal, deXuatBaoHiemSv)
-    super.ngOnInit()
-    this.filterTable = {};
-  }
-
-  ngOnInit() {
-    this.spinner.show();
-    try {
-      this.initFormSearch();
-      this.filter();
-      this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  }
-
-  initFormSearch(){
+    super.ngOnInit();
     this.formData = this.fb.group({
       maDvi: [''],
       capDvi: [''],
@@ -64,6 +48,19 @@ export class DeXuatHopDongChiCucComponent extends Base2Component implements OnIn
       ngayKyTu: [''],
       ngayKyDen: [''],
     });
+    this.filterTable = {};
+  }
+
+  async ngOnInit() {
+    this.spinner.show();
+    try {
+      await this.filter();
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
   }
 
   async filter() {
@@ -72,12 +69,15 @@ export class DeXuatHopDongChiCucComponent extends Base2Component implements OnIn
         ngayKyTu : this.formData.value.ngayKy[0],
         ngayKyDen : this.formData.value.ngayKy[1]
       })
-    }
+    };
     this.formData.patchValue({
       maDvi : this.userInfo.MA_DVI,
       capDvi : 3
-    })
+    });
     await this.search();
+    if (this.dataTable.length > 0 && !this.userService.isChiCuc()) {
+      this.dataTable = this.dataTable.filter(item => item.trangThai != STATUS.DU_THAO);
+    }
   }
 
 
@@ -89,11 +89,7 @@ export class DeXuatHopDongChiCucComponent extends Base2Component implements OnIn
 
   async clearForm() {
     this.formData.reset();
-    this.formData.patchValue({
-      maDvi : this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
-      capDvi : 3
-    })
-    await this.search();
+    await this.filter()
   }
 
   exportData() {
