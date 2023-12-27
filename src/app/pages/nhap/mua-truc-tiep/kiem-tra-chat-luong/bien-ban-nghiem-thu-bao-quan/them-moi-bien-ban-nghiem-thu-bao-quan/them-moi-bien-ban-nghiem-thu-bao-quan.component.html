@@ -133,18 +133,18 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-<!--        <div *ngIf="formData.value.loaiQd == '01'" nz-col nzSpan="3">-->
-<!--          <nz-form-item>-->
-<!--            <nz-form-label nzRequired [nzNoColon]="true">-->
-<!--              Căn cứ vào hợp đồng-->
-<!--            </nz-form-label>-->
-<!--            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">-->
-<!--              <nz-input-group nzAddOnAfterIcon="folder-open">-->
-<!--                <input nz-input [readonly]="true" formControlName="soHopDong"/>-->
-<!--              </nz-input-group>-->
-<!--            </nz-form-control>-->
-<!--          </nz-form-item>-->
-<!--        </div>-->
+        <div *ngIf="formData.value.loaiQd == '01'" nz-col nzSpan="3">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true">
+              Căn cứ vào hợp đồng
+            </nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+              <nz-input-group nzAddOnAfterIcon="folder-open">
+                <input nz-input [readonly]="true" formControlName="soHopDong"/>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
         <div *ngIf="formData.value.loaiQd == '02'" nz-col nzSpan="3">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">
