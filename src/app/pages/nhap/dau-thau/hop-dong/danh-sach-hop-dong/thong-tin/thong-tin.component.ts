@@ -391,6 +391,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
         body.listFileDinhKem = this.listFileDinhKem;
         body.listCcPhapLy = this.listCcPhapLy;
         body.detail = this.dataTable;
+        console.log(this.dataTable)
         let res = null;
         if (this.formData.get('id').value) {
             res = await this.hopDongService.update(body);
@@ -633,34 +634,29 @@ export class ThongTinComponent implements OnInit, OnChanges {
                 let res = await this.thongTinDauThauService.getDetailThongTin(data.id, this.loaiVthh);
                 if (res.msg == MESSAGE.SUCCESS) {
                   let nhaThauTrung = res.data.dsNhaThauDthau.find(item => item.id == data.idNhaThau);
-                  if (this.userService.isTongCuc()) {
-                    this.dataTable = data.children;
-                    this.dataTable.forEach(item => {
-                      item.donGiaVat = data.donGiaNhaThau
-                    })
-                  } else {
-                    for (let i = 0; i < data.children.length; i++) {
-                      let body = {
-                        maDvi: data.children[i].maDvi,
-                        type: this.listType
-                      }
-                      const res = await this.donViService.layTatCaByMaDvi(body);
-                      if (res.msg == MESSAGE.SUCCESS) {
-                        const listDiemKho = [];
-                        for (let j = 0; j < res.data[0].children.length; j++) {
-                          const item = {
-                            'maDvi': res.data[0].children[j].maDvi,
-                            'tenDvi': res.data[0].children[j].tenDvi,
-                            'diaDiemNhap': res.data[0].children[j].diaChi,
-                          };
-                          listDiemKho.push(item);
-                        }
-                        this.listDiemKho[i] = [...listDiemKho];
-                        this.rowItem.push(new DanhSachGoiThau())
-                      }
+                  for (let i = 0; i < data.children.length; i++) {
+                    let body = {
+                      maDvi: data.children[i].maDvi,
+                      type: this.listType
                     }
-                    this.dataTable.push(data);
+                    const res = await this.donViService.layTatCaByMaDvi(body);
+                    if (res.msg == MESSAGE.SUCCESS) {
+                      const listDiemKho = [];
+                      for (let j = 0; j < res.data[0].children.length; j++) {
+                        const item = {
+                          'maDvi': res.data[0].children[j].maDvi,
+                          'tenDvi': res.data[0].children[j].tenDvi,
+                          'diaDiemNhap': res.data[0].children[j].diaChi,
+                        };
+                        listDiemKho.push(item);
+                      }
+                      this.listDiemKho[i] = [...listDiemKho];
+                      this.rowItem.push(new DanhSachGoiThau())
+                    }
+                    data.children[i].donGiaVat = data.donGiaNhaThau
                   }
+                  this.dataTable.push(data);
+                  // }
                   this.formData.patchValue({
                     idGoiThau: data.id,
                     tenGoiThau: data.goiThau,
@@ -1090,7 +1086,8 @@ export class ThongTinComponent implements OnInit, OnChanges {
       }
     }
   }
-  saveRowTp(i) {
+  async saveRowTp(i) {
+    this.spinner.show();
     this.editRowTinhPhat[i].thanhTienTinhPhat = this.editRowTinhPhat[i].soNgayGiaoCham * this.editRowTinhPhat[i].slGiaoCham * this.editRowTinhPhat[i].donGiaVat * this.editRowTinhPhat[i].mucPhat;
     this.dataTable[i].thanhTienTinhPhat = this.editRowTinhPhat[i].thanhTienTinhPhat;
     this.dataTable[i].soNgayGiaoCham = this.editRowTinhPhat[i].soNgayGiaoCham;
@@ -1098,6 +1095,13 @@ export class ThongTinComponent implements OnInit, OnChanges {
     this.dataTable[i].mucPhat = this.editRowTinhPhat[i].mucPhat;
     this.dataTable[i].tgianGiaoThucTe = this.editRowTinhPhat[i].tgianGiaoThucTe;
     this.dataTable[i].editTinhPhat = false;
+    let res = await this.hopDongService.saveSoTienTinhPhat(this.dataTable[i]);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+    this.spinner.hide();
   }
   cancelEditRowTp(i) {
     this.dataTable[i].editTinhPhat = false;

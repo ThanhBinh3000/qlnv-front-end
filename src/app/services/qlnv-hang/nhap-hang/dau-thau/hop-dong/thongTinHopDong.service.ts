@@ -50,4 +50,8 @@ export class ThongTinHopDongService extends BaseService {
   //   const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/hop-dong/xoa`;
   //   return this.httpClient.post<any>(url, body).toPromise();
   // }
+  saveSoTienTinhPhat(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tinh-tien-phat`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
 }
