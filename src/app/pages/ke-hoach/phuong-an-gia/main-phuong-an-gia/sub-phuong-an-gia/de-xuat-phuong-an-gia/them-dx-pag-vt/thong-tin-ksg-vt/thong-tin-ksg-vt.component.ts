@@ -34,6 +34,7 @@ export class ThongTinKsgVtComponent implements OnInit, OnChanges {
   @Input() type: string;
   isVat: boolean;
   vat: any;
+  donViTinh: string;
   userInfo: UserLogin
   rowItem: ThongTinKhaoSatGia = new ThongTinKhaoSatGia();
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinKhaoSatGia } } = {};
@@ -54,6 +55,7 @@ export class ThongTinKsgVtComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.isVat = this.dataParent && this.dataParent.loaiGia && (this.dataParent.loaiGia == 'LG01' || this.dataParent.loaiGia == 'LG03')
     this.vat = this.dataParent && this.dataParent.vat ? this.dataParent.vat : 0
+    this.donViTinh = this.dataParent && this.dataParent.donViTinh ? this.dataParent.donViTinh : ""
     this.userInfo = this.userService.getUserLogin();
     this.emitDataTable();
     this.updateEditCache();
@@ -62,7 +64,8 @@ export class ThongTinKsgVtComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (this.dataParent) {
       this.isVat = this.dataParent && this.dataParent.loaiGia && (this.dataParent.loaiGia == 'LG01' || this.dataParent.loaiGia == 'LG03');
-      this.vat = this.dataParent && this.dataParent.vat ? this.dataParent.vat : 0
+      this.donViTinh = this.dataParent && this.dataParent.donViTinh ? this.dataParent.donViTinh : "";
+      this.vat = this.dataParent && this.dataParent.vat ? this.dataParent.vat : 0;
     }
     this.updateEditCache();
   }
@@ -124,6 +127,9 @@ export class ThongTinKsgVtComponent implements OnInit, OnChanges {
     }
     if (this.isVat && this.type == 'GCT') {
       this.rowItem.donGiaVat = this.rowItem.donGia * this.rowItem.vat + this.rowItem.donGia
+    }
+    if (this.listCloaiVthh.length == 0) {
+      this.rowItem.donViTinh = this.donViTinh;
     }
     this.dataTable = [...this.dataTable, this.rowItem];
     this.rowItem = new ThongTinKhaoSatGia();

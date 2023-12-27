@@ -589,8 +589,8 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
             child1.slKhoLt5000 = dkLt5000.length;
             child1.giaTriHtGt5000 = this.sumTable(dkGt5000, 'giaTriDkKhoHt');
             child1.giaTriHtLt5000 = this.sumTable(dkLt5000, 'giaTriDkKhoHt');
-            child1.giaTriKhGt5000 = this.sumTable(dkGt5000, 'giaTriDkKhoHt');
-            child1.giaTriKhLt5000 = this.sumTable(dkLt5000, 'giaTriDkKhoHt');
+            child1.giaTriKhGt5000 = this.sumTable(dkGt5000, 'giaTriDkKhoKh');
+            child1.giaTriKhLt5000 = this.sumTable(dkLt5000, 'giaTriDkKhoKh');
             arrResult.push(child1);
             child1.children.forEach(child2 => {
               child2.tenDiemKho = '';
@@ -598,10 +598,10 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
               child2.khoiTichLt5000 = child2.khoiTich && child2.khoiTich <= 5000 ? child2.khoiTich : 0
               child2.slKhoGt5000 = child2.khoiTich && child2.khoiTich > 5000 ? 1 : 0
               child2.slKhoLt5000 = child2.khoiTich && child2.khoiTich <= 5000 ? 1 : 0
-              child2.giaTriHtGt5000 = child2.khoiTich && child2.khoiTich > 5000 ? child2.giaTriHtKhoHt : 0
-              child2.giaTriHtLt5000 = child2.khoiTich && child2.khoiTich <= 5000 ? child2.giaTriHtKhoHt : 0
-              child2.giaTriKhGt5000 = child2.khoiTich && child2.khoiTich > 5000 ? child2.giaTriHtKhoKh : 0
-              child2.giaTriKhLt5000 = child2.khoiTich && child2.khoiTich <= 5000 ? child2.giaTriHtKhoKh : 0
+              child2.giaTriHtGt5000 = child2.khoiTich && child2.khoiTich > 5000 ? child2.giaTriDkKhoHt : 0
+              child2.giaTriHtLt5000 = child2.khoiTich && child2.khoiTich <= 5000 ? child2.giaTriDkKhoHt : 0
+              child2.giaTriKhGt5000 = child2.khoiTich && child2.khoiTich > 5000 ? child2.giaTriDkKhoKh : 0
+              child2.giaTriKhLt5000 = child2.khoiTich && child2.khoiTich <= 5000 ? child2.giaTriDkKhoKh : 0
               arrResult.push(child2);
             })
           })
