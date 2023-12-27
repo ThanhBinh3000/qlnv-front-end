@@ -1,6 +1,6 @@
-import {LOAI_HANG_DTQG, STATUS_DA_DUYET, STATUS_DA_HOAN_THANH, TEN_HANG_DTQG, TEN_LOAI_VTHH} from "../constants/config";
+import { LOAI_HANG_DTQG, STATUS_DA_DUYET, STATUS_DA_HOAN_THANH, TEN_HANG_DTQG, TEN_LOAI_VTHH } from "../constants/config";
 import VNnum2words from 'vn-num2words';
-import {STATUS} from "../constants/status";
+import { STATUS } from "../constants/status";
 
 export function convertTrangThai(status: string): string {
   if (status == '00') {
@@ -137,7 +137,12 @@ export function convertVthhToId(ten: string) {
 
 export function convertTienTobangChu(tien: number): string {
   if (tien > 0) {
-    const chuoiChu = VNnum2words(tien);
+    let chuoiChu = VNnum2words(tien);
+    if (chuoiChu && (typeof chuoiChu === "string" || chuoiChu instanceof String)) {
+      chuoiChu = chuoiChu.replace(/muời/g, "mười")
+    } else {
+      chuoiChu = ''
+    }
     return chuoiChu.charAt(0).toUpperCase() + chuoiChu.slice(1);
   } else {
     return '';
@@ -248,8 +253,20 @@ export function convertTienTobangChuThapPhan(tien: number): string {
   if (tien > 0) {
     const phanNguyen = +tien.toString().split(".")[0];
     const phanThapPhan = +tien.toString().split(".")[1];
-    return VNnum2words(phanNguyen) + (phanThapPhan ? " " + "phẩy" + " " + VNnum2words(phanThapPhan) : "");
+    let phanNguyenText = !isNaN(phanNguyen) ? VNnum2words(phanNguyen) : "";
+    let phanThapPhanText = !isNaN(phanThapPhan) ? VNnum2words(phanThapPhan) : "";
+    if (phanNguyenText && (typeof phanNguyenText === "string" || phanNguyenText instanceof String)) {
+      phanNguyenText = phanNguyenText.replace(/muời/g, "mười")
+    } else {
+      phanNguyenText = '';
+    }
+    if (phanThapPhanText && (typeof phanThapPhanText === "string" || phanThapPhanText instanceof String)) {
+      phanThapPhanText = phanThapPhanText.replace(/muời/g, "mười")
+    } else {
+      phanThapPhanText = '';
+    }
+    return phanNguyenText + (phanThapPhanText ? " " + "phẩy" + " " + phanThapPhanText : "");
   } else {
-    return ''
+    return '';
   }
 }
