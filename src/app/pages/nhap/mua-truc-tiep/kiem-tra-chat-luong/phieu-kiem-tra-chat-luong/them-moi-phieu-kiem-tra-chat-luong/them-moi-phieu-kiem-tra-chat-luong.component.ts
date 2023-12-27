@@ -124,6 +124,8 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
         trangThai: [],
         tenTrangThai: [],
         tenNganLoKho: [],
+        soBangKe: [],
+        loaiQd: [],
       }
     );
   }
@@ -227,6 +229,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
       tenCloaiVthh: data.tenCloaiVthh,
       moTaHangHoa: data.moTaHangHoa,
       soHd: data.soHd,
+      loaiQd: data.loaiQd,
     });
     let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi.includes(this.userInfo.MA_DVI));
     if (dataChiCuc.length > 0) {
@@ -281,6 +284,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
         soLuong: data.soLuong * 1000,
         soLuongQdGiaoNvNh: data.soLuong * 1000,
         soBb: data.listBienBanNghiemThuBq.find(item => item.id === Math.min(...data.listBienBanNghiemThuBq.map(item => item.id))).soBb,
+        soBangKe: data.listBienBanNghiemThuBq.find(item => item.id === Math.min(...data.listBienBanNghiemThuBq.map(item => item.id))).soBangKe,
         tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
         soLuongDaNhap: soLuongNhap.data
       })
@@ -346,7 +350,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
             })
           }
           let dataDdiem = this.listDiaDiemNhap.filter(item => item.id == data.idDdiemGiaoNvNh)[0];
-          this.bindingDataDdNhap(dataDdiem);
+          await this.bindingDataDdNhap(dataDdiem);
         }
       }
     }

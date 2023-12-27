@@ -98,6 +98,7 @@ export class ThemMoiChiTietNhapXuatTonKhoHangDtqgComponent extends Base2Componen
         bieuSo: [null],
         tenBieuSo: [null],
         dviGui: [null],
+        tenDviGui: [null],
         boNganh: [null],
         dviNhan: [null],
         denNgayKyGui: [null],
@@ -145,6 +146,8 @@ export class ThemMoiChiTietNhapXuatTonKhoHangDtqgComponent extends Base2Componen
             kyBc: this.listData.kyBc,
             loaiBc: this.listData.loaiBc,
             nam: this.listData.nam,
+            dviGui: this.userService.isTongCuc() ? this.listData.dviGui : this.userInfo.MA_DVI,
+            tenDviGui: this.userService.isTongCuc() ? this.listData.tenDviGui : this.userInfo.TEN_DVI,
             tenTrangThai: this.listData.tenTrangThai,
             trangThai: this.listData.trangThai,
             tGianTaoTuNgay: this.listData.tGianTaoTuNgay,
@@ -183,14 +186,19 @@ export class ThemMoiChiTietNhapXuatTonKhoHangDtqgComponent extends Base2Componen
       tenBieuSo: this.TEN_BIEU_SO,
       bieuSo: this.BIEU_SO,
       dviGui: this.userInfo.MA_DVI,
+      tenDviGui: this.userInfo.TEN_DVI,
       trangThai: "00",
       tenTrangThai: "Dự thảo"
     })
+    if(!this.userService.isTongCuc()){
+      this.handleChoose(this.userInfo.MA_DVI).then();
+    }
   }
 
   async getUserInfor() {
     this.formData.patchValue({
-      dviGui: this.userInfo.TEN_DVI,
+      dviGui: this.userService.isTongCuc() ? this.formData.value.dviGui : this.userInfo.MA_DVI,
+      tenDviGui: this.userInfo.TEN_DVI,
       tenBieuSo: this.TEN_BIEU_SO,
     })
   }

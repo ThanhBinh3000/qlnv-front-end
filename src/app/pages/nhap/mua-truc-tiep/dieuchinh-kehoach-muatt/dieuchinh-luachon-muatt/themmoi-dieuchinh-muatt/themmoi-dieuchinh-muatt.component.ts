@@ -89,6 +89,8 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
       kieuNx: [''],
       tenKieuNx: [''],
       trichYeuDc: [''],
+      noiDungToTrinh: [''],
+      noiDungQdDc: [''],
 
     });
   }
@@ -514,6 +516,11 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
         mesg = 'Bạn có muốn gửi duyệt ?'
         break;
       }
+      case STATUS.TU_CHOI_LDTC: {
+        trangThai = STATUS.CHO_DUYET_LDV;
+        mesg = 'Bạn có muốn gửi duyệt ?'
+        break;
+      }
       case STATUS.CHO_DUYET_LDV: {
         trangThai = STATUS.DA_DUYET_LDV;
         mesg = 'Bạn có muốn gửi duyệt ?'
@@ -613,7 +620,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
 
   checkDisableQdDc() {
     if (this.isView) {
-      return !(this.formData.get('trangThai').value == STATUS.DA_DUYET_LDV && this.userService.isAccessPermisson("NHDTQG_PTMTT_DCKHLCNT_BANHANH_TUCHOI_TC"));
+      return !(this.formData.get('trangThai').value == STATUS.DA_DUYET_LDV && this.userService.isAccessPermisson("NHDTQG_PTMTT_DCKHMTT_BANHANH"));
     }
     return true;
   }

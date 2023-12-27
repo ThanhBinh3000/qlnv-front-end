@@ -93,6 +93,7 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
           console.log(property, res[property]);
           this.rowItem[property] = res[property];
         }
+        this.fileDinhKem = res.fileDinhKem
       });
     } else {
       this.formData.patchValue({
@@ -134,6 +135,7 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
       ...this.formData.value,
       ...this.rowItem
     };
+    body.fileDinhKem = this.fileDinhKem;
     this.createUpdate(body).then((res) => {
       if (res) {
         if (isApprove) {
