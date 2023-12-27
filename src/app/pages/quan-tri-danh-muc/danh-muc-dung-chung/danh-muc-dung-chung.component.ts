@@ -324,23 +324,12 @@ export class DanhMucDungChungComponent implements OnInit {
   filterInTable(key: string, value: string) {
     this.search();
 
-    //   if (value && value != '') {
-    //     this.dataTable = [];
-    //     let temp = [];
-    //     if (this.dataTableAll && this.dataTableAll.length > 0) {
-    //       this.dataTableAll.forEach((item) => {
-    //         if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
-    //           temp.push(item)
-    //         }
-    //       });
-    //     }
-    //     this.dataTable = [...this.dataTable, ...temp];
-    //   } else {
-    //     this.dataTable = cloneDeep(this.dataTableAll);
-    //   }
-    //   console.log(this.dataTableAll)
-    // }
   }
+
+  beforeSearch() {
+
+  }
+
 
   print() {
 
