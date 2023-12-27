@@ -204,26 +204,36 @@
     <thead>
     <tr>
       <th nzWidth="150px" class="text-center wrap">Chi cục</th>
-<!--      <th nzWidth="150px" class="text-center wrap">Điểm kho</th>-->
-<!--      <th nzWidth="150px" class="text-center wrap">Địa điểm kho</th>-->
-      <th nzWidth="100px" class="text-center wrap">SL theo chỉ tiêu kế hoạch năm</th>
-      <th nzWidth="100px" class="text-center wrap">SL theo kế hoạch năm đã được duyệt</th>
-      <th nzWidth="100px" class="text-center wrap">SL đề xuất mua trực tiếp (Tấn)</th>
-      <th nzWidth="100px" class="text-center wrap">Thành tiền (đông)</th>
-      <th nzWidth="50px">Hành động</th>
+      <th *ngIf="isCache" nzWidth="150px" class="text-center wrap">Điểm kho</th>
+      <th *ngIf="isCache" nzWidth="150px" class="text-center wrap">Địa điểm kho</th>
+      <th *ngIf="isCache" nzWidth="150px" class="text-center wrap">Chỉ tiêu kế hoạch được giao (Tấn)</th>
+      <th nzWidth="150px" class="text-center wrap">Số đã thực hiện<br>(Tấn)</th>
+      <th *ngIf="isCache" nzWidth="150px" class="text-center wrap">SL trình<br>phê duyệt (Tấn)</th>
+      <th *ngIf="isCache" nzWidth="150px" class="text-center wrap">Đơn giá có<br>VAT đã duyệt (đ/kg)</th>
+      <th *ngIf="!isCache" nzWidth="100px" class="text-center wrap">Số lượng phê duyệt (Tấn)</th>
+      <th *ngIf="!isCache" nzWidth="100px" class="text-center wrap">Đơn giá có<br>VAT (đ/kg)</th>
+      <th nzWidth="100px" class="text-center wrap">Thành tiền (đ)</th>
+      <th *ngIf="isCache" nzWidth="100px" class="text-center wrap">Bằng chữ</th>
+      <th nzWidth="100px" class="text-center wrap">Số còn lại chưa<br>thực hiện</th>
+      <th *ngIf="!isCache" nzWidth="50px">Hành động</th>
     </tr>
     </thead>
     <tbody>
     <ng-container *ngFor="let item of dataTable , let i = index">
       <tr>
         <td>{{item.tenDvi}}</td>
-<!--        <td></td>-->
-<!--        <td></td>-->
-        <td class="text-blue">{{item.soLuongChiTieu | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="text-blue">{{item.soLuongKhDd | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="text-blue">{{item.tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
+        <td *ngIf="isCache"></td>
+        <td *ngIf="isCache"></td>
+        <td *ngIf="isCache">{{item.soLuongChiTieu | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-red">{{item.soLuongKhDd | number : '1.0-1' : 'vi_VN'}}</td>
+        <td *ngIf="isCache" class="text-red">{{item.tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
+        <td *ngIf="isCache" class="text-blue">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+        <td *ngIf="!isCache" class="text-blue">{{item.tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
+        <td *ngIf="!isCache" class="text-blue">{{item.donGiaVat}}</td>
         <td class="text-blue">{{item.tongSoLuong * item.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
-        <td>
+        <td *ngIf="isCache"></td>
+        <td class="text-red">{{item.tongSoLuong - item.soLuongKhDd | number : '1.0-1' : 'vi_VN'}}</td>
+        <td *ngIf="!isCache">
           <a *ngIf="!isView" (click)="themMoiBangPhanLoTaiSan(item,i)">
             <i class="fa fa-pencil" title="Sửa"></i>
           </a>
@@ -232,17 +242,25 @@
           </a>
         </td>
       </tr>
-      <ng-container *ngFor="let data of item.children , let i = index">
-        <tr>
-          <td></td>
-<!--          <td>{{data.tenDiemKho}}</td>-->
-<!--          <td>{{data.diaDiemNhap}}</td>-->
-          <td class="text-blue"></td>
-          <td class="text-blue"></td>
-          <td>{{data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>{{data.soLuong * item.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
-          <td></td>
-        </tr>
+      <ng-container *ngIf="isCache">
+        <ng-container *ngFor="let data of item.children , let i = index">
+          <tr>
+            <td></td>
+            <td *ngIf="isCache">{{data.tenDiemKho}}</td>
+            <td *ngIf="isCache">{{data.diaDiemNhap}}</td>
+            <td *ngIf="isCache"></td>
+            <td *ngIf="isCache"></td>
+            <td *ngIf="isCache">{{data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+            <td *ngIf="isCache">{{item.donGiaVat}}</td>
+<!--            <td *ngIf="!isCache" class="text-blue"></td>-->
+<!--            <td *ngIf="!isCache" class="text-blue"></td>-->
+<!--            <td *ngIf="!isCache" class="text-blue"></td>-->
+            <td *ngIf="isCache">{{data.soLuong * item.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
+            <td *ngIf="isCache">{{convertTienTobangChu(data.soLuong * item.donGiaVat * 1000)}}</td>
+            <td *ngIf="isCache"></td>
+<!--            <td *ngIf="!isCache"></td>-->
+          </tr>
+        </ng-container>
       </ng-container>
     </ng-container>
     </tbody>

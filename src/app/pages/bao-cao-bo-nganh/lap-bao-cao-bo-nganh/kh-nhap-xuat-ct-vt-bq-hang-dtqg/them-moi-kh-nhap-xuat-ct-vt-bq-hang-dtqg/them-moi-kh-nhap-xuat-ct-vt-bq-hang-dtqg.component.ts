@@ -93,6 +93,7 @@ export class ThemMoiKhNhapXuatCtVtBqHangDtqgComponent extends Base2Component imp
         dviGui: [null],
         boNganh: [null],
         dviNhan: [null],
+        tenDviGui: [null],
         denNgayKyGui: [null],
         tenHang: [null],
         cloaiVthh: [null],
@@ -148,6 +149,7 @@ export class ThemMoiKhNhapXuatCtVtBqHangDtqgComponent extends Base2Component imp
             tGianBanHanhDenNgay: this.listData.tGianBanHanhDenNgay,
             donVi: this.listData.donVi,
             dviGui: this.userService.isTongCuc() ? this.listData.dviGui : this.userInfo.MA_DVI,
+            tenDviGui: this.userService.isTongCuc() ? this.listData.tenDviGui : this.userInfo.TEN_DVI,
             kyBc: this.listData.kyBc,
             loaiBc: this.listData.loaiBc,
             donViNhanTien: this.listData.donViNhanTien,
@@ -173,14 +175,19 @@ export class ThemMoiKhNhapXuatCtVtBqHangDtqgComponent extends Base2Component imp
       tenBieuSo: this.TEN_BIEU_SO,
       bieuSo: this.BIEU_SO,
       dviGui: this.userInfo.MA_DVI,
+      tenDviGui: this.userInfo.TEN_DVI,
       trangThai: "00",
       tenTrangThai: "Dự thảo"
     })
+    if(!this.userService.isTongCuc()){
+      this.handleChoose(this.userInfo.MA_DVI).then();
+    }
   }
 
   async getUserInfor() {
     this.formData.patchValue({
-      dviGui: this.userInfo.TEN_DVI,
+      dviGui: this.userService.isTongCuc() ? this.formData.value.dviGui : this.userInfo.MA_DVI,
+      tenDviGui: this.userInfo.TEN_DVI,
       tenBieuSo: this.TEN_BIEU_SO,
     })
   }
@@ -387,12 +394,14 @@ export class ThemMoiKhNhapXuatCtVtBqHangDtqgComponent extends Base2Component imp
   async selectDonVi(donVi) {
     this.itemRow.cloaiVthh = donVi.maHangHoa;
     this.itemRow.tenHang = donVi.tenHangHoa;
+    this.itemRow.dvt = donVi.maDviTinh;
     this.selectedCloaiVthh = donVi;
   }
 
   async selectCloaiVthhUpdate(donVi) {
     this.itemRowUpdate.cloaiVthh = donVi.maHangHoa;
     this.itemRowUpdate.tenHang = donVi.tenHangHoa;
+    this.itemRowUpdate.dvt = donVi.maDviTinh;
     this.selectedCloaiVthh = donVi;
   }
 
