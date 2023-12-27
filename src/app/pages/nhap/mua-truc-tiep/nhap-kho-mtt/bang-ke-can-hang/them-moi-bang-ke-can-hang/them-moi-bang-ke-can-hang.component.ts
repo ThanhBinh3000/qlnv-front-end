@@ -105,6 +105,8 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
       soPhieuKtraCluong: [''],
       tongSlBaoBi: [''],
       tongSlCaBaoBi: [''],
+      soBangKe: [],
+      loaiQd: [],
       tongSlDaTruBaoBi: [''],
     })
   }
@@ -228,6 +230,7 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
       tenCloaiVthh: data.tenCloaiVthh,
       moTaHangHoa: data.moTaHangHoa,
       soHdong: data.soHd,
+      loaiQd: data.loaiQd,
       ngayKiHdong: data.ngayKyHd,
     });
     let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi.includes(this.userInfo.MA_DVI));
@@ -319,7 +322,8 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
         donViGiao: data.donViGiao,
         diaChiNguoiGiao: data.diaChiNguoiGiao,
         thoiGianGiaoNhan: data.thoiGianGiaoNhan,
-        soPhieuKtraCluong: data.soPhieuKtraCluong
+        soPhieuKtraCluong: data.soPhieuKtraCluong,
+        soBangKe: data.soBangKe
       });
     }
   }

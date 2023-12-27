@@ -295,6 +295,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
         const data = res.data;
         console.log(data)
         this.helperService.bidingDataInFormGroup(this.formData, data);
+        await this.bindingDataQd(data.idQdGiaoNvNh);
         this.dataTable = data.hhPhieuNhapKhoCtList;
         this.fileDinhKems = data.fileDinhKems
         this.formData.patchValue({

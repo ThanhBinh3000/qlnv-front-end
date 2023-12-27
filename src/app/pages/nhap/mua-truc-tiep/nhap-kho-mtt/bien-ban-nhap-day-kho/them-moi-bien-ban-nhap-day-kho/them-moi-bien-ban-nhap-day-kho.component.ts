@@ -107,8 +107,8 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
       ghiChu: [''],
       ktvBanQuan: [''],
       keToanTruong: [''],
-      trangThai: [],
-      tenTrangThai: [],
+      trangThai: ['00'],
+      tenTrangThai: ['Dự thảo'],
       lyDoTuChoi: [],
       nguoiPduyet: [''],
       donGiaHd: [''],
@@ -116,6 +116,8 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
       soPhieuNhapKho: [''],
       tenNganLoKho: [''],
       soBangKeCanHang: [''],
+      soBangKe: [],
+      loaiQd: [],
 
     })
 
@@ -209,6 +211,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
       soQuyetDinhNhap: data.soQd,
       soHdong: data.soHd,
       ngayKiHdong: data.hopDongMttHdrs[0]?.ngayPduyet,
+      loaiQd: data.loaiQd,
       // soLuong: data.hopDongMttHdrs[0]?.soLuong,
       donGiaHd: data.hopDongMttHdrs[0]?.donGiaGomThue,
       thanhTien: data.hopDongMttHdrs[0]?.soLuong * data.hopDongMttHdrs[0]?.donGiaGomThue,
@@ -258,6 +261,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
         tenNganKho: data.tenNganKho,
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
+        soBangKe: item.soBangKe,
         tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
       })
     })
