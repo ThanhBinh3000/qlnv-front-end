@@ -227,6 +227,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     if (res.msg !== MESSAGE.SUCCESS || !res.data) {
       return;
     }
+    console.log(res.data, 999);
     this.listDiemKho = res.data.children || [];
   }
 
@@ -282,6 +283,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         dataToUpdate.tenNganKho = selectedKho.title;
         if (this.listLoKho.length === 0) {
           dataToUpdate.tonKho = selectedKho.slTon;
+          dataToUpdate.namNhap = selectedKho.namNhap;
           dataToUpdate.loaiVthh = selectedKho.loaiVthh;
           dataToUpdate.cloaiVthh = selectedKho.cloaiVthh;
           dataToUpdate.tenCloaiVthh = selectedKho.tenCloaiVthh;
@@ -299,6 +301,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         dataToUpdate.tenNganKho = selectedKho.title;
         if (this.listLoKho.length === 0) {
           dataToUpdate.tonKho = selectedKho.slTon;
+          dataToUpdate.namNhap = selectedKho.namNhap;
           dataToUpdate.loaiVthh = selectedKho.loaiVthh;
           dataToUpdate.cloaiVthh = selectedKho.cloaiVthh;
           dataToUpdate.tenCloaiVthh = selectedKho.tenCloaiVthh;
@@ -316,6 +319,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       if (selectedKho) {
         dataToUpdate.tenLoKho = selectedKho.title;
         dataToUpdate.tonKho = selectedKho.slTon;
+        dataToUpdate.namNhap = selectedKho.namNhap;
         dataToUpdate.loaiVthh = selectedKho.loaiVthh;
         dataToUpdate.cloaiVthh = selectedKho.cloaiVthh;
         dataToUpdate.tenCloaiVthh = selectedKho.tenCloaiVthh;
@@ -327,6 +331,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       if (selectedKho) {
         dataToUpdate.tenLoKho = selectedKho.title;
         dataToUpdate.tonKho = selectedKho.slTon;
+        dataToUpdate.namNhap = selectedKho.namNhap;
         dataToUpdate.loaiVthh = selectedKho.loaiVthh;
         dataToUpdate.cloaiVthh = selectedKho.cloaiVthh;
         dataToUpdate.tenCloaiVthh = selectedKho.tenCloaiVthh;
@@ -347,6 +352,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         dataToUpdate.maLoKho = null;
         dataToUpdate.tenLoKho = null;
         dataToUpdate.tonKho = null;
+        dataToUpdate.namNhap = null;
         dataToUpdate.loaiVthh = null;
         dataToUpdate.cloaiVthh = null;
         dataToUpdate.tenCloaiVthh = null;
@@ -358,6 +364,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         dataToUpdate.maLoKho = null;
         dataToUpdate.tenLoKho = null;
         dataToUpdate.tonKho = null;
+        dataToUpdate.namNhap = null;
         dataToUpdate.loaiVthh = null;
         dataToUpdate.cloaiVthh = null;
         dataToUpdate.tenCloaiVthh = null;
@@ -367,12 +374,14 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         dataToUpdate.maLoKho = null;
         dataToUpdate.tenLoKho = null;
         dataToUpdate.tonKho = null;
+        dataToUpdate.namNhap = null;
         dataToUpdate.loaiVthh = null;
         dataToUpdate.cloaiVthh = null;
         dataToUpdate.tenCloaiVthh = null;
         break;
       case 'loKho':
         dataToUpdate.tonKho = null;
+        dataToUpdate.namNhap = null;
         dataToUpdate.loaiVthh = null;
         dataToUpdate.cloaiVthh = null;
         dataToUpdate.tenCloaiVthh = null;
