@@ -219,9 +219,9 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
       // if (this.passData.qddccId) {
       //   this.getChiTietQD(this.passData.qddccId)
       // }
-      if (this.passData.cloaiVthh) {
-        this.getPPLayMau(this.passData.cloaiVthh)
-        this.getChiTietTieuChiCanKiemTra(this.passData.cloaiVthh)
+      if (this.passData.cloaiVthh || this.passData.loaiVthh) {
+        this.getPPLayMau(this.passData.cloaiVthh || this.passData.loaiVthh)
+        this.getChiTietTieuChiCanKiemTra(this.passData.cloaiVthh || this.passData.loaiVthh)
       }
     }
 
@@ -440,9 +440,9 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         keHoachDcDtlId: data.id
       })
     }
-    if (data.cloaiVthh) {
-      this.getPPLayMau(data.cloaiVthh)
-      this.getChiTietTieuChiCanKiemTra(data.cloaiVthh)
+    if (data.cloaiVthh || data.loaiVthh) {
+      this.getPPLayMau(data.cloaiVthh || data.loaiVthh)
+      this.getChiTietTieuChiCanKiemTra(data.cloaiVthh || data.loaiVthh)
     }
   }
 
