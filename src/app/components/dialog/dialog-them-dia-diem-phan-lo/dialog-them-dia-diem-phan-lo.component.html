@@ -69,6 +69,7 @@
       <th nzWidth="150px" class="text-left wrap"> Ngăn kho</th>
       <th nzWidth="150px" class="text-left wrap"> Lô Kho</th>
       <th class="text-left"> Chủng loại hàng DTQG</th>
+      <th class="text-center"> Năm nhập</th>
       <th class="text-left"><span style='color: red'>*</span> Mã đơn vị tài sản</th>
       <th class="text-center"> Tồn kho</th>
       <th class="text-center"><span style='color: red'>*</span> SL xuất bán <br>đề xuất</th>
@@ -105,6 +106,9 @@
       </th>
       <th class="text-left">
         <input nz-input [(ngModel)]="thongtinPhanLo.tenCloaiVthh" class="w-150" [disabled]="true"/>
+      </th>
+      <th class="text-center">
+        {{thongtinPhanLo.namNhap}}
       </th>
       <th class="text-left">
         <input nz-input [(ngModel)]="thongtinPhanLo.maDviTsan" class="w-150"/>
@@ -151,6 +155,7 @@
         <td class="text-left">{{ data.tenNganKho }}</td>
         <td class="text-left">{{ data.tenLoKho }}</td>
         <td class="text-left">{{ data.tenCloaiVthh }}</td>
+        <td class="text-center">{{ data.namNhap }}</td>
         <td class="text-left">{{ data.maDviTsan }}</td>
         <td class="text-right">{{ data.tonKho|number:globals.numberFormat:globals.locale }}</td>
         <td class="text-right">{{ data.soLuongDeXuat|number:globals.numberFormat:globals.locale }}</td>
@@ -198,6 +203,9 @@
         </td>
         <td class="text-left">
           <input nz-input [(ngModel)]="editCache[idx].data.tenCloaiVthh" class="w-150" [disabled]="true"/>
+        </td>
+        <td class="text-center">
+          {{ editCache[idx].data.namNhap}}
         </td>
         <td class="text-left">
           <input nz-input [(ngModel)]="editCache[idx].data.maDviTsan" class="w-150"/>
