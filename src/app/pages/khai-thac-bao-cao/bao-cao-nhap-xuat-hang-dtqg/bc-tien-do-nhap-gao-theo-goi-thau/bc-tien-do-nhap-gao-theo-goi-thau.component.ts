@@ -65,8 +65,7 @@ export class BcTienDoNhapGaoTheoGoiThauComponent extends Base2Component implemen
       this.spinner.show();
       let body = this.formData.value;
       body.typeFile = "xlsx";
-      // body.trangThai = "01";
-      // body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc
+      body.fileName = this.nameFile;
       await this.bcNhapXuatMuaBanHangDTQGService.baoCaoTienDoNhapHang(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
