@@ -297,6 +297,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
       tenLoaiVthh: data.tenLoaiVthh,
       tenCloaiVthh: data.tenCloaiVthh,
       moTaHangHoa: data.moTaHangHoa,
+      soHopDong: data.soHd,
       loaiQd: data.loaiQd,
     });
     let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi.includes(this.userInfo.MA_DVI));
