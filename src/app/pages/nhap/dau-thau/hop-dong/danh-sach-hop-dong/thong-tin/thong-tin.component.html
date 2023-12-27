@@ -884,14 +884,14 @@
               <input nz-input placeholder="Đơn vị tính" formControlName="donViTinh" readonly/>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="3" *ngIf="loaiVthh.startsWith('02')">
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="true"> Đơn giá gồm thuế (đ)</nz-form-label>
-              <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                               [nzParser]="globals.parser" nz-input formControlName="donGia" nzDisabled>
-              </nz-input-number>
-            </nz-form-item>
-          </div>
+<!--          <div nz-col [nzSpan]="3" *ngIf="loaiVthh.startsWith('02')">-->
+<!--            <nz-form-item>-->
+<!--              <nz-form-label [nzNoColon]="true"> Đơn giá gồm thuế (đ)</nz-form-label>-->
+<!--              <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter"-->
+<!--                               [nzParser]="globals.parser" nz-input formControlName="donGia" nzDisabled>-->
+<!--              </nz-input-number>-->
+<!--            </nz-form-item>-->
+<!--          </div>-->
           <div nz-col [nzSpan]="4">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true"> Thành tiền</nz-form-label>
@@ -938,14 +938,14 @@
       </form>
       <nz-card class="flex-card p-lr16 card-table">
         <nz-collapse nzAccordion>
-          <nz-collapse-panel [nzHeader]="'ĐỊA ĐIỂM CUNG CẤP HÀNG HÓA'" [nzActive]="true">
+          <nz-collapse-panel [nzHeader]="'ĐỊA ĐIỂM CUNG CẤP HÀNG DTQG'" [nzActive]="true">
             <ng-container *ngIf="loaiVthh.startsWith('02');else tempTableLt">
               <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered>
                 <thead>
                 <tr>
                   <th style="width: 2%;"></th>
                   <th class="text-center">Cục DTNN KV</th>
-                  <th class="text-center">Chi cục DTNN KV</th>
+                  <th class="text-center">Chi cục DTNN</th>
                   <th class="text-center">Số lượng nhập</th>
                   <th class="text-center">Đơn giá cụ thể<br/>có VAT được duyệt (đ)</th>
                   <th class="text-center">Thành tiền theo đơn giá cụ thể<br/>có VAT được duyệt (đ)</th>
@@ -958,9 +958,9 @@
                     <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
                     <td>{{cuc.tenDvi}}</td>
                     <td></td>
-                    <td>{{cuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{cuc.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{cuc.soLuong * cuc.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-right">{{cuc.soLuong | number : '1.2-2' : 'vi_VN'}}</td>
+                    <td class="text-right">{{cuc.donGiaVat | number : '1.2-2' : 'vi_VN'}}</td>
+                    <td class="text-right">{{cuc.soLuong * cuc.donGiaVat | number : '1.2-2' : 'vi_VN'}}</td>
                     <td  *ngIf="!isDisableForm()">
                       <a (click)="themMoiChiCuc()">
                         <i class="fa fa-pencil" title="Sửa"></i>
@@ -973,9 +973,9 @@
                         <td></td>
                         <td></td>
                         <td>{{ chiCuc.tenDvi }}</td>
-                        <td>{{ chiCuc.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
-                        <td>{{ cuc.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
-                        <td>{{ chiCuc.soLuong * cuc.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
+                        <td class="text-right">{{ chiCuc.soLuong | number : '1.2-2' : 'vi_VN' }}</td>
+                        <td class="text-right">{{ cuc.donGiaVat | number : '1.2-2' : 'vi_VN' }}</td>
+                        <td class="text-right">{{ chiCuc.soLuong * cuc.donGiaVat | number : '1.2-2' : 'vi_VN' }}</td>
                         <td  *ngIf="!isDisableForm()"></td>
                       </tr>
                     </ng-container>
@@ -1006,9 +1006,9 @@
                       </td>
                       <td colspan="3">{{chiCuc.tenDvi}}</td>
                       <td class="text-right text-bold">{{chiCuc.soLuong}}</td>
-                      <td class="text-right text-bold">{{chiCuc.donGia}}</td>
-                      <td class="text-right text-bold">{{chiCuc.soLuong * chiCuc.donGia * 1000 | number :
-                        '1.0-1' :
+                      <td class="text-right text-bold">{{chiCuc.donGiaVat}}</td>
+                      <td class="text-right text-bold">{{chiCuc.soLuong * chiCuc.donGiaVat * 1000 | number :
+                        '1.2-2' :
                         'vi_VN'}}</td>
                       <td *ngIf="!isDisableForm()"></td>
                     </tr>
@@ -1028,9 +1028,9 @@
                                            [(ngModel)]="rowItem[y].soLuong" [nzMin]="0">
                           </nz-input-number>
                         </td>
-                        <td class="text-right text-bold">{{chiCuc.donGia}}</td>
+                        <td class="text-right text-bold">{{chiCuc.donGiaVat}}</td>
                         <td class="text-right text-bold">{{rowItem[y].soLuong * chiCuc.donGia*1000 | number :
-                          '1.0-1' :
+                          '1.2-2' :
                           'vi_VN'}}</td>
                         <td *ngIf="!isDisableForm()">
                           <a (click)="themDiaDiemNhap(y)">
@@ -1047,9 +1047,9 @@
                         <td></td>
                         <td>{{diemKho.tenDvi}}</td>
                         <td>{{diemKho.diaDiemNhap}}</td>
-                        <td class="text-right">{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                          <td class="text-right text-bold">{{chiCuc.donGia}}</td>
-                        <td class="text-right">{{diemKho.soLuong * chiCuc.donGia *1000  | number : '1.0-1' :
+                        <td class="text-right">{{diemKho.soLuong | number : '1.2-2' : 'vi_VN'}}</td>
+                          <td class="text-right text-bold">{{chiCuc.donGiaVat}}</td>
+                        <td class="text-right">{{diemKho.soLuong * chiCuc.donGiaVat *1000  | number : '1.2-2' :
                           'vi_VN'}}
                         </td>
                         <td *ngIf="!isDisableForm()">
@@ -1076,9 +1076,9 @@
                                              [(ngModel)]="rowItemEdit[z].soLuong" [nzMin]="0">
                             </nz-input-number>
                           </td>
-                          <td class="text-right text-bold">{{chiCuc.donGia}}</td>
-                          <td class="text-right text-bold">{{rowItemEdit[z].soLuong * chiCuc.donGia *1000| number :
-                            '1.0-1' :
+                          <td class="text-right text-bold">{{chiCuc.donGiaVat}}</td>
+                          <td class="text-right text-bold">{{rowItemEdit[z].soLuong * chiCuc.donGiaVat *1000| number :
+                            '1.2-2' :
                             'vi_VN'}}</td>
                           <td *ngIf="!isDisableForm()">
                             <a (click)="saveEdit(y, z)">
@@ -1097,11 +1097,11 @@
                   <td></td>
                   <td colspan="3" class="text-right blue-text">Tổng
                   </td>
-                  <td class="text-right blue-text">{{ calcTongSl() | number : '1.0-1' :
+                  <td class="text-right blue-text">{{ calcTongSl() | number : '1.2-2' :
                     'vi_VN' }}</td>
                   <td></td>
                   <td class="text-right blue-text">{{ calcTongThanhTien() | number :
-                    '1.0-1' :
+                    '1.2-2' :
                     'vi_VN'}}</td>
                   <td *ngIf="!isDisableForm()"></td>
                 </tr>
@@ -1127,7 +1127,7 @@
                   <th nzWidth="150px" class="text-center multi-line">Đơn giá</th>
                   <th nzWidth="150px" class="text-center multi-line">Mức phạt</th>
                   <th nzWidth="150px" class="text-center multi-line">Thành tiền <br/>(đ)</th>
-                  <th nzWidth="80px" class="text-center" *ngIf="!isDisableForm()">Hành động</th>
+                  <th nzWidth="80px" class="text-center">Hành động</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -1143,8 +1143,8 @@
                     <td class="text-center">{{formData.value.donViTinh}}</td>
                     <td class="text-right">{{cuc.donGiaVat | number : '1.2-2' : 'vi_VN'}}</td>
                     <td class="text-right">{{cuc.mucPhat | number : '1.0-99' : 'vi_VN'}}</td>
-                    <td class="text-right">{{cuc.thanhTienTinhPhat | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td  *ngIf="!isDisableForm()">
+                    <td class="text-right">{{cuc.thanhTienTinhPhat | number : '1.2-2' : 'vi_VN'}}</td>
+                    <td>
                       <a (click)="editRowTp(i)">
                         <i class="fa fa-pencil" title="Sửa"></i>
                       </a>

@@ -97,6 +97,8 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
         diaDiemLayMau: [null, [Validators.required]],
         loaiVthh: [null],
         cloaiVthh: [null],
+        donViTinh: [],
+        maDviTsan: [],
         namNhap: [null],
         maDiaDiem: [null, [Validators.required]],
         maDiemKho: [null],
@@ -468,7 +470,9 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
           tenCloaiVthh: item.tenCloaiVthh,
           ngayXuatLayMau: item.ngayXuat,
           slTonKho: item.slTonKho,
-          namNhap: item.namNhap
+          namNhap: item.namNhap,
+          donViTinh: item.donViTinh,
+          maDviTsan: item.maDviTsan,
         });
         await this.loadPhuongPhapLayMau(item.cloaiVthh);
         await this.loadChiTieuCl(item.cloaiVthh);

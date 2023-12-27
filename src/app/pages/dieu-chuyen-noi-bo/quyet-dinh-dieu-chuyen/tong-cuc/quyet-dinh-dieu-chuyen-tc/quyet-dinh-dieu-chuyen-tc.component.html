@@ -216,7 +216,7 @@
               <td>{{ data.soQdinhNhapCuc }}</td>
               <td>{{ data.tenTrangThai }}</td>
               <td class="text-center">
-                <a *ngIf="data.trangThai === STATUS.BAN_HANH && userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM')"
+                <a *ngIf="(data.trangThai === STATUS.BAN_HANH || data.trangThai === STATUS.TU_CHOI_LDTC) && userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM')"
                   (click)="redirectDetail(data.id, true)">
                   <i class="fa fa-eye" title="Xem chi tiết"></i>
                 </a>
@@ -224,7 +224,7 @@
                   (click)="redirectDetail(data.id, true)">
                   <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
                 </a>
-                <a *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDV || data.trangThai == STATUS.TU_CHOI_LDTC) && userService.isAccessPermisson('DCNB_QUYETDINHDC_SUA') && isTongCuc()"
+                <a *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDV) && userService.isAccessPermisson('DCNB_QUYETDINHDC_SUA') && isTongCuc()"
                   (click)="redirectDetail(data.id, false)">
                   <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
