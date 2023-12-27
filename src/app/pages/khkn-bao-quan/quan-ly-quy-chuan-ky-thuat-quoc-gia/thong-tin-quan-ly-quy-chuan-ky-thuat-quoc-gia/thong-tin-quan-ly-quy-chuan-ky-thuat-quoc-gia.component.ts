@@ -717,7 +717,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     }
     if (idx > -1) {
       if ( !this.formData.value.soVanBanSuaDoi && !this.formData.value.soVanBanThayThe) {
-        if (listCtEdit && listCtEdit.length == 1) {
+        if (listCtEdit && listCtEdit.length != 1) {
             this.notification.warning(MESSAGE.WARNING, 'Vui lòng không nhập trùng chỉ tiêu');
             return;
         }

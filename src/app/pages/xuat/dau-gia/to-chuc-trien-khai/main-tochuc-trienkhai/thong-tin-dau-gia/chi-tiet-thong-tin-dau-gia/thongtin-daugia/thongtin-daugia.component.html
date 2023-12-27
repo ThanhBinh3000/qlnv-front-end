@@ -79,14 +79,21 @@
                           </nz-form-control>
                         </nz-form-item>
                       </div>
-                      <div nz-col [nzSpan]="24">
-                        <nz-form-item class="form-item display-block">
-                          <nz-form-label nzRequired [nzNoColon]="true">
-                            Tài khoản ngân hàng của tổ chức bán đấu giá
+                      <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                          <nz-form-label nzRequired [nzNoColon]="true"> Tài khoản ngân hàng của tổ chức bán đấu giá
                           </nz-form-label>
                           <nz-form-control nz-col [nzErrorTip]="error">
-                            <textarea nz-input [rows]="3" formControlName="taiKhoanToChuc" [readonly]="isView">
-                            </textarea>
+                            <input nz-input formControlName="taiKhoanToChuc" [readonly]="isView"/>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                          <nz-form-label [nzNoColon]="true"> Số QĐ phê duyệt KQ lựa chọn đơn vị tổ chức BĐG
+                          </nz-form-label>
+                          <nz-form-control nz-col>
+                            <input nz-input formControlName="qdLcTcBdg" [readonly]="isView"/>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -129,12 +136,24 @@
                   <nz-collapse-panel [nzHeader]="'Thông tin bán đấu giá'" [nzActive]="true">
                     <div nz-row [nzGutter]="[24, 16]">
                       <div nz-col [nzSpan]="6">
-                        <nz-form-item>
+                        <nz-form-item class="form-item">
                           <nz-form-label nzRequired [nzNoColon]="true"> Thời hạn đăng ký tham gia đấu giá
                           </nz-form-label>
                           <nz-form-control nz-col [nzErrorTip]="error">
-                            <nz-range-picker formControlName="tgianDky" nzFormat="dd/MM/yyyy" [nzDisabled]="isView">
-                            </nz-range-picker>
+                            <div nz-row [nzGutter]="24">
+                              <div nz-col [nzSpan]="12" class="cus-start-date">
+                                <nz-date-picker [nzDisabledDate]="disabledTgianDangKyTu" nzFormat="dd/MM/yyyy"
+                                                formControlName="tgianDkyTu" nzPlaceHolder="Ngày bắt đầu"
+                                                [nzDisabled]="isView">
+                                </nz-date-picker>
+                              </div>
+                              <div nz-col [nzSpan]="12" class="cus-end-date">
+                                <nz-date-picker [nzDisabledDate]="disabledTgianDangKyDen" nzFormat="dd/MM/yyyy"
+                                                formControlName="tgianDkyDen" nzPlaceHolder="Ngày kết thúc"
+                                                [nzDisabled]="isView">
+                                </nz-date-picker>
+                              </div>
+                            </div>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -200,11 +219,23 @@
                         </nz-form-item>
                       </div>
                       <div nz-col [nzSpan]="6">
-                        <nz-form-item>
+                        <nz-form-item class="form-item">
                           <nz-form-label nzRequired [nzNoColon]="true"> Thời hạn tổ chức xem tài sản</nz-form-label>
                           <nz-form-control nz-col [nzErrorTip]="error">
-                            <nz-range-picker formControlName="tgianXem" nzFormat="dd/MM/yyyy" [nzDisabled]="isView">
-                            </nz-range-picker>
+                            <div nz-row [nzGutter]="24">
+                              <div nz-col [nzSpan]="12" class="cus-start-date">
+                                <nz-date-picker [nzDisabledDate]="disabledTgianXemtaiSanTu" nzFormat="dd/MM/yyyy"
+                                                formControlName="tgianXemTu" nzPlaceHolder="Ngày bắt đầu"
+                                                [nzDisabled]="isView">
+                                </nz-date-picker>
+                              </div>
+                              <div nz-col [nzSpan]="12" class="cus-end-date">
+                                <nz-date-picker [nzDisabledDate]="disabledTgianXemtaiSanDen" nzFormat="dd/MM/yyyy"
+                                                formControlName="tgianXemDen" nzPlaceHolder="Ngày kết thúc"
+                                                [nzDisabled]="isView">
+                                </nz-date-picker>
+                              </div>
+                            </div>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -225,11 +256,23 @@
                         </nz-form-item>
                       </div>
                       <div nz-col [nzSpan]="6">
-                        <nz-form-item>
+                        <nz-form-item class="form-item">
                           <nz-form-label nzRequired [nzNoColon]="true"> Thời hạn nộp tiền đặt trước</nz-form-label>
                           <nz-form-control nz-col [nzErrorTip]="error">
-                            <nz-range-picker formControlName="tgianNopTien" nzFormat="dd/MM/yyyy" [nzDisabled]="isView">
-                            </nz-range-picker>
+                            <div nz-row [nzGutter]="24">
+                              <div nz-col [nzSpan]="12" class="cus-start-date">
+                                <nz-date-picker [nzDisabledDate]="disabledTgianNopTienTu" nzFormat="dd/MM/yyyy"
+                                                formControlName="tgianNopTienTu" nzPlaceHolder="Ngày bắt đầu"
+                                                [nzDisabled]="isView">
+                                </nz-date-picker>
+                              </div>
+                              <div nz-col [nzSpan]="12" class="cus-end-date">
+                                <nz-date-picker [nzDisabledDate]="disabledTgianNopTienDen" nzFormat="dd/MM/yyyy"
+                                                formControlName="tgianNopTienDen" nzPlaceHolder="Ngày kết thúc"
+                                                [nzDisabled]="isView">
+                                </nz-date-picker>
+                              </div>
+                            </div>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -282,11 +325,25 @@
                         </nz-form-item>
                       </div>
                       <div nz-col [nzSpan]="6">
-                        <nz-form-item>
+                        <nz-form-item class="form-item">
                           <nz-form-label nzRequired [nzNoColon]="true"> Thời gian tổ chức cuộc đấu giá</nz-form-label>
                           <nz-form-control nz-col [nzErrorTip]="error">
-                            <nz-range-picker formControlName="tgianDauGia" nzFormat="dd/MM/yyyy" [nzDisabled]="isView">
-                            </nz-range-picker>
+                            <div nz-row [nzGutter]="24">
+                              <div nz-col [nzSpan]="12" class="cus-start-date">
+                                <nz-date-picker [nzDisabledDate]="disabledTgianDauGiaTu"
+                                                formControlName="tgianDauGiaTu" nzShowTime
+                                                nzFormat="dd/MM/yyyy HH:mm:ss" nzPlaceHolder="Ngày bắt đầu"
+                                                [nzDisabled]="isView">
+                                </nz-date-picker>
+                              </div>
+                              <div nz-col [nzSpan]="12" class="cus-end-date">
+                                <nz-date-picker [nzDisabledDate]="disabledTgianDauGiaDen"
+                                                formControlName="tgianDauGiaDen" nzShowTime
+                                                nzFormat="dd/MM/yyyy HH:mm:ss" nzPlaceHolder="Ngày kết thúc"
+                                                [nzDisabled]="isView">
+                                </nz-date-picker>
+                              </div>
+                            </div>
                           </nz-form-control>
                         </nz-form-item>
                       </div>

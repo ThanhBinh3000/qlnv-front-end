@@ -162,6 +162,7 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
         this.itemRowNguon
       ];
       this.clearItemRow();
+      this.tongRowNguon()
     }
   }
 
@@ -231,7 +232,45 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
         + this.nvl(this.itemRowNguonEdit[index].muaBsungLuyKe) + this.nvl(this.itemRowNguonEdit[index].khacLuyKe);
       this.dataNguonNsnn[index] = this.itemRowNguonEdit[index];
       this.dataNguonNsnn[index].edit = false;
+      this.tongRowNguon()
     }
+  }
+
+  tongRowNguon () {
+    let tongTrongKy = 0;
+    let tongLuyKe = 0;
+    let muaTangTrongKy = 0;
+    let muaBuTrongKy = 0;
+    let muaBsungTrongKy = 0;
+    let khacTrongKy = 0;
+    let muaTangLuyKe = 0;
+    let muaBuLuyKe = 0;
+    let muaBsungLuyKe = 0;
+    let khacLuyKe = 0;
+    this.dataNguonNsnn.forEach(item => {
+      if (item.dmLevel == 2) {
+        tongTrongKy += this.nvl(item.tongTrongKy);
+        tongLuyKe += this.nvl(item.tongLuyKe);
+        muaTangTrongKy += this.nvl(item.muaTangTrongKy);
+        muaBuTrongKy += this.nvl(item.muaBuTrongKy);
+        muaBsungTrongKy += this.nvl(item.muaBsungTrongKy);
+        khacTrongKy += this.nvl(item.khacTrongKy);
+        muaTangLuyKe += this.nvl(item.muaTangLuyKe);
+        muaBuLuyKe += this.nvl(item.muaBuLuyKe);
+        muaBsungLuyKe += this.nvl(item.muaBsungLuyKe);
+        khacLuyKe += this.nvl(item.khacLuyKe);
+      }
+    })
+    this.dataNguonNsnn[0].tongTrongKy = tongTrongKy
+    this.dataNguonNsnn[0].tongLuyKe = tongLuyKe
+    this.dataNguonNsnn[0].muaTangTrongKy = muaTangTrongKy
+    this.dataNguonNsnn[0].muaBuTrongKy = muaBuTrongKy
+    this.dataNguonNsnn[0].muaBsungTrongKy = muaBsungTrongKy
+    this.dataNguonNsnn[0].khacTrongKy = khacTrongKy
+    this.dataNguonNsnn[0].muaTangLuyKe = muaTangLuyKe
+    this.dataNguonNsnn[0].muaBuLuyKe = muaBuLuyKe
+    this.dataNguonNsnn[0].muaBsungLuyKe = muaBsungLuyKe
+    this.dataNguonNsnn[0].khacLuyKe = khacLuyKe
   }
 
   cancelEditRowNguon(index: number) {
@@ -345,14 +384,14 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
     let sum = 0
     if (this.dataNguonNsnn) {
       this.dataNguonNsnn.forEach(item => {
-        if (item.dmLevel == 2) {
+        if (item.dmLevel == 1) {
           sum += this.nvl(item.tongTrongKy);
         }
       })
     }
     if (this.dataNguonNgoaiNsnn) {
       this.dataNguonNgoaiNsnn.forEach(item => {
-        if (item.dmLevel == 2) {
+        if (item.dmLevel == 1) {
           sum += this.nvl(item.tongTrongKy);
         }
       })
@@ -364,14 +403,14 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
     let sum = 0
     if (this.dataNguonNsnn) {
       this.dataNguonNsnn.forEach(item => {
-        if (item.dmLevel == 2) {
+        if (item.dmLevel == 1) {
           sum += this.nvl(item.tongLuyKe);
         }
       })
     }
     if (this.dataNguonNgoaiNsnn) {
       this.dataNguonNgoaiNsnn.forEach(item => {
-        if (item.dmLevel == 2) {
+        if (item.dmLevel == 1) {
           sum += this.nvl(item.tongLuyKe);
         }
       })

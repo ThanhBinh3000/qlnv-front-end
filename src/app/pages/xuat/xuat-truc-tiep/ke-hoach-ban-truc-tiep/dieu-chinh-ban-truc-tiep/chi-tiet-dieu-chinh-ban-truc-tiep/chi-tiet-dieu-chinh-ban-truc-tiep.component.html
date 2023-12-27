@@ -89,7 +89,8 @@
                 <nz-form-control nz-col [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfter="{{maConVan}}">
                     <nz-input-number formControlName="soCongVan" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-                                     [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isView">
+                                     [nzStep]="1" [nzSize]="'small'"
+                                     [nzDisabled]="formData.value.trangThai === STATUS.BAN_HANH">
                     </nz-input-number>
                   </nz-input-group>
                 </nz-form-control>
@@ -99,15 +100,16 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Ngày tạo công văn/tờ trình</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
-                  <nz-date-picker formControlName="ngayTaoCongVan" nzFormat="dd/MM/yyyy" [nzDisabled]="isView">
+                  <nz-date-picker formControlName="ngayTaoCongVan" nzFormat="dd/MM/yyyy"
+                                  [nzDisabled]="formData.value.trangThai === STATUS.BAN_HANH">
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="12">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true">Trích yếu</nz-form-label>
-                <nz-form-control nz-col>
+                <nz-form-label nzRequired [nzNoColon]="true">Trích yếu</nz-form-label>
+                <nz-form-control nz-col [nzErrorTip]="error">
                   <input nz-input formControlName="trichYeu" [readonly]="isView"/>
                 </nz-form-control>
               </nz-form-item>
@@ -183,7 +185,7 @@
                 <nz-form-control nz-col>
                   <nz-input-group nzAddOnAfter="{{maHauTo}}">
                     <nz-input-number formControlName="soQdDc" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1"
-                                     [nzSize]="'small'" [nzDisabled]="isView">
+                                     [nzSize]="'small'" [nzDisabled]="formData.value.trangThai === STATUS.BAN_HANH">
                     </nz-input-number>
                   </nz-input-group>
                 </nz-form-control>
@@ -193,7 +195,8 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Ngày ký QĐ điều chỉnh</nz-form-label>
                 <nz-form-control nz-col>
-                  <nz-date-picker formControlName="ngayKyDc" nzFormat="dd/MM/yyyy" [nzDisabled]="isView">
+                  <nz-date-picker formControlName="ngayKyDc" nzFormat="dd/MM/yyyy"
+                                  [nzDisabled]="formData.value.trangThai === STATUS.BAN_HANH">
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -202,7 +205,8 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Ngày hiệu lực của QĐ điều chỉnh</nz-form-label>
                 <nz-form-control nz-col>
-                  <nz-date-picker formControlName="ngayHlucDc" nzFormat="dd/MM/yyyy" [nzDisabled]="isView">
+                  <nz-date-picker formControlName="ngayHlucDc" nzFormat="dd/MM/yyyy"
+                                  [nzDisabled]="formData.value.trangThai === STATUS.BAN_HANH">
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -211,7 +215,8 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Trích yếu</nz-form-label>
                 <nz-form-control nz-col>
-                  <input nz-input formControlName="trichYeuDieuChinh" [readonly]="isView"/>
+                  <input nz-input formControlName="trichYeuDieuChinh"
+                         [readonly]="formData.value.trangThai === STATUS.BAN_HANH"/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -219,7 +224,8 @@
               <nz-form-item class="form-item display-block">
                 <nz-form-label [nzNoColon]="true"> Nội dung quyết định điều chỉnh</nz-form-label>
                 <nz-form-control nz-col>
-                  <textarea nz-input [rows]="3" formControlName="noiDungDieuChinh" [readonly]="isView"></textarea>
+                  <textarea nz-input [rows]="3" formControlName="noiDungDieuChinh"
+                            [readonly]="formData.value.trangThai === STATUS.BAN_HANH"></textarea>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -235,7 +241,8 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Căn cứ pháp lý</nz-form-label>
                 <div class="list-file">
-                  <file-list [data]="canCuPhapLy" [isCanCuPL]="true" [isViewDetail]="isView"></file-list>
+                  <file-list [data]="canCuPhapLy" [isCanCuPL]="true"
+                             [isViewDetail]="formData.value.trangThai === STATUS.BAN_HANH"></file-list>
                 </div>
               </nz-form-item>
             </div>

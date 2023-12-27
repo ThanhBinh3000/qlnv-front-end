@@ -17,6 +17,7 @@ import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {THONG_TIN_BAN_TRUC_TIEP} from "../../../../../../constants/status";
 import {AMOUNT_ONE_DECIMAL} from "../../../../../../Utility/utils";
+import {cloneDeep} from 'lodash';
 
 @Component({
   selector: 'app-them-moi-thong-tin-ban-truc-tiep',
@@ -32,10 +33,14 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   LOAI_HANG_DTQG = LOAI_HANG_DTQG
   amount = {...AMOUNT_ONE_DECIMAL};
   TRUC_TIEP = THONG_TIN_BAN_TRUC_TIEP
+  templateNameVt = "Thông tin bán trực tiếp chào giá vật tư";
+  templateNameLt = "Thông tin bán trực tiếp chào giá lương thực";
   listOfData: any[] = [];
   showFromTT: boolean = false;
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
+  listToChucCaNhan: any[] = [];
+  filteredListToChucCaNhan: any[] = [];
   idDviDtl: number;
 
   constructor(
@@ -132,11 +137,50 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       this.dataTable = data.children;
       await this.selectRow(this.dataTable.flatMap(item => item.children)[0]);
       this.fileDinhKem = data.fileDinhKem;
+      await this.loadToChucCaNhan();
     } catch (e) {
       console.error('Error:', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
+    }
+  }
+
+  async loadToChucCaNhan() {
+    this.listToChucCaNhan = [];
+    let res = await this.chaoGiaMuaLeUyQuyenService.getToChucCaNhan();
+    if (res.msg == MESSAGE.SUCCESS) {
+      const uniqueKeyMap = new Map();
+      for (const obj of res.data) {
+        const key = `${obj.tochucCanhan}${obj.mst}`;
+        if (uniqueKeyMap.has(key)) {
+          const existingObj = uniqueKeyMap.get(key);
+          existingObj.someProperty += obj.someProperty;
+        } else {
+          uniqueKeyMap.set(key, obj);
+        }
+      }
+      this.listToChucCaNhan = Array.from(uniqueKeyMap.values());
+      this.filteredListToChucCaNhan = cloneDeep(this.listToChucCaNhan)
+    }
+  }
+
+  filterToChucCaNhan(event: any): void {
+    const keyword = event.target.value;
+    this.filteredListToChucCaNhan = this.listToChucCaNhan.filter(
+      item => item.tochucCanhan.toLowerCase().includes(keyword.toLowerCase())
+    );
+  }
+
+  changeToChucCaNhan(event?: any, index?: number) {
+    if (event.nzValue !== '') {
+      const selectedToChuc = this.listToChucCaNhan.find(item => item.tochucCanhan === event.nzValue);
+      if (selectedToChuc) {
+        const target = index >= 0 ? this.dataEdit[index].data : this.rowItem;
+        target.mst = selectedToChuc.mst;
+        target.diaDiemChaoGia = selectedToChuc.diaDiemChaoGia;
+        target.sdt = selectedToChuc.sdt;
+      }
     }
   }
 
@@ -263,9 +307,17 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
 
   validateSoLuong(): boolean {
     let isValid = true;
-    if (!this.rowItem.tochucCanhan || !this.rowItem.mst || !this.rowItem.diaDiemChaoGia || !this.rowItem.sdt || !this.rowItem.ngayChaoGia || !this.rowItem.soLuong || !this.rowItem.donGia) {
+    if (!this.rowItem.tochucCanhan || !this.rowItem.mst || !this.rowItem.sdt || !this.rowItem.ngayChaoGia || !this.rowItem.soLuong || !this.rowItem.donGia) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
       isValid = false;
+      return isValid;
+    }
+    const tgianMoKho = new Date(this.formData.value.tgianDkienTu);
+    const tgianDongKho = new Date(this.formData.value.tgianDkienDen);
+    const tgianChaoGia = new Date(this.rowItem.ngayChaoGia);
+    if (tgianChaoGia < tgianMoKho || tgianChaoGia > tgianDongKho) {
+      this.notification.error(MESSAGE.WARNING, 'Ngày chào giá phải lớn hơn thời gian mở cửa kho bán trực tiếp và nhỏ hơn thời hạn bán trực tiếp');
+      isValid = false
     }
     for (const data of this.dataTable) {
       for (const item of data.children) {

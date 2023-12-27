@@ -303,7 +303,6 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
           };
           this.dsPpLayMau.push(option);
         });
-        console.log("this.dsPpLayMau", this.dsPpLayMau)
         const xhPhieuKnclDtl = this.formData.value.xhPhieuKnclDtl.filter(f => f.type !== BBLM_LOAI_DOI_TUONG.PHUONG_PHAP_LAY_MAU).concat(this.dsPpLayMau)
         this.formData.patchValue({ xhPhieuKnclDtl })
       }
@@ -532,8 +531,8 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         } else if (res.data) {
           let data = res.data;
           data.xhBienBanLayMauDtl.forEach(s => {
-            delete s.id,
-              s.danhGia = 'Đạt';
+            delete s.id;
+            // s.danhGia = 'Đạt';
           });
           this.formData.patchValue({
             idBbLayMau: data.id,

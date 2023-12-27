@@ -316,14 +316,14 @@
                 <td class="text-right font-weight-bold"> {{calcTong(data.tenDvi) | number : '1.0-1' : 'vi-VN'}}</td>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td *ngIf="!isMuaToiDa"></td>
-                <td *ngIf="!isMuaToiDa"></td>
-                <td></td>
-                <td></td>
-                <td *ngIf="isMuaToiDa"></td>
-                <td *ngIf="isMuaToiDa"></td>
+                <td [class]="data.giaCucDnMin && data.giaCucDnMax &&  data.giaCucDnMin == data.giaCucDnMax ? 'text-right font-weight-bold' : 'text-center font-weight-bold'">{{ data.giaCucDnMin && data.giaCucDnMax ? (data.giaCucDnMin == data.giaCucDnMax ? (data.giaCucDnMin | number : '1.0-1' : 'vi_VN') : ((data.giaCucDnMin | number : '1.0-1' : 'vi_VN') + ' - ' + (data.giaCucDnMax | number : '1.0-1' : 'vi_VN'))) : ''  }}</td>
+                <td [class]="data.giaCucDnMinVat && data.giaCucDnMaxVat &&  data.giaCucDnMinVat == data.giaCucDnMaxVat ? 'text-right font-weight-bold' : 'text-center font-weight-bold'">{{ data.giaCucDnMinVat && data.giaCucDnMaxVat ? (data.giaCucDnMinVat == data.giaCucDnMaxVat ? (data.giaCucDnMinVat | number : '1.0-1' : 'vi_VN') : ((data.giaCucDnMinVat | number : '1.0-1' : 'vi_VN') + ' - ' + (data.giaCucDnMaxVat | number : '1.0-1' : 'vi_VN'))) : '' }}</td>
+                <td *ngIf="!isMuaToiDa" [class]="data.giaQdBtcMin && data.giaQdBtcMax &&  data.giaQdBtcMin == data.giaQdBtcMax ? 'text-right font-weight-bold' : 'text-center font-weight-bold'">{{ data.giaQdBtcMin && data.giaQdBtcMax ? (data.giaQdBtcMin == data.giaQdBtcMax ? (data.giaQdBtcMin | number : '1.0-1' : 'vi_VN') : ((data.giaQdBtcMin | number : '1.0-1' : 'vi_VN') + ' - ' + (data.giaQdBtcMax | number : '1.0-1' : 'vi_VN'))) : '' }}</td>
+                <td *ngIf="!isMuaToiDa" [class]="data.giaQdBtcMinVat && data.giaQdBtcMaxVat &&  data.giaQdBtcMinVat == data.giaQdBtcMaxVat ? 'text-right font-weight-bold' : 'text-center font-weight-bold'">{{ data.giaQdBtcMinVat && data.giaQdBtcMaxVat ? (data.giaQdBtcMinVat == data.giaQdBtcMaxVat ? (data.giaQdBtcMinVat | number : '1.0-1' : 'vi_VN') : ((data.giaQdBtcMinVat | number : '1.0-1' : 'vi_VN') + ' - ' + (data.giaQdBtcMaxVat | number : '1.0-1' : 'vi_VN'))) : '' }}</td>
+                <td  [class]="data.giaQdTcdtMin && data.giaQdTcdtMax &&  data.giaQdTcdtMin == data.giaQdTcdtMax ? 'text-right font-weight-bold' : 'text-center font-weight-bold'">{{ data.giaQdTcdtMin && data.giaQdTcdtMax ? (data.giaQdTcdtMin == data.giaQdTcdtMax ? (data.giaQdTcdtMin | number : '1.0-1' : 'vi_VN') : ((data.giaQdTcdtMin | number : '1.0-1' : 'vi_VN') + ' - ' + (data.giaQdTcdtMax | number : '1.0-1' : 'vi_VN'))) : '' }}</td>
+                <td  [class]="data.giaQdTcdtMinVat && data.giaQdTcdtMaxVat &&  data.giaQdTcdtMinVat == data.giaQdTcdtMaxVat ? 'text-right font-weight-bold' : 'text-center font-weight-bold'">{{ data.giaQdTcdtMinVat && data.giaQdTcdtMaxVat ? (data.giaQdTcdtMinVat == data.giaQdTcdtMaxVat ? (data.giaQdTcdtMinVat | number : '1.0-1' : 'vi_VN') : ((data.giaQdTcdtMinVat | number : '1.0-1' : 'vi_VN') + ' - ' + (data.giaQdTcdtMaxVat | number : '1.0-1' : 'vi_VN'))) : '' }}</td>
+                <td *ngIf="isMuaToiDa" [class]="data.giaQdBtcMin && data.giaQdBtcMax &&  data.giaQdBtcMin == data.giaQdBtcMax ? 'text-right font-weight-bold' : 'text-center font-weight-bold'">{{ data.giaQdBtcMin && data.giaQdBtcMax ? (data.giaQdBtcMin == data.giaQdBtcMax ? (data.giaQdBtcMin | number : '1.0-1' : 'vi_VN') : ((data.giaQdBtcMin | number : '1.0-1' : 'vi_VN') + ' - ' + (data.giaQdBtcMax | number : '1.0-1' : 'vi_VN'))) : '' }}</td>
+                <td *ngIf="isMuaToiDa" [class]="data.giaQdBtcMinVat && data.giaQdBtcMaxVat &&  data.giaQdBtcMinVat == data.giaQdBtcMaxVat ? 'text-right font-weight-bold' : 'text-center font-weight-bold'">{{ data.giaQdBtcMinVat && data.giaQdBtcMaxVat ? (data.giaQdBtcMinVat == data.giaQdBtcMaxVat ? (data.giaQdBtcMinVat | number : '1.0-1' : 'vi_VN') : ((data.giaQdBtcMinVat | number : '1.0-1' : 'vi_VN') + ' - ' + (data.giaQdBtcMaxVat | number : '1.0-1' : 'vi_VN'))) : '' }}</td>
               </tr>
               <ng-container *ngIf="expandSet.has(data.idVirtual)">
                 <ng-container *ngFor="let item of data.children, let y = index">
@@ -416,10 +416,10 @@
                 <td></td>
                 <td class="text-right font-weight-bold"> {{calcTong(data.tenDvi) | number : '1.0-1' : 'vi-VN'}}</td>
                 <td></td>
-                <td></td>
-                <td *ngIf="!isMuaToiDa"></td>
-                <td></td>
-                <td *ngIf="isMuaToiDa"></td>
+                <td [class]="data.giaCucDnMin && data.giaCucDnMax &&  data.giaCucDnMin == data.giaCucDnMax ? 'text-right font-weight-bold' : 'text-center font-weight-bold'">{{ data.giaCucDnMin && data.giaCucDnMax ? (data.giaCucDnMin == data.giaCucDnMax ? (data.giaCucDnMin | number : '1.0-1' : 'vi_VN') : ((data.giaCucDnMin | number : '1.0-1' : 'vi_VN') + ' - ' + (data.giaCucDnMax | number : '1.0-1' : 'vi_VN'))) : ''  }}</td>
+                <td *ngIf="!isMuaToiDa" [class]="data.giaQdBtcMin && data.giaQdBtcMax &&  data.giaQdBtcMin == data.giaQdBtcMax ? 'text-right font-weight-bold' : 'text-center font-weight-bold'">{{ data.giaQdBtcMin && data.giaQdBtcMax ? (data.giaQdBtcMin == data.giaQdBtcMax ? (data.giaQdBtcMin | number : '1.0-1' : 'vi_VN') : ((data.giaQdBtcMin | number : '1.0-1' : 'vi_VN') + ' - ' + (data.giaQdBtcMax | number : '1.0-1' : 'vi_VN'))) : '' }}</td>
+                <td  [class]="data.giaQdTcdtMin && data.giaQdTcdtMax &&  data.giaQdTcdtMin == data.giaQdTcdtMax ? 'text-right font-weight-bold' : 'text-center font-weight-bold'">{{ data.giaQdTcdtMin && data.giaQdTcdtMax ? (data.giaQdTcdtMin == data.giaQdTcdtMax ? (data.giaQdTcdtMin | number : '1.0-1' : 'vi_VN') : ((data.giaQdTcdtMin | number : '1.0-1' : 'vi_VN') + ' - ' + (data.giaQdTcdtMax | number : '1.0-1' : 'vi_VN'))) : '' }}</td>
+                <td *ngIf="isMuaToiDa" [class]="data.giaQdBtcMin && data.giaQdBtcMax &&  data.giaQdBtcMin == data.giaQdBtcMax ? 'text-right font-weight-bold' : 'text-center font-weight-bold'">{{ data.giaQdBtcMin && data.giaQdBtcMax ? (data.giaQdBtcMin == data.giaQdBtcMax ? (data.giaQdBtcMin | number : '1.0-1' : 'vi_VN') : ((data.giaQdBtcMin | number : '1.0-1' : 'vi_VN') + ' - ' + (data.giaQdBtcMax | number : '1.0-1' : 'vi_VN'))) : '' }}</td>
               </tr>
               <ng-container *ngIf="expandSet.has(data.idVirtual)">
                 <ng-container *ngFor="let item of data.children, let y = index">

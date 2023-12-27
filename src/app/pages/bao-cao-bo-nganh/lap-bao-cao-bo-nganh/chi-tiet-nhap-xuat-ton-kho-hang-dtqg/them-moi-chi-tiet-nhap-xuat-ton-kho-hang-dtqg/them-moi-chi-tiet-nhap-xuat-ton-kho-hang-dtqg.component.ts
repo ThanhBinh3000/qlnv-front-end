@@ -120,6 +120,7 @@ export class ThemMoiChiTietNhapXuatTonKhoHangDtqgComponent extends Base2Componen
     await Promise.all([
       this.getUserInfor(),
       // this.loadDsVthh(),
+      this.loadDsChiCuc(),
       this.loadDsDonVi(),
       this.layTatCaDonViByLevel()
     ]);

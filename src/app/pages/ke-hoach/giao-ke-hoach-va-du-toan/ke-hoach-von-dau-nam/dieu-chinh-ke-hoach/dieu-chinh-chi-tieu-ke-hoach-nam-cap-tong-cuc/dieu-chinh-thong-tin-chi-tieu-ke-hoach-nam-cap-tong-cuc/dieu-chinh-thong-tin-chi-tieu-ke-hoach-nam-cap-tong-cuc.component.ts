@@ -227,7 +227,9 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.qdTCDT = this.userInfo.MA_QD;
       this.formData.patchValue({
         tenDonVi: this.userInfo.TEN_DVI,
-        cap: this.userInfo.CAP_DVI
+        cap: this.userInfo.CAP_DVI,
+        trangThai: this.isTongCuc() ? STATUS.DANG_NHAP_DU_LIEU : STATUS.DU_THAO,
+        tenTrangThai: this.isTongCuc() ? 'Đang nhập dữ liệu' : 'Dự thảo',
       })
     }
 
@@ -242,7 +244,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       await this.loadThongTinChiTieuKeHoachNam(this.id);
     } else {
       this.thongTinChiTieuKeHoachNam.cap = this.userInfo.CAP_DVI;
-      this.thongTinChiTieuKeHoachNam.trangThai = STATUS.DANG_NHAP_DU_LIEU;
+      this.thongTinChiTieuKeHoachNam.trangThai = this.isTongCuc() ? STATUS.DANG_NHAP_DU_LIEU : STATUS.DU_THAO;
+      this.thongTinChiTieuKeHoachNam.tenTrangThai = this.isTongCuc() ? 'Đang nhập dữ liệu' : 'Dự thảo';
 
 
 
@@ -908,7 +911,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       slNhapTrongNam: [],
       slXuatTrongNam: [],
       slTonKhoCuoiNam: [],
-
+      lyDoTuChoi: [],
     });
     this.formData.markAsPristine();
   }
@@ -1866,12 +1869,12 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         try {
           let trangThai;
           switch (this.thongTinChiTieuKeHoachNam.trangThai) {
-            case STATUS.CHO_DUYET_LDV: {
-              trangThai = STATUS.DA_DUYET_LDV;
+            case STATUS.DA_DUYET_LDC: {
+              trangThai = STATUS.BAN_HANH;
               break;
             }
             case STATUS.CHO_DUYET_LDC: {
-              trangThai = STATUS.DA_DUYET_LDC;
+              trangThai = STATUS.BAN_HANH;
               break;
             }
             case STATUS.CHO_DUYET_TP: {
@@ -1969,17 +1972,17 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
               trangThai = STATUS.TU_CHOI_LDC
               break;
             }
-            case STATUS.CHO_DUYET_LDV: {
-              trangThai = STATUS.TU_CHOI_LDV
-              break;
-            }
+            // case STATUS.CHO_DUYET_LDV: {
+            //   trangThai = STATUS.TU_CHOI_LDV
+            //   break;
+            // }
           }
           let body = {
             id: this.id,
             lyDoTuChoi: text,
             trangThai: trangThai,
           };
-          const res = await this.chiTieuKeHoachNamService.updateStatus(body);
+          const res = await this.quyetDinhDieuChinhCTKHService.duyet(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
             this.redirectChiTieuKeHoachNam();
@@ -2051,7 +2054,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           if (res.msg == MESSAGE.SUCCESS) {
             this.thongTinChiTieuKeHoachNam = res.data
             if (isGuiDuyet) {
-              let trangThai = STATUS.BAN_HANH;
+              let trangThai = this.isTongCuc() ? STATUS.BAN_HANH : STATUS.CHO_DUYET_TP;
               let body = {
                 id: res.data.id,
                 trangThai: trangThai
@@ -2094,10 +2097,18 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           if (res.msg == MESSAGE.SUCCESS) {
             this.thongTinChiTieuKeHoachNam = res.data
             if (isGuiDuyet) {
-              let trangThai = STATUS.BAN_HANH;
+              let trangThai = () => {
+                if (this.formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU)
+                  return STATUS.BAN_HANH
+                if (this.formData.value.trangThai == STATUS.DU_THAO)
+                  return STATUS.CHO_DUYET_TP
+                if (this.formData.value.trangThai == STATUS.CHO_DUYET_TP)
+                  return STATUS.CHO_DUYET_LDC
+              };
+              // let trangThai = STATUS.BAN_HANH;
               let body = {
                 id: res.data.id,
-                trangThai: trangThai
+                trangThai: trangThai()
               };
               this.quyetDinhDieuChinhCTKHService.duyet(body)
                 .then((resp) => {

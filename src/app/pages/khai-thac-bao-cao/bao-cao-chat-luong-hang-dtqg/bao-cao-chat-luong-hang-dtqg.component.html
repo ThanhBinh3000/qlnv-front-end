@@ -12,13 +12,13 @@
                 *ngIf="userService.isAccessPermisson('KTBC_CLHDTQG_CLN')"
             >
               <span nz-icon nzType='fund'></span>
-              <span>Báo cáo chất lượng công tác nhập</span>
+              <span>Báo cáo chất lượng hàng nhập kho</span>
             </li>
             <li nz-menu-item [nzSelected]='tabSelected==1' (click)='selectTab(1)'
                 *ngIf="userService.isAccessPermisson('KTBC_CLHDTQG_CLX')"
             >
               <span nz-icon nzType='fund'></span>
-              <span>Báo cáo chất lượng hàng trước khi xuất</span>
+              <span>Báo cáo chất lượng hàng xuất kho</span>
             </li>
             <li nz-menu-item [nzSelected]='tabSelected==2' (click)='selectTab(2)'
                 *ngIf="userService.isAccessPermisson('KTBC_CLHDTQG_HH')"

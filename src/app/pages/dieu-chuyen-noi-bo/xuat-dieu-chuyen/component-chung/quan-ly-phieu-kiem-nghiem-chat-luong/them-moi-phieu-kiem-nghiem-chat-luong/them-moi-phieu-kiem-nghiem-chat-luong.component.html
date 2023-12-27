@@ -428,7 +428,8 @@
                 <td>{{data.chiTieuCl}}</td>
                 <td>{{data.chiSoCl}}</td>
                 <td>
-                  <input type="text" nz-input class="w-400" [(ngModel)]="data.ketQuaPt" [readOnly]="isView" />
+                  <input type="text" nz-input class="w-400" [(ngModel)]="data.ketQuaPt" [readOnly]="isView"
+                    (ngModelChange)="onKetQuaChange($event,i,dataTableChiTieu)" />
                 </td>
                 <td>{{data.phuongPhap}}</td>
                 <td>

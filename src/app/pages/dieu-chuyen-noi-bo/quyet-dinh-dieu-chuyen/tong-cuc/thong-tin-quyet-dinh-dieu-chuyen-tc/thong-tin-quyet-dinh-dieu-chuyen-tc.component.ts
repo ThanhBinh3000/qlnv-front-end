@@ -132,6 +132,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       lyDoTuChoi: [],
       tenLoaiHinhNhapXuat: [],
       tenKieuNhapXuat: [],
+      ysKienVuKhac: [],
       quyetDinhPdDtl: [new Array<QuyetDinhPdDtl>(),],
       danhSachQuyetDinh: [new Array<any>(),],
     }
@@ -235,7 +236,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       this.formData.patchValue({
         ...data,
         quyetDinhPdDtl: listDeXuat,
-        soQdinh: data.soQdinh.split('/')[0]
+        soQdinh: data.soQdinh ? data.soQdinh.split('/')[0] : ''
       });
 
       if (data.idThop) {
@@ -580,7 +581,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     if (!this.formData.valid) return
     await this.spinner.show();
     let body = this.formData.value;
-    body.soQdinh = `${this.formData.value.soQdinh.toString().split("/")[0]}/${this.maQd}`
+    body.soQdinh = this.formData.value.soQdinh ? `${this.formData.value.soQdinh.toString().split("/")[0]}/${this.maQd}` : ''
     if (this.idInput) {
       body.id = this.idInput
     }
@@ -603,16 +604,24 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
   }
 
   async guiDuyet() {
-    let trangThai = STATUS.CHO_DUYET_LDV;
-    let mesg = 'Bạn muốn gửi duyệt văn bản?'
-    this.approve(this.idInput, trangThai, mesg);
+    let trangThai = () => {
+      if (this.formData.value.trangThai == STATUS.DU_THAO)
+        return STATUS.CHO_DUYET_LDV
+      if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDV)
+        return STATUS.DA_DUYET_LDV
+      if (this.formData.value.trangThai == STATUS.DA_DUYET_LDV)
+        return STATUS.BAN_HANH
+    };
+    // let trangThai = STATUS.CHO_DUYET_LDV;
+    let mesg = this.formData.value.trangThai == STATUS.DA_DUYET_LDV ? 'Bạn muốn ban hành văn bản?' : 'Bạn muốn phê duyệt văn bản?'
+    this.approve(this.idInput, trangThai(), mesg);
   }
 
   async tuChoi() {
     let trangThai = () => {
       if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDV)
         return STATUS.TU_CHOI_LDV
-      if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDTC)
+      if (this.formData.value.trangThai == STATUS.DA_DUYET_LDV)
         return STATUS.TU_CHOI_LDTC
       return STATUS.CHO_DUYET_LDV;
     };
@@ -620,13 +629,16 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
   }
 
   async pheDuyet() {
-    let trangThai = this.formData.value.trangThai == STATUS.CHO_DUYET_LDV ? STATUS.CHO_DUYET_LDTC : STATUS.BAN_HANH;
-    let mesg = 'Bạn muốn phê duyệt văn bản?'
+    this.setValidator()
+    this.helperService.markFormGroupTouched(this.formData);
+    if (!this.formData.valid) return
+    let trangThai = this.formData.value.trangThai == STATUS.CHO_DUYET_LDV ? STATUS.DA_DUYET_LDV : STATUS.BAN_HANH;
+    let mesg = this.formData.value.trangThai == STATUS.DA_DUYET_LDV ? 'Bạn muốn ban hành văn bản?' : 'Bạn muốn phê duyệt văn bản?'
     this.approve(this.idInput, trangThai, mesg);
   }
 
   isBanHanh() {
-    return this.formData.value.trangThai == STATUS.DA_DUYET_LDTC && this.isTongCuc()
+    return this.formData.value.trangThai == STATUS.DA_DUYET_LDV && this.isTongCuc() && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_DUYET_LDTC')
   }
 
   async banHanh() {
@@ -635,7 +647,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     if (!this.formData.valid) return
     await this.spinner.show();
     let body = this.formData.value;
-    body.soQdinh = `${this.formData.value.soQdinh.toString().split("/")[0]}/${this.maQd}`
+    body.soQdinh = this.formData.value.soQdinh ? `${this.formData.value.soQdinh.toString().split("/")[0]}/${this.maQd}` : ''
     if (this.idInput) {
       body.id = this.idInput
     }
@@ -659,6 +671,16 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
 
 
   setValidator() {
+    if (this.formData.get('trangThai').value !== STATUS.DA_DUYET_LDV) {
+      this.formData.controls["soQdinh"].clearValidators();
+      this.formData.controls["ngayKyQdinh"].clearValidators();
+      this.formData.controls["ngayPduyet"].clearValidators();
+    } else {
+      this.formData.controls["soQdinh"].setValidators([Validators.required]);
+      this.formData.controls["ngayKyQdinh"].setValidators([Validators.required]);
+      this.formData.controls["ngayPduyet"].setValidators([Validators.required]);
+    }
+
     if (this.formData.get('type').value == 'TH') {
       this.formData.controls["idThop"].setValidators([Validators.required]);
       this.formData.controls["idDxuat"].clearValidators();

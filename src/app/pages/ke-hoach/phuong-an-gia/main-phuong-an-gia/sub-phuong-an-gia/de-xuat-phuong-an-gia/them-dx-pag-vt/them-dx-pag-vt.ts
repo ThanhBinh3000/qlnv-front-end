@@ -81,17 +81,13 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   dataTableTtThamKhao: any[] = [];
   typeConst = TYPE_PAG;
   tenLoaiVthh: string;
-  reportTemplate: any = {
-    typeFile: "",
-    fileName: "de_xuat_phuong_an_gia.docx",
-    tenBaoCao: "",
-    trangThai: ""
-  };
-  showDlgPreview = false;
+  templateNameMua = 'de-xuat-phuong-an-gia-mua';
+  templateNameBan = 'de-xuat-phuong-an-gia-ban';
   pdfSrc: any;
   wordSrc: any;
   excelSrc: any;
   printSrc: any;
+  showDlgPreview = false;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -498,6 +494,8 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.dataTableKqGia = data.ketQuaThamDinhGia;
       this.dataTableKsGia = data.ketQuaKhaoSatGiaThiTruong;
       this.dataTableTtThamKhao = data.ketQuaKhaoSatTtThamKhao;
+      this.dataQdThamQuyen = data.ketQuaQdThamQuyen;
+      this.dataGdThanhCong = data.ketQuaGdThanhCong;
       this.dataTableCanCuXdg = data.canCuPhapLy;
       this.fileDinhKemList = data.fileDinhKems && data.fileDinhKems.length ? data.fileDinhKems.filter(item => !item.fileType) : [];
       this.filePhanTichs = data.fileDinhKems && data.fileDinhKems.length ? data.fileDinhKems.filter(item => item.fileType == FILETYPE.FILE_DINH_KEM) : [];
@@ -579,7 +577,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       let body = {
         "str": event
       };
-      let loaiHangHoa = this.listVthh.filter(item => item.ma == event);
       let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
       this.listCloaiVthh = [];
       let resp = await this.danhMucService.getDetail(event);
@@ -589,10 +586,29 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.listCloaiVthh = res.data;
-          if (this.listCloaiVthh.length == 0 && loaiHangHoa && loaiHangHoa.length > 0) {
+          if (this.listCloaiVthh.length == 0 && this.formData.value.loaiVthh) {
             if (resp.msg == MESSAGE.SUCCESS) {
               this.rowItemTtc.tchuanCluong = resp.data && resp.data.tieuChuanCl ? resp.data.tieuChuanCl : ""
               this.rowItemTtc.donViTinh = resp.data && resp.data.maDviTinh ? resp.data.maDviTinh : "";
+              if (this.type == 'GCT' && this.formData.value.loaiGia) {
+                let body = {
+                  namKeHoach: this.formData.value.namKeHoach,
+                  loaiGia: this.formData.value.loaiGia == 'LG03' ? 'LG01' : 'LG02',
+                  loaiVthh: this.formData.value.loaiVthh
+                }
+                let resQdBtc = await this.quyetDinhGiaCuaBtcService.getQdGiaVattu(body);
+                if (resQdBtc.msg == MESSAGE.SUCCESS) {
+                  let qdBtc = resQdBtc.data
+                  if (qdBtc ) {
+                        this.rowItemTtc.giaQdBtc = qdBtc.giaQdBtc;
+                        this.rowItemTtc.giaQdBtcVat = qdBtc.giaQdBtcVat;
+                        this.rowItemTtc.vat = qdBtc.vat;
+                  }
+                } else {
+                  this.notification.warning(MESSAGE.WARNING, 'Không tìm thấy giá BTC cho loại hàng này')
+                  return;
+                }
+              }
             }
           }
         }
@@ -601,6 +617,30 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       }
     } else {
       this.listCloaiVthh = [];
+    }
+  }
+
+  async changeLoaiGia(event) {
+    if (event) {
+      if (this.type == 'GCT' && this.formData.value.loaiVthh && this.listCloaiVthh.length == 0) {
+        let body = {
+          namKeHoach: this.formData.value.namKeHoach,
+          loaiGia: this.formData.value.loaiGia == 'LG03' ? 'LG01' : 'LG02',
+          loaiVthh: this.formData.value.loaiVthh
+        }
+        let resQdBtc = await this.quyetDinhGiaCuaBtcService.getQdGiaVattu(body);
+        if (resQdBtc.msg == MESSAGE.SUCCESS) {
+          let qdBtc = resQdBtc.data
+          if (qdBtc ) {
+            this.rowItemTtc.giaQdBtc = qdBtc.giaQdBtc;
+            this.rowItemTtc.giaQdBtcVat = qdBtc.giaQdBtcVat;
+            this.rowItemTtc.vat = qdBtc.vat;
+          }
+        } else {
+          this.notification.warning(MESSAGE.WARNING, 'Không tìm thấy giá BTC cho loại hàng này')
+          return;
+        }
+      }
     }
   }
 
@@ -634,25 +674,13 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
           let qdBtc = res.data
           if (qdBtc ) {
             if (item) {
-              if (qdBtc.giaQdDcBtc && qdBtc.giaQdDcBtc > 0) {
-                item.giaQdBtc = qdBtc.giaQdDcBtc;
-                item.giaQdBtcVat = qdBtc.giaQdDcBtcVat;
-                item.vat = qdBtc.vat;
-              } else {
                 item.giaQdBtc = qdBtc.giaQdBtc;
                 item.giaQdBtcVat = qdBtc.giaQdBtcVat;
                 item.vat = qdBtc.vat;
-              }
             } else {
-              if (qdBtc.giaQdDcBtc && qdBtc.giaQdDcBtc > 0) {
-                this.rowItemTtc.giaQdBtc = qdBtc.giaQdDcBtc;
-                this.rowItemTtc.giaQdBtcVat = qdBtc.giaQdDcBtcVat;
-                this.rowItemTtc.vat = qdBtc.vat;
-              } else {
                 this.rowItemTtc.giaQdBtc = qdBtc.giaQdBtc;
                 this.rowItemTtc.giaQdBtcVat = qdBtc.giaQdBtcVat;
                 this.rowItemTtc.vat = qdBtc.vat;
-              }
             }
           }
         } else {
@@ -797,6 +825,8 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     body.ketQuaKhaoSatGiaThiTruong = this.dataTableKsGia;
     body.ketQuaThamDinhGia = this.dataTableKqGia;
     body.ketQuaKhaoSatTtThamKhao = this.dataTableTtThamKhao;
+    body.ketQuaQdThamQuyen = this.dataQdThamQuyen;
+    body.ketQuaGdThanhCong = this.dataGdThanhCong;
     body.type = this.type;
     body.soDeXuat = body.soDeXuat + this.maDx;
     this.listFile = this.fileDinhKemList;
@@ -862,49 +892,43 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     }
   }
 
-  downloadPdf() {
-    if (this.type == 'GCT') {
-      saveAs(this.pdfSrc, "de_xuat_phuong_an_gia.pdf");
-    } else {
-      saveAs(this.pdfSrc, "de_xuat_phuong_an_gia.pdf");
-    }
+  changeNamKh(event) {
+    this.loadDsDxCanSua();
   }
 
   async preview() {
     this.spinner.show();
-    try {
-      let body = {
-        reportTemplateRequest: this.reportTemplate,
-        id: this.idInput
-      }
-      await this.giaDeXuatGiaService.preview(body).then(async s => {
-        this.pdfSrc = PREVIEW.PATH_PDF + s.data.pdfSrc;
-        this.wordSrc = PREVIEW.PATH_WORD + s.data.wordSrc;
-        this.printSrc = s.data.pdfSrc;
+    await this.giaDeXuatGiaService.previewPag({
+      tenBaoCao: this.formData.value.loaiGia && (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03' ) ? this.templateNameMua+ '.docx' : this.templateNameBan+ '.docx',
+      id: this.formData.value.id,
+    }).then(async res => {
+      if (res.data) {
+        this.printSrc = res.data.pdfSrc;
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
         this.showDlgPreview = true;
-        this
-      });
-      this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
+      }
+    });
+    this.spinner.hide();
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc,this.formData.value.loaiGia && (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03' ) ? this.templateNameMua+ '.pdf' : this.templateNameBan+ '.pdf');
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc,this.formData.value.loaiGia && (this.formData.value.loaiGia == 'LG01' || this.formData.value.loaiGia == 'LG03' ) ? this.templateNameMua+ '.docx' : this.templateNameBan+ '.docx');
+  }
+
+  printPreview() {
+    printJS({ printable: this.printSrc, type: 'pdf', base64: true });
   }
 
   closeDlg() {
     this.showDlgPreview = false;
   }
 
-  doPrint() {
-    printJS({printable: this.printSrc, type: 'pdf', base64: true});
-  }
 
-  downloadWord() {
-    saveAs(this.wordSrc, "de_xuat_phuong_an_gia.docx");
-  }
-
-  changeNamKh(event) {
-    this.loadDsDxCanSua();
-  }
 }

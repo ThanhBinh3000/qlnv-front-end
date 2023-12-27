@@ -44,6 +44,8 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
   fileNghiemThu: any[] = [];
   fileThanhLy: any[] = [];
   listDonVi: any[] = [];
+  listDviChuTri: any[] = [];
+  listDviThucHien: any[] = [];
   options = {
     allowZero: true,
     allowNegative: true,
@@ -236,6 +238,8 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
       this.listDonVi.forEach(item => {
         item.fullname = item.key + ' - ' + item.title;
       });
+      this.listDviChuTri = this.listDonVi.filter(item => item.fullname && (!item.fullname.includes("Vụ") && ! item.fullname.includes("BLĐ Tổng cục DTNN")) );
+      this.listDviThucHien = this.listDonVi.filter(item => item.fullname && ! item.fullname.includes("BLĐ Tổng cục DTNN"));
     }
   }
 
@@ -573,6 +577,8 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
       if (val == '02') {
         if (this.listDonVi && !this.listDonVi.find(item => item.key == '0101')) {
           this.listDonVi.push({ key: '0101', title: 'Tổng cục DTNN', fullname: '0101 - Tổng cục DTNN' });
+          this.listDviChuTri.push({ key: '0101', title: 'Tổng cục DTNN', fullname: '0101 - Tổng cục DTNN' });
+          this.listDviThucHien.push({ key: '0101', title: 'Tổng cục DTNN', fullname: '0101 - Tổng cục DTNN' });
         }
         this.formData.patchValue({
           dviChuTri: '0101',
@@ -585,6 +591,8 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
         let indexTc = this.listDonVi.findIndex(item => item.key == '0101');
         if (indexTc != -1) {
           this.listDonVi.splice(indexTc, 1);
+          this.listDviThucHien.splice(indexTc, 1);
+          this.listDviChuTri.splice(indexTc, 1);
         }
       }
     }

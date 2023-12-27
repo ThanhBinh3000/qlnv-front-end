@@ -10,13 +10,36 @@
           <span>Quay lại</span>
         </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="guiDuyet()"
-          *ngIf="thongTinChiTieuKeHoachNam.trangThai == STATUS.DANG_NHAP_DU_LIEU && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_CUC_BANHANH') || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_BANHANH'))">
+          *ngIf="isTongCuc() && thongTinChiTieuKeHoachNam.trangThai == STATUS.DANG_NHAP_DU_LIEU && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_CUC_BANHANH') || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_BANHANH'))">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
+          <span>Ban hành</span>
+        </button>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="guiDuyet()"
+          *ngIf="isCuc() && thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_CUC_BANHANH') || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_BANHANH'))">
+          <i class="icon htvbdh_tcdt_guiduyet"></i>
+          <span>Lưu và Gửi duyệt</span>
+        </button>
+        <button
+          *ngIf="isCuc() && (thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_CUC_BANHANH') || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_BANHANH'))"
+          type="button" class="btn btn-sub" (click)="pheDuyet()">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          <span>Duyệt</span>
+        </button>
+        <button
+          *ngIf="isCuc() && (thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_CUC_BANHANH') || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_BANHANH'))"
+          type="button" class="btn btn-sub" (click)="tuChoi()">
+          <i class="icon htvbdh_tcdt_tuchoi do"></i>
+          <span>Từ chối</span>
+        </button>
+        <button
+          *ngIf="isCuc() && thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDC && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_CUC_BANHANH') || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_BANHANH'))"
+          type="button" class="btn btn-sub" (click)="pheDuyet()">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Ban hành</span>
         </button>
 
         <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
-          *ngIf="thongTinChiTieuKeHoachNam.trangThai == STATUS.DANG_NHAP_DU_LIEU && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_CUC_THEM') || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_THEM'))">
+          *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.DANG_NHAP_DU_LIEU || thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO) && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_CUC_THEM') || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_THEM'))">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
@@ -24,6 +47,10 @@
     </div>
   </div>
 </nz-affix>
+<nz-alert class="mg-t-16"
+  *ngIf="formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC" nzShowIcon
+  nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
+</nz-alert>
 <div class="bg-trang">
   <nz-card class="mt16 flex-card p-lr16">
     <div class="header">

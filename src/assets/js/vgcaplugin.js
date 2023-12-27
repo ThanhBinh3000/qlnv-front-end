@@ -207,7 +207,7 @@ var vgcapluginObject = (function () {
                 console[_0xaea9('0x13')](_0xaea9('0xd'));
             }
         },
-
+        // 1:data truyen cho callback, 2: json_prms 3: call back
         vgca_sign_xml(_0x1ae8a8, _0x10d7f0, _0x2cfd11) {
             if (_0xaea9('0x7') in window) {
                 var _0x278db6 = new WebSocket(_0xaea9('0x12'));

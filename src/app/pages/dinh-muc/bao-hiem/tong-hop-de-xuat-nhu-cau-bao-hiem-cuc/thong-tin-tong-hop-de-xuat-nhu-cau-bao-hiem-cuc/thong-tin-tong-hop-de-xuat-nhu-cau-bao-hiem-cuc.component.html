@@ -15,11 +15,6 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button
-        type="button" class="btn btn-sub do ml-2" (click)="preview()" *ngIf="id > 0">
-        <i class="icon htvbdh_tcdt_tuchoi"></i>
-        <span>Xem trước</span>
-      </button>
       <button type="button" class="btn btn-sub xanh ml-2" (click)="save(true)"
               *ngIf=" !isView && isTongHop && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDTC) && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_THDEXUATCUC_THEM') ">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
@@ -143,7 +138,13 @@
     </form>
   </nz-card>
   <nz-collapse *ngIf="isTongHop">
-    <nz-collapse-panel [nzHeader]="'TỔNG HỢP GIÁ TRỊ MUA BẢO HIỂM'" [nzActive]="true">
+    <nz-collapse-panel [nzHeader]="'TỔNG HỢP GIÁ TRỊ MUA BẢO HIỂM'" [nzActive]="true" [nzExtra]="previewTh">
+      <ng-template #previewTh>
+        <button class="btn btn-sub btn-sm waves-effect waves-light" (click)="downloadExcel(3, $event)" *ngIf="id > 0">
+          <i class="icon htvbdh_trinh"></i>
+          <span>Xuất Excel</span>
+        </button>
+      </ng-template>
       <nz-table class='nowrap pd-15 mg-t-10' [nzData]='tableHangDtqgView' [nzFrontPagination]='false'
                 [nzShowPagination]='false' nzBordered>
         <thead>
@@ -185,7 +186,13 @@
     </nz-collapse-panel>
   </nz-collapse>
   <nz-collapse *ngIf="isTongHop">
-    <nz-collapse-panel [nzActive]="true" nzHeader="KHO ĐANG CHỨA HÀNG VÀ DỰ KIẾN CHỨA HÀNG" class="mg-t-10">
+    <nz-collapse-panel [nzActive]="true" nzHeader="KHO ĐANG CHỨA HÀNG VÀ DỰ KIẾN CHỨA HÀNG" class="mg-t-10" [nzExtra]="previewKho">
+      <ng-template #previewKho>
+        <button class="btn btn-sub btn-sm waves-effect waves-light" (click)="downloadExcel(1, $event)" *ngIf="id > 0">
+          <i class="icon htvbdh_trinh"></i>
+          <span>Xuất Excel</span>
+        </button>
+      </ng-template>
       <nz-table class="wrap pd-15" [nzData]="dataTable" [nzFrontPagination]="false" *ngIf="isTongHop"
                 [nzShowPagination]="false" nzBordered>
         <thead>
@@ -312,7 +319,13 @@
     </nz-collapse-panel>
   </nz-collapse>
   <nz-collapse *ngIf="isTongHop">
-    <nz-collapse-panel [nzActive]="true" nzHeader="HÀNG DỰ TRỮ QUỐC GIA" class="mg-t-10">
+    <nz-collapse-panel [nzActive]="true" nzHeader="HÀNG DỰ TRỮ QUỐC GIA" class="mg-t-10" [nzExtra]="previewHang">
+      <ng-template #previewHang>
+        <button class="btn btn-sub btn-sm waves-effect waves-light" (click)="downloadExcel(4, $event)" *ngIf="id > 0">
+          <i class="icon htvbdh_trinh"></i>
+          <span>Xuất Excel</span>
+        </button>
+      </ng-template>
       <nz-card class="mt16 flex-card p-lr16 mg-t-10" *ngFor="let data of tableHangDtqgView, let idx = index">
         <nz-collapse *ngIf="isTongHop">
           <nz-collapse-panel [nzActive]="true" [nzHeader]="data.tenDvi" class="mg-t-10">
@@ -371,24 +384,30 @@
                 <th></th>
                 <th class="font-weight-bold text-left">Tổng cộng</th>
                 <th></th>
-                <th
-                  class="font-weight-bold text-right">{{sumSlHang('slHtGt5000', data.listQlDinhMucThHangDtqgBh) | number: '1.0-1': 'vi_VN'}}</th>
-                <th
-                  class="font-weight-bold text-right">{{sumSlHang('slHtLt5000', data.listQlDinhMucThHangDtqgBh) | number: '1.0-1': 'vi_VN'}}</th>
-                <th
-                  class="font-weight-bold text-right">{{sumSlHang('slHtGt5000', data.listQlDinhMucThHangDtqgBh) + sumSlHang('slHtLt5000', data.listQlDinhMucThHangDtqgBh) | number: '1.0-1': 'vi_VN'}}</th>
+<!--                <th-->
+<!--                  class="font-weight-bold text-right">{{sumSlHang('slHtGt5000', data.listQlDinhMucThHangDtqgBh) | number: '1.0-1': 'vi_VN'}}</th>-->
+<!--                <th-->
+<!--                  class="font-weight-bold text-right">{{sumSlHang('slHtLt5000', data.listQlDinhMucThHangDtqgBh) | number: '1.0-1': 'vi_VN'}}</th>-->
+<!--                <th-->
+<!--                  class="font-weight-bold text-right">{{sumSlHang('slHtGt5000', data.listQlDinhMucThHangDtqgBh) + sumSlHang('slHtLt5000', data.listQlDinhMucThHangDtqgBh) | number: '1.0-1': 'vi_VN'}}</th>-->
+               <th></th>
+               <th></th>
+               <th></th>
                 <th
                   class="font-weight-bold text-right">{{sumSlHang('giaTriHtGt5000', data.listQlDinhMucThHangDtqgBh) | number: '1.0-1': 'vi_VN'}}</th>
                 <th
                   class="font-weight-bold text-right">{{sumSlHang('giaTriHtLt5000', data.listQlDinhMucThHangDtqgBh) | number: '1.0-1': 'vi_VN'}}</th>
                 <th
                   class="font-weight-bold text-right">{{sumSlHang('giaTriHtGt5000', data.listQlDinhMucThHangDtqgBh) + sumSlHang('giaTriHtLt5000', data.listQlDinhMucThHangDtqgBh) | number: '1.0-1': 'vi_VN'}}</th>
-                <th
-                  class="font-weight-bold text-right">{{sumSlHang('slDkGt5000', data.listQlDinhMucThHangDtqgBh) | number: '1.0-1': 'vi_VN'}}</th>
-                <th
-                  class="font-weight-bold text-right">{{sumSlHang('slDkLt5000', data.listQlDinhMucThHangDtqgBh) | number: '1.0-1': 'vi_VN'}}</th>
-                <th
-                  class="font-weight-bold text-right">{{sumSlHang('slDkGt5000', data.listQlDinhMucThHangDtqgBh) + sumSlHang('slDkLt5000', data.listQlDinhMucThHangDtqgBh) | number: '1.0-1': 'vi_VN'}}</th>
+<!--                <th-->
+<!--                  class="font-weight-bold text-right">{{sumSlHang('slDkGt5000', data.listQlDinhMucThHangDtqgBh) | number: '1.0-1': 'vi_VN'}}</th>-->
+<!--                <th-->
+<!--                  class="font-weight-bold text-right">{{sumSlHang('slDkLt5000', data.listQlDinhMucThHangDtqgBh) | number: '1.0-1': 'vi_VN'}}</th>-->
+<!--                <th-->
+<!--                  class="font-weight-bold text-right">{{sumSlHang('slDkGt5000', data.listQlDinhMucThHangDtqgBh) + sumSlHang('slDkLt5000', data.listQlDinhMucThHangDtqgBh) | number: '1.0-1': 'vi_VN'}}</th>-->
+                <th></th>
+                <th></th>
+                <th></th>
                 <th
                   class="font-weight-bold text-right">{{sumSlHang('giaTriDkGt5000', data.listQlDinhMucThHangDtqgBh) | number: '1.0-1': 'vi_VN'}}</th>
                 <th
@@ -409,28 +428,28 @@
   </ng-container>
 </ng-template>
 
-<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="ĐỀ XUẤT NHU CẦU BẢO HIỂM" nzWidth="100%" (nzOnCancel)="closeDlg()">
-  <div *nzModalContent class="modal__content">
-    <pdf-viewer #pdfViewer [render-text]="true"
-                [external-link-target]="'blank'" [src]="pdfSrc" [original-size]="false"  style="width: 100%; height: 600px;">
-    </pdf-viewer>
-  </div>
-  <div *nzModalFooter>
-    <button nz-button (click)="downloadPdf()" class="modal__button--save">
-      <i class="icon htvbdh_tcdt_tuchoi"></i>
-      Xuất .pdf
-    </button>
-    <button nz-button (click)="downloadExcel()" class="modal__button--save">
-      <i class="icon htvbdh_tcdt_tuchoi"></i>
-      Xuất Excel
-    </button>
-    <button nz-button (click)="printPreview()" class="modal__button--save">
-      <i class="icon htvbdh_tcdt_print"></i>
-      In
-    </button>
-    <button nz-button (click)="closeDlg()" class="modal__button--cancel">
-      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-      Đóng
-    </button>
-  </div>
-</nz-modal>
+<!--<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="ĐỀ XUẤT NHU CẦU BẢO HIỂM" nzWidth="100%" (nzOnCancel)="closeDlg()">-->
+<!--  <div *nzModalContent class="modal__content">-->
+<!--    <pdf-viewer #pdfViewer [render-text]="true"-->
+<!--                [external-link-target]="'blank'" [src]="pdfSrc" [original-size]="false"  style="width: 100%; height: 600px;">-->
+<!--    </pdf-viewer>-->
+<!--  </div>-->
+<!--  <div *nzModalFooter>-->
+<!--    <button nz-button (click)="downloadPdf()" class="modal__button&#45;&#45;save">-->
+<!--      <i class="icon htvbdh_tcdt_tuchoi"></i>-->
+<!--      Xuất .pdf-->
+<!--    </button>-->
+<!--    <button nz-button (click)="downloadExcel()" class="modal__button&#45;&#45;save">-->
+<!--      <i class="icon htvbdh_tcdt_tuchoi"></i>-->
+<!--      Xuất Excel-->
+<!--    </button>-->
+<!--    <button nz-button (click)="printPreview()" class="modal__button&#45;&#45;save">-->
+<!--      <i class="icon htvbdh_tcdt_print"></i>-->
+<!--      In-->
+<!--    </button>-->
+<!--    <button nz-button (click)="closeDlg()" class="modal__button&#45;&#45;cancel">-->
+<!--      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>-->
+<!--      Đóng-->
+<!--    </button>-->
+<!--  </div>-->
+<!--</nz-modal>-->

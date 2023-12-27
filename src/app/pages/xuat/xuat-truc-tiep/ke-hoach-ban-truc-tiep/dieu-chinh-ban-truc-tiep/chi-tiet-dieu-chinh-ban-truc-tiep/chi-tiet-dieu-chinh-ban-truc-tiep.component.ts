@@ -289,6 +289,7 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
     try {
+      this.formData.controls["trichYeu"].setValidators([Validators.required]);
       if (trangThai === STATUS.BAN_HANH) {
         this.setValidForm();
       }

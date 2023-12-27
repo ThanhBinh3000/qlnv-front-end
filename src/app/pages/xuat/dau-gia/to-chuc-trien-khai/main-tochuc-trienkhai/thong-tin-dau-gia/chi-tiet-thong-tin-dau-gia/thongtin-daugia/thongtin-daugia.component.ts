@@ -1,6 +1,5 @@
 import {HttpClient} from '@angular/common/http';
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import dayjs from 'dayjs';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {NgxSpinnerService} from 'ngx-spinner';
@@ -24,6 +23,7 @@ import {AMOUNT_ONE_DECIMAL} from "../../../../../../../../Utility/utils";
 @Component({
   selector: 'app-thongtin-daugia',
   templateUrl: './thongtin-daugia.component.html',
+  styleUrls: ['./thongtin-daugia.component.scss']
 })
 export class ThongtinDaugiaComponent extends Base2Component implements OnInit, OnChanges {
   @Input() isView: boolean
@@ -72,7 +72,6 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       soHd: [''],
       ngayKyHd: [''],
       hthucTchuc: [''],
-      tgianDky: [''],
       tgianDkyTu: [''],
       tgianDkyDen: [''],
       ghiChuTgianDky: [''],
@@ -81,12 +80,10 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       tienMuaHoSo: [],
       buocGia: [],
       ghiChuBuocGia: [''],
-      tgianXem: [''],
       tgianXemTu: [''],
       tgianXemDen: [''],
       ghiChuTgianXem: [''],
       diaDiemXem: [''],
-      tgianNopTien: [''],
       tgianNopTienTu: [''],
       tgianNopTienDen: [''],
       pthucTtoan: [''],
@@ -95,7 +92,6 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       stkThuHuong: [''],
       nganHangThuHuong: [''],
       chiNhanhNganHang: [''],
-      tgianDauGia: [''],
       tgianDauGiaTu: [''],
       tgianDauGiaDen: [''],
       diaDiemDauGia: [''],
@@ -114,6 +110,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       khoanTienDatTruoc: [],
       thongBaoKhongThanh: [''],
       soDviTsan: [],
+      qdLcTcBdg: [''],
       trangThai: [STATUS.DANG_THUC_HIEN],
       tenTrangThai: ['ĐANG THỰC HIỆN'],
       canCu: [new Array<FileDinhKem>()],
@@ -249,10 +246,6 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       const data = res.data;
       this.helperService.bidingDataInFormGroup(this.formData, data);
       this.formData.patchValue({
-        tgianDky: this.getDateRange(data.tgianDkyTu, data.tgianDkyDen),
-        tgianXem: this.getDateRange(data.tgianXemTu, data.tgianXemDen),
-        tgianNopTien: this.getDateRange(data.tgianNopTienTu, data.tgianNopTienDen),
-        tgianDauGia: this.getDateRange(data.tgianDauGiaTu, data.tgianDauGiaDen),
         ketQua: data.ketQua.toString(),
       });
       this.dataTable = data.children;
@@ -347,14 +340,6 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
 
   prepareFormData() {
     const formData = this.formData.value;
-    const dateFields = ['tgianDky', 'tgianXem', 'tgianNopTien', 'tgianDauGia'];
-    dateFields.forEach((field) => {
-      if (this.formData.get(field).value) {
-        const [startDate, endDate] = this.formData.get(field).value.map((date) => dayjs(date).format('YYYY-MM-DD'));
-        formData[`${field}Tu`] = startDate;
-        formData[`${field}Den`] = endDate;
-      }
-    });
     formData.listNguoiTgia = this.dataNguoiTgia;
     formData.children = this.dataTable;
     const {ketQua, ketQuaSl, soDviTsan} = this.calculateKetQua();
@@ -522,6 +507,62 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     return null;
   }
 
+  disabledTgianDangKyTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.tgianDkyDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.tgianDkyDen.getTime();
+  };
+
+  disabledTgianDangKyDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.tgianDkyTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.tgianDkyTu.getTime();
+  };
+
+  disabledTgianXemtaiSanTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.tgianXemDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.tgianXemDen.getTime();
+  };
+
+  disabledTgianXemtaiSanDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.tgianXemTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.tgianXemTu.getTime();
+  };
+
+  disabledTgianNopTienTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.tgianNopTienDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.tgianNopTienDen.getTime();
+  };
+
+  disabledTgianNopTienDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.tgianNopTienTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.tgianNopTienTu.getTime();
+  };
+
+  disabledTgianDauGiaTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.tgianDauGiaDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.tgianDauGiaDen.getTime();
+  };
+
+  disabledTgianDauGiaDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.tgianDauGiaTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.tgianDauGiaTu.getTime();
+  };
+
   setValidForm() {
     const fieldsToValidate = [
       "maThongBao",
@@ -532,16 +573,16 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       "taiKhoanToChuc",
       "soHd",
       "hthucTchuc",
-      "tgianDky",
+      "tgianDkyTu",
+      "tgianXemTu",
+      "tgianNopTienTu",
+      "tgianDauGiaTu",
       "diaDiemDky",
       "dieuKienDky",
       "tienMuaHoSo",
       "buocGia",
-      "tgianXem",
       "diaDiemXem",
-      "tgianNopTien",
       "pthucTtoan",
-      "tgianDauGia",
       "diaDiemDauGia",
       "hthucDgia",
       "pthucDgia",
