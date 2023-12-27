@@ -127,7 +127,7 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
 
 
   redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number, idDiemKho?: number) {
-    this.selectedId = id;
+    this.idSelected = id;
     this.isDetail = true;
     this.isView = isView;
     this.idQdGiaoNvNh = idQdGiaoNvNh

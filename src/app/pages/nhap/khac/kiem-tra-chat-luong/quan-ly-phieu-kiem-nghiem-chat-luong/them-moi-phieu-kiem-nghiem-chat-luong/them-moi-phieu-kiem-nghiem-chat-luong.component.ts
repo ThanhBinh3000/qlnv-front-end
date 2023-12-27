@@ -229,9 +229,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     }
   }
 
-  newObjectBienBanLayMau() {
-    this.phieuKiemNghiemChatLuongHang = new PhieuKiemNghiemChatLuongHang();
-  }
 
   async save(isGuiDuyet?: boolean) {
     await this.spinner.show();
@@ -461,26 +458,26 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     }
   }
 
-  async loadDanhMucPhuongThucBaoQuan() {
-    let body = {
-      maHthuc: null,
-      paggingReq: {
-        limit: 1000,
-        page: 1,
-      },
-      str: null,
-      tenHthuc: null,
-      trangThai: null,
-    };
-    let res = await this.danhMucService.loadDanhMucHinhThucBaoQuan(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.content) {
-        this.listHinhThucBaoQuan = res.data.content;
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
+  // async loadDanhMucPhuongThucBaoQuan() {
+  //   let body = {
+  //     maHthuc: null,
+  //     paggingReq: {
+  //       limit: 1000,
+  //       page: 1,
+  //     },
+  //     str: null,
+  //     tenHthuc: null,
+  //     trangThai: null,
+  //   };
+  //   let res = await this.danhMucService.loadDanhMucHinhThucBaoQuan(body);
+  //   if (res.msg == MESSAGE.SUCCESS) {
+  //     if (res.data && res.data.content) {
+  //       this.listHinhThucBaoQuan = res.data.content;
+  //     }
+  //   } else {
+  //     this.notification.error(MESSAGE.ERROR, res.msg);
+  //   }
+  // }
 
   back() {
     this.showListEvent.emit();

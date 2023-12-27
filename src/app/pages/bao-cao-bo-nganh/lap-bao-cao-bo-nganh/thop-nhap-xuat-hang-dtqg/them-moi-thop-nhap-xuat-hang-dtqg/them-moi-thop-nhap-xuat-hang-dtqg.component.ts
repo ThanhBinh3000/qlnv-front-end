@@ -75,6 +75,7 @@ export class ThemMoiThopNhapXuatHangDtqgComponent extends Base2Component impleme
         bieuSo: [null],
         tenBieuSo: [null],
         dviGui: [null],
+        tenDviGui: [null],
         boNganh: [null],
         dviNhan: [null],
         denNgayKyGui: [null],
@@ -117,6 +118,7 @@ export class ThemMoiThopNhapXuatHangDtqgComponent extends Base2Component impleme
             thongTuSo: this.listData.thongTuSo,
             boNganh: this.listData.boNganh,
             dviGui: this.userService.isTongCuc() ? this.listData.dviGui : this.userInfo.MA_DVI,
+            tenDviGui: this.userService.isTongCuc() ? this.listData.tenDviGui : this.userInfo.TEN_DVI,
             nam: this.listData.nam,
             trangThai: this.listData.trangThai,
             tenTrangThai: this.listData.tenTrangThai,
@@ -141,14 +143,19 @@ export class ThemMoiThopNhapXuatHangDtqgComponent extends Base2Component impleme
       tenBieuSo: this.TEN_BIEU_SO,
       bieuSo: this.BIEU_SO,
       dviGui: this.userInfo.MA_DVI,
+      tenDviGui: this.userInfo.TEN_DVI,
       trangThai: "00",
       tenTrangThai: "Dự thảo"
     })
+    if(!this.userService.isTongCuc()){
+      this.handleChoose(this.userInfo.MA_DVI).then();
+    }
   }
 
   async getUserInfor() {
     this.formData.patchValue({
-      dviGui: this.userService.isTongCuc() ? this.formData.value.dviGui : this.userInfo.TEN_DVI,
+      dviGui: this.userService.isTongCuc() ? this.formData.value.dviGui : this.userInfo.MA_DVI,
+      tenDviGui: this.userInfo.TEN_DVI,
       tenBieuSo: this.TEN_BIEU_SO,
     })
   }
@@ -255,12 +262,14 @@ export class ThemMoiThopNhapXuatHangDtqgComponent extends Base2Component impleme
   async selectDonVi(donVi) {
     this.itemRow.cloaiVthh = donVi.maHangHoa;
     this.itemRow.tenHang = donVi.tenHangHoa;
+    this.itemRow.dvt = donVi.maDviTinh;
     this.selectedCloaiVthh = donVi;
   }
 
   async selectCloaiVthhUpdate(donVi) {
     this.itemRowUpdate.cloaiVthh = donVi.maHangHoa;
     this.itemRowUpdate.tenHang = donVi.tenHangHoa;
+    this.itemRowUpdate.dvt = donVi.maDviTinh;
     this.selectedCloaiVthh = donVi;
   }
 
