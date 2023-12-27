@@ -255,24 +255,24 @@
             <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
             <td>{{ data.soDxuat }}</td>
             <td *ngIf="loaiVthh != '02'">{{ data.tenDvi }}</td>
-            <td>{{ data.namKhoach }}</td>
-            <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
+            <td class="text-center">{{ data.namKhoach }}</td>
+            <td class="text-center">{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
+            <td class="text-center">{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
             <td>
               <a style="color: blue" (click)="openQdGiaoModal(data.qdGiaoChiTieuId)">{{ data.soQd}}</a>
             </td>
             <td *ngIf="loaiVthh.startsWith('02')">{{ data.tenLoaiVthh }}</td>
             <td *ngIf=" loaiVthh != '02'">{{ data.tenCloaiVthh }}</td>
-            <td>{{ data.soGoiThau}}</td>
+            <td class="text-right">{{ data.soGoiThau}}</td>
             <td>
               <a style="color: blue" (click)="openQdPdKhlcntModal(data.idQdPdKhLcnt)">{{ data.soQdPdKhLcnt}}</a>
             </td>
-            <td *ngIf="loaiVthh != '02'">{{ data.tgianDthau | date: 'dd/MM/YYYY'}}</td>
-            <td *ngIf="loaiVthh != '02'">{{ data.tgianMthau | date: 'dd/MM/YYYY'}}</td>
-            <td *ngIf="loaiVthh == '02'">{{ data.tgianDongMothau}}</td>
-            <td *ngIf="loaiVthh == '02'">{{ data.tgianThienHd}}</td>
-            <td *ngIf="loaiVthh == '02'">{{ data.tgianThien}}</td>
-            <td *ngIf="loaiVthh != '02'">{{ data.tgianNhang | date: 'dd/MM/YYYY' }}</td>
+            <td class="text-center" *ngIf="loaiVthh != '02'">{{ data.tgianDthau | date: 'dd/MM/YYYY'}}</td>
+            <td class="text-center" *ngIf="loaiVthh != '02'">{{ data.tgianMthau | date: 'dd/MM/YYYY'}}</td>
+            <td class="text-center" *ngIf="loaiVthh == '02'">{{ data.tgianDongMothau | date: 'dd/MM/YYYY'}}</td>
+            <td class="text-right" *ngIf="loaiVthh == '02'">{{ data.tgianThienHd}}</td>
+            <td class="text-right" *ngIf="loaiVthh == '02'">{{ data.tgianThien}}</td>
+            <td class="text-center" *ngIf="loaiVthh != '02'">{{ data.tgianNhang | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td *ngIf="userService.isTongCuc() && loaiVthh != '02'">
               <span *ngIf="data.trangThaiTh == '24'">{{data.tenTrangThaiTh}}</span>

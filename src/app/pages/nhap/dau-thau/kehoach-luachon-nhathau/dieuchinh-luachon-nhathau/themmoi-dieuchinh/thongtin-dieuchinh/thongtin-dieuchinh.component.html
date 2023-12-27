@@ -336,7 +336,8 @@
               <th class="text-center multi-line" nzWidth="150px"  >Địa điểm nhập kho</th>
               <th class="text-center multi-line" nzWidth="150px" *ngIf="isCache">Chỉ tiêu kế hoạch đuợc giao<br/>(Tấn)</th>
               <th class="text-center multi-line" nzWidth="150px" *ngIf="isCache">Số đã thực hiện<br/>(Tấn)</th>
-              <th class="text-center multi-line" nzWidth="150px"  >Số đề xuất <br/>(tấn)</th>
+              <th class="text-center multi-line" nzWidth="150px" *ngIf="isCache">Số đề xuất <br/>(Tấn)</th>
+              <th class="text-center multi-line" nzWidth="150px" *ngIf="!isCache">Số lượng phê duyệt <br/>(Tấn)</th>
               <th class="text-center multi-line" nzWidth="150px"  >Đơn giá đề xuất<br/> có VAT (đ/kg)</th>
               <th class="text-center multi-line" nzWidth="150px"  >Thành tiền tạm tính<br/> theo giá đề xuất (đ)</th>
               <th class="text-center multi-line" nzWidth="150px"  >Đơn được duyệt<br/> có VAT (đ/kg)</th>

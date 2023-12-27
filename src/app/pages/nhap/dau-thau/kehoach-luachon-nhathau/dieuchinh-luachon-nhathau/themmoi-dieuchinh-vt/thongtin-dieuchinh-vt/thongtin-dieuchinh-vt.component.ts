@@ -35,6 +35,7 @@ export class ThongtinDieuchinhVtComponent extends Base2Component implements OnIn
   @Input() dataInput;
   @Input() isView: boolean = false;
   @Input() isCache: boolean = false;
+  @Input() isQd: boolean = false;
   @Output() dsDxChange = new EventEmitter<any>();
   listOfData: any[] = [];
   listOfDataCache: any[] = [];
@@ -209,7 +210,8 @@ export class ThongtinDieuchinhVtComponent extends Base2Component implements OnIn
         dataChiTieu: this.dataChiTieu,
         loaiVthh: this.formData.get("loaiVthh").value,
         dviTinh: this.formData.get("loaiVthh").value.maDviTinh,
-        namKeHoach: this.formData.value.namKhoach
+        namKeHoach: this.formData.value.namKhoach,
+        showFromQd: true
       }
     });
     modal.afterClose.subscribe((res) => {
