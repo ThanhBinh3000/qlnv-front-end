@@ -401,7 +401,8 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
         cloaiVthh: this.formData.get('cloaiVthh').value,
         tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
         namKhoach: this.formData.get('namKhoach').value,
-        donGiaVat: this.formData.get('donGiaVat').value
+        donGiaVat: this.formData.get('donGiaVat').value,
+        showFromQd: true
       },
     });
     modalGT.afterClose.subscribe((res) => {

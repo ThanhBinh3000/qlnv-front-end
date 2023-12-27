@@ -82,7 +82,8 @@
         <th nzWidth="160px" class="text-center">Điểm kho</th>
         <th nzWidth="120px" class="text-center wrap-text">Chỉ tiêu kế hoạch được giao</th>
         <th nzWidth="130px" class="text-center wrap-text">Số đã thực hiện</th>
-        <th nzWidth="120px" class="text-center wrap-text">Số lượng trình<br/>phê duyệt</th>
+        <th nzWidth="120px" class="text-center wrap-text" *ngIf="!showFromQd">Số lượng trình<br/>phê duyệt</th>
+        <th nzWidth="120px" class="text-center wrap-text" *ngIf="showFromQd">Số lượng<br/>phê duyệt</th>
         <th nzWidth="150px" class="text-center wrap-text">Thành tiền theo đơn giá có VAT được duyệt (đ)</th>
         <th nzWidth="80px" [nzRight]="true" class="text-center">Hành động</th>
       </tr>

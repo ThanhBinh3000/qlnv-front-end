@@ -225,7 +225,8 @@
           <th class="text-center multi-line" nzWidth="100px"  nzLeft>Cục DTNN KV</th>
           <th class="text-center multi-line" nzWidth="100px"  >Chỉ tiêu kế hoạch<br/>được giao</th>
           <th class="text-center multi-line" nzWidth="100px"  >Số đã thực hiện</th>
-          <th class="text-center multi-line" nzWidth="100px"  >Số lượng trình phê duyệt</th>
+          <th class="text-center multi-line" nzWidth="100px" *ngIf="isQd"  >Số lượng phê duyệt</th>
+          <th class="text-center multi-line" nzWidth="100px" *ngIf="!isQd">Số lượng trình phê duyệt</th>
           <th class="text-center multi-line" nzWidth="130px"  >Đơn giá cụ thể<br/> có VAT được duyệt (đ)</th>
           <th class="text-center multi-line" nzWidth="180px"  >Thành tiền theo đơn giá cụ thể<br/> có VAT được duyệt (đ)</th>
           <th class="text-center multi-line" nzWidth="100px"  >Số còn lại chưa thực hiện</th>

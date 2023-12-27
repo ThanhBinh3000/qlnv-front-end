@@ -90,7 +90,8 @@
         <th nzWidth="190px" class="text-center">Địa điểm kho</th>
         <th nzWidth="130px" class="text-center wrap-text">Chỉ tiêu kế hoạch <br/>được giao (Tấn)</th>
         <th nzWidth="130px" class="text-center wrap-text">Số đã thực hiện <br/>(Tấn)</th>
-        <th nzWidth="100px" class="text-center">Số đề xuất <br/>(Tấn)</th>
+        <th nzWidth="150px" class="text-center" *ngIf="!showFromQd">Số đề xuất <br/>(Tấn)</th>
+        <th nzWidth="150px" class="text-center" *ngIf="showFromQd">Số lượng phê duyệt<br/>(Tấn)</th>
         <th nzWidth="130px" class="text-center">Đơn giá đề xuất<br/>có VAT (đ/kg)</th>
         <th nzWidth="150px" class="text-center">Đơn giá mua tối đa<br/>được duyệt có VAT (đ/kg)</th>
         <th nzWidth="170px" class="text-center">Đơn giá được duyệt<br/>có VAT (đ/kg)</th>

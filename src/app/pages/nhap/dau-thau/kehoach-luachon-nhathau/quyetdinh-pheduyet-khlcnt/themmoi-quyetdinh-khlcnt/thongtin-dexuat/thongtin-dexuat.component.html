@@ -322,7 +322,8 @@
         <th>Địa điểm nhập kho</th>
         <th *ngIf="isCache">Chỉ tiêu kế hoạch đuợc giao<br/>(Tấn)</th>
         <th *ngIf="isCache">Số đã thực hiện<br/>(Tấn)</th>
-        <th>Số đề xuất (Tấn)</th>
+        <th *ngIf="isCache">Số đề xuất (Tấn)</th>
+        <th *ngIf="!isCache">Số lượng phê duyệt (Tấn)</th>
         <th>Đơn giá có VAT (đ/kg)</th>
         <th>Thành tiền theo đơn giá<br/> có VAT (đ)</th>
 <!--        <th>Đơn giá được duyệt <br/>có VAT (đ/kg)</th>-->
