@@ -516,6 +516,11 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
         mesg = 'Bạn có muốn gửi duyệt ?'
         break;
       }
+      case STATUS.TU_CHOI_LDTC: {
+        trangThai = STATUS.CHO_DUYET_LDV;
+        mesg = 'Bạn có muốn gửi duyệt ?'
+        break;
+      }
       case STATUS.CHO_DUYET_LDV: {
         trangThai = STATUS.DA_DUYET_LDV;
         mesg = 'Bạn có muốn gửi duyệt ?'
