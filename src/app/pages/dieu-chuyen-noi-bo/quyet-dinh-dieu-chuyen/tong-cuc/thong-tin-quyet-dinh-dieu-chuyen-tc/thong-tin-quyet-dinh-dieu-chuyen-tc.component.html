@@ -253,6 +253,7 @@
                 <th>Số đề xuất/ Công văn</th>
                 <th>Ngày trình duyệt Tổng cục</th>
                 <th>Tổng dự toán kinh phí (triệu đồng)</th>
+                <th>Tổng dự toán kinh phí PD (triệu đồng)</th>
                 <th>Trích yếu</th>
               </tr>
             </thead>
@@ -265,6 +266,12 @@
                   <td>{{item.soDxuat || ""}}</td>
                   <td>{{item.ngayGduyet | date: 'dd/MM/YYYY'}}</td>
                   <td>{{item.tongDuToanKp|number: '1.0-1' || ""}}</td>
+                  <td>
+                    <nz-input-number [(ngModel)]='item.tongDuToanKpPd' [nzMin]="1" [nzMax]="999999999" [nzStep]="1"
+                      [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                      [nzDisabled]="isView">
+                    </nz-input-number>
+                  </td>
                   <td>{{item.trichYeu || ""}}</td>
                 </tr>
               </ng-container>
@@ -299,6 +306,9 @@
                   <th rowspan="2"></th>
                   <th rowspan="2"></th>
                   <th colspan="10" class="text-center">Chi cục đề xuất điều chuyển</th>
+                  <th rowspan="2" class="text-center break min-w-120 max-w-120">
+                    Dự toán kinh phí
+                    PD (triệu đồng)</th>
                   <th rowspan="2" style="max-width: 90px; min-width: 90px;  white-space: break-spaces;"
                     class="text-center">
                     Thời gian dự
@@ -345,6 +355,8 @@
                     <td></td>
                     <td class="text-right bold">{{item.duToanKphi|number: '1.0-1':
                       'vi_VN'}}</td>
+                    <td class="text-right bold">{{item.duToanKphiPd|number: '1.0-1':
+                      'vi_VN'}}</td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -362,6 +374,7 @@
                         </td>
                         <td></td>
                         <td class="bold">{{ bb.tenDiemKho || ""}}</td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -398,6 +411,8 @@
                               'vi_VN'}}</td>
                             <td class="text-right bold">{{c.duToanKphi|number: '1.0-1':
                               'vi_VN'}}</td>
+                            <td class="text-right bold">{{item.duToanKphiPd|number: '1.0-1':
+                              'vi_VN'}}</td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -408,6 +423,7 @@
                           </tr>
                           <ng-container *ngFor="let d of c.children, let y = index">
                             <tr>
+                              <td></td>
                               <td></td>
                               <td></td>
                               <td></td>
@@ -448,6 +464,7 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
+                                <td></td>
                                 <td>{{(e.tenDiemKhoNhan || "")}}</td>
                                 <td></td>
                                 <td></td>
@@ -456,6 +473,7 @@
                               </tr>
                               <ng-container *ngFor="let e of d.children, let y = index">
                                 <tr>
+                                  <td></td>
                                   <td></td>
                                   <td></td>
                                   <td></td>
@@ -498,6 +516,9 @@
                   <th rowspan="2"></th>
                   <th rowspan="2"></th>
                   <th colspan="10" class="text-center">Chi cục đề xuất điều chuyển</th>
+                  <th rowspan="2" class="text-center break min-w-120 max-w-120">
+                    Dự toán kinh phí
+                    PD (triệu đồng)</th>
                   <th rowspan="2" style="max-width: 90px; min-width: 90px;  white-space: break-spaces;"
                     class="text-center">
                     Thời gian dự
@@ -543,6 +564,8 @@
                     <td></td>
                     <td class="text-right bold">{{item.duToanKphi|number: '1.0-1':
                       'vi_VN'}}</td>
+                    <td class="text-right bold">{{item.duToanKphiPd|number: '1.0-1':
+                      'vi_VN'}}</td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -561,6 +584,7 @@
                         </td>
                         <td></td>
                         <td class="bold">{{ bb.tenDiemKho || ""}}</td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -598,6 +622,8 @@
                               'vi_VN'}}</td>
                             <td class="text-right bold">{{c.duToanKphi|number: '1.0-1':
                               'vi_VN'}}</td>
+                            <td class="text-right bold">{{item.duToanKphiPd|number: '1.0-1':
+                              'vi_VN'}}</td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -609,6 +635,7 @@
                           </tr>
                           <ng-container *ngFor="let d of c.children, let y = index">
                             <tr>
+                              <td></td>
                               <td></td>
                               <td></td>
                               <td></td>
