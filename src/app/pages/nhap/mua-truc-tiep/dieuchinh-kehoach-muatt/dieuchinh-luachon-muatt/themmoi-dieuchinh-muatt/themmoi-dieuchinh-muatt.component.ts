@@ -238,7 +238,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
         const data = res.data;
         this.formData.patchValue({
           id: data.id,
-          soQdDc: data.soQdDc.split("/")[0] != "" ? data.soQdDc.split("/")[0] : this.soQdDc,
+          soQdDc: data.soQdDc.split("/")[0] != "" ? data.soQdDc.split("/")[0] : "",
           ngayKyDc: data.ngayKyDc,
           ngayHluc: data.ngayHluc,
           loaiVthh: data.loaiVthh,
@@ -466,10 +466,12 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
       } else {
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+          res.data.soQdDc = res.data.soQdDc.split("/")[0] != "" ? res.data.soQdDc.split("/")[0] : ""
           this.helperService.bidingDataInFormGroup(this.formData, res.data);
           // this.quayLai()
         } else {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          res.data.soQdDc = res.data.soQdDc.split("/")[0] != "" ? res.data.soQdDc.split("/")[0] : ""
           this.helperService.bidingDataInFormGroup(this.formData, res.data);
           // this.quayLai()
         }
