@@ -281,6 +281,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
         dataToUpdate.tenNganKho = selectedKho.title;
         if (this.listLoKho.length === 0) {
           dataToUpdate.tonKho = selectedKho.slTon;
+          dataToUpdate.namNhap = selectedKho.namNhap;
           dataToUpdate.loaiVthh = selectedKho.loaiVthh;
           dataToUpdate.cloaiVthh = selectedKho.cloaiVthh;
           dataToUpdate.tenCloaiVthh = selectedKho.tenCloaiVthh;
@@ -298,6 +299,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
         dataToUpdate.tenNganKho = selectedKho.title;
         if (this.listLoKho.length === 0) {
           dataToUpdate.tonKho = selectedKho.slTon;
+          dataToUpdate.namNhap = selectedKho.namNhap;
           dataToUpdate.loaiVthh = selectedKho.loaiVthh;
           dataToUpdate.cloaiVthh = selectedKho.cloaiVthh;
           dataToUpdate.tenCloaiVthh = selectedKho.tenCloaiVthh;
@@ -315,6 +317,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       if (selectedKho) {
         dataToUpdate.tenLoKho = selectedKho.title;
         dataToUpdate.tonKho = selectedKho.slTon;
+        dataToUpdate.namNhap = selectedKho.namNhap;
         dataToUpdate.loaiVthh = selectedKho.loaiVthh;
         dataToUpdate.cloaiVthh = selectedKho.cloaiVthh;
         dataToUpdate.tenCloaiVthh = selectedKho.tenCloaiVthh;
@@ -326,6 +329,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       if (selectedKho) {
         dataToUpdate.tenLoKho = selectedKho.title;
         dataToUpdate.tonKho = selectedKho.slTon;
+        dataToUpdate.namNhap = selectedKho.namNhap;
         dataToUpdate.loaiVthh = selectedKho.loaiVthh;
         dataToUpdate.cloaiVthh = selectedKho.cloaiVthh;
         dataToUpdate.tenCloaiVthh = selectedKho.tenCloaiVthh;
@@ -346,6 +350,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
         dataToUpdate.maLoKho = null;
         dataToUpdate.tenLoKho = null;
         dataToUpdate.tonKho = null;
+        dataToUpdate.namNhap = null;
         dataToUpdate.loaiVthh = null;
         dataToUpdate.cloaiVthh = null;
         dataToUpdate.tenCloaiVthh = null;
@@ -357,6 +362,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
         dataToUpdate.maLoKho = null;
         dataToUpdate.tenLoKho = null;
         dataToUpdate.tonKho = null;
+        dataToUpdate.namNhap = null;
         dataToUpdate.loaiVthh = null;
         dataToUpdate.cloaiVthh = null;
         dataToUpdate.tenCloaiVthh = null;
@@ -366,12 +372,14 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
         dataToUpdate.maLoKho = null;
         dataToUpdate.tenLoKho = null;
         dataToUpdate.tonKho = null;
+        dataToUpdate.namNhap = null;
         dataToUpdate.loaiVthh = null;
         dataToUpdate.cloaiVthh = null;
         dataToUpdate.tenCloaiVthh = null;
         break;
       case 'loKho':
         dataToUpdate.tonKho = null;
+        dataToUpdate.namNhap = null;
         dataToUpdate.loaiVthh = null;
         dataToUpdate.cloaiVthh = null;
         dataToUpdate.tenCloaiVthh = null;
