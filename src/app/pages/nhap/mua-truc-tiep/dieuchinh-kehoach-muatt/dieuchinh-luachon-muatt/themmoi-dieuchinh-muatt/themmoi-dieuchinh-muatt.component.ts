@@ -91,6 +91,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
       trichYeuDc: [''],
       noiDungToTrinh: [''],
       noiDungQdDc: [''],
+      checkListFileDinhKems: [''],
 
     });
   }
@@ -455,7 +456,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     }
     if (res.msg == MESSAGE.SUCCESS) {
       if (isGuiDuyet) {
-        this.setValidator();
+        await this.setValidator();
         await this.helperService.markFormGroupTouched(this.formData);
         if (this.formData.invalid) {
           return;
@@ -485,19 +486,25 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     this.formData.controls["ngayHluc"].clearValidators();
   }
 
-  setValidator() {
+  async setValidator() {
     this.formData.controls["soToTrinh"].setValidators([Validators.required]);
     this.formData.controls["ngayTaoCv"].setValidators([Validators.required]);
-    this.formData.controls["soQdDc"].setValidators([Validators.required]);
     this.formData.controls["ngayHluc"].setValidators([Validators.required]);
     if (this.formData.get("trangThai").value == STATUS.DA_DUYET_LDV) {
       this.formData.controls["soQdDc"].setValidators([Validators.required]);
       this.formData.controls["ngayKyDc"].setValidators([Validators.required]);
       this.formData.controls["ngayHluc"].setValidators([Validators.required]);
+      this.formData.controls["trichYeuDc"].setValidators([Validators.required]);
+      if(this.fileDinhKems.length == 0){
+        this.formData.controls["checkListFileDinhKems"].setValidators([Validators.required]);
+      }else{
+        this.formData.controls["checkListFileDinhKems"].clearValidators();
+      }
     } else {
       this.formData.controls["soQdDc"].clearValidators();
       this.formData.controls["ngayKyDc"].clearValidators();
       this.formData.controls["ngayHluc"].clearValidators();
+      this.formData.controls["trichYeuDc"].clearValidators();
     }
   }
 
