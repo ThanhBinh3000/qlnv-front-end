@@ -123,7 +123,7 @@
             </div>
             <div nz-col [nzSpan]="4" *ngIf="this.userService.isTongCuc()">
               <nz-form-item>
-                <nz-form-label nzRequired>Thời gian phê duyệt tiêu hũy của BTC</nz-form-label>
+                <nz-form-label nzRequired>Thời gian phê duyệt tiêu hủy của BTC</nz-form-label>
                 <nz-form-control>
                   <nz-range-picker [nzRanges]="ranges" ngModel formControlName="thoiGianPd"
                                    (ngModelChange)="onChangeTimeQd($event)" [nzDisabled]="disabledThamDinh()"
