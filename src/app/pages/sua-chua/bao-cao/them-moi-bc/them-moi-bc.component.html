@@ -164,6 +164,7 @@
               <th>Chi cục DTNN</th>
               <th>Loại hàng</th>
               <th>Chủng loại</th>
+              <th>Năm nhập</th>
               <th>ĐVT</th>
               <th>Điểm kho</th>
               <th>Nhà kho/Ngăn kho/Lô kho</th>
@@ -194,6 +195,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
               </tr>
               <ng-container *ngIf="item.expandSet">
                 <tr *ngFor="let data of item.children">
@@ -201,6 +203,7 @@
                   <td></td>
                   <td>{{data.tenLoaiVthh}}</td>
                   <td>{{data.tenCloaiVthh}}</td>
+                  <td>{{data.namNhap}}</td>
                   <td>{{data.donViTinh }}</td>
                   <td>{{data.tenDiemKho}}</td>
                   <td>{{data.tenNhaKho}}/{{data.tenNganKho}}/{{data.tenLoKho}}</td>
