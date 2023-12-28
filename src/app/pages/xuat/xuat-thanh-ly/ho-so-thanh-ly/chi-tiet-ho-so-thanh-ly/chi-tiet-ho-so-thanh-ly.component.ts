@@ -1,18 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "src/app/services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
+import {Component, OnInit} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "src/app/services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
 import * as dayjs from "dayjs";
-import { STATUS } from "src/app/constants/status";
-import { HoSoThanhLyService } from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/HoSoThanhLy.service";
-import { chain } from "lodash";
-import { TongHopThanhLyService } from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/TongHopThanhLy.service";
-import { Validators } from "@angular/forms";
-import { Base3Component } from 'src/app/components/base3/base3.component';
-import { ActivatedRoute, Router } from '@angular/router';
-import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
+import {STATUS} from "src/app/constants/status";
+import {HoSoThanhLyService} from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/HoSoThanhLy.service";
+import {chain} from "lodash";
+import {TongHopThanhLyService} from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/TongHopThanhLy.service";
+import {Validators} from "@angular/forms";
+import {Base3Component} from 'src/app/components/base3/base3.component';
+import {ActivatedRoute, Router} from '@angular/router';
+import {
+  DialogTableSelectionComponent
+} from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import {MESSAGE} from "../../../../../constants/message";
 import {PREVIEW} from "src/app/constants/fileType";
 
@@ -24,6 +26,8 @@ import {PREVIEW} from "src/app/constants/fileType";
 export class ChiTietHoSoThanhLyComponent extends Base3Component implements OnInit {
   fileCanCu: any[] = [];
   symbol: string = '';
+  suffixes: string = '';
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -44,6 +48,7 @@ export class ChiTietHoSoThanhLyComponent extends Base3Component implements OnIni
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
       soHoSo: [null, [Validators.required]],
+      soTtrinhVu: [null],
       ngayTao: [dayjs().format("YYYY-MM-DD"), [Validators.required]],
       maDanhSach: [null, [Validators.required]],
       idDanhSach: [null, [Validators.required]],
@@ -65,26 +70,29 @@ export class ChiTietHoSoThanhLyComponent extends Base3Component implements OnIni
   }
 
   initForm() {
+    this.suffixes = "/TTr-QLHDT";
     if (this.id) {
       this.detail(this.id).then((res) => {
         if (res) {
-          let ttr = res.soHoSo.split('/')
+          const ttr = (res.soHoSo || '').split('/');
+          const ttrVu = (res.soTtrinhVu || '').split('/');
           this.formData.patchValue({
-            soHoSo: ttr[0],
+            soHoSo: ttr[0] || '',
+            soTtrinhVu: ttrVu[0] || '',
             thoiGianTl: [res.thoiGianTlTu, res.thoiGianTlDen]
           })
-          this.symbol = '/'+ttr[1];
+          this.symbol = '/' + (ttr[1] || '');
           this.dataTable = chain(res.children).groupBy('xhTlDanhSachHdr.tenChiCuc').map((value, key) => ({
-            expandSet: true,
-            tenDonVi: key,
-            children: value,
-          })
+              expandSet: true,
+              tenDonVi: key,
+              children: value,
+            })
           ).value()
         }
       })
-    }else{
-      if(this.userService.isCuc()){
-        this.symbol = '/'+this.userInfo.DON_VI.tenVietTat+"-KH&QLHDT";
+    } else {
+      if (this.userService.isCuc()) {
+        this.symbol = '/' + (this.userInfo.DON_VI.tenVietTat || '') + "-KH&QLHDT";
       }
     }
   }
@@ -112,47 +120,48 @@ export class ChiTietHoSoThanhLyComponent extends Base3Component implements OnIni
       })
     })
     body.children = children;
-    body.soHoSo = this.formData.value.soHoSo + this.symbol
+    body.soHoSo = this.formData.value.soHoSo + this.symbol;
+    body.soTtrinhVu = this.formData.value.soTtrinhVu + this.suffixes;
     let validateDataTable = true;
-    if(isGuiDuyet){
-      if(this.userService.isCuc()){
+    if (isGuiDuyet) {
+      if (this.userService.isCuc()) {
         body.children.forEach(item => {
           console.log(item);
-          if(item.donGiaDk == null || item.donGiaDk == 0){
-            this.notification.error(MESSAGE.ERROR, "Vui lòng điền đơn giá thanh lý dự kiến tại " + item.tenNhaKho + " - "  + item.tenNganKho + " - " + item.tenLoKho);
+          if (item.donGiaDk == null || item.donGiaDk == 0) {
+            this.notification.error(MESSAGE.ERROR, "Vui lòng điền đơn giá thanh lý dự kiến tại " + item.tenNhaKho + " - " + item.tenNganKho + " - " + item.tenLoKho);
             validateDataTable = false;
             return;
           }
-          if(item.ketQua == null){
-            this.notification.error(MESSAGE.ERROR, "Vui lòng điền kết quả đánh giá chất lượng tại " + item.tenNhaKho + " - "  + item.tenNganKho + " - " + item.tenLoKho);
+          if (item.ketQua == null) {
+            this.notification.error(MESSAGE.ERROR, "Vui lòng điền kết quả đánh giá chất lượng tại " + item.tenNhaKho + " - " + item.tenNganKho + " - " + item.tenLoKho);
             validateDataTable = false;
             return;
           }
         });
       }
-      if(this.userService.isTongCuc()){
+      if (this.userService.isTongCuc()) {
         body.children.forEach(item => {
           console.log(item);
-          if(item.slDaDuyet == null || item.slDaDuyet == 0){
-            this.notification.error(MESSAGE.ERROR, "Vui lòng điền số lượng phê duyệt tại " + item.tenNhaKho + " - "  + item.tenNganKho + " - " + item.tenLoKho);
+          if (item.slDaDuyet == null || item.slDaDuyet == 0) {
+            this.notification.error(MESSAGE.ERROR, "Vui lòng điền số lượng phê duyệt tại " + item.tenNhaKho + " - " + item.tenNganKho + " - " + item.tenLoKho);
             validateDataTable = false;
             return;
           }
-          if(item.donGiaPd == null || item.donGiaPd == 0){
-            this.notification.error(MESSAGE.ERROR, "Vui lòng điền đơn giá thanh lý phê duyệt tại " + item.tenNhaKho + " - "  + item.tenNganKho + " - " + item.tenLoKho);
+          if (item.donGiaPd == null || item.donGiaPd == 0) {
+            this.notification.error(MESSAGE.ERROR, "Vui lòng điền đơn giá thanh lý phê duyệt tại " + item.tenNhaKho + " - " + item.tenNganKho + " - " + item.tenLoKho);
             validateDataTable = false;
             return;
           }
         });
       }
     }
-    if(validateDataTable){
+    if (validateDataTable) {
       this.createUpdate(body).then((res) => {
         if (res) {
           if (isGuiDuyet) {
             this.id = res.id;
             this.formData.patchValue({
-              id : res.id,
+              id: res.id,
               trangThai: res.trangThai,
               tenTrangThai: res.tenTrangThai
             })
@@ -205,10 +214,10 @@ export class ChiTietHoSoThanhLyComponent extends Base3Component implements OnIni
                   thoiGianTlDen: dataTh.thoiGianTlDen
                 })
                 this.dataTable = chain(dataTh.children).groupBy('xhTlDanhSachHdr.tenChiCuc').map((value, key) => ({
-                  expandSet: true,
-                  tenDonVi: key,
-                  children: value,
-                })
+                    expandSet: true,
+                    tenDonVi: key,
+                    children: value,
+                  })
                 ).value()
               }
             })

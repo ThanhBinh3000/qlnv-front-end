@@ -1,18 +1,13 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "src/app/services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { DanhMucService } from "src/app/services/danhmuc.service";
-import { Base2Component } from "src/app/components/base2/base2.component";
-import { CHUC_NANG } from 'src/app/constants/status';
-import { XuatThanhLyComponent } from "src/app/pages/xuat/xuat-thanh-ly/xuat-thanh-ly.component";
-import { HoSoThanhLyService } from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/HoSoThanhLy.service";
-import dayjs from "dayjs";
-import { MESSAGE } from "src/app/constants/message";
-import { Base3Component } from 'src/app/components/base3/base3.component';
-import { ActivatedRoute, Router } from '@angular/router';
+import {Component, Input, OnInit} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "src/app/services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {DanhMucService} from "src/app/services/danhmuc.service";
+import {HoSoThanhLyService} from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/HoSoThanhLy.service";
+import {Base3Component} from 'src/app/components/base3/base3.component';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-ho-so-thanh-ly',
@@ -36,9 +31,10 @@ export class HoSoThanhLyComponent extends Base3Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, route, router, _service);
     this.defaultURL = 'xuat/xuat-thanh-ly/trinh-tham-dinh'
     this.formData = this.fb.group({
-      nam : null,
+      nam: null,
       soHoSo: null,
       soQd: null,
+      soTb: null,
       trangThai: null,
       ngayTuCuc: null,
       ngayDenCuc: null,
@@ -89,12 +85,10 @@ export class HoSoThanhLyComponent extends Base3Component implements OnInit {
     let trangThai = data.trangThai
     if (this.userService.isCuc()) {
       this.STATUS.DU_THAO || trangThai == this.STATUS.TU_CHOI_TP || trangThai == this.STATUS.TU_CHOI_LDC
-        || trangThai == this.STATUS.TU_CHOI_CBV || trangThai == this.STATUS.TU_CHOI_LDV
+      || trangThai == this.STATUS.TU_CHOI_CBV || trangThai == this.STATUS.TU_CHOI_LDV
     }
     if (this.userService.isTongCuc()) {
       return trangThai == this.STATUS.DA_DUYET_LDC || trangThai == this.STATUS.DANG_DUYET_CB_VU;
     }
   }
-
-
 }
