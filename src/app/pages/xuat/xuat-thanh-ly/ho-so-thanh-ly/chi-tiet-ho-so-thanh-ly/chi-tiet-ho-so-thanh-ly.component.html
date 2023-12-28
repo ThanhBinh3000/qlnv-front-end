@@ -90,7 +90,7 @@
             </div>
             <div nz-col [nzSpan]="3">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true">Ngày duyệt LĐ Cục</nz-form-label>
+                <nz-form-label [nzNoColon]="true">Ngày duyệt LĐ Cục (ngày trình Tổng cục)</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-date-picker formControlName="ngayDuyetLdc" nzFormat="dd/MM/yyyy" nzDisabled>
                   </nz-date-picker>
@@ -99,7 +99,7 @@
             </div>
             <div nz-col [nzSpan]="5">
               <nz-form-item>
-                <nz-form-label>Thời gian đề xuất thanh lý</nz-form-label>
+                <nz-form-label>Thời gian đề xuất thanh lý của Cục</nz-form-label>
                 <nz-form-control>
                   <nz-range-picker [nzRanges]="ranges" ngModel formControlName="thoiGianTl" nzDisabled
                                    [nzFormat]="globals.dateFormat"></nz-range-picker>
@@ -166,7 +166,7 @@
             <th>Tồn kho</th>
             <th>SL đề xuất thanh lý</th>
             <th>ĐVT</th>
-            <th>Đơn giá thanh lý dự kiến</th>
+            <th>Đơn giá thanh lý dự kiến (đ)</th>
             <th>Thành tiền dự kiến (đồng)</th>
             <th>Lý do cần thanh lý</th>
             <th>Kết quả đánh giá chất lượng</th>
@@ -232,8 +232,8 @@
           <tr>
             <th [width]="30">STT</th>
             <th>Chi cục DTNN</th>
-            <th>Loại hàng</th>
-            <th>Chủng loại</th>
+            <th>Loại hàng DTQG</th>
+            <th>Chủng loại hàng DTQG</th>
             <th>Tên hàng</th>
             <th>Điểm kho</th>
             <th>Nhà kho/Ngăn kho/Lô kho</th>

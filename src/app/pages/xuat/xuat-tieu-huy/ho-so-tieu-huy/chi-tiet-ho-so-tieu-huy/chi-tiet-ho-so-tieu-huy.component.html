@@ -108,7 +108,7 @@
             </div>
             <div nz-col [nzSpan]="4" *ngIf="this.userService.isTongCuc()">
               <nz-form-item>
-                <nz-form-label nzRequired>Thời gian phê duyệt tiêu hủy</nz-form-label>
+                <nz-form-label nzRequired>Thời gian phê duyệt tiêu hũy của BTC</nz-form-label>
                 <nz-form-control>
                   <nz-range-picker [nzRanges]="ranges" ngModel formControlName="thoiGianPd"
                                    (ngModelChange)="onChangeTimeQd($event)" [nzDisabled]="disabledThamDinh()"
@@ -176,7 +176,7 @@
             <th>Tồn kho</th>
             <th>SL đề xuất tiêu hủy</th>
             <th>ĐVT</th>
-            <th>Đơn giá tiêu hủy dự kiến</th>
+            <th>Đơn giá tiêu hủy dự kiến (đ)</th>
             <th>Thành tiền dự kiến (đồng)</th>
             <th>Lý do cần tiêu hủy</th>
             <th>Kết quả đánh giá chất lượng</th>
@@ -242,8 +242,8 @@
           <tr>
             <th [width]="30">STT</th>
             <th>Chi cục DTNN</th>
-            <th>Loại hàng</th>
-            <th>Chủng loại</th>
+            <th>Loại hàng DTQG</th>
+            <th>Chủng loại hàng DTQG</th>
             <th>Tên hàng hóa</th>
             <th>Điểm kho</th>
             <th>Nhà kho/Ngăn kho/Lô kho</th>
@@ -252,7 +252,7 @@
             <th>SL tiêu hủy thẩm định</th>
             <th>ĐVT</th>
             <th>Đơn giá tiêu hủy thẩm định</th>
-            <th>Thành tiền(đồng)</th>
+            <th>Thành tiền (đồng)</th>
             <th>Lý do cần tiêu hủy</th>
             <th>Kết quả đánh giá chất lượng</th>
           </tr>
