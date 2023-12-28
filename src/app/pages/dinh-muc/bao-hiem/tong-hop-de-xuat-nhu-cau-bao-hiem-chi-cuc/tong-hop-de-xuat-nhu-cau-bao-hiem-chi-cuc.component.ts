@@ -8,6 +8,7 @@ import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../services/storage.service";
 import { saveAs } from 'file-saver';
 import {DeXuatNhuCauBaoHiemService} from "../../../../services/dinhmuc-maymoc-baohiem/de-xuat-nhu-cau-bao-hiem.service";
+import {STATUS} from "../../../../constants/status";
 
 @Component({
   selector: 'app-tong-hop-de-xuat-nhu-cau-bao-hiem-chi-cuc',
@@ -79,15 +80,14 @@ export class TongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Component im
       capDvi : 2
     })
     await this.search();
+    if (this.dataTable.length > 0 && !this.userService.isCuc()) {
+      this.dataTable = this.dataTable.filter(item => item.trangThai != STATUS.DU_THAO);
+    }
   }
 
   async clearForm() {
     this.formData.reset();
-    this.formData.patchValue({
-      maDvi : this.userInfo.MA_DVI,
-      capDvi : 2
-    })
-    await this.search();
+    await this.filter();
   }
 
 

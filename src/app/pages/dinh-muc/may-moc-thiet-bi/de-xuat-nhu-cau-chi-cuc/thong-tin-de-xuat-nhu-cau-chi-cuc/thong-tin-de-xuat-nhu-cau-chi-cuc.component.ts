@@ -13,9 +13,6 @@ import {STATUS} from "../../../../../constants/status";
 import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 import {MmHienTrangMmService} from "../../../../../services/mm-hien-trang-mm.service";
 import {MangLuoiKhoService} from "../../../../../services/qlnv-kho/mangLuoiKho.service";
-import {
-  MmThemMoiDmTrangBiComponent
-} from "../../mm-dinh-muc-trang-bi/mm-them-moi-dm-trang-bi/mm-them-moi-dm-trang-bi.component";
 
 // @ts-ignore
 @Component({
