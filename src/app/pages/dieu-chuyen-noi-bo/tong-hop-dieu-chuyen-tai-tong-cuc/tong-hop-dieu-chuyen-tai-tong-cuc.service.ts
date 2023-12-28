@@ -34,4 +34,8 @@ export class TongHopDieuChuyenCapTongCucService extends BaseService {
         const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet/${id}`;
         return this._httpClient.get<OldResponseData>(url).toPromise();
     }
+    previewTh(body) {
+        const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/xem-truoc-tong-hop`;
+        return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+    }
 }
