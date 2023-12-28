@@ -179,7 +179,7 @@
             <div nz-row [nzGutter]="24">
               <div nz-col nzSpan="4">
                 <nz-form-item class="form-item">
-                  <nz-form-label [nzNoColon]="true" > Số QĐ điều chỉnh
+                  <nz-form-label [nzNoColon]="true" nzRequired > Số QĐ điều chỉnh
                   </nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-input-group nzAddOnAfter="{{soQdDc}}">
@@ -193,7 +193,7 @@
               </div>
               <div nz-col nzSpan="4">
                 <nz-form-item class="form-item">
-                  <nz-form-label [nzNoColon]="true" > Ngày Ký QĐ điều chỉnh </nz-form-label>
+                  <nz-form-label [nzNoColon]="true" nzRequired > Ngày Ký QĐ điều chỉnh </nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-date-picker formControlName="ngayKyDc" nzFormat="yyyy-MM-dd"
                                     [nzDisabled]="checkDisableQdDc()">
@@ -214,7 +214,7 @@
               <div nz-col [nzSpan]="12">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true" nzRequired> Trích yếu </nz-form-label>
-                  <nz-form-control nz-col [nzSpan]="24">
+                  <nz-form-control nz-col [nzErrorTip]="error" [nzSpan]="24">
                     <nz-input-group>
                       <input [readonly]="checkDisableQdDc()" class="search__input" nz-input formControlName="trichYeuDc" />
                     </nz-input-group>
@@ -224,14 +224,14 @@
               <div nz-col nzSpan="24">
                 <nz-form-item>
                   <nz-form-label>Nội dung quyết định điều chỉnh</nz-form-label>
-                  <nz-form-control [nzErrorTip]="error">
+                  <nz-form-control>
                     <textarea rows="3" nz-input class="search__input" formControlName="noiDungQdDc" [readOnly]="checkDisableQdDc()"></textarea>
                   </nz-form-control>
                 </nz-form-item>
               </div>
               <div nz-col [nzSpan]="24">
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true">
+                  <nz-form-label [nzNoColon]="true" nzRequired>
                     File đính kèm QĐ điều chỉnh
                   </nz-form-label>
                   <div class="list-file">

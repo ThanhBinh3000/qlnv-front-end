@@ -29,6 +29,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   listVatTu?= [];
   loaiVthh?: any;
   isReadOnly?: boolean = false;
+  showFromQd: boolean = false;
   listChungLoai = [];
   listCuc = [];
   listChiCuc = [];

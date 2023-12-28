@@ -127,7 +127,19 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col nzSpan="4">
+                <div *ngIf="formData.value.loaiQd == '02'" nz-col nzSpan="4">
+                  <nz-form-item>
+                    <nz-form-label nzRequired [nzNoColon]="true">
+                      Căn cứ vào bảng kê
+                    </nz-form-label>
+                    <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                      <nz-input-group>
+                        <input nz-input [readonly]="true" formControlName="soBangKe"/>
+                      </nz-input-group>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div *ngIf="formData.value.loaiQd == '01'" nz-col nzSpan="4">
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true">
                             Số hợp đồng
@@ -137,7 +149,7 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col nzSpan="4">
+                <div *ngIf="formData.value.loaiQd == '01'" nz-col nzSpan="4">
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true">
                             Ngày ký hợp đồng

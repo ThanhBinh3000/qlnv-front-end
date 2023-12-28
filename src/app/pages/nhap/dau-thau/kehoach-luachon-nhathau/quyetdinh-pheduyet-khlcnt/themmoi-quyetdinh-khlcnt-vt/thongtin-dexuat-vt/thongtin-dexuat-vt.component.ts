@@ -257,7 +257,8 @@ export class ThongtinDexuatVtComponent extends Base2Component implements OnInit 
         dataChiTieu: this.dataChiTieu,
         loaiVthh: this.formData.get("loaiVthh").value,
         dviTinh: this.formData.get("loaiVthh").value.maDviTinh,
-        namKeHoach: this.formData.value.namKhoach
+        namKeHoach: this.formData.value.namKhoach,
+        showFromQd: true
       }
     });
     modal.afterClose.subscribe((res) => {
