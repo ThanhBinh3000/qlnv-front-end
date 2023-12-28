@@ -62,7 +62,18 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="4">
+            <div nz-col [nzSpan]="3" *ngIf="userService.isTongCuc()">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">Số tờ trình của Vụ QLHDT</nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-input-group nzAddOnAfter="{{suffixes}}">
+                    <nz-input-number [nzSize]="'small'" nz-input formControlName="soTtrinhVu"
+                                     [nzDisabled]="disabledTrinh()"></nz-input-number>
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="userService.isTongCuc() ? 3 : 4">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true">Số hồ sơ</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -101,7 +112,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="4">
+            <div nz-col [nzSpan]="userService.isTongCuc() ? 3 : 5">
               <nz-form-item>
                 <nz-form-label>Thời gian đề xuất tiêu hủy của Cục</nz-form-label>
                 <nz-form-control>

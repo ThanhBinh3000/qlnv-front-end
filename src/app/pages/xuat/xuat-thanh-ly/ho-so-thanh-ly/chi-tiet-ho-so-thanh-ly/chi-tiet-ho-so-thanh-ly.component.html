@@ -46,7 +46,6 @@
             *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC || formData.value.trangThai == STATUS.TU_CHOI_CBV "
             nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
-
   <nz-card class="mg-t-16 flex-card p-lr16">
     <nz-collapse>
       <nz-collapse-panel nzActive="true" nzHeader="THÔNG TIN CHUNG">
@@ -62,13 +61,24 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
+            <div nz-col [nzSpan]="4" *ngIf="userService.isTongCuc()">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">Số tờ trình của Vụ QLHDT</nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-input-group nzAddOnAfter="{{suffixes}}">
+                    <nz-input-number [nzSize]="'small'" nz-input formControlName="soTtrinhVu"
+                                     [nzDisabled]="disabledTrinh()"></nz-input-number>
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
             <div nz-col [nzSpan]="4">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true">Số hồ sơ</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfter="{{symbol}}">
                     <nz-input-number [nzSize]="'small'" nz-input formControlName="soHoSo"
-                                     [nzDisabled]="disabledTrinh()"></nz-input-number>
+                                     [nzDisabled]="disabledTrinh() || userService.isTongCuc()"></nz-input-number>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
