@@ -186,7 +186,21 @@ export class HelperService {
   decodeStringToBase64(input: string): string {
     return decodeURIComponent(escape(window.atob(input)));
   }
-
+  exc_check_digital_signatures(signCallBack) {
+    let data = {
+      test: "test"
+    };
+    this.exc_sign_xml(this, data, (sender, rv)=>{
+      var received_msg = JSON.parse(rv);
+      if (received_msg.Status == 0) {
+        this.exc_verify_xml(this.decodeStringToBase64(received_msg.Signature), (rv)=>{
+          signCallBack(JSON.parse(rv)[0].ValidationDetails.SignerCertStatus);
+        });
+      } else {
+        alert("Ký số không thành công:" + received_msg.Status + ":" + received_msg.Error);
+      }
+    })
+  }
   exc_sign_xml(sendToCallBack, data, signCallBack) {
     data = JsonToXML.parse("data", data)
     var prms = {};

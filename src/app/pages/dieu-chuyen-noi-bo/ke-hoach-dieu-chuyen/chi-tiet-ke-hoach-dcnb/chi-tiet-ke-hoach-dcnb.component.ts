@@ -1494,6 +1494,9 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       } else {
         alert("Ký số không thành công:" + received_msg.Status + ":" + received_msg.Error);
       }
-    })
+    });
+    this.helperService.exc_check_digital_signatures((data)=>{
+      alert(data.Description);
+    });
   }
 }
