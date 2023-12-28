@@ -24,14 +24,14 @@
             </nz-select>
           </nz-input-group>
         </div>
-        <div nz-col [nzSpan]="6">
-          <label class="search__label">Trạng thái</label>
-          <nz-input-group>
-            <nz-select formControlName="status">
-              <nz-option *ngFor="let item of listTrangThai" [nzLabel]="item.giaTri" [nzValue]="item.ma"></nz-option>
-            </nz-select>
-          </nz-input-group>
-        </div>
+<!--        <div nz-col [nzSpan]="6">-->
+<!--          <label class="search__label">Trạng thái</label>-->
+<!--          <nz-input-group>-->
+<!--            <nz-select formControlName="status">-->
+<!--              <nz-option *ngFor="let item of listTrangThai" [nzLabel]="item.giaTri" [nzValue]="item.ma"></nz-option>-->
+<!--            </nz-select>-->
+<!--          </nz-input-group>-->
+<!--        </div>-->
       </div>
     </form>
     <div class="cangiua group-button-search">
@@ -64,7 +64,7 @@
           <th class="text-center" nzWidth="">SĐT di động</th>
           <th class="text-center" nzWidth="">Email</th>
           <th class="text-center" nzWidth="">Đơn vị quản lý</th>
-          <th class="text-center" nzWidth="150px">Trạng thái</th>
+<!--          <th class="text-center" nzWidth="150px">Trạng thái</th>-->
           <th class="text-center" nzWidth="120px">Hành động</th>
         </tr>
       </thead>
@@ -75,7 +75,7 @@
           <td>{{data.phoneNo}}</td>
           <td>{{data.email}}</td>
           <td>{{data.dvql}} - {{data.dvqlName}}</td>
-          <td>{{data.tenTrangThai}}</td>
+<!--          <td>{{data.tenTrangThai}}</td>-->
           <td style="text-align: center;">
             <a (click)="getDetail(data)" *ngIf="userService.isAccessPermisson('QTDM_DM_THU_KHO_THEM')">
               <i class="fa fa-eye" title="Xem chi tiết"></i>

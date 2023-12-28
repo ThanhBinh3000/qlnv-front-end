@@ -7,7 +7,7 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import {FormGroup, Validators} from "@angular/forms";
 import {Base2Component} from "../../../../../components/base2/base2.component";
 import {chain} from 'lodash';
-import { saveAs } from 'file-saver';
+import {saveAs} from 'file-saver';
 import {v4 as uuidv4} from 'uuid';
 import {
   MmThongTinNcChiCuc
@@ -16,6 +16,7 @@ import {MmDxChiCucService} from "../../../../../services/mm-dx-chi-cuc.service";
 import {MESSAGE} from "../../../../../constants/message";
 import dayjs from "dayjs";
 import {STATUS} from "../../../../../constants/status";
+import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 
 @Component({
   selector: 'app-them-moi-mm-dx-cuc',
@@ -39,6 +40,7 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private dxChiCucService: MmDxChiCucService,
+    private ctieuKhService: ChiTieuKeHoachNamCapTongCucService
   ) {
     super(httpClient, storageService, notification, spinner, modal, dxChiCucService)
     super.ngOnInit()
@@ -87,6 +89,30 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     }
   }
 
+  async changeNamKh(event) {
+    if (event) {
+      await this.loadDsDxCc(event);
+      let res = await this.ctieuKhService.loadThongTinChiTieuKeHoachTheoNamVaDonVi(event, this.userInfo.MA_DVI.substring(0, 4));
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          let qdGiaoChiTieu = res.data;
+          if (qdGiaoChiTieu && qdGiaoChiTieu.khLuongThuc) {
+            let detailLt = qdGiaoChiTieu.khLuongThuc.find(item => item.maDonVi == this.userInfo.MA_DVI)
+            if (detailLt) {
+              this.formData.patchValue({
+                slGaoNhap: detailLt.ntnGao,
+                slThocNhap: detailLt.ntnThoc,
+                slGaoXuat: detailLt.xtnTongThoc,
+                slThocXuat: detailLt.xtnTongGao,
+                soQdGiaoCt: qdGiaoChiTieu.soQuyetDinh,
+              })
+            }
+          }
+        }
+      }
+    }
+  }
+
   async tongHop() {
     this.helperService.markFormGroupTouched(this.formDataTongHop);
     if (this.formDataTongHop.invalid) {
@@ -118,10 +144,10 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
           namKeHoach: this.formDataTongHop.value.namKeHoach,
           slGaoDangBaoQuan: detail.slGaoDangBaoQuan,
           slThocDangBaoQuan: detail.slThocDangBaoQuan,
-          slGaoNhap: detail.slGaoNhap,
-          slGaoXuat: detail.slGaoXuat,
-          slThocNhap: detail.slThocNhap,
-          slThocXuat: detail.slThocXuat,
+          // slGaoNhap: detail.slGaoNhap,
+          // slGaoXuat: detail.slGaoXuat,
+          // slThocNhap: detail.slThocNhap,
+          // slThocXuat: detail.slThocXuat,
         })
         this.dataTable = detail.listQlDinhMucDxTbmmTbcdDtl
         this.dataTable.forEach(item => {
@@ -141,7 +167,7 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
       }
       this.isTongHop = true;
     } else {
-      this.notification.warning('',res.msg);
+      this.notification.warning('', res.msg);
       return;
     }
   }
@@ -164,8 +190,8 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     try {
       let body = {
         "capDvi": "3",
-        "namKeHoach" : namKh,
-        "trangThaiTh" : "24",
+        "namKeHoach": namKh,
+        "trangThaiTh": "24",
         "paggingReq": {
           "limit": 10,
           "page": 0
@@ -174,7 +200,7 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
       let res = await this.dxChiCucService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.formDataTongHop.patchValue({
-          listSoCv : []
+          listSoCv: []
         })
         let data = res.data;
         this.listDxChiCuc = data.content;
@@ -286,6 +312,8 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
           tenTaiSan: key,
           dataChild: value,
           idVirtual: uuidv4(),
+          donViTinh: value && value.length > 0 ? value[0].donViTinh : null,
+          donGiaTd: value && value.length > 0 ? value[0].donGiaTd : null
         })
       ).value()
     }
@@ -294,8 +322,6 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
         if (item && item.dataChild && item.dataChild.length > 0) {
           item.dataChild.forEach(data => {
             this.loadSlThuaThieu(data)
-            item.donViTinh = data.donViTinh
-            item.donGiaTd = data.donGiaTd
           })
         }
       })
@@ -317,12 +343,13 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     console.log(this.dataTable)
   }
 
-  sumSoLuong(data: any) {
+  sumSoLuong(data: any, field: string) {
     let sl = 0;
     if (data && data.dataChild && data.dataChild.length > 0) {
-      data.dataChild.forEach(item => {
-        sl = sl + item.soLuong
-      })
+      return data.dataChild.reduce((prev, cur) => {
+        prev += cur[field];
+        return prev;
+      }, 0);
     }
     return sl
   }
@@ -380,9 +407,5 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
-  }
-
-  changeNamKh(event) {
-    this.loadDsDxCc(event);
   }
 }

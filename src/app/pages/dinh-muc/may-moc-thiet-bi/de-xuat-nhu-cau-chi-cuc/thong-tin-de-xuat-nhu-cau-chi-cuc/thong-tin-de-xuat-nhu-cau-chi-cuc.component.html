@@ -235,12 +235,10 @@
                               [nzParser]="globals.parser"></nz-input-number>
           </th>
           <th>
-            <nz-input-number  [(ngModel)]="rowItem.donGiaTd" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter" [nzMin]="0"
-                              [nzParser]="globals.parser"></nz-input-number>
+            {{rowItem.donGiaTd | number : '1.0-3' : 'vi_VN'}}
           </th>
           <th>
-            <nz-input-number  [(ngModel)]="rowItem.soLuong * rowItem.donGiaTd" nzDisabled [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzMin]="0"
-                              [nzParser]="globals.parser"></nz-input-number>
+            {{rowItem.soLuong * rowItem.donGiaTd | number : '1.0-3' : 'vi_VN'}}
           </th>
           <th>
             <input type="text" [(ngModel)]="rowItem.ghiChu" nz-input/>
@@ -272,8 +270,8 @@
             <td class="text-right">{{data.chenhLechThieu | number : '1.0-1' : 'vi_VN'}}</td>
             <td class="text-right">{{data.chenhLechThua | number : '1.0-1' : 'vi_VN'}}</td>
             <td class="text-right">{{data.soLuong  | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="text-right">{{data.donGiaTd  | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="text-right">{{data.soLuong * data.donGiaTd    | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class="text-right">{{data.donGiaTd  | number : '1.0-3' : 'vi_VN'}}</td>
+            <td class="text-right">{{data.soLuong * data.donGiaTd    | number : '1.0-3' : 'vi_VN'}}</td>
             <td>{{data.ghiChu}}</td>
             <td class="text-center" nzRight >
               <a (click)="editRow(idx)" *ngIf="!isView">
@@ -328,14 +326,12 @@
               <nz-input-number [nzMin]="0"  [(ngModel)]="dataEdit[idx].data.soLuong" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzMax]="dataEdit[idx].data.slTieuChuan ? dataEdit[idx].data.slTieuChuan : 9999999999999"
                                [nzParser]="globals.parser"></nz-input-number>
             </td>
-            <td>
-              <nz-input-number [nzMin]="0"  [(ngModel)]="dataEdit[idx].data.donGiaTd" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter"
-                               [nzParser]="globals.parser"></nz-input-number>
-            </td>
-            <td>
-              <nz-input-number [nzMin]="0"  [(ngModel)]="dataEdit[idx].data.soLuong * dataEdit[idx].data.donGiaTd" nzDisabled [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                               [nzParser]="globals.parser"></nz-input-number>
-            </td>
+            <th>
+              {{dataEdit[idx].data.donGiaTd | number : '1.0-3' : 'vi_VN'}}
+            </th>
+            <th>
+              {{dataEdit[idx].data.soLuong * dataEdit[idx].data.donGiaTd | number : '1.0-3' : 'vi_VN'}}
+            </th>
             <td>
               <input type="text" [(ngModel)]="dataEdit[idx].data.ghiChu" nz-input/>
             </td>
