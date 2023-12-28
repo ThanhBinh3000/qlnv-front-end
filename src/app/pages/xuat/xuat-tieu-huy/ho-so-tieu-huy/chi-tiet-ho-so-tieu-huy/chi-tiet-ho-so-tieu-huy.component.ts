@@ -25,6 +25,7 @@ import {TongHopThanhLyService} from "../../../../../services/qlnv-hang/xuat-hang
 import {
   DialogTableSelectionComponent
 } from "../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
+import {PREVIEW} from "src/app/constants/fileType";
 
 @Component({
   selector: 'app-chi-tiet-ho-so-tieu-huy',
@@ -323,4 +324,21 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
     })
   }
 
+  async preview(id) {
+    this.spinner.show();
+    await this._service.preview({
+      tenBaoCao: '62.Thông tin trình thẩm định HS tiêu hủy.docx',
+      id: id,
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.printSrc = res.data.pdfSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
+      }
+    });
+    this.spinner.hide();
+  }
 }
