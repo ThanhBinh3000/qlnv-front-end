@@ -848,7 +848,7 @@
                             <td class="text-right bold">{{c.duToanKphi|number: '1.0-1':
                               'vi_VN'}}</td>
                             <td class="text-right bold">
-                              <nz-input-number [(ngModel)]='item.duToanKphiPd' [nzMin]="1" [nzMax]="999999999"
+                              <nz-input-number [(ngModel)]='item.duToanKphiPd' [nzMin]="0" [nzMax]="999999999"
                                 [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                 (ngModelChange)="onChangeDuToanKphiPd($event, item)" [nzParser]="globals.parser"
                                 [nzDisabled]="isView">
@@ -1016,10 +1016,6 @@
                       'vi_VN'}}</td>
                     <td class="text-right bold">
                       {{item.duToanKphiPd|number: '1.0-1':'vi_VN'}}
-                      <!-- <nz-input-number [(ngModel)]='item.duToanKphiPd' [nzMin]="1" [nzMax]="999999999" [nzStep]="1"
-                        [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                        [nzDisabled]="isView">
-                      </nz-input-number> -->
                     </td>
                     <td></td>
                     <td></td>
@@ -1076,7 +1072,7 @@
                             <td class="text-right bold">{{c.duToanKphi|number: '1.0-1':
                               'vi_VN'}}</td>
                             <td class="text-right bold" *ngIf="formData.value.loaiQdinh == '01'">
-                              <nz-input-number [(ngModel)]='item.duToanKphiPd' [nzMin]="1" [nzMax]="999999999"
+                              <nz-input-number [(ngModel)]='item.duToanKphiPd' [nzMin]="0" [nzMax]="999999999"
                                 [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                 (ngModelChange)="onChangeDuToanKphiPd($event, item)" [nzParser]="globals.parser"
                                 [nzDisabled]="isView">
