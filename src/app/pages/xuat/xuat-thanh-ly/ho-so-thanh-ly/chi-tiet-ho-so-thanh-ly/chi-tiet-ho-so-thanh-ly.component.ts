@@ -14,6 +14,7 @@ import { Base3Component } from 'src/app/components/base3/base3.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import {MESSAGE} from "../../../../../constants/message";
+import {PREVIEW} from "src/app/constants/fileType";
 
 @Component({
   selector: 'app-chi-tiet-ho-so-thanh-ly',
@@ -321,5 +322,23 @@ export class ChiTietHoSoThanhLyComponent extends Base3Component implements OnIni
 
   viewTongCuc() {
     return this.userService.isTongCuc();
+  }
+
+  async preview(id) {
+    this.spinner.show();
+    await this._service.preview({
+      tenBaoCao: '60.Thông tin trình thẩm định HS thanh lý.docx',
+      id: id,
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.printSrc = res.data.pdfSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
+      }
+    });
+    this.spinner.hide();
   }
 }
