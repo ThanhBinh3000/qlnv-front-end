@@ -71,7 +71,7 @@
             <div nz-col nzSpan="3">
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-form-label  [nzNoColon]="true" class="label-color-kh"> Số QĐ xuất giảm vật tư
+                  <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Số QĐ xuất giảm vật tư
                   </nz-form-label>
                   <nz-input-group [nzAddOnAfter]="maQd">
                     <input nz-input formControlName="soQuyetDinh" [readonly]="isView"/>

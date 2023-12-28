@@ -53,6 +53,7 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
       thoiHanNhapDk: [null, [Validators.required]],
       soQdSc: [null],
       trichYeu: [null, [Validators.required]],
+      ysKien: [null],
       ketQua: [null],
       lyDoTuChoi: [null],
     });

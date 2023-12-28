@@ -147,10 +147,10 @@
             </div>
             <div *ngIf="viewTongCuc()" nz-col [nzSpan]="24">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true">Ý kiến của các Vụ nghiệp vụ</nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true">Ý kiến của các Vụ nghiệp vụ 1</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                                      <textarea rows="3" nz-input formControlName="yKien"
+                                      <textarea rows="3" nz-input formControlName="ysKien"
                                                 [readOnly]="disabledThamDinh()"></textarea>
                   </nz-input-group>
                 </nz-form-control>
@@ -279,6 +279,7 @@
             <th>Chi cục DTNN</th>
             <th>Loại hàng</th>
             <th>Chủng loại</th>
+            <th>Năm nhập</th>
 <!--            <th>Tên hàng</th>-->
             <th>Điểm kho</th>
             <th>Nhà kho/Ngăn kho/Lô kho</th>
