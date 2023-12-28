@@ -229,7 +229,7 @@ export class ChiTietTongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Comp
               let body = this.formData.value;
               body.maDanhSach = this.selectedItem ?? this.maHauTo;
               body.fileDinhKems = this.fileDinhKems;
-              body.tongHopDtl = res.data.content;
+              body.tongHopDtl = danhSach;
               let result = await this.createUpdate(this.formData.value);
               if (result) {
                 this.selectedItem = cloneDeep(result);

@@ -303,12 +303,8 @@ export class ThongTinQuyetDinhXuatGiamVatTuBaoHanhComponent extends Base2Compone
       //   return m.qdGiaonvXhDtl
       //     .filter(i=> i.mauBiHuy==true);
       // }).flat();
-      this.dataTable = responseData.qdGiaonvXn.map(m => {
-        return m.qdGiaonvXhDtl
-          .filter(i => i.mauBiHuy == true);
-      }).flat();
+      this.dataTable = responseData.phieuKdcl.filter(i => i.mauBiHuy == true);
       console.log(this.dataTable,'this.dataTable')
-
       this.formData.patchValue({
         soCanCu: responseData.soBaoCao,
         idCanCu: responseData.id,

@@ -39,8 +39,8 @@
     </div>
   </div>
   <nz-alert class="mg-t-10"
-    *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC || formData.value.trangThai == STATUS.TU_CHOI_CBV "
-    nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
+            *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC || formData.value.trangThai == STATUS.TU_CHOI_CBV "
+            nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
 
   <nz-card class="mg-t-16 flex-card p-lr16">
@@ -50,7 +50,7 @@
           <div nz-row [nzGutter]="[18]">
             <div nz-col [nzSpan]="2">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true">Năm </nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true">Năm</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
                   <nz-select formControlName="nam" [nzDisabled]="true">
                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
@@ -60,11 +60,11 @@
             </div>
             <div nz-col [nzSpan]="4">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true">Số hồ sơ </nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true">Số hồ sơ</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfter="{{symbol}}">
                     <nz-input-number [nzSize]="'small'" nz-input formControlName="soHoSo"
-                      [nzDisabled]="disabledTrinh()"></nz-input-number>
+                                     [nzDisabled]="disabledTrinh()"></nz-input-number>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -83,14 +83,14 @@
                 <nz-form-label nzRequired [nzNoColon]="true">Mã danh sách thanh lý</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDanhSach()">
-                    <input nz-input [readonly]="true" formControlName="maDanhSach" />
+                    <input nz-input [readonly]="true" formControlName="maDanhSach"/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="3">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true">Ngày duyệt LĐ Cục</nz-form-label>
+                <nz-form-label [nzNoColon]="true">Ngày duyệt LĐ Cục (ngày trình Tổng cục)</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-date-picker formControlName="ngayDuyetLdc" nzFormat="dd/MM/yyyy" nzDisabled>
                   </nz-date-picker>
@@ -99,31 +99,28 @@
             </div>
             <div nz-col [nzSpan]="5">
               <nz-form-item>
-                <nz-form-label>Thời gian đề xuất thanh lý</nz-form-label>
+                <nz-form-label>Thời gian đề xuất thanh lý của Cục</nz-form-label>
                 <nz-form-control>
                   <nz-range-picker [nzRanges]="ranges" ngModel formControlName="thoiGianTl" nzDisabled
-                    [nzFormat]="globals.dateFormat"></nz-range-picker>
+                                   [nzFormat]="globals.dateFormat"></nz-range-picker>
                 </nz-form-control>
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="24">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true">Trích yếu </nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true">Trích yếu</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input formControlName="trichYeu" [readonly]="disabledTrinh()" />
+                    <input nz-input formControlName="trichYeu" [readonly]="disabledTrinh()"/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
             </div>
             <div *ngIf="viewTongCuc()" nz-col [nzSpan]="24">
-              <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true">Kết quả đánh giá của Cán bộ Vụ QLHDT
-                </nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group>
-                    <input nz-input formControlName="ketQua" [readOnly]="disabledThamDinh()" />
-                  </nz-input-group>
+              <nz-form-item class="form-item display-block">
+                <nz-form-label [nzNoColon]="true"> Kết quả đánh giá của Cán bộ Vụ QLHDT</nz-form-label>
+                <nz-form-control nz-col [nzErrorTip]="error">
+                  <textarea nz-input [rows]="3" formControlName="ketQua" [readOnly]="disabledThamDinh()"></textarea>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -155,148 +152,154 @@
     <nz-collapse>
       <nz-collapse-panel nzActive="true" nzHeader="Danh sách hàng DTQG đề nghị thanh lý">
         <nz-table class="pd-10 nowrap" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
-          [nzShowPagination]="false">
+                  [nzShowPagination]="false">
           <thead>
-            <tr>
-              <th [width]="30">STT</th>
-              <th>Chi cục DTNN</th>
-              <th>Loại hàng DTQG</th>
-              <th>Chủng loại hàng DTQG</th>
-              <th>Tên hàng</th>
-              <th>Điểm kho</th>
-              <th>Nhà kho/Ngăn kho/Lô kho</th>
-              <th>Ngày nhâp kho</th>
-              <th>Tồn kho</th>
-              <th>SL đề xuất thanh lý</th>
-              <th>ĐVT</th>
-              <th>Đơn giá thanh lý dự kiến</th>
-              <th>Chi phí thanh lý dự kiến</th>
-              <th>Lý do cần thanh lý</th>
-              <th>Kết quả đánh giá chất lượng</th>
-            </tr>
+          <tr>
+            <th [width]="30">STT</th>
+            <th>Chi cục DTNN</th>
+            <th>Loại hàng DTQG</th>
+            <th>Chủng loại hàng DTQG</th>
+            <th>Tên hàng</th>
+            <th>Điểm kho</th>
+            <th>Nhà kho/Ngăn kho/Lô kho</th>
+            <th>Ngày nhâp kho</th>
+            <th>Tồn kho</th>
+            <th>SL đề xuất thanh lý</th>
+            <th>ĐVT</th>
+            <th>Đơn giá thanh lý dự kiến (đ)</th>
+            <th>Thành tiền dự kiến (đồng)</th>
+            <th>Lý do cần thanh lý</th>
+            <th>Kết quả đánh giá chất lượng</th>
+          </tr>
           </thead>
           <tbody>
-            <ng-container *ngFor="let item of dataTable , let i = index">
-              <tr>
-                <td nzShowExpand="true" [nzExpand]="item.expandSet" (nzExpandChange)="onExpandChange(item, $event)">
+          <ng-container *ngFor="let item of dataTable , let i = index">
+            <tr>
+              <td nzShowExpand="true" [nzExpand]="item.expandSet" (nzExpandChange)="onExpandChange(item, $event)">
+              </td>
+              <td>{{ item.tenDonVi }}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <ng-container *ngIf="item.expandSet">
+              <tr *ngFor="let data of item.children">
+                <td></td>
+                <td></td>
+                <td>{{data.xhTlDanhSachHdr.tenLoaiVthh}}</td>
+                <td>{{data.xhTlDanhSachHdr.tenCloaiVthh}}</td>
+                <td></td>
+                <td>{{data.xhTlDanhSachHdr.tenDiemKho}}</td>
+                <td>
+                  {{data.xhTlDanhSachHdr.tenNhaKho}}/{{data.xhTlDanhSachHdr.tenNganKho}}
+                  /{{data.xhTlDanhSachHdr.tenLoKho}}
                 </td>
-                <td>{{ item.tenDonVi }}</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{data.xhTlDanhSachHdr.ngayNhapKho | date : 'dd/MM/yyyy'}}</td>
+                <td>{{data.xhTlDanhSachHdr.slHienTai | number : '1.0-1' : 'vi_VN' }}</td>
+                <td>{{data.xhTlDanhSachHdr.slDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
+                <td>{{data.xhTlDanhSachHdr.donViTinh }}</td>
+                <td>
+                  <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   nz-input [(ngModel)]="data.xhTlDanhSachHdr.donGiaDk" [nzMin]="1"
+                                   [nzDisabled]="disabledTrinh()"></nz-input-number>
+                </td>
+                <td>{{data.xhTlDanhSachHdr.slDeXuat * data.xhTlDanhSachHdr.donGiaDk | number : '1.0-1' :
+                  'vi_VN' }}</td>
+                <td>{{data.xhTlDanhSachHdr.lyDo}}</td>
+                <td><input nz-input [(ngModel)]="data.xhTlDanhSachHdr.ketQua" [readOnly]="disabledTrinh()"/></td>
               </tr>
-              <ng-container *ngIf="item.expandSet">
-                <tr *ngFor="let data of item.children">
-                  <td></td>
-                  <td></td>
-                  <td>{{data.xhTlDanhSachHdr.tenLoaiVthh}}</td>
-                  <td>{{data.xhTlDanhSachHdr.tenCloaiVthh}}</td>
-                  <td></td>
-                  <td>{{data.xhTlDanhSachHdr.tenDiemKho}}</td>
-                  <td>
-                    {{data.xhTlDanhSachHdr.tenNhaKho}}/{{data.xhTlDanhSachHdr.tenNganKho}}/{{data.xhTlDanhSachHdr.tenLoKho}}
-                  </td>
-                  <td>{{data.xhTlDanhSachHdr.ngayNhapKho | date : 'dd/MM/yyyy'}}</td>
-                  <td>{{data.xhTlDanhSachHdr.slHienTai | number : '1.0-1' : 'vi_VN' }}</td>
-                  <td>{{data.xhTlDanhSachHdr.slDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
-                  <td>{{data.xhTlDanhSachHdr.donViTinh }}</td>
-                  <td><nz-input-number [nzSize]="'small'"  [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      nz-input [(ngModel)]="data.xhTlDanhSachHdr.donGiaDk" [nzMin]="1"
-                      [nzDisabled]="disabledTrinh()"></nz-input-number>
-                  </td>
-                  <td>{{data.xhTlDanhSachHdr.slDeXuat * data.xhTlDanhSachHdr.donGiaDk | number : '1.0-1' :
-                    'vi_VN' }}</td>
-                  <td>{{data.xhTlDanhSachHdr.lyDo}}</td>
-                  <td><input nz-input [(ngModel)]="data.xhTlDanhSachHdr.ketQua" [readOnly]="disabledTrinh()" /></td>
-                </tr>
-              </ng-container>
             </ng-container>
+          </ng-container>
           </tbody>
         </nz-table>
       </nz-collapse-panel>
     </nz-collapse>
     <nz-collapse>
-    <nz-collapse-panel *ngIf="viewTongCuc()" nzActive="true" nzHeader="Kết quả thẩm định của Vụ QLHDT">
+      <nz-collapse-panel *ngIf="viewTongCuc()" nzActive="true" nzHeader="Kết quả thẩm định của Vụ QLHDT">
         <nz-table class="mt-2px pd-10 nowrap" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
-          [nzShowPagination]="false">
+                  [nzShowPagination]="false">
           <thead>
-            <tr>
-              <th [width]="30">STT</th>
-              <th>Chi cục DTNN</th>
-              <th>Loại hàng</th>
-              <th>Chủng loại</th>
-              <th>Tên hàng</th>
-              <th>Điểm kho</th>
-              <th>Nhà kho/Ngăn kho/Lô kho</th>
-              <th>Ngày nhâp kho</th>
-              <th>Tồn kho</th>
-              <th>SL thanh lý phê duyệt</th>
-              <th>ĐVT</th>
-              <th>Đơn giá thanh lý phê duyệt</th>
-              <th>Chi phí thanh lý phê duyệt</th>
-              <th>Lý do cần thanh lý</th>
-              <th>Kết quả đánh giá chất lượng</th>
-            </tr>
+          <tr>
+            <th [width]="30">STT</th>
+            <th>Chi cục DTNN</th>
+            <th>Loại hàng DTQG</th>
+            <th>Chủng loại hàng DTQG</th>
+            <th>Tên hàng</th>
+            <th>Điểm kho</th>
+            <th>Nhà kho/Ngăn kho/Lô kho</th>
+            <th>Ngày nhâp kho</th>
+            <th>Đề xuất thanh lý của Cục</th>
+            <th>SL thanh lý thẩm định</th>
+            <th>ĐVT</th>
+            <th>Đơn giá thanh lý thẩm định</th>
+            <th>Thành tiền (đồng)</th>
+            <th>Lý do cần thanh lý</th>
+            <th>Kết quả đánh giá chất lượng</th>
+          </tr>
           </thead>
           <tbody>
-            <ng-container *ngFor="let item of dataTable , let i = index">
-              <tr>
-                <td nzShowExpand="true" [nzExpand]="item.expandSet" (nzExpandChange)="onExpandChange(item, $event)">
+          <ng-container *ngFor="let item of dataTable , let i = index">
+            <tr>
+              <td nzShowExpand="true" [nzExpand]="item.expandSet" (nzExpandChange)="onExpandChange(item, $event)">
+              </td>
+              <td>{{ item.tenDonVi }}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <ng-container *ngIf="item.expandSet">
+              <tr *ngFor="let data of item.children">
+                <td></td>
+                <td></td>
+                <td>{{data.xhTlDanhSachHdr.tenLoaiVthh}}</td>
+                <td>{{data.xhTlDanhSachHdr.tenCloaiVthh}}</td>
+                <td></td>
+                <td>{{data.xhTlDanhSachHdr.tenDiemKho}}</td>
+                <td>
+                  {{data.xhTlDanhSachHdr.tenNhaKho}}/{{data.xhTlDanhSachHdr.tenNganKho}}
+                  /{{data.xhTlDanhSachHdr.tenLoKho}}
                 </td>
-                <td>{{ item.tenDonVi }}</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{data.xhTlDanhSachHdr.ngayNhapKho | date : 'dd/MM/yyyy'}}</td>
+                <td>{{data.xhTlDanhSachHdr.slDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
+                <td>
+                  <nz-input-number [nzSize]="'small'" [nzMax]="data.xhTlDanhSachHdr.slDeXuat"
+                                   [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   nz-input [(ngModel)]="data.xhTlDanhSachHdr.slDaDuyet" [nzMin]="1"
+                                   [nzDisabled]="disabledThamDinh()"></nz-input-number>
+                </td>
+                <td>{{data.xhTlDanhSachHdr.donViTinh }}</td>
+                <td>
+                  <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                   nz-input [(ngModel)]="data.xhTlDanhSachHdr.donGiaPd" [nzMin]="1"
+                                   [nzDisabled]="disabledThamDinh()"></nz-input-number>
+                </td>
+                <td>{{data.xhTlDanhSachHdr.slDaDuyet * data.xhTlDanhSachHdr.donGiaPd | number : '1.0-1'
+                  : 'vi_VN' }}</td>
+                <td>{{data.xhTlDanhSachHdr.lyDo}}</td>
+                <td>{{data.xhTlDanhSachHdr.ketQua}}</td>
               </tr>
-              <ng-container *ngIf="item.expandSet">
-                <tr *ngFor="let data of item.children">
-                  <td></td>
-                  <td></td>
-                  <td>{{data.xhTlDanhSachHdr.tenLoaiVthh}}</td>
-                  <td>{{data.xhTlDanhSachHdr.tenCloaiVthh}}</td>
-                  <td></td>
-                  <td>{{data.xhTlDanhSachHdr.tenDiemKho}}</td>
-                  <td>
-                    {{data.xhTlDanhSachHdr.tenNhaKho}}/{{data.xhTlDanhSachHdr.tenNganKho}}/{{data.xhTlDanhSachHdr.tenLoKho}}
-                  </td>
-                  <td>{{data.xhTlDanhSachHdr.ngayNhapKho | date : 'dd/MM/yyyy'}}</td>
-                  <td>{{data.xhTlDanhSachHdr.slHienTai | number : '1.0-1' : 'vi_VN' }}</td>
-                  <td><nz-input-number [nzSize]="'small'" [nzMax]="data.xhTlDanhSachHdr.slDeXuat" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      nz-input [(ngModel)]="data.xhTlDanhSachHdr.slDaDuyet" [nzMin]="1"
-                      [nzDisabled]="disabledThamDinh()"></nz-input-number>
-                  </td>
-                  <td>{{data.xhTlDanhSachHdr.donViTinh }}</td>
-                  <td><nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                      nz-input [(ngModel)]="data.xhTlDanhSachHdr.donGiaPd" [nzMin]="1"
-                      [nzDisabled]="disabledThamDinh()"></nz-input-number>
-                  </td>
-                  <td>{{data.xhTlDanhSachHdr.slDaDuyet * data.xhTlDanhSachHdr.donGiaPd | number : '1.0-1'
-                    : 'vi_VN' }}</td>
-                  <td>{{data.xhTlDanhSachHdr.lyDo}}</td>
-                  <td>{{data.xhTlDanhSachHdr.ketQua}}</td>
-                </tr>
-              </ng-container>
             </ng-container>
+          </ng-container>
           </tbody>
         </nz-table>
       </nz-collapse-panel>

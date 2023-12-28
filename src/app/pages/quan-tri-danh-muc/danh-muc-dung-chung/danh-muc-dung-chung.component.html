@@ -37,38 +37,26 @@
           <th>
             <nz-input-group [nzSuffix]="suffixTemplateInfo">
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.loai"
-                (input)="filterInTable('loai',filterTable.loai)" name="loai" />
+               (blur)="search()" (keydown.enter)="search()" />
             </nz-input-group>
-            <ng-template #suffixTemplateInfo>
-              <i nz-icon nzType="search"></i>
-            </ng-template>
           </th>
           <th>
             <nz-input-group [nzSuffix]="suffixTemplateInfo">
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.ma"
-                (input)="filterInTable('ma',filterTable.ma)" name="ma  " />
+                     (blur)="search()" (keydown.enter)="search()" />
             </nz-input-group>
-            <ng-template #suffixTemplateInfo>
-              <i nz-icon nzType="search"></i>
-            </ng-template>
           </th>
           <th>
             <nz-input-group [nzSuffix]="suffixTemplateInfo">
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.giaTri"
-                (input)="filterInTable('giaTri',filterTable.giaTri)" name="giaTri" />
+                     (blur)="search()" (keydown.enter)="search()" />
             </nz-input-group>
-            <ng-template #suffixTemplateInfo>
-              <i nz-icon nzType="search"></i>
-            </ng-template>
           </th>
           <th>
             <nz-input-group [nzSuffix]="suffixTemplateInfo">
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.trangThai"
-                (input)="filterInTable('trangThai',filterTable.trangThai)" name="trangThai" />
+                     (blur)="search()" (keydown.enter)="search()"/>
             </nz-input-group>
-            <ng-template #suffixTemplateInfo>
-              <i nz-icon nzType="search"></i>
-            </ng-template>
           </th>
           <th></th>
         </tr>
@@ -113,3 +101,6 @@
     </div>
   </nz-card>
 </div>
+<ng-template #suffixTemplateInfo>
+  <i nz-icon nzType="search"></i>
+</ng-template>

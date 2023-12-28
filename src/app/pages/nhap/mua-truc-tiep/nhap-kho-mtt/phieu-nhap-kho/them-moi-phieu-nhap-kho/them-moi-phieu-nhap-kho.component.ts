@@ -17,6 +17,9 @@ import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { QuyetDinhGiaoNvNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/mua-truc-tiep/qdinh-giao-nvu-nh/quyetDinhGiaoNvNhapHang.service';
 import { PhieuNhapKhoMuaTrucTiepService } from 'src/app/services/phieu-nhap-kho-mua-truc-tiep.service';
+import {
+  MttPhieuKiemTraChatLuongService
+} from "../../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/MttPhieuKiemTraChatLuongService.service";
 
 
 @Component({
@@ -47,6 +50,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private phieuNhapKhoMuaTrucTiepService: PhieuNhapKhoMuaTrucTiepService,
+    private phieuKtraCluongService: MttPhieuKiemTraChatLuongService,
     private quyetDinhGiaoNvNhapHangService: QuyetDinhGiaoNvNhapHangService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuNhapKhoMuaTrucTiepService);
@@ -99,6 +103,8 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
       nguoiPduyet: [],
       tenNganLoKho: [],
       ngayGdinh: [],
+      soBangKe: [],
+      loaiQd: [],
     })
   }
 
@@ -193,6 +199,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
       tenLoaiVthh: data.tenLoaiVthh,
       tenCloaiVthh: data.tenCloaiVthh,
       moTaHangHoa: data.moTaHangHoa,
+      loaiQd: data.loaiQd,
       donGiaHd: data.hopDongMttHdrs[0]?.donGiaGomThue
     });
     let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi.includes(this.userInfo.MA_DVI));
@@ -267,14 +274,16 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
+        let phieuKtraCl = await this.phieuKtraCluongService.getDetail(data.id);
         this.formData.patchValue({
-          soPhieuKtraCluong: data.soPhieu,
-          ktvBaoQuan: data.ktvBaoQuan,
-          ngayGdinh: data.ngayGdinh,
+          soPhieuKtraCluong: phieuKtraCl.data.soPhieu,
+          ktvBaoQuan: phieuKtraCl.data.ktvBaoQuan,
+          ngayGdinh: phieuKtraCl.data.ngayGdinh,
+          soBangKe: phieuKtraCl.data.soBangKe,
         });
         console.log(this.dataTable, 123)
-        this.dataTable[0].soLuongThucNhap = data.soLuongNhapKho;
-        this.dataTable[0].soLuongChungTu = data.soLuongDeNghiKt;
+        this.dataTable[0].soLuongThucNhap = phieuKtraCl.data.soLuongNhapKho;
+        this.dataTable[0].soLuongChungTu = phieuKtraCl.data.soLuongDeNghiKt;
       }
     });
   }
@@ -286,6 +295,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
         const data = res.data;
         console.log(data)
         this.helperService.bidingDataInFormGroup(this.formData, data);
+        await this.bindingDataQd(data.idQdGiaoNvNh);
         this.dataTable = data.hhPhieuNhapKhoCtList;
         this.fileDinhKems = data.fileDinhKems
         this.formData.patchValue({

@@ -124,6 +124,8 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
       truongBpKtbq: [''],
       tenDviCcHang: [''],
       nguoiPduyet: [''],
+      soBangKe: [],
+      loaiQd: [],
     });
   }
 
@@ -416,6 +418,7 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
       const data = res.data;
       data.tenDvi = this.userInfo.TEN_DVI;
       this.helperService.bidingDataInFormGroup(this.formData, data);
+      await this.bindingDataQd(data.idQdGiaoNvNh);
       this.formData.value.tenNganLoKho = data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho;
       this.tenNganLoKho = this.formData.value.tenNganLoKho;
       this.radioValue = data.loaiBienBan;
@@ -545,6 +548,7 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
       cloaiVthh: data.cloaiVthh,
       tenLoaiVthh: data.tenLoaiVthh,
       tenCloaiVthh: data.tenCloaiVthh,
+      loaiQd: data.loaiQd,
       moTaHangHoa: data.moTaHangHoa,
       soHd: data.soHd,
       // ngayHd: data.hopDong.ngayKyHd,
@@ -605,6 +609,7 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
           soBbNhapDayKho: data.bienBanNhapDayKho[0]?.soBbNhapDayKho,
           idBbNhapDayKho: data.bienBanNhapDayKho[0]?.id,
           ngayKetThucNhap: data.bienBanNhapDayKho[0]?.ngayKthucNhap,
+          soBangKe: data.bienBanNhapDayKho[0]?.soBangKe,
         });
         this.tenNganLoKho = data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho;
         console.log(data.bienBanNhapDayKho[0]?.ngayKthucNhap, 888888);

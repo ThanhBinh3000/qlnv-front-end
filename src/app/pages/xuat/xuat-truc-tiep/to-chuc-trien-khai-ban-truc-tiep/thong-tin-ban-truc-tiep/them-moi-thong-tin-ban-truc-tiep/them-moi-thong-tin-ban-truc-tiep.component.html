@@ -224,15 +224,25 @@
           <thead>
           <tr>
             <th nzWidth="50px" class="text-center wrap"> STT</th>
-            <th class="text-left"> Tên cá nhân/tổ chức</th>
-            <th class="text-left"> MST</th>
+            <th class="text-left">
+              <span style='color: red;'>*</span> Tên cá nhân/tổ chức
+            </th>
+            <th class="text-left">
+              <span style='color: red;'>*</span> MST
+            </th>
             <th class="text-left"> Địa chỉ</th>
-            <th class="text-left"> Số điện thoại</th>
-            <th class="text-left"> Ngày chào giá</th>
-            <th class="text-center"> Số lượng
+            <th class="text-left">
+              <span style='color: red;'>*</span> Số điện thoại
+            </th>
+            <th class="text-left">
+              <span style='color: red;'>*</span> Ngày chào giá
+            </th>
+            <th class="text-center">
+              <span style='color: red;'>*</span> Số lượng
               {{loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? '' : '(kg)'}}
             </th>
-            <th class="text-center"> Đơn giá không có VAT
+            <th class="text-center">
+              <span style='color: red;'>*</span> Đơn giá không có VAT
               {{loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? '(đ)' : '(đ/kg)'}}
             </th>
             <th class="text-right"> Thành tiền không VAT (đ)</th>
@@ -242,7 +252,13 @@
           <tr *ngIf="!isView">
             <th class="text-center"></th>
             <th class="text-left">
-              <input nz-input [(ngModel)]="rowItem.tochucCanhan"/>
+              <input nz-input [nzAutocomplete]="auto" [(ngModel)]="rowItem.tochucCanhan"
+                     (input)="filterToChucCaNhan($event)"/>
+              <nz-autocomplete #auto (selectionChange)="changeToChucCaNhan($event)">
+                <nz-auto-option *ngFor="let item of filteredListToChucCaNhan" [nzValue]="item.tochucCanhan">
+                  {{ item.tochucCanhan }}
+                </nz-auto-option>
+              </nz-autocomplete>
             </th>
             <th class="text-left">
               <input nz-input [(ngModel)]="rowItem.mst"/>
@@ -324,9 +340,15 @@
             </ng-container>
             <ng-template #editTemplate>
               <td class="text-center">{{idx + 1}} </td>
-              <td class="text-left">
-                <input type="text" [(ngModel)]="dataEdit[idx].data.tochucCanhan" nz-input/>
-              </td>
+              <th class="text-left">
+                <input nz-input [nzAutocomplete]="auto" [(ngModel)]="dataEdit[idx].data.tochucCanhan"
+                       (input)="filterToChucCaNhan($event)"/>
+                <nz-autocomplete #auto (selectionChange)="changeToChucCaNhan($event, idx)">
+                  <nz-auto-option *ngFor="let item of filteredListToChucCaNhan" [nzValue]="item.tochucCanhan">
+                    {{ item.tochucCanhan }}
+                  </nz-auto-option>
+                </nz-autocomplete>
+              </th>
               <td class="text-left">
                 <input type="text" [(ngModel)]="dataEdit[idx].data.mst" nz-input/>
               </td>

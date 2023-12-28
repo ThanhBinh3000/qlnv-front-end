@@ -47,6 +47,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
   listKieuNx: any[] = [];
   dataChiTieu: any;
   maDviSelected: any;
+  previewName : string = 'qd_dieu_chinh_khlcnt_lt';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

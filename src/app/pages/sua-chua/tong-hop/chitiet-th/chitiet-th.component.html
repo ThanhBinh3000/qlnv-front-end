@@ -74,6 +74,7 @@
           <th>Chi cục DTNN</th>
           <th>Loại hàng</th>
           <th>Chủng loại</th>
+          <th>Năm nhập</th>
           <th>Điểm kho</th>
           <th>Nhà/Ngăn/Lô kho</th>
           <th>Ngày nhập kho</th>
@@ -97,6 +98,7 @@
             <td>{{(page-1)*pageSize+i+1}}</td>
             <td>{{item.nam}}</td>
             <td>{{item.maDanhSach}}</td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -140,6 +142,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
               </tr>
               <ng-container *ngFor="let data of chiCuc.children , let i = index">
                 <tr>
@@ -150,6 +153,7 @@
                   <td></td>
                   <td>{{data.scDanhSachHdr.tenLoaiVthh}}</td>
                   <td>{{data.scDanhSachHdr.tenCloaiVthh}}</td>
+                  <td>{{data.scDanhSachHdr.namNhap}}</td>
                   <td>{{data.scDanhSachHdr.tenDiemKho}}</td>
                   <td>{{data.scDanhSachHdr.tenNhaKho}}/{{data.scDanhSachHdr.tenNganKho}}/{{data.scDanhSachHdr.tenLoKho}}
                   </td>

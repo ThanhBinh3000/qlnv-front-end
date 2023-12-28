@@ -126,7 +126,8 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         soCanCu: [null],
         maPphapXdg: [null],
         loaiHangXdg: ['XDG_LH01'],
-        vat: [null]
+        vat: [null],
+        donViTinh: [null]
       }
     );
   }
@@ -590,6 +591,9 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
             if (resp.msg == MESSAGE.SUCCESS) {
               this.rowItemTtc.tchuanCluong = resp.data && resp.data.tieuChuanCl ? resp.data.tieuChuanCl : ""
               this.rowItemTtc.donViTinh = resp.data && resp.data.maDviTinh ? resp.data.maDviTinh : "";
+              this.formData.patchValue({
+                donViTinh : resp.data && resp.data.maDviTinh ? resp.data.maDviTinh : ""
+              })
               if (this.type == 'GCT' && this.formData.value.loaiGia) {
                 let body = {
                   namKeHoach: this.formData.value.namKeHoach,

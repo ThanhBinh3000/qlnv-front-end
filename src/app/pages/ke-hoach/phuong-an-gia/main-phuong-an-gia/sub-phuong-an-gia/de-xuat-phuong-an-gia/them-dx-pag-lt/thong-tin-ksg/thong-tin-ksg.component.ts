@@ -137,7 +137,7 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
     let msgRequired = "";
     //validator
     if (!this.isTabNdKhac && ((this.isTableKetQua && (!item.tenDviBaoGia || !item.ngayBaoGia)) || (!this.isTableKetQua && !item.tenDviThamDinh)
-      || !item.cloaiVthh || !item.soLuong || !item.donGia || !item.thoiHanBaoGia || (!this.isApDung && !item.maChiCuc ) || !item.fileDinhKem) ) {
+      || !item.cloaiVthh || !item.soLuong || !item.donGia || !item.thoiHanBaoGia || (!this.isApDung && !item.maChiCuc ) || !(item.fileDinhKem &&  item.fileDinhKem.fileName))) {
       msgRequired = "Vui lòng nhập đủ thông tin";
     }
     return msgRequired;
