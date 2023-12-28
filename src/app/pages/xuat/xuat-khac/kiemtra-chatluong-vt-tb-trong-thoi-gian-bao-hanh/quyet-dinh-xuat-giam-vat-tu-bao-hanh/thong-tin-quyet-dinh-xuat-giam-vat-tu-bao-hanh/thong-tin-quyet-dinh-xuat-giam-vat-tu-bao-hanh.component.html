@@ -197,7 +197,7 @@
         <th>Ngăn/lô kho</th>
         <th>ĐVT</th>
         <th>Mã đơn vị tài sản</th>
-        <th>SL lấy mẫu đã xuất</th>
+        <th>SL mẫu Kiểm định</th>
         <th>Kết quả kiểm định</th>
         <th>Số phiếu KĐCL</th>
         <th class="text-center">Mẫu có bị hủy?</th>
@@ -235,9 +235,9 @@
               <td>{{lv1.tenLoKho ? lv1.tenNganKho + '-' + lv1.tenLoKho : lv1.tenNganKho}}</td>
               <td>{{lv1.donViTinh}}</td>
               <td>{{lv1.maDviTsan}}</td>
-              <td>{{lv1.slLayMau}}</td>
+              <td>{{lv1.soLuongMauKd}}</td>
               <td>{{lv1.isDat == 1 ? 'Đạt' : 'Không đạt'}}</td>
-              <td>{{lv1.soPhieuKdcl}}</td>
+              <td>{{lv1.soPhieu}}</td>
               <td class="text-center">
                 <label nz-checkbox [(ngModel)]="lv1.mauBiHuy" [nzDisabled]="true"></label>
               </td>
