@@ -152,6 +152,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       soDxuat: [],
       ngayTrinhDuyetTc: [],
       tongDuToanKp: [],
+      tongDuToanKpPd: [],
       tenLoaiHinhNhapXuat: [],
       tenKieuNhapXuat: [],
       quyetDinhPdDtl: [new Array<any>(),],
@@ -454,6 +455,9 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       if (loaiQD) {
         this.formData.patchValue({
           tenLoaiQdinh: loaiQD.text,
+          soCanCuQdTc: "",
+          soDxuat: "",
+          ngayTrinhDuyetTc: ""
         })
         this.getDataNX(this.formData.value.loaiDc, value)
       }
@@ -510,11 +514,11 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
       this.danhSachKeHoach = []
       this.danhSachQuyetDinh = []
-      let dsHH = []
+
       const detail = await this.quyetDinhDieuChuyenTCService.getDetail(id)
       const data = detail.data
       if (!data) return
-      console.log('onChangeCanCuQdTc', detail)
+
       let dsDX = []
       if (this.formData.value.loaiQdinh === "01") {
         dsDX = data.danhSachQuyetDinh.filter((dvn) => dvn.maCucXuat === this.userInfo.MA_DVI)
@@ -531,30 +535,33 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
         })
       });
 
-      const hanghoa = dsDX[0]
-      hanghoa.danhSachQuyetDinhChiTiet.forEach(itemHH => {
-        const dcnbKeHoachDcHdr = itemHH.dcnbKeHoachDcHdr
-        if (dcnbKeHoachDcHdr) {
-          dcnbKeHoachDcHdr.danhSachHangHoa.forEach(element => {
-            dsHH.push({
-              ...element,
-              maLoNganKho: itemHH.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
-              maDvi: dcnbKeHoachDcHdr.maDvi,
-              tenDvi: dcnbKeHoachDcHdr.tenDvi,
-              soDxuat: dcnbKeHoachDcHdr.soDxuat
-            })
-          });
-        }
+      let dsHH = []
+      if (dsDX.length > 0) {
+        const hanghoa = dsDX[0]
+        hanghoa.danhSachQuyetDinhChiTiet.forEach(itemHH => {
+          const dcnbKeHoachDcHdr = itemHH.dcnbKeHoachDcHdr
+          if (dcnbKeHoachDcHdr) {
+            dcnbKeHoachDcHdr.danhSachHangHoa.forEach(element => {
+              dsHH.push({
+                ...element,
+                maLoNganKho: itemHH.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
+                maDvi: dcnbKeHoachDcHdr.maDvi,
+                tenDvi: dcnbKeHoachDcHdr.tenDvi,
+                soDxuat: dcnbKeHoachDcHdr.soDxuat
+              })
+            });
+          }
 
-      })
-
-
+        })
+      }
 
       this.dataTableView = this.buildTableView(dsHH, "maDvi")
-      let tongDuToanKp = dsDX?.reduce((prev, cur) => prev + cur.tongDuToanKp, 0);
+      let tongDuToanKp = dsDX?.reduce((prev, cur) => prev + (cur.tongDuToanKp || 0), 0);
+      let tongDuToanKpPd = dsDX?.reduce((prev, cur) => prev + (cur.tongDuToanKpPd || 0), 0);
 
       this.formData.patchValue({
         tongDuToanKp,
+        tongDuToanKpPd,
         quyetDinhPdDtl: dsDX,
         danhSachQuyetDinh: this.danhSachQuyetDinh
       })
@@ -616,23 +623,27 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
 
                 let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+                let duToanKphiPd = vs?.reduce((prev, cur) => prev + cur.duToanKphiPd, 0);
 
                 return {
                   ...maLoKho,
                   idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
                   children: rsxx,
                   duToanKphi,
+                  duToanKphiPd
                 }
               }
               ).value();
 
             let duToanKphi = v?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+            let duToanKphiPd = v?.reduce((prev, cur) => prev + cur.duToanKphiPd, 0);
             let rowDiemKho = v?.find(s => s.maDiemKho === k);
 
             return {
               ...rowDiemKho,
               idVirtual: rowDiemKho ? rowDiemKho.idVirtual ? rowDiemKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
               duToanKphi: duToanKphi,
+              duToanKphiPd,
               children: rss,
               expand: true
             }
@@ -640,6 +651,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
           ).value();
 
         let duToanKphi = rs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+        let duToanKphiPd = rs?.reduce((prev, cur) => prev + cur.duToanKphiPd, 0);
 
 
         let rowChiCuc = value?.find(s => s[groupBy] === key);
@@ -647,6 +659,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
           ...rowChiCuc,
           idVirtual: rowChiCuc ? rowChiCuc.idVirtual ? rowChiCuc.idVirtual : uuidv4.v4() : uuidv4.v4(),
           duToanKphi: duToanKphi,
+          duToanKphiPd,
           children: rs,
           expand: true
         };
@@ -655,11 +668,13 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
     if (data?.length > 0) {
       const tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+      const tongDuToanChiPhiPd = data.reduce((prev, cur) => prev + cur.duToanKphiPd, 0);
       this.formData.patchValue({
         tongDuToanKp: tongDuToanChiPhi,
+        tongDuToanKpPd: tongDuToanChiPhiPd,
       })
     };
-    console.log('dataView', dataView)
+
     return dataView
   }
 
@@ -682,7 +697,6 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
   nzActiveChange(value) {
     this.nzActive = value
-    console.log('nzActiveChange', value, this.nzActive)
   }
 
   async add(row?: any) {
@@ -835,7 +849,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
   async addCC(row?: any) {
     await this.spinner.show();
-    console.log('addCC', row)
+
     await this.spinner.hide();
     const keHoachDcHdrId = row.hdrId
     const param = {
@@ -853,19 +867,13 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       nzComponentParams: param,
     });
     modalQD.afterClose.subscribe(async (data) => {
-      debugger
-      // this.danhSachKeHoach = this.danhSachKeHoach.filter(item => !!item.maDiemKhoNhan)
+
       const diemKho = this.danhSachKeHoach.find(item => `${item.maLoKho}${item.maNganKho}${item.maNhaKho}${item.maDiemKho}${item.maDvi}` !== `${row.maLoKho}${row.maNganKho}${row.maNhaKho}${row.maDiemKho}${row.maDvi}`)
-      console.log('danhSachKeHoach', this.danhSachKeHoach)
-      console.log('diemKho', diemKho)
+
       if (data) {
         if (this.typeKeHoach === "LO_KHO_NHAN")
           this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => `${kh.maLoKhoNhan}${kh.maNganKhoNhan}` !== `${row.maLoKhoNhan}${row.maNganKhoNhan}`)
-        // if (this.typeKeHoach === "THEM_LO_KHO_NHAN")
-        //   this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maLoKhoNhan !== data.maLoKhoNhan)
 
-        // if (this.typeKeHoach === "THEM_DIEM_KHO_NHAN")
-        //   this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maDiemKhoNhan !== data.maDiemKhoNhan)
 
         this.danhSachKeHoach.push({
           ...data,
@@ -1309,7 +1317,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
             danhSachQuyetDinh: dsQuyetDinh
           })
 
-          console.log('xoaLoKhoNhanCC', dsQuyetDinh)
+
         }
       },
     });
@@ -1322,6 +1330,15 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       this.add(row)
     if (this.isChiCuc())
       this.addCC(row)
+  }
+
+  onChangeDuToanKphiPd(value, item) {
+    const iDV = this.formData.value.danhSachQuyetDinh.findIndex((qd) => qd.keHoachDcHdrId === item.hdrId)
+
+    const danhSachHangHoa = this.formData.value.danhSachQuyetDinh[iDV].dcnbKeHoachDcHdr.danhSachHangHoa
+    const iKho = danhSachHangHoa.findIndex((hh) => hh.maDiemKho === item.maDiemKho && hh.maNhaKho === item.maNhaKho && hh.maNganKho === item.maNganKho && hh.maLoKho === item.maLoKho)
+
+    this.formData.value.danhSachQuyetDinh[iDV].dcnbKeHoachDcHdr.danhSachHangHoa[iKho].duToanKphiPd = value
   }
 
   isLuuVaGD() {
@@ -1354,7 +1371,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     if (this.idInput) {
       body.id = this.idInput
     }
-    console.log('save', body)
+
     // return
     await this.spinner.show();
     let data = await this.createUpdate(body, null, isGuiDuyet);
