@@ -13,6 +13,7 @@ import { NzNotificationService } from "ng-zorro-antd/notification";
 import { Base2Component } from "src/app/components/base2/base2.component";
 import dayjs from "dayjs";
 import moment from "moment";
+import { DanhMucService } from "src/app/services/danhmuc.service";
 
 @Component({
   selector: 'app-them-chung-thu-so',
@@ -25,6 +26,7 @@ export class ThemChungThuSoComponent extends Base2Component implements OnInit {
   fb: FormBuilder = new FormBuilder();
   isView = false
   data?: any
+  dsCT: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -33,6 +35,7 @@ export class ThemChungThuSoComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private _modalRef: NzModalRef,
+    private danhMucService: DanhMucService,
     private donViService: DonviService,
     private mangLuoiKhoService: MangLuoiKhoService,
     private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
@@ -44,6 +47,7 @@ export class ThemChungThuSoComponent extends Base2Component implements OnInit {
       startDate: [, [Validators.required]],
       endDate: [, [Validators.required]],
       description: [],
+      loaiChungThu: [, [Validators.required]],
       note: [],
       status: [true],
     }
@@ -51,7 +55,16 @@ export class ThemChungThuSoComponent extends Base2Component implements OnInit {
   }
 
   ngOnInit(): void {
-    this.formData.patchValue({ ...this.data, startDate: moment(this.data.startDate, 'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD'), endDate: moment(this.data.endDate, 'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD') })
+    this.loadDsChungThu()
+    if (this.data)
+      this.formData.patchValue({ ...this.data, startDate: moment(this.data.startDate, 'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD'), endDate: moment(this.data.endDate, 'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD') })
+  }
+
+  async loadDsChungThu() {
+    let res = await this.danhMucService.danhMucChungGetAll("LOAI_CHUNG_THU");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dsCT = res.data
+    }
   }
 
   handleOk(item: any) {

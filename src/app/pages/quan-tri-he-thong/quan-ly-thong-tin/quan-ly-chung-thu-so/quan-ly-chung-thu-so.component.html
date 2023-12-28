@@ -80,6 +80,7 @@
               <th>Ngày nhập</th>
               <th>Ngày hết hạn</th>
               <th>Mô tả</th>
+              <th>Loại chứng thư</th>
               <th>Ghi chú</th>
               <th>Trạng thái</th>
               <th width="90px">Hành động</th>
@@ -120,6 +121,13 @@
 
               <th>
                 <nz-input-group>
+                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.loaiChungThu"
+                    (input)="filterInTable('loaiChungThu',filterTable.loaiChungThu)" size="small" />
+                </nz-input-group>
+              </th>
+
+              <th>
+                <nz-input-group>
                   <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.note"
                     (input)="filterInTable('note',filterTable.note)" size="small" />
                 </nz-input-group>
@@ -148,6 +156,7 @@
               <td>{{ data.startDate }}</td>
               <td>{{ data.endDate }}</td>
               <td>{{ data.description }}</td>
+              <td>{{ data.loaiChungThu }}</td>
               <td>{{ data.note }}</td>
               <td>{{ data.status ? "Hoạt động" : "Ngừng hoạt động" }}</td>
               <td class="text-center">

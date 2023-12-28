@@ -232,7 +232,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
         });
       }
 
-      console.log('listDeXuat', listDeXuat)
+
       this.formData.patchValue({
         ...data,
         quyetDinhPdDtl: listDeXuat,
@@ -569,7 +569,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
         tongtien: tongDuToanChiPhi,
       })
     };
-    console.log('dataView', data, dataView)
+
     return dataView
   }
 

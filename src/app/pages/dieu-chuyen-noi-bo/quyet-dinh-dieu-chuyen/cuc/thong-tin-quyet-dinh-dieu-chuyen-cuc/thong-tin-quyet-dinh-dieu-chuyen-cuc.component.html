@@ -242,7 +242,7 @@
               </nz-form-item>
             </div>
 
-            <div nz-col [nzSpan]="13">
+            <div nz-col [nzSpan]="9">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Trích yếu
@@ -256,10 +256,21 @@
             <div nz-col [nzSpan]="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Tổng dự toán kinh phí(triệu đồng)
+                  Tổng dự toán kinh phí của Cục (triệu đồng)
                 </nz-form-label>
                 <nz-form-control>
                   <input nz-input currencyMask formControlName="tongDuToanKp" [options]="AMOUNT" [readonly]="true" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div nz-col [nzSpan]="4">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Tổng dự toán kinh phí PD của Tổng Cục (triệu đồng)
+                </nz-form-label>
+                <nz-form-control>
+                  <input nz-input currencyMask formControlName="tongDuToanKpPd" [options]="AMOUNT" [readonly]="true" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -289,7 +300,7 @@
           </div>
 
           <div *ngIf="formData.value.loaiDc === 'CUC'" nz-row [nzGutter]="24">
-            <div nz-col nzSpan="3">
+            <div nz-col nzSpan="2">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch
                 </nz-form-label>
@@ -324,7 +335,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="2">
+            <div nz-col [nzSpan]="3">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Ngày ký quyết định</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -334,7 +345,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="2">
+            <div nz-col [nzSpan]="3">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Ngày hiệu lực</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -345,10 +356,9 @@
               </nz-form-item>
             </div>
 
-            <div nz-col [nzSpan]="5">
+            <div nz-col [nzSpan]="4">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true">Căn cứ vào quyết định điều chuyển của Tổng
-                  cục</nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true">Căn cứ vào quyết định điều chuyển của TC</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group *ngIf="!!formData.value.loaiQdinh" nzAddOnAfterIcon="folder-open"
                     (click)="openDialogQD()">
@@ -379,7 +389,7 @@
               </nz-form-item>
             </div>
 
-            <div nz-col [nzSpan]="13">
+            <div nz-col [nzSpan]="10">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Trích yếu
@@ -390,13 +400,24 @@
               </nz-form-item>
             </div>
 
-            <div nz-col [nzSpan]="5">
+            <div nz-col [nzSpan]="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Tổng dự toán kinh phí (triệu đồng)
+                  Tổng dự toán kinh phí của Cục (triệu đồng)
                 </nz-form-label>
                 <nz-form-control>
                   <input nz-input currencyMask formControlName="tongDuToanKp" [options]="AMOUNT" [readonly]="true" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div nz-col [nzSpan]="4">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Tổng dự toán kinh phí PD của TC (triệu đồng)
+                </nz-form-label>
+                <nz-form-control>
+                  <input nz-input currencyMask formControlName="tongDuToanKpPd" [options]="AMOUNT" [readonly]="true" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -716,6 +737,8 @@
                   <th rowspan="2"></th>
                   <th rowspan="2"></th>
                   <th colspan="10" class="text-center">Chi cục đề xuất điều chuyển</th>
+                  <th rowspan="2" class="text-center break min-w-120 max-w-120">Dự toán kinh phí <br /> PD (triệu đồng)
+                  </th>
                   <th rowspan="2" style="max-width: 90px; min-width: 90px;  white-space: break-spaces;"
                     class="text-center">
                     Thời gian dự
@@ -762,6 +785,8 @@
                     <td></td>
                     <td class="text-right bold">{{item.duToanKphi|number: '1.0-1':
                       'vi_VN'}}</td>
+                    <td class="text-right bold">{{item.duToanKphiPd|number: '1.0-1':
+                      'vi_VN'}}</td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -782,6 +807,7 @@
                         </td>
                         <td></td>
                         <td class="bold">{{ bb.tenDiemKho || ""}}</td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -821,21 +847,19 @@
                               'vi_VN'}}</td>
                             <td class="text-right bold">{{c.duToanKphi|number: '1.0-1':
                               'vi_VN'}}</td>
-                            <!-- <td>{{c.thoiGianDkDc}}</td>
-                                  <td>{{c.tenChiCucNhan}}</td>
-                                  <td>{{c.tenDiemKhoNhan}}</td>
-                                  <td>{{c.tenNhaKhoNhan}}</td>
-                                  <td>{{c.tenNganKhoNhan}}</td>
-                                  <td>{{c.tenLoKhoNhan}}</td>
-                                  <td>{{c.tichLuongKd}}</td>
-                                  <td>{{c.soLuongPhanBo}}</td> -->
+                            <td class="text-right bold">
+                              <nz-input-number [(ngModel)]='item.duToanKphiPd' [nzMin]="1" [nzMax]="999999999"
+                                [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                (ngModelChange)="onChangeDuToanKphiPd($event, item)" [nzParser]="globals.parser"
+                                [nzDisabled]="isView">
+                              </nz-input-number>
+                            </td>
                             <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
-                            <!-- <td></td> -->
                           </tr>
                           <ng-container *ngFor="let d of c.children, let y = index">
                             <tr>
@@ -844,6 +868,7 @@
                               <!-- <td [nzExpand]="expandSet.has(bb.key)"
                                       (nzExpandChange)="onExpandChange(bb.key, $event)">
                                   </td> -->
+                              <td></td>
                               <td></td>
                               <td></td>
                               <td></td>
@@ -885,6 +910,7 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
+                                <td></td>
                                 <td>{{(e.tenDiemKhoNhan || "")}}</td>
                                 <td></td>
                                 <td></td>
@@ -898,6 +924,7 @@
                                   <!-- <td [nzExpand]="expandSet.has(bb.key)"
                                               (nzExpandChange)="onExpandChange(bb.key, $event)">
                                           </td> -->
+                                  <td></td>
                                   <td></td>
                                   <td></td>
                                   <td></td>
@@ -938,7 +965,9 @@
                   <th rowspan="2" width="60px" class="text-center">STT</th>
                   <th rowspan="2"></th>
                   <th rowspan="2"></th>
-                  <th colspan="10" class="text-center">Chi cục đề xuất điều chuyển</th>
+                  <th colspan="11" class="text-center">Chi cục đề xuất điều chuyển</th>
+                  <th rowspan="2" class="text-center break min-w-120 max-w-120">Dự toán kinh phí <br /> PD (triệu đồng)
+                  </th>
                   <th rowspan="2" style="max-width: 90px; min-width: 90px;  white-space: break-spaces;"
                     class="text-center">
                     Thời gian dự
@@ -985,6 +1014,13 @@
                     <td></td>
                     <td class="text-right bold">{{item.duToanKphi|number: '1.0-1':
                       'vi_VN'}}</td>
+                    <td class="text-right bold">
+                      {{item.duToanKphiPd|number: '1.0-1':'vi_VN'}}
+                      <!-- <nz-input-number [(ngModel)]='item.duToanKphiPd' [nzMin]="1" [nzMax]="999999999" [nzStep]="1"
+                        [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                        [nzDisabled]="isView">
+                      </nz-input-number> -->
+                    </td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -1002,6 +1038,7 @@
                         <td></td>
                         <td></td>
                         <td class="bold">{{ bb.tenDiemKho || ""}}</td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -1038,6 +1075,16 @@
                               'vi_VN'}}</td>
                             <td class="text-right bold">{{c.duToanKphi|number: '1.0-1':
                               'vi_VN'}}</td>
+                            <td class="text-right bold" *ngIf="formData.value.loaiQdinh == '01'">
+                              <nz-input-number [(ngModel)]='item.duToanKphiPd' [nzMin]="1" [nzMax]="999999999"
+                                [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                (ngModelChange)="onChangeDuToanKphiPd($event, item)" [nzParser]="globals.parser"
+                                [nzDisabled]="isView">
+                              </nz-input-number>
+                            </td>
+                            <td class="text-right bold" *ngIf="formData.value.loaiQdinh !== '01'">
+                              {{item.duToanKphiPd|number: '1.0-1':'vi_VN'}}
+                            </td>
                             <td class="bold">{{c.thoiGianDkDc|date: "dd/MM/yyyy"}}</td>
                             <td></td>
                             <td></td>
@@ -1047,6 +1094,7 @@
                           </tr>
                           <ng-container *ngFor="let d of c.children, let y = index">
                             <tr>
+                              <td></td>
                               <td></td>
                               <td></td>
                               <td></td>
@@ -1088,6 +1136,7 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
+                                <td></td>
                                 <td>{{(diemKhoNhan.tenDiemKhoNhan || "")}}</td>
                                 <td></td>
                                 <td></td>
@@ -1096,6 +1145,7 @@
                               </tr>
                               <ng-container *ngFor="let f of diemKhoNhan.children, let y = index">
                                 <tr *ngIf="f.tenNganKhoNhan">
+                                  <td></td>
                                   <td></td>
                                   <td></td>
                                   <td></td>
