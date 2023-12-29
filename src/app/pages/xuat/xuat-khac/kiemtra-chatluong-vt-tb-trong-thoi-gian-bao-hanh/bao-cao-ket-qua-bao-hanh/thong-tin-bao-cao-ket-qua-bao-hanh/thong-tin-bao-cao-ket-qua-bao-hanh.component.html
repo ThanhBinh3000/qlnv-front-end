@@ -174,7 +174,7 @@
         <th>SL xuất lấy mẫu - lần 2</th>
         <th>SL bảo hành</th>
         <th>Trạng thái bảo hành</th>
-        <th>Trạng thái xuất hàng</th>
+<!--        <th>Trạng thái xuất hàng</th>-->
       </tr>
       </thead>
       <tbody>
@@ -195,7 +195,7 @@
           <td></td>
           <td></td>
           <td></td>
-          <td></td>
+<!--          <td></td>-->
         </tr>
         <ng-container *ngIf="expandSetString.has(item.idVirtual) && expandSetString.has(item.idVirtual)">
           <ng-container *ngFor="let lv1 of item.childData,let i1=index">
@@ -214,7 +214,7 @@
               <td>{{lv1.slLayMauL2}}</td>
               <td>{{lv1.slBaoHanh}}</td>
               <td>{{lv1.trangThaiBh=='DA_BH'?"Đã hoàn thành bảo hành":"Đang bảo hành"}}</td>
-              <td>{{lv1.tenTrangThaiXh}}</td>
+<!--              <td>{{lv1.tenTrangThaiXh}}</td>-->
             </tr>
           </ng-container>
         </ng-container>

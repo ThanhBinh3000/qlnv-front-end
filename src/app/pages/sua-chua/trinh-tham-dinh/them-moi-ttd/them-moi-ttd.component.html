@@ -44,13 +44,26 @@
       <nz-collapse-panel nzActive="true" nzHeader="THÔNG TIN CHUNG">
         <form nzLayout="vertical" nz-form [formGroup]="formData">
           <div nz-row [nzGutter]="[18]">
-            <div nz-col [nzSpan]="4">
+            <div nz-col [nzSpan]="3">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true">Số tờ trình</nz-form-label>
+                <nz-form-label [nzNoColon]="true">Số tờ trình của Cục DTNN KV</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfter="{{symbol}}">
                     <nz-input-number [nzSize]="'small'" nz-input formControlName="soTtr"
                                      [nzDisabled]="disabledTrinh()"></nz-input-number>
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="3">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">Số tờ trình của Vụ QLHDT</nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-input-group nzAddOnAfter="{{symbol}}">
+                    <nz-input-number [nzSize]="'small'" nz-input formControlName="soTtrTcuc"
+                                     [nzDisabled]="!(userService.isTongCuc()
+                                     && (formData.value.trangThai == STATUS.DA_DUYET_LDC || formData.value.trangThai == STATUS.DANG_DUYET_CB_VU))">
+                    </nz-input-number>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -147,10 +160,10 @@
             </div>
             <div *ngIf="viewTongCuc()" nz-col [nzSpan]="24">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true">Ý kiến của các Vụ nghiệp vụ</nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true">Ý kiến của các Vụ nghiệp vụ 1</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                                      <textarea rows="3" nz-input formControlName="yKien"
+                                      <textarea rows="3" nz-input formControlName="ysKien"
                                                 [readOnly]="disabledThamDinh()"></textarea>
                   </nz-input-group>
                 </nz-form-control>
@@ -204,7 +217,7 @@
             <th>Loại hàng</th>
             <th>Chủng loại</th>
             <th>Năm nhập</th>
-<!--            <th>Tên hàng</th>-->
+            <!--            <th>Tên hàng</th>-->
             <th>Điểm kho</th>
             <th>Nhà kho/Ngăn kho/Lô kho</th>
             <th>Ngày nhập kho</th>
@@ -229,7 +242,7 @@
               <td></td>
               <td></td>
               <td></td>
-<!--              <td></td>-->
+              <!--              <td></td>-->
               <td></td>
               <td></td>
               <td></td>
@@ -245,7 +258,7 @@
                 <td>{{data.scDanhSachHdr.tenLoaiVthh}}</td>
                 <td>{{data.scDanhSachHdr.tenCloaiVthh}}</td>
                 <td>{{data.scDanhSachHdr.namNhap}}</td>
-<!--                <td></td>-->
+                <!--                <td></td>-->
                 <td>{{data.scDanhSachHdr.tenDiemKho}}</td>
                 <td>{{data.scDanhSachHdr.tenNhaKho}}/{{data.scDanhSachHdr.tenNganKho}}/{{data.scDanhSachHdr.tenLoKho}}
                 </td>
@@ -279,7 +292,8 @@
             <th>Chi cục DTNN</th>
             <th>Loại hàng</th>
             <th>Chủng loại</th>
-<!--            <th>Tên hàng</th>-->
+            <th>Năm nhập</th>
+            <!--            <th>Tên hàng</th>-->
             <th>Điểm kho</th>
             <th>Nhà kho/Ngăn kho/Lô kho</th>
             <th>Ngày nhập kho</th>
@@ -306,7 +320,7 @@
               <td></td>
               <td></td>
               <td></td>
-<!--              <td></td>-->
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -319,7 +333,7 @@
                 <td>{{data.scDanhSachHdr.tenLoaiVthh}}</td>
                 <td>{{data.scDanhSachHdr.tenCloaiVthh}}</td>
                 <td>{{data.scDanhSachHdr.namNhap}}</td>
-<!--                <td></td>-->
+                <!--                <td></td>-->
                 <td>{{data.scDanhSachHdr.tenDiemKho}}</td>
                 <td>{{data.scDanhSachHdr.tenNhaKho}}/{{data.scDanhSachHdr.tenNganKho}}/{{data.scDanhSachHdr.tenLoKho}}
                 </td>
