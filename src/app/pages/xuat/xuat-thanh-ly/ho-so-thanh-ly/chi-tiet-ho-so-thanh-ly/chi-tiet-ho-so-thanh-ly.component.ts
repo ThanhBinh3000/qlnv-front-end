@@ -240,6 +240,11 @@ export class ChiTietHoSoThanhLyComponent extends Base3Component implements OnIni
     return trangThai == STATUS.CHO_DUYET_LDV || trangThai == STATUS.CHO_DUYET_LDTC || trangThai == STATUS.DA_DUYET_LDTC;
   }
 
+  disabledTrinhVu() {
+    let trangThai = this.formData.value.trangThai;
+    return trangThai == STATUS.DA_DUYET_LDC || trangThai == STATUS.DA_DUYET_CBV;
+  }
+
   showPheDuyetTuChoi() {
     let trangThai = this.formData.value.trangThai;
     if (this.userService.isCuc()) {
