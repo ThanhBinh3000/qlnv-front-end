@@ -48,12 +48,27 @@ export class PvcThongTinHienTrangComponent extends Base2Component implements OnI
     super(httpClient, storageService, notification, spinner, modal, hienTrangSv);
     super.ngOnInit()
     this.formData = this.fb.group({
+      id: [null],
       maDvi: [null],
       tenDvi: [null],
       namKeHoach: [null],
-      tenCcdc: [null],
+      tenTaiSan: [null],
       maCcdc: [null],
       donViTinh: [null],
+      luongHang: [null],
+      hieuQua: [null],
+      lyDoHieuQua: [null],
+      slCkKd: [null],
+      slThKd: [null],
+      slKdSauSc: [null],
+      donviThKd: [null],
+      hcTheoQd: [null],
+      hcKtheoQd: [null],
+      donviHc: [null],
+      slSuaChua: [null],
+      noiDungSuaChua: [null],
+      trangThai: [null],
+      soDuNamTruoc: [null],
     });
   }
 
@@ -89,6 +104,7 @@ export class PvcThongTinHienTrangComponent extends Base2Component implements OnI
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           const data = res.data;
+          this.formData.patchValue(data);
           this.dataTable = data.listQlDinhMucHienTrangCcdcDtl
           this.updateEditCache()
         }
@@ -107,7 +123,7 @@ export class PvcThongTinHienTrangComponent extends Base2Component implements OnI
   initForm() {
     this.formData.patchValue({
       tenDvi: this.dataDetail.tenDvi,
-      tenCcdc: this.dataDetail.tenTaiSan,
+      tenTaiSan: this.dataDetail.tenTaiSan,
       donViTinh: this.dataDetail.donViTinh,
       namKeHoach: this.dataDetail.namKeHoach
     })
@@ -255,7 +271,7 @@ export class PvcThongTinHienTrangComponent extends Base2Component implements OnI
   }
 
   async handleOk(data : string) {
-    let body = this.dataDetail
+    let body = this.formData.value
     if (!this.dataTable) {
       this.notification.error(MESSAGE.ERROR,'Vui lòng nhập danh sách chi tiết!')
       return;
