@@ -231,7 +231,7 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
 
   disabledTrinhVu() {
     let trangThai = this.formData.value.trangThai;
-    return trangThai == STATUS.DA_DUYET_LDC || trangThai == STATUS.DA_DUYET_CBV;
+    return trangThai != STATUS.DA_DUYET_LDC || trangThai != STATUS.DA_DUYET_CBV;
   }
 
   showPheDuyetTuChoi() {
