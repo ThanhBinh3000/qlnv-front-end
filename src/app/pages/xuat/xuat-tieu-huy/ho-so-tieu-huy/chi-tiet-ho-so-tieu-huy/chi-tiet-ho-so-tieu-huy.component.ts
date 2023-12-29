@@ -25,6 +25,7 @@ import {TongHopThanhLyService} from "../../../../../services/qlnv-hang/xuat-hang
 import {
   DialogTableSelectionComponent
 } from "../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
+import {PREVIEW} from "src/app/constants/fileType";
 
 @Component({
   selector: 'app-chi-tiet-ho-so-tieu-huy',
@@ -34,6 +35,8 @@ import {
 export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnInit {
   fileCanCu: any[] = [];
   symbol: string = '';
+  suffixes: string = '';
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -54,6 +57,7 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
       soHoSo: [null, [Validators.required]],
+      soTtrinhVu: [null],
       ngayTao: [dayjs().format("YYYY-MM-DD"), [Validators.required]],
       maDanhSach: [null, [Validators.required]],
       idDanhSach: [null, [Validators.required]],
@@ -64,7 +68,7 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
       thoiGianTh: [null],
       thoiGianThTu: [null],
       thoiGianThDen: [null],
-      thoiGianPd : [null],
+      thoiGianPd: [null],
       thoiGianPdTu: [null],
       thoiGianPdDen: [null],
     });
@@ -79,16 +83,19 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
   }
 
   initForm() {
+    this.suffixes = "/TTr-QLHDT";
     if (this.id) {
       this.detail(this.id).then((res) => {
         if (res) {
-          let ttr = res.soHoSo.split('/');
+          const ttr = (res.soHoSo || '').split('/');
+          const ttrVu = (res.soTtrinhVu || '').split('/');
           this.formData.patchValue({
-            soHoSo: ttr[0],
+            soHoSo: ttr[0] || '',
+            soTtrinhVu: ttrVu[0] || '',
             thoiGianTh: [res.thoiGianThTu, res.thoiGianThDen],
             thoiGianPd: [res.thoiGianPdTu, res.thoiGianPdDen],
           })
-          this.symbol = '/'+ttr[1];
+          this.symbol = '/' + (ttr[1] || '');
           this.dataTable = chain(res.children).groupBy('xhThDanhSachHdr.tenChiCuc').map((value, key) => ({
               expandSet: true,
               tenDonVi: key,
@@ -97,10 +104,9 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
           ).value();
         }
       })
-    }
-    else{
-      if(this.userService.isCuc()){
-        this.symbol = '/'+this.userInfo.DON_VI.tenVietTat+"-KH&QLHDT";
+    } else {
+      if (this.userService.isCuc()) {
+        this.symbol = '/' + (this.userInfo.DON_VI.tenVietTat || '') + "-KH&QLHDT";
       }
     }
   }
@@ -117,9 +123,9 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
   }
 
   save(isGuiDuyet?) {
-    if(this.viewTongCuc()){
+    if (this.viewTongCuc()) {
       this.formData.controls['ketQua'].setValidators([Validators.required]);
-    }else{
+    } else {
       this.formData.controls['ketQua'].clearValidators();
     }
     this.spinner.show();
@@ -143,7 +149,7 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
         if (isGuiDuyet) {
           this.id = res.id;
           this.formData.patchValue({
-            id : res.id,
+            id: res.id,
             trangThai: res.trangThai,
             tenTrangThai: res.tenTrangThai
           })
@@ -221,6 +227,11 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
   disabledThamDinh() {
     let trangThai = this.formData.value.trangThai;
     return trangThai == STATUS.CHO_DUYET_LDV || trangThai == STATUS.CHO_DUYET_LDTC || trangThai == STATUS.DA_DUYET_LDTC || trangThai == STATUS.CHODUYET_BTC || trangThai == STATUS.DADUYET_BTC ;
+  }
+
+  disabledTrinhVu() {
+    let trangThai = this.formData.value.trangThai;
+    return trangThai != STATUS.DA_DUYET_LDC || trangThai != STATUS.DA_DUYET_CBV;
   }
 
   showPheDuyetTuChoi() {
@@ -316,11 +327,28 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
     return this.userService.isTongCuc();
   }
 
-  onChangeTimeQd($event){
+  onChangeTimeQd($event) {
     this.formData.patchValue({
-      thoiGianPdTu : $event[0],
-      thoiGianPdDen : $event[1]
+      thoiGianPdTu: $event[0],
+      thoiGianPdDen: $event[1]
     })
   }
 
+  async preview(id) {
+    this.spinner.show();
+    await this._service.preview({
+      tenBaoCao: '62.Thông tin trình thẩm định HS tiêu hủy.docx',
+      id: id,
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.printSrc = res.data.pdfSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
+      }
+    });
+    this.spinner.hide();
+  }
 }

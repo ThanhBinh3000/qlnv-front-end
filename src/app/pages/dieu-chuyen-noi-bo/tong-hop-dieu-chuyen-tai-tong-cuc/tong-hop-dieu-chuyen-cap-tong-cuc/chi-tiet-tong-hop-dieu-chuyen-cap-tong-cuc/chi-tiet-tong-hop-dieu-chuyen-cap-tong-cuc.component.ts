@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { TongHopDieuChuyenCapTongCuc } from './../tong-hop-dieu-chuyen-cap-tong-cuc.component';
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
@@ -128,6 +129,10 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
     4: "Xuất không thu tiền",
     5: "Khác"
   };
+  dataPreView: { id: number, nam: number, listDtl: any[], type: string, fileType: string };
+  previewName: string = "";
+  excelBlob: any;
+  excelSrc: any
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
@@ -489,7 +494,7 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
       }
     } else {
       if (data.loaiDieuChuyen == "CHI_CUC") {
-        this.groupData2ChiCuc = cloneDeep(data.thKeHoachDieuChuyenTongCucDtls)
+        this.groupData2ChiCuc = Array.isArray(data.thKeHoachDieuChuyenTongCucDtls) ? cloneDeep(data.thKeHoachDieuChuyenTongCucDtls) : []
         this.selectRow(this.groupData2ChiCuc[0], isNew)
       }
       else if (data.loaiDieuChuyen == "CUC") {
@@ -650,4 +655,197 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
     }
     return false;
   };
+  flattenTree(tree) {
+    const flatArray = [];
+
+    function flatten(node) {
+      flatArray.push(node);
+      if (node.listData && node.listData.length > 0) {
+        node.listData.forEach(child => {
+          flatten(child);
+        });
+      }
+    }
+
+    tree.forEach(item => {
+      flatten(item);
+    });
+
+    return flatArray;
+  }
+  //  const obj = { 
+  //   stt: i*5 +1,
+  //   tenChiCucXuat: f.tenDvi,
+  //   tenChiCucNhan: f.tenChiCucNhan,
+  //   // thoiGianDkDc: f.thoiGianDkDc,
+  //   thoiGianDkDc: "",
+  //   tenLoaiVthh: f.tenLoaiVthh,
+  //   tenCloaiVthh: f.tenCloaiVthh,
+  //   donViTinh: f.donViTinh,
+  //   tonKho: f.tonKho,
+  //   namNhap: f.namNhap,
+  //   soLuongDc: f.soLuongDc,
+  //   duToanKphi: f.tongDuToanKp,
+  //   tichLuongKd: f.tichLuongKd,
+  //   soLuongPhanBo: f.soLuongPhanBo,
+  //   slDcConLai: f.slDcConLai,
+  //   lyDo: f.lyDoDc,
+  //   tenDiemKho: f.tenDiemKho,
+  //   tenNhaKho: f.tenNhaKho,
+  //   tenNganKho: f.tenNganKho,
+  //   tenLoKho: f.tenLoKho,
+  //   tenDiemKhoNhan: f.tenDiemKhoNhan,
+  //   tenNhaKhoNhan: f.tenNhaKhoNhan,
+  //   tenNganKhoNhan: f.tenNganKhoNhan,
+  //   tenLoKhoNhan: f.tenLoKhoNhan
+  //  };
+  async convertDataPreView(groupData) {
+    let listData = [];
+    if (this.formData.value.loaiDieuChuyen === "CUC") {
+      listData = cloneDeep(groupData).map((dataCuc) => {
+        const detailCuc = dataCuc.thKeHoachDieuChuyenCucKhacCucDtl;
+        if (!detailCuc) return;
+        let flatArray = [];
+        Array.isArray(detailCuc.dcnbKeHoachDcHdr) && detailCuc.dcnbKeHoachDcHdr.forEach(elmHdr => {
+          Array.isArray(elmHdr?.danhSachHangHoa) && elmHdr.danhSachHangHoa.forEach(elmDs => {
+            flatArray.push({ ...elmHdr, danhSachHangHoa: null, ...elmDs })
+          })
+        });
+        const rs1 = chain(flatArray).groupBy('soDxuat').map((value, k) => {
+          const row = value.find(f => f.soDxuat == k);
+          if (!row) return;
+          const tongDuToanKp = value.reduce((sum, cur) => sum += cur.duToanKphi, 0)
+          return {
+            duToanKphi: tongDuToanKp,
+            tenChiCucXuat: row.tenDvi,
+            tenChiCucNhan: row.tenChiCucNhan,
+            lyDo: row.lyDoDc,
+            listData: value.map(f => ({
+              thoiGianDkDc: f.thoiGianDkDc,
+              tenLoaiVthh: f.tenLoaiVthh,
+              tenCloaiVthh: f.tenCloaiVthh,
+              donViTinh: f.donViTinh,
+              tonKho: f.tonKho,
+              namNhap: f.namNhap,
+              soLuongDc: f.soLuongDc,
+              duToanKphi: f.tongDuToanKp,
+              tenDiemKho: f.tenDiemKho,
+              tenNhaKho: f.tenNhaKho,
+              tenNganKho: f.tenNganKho,
+              tenLoKho: (f.tenLoKho ? f.tenLoKho + " - " : "") + (f.tenNhaKho ? f.tenNhaKho + " - " : "") +
+                (f.tenNganKho ? f.tenNganKho : ""),
+            }))
+          }
+        }).value().filter(f => !!f);
+        return {
+          tenCuc: dataCuc.tenCucDxuat,
+          soToTrinh: dataCuc.soDxuat,
+          tongDuToanKinhPhi: dataCuc.tongDuToanKp,
+          listData: this.flattenTree(rs1)
+        }
+      })
+    }
+    if (this.formData.value.loaiDieuChuyen === "CHI_CUC") {
+      const listPromise = cloneDeep(groupData).map(f => this.tongHopDieuChuyenService.getDetail(f.thKhDcHdrId).then(res => ({ ...res.data, tongDuToanKp: f.tongDuToanKp })));
+      const dataPromise = await Promise.all(listPromise);
+      listData = Array.isArray(dataPromise) ? dataPromise.map((detail2ChiCuc: any, i) => {
+        const flatArray = [];
+        if (Array.isArray(detail2ChiCuc?.thKeHoachDieuChuyenNoiBoCucDtls)) {
+          detail2ChiCuc.thKeHoachDieuChuyenNoiBoCucDtls.forEach(item => {
+            Array.isArray(item?.dcnbKeHoachDcHdr?.danhSachHangHoa) && item?.dcnbKeHoachDcHdr?.danhSachHangHoa.forEach(element => {
+              const newItem = cloneDeep(item);
+              delete newItem.dcnbKeHoachDcHdr.danhSachHangHoa;
+              flatArray.push({ ...newItem, ...newItem.dcnbKeHoachDcHdr, ...element, maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho })
+            });
+          });
+        }
+        const rs1 = chain(flatArray).groupBy("maDvi").map((v1, k1) => {
+          const row1 = v1.find(f => f.maDvi === k1);
+          if (!row1) return;
+          const rs2 = chain(v1).groupBy("maLoNganKho").map((v2, k2) => {
+            const row2 = v2.find(f => f.maLoNganKho === k2);
+            if (!row2) return;
+            const rs3 = chain(v2).groupBy("maChiCucNhan").map((v3, k3) => {
+              const row3 = v3.find(f => f.maChiCucNhan === k3);
+              if (!row3) return;
+              const rs4 = chain(v3).groupBy("maDiemKhoNhan").map((v4, k4) => {
+                const row4 = v4.find(f => f.maDiemKhoNhan === k4);
+                if (!row4) return;
+                return {
+                  tenDiemKhoNhan: row4.tenDiemKhoNhan,
+                  listData: v4.map(f => ({
+                    slDcConLai: f.slDcConLai,
+                    tichLuongKd: f.tichLuongKd,
+                    soLuongPhanBo: f.soLuongPhanBo,
+                    tenLoKhoNhan: (f.tenLoKhoNhan ? f.tenLoKhoNhan + " - " : "") + (f.tenNganKhoNhan ? f.tenNganKhoNhan + " - " : "") +
+                      (f.tenNhaKhoNhan ? f.tenNhaKhoNhan : "")
+                  }))
+                }
+              }).value().filter(f => !!f)
+              return {
+                thoiGianDkDc: row3.thoiGianDkDc,
+                tenChiCucNhan: row3.tenChiCucNhan,
+                listData: rs4
+              }
+            }).value().filter(f => !!f);
+
+            return {
+              tenLoaiVthh: row2.tenLoaiVthh,
+              tenCloaiVthh: row2.tenCloaiVthh,
+              donViTinh: row2.donViTinh,
+              tonKho: row2.tonKho,
+              namNhap: row2.namNhap,
+              soLuongDc: row2.soLuongDc,
+              duToanKphi: row2.duToanKphi,
+              tenLoKho: (row2.tenLoKho ? row2.tenLoKho + " - " : "") + (row2.tenNhaKho ? row2.tenNhaKho + " - " : "") +
+                (row2.tenNganKho ? row2.tenNganKho + " - " : "") + (row2.tenDiemKho ? row2.tenDiemKho : ""),
+              listData: rs3
+            }
+          }).value().filter(f => !!f)
+          return {
+            tenChiCucXuat: row1.tenDvi,
+            lyDo: row1.lyDoDc,
+            listData: rs2
+          }
+        }).value().filter(f => !!f);
+        const newRs1 = this.flattenTree(rs1);
+        return {
+          tenCuc: detail2ChiCuc.tenDvi,
+          soToTrinh: detail2ChiCuc.soDeXuat,
+          tongDuToanKinhPhi: detail2ChiCuc.tongDuToanKp,
+          listData: newRs1
+        }
+      }) : [];
+
+    }
+    return listData;
+  }
+  async preview() {
+    try {
+      this.spinner.show();
+      const groupData = this.formData.value.loaiDieuChuyen === "CUC" ? cloneDeep(this.groupData2Cuc) : cloneDeep(this.groupData2ChiCuc);
+      let listData = await this.convertDataPreView(groupData);
+      this.dataPreView = { id: null, nam: this.formData.value.namKeHoach, listDtl: listData, type: this.formData.value.loaiDieuChuyen, fileType: 'pdf' }
+      const resData = await this.tongHopDieuChuyenCapTongCucService.previewTh(this.dataPreView)
+      this.pdfBlob = resData;
+      const arrayBuffer = await resData.arrayBuffer();
+      this.pdfSrc = arrayBuffer;
+      this.showDlgPreview = true;
+    } catch (error) {
+      console.log("error", error)
+    } finally {
+      this.spinner.hide();
+    }
+
+  }
+  downloadPdf() {
+    saveAs(this.pdfBlob, "tong_hop_ke_hoach_dieu_chuyen_cap_tong_cuc.pdf");
+  }
+  downloadExcel() {
+    this.tongHopDieuChuyenCapTongCucService.previewTh({ ...this.dataPreView, fileType: 'xlsx' }).then(async res => {
+      this.excelBlob = res;
+      this.excelSrc = await new Response(res).arrayBuffer();
+      saveAs(this.excelBlob, "tong_hop_ke_hoach_dieu_chuyen_cap_tong_cuc.xlsx");
+    }).catch((error) => console.log("error", error));
+  }
 }

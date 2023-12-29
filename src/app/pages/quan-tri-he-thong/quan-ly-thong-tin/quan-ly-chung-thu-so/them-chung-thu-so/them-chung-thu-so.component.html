@@ -7,10 +7,10 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">Số chứng thư</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <!-- <input nz-input type="number" formControlName="certificateNumber" [readonly]="isView" /> -->
-              <nz-input-number formControlName="certificateNumber" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
+              <input nz-input type="text" formControlName="certificateNumber" [readonly]="isView" />
+              <!-- <nz-input-number formControlName="certificateNumber" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
                 [nzSize]="'small'" [nzDisabled]="isView">
-              </nz-input-number>
+              </nz-input-number> -->
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -32,6 +32,18 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true">Loại chứng thư</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="loaiChungThu" nzAllowClear>
+                <nz-option *ngFor="let p of dsCT" [nzValue]="p.giaTri" [nzLabel]="p.giaTri"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
         <div nz-col [nzSpan]="24" class="mt10">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
@@ -43,6 +55,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+
         <div nz-col [nzSpan]="24" class="mt10">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">

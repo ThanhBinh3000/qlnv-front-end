@@ -43,6 +43,7 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
       soTtr: [null, [Validators.required]],
+      soTtrTcuc: [null,],
       ngayTao: [dayjs().format("YYYY-MM-DD"), [Validators.required]],
       maThHdr: [null, [Validators.required]],
       idThHdr: [null, [Validators.required]],
@@ -53,6 +54,7 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
       thoiHanNhapDk: [null, [Validators.required]],
       soQdSc: [null],
       trichYeu: [null, [Validators.required]],
+      ysKien: [null],
       ketQua: [null],
       lyDoTuChoi: [null],
     });
@@ -233,6 +235,9 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
         trangThai = STATUS.CHO_DUYET_TP;
         break;
     }
+    this.formData.controls['soTtrTcuc'].setValidators([Validators.required])
+    this.helperService.markFormGroupTouched(this.formData);
+    if (!this.formData.valid) return;
     this.approve(this.id, trangThai, 'Bạn có muốn gửi duyệt', null, 'Phê duyệt thành công');
   }
 

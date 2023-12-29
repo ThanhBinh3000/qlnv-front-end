@@ -53,6 +53,7 @@ export class DanhSachSuaChuaComponent extends Base3Component implements OnInit {
       maDiaDiem: [],
       loaiVthh: [],
       cloaiVthh: [],
+      namNhap: [],
       donViTinh: [],
       slHienTai: [],
       slDeXuat: [],

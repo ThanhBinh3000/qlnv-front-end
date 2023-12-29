@@ -352,6 +352,8 @@ export class ThongTinBienBanYeuCauBaoHanhComponent extends Base2Component implem
       idPhieuKdcl: item.id,
       soPhieuKdcl: item.soPhieu,
       maDiaDiem: item.maDiaDiem,
+      maDviTsan: item.maDviTsan,
+      donViTinh: item.donViTinh,
       loaiVthh: item.loaiVthh,
       cloaiVthh: item.cloaiVthh,
       tenLoaiVthh: item.tenLoaiVthh,

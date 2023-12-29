@@ -232,7 +232,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
         });
       }
 
-      console.log('listDeXuat', listDeXuat)
+
       this.formData.patchValue({
         ...data,
         quyetDinhPdDtl: listDeXuat,
@@ -569,7 +569,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
         tongtien: tongDuToanChiPhi,
       })
     };
-    console.log('dataView', data, dataView)
+
     return dataView
   }
 
@@ -611,6 +611,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
         return STATUS.DA_DUYET_LDV
       if (this.formData.value.trangThai == STATUS.DA_DUYET_LDV)
         return STATUS.BAN_HANH
+      return STATUS.CHO_DUYET_LDV
     };
     // let trangThai = STATUS.CHO_DUYET_LDV;
     let mesg = this.formData.value.trangThai == STATUS.DA_DUYET_LDV ? 'Bạn muốn ban hành văn bản?' : 'Bạn muốn phê duyệt văn bản?'

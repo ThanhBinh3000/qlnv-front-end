@@ -547,6 +547,9 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
         if (this.formData.get("id").value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
         } else {
+          res.data.children.forEach(child => {
+            this.danhsachDx.find(i => i.maDvi == child.maDvi).idHhQdKhlcntDtl = child.idHhQdKhlcntDtl
+          })
           this.formData.get("id").setValue(res.data.id);
           this.id = res.data.id;
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);

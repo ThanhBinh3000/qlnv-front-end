@@ -267,7 +267,7 @@
                   <td>{{item.ngayGduyet | date: 'dd/MM/YYYY'}}</td>
                   <td>{{item.tongDuToanKp|number: '1.0-1' || ""}}</td>
                   <td>
-                    <nz-input-number [(ngModel)]='item.tongDuToanKpPd' [nzMin]="1" [nzMax]="999999999" [nzStep]="1"
+                    <nz-input-number [(ngModel)]='item.tongDuToanKpPd' [nzMin]="0" [nzMax]="999999999" [nzStep]="1"
                       [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                       [nzDisabled]="isView">
                     </nz-input-number>

@@ -10,24 +10,184 @@
   <nz-card class="mt16 flex-card p-lr16 mg-t-10">
     <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
       <div nz-row [nzGutter]="20">
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label>Đơn vị</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <input nz-input formControlName="tenDvi" [readonly]="true" />
+            </nz-form-control>
+          </nz-form-item>
+<!--          <label class="search__label">Đơn vị</label>-->
+<!--          <input readonly formControlName="tenDvi" class="search__input" nz-input/>-->
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label>Tên công cụ dụng cụ</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <input nz-input formControlName="tenTaiSan" [readonly]="true" />
+            </nz-form-control>
+          </nz-form-item>
+<!--          <label class="search__label">Tên công cụ dụng cụ</label>-->
+<!--          <input readonly formControlName="tenCcdc" class="search__input" nz-input/>-->
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label>Đơn vị tính</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <input nz-input formControlName="donViTinh" [readonly]="true" />
+            </nz-form-control>
+          </nz-form-item>
+<!--          <label class="search__label">Đơn vị tính</label>-->
+<!--          <input readonly formControlName="donViTinh" class="search__input" nz-input/>-->
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label>Hiệu quả sử dụng</nz-form-label>
+            <nz-select formControlName='hieuQua'>
+              <nz-option nzValue='01' nzLabel='Đáp ứng'></nz-option>
+              <nz-option nzValue='00' nzLabel='Chưa đáp ứng'></nz-option>
+            </nz-select>
+          </nz-form-item>
+<!--          <label class="search__label">Hiệu quả sử dụng</label>-->
+<!--          <nz-select formControlName='hieuQua'>-->
+<!--            <nz-option nzValue='01' nzLabel='Đáp ứng'></nz-option>-->
+<!--            <nz-option nzValue='00' nzLabel='Chưa đáp ứng'></nz-option>-->
+<!--          </nz-select>-->
+        </div>
+        <div nz-col nzSpan="4">
+<!--          <label class="search__label">Lượng hàng</label>-->
+<!--          <nz-input-number nz-input formControlName="luongHang" [nzSize]="'small'"-->
+<!--                           [nzFormatter]="globals.formatter" [nzParser]="globals.parser">-->
+<!--          </nz-input-number>-->
+          <nz-form-item>
+            <nz-form-label>Lượng hàng</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-number nz-input formControlName="luongHang" [nzSize]="'small'"
+                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+              </nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label>Năm</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <input nz-input formControlName="namKeHoach" [readonly]="true" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div class='mt-2' nz-col nzSpan="24" *ngIf='formData.value.hieuQua == "00" '>
+          <nz-form-item>
+            <nz-form-label>Nêu cụ thể lý do chưa đáp ứng</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <input nz-input formControlName="lyDoHieuQua"  />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+<!--    </form>-->
+    <div class="header header-green-background mg-t-10">
+      <div class="header-text">
+        <div class="title-chi-tieu">
+          <span class="text-uppercase font-weight-bold">Số lượng đã thực hiện kiểm định, hiệu chuẩn, sửa chữa</span>
+        </div>
+      </div>
+    </div>
+      <div nz-row [nzGutter]="24">
         <div nz-col nzSpan="6">
-          <label class="search__label">Đơn vị</label>
-          <input readonly formControlName="tenDvi" class="search__input" nz-input/>
+          <nz-form-item>
+            <nz-form-label>Số lượng đã đến chu kỳ kiểm định</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-number nz-input formControlName="slCkKd" [nzSize]="'small'"
+                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+              </nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
         </div>
         <div nz-col nzSpan="6">
-          <label class="search__label">Tên công cụ dụng cụ</label>
-          <input readonly formControlName="tenCcdc" class="search__input" nz-input/>
+          <nz-form-item>
+            <nz-form-label>Số lượng thực hiện kiểm định</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-number nz-input formControlName="slThKd" [nzSize]="'small'"
+                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+              </nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
         </div>
         <div nz-col nzSpan="6">
-          <label class="search__label">Đơn vị tính</label>
-          <input readonly formControlName="donViTinh" class="search__input" nz-input/>
+          <nz-form-item>
+            <nz-form-label>Số lượng kiểm định sau sửa chữa</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-number nz-input formControlName="slKdSauSc" [nzSize]="'small'"
+                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+              </nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
         </div>
         <div nz-col nzSpan="6">
-          <label class="search__label">Năm</label>
-          <input readonly formControlName="namKeHoach" class="search__input" nz-input/>
+          <nz-form-item>
+            <nz-form-label>Đơn vị thực hiện kiểm định</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <input nz-input formControlName="donviThKd"  />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label>Hiệu chuẩn kèm theo kiểm định</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-number nz-input formControlName="hcTheoQd" [nzSize]="'small'"
+                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+              </nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label>Hiệu chuẩn không kèm theo kiểm định</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-number nz-input formControlName="hcKtheoQd" [nzSize]="'small'"
+                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+              </nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label>Đơn vị thực hiện hiệu chuẩn</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <input nz-input formControlName="donviHc"  />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label>Số lượng sửa chữa</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-number nz-input formControlName="slSuaChua" [nzSize]="'small'"
+                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+              </nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="18">
+          <nz-form-item>
+            <nz-form-label>Nội dung sửa chữa</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <input nz-input formControlName="noiDungSuaChua"  />
+            </nz-form-control>
+          </nz-form-item>
         </div>
       </div>
     </form>
+    <ng-template #error let-control>
+      <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+      </ng-container>
+    </ng-template>
   </nz-card>
   <nz-card class="mt-2px flex-card data-table card-border-content table-card mg-t-10">
     <nz-table nzBordered  [nzFrontPagination]="false" [nzShowPagination]="false"

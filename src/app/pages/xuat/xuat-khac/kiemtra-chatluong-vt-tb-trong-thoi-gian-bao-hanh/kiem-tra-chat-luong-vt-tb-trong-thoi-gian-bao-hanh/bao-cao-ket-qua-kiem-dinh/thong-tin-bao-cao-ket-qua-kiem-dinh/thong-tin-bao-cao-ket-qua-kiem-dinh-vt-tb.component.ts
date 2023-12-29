@@ -94,7 +94,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
       soBaoCao: [null, [Validators.required]],
       soCanCu: [null, [Validators.required]],
       idCanCu: [null, [Validators.required]],
-      ngayBaoCao: [null, [Validators.required]],
+      ngayBaoCao: [null,],
       phieuKtcl: [new Array()],
       phieuKdcl: [new Array()],
       fileDinhKems: [new Array<FileDinhKem>()],
@@ -293,20 +293,19 @@ export class ThongTinBaoCaoKetQuaKiemDinhVtTbComponent extends Base2Component im
 
   async loadSoQuyetDinhGiaoNvXh() {
     let body = {
-      namKeHoach: this.formData.get("nam").value,
+      nam: this.formData.get("nam").value,
       dvql: this.userInfo.MA_DVI,
       trangThai: STATUS.DA_DUYET_LDC,
-      loaiXn: 'XUAT'
+      loaiXn: 'XUAT',
     }
-    let res = await this.qdGiaoNvXuatHangTrongThoiGianBaoHanhService.search(body);
+    let res = await this.qdGiaoNvXuatHangTrongThoiGianBaoHanhService.listQd(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      let data = cloneDeep(res.data.content);
+      this.listSoQuyetDinh = cloneDeep(res.data);
       // this.listSoQuyetDinh =  data.filter(item => !item.soBaoCaoKdm);
-
-      this.listSoQuyetDinh = data.filter(item => {
-        item.qdGiaonvXhDtl = item.qdGiaonvXhDtl.filter(i => i.idPhieuKdcl != null);
-        return item.qdGiaonvXhDtl.length > 0;
-      });
+      // this.listSoQuyetDinh = data.filter(item => {
+      //   item.qdGiaonvXhDtl = item.qdGiaonvXhDtl.filter(i => i.idPhieuKdcl != null);
+      //   return item.qdGiaonvXhDtl.length > 0;
+      // });
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
