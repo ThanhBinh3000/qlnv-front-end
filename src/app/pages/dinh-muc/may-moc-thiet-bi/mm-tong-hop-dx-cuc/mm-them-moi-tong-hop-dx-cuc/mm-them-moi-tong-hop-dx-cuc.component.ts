@@ -1,21 +1,21 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { chain } from 'lodash';
-import { v4 as uuidv4 } from 'uuid';
-import { FormGroup, Validators } from "@angular/forms";
-import { Base2Component } from "../../../../../components/base2/base2.component";
+import {Component, Input, OnInit} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {chain} from 'lodash';
+import {v4 as uuidv4} from 'uuid';
+import {FormGroup, Validators} from "@angular/forms";
+import {Base2Component} from "../../../../../components/base2/base2.component";
 import dayjs from "dayjs";
-import { saveAs } from 'file-saver';
-import { MESSAGE } from "../../../../../constants/message";
-import { STATUS } from "../../../../../constants/status";
+import {saveAs} from 'file-saver';
+import {MESSAGE} from "../../../../../constants/message";
+import {STATUS} from "../../../../../constants/status";
 import {
   MmThongTinNcChiCuc
 } from "../../de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc.component";
-import { MmDxChiCucService } from "../../../../../services/mm-dx-chi-cuc.service";
+import {MmDxChiCucService} from "../../../../../services/mm-dx-chi-cuc.service";
 
 @Component({
   selector: 'app-mm-them-moi-tong-hop-dx-cuc',
@@ -66,8 +66,8 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
       klLtXuatCuc: [null],
       trichYeu: [null, Validators.required],
       ngayKy: [null],
-      ngayTongHopNgayTrinh:[null, Validators.required],
-      soToTrinh:[null, Validators.required],
+      ngayTongHopNgayTrinh: [null, Validators.required],
+      soToTrinh: [null, Validators.required],
       soQdGiaoCt: [null],
       trangThai: ['78'],
       trangThaiTh: [],
@@ -177,7 +177,7 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
       let body = {
         "capDvi": "2",
         "namKeHoach": namKh,
-        "trangThaiTh" : "24",
+        "trangThaiTh": "24",
         "paggingReq": {
           "limit": 10,
           "page": 0
@@ -186,7 +186,7 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
       let res = await this.dxChiCucService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.formData.patchValue({
-          listSoCv : []
+          listSoCv: []
         })
         let data = res.data;
         this.listDxCuc = data.content;
@@ -229,12 +229,11 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
     let body = this.formData.value;
     body.listSoCv = this.listDxCucList
       .filter(obj => body.listSoCv.includes(obj.id))
-      .map(obj => ({ soDeXuat: obj.soCv, deXuatId: obj.id }));
+      .map(obj => ({soDeXuat: obj.soCv, deXuatId: obj.id}));
     let data = await this.createUpdate(body);
     if (data) {
       this.goBack()
-    }
-    else {
+    } else {
       this.convertListData()
     }
   }
@@ -267,8 +266,8 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
           let ngayDx = [];
           ngayDx[0] = res.data.ngayDxTu
           ngayDx[1] = res.data.ngayDxDen;
-          this.listDxCuc = [...data.listSoCv].map(item => ({id:item.deXuatId, soCv:item.soDeXuat }));
-          this.listDxCucList = [...data.listSoCv].map(item => ({id:item.deXuatId, soCv:item.soDeXuat }));
+          this.listDxCuc = [...data.listSoCv].map(item => ({id: item.deXuatId, soCv: item.soDeXuat}));
+          this.listDxCucList = [...data.listSoCv].map(item => ({id: item.deXuatId, soCv: item.soDeXuat}));
           this.formData.patchValue({
             ngayDx: ngayDx,
             listSoCv: data.listSoCv.map(obj => obj.deXuatId)
@@ -311,21 +310,13 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
   convertListData() {
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable = chain(this.dataTable).groupBy('tenTaiSan').map((value, key) => ({
-        tenTaiSan: key,
-        dataChild: value,
-        idVirtual: uuidv4(),
-      })
+          tenTaiSan: key,
+          dataChild: value,
+          idVirtual: uuidv4(),
+          donViTinh: value && value.length > 0 ? value[0].donViTinh : null,
+          donGiaTd: value && value.length > 0 ? value[0].donGiaTd : null
+        })
       ).value()
-    }
-    if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTable.forEach(item => {
-        if (item && item.dataChild && item.dataChild.length > 0) {
-          item.dataChild.forEach(data => {
-            item.donViTinh = data.donViTinh
-            item.donGiaTd = data.donGiaTd
-          })
-        }
-      })
     }
     this.expandAll();
   }
@@ -344,20 +335,15 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
     console.log(this.dataTable)
   }
 
-  sumSoLuong(data: any, type: string) {
-    let sl = 0;
-    let slTc = 0;
+  sumSoLuong(data: any, field: string): number {
+    let result = 0;
     if (data && data.dataChild && data.dataChild.length > 0) {
-      data.dataChild.forEach(item => {
-        sl = sl + item.soLuong
-        slTc = slTc + item.soLuongTc
-      })
+      return data.dataChild.reduce((prev, cur) => {
+        prev += cur[field];
+        return prev;
+      }, 0);
     }
-    if (type == 'tong') {
-      return slTc
-    } else {
-      return sl
-    }
+    return result;
   }
 
   async loadSlThuaThieu(item: MmThongTinNcChiCuc) {

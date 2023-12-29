@@ -14,6 +14,10 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
+      <button *ngIf='formData.value.id' type="button" class="btn btn-sub ml-2" (click)="preview(formData.value.id)">
+        <i class="icon htvbdh_totrinh"></i>
+        <span> In/Xem trước </span>
+      </button>
       <button
         *ngIf="showPheDuyetTuChoi() || (userService.isTongCuc() && (formData.value.trangThai == STATUS.DA_DUYET_LDC || formData.value.trangThai == STATUS.DANG_DUYET_CB_VU))"
         type="button" class="btn btn-sub do ml-2" (click)="tuChoi()">
@@ -58,7 +62,18 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="4">
+            <div nz-col [nzSpan]="3" *ngIf="userService.isTongCuc()">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">Số tờ trình của Vụ QLHDT</nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-input-group nzAddOnAfter="{{suffixes}}">
+                    <nz-input-number [nzSize]="'small'" nz-input formControlName="soTtrinhVu"
+                                     [nzDisabled]="disabledTrinh()"></nz-input-number>
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="userService.isTongCuc() ? 3 : 4">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true">Số hồ sơ</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -97,7 +112,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="4">
+            <div nz-col [nzSpan]="userService.isTongCuc() ? 3 : 5">
               <nz-form-item>
                 <nz-form-label>Thời gian đề xuất tiêu hủy của Cục</nz-form-label>
                 <nz-form-control>
@@ -108,7 +123,7 @@
             </div>
             <div nz-col [nzSpan]="4" *ngIf="this.userService.isTongCuc()">
               <nz-form-item>
-                <nz-form-label nzRequired>Thời gian phê duyệt tiêu hũy của BTC</nz-form-label>
+                <nz-form-label nzRequired>Thời gian phê duyệt tiêu hủy của BTC</nz-form-label>
                 <nz-form-control>
                   <nz-range-picker [nzRanges]="ranges" ngModel formControlName="thoiGianPd"
                                    (ngModelChange)="onChangeTimeQd($event)" [nzDisabled]="disabledThamDinh()"
@@ -167,8 +182,8 @@
           <tr>
             <th [width]="30">STT</th>
             <th>Chi cục DTNN</th>
-            <th>Loại hàng</th>
-            <th>Chủng loại</th>
+            <th>Loại hàng DTQG</th>
+            <th>Chủng loại hàng DTQG</th>
             <th>Tên hàng hóa</th>
             <th>Điểm kho</th>
             <th>Nhà kho/Ngăn kho/Lô kho</th>
@@ -318,3 +333,28 @@
 <ng-template #error let-control>
   <app-template-error #error [control]="control"></app-template-error>
 </ng-template>
+<nz-modal [(nzVisible)]='showDlgPreview' nzTitle='THẨM ĐỊNH HỒ SƠ ĐỀ NGHỊ TIÊU HỦY HÀNG DỰ TRỰ QUỐC GIA
+' nzWidth='100%'
+          (nzOnCancel)='closeDlg()'>
+  <div *nzModalContent class='modal__content'>
+    <pdf-viewer [src]='pdfSrc' [render-text]='true' style='width: 100%; height: 650px;'></pdf-viewer>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)='printPreview()' class='modal__button--save'>
+      <i class='icon htvbdh_printer'></i>
+      In
+    </button>
+    <button nz-button (click)="downloadPdf('Thông tin trình thẩm định HS tiêu hủy')" class='modal__button--save'>
+      <i class='icon htvbdh_file-pdf'></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)="downloadWord('Thông tin trình thẩm định HS tiêu hủy')" class='modal__button--save'>
+      <i class='icon htvbdh_file-word'></i>
+      Xuất .docx
+    </button>
+    <button nz-button (click)='closeDlg()' class='modal__button--cancel'>
+      <i nz-icon nzType='close-circle' nzTheme='fill' class='icon-cancel'></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

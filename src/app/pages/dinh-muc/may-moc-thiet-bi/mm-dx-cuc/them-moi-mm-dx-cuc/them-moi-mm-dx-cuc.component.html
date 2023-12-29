@@ -235,15 +235,15 @@
         <td></td>
         <td></td>
         <td></td>
+        <td class="font-weight-bold text-right">{{sumSoLuong(data,'slHienCo') | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="font-weight-bold text-right">{{sumSoLuong(data,'slNhapThem') | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="font-weight-bold text-right">{{sumSoLuong(data,'slHienCo') + sumSoLuong(data,'slNhapThem')   | number : '1.0-1' : 'vi_VN'}}</td>
         <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td class="font-weight-bold text-right">{{sumSoLuong(data)}}</td>
-        <td class="font-weight-bold text-right">{{data.donGiaTd | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="font-weight-bold text-right">{{sumSoLuong(data) * data.donGiaTd | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="font-weight-bold text-right">{{sumSoLuong(data,'chenhLechThieu') | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="font-weight-bold text-right">{{sumSoLuong(data,'chenhLechThua') | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="font-weight-bold text-right">{{sumSoLuong(data,'soLuong') | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="font-weight-bold text-right">{{data.donGiaTd | number : '1.0-3' : 'vi_VN'}}</td>
+        <td class="font-weight-bold text-right">{{sumSoLuong(data, 'soLuong') * data.donGiaTd | number : '1.0-3' : 'vi_VN'}}</td>
         <td></td>
       </tr>
       <ng-container *ngIf="expandSet.has(data.idVirtual)">
@@ -264,7 +264,8 @@
           <td class="text-right">{{item.slTieuChuan | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="text-right">{{item.chenhLechThieu | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="text-right">{{item.chenhLechThua | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>
+          <td class="text-right" *ngIf="isView">{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+          <td *ngIf="!isView">
             <nz-input-number [(ngModel)]="item.soLuong" [nzSize]="'small'" [nzDisabled]="isView"
                              [nzFormatter]="globals.formatter"
                              [nzParser]="globals.parser"></nz-input-number>
