@@ -129,8 +129,10 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
     4: "Xuất không thu tiền",
     5: "Khác"
   };
-  flatArray: any[] = [];
+  dataPreView: { id: number, nam: number, listDtl: any[], type: string, fileType: string };
   previewName: string = "";
+  excelBlob: any;
+  excelSrc: any
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
@@ -409,7 +411,6 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
               })
             });
           });
-          this.flatArray = cloneDeep(flatArray);
           this.dataTable2Cuc = chain(flatArray).groupBy('soDxuat').map((item, i) => {
             const soDxuat = item.find(f => f.soDxuat == i);
             const duToanKphi = item.reduce((sum, cur) => sum += cur.duToanKphi, 0)
@@ -439,7 +440,6 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
               flatArray.push({ ...elmHdr, danhSachHangHoa: null, ...elmDs })
             })
           });
-          this.flatArray = cloneDeep(flatArray);
           this.dataTable2Cuc = chain(flatArray).groupBy('soDxuat').map((item, i) => {
             const soDxuat = item.find(f => f.soDxuat == i);
             const duToanKphi = item.reduce((sum, cur) => sum += cur.duToanKphi, 0)
@@ -476,7 +476,6 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
             });
           });
         }
-        this.flatArray = cloneDeep(flatArray);
         const buildData2ChiCuc = this.buildTableView(flatArray)
         this.dataTable2ChiCuc = cloneDeep(buildData2ChiCuc);
       }
@@ -495,7 +494,7 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
       }
     } else {
       if (data.loaiDieuChuyen == "CHI_CUC") {
-        this.groupData2ChiCuc = cloneDeep(data.thKeHoachDieuChuyenTongCucDtls)
+        this.groupData2ChiCuc = Array.isArray(data.thKeHoachDieuChuyenTongCucDtls) ? cloneDeep(data.thKeHoachDieuChuyenTongCucDtls) : []
         this.selectRow(this.groupData2ChiCuc[0], isNew)
       }
       else if (data.loaiDieuChuyen == "CUC") {
@@ -700,9 +699,7 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
   //   tenNganKhoNhan: f.tenNganKhoNhan,
   //   tenLoKhoNhan: f.tenLoKhoNhan
   //  };
-  async preview() {
-    const data = await this.detail(this.idInput);
-    const groupData = data && Array.isArray(data.thKeHoachDieuChuyenTongCucDtls) ? data.thKeHoachDieuChuyenTongCucDtls : []
+  async convertDataPreView(groupData) {
     let listData = [];
     if (this.formData.value.loaiDieuChuyen === "CUC") {
       listData = cloneDeep(groupData).map((dataCuc) => {
@@ -821,15 +818,34 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
       }) : [];
 
     }
-    const dataView = { id: null, nam: this.formData.value.namKeHoach, listDtl: listData, type: this.formData.value.loaiDieuChuyen }
-    this.tongHopDieuChuyenCapTongCucService.previewTh(dataView).then(async res => {
-      this.pdfBlob = res;
-      const arrayBuffer = await res.arrayBuffer();
+    return listData;
+  }
+  async preview() {
+    try {
+      this.spinner.show();
+      const groupData = this.formData.value.loaiDieuChuyen === "CUC" ? cloneDeep(this.groupData2Cuc) : cloneDeep(this.groupData2ChiCuc);
+      let listData = await this.convertDataPreView(groupData);
+      this.dataPreView = { id: null, nam: this.formData.value.namKeHoach, listDtl: listData, type: this.formData.value.loaiDieuChuyen, fileType: 'pdf' }
+      const resData = await this.tongHopDieuChuyenCapTongCucService.previewTh(this.dataPreView)
+      this.pdfBlob = resData;
+      const arrayBuffer = await resData.arrayBuffer();
       this.pdfSrc = arrayBuffer;
       this.showDlgPreview = true;
-    }).catch((error) => console.log("error", error));
+    } catch (error) {
+      console.log("error", error)
+    } finally {
+      this.spinner.hide();
+    }
+
   }
   downloadPdf() {
     saveAs(this.pdfBlob, "tong_hop_ke_hoach_dieu_chuyen_cap_tong_cuc.pdf");
+  }
+  downloadExcel() {
+    this.tongHopDieuChuyenCapTongCucService.previewTh({ ...this.dataPreView, fileType: 'xlsx' }).then(async res => {
+      this.excelBlob = res;
+      this.excelSrc = await new Response(res).arrayBuffer();
+      saveAs(this.excelBlob, "tong_hop_ke_hoach_dieu_chuyen_cap_tong_cuc.xlsx");
+    }).catch((error) => console.log("error", error));
   }
 }
