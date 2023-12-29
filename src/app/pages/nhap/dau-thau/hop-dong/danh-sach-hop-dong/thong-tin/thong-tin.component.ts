@@ -577,7 +577,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
         this.formData.patchValue({
             soQdKqLcnt: data.soQd,
             idQdKqLcnt: data.id,
-            ngayQdKqLcnt: data.ngayTao,
+            ngayQdKqLcnt: data.ngayKy,
             soQdPdKhlcnt: data.soQdPdKhlcnt,
             loaiHdong: dataDtl.dxuatKhLcntHdr?.loaiHdong,
             cloaiVthh: dataDtl.hhQdKhlcntHdr?.cloaiVthh,

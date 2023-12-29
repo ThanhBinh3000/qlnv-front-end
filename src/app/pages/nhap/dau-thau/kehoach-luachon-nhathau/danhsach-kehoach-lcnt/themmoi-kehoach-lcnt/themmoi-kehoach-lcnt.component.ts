@@ -156,7 +156,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       loaiHdong: [null, [Validators.required]],
       hthucLcnt: [null, [Validators.required]],
       pthucLcnt: [null, [Validators.required]],
-      tgianBdauTchuc: [null, [Validators.required]],
+      tgianBdauTchuc: [null],
 
       tgianDthau: [null, [Validators.required]],
       tgianMthau: [null, [Validators.required]],
@@ -552,13 +552,15 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     let tongMucDtDx: number = 0;
     let tongSlChiTieu: number = 0;
     this.listOfData.forEach((item) => {
-      tongMucDt = tongMucDt + item.thanhTien;
-      tongMucDtDx = tongMucDtDx + item.thanhTienDx;
-      tongSlChiTieu += item.soLuongChiTieu
+      item.children.forEach(child => {
+        tongMucDt = tongMucDt + (child.soLuong * child.donGiaTamTinh);
+        tongMucDtDx = tongMucDtDx + (child.soLuong * child.donGia);
+        tongSlChiTieu += child.soLuongChiTieu
+      })
     });
     this.formData.patchValue({
-      tongMucDtLamTron: parseFloat((tongMucDt / 1000000000).toFixed(2)),
-      tongMucDtDxLamTron: parseFloat((tongMucDtDx / 1000000000).toFixed(2)),
+      tongMucDtLamTron: parseFloat((tongMucDt / 1000000).toFixed(2)),
+      tongMucDtDxLamTron: parseFloat((tongMucDtDx / 1000000).toFixed(2)),
       tongMucDt: tongMucDt,
       tongMucDtDx: tongMucDtDx,
       tongSlChiTieu: tongSlChiTieu,
@@ -721,7 +723,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     this.formData.controls["tenDuAn"].setValidators([Validators.required]);
     this.formData.controls["hthucLcnt"].setValidators([Validators.required]);
     this.formData.controls["pthucLcnt"].setValidators([Validators.required]);
-    this.formData.controls["tgianBdauTchuc"].setValidators([Validators.required]);
+    this.formData.controls["quy"].setValidators([Validators.required]);
     this.formData.controls["tgianDthau"].setValidators([Validators.required]);
     this.formData.controls["tgianMthau"].setValidators([Validators.required]);
     this.formData.controls["gtriDthau"].setValidators([Validators.required]);
@@ -1362,7 +1364,8 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     }
     await this.dauThauService.danhSachGthauTruot(body).then((res) => {
       if (res.msg == MESSAGE.SUCCESS) {
-        this.listOfData = res.data
+        this.listOfData = res.data;
+        this.tinhTongMucDtDx()
       }
     })
       .catch((e) => {
