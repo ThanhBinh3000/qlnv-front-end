@@ -13,7 +13,7 @@
         <td *ngFor="let column of dataColumn;">
           {{
           (
-            column === 'donGiaNhaThau' || column.startsWith('number') ? ((data.hdr ? data.hdr[column] : data[column]) | number: '1.0-1' :'vi_VN') :
+            column === 'soQd' ? (data[column] ? data[column] : data['soQdDc']) : column === 'donGiaNhaThau' || column.startsWith('number') ? ((data.hdr ? data.hdr[column] : data[column]) | number: '1.0-1' :'vi_VN') :
             column === 'ngayKy' || column === 'ngayTao' || column.startsWith('ngay') ? ((data.hdr ? data.hdr[column] : data[column]) | date: 'dd/MM/YYYY') :
               data.hdr ? data.hdr[column] : data[column]) }}
         </td>
