@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import { FormBuilder} from '@angular/forms';
+import {FormBuilder} from '@angular/forms';
 import {Router} from '@angular/router';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {MESSAGE} from 'src/app/constants/message';
@@ -12,6 +12,7 @@ import {cloneDeep} from 'lodash';
 import {UserService} from "../../../services/user.service";
 import {QuanTriThamSoService} from "../../../services/quan-tri-tham-so.service";
 import {ThemMoiQtriThamSoComponent} from "./them-moi-qtri-tham-so/them-moi-qtri-tham-so.component";
+import {saveAs} from "file-saver";
 
 
 @Component({
@@ -31,7 +32,7 @@ export class QuanTriThamSoComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private userService : UserService,
+    private userService: UserService,
     private serVice: QuanTriThamSoService,
     private notification: NzNotificationService,
     private formBuilder: FormBuilder,
@@ -42,13 +43,13 @@ export class QuanTriThamSoComponent implements OnInit {
   }
 
   filterTable = {
-    ma : '',
-    ten : '',
-    giaTri : '',
-    moTa : '',
-    tuNgay : '',
-    denNgay : '',
-    tenTrangThai : '',
+    ma: '',
+    ten: '',
+    giaTri: '',
+    moTa: '',
+    tuNgay: '',
+    denNgay: '',
+    tenTrangThai: '',
   }
 
   async ngOnInit() {
@@ -104,8 +105,7 @@ export class QuanTriThamSoComponent implements OnInit {
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
@@ -116,8 +116,7 @@ export class QuanTriThamSoComponent implements OnInit {
       this.page = event;
       await this.search();
       this.spinner.hide();
-    }
-    catch (e) {
+    } catch (e) {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -130,29 +129,48 @@ export class QuanTriThamSoComponent implements OnInit {
       this.pageSize = event;
       await this.search();
       this.spinner.hide();
-    }
-    catch (e) {
+    } catch (e) {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
-  themMoi(data? : any) {
-      let modalQD = this.modal.create({
-        nzTitle: data? 'CẬP NHẬT QUẢN TRỊ THAM SỐ' : 'THÊM MỚI QUẢN TRỊ THAM SỐ',
-        nzContent: ThemMoiQtriThamSoComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '1200px',
-        nzFooter: null,
-        nzComponentParams: {
-          dataDetail : data
-        },
-      });
-      modalQD.afterClose.subscribe(async (data) => {
-        await this.search()
-      })
+  themMoi(data?: any) {
+    let modalQD = this.modal.create({
+      nzTitle: data ? 'CẬP NHẬT QUẢN TRỊ THAM SỐ' : 'THÊM MỚI QUẢN TRỊ THAM SỐ',
+      nzContent: ThemMoiQtriThamSoComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '1200px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataDetail: data
+      },
+    });
+    modalQD.afterClose.subscribe(async (data) => {
+      await this.search()
+    })
   }
 
+  xuatExcel() {
+    this.spinner.show();
+    try {
+      let body = {
+        "paggingReq": {
+          "limit": 10,
+          "page": this.page - 1
+        }
+      }
+      this.serVice.export(body)
+        .subscribe((blob) =>
+          saveAs(blob, 'tham-so.xlsx'),
+        );
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
 }
