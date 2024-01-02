@@ -14,11 +14,11 @@
         <i class='fa fa-arrow-left'></i>
         <span>Quay lại</span>
       </button>
-      <button
-        type="button" class="btn btn-sub do" (click)="preview()">
-        <i class="icon htvbdh_tcdt_tuchoi"></i>
-        <span>Xem trước</span>
-      </button>
+<!--      <button-->
+<!--        type="button" class="btn btn-sub do" (click)="preview()">-->
+<!--        <i class="icon htvbdh_tcdt_tuchoi"></i>-->
+<!--        <span>Xem trước</span>-->
+<!--      </button>-->
       <button
         *ngIf=" userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_QD_THEM') && userService.isTongCuc() && formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"
         type='button'
@@ -153,10 +153,13 @@
     <nz-collapse nzAccordion>
       <nz-collapse-panel [nzHeader]="'THÔNG TIN CHI TIẾT'" [nzActive]='true'>
         <nz-card class='mt-2px flex-card data-table card-border-content table-card'>
-          <div>
-    <span class='text-right'>
-      <h2 style='font-size: 100%; margin-top: 0.5%;font-style: italic;color: red'>Đơn vị : Đồng</h2>
-    </span>
+            <div class="text-right text-danger" style="font-size: small;font-style: italic;">
+              Đơn vị:Đồng
+              <button
+                type="button" class="btn btn-sub xanh-nhat" (click)="preview()">
+                <i class="icon htvbdh_trinh"></i>
+                <span>Xuất file</span>
+              </button>
           </div>
           <nz-table nzBordered class='pd-10'
                     [nzFrontPagination]='false' [nzShowPagination]='false'

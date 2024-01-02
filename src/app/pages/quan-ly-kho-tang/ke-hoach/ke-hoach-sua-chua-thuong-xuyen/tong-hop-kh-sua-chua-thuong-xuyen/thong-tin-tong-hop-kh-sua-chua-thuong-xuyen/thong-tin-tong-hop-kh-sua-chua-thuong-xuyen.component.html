@@ -15,11 +15,11 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button
-        type="button" class="btn btn-sub do" (click)="preview()">
-        <i class="icon htvbdh_tcdt_tuchoi"></i>
-        <span>Xem trước</span>
-      </button>
+<!--      <button-->
+<!--        type="button" class="btn btn-sub do" (click)="preview()">-->
+<!--        <i class="icon htvbdh_tcdt_tuchoi"></i>-->
+<!--        <span>Xem trước</span>-->
+<!--      </button>-->
       <button type="button" class="btn btn-sub xanh-nhat ml-2"
               *ngIf="!isViewQd && !isViewDetail && isTongHop && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC) "
               (click)="save(true)">
@@ -259,25 +259,22 @@
                 <th class="text-center" width="1%" rowSpan="2"></th>
                 <th class="text-center" width="5%" rowSpan="2">Chi cục</th>
                 <th class="text-center" width="8%" rowSpan="2">Khối sửa chữa</th>
-                <th class="text-center" width="8%" rowSpan="2">Danh mục</th>
-                <th class="text-center" width="8%" rowSpan="2">Điểm kho</th>
-                <th class="text-center" width="7%" rowSpan="2">Địa điểm</th>
-                <th class="text-center" width="5%" rowSpan="2">Danh mục đề nghị</th>
-                <th class="text-center" width="5%" rowSpan="2">Danh mục<br/> đã được<br/> phê duyệt</th>
-                <th class="text-center" width="5%" rowSpan="2">Danh mục<br/> chưa được<br/> phê duyệt
-                </th>
-                <th class="text-center" width="5%" rowSpan="2">Danh mục đã<br/> thực hiện/Giá <br/>trị ước thực<br/>hiện
-                </th>
-                <th class="text-center" width="5%" rowSpan="2">Chênh lệch<br/> kế hoạch -<br/> thực hiện
-                </th>
-                <th class="text-center" width="13%" colSpan="2">Danh mục chưa được phê duyệt năm {{formData.value.namKh}}</th>
+                <th class="text-center" width="8%" rowSpan="2">Danh mục<br/> (B)</th>
+                <th class="text-center" width="8%" rowSpan="2">Điểm kho<br/> (C)</th>
+                <th class="text-center" width="7%" rowSpan="2">Địa điểm<br/> (D)</th>
+                <th class="text-center" width="5%" rowSpan="2">Danh mục<br/> đề nghị<br/> (1)</th>
+                <th class="text-center" width="5%" rowSpan="2">Danh mục<br/> đã được<br/> phê duyệt<br/> (2)</th>
+                <th class="text-center" width="5%" rowSpan="2">Danh mục<br/> chưa được<br/> phê duyệt<br/> (3) = (1) - (2)</th>
+                <th class="text-center" width="5%" rowSpan="2">Danh mục đã<br/> thực hiện/Giá <br/>trị ước thực<br/>hiện<br/> (4)</th>
+                <th class="text-center" width="5%" rowSpan="2">Chênh lệch<br/> kế hoạch -<br/> thực hiện<br/> (5) = (2) - (4)</th>
+                <th class="text-center" width="15%" colSpan="2">Danh mục chưa được phê duyệt năm {{formData.value.namKh}}</th>
                 <th class="text-center" width="13%" colSpan="3">Kết quả PD tổng mức đầu tư</th>
                 <th class="text-center" width="13%" colSpan="3">Kết quả PD kế hoạch vốn năm</th>
-                <th class="text-center" width="7%" rowSpan="2">Ghi chú</th>
+                <th class="text-center" width="7%" rowSpan="2">Ghi chú<br/> (8)</th>
               </tr>
               <tr>
-                <th class="text-center">Danh mục<br/> đề nghị bổ sung đợt này</th>
-                <th class="text-center">Danh mục<br/> không có nhu cầu bổ sung</th>
+                <th class="text-center">Danh mục<br/> đề nghị bổ sung đợt này<br/> (6)</th>
+                <th class="text-center">Danh mục không có<br/> nhu cầu bổ sung<br/> (7)</th>
                 <th class="text-center">Chuyên viên</th>
                 <th class="text-center">Lãnh đạo vụ</th>
                 <th class="text-center">Lãnh đạo TC</th>
@@ -430,10 +427,17 @@
             <div class="header header-green-background">
               <div class="header-text">
                 <div class="title-chi-tieu">
-                  <h3 class="text-uppercase ml-2">Phương án của tổng cục</h3>
+                  <h3 class="text-uppercase ml-2">Phương án/quyết định của tổng cục</h3>
                 </div>
               </div>
-              <div class="text-right text-danger" style="font-size: small;font-style: italic;">Đơn vị:Đồng</div>
+              <div class="text-right text-danger" style="font-size: small;font-style: italic;">
+                Đơn vị:Đồng
+                <button
+                  type="button" class="btn btn-sub xanh-nhat" (click)="preview()">
+                  <i class="icon htvbdh_trinh"></i>
+                  <span>Xuất file</span>
+                </button>
+              </div>
             </div>
             <nz-table nzBordered class="pd-10"
                       [nzFrontPagination]="false" [nzShowPagination]="false"
@@ -444,26 +448,23 @@
                 <th class="text-center" width="1%" rowSpan="2"></th>
                 <th class="text-center" width="5%" rowSpan="2">Chi cục</th>
                 <th class="text-center" width="8%" rowSpan="2">Khối sửa chữa</th>
-                <th class="text-center" width="8%" rowSpan="2">Danh mục</th>
-                <th class="text-center" width="8%" rowSpan="2">Điểm kho</th>
-                <th class="text-center" width="7%" rowSpan="2">Địa điểm</th>
-                <th class="text-center" width="5%" rowSpan="2">Danh mục đề nghị</th>
-                <th class="text-center" width="5%" rowSpan="2">Danh mục<br/> đã được<br/> phê duyệt</th>
-                <th class="text-center" width="5%" rowSpan="2">Danh mục<br/> chưa được<br/> phê duyệt
-                </th>
-                <th class="text-center" width="5%" rowSpan="2">Danh mục đã<br/> thực hiện/Giá<br/> trị ước thực<br/> hiện
-                </th>
-                <th class="text-center" width="5%" rowSpan="2">Chênh lệch<br/> kế hoạch -<br/> thực hiện
-                </th>
-                <th class="text-center" width="13%" colSpan="2">Danh mục chưa được phê duyệt năm {{formData.value.namKh}}</th>
+                <th class="text-center" width="8%" rowSpan="2">Danh mục<br/> (B)</th>
+                <th class="text-center" width="8%" rowSpan="2">Điểm kho<br/> (C)</th>
+                <th class="text-center" width="7%" rowSpan="2">Địa điểm<br/> (D)</th>
+                <th class="text-center" width="5%" rowSpan="2">Danh mục<br/> đề nghị<br/> (1)</th>
+                <th class="text-center" width="5%" rowSpan="2">Danh mục<br/> đã được<br/> phê duyệt<br/> (2)</th>
+                <th class="text-center" width="5%" rowSpan="2">Danh mục<br/> chưa được<br/> phê duyệt<br/> (3) = (1) - (2)</th>
+                <th class="text-center" width="5%" rowSpan="2">Danh mục đã<br/> thực hiện/Giá<br/> trị ước thực<br/> hiện<br/> (4)</th>
+                <th class="text-center" width="5%" rowSpan="2">Chênh lệch<br/> kế hoạch -<br/> thực hiện<br/> (5) = (2) - (4)</th>
+                <th class="text-center" width="15%" colSpan="2">Danh mục chưa được phê duyệt năm {{formData.value.namKh}}</th>
                 <th class="text-center" width="13%" colSpan="3">Kết quả PD tổng mức đầu tư</th>
                 <th class="text-center" width="13%" colSpan="3">Kết quả PD kế hoạch vốn năm</th>
-                <th class="text-center" width="7%" rowSpan="2">Ghi chú</th>
+                <th class="text-center" width="7%" rowSpan="2">Ghi chú<br/> (8)</th>
                 <th class="text-center" width="5%" rowSpan="2">Hành động</th>
               </tr>
               <tr>
-                <th class="text-center">Danh mục<br/> đề nghị bổ sung đợt này</th>
-                <th class="text-center">Danh mục<br/> không có nhu cầu bổ sung</th>
+                <th class="text-center">Danh mục<br/> đề nghị bổ sung đợt này<br/> (6)</th>
+                <th class="text-center">Danh mục không có<br/> nhu cầu bổ sung<br/> (7)</th>
                 <th class="text-center">Chuyên viên</th>
                 <th class="text-center">Lãnh đạo Vụ</th>
                 <th class="text-center">Lãnh đạo TC</th>
@@ -564,9 +565,9 @@
                           <td class="text-right">{{ children.khVonLdTc  | number : '1.0-1' : 'vi_VN' }}</td>
                           <td>{{ children.ghiChu  }}</td>
                           <td class="font-weight-bold text-right" class="text-center">
-<!--                            <a *ngIf="!isViewDetail" (click)="updateItemDetail(children, 'sua', y1, item.dataChild)">-->
-<!--                              <i class="fa fa-pencil" title="Sửa"></i>-->
-<!--                            </a>-->
+                            <a *ngIf="!isViewDetail" (click)="updateItemDetail(children, 'sua', y1, item.dataChild)">
+                              <i class="fa fa-pencil" title="Sửa"></i>
+                            </a>
                             <a *ngIf="(isApprove && formData.value.trangThai == STATUS.CHO_DUYET_LDV) || (isApprove && formData.value.trangThai == STATUS.CHO_DUYET_LDTC)" (click)="updateItemDetail(children, 'sua', y1, item.dataChild)">
                               <i class="fa fa-pencil" title="Sửa"></i>
                             </a>
