@@ -112,7 +112,7 @@ export class DanhMucCongCuDungCuComponent extends Base2Component implements OnIn
     try {
       let body = {
         'tenCcdc': this.searchForm.tenCcdc ? this.searchForm.tenCcdc : null,
-        'nhomCcdc': this.searchForm.nhomCcdc ? this.searchForm.nhomCcdc : null,
+        'nhomCcdc': this.searchForm.nhomCcdc ? [this.searchForm.nhomCcdc] : null,
         'trangThai': this.searchForm.trangThai ? this.searchForm.trangThai : null,
         'moTa': this.searchForm.moTa ? this.searchForm.moTa : null,
         'paggingReq': {
@@ -156,7 +156,7 @@ export class DanhMucCongCuDungCuComponent extends Base2Component implements OnIn
   resetFilter() {
     this.searchForm = {
       tenCcdc: null,
-      nhomCcdc: null,
+      nhomCcdc: [],
       trangThai: null,
       moTa: null,
     };
