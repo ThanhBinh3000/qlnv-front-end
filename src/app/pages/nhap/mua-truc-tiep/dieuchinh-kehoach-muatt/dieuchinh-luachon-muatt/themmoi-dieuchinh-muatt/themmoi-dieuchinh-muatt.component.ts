@@ -263,6 +263,7 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
           idQdGoc: data.idQdGoc,
           soQdGoc: data.soQdGoc,
           ldoTchoi: data.ldoTchoi,
+          trichYeuDc: data.trichYeuDc,
           ngayKyQdGoc: data.ngayKyQdGoc,
           soLanDieuChinh: data.soLanDieuChinh,
           soQdCc: data.soQdCc,
