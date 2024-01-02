@@ -120,13 +120,16 @@ export class ChiTietHoSoThanhLyComponent extends Base3Component implements OnIni
       })
     })
     body.children = children;
-    body.soHoSo = this.formData.value.soHoSo + this.symbol;
-    body.soTtrinhVu = this.formData.value.soTtrinhVu + this.suffixes;
+    if (this.formData.value.soHoSo) {
+      body.soHoSo = this.formData.value.soHoSo + this.symbol
+    }
+    if (this.formData.value.soTtrinhVu) {
+      body.soTtrinhVu = this.formData.value.soTtrinhVu + this.suffixes
+    }
     let validateDataTable = true;
     if (isGuiDuyet) {
       if (this.userService.isCuc()) {
         body.children.forEach(item => {
-          console.log(item);
           if (item.donGiaDk == null || item.donGiaDk == 0) {
             this.notification.error(MESSAGE.ERROR, "Vui lòng điền đơn giá thanh lý dự kiến tại " + item.tenNhaKho + " - " + item.tenNganKho + " - " + item.tenLoKho);
             validateDataTable = false;
@@ -141,7 +144,6 @@ export class ChiTietHoSoThanhLyComponent extends Base3Component implements OnIni
       }
       if (this.userService.isTongCuc()) {
         body.children.forEach(item => {
-          console.log(item);
           if (item.slDaDuyet == null || item.slDaDuyet == 0) {
             this.notification.error(MESSAGE.ERROR, "Vui lòng điền số lượng phê duyệt tại " + item.tenNhaKho + " - " + item.tenNganKho + " - " + item.tenLoKho);
             validateDataTable = false;
@@ -242,7 +244,7 @@ export class ChiTietHoSoThanhLyComponent extends Base3Component implements OnIni
 
   disabledTrinhVu() {
     let trangThai = this.formData.value.trangThai;
-    return !(trangThai === STATUS.DA_DUYET_LDC || trangThai === STATUS.DA_DUYET_CBV);
+    return !(trangThai === STATUS.DA_DUYET_LDC || trangThai === STATUS.DANG_DUYET_CB_VU);
   }
 
   showPheDuyetTuChoi() {

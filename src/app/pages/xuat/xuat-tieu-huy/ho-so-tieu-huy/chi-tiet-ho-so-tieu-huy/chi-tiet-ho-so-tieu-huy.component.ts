@@ -144,6 +144,9 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
     if (this.formData.value.soHoSo) {
       body.soHoSo = this.formData.value.soHoSo + this.symbol
     }
+    if (this.formData.value.soTtrinhVu) {
+      body.soTtrinhVu = this.formData.value.soTtrinhVu + this.suffixes
+    }
     this.createUpdate(body).then((res) => {
       if (res) {
         if (isGuiDuyet) {
@@ -231,7 +234,7 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
 
   disabledTrinhVu() {
     let trangThai = this.formData.value.trangThai;
-    return !(trangThai === STATUS.DA_DUYET_LDC || trangThai === STATUS.DA_DUYET_CBV);
+    return !(trangThai === STATUS.DA_DUYET_LDC || trangThai === STATUS.DANG_DUYET_CB_VU);
   }
 
   showPheDuyetTuChoi() {
