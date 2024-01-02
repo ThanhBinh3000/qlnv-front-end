@@ -543,6 +543,13 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
         this.formData.controls["checkListFileDinhKems"].clearValidators();
       }
     }
+    if (this.formData.get("trangThai").value == STATUS.CHO_DUYET_LDV) {
+      if (this.fileDinhKems.length == 0) {
+        this.formData.controls["ngayKyQdGoc"].setValidators([Validators.required]);
+      } else {
+        this.formData.controls["ngayKyQdGoc"].clearValidators();
+      }
+    }
   }
 
   async setValidator() {
