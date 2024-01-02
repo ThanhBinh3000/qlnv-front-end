@@ -48,6 +48,10 @@
               <span nz-icon nzType='fund'></span>
               <span>BC công tác quản lý định mức kinh tế - kỹ thuật hàng DTQG </span>
             </li>
+            <li nz-menu-item [nzSelected]='tabSelected==7' (click)='selectTab(7)'>
+              <span nz-icon nzType='fund'></span>
+              <span>Báo cáo số lượng, chất lượng giá kê, kích kê, palet năm...</span>
+            </li>
           </ul>
         </li>
       </ul>
@@ -74,6 +78,9 @@
         </ng-container>
         <ng-container *ngIf='tabSelected == 6'>
           <app-bc-cong-tac-dinhmuc-ktkt></app-bc-cong-tac-dinhmuc-ktkt>
+        </ng-container>
+        <ng-container *ngIf='tabSelected == 7'>
+          <app-bc-soluong-chatluong-giake-kichke-nam></app-bc-soluong-chatluong-giake-kichke-nam>
         </ng-container>
       </div>
     </div>
