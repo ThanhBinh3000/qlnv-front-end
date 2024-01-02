@@ -180,13 +180,14 @@
   <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered>
     <thead>
     <tr>
-      <th nzWidth="150px" class="text-center wrap">Chi cục</th>
+      <th nzWidth="150px" class="text-center wrap">Chi cục DTNN</th>
       <th nzWidth="150px" class="text-center wrap">Điểm kho</th>
       <th nzWidth="150px" class="text-center wrap">Địa điểm kho</th>
-      <th nzWidth="100px" class="text-center wrap">SL theo chỉ tiêu kế hoạch năm</th>
-      <th nzWidth="100px" class="text-center wrap">SL theo kế hoạch năm đã được duyệt</th>
-      <th nzWidth="100px" class="text-center wrap">SL đề xuất mua trực tiếp (Tấn)</th>
-      <th nzWidth="100px" class="text-center wrap">Đơn giá có VAT</th>
+      <th nzWidth="100px" class="text-center wrap">SL theo chỉ tiêu kế hoạch năm <br> (tấn)</th>
+      <th nzWidth="100px" class="text-center wrap">SL theo kế hoạch năm đã được duyệt (tấn)</th>
+      <th nzWidth="100px" *ngIf="isCache" class="text-center wrap">SL đề xuất mua trực tiếp (Tấn)</th>
+      <th nzWidth="100px" *ngIf="!isCache" class="text-center wrap">Số lượng phê duyệt (Tấn)</th>
+      <th nzWidth="100px" class="text-center wrap">Đơn giá có VAT (đ/kg)</th>
       <th nzWidth="100px" class="text-center wrap">Thành tiền (đông)</th>
       <th nzWidth="50px">Hành động</th>
     </tr>
