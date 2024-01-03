@@ -147,6 +147,8 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
     if (this.formData.value.soTtrinhVu) {
       body.soTtrinhVu = this.formData.value.soTtrinhVu + this.suffixes
     }
+    body.thoiGianPdTu ? dayjs(body.thoiGianPd[0]).format('YYYY-MM-DD') : null;
+    body.thoiGianPdDen ? dayjs(body.thoiGianPd[1]).format('YYYY-MM-DD') : null;
     this.createUpdate(body).then((res) => {
       if (res) {
         if (isGuiDuyet) {
