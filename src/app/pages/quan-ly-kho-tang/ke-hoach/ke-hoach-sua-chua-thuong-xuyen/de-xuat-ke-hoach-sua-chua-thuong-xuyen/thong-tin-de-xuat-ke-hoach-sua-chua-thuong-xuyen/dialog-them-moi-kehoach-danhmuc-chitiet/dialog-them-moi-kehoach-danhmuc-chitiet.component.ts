@@ -249,8 +249,8 @@ export class DialogThemMoiKehoachDanhmucChitietComponent extends Base2Component 
               tgSuaChua: result.tgSuaChua,
               soQdPdTmdt: result.soQdPheDuyet,
               idDanhMuc: result.id,
-              loaiDeXuat: danhMuc.loaiDeXuat,
-              nguonKinhPhi: danhMuc.nguonKinhPhi,
+              loaiDeXuat: result.loaiDeXuat,
+              nguonKinhPhi: result.nguonKinhPhi,
               loaiDx: this.radioValue,
               ngayKyQdPdTmdt: result.ngayQdPd
             })

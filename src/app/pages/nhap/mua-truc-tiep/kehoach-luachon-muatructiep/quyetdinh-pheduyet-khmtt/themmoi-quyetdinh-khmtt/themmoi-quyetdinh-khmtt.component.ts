@@ -247,7 +247,8 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
   async guiDuyet() {
     let trangThai = STATUS.BAN_HANH;
     let mesg = 'Văn bản sẵn sàng ban hành ?'
-    this.approve(this.idInput, trangThai, mesg);
+    let msgSuccess = 'Ban hành thành công'
+    this.approve(this.idInput, trangThai, mesg, 'NHDTQG_PTMTT_KHMTT_QDLCNT_BANHANH', msgSuccess);
   }
 
   async loadChiTiet(id: number) {
@@ -293,7 +294,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listDanhSachTongHop,
-        dataHeader: ['Số tổng hợp', 'Nội dung tổng hợp'],
+        dataHeader: ['Mã tổng hợp', 'Nội dung tổng hợp'],
         dataColumn: ['id', 'noiDungThop']
       },
     });
@@ -304,10 +305,10 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
     });
   }
 
-  async selectMaTongHop(event) {
+  async selectMaTongHop(idTh) {
     await this.spinner.show()
-    if (event) {
-      const res = await this.tongHopDeXuatKHMTTService.getDetail(event)
+    if (idTh) {
+      const res = await this.tongHopDeXuatKHMTTService.getDetail(idTh)
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
         this.formData.patchValue({
@@ -318,7 +319,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
           tchuanCluong: data.tchuanCluong,
           soQdCc: data.soQd,
           idSoQdCc: data.idSoQdCc,
-          idThHdr: event,
+          idThHdr: idTh,
           idTrHdr: null,
           soTrHdr: null,
         })
@@ -326,6 +327,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
         for (let item of data.children) {
           await this.danhSachMuaTrucTiepService.getDetail(item.idDxHdr).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
+              this.danhsachDx = [];
               const dataRes = res.data;
               dataRes.idDxHdr = dataRes.id;
               this.danhsachDx.push(dataRes);
@@ -334,6 +336,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
         };
         // this.dataInput = null;
         // this.dataInputCache = null;
+        await this.showDetail(event, this.danhsachDx[0]);
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -364,7 +367,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
     await this.spinner.hide();
 
     const modalQD = this.modal.create({
-      nzTitle: 'DANH SÁCH ĐỀ XUẤT KẾ HOẠCH LỰA CHỌN NHÀ THẦU',
+      nzTitle: 'DANH SÁCH ĐỀ XUẤT KẾ HOẠCH MUA TRỰC TIẾP',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
