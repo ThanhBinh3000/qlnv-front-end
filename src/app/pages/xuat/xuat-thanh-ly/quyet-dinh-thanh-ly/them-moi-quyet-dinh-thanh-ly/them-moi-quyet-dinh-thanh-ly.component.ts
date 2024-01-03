@@ -14,6 +14,8 @@ import { HoSoThanhLyService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-th
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import dayjs from 'dayjs';
+import {PREVIEW} from "src/app/constants/fileType";
+import {MESSAGE} from "src/app/constants/message";
 
 @Component({
   selector: 'app-them-moi-quyet-dinh-thanh-ly',
@@ -211,5 +213,22 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base3Component implements 
         break;
     }
     this.reject(this.formData.value.id, trangThai);
+  }
+  async preview(id) {
+    this.spinner.show();
+    await this._service.preview({
+      tenBaoCao: '61.Thông tin QĐ thanh lý.docx',
+      id: id,
+    }).then(async res => {
+      if (res.data) {
+        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+        this.printSrc = res.data.pdfSrc;
+        this.showDlgPreview = true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
+      }
+    });
+    this.spinner.hide();
   }
 }
