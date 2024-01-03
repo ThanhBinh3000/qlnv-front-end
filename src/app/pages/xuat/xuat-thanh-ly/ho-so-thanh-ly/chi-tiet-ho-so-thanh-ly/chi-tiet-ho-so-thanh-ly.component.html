@@ -111,11 +111,21 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="5">
+            <div nz-col [nzSpan]="userService.isTongCuc() ? 3 : 5">
               <nz-form-item>
                 <nz-form-label>Thời gian đề xuất thanh lý của Cục</nz-form-label>
                 <nz-form-control>
                   <nz-range-picker [nzRanges]="ranges" ngModel formControlName="thoiGianTl" nzDisabled
+                                   [nzFormat]="globals.dateFormat"></nz-range-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="4" *ngIf="this.userService.isTongCuc()">
+              <nz-form-item>
+                <nz-form-label nzRequired>Thời gian phê duyệt thanh lý của BTC</nz-form-label>
+                <nz-form-control>
+                  <nz-range-picker [nzRanges]="ranges" ngModel formControlName="thoiGianPd"
+                                   (ngModelChange)="onChangeTimeQd($event)" [nzDisabled]="disabledThamDinh()"
                                    [nzFormat]="globals.dateFormat"></nz-range-picker>
                 </nz-form-control>
               </nz-form-item>
