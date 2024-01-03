@@ -146,6 +146,7 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
         })
         this.dataTable = dataDetail.children;
         this.isTongHop = true;
+        await this.showDetail(event, this.dataTable[0].idDxHdr)
         console.log(this.formData.value)
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);

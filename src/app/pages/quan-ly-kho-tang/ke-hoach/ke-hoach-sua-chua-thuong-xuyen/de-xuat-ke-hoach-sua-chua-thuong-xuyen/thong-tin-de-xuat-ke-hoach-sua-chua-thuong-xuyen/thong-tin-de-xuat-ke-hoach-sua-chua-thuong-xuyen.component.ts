@@ -171,7 +171,7 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
         nzComponentParams: {
           dataTable: list && list.dataChild ? list.dataChild : [],
           dataInput: data,
-          typeKh: 'TH',
+          typeKh: 'DX',
           type: type,
           listDmSuaChua: (this.listDmSuaChua && this.listDmSuaChua.length > 0) ? this.listDmSuaChua.filter(item => (item.trangThai == STATUS.CHUA_THUC_HIEN) && item.khoi == data.khoi) : [],
           dataHeader: this.formData.value,

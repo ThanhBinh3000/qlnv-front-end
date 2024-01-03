@@ -178,6 +178,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent extends Base2Component implemen
     }
     this.rowItem.donGiaVat = data.donGiaVat
     this.donGiaRow = data.donGiaVat
+    console.log(this.listChiCuc)
     if(this.listChiCuc.length > 0){
       this.listDiemKho = this.listChiCuc.find(x => x.maDvi == data.maDvi).children.filter(y => y.type == 'MLK').filter(k => k.maDvi.includes(data.children.filter(i => i.maDiemKho == k.maDvi)))
     }
