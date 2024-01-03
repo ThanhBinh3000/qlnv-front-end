@@ -25,6 +25,7 @@ export const MESSAGE = {
   RELEASE_SUCCESS: 'Phát hành thành công',
   SUBMIT_SUCCESS: 'Trình duyệt thành công',
   APPROVE_SUCCESS: 'Duyệt thành công',
+  SIGNE_APPROVE_SUCCESS: 'Ký số và ban hành thành công',
   KY_THAY: 'Chuyển ký thay thành công',
   KY_THUALENH: 'Chuyển ký thừa lệnh thành công',
   KY_UYQUYEN: 'Chuyển ký ủy quyền thành công',

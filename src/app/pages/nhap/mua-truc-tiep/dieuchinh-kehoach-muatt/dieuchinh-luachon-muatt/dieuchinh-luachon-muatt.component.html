@@ -51,7 +51,7 @@
                 <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)"
                     *ngIf="userService.isTongCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_DCKHMTT_THEM')">
                     <i class="icon htvbdh_soanthao"></i>
-                    <span>Tạo quyết định</span>
+                    <span>Tạo PA và quyết định điều chỉnh</span>
                 </button>
             </div>
         </div>
@@ -71,7 +71,7 @@
                         <th class="text-center" style="width: 10%;">Ngày ký QĐ điều chỉnh</th>
                         <th class="text-center" style="width: 10%;">Số QĐ trước điều chỉnh</th>
                         <th class="text-center" style="width: 30%;">Trích yếu</th>
-                        <th class="text-center" style="width: 7%;">Loại hàng DTQG</th>
+<!--                        <th class="text-center" style="width: 7%;">Loại hàng DTQG</th>-->
                         <th class="text-center" style="width: 7%;">Chủng loại hàng DTQG</th>
                         <th class="text-center" style="width: 7%;">Trạng thái</th>
                         <th width="90px">Hành động</th>
@@ -118,12 +118,12 @@
                                     (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
                             </nz-input-group>
                         </th>
-                        <th>
-                            <nz-input-group>
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenloaiVthh"
-                                    (input)="filterInTable('tenloaiVthh',filterTable.tenloaiVthh)" size="small" />
-                            </nz-input-group>
-                        </th>
+<!--                        <th>-->
+<!--                            <nz-input-group>-->
+<!--                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenloaiVthh"-->
+<!--                                    (input)="filterInTable('tenloaiVthh',filterTable.tenloaiVthh)" size="small" />-->
+<!--                            </nz-input-group>-->
+<!--                        </th>-->
                         <th>
                             <nz-input-group>
                                 <input type="text" nz-input placeholder="Tìm kiếm"
@@ -155,7 +155,7 @@
                         <td>{{data.ngayKyDc}}</td>
                         <td>{{data.soQdGoc}}</td>
                         <td>{{data.trichYeu}}</td>
-                        <td>{{data.tenloaiVthh}}</td>
+<!--                        <td>{{data.tenloaiVthh}}</td>-->
                         <td>{{data.tenCloaiVthh}}</td>
                         <td>{{data.tenTrangThai}}</td>
                         <td class="text-left">

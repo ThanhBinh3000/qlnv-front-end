@@ -89,9 +89,9 @@ export class ThongTinQuyetDinhXuatGiamVatTuBaoHanhComponent extends Base2Compone
       tenTrangThai: ['Dự Thảo'],
       trangThai: [STATUS.DU_THAO],
       tenDviNhan: [],
-      soQuyetDinh: [],
+      soQuyetDinh: [null, [Validators.required]],
       loai: ["XUAT_GIAM"],
-      trichYeu: [],
+      trichYeu: [null, [Validators.required]],
       soCanCu: [null, [Validators.required]],
       idCanCu: [null, [Validators.required]],
       ngayKy: [dayjs().format("YYYY-MM-DD")],
@@ -311,7 +311,12 @@ export class ThongTinQuyetDinhXuatGiamVatTuBaoHanhComponent extends Base2Compone
         listSoQdGiaoNvXh: responseData.soCanCu,
         listIdQdGiaoNvXh: responseData.idCanCu,
         maDviNhan: responseData.maDvi,
-        qdXuatGiamVtDtl:this.dataTable,
+        qdXuatGiamVtDtl: this.dataTable.map(item => {
+          return {
+            idPhieu: item.id,
+            ... item
+          };
+        }),
       });
       this.buildTableView(this.dataTable)
     } catch (e) {

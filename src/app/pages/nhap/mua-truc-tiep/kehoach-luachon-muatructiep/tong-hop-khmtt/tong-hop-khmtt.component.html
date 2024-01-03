@@ -88,15 +88,15 @@
               <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                 [nzIndeterminate]="indeterminate"></label>
             </th>
-            <th width="30px">STT</th>
-            <th>Mã tổng hợp</th>
-            <th>Ngày tổng hợp</th>
-            <th>Nội dung tổng hợp</th>
-            <th>Năm kế hoạch</th>
-            <th>Chủng loại hàng DTQG</th>
-            <th>Trạng thái</th>
-            <th>Số QĐ phê duyệt KH mua trực tiếp</th>
-            <th width="90px" class="text-right">Hành động</th>
+            <th width="30px" class="text-center">STT</th>
+            <th class="text-center">Mã tổng hợp</th>
+            <th class="text-center">Ngày tổng hợp</th>
+            <th class="text-center">Nội dung tổng hợp</th>
+            <th class="text-center">Năm kế hoạch</th>
+            <th class="text-center">Chủng loại hàng DTQG</th>
+            <th class="text-center">Trạng thái</th>
+            <th class="text-center">Số QĐ phê duyệt KH mua trực tiếp</th>
+            <th width="90px" class="text-center">Hành động</th>
           </tr>
           <tr class="search-table">
             <th></th>
@@ -156,10 +156,10 @@
                 [nzDisabled]="data.trangThai == STATUS.DA_BAN_HANH_QD "></label>
             </td>
             <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-            <td>{{data.id}}</td>
-            <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
+            <td class="text-center">{{data.id}}</td>
+            <td class="text-center">{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.noiDungThop }}</td>
-            <td>{{ data.namKh }}</td>
+            <td class="text-center">{{ data.namKh }}</td>
             <td>{{ data.tenCloaiVthh }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-blue" (click)="openModalQdPd(data.idQdPduyet)">{{ data.soQdPduyet }}</td>

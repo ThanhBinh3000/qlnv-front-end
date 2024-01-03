@@ -168,6 +168,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
       if (data) {
         this.formData.patchValue({
           soDxuat: data.soDxuat?.split('/')[0],
+          ngayPduyet: data.trangThai == STATUS.CHO_DUYET_LDC ? new Date() : null,
         })
         this.maTrinh = "/" + data.soDxuat?.split('/')[1]
         this.dataTable = data.children;
@@ -377,8 +378,6 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
           'Danh sách số lượng địa điểm không được để trống',
         );
         return;
-      }else{
-        body.ngayPduyet = new Date();
       }
     }
     let pipe = new DatePipe('en-US');
@@ -435,6 +434,11 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
       this.formData.controls["giaMua"].setValidators([Validators.required]);
       this.formData.controls["tgianMkho"].setValidators([Validators.required]);
       this.formData.controls["tgianKthuc"].setValidators([Validators.required]);
+      if(this.formData.value.trangThai == STATUS.CHO_DUYET_LDC){
+        this.formData.controls["ngayPduyet"].setValidators([Validators.required]);
+      }else{
+        this.formData.controls["ngayPduyet"].clearValidators();
+      }
     } else {
       this.formData.controls["soDxuat"].setValidators([Validators.required]);
       this.formData.controls["loaiHinhNx"].clearValidators();

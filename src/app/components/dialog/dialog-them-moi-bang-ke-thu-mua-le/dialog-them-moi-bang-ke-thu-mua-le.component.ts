@@ -80,6 +80,7 @@ export class DialogThemMoiBangKeThuMuaLeComponent extends Base2Component impleme
   async ngOnInit() {
     this.spinner.show();
     try {
+      debugger
       await Promise.all([
         this.loadSoQuyetDinh(),
       ]);
@@ -113,6 +114,9 @@ export class DialogThemMoiBangKeThuMuaLeComponent extends Base2Component impleme
         idQdGiaoNvNh: this.dataEdit.id,
         ngayQdGiaoNvNh: this.dataEdit.ngayQd,
         namQd: this.dataEdit.namNhap,
+        tenDvi: this.userInfo.TEN_DVI,
+        maDvi: this.userInfo.MA_DVI,
+        nguoiTao: this.userInfo.sub,
         loaiVthh: this.dataEdit.loaiVthh,
         cloaiVthh: this.dataEdit.cloaiVthh,
         tenLoaiVthh: this.dataEdit.tenLoaiVthh,

@@ -22,6 +22,9 @@ import { STATUS } from "../../../../../../constants/status";
 import { cloneDeep } from "lodash";
 import { filter } from 'rxjs/operators';
 import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../../services/storage.service";
 
 
 @Component({
@@ -29,7 +32,7 @@ import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../../services/chi
   templateUrl: './themmoi-dieuchinh-muatt.component.html',
   styleUrls: ['./themmoi-dieuchinh-muatt.component.scss']
 })
-export class ThemmoiDieuchinhMuattComponent implements OnInit {
+export class ThemmoiDieuchinhMuattComponent extends Base2Component implements OnInit {
   @Input('isView') isView: boolean;
   @Input() typeHangHoa: string;
   @Input() idInput: number;
@@ -44,20 +47,21 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
   dataChiTieu: any
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
+  previewName: string = "qd_dieu_chinh_khmtt";
   constructor(
-    private router: Router,
-    private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     public userService: UserService,
     private quyetDinhPheDuyetKeHoachMTTService: QuyetDinhPheDuyetKeHoachMTTService,
     private dieuChinhQuyetDinhPdKhmttService: DieuChinhQuyetDinhPdKhmttService,
     private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
     public globals: Globals,
     private danhMucService: DanhMucService,
-    private fb: FormBuilder,
-    private modal: NzModalService,
-    private helperService: HelperService
   ) {
+    super(httpClient, storageService, notification, spinner, modal, dieuChinhQuyetDinhPdKhmttService);
     this.formData = this.fb.group({
       id: [null],
       namKh: [dayjs().get('year'), Validators.required],
@@ -235,6 +239,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     if (this.idInput > 0) {
       let res = await this.dieuChinhQuyetDinhPdKhmttService.getDetail(this.idInput);
       if (res.msg == MESSAGE.SUCCESS) {
+        console.log(res.data, "getDetail")
         const data = res.data;
         this.formData.patchValue({
           id: data.id,
@@ -258,6 +263,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
           idQdGoc: data.idQdGoc,
           soQdGoc: data.soQdGoc,
           ldoTchoi: data.ldoTchoi,
+          trichYeuDc: data.trichYeuDc,
           ngayKyQdGoc: data.ngayKyQdGoc,
           soLanDieuChinh: data.soLanDieuChinh,
           soQdCc: data.soQdCc,
@@ -269,6 +275,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
         this.fileDinhKems = data.fileDinhKems;
         this.canCuPhapLy = data.canCuPhapLy;
         this.cvanToTrinh = data.cvanToTrinh;
+        console.log(data.hhDcQdPduyetKhmttDxList, "hhDcQdPduyetKhmttDxList")
         this.danhsachDxMtt = data.hhDcQdPduyetKhmttDxList;
         this.danhsachDxMttCache = cloneDeep(this.danhsachDxMtt)
         await this.showFirstRow(event, this.danhsachDxMtt[0]);
@@ -288,8 +295,9 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
       maDvi: null,
       lastest: null
     };
-    let res = await this.quyetDinhPheDuyetKeHoachMTTService.searchDsTaoQdDc(body);
+    let res = await this.dieuChinhQuyetDinhPdKhmttService.danhSachQdDc(body);
     if (res.msg == MESSAGE.SUCCESS) {
+      console.log(res.data, "danhSachQdDc")
       this.listQdGoc = res.data
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -314,8 +322,12 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
       },
     });
     modalQD.afterClose.subscribe((data) => {
-      if (data) {
-        this.onChangeSoQdGoc(data.id);
+      if(data){
+        if (data.soQd != null) {
+          this.onChangeSoQdGoc(data.id);
+        }else{
+          this.onChangeSoQdDcGoc(data.id)
+        }
       }
     });
   }
@@ -343,14 +355,14 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           moTaHangHoa: data.mthh,
-          soLanDieuChinh: data.soLanDieuChinh,
+          soLanDieuChinh: data.soLanDieuChinh + 1,
           soQdCc: data.soQdCc,
           idSoQdCc: data.idSoQdCc,
           namKh: data.namKh
 
         })
         await this.getDataChiTieu(data.idSoQdCc);
-        this.danhsachDxMtt = data.children;
+        this.danhsachDxMtt = data.children.filter(x => x.idQdGiaoNvuNh == null);
         this.danhsachDxMttCache = cloneDeep(this.danhsachDxMtt)
         for (let item of this.danhsachDxMtt) {
           item.id = null;
@@ -361,6 +373,44 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
       else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
+    }
+    this.spinner.hide();
+  }
+
+  async onChangeSoQdDcGoc($event) {
+    this.spinner.show();
+    if ($event) {
+      let res = await this.dieuChinhQuyetDinhPdKhmttService.getDetail($event);
+      console.log(res.data, 6666)
+      delete res.data?.trangThai;
+      delete res.data?.tenTrangThai;
+      for (let item of res.data.hhDcQdPduyetKhmttDxList) {
+        this.mthh = item.moTaHangHoa;
+      }
+      Object.assign(res.data, {mthh: this.mthh})
+      this.formData.patchValue({
+        id: null,
+        ngayKyQdGoc: res.data.ngayKyDc,
+        idQdGoc: res.data.id,
+        soQdGoc: res.data.soQdDc + this.soQdDc,
+        loaiVthh: res.data.loaiVthh,
+        tenLoaiVthh: res.data.tenLoaiVthh,
+        cloaiVthh: res.data.cloaiVthh,
+        tenCloaiVthh: res.data.tenCloaiVthh,
+        moTaHangHoa: res.data.mthh,
+        soLanDieuChinh: res.data.soLanDieuChinh + 1,
+        soQdCc: res.data.soQdCc,
+        idSoQdCc: res.data.idSoQdCc,
+        namKh: res.data.namKh
+
+      })
+      await this.getDataChiTieu(res.data.idSoQdCc);
+      this.danhsachDxMtt = res.data.hhDcQdPduyetKhmttDxList;
+      this.danhsachDxMttCache = cloneDeep(this.danhsachDxMtt)
+      for (let item of this.danhsachDxMtt) {
+        item.id = null;
+      }
+      this.showFirstRow(event, this.danhsachDxMtt[0]);
     }
     this.spinner.hide();
   }
@@ -434,8 +484,8 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
 
 
   async save(isGuiDuyet?) {
-    await this.helperService.markFormGroupTouched(this.formData);
     this.clearValidatorLuuDuThao()
+    await this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
       return;
@@ -448,10 +498,10 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     body.canCuPhapLy = this.canCuPhapLy;
     body.cvanToTrinh = this.cvanToTrinh;
     let res = null;
+    body.soQdDc = body.soQdDc + this.soQdDc;
     if (this.formData.get('id').value) {
       res = await this.dieuChinhQuyetDinhPdKhmttService.update(body);
     } else {
-      body.soQdDc = body.soQdDc + this.soQdDc;
       res = await this.dieuChinhQuyetDinhPdKhmttService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
@@ -486,6 +536,20 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     this.formData.controls["ngayTaoCv"].clearValidators();
     this.formData.controls["soQdDc"].clearValidators();
     this.formData.controls["ngayHluc"].clearValidators();
+    if (this.formData.get("trangThai").value == STATUS.DA_DUYET_LDV) {
+      if (this.fileDinhKems.length == 0) {
+        this.formData.controls["checkListFileDinhKems"].setValidators([Validators.required]);
+      } else {
+        this.formData.controls["checkListFileDinhKems"].clearValidators();
+      }
+    }
+    if (this.formData.get("trangThai").value == STATUS.CHO_DUYET_LDV) {
+      if (this.fileDinhKems.length == 0) {
+        this.formData.controls["ngayKyQdGoc"].setValidators([Validators.required]);
+      } else {
+        this.formData.controls["ngayKyQdGoc"].clearValidators();
+      }
+    }
   }
 
   async setValidator() {
@@ -592,8 +656,8 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     debugger
     this.danhsachDxMtt.forEach(item => {
       item.children = $event.filter(x => x.maDvi.includes(item.maDvi));
-      item.tongSoLuong = item.children.reduce((acc, data) => acc + data.tongSoLuong, 0)
-      item.tongMucDt = item.children.reduce((acc, data) => acc + data.tongThanhTien, 0)
+      // item.tongSoLuong = item.children.reduce((acc, data) => acc + data.tongSoLuong, 0)
+      // item.tongMucDt = item.children.reduce((acc, data) => acc + data.tongThanhTien, 0)
     })
   }
 

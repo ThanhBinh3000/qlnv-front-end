@@ -64,11 +64,11 @@
             </div>
             <div nz-col [nzSpan]="3" *ngIf="userService.isTongCuc()">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true">Số tờ trình của Vụ QLHDT</nz-form-label>
+                <nz-form-label [nzNoColon]="true">Số tờ trình của Vụ QLHDT</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfter="{{suffixes}}">
                     <nz-input-number [nzSize]="'small'" nz-input formControlName="soTtrinhVu"
-                                     [nzDisabled]="disabledTrinh()"></nz-input-number>
+                                     [nzDisabled]="disabledTrinhVu()"></nz-input-number>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
