@@ -50,7 +50,11 @@
             </li>
             <li nz-menu-item [nzSelected]='tabSelected==7' (click)='selectTab(7)'>
               <span nz-icon nzType='fund'></span>
-              <span>Báo cáo số lượng, chất lượng giá kê, kích kê, palet năm...</span>
+              <span>Báo cáo số lượng, chất lượng, giá kê, kích kê, palet</span>
+            </li>
+            <li nz-menu-item [nzSelected]='tabSelected==8' (click)='selectTab(8)'>
+              <span nz-icon nzType='fund'></span>
+              <span>Báo cáo tình hình kiểm định, hiệu chuẩn, sửa chữa máy móc, thiết bị chuyên dùng</span>
             </li>
           </ul>
         </li>
@@ -80,7 +84,10 @@
           <app-bc-cong-tac-dinhmuc-ktkt></app-bc-cong-tac-dinhmuc-ktkt>
         </ng-container>
         <ng-container *ngIf='tabSelected == 7'>
-          <app-bc-soluong-chatluong-giake-kichke-nam></app-bc-soluong-chatluong-giake-kichke-nam>
+         <app-bccl-giake-kichke-palet></app-bccl-giake-kichke-palet>
+        </ng-container>
+        <ng-container *ngIf='tabSelected == 8'>
+          <app-bc-tinh-hinh-kiem-dinh></app-bc-tinh-hinh-kiem-dinh>
         </ng-container>
       </div>
     </div>

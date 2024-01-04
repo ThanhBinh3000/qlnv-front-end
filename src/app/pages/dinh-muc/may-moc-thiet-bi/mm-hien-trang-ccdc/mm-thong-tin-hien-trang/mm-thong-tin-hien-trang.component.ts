@@ -48,6 +48,20 @@ export class MmThongTinHienTrangComponent extends Base2Component implements OnIn
       tenCcdc: [null],
       maCcdc: [null],
       donViTinh: [null],
+      luongHang: [null],
+      hieuQua: [null],
+      lyDoHieuQua: [null],
+      slCkKd: [null],
+      slThKd: [null],
+      slKdSauSc: [null],
+      donviThKd: [null],
+      hcTheoQd: [null],
+      hcKtheoQd: [null],
+      donviHc: [null],
+      slSuaChua: [null],
+      noiDungSuaChua: [null],
+      trangThai: [null],
+      soDuNamTruoc: [null],
     });
   }
 
