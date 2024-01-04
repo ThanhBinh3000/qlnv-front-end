@@ -51,6 +51,10 @@
     <div class="group-button">
       <h3> DANH SÁCH DANH CHỈ TIÊU CHẤT LƯỢNG</h3>
       <div class="buttons">
+        <button type="button" class="btn btn-sub" (click)="export()">
+          <i class="icon htvbdh_chuyen-xu-ly"></i>
+          <span>Xuất file</span>
+        </button>
         <button type="button" class="btn btn-main" (click)="themMoi(null, false)" *ngIf="userService.isAccessPermisson('QTDM_DM_DVI_LIENQUAN_THEM')">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
