@@ -196,7 +196,8 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
           donGiaVat: item.kqlcntDtl?.donGiaVat,
           trangThai: item.kqlcntDtl?.trangThai,
           type: type,
-          tenNhaThau: item.kqlcntDtl?.tenNhaThau
+          tenNhaThau: item.kqlcntDtl?.tenNhaThau,
+          dienGiaiNhaThau: item.kqlcntDtl?.dienGiaiNhaThau
         }
         detail.push(dtl)
         if (item.kqlcntDtl?.trangThai == null) {
