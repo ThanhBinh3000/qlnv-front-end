@@ -103,7 +103,7 @@ export class ThemMoiQdComponent extends Base3Component implements OnInit {
           nzComponentParams: {
             dataTable: res.data,
             dataHeader: ['Mã tờ trình', 'Trích yếu', 'Ngày duyệt', 'Thời hạn xuất', 'Thời hạn nhập'],
-            dataColumn: ['soTtr', 'trichYeu', 'ngayDuyetLdtc', 'ngayXuat', 'ngayNhap']
+            dataColumn: ['soTtrTcuc', 'trichYeu', 'ngayDuyetLdtc', 'ngayXuat', 'ngayNhap']
           },
         });
         modalQD.afterClose.subscribe(async (data) => {
@@ -115,7 +115,7 @@ export class ThemMoiQdComponent extends Base3Component implements OnInit {
               if (res.data) {
                 const dataTh = res.data
                 this.formData.patchValue({
-                  soTtr: data.soTtr,
+                  soTtr: data.soTtrTcuc,
                   idTtr: data.id,
                   ngayDuyetLdtc: data.ngayDuyetLdtc,
                   thoiHanNhap: data.thoiHanNhap,
