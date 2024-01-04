@@ -36,6 +36,8 @@ export class KhMuaHangDtqgComponent extends Base2Component implements OnInit {
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
   rows: any[] = [];
+  maCuc: any;
+  maChiCuc: any;
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -104,6 +106,8 @@ export class KhMuaHangDtqgComponent extends Base2Component implements OnInit {
       body.fileName = "bc_kh_mua_hang_dtqg_130.jrxml";
       body.tenBaoCao = "Báo cáo kế hoạch mua hàng DTQG";
       body.trangThai = "01";
+      body.maCuc = this.maCuc;
+      body.maChiCuc = this.maChiCuc;
       await this.thongTu1302018Service.bcKhMuaHangDtqg(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
@@ -124,6 +128,8 @@ export class KhMuaHangDtqgComponent extends Base2Component implements OnInit {
       body.fileName = "bc_kh_mua_hang_dtqg_130.jrxml";
       body.tenBaoCao = "Báo cáo kế hoạch mua hàng DTQG";
       body.trangThai = "01";
+      body.maCuc = this.maCuc;
+      body.maChiCuc = this.maChiCuc;
       await this.thongTu1302018Service.bcKhMuaHangDtqg(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
@@ -196,5 +202,15 @@ export class KhMuaHangDtqgComponent extends Base2Component implements OnInit {
 
   deleteRow(index: number) {
     this.rows.splice(index, 1)
+  }
+
+  clearFilter() {
+    this.formData.patchValue({
+      quy: null,
+      maDvi: null,
+      dviNhanBaoCao: null,
+    })
+    this.maCuc = null;
+    this.maChiCuc = null;
   }
 }
