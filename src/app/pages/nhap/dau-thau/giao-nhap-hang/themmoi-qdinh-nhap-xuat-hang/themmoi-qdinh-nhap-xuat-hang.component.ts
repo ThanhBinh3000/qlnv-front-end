@@ -432,6 +432,7 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
         if (res.msg == MESSAGE.SUCCESS) {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
+          this.maQdSuffix = "/" + data.soQd?.split("/")[1]
           if (!this.loaiVthh.startsWith('02')) {
             this.formData.patchValue({
               donViTinh: 'tấn',
@@ -893,7 +894,7 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
           let res = await this.quyetDinhGiaoNhapHangService.updateDdiemNhap(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.redirectQdNhapXuat();
+            // this.redirectQdNhapXuat();
             this.spinner.hide();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);

@@ -555,7 +555,11 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.formData.patchValue({
         soQd: data.soQd?.split("/")[0],
       });
-      this.danhsachDx = data.children;
+      if (!this.userService.isTongCuc()) {
+        this.danhsachDx = data.children.filter(item => this.userInfo.MA_DVI.startsWith(item.maDvi));
+      } else {
+        this.danhsachDx = data.children;
+      }
       this.danhsachDxCache = cloneDeep(this.danhsachDx);
       for (const item of this.danhsachDxCache) {
         await this.dauThauService.getDetail(item.idDxHdr).then((res) => {
