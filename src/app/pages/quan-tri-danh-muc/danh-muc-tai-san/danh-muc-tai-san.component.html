@@ -175,12 +175,12 @@
                 </nz-input-group>
               </nz-form-control>
             </td>
-            <td style="text-align: center;">
+            <td class="text-center">
               <a (click)="themMoiItem(data.id, dataEdit[i].data)" *ngIf="userService.isAccessPermisson('QTDM_DM_TAI_SAN_THEM')">
-                <i class="fa fa-save mr-3"></i>
+                <i class="fa fa-save"></i>
               </a>
               <a (click)="huyEdit(i)" *ngIf="userService.isAccessPermisson('QTDM_DM_TAI_SAN_XOA')">
-                <i class="fa fa-times do mr-3"></i>
+                <i class="fa fa-times do"></i>
               </a>
             </td>
           </ng-template>
