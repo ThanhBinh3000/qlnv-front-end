@@ -34,6 +34,7 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
   listCcPhapLy: any[] = [];
   listQuy: any[] = [];
   listOfData: any[] = [];
+  listGoiThau: any[] = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -70,6 +71,7 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
       tgianMthauTime: [],
       gtriDthau: [],
       idQdPdKhlcntDtl: [],
+      listIdGthau: [],
     })
   }
 
@@ -143,14 +145,7 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
               tgianMthauTime: chiCuc.tgianMthauTime,
               tgianMthau: chiCuc.tgianMthau,
             })
-            this.listOfData = chiCuc.children
-            for (let i = 0; i < this.listOfData.length; i++) {
-              this.expandSet.add(i)
-              for (let j = 0; j < this.listOfData[i].children.length; j++) {
-                this.expandSet2.add(j)
-              }
-            }
-            this.tinhTongMucDtDx()
+            this.listGoiThau = chiCuc.children.filter(item => item.idQdPdHsmt == null);
           }
         })
       }
@@ -309,21 +304,19 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
         cloaiVthh: data.qdKhlcntHdr.cloaiVthh,
         tgianBdauTchuc: data.tgianBdauTchuc
       });
+      if (data.soQd) {
+        this.maQd = data.soQd?.split("/")[1];
+      }
       data.qdKhlcntHdr.children.forEach(cuc => {
         if (cuc.maDvi == data.maDvi) {
+          this.listGoiThau = cuc.children;
           this.formData.patchValue({
             tenDuAn: cuc.dxuatKhLcntHdr?.tenDuAn,
             tchuanCluong: cuc.dxuatKhLcntHdr?.tchuanCluong,
             quy: cuc.dxuatKhLcntHdr?.quy,
+            listIdGthau: cuc.listIdGthau
           });
-          this.listOfData = cuc.children
-          for (let i = 0; i < this.listOfData.length; i++) {
-           this.expandSet.add(i)
-            for (let j = 0; j < this.listOfData[i].children.length; j++) {
-              this.expandSet2.add(j)
-            }
-          }
-          this.tinhTongMucDtDx()
+          this.selectGthau()
         }
       })
       this.listCcPhapLy = data.listCcPhapLy;
@@ -361,5 +354,18 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
       tongSlChiTieu: tongSlChiTieu,
       soLuong: tongSl,
     });
+  }
+
+  selectGthau() {
+    if (this.formData.value.listIdGthau != null) {
+      this.listOfData = this.listGoiThau.filter(item => this.formData.value.listIdGthau.includes(item.id))
+      this.tinhTongMucDtDx()
+      for (let i = 0; i < this.listOfData.length; i++) {
+        this.expandSet.add(i)
+        for (let j = 0; j < this.listOfData[i].children.length; j++) {
+          this.expandSet2.add(j)
+        }
+      }
+    }
   }
 }

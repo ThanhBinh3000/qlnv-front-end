@@ -85,6 +85,7 @@ export class ThemMoiTangHangDtqgComponent extends Base2Component implements OnIn
         trangThai: "00",
         tenTrangThai: "Dự thảo",
         detail: [],
+        kySo: [null],
       }
     );
   }
@@ -260,7 +261,7 @@ export class ThemMoiTangHangDtqgComponent extends Base2Component implements OnIn
     }
     if (res.msg == MESSAGE.SUCCESS) {
       if (isBanHanh) {
-        this.pheDuyet(body);
+        this.pheDuyetBcBn(body);
       } else {
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -274,44 +275,6 @@ export class ThemMoiTangHangDtqgComponent extends Base2Component implements OnIn
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     await this.spinner.hide()
-  }
-
-  pheDuyet(data: any) {
-    let trangThai = '';
-    let msg = '';
-    switch (this.formData.get('trangThai').value) {
-      case this.STATUS.DU_THAO: {
-        trangThai = this.STATUS.BAN_HANH;
-        msg = 'Bạn có muốn ban hành ?'
-        break;
-      }
-    }
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: msg,
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 400,
-      nzOnOk: async () => {
-        this.spinner.show();
-        try {
-          const res = await this.bcBnTt145Service.approve(data);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-            this.quayLai();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-          this.spinner.hide();
-        } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-    });
   }
 
   async loadDsDonVi() {
@@ -393,7 +356,6 @@ export class ThemMoiTangHangDtqgComponent extends Base2Component implements OnIn
   async layTatCaDonViByLevel() {
     let res = await this.donViService.layTatCaDonViByLevel(0);
     if (res.msg == MESSAGE.SUCCESS) {
-      console.log(res.data, 1234)
       this.listDsDvi = res.data
       // this.formData.get('dviNhan').setValue(res.data[0].tenDvi);
     } else {

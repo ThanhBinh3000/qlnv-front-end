@@ -3,7 +3,7 @@
     <div class="header-text">
       <div class="title-chi-tieu">
         <span
-          [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'status-xanh' : 'status-do'">
+          [ngClass]="formData.value.trangThai == STATUS.DA_KY ? 'status-xanh' : 'status-do'">
           {{ formData.value.tenTrangThai }}
         </span>
         <span>BÁO CÁO KẾ HOẠCH MUA HÀNG DỰ TRỮ QUỐC GIA</span>
@@ -15,11 +15,11 @@
         <span>Quay lại</span>
       </button>
       <ng-container>
-        <button *ngIf="formData.value.trangThai == STATUS.DU_THAO
+        <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && !isView
         && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_KHMHDTQG_DUYET')"
-                type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet(idInput)">
+                type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
-          <span>Ban hành</span>
+          <span>Ký số</span>
         </button>
         <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && !isView
         && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_KHMHDTQG_LAP')"

@@ -35,7 +35,7 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
   listCcPhapLy: any[] = [];
   listQuy: any[] = [];
   listOfData: any[] = [];
-
+  listGoiThau: any[] = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -69,6 +69,7 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
       tgianBdauTchuc: [""],
       tgianDthauTime: [],
       tgianMthauTime: [],
+      listIdGthau: [],
     })
   }
 
@@ -136,7 +137,8 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
           tgianMthauTime: data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.tgianMthauTime: data.tgianMthauTime,
           tgianMthau: data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.tgianMthau: data.tgianMthau,
         })
-        this.listOfData = data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.dsGthau : data.dsGthau;
+        let dsthau = data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.dsGthau : data.dsGthau;
+        this.listGoiThau = dsthau.filter(item => item.idQdPdHsmt == null);
       }
     });
   }
@@ -279,6 +281,8 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
     if (id > 0) {
       let res = await this.quyetDinhPheDuyetHsmtService.getDetail(id);
       const data = res.data;
+      console.log(data)
+      this.listGoiThau = data.qdKhlcntHdr.dchinhDxKhLcntHdr? data.qdKhlcntHdr.dchinhDxKhLcntHdr.dsGthau : data.qdKhlcntHdr.dsGthau;
       this.helperService.bidingDataInFormGroup(this.formData, data);
       this.formData.patchValue({
         soQd: data.soQd?.split("/")[0],
@@ -290,8 +294,12 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
         tchuanCluong: data.qdKhlcntHdr.dxKhlcntHdr.tchuanCluong,
         quy: data.qdKhlcntHdr.dxKhlcntHdr?.quy,
         tgianBdauTchuc: data.qdKhlcntHdr.dchinhDxKhLcntHdr? data.qdKhlcntHdr.dchinhDxKhLcntHdr.tgianBdauTchuc : data.qdKhlcntHdr.tgianBdauTchuc,
+        listIdGthau: data.qdKhlcntHdr.dchinhDxKhLcntHdr? data.qdKhlcntHdr.dchinhDxKhLcntHdr.listIdGthau : data.qdKhlcntHdr.listIdGthau,
       });
-      this.listOfData = data.qdKhlcntHdr.dchinhDxKhLcntHdr? data.qdKhlcntHdr.dchinhDxKhLcntHdr.dsGthau : data.qdKhlcntHdr.dsGthau;
+      if (data.soQd) {
+        this.maQd = data.soQd?.split("/")[1];
+      }
+      this.selectGthau()
       this.listCcPhapLy = data.listCcPhapLy;
       if (this.userService.isCuc()) {
         for (let item of this.listOfData) {
@@ -331,6 +339,18 @@ export class ThemMoiQdPdHsMtVtComponent extends Base2Component implements OnInit
         sum += sumChild;
       })
       return sum;
+    }
+  }
+
+  selectGthau() {
+    if (this.formData.value.listIdGthau != null) {
+      this.listOfData = this.listGoiThau.filter(item => this.formData.value.listIdGthau.includes(item.id))
+      for (let i = 0; i < this.listOfData.length; i++) {
+        this.expandSet.add(i)
+        for (let j = 0; j < this.listOfData[i].children.length; j++) {
+          this.expandSet2.add(j)
+        }
+      }
     }
   }
 }

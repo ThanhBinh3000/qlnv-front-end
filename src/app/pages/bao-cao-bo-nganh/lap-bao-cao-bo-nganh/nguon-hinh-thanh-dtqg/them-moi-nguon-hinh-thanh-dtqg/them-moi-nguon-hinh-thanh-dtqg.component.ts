@@ -88,6 +88,7 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
         ngayTao: [dayjs().format("YYYY-MM-DD")],
         trangThai: [STATUS.DU_THAO],
         tenTrangThai: ['Dự thảo'],
+        kySo: [null],
       }
     );
     this.templateName = 'template_bcbn_nguon_hinh_thanh_dtqg.xlsx'
@@ -312,13 +313,7 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
     this.showListEvent.emit();
   }
 
-  async guiDuyet(id: number) {
-    let trangThai = STATUS.BAN_HANH;
-    let mesg = 'Ban hành quyết định'
-    this.approve(id, trangThai, mesg);
-  }
-
-  async save() {
+  async save(isBanHanh?: boolean) {
     this.dataNguonNsnn.forEach(i => {
       i.loaiNguon = 1
     })
@@ -337,11 +332,15 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
     }
     if (res.msg == MESSAGE.SUCCESS) {
       this.idInput = res.data.id;
-      if (this.formData.get("id").value) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+      if (isBanHanh) {
+        this.pheDuyetBcBn(body);
       } else {
-        this.formData.get("id").setValue(res.data.id);
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        if (this.formData.get("id").value) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        } else {
+          this.formData.get("id").setValue(res.data.id);
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        }
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);

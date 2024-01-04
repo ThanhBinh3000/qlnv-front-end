@@ -541,6 +541,7 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
           if (res.msg == MESSAGE.SUCCESS) {
             if (isGuiDuyet) {
               this.idInput = res.data.id;
+              this.formData.get("id").setValue(res.data.id);
               await this.guiDuyet();
             } else {
               if (this.formData.get("id").value) {
