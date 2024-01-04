@@ -144,6 +144,8 @@ export class DanhMucTaiSanComponent implements OnInit {
       this.rowItem = new DmTaiSan();
       await this.search();
       this.updateEditCache();
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
   }
