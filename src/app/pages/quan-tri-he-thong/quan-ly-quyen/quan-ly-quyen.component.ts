@@ -12,6 +12,7 @@ import {QlQuyenNSDService} from 'src/app/services/quantri-nguoidung/qlQuyen.serv
 import {UserService} from 'src/app/services/user.service';
 import {convertTrangThai} from 'src/app/shared/commonFunction';
 import {DanhMucDungChungService} from "../../../services/danh-muc-dung-chung.service";
+import {saveAs} from 'file-saver';
 
 export interface TreeNodeInterface {
   key: string;
@@ -558,6 +559,26 @@ export class QuanLyQuyenComponent implements OnInit {
         }
       },
     });
+  }
+
+  async export() {
+    try {
+      this.spinner.show();
+      let body = this.formData.value;
+      body.paggingReq = {
+        limit: this.pageSize,
+        page: this.page - 1,
+      }
+      let res = await this.qlNhomQuyenService.export(body)
+        .subscribe((blob) =>
+          saveAs(blob, "quan_ly_nhom_quyen.xlsx")
+        );
+      this.spinner.hide();
+    } catch (e) {
+      console.log("error: ", e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
   }
 }
 

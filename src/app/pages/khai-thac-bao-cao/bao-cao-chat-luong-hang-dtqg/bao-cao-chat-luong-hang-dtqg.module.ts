@@ -16,6 +16,8 @@ import { BcclCongTacBaoQuanGaoComponent } from './bccl-cong-tac-bao-quan/bccl-co
 import { BcclHangDtqgXuatKhoComponent } from './bccl-hang-dtqg-xuat-kho/bccl-hang-dtqg-xuat-kho.component';
 import { BcclHangDtqgNhapKhoComponent } from './bccl-hang-dtqg-nhap-kho/bccl-hang-dtqg-nhap-kho.component';
 import { BcCongTacDinhmucKtktComponent } from './bc-cong-tac-dinhmuc-ktkt/bc-cong-tac-dinhmuc-ktkt.component';
+import { BcclGiakeKichkePaletComponent } from './bccl-giake-kichke-palet/bccl-giake-kichke-palet.component';
+import { BcTinhHinhKiemDinhComponent } from './bc-tinh-hinh-kiem-dinh/bc-tinh-hinh-kiem-dinh.component';
 
 
 @NgModule({
@@ -27,7 +29,9 @@ import { BcCongTacDinhmucKtktComponent } from './bc-cong-tac-dinhmuc-ktkt/bc-con
     BcclCongTacBaoQuanGaoComponent,
     BcclHangDtqgXuatKhoComponent,
     BcclHangDtqgNhapKhoComponent,
-    BcCongTacDinhmucKtktComponent
+    BcCongTacDinhmucKtktComponent,
+    BcclGiakeKichkePaletComponent,
+    BcTinhHinhKiemDinhComponent
   ],
   imports: [
     CommonModule,

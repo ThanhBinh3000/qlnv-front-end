@@ -103,6 +103,8 @@ export class LoginComponent implements OnInit {
             if (data && data.length > 0) {
               jsonData = JSON.stringify(data);
               allRoles = jsonData;
+            } else {
+              this.notification.error(MESSAGE.ERROR, 'Tài khoản không có quyền!');
             }
           } else {
             this.notification.error(MESSAGE.ERROR, permission.msg);
