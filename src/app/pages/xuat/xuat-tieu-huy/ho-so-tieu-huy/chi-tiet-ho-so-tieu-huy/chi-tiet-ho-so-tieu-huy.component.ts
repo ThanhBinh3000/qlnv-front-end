@@ -332,6 +332,7 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
     let trangThai = this.formData.value.trangThai;
     return this.userService.isTongCuc() || trangThai == STATUS.CHO_DUYET_LDTC
       || trangThai == STATUS.DA_DUYET_LDTC || trangThai == STATUS.DADUYET_BTC || trangThai == STATUS.TUCHOI_BTC
+      || trangThai == STATUS.CHO_DUYET_LDV
   }
 
   onChangeTimeQd($event) {
