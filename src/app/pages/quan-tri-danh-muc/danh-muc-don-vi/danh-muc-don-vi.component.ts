@@ -14,7 +14,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {UserLogin} from "../../../models/userlogin";
 import {UserService} from "../../../services/user.service";
 import {DanhMucService} from "../../../services/danhmuc.service";
-
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: "app-danh-muc-don-vi",
@@ -357,5 +357,22 @@ export class DanhMucDonViComponent implements OnInit {
         this.listPhuongXa = this.listAllDiaDanh.filter(item => item.maCha == event && item.capDiaDanh === 3);
       }
     }
+  }
+
+  exportDataTC() {
+      this.spinner.show();
+      try {
+        let body = {}
+        this.donviService
+          .export(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'dm-don-vi.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
   }
 }
