@@ -147,7 +147,7 @@
               </div>
               <div nz-col [nzSpan]="4">
                 <nz-form-item class="form-item">
-                  <nz-form-label [nzNoColon]="true" nzRequired> Căn cứ giao chỉ tiêu của Tổng cục DTNN </nz-form-label>
+                  <nz-form-label [nzNoColon]="true"> Căn cứ giao chỉ tiêu của Tổng cục DTNN </nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-input-group>
                       <input [readonly]="true" nz-input formControlName="soQdCc" readonly="true" />
@@ -329,7 +329,7 @@
                             <th>Cục DTNN KV</th>
                             <th>Địa chỉ</th>
                             <th>Số kế hoạch/đề xuất</th>
-                            <th>Ngày kí</th>
+                            <th>Ngày ký</th>
                             <th>Trích yếu</th>
                             <th>Tên dự án</th>
                             <th>Số lượng</th>
@@ -343,12 +343,12 @@
                             <td style="width: 35px">{{i + 1}}</td>
                             <td>{{ data.tenDvi }}</td>
                             <td>{{ data.diaChi }}</td>
-                            <td>{{ data.soDxuat }}/TC</td>
+                            <td>{{ data.soDxuat }}</td>
                             <td>{{ data.ngayPduyet }}</td>
                             <td>{{ data.trichYeu }}</td>
                             <td>{{ data.tenDuAn }}</td>
-                            <td>{{ data.tongSoLuong | number: '1.0-1' : 'vi_VN' }}</td>
-                            <td>{{ (data.tongMucDt ? data.tongMucDt : data.tongSoLuong * data.donGiaVat * 1000) | number: '1.0-1' : 'vi_VN' }}</td>
+                            <td class="text-right">{{ data.tongSoLuong | number: '1.0-1' : 'vi_VN' }}</td>
+                            <td class="text-right">{{ (data.tongMucDt ? data.tongMucDt : data.tongSoLuong * data.donGiaVat * 1000) | number: '1.0-1' : 'vi_VN' }}</td>
                         </tr>
                     </tbody>
                 </nz-table>

@@ -1,23 +1,23 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Base2Component } from "src/app/components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "src/app/services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { DonviService } from "src/app/services/donvi.service";
-import { DanhMucService } from "src/app/services/danhmuc.service";
+import {Component, Input, OnInit} from '@angular/core';
+import {Base2Component} from "src/app/components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "src/app/services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {DonviService} from "src/app/services/donvi.service";
+import {DanhMucService} from "src/app/services/danhmuc.service";
 import * as dayjs from "dayjs";
-import { STATUS } from "src/app/constants/status";
-import { FileDinhKem } from "src/app/models/DeXuatKeHoachuaChonNhaThau";
-import { MESSAGE } from "src/app/constants/message";
-import { chain, cloneDeep } from "lodash";
-import { v4 as uuidv4 } from "uuid";
-import { NumberToRoman } from 'src/app/shared/commonFunction';
-import { Validators } from "@angular/forms";
-import { HoSoTieuHuyService } from "../../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/HoSoTieuHuy.service";
-import { TongHopTieuHuyService } from "../../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/TongHopTieuHuy.service";
-import { DialogTuChoiComponent } from "../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import {STATUS} from "src/app/constants/status";
+import {FileDinhKem} from "src/app/models/DeXuatKeHoachuaChonNhaThau";
+import {MESSAGE} from "src/app/constants/message";
+import {chain, cloneDeep} from "lodash";
+import {v4 as uuidv4} from "uuid";
+import {NumberToRoman} from 'src/app/shared/commonFunction';
+import {Validators} from "@angular/forms";
+import {HoSoTieuHuyService} from "../../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/HoSoTieuHuy.service";
+import {TongHopTieuHuyService} from "../../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/TongHopTieuHuy.service";
+import {DialogTuChoiComponent} from "../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 import {Base3Component} from "../../../../../components/base3/base3.component";
 import {ActivatedRoute, Router} from "@angular/router";
 import {HoSoThanhLyService} from "../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/HoSoThanhLy.service";
@@ -144,6 +144,11 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
     if (this.formData.value.soHoSo) {
       body.soHoSo = this.formData.value.soHoSo + this.symbol
     }
+    if (this.formData.value.soTtrinhVu) {
+      body.soTtrinhVu = this.formData.value.soTtrinhVu + this.suffixes
+    }
+    body.thoiGianPdTu ? dayjs(body.thoiGianPd[0]).format('YYYY-MM-DD') : null;
+    body.thoiGianPdDen ? dayjs(body.thoiGianPd[1]).format('YYYY-MM-DD') : null;
     this.createUpdate(body).then((res) => {
       if (res) {
         if (isGuiDuyet) {
@@ -226,12 +231,12 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
 
   disabledThamDinh() {
     let trangThai = this.formData.value.trangThai;
-    return trangThai == STATUS.CHO_DUYET_LDV || trangThai == STATUS.CHO_DUYET_LDTC || trangThai == STATUS.DA_DUYET_LDTC || trangThai == STATUS.CHODUYET_BTC || trangThai == STATUS.DADUYET_BTC ;
+    return trangThai == STATUS.CHO_DUYET_LDV || trangThai == STATUS.CHO_DUYET_LDTC || trangThai == STATUS.DA_DUYET_LDTC || trangThai == STATUS.CHODUYET_BTC || trangThai == STATUS.DADUYET_BTC;
   }
 
   disabledTrinhVu() {
     let trangThai = this.formData.value.trangThai;
-    return trangThai != STATUS.DA_DUYET_LDC || trangThai != STATUS.DA_DUYET_CBV;
+    return !(trangThai === STATUS.DA_DUYET_LDC || trangThai === STATUS.DANG_DUYET_CB_VU);
   }
 
   showPheDuyetTuChoi() {

@@ -170,7 +170,7 @@
             <th class="text-center" width="13%" colSpan="2">Danh mục chưa được phê duyệt
               năm {{formData.value.namKh}}</th>
             <th class="text-center" width="7%" rowSpan="2">Ghi chú</th>
-            <th class="text-center" *ngIf="!isViewDetail" width="5%" rowSpan="2" nzRight>Hành động</th>
+            <th class="text-center" width="5%" rowSpan="2" nzRight>Hành động</th>
           </tr>
           <tr>
             <th class="text-center">Danh mục<br/> đề nghị bổ sung đợt này<br/>(6)</th>
@@ -195,8 +195,8 @@
             <th></th>
             <th></th>
             <th></th>
-            <th class="text-center" *ngIf="!isViewDetail" nzRight>
-              <a (click)="addNewKhoi()">
+            <th class="text-center" nzRight>
+              <a *ngIf="!isViewDetail" (click)="addNewKhoi()">
                 <i class="icon htvbdh_dau-cong"></i>
               </a>
             </th>
@@ -226,11 +226,11 @@
               <td
                 class="font-weight-bold text-right">{{sumSoLuong(data, 'giaTriKbs') | number : '1.0-1' : 'vi_VN'}}</td>
               <td></td>
-              <td class="font-weight-bold text-right" class="text-center" *ngIf="!isViewDetail" nzRight>
-                <a (click)="addNewItemDetail(data, 'them', idx, dataTable[idx])">
+              <td class="font-weight-bold text-right" class="text-center" nzRight>
+                <a *ngIf="!isViewDetail" (click)="addNewItemDetail(data, 'them', idx, dataTable[idx])">
                   <i class="icon htvbdh_dau-cong"></i>
                 </a>
-                <a (click)="deleteItemCha(idx)">
+                <a *ngIf="!isViewDetail" (click)="deleteItemCha(idx)">
                   <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
@@ -250,11 +250,14 @@
                 <td class="text-right">{{ item.giaTriDnBs  | number : '1.0-1' : 'vi_VN' }}</td>
                 <td class="text-right">{{ item.giaTriKbs  | number : '1.0-1' : 'vi_VN' }}</td>
                 <td>{{ item.ghiChu  }}</td>
-                <td class="text-center" nzRight *ngIf="!isViewDetail">
-                  <a (click)="addNewItemDetail(item, 'sua', y, dataTable[idx])">
+                <td class="text-center" nzRight>
+                  <a *ngIf="!isViewDetail" (click)="addNewItemDetail(item, 'sua', y, dataTable[idx])">
                     <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
-                  <a (click)="deleteItem(idx, y)">
+                  <a *ngIf="isViewDetail" (click)="showItemDetail(item, 'sua', y, dataTable[idx], data)">
+                    <i class="icon htvbdh_eye" title="Xem"></i>
+                  </a>
+                  <a *ngIf="!isViewDetail" (click)="deleteItem(idx, y)">
                     <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
                 </td>
@@ -284,7 +287,7 @@
             <td class="font-weight-bold text-right"
                 style="color: blue">{{sumSoLuong(null, 'giaTriKbs', true) | number : '1.0-1' : 'vi_VN'}}</td>
             <td></td>
-            <td *ngIf="!isViewDetail" nzRight></td>
+            <td nzRight></td>
           </tr>
           </tfoot>
         </nz-table>

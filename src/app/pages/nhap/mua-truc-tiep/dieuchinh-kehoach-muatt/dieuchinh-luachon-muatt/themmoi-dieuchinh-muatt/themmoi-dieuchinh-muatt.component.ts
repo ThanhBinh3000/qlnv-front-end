@@ -263,6 +263,7 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
           idQdGoc: data.idQdGoc,
           soQdGoc: data.soQdGoc,
           ldoTchoi: data.ldoTchoi,
+          trichYeuDc: data.trichYeuDc,
           ngayKyQdGoc: data.ngayKyQdGoc,
           soLanDieuChinh: data.soLanDieuChinh,
           soQdCc: data.soQdCc,
@@ -354,7 +355,7 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           moTaHangHoa: data.mthh,
-          soLanDieuChinh: data.soLanDieuChinh,
+          soLanDieuChinh: data.soLanDieuChinh + 1,
           soQdCc: data.soQdCc,
           idSoQdCc: data.idSoQdCc,
           namKh: data.namKh
@@ -397,7 +398,7 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
         cloaiVthh: res.data.cloaiVthh,
         tenCloaiVthh: res.data.tenCloaiVthh,
         moTaHangHoa: res.data.mthh,
-        soLanDieuChinh: res.data.soLanDieuChinh,
+        soLanDieuChinh: res.data.soLanDieuChinh + 1,
         soQdCc: res.data.soQdCc,
         idSoQdCc: res.data.idSoQdCc,
         namKh: res.data.namKh
@@ -483,8 +484,8 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
 
 
   async save(isGuiDuyet?) {
-    await this.helperService.markFormGroupTouched(this.formData);
     this.clearValidatorLuuDuThao()
+    await this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
       return;
@@ -535,6 +536,20 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
     this.formData.controls["ngayTaoCv"].clearValidators();
     this.formData.controls["soQdDc"].clearValidators();
     this.formData.controls["ngayHluc"].clearValidators();
+    if (this.formData.get("trangThai").value == STATUS.DA_DUYET_LDV) {
+      if (this.fileDinhKems.length == 0) {
+        this.formData.controls["checkListFileDinhKems"].setValidators([Validators.required]);
+      } else {
+        this.formData.controls["checkListFileDinhKems"].clearValidators();
+      }
+    }
+    if (this.formData.get("trangThai").value == STATUS.CHO_DUYET_LDV) {
+      if (this.fileDinhKems.length == 0) {
+        this.formData.controls["ngayKyQdGoc"].setValidators([Validators.required]);
+      } else {
+        this.formData.controls["ngayKyQdGoc"].clearValidators();
+      }
+    }
   }
 
   async setValidator() {
@@ -641,8 +656,8 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
     debugger
     this.danhsachDxMtt.forEach(item => {
       item.children = $event.filter(x => x.maDvi.includes(item.maDvi));
-      item.tongSoLuong = item.children.reduce((acc, data) => acc + data.tongSoLuong, 0)
-      item.tongMucDt = item.children.reduce((acc, data) => acc + data.tongThanhTien, 0)
+      // item.tongSoLuong = item.children.reduce((acc, data) => acc + data.tongSoLuong, 0)
+      // item.tongMucDt = item.children.reduce((acc, data) => acc + data.tongThanhTien, 0)
     })
   }
 

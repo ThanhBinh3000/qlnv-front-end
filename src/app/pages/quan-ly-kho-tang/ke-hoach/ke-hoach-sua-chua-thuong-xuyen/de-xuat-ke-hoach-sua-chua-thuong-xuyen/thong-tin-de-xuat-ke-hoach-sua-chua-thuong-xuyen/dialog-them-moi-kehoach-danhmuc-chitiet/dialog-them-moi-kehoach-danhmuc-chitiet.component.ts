@@ -164,6 +164,7 @@ export class DialogThemMoiKehoachDanhmucChitietComponent extends Base2Component 
     let res = await this.danhMucService.danhMucChungGetAll("LOAI_NHU_CAU_DEXUAT_DTSC_KT");
     if (res.msg == MESSAGE.SUCCESS) {
       this.listLoaiNhuCauDx = res.data;
+      console.log(this.listLoaiNhuCauDx, 'listLoaiNhuCauDx')
     }
   }
 
@@ -227,6 +228,8 @@ export class DialogThemMoiKehoachDanhmucChitietComponent extends Base2Component 
               soQdPdTmdt: danhMuc.soQdPdTmdt,
               idDanhMuc: danhMuc.idDanhMuc,
               loaiDx: this.radioValue,
+              loaiDeXuat: danhMuc.loaiDeXuat,
+              nguonKinhPhi: danhMuc.nguonKinhPhi,
               ngayKyQdPdTmdt: danhMuc.ngayQdPd
             })
           }else{
@@ -246,6 +249,8 @@ export class DialogThemMoiKehoachDanhmucChitietComponent extends Base2Component 
               tgSuaChua: result.tgSuaChua,
               soQdPdTmdt: result.soQdPheDuyet,
               idDanhMuc: result.id,
+              loaiDeXuat: result.loaiDeXuat,
+              nguonKinhPhi: result.nguonKinhPhi,
               loaiDx: this.radioValue,
               ngayKyQdPdTmdt: result.ngayQdPd
             })

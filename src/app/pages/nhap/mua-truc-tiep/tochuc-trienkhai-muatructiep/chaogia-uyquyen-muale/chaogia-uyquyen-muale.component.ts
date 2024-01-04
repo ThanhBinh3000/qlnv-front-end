@@ -80,7 +80,7 @@ export class ChaogiaUyquyenMualeComponent extends Base2Component implements OnIn
   async loadDsTong() {
     const dsTong = await this.donviService.layDonViCon();
     if (!isEmpty(dsTong)) {
-      this.dsDonvi = dsTong.data;
+      this.dsDonvi = dsTong.data.filter(x => x.type == 'DV');
     }
   }
 

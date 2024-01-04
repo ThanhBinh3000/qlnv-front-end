@@ -157,7 +157,7 @@
                                 <nz-form-label nzRequired [nzNoColon]="true"> Ngày duyệt kế hoạch </nz-form-label>
                                 <nz-form-control nz-col>
                                     <nz-input-group>
-                                        <nz-date-picker formControlName="ngayPduyet" nzFormat="dd/MM/yyyy" [nzDisabled]="true">
+                                        <nz-date-picker formControlName="ngayPduyet" nzFormat="dd/MM/yyyy" [nzDisabled]="formData.value.trangThai != STATUS.CHO_DUYET_LDC">
                                         </nz-date-picker>
                                     </nz-input-group>
                                 </nz-form-control>

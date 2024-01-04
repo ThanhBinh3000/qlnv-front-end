@@ -171,6 +171,7 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
         nzComponentParams: {
           dataTable: list && list.dataChild ? list.dataChild : [],
           dataInput: data,
+          typeKh: 'DX',
           type: type,
           listDmSuaChua: (this.listDmSuaChua && this.listDmSuaChua.length > 0) ? this.listDmSuaChua.filter(item => (item.trangThai == STATUS.CHUA_THUC_HIEN) && item.khoi == data.khoi) : [],
           dataHeader: this.formData.value,
@@ -195,6 +196,45 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
         }
       });
     }
+  }
+
+  showItemDetail(data: any, type: string, idx: number, list?: any, parent?: any) {
+    console.log(parent, "showItemDetail")
+
+    let modalQD = this.modal.create({
+      nzTitle: "Thêm mới kế hoạch, danh mục chi tiết",
+      nzContent: DialogThemMoiKehoachDanhmucChitietComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: "1000px",
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: list && list.dataChild ? list.dataChild : [],
+        dataInput: data,
+        typeKh: 'TH',
+        type: type,
+        listDmSuaChua: (this.listDmSuaChua && this.listDmSuaChua.length > 0) ? this.listDmSuaChua.filter(item => (item.trangThai == STATUS.CHUA_THUC_HIEN) && item.khoi == data.khoi) : [],
+        dataHeader: this.formData.value,
+      }
+    });
+    modalQD.afterClose.subscribe(async (detail) => {
+      if (detail) {
+        if (!data.dataChild) {
+          data.dataChild = [];
+        }
+        if (!data.idVirtual) {
+          data.idVirtual = uuidv4();
+        }
+        if (type == "them") {
+          data.dataChild.push(detail);
+        } else {
+          if (list) {
+            Object.assign(list.dataChild[idx], detail);
+          }
+        }
+        this.expandAll();
+      }
+    });
   }
 
   convertListData() {

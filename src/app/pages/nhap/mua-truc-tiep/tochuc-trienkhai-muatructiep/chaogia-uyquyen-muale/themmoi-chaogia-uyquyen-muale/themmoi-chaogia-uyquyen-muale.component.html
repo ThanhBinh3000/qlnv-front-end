@@ -190,15 +190,15 @@
         <nz-table #tableData [nzData]="danhSachCtiet" class="nowrap" nzBordered>
           <thead>
           <tr>
-            <th style="width: 2%;">STT</th>
-            <th style="width: 300px;">Chi cục</th>
-            <th>Điểm kho</th>
-            <th>Chỉ tiêu kế hoạch được giao (tấn)</th>
-            <th>Số đã thực hiện (tấn)</th>
-            <th>SL phê duyệt (tấn)</th>
-            <th>Đơn giá được duyệt có VAT (đ)</th>
-            <th>Thành tiền theo đơn giá đã duyệt (đ)</th>
-            <th>Hành động</th>
+            <th style="width: 2%;" class="text-center">STT</th>
+            <th style="width: 300px;" class="text-center">Chi cục</th>
+            <th class="text-center">Điểm kho</th>
+            <th class="text-center">Chỉ tiêu kế hoạch được giao (tấn)</th>
+            <th class="text-center">Số đã thực hiện (tấn)</th>
+            <th class="text-center">SL phê duyệt (tấn)</th>
+            <th class="text-center">Đơn giá được duyệt có VAT (đ)</th>
+            <th class="text-center">Thành tiền theo đơn giá đã duyệt (đ)</th>
+            <th class="text-center">Hành động</th>
           </tr>
           </thead>
           <tbody>
@@ -207,9 +207,9 @@
               <td [nzExpand]="true"></td>
               <td>{{item.tenDvi}}</td>
               <td></td>
-              <td class="text-bold">{{ item.soLuongChiTieu | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-bold">{{ item.soLuongKhDd | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-bold">{{ item.tongSoLuong | number :
+              <td class="text-bold text-right">{{ item.soLuongChiTieu | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-bold text-right">{{ item.soLuongKhDd | number : '1.0-1' : 'vi_VN' }}</td>
+              <td class="text-bold text-right">{{ item.tongSoLuong | number :
                 '1.0-1' :
                 'vi_VN'}}</td>
               <td></td>
@@ -231,9 +231,9 @@
               </td>
               <td></td>
               <td></td>
-              <td><input nz-input [(ngModel)]="diemKhoItem.soLuong"/></td>
-              <td><input readonly="true" nz-input [(ngModel)]="diemKhoItem.donGiaVat"/></td>
-              <td>{{(diemKhoItem.donGiaVat * (diemKhoItem.soLuong ? diemKhoItem.soLuong : 0) * 1000) | number : '1.0-1' : 'vi_VN'}}</td>
+              <td class="text-right"><input nz-input [(ngModel)]="diemKhoItem.soLuong"/></td>
+              <td class="text-right"><input readonly="true" nz-input [(ngModel)]="diemKhoItem.donGiaVat"/></td>
+              <td class="text-right">{{(diemKhoItem.donGiaVat * (diemKhoItem.soLuong ? diemKhoItem.soLuong : 0) * 1000) | number : '1.0-1' : 'vi_VN'}}</td>
               <td>
                 <a (click)="addDiemKho(i, diemKhoItem)" [class.disabled]="!diemKhoItem">
                   <i class="fa fa-plus"></i>
@@ -251,9 +251,9 @@
                 <td>{{diemKho.tenDiemKho}}</td>
                 <td></td>
                 <td></td>
-                <td>{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{item.donGiaVat * diemKho.soLuong * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right">{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right">{{item.donGiaVat * diemKho.soLuong * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
                 <td>
                   <a *ngIf="formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT && userService.isCuc()" (click)="startEditDk(i, y)"
                      class="text-center">
@@ -272,13 +272,13 @@
                   </td>
                   <td></td>
                   <td></td>
-                  <td>
+                  <td class="text-right">
                     <input type="text" [(ngModel)]="diemKhoEdit[i]?.data.children[y].soLuong" nz-input/>
                   </td>
-                  <td>
+                  <td class="text-right">
                     <input type="text" [(ngModel)]="diemKhoEdit[i]?.data.children[y].donGiaVat" nz-input/>
                   </td>
-                  <td>
+                  <td class="text-right">
                     {{(diemKhoEdit[i]?.data.children[y].donGiaVat * diemKhoEdit[i]?.data.children[y].soLuong * 1000) | number : '1.0-1' : 'vi_VN'}}
                   </td>
                   <td class="text-center">

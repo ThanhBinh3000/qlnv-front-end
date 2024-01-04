@@ -140,14 +140,14 @@
             <thead>
               <tr>
                 <th [width]="30">STT</th>
-                <th>Cục DTNN KV</th>
-                <th>Địa chỉ</th>
-                <th>Số công văn/tờ trình</th>
-                <th>Ngày ký</th>
-                <th>Trích yếu</th>
-                <th>Tên dự án</th>
-                <th>Số lượng (tấn)</th>
-                <th>Tổng tiền đã bao gồm thuế</th>
+                <th class="text-center">Cục DTNN KV</th>
+                <th class="text-center">Địa chỉ</th>
+                <th class="text-center">Số công văn/tờ trình</th>
+                <th class="text-center">Ngày ký</th>
+                <th class="text-center">Trích yếu</th>
+                <th class="text-center">Tên dự án</th>
+                <th class="text-center">Số lượng (tấn)</th>
+                <th class="text-center">Tổng tiền đã bao gồm thuế</th>
               </tr>
             </thead>
             <tbody>
@@ -157,11 +157,11 @@
                 <td>{{ data.tenDvi }}</td>
                 <td>{{ data.diaChi }}</td>
                 <td>{{ data.soDxuat }}</td>
-                <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
+                <td class="text-center">{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
                 <td>{{ data.trichYeu }}</td>
                 <td>{{ data.tenDuAn }}</td>
-                <td>{{ data.tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{ (data.tongTienGomThue ? data.tongTienGomThue : (data.tongMucDt ? data.tongMucDt : data.tongSoLuong * data.donGiaVat * 1000)) | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right">{{ data.tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right">{{ (data.tongTienGomThue ? data.tongTienGomThue : (data.tongMucDt ? data.tongMucDt : data.tongSoLuong * data.donGiaVat * 1000)) | number : '1.0-1' : 'vi_VN'}}</td>
               </tr>
             </tbody>
           </nz-table>
