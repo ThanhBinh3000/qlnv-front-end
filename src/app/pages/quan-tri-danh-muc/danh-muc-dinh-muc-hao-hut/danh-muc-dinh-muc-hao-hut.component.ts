@@ -13,7 +13,7 @@ import {DanhMucDinhMucHaoHutService} from "../../../services/danh-muc-dinh-muc-h
 import {Globals} from "../../../shared/globals";
 import {AMOUNT} from "../../../Utility/utils";
 import {DonviService} from "../../../services/donvi.service";
-
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-danh-muc-dinh-muc-hao-hut',
@@ -377,6 +377,23 @@ export class DanhMucDinhMucHaoHutComponent implements OnInit {
 
   onOptionClick(event: Event): void {
     event.preventDefault();
+  }
+
+  export() {
+        this.spinner.show();
+        try {
+          let body = {};
+          this.dmDinhMucHaoHut
+            .export(body)
+            .subscribe((blob) =>
+              saveAs(blob, 'danh-muc-dm-hao-hut.xlsx'),
+            );
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
   }
 }
 
