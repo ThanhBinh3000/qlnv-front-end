@@ -27,6 +27,7 @@ import { PREVIEW } from '../../../../../constants/fileType';
 import printJS from 'print-js';
 import { MA_QUYEN_PKNCL } from './../phieu-kiem-nghiem-chat-luong.component';
 import dayjs from 'dayjs';
+import { AMOUNT_TWO_DECIMAL } from 'src/app/Utility/utils';
 
 @Component({
   selector: 'app-chi-tiet-phieu-kiem-nghiem-chat-luong',
@@ -62,6 +63,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   public vldTrangThai: BienBanLayMauComponent;
   templateName = 'phieu_khiem_nghiem_cl';
   listDiaDiemNhap: any[];
+  amount1 = { ...AMOUNT_TWO_DECIMAL, align: "left" }
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
@@ -702,6 +704,32 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         break;
     }
     this.reject(this.idSelected, trangThai);
+  }
+  onKetQuaChange(kq: number, index: number, dataTable: any): void {
+    if (dataTable[index].chiSoClToiThieu && dataTable[index].chiSoClToiDa && kq !== null && index !== null) {
+      let toiThieu = parseFloat(dataTable[index].chiSoClToiThieu.replace(",", "."));
+      let toiDa = parseFloat(dataTable[index].chiSoClToiDa.replace(",", "."));
+      let tt = parseFloat(dataTable[index].toanTu);
+
+      if ((tt === 1 || tt === 2) && toiThieu < kq && kq < toiDa) {
+        dataTable[index].danhGia = "Đạt";
+      } else {
+        dataTable[index].danhGia = "Không đạt";
+      }
+
+      if (tt === 3 && toiThieu == kq && kq == toiDa) {
+        dataTable[index].danhGia = "Đạt";
+      } else {
+        dataTable[index].danhGia = "Không đạt";
+      }
+
+      if ((tt === 4 || tt === 5) && toiThieu <= kq && kq <= toiDa) {
+        dataTable[index].danhGia = "Đạt";
+      } else {
+        dataTable[index].danhGia = "Không đạt";
+      }
+
+    }
   }
   checkRoleDuyet(trangThai: STATUS): boolean {
     if (trangThai === this.STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson(this.maQuyen.DUYET_TP) || trangThai === this.STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson(this.maQuyen.DUYET_LDC)) {

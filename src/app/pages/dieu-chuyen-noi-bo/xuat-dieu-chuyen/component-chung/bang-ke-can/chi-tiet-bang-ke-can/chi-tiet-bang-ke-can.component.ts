@@ -30,6 +30,7 @@ import {
 import { convertTienTobangChu, convertTienTobangChuThapPhan } from 'src/app/shared/commonFunction';
 import { PassDataXuatBangKeCanHang } from '../bang-ke-can.component';
 import { PREVIEW } from 'src/app/constants/fileType';
+import { AMOUNT_TWO_DECIMAL } from 'src/app/Utility/utils';
 
 
 @Component({
@@ -103,6 +104,7 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
   maBb: string;
   danhSachHangHoaQD: any[] = [];
   previewName: string = "nhap_xuat_lt_bang_ke_can_hang_nhap_lt";
+  amount1 = { ...AMOUNT_TWO_DECIMAL }
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

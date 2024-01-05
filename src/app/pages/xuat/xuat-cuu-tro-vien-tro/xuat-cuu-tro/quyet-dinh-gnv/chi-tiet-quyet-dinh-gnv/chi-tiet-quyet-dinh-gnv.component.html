@@ -838,7 +838,7 @@
                   [nzDisabled]="true" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                 </nz-input-number> -->
                 <input currencyMask class="money-input" formControlName="soLuongDx" [readOnly]="true"
-                  [options]="amount1" />
+                  [options]="isVthhVatuThietBi() ? amount: amount1" />
               </nz-form-control>
             </nz-form-item>
           </ng-container>
@@ -853,7 +853,7 @@
                 [nzParser]="globals.parser">
               </nz-input-number> -->
               <input currencyMask class="money-input" formControlName="soLuongGiao" [readOnly]="!userService.isCuc()"
-                [options]="amount1" />
+                [options]="isVthhVatuThietBi()? amount: amount1" />
             </nz-form-control>
           </nz-form-item>
           <nz-form-item *ngIf="userService.isChiCuc()">
@@ -890,7 +890,8 @@
               <!-- <nz-input-number formControlName="soLuong" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
                 [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
               </nz-input-number> -->
-              <input currencyMask class="money-input" formControlName="soLuong" [options]="amount1" />
+              <input currencyMask class="money-input" formControlName="soLuong"
+                [options]="isVthhVatuThietBi()?amount: amount1" />
             </nz-form-control>
           </nz-form-item>
 
@@ -913,7 +914,7 @@
               <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Tỉ lệ thu hồi sau xay xát
                 (%)</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <input currencyMask class="money-input" formControlName="tyLeThuHoiSauXayXat" [options]="amount"
+                <input currencyMask class="money-input" formControlName="tyLeThuHoiSauXayXat" [options]="amount1"
                   [readOnly]="formData.value.trangThaiXh === STATUS.DA_HOAN_THANH" />
               </nz-form-control>
             </nz-form-item>
@@ -948,7 +949,7 @@
               <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Tỉ lệ thu hồi sau xay xát
                 (%)</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <input currencyMask class="money-input" formControlName="tyLeThuHoiSauXayXat" [options]="amount"
+                <input currencyMask class="money-input" formControlName="tyLeThuHoiSauXayXat" [options]="amount1"
                   [readOnly]="formData.value.trangThaiXh === STATUS.DA_HOAN_THANH" />
               </nz-form-control>
             </nz-form-item>

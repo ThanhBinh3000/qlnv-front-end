@@ -393,12 +393,12 @@
               Số lượng mẫu hàng kiểm tra
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <!-- <nz-input-number type="text" nz-input [nzSize]="'small'" formControlName="soLuongMau"
-                [nzDisabled]="isView" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter"
-                [nzParser]="globals.parser">
-              </nz-input-number> -->
-              <input currencyMask class="money-input" formControlName="soLuongMau" [readOnly]="isView"
-                [options]="amount1" />
+              <nz-input-number *ngIf="loaiVthh === '02'" type="text" nz-input [nzSize]="'small'"
+                formControlName="soLuongMau" [nzDisabled]="isView" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
+                [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+              </nz-input-number>
+              <input *ngIf="loaiVthh !== '02'" currencyMask class="money-input" formControlName="soLuongMau"
+                [readOnly]="isView" [options]="amount1" />
             </nz-form-control>
           </nz-form-item>
         </div>

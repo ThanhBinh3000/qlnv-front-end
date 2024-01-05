@@ -946,7 +946,9 @@
                 <div nz-row [nzGutter]="48">
                   <div nz-col [nzSpan]="16">
                     <input currencyMask class="money-input" formControlName="soLuong"
-                      (ngModelChange)="soLuongNhuCauXuatChange($event)" [readOnly]="isView" [options]="amount1" />
+                      (ngModelChange)="soLuongNhuCauXuatChange($event)" [readOnly]="isView"
+                      [options]="isVthhVatuThietBi()?  amount: amount1" />
+
                   </div>
                   <div nz-col [nzSpan]="8">
                     <p style="font-size: 13px;font-weight: 500">Đơn vị tính:

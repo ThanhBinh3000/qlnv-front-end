@@ -26,7 +26,7 @@ import {
 } from "src/app/services/qlnv-hang/xuat-hang/chung/kiem-tra-chat-luong/PhieuKiemNghiemChatLuong.service";
 import { uniqBy } from 'lodash';
 import { BangKeCanCtvtService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BangKeCanCtvt.service';
-import { AMOUNT_ONE_DECIMAL } from 'src/app/Utility/utils';
+import { AMOUNT_NO_DECIMAL, AMOUNT_ONE_DECIMAL, AMOUNT_TWO_DECIMAL } from 'src/app/Utility/utils';
 @Component({
   selector: 'app-them-moi-phieu-xuat-kho',
   templateUrl: './them-moi-phieu-xuat-kho.component.html',
@@ -53,7 +53,8 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   templateNameVt = "Phiếu xuất kho";
   listDonViNhan: any[];
   listDiaDiemNhapFilter: any[];
-  amount1 = { ...AMOUNT_ONE_DECIMAL };
+  amount = { ...AMOUNT_NO_DECIMAL };
+  amount1 = { ...AMOUNT_TWO_DECIMAL };
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

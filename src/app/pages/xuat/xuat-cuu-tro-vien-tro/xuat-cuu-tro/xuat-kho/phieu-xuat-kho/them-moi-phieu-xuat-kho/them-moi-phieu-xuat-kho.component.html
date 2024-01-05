@@ -518,7 +518,7 @@
                     </nz-input-number> -->
                     <input currencyMask class="money-input" formControlName="theoChungTu"
                       [readOnly]="isView || (!formData.value.tenCloaiVthh && !formData.value.tenLoaiVthh)"
-                      [options]="amount1" />
+                      [options]="formData.value.loaiVthh === '02'? amount: amount1" />
                   </nz-input-group>
                 </nz-form-control>
               </td>
@@ -534,7 +534,7 @@
                     </nz-input-number> -->
                     <input currencyMask class="money-input" formControlName="thucXuat"
                       [readOnly]="isView || (!formData.value.tenCloaiVthh && !formData.value.tenLoaiVthh)"
-                      [options]="amount1" />
+                      [options]="formData.value.loaiVthh === '02'? amount: amount1" />
                   </nz-input-group>
                 </nz-form-control>
               </td>
@@ -545,7 +545,7 @@
                   <nz-input-group>
                     <input currencyMask class="money-input" formControlName="donGia"
                       [readOnly]="isView || (!formData.value.tenCloaiVthh && !formData.value.tenLoaiVthh)"
-                      [options]="amount1" />
+                      [options]="formData.value.loaiVthh === '02'? amount: amount1" />
                   </nz-input-group>
                 </nz-form-control>
               </td>

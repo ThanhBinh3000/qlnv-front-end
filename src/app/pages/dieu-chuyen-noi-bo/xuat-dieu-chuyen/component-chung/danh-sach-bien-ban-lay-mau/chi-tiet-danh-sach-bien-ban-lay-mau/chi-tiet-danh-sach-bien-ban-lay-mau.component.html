@@ -342,8 +342,10 @@
                                     <nz-input-number type="text" nz-input [nzSize]="'small'"
                                         formControlName="soLuongMau" [nzDisabled]="isView" [nzMin]="0"
                                         [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="numberFomater"
-                                        [nzParser]="globals.parser">
+                                        [nzParser]="globals.parser" *ngIf="isVatTu">
                                     </nz-input-number>
+                                    <input class="money-input" currencyMask [options]="amount1"
+                                        formControlName="soLuongMau" [readOnly]="isView" *ngIf="!isVatTu" />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>

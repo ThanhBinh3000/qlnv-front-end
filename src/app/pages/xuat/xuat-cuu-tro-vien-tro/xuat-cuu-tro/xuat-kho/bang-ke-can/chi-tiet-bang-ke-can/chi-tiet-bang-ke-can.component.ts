@@ -1,4 +1,4 @@
-import { AMOUNT_ONE_DECIMAL } from './../../../../../../../Utility/utils';
+import { AMOUNT_ONE_DECIMAL, AMOUNT_TWO_DECIMAL } from './../../../../../../../Utility/utils';
 import { AMOUNT_NO_DECIMAL } from 'src/app/Utility/utils';
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Validators } from "@angular/forms";
@@ -101,8 +101,8 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   templateName = "Bảng kê cân hàng";
   templateNameVt = "Bảng kê xuất Vật tư";
   amount = { ...AMOUNT_NO_DECIMAL };
-  amount1 = { ...AMOUNT_ONE_DECIMAL };
-  amount1Left = { ...AMOUNT_ONE_DECIMAL, align: "left" }
+  amount1 = { ...AMOUNT_TWO_DECIMAL };
+  amount1Left = { ...AMOUNT_TWO_DECIMAL, align: "left" }
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
