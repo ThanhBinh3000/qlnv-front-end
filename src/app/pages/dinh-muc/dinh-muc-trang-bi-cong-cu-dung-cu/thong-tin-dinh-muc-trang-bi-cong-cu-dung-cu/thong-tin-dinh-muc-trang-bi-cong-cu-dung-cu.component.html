@@ -145,7 +145,7 @@
           <td>{{data.apDungTai ? data.apDungTaiStr : 'Tất cả'}}</td>
           <td>{{data.ccRaDm=='DK' ? 'Điểm kho bảo quản' : data.ccRaDm=='KL' ? 'Khối lượng hàng nhập, xuất, bảo quản' :
             '' }}</td>
-          <td>{{getTenLoaiHang(data.loaiHhBq)}}</td>
+          <td>{{data.loaiHhBqStr ? data.loaiHhBqStr : getTenLoaiHang(data.loaiHhBq)}}</td>
           <td>{{data.trangBi=='LĐ' ? 'Lần đầu':data.trangBi=='BS' ? 'Bổ sung': ''}}</td>
           <td>{{data.dmVpCuc | number}}</td>
           <td>{{data.cucKtbq | number}}</td>

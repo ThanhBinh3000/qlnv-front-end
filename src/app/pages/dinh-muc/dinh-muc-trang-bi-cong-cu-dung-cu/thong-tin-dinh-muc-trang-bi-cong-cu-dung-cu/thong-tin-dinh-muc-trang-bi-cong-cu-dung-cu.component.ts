@@ -1,20 +1,20 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Base2Component } from '../../../../components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { DonviService } from '../../../../services/donvi.service';
-import { StorageService } from '../../../../services/storage.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import {Component, Input, OnInit} from '@angular/core';
+import {Base2Component} from '../../../../components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {DonviService} from '../../../../services/donvi.service';
+import {StorageService} from '../../../../services/storage.service';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzModalService} from 'ng-zorro-antd/modal';
 import * as uuid from 'uuid';
-import { QlDinhMucPhiService } from '../../../../services/qlnv-kho/QlDinhMucPhi.service';
-import { DanhMucDinhMucService } from '../../../../services/danh-muc-dinh-muc.service';
-import { DanhMucService } from '../../../../services/danhmuc.service';
-import { FormGroup, Validators } from '@angular/forms';
-import { MESSAGE } from '../../../../constants/message';
-import { DanhMucCongCuDungCuService } from '../../../../services/danh-muc-cong-cu-dung-cu.service';
-import { STATUS } from '../../../../constants/status';
-import { saveAs } from 'file-saver';
+import {QlDinhMucPhiService} from '../../../../services/qlnv-kho/QlDinhMucPhi.service';
+import {DanhMucDinhMucService} from '../../../../services/danh-muc-dinh-muc.service';
+import {DanhMucService} from '../../../../services/danhmuc.service';
+import {FormGroup, Validators} from '@angular/forms';
+import {MESSAGE} from '../../../../constants/message';
+import {DanhMucCongCuDungCuService} from '../../../../services/danh-muc-cong-cu-dung-cu.service';
+import {STATUS} from '../../../../constants/status';
+import {saveAs} from 'file-saver';
 
 @Component({
   selector: 'app-thong-tin-dinh-muc-trang-bi-cong-cu-dung-cu',
@@ -28,7 +28,7 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
   formDataDetail: FormGroup;
   listCcdc: any = [];
   listDonVi: any = [];
-  listHangHoaLT: any = [{ ma: '01', ten: 'Thóc tẻ' }, { ma: '02', ten: 'Gạo tẻ' }];
+  listHangHoaLT: any = [{ma: '01', ten: 'Thóc tẻ'}, {ma: '02', ten: 'Gạo tẻ'}];
   listHangHoaVT: any = [];
   listHangHoa: any = [];
   listHangHoaAll: any = [];
@@ -246,6 +246,9 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
       table.splice(index, 1, this.formDataDetail.value);
     } else {
       this.dataTableDetail = [...this.dataTableDetail, this.formDataDetail.value];
+      this.dataTableDetail.forEach(s => {
+        s.loaiHhBqStr = this.getTenLoaiHang(s.loaiHhBq);
+      });
     }
     this.isVisible = false;
     this.initFormDataDetail();
@@ -296,7 +299,10 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.fileDinhKem = data.fileDinhKem;
           this.dataTableDetail = data.listQlDinhMucTbCcdcDtl;
-          this.dataTableDetail.forEach(s => s.idVirtual = uuid.v4());
+          this.dataTableDetail.forEach(s => {
+            s.idVirtual = uuid.v4();
+            s.loaiHhBqStr = this.getTenLoaiHang(s.loaiHhBq);
+          });
           this.dataTableDetail.forEach(item => {
             item.apDungTaiStr = this.getStrTenDonVi(item.apDungTai);
           });
