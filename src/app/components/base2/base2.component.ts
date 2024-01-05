@@ -853,16 +853,7 @@ export class Base2Component implements OnInit {
         this.spinner.show();
         try {
           await this.kySo();
-          if(this.formData.value.kySo) {
-            data.kySo = this.formData.value.kySo
-            const res = await this.service.approve(data);
-            if (res.msg == MESSAGE.SUCCESS) {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.SIGNE_APPROVE_SUCCESS);
-              this.goBack();
-            } else {
-              this.notification.error(MESSAGE.ERROR, res.msg);
-            }
-          }
+
           this.spinner.hide();
         } catch (e) {
           console.log('error: ', e);
@@ -875,12 +866,22 @@ export class Base2Component implements OnInit {
 
   async kySo() {
     let data = this.formData.value;
-    this.helperService.exc_sign_xml(this, data, (sender, rv)=>{
+    this.helperService.exc_sign_xml(this, data, async (sender, rv) => {
       var received_msg = JSON.parse(rv);
       if (received_msg.Status == 0) {
         this.formData.patchValue({
           kySo: received_msg.Signature
-        })
+        });
+        if (this.formData.value.kySo) {
+          data.kySo = this.formData.value.kySo
+          const res = await this.service.approve(data);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SIGNE_APPROVE_SUCCESS);
+            this.goBack();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+        }
       } else {
         this.notification.error(MESSAGE.ERROR, "Ký số không thành công:" + received_msg.Status + ":" + received_msg.Error);
       }
