@@ -9,11 +9,7 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
-        <a class="btn btn-outline-danger btn-sm waves-effect waves-light" (click)="khongBH()"
-          *ngIf="userService.isTongCuc() && thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_PA_TCGIAO_THEM')">
-          <i class="icon htvbdh_tcdt_tuchoi"></i>
-          <span>Không ban hành</span>
-        </a>
+
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="guiDuyet()"
           *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_PA_TCGIAO_THEM') && !isViewDetail">
           <i class="icon htvbdh_tcdt_guiduyet"></i>

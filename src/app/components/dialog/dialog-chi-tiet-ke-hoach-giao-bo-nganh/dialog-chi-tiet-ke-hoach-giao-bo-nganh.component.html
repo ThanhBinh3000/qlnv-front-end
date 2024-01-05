@@ -27,8 +27,8 @@
   <!--    </nz-form-item>-->
   <!--  </div>-->
 </div>
-<div class="flex-card dialog-chi-tiet-ke-hoach">
-  <nz-tabset nzType="card" class="mt-16 tab-level-3" nzSelectedIndex="0">
+<div class="flex-card dialog-chi-tiet-ke-hoach" style='padding: 0px !important;'>
+  <nz-tabset nzType="card" style='padding: 0px !important;' class="mt-16" nzSelectedIndex="0">
     <nz-tab *ngIf="radioValue=='BTC'" [nzTitle]="'Nhập - Xuất tồn kho lương thực'">
       <app-ke-hoach-luong-thuc #keHoachLuongThuc [(ltGaoMua)]="keHoach.ltGaoMua" [isView]="isView" [namHienTai]="nam"
                                [(ltGaoXuat)]="keHoach.ltGaoXuat" [(ltThocMua)]="keHoach.ltThocMua"
@@ -39,7 +39,7 @@
       </app-ke-hoach-luong-thuc>
     </nz-tab>
 
-    <nz-tab [nzTitle]="'Mua tăng'">
+    <nz-tab [nzTitle]="'Mua tăng'" style='padding: 0px !important;'>
       <app-ke-hoach-xuat-giam [isView]="isView" tab='MT' [tabRadio]="radioValue" [dsHangHoa]="dsHangHoa"
                               [(tongGtri)]="keHoach.ttMuaTang"
                               [(ghiChu)]="keHoach.ghiChuMuaTang"

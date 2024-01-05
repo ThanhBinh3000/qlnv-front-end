@@ -1,5 +1,5 @@
-<div nzGutter="24">
-  <div class="header header-green-background" nzSpan="24" *ngIf="tabRadio =='BTC' && tab =='MT'">
+<div>
+  <div class="header header-green-background"  *ngIf="tabRadio =='BTC' && tab =='MT'">
     <div class="header-text">
       <div class="title-chi-tieu">
         <span>Kế hoạch mua tăng vật tư</span>
@@ -194,7 +194,7 @@
     </tr>
     <ng-container *ngFor="let data of dataTableView , let idx = index">
       <tr>
-        <td>{{idx + 1}}</td>
+        <td class="text-center">{{idx + 1}}</td>
         <td [nzExpand]="expandSet.has(data.idVirtual)"
             (nzExpandChange)="onExpandChange(data.idVirtual, $event)">{{data.tenVthh}}</td>
         <ng-container *ngIf="!data.isLeaf">

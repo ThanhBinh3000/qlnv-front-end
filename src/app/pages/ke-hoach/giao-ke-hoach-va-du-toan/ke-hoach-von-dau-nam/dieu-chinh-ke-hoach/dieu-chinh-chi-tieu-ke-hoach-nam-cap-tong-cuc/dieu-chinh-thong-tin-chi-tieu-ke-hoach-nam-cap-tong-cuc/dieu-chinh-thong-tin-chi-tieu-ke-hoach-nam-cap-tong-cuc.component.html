@@ -9,11 +9,19 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
+
+        <a class="btn btn-outline-danger btn-sm waves-effect waves-light" (click)="save(false,true)"
+          *ngIf="isTongCuc() && thongTinChiTieuKeHoachNam.trangThai == STATUS.DANG_NHAP_DU_LIEU && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_CUC_BANHANH') || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_BANHANH'))">
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Không ban hành</span>
+        </a>
+
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="guiDuyet()"
           *ngIf="isTongCuc() && thongTinChiTieuKeHoachNam.trangThai == STATUS.DANG_NHAP_DU_LIEU && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_CUC_BANHANH') || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_BANHANH'))">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Ban hành</span>
         </button>
+
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="guiDuyet()"
           *ngIf="isCuc() && thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_CUC_BANHANH') || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_BANHANH'))">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
@@ -52,19 +60,92 @@
   nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
 </nz-alert>
 <div class="bg-trang">
-  <nz-card class="mt16 flex-card p-lr16">
+
+  <div class="header">
+    <div class="header-text">
+      <div class="title-chi-tieu">
+        <span
+          [ngClass]="thongTinChiTieuKeHoachNam.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'  ">
+          {{thongTinChiTieuKeHoachNam.trangThai == STATUS.DANG_NHAP_DU_LIEU ? 'Đang nhập dữ liệu' :
+          thongTinChiTieuKeHoachNam.tenTrangThai
+          }}
+        </span>
+        <span>QUYẾT ĐỊNH ĐIỀU CHỈNH CHỈ TIÊU KẾ HOẠCH NĂM CỦA {{thongTinChiTieuKeHoachNam.cap == "1" ?
+          'TỔNG CỤC' : 'CỤC'}}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <nz-card class="mt16 mg-t-16 flex-card p-lr16 bg-kbh" *ngIf="formData.value.trangThai == STATUS.KHONG_BAN_HANH">
     <div class="header">
       <div class="header-text">
         <div class="title-chi-tieu">
-          <span
-            [ngClass]="thongTinChiTieuKeHoachNam.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'  ">
-            {{thongTinChiTieuKeHoachNam.trangThai == STATUS.DANG_NHAP_DU_LIEU ? 'Đang nhập dữ liệu' :
-            thongTinChiTieuKeHoachNam.tenTrangThai
-            }}
-          </span>
-          <span>QUYẾT ĐỊNH ĐIỀU CHỈNH CHỈ TIÊU KẾ HOẠCH NĂM CỦA {{thongTinChiTieuKeHoachNam.cap == "1" ?
-            'TỔNG CỤC' : 'CỤC'}}
-          </span>
+          <span class="text-red">THÔNG BÁO KHÔNG BAN HÀNH</span>
+        </div>
+      </div>
+    </div>
+    <form nz-form nzLayout="vertical" [formGroup]="formData">
+
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" class="text-left"> Số văn bản</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group nzAddOnAfter="/{{qdTCDT}}" class="input-kbh">
+                <input formControlName="soVanBanKhongBh" class="input-kbh" [readonly]="true" nz-input nzSize="small"
+                  placeholder="Nhập số văn bản" />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" class="text-left"> Ngày ký
+            </nz-form-label>
+            <nz-form-control nz-col [nzErrorTip]="error">
+              <nz-date-picker class="search__input input-kbh" nzFormat="dd/MM/yyyy" formControlName="ngayKyKhongBh"
+                [nzDisabled]="true" nzPlaceHolder="Ngày ký">
+              </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+      </div>
+      <div nz-row [nzGutter]="24" class="mg-t-10">
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" class="text-left"> Nội dung văn bản
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <textarea rows="5" formControlName="noiDungVanBanKhongBh" class="search__input input-kbh" nz-input
+                nzSize="small" placeholder="Nhập text" [readonly]="true"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" class="text-left"> Lý do không điều chỉnh
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <textarea rows="5" formControlName="lyDoKhongBh" class="search__input input-kbh" nz-input nzSize="small"
+                placeholder="Nhập text" [readonly]="true"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+      </div>
+
+
+
+    </form>
+  </nz-card>
+
+  <nz-card class="mt16 mg-t-16 flex-card p-lr16">
+    <div class="header">
+      <div class="header-text">
+        <div class="title-chi-tieu">
+          <span>THÔNG TIN CHUNG</span>
         </div>
       </div>
     </div>

@@ -18,7 +18,6 @@ import { StorageService } from 'src/app/services/storage.service';
 export class KhongBanHanhComponent extends Base2Component implements OnInit {
 
   qdTCDT: string
-  soCongVan: string
   fileDinhKemKhongBhs: any[] = [];
 
   constructor(

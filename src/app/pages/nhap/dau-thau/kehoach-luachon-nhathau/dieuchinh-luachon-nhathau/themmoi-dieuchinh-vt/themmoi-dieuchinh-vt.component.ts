@@ -45,7 +45,7 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
   listCcPhapLy: any[] = [];
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
-
+  previewName : string = 'qd_dieu_chinh_khlcnt_vt';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
