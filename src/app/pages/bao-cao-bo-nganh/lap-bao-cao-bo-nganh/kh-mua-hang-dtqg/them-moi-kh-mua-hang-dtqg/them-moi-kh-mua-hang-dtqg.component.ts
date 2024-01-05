@@ -182,13 +182,7 @@ export class ThemMoiKhMuaHangDtqgComponent extends Base2Component implements OnI
     this.showListEvent.emit();
   }
 
-  async guiDuyet(id: number) {
-    let trangThai = STATUS.BAN_HANH;
-    let mesg = 'Ban hành quyết định'
-    this.approve(id, trangThai, mesg);
-  }
-
-  async save() {
+  async save(isBanHanh?: boolean) {
     for (let i = 0; i < this.listDataGroup.length; i++) {
       this.listDataGroup[i].thuTuHienThi = (i+1)
     }
@@ -204,11 +198,15 @@ export class ThemMoiKhMuaHangDtqgComponent extends Base2Component implements OnI
     }
     if (res.msg == MESSAGE.SUCCESS) {
       this.idInput = res.data.id;
-      if (this.formData.get("id").value) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+      if (isBanHanh) {
+        this.pheDuyetBcBn(body);
       } else {
-        this.formData.get("id").setValue(res.data.id);
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        if (this.formData.get("id").value) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        } else {
+          this.formData.get("id").setValue(res.data.id);
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        }
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);

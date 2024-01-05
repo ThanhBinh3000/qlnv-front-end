@@ -467,7 +467,7 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
 
       let res = await this.chiTieuKeHoachNamService.loadThongTinChiTieuKeHoachTongCucGiao(body)
       if (res.msg == MESSAGE.SUCCESS) {
-        console.log("loadThongTinChiTieuKeHoachTongCucGiao", res)
+
         let data = res.data
 
         if (data) {
@@ -659,7 +659,8 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
           this.expandAllVatTuXuat(this.dataVatTuXuatTree);
         }
       } else {
-        this.notification.error(MESSAGE.ERROR, "Chưa có QĐ giao chỉ tiêu KH năm của Tổng Cục")
+        if (!this.id)
+          this.notification.error(MESSAGE.ERROR, "Chưa có QĐ giao chỉ tiêu KH năm của Tổng Cục")
       }
     }
 
@@ -1407,77 +1408,6 @@ export class ThongTinPhuongAnDieuChinhComponent implements OnInit {
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
-      }
-    });
-  }
-
-  confirmKhongBH(body) {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn không ban hành phương án?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: async () => {
-        this.spinner.show();
-        try {
-          const res = await this.phuongAnDieuChinhCTKHService.duyet(body);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
-            this.redirectChiTieuKeHoachNam();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-          this.spinner.hide();
-        } catch (e) {
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-    });
-
-  }
-
-  async khongBH(row?: any) {
-    await this.spinner.show();
-
-    await this.spinner.hide();
-
-
-    const modalQD = this.modal.create({
-      nzTitle: 'THÔNG BÁO KHÔNG BAN HÀNH',
-      nzContent: KhongBanHanhComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '1200px',
-      nzFooter: null,
-      nzComponentParams: {
-        soCongVan: this.thongTinChiTieuKeHoachNam.soCongVan//`${this.thongTinChiTieuKeHoachNam.soCongVan}/${this.qdTCDT}`
-      },
-    });
-    modalQD.afterClose.subscribe(async (data) => {
-
-      if (data) {
-
-        let body = this.formData.value
-        // body.soCongVan = `${body.soCongVan}/${this.qdTCDT}`
-        body.dcKeHoachNamLtDtl = this.dsKeHoachLuongThucClone.map((lt) => {
-          return {
-            ...lt,
-            dcKeHoachNamLtTtDtl: [...lt.tkdnGao, ...lt.tkdnThoc, ...lt.ntnGao, ...lt.ntnThoc, ...lt.xtnGao, ...lt.xtnThoc, ...lt.tkcnGao, ...lt.tkcnThoc]
-          }
-        })
-        body.dcKeHoachNamMuoiDtl = this.dsMuoiClone
-        body.dcKeHoachNamVatTuDtl = [...this.dataVatTuNhap, ...this.dataVatTuXuat]
-        body.fileDinhKemReq = this.fileDinhKems
-        body.canCus = this.listCcPhapLy
-        body.id = this.thongTinChiTieuKeHoachNam.id
-        body.trangThai = STATUS.KHONG_BAN_HANH
-        console.log("KhongBanHanhComponent", { ...data, ...body })
-        this.confirmKhongBH({ ...data, ...body })
-
       }
     });
   }

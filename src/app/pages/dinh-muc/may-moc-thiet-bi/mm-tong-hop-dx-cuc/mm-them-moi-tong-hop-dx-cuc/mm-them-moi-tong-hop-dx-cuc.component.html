@@ -290,9 +290,9 @@
                              [nzParser]="globals.parser"></nz-input-number>
           </td>
           <td class="text-right" *ngIf="isView">{{item.soLuong | number: '1.0-1': 'vi_VN' }}</td>
-          <td class="text-right">{{item.donGiaTd  | number: '1.0-1': 'vi_VN' }}</td>
-          <td class="text-right">{{item.donGiaTd * item.soLuong   | number: '1.0-1': 'vi_VN' }}</td>
-          <td>
+          <td class="text-right">{{item.donGiaTd  | number: '1.0-3': 'vi_VN' }}</td>
+          <td class="text-right">{{item.donGiaTd * item.soLuong   | number: '1.0-3': 'vi_VN' }}</td>
+          <td *ngIf="!isView">
             <nz-input-number [(ngModel)]="item.soLuongTc" [nzSize]="'small'" [nzDisabled]="isView"
                              [nzFormatter]="globals.formatter"
                              [nzParser]="globals.parser"></nz-input-number>

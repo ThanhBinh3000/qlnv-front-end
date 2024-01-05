@@ -14,7 +14,7 @@ import {FormGroup, Validators} from '@angular/forms';
 import {MESSAGE} from '../../../../constants/message';
 import {DanhMucCongCuDungCuService} from '../../../../services/danh-muc-cong-cu-dung-cu.service';
 import {STATUS} from '../../../../constants/status';
-import dayjs from "dayjs";
+import {saveAs} from 'file-saver';
 
 @Component({
   selector: 'app-thong-tin-dinh-muc-trang-bi-cong-cu-dung-cu',
@@ -246,6 +246,9 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
       table.splice(index, 1, this.formDataDetail.value);
     } else {
       this.dataTableDetail = [...this.dataTableDetail, this.formDataDetail.value];
+      this.dataTableDetail.forEach(s => {
+        s.loaiHhBqStr = this.getTenLoaiHang(s.loaiHhBq);
+      });
     }
     this.isVisible = false;
     this.initFormDataDetail();
@@ -296,7 +299,10 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.fileDinhKem = data.fileDinhKem;
           this.dataTableDetail = data.listQlDinhMucTbCcdcDtl;
-          this.dataTableDetail.forEach(s => s.idVirtual = uuid.v4());
+          this.dataTableDetail.forEach(s => {
+            s.idVirtual = uuid.v4();
+            s.loaiHhBqStr = this.getTenLoaiHang(s.loaiHhBq);
+          });
           this.dataTableDetail.forEach(item => {
             item.apDungTaiStr = this.getStrTenDonVi(item.apDungTai);
           });
@@ -438,4 +444,22 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
     }
     return ten.join(',');
   }
+
+  exportDataDetail() {
+    this.spinner.show();
+    try {
+      let body = this.formData.value;
+      this.qlDinhMucPhiService
+        .exportDetailCCDC(body)
+        .subscribe((blob) =>
+          saveAs(blob, 'danh-sach-chi-tiet-dinh-muc-trang-bi-ccdc.xlsx'),
+        );
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
 }

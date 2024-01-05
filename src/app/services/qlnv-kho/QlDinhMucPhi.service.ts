@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BaseService } from '../base.service';
-import {environment} from "../../../environments/environment";
-import {OldResponseData} from "../../interfaces/response";
+import { environment } from "../../../environments/environment";
+import { OldResponseData } from "../../interfaces/response";
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +20,11 @@ export class QlDinhMucPhiService extends BaseService {
 
   exportDetail(body: any) {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ket-xuat-detail`;
+    return this._httpClient.post(url, body, { responseType: 'blob' });
+  }
+
+  exportDetailCCDC(body: any) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ket-xuat-detail-ccdc`;
     return this._httpClient.post(url, body, { responseType: 'blob' });
   }
 }

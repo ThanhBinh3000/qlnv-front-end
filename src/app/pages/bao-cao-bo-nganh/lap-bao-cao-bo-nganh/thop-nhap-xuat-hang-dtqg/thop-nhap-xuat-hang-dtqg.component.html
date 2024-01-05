@@ -98,21 +98,21 @@
             <td class="text-left">
               <a (click)="goDetail(data.id, true)"
                  *ngIf="(userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHTHNXHDTQG_XEM')
-                 && !(userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHTHNXHDTQG_LAP') && data.trangThai != STATUS.BAN_HANH))
+                 && !(userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHTHNXHDTQG_LAP') && data.trangThai != STATUS.DA_KY))
                  || userService.isAccessPermisson('BCBN_NHANBAOCAO_TT145_KHTHNXHDTQG')">
                 <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
-              <a *ngIf="data.trangThai == STATUS.BAN_HANH" (click)="download(data.id, 'pdf')">
+              <a *ngIf="data.trangThai == STATUS.DA_KY" (click)="download(data.id, 'pdf')">
                 <i class="icon htvbdh_file-pdf"></i>
               </a>
-              <a *ngIf="data.trangThai == STATUS.BAN_HANH" (click)="download(data.id, 'xlsx')">
+              <a *ngIf="data.trangThai == STATUS.DA_KY" (click)="download(data.id, 'xlsx')">
                 <i class="icon htvbdh_file-excel"></i>
               </a>
-              <a *ngIf="data.trangThai != STATUS.BAN_HANH && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHTHNXHDTQG_LAP')"
+              <a *ngIf="data.trangThai != STATUS.DA_KY && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHTHNXHDTQG_LAP')"
                  (click)="goDetail(data.id, false)">
                 <i class="fa fa-pencil" title="Sửa"></i>
               </a>
-              <a *ngIf="data.trangThai != STATUS.BAN_HANH && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHTHNXHDTQG_XOA')"
+              <a *ngIf="data.trangThai != STATUS.DA_KY && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_KHTHNXHDTQG_XOA')"
                  (click)="xoaItem(data)" >
                 <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               </a>

@@ -70,6 +70,12 @@
   </nz-card>
   <div class="group-button">
     <h3 class="label_dm">DANH SÁCH DANH MỤC ĐỊNH MỨC HAO HỤT</h3>
+    <div class="buttons">
+      <button type="button" class="btn btn-sub" (click)="export()">
+        <i class="icon htvbdh_chuyen-xu-ly"></i>
+        <span>Xuất file</span>
+      </button>
+    </div>
   </div>
   <nz-card class="mt-2px flex-card data-table card-border-content table-card">
     <nz-table class="wrap" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"

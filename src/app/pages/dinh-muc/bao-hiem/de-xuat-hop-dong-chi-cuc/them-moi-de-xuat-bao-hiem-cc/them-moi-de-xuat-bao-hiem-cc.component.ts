@@ -97,11 +97,12 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
   async ngOnInit() {
     this.spinner.show();
     try {
-      this.maCv = '/' + this.userInfo.DON_VI.tenVietTat + '-TCKT'
       this.loadAllDsDiemKho()
       this.loadDsHangHoa()
       if (this.id) {
         await this.detail(this.id)
+      } else {
+        this.maCv = '/' + this.userInfo.DON_VI.tenVietTat + '-TCKT'
       }
       this.spinner.hide();
     } catch (e) {
@@ -326,7 +327,7 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
         if (res.data) {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
-          this.maCv = this.formData.value.soCv ? this.formData.value.soCv.split('/')[1] : null
+          this.maCv = this.formData.value.soCv ? '/' + this.formData.value.soCv.split('/')[1] : null
           this.formData.patchValue({
             soCv: this.formData.value.soCv ? this.formData.value.soCv.split('/')[0] : null
           })

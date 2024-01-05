@@ -16,6 +16,10 @@
         <div class="group-button">
           <h3>Nhóm hàng/loại hàng</h3>
           <div class="buttons">
+            <button  type="button" class="btn btn-sub" (click)="exportDataTC()">
+              <i class="icon htvbdh_chuyen-xu-ly"></i>
+              <span>Xuất file</span>
+            </button>
             <button type="button" class="btn btn-main" (click)="create()" *ngIf="userService.isAccessPermisson('QTDM_DM_HANG_DTQG_THEM')">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>

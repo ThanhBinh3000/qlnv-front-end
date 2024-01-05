@@ -66,17 +66,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="8">
-              <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true">
-                  Trích yếu
-                </nz-form-label>
-                <nz-form-control>
-                  <input nz-input formControlName="trichYeu"
-                         [readonly]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== '78' && formData.value.trangThai !== '' || isView"/>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
+
 <!--            <div nz-col [nzSpan]="4">-->
 <!--              <nz-form-item>-->
 <!--                <nz-form-label nzRequired [nzNoColon]="true"> Ngày hiệu lực</nz-form-label>-->
@@ -87,13 +77,34 @@
 <!--                </nz-form-control>-->
 <!--              </nz-form-item>-->
 <!--            </div>-->
-            <div nz-col [nzSpan]="4">
+            <div nz-col [nzSpan]="6">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true">Số QĐ PD KHLCNT</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : openDialogQd()">
                     <input [readonly]="true" nz-input formControlName="soQdPdKhlcnt"/>
                   </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true" > Gói thầu</nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-select formControlName="listIdGthau" nzMode="multiple" nzAllowClear [nzDisabled]="isView" (ngModelChange)="selectGthau()">
+                    <nz-option *ngFor="let item of listGoiThau" [nzValue]="item.id" [nzLabel]="item.goiThau" ></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="24">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true">
+                  Trích yếu
+                </nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="trichYeu"
+                         [readonly]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== '78' && formData.value.trangThai !== '' || isView"/>
                 </nz-form-control>
               </nz-form-item>
             </div>

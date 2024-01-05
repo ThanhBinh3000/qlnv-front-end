@@ -189,7 +189,6 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      console.log(this.dataTable )
       this.totalRecord = data.totalElements;
       if (data && data.content && data.content.length > 0) {
         this.dataTable.forEach((item) => {

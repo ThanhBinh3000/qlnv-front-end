@@ -133,29 +133,29 @@
             </td>
           </ng-container>
           <ng-template #editTemplate>
-            <th></th>
-            <th>
+            <td></td>
+            <td>
               <nz-form-control>
                 <nz-input-group>
                   <input type="text" nz-input [(ngModel)]="dataEdit[i].data.maTaiSan"/>
                 </nz-input-group>
               </nz-form-control>
-            </th>
-            <th>
+            </td>
+            <td>
               <nz-form-control>
                 <nz-input-group>
                   <input type="text" nz-input [(ngModel)]="dataEdit[i].data.tenTaiSan"/>
                 </nz-input-group>
               </nz-form-control>
-            </th>
-            <th>
+            </td>
+            <td>
               <nz-form-control>
                 <nz-input-group>
                   <input type="text" nz-input [(ngModel)]="dataEdit[i].data.moTa"/>
                 </nz-input-group>
               </nz-form-control>
-            </th>
-            <th>
+            </td>
+            <td>
               <nz-form-control>
                 <nz-input-group>
                   <nz-input-group>
@@ -165,8 +165,8 @@
                   </nz-input-group>
                 </nz-input-group>
               </nz-form-control>
-            </th>
-            <th>
+            </td>
+            <td>
               <nz-form-control>
                 <nz-input-group>
                   <nz-select  [(ngModel)]="dataEdit[i].data.trangThai"  >
@@ -174,15 +174,15 @@
                   </nz-select>
                 </nz-input-group>
               </nz-form-control>
-            </th>
-            <th style="text-align: center;">
+            </td>
+            <td class="text-center">
               <a (click)="themMoiItem(data.id, dataEdit[i].data)" *ngIf="userService.isAccessPermisson('QTDM_DM_TAI_SAN_THEM')">
-                <i class="fa fa-save mr-3"></i>
+                <i class="fa fa-save"></i>
               </a>
               <a (click)="huyEdit(i)" *ngIf="userService.isAccessPermisson('QTDM_DM_TAI_SAN_XOA')">
-                <i class="fa fa-times do mr-3"></i>
+                <i class="fa fa-times do"></i>
               </a>
-            </th>
+            </td>
           </ng-template>
         </tr>
         </tbody>

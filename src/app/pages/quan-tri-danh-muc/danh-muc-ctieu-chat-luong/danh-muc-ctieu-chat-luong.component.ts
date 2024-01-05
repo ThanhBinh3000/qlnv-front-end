@@ -7,13 +7,12 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import {NgxSpinnerService} from "ngx-spinner";
 import {MESSAGE} from "../../../constants/message";
 import {DanhMucService} from "../../../services/danhmuc.service";
-import {DanhMucDviLqService} from "../../../services/quantri-danhmuc/danh-muc-dvi-lq.service";
 import {Router} from "@angular/router";
 import {
   ThemMoiDanhMucCtieuChatLuongComponent
 } from "./them-moi-danh-muc-ctieu-chat-luong/them-moi-danh-muc-ctieu-chat-luong.component";
 import {DanhMucCtieuCluongService} from "../../../services/quantri-danhmuc/danh-muc-ctieu-cluong";
-
+import { saveAs } from 'file-saver';
 @Component({
   selector: 'app-danh-muc-ctieu-chat-luong',
   templateUrl: './danh-muc-ctieu-chat-luong.component.html',
@@ -116,4 +115,22 @@ export class DanhMucCtieuChatLuongComponent extends Base2Component implements On
       },
     });
   }
+
+  export() {
+    this.spinner.show();
+    try {
+      let body = this.formData.value;
+      this.danhMucCtieuCluongService
+        .export(body)
+        .subscribe((blob) =>
+          saveAs(blob, 'danh-muc-chi-tieu.xlsx'),
+        );
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
 }

@@ -81,6 +81,7 @@
             <th>Chi cục DTNN KV</th>
             <th>Loại hàng hóa</th>
             <th>Chủng loại</th>
+            <th>Chủng loại</th>
             <th>Điểm kho</th>
             <th>Ngăn/lô kho</th>
             <th>Ngày nhập kho</th>
@@ -105,6 +106,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <ng-container *ngFor="let lv1 of item.childData,let i1=index">
               <tr>
@@ -112,6 +114,7 @@
                 <td></td>
                 <td>{{lv1.tenLoaiVthh}}</td>
                 <td>{{lv1.tenCloaiVthh}}</td>
+                <td>{{lv1.namNhap}}</td>
                 <td>{{lv1.tenDiemKho}}</td>
                 <td>{{lv1.tenLoKho ? lv1.tenLoKho : lv1.tenNganKho}}</td>
                 <td>{{lv1.ngayNhapKho|date:globals.dateFormat}}</td>

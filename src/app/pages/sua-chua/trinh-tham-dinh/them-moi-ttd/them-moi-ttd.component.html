@@ -59,10 +59,10 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Số tờ trình của Vụ QLHDT</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfter="{{symbol}}">
+                  <nz-input-group nzAddOnAfter="{{maToTrinh}}">
                     <nz-input-number [nzSize]="'small'" nz-input formControlName="soTtrTcuc"
                                      [nzDisabled]="!(userService.isTongCuc()
-                                     && (formData.value.trangThai == STATUS.DA_DUYET_LDC || formData.value.trangThai == STATUS.DANG_DUYET_CB_VU))">
+                                     && (formData.value.trangThai == STATUS.CHO_DUYET_LDTC))">
                     </nz-input-number>
                   </nz-input-group>
                 </nz-form-control>
@@ -196,7 +196,7 @@
                 <nz-form-label [nzNoColon]="true">Tài liệu đính kèm</nz-form-label>
                 <nz-form-control>
                   <div class="list-file">
-                    <file-list [isViewDetail]="disabledTrinh()" [data]="fileDinhKem"></file-list>
+                    <file-list [isViewDetail]="this.formData.value.trangThai!= STATUS.CHO_DUYET_LDTC" [data]="fileDinhKem"></file-list>
                   </div>
                 </nz-form-control>
               </nz-form-item>

@@ -353,8 +353,8 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
             this.formData.patchValue({
               tgianBdauTchuc: dataDetail.tgianBdauTchuc,
               soDxuat: dataDetail.soDxuat?.split('/')[0],
-              tongMucDtLamTron: parseFloat((this.formData.get('tongMucDt').value / 1000000000).toFixed(2)),
-              tongMucDtDxLamTron: parseFloat((this.formData.get('tongMucDtDx').value / 1000000000).toFixed(2)),
+              tongMucDtLamTron: parseFloat((this.formData.get('tongMucDt').value / 1000000).toFixed(2)),
+              tongMucDtDxLamTron: parseFloat((this.formData.get('tongMucDtDx').value / 1000000).toFixed(2)),
             })
             if (dataDetail.soDxuat != null) {
               this.maTrinh = '/' + dataDetail.soDxuat?.split('/')[1]

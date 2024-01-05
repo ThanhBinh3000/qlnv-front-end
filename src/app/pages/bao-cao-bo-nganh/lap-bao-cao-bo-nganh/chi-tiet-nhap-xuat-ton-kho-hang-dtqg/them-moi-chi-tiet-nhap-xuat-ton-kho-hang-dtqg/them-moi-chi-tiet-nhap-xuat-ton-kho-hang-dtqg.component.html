@@ -2,7 +2,7 @@
   <div class="header header-green-background mg-t-16">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'status-xanh' : 'status-do'">
+        <span [ngClass]="formData.value.trangThai == STATUS.DA_KY ? 'status-xanh' : 'status-do'">
         {{ formData.value.tenTrangThai }}</span>
         <span>LẬP BÁO CÁO CHI TIẾT NHẬP, XUẤT, TỒN KHO HÀNG DỰ TRỮ QUỐC GIA</span>
       </div>
@@ -14,12 +14,12 @@
           <span>Quay lại</span>
         </button>
         <ng-container>
-          <button *ngIf="formData.value.trangThai != STATUS.BAN_HANH && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_CTNXTHDTQG_DUYET')" type="button"
+          <button *ngIf="formData.value.trangThai != STATUS.DA_KY && !isView && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_CTNXTHDTQG_DUYET')" type="button"
             class="btn btn-sub xanh-nhat" (click)="save(true)">
             <i class="icon htvbdh_checkfile2"></i>
-            <span>Ban hành</span>
+            <span>Ký số</span>
           </button>
-          <button *ngIf="formData.value.trangThai != STATUS.BAN_HANH && !isView
+          <button *ngIf="formData.value.trangThai != STATUS.DA_KY && !isView
           && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT145_CTNXTHDTQG_LAP')" type="button" class="btn btn-main" (click)="save()">
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>

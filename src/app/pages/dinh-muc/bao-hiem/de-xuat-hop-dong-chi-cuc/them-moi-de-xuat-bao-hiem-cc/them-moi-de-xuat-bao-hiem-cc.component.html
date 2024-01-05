@@ -299,12 +299,7 @@
                      [(ngModel)]='dataEditKho[idx].data.giaTriHtKhoKh'
               />
             </td>
-            <td>
-              <input class='money-input' currencyMask [options]='amount'
-                     [min]='0'
-                     [(ngModel)]='dataEditKho[idx].data.giaTriHtTc'
-              />
-            </td>
+            <td class='text-right'>{{dataEditKho[idx].data.giaTriHtKhoHt + dataEditKho[idx].data.giaTriHtKhoKh   | number : '1.0-1' : 'vi_VN'}}</td>
             <td>
               <input class='money-input' currencyMask [options]='amount'
                      [min]='0'
@@ -317,12 +312,7 @@
                      [(ngModel)]='dataEditKho[idx].data.giaTriDkKhoKh'
               />
             </td>
-            <td>
-              <input class='money-input' currencyMask [options]='amount'
-                     [min]='0'
-                     [(ngModel)]='dataEditKho[idx].data.giaTriDkTc'
-              />
-            </td>
+            <td class='text-right'>{{dataEditKho[idx].data.giaTriDkKhoHt + dataEditKho[idx].data.giaTriDkKhoKh  | number : '1.0-1' : 'vi_VN'}}</td>
             <td class='text-center' *ngIf='!isView' nzRight>
               <a class='save' (click)='saveKhoChua(idx)'>
                 <i class='fa fa-save'></i>
@@ -472,7 +462,7 @@
     </nz-collapse-panel>
   </nz-collapse>
 </div>
-<nz-modal [nzWidth]="'70%'"  [nzBodyStyle]="{ 'overflow-y': 'auto' }"
+<nz-modal [nzWidth]="'70%'"  [nzBodyStyle]="{ 'overflow-y': 'auto', 'margin-top' : '100px'}"
           [(nzVisible)]="isViewModal" (nzOnCancel)="closeModal()">
   <ng-container *nzModalContent>
     <div class="header-text">

@@ -49,4 +49,14 @@ export class BcCLuongHangDTQGService extends BaseService {
     return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
   }
 
+  bcclGiaKeKichKe(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bc-giake-kichke`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
+  bcclTinhHinhKiemDinh(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bc-tinh-hinh-kiem-dinh-ccdc`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
+
+
 }

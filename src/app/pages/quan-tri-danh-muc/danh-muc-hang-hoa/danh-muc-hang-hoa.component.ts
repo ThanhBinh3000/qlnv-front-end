@@ -16,8 +16,7 @@ import {DanhMucService} from "../../../services/danhmuc.service";
 import {UserService} from "../../../services/user.service";
 import {DanhMucTieuChuanService} from "../../../services/quantri-danhmuc/danhMucTieuChuan.service";
 import {TYPE_PAG} from "../../../constants/config";
-
-
+import { saveAs } from 'file-saver';
 @Component({
   selector: 'app-danh-muc-hang-hoa',
   templateUrl: './danh-muc-hang-hoa.component.html',
@@ -414,5 +413,22 @@ export class DanhMucHangHoaComponent implements OnInit {
   async changeDviQly(loai) {
     this.dviQly = loai;
     await this.layTatCaDonViTheoTree();
+  }
+
+  exportDataTC() {
+    this.spinner.show();
+    try {
+      let body = {}
+      this.dmHangService
+        .export(body)
+        .subscribe((blob) =>
+          saveAs(blob, 'dm-hang-hoa.xlsx'),
+        );
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
   }
 }
