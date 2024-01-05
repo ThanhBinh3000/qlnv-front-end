@@ -885,8 +885,5 @@ export class Base2Component implements OnInit {
         this.notification.error(MESSAGE.ERROR, "Ký số không thành công:" + received_msg.Status + ":" + received_msg.Error);
       }
     });
-    this.helperService.exc_check_digital_signatures((data)=>{
-      alert(data.Description);
-    });
   }
 }
