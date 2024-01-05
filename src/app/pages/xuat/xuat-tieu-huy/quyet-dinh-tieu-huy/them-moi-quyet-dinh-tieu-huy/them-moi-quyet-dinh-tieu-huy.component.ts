@@ -212,19 +212,25 @@ export class ThemMoiQuyetDinhTieuHuyComponent extends Base3Component implements 
   }
   async preview(id) {
     this.spinner.show();
-    await this._service.preview({
-      tenBaoCao: '63.Thông tin QĐ tiêu hủy',
-      id: id,
-    }).then(async res => {
-      if (res.data) {
-        this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
-        this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
-        this.printSrc = res.data.pdfSrc;
-        this.showDlgPreview = true;
-      } else {
-        this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
-      }
-    });
-    this.spinner.hide();
+    try {
+      await this._service.preview({
+        tenBaoCao: '63.Thông tin QĐ tiêu hủy.docx',
+        id: id,
+      }).then(async res => {
+        if (res.data) {
+          this.pdfSrc = PREVIEW.PATH_PDF + res.data.pdfSrc;
+          this.wordSrc = PREVIEW.PATH_WORD + res.data.wordSrc;
+          this.printSrc = res.data.pdfSrc;
+          this.showDlgPreview = true;
+        } else {
+          this.notification.error(MESSAGE.ERROR, 'Lỗi trong quá trình tải file.');
+        }
+      });
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+
   }
 }

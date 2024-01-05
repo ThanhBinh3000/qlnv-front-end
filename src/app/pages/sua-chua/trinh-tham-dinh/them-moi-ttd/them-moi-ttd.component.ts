@@ -24,6 +24,7 @@ import { STATUS } from "../../../../constants/status";
 export class ThemMoiTtdComponent extends Base3Component implements OnInit {
   fileCanCu: any[] = [];
   symbol: string = '';
+  maToTrinh: string = '';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -57,8 +58,10 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
       ysKien: [null],
       ketQua: [null],
       lyDoTuChoi: [null],
+      fileDinhKem: [null],
     });
-    this.symbol = this.userInfo.MA_TR;
+    this.symbol = this.userInfo.MA_QD;
+    this.maToTrinh = this.userInfo.MA_TR;
   }
 
   async ngOnInit() {
@@ -72,10 +75,12 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
     if (this.id) {
       this.detail(this.id).then((res) => {
         if (res) {
-          let ttr = res.soTtr.split('/')[0];
+          const ttr = res.soTtr?.split('/')[0] ?? null;
+          const soTtrTcuc = res.soTtrTcuc?.split('/')[0] ?? null;
           this.formData.patchValue({
-            soTtr: ttr
-          })
+            soTtr: ttr,
+            soTtrTcuc: soTtrTcuc
+          });
           this.dataTable = chain(res.children).groupBy('scDanhSachHdr.tenChiCuc').map((value, key) => ({
             expandSet: true,
             tenDonVi: key,
@@ -110,8 +115,9 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
       })
     })
     body.children = children;
-    if (this.formData.value.soTtr) {
+    if (this.formData.value.soTtr||this.formData.value.soTtrTcuc) {
       body.soTtr = this.formData.value.soTtr + '/' + this.symbol
+      body.soTtrTcuc = this.formData.value.soTtrTcuc + '/' + this.maToTrinh;
     }
     this.createUpdate(body).then((res) => {
       if (res) {
@@ -224,6 +230,24 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
         trangThai = STATUS.CHO_DUYET_LDTC;
         break;
       case STATUS.CHO_DUYET_LDTC:
+        this.formData.controls['soTtrTcuc'].setValidators([Validators.required])
+        this.helperService.markFormGroupTouched(this.formData);
+        if (!this.formData.valid) return;
+        let body = this.formData.value;
+        body.fileDinhKemReq = this.fileDinhKem;
+        body.fileCanCuReq = this.fileCanCu;
+        let children = []
+        this.dataTable.forEach(item => {
+          item.children.forEach(data => {
+            children.push(data.scDanhSachHdr);
+          })
+        })
+        body.children = children;
+        if (this.formData.value.soTtr||this.formData.value.soTtrTcuc) {
+          body.soTtr = this.formData.value.soTtr + '/' + this.symbol
+          body.soTtrTcuc = this.formData.value.soTtrTcuc + '/' + this.maToTrinh;
+        }
+        this.trinhThamDinhScService.update(body);
         trangThai = STATUS.DA_DUYET_LDTC;
         break;
       //Reject
@@ -235,9 +259,6 @@ export class ThemMoiTtdComponent extends Base3Component implements OnInit {
         trangThai = STATUS.CHO_DUYET_TP;
         break;
     }
-    this.formData.controls['soTtrTcuc'].setValidators([Validators.required])
-    this.helperService.markFormGroupTouched(this.formData);
-    if (!this.formData.valid) return;
     this.approve(this.id, trangThai, 'Bạn có muốn gửi duyệt', null, 'Phê duyệt thành công');
   }
 

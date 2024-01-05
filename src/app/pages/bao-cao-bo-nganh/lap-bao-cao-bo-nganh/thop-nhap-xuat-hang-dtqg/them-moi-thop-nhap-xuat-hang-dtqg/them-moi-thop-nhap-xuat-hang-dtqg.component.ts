@@ -290,7 +290,6 @@ export class ThemMoiThopNhapXuatHangDtqgComponent extends Base2Component impleme
       body.boNganh = this.tenBoNganh
     }
     body.detail = this.listDataDetail
-    console.log(body)
     let res = null;
     if (this.idInput > 0) {
       res = await this.bcBnTt145Service.update(body);
@@ -300,7 +299,7 @@ export class ThemMoiThopNhapXuatHangDtqgComponent extends Base2Component impleme
     if (res.msg == MESSAGE.SUCCESS) {
       if (isBanHanh) {
         this.idInput = res.data.id;
-        this.pheDuyet(body);
+        this.pheDuyetBcBn(body);
       } else {
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -315,48 +314,6 @@ export class ThemMoiThopNhapXuatHangDtqgComponent extends Base2Component impleme
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     await this.spinner.hide()
-  }
-
-  pheDuyet(data: any) {
-    let trangThai = '';
-    let msg = '';
-    switch (this.formData.get('trangThai').value) {
-      case this.STATUS.DU_THAO: {
-        trangThai = this.STATUS.DA_KY;
-        msg = 'Bạn có muốn ký số và ban hành ?'
-        break;
-      }
-    }
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: msg,
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 400,
-      nzOnOk: async () => {
-        this.spinner.show();
-        try {
-          await this.signXml();
-          if(this.formData.value.kySo){
-            data.kySo = this.formData.value.kySo
-            const res = await this.bcBnTt145Service.approve(data);
-            if (res.msg == MESSAGE.SUCCESS) {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.SIGNE_APPROVE_SUCCESS);
-              this.quayLai();
-            } else {
-              this.notification.error(MESSAGE.ERROR, res.msg);
-            }
-          }
-          this.spinner.hide();
-        } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-    });
   }
 
   async loadDsDonVi() {
@@ -374,7 +331,6 @@ export class ThemMoiThopNhapXuatHangDtqgComponent extends Base2Component impleme
   async layTatCaDonViByLevel() {
     let res = await this.donViService.layTatCaDonViByLevel(0);
     if (res.msg == MESSAGE.SUCCESS) {
-      console.log(res.data, 1234)
       this.listDsDvi = res.data
       // this.formData.get('dviNhan').setValue(res.data[0].tenDvi);
     } else {
@@ -411,36 +367,11 @@ export class ThemMoiThopNhapXuatHangDtqgComponent extends Base2Component impleme
   }
 
   setDataTable(data: any){
-    console.log(data)
     data.nhapTsSl = data.nhapTSl + data.nhapLpSl;
     data.nhapTsTt = data.nhapTTt + data.nhapLpTt;
     data.xuatTsSl = data.xuatTSl + data.xuatLpSl;
     data.xuatTsTt = data.xuatTTt + data.xuatLpTt;
     data.tonKhoNamKhSl = data.tonKhoNamBcSl + data.nhapTsSl - data.xuatTsSl;
     data.tonKhoNamKhTt = data.tonKhoNamBcTt + data.nhapTsTt - data.xuatTsTt;
-  }
-
-  async signXml() {
-    let data = this.formData.value;
-    this.helperService.exc_sign_xml(this, data, (sender, rv)=>{
-      var received_msg = JSON.parse(rv);
-      if (received_msg.Status == 0) {
-        // alert("Ký số thành công!");
-        console.log(received_msg.Signature);
-        // luu lai received_msg.Signature
-        this.formData.patchValue({
-          kySo: received_msg.Signature
-        })
-        this.helperService.exc_verify_xml(this.helperService.decodeStringToBase64(received_msg.Signature), (rv)=>{
-          console.log(rv);
-        });
-      } else {
-        this.notification.error(MESSAGE.ERROR, "Ký số không thành công:" + received_msg.Status + ":" + received_msg.Error);
-        // alert("Ký số không thành công:" + received_msg.Status + ":" + received_msg.Error);
-      }
-    });
-    this.helperService.exc_check_digital_signatures((data)=>{
-      alert(data.Description);
-    });
   }
 }

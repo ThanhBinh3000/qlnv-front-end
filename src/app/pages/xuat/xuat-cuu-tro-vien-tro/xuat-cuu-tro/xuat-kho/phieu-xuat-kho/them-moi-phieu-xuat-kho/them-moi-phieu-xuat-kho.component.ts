@@ -274,7 +274,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     this.formData.patchValue({
       soQdGiaoNvXh: data.soBbQd,
       idQdGiaoNvXh: data.id,
-      idDtlQdGiaoNvXh: data.idDtlQdGiaoNvXh,
+      // idDtlQdGiaoNvXh: data.idDtlQdGiaoNvXh,
       ngayQdGiaoNvXh: data.ngayKy,
       thoiGianGiaoNhan: data.thoiGianGiaoNhan,
       loaiNhapXuat: data.loaiNhapXuat,
@@ -286,6 +286,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       s.maNhaKho = s.maDvi.length >= 12 ? s.maDvi.substring(0, 12) : null;
       s.maNganKho = s.maDvi.length >= 14 ? s.maDvi.substring(0, 14) : null;
       s.maLoKho = s.maDvi.length >= 16 ? s.maDvi.substring(0, 16) : null;
+      s.idDtlQdGiaoNvXh = s.id
     });
     let dataChiCuc = data.dataDtl.filter(item => item.tenChiCuc == this.userInfo.TEN_DVI && item.trangThai === STATUS.DA_HOAN_THANH);
     if (dataChiCuc) {
@@ -329,6 +330,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
         donViTinh: data.donViTinh,
+        idDtlQdGiaoNvXh: data.idDtlQdGiaoNvXh,
         // mucDichXuat: data.mucDichXuat,
         noiDungDx: data.noiDungDx,
         soLuong: data.soLuong

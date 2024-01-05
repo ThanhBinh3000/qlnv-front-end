@@ -100,6 +100,7 @@
               <th>Chi cục DTNN</th>
               <th>Loại hàng hóa</th>
               <th>Chủng loại</th>
+              <th>Năm nhập</th>
               <th>Điểm kho</th>
               <th>Ngăn/lô kho</th>
               <th>Ngày nhập kho</th>
@@ -120,6 +121,7 @@
                 </td>
                 <td>{{item.nam}}</td>
                 <td>{{item.maDanhSach}}</td>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -158,6 +160,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td></td>
                   </tr>
                   <ng-container *ngIf="expandSetString.has(item.idVirtual) && expandSetString.has(lv1.idVirtual)">
                     <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
@@ -168,6 +171,7 @@
                         <td></td>
                         <td>{{lv2.tenLoaiVthh}}</td>
                         <td>{{lv2.tenCloaiVthh}}</td>
+                        <td>{{lv2.namNhap}}</td>
                         <td>{{lv2.tenDiemKho}}</td>
                         <td>{{lv2.tenLoKho ? lv2.tenLoKho : lv2.tenNganKho}}</td>
                         <td>{{lv2.ngayNhapKho|date:globals.dateFormat}}</td>
