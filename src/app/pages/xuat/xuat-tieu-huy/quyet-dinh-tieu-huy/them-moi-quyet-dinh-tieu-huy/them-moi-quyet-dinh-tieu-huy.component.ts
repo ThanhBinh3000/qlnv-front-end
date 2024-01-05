@@ -214,7 +214,7 @@ export class ThemMoiQuyetDinhTieuHuyComponent extends Base3Component implements 
     this.spinner.show();
     try {
       await this._service.preview({
-        tenBaoCao: '63.Thông tin QĐ tiêu hủy',
+        tenBaoCao: '63.Thông tin QĐ tiêu hủy.docx',
         id: id,
       }).then(async res => {
         if (res.data) {
