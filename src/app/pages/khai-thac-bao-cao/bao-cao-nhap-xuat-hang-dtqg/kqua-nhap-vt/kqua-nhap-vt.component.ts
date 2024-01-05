@@ -52,6 +52,7 @@ export class KquaNhapVtComponent extends Base2Component implements OnInit {
       body.fileName = "kqua-nhap-vt.jrxml";
       body.tenBaoCao = "Kết quả nhập vật tư, thiết bị";
       body.trangThai = "01";
+      body.loaiVthh = "02";
       await this.bcNhapXuatMuaBanHangDTQGService.kquaNhapVt(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
