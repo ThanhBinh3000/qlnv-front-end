@@ -70,6 +70,7 @@ import { QuyetDinhDieuChinhCTKHService } from 'src/app/services/dieu-chinh-chi-t
 import { DeXuatDieuChinhCTKHService } from 'src/app/services/dieu-chinh-chi-tieu-ke-hoach/de-xuat-dieu-chinh-ctkh';
 import { PhuongAnDieuChinhCTKHService } from 'src/app/services/dieu-chinh-chi-tieu-ke-hoach/phuong-an-dieu-chinh-ctkh';
 import printJS from 'print-js';
+import { KhongBanHanhComponent } from '../../phuong-an-dieu-chinh-ctkh/khong-ban-hanh/khong-ban-hanh.component';
 
 @Component({
   selector: 'app-dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -678,7 +679,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
 
         }
       } else {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR)
+        if (!this.id)
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR)
       }
     }
 
@@ -852,7 +854,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.expandAllVatTuXuat(this.dataVatTuXuatTree);
         }
       } else {
-        this.notification.error(MESSAGE.ERROR, res.msg)
+        if (!this.id)
+          this.notification.error(MESSAGE.ERROR, res.msg)
       }
     }
 
@@ -912,6 +915,10 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       slXuatTrongNam: [],
       slTonKhoCuoiNam: [],
       lyDoTuChoi: [],
+      soVanBanKhongBh: [],
+      ngayKyKhongBh: [],
+      noiDungVanBanKhongBh: [],
+      lyDoKhongBh: [],
     });
     this.formData.markAsPristine();
   }
@@ -1168,6 +1175,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           const data = res.data
           if (data.soQuyetDinh)
             data.soQuyetDinh = data.soQuyetDinh.split("/")[0]
+          if (data.soVanBanKhongBh)
+            data.soVanBanKhongBh = data.soVanBanKhongBh.split("/")[0]
           this.formData.patchValue(data)
           this.thongTinChiTieuKeHoachNam = data;
           this.fileDinhKems = data.fileDinhKems
@@ -1823,6 +1832,74 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.showDlgPreview = false;
   }
 
+  async khongBH() {
+    await this.spinner.show();
+
+    await this.spinner.hide();
+
+
+    const modalQD = this.modal.create({
+      nzTitle: 'THÔNG BÁO KHÔNG BAN HÀNH',
+      nzContent: KhongBanHanhComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '1200px',
+      nzFooter: null,
+      nzComponentParams: {},
+    });
+    modalQD.afterClose.subscribe(async (data) => {
+
+      if (data) {
+
+        let body = this.formData.value
+        body.dcKeHoachNamLtDtl = this.dsKeHoachLuongThucClone.map((lt) => {
+          return {
+            ...lt,
+            dcKeHoachNamLtTtDtl: [...lt.tkdnGao, ...lt.tkdnThoc, ...lt.ntnGao, ...lt.ntnThoc, ...lt.xtnGao, ...lt.xtnThoc, ...lt.tkcnGao, ...lt.tkcnThoc]
+          }
+        })
+        body.dcKeHoachNamMuoiDtl = this.dsMuoiClone
+        body.dcKeHoachNamVatTuDtl = [...this.dataVatTuNhap, ...this.dataVatTuXuat]
+        body.fileDinhKemReq = this.fileDinhKems
+        body.canCus = this.listCcPhapLy
+        body.id = this.thongTinChiTieuKeHoachNam.id
+        body.trangThai = STATUS.KHONG_BAN_HANH
+        console.log("KhongBanHanhComponent", { ...data, ...body })
+        this.confirmKhongBH({ ...data, ...body })
+
+      }
+    });
+  }
+
+  confirmKhongBH(body) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn không ban hành quyết định?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          const res = await this.quyetDinhDieuChinhCTKHService.duyet(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+            this.redirectChiTieuKeHoachNam();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+
+  }
+
   guiDuyet() {
     if (this.isCuc()) {
       this.formData.controls["soCongVan"].clearValidators();
@@ -2013,7 +2090,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     });
   }
 
-  save(isGuiDuyet?: boolean) {
+  save(isGuiDuyet?: boolean, kbh?: boolean) {
     if (this.isCuc()) {
       this.formData.controls["soCongVan"].clearValidators();
     }
@@ -2075,9 +2152,12 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
                     this.notification.error(MESSAGE.ERROR, resp.msg);
                   }
                 })
-            } else {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+
             }
+            else if (kbh) {
+              this.khongBH()
+            }
+            else this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
