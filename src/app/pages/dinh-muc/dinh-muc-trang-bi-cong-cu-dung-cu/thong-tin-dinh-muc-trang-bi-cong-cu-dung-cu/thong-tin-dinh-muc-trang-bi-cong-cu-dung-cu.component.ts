@@ -446,7 +446,7 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
       this.qlDinhMucPhiService
         .exportDetailCCDC(body)
         .subscribe((blob) =>
-          saveAs(blob, 'danh-sach-chi-tiet-dinh-muc-phi-ccdc.xlsx'),
+          saveAs(blob, 'danh-sach-chi-tiet-dinh-muc-trang-bi-ccdc.xlsx'),
         );
       this.spinner.hide();
     } catch (e) {
