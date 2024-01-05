@@ -159,6 +159,8 @@ import { STATUS } from '../../../../../constants/status';
           check = true
         }
       })
+    } else {
+      check = true;
     }
     return check;
   }
@@ -236,7 +238,7 @@ import { STATUS } from '../../../../../constants/status';
           if (res.data) {
             const data = res.data;
             if (data && data.listQlDinhMucQdMuaSamDtl && data.listQlDinhMucQdMuaSamDtl.length > 0 ) {
-              this.dataTable = data.listQlDinhMucQdMuaSamDtl.filter(item => item.maDvi = this.userInfo.MA_DVI)
+              this.dataTable = data.listQlDinhMucQdMuaSamDtl.filter(it => it.maDvi == this.userInfo.MA_DVI);
             }
             if (this.dataTable && this.dataTable.length > 0) {
               this.dataTable.forEach(item => {

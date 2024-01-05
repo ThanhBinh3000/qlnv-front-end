@@ -55,8 +55,8 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
       soQd: [null, Validators.required],
       trichYeu: [null, Validators.required],
       ngayKy: [null, Validators.required],
-      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
-      tenTrangThai: ['Đang nhập dữ liệu'],
+      trangThai: [STATUS.DU_THAO],
+      tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
       lyDoTuChoi: [null],
       listQlDinhMucQdMuaSamDtlReq: [null],
@@ -215,7 +215,7 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
   async pheDuyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.DANG_NHAP_DU_LIEU :
+      case STATUS.DU_THAO :
       case STATUS.TU_CHOI_LDTC : {
         trangThai = STATUS.CHO_DUYET_LDTC;
         break;
