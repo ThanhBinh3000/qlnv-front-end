@@ -1,20 +1,20 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Base2Component} from '../../../../components/base2/base2.component';
-import {HttpClient} from '@angular/common/http';
-import {DonviService} from '../../../../services/donvi.service';
-import {StorageService} from '../../../../services/storage.service';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {NzModalService} from 'ng-zorro-antd/modal';
+import { Component, Input, OnInit } from '@angular/core';
+import { Base2Component } from '../../../../components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { DonviService } from '../../../../services/donvi.service';
+import { StorageService } from '../../../../services/storage.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import * as uuid from 'uuid';
-import {QlDinhMucPhiService} from '../../../../services/qlnv-kho/QlDinhMucPhi.service';
-import {DanhMucDinhMucService} from '../../../../services/danh-muc-dinh-muc.service';
-import {DanhMucService} from '../../../../services/danhmuc.service';
-import {FormGroup, Validators} from '@angular/forms';
-import {MESSAGE} from '../../../../constants/message';
-import {DanhMucCongCuDungCuService} from '../../../../services/danh-muc-cong-cu-dung-cu.service';
-import {STATUS} from '../../../../constants/status';
-import dayjs from "dayjs";
+import { QlDinhMucPhiService } from '../../../../services/qlnv-kho/QlDinhMucPhi.service';
+import { DanhMucDinhMucService } from '../../../../services/danh-muc-dinh-muc.service';
+import { DanhMucService } from '../../../../services/danhmuc.service';
+import { FormGroup, Validators } from '@angular/forms';
+import { MESSAGE } from '../../../../constants/message';
+import { DanhMucCongCuDungCuService } from '../../../../services/danh-muc-cong-cu-dung-cu.service';
+import { STATUS } from '../../../../constants/status';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-thong-tin-dinh-muc-trang-bi-cong-cu-dung-cu',
@@ -28,7 +28,7 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
   formDataDetail: FormGroup;
   listCcdc: any = [];
   listDonVi: any = [];
-  listHangHoaLT: any = [{ma: '01', ten: 'Thóc tẻ'}, {ma: '02', ten: 'Gạo tẻ'}];
+  listHangHoaLT: any = [{ ma: '01', ten: 'Thóc tẻ' }, { ma: '02', ten: 'Gạo tẻ' }];
   listHangHoaVT: any = [];
   listHangHoa: any = [];
   listHangHoaAll: any = [];
@@ -438,4 +438,22 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
     }
     return ten.join(',');
   }
+
+  exportDataDetail() {
+    this.spinner.show();
+    try {
+      let body = this.formData.value;
+      this.qlDinhMucPhiService
+        .exportDetailCCDC(body)
+        .subscribe((blob) =>
+          saveAs(blob, 'danh-sach-chi-tiet-dinh-muc-trang-bi-ccdc.xlsx'),
+        );
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
 }
