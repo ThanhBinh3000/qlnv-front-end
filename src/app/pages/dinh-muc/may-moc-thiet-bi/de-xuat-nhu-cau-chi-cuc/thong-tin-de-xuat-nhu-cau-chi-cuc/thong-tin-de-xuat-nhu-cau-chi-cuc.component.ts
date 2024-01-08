@@ -112,36 +112,38 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
   async changeDm(event, type?: any) {
     let result = this.listDmTaiSan.find(item => item.maTaiSan == event)
     if (result) {
-      let itemQdGiaoChiTieuChiCuc = this.qdGiaoChiTieu.khLuongThuc.find(it => it.maDonVi === this.userInfo.MA_DVI);
-      let body = {
-        maCcdc: result.maTaiSan,
-        namKeHoach: this.formData.value.namKeHoach,
-        maDvi: this.userInfo.MA_DVI,
-        paggingReq: {limit: 999, page: 0}
-      }
-      let res = await this.hienTrangSv.search(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        let data = res.data.content;
-        if (data && data.length > 0) {
-          this.rowItem.slHienCo = data[0].soDuNamTruoc + data[0].slNhap + data[0].dieuChinhTang - data[0].dieuChinhGiam - data[0].slCanThanhLy;
+      let itemQdGiaoChiTieuChiCuc = this.qdGiaoChiTieu?.khLuongThuc.find(it => it.maDonVi === this.userInfo.MA_DVI);
+      if (itemQdGiaoChiTieuChiCuc) {
+        let body = {
+          maCcdc: result.maTaiSan,
+          namKeHoach: this.formData.value.namKeHoach,
+          maDvi: this.userInfo.MA_DVI,
+          paggingReq: {limit: 999, page: 0}
         }
-      } else {
-        this.dataTable = [];
-        this.totalRecord = 0;
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-      if (!type) {
-        this.rowItem.tenTaiSan = result.tenTaiSan;
-        this.rowItem.donViTinh = result.dviTinh;
-        this.rowItem.donGiaTd = result.donGiaTd;
-        if (itemQdGiaoChiTieuChiCuc) {
-          this.rowItem.slChiTieuGao = itemQdGiaoChiTieuChiCuc.ntnGao;
-          this.rowItem.slChiTieuThoc = itemQdGiaoChiTieuChiCuc.ntnThoc;
+        let res = await this.hienTrangSv.search(body);
+        if (res.msg == MESSAGE.SUCCESS) {
+          let data = res.data.content;
+          if (data && data.length > 0) {
+            this.rowItem.slHienCo = data[0].soDuNamTruoc + data[0].slNhap + data[0].dieuChinhTang - data[0].dieuChinhGiam - data[0].slCanThanhLy;
+          }
+        } else {
+          this.dataTable = [];
+          this.totalRecord = 0;
+          this.notification.error(MESSAGE.ERROR, res.msg);
         }
-      } else {
-        type.tenTaiSan = result.tenTaiSan
-        type.donViTinh = result.dviTinh;
-        type.donGiaTd = result.donGiaTd;
+        if (!type) {
+          this.rowItem.tenTaiSan = result.tenTaiSan;
+          this.rowItem.donViTinh = result.dviTinh;
+          this.rowItem.donGiaTd = result.donGiaTd;
+          if (itemQdGiaoChiTieuChiCuc) {
+            this.rowItem.slChiTieuGao = itemQdGiaoChiTieuChiCuc.ntnGao;
+            this.rowItem.slChiTieuThoc = itemQdGiaoChiTieuChiCuc.ntnThoc;
+          }
+        } else {
+          type.tenTaiSan = result.tenTaiSan
+          type.donViTinh = result.dviTinh;
+          type.donGiaTd = result.donGiaTd;
+        }
       }
     }
     await this.getSLHienCo(event)
