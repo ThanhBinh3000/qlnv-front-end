@@ -160,7 +160,7 @@ import { STATUS } from '../../../../../constants/status';
         }
       })
     } else {
-      check = true;
+      check = true
     }
     return check;
   }
