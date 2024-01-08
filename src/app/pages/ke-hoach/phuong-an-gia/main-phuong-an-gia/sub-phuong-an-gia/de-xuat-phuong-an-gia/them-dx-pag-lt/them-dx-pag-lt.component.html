@@ -37,7 +37,7 @@
               type="button" class="btn btn-sub xanh-nhat ml-2"
               (click)="pheDuyet()">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
-        <span>Duyệt</span>
+        <span>{{formData.value.trangThai == STATUS.DA_DUYET_LDC  ? 'Tiếp nhận' : 'Duyệt'}}</span>
       </button>
       <button *ngIf=" (formData.value.trangThai == STATUS.DU_THAO ||
             formData.value.trangThai == STATUS.TU_CHOI_TP ||  formData.value.trangThai == STATUS.TU_CHOI_LDC) && ((userService.isAccessPermisson('KHVDTNSNN_PAGIA_LT_MTDBTT_DEXUAT_THEM') && type == typeConst.GIA_MUA_TOI_DA )
