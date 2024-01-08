@@ -31,7 +31,7 @@ import {
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { PREVIEW } from "../../../../../../constants/fileType";
 import { LOAI_HANG_DTQG, TEN_LOAI_VTHH } from 'src/app/constants/config';
-import { AMOUNT_ONE_DECIMAL } from 'src/app/Utility/utils';
+import { AMOUNT_NO_DECIMAL, AMOUNT_ONE_DECIMAL, AMOUNT_TWO_DECIMAL } from 'src/app/Utility/utils';
 import { MangLuoiKhoService } from 'src/app/services/qlnv-kho/mangLuoiKho.service';
 
 @Component({
@@ -106,8 +106,9 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
   tongSlQd: number = 0;
   tongSoLuongQD: number = 0;
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
-  amount1 = { ...AMOUNT_ONE_DECIMAL };
-  amount1Left = { ...AMOUNT_ONE_DECIMAL, align: "left" }
+  amount = { ...AMOUNT_NO_DECIMAL };
+  amount1 = { ...AMOUNT_TWO_DECIMAL };
+  amount1Left = { ...AMOUNT_TWO_DECIMAL, align: "left" }
   dataPhanBoXuatCap: any[] = [];
   dataPhanBoXuatCapView: any[] = [];
   modalChiTiet: boolean = false;

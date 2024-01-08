@@ -42,6 +42,7 @@ import { PassDataPKNCL } from '../quan-ly-phieu-kiem-nghiem-chat-luong.component
 import { KhCnQuyChuanKyThuat } from 'src/app/services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
 import { PhuongPhapLayMau } from 'src/app/models/PhuongPhapLayMau';
 import { PREVIEW } from 'src/app/constants/fileType';
+import { AMOUNT_TWO_DECIMAL } from 'src/app/Utility/utils';
 @Component({
   selector: 'app-them-moi-phieu-kiem-nghiem-chat-luong',
   templateUrl: './them-moi-phieu-kiem-nghiem-chat-luong.component.html',
@@ -112,6 +113,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
   ]
   maBb: string;
   previewName: string = "";
+  amount1 = { ...AMOUNT_TWO_DECIMAL }
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -772,12 +774,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       },
     });
   }
-  onKetQuaChange(event: any, index: number, dataTable: any): void {
-    if (event.length == 0) {
-      dataTable[index].danhGia = "";
-      return;
-    }
-    let kq = parseFloat(event.replace(",", "."));
+  onKetQuaChange(kq: number, index: number, dataTable: any): void {
     if (dataTable[index].chiSoClToiThieu >= 0 && dataTable[index].chiSoClToiDa && kq !== null && index !== null) {
       // let toiThieu = parseFloat(dataTable[index].chiSoClToiThieu.replace(",", "."));
       // let toiDa = parseFloat(dataTable[index].chiSoClToiDa.replace(",", "."));

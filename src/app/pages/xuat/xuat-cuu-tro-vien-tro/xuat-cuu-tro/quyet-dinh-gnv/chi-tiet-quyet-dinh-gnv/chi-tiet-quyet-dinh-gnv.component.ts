@@ -32,7 +32,7 @@ import { NzTreeSelectComponent } from "ng-zorro-antd/tree-select";
 import { QuanLyHangTrongKhoService } from "src/app/services/quanLyHangTrongKho.service";
 import { PREVIEW } from 'src/app/constants/fileType';
 import { LOAI_HANG_DTQG, TEN_LOAI_VTHH } from 'src/app/constants/config';
-import { AMOUNT_ONE_DECIMAL, AMOUNT_TWO_DECIMAL } from 'src/app/Utility/utils';
+import { AMOUNT_NO_DECIMAL, AMOUNT_ONE_DECIMAL, AMOUNT_TWO_DECIMAL } from 'src/app/Utility/utils';
 
 @Component({
   selector: 'app-chi-tiet-quyet-dinh-gnv',
@@ -69,8 +69,8 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   maHauTo: any;
   selectedNode: any;
   templateName: string = "Quyết định giao nhiệm vụ xuất cứu trợ, viện trợ";
-  amount1 = { ...AMOUNT_ONE_DECIMAL, align: "left" }
-  amount = { ...AMOUNT_TWO_DECIMAL, align: "left", min: 0, max: 100 };
+  amount1 = { ...AMOUNT_TWO_DECIMAL, align: "left" }
+  amount = { ...AMOUNT_NO_DECIMAL, align: "left", min: 0, max: 100 };
   chuyenXuatCap: boolean = true;
   constructor(
     httpClient: HttpClient,

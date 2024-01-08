@@ -420,7 +420,11 @@
               <td class="text-center">{{i + 1}}</td>
               <td>{{data.ten}}</td>
               <td>{{data.chiSoCl}}</td>
-              <td><input nz-input [(ngModel)]="data.ketQua" (ngModelChange)="onKetQuaChange($event,i,viewCtChatLuong)"/></td>
+              <!-- <td><input nz-input [(ngModel)]="data.ketQua" (ngModelChange)="onKetQuaChange($event,i,viewCtChatLuong)"/></td> -->
+              <td *ngIf="!data.toanTu"><input nz-input [(ngModel)]="data.ketQua" /></td>
+              <td *ngIf="data.toanTu"><input currencyMask class="money-input" [(ngModel)]="data.ketQua"
+                  (ngModelChange)="onKetQuaChange($event,i,viewCtChatLuong)" [options]="amount1" />
+              </td>
               <td>{{data.phuongPhap}}</td>
               <td>
                 <nz-select [(ngModel)]="data.danhGia">

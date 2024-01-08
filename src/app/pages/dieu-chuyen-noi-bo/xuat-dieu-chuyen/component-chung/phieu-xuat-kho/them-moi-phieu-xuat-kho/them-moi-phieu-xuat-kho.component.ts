@@ -22,6 +22,7 @@ import { PassDataXK } from '../phieu-xuat-kho.component';
 import { CurrencyMaskInputMode } from 'ngx-currency';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { PREVIEW } from 'src/app/constants/fileType';
+import { AMOUNT_TWO_DECIMAL } from 'src/app/Utility/utils';
 @Component({
   selector: 'app-xuat-dcnb-them-moi-phieu-xuat-kho',
   templateUrl: './them-moi-phieu-xuat-kho.component.html',
@@ -69,6 +70,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
     max: 1000000000000,
     inputMode: CurrencyMaskInputMode.NATURAL,
   }
+  amount1 = { ...AMOUNT_TWO_DECIMAL }
   maBb: string;
   TEN_KIEU_NHAP_XUAT: { [key: number]: any } = {
     1: "Nhập mua",

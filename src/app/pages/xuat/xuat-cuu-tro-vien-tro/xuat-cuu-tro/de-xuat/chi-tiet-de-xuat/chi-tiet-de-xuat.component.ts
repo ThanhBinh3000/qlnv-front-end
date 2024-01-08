@@ -25,7 +25,7 @@ import { LOAI_HANG_DTQG, TEN_LOAI_VTHH } from "src/app/constants/config";
 import { PREVIEW } from 'src/app/constants/fileType';
 import { MangLuoiKhoService } from 'src/app/services/qlnv-kho/mangLuoiKho.service';
 import { DataService } from 'src/app/services/data.service';
-import { AMOUNT_ONE_DECIMAL } from 'src/app/Utility/utils';
+import { AMOUNT_NO_DECIMAL, AMOUNT_ONE_DECIMAL, AMOUNT_TWO_DECIMAL } from 'src/app/Utility/utils';
 
 
 @Component({
@@ -55,7 +55,8 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
   listQuocGia: any[] = [];
   listDiaDanhHanhChinh: any[] = [];
   editSoLuongNhuCauXuat: boolean = false;
-  amount1 = { ...AMOUNT_ONE_DECIMAL, align: "left" };
+  amount = { ...AMOUNT_NO_DECIMAL, align: "left" };
+  amount1 = { ...AMOUNT_TWO_DECIMAL, align: "left" };
   listNamNhap: Array<{ value: number, text: number, soLuong: number }> = [];
   openViewVttb: boolean = false;
   phuongAnViewVttb: any[] = [];
