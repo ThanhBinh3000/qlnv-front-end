@@ -442,10 +442,14 @@
                             <input nz-input [(ngModel)]="item.maSo" [readOnly]="isView" />
                         </td>
                         <td>{{item.donViTinh}}</td>
-                        <td>
+                        <td *ngIf="isVatTu">
                             <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
                                 [nzSize]="'small'" [(ngModel)]="item.slDcThucTe"
                                 [nzDisabled]="isView"></nz-input-number>
+                        </td>
+                        <td *ngIf="!isVatTu">
+                            <input class="money-input" currencyMask [options]="amount1" [(ngModel)]="item.slDcThucTe"
+                                [readOnly]="isView" />
                         </td>
                         <td>
                             <input class="money-input" currencyMask [options]="amount" [(ngModel)]="item.kinhPhiDcTt"

@@ -26,6 +26,7 @@ import { PassData } from '../danh-sach-bien-ban-lay-mau.component';
 import { formatNumber } from '@angular/common';
 import { KhCnQuyChuanKyThuat } from 'src/app/services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
 import { PREVIEW } from 'src/app/constants/fileType';
+import { AMOUNT_TWO_DECIMAL } from 'src/app/Utility/utils';
 interface PhuongPhapLayMauDC extends PhuongPhapLayMau {
   checked: true
 }
@@ -76,6 +77,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
   chiTieuKiemTra: any[];
   tabSelected: number = 0;
   previewName: string = "bien_ban_lay_mau_ban_giao_mau_lt_dieu_chuyen";
+  amount1 = { ...AMOUNT_TWO_DECIMAL }
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

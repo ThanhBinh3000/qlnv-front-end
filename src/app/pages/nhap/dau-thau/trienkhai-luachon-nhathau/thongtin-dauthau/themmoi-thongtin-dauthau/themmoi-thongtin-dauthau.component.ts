@@ -223,7 +223,17 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     this.listNhaThau = [];
     let resNt = await this.thongTinDauThauService.getDanhSachNhaThau();
     if (resNt.msg == MESSAGE.SUCCESS) {
-      this.listNhaThau = resNt.data;
+      const uniqueKeyMap = new Map();
+      for (const obj of resNt.data) {
+        const key = `${obj.tenNhaThau}`;
+        if (uniqueKeyMap.has(key)) {
+          const existingObj = uniqueKeyMap.get(key);
+          existingObj.someProperty += obj.someProperty;
+        } else {
+          uniqueKeyMap.set(key, obj);
+        }
+      }
+      this.listNhaThau = Array.from(uniqueKeyMap.values());
     }
     this.listStatusNhaThau = [
       {
