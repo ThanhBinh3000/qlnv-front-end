@@ -18,7 +18,7 @@ import {MESSAGE} from "../../../../constants/message";
 export class MmBienBanGiaoNhanComponent extends Base2Component implements OnInit {
   isViewDetail : boolean;
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.DU_THAO, giaTri: 'Đang nhập dữ liệu' },
     { ma: this.STATUS.DA_KY, giaTri: 'Đã ký' }
   ];
   constructor(

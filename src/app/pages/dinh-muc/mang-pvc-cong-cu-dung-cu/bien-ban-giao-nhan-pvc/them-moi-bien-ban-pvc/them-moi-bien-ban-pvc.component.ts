@@ -113,7 +113,6 @@ export class ThemMoiBienBanPvcComponent extends Base2Component implements OnInit
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           const data = res.data;
-          this.chagneHopDong(data.soHopDong)
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.fileDinhKem = data.listFileDinhKems;
           this.formData.patchValue({
@@ -122,9 +121,10 @@ export class ThemMoiBienBanPvcComponent extends Base2Component implements OnInit
           this.dataTable = data.listQlDinhMucPvcBbGnLoaiHh;
           this.tableBenNhan = data.listQlDinhMucPvcBbGnDaiDienBenNhan;
           this.tableBenGiao = data.listQlDinhMucPvcBbGnDaiDienBenGiao;
-          this.updateEditCache()
-          this.updateEditCacheBgBn('benGiao')
-          this.updateEditCacheBgBn('benNhan')
+          this.updateEditCache();
+          this.updateEditCacheBgBn('benGiao');
+          this.updateEditCacheBgBn('benNhan');
+          await this.chagneHopDong(data.soHopDong);
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -267,8 +267,14 @@ export class ThemMoiBienBanPvcComponent extends Base2Component implements OnInit
             if (this.listHangHoa && this.listHangHoa.length > 0) {
               this.listHangHoa.forEach(item => {
                 item.id = null;
+                item.soLuongMax = item.soLuong
                 item.soLuong = 0;
+                let index = this.dataTable.findIndex(it => it.maHangHoa == item.maHangHoa);
+                if (index > -1) {
+                  this.dataTable[index].soLuongMax = item.soLuongMax;
+                }
               })
+               this.updateEditCache();
             }
           }
         }
@@ -276,18 +282,20 @@ export class ThemMoiBienBanPvcComponent extends Base2Component implements OnInit
     }
 
   changHangHoa(event, type?: any) {
-    let result = this.listHangHoa.filter(item => item.maHangHoa === event)
-    if (result && result.length > 0) {
+    let result = this.listHangHoa.find(item => item.maHangHoa === event)
+    if (result) {
       if (type) {
-        type.tenHangHoa = result[0].tenHangHoa;
-        type.donViTinh = result[0].donViTinh;
-        type.soLuong = result[0].soLuong;
-        type.donGia = result[0].donGia;
+        type.tenHangHoa = result?.tenHangHoa;
+        type.donViTinh = result?.donViTinh;
+        type.soLuong = result?.soLuong;
+        type.donGia = result?.donGia;
+        type.soLuongMax = result?.soLuongMax;
       } else {
-        this.rowItem.tenHangHoa = result[0].tenHangHoa;
-        this.rowItem.donViTinh = result[0].donViTinh;
-        this.rowItem.soLuong = result[0].soLuong;
-        this.rowItem.donGia = result[0].donGia;
+        this.rowItem.tenHangHoa = result?.tenHangHoa;
+        this.rowItem.donViTinh = result?.donViTinh;
+        this.rowItem.soLuong = result?.soLuong;
+        this.rowItem.soLuongMax = result?.soLuongMax;
+        this.rowItem.donGia = result?.donGia;
       }
     }
   }

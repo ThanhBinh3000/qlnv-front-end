@@ -60,8 +60,8 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
       benNhanHang: [null, Validators.required],
       quyCachChatLuong: [null],
       noiDungKhac: [null],
-      trangThai: ['00'],
-      tenTrangThai: ['Dự thảo'],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
+      tenTrangThai: ['Đang nhập dữ liệu'],
     });
   }
 
@@ -106,7 +106,6 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           const data = res.data;
-          this.chagneHopDong(data.soHopDong)
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.fileDinhKem = data.listFileDinhKems;
           this.formData.patchValue({
@@ -118,6 +117,7 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
           this.updateEditCache()
           this.updateEditCacheBgBn('benGiao')
           this.updateEditCacheBgBn('benNhan')
+          await this.chagneHopDong(data.soHopDong)
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -156,7 +156,7 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
   async pheDuyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.DU_THAO:
+      case STATUS.DANG_NHAP_DU_LIEU:
       case STATUS.TUCHOI_CB_CUC: {
         trangThai = STATUS.DA_KY;
         break;
@@ -245,9 +245,9 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
   }
 
   async chagneHopDong(soHd) {
-    let filter = this.listHopDong.filter(item => item.soHopDong = soHd)
-    if (filter && filter.length > 0) {
-      let res = await this.hopDongService.getDetail(filter[0].id);
+    let filter = this.listHopDong.find(item => item.soHopDong = soHd)
+    if (filter) {
+      let res = await this.hopDongService.getDetail(filter.id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           const data = res.data;
@@ -263,8 +263,14 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
               this.listHangHoa = this.listHangHoa.filter(it => listHh.includes(it.maHangHoa));
               this.listHangHoa.forEach(item => {
                 item.id = null;
+                item.soLuongMax = item.soLuong
                 item.soLuong = 0
+                let index = this.dataTable.findIndex(it => it.maHangHoa == item.maHangHoa);
+                if (index > -1) {
+                  this.dataTable[index].soLuongMax = item.soLuongMax;
+                }
               })
+              this.updateEditCache();
             }
           }
         }
@@ -275,18 +281,20 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
   }
 
   changHangHoa(event, type?: any) {
-    let result = this.listHangHoa.filter(item => item.maHangHoa === event)
-    if (result && result.length > 0) {
+    let result = this.listHangHoa.find(item => item.maHangHoa === event)
+    if (result) {
       if (type) {
-        type.tenHangHoa = result[0].tenHangHoa;
-        type.donViTinh = result[0].donViTinh;
-        type.soLuong = result[0].soLuong;
-        type.donGia = result[0].donGia;
+        type.tenHangHoa = result?.tenHangHoa;
+        type.donViTinh = result?.donViTinh;
+        type.soLuong = result?.soLuong;
+        type.soLuongMax = result?.soLuongMax;
+        type.donGia = result?.donGia;
       } else {
-        this.rowItem.tenHangHoa = result[0].tenHangHoa;
-        this.rowItem.donViTinh = result[0].donViTinh;
-        this.rowItem.soLuong = result[0].soLuong;
-        this.rowItem.donGia = result[0].donGia;
+        this.rowItem.tenHangHoa = result?.tenHangHoa;
+        this.rowItem.donViTinh = result?.donViTinh;
+        this.rowItem.soLuong = result?.soLuong;
+        this.rowItem.soLuongMax = result?.soLuongMax;
+        this.rowItem.donGia = result?.donGia;
       }
     }
   }

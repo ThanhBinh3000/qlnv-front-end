@@ -253,7 +253,7 @@
             <td>
               <nz-input-number [ngModelOptions]="{standalone: true}" [(ngModel)]="rowItem.soLuong" [nzSize]="'small'"
                                [nzFormatter]="globals.formatter"
-                               [nzMin]="0"
+                               [nzMin]="0" [nzMax]="rowItem.soLuongMax"
                                [nzParser]="globals.parser"></nz-input-number>
             </td>
             <td>
@@ -307,7 +307,7 @@
                        [(ngModel)]="dataEdit[idx].data.donViTinh"/>
               </td>
               <td>
-                <nz-input-number [ngModelOptions]="{standalone: true}" [(ngModel)]="dataEdit[idx].data.soLuong" [nzMax]="data.soLuong"
+                <nz-input-number [ngModelOptions]="{standalone: true}" [(ngModel)]="dataEdit[idx].data.soLuong" [nzMax]="dataEdit[idx].data.soLuongMax"
                                  [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                  [nzMin]="0"
                                  [nzParser]="globals.parser"></nz-input-number>
