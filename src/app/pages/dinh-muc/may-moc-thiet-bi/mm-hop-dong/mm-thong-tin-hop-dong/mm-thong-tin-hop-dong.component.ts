@@ -594,6 +594,7 @@ export class MmHopDongCt {
   maHangHoa: string;
   tenHangHoa: string;
   soLuong: number = 0;
+  soLuongMax: number = 0;
   donViTinh: string;
   donGia: number = 0;
   slMetQuyCuon?: number;
