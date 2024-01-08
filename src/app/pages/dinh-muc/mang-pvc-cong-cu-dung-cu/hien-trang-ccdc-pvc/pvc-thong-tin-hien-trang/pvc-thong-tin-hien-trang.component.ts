@@ -131,7 +131,7 @@ export class PvcThongTinHienTrangComponent extends Base2Component implements OnI
   }
 
   async loadDsloaiGiaoDich() {
-    let res = await this.danhMucSv.danhMucChungGetAll("LOAI_GD_MMTB");
+    let res = await this.danhMucSv.danhMucChungGetAll("LOAI_GD_CCDC");
     if (res.msg == MESSAGE.SUCCESS) {
       this.danhSachloaiGiaoDich = res.data;
     }

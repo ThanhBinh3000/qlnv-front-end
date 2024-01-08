@@ -75,9 +75,10 @@
           <th nzWidth="200px">Số lượng nhập(2)</th>
           <th nzWidth="200px">Số lượng điều chỉnh tăng(3)</th>
           <th nzWidth="200px">Số lượng điều chỉnh giảm(4)</th>
-          <th nzWidth="200px">Số lượng cần sửa chữa(5)</th>
-          <th nzWidth="200px">Số lượng phải thanh lý(6)</th>
-          <th nzWidth="200px">Số lượng tồn(7)=1+2+3-4-6</th>
+          <th nzWidth="200px">Số lượng đã sử dụng(5)</th>
+          <th nzWidth="200px">Số lượng cần sửa chữa(6)</th>
+          <th nzWidth="200px">Số lượng phải thanh lý(7)</th>
+          <th nzWidth="200px">Số lượng tồn(7)=1+2+3-4-5-7</th>
           <th nzWidth="100px" nzRight>Hành động</th>
         </tr>
         </thead>
@@ -94,6 +95,7 @@
           <td class="text-right">{{ data.slNhap | number : '1.0-1' : 'vi_VN' }}</td>
           <td  class="text-right">{{ data.dieuChinhTang | number : '1.0-1' : 'vi_VN' }}</td>
           <td class="text-right">{{ data.dieuChinhGiam | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-right">{{ data.slDaSuDung | number : '1.0-1' : 'vi_VN' }}</td>
           <td class="text-right">{{ data.slCanSuaChua | number : '1.0-1' : 'vi_VN' }}</td>
           <td class="text-right">{{ data.slCanThanhLy | number : '1.0-1' : 'vi_VN' }}</td>
           <td class="text-right">{{ data.slTon | number : '1.0-1' : 'vi_VN' }}</td>
