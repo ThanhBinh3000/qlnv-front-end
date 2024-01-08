@@ -129,16 +129,16 @@
             [nzShowPagination]="false" nzBordered>
     <thead>
     <tr>
-      <th width="40px"></th>
-      <th width="40px">STT</th>
-      <th width="200px">Nội dung</th>
-      <th width="100px">ĐVT</th>
-      <th width="100px">SL sử dụng được tại thời điểm đề xuất</th>
-      <th width="100px">Số lượng sẽ nhập thêm từ năm trước</th>
-      <th width="100px">Tổng cộng</th>
-      <th width="100px">SL phân bổ</th>
-      <th width="200px">Ghi chú</th>
-      <th width="100px" class="text-center" *ngIf="!isView">Hành động</th>
+      <th class="text-center" width="40px"></th>
+      <th class="text-center" width="40px">STT</th>
+      <th class="text-center" width="200px">Nội dung</th>
+      <th class="text-center" width="100px">ĐVT</th>
+      <th class="text-center" width="100px">SL sử dụng được tại thời điểm đề xuất</th>
+      <th class="text-center" width="100px">Số lượng sẽ nhập thêm từ năm trước</th>
+      <th class="text-center" width="100px">Tổng cộng</th>
+      <th class="text-center" width="100px">SL phân bổ</th>
+      <th class="text-center" width="200px">Ghi chú</th>
+      <th class="text-center" width="100px" class="text-center" *ngIf="!isView">Hành động</th>
     </tr>
     </thead>
     <tbody>
@@ -151,7 +151,7 @@
         <td></td>
         <td></td>
         <td></td>
-        <td class="font-weight-bold">{{data.soLuongTc}}</td>
+        <td class="font-weight-bold text-right">{{data.soLuongTc}}</td>
         <td></td>
         <td class="text-center" *ngIf="!isView">
           <a (click)="openModalCt(data, 'them', idx, dataTable[idx])">
@@ -168,7 +168,7 @@
           <td class="text-right">{{item.slHienCo | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="text-right">{{item.slNhapThem | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="text-right">{{item.slHienCo + item.slNhapThem | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>{{item.soLuong}}</td>
+          <td class="text-right">{{item.soLuong}}</td>
           <td>{{item.ghiChu}}</td>
           <td class="text-center" *ngIf="!isView">
             <a (click)="openModalCt(item, 'sua', y, dataTable[idx])">

@@ -56,7 +56,7 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
       trichYeu: [null, Validators.required],
       ngayKy: [null, Validators.required],
       trangThai: [STATUS.DANG_NHAP_DU_LIEU],
-      tenTrangThai: ['Đang nhập dữ liệu'],
+      tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
       lyDoTuChoi: [null],
       listQlDinhMucQdPvcMuaSamDtlReq: [null],
