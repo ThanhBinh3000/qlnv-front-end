@@ -99,6 +99,7 @@
               <th style="min-width: 340px">Chi cục DTNN</th>
               <th>Loại hàng hóa</th>
               <th>Chủng loại</th>
+              <th>Năm nhập</th>
               <th>Điểm kho</th>
               <th>Lô kho</th>
               <th>SL hết hạn <br/> (12 tháng)</th>
@@ -130,6 +131,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
               </tr>
               <ng-container *ngIf="expandSetString.has(item.idVirtual) && expandSetString.has(item.idVirtual)">
                 <ng-container *ngFor="let lv1 of item.childData,let i1=index">
@@ -137,6 +139,7 @@
                     <td style="text-align: right;">{{i1 + 1}}</td>
                     <td>{{lv1.tenLoaiVthh}}</td>
                     <td>{{lv1.tenCloaiVthh}}</td>
+                    <td>{{lv1.namNhap}}</td>
                     <td>{{lv1.tenDiemKho}}</td>
                     <td>{{lv1.tenLoKho == null ? lv1.tenNganKho : lv1.tenLoKho}}</td>
                     <td>{{lv1.slHetHan|number:globals.numberFormat}}</td>
