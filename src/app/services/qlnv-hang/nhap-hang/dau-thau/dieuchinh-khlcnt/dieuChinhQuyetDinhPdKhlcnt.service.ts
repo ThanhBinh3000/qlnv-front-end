@@ -13,8 +13,8 @@ export class DieuChinhQuyetDinhPdKhlcntService extends BaseService {
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'qd-lcnt/dieu-chinh', '/qlnv-hang');
   }
-  findByIdQdGoc(idQdGoc): Promise<OldResponseData> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet/findByIdQdGoc/${idQdGoc}`;
+  findByIdQdGoc(idQdGoc, lanDieuChinh): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet/findByIdQdGoc/${idQdGoc}/${lanDieuChinh}`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
 }

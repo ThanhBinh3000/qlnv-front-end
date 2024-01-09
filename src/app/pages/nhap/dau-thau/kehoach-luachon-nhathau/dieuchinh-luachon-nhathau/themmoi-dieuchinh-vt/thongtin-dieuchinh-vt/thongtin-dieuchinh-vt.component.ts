@@ -229,6 +229,11 @@ export class ThongtinDieuchinhVtComponent extends Base2Component implements OnIn
         let tongMucDt: number = 0;
         let tongSlChiTieu: number = 0;
         this.listOfData.forEach((item) => {
+          let soLuong = 0
+          item.children.forEach(cuc => {
+            soLuong += cuc.soLuong;
+          })
+          item.soLuong = soLuong;
           tongMucDt = tongMucDt + (item.soLuong * item.donGiaVat / 1000000000);
           tongSlChiTieu += item.soLuongTheoChiTieu;
         });
@@ -245,6 +250,7 @@ export class ThongtinDieuchinhVtComponent extends Base2Component implements OnIn
     this.listOfData = this.listOfData.filter((d, index) => index !== i);
    this.tinhTongMucDauTu();
     this.helperService.setIndexArray(this.listOfData);
+    this.dsDxChange.emit(this.listOfData);
   }
 
   calcTongSl() {

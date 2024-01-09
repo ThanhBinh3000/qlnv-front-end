@@ -210,9 +210,9 @@
                 {{ data.soDxuat ? data.soDxuat : data.soTrHdr }}
               </a>
             </td>
-            <td *ngIf="loaiVthh.startsWith('02')"><a style="color: blue">{{ data.dieuChinh ? data.soQdDc :data.soQd}}</a></td>
+            <td *ngIf="loaiVthh.startsWith('02')"><a style="color: blue">{{ data.dieuChinh ? data.soQdDc :data.hhQdKhlcntHdr?.soQd}}</a></td>
             <td *ngIf="loaiVthh.startsWith('02')">{{ data.dchinhDxKhLcntHdr?.lanDieuChinh}}</td>
-            <td *ngIf="!loaiVthh.startsWith('02')"><a style="color: blue">{{ data.soQd }}</a></td>
+            <td *ngIf="!loaiVthh.startsWith('02')"><a style="color: blue">{{ data.hhQdKhlcntHdr?.soQd }}</a></td>
             <td *ngIf="!loaiVthh.startsWith('02')">{{ data.lanDieuChinh }}</td>
             <td>
               <a style="color: blue; font-weight: bold;"
