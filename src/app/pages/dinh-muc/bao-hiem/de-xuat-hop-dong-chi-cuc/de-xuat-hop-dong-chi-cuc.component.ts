@@ -23,7 +23,7 @@ export class DeXuatHopDongChiCucComponent extends Base2Component implements OnIn
 
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.DA_KY, giaTri: 'Đã ký' },
+    { ma: this.STATUS.DA_DUYET_LDCC, giaTri: 'Đã duyệt - LĐ Chi cục' },
     { ma: this.STATUS.DADUYET_CB_CUC, giaTri: 'Đã duyệt - Cán bộ cục' },
     { ma: this.STATUS.TUCHOI_CB_CUC, giaTri: 'Từ chối - Cán bộ cục' }
   ];

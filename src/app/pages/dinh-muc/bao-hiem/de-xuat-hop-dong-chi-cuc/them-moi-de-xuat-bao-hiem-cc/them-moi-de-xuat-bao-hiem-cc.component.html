@@ -3,7 +3,7 @@
     <div class='header-text'>
       <div class='title-chi-tieu'>
         <span
-          [ngClass]="formData.value.trangThai == STATUS.DA_KY || formData.value.trangThai == STATUS.DADUYET_CB_CUC  ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+          [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC || formData.value.trangThai == STATUS.DADUYET_CB_CUC  ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
           {{ formData.value.tenTrangThai }}
         </span>
         <span class='text-uppercase'>ĐỀ XUẤT NHU CẦU BẢO HIỂM</span>
@@ -23,22 +23,22 @@
         <i class="icon htvbdh_trinh"></i>
         <span>Xuất Excel</span>
       </button>
-      <button class='btn btn-sub ml-2' (click)="saveAndSend(STATUS.DA_KY, 'Bạn có muốn ký?','Bạn đã ký thành công!')"
+      <button class='btn btn-sub ml-2' (click)="saveAndSend(STATUS.DA_DUYET_LDCC, 'Bạn có muốn duyệt?','Bạn đã duyệt thành công!')"
               *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TUCHOI_CB_CUC)  && userService.isChiCuc() && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_DEXUATCC_THEM')">
         <i class='icon htvbdh_trinh'></i>
-        <span>Đã ký</span>
+        <span>Đã duyệt - LĐ Chi cục </span>
       </button>
       <button type='button' class='btn btn-sub btn-xoa  ml-2'
-              *ngIf=" (formData.value.trangThai == STATUS.DA_KY && userService.isCuc()) && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_DEXUATCC_DUYETCBCUC')"
+              *ngIf=" (formData.value.trangThai == STATUS.DA_DUYET_LDCC && userService.isCuc()) && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_DEXUATCC_DUYETCBCUC')"
               (click)='reject(id, STATUS.TUCHOI_CB_CUC)'>
         <i class='icon htvbdh_tcdt_tuchoi'></i>
         <span>Từ chối</span>
       </button>
       <button type='button' class='btn btn-sub xanh-nhat  ml-2'
-              *ngIf=" (formData.value.trangThai == STATUS.DA_KY && userService.isCuc()) && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_DEXUATCC_DUYETCBCUC')"
+              *ngIf=" (formData.value.trangThai == STATUS.DA_DUYET_LDCC && userService.isCuc()) && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_DEXUATCC_DUYETCBCUC')"
               (click)='pheDuyet()'>
         <i class='icon htvbdh_dakyduyet'></i>
-        <span>Duyệt</span>
+        <span>Tiếp nhận</span>
       </button>
       <button (click)='save()'
               *ngIf='(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TUCHOI_CB_CUC) && userService.isChiCuc() '

@@ -127,7 +127,7 @@
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>
-            <a (click)="redirectToChiTiet(true, data.id)" *ngIf="(((data.trangThai == STATUS.DA_KY || data.trangThai == STATUS.DADUYET_CB_CUC) && userService.isChiCuc()) ||!userService.isChiCuc()) && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_DEXUATCC_XEM')">
+            <a (click)="redirectToChiTiet(true, data.id)" *ngIf="(((data.trangThai == STATUS.DA_DUYET_LDCC || data.trangThai == STATUS.DADUYET_CB_CUC) && userService.isChiCuc()) ||!userService.isChiCuc()) && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_DEXUATCC_XEM')">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a *ngIf="((data.trangThai == STATUS.TUCHOI_CB_CUC || data.trangThai == STATUS.DU_THAO) && userService.isChiCuc()) && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_DEXUATCC_SUA')"
