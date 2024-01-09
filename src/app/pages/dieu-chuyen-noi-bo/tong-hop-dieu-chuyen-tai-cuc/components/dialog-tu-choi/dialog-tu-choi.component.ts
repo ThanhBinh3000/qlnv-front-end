@@ -6,6 +6,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from "@angular/forms";
 import { Globals } from 'src/app/shared/globals';
 import { HelperService } from 'src/app/services/helper.service';
+import {UserService} from "../../../../../services/user.service";
 
 @Component({
   selector: 'dialog-tu-choi',
@@ -24,9 +25,10 @@ export class DialogTuChoiTongHopDieuChuyenComponent implements OnInit {
     private _modalRef: NzModalRef,
     notification: NzNotificationService,
     httpClient: HttpClient,
+    private userService: UserService
   ) {
     this.notification = notification
-    this.helperService = new HelperService(httpClient, notification);
+    this.helperService = new HelperService(httpClient,this.userService, this.notification);
     this.formData = this.fb.group({
       text: [, [Validators.required]],
       listCucNhan: [],

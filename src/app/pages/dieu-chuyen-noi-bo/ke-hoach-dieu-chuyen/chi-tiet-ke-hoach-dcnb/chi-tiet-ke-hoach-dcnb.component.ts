@@ -1482,21 +1482,15 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
 
   signXml() {
     let data = this.formData.value;
-    this.helperService.exc_sign_xml(this, data, (sender, rv)=>{
+    this.helperService.exc_sign_xml(this, data, (sender, rv, rv2)=>{
       var received_msg = JSON.parse(rv);
       if (received_msg.Status == 0) {
         alert("Ký số thành công!");
         console.log(received_msg.Signature);
-        // luu lai received_msg.Signature
-        this.helperService.exc_verify_xml(this.helperService.decodeStringToBase64(received_msg.Signature), (rv)=>{
-          console.log(rv);
-        });
+        console.log(rv2);
       } else {
         alert("Ký số không thành công:" + received_msg.Status + ":" + received_msg.Error);
       }
-    });
-    this.helperService.exc_check_digital_signatures((data)=>{
-      alert(data.Description);
     });
   }
 }

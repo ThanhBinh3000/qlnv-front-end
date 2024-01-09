@@ -26,7 +26,7 @@ import { NzSingletonService } from 'ng-zorro-antd/core/services';
   templateUrl: './base.component.html',
 })
 export class BaseComponent implements OnInit {
-  // User Info 
+  // User Info
   userInfo: UserLogin;
 
   // Const
@@ -43,7 +43,7 @@ export class BaseComponent implements OnInit {
   allChecked = false;
   indeterminate = false;
 
-  // Service 
+  // Service
   spinner: NgxSpinnerService;
   modal: NzModalService
   filterTable: any = {}
@@ -63,8 +63,8 @@ export class BaseComponent implements OnInit {
     private service: BaseService,
   ) {
     this.spinner = new NgxSpinnerService();
-    this.helperService = new HelperService(httpClient, this.notification);
     this.userService = new UserService(httpClient, storageService);
+    this.helperService = new HelperService(httpClient,this.userService, this.notification);
   }
 
   ngOnInit(): void {
@@ -276,7 +276,7 @@ export class BaseComponent implements OnInit {
     }
   }
 
-  // Save 
+  // Save
   async createUpdate(body) {
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);

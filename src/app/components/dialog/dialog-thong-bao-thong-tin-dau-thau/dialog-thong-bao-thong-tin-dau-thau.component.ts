@@ -9,6 +9,7 @@ import { Globals } from "../../../shared/globals";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MESSAGE } from "../../../constants/message";
 import { HelperService } from "../../../services/helper.service";
+import {UserService} from "../../../services/user.service";
 
 @Component({
   selector: 'dialog-thong-bao-thong-tin-dau-thau',
@@ -30,9 +31,10 @@ export class DialogThongBaoThongTinDauThauComponent implements OnInit {
     private _modalRef: NzModalRef,
     notification: NzNotificationService,
     httpClient: HttpClient,
+    private userService: UserService
   ) {
     this.notification = notification
-    this.helperService = new HelperService(httpClient, notification);
+    this.helperService = new HelperService(httpClient,this.userService, this.notification);
 
   }
 

@@ -94,8 +94,8 @@ export class Base2Component implements OnInit {
     this.notification = notification
     this.spinner = spinner;
     this.modal = modal
-    this.helperService = new HelperService(httpClient, notification);
     this.userService = new UserService(httpClient, storageService);
+    this.helperService = new HelperService(httpClient,this.userService, notification);
     this.userInfo = this.userService.getUserLogin();
     this.uploadFileService = new UploadFileService(httpClient);
     for (let i = -3; i < 23; i++) {
