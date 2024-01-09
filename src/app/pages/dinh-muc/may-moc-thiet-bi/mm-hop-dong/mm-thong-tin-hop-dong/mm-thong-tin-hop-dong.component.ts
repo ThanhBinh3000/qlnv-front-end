@@ -228,6 +228,32 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
     }
   }
 
+  async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
+    try {
+      this.helperService.markFormGroupTouched(this.formData);
+      if (this.formData.invalid) {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
+        this.spinner.hide();
+        return;
+      }
+      this.convertListDiaDiem()
+      if (this.fileDinhKem && this.fileDinhKem.length > 0) {
+        this.formData.value.listFileDinhKems = this.fileDinhKem;
+      }
+      this.formData.value.listQlDinhMucHdLoaiHh = this.dataTable;
+      this.formData.value.giaTri = this.calcTong();
+      this.formData.value.maDvi = this.userInfo.MA_DVI
+      this.formData.value.capDvi = this.userInfo.CAP_DVI
+      this.formData.value.soHopDong = this.formData.value.soHopDong + this.maQd
+      this.formData.value.listQlDinhMucHdDiaDiemNh = this.listDiaDiem
+      let body = this.formData.value;
+      await super.saveAndSend(body, trangThai, msg, msgSuccess);
+    } catch (error) {
+      console.error("Lỗi khi lưu và gửi dữ liệu:", error);
+    }
+  }
+
+
   async daKy() {
     await this.approve(this.id, STATUS.DA_KY, 'Bạn có chắc chắn muốn ký?')
   }
@@ -568,6 +594,7 @@ export class MmHopDongCt {
   maHangHoa: string;
   tenHangHoa: string;
   soLuong: number = 0;
+  soLuongMax: number = 0;
   donViTinh: string;
   donGia: number = 0;
   slMetQuyCuon?: number;

@@ -311,7 +311,7 @@ export class QuanLyCanBoComponent implements OnInit {
 
   them(data?: any, isView?: boolean) {
     let modal = this.modal.create({
-      nzTitle: data ? 'THÔNG TIN CÁN BỘ' : 'THÊM MỚI THÔNG TIN CÁN BỘ',
+      nzTitle: data ? 'THÔNG TIN NGƯỜI SỬ DỤNG' : 'THÊM MỚI THÔNG TIN NGƯỜI SỬ DỤNG',
       nzContent: DialogThongTinCanBoComponent,
       nzMaskClosable: false,
       nzClosable: false,

@@ -229,8 +229,24 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
         this.danhsachDx = cloneDeep(data.children);
         let res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(data.idQdGoc);
         if (res.msg == MESSAGE.SUCCESS) {
-          const dataQd = res.data;
-          this.danhsachDxCache = cloneDeep(dataQd.children);
+        if (this.formData.value.trangThai == this.STATUS.BAN_HANH ) {
+          if (this.formData.value.lanDieuChinh > 1) {
+            let dataQdGoc = await this.dieuChinhQuyetDinhPdKhlcntService.findByIdQdGoc(data.idQdGoc, this.formData.value.lanDieuChinh -1);
+            if (res.msg == MESSAGE.SUCCESS) {
+              const dataQd = dataQdGoc.data;
+              this.danhsachDxCache = cloneDeep(dataQd.children);
+            }
+          } else {
+            let dataQdGoc = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(res.data.idGoc);
+            if (res.msg == MESSAGE.SUCCESS) {
+              const dataQd = dataQdGoc.data;
+              this.danhsachDxCache = cloneDeep(dataQd.children);
+            }
+          }
+        } else {
+            const dataQd = res.data;
+            this.danhsachDxCache = cloneDeep(dataQd.children);
+          }
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
@@ -253,9 +269,12 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     }
     let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listQdGoc = res.data.content.filter(item =>
-        !item.children.every(child => child.qdPdHsmt?.trangThai == this.STATUS.BAN_HANH)
-      );
+      this.listQdGoc = res.data.content;
+      this.listQdGoc.forEach(item => {
+        if (item.soQdDc != null) {
+          item.soQd = item.soQdDc
+        }
+      })
     }
     this.spinner.hide();
     const modalQD = this.modal.create({
@@ -267,8 +286,8 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listQdGoc,
-        dataHeader: ['Số quyết định gốc', 'Số quyết định điều chỉnh', 'Loại hàng DTQG', 'Chủng loại hàng DTQG'],
-        dataColumn: ['soQd','soQdDc', 'tenLoaiVthh', 'tenCloaiVthh']
+        dataHeader: ['Số quyết định gốc', 'Loại hàng DTQG', 'Chủng loại hàng DTQG'],
+        dataColumn: ['soQd', 'tenLoaiVthh', 'tenCloaiVthh']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -291,7 +310,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
           tenCloaiVthh: data.tenCloaiVthh,
           ghiChu: data.ghiChu,
           idQdGoc: $event,
-          soQdGoc: data.soQd,
+          soQdGoc: data.soQdDc? data.soQdDc : data.soQd,
           ngayQdGoc: data.ngayQd,
           soQd: data.children[0]?.dxuatKhLcntHdr?.soQd,
           lanDieuChinh: data.lanDieuChinh ? data.lanDieuChinh + 1 : 1,
@@ -301,7 +320,13 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
           // this.dataInputCache = cloneDeep(this.dataInput);
           this.danhsachDx = data.children
         } else {
-          this.danhsachDx = data.children.filter(x => (x.qdPdHsmt == null || x.qdPdHsmt?.trangThai != this.STATUS.BAN_HANH))
+          this.danhsachDx = data.children
+              .filter(item =>
+              !item.children.every(child => child.qdPdHsmt?.trangThai == this.STATUS.BAN_HANH)
+            );
+          for (let item of this.danhsachDx) {
+            item.children = item.children.filter(x => (x.qdPdHsmt == null || x.qdPdHsmt?.trangThai != STATUS.BAN_HANH));
+          }
           this.danhsachDxCache = cloneDeep(this.danhsachDx);
           this.formData.patchValue({
             hthucLcnt: data.hthucLcnt,
@@ -315,7 +340,11 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
             tgianThienHd: data.tgianThienHd
           })
         }
-        await this.showDetail(event, this.danhsachDx[0])
+        if (this.danhsachDx != null && this.danhsachDx.length > 0) {
+          await this.showDetail(event, this.danhsachDx[0])
+        } else {
+          this.notification.warning(MESSAGE.WARNING, 'QĐ phê duyệt HSMT đã được ban hành với tất cả các gói thầu!');
+        }
       }
       else {
         this.notification.error(MESSAGE.ERROR, res.msg);

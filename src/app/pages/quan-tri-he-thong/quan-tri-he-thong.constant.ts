@@ -3,7 +3,7 @@ export const NHAP_ROUTE_LIST = [
   {
     id: 1,
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'Quản lý cán bộ',
+    title: 'Quản lý người sử dụng',
     url: `/${NHAP_MAIN_ROUTE}/quan-ly-can-bo`,
     dropdown: 'quan-ly-can-bo',
     idHover: 'quan-ly-can-bo',

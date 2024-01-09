@@ -87,13 +87,11 @@ export class ThemMoiDmDviLqComponent extends Base2Component implements OnInit {
         this.formData.value.fax = null
         this.formData.value.nguoiDdien = null
         this.formData.value.chucVu = null
-        this.formData.controls["fax"].clearValidators();
         this.formData.controls["nguoiDdien"].clearValidators();
         this.formData.controls["chucVu"].clearValidators();
         break;
       }
       case "01" : {
-        this.formData.controls["fax"].setValidators([Validators.required]);
         this.formData.controls["nguoiDdien"].setValidators([Validators.required]);
         this.formData.controls["chucVu"].setValidators([Validators.required]);
         break;

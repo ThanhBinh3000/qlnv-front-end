@@ -58,19 +58,19 @@
                 [nzData]="dataTable">
         <thead>
         <tr>
-          <th nzWidth="45px">
+          <th class="text-center" nzWidth="45px">
             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                    [nzIndeterminate]="indeterminate"></label>
           </th>
-          <th nzWidth="40px">STT</th>
-          <th nzWidth="120px">Số biên bản</th>
-          <th nzWidth="120px">Năm kế hoạch</th>
-          <th nzWidth="120px">Số hợp đồng</th>
-          <th nzWidth="120px">Ngày giao nhận</th>
-          <th nzWidth="">Bên giao</th>
-          <th nzWidth="">Bên nhận</th>
-          <th nzWidth="120px">Trạng thái</th>
-          <th nzWidth="140px">Hành động</th>
+          <th class="text-center" nzWidth="40px">STT</th>
+          <th class="text-center" nzWidth="120px">Số biên bản</th>
+          <th class="text-center" nzWidth="120px">Năm kế hoạch</th>
+          <th class="text-center" nzWidth="120px">Số hợp đồng</th>
+          <th class="text-center" nzWidth="120px">Ngày giao nhận</th>
+          <th class="text-center" nzWidth="">Bên giao</th>
+          <th class="text-center" nzWidth="">Bên nhận</th>
+          <th class="text-center" nzWidth="120px">Trạng thái</th>
+          <th class="text-center" nzWidth="140px">Hành động</th>
         </tr>
         <tr class="search-table">
           <th></th>
@@ -132,10 +132,10 @@
         <tbody>
 
         <tr *ngFor="let data of basicTable.data; let i = index">
-          <th nzWidth="45px">
+          <td>
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                   [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
-          </th>
+                   [nzDisabled]="data.trangThai != STATUS.DANG_NHAP_DU_LIEU"></label>
+          </td>
           <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
           <td>{{ data.soBienBan }}</td>
           <td>{{ data.namKeHoach }}</td>
@@ -148,11 +148,11 @@
             <a (click)="redirectToChiTiet(data.id, true)" *ngIf="((data.trangThai == STATUS.DA_KY || !userService.isChiCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_BBGN_XEM'))">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a *ngIf="((data.trangThai == STATUS.DU_THAO && userService.isChiCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_BBGN_SUA'))"
+            <a *ngIf="((data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isChiCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_BBGN_SUA'))"
                (click)="redirectToChiTiet(data.id, false)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a *ngIf="((data.trangThai == STATUS.DU_THAO && userService.isChiCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_BBGN_XOA'))" (click)="delete(data)">
+            <a *ngIf="((data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isChiCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_BBGN_XOA'))" (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>

@@ -15,8 +15,8 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
-        <button class="btn btn-sub ml-2" (click)="daKy()"
-                *ngIf="(formData.value.trangThai == STATUS.DU_THAO && id > 0) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HDMUASAM_THEM')">
+        <button class="btn btn-sub ml-2"  (click)="saveAndSend(STATUS.DA_KY, 'Bạn có muốn ký hợp đồng ?','Bạn đã ký hợp đồng thành công!')"
+                *ngIf="(formData.value.trangThai == STATUS.DU_THAO) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HDMUASAM_THEM')">
           <i class="icon htvbdh_trinh "></i>
           <span>Đã ký</span>
         </button>

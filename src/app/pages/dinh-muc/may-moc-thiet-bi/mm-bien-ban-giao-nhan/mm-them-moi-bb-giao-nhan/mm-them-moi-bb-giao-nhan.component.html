@@ -16,11 +16,11 @@
           <span>Quay lại</span>
         </button>
         <button class="btn btn-sub ml-2" (click)="pheDuyet()"
-                *ngIf="(formData.value.trangThai == STATUS.DU_THAO && id > 0 && userService.isChiCuc() )">
+                *ngIf="(formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && id > 0 && userService.isChiCuc() )">
           <i class="icon htvbdh_trinh "></i>
           <span>Đã ký</span>
         </button>
-        <button class="btn btn-main btn-sm waves-effect waves-light ml-2" (click)="save()" *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isChiCuc()">
+        <button class="btn btn-main btn-sm waves-effect waves-light ml-2" (click)="save()" *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isChiCuc()">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
@@ -120,10 +120,10 @@
                     [nzShowPagination]="false" nzBordered>
             <thead>
             <tr>
-              <th nzWidth="40px">STT</th>
-              <th nzWidth="300px">Đại diện bên giao</th>
-              <th nzWidth="200px">Chức vụ</th>
-              <th nzWidth="90px" class="text-center" *ngIf="!isView">Hành động</th>
+              <th class="text-center" nzWidth="40px">STT</th>
+              <th class="text-center" nzWidth="300px">Đại diện bên giao</th>
+              <th class="text-center" nzWidth="200px">Chức vụ</th>
+              <th class="text-center" nzWidth="90px" class="text-center" *ngIf="!isView">Hành động</th>
             </tr>
             <tr *ngIf="!isView">
               <th></th>
@@ -175,10 +175,10 @@
                     [nzShowPagination]="false" nzBordered>
             <thead>
             <tr>
-              <th nzWidth="40px">STT</th>
-              <th nzWidth="300px">Đại diện bên nhận</th>
-              <th nzWidth="200px">Chức vụ</th>
-              <th nzWidth="90px" class="text-center" *ngIf="!isView">Hành động</th>
+              <th class="text-center" nzWidth="40px">STT</th>
+              <th class="text-center" nzWidth="300px">Đại diện bên nhận</th>
+              <th class="text-center" nzWidth="200px">Chức vụ</th>
+              <th class="text-center" nzWidth="90px" class="text-center" *ngIf="!isView">Hành động</th>
             </tr>
             <tr *ngIf="!isView">
               <th></th>
@@ -229,13 +229,13 @@
                   [nzShowPagination]="false" nzBordered>
           <thead>
           <tr>
-            <th nzWidth="40px">STT</th>
-            <th nzWidth="300px">Loại hàng hóa</th>
-            <th nzWidth="140px">Đơn vị tính</th>
-            <th nzWidth="140px">Số lượng</th>
-            <th nzWidth="140px">Đơn giá (trđ)</th>
-            <th>Thành tiền (trđ)</th>
-            <th nzWidth="120px" class="text-center" *ngIf="!isView">Hành động</th>
+            <th class="text-center" nzWidth="40px">STT</th>
+            <th class="text-center" nzWidth="300px">Loại hàng hóa</th>
+            <th class="text-center" nzWidth="140px">Đơn vị tính</th>
+            <th class="text-center" nzWidth="140px">Số lượng</th>
+            <th class="text-center" nzWidth="140px">Đơn giá (trđ)</th>
+            <th class="text-center">Thành tiền (trđ)</th>
+            <th class="text-center" nzWidth="120px" *ngIf="!isView">Hành động</th>
           </tr>
           </thead>
           <tbody>
@@ -252,6 +252,7 @@
             </td>
             <td>
               <nz-input-number [ngModelOptions]="{standalone: true}" [(ngModel)]="rowItem.soLuong" [nzSize]="'small'"
+                               [nzMax]="rowItem.soLuongMax"
                                [nzFormatter]="globals.formatter"
                                [nzMin]="0"
                                [nzParser]="globals.parser"></nz-input-number>
@@ -307,7 +308,7 @@
                        [(ngModel)]="dataEdit[idx].data.donViTinh"/>
               </td>
               <td>
-                <nz-input-number [ngModelOptions]="{standalone: true}" [(ngModel)]="dataEdit[idx].data.soLuong" [nzMax]="data.soLuong"
+                <nz-input-number [ngModelOptions]="{standalone: true}" [(ngModel)]="dataEdit[idx].data.soLuong" [nzMax]="dataEdit[idx].data.soLuongMax"
                                  [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                  [nzMin]="0"
                                  [nzParser]="globals.parser"></nz-input-number>
