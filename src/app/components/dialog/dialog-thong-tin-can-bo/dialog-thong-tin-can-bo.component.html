@@ -31,7 +31,18 @@
         </nz-form-control>
       </nz-form-item>
     </div>
+
     <div nz-col [nzSpan]="12">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Loại người sử dụng</nz-form-label>
+        <nz-select formControlName="sysType" nzAllowClear [nzDisabled]="isView">
+          <nz-option nzValue="{{item.ma}}" nzLabel="{{item.giaTri}}" *ngFor="let item of sysTypeList">
+          </nz-option>
+        </nz-select>
+      </nz-form-item>
+    </div>
+
+    <div nz-col [nzSpan]="12" *ngIf="formData.get('sysType').value == 'APP'">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Tài khoản</nz-form-label>
         <nz-form-control [nzErrorTip]="error">
@@ -41,7 +52,27 @@
         </nz-form-control>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="12" *ngIf="!formData.value.id">
+
+    <div nz-col [nzSpan]="12" *ngIf="formData.get('sysType').value == 'AD'">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Tài khoản</nz-form-label>
+        <nz-form-control [nzErrorTip]="error">
+          <nz-input-group [nzSuffix]="suffixIcon">
+            <input nz-input formControlName="username" [nzAutocomplete]="auto" [readOnly]="isView"
+              (ngModelChange)="getUserLDap($event)" />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #suffixIcon>
+          <i nz-icon nzType="search"></i>
+        </ng-template>
+        <nz-autocomplete #auto>
+          <nz-auto-option *ngFor="let option of userLDapList" [nzValue]="option.username">{{ option.username }}
+          </nz-auto-option>
+        </nz-autocomplete>
+      </nz-form-item>
+    </div>
+
+    <div nz-col [nzSpan]="12" *ngIf="!formData.value.id && formData.get('sysType').value == 'APP'">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Mật khẩu</nz-form-label>
         <nz-form-control [nzErrorTip]="error">
@@ -100,15 +131,7 @@
         </nz-select>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="12">
-      <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true"> Loại người sử dụng</nz-form-label>
-        <nz-select formControlName="sysType" nzAllowClear [nzDisabled]="isView">
-          <nz-option nzValue="{{item.ma}}" nzLabel="{{item.giaTri}}" *ngFor="let item of sysTypeList">
-          </nz-option>
-        </nz-select>
-      </nz-form-item>
-    </div>
+
     <div nz-col [nzSpan]="12">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Đơn vị quản lý</nz-form-label>
@@ -127,6 +150,7 @@
         </nz-autocomplete>
       </nz-form-item>
     </div>
+
     <div nz-col [nzSpan]="12" *ngIf="formData.get('userType').value == 'DT'">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Phòng ban</nz-form-label>
