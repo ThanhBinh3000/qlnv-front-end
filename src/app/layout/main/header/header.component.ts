@@ -128,7 +128,7 @@ export class HeaderComponent implements OnInit {
       ghiChu: this.userInfo.DON_VI.ghiChu
     }
     let modal = this.modal.create({
-      nzTitle: 'THÔNG TIN CÁN BỘ',
+      nzTitle: 'THÔNG TIN NGƯỜI SỬ DỤNG',
       nzContent: DialogThongTinCanBoComponent,
       nzMaskClosable: false,
       nzClosable: true,
