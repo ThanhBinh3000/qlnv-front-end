@@ -106,8 +106,8 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       tenTrangThai: [''],
       tenLoaiHinhNx: [''],
       tenKieuNx: [''],
-      tgianTrinhKqTcg: [''],
-      tgianTrinhTtd: [''],
+      // tgianTrinhKqTcg: [''],
+      // tgianTrinhTtd: [''],
       ghiChuTtdt: [''],
     });
   }
@@ -499,8 +499,8 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     let body = {
       idGoiThau: this.idGoiThau,
       ghiChuTtdt: this.formData.value.ghiChuTtdt,
-      tgianTrinhKqTcg: this.formData.value.tgianTrinhKqTcg,
-      tgianTrinhTtd: this.formData.value.tgianTrinhTtd,
+      // tgianTrinhKqTcg: this.formData.value.tgianTrinhKqTcg,
+      // tgianTrinhTtd: this.formData.value.tgianTrinhTtd,
       fileDinhKems: this.fileDinhKems,
       loaiVthh: this.loaiVthh
     }
@@ -558,9 +558,12 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     // this.itemRow.soLuong = dataGoiThau.soLuong
     if (res.msg == MESSAGE.SUCCESS) {
       this.formData.patchValue({
-        tgianTrinhKqTcg: res.data.tgianTrinhKqTcg,
-        tgianTrinhTtd: res.data.tgianTrinhTtd,
+        // tgianTrinhKqTcg: res.data.tgianTrinhKqTcg,
+        // tgianTrinhTtd: res.data.tgianTrinhTtd,
         ghiChuTtdt: res.data.ghiChuTtdt,
+        tgianBdauTchuc: 'Quý ' + res.data.quy + ' ' + formatDate(res.data.tgianBdauTchuc, "dd/MM/yyyy", 'en-US'),
+        tgianMthau: formatDate(res.data.tgianMthau, "dd/MM/yyyy", 'en-US'),
+        tgianDthau: formatDate(res.data.tgianDthau, "dd/MM/yyyy", 'en-US'),
       })
       this.fileDinhKems = res.data.fileDinhKems
       this.listNthauNopHs = res.data.dsNhaThauDthau;
@@ -864,8 +867,8 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     let res = await this.thongTinDauThauService.getDetailThongTin(this.listOfData[i].id, this.loaiVthh);
     if (res.msg == MESSAGE.SUCCESS) {
       this.formData.patchValue({
-        tgianTrinhKqTcg: res.data.tgianTrinhKqTcg,
-        tgianTrinhTtd: res.data.tgianTrinhTtd,
+        // tgianTrinhKqTcg: res.data.tgianTrinhKqTcg,
+        // tgianTrinhTtd: res.data.tgianTrinhTtd,
         ghiChuTtdt: res.data.ghiChuTtdt,
       })
       this.fileDinhKems = res.data.fileDinhKems
