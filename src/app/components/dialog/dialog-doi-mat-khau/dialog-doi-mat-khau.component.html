@@ -1,5 +1,5 @@
 <form nz-form nzLayout="vertical" [formGroup]="formData">
-  <div nz-row [nzGutter]="24">
+  <div nz-row [nzGutter]="24" class="mg-b-16">
 
     <div nz-col [nzSpan]="24">
       <nz-form-item>
@@ -45,11 +45,21 @@
       </nz-form-item>
     </div>
 
+    <div nz-col [nzSpan]="24" *ngIf="userInfo.sub !== 'admin'">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> OTP</nz-form-label>
+        <nz-form-control [nzErrorTip]="error">
+          <nz-input-group>
+            <input nz-input type="text" formControlName="otp" [readOnly]="false">
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
   </div>
 
   <ng-template #error let-control>
     <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
-    <!-- <ng-container *ngIf="control.hasError('pattern')">{{globals.prop.PASSWORD_INVALID}}</ng-container> -->
     <ng-container *ngIf="control.hasError('pattern')">{{regexComplex}}</ng-container>
   </ng-template>
 
@@ -62,6 +72,11 @@
       <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="handleCancel()">
         <i aria-hidden="true" class="fa fa-close"></i>
         Hủy
+      </button>
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="sendOTP() "
+        *ngIf="userInfo.sub !== 'admin'">
+        <i class="icon htvbdh_chuyen-xu-ly"></i>
+        Gửi OTP
       </button>
       <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="save() ">
         <i aria-hidden="true" class="fa fa-save"></i>

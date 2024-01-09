@@ -57,6 +57,16 @@ export class QlNguoiSuDungService extends BaseService {
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
+  senOTP(username: string, email: string) {
+    const url = `${environment.SERVICE_API}${this.gateway}/user/send-mail-reset-password?username=${username}&email=${email}`;
+    return this.httpClient.get<any>(url).toPromise();
+  }
+
+  userLDap(username: string) {
+    const url = `${environment.SERVICE_API}${this.gateway}/user/get-list-user-ldap?username=${username}`;
+    return this.httpClient.get<any>(url).toPromise();
+  }
+
   changePassword(body: any) {
     const url = `${environment.SERVICE_API}${this.gateway}/user/changePassword`;
     return this.httpClient.post<any>(url, body).toPromise();

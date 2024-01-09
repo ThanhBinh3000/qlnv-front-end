@@ -33,7 +33,7 @@ export class DialogThongTinCanBoComponent implements OnInit {
   optionsPhongBan: any[] = [];
   optionsPhongBanFilter: any[] = [];
   suggestPhongBan: any[] = [];
-
+  userLDapList: any[] = [];
 
   constructor(
     private router: Router,
@@ -201,9 +201,18 @@ export class DialogThongTinCanBoComponent implements OnInit {
     this.sysTypeList = res.data;
   }
 
+  async getUserLDap(username) {
+    let res = await this.qlNSDService.userLDap(username);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.userLDapList = res.data;
+    } else
+      this.userLDapList = []
+
+  }
+
   async save() {
     this.spinner.show();
-    if (!this.dataEdit) {
+    if (!this.dataEdit && this.formData.value.sysType === 'APP') {
       if (!this.formData.value.password) {
         this.notification.error(MESSAGE.ERROR, 'Mật khẩu không được để trống');
         this.spinner.hide();
@@ -304,6 +313,7 @@ export class DialogThongTinCanBoComponent implements OnInit {
       nzComponentParams: {
         isOld: this.isOld,
         username: this.formData.value.username,
+        email: this.formData.value.email,
         pattern: data
       },
     });
