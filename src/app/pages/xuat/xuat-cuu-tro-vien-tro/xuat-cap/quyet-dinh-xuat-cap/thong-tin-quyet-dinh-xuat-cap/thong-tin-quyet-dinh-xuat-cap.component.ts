@@ -147,6 +147,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
         loaiNhapXuat: [],
         kieuNhapXuat: [],
         mucDichXuat: [, [Validators.required]],
+        phanLoai: [],
         trichYeu: [],
         trangThai: [STATUS.DU_THAO],
         lyDoTuChoi: [],
@@ -210,6 +211,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
       }
       this.formData.controls["qdPaXuatCap"].setValue("", { emitEvent: false });
       this.formData.controls["mucDichXuat"].setValue("", { emitEvent: false });
+
       this.phuongAnHdrView = [];
       this.phuongAnView = [];
       this.loaiNhapXuat = '';

@@ -1,3 +1,4 @@
+import { startWith, pairwise } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Base2Component } from "src/app/components/base2/base2.component";
 import { HttpClient } from "@angular/common/http";
@@ -131,7 +132,8 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         tonKhoDvi: [0],
         maDviDx: [0],
         ngayTapKet: [],
-        ngayGiaoHang: []
+        ngayGiaoHang: [],
+        phanLoai: ['']
       }
     );
 
@@ -197,6 +199,12 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         this.listDiaDanh = [];
       }
     });
+    this.formData.get('mucDichXuat')?.valueChanges.pipe(startWith(this.formData.get('mucDichXuat')?.value), pairwise()).subscribe(([prevValue, nextValue]) => {
+      if (prevValue !== nextValue) {
+        const findIndex = this.listMucDichXuat.findIndex(f => f.giaTri === nextValue);
+        this.formData.patchValue({ phanLoai: findIndex >= 0 ? this.listMucDichXuat[findIndex].phanLoai : null })
+      }
+    })
   }
 
   async ngOnInit() {
@@ -357,6 +365,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
         this.formDataDtl.patchValue({ noiDung: data.noiDung, soLuongNhuCauXuat: data.soLuongNhuCauXuat, editNhuCauXuat: true, edit: true });
         this.editSoLuongNhuCauXuat = true;
         this.modalChiTiet = true;
+        this.validatorsoLuongNhuCauXuat();
       } else {
         data.edit = true;
         this.formDataDtl.patchValue({ ...data, editNhuCauXuat: false });
@@ -405,7 +414,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
       } else {
         let exist =
           // this.formData.value.deXuatPhuongAn.find(s => s.idVirtual === row.idVirtual) ||
-          deXuatPhuongAn.find(s => s.noiDung === row.noiDung && s.maDvi === row.maDvi && s.loaiVthh === row.loaiVthh && s.cloaiVthh === '' && s.namNhap === row.namNhap) ||
+          deXuatPhuongAn.find(s => s.noiDung === row.noiDung && s.maDvi === row.maDvi && s.loaiVthh === row.loaiVthh && !s.cloaiVthh && s.namNhap === row.namNhap) ||
           deXuatPhuongAn.find(s => s.noiDung === row.noiDung && s.maDvi === row.maDvi && s.loaiVthh === row.loaiVthh && s.cloaiVthh === row.cloaiVthh && s.namNhap === row.namNhap);
         if (exist) {
           Object.assign(exist, row);
@@ -499,15 +508,25 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     }
   };
   validatorSoLuong() {
-    const { maDvi, tonKhoDvi, soLuongNhuCauXuat } = this.formDataDtl.value;
+    const deXuatPhuongAn = Array.isArray(this.formData.value.deXuatPhuongAn) ? this.formData.value.deXuatPhuongAn : [];
+    const { maDvi, tonKhoDvi, soLuongNhuCauXuat, noiDung, namNhap } = this.formDataDtl.value;
+    const tongSoLuongGiaoCuc = deXuatPhuongAn.reduce((sum, cur) => sum += !(cur.maDvi === maDvi && cur.namNhap === namNhap && cur.noiDung === noiDung) ? cur.soLuong : 0, 0);
+    const soLuongConLaiGiaoCuc = soLuongNhuCauXuat - tongSoLuongGiaoCuc;
     if (maDvi) {
       if (this.isVthhGao()) {
-        this.formDataDtl.get('soLuong').setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongNhuCauXuat, tonKhoDvi))]);
+        this.formDataDtl.get('soLuong').setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongNhuCauXuat, tonKhoDvi, soLuongConLaiGiaoCuc))]);
       } else {
         this.formDataDtl.get('soLuong').setValidators([Validators.required, Validators.min(1), Validators.max(tonKhoDvi)]);
       }
     }
     this.formDataDtl.get('soLuong').updateValueAndValidity()
+  }
+  validatorsoLuongNhuCauXuat() {
+    const deXuatPhuongAn = Array.isArray(this.formData.value.deXuatPhuongAn) ? this.formData.value.deXuatPhuongAn : [];
+    const { noiDung } = this.formDataDtl.value;
+    const soLuong = deXuatPhuongAn.reduce((sum, cur) => sum += cur.noiDung === noiDung ? cur.soLuong : 0, 0)
+    this.formDataDtl.get('soLuongNhuCauXuat').setValidators([Validators.required, Validators.min(soLuong)]);
+    this.formDataDtl.get('soLuongNhuCauXuat').updateValueAndValidity()
   }
   handleChangeNamNhap() {
     const namNhapData = this.listNamNhap.find(f => f.value === this.formDataDtl.value.namNhap);
@@ -919,7 +938,7 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     this.taoQuyetDinh.emit(2);
   }
   isTongCuc() {
-    return this.formData.value.maDvi.length === 6
+    return this.formData.value.maDvi.length <= 6
   }
   isCuc() {
     return this.formData.value.maDvi.length === 8

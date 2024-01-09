@@ -115,6 +115,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       loaiNhapXuat: [],
       kieuNhapXuat: [],
       mucDichXuat: [, [Validators.required]],
+      phanLoai: [],
       tenDvi: [, [Validators.required]],
       tenDviCha: [, [Validators.required]],
       tenLoaiVthh: [],
@@ -143,6 +144,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
         loaiNhapXuat: [],
         kieuNhapXuat: [],
         mucDichXuat: [],
+        phanLoai: [],
         noiDungDx: [],
         loaiVthh: [],
         cloaiVthh: [],
@@ -560,8 +562,10 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           if (data) {
             let res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.getDetail(data.id);
             let detail = res.data;
+            let quyetDinhPdDtl = [];
             if (this.formData.value.type !== 'XC') {
-              detail.quyetDinhPdDtl.forEach(s => {
+              quyetDinhPdDtl = cloneDeep(detail.quyetDinhPdDtl).filter(f => !f.xuatCap);
+              quyetDinhPdDtl.forEach(s => {
                 s.idQdPdDtl = s.id;
                 s.soLuongDx = s.soLuong;
                 s.soLuong = 0;
@@ -570,7 +574,8 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               });
             }
             else if (this.formData.value.type === 'XC' && !detail.paXuatGaoChuyenXc) {
-              detail.quyetDinhPdDtl.forEach(s => {
+              quyetDinhPdDtl = cloneDeep(detail.quyetDinhPdDtl);
+              quyetDinhPdDtl.forEach(s => {
                 s.idQdPdDtl = s.id;
                 s.soLuongXc = s.soLuong;
                 s.soLuongDx = s.soLuong;
@@ -579,7 +584,8 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
                 delete s.id;
               });
             } else if (this.formData.value.type === "XC" && detail.paXuatGaoChuyenXc) {
-              detail.quyetDinhPdDtl.forEach(s => {
+              quyetDinhPdDtl = cloneDeep(detail.quyetDinhPdDtl);
+              quyetDinhPdDtl.forEach(s => {
                 s.idQdPdDtl = s.id;
                 s.soLuongDx = s.soLuongXc;
                 s.soLuong = 0;
@@ -587,7 +593,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
                 delete s.id;
               });
             }
-            const soLuong = detail.quyetDinhPdDtl.filter(f => f.maDvi === this.userInfo.MA_DVI).reduce((sum, cur) => {
+            const soLuong = quyetDinhPdDtl.filter(f => f.maDvi === this.userInfo.MA_DVI).reduce((sum, cur) => {
 
               if (detail.paXuatGaoChuyenXc) {
                 sum += cur.soLuongXc ? cur.soLuongXc : 0
@@ -604,13 +610,14 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               loaiNhapXuat: detail.loaiNhapXuat,
               kieuNhapXuat: detail.kieuNhapXuat,
               mucDichXuat: detail.mucDichXuat,
+              phanLoai: detail.phanLoai,
               // tenVthh: detail.tenVthh,
-              dataDtl: detail.quyetDinhPdDtl,
+              dataDtl: quyetDinhPdDtl,
               type: this.formData.value.type === 'XC' ? 'XC' : detail.type,
               tenVthh: this.formData.value.type === 'XC' ? TEN_LOAI_VTHH.THOC : detail.tenVthh,
               loaiVthh: this.formData.value.type === 'XC' ? LOAI_HANG_DTQG.THOC : detail.loaiVthh,
               tenLoaiVthh: this.formData.value.type === 'XC' ? TEN_LOAI_VTHH.THOC : detail.tenLoaiVthh,
-              thoiGianGiaoNhan: this.formData.value.type === 'XC' ? detail.paXuatGaoChuyenXc ? detail.quyetDinhPdDtl.find(f => f.maDvi === this.userInfo.MA_DVI) ? detail.quyetDinhPdDtl.find(f => f.maDvi === this.userInfo.MA_DVI).ngayKetThuc : '' : detail.ngayKetThuc : '',
+              thoiGianGiaoNhan: this.formData.value.type === 'XC' ? detail.paXuatGaoChuyenXc ? quyetDinhPdDtl.find(f => f.maDvi === this.userInfo.MA_DVI) ? quyetDinhPdDtl.find(f => f.maDvi === this.userInfo.MA_DVI).ngayKetThuc : '' : detail.ngayKetThuc : '',
               soLuong,
               paXuatGaoChuyenXc: detail.paXuatGaoChuyenXc
 
