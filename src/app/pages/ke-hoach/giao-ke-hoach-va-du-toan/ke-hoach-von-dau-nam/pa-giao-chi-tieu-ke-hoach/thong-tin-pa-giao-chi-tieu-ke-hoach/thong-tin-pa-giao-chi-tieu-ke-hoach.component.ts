@@ -268,6 +268,52 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
         } else {
           this.notification.warning(MESSAGE.WARNING, 'Không tìm thấy quyết định giao chỉ tiêu của Tổng Cục DTNN.');
         }
+      }else{
+        this.dataQdCanCu = {};
+        this.formData.patchValue({
+          canCu: null,
+          idCanCu: null,
+        });
+        if (this.formData.get('loaiCanCu').value == 'TTCP') {
+          let res = await this.quyetDinhTtcpService.chiTietTheoNam(year);
+          if (res.msg == MESSAGE.SUCCESS) {
+            let data = res.data;
+            if (data) {
+              //Lấy data của TTCP giao cho BTC (TCDT)
+              this.dataQdCanCu = data.listBoNganh ? res.data.listBoNganh.find(item => item.maBoNganh == '01') : null;
+              this.formData.patchValue({
+                canCu: data.soQd,
+                idCanCu: data.id,
+              });
+            }
+          } else {
+            this.notification.warning(MESSAGE.WARNING, res.msg);
+          }
+        } else if (this.formData.get('loaiCanCu').value == 'BTC') {
+          this.formData.patchValue({
+            canCu: null,
+            idCanCu: null,
+          });
+          let res = await this.chiTieuKeHoachNamService.canCuBTCGiaoTCDT(year);
+          if (res.msg == MESSAGE.SUCCESS) {
+            let data = res.data;
+            if (data) {
+              //Lấy data của BTC giao cho TCDT
+              this.dataQdCanCu = {
+                'ltThocMua': (data.keHoachNhapXuat && data.keHoachNhapXuat.soLuongMuaThoc) ? data.keHoachNhapXuat.soLuongMuaThoc : 0,
+                'ltGaoMua': (data.keHoachNhapXuat && data.keHoachNhapXuat.soLuongMuaGao) ? data.keHoachNhapXuat.soLuongMuaGao : 0,
+                'ltThocXuat': (data.keHoachNhapXuat && data.keHoachNhapXuat.soLuongBanThoc) ? data.keHoachNhapXuat.soLuongBanThoc : 0,
+                'ltGaoXuat': (data.keHoachNhapXuat && data.keHoachNhapXuat.soLuongBanGao) ? data.keHoachNhapXuat.soLuongBanGao : 0,
+              };
+              this.formData.patchValue({
+                canCu: data.soQd,
+                idCanCu: data.id,
+              });
+            }
+          } else {
+            this.notification.warning(MESSAGE.WARNING, res.msg);
+          }
+        }
       }
     } else {
       if (this.userService.isCuc()) {
