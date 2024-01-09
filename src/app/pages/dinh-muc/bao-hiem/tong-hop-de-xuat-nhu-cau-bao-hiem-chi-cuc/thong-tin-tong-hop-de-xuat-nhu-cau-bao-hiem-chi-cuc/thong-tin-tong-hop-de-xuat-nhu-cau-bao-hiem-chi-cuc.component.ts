@@ -252,10 +252,10 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
     switch (this.formData.value.trangThai) {
       case STATUS.DU_THAO:
       case STATUS.TU_CHOI_CBV: {
-        trangThai = STATUS.DA_KY;
+        trangThai = STATUS.DA_DUYET_LDC;
         break;
       }
-      case STATUS.DA_KY: {
+      case STATUS.DA_DUYET_LDC: {
         trangThai = STATUS.DA_DUYET_CBV
       }
     }

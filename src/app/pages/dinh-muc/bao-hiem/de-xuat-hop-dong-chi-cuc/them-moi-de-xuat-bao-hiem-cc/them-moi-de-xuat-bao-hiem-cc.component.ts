@@ -263,7 +263,7 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
   async pheDuyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
-      case STATUS.DA_KY : {
+      case STATUS.DA_DUYET_LDCC : {
         trangThai = STATUS.DADUYET_CB_CUC
       }
     }
