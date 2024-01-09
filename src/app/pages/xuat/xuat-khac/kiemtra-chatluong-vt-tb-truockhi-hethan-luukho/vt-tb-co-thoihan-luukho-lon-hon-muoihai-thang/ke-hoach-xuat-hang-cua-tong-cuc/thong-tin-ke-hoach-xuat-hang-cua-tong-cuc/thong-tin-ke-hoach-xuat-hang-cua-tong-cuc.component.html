@@ -287,6 +287,7 @@
               <th>Chi cục DTNN</th>
               <th>Loại hàng DTQG</th>
               <th>Chủng loại</th>
+              <th>Năm nhập</th>
               <th>Điểm kho</th>
               <th>Ngăn/lô kho</th>
               <th>Ngày nhập kho</th>
@@ -302,6 +303,7 @@
                     [nzExpand]='expandSetStringCuc.has(item.idVirtual)' nzShowExpand='true' style='width: 40px'>
                 </td>
                 <td style='font-weight: bold'>{{item.tenCuc}}</td>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -327,6 +329,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td></td>
                   </tr>
                   <ng-container *ngFor='let lv2 of lv1.dataChild,let i2=index'>
                     <tr>
@@ -335,6 +338,7 @@
                       <td></td>
                       <td>{{lv2.tenLoaiVthh}}</td>
                       <td>{{lv2.tenCloaiVthh}}</td>
+                      <td>{{lv2.namNhap}}</td>
                       <td>{{lv2.tenDiemKho}}</td>
                       <td>{{lv2.tenLoKho ? lv2.tenLoKho : lv2.tenNganKho}}</td>
                       <td>{{lv2.ngayNhapKho|date:globals.dateFormat}}</td>
