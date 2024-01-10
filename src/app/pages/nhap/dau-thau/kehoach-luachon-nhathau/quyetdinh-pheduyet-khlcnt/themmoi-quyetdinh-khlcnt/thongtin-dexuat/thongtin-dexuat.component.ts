@@ -435,8 +435,19 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     });
   }
   deleteGoiThau(i:number) {
-    this.listOfData.splice(i, 1)
-    this.tinhTongMucDtDx()
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa gói thầu?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.listOfData.splice(i, 1)
+        this.tinhTongMucDtDx()
+      },
+    });
   }
 
   deleteDiemKho(i:number, y:number, z:number) {

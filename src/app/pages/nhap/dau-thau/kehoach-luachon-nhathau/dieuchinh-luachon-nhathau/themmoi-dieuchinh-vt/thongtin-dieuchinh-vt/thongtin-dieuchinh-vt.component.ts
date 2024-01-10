@@ -33,6 +33,7 @@ export class ThongtinDieuchinhVtComponent extends Base2Component implements OnIn
   @Input() title;
   @Input() titleDx;
   @Input() dataInput;
+  @Input() dataGoc;
   @Input() isView: boolean = false;
   @Input() isCache: boolean = false;
   @Input() isQd: boolean = false;
@@ -89,7 +90,7 @@ export class ThongtinDieuchinhVtComponent extends Base2Component implements OnIn
       gtriDthau: [null],
       gtriHdong: [null],
       donGiaVat: [],
-      vat: ["5"],
+      vat: [],
       tgianNhang: [null],
       tgianThien: [null],
       tgianThienHd: [null],
@@ -119,13 +120,14 @@ export class ThongtinDieuchinhVtComponent extends Base2Component implements OnIn
       if (this.dataInput) {
         this.helperService.bidingDataInFormGroup(this.formData, this.dataInput);
         this.formData.patchValue({
-          nguonVon: this.dataInput.dxKhlcntHdr.nguonVon,
-          cviecDaTh: this.dataInput.dxKhlcntHdr.cviecDaTh,
-          cviecKhongTh: this.dataInput.dxKhlcntHdr.cviecKhongTh,
-          quy: this.dataInput.dxKhlcntHdr.quy,
-          tongMucDt: this.dataInput.dxKhlcntHdr.tongMucDt,
-          soQdPdGiaCuThe: this.dataInput.dxKhlcntHdr.soQdPdGiaCuThe,
-          ngayKyQdPdGiaCuThe: formatDate(this.dataInput.dxKhlcntHdr.ngayKyQdPdGiaCuThe, "dd/MM/yyyy", 'en-US'),
+          nguonVon: this.dataGoc.dxKhlcntHdr?.nguonVon,
+          cviecDaTh: this.dataGoc.dxKhlcntHdr?.cviecDaTh,
+          cviecKhongTh: this.dataGoc.dxKhlcntHdr?.cviecKhongTh,
+          quy: this.dataGoc.dxKhlcntHdr?.quy,
+          vat: this.dataGoc.dxKhlcntHdr?.thueVat,
+          tongMucDt: this.dataGoc.dxKhlcntHdr?.tongMucDt,
+          soQdPdGiaCuThe: this.dataGoc.dxKhlcntHdr?.soQdPdGiaCuThe,
+          ngayKyQdPdGiaCuThe: this.dataGoc.dxKhlcntHdr?.ngayKyQdPdGiaCuThe? formatDate(this.dataGoc.dxKhlcntHdr?.ngayKyQdPdGiaCuThe, "dd/MM/yyyy", 'en-US'): null,
         })
         this.listOfData = [...this.dataInput.dsGthau];
         this.listOfDataCache = [...this.dataInput.dsGthau];
