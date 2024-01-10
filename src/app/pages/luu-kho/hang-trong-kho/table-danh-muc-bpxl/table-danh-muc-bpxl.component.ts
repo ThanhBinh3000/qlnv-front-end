@@ -12,6 +12,7 @@ import {TheoDoiBqDtlService} from "../../../../services/luu-kho/theoDoiBqDtl.ser
 import { chain } from 'lodash';
 import {DanhMucService} from "../../../../services/danhmuc.service";
 import {DonviService} from "../../../../services/donvi.service";
+import {saveAs} from 'file-saver';
 
 @Component({
   selector: 'app-table-danh-muc-bpxl',
@@ -173,6 +174,29 @@ export class TableDanhMucBpxlComponent extends Base3Component implements OnInit 
           chilren: rs
         };
     }).value();
+  }
+
+  exportData(fileName?: string, roles?: any) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
+    if (this.dataTableAll.length > 0) {
+      this.spinner.show();
+      try {
+        this.theoDoiBqDtlService
+          .export(this.formData.value)
+          .subscribe((blob) =>
+            saveAs(blob, fileName ? fileName : 'data.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 
   async searchList(){

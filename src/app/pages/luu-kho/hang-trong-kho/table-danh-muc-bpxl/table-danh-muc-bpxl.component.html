@@ -92,6 +92,12 @@
   </nz-card>
   <div class="group-button">
     <h3 class="text-uppercase">{{title}} </h3>
+    <div class="buttons">
+      <button type="button" class="btn btn-sub" (click)="exportData()" >
+        <i class="icon htvbdh_chuyen-xu-ly"></i>
+        <span>Xuất file</span>
+      </button>
+    </div>
   </div>
   <nz-card class="mt-2px flex-card data-table card-border-content table-card">
     <nz-table class="nowrap" [nzData]="dataTableAll" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
