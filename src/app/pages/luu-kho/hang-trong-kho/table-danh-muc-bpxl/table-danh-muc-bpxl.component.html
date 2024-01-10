@@ -112,7 +112,7 @@
         <th>Trạng thái chốt DS của Cục</th>
         <th>Ngày chốt DS của Cục</th>
         <th>Trạng thái {{columnTt}}</th>
-<!--        <th nzWidth="35px">Hành động</th>-->
+        <th nzWidth="35px">Hành động</th>
       </tr>
       </thead>
       <tbody>
@@ -134,7 +134,7 @@
           <td></td>
           <td></td>
           <td></td>
-<!--          <td> </td>-->
+          <td> </td>
         </tr>
         <ng-container *ngIf="loaiVthh.expandSet">
           <ng-container *ngFor="let cloaiVthh of loaiVthh.chilren , let i = index">
@@ -155,7 +155,7 @@
               <td></td>
               <td></td>
               <td></td>
-<!--              <td></td>-->
+              <td></td>
             </tr>
             <ng-container *ngIf="cloaiVthh.expandSet">
               <ng-container *ngFor="let data of cloaiVthh.children , let i = index">
@@ -175,11 +175,11 @@
                   <td></td>
                   <td></td>
                   <td></td>
-<!--                  <td>-->
-<!--                    <a (click)="showDetail(data)">-->
-<!--                      <i class="fa fa-pencil" title="Sửa"></i>-->
-<!--                    </a>-->
-<!--                  </td>-->
+                  <td>
+                    <a (click)="showDetail(data)">
+                      <i class="fa fa-pencil" title="Sửa"></i>
+                    </a>
+                  </td>
                 </tr>
               </ng-container>
             </ng-container>
