@@ -129,6 +129,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         loaiNhapXuat: [],
         kieuNhapXuat: [],
         mucDichXuat: [, [Validators.required]],
+        phanLoai: [],
         noiDungDx: [],
         soLuong: [, [Validators.required, Validators.min(0)]],
         thanhTienBc: [, [Validators.required]],
@@ -261,7 +262,8 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
           thoiGianGiaoNhan: '',
           loaiNhapXuat: '',
           kieuNhapXuat: '',
-          mucDichXuat: ''
+          mucDichXuat: '',
+          phanLoai: ''
         })
         await this.bindingDataQd(data.id, true);
       }
@@ -280,7 +282,8 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       thoiGianGiaoNhan: data.thoiGianGiaoNhan,
       loaiNhapXuat: data.loaiNhapXuat,
       kieuNhapXuat: data.kieuNhapXuat,
-      mucDichXuat: data.mucDichXuat
+      mucDichXuat: data.mucDichXuat,
+      phanLoai: data.phanLoai
     });
     data.dataDtl.forEach(s => {
       s.maDiemKho = s.maDvi.length >= 10 ? s.maDvi.substring(0, 10) : null;

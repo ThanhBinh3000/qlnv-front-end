@@ -158,6 +158,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       loaiNhapXuat: [],
       kieuNhapXuat: [],
       mucDichXuat: [],
+      phanLoai: [],
       trichYeu: [],
       trangThai: [STATUS.DANG_NHAP_DU_LIEU],
       lyDoTuChoi: [],
@@ -191,6 +192,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       loaiNhapXuat: ["", [Validators.required]],
       kieuNhapXuat: ["", [Validators.required]],
       mucDichXuat: ["", [Validators.required]],
+      phanLoai: [''],
       noiDungDx: ["", [Validators.required]],
       idDonViNhan: ["", [Validators.required]],
       loaiVthh: ["", [Validators.required]],
@@ -303,6 +305,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
                 s.loaiNhapXuat = detail.loaiNhapXuat;
                 s.kieuNhapXuat = detail.kieuNhapXuat;
                 s.mucDichXuat = detail.mucDichXuat;
+                s.phanLoai = detail.phanLoai;
                 s.ngayKetThuc = detail.ngayKetThuc;
               });
               this.quyetDinhPdDtlCache = cloneDeep(detail.deXuatPhuongAn.map(element => ({
@@ -527,6 +530,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
       s.loaiNhapXuat = detail.loaiNhapXuat;
       s.kieuNhapXuat = detail.kieuNhapXuat;
       s.mucDichXuat = detail.mucDichXuat;
+      s.phanLoai = detail.phanLoai;
       s.ngayKetThuc = detail.ngayKetThuc;
       s.tenVthh = detail.tenVthh;
       s.soLuongXc = s.soLuongChuyenCapThoc;
@@ -623,6 +627,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               soDx: row.soDx,
               trichYeuDx: row.trichYeuDx,
               mucDichXuat: row.mucDichXuat,
+              phanLoai: row.phanLoai,
               ngayKetThuc: row.ngayKetThuc,
               ngayKyDx: row.ngayKyDx,
               soLuong,
@@ -661,6 +666,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               soDx: row.soDx,
               trichYeuDx: row.trichYeuDx,
               mucDichXuat: row.mucDichXuat,
+              phanLoai: row.phanLoai,
               ngayKetThuc: row.ngayKetThuc,
               ngayKyDx: row.ngayKyDx,
               thoiGian: row.ngayKyDx,
@@ -740,6 +746,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               soDx: row.soDx,
               trichYeuDx: row.trichYeuDx,
               mucDichXuat: row.mucDichXuat,
+              phanLoai: row.phanLoai,
               ngayKetThuc: row.ngayKetThuc,
               ngayKyDx: row.ngayKyDx,
               thoiGian: row.ngayKyDx,
@@ -777,6 +784,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               soDx: row.soDx,
               trichYeuDx: row.trichYeuDx,
               mucDichXuat: row.mucDichXuat,
+              phanLoai: row.phanLoai,
               ngayKetThuc: row.ngayKetThuc,
               ngayKyDx: row.ngayKyDx,
               thoiGian: row.ngayKyDx,
@@ -843,6 +851,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               soDx: row.soDx,
               trichYeuDx: row.trichYeuDx,
               mucDichXuat: row.mucDichXuat,
+              phanLoai: row.phanLoai,
               ngayKetThuc: row.ngayKetThuc,
               ngayKyDx: row.ngayKyDx,
               thoiGian: row.ngayKyDx,
@@ -939,6 +948,7 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
               soDx: row.soDx,
               trichYeuDx: row.trichYeuDx,
               mucDichXuat: row.mucDichXuat,
+              phanLoai: row.phanLoai,
               ngayKetThuc: row.ngayKetThuc,
               ngayKyDx: row.ngayKyDx,
               thoiGian: row.ngayKyDx,
@@ -1366,7 +1376,12 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
         }
       })
     } else {
-      this.dataPhanBoXuatCap.push(row);
+      const indexExist = this.dataPhanBoXuatCap.findIndex(f => f.noiDungDx === row.noiDungDx && f.maDvi === row.maDvi && f.namNhap === row.namNhap);
+      if (indexExist >= 0) {
+        this.dataPhanBoXuatCap[indexExist] = { ...row }
+      } else {
+        this.dataPhanBoXuatCap.push(row);
+      }
     };
     this.huyPhuongAnXc()
   }
