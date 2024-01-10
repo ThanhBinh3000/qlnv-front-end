@@ -88,8 +88,8 @@ export class Base3Component implements OnInit {
     this.notification = notification
     this.spinner = spinner;
     this.modal = modal
-    this.helperService = new HelperService(httpClient, notification);
     this.userService = new UserService(httpClient, storageService);
+    this.helperService = new HelperService(httpClient,this.userService, notification);
     this.userInfo = this.userService.getUserLogin();
     this.uploadFileService = new UploadFileService(httpClient);
     this.route = route;

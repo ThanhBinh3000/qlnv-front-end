@@ -70,7 +70,7 @@ export class ThemSuaKeHoachVatTuComponent implements OnInit {
     this.notification = notification
     this.spinner = spinner;
     this.modal = modal
-    this.helperService = new HelperService(httpClient, notification);
+    this.helperService = new HelperService(httpClient,this.userService, this.notification);
   }
 
   ngOnInit(): void {

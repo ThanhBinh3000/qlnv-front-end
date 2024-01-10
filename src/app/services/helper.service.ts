@@ -3,14 +3,14 @@ import {Injectable} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import * as moment from 'moment';
 import Cleave from 'cleave.js';
-import * as XLSX from 'xlsx';
 import {environment} from 'src/environments/environment';
 import {ResponseData} from '../interfaces/response';
 import {MESSAGE} from "../constants/message";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import * as JsonToXML from "js2xmlparser";
+import {UserService} from "./user.service";
+import dayjs from "dayjs";
 
-declare var vgcapluginObject: any;
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +21,7 @@ export class HelperService {
 
   constructor(
     private httpClient: HttpClient,
+    private userService: UserService,
     private notification: NzNotificationService,
   ) {
     this.mywindow = window;
@@ -183,17 +184,19 @@ export class HelperService {
   encodeStringToBase64(input: string): string {
     return btoa(unescape(encodeURIComponent(input)));
   }
+
   decodeStringToBase64(input: string): string {
     return decodeURIComponent(escape(window.atob(input)));
   }
+
   exc_check_digital_signatures(signCallBack) {
     let data = {
       test: "test"
     };
-    this.exc_sign_xml(this, data, (sender, rv)=>{
+    this.exc_sign_xml(this, data, (sender, rv) => {
       var received_msg = JSON.parse(rv);
       if (received_msg.Status == 0) {
-        this.exc_verify_xml(this.decodeStringToBase64(received_msg.Signature), (rv)=>{
+        this.exc_verify_xml(this.decodeStringToBase64(received_msg.Signature), (rv) => {
           signCallBack(JSON.parse(rv)[0].ValidationDetails.SignerCertStatus);
         });
       } else {
@@ -201,8 +204,10 @@ export class HelperService {
       }
     })
   }
+
   exc_sign_xml(sendToCallBack, data, signCallBack) {
-    data = JsonToXML.parse("data", data)
+    data = JsonToXML.parse("data", data);
+
     var prms = {};
 
     prms["Base64Content"] = this.encodeStringToBase64(data);
@@ -210,10 +215,56 @@ export class HelperService {
     prms["HashAlg"] = "Sha256";
     prms["XmlDsigForm"] = "false";//"DSign";
     var json_prms = JSON.stringify(prms);
-    this.mywindow.vgca_sign_xml(sendToCallBack, json_prms, signCallBack);
+    this.mywindow.vgca_sign_xml(sendToCallBack, json_prms, async (sender, rv) => {
+      var received_msg = JSON.parse(rv);
+      var sign = this.decodeStringToBase64(received_msg.Signature);
+      this.exc_verify_xml(sign, async (rv2) => {
+        if (signCallBack) {
+          let user = this.userService.getUserLogin();
+          let userId = user.ID;
+          let certificateNumber = JSON.parse(rv2)[0].SigInfo.SignerCert.SerialNumber;
+          let cert = await this.check_certificate(userId, certificateNumber);
+          if (cert.length == 0) { // false là chưa có thêm mới
+            let data = {
+              certificateNumber: certificateNumber,
+              status: true,
+              startDate: dayjs().format("DD/MM/YYYY"),
+              endDate: dayjs().add(1, 'year').format("DD/MM/YYYY"),
+              loaiChungThu: "Chứng thư số của đơn vị gửi báo cáo (Bộ/Ngành)",
+              userId: userId
+            }
+            await this.create_certificate(data);
+            signCallBack(sender, rv, JSON.parse(rv2)[0]);
+          } else {
+            let c = cert.find(item => item.certificateNumber === certificateNumber);
+            if(!c){
+              alert("Chữ kí số chưa được đăng kí!");
+            }else {
+              signCallBack(sender, rv, JSON.parse(rv2)[0]);
+            }
+          }
+        }
+      })
+    });
   }
 
-  exc_verify_xml(data,signCallBack) {
+  async check_certificate(userId: any, certificateNumber: any) {
+    const url = `${environment.SERVICE_API}/qlnv-category/info-manage/check-certificate/${userId}/${certificateNumber}`;
+    let res = await this.httpClient.get<any>(url).toPromise();
+    if (res.msg == MESSAGE.SUCCESS) {
+      return res.data;
+    }
+    return [];
+  }
+
+  async create_certificate(data: any) {
+    const url = `${environment.SERVICE_API}/qlnv-category/info-manage/create-certificate`;
+    let res = await this.httpClient.post<any>(url, data).toPromise();
+    if (res.msg == MESSAGE.SUCCESS) {
+    }
+  }
+
+  exc_verify_xml(data, signCallBack) {
     var prms = {};
     prms["Data"] = data;
     prms["Format"] = "XML";
