@@ -39,6 +39,7 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
   @Output() showListEvent = new EventEmitter<any>();
   danhsachDx: any[] = [];
   danhsachDxCache: any[] = [];
+  dataGoc: any[] = [];
   selected: boolean = false;
   fileDinhKems: any[] = [];
   fileDinhKemsTtr: any[] = [];
@@ -204,14 +205,28 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
         if (data.soTtrDc != null) {
           this.maTrinh = "/" + data.soTtrDc?.split("/")[1]
         }
-        this.dataLoadDetail = data.dsGthau;
+        if (data.lanDieuChinh > 1) {
+          let dataQdGoc = await this.dieuChinhQuyetDinhPdKhlcntService.findByIdQdGoc(data.idQdGoc, data.lanDieuChinh -1);
+          if (dataQdGoc.msg == MESSAGE.SUCCESS) {
+            this.dataGoc = dataQdGoc.data;
+            this.dataInputCache = cloneDeep(dataQdGoc.data);
+          }
+        } else {
+          let dataQdGoc = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(data.idQdGoc);
+          if (dataQdGoc.msg == MESSAGE.SUCCESS) {
+            this.dataGoc = dataQdGoc.data;
+            this.dataInputCache = cloneDeep(dataQdGoc.data);
+          }
+        }
+        this.dataInput = data;
+        // this.dataLoadDetail = data.dsGthau;
         this.fileDinhKems = data.fileDinhKems;
         this.listCcPhapLy = data.listCcPhapLy;
         this.fileDinhKemsTtr = data.fileDinhKemsTtr;
-        await this.onChangeSoQdGoc(data.idQdGoc, true);
-        this.formData.patchValue({
-          lanDieuChinh: data.lanDieuChinh
-        })
+        // await this.onChangeSoQdGoc(data.idQdGoc, true);
+        // this.formData.patchValue({
+        //   lanDieuChinh: data.lanDieuChinh
+        // })
       }
     }
   }
@@ -227,8 +242,12 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
     };
     let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listQdGoc = res.data.content.filter(item => item.qdPdHsmt == null
-      || item.qdPdHsmt?.trangThai != this.STATUS.BAN_HANH);
+      this.listQdGoc = res.data.content;
+      this.listQdGoc.forEach(item => {
+        if (item.soQdDc != null) {
+          item.soQd = item.soQdDc
+        }
+      })
     }
     this.spinner.hide();
     const modalQD = this.modal.create({
@@ -258,7 +277,7 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
         this.formData.patchValue({
-          soQdGoc: data.soQd,
+          soQdGoc: data.soQdDc? data.soQdDc : data.soQd,
           idQdGoc: $event,
           lanDieuChinh: data.dchinhDxKhLcntHdr?data.dchinhDxKhLcntHdr.lanDieuChinh + 1 : 1,
           ngayQdGoc: data.ngayQd,
@@ -269,8 +288,16 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
           kieuNx: data.dxKhlcntHdr.kieuNx,
           tchuanCluong: data.dxKhlcntHdr.tchuanCluong
         });
-        this.dataInput = data;
-        this.dataInputCache = cloneDeep(data);
+        this.dataGoc = res.data;
+        if (data.dchinhDxKhLcntHdr != null) {
+          this.dataInput = data.dchinhDxKhLcntHdr;
+          this.dataInput.dsGthau = this.dataInput.dsGthau.filter(item => (item.qdPdHsmt == null || item.qdPdHsmt?.trangThai != STATUS.BAN_HANH))
+          this.dataInputCache = cloneDeep(this.dataInput);
+        } else {
+          this.dataInput = data;
+          this.dataInput.dsGthau = this.dataInput.dsGthau.filter(item => (item.qdPdHsmt == null || item.qdPdHsmt?.trangThai != STATUS.BAN_HANH))
+          this.dataInputCache = cloneDeep(this.dataInput);
+        }
         if (isInit) {
           this.initDataInput();
         }
