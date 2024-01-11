@@ -7,6 +7,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DialogThongTinCanBoComponent } from 'src/app/components/dialog/dialog-thong-tin-can-bo/dialog-thong-tin-can-bo.component';
 import { UserAPIService } from 'src/app/services/user/userApi.service';
+import { QlNguoiSuDungService } from 'src/app/services/quantri-nguoidung/qlNguoiSuDung.service';
+import { MESSAGE } from 'src/app/constants/message';
 
 @Component({
   selector: 'app-header',
@@ -24,6 +26,7 @@ export class HeaderComponent implements OnInit {
     private userService: UserService,
     private userAPIService: UserAPIService,
     private notification: NzNotificationService,
+    private qlNsdService: QlNguoiSuDungService,
     private _modalService: NzModalService,
     private router: Router,
   ) { }
@@ -112,8 +115,12 @@ export class HeaderComponent implements OnInit {
     modal.afterClose.subscribe((b) => { });
   }
 
-  showModalThongTinCaNhan() {
-    let data = {
+  async showModalThongTinCaNhan() {
+    let data = null
+    let res = await this.qlNsdService.getDetail(this.userInfo.ID);
+    if (res.msg == MESSAGE.SUCCESS) {
+      data = res.data
+    } else data = {
       id: this.userInfo.ID,
       userType: this.userInfo.CAP_DVI === "0" ? "BN" : "DT",
       fullName: this.userInfo.TEN_DAY_DU,

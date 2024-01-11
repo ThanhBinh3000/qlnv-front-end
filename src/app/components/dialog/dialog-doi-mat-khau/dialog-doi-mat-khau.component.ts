@@ -54,7 +54,6 @@ export class DialogDoiMatKhauComponent implements OnInit {
       this.formData.controls["newPassword"].setValidators([Validators.pattern(this.pattern.regexComplex)]);
     }
     this.userInfo = this.userService.getUserLogin();
-    console.log("this.userInfo", this.userInfo)
   }
 
   handleCancel() {
