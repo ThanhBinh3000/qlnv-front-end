@@ -74,7 +74,7 @@
       </nz-form-item>
     </div>
 
-    <div nz-col [nzSpan]="12" *ngIf="!formData.value.id && formData.get('sysType').value == 'APP'">
+    <div nz-col [nzSpan]="12" *ngIf="!formData.value.id && formData.get('sysType').value !== 'AD'">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Mật khẩu</nz-form-label>
         <nz-form-control [nzErrorTip]="error">
@@ -85,7 +85,7 @@
       </nz-form-item>
     </div>
 
-    <div nz-col [nzSpan]="12" *ngIf="formData.value.id && formData.get('sysType').value == 'APP'">
+    <div nz-col [nzSpan]="12" *ngIf="formData.value.id && formData.get('sysType').value !== 'AD'">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Mật khẩu</nz-form-label>
         <nz-form-control [nzErrorTip]="error">
