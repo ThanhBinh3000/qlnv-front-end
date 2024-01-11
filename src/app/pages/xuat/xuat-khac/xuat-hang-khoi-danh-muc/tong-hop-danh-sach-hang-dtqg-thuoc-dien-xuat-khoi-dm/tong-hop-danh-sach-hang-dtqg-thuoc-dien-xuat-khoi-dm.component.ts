@@ -218,6 +218,7 @@ export class TongHopDanhSachHangDtqgThuocDienXuatKhoiDmComponent extends Base2Co
           childData: rs
         };
       }).value();
+    console.log(this.dataTableView,'this.dataTableViewthis.dataTableViewthis.dataTableView');
   }
 
   onExpandStringChange(id: string, checked: boolean) {
