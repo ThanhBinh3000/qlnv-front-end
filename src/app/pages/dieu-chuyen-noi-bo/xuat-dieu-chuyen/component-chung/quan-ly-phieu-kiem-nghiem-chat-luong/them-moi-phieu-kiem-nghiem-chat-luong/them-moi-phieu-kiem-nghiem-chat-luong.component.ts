@@ -782,24 +782,30 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       let toiDa = dataTable[index].chiSoClToiDa;
       let tt = parseFloat(dataTable[index].toanTu);
 
-      if ((tt === 1 || tt === 2) && toiThieu < kq && kq < toiDa) {
-        dataTable[index].danhGia = 1;
-      } else {
-        dataTable[index].danhGia = 0;
-      }
+      // if ((tt === 1 || tt === 2) && toiThieu < kq && kq < toiDa) {
+      //   dataTable[index].danhGia = 1;
+      // } else {
+      //   dataTable[index].danhGia = 0;
+      // }
 
-      if (tt === 3 && toiThieu == kq && kq == toiDa) {
-        dataTable[index].danhGia = 1;
-      } else {
-        dataTable[index].danhGia = 0;
-      }
+      // if (tt === 3 && toiThieu == kq && kq == toiDa) {
+      //   dataTable[index].danhGia = 1;
+      // } else {
+      //   dataTable[index].danhGia = 0;
+      // }
 
-      if ((tt === 4 || tt === 5 || tt === 6) && toiThieu <= kq && kq <= toiDa) {
+      // if ((tt === 4 || tt === 5 || tt === 6) && toiThieu <= kq && kq <= toiDa) {
+      //   dataTable[index].danhGia = 1;
+      // } else {
+      //   dataTable[index].danhGia = 0;
+      // }
+      if ((tt === 1 && toiThieu < kq) || (tt === 2 && kq < toiDa) || (tt === 3 && toiThieu == kq && kq == toiDa) ||
+        (tt === 4 && toiThieu <= kq) || (tt === 5 && kq <= toiDa) || (tt === 6 && toiThieu <= kq && kq <= toiDa)) {
         dataTable[index].danhGia = 1;
-      } else {
-        dataTable[index].danhGia = 0;
       }
-
+      else {
+        dataTable[index].danhGia = 0
+      }
     }
   }
 

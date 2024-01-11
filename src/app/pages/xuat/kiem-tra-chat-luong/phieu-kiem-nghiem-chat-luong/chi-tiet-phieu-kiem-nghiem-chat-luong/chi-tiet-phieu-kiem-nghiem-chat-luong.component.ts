@@ -711,22 +711,29 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       let toiDa = parseFloat(dataTable[index].chiSoClToiDa.replace(",", "."));
       let tt = parseFloat(dataTable[index].toanTu);
 
-      if ((tt === 1 || tt === 2) && toiThieu < kq && kq < toiDa) {
-        dataTable[index].danhGia = "Đạt";
-      } else {
-        dataTable[index].danhGia = "Không đạt";
-      }
+      // if ((tt === 1 || tt === 2) && toiThieu < kq && kq < toiDa) {
+      //   dataTable[index].danhGia = "Đạt";
+      // } else {
+      //   dataTable[index].danhGia = "Không đạt";
+      // }
 
-      if (tt === 3 && toiThieu == kq && kq == toiDa) {
-        dataTable[index].danhGia = "Đạt";
-      } else {
-        dataTable[index].danhGia = "Không đạt";
-      }
+      // if (tt === 3 && toiThieu == kq && kq == toiDa) {
+      //   dataTable[index].danhGia = "Đạt";
+      // } else {
+      //   dataTable[index].danhGia = "Không đạt";
+      // }
 
-      if ((tt === 4 || tt === 5 || tt === 6) && toiThieu <= kq && kq <= toiDa) {
+      // if ((tt === 4 || tt === 5 || tt === 6) && toiThieu <= kq && kq <= toiDa) {
+      //   dataTable[index].danhGia = "Đạt";
+      // } else {
+      //   dataTable[index].danhGia = "Không đạt";
+      // }
+      if ((tt === 1 && toiThieu < kq) || (tt === 2 && kq < toiDa) || (tt === 3 && toiThieu == kq && kq == toiDa) ||
+        (tt === 4 && toiThieu <= kq) || (tt === 5 && kq <= toiDa) || (tt === 6 && toiThieu <= kq && kq <= toiDa)) {
         dataTable[index].danhGia = "Đạt";
-      } else {
-        dataTable[index].danhGia = "Không đạt";
+      }
+      else {
+        dataTable[index].danhGia = "Không đạt"
       }
     }
   }
