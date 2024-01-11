@@ -232,13 +232,13 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
         if (this.formData.value.trangThai == this.STATUS.BAN_HANH ) {
           if (this.formData.value.lanDieuChinh > 1) {
             let dataQdGoc = await this.dieuChinhQuyetDinhPdKhlcntService.findByIdQdGoc(data.idQdGoc, this.formData.value.lanDieuChinh -1);
-            if (res.msg == MESSAGE.SUCCESS) {
+            if (dataQdGoc.msg == MESSAGE.SUCCESS) {
               const dataQd = dataQdGoc.data;
               this.danhsachDxCache = cloneDeep(dataQd.children);
             }
           } else {
             let dataQdGoc = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(res.data.idGoc);
-            if (res.msg == MESSAGE.SUCCESS) {
+            if (dataQdGoc.msg == MESSAGE.SUCCESS) {
               const dataQd = dataQdGoc.data;
               this.danhsachDxCache = cloneDeep(dataQd.children);
             }

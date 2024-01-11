@@ -680,7 +680,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         }
       } else {
         if (!this.id)
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR)
+          this.notification.error(MESSAGE.ERROR, "Chưa có QĐ giao chỉ tiêu KH năm của Tổng Cục")
       }
     }
 
@@ -855,7 +855,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         }
       } else {
         if (!this.id)
-          this.notification.error(MESSAGE.ERROR, res.msg)
+          this.notification.error(MESSAGE.ERROR, "Chưa có QĐ giao chỉ tiêu KH năm của Cục")
       }
     }
 

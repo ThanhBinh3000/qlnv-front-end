@@ -210,6 +210,13 @@ export class DialogThongTinCanBoComponent implements OnInit {
 
   }
 
+  selectUserLDap(data) {
+    this.formData.patchValue({
+      fullName: data.name,
+      email: data.email
+    })
+  }
+
   async save() {
     this.spinner.show();
     if (!this.dataEdit && this.formData.value.sysType === 'APP') {
@@ -319,7 +326,6 @@ export class DialogThongTinCanBoComponent implements OnInit {
     });
     modal.afterClose.subscribe(async (data) => {
       if (data) {
-        console.log('doiMK', data)
         let res = await this.qlNSDService.changePassword(data);
         if (res.msg == MESSAGE.SUCCESS) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
