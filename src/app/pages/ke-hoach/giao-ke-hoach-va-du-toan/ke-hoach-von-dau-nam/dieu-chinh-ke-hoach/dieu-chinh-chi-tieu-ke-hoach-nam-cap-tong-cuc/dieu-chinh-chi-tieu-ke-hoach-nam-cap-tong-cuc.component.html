@@ -163,7 +163,7 @@
                     <td>{{ data.soQuyetDinhDcCuaC }}</td>
                     <td>{{ data.tenTrangThai }}</td>
                     <td class="text-center" *ngIf="isTongCuc()">
-                      <a *ngIf="data.trangThai === STATUS.BAN_HANH && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_XEM')"
+                      <a *ngIf="(data.trangThai === STATUS.BAN_HANH || data.trangThai === STATUS.KHONG_BAN_HANH) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_XEM')"
                         (click)="redirectDetail(data.id, true)">
                         <i class="fa fa-eye" title="Xem chi tiết"></i>
                       </a>
@@ -308,7 +308,7 @@
                     <td>{{ data.soQuyetDinhDcCuaC }}</td>
                     <td>{{ data.tenTrangThai }}</td>
                     <td class="text-center" *ngIf="isCuc()">
-                      <a *ngIf="(data.trangThai === STATUS.BAN_HANH || data.trangThai === STATUS.CHO_DUYET_TP || data.trangThai === STATUS.CHO_DUYET_LDC) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_CUC_XEM')"
+                      <a *ngIf="(data.trangThai === STATUS.BAN_HANH || data.trangThai === STATUS.CHO_DUYET_TP || data.trangThai === STATUS.CHO_DUYET_LDC || data.trangThai === STATUS.KHONG_BAN_HANH) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_CUC_XEM')"
                         (click)="redirectDetail(data.id, true)">
                         <i class="fa fa-eye" title="Xem chi tiết"></i>
                       </a>

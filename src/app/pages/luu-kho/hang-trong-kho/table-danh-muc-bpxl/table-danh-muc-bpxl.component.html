@@ -92,6 +92,12 @@
   </nz-card>
   <div class="group-button">
     <h3 class="text-uppercase">{{title}} </h3>
+    <div class="buttons">
+      <button type="button" class="btn btn-sub" (click)="exportData()" >
+        <i class="icon htvbdh_chuyen-xu-ly"></i>
+        <span>Xuất file</span>
+      </button>
+    </div>
   </div>
   <nz-card class="mt-2px flex-card data-table card-border-content table-card">
     <nz-table class="nowrap" [nzData]="dataTableAll" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
@@ -104,14 +110,14 @@
         <th>Điểm kho</th>
         <th>Ngày nhập kho</th>
         <th>Tồn kho</th>
-        <th>SL cần {{column}}</th>
-        <th>SL đã {{column}}</th>
+        <th>SL {{column}}</th>
+        <th *ngIf="column1">SL {{column1}}</th>
         <th>ĐVT</th>
         <th>Lý do</th>
         <th>Trạng thái</th>
         <th>Trạng thái chốt DS của Cục</th>
         <th>Ngày chốt DS của Cục</th>
-        <th>Trạng thái {{column}}</th>
+        <th>Trạng thái {{columnTt}}</th>
         <th nzWidth="35px">Hành động</th>
       </tr>
       </thead>
@@ -127,7 +133,7 @@
           <td></td>
           <td></td>
           <td></td>
-          <td></td>
+          <td *ngIf="column1"></td>
           <td></td>
           <td></td>
           <td></td>
@@ -149,7 +155,7 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
+              <td *ngIf="column1"></td>
               <td></td>
               <td></td>
               <td></td>
@@ -168,7 +174,7 @@
                   <td>{{data.ngayNhapDayKho | date : 'dd/MM/yyyy'}}</td>
                   <td>{{data.tongSoLuong | number : '1.0-1' : 'vi_VN' }}</td>
                   <td>{{data.soLuongXl | number : '1.0-1' : 'vi_VN' }}</td>
-                  <td></td>
+                  <td *ngIf="column1"></td>
                   <td>{{data.dviTinh }}</td>
                   <td>{{data.nguyenNhan}}</td>
                   <td></td>

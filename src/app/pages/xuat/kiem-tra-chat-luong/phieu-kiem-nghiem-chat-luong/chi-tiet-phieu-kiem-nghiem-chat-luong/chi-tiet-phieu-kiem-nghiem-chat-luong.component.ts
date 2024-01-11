@@ -723,12 +723,11 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         dataTable[index].danhGia = "Không đạt";
       }
 
-      if ((tt === 4 || tt === 5) && toiThieu <= kq && kq <= toiDa) {
+      if ((tt === 4 || tt === 5 || tt === 6) && toiThieu <= kq && kq <= toiDa) {
         dataTable[index].danhGia = "Đạt";
       } else {
         dataTable[index].danhGia = "Không đạt";
       }
-
     }
   }
   checkRoleDuyet(trangThai: STATUS): boolean {

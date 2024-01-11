@@ -794,7 +794,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
         dataTable[index].danhGia = 0;
       }
 
-      if ((tt === 4 || tt === 5) && toiThieu <= kq && kq <= toiDa) {
+      if ((tt === 4 || tt === 5 || tt === 6) && toiThieu <= kq && kq <= toiDa) {
         dataTable[index].danhGia = 1;
       } else {
         dataTable[index].danhGia = 0;

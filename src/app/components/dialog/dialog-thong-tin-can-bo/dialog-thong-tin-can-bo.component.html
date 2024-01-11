@@ -11,26 +11,6 @@
         </nz-form-control>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="12">
-      <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true"> Tên cán bộ</nz-form-label>
-        <nz-form-control [nzErrorTip]="error">
-          <nz-input-group>
-            <input nz-input formControlName="fullName" [readOnly]="isView">
-          </nz-input-group>
-        </nz-form-control>
-      </nz-form-item>
-    </div>
-    <div nz-col [nzSpan]="12">
-      <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true"> Email</nz-form-label>
-        <nz-form-control [nzErrorTip]="error">
-          <nz-input-group>
-            <input nz-input formControlName="email" [readOnly]="isView">
-          </nz-input-group>
-        </nz-form-control>
-      </nz-form-item>
-    </div>
 
     <div nz-col [nzSpan]="12">
       <nz-form-item>
@@ -66,9 +46,31 @@
           <i nz-icon nzType="search"></i>
         </ng-template>
         <nz-autocomplete #auto>
-          <nz-auto-option *ngFor="let option of userLDapList" [nzValue]="option.username">{{ option.username }}
+          <nz-auto-option *ngFor="let option of userLDapList" [nzValue]="option.username"
+            (click)="selectUserLDap(option)">{{ option.username }}
           </nz-auto-option>
         </nz-autocomplete>
+      </nz-form-item>
+    </div>
+
+    <div nz-col [nzSpan]="12">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Tên cán bộ</nz-form-label>
+        <nz-form-control [nzErrorTip]="error">
+          <nz-input-group>
+            <input nz-input formControlName="fullName" [readOnly]="isView">
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="12">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Email</nz-form-label>
+        <nz-form-control [nzErrorTip]="error">
+          <nz-input-group>
+            <input nz-input formControlName="email" [readOnly]="isView">
+          </nz-input-group>
+        </nz-form-control>
       </nz-form-item>
     </div>
 
@@ -83,7 +85,7 @@
       </nz-form-item>
     </div>
 
-    <div nz-col [nzSpan]="12" *ngIf="formData.value.id">
+    <div nz-col [nzSpan]="12" *ngIf="formData.value.id && formData.get('sysType').value == 'APP'">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Mật khẩu</nz-form-label>
         <nz-form-control [nzErrorTip]="error">

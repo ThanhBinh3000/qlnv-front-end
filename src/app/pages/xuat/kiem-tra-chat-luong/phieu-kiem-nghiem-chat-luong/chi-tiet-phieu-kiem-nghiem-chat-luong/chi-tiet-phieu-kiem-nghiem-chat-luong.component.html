@@ -421,13 +421,13 @@
               <td>{{data.ten}}</td>
               <td>{{data.chiSoCl}}</td>
               <!-- <td><input nz-input [(ngModel)]="data.ketQua" (ngModelChange)="onKetQuaChange($event,i,viewCtChatLuong)"/></td> -->
-              <td *ngIf="!data.toanTu"><input nz-input [(ngModel)]="data.ketQua" /></td>
+              <td *ngIf="!data.toanTu"><input nz-input [(ngModel)]="data.ketQua" [readonly]="isView" /></td>
               <td *ngIf="data.toanTu"><input currencyMask class="money-input" [(ngModel)]="data.ketQua"
-                  (ngModelChange)="onKetQuaChange($event,i,viewCtChatLuong)" [options]="amount1" />
+                  (ngModelChange)="onKetQuaChange($event,i,viewCtChatLuong)" [options]="amount1" [readonly]="isView" />
               </td>
               <td>{{data.phuongPhap}}</td>
               <td>
-                <nz-select [(ngModel)]="data.danhGia">
+                <nz-select [(ngModel)]="data.danhGia" [nzDisabled]="isView">
                   <nz-option nzValue="Đạt" nzLabel="Đạt"></nz-option>
                   <nz-option nzValue="Không đạt" nzLabel="Không đạt"></nz-option>
                 </nz-select>

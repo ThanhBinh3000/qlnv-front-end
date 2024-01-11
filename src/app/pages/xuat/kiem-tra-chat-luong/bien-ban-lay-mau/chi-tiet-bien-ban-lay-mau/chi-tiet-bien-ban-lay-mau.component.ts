@@ -407,7 +407,10 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
               phuongPhap: s.phuongPhap,
               chiSoCl: s.chiSoCl,
               type: BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG,
-              ma: s.ma
+              ma: s.ma,
+              chiSoClToiThieu: s.chiSoClToiThieu,
+              chiSoClToiDa: s.chiSoClToiDa,
+              toanTu: s.toanTu
             }
           });
           filter.push(...defaultCt);
@@ -423,7 +426,10 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
               phuongPhap: s.phuongPhap,
               chiSoCl: s.chiSoCl,
               type: BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG,
-              ma: s.ma
+              ma: s.ma,
+              chiSoClToiThieu: s.chiSoClToiThieu,
+              chiSoClToiDa: s.chiSoClToiDa,
+              toanTu: s.toanTu
             }
           });
           filter.push(...defaultPp, ...defaultCt);
