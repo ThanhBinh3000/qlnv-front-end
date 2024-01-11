@@ -431,9 +431,10 @@
                   <input type="text" nz-input class="w-400" [(ngModel)]="data.ketQuaPt" [readOnly]="isView"
                     (ngModelChange)="onKetQuaChange($event,i,dataTableChiTieu)" />
                 </td> -->
-                <td *ngIf="!data.toanTu"><input nz-input [(ngModel)]="data.ketQuaPt" /></td>
+                <td *ngIf="!data.toanTu"><input nz-input [(ngModel)]="data.ketQuaPt" [readOnly]="isView" /></td>
                 <td *ngIf="data.toanTu"><input currencyMask class="money-input" [(ngModel)]="data.ketQuaPt"
-                    (ngModelChange)="onKetQuaChange($event,i,dataTableChiTieu)" [options]="amount1" />
+                    (ngModelChange)="onKetQuaChange($event,i,dataTableChiTieu)" [options]="amount1"
+                    [readOnly]="isView" />
                 </td>
                 <td>{{data.phuongPhap}}</td>
                 <td>
