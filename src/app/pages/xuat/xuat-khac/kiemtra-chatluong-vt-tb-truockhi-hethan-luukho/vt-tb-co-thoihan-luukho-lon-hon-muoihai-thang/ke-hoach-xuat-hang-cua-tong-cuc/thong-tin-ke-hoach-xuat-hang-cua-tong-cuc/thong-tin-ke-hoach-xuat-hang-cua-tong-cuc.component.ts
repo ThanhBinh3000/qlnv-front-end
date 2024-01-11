@@ -82,6 +82,8 @@ export class ThongTinKeHoachXuatHangCuaTongCucComponent extends Base2Component i
       ngayTrinhDuyetBtc: [],
       ngayDuyetBtc: [],
       ngayDxXuatHang: [],
+      ngayDxXuatHangTu: [],
+      ngayDxXuatHangDen: [],
       thoiGianDuKienXuatHang: [],
       thoiGianDuKienXuatTu: [],
       thoiGianDuKienXuatDen: [],
@@ -128,12 +130,15 @@ export class ThongTinKeHoachXuatHangCuaTongCucComponent extends Base2Component i
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           const dataDetail = res.data;
+          console.log(dataDetail,'dataDetaildataDetaildataDetail');
           this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
           if (dataDetail) {
+            let thoiGianDxXuatHang = [dataDetail.ngayDxXuatHangTu, dataDetail.ngayDxXuatHangDen];
             let thoiGianDuKienXuat = [dataDetail.thoiGianDuKienXuatTu, dataDetail.thoiGianDuKienXuatDen];
             this.formData.patchValue({
               soToTrinh: dataDetail.soToTrinh?.split('/')[0],
               thoiGianDuKienXuatHang: thoiGianDuKienXuat,
+              ngayDxXuatHang : thoiGianDxXuatHang,
               xhXkKhXuatHangDtl: dataDetail.xhXkKhXuatHangDtl,
             })
             this.listFile = dataDetail.fileDinhKems;
@@ -291,6 +296,10 @@ export class ThongTinKeHoachXuatHangCuaTongCucComponent extends Base2Component i
     if (this.formData.get("thoiGianDuKienXuatHang").value) {
       this.formData.value.thoiGianDuKienXuatTu = this.formData.get("thoiGianDuKienXuatHang").value[0];
       this.formData.value.thoiGianDuKienXuatDen = this.formData.get("thoiGianDuKienXuatHang").value[1];
+    }
+    if (this.formData.get("ngayDxXuatHang").value) {
+      this.formData.value.ngayDxXuatHangTu = this.formData.get("ngayDxXuatHang").value[0];
+      this.formData.value.ngayDxXuatHangDen = this.formData.get("ngayDxXuatHang").value[1];
     }
     this.formData.value.xhXkKhXuatHangDtl.forEach(item => {
       delete item.id;
