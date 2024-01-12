@@ -769,37 +769,34 @@ export class Base2Component implements OnInit {
       return;
     }
     let kq = parseFloat(event.replace(",", "."));
-    if (dataTable[index].chiSoClToiThieu && dataTable[index].chiSoClToiDa && kq !== null && index !== null) {
+    if ((kq === 0 || kq >= 0) && index !== null) {
       let toiThieu = parseFloat(dataTable[index].chiSoClToiThieu.replace(",", "."));
       let toiDa = parseFloat(dataTable[index].chiSoClToiDa.replace(",", "."));
       let tt = parseFloat(dataTable[index].toanTu);
-
-      // if ((tt === 1 || tt === 2) && toiThieu < kq && kq < toiDa) {
-      //   dataTable[index].danhGia = "Đạt";
-      // } else {
-      //   dataTable[index].danhGia = "Không đạt";
-      // }
-
-      // if (tt === 3 && toiThieu == kq && kq == toiDa) {
-      //   dataTable[index].danhGia = "Đạt";
-      // } else {
-      //   dataTable[index].danhGia = "Không đạt";
-      // }
-
-      // if ((tt === 4 || tt === 5) && toiThieu <= kq && kq <= toiDa) {
-      //   dataTable[index].danhGia = "Đạt";
-      // } else {
-      //   dataTable[index].danhGia = "Không đạt";
-      // }
-
-      if ((tt === 1 && toiThieu < kq) || (tt === 2 && kq < toiDa) || (tt === 3 && toiThieu == kq && kq == toiDa) ||
-        (tt === 4 && toiThieu <= kq) || (tt === 5 && kq <= toiDa) || (tt === 6 && toiThieu <= kq && kq <= toiDa)) {
-        dataTable[index].danhGia = "Đạt";
+      if ([1, 4].includes(tt) && (toiThieu === 0 || toiThieu > 0)) {
+        if ((tt === 1 && toiThieu < kq) || (tt === 4 && toiThieu <= kq)) {
+          dataTable[index].danhGia = "Đạt";
+        }
+        else {
+          dataTable[index].danhGia = "Không đạt"
+        }
       }
-      else {
-        dataTable[index].danhGia = "Không đạt"
+      if ([2, 5].includes(tt) && toiDa > 0) {
+        if ((tt === 2 && kq < toiDa) || (tt === 5 && kq <= toiDa)) {
+          dataTable[index].danhGia = "Đạt";
+        }
+        else {
+          dataTable[index].danhGia = "Không đạt"
+        }
       }
-
+      if ([3, 6].includes(tt) && (toiDa === 0 || toiDa > 0) && (toiThieu === 0 || toiThieu > 0)) {
+        if ((tt === 3 && toiThieu == kq && kq == toiDa) || (tt === 6 && toiThieu <= kq && kq <= toiDa)) {
+          dataTable[index].danhGia = "Đạt";
+        }
+        else {
+          dataTable[index].danhGia = "Không đạt"
+        }
+      }
     }
   }
 
