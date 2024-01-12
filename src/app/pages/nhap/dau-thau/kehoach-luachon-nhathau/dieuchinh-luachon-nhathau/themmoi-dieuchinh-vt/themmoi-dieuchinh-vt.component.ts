@@ -238,7 +238,11 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
       trangThai: STATUS.BAN_HANH,
       loaiVthh: this.loaiVthh,
       namKhoach: this.formData.get("nam").value,
-      lastest: 0
+      lastest: 0,
+      paggingReq: {
+        limit: this.globals.prop.MAX_INTERGER,
+        page: 0
+      },
     };
     let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {

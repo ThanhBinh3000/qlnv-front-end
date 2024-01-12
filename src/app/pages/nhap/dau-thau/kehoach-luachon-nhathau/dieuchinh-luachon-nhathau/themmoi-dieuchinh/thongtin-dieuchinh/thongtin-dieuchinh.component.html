@@ -332,16 +332,16 @@
               <th class="text-center" nzWidth="40px" nzLeft></th>
               <th class="text-center multi-line" nzWidth="150px"  nzLeft>Tên gói thầu</th>
               <th class="text-center multi-line" nzWidth="150px"  nzLeft>Chi cục DTNN</th>
-              <th class="text-center multi-line" nzWidth="150px"  nzLeft>Điểm kho</th>
+              <th class="text-center multi-line" nzWidth="150px"  >Điểm kho</th>
               <th class="text-center multi-line" nzWidth="150px"  >Địa điểm nhập kho</th>
-              <th class="text-center multi-line" nzWidth="150px" *ngIf="isCache">Chỉ tiêu kế hoạch đuợc giao<br/>(Tấn)</th>
-              <th class="text-center multi-line" nzWidth="150px" *ngIf="isCache">Số đã thực hiện<br/>(Tấn)</th>
-              <th class="text-center multi-line" nzWidth="150px" *ngIf="isCache">Số đề xuất <br/>(Tấn)</th>
-              <th class="text-center multi-line" nzWidth="150px" *ngIf="!isCache">Số lượng phê duyệt <br/>(Tấn)</th>
-              <th class="text-center multi-line" nzWidth="150px"  >Đơn giá đề xuất<br/> có VAT (đ/kg)</th>
-              <th class="text-center multi-line" nzWidth="150px"  >Thành tiền tạm tính<br/> theo giá đề xuất (đ)</th>
-              <th class="text-center multi-line" nzWidth="150px"  >Đơn được duyệt<br/> có VAT (đ/kg)</th>
-              <th class="text-center multi-line" nzWidth="180px"  >Thành tiền theo đơn giá <br/>được duyệt có VAT (đ)</th>
+              <th class="text-center multi-line" nzWidth="150px">Chỉ tiêu kế hoạch đuợc giao<br/>(Tấn)</th>
+              <th class="text-center multi-line" nzWidth="150px">Số đã thực hiện<br/>(Tấn)</th>
+<!--              <th class="text-center multi-line" nzWidth="150px" *ngIf="isCache">Số đề xuất <br/>(Tấn)</th>-->
+              <th class="text-center multi-line" nzWidth="150px"  >SL phê duyệt <br/>(Tấn)</th>
+<!--              <th class="text-center multi-line" nzWidth="150px"  >Đơn giá đề xuất<br/> có VAT (đ/kg)</th>-->
+<!--              <th class="text-center multi-line" nzWidth="150px"  >Thành tiền tạm tính<br/> theo giá đề xuất (đ)</th>-->
+              <th class="text-center multi-line" nzWidth="150px"  >Đơn giá<br/> có VAT (đ/kg)</th>
+              <th class="text-center multi-line" nzWidth="180px"  >Thành tiền theo đơn giá <br/>có VAT (đ)</th>
               <th class="text-center multi-line" nzWidth="150px"  >Tiền bảo lãnh <br/>dự thầu (đ)</th>
               <th class="text-center multi-line" nzWidth="150px"  >Trạng thái<br/>đấu thầu</th>
               <th class="text-center multi-line" nzWidth="100px"  *ngIf="!isView">Hành động</th>
@@ -353,16 +353,16 @@
           <td nzLeft [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
           <td nzLeft class="multi-line">{{dtGoiThau.goiThau}}</td>
           <td nzLeft></td>
-          <td nzLeft></td>
+          <td ></td>
           <td></td>
-          <td *ngIf="isCache"></td>
-          <td *ngIf="isCache"></td>
+          <td ></td>
+          <td ></td>
           <td class="text-right blue-text bold-700">{{ dtGoiThau.soLuong | number : '1.0-99' : 'vi_VN' }}</td>
-          <td></td>
-          <td class="text-right bold-700">{{ dtGoiThau.thanhTienDx| number :'1.0-99' : 'vi_VN' }}</td>
+<!--          <td></td>-->
+<!--          <td class="text-right bold-700">{{ dtGoiThau.thanhTienDx| number :'1.0-99' : 'vi_VN' }}</td>-->
           <td></td>
           <td class="text-right bold-700">{{ dtGoiThau.thanhTien | number : '1.0-99' : 'vi_VN'}}</td>
-          <td class="text-right bold-700">{{ dtGoiThau.thanhTienDx * formData.value.gtriDthau / 100 | number : '1.0-99' : 'vi_VN'}}</td>
+          <td class="text-right bold-700">{{ dtGoiThau.thanhTien * formData.value.gtriDthau / 100 | number : '1.0-99' : 'vi_VN'}}</td>
           <td>{{ dtGoiThau.trangThaiDt}}</td>
           <td class="text-right" *ngIf="!isView">
             <a *ngIf="!isView" (click)="themMoiGoiThau($event, dtGoiThau.goiThau)">
@@ -379,16 +379,16 @@
               <td nzLeft></td>
               <td nzLeft [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>
               <td nzLeft class="multi-line">{{chiCuc.tenDvi}}</td>
-              <td nzLeft></td>
+              <td ></td>
               <td></td>
-              <td *ngIf="isCache" class="text-right red-text">{{chiCuc.soLuongTheoChiTieu| number : '1.0-99' : 'vi_VN'}}</td>
-              <td *ngIf="isCache" class="text-right red-text">{{chiCuc.soLuongDaMua| number : '1.0-99' : 'vi_VN'}}</td>
+              <td  class="text-right red-text">{{chiCuc.soLuongTheoChiTieu| number : '1.0-99' : 'vi_VN'}}</td>
+              <td  class="text-right red-text">{{chiCuc.soLuongDaMua| number : '1.0-99' : 'vi_VN'}}</td>
               <td class="text-right blue-text bold-700">{{ chiCuc.soLuong | number : '1.0-99' : 'vi_VN' }}</td>
-              <td class="text-right">{{chiCuc.donGiaTamTinh | number : '1.0-99' : 'vi_VN'}}</td>
-              <td class="text-right bold-700">{{ chiCuc.soLuong * chiCuc.donGiaTamTinh *1000| number :'1.0-99' : 'vi_VN' }}</td>
+<!--              <td class="text-right">{{chiCuc.donGiaTamTinh | number : '1.0-99' : 'vi_VN'}}</td>-->
+<!--              <td class="text-right bold-700">{{ chiCuc.soLuong * chiCuc.donGiaTamTinh *1000| number :'1.0-99' : 'vi_VN' }}</td>-->
               <td class="text-right">{{chiCuc.donGia | number : '1.0-99' : 'vi_VN'}}</td>
               <td class="text-right">{{ chiCuc.soLuong * chiCuc.donGia *1000| number :'1.0-99' : 'vi_VN' }}</td>
-              <td class="text-right">{{ chiCuc.soLuong * chiCuc.donGiaTamTinh *1000 * formData.value.gtriDthau / 100| number :'1.0-99' : 'vi_VN' }}</td>
+              <td class="text-right">{{ chiCuc.soLuong * chiCuc.donGia *1000 * formData.value.gtriDthau / 100| number :'1.0-99' : 'vi_VN' }}</td>
               <td></td>
               <td *ngIf="!isView"></td>
             </tr>
@@ -398,16 +398,16 @@
                   <td nzLeft></td>
                   <td nzLeft></td>
                   <td nzLeft></td>
-                  <td nzLeft class="multi-line">{{diemKho.tenDvi}}</td>
+                  <td  class="multi-line">{{diemKho.tenDvi}}</td>
                   <td class="multi-line">{{diemKho.diaDiemNhap}}</td>
-                  <td *ngIf="isCache"></td>
-                  <td *ngIf="isCache"></td>
+                  <td ></td>
+                  <td ></td>
                   <td class="text-right blue-text">{{diemKho.soLuong | number : '1.0-99' : 'vi_VN'}}</td>
-                  <td class="text-right">{{chiCuc.donGiaTamTinh | number : '1.0-99' : 'vi_VN'}}</td>
-                  <td class="text-right">{{diemKho.soLuong * chiCuc.donGiaTamTinh * 1000 | number : '1.0-99' : 'vi_VN'}}</td>
+<!--                  <td class="text-right">{{chiCuc.donGiaTamTinh | number : '1.0-99' : 'vi_VN'}}</td>-->
+<!--                  <td class="text-right">{{diemKho.soLuong * chiCuc.donGiaTamTinh * 1000 | number : '1.0-99' : 'vi_VN'}}</td>-->
                   <td class="text-right">{{chiCuc.donGia | number : '1.0-99' : 'vi_VN'}}</td>
                   <td class="text-right">{{diemKho.soLuong * chiCuc.donGia * 1000 | number: '1.0-99' : 'vi_VN'}}</td>
-                  <td class="text-right">{{ diemKho.soLuong * chiCuc.donGiaTamTinh *1000 * formData.value.gtriDthau / 100| number :'1.0-99' : 'vi_VN' }}</td>
+                  <td class="text-right">{{ diemKho.soLuong * chiCuc.donGia *1000 * formData.value.gtriDthau / 100| number :'1.0-99' : 'vi_VN' }}</td>
                   <td></td>
                   <td class="text-right" *ngIf="!isView">
                     <a *ngIf="!isView" (click)="themMoiGoiThau($event, dtGoiThau.goiThau)">
@@ -429,11 +429,11 @@
         <td nzLeft></td>
         <td nzLeft class="text-right blue-text bold-700">TỔNG</td>
         <td></td>
-        <td *ngIf="isCache"></td>
-        <td *ngIf="isCache"></td>
+        <td ></td>
+        <td ></td>
         <td class="text-right blue-text bold-700">{{ calcTongSl() | number : '1.0-99' : 'vi_VN' }}</td>
-        <td></td>
-        <td class="text-right blue-text bold-700">{{ calcTongThanhTienDx() | number : '1.0-99' : 'vi_VN' }}</td>
+<!--        <td></td>-->
+<!--        <td class="text-right blue-text bold-700">{{ calcTongThanhTienDx() | number : '1.0-99' : 'vi_VN' }}</td>-->
         <td></td>
         <td class="text-right blue-text bold-700">{{ calcTongThanhTien() | number : '1.0-99' : 'vi_VN' }}</td>
         <td class="text-right blue-text bold-700">{{ calcTongThanhTienBaoLanh() | number : '1.0-99' : 'vi_VN' }}</td>
