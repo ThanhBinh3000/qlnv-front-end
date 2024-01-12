@@ -130,7 +130,6 @@ export class ThongTinKeHoachXuatHangCuaTongCucComponent extends Base2Component i
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           const dataDetail = res.data;
-          console.log(dataDetail,'dataDetaildataDetaildataDetail');
           this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
           if (dataDetail) {
             let thoiGianDxXuatHang = [dataDetail.ngayDxXuatHangTu, dataDetail.ngayDxXuatHangDen];

@@ -483,8 +483,6 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
                       case this.yearNow - 1:
                         item.tkdnThoc[2].soLuong +=
                           tonKho.duDau;
-                        item.xtnThoc[2].soLuong +=
-                          tonKho.duDau;
                         break;
                       case this.yearNow - 2:
                         item.tkdnThoc[1].soLuong +=
@@ -494,6 +492,8 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
                         break;
                       case this.yearNow - 3:
                         item.tkdnThoc[0].soLuong +=
+                          tonKho.duDau;
+                        item.xtnThoc[0].soLuong +=
                           tonKho.duDau;
                         break;
                       default:
@@ -510,9 +510,13 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
                       case this.yearNow - 2:
                         item.tkdnGao[1].soLuong +=
                           tonKho.duDau;
+                        item.xtnGao[1].soLuong +=
+                          tonKho.duDau;
                         break;
                       case this.yearNow - 3:
                         item.tkdnGao[0].soLuong +=
+                          tonKho.duDau;
+                        item.xtnGao[0].soLuong +=
                           tonKho.duDau;
                         break;
                       default:
@@ -530,9 +534,9 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
     this.calculateAndConvertDataKHLT();
     this.procThemMoiKHLT();
     this.thongTinChiTieuKeHoachNam.khLuongThuc = cloneDeep(this.dsKeHoachLuongThucClone);
-    // this.dsKeHoachLuongThucClone.forEach(item => {
-    //   item.isEdit = true;
-    // });
+    this.dsKeHoachLuongThucClone.forEach(item => {
+      item.isEdit = true;
+    });
     this.sumRowDetailLuongThuc();
   }
 
