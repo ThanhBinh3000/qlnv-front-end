@@ -86,6 +86,7 @@ export class ChiTietHoSoThanhLyComponent extends Base3Component implements OnIni
             thoiGianPd: [res.thoiGianPdTu, res.thoiGianPdDen],
           })
           this.symbol = '/' + (ttr[1] || '');
+          res.children = res.children.filter( x => x.xhTlDanhSachHdr?.maDvi.startsWith(this.userInfo.MA_DVI));
           this.dataTable = chain(res.children).groupBy('xhTlDanhSachHdr.tenChiCuc').map((value, key) => ({
               expandSet: true,
               tenDonVi: key,
