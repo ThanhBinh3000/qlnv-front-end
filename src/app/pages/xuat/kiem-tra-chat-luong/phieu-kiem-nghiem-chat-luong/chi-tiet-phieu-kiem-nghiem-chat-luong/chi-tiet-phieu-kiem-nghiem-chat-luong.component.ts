@@ -706,27 +706,33 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     this.reject(this.idSelected, trangThai);
   }
   onKetQuaChange(kq: number, index: number, dataTable: any): void {
-    if (dataTable[index].chiSoClToiThieu && dataTable[index].chiSoClToiDa && kq !== null && index !== null) {
+    if ((kq === 0 || kq >= 0) && index !== null) {
       let toiThieu = parseFloat(dataTable[index].chiSoClToiThieu.replace(",", "."));
       let toiDa = parseFloat(dataTable[index].chiSoClToiDa.replace(",", "."));
       let tt = parseFloat(dataTable[index].toanTu);
-
-      if ((tt === 1 || tt === 2) && toiThieu < kq && kq < toiDa) {
-        dataTable[index].danhGia = "Đạt";
-      } else {
-        dataTable[index].danhGia = "Không đạt";
+      if ([1, 4].includes(tt) && (toiThieu === 0 || toiThieu > 0)) {
+        if ((tt === 1 && toiThieu < kq) || (tt === 4 && toiThieu <= kq)) {
+          dataTable[index].danhGia = "Đạt";
+        }
+        else {
+          dataTable[index].danhGia = "Không đạt"
+        }
       }
-
-      if (tt === 3 && toiThieu == kq && kq == toiDa) {
-        dataTable[index].danhGia = "Đạt";
-      } else {
-        dataTable[index].danhGia = "Không đạt";
+      if ([2, 5].includes(tt) && toiDa > 0) {
+        if ((tt === 2 && kq < toiDa) || (tt === 5 && kq <= toiDa)) {
+          dataTable[index].danhGia = "Đạt";
+        }
+        else {
+          dataTable[index].danhGia = "Không đạt"
+        }
       }
-
-      if ((tt === 4 || tt === 5 || tt === 6) && toiThieu <= kq && kq <= toiDa) {
-        dataTable[index].danhGia = "Đạt";
-      } else {
-        dataTable[index].danhGia = "Không đạt";
+      if ([3, 6].includes(tt) && (toiDa === 0 || toiDa > 0) && (toiThieu === 0 || toiThieu > 0)) {
+        if ((tt === 3 && toiThieu == kq && kq == toiDa) || (tt === 6 && toiThieu <= kq && kq <= toiDa)) {
+          dataTable[index].danhGia = "Đạt";
+        }
+        else {
+          dataTable[index].danhGia = "Không đạt"
+        }
       }
     }
   }

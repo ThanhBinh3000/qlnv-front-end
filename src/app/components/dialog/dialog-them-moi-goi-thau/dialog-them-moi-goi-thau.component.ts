@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { NzModalRef } from 'ng-zorro-antd/modal';
+import {NzModalRef, NzModalService} from 'ng-zorro-antd/modal';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DanhSachGoiThau } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { Globals } from 'src/app/shared/globals';
@@ -77,7 +77,8 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     private dxuatKhLcntService: DxuatKhLcntService,
     private userService: UserService,
     private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
-    private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService
+    private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService,
+    private modal: NzModalService,
   ) {
     this.formGoiThau = this.fb.group({
       goiThau: [null, [Validators.required]],
@@ -405,16 +406,27 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   }
 
   deleteRow(i, y, z) {
-    if (i >= 0 && y >= 0 && z >= 0) {
-      // this.dataTable[i].children[y].children = this.dataTable[i].children[y].children.splice(z, 1);
-      this.dataTable[i].children[y].children = this.dataTable[i].children[y].children.filter((d, index) => index !== z);
-    } else if (i >= 0 && y >= 0) {
-      // this.dataTable[i].children = this.dataTable[i].children.splice(y, 1);
-      this.dataTable[i].children = this.dataTable[i].children.filter((d, index) => index !== y);
-    } else if (i >= 0) {
-      this.dataTable = this.dataTable.filter((d, index) => index !== i);
-      // this.dataTable = this.dataTable.splice(i, 1);
-    }
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        if (i >= 0 && y >= 0 && z >= 0) {
+          // this.dataTable[i].children[y].children = this.dataTable[i].children[y].children.splice(z, 1);
+          this.dataTable[i].children[y].children = this.dataTable[i].children[y].children.filter((d, index) => index !== z);
+        } else if (i >= 0 && y >= 0) {
+          // this.dataTable[i].children = this.dataTable[i].children.splice(y, 1);
+          this.dataTable[i].children = this.dataTable[i].children.filter((d, index) => index !== y);
+        } else if (i >= 0) {
+          this.dataTable = this.dataTable.filter((d, index) => index !== i);
+          // this.dataTable = this.dataTable.splice(i, 1);
+        }
+      },
+    });
   }
 
   clearCuc() {

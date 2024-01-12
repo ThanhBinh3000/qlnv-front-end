@@ -200,12 +200,11 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
             thueVat: this.dataInput.dxuatKhLcntHdr?.thueVat,
           });
           this.initListQuy();
-          this.tinhTongMucDtDx();
         } else if (res != null && res.msg == MESSAGE.SUCCESS) {
           this.helperService.bidingDataInFormGroup(this.formData, res.data);
           this.initListQuy();
-          this.tinhTongMucDtDx();
         }
+        this.tinhTongMucDtDx();
         this.objectChange.emit(this.formData.value)
       } else {
         this.formData.reset();

@@ -230,7 +230,7 @@
           <th class="text-center multi-line" nzWidth="130px"  >Đơn giá cụ thể<br/> có VAT được duyệt (đ)</th>
           <th class="text-center multi-line" nzWidth="180px"  >Thành tiền theo đơn giá cụ thể<br/> có VAT được duyệt (đ)</th>
           <th class="text-center multi-line" nzWidth="100px"  >Số còn lại chưa thực hiện</th>
-          <th class="text-center multi-line" nzWidth="100px"  *ngIf="!isView">Hành động</th>
+          <th class="text-center multi-line" nzWidth="100px" nzRight *ngIf="!isView">Hành động</th>
         </tr>
         </thead>
         <tbody>
@@ -248,7 +248,7 @@
               <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
               <td class="text-right bold-700">{{item.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
               <td></td>
-              <td *ngIf="!isView">
+              <td *ngIf="!isView" nzRight>
                 <a (click)="themMoiGoiThau($event, item,i)">
                   <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
@@ -271,7 +271,7 @@
                   <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
                   <td class="text-right">{{cuc.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
                   <td class="text-right">{{cuc.soLuongTheoChiTieu - item.soLuongDaMua | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td class="text-right" *ngIf="!isView"></td>
+                  <td class="text-right" *ngIf="!isView" nzRight></td>
                 </tr>
               </ng-container>
             </ng-container>
@@ -291,7 +291,7 @@
               <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
               <td class="text-right bold-700">{{item.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
               <td></td>
-              <td *ngIf="!isView">
+              <td *ngIf="!isView" nzRight>
                 <a (click)="themMoiGoiThau($event, item,i)">
                   <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
@@ -314,7 +314,7 @@
                   <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
                   <td class="text-right">{{cuc.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
                   <td class="text-right">{{cuc.soLuongTheoChiTieu - item.soLuongDaMua | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td class="text-right" *ngIf="!isView"></td>
+                  <td class="text-right" *ngIf="!isView" nzRight></td>
                 </tr>
               </ng-container>
             </ng-container>
@@ -333,7 +333,7 @@
           <td class="background-last-row text-right blue-text">{{ calcTongThanhTien() | number : '1.0-1' :
             'vi_VN'}}</td>
           <td></td>
-          <td *ngIf="!isView"></td>
+          <td *ngIf="!isView" nzRight></td>
         </tr>
         </tbody>
       </nz-table>

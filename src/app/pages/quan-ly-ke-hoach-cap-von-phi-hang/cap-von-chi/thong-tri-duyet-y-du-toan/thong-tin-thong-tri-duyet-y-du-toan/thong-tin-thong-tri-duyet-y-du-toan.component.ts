@@ -528,7 +528,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
       });
     }
   }
-  templateName = 'cap-von-thong-tri-duyet-y-du-toan';
+  templateName = 'thong-tri-y-duyet-du-toan';
 
   async preview(id) {
     this.spinner.show();

@@ -796,13 +796,17 @@
           <div nz-col [nzSpan]="6">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Tên người đại diện ký hợp đồng</nz-form-label>
-              <input [readonly]="isDisableForm()" nz-input formControlName="tenNguoiDdienNhaThau"/>
+              <nz-form-control [nzErrorTip]="error">
+                <input [readonly]="isDisableForm()" nz-input formControlName="tenNguoiDdienNhaThau"/>
+              </nz-form-control>
             </nz-form-item>
           </div>
           <div nz-col [nzSpan]="6">
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Chức vụ</nz-form-label>
-              <input [readonly]="isDisableForm()" nz-input formControlName="chucVuNhaThau"/>
+              <nz-form-control [nzErrorTip]="error">
+                <input [readonly]="isDisableForm()" nz-input formControlName="chucVuNhaThau"/>
+              </nz-form-control>
             </nz-form-item>
           </div>
           <div nz-col [nzSpan]="6">
