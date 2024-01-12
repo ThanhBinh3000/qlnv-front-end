@@ -244,7 +244,8 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
 
   async findCanCuByYear(year: number, chiTieuKhNam?) {
     if (chiTieuKhNam) {
-      if (chiTieuKhNam.capDvi == '2') {
+      console.log(chiTieuKhNam,'chiTieuKhNamchiTieuKhNam');
+      if (chiTieuKhNam.capDvi == '2' && (!chiTieuKhNam.loaiCanCu || chiTieuKhNam.loaiCanCu == 'QD-TCDT')) {
         let res = await this.chiTieuKeHoachNamService.loadThongTinChiTieuKeHoachNam(chiTieuKhNam.qdGocId);
         if (res.msg == MESSAGE.SUCCESS) {
           let data = res.data;
