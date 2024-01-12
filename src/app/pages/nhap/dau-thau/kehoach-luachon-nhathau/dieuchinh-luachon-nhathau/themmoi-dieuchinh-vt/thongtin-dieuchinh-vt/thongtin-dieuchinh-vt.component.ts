@@ -249,10 +249,21 @@ export class ThongtinDieuchinhVtComponent extends Base2Component implements OnIn
   }
 
   deleteRow(i: number): void {
-    this.listOfData = this.listOfData.filter((d, index) => index !== i);
-   this.tinhTongMucDauTu();
-    this.helperService.setIndexArray(this.listOfData);
-    this.dsDxChange.emit(this.listOfData);
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa gói thầu?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.listOfData = this.listOfData.filter((d, index) => index !== i);
+        this.tinhTongMucDauTu();
+        this.helperService.setIndexArray(this.listOfData);
+        this.dsDxChange.emit(this.listOfData);
+      },
+    });
   }
 
   calcTongSl() {

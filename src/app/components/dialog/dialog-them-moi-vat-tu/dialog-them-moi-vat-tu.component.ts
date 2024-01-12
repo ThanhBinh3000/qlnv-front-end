@@ -1,7 +1,7 @@
 import { DanhSachGoiThau } from './../../../models/DeXuatKeHoachuaChonNhaThau';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NzModalRef } from 'ng-zorro-antd/modal';
+import {NzModalRef, NzModalService} from 'ng-zorro-antd/modal';
 import VNnum2words from 'vn-num2words';
 import { Globals } from 'src/app/shared/globals';
 import { UserService } from 'src/app/services/user.service';
@@ -68,6 +68,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService,
     private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
     private soLuongNhapHangService: SoLuongNhapHangService,
+    private modal: NzModalService,
   ) {
     this.formData = this.fb.group({
       id: [null],
@@ -457,15 +458,26 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   }
 
   deleteRow(i, y, z?) {
-    if (i >= 0 && y >= 0 && z >= 0) {
-      this.listOfData[i].children[y].children = this.listOfData[i].children[y].children.filter((d, index) => index !== z);
-    } else if (i >= 0 && y >= 0) {
-      this.listOfData[i].children = this.listOfData[i].children.filter((d, index) => index !== y);
-    } else if (i >= 0) {
-      this.listOfData = this.listOfData.filter((d, index) => index !== i);
-      this.listAllDiemKho.splice(i, 1);
-    }
-    this.calcTong()
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        if (i >= 0 && y >= 0 && z >= 0) {
+          this.listOfData[i].children[y].children = this.listOfData[i].children[y].children.filter((d, index) => index !== z);
+        } else if (i >= 0 && y >= 0) {
+          this.listOfData[i].children = this.listOfData[i].children.filter((d, index) => index !== y);
+        } else if (i >= 0) {
+          this.listOfData = this.listOfData.filter((d, index) => index !== i);
+          this.listAllDiemKho.splice(i, 1);
+        }
+        this.calcTong()
+      },
+    });
   }
 
   validateSlChiCuc(i) {
