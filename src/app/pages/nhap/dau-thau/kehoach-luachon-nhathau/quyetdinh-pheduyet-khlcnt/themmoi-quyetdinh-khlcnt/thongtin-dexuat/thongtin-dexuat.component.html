@@ -312,34 +312,34 @@
       </button>
     </ng-template>
 <nz-card class="mg-t-16 flex-card p-lr16 table-card">
-  <nz-table [nzData]="listDataGroup" class="nowrap" nzBordered>
+  <nz-table [nzData]="listDataGroup" class="nowrap" nzBordered [nzScroll]="{ x: '1000px' }">
     <thead>
       <tr>
-        <th style="width: 2%;" class="text-center">STT</th>
-        <th class="text-center">Tên gói thầu</th>
-        <th class="text-center">Chi cục DTNN</th>
-        <th class="text-center">Điểm kho</th>
-        <th class="text-center">Địa điểm nhập kho</th>
-        <th class="text-center">Chỉ tiêu kế hoạch đuợc giao<br/>(Tấn)</th>
-        <th class="text-center">Số đã thực hiện<br/>(Tấn)</th>
-        <th class="text-center" *ngIf="isCache">Số đề xuất (Tấn)</th>
-        <th class="text-center" *ngIf="!isCache">Số lượng phê duyệt (Tấn)</th>
-        <th class="text-center" *ngIf="isCache">Đơn giá đề xuất<br/>có VAT (đ/kg)</th>
-        <th class="text-center" *ngIf="!isCache">Đơn giá có VAT (đ/kg)</th>
-        <th class="text-center">Thành tiền theo đơn giá<br/> có VAT (đ)</th>
+        <th nzWidth="40px" nzLeft class="text-center">STT</th>
+        <th nzWidth="150px" nzLeft class="text-center">Tên gói thầu</th>
+        <th nzWidth="150px" nzLeft  class="text-center">Chi cục DTNN</th>
+        <th nzWidth="150px"  class="text-center">Điểm kho</th>
+        <th nzWidth="150px"  class="text-center">Địa điểm nhập kho</th>
+        <th nzWidth="150px"  class="text-center">Chỉ tiêu kế hoạch đuợc giao<br/>(Tấn)</th>
+        <th nzWidth="150px"  class="text-center">Số đã thực hiện<br/>(Tấn)</th>
+        <th nzWidth="150px"  class="text-center" *ngIf="isCache">Số đề xuất (Tấn)</th>
+        <th nzWidth="150px"  class="text-center" *ngIf="!isCache">Số lượng phê duyệt (Tấn)</th>
+        <th nzWidth="150px"  class="text-center" *ngIf="isCache">Đơn giá đề xuất<br/>có VAT (đ/kg)</th>
+        <th nzWidth="150px"  class="text-center" *ngIf="!isCache">Đơn giá có VAT (đ/kg)</th>
+        <th nzWidth="180px"  class="text-center">Thành tiền theo đơn giá<br/> có VAT (đ)</th>
 <!--        <th>Đơn giá được duyệt <br/>có VAT (đ/kg)</th>-->
 <!--        <th>Thành tiền theo đơn giá <br/>được duyệt có VAT (đ)</th>-->
-        <th class="text-center">Tiền bão lãnh <br/>dự thầu (đ)</th>
-        <th class="text-center">Trạng thái <br/>đấu thầu</th>
-        <th class="text-center" *ngIf="!isView">Hành động</th>
+        <th nzWidth="150px"  class="text-center">Tiền bão lãnh <br/>dự thầu (đ)</th>
+        <th nzWidth="150px"  class="text-center">Trạng thái <br/>đấu thầu</th>
+        <th nzWidth="100px"  class="text-center" *ngIf="!isView">Hành động</th>
       </tr>
     </thead>
     <tbody>
     <ng-container *ngFor="let dtGoiThau of listOfData , let i = index">
       <tr>
-        <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-        <td>{{dtGoiThau.goiThau}}</td>
-        <td></td>
+        <td nzLeft [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+        <td nzLeft>{{dtGoiThau.goiThau}}</td>
+        <td nzLeft></td>
         <td></td>
         <td></td>
         <td></td>
@@ -363,9 +363,9 @@
       <ng-container *ngIf="expandSet.has(i)">
         <ng-container *ngFor="let chiCuc of dtGoiThau.children, let y = index">
           <tr>
-            <td></td>
-            <td [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>
-            <td>{{chiCuc.tenDvi}}</td>
+            <td nzLeft></td>
+            <td nzLeft [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>
+            <td nzLeft>{{chiCuc.tenDvi}}</td>
             <td></td>
             <td></td>
             <td class="text-right red-text">{{chiCuc.soLuongTheoChiTieu| number : '1.0-99' : 'vi_VN'}}</td>
@@ -382,9 +382,9 @@
           <ng-container *ngIf="expandSet2.has(y)">
             <ng-container *ngFor="let diemKho of chiCuc.children, let z = index">
               <tr>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td nzLeft></td>
+                <td nzLeft></td>
+                <td nzLeft></td>
                 <td>{{diemKho.tenDvi}}</td>
                 <td>{{diemKho.diaDiemNhap}}</td>
                 <td></td>
@@ -411,9 +411,9 @@
       </ng-container>
     </ng-container>
     <tr *ngIf="listOfData.length > 0">
-      <td></td>
-      <td></td>
-      <td></td>
+      <td nzLeft></td>
+      <td nzLeft></td>
+      <td nzLeft></td>
       <td class="text-right blue-text bold-700">TỔNG</td>
       <td></td>
       <td *ngIf="isCache"></td>

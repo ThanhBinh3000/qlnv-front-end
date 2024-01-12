@@ -416,44 +416,46 @@ export class ThongTinComponent implements OnInit, OnChanges {
         this.spinner.hide();
     }
 
-    setValidator(isKy) {
-        if (isKy) {
-            this.formData.controls["maHdong"].setValidators([Validators.required]);
-            this.formData.controls["tenHd"].setValidators([Validators.required]);
-            if (this.loaiVthh.startsWith("02")) {
-              this.formData.controls["noiDung"].setValidators([Validators.required]);
-              this.formData.controls["dieuKien"].setValidators([Validators.required]);
-              this.formData.controls["soNgayThien"].setValidators([Validators.required]);
-            }
-          this.formData.controls["ngayKy"].setValidators([Validators.required]);
-          this.formData.controls["ngayHlucHd"].setValidators([Validators.required]);
-          this.formData.controls["idNguoiDdien"].setValidators([Validators.required]);
-          this.formData.controls["tenNguoiDdienNhaThau"].setValidators([Validators.required]);
-          this.formData.controls["chucVuNhaThau"].setValidators([Validators.required]);
-            this.formData.controls["idQdKqLcnt"].setValidators([Validators.required]);
-            this.formData.controls["tenGoiThau"].setValidators([Validators.required]);
-            this.formData.controls["tenHd"].setValidators([Validators.required]);
-            this.formData.controls["maDvi"].setValidators([Validators.required]);
-            this.formData.controls["tenDvi"].setValidators([Validators.required]);
-            this.formData.controls["diaChi"].setValidators([Validators.required]);
-            this.formData.controls["mst"].setValidators([Validators.required]);
-            this.formData.controls["sdt"].setValidators([Validators.required]);
-            this.formData.controls["stk"].setValidators([Validators.required]);
-            this.formData.controls["moTai"].setValidators([Validators.required]);
-            this.formData.controls["tenNguoiDdien"].setValidators([Validators.required]);
-            this.formData.controls["chucVu"].setValidators([Validators.required]);
-            this.formData.controls["stkNhaThau"].setValidators([Validators.required]);
-            this.formData.controls["moTaiNhaThau"].setValidators([Validators.required]);
-        } else {
-          Object.keys(this.formData.controls).forEach(key => {
-            const control = this.formData.controls[key];
-            control.clearValidators();
-            control.updateValueAndValidity();
-          });
-          this.formData.updateValueAndValidity();
-          this.formData.controls["maHdong"].setValidators([Validators.required]);
-        }
+  setValidator(isKy) {
+    if (isKy) {
+      this.formData.controls["maHdong"].setValidators([Validators.required]);
+      this.formData.controls["tenHd"].setValidators([Validators.required]);
+      if (this.loaiVthh.startsWith("02")) {
+        this.formData.controls["noiDung"].setValidators([Validators.required]);
+        this.formData.controls["dieuKien"].setValidators([Validators.required]);
+        this.formData.controls["soNgayThien"].setValidators([Validators.required]);
+      }
+      this.formData.controls["ngayKy"].setValidators([Validators.required]);
+      this.formData.controls["ngayHlucHd"].setValidators([Validators.required]);
+      this.formData.controls["idNguoiDdien"].setValidators([Validators.required]);
+      this.formData.controls["tenNguoiDdienNhaThau"].setValidators([Validators.required]);
+      this.formData.controls["chucVuNhaThau"].setValidators([Validators.required]);
+      this.formData.controls["idQdKqLcnt"].setValidators([Validators.required]);
+      this.formData.controls["tenGoiThau"].setValidators([Validators.required]);
+      this.formData.controls["tenHd"].setValidators([Validators.required]);
+      this.formData.controls["maDvi"].setValidators([Validators.required]);
+      this.formData.controls["tenDvi"].setValidators([Validators.required]);
+      this.formData.controls["diaChi"].setValidators([Validators.required]);
+      this.formData.controls["mst"].setValidators([Validators.required]);
+      this.formData.controls["sdt"].setValidators([Validators.required]);
+      this.formData.controls["stk"].setValidators([Validators.required]);
+      this.formData.controls["moTai"].setValidators([Validators.required]);
+      this.formData.controls["tenNguoiDdien"].setValidators([Validators.required]);
+      this.formData.controls["chucVu"].setValidators([Validators.required]);
+      this.formData.controls["stkNhaThau"].setValidators([Validators.required]);
+      this.formData.controls["moTaiNhaThau"].setValidators([Validators.required]);
+      this.formData.controls["noiDung"].setValidators([Validators.required]);
+      this.formData.controls["dieuKien"].setValidators([Validators.required]);
+    } else {
+      Object.keys(this.formData.controls).forEach(key => {
+        const control = this.formData.controls[key];
+        control.clearValidators();
+        control.updateValueAndValidity();
+      });
+      this.formData.updateValueAndValidity();
+      this.formData.controls["maHdong"].setValidators([Validators.required]);
     }
+  }
 
 
     redirectPhuLuc(isView, id?) {
