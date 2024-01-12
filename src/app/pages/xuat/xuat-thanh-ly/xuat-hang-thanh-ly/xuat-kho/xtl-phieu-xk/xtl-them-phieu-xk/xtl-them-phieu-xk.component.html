@@ -392,7 +392,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Tổng số lượng (viết bằng chữ)</nz-form-label>
                 <nz-form-control>
-                  <input nz-input [ngModel]="convertTien(this.formData.value.tongSoLuong)"
+                  <input nz-input [ngModel]="convertTien(calTongSlThucTe())"
                          [ngModelOptions]="{standalone: true}" readonly />
                 </nz-form-control>
               </nz-form-item>
@@ -401,7 +401,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Tổng số kinh phí thanh lý thực tế (viết bằng chữ)</nz-form-label>
                 <nz-form-control>
-                  <input nz-input [ngModel]="convertTien(this.formData.value.tongSoLuong)"
+                  <input nz-input [ngModel]="convertTien(calTongSlKinhPhi())"
                          [ngModelOptions]="{standalone: true}" readonly />
                 </nz-form-control>
               </nz-form-item>

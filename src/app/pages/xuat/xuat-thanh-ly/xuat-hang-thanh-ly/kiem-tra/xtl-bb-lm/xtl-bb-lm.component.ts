@@ -31,8 +31,8 @@ export class XtlBbLmComponent extends Base3Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, route, router, _service);
     this.formData = this.fb.group({
       nam: null,
-      soQdXh: null,
-      soPhieuKtcl: null,
+      soBbQd: null,
+      soBienBan: null,
       ngayTu: null,
       ngayDen: null,
       phanLoai : null,
