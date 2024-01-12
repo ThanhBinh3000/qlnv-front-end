@@ -4,17 +4,17 @@
       <div nz-row [nzGutter]="20">
         <div nz-col nzSpan="4">
           <nz-form-control>
-            <nz-form-label>Số quyết định</nz-form-label>
+            <nz-form-label>Số báo cáo</nz-form-label>
             <nz-form-item>
-              <input nz-input formControlName="maSc" />
+              <input nz-input formControlName="soBaoCao" />
             </nz-form-item>
           </nz-form-control>
         </div>
         <div nz-col nzSpan="4">
           <nz-form-control>
-            <nz-form-label>Số tờ trình</nz-form-label>
+            <nz-form-label>Số quyết định</nz-form-label>
             <nz-form-item>
-              <input nz-input formControlName="maSc" />
+              <input nz-input formControlName="soQd" />
             </nz-form-item>
           </nz-form-control>
         </div>
@@ -22,22 +22,22 @@
           <nz-form-control>
             <nz-form-label>Trạng thái</nz-form-label>
             <nz-form-item>
-              <input nz-input formControlName="maSc" />
+              <input nz-input formControlName="trangThai" />
             </nz-form-item>
           </nz-form-control>
         </div>
         <div nz-col nzSpan="6">
           <nz-form-control>
-            <nz-form-label>Ngày ký</nz-form-label>
+            <nz-form-label>Ngày báo cáo</nz-form-label>
             <nz-form-item>
               <div nz-row>
                 <div nz-col nzSpan="12" class="cus-start-date">
-                  <nz-date-picker [nzDisabledDate]="disabledNgayTu" nzFormat="dd/MM/yyyy" formControlName="ngayTu"
+                  <nz-date-picker [nzDisabledDate]="disabledNgayTu" nzFormat="dd/MM/yyyy" formControlName="ngayBaoCaoTu"
                                   nzPlaceHolder="Ngày bắt đầu">
                   </nz-date-picker>
                 </div>
                 <div nz-col nzSpan="12" class="cus-end-date">
-                  <nz-date-picker [nzDisabledDate]="disabledNgayDen" nzFormat="dd/MM/yyyy" formControlName="ngayDen"
+                  <nz-date-picker [nzDisabledDate]="disabledNgayDen" nzFormat="dd/MM/yyyy" formControlName="ngayBaoCaoDen"
                                   nzPlaceHolder="Ngày kết thúc">
                   </nz-date-picker>
                 </div>

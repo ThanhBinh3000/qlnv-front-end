@@ -13,7 +13,7 @@
           </div>
           <div nz-col [nzSpan]="3">
             <nz-form-control [nzErrorTip]="error">
-              <nz-form-label nzRequired>Thời kiểm tra</nz-form-label>
+              <nz-form-label nzRequired>Ngày kiểm tra</nz-form-label>
               <nz-form-item>
                 <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayKtra">
                 </nz-date-picker>
@@ -54,7 +54,7 @@
           </div>
           <div nz-col [nzSpan]="6">
             <nz-form-control [nzErrorTip]="error">
-              <nz-form-label>Thời gian còn lại theo HĐ (ngày)</nz-form-label>
+              <nz-form-label>Thời gian NH còn lại theo HĐ (ngày)</nz-form-label>
               <nz-form-item>
                 <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                   nz-input [ngModel]="thoiGianConLaiBh" [ngModelOptions]="{standalone: true}" [nzDisabled]="true">
