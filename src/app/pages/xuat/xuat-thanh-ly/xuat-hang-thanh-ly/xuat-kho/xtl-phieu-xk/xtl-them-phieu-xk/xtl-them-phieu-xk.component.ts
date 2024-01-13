@@ -361,7 +361,7 @@ export class XtlThemPhieuXkComponent extends Base3Component implements OnInit {
     return true
   }
 
-  calTongSlThucTe() {
+  calTongSlThucTe():number {
     if (this.dataTable) {
       let sum = 0
       this.dataTable.forEach(item => {
@@ -369,6 +369,18 @@ export class XtlThemPhieuXkComponent extends Base3Component implements OnInit {
       })
       return sum;
     }
+    return 0;
+  }
+
+  calTongSlKinhPhi():number {
+    if (this.dataTable) {
+      let sum = 0
+      this.dataTable.forEach(item => {
+        sum += this.nvl(item.kinhPhiThucTe);
+      })
+      return sum;
+    }
+    return 0;
   }
 
   convertTien(tien: number): string {

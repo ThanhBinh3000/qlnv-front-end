@@ -232,13 +232,13 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
         if (this.formData.value.trangThai == this.STATUS.BAN_HANH ) {
           if (this.formData.value.lanDieuChinh > 1) {
             let dataQdGoc = await this.dieuChinhQuyetDinhPdKhlcntService.findByIdQdGoc(data.idQdGoc, this.formData.value.lanDieuChinh -1);
-            if (res.msg == MESSAGE.SUCCESS) {
+            if (dataQdGoc.msg == MESSAGE.SUCCESS) {
               const dataQd = dataQdGoc.data;
               this.danhsachDxCache = cloneDeep(dataQd.children);
             }
           } else {
             let dataQdGoc = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(res.data.idGoc);
-            if (res.msg == MESSAGE.SUCCESS) {
+            if (dataQdGoc.msg == MESSAGE.SUCCESS) {
               const dataQd = dataQdGoc.data;
               this.danhsachDxCache = cloneDeep(dataQd.children);
             }
@@ -264,8 +264,12 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     let body = {
       trangThai: STATUS.BAN_HANH,
       loaiVthh: this.loaiVthh,
-      nam: this.formData.get('nam') ? this.formData.get('nam').value : null,
-      lastest: 1
+      namKhoach: this.formData.get('nam') ? this.formData.get('nam').value : null,
+      lastest: 1,
+      paggingReq: {
+        limit: this.globals.prop.MAX_INTERGER,
+        page: 0
+      },
     }
     let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -516,6 +520,11 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     this.setValidator(isGuiDuyet);
     await this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
+      await this.spinner.hide();
+      return;
+    }
+    if (this.formData.get("trangThai").value == STATUS.DA_DUYET_LDV && isGuiDuyet && (this.fileDinhKems == null || this.fileDinhKems.length == 0)) {
+      this.notification.error(MESSAGE.ERROR, 'File đính kèm QĐ điều chỉnh đã ký và đóng dấu không được để trống.');
       await this.spinner.hide();
       return;
     }

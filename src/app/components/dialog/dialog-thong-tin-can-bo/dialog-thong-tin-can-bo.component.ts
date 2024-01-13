@@ -55,6 +55,7 @@ export class DialogThongTinCanBoComponent implements OnInit {
       email: [null, [Validators.required, Validators.email]],
       username: [null, [Validators.required, Validators.minLength(5), Validators.maxLength(16)]],
       password: [null],
+      domain: [null],
       userType: ['DT', [Validators.required]],
       position: [null, [Validators.required]],
       phoneNo: [null, [Validators.required]],
@@ -210,6 +211,18 @@ export class DialogThongTinCanBoComponent implements OnInit {
 
   }
 
+  selectUserLDap(data) {
+    const distinguishedName = data.distinguishedName
+    const distinguishedNameArr = distinguishedName.split(",")
+    const lab = distinguishedNameArr[2] ? (distinguishedNameArr[2].split("=")[1] || "") : ""
+    const local = distinguishedNameArr[3] ? (distinguishedNameArr[3].split("=")[1] || "") : ""
+    this.formData.patchValue({
+      fullName: data.name,
+      email: data.email,
+      domain: `${lab}.${local}`
+    })
+  }
+
   async save() {
     this.spinner.show();
     if (!this.dataEdit && this.formData.value.sysType === 'APP') {
@@ -319,7 +332,6 @@ export class DialogThongTinCanBoComponent implements OnInit {
     });
     modal.afterClose.subscribe(async (data) => {
       if (data) {
-        console.log('doiMK', data)
         let res = await this.qlNSDService.changePassword(data);
         if (res.msg == MESSAGE.SUCCESS) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);

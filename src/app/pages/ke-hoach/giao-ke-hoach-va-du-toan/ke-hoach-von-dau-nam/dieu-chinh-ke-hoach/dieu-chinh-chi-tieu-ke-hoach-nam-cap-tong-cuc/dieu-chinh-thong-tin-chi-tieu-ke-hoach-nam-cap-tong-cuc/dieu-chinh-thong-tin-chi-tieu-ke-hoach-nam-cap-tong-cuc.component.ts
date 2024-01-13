@@ -680,7 +680,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         }
       } else {
         if (!this.id)
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR)
+          this.notification.error(MESSAGE.ERROR, "Chưa có QĐ giao chỉ tiêu KH năm của Tổng Cục")
       }
     }
 
@@ -855,7 +855,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         }
       } else {
         if (!this.id)
-          this.notification.error(MESSAGE.ERROR, res.msg)
+          this.notification.error(MESSAGE.ERROR, "Chưa có QĐ giao chỉ tiêu KH năm của Cục")
       }
     }
 
@@ -1850,7 +1850,6 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     modalQD.afterClose.subscribe(async (data) => {
 
       if (data) {
-
         let body = this.formData.value
         body.dcKeHoachNamLtDtl = this.dsKeHoachLuongThucClone.map((lt) => {
           return {
@@ -1864,8 +1863,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         body.canCus = this.listCcPhapLy
         body.id = this.thongTinChiTieuKeHoachNam.id
         body.trangThai = STATUS.KHONG_BAN_HANH
-        console.log("KhongBanHanhComponent", { ...data, ...body })
-        this.confirmKhongBH({ ...data, ...body })
+        this.confirmKhongBH({ ...body, ...data })
 
       }
     });

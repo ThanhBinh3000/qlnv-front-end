@@ -504,24 +504,24 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     }
   }
 
-  // validatemaDviTsan(): boolean {
-  //   if (this.dataTable && this.dataTable.length > 0) {
-  //     const data = this.dataTable.flatMap(s => s.children);
-  //     const checkMaDviTsan = {};
-  //     data.forEach(item => {
-  //       const maDviTsan = item.maDviTsan;
-  //       checkMaDviTsan[maDviTsan] = (checkMaDviTsan[maDviTsan] || 0) + 1;
-  //     });
-  //     const duplicateMdvts = Object.entries(checkMaDviTsan)
-  //       .filter(([_, count]) => count > 1)
-  //       .map(([maDviTsan, count]) => `${maDviTsan} (hiện đang bị lặp lại ${count} lần)`);
-  //     if (duplicateMdvts.length > 0) {
-  //       this.notification.error(MESSAGE.ERROR, "Mã đơn vị tài sản " + duplicateMdvts.join(', ') + " vui lòng nhập lại");
-  //       return false;
-  //     }
-  //   }
-  //   return true;
-  // }
+  validatemaDviTsan(): boolean {
+    if (this.dataTable && this.dataTable.length > 0) {
+      const data = this.dataTable.flatMap(s => s.children);
+      const checkMaDviTsan = {};
+      data.forEach(item => {
+        const maDviTsan = item.maDviTsan;
+        checkMaDviTsan[maDviTsan] = (checkMaDviTsan[maDviTsan] || 0) + 1;
+      });
+      const duplicateMdvts = Object.entries(checkMaDviTsan)
+        .filter(([_, count]) => count > 1)
+        .map(([maDviTsan, count]) => `${maDviTsan} (hiện đang bị lặp lại ${count} lần)`);
+      if (duplicateMdvts.length > 0) {
+        this.notification.error(MESSAGE.ERROR, "Mã đơn vị tài sản " + duplicateMdvts.join(', ') + " vui lòng nhập lại");
+        return false;
+      }
+    }
+    return true;
+  }
 
   validateNgay() {
     const {ngayTao, ngayPduyet} = this.formData.value;
