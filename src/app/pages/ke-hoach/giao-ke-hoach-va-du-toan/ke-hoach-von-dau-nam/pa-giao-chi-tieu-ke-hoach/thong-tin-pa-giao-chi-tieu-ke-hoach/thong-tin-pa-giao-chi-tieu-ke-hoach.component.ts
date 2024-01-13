@@ -314,6 +314,11 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
           } else {
             this.notification.warning(MESSAGE.WARNING, res.msg);
           }
+        } else if (this.formData.get('loaiCanCu').value == 'OTHER') {
+          this.formData.patchValue({
+            canCu: chiTieuKhNam.canCu,
+            idCanCu: null,
+          });
         }
       }
     } else {
