@@ -16,19 +16,30 @@
               </nz-select>
             </nz-form-item>
           </div>
+          <div nz-col [nzSpan]="4" *ngIf="userService.isTongCuc()">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Loại báo cáo
+              </nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-select formControlName="loaiBc" (ngModelChange)="changeLoaiBc($event)">
+                  <nz-option *ngFor="let p of listLoaiBc" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
 
-          <div nz-col [nzSpan]="10" *ngIf="userService.isTongCuc()">
-          <nz-form-item>
-            <nz-form-label [nzXs]="6">Cục DTNN KV</nz-form-label>
-            <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-select [(ngModel)]="maCuc" [ngModelOptions]="{standalone: true}"
-                         (ngModelChange)="changeCuc($event)">
-                <nz-option *ngFor="let p of dsDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
-              </nz-select>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-          <div nz-col [nzSpan]="6" *ngIf="!userService.isTongCuc() || userService.isCuc()">
+          <div nz-col [nzSpan]="6" *ngIf="userService.isTongCuc() && formData.value.loaiBc != '01'">
+            <nz-form-item>
+              <nz-form-label [nzXs]="6">Cục DTNN KV</nz-form-label>
+              <nz-form-control nz-col [nzErrorTip]="error">
+                <nz-select [(ngModel)]="maCuc" [ngModelOptions]="{standalone: true}"
+                           (ngModelChange)="changeCuc($event)">
+                  <nz-option *ngFor="let p of dsDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="6" *ngIf="!userService.isTongCuc() || (userService.isCuc() && formData.value.loaiBc != '01')">
             <nz-form-item>
               <nz-form-label [nzXs]="6">Chi Cục DTNN</nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
