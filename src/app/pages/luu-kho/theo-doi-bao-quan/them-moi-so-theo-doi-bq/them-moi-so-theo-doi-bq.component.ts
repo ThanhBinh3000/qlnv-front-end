@@ -143,7 +143,7 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
       let res = await this.danhMucService.getDetail(this.formData.value.cloaiVthh);
       if (res.msg == MESSAGE.SUCCESS) {
         this.listPhuongThucBaoQuan = res.data?.phuongPhapBq
-        this.listHinhThucBaoQuan = res.data?.hinhThucBq
+        this.listHinhThucBaoQuan = res.data?.loaiHinhBq
         this.formData.patchValue({
           thoiHanLk : res.data.thoiHanLk,
           thoiHanBh : res.data.thoiHanBh
@@ -154,7 +154,7 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
         let res = await this.danhMucService.getDetail(this.formData.value.loaiVthh);
         if (res.msg == MESSAGE.SUCCESS) {
           this.listPhuongThucBaoQuan = res.data?.phuongPhapBq
-          this.listHinhThucBaoQuan = res.data?.hinhThucBq
+          this.listHinhThucBaoQuan = res.data?.loaiHinhBq
         }
         this.formData.patchValue({
           thoiHanLk : res.data.thoiHanLk,
