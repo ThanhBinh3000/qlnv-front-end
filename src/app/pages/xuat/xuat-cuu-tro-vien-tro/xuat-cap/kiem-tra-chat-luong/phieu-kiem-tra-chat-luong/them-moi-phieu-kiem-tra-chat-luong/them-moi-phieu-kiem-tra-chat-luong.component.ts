@@ -123,7 +123,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
       }
     );
     this.maPhieu = 'PKTCL-' + this.userInfo.DON_VI.tenVietTat;
-    this.formData.get('chungLoaiGao')?.valueChanges.pipe(startWith(this.formData.get('noiDung')?.value), pairwise()).subscribe(([prevValue, currentValue]) => {
+    this.formData.get('chungLoaiGao')?.valueChanges.pipe(startWith(this.formData.get('chungLoaiGao')?.value), pairwise()).subscribe(([prevValue, currentValue]) => {
       if (currentValue && currentValue !== prevValue) {
         this.loadDsChiTieuChatLuong(currentValue)
       }
