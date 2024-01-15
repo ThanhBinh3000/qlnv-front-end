@@ -41,7 +41,7 @@
       <nz-collapse-panel nzHeader="THÔNG TIN CHUNG" [nzActive]="true">
         <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
           <div nz-row [nzGutter]="24">
-            <div nz-col nzSpan="2">
+            <div nz-col nzSpan="3">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Năm kế hoạch
@@ -86,7 +86,7 @@
 <!--                </nz-form-control>-->
 <!--              </nz-form-item>-->
 <!--            </div>-->
-            <div nz-col [nzSpan]="4">
+            <div nz-col [nzSpan]="6">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ thông tin đấu thầu
                 </nz-form-label>
@@ -99,6 +99,16 @@
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="8">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true" > Gói thầu</nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-select formControlName="listIdGthau" nzMode="multiple" nzAllowClear [nzDisabled]="isViewDetail" >
+                    <nz-option *ngFor="let item of listGoiThau" [nzValue]="item.id" [nzLabel]="item.goiThau" ></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="24">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Trích yếu</nz-form-label>
                 <nz-form-control>
@@ -166,6 +176,7 @@
   <app-themmoi-thongtin-dauthau *ngIf="formData.value.soQdPdKhlcnt && !loaiVthh.startsWith('02')" [isShowFromKq]="true"
                                 [isKqDaBh]="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"
                                 [idInput]="formData.value.idQdPdKhlcntDtl"
+                                [listIdGthau]="formData.value.listIdGthau"
                                 [titleThongTinChung]="'KẾT QUẢ LỰA CHỌN NHÀ THẦU'"
                                 [loaiVthh]="loaiVthh" #thongtindt>
   </app-themmoi-thongtin-dauthau>
@@ -175,6 +186,7 @@
         <app-themmoi-thongtin-dauthau-vt [isShowFromKq]="true"
                                          [isKqDaBh]="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU"
                                          [idInput]="formData.value.idQdPdKhlcnt"
+                                         [listIdGthau]="formData.value.listIdGthau"
                                          [loaiVthh]="loaiVthh" #thongtindtvt>
         </app-themmoi-thongtin-dauthau-vt>
       </nz-collapse-panel>
