@@ -65,6 +65,7 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
     this.formData = this.fb.group({
       id: [],
       trangThai: ['00'],
+      trangThaiSoKho: [null],
       tenTrangThai: ['Dự thảo'],
       nam: [dayjs().year(), [Validators.required]],
       tenDvi: ['', [Validators.required]],
@@ -309,7 +310,7 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
   }
 
   isShowEditDelete(item) {
-    return item.ngayKtra == dayjs().format('YYYY-MM-DD') && item.idNguoiKtra == this.userInfo.ID && item.trangThai == this.STATUS.DU_THAO;
+    return item.ngayKtra == dayjs().format('YYYY-MM-DD') && item.idNguoiKtra == this.userInfo.ID && item.trangThai == this.STATUS.DU_THAO && this.formData.value.trangThaiSoKho != STATUS.DA_DONG;;
   }
 
   showPheDuyetTuChoi() {
