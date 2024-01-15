@@ -768,13 +768,14 @@ export class Base2Component implements OnInit {
       dataTable[index].danhGia = "";
       return;
     }
-    let kq = parseFloat(event.replace(",", "."));
+    let kq = typeof event === "string" || event instanceof String ? parseFloat(event.replace(",", ".")) : event;
     if ((kq === 0 || kq >= 0) && index !== null) {
-      let toiThieu = parseFloat(dataTable[index].chiSoClToiThieu.replace(",", "."));
-      let toiDa = parseFloat(dataTable[index].chiSoClToiDa.replace(",", "."));
-      let tt = parseFloat(dataTable[index].toanTu);
+      let toiThieu = typeof dataTable[index].chiSoClToiThieu === "string" || dataTable[index].chiSoClToiThieu instanceof String ? parseFloat(dataTable[index].chiSoClToiThieu.replace(",", ".")) : dataTable[index].chiSoClToiThieu;
+      let toiDa = typeof dataTable[index].chiSoClToiDa === "string" || dataTable[index].chiSoClToiDa instanceof String ? parseFloat(dataTable[index].chiSoClToiDa.replace(",", ".")) : dataTable[index].chiSoClToiDa;
+      let tt = typeof dataTable[index].chiSoClToiDa === "string" || dataTable[index].chiSoClToiDa instanceof String ? parseFloat(dataTable[index].toanTu) : dataTable[index].toanTu;
+
       if ([1, 4].includes(tt) && (toiThieu === 0 || toiThieu > 0)) {
-        if ((tt === 1 && toiThieu < kq) || (tt === 4 && toiThieu <= kq)) {
+        if ((tt === 1 && toiThieu < kq && (!toiDa || kq <= toiDa)) || (tt === 4 && toiThieu <= kq && (!toiDa || kq <= toiDa))) {
           dataTable[index].danhGia = "Đạt";
         }
         else {
@@ -782,7 +783,7 @@ export class Base2Component implements OnInit {
         }
       }
       if ([2, 5].includes(tt) && toiDa > 0) {
-        if ((tt === 2 && kq < toiDa) || (tt === 5 && kq <= toiDa)) {
+        if ((tt === 2 && kq < toiDa && (!toiThieu || kq >= toiThieu)) || (tt === 5 && kq <= toiDa && (!toiThieu || kq >= toiThieu))) {
           dataTable[index].danhGia = "Đạt";
         }
         else {

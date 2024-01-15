@@ -115,6 +115,7 @@ export class QuyetDinhGnvComponent extends Base2Component implements OnInit {
         this.formData.patchValue({ trangThai: this.STATUS.BAN_HANH })
       }
       await this.timKiem()
+      await this.loadDsVthh();
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
