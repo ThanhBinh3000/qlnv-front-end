@@ -54,7 +54,7 @@ export class XuatThanhLyComponent implements OnInit {
     },
     {
       url: '/to-chuc',
-      name: 'Tổ chức triển khai KH bán đấu giá thanh lý hàng DTQG',
+      name: 'Tổ chức thực hiện thanh lý hàng DTQG',
       accessPermisson: 'XHDTQG_XTL_TCKHBDG'
     },
     {
