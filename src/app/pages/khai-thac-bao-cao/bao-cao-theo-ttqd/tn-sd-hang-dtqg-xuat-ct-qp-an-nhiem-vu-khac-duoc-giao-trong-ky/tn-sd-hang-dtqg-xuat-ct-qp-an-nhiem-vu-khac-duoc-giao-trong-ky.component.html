@@ -51,11 +51,11 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="6" *ngIf="!userService.isTongCuc() || userService.isCuc()">
+          <div nz-col [nzSpan]="6" *ngIf="!userService.isChiCuc()">
             <nz-form-item>
               <nz-form-label [nzXs]="6">Chi Cục DTNN</nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select [(ngModel)]="maChiCuc" [ngModelOptions]="{standalone: true}">
+                <nz-select [(ngModel)]="maChiCuc" [ngModelOptions]="{standalone: true}" (ngModelChange)="changeChiCuc($event)">
                   <nz-option *ngFor="let p of listChiCuc" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
                 </nz-select>
               </nz-form-control>

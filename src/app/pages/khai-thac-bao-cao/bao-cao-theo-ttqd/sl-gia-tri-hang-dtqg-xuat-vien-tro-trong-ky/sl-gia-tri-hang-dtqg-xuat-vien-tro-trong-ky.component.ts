@@ -62,6 +62,8 @@ export class SlGiaTriHangDtqgXuatVienTroTrongKyComponent extends Base2Component 
         quy: [null, [Validators.required]],
         bieuSo: null,
         dviBaoCao: null,
+        tenCuc: null,
+        tenChiCuc: null,
         dviNhanBaoCao: null,
         loaiBc: null,
         loaiKyBc: ['02', [Validators.required]],
@@ -222,6 +224,9 @@ export class SlGiaTriHangDtqgXuatVienTroTrongKyComponent extends Base2Component 
 
   async changeCuc(event: any) {
     if (event) {
+      this.formData.patchValue({
+        tenCuc: this.dsDonVi.find(x => x.maDvi == event).tenDvi
+      })
       let body = {
         trangThai: "01",
         maDviCha: event,
@@ -233,6 +238,14 @@ export class SlGiaTriHangDtqgXuatVienTroTrongKyComponent extends Base2Component 
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
+    }
+  }
+
+  async changeChiCuc(event: any) {
+    if (event) {
+      this.formData.patchValue({
+        tenChiCuc: this.listChiCuc.find(x => x.maDvi == event).tenDvi
+      })
     }
   }
 
