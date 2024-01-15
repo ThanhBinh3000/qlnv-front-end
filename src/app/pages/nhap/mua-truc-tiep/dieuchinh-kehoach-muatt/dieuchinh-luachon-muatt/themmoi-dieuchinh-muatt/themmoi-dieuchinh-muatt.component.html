@@ -328,7 +328,7 @@
                             <th style="width: 35px">STT</th>
                             <th>Cục DTNN KV</th>
                             <th>Địa chỉ</th>
-                            <th>Số kế hoạch/đề xuất</th>
+                            <th>Số công văn/tờ trình</th>
                             <th>Ngày ký</th>
                             <th>Trích yếu</th>
                             <th>Tên dự án</th>
@@ -368,7 +368,7 @@
                     <nz-card class="mg-t-10 flex-card p-lr16 ">
                         <app-thongtin-dieuchinh [title]="'Quyết định điều chỉnh'" [dataInput]="dataInput"
                             [isCache]="false" [isView]="formData.value.trangThai != STATUS.DA_LAP"
-                            (data)="onChangesData($event)" (dataChild)="onChangesDataChild($event)" [dataChiTieu]="this.dataChiTieu" (dataTableChange)="setNewTableData($event)" (objectChange)="objectChange($event)">
+                            (data)="onChangesData($event)" (dataChild)="onChangesDataChild($event)" [dataChiTieu]="this.dataChiTieu" (objectChange)="objectChange($event)">
                         </app-thongtin-dieuchinh>
                     </nz-card>
                 </div>

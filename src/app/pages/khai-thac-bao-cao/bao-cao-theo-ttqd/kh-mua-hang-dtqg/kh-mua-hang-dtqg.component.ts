@@ -35,6 +35,7 @@ export class KhMuaHangDtqgComponent extends Base2Component implements OnInit {
   listChiCuc: any[] = [];
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
+  listLoaiBc: any[] = [];
   rows: any[] = [];
   maCuc: any;
   maChiCuc: any;
@@ -55,6 +56,9 @@ export class KhMuaHangDtqgComponent extends Base2Component implements OnInit {
         nam: [dayjs().get("year"), [Validators.required]],
         quy: null,
         bieuSo: null,
+        tenCuc: null,
+        tenChiCuc: null,
+        loaiBc: [null, [Validators.required]],
         dviBaoCao: null,
         dviNhanBaoCao: null,
       }
@@ -72,6 +76,7 @@ export class KhMuaHangDtqgComponent extends Base2Component implements OnInit {
       }
       await Promise.all([
         this.loadDsDonVi(),
+        this.loadDsLoaiBc(),
         this.loadDsVthh()
       ]);
     } catch (e) {
@@ -80,6 +85,14 @@ export class KhMuaHangDtqgComponent extends Base2Component implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
     await this.spinner.hide();
+  }
+
+  async loadDsLoaiBc() {
+    let res = await this.danhMucService.danhMucChungGetAll("LOAI_BAO_CAO");
+    if (res.msg == MESSAGE.SUCCESS) {
+      console.log(res, "4444")
+      this.listLoaiBc = res.data
+    }
   }
 
   downloadPdf() {
@@ -160,6 +173,9 @@ export class KhMuaHangDtqgComponent extends Base2Component implements OnInit {
 
   async changeCuc(event: any) {
     if (event) {
+      this.formData.patchValue({
+        tenCuc: this.dsDonVi.find(x => x.maDvi == event).tenDvi
+      })
       let body = {
         trangThai: "01",
         maDviCha: event,
@@ -179,6 +195,13 @@ export class KhMuaHangDtqgComponent extends Base2Component implements OnInit {
     let res = await this.danhMucService.danhMucChungGetAll("LOAI_HHOA");
     if (res.msg == MESSAGE.SUCCESS) {
       this.listVthh = res.data.filter(item => item.ma != "02");
+    }
+  }
+
+  async changeLoaiBc(event: any){
+    if(event == '01'){
+      this.maCuc = null;
+      this.maChiCuc = null;
     }
   }
 

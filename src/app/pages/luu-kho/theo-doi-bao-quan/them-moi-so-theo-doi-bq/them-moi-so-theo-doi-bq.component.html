@@ -290,14 +290,14 @@
             <span>Xuất file</span>
           </button>
           <button type="button" class="btn btn-sub xanh-nhat ml-2"
-            *ngIf="(this.userService.isCuc() || this.userService.isChiCuc()) && this.formData.value.trangThai == STATUS.DA_DUYET_LDCC
+            *ngIf="(this.userService.isCuc() || this.userService.isChiCuc()) && this.formData.value.trangThai == STATUS.DA_DUYET_LDCC && this.formData.value.trangThaiSoKho != STATUS.DA_DONG
             && (isAccessPermisson('LKQLCL_TDBQ_GHINHATTRINH_LDCCUC') || isAccessPermisson('LKQLCL_TDBQ_GHINHATTRINH_LDCUC'))"
             (click)="themMoiCtiet($event,true)">
             <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Xác nhận</span>
           </button>
           <button type="button" class="btn btn-sub"
-            *ngIf=" this.userService.isChiCuc() && this.formData.value.trangThai == STATUS.DA_DUYET_LDCC
+            *ngIf=" this.userService.isChiCuc() && this.formData.value.trangThai == STATUS.DA_DUYET_LDCC && this.formData.value.trangThaiSoKho != STATUS.DA_DONG
             && (isAccessPermisson('LKQLCL_TDBQ_GHINHATTRINH_THUKHO') ||isAccessPermisson('LKQLCL_TDBQ_GHINHATTRINH_KTVBQ'))"
             (click)="themMoiCtiet($event,false)">
             <i class="icon htvbdh_dau-cong"></i>

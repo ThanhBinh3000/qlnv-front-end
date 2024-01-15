@@ -71,6 +71,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
     trangThai: ""
   };
   previewName: string;
+  listGoiThau: any[] = [];
   constructor(
     modal: NzModalService,
     private danhMucService: DanhMucService,
@@ -108,6 +109,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
         fileDinhKems: new FormControl([]),
         tgianTrinhKqTcg: [''],
         tgianTrinhTtd: [''],
+        listIdGthau: [],
       }
     );
   }
@@ -149,8 +151,22 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
       if (id > 0) {
         res = await this.quyetDinhPheDuyetKetQuaLCNTService.getDetail(id);
       }
-      if (res.msg == MESSAGE.SUCCESS) {
+      if (res != null && res.msg == MESSAGE.SUCCESS) {
         const dataDetail = res.data;
+        if (this.loaiVthh.startsWith('02')) {
+          let gthauList = dataDetail.hhQdKhlcntHdr?.dchinhDxKhLcntHdr ? dataDetail.hhQdKhlcntHdr?.dchinhDxKhLcntHdr.dsGthau : dataDetail.hhQdKhlcntHdr?.dsGthau;
+          if (this.isViewDetail) {
+            this.listGoiThau = gthauList.filter(x => dataDetail.listIdGthau?.includes(x.id))
+          } else {
+            this.listGoiThau = gthauList.filter(x => ( x.idNhaThau == null && x.dsNhaThauDthau != null && x.dsNhaThauDthau.length > 0))
+          }
+        } else {
+          if (this.isViewDetail) {
+            this.listGoiThau = dataDetail.qdKhlcntDtl?.children?.filter(x => dataDetail.listIdGthau?.includes(x.id))
+          } else {
+            this.listGoiThau = dataDetail.qdKhlcntDtl?.children?.filter(x => ( x.idNhaThau == null && x.dsNhaThauDthau != null && x.dsNhaThauDthau.length > 0))
+          }
+        }
         this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
         this.formData.patchValue({
           soQd: dataDetail.soQd?.split('/')[0],
@@ -214,6 +230,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
           idGoiThau: item.id,
           idNhaThau: item.kqlcntDtl?.idNhaThau,
           donGiaVat: item.kqlcntDtl?.donGiaVat,
+          thanhTienNhaThau: item.kqlcntDtl?.thanhTienNhaThau,
           trangThai: item.kqlcntDtl?.trangThai,
           tenNhaThau: item.kqlcntDtl?.tenNhaThau,
           dienGiaiNhaThau: item.kqlcntDtl?.dienGiaiNhaThau
@@ -256,6 +273,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
     if (isBanHanh) {
       this.formData.controls["soQd"].setValidators([Validators.required]);
       this.formData.controls["ngayKy"].setValidators([Validators.required]);
+      this.formData.controls["listIdGthau"].setValidators([Validators.required]);
       if (this.loaiVthh.startsWith('02')) {
         this.formData.controls["tgianTrinhKqTcg"].setValidators([Validators.required]);
         this.formData.controls["tgianTrinhTtd"].setValidators([Validators.required]);
@@ -321,30 +339,19 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
     if (this.loaiVthh.startsWith("02")) {
       body = {
         namKhoach: this.formData.get('namKhoach').value,
-        trangThaiDt: STATUS.HOAN_THANH_CAP_NHAT,
-        paggingReq: {
-          limit: this.globals.prop.MAX_INTERGER,
-          page: 0,
-        },
         loaiVthh: this.loaiVthh,
         trangThai: STATUS.BAN_HANH,
-        lastest: 0
       };
     } else {
       body = {
         namKhoach: this.formData.get('namKhoach').value,
-        trangThaiDtl: STATUS.HOAN_THANH_CAP_NHAT,
         maDvi: this.userInfo.MA_DVI,
-        paggingReq: {
-          limit: this.globals.prop.MAX_INTERGER,
-          page: 0,
-        },
         loaiVthh: this.loaiVthh
       };
     }
 
-    let res = await this.thongTinDauThauService.search(body);
-    this.listQdPdKhlcnt = res.data.content.filter(item => isEmpty(item.soQdPdKqLcnt));
+    let res = await this.thongTinDauThauService.getDsTtDthau(body);
+    this.listQdPdKhlcnt = res.data;
 
     this.listQdPdKhlcnt.forEach(element => {
       if (this.loaiVthh == '02') {
@@ -384,6 +391,11 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
           loaiVthh: data.loaiVthh,
           cloaiVthh: data.cloaiVthh
         })
+        if (this.loaiVthh.startsWith('02')) {
+          this.listGoiThau = data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.dsGthau : data.dsGthau;
+        } else {
+          this.listGoiThau = data.children;
+        }
       }
     });
   }

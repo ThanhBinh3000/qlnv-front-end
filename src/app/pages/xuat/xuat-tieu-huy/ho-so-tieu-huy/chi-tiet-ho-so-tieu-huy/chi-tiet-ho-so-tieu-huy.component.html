@@ -40,6 +40,10 @@
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
+      <button *ngIf="showRedirectPage()" type="button" class="btn btn-main ml-2" (click)="redirectPage()">
+        <i class="icon htvbdh_tcdt_guiduyet"></i>
+        <span>{{this.formData.value.trangThai == STATUS.DADUYET_BTC ? 'Tạo quyết định' : 'Tạo thông báo'}}</span>
+      </button>
     </div>
   </div>
   <nz-alert class="mg-t-10"

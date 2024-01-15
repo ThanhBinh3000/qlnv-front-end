@@ -96,6 +96,7 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
             thoiGianPd: [res.thoiGianPdTu, res.thoiGianPdDen],
           })
           this.symbol = '/' + (ttr[1] || '');
+          res.children = res.children.filter( x => x.xhThDanhSachHdr?.maDvi.startsWith(this.userInfo.MA_DVI));
           this.dataTable = chain(res.children).groupBy('xhThDanhSachHdr.tenChiCuc').map((value, key) => ({
               expandSet: true,
               tenDonVi: key,
@@ -358,5 +359,19 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
       }
     });
     this.spinner.hide();
+  }
+
+  showRedirectPage(){
+    let trangThai = this.formData.value.trangThai;
+    if (this.userService.isTongCuc()) {
+      return (trangThai == STATUS.DADUYET_BTC || trangThai == STATUS.TUCHOI_BTC);
+    }
+    return false
+  }
+
+  redirectPage() {
+    let trangThai = this.formData.value.trangThai;
+    let url = trangThai == STATUS.DADUYET_BTC ? '/xuat/xuat-tieu-huy/quyet-dinh/them-moi' : '/xuat/xuat-tieu-huy/thong-bao-kq'
+    this.router.navigate([url]);
   }
 }

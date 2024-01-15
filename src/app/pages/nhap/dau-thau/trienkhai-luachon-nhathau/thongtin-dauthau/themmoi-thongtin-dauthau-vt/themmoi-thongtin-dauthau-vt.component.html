@@ -102,6 +102,10 @@
                     </nz-form-control>
                   </nz-form-item>
                 </div>
+              </div>
+            </div>
+            <div nz-col nzSpan="8">
+              <div nz-row [nzGutter]="24" class="label-50 mg-t-10 border-right">
                 <div nz-col nzSpan="24">
                   <nz-form-item>
                     <nz-form-label [nzNoColon]="true"> Tổng giá trị các gói thầu
@@ -113,10 +117,6 @@
                     </nz-form-control>
                   </nz-form-item>
                 </div>
-              </div>
-            </div>
-            <div nz-col nzSpan="8">
-              <div nz-row [nzGutter]="24" class="label-50 mg-t-10 border-right">
                 <div nz-col nzSpan="24">
                   <nz-form-item>
                     <nz-form-label [nzNoColon]="true"> Loại hợp đồng</nz-form-label>
@@ -141,39 +141,39 @@
                     </nz-form-control>
                   </nz-form-item>
                 </div>
-                <div nz-col nzSpan="24">
-                  <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Thời gian bắt đầu tổ chức LCNT <br> (Thời gian phát
-                      hành
-                      HSMT)
-                    </nz-form-label>
-                    <nz-form-control>
-                      <nz-input-group>
-                        <input nz-input formControlName="tgianBdauTchuc" readonly/>
-                      </nz-input-group>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col nzSpan="24">
-                  <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Thời điểm mở thầu</nz-form-label>
-                    <nz-form-control>
-                      <nz-input-group>
-                        <input nz-input formControlName="tgianMthau" readonly/>
-                      </nz-input-group>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col nzSpan="24">
-                  <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Thời điểm đóng thầu</nz-form-label>
-                    <nz-form-control>
-                      <nz-input-group>
-                        <input nz-input formControlName="tgianDthau" readonly/>
-                      </nz-input-group>
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
+<!--                <div nz-col nzSpan="24">-->
+<!--                  <nz-form-item>-->
+<!--                    <nz-form-label [nzNoColon]="true"> Thời gian bắt đầu tổ chức LCNT <br> (Thời gian phát-->
+<!--                      hành-->
+<!--                      HSMT)-->
+<!--                    </nz-form-label>-->
+<!--                    <nz-form-control>-->
+<!--                      <nz-input-group>-->
+<!--                        <input nz-input formControlName="tgianBdauTchuc" readonly/>-->
+<!--                      </nz-input-group>-->
+<!--                    </nz-form-control>-->
+<!--                  </nz-form-item>-->
+<!--                </div>-->
+<!--                <div nz-col nzSpan="24">-->
+<!--                  <nz-form-item>-->
+<!--                    <nz-form-label [nzNoColon]="true"> Thời điểm mở thầu</nz-form-label>-->
+<!--                    <nz-form-control>-->
+<!--                      <nz-input-group>-->
+<!--                        <input nz-input formControlName="tgianMthau" readonly/>-->
+<!--                      </nz-input-group>-->
+<!--                    </nz-form-control>-->
+<!--                  </nz-form-item>-->
+<!--                </div>-->
+<!--                <div nz-col nzSpan="24">-->
+<!--                  <nz-form-item>-->
+<!--                    <nz-form-label [nzNoColon]="true"> Thời điểm đóng thầu</nz-form-label>-->
+<!--                    <nz-form-control>-->
+<!--                      <nz-input-group>-->
+<!--                        <input nz-input formControlName="tgianDthau" readonly/>-->
+<!--                      </nz-input-group>-->
+<!--                    </nz-form-control>-->
+<!--                  </nz-form-item>-->
+<!--                </div>-->
                 <div nz-col nzSpan="24">
                   <nz-form-item>
                     <nz-form-label [nzNoColon]="true"> Tổng giá trị các gói thầu đã trúng
@@ -251,7 +251,7 @@
                 </div>
                 <div nz-col nzSpan="24">
                   <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
+                    <nz-form-label [nzNoColon]="true"> Loại hình nhập</nz-form-label>
                     <nz-form-control>
                       <nz-input-group>
                         <input nz-input formControlName="tenLoaiHinhNx" readonly/>
@@ -261,7 +261,7 @@
                 </div>
                 <div nz-col nzSpan="24">
                   <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất</nz-form-label>
+                    <nz-form-label [nzNoColon]="true"> Kiểu nhập</nz-form-label>
                     <nz-form-control>
                       <nz-input-group>
                         <input nz-input formControlName="tenKieuNx" readonly/>
@@ -442,7 +442,7 @@
             <th>Mã số thuế</th>
             <th>Địa chỉ</th>
             <th>Số điện thoại</th>
-            <th *ngIf="formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT" width="30px">Hành động
+            <th *ngIf="formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !daCoKqLcnt" width="30px">Hành động
             </th>
           </tr>
           </thead>
@@ -465,7 +465,7 @@
             </td>
             <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow.diaChi"/></td>
             <td><input nz-input pattern="[0-9]*" [readonly]="isView" [(ngModel)]="itemRow.sdt"/></td>
-            <td *ngIf="!isShowFromKq">
+            <td *ngIf="!isShowFromKq && !daCoKqLcnt">
               <a (click)="addRow()">
                 <i class="fa fa-plus" title="Thêm bản ghi"></i>
               </a>
@@ -482,7 +482,7 @@
               <td>{{ data.mst }}</td>
               <td>{{ data.diaChi }}</td>
               <td>{{ data.sdt }}</td>
-              <td *ngIf="!isShowFromKq && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isView"
+              <td *ngIf="!isShowFromKq && !daCoKqLcnt && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isView"
                   class="text-center">
                 <a (click)="startEdit(i)">
                   <i class=" fa fa-pencil" title="Sửa bản ghi"></i>
@@ -553,7 +553,7 @@
             </nz-form-label>
             <div class="list-file">
               <file-list
-                [isViewDetail]="isShowFromKq || formData.value.trangThaiDt == STATUS.HOAN_THANH_CAP_NHAT || isView"
+                [isViewDetail]="isShowFromKq || daCoKqLcnt || formData.value.trangThaiDt == STATUS.HOAN_THANH_CAP_NHAT || isView"
                 [data]="fileDinhKems"></file-list>
             </div>
           </nz-form-item>
@@ -563,7 +563,7 @@
             <nz-form-label [nzNoColon]="true"> Ghi chú</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
                 <textarea
-                  [readonly]="isShowFromKq || formData.value.trangThaiDt == STATUS.HOAN_THANH_CAP_NHAT || isView"
+                  [readonly]="isShowFromKq || daCoKqLcnt || formData.value.trangThaiDt == STATUS.HOAN_THANH_CAP_NHAT || isView"
                   rows="3" nz-input formControlName="ghiChuTtdt"></textarea>
             </nz-form-control>
           </nz-form-item>
@@ -601,7 +601,7 @@
 </nz-modal>
 <ng-template #themMoiGt>
   <button
-    *ngIf="idGoiThau > 0 && !isShowFromKq && formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT && !isView"
+    *ngIf="idGoiThau > 0 && !daCoKqLcnt && !isShowFromKq && formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT && !isView"
     type="button" class="btn btn-sub xanh" (click)="saveGoiThauPopup($event)">
     <i class="icon htvbdh_tcdt_save"></i>
     <span>Lưu</span>

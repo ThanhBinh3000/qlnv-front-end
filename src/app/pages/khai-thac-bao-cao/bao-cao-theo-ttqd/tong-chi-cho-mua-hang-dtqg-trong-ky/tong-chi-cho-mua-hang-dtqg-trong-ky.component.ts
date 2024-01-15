@@ -39,6 +39,7 @@ export class TongChiChoMuaHangDtqgTrongKyComponent extends Base2Component implem
   maCuc: any;
   maChiCuc: any;
   listLoaiKyBc: any[] = [];
+  listLoaiBc: any[] = [];
   listKyBc: any[] = [];
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -57,8 +58,10 @@ export class TongChiChoMuaHangDtqgTrongKyComponent extends Base2Component implem
         quy: [null, [Validators.required]],
         bieuSo: null,
         dviBaoCao: null,
+        tenCuc: null,
+        tenChiCuc: null,
         dviNhanBaoCao: null,
-        loaiBc: null,
+        loaiBc: [null, [Validators.required]],
         loaiKyBc: ['02', [Validators.required]],
       }
     );
@@ -77,6 +80,7 @@ export class TongChiChoMuaHangDtqgTrongKyComponent extends Base2Component implem
         this.loadDsDonVi(),
         this.loadDsVthh(),
         this.loadDsKyBc(),
+        this.loadDsLoaiBc(),
         this.changLoaiKyBc('02')
       ]);
     } catch (e) {
@@ -95,6 +99,15 @@ export class TongChiChoMuaHangDtqgTrongKyComponent extends Base2Component implem
       if (this.listLoaiKyBc && this.listLoaiKyBc.length > 0) {
         this.listLoaiKyBc.sort((a, b) => (a.ma - b.ma))
       }
+    }
+  }
+
+
+  async loadDsLoaiBc() {
+    let res = await this.danhMucService.danhMucChungGetAll("LOAI_BAO_CAO");
+    if (res.msg == MESSAGE.SUCCESS) {
+      console.log(res, "4444")
+      this.listLoaiBc = res.data
     }
   }
 
@@ -119,6 +132,13 @@ export class TongChiChoMuaHangDtqgTrongKyComponent extends Base2Component implem
           break;
         }
       }
+    }
+  }
+
+  async changeLoaiBc(event: any){
+    if(event == '01'){
+      this.maCuc = null;
+      this.maChiCuc = null;
     }
   }
 
@@ -215,6 +235,9 @@ export class TongChiChoMuaHangDtqgTrongKyComponent extends Base2Component implem
 
   async changeCuc(event: any) {
     if (event) {
+      this.formData.patchValue({
+        tenCuc: this.dsDonVi.find(x => x.maDvi == event).tenDvi
+      })
       let body = {
         trangThai: "01",
         maDviCha: event,

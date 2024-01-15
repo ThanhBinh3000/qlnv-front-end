@@ -326,7 +326,6 @@ export class XtlThemPhieuKtraClComponent extends Base3Component implements OnIni
   onChangeKetQua($event, data) {
     console.log(+$event, data);
     if ((+$event || +$event == 0) && (data.mucYeuCauNhapToiDa || data.mucYeuCauNhapToiThieu)) {
-      console.log('ádoasdasd');
       if (+$event >= +data.mucYeuCauNhapToiThieu && +$event <= +data.mucYeuCauNhapToiDa) {
         data.danhGia = 'Đạt';
       } else {

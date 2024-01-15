@@ -187,7 +187,7 @@
                          nzHeader="THÔNG TIN CÁC LẦN THỰC HIỆN ĐẤU GIÁ">
         <ng-template #tmpThemMoiPhienDauGia>
           <div class="buttons"
-               *ngIf="this.userService.isCuc() && formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT">
+               *ngIf="this.userService.isCuc() && formData.value.trangThaiDg != STATUS.HOAN_THANH_CAP_NHAT">
             <button style="background: #353a64;" type="button" class="btn btn-main"
                     (click)="themMoiPhienDauGia($event)">
               <i class="icon htvbdh_dau-cong"></i>

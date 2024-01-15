@@ -77,7 +77,7 @@
           <td>{{data.dvql}} - {{data.dvqlName}}</td>
 <!--          <td>{{data.tenTrangThai}}</td>-->
           <td style="text-align: center;">
-            <a (click)="getDetail(data)" *ngIf="userService.isAccessPermisson('QTDM_DM_THU_KHO_THEM')">
+            <a (click)="getDetail(data)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a (click)="edit(data)" *ngIf="userService.isAccessPermisson('QTDM_DM_THU_KHO_XOA')">

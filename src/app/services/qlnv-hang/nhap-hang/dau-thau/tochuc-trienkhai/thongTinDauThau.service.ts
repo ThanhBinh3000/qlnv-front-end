@@ -35,4 +35,9 @@ export class ThongTinDauThauService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/update-goi-thau`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
+
+  getDsTtDthau(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ds-tt-dthau`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
 }

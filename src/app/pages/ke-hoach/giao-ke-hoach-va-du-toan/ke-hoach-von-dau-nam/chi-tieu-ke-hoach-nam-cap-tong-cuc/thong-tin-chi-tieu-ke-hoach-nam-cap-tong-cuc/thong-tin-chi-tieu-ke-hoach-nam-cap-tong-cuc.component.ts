@@ -265,7 +265,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.spinner.show();
     try {
       if (chiTieuKhNam) {
-        if (chiTieuKhNam.capDvi == '2' && chiTieuKhNam.loaiCanCu == 'QD-TCDT') {
+        if (chiTieuKhNam.capDvi == '2' && (!chiTieuKhNam.loaiCanCu || chiTieuKhNam.loaiCanCu == 'QD-TCDT')) {
           let res = await this.chiTieuKeHoachNamService.canCuCucQd(year);
           if (res.msg == MESSAGE.SUCCESS) {
             let dataQd = res.data;
