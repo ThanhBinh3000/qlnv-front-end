@@ -343,7 +343,7 @@
             </div>
             <div class="buttons">
                 <button
-                    *ngIf="idGoiThau > 0 && !isShowFromKq && formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT && !isView"
+                    *ngIf="idGoiThau > 0 && !isShowFromKq && formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT && !isView && !daCoKqLcnt"
                     class="btn btn-main btn-sm waves-effect waves-light" (click)="saveGoiThauPopup()">
                     <i class="icon htvbdh_tcdt_save"></i>
                     <span>Lưu</span>
@@ -390,13 +390,13 @@
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td class="text-right">{{dtGoiThau.soLuong | number : '1.0-99' : 'vi_VN'}}</td>
+                      <td class="text-right">{{dtGoiThau.soLuong | number : '1.2-2' : 'vi_VN'}}</td>
                       <td class="text-right"></td>
-                      <td class="text-right">{{dtGoiThau.thanhTien | number: '1.0-99' : 'vi_VN'}}</td>
+                      <td class="text-right">{{dtGoiThau.thanhTien | number: '1.2-2' : 'vi_VN'}}</td>
                       <td>{{dtGoiThau.tenNhaThau}}</td>
-                      <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? dtGoiThau.donGiaNhaThau : null) | number : '1.0-99' : 'vi_VN'}}</td>
-                      <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? dtGoiThau.soLuong * dtGoiThau.donGiaNhaThau * 1000 : null) | number:'1.0-99' : 'vi_VN' }}</td>
-                      <td class="text-right">{{calcTongChenhLech(i) | number:'1.0-99' : 'vi_VN'}}</td>
+                      <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? dtGoiThau.donGiaNhaThau : null) | number : '1.2-2' : 'vi_VN'}}</td>
+                      <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? dtGoiThau.soLuong * dtGoiThau.donGiaNhaThau * 1000 : null) | number:'1.2-2' : 'vi_VN' }}</td>
+                      <td class="text-right">{{calcTongChenhLech(i) | number:'1.2-2' : 'vi_VN'}}</td>
                       <td>{{dtGoiThau.tenTrangThaiDt}}</td>
                       <td>{{dtGoiThau.dienGiaiNhaThau}}</td>
                     </tr>
@@ -408,15 +408,15 @@
                           <td>{{chiCuc.tenDvi}}</td>
                           <td></td>
                           <td></td>
-                          <td class="text-right red-text">{{chiCuc.soLuongTheoChiTieu| number : '1.0-99' : 'vi_VN'}}</td>
+                          <td class="text-right red-text">{{chiCuc.soLuongTheoChiTieu| number : '1.2-2' : 'vi_VN'}}</td>
                           <td class="text-center">Tấn</td>
-                          <td class="text-right blue-text bold-700">{{ chiCuc.soLuong | number : '1.0-99' : 'vi_VN' }}</td>
-                          <td class="text-right">{{chiCuc.donGia | number : '1.0-99' : 'vi_VN'}}</td>
-                          <td class="text-right bold-700">{{ chiCuc.soLuong * chiCuc.donGia *1000| number :'1.0-99' : 'vi_VN' }}</td>
+                          <td class="text-right blue-text bold-700">{{ chiCuc.soLuong | number : '1.2-2' : 'vi_VN' }}</td>
+                          <td class="text-right">{{chiCuc.donGia | number : '1.2-2' : 'vi_VN'}}</td>
+                          <td class="text-right bold-700">{{ chiCuc.soLuong * chiCuc.donGia *1000| number :'1.2-2' : 'vi_VN' }}</td>
                           <td></td>
-                          <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? dtGoiThau.donGiaNhaThau : null) | number : '1.0-99' : 'vi_VN'}}</td>
-                          <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? chiCuc.soLuong * dtGoiThau.donGiaNhaThau * 1000 : null) | number:'1.0-99' : 'vi_VN' }}</td>
-                          <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? abs(dtGoiThau.donGiaNhaThau - chiCuc.donGia) * chiCuc.soLuong * 1000 : null) | number: '1.0-99' : 'vi_VN' }} </td>
+                          <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? dtGoiThau.donGiaNhaThau : null) | number : '1.2-2' : 'vi_VN'}}</td>
+                          <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? chiCuc.soLuong * dtGoiThau.donGiaNhaThau * 1000 : null) | number:'1.2-2' : 'vi_VN' }}</td>
+                          <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? abs(dtGoiThau.donGiaNhaThau - chiCuc.donGia) * chiCuc.soLuong * 1000 : null) | number: '1.2-2' : 'vi_VN' }} </td>
                           <td></td>
                           <td></td>
                           <td *ngIf="isShowFromKq"></td>
@@ -431,13 +431,13 @@
                               <td>{{diemKho.diaDiemNhap}}</td>
                               <td></td>
                               <td class="text-center">Tấn</td>
-                              <td class="text-right blue-text">{{diemKho.soLuong | number : '1.0-99' : 'vi_VN'}}</td>
-                              <td class="text-right">{{chiCuc.donGia | number : '1.0-99' : 'vi_VN'}}</td>
-                              <td class="text-right">{{diemKho.soLuong * chiCuc.donGia * 1000 | number : '1.0-99' : 'vi_VN'}}</td>
+                              <td class="text-right blue-text">{{diemKho.soLuong | number : '1.2-2' : 'vi_VN'}}</td>
+                              <td class="text-right">{{chiCuc.donGia | number : '1.2-2' : 'vi_VN'}}</td>
+                              <td class="text-right">{{diemKho.soLuong * chiCuc.donGia * 1000 | number : '1.2-2' : 'vi_VN'}}</td>
                               <td></td>
-                              <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? dtGoiThau.donGiaNhaThau : null) | number : '1.0-99' : 'vi_VN'}}</td>
-                              <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? diemKho.soLuong * dtGoiThau.donGiaNhaThau * 1000 : null) | number:'1.0-99' : 'vi_VN' }}</td>
-                              <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? abs(dtGoiThau.donGiaNhaThau - chiCuc.donGia) * diemKho.soLuong * 1000 : null) | number: '1.0-99' : 'vi_VN' }} </td>
+                              <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? dtGoiThau.donGiaNhaThau : null) | number : '1.2-2' : 'vi_VN'}}</td>
+                              <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? diemKho.soLuong * dtGoiThau.donGiaNhaThau * 1000 : null) | number:'1.2-2' : 'vi_VN' }}</td>
+                              <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? abs(dtGoiThau.donGiaNhaThau - chiCuc.donGia) * diemKho.soLuong * 1000 : null) | number: '1.2-2' : 'vi_VN' }} </td>
                               <td></td>
                               <td></td>
                               <td *ngIf="isShowFromKq"></td>
@@ -448,9 +448,9 @@
                     </ng-container>
                   </ng-container>
                   <ng-template #kqTemplate>
-                    <tr (click)="showDetail($event,dtGoiThau)"
-                        [ngClass]="{'bg-selected': this.selected && i == 0}">
                       <ng-container *ngIf="!dtGoiThau.edit; else editTemplate">
+                        <tr (click)="showDetail($event,dtGoiThau)"
+                            [ngClass]="{'bg-selected': this.selected && i == 0}">
                           <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
                           <td>{{dtGoiThau.goiThau}}</td>
                           <td></td>
@@ -458,13 +458,13 @@
                           <td></td>
                           <td></td>
                           <td></td>
-                          <td class="text-right">{{dtGoiThau.soLuong | number : '1.0-99' : 'vi_VN'}}</td>
+                          <td class="text-right">{{dtGoiThau.soLuong | number : '1.2-2' : 'vi_VN'}}</td>
                           <td class="text-right"></td>
-                          <td class="text-right">{{dtGoiThau.thanhTien | number: '1.0-99' : 'vi_VN'}}</td>
+                          <td class="text-right">{{dtGoiThau.thanhTien | number: '1.2-2' : 'vi_VN'}}</td>
                           <td>{{dtGoiThau.kqlcntDtl?.tenNhaThau}}</td>
-                          <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? dtGoiThau.kqlcntDtl?.donGiaVat : null) | number : '1.0-99' : 'vi_VN'}}</td>
-                          <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? dtGoiThau.soLuong * dtGoiThau.kqlcntDtl?.donGiaVat * 1000 : null) | number:'1.0-99' : 'vi_VN' }}</td>
-                        <td class="text-right">{{calcTongChenhLech(i) | number:'1.0-99' : 'vi_VN'}}</td>
+                          <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? dtGoiThau.kqlcntDtl?.donGiaVat : null) | number : '1.2-2' : 'vi_VN'}}</td>
+                          <td class="text-right">{{(dtGoiThau.kqlcntDtl?.thanhTienNhaThau ? dtGoiThau.kqlcntDtl?.thanhTienNhaThau : null) | number:'1.2-2' : 'vi_VN' }}</td>
+                        <td class="text-right">{{calcTongChenhLech(i) | number:'1.2-2' : 'vi_VN'}}</td>
                           <td>{{dtGoiThau.kqlcntDtl?.tenTrangThai}}</td>
                           <td>{{dtGoiThau.kqlcntDtl?.dienGiaiNhaThau}}</td>
                           <td *ngIf="isShowFromKq && isKqDaBh">
@@ -472,8 +472,10 @@
                               <i class=" fa fa-pencil" title="Sửa bản ghi"></i>
                             </a>
                           </td>
+                        </tr>
                       </ng-container>
                       <ng-template #editTemplate>
+                        <tr>
                           <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
                           <td>{{dtGoiThau.goiThau}}</td>
                           <td></td>
@@ -481,17 +483,17 @@
                           <td></td>
                           <td></td>
                           <td></td>
-                          <td class="text-right">{{dtGoiThau.soLuong | number : '1.0-99' : 'vi_VN'}}</td>
+                          <td class="text-right">{{dtGoiThau.soLuong | number : '1.2-2' : 'vi_VN'}}</td>
                           <td class="text-right"></td>
-                          <td class="text-right">{{dtGoiThau.thanhTien | number: '1.0-99' : 'vi_VN'}}</td>
+                          <td class="text-right">{{dtGoiThau.thanhTien | number: '1.2-2' : 'vi_VN'}}</td>
                           <td>
                             <nz-select [(ngModel)]=itemRowQd[i].idNhaThau (ngModelChange)="selectNhaThau(i, $event)">
                               <nz-option *ngFor="let p of listNthauNopHs" [nzValue]="p.id"
                                          [nzLabel]="p.tenNhaThau"></nz-option>
                             </nz-select>
                           </td>
-                          <td><input nz-input class="money-input" currencyMask [options]="amount" [(ngModel)]="itemRowQd[i].donGiaVat"></td>
                           <td></td>
+                          <td><input nz-input class="money-input" currencyMask [options]="amount" [(ngModel)]="itemRowQd[i].thanhTienNhaThau"></td>
                           <td></td>
                           <td>
                             <nz-select [(ngModel)]=itemRowQd[i].trangThai>
@@ -507,8 +509,8 @@
                               <i class="fa fa-ban do"></i>
                             </a>
                           </td>
+                        </tr>
                       </ng-template>
-                    </tr>
                     <ng-container *ngIf="expandSet.has(i)">
                       <ng-container *ngFor="let chiCuc of dtGoiThau.children , let y = index">
                         <tr>
@@ -517,15 +519,15 @@
                           <td>{{chiCuc.tenDvi}}</td>
                           <td></td>
                           <td></td>
-                          <td class="text-right red-text">{{chiCuc.soLuongTheoChiTieu| number : '1.0-99' : 'vi_VN'}}</td>
+                          <td class="text-right red-text">{{chiCuc.soLuongTheoChiTieu| number : '1.2-2' : 'vi_VN'}}</td>
                           <td class="text-center">Tấn</td>
-                          <td class="text-right blue-text bold-700">{{ chiCuc.soLuong | number : '1.0-99' : 'vi_VN' }}</td>
+                          <td class="text-right blue-text bold-700">{{ chiCuc.soLuong | number : '1.2-2' : 'vi_VN' }}</td>
                           <td class="text-right">{{chiCuc.donGia | number : '1.0-1' : 'vi_VN'}}</td>
-                          <td class="text-right bold-700">{{ chiCuc.soLuong * chiCuc.donGia *1000| number :'1.0-99' : 'vi_VN' }}</td>
+                          <td class="text-right bold-700">{{ chiCuc.soLuong * chiCuc.donGia *1000| number :'1.2-2' : 'vi_VN' }}</td>
                           <td></td>
-                          <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? dtGoiThau.kqlcntDtl?.donGiaVat : null) | number : '1.0-99' : 'vi_VN'}}</td>
-                          <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? chiCuc.soLuong * dtGoiThau.kqlcntDtl?.donGiaVat * 1000 : null) | number:'1.0-99' : 'vi_VN' }}</td>
-                          <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? abs(dtGoiThau.kqlcntDtl?.donGiaVat - chiCuc.donGia) * chiCuc.soLuong * 1000 : null) | number: '1.0-99' : 'vi_VN' }} </td>
+                          <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? dtGoiThau.kqlcntDtl?.donGiaVat : null) | number : '1.2-2' : 'vi_VN'}}</td>
+                          <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? chiCuc.soLuong * dtGoiThau.kqlcntDtl?.donGiaVat * 1000 : null) | number:'1.2-2' : 'vi_VN' }}</td>
+                          <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? abs(dtGoiThau.kqlcntDtl?.donGiaVat - chiCuc.donGia) * chiCuc.soLuong * 1000 : null) | number: '1.2-2' : 'vi_VN' }} </td>
                           <td></td>
                           <td></td>
                           <td *ngIf="isShowFromKq"></td>
@@ -540,13 +542,13 @@
                               <td>{{diemKho.diaDiemNhap}}</td>
                               <td></td>
                               <td class="text-center">Tấn</td>
-                              <td class="text-right blue-text">{{diemKho.soLuong | number : '1.0-99' : 'vi_VN'}}</td>
-                              <td class="text-right">{{chiCuc.donGia | number : '1.0-99' : 'vi_VN'}}</td>
-                              <td class="text-right">{{diemKho.soLuong * chiCuc.donGia * 1000 | number : '1.0-99' : 'vi_VN'}}</td>
+                              <td class="text-right blue-text">{{diemKho.soLuong | number : '1.2-2' : 'vi_VN'}}</td>
+                              <td class="text-right">{{chiCuc.donGia | number : '1.2-2' : 'vi_VN'}}</td>
+                              <td class="text-right">{{diemKho.soLuong * chiCuc.donGia * 1000 | number : '1.2-2' : 'vi_VN'}}</td>
                               <td></td>
-                              <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? dtGoiThau.kqlcntDtl?.donGiaVat : null) | number : '1.0-99' : 'vi_VN'}}</td>
-                              <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? diemKho.soLuong * dtGoiThau.kqlcntDtl?.donGiaVat * 1000 : null) | number:'1.0-99' : 'vi_VN' }}</td>
-                              <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? abs(dtGoiThau.kqlcntDtl?.donGiaVat - chiCuc.donGia) * diemKho.soLuong * 1000 : null) | number: '1.0-99' : 'vi_VN' }} </td>
+                              <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? dtGoiThau.kqlcntDtl?.donGiaVat : null) | number : '1.2-2' : 'vi_VN'}}</td>
+                              <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? diemKho.soLuong * dtGoiThau.kqlcntDtl?.donGiaVat * 1000 : null) | number:'1.2-2' : 'vi_VN' }}</td>
+                              <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? abs(dtGoiThau.kqlcntDtl?.donGiaVat - chiCuc.donGia) * diemKho.soLuong * 1000 : null) | number: '1.2-2' : 'vi_VN' }} </td>
                               <td></td>
                               <td></td>
                               <td *ngIf="isShowFromKq"></td>
@@ -591,7 +593,7 @@
               <th>Mã số thuế</th>
               <th>Địa chỉ</th>
               <th>Số điện thoại</th>
-              <th *ngIf="!isShowFromKq && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isView" width="30px">Hành động
+              <th *ngIf="!isShowFromKq && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isView && !daCoKqLcnt" width="30px">Hành động
               </th>
             </tr>
             </thead>
@@ -614,7 +616,7 @@
               </td>
               <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow.diaChi"/></td>
               <td><input nz-input pattern="[0-9]*" [readonly]="isView" [(ngModel)]="itemRow.sdt"/></td>
-              <td *ngIf="!isShowFromKq && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isView">
+              <td *ngIf="!isShowFromKq && !daCoKqLcnt && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isView">
                 <a (click)="addRow()">
                   <i class="fa fa-plus" title="Thêm bản ghi"></i>
                 </a>
@@ -631,7 +633,7 @@
                 <td>{{ data.mst }}</td>
                 <td>{{ data.diaChi }}</td>
                 <td>{{ data.sdt }}</td>
-                <td *ngIf="!isShowFromKq && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isView"
+                <td *ngIf="!isShowFromKq && !daCoKqLcnt && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isView"
                     class="text-center">
                   <a (click)="startEdit(i)">
                     <i class=" fa fa-pencil" title="Sửa bản ghi"></i>
@@ -653,7 +655,7 @@
                 </td>
                 <td><input nz-input [(ngModel)]="itemRowUpdate.diaChi"/></td>
                 <td><input nz-input [(ngModel)]="itemRowUpdate.sdt"/></td>
-                <td class="text-center" *ngIf="!isShowFromKq && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isView">
+                <td class="text-center" *ngIf="!isShowFromKq && !daCoKqLcnt && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isView">
                   <a
                     (click)="saveEdit(itemRowUpdate,i)" class="save">
                     <i class="icon htvbdh_tcdt_save"></i>
@@ -704,7 +706,7 @@
               </nz-form-label>
               <div class="list-file">
                 <file-list
-                  [isViewDetail]="isShowFromKq || formData.value.trangThaiDt == STATUS.HOAN_THANH_CAP_NHAT || isView"
+                  [isViewDetail]="isShowFromKq || formData.value.trangThaiDt == STATUS.HOAN_THANH_CAP_NHAT || isView || daCoKqLcnt"
                   [data]="fileDinhKems"></file-list>
               </div>
             </nz-form-item>
@@ -714,7 +716,7 @@
               <nz-form-label [nzNoColon]="true"> Ghi chú</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24">
                 <textarea
-                  [readonly]="isShowFromKq || formData.value.trangThaiDt == STATUS.HOAN_THANH_CAP_NHAT || isView"
+                  [readonly]="isShowFromKq || formData.value.trangThaiDt == STATUS.HOAN_THANH_CAP_NHAT || isView || daCoKqLcnt"
                   rows="3" nz-input formControlName="ghiChuTtdt"></textarea>
               </nz-form-control>
             </nz-form-item>

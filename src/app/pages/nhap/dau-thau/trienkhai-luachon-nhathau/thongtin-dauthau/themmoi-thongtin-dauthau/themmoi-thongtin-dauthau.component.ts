@@ -41,6 +41,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   @Input() isView: boolean;
   @Input() isKqDaBh: boolean;
   @Input() titleThongTinChung: string = 'THÔNG TIN CHUNG';
+  @Input() listIdGthau: any[] = [];
   reportTemplate: any = {
     typeFile: "",
     fileName: "thong_tin_dau_thau_lt.docx",
@@ -48,6 +49,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     trangThai: ""
   };
   showDlgPreview = false;
+  daCoKqLcnt = false;
   pdfSrc: any;
   wordSrc: any;
   printSrc: any;
@@ -112,6 +114,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     });
   }
   idGoiThau: number = 0;
+  acceptSave: boolean = false;
   STATUS = STATUS
   itemRow: any = {};
   itemRowUpdate: any = {};
@@ -264,7 +267,13 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       let tongMucDt = 0
       let slGthauTrung  = 0
       let indexGthau = 0
-      this.listOfData = data.children;
+      if (this.isShowFromKq) {
+        if (this.listIdGthau != null && this.listIdGthau.length > 0) {
+          this.listOfData = data.children.filter(item => this.listIdGthau.includes(item.id))
+        }
+      } else {
+        this.listOfData = data.children;
+      }
       for (let i = 0; i < this.listOfData.length; i++) {
         if (this.idGoiThau > 0 && this.idGoiThau == this.listOfData[i].id) {
           indexGthau = i;
@@ -496,6 +505,11 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
 
   async saveGoiThauPopup() {
     await this.spinner.show()
+    if (!this.acceptSave) {
+      this.notification.warning(MESSAGE.WARNING, 'Bạn cần tạo và ban hành QĐ Phê duyệt HSMT cho gói thầu trước.')
+      await this.spinner.hide()
+      return;
+    }
     let body = {
       idGoiThau: this.idGoiThau,
       ghiChuTtdt: this.formData.value.ghiChuTtdt,
@@ -552,7 +566,16 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       this.selected = true;
       this.idGoiThau = dataGoiThau.id;
     }
-
+    if (dataGoiThau.soQdPdHsmt != null && dataGoiThau.soQdPdHsmt.trangThai == STATUS.BAN_HANH) {
+      this.acceptSave = true;
+    } else {
+      this.acceptSave = false;
+    }
+    if (dataGoiThau.idNhaThau != null) {
+      this.daCoKqLcnt = true;
+    } else {
+      this.daCoKqLcnt = false;
+    }
     let res = await this.thongTinDauThauService.getDetailThongTin(this.idGoiThau, this.loaiVthh);
     this.itemRow = {};
     // this.itemRow.soLuong = dataGoiThau.soLuong
@@ -584,6 +607,10 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   }
 
   async addRow() {
+    if (!this.acceptSave) {
+      this.notification.warning(MESSAGE.WARNING, 'Bạn cần tạo và ban hành QĐ Phê duyệt HSMT cho gói thầu trước.')
+      return;
+    }
     if (this.validateItemSave(this.itemRow)) {
       this.listNthauNopHs = [
         ...this.listNthauNopHs,
@@ -830,12 +857,12 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       let sum = 0
       this.listOfData.forEach(item => {
         const sumChild = item.children.reduce((prev, cur) => {
-          prev += cur.soLuong * item.donGiaNhaThau;
+          prev += cur.thanhTienNhaThau;
           return prev;
         }, 0);
         sum += sumChild;
       })
-      return sum * 1000;
+      return sum;
     }
   }
 
@@ -891,6 +918,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     this.listOfData[i].edit = false;
   }
   async saveEditRowNt(i) {
+    this.itemRowQd[i].donGiaVat = parseFloat((this.itemRowQd[i].thanhTienNhaThau/(this.listOfData[i].soLuong*1000)).toFixed(2));
     this.listOfData[i].kqlcntDtl = this.itemRowQd[i];
     if (this.itemRowQd[i].trangThai != null) {
       this.listOfData[i].kqlcntDtl.tenTrangThai = this.dsTrangThai.find(item => item.value == this.itemRowQd[i].trangThai).text;
@@ -917,7 +945,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   selectNhaThau(i, event) {
     this.listNthauNopHs.forEach(item => {
       if (item.id == event) {
-        this.itemRowQd[i].donGiaVat = item.donGia
+        this.itemRowQd[i].thanhTienNhaThau = item.donGia
       }
     })
   }
