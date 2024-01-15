@@ -46,7 +46,6 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
   listNganKho: any[] = [];
   listLoKho: any[] = []
 
-
   constructor(
     private _modalRef: NzModalRef,
     private fb: FormBuilder,
@@ -113,10 +112,11 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
 
   async loadDsVthh() {
     const res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
-    if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-      return;
+    if (res && res.msg === MESSAGE.SUCCESS || res.data) {
+      this.listHangHoaAll = res.data;
+    } else {
+      this.listHangHoaAll = [];
     }
-    this.listHangHoaAll = res.data;
   }
 
   async loadDonVi() {
@@ -199,20 +199,19 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       this.donViService.getDonVi({str: event}),
     ]);
     this.listDiemKho = [];
-    if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-      return;
+    if (res && res.msg === MESSAGE.SUCCESS || res.data) {
+      const soLuongChiTieu = chiCuc?.soLuongXuat;
+      this.formData.patchValue({
+        tenDvi: res.data.tenDvi,
+        diaChi: res.data.diaChi,
+        soLuongKhDaDuyet: soLuongDaLenKh.data,
+        soLuongChiTieu: soLuongChiTieu,
+      });
+      if (isSlChiTieu) {
+        await this.loadDsDiemKho(event);
+      }
+      this.thongTinXuatBanTrucTiep = new DanhSachXuatBanTrucTiep();
     }
-    const soLuongChiTieu = chiCuc?.soLuongXuat;
-    this.formData.patchValue({
-      tenDvi: res.data.tenDvi,
-      diaChi: res.data.diaChi,
-      soLuongKhDaDuyet: soLuongDaLenKh.data,
-      soLuongChiTieu: soLuongChiTieu,
-    });
-    if (isSlChiTieu) {
-      await this.loadDsDiemKho(event);
-    }
-    this.thongTinXuatBanTrucTiep = new DanhSachXuatBanTrucTiep();
   }
 
   async loadDsDiemKho(maDvi) {
@@ -223,48 +222,53 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       cloaiVthh: this.dataOriginal.cloaiVthh,
     };
     let res = await this.donViService.getDonViHangTree(body);
-    if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-      return;
+    if (res && res.msg === MESSAGE.SUCCESS || res.data) {
+      this.listDiemKho = res.data.children || [];
     }
-    this.listDiemKho = res.data.children || [];
   }
 
   async changeDiemKho(index?, isboolean?) {
+    const dataToUpdate = index >= 0 ? this.editCache[index].data : this.thongTinXuatBanTrucTiep;
     if (index >= 0) {
-      if (isboolean) await this.closeKho('diemKho', index);
-      const selectedKho = this.listDiemKho.find(item => item.key === this.editCache[index].data.maDiemKho);
+      if (isboolean) {
+        await this.closeKho('diemKho', index);
+      }
+      const selectedKho = this.listDiemKho.find(item => item.key === dataToUpdate.maDiemKho);
       if (selectedKho) {
         this.listNhaKho = selectedKho.children || [];
-        this.editCache[index].data.tenDiemKho = selectedKho.title;
+        dataToUpdate.tenDiemKho = selectedKho.title;
         await this.changeNhaKho(index);
         await this.getdonGiaDuocDuyet(index);
       }
     } else {
       await this.closeKho('diemKho');
-      const selectedKho = this.listDiemKho.find(item => item.key === this.thongTinXuatBanTrucTiep.maDiemKho);
+      const selectedKho = this.listDiemKho.find(item => item.key === dataToUpdate.maDiemKho);
       if (selectedKho) {
         this.listNhaKho = selectedKho.children || [];
-        this.thongTinXuatBanTrucTiep.tenDiemKho = selectedKho.title;
+        dataToUpdate.tenDiemKho = selectedKho.title;
       }
       await this.getdonGiaDuocDuyet();
     }
   }
 
   async changeNhaKho(index?, isboolean?) {
+    const dataToUpdate = index >= 0 ? this.editCache[index].data : this.thongTinXuatBanTrucTiep;
     if (index >= 0) {
-      if (isboolean) await this.closeKho('nhaKho', index);
-      const selectedKho = this.listNhaKho.find(item => item.key === this.editCache[index].data.maNhaKho);
+      if (isboolean) {
+        await this.closeKho('nhaKho', index);
+      }
+      const selectedKho = this.listNhaKho.find(item => item.key === dataToUpdate.maNhaKho);
       if (selectedKho) {
         this.listNganKho = selectedKho.children || [];
-        this.editCache[index].data.tenNhaKho = selectedKho.title;
+        dataToUpdate.tenNhaKho = selectedKho.title;
         await this.changeNganKho(index);
       }
     } else {
       await this.closeKho('nhaKho');
-      const selectedKho = this.listNhaKho.find(item => item.key === this.thongTinXuatBanTrucTiep.maNhaKho);
+      const selectedKho = this.listNhaKho.find(item => item.key === dataToUpdate.maNhaKho);
       if (selectedKho) {
         this.listNganKho = selectedKho.children || [];
-        this.thongTinXuatBanTrucTiep.tenNhaKho = selectedKho.title;
+        dataToUpdate.tenNhaKho = selectedKho.title;
       }
     }
   }
@@ -272,7 +276,9 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
   async changeNganKho(index?, isboolean?) {
     const dataToUpdate = index >= 0 ? this.editCache[index].data : this.thongTinXuatBanTrucTiep;
     if (index >= 0) {
-      if (isboolean) await this.closeKho('nganKho', index);
+      if (isboolean) {
+        await this.closeKho('nganKho', index);
+      }
       const selectedKho = this.listNganKho.find(item => item.key === dataToUpdate.maNganKho);
       if (selectedKho) {
         this.listLoKho = selectedKho.children?.filter(item => {
@@ -312,7 +318,9 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
   async changeLoKho(index?, isboolean?) {
     const dataToUpdate = index >= 0 ? this.editCache[index].data : this.thongTinXuatBanTrucTiep;
     if (index >= 0) {
-      if (isboolean) await this.closeKho('loKho', index);
+      if (isboolean) {
+        await this.closeKho('loKho', index);
+      }
       const selectedKho = this.listLoKho.find(item => item.key === dataToUpdate.maLoKho);
       if (selectedKho) {
         dataToUpdate.tenLoKho = selectedKho.title;
@@ -398,13 +406,9 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       typeLoaiVthh: this.typeLoaiVthh,
     };
     const giaDuyet = await this.deXuatKhBanTrucTiepService.getDonGiaDuocDuyet(bodyPag);
-    if (!giaDuyet.data) {
-      return;
-    }
-    if (index >= 0) {
-      this.editCache[index].data.donGiaDuocDuyet = giaDuyet.data;
-    } else {
-      this.thongTinXuatBanTrucTiep.donGiaDuocDuyet = giaDuyet.data;
+    if (giaDuyet.data) {
+      const dataToUpdate = index >= 0 ? this.editCache[index].data : this.thongTinXuatBanTrucTiep;
+      dataToUpdate.donGiaDuocDuyet = giaDuyet.data
     }
   }
 
@@ -550,8 +554,10 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
   }
 
   calcTong(columnName) {
-    if (!this.listOfData) return 0;
-    return this.listOfData.reduce((sum, cur) => sum + (cur[columnName] || 0), 0);
+    if (!this.listOfData) {
+      return 0;
+    }
+    return this.listOfData.reduce((sum, cur) => sum + (cur?.[columnName] || 0), 0);
   }
 
   async onChangeTinh(event) {
