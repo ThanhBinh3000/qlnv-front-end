@@ -39,7 +39,7 @@
         <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC ? 'status-xanh' : 'status-do'">
           {{ formData.value.tenTrangThai }}
         </span>
-        <span>Phiếu kiểm nghiệm chất lượng hàng DTQG</span>
+        <span>Phiếu kiểm tra chất lượng hàng DTQG</span>
       </div>
     </div>
   </div>
@@ -207,7 +207,7 @@
             <div nz-col nzSpan="24">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired>
-                  File đính kèm phiếu kiểm nghiệm chất lượng đã ký
+                  File đính kèm phiếu kiểm tra chất lượng đã ký
                 </nz-form-label>
                 <nz-form-item>
                   <div class="list-file" nz-col nzSpan="24">
@@ -224,7 +224,7 @@
           <div class="header-text">
             <div class="title-chi-tieu">
               <span></span>
-              <span>Kiểm tra số lượng sau khi xay xát</span>
+              <span>Kiểm tra số lượng gạo sau khi xay xát</span>
             </div>
           </div>
         </div>
@@ -250,6 +250,21 @@
                   <!-- <input nz-input formControlName="soLuongNhan" [readonly]="isView" /> -->
                   <input currencyMask class="money-input" formControlName="soLuongNhan" [readOnly]="isView"
                     [options]="amount1Left" style="color: blue; font-weight: bold" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+          <div nz-row [nzGutter]="24">
+            <div nz-col [nzSpan]="12">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Chủng loại gạo sau xay sát</nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                  <nz-select formControlName="chungLoaiGao" [nzDisabled]="isView" nzShowSearch
+                    nzPlaceHolder="Chọn chủng loại gạo">
+                    <nz-option *ngFor="let p of listChungLoaiGao" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
+                    <!-- <nz-option nzValue="Xuất cứu trợ" nzLabel="Xuất cứu trợ"></nz-option>
+                    <nz-option *ngIf="isTongCuc()" nzValue="Xuất viện trợ" nzLabel="Xuất viện trợ"></nz-option> -->
+                  </nz-select>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -283,7 +298,7 @@
           </div>
         </div>
         <nz-card class="mg-t-16 flex-card p-lr16 table-card">
-          <nz-table class="pd-10" #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
+          <!-- <nz-table class="pd-10" #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
             [nzData]="dataTableChiTieu">
             <thead>
               <tr>
@@ -328,6 +343,39 @@
                     </a>
                   </td>
                 </ng-template>
+              </tr>
+            </tbody>
+          </nz-table> -->
+          <nz-table class="nowrap pd-t-16" #basicTable [nzData]="dataTableChiTieu" nzBordered
+            [nzFrontPagination]="false" [nzShowPagination]="false">
+            <thead>
+              <tr>
+                <th class="text-center" nzWidth="50px">STT</th>
+                <th>Chỉ tiêu chất lượng</th>
+                <th>Chỉ số chất lượng theo QCVN 14:2020/BTC</th>
+                <th>Kết quả phân tích</th>
+                <th>Phương pháp kiểm tra chất lượng</th>
+                <th>Đánh giá</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of dataTableChiTieu;let i = index">
+                <td class="text-center">{{i + 1}}</td>
+                <td>{{data.tenTchuan}}</td>
+                <td>{{data.chiSoXuat}}</td>
+                <!-- <td><input nz-input [(ngModel)]="data.ketQua" (ngModelChange)="onKetQuaChange($event,i,viewCtChatLuong)"/></td> -->
+                <td *ngIf="!data.toanTu"><input nz-input [(ngModel)]="data.ketQuaPt" [readonly]="isView" /></td>
+                <td *ngIf="data.toanTu"><input currencyMask class="money-input" [(ngModel)]="data.ketQuaPt"
+                    (ngModelChange)="onKetQuaChange($event,i,dataTableChiTieu)" [options]="amount1Left"
+                    [readonly]="isView" />
+                </td>
+                <td>{{data.phuongPhap}}</td>
+                <td>
+                  <nz-select [(ngModel)]="data.danhGia" [nzDisabled]="isView">
+                    <nz-option nzValue="Đạt" nzLabel="Đạt"></nz-option>
+                    <nz-option nzValue="Không đạt" nzLabel="Không đạt"></nz-option>
+                  </nz-select>
+                </td>
               </tr>
             </tbody>
           </nz-table>
