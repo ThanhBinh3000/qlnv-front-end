@@ -314,7 +314,7 @@
             <td></td>
             <td>Tổng</td>
             <td></td>
-            <td>{{ calTongSlThucTe() | number : '1.0-1' : 'vi_VN'}}</td>
+            <td>{{ calTongTable('soLuong') | number : '1.0-1' : 'vi_VN'}}</td>
           </tr>
           </tfoot>
         </nz-table>
@@ -324,8 +324,9 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true">Tổng trọng lượng bao bì (kg)</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-input-number [nzSize]="'small'" nz-input formControlName="tongTrongLuong"
-                                   [nzDisabled]="disabled()"></nz-input-number>
+                  <nz-input-number [nzSize]="'small'" [ngModel]="calTongTable('soBaoBi')"
+                                   [ngModelOptions]="{standalone: true}"
+                                   [nzDisabled]="true"></nz-input-number>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -333,7 +334,8 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true">Tổng trọng lượng kể cả bao bì (kg)</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-input-number [nzSize]="'small'" nz-input formControlName="tongTrongLuong"
+                  <nz-input-number [nzSize]="'small'" [ngModel]="calTongTable('trongLuongCaBi')"
+                                   [ngModelOptions]="{standalone: true}"
                                    [nzDisabled]="true"></nz-input-number>
                 </nz-form-control>
               </nz-form-item>
@@ -342,7 +344,8 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true">Tổng trọng lượng hàng đã trừ bì (kg) (viết bằng số)</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-input-number [nzSize]="'small'" nz-input formControlName="tongTrongLuong"
+                  <nz-input-number [nzSize]="'small'" [ngModel]="calTongTable('trongLuongCaBi') - calTongTable('soBaoBi')"
+                                   [ngModelOptions]="{standalone: true}"
                                    [nzDisabled]="true"></nz-input-number>
                 </nz-form-control>
               </nz-form-item>
@@ -351,7 +354,8 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true">Tổng trọng lượng hàng đã trừ bì (kg) (viết bằng chữ)</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-input-number [nzSize]="'small'" nz-input formControlName="tongTrongLuong"
+                  <nz-input-number [nzSize]="'small'" [ngModel]="convertTien(calTongTable('trongLuongCaBi') - calTongTable('soBaoBi'))"
+                                   [ngModelOptions]="{standalone: true}"
                                    [nzDisabled]="true"></nz-input-number>
                 </nz-form-control>
               </nz-form-item>
