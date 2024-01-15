@@ -311,7 +311,7 @@ export class XtlThemBangKeChComponent extends Base3Component implements OnInit {
       this.rowItem.soBaoBi = 0;
       this.rowItem.trongLuongCaBi = 0;
       this.formData.patchValue({
-        tongTrongLuong: this.calTongSlThucTe()
+        tongTrongLuong: this.calTongTable('soLuong')
       })
     }
   }
@@ -337,11 +337,13 @@ export class XtlThemBangKeChComponent extends Base3Component implements OnInit {
     return true
   }
 
-  calTongSlThucTe() {
+  calTongTable(columnName) {
     if (this.dataTable) {
       let sum = 0
       this.dataTable.forEach(item => {
-        sum += this.nvl(item.soLuong);
+        if(item.hasOwnProperty(columnName)){
+          sum += this.nvl(item[columnName]);
+        }
       })
       return sum;
     }
