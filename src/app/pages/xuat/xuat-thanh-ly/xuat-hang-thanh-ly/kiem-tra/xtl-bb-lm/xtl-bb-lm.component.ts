@@ -36,6 +36,7 @@ export class XtlBbLmComponent extends Base3Component implements OnInit {
       ngayTu: null,
       ngayDen: null,
       phanLoai : null,
+      dviKnghiem : null,
     })
     router.events.subscribe((val) => {
       let routerUrl = this.router.url;
