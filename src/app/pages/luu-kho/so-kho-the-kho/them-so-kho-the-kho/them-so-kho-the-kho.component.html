@@ -23,7 +23,7 @@
             <nz-form-label [nzNoColon]="true" nzRequired>Năm</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <nz-select formControlName="nam" nzDisabled>
+                <nz-select formControlName="nam" >
                   <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
               </nz-input-group>
@@ -161,7 +161,7 @@
             <nz-form-label [nzNoColon]="true"> Tồn kho</nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input nz-input formControlName="slTon" readonly class="money-input" currencyMask [options]="amount">
+                <input nz-input formControlName="slTon" readonly class="money-input" currencyMask [options]="quatity">
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -172,7 +172,7 @@
             <nz-form-control>
               <nz-input-group>
                 <input nz-input formControlName="tichLuongKd" readonly class="money-input" currencyMask
-                  [options]="amount">
+                  [options]="quatity">
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -183,7 +183,7 @@
             <nz-form-control>
               <nz-input-group>
                 <input nz-input formControlName="tichLuongTk" readonly class="money-input" currencyMask
-                  [options]="amount">
+                  [options]="quatity">
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -257,7 +257,7 @@
             <nz-form-label [nzNoColon]="true" nzRequired>Năm</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <nz-select formControlName="nam" nzDisabled>
+                <nz-select formControlName="nam" >
                   <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
               </nz-input-group>
@@ -312,10 +312,10 @@
         </div>
         <div nz-col [nzSpan]="20">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" nzRequired>Tên sổ kho</nz-form-label>
+            <nz-form-label [nzNoColon]="true" nzRequired>Sổ kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="idSoKho" (ngModelChange)="onChangeSoKho($event)"  [nzDisabled]="idInput > 0">
-                <nz-option *ngFor="let item of dsSoKho" [nzValue]="item.id" [nzLabel]="item.ten">
+                <nz-option *ngFor="let item of dsSoKho" [nzValue]="item.id" [nzLabel]="item.so + ' - ' +item.ten">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -406,7 +406,7 @@
             <nz-form-label [nzNoColon]="true"> Tồn kho</nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input nz-input formControlName="slTon" readonly class="money-input" currencyMask [options]="amount">
+                <input nz-input formControlName="slTon" readonly class="money-input" currencyMask [options]="quatity">
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -417,7 +417,7 @@
             <nz-form-control>
               <nz-input-group>
                 <input nz-input formControlName="tichLuongKd" readonly class="money-input" currencyMask
-                  [options]="amount">
+                  [options]="quatity">
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -428,7 +428,7 @@
             <nz-form-control>
               <nz-input-group>
                 <input nz-input formControlName="tichLuongTk" readonly class="money-input" currencyMask
-                  [options]="amount">
+                  [options]="quatity">
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>

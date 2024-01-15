@@ -10,7 +10,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { NgxSpinnerService } from "ngx-spinner";
 import dayjs from "dayjs";
 import { Validators } from "@angular/forms";
-import { AMOUNT } from 'src/app/Utility/utils';
+import {AMOUNT, QUATITY} from 'src/app/Utility/utils';
 import { STATUS } from 'src/app/constants/status';
 import { OldResponseData } from 'src/app/interfaces/response';
 import { MangLuoiKhoService } from 'src/app/services/qlnv-kho/mangLuoiKho.service';
@@ -41,6 +41,7 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
 
   dsSoKho = [];
   amount = AMOUNT;
+  quatity = QUATITY;
 
   constructor(
     private httpClient: HttpClient,
@@ -100,6 +101,7 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
         await this.getDetail(this.idInput)
       }
       else if(this.idParentInput > 0) {
+        console.log('ádasdasdas')
         await this.getDetailParent(this.idParentInput)
       }
       else {
@@ -236,6 +238,7 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
     try {
       let data = await this.detail(id);
       this.formData.patchValue({
+        nam : +data.nam,
         id : data.id,
         maDiemKho: data.maDiemKho,
         maNhaKho: data.maNhaKho,
@@ -258,6 +261,7 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           const data = res.data;
+          console.log(data)
           this.formData.patchValue({
             loai : '01',
             idSoKho : data.id,
@@ -267,7 +271,8 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
             maNganKho: data.maNganKho,
             maLoKho: data.maLoKho ? data.maLoKho : null,
             nguoiLap: this.userInfo.TEN_DAY_DU,
-            tenDvi: this.userInfo.TEN_DVI
+            tenDvi: this.userInfo.TEN_DVI,
+            nam : +data.nam,
           });
         }
       } else {
@@ -422,7 +427,6 @@ export class ThemSoKhoTheKhoComponent extends Base2Component implements OnInit {
   changeLoai() {
     this.formData.patchValue({
       id: null,
-      nam: dayjs().get('year'),
       nguoiLap: null,
       maDvi: null,
       tenDvi: null,
