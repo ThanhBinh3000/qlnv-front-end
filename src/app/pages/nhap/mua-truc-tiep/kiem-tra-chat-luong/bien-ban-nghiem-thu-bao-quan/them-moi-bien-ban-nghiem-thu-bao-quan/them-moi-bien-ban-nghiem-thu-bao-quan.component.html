@@ -360,6 +360,18 @@
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Loại hình bảo quản</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="loaiHinhBaoQuan">
+                <nz-option [nzDisabled]="isView" *ngFor="let p of listLoaiHinhBaoQuan" [nzValue]="p.ma"
+                           [nzLabel]="p.giaTri">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="3">
+          <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Định mức được giao</nz-form-label>
             <nz-form-control>
               <input [readonly]="true" nz-input formControlName="dinhMucGiao" readonly/>

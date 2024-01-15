@@ -30,6 +30,9 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
   @Input() isShowFromKq: boolean;
   @Input() isKqDaBh: boolean;
   @Input() isView: boolean;
+  @Input() listIdGthau: any[] = [];
+  acceptSave: boolean = false;
+  daCoKqLcnt = false;
   danhsachDx: any[] = [];
   listNthauNopHs: any[] = [];
   dsTrangThai: any[] = [];
@@ -203,7 +206,14 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
         tenLoaiHinhNx: data.dxKhlcntHdr?.tenLoaiHinhNx,
         tenKieuNx: data.dxKhlcntHdr?.tenKieuNx,
       })
-      this.danhsachDx = data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.dsGthau : data.dsGthau;
+      if (this.isShowFromKq) {
+        if (this.listIdGthau != null && this.listIdGthau.length > 0) {
+          let gthauList = data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.dsGthau : data.dsGthau;
+          this.danhsachDx = gthauList.filter(item => this.listIdGthau.includes(item.id))
+        }
+      } else {
+        this.danhsachDx = data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.dsGthau : data.dsGthau;
+      }
       if (data.dchinhDxKhLcntHdr) {
         this.isDieuChinh = true;
       }
@@ -239,6 +249,16 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
     } else {
       this.selected = true;
       this.idGoiThau = dataGoiThau.id;
+    }
+    if (dataGoiThau.soQdPdHsmt != null && dataGoiThau.soQdPdHsmt.trangThai == STATUS.BAN_HANH) {
+      this.acceptSave = true;
+    } else {
+      this.acceptSave = false;
+    }
+    if (dataGoiThau.idNhaThau != null) {
+      this.daCoKqLcnt = true;
+    } else {
+      this.daCoKqLcnt = false;
     }
     let type = "GOC";
     if (this.isDieuChinh) {
