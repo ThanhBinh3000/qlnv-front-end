@@ -63,6 +63,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
   listBangKe: any[] = [];
   listLoaiKho: any[] = [];
   listPhuongThucBaoQuan: any[] = [];
+  listLoaiHinhBaoQuan: any[] = [];
   listHinhThucBaoQuan: any[] = [];
   listDonViTinh: any[] = [];
   listSoQuyetDinh: any[] = [];
@@ -110,6 +111,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
         idQdGiaoNvNh: ['', [Validators.required]],
         soQdGiaoNvNh: [, [Validators.required]],
         tgianNkho: [''],
+        loaiHinhBaoQuan: [''],
         soBb: ['', [Validators.required]],
         ngayTao: [dayjs().format('YYYY-MM-DD'),],
         ngayNghiemThu: [''],
@@ -171,6 +173,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
         this.loadDataComboBox(),
+        this.loadDsLoaiHinhBaoQuan(),
         this.loadSoQuyetDinh(),
         this.loadDsBangKe(),
         this.loadDonViTinh()
@@ -203,7 +206,6 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
       await this.bindingDataQd(this.idQdGiaoNvNh, true);
     }
   }
-
   async loadDataComboBox() {
     if (this.formData.value.cloaiVthh) {
       let res = await this.danhMucService.getDetail(this.formData.value.cloaiVthh);
@@ -211,6 +213,13 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
         this.listPhuongThucBaoQuan = res.data?.phuongPhapBq
         this.listHinhThucBaoQuan = res.data?.hinhThucBq
       }
+    }
+  }
+
+  async loadDsLoaiHinhBaoQuan() {
+    let res = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_BAO_QUAN');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listLoaiHinhBaoQuan = res.data
     }
   }
 

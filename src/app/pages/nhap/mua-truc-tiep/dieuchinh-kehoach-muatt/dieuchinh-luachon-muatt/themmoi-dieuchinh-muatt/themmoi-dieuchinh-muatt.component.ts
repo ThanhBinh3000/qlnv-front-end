@@ -437,12 +437,12 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
         await this.getDataChiTieu(res.data.idSoQdCc);
       }
       this.dataInputCache = res.data.children.find(x => x.maDvi == data.maDvi)
-      data.tongSoLuong = 0;
-      data.tongMucDt = 0;
-      data.children.forEach(item =>{
-        data.tongSoLuong += item.tongSoLuong;
-        data.tongMucDt += item.tongSoLuong * item.donGiaVat * 1000;
-      })
+      // data.tongSoLuong = 0;
+      // data.tongMucDt = 0;
+      // data.children.forEach(item =>{
+      //   data.tongSoLuong += item.tongSoLuong;
+      //   data.tongMucDt += item.tongSoLuong * item.donGiaVat * 1000;
+      // })
     }
     await this.spinner.hide();
   }
@@ -536,7 +536,12 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
     this.formData.controls["ngayTaoCv"].clearValidators();
     this.formData.controls["soQdDc"].clearValidators();
     this.formData.controls["ngayHluc"].clearValidators();
+    this.formData.controls["ngayKyDc"].clearValidators();
     if (this.formData.get("trangThai").value == STATUS.DA_DUYET_LDV) {
+      this.formData.controls["soQdDc"].setValidators([Validators.required]);
+      this.formData.controls["ngayKyDc"].setValidators([Validators.required]);
+      this.formData.controls["ngayHluc"].setValidators([Validators.required]);
+      this.formData.controls["trichYeuDc"].setValidators([Validators.required]);
       if (this.fileDinhKems.length == 0) {
         this.formData.controls["checkListFileDinhKems"].setValidators([Validators.required]);
       } else {
@@ -555,7 +560,7 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
   async setValidator() {
     this.formData.controls["soToTrinh"].setValidators([Validators.required]);
     this.formData.controls["ngayTaoCv"].setValidators([Validators.required]);
-    this.formData.controls["ngayHluc"].setValidators([Validators.required]);
+    // this.formData.controls["ngayHluc"].setValidators([Validators.required]);
     if (this.formData.get("trangThai").value == STATUS.DA_DUYET_LDV) {
       this.formData.controls["soQdDc"].setValidators([Validators.required]);
       this.formData.controls["ngayKyDc"].setValidators([Validators.required]);
