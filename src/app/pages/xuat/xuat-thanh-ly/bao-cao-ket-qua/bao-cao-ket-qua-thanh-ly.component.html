@@ -30,7 +30,9 @@
           <nz-form-control>
             <nz-form-label>Trạng thái</nz-form-label>
             <nz-form-item>
-              <input nz-input formControlName="trangThai" />
+              <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" formControlName="trangThai">
+                <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              </nz-select>
             </nz-form-item>
           </nz-form-control>
         </div>

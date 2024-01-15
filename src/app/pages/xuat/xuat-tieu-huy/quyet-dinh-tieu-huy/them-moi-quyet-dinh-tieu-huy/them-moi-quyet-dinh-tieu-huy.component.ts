@@ -124,7 +124,8 @@ export class ThemMoiQuyetDinhTieuHuyComponent extends Base3Component implements 
           soHoSo: dataTh.soHoSo,
           idHoSo: dataTh.id,
           thoiGianPd: [dataTh.thoiGianPdTu, dataTh.thoiGianPdDen]
-        })
+        });
+        dataTh.children = dataTh.children.filter( x => x.xhThDanhSachHdr?.maDvi.startsWith(this.userInfo.MA_DVI));
         this.dataTable = chain(dataTh.children).groupBy('xhThDanhSachHdr.tenChiCuc').map((value, key) => ({
             expandSet: true,
             tenDonVi: key,
