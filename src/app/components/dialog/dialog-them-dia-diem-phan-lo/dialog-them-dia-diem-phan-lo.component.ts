@@ -114,10 +114,11 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
 
   async loadDsVthh() {
     const res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
-    if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-      return;
+    if (res && res.msg === MESSAGE.SUCCESS || res.data) {
+      this.listHangHoaAll = res.data;
+    } else {
+      this.listHangHoaAll = [];
     }
-    this.listHangHoaAll = res.data;
   }
 
   async loadDonVi() {
@@ -200,20 +201,19 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       this.donViService.getDonVi({str: event}),
     ]);
     this.listDiemKho = [];
-    if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-      return;
+    if (res && res.msg === MESSAGE.SUCCESS || res.data) {
+      const slChiTieu = chiCuc?.soLuongXuat;
+      this.formData.patchValue({
+        tenDvi: res.data.tenDvi,
+        diaChi: res.data.diaChi,
+        tongSlKeHoachDd: soLuongDaLenKh.data,
+        slChiTieu: slChiTieu,
+      });
+      if (isSlChiTieu) {
+        await this.loadDsDiemKho(event);
+      }
+      this.thongtinPhanLo = new DanhSachPhanLo();
     }
-    const slChiTieu = chiCuc?.soLuongXuat;
-    this.formData.patchValue({
-      tenDvi: res.data.tenDvi,
-      diaChi: res.data.diaChi,
-      tongSlKeHoachDd: soLuongDaLenKh.data,
-      slChiTieu: slChiTieu,
-    });
-    if (isSlChiTieu) {
-      await this.loadDsDiemKho(event);
-    }
-    this.thongtinPhanLo = new DanhSachPhanLo();
   }
 
   async loadDsDiemKho(maDvi) {
@@ -224,49 +224,53 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       cloaiVthh: this.dataOriginal.cloaiVthh,
     };
     let res = await this.donViService.getDonViHangTree(body);
-    if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-      return;
+    if (res && res.msg === MESSAGE.SUCCESS || res.data) {
+      this.listDiemKho = res.data.children || [];
     }
-    console.log(res.data, 999);
-    this.listDiemKho = res.data.children || [];
   }
 
   async changeDiemKho(index?, isboolean?) {
+    const dataToUpdate = index >= 0 ? this.editCache[index].data : this.thongtinPhanLo;
     if (index >= 0) {
-      if (isboolean) await this.closeKho('diemKho', index);
-      const selectedKho = this.listDiemKho.find(item => item.key === this.editCache[index].data.maDiemKho);
+      if (isboolean) {
+        await this.closeKho('diemKho', index);
+      }
+      const selectedKho = this.listDiemKho.find(item => item.key === dataToUpdate.maDiemKho);
       if (selectedKho) {
         this.listNhaKho = selectedKho.children || [];
-        this.editCache[index].data.tenDiemKho = selectedKho.title;
+        dataToUpdate.tenDiemKho = selectedKho.title;
         await this.changeNhaKho(index);
         await this.getdonGiaDuocDuyet(index);
       }
     } else {
       await this.closeKho('diemKho');
-      const selectedKho = this.listDiemKho.find(item => item.key === this.thongtinPhanLo.maDiemKho);
+      const selectedKho = this.listDiemKho.find(item => item.key === dataToUpdate.maDiemKho);
       if (selectedKho) {
         this.listNhaKho = selectedKho.children || [];
-        this.thongtinPhanLo.tenDiemKho = selectedKho.title;
+        dataToUpdate.tenDiemKho = selectedKho.title;
       }
       await this.getdonGiaDuocDuyet();
     }
   }
 
   async changeNhaKho(index?, isboolean?) {
+    const dataToUpdate = index >= 0 ? this.editCache[index].data : this.thongtinPhanLo;
     if (index >= 0) {
-      if (isboolean) await this.closeKho('nhaKho', index);
-      const selectedKho = this.listNhaKho.find(item => item.key === this.editCache[index].data.maNhaKho);
+      if (isboolean) {
+        await this.closeKho('nhaKho', index);
+      }
+      const selectedKho = this.listNhaKho.find(item => item.key === dataToUpdate.maNhaKho);
       if (selectedKho) {
         this.listNganKho = selectedKho.children || [];
-        this.editCache[index].data.tenNhaKho = selectedKho.title;
+        dataToUpdate.tenNhaKho = selectedKho.title;
         await this.changeNganKho(index);
       }
     } else {
       await this.closeKho('nhaKho');
-      const selectedKho = this.listNhaKho.find(item => item.key === this.thongtinPhanLo.maNhaKho);
+      const selectedKho = this.listNhaKho.find(item => item.key === dataToUpdate.maNhaKho);
       if (selectedKho) {
         this.listNganKho = selectedKho.children || [];
-        this.thongtinPhanLo.tenNhaKho = selectedKho.title;
+        dataToUpdate.tenNhaKho = selectedKho.title;
       }
     }
   }
@@ -274,7 +278,9 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   async changeNganKho(index?, isboolean?) {
     const dataToUpdate = index >= 0 ? this.editCache[index].data : this.thongtinPhanLo;
     if (index >= 0) {
-      if (isboolean) await this.closeKho('nganKho', index);
+      if (isboolean) {
+        await this.closeKho('nganKho', index);
+      }
       const selectedKho = this.listNganKho.find(item => item.key === dataToUpdate.maNganKho);
       if (selectedKho) {
         this.listLoKho = selectedKho.children?.filter(item => {
@@ -314,7 +320,9 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   async changeLoKho(index?, isboolean?) {
     const dataToUpdate = index >= 0 ? this.editCache[index].data : this.thongtinPhanLo;
     if (index >= 0) {
-      if (isboolean) await this.closeKho('loKho', index);
+      if (isboolean) {
+        await this.closeKho('loKho', index);
+      }
       const selectedKho = this.listLoKho.find(item => item.key === dataToUpdate.maLoKho);
       if (selectedKho) {
         dataToUpdate.tenLoKho = selectedKho.title;
@@ -400,13 +408,9 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       typeLoaiVthh: this.typeLoaiVthh,
     };
     const giaDuyet = await this.deXuatKhBanDauGiaService.getDonGiaDuocDuyet(bodyPag);
-    if (!giaDuyet.data) {
-      return;
-    }
-    if (index >= 0) {
-      this.editCache[index].data.donGiaDuocDuyet = giaDuyet.data;
-    } else {
-      this.thongtinPhanLo.donGiaDuocDuyet = giaDuyet.data;
+    if (giaDuyet.data) {
+      const dataToUpdate = index >= 0 ? this.editCache[index].data : this.thongtinPhanLo;
+      dataToUpdate.donGiaDuocDuyet = giaDuyet.data;
     }
   }
 
@@ -552,8 +556,10 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   }
 
   calcTong(columnName) {
-    if (!this.listOfData) return 0;
-    return this.listOfData.reduce((sum, cur) => sum + (cur[columnName] || 0), 0);
+    if (!this.listOfData) {
+      return 0;
+    }
+    return this.listOfData.reduce((sum, cur) => sum + (cur?.[columnName] || 0), 0);
   }
 
   async onChangeTinh(event) {
@@ -570,6 +576,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       data.giaKhoiDiemDx = data.donGiaDeXuat * data.soLuongDeXuat;
       data.thanhTienDuocDuyet = data.donGiaDuocDuyet * data.soLuongDeXuat;
       data.soTienDtruocDx = data.soLuongDeXuat * data.donGiaDeXuat * this.dataOriginal.khoanTienDatTruoc / 100;
+
     }
   }
 }
