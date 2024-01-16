@@ -58,10 +58,10 @@
                     <tbody>
                         <tr *ngFor="let data of dataTable; let idx = index" (click)="showDetail($event,data.id)">
                             <td class="text-center">{{idx + 1}}</td>
-                            <td>{{data.ngayChot | date: 'dd/MM/YYYY'}}</td>
-                            <td>{{data.ngayHluc | date: 'dd/MM/YYYY'}}</td>
+                            <td>{{data.ngayChot | date: 'dd/MM/yyyy'}}</td>
+                            <td>{{data.ngayHluc | date: 'dd/MM/yyyy'}}</td>
                             <td>{{data.tenNguoiTao}}</td>
-                            <td>{{data.ngayHuy | date: 'dd/MM/YYYY'}}</td>
+                            <td>{{data.ngayHuy | date: 'dd/MM/yyyy'}}</td>
                         </tr>
                     </tbody>
                 </nz-table>

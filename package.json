@@ -23,6 +23,7 @@
     "@kolkov/angular-editor": "^2.0.0",
     "apexcharts": "^3.37.3",
     "cleave.js": "^1.6.0",
+    "date-fns": "^2.30.0",
     "dayjs": "^1.10.8",
     "file-saver": "^2.0.5",
     "gojs": "^2.1.49",

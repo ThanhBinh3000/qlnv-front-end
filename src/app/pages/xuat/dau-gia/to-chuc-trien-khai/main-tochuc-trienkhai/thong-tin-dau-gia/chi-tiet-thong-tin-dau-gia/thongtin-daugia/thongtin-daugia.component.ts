@@ -111,6 +111,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       thongBaoKhongThanh: [''],
       soDviTsan: [],
       qdLcTcBdg: [''],
+      ngayQdBdg: [''],
       trangThai: [STATUS.DANG_THUC_HIEN],
       tenTrangThai: ['ĐANG THỰC HIỆN'],
       canCu: [new Array<FileDinhKem>()],

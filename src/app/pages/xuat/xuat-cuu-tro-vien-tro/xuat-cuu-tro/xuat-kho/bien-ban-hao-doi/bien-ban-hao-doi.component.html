@@ -141,7 +141,7 @@
               <td></td>
               <td class="bold">{{ item.soQdGiaoNvXh }}</td>
               <td class="bold">{{ item.nam }}</td>
-              <td class="bold">{{ item.ngayQdGiaoNvXh | date: 'dd/MM/YYYY'}}</td>
+              <td class="bold">{{ item.ngayQdGiaoNvXh | date: 'dd/MM/yyyy'}}</td>
               <td></td>
               <td></td>
               <td></td>
@@ -194,7 +194,7 @@
                       <td><a *ngIf="lv2.soPhieuKnCl" nz-button nzType="link"
                           (click)="openPhieuKnClModal(lv2.idPhieuKnCl)">{{lv2.soPhieuKnCl}}</a></td>
                       <td class="bold">{{lv2.soBbHaoDoi}}</td>
-                      <td>{{lv2.ngayTaoBb | date: 'dd/MM/YYYY'}}</td>
+                      <td>{{lv2.ngayTaoBb | date: 'dd/MM/yyyy'}}</td>
                       <td class="bold"><a *ngIf="lv2.soBbTinhKho" nz-button nzType="link"
                           (click)="openBbTkModal(lv2.id)">{{lv2.soBbTinhKho}}</a></td>
                       <!-- <td class="bold">{{lv2.ngayBatDauXuat}}</td>
@@ -263,7 +263,7 @@
                           <td><a *ngIf="lv4.soPhieuXuatKho" nz-button nzType="link"
                               (click)="openPhieuXkModal(lv4.idPhieuXuatKho)">{{lv4.soPhieuXuatKho}}</a>
                           </td>
-                          <td>{{lv4.ngayXuatKho| date: 'dd/MM/YYYY'}}</td>
+                          <td>{{lv4.ngayXuatKho| date: 'dd/MM/yyyy'}}</td>
                           <td><a *ngIf="lv4.soBkCanHang" nz-button nzType="link"
                               (click)="openBangKeModal(lv4.idBkCanHang)">{{lv4.soBkCanHang}}</a></td>
                           <td></td>

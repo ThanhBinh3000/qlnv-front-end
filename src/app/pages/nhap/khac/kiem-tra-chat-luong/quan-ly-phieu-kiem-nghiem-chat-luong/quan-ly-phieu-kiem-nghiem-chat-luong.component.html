@@ -131,11 +131,11 @@
                     <td></td>
                     <td>{{lk.tenNganLoKho}}</td>
                     <td class="bold">{{lk.pknghiemClHang?.soPhieuKiemNghiemCl}}</td>
-                    <td>{{lk.pknghiemClHang?.ngayKnghiem | date: 'dd/MM/YYYY' }}</td>
+                    <td>{{lk.pknghiemClHang?.ngayKnghiem | date: 'dd/MM/yyyy' }}</td>
                     <td class="bold">{{lk.bbLayMau?.soBienBan}}</td>
-                    <td>{{lk.bbLayMau?.ngayLayMau | date: 'dd/MM/YYYY'}}</td>
+                    <td>{{lk.bbLayMau?.ngayLayMau | date: 'dd/MM/yyyy'}}</td>
                     <td>{{lk.soBbNhapDayKho}}</td>
-                    <td>{{lk.ngayNhapDayKho | date: 'dd/MM/YYYY' }}</td>
+                    <td>{{lk.ngayNhapDayKho | date: 'dd/MM/yyyy' }}</td>
                     <td>{{lk.pknghiemClHang?.tenTrangThai}}</td>
                     <td>
                       <a *ngIf="lk.pknghiemClHang?.trangThai == STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(false, lk.pknghiemClHang?.id, item)">

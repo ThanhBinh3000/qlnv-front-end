@@ -102,7 +102,7 @@
               </nz-input-group>
             </th>
             <th>
-              <nz-date-picker nzFormat="dd/MM/YYYY" [(ngModel)]="filterTable.ngayQd"
+              <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayQd"
                 (ngModelChange)="filterInTable('ngayQd',filterTable.ngayQd)">
               </nz-date-picker>
             </th>
@@ -150,7 +150,7 @@
             <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
             <td>{{data.namKh}}</td>
             <td>{{ data.soQd }}</td>
-            <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.ngayQd | date: 'dd/MM/yyyy' }}</td>
             <td>
               <a style="color: blue; font-weight: bold;" (click)="openDxMttModal(data.idTrHdr)">{{ data.soTrHdr }}</a>
             </td>

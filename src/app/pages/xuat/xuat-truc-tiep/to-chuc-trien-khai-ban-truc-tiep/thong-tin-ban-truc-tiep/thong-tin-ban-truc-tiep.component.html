@@ -175,7 +175,7 @@
           <td class="text-left">
             {{{'01': 'Chào giá', '02': 'Ủy quyền', '03': 'Bán lẻ'}[data.pthucBanTrucTiep] || null}}
           </td>
-          <td class="text-left">{{ data.ngayNhanCgia | date: 'dd/MM/YYYY' }}</td>
+          <td class="text-left">{{ data.ngayNhanCgia | date: 'dd/MM/yyyy' }}</td>
           <td class="text-left">
             <a *ngIf="data.soQdKq && data.idQdKq" (click)="openModal(data.idQdKq, 'QdKq')"
                style="color: blue">{{ data.soQdKq }}

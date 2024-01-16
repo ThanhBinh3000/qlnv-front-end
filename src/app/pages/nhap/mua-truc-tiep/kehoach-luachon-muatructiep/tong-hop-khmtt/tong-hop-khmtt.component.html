@@ -108,7 +108,7 @@
               </nz-input-group>
             </th>
             <th>
-              <nz-date-picker nzFormat="dd/MM/YYYY" [(ngModel)]="filterTable.ngayTao"
+              <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayTao"
                 (ngModelChange)="filterInTable('ngayTao',filterTable.ngayTao)">
               </nz-date-picker>
             </th>
@@ -157,7 +157,7 @@
             </td>
             <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
             <td class="text-center">{{data.id}}</td>
-            <td class="text-center">{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
+            <td class="text-center">{{ data.ngayTao | date: 'dd/MM/yyyy' }}</td>
             <td>{{ data.noiDungThop }}</td>
             <td class="text-center">{{ data.namKh }}</td>
             <td>{{ data.tenCloaiVthh }}</td>

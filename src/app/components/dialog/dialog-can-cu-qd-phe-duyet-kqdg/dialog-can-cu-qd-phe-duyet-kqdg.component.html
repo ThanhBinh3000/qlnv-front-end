@@ -17,7 +17,7 @@
       <tr *ngFor="let data of basicTable.data; let i = index" class="editable-row">
         <td class="text-center">{{page*pageSize+i+1}}</td>
         <td>{{ data.soQuyetDinh }}</td>
-        <td>{{ data.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
+        <td>{{ data.ngayHieuLuc | date: 'dd/MM/yyyy' }}</td>
         <td>{{ data.trichYeu }}</td>
         <td class="text-center">
           <a (click)="handleOk(data)">

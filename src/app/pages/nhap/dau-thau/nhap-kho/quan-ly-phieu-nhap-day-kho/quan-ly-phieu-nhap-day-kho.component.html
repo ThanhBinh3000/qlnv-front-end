@@ -108,8 +108,8 @@
                   <td [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>
                   <td colspan="3"></td>
                   <td>{{bbNhapDayKho.soBienBanNhapDayKho}}</td>
-                  <td>{{bbNhapDayKho.ngayBatDauNhap | date: 'dd/MM/YYYY' }}</td>
-                  <td>{{bbNhapDayKho.ngayKetThucNhap | date: 'dd/MM/YYYY' }}</td>
+                  <td>{{bbNhapDayKho.ngayBatDauNhap | date: 'dd/MM/yyyy' }}</td>
+                  <td>{{bbNhapDayKho.ngayKetThucNhap | date: 'dd/MM/yyyy' }}</td>
                   <td>{{bbNhapDayKho.tenDiemKho}}</td>
                   <td>{{bbNhapDayKho.tenNhaKho}}</td>
                   <td>{{bbNhapDayKho.tenNganKho}}</td>
@@ -144,7 +144,7 @@
                     <td class="link">{{dataPhieu.soPhieuKtraCl}}</td>
                     <td class="link">{{dataPhieu.soPhieuNhapKho}}</td>
                     <td class="link">{{dataPhieu.soBangKe}}</td>
-                    <td class="bold">{{dataPhieu.ngayNhap | date: 'dd/MM/YYYY'}}</td>
+                    <td class="bold">{{dataPhieu.ngayNhap | date: 'dd/MM/yyyy'}}</td>
                     <td></td>
                     <td></td>
                   </tr>

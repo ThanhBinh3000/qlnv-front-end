@@ -258,7 +258,7 @@
             <nz-form-label [nzNoColon]="true"> Ngày ký hợp đồng</nz-form-label>
             <nz-form-control nz-col>
                <span *ngIf="formData.value.ngayKyHopDong">
-                {{formData.value.ngayKyHopDong|date: 'dd/MM/YYYY'}}
+                {{formData.value.ngayKyHopDong|date: 'dd/MM/yyyy'}}
                </span>
             </nz-form-control>
           </nz-form-item>
@@ -288,7 +288,7 @@
             <nz-form-label [nzNoColon]="true"> Ngày tạo bảng kê bán lẻ</nz-form-label>
             <nz-form-control nz-col>
               <span *ngIf="formData.value.ngayTaoBkeBanLe">
-                {{formData.value.ngayTaoBkeBanLe|date: 'dd/MM/YYYY'}}
+                {{formData.value.ngayTaoBkeBanLe|date: 'dd/MM/yyyy'}}
               </span>
             </nz-form-control>
           </nz-form-item>
@@ -331,7 +331,7 @@
                  style="color: blue">{{ data.soBangKeHang }}
               </a>
             </td>
-            <td class="text-left">{{ data.ngayXuatKho|date: 'dd/MM/YYYY' }}</td>
+            <td class="text-left">{{ data.ngayXuatKho|date: 'dd/MM/yyyy' }}</td>
             <td class="text-left">{{ data.soLuongXuat|number:globals.numberFormat:globals.locale }} </td>
           </tr>
           </tbody>

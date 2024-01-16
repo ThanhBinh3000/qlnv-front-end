@@ -171,7 +171,7 @@
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td>{{ data.namKhoach }}</td>
           <td>{{ data.soQd }}</td>
-          <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.ngayQd | date: 'dd/MM/yyyy' }}</td>
           <td>{{ data.trichYeu }}</td>
           <td *ngIf="loaiVthh.startsWith('02')"><a style="color: blue">{{ data.qdKhlcntHdr?.dieuChinh ? data.qdKhlcntHdr?.soQdDc :data.qdKhlcntHdr?.soQd}}</a></td>
           <td *ngIf="loaiVthh.startsWith('02')">{{ data.qdKhlcntHdr?.dchinhDxKhLcntHdr?.lanDieuChinh}}</td>

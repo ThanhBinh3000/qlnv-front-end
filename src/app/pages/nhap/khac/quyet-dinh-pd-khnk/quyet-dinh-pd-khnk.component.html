@@ -164,7 +164,7 @@
             <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
             <td>{{data.namKhoach}}</td>
             <td>{{ data.soQd }}</td>
-            <td>{{ data.ngayKyQd | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.ngayKyQd | date: 'dd/MM/yyyy' }}</td>
             <td>
               <a style="color: blue; font-weight: bold;"
                  (click)="openDxKhlcntModal(null, data.idTh)">{{

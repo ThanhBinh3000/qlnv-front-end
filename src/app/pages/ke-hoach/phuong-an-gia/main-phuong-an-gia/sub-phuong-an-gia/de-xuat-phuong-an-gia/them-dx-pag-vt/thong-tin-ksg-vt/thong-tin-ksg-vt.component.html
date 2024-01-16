@@ -106,7 +106,7 @@
       <td class="text-right">{{data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
       <td class="text-right">{{data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
       <td class="text-right" *ngIf="isVat">{{data.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
-      <td *ngIf="isTableKetQua">{{data.ngayBaoGia | date: 'dd/MM/YYYY' }}</td>
+      <td *ngIf="isTableKetQua">{{data.ngayBaoGia | date: 'dd/MM/yyyy' }}</td>
       <td *ngIf="!isTabNdKhac && !isQdThamQuyen">{{data.thoiHanBaoGia }}</td>
       <td *ngIf="isTabNdKhac">{{data.chiSoCpi }}</td>
       <td>{{data.ghiChu }}</td>

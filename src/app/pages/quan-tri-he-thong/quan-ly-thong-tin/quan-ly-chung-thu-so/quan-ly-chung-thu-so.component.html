@@ -98,7 +98,7 @@
 
               <th>
                 <nz-input-group>
-                  <nz-date-picker nzFormat="dd/MM/YYYY" [(ngModel)]="filterTable.startDate"
+                  <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.startDate"
                     (ngModelChange)="filterInTable('startDate', convertDateToString(filterTable.startDate))">
                   </nz-date-picker>
                 </nz-input-group>
@@ -106,7 +106,7 @@
 
               <th>
                 <nz-input-group>
-                  <nz-date-picker nzFormat="dd/MM/YYYY" [(ngModel)]="filterTable.endDate"
+                  <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.endDate"
                     (ngModelChange)="filterInTable('endDate', convertDateToString(filterTable.endDate))">
                   </nz-date-picker>
                 </nz-input-group>

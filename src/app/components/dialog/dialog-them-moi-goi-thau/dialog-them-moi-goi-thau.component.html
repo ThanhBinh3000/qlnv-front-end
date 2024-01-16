@@ -78,13 +78,14 @@
       <tr>
 <!--        <th nzWidth="40px"></th>-->
         <th nzWidth="235px" class="text-center">Cục DTNN KV</th>
-        <th nzWidth="235px" class="text-center">Chi cục DTNN</th>
-        <th nzWidth="160px" class="text-center">Điểm kho</th>
+<!--        <th nzWidth="235px" class="text-center">Chi cục DTNN</th>-->
+<!--        <th nzWidth="160px" class="text-center">Điểm kho</th>-->
         <th nzWidth="120px" class="text-center wrap-text">Chỉ tiêu kế hoạch được giao</th>
         <th nzWidth="130px" class="text-center wrap-text">Số đã thực hiện</th>
         <th nzWidth="120px" class="text-center wrap-text" *ngIf="!showFromQd">Số lượng trình<br/>phê duyệt</th>
         <th nzWidth="120px" class="text-center wrap-text" *ngIf="showFromQd">Số lượng<br/>phê duyệt</th>
         <th nzWidth="150px" class="text-center wrap-text">Thành tiền theo đơn giá có VAT được duyệt (đ)</th>
+        <th nzWidth="150px" class="text-center wrap-text">Số còn lại chưa<br/>thực hiện</th>
         <th nzWidth="80px" [nzRight]="true" class="text-center">Hành động</th>
       </tr>
       </thead>
@@ -96,8 +97,8 @@
             <nz-option *ngFor="let p of listCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
           </nz-select>
         </td>
-        <td></td>
-        <td></td>
+<!--        <td></td>-->
+<!--        <td></td>-->
         <td class="text-right">{{thongTinCuc.soLuongTheoChiTieu}}</td>
         <td class="text-right">{{thongTinCuc.soLuongDaMua}}</td>
         <td>
@@ -105,6 +106,7 @@
                            [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
           </nz-input-number>
         </td>
+        <td></td>
         <td></td>
         <td class="text-left">
           <a (click)="addCuc()">
@@ -120,12 +122,13 @@
           <ng-container *ngIf="!dataCuc.edit; else editCuc">
 <!--            <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>-->
             <td>{{ dataCuc.tenDvi }}</td>
-            <td></td>
-            <td></td>
+<!--            <td></td>-->
+<!--            <td></td>-->
             <td class="text-right">{{ dataCuc.soLuongTheoChiTieu }}</td>
             <td class="text-right">{{ dataCuc.soLuongDaMua}}</td>
             <td class="text-right">{{ dataCuc.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
             <td class="text-right">{{ dataCuc.soLuong * formGoiThau.value.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
+            <td class="text-right">{{ dataCuc.soLuongTheoChiTieu - dataCuc.soLuongDaMua - dataCuc.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
             <td class="text-left">
               <a (click)="editRowCuc(i)">
                 <i class="fa fa-pencil" title="Sửa"></i>
@@ -138,8 +141,8 @@
           <ng-template #editCuc>
 <!--            <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>-->
             <td>{{ dataCuc.tenDvi }}</td>
-            <td></td>
-            <td></td>
+<!--            <td></td>-->
+<!--            <td></td>-->
             <td class="text-right">{{ dataCuc.soLuongTheoChiTieu }}</td>
             <td class="text-right">{{ dataCuc.soLuongDaMua}}</td>
 
@@ -149,6 +152,7 @@
               </nz-input-number>
             </td>
             <td class="text-right">{{ thongTinCucEdit[i] * formGoiThau.value.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
+            <td class="text-right">{{ dataCuc.soLuongTheoChiTieu - dataCuc.soLuongDaMua - thongTinCucEdit[i] | number : '1.0-1' : 'vi_VN' }}</td>
             <td>
               <a (click)="saveEditCuc(i)" class="save">
                 <i class="fa fa-save"></i>

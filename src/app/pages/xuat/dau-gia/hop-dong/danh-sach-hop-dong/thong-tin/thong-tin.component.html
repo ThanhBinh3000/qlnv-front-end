@@ -697,8 +697,8 @@
             <tr *ngFor="let data of dataTablePhuLuc; let i = index">
               <td>{{ i + 1 }}</td>
               <td>{{data.soPhuLuc}}</td>
-              <td>{{data.ngayPduyet | date: 'dd/MM/YYYY'}}</td>
-              <td>{{data.ngayHlucPhuLuc | date: 'dd/MM/YYYY'}}</td>
+              <td>{{data.ngayPduyet | date: 'dd/MM/yyyy'}}</td>
+              <td>{{data.ngayHlucPhuLuc | date: 'dd/MM/yyyy'}}</td>
               <td>{{data.noiDungPhuLuc}}</td>
               <td>{{data.tenTrangThai}}</td>
               <td *ngIf="!isQuanLy">
