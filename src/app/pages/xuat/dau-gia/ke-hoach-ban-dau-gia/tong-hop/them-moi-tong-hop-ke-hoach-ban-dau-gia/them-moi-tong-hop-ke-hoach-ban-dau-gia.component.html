@@ -201,7 +201,7 @@
                 {{ data.tenDvi }}
               </td>
               <td class="text-left">{{ data.soDxuat }}</td>
-              <td class="text-left">{{ data.ngayPduyet|date:'dd/MM/YYYY' }}</td>
+              <td class="text-left">{{ data.ngayPduyet|date:'dd/MM/yyyy' }}</td>
               <td class="text-left">
                 <ng-container *ngIf="data.trichYeu.length > 20; else shortDescription">{{ data.trichYeu | slice:0:20 }}
                   ...

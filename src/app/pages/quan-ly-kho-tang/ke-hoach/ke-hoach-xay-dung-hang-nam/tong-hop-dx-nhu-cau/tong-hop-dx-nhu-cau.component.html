@@ -200,7 +200,7 @@
           <td class="text-center">{{ data.namKeHoach }}</td>
           <td>{{ data.namBatDau && data.namKetThuc ? data.namBatDau + ' - ' + data.namKetThuc : ''}}</td>
           <td>{{ data.id }}</td>
-          <td  class="text-center">{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
+          <td  class="text-center">{{ data.ngayTao | date: 'dd/MM/yyyy' }}</td>
           <td><a nz-button nzType="link" *ngIf="data.maToTrinh"
                  (click)="openChiTietModal(data.id)">{{ data.maToTrinh }}</a>
           </td>

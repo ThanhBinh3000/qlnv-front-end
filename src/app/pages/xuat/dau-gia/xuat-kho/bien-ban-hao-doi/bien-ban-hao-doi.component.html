@@ -98,7 +98,7 @@
             </a>
           </td>
           <td class="text-left bold">{{item.nam}}</td>
-          <td class="text-left bold">{{item.thoiGianGiaoNhan|date: 'dd/MM/YYYY'}}</td>
+          <td class="text-left bold">{{item.thoiGianGiaoNhan|date: 'dd/MM/yyyy'}}</td>
           <td></td>
           <td></td>
           <td></td>
@@ -143,7 +143,7 @@
                   <td
                     class="text-left bold">{{ (lv2.tenLoKho ? lv2.tenLoKho + " - " : "") + (lv2.tenNganKho ? lv2.tenNganKho + " - " : "") + (lv2.tenNhaKho ? lv2.tenNhaKho : "") }}</td>
                   <td class="text-left bold">{{ lv2.soBbHaoDoi }}</td>
-                  <td class="text-left bold">{{ lv2.ngayLapBienBan|date:'dd/MM/YYYY' }}</td>
+                  <td class="text-left bold">{{ lv2.ngayLapBienBan|date:'dd/MM/yyyy' }}</td>
                   <td class="text-left">
                     <a *ngIf="lv2.soBbTinhKho && lv2.idBbTinhKho" (click)="openModal(lv2.idBbTinhKho, 'tinhKho')"
                        style="color: blue">{{ lv2.soBbTinhKho }}
@@ -199,7 +199,7 @@
                            style="color: blue">{{ lv3.soPhieuXuatKho }}
                         </a>
                       </td>
-                      <td class="text-left">{{lv3.ngayXuatKho|date:'dd/MM/YYYY'}}</td>
+                      <td class="text-left">{{lv3.ngayXuatKho|date:'dd/MM/yyyy'}}</td>
                       <td></td>
                       <td></td>
                     </tr>

@@ -49,7 +49,7 @@
                 <nz-form-control [nzErrorTip]="error">
                   <nz-form-label [nzNoColon]="true" class="label-color-kh"> Ngày ký QĐ phê duyệt kết quả LCNT
                   </nz-form-label>
-                  <nz-date-picker [nzDisabled]="true" class="search__input" nzFormat="dd/MM/YYYY"
+                  <nz-date-picker [nzDisabled]="true" class="search__input" nzFormat="dd/MM/yyyy"
                                   nzPlaceHolder="Ngày ký"
                                   formControlName="ngayKyKqlcnt">
                   </nz-date-picker>
@@ -99,7 +99,7 @@
                 <nz-form-control [nzErrorTip]="error">
                   <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Ngày hiệu lực (Ngày ký hđ)
                   </nz-form-label>
-                  <nz-date-picker [nzDisabled]="isViewDetail" class="search__input" nzFormat="dd/MM/YYYY"
+                  <nz-date-picker [nzDisabled]="isViewDetail" class="search__input" nzFormat="dd/MM/yyyy"
                                   nzPlaceHolder="Ngày ký"
                                   formControlName="ngayHieuLuc">
                   </nz-date-picker>
@@ -568,7 +568,7 @@
           <tr *ngFor="let data of listPhuLuc; let idx = index">
             <td>{{idx + 1}}</td>
             <td>{{data.soHd}}</td>
-            <td>{{data.ngayHieuLuc | date: 'dd/MM/YYYY'}}</td>
+            <td>{{data.ngayHieuLuc | date: 'dd/MM/yyyy'}}</td>
             <td>{{data.noiDungPl  }}</td>
             <td>{{data.tenTrangThai }}</td>
             <td class="text-center" *ngIf="isViewDetail">

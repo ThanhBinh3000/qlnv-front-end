@@ -256,8 +256,8 @@
             <td>{{ data.soDxuat }}</td>
             <td *ngIf="loaiVthh != '02'">{{ data.tenDvi }}</td>
             <td class="text-center">{{ data.namKhoach }}</td>
-            <td class="text-center">{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
-            <td class="text-center">{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
+            <td class="text-center">{{ data.ngayTao | date: 'dd/MM/yyyy' }}</td>
+            <td class="text-center">{{ data.ngayPduyet | date: 'dd/MM/yyyy' }}</td>
             <td>
               <a style="color: blue" (click)="openQdGiaoModal(data.qdGiaoChiTieuId)">{{ data.soQd}}</a>
             </td>
@@ -267,12 +267,12 @@
             <td>
               <a style="color: blue" (click)="openQdPdKhlcntModal(data.idQdPdKhLcnt)">{{ data.soQdPdKhLcnt}}</a>
             </td>
-            <td class="text-center" *ngIf="loaiVthh != '02'">{{ data.tgianDthau | date: 'dd/MM/YYYY'}}</td>
-            <td class="text-center" *ngIf="loaiVthh != '02'">{{ data.tgianMthau | date: 'dd/MM/YYYY'}}</td>
-            <td class="text-center" *ngIf="loaiVthh == '02'">{{ data.tgianDongMothau | date: 'dd/MM/YYYY'}}</td>
+            <td class="text-center" *ngIf="loaiVthh != '02'">{{ data.tgianDthau | date: 'dd/MM/yyyy'}}</td>
+            <td class="text-center" *ngIf="loaiVthh != '02'">{{ data.tgianMthau | date: 'dd/MM/yyyy'}}</td>
+            <td class="text-center" *ngIf="loaiVthh == '02'">{{ data.tgianDongMothau | date: 'dd/MM/yyyy'}}</td>
             <td class="text-right" *ngIf="loaiVthh == '02'">{{ data.tgianThienHd}}</td>
             <td class="text-right" *ngIf="loaiVthh == '02'">{{ data.tgianThien}}</td>
-            <td class="text-center" *ngIf="loaiVthh != '02'">{{ data.tgianNhang | date: 'dd/MM/YYYY' }}</td>
+            <td class="text-center" *ngIf="loaiVthh != '02'">{{ data.tgianNhang | date: 'dd/MM/yyyy' }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td *ngIf="userService.isTongCuc() && loaiVthh != '02'">
               <span *ngIf="data.trangThaiTh == '24'">{{data.tenTrangThaiTh}}</span>

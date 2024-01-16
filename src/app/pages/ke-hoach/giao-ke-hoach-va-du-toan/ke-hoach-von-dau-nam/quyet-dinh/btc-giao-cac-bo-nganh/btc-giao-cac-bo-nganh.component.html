@@ -178,7 +178,7 @@
           <td [ngClass]="(rowSelected==data.id)?'bg-selected':''"
               class="text-center">{{(page - 1) * pageSize + idx + 1}}</td>
           <td class='text-left' [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.soQd }}</td>
-          <td class='text-center' [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
+          <td class='text-center' [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.ngayQd | date: 'dd/MM/yyyy' }}</td>
           <td class='text-center' [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.namQd }}</td>
           <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.tenBoNganh }}</td>
           <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.trichYeu }}</td>

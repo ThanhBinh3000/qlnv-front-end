@@ -236,8 +236,8 @@
                         <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                       <td class="text-center">{{ data.namKh }}</td>
                       <td>{{ data.soDxuat }}</td>
-                        <td class="text-center">{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
-                        <td class="text-center">{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
+                        <td class="text-center">{{ data.ngayTao | date: 'dd/MM/yyyy' }}</td>
+                        <td class="text-center">{{ data.ngayPduyet | date: 'dd/MM/yyyy' }}</td>
                         <td>{{ data.trichYeu }}</td>
                         <td class="text-right">
                             <a nz-button nzType="link" nzBlock (click)="openModalChiTieu(data.idSoQdCc)">{{

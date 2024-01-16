@@ -100,8 +100,8 @@
           <td>{{ data.namBc }}</td>
           <td>{{data.kyBc? 'Quý ' +  convertToRoman(data.kyBc) : '' }}</td>
           <td>{{ data.tenDonViGui }}</td>
-          <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
-          <td>{{ data.ngayBanHanh | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.ngayTao | date: 'dd/MM/yyyy' }}</td>
+          <td>{{ data.ngayBanHanh | date: 'dd/MM/yyyy' }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>
             <a (click)="redirectDetail(true, data)"

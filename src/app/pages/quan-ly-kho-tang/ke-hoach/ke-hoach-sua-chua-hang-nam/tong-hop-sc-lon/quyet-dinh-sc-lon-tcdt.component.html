@@ -162,7 +162,7 @@
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td>{{ data.namKeHoach }}</td>
           <td>{{ data.id }}</td>
-          <td>{{ data.tgTongHop | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.tgTongHop | date: 'dd/MM/yyyy' }}</td>
           <td>{{ data.noiDung }}</td>
           <td>{{ data.loaiTmdt == 'TREN15TY' ? '> 15 tỷ' :   '<= 15 tỷ' }}</td>
           <td><a nz-button nzType="link" (click)="openModalQdDc(data.soQdBtc, '00')">{{

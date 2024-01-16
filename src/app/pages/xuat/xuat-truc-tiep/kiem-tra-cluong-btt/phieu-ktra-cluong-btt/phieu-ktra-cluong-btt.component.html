@@ -106,7 +106,7 @@
               </a>
             </td>
             <td class="text-left bold">{{item.namKh}}</td>
-            <td class="text-left bold">{{item.tgianGiaoNhan|date: 'dd/MM/YYYY'}}</td>
+            <td class="text-left bold">{{item.tgianGiaoNhan|date: 'dd/MM/yyyy'}}</td>
             <td></td>
             <td></td>
             <td></td>
@@ -149,13 +149,13 @@
                     <td
                       class="text-left">{{ (lv2.tenLoKho ? lv2.tenLoKho + " - " : "") + (lv2.tenNganKho ? lv2.tenNganKho + " - " : "") + (lv2.tenNhaKho ? lv2.tenNhaKho : "") }}</td>
                     <td class="text-left bold">{{ lv2.soPhieuKiemNghiem }}</td>
-                    <td class="text-left">{{ lv2.ngayKiemNghiemMau|date: 'dd/MM/YYYY' }}</td>
+                    <td class="text-left">{{ lv2.ngayKiemNghiemMau|date: 'dd/MM/yyyy' }}</td>
                     <td class="text-left">
                       <a *ngIf="lv2.soBbLayMau && lv2.idBbLayMau" (click)="openModal(lv2.idBbLayMau, 'layMau')"
                          style="color: blue">{{ lv2.soBbLayMau }}
                       </a>
                     </td>
-                    <td class="text-left">{{ lv2.ngayLayMau|date: 'dd/MM/YYYY' }}</td>
+                    <td class="text-left">{{ lv2.ngayLayMau|date: 'dd/MM/yyyy' }}</td>
                     <td class="text-left">
                       <a *ngIf="lv2.soBbTinhKho && lv2.idTinhKho" (click)="openModal(lv2.idTinhKho, 'tinhKho')"
                          style="color: blue">{{ lv2.soBbTinhKho }}

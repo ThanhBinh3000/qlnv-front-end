@@ -97,7 +97,7 @@
               </a>
             </td>
             <td class="text-left bold">{{item.namKh}}</td>
-            <td class="text-left bold">{{item.tgianGiaoNhan|date: 'dd/MM/YYYY'}}</td>
+            <td class="text-left bold">{{item.tgianGiaoNhan|date: 'dd/MM/yyyy'}}</td>
             <td></td>
             <td></td>
             <td></td>
@@ -143,7 +143,7 @@
                          style="color: blue; font-weight: bold">{{ lv2.soPhieuKiemNghiem }}
                       </a>
                     </td>
-                    <td class="text-left bold">{{ lv2.ngayKiemNghiemMau|date:'dd/MM/YYYY' }}</td>
+                    <td class="text-left bold">{{ lv2.ngayKiemNghiemMau|date:'dd/MM/yyyy' }}</td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -175,7 +175,7 @@
                              style="color: blue">{{ lv3.soBangKeHang }}
                           </a>
                         </td>
-                        <td class="text-left">{{lv3.ngayLapPhieu|date:'dd/MM/YYYY'}}</td>
+                        <td class="text-left">{{lv3.ngayLapPhieu|date:'dd/MM/yyyy'}}</td>
                         <td class="text-left">{{lv3.tenTrangThai}}</td>
                         <td class="text-center">
                           <a *ngIf="isActionAllowed('XEM', lv3)" (click)="redirectDetail(lv3.id,true, 0, 0)">

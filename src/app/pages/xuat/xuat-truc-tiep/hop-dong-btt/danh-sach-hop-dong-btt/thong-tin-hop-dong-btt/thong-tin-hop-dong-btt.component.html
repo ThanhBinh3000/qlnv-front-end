@@ -726,8 +726,8 @@
             <tr *ngFor="let data of dataTablePhuLuc; let i = index">
               <td class="text-center">{{ i + 1 }}</td>
               <td class="text-left">{{data.soPhuLuc}}</td>
-              <td class="text-left">{{data.ngayPduyet|date: 'dd/MM/YYYY'}}</td>
-              <td class="text-left">{{data.ngayHlucPhuLuc|date: 'dd/MM/YYYY'}}</td>
+              <td class="text-left">{{data.ngayPduyet|date: 'dd/MM/yyyy'}}</td>
+              <td class="text-left">{{data.ngayHlucPhuLuc|date: 'dd/MM/yyyy'}}</td>
               <td class="text-left">{{data.noiDungPhuLuc}}</td>
               <td class="text-left">{{data.tenTrangThai}}</td>
               <td class="text-center" *ngIf="!isQuanLy">
@@ -1385,8 +1385,8 @@
             <tr *ngFor="let data of dataTablePhuLuc; let i = index">
               <td class="text-center">{{ i + 1 }}</td>
               <td class="text-left">{{data.soPhuLuc}}</td>
-              <td class="text-left">{{data.ngayPduyet|date: 'dd/MM/YYYY'}}</td>
-              <td class="text-left">{{data.ngayHlucPhuLuc|date: 'dd/MM/YYYY'}}</td>
+              <td class="text-left">{{data.ngayPduyet|date: 'dd/MM/yyyy'}}</td>
+              <td class="text-left">{{data.ngayHlucPhuLuc|date: 'dd/MM/yyyy'}}</td>
               <td class="text-left">{{data.noiDungPhuLuc}}</td>
               <td class="text-left">{{data.tenTrangThai}}</td>
               <td class="text-center" *ngIf="!isQuanLy">

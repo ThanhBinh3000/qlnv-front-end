@@ -116,7 +116,7 @@
           <td class="text-center">{{ data.type == '01' ? data.nguoiDdien : null}}</td>
           <td class="text-center">{{ data.type == '01' ?  data.chucVu : null}}</td>
           <td class="text-center">{{data.ghiChu}}</td>
-          <td class="text-center">{{data.ngayTao | date : 'dd/MM/YYYY'}}</td>
+          <td class="text-center">{{data.ngayTao | date : 'dd/MM/yyyy'}}</td>
           <td class="text-center">{{data.tenTrangThai}}</td>
           <td class="text-left" nzRight>
             <a (click)="themMoi(data.id)" *ngIf="userService.isAccessPermisson('QTDM_DM_DVI_LIENQUAN_THEM')">

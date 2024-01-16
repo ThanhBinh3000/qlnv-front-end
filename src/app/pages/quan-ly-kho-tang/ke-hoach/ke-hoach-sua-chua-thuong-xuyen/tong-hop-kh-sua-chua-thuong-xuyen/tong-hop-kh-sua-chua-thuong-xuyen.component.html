@@ -170,13 +170,13 @@
           <td>{{(page - 1) * pageSize + i + 1}}</td>
           <td>{{ data.namKh }}</td>
           <td>{{ data.soToTrinh }}</td>
-          <td>{{ data.ngayTaoTt | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.ngayTaoTt | date: 'dd/MM/yyyy' }}</td>
           <td>{{ data.id }}</td>
-          <td>{{ data.thoiGianTh |date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.thoiGianTh |date: 'dd/MM/yyyy' }}</td>
           <td>{{ data.noiDungTh }}</td>
           <td><a nz-button nzType="link" *ngIf="data.idQdPdKhDm"
                  (click)="openQdPdModal(data.idQdPdKhDm)">{{data.soQdPdKhDm}}</a>
-          <td>{{ data.ngayKyQd | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.ngayKyQd | date: 'dd/MM/yyyy' }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-center">
             <a *ngIf="userService.isTongCuc() && data.trangThai != STATUS.DU_THAO && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_TH_XEM')"

@@ -194,11 +194,11 @@
             </td>
             <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
             <td>{{ data.soQd }}</td>
-            <td>{{ data.ngayKy| date: 'dd/MM/YYYY'}}</td>
+            <td>{{ data.ngayKy| date: 'dd/MM/yyyy'}}</td>
             <td><a nz-button nzType="link" (click)="openThModal(data.idTongHop)"> {{data.maTongHop}}</a></td>
-            <td>{{ data.ngayThop | date: 'dd/MM/YYYY'}}</td>
+            <td>{{ data.ngayThop | date: 'dd/MM/yyyy'}}</td>
             <td><a nz-button nzType="link" (click)="openDxPaModal(data.idDx)"> {{data.soDx}}</a></td>
-            <td>{{ data.ngayDx | date: 'dd/MM/YYYY'}}</td>
+            <td>{{ data.ngayDx | date: 'dd/MM/yyyy'}}</td>
             <td>{{ data.tenLoaiVthh }}</td>
             <td>{{ data.tongSoLuongDx |number: '1.0-1' : 'vi_VN' }}</td>
             <td>{{ data.tongSoLuong |number: '1.0-1' : 'vi_VN' }}</td>
