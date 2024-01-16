@@ -18,6 +18,11 @@ export class SoLuongNhapHangService extends BaseService {
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
+  getSoLuongCtkhTheoQdByIdQd(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/count-sl-ctkh-qd-by-id-qd`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
   getSoLuongCtkhTheoKh(body): Promise<OldResponseData> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/count-sl-ctkh-kh`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
