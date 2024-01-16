@@ -6,7 +6,7 @@
                     <nz-form-control>
                         <nz-form-label>Năm kế hoạch</nz-form-label>
                         <nz-form-item>
-                            <nz-select formControlName="nam">
+                            <nz-select formControlName="namSr">
                                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                             </nz-select>
                         </nz-form-item>
@@ -16,21 +16,19 @@
                     <nz-form-control>
                         <nz-form-label>Mã danh sách cần SC</nz-form-label>
                         <nz-form-item>
-                            <input nz-input formControlName="maSc" />
+                            <input nz-input formControlName="maDanhSach" />
                         </nz-form-item>
                     </nz-form-control>
                 </div>
                 <div nz-col nzSpan="5">
-                    <nz-form-control>
-                        <nz-form-label>
-                            Chi cục DTNN
-                        </nz-form-label>
-                        <nz-form-item>
-                            <nz-select formControlName="maCc" nzShowSearch nzAllowClear>
-                                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-                            </nz-select>
-                        </nz-form-item>
-                    </nz-form-control>
+                  <nz-form-control>
+                    <nz-form-label>Chi cục DTNN KV</nz-form-label>
+                    <nz-form-item>
+                      <nz-select formControlName="maDviSr" nzShowSearch nzAllowClear>
+                        <nz-option *ngFor="let p of dsDonvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
+                      </nz-select>
+                    </nz-form-item>
+                  </nz-form-control>
                 </div>
                 <div nz-col nzSpan="6">
                     <nz-form-control>

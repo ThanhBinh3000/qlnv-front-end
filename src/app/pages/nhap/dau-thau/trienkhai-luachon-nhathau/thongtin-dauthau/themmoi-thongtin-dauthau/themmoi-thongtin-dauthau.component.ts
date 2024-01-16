@@ -566,7 +566,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       this.selected = true;
       this.idGoiThau = dataGoiThau.id;
     }
-    if (dataGoiThau.soQdPdHsmt != null && dataGoiThau.soQdPdHsmt.trangThai == STATUS.BAN_HANH) {
+    if (dataGoiThau.qdPdHsmt != null && dataGoiThau.qdPdHsmt.trangThai == STATUS.BAN_HANH) {
       this.acceptSave = true;
     } else {
       this.acceptSave = false;

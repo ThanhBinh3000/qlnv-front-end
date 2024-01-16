@@ -60,6 +60,9 @@ export class TableDanhMucBpxlComponent extends Base3Component implements OnInit 
   column : string = ''
   column1 : string = ''
   columnTt : string = ''
+  column3 : string = ''
+  column4 : string = ''
+  typeTable : number = 1;
 
   async ngOnInit() {
     await this.spinner.show();
@@ -88,6 +91,7 @@ export class TableDanhMucBpxlComponent extends Base3Component implements OnInit 
     switch (this.router.url) {
       case '/luu-kho/hang-trong-kho/thanh-ly':
         typeBpxl = '1';
+        this.typeTable = 1;
         this.title = 'Danh sách hàng thuộc diện thanh lý';
         this.column = 'cần thanh lý';
         this.column1 = 'đã thanh lý';
@@ -95,6 +99,7 @@ export class TableDanhMucBpxlComponent extends Base3Component implements OnInit 
         break;
       case '/luu-kho/hang-trong-kho/tieu-huy':
         typeBpxl = '2';
+        this.typeTable = 1;
         this.title = 'Danh sách hàng thuộc diện tiêu hủy';
         this.column = 'cần tiêu hủy';
         this.column1 = 'đã tiêu hủy';
@@ -102,24 +107,31 @@ export class TableDanhMucBpxlComponent extends Base3Component implements OnInit 
         break;
       case '/luu-kho/hang-trong-kho/sap-het-han-bao-hanh':
         typeBpxl = '6';
+        this.typeTable = 2;
         this.title = 'Danh sách hàng DTQG sắp hết hạn bảo hành (trước 3 tháng) theo hợp đồng đã ký';
         this.column = 'sắp hết hạn BH';
         this.column1 = null;
         this.columnTt = 'xử lý';
+        this.column3 = 'Ngày hết hạn bảo hành theo HĐ';
+        this.column4 = 'Thời gian BH còn lại theo HĐ (Ngày)';
         vaiTro = null;
         trangThai = null;
         break;
       case '/luu-kho/hang-trong-kho/het-han-luu-kho':
         typeBpxl = '7';
+        this.typeTable = 2;
         this.title = 'Danh sách hàng sắp hết hạn lưu kho nhưng chưa có kế hoạch xuất kho'
         this.column = 'sắp hết hạn lưu kho';
         this.column1 = null;
         this.columnTt = 'KTCL';
+        this.column3 = 'Ngày hết hạn lưu kho';
+        this.column4 = 'Thời gian lưu kho còn lại theo HĐ (Ngày)';
         vaiTro = null;
         trangThai = null;
         break;
       case '/luu-kho/hang-trong-kho/hong-hoc-giam-cl':
         typeBpxl = '4';
+        this.typeTable = 1;
         this.title = 'Danh sách hàng hỏng, giảm chất lượng do nguyên nhân bất khả kháng';
         this.column = 'hỏng hóc';
         this.column1 = null;
@@ -127,6 +139,7 @@ export class TableDanhMucBpxlComponent extends Base3Component implements OnInit 
         break;
       case '/luu-kho/hang-trong-kho/hong-hoc-bao-hanh':
         typeBpxl = '3';
+        this.typeTable = 1;
         this.title = 'Danh sách hàng thuộc diện hỏng cần bảo hành';
         this.column = 'hỏng cần BH';
         this.column1 = 'đã BH';
@@ -134,6 +147,7 @@ export class TableDanhMucBpxlComponent extends Base3Component implements OnInit 
         break;
       case '/luu-kho/hang-trong-kho/hong-hoc-sua-chua':
         typeBpxl = '5';
+        this.typeTable = 1;
         this.title = 'Danh sách hàng thuộc diện hỏng cần sửa chữa'
         this.column = 'hỏng cần sửa chữa';
         this.column1 = 'đã sửa chữa';
@@ -141,6 +155,7 @@ export class TableDanhMucBpxlComponent extends Base3Component implements OnInit 
         break;
       case '/luu-kho/hang-trong-kho/da-het-han':
         typeBpxl = '8';
+        this.typeTable = 1;
         this.title = 'Danh sách hàng đã hết hạn bảo hành, chưa hết hạn lưu kho'
         this.column = 'hết hạn BH, chưa hết hạn LK';
         this.column1 = null;

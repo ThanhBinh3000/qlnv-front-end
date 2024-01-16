@@ -46,6 +46,7 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
   @Input() trangThaiQd;
   @Input() isQdTongCuc: boolean = false;
   @Input() fileDinhKem: any[] = [];
+  fileDinhKems: any[] = [];
   formData: FormGroup
   listNguonVon: any[] = [];
   listThuHoachVu: any[] = [];
@@ -205,6 +206,9 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
           this.initListQuy();
         }
         this.tinhTongMucDtDx();
+        if (this.fileDinhKem != null) {
+          this.fileDinhKems = this.fileDinhKem;
+        }
         this.objectChange.emit(this.formData.value)
       } else {
         this.formData.reset();
