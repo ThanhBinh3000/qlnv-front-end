@@ -165,6 +165,9 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
         soDxuat: data.soDxuat?.split('/')[0]
       });
       this.dataTable = data.children;
+      if (!this.isView){
+        await this.getGiaToiThieu();
+      }
       if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
         await this.loaiVatTu(data);
       }
@@ -335,7 +338,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     };
     const res = await this.quyetDinhGiaCuaBtcService.getQdGiaLastestBtc(body);
     if (res && res.msg === MESSAGE.SUCCESS && res.data) {
-      console.log(res, 999)
       let giaToiDa = 0;
       res.data.forEach((item) => {
         const giaQdBtc = item.giaQdDcBtc != null && item.giaQdDcBtc > 0 ? item.giaQdDcBtc : item.giaQdBtc;
