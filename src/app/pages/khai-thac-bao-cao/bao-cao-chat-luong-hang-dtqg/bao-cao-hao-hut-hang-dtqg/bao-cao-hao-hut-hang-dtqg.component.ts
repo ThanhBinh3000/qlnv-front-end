@@ -36,6 +36,7 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
   listLoaiKyBc: any[] = [];
   listKyBc: any[] = [];
   rows: any[] = [];
+  listPtbq: any[] = [];
   nameFile: any;
 
   constructor(httpClient: HttpClient,
@@ -55,6 +56,7 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
         namXuat: [[], [Validators.required]],
         maCuc: null,
         maChiCuc: null,
+        pthucBquan: null,
         loaiVthh: [null, [Validators.required]],
         loaiBc: ['02', [Validators.required]],
       }
@@ -67,6 +69,7 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
       this.loadDsDonVi();
       this.loadDsVthh();
       this.loadDsLoaiBc();
+      this.loadListPpbq();
       await this.initForm()
     } catch (e) {
       console.log("error: ", e);
@@ -74,6 +77,14 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
     await this.spinner.hide();
+  }
+
+  async loadListPpbq() {
+    this.listPtbq = [];
+    let res = await this.danhMucSv.danhMucChungGetAll('PT_BAO_QUAN');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listPtbq = res.data;
+    }
   }
 
   downloadPdf() {
