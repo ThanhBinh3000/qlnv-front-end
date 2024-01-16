@@ -36,6 +36,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
   tenCloaiVthh: any;
   dataChiTieu: any;
   dataEdit: any;
+  idQdHdr: any;
   maDviCuc: any;
   dataAll: any;
   listOfData: any[] = [];
@@ -93,6 +94,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
       diaChi: [null],
       soLuongChiTieu: [null],
       soLuongKhDd: [null],
+      soLuongDaLenKhByIdQd: [null],
       donGia: [null],
       donGiaVat: [null],
       tongSoLuong: [null, [Validators.required]],
@@ -126,10 +128,10 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, "Đơn giá đề xuất không được lớn hơn đơn giá tối đa được duyệt bao gồm VAT")
         return;
       }
-      if (this.formData.get('tongSoLuong').value > (this.formData.get('soLuongChiTieu').value - this.formData.get('soLuongKhDd').value)) {
-        this.notification.error(MESSAGE.ERROR, "Số lượng đề xuất, phê duyệt không được lớn hơn số lượng chỉ tiêu kế hoạch")
-        return;
-      }
+      // if (this.formData.get('tongSoLuong').value > (this.formData.get('soLuongChiTieu').value - this.formData.get('soLuongKhDd').value)) {
+      //   this.notification.error(MESSAGE.ERROR, "Số lượng đề xuất, phê duyệt không được lớn hơn số lượng chỉ tiêu kế hoạch")
+      //   return;
+      // }
       // if (this.listOfData.length == 0 && this.userService.isCuc()) {
       //   this.notification.error(MESSAGE.ERROR, "Danh sách điểm kho không được để trống")
       //   return;
@@ -167,10 +169,13 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
       let body = {
         year: this.namKh,
         loaiVthh: this.loaiVthh,
-        maDvi: this.formData.value.maDvi
+        maDvi: this.formData.value.maDvi,
+        idQd: this.idQdHdr,
       }
       let soLuongDaLenKh = await this.soLuongNhapHangService.getSoLuongCtkhTheoQd(body);
+      let soLuongDaLenKhByIdQd = await this.soLuongNhapHangService.getSoLuongCtkhTheoQdByIdQd(body);
       this.formData.value.soLuongKhDd = soLuongDaLenKh.data;
+      this.formData.value.soLuongDaLenKhByIdQd = soLuongDaLenKhByIdQd.data;
       this.formData.value.tongSoLuongChuaTh = this.formData.value.soLuongChiTieu - this.formData.value.soLuongKhDd
       // this.changeChiCuc(this.dataEdit.maDvi);
       this.listOfData = this.dataEdit.children
@@ -212,6 +217,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
       };
       let res = await this.donViService.getAll(body);
       if (res.msg === MESSAGE.SUCCESS) {
+        console.log(this.dataChiTieu, "this.dataChiTieu")
         this.listChiCuc = this.dataChiTieu.khLuongThuc.filter(x => x.ntnThoc != 0)
         this.listChiCuc.map(v => Object.assign(v, { tenDonVi: v.tenDvi }))
         console.log(this.listChiCuc, "this.listChiCuc")
@@ -227,12 +233,13 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     let body = {
       year: this.namKh,
       loaiVthh: this.loaiVthh,
-      maDvi: event
+      maDvi: event,
+      idQd: this.idQdHdr,
     }
     await this.getGiaCuThe(event)
     await this.getGiaToiDa(event);
     let soLuongDaLenKh = await this.soLuongNhapHangService.getSoLuongCtkhTheoQd(body);
-    console.log(this.dataChiTieu)
+    let soLuongDaLenKhByIdQd = await this.soLuongNhapHangService.getSoLuongCtkhTheoQdByIdQd(body);
     let resChiTieu = this.dataChiTieu?.khLuongThuc.find(x => x.maDonVi == event);
     let chiCuc = this.listChiCuc.filter(item => item.maDvi == event)[0];
     const res = await this.donViService.getDonVi({ str: event })
@@ -255,6 +262,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
         this.formData.patchValue({
           soLuongKhDd: soLuongDaLenKh?.data,
           soLuongChiTieu: resChiTieu?.ntnThoc,
+          soLuongDaLenKhByIdQd: soLuongDaLenKhByIdQd?.data,
           tongSoLuongChuaTh: resChiTieu?.ntnThoc - soLuongDaLenKh.data
         })
       }
@@ -313,16 +321,23 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
   }
 
   validateSoLuong(isAdd?) {
-    const soLuongConLai = this.formData.value.soLuongChiTieu - this.formData.value.soLuongKhDd
+    let soLuongConLai = this.formData.value.soLuongChiTieu - this.formData.value.soLuongKhDd
+    let soLuongConLaiByIdQd = 0
     let soLuong = 0
     if (isAdd) {
       soLuong += this.thongTinMuaTrucTiep.soLuong;
+    }else{
+      soLuong += this.formData.value.tongSoLuong
+    }
+    if(this.formData.value.soLuongDaLenKhByIdQd){
+      soLuongConLaiByIdQd = this.formData.value.soLuongDaLenKhByIdQd
+      soLuongConLai = soLuongConLai + soLuongConLaiByIdQd;
     }
     this.listOfData.forEach(item => {
       soLuong += item.soLuong
     })
     if (soLuong > soLuongConLai) {
-      this.notification.error(MESSAGE.ERROR, "Số lượng đã vượt quá số lượng chỉ tiêu ")
+      this.notification.error(MESSAGE.ERROR, "Số lượng đề xuất, phê duyệt không được lớn hơn số lượng chỉ tiêu kế hoạch ")
       return false
     }
     return true

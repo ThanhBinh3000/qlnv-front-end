@@ -361,7 +361,7 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
           namKh: data.namKh
 
         })
-        await this.getDataChiTieu(data.idSoQdCc);
+        // await this.getDataChiTieu(data.idSoQdCc);
         this.danhsachDxMtt = data.children.filter(x => x.idQdGiaoNvuNh == null);
         this.danhsachDxMttCache = cloneDeep(this.danhsachDxMtt)
         for (let item of this.danhsachDxMtt) {
@@ -404,7 +404,7 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
         namKh: res.data.namKh
 
       })
-      await this.getDataChiTieu(res.data.idSoQdCc);
+      // await this.getDataChiTieu(res.data.idSoQdCc);
       this.danhsachDxMtt = res.data.hhDcQdPduyetKhmttDxList;
       this.danhsachDxMttCache = cloneDeep(this.danhsachDxMtt)
       for (let item of this.danhsachDxMtt) {
@@ -434,7 +434,7 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
       this.dataInput = data;
       let res = await this.quyetDinhPheDuyetKeHoachMTTService.getDetail(data?.idQdHdr);
       if(res.msg == MESSAGE.SUCCESS){
-        await this.getDataChiTieu(res.data.idSoQdCc);
+        await this.getDataChiTieu(data.idSoQdCc);
       }
       this.dataInputCache = res.data.children.find(x => x.maDvi == data.maDvi)
       // data.tongSoLuong = 0;
@@ -653,6 +653,7 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
   async getDataChiTieu(id: any) {
     let res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachNam(id);
     if (res2.msg == MESSAGE.SUCCESS) {
+      console.log(res2.data, "getDataChiTieu")
       this.dataChiTieu = res2.data;
     }
   }
@@ -660,7 +661,9 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
   setNewTableData($event) {
     debugger
     this.danhsachDxMtt.forEach(item => {
-      item.children = $event.filter(x => x.maDvi.includes(item.maDvi));
+      if($event.find(x => x.maDvi.includes(item.maDvi))){
+        item.children = $event;
+      }
       // item.tongSoLuong = item.children.reduce((acc, data) => acc + data.tongSoLuong, 0)
       // item.tongMucDt = item.children.reduce((acc, data) => acc + data.tongThanhTien, 0)
     })
