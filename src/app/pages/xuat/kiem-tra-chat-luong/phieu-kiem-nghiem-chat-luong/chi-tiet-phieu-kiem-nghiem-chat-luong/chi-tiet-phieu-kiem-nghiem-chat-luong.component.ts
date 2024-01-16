@@ -1,3 +1,4 @@
+import { DanhMucDungChungService } from './../../../../../services/danh-muc-dung-chung.service';
 import { MangLuoiKhoService } from './../../../../../services/qlnv-kho/mangLuoiKho.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { Base2Component } from 'src/app/components/base2/base2.component';
@@ -63,7 +64,9 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   public vldTrangThai: BienBanLayMauComponent;
   templateName = 'phieu_khiem_nghiem_cl';
   listDiaDiemNhap: any[];
-  amount1 = { ...AMOUNT_TWO_DECIMAL, align: "left" }
+  amount1 = { ...AMOUNT_TWO_DECIMAL, align: "left" };
+  dmDanhBongGao: any[] = [];
+  dmMucXatGao: any[] = [];
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
@@ -73,6 +76,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
     private danhMucService: DanhMucService,
     private mangLuoiKhoService: MangLuoiKhoService,
+    private danhMucDungChungService: DanhMucDungChungService
   ) {
     super(httpClient, storageService, notification, spinner, modal, null);
     this.formData = this.fb.group({
@@ -144,6 +148,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       this.maHauTo = '/PKNCL-' + this.userInfo.DON_VI.tenVietTat;
       await Promise.all([
         this.loadDsQdGnv(),
+        this.loadDmDanhBongGao(this.loaiVthh, 'DANH_BONG'), this.loadDmMucXatGao(this.loaiVthh, 'MUC_XAT')
         // this.loadDsPplm(),
       ]);
       await this.loadDetail();
@@ -194,6 +199,21 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     if (res.msg === MESSAGE.SUCCESS) {
       const dsHinhThucBq = Array.isArray(res.data.hinhThucBq) ? res.data.hinhThucBq.map(item => ({ ten: item.giaTri, label: item.giaTri, value: item.ma, type: HINH_THUC_KE_LOT_BAO_QUAN.PHUONG_PHAP_BAO_QUAN })) : [];
       this.formData.patchValue({ xhPhieuKnclDtl: [...this.formData.value.xhPhieuKnclDtl.filter(f => f.type !== HINH_THUC_KE_LOT_BAO_QUAN.PHUONG_PHAP_BAO_QUAN), ...dsHinhThucBq] });
+    }
+  }
+  async loadDmDanhBongGao(loaiVthh: string, ma: string) {
+    if (loaiVthh !== '0102') return;
+    const res = await this.danhMucDungChungService.danhMucChungGetAll(ma);
+    if (res.msg === MESSAGE.SUCCESS) {
+      this.dmDanhBongGao = Array.isArray(res.data) ? res.data : []
+    }
+
+  }
+  async loadDmMucXatGao(loaiVthh: string, ma: string) {
+    if (loaiVthh !== '0102') return;
+    const res = await this.danhMucDungChungService.danhMucChungGetAll(ma);
+    if (res.msg === MESSAGE.SUCCESS) {
+      this.dmMucXatGao = Array.isArray(res.data) ? res.data : []
     }
   }
   async save() {

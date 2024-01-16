@@ -43,6 +43,7 @@ import { KhCnQuyChuanKyThuat } from 'src/app/services/kh-cn-bao-quan/KhCnQuyChua
 import { PhuongPhapLayMau } from 'src/app/models/PhuongPhapLayMau';
 import { PREVIEW } from 'src/app/constants/fileType';
 import { AMOUNT_TWO_DECIMAL } from 'src/app/Utility/utils';
+import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 @Component({
   selector: 'app-them-moi-phieu-kiem-nghiem-chat-luong',
   templateUrl: './them-moi-phieu-kiem-nghiem-chat-luong.component.html',
@@ -113,7 +114,9 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
   ]
   maBb: string;
   previewName: string = "";
-  amount1 = { ...AMOUNT_TWO_DECIMAL }
+  amount1 = { ...AMOUNT_TWO_DECIMAL };
+  dmDanhBongGao: any[] = [];
+  dmMucXatGao: any[] = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -127,6 +130,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
     private bienBanLayMauDieuChuyenService: BienBanLayMauDieuChuyenService,
     private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
+    private danhMucDungChungService: DanhMucDungChungService,
     private phieuKiemNghiemChatLuongDieuChuyenService: PhieuKiemNghiemChatLuongDieuChuyenService
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuKiemNghiemChatLuongDieuChuyenService);
@@ -213,19 +217,19 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     }
   }
   async initForm() {
-    if (this.passData.maHangHoa) {
-      // let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(this.passData.maChLoaiHangHoa);
-      let dmTieuChuan = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(this.passData.maChLoaiHangHoa || this.passData.maHangHoa);
-      if (dmTieuChuan.data) {
-        this.dataTableChiTieu = Array.isArray(dmTieuChuan.data) ?
-          dmTieuChuan.data.map(element => ({
-            edit: false, chiSoCl: element.mucYeuCauXuat,
-            chiSoClToiThieu: !isNaN(element.mucYeuCauXuatToiThieu?.replace(",", ".")) ? parseFloat(element.mucYeuCauXuatToiThieu.replace(",", ".")) : element.mucYeuCauXuatToiThieu,
-            chiSoClToiDa: !isNaN(element.mucYeuCauXuatToiDa?.replace(",", ".")) ? parseFloat(element.mucYeuCauXuatToiDa.replace(",", ".")) : element.mucYeuCauXuatToiDa,
-            toanTu: element.toanTu, chiTieuCl: element.tenChiTieu, danhGia: element.danhGia, hdrId: element.hdrId, id: element.id, ketQuaPt: element.ketQuaPt, phuongPhap: element.phuongPhap
-          })) : [];
-      }
-    }
+    // if (this.passData.maHangHoa) {
+    //   // let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(this.passData.maChLoaiHangHoa);
+    //   let dmTieuChuan = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(this.passData.maChLoaiHangHoa || this.passData.maHangHoa);
+    //   if (dmTieuChuan.data) {
+    //     this.dataTableChiTieu = Array.isArray(dmTieuChuan.data) ?
+    //       dmTieuChuan.data.map(element => ({
+    //         edit: false, chiSoCl: element.mucYeuCauXuat,
+    //         chiSoClToiThieu: !isNaN(element.mucYeuCauXuatToiThieu?.replace(",", ".")) ? parseFloat(element.mucYeuCauXuatToiThieu.replace(",", ".")) : element.mucYeuCauXuatToiThieu,
+    //         chiSoClToiDa: !isNaN(element.mucYeuCauXuatToiDa?.replace(",", ".")) ? parseFloat(element.mucYeuCauXuatToiDa.replace(",", ".")) : element.mucYeuCauXuatToiDa,
+    //         toanTu: element.toanTu, chiTieuCl: element.tenChiTieu, danhGia: element.danhGia, hdrId: element.hdrId, id: element.id, ketQuaPt: element.ketQuaPt, phuongPhap: element.phuongPhap
+    //       })) : [];
+    //   }
+    // }
     this.formData.patchValue({
       maDvi: this.userInfo.MA_DVI,
       tenDvi: this.userInfo.TEN_DVI,
@@ -258,14 +262,13 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       ngayHieuLuc: this.passData.ngayHieuLuc,
       ngayQdinhDc: this.passData.ngayQdinhDc
     });
-    if (this.passData.maChLoaiHangHoa || this.passData.maHangHoa) {
-      this.getChiTietHangHoa(this.passData.maChLoaiHangHoa || this.passData.maHangHoa)
-    }
-    if (this.passData.qdinhDccId) {
-      this.getDetailQuyetDinhCuc(this.passData.qdinhDccId)
-    }
+    await Promise.all([this.getDetailQuyetDinhCuc(this.passData.qdinhDccId), this.getChiTietHangHoa(this.passData.maChLoaiHangHoa || this.passData.maHangHoa), this.getTieuChuanKyThuatHangHoa(this.passData.maChLoaiHangHoa || this.passData.maHangHoa), this.loadDmDanhBongGao(this.passData.maHangHoa, 'DANH_BONG'), this.loadDmMucXatGao(this.passData.maHangHoa, 'MUC_XAT')]);
+    // if (this.passData.qdinhDccId) {
+    //   this.getDetailQuyetDinhCuc(this.passData.qdinhDccId)
+    // }
   }
   async getDetailQuyetDinhCuc(id: number) {
+    if (!id) return;
     let dataRes = await this.quyetDinhDieuChuyenCucService.getDetail(id)
     const data = dataRes.data;
     this.formData.patchValue({
@@ -297,6 +300,21 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
+  async loadDmDanhBongGao(loaiVthh: string, ma: string) {
+    if (loaiVthh !== '0102') return;
+    const res = await this.danhMucDungChungService.danhMucChungGetAll(ma);
+    if (res.msg === MESSAGE.SUCCESS) {
+      this.dmDanhBongGao = Array.isArray(res.data) ? res.data : []
+    }
+
+  }
+  async loadDmMucXatGao(loaiVthh: string, ma: string) {
+    if (loaiVthh !== '0102') return;
+    const res = await this.danhMucDungChungService.danhMucChungGetAll(ma);
+    if (res.msg === MESSAGE.SUCCESS) {
+      this.dmMucXatGao = Array.isArray(res.data) ? res.data : []
+    }
+  }
   async getDetail(idInput: number) {
     let res = await this.phieuKiemNghiemChatLuongDieuChuyenService.getDetail(idInput);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -308,7 +326,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
         this.dinhKems = data.dinhKems;
         this.listHinhThucBaoQuan = typeof data.hinhThucBq === "string" || data.hinhThucBq instanceof String ? data.hinhThucBq.split("-*").map(f => ({ id: f.split("+*")[0], giaTri: f.split("+*")[1] })) : [];
 
-        await this.bindingDataBbLayMau(data.bbLayMauId, true)
+        await Promise.all([this.bindingDataBbLayMau(data.bbLayMauId, true), this.loadDmDanhBongGao(data.loaiVthh, 'DANH_BONG'), this.loadDmMucXatGao(data.loaiVthh, 'MUC_XAT')]);
       }
     }
   }
@@ -633,64 +651,75 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     });
   }
   async bindingDataBbLayMau(id, isChiTiet) {
-    let res = await this.bienBanLayMauDieuChuyenService.getDetail(id);
-    if (res.msg == MESSAGE.SUCCESS) {
-      const data = res.data;
-      // this.phuongPhapLayMaus = data.pplayMau && typeof data.pplayMau === "string" && data?.pplayMau?.split("-*") ? data.pplayMau.split("-*").map(f => ({ id: f.split("+*")[0], giaTri: f.split("+*")[1], checked: this.booleanParse(f.split("+*")[2]) })) : []
-      if (!isChiTiet) {
-        this.formData.patchValue({
-          bbLayMauId: data.id,
-          soBbLayMau: data.soBbLayMau,
-          ngayLayMau: data.ngayLayMau,
-          maDiemKho: data.maDiemKho,
-          tenDiemKho: data.tenDiemKho,
-          maNhaKho: data.maNhaKho,
-          tenNhaKho: data.tenNhaKho,
-          maNganKho: data.maNganKho,
-          tenNganKho: data.tenNganKho,
-          tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
-          maLoKho: data.maLoKho,
-          tenLoKho: data.tenLoKho,
-          loaiVthh: data.loaiVthh,
-          cloaiVthh: data.cloaiVthh,
-          tenLoaiVthh: data.tenLoaiVthh,
-          tenCloaiVthh: data.tenCloaiVthh,
-          thuKhoId: data.thuKho,
-          tenThuKho: data.tenThuKho,
-          donViTinh: data.donViTinh,
-          keHoachDcDtlId: data.keHoachDcDtlId,
-          // ngayHieuLuc: data.ngayHieuLuc,
-          // ngayQdinhDc: data.ngayQdinhDc
-          // moTaHangHoa: data.moTaHangHoa,
-          // tenThuKho: data.bbNhapDayKho.tenNguoiTao
-        })
-        if (data.cloaiVthh || data.loaiVthh) {
-          this.getChiTietHangHoa(data.cloaiVthh || data.loaiVthh)
+    try {
+      await this.spinner.show();
+      let res = await this.bienBanLayMauDieuChuyenService.getDetail(id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        const data = res.data;
+        // this.phuongPhapLayMaus = data.pplayMau && typeof data.pplayMau === "string" && data?.pplayMau?.split("-*") ? data.pplayMau.split("-*").map(f => ({ id: f.split("+*")[0], giaTri: f.split("+*")[1], checked: this.booleanParse(f.split("+*")[2]) })) : []
+        if (!isChiTiet) {
+          this.formData.patchValue({
+            bbLayMauId: data.id,
+            soBbLayMau: data.soBbLayMau,
+            ngayLayMau: data.ngayLayMau,
+            maDiemKho: data.maDiemKho,
+            tenDiemKho: data.tenDiemKho,
+            maNhaKho: data.maNhaKho,
+            tenNhaKho: data.tenNhaKho,
+            maNganKho: data.maNganKho,
+            tenNganKho: data.tenNganKho,
+            tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
+            maLoKho: data.maLoKho,
+            tenLoKho: data.tenLoKho,
+            loaiVthh: data.loaiVthh,
+            cloaiVthh: data.cloaiVthh,
+            tenLoaiVthh: data.tenLoaiVthh,
+            tenCloaiVthh: data.tenCloaiVthh,
+            thuKhoId: data.thuKho,
+            tenThuKho: data.tenThuKho,
+            donViTinh: data.donViTinh,
+            keHoachDcDtlId: data.keHoachDcDtlId,
+            // ngayHieuLuc: data.ngayHieuLuc,
+            // ngayQdinhDc: data.ngayQdinhDc
+            // moTaHangHoa: data.moTaHangHoa,
+            // tenThuKho: data.bbNhapDayKho.tenNguoiTao
+          })
+          await Promise.all([this.getChiTietHangHoa(data.cloaiVthh || data.loaiVthh), this.getTieuChuanKyThuatHangHoa(data.cloaiVthh || data.loaiVthh),
+          this.loadDmDanhBongGao(data.loaiVthh, 'DANH_BONG'), this.loadDmMucXatGao(data.loaiVthh, 'MUC_XAT')])
+
         }
-        const dmTieuChuan = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(data.cloaiVthh || data.loaiVthh);
-        if (dmTieuChuan.data) {
-          this.dataTableChiTieu = Array.isArray(dmTieuChuan.data) ? dmTieuChuan.data.map(element => ({
-            edit: false, chiSoCl: element.mucYeuCauXuat,
-            chiSoClToiThieu: !isNaN(element.mucYeuCauXuatToiThieu?.replace(",", ".")) ? parseFloat(element.mucYeuCauXuatToiThieu.replace(",", ".")) : element.mucYeuCauXuatToiThieu,
-            chiSoClToiDa: !isNaN(element.mucYeuCauXuatToiDa?.replace(",", ".")) ? parseFloat(element.mucYeuCauXuatToiDa.replace(",", ".")) : element.mucYeuCauXuatToiDa,
-            toanTu: element.toanTu, chiTieuCl: element.tenChiTieu, danhGia: element.danhGia, hdrId: element.hdrId, id: element.id, ketQuaPt: element.ketQuaPt, phuongPhap: element.phuongPhapXd
-          })) : [];
-        };
+        // if (!isChiTiet) {
+        // let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
+        // let [dmTieuChuan, chiTietHangHoa] = await Promise.all([this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh), this.danhMucService.loadDanhMucHangChiTiet(data.cloaiVthh)])
+        // if (dmTieuChuan.data) {
+        //   this.dataTableChiTieu = Array.isArray(dmTieuChuan.data.children) ? dmTieuChuan.data.children.map(element => ({ edit: false, chiSoCl: element.chiSoXuat, chiTieuCl: element.tenTchuan, danhGia: element.danhGia, hdrId: element.hdrId, id: element.id, ketQuaPt: element.ketQuaPt, phuongPhap: element.phuongPhap })) : [];
+        // };
+        // }
       }
-      // if (!isChiTiet) {
-      // let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
-      // let [dmTieuChuan, chiTietHangHoa] = await Promise.all([this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh), this.danhMucService.loadDanhMucHangChiTiet(data.cloaiVthh)])
-      // if (dmTieuChuan.data) {
-      //   this.dataTableChiTieu = Array.isArray(dmTieuChuan.data.children) ? dmTieuChuan.data.children.map(element => ({ edit: false, chiSoCl: element.chiSoXuat, chiTieuCl: element.tenTchuan, danhGia: element.danhGia, hdrId: element.hdrId, id: element.id, ketQuaPt: element.ketQuaPt, phuongPhap: element.phuongPhap })) : [];
-      // };
-      // }
+    } catch (error) {
+      console.log("error", error)
+    } finally {
+      await this.spinner.hide();
     }
   }
   async getChiTietHangHoa(vthh: string) {
+    if (!vthh) return;
     const res = await this.danhMucService.loadDanhMucHangChiTiet(vthh);
     if (res.msg === MESSAGE.SUCCESS) {
       this.listHinhThucBaoQuan = Array.isArray(res.data.hinhThucBq) ? res.data.hinhThucBq : [];
     }
+  }
+  async getTieuChuanKyThuatHangHoa(vthh: string) {
+    if (!vthh) return;
+    const dmTieuChuan = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(vthh);
+    if (dmTieuChuan.data) {
+      this.dataTableChiTieu = Array.isArray(dmTieuChuan.data) ? dmTieuChuan.data.map(element => ({
+        edit: false, chiSoCl: element.mucYeuCauXuat,
+        chiSoClToiThieu: !isNaN(element.mucYeuCauXuatToiThieu?.replace(",", ".")) ? parseFloat(element.mucYeuCauXuatToiThieu.replace(",", ".")) : element.mucYeuCauXuatToiThieu,
+        chiSoClToiDa: !isNaN(element.mucYeuCauXuatToiDa?.replace(",", ".")) ? parseFloat(element.mucYeuCauXuatToiDa.replace(",", ".")) : element.mucYeuCauXuatToiDa,
+        toanTu: element.toanTu, chiTieuCl: element.tenChiTieu, danhGia: element.danhGia, hdrId: element.hdrId, id: element.id, ketQuaPt: element.ketQuaPt, phuongPhap: element.phuongPhapXd
+      })) : [];
+    };
   }
   // async loadDanhMucPhuongThucBaoQuan() {
   //   let body = {

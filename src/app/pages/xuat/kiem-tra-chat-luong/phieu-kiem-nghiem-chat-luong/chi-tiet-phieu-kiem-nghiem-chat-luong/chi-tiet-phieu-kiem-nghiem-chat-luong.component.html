@@ -421,10 +421,26 @@
               <td>{{data.ten}}</td>
               <td>{{data.chiSoCl}}</td>
               <!-- <td><input nz-input [(ngModel)]="data.ketQua" (ngModelChange)="onKetQuaChange($event,i,viewCtChatLuong)"/></td> -->
-              <td *ngIf="!data.toanTu"><input nz-input [(ngModel)]="data.ketQua" [readonly]="isView" /></td>
-              <td *ngIf="data.toanTu"><input currencyMask class="money-input" [(ngModel)]="data.ketQua"
-                  (ngModelChange)="onKetQuaChange($event,i,viewCtChatLuong)" [options]="amount1" [readonly]="isView" />
-              </td>
+              <ng-container
+                *ngIf="loaiVthh === '0102' && ['DANH_BONG_GAO', 'MUC_XAT_GAO'].includes(data.ma); else inputCtCL">
+                <td>
+                  <nz-select *ngIf="data.ma === 'DANH_BONG_GAO'" [(ngModel)]="data.ketQua" [nzDisabled]="isView">
+                    <nz-option *ngFor="let item of dmDanhBongGao" [nzValue]="item.giaTri"
+                      [nzLabel]="item.giaTri"></nz-option>
+                  </nz-select>
+                  <nz-select *ngIf="data.ma === 'MUC_XAT_GAO'" [(ngModel)]="data.ketQua" [nzDisabled]="isView">
+                    <nz-option *ngFor="let item of dmMucXatGao" [nzValue]="item.giaTri"
+                      [nzLabel]="item.giaTri"></nz-option>
+                  </nz-select>
+                </td>
+              </ng-container>
+              <ng-template #inputCtCL>
+                <td *ngIf="!data.toanTu"><input nz-input [(ngModel)]="data.ketQua" [readonly]="isView" /></td>
+                <td *ngIf="data.toanTu"><input currencyMask class="money-input" [(ngModel)]="data.ketQua"
+                    (ngModelChange)="onKetQuaChange($event,i,viewCtChatLuong)" [options]="amount1"
+                    [readonly]="isView" />
+                </td>
+              </ng-template>
               <td>{{data.phuongPhap}}</td>
               <td>
                 <nz-select [(ngModel)]="data.danhGia" [nzDisabled]="isView">
