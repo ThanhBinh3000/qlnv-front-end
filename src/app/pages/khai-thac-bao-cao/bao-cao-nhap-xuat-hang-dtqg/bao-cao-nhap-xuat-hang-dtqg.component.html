@@ -20,6 +20,10 @@
               <span nz-icon nzType='fund'></span>
               <span>Báo cáo tiến độ bán đấu giá thóc, gạo theo năm</span>
             </li>
+            <li nz-menu-item [nzSelected]='tabSelected==14' (click)='selectTab(14)'>
+              <span nz-icon nzType='fund'></span>
+              <span>Tổng hợp tồn kho vật tư</span>
+            </li>
             <li nz-menu-item [nzSelected]='tabSelected==15' (click)='selectTab(15)'>
               <span nz-icon nzType='fund'></span>
               <span>Thông tin đấu thầu mua vật tư, thiết bị</span>
@@ -43,6 +47,9 @@
         </ng-container>
         <ng-container *ngIf='tabSelected == 1'>
           <app-bao-cao-chitiet-xuat-gao-hotro-diaphuong></app-bao-cao-chitiet-xuat-gao-hotro-diaphuong>
+        </ng-container>
+        <ng-container *ngIf='tabSelected == 14'>
+          <app-tong-hop-ton-kho-vat-tu></app-tong-hop-ton-kho-vat-tu>
         </ng-container>
         <ng-container *ngIf='tabSelected == 15'>
           <app-thong-tin-dau-thau-mua-vt></app-thong-tin-dau-thau-mua-vt>
