@@ -1,27 +1,27 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
-import { Base2Component } from "../../../../../../components/base2/base2.component";
-import { ThongtinDieuchinhComponent } from "../themmoi-dieuchinh/thongtin-dieuchinh/thongtin-dieuchinh.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from "@angular/core";
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {ThongtinDieuchinhComponent} from "../themmoi-dieuchinh/thongtin-dieuchinh/thongtin-dieuchinh.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
 import {
   QuyetDinhPheDuyetKeHoachLCNTService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service";
 import {
   DieuChinhQuyetDinhPdKhlcntService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/dieuchinh-khlcnt/dieuChinhQuyetDinhPdKhlcnt.service";
-import { DanhMucService } from "../../../../../../services/danhmuc.service";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import dayjs from "dayjs";
-import { Validators } from "@angular/forms";
-import { STATUS } from "../../../../../../constants/status";
-import { MESSAGE } from "../../../../../../constants/message";
-import { DatePipe } from "@angular/common";
+import {Validators} from "@angular/forms";
+import {STATUS} from "../../../../../../constants/status";
+import {MESSAGE} from "../../../../../../constants/message";
+import {formatDate} from "@angular/common";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import { cloneDeep } from "lodash";
+import {cloneDeep} from "lodash";
 import {DialogTuChoiComponent} from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 
 @Component({
@@ -251,6 +251,7 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
         if (item.soQdDc != null) {
           item.soQd = item.soQdDc
         }
+        item.thoiDiemKy = item.ngayQd ? formatDate(item.ngayQd, "dd/MM/yyyy", 'en-US') : ''
       })
     }
     this.spinner.hide();
@@ -263,8 +264,8 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listQdGoc,
-        dataHeader: ["Số quyết định gốc", "Loại hàng DTQG", "Chủng loại hàng DTQG"],
-        dataColumn: ["soQd", "tenLoaiVthh", "tenCloaiVthh"]
+        dataHeader: ["Số QĐ cần điều chỉnh", "Ngày ký QĐ", "Trạng thái", "Ngày chốt điều chỉnh giá", "Ngày hiệu lực"],
+        dataColumn: ["soQd", "thoiDiemKy", "", "", ""]
       }
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -353,6 +354,16 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
     this.helperService.markFormGroupTouched(this.formData);
     this.helperService.markFormGroupTouched(this.thongtinDieuchinhComponent.formData);
     if (this.formData.invalid || this.thongtinDieuchinhComponent.formData.invalid) {
+      await this.spinner.hide();
+      return;
+    }
+    if (isGuiDuyet && (this.fileDinhKemsTtr == null || this.fileDinhKemsTtr.length == 0)) {
+      this.notification.error(MESSAGE.ERROR, 'File đính kèm tờ trình/công văn phương án điều chỉnh không được bỏ trống.');
+      await this.spinner.hide();
+      return;
+    }
+    if (isGuiDuyet && this.formData.get('trangThai').value == STATUS.DA_DUYET_LDV && (this.fileDinhKems == null || this.fileDinhKems.length == 0)) {
+      this.notification.error(MESSAGE.ERROR, 'File đính kèm QĐ điều chỉnh đã ký và đóng dấu không được bỏ trống.');
       await this.spinner.hide();
       return;
     }
