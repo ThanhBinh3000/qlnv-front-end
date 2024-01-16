@@ -419,7 +419,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     this.danhsachDx[this.index].tgianDthauTime = pipe.transform(this.thongtinDexuatComponent.formData.value.tgianDthauTime, 'yyyy-MM-dd HH:mm')
     this.danhsachDx[this.index].tgianMoHoSoTime = pipe.transform(this.thongtinDexuatComponent.formData.value.tgianMoHoSoTime, 'yyyy-MM-dd HH:mm')
     this.danhsachDx[this.index].giaBanHoSo = this.thongtinDexuatComponent.formData.value.giaBanHoSo
-    this.danhsachDx[this.index].fileDinhKem = this.thongtinDexuatComponent.fileDinhKem
+    this.danhsachDx[this.index].fileDinhKem = this.thongtinDexuatComponent.fileDinhKems
     body.children = this.danhsachDx;
     body.fileDinhKems = this.listFileDinhKem;
     body.listCcPhapLy = this.listCcPhapLy;
