@@ -36,6 +36,7 @@ export class XtlBbLmComponent extends Base3Component implements OnInit {
       ngayTu: null,
       ngayDen: null,
       phanLoai : null,
+      dviKnghiem : null,
     })
     router.events.subscribe((val) => {
       let routerUrl = this.router.url;
@@ -48,6 +49,16 @@ export class XtlBbLmComponent extends Base3Component implements OnInit {
   }
 
   ngOnInit(): void {
+    this.searchPage();
+  }
+
+  clearForm() {
+    this.formData.reset();
+    let routerUrl = this.router.url;
+    const urlList = routerUrl.split("/");
+    this.formData.patchValue({
+      phanLoai : urlList[4] == 'kiem-tra-lt' ? 'LT' : 'VT'
+    })
     this.searchPage();
   }
 

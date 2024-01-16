@@ -361,6 +361,7 @@
               <th class='text-center'>STT</th>
               <th>Loại hàng DTQG</th>
               <th>Chủng loại</th>
+              <th>Năm nhập</th>
               <th>Điểm kho</th>
               <th>Ngăn/lô kho</th>
               <th>Ngày nhập kho</th>
@@ -383,6 +384,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
               </tr>
               <ng-container
                 *ngIf='expandSetStringLoaiVthh.has(item.idVirtual) && expandSetStringLoaiVthh.has(item.idVirtual)'>
@@ -391,6 +393,7 @@
                     <td></td>
                     <td></td>
                     <td>{{lv1.tenCloaiVthh}}</td>
+                    <td>{{lv1.namNhap}}</td>
                     <td>{{lv1.tenDiemKho}}</td>
                     <td>{{lv1.tenLoKho ? lv1.tenLoKho : lv1.tenNganKho}}</td>
                     <td>{{lv1.ngayNhapKho|date:globals.dateFormat}}</td>
