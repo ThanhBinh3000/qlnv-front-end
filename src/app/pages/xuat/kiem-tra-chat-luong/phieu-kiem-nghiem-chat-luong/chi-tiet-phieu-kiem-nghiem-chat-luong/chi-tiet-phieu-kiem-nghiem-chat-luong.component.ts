@@ -340,8 +340,9 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     }
   }
 
-  async loadDsCtChatLuong() {
-    const res = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(this.formData.value.cloaiVthh)
+  async loadDsCtChatLuong(vthh: string) {
+    if (!vthh) return;
+    const res = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(vthh)
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
         // res.data.ppLayMau.forEach(item => {
@@ -353,12 +354,23 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         //   this.dsCtChatLuong.push(option);
         // });
         Array.isArray(res.data) && res.data.forEach(element => {
-          const option = {
-            ten: element.tenChiTieu,
+          // const option = {
+          //   ten: element.tenChiTieu,
+          //   chiSoCl: element.mucYeuCauXuat,
+          //   phuongPhap: element.phuongPhapXd,
+          //   type: BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG,
+          // }
+          let option = {
+            label: element.tenChiTieu,
+            value: element.id,
             chiSoCl: element.mucYeuCauXuat,
+            chiSoClToiThieu: element.mucYeuCauXuatToiThieu,
+            chiSoClToiDa: element.mucYeuCauXuatToiDa,
+            toanTu: element.toanTu,
             phuongPhap: element.phuongPhapXd,
+            ma: element.maChiTieu,
             type: BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG,
-          }
+          };
           this.dsCtChatLuong.push(option);
         });
         const xhPhieuKnclDtl = this.formData.value.xhPhieuKnclDtl.filter(f => f.type !== BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG).concat(this.dsCtChatLuong)
@@ -622,7 +634,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         donViTinh: data.donViTinh,
         tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho
       });
-      await Promise.all([this.loadDsPpLayMau(), this.loadDanhSachHinhThucBaoQuan(data.cloaiVthh || data.loaiVthh), this.loadDsCtChatLuong(), this.tenThuKho(maDiaDiem), this.kiemTraTonKho(maDiaDiem)]);
+      await Promise.all([this.loadDsPpLayMau(), this.loadDanhSachHinhThucBaoQuan(data.cloaiVthh || data.loaiVthh), this.loadDsCtChatLuong(data.cloaiVthh || data.loaiVthh), this.tenThuKho(maDiaDiem), this.kiemTraTonKho(maDiaDiem)]);
       this.buildTableView();
     }
   }

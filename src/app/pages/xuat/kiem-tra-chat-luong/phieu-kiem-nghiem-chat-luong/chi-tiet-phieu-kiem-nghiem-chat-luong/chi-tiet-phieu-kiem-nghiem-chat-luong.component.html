@@ -33,7 +33,7 @@
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'status-xanh' : 'status-do'">
+        <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC ? 'status-xanh' : 'status-do'">
           {{ formData.value.tenTrangThai }}
         </span>
         <span>Phiếu kiểm nghiệm chất luợng hàng DTQG</span>
@@ -41,7 +41,7 @@
     </div>
   </div>
 
-  <nz-alert class="mg-t-10" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDCC " nzShowIcon nzType="error"
+  <nz-alert class="mg-t-10" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDC " nzShowIcon nzType="error"
     nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
 
