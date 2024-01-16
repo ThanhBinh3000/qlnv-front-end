@@ -1,5 +1,5 @@
 <nz-collapse *ngIf="dataTk">
-  <nz-collapse-panel nzActive="true" nzHeader="Kết quả thủ kho - Kiểm tra ngày : {{dataTk.ngayKtra | date: 'dd/MM/YYYY'}}">
+  <nz-collapse-panel nzActive="true" nzHeader="Kết quả thủ kho - Kiểm tra ngày : {{dataTk.ngayKtra | date: 'dd/MM/yyyy'}}">
     <nz-table *ngIf="loaiVthh == LOAI_HANG_DTQG.THOC"  class="pd-10 nowrap" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
               [nzShowPagination]="false">
       <thead>
@@ -292,7 +292,7 @@
   </nz-collapse-panel>
 </nz-collapse>
 <nz-collapse *ngIf="dataKtv">
-  <nz-collapse-panel nzActive="true" nzHeader="Kết quả KTV bảo quản - Kiểm tra ngày : {{dataKtv.ngayKtra | date: 'dd/MM/YYYY'}}">
+  <nz-collapse-panel nzActive="true" nzHeader="Kết quả KTV bảo quản - Kiểm tra ngày : {{dataKtv.ngayKtra | date: 'dd/MM/yyyy'}}">
     <nz-table *ngIf="loaiVthh == LOAI_HANG_DTQG.THOC"  class="pd-10 nowrap" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
               [nzShowPagination]="false">
       <thead>
@@ -585,7 +585,7 @@
   </nz-collapse-panel>
 </nz-collapse >
 <nz-collapse *ngIf="this.userService.isCuc() && this.dataLdcc">
-  <nz-collapse-panel nzActive="true" nzHeader="Kết quả của Lãnh đạo Chi cục - Kiểm tra ngày : {{dataLdcc.ngayKtra | date: 'dd/MM/YYYY' }}">
+  <nz-collapse-panel nzActive="true" nzHeader="Kết quả của Lãnh đạo Chi cục - Kiểm tra ngày : {{dataLdcc.ngayKtra | date: 'dd/MM/yyyy' }}">
     <nz-table *ngIf="loaiVthh == LOAI_HANG_DTQG.THOC"  class="pd-10 nowrap" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
               [nzShowPagination]="false">
       <thead>

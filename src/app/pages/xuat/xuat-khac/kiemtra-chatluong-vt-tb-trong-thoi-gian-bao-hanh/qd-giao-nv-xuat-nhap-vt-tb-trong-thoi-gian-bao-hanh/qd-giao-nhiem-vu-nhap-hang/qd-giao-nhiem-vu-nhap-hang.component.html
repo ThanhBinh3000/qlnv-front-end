@@ -190,7 +190,7 @@
           1}}</td>
           <td> {{ data.nam }} </td>
           <td>{{ data.soQuyetDinh }}</td>
-          <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.ngayKy | date: 'dd/MM/yyyy' }}</td>
           <td>{{ data.loai == 'NHAP_MAU' ? "Nhập mẫu không bị hủy vào kho" : (data.loai == 'NHAP_SAU_BH' ? "Nhập sau bảo hành" : "")}}</td>
           <td>{{ data.loai == 'NHAP_SAU_BH' ? data.soCanCu : "" }}</td>
           <td>{{ data.soBbKtNk }}</td>

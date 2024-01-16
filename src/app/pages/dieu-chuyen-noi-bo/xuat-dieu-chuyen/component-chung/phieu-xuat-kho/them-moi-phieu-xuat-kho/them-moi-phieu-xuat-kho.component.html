@@ -94,7 +94,7 @@
                         <nz-form-label [nzNoColon]="true" nzRequired>
                             Ngày tạo phiếu
                         </nz-form-label>
-                        <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayTaoPhieu" nzDisabled>
+                        <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayTaoPhieu" nzDisabled>
                         </nz-date-picker>
                     </nz-form-item>
                 </div>
@@ -103,7 +103,7 @@
                         <nz-form-label [nzNoColon]="true" nzRequired="">
                             Ngày xuất kho
                         </nz-form-label>
-                        <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayXuatKho" [nzDisabled]="isView">
+                        <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayXuatKho" [nzDisabled]="isView">
                         </nz-date-picker>
                     </nz-form-item>
                 </div>
@@ -160,7 +160,7 @@
                         <nz-form-label [nzNoColon]="true">
                             Ngày ký hợp đồng
                         </nz-form-label>
-                        <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayKyHd" nzDisabled>
+                        <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayKyHd" nzDisabled>
                         </nz-date-picker>
                     </nz-form-item>
                 </div> -->
@@ -169,7 +169,7 @@
                         <nz-form-label [nzNoColon]="true">
                             Ngày ký QĐ điều chuyển
                         </nz-form-label>
-                        <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayKyQddc" nzDisabled>
+                        <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayKyQddc" nzDisabled>
                         </nz-date-picker>
                     </nz-form-item>
                 </div>
@@ -331,7 +331,7 @@
                             gian giao, nhận hàng
                         </nz-form-label>
                         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                            <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="thoiGianGiaoNhan"
+                            <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="thoiGianGiaoNhan"
                                 [nzDisabled]="isDisabled()">
                             </nz-date-picker>
                         </nz-form-control>

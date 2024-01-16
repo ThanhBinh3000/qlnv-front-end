@@ -112,7 +112,7 @@
                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
               <td class="bold">{{ item.soQdGiaoNvXh }}</td>
               <td class="bold">{{item.nam}}</td>
-              <td class="bold">{{item.thoiGianGiaoNhan | date: 'dd/MM/YYYY' }}</td>
+              <td class="bold">{{item.thoiGianGiaoNhan | date: 'dd/MM/yyyy' }}</td>
               <td></td>
               <td></td>
               <!-- <td></td>
@@ -154,7 +154,7 @@
                         '-' : '')+ (lv2.tenNhaKho ? lv2.tenNhaKho : '') }}</td>
                       <!-- <td><a *ngIf="lv2.soPhieuKnCl" nzType="link"
                           (click)="openPhieuKnClModal(lv2.idPhieuKnCl)">{{lv2.soPhieuKnCl}}</a></td>
-                      <td>{{lv2.ngayKn | date: 'dd/MM/YYYY' }}</td> -->
+                      <td>{{lv2.ngayKn | date: 'dd/MM/yyyy' }}</td> -->
                       <td></td>
                       <td></td>
                       <td></td>
@@ -176,7 +176,7 @@
                           <td class="bold">{{lv3.soBangKe}}</td>
                           <td> <a nz-button nzType="link"
                               (click)="openPhieuXkModal(lv3.idPhieuXuatKho)">{{lv3.soPhieuXuatKho}}</a></td>
-                          <td>{{lv3.ngayXuat | date: 'dd/MM/YYYY' }}</td>
+                          <td>{{lv3.ngayXuat | date: 'dd/MM/yyyy' }}</td>
                           <td>{{lv3.tenTrangThai}}</td>
                           <td class="text-left">
                             <a (click)="redirectDetail(lv3.id, true)" *ngIf="vldTrangThai.checkStatusPermission(lv3,CHUC_NANG.XEM)

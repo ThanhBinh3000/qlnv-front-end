@@ -189,10 +189,10 @@
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td>{{ data.nam }}</td>
           <td><a nz-button nzType="link" (click)="openQdGnvModal(data.id)">{{ data.soQd }}</a></td>
-          <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.ngayKy | date: 'dd/MM/yyyy' }}</td>
           <td><a nz-button nzType="link" (click)="openQdPdModal(data.idQdPd)">{{ data.soQdPd }}</a></td>
           <td>{{ data.tenLoaiVthh}}</td>
-          <td>{{ data.thoiGianGiaoNhan | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.thoiGianGiaoNhan | date: 'dd/MM/yyyy' }}</td>
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.soBbTinhKho }}</td>
           <td>{{ data.soBbHaoDoi }}</td>

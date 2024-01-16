@@ -283,7 +283,7 @@
                     (click)="openPhieuXkModal(item.idPhieuXuatKho)">{{item.soPhieuXuatKho}}</a></td>
                 <td><a *ngIf="item.soBkCanHang" nz-button nzType="link"
                     (click)="openBangKeModal(item.idBkCanHang)">{{item.soBkCanHang}}</a></td>
-                <td class="text-center">{{item.ngayXuatKho | date: 'dd/MM/YYYY' }}</td>
+                <td class="text-center">{{item.ngayXuatKho | date: 'dd/MM/yyyy' }}</td>
                 <td class="text-right">{{item.slXuat |number:'1.0-1' : 'vi_VN'}}</td>
               </tr>
             </ng-container>
@@ -314,7 +314,7 @@
             <nz-form-label [nzNoColon]="true">
               Thời gian kết thúc nhập
             </nz-form-label>
-            <span>{{formData.value.ngayKetThucNhap | date: 'dd/MM/YYYY'}}</span>
+            <span>{{formData.value.ngayKetThucNhap | date: 'dd/MM/yyyy'}}</span>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="6">
@@ -331,7 +331,7 @@
               Thời gian kết thúc xuất
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <span>{{formData.value.ngayKetThucXuat | date: 'dd/MM/YYYY'}}</span>
+              <span>{{formData.value.ngayKetThucXuat | date: 'dd/MM/yyyy'}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -485,10 +485,10 @@
                 <ng-container>
                   <tr>
                     <td>1</td>
-                    <td class="text-center">{{formData.value.ngayKetThucNhap | date: 'dd/MM/YYYY' }}
+                    <td class="text-center">{{formData.value.ngayKetThucNhap | date: 'dd/MM/yyyy' }}
                       {{formData.value.ngayKetThucNhap && formData.value.ngayKetThucXuat? "-": ""}}
                       {{formData.value.ngayKetThucXuat
-                      |date: 'dd/MM/YYYY' }} </td>
+                      |date: 'dd/MM/yyyy' }} </td>
                     <td class="text-right">{{formData.value.soThangBaoQuanHang|number:'1.0-1' : 'vi_VN'}}</td>
                     <td class="text-right">{{formData.value.tongSlNhap |number:'1.0-1' : 'vi_VN'}}</td>
                     <td class="text-right">{{formData.value.dinhMucHaoHut}}</td>

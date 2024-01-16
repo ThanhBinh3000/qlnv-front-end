@@ -247,9 +247,9 @@
                 class='text-blue'>VB sửa đổi:</span><b> {{ data.soVanBanSuaDoi}}</b></p>
             </td>
             <td>{{ data.listTenLoaiVthh }}</td>
-            <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.ngayHetHieuLuc | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.ngayKy | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ data.ngayHieuLuc | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ data.ngayHetHieuLuc | date: 'dd/MM/yyyy' }}</td>
             <td class='text-center'>
               <label nz-checkbox nzDisabled [(ngModel)]='data.isMat'
                      [nzIndeterminate]='indeterminate'></label>

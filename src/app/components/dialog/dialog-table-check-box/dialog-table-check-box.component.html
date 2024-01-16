@@ -13,11 +13,11 @@
                 <td class="text-center">{{i + 1}}</td>
                 <td *ngFor="let column of dataColumn;">
                     {{(column === 'donGiaNhaThau' ? (data[column] | number: '1.0-1' :'vi_VN')
-                    : column === 'ngayKy' ? (data[column] | date: 'dd/MM/YYYY')
-                    : column === 'ngayTao' ? (data[column] | date: 'dd/MM/YYYY')
-                    : column.startsWith('ngay') ? (data[column] | date: 'dd/MM/YYYY')
+                    : column === 'ngayKy' ? (data[column] | date: 'dd/MM/yyyy')
+                    : column === 'ngayTao' ? (data[column] | date: 'dd/MM/yyyy')
+                    : column.startsWith('ngay') ? (data[column] | date: 'dd/MM/yyyy')
                     : column.startsWith('number') ? (data[column] | number: '1.0-1' :'vi_VN')
-                    : column === 'ngayKiemDinh' ? (data[column] | date: 'dd/MM/YYYY')
+                    : column === 'ngayKiemDinh' ? (data[column] | date: 'dd/MM/yyyy')
                     : data[column])
                     }}
                 </td>

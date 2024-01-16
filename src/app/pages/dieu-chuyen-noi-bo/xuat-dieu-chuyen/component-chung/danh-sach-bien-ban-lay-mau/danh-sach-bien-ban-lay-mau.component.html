@@ -100,7 +100,7 @@
                   item.soQdinh}}</a>
               </td>
               <td>{{item.namKh}}</td>
-              <!-- <td>{{item.ngayQd | date: 'dd/MM/YYYY'}}</td> -->
+              <!-- <td>{{item.ngayQd | date: 'dd/MM/yyyy'}}</td> -->
               <td></td>
               <td></td>
               <td></td>
@@ -119,7 +119,7 @@
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td>{{lv1.thoiHanDieuChuyen | date: 'dd/MM/YYYY'}}</td>
+                  <td>{{lv1.thoiHanDieuChuyen | date: 'dd/MM/yyyy'}}</td>
                   <td>{{lv1.tenDiemKho}}</td>
                   <td></td>
                   <td></td>
@@ -142,9 +142,9 @@
                         lv2.tenNganKho + " - ": "") + (lv2.tenNhaKho ? lv2.tenNhaKho: "")}}
                       </td>
                       <td>{{lv2.soBBLayMau}}</td>
-                      <td>{{lv2.ngaylayMau | date: 'dd/MM/YYYY' }}</td>
+                      <td>{{lv2.ngaylayMau | date: 'dd/MM/yyyy' }}</td>
                       <td>{{lv2.soBBTinhKho}}</td>
-                      <td>{{lv2.ngayLapBbTinhKho | date: 'dd/MM/YYYY'}}</td>
+                      <td>{{lv2.ngayLapBbTinhKho | date: 'dd/MM/yyyy'}}</td>
                       <td>{{LIST_TRANG_THAI[lv2.trangThai]}}</td>
                       <td class="text-left">
                         <a *ngIf="checkRoleAdd(lv2.trangThai)"

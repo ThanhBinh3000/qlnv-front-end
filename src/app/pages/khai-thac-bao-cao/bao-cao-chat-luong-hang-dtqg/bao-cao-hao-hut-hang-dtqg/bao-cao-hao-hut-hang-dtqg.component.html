@@ -74,6 +74,16 @@
               </nz-form-control>
             </nz-form-item>
           </div>
+          <div nz-col  [nzSpan]="6" *ngIf="formData.value.loaiBc == '01' && formData.value.loaiVthh == '0101'">
+            <nz-form-item>
+              <nz-form-label nzRequired>Phương thức bảo quản</nz-form-label>
+              <nz-form-control nz-col >
+                <nz-select nzShowSearch formControlName="pthucBquan" nzAllowClear [nzDisabled]="userService.isChiCuc()">
+                  <nz-option *ngFor="let p of listPtbq" [nzLabel]="p.giaTri" [nzValue]="p.ma"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
         </div>
       </form>
     </nz-card>

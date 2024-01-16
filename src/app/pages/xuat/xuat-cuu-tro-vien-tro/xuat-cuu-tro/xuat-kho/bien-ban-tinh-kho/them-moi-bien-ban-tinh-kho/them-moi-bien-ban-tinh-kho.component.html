@@ -255,7 +255,7 @@
                     (click)="openPhieuXkModal(item.idPhieuXuatKho)">{{item.soPhieuXuatKho}}</a></td>
                 <td><a *ngIf="item.soBkCanHang" nz-button nzType="link"
                     (click)="openBangKeModal(item.idBkCanHang)">{{item.soBkCanHang}}</a></td>
-                <td class="text-center">{{item.ngayXuatKho | date: 'dd/MM/YYYY' }}</td>
+                <td class="text-center">{{item.ngayXuatKho | date: 'dd/MM/yyyy' }}</td>
                 <td class="text-right">{{item.slXuat |number:'1.0-1' : 'vi_VN'}}</td>
               </tr>
             </ng-container>

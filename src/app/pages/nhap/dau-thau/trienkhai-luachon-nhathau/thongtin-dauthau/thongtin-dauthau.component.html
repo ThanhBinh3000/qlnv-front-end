@@ -220,12 +220,12 @@
                 {{ data.hhQdPduyetKqlcntHdr ? data.hhQdPduyetKqlcntHdr.soQd : data.soQdPdKqLcnt }}
               </a>
             </td>
-            <td>{{ (data.hhQdPduyetKqlcntHdr?.ngayKy) | date: 'dd/MM/YYYY'}}</td>
+            <td>{{ (data.hhQdPduyetKqlcntHdr?.ngayKy) | date: 'dd/MM/yyyy'}}</td>
             <td>{{ data.soGthau }}</td>
             <td>{{ data.soGthauTrung}}</td>
             <td>{{ data.soGthauTruot}}</td>
             <td *ngIf="!loaiVthh.startsWith('02')">{{ (data.dxuatKhLcntHdr ? data.dxuatKhLcntHdr.tgianNhang : null)
-              | date: 'dd/MM/YYYY' }}</td>
+              | date: 'dd/MM/yyyy' }}</td>
             <td *ngIf="loaiVthh.startsWith('02')">{{ data.tgianThien }}</td>
             <td>{{ data.dxuatKhLcntHdr?.tenPthucLcnt}}</td>
             <td *ngIf="loaiVthh.startsWith('02')">{{ data.hhQdKhlcntHdr?.tenLoaiVthh ? data.hhQdKhlcntHdr?.tenLoaiVthh : data.tenLoaiVthh }}</td>

@@ -23,6 +23,7 @@ import { QuyetDinhGiaoNvCuuTroService } from 'src/app/services/qlnv-hang/xuat-ha
 import { BienBanTinhKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanTinhKho.service';
 import { AMOUNT_ONE_DECIMAL, AMOUNT_TWO_DECIMAL } from 'src/app/Utility/utils';
 import { KhCnQuyChuanKyThuat } from 'src/app/services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
+import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 // import {
 //   QuyetDinhGiaoNvCuuTroService
 // } from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-cap/QuyetDinhGiaoNvCuuTro.service";
@@ -57,6 +58,8 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
   listBbTinhKho: any[];
   amount1Left = { ...AMOUNT_TWO_DECIMAL, align: "left" };
   listChungLoaiGao: any[] = [];
+  dmDanhBongGao: any[] = [];
+  dmMucXatGao: any[] = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -68,8 +71,8 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
     private phieuKiemTraChatLuongService: PhieuKiemTraChatLuongService,
     private quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
     private bienBanTinhKhoService: BienBanTinhKhoService,
-    private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat
-
+    private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
+    private danhMucDungChungService: DanhMucDungChungService
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuKiemTraChatLuongService);
 
@@ -138,7 +141,9 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
         this.loadSoQuyetDinh(),
         // this.loadDanhMucPhuongThucBaoQuan(),
         this.loadTieuChuan(),
-        this.loadDsVthh()
+        this.loadDsVthh(),
+        this.loadDmDanhBongGao('DANH_BONG'),
+        this.loadDmMucXatGao('MUC_XAT')
       ])
       await this.loadDetail(this.idInput)
       this.spinner.hide();
@@ -243,6 +248,19 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
       }
     } catch (error) {
       console.log("e", error)
+    }
+  }
+  async loadDmDanhBongGao(ma: string) {
+    const res = await this.danhMucDungChungService.danhMucChungGetAll(ma);
+    if (res.msg === MESSAGE.SUCCESS) {
+      this.dmDanhBongGao = Array.isArray(res.data) ? res.data : []
+    }
+
+  }
+  async loadDmMucXatGao(ma: string) {
+    const res = await this.danhMucDungChungService.danhMucChungGetAll(ma);
+    if (res.msg === MESSAGE.SUCCESS) {
+      this.dmMucXatGao = Array.isArray(res.data) ? res.data : []
     }
   }
   // async loadDanhMucPhuongThucBaoQuan() {

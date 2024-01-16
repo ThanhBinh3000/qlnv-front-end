@@ -131,10 +131,10 @@
         <td class='text-center'>{{(page - 1) * pageSize + idx + 1}}</td>
         <td>{{ data.idVpBnGoc }}</td>
         <td>{{ data.namQt }}</td>
-        <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
+        <td>{{ data.ngayTao | date: 'dd/MM/yyyy' }}</td>
         <td>{{ data.soToTrinh }}</td>
         <td>{{ data.soQdBtc }}</td>
-        <td>{{ data.ngayQdBtc| date: 'dd/MM/YYYY' }}</td>
+        <td>{{ data.ngayQdBtc| date: 'dd/MM/yyyy' }}</td>
         <td>{{ data.tenTrangThaiBtc }}</td>
         <td class='text-center'>
           <a (click)='viewDetail(data.id, true)'>

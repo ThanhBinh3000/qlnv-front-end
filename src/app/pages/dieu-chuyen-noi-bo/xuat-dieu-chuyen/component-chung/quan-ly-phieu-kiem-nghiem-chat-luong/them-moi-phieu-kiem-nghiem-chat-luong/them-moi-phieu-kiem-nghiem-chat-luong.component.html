@@ -122,7 +122,7 @@
                 <nz-form-label nzRequired [nzNoColon]="true" nzRequired>
                   Ngày lập phiếu
                 </nz-form-label>
-                <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayLapPhieu" nzDisabled>
+                <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayLapPhieu" nzDisabled>
                 </nz-date-picker>
               </nz-form-item>
             </div>
@@ -158,7 +158,7 @@
                   Ngày hiệu lực của QĐ
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayHieuLuc" nzDisabled>
+                  <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayHieuLuc" nzDisabled>
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -178,7 +178,7 @@
                 <nz-form-label [nzNoColon]="true" nzRequired>
                   Ngày lấy mẫu
                 </nz-form-label>
-                <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayLayMau" nzDisabled>
+                <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayLayMau" nzDisabled>
                 </nz-date-picker>
               </nz-form-item>
             </div>
@@ -188,7 +188,7 @@
                   Ngày kiểm nghiệm mẫu
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayKiem" [nzDisabled]="isView">
+                  <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayKiem" [nzDisabled]="isView">
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -303,7 +303,7 @@
             <nz-form-label [nzNoColon]="true">
               Ngày tháng nhập đầy kho
             </nz-form-label>
-            <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayNhapDayKho" nzDisabled>
+            <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayNhapDayKho" nzDisabled>
             </nz-date-picker>
           </nz-form-item>
         </div> -->
@@ -431,11 +431,26 @@
                   <input type="text" nz-input class="w-400" [(ngModel)]="data.ketQuaPt" [readOnly]="isView"
                     (ngModelChange)="onKetQuaChange($event,i,dataTableChiTieu)" />
                 </td> -->
-                <td *ngIf="!data.toanTu"><input nz-input [(ngModel)]="data.ketQuaPt" [readOnly]="isView" /></td>
-                <td *ngIf="data.toanTu"><input currencyMask class="money-input" [(ngModel)]="data.ketQuaPt"
-                    (ngModelChange)="onKetQuaChange($event,i,dataTableChiTieu)" [options]="amount1"
-                    [readOnly]="isView" />
-                </td>
+                <ng-container
+                  *ngIf="formData.value.loaiVthh === '0102' && ['DANH_BONG_GAO', 'MUC_XAT_GAO'].includes(data.ma); else inputCtCL">
+                  <td>
+                    <nz-select *ngIf="data.ma === 'DANH_BONG_GAO'" [(ngModel)]="data.ketQuaPt" [nzDisabled]="isView">
+                      <nz-option *ngFor="let item of dmDanhBongGao" [nzValue]="item.giaTri"
+                        [nzLabel]="item.giaTri"></nz-option>
+                    </nz-select>
+                    <nz-select *ngIf="data.ma === 'MUC_XAT_GAO'" [(ngModel)]="data.ketQuaPt" [nzDisabled]="isView">
+                      <nz-option *ngFor="let item of dmMucXatGao" [nzValue]="item.giaTri"
+                        [nzLabel]="item.giaTri"></nz-option>
+                    </nz-select>
+                  </td>
+                </ng-container>
+                <ng-template #inputCtCL>
+                  <td *ngIf="!data.toanTu"><input nz-input [(ngModel)]="data.ketQuaPt" [readOnly]="isView" /></td>
+                  <td *ngIf="data.toanTu"><input currencyMask class="money-input" [(ngModel)]="data.ketQuaPt"
+                      (ngModelChange)="onKetQuaChange($event,i,dataTableChiTieu)" [options]="amount1"
+                      [readOnly]="isView" />
+                  </td>
+                </ng-template>
                 <td>{{data.phuongPhap}}</td>
                 <td>
                   <nz-select [(ngModel)]="data.danhGia" [disabled]="isView">

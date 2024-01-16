@@ -101,7 +101,7 @@
                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
             <td class="bold">{{ item.soCanCu }}</td>
             <td class="bold">{{ item.namKeHoach }}</td>
-            <td class="bold">{{ item.ngayQdGiaoNvXh | date: 'dd/MM/YYYY' }}</td>
+            <td class="bold">{{ item.ngayQdGiaoNvXh | date: 'dd/MM/yyyy' }}</td>
             <td></td>
             <td></td>
             <td></td>
@@ -171,11 +171,11 @@
                         <td></td>
                         <td></td>
                         <td class="bold">{{lv3.soPhieu}}</td>
-                        <td>{{lv3.ngayXuatNhap | date: 'dd/MM/YYYY' }}</td>
+                        <td>{{lv3.ngayXuatNhap | date: 'dd/MM/yyyy' }}</td>
                         <td>{{lv3.tenLoai}}</td>
                         <td><a *ngIf="lv3.soPhieuKncl" nzType="link"
                                (click)="openPhieuKnClModal(lv3.idPhieuKncl)">{{lv3.soPhieuKncl}}</a></td>
-                        <td>{{lv3.ngayKn | date: 'dd/MM/YYYY' }}</td>
+                        <td>{{lv3.ngayKn | date: 'dd/MM/yyyy' }}</td>
                         <td>{{lv3.tenTrangThai}}</td>
                         <td class="text-left">
                           <a *ngIf="lv3.trangThai ==STATUS.DA_DUYET_LDCC" (click)="redirectDetail(lv3.id, true)">

@@ -190,7 +190,7 @@
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td class="text-left">{{ data.namKh }}</td>
           <td class="text-left">{{ data.soQdNv }}</td>
-          <td class="text-left">{{ data.ngayKyQdNv|date: 'dd/MM/YYYY' }}</td>
+          <td class="text-left">{{ data.ngayKyQdNv|date: 'dd/MM/yyyy' }}</td>
           <td class="text-left">
             <a *ngIf="data.soHopDong" (click)="openModal(data.idHopDong, 'hopDong')"
                style="color: blue">{{ data.soHopDong }}
@@ -198,7 +198,7 @@
           </td>
           <td class="text-left" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">{{ data.tenLoaiVthh }}</td>
           <td class="text-left">{{ data.tenCloaiVthh }}</td>
-          <td class="text-left">{{ data.tgianGiaoNhan|date: 'dd/MM/YYYY'}}</td>
+          <td class="text-left">{{ data.tgianGiaoNhan|date: 'dd/MM/yyyy'}}</td>
           <td class="text-left" style="max-width: 300px; min-width: 250px;  white-space: break-spaces;">
             {{data.trichYeu}}
           </td>

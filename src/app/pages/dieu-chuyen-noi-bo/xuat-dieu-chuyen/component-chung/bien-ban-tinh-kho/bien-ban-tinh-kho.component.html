@@ -133,7 +133,7 @@
                             <td><a nz-button nzType="link" (click)="openQdDcModal(item.qdinhDcId)">{{item.soQdinh}}</a>
                             </td>
                             <td>{{ item.nam }}</td>
-                            <td>{{ item.thoiHanDieuChuyen|date:'dd/MM/YYYY' }}</td>
+                            <td>{{ item.thoiHanDieuChuyen|date:'dd/MM/yyyy' }}</td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -180,8 +180,8 @@
                                             <td>{{(lv2.tenLoKho? lv2.tenLoKho + " - ": "") + (lv2.tenNganKho?
                                                 lv2.tenNganKho + " - ": "") + (lv2.tenNhaKho ? lv2.tenNhaKho: "")}}</td>
                                             <td>{{lv2.soBbTinhKho}}</td>
-                                            <td>{{lv2.ngayBatDauXuat | date:'dd/MM/YYYY'}}</td>
-                                            <td>{{lv2.ngayKetThucXuat | date:'dd/MM/YYYY'}}</td>
+                                            <td>{{lv2.ngayBatDauXuat | date:'dd/MM/yyyy'}}</td>
+                                            <td>{{lv2.ngayKetThucXuat | date:'dd/MM/yyyy'}}</td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -225,7 +225,7 @@
                                                 <td><a nz-button nzType="link"
                                                         (click)="openBangKeModal(lv3.bangKeId)">{{lv3.soBangKe}}</a>
                                                 </td>
-                                                <td>{{lv3.ngayXuatKho | date:'dd/MM/YYYY'}}</td>
+                                                <td>{{lv3.ngayXuatKho | date:'dd/MM/yyyy'}}</td>
                                                 <td></td>
                                                 <td></td>
                                             </tr>

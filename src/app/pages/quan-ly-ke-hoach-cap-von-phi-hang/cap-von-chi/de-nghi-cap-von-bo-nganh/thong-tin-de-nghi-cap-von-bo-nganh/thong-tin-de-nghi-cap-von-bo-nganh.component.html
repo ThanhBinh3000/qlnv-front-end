@@ -767,7 +767,7 @@
       <tr *ngFor='let item of (detailHopDong ? detailHopDong.listHopDongTheoDeNghi : []), let idx = index'>
         <td>{{idx + 1}}</td>
         <td>{{item.soDeNghi}}</td>
-        <td>{{item.ngayDeNghi | date: 'dd/MM/YYYY'}}</td>
+        <td>{{item.ngayDeNghi | date: 'dd/MM/yyyy'}}</td>
         <td>{{(detailHopDong.loaiTien != "01" ? item.kinhPhiDaCapNt : null) |number : '1.0-1' : 'vi_VN'}}</td>
         <td>{{item.kinhPhiDaCap |number : '1.0-1' : 'vi_VN'}}</td>
         <td>{{(detailHopDong.loaiTien != "01" ? item.kinhPhiChuaCapNt : null) |number : '1.0-1' : 'vi_VN'}}</td>

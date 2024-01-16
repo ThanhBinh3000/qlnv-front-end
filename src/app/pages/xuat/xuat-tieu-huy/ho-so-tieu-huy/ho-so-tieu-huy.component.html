@@ -24,7 +24,7 @@
           <nz-form-control>
             <nz-form-label>Số thông báo KQ trình hồ sơ</nz-form-label>
             <nz-form-item>
-              <input nz-input formControlName="soTb" />
+              <input nz-input formControlName="soTbSr" />
             </nz-form-item>
           </nz-form-control>
         </div>
@@ -196,9 +196,9 @@
         <td>{{ data.nam }}</td>
         <td>{{ data.soHoSo }}</td>
         <td>{{ data.trichYeu }}</td>
-        <td>{{ data.ngayDuyetLdc | date: 'dd/MM/YYYY' }}</td>
-        <td>{{ data.ngayDuyetLdv | date: 'dd/MM/YYYY' }}</td>
-        <td>{{ data.ngayDuyetLdtc | date: 'dd/MM/YYYY' }}</td>
+        <td>{{ data.ngayDuyetLdc | date: 'dd/MM/yyyy' }}</td>
+        <td>{{ data.ngayDuyetLdv | date: 'dd/MM/yyyy' }}</td>
+        <td>{{ data.ngayDuyetLdtc | date: 'dd/MM/yyyy' }}</td>
         <td>{{ data.soQd }}</td>
         <td>{{ data.soTb }}</td>
         <td>{{ data.tenTrangThai }}</td>

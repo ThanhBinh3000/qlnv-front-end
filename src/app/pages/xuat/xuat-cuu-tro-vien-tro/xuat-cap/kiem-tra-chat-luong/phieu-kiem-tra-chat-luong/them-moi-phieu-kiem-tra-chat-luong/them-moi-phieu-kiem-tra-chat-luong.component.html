@@ -111,7 +111,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Ngày lập phiếu
                 </nz-form-label>
-                <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayLapPhieu" [nzDisabled]="isView">
+                <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayLapPhieu" [nzDisabled]="isView">
                 </nz-date-picker>
               </nz-form-item>
             </div>
@@ -364,11 +364,25 @@
                 <td>{{data.tenTchuan}}</td>
                 <td>{{data.chiSoXuat}}</td>
                 <!-- <td><input nz-input [(ngModel)]="data.ketQua" (ngModelChange)="onKetQuaChange($event,i,viewCtChatLuong)"/></td> -->
-                <td *ngIf="!data.toanTu"><input nz-input [(ngModel)]="data.ketQuaPt" [readonly]="isView" /></td>
-                <td *ngIf="data.toanTu"><input currencyMask class="money-input" [(ngModel)]="data.ketQuaPt"
-                    (ngModelChange)="onKetQuaChange($event,i,dataTableChiTieu)" [options]="amount1Left"
-                    [readonly]="isView" />
-                </td>
+                <ng-container *ngIf="['DANH_BONG_GAO', 'MUC_XAT_GAO'].includes(data.ma); else inputCtCL">
+                  <td>
+                    <nz-select *ngIf="data.ma === 'DANH_BONG_GAO'" [(ngModel)]="data.ketQuaPt" [nzDisabled]="isView">
+                      <nz-option *ngFor="let item of dmDanhBongGao" [nzValue]="item.giaTri"
+                        [nzLabel]="item.giaTri"></nz-option>
+                    </nz-select>
+                    <nz-select *ngIf="data.ma === 'MUC_XAT_GAO'" [(ngModel)]="data.ketQuaPt" [nzDisabled]="isView">
+                      <nz-option *ngFor="let item of dmMucXatGao" [nzValue]="item.giaTri"
+                        [nzLabel]="item.giaTri"></nz-option>
+                    </nz-select>
+                  </td>
+                </ng-container>
+                <ng-template #inputCtCL>
+                  <td *ngIf="!data.toanTu"><input nz-input [(ngModel)]="data.ketQuaPt" [readonly]="isView" /></td>
+                  <td *ngIf="data.toanTu"><input currencyMask class="money-input" [(ngModel)]="data.ketQuaPt"
+                      (ngModelChange)="onKetQuaChange($event,i,dataTableChiTieu)" [options]="amount1Left"
+                      [readonly]="isView" />
+                  </td>
+                </ng-template>
                 <td>{{data.phuongPhap}}</td>
                 <td>
                   <nz-select [(ngModel)]="data.danhGia" [nzDisabled]="isView">

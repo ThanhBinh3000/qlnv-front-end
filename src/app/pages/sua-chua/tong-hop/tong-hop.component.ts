@@ -9,8 +9,9 @@ import { StorageService } from 'src/app/services/storage.service';
 import { TongHopScService } from 'src/app/services/sua-chua/tongHopSc.service';
 import { ThemmoiThComponent } from './themmoi-th/themmoi-th.component';
 import { MESSAGE } from "../../../constants/message";
-import { cloneDeep, chain } from 'lodash';
+import { cloneDeep, chain , isEmpty } from 'lodash';
 import { ChitietThComponent } from "./chitiet-th/chitiet-th.component";
+import {DonviService} from "../../../services/donvi.service";
 
 @Component({
   selector: 'app-tong-hop',
@@ -18,6 +19,8 @@ import { ChitietThComponent } from "./chitiet-th/chitiet-th.component";
   styleUrls: ['./tong-hop.component.scss']
 })
 export class TongHopComponent extends Base3Component implements OnInit {
+
+  dsDonvi: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -28,14 +31,15 @@ export class TongHopComponent extends Base3Component implements OnInit {
     route: ActivatedRoute,
     router: Router,
     private tongHopScService: TongHopScService,
+    private donviService: DonviService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, route, router, tongHopScService);
     this.formData = this.fb.group({
-      nam: null,
-      maSc: null,
-      maCc: null,
+      namSr: null,
+      maDanhSach: null,
       ngayTu: null,
       ngayDen: null,
+      maDviSr: null,
     })
   }
 
@@ -58,6 +62,13 @@ export class TongHopComponent extends Base3Component implements OnInit {
       })
       ).value()
     })
+  }
+
+  async loadDsDonVi() {
+    const dsTong = await this.donviService.layDonViCon();
+    if (!isEmpty(dsTong)) {
+      this.dsDonvi = dsTong.data.filter(s => s.type === 'DV');
+    }
   }
 
   openDialogDs(roles?) {

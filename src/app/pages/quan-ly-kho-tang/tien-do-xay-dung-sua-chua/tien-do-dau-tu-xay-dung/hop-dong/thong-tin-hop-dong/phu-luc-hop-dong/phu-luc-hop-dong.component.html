@@ -53,7 +53,7 @@
           <nz-form-item>
             <nz-form-label nzRequired>Ngày hiệu lực HĐ</nz-form-label>
             <nz-form-control>
-              <nz-date-picker [nzDisabled]="true" class="search__input" nzFormat="dd/MM/YYYY" formControlName="ngayHieuLucHdr"
+              <nz-date-picker [nzDisabled]="true" class="search__input" nzFormat="dd/MM/yyyy" formControlName="ngayHieuLucHdr"
               >
               </nz-date-picker>
             </nz-form-control>
@@ -73,7 +73,7 @@
           <nz-form-item>
             <nz-form-label nzRequired>Ngày hiệu lực của phụ lục HĐ</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd/MM/YYYY" formControlName="ngayHieuLuc"
+              <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd/MM/yyyy" formControlName="ngayHieuLuc"
               >
               </nz-date-picker>
             </nz-form-control>
@@ -100,7 +100,7 @@
               <nz-form-item>
                 <nz-form-label>Ngày hiệu lực trước khi điều chỉnh</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker [nzDisabled]="true" class="search__input" nzFormat="dd/MM/YYYY"
+                  <nz-date-picker [nzDisabled]="true" class="search__input" nzFormat="dd/MM/yyyy"
                                   formControlName="ngayHieuLucHdr">
                   </nz-date-picker>
                 </nz-form-control>
@@ -110,7 +110,7 @@
               <nz-form-item>
                 <nz-form-label>Ngày hiệu lực sau khi điều chỉnh</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd/MM/YYYY"
+                  <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd/MM/yyyy"
                                   formControlName="ngayHieuLuc">
                   </nz-date-picker>
                 </nz-form-control>

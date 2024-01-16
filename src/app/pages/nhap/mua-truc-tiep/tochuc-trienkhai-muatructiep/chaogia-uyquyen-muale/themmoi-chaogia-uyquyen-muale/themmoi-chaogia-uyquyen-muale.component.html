@@ -388,7 +388,7 @@
               <td>{{ data.mst }}</td>
               <td>{{ data.diaChi }}</td>
               <td>{{ data.sdt }}</td>
-              <td>{{ data.ngayChaoGia | date: 'dd/MM/YYYY' }}</td>
+              <td>{{ data.ngayChaoGia | date: 'dd/MM/yyyy' }}</td>
               <td>{{ data.soLuong| number : '1.0-1' : 'vi_VN' }}</td>
               <td>{{ data.donGiaVat ? data.donGiaVat : data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
               <td>{{ data.thanhTien ? data.thanhTien : data.soLuong * (data.donGiaVat ? data.donGiaVat : data.donGia) * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
