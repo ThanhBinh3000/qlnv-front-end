@@ -431,11 +431,26 @@
                   <input type="text" nz-input class="w-400" [(ngModel)]="data.ketQuaPt" [readOnly]="isView"
                     (ngModelChange)="onKetQuaChange($event,i,dataTableChiTieu)" />
                 </td> -->
-                <td *ngIf="!data.toanTu"><input nz-input [(ngModel)]="data.ketQuaPt" [readOnly]="isView" /></td>
-                <td *ngIf="data.toanTu"><input currencyMask class="money-input" [(ngModel)]="data.ketQuaPt"
-                    (ngModelChange)="onKetQuaChange($event,i,dataTableChiTieu)" [options]="amount1"
-                    [readOnly]="isView" />
-                </td>
+                <ng-container
+                  *ngIf="formData.value.loaiVthh === '0102' && ['DANH_BONG_GAO', 'MUC_XAT_GAO'].includes(data.ma); else inputCtCL">
+                  <td>
+                    <nz-select *ngIf="data.ma === 'DANH_BONG_GAO'" [(ngModel)]="data.ketQuaPt" [nzDisabled]="isView">
+                      <nz-option *ngFor="let item of dmDanhBongGao" [nzValue]="item.giaTri"
+                        [nzLabel]="item.giaTri"></nz-option>
+                    </nz-select>
+                    <nz-select *ngIf="data.ma === 'MUC_XAT_GAO'" [(ngModel)]="data.ketQuaPt" [nzDisabled]="isView">
+                      <nz-option *ngFor="let item of dmMucXatGao" [nzValue]="item.giaTri"
+                        [nzLabel]="item.giaTri"></nz-option>
+                    </nz-select>
+                  </td>
+                </ng-container>
+                <ng-template #inputCtCL>
+                  <td *ngIf="!data.toanTu"><input nz-input [(ngModel)]="data.ketQuaPt" [readOnly]="isView" /></td>
+                  <td *ngIf="data.toanTu"><input currencyMask class="money-input" [(ngModel)]="data.ketQuaPt"
+                      (ngModelChange)="onKetQuaChange($event,i,dataTableChiTieu)" [options]="amount1"
+                      [readOnly]="isView" />
+                  </td>
+                </ng-template>
                 <td>{{data.phuongPhap}}</td>
                 <td>
                   <nz-select [(ngModel)]="data.danhGia" [disabled]="isView">
