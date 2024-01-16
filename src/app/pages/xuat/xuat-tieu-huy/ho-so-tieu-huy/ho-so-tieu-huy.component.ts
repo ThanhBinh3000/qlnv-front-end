@@ -31,13 +31,9 @@ export class HoSoTieuHuyComponent extends Base3Component implements OnInit {
     this.defaultURL = 'xuat/xuat-tieu-huy/trinh-tham-dinh'
     this.defaultPermisson = 'XHDTQG_XTH_HSTH'
     this.formData = this.fb.group({
-      soTtr: null,
-      soQdScSr: null,
-      ngayTuCuc: null,
-      ngayDenCuc: null,
-      ngayTuTc: null,
-      ngayDenTc: null,
-      ngayDen: null,
+      nam: null,
+      soHoSo: null,
+      soTbSr: null,
       trangThai: null,
     });
     this.listTrangThai = [
