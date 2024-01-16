@@ -238,22 +238,21 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     });
     modalTuChoi.afterClose.subscribe(async (data) => {
       if (data) {
-        const {ma, ten, parent, cap} = data;
         if (data.ma.startsWith(LOAI_HANG_DTQG.MUOI)) {
           this.formData.patchValue({
-            cloaiVthh: ma,
-            tenCloaiVthh: ten,
-            loaiVthh: parent.ma,
-            tenLoaiVthh: parent.ten,
-            donViTinh: parent.maDviTinh
+            cloaiVthh: data.ma,
+            tenCloaiVthh: data.ten,
+            loaiVthh: data.parent.ma,
+            tenLoaiVthh: data.parent.ten,
+            donViTinh: data.parent.maDviTinh
           });
         } else {
           this.formData.patchValue({
-            cloaiVthh: cap == 3 ? ma : null,
-            tenCloaiVthh: cap == 3 ? ten : null,
-            loaiVthh: cap == 3 ? parent.ma : data.ma,
-            tenLoaiVthh: cap == 3 ? parent.ten : data.ten,
-            donViTinh: cap == 3 ? parent.maDviTinh : null,
+            cloaiVthh: data.cap == 3 ? data.ma : null,
+            tenCloaiVthh: data.cap == 3 ? data.ten : null,
+            loaiVthh: data.cap == 3 ? data.parent.ma : data.ma,
+            tenLoaiVthh: data.cap == 3 ? data.parent.ten : data.ten,
+            donViTinh: data.cap == 3 ? data.parent.maDviTinh : null,
           });
         }
         await Promise.all([
