@@ -270,7 +270,7 @@
                   <td>{{data.soLuongXl | number : '1.0-1' : 'vi_VN' }}</td>
                   <td *ngIf="column1"></td>
                   <td>{{data.dviTinh }}</td>
-                  <td>{{data.tableNgayHan}}</td>
+                  <td>{{data.tableNgayHan | date : 'dd/MM/yyyy'}}</td>
                   <td>{{data.tableNgayConLai}}</td>
                   <td>{{data.tableTenTrangThai}}</td>
                   <td>{{data.tableNgayChot | date : 'dd/MM/yyyy'}}</td>
