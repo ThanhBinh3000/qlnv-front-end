@@ -88,12 +88,21 @@
                           </nz-form-control>
                         </nz-form-item>
                       </div>
-                      <div nz-col [nzSpan]="12">
+                      <div nz-col [nzSpan]="9">
                         <nz-form-item>
                           <nz-form-label [nzNoColon]="true"> Số QĐ phê duyệt KQ lựa chọn đơn vị tổ chức BĐG
                           </nz-form-label>
                           <nz-form-control nz-col>
                             <input nz-input formControlName="qdLcTcBdg" [readonly]="isView"/>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <div nz-col [nzSpan]="3">
+                        <nz-form-item>
+                          <nz-form-label [nzNoColon]="true"> Ngày quyết định</nz-form-label>
+                          <nz-form-control nz-col>
+                            <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayQdBdg" [nzDisabled]="isView">
+                            </nz-date-picker>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
