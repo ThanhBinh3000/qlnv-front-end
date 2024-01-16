@@ -229,10 +229,7 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
     this.openPopThemMoiHd = true;
   }
 
-  delete(item
-           :
-           any
-  ) {
+  delete(item : any) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -245,13 +242,14 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            id: item.id
+            id: item.idHopDong
           };
           this.hopdongService.delete(body).then(async () => {
-            let resp = await this.hopdongService.danhSachHdTheoKhlcnt(this.idInput);
-            if (resp.msg == MESSAGE.SUCCESS) {
-              this.listHopDong = resp.data;
-            }
+            // let resp = await this.hopdongService.danhSachHdTheoKhlcnt(this.idInput);
+            // if (resp.msg == MESSAGE.SUCCESS) {
+            //   this.listHopDong = resp.data;
+            // }
+            await this.detail(true);
             this.spinner.hide();
           });
         } catch (e) {
