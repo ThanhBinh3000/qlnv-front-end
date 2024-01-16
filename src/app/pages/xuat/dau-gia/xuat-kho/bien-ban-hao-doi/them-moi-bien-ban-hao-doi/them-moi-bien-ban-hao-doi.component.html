@@ -290,7 +290,7 @@
                  style="color: blue">{{ data.soBangKeHang }}
               </a>
             </td>
-            <td class="text-left">{{ data.ngayXuatKho|date: 'dd/MM/YYYY' }}</td>
+            <td class="text-left">{{ data.ngayXuatKho|date: 'dd/MM/yyyy' }}</td>
             <td class="text-left">{{ data.soLuongXuat|number:globals.numberFormat:globals.locale }} </td>
           </tr>
           </tbody>
@@ -324,7 +324,7 @@
             <nz-form-label [nzNoColon]="true"> Ngày kết thúc nhập</nz-form-label>
             <nz-form-control nz-col>
                <span style="color: blue" *ngIf="formData.value.thoiGianKthucNhap">
-                 {{ formData.value.thoiGianKthucNhap|date: 'dd/MM/YYYY' }}
+                 {{ formData.value.thoiGianKthucNhap|date: 'dd/MM/yyyy' }}
                </span>
             </nz-form-control>
           </nz-form-item>
@@ -344,7 +344,7 @@
             <nz-form-label [nzNoColon]="true"> Ngày kết thúc xuất</nz-form-label>
             <nz-form-control nz-col>
               <span style="color: blue" *ngIf="formData.value.thoiGianKthucXuat">
-                {{ formData.value.thoiGianKthucXuat|date: 'dd/MM/YYYY' }}
+                {{ formData.value.thoiGianKthucXuat|date: 'dd/MM/yyyy' }}
               </span>
             </nz-form-control>
           </nz-form-item>
@@ -463,8 +463,8 @@
             <td class="text-center">1</td>
             <td class="text-center">
               <ng-container *ngIf="formData.value.thoiGianKthucNhap && formData.value.thoiGianKthucXuat">
-                Từ {{ formData.value.thoiGianKthucNhap | date: 'dd/MM/YYYY' }}
-                đến {{ formData.value.thoiGianKthucXuat | date: 'dd/MM/YYYY' }}
+                Từ {{ formData.value.thoiGianKthucNhap | date: 'dd/MM/yyyy' }}
+                đến {{ formData.value.thoiGianKthucXuat | date: 'dd/MM/yyyy' }}
               </ng-container>
             </td>
             <td class="text-center">{{formData.value.tongSlNhap|number:globals.numberFormat:globals.locale}}</td>

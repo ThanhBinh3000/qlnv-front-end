@@ -104,7 +104,7 @@
                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
             <td class="bold">{{ item.soQdGiaoNvXh }}</td>
             <td class="bold">{{ item.nam }}</td>
-            <td class="bold">{{ item.ngayXuatLayMau | date: 'dd/MM/YYYY' }}</td>
+            <td class="bold">{{ item.ngayXuatLayMau | date: 'dd/MM/yyyy' }}</td>
             <td></td>
             <td></td>
             <td></td>
@@ -151,7 +151,7 @@
                     <td></td>
                     <td></td>
                     <td class="bold">{{lv2.soBienBan}}</td>
-                    <td>{{lv2.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
+                    <td>{{lv2.ngayLayMau | date: 'dd/MM/yyyy' }}</td>
                     <td>{{lv2.tenTrangThai}}</td>
                     <td class="text-left">
                       <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BBLMBGM_XEM')

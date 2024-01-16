@@ -163,7 +163,7 @@
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td class="text-left">{{ data.namKh}}</td>
           <td class="text-left">{{ data.soQdDc }}</td>
-          <td class="text-left">{{ data.ngayKyDc | date: 'dd/MM/YYYY' }}</td>
+          <td class="text-left">{{ data.ngayKyDc | date: 'dd/MM/yyyy' }}</td>
           <td class="text-left">
             <a *ngIf="data.soQdPd && data.idQdPd" (click)="openModal(data.idQdPd)"
                style="color: blue">{{data.soQdPd}}

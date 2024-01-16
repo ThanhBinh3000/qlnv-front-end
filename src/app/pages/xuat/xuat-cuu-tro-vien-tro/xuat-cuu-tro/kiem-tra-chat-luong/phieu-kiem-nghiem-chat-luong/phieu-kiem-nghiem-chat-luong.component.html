@@ -220,7 +220,7 @@
                   {{ item.soQdGiaoNvXh}}</a>
               </td>
               <td class="bold">{{ item.nam }}</td>
-              <td class="bold">{{ item.ngayQdGiaoNvXh | date: 'dd/MM/YYYY' }}</td>
+              <td class="bold">{{ item.ngayQdGiaoNvXh | date: 'dd/MM/yyyy' }}</td>
               <td></td>
               <td></td>
               <td></td>
@@ -243,7 +243,7 @@
                   <td></td>
                   <td></td>
                   <td class="bold">{{lv1.soPhieu}}</td>
-                  <td>{{lv1.ngayKnMau | date: 'dd/MM/YYYY' }}</td>
+                  <td>{{lv1.ngayKnMau | date: 'dd/MM/yyyy' }}</td>
                   <td>{{lv1.tenDiemKho}}</td>
                   <td>{{lv1.tenNhaKho}}</td>
                   <td>{{lv1.tenNganKho}}</td>
@@ -251,9 +251,9 @@
                   <td><a nz-button nzType="link" *ngIf="lv1.soBienBan"
                       (click)="openBbLmModal(lv1.idBienBan)">{{lv1.soBienBan}}</a>
                   </td>
-                  <td>{{lv1.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
+                  <td>{{lv1.ngayLayMau | date: 'dd/MM/yyyy' }}</td>
                   <td>{{lv1.soBbTinhKho}}</td>
-                  <td>{{lv1.ngayXuatDocKho | date: 'dd/MM/YYYY' }}</td>
+                  <td>{{lv1.ngayXuatDocKho | date: 'dd/MM/yyyy' }}</td>
                   <td>{{lv1.tenTrangThai}}</td>
                   <td class="text-left">
                     <a (click)="redirectDetail(lv1.id, true)" *ngIf="vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.XEM) &&

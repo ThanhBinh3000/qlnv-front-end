@@ -108,7 +108,7 @@
                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
             <td class="bold">{{ item.soQdGiaoNvXh }}</td>
             <td class="bold">{{item.nam}}</td>
-            <td class="bold">{{item.thoiGianGiaoNhan | date: 'dd/MM/YYYY' }}</td>
+            <td class="bold">{{item.thoiGianGiaoNhan | date: 'dd/MM/yyyy' }}</td>
             <td></td>
             <td></td>
             <td></td>
@@ -148,7 +148,7 @@
                     <td class="bold">{{lv2.soBangKe}}</td>
                     <td><a nz-button nzType="link"
                            (click)="openPhieuXkModal(lv2.idPhieuXuatKho)">{{lv2.soPhieuXuatKho}}</a></td>
-                    <td>{{lv2.ngayXuat | date: 'dd/MM/YYYY' }}</td>
+                    <td>{{lv2.ngayXuat | date: 'dd/MM/yyyy' }}</td>
                     <td>{{lv2.tenTrangThai}}</td>
                     <td class="text-left">
                       <a (click)="redirectDetail(lv2.id, true)" *ngIf="vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.XEM)

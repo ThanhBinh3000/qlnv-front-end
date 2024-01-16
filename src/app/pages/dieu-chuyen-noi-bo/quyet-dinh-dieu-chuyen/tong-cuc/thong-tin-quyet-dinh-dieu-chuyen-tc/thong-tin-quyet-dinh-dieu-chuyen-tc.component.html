@@ -264,7 +264,7 @@
                   <td>{{item.tenDviCuc || item.tenCucDxuat || item.tenCucXuat || ""}}</td>
                   <td *ngIf="formData.value.loaiDc == 'CUC'">{{item.tenCucNhan || ""}}</td>
                   <td>{{item.soDxuat || ""}}</td>
-                  <td>{{item.ngayGduyet | date: 'dd/MM/YYYY'}}</td>
+                  <td>{{item.ngayGduyet | date: 'dd/MM/yyyy'}}</td>
                   <td>{{item.tongDuToanKp|number: '1.0-1' || ""}}</td>
                   <td>
                     <nz-input-number [(ngModel)]='item.tongDuToanKpPd' [nzMin]="0" [nzMax]="999999999" [nzStep]="1"

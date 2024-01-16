@@ -38,7 +38,7 @@
         <td>{{ data.soBienBan }}</td>
         <td>{{ data.soHopDong }}</td>
         <td>{{ data.tenHopDong}}</td>
-        <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
+        <td>{{ data.ngayKy | date: 'dd/MM/yyyy' }}</td>
         <td>{{  data.tenTrangThai  }}</td>
         <td>
           <a (click)="redirectToChiTiet(true, data.id)" *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDSCTX_BBNT_XEM')">

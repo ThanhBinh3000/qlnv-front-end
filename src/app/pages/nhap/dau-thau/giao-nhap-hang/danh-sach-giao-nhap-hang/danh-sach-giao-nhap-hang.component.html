@@ -182,14 +182,14 @@
             <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
             <td>{{ data.namNhap }}</td>
             <td>{{ data.soQd }}</td>
-            <td>{{ data.ngayQdinh | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.ngayQdinh | date: 'dd/MM/yyyy' }}</td>
             <td>
               <a style="color: blue; font-weight: bold;" (click)="openHdModal(data.idHd)">{{
                 data.soHd}}</a>
             </td>
             <td>{{ data.tenLoaiVthh}}</td>
             <td>{{ data.tenCloaiVthh}}</td>
-            <td>{{ data.tgianNkho | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.tgianNkho | date: 'dd/MM/yyyy' }}</td>
             <td>{{ data.trichYeu }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td></td>

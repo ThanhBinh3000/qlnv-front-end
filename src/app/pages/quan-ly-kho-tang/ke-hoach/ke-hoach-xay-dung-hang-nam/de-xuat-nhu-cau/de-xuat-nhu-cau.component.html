@@ -158,7 +158,7 @@
           <td *ngIf="!userService.isCuc()">{{ data.tenDvi }}</td>
           <td class="text-center">{{ data.namKeHoach }}</td>
           <td>{{ data.soCongVan }}</td>
-          <td class="text-center" >{{ data.ngayDuyet | date: 'dd/MM/YYYY' }}</td>
+          <td class="text-center" >{{ data.ngayDuyet | date: 'dd/MM/yyyy' }}</td>
           <td class="text-right">{{ data.tmdt | number : '1.0-1': 'vi-VN' }}</td>
           <td>{{ data.trichYeu }}</td>
           <td> <a nz-button nzType="link" (click)="openModalCttongHop(data)">{{ data.soQdTrunghan }}</a></td>

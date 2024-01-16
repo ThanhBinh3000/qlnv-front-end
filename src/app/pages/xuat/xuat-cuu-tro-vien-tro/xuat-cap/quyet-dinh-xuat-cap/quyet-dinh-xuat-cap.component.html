@@ -83,12 +83,12 @@
             </td>
             <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
             <td>{{ data.soBbQd }}</td>
-            <td class="text-center">{{ data.ngayHluc | date: 'dd/MM/YYYY' }}</td>
+            <td class="text-center">{{ data.ngayHluc | date: 'dd/MM/yyyy' }}</td>
             <!-- <td>{{ data.soXc }}</td> -->
             <!-- <td>{{data.qdPaXuatCap}}</td> -->
 
             <!-- <td><a nz-button nzType="link" (click)="openQdPdModal(data.qdPaXuatCapId)">{{ data.qdPaXuatCap}}</a></td>
-            <td class="text-center">{{data.ngayHieuLucQdcxc| date: 'dd/MM/YYYY'}}</td>
+            <td class="text-center">{{data.ngayHieuLucQdcxc| date: 'dd/MM/yyyy'}}</td>
             <td class="text-right">{{data.slGaoChuyenXuatCap| number : '1.0-1' : 'vi_VN'}}</td> -->
             <td class="text-right">{{ getSlGaoChuyenXuatCap(data)| number : '1.0-1' : 'vi_VN'}}</td>
             <td class="break-2">

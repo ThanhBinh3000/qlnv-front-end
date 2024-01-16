@@ -147,7 +147,7 @@
                                         <td>{{dataPhieu.ngayGdinh}}</td>
                                         <td>{{dataPhieu.kqDanhGia}}</td>
                                         <td class="link">{{dataPhieu.phieuNhapKhoHdr?.soPhieuNhapKho}}</td>
-                                        <td>{{dataPhieu.phieuNhapKhoHdr?.ngayNkho | date: 'dd/MM/YYYY' }}</td>
+                                        <td>{{dataPhieu.phieuNhapKhoHdr?.ngayNkho | date: 'dd/MM/yyyy' }}</td>
                                         <td>{{dataPhieu.tenTrangThai}}</td>
                                         <td>
                                             <a *ngIf="(dataPhieu.trangThai == STATUS.DA_DUYET_LDCC || dataPhieu.trangThai == STATUS.CHO_DUYET_LDCC || dataPhieu.trangThai == STATUS.TU_CHOI_LDCC) && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_PKTCL_XEM')

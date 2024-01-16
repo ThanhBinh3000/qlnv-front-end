@@ -200,7 +200,7 @@
           <td class="text-center">
             <span *ngIf="data.slHdDaKy">{{ data.slHdDaKy}}</span>
           </td>
-          <td class="text-left">{{ data.ngayKthuc|date: 'dd/MM/YYYY' }}</td>
+          <td class="text-left">{{ data.ngayKthuc|date: 'dd/MM/yyyy' }}</td>
           <td class="text-left" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">{{ data.tenLoaiVthh }}</td>
           <td class="text-left">{{ data.tenCloaiVthh }}</td>
           <td class="text-right">{{ data.tongGiaTriHdong|number:globals.numberFormat:globals.locale}}</td>

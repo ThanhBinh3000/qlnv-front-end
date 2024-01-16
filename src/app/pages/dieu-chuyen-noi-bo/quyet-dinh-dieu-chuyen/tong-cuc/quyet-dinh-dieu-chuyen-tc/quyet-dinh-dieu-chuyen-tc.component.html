@@ -146,7 +146,7 @@
               </th>
               <th>
                 <nz-input-group>
-                  <nz-date-picker nzFormat="dd/MM/YYYY" [(ngModel)]="filterTable.ngayKyQdinh"
+                  <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayKyQdinh"
                     (ngModelChange)="filterInTable('ngayKyQdinh', convertDateToString(filterTable.ngayKyQdinh))">
                   </nz-date-picker>
                 </nz-input-group>
@@ -207,7 +207,7 @@
               <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
               <td>{{ data.nam }}</td>
               <td>{{ data.soQdinh }}</td>
-              <td>{{ data.ngayKyQdinh | date: 'dd/MM/YYYY' }}</td>
+              <td>{{ data.ngayKyQdinh | date: 'dd/MM/yyyy' }}</td>
               <td>{{ data.tenLoaiDc }}</td>
               <td>{{ data.trichYeu }}</td>
               <td>{{ data.maDxuat }}</td>

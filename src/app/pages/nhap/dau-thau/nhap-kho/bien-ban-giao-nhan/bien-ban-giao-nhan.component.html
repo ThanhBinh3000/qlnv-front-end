@@ -106,7 +106,7 @@
             <td></td>
             <td class="link bold">{{ item.soQd }}</td>
             <td class="bold">{{ item.namNhap }}</td>
-            <td class="bold">{{ item.tgianNkho| date: 'dd/MM/YYYY' }}</td>
+            <td class="bold">{{ item.tgianNkho| date: 'dd/MM/yyyy' }}</td>
             <td colspan="9"></td>
             <td>
               <a (click)="redirectToChiTiet(false, 0,item.id)">
@@ -127,7 +127,7 @@
                   class="bold">{{row3.tenLoKho ? row3.tenLoKho + ' - ' + row3.tenNganKho + ' - ' + row3.tenNhaKho : row3.tenNganKho + ' - ' + row3.tenNhaKho}}</td>
                 <td>{{row3.soBbGiaoNhan }}</td>
                 <td>{{row3.soBbNhapDayKho }}</td>
-                <td>{{row3.bbNhapDayKho?.ngayKetThucNhap | date: 'dd/MM/YYYY' }}</td>
+                <td>{{row3.bbNhapDayKho?.ngayKetThucNhap | date: 'dd/MM/yyyy' }}</td>
                 <td>{{row3.bbGuiHang?.soBienBanGuiHang }}</td>
                 <td>{{row3.bbLayMau?.soBienBan }}</td>
                 <td>{{row3.bbLayMau?.soHskt }}</td>

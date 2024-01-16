@@ -103,11 +103,11 @@
                   <td>{{bb.tenDiemKho}}</td>
                   <td>{{bb.tenLoKho ?bb.tenLoKho + ' - ' + bb.tenNganKho : bb.tenNganKho}}</td>
                   <td>{{bb.bienBanLayMau?.soBienBan}}</td>
-                  <td>{{bb.bienBanLayMau?.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
+                  <td>{{bb.bienBanLayMau?.ngayLayMau | date: 'dd/MM/yyyy' }}</td>
                   <td>{{ loaiVthh == '02' ? bb.bienBanGuiHang?.soBienBanGuiHang :
                     bb.bienBanNhapDayKho?.soBienBanNhapDayKho }}</td>
                   <td>{{ (loaiVthh == '02' ? bb.bienBanGuiHang?.ngayTao : bb.bienBanNhapDayKho?.ngayKetThucNhap) | date:
-                    'dd/MM/YYYY'
+                    'dd/MM/yyyy'
                     }}
                   </td>
                   <td>{{bb.bienBanLayMau?.tenTrangThai}}</td>

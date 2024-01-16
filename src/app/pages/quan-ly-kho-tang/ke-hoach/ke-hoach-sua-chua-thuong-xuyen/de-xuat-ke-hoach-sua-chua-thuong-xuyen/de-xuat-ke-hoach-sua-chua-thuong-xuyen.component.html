@@ -148,7 +148,7 @@
           <td class="text-center">{{ data.namKh }}</td>
           <td>{{ data.soCv }}</td>
           <td *ngIf="userService.isTongCuc()">{{ data.tenDviDeXuat }}</td>
-          <td class="text-center">{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
+          <td class="text-center">{{ data.ngayKy | date: 'dd/MM/yyyy' }}</td>
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td *ngIf="userService.isTongCuc()">{{ data.maTongHop ? data.maTongHop : 'Chưa tổng hợp'}}</td>

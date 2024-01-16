@@ -128,7 +128,7 @@
                     <td>{{ loaiVthh == '02' ? dataPhieu.bienBanGuiHang?.soBienBanGuiHang :
                       dataPhieu.phieuKiemTraCl?.soPhieu}}</td>
                     <td>{{ (loaiVthh == '02' ? dataPhieu.bienBanGuiHang?.ngayTao : dataPhieu.phieuKiemTraCl?.ngayGdinh )
-                      | date: 'dd/MM/YYYY'}}</td>
+                      | date: 'dd/MM/yyyy'}}</td>
                     <td *ngIf="!loaiVthh.startsWith('02')">{{dataPhieu.bangKeCanHang?.soBangKe}}</td>
                     <td>{{ dataPhieu.tenTrangThai }}</td>
                     <td>

@@ -204,7 +204,7 @@
             <td class="text-right">{{ data.hhQdKhlcntHdr?.soGthau}}</td>
             <td class="text-right">{{ data.hhQdKhlcntHdr?.soGthauTrung == null ? 0 : data.hhQdKhlcntHdr?.soGthauTrung}}</td>
             <td class="text-right">{{ data.listHopDong?.length }}</td>
-            <td>{{ data.qdKhlcntDtl?.dxuatKhLcntHdr?.tgianNhang | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.qdKhlcntDtl?.dxuatKhLcntHdr?.tgianNhang | date: 'dd/MM/yyyy' }}</td>
             <td>{{ data.qdKhlcntDtl?.hhQdKhlcntHdr?.tenCloaiVthh }}</td>
             <td class="text-right">{{ data.qdKhlcntDtl?.donGiaVat * data.qdKhlcntDtl?.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
             <td>{{ data.tenDvi}}</td>

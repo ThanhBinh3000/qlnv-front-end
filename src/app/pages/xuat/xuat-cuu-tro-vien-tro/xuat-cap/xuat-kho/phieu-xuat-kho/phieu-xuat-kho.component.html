@@ -176,7 +176,7 @@
                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
             <td class="bold">{{ item.soQdGiaoNvXh }}</td>
             <td class="bold">{{ item.nam }}</td>
-            <td class="bold">{{ item.ngayQdGiaoNvXh | date: 'dd/MM/YYYY' }}</td>
+            <td class="bold">{{ item.ngayQdGiaoNvXh | date: 'dd/MM/yyyy' }}</td>
             <td></td>
             <td></td>
             <td></td>
@@ -216,10 +216,10 @@
                     <td></td>
                     <td></td>
                     <td class="bold">{{lv2.soPhieuXuatKho}}</td>
-                    <td>{{lv2.ngayXuatKho | date: 'dd/MM/YYYY' }}</td>
+                    <td>{{lv2.ngayXuatKho | date: 'dd/MM/yyyy' }}</td>
                     <td><a *ngIf="lv2.soPhieuKnCl" nzType="link"
                            (click)="openPhieuKnClModal(lv2.idPhieuKnCl)">{{lv2.soPhieuKnCl}}</a></td>
-                    <td>{{lv2.ngayKn | date: 'dd/MM/YYYY' }}</td>
+                    <td>{{lv2.ngayKn | date: 'dd/MM/yyyy' }}</td>
                     <td>{{lv2.tenTrangThai}}</td>
                     <td class="text-left">
                       <a (click)="redirectDetail(lv2.id, true)"

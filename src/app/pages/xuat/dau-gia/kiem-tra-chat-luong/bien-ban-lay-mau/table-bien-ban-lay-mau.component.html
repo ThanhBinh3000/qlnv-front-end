@@ -96,7 +96,7 @@
               </a>
             </td>
             <td class="text-left bold">{{item.nam}}</td>
-            <td class="text-left bold">{{item.tgianGiaoHang|date: 'dd/MM/YYYY'}}</td>
+            <td class="text-left bold">{{item.tgianGiaoHang|date: 'dd/MM/yyyy'}}</td>
             <td></td>
             <td></td>
             <td></td>
@@ -138,13 +138,13 @@
                       {{ (lv2.tenLoKho ? lv2.tenLoKho + " - " : "") + (lv2.tenNganKho ? lv2.tenNganKho + " - " : "") + (lv2.tenNhaKho ? lv2.tenNhaKho : "") }}
                     </td>
                     <td class="text-left bold">{{ lv2.soBbLayMau }}</td>
-                    <td class="text-left">{{ lv2.ngayLayMau|date:'dd/MM/YYYY' }}</td>
+                    <td class="text-left">{{ lv2.ngayLayMau|date:'dd/MM/yyyy' }}</td>
                     <td class="text-left">
                       <a *ngIf="lv2.soBbTinhKho && lv2.idTinhKho" (click)="openModal(lv2.idTinhKho, 'tinhKho')"
                          style="color: blue">{{ lv2.soBbTinhKho }}
                       </a>
                     </td>
-                    <td class="text-left">{{ lv2.ngayXuatDocKho |date:'dd/MM/YYYY'}}</td>
+                    <td class="text-left">{{ lv2.ngayXuatDocKho |date:'dd/MM/yyyy'}}</td>
                     <td class="text-left" *ngIf="!loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
                       <a *ngIf="lv2.soBbHaoDoi && lv2.idHaoDoi" (click)="openModal(lv2.idHaoDoi, 'haoDoi')"
                          style="color: blue">{{ lv2.soBbHaoDoi }}

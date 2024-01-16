@@ -187,7 +187,7 @@
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td class="text-center">{{ data.namKeHoach }}</td>
           <td>{{ data.soQuyetDinh }}</td>
-          <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.ngayKy | date: 'dd/MM/yyyy' }}</td>
           <td class="text-center">{{ data.namBatDau && data.namKetThuc ? data.namBatDau + ' - ' + data.namKetThuc : ''  }}</td>
           <td>{{data.trichYeu}}</td>
           <td>{{type == '00' ? data.soQdDc : data.soQdGoc}}</td>

@@ -102,7 +102,7 @@
                   item.soQdinh}}</a>
               </td>
               <td>{{item.nam}}</td>
-              <td>{{item.thoiHanDieuChuyen | date: 'dd/MM/YYYY'}}</td>
+              <td>{{item.thoiHanDieuChuyen | date: 'dd/MM/yyyy'}}</td>
               <td></td>
               <td></td>
               <td></td>
@@ -146,15 +146,15 @@
                         (lv2.tenNhaKho? lv2.tenNhaKho: "")}}
                       </td>
                       <td>{{lv2.soPhieuKnChatLuong}}</td>
-                      <td>{{lv2.ngayKiemNghiem | date: 'dd/MM/YYYY' }}</td>
+                      <td>{{lv2.ngayKiemNghiem | date: 'dd/MM/yyyy' }}</td>
                       <td>
                         <a *ngIf="lv2.soBBLayMau && lv2.bblayMauId" nz-button nzType="link"
                           (click)="openModalBbLayMau(lv2.bblayMauId)">{{
                           lv2.soBBLayMau}}</a>
                       </td>
-                      <td>{{lv2.ngaylayMau | date: 'dd/MM/YYYY'}}</td>
+                      <td>{{lv2.ngaylayMau | date: 'dd/MM/yyyy'}}</td>
                       <td>{{lv2.soBBTinhKho}}</td>
-                      <td>{{lv2.ngayLapBbTinhKho| date: 'dd/MM/YYYY'}}</td>
+                      <td>{{lv2.ngayLapBbTinhKho| date: 'dd/MM/yyyy'}}</td>
                       <td>{{LIST_TRANG_THAI[lv2.trangThai]}}</td>
                       <td class="text-left">
                         <a (click)="redirectToChiTiet(lv2, false, lv2.bblayMauId)"
