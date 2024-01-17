@@ -161,7 +161,7 @@ export class DieuChinhChiTieuKeHoachNamComponent extends Base2Component implemen
 
   async timKiem() {
     if (this.formData.value.ngayKyTu) {
-      this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayDuyetTcTu).format('YYYY-MM-DD')
+      this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayKyTu).format('YYYY-MM-DD')
     }
     if (this.formData.value.ngayKyDen) {
       this.formData.value.ngayKyDen = dayjs(this.formData.value.ngayKyDen).format('YYYY-MM-DD')
@@ -303,7 +303,7 @@ export class DieuChinhChiTieuKeHoachNamComponent extends Base2Component implemen
       this.spinner.show();
       try {
         if (this.formData.value.ngayKyTu) {
-          this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayDuyetTcTu).format('YYYY-MM-DD')
+          this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayKyTu).format('YYYY-MM-DD')
         }
         if (this.formData.value.ngayKyDen) {
           this.formData.value.ngayKyDen = dayjs(this.formData.value.ngayKyDen).format('YYYY-MM-DD')
