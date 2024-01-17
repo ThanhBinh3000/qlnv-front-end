@@ -211,6 +211,9 @@ export class ChiSoChatLuong {
   camQuan: string = '';
   tinhTrangNamMoc: string = '';
   conTrungSong: number = 0;
+
+  luongDietTrung: number = 0;
+  loaiThuoc: string = '';
   // Muoi them
   muiVi: string = '';
   benNgoaiCoHat: string = '';
