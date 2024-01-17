@@ -42,10 +42,11 @@ export class MmThongTinHienTrangComponent extends Base2Component implements OnIn
     super(httpClient, storageService, notification, spinner, modal, hienTrangSv);
     super.ngOnInit()
     this.formData = this.fb.group({
+      id: [null],
       maDvi: [null],
       tenDvi: [null],
       namKeHoach: [null],
-      tenCcdc: [null],
+      tenTaiSan: [null],
       maCcdc: [null],
       donViTinh: [null],
       luongHang: [null],

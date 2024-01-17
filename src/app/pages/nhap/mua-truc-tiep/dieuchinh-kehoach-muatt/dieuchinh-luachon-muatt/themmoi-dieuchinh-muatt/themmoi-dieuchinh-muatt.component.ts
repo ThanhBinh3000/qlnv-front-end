@@ -290,6 +290,7 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
   }
 
   async getQdGocList() {
+    this.spinner.show();
     let body = {
       trangThai: STATUS.BAN_HANH,
       maDvi: null,
@@ -302,7 +303,7 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
-    await this.spinner.hide();
+    this.spinner.hide();
 
   }
 
@@ -324,9 +325,9 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
     modalQD.afterClose.subscribe((data) => {
       if(data){
         if (data.soQd != null) {
-          this.onChangeSoQdGoc(data.id);
+          this.onChangeSoQdGoc(data);
         }else{
-          this.onChangeSoQdDcGoc(data.id)
+          this.onChangeSoQdDcGoc(data)
         }
       }
     });
@@ -334,13 +335,13 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
   async onChangeSoQdGoc($event) {
     this.spinner.show();
     if ($event) {
-      let res = await this.quyetDinhPheDuyetKeHoachMTTService.getDetail($event);
-      console.log(res,5555)
-      let qdGoc = this.listQdGoc.filter(item => item.id == $event)
-      if (res.msg == MESSAGE.SUCCESS) {
-        const data = res.data;
-        delete res.data?.trangThai;
-        delete res.data?.tenTrangThai;
+      // let res = await this.quyetDinhPheDuyetKeHoachMTTService.getDetail($event);
+      console.log($event,5555)
+      let qdGoc = this.listQdGoc.filter(item => item.id == $event.id)
+      // if ($event) {
+        const data = $event;
+        delete $event?.trangThai;
+        delete $event?.tenTrangThai;
         for (let item of data.children) {
           this.mthh = item.moTaHangHoa;
         }
@@ -348,7 +349,7 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
         this.formData.patchValue({
           id: null,
           ngayKyQdGoc: data.ngayQd,
-          idQdGoc: $event,
+          idQdGoc: $event?.id,
           soQdGoc: qdGoc.length > 0 ? qdGoc[0].soQd : null,
           loaiVthh: data.loaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
@@ -368,11 +369,11 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
           item.id = null;
         }
         this.showFirstRow(event, this.danhsachDxMtt[0]);
-      }
+      // }
 
-      else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
+      // else {
+      //   this.notification.error(MESSAGE.ERROR, res.msg);
+      // }
     }
     this.spinner.hide();
   }
@@ -380,32 +381,31 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
   async onChangeSoQdDcGoc($event) {
     this.spinner.show();
     if ($event) {
-      let res = await this.dieuChinhQuyetDinhPdKhmttService.getDetail($event);
-      console.log(res.data, 6666)
-      delete res.data?.trangThai;
-      delete res.data?.tenTrangThai;
-      for (let item of res.data.hhDcQdPduyetKhmttDxList) {
+      console.log($event, 6666)
+      delete $event?.trangThai;
+      delete $event?.tenTrangThai;
+      for (let item of $event.hhDcQdPduyetKhmttDxList) {
         this.mthh = item.moTaHangHoa;
       }
-      Object.assign(res.data, {mthh: this.mthh})
+      Object.assign($event, {mthh: this.mthh})
       this.formData.patchValue({
         id: null,
-        ngayKyQdGoc: res.data.ngayKyDc,
-        idQdGoc: res.data.id,
-        soQdGoc: res.data.soQdDc + this.soQdDc,
-        loaiVthh: res.data.loaiVthh,
-        tenLoaiVthh: res.data.tenLoaiVthh,
-        cloaiVthh: res.data.cloaiVthh,
-        tenCloaiVthh: res.data.tenCloaiVthh,
-        moTaHangHoa: res.data.mthh,
-        soLanDieuChinh: res.data.soLanDieuChinh + 1,
-        soQdCc: res.data.soQdCc,
-        idSoQdCc: res.data.idSoQdCc,
-        namKh: res.data.namKh
+        ngayKyQdGoc: $event.ngayKyDc,
+        idQdGoc: $event.id,
+        soQdGoc: $event.soQdDc + this.soQdDc,
+        loaiVthh: $event.loaiVthh,
+        tenLoaiVthh: $event.tenLoaiVthh,
+        cloaiVthh: $event.cloaiVthh,
+        tenCloaiVthh: $event.tenCloaiVthh,
+        moTaHangHoa: $event.mthh,
+        soLanDieuChinh: $event.soLanDieuChinh + 1,
+        soQdCc: $event.soQdCc,
+        idSoQdCc: $event.idSoQdCc,
+        namKh: $event.namKh
 
       })
       // await this.getDataChiTieu(res.data.idSoQdCc);
-      this.danhsachDxMtt = res.data.hhDcQdPduyetKhmttDxList;
+      this.danhsachDxMtt = $event.hhDcQdPduyetKhmttDxList;
       this.danhsachDxMttCache = cloneDeep(this.danhsachDxMtt)
       for (let item of this.danhsachDxMtt) {
         item.id = null;

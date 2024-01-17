@@ -173,7 +173,7 @@
                   (click)="redirectDetail(data.id, true)">
                   <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
                 </a>
-                <a *ngIf="(data.trangThai === STATUS.DA_DUYET_LDV || data.trangThai === STATUS.KHONG_BAN_HANH) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_PA_TCGIAO_XEM')"
+                <a *ngIf="(data.trangThai === STATUS.DA_DUYET_LDV || !(data.trangThai === STATUS.CHO_DUYET_LDV && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_PA_TCGIAO_DUYET_LDVU')) || data.trangThai === STATUS.KHONG_BAN_HANH) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_PA_TCGIAO_XEM')"
                   (click)="redirectDetail(data.id, true)">
                   <i class="fa fa-eye" title="Xem chi tiết"></i>
                 </a>

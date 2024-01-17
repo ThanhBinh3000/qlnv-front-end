@@ -191,8 +191,6 @@ export class DanhSachSuaChuaComponent extends Base3Component implements OnInit {
           childData: rs
         };
       }).value();
-    console.log(this.dataTableView, 'dataTableView')
-    console.log(this.expandSetString)
   }
 
   onExpandStringChange(id: string, checked: boolean) {
