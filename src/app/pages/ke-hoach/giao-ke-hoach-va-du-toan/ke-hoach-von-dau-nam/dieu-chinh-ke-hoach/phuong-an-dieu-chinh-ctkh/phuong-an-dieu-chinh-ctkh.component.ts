@@ -90,21 +90,21 @@ export class PhuongAnDieuChinhCtkhComponent extends Base2Component implements On
     this.userInfo = this.userService.getUserLogin();
   }
 
-  disabledStartNgayQD = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayKyDen) {
-      return startValue.getTime() > this.formData.value.ngayKyDen.getTime();
-    } else {
-      return false;
-    }
-  };
+  // disabledStartNgayQD = (startValue: Date): boolean => {
+  //   if (startValue && this.formData.value.ngayKyDen) {
+  //     return startValue.getTime() > this.formData.value.ngayKyDen.getTime();
+  //   } else {
+  //     return false;
+  //   }
+  // };
 
-  disabledEndNgayQD = (endValue: Date): boolean => {
-    if (endValue && this.formData.value.ngayKyTu) {
-      return endValue.getTime() < this.formData.value.ngayKyTu.getTime();
-    } else {
-      return false;
-    }
-  };
+  // disabledEndNgayQD = (endValue: Date): boolean => {
+  //   if (endValue && this.formData.value.ngayKyTu) {
+  //     return endValue.getTime() < this.formData.value.ngayKyTu.getTime();
+  //   } else {
+  //     return false;
+  //   }
+  // };
 
   isShowDS() {
     if (this.isChiCuc()) return true
@@ -127,7 +127,7 @@ export class PhuongAnDieuChinhCtkhComponent extends Base2Component implements On
 
   async timKiem() {
     if (this.formData.value.ngayKyTu) {
-      this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayDuyetTcTu).format('YYYY-MM-DD')
+      this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayKyTu).format('YYYY-MM-DD')
     }
     if (this.formData.value.ngayKyDen) {
       this.formData.value.ngayKyDen = dayjs(this.formData.value.ngayKyDen).format('YYYY-MM-DD')
@@ -219,7 +219,7 @@ export class PhuongAnDieuChinhCtkhComponent extends Base2Component implements On
       try {
 
         if (this.formData.value.ngayKyTu) {
-          this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayDuyetTcTu).format('YYYY-MM-DD')
+          this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayKyTu).format('YYYY-MM-DD')
         }
         if (this.formData.value.ngayKyDen) {
           this.formData.value.ngayKyDen = dayjs(this.formData.value.ngayKyDen).format('YYYY-MM-DD')

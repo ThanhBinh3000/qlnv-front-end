@@ -2204,6 +2204,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
                     this.notification.error(MESSAGE.ERROR, resp.msg);
                   }
                 })
+            } else if (kbh) {
+              this.khongBH()
             } else {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             }
