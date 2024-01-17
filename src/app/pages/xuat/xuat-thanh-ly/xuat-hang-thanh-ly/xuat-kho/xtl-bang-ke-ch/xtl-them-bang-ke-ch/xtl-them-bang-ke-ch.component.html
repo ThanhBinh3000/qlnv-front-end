@@ -267,9 +267,9 @@
           <thead>
           <tr>
             <th nzWidth="30px">STT</th>
-            <th>Mã cân (A)</th>
-            <th>Số bao bì (1)</th>
-            <th>Trọng lượng cả bì (kg) (2)</th>
+            <th> {{phanLoai == 'LT' ? 'Mã cân (A)' : 'Số serial/mã sản phẩm' }}</th>
+            <th *ngIf="phanLoai == 'LT'">Số bao bì (1)</th>
+            <th>{{phanLoai == 'LT' ? 'Trọng lượng cả bì (kg) (2)' : 'Số lượng (2)' }}</th>
             <th nzWidth="55px">Hành động</th>
           </tr>
           </thead>
@@ -279,7 +279,7 @@
             <td>
               <input [(ngModel)]="rowItem.maCan" />
             </td>
-            <td>
+            <td *ngIf="phanLoai == 'LT'">
               <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.soBaoBi" [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser"></nz-input-number>
             </td>
@@ -297,7 +297,7 @@
             <tr>
               <td>{{ i+1 }}</td>
               <td><input [(ngModel)]="item.maCan" /></td>
-              <td> <nz-input-number [nzSize]="'small'" [(ngModel)]="item.soBaoBi" [nzFormatter]="globals.formatter"
+              <td *ngIf="phanLoai == 'LT'"> <nz-input-number [nzSize]="'small'" [(ngModel)]="item.soBaoBi" [nzFormatter]="globals.formatter"
                                     [nzParser]="globals.parser"></nz-input-number></td>
               <td><nz-input-number [nzSize]="'small'" [(ngModel)]="item.trongLuongCaBi" [nzFormatter]="globals.formatter"
                                                  [nzParser]="globals.parser"></nz-input-number></td>
@@ -313,12 +313,12 @@
           <tr>
             <td></td>
             <td>Tổng</td>
-            <td></td>
-            <td>{{ calTongTable('soLuong') | number : '1.0-1' : 'vi_VN'}}</td>
+            <td *ngIf="phanLoai == 'LT'" ></td>
+            <td>{{ calTongTable('trongLuongCaBi') | number : '1.0-1' : 'vi_VN'}}</td>
           </tr>
           </tfoot>
         </nz-table>
-        <form nzLayout="vertical" nz-form [formGroup]="formData">
+        <form *ngIf="phanLoai == 'LT'" nzLayout="vertical" nz-form [formGroup]="formData">
           <div nz-row [nzGutter]="[18]">
             <div nz-col [nzSpan]="12">
               <nz-form-item>

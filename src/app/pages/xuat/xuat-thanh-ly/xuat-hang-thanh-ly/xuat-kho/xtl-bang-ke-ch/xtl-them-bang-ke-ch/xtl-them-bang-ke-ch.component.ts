@@ -321,19 +321,37 @@ export class XtlThemBangKeChComponent extends Base3Component implements OnInit {
   }
 
   validateRow(): boolean {
-    if (this.rowItem.maCan && this.rowItem.soBaoBi && this.rowItem.trongLuongCaBi) {
-      // if (this.dataTable.filter(i => i.soSerial == this.rowItem.soSerial).length > 0) {
-      //   this.notification.error(MESSAGE.ERROR, "Số serial đã tồn tại");
-      //   return false
-      // }
-      // if (this.rowItem.soLuong <= 0) {
-      //   this.notification.error(MESSAGE.ERROR, "Số lượng thực tế phải lớn hơn 0");
-      //   return false
-      // }
-    } else {
-      this.notification.error(MESSAGE.ERROR, "Vui lòng điền đủ thông tin");
-      return false;
+    if(this.phanLoai == 'LT'){
+      if (this.rowItem.maCan && this.rowItem.soBaoBi && this.rowItem.trongLuongCaBi) {
+        // if (this.dataTable.filter(i => i.soSerial == this.rowItem.soSerial).length > 0) {
+        //   this.notification.error(MESSAGE.ERROR, "Số serial đã tồn tại");
+        //   return false
+        // }
+        // if (this.rowItem.soLuong <= 0) {
+        //   this.notification.error(MESSAGE.ERROR, "Số lượng thực tế phải lớn hơn 0");
+        //   return false
+        // }
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Vui lòng điền đủ thông tin");
+        return false;
+      }
+    }else{
+      if (this.rowItem.maCan && this.rowItem.trongLuongCaBi) {
+        // if (this.dataTable.filter(i => i.soSerial == this.rowItem.soSerial).length > 0) {
+        //   this.notification.error(MESSAGE.ERROR, "Số serial đã tồn tại");
+        //   return false
+        // }
+        // if (this.rowItem.soLuong <= 0) {
+        //   this.notification.error(MESSAGE.ERROR, "Số lượng thực tế phải lớn hơn 0");
+        //   return false
+        // }
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Vui lòng điền đủ thông tin");
+        return false;
+      }
     }
+
+
     return true
   }
 
