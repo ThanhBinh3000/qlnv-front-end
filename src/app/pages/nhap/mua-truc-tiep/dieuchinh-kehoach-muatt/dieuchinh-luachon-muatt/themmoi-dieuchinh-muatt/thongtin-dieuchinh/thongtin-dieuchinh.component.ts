@@ -121,6 +121,7 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
         this.tenDviChange = this.dataInput.tenDvi
         await this.getPag(this.dataInput);
         this.dataTable = this.dataInput.children
+        console.log(this.dataInput, "dataInput")
         this.calculatorTable();
         this.sumTongMucDt();
       } else {
@@ -217,10 +218,12 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
         namKh: this.formData.get('namKh').value,
         loaiVthh: this.formData.get('loaiVthh').value,
         cloaiVthh: this.formData.get('cloaiVthh').value,
+        idQdHdr: this.formData.get('idQdHdr').value,
         maDviCuc: this.formData.value.maDvi
       },
     });
     modalGT.afterClose.subscribe((data) => {
+      console.log(data, "DialogThemMoiKeHoachMuaTrucTiepComponent")
       if (!data) {
         return;
       }

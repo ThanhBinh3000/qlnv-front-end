@@ -364,13 +364,15 @@
                 <td>{{data.tenTchuan}}</td>
                 <td>{{data.chiSoXuat}}</td>
                 <!-- <td><input nz-input [(ngModel)]="data.ketQua" (ngModelChange)="onKetQuaChange($event,i,viewCtChatLuong)"/></td> -->
-                <ng-container *ngIf="['DANH_BONG_GAO', 'MUC_XAT_GAO'].includes(data.ma); else inputCtCL">
+                <ng-container *ngIf="['DANH_BONG_GAO', 'MUC_XAT_GAO'].includes(data.maChiTieu); else inputCtCL">
                   <td>
-                    <nz-select *ngIf="data.ma === 'DANH_BONG_GAO'" [(ngModel)]="data.ketQuaPt" [nzDisabled]="isView">
+                    <nz-select *ngIf="data.maChiTieu === 'DANH_BONG_GAO'" [(ngModel)]="data.ketQuaPt"
+                      [nzDisabled]="isView">
                       <nz-option *ngFor="let item of dmDanhBongGao" [nzValue]="item.giaTri"
                         [nzLabel]="item.giaTri"></nz-option>
                     </nz-select>
-                    <nz-select *ngIf="data.ma === 'MUC_XAT_GAO'" [(ngModel)]="data.ketQuaPt" [nzDisabled]="isView">
+                    <nz-select *ngIf="data.maChiTieu === 'MUC_XAT_GAO'" [(ngModel)]="data.ketQuaPt"
+                      [nzDisabled]="isView">
                       <nz-option *ngFor="let item of dmMucXatGao" [nzValue]="item.giaTri"
                         [nzLabel]="item.giaTri"></nz-option>
                     </nz-select>

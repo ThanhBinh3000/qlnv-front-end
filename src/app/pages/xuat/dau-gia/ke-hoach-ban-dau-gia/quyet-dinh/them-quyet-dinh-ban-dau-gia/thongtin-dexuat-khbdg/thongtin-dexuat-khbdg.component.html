@@ -188,6 +188,7 @@
         <th nzWidth="150px" class="text-left wrap"> Chi cục</th>
         <th class="text-left"> Điểm kho</th>
         <th class="text-left"> Lô kho</th>
+        <th class="text-left"> Năm nhập</th>
         <th class="text-left"> Mã ĐVTS</th>
         <th nzWidth="100px" class="text-center wrap"
             [innerHTML]="isView ? 'SL xuất bán <br>đề xuất' : 'SL xuất bán'"></th>
@@ -222,7 +223,9 @@
             <td class="text-left">
               {{(children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") + (children.tenNhaKho ? children.tenNhaKho : "")}}
             </td>
+            <td class="text-left">{{ children.namNhap}}</td>
             <td class="text-left">{{ children.maDviTsan}}</td>
+
             <td class="text-right">
               {{ children.soLuongDeXuat|number:globals.numberFormat:globals.locale }}
             </td>
@@ -250,6 +253,7 @@
         <th nzWidth="150px" class="text-left wrap"> Chi cục</th>
         <th class="text-left"> Điểm kho</th>
         <th class="text-left"> Lô kho</th>
+        <th class="text-left"> Năm nhập</th>
         <th class="text-left"> Mã ĐVTS</th>
         <th nzWidth="100px" class="text-center wrap"
             [innerHTML]="isView ? 'SL xuất bán <br>đề xuất' : 'SL xuất bán'"></th>
@@ -284,6 +288,7 @@
             <td class="text-left">
               {{(children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") + (children.tenNhaKho ? children.tenNhaKho : "")}}
             </td>
+            <td class="text-left">{{ children.namNhap}}</td>
             <td class="text-left">{{ children.maDviTsan}}</td>
             <td class="text-right">
               <input currencyMask class="money-input" [(ngModel)]="children.soLuongDeXuat"

@@ -160,6 +160,9 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
         soDxuat: data.soDxuat?.split('/')[0]
       });
       this.dataTable = data.children;
+      if (!this.isView){
+        await this.getGiaToiThieu();
+      }
       if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
         await this.loaiVatTu(data);
       }
