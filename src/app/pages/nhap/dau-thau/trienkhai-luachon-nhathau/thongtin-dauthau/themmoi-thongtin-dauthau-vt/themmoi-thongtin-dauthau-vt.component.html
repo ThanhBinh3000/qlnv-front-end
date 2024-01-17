@@ -523,7 +523,7 @@
       </nz-collapse-panel>
     </nz-collapse>
     <form nzLayout="vertical" nz-form [formGroup]="formData">
-      <div nz-row [nzGutter]="24">
+      <div nz-row [nzGutter]="24" class="label-50 mg-t-10 border-right">
 <!--        <div nz-col [nzSpan]="6">-->
 <!--          <nz-form-item>-->
 <!--            <nz-form-label nzRequired [nzNoColon]="true"> Thời gian trình kết quả tổ chuyên gia</nz-form-label>-->
@@ -546,6 +546,22 @@
 <!--            </nz-form-control>-->
 <!--          </nz-form-item>-->
 <!--        </div>-->
+        <div nz-col [nzSpan]="8">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Thời gian bắt đầu tổ chức LCNT (Thời gian phát hành HSMT)</nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24">
+              <input class="blue-text" nz-input formControlName="tgianBdauTchuc" readonly />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Thời gian đóng/mở thầu</nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24">
+              <input class="blue-text" nz-input formControlName="tgianDthau" readonly />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
         <div nz-col nzSpan="24">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">

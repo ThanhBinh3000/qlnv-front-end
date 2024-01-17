@@ -206,7 +206,7 @@
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư đề xuất (tỷ đồng) </nz-form-label>
         <nz-form-control [nzErrorTip]="error">
-          <span class="blue-text">{{formData.value.tongMucDtDxLamTron | number : '1.0-9999' : 'vi_VN'}}</span>
+          <span class="blue-text">{{formData.value.tongMucDtDxLamTron | number : '1.2-2' : 'vi_VN'}}</span>
         </nz-form-control>
       </nz-form-item>
     </div>
@@ -253,7 +253,12 @@
         <nz-form-label nzRequired [nzNoColon]="true"> Tiền đảm bảo thực hiện hợp đồng (đ) </nz-form-label>
         <nz-form-control [nzErrorTip]="error">
           <nz-input-group>
-            <nz-input-number [ngModel]="formData.value.tongMucDtDx * (formData.value.gtriHdong / 100) "
+            <nz-input-number *ngIf="isCache" [ngModel]="formData.value.tongMucDtDx * (formData.value.gtriHdong / 100) "
+                             [ngModelOptions]="{standalone: true}" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
+                             [nzStep]="1" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+            <nz-input-number *ngIf="!isCache" [ngModel]="formData.value.tongMucDt * (formData.value.gtriHdong / 100) "
                              [ngModelOptions]="{standalone: true}" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
                              [nzStep]="1" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter"
                              [nzParser]="globals.parser">
@@ -266,7 +271,8 @@
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư theo đơn giá đã duyệt (tỷ đồng) </nz-form-label>
         <nz-form-control [nzErrorTip]="error">
-          <span class="blue-text">{{formData.value.tongMucDtLamTron | number : '1.0-9999' : 'vi_VN'}}</span>
+          <span class="blue-text" *ngIf="isCache">{{formData.value.tongMucDtDxLamTron | number : '1.2-2' : 'vi_VN'}}</span>
+          <span class="blue-text" *ngIf="!isCache">{{formData.value.tongMucDtLamTron | number : '1.2-2' : 'vi_VN'}}</span>
         </nz-form-control>
       </nz-form-item>
     </div>
@@ -276,8 +282,13 @@
         </nz-form-label>
         <nz-form-control [nzErrorTip]="error">
           <nz-input-group nzAddOnAfter="đ">
-            <nz-input-number
+            <nz-input-number *ngIf="isCache"
               [ngModel]="((formData.value.tongMucDtDx * formData.value.gtriHdong / 100) +(formData.value.tongMucDtDx * formData.value.gtriDthau/ 100)) "
+              [ngModelOptions]="{standalone: true}" nz-input [nzSize]="'small'" nzDisabled
+              [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+            </nz-input-number>
+            <nz-input-number *ngIf="!isCache"
+              [ngModel]="((formData.value.tongMucDt * formData.value.gtriHdong / 100) +(formData.value.tongMucDt * formData.value.gtriDthau/ 100)) "
               [ngModelOptions]="{standalone: true}" nz-input [nzSize]="'small'" nzDisabled
               [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
             </nz-input-number>
@@ -320,10 +331,10 @@
         <th nzWidth="150px" nzLeft  class="text-center">Chi cục DTNN</th>
         <th nzWidth="150px"  class="text-center">Điểm kho</th>
         <th nzWidth="150px"  class="text-center">Địa điểm nhập kho</th>
-        <th nzWidth="150px"  class="text-center">Chỉ tiêu kế hoạch đuợc giao<br/>(Tấn)</th>
+        <th nzWidth="150px"  class="text-center">Chỉ tiêu kế hoạch<br/> đuợc giao<br/>(Tấn)</th>
         <th nzWidth="150px"  class="text-center">Số đã thực hiện<br/>(Tấn)</th>
         <th nzWidth="150px"  class="text-center" *ngIf="isCache">Số đề xuất (Tấn)</th>
-        <th nzWidth="150px"  class="text-center" *ngIf="!isCache">Số lượng phê duyệt (Tấn)</th>
+        <th nzWidth="150px"  class="text-center" *ngIf="!isCache">Số lượng phê duyệt<br/> (Tấn)</th>
         <th nzWidth="150px"  class="text-center" *ngIf="isCache">Đơn giá đề xuất<br/>có VAT (đ/kg)</th>
         <th nzWidth="150px"  class="text-center" *ngIf="!isCache">Đơn giá có VAT (đ/kg)</th>
         <th nzWidth="180px"  class="text-center">Thành tiền theo đơn giá<br/> có VAT (đ)</th>
@@ -338,7 +349,7 @@
     <ng-container *ngFor="let dtGoiThau of listOfData , let i = index">
       <tr>
         <td nzLeft [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-        <td nzLeft>{{dtGoiThau.goiThau}}</td>
+        <td nzLeft class="multi-line">{{dtGoiThau.goiThau}}</td>
         <td nzLeft></td>
         <td></td>
         <td></td>
@@ -365,7 +376,7 @@
           <tr>
             <td nzLeft></td>
             <td nzLeft [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>
-            <td nzLeft>{{chiCuc.tenDvi}}</td>
+            <td nzLeft class="multi-line">{{chiCuc.tenDvi}}</td>
             <td></td>
             <td></td>
             <td class="text-right red-text">{{chiCuc.soLuongTheoChiTieu| number : '1.0-99' : 'vi_VN'}}</td>
@@ -385,8 +396,8 @@
                 <td nzLeft></td>
                 <td nzLeft></td>
                 <td nzLeft></td>
-                <td>{{diemKho.tenDvi}}</td>
-                <td>{{diemKho.diaDiemNhap}}</td>
+                <td class="multi-line">{{diemKho.tenDvi}}</td>
+                <td class="multi-line">{{diemKho.diaDiemNhap}}</td>
                 <td></td>
                 <td></td>
                 <td class="text-right blue-text">{{diemKho.soLuong | number : '1.0-99' : 'vi_VN'}}</td>
@@ -416,8 +427,8 @@
       <td nzLeft></td>
       <td class="text-right blue-text bold-700">TỔNG</td>
       <td></td>
-      <td *ngIf="isCache"></td>
-      <td *ngIf="isCache"></td>
+      <td ></td>
+      <td ></td>
       <td class="text-right blue-text bold-700">{{ calcTongSl() | number : '1.0-99' : 'vi_VN' }}</td>
       <td></td>
       <td class="text-right blue-text bold-700">{{ calcTongThanhTienDx() | number : '1.0-99' : 'vi_VN' }}</td>
