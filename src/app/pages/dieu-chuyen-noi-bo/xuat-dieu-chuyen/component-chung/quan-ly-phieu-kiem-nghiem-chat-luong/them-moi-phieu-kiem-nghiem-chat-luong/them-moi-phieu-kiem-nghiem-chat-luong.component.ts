@@ -804,6 +804,10 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     });
   }
   onKetQuaChange(kq: number, index: number, dataTable: any): void {
+    if (typeof kq === undefined || typeof kq === null) {
+      dataTable[index].danhGia = "";
+      return;
+    }
     if ((kq === 0 || kq >= 0) && index !== null) {
       let toiThieu = typeof dataTable[index].chiSoClToiThieu === "string" || dataTable[index].chiSoClToiThieu instanceof String ? parseFloat(dataTable[index].chiSoClToiThieu.replace(",", ".")) : dataTable[index].chiSoClToiThieu;
       let toiDa = typeof dataTable[index].chiSoClToiDa === "string" || dataTable[index].chiSoClToiDa instanceof String ? parseFloat(dataTable[index].chiSoClToiDa.replace(",", ".")) : dataTable[index].chiSoClToiDa;
