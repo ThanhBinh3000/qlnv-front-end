@@ -87,7 +87,7 @@
             <nz-form-control [nzErrorTip]='error'>
               <nz-input-group>
                 <input formControlName='soQuyetDinh' [readonly]='checkTrangThaiRecord()' nz-input nzSize='small'
-                       placeholder='Nhập số công văn/tờ trình' />
+                       placeholder='Nhập số công văn/tờ trình' [maxlength]='50' />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
