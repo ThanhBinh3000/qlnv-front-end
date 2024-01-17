@@ -804,7 +804,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     });
   }
   onKetQuaChange(kq: number, index: number, dataTable: any): void {
-    if (isNaN(kq)) {
+    if (typeof kq === undefined || typeof kq === null) {
       dataTable[index].danhGia = "";
       return;
     }
