@@ -764,7 +764,7 @@ export class Base2Component implements OnInit {
   }
 
   onKetQuaChange(event: any, index: number, dataTable: any): void {
-    if (typeof event === undefined || typeof event === null || event === "") {
+    if (event === undefined || event === null || event === "") {
       dataTable[index].danhGia = "";
       return;
     }
