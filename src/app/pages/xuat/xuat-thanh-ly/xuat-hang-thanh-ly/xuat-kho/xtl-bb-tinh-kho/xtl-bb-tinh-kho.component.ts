@@ -51,6 +51,16 @@ export class XtlBbTinhKhoComponent extends Base3Component implements OnInit {
     this.searchPage();
   }
 
+  clearForm() {
+    this.formData.reset();
+    let routerUrl = this.router.url;
+    const urlList = routerUrl.split("/");
+    this.formData.patchValue({
+      phanLoai : urlList[4] == 'xuat-kho-lt' ? 'LT' : 'VT'
+    })
+    this.searchPage();
+  }
+
   async searchPage() {
     await this.search();
     this.dataTable.forEach(item => item.expandSet = true);

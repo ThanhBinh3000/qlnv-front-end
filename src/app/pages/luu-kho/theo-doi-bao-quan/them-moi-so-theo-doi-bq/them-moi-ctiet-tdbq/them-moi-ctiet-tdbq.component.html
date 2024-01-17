@@ -142,6 +142,7 @@
           <tr>
             <th colSpan="3">Tổng lượng bảo quản</th>
             <th colSpan="7">Chi số của lô thóc</th>
+            <th colSpan="2">Diệt trùng</th>
           </tr>
           <tr>
             <th rowSpan="2">Tổng</th>
@@ -153,6 +154,8 @@
             <th rowSpan="2"> Hạt vàng (%) </th>
             <th colSpan="2"> Cảm quan </th>
             <th rowSpan="2"> Côn trùng sống (con/kg) </th>
+            <th rowSpan="2"> Lượng (tấn) </th>
+            <th rowSpan="2"> Loại thuốc, nồng độ sử dụng </th>
           </tr>
           <tr>
             <th>Màu sắc,mùi vị,tình trạng</th>
@@ -199,6 +202,12 @@
                 [(ngModel)]="rowItem.conTrungSong" [nzDisabled]="disabled()">
               </nz-input-number>
             </td>
+            <td>
+              <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
+                               [(ngModel)]="rowItem.luongDietTrung" [nzDisabled]="disabled()">
+              </nz-input-number>
+            </td>
+            <td><input [(ngModel)]="rowItem.loaiThuoc" [readonly]="disabled()"></td>
           </tr>
         </tbody>
       </nz-table>

@@ -33,8 +33,16 @@ export class HoSoTieuHuyComponent extends Base3Component implements OnInit {
     this.formData = this.fb.group({
       nam: null,
       soHoSo: null,
+      soQdSr: null,
       soTbSr: null,
       trangThai: null,
+      soTtr: null,
+      soQdScSr: null,
+      ngayTuCuc: null,
+      ngayDenCuc: null,
+      ngayTuTc: null,
+      ngayDenTc: null,
+      ngayDen: null,
     });
     this.listTrangThai = [
       {
@@ -87,7 +95,6 @@ export class HoSoTieuHuyComponent extends Base3Component implements OnInit {
       if (this.userService.isTongCuc()) {
         result = trangThai == this.STATUS.DA_DUYET_LDC || trangThai == this.STATUS.DANG_DUYET_CB_VU;
       }
-      console.log(result,this.isAccessPermisson(this.defaultPermisson+"_THEM"))
       return result && this.isAccessPermisson(this.defaultPermisson+"_THEM");
     }
     return false
