@@ -4,14 +4,14 @@
             <div class="group-button">
                 <h3>Lịch sử chốt {{ isChotDieuChinhGia ? 'điều chỉnh giá' : 'nhập xuất' }}</h3>
                 <div class="buttons">
-                    <button type="button" class="btn btn-main" (click)="themMoi()">
+                    <button type="button" class="btn btn-main" *ngIf="id" (click)="themMoi()">
                         <i class="icon htvbdh_dau-cong"></i>
-                        <span>Thêm</span>
+                        <span>Chốt</span>
                     </button>
                 </div>
             </div>
             <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-                <nz-table class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false"
+                <nz-table [id]="'tableView'" class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false"
                     nzBordered>
                     <thead>
                         <tr>
@@ -98,7 +98,7 @@
                     </button>
                     <button *ngIf="!id" type="button" class="btn btn-main" (click)="save()">
                         <i class="fa fa-save"></i>
-                        <span>Chốt</span>
+                        <span>Lưu</span>
                     </button>
                 </div>
             </div>
