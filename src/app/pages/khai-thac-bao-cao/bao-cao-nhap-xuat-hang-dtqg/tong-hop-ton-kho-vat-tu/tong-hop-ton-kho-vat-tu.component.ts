@@ -115,7 +115,7 @@ export class TongHopTonKhoVatTuComponent extends Base2Component implements OnIni
       let body = this.formData.value;
       body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc
       body.typeFile = "pdf";
-      await this.bcNhapXuatMuaBanHangDTQGService.baoCaoNhapXuatTon(body).then(async s => {
+      await this.bcNhapXuatMuaBanHangDTQGService.tongHopTonKhoVatTu(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
