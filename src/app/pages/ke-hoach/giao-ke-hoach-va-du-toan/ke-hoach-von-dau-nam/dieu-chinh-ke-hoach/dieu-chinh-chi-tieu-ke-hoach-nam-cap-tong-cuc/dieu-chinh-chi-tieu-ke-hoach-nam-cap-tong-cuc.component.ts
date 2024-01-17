@@ -175,6 +175,18 @@ export class DieuChinhChiTieuKeHoachNamComponent extends Base2Component implemen
 
   }
 
+  clearFormDCCTKH(currentSearch?: any) {
+    this.formData.reset();
+    if (currentSearch) {
+      this.formData.patchValue(currentSearch)
+    }
+    this.formData.patchValue({
+      cap: this.userInfo.CAP_DVI,
+      type: "02"
+    })
+    this.timKiem();
+  }
+
   async searchTc(roles?) {
     if (!this.checkPermission(roles)) {
       return
