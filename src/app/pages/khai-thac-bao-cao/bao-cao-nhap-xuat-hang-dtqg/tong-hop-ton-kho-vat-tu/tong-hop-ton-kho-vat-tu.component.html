@@ -21,22 +21,12 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col nzSpan="6">
-            <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Ngày báo cáo
-              </nz-form-label>
-              <div nz-row>
-                <div nz-col nzSpan="12" class="cus-start-date">
-                  <nz-date-picker [nzDisabledDate]="disabledStartNgay" nzFormat="dd/MM/yyyy"
-                                  formControlName="ngayBatDau" nzPlaceHolder="Ngày bắt đầu">
-                  </nz-date-picker>
-                </div>
-                <div nz-col nzSpan="12" class="cus-end-date">
-                  <nz-date-picker [nzDisabledDate]="disabledEndNgay" nzFormat="dd/MM/yyyy"
-                                  formControlName="ngayKetThuc" nzPlaceHolder="Ngày kết thúc">
-                  </nz-date-picker>
-                </div>
-              </div>
+          <div nz-col nzSpan="5">
+            <nz-form-item class="form-item">
+              <nz-form-label>Loại hàng DTQG</nz-form-label>
+              <nz-select formControlName="loaiVthh" nzShowSearch nzAllowClear>
+                <nz-option *ngFor="let p of dsLoaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
+              </nz-select>
             </nz-form-item>
           </div>
         </div>
