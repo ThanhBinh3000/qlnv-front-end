@@ -399,6 +399,7 @@
             <th nzWidth="150px" class="text-left wrap"> Chi cục</th>
             <th class="text-left">Điểm kho</th>
             <th class="text-left">Lô kho</th>
+            <th class="text-left"> Năm nhập</th>
             <th class="text-left">Mã đơn vị tài sản</th>
             <th class="text-center">Tồn kho</th>
             <th class="text-center">SL xuất bán <br>TT đề xuất</th>
@@ -446,6 +447,7 @@
                 <td class="text-left">
                   {{ (children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") + (children.tenNhaKho ? children.tenNhaKho : "") }}
                 </td>
+                <td class="text-left">{{children.namNhap}}</td>
                 <td class="text-left">{{children.maDviTsan}}</td>
                 <td class="text-right">{{children.tonKho|number:globals.numberFormat:globals.locale}}</td>
                 <td class="text-right">{{children.soLuongDeXuat|number:globals.numberFormat:globals.locale}}</td>
