@@ -371,7 +371,7 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
 
   redirectPage() {
     let trangThai = this.formData.value.trangThai;
-    let url = trangThai == STATUS.DADUYET_BTC ? '/xuat/xuat-tieu-huy/quyet-dinh/them-moi' : '/xuat/xuat-tieu-huy/thong-bao-kq'
+    let url = trangThai == STATUS.DADUYET_BTC ? '/xuat/xuat-tieu-huy/quyet-dinh/them-moi' : '/xuat/xuat-tieu-huy/thong-bao-kq/them-moi'
     this.router.navigate([url]);
   }
 }

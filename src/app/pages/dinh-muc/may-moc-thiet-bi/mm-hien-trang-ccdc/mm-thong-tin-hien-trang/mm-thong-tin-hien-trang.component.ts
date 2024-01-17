@@ -42,10 +42,11 @@ export class MmThongTinHienTrangComponent extends Base2Component implements OnIn
     super(httpClient, storageService, notification, spinner, modal, hienTrangSv);
     super.ngOnInit()
     this.formData = this.fb.group({
+      id: [null],
       maDvi: [null],
       tenDvi: [null],
       namKeHoach: [null],
-      tenCcdc: [null],
+      tenTaiSan: [null],
       maCcdc: [null],
       donViTinh: [null],
       luongHang: [null],
@@ -97,6 +98,7 @@ export class MmThongTinHienTrangComponent extends Base2Component implements OnIn
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           const data = res.data;
+          this.formData.patchValue(data);
           this.dataTable = data.listQlDinhMucHienTrangMmtbDtl;
           this.updateEditCache()
         }
@@ -263,7 +265,7 @@ export class MmThongTinHienTrangComponent extends Base2Component implements OnIn
   }
 
   async handleOk(data : string) {
-    let body = this.dataDetail
+    let body = this.formData.value;
     if (!this.dataTable) {
       this.notification.error(MESSAGE.ERROR,'Vui lòng nhập danh sách chi tiết!')
       return;

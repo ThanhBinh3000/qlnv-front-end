@@ -22,7 +22,11 @@ export class XuatThanhLyComponent implements OnInit {
     public userService: UserService
   ) {
     router.events.subscribe((val) => {
-      this.routerUrl = this.router.url;
+      if(this.routerUrl != this.router.url){
+        this.routerUrl = this.router.url;
+        console.log('1',this.routerUrl);
+        console.log('2',this.router.url);
+      }
     })
   }
 

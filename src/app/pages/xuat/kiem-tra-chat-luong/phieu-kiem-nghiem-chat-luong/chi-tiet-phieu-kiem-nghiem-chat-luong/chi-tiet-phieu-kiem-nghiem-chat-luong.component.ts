@@ -361,7 +361,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
           //   type: BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG,
           // }
           let option = {
-            label: element.tenChiTieu,
+            ten: element.tenChiTieu,
             value: element.id,
             chiSoCl: element.mucYeuCauXuat,
             chiSoClToiThieu: element.mucYeuCauXuatToiThieu,

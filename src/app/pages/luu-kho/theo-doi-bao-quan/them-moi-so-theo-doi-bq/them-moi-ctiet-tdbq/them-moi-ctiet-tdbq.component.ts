@@ -90,7 +90,6 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
     if (this.id) {
       await this.detail(this.id).then((res) => {
         for (const property in this.rowItem) {
-          console.log(property, res[property]);
           this.rowItem[property] = res[property];
         }
         this.fileDinhKem = res.fileDinhKem
@@ -211,6 +210,9 @@ export class ChiSoChatLuong {
   camQuan: string = '';
   tinhTrangNamMoc: string = '';
   conTrungSong: number = 0;
+
+  luongDietTrung: number = 0;
+  loaiThuoc: string = '';
   // Muoi them
   muiVi: string = '';
   benNgoaiCoHat: string = '';

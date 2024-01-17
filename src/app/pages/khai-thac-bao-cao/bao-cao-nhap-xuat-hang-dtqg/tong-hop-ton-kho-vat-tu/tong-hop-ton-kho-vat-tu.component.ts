@@ -26,7 +26,7 @@ export class TongHopTonKhoVatTuComponent extends Base2Component implements OnIni
   pdfBlob: any;
   excelBlob: any;
   nameFile: any;
-
+  dsLoaiVthh: any[] = [];
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -43,6 +43,7 @@ export class TongHopTonKhoVatTuComponent extends Base2Component implements OnIni
         nam: [dayjs().get("year"), [Validators.required]],
         ngayBatDau: '',
         ngayKetThuc: '',
+        loaiVthh:''
       }
     );
   }
@@ -65,6 +66,9 @@ export class TongHopTonKhoVatTuComponent extends Base2Component implements OnIni
   async ngOnInit() {
     await this.spinner.show();
     try {
+      await Promise.all([
+        this.loadDsVthh()
+      ]);
     } catch (e) {
       console.log("error: ", e);
       await this.spinner.hide();
@@ -115,7 +119,7 @@ export class TongHopTonKhoVatTuComponent extends Base2Component implements OnIni
       let body = this.formData.value;
       body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc
       body.typeFile = "pdf";
-      await this.bcNhapXuatMuaBanHangDTQGService.baoCaoNhapXuatTon(body).then(async s => {
+      await this.bcNhapXuatMuaBanHangDTQGService.tongHopTonKhoVatTu(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
@@ -133,5 +137,13 @@ export class TongHopTonKhoVatTuComponent extends Base2Component implements OnIni
       nam: dayjs().get('year')
     })
   }
-
+  async loadDsVthh() {
+    this.danhMucSv.getDanhMucHangDvql({
+      "dviQly": "0101"
+    }).subscribe((hangHoa) => {
+      if (hangHoa.msg == MESSAGE.SUCCESS) {
+        this.dsLoaiVthh = hangHoa.data?.filter((x) => ((x.ma.startsWith("02") || x.ma.startsWith("03")) && (x.cap == 1 || x.cap == 2)));
+      }
+    });
+  }
 }

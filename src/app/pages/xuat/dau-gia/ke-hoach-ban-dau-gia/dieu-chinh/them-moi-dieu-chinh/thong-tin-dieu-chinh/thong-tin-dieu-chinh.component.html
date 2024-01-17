@@ -185,6 +185,7 @@
         <th nzWidth="150px" class="text-left wrap"> Chi cục</th>
         <th class="text-left"> Điểm kho</th>
         <th class="text-left"> Lô kho</th>
+        <th class="text-left"> Năm nhập</th>
         <th class="text-left"> Mã ĐVTS</th>
         <th class="text-left"> ĐVT</th>
         <th class="text-center" [innerHTML]="isView ? 'SL xuất bán <br>đề xuất' : 'SL xuất bán <br>phê duyệt'"></th>
@@ -213,6 +214,7 @@
             <td class="text-left">
               {{(children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") + (children.tenNhaKho ? children.tenNhaKho : "")}}
             </td>
+            <td class="text-left">{{children.namNhap}}</td>
             <td class="text-left">{{ children.maDviTsan}}</td>
             <td class="text-left">{{ children.donViTinh}}</td>
             <td class="text-right">
@@ -234,6 +236,7 @@
         <th nzWidth="150px" class="text-left wrap"> Chi cục</th>
         <th class="text-left"> Điểm kho</th>
         <th class="text-left"> Lô kho</th>
+        <th class="text-left"> Năm nhập</th>
         <th class="text-left"> Mã ĐVTS</th>
         <th class="text-left"> ĐVT</th>
         <th class="text-center" [innerHTML]="isView ? 'SL xuất bán <br>đề xuất' : 'SL xuất bán <br>phê duyệt'"></th>
@@ -262,6 +265,7 @@
             <td class="text-left">
               {{(children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") + (children.tenNhaKho ? children.tenNhaKho : "")}}
             </td>
+            <td class="text-left">{{ children.namNhap}}</td>
             <td class="text-left">{{ children.maDviTsan}}</td>
             <td class="text-left">{{ children.donViTinh}}</td>
             <td class="text-right">
