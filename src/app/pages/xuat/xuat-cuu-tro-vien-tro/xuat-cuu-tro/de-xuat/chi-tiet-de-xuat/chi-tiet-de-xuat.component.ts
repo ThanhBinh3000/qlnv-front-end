@@ -938,10 +938,10 @@ export class ChiTietDeXuatComponent extends Base2Component implements OnInit {
     this.taoQuyetDinh.emit(2);
   }
   isTongCuc() {
-    return this.formData.value.maDvi.length <= 6
+    return this.formData.value.maDvi?.length <= 6
   }
   isCuc() {
-    return this.formData.value.maDvi.length === 8
+    return this.formData.value.maDvi?.length === 8
   }
   openVttbModal() {
     this.openViewVttb = true;
