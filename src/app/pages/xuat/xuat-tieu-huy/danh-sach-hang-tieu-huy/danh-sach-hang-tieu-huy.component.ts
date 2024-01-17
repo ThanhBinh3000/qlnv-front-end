@@ -211,8 +211,6 @@ export class DanhSachHangTieuHuyComponent extends Base3Component implements OnIn
           childData: rs
         };
       }).value();
-    console.log(this.dataTableView, 'dataTableView')
-    console.log(this.expandSetString)
   }
 
   onExpandStringChange(id: string, checked: boolean) {

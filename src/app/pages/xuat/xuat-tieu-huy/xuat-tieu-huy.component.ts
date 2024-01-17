@@ -65,7 +65,6 @@ export class XuatTieuHuyComponent implements OnInit {
   }
 
   redirectUrl(url) {
-    console.log(this.defaultUrl + url);
     this.router.navigate([this.defaultUrl + url]);
   }
 }
