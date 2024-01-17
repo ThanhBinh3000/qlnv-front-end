@@ -125,6 +125,7 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
         if (res) {
           this.changeMonth(this.monthSelect)
           this.loadDataComboBox();
+          this.bindingDataSoKho(res.idSoKho);
         }
       })
     } else {
@@ -222,7 +223,8 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
           tenCloaiVthh: data.tenCloaiVthh,
           tenHangHoa: data.tenHangHoa,
           soLuong: data.slTon,
-          dviTinh: data.donViTinh
+          dviTinh: data.donViTinh,
+          tenThuKho : data.nguoiLap,
         })
         await this.loadDataComboBox();
         this.loadThongTinKho(data.maLoKho ? data.maLoKho : data.maNganKho);

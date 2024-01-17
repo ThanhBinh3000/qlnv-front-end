@@ -90,7 +90,6 @@ export class ThemMoiCtietTdbqComponent extends Base3Component implements OnInit 
     if (this.id) {
       await this.detail(this.id).then((res) => {
         for (const property in this.rowItem) {
-          console.log(property, res[property]);
           this.rowItem[property] = res[property];
         }
         this.fileDinhKem = res.fileDinhKem
