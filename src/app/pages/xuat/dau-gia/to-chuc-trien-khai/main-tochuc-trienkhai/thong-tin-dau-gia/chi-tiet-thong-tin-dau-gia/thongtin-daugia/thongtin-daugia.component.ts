@@ -250,6 +250,16 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
         ketQua: data.ketQua.toString(),
       });
       this.dataTable = data.children;
+      if (!this.isView) {
+        await this.getSoLuongDieuChinh(this.dataDetail.idQdPdDtl);
+        this.formData.patchValue({
+          idQdPd: this.dataDetail.idQdPd,
+          soQdPd: this.dataDetail.soQdPd,
+          idQdDc: this.dataDetail.idQdDc,
+          soQdDc: this.dataDetail.soQdDc,
+          idQdPdDtl: this.dataDetail.idQdPdDtl,
+        });
+      }
       this.dataNguoiTgia = data.listNguoiTgia;
       this.dataNguoiShow = chain(this.dataNguoiTgia).groupBy('loai').map((value, key) => ({
         loai: key,
@@ -260,6 +270,32 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
+    }
+  }
+
+  async getSoLuongDieuChinh(id) {
+    if (id <= 0) {
+      return;
+    }
+    const res = await this.quyetDinhPdKhBdgService.getDtlDetail(id);
+    if (res.msg === MESSAGE.SUCCESS || res.data) {
+      this.dataTable.forEach(item => {
+        item.children.forEach(child => {
+          const matchedS1 = res.data.children
+            .flatMap(s => s.children)
+            .find(s1 => (
+              child.maDiemKho === s1.maDiemKho &&
+              child.maNhaKho === s1.maNhaKho &&
+              child.maNganKho === s1.maNganKho &&
+              child.maLoKho === s1.maLoKho &&
+              child.maDviTsan === s1.maDviTsan
+            ));
+          if (matchedS1) {
+            child.soLuongDeXuat = matchedS1.soLuongDeXuat;
+            this.calculatorTable()
+          }
+        });
+      });
     }
   }
 
