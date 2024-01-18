@@ -12,6 +12,10 @@ import {StorageService} from "../../../../../../../services/storage.service";
 import {
   QuyetDinhPdKhBdgService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service";
+import {MESSAGE} from "../../../../../../../constants/message";
+import {
+  ThongTinDauGiaService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service";
 
 @Component({
   selector: 'app-thong-tin-dieu-chinh',
@@ -30,6 +34,7 @@ export class ThongTinDieuChinhComponent extends Base2Component implements OnChan
   @Output() countChanged: EventEmitter<any> = new EventEmitter();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   amount = {...AMOUNT_ONE_DECIMAL};
+  listKho: any[] = []
 
   constructor(
     httpClient: HttpClient,
@@ -37,6 +42,7 @@ export class ThongTinDieuChinhComponent extends Base2Component implements OnChan
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private thongTinDauGiaService: ThongTinDauGiaService,
     private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, null);
@@ -84,8 +90,11 @@ export class ThongTinDieuChinhComponent extends Base2Component implements OnChan
       if (dataInput) {
         await processChange(dataInput);
         this.dataTable = dataInput.children;
-        if (!this.idInput) {
-          await this.getdonGiaDuocDuyet(dataInput);
+        if (this.dataTable) {
+          if (!this.idInput) {
+            await this.getdonGiaDuocDuyet(dataInput);
+          }
+          await this.getNganLoKho(dataInput);
         }
       }
     };
@@ -115,6 +124,34 @@ export class ThongTinDieuChinhComponent extends Base2Component implements OnChan
     );
     await Promise.all(giaDuyetPromises);
     await this.changeTable();
+  }
+
+  async getNganLoKho(item) {
+    const res = await this.thongTinDauGiaService.search({
+      nam: item.nam,
+      loaiVthh: item.loaiVthh,
+      cloaiVthh: item.cloaiVthh,
+      soQdPd: item.soQdPd,
+    });
+    if (res && res.msg === MESSAGE.SUCCESS) {
+      res.data.content.forEach(item => {
+        item.children.forEach(child => {
+          this.listKho = [
+            ...this.listKho,
+            ...child.children.filter(s => s.toChucCaNhan != null)
+          ];
+        })
+      })
+    }
+    this.dataTable.forEach(item => {
+      item.children.forEach(child => {
+        this.listKho.forEach(kho => {
+          if (child.maDiemKho === kho.maDiemKho && child.maNhaKho === kho.maNhaKho && child.maNganKho === kho.maNganKho && child.maLoKho === kho.maLoKho) {
+            child.toChucCaNhan = kho.toChucCaNhan
+          }
+        })
+      })
+    })
   }
 
   expandSet = new Set<number>();
