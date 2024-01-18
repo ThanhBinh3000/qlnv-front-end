@@ -43,7 +43,7 @@ export class TongHopTonKhoVatTuComponent extends Base2Component implements OnIni
         nam: [dayjs().get("year"), [Validators.required]],
         ngayBatDau: '',
         ngayKetThuc: '',
-        loaiVthh:''
+        tenLoaiVthh:''
       }
     );
   }
