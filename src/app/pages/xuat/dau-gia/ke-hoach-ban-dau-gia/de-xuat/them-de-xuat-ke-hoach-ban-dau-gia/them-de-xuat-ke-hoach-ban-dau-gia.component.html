@@ -492,7 +492,7 @@
           <ng-container *ngFor="let item of dataTable , let i = index">
             <tr>
               <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-              <td colspan="5" class="text-left">{{ item.tenDvi }}</td>
+              <td colspan="6" class="text-left">{{ item.tenDvi }}</td>
               <td class="text-right bold">{{ item.tongSlXuatBanDx|number:globals.numberFormat:globals.locale }}</td>
               <td></td>
               <td></td>
