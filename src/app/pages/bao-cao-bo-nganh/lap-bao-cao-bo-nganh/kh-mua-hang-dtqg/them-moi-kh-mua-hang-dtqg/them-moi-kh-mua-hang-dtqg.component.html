@@ -379,7 +379,7 @@
                        [(ngModel)]="itemRowNhomMhEdit[i][y].gtriTongKhDuocGiao"/>
               </td>
               <td>
-                <nz-input-number [nzMin]="0" *ngIf="!nhomMatHang.coNhieuMatHang"
+                <nz-input-number [nzMin]="0"
                                  [(ngModel)]="itemRowNhomMhEdit[i][y].namThucHienNamTruoc"></nz-input-number>
               </td>
               <td>
@@ -424,7 +424,7 @@
               </td>
               <td>
                 <input class="money-input" currencyMask [options]="amount" [min]="0"
-                       [(ngModel)]="itemRowNhomMhEdit[i][y].muaTangTrongKy"/>
+                       [(ngModel)]="itemRowNhomMhEdit[i][y].slTongDuToanConLai"/>
               </td>
               <td>
                 <input class="money-input" currencyMask [options]="amount" [min]="0"
@@ -510,7 +510,7 @@
                          [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriTongKhDuocGiao"/>
                 </td>
                 <td>
-                  <nz-input-number [nzMin]="0" *ngIf="!nhomMatHang.coNhieuMatHang"
+                  <nz-input-number [nzMin]="0"
                                    [(ngModel)]="itemRowMatHangEdit[i][y][z].namThucHienNamTruoc"></nz-input-number>
                 </td>
                 <td>
@@ -555,7 +555,7 @@
                 </td>
                 <td>
                   <input class="money-input" currencyMask [options]="amount" [min]="0"
-                         [(ngModel)]="itemRowMatHangEdit[i][y][z].muaTangTrongKy"/>
+                         [(ngModel)]="itemRowMatHangEdit[i][y][z].slTongDuToanConLai"/>
                 </td>
                 <td>
                   <input class="money-input" currencyMask [options]="amount" [min]="0"
@@ -606,7 +606,7 @@
                      [(ngModel)]="itemRowMatHang[i][y].gtriTongKhDuocGiao"/>
             </td>
             <td>
-              <nz-input-number [nzMin]="0" *ngIf="!nhomMatHang.coNhieuMatHang"
+              <nz-input-number [nzMin]="0"
                                [(ngModel)]="itemRowMatHang[i][y].namThucHienNamTruoc"></nz-input-number>
             </td>
             <td>
@@ -651,7 +651,7 @@
             </td>
             <td>
               <input class="money-input" currencyMask [options]="amount" [min]="0"
-                     [(ngModel)]="itemRowMatHang[i][y].muaTangTrongKy"/>
+                     [(ngModel)]="itemRowMatHang[i][y].slTongDuToanConLai"/>
             </td>
             <td>
               <input class="money-input" currencyMask [options]="amount" [min]="0"
