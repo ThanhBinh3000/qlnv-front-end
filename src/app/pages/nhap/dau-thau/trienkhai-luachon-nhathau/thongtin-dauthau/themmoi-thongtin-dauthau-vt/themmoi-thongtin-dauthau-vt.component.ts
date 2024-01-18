@@ -98,6 +98,7 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
       tgianTrinhTtd: [''],
       ghiChuTtdt: [''],
       ttinQdKhlcnt: [''],
+      quy: [''],
     })
   }
 
@@ -195,9 +196,10 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
         tenLoaiHdong: data.tenLoaiHdong,
         tenHthucLcnt: data.tenHthucLcnt,
         tenPthucLcnt: data.tenPthucLcnt,
-        tgianBdauTchuc: 'Quý ' + data.dxKhlcntHdr?.quy + ' ' + formatDate(data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.tgianBdauTchuc : data.tgianBdauTchuc, "dd/MM/yyyy", 'en-US'),
-        tgianMthau: data.qdPdHsmt?.tgianMthau ? formatDate(data.qdPdHsmt?.tgianMthau, "dd/MM/yyyy", 'en-US') : null,
-        tgianDthau: data.qdPdHsmt?.tgianDthau ? formatDate(data.qdPdHsmt?.tgianDthau, "dd/MM/yyyy", 'en-US') : null,
+        quy: data.dxKhlcntHdr?.quy,
+        // tgianBdauTchuc: 'Quý ' + data.dxKhlcntHdr?.quy + ' ' + formatDate(data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.tgianBdauTchuc : data.tgianBdauTchuc, "dd/MM/yyyy", 'en-US'),
+        // tgianMthau: data.qdPdHsmt?.tgianMthau ? formatDate(data.qdPdHsmt?.tgianMthau, "dd/MM/yyyy", 'en-US') : null,
+        // tgianDthau: data.qdPdHsmt?.tgianDthau ? formatDate(data.qdPdHsmt?.tgianDthau, "dd/MM/yyyy", 'en-US') : null,
         tongMucDtGoiTrung: [''],
         soGthauTrung: [''],
         tenLoaiVthh: data.tenLoaiVthh,
@@ -250,11 +252,25 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
       this.selected = true;
       this.idGoiThau = dataGoiThau.id;
     }
-    if (dataGoiThau.soQdPdHsmt != null && dataGoiThau.soQdPdHsmt.trangThai == STATUS.BAN_HANH) {
+    if (dataGoiThau.qdPdHsmt != null && dataGoiThau.qdPdHsmt.trangThai == STATUS.BAN_HANH) {
       this.acceptSave = true;
     } else {
       this.acceptSave = false;
     }
+    let tgianBdauTchuc = 'Quý ' + this.formData.get('quy').value;
+    this.formData.patchValue({
+      tgianDthau: null,
+      tgianBdauTchuc: null,
+    })
+    if (dataGoiThau.qdPdHsmt != null) {
+      if (dataGoiThau.qdPdHsmt.tgianDthau != null) {
+        this.formData.get('tgianDthau').setValue(formatDate(dataGoiThau.qdPdHsmt.tgianDthau, "dd/MM/yyyy", 'en-US'))
+      }
+      if (dataGoiThau.qdPdHsmt.tgianBdauTchuc != null) {
+        tgianBdauTchuc += ' ngày ' + formatDate(dataGoiThau.qdPdHsmt.tgianBdauTchuc, "dd/MM/yyyy", 'en-US')
+      }
+    }
+    this.formData.get('tgianBdauTchuc').setValue(tgianBdauTchuc)
     if (dataGoiThau.idNhaThau != null) {
       this.daCoKqLcnt = true;
     } else {
