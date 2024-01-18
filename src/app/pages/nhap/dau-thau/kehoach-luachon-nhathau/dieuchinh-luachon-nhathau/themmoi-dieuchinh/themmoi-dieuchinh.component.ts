@@ -18,7 +18,7 @@ import { ThongtinDieuchinhComponent } from './thongtin-dieuchinh/thongtin-dieuch
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
-import {DatePipe} from "@angular/common";
+import {DatePipe, formatDate} from "@angular/common";
 import {DialogTuChoiComponent} from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 
@@ -278,6 +278,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
         if (item.soQdDc != null) {
           item.soQd = item.soQdDc
         }
+        item.thoiDiemKy = item.ngayQd ? formatDate(item.ngayQd, "dd/MM/yyyy", 'en-US') : ''
       })
     }
     this.spinner.hide();
@@ -290,8 +291,8 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listQdGoc,
-        dataHeader: ['Số quyết định gốc', 'Loại hàng DTQG', 'Chủng loại hàng DTQG'],
-        dataColumn: ['soQd', 'tenLoaiVthh', 'tenCloaiVthh']
+        dataHeader: ["Số QĐ cần điều chỉnh", "Ngày ký QĐ", "Trạng thái", "Ngày chốt điều chỉnh giá", "Ngày hiệu lực"],
+        dataColumn: ["soQd", "thoiDiemKy", "", "", ""]
       },
     });
     modalQD.afterClose.subscribe(async (data) => {

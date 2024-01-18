@@ -619,23 +619,30 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   }
 
   async bindingDataDdNhap(data, isChiTiet) {
-    if (data) {
-      const maDiaDiem = data.maDiaDiem || data.maLoKho || data.maNganKho || data.maDvi;
-      this.formData.patchValue({
-        maDiaDiem: maDiaDiem,
-        loaiVthh: data.loaiVthh,
-        cloaiVthh: data.cloaiVthh,
-        tenLoaiVthh: data.tenLoaiVthh,
-        tenCloaiVthh: data.tenCloaiVthh,
-        tenDiemKho: data.tenDiemKho,
-        tenNhaKho: data.tenNhaKho,
-        tenNganKho: data.tenNganKho,
-        tenLoKho: data.tenLoKho,
-        donViTinh: data.donViTinh,
-        tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho
-      });
-      await Promise.all([this.loadDsPpLayMau(), this.loadDanhSachHinhThucBaoQuan(data.cloaiVthh || data.loaiVthh), this.loadDsCtChatLuong(data.cloaiVthh || data.loaiVthh), this.tenThuKho(maDiaDiem), this.kiemTraTonKho(maDiaDiem)]);
-      this.buildTableView();
+    try {
+      await this.spinner.show();
+      if (data) {
+        const maDiaDiem = data.maDiaDiem || data.maLoKho || data.maNganKho || data.maDvi;
+        this.formData.patchValue({
+          maDiaDiem: maDiaDiem,
+          loaiVthh: data.loaiVthh,
+          cloaiVthh: data.cloaiVthh,
+          tenLoaiVthh: data.tenLoaiVthh,
+          tenCloaiVthh: data.tenCloaiVthh,
+          tenDiemKho: data.tenDiemKho,
+          tenNhaKho: data.tenNhaKho,
+          tenNganKho: data.tenNganKho,
+          tenLoKho: data.tenLoKho,
+          donViTinh: data.donViTinh,
+          tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho
+        });
+        await Promise.all([this.loadDsPpLayMau(), this.loadDanhSachHinhThucBaoQuan(data.cloaiVthh || data.loaiVthh), this.loadDsCtChatLuong(data.cloaiVthh || data.loaiVthh), this.tenThuKho(maDiaDiem), this.kiemTraTonKho(maDiaDiem)]);
+        this.buildTableView();
+      }
+    } catch (error) {
+      console.log("error", error)
+    } finally {
+      await this.spinner.hide()
     }
   }
   async tenThuKho(event) {

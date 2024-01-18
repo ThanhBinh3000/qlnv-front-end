@@ -113,7 +113,7 @@
             <th *ngIf="loaiVthh != '02'" class="text-center" style="width: 7%;">Thời điểm đóng thầu</th>
             <th *ngIf="loaiVthh != '02'" class="text-center" style="width: 7%;">Thời điểm mở thầu</th>
             <th *ngIf="loaiVthh != '02'" class="text-center" style="width: 7%;">Thời hạn nhập kho</th>
-            <th *ngIf="loaiVthh == '02'" class="text-center" style="width: 7%;">Thời gian đóng - mở thầu</th>
+<!--            <th *ngIf="loaiVthh == '02'" class="text-center" style="width: 7%;">Thời gian đóng - mở thầu</th>-->
             <th *ngIf="loaiVthh == '02'" class="text-center" style="width: 7%;">Thời gian thực hiện hợp đồng</th>
             <th *ngIf="loaiVthh == '02'" class="text-center" style="width: 7%;">Thời hạn thực hiện dự án</th>
             <th class="text-center" style="width: 7%;">{{ loaiVthh == '02' ? 'Trạng thái đề xuất' : 'Trạng thái'}} </th>
@@ -207,12 +207,12 @@
                   (ngModelChange)="filterInTable('tgianNhang', convertDateToString(filterTable.tgianNhang))"></nz-date-picker>
               </nz-input-group>
             </th>
-            <th *ngIf="loaiVthh == '02'">
-              <nz-input-group>
-                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.tgianDongMothau"
-                  (ngModelChange)="filterInTable('tgianDongMothau', convertDateToString(filterTable.tgianDongMothau))"></nz-date-picker>
-              </nz-input-group>
-            </th>
+<!--            <th *ngIf="loaiVthh == '02'">-->
+<!--              <nz-input-group>-->
+<!--                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.tgianDongMothau"-->
+<!--                  (ngModelChange)="filterInTable('tgianDongMothau', convertDateToString(filterTable.tgianDongMothau))"></nz-date-picker>-->
+<!--              </nz-input-group>-->
+<!--            </th>-->
             <th *ngIf="loaiVthh == '02'">
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tgianThienHd"
@@ -269,7 +269,7 @@
             </td>
             <td class="text-center" *ngIf="loaiVthh != '02'">{{ data.tgianDthau | date: 'dd/MM/yyyy'}}</td>
             <td class="text-center" *ngIf="loaiVthh != '02'">{{ data.tgianMthau | date: 'dd/MM/yyyy'}}</td>
-            <td class="text-center" *ngIf="loaiVthh == '02'">{{ data.tgianDongMothau | date: 'dd/MM/yyyy'}}</td>
+<!--            <td class="text-center" *ngIf="loaiVthh == '02'">{{ data.tgianDongMothau | date: 'dd/MM/yyyy'}}</td>-->
             <td class="text-right" *ngIf="loaiVthh == '02'">{{ data.tgianThienHd}}</td>
             <td class="text-right" *ngIf="loaiVthh == '02'">{{ data.tgianThien}}</td>
             <td class="text-center" *ngIf="loaiVthh != '02'">{{ data.tgianNhang | date: 'dd/MM/yyyy' }}</td>

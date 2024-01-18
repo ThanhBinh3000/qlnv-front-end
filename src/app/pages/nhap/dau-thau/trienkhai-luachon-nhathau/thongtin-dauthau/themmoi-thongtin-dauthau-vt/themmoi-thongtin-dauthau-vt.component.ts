@@ -195,7 +195,7 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
         tenLoaiHdong: data.tenLoaiHdong,
         tenHthucLcnt: data.tenHthucLcnt,
         tenPthucLcnt: data.tenPthucLcnt,
-        tgianBdauTchuc: data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.tgianBdauTchuc : data.tgianBdauTchuc,
+        tgianBdauTchuc: 'Quý ' + data.dxKhlcntHdr?.quy + ' ' + formatDate(data.dchinhDxKhLcntHdr ? data.dchinhDxKhLcntHdr.tgianBdauTchuc : data.tgianBdauTchuc, "dd/MM/yyyy", 'en-US'),
         tgianMthau: data.qdPdHsmt?.tgianMthau ? formatDate(data.qdPdHsmt?.tgianMthau, "dd/MM/yyyy", 'en-US') : null,
         tgianDthau: data.qdPdHsmt?.tgianDthau ? formatDate(data.qdPdHsmt?.tgianDthau, "dd/MM/yyyy", 'en-US') : null,
         tongMucDtGoiTrung: [''],
@@ -352,6 +352,10 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
   }
 
   async addRow() {
+    if (!this.acceptSave) {
+      this.notification.warning(MESSAGE.WARNING, 'Bạn cần tạo và ban hành QĐ Phê duyệt HSMT cho gói thầu trước.')
+      return;
+    }
     this.listNthauNopHs = [
       ...this.listNthauNopHs,
       this.itemRow
@@ -497,6 +501,11 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
   async saveGoiThauPopup($event) {
     $event.stopPropagation();
     await this.spinner.show();
+    if (!this.acceptSave) {
+      this.notification.warning(MESSAGE.WARNING, 'Bạn cần tạo và ban hành QĐ Phê duyệt HSMT cho gói thầu trước.')
+      await this.spinner.hide()
+      return;
+    }
     let type = "GOC";
     if (this.isDieuChinh) {
       type = "DC"
