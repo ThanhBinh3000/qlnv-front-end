@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Base2Component} from "../../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../../services/storage.service";
@@ -32,7 +32,7 @@ export class TongHopKeHoachXuatHangComponent extends Base2Component implements O
   isTaoQdTongCuc: boolean = false;
   dataTongHop: any = {};
   @Output() tabFocus = new EventEmitter<object>();
-
+  @Input() selectedTab: number;
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,

@@ -19,32 +19,40 @@
           <i class='icon htvbdh_totrinh'></i>
           <span> In/Xem trước </span>
         </button>
-        <button type='button' (click)='save(true)' class='btn btn-sm ml-2'
-                *ngIf='(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC ||  formData.value.trangThai == STATUS.TUCHOI_BTC)'>
-          <i class='icon htvbdh_tcdt_guiduyet'></i>
+        <button type="button" class="btn btn-sub xanh-nhat ml-2"
+                *ngIf=" userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHTC_THEM') && !isViewDetail
+                && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC || formData.value.trangThai == STATUS.TUCHOI_BTC) "
+                (click)="save(true)">
+          <i class="icon htvbdh_tcdt_print"></i>
           <span>Lưu và gửi duyệt</span>
         </button>
-        <a class='btn btn-outline-danger btn-sm waves-effect waves-light ml-2' (click)='tuChoi()'
-           *ngIf='(formData.value.trangThai  == STATUS.CHO_DUYET_LDV || formData.value.trangThai  == STATUS.CHO_DUYET_LDTC || formData.value.trangThai  == STATUS.CHODUYET_BTC)'>
-          <i class='icon htvbdh_tcdt_tuchoi'></i>
+        <button type="button" class="btn btn-sub btn-xoa  ml-2"
+                *ngIf=" ((formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHTC_DUYETLDV'))
+                || (formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHTC_DUYETLCTC'))
+                || (formData.value.trangThai == STATUS.CHODUYET_BTC && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHTC_DUYETLDTC')))"
+                (click)="tuChoi()">
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
-        </a>
-        <a class='btn btn-outline-success btn-sm waves-effect waves-light ml-2'
-           *ngIf='(formData.value.trangThai  == STATUS.CHO_DUYET_LDV || formData.value.trangThai  == STATUS.CHO_DUYET_LDTC || formData.value.trangThai  == STATUS.CHODUYET_BTC)'
-           (click)='pheDuyet()'>
-          <i class='icon htvbdh_tcdt_pheduyet'></i>
+        </button>
+        <button type="button" class="btn btn-sub xanh-nhat  ml-2"
+                *ngIf=" ((formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHTC_DUYETLDV'))
+                || (formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHTC_DUYETLCTC'))
+                || (formData.value.trangThai == STATUS.CHODUYET_BTC && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHTC_DUYETLDTC')))"
+                (click)="save(true)">
+          <i class="icon htvbdh_dakyduyet"></i>
           <span>Duyệt</span>
-        </a>
-        <button (click)='save(false)'
-                *ngIf='(formData.value.trangThai == STATUS.DU_THAO && !isViewDetail)  '
-                class='btn btn-main btn-sm waves-effect waves-light ml-2'>
-          <i class='icon htvbdh_tcdt_save'></i>
+        </button>
+        <button type="button" class="btn btn-sub xanh ml-2"
+                *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHTC_THEM') && !isViewDetail
+                && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV  || formData.value.trangThai == STATUS.TU_CHOI_LDTC || formData.value.trangThai == STATUS.TUCHOI_BTC) "
+                (click)="save()">
+          <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
       </div>
     </div>
   </nz-affix>
-  <nz-alert *ngIf='formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC '
+  <nz-alert *ngIf='formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC'
             nzShowIcon nzType='error'
             nzMessage='Lý do từ chối'
             nzDescription='{{formData.value.lyDoTuChoi}}'>
@@ -147,7 +155,7 @@
                 <nz-form-control [nzErrorTip]='error'>
                   <nz-form-label [nzNoColon]='true' class='label-color-kh'> Ngày duyệt kế hoạch của Tổng cục
                   </nz-form-label>
-                  <nz-date-picker [nzDisabled]='isViewDetail' nzMode='' class='search__input' nzFormat='dd/MM/yyyy'
+                  <nz-date-picker [nzDisabled]='formData.value.trangThai != STATUS.CHO_DUYET_LDTC' nzMode='' class='search__input' nzFormat='dd/MM/yyyy'
                                   nzPlaceHolder='Ngày duyệt kế hoạch'
                                   formControlName='ngayDuyetKeHoach'>
                   </nz-date-picker>
@@ -174,7 +182,7 @@
                 <nz-form-control [nzErrorTip]='error'>
                   <nz-form-label [nzNoColon]='true' class='label-color-kh'> Ngày trình duyệt BTC
                   </nz-form-label>
-                  <nz-date-picker [nzDisabled]='true' nzMode='' class='search__input' nzFormat='dd/MM/yyyy'
+                  <nz-date-picker [nzDisabled]='formData.value.trangThai != STATUS.CHO_DUYET_LDTC' nzMode='' class='search__input' nzFormat='dd/MM/yyyy'
                                   nzPlaceHolder='Ngày trình BTC duyệt'
                                   formControlName='ngayTrinhDuyetBtc'>
                   </nz-date-picker>
@@ -186,7 +194,7 @@
                 <nz-form-control [nzErrorTip]='error'>
                   <nz-form-label [nzNoColon]='true' class='label-color-kh'> Số QĐ của BTC
                   </nz-form-label>
-                  <input nz-input formControlName='soQdBtc' [readonly]='true' />
+                  <input nz-input formControlName='soQdBtc' [readonly]='formData.value.trangThai != STATUS.CHODUYET_BTC' />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -195,7 +203,7 @@
                 <nz-form-control [nzErrorTip]='error'>
                   <nz-form-label [nzNoColon]='true' class='label-color-kh'> Ngày duyệt của BTC
                   </nz-form-label>
-                  <nz-date-picker [nzDisabled]='true' nzMode='' class='search__input' nzFormat='dd/MM/yyyy'
+                  <nz-date-picker [nzDisabled]='formData.value.trangThai != STATUS.CHODUYET_BTC' nzMode='' class='search__input' nzFormat='dd/MM/yyyy'
                                   nzPlaceHolder='Ngày BTC duyệt'
                                   formControlName='ngayDuyetBtc'>
                   </nz-date-picker>

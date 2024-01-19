@@ -8,22 +8,22 @@
       </div>
     </div>
     <div class="btn-group">
-      <button type="button" class="btn btn-sub ml-2" (click)="quayLai()" *ngIf="!isViewQd">
+      <button type="button" class="btn btn-sub mr-2" (click)="quayLai()" *ngIf="!isViewQd">
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button *ngIf='idInput' type='button' class='btn btn-sub do mr-2' (click)='preview(idInput)'>
+      <button *ngIf='idInput' type='button' class='btn btn-sub mr-2' (click)='preview(idInput)'>
         <i class='icon htvbdh_totrinh'></i>
         <span> In/Xem trước </span>
       </button>
-      <button type="button" class="btn btn-sub xanh-nhat ml-2"
-              *ngIf="isTongHop && idInput && formData.value.trangThai == STATUS.CHUATAO_KH "
-      >
+      <button type="button" class="btn btn-sub xanh-nhat mr-2"
+              *ngIf="isTongHop && idInput && formData.value.trangThai == STATUS.CHUATAO_KH"
+              (click)="openTongHop()">
         <i class="icon htvbdh_tcdt_tao-qd"></i>
         <span>Tạo KH xuất hàng</span>
       </button>
-      <button type="button" class="btn btn-sub xanh ml-2" (click)="save()"
-              *ngIf="(!isViewDetail && isTongHop) || (formData.value.trangThai == STATUS.DAGUIDUYET_KH) ">
+      <button type="button" class="btn btn-sub xanh mr-2" (click)="save()"
+              *ngIf="(!isViewDetail && isTongHop && formData.value.trangThai == STATUS.DAGUIDUYET_KH) ">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
@@ -49,6 +49,14 @@
         </div>
         <div nz-col nzSpan="4">
           <nz-form-item class="form-item">
+            <nz-form-label>Loại hàng DTQG</nz-form-label>
+            <nz-select formControlName="loaiVthh" nzShowSearch nzAllowClear>
+              <nz-option *ngFor="let p of dsLoaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
+            </nz-select>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true">Thời gian tổng hợp
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -71,7 +79,6 @@
       <nz-collapse-panel [nzHeader]="'THÔNG TIN CHUNG'" [nzActive]="true">
         <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
           <div nz-row [nzGutter]="20">
-
             <div nz-col nzSpan="4">
               <nz-form-item class="form-item">
                 <nz-form-label [nzNoColon]="true">Mã tổng hợp
@@ -135,7 +142,7 @@
       <nz-collapse-panel [nzHeader]="'CHI TIẾT KẾ HOẠCH'" [nzActive]="true">
         <form nz-form nzLayout="vertical" [formGroup]="formData">
           <div nz-row [nzGutter]="24">
-            <div nz-col nzSpan="6">
+            <div nz-col nzSpan="12">
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Thời gian dự kiến xuất hàng
@@ -144,6 +151,8 @@
                                    nzFormat="dd/MM/yyyy"></nz-range-picker>
                 </nz-form-control>
               </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12">
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Số công văn/trờ trình của Cục
@@ -152,16 +161,6 @@
                     <input class="search__input" [readonly]="true" nz-input formControlName="listSoKeHoachs"
                            readonly/>
                   </nz-form-control>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col nzSpan="18">
-              <nz-form-item>
-                <nz-form-control [nzErrorTip]="error">
-                  <nz-form-label [nzNoColon]="true" class="label-color-kh"> Mô tả chi tiết
-                  </nz-form-label>
-                  <textarea rows="5" nz-input formControlName="moTa" class="search__input"
-                            [readonly]="isViewDetail"></textarea>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -174,8 +173,8 @@
             <tr>
               <th class="text-center">STT</th>
               <th>Chi cục DTNN KV</th>
-              <th>Loại hàng hóa</th>
-              <th>Chủng loại</th>
+              <th>Loại hàng DTQG</th>
+              <th>Chủng loại hàng DTQG</th>
               <th>Điểm kho</th>
               <th>Ngăn/lô kho</th>
               <th>Ngày nhập kho</th>
@@ -226,8 +225,8 @@
             <thead>
             <tr>
               <th class="text-center">STT</th>
-              <th>Loại hàng hóa</th>
-              <th>Chủng loại</th>
+              <th>Loại hàng DTQG</th>
+              <th>Chủng loại DTQG</th>
               <th>Điểm kho</th>
               <th>Ngăn/lô kho</th>
               <th>Ngày nhập kho</th>

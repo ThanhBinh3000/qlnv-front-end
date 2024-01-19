@@ -1,34 +1,28 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { UserLogin } from '../../../../../../../models/userlogin';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { KeHoachXayDungTrungHan } from '../../../../../../../models/QuyHoachVaKeHoachKhoTang';
-import { Router } from '@angular/router';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { chain, cloneDeep, isEmpty } from 'lodash';
-import { v4 as uuidv4 } from 'uuid';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { UserService } from '../../../../../../../services/user.service';
-import { DanhMucService } from '../../../../../../../services/danhmuc.service';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {UserLogin} from '../../../../../../../models/userlogin';
+import {FormGroup, Validators} from '@angular/forms';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {chain, cloneDeep} from 'lodash';
+import {v4 as uuidv4} from 'uuid';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {DanhMucService} from '../../../../../../../services/danhmuc.service';
+import {NzModalService} from 'ng-zorro-antd/modal';
 import dayjs from 'dayjs';
-import { STATUS } from '../../../../../../../constants/status';
-import { MESSAGE } from '../../../../../../../constants/message';
-import { Base2Component } from '../../../../../../../components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from '../../../../../../../services/storage.service';
-import { DonviService } from '../../../../../../../services/donvi.service';
-import {
-  TongHopDanhSachVttbService,
-} from '../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/TongHopDanhSachVttb.service';
+import {STATUS} from '../../../../../../../constants/status';
+import {MESSAGE} from '../../../../../../../constants/message';
+import {Base2Component} from '../../../../../../../components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from '../../../../../../../services/storage.service';
+import {DonviService} from '../../../../../../../services/donvi.service';
 import {
   KeHoachXuatHangService,
 } from '../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/KeHoachXuatHang.service';
-import { NumberToRoman } from '../../../../../../../shared/commonFunction';
+import {NumberToRoman} from '../../../../../../../shared/commonFunction';
 import {
   TongHopKeHoachXuatHangService,
 } from '../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/TongHopKeHoachXuatHang.service';
-import { FILETYPE, PREVIEW } from '../../../../../../../constants/fileType';
-import { saveAs } from 'file-saver';
+import {PREVIEW} from '../../../../../../../constants/fileType';
+import {saveAs} from 'file-saver';
 
 @Component({
   selector: 'app-thong-tin-tong-hop-ke-hoach-xuat-hang',
@@ -54,16 +48,18 @@ export class ThongTinTongHopKeHoachXuatHangComponent extends Base2Component impl
   expandSetStringLoaiVthh = new Set<string>();
   numberToRoman = NumberToRoman;
   templateName = 'xuat_khac_ktcl_vat_tu_12_thang_th_kh_xuat_hang';
-
+  tongHopKh = false;
+  @Output() tabFocus = new EventEmitter<object>();
+  dsLoaiVthh: any[] = [];
   constructor(httpClient: HttpClient,
-    storageService: StorageService,
-    notification: NzNotificationService,
-    spinner: NgxSpinnerService,
-    modal: NzModalService,
-    private donviService: DonviService,
-    private danhMucService: DanhMucService,
-    private keHoachXuatHangService: KeHoachXuatHangService,
-    private tongHopKeHoachXuatHangService: TongHopKeHoachXuatHangService) {
+              storageService: StorageService,
+              notification: NzNotificationService,
+              spinner: NgxSpinnerService,
+              modal: NzModalService,
+              private donviService: DonviService,
+              private danhMucService: DanhMucService,
+              private keHoachXuatHangService: KeHoachXuatHangService,
+              private tongHopKeHoachXuatHangService: TongHopKeHoachXuatHangService) {
     super(httpClient, storageService, notification, spinner, modal, tongHopKeHoachXuatHangService);
     super.ngOnInit();
     this.formData = this.fb.group({
@@ -91,6 +87,9 @@ export class ThongTinTongHopKeHoachXuatHangComponent extends Base2Component impl
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
+      await Promise.all([
+        this.loadDsVthh()
+      ]);
       if (this.idInput) {
         this.getDetail(this.idInput);
       }
@@ -216,7 +215,7 @@ export class ThongTinTongHopKeHoachXuatHangComponent extends Base2Component impl
       if (data) {
         if (!this.idInput) {
           this.idInput = data.id;
-          this.formData.patchValue({ id: data.id, trangThai: data.trangThai });
+          this.formData.patchValue({id: data.id, trangThai: data.trangThai});
         }
       } else {
         this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
@@ -280,5 +279,23 @@ export class ThongTinTongHopKeHoachXuatHangComponent extends Base2Component impl
 
   downloadWord() {
     saveAs(this.wordSrc, this.templateName + '.docx');
+  }
+
+  emitTab(tab) {
+    this.tabFocus.emit(tab);
+  }
+  openTongHop() {
+    this.tongHopKh = !this.tongHopKh;
+    this.emitTab(this.formData.value);
+  }
+
+  async loadDsVthh() {
+    this.danhMucService.getDanhMucHangDvql({
+      "dviQly": "0101"
+    }).subscribe((hangHoa) => {
+      if (hangHoa.msg == MESSAGE.SUCCESS) {
+        this.dsLoaiVthh = hangHoa.data?.filter((x) => ((x.ma.startsWith("02") || x.ma.startsWith("03")) && (x.cap == 1 || x.cap == 2)));
+      }
+    });
   }
 }

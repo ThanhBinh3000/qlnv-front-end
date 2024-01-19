@@ -5,7 +5,7 @@
         <div nz-row [nzGutter]="20">
           <div nz-col nzSpan="6">
             <nz-form-item class="form-item">
-              <nz-form-label>Đơn vị đề xuất</nz-form-label>
+              <nz-form-label>Chi cục DTNN</nz-form-label>
               <nz-select formControlName="maDvi" nzShowSearch nzAllowClear>
                 <nz-option *ngFor="let p of dsDonvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
               </nz-select>
@@ -13,7 +13,7 @@
           </div>
           <div nz-col nzSpan="5">
             <nz-form-item class="form-item">
-              <nz-form-label>Loại hàng hóa</nz-form-label>
+              <nz-form-label>Loại hàng DTQG</nz-form-label>
               <nz-select formControlName="loaiVthh" nzShowSearch nzAllowClear
                          (ngModelChange)="changeHangHoa($event)">
                 <nz-option *ngFor="let p of dsLoaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
@@ -22,7 +22,7 @@
           </div>
           <div nz-col nzSpan="5">
             <nz-form-item class="form-item">
-              <nz-form-label>Chủng loại hàng hóa</nz-form-label>
+              <nz-form-label>Chủng loại hàng DTQG</nz-form-label>
               <nz-select formControlName="cloaiVthh" nzShowSearch nzAllowClear>
                 <nz-option *ngFor="let p of dsCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
               </nz-select>
@@ -97,16 +97,17 @@
             <thead>
             <tr>
               <th style="min-width: 340px">Chi cục DTNN</th>
-              <th>Loại hàng hóa</th>
-              <th>Chủng loại</th>
+              <th>Loại hàng DTQG</th>
+              <th>Chủng loại hàng DTQG</th>
               <th>Năm nhập</th>
               <th>Điểm kho</th>
-              <th>Lô kho</th>
+              <th>Nhà/Ngăn/Lô kho</th>
+              <th>Ngày nhập kho</th>
               <th>SL hết hạn <br/> (12 tháng)</th>
               <th>Tồn kho</th>
-              <th>Ngày nhập kho</th>
               <th>ĐVT</th>
-              <th>Ngày đề xuất</th>
+              <th>Ngày đề hết hạn lưu kho</th>
+              <th>Thời gian lưu kho còn lại (tháng)</th>
               <th>Ngày tổng hợp (chốt DS)</th>
               <th>Trạng thái</th>
               <th>Mã danh sách</th>
@@ -132,6 +133,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
               </tr>
               <ng-container *ngIf="expandSetString.has(item.idVirtual) && expandSetString.has(item.idVirtual)">
                 <ng-container *ngFor="let lv1 of item.childData,let i1=index">
@@ -141,12 +143,13 @@
                     <td>{{lv1.tenCloaiVthh}}</td>
                     <td>{{lv1.namNhap}}</td>
                     <td>{{lv1.tenDiemKho}}</td>
-                    <td>{{lv1.tenLoKho == null ? lv1.tenNganKho : lv1.tenLoKho}}</td>
+                    <td>{{lv1.tenNhaKho+'/'+lv1.tenNganKho + (lv1.tenLoKho != null ? '/'+ lv1.tenLoKho : '')}}</td>
+                    <td>{{lv1.ngayNhapKho|date:globals.dateFormat}}</td>
                     <td>{{lv1.slHetHan|number:globals.numberFormat}}</td>
                     <td>{{lv1.slTonKho|number:globals.numberFormat}}</td>
-                    <td>{{lv1.ngayNhapKho|date:globals.dateFormat}}</td>
                     <td>{{lv1.donViTinh}}</td>
                     <td>{{lv1.ngayDeXuat|date:globals.dateFormat}}</td>
+                    <td>{{lv1.ngayHetHanBh|date:globals.dateFormat}}</td>
                     <td>{{lv1.ngayTongHop|date:globals.dateFormat}}</td>
                     <td>{{lv1.tenTrangThai}}</td>
                     <td>{{lv1.maTongHop}}</td>
