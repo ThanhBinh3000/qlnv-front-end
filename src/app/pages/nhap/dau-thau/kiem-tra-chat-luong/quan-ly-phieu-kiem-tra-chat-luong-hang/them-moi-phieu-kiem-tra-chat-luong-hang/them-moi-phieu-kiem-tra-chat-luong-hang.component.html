@@ -59,7 +59,7 @@
                   Năm kế hoạch
                 </nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
-                  <nz-select formControlName="nam" [nzDisabled]="true">
+                  <nz-select formControlName="nam" [nzDisabled]="isView">
                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
                     </nz-option>
                   </nz-select>
@@ -377,7 +377,7 @@
                   Số lượng khách hàng khai báo (kg)
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input nz-input formControlName="slKhKb" />
+                  <input nz-input [readonly]="isView" formControlName="slKhKb" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -387,7 +387,7 @@
                   Số lượng hàng thực tế kiểm tra (kg)
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input nz-input formControlName="slTtKtra" />
+                  <input nz-input [readonly]="isView" formControlName="slTtKtra" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -525,7 +525,7 @@
                   Nhận xét
                 </nz-form-label>
                 <textarea rows="3" placeholder="Nhập nội dung" class="search__input" nz-input formControlName="ketLuan"
-                  [disabled]="isDisableField() || isView"></textarea>
+                  [readonly]="isDisableField() || isView"></textarea>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="2">

@@ -31,6 +31,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
   @Input() isTatCa: boolean;
   @Input() loaiVthh: string;
   @Input() idQdGiaoNvNh: number;
+  @Input() maNganLoKho: string;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -248,6 +249,17 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
         this.dataTableChiTieu.forEach(element => {
           element.edit = false
         });
+      }
+    }
+    if (this.maNganLoKho != null) {
+      let dataDdiem = null;
+      if (this.maNganLoKho.length == 16) {
+        dataDdiem = this.listDiaDiemNhap.find(x => x.maLoKho == this.maNganLoKho);
+      } else if (this.maNganLoKho.length == 14) {
+        dataDdiem = this.listDiaDiemNhap.find(x => x.maNganKho == this.maNganLoKho);
+      }
+      if (dataDdiem != null) {
+        this.bindingDataDdNhap(dataDdiem);
       }
     }
     await this.spinner.hide();
