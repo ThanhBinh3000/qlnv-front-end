@@ -41,9 +41,14 @@ export class HopdongPhulucHopdongComponent implements OnInit {
   allChecked = false;
   indeterminate = false;
   filterTable = {
-    namNhap: '',
+    namKh: '',
     ngayKy: '',
     soQdPd: '',
+    slHd: '',
+    tenLoaiQd: '',
+    tongGtriHd: '',
+    slHdDaKy: '',
+    soQd: '',
     soQdKq: '',
     ngayMkho: '',
     loaiVthh: '',
@@ -51,7 +56,7 @@ export class HopdongPhulucHopdongComponent implements OnInit {
     cloaiVthh: '',
     tenCloaiVthh: '',
     tenTrangThaiHd: '',
-    tenTrangThaiXh: '',
+    tenTrangThaiNh: '',
   }
   idSelected: number
   isDetail: boolean
@@ -75,7 +80,7 @@ export class HopdongPhulucHopdongComponent implements OnInit {
     private thongTinPhuLucHopDongService: MttHopDongPhuLucHdService,
   ) {
     this.formData = this.fb.group({
-      namNhap: null,
+      namKh: null,
       soHd: null,
       tenHd: null,
       ngayKy: null,
@@ -140,7 +145,6 @@ export class HopdongPhulucHopdongComponent implements OnInit {
     await this.spinner.show();
     try {
       let body = this.formData.value
-      // body.namNhap = dayjs().get('year')
       body.tuNgayKy = this.tuNgayKy != null ? dayjs(this.tuNgayKy).format('YYYY-MM-DD') + " 00:00:00" : null
       body.denNgayKy = this.denNgayKy != null ? dayjs(this.denNgayKy).format('YYYY-MM-DD') + " 23:59:59" : null
       body.paggingReq = {
@@ -174,7 +178,6 @@ export class HopdongPhulucHopdongComponent implements OnInit {
     await this.spinner.show();
     try {
       let body = this.formData.value
-      // body.namNhap = dayjs().get('year')
       body.trangThaiKq = STATUS.DA_DUYET_LDC
       body.trangThaiQd = STATUS.BAN_HANH
       body.tuNgayKy = this.tuNgayKy != null ? dayjs(this.tuNgayKy).format('YYYY-MM-DD') + " 00:00:00" : null

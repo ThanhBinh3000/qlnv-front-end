@@ -285,6 +285,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
         return;
       }
     }
+    this.validateForm(isOther)
     if (this.formData.invalid) {
       this.spinner.hide();
       return;
@@ -304,6 +305,70 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
       } else {
         // this.goBack()
       }
+    }
+  }
+
+  validateForm(isOther?){
+    if (isOther) {
+      this.formData.controls["namHd"].setValidators([Validators.required]);
+      this.formData.controls["soQdKh"].setValidators([Validators.required]);
+      this.formData.controls["ngayMkho"].setValidators([Validators.required]);
+      this.formData.controls["soQd"].setValidators([Validators.required]);
+      this.formData.controls["soHd"].setValidators([Validators.required]);
+      this.formData.controls["ngayHluc"].setValidators([Validators.required]);
+      this.formData.controls["loaiHdong"].setValidators([Validators.required]);
+      this.formData.controls["tgianThienHd"].setValidators([Validators.required]);
+      this.formData.controls["thoiGianDuKien"].setValidators([Validators.required]);
+      this.formData.controls["noiDungHdong"].setValidators([Validators.required]);
+      this.formData.controls["dkienHanTtoan"].setValidators([Validators.required]);
+      this.formData.controls["mst"].setValidators([Validators.required]);
+      this.formData.controls["tenNguoiDdien"].setValidators([Validators.required]);
+      this.formData.controls["chucVu"].setValidators([Validators.required]);
+      this.formData.controls["sdtDviBan"].setValidators([Validators.required]);
+      this.formData.controls["fax"].setValidators([Validators.required]);
+      this.formData.controls["stk"].setValidators([Validators.required]);
+      this.formData.controls["moLai"].setValidators([Validators.required]);
+      this.formData.controls["tenNguoiDdienDviBan"].setValidators([Validators.required]);
+      this.formData.controls["chucVuDviBan"].setValidators([Validators.required]);
+      this.formData.controls["faxDviBan"].setValidators([Validators.required]);
+      this.formData.controls["stkDviBan"].setValidators([Validators.required]);
+      this.formData.controls["moLaiDviBan"].setValidators([Validators.required]);
+      this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
+      this.formData.controls["loaiVthh"].setValidators([Validators.required]);
+      this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
+      this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
+      this.formData.controls["moTaHangHoa"].setValidators([Validators.required]);
+      this.formData.controls["ghiChu"].setValidators([Validators.required]);
+    } else {
+      this.formData.controls["namHd"].clearValidators();
+      this.formData.controls["soQdKh"].clearValidators();
+      this.formData.controls["ngayMkho"].clearValidators();
+      this.formData.controls["soQd"].clearValidators();
+      this.formData.controls["soHd"].clearValidators();
+      this.formData.controls["ngayHluc"].clearValidators();
+      this.formData.controls["loaiHdong"].clearValidators();
+      this.formData.controls["tgianThienHd"].clearValidators();
+      this.formData.controls["thoiGianDuKien"].clearValidators();
+      this.formData.controls["noiDungHdong"].clearValidators();
+      this.formData.controls["dkienHanTtoan"].clearValidators();
+      this.formData.controls["mst"].clearValidators();
+      this.formData.controls["tenNguoiDdien"].clearValidators();
+      this.formData.controls["chucVu"].clearValidators();
+      this.formData.controls["sdtDviBan"].clearValidators();
+      this.formData.controls["fax"].clearValidators();
+      this.formData.controls["stk"].clearValidators();
+      this.formData.controls["moLai"].clearValidators();
+      this.formData.controls["tenNguoiDdienDviBan"].clearValidators();
+      this.formData.controls["chucVuDviBan"].clearValidators();
+      this.formData.controls["faxDviBan"].clearValidators();
+      this.formData.controls["stkDviBan"].clearValidators();
+      this.formData.controls["moLaiDviBan"].clearValidators();
+      this.formData.controls["tenLoaiVthh"].clearValidators();
+      this.formData.controls["loaiVthh"].clearValidators();
+      this.formData.controls["tenCloaiVthh"].clearValidators();
+      this.formData.controls["cloaiVthh"].clearValidators();
+      this.formData.controls["moTaHangHoa"].clearValidators();
+      this.formData.controls["ghiChu"].clearValidators();
     }
   }
 
@@ -340,6 +405,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
     let res = await this.chaogiaUyquyenMualeService.search(body)
     if (res.data) {
       listQdKh = res.data?.content;
+      console.log(listQdKh, "kissafnjk")
     }
     this.spinner.hide();
     const modalQD = this.modal.create({
@@ -350,7 +416,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
-        dataHeader: ['Số QĐ kế hoạch', 'Số QĐ điều chỉnh (nếu có)', 'Tên loại hàng DTQG', 'Chủng loại hàng DTQG'],
+        dataHeader: ['Số QĐ phê duyệt KHMTT', 'Số QĐ điều chỉnh KHMTT', 'Tên loại hàng DTQG', 'Chủng loại hàng DTQG'],
         dataColumn: ['soQd', 'soQdDc', 'tenLoaiVthh', 'tenCloaiVthh'],
         dataTable: listQdKh
       },
