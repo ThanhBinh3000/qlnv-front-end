@@ -25,7 +25,7 @@
             <nz-form-item>
               <nz-form-label>Cục DTNN KV</nz-form-label>
               <nz-form-control>
-                <nz-select formControlName="maCuc" nzShowSearch nzAllowClear>
+                <nz-select formControlName="maCuc" (ngModelChange)="loadDsChiCuc()" nzShowSearch nzAllowClear>
                   <nz-option *ngFor="let p of dsDonvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -36,7 +36,7 @@
               <nz-form-label>Chi cục DTNN KV</nz-form-label>
               <nz-form-control>
                 <nz-select formControlName="maChiCuc" nzShowSearch nzAllowClear>
-                  <nz-option *ngFor="let p of dsDonvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
+                  <nz-option *ngFor="let p of listChiCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
@@ -232,7 +232,7 @@
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
-      <button class="btn btn-sub" *ngIf="this.selectedItem && this.selectedItem.trangThai != STATUS.GUI_DUYET"
+      <button class="btn btn-sub" *ngIf="this.selectedItem && this.selectedItem.trangThai == STATUS.GUI_DUYET"
               (click)="exportExcel()">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất excel</span>
