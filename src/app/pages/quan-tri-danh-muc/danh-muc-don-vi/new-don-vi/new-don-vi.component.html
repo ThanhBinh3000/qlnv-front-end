@@ -143,11 +143,9 @@
           <nz-form-label [nzNoColon]="true"> Vùng miền
           </nz-form-label>
           <nz-form-control>
-            <nz-radio-group formControlName="vungMien" >
-              <label nz-radio nzValue="Miền Bắc"> Miên bắc </label>
-              <label nz-radio nzValue="Miền Trung"> Miền trung </label>
-              <label nz-radio nzValue="Miền Nam"> Miền Nam </label>
-            </nz-radio-group>
+            <nz-select  formControlName="vungMien">
+              <nz-option *ngFor="let item of listVungMien" [nzValue]="item.ma" [nzLabel]="item.giaTri"></nz-option>
+            </nz-select>
           </nz-form-control>
         </nz-form-item>
       </div>
