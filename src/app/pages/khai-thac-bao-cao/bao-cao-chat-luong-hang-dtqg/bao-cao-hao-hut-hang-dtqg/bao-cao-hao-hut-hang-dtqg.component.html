@@ -74,12 +74,23 @@
               </nz-form-control>
             </nz-form-item>
           </div>
+<!--          <div nz-col  [nzSpan]="6" *ngIf="formData.value.loaiBc == '01' && formData.value.loaiVthh == '0101'">-->
+<!--            <nz-form-item>-->
+<!--              <nz-form-label nzRequired>Phương thức bảo quản</nz-form-label>-->
+<!--              <nz-form-control nz-col >-->
+<!--                <nz-select nzShowSearch formControlName="pthucBquan" nzAllowClear [nzDisabled]="userService.isChiCuc()">-->
+<!--                  <nz-option *ngFor="let p of listPtbq" [nzLabel]="p.giaTri" [nzValue]="p.ma"></nz-option>-->
+<!--                </nz-select>-->
+<!--              </nz-form-control>-->
+<!--            </nz-form-item>-->
+<!--          </div>-->
           <div nz-col  [nzSpan]="6" *ngIf="formData.value.loaiBc == '01' && formData.value.loaiVthh == '0101'">
             <nz-form-item>
-              <nz-form-label nzRequired>Phương thức bảo quản</nz-form-label>
-              <nz-form-control nz-col >
-                <nz-select nzShowSearch formControlName="pthucBquan" nzAllowClear [nzDisabled]="userService.isChiCuc()">
-                  <nz-option *ngFor="let p of listPtbq" [nzLabel]="p.giaTri" [nzValue]="p.ma"></nz-option>
+              <nz-form-label nzRequired>Thóc bảo quản tại khu vực</nz-form-label>
+              <nz-form-control>
+                <nz-select nzShowSearch formControlName="vungMien" nzAllowClear>
+                  <nz-option nzValue="OTHER" nzLabel="Miền Bắc, miền Trung"></nz-option>
+                  <nz-option nzValue="MN" nzLabel="Miền Nam"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
