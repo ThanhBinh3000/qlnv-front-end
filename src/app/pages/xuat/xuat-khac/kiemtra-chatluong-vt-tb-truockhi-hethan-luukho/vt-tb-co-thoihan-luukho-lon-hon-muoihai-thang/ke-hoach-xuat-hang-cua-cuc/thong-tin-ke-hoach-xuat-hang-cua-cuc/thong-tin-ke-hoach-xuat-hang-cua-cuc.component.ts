@@ -50,7 +50,8 @@ export class ThongTinKeHoachXuatHangCuaCucComponent extends Base2Component imple
   dataThTree: any[] = []
   expandSetString = new Set<string>();
   numberToRoman = NumberToRoman;
-
+  keHoachCuc: any;
+  KE_HOACH: string = "00";
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -190,9 +191,33 @@ export class ThongTinKeHoachXuatHangCuaCucComponent extends Base2Component imple
     if (rs.msg == MESSAGE.SUCCESS) {
       this.listMaTongHop = rs.data.content;
     }
+    console.log(this.listMaTongHop,1)
   }
 
-  openDialogDsTongHop() {
+  async loadKeHoachCuc() {
+    await this.spinner.show();
+    let body = {
+      capDvi: "2",
+      loai: this.KE_HOACH,
+    }
+    let res = await this.keHoachXuatHangService.search(body)
+    const data = res.data;
+    this.keHoachCuc = data.content;
+    console.log(this.keHoachCuc,2)
+    let tongHop = [
+      ...this.listMaTongHop.filter((e) => {
+        return !this.keHoachCuc.some((bb) => {
+          return e.maDanhSach === bb.maTongHopDs;
+        });
+      }),
+    ];
+    this.listMaTongHop = tongHop;
+    console.log(this.listMaTongHop,3)
+  }
+
+
+  async openDialogDsTongHop() {
+    await this.loadKeHoachCuc();
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách tổng hợp',
       nzContent: DialogTableSelectionComponent,
@@ -276,8 +301,6 @@ export class ThongTinKeHoachXuatHangCuaCucComponent extends Base2Component imple
       if (isGuiDuyet) {
         this.pheDuyet(this.formData.get("id").value)
       }
-    } else {
-      this.notification.error(MESSAGE.ERROR, "Có lỗi xảy ra.");
     }
   }
 
@@ -287,7 +310,8 @@ export class ThongTinKeHoachXuatHangCuaCucComponent extends Base2Component imple
     let mess = ''
     switch (this.formData.get('trangThai').value) {
       case STATUS.DU_THAO:
-      case STATUS.TU_CHOI_TP: {
+      case STATUS.TU_CHOI_TP:
+      case STATUS.TU_CHOI_LDC: {
         trangThai = STATUS.CHO_DUYET_TP;
         mess = 'Bạn có muốn gửi duyệt?'
         break;

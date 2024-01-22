@@ -27,6 +27,7 @@ import {
   TongHopKeHoachXuatHangService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/TongHopKeHoachXuatHang.service";
 import { now } from "moment";
+import {FileDinhKem} from "../../../../../../../models/FileDinhKem";
 
 @Component({
   selector: 'app-thong-tin-ke-hoach-xuat-hang-cua-tong-cuc',
@@ -56,6 +57,8 @@ export class ThongTinKeHoachXuatHangCuaTongCucComponent extends Base2Component i
   @Output() tabFocus = new EventEmitter<number>();
   numberToRoman = NumberToRoman;
   templateName = "Biên bản lấy mẫu bàn giao mẫu vật tư";
+  KE_HOACH: string = "00";
+  keHoachTcuc: any;
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
@@ -95,7 +98,8 @@ export class ThongTinKeHoachXuatHangCuaTongCucComponent extends Base2Component i
       soQdBtc: [],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
-      xhXkKhXuatHangDtl: [new Array()]
+      xhXkKhXuatHangDtl: [new Array()],
+      fileDinhKemReq: [new Array<FileDinhKem>()],
     })
   }
 
@@ -231,7 +235,29 @@ export class ThongTinKeHoachXuatHangCuaTongCucComponent extends Base2Component i
     }
   }
 
-  openDialogDsTongHop() {
+  async loadKeHoachTcuc() {
+    await this.spinner.show();
+    let body = {
+      capDvi: "1",
+      loai: this.KE_HOACH,
+    }
+    let res = await this.keHoachXuatHangService.search(body)
+    const data = res.data;
+    this.keHoachTcuc = data.content;
+    console.log(this.keHoachTcuc,2)
+    let tongHop = [
+      ...this.listMaTongHop.filter((e) => {
+        return !this.keHoachTcuc.some((bb) => {
+          return e.id === bb.idCanCu;
+        });
+      }),
+    ];
+    this.listMaTongHop = tongHop;
+    console.log(this.listMaTongHop,3)
+  }
+
+  async openDialogDsTongHop() {
+    await this.loadKeHoachTcuc();
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách tổng hợp',
       nzContent: DialogTableSelectionComponent,
@@ -289,7 +315,7 @@ export class ThongTinKeHoachXuatHangCuaTongCucComponent extends Base2Component i
       });
     }
     if (this.listFile && this.listFile.length > 0) {
-      this.formData.value.fileDinhKems = this.listFile;
+      this.formData.value.fileDinhKemReq = this.listFile;
     }
     this.formData.value.soToTrinh = this.formData.value.soToTrinh + this.maTT;
     if (this.formData.get("thoiGianDuKienXuatHang").value) {

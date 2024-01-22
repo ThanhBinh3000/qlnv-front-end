@@ -21,6 +21,7 @@ import {LOAI_HH_XUAT_KHAC} from "../../../../../../constants/config";
 import {
   TongHopDanhSachVttbService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/TongHopDanhSachVttb.service";
+import {DANH_MUC_LEVEL} from "../../../../../luu-kho/luu-kho.constant";
 
 @Component({
   selector: 'app-tong-hop-danh-sach-vt12th',
@@ -46,6 +47,7 @@ export class TongHopDanhSachVt12thComponent extends Base2Component implements On
   DanhSach: boolean = false;
   showDetail: boolean;
   @Output() tabFocus = new EventEmitter<number>();
+  listChiCuc: any[];
 
   constructor(
     httpClient: HttpClient,
@@ -165,6 +167,19 @@ export class TongHopDanhSachVt12thComponent extends Base2Component implements On
          this.dsDonvi = dsTong.data.filter(s => s.type === 'PB');
        }*/
     }
+    if (!this.userService.isTongCuc()) {
+      this.loadDsChiCuc();
+    }
+  }
+
+  async loadDsChiCuc() {
+    const body = {
+      maDviCha: this.userService.isTongCuc() ? this.formData.value.maCuc : this.userInfo.MA_DVI,
+      trangThai: '01',
+    };
+    const dsTong = await this.donviService.layDonViTheoCapDo(body);
+    this.listChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+    this.listChiCuc = this.listChiCuc.filter(item => item.type === 'DV')
   }
 
   async loadDsVthh() {

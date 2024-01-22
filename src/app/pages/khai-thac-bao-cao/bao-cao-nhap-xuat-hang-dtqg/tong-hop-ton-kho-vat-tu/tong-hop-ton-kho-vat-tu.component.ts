@@ -43,7 +43,8 @@ export class TongHopTonKhoVatTuComponent extends Base2Component implements OnIni
         nam: [dayjs().get("year"), [Validators.required]],
         ngayBatDau: '',
         ngayKetThuc: '',
-        loaiVthh:''
+        loaiVthh:'',
+        tenLoaiVthh:'',
       }
     );
   }
@@ -145,5 +146,13 @@ export class TongHopTonKhoVatTuComponent extends Base2Component implements OnIni
         this.dsLoaiVthh = hangHoa.data?.filter((x) => ((x.ma.startsWith("02") || x.ma.startsWith("03")) && (x.cap == 1 || x.cap == 2)));
       }
     });
+  }
+
+  onChangeTen($event: any) {
+    if (this.dsLoaiVthh){
+      this.formData.patchValue({
+        tenLoaiVthh : this.dsLoaiVthh.find(i => i.ma == $event)?.ten
+      })
+    }
   }
 }

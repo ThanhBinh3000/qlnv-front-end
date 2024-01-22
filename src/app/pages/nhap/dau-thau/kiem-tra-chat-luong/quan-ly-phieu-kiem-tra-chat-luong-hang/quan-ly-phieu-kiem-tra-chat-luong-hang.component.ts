@@ -59,6 +59,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   selectedId: number = 0;
   isView: boolean = false;
   idQdGiaoNvNh: number = 0;
+  maNganLoKho: string;
   isTatCa: boolean = false;
   tuNgayGD: Date | null = null;
   denNgayGD: Date | null = null;
@@ -269,11 +270,12 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     });
   }
 
-  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
+  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number, maNganLoKho?: string ) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
     this.idQdGiaoNvNh = idQdGiaoNvNh;
+    this.maNganLoKho = maNganLoKho;
   }
 
   async showList() {

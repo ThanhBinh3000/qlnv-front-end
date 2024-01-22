@@ -170,7 +170,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
         const idGocSet = new Set(this.danhSachDieuChinh.map(item => item.idGoc));
         this.danhSachQdPdKeHoach = this.danhSachQdPdKeHoach.filter(item => !idGocSet.has(item.id))
         this.danhSachQdPdKeHoach.forEach(item => {
-          item.children = item.children.filter(item => item.idQdKq === null && item.soQdKq === null)
+          item.children = item.children.filter(item => item.trangThai !== STATUS.DA_HOAN_THANH);
         })
       }
       const modalQD = this.modal.create({
@@ -238,8 +238,8 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
           child.children.forEach(s => s.id = null);
         });
       });
-      this.dataTable = data.children.filter(item => item.idQdKq === null && item.soQdKq === null)
-      this.dataTableAll = data.children.filter(item => item.idQdKq === null && item.soQdKq === null)
+      this.dataTable = data.children.filter(item => item.trangThai !== STATUS.DA_HOAN_THANH)
+      this.dataTableAll = data.children.filter(item => item.trangThai !== STATUS.DA_HOAN_THANH)
       if (this.dataTable && this.dataTable.length > 0) {
         await this.selectRow(this.dataTable[0]);
       }

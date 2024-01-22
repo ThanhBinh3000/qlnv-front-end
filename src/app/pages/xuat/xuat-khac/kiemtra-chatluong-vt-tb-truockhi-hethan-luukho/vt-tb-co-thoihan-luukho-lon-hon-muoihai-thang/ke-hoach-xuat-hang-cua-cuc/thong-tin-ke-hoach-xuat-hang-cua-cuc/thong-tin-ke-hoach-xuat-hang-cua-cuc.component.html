@@ -16,23 +16,27 @@
           <span>Quay lại</span>
         </button>
         <button type="button" (click)="save(true)" class="btn btn-sm ml-2"
-                *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC )">
+                *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHC_THEM')
+                && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC && !isViewDetail)">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Lưu và gửi duyệt</span>
         </button>
-        <a class="btn btn-outline-danger btn-sm waves-effect waves-light ml-2" (click)="tuChoi()"
-           *ngIf="(formData.value.trangThai  == STATUS.CHO_DUYET_TP || formData.value.trangThai  == STATUS.CHO_DUYET_LDC)">
+        <a  class="btn btn-sub do ml-2" (click)="tuChoi()"
+           *ngIf="(userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHC_DUYETTP') && formData.value.trangThai == STATUS.CHO_DUYET_TP)
+          || (userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHC_DUYETLDC')  && formData.value.trangThai == STATUS.CHO_DUYET_LDC)">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </a>
-        <a class="btn btn-outline-success btn-sm waves-effect waves-light ml-2"
-           *ngIf="(formData.value.trangThai  == STATUS.CHO_DUYET_TP || formData.value.trangThai  == STATUS.CHO_DUYET_LDC)"
+        <a  class="btn btn-sub xanh-nhat ml-2"
+           *ngIf="(userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHC_DUYETTP') && formData.value.trangThai == STATUS.CHO_DUYET_TP)
+          || (userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHC_DUYETLDC')  && formData.value.trangThai == STATUS.CHO_DUYET_LDC)"
            (click)="pheDuyet()">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Duyệt</span>
         </a>
         <button (click)="save(false)"
-                *ngIf="(formData.value.trangThai == STATUS.DU_THAO && !isViewDetail)  "
+                *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHC_THEM')
+                && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC) && !isViewDetail"
                 class="btn btn-main btn-sm waves-effect waves-light ml-2">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
@@ -189,7 +193,6 @@
                 </nz-form-control>
               </nz-form-item>
               <nz-form-item>
-                <nz-form-control [nzErrorTip]="error">
                   <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Chọn bản tổng hợp
                   </nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
@@ -198,7 +201,6 @@
                       <input class="search__input" [readonly]="true" nz-input formControlName="maTongHopDs"
                              readonly/>
                     </nz-input-group>
-                  </nz-form-control>
                 </nz-form-control>
               </nz-form-item>
             </div>
