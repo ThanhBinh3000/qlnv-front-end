@@ -71,6 +71,10 @@ const routes: Routes = [
         path: 'quyet-dinh/chi-tiet/:id',
         component: ThemMoiQuyetDinhTieuHuyComponent
       },
+      {
+        path: 'quyet-dinh/them-moi/:idHoSo',
+        component: ThemMoiQuyetDinhTieuHuyComponent
+      },
       // Region Thông báo kq
       {
         path: 'thong-bao-kq',
@@ -84,7 +88,10 @@ const routes: Routes = [
         path: 'thong-bao-kq/chi-tiet/:id',
         component: ThemMoiThongBaoKetQuaComponent
       },
-
+      {
+        path: 'thong-bao-kq/them-moi/:idHoSo',
+        component: ThemMoiThongBaoKetQuaComponent
+      },
       // Region Thông báo kq
       {
         path: 'bao-cao-kq',
