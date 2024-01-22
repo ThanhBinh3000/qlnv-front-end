@@ -135,7 +135,7 @@ export class TableDanhMucBpxlComponent extends Base3Component implements OnInit 
         this.title = 'Danh sách hàng hỏng, giảm chất lượng do nguyên nhân bất khả kháng';
         this.column = 'hỏng hóc';
         this.column1 = null;
-        this.columnTt = 'xử lý';
+        this.columnTt = null;
         break;
       case '/luu-kho/hang-trong-kho/hong-hoc-bao-hanh':
         typeBpxl = '3';

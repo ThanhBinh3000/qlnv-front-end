@@ -48,28 +48,29 @@
             </nz-form-item>
           </nz-form-control>
         </div>
-        <div nz-col nzSpan="6" *ngIf="userService.isCuc()">
+<!--        <div nz-col nzSpan="6" *ngIf="userService.isCuc()">-->
+<!--          <nz-form-control>-->
+<!--            <nz-form-label>Ngày ký</nz-form-label>-->
+<!--            <nz-form-item>-->
+<!--              <div nz-row>-->
+<!--                <div nz-col nzSpan="12" class="cus-start-date">-->
+<!--                  <nz-date-picker [nzDisabledDate]="disabledNgayTu" nzFormat="dd/MM/yyyy" formControlName="ngayTuCuc"-->
+<!--                                  nzPlaceHolder="Ngày bắt đầu">-->
+<!--                  </nz-date-picker>-->
+<!--                </div>-->
+<!--                <div nz-col nzSpan="12" class="cus-end-date">-->
+<!--                  <nz-date-picker [nzDisabledDate]="disabledNgayDen" nzFormat="dd/MM/yyyy" formControlName="ngayDenCuc"-->
+<!--                                  nzPlaceHolder="Ngày kết thúc">-->
+<!--                  </nz-date-picker>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </nz-form-item>-->
+<!--          </nz-form-control>-->
+<!--        </div>-->
+<!--        <div nz-col nzSpan="6" *ngIf="userService.isTongCuc()">-->
+        <div nz-col nzSpan="6">
           <nz-form-control>
-            <nz-form-label>Ngày duyệt LĐ cục</nz-form-label>
-            <nz-form-item>
-              <div nz-row>
-                <div nz-col nzSpan="12" class="cus-start-date">
-                  <nz-date-picker [nzDisabledDate]="disabledNgayTu" nzFormat="dd/MM/yyyy" formControlName="ngayTuCuc"
-                                  nzPlaceHolder="Ngày bắt đầu">
-                  </nz-date-picker>
-                </div>
-                <div nz-col nzSpan="12" class="cus-end-date">
-                  <nz-date-picker [nzDisabledDate]="disabledNgayDen" nzFormat="dd/MM/yyyy" formControlName="ngayDenCuc"
-                                  nzPlaceHolder="Ngày kết thúc">
-                  </nz-date-picker>
-                </div>
-              </div>
-            </nz-form-item>
-          </nz-form-control>
-        </div>
-        <div nz-col nzSpan="6" *ngIf="userService.isTongCuc()">
-          <nz-form-control>
-            <nz-form-label>Ngày duyệt LĐ tổng cục</nz-form-label>
+            <nz-form-label>Ngày ký</nz-form-label>
             <nz-form-item>
               <div nz-row>
                 <div nz-col nzSpan="12" class="cus-start-date">
@@ -130,11 +131,9 @@
         <th class="text-center" nzWidth="45px">STT</th>
         <th class="text-center" nzWidth="45px">Năm</th>
         <th class="text-center" nzWidth="90px">Số hồ sơ</th>
-        <th class="text-center">Tên hồ sơ</th>
-        <th class="text-center" nzWidth="90px">Ngày duyệt LĐ Cục</th>
-        <th class="text-center" nzWidth="90px">Ngày duyệt LĐ Vụ</th>
-        <th class="text-center" nzWidth="90px">Ngày duyệt LĐ TC</th>
-        <th class="text-center" nzWidth="90px">Số QĐ tiêu hủy</th>
+        <th class="text-center">Trích yếu</th>
+        <th class="text-center" nzWidth="90px">Ngày ký</th>
+        <th class="text-center" nzWidth="90px">Số QĐ phê duyệt</th>
         <th class="text-center" nzWidth="90px">Số thông báo KQ trình hồ sơ</th>
         <th class="text-center" nzWidth="120px">Trạng thái</th>
         <th class="text-center" nzWidth="35px">Hành động</th>
@@ -157,32 +156,20 @@
         </th>
         <th>
           <nz-input-group>
-            <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.ngayDuyetLdc"
-                            (ngModelChange)="filterInTable('ngayDuyetLdc', convertDateToString(filterTable.ngayDuyetLdc),'date')"></nz-date-picker>
-          </nz-input-group>
-        </th>
-        <th>
-          <nz-input-group>
-            <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.ngayDuyetLdv"
-                            (ngModelChange)="filterInTable('ngayDuyetLdv', convertDateToString(filterTable.ngayDuyetLdv),'date')"></nz-date-picker>
-          </nz-input-group>
-        </th>
-        <th>
-          <nz-input-group>
             <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.ngayDuyetLdtc"
                             (ngModelChange)="filterInTable('ngayDuyetLdtc', convertDateToString(filterTable.ngayDuyetLdtc),'date')"></nz-date-picker>
           </nz-input-group>
         </th>
         <th>
           <nz-input-group>
-            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdSc"
-                   (input)="filterInTable('soQdSc',filterTable.soQdSc)" size="small" />
+            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
+                   (input)="filterInTable('soQd',filterTable.soQd)" size="small" />
           </nz-input-group>
         </th>
         <th>
           <nz-input-group>
-            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdSc"
-                   (input)="filterInTable('soQdSc',filterTable.soQdSc)" size="small" />
+            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soTb"
+                   (input)="filterInTable('soTb',filterTable.soTb)" size="small" />
           </nz-input-group>
         </th>
         <th>
@@ -204,8 +191,6 @@
         <td>{{ data.nam }}</td>
         <td>{{ data.soHoSo }}</td>
         <td>{{ data.trichYeu }}</td>
-        <td>{{ data.ngayDuyetLdc | date: 'dd/MM/yyyy' }}</td>
-        <td>{{ data.ngayDuyetLdv | date: 'dd/MM/yyyy' }}</td>
         <td>{{ data.ngayDuyetLdtc | date: 'dd/MM/yyyy' }}</td>
         <td>{{ data.soQd }}</td>
         <td>{{ data.soTb }}</td>

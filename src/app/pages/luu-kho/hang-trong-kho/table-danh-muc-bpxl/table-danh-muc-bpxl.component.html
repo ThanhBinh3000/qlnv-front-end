@@ -117,7 +117,7 @@
           <th>Trạng thái</th>
           <th>Trạng thái chốt DS của Cục</th>
           <th>Ngày chốt DS của Cục</th>
-          <th>Trạng thái {{columnTt}}</th>
+          <th  *ngIf="columnTt">Trạng thái {{columnTt}}</th>
           <th nzWidth="35px">Hành động</th>
         </tr>
       </thead>
@@ -139,7 +139,7 @@
           <td></td>
           <td></td>
           <td></td>
-          <td></td>
+          <td *ngIf="columnTt"></td>
           <td> </td>
         </tr>
         <ng-container *ngIf="loaiVthh.expandSet">
@@ -160,7 +160,7 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
+              <td *ngIf="columnTt"></td>
               <td></td>
             </tr>
             <ng-container *ngIf="cloaiVthh.expandSet">
@@ -180,10 +180,10 @@
                   <td>{{data.tenTrangThai}}</td>
                   <td>{{data.tableTenTrangThai}}</td>
                   <td>{{data.tableNgayChot | date : 'dd/MM/yyyy'}}</td>
-                  <td>{{data.tableTenTrangThaiXl }}</td>
+                  <td *ngIf="columnTt">{{data.tableTenTrangThaiXl }}</td>
                   <td>
                     <a (click)="showDetail(data)">
-                      <i class="fa fa-pencil" title="Sửa"></i>
+                      <i class="fa fa-eye" title="Sửa"></i>
                     </a>
                   </td>
                 </tr>
@@ -277,7 +277,7 @@
                   <td>{{data.tableTenTrangThaiXl }}</td>
                   <td>
                     <a (click)="showDetail(data)">
-                      <i class="fa fa-pencil" title="Sửa"></i>
+                      <i class="fa fa-eye" title="Sửa"></i>
                     </a>
                   </td>
                 </tr>
@@ -363,7 +363,7 @@
                   <td>{{data.tableNgayChot | date : 'dd/MM/yyyy'}}</td>
                   <td>
                     <a (click)="showDetail(data)">
-                      <i class="fa fa-pencil" title="Sửa"></i>
+                      <i class="fa fa-eye" title="Sửa"></i>
                     </a>
                   </td>
                 </tr>

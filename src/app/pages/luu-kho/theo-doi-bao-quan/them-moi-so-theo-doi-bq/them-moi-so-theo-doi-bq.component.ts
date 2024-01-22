@@ -125,7 +125,7 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
         if (res) {
           this.changeMonth(this.monthSelect)
           this.loadDataComboBox();
-          this.bindingDataSoKho(res.idSoKho);
+          this.bindingDataSoKho(res.idSoKho,false);
         }
       })
     } else {
@@ -193,14 +193,14 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
         });
         modalQD.afterClose.subscribe(async (data) => {
           if (data) {
-            this.bindingDataSoKho(data.id)
+            this.bindingDataSoKho(data.id,true)
           }
         });
       }
     })
   }
 
-  async bindingDataSoKho(id) {
+  async bindingDataSoKho(id,isBidngTtKho : boolean) {
     this.spinner.show();
     await this.quanLySoKhoTheKhoService.getDetail(id).then(async (res) => {
       if (res.data) {
@@ -227,7 +227,9 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
           tenThuKho : data.nguoiLap,
         })
         await this.loadDataComboBox();
-        this.loadThongTinKho(data.maLoKho ? data.maLoKho : data.maNganKho);
+        if(isBidngTtKho){
+          this.loadThongTinKho(data.maLoKho ? data.maLoKho : data.maNganKho);
+        }
       }
       this.spinner.hide();
     });
@@ -236,7 +238,6 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
 
   async loadThongTinKho(maDiaDiem){
     this.quanLyHangTrongKhoService.getTrangThaiHt({maDvi : maDiaDiem}).then((res)=>{
-      console.log(res)
       if(res.data && res.data.length > 0){
         const data = res.data[0];
         let date = new Date(data.ngayNhapDayKho);
