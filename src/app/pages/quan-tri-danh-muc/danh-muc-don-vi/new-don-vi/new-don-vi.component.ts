@@ -28,9 +28,7 @@ export class NewDonViComponent implements OnInit {
   settings = {};
   formDonVi: FormGroup;
   isVisible = false;
-  selectedNode: any;
-  optionList: string[] = [];
-  cureentNodeParent: any
+  listVungMien: any[] = [];
   levelNode: number = 0;
 
   dataDetail: any;
@@ -84,6 +82,7 @@ export class NewDonViComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadDsKhuVuc()
+    this.loadDsVungMien()
   }
 
 
@@ -96,6 +95,13 @@ export class NewDonViComponent implements OnInit {
      }
    }
  }
+
+  async loadDsVungMien() {
+    let res = await this.danhMucService.danhMucChungGetAll('VUNG_MIEN');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listVungMien = res.data;
+    }
+  }
 
   convertNumberToString(value) {
     return value < 10 ? "0" + value.toString() : value.toString();
