@@ -138,14 +138,15 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
     }
     this.userInfo = this.userService.getUserLogin();
     this.maQdSuffix = "/" + this.userInfo.MA_QD;
-    await Promise.all([
-      await this.loadDiemKho()
-    ])
     if (this.id > 0) {
       await this.loadThongTinQdNhapXuatHang(this.id);
     } else {
       this.initForm();
     }
+    await Promise.all([
+      await this.loadDiemKho()
+    ])
+
     this.spinner.hide();
   }
 
@@ -758,8 +759,10 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
     let body = {
       maDviCha: this.userInfo.MA_DVI,
       trangThai: '01',
+      loaiVthh: this.loaiVthh,
+      cloaiVthh: this.formData.value.cloaiVthh,
     }
-    const res = await this.donViService.getTreeAll(body);
+    const res = await this.donViService.getDonViHangTree(body);
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.length > 0) {
         res.data.forEach(element => {
@@ -778,9 +781,10 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
           }
         });
       };
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
     }
+    // else {
+    //   this.notification.error(MESSAGE.ERROR, res.msg);
+    // }
   }
 
   changeDiemKho(isEdit?) {
