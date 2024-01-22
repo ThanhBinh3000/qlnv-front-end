@@ -14,6 +14,7 @@ import {Base2Component} from "../../../../components/base2/base2.component";
 import {saveAs} from "file-saver";
 import {BcCLuongHangDTQGService} from 'src/app/services/bao-cao/BcCLuongHangDTQG.service';
 import {DanhMucService} from "../../../../services/danhmuc.service";
+import { el, th } from 'date-fns/locale';
 
 @Component({
   selector: 'app-bao-cao-hao-hut-hang-dtqg',
@@ -56,7 +57,7 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
         namXuat: [[], [Validators.required]],
         maCuc: null,
         maChiCuc: null,
-        pthucBquan: null,
+        vungMien: null,
         loaiVthh: [null, [Validators.required]],
         loaiBc: ['02', [Validators.required]],
       }
@@ -69,7 +70,7 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
       this.loadDsDonVi();
       this.loadDsVthh();
       this.loadDsLoaiBc();
-      this.loadListPpbq();
+      // this.loadListPpbq();
       await this.initForm()
     } catch (e) {
       console.log("error: ", e);
@@ -79,13 +80,13 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
     await this.spinner.hide();
   }
 
-  async loadListPpbq() {
-    this.listPtbq = [];
-    let res = await this.danhMucSv.danhMucChungGetAll('PT_BAO_QUAN');
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listPtbq = res.data;
-    }
-  }
+  // async loadListPpbq() {
+  //   this.listPtbq = [];
+  //   let res = await this.danhMucSv.danhMucChungGetAll('PT_BAO_QUAN');
+  //   if (res.msg == MESSAGE.SUCCESS) {
+  //     this.listPtbq = res.data;
+  //   }
+  // }
 
   downloadPdf() {
     saveAs(this.pdfBlob, this.nameFile + ".pdf");
@@ -146,6 +147,10 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
     this.formData.controls["maCuc"].clearValidators();
     if (this.formData.value.loaiBc == '02') {
       this.formData.controls["maCuc"].setValidators(Validators.required);
+    } else {
+      if (this.formData.value.loaiVthh == '0101') {
+        this.formData.controls["vungMien"].setValidators(Validators.required);
+      }
     }
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {

@@ -83,11 +83,13 @@
           <span>Xóa</span>
         </button>
         <button type="button"
-                class="btn btn-sub" (click)="exportData()">
+                class="btn btn-sub" *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHC_EXP')"
+                (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button *ngIf="userService.isCuc()" (click)="themMoi(null,false)"
+        <button *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHC_THEM') && userService.isCuc()"
+                (click)="themMoi(null,false)"
                 type="button" class="btn btn-sub xanh">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
@@ -175,13 +177,21 @@
           <td>{{ data.soDviTaiSan }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
-            <a (click)="themMoi(data.id, true)">
+            <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHC_XEM')
+               && !((data.trangThai ==STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai ==STATUS.DU_THAO) && data.nguoiTaoId == userInfo.ID)" (click)="themMoi(data.id, true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a *ngIf="data.trangThai==STATUS.DU_THAO" (click)="themMoi(data.id, false)">
+            <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHC_THEM') &&
+              (data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai ==STATUS.DU_THAO)"
+              (click)="themMoi(data.id, false)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a *ngIf="data.trangThai==STATUS.DU_THAO" (click)="delete(data)">
+            <a *ngIf="(userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHC_DUYETLDC') && data.trangThai ==STATUS.CHO_DUYET_LDC) ||
+            (userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHC_DUYETTP') && data.trangThai == STATUS.CHO_DUYET_TP)"
+               (click)="themMoi(data.id, true)">
+              <i class="icon htvbdh_tcdt_pheduyet"></i>
+            </a>
+            <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHC_XOA') && data.trangThai ==STATUS.DU_THAO" (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>

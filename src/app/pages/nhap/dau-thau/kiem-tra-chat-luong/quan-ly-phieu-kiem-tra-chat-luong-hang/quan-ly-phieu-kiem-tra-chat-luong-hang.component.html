@@ -100,10 +100,10 @@
               <td nzLeft class="bold">{{ item.tgianNkho }}</td>
               <td colspan="9"></td>
               <td nzRight>
-                <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_THEM')"
-                  (click)="redirectToChiTiet(false, 0,item.id)">
-                  <i class="fa fa-plus"></i>
-                </a>
+<!--                <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_THEM')"-->
+<!--                  (click)="redirectToChiTiet(false, 0,item.id)">-->
+<!--                  <i class="fa fa-plus"></i>-->
+<!--                </a>-->
 <!--                <a *ngIf="item.trangThai != STATUS.DA_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_THEM')"-->
 <!--                  (click)="redirectToChiTiet(false, item.id)">-->
 <!--                  <i class="fa fa-pencil" title="Sửa"></i>-->
@@ -125,8 +125,14 @@
                   <td nzLeft></td>
                   <td nzLeft></td>
                   <td nzLeft>{{dataDdiem.tenDiemKho}}</td>
-                  <td nzLeft>{{dataDdiem.tenLoKho}}</td>
-                  <td colspan="8"></td>
+                  <td nzLeft>{{dataDdiem.tenNganLoKho}}</td>
+                  <td colspan="7"></td>
+                  <td nzRight>
+                    <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_THEM')"
+                       (click)="redirectToChiTiet(false, 0,item.id, dataDdiem.maLoKho? dataDdiem.maLoKho : dataDdiem.maNganKho)">
+                      <i class="fa fa-plus"></i>
+                    </a>
+                  </td>
                 </tr>
                 <ng-container *ngFor="let dataBb of item.detail.listBienBanNghiemThuBq, let k = index">
                   <tr class="level-3"
@@ -214,6 +220,6 @@
 </ng-container>
 <ng-container class="chi-tiet" *ngIf="isDetail">
   <them-moi-phieu-kiem-tra-chat-luong-hang [id]="selectedId" (showListEvent)="showList()" [isView]="isView"
-    [loaiVthh]="loaiVthh" [isTatCa]="isTatCa" [idQdGiaoNvNh]="idQdGiaoNvNh">
+    [loaiVthh]="loaiVthh" [isTatCa]="isTatCa" [idQdGiaoNvNh]="idQdGiaoNvNh" [maNganLoKho]="maNganLoKho">
   </them-moi-phieu-kiem-tra-chat-luong-hang>
 </ng-container>

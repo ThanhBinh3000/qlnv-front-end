@@ -333,9 +333,9 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
       soLuongConLaiByIdQd = this.formData.value.soLuongDaLenKhByIdQd
       soLuongConLai = soLuongConLai + soLuongConLaiByIdQd;
     }
-    this.listOfData.forEach(item => {
-      soLuong += item.soLuong
-    })
+    // this.listOfData.forEach(item => {
+    //   soLuong += item.soLuong
+    // })
     if (soLuong > soLuongConLai) {
       this.notification.error(MESSAGE.ERROR, "Số lượng đề xuất, phê duyệt không được lớn hơn số lượng chỉ tiêu kế hoạch ")
       return false

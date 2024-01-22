@@ -58,16 +58,34 @@ export class ThemMoiQuyetDinhTieuHuyComponent extends Base3Component implements 
       idHoSo: [null, [Validators.required]],
       thoiGianPd: [null],
       trichYeu: [null, [Validators.required]],
-    })
+    });
+    if (!localStorage.getItem('foo')) {
+      localStorage.setItem('foo', 'no reload')
+      location.reload()
+    } else {
+      localStorage.removeItem('foo')
+    }
   }
 
   async ngOnInit() {
     this.spinner.show();
     await Promise.all([
       await this.getId(),
+      await this.getIdHoSo(),
       await this.initForm()
     ])
     this.spinner.hide();
+  }
+
+  idHoSo : number;
+  getIdHoSo() {
+    let idHoSo = this.route.snapshot.paramMap.get('idHoSo');
+    if (idHoSo && +idHoSo > 0) {
+      this.idHoSo = +idHoSo
+    }
+    if(this.idHoSo){
+       this.bindingDataHoSoTieuHuy(this.idHoSo)
+    }
   }
 
   async initForm() {

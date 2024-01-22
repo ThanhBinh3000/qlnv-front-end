@@ -332,7 +332,9 @@
               <nz-input-group>
                 <input type='text' nz-input placeholder='Tìm kiếm' [(ngModel)]='filterTable.tenChiTieu'
                        [ngModelOptions]='{standalone: true}'
-                       (input)="searchInTable('tenChiTieu',filterTable.tenChiTieu)" size='small'/>
+                       (blur)="searchInTable('tenChiTieu',filterTable.tenChiTieu)"
+                       (keydown.enter)="searchInTable('tenChiTieu',filterTable.tenChiTieu)"
+                      size='small'/>
               </nz-input-group>
             </th>
             <th *ngIf='formData.value.apDungCloaiVthh == false'>

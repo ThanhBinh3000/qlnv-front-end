@@ -24,7 +24,7 @@
           <div nz-col nzSpan="5">
             <nz-form-item class="form-item">
               <nz-form-label>Loại hàng DTQG</nz-form-label>
-              <nz-select formControlName="loaiVthh" nzShowSearch nzAllowClear>
+              <nz-select formControlName="loaiVthh" nzShowSearch nzAllowClear (ngModelChange)="onChangeTen($event)">
                 <nz-option *ngFor="let p of dsLoaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
               </nz-select>
             </nz-form-item>

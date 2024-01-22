@@ -135,7 +135,7 @@ export class TableDanhMucBpxlComponent extends Base3Component implements OnInit 
         this.title = 'Danh sách hàng hỏng, giảm chất lượng do nguyên nhân bất khả kháng';
         this.column = 'hỏng hóc';
         this.column1 = null;
-        this.columnTt = 'xử lý';
+        this.columnTt = null;
         break;
       case '/luu-kho/hang-trong-kho/hong-hoc-bao-hanh':
         typeBpxl = '3';
@@ -155,11 +155,12 @@ export class TableDanhMucBpxlComponent extends Base3Component implements OnInit 
         break;
       case '/luu-kho/hang-trong-kho/da-het-han':
         typeBpxl = '8';
-        this.typeTable = 1;
+        this.typeTable = 3;
         this.title = 'Danh sách hàng đã hết hạn bảo hành, chưa hết hạn lưu kho'
         this.column = 'hết hạn BH, chưa hết hạn LK';
         this.column1 = null;
         this.columnTt = 'xử lý';
+        this.column3 = 'Ngày hết hạn bảo hành';
         vaiTro = null;
         trangThai = null;
         break;

@@ -71,6 +71,8 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
       thoiGianPd: [null],
       thoiGianPdTu: [null],
       thoiGianPdDen: [null],
+      idQd : [null],
+      idTb : [null]
     });
     // this.symbol = '/'+this.userInfo.DON_VI.tenVietTat+"-KH&QLHDT";
   }
@@ -364,14 +366,16 @@ export class ChiTietHoSoTieuHuyComponent extends Base3Component implements OnIni
   showRedirectPage(){
     let trangThai = this.formData.value.trangThai;
     if (this.userService.isTongCuc()) {
-      return (trangThai == STATUS.DADUYET_BTC || trangThai == STATUS.TUCHOI_BTC);
+      return (trangThai == STATUS.DADUYET_BTC && this.formData.value.idQd == null
+        || trangThai == STATUS.TUCHOI_BTC && this.formData.value.idTb == null);
     }
     return false
   }
 
   redirectPage() {
     let trangThai = this.formData.value.trangThai;
-    let url = trangThai == STATUS.DADUYET_BTC ? '/xuat/xuat-tieu-huy/quyet-dinh/them-moi' : '/xuat/xuat-tieu-huy/thong-bao-kq/them-moi'
+    let url = trangThai == STATUS.DADUYET_BTC ? '/xuat/xuat-tieu-huy/quyet-dinh/them-moi/'+this.id : '/xuat/xuat-tieu-huy/thong-bao-kq/them-moi/'+this.id
     this.router.navigate([url]);
   }
+
 }

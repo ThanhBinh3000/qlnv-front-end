@@ -117,7 +117,7 @@
           <th>Trạng thái</th>
           <th>Trạng thái chốt DS của Cục</th>
           <th>Ngày chốt DS của Cục</th>
-          <th>Trạng thái {{columnTt}}</th>
+          <th  *ngIf="columnTt">Trạng thái {{columnTt}}</th>
           <th nzWidth="35px">Hành động</th>
         </tr>
       </thead>
@@ -139,7 +139,7 @@
           <td></td>
           <td></td>
           <td></td>
-          <td></td>
+          <td *ngIf="columnTt"></td>
           <td> </td>
         </tr>
         <ng-container *ngIf="loaiVthh.expandSet">
@@ -160,7 +160,7 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
+              <td *ngIf="columnTt"></td>
               <td></td>
             </tr>
             <ng-container *ngIf="cloaiVthh.expandSet">
@@ -180,10 +180,10 @@
                   <td>{{data.tenTrangThai}}</td>
                   <td>{{data.tableTenTrangThai}}</td>
                   <td>{{data.tableNgayChot | date : 'dd/MM/yyyy'}}</td>
-                  <td>{{data.tableTenTrangThaiXl }}</td>
+                  <td *ngIf="columnTt">{{data.tableTenTrangThaiXl }}</td>
                   <td>
                     <a (click)="showDetail(data)">
-                      <i class="fa fa-pencil" title="Sửa"></i>
+                      <i class="fa fa-eye" title="Sửa"></i>
                     </a>
                   </td>
                 </tr>
@@ -277,7 +277,93 @@
                   <td>{{data.tableTenTrangThaiXl }}</td>
                   <td>
                     <a (click)="showDetail(data)">
-                      <i class="fa fa-pencil" title="Sửa"></i>
+                      <i class="fa fa-eye" title="Sửa"></i>
+                    </a>
+                  </td>
+                </tr>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+      </tbody>
+    </nz-table>
+    <nz-table *ngIf="typeTable == 3" class="nowrap" [nzData]="dataTableAll" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
+      <thead>
+      <tr>
+        <th>Loại hàng DTQG</th>
+        <th>Chủng loại hàng DTQG</th>
+        <th>Ngăn/lô kho</th>
+        <th>Nhà kho</th>
+        <th>Điểm kho</th>
+        <th>Ngày nhập kho</th>
+        <th>Tồn kho</th>
+        <th>SL {{column}}</th>
+        <th *ngIf="column1">SL {{column1}}</th>
+        <th>ĐVT</th>
+        <th>{{column3}}</th>
+        <th>Trạng thái chốt DS của Cục</th>
+        <th>Ngày chốt DS của Cục</th>
+        <th nzWidth="35px">Hành động</th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let loaiVthh of dataTableAll , let i = index">
+        <tr>
+          <td nzShowExpand="true" [nzExpand]="loaiVthh.expandSet"
+              (nzExpandChange)="onExpandChange(loaiVthh, $event)">{{loaiVthh.tenLoaiVthh}}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td *ngIf="column1"></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <ng-container *ngIf="loaiVthh.expandSet">
+          <ng-container *ngFor="let cloaiVthh of loaiVthh.chilren , let i = index">
+            <tr>
+              <td></td>
+              <td nzShowExpand="true" [nzExpand]="cloaiVthh.expandSet"
+                  (nzExpandChange)="onExpandChange(cloaiVthh, $event)">{{cloaiVthh.tenCloaiVthh == 'null' ? loaiVthh.tenLoaiVthh : cloaiVthh.tenCloaiVthh}}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td *ngIf="column1"></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <ng-container *ngIf="cloaiVthh.expandSet">
+              <ng-container *ngFor="let data of cloaiVthh.children , let i = index">
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td>{{data.tenNganKho}} , {{data.tenLoKho}}</td>
+                  <td>{{data.tenNhaKho}}</td>
+                  <td>{{data.tenDiemKho}}</td>
+                  <td>{{data.ngayNhapDayKho | date : 'dd/MM/yyyy'}}</td>
+                  <td>{{data.tongSoLuong | number : '1.0-1' : 'vi_VN' }}</td>
+                  <td>{{data.soLuongXl | number : '1.0-1' : 'vi_VN' }}</td>
+                  <td *ngIf="column1"></td>
+                  <td>{{data.dviTinh }}</td>
+                  <td>{{data.tableNgayHan | date : 'dd/MM/yyyy'}}</td>
+                  <td>{{data.tableTenTrangThai}}</td>
+                  <td>{{data.tableNgayChot | date : 'dd/MM/yyyy'}}</td>
+                  <td>
+                    <a (click)="showDetail(data)">
+                      <i class="fa fa-eye" title="Sửa"></i>
                     </a>
                   </td>
                 </tr>

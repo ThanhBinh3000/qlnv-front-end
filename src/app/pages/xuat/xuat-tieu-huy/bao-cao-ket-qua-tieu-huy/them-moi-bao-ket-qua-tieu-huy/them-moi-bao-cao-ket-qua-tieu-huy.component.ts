@@ -57,7 +57,6 @@ export class ThemMoiBaoCaoKetQuaTieuHuyComponent extends Base3Component implemen
       lyDoTuChoi: [null],
     })
     this.symbol = '/' + this.userInfo.DON_VI.tenVietTat + '-KH&QLHDT';
-
   }
 
   async ngOnInit() {

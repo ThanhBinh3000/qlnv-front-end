@@ -113,7 +113,7 @@
             <nz-form-label [nzNoColon]="true">
               Ngày lấy mẫu
             </nz-form-label>
-            <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayLayMau">
+            <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayLayMau" [nzDisabled]="isView">
             </nz-date-picker>
           </nz-form-item>
         </div>
@@ -335,7 +335,7 @@
             </nz-option>
           </nz-select>
         </th>
-        <th>
+        <th *ngIf="!isView">
           <a (click)="themDaiDien()">
             <i class="fa fa-plus"></i>
           </a>
@@ -351,7 +351,7 @@
           <td class="text-center">{{i + 1}}</td>
           <td>{{data.daiDien}}</td>
           <td>{{data.tenLoaiDaiDien}}</td>
-          <td>
+          <td *ngIf="!isView">
             <a (click)="suaDaiDien(i)">
               <i class="fa fa-edit"></i>
             </a>

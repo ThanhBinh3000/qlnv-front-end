@@ -254,9 +254,11 @@ export class ThemMoiKhMuaHangDtqgComponent extends Base2Component implements OnI
       if (this.itemRowMatHangEdit[i] == undefined) {
         this.itemRowMatHangEdit[i] = [];
       }
-      for (let y = 0; y < this.listDataGroup[i].children.length; y++) {
-        if (this.itemRowMatHangEdit[i][y] == undefined) {
-          this.itemRowMatHangEdit[i][y] = [];
+      if (this.listDataGroup[i].children != null) {
+        for (let y = 0; y < this.listDataGroup[i].children.length; y++) {
+          if (this.itemRowMatHangEdit[i][y] == undefined) {
+            this.itemRowMatHangEdit[i][y] = [];
+          }
         }
       }
     }

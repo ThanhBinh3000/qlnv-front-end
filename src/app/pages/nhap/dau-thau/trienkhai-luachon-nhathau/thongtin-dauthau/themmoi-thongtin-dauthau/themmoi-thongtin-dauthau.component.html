@@ -360,7 +360,7 @@
                   <th rowspan="2">Chi cục DTNN</th>
                   <th rowspan="2">Điểm kho</th>
                   <th rowspan="2">Địa điểm nhập kho</th>
-                  <th rowspan="2">SL theo KH năm đã được duyệt</th>
+                  <th rowspan="2">Chỉ tiêu theo<br/>KH được giao</th>
                   <th rowspan="2">ĐVT</th>
                   <th colspan="3">Kế hoạch đấu thầu</th>
                   <th colspan="4">Kết quả đấu thầu</th>
@@ -587,13 +587,13 @@
                     [nzShowPagination]="false">
             <thead>
             <tr>
-              <th width="30px">STT</th>
-              <th>Tên nhà thầu <span style="color: red">*</span> </th>
-              <th>Giá dự thầu</th>
-              <th>Mã số thuế</th>
-              <th>Địa chỉ</th>
-              <th>Số điện thoại</th>
-              <th *ngIf="!isShowFromKq && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isView && !daCoKqLcnt" width="30px">Hành động
+              <th class="text-center" width="30px">STT</th>
+              <th class="text-center">Tên nhà thầu <span style="color: red">*</span> </th>
+              <th class="text-center">Giá dự thầu</th>
+              <th class="text-center">Mã số thuế</th>
+              <th class="text-center">Địa chỉ</th>
+              <th class="text-center">Số điện thoại</th>
+              <th class="text-center" *ngIf="!isShowFromKq && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isView && !daCoKqLcnt" width="30px">Hành động
               </th>
             </tr>
             </thead>
@@ -608,12 +608,13 @@
                 </nz-autocomplete>
               </td>
               <td><input nz-input class="money-input" currencyMask [options]="amount" [readonly]="isView" [(ngModel)]="itemRow.donGia"/></td>
-              <td>
-                <nz-input-number
-                  [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-                  [nzStep]="1" [nzDisabled]="isView" [(ngModel)]="itemRow.mst">
-                </nz-input-number>
-              </td>
+<!--              <td>-->
+<!--                <nz-input-number-->
+<!--                  [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"-->
+<!--                  [nzStep]="1" [nzDisabled]="isView" [(ngModel)]="itemRow.mst">-->
+<!--                </nz-input-number>-->
+<!--              </td>-->
+              <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow.mst"/></td>
               <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow.diaChi"/></td>
               <td><input nz-input pattern="[0-9]*" [readonly]="isView" [(ngModel)]="itemRow.sdt"/></td>
               <td *ngIf="!isShowFromKq && !daCoKqLcnt && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isView">
@@ -629,7 +630,7 @@
               <ng-container *ngIf="!data.edit; else editTemplate">
                 <td class="text-center">{{i + 1}}</td>
                 <td>{{ data.tenNhaThau }}</td>
-                <td>{{ data.donGia | number: '1.0-1' : 'vi_VN' }}</td>
+                <td class="text-right">{{ data.donGia | number: '1.0-1' : 'vi_VN' }}</td>
                 <td>{{ data.mst }}</td>
                 <td>{{ data.diaChi }}</td>
                 <td>{{ data.sdt }}</td>

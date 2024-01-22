@@ -92,6 +92,7 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
     this.userInfo = this.userService.getUserLogin();
     this.dataTable = []
     await this.spinner.show()
+    this.initForm();
     await Promise.all([
     ]);
     if (this.id && !this.userService.isChiCuc()) {
@@ -100,7 +101,6 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
     if (this.id && this.userService.isChiCuc()) {
       await this.getDetailChiCuc(this.id)
     }
-    this.initForm();
     await Promise.all([
       this.loadDataComboBox(),
     ]);
@@ -126,6 +126,7 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
             soQdKq: data.soQdKq,
             tenDuAn: dataTtin.data?.tenDuAn,
             tongMucDt: dataTtin.data?.tongMucDt,
+            tenDvi: dataTtin.data?.tenDvi,
             nguonVon: dataTtin.data?.nguonVon,
             tongSoLuong: dataTtin.data?.tongSoLuong * 1000,
             tenLoaiVthh: dataTtin.data?.tenLoaiVthh,
@@ -162,6 +163,7 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
             soQd: res.data.hhQdPheduyetKhMttHdr.soQd,
             tenDuAn: res.data.hhQdPheduyetKhMttHdr.tenDuAn,
             tongMucDt: res.data.tongMucDt,
+            tenDvi: res.data.tenDvi,
             nguonVon: res.data.nguonVon,
             tongSoLuong: res.data.hopDongMttHdrs.reduce((prev, cur) => {
               prev += cur.soLuong;
