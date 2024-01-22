@@ -617,8 +617,9 @@
               <th class="text-left">Địa điểm xuất kho</th>
               <th class="text-left">Điểm kho</th>
               <th class="text-left">Ngăn/Lô kho</th>
-              <th class="text-center">SL xuất bán đấu giá</th>
+              <th class="text-left">Năm nhập</th>
               <th class="text-left">Mã ĐVTS</th>
+              <th class="text-center">SL xuất bán đấu giá</th>
               <th class="text-center">Đơn giá không VAT (đ)</th>
               <th class="text-center">Thành tiền (đ)</th>
             </tr>
@@ -627,12 +628,8 @@
             <ng-container *ngFor="let data of dataTable , let idx = index">
               <tr>
                 <td [nzExpand]="expandSet.has(idx)" (nzExpandChange)="onExpandChange(idx, $event)"></td>
-                <td class="text-left bold">{{data.tenDvi}}</td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td colspan="6" class="text-left bold">{{data.tenDvi}}</td>
                 <td class="text-right bold">{{data.soLuongXuatBan|number:globals.numberFormat:globals.locale }}</td>
-                <td></td>
                 <td></td>
                 <td></td>
               </tr>
@@ -645,8 +642,9 @@
                   <td class="text-left">
                     {{(children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") + (children.tenNhaKho ? children.tenNhaKho : "")}}
                   </td>
-                  <td class="text-right">{{ children.soLuong|number:globals.numberFormat:globals.locale }}</td>
+                  <td class="text-left">{{ children.namNhap }}</td>
                   <td class="text-left">{{ children.maDviTsan }}</td>
+                  <td class="text-right">{{ children.soLuong|number:globals.numberFormat:globals.locale }}</td>
                   <td class="text-right">{{ children.donGiaTraGia|number:globals.numberFormat:globals.locale }}</td>
                   <td class="text-right">{{ children.thanhTien|number:globals.numberFormat:globals.locale }}</td>
                 </tr>
@@ -656,10 +654,8 @@
             <ng-container *ngIf="dataTable.length > 0">
               <tfoot>
               <tr>
-                <td colspan="5"></td>
-                <td
-                  class="text-right bold text-blue">{{formData.value.soLuong|number:globals.numberFormat:globals.locale}}</td>
-                <td></td>
+                <td colspan="7"></td>
+                <td class="text-right bold text-blue">{{formData.value.soLuong|number:globals.numberFormat:globals.locale}}</td>
                 <td></td>
                 <td
                   class="text-right bold text-blue">{{formData.value.thanhTien|number:globals.numberFormat:globals.locale}}</td>

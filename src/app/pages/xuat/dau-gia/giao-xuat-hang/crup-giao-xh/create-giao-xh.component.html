@@ -274,6 +274,7 @@
             <th class="text-left"> Chi cục DTNN</th>
             <th class="text-left"> Điểm kho</th>
             <th class="text-left"> Ngăn/Lô kho</th>
+            <th class="text-left"> Năm nhập</th>
             <th class="text-left"> Mã ĐVTS</th>
             <th class="text-center"> Tồn kho</th>
             <th class="text-center"> Số lượng xuất</th>
@@ -286,10 +287,7 @@
           <ng-container *ngFor="let data of dataTable , let idx = index">
             <tr>
               <td [nzExpand]="expandSet.has(idx)" (nzExpandChange)="onExpandChange(idx, $event)"></td>
-              <td class="text-left bold">{{ data.tenDvi }}</td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td colspan="5" class="text-left bold">{{ data.tenDvi }}</td>
               <td class="text-right bold">{{ data.tonKho|number:globals.numberFormat:globals.locale }}</td>
               <td class="text-right bold">{{ data.soLuongXuatBan|number:globals.numberFormat:globals.locale }}</td>
               <td></td>
@@ -304,6 +302,7 @@
                 <td class="text-left">
                   {{(children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") + (children.tenNhaKho ? children.tenNhaKho : "")}}
                 </td>
+                <td class="text-left">{{ children.namNhap }}</td>
                 <td class="text-left">{{ children.maDviTsan }}</td>
                 <td class="text-right">{{ children.tonKho|number:globals.numberFormat:globals.locale }}</td>
                 <td class="text-right">{{ children.soLuong|number:globals.numberFormat:globals.locale }}</td>
@@ -317,11 +316,7 @@
           <ng-container *ngIf="dataTable.length > 0">
             <tfoot>
             <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td class="text-right text-blue">TỔNG SỐ</td>
+              <td colspan="6" class="text-left text-blue">TỔNG SỐ</td>
               <th class="text-right text-blue">
                 {{calcTong('tonKho')|number:globals.numberFormat:globals.locale}}
               </th>
