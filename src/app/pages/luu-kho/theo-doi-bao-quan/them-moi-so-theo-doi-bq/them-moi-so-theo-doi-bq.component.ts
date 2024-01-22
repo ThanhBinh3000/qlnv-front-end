@@ -227,7 +227,7 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
           tenThuKho : data.nguoiLap,
         })
         await this.loadDataComboBox();
-        this.loadThongTinKho(data.maLoKho ? data.maLoKho : data.maNganKho);
+        // this.loadThongTinKho(data.maLoKho ? data.maLoKho : data.maNganKho);
       }
       this.spinner.hide();
     });
@@ -236,7 +236,6 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
 
   async loadThongTinKho(maDiaDiem){
     this.quanLyHangTrongKhoService.getTrangThaiHt({maDvi : maDiaDiem}).then((res)=>{
-      console.log(res)
       if(res.data && res.data.length > 0){
         const data = res.data[0];
         let date = new Date(data.ngayNhapDayKho);
