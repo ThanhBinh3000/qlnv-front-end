@@ -61,7 +61,7 @@
       <h3>DANH SÁCH PHIẾU KIỂM NGHIỆM CHẤT LƯỢNG</h3>
       <div class="buttons">
         <button
-          *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_THEM') && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_EXP')"
+          *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_EXP')"
           type="button" class="btn btn-sub" (click)="export()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
