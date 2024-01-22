@@ -54,7 +54,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   userInfo: UserLogin;
   detail: any = {};
   idNhapHang: number = 0;
-
+  fileDinhKem: any[] = [];
   loaiVthh: string;
   loaiStr: string;
   maVthh: string;
@@ -194,6 +194,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         this.helperService.bidingDataInFormGroup(this.formData, data);
         this.bindingDataBbLayMau(data.soBbLayMau.split('/')[0], true);
         this.dataTableChiTieu = data.listKquaKngiem;
+        this.fileDinhKem = data.fileDinhKems;
         this.dataTableChiTieu.forEach(item => {
           item.tenDanhGia = this.dsDanhGia.find(i => i.ma == item.danhGia)?.giaTri;
         })
@@ -223,6 +224,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     }
     let body = this.formData.value;
     body.kquaKnghiem = this.dataTableChiTieu;
+    body.fileDinhKems = this.fileDinhKem
     let res;
     if (this.formData.get('id').value > 0) {
       res = await this.phieuKiemNghiemChatLuongHangService.update(body);
