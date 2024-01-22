@@ -111,7 +111,7 @@
             </a>
             <a
               *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_BCKQKD_THEM') &&
-              data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai ==STATUS.DU_THAO"
+              (data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai ==STATUS.DU_THAO)"
               (click)="redirectDetail(data.id, false)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>

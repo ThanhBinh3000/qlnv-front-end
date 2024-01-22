@@ -102,12 +102,12 @@
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
-        <button type="button"
+        <button type="button" *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHTC_EXP')"
                 class="btn btn-sub" (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button *ngIf="userService.isTongCuc()" (click)="themMoi(null,false)"
+        <button *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHTC_THEM') && userService.isTongCuc()" (click)="themMoi(null,false)"
                 type="button" class="btn btn-sub xanh">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
@@ -130,7 +130,7 @@
           <th class="text-left">Ngày duyệt KH của TC</th>
           <th class="text-left">Ngày duyệt của BTC</th>
           <th class="text-left">Trích yếu</th>
-<!--          <th class="text-left">Số ĐV tài sản</th>-->
+          <!--          <th class="text-left">Số ĐV tài sản</th>-->
           <th class="text-left">Trạng thái</th>
           <th class="text-center" width="120px">Hành động</th>
         </tr>
@@ -173,12 +173,12 @@
                      (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small"/>
             </nz-input-group>
           </th>
-<!--          <th>-->
-<!--            <nz-input-group>-->
-<!--              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soDviTaiSan"-->
-<!--                     (input)="filterInTable('soDviTaiSan',filterTable.soDviTaiSan)" size="small"/>-->
-<!--            </nz-input-group>-->
-<!--          </th>-->
+          <!--          <th>-->
+          <!--            <nz-input-group>-->
+          <!--              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soDviTaiSan"-->
+          <!--                     (input)="filterInTable('soDviTaiSan',filterTable.soDviTaiSan)" size="small"/>-->
+          <!--            </nz-input-group>-->
+          <!--          </th>-->
           <th>
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
@@ -200,20 +200,25 @@
           <td>{{ data.ngayDuyetKeHoach | date: 'dd/MM/yyyy' }}</td>
           <td>{{ data.ngayDuyetKeHoachBtc | date: 'dd/MM/yyyy' }}</td>
           <td>{{ data.trichYeu }}</td>
-<!--          <td>{{ data.soDviTaiSan }}</td>-->
+          <!--          <td>{{ data.soDviTaiSan }}</td>-->
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
-            <a
-              *ngIf="data.trangThai !== STATUS.DU_THAO && data.trangThai !==STATUS.TUCHOI_BTC &&  data.trangThai!==STATUS.TU_CHOI_LDV && data.trangThai!==STATUS.TU_CHOI_LDTC"
+            <a *ngIf=" userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHTC_XEM')
+           && !((data.trangThai !== STATUS.DU_THAO && data.trangThai !==STATUS.TUCHOI_BTC &&  data.trangThai!==STATUS.TU_CHOI_LDV && data.trangThai!==STATUS.TU_CHOI_LDTC)
+           && data.nguoiTaoId == userInfo.ID)"
               (click)="themMoi(data.id, true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a
-              *ngIf="data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TUCHOI_BTC || data.trangThai==STATUS.TU_CHOI_LDV || data.trangThai==STATUS.TU_CHOI_LDTC"
+            <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHTC_THEM')
+            && (data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TUCHOI_BTC || data.trangThai==STATUS.TU_CHOI_LDV || data.trangThai==STATUS.TU_CHOI_LDTC)"
               (click)="themMoi(data.id, false)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a *ngIf="data.trangThai==STATUS.DU_THAO" (click)="delete(data)">
+            <a *ngIf="showButtonPheDuyet(data.trangThai, 'XHDTQG_XK_KTCLVTLK_12THANG_KHXHTC')"
+               (click)="themMoi(true, data.id)">
+              <i class="icon htvbdh_tcdt_pheduyet"></i>
+            </a>
+            <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHTC_XOA') && data.trangThai==STATUS.DU_THAO" (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
