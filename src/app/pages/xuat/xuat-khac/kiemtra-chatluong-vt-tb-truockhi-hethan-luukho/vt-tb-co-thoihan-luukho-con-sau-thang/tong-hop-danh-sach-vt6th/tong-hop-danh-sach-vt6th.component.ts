@@ -136,6 +136,7 @@ export class TongHopDanhSachVt6thComponent extends Base2Component implements OnI
 
   async timKiem() {
     await this.search();
+    console.log(this.dataTable,55)
     this.flatDataTable = this.dataTable.flatMap(s => {
       if (s.tongHopDtl && s.tongHopDtl.length > 0) {
         return s.tongHopDtl.map(s1 => {
@@ -180,6 +181,7 @@ export class TongHopDanhSachVt6thComponent extends Base2Component implements OnI
   }
 
   buildTableView() {
+    console.log(this.flatDataTable,123)
     this.dataTableView = chain(this.flatDataTable)
       .groupBy("header")
       .map((value, key) => {
@@ -215,6 +217,7 @@ export class TongHopDanhSachVt6thComponent extends Base2Component implements OnI
           childData: rs
         };
       }).value();
+    console.log(this.dataTableView)
   }
 
   onExpandStringChange(id: string, checked: boolean) {
@@ -234,7 +237,9 @@ export class TongHopDanhSachVt6thComponent extends Base2Component implements OnI
       this.formData.patchValue({
         maDanhSach: this.selectedItem.maDanhSach
       });
-      this.exportData("danh-sach-vat-tu-thiet-bi-co-thoi-han-luu-kho-lon-hon-12-thang.xlsx");
+      this.exportData(this.selectedItem.loai=='VT12'
+        ? "tong-hop-danh-sach-vat-tu-thiet-bi-co-thoi-han-luu-kho-lon-hon-12-thang.xlsx"
+        : "tong-hop-danh-sach-vat-tu-thiet-bi-co-thoi-han-luu-kho-lon-hon-6-thang.xlsx");
     }
   }
 

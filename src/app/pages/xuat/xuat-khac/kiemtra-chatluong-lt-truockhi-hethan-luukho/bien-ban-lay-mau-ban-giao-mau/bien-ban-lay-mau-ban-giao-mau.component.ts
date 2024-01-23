@@ -17,7 +17,7 @@ import {
 import {
   BienBanLayMauLuongThucHangDTQGService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/BienBanLayMauLuongThucHangDTQG.service";
-
+import {chain, cloneDeep} from "lodash";
 @Component({
   selector: 'app-xk-bien-ban-lay-mau-ban-giao-mau',
   templateUrl: './bien-ban-lay-mau-ban-giao-mau.component.html',
@@ -54,6 +54,7 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
       ngayLayMauDen: null,
       loai: null,
       loaiVthh: null,
+      maChiCuc: null,
     })
     this.filterTable = {
       maDanhSach: '',
@@ -82,7 +83,6 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
 
   ngOnInit(): void {
     try {
-      console.log(this.userService.getUserLogin().MA_PHONG_BAN, 8888)
       this.initData()
       this.timKiem();
     } catch (e) {
@@ -126,6 +126,16 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
       loai: this.loaiHhXuatKhac.LT_6_THANG,
     });
     await this.search();
+    let data= cloneDeep(this.dataTable)
+    this.dataTable = [];
+    data.forEach(item => {
+      const filteredHdr = { ...item }; // Tạo một bản sao của hdr để tránh thay đổi gián tiếp đến dữ liệu gốc
+      filteredHdr.tongHopDtl = item.tongHopDtl.filter(tongHopDtlItem => tongHopDtlItem.maDiaDiem.startsWith(this.userInfo.MA_DVI));
+      if (filteredHdr.tongHopDtl.length > 0) {
+        this.dataTable.push(filteredHdr);
+      }
+    });
+    console.log(this.dataTable,"5")
     this.dataTable.forEach(s => {
       s.idVirtual = uuidv4();
       this.expandSetString.add(s.idVirtual);

@@ -13,11 +13,22 @@ export class XuatKhacComponent implements OnInit {
 
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
-
+  tabSelected: number ;
   constructor(
     public userService: UserService,
     public globals: Globals
   ) {
+    if (this.userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH')) {
+      this.tabSelected = 0;
+    } else if (this.userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK')) {
+      this.tabSelected = 1;
+    } else if (this.userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK')) {
+      this.tabSelected = 2;
+    } else if (this.userService.isAccessPermisson('XHDTQG_XK_XHBKK')) {
+      this.tabSelected = 3;
+    } else if (this.userService.isAccessPermisson('XHDTQG_XK_XHKDM')) {
+      this.tabSelected = 4;
+    }
   }
 
   ngOnInit(): void {
@@ -25,8 +36,6 @@ export class XuatKhacComponent implements OnInit {
       this.visibleTab = value;
     });
   }
-
-  tabSelected: number = 0;
 
   selectTab(tab: number) {
     this.tabSelected = tab;

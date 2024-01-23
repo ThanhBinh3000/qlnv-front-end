@@ -162,6 +162,7 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
 
   async loadDetail(idInput: number) {
     if (idInput > 0) {
+      console.log(idInput,"idInput")
       await this.phieuKdclVtTbTrongThoiGianBaoHanhService.getDetail(idInput)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
@@ -188,6 +189,7 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
             }
             this.dataTableChiTieu = data.phieuKdclDtl
             this.fileDinhKems = data.fileDinhKems;
+            console.log(idInput,"CMM")
           }
         })
         .catch((e) => {
