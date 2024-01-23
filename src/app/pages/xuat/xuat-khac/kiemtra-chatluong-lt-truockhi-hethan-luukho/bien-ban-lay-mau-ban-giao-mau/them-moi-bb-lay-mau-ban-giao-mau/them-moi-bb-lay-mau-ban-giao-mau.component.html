@@ -358,7 +358,7 @@
         <div nz-col nzSpan="8">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nzRequired>
-              Số lượng mẫu hàng kiểm tra (theo quy định trong hợp đồng)
+              Số lượng mẫu hàng kiểm tra (kg)
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-number type="text" nz-input [nzSize]="'small'" formControlName="soLuongMau"
@@ -375,7 +375,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-checkbox-group style="display: inline-grid;" formControlName="ppLayMauList"
-                                 [nzDisabled]="true"></nz-checkbox-group>
+                                 [nzDisabled]="isView"></nz-checkbox-group>
             </nz-form-control>
           </nz-form-item>
         </div>

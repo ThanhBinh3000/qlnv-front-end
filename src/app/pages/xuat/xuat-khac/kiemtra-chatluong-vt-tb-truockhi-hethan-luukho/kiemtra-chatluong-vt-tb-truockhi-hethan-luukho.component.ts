@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Subject} from "rxjs";
 import {UserService} from "../../../../services/user.service";
 import {Globals} from "../../../../shared/globals";
@@ -13,7 +13,6 @@ export class KiemtraChatluongVtTbTruockhiHethanLuukhoComponent implements OnInit
   visibleTab: boolean = true;
   dataInit: any = {};
   isDetail: boolean;
-
   constructor(
     public userService: UserService,
     public globals: Globals

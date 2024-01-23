@@ -1,18 +1,23 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="level1">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)">
-      Toàn bộ danh sách hàng DTQG còn 6 tháng hết hạn lưu kho nhưng chưa có kế hoạch xuất
+    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)"
+        *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_TBDS')">
+    Toàn bộ danh sách hàng DTQG còn 6 tháng hết hạn lưu kho nhưng chưa có kế hoạch xuất
     </li>
-    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)">
+    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)"
+        *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_THDS')">
       Tổng hợp danh sách hàng DTQG còn 6 tháng hết hạn lưu kho nhưng chưa có kế hoạch xuất
     </li>
-    <li [nzSelected]="tabSelected==2" nz-menu-item (click)="selectTab(2)">
+    <li [nzSelected]="tabSelected==2" nz-menu-item (click)="selectTab(2)"
+        *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_BBLMBGM')">
       Biên bản lấy mẫu/bàn giao mẫu
     </li>
-    <li [nzSelected]="tabSelected==3" nz-menu-item (click)="selectTab(3)">
+    <li [nzSelected]="tabSelected==3" nz-menu-item (click)="selectTab(3)"
+        *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_PKNCL')">
       Phiếu kiểm nghiệm chất lượng
     </li>
-    <li [nzSelected]="tabSelected==4" nz-menu-item (click)="selectTab(4)">
+    <li [nzSelected]="tabSelected==4" nz-menu-item (click)="selectTab(4)"
+        *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_BCKQKD')">
       Báo cáo kết quả kiểm định mẫu
     </li>
   </ul>

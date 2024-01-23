@@ -79,7 +79,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="4">
+            <div nz-col nzSpan="3">
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-form-label  [nzNoColon]="true" class="label-color-kh"> Ngày ký QĐ xuất giảm vật tư
@@ -124,16 +124,15 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="4">
+            <div nz-col nzSpan="5">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
                   Đơn vị nhận báo cáo
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-select formControlName="maDviNhan" nzDisabled>
-                    <nz-option *ngFor="let p of dviNhan" [nzValue]="p.maDvi"
-                               [nzLabel]="p.title"></nz-option>
-                  </nz-select>
+                  <nz-form-control [nzErrorTip]="error">
+                    <input nz-input readonly formControlName="maDviNhan"/>
+                  </nz-form-control>
                 </nz-form-control>
               </nz-form-item>
             </div>

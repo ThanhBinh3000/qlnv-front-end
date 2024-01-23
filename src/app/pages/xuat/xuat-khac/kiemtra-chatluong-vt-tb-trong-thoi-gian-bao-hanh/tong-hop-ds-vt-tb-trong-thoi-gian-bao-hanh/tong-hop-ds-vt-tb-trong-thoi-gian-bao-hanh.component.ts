@@ -139,15 +139,15 @@ export class TongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Component i
       loai: this.loaiHhXuatKhac.VT_BH,
     });
     await this.search();
-    console.log( this.dataTable,100000)
     this.flatDataTable = this.dataTable.flatMap(s => {
       if (s.tongHopDtl && s.tongHopDtl.length > 0) {
         return s.tongHopDtl.map(s1 => {
-          delete s.tongHopDtl;
-          s.idVirtual = uuidv4();
-          s.header = s.nam + s.maDanhSach + s.tenDanhSach;
-          this.expandSetString.add(s.idVirtual);
-          return Object.assign(s1, s);
+          const clonedS = { ...s };
+          delete clonedS.tongHopDtl;
+          clonedS.idVirtual = uuidv4();
+          clonedS.header = clonedS.nam + clonedS.maDanhSach + clonedS.tenDanhSach;
+          this.expandSetString.add(clonedS.idVirtual);
+          return Object.assign(s1, clonedS);
         })
       } else return s;
     });
@@ -250,7 +250,6 @@ export class TongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Component i
     this.selectedItem = item;
     this.modalWidth = showDetail ? '80vw' : (item ? '40vw' : '40vw');
     // this.step = item ? '1' : '2';
-    console.log(this.selectedItem,9999)
   }
 
   async changeStep($event: any) {
@@ -264,7 +263,6 @@ export class TongHopDsVtTbTrongThoiGianBaoHanhComponent extends Base2Component i
   }
 
   async changeShowDetail($event: any) {
-    console.log($event)
     this.showModal(true, $event.item, $event.showDetail);
   }
 
