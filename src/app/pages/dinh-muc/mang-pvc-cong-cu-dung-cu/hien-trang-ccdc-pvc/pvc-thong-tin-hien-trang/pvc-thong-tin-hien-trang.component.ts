@@ -69,6 +69,7 @@ export class PvcThongTinHienTrangComponent extends Base2Component implements OnI
       noiDungSuaChua: [null],
       trangThai: [null],
       soDuNamTruoc: [null],
+      dienGiaiChiTiet: [null],
     });
   }
 
