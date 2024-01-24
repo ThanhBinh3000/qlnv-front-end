@@ -125,7 +125,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
         tongSlDaKyHdong: tongSlDaKyHdong,
         tongSlChuaKyHdong: tongSlChuaKyHdong,
       });
-      this.dataTable = data.listHopDongBtt.filter(item => item.maDvi === this.userInfo.MA_DVI);
+      this.dataTable = this.userService.isTongCuc() ? data.listHopDongBtt : data.listHopDongBtt.filter(item => item.maDvi === this.userInfo.MA_DVI);
       if (this.dataTable && this.dataTable.length > 0) {
         await this.selectRow(this.dataTable[0]);
       }
