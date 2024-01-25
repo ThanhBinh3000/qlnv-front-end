@@ -84,6 +84,24 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div class='mt-2' nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label>Diễn giải chi tiết cho lượng hàng</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <textarea rows="3" class="search__input" nz-input formControlName="dienGiaiChiTiet"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div class='mt-2' nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label>Số lượng đề xuất</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-number nz-input formControlName="slDx" [nzSize]="'small'"
+                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+              </nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
       </div>
 <!--    </form>-->
     <div class="header header-green-background mg-t-10">

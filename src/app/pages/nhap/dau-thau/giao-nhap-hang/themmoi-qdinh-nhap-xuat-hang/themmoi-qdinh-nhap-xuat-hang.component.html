@@ -348,7 +348,7 @@
             <td></td>
             <td></td>
             <td>{{ ddNhap.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-            <td></td>
+            <td>{{ ddNhap.bienBanNhapDayKho?.soBienBanNhapDayKho }}</td>
             <td *ngIf="userService.isChiCuc()"></td>
             <td *ngIf="!userService.isChiCuc()"></td>
             <td *ngIf="!userService.isChiCuc()"></td>

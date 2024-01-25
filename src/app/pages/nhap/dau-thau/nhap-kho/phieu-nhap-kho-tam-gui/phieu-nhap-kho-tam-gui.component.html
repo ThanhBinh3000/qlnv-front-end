@@ -54,18 +54,18 @@
     <div class="group-button">
       <h3 style="text-transform: uppercase">Danh sách phiếu tạm giao, nhận hàng chờ kết quả ktcl tại cơ quan chuyên môn </h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteSelect()"
-          *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_XOA')">
-          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-          <span>Xóa</span>
-        </button>
-        <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_EXP')" type="button" class="btn btn-sub"
+<!--        <button type="button" class="btn btn-do" (click)="deleteSelect()"-->
+<!--          *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNKTG_XOA')">-->
+<!--          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>-->
+<!--          <span>Xóa</span>-->
+<!--        </button>-->
+        <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNKTG_EXP')" type="button" class="btn btn-sub"
           (click)="export()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-main"
-          *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_THEM')"
+          *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNKTG_THEM')"
           (click)="redirectToChiTiet(false, 0)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
@@ -104,7 +104,7 @@
               <td class="bold">{{ item.tgianNkho }}</td>
               <td colspan="9"></td>
               <td>
-                <a (click)="redirectToChiTiet(false, 0,item.id)">
+                <a (click)="redirectToChiTiet(false, 0,item.id)"  *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNKTG_THEM')">
                   <i class="fa fa-plus"></i>
                 </a>
               </td>

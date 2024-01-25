@@ -93,6 +93,7 @@ export class BcclGiakeKichkePaletComponent extends Base2Component implements OnI
       let body = this.formData.value;
       body.typeFile = "xlsx";
       body.trangThai = "01";
+      body.maDvi = this.userInfo.MA_DVI;
       body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc
       await this.bcCLuongHangDTQGService.bcclGiaKeKichKe(body).then(async s => {
         this.excelBlob = s;
@@ -124,6 +125,7 @@ export class BcclGiakeKichkePaletComponent extends Base2Component implements OnI
       body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc
       body.typeFile = "pdf";
       body.trangThai = "01";
+      body.maDvi = this.userInfo.MA_DVI;
       await this.bcCLuongHangDTQGService.bcclGiaKeKichKe(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();

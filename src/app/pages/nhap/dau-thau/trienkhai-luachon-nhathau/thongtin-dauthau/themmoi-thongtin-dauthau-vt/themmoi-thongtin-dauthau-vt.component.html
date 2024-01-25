@@ -457,12 +457,13 @@
               </nz-autocomplete>
             </td>
             <td><input nz-input class="money-input" currencyMask [options]="amount" [readonly]="isView" [(ngModel)]="itemRow.donGia"/></td>
-            <td>
-              <nz-input-number
-                [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-                [nzStep]="1" [nzDisabled]="isView" [(ngModel)]="itemRow.mst">
-              </nz-input-number>
-            </td>
+<!--            <td>-->
+<!--              <nz-input-number-->
+<!--                [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"-->
+<!--                [nzStep]="1" [nzDisabled]="isView" [(ngModel)]="itemRow.mst">-->
+<!--              </nz-input-number>-->
+<!--            </td>-->
+            <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow.mst"/></td>
             <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow.diaChi"/></td>
             <td><input nz-input pattern="[0-9]*" [readonly]="isView" [(ngModel)]="itemRow.sdt"/></td>
             <td *ngIf="!isShowFromKq && !daCoKqLcnt">

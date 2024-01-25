@@ -17,6 +17,9 @@ import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import {
+  HopDongBttService
+} from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service";
 
 @Component({
   selector: 'app-chi-tiet-dieu-chinh-ban-truc-tiep',
@@ -38,7 +41,8 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
   dataInput: any[] = [];
   dataInputCache: any[] = [];
   danhSachDieuChinh: any[] = [];
-  fileDinhKemDc: any[] = []
+  fileDinhKemDc: any[] = [];
+  listDataHopDong: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -47,6 +51,7 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService: DanhMucService,
+    private hopDongBttService: HopDongBttService,
     private quyetDinhPdKhBanTrucTiepService: QuyetDinhPdKhBanTrucTiepService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPdKhBanTrucTiepService);
@@ -150,9 +155,10 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
         loaiVthh: this.loaiVthh,
         namKh: this.formData.value.namKh,
         trangThai: STATUS.BAN_HANH,
-        lastest: 1
+        lastest: 1,
       }
       await this.loadDanhSachDieuChinh();
+      await this.loadHopDong();
       const res = await this.quyetDinhPdKhBanTrucTiepService.search(body)
       if (res && res.msg === MESSAGE.SUCCESS) {
         this.danhSachQdPdKeHoach = res.data.content.map(item => ({
@@ -162,9 +168,9 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
         }));
         const idGocSet = new Set(this.danhSachDieuChinh.map(item => item.idGoc));
         this.danhSachQdPdKeHoach = this.danhSachQdPdKeHoach.filter(item => !idGocSet.has(item.id))
-        this.danhSachQdPdKeHoach.forEach(item => {
-          item.children = item.children.filter(item => item.idQdKq === null && item.soQdKq === null && item.idQdNv === null && item.soQdNv === null)
-        })
+        if (this.listDataHopDong.length > 0) {
+          this.validateHopDong();
+        }
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH BÁN TRỰC TIẾP',
@@ -219,17 +225,20 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
         tenCloaiVthh: data.tenCloaiVthh,
         moTaHangHoa: data.moTaHangHoa,
         tchuanCluong: data.tchuanCluong,
-        slDviTsan: data.slDviTsan,
       });
+      if (this.listDataHopDong.length > 0) {
+        this.validateHopDong(data);
+      }
       data.children.forEach(item => {
         item.id = null;
+        item.children = item.children.filter(child => child.children && child.children.length > 0)
         item.children.forEach(child => {
           child.id = null;
           child.children.forEach(s => s.id = null);
         });
       });
-      this.dataTable = data.children.filter(item => item.idQdKq === null && item.soQdKq === null && item.idQdNv === null && item.soQdNv === null)
-      this.dataTableAll = data.children.filter(item => item.idQdKq === null && item.soQdKq === null && item.idQdNv === null && item.soQdNv === null)
+      this.dataTable = data.children
+      this.dataTableAll = data.children
       if (this.dataTable && this.dataTable.length > 0) {
         await this.selectRow(this.dataTable[0]);
       }
@@ -242,6 +251,76 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
+    }
+  }
+
+  async loadHopDong() {
+    try {
+      let body = {
+        namHd: this.formData.value.namKh,
+        loaiVthh: this.loaiVthh,
+        trangThai: STATUS.DA_KY,
+      }
+      const res = await this.hopDongBttService.search(body);
+      if (res && res.msg === MESSAGE.SUCCESS && res.data.content) {
+        this.listDataHopDong = res.data.content.filter(item => item.idHd === null);
+      }
+    } catch (e) {
+      console.error('Error: ', e);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
+  validateHopDong(data?) {
+    const filterChildren = (children) => {
+      const soLuongArray = children.map(item => ({
+        idDtl: item.id,
+        soLuong: this.listDataHopDong
+          .filter(s => s.idChaoGia === item.id)
+          .reduce((prev, cur) => prev + cur.soLuong, 0)
+      }));
+      return children.filter(child => {
+        const correspondingSoLuong = soLuongArray.find(item => item.idDtl === child.id);
+        return correspondingSoLuong && child.tongSoLuong > correspondingSoLuong.soLuong;
+      });
+    };
+    if (data) {
+      this.listDataHopDong = this.listDataHopDong.filter(item => item.soQdPd === data.soQdPd);
+      data.children = filterChildren(data.children);
+      data.children.forEach(item => {
+        const element = this.listDataHopDong.filter(hopDong => hopDong.idChaoGia === item.id);
+        element.forEach(element1 => {
+          if (element1.children && element1.children.length > 0) {
+            element1.children.forEach(element2 => {
+              element2.children.forEach(element3 => {
+                item.children.forEach(child => {
+                  child.children = child.children.filter(s => s.maDviTsan !== element3.maDviTsan
+                    && s.maDiemKho !== element3.maDiemKho
+                    && s.maNhaKho !== element3.maNhaKho
+                    && s.maNganKho !== element3.maNganKho
+                    && s.maLoKho !== element3.maLoKho)
+                })
+              })
+            })
+          }
+          if (element1.xhHopDongBttDviList && element1.xhHopDongBttDviList.length > 0) {
+            element1.xhHopDongBttDviList.forEach(element2 => {
+              item.children.forEach(child => {
+                child.children = child.children.filter(s => s.maDviTsan !== element2.maDviTsan
+                  && s.maDiemKho !== element2.maDiemKho
+                  && s.maNhaKho !== element2.maNhaKho
+                  && s.maNganKho !== element2.maNganKho
+                  && s.maLoKho !== element2.maLoKho)
+              })
+            })
+          }
+        })
+      })
+    } else {
+      this.danhSachQdPdKeHoach.forEach(element => {
+        element.children = filterChildren(element.children);
+      });
     }
   }
 
@@ -322,6 +401,10 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
       const findndexCache = this.dataTableAll.findIndex(child => child.soDxuat == data.soDxuat);
       this.index = findndex
       this.dataInput = this.dataTable[findndex];
+      this.dataTableAll[findndexCache].children = this.dataTableAll[findndexCache].children
+        .filter(child => this.dataTable[findndex].children.some(selectedChild => selectedChild.maDvi === child.maDvi));
+      let soLuongCuc = this.dataTableAll[findndexCache].children.reduce((prev, cur) => prev + cur.soLuongChiCuc, 0);
+      this.dataTableAll[findndexCache].tongSoLuong = soLuongCuc || 0;
       this.dataInputCache = this.dataTableAll[findndexCache];
     }
   }

@@ -3,10 +3,12 @@
 
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected (click)="selectTab(0)">
+    <li nz-menu-item [nzSelected]="tabSelected == 0" (click)="selectTab(0)"
+      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT')">
       Xuất cứu trợ, viện trợ
     </li>
-    <li nz-menu-item (click)="selectTab(1)">
+    <li nz-menu-item [nzSelected]="tabSelected == 1" (click)="selectTab(1)"
+      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC')">
       Xuất thóc gia công
     </li>
   </ul>

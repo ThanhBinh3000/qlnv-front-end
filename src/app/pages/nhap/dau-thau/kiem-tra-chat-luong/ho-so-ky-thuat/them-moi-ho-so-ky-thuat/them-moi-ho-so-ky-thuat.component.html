@@ -163,7 +163,7 @@
                   <nz-form-label nzRequired [nzNoColon]="true"> Số biên bàn lấy mẫu/Bàn giao mẫu
                   </nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
-                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogBbLayMau()">
+                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView?'':openDialogBbLayMau()">
                       <input [readonly]="true" nz-input formControlName="soBbLayMau" readonly/>
                     </nz-input-group>
                   </nz-form-control>
@@ -285,7 +285,7 @@
             <th>File đính kèm</th>
             <th width="100px"></th>
           </tr>
-          <tr>
+          <tr *ngIf="!isView">
             <th></th>
             <th><input nz-input [(ngModel)]="hoSoRow.tenHoSo"/></th>
             <th>
@@ -333,10 +333,10 @@
                 <a (click)="downloadFile(item.fileDinhKem[0])">
                   <i class="fa fa-download" title="Tải tài liệu"></i>
                 </a>
-                <a (click)="suaHoSo(i)">
+                <a (click)="suaHoSo(i)" *ngIf="!isView">
                   <i class="fa fa-edit" title="Chỉnh sửa"></i>
                 </a>
-                <a (click)="xoaHoSo(i)">
+                <a (click)="xoaHoSo(i)" *ngIf="!isView">
                   <i class="fa fa-trash-o do" title="Xóa"></i>
                 </a>
               </td>
@@ -400,11 +400,11 @@
                  (click)="redirectToBienBan(false,item)">
                 <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
-              <a *ngIf="formData.value.id > 0 && item.trangThai != STATUS.DA_KY"
+              <a *ngIf="formData.value.id > 0 && item.trangThai != STATUS.DA_KY && !isView"
                  (click)="redirectToBienBan(false,item)">
                 <i class="fa fa-pencil" title="Sửa"></i>
               </a>
-              <a *ngIf="formData.value.id > 0 && item.id && item.trangThai == STATUS.DU_THAO "
+              <a *ngIf="formData.value.id > 0 && item.id && item.trangThai == STATUS.DU_THAO && !isView"
                  (click)="redirectToBienBan(false,item)">
                 <i class="fa fa-trash do"></i>
               </a>

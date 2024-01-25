@@ -503,6 +503,11 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       this.spinner.hide();
       return;
     }
+    if((this.rowItem.nvChuyenMonTc + this.rowItem.ttCaNhanTc + this.rowItem.tcDieuHanhTc + this.rowItem.nvChuyenMonKv + this.rowItem.ttCaNhanKv + this.rowItem.tcDieuHanhKv) > this.rowItem.tongDinhMucTc) {
+      this.notification.error(MESSAGE.ERROR, 'Tổng định mức chi của Cục DTNN KV vươt quá số lượng cho phép.');
+      this.spinner.hide();
+      return;
+    }
     if (this.rowItem.apDungTai) {
       let apDungTai = this.rowItem.apDungTai ? this.rowItem.apDungTai.toString() : null;
       if (apDungTai === '') {

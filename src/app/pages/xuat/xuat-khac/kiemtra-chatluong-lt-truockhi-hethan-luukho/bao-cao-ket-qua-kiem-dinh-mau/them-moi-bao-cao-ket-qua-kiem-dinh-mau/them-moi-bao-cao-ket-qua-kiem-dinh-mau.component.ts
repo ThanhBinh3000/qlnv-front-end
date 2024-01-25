@@ -84,7 +84,10 @@ export class ThemMoiBaoCaoKetQuaKiemDinhMauComponent extends Base2Component impl
   async ngOnInit() {
     await this.spinner.show();
     try {
-      this.maHauTo = '/' + this.userInfo.MA_QD;
+      this.maHauTo = '/' + this.userInfo.MA_DVI+'-KTBQ';
+      this.formData.patchValue({
+        tenDviNhan: 'Vụ Khoa học công nghệ bảo quản - Tổng cục DTNN',
+      })
       await Promise.all([
         this.loadMaDs(),
       ]);

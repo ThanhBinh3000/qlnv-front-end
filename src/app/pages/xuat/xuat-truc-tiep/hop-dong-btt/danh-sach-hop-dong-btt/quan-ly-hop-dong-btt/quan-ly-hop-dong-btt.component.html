@@ -5,7 +5,7 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH
+      <button *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH && !isDieuChinh
             && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_HDPL_THEM') : userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_HDPL_THEM'))"
               type="button"
               class="btn btn-sub xanh-nhat" (click)="pheDuyet()">
@@ -330,7 +330,7 @@
             <span> DANH SÁCH HỢP ĐỒNG CẦN KÝ </span>
           </div>
         </div>
-        <div class="buttons" *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH
+        <div class="buttons" *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH && !isDieuChinh
         && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_HDPL_THEM') :
             userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_HDPL_THEM'))">
           <button type="button" class="btn btn-main"
@@ -358,7 +358,7 @@
             <th class="text-left"> Trạng thái HĐ</th>
             <th class="text-left"> Số QĐ giao NV XH</th>
             <th class="text-left"> Trạng thái XH</th>
-            <th class="text-center wrap" nzWidth="100px"> Hành động</th>
+            <th class="text-center wrap" nzWidth="100px" *ngIf="!isDieuChinh"> Hành động</th>
           </tr>
           </thead>
           <tbody>
@@ -381,7 +381,7 @@
                 </a>
               </td>
               <td class="text-left">{{data.tenTrangThaiXh}}</td>
-              <td class="text-center">
+              <td class="text-center" *ngIf="!isDieuChinh">
                 <a *ngIf="data.id > 0"
                    (click)="xemTruoc(data.id)">
                   <i class="icon htvbdh_tcdt_tuchoi" title="Xem trước"></i>
@@ -416,7 +416,7 @@
               <th></th>
               <th></th>
               <th></th>
-              <th></th>
+              <th *ngIf="!isDieuChinh"></th>
             </tr>
             </tfoot>
           </ng-container>

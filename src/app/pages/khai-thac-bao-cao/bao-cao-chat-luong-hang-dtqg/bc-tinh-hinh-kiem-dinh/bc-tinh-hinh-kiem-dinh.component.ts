@@ -93,6 +93,7 @@ export class BcTinhHinhKiemDinhComponent extends Base2Component implements OnIni
       let body = this.formData.value;
       body.typeFile = "xlsx";
       body.trangThai = "01";
+      body.maDvi = this.userInfo.MA_DVI;
       body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc
       await this.bcCLuongHangDTQGService.bcclTinhHinhKiemDinh(body).then(async s => {
         this.excelBlob = s;
@@ -122,6 +123,7 @@ export class BcTinhHinhKiemDinhComponent extends Base2Component implements OnIni
       this.spinner.show();
       let body = this.formData.value;
       body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc
+      body.maDvi = this.userInfo.MA_DVI;
       body.typeFile = "pdf";
       body.trangThai = "01";
       await this.bcCLuongHangDTQGService.bcclTinhHinhKiemDinh(body).then(async s => {

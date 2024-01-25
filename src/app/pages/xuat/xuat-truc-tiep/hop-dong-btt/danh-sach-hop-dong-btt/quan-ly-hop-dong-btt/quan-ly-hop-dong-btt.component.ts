@@ -25,6 +25,7 @@ import {PREVIEW} from "../../../../../../constants/fileType";
 export class QuanLyHopDongBttComponent extends Base2Component implements OnInit {
   @Input() idInput: number;
   @Input() loaiVthh: string;
+  @Input() isDieuChinh: boolean;
   @Output() showListEvent = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG
   TRUC_TIEP = THONG_TIN_BAN_TRUC_TIEP
@@ -125,7 +126,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
         tongSlDaKyHdong: tongSlDaKyHdong,
         tongSlChuaKyHdong: tongSlChuaKyHdong,
       });
-      this.dataTable = data.listHopDongBtt.filter(item => item.maDvi === this.userInfo.MA_DVI);
+      this.dataTable = this.userService.isTongCuc() ? data.listHopDongBtt : data.listHopDongBtt.filter(item => item.maDvi === this.userInfo.MA_DVI);
       if (this.dataTable && this.dataTable.length > 0) {
         await this.selectRow(this.dataTable[0]);
       }

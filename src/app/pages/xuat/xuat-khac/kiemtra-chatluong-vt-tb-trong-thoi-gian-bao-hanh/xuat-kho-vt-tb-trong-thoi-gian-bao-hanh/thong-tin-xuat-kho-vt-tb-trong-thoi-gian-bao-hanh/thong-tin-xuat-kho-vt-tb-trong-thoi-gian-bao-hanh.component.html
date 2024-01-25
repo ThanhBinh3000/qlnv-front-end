@@ -57,7 +57,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Loại phiếu xuất</nz-form-label>
             <nz-form-control>
-              <nz-radio-group formControlName="loai" [nzDisabled]="isView" nzName="radiogroup">
+              <nz-radio-group formControlName="loai" [nzDisabled]="isView" nzName="radiogroup" (ngModelChange)="changeLoai($event)">
                 <label nz-radio nzValue="XUAT_MAU"> Xuất hàng để lấy mẫu</label>
                 <label nz-radio nzValue="XUAT_HUY"> Xuất mẫu bị hủy khỏi kho</label>
                 <label nz-radio nzValue="XUAT_BH"> Xuất để bảo hành</label>
@@ -316,7 +316,7 @@
         <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
-              Họ và tên người giao hàng
+              Họ và tên người nhận hàng
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
@@ -340,7 +340,7 @@
         <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
-              Đơn vị/Công ty (của người giao hàng)
+              Đơn vị/Công ty (của người nhận hàng)
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>

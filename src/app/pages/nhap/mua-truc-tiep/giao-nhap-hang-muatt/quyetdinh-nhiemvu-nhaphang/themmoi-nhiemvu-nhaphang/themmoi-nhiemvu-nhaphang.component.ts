@@ -772,6 +772,18 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
     }
   }
 
+  calcTongByName(index) {
+    if (this.dataTable) {
+      let sum = 0;
+      const sumChild = this.dataTable[index].children.reduce((prev, cur) => {
+        prev += cur.soLuong;
+        return prev;
+      }, 0);
+      sum += sumChild
+      return sum;
+    }
+  }
+
   calcTongChil() {
     if (this.dataTable) {
       let sum = 0;
@@ -952,6 +964,7 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
     }
     let checkTable = false;
     let msg = '';
+    console.log(this.dataTable, "1")
     this.dataTable.forEach(item => {
       item.trangThai = statusSave
       item.children.forEach(x =>{
@@ -965,10 +978,11 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
     }else{
       msg = 'Bạn có lưu cập nhật'
     }
-    // if(checkTable){
-    //   this.notification.error(MESSAGE.ERROR, 'Bạn phải hoàn thành cập nhật lô kho');
-    //   return;
-    // }
+    console.log(this.dataTable, "2")
+    if(checkTable){
+      this.notification.error(MESSAGE.ERROR, 'Bạn phải hoàn thành cập nhật lô kho');
+      return;
+    }
 
     this.modal.confirm({
       nzClosable: false,

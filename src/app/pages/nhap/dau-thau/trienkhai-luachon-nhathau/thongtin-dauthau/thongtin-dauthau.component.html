@@ -19,35 +19,35 @@
           <input class="search__input" placeholder="Đơn vị" nz-input [(ngModel)]="searchFilter.maDvi" />
         </div> -->
         <div nz-col nzSpan="5">
-          <label class="search__label">Số KH/đề xuất</label>
+          <label class="search__label">Số công văn/đề xuất</label>
           <input class="search__input" nz-input [(ngModel)]="searchFilter.soQd" />
         </div>
         <div nz-col nzSpan="5">
           <label class="search__label">Số QĐ PD KHLCNT</label>
           <input class="search__input" nz-input [(ngModel)]="searchFilter.soQdPdKhlcnt" />
         </div>
-        <div nz-col nzSpan="5">
-          <label class="search__label">Số QĐ PD KQLCNT</label>
-          <input class="search__input" nz-input [(ngModel)]="searchFilter.soQdPdKqlcnt" />
-        </div>
+<!--        <div nz-col nzSpan="5">-->
+<!--          <label class="search__label">Số QĐ PD KQLCNT</label>-->
+<!--          <input class="search__input" nz-input [(ngModel)]="searchFilter.soQdPdKqlcnt" />-->
+<!--        </div>-->
         <!--        <div nz-col nzSpan="5">-->
         <!--          <label class="search__label">Ngày QĐ PD KQLCNT</label>-->
         <!--          <nz-range-picker [(ngModel)]="searchFilter.ngayQd" nzFormat="dd/MM/yyyy"></nz-range-picker>-->
         <!--        </div>-->
-        <div nz-col nzSpan="5">
-          <label class="search__label">Ngày QĐ PD KQLCNT</label>
-          <div nz-row [nzGutter]="24">
-            <div nz-col nzSpan="12" class="cus-start-date">
-              <nz-date-picker [nzDisabledDate]="disabledTuNgayKy" nzFormat="dd/MM/yyyy" [(ngModel)]="tuNgayQd"
-                nzPlaceHolder="Ngày bắt đầu">
-              </nz-date-picker>
-            </div>
-            <div nz-col nzSpan="12" class="cus-end-date">
-              <nz-date-picker [nzDisabledDate]="disabledDenNgayKy" nzFormat="dd/MM/yyyy" [(ngModel)]="denNgayQd"
-                nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
-            </div>
-          </div>
-        </div>
+<!--        <div nz-col nzSpan="5">-->
+<!--          <label class="search__label">Ngày QĐ PD KQLCNT</label>-->
+<!--          <div nz-row [nzGutter]="24">-->
+<!--            <div nz-col nzSpan="12" class="cus-start-date">-->
+<!--              <nz-date-picker [nzDisabledDate]="disabledTuNgayKy" nzFormat="dd/MM/yyyy" [(ngModel)]="tuNgayQd"-->
+<!--                nzPlaceHolder="Ngày bắt đầu">-->
+<!--              </nz-date-picker>-->
+<!--            </div>-->
+<!--            <div nz-col nzSpan="12" class="cus-end-date">-->
+<!--              <nz-date-picker [nzDisabledDate]="disabledDenNgayKy" nzFormat="dd/MM/yyyy" [(ngModel)]="denNgayQd"-->
+<!--                nzPlaceHolder="Ngày kết thúc"></nz-date-picker>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
       </div>
       <div class="cangiua group-button-search">
         <button nz-button class="search__button--clear" (click)="clearFilter()">
@@ -83,8 +83,8 @@
             <th>Số công văn/đề xuất</th>
             <th>Số QĐ PD/ĐC KHLCNT</th>
             <th>Lần điều chỉnh</th>
-            <th>Số QĐ PD KQLCNT</th>
-            <th>Ngày QĐ PD KQLCNT</th>
+<!--            <th>Số QĐ PD KQLCNT</th>-->
+<!--            <th>Ngày QĐ PD KQLCNT</th>-->
             <th>Tổng số gói thầu</th>
             <th>Số gói thầu đã trúng </th>
             <th>Số gói thầu đã trượt</th>
@@ -124,25 +124,25 @@
                        (input)="filterInTable('lanDieuChinh',filterTable.lanDieuChinh)" size="small" />
               </nz-input-group>
             </th>
-            <th>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdPdKqLcnt"
-                  (input)="filterInTable('soQdPdKqLcnt',filterTable.soQdPdKqLcnt)" size="small" />
-              </nz-input-group>
-            </th>
-            <th *ngIf="!loaiVthh.startsWith('02')">
-              <nz-input-group>
-                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm"
-                  [(ngModel)]="filterTable.ngayKyQdPduyetKqlcntHdr"
-                  (ngModelChange)="filterInTable('ngayKyQdPduyetKqlcntHdr', convertDateToString(filterTable.ngayKyQdPduyetKqlcntHdr))"></nz-date-picker>
-              </nz-input-group>
-            </th>
-            <th *ngIf="loaiVthh.startsWith('02')">
-              <nz-input-group>
-                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.ngayPduyet"
-                  (ngModelChange)="filterInTable('ngayPduyet', convertDateToString(filterTable.ngayPduyet))"></nz-date-picker>
-              </nz-input-group>
-            </th>
+<!--            <th>-->
+<!--              <nz-input-group>-->
+<!--                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdPdKqLcnt"-->
+<!--                  (input)="filterInTable('soQdPdKqLcnt',filterTable.soQdPdKqLcnt)" size="small" />-->
+<!--              </nz-input-group>-->
+<!--            </th>-->
+<!--            <th *ngIf="!loaiVthh.startsWith('02')">-->
+<!--              <nz-input-group>-->
+<!--                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm"-->
+<!--                  [(ngModel)]="filterTable.ngayKyQdPduyetKqlcntHdr"-->
+<!--                  (ngModelChange)="filterInTable('ngayKyQdPduyetKqlcntHdr', convertDateToString(filterTable.ngayKyQdPduyetKqlcntHdr))"></nz-date-picker>-->
+<!--              </nz-input-group>-->
+<!--            </th>-->
+<!--            <th *ngIf="loaiVthh.startsWith('02')">-->
+<!--              <nz-input-group>-->
+<!--                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.ngayPduyet"-->
+<!--                  (ngModelChange)="filterInTable('ngayPduyet', convertDateToString(filterTable.ngayPduyet))"></nz-date-picker>-->
+<!--              </nz-input-group>-->
+<!--            </th>-->
             <th>
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soGthau"
@@ -188,7 +188,7 @@
             <th>
               <nz-input-group>
                 <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
-                  (ngModelChange)="filterInTable('trangThai',filterTable.trangThai)">
+                  (ngModelChange)="filterInTable(loaiVthh.startsWith('02') ?'trangThaiDt': 'trangThai',filterTable.trangThai)">
                   <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
                 </nz-select>
               </nz-input-group>
@@ -210,17 +210,17 @@
                 {{ data.soDxuat ? data.soDxuat : data.soTrHdr }}
               </a>
             </td>
-            <td *ngIf="loaiVthh.startsWith('02')"><a style="color: blue">{{ data.dieuChinh ? data.soQdDc :data.hhQdKhlcntHdr?.soQd}}</a></td>
+            <td *ngIf="loaiVthh.startsWith('02')"><a style="color: blue">{{ data.dieuChinh ? data.soQdDc :data.soQd}}</a></td>
             <td *ngIf="loaiVthh.startsWith('02')">{{ data.dchinhDxKhLcntHdr?.lanDieuChinh}}</td>
             <td *ngIf="!loaiVthh.startsWith('02')"><a style="color: blue">{{ data.hhQdKhlcntHdr?.soQd }}</a></td>
             <td *ngIf="!loaiVthh.startsWith('02')">{{ data.lanDieuChinh }}</td>
-            <td>
-              <a style="color: blue; font-weight: bold;"
-                (click)="data.hhQdPduyetKqlcntHdr ? openQdPdKqKhlcntModal(data.hhQdPduyetKqlcntHdr.id) : openQdPdKqKhlcntModal(null, data.soQdPdKqLcnt)">
-                {{ data.hhQdPduyetKqlcntHdr ? data.hhQdPduyetKqlcntHdr.soQd : data.soQdPdKqLcnt }}
-              </a>
-            </td>
-            <td>{{ (data.hhQdPduyetKqlcntHdr?.ngayKy) | date: 'dd/MM/yyyy'}}</td>
+<!--            <td>-->
+<!--              <a style="color: blue; font-weight: bold;"-->
+<!--                (click)="data.hhQdPduyetKqlcntHdr ? openQdPdKqKhlcntModal(data.hhQdPduyetKqlcntHdr.id) : openQdPdKqKhlcntModal(null, data.soQdPdKqLcnt)">-->
+<!--                {{ data.hhQdPduyetKqlcntHdr ? data.hhQdPduyetKqlcntHdr.soQd : data.soQdPdKqLcnt }}-->
+<!--              </a>-->
+<!--            </td>-->
+<!--            <td>{{ (data.hhQdPduyetKqlcntHdr?.ngayKy) | date: 'dd/MM/yyyy'}}</td>-->
             <td>{{ data.soGthau }}</td>
             <td>{{ data.soGthauTrung}}</td>
             <td>{{ data.soGthauTruot}}</td>
