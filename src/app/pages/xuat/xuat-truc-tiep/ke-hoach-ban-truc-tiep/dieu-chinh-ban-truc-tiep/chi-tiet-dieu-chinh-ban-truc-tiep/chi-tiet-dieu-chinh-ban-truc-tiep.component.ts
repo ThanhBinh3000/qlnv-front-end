@@ -225,7 +225,6 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
         tenCloaiVthh: data.tenCloaiVthh,
         moTaHangHoa: data.moTaHangHoa,
         tchuanCluong: data.tchuanCluong,
-        slDviTsan: data.slDviTsan,
       });
       if (this.listDataHopDong.length > 0) {
         this.validateHopDong(data);
