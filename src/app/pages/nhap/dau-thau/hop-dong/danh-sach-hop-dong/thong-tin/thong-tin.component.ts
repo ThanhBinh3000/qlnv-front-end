@@ -553,10 +553,10 @@ export class ThongTinComponent implements OnInit, OnChanges {
     async bindingDataKqLcntVatTu(data, idGthau?) {
       this.namKhoach = data.namKhoach;
       if (data.hhQdKhlcntHdr.dchinhDxKhLcntHdr) {
-        this.listGoiThau = data.hhQdKhlcntHdr.dchinhDxKhLcntHdr.dsGthau.filter(item => item.trangThaiDt == STATUS.THANH_CONG && (data.listHopDong.map(e => e.idGoiThau).indexOf(item.id) < 0));
+        this.listGoiThau = data.hhQdKhlcntHdr.dchinhDxKhLcntHdr.dsGthau.filter(item => item.trangThaiDt == STATUS.THANH_CONG && (data.listHopDong.map(e => e.idGoiThau).indexOf(item.id) < 0) && data.listIdGthau.includes(item.id));
         this.isDieuChinh = true;
       } else {
-        this.listGoiThau = data.hhQdKhlcntHdr.dsGthau.filter(item => item.trangThaiDt == STATUS.THANH_CONG && (data.listHopDong.map(e => e.idGoiThau).indexOf(item.id) < 0));
+        this.listGoiThau = data.hhQdKhlcntHdr.dsGthau.filter(item => item.trangThaiDt == STATUS.THANH_CONG && (data.listHopDong.map(e => e.idGoiThau).indexOf(item.id) < 0) && data.listIdGthau.includes(item.id));
       }
       this.formData.patchValue({
         soQdKqLcnt: data.soQd,

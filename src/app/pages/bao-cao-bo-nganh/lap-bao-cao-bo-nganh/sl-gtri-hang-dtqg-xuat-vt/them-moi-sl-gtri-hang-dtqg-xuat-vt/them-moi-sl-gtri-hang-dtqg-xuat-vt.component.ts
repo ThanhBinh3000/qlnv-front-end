@@ -61,6 +61,8 @@ export class ThemMoiSlGtriHangDtqgXuatVtComponent extends Base2Component impleme
     max: 1000000000000,
     inputMode: CurrencyMaskInputMode.NATURAL,
   }
+  listDsDvi: any;
+  tenBoNganh: any;
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -94,6 +96,9 @@ export class ThemMoiSlGtriHangDtqgXuatVtComponent extends Base2Component impleme
   async ngOnInit() {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
+    await Promise.all([
+      this.layTatCaDonViByLevel(),
+    ]);
     if (this.idInput != null) {
       await this.loadChiTiet(this.idInput)
     } else {
@@ -167,6 +172,9 @@ export class ThemMoiSlGtriHangDtqgXuatVtComponent extends Base2Component impleme
       "hdr" : this.formData.value,
       "detail": this.listDataGroup
     };
+    if(!this.userService.isTongCuc()){
+      body.hdr.maDonViGui = this.userInfo.MA_DVI
+    }
     let res = null;
     if (this.formData.get("id").value) {
       res = await this.bcBnTt108Service.update(body);
@@ -382,6 +390,21 @@ export class ThemMoiSlGtriHangDtqgXuatVtComponent extends Base2Component impleme
         sum += this.nvl(item.gtriTong);
       })
       return sum;
+    }
+  }
+  async handleChoose(event) {
+    if (event != null) {
+      let data = this.listDsDvi.find(x => x.maDvi == event)
+      this.formData.get('tenDonViGui').setValue(data?.tenDvi);
+    }
+  }
+
+  async layTatCaDonViByLevel() {
+    let res = await this.donViService.layTatCaDonViByLevel(0);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listDsDvi = res.data
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 }

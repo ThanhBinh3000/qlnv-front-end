@@ -61,6 +61,8 @@ export class ThemMoiTiepNhanHangDtqgComponent extends Base2Component implements 
     max: 1000000000000,
     inputMode: CurrencyMaskInputMode.NATURAL,
   }
+  listDsDvi: any;
+  tenBoNganh: any;
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -94,6 +96,9 @@ export class ThemMoiTiepNhanHangDtqgComponent extends Base2Component implements 
   async ngOnInit() {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
+    await Promise.all([
+      this.layTatCaDonViByLevel(),
+    ]);
     if (this.idInput != null) {
       await this.loadChiTiet(this.idInput)
     } else {
@@ -101,8 +106,6 @@ export class ThemMoiTiepNhanHangDtqgComponent extends Base2Component implements 
         this.loadDsDonVi()
       ]);
       this.formData.patchValue({
-        tenDonViGui: this.userInfo.TEN_DVI,
-        maDonViGui: this.userInfo.MA_DVI,
         tenDonViNhan: this.dsDonVi[0].tenDvi,
         maDonViNhan: this.dsDonVi[0].maDvi
       });
@@ -167,6 +170,9 @@ export class ThemMoiTiepNhanHangDtqgComponent extends Base2Component implements 
       "hdr" : this.formData.value,
       "detail": this.listDataGroup
     };
+    if(!this.userService.isTongCuc()){
+      body.hdr.maDonViGui = this.userInfo.MA_DVI
+    }
     let res = null;
     if (this.formData.get("id").value) {
       res = await this.bcBnTt108Service.update(body);
@@ -319,6 +325,21 @@ export class ThemMoiTiepNhanHangDtqgComponent extends Base2Component implements 
     await this.onFileSelected(event);
     if(this.dataImport.length > 0){
       this.listDataGroup = this.dataImport
+    }
+  }
+  async handleChoose(event) {
+    if(event != null) {
+      let data = this.listDsDvi.find(x => x.maDvi == event)
+      this.formData.get('tenDonViGui').setValue(data?.tenDvi);
+    }
+  }
+
+  async layTatCaDonViByLevel() {
+    let res = await this.donViService.layTatCaDonViByLevel(0);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listDsDvi = res.data
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 }

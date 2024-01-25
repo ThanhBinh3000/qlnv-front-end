@@ -96,6 +96,11 @@ export class NguonHinhThanhDtqgComponent extends Base2Component implements OnIni
       denNgayKyGui: this.denNgayKyGui != null ? dayjs(this.denNgayKyGui).format('YYYY-MM-DD') + " 23:59:59" : null,
     })
     let body = this.formData.value;
+    if (!this.userService.isTongCuc()) {
+      body.maDvi = this.userInfo.MA_DVI
+    }else{
+      body.maDvi = null
+    }
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1
