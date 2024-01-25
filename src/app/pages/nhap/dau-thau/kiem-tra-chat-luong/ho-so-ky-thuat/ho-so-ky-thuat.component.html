@@ -76,19 +76,19 @@
               <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                 [nzIndeterminate]="indeterminate"></label>
             </th>
-            <th width="60px">STT</th>
-            <th width="161px">Số hồ sơ kỹ thuật</th>
-            <th width="161px">Ngày tạo HSKT</th>
-            <th>Điểm kho</th>
-            <th>Ngăn/Lô kho</th>
-            <th width="161px">Số BB LM/BGM</th>
-            <th width="161px">Số QĐ giao NVNH</th>
-            <th width="161px">Số hợp đồng</th>
-            <th>Số BB kiểm tra ngoại quan</th>
-            <th>Số BB kiểm tra vận hành</th>
-            <th>Số BB kiểm tra HSKT</th>
-            <th width="161px">Trạng thái</th>
-            <th width="140px">Hành động</th>
+            <th width="60px" class="text-center">STT</th>
+            <th class="text-center" width="161px">Số hồ sơ kỹ thuật</th>
+            <th class="text-center" width="161px">Ngày tạo HSKT</th>
+            <th class="text-center">Điểm kho</th>
+            <th class="text-center">Ngăn/Lô kho</th>
+            <th class="text-center" width="161px">Số BB LM/BGM</th>
+            <th class="text-center" width="161px">Số QĐ giao NVNH</th>
+            <th class="text-center" width="161px">Số hợp đồng</th>
+            <th class="text-center">Số BB kiểm tra ngoại quan</th>
+            <th class="text-center">Số BB kiểm tra vận hành</th>
+            <th class="text-center">Số BB kiểm tra HSKT</th>
+            <th class="text-center" width="161px">Trạng thái</th>
+            <th class="text-center" width="140px">Hành động</th>
           </tr>
           <tr class="search-table">
             <th></th>
@@ -161,7 +161,7 @@
             </td>
             <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
             <td>{{data.soHoSoKyThuat}}</td>
-            <td>{{data.ngayTao | date : 'dd/MM/yyyy'}}</td>
+            <td class="text-center">{{data.ngayTao | date : 'dd/MM/yyyy'}}</td>
             <td>{{data.bienBanLayMau?.tenDiemKho}}</td>
             <td>{{data.bienBanLayMau?.tenNganLoKho}}</td>
             <td>{{data.soBbLayMau}}</td>

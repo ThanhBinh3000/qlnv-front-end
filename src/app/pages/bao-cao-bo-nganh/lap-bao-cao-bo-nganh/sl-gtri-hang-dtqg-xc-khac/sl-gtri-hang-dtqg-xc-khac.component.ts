@@ -100,6 +100,11 @@ export class SlGtriHangDtqgXcKhacComponent extends Base2Component implements OnI
       limit: this.pageSize,
       page: this.page - 1
     }
+    if (!this.userService.isTongCuc()) {
+      body.maDvi = this.userInfo.MA_DVI
+    }else{
+      body.maDvi = null
+    }
     let res = await this.bcBnTt108Service.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
