@@ -61,14 +61,13 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6">
+        <div nz-col *ngIf="userService.isTongCuc()" [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Đơn vị gửi báo cáo</nz-form-label>
-            <nz-form-control>
-              <nz-input-group>
-                <input nz-input readonly formControlName="tenDonViGui" />
-              </nz-input-group>
-            </nz-form-control>
+            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Đơn vị gửi báo cáo
+            </nz-form-label>
+            <nz-select formControlName="maDonViGui" (ngModelChange)="handleChoose($event)" [nzDisabled]="isView">
+              <nz-option *ngFor="let p of listDsDvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
+            </nz-select>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="6">
@@ -341,7 +340,7 @@
               <td><input *ngIf="!nhomMatHang.coNhieuMatHang" nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].dvt" /></td>
               <td>
                 <input class="money-input" currencyMask [options]="amount" [min]="0"
-                       [(ngModel)]="itemRowNhomMhEdit[i][y].slLuyKeTn"/>
+                       [(ngModel)]="itemRowNhomMhEdit[i][y].slTonDauNam"/>
               </td>
               <td>
                 <input class="money-input" currencyMask [options]="amount" [min]="0"
@@ -454,7 +453,7 @@
                 <td><input nz-input [(ngModel)]="itemRowMatHangEdit[i][y][z].dvt" /></td>
                 <td>
                   <input class="money-input" currencyMask [options]="amount" [min]="0"
-                         [(ngModel)]="itemRowMatHangEdit[i][y][z].slLuyKeTn"/>
+                         [(ngModel)]="itemRowMatHangEdit[i][y][z].slTonDauNam"/>
                 </td>
                 <td>
                   <input class="money-input" currencyMask [options]="amount" [min]="0"
@@ -534,7 +533,7 @@
             <td><input nz-input [(ngModel)]="itemRowMatHang[i][y].dvt" /></td>
             <td>
               <input class="money-input" currencyMask [options]="amount" [min]="0"
-                     [(ngModel)]="itemRowMatHang[i][y].slLuyKeTn"/>
+                     [(ngModel)]="itemRowMatHang[i][y].slTonDauNam"/>
             </td>
             <td>
               <input class="money-input" currencyMask [options]="amount" [min]="0"

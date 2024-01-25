@@ -279,10 +279,9 @@ export class ThongTinPhieuNhapKhoTamGuiComponent extends Base2Component implemen
         } else {
           if (this.formData.get('id').value) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.back();
           } else {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            this.back();
+            this.formData.get('id').setValue(res.data.id)
           }
           await this.spinner.hide();
         }
