@@ -74,7 +74,7 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
         duCo: [],
         idCanCu: [],
         soCanCu: [],
-        soLanLm: ['', [Validators.required]],
+        soLanLm: ['',[Validators.required]],
         maDiaDiem: ['', [Validators.required]],
         ngayKyCanCu: [],
         maNhaKho: [],
@@ -445,4 +445,11 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
     return convertTienTobangChu(tien);
   }
 
+  changeLoai(event: any) {
+    if( event == 'XUAT_MAU'){
+      this.formData.controls['soLanLm'].setValidators([Validators.required]);
+    }else {
+      this.formData.controls['soLanLm'].clearValidators();
+    }
+  }
 }

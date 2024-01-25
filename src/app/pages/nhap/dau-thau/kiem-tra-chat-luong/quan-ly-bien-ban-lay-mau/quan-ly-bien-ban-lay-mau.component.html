@@ -69,11 +69,13 @@
             <th>Năm kế hoạch</th>
             <th>Thời hạn NH trước ngày</th>
             <th>Điểm kho</th>
-            <th>Lô kho </th>
+            <th>Ngăn/Lô kho </th>
             <th>Số BB LM/BGM</th>
             <th>Ngày lấy mẫu</th>
-            <th>Số BB nhập đầy kho</th>
-            <th>Ngày nhập đầy kho</th>
+            <th *ngIf="!loaiVthh.startsWith('02')">Số BB nhập đầy kho</th>
+            <th *ngIf="!loaiVthh.startsWith('02')">Ngày nhập đầy kho</th>
+            <th *ngIf="loaiVthh.startsWith('02')">Số BB nhập đầy kho</th>
+            <th *ngIf="loaiVthh.startsWith('02')">Ngày nhập đầy kho</th>
             <th>Trạng thái</th>
             <th>Hành động</th>
           </tr>

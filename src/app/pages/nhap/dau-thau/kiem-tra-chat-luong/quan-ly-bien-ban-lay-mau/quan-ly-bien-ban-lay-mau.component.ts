@@ -308,7 +308,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
           loaiVthh: this.loaiVthh,
         };
         this.bienBanLayMauService
-          .exportList(body)
+          .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-bien-ban-lay-mau.xlsx'),
           );

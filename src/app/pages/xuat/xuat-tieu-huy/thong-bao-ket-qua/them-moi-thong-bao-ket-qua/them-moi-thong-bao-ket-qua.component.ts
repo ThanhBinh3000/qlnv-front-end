@@ -55,15 +55,33 @@ export class ThemMoiThongBaoKetQuaComponent extends Base3Component implements On
       lyDo: [null, [Validators.required]],
     });
     this.symbol = '/TCDT-QLHDT';
+    if (!localStorage.getItem('foo')) {
+      localStorage.setItem('foo', 'no reload')
+      location.reload()
+    } else {
+      localStorage.removeItem('foo')
+    }
   }
 
   async ngOnInit() {
     this.spinner.show();
     await Promise.all([
       await this.getId(),
+      await this.getIdHoSo(),
       await this.initForm()
     ])
     this.spinner.hide();
+  }
+
+  idHoSo : number;
+  getIdHoSo() {
+    let idHoSo = this.route.snapshot.paramMap.get('idHoSo');
+    if (idHoSo && +idHoSo > 0) {
+      this.idHoSo = +idHoSo
+    }
+    if(this.idHoSo){
+      this.getDetailHoSo(this.idHoSo);
+    }
   }
 
   async initForm() {
@@ -123,7 +141,7 @@ export class ThemMoiThongBaoKetQuaComponent extends Base3Component implements On
         this.formData.patchValue({
           soHoSo: dataHs.soHoSo,
           idHoSo: dataHs.id,
-        })
+        });
       }
     });
   }

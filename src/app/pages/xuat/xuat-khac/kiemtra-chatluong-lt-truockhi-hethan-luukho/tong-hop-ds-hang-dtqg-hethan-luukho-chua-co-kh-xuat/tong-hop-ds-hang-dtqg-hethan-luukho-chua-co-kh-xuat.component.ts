@@ -14,14 +14,13 @@ import {MESSAGE} from "../../../../../constants/message";
 import {
   KiemtraChatluongLtTruockhiHethanLuukhoComponent
 } from "../kiemtra-chatluong-lt-truockhi-hethan-luukho.component";
-import {chain, isEmpty} from "lodash";
+import {chain, isEmpty,cloneDeep} from "lodash";
 import {v4 as uuidv4} from "uuid";
 import {
   TongHopDanhSachHangDTQGService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/TongHopDanhSachHangDTQG.service";
 import {LOAI_HH_XUAT_KHAC} from "../../../../../constants/config";
 import {DANH_MUC_LEVEL} from "../../../../luu-kho/luu-kho.constant";
-
 @Component({
   selector: 'app-tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat',
   templateUrl: './tong-hop-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat.component.html',
@@ -148,7 +147,15 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
       maCuc: this.formData.value.maChiCuc ? null : this.formData.value.maCuc,
     });
     await this.search();
-
+    let data= cloneDeep(this.dataTable)
+    this.dataTable = [];
+    data.forEach(item => {
+      const filteredHdr = { ...item };
+      filteredHdr.tongHopDtl = item.tongHopDtl.filter(tongHopDtlItem => tongHopDtlItem.maDiaDiem.startsWith(this.userInfo.MA_DVI));
+      if (filteredHdr.tongHopDtl.length > 0) {
+        this.dataTable.push(filteredHdr);
+      }
+    });
     this.flatDataTable = this.dataTable.flatMap(s => {
       if (s.tongHopDtl && s.tongHopDtl.length > 0) {
         return s.tongHopDtl.map(s1 => {
@@ -161,9 +168,6 @@ export class TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Com
       } else return s;
 
     });
-    if(this.formData.value.maChiCuc){
-      this.flatDataTable = this.flatDataTable.filter(i=> i.maDiaDiem.substring(0,8) === this.formData.value.maChiCuc)
-    }
     this.buildTableView();
   }
 

@@ -549,7 +549,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         namKh: this.formData.value.namHd,
         trangThai: STATUS.DA_HOAN_THANH,
         pthucBanTrucTiep: ['02'],
-        lastest: 1,
       };
       const res = await this.chaoGiaMuaLeUyQuyenService.search(body);
       if (res.msg === MESSAGE.SUCCESS) {

@@ -30,6 +30,9 @@ import {
   BaoCaoKdmVtTbTrongThoiGianBaoHanh
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvtbaohanh/BaoCaoKdmVtTbTrongThoiGianBaoHanh.service";
 import {DonviService} from "../../../../../../services/donvi.service";
+import {
+  DialogTableCheckBoxComponent
+} from "../../../../../../components/dialog/dialog-table-check-box/dialog-table-check-box.component";
 
 
 @Component({
@@ -275,7 +278,7 @@ export class ThongTinQuyetDinhXuatGiamVatTuBaoHanhComponent extends Base2Compone
     await this.loadSoBaoCao();
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách số báo cáo kết quả kiểm định mẫu',
-      nzContent: DialogTableSelectionComponent,
+      nzContent: DialogTableCheckBoxComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '900px',
@@ -297,20 +300,31 @@ export class ThongTinQuyetDinhXuatGiamVatTuBaoHanhComponent extends Base2Compone
   async bindingDataBaoCao(data) {
     try {
       await this.spinner.show();
-      let dataRes = await this.baoCaoKdmVtTbTrongThoiGianBaoHanh.getDetail(data.id)
-      const responseData = dataRes.data;
+      // let dataRes = await this.baoCaoKdmVtTbTrongThoiGianBaoHanh.getDetail(data.id)
+      // const responseData = dataRes.data;
       // this.dataTable = responseData.baoCaoDtl.map(m => {
       //   return m.qdGiaonvXhDtl
       //     .filter(i=> i.mauBiHuy==true);
       // }).flat();
-      this.dataTable = responseData.phieuKdcl.filter(i => i.mauBiHuy == true);
+      this.listSoBaoCao = cloneDeep(data.data);
+      this.allChecked = data.allChecked;
+      this.listSoBaoCao = this.listSoBaoCao.filter(f => f.checked);
+
+      this.listSoBaoCao.forEach(item =>{
+        item.phieuKdcl.forEach(i=>{
+          if( i.mauBiHuy == true){
+            this.dataTable.push(i);
+          }
+        })
+      })
+
       console.log(this.dataTable,'this.dataTable')
       this.formData.patchValue({
-        soCanCu: responseData.soBaoCao,
-        idCanCu: responseData.id,
-        listSoQdGiaoNvXh: responseData.soCanCu,
-        listIdQdGiaoNvXh: responseData.idCanCu,
-        maDviNhan: responseData.maDvi,
+        soCanCu: this.listSoBaoCao.map(m => m.soBaoCao).join(','),
+        idCanCu: this.listSoBaoCao.map(m => m.id).join(','),
+        listSoQdGiaoNvXh: this.listSoBaoCao.map(m => m.soCanCu).join(','),
+        listIdQdGiaoNvXh: this.listSoBaoCao.map(m => m.idCanCu).join(','),
+        maDviNhan: this.listSoBaoCao.map(m => m.tenDviNhan).join(','),
         qdXuatGiamVtDtl: this.dataTable.map(item => {
           return {
             idPhieu: item.id,
@@ -329,8 +343,13 @@ export class ThongTinQuyetDinhXuatGiamVatTuBaoHanhComponent extends Base2Compone
   async loadDsCuc() {
     const dsTong = await this.donviService.layTatCaDonViByLevel(2);
     this.dviNhan = dsTong && Array.isArray(dsTong.data) ? dsTong.data.filter(item => item.type != "PB") : []
-    console.log(this.dviNhan,"111")
   }
+  // getDviName(maDvi: string): string {
+  //   console.log(this.dviNhan,'this.dviNhan')
+  //   const dvi = this.dviNhan.find(d => d.maDvi === maDvi);
+  //   console.log(dvi,'dvi')
+  //   return dvi ? dvi.title : '';
+  // }
   buildTableView(data) {
     let dataView = chain(this.dataTable)
       .groupBy("maDiaDiem")

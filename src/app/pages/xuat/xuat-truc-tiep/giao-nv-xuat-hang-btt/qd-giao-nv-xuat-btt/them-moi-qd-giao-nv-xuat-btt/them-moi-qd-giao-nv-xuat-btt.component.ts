@@ -21,8 +21,6 @@ import {
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service';
 import {cloneDeep} from 'lodash';
 import {FileDinhKem} from "../../../../../../models/DeXuatKeHoachBanTrucTiep";
-import {PREVIEW} from "../../../../../../constants/fileType";
-import printJS from "print-js";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import _ from 'lodash';
 
@@ -293,7 +291,6 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
       loaiVthh: this.loaiVthh,
       trangThai: STATUS.DA_HOAN_THANH,
       pthucBanTrucTiep: [THONG_TIN_BAN_TRUC_TIEP.UY_QUYEN, THONG_TIN_BAN_TRUC_TIEP.BAN_LE],
-      lastest: 1
     };
     try {
       const res = await this.chaoGiaMuaLeUyQuyenService.search(body);

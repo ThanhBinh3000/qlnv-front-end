@@ -81,7 +81,7 @@ export class ThongTinChiTietDieuChinhComponent extends Base2Component implements
       if (dataInput) {
         await processChange(dataInput);
         this.dataTable = dataInput.children;
-        if (!this.idInput) {
+        if (this.dataTable && !this.idInput) {
           await this.getdonGiaDuocDuyet(dataInput);
         }
       }
@@ -113,7 +113,6 @@ export class ThongTinChiTietDieuChinhComponent extends Base2Component implements
     await Promise.all(giaDuyetPromises);
     await this.changeTable();
   }
-
 
   expandSet = new Set<number>();
 

@@ -678,6 +678,7 @@
                         <th class="text-left"> Chi cục</th>
                         <th class="text-left"> Điểm kho</th>
                         <th class="text-left"> Lô kho</th>
+                        <th class="text-left"> Năm nhập</th>
                         <th class="text-left"> Mã ĐVTS</th>
                         <th class="text-center"> SL bán đấu giá</th>
                         <th class="text-left"> ĐVT</th>
@@ -704,6 +705,7 @@
                           <td></td>
                           <td></td>
                           <td></td>
+                          <td></td>
                           <td class="text-right bold">
                             {{item.soLuongXuatBan|number:globals.numberFormat:globals.locale }}
                           </td>
@@ -726,6 +728,7 @@
                             <td class="text-left">
                               {{(children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") + (children.tenNhaKho ? children.tenNhaKho : "")}}
                             </td>
+                            <td class="text-left">{{children.namNhap}}</td>
                             <td class="text-left">{{children.maDviTsan}}</td>
                             <td class="text-right">
                               {{children.soLuongDeXuat|number:globals.numberFormat:globals.locale }}
@@ -779,6 +782,7 @@
                         <th class="text-left"> Chi cục</th>
                         <th class="text-left"> Điểm kho</th>
                         <th class="text-left"> Lô kho</th>
+                        <th class="text-left"> Năm nhập</th>
                         <th class="text-left"> Mã đơn vị tài sản</th>
                         <th class="text-center"> Số lượng</th>
                         <th class="text-left"> Đơn vị tính</th>
@@ -792,6 +796,7 @@
                         <tr>
                           <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
                           <td class="text-left"> {{item.tenDvi}} </td>
+                          <td></td>
                           <td></td>
                           <td></td>
                           <td></td>
@@ -813,6 +818,7 @@
                             <td class="text-left">
                               {{(children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") + (children.tenNhaKho ? children.tenNhaKho : "")}}
                             </td>
+                            <td class="text-left"> {{children.namNhap}} </td>
                             <td class="text-left"> {{children.maDviTsan}} </td>
                             <td class="text-right">
                               {{children.soLuongDeXuat|number:globals.numberFormat:globals.locale }}
