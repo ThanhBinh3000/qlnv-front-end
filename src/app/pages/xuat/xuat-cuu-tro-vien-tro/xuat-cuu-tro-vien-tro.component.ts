@@ -32,6 +32,8 @@ export class XuatCuuTroVienTroComponent implements OnInit {
       this.defaultTabCtvt = 4;
     } else if (this.userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK')) {
       this.defaultTabCtvt = 5;
+    } else {
+      this.defaultTabCtvt = null;
     }
 
 
@@ -54,6 +56,8 @@ export class XuatCuuTroVienTroComponent implements OnInit {
       this.defaultTabXc = 3;
     } else if (this.userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_XK')) {
       this.defaultTabXc = 4;
+    } else {
+      this.defaultTabXc = null
     }
   }
 
