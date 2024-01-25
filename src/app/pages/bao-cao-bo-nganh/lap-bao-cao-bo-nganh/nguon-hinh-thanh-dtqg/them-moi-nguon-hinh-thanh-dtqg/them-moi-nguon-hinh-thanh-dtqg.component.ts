@@ -61,7 +61,10 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
     max: 1000000000000,
     inputMode: CurrencyMaskInputMode.NATURAL,
   }
-
+  listDsDvi: any;
+  tenBoNganh: any;
+  // listCloaiVthh: any[] = [];
+  // optionsCloaiVthh: any[] = [];
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -97,6 +100,9 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
   async ngOnInit() {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
+    await Promise.all([
+      this.layTatCaDonViByLevel(),
+    ]);
     if (this.idInput != null) {
       await this.loadChiTiet(this.idInput)
     } else {
@@ -105,8 +111,6 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
         this.nguonVonGetAll()
       ]);
       this.formData.patchValue({
-        tenDonViGui: this.userInfo.TEN_DVI,
-        maDonViGui: this.userInfo.MA_DVI,
         tenDonViNhan: this.dsDonVi[0].tenDvi,
         maDonViNhan: this.dsDonVi[0].maDvi
       });
@@ -324,6 +328,9 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
       "hdr" : this.formData.value,
       "detail" : [...this.dataNguonNsnn, ...this.dataNguonNgoaiNsnn]
     };
+    if(!this.userService.isTongCuc()){
+      body.hdr.maDonViGui = this.userInfo.MA_DVI
+    }
     let res = null;
     if (this.formData.get("id").value) {
       res = await this.bcBnTt108Service.update(body);
@@ -417,4 +424,25 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
     return sum;
   }
 
+  async handleChoose(event) {
+    let data = this.listDsDvi.find(x => x.maDvi == event)
+    this.formData.get('tenDonViGui').setValue(data.tenDvi);
+    // let res = await this.danhMucService.getDanhMucHangHoaDvql({
+    //   'maDvi': data.maDvi ? (data.maDvi == '01' ? '0101' : data.maDvi) : this.userInfo.MA_DVI,
+    // }).toPromise();
+    // if (res.msg == MESSAGE.SUCCESS) {
+    //   this.listCloaiVthh = res.data;
+    //   this.optionsCloaiVthh = this.listCloaiVthh
+    // }
+  }
+
+  async layTatCaDonViByLevel() {
+    let res = await this.donViService.layTatCaDonViByLevel(0);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listDsDvi = res.data
+      // this.formData.get('dviNhan').setValue(res.data[0].tenDvi);
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
 }
