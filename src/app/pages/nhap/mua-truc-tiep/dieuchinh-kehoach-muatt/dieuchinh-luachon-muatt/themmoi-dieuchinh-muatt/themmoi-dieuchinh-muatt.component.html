@@ -140,7 +140,9 @@
                   <nz-form-label [nzNoColon]="true" nzRequired> Ngày ký QĐ cần điều chỉnh</nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-input-group nzAddOnAfterIcon="folder-open">
-                      <input [readonly]="true" nz-input formControlName="ngayKyQdGoc" readonly="true"/>
+<!--                      <input [readonly]="true" nz-input formControlName="ngayKyQdGoc" readonly="true"/>-->
+                      <nz-date-picker [nzDisabled]="true" formControlName="ngayKyQdGoc" nzFormat="dd-MM-yyyy">
+                      </nz-date-picker>
                     </nz-input-group>
                   </nz-form-control>
                 </nz-form-item>

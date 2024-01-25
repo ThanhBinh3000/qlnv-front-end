@@ -278,7 +278,7 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
         console.log(data.hhDcQdPduyetKhmttDxList, "hhDcQdPduyetKhmttDxList")
         this.danhsachDxMtt = data.hhDcQdPduyetKhmttDxList;
         this.danhsachDxMttCache = cloneDeep(this.danhsachDxMtt)
-        await this.showFirstRow(event, this.danhsachDxMtt[0]);
+        await this.showFirstRow(event, this.danhsachDxMtt[0], true);
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -293,6 +293,7 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
     this.spinner.show();
     let body = {
       trangThai: STATUS.BAN_HANH,
+      namKh: this.formData.value.namKh,
       maDvi: null,
       lastest: null
     };
@@ -415,12 +416,12 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
     this.spinner.hide();
   }
 
-  async showFirstRow($event, dataGoiThau: any) {
-    await this.showDetail($event, dataGoiThau);
+  async showFirstRow($event, dataGoiThau: any, detail?) {
+    await this.showDetail($event, dataGoiThau, detail);
   }
 
   index = 0;
-  async showDetail($event, data) {
+  async showDetail($event, data, detail?) {
     console.log("1")
     await this.spinner.show();
     if ($event != undefined && $event.type == 'click') {
@@ -432,17 +433,30 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
     }
     if (data) {
       this.dataInput = data;
-      let res = await this.quyetDinhPheDuyetKeHoachMTTService.getDetail(data?.idQdHdr);
-      if(res.msg == MESSAGE.SUCCESS){
-        await this.getDataChiTieu(data.idSoQdCc);
+      if(data.soQd != null){
+        let res = await this.quyetDinhPheDuyetKeHoachMTTService.getDetail(data?.idQdHdr);
+        if(res.msg == MESSAGE.SUCCESS){
+          await this.getDataChiTieu(data.idSoQdCc);
+        }
+        this.dataInputCache = res.data.children.find(x => x.maDvi == data.maDvi)
+      }else{
+        if(detail){
+          let res = await this.dieuChinhQuyetDinhPdKhmttService.findByIdFromDcDx(data);
+          console.log(res, "detail-idQdGoc")
+          await this.getDataChiTieu(data.idSoQdCc);
+          if(res.msg == MESSAGE.SUCCESS){
+            if(res.data.type == 'DC_HDR'){
+              this.dataInputCache = res.data.hhDcQdPduyetKhmttDxList.find(x => x.maDvi == data.maDvi)
+            }
+            if(res.data.type == 'QD_HDR'){
+              this.dataInputCache = res.data.children.find(x => x.maDvi == data.maDvi)
+            }
+            console.log(this.dataInputCache, "dataInputCache")
+          }
+        }else{
+          this.dataInputCache = this.dataInput
+        }
       }
-      this.dataInputCache = res.data.children.find(x => x.maDvi == data.maDvi)
-      // data.tongSoLuong = 0;
-      // data.tongMucDt = 0;
-      // data.children.forEach(item =>{
-      //   data.tongSoLuong += item.tongSoLuong;
-      //   data.tongMucDt += item.tongSoLuong * item.donGiaVat * 1000;
-      // })
     }
     await this.spinner.hide();
   }
