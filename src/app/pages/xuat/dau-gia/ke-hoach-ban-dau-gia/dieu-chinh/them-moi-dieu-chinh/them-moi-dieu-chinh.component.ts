@@ -165,6 +165,8 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
         this.danhSachQdPdKeHoach = res.data.content.map(item => ({
           soQd: item.soQdDc || item.soQdPd,
           ngayKy: item.ngayKyDc || item.ngayKyQd,
+          trangThaiGia: item.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia.length > 0 ? 'Dừng thực hiện để điều chỉnh giá' : '',
+          loai: item.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia.length > 0 ? 'Điều chỉnh giá' : '',
           ...item
         }));
         const idGocSet = new Set(this.danhSachDieuChinh.map(item => item.idGoc));
@@ -182,8 +184,8 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
         nzFooter: null,
         nzComponentParams: {
           dataTable: this.danhSachQdPdKeHoach.filter(item => item.children.length > 0),
-          dataHeader: ['Số quyết định cần điều chỉnh', 'Ngày ký quyết định cần điều chỉnh', 'Loại hàng hóa'],
-          dataColumn: ['soQd', 'ngayKy', 'tenLoaiVthh']
+          dataHeader: ['Số QĐ cần điều chỉnh', 'Ngày ký QĐ', 'Loại hàng hóa', 'Trạng thái', 'Loại'],
+          dataColumn: ['soQd', 'ngayKy', 'tenLoaiVthh', 'trangThaiGia', 'loai']
         },
       });
       modalQD.afterClose.subscribe(async (data) => {

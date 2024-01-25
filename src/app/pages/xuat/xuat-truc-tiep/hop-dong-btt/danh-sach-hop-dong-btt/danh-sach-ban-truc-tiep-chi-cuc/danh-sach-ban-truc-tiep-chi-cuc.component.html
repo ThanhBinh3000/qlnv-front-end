@@ -76,6 +76,7 @@
           <th nzWidth="50px" class="text-center wrap"> STT</th>
           <th class="text-left">Năm KH</th>
           <th class="text-left">QĐ PD KHBTT</th>
+          <th class="text-left">QĐ DC KHBTT</th>
           <th class="text-center">SL HĐ cần ký</th>
           <th class="text-center">SL HĐ đã ký</th>
           <th class="text-left">Thời hạn xuất kho</th>
@@ -101,6 +102,12 @@
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdPd"
                      (input)="filterInTable('soQdPd',filterTable.soQdPd)" size="small"/>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdDc"
+                     (input)="filterInTable('soQdDc',filterTable.soQdDc)" size="small"/>
             </nz-input-group>
           </th>
           <th>
@@ -171,8 +178,14 @@
           <td class="text-left">{{ data.namKh }}</td>
           <td class="text-left">
             <a *ngIf="data.soQdPd && data.xhQdPdKhBttHdr.type === 'QDDC' ? data.xhQdPdKhBttHdr.idQdPd : data.idHdr"
-               (click)="openModal(data.xhQdPdKhBttHdr.type === 'QDDC' ? data.xhQdPdKhBttHdr.idQdPd : data.idHdr)"
+               (click)="openModal((data.xhQdPdKhBttHdr.type === 'QDDC' ? data.xhQdPdKhBttHdr.idQdPd : data.idHdr), 'QdKh')"
                style="color: blue">{{ data.soQdPd }}
+            </a>
+          </td>
+          <td class="text-left">
+            <a *ngIf="data.soQdDc && data.xhQdPdKhBttHdr.type === 'QDDC' ? data.idHdr : null"
+               (click)="openModal((data.xhQdPdKhBttHdr.type === 'QDDC' ? data.idHdr : null), 'QdDc')"
+               style="color: blue">{{ data.soQdDc }}
             </a>
           </td>
           <td class="text-center">
@@ -227,18 +240,31 @@
 <ng-container class="chi-tiet" *ngIf="isDetail">
   <app-thong-tin-hop-dong-btt *ngIf="isAddNew" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
   </app-thong-tin-hop-dong-btt>
-  <app-quan-ly-hop-dong-btt *ngIf="isQuanLy" [isDieuChinh]="isDieuChinh" [idInput]="idSelected" [loaiVthh]="loaiVthh"
+  <app-quan-ly-hop-dong-btt *ngIf="isQuanLy" [idInput]="idSelected" [loaiVthh]="loaiVthh"
                             (showListEvent)="showList()">
   </app-quan-ly-hop-dong-btt>
 </ng-container>
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModal()">
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPdKh" (nzOnCancel)="closeModal('QdKh')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <!--    <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [id]="idQdPd" [isViewDetail]="true"-->
-    <!--                                           [isViewOnModal]="true">-->
+    <!--    <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [idInput]="idQdPdKh" [loaiVthh]="loaiVthh" [isViewOnModal]="true"-->
+    <!--                                                [isView]="true">-->
     <!--    </app-them-moi-qd-phe-duyet-kh-ban-truc-tiep>-->
   </ng-container>
   <div *nzModalFooter>
-    <button nz-button (click)="closeModal()" class="modal__button--cancel">
+    <button nz-button (click)="closeModal('QdKh')" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdDc" (nzOnCancel)="closeModal('QdDc')">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <!--    <app-chi-tiet-dieu-chinh-ban-truc-tiep [idInput]="idQdDc" [loaiVthh]="loaiVthh" [isViewOnModal]="true"-->
+    <!--                                           [isView]="true">-->
+    <!--    </app-chi-tiet-dieu-chinh-ban-truc-tiep>-->
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModal('QdDc')" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>

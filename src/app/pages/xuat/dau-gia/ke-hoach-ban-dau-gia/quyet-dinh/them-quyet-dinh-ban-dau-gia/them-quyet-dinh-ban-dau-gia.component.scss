@@ -10,3 +10,44 @@
 .rdo-input .ant-form-item {
   padding-top: 10px;
 }
+
+.label-50 {
+  .ant-form-item-label.ant-col {
+    text-align: left;
+    width: 100%;
+    height: 30px;
+  }
+
+  .ant-picker,
+  input {
+    border: none;
+    background: transparent;
+    font-weight: 700;
+  }
+
+  .ant-input-number {
+    width: 100% !important;
+    border: none;
+    background: transparent;
+    color: #444444;
+    font-weight: 700;
+  }
+}
+
+.bg-xanh-tim {
+  background-color: #ebedff80 !important;
+}
+
+::ng-deep {
+  .label-bold {
+    span:nth-child(2) {
+      color: black;
+      font-weight: 500;
+      font-size: 14px;
+    }
+  }
+}
+
+.border-right {
+  border-right: solid 1px #e2e2e2;
+}

@@ -24,11 +24,12 @@ export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implement
   @Input() loaiVthh: string;
   isQuanLy: boolean;
   isAddNew: boolean;
-  isDieuChinh: boolean = false;
   listTrangThaiHd: any = [];
   listTrangThaiXh: any = [];
-  idQdPd: number = 0;
-  isViewQdPd: boolean = false;
+  idQdPdKh: number = 0;
+  isViewQdPdKh: boolean = false;
+  idQdDc: number = 0;
+  isViewQdDc: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -123,7 +124,6 @@ export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implement
         this.dataTable = data.content.filter(item =>
           item.xhQdPdKhBttHdr.lastest || item.trangThai === STATUS.DA_HOAN_THANH).map(item => {
           item.checked = false;
-          item.xhQdPdKhBttHdr.lastest ? this.isDieuChinh : this.isDieuChinh = true;
           return item;
         });
         this.totalRecord = data.totalElements;
@@ -165,17 +165,34 @@ export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implement
     );
   }
 
-  openModal(id: number) {
-    this.updateQdPd(id, true)
+  openModal(id: number, modalType: string) {
+    switch (modalType) {
+      case 'QdKh':
+        this.idQdPdKh = id;
+        this.isViewQdPdKh = true;
+        break;
+      case 'QdDc':
+        this.idQdDc = id;
+        this.isViewQdDc = true;
+        break;
+      default:
+        break;
+    }
   }
 
-  closeModal() {
-    this.updateQdPd(null, false)
-  }
-
-  private updateQdPd(id: number | null, isView: boolean) {
-    this.idQdPd = id;
-    this.isViewQdPd = isView;
+  closeModal(modalType: string) {
+    switch (modalType) {
+      case 'QdKh':
+        this.idQdPdKh = null;
+        this.isViewQdPdKh = false;
+        break;
+      case 'QdDc':
+        this.idQdDc = null;
+        this.isViewQdDc = false;
+        break;
+      default:
+        break;
+    }
   }
 
   isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
