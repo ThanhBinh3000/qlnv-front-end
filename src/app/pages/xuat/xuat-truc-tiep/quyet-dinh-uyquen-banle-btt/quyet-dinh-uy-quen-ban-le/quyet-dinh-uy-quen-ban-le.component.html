@@ -59,7 +59,8 @@
     <div class="group-button">
       <h3 class="text-uppercase"> DANH SÁCH QD PD KẾ HOẠCH BÁN TRỰC TIẾP ĐƯỢC ỦY QUYỀN/BÁN LẺ </h3>
       <div class="buttons">
-        <button type="button" (click)="exportData('danh-sach-quyet-dinh-phe-duyet-ke-hoach-ban-truc-tiep-duoc-uy-quyen/ban-le-hang-DTQG.xlsx')"
+        <button type="button"
+                (click)="exportData('danh-sach-quyet-dinh-phe-duyet-ke-hoach-ban-truc-tiep-duoc-uy-quyen/ban-le-hang-DTQG.xlsx')"
                 class="btn btn-sub">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
@@ -73,6 +74,7 @@
         <tr>
           <th nzWidth="50px" class="text-center wrap"> STT</th>
           <th class="text-left"> Số quyết định</th>
+          <th class="text-left"> Số QĐ điều chỉnh</th>
           <th class="text-left"> Số kế hoạch</th>
           <th class="text-left"> Năm kế hoạch</th>
           <th class="text-left"> Ngày duyệt</th>
@@ -93,6 +95,12 @@
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdPd"
                      (input)="filterInTable('soQdPd',filterTable.soQdPd)" size="small"/>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdDc"
+                     (input)="filterInTable('soQdDc',filterTable.soQdDc)" size="small"/>
             </nz-input-group>
           </th>
           <th>
@@ -179,6 +187,12 @@
             </a>
           </td>
           <td class="text-left">
+            <a *ngIf="data.soQdDc && data.xhQdPdKhBttHdr.type === 'QDDC' ? data.idHdr : null"
+               (click)="openModal((data.xhQdPdKhBttHdr.type === 'QDDC' ? data.idHdr : null), 'QdDc')"
+               style="color: blue">{{ data.soQdDc }}
+            </a>
+          </td>
+          <td class="text-left">
             <a *ngIf="data.soDxuat && data.idDxHdr" (click)="openModal(data.idDxHdr, 'DxKh')"
                style="color: blue">{{ data.soDxuat }}
             </a>
@@ -238,6 +252,19 @@
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeModal('QdKh')" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdDc" (nzOnCancel)="closeModal('QdDc')">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-chi-tiet-dieu-chinh-ban-truc-tiep [idInput]="idQdDc" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
+                                           [isView]="true">
+    </app-chi-tiet-dieu-chinh-ban-truc-tiep>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModal('QdDc')" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>

@@ -25,7 +25,6 @@ import {PREVIEW} from "../../../../../../constants/fileType";
 export class QuanLyHopDongBttComponent extends Base2Component implements OnInit {
   @Input() idInput: number;
   @Input() loaiVthh: string;
-  @Input() isDieuChinh: boolean;
   @Output() showListEvent = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG
   TRUC_TIEP = THONG_TIN_BAN_TRUC_TIEP
@@ -36,6 +35,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
   isViewQdNv: boolean = false;
   idHopDong: number;
   isHopDong: boolean = false;
+  isDieuChinh: boolean;
 
   constructor(
     httpClient: HttpClient,
@@ -145,6 +145,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
         return;
       }
       const data = res.data;
+      this.isDieuChinh = data.xhQdPdKhBttHdr.lastest ? false : true;
       await this.loadDanhDachHopDong();
       this.formData.patchValue({
         namKh: data.namKh,

@@ -95,6 +95,11 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       tenLoaiVthh: [''],
       tenCloaiVthh: [''],
       type: [''],
+      chotDcGia: [''],
+      quyetDinhDcGia: [''],
+      quyetDinhDc: [''],
+      ngayQuyetDinhDieuBTT: [''],
+      soQuyetDinhDieuBTT: [''],
     })
   }
 
@@ -213,13 +218,17 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       return;
     }
     const data = await this.detail(id);
-    const {soQdPd, children} = data;
     this.formData.patchValue({
-      soQdPd: soQdPd?.split('/')[0] || null,
+      soQdPd: data.soQdPd?.split('/')[0] || null,
+      soQuyetDinhDieuBTT: data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.soQuyetDinhDieuKHLCNT ?? null,
+      ngayQuyetDinhDieuBTT: data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.ngayQuyetDinhDieuKHLCNT ?? null,
+      chotDcGia: !!data.qthtChotGiaInfoRes?.qthtChotDieuChinhGia.length,
+      quyetDinhDcGia: !!data.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia.length,
+      quyetDinhDc: !!(data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.soQuyetDinhDieuKHLCNT && data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.ngayQuyetDinhDieuKHLCNT),
     });
     this.canCuPhapLy = data.canCuPhapLy;
     this.fileDinhKem = data.fileDinhKem;
-    this.danhsachDx = this.userService.isCuc() ? children.filter(item => item.maDvi === this.userInfo.MA_DVI) : children;
+    this.danhsachDx = this.userService.isCuc() ? data.children.filter(item => item.maDvi === this.userInfo.MA_DVI) : data.children;
     this.dataTable = this.danhsachDx;
     if (data.phanLoai === "TH") {
       let res = await this.tongHopKhBanTrucTiepService.getDetail(data.idThHdr);
@@ -291,7 +300,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       const data = res.data;
       const soLuongDviTsan = data.children.reduce((total, item) => total + item.slDviTsan, 0);
       this.formData.patchValue({
-        namKh : data.namKh,
+        namKh: data.namKh,
         cloaiVthh: data.cloaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
         loaiVthh: data.loaiVthh,

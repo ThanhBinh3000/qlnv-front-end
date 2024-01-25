@@ -87,6 +87,11 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       kieuNx: [''],
       tenKieuNx: [''],
       type: [''],
+      chotDcGia: [''],
+      quyetDinhDcGia: [''],
+      quyetDinhDc: [''],
+      ngayQuyetDinhDieuBDG: [''],
+      soQuyetDinhDieuBDG: [''],
     })
   }
 
@@ -205,13 +210,17 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       return;
     }
     const data = await this.detail(id);
-    const {soQdPd, children} = data;
     this.formData.patchValue({
-      soQdPd: soQdPd?.split('/')[0] || null,
+      soQdPd: data.soQdPd?.split('/')[0] || null,
+      soQuyetDinhDieuBDG: data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.soQuyetDinhDieuKHLCNT ?? null,
+      ngayQuyetDinhDieuBDG: data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.ngayQuyetDinhDieuKHLCNT ?? null,
+      chotDcGia: !!data.qthtChotGiaInfoRes?.qthtChotDieuChinhGia.length,
+      quyetDinhDcGia: !!data.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia.length,
+      quyetDinhDc: !!(data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.soQuyetDinhDieuKHLCNT && data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.ngayQuyetDinhDieuKHLCNT),
     });
     this.canCuPhapLy = data.canCuPhapLy;
     this.fileDinhKem = data.fileDinhKem;
-    this.danhsachDx = this.userService.isCuc() ? children.filter(item => item.maDvi === this.userInfo.MA_DVI) : children;
+    this.danhsachDx = this.userService.isCuc() ? data.children.filter(item => item.maDvi === this.userInfo.MA_DVI) : data.children;
     this.dataTable = this.danhsachDx;
     if (data.phanLoai === "TH") {
       let res = await this.tongHopDeXuatKeHoachBanDauGiaService.getDetail(data.idThHdr);
