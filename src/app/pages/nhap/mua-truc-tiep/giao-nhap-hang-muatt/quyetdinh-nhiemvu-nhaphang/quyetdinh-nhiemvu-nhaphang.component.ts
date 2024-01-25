@@ -190,6 +190,7 @@ export class QuyetdinhNhiemvuNhaphangComponent implements OnInit {
           item.checked = false;
         });
       }
+      console.log(this.dataTable, "datatable")
       this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
     } else {
@@ -418,8 +419,9 @@ export class QuyetdinhNhiemvuNhaphangComponent implements OnInit {
     }
   }
 
-  openHdModal(id: number) {
+  openHdModal(id: number, idQdKh: number) {
     this.idHd = id;
+    this.idQdKh = idQdKh;
     this.openHd = true;
   }
 

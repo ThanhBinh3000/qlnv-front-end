@@ -137,16 +137,6 @@
                     </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="4" *ngIf=" radioValue == '01'">
-<!--                    <nz-form-item class="form-item">-->
-<!--                        <nz-form-label [nzNoColon]="true" nzRequired>-->
-<!--                            Chọn 1 hợp đồng đã ký cấp Cục-->
-<!--                        </nz-form-label>-->
-<!--                        <nz-form-control [nzErrorTip]="error">-->
-<!--                            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isDisableForm() ? '' : openDialogHopDong()">-->
-<!--                                <input [readonly]="true" nz-input formControlName="soHd" readonly="true" />-->
-<!--                            </nz-input-group>-->
-<!--                        </nz-form-control>-->
-<!--                    </nz-form-item>-->
                   <nz-form-label [nzNoColon]="true" nzRequired>
                     Chọn các hợp đồng đã ký cấp Cục
                   </nz-form-label>
@@ -157,7 +147,7 @@
                 <div nz-col [nzSpan]="4" *ngIf=" radioValue == '02'">
                     <nz-form-item class="form-item">
                         <nz-form-label [nzNoColon]="true" nzRequired>
-                            Chọn QĐ phê duyệt KH mua trực tiếp (ủy quyền)
+                            Chọn QĐ phê duyệt/điều chỉnh KH muc trực tiếp (ủy quyền/mua lẻ)
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isDisableForm() ? '' : openDialogCanCuUyQuyen()">
@@ -213,7 +203,7 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col [nzSpan]="9">
+                <div nz-col [nzSpan]="24">
                     <nz-form-item class="form-item">
                         <nz-form-label [nzNoColon]="true">
                             Trích yếu
@@ -259,7 +249,7 @@
         <th class="text-center">Lô kho</th>
         <th class="text-center">Tổng tích lượng</th>
         <th class="text-center">Tồn kho</th>
-        <th nzWidth="160px" class="text-center">Số lượng nhập</th>
+        <th nzWidth="160px" class="text-center">Số lượng nhập được phân bổ</th>
         <th class="text-center">Số BB nhập đầy kho</th>
         <th class="text-center">Trạng thái</th>
         <th *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_PHANBO')"
@@ -275,7 +265,7 @@
           <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>
           <td>{{ item.tenDvi }}</td>
           <td></td>
-          <td>{{ formData.value.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-right">{{ calcTongByName(i) | number : '1.0-1' : 'vi_VN' }}</td>
           <td></td>
           <td></td>
           <td></td>
@@ -318,7 +308,7 @@
           </td>
           <td></td>
           <td></td>
-          <td>
+          <td class="text-right">
             <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzSize]="'small'"
                              nz-input [(ngModel)]="rowItem.soLuong" [nzMin]="0">
             </nz-input-number>
@@ -341,13 +331,13 @@
             <td></td>
             <td></td>
             <td>{{ ddNhap.tenDiemKho }}</td>
-            <td>{{ ddNhap.soLuongDiemKho | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class="text-right">{{ ddNhap.soLuongDiemKho | number : '1.0-1' : 'vi_VN'}}</td>
             <td>{{ ddNhap.tenNhaKho }}</td>
             <td>{{ ddNhap.tenNganKho }}</td>
             <td>{{ ddNhap.tenLoKho }}</td>
             <td>{{ ddNhap.bienBanNhapDayKho && ddNhap.bienBanNhapDayKho[0]?.soBbNhapDayKho }}</td>
             <td></td>
-            <td>{{ ddNhap.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class="text-right">{{ ddNhap.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
             <td></td>
             <td></td>
             <td *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_PHANBO') && (formData.value.trangThaiDtl == STATUS.CHUA_CAP_NHAT || formData.value.trangThaiDtl == STATUS.DANG_CAP_NHAT)"
@@ -391,7 +381,7 @@
             </td>
             <td></td>
             <td></td>
-            <td>
+            <td class="text-right">
               <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzSize]="'small'"
                                nz-input [(ngModel)]="rowItemEdit.soLuong" [nzMin]="0">
               </nz-input-number>
@@ -415,7 +405,7 @@
           <td style="text-align: right; font-weight: 700; color: blue" colspan="8">Tổng số</td>
           <td></td>
           <td></td>
-          <td class="text-blue">{{ calcTongChil() | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-blue text-right">{{ calcTongChil() | number : '1.0-1' : 'vi_VN' }}</td>
           <td></td>
           <td></td>
           <td *ngIf="userService.isAccessPermisson('NHDTQG_PTMTT_QDGNVNH_PHANBO')"></td>
@@ -428,7 +418,7 @@
         <td></td>
         <td></td>
         <td></td>
-        <td class="text-blue">{{ calcTongChil() | number : '1.0-1' : 'vi_VN' }}</td>
+        <td class="text-blue text-right">{{ calcTongChil() | number : '1.0-1' : 'vi_VN' }}</td>
         <td></td>
       </tr>
       </tfoot>
