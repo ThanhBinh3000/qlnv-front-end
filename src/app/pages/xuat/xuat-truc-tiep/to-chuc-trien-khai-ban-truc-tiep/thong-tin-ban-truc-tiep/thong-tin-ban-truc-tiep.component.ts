@@ -12,6 +12,8 @@ import {
 import {isEmpty} from 'lodash';
 import {DonviService} from 'src/app/services/donvi.service';
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import {cloneDeep} from 'lodash';
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-thong-tin-ban-truc-tiep',
@@ -89,6 +91,36 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
       await this.search();
     } catch (e) {
       console.log('error: ', e);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
+  async search() {
+    try {
+      await this.spinner.show();
+      const body = this.formData.value;
+      body.paggingReq = {
+        limit: this.pageSize,
+        page: this.page - 1
+      };
+      const res = await this.chaoGiaMuaLeUyQuyenService.search(body);
+      if (res.msg === MESSAGE.SUCCESS) {
+        const data = res.data;
+        this.dataTable = data.content.filter(item =>
+          item.xhQdPdKhBttHdr.lastest || item.trangThai === STATUS.DA_HOAN_THANH).map(item => {
+          item.checked = false;
+          return item;
+        });
+        this.totalRecord = data.totalElements;
+        this.dataTableAll = cloneDeep(this.dataTable);
+      } else {
+        this.dataTable = [];
+        this.totalRecord = 0;
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    } catch (e) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
