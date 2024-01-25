@@ -268,7 +268,7 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
           soLanDieuChinh: data.soLanDieuChinh,
           soQdCc: data.soQdCc,
           idSoQdCc: data.idSoQdCc,
-          soToTrinh: data.soToTrinh,
+          soToTrinh: data.soToTrinh.split("/")[0] != "" ? data.soToTrinh.split("/")[0] : "",
           ngayTaoCv: data.ngayTaoCv,
 
         });
@@ -392,7 +392,7 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
         id: null,
         ngayKyQdGoc: $event.ngayKyDc,
         idQdGoc: $event.id,
-        soQdGoc: $event.soQdDc + this.soQdDc,
+        soQdGoc: $event.soQdDc,
         loaiVthh: $event.loaiVthh,
         tenLoaiVthh: $event.tenLoaiVthh,
         cloaiVthh: $event.cloaiVthh,
@@ -499,6 +499,7 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
     body.cvanToTrinh = this.cvanToTrinh;
     let res = null;
     body.soQdDc = body.soQdDc + this.soQdDc;
+    body.soToTrinh = body.soToTrinh + this.maTt;
     if (this.formData.get('id').value) {
       res = await this.dieuChinhQuyetDinhPdKhmttService.update(body);
     } else {
@@ -517,11 +518,13 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
           res.data.soQdDc = res.data.soQdDc.split("/")[0] != "" ? res.data.soQdDc.split("/")[0] : ""
+          res.data.soToTrinh = res.data.soToTrinh.split("/")[0] != "" ? res.data.soToTrinh.split("/")[0] : ""
           this.helperService.bidingDataInFormGroup(this.formData, res.data);
           // this.quayLai()
         } else {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
           res.data.soQdDc = res.data.soQdDc.split("/")[0] != "" ? res.data.soQdDc.split("/")[0] : ""
+          res.data.soToTrinh = res.data.soToTrinh.split("/")[0] != "" ? res.data.soToTrinh.split("/")[0] : ""
           this.helperService.bidingDataInFormGroup(this.formData, res.data);
           // this.quayLai()
         }

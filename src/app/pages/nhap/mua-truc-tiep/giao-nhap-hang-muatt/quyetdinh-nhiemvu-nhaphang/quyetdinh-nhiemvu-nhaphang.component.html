@@ -12,12 +12,6 @@
                     <label class="search__label">Số QĐ giao nhiệm vụ NH</label>
                     <input [(ngModel)]="searchFilter.soQd" nz-input nzSize="small" placeholder="Nhập số quyết định" />
                 </div>
-<!--                <div nz-col nzSpan="3">-->
-<!--                    <label class="search__label">Loại hàng hóa </label>-->
-<!--                    <nz-select [(ngModel)]="searchFilter.loaiVthh">-->
-<!--                        <nz-option *ngFor="let p of listVthh" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>-->
-<!--                    </nz-select>-->
-<!--                </div>-->
                 <div nz-col nzSpan="3">
                     <label class="search__label">Chủng loại hàng DTQG </label>
                     <nz-select [(ngModel)]="searchFilter.cloaiVthh">
@@ -86,7 +80,6 @@
                         <th class="text-center" style="width: 8%;">Số hợp đồng</th>
                         <th class="text-center" style="width: 12%;">Số QĐ phê duyệt KH</th>
                         <th class="text-center" style="width: 8%;">Năm nhập</th>
-<!--                        <th class="text-center" style="width: 8%;">Loại hàng hóa</th>-->
                         <th class="text-center" style="width: 12%;">Chủng loại hàng DTQG</th>
                         <th class="text-center" style="width: 25%;">Trích yếu quyết định</th>
                         <th class="text-center" style="width: 15%;">Trạng thái</th>
@@ -165,7 +158,7 @@
                         <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                         <td>{{data.soQd}}</td>
                         <td>{{data.ngayQd}}</td>
-                        <td><a style="color: blue; font-weight: bold;" (click)="openHdModal(data.idHd)">{{
+                        <td><a style="color: blue; font-weight: bold;" (click)="openHdModal(data.idHd, data.idQdPdKh)">{{
                           data.soHd}}</a></td>
                         <td><a style="color: blue; font-weight: bold;" (click)="openQdKhModal(data.idQdPdKh)">{{data.soQdPdKh}}</a></td>
                         <td>{{data.namNhap}}</td>
@@ -220,8 +213,8 @@
 </ng-container>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openHd" (nzOnCancel)="closeHdModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-thong-tin [id]="idHd" [loaiVthh]="loaiVthh" [isView]="true">
-    </app-thong-tin>
+    <app-themmoi-hopdong-phuluc [id]="idHd" [idQdKh]="idQdKh" [loaiVthh]="loaiVthh">
+    </app-themmoi-hopdong-phuluc>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeHdModal()" class="modal__button--cancel">
@@ -230,7 +223,7 @@
     </button>
   </div>
 </nz-modal>
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openHd" (nzOnCancel)="closeQdKhModal()">
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openQdKh" (nzOnCancel)="closeQdKhModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-themmoi-kehoach-muatructiep [idInput]="idQdKh" [loaiVthhInput]="loaiVthh" [isView]="true">
     </app-themmoi-kehoach-muatructiep>

@@ -7,6 +7,7 @@ import { QuyetdinhNhiemvuNhaphangComponent } from './quyetdinh-nhiemvu-nhaphang/
 import { ThemmoiNhiemvuNhaphangComponent } from './quyetdinh-nhiemvu-nhaphang/themmoi-nhiemvu-nhaphang/themmoi-nhiemvu-nhaphang.component';
 import {HopDongModule} from "../../dau-thau/hop-dong/hop-dong.module";
 import {KehoachLuachonMuatructiepModule} from "../kehoach-luachon-muatructiep/kehoach-luachon-muatructiep.module";
+import {HopdongBangkePhieumuahangModule} from "../hopdong-bangke-phieumuahang/hopdong-bangke-phieumuahang.module";
 
 
 @NgModule({
@@ -15,13 +16,14 @@ import {KehoachLuachonMuatructiepModule} from "../kehoach-luachon-muatructiep/ke
         QuyetdinhNhiemvuNhaphangComponent,
         ThemmoiNhiemvuNhaphangComponent
     ],
-    imports: [
-        CommonModule,
-        ComponentsModule,
-        DirectivesModule,
-        HopDongModule,
-        KehoachLuachonMuatructiepModule
-    ],
+  imports: [
+    CommonModule,
+    ComponentsModule,
+    DirectivesModule,
+    HopDongModule,
+    KehoachLuachonMuatructiepModule,
+    HopdongBangkePhieumuahangModule
+  ],
     exports: [
         GiaoNhapHangMuattComponent,
         QuyetdinhNhiemvuNhaphangComponent
