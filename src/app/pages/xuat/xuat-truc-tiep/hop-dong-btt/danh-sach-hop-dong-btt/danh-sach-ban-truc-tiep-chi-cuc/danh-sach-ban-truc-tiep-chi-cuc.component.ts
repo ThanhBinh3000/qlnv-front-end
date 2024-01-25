@@ -12,6 +12,7 @@ import {
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service";
 import {saveAs} from 'file-saver';
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import {cloneDeep} from 'lodash';
 
 @Component({
   selector: 'app-danh-sach-ban-truc-tiep-chi-cuc',
@@ -23,6 +24,7 @@ export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implement
   @Input() loaiVthh: string;
   isQuanLy: boolean;
   isAddNew: boolean;
+  isDieuChinh: boolean = false;
   listTrangThaiHd: any = [];
   listTrangThaiXh: any = [];
   idQdPd: number = 0;
@@ -96,13 +98,42 @@ export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implement
       await this.spinner.show();
       this.formData.patchValue({
         loaiVthh: this.loaiVthh,
-        trangThai: STATUS.DA_HOAN_THANH,
         pthucBanTrucTiep: ['02'],
-        lastest: 1
       })
       await this.search();
     } catch (e) {
       console.error('error: ', e);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
+  async search() {
+    try {
+      await this.spinner.show();
+      const body = this.formData.value;
+      body.paggingReq = {
+        limit: this.pageSize,
+        page: this.page - 1
+      };
+      const res = await this.chaoGiaMuaLeUyQuyenService.search(body);
+      if (res.msg === MESSAGE.SUCCESS) {
+        const data = res.data;
+        this.dataTable = data.content.filter(item =>
+          item.xhQdPdKhBttHdr.lastest || item.trangThai === STATUS.DA_HOAN_THANH).map(item => {
+          item.checked = false;
+          item.xhQdPdKhBttHdr.lastest ? this.isDieuChinh : this.isDieuChinh = true;
+          return item;
+        });
+        this.totalRecord = data.totalElements;
+        this.dataTableAll = cloneDeep(this.dataTable);
+      } else {
+        this.dataTable = [];
+        this.totalRecord = 0;
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    } catch (e) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
