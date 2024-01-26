@@ -153,6 +153,9 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         fileCanCu: [new Array<FileDinhKem>()],
         fileDinhKem: [new Array<FileDinhKem>()],
         listMaDviTsan: [null],
+        idQdDc: [''],
+        soQdDc: [''],
+        soQd: ['']
       }
     );
   }
@@ -235,7 +238,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       return;
     }
     const data = await this.detail(id);
-    const {soHopDong, tgianGiaoNhanTu, tgianGiaoNhanDen, tenBenMua, children, xhHopDongBttDviList, phuLuc} = data;
+    const {soHopDong, tgianGiaoNhanTu, tgianGiaoNhanDen, children, xhHopDongBttDviList, phuLuc} = data;
     this.formData.patchValue({
       soHopDong: soHopDong?.split('/')[0] || null,
       tgianGiaoNhan: this.isValidDate(tgianGiaoNhanTu) && this.isValidDate(tgianGiaoNhanDen)
@@ -350,6 +353,8 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         thoiHanXuatKho: data.ngayMkho,
         idQdPd: data.idQdPd,
         soQdPd: data.soQdPd,
+        idQdDc: data.idQdDc,
+        soQdDc: data.soQdDc,
         idChaoGia: data.idChaoGia,
         loaiVthh: data.loaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
@@ -553,7 +558,12 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       };
       const res = await this.chaoGiaMuaLeUyQuyenService.search(body);
       if (res.msg === MESSAGE.SUCCESS) {
-        this.listSoQdPdKh = res.data.content.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI)) || [];
+        this.listSoQdPdKh = res.data.content
+          .filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI))
+          .map(item => ({
+            soQd: item.soQdDc || item.soQdPd,
+            ...item
+          }));
       }
       const modalQD = this.modal.create({
         nzTitle: 'SỐ QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH BÁN TRỰC TIẾP',
@@ -564,8 +574,8 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         nzFooter: null,
         nzComponentParams: {
           dataTable: this.listSoQdPdKh,
-          dataHeader: ['Số QĐ PD KQ chào giá', ' Loại hàng hóa', 'Chủng loại hàng hóa'],
-          dataColumn: ['soQdPd', 'tenLoaiVthh', 'tenCloaiVthh'],
+          dataHeader: ['Số QĐ PD/ĐC KQ chào giá', ' Loại hàng hóa', 'Chủng loại hàng hóa'],
+          dataColumn: ['soQd', 'tenLoaiVthh', 'tenCloaiVthh'],
         },
       });
       modalQD.afterClose.subscribe(async (data) => {
@@ -596,8 +606,11 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       this.formData.patchValue({
         namHd: data.namKh,
         idChaoGia: data.id,
-        idQdPd: data.idHdr,
+        idQdPd: data.xhQdPdKhBttHdr.type === 'QDDC' ? data.xhQdPdKhBttHdr.idQdPd : data.idHdr,
         soQdPd: data.soQdPd,
+        idQdDc: data.xhQdPdKhBttHdr.type === 'QDDC' ? data.idHdr : null,
+        soQdDc: data.soQdDc,
+        soQd: data.soQdDc || data.soQdPd,
         idQdNv: data.idQdNv,
         soQdNv: data.soQdNv,
         ngayKyUyQuyen: data.ngayNhanCgia,
@@ -646,7 +659,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   }
 
   ChangeUyQuyen(event) {
-    if (this.flagInit && event && event !== this.formData.value.soQdPd) {
+    if (this.flagInit && event && event !== this.formData.value.soQd) {
       this.formData.patchValue({
         listMaDviTsan: null,
       });

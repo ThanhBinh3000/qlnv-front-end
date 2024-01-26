@@ -178,11 +178,12 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
       const res = await this.chaoGiaMuaLeUyQuyenService.search(body);
       if (res && res.msg === MESSAGE.SUCCESS) {
         const set = new Set(this.loadQuyetDinhKetQua.map(item => item.idChaoGia));
-        this.dataThongTinChaoGia = res.data.content.filter(item => !set.has(item.id));
-        this.dataThongTinChaoGia = this.dataThongTinChaoGia.map(item => {
-          item.soQd = item.soQdDc ? item.soQdDc : item.soQdPd;
-          return item;
-        });
+        this.dataThongTinChaoGia = res.data.content
+          .filter(item => !set.has(item.id))
+          .map(item => ({
+            ...item,
+            soQd: item.soQdDc || item.soQdPd
+          }));
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH THÔNG TIN CHÀO GIÁ',
