@@ -258,9 +258,8 @@
         <th class="text-center" *ngIf="userService.isChiCuc()">Trạng thái</th>
         <th class="text-center" *ngIf="!userService.isChiCuc()">Trạng thái NH</th>
         <th class="text-center" *ngIf="!userService.isChiCuc()">Trạng thái phân bổ</th>
-        <th *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO')"
-            nzWidth="80px" class="text-center">Hành
-          động
+        <th *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO')"
+            nzWidth="80px" class="text-center">Hành động
         </th>
       </tr>
       </thead>
@@ -282,7 +281,7 @@
           <td *ngIf="userService.isChiCuc()">{{ item.tenTrangThai }}</td>
           <td *ngIf="!userService.isChiCuc()"></td>
           <td *ngIf="!userService.isChiCuc()">{{ item.tenTrangThai }}</td>
-          <td *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO') "></td>
+          <td *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO') "></td>
         </tr>
         <tr
           *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO') && item.trangThai != STATUS.HOAN_THANH_CAP_NHAT ">
@@ -290,27 +289,27 @@
           <td></td>
           <td></td>
           <td>
-            <nz-select [(ngModel)]="rowItem.maDiemKho" (ngModelChange)="changeDiemKho()">
-              <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.key" [nzLabel]="item.title">
+            <nz-select [(ngModel)]="rowItem.maDiemKho" (ngModelChange)="changeDiemKho(i)">
+              <nz-option *ngFor="let item of listDiemKho[i]" [nzValue]="item.key" [nzLabel]="item.title">
               </nz-option>
             </nz-select>
           </td>
           <td>{{rowItem.soLuongDiemKho}}</td>
           <td>
-            <nz-select [(ngModel)]="rowItem.maNhaKho" (ngModelChange)="changeNhaKho()">
-              <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.key" [nzLabel]="item.title">
+            <nz-select [(ngModel)]="rowItem.maNhaKho" (ngModelChange)="changeNhaKho(i)">
+              <nz-option *ngFor="let item of listNhaKho[i]" [nzValue]="item.key" [nzLabel]="item.title">
               </nz-option>
             </nz-select>
           </td>
           <td>
-            <nz-select [(ngModel)]="rowItem.maNganKho" (ngModelChange)="changeNganKho()">
-              <nz-option *ngFor="let item of listNganKho" [nzValue]="item.key" [nzLabel]="item.title">
+            <nz-select [(ngModel)]="rowItem.maNganKho" (ngModelChange)="changeNganKho(i)">
+              <nz-option *ngFor="let item of listNganKho[i]" [nzValue]="item.key" [nzLabel]="item.title">
               </nz-option>
             </nz-select>
           </td>
           <td>
-            <nz-select [(ngModel)]="rowItem.maLoKho" (ngModelChange)="changeLoKho()">
-              <nz-option *ngFor="let item of listNganLo" [nzValue]="item.key" [nzLabel]="item.title">
+            <nz-select [(ngModel)]="rowItem.maLoKho" (ngModelChange)="changeLoKho(i)">
+              <nz-option *ngFor="let item of listNganLo[i]" [nzValue]="item.key" [nzLabel]="item.title">
               </nz-option>
             </nz-select>
           </td>
@@ -326,7 +325,7 @@
           <td *ngIf="!userService.isChiCuc()"></td>
           <td *ngIf="!userService.isChiCuc()"></td>
           <td style="text-align: center;"
-              *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO')">
+              *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO')">
             <a (click)="themDiaDiemNhap(i)">
               <i class="fa fa-plus"></i>
             </a>
@@ -352,7 +351,7 @@
             <td *ngIf="userService.isChiCuc()"></td>
             <td *ngIf="!userService.isChiCuc()"></td>
             <td *ngIf="!userService.isChiCuc()"></td>
-            <td *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO')"
+            <td *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO')"
                 style="text-align: center;">
               <a *ngIf="item.trangThai != STATUS.HOAN_THANH_CAP_NHAT">
                 <i (click)="editRow(i, y)" class="fa fa-pencil" title="Sửa"></i>
@@ -367,27 +366,27 @@
             <td></td>
             <td></td>
             <td>
-              <nz-select [(ngModel)]="rowItemEdit.maDiemKho" (ngModelChange)="changeDiemKho(true)">
-                <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.key" [nzLabel]="item.title">
+              <nz-select [(ngModel)]="rowItemEdit.maDiemKho" (ngModelChange)="changeDiemKho(i,true)">
+                <nz-option *ngFor="let item of listDiemKho[i]" [nzValue]="item.key" [nzLabel]="item.title">
                 </nz-option>
               </nz-select>
             </td>
             <td>{{rowItemEdit.soLuongDiemKho}}</td>
             <td>
-              <nz-select [(ngModel)]="rowItemEdit.maNhaKho" (ngModelChange)="changeNhaKho(true)">
-                <nz-option *ngFor="let item of listNhaKhoEdit" [nzValue]="item.key" [nzLabel]="item.title">
+              <nz-select [(ngModel)]="rowItemEdit.maNhaKho" (ngModelChange)="changeNhaKho(i,true)">
+                <nz-option *ngFor="let item of listNhaKhoEdit[i]" [nzValue]="item.key" [nzLabel]="item.title">
                 </nz-option>
               </nz-select>
             </td>
             <td>
-              <nz-select [(ngModel)]="rowItemEdit.maNganKho" (ngModelChange)="changeNganKho(true)">
-                <nz-option *ngFor="let item of listNganKhoEdit" [nzValue]="item.key" [nzLabel]="item.title">
+              <nz-select [(ngModel)]="rowItemEdit.maNganKho" (ngModelChange)="changeNganKho(i,true)">
+                <nz-option *ngFor="let item of listNganKhoEdit[i]" [nzValue]="item.key" [nzLabel]="item.title">
                 </nz-option>
               </nz-select>
             </td>
             <td>
-              <nz-select [(ngModel)]="rowItemEdit.maLoKho" (ngModelChange)="changeLoKho(true)">
-                <nz-option *ngFor="let item of listNganLoEdit" [nzValue]="item.key" [nzLabel]="item.title">
+              <nz-select [(ngModel)]="rowItemEdit.maLoKho" (ngModelChange)="changeLoKho(i,true)">
+                <nz-option *ngFor="let item of listNganLoEdit[i]" [nzValue]="item.key" [nzLabel]="item.title">
                 </nz-option>
               </nz-select>
             </td>
@@ -403,7 +402,7 @@
             <td *ngIf="!userService.isChiCuc()"></td>
             <td *ngIf="!userService.isChiCuc()"></td>
             <td style="text-align: center;"
-                *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO')">
+                *ngIf=" userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO')">
               <a (click)="saveEdit(i, y)">
                 <i class="fa fa-save"></i>
               </a>

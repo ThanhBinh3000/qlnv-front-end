@@ -23,6 +23,8 @@ export class QuyetDinhUyQuenBanLeComponent extends Base2Component implements OnI
   isView: boolean = false;
   idQdPdKh: number = 0;
   isViewQdPdKh: boolean = false;
+  idQdDc: number = 0;
+  isViewQdDc: boolean = false;
   idDxKh: number = 0;
   isViewDxKh: boolean = false;
   listTrangThai: any[] = [
@@ -98,6 +100,10 @@ export class QuyetDinhUyQuenBanLeComponent extends Base2Component implements OnI
         this.idQdPdKh = id;
         this.isViewQdPdKh = true;
         break;
+      case 'QdDc':
+        this.idQdDc = id;
+        this.isViewQdDc = true;
+        break;
       case 'DxKh':
         this.idDxKh = id;
         this.isViewDxKh = true;
@@ -112,6 +118,10 @@ export class QuyetDinhUyQuenBanLeComponent extends Base2Component implements OnI
       case 'QdKh':
         this.idQdPdKh = null;
         this.isViewQdPdKh = false;
+        break;
+      case 'QdDc':
+        this.idQdDc = null;
+        this.isViewQdDc = false;
         break;
       case 'DxKh':
         this.idDxKh = null;
