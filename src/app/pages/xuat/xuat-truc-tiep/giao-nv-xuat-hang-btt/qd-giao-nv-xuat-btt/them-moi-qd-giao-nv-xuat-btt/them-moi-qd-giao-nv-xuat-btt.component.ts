@@ -290,6 +290,7 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
       loaiVthh: this.loaiVthh,
       trangThai: STATUS.DA_HOAN_THANH,
       pthucBanTrucTiep: [THONG_TIN_BAN_TRUC_TIEP.UY_QUYEN, THONG_TIN_BAN_TRUC_TIEP.BAN_LE],
+      lastest: 1,
     };
     try {
       const res = await this.chaoGiaMuaLeUyQuyenService.search(body);
