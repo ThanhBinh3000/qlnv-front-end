@@ -53,6 +53,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
       namKh: [],
       soQdKq: [''],
       soQdPd: [''],
+      soQdDc: [''],
       tenDuAn: [''],
       tenDviCha: [''],
       tenDvi: [''],
@@ -103,6 +104,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
       this.formData.patchValue({
         namKh: data.namKh,
         soQdPd: data.soQdPd,
+        soQdDc: data.soQdDc,
         soQdKq: data.soQdKq,
         tenDvi: data.tenDvi,
         loaiVthh: data.loaiVthh,
@@ -151,6 +153,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
         namKh: data.namKh,
         tenDviCha: data.tenDvi,
         soQdPd: data.soQdPd,
+        soQdDc: data.soQdDc,
         loaiVthh: data.loaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
         cloaiVthh: data.cloaiVthh,
