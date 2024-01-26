@@ -308,7 +308,7 @@
         <tr *ngFor="let data of pagTtChungs; let idx = index">
           <td>{{ idx + 1 }}</td>
           <td>{{ data.tenChiCuc }}</td>
-          <td class="text-right">{{ data.soLuongCtieu | number : '1.0-1' : 'vi-VN'}}</td>
+          <td class="text-right">{{ data.soLuongCtieu | number : '1.0-3' : 'vi-VN'}}</td>
           <td class="text-right" *ngIf="!isView">
             <input class="money-input" currencyMask [options]="amount" [(ngModel)]="data.soLuong" (ngModelChange)="checkMaxValue(data)"
                    [readOnly]="isView" />
@@ -329,8 +329,8 @@
         <tr>
           <th></th>
           <th class="text-right font-weight-bold">Tổng</th>
-          <th class="text-right"> {{calcTong('soLuongCtieu') | number : '1.0-1' : 'vi-VN'}}</th>
-          <th class="text-right"> {{calcTong('soLuong') | number : '1.0-1' : 'vi-VN'}}</th>
+          <th class="text-right"> {{calcTong('soLuongCtieu') | number : '1.0-3' : 'vi-VN'}}</th>
+          <th class="text-right"> {{calcTong('soLuong') | number : '1.0-3' : 'vi-VN'}}</th>
           <th></th>
           <th *ngIf="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'"></th>
         </tr>
