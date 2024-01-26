@@ -272,7 +272,6 @@ export class ThemMoiSoTheoDoiBqComponent extends Base3Component implements OnIni
         const data = res.data.object;
         let date = new Date(data.ngayNhapDay);
         let date2 = new Date(data.ngayNhapDay);
-        console.log(this.formData.value.thoiHanLk,this.formData.value.thoiHanBh);
         const dateHetHanLk = new Date(date.setMonth(date.getMonth()+this.formData.value.thoiHanLk));
         const dateHetHanBh = new Date(date2.setMonth(date2.getMonth()+this.formData.value.thoiHanBh));
         this.formData.patchValue({
