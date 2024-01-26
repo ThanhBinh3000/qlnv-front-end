@@ -173,6 +173,7 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
         loaiVthh: this.loaiVthh,
         trangThai: STATUS.DA_HOAN_THANH,
         pthucBanTrucTiep: ['01'],
+        lastest: 1,
       };
       await this.loadQdNvXuatHang();
       const res = await this.chaoGiaMuaLeUyQuyenService.search(body);
