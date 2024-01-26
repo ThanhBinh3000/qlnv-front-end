@@ -166,20 +166,20 @@
     <div class="cantrai">
     </div>
     <div class="canphai">
-      <!-- <button nz-button (click)="downloadPdf()"
+      <button nz-button (click)="downloadPdf()"
             class="modal__button--save ml-2">
         <i class="icon htvbdh_file-pdf"></i>
         Xuất .pdf
       </button>
-      <button nz-button (click)="downloadExcel()"
+      <button nz-button (click)="downloadWord()"
               class="modal__button--save ml-2">
         <i class="icon htvbdh_nhap-excel"></i>
         Xuất Excel
       </button>
-      <button type="button" class="btn btn-main ml-2" (click)="doPrint()">
+      <button type="button" class="btn btn-main ml-2" (click)="printPreview()">
         <i nz-icon nzType="printer" nzTheme="outline"></i>
         <span>In</span>
-      </button> -->
+      </button>
       <button nz-button *ngIf="formData.value.trangThai == STATUS.DU_THAO" (click)="handleOk()"
               class="modal__button--save ml-2">
         <i nz-icon nzType="save"></i>

@@ -13,6 +13,8 @@ import {MESSAGE} from "../../../../../constants/message";
 import {Base3Component} from "../../../../../components/base3/base3.component";
 import { chain } from 'lodash';
 import {TongHopTieuHuyService} from "../../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/TongHopTieuHuy.service";
+import printJS from "print-js";
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-chitiet-th-th',
@@ -107,6 +109,18 @@ export class ChitietThThComponent extends Base3Component implements OnInit {
 
   showDetail() {
     this.isDetail = true;
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, "tong_hop_kh_lcnt.pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, "tong_hop_kh_lcnt.docx");
+  }
+
+  printPreview(){
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 
 }

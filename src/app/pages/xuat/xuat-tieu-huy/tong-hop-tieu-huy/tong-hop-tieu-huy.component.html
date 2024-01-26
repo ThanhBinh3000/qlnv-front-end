@@ -124,7 +124,7 @@
           <td></td>
           <td></td>
           <td>{{item.tenTrangThai}}</td>
-          <td>{{item.tenTrangThaiTh}}</td>
+          <td></td>
           <td>
             <a (click)="showDetail(item.id)">
               <span class="icon htvbdh_eye"></span>
@@ -180,7 +180,7 @@
                 <td>{{data.xhThDanhSachHdr.lyDo}}</td>
                 <td>{{item.thoiGianThTu | date : 'dd/MM/yyyy'}} - {{item.thoiGianThDen | date : 'dd/MM/yyyy'}}</td>
                 <td></td>
-                <td></td>
+                <td>{{item.xhThDanhSachHdr.tenTrangThaiTh}}</td>
                 <td></td>
               </tr>
             </ng-container>
