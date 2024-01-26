@@ -122,6 +122,10 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
       tenCloaiVthh: [''],
       ldoTuchoi: [''],
       trangThaiChiCuc: [],
+      tenTruongPhong: [],
+      dviCungCap: [],
+      nguoiTao: [],
+      nguoiPduyet: [],
       loaiHinhNx: 'Mua đấu thầu',
       kieuNx: 'Nhập mua'
     });
@@ -209,6 +213,7 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
             donViTinh: data.donViTinh,
             soLuong: data.soLuong,
             tgianNkho: data.tgianGiaoDuHang,
+            dviCungCap: data.tenNhaThau,
           })
           if (data.loaiVthh.startsWith('02')) {
             let dataUserLogin = data.details.filter(item => item.maDvi == this.userInfo.MA_DVI);
@@ -239,6 +244,7 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
             soLuong += i.soLuong
           })
           this.formData.get('soLuong').setValue(soLuong);
+          await this.loadDiemKho()
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg)
         }
