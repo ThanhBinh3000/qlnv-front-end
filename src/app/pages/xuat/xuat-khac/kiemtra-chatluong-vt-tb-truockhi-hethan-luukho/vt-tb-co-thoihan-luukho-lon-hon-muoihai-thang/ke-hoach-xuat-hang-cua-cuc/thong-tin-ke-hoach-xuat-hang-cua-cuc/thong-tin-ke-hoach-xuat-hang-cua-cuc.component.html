@@ -198,7 +198,7 @@
                   <nz-form-control [nzErrorTip]="error">
                     <nz-input-group nzAddOnAfterIcon="folder-open"
                                     (click)="!isViewDetail  ? openDialogDsTongHop():  'javascript:;'">
-                      <input class="search__input" [readonly]="true" nz-input formControlName="maTongHopDs"
+                      <input class="search__input" [readonly]="isViewDetail" nz-input formControlName="maTongHopDs"
                              readonly/>
                     </nz-input-group>
                 </nz-form-control>
