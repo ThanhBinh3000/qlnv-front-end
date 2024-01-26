@@ -72,7 +72,7 @@
         <th class="text-left"> Ngày ký QĐ</th>
         <th class="text-left"> Trích yếu</th>
         <th class="text-left"> Đơn vị</th>
-        <th class="text-left"> Số QĐ PDKH bán trực tiếp</th>
+        <th class="text-left"> Số QĐ PD KH/QĐ ĐC KH bán trực tiếp</th>
         <th class="text-left" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">Loại hàng DTQG</th>
         <th class="text-left"> Chủng loại hàng DTQG</th>
         <th class="text-left"> Trạng thái</th>
@@ -148,9 +148,14 @@
           {{data.trichYeu}}
         </td>
         <td class="text-left">{{ data.tenDvi }}</td>
-        <td class="text-left">
-          <a *ngIf="data.soQdPd && data.idQdPd" (click)="openModalQdPdKh(data.idQdPd)"
+        <td class="text-left" *ngIf="!data.soQdDc">
+          <a *ngIf="data.soQdPd && data.idQdPd" (click)="openModal(data.idQdPd, 'QdKh')"
              style="color: blue">{{data.soQdPd}}
+          </a>
+        </td>
+        <td class="text-left" *ngIf="data.soQdDc">
+          <a *ngIf="data.soQdDc && data.idQdDc" (click)="openModal(data.idQdDc, 'QdDc')"
+             style="color: blue">{{data.soQdDc}}
           </a>
         </td>
         <td class="text-left" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">{{data.tenLoaiVthh}}</td>
@@ -196,14 +201,27 @@
   </app-chi-tiet-quyet-dinh-chao-gia>
 </div>
 <!--xem -->
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPdKh" (nzOnCancel)="closeModalQdPdKh()">
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPdKh" (nzOnCancel)="closeModal('QdKh')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [idInput]="idQdPdKh" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
                                                 [isView]="true">
     </app-them-moi-qd-phe-duyet-kh-ban-truc-tiep>
   </ng-container>
   <div *nzModalFooter>
-    <button nz-button (click)="closeModalQdPdKh()" class="modal__button--cancel">
+    <button nz-button (click)="closeModal('QdKh')" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPdDc" (nzOnCancel)="closeModal('QdDc')">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-chi-tiet-dieu-chinh-ban-truc-tiep [idInput]="idQdPdDc" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
+                                           [isView]="true">
+    </app-chi-tiet-dieu-chinh-ban-truc-tiep>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModal('QdDc')" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>
