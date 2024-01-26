@@ -759,7 +759,7 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
     for (let i = 0; i < this.dataTable.length; i++) {
       let body = {
         maDvi: this.dataTable[i].maDvi,
-        loaiVthh: this.loaiVthh,
+        loaiVthh: this.formData.value.loaiVthh,
         cloaiVthh: this.formData.value.cloaiVthh,
       }
       const res = await this.donViService.getDonViHangTree(body);
