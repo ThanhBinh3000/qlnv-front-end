@@ -14,6 +14,8 @@ import { STATUS } from 'src/app/constants/status';
 import { StorageService } from 'src/app/services/storage.service';
 import { TongHopScService } from 'src/app/services/sua-chua/tongHopSc.service';
 import { TongHopThanhLyService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/TongHopThanhLy.service';
+import printJS from "print-js";
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-chitiet-th',
@@ -109,6 +111,18 @@ export class ChitietThComponent extends Base3Component implements OnInit {
 
   showDetail() {
     this.isDetail = true;
+  }
+
+  downloadPdf() {
+    saveAs(this.pdfSrc, "tong_hop_kh_lcnt.pdf");
+  }
+
+  downloadWord() {
+    saveAs(this.wordSrc, "tong_hop_kh_lcnt.docx");
+  }
+
+  printPreview(){
+    printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
 
 }

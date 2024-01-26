@@ -55,7 +55,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   amount = {
     allowZero: true,
     allowNegative: false,
-    precision: 1,
+    precision: 3,
     prefix: '',
     thousands: '.',
     decimal: ',',

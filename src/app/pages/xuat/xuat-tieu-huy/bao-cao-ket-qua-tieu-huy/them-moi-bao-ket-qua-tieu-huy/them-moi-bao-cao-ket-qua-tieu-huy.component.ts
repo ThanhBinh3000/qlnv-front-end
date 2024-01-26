@@ -27,7 +27,7 @@ import {Base3Component} from "../../../../../components/base3/base3.component";
 export class ThemMoiBaoCaoKetQuaTieuHuyComponent extends Base3Component implements OnInit {
   symbol: string = ''
 
-  optionDanhGia: any[] = ['Thành công', 'Không thành công'];
+  optionDanhGia: any[] = ['Thành công', 'Không thành công','Chưa thực hiện','Đang thực hiện'];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
