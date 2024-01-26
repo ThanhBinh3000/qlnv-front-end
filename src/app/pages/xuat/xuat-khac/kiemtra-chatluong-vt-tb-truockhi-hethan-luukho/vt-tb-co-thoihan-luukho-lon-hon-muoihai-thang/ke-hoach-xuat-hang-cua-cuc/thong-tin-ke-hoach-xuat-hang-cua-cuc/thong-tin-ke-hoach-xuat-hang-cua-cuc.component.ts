@@ -195,7 +195,7 @@ export class ThongTinKeHoachXuatHangCuaCucComponent extends Base2Component imple
   }
 
   async loadKeHoachCuc() {
-    await this.spinner.show();
+    // await this.spinner.show();
     let body = {
       capDvi: "2",
       loai: this.KE_HOACH,
