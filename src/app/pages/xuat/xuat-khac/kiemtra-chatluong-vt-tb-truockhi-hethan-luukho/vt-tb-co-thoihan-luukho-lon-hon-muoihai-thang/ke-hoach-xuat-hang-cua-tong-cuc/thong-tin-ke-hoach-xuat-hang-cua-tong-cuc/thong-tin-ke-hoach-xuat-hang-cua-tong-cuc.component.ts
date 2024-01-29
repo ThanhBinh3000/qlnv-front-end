@@ -77,7 +77,7 @@ export class ThongTinKeHoachXuatHangCuaTongCucComponent extends Base2Component i
       diaChi: [],
       loaiHinhNhapXuat: [null, [Validators.required]],
       kieuNhapXuat: [null, [Validators.required]],
-      namKeHoach: [null, [Validators.required]],
+      namKeHoach: [dayjs().get('year'), [Validators.required]],
       soToTrinh: [null, [Validators.required]],
       trichYeu: [],
       ngayKeHoach: [dayjs().format("YYYY-MM-DD")],
@@ -236,7 +236,7 @@ export class ThongTinKeHoachXuatHangCuaTongCucComponent extends Base2Component i
   }
 
   async loadKeHoachTcuc() {
-    await this.spinner.show();
+    // await this.spinner.show();
     let body = {
       capDvi: "1",
       loai: this.KE_HOACH,

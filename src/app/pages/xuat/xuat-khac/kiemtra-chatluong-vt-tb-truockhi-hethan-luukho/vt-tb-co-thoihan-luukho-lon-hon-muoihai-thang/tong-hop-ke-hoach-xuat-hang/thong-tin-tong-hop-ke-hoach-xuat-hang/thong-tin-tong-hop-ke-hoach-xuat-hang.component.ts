@@ -142,17 +142,17 @@ export class ThongTinTongHopKeHoachXuatHangComponent extends Base2Component impl
         let listDataKh = res.data;
         let dtl= [];
         if (listDataKh) {
-          this.formData.patchValue({
-            listSoKeHoachs: listDataKh.listSoKeHoachs.join(','),
-            listIdKeHoachs: listDataKh.listIdKeHoachs,
-            xhXkKhXuatHangDtl: listDataKh.xhXkKhXuatHangDtl,
-          });
           dtl = cloneDeep(listDataKh.xhXkKhXuatHangDtl);
           if (this.formData.get('loaiVthh').value != null){
             this.listKeHoachDtl=dtl.filter(i => i.loaiVthh==this.formData.get('loaiVthh').value);
           }else {
             this.listKeHoachDtl=dtl;
           }
+          this.formData.patchValue({
+            listSoKeHoachs: listDataKh.listSoKeHoachs.join(','),
+            listIdKeHoachs: listDataKh.listIdKeHoachs,
+            xhXkKhXuatHangDtl:  this.listKeHoachDtl,
+          });
           this.listDxCuc = cloneDeep(listDataKh.listDxCuc);
           this.isTongHop = true;
           if (this.listKeHoachDtl.length > 0){
