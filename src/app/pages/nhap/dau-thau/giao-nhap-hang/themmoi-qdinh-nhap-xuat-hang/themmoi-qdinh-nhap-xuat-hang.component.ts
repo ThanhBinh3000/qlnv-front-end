@@ -842,7 +842,8 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
       let nganKho = this.listNganKho[index].filter(x => x.key == this.rowItem.maNganKho);
       if (nganKho && nganKho.length > 0) {
         this.listNganLo[index] = nganKho[0].children;
-        this.rowItem.tenNganKho = nganKho[0].tenDvi
+        this.rowItem.tenNganKho = nganKho[0].tenDvi;
+        this.rowItem.slTon = nganKho[0].slTon
       }
     }
   }
@@ -856,7 +857,8 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
     } else {
       let loKho = this.listNganLo[index].filter(x => x.key == this.rowItem.maLoKho);
       if (loKho && loKho.length > 0) {
-        this.rowItem.tenLoKho = loKho[0].tenDvi
+        this.rowItem.tenLoKho = loKho[0].tenDvi;
+        this.rowItem.slTon = loKho[0].slTon
       }
     }
   }
