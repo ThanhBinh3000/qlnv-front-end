@@ -236,7 +236,7 @@ export class ThongTinKeHoachXuatHangCuaTongCucComponent extends Base2Component i
   }
 
   async loadKeHoachTcuc() {
-    // await this.spinner.show();
+    await this.spinner.show();
     let body = {
       capDvi: "1",
       loai: this.KE_HOACH,
@@ -254,6 +254,7 @@ export class ThongTinKeHoachXuatHangCuaTongCucComponent extends Base2Component i
     ];
     this.listMaTongHop = tongHop;
     console.log(this.listMaTongHop,3)
+    await this.spinner.hide();
   }
 
   async openDialogDsTongHop() {

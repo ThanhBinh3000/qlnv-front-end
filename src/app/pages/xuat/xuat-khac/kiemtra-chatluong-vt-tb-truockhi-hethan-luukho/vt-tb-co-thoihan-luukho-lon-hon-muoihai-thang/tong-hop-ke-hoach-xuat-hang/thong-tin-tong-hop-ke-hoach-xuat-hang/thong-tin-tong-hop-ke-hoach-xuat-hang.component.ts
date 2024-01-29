@@ -79,6 +79,7 @@ export class ThongTinTongHopKeHoachXuatHangComponent extends Base2Component impl
       maDvi: [this.userInfo.MA_DVI],
       tenTrangThai: ['Dự thảo kế hoạch'],
       loai: ['01', Validators.required],
+      idCanCuTh: [],
       listSoKeHoachs: [],
       listIdKeHoachs: [new Array()],
       xhXkKhXuatHangDtl: [new Array()],
@@ -152,6 +153,7 @@ export class ThongTinTongHopKeHoachXuatHangComponent extends Base2Component impl
             listSoKeHoachs: listDataKh.listSoKeHoachs.join(','),
             listIdKeHoachs: listDataKh.listIdKeHoachs,
             xhXkKhXuatHangDtl:  this.listKeHoachDtl,
+            idCanCuTh: listDataKh.listIdKeHoachs.join(','),
           });
           this.listDxCuc = cloneDeep(listDataKh.listDxCuc);
           this.isTongHop = true;
