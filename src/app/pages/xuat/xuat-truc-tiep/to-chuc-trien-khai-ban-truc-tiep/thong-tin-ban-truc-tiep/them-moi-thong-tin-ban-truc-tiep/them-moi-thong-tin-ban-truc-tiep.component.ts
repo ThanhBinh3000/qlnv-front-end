@@ -135,7 +135,9 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         });
       }
       this.dataTable = data.children;
-      await this.selectRow(this.dataTable.flatMap(item => item.children)[0]);
+      if (this.dataTable && this.dataTable.length > 0){
+        await this.selectRow(this.dataTable.flatMap(item => item.children)[0]);
+      }
       this.fileDinhKem = data.fileDinhKem;
       await this.loadToChucCaNhan();
     } catch (e) {
