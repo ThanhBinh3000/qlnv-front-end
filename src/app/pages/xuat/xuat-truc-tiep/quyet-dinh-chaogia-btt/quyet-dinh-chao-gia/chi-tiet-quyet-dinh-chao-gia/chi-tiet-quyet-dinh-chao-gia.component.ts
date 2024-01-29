@@ -127,7 +127,7 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
       soQdKq: data.soQdKq?.split('/')[0] || null,
     });
     this.dataTable = data.children;
-    if (this.dataTable && this.dataTable.length > 0){
+    if (this.dataTable && this.dataTable.length > 0) {
       await this.selectRow(this.dataTable.flatMap(item => item.children)[0]);
     }
   }
@@ -276,7 +276,7 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
           });
       });
       this.dataTable = data.children.filter(item => item.children && item.children.length > 0);
-      if (this.dataTable && this.dataTable.length > 0){
+      if (this.dataTable && this.dataTable.length > 0) {
         await this.selectRow(this.dataTable.flatMap(item => item.children)[0]);
       }
     } catch (e) {
@@ -301,7 +301,11 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
     if (!data.selected) {
       this.dataTableAll.forEach(item => item.selected = false);
       data.selected = true;
-      const findndex = this.dataTableAll.findIndex(child => child.id == data.id);
+      const findndex = this.dataTableAll.findIndex(child => child.maDviTsan === data.maDviTsan
+        && child.maDiemKho === data.maDiemKho
+        && child.maNhaKho === data.maNhaKho
+        && child.maNgankho === data.maNgankho
+        && child.maLoKho === data.maLoKho);
       this.listOfData = this.dataTableAll[findndex].children;
       this.showFromTT = true;
     }

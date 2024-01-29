@@ -129,7 +129,7 @@
                     <nz-input-group>
                       <nz-select nzMode="multiple" formControlName="listMaDviTsan"
                                  (ngModelChange)="selectMaDviTsanCuc()" [nzDisabled]="isView">
-                        <nz-option *ngFor="let item of listDviTsanFilter" [nzValue]="item.maDviTsan"
+                        <nz-option *ngFor="let item of listDviTsanHienThi" [nzValue]="item.maDviTsan"
                                    [nzLabel]="item.maDviTsan">
                         </nz-option>
                       </nz-select>

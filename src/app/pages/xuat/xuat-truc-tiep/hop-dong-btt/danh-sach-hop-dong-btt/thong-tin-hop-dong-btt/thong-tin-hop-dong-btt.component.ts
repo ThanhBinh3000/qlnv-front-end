@@ -55,6 +55,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   listTccnChaoGia: any[] = [];
   loadDanhSachHdong: any[] = [];
   listDviTsanFilter: any[] = [];
+  listDviTsanHienThi: any[] = [];
   listDviTsan: any[] = [];
   listAllDviTsan: any[] = [];
   flagInit: Boolean = false;
@@ -340,7 +341,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         return;
       }
       const data = res.data;
-      await this.loadDanhDachHopDong(data);
       this.formData.patchValue({
         namHd: data.namKh,
         loaiHinhNx: data.loaiHinhNx,
@@ -364,6 +364,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         slXuatBanQdPd: data.tongSoLuong || 0,
         donViTinh: this.listHangHoaAll.find(s => s.ma == data.loaiVthh)?.maDviTinh,
       });
+      await this.loadDanhDachHopDong();
       this.listTccnChaoGia = data.children.flatMap(item => item.children.flatMap(child => child.children.map(grandchild => grandchild))).filter(info => info.luaChon);
       const filteredItems = this.loadDanhSachHdong.filter(item => item.idQdKq === data.id && item.trangThai === STATUS.DA_KY);
       this.formData.patchValue({
@@ -454,6 +455,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         listMaDviTsan: null,
       });
       this.dataTable = [];
+      this.listDviTsanHienThi = [];
     }
     this.listDviTsanFilter = this.listDviTsan.map(grandchild => {
       if (grandchild.children && grandchild.children.length > 0) {
@@ -462,6 +464,24 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       }
       return null;
     }).filter(item => item !== null);
+    const dataGroup = this.listDviTsanFilter.reduce((acc, val) => {
+      acc[val.maDviTsan] = acc[val.maDviTsan] || [];
+      acc[val.maDviTsan].push(val);
+      return acc;
+    }, {});
+    if (this.idHopDong) {
+      this.listDviTsanHienThi.push(...Object.entries(dataGroup).map(([key, value]) => ({
+        maDviTsan: key,
+        children: value
+      })));
+    } else {
+      this.loadDanhDachHopDong()
+      this.loadDanhSachHdong = this.loadDanhSachHdong.filter(item => item.tenBenMua === event);
+      const filteredDataGroup = Object.entries(dataGroup)
+        .filter(([key]) => !this.loadDanhSachHdong.some(child => child.maDviTsan.split(',').includes(key)))
+        .map(([key, value]) => ({maDviTsan: key, children: value}));
+      this.listDviTsanHienThi.push(...filteredDataGroup);
+    }
   }
 
   async selectMaDviTsanCuc() {
@@ -601,7 +621,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         return;
       }
       const data = res.data;
-      await this.loadDanhDachHopDong(data);
       const loaiVthhItem = this.listHangHoaAll.find(s => s.ma == data.loaiVthh);
       this.formData.patchValue({
         namHd: data.namKh,
@@ -627,6 +646,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         slXuatBanQdPd: data.children.find(item => item.maDvi === this.userInfo.MA_DVI).soLuongChiCuc,
         donViTinh: loaiVthhItem?.maDviTinh,
       });
+      await this.loadDanhDachHopDong();
       const filteredItems = this.loadDanhSachHdong.filter(item => item.idChaoGia === data.id && item.trangThai === STATUS.DA_KY);
       const slXuatBanKyHdong = filteredItems.reduce((acc, item) => acc + item.soLuong, 0);
       const tonSl = this.formData.value.slXuatBanQdPd || 0
@@ -698,10 +718,10 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     }
   }
 
-  async loadDanhDachHopDong(dsData) {
+  async loadDanhDachHopDong() {
     const body = {
       loaiVthh: this.loaiVthh,
-      namHd: dsData.namKh,
+      namHd: this.formData.value.namHd,
     };
     const res = await this.hopDongBttService.search(body);
     if (res.msg !== MESSAGE.SUCCESS) {
