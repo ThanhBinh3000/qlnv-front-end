@@ -127,7 +127,9 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
       soQdKq: data.soQdKq?.split('/')[0] || null,
     });
     this.dataTable = data.children;
-    await this.selectRow(this.dataTable.flatMap(item => item.children)[0]);
+    if (this.dataTable && this.dataTable.length > 0){
+      await this.selectRow(this.dataTable.flatMap(item => item.children)[0]);
+    }
   }
 
   async save() {
@@ -262,11 +264,21 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
         tongSoLuong: data.tongSoLuong,
         tongGiaTriHdong: data.thanhTienDuocDuyet,
       });
-      this.dataTable = data.children;
-      this.dataTable.forEach((item) => {
+      data.children.forEach(item => {
+        item.id = null;
         item.isKetQua = true
-      })
-      await this.selectRow(this.dataTable.flatMap(item => item.children)[0]);
+        item.children = item.children
+          .filter(child => child.children && child.children.length > 0)
+          .map(child => {
+            child.id = null;
+            child.children.forEach(s => s.id = null);
+            return child;
+          });
+      });
+      this.dataTable = data.children.filter(item => item.children && item.children.length > 0);
+      if (this.dataTable && this.dataTable.length > 0){
+        await this.selectRow(this.dataTable.flatMap(item => item.children)[0]);
+      }
     } catch (e) {
       console.error('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
