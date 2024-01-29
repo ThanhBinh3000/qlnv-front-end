@@ -71,4 +71,5 @@ export class ThongTinDiaDiemNhap {
     soLuongDiemKho: number;
     soLuongGiao: number;
     soLuongPhanBo: number;
+  slTon: number;
 }
