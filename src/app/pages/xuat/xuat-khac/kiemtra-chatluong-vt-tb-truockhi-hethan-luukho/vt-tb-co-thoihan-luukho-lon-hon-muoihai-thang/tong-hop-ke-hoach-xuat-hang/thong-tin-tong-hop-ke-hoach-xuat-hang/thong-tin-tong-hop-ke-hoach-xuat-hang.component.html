@@ -23,7 +23,7 @@
         <span>Tạo KH xuất hàng</span>
       </button>
       <button type="button" class="btn btn-sub xanh mr-2" (click)="save()"
-              *ngIf="(!isViewDetail && isTongHop && formData.value.trangThai == STATUS.DAGUIDUYET_KH) ">
+              *ngIf="(!isViewDetail && isTongHop && formData.value.trangThai != STATUS.DAGUIDUYET_KH) ">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
@@ -226,7 +226,7 @@
             <tr>
               <th class="text-center">STT</th>
               <th>Loại hàng DTQG</th>
-              <th>Chủng loại DTQG</th>
+              <th>Chủng loại hàng DTQG</th>
               <th>Điểm kho</th>
               <th>Ngăn/lô kho</th>
               <th>Ngày nhập kho</th>
