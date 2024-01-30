@@ -40,8 +40,10 @@
       </div>
     </div>
   </nz-affix>
-  <nz-alert class='mg-t-10' *ngIf='formData.value.trangThai == STATUS.TU_CHOI_LDC' nzShowIcon nzType='error'
-            nzMessage='Lý do từ chối' nzDescription='{{formData.value.lyDoTuChoi}}'>
+  <nz-alert *ngIf='formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC '
+            nzShowIcon nzType='error'
+            nzMessage='Lý do từ chối'
+            nzDescription='{{formData.value.lyDoTuChoi}}'>
   </nz-alert>
   <nz-card class='mt16 flex-card p-lr16'>
     <!-- Thông tin chung -->
@@ -85,9 +87,11 @@
                 <nz-form-label [nzNoColon]='true' nzRequired>
                   Số báo cáo
                 </nz-form-label>
+                <nz-input-group [nzAddOnAfter]="maBc">
                 <nz-form-control [nzErrorTip]='error'>
                   <input nz-input [readOnly]='isView' formControlName='soBaoCao' />
                 </nz-form-control>
+                </nz-input-group>
               </nz-form-item>
             </div>
             <div nz-col nzSpan='5'>

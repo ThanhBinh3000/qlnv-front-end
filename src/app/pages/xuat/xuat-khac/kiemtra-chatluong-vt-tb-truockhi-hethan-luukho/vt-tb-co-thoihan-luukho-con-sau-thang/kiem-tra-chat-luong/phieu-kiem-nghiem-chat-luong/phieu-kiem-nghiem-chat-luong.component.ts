@@ -1,22 +1,19 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import { Base2Component } from '../../../../../../../components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from '../../../../../../../services/storage.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { chain } from 'lodash';
+import {Base2Component} from '../../../../../../../components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from '../../../../../../../services/storage.service';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzModalService} from 'ng-zorro-antd/modal';
 import * as uuid from 'uuid';
-import {
-  BienBanLayMauVtKtclService,
-} from '../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/BienBanLayMauVtKtcl.service';
-import { UserLogin } from '../../../../../../../models/userlogin';
-import { MESSAGE } from '../../../../../../../constants/message';
+import {UserLogin} from '../../../../../../../models/userlogin';
+import {MESSAGE} from '../../../../../../../constants/message';
 import dayjs from 'dayjs';
-import { CHUC_NANG } from '../../../../../../../constants/status';
+import {CHUC_NANG} from '../../../../../../../constants/status';
 import {
   PhieuKdclVtKtclService,
 } from '../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuKdclVtKtcl.service';
+import {chain, cloneDeep} from 'lodash';
 
 @Component({
   selector: 'app-xk-vt-phieu-kiem-nghiem-chat-luong',
@@ -115,6 +112,13 @@ export class XkVtPhieuKiemNghiemChatLuongComponent extends Base2Component implem
         this.formData.value.maDvi = this.userInfo.MA_DVI.substr(0, 6);
       }
       await this.search();
+      let data = cloneDeep(this.dataTable)
+      this.dataTable = [];
+      data.forEach(item => {
+        if (item.maDiaDiem.startsWith(this.userInfo.MA_DVI)) {
+          this.dataTable.push(item);
+        }
+      });
     } catch (e) {
       console.log(e);
     }
@@ -190,6 +194,7 @@ export class XkVtPhieuKiemNghiemChatLuongComponent extends Base2Component implem
   emitTab(tab) {
     this.tabFocus.emit(tab);
   }
+
   openBcKq() {
     this.baoCaoKq = !this.baoCaoKq;
     this.emitTab(2);

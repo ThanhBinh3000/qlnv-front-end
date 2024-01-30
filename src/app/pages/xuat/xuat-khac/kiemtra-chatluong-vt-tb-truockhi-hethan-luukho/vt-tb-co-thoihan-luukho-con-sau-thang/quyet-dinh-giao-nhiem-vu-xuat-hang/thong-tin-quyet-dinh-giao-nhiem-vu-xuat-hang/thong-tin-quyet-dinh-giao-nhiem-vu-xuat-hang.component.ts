@@ -466,6 +466,7 @@ export class ThongTinQuyetDinhGiaoNhiemVuXuatHangComponent extends Base2Componen
   }
 
   async getDetail(id: number) {
+    console.log(id,"id")
     await this.quyetDinhGiaoNvXuatHangService
       .getDetail(id)
       .then((res) => {
