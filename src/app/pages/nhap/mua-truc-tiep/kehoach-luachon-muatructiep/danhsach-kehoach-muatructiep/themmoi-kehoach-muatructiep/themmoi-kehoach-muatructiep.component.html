@@ -468,7 +468,7 @@
                               <td *ngIf="item.children.length == 0" class="text-right text-black">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
                               <td *ngIf="item.children.length != 0"></td>
                                 <td class="text-right">{{item.tongThanhTienVat | number : '1.0-1' : 'vi_VN'}}</td>
-                                <td class="text-right text-red">{{item.soLuongChiTieu - item.tongSoLuong - item.soLuongKhDd | number : '1.0-1' : 'vi_VN'}}</td>
+                                <td class="text-right text-red">{{item.soLuongChiTieu - item.soLuongKhDd | number : '1.0-1' : 'vi_VN'}}</td>
                                 <td>
                                   <a *ngIf="!isDisable() && item.children.length == 0" (click)="themMoiBangPhanLoTaiSan($event,item,i)">
                                     <i class="fa fa-pencil" title="Sửa"></i>
