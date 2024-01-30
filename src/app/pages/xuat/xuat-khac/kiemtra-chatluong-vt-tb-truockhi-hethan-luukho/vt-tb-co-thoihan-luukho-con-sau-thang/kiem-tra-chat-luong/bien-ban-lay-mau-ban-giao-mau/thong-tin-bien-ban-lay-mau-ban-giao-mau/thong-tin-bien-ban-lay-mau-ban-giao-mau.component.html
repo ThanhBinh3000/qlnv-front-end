@@ -130,7 +130,7 @@
                 <nz-form-label [nzNoColon]="true" nzRequired> Số phiếu xuất kho
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-select formControlName="soPhieuXuatKho" [nzDisabled]="isView || idInput > 0"
+                  <nz-select formControlName="soPhieuXuatKho" [nzDisabled]="isView"
                              (ngModelChange)="changeValuePhieuXuatKho($event)">
                     <nz-option *ngFor="let p of listPhieuXuatKho" [nzValue]="p.soPhieu"
                                [nzLabel]="p.soPhieu">
@@ -142,7 +142,7 @@
             <div nz-col [nzSpan]="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Ngăn/Lô kho</nz-form-label>
-                <nz-form-control>
+                <nz-form-control  [nzErrorTip]="error">
                   <input [readonly]="true" nz-input formControlName="tenDiaDiem" readonly/>
                 </nz-form-control>
               </nz-form-item>

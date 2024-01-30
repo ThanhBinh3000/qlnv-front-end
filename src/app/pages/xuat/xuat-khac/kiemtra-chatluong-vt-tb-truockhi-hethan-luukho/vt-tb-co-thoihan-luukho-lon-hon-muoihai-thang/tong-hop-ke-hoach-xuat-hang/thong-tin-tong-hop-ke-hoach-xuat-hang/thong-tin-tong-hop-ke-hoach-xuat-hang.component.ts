@@ -145,7 +145,7 @@ export class ThongTinTongHopKeHoachXuatHangComponent extends Base2Component impl
         if (listDataKh) {
           dtl = cloneDeep(listDataKh.xhXkKhXuatHangDtl);
           if (this.formData.get('loaiVthh').value != null){
-            this.listKeHoachDtl=dtl.filter(i => i.loaiVthh==this.formData.get('loaiVthh').value);
+            this.listKeHoachDtl=dtl.filter(i => i.loaiVthh==this.formData.get('loaiVthh').value && i.idTh == null);
           }else {
             this.listKeHoachDtl=dtl;
           }
