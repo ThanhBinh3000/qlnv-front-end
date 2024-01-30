@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import { Base2Component } from '../../../../../../../components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from '../../../../../../../services/storage.service';
@@ -57,7 +57,8 @@ export class XkVtPhieuKiemNghiemChatLuongComponent extends Base2Component implem
   expandSetString = new Set<string>();
   idPhieuKnCl: number = 0;
   openPhieuKnCl = false;
-
+  baoCaoKq = false;
+  @Output() tabFocus = new EventEmitter<object>();
   disabledStartNgayLayMau = (startValue: Date): boolean => {
     if (startValue && this.formData.value.ngayKiemDinhDen) {
       return startValue.getTime() >= this.formData.value.ngayKiemDinhDen.getTime();
@@ -184,5 +185,13 @@ export class XkVtPhieuKiemNghiemChatLuongComponent extends Base2Component implem
   async showList() {
     this.isDetail = false;
     await this.search();
+  }
+
+  emitTab(tab) {
+    this.tabFocus.emit(tab);
+  }
+  openBcKq() {
+    this.baoCaoKq = !this.baoCaoKq;
+    this.emitTab(2);
   }
 }
