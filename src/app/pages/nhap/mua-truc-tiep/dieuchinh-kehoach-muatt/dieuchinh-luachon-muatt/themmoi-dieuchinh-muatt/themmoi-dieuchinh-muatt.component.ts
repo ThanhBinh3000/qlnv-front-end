@@ -432,18 +432,15 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
       this.selected = true
     }
     if (data) {
+      await this.getDataChiTieu(data.idSoQdCc);
       this.dataInput = data;
       if(data.soQd != null){
         let res = await this.quyetDinhPheDuyetKeHoachMTTService.getDetail(data?.idQdHdr);
-        if(res.msg == MESSAGE.SUCCESS){
-          await this.getDataChiTieu(data.idSoQdCc);
-        }
         this.dataInputCache = res.data.children.find(x => x.maDvi == data.maDvi)
       }else{
         if(detail){
           let res = await this.dieuChinhQuyetDinhPdKhmttService.findByIdFromDcDx(data);
           console.log(res, "detail-idQdGoc")
-          await this.getDataChiTieu(data.idSoQdCc);
           if(res.msg == MESSAGE.SUCCESS){
             if(res.data.type == 'DC_HDR'){
               this.dataInputCache = res.data.hhDcQdPduyetKhmttDxList.find(x => x.maDvi == data.maDvi)

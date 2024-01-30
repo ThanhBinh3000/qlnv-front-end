@@ -231,7 +231,8 @@
         <td *ngIf="!isCache" class="text-blue text-right">{{item.tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
         <td *ngIf="!isCache" class="text-blue text-right">{{item.donGiaVat}}</td>
         <td class="text-blue text-right">{{item.tongSoLuong * item.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
-        <td *ngIf="isCache">{{convertTienTobangChu(item.tongSoLuong * item.donGiaVat * 1000)}}</td>
+<!--        <td *ngIf="isCache">{{convertTienTobangChu(item.tongSoLuong * item.donGiaVat * 1000)}}</td>-->
+        <td *ngIf="isCache"></td>
         <td class="text-red text-right">{{item.soLuongChiTieu - item.tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
         <td *ngIf="!isCache">
           <a *ngIf="!isView" (click)="themMoiBangPhanLoTaiSan(item,i)">

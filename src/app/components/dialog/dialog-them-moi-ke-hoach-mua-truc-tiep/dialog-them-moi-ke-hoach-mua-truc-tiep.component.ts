@@ -241,7 +241,8 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     let soLuongDaLenKh = await this.soLuongNhapHangService.getSoLuongCtkhTheoQd(body);
     let soLuongDaLenKhByIdQd = await this.soLuongNhapHangService.getSoLuongCtkhTheoQdByIdQd(body);
     let resChiTieu = this.dataChiTieu?.khLuongThuc.find(x => x.maDonVi == event);
-    let chiCuc = this.listChiCuc.filter(item => item.maDvi == event)[0];
+    console.log(this.dataAll, "dataAll")
+    let chiCuc = this.dataAll.find(item => item.maDvi == event);
     const res = await this.donViService.getDonVi({ str: event })
     this.listDiemKho = [];
     if (res.msg == MESSAGE.SUCCESS) {
@@ -251,12 +252,12 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
         dvt: resChiTieu?.donViTinh,
         // maDonVi: res.data.maDvi,
 
-        // soLuongNhap: chiCuc?.soLuongNhap,
-        // tongSoLuong: chiCuc?.tongSoLuong,
-        // donGiaVat: chiCuc?.donGiaVat,
-        // tongThanhTien: chiCuc?.tongThanhTien,
-        // tongThanhTienVat: chiCuc?.tongThanhTienVat,
-        // donGia: chiCuc?.donGia,
+        soLuongNhap: chiCuc?.soLuongNhap,
+        tongSoLuong: chiCuc?.tongSoLuong,
+        donGiaVat: chiCuc?.donGiaVat,
+        tongThanhTien: chiCuc?.tongThanhTien,
+        tongThanhTienVat: chiCuc?.tongThanhTienVat,
+        donGia: chiCuc?.donGia,
       })
       if(soLuongDaLenKh && resChiTieu){
         this.formData.patchValue({
