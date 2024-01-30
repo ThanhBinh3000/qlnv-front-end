@@ -5,11 +5,8 @@ import {StorageService} from "../../../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {chain} from 'lodash';
+import {chain, cloneDeep} from 'lodash';
 import * as uuid from "uuid";
-import {
-  PhieuXuatNhapKhoService
-} from "../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/PhieuXuatNhapKho.service";
 import {UserLogin} from "../../../../../../../models/userlogin";
 import {MESSAGE} from "../../../../../../../constants/message";
 import dayjs from "dayjs";
@@ -112,6 +109,13 @@ export class XkBienBanLayMauBanGiaoMauComponent extends Base2Component implement
         this.formData.value.ngayLayMauDen = dayjs(this.formData.value.ngayLayMau[1]).format('YYYY-MM-DD')
       }
       await this.search();
+      let data = cloneDeep(this.dataTable)
+      this.dataTable = [];
+      data.forEach(item => {
+        if (item.maDiaDiem.startsWith(this.userInfo.MA_DVI)) {
+          this.dataTable.push(item);
+        }
+      });
     } catch (e) {
       console.log(e)
     }
