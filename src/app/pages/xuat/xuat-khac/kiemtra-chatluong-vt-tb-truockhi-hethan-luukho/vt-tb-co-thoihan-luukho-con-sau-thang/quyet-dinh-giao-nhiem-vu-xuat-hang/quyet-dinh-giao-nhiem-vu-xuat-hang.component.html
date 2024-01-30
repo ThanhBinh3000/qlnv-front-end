@@ -178,16 +178,16 @@
           <td>{{ data.tenTrangThaiXh }}</td>
           <td class='text-left'>
             <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_QDGNVXH_XEM')"
-               (click)="themMoi(true, data.id)">
+               (click)="themMoi( data.id,true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC ) && userService.isCuc()
               && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_QDGNVXH_THEM')"
-               (click)="themMoi(false, data.id)">
+               (click)="themMoi(data.id,false)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a *ngIf="(data.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_QDGNVXH_DUYETTP') || data.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_QDGNVXH_DUYETLDC') ) && userService.isCuc() "
-               (click)="themMoi(false, data.id)">
+               (click)="themMoi( data.id,false)">
               <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
             </a>
             <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc() && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_QDGNVXH_XOA')"

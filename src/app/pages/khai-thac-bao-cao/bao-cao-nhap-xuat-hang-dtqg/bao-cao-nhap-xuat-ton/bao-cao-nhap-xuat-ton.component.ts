@@ -49,7 +49,7 @@ export class BaoCaoNhapXuatTonComponent extends Base2Component implements OnInit
   }
   disabledStartNgay = (startValue: Date): boolean => {
     if (startValue && this.formData.value.ngayKetThuc) {
-      return startValue.getTime() > this.formData.value.ngayKetThuc.getTime();
+      return startValue.getTime() > this.formData.value.ngayKetThuc;
     }
     return false;
   };
@@ -58,7 +58,7 @@ export class BaoCaoNhapXuatTonComponent extends Base2Component implements OnInit
     if (!endValue || !this.formData.value.ngayBatDau) {
       return false;
     }
-    return endValue.getTime() <= this.formData.value.ngayBatDau.getTime();
+    return endValue.getTime() <= this.formData.value.ngayBatDau;
   };
 
 
