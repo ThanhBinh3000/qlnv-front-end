@@ -33,5 +33,9 @@ export class KiemTraChatLuongComponent implements OnInit {
   selectTab(tab: number) {
     this.tabSelected = tab;
   }
-
+  receivedTab(tab) {
+    if (tab >= 0) {
+      this.tabSelected = tab;
+    }
+  }
 }

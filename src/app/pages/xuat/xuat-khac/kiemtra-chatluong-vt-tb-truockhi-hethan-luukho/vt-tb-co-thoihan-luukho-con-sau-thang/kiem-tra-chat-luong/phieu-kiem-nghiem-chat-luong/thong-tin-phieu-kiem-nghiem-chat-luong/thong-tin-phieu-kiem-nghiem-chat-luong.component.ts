@@ -68,6 +68,7 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
   listBbLayMau: any = [];
   dataTableChiTieu: any[] = [];
   templateName = 'xuat-khac-phieu_khiem_nghiem_cl.docx';
+  listSoPhieuKd: any;
 
   constructor(
     httpClient: HttpClient,
@@ -257,6 +258,7 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
         ngayQdGiaoNvXh: data.ngayKy,
       });
       await this.getListBbLayMau(data);
+      await this.listPhieuKdMau(data)
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, e.msg);
     } finally {
@@ -281,6 +283,27 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
     } finally {
       await this.spinner.hide();
     }
+  }
+
+  async listPhieuKdMau(itemQdGnvXh) {
+    let body = {
+      soQdGiaoNvXh:  itemQdGnvXh.soQuyetDinh,
+    }
+    let res = await this.phieuKdclVtKtclService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.listSoPhieuKd = data.content;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+      let bienBan = [
+        ...this.listBbLayMau.filter((e) => {
+          return !this.listSoPhieuKd.some((bb) => {
+            return e.soBienBan === bb.soBbLayMau;
+          });
+        }),
+      ];
+      this.listBbLayMau = bienBan;
   }
 
   async listBienBan(item) {

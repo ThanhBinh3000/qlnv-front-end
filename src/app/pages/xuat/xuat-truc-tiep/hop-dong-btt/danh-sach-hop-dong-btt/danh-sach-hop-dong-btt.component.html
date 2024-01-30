@@ -80,6 +80,7 @@
           <th nzWidth="50px" class="text-center wrap"> STT</th>
           <th class="text-left">Năm KH</th>
           <th class="text-left">QĐ PD KHBTT</th>
+          <th class="text-left">QĐ ĐC KHBTT</th>
           <th class="text-left">QĐ PD KQ chào giá</th>
           <th class="text-center">SL HĐ cần ký</th>
           <th class="text-center">SL HĐ đã ký</th>
@@ -106,6 +107,12 @@
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdPd"
                      (input)="filterInTable('soQdPd',filterTable.soQdPd)" size="small"/>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdDc"
+                     (input)="filterInTable('soQdDc',filterTable.soQdDc)" size="small"/>
             </nz-input-group>
           </th>
           <th>
@@ -189,6 +196,12 @@
             </a>
           </td>
           <td class="text-left">
+            <a *ngIf="data.soQdDc && data.idQdDc"
+               (click)="openModal(data.idQdDc, 'dieuChinh')"
+               style="color: blue"> {{ data.soQdDc}}
+            </a>
+          </td>
+          <td class="text-left">
             <a *ngIf="data.soQdKq && data.id"
                (click)="openModal(data.id, 'ketQua')"
                style="color: blue">{{ data.soQdKq }}
@@ -256,6 +269,19 @@
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeModal('ChiTieu')" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModal('dieuChinh')">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <!--    <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [id]="idQdPd" [isViewDetail]="true"-->
+    <!--                                           [isViewOnModal]="true">-->
+    <!--    </app-them-moi-qd-phe-duyet-kh-ban-truc-tiep>-->
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModal('dieuChinh')" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>

@@ -7,7 +7,7 @@
       Tổng hợp danh sách VT, TB hết hạn lưu kho nhưng chưa có kế hoạch xuất
     </li>
     <li [nzSelected]="tabSelected==2" *ngIf="!userService.isChiCuc()" nz-menu-item (click)="selectTab(2)">
-      Kế hoạch xuất hàng của cục
+      Kế hoạch xuất hàng của Cục
     </li>
     <li [nzSelected]="tabSelected==3" nz-menu-item *ngIf="userService.isTongCuc()" (click)="selectTab(3)">
       Tổng hợp kế hoạch xuất hàng

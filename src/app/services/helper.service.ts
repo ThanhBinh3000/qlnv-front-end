@@ -223,6 +223,16 @@ export class HelperService {
           let user = this.userService.getUserLogin();
           let userId = user.ID;
           let certificateNumber = JSON.parse(rv2)[0].SigInfo.SignerCert.SerialNumber;
+          console.log(JSON.parse(rv2)[0].ValidationDetails.SignerCertStatus);
+          if(JSON.parse(rv2)[0].ValidationDetails.SignerCertStatus === null){
+            alert("Hãy bật dịch vụ kiểm tra chứng thư số người ký qua OCSP!");
+            return;
+          }else {
+            if(JSON.parse(rv2)[0].ValidationDetails.SignerCertStatus.Status !== 0 ){
+              alert(JSON.parse(rv2)[0].ValidationDetails.SignerCertStatus.Description);
+              return;
+            }
+          }
           let cert = await this.check_certificate(userId, certificateNumber);
           if (cert.length == 0) { // false là chưa có thêm mới
             let data = {

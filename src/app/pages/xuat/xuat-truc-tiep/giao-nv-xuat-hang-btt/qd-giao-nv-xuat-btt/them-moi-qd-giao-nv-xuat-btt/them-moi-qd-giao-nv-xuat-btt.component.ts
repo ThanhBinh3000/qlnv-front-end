@@ -155,11 +155,10 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
       return;
     }
     const data = await this.detail(id);
-    const {soQdNv, soQdDc, soQdPd, soHopDong, idChaoGia, children} = data;
+    const {soQdNv, soHopDong, idChaoGia, children} = data;
     this.formData.patchValue({
       soQdNv: soQdNv?.split('/')[0] || null,
       soHopDong: idChaoGia ? null : soHopDong,
-      soQd: soQdDc || soQdPd
     });
     if (data.idChaoGia > 0) {
       await this.onChangeThongTin(data.idChaoGia);
@@ -291,6 +290,7 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
       loaiVthh: this.loaiVthh,
       trangThai: STATUS.DA_HOAN_THANH,
       pthucBanTrucTiep: [THONG_TIN_BAN_TRUC_TIEP.UY_QUYEN, THONG_TIN_BAN_TRUC_TIEP.BAN_LE],
+      lastest: 1,
     };
     try {
       const res = await this.chaoGiaMuaLeUyQuyenService.search(body);

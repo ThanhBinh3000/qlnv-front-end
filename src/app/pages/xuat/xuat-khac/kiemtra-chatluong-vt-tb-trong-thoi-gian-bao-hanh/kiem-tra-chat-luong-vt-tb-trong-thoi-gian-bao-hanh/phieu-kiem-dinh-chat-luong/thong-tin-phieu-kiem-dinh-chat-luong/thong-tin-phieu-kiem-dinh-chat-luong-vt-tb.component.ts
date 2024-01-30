@@ -162,7 +162,6 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
 
   async loadDetail(idInput: number) {
     if (idInput > 0) {
-      console.log(idInput,"idInput")
       await this.phieuKdclVtTbTrongThoiGianBaoHanhService.getDetail(idInput)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
@@ -189,7 +188,6 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
             }
             this.dataTableChiTieu = data.phieuKdclDtl
             this.fileDinhKems = data.fileDinhKems;
-            console.log(idInput,"CMM")
           }
         })
         .catch((e) => {
@@ -492,7 +490,7 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
     if (soQd) {
       let bienBan = [
         ...this.listBbLayMau.filter((e) => {
-          let phieuKd = this.listSoPhieuKd.filter(i => i.soBBLayMau == e.soBienBan);
+          let phieuKd = this.listSoPhieuKd.filter(i => i.soBbLayMau == e.soBienBan);
           return e.soLanLm !== phieuKd.reduce((prev, cur) => prev + cur.soLuongMauKd, 0);
         }),
       ];

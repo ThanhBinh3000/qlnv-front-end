@@ -23,6 +23,7 @@ import {
 } from '../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/TongHopKeHoachXuatHang.service';
 import {PREVIEW} from '../../../../../../../constants/fileType';
 import {saveAs} from 'file-saver';
+import {el} from "date-fns/locale";
 
 @Component({
   selector: 'app-thong-tin-tong-hop-ke-hoach-xuat-hang',
@@ -74,9 +75,11 @@ export class ThongTinTongHopKeHoachXuatHangComponent extends Base2Component impl
       ngayKyQd: [null],
       trangThai: [STATUS.CHUATAO_KH],
       moTa: [null],
+      loaiVthh: [null],
       maDvi: [this.userInfo.MA_DVI],
       tenTrangThai: ['Dự thảo kế hoạch'],
       loai: ['01', Validators.required],
+      idCanCuTh: [],
       listSoKeHoachs: [],
       listIdKeHoachs: [new Array()],
       xhXkKhXuatHangDtl: [new Array()],
@@ -138,19 +141,31 @@ export class ThongTinTongHopKeHoachXuatHangComponent extends Base2Component impl
         this.listDxCuc = [];
         this.listKeHoachDtl = [];
         let listDataKh = res.data;
+        let dtl= [];
         if (listDataKh) {
+          dtl = cloneDeep(listDataKh.xhXkKhXuatHangDtl);
+          if (this.formData.get('loaiVthh').value != null){
+            this.listKeHoachDtl=dtl.filter(i => i.loaiVthh==this.formData.get('loaiVthh').value && i.idTh == null);
+          }else {
+            this.listKeHoachDtl=dtl;
+          }
           this.formData.patchValue({
             listSoKeHoachs: listDataKh.listSoKeHoachs.join(','),
             listIdKeHoachs: listDataKh.listIdKeHoachs,
-            xhXkKhXuatHangDtl: listDataKh.xhXkKhXuatHangDtl,
+            xhXkKhXuatHangDtl:  this.listKeHoachDtl,
+            idCanCuTh: listDataKh.listIdKeHoachs.join(','),
           });
-          this.listKeHoachDtl = cloneDeep(listDataKh.xhXkKhXuatHangDtl);
           this.listDxCuc = cloneDeep(listDataKh.listDxCuc);
           this.isTongHop = true;
-          this.buildTableView(this.listKeHoachDtl);
-          this.buildTableViewByLoaiVthh(this.listKeHoachDtl);
+          if (this.listKeHoachDtl.length > 0){
+            this.buildTableView(this.listKeHoachDtl);
+            this.buildTableViewByLoaiVthh(this.listKeHoachDtl);
+          }else{
+            this.notification.warning(MESSAGE.WARNING, 'Không tìm thấy dữ liệu kế hoạch xuất hàng của Cục cho loại hàng DTQG'+' '+this.formData.get('loaiVthh').value);
+          }
+
         } else {
-          this.notification.warning(MESSAGE.WARNING, 'Không tìm thấy dữ liệu kế hoạch xuất hàng của Cục111');
+          this.notification.warning(MESSAGE.WARNING, 'Không tìm thấy dữ liệu kế hoạch xuất hàng của Cục');
           this.isTongHop = false;
           this.spinner.hide();
           return;

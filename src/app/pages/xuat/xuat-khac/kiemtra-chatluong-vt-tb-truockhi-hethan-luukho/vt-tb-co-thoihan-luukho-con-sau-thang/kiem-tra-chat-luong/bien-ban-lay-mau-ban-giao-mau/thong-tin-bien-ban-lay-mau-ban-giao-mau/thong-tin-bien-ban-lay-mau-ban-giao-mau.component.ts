@@ -81,7 +81,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
         maQhNs: [],
         idQdGiaoNvXh: [null, [Validators.required]],
         soQdGiaoNvXh: [null, [Validators.required]],
-        ngayQdGiaoNvXh: [null, [Validators.required]],
+        ngayQdGiaoNvXh: [null],
         idPhieuXuatKho: [null, [Validators.required]],
         soPhieuXuatKho: [null, [Validators.required]],
         soBienBan: [null, [Validators.required]],
@@ -110,7 +110,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
         tenCloaiVthh: [''],
         tenTrangThai: ['Dự Thảo'],
         diaChiDvi: [null],
-        tenDiaDiem: [null, [Validators.required]],
+        tenDiaDiem: [null],
         tenDiemKho: [null],
         tenNhaKho: [null],
         tenNganKho: [null],
@@ -142,19 +142,20 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
   async loadDetail(idInput: number) {
     if (idInput > 0) {
       await this.bienBanLayMauVtKtclService.getDetail(idInput)
-        .then((res) => {
+        .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            this.formData.patchValue(res.data);
-            const data = res.data;
-            this.checked = data.ketQuaNiemPhong;
-            let itemQd = this.listSoQuyetDinh.find(item => item.soQuyetDinh == data.soQdGiaoNvXh);
+            let itemQd = this.listSoQuyetDinh.find(item => item.soQuyetDinh == res.data.soQdGiaoNvXh);
             if (itemQd) {
               this.bindingDataQd(itemQd);
             }
+            this.formData.patchValue(res.data);
+            const data = res.data;
+            this.checked = data.ketQuaNiemPhong;
             this.formData.patchValue({
               soPhieuXuatKho: data.soPhieuXuatKho,
               tenDiaDiem: data.tenLoKho ? data.tenLoKho + ' - ' + data.tenNganKho : data.tenNganKho,
             });
+            // await this.getListPhieuXuatKho(data.soQuyetDinh)
             if (data.fileDinhKems) {
               this.fileDinhKems = data.fileDinhKems.filter(item => item.fileType === FILETYPE.FILE_DINH_KEM);
               this.canCu = data.fileDinhKems.filter(item => item.fileType === FILETYPE.CAN_CU_PHAP_LY);
@@ -177,6 +178,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
             }
             this.listDaiDienChiCuc = data.xhXkVtBbLayMauDtl.filter(x => x.loaiDaiDien == 'CHI_CUC');
             this.listDaiDienCuc = data.xhXkVtBbLayMauDtl.filter(x => x.loaiDaiDien == 'CUC');
+            console.log(this.listPhieuXuatKho,"123")
           }
         })
         .catch((e) => {
@@ -208,7 +210,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
 
   async loadSoQuyetDinhGiaoNvXh() {
     let body = {
-      namKeHoach: this.formData.get('nam').value,
+      // namKeHoach: this.formData.get('nam').value,
       dvql: this.userInfo.MA_DVI,
       trangThai: STATUS.DA_DUYET_LDC,
       listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
@@ -217,6 +219,8 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listSoQuyetDinh = data.content;
+      console.log(this.userInfo.MA_DVI,444)
+      console.log(this.listSoQuyetDinh,555)
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -239,6 +243,21 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         await this.bindingDataQd(data);
+        this.formData.patchValue({
+          soPhieuXuatKho: null,
+          idPhieuXuatKho:null,
+          maDiemKho: null,
+          tenDiaDiem: null,
+          tenDiemKho: null,
+          maNhaKho: null,
+          tenNhaKho: null,
+          maNganKho: null,
+          tenNganKho: null,
+          maLoKho: null,
+          tenLoKho: null,
+          cloaiVthh: null,
+          tenCloaiVthh: null,
+        });
       }
     });
   };
@@ -251,8 +270,20 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
         soQdGiaoNvXh: data.soQuyetDinh,
         idQdGiaoNvXh: data.id,
         ngayQdGiaoNvXh: data.ngayKy,
+        // soPhieuXuatKho: null,
+        // idPhieuXuatKho:null,
+        // maDiemKho: null,
+        // tenDiemKho: null,
+        // maNhaKho: null,
+        // tenNhaKho: null,
+        // maNganKho: null,
+        // tenNganKho: null,
+        // maLoKho: null,
+        // tenLoKho: null,
+        // cloaiVthh: null,
+        // tenCloaiVthh: null,
       });
-      await this.getListPhieuXuatKho(data);
+      await this.getListPhieuXuatKho(data.soQuyetDinh);
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, e.msg);
     } finally {
@@ -265,14 +296,14 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     this.listPhieuXuatKho = [];
     try {
       let body = {
-        soCanCu: itemQdGnvXh.soQuyetDinh,
-        namKeHoach: this.formData.get('nam').value,
+        soCanCu: itemQdGnvXh,
+        // namKeHoach: this.formData.get('nam').value,
+        trangThai: STATUS.DA_DUYET_LDCC
       };
       let res = await this.phieuXuatKhoService.search(body);
+      console.log(res,777)
       if (res.msg == MESSAGE.SUCCESS) {
-        this.listPhieuXuatKho = this.idInput > 0 ? res.data.content : res.data.content.filter(item => !item.soBbLayMau,
-        )
-          ;
+        this.listPhieuXuatKho = this.idInput > 0 ? res.data.content : res.data.content.filter(item => !item.soBbLayMau);
       }
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, e.msg);

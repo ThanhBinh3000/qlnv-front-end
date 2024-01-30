@@ -233,11 +233,13 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
       }
       data.children.forEach(item => {
         item.id = null;
-        item.children = item.children.filter(child => child.children && child.children.length > 0)
-        item.children.forEach(child => {
-          child.id = null;
-          child.children.forEach(s => s.id = null);
-        });
+        item.children = item.children
+          .filter(child => child.children && child.children.length > 0)
+          .map(child => {
+            child.id = null;
+            child.children.forEach(s => s.id = null);
+            return child;
+          });
       });
       this.dataTable = data.children
       this.dataTableAll = data.children

@@ -27,6 +27,8 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
   listTrangThaiXh: any = [];
   idQdPd: number = 0;
   isViewQdPd: boolean = false;
+  idQdDc: number = 0;
+  isViewQdDc: boolean = false;
   idQdKq: number = 0;
   isViewQdKq: boolean = false;
 
@@ -139,6 +141,10 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
         this.idQdPd = id;
         this.isViewQdPd = true;
         break;
+      case 'dieuChinh':
+        this.idQdDc = id;
+        this.isViewQdDc = true;
+        break;
       case 'ketQua':
         this.idQdKq = id;
         this.isViewQdKq = true;
@@ -153,6 +159,10 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
       case 'pheDuyet':
         this.idQdPd = null;
         this.isViewQdPd = false;
+        break;
+      case 'dieuChinh':
+        this.idQdDc = null;
+        this.isViewQdDc = false;
         break;
       case 'ketQua':
         this.idQdKq = null;

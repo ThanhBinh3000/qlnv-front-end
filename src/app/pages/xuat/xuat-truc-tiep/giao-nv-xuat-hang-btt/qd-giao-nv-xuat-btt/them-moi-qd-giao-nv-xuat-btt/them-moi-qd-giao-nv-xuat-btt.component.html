@@ -123,7 +123,12 @@
                   <label nz-radio [nzValue]="TRUC_TIEP.UY_QUYEN_BAN_LE"> Căn cứ vào Ủy quyền/Bán lẻ</label>
                   <nz-form-control nz-col [nzErrorTip]="error">
                     <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? null : openDialogThongTin()">
-                      <input nz-input formControlName="soQd" (ngModelChange)="changeUyQuenBanLe($event)" readonly/>
+                      <span *ngIf="!this.formData.value.soQdDc">
+                        <input nz-input formControlName="soQdPd" (ngModelChange)="changeUyQuenBanLe($event)" readonly/>
+                      </span>
+                      <span *ngIf="this.formData.value.soQdDc">
+                        <input nz-input formControlName="soQdDc" (ngModelChange)="changeUyQuenBanLe($event)" readonly/>
+                      </span>
                     </nz-input-group>
                   </nz-form-control>
                 </nz-form-item>

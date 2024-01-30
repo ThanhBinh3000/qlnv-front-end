@@ -31,6 +31,8 @@ import {
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyNghiemThuKeLot.service";
 import {cloneDeep} from 'lodash';
 import {PREVIEW} from "../../../../../../constants/fileType";
+import {DANH_MUC_LEVEL} from "../../../../../luu-kho/luu-kho.constant";
+import {MangLuoiKhoService} from "../../../../../../services/qlnv-kho/mangLuoiKho.service";
 @Component({
   selector: 'thong-tin-quan-ly-bang-ke-can-hang',
   templateUrl: './thong-tin-quan-ly-bang-ke-can-hang.component.html',
@@ -63,6 +65,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private mangLuoiKhoService: MangLuoiKhoService,
     private quanLyNghiemThuKeLotService: QuanLyNghiemThuKeLotService,
     private quanLyBangKeCanHangService: QuanLyBangKeCanHangService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
@@ -119,7 +122,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
       tenNganLoKho: [],
       dvt: ['kg'],
       nguoiGiamSat: [],
-      ngayTao: [],
+      ngayTao: [dayjs().format("YYYY-MM-DD")],
       diaDiemKho: [],
       lhKho: [],
       trongLuongBaoBi: [],
@@ -285,11 +288,17 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
 
   async bindingDataDdNhap(data, isDetail?) {
     this.dataTable = [];
+    let body = {
+      maDvi: data.maDiemKho,
+      capDvi: DANH_MUC_LEVEL.DIEM_KHO
+    }
+    const detail = await this.mangLuoiKhoService.getDetailByMa(body);
     await this.getNganKho(data.maLoKho ? data.maLoKho : data.maNganKho);
     this.formData.patchValue({
       idDdiemGiaoNvNh: data.id,
       maDiemKho: data.maDiemKho,
       tenDiemKho: data.tenDiemKho,
+      diaDiemKho: detail?.data.object.diaChi,
       maNhaKho: data.maNhaKho,
       tenNhaKho: data.tenNhaKho,
       maNganKho: data.maNganKho,

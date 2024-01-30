@@ -23,6 +23,8 @@ export class QuyetDinhChaoGiaComponent extends Base2Component implements OnInit 
   isView = false;
   idQdPdKh: number = 0;
   isViewQdPdKh: boolean = false;
+  idQdPdDc: number = 0;
+  isViewQdPdDc: boolean = false;
   listTrangThai: any = [];
 
   constructor(
@@ -100,14 +102,34 @@ export class QuyetDinhChaoGiaComponent extends Base2Component implements OnInit 
     this.isView = isView;
   }
 
-  openModalQdPdKh(id: number) {
-    this.idQdPdKh = id;
-    this.isViewQdPdKh = true;
+  openModal(id: number, modalType: string) {
+    switch (modalType) {
+      case 'QdKh':
+        this.idQdPdKh = id;
+        this.isViewQdPdKh = true;
+        break;
+      case 'QdDc':
+        this.idQdPdDc = id;
+        this.isViewQdPdDc = true;
+        break;
+      default:
+        break;
+    }
   }
 
-  closeModalQdPdKh() {
-    this.idQdPdKh = null;
-    this.isViewQdPdKh = false;
+  closeModal(modalType: string) {
+    switch (modalType) {
+      case 'QdKh':
+        this.idQdPdKh = null;
+        this.isViewQdPdKh = false;
+        break;
+      case 'QdDc':
+        this.idQdPdDc = null;
+        this.isViewQdPdDc = false;
+        break;
+      default:
+        break;
+    }
   }
 
   isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {

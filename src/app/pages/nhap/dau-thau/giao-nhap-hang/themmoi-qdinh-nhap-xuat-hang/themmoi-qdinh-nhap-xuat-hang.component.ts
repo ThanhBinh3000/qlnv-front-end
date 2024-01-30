@@ -122,6 +122,10 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
       tenCloaiVthh: [''],
       ldoTuchoi: [''],
       trangThaiChiCuc: [],
+      tenTruongPhong: [],
+      dviCungCap: [],
+      nguoiTao: [],
+      nguoiPduyet: [],
       loaiHinhNx: 'Mua đấu thầu',
       kieuNx: 'Nhập mua'
     });
@@ -209,6 +213,7 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
             donViTinh: data.donViTinh,
             soLuong: data.soLuong,
             tgianNkho: data.tgianGiaoDuHang,
+            dviCungCap: data.tenNhaThau,
           })
           if (data.loaiVthh.startsWith('02')) {
             let dataUserLogin = data.details.filter(item => item.maDvi == this.userInfo.MA_DVI);
@@ -239,6 +244,7 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
             soLuong += i.soLuong
           })
           this.formData.get('soLuong').setValue(soLuong);
+          await this.loadDiemKho()
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg)
         }
@@ -759,7 +765,7 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
     for (let i = 0; i < this.dataTable.length; i++) {
       let body = {
         maDvi: this.dataTable[i].maDvi,
-        loaiVthh: this.loaiVthh,
+        loaiVthh: this.formData.value.loaiVthh,
         cloaiVthh: this.formData.value.cloaiVthh,
       }
       const res = await this.donViService.getDonViHangTree(body);
@@ -836,7 +842,8 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
       let nganKho = this.listNganKho[index].filter(x => x.key == this.rowItem.maNganKho);
       if (nganKho && nganKho.length > 0) {
         this.listNganLo[index] = nganKho[0].children;
-        this.rowItem.tenNganKho = nganKho[0].tenDvi
+        this.rowItem.tenNganKho = nganKho[0].tenDvi;
+        this.rowItem.slTon = nganKho[0].slTon
       }
     }
   }
@@ -850,7 +857,8 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
     } else {
       let loKho = this.listNganLo[index].filter(x => x.key == this.rowItem.maLoKho);
       if (loKho && loKho.length > 0) {
-        this.rowItem.tenLoKho = loKho[0].tenDvi
+        this.rowItem.tenLoKho = loKho[0].tenDvi;
+        this.rowItem.slTon = loKho[0].slTon
       }
     }
   }

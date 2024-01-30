@@ -97,10 +97,15 @@
               </div>
               <div nz-col [nzSpan]="3">
                 <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true"> Số QĐ phê duyệt KH bán trực tiếp</nz-form-label>
+                  <nz-form-label nzRequired [nzNoColon]="true"> Số QĐ PD/ĐC KH bán trực tiếp</nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
                     <nz-input-group nzAddOnAfterIcon="folder-open">
-                      <input nz-input formControlName="soQdPd" readonly/>
+                      <span *ngIf="!this.formData.value.soQdDc">
+                        <input nz-input formControlName="soQdPd" readonly/>
+                      </span>
+                      <span *ngIf="this.formData.value.soQdDc">
+                        <input nz-input formControlName="soQdDc" readonly/>
+                      </span>
                     </nz-input-group>
                   </nz-form-control>
                 </nz-form-item>
@@ -124,7 +129,7 @@
                     <nz-input-group>
                       <nz-select nzMode="multiple" formControlName="listMaDviTsan"
                                  (ngModelChange)="selectMaDviTsanCuc()" [nzDisabled]="isView">
-                        <nz-option *ngFor="let item of listDviTsanFilter" [nzValue]="item.maDviTsan"
+                        <nz-option *ngFor="let item of listDviTsanHienThi" [nzValue]="item.maDviTsan"
                                    [nzLabel]="item.maDviTsan">
                         </nz-option>
                       </nz-select>
@@ -784,11 +789,16 @@
               </div>
               <div nz-col [nzSpan]="3">
                 <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ QĐ PD KH bán trực tiếp được ủy quyền
+                  <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ QĐ PD KH/QĐ ĐC KH bán trực tiếp được ủy quyền
                   </nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
                     <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? null : openDialogUyQuyen()">
-                      <input nz-input formControlName="soQdPd" (ngModelChange)="ChangeUyQuyen($event)" readonly/>
+                      <span *ngIf="!this.formData.value.soQdDc">
+                        <input nz-input formControlName="soQdPd" (ngModelChange)="ChangeUyQuyen($event)" readonly/>
+                      </span>
+                      <span *ngIf="this.formData.value.soQdDc">
+                        <input nz-input formControlName="soQdDc" (ngModelChange)="ChangeUyQuyen($event)" readonly/>
+                      </span>
                     </nz-input-group>
                   </nz-form-control>
                 </nz-form-item>
