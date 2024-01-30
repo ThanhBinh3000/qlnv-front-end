@@ -23,6 +23,8 @@ export class DialogDoiMatKhauComponent implements OnInit {
   email: string
   regexComplex: string
   userInfo: UserLogin;
+  isInterval: any
+  time: number = 30
 
   constructor(
     private fb: FormBuilder,
@@ -56,6 +58,17 @@ export class DialogDoiMatKhauComponent implements OnInit {
     this.userInfo = this.userService.getUserLogin();
   }
 
+
+
+  timer() {
+    this.time = this.time - 1
+    if (this.time == 0) {
+      clearInterval(this.isInterval);
+      this.isInterval = null
+      this.time = 30
+    }
+  }
+
   handleCancel() {
     this._modalRef.destroy();
   }
@@ -65,9 +78,14 @@ export class DialogDoiMatKhauComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, "Chưa có thông tin email.");
       return
     }
+    await this.spinner.show();
     let res = await this.qlNSDService.senOTP(this.username, this.email);
     if (res.msg == MESSAGE.SUCCESS) {
+      await this.spinner.hide();
       this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+      this.isInterval = setInterval(() => {
+        this.timer();
+      }, 1000)
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -94,4 +112,8 @@ export class DialogDoiMatKhauComponent implements OnInit {
     this._modalRef.close(this.formData.value);
   }
 
+  ngOnDestroy() {
+    if (this.isInterval)
+      clearInterval(this.isInterval);
+  }
 }

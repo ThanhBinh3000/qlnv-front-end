@@ -74,9 +74,12 @@
         Hủy
       </button>
       <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="sendOTP() "
-        *ngIf="userInfo.sub !== 'admin'">
+        *ngIf="userInfo.sub !== 'admin' && !this.isInterval">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         Gửi OTP
+      </button>
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light" *ngIf="!!this.isInterval">
+        {{time}}
       </button>
       <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="save() ">
         <i aria-hidden="true" class="fa fa-save"></i>
