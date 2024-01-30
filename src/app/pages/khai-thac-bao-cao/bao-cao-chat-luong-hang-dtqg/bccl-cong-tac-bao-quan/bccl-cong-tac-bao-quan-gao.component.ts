@@ -278,6 +278,7 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
         }
         if (body.loaiKyBc == '03') {
           body.tuNgay = '1/10/' + body.namNhap
+          body.dauNam = '1/1/' + body.namNhap
           body.denNgay = '31/12/' + body.namNhap
         }
         if (body.loaiKyBc == '04') {
