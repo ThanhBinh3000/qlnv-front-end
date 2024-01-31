@@ -248,7 +248,7 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
           };
           let res = await this.quyetDinhPheDuyetHsmtService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.BAN_HANH_SUCCESS);
             this.quayLai();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -366,6 +366,34 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
           this.expandSet2.add(j)
         }
       }
+    }
+  }
+
+  calcTongSl() {
+    if (this.listOfData) {
+      let sum = 0;
+      this.listOfData.forEach(item => {
+        const sumChild = item.children.reduce((prev, cur) => {
+          prev += cur.soLuong;
+          return prev;
+        }, 0);
+        sum += sumChild;
+      });
+      return sum;
+    }
+  }
+
+  calcTongThanhTien() {
+    if (this.listOfData) {
+      let sum = 0;
+      this.listOfData.forEach(item => {
+        const sumChild = item.children.reduce((prev, cur) => {
+          prev += cur.soLuong * cur.donGia;
+          return prev;
+        }, 0);
+        sum += sumChild;
+      });
+      return sum;
     }
   }
 }
