@@ -357,6 +357,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
           this.formData.get('tenNganLoKho').setValue(this.formData.get('tenLoKho').value ? this.formData.get('tenNganKho').value + " - " + this.formData.get('tenLoKho').value : this.formData.get('tenNganKho').value)
           this.danhSach = data.children;
           this.dsHangTH = data.children.filter(item => item.type === "TH")
+          this.viewTableTH()
           this.dsHangPD = data.children.filter(item => item.type === "PD")
           this.fileDinhKem = data.fileDinhKems;
         }

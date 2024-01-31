@@ -250,10 +250,10 @@
               <td nzLeft></td>
               <td></td>
               <td></td>
-              <td class="text-right blue-text bold-700">{{item.soLuong | number : '1.0-99' : 'vi_VN'}}</td>
+              <td class="text-right blue-text bold-700">{{item.soLuong | number : '1.2-2' : 'vi_VN'}}</td>
               <td class="text-left">Tấn</td>
               <td class="text-right"></td>
-              <td class="text-right">{{item.thanhTien | number : '1.0-99' : 'vi_VN'}}</td>
+              <td class="text-right bold-700">{{item.thanhTien | number : '1.2-2' : 'vi_VN'}}</td>
             </tr>
             <ng-container *ngIf="expandSet.has(i)">
               <ng-container *ngFor="let chiCuc of item.children, let y = index">
@@ -262,12 +262,12 @@
                   <td nzLeft [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>
                   <td nzLeft class="multi-line">{{chiCuc.tenDvi}}</td>
                   <td nzLeft></td>
-                  <td class="text-right red-text">{{chiCuc.soLuongTheoChiTieu | number : '1.0-99' : 'vi_VN'}}</td>
-                  <td class="text-right red-text">{{chiCuc.soLuongDaMua | number : '1.0-99' : 'vi_VN'}}</td>
-                  <td class="text-right blue-text">{{chiCuc.soLuong | number : '1.0-99' : 'vi_VN'}}</td>
+                  <td class="text-right red-text">{{chiCuc.soLuongTheoChiTieu | number : '1.2-2' : 'vi_VN'}}</td>
+                  <td class="text-right red-text">{{chiCuc.soLuongDaMua | number : '1.2-2' : 'vi_VN'}}</td>
+                  <td class="text-right blue-text">{{chiCuc.soLuong | number : '1.2-2' : 'vi_VN'}}</td>
                   <td class="text-left">Tấn</td>
-                  <td class="text-right">{{chiCuc.donGia | number : '1.0-99' : 'vi_VN'}}</td>
-                  <td class="text-right">{{ chiCuc.soLuong * chiCuc.donGia *1000| number :'1.0-99' : 'vi_VN' }}</td>
+                  <td class="text-right">{{chiCuc.donGia | number : '1.2-2' : 'vi_VN'}}</td>
+                  <td class="text-right">{{ chiCuc.soLuong * chiCuc.donGia *1000| number :'1.2-2' : 'vi_VN' }}</td>
                 </tr>
                 <ng-container *ngIf="expandSet2.has(y)">
                   <ng-container *ngFor="let diemKho of chiCuc.children, let z = index">
@@ -278,16 +278,28 @@
                       <td nzLeft class="multi-line">{{diemKho.tenDvi}}</td>
                       <td></td>
                       <td></td>
-                      <td class="text-right blue-text">{{diemKho.soLuong | number : '1.0-99' : 'vi_VN'}}</td>
+                      <td class="text-right blue-text">{{diemKho.soLuong | number : '1.2-2' : 'vi_VN'}}</td>
                       <td class="text-left">Tấn</td>
-                      <td class="text-right">{{chiCuc.donGia | number : '1.0-99' : 'vi_VN'}}</td>
-                      <td class="text-right">{{diemKho.soLuong * chiCuc.donGia * 1000 | number: '1.0-99' : 'vi_VN'}}</td>
+                      <td class="text-right">{{chiCuc.donGia | number : '1.2-2' : 'vi_VN'}}</td>
+                      <td class="text-right">{{diemKho.soLuong * chiCuc.donGia * 1000 | number: '1.2-2' : 'vi_VN'}}</td>
                     </tr>
                   </ng-container>
                 </ng-container>
               </ng-container>
             </ng-container>
           </ng-container>
+          <tr *ngIf="listOfData.length > 0">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="text-right blue-text bold-700">TỔNG</td>
+            <td></td>
+            <td></td>
+            <td class="text-right blue-text bold-700">{{ calcTongSl() | number : '1.2-2' : 'vi_VN' }}</td>
+            <td></td>
+            <td></td>
+            <td class="text-right blue-text bold-700">{{ calcTongThanhTien() | number : '1.2-2' : 'vi_VN' }}</td>
+          </tr>
           </tbody>
         </nz-table>
       </nz-collapse-panel>

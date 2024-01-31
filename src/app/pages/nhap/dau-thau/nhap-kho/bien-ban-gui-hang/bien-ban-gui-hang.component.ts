@@ -276,26 +276,10 @@ export class BienBanGuiHangComponent extends Base2Component implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "loaiVthh": this.loaiVthh,
-          "maDvi": this.userInfo.MA_DVI,
-          "ngayGuiHangDen": this.searchFilter.ngayGuiHang && this.searchFilter.ngayGuiHang.length > 1
-            ? dayjs(this.searchFilter.ngayGuiHang[1]).format('YYYY-MM-DD')
-            : null,
-          "ngayGuiHangTu": this.searchFilter.ngayGuiHang && this.searchFilter.ngayGuiHang.length > 1
-            ? dayjs(this.searchFilter.ngayGuiHang[0]).format('YYYY-MM-DD')
-            : null,
-          "orderBy": null,
-          "orderDirection": null,
-          "paggingReq": {
-            "limit": 20,
-            "orderBy": null,
-            "orderType": null,
-            "page": 0
-          },
-          "soBienBan": this.searchFilter.soBienBan,
-          "soQdNhap": this.searchFilter.soQuyetDinh,
-          "str": null,
-          "trangThai": null
+          namNhap: this.searchFilter.namKh,
+          soQd: this.searchFilter.soQuyetDinh,
+          trangThai: this.STATUS.BAN_HANH,
+          loaiVthh: this.loaiVthh
         };
         this.bienBanGuiHangService
           .export(body)
