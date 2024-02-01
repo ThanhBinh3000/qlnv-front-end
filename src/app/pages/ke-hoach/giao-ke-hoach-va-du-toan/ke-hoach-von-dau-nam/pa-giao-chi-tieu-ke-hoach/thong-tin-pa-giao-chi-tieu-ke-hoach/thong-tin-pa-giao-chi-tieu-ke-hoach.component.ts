@@ -244,7 +244,6 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
 
   async findCanCuByYear(year: number, chiTieuKhNam?) {
     if (chiTieuKhNam) {
-      console.log(chiTieuKhNam,'chiTieuKhNamchiTieuKhNam');
       if (chiTieuKhNam.capDvi == '2' && (!chiTieuKhNam.loaiCanCu || chiTieuKhNam.loaiCanCu == 'QD-TCDT')) {
         let res = await this.chiTieuKeHoachNamService.loadThongTinChiTieuKeHoachNam(chiTieuKhNam.qdGocId);
         if (res.msg == MESSAGE.SUCCESS) {
@@ -336,6 +335,7 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
             this.formData.patchValue({
               canCu: data.soQuyetDinh,
               chiTieuId: data.id,
+              loaiCanCu: 'QD-TCDT',
               idCanCu: data.id,
             });
             // Lấy kế hoạch tổng cục giao cho cục đang login
