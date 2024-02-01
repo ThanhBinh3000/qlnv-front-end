@@ -67,7 +67,7 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
   listFiles: any = [];
   listBbLayMau: any = [];
   dataTableChiTieu: any[] = [];
-  templateName = '20.Báo cáo KQ kiểm định mẫu_LK còn 6 tháng';
+  templateName = '3.7. C84-HD_Phiếu kiểm định chất lượng_còn 6 tháng';
   listSoPhieuKd: any;
 
   constructor(

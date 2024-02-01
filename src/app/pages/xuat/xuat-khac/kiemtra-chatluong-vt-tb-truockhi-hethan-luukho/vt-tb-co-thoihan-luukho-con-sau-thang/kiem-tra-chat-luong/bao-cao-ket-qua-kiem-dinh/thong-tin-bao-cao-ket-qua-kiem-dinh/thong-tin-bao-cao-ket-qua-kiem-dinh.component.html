@@ -14,27 +14,33 @@
           <i class='fa fa-arrow-left'></i>
           <span>Quay lại</span>
         </button>
-        <button *ngIf='this.userService.isCuc() && !isDisabled()'
-                class='btn btn-sub xanh-nhat mr-2' (click)='save(true)'>
-          <i class='icon htvbdh_tcdt_guiduyet'></i>
+        <button type="button" class="btn btn-sub mr-2" *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_BCKQKD_IN')" (click)="xemTruoc(idInput,templateName)">
+          <i class="icon htvbdh_totrinh"></i>
+          <span> In/Xem trước </span>
+        </button>
+        <button *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_BCKQKD_THEM') && this.userService.isCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDC"
+                class="btn btn-sub xanh-nhat mr-2" (click)="save(true)">
+          <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Lưu và gửi duyệt</span>
         </button>
         <button
-          *ngIf='this.userService.isCuc() && isDisabled()'
-          type='button' class='btn btn-sub do mr-2' (click)='tuChoi()'>
-          <i class='icon htvbdh_tcdt_tuchoi do'></i>
+          *ngIf="(userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_BCKQKD_DUYETTP') && formData.value.trangThai == STATUS.CHO_DUYET_TP)
+          || (userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_BCKQKD_DUYETLDC')  && formData.value.trangThai == STATUS.CHO_DUYET_LDC) && this.userService.isCuc()"
+          type="button" class="btn btn-sub do mr-2" (click)="tuChoi()">
+          <i class="icon htvbdh_tcdt_tuchoi do"></i>
           <span>Từ chối</span>
         </button>
         <button
-          *ngIf='this.userService.isCuc() && isDisabled() '
-          class='btn btn-sub xanh-nhat mr-2' (click)='pheDuyet()'>
-          <i class='icon htvbdh_tcdt_pheduyet'></i>
+          *ngIf="(userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_BCKQKD_DUYETTP') && formData.value.trangThai == STATUS.CHO_DUYET_TP)
+          || (userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_BCKQKD_DUYETLDC')  && formData.value.trangThai == STATUS.CHO_DUYET_LDC) && this.userService.isCuc()"
+          class="btn btn-sub xanh-nhat mr-2" (click)="pheDuyet()">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Duyệt</span>
         </button>
         <button
-          *ngIf='this.userService.isCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDC '
-          type='button' class='btn btn-main' (click)='save()'>
-          <i class='icon htvbdh_tcdt_save'></i>
+          *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_BCKQKD_THEM') && this.userService.isCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDC"
+          type="button" class="btn btn-main" (click)="save()">
+          <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
       </div>

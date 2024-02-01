@@ -92,6 +92,7 @@ export class ThongTinPhieuXuatKhoComponent extends Base2Component implements OnI
         thoiGianGiaoHang: [],
         maSo: [],
         donViTinh: [],
+        maDviTsan: [],
         slLayMau: [],
         slThucTe: [],
         ghiChu: ['', [Validators.required]],
@@ -243,6 +244,7 @@ export class ThongTinPhieuXuatKhoComponent extends Base2Component implements OnI
           cloaiVthh: item.cloaiVthh,
           tenCloaiVthh: item.tenCloaiVthh,
           donViTinh: item.donViTinh,
+          maDviTsan: item.maDviTsan,
           slLayMau: item.slLayMau
         })
       }
