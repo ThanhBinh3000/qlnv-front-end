@@ -62,7 +62,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
     { value: 1, label: 'Đạt' },
   ];
   dataPhieuKncl: any;
-  templateName = 'xuat_khac_ktcl_vat_tu_6_thang_bc_kq_kiem_dinh_mau';
+  templateName = '20.Báo cáo KQ kiểm định mẫu_LK còn 6 tháng';
   maBc: string;
   constructor(
     httpClient: HttpClient,
@@ -136,7 +136,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
               id: res.data.id,
               tenDvi: res.data.tenDvi,
               maDviNhan: res.data.maDviNhan,
-              soBaoCao: res.data.soBaoCao,
+              soBaoCao:  res.data.soBaoCao ?  res.data.soBaoCao.split('/')[0] : null,
               ngayBaoCao: res.data.ngayBaoCao,
               maDvi: res.data.maDvi,
               lyDoTuChoi: res.data.lyDoTuChoi,

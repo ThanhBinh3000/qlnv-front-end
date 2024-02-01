@@ -215,7 +215,7 @@
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a *ngIf="showButtonPheDuyet(data.trangThai, 'XHDTQG_XK_KTCLVTLK_12THANG_KHXHTC')"
-               (click)="themMoi(true, data.id)">
+               (click)="themMoi(data.id, true)">
               <i class="icon htvbdh_tcdt_pheduyet"></i>
             </a>
             <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHTC_XOA') && data.trangThai==STATUS.DU_THAO" (click)="delete(data)">
