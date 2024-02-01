@@ -79,12 +79,7 @@
               <td class="bold">{{ item.namNhap }}</td>
               <td class="bold">{{ item.tgianNkho }}</td>
               <td colspan="6"></td>
-              <td>
-                <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BKCH_THEM')"
-                  (click)="redirectToChiTiet(false, 0,item.id)">
-                  <i class="fa fa-plus"></i>
-                </a>
-              </td>
+              <td></td>
             </tr>
             <ng-container *ngIf="expandSet.has(i)">
               <ng-container *ngFor="let dataDdiem of item.detail.children, let y = index">
@@ -95,7 +90,13 @@
                   <td colspan="3"></td>
                   <td>{{dataDdiem.tenDiemKho}}</td>
                   <td>{{dataDdiem.tenLoKho? dataDdiem.tenNganKho + ' - ' + dataDdiem.tenLoKho : dataDdiem.tenNganKho}}</td>
-                  <td colspan="5"></td>
+                  <td colspan="4"></td>
+                  <td>
+                    <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BKCH_THEM')"
+                         (click)="redirectToChiTiet(false, 0,item.id, dataDdiem.maLoKho? dataDdiem.maLoKho : dataDdiem.maNganKho)">
+                    <i class="fa fa-plus"></i>
+                    </a>
+                  </td>
                 </tr>
                 <ng-container *ngIf="expandSet2.has(y)">
                   <tr class="level-3" *ngFor="let dataPhieu of dataDdiem.listBangKeCanHang">
@@ -193,6 +194,6 @@
 </ng-container>
 <ng-container *ngIf="isDetail">
   <thong-tin-quan-ly-bang-ke-can-hang [id]="selectedId" (showListEvent)="showList()" [isView]="isView"
-    [typeVthh]="typeVthh" [idQdGiaoNvNh]="idQdGiaoNvNh">
+    [typeVthh]="typeVthh" [idQdGiaoNvNh]="idQdGiaoNvNh" [maNganLoKho]="maNganLoKho">
   </thong-tin-quan-ly-bang-ke-can-hang>
 </ng-container>

@@ -60,7 +60,7 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
 
   allChecked = false;
   indeterminate = false;
-
+  maNganLoKho: string;
   filterTable: any = {
     chungLoaiHangHoa: '',
     loaiHangHoa: '',
@@ -259,11 +259,12 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
     });
   }
 
-  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
+  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number, maNganLoKho?: string) {
     this.selectedId = id;
     this.isDetail = true;
     this.idQdGiaoNvNh = idQdGiaoNvNh;
     this.isView = isView;
+    this.maNganLoKho = maNganLoKho;
   }
 
   async showList() {

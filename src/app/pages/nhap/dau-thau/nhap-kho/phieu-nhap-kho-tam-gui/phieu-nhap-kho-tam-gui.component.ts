@@ -285,23 +285,16 @@ export class PhieuNhapKhoTamGuiComponent extends Base2Component implements OnIni
       this.spinner.show();
       try {
         let body = {
-          "loaiVthh": this.loaiVthh,
-          "maDvi": this.userInfo.MA_DVI,
           "ngayNhapKhoDen": this.denNgayNk != null ? dayjs(this.denNgayNk).format('YYYY-MM-DD') + " 24:59:59" : null,
           "ngayNhapKhoTu": this.tuNgayNk != null ? dayjs(this.tuNgayNk).format('YYYY-MM-DD') + " 00:00:00" : null,
-          "orderBy": null,
-          "orderDirection": null,
-          "paggingReq": {
-            "limit": 20,
-            "orderBy": null,
-            "orderType": null,
-            "page": 0
-          },
           "soPhieu": this.searchFilter.soPhieu,
           "soQdNhap": this.searchFilter.soQuyetDinh,
-          // "soBbGuiHang": this.searchFilter.soBbGuiHang,
-          "str": null,
-          "trangThai": null
+          trangThai: this.STATUS.BAN_HANH,
+          paggingReq: {
+            "limit": this.pageSize,
+            "page": this.page - 1
+          },
+          "loaiVthh": this.loaiVthh
         };
         this.phieuNhapKhoTamGuiService
           .export(body)

@@ -87,10 +87,6 @@
               <td class="bold">{{ item.tgianNkho }}</td>
               <td colspan="5"></td>
               <td>
-                <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_THEM')"
-                  (click)="redirectToChiTiet(false, 0,item.id)">
-                  <i class="fa fa-plus"></i>
-                </a>
               </td>
             </tr>
             <ng-container *ngIf="expandSet.has(i)">
@@ -106,6 +102,10 @@
                 <td>{{bb.bienBanChuanBiKho?.ngayTao | date : 'dd/MM/yyyy' }}</td>
                 <td>{{bb.bienBanChuanBiKho?.tenTrangThai}}</td>
                 <td>
+                  <a *ngIf="bb.bienBanChuanBiKho?.id == null && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_THEM')"
+                     (click)="redirectToChiTiet(false, 0,item.id, bb.maLoKho? bb.maLoKho : bb.maNganKho)">
+                    <i class="fa fa-plus"></i>
+                  </a>
                   <a *ngIf="checkQuyenXem(bb.bienBanChuanBiKho?.trangThai)"
                     (click)="redirectToChiTiet(true, bb.bienBanChuanBiKho?.id)">
                     <i class="fa fa-eye" title="Xem chi tiết"></i>
@@ -151,6 +151,6 @@
 
 <ng-container class="chi-tiet" *ngIf="isDetail">
   <app-thong-tin-bien-ban-chuan-bi-kho [id]="selectedId" (showListEvent)="showList()" [isView]="isView"
-    [loaiVthh]="loaiVthh" [idQdGiaoNvNh]="idQdGiaoNvNh">
+    [loaiVthh]="loaiVthh" [idQdGiaoNvNh]="idQdGiaoNvNh" [maNganLoKho]="maNganLoKho">
   </app-thong-tin-bien-ban-chuan-bi-kho>
 </ng-container>

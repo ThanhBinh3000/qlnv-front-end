@@ -43,6 +43,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
   @Input() isView: boolean;
   @Input() typeVthh: string;
   @Input() idQdGiaoNvNh: number;
+  @Input() maNganLoKho: string;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -81,7 +82,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
       maQhns: ['',],
       tenDvi: ['', [Validators.required]],
       soBangKe: [''],
-      soPhieuNhapKho: [],
+      soPhieuNhapKho: ['', [Validators.required]],
       ngayNhapKho: [],
       soLuongNhapKho: [],
 
@@ -260,6 +261,17 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
       dataChiCuc = data.dtlList.filter(item => item.maDvi == this.formData.value.maDvi);
       if (dataChiCuc.length > 0) {
         this.listDiaDiemNhap = dataChiCuc[0].children;
+      }
+    }
+    if (this.maNganLoKho != null) {
+      let dataDdiem = null;
+      if (this.maNganLoKho.length == 16) {
+        dataDdiem = this.listDiaDiemNhap.find(x => x.maLoKho == this.maNganLoKho);
+      } else if (this.maNganLoKho.length == 14) {
+        dataDdiem = this.listDiaDiemNhap.find(x => x.maNganKho == this.maNganLoKho);
+      }
+      if (dataDdiem != null) {
+        this.bindingDataDdNhap(dataDdiem);
       }
     }
     await this.spinner.hide();

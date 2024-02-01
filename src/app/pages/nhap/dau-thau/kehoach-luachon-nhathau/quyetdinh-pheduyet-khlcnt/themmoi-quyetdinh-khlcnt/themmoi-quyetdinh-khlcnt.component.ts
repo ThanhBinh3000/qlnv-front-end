@@ -40,6 +40,7 @@ import {ThongtinDexuatComponent} from "./thongtin-dexuat/thongtin-dexuat.compone
 import printJS from "print-js";
 import {QuyetDinhGiaTCDTNNService} from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
 import {QuyetDinhGiaCuaBtcService} from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
+import {da} from "date-fns/locale";
 
 @Component({
   selector: 'app-themmoi-quyetdinh-khlcnt',
@@ -170,7 +171,12 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       tgianThien: [''],
       ykienThamGia: [''],
       loaiHinhNx: 'Mua đấu thầu',
-      kieuNx: 'Nhập mua'
+      kieuNx: 'Nhập mua',
+      chotDcGia: [''],
+      quyetDinhDcGia: [''],
+      quyetDinhDc: [''],
+      ngayQuyetDinhDieuBDG: [''],
+      soQuyetDinhDieuBDG: [''],
     })
   }
 
@@ -554,6 +560,11 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.helperService.bidingDataInFormGroup(this.formData, data);
       this.formData.patchValue({
         soQd: data.soQd?.split("/")[0],
+        soQuyetDinhDieuBDG: data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.soQuyetDinhDieuKHLCNT ?? null,
+        ngayQuyetDinhDieuBDG: data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.ngayQuyetDinhDieuKHLCNT ?? null,
+        chotDcGia: !!data.qthtChotGiaInfoRes?.qthtChotDieuChinhGia.length,
+        quyetDinhDcGia: !!data.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia.length,
+        quyetDinhDc: !!(data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.soQuyetDinhDieuKHLCNT && data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.ngayQuyetDinhDieuKHLCNT),
       });
       if (!this.userService.isTongCuc()) {
         this.danhsachDx = data.children.filter(item => this.userInfo.MA_DVI.startsWith(item.maDvi));

@@ -36,7 +36,7 @@ export class QuanLyBangKeCanHangComponent extends Base2Component implements OnIn
   listDiemKho: any[] = [];
   listNhaKho: any[] = [];
   listNganLo: any[] = [];
-
+  maNganLoKho: string;
   userInfo: UserLogin;
 
   dataTable: any[] = [];
@@ -215,12 +215,12 @@ export class QuanLyBangKeCanHangComponent extends Base2Component implements OnIn
     }
   }
 
-  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
+  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number, maNganLoKho?: string) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
     this.idQdGiaoNvNh = idQdGiaoNvNh;
-
+    this.maNganLoKho = maNganLoKho;
   }
 
   async showList() {

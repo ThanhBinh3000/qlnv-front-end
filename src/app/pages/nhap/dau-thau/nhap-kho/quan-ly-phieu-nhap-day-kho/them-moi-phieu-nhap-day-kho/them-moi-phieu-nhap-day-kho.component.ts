@@ -532,16 +532,16 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
         trangThai = STATUS.TU_CHOI_KTVBQ;
         break;
       }
-      case STATUS.CHO_DUYET_KTVBQ: {
-        trangThai = STATUS.CHO_DUYET_KT;
-        break;
-      }
+      // case STATUS.CHO_DUYET_KTVBQ: {
+      //   trangThai = STATUS.CHO_DUYET_KT;
+      //   break;
+      // }
       case STATUS.CHO_DUYET_KT: {
-        trangThai = STATUS.CHO_DUYET_LDCC;
+        trangThai = STATUS.TU_CHOI_KT;
         break;
       }
       case STATUS.CHO_DUYET_LDCC: {
-        trangThai = STATUS.DA_DUYET_LDCC;
+        trangThai = STATUS.TU_CHOI_LDCC;
         break;
       }
     }

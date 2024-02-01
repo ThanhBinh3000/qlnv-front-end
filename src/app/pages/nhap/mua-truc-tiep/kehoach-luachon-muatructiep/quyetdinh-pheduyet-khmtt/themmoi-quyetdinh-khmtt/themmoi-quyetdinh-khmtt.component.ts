@@ -88,6 +88,11 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
       phanLoai: ['TH', [Validators.required]],
       soQdCc: [''],
       idSoQdCc: [''],
+      chotDcGia: [''],
+      quyetDinhDcGia: [''],
+      quyetDinhDc: [''],
+      ngayQuyetDinhDieuBDG: [''],
+      soQuyetDinhDieuBDG: [''],
     })
   }
 
@@ -256,7 +261,12 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
     if (id) {
       let data = await this.detail(id);
       this.formData.patchValue({
-        soQd: data.soQd?.split('/')[0]
+        soQd: data.soQd?.split('/')[0],
+        soQuyetDinhDieuBDG: data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.soQuyetDinhDieuKHLCNT ?? null,
+        ngayQuyetDinhDieuBDG: data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.ngayQuyetDinhDieuKHLCNT ?? null,
+        chotDcGia: !!data.qthtChotGiaInfoRes?.qthtChotDieuChinhGia.length,
+        quyetDinhDcGia: !!data.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia.length,
+        quyetDinhDc: !!(data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.soQuyetDinhDieuKHLCNT && data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.ngayQuyetDinhDieuKHLCNT),
       })
       this.idSoQdCc = data.idSoQdCc
       this.danhsachDx = data.children.filter(x => x.maDvi.includes(this.userInfo.MA_DVI));

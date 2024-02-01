@@ -42,6 +42,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
   @Input() isView: boolean;
   @Input() loaiVthh: string;
   @Input() idQdGiaoNvNh: number;
+  @Input() maNganLoKho: string;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -223,6 +224,17 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
     let dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
     if (dataChiCuc.length > 0) {
       this.listDiaDiemNhap = dataChiCuc[0].children.filter(i => i.bienBanChuanBiKho == null);
+    }
+    if (this.maNganLoKho != null) {
+      let dataDdiem = null;
+      if (this.maNganLoKho.length == 16) {
+        dataDdiem = this.listDiaDiemNhap.find(x => x.maLoKho == this.maNganLoKho);
+      } else if (this.maNganLoKho.length == 14) {
+        dataDdiem = this.listDiaDiemNhap.find(x => x.maNganKho == this.maNganLoKho);
+      }
+      if (dataDdiem != null) {
+        this.bindingDataDdNhap(dataDdiem);
+      }
     }
     await this.spinner.hide();
   }

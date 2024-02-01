@@ -299,8 +299,11 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
     };
     let res = await this.dieuChinhQuyetDinhPdKhmttService.danhSachQdDc(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      console.log(res.data, "danhSachQdDc")
       this.listQdGoc = res.data
+      this.listQdGoc.forEach(item => {
+        item.trangThaiGia = item.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia.length > 0 ? 'Dừng thực hiện để điều chỉnh giá' : '';
+        item.loai = item.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia.length > 0 ? 'Điều chỉnh giá' : ''
+      })
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -319,8 +322,8 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listQdGoc,
-        dataHeader: ['Số quyết định gốc', 'Loại hàng DTQG', 'Chủng loại hàng DTQG'],
-        dataColumn: ['soQd', 'tenLoaiVthh', 'tenCloaiVthh']
+        dataHeader: ['Số quyết định gốc', 'Loại hàng DTQG', 'Chủng loại hàng DTQG', 'Trạng thái', 'Loại'],
+        dataColumn: ['soQd', 'tenLoaiVthh', 'tenCloaiVthh', 'trangThaiGia', 'loai']
       },
     });
     modalQD.afterClose.subscribe((data) => {
