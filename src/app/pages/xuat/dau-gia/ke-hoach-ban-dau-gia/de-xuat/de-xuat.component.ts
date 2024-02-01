@@ -28,6 +28,7 @@ export class DeXuatComponent extends Base2Component implements OnInit {
   idQdPd: number = 0;
   isViewQdPd: boolean = false;
   listTrangThai: any = [];
+  listTrangThaiTh: any = [];
 
   constructor(
     httpClient: HttpClient,
@@ -100,6 +101,29 @@ export class DeXuatComponent extends Base2Component implements OnInit {
         value: this.STATUS.DA_DUYET_CBV,
         text: 'Đã duyệt - CB Vụ'
       },
+    ];
+
+    this.listTrangThaiTh = [
+      {
+        value: this.STATUS.CHUA_TONG_HOP,
+        text: 'Chưa Tổng Hợp'
+      },
+      {
+        value: this.STATUS.DA_TONG_HOP,
+        text: 'Đã Tổng Hợp'
+      },
+      {
+        value: this.STATUS.CHUA_TAO_QD,
+        text: 'Chưa Tạo QĐ'
+      },
+      {
+        value: this.STATUS.DA_DU_THAO_QD,
+        text: 'Đã Dự Thảo QĐ'
+      },
+      {
+        value: this.STATUS.DA_BAN_HANH_QD,
+        text: 'Đã Ban Hành QĐ'
+      },
     ]
   }
 
@@ -163,26 +187,40 @@ export class DeXuatComponent extends Base2Component implements OnInit {
     }
   }
 
-  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
-    const startDate = this.formData.value[formDataKey + 'Tu'];
-    const endDate = this.formData.value[formDataKey + 'Den'];
-    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
-  };
-
   disabledNgayTaoTu = (startValue: Date): boolean => {
-    return this.isInvalidDateRange(startValue, this.formData.value.ngayTaoDen, 'ngayTao');
+    if (!startValue || !this.formData.value.ngayTaoDen) {
+      return false;
+    }
+    const startDay = new Date(startValue.getFullYear(), startValue.getMonth(), startValue.getDate());
+    const endDay = new Date(this.formData.value.ngayTaoDen.getFullYear(), this.formData.value.ngayTaoDen.getMonth(), this.formData.value.ngayTaoDen.getDate());
+    return startDay > endDay;
   };
 
   disabledNgayTaoDen = (endValue: Date): boolean => {
-    return this.isInvalidDateRange(endValue, this.formData.value.ngayTaoTu, 'ngayTao');
+    if (!endValue || !this.formData.value.ngayTaoTu) {
+      return false;
+    }
+    const endDay = new Date(endValue.getFullYear(), endValue.getMonth(), endValue.getDate());
+    const startDay = new Date(this.formData.value.ngayTaoTu.getFullYear(), this.formData.value.ngayTaoTu.getMonth(), this.formData.value.ngayTaoTu.getDate());
+    return endDay < startDay;
   };
 
   disabledNgayDuyetTu = (startValue: Date): boolean => {
-    return this.isInvalidDateRange(startValue, this.formData.value.ngayDuyetDen, 'ngayDuyet');
+    if (!startValue || !this.formData.value.ngayDuyetDen) {
+      return false;
+    }
+    const startDay = new Date(startValue.getFullYear(), startValue.getMonth(), startValue.getDate());
+    const endDay = new Date(this.formData.value.ngayDuyetDen.getFullYear(), this.formData.value.ngayDuyetDen.getMonth(), this.formData.value.ngayDuyetDen.getDate());
+    return startDay > endDay;
   };
 
   disabledNgayDuyetDen = (endValue: Date): boolean => {
-    return this.isInvalidDateRange(endValue, this.formData.value.ngayDuyetTu, 'ngayDuyet');
+    if (!endValue || !this.formData.value.ngayDuyetTu) {
+      return false;
+    }
+    const endDay = new Date(endValue.getFullYear(), endValue.getMonth(), endValue.getDate());
+    const startDay = new Date(this.formData.value.ngayDuyetTu.getFullYear(), this.formData.value.ngayDuyetTu.getMonth(), this.formData.value.ngayDuyetTu.getDate());
+    return endDay < startDay;
   };
 
   isActionAllowed(action: string, data: any): boolean {

@@ -261,7 +261,8 @@
                   <div nz-row [nzGutter]="24">
                     <div nz-col [nzSpan]="12" class="cus-start-date">
                       <nz-date-picker [nzDisabledDate]="disabledTgianTocChucTu" nzFormat="dd/MM/yyyy"
-                                      formControlName="tgianDkienTu" nzPlaceHolder="Ngày bắt đầu" [nzDisabled]="isView">
+                                      formControlName="tgianDkienTu" nzPlaceHolder="Ngày bắt đầu"
+                                      [nzDisabled]="isView">
                       </nz-date-picker>
                     </div>
                     <div nz-col [nzSpan]="12" class="cus-end-date">
@@ -397,8 +398,8 @@
                 <nz-form-label [nzNoColon]="true"> Khoản tiền đặt trước (%)</nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfter="%">
-                  <input class="money-input" currencyMask [options]="amount" [min]="0"
-                         formControlName="khoanTienDatTruoc" [readonly]="isView"/>
+                    <input class="money-input" currencyMask [options]="amount" [min]="0"
+                           formControlName="khoanTienDatTruoc" [readonly]="isView"/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
