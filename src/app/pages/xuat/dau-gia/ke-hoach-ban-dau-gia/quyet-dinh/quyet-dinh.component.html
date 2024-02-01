@@ -4,28 +4,28 @@
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
         <div nz-row [nzGutter]="20">
           <div nz-col [nzSpan]="2">
-            <label class="search__label"> Năm kế hoạch </label>
+            <label class="search__label"> Năm kế hoạch</label>
             <nz-select formControlName="nam">
               <nz-option *ngFor="let item of listNam" [nzValue]="item.value" [nzLabel]="item.text"></nz-option>
             </nz-select>
           </div>
           <div nz-col [nzSpan]="4">
-            <label class="search__label"> Số QĐ PD KH BĐG </label>
+            <label class="search__label"> Số QĐ PD KH BĐG</label>
             <input nz-input formControlName="soQdPd"/>
           </div>
           <div nz-col [nzSpan]="10">
-            <label class="search__label"> Trích yếu </label>
+            <label class="search__label"> Trích yếu</label>
             <input nz-input formControlName="trichYeu"/>
           </div>
-          <div nz-col nzSpan="5">
-            <label class="search__label"> Ngày Ký QĐ </label>
-            <div nz-row [nzGutter]="24">
+          <div nz-col [nzSpan]="5">
+            <label class="search__label"> Ngày Ký QĐ</label>
+            <div nz-row>
               <div nz-col [nzSpan]="12" class="cus-start-date">
                 <nz-date-picker [nzDisabledDate]="disabledNgayKyQdTu" nzFormat="dd/MM/yyyy"
                                 formControlName="ngayKyQdTu" nzPlaceHolder="Ngày bắt đầu">
                 </nz-date-picker>
               </div>
-              <div nz-col [nzSpan]="12" class="cus-start-date">
+              <div nz-col [nzSpan]="12" class="cus-end-date">
                 <nz-date-picker [nzDisabledDate]="disabledNgayKyQdDen" nzFormat="dd/MM/yyyy"
                                 formControlName="ngayKyQdDen" nzPlaceHolder="Ngày kết thúc">
                 </nz-date-picker>
@@ -39,7 +39,7 @@
         </div>
       </form>
       <div class="cangiua group-button-search">
-        <button nz-button class="search__button--clear" (click)="clearForm(loaiVthh)">
+        <button nz-button class="search__button--clear" (click)="clearForm({loaiVthh: loaiVthh, type : 'QDKH'})">
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>

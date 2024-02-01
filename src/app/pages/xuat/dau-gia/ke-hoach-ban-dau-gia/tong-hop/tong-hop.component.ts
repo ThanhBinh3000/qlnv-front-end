@@ -117,18 +117,22 @@ export class TongHopComponent extends Base2Component implements OnInit {
     this.eventTaoQd.emit(2);
   }
 
-  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
-    const startDate = this.formData.value[formDataKey + 'Tu'];
-    const endDate = this.formData.value[formDataKey + 'Den'];
-    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
-  };
-
   disabledNgayThopTu = (startValue: Date): boolean => {
-    return this.isInvalidDateRange(startValue, this.formData.value.ngayThopDen, 'ngayThop');
+    if (!startValue || !this.formData.value.ngayThopDen) {
+      return false;
+    }
+    const startDay = new Date(startValue.getFullYear(), startValue.getMonth(), startValue.getDate());
+    const endDay = new Date(this.formData.value.ngayThopDen.getFullYear(), this.formData.value.ngayThopDen.getMonth(), this.formData.value.ngayThopDen.getDate());
+    return startDay > endDay;
   };
 
   disabledNgayThopDen = (endValue: Date): boolean => {
-    return this.isInvalidDateRange(endValue, this.formData.value.ngayThopTu, 'ngayThop');
+    if (!endValue || !this.formData.value.ngayThopTu) {
+      return false;
+    }
+    const endDay = new Date(endValue.getFullYear(), endValue.getMonth(), endValue.getDate());
+    const startDay = new Date(this.formData.value.ngayThopTu.getFullYear(), this.formData.value.ngayThopTu.getMonth(), this.formData.value.ngayThopTu.getDate());
+    return endDay < startDay;
   };
 
   openModalQdPd(id: number) {

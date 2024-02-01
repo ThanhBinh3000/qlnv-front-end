@@ -197,14 +197,18 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     if (!startValue || !this.formTraCuu.value.ngayDuyetDen) {
       return false;
     }
-    return startValue.getTime() > this.formTraCuu.value.ngayDuyetDen.getTime();
+    const startDay = new Date(startValue.getFullYear(), startValue.getMonth(), startValue.getDate());
+    const endDay = new Date(this.formTraCuu.value.ngayDuyetDen.getFullYear(), this.formTraCuu.value.ngayDuyetDen.getMonth(), this.formTraCuu.value.ngayDuyetDen.getDate());
+    return startDay > endDay;
   };
 
   disabledNgayDuyetDen = (endValue: Date): boolean => {
     if (!endValue || !this.formTraCuu.value.ngayDuyetTu) {
       return false;
     }
-    return endValue.getTime() <= this.formTraCuu.value.ngayDuyetTu.getTime();
+    const endDay = new Date(endValue.getFullYear(), endValue.getMonth(), endValue.getDate());
+    const startDay = new Date(this.formTraCuu.value.ngayDuyetTu.getFullYear(), this.formTraCuu.value.ngayDuyetTu.getMonth(), this.formTraCuu.value.ngayDuyetTu.getDate());
+    return endDay < startDay;
   };
 
   showList() {
