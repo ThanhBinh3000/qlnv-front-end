@@ -1,0 +1,76 @@
+<div class="bg-trang">
+  <div class="header header-green-background">
+    <div class="header-text">
+      <div class="title-chi-tieu">
+        <span>
+        </span>
+        <span>CẤU HÌNH KẾT NỐI PHẦN MỀM KẾ TOÁN NỘI BỘ</span>
+      </div>
+    </div>
+
+    <div class="btn-group">
+      <button type="button" class="btn btn-main ml-2" (click)="save()">
+        <i class="icon htvbdh_tcdt_baogao"></i>
+        <span>Kết nối</span>
+      </button>
+      <button type="button" class="btn btn-main ml-2" (click)="save()">
+        <i class="icon htvbdh_tcdt_save"></i>
+        <span>Lưu</span>
+      </button>
+
+
+    </div>
+  </div>
+
+  <form nz-form nzLayout="vertical" [formGroup]="formData">
+    <div nz-row [nzGutter]="24" class="mg-t-16">
+      <div nz-col nzSpan="12">
+        <nz-card class="pd-t-10">
+          <div nz-row [nzGutter]="24" class="mg-t-16">
+            <div nz-col [nzSpan]="14">
+              <span class='bold'>Địa chỉ endpoint</span>
+            </div>
+            <div nz-col [nzSpan]="2">
+            </div>
+            <div nz-col [nzSpan]="6">
+              <input  formControlName="endpoint" />
+            </div>
+          </div>
+          <div nz-row [nzGutter]="24" class="mg-t-16">
+            <div nz-col [nzSpan]="14">
+              <span class='bold'>Cổng kết nối</span>
+            </div>
+            <div nz-col [nzSpan]="2">
+            </div>
+            <div nz-col [nzSpan]="6">
+              <input   formControlName="port" />
+            </div>
+          </div>
+          <div nz-row [nzGutter]="24" class="mg-t-16">
+            <div nz-col [nzSpan]="14">
+              <span class='bold'>Path </span>
+            </div>
+            <div nz-col [nzSpan]="2">
+            </div>
+            <div nz-col [nzSpan]="6">
+              <input formControlName="endpoint"/>
+            </div>
+          </div>
+        </nz-card>
+
+      </div>
+      <div nz-col nzSpan="12">
+
+
+      </div>
+    </div>
+
+  </form>
+
+
+
+  <ng-template #error let-control>
+    <app-template-error #error [control]="control"></app-template-error>
+  </ng-template>
+
+</div>
