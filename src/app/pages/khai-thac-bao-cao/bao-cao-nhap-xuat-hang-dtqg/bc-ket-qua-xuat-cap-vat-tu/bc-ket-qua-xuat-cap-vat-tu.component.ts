@@ -27,7 +27,7 @@ export class BcKetQuaXuatCapVatTuComponent extends Base2Component implements OnI
   pdfBlob: any;
   excelBlob: any;
   nameFile = "bao-cao-tien-do-nhap-gao-theo-goi-thau";
-
+  listNam: any[] = [];
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -41,7 +41,7 @@ export class BcKetQuaXuatCapVatTuComponent extends Base2Component implements OnI
     super(httpClient, storageService, notification, spinner, modal, bcNhapXuatMuaBanHangDTQGService);
     this.formData = this.fb.group(
       {
-        nam: [, [Validators.required]],
+        listNam: [, [Validators.required]],
       }
     );
   }
@@ -49,6 +49,12 @@ export class BcKetQuaXuatCapVatTuComponent extends Base2Component implements OnI
   async ngOnInit() {
     await this.spinner.show();
     try {
+      for (let i = 0; i < 15; i++) {
+        this.listNam.push({
+          value: dayjs().get('year') - i,
+          text: dayjs().get('year') - i,
+        });
+      }
       const listNamHt =[];
       for (let i = 2; i >= 0; i--) {
          listNamHt.push({
@@ -58,7 +64,7 @@ export class BcKetQuaXuatCapVatTuComponent extends Base2Component implements OnI
       }
       console.log(listNamHt,"listNamHt")
       this.formData.patchValue({
-        nam: listNamHt.map(item => item.value)
+        listNam: listNamHt.map(item => item.value)
       });
     } catch (e) {
       console.log("error: ", e);
