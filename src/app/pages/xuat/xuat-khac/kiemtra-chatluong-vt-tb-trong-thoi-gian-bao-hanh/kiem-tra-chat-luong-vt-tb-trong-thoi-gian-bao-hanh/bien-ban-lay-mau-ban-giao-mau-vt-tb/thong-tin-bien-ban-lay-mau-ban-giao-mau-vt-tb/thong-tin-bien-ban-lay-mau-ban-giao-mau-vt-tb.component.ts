@@ -91,7 +91,7 @@ export class ThongTinBienBanLayMauBanGiaoMauVtTbComponent extends Base2Component
         idPhieuXuatKho: [null, [Validators.required]],
         soPhieuXuatKho: [null, [Validators.required]],
         soBienBan: [null, [Validators.required]],
-        ngayLayMau: [dayjs().format('YYYY-MM-DD')],
+        ngayLayMau: [dayjs().format('YYYY-MM-DD'),[Validators.required]],
         ngayXuatLayMau: [null],
         dviKiemNghiem: [null, [Validators.required]],
         diaDiemLayMau: [null, [Validators.required]],

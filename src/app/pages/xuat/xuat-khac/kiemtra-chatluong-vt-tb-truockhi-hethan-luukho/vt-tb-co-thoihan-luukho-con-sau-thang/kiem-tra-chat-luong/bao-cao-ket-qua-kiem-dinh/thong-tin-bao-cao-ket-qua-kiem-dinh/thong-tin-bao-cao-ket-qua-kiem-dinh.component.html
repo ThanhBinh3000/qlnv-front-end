@@ -209,7 +209,7 @@
               <td><a *ngIf='lv1.soPhieuKncl' nzType='link'
                      (click)='openPhieuKnClModal(lv1.idPhieuKncl)'>{{lv1.soPhieuKncl}}</a></td>
               <td class='text-center'>
-                <label nz-checkbox [(ngModel)]='lv1.mauBiHuy'></label>
+                <label nz-checkbox [nzDisabled] ='formData.value.trangThai == STATUS.DA_DUYET_LDC && isDisabled()' [(ngModel)]='lv1.mauBiHuy'></label>
               </td>
               <td></td>
             </tr>
