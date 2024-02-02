@@ -59,6 +59,15 @@ export const NHAP_ROUTE_LIST = [
     isSelected: false
   },
   {
+    id: 9,
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Cấu hình kết nối KTNB',
+    url: `/${NHAP_MAIN_ROUTE}/cau-hinh-ktnb`,
+    dropdown: 'cau-hinh-ktnb',
+    idHover: 'cau-hinh-ktnb',
+    isSelected: false
+  },
+  {
     id: 6,
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Thống kê truy cập',
