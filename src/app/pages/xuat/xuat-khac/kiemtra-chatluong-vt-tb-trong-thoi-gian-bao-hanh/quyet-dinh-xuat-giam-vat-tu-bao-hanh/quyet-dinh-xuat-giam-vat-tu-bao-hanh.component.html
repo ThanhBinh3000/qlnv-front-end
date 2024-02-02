@@ -116,10 +116,10 @@
               (click)="redirectDetail(data.id, false)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a *ngIf=" data.trangThai== STATUS.CHO_DUYET_LDV  ||  data.trangThai == STATUS.CHO_DUYET_LDTC"
+            <a
+              *ngIf="(userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_QDXG_DUYETLDV') && data.trangThai== STATUS.CHO_DUYET_LDV )
+              || (userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_QDXG_DUYETLDTC') && data.trangThai == STATUS.CHO_DUYET_LDTC)"
               (click)="redirectDetail(data.id, true)">
-              <!--              *ngIf="(userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_QDXG_DUYETLDV') && data.trangThai== STATUS.CHO_DUYET_LDV )-->
-              <!--              || (userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_QDXG_DUYETLDTC') && data.trangThai == STATUS.CHO_DUYET_LDTC)"-->
               <i class="icon htvbdh_tcdt_pheduyet"></i>
             </a>
             <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_QDXG_XOA') && data.trangThai ==STATUS.DU_THAO" (click)="delete(data)">

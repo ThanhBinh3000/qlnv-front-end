@@ -100,7 +100,7 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
         idBbLayMau: [null, [Validators.required]],
         soBbLayMau: [null, [Validators.required]],
         soPhieu: [null, [Validators.required]],
-        ngayLapPhieu: [null],
+        ngayLapPhieu: [dayjs().format("YYYY-MM-DD"), [Validators.required]],
         ngayKiemDinh: [null, [Validators.required]],
         ngayXuatLayMau: [null],
         dviKiemNghiem: [null, [Validators.required]],
