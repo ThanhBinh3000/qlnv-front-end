@@ -95,7 +95,7 @@ export class ThongTinPhieuXuatKhoComponent extends Base2Component implements OnI
         maDviTsan: [],
         slLayMau: [],
         slThucTe: [],
-        ghiChu: ['', [Validators.required]],
+        ghiChu: [],
         trangThai: [STATUS.DU_THAO],
         tenDvi: [],
         lyDoTuChoi: [],
@@ -188,8 +188,10 @@ export class ThongTinPhieuXuatKhoComponent extends Base2Component implements OnI
     }
     let res = await this.quyetDinhGiaoNvXuatHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      this.listSoQuyetDinh = data.content;
+      let data = res.data.content;
+      this.listSoQuyetDinh = data.filter(item => {
+        return item.xhXkVtQdGiaonvXhDtl.some(i => i.maDiaDiem.startsWith(this.userInfo.MA_DVI));
+      });
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -212,6 +214,19 @@ export class ThongTinPhieuXuatKhoComponent extends Base2Component implements OnI
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         await this.bindingDataQd(data);
+        this.formData.patchValue({
+          maDiaDiem: null,
+          slTonKho: null,
+          tenNhaKho: null,
+          tenDiemKho: null,
+          tenLoaiVthh: null,
+          loaiVthh: null,
+          cloaiVthh: null,
+          tenCloaiVthh: null,
+          donViTinh: null,
+          maDviTsan: null,
+          slLayMau: null,
+        })
       }
     });
   };
@@ -219,7 +234,9 @@ export class ThongTinPhieuXuatKhoComponent extends Base2Component implements OnI
   async bindingDataQd(data) {
     try {
       await this.spinner.show();
-      this.listNganLoKho = data.xhXkVtQdGiaonvXhDtl;
+      this.listNganLoKho = data.xhXkVtQdGiaonvXhDtl.filter(i=>{
+        return i.maDiaDiem.startsWith(this.userInfo.MA_DVI)
+      });
       this.formData.patchValue({
         soCanCu: data.soQuyetDinh,
         idCanCu: data.id,

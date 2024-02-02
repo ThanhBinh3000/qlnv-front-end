@@ -273,6 +273,7 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
       let body = {
         soQdGiaoNvXh: itemQdGnvXh.soQuyetDinh,
         nam: this.formData.get('nam').value,
+        trangThai: STATUS.DA_DUYET_LDC
       };
       let res = await this.bienBanLayMauVtKtclService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {

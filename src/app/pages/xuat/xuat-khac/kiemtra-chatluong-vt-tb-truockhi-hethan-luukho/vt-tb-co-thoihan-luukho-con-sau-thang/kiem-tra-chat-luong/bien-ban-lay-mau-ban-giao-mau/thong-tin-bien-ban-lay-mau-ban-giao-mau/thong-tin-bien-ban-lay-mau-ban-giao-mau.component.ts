@@ -85,7 +85,7 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
         idPhieuXuatKho: [null, [Validators.required]],
         soPhieuXuatKho: [null, [Validators.required]],
         soBienBan: [null, [Validators.required]],
-        ngayLayMau: [null],
+        ngayLayMau: [dayjs().format("YYYY-MM-DD"), [Validators.required]],
         ngayXuatLayMau: [null],
         dviKiemNghiem: [null, [Validators.required]],
         diaDiemLayMau: [null, [Validators.required]],
@@ -219,8 +219,6 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listSoQuyetDinh = data.content;
-      console.log(this.userInfo.MA_DVI,444)
-      console.log(this.listSoQuyetDinh,555)
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
