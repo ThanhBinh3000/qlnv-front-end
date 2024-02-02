@@ -66,6 +66,8 @@ export class SlGiaTriHangDtqgComponent extends Base2Component implements OnInit 
         dviNhanBaoCao: null,
         loaiBc: null,
         loaiKyBc: ['02', [Validators.required]],
+        loaiVthh: null,
+        chungLoaiVthh: null,
       }
     );
   }
@@ -250,11 +252,13 @@ export class SlGiaTriHangDtqgComponent extends Base2Component implements OnInit 
     this.listVthh = [];
     let res = await this.danhMucService.danhMucChungGetAll("LOAI_HHOA");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listVthh = res.data.filter(item => item.ma != "02");
+      this.listVthh = res.data;
     }
   }
 
   async changeLoaiVthh(event) {
+    this.listCloaiVthh = [];
+    this.formData.value.chungLoaiVthh = null;
     let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
@@ -279,6 +283,8 @@ export class SlGiaTriHangDtqgComponent extends Base2Component implements OnInit 
   clearFilter() {
     this.formData.patchValue({
       quy: null,
+      loaiVthh: null,
+      chungLoaiVthh: null,
     })
     this.maCuc = null;
     this.maChiCuc = null;
