@@ -37,7 +37,6 @@ export class CauHinhKetNoiKtnbComponent extends Base2Component implements OnInit
 
   async ngOnInit() {
     this.getData()
-
   }
 
   async getData() {
@@ -45,14 +44,7 @@ export class CauHinhKetNoiKtnbComponent extends Base2Component implements OnInit
       let res = await this.cauHinhKetNoiKtnb.chiTiet();
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data.length > 0) {
-          const data = res.data[0]
-          this.formData.patchValue({
-            ...data,
-            isSizePassword: !!data.sizePassword,
-            isMinSpecial: !!data.minSpecial
-          })
         }
-
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -64,15 +56,9 @@ export class CauHinhKetNoiKtnbComponent extends Base2Component implements OnInit
     }
   }
 
-  async onMinSpecial(isMinSpecial) {
-
-  }
 
   async save() {
-    console.log('formData', this.formData.value)
     this.spinner.show();
-    if (!this.formData.value.isMinSpecial) this.formData.value.minSpecial = null
-    if (!this.formData.value.isSizePassword) this.formData.value.sizePassword = null
     try {
       let res = await this.cauHinhKetNoiKtnb.capNhat(this.formData.value);
       if (res.msg == MESSAGE.SUCCESS) {
