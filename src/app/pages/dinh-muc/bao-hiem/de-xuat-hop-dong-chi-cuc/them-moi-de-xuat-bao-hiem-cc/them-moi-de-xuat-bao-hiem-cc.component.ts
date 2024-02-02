@@ -164,7 +164,14 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
                 data.maKhoChua = item.maDonVi;
                 data.maDvi = this.userInfo.MA_DVI;
                 data.khoiTich = this.rowItemKho.khoiTich
-                this.tableHangDtqgReq.push(data)
+                if (item.loaiVthh) {
+                  let detailHH = await this.danhMucSv.getDetail(item.loaiVthh);
+                  if (detailHH.msg == MESSAGE.SUCCESS) {
+                    if (detailHH.data && detailHH.data.nhomHhBaoHiem) {
+                      this.tableHangDtqgReq.push(data)
+                    }
+                  }
+                }
               }
             }
             this.buildTableView(this.tableHangDtqgReq);
