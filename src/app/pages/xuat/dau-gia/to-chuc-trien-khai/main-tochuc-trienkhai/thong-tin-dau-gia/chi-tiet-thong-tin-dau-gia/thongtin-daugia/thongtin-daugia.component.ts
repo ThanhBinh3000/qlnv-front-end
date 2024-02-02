@@ -249,7 +249,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       this.formData.patchValue({
         ketQua: data.ketQua.toString(),
       });
-      this.dataTable = data.children;
+      this.dataTable = data.children.filter(s => s.children && s.children.length > 0);
       if (!this.isView) {
         await this.getSoLuongDieuChinh(this.dataDetail.idQdPdDtl);
         this.formData.patchValue({
