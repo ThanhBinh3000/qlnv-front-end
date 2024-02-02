@@ -1,20 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { Base2Component } from '../../../../components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from '../../../../services/storage.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { BcCLuongHangDTQGService } from '../../../../services/bao-cao/BcCLuongHangDTQG.service';
-import { UserService } from '../../../../services/user.service';
-import { DonviService } from '../../../../services/donvi.service';
-import { DanhMucService } from '../../../../services/danhmuc.service';
-import { Globals } from '../../../../shared/globals';
+import {Component, OnInit} from '@angular/core';
+import {Base2Component} from '../../../../components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from '../../../../services/storage.service';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {UserService} from '../../../../services/user.service';
+import {DonviService} from '../../../../services/donvi.service';
+import {DanhMucService} from '../../../../services/danhmuc.service';
+import {Globals} from '../../../../shared/globals';
 import * as dayjs from 'dayjs';
 import {saveAs} from "file-saver";
-import { Validators } from '@angular/forms';
-import { MESSAGE } from '../../../../constants/message';
-import { BcNhapXuatMuaBanHangDTQGService } from '../../../../services/bao-cao/BcNhapXuatMuaBanHangDTQG.service';
+import {Validators} from '@angular/forms';
+import {MESSAGE} from '../../../../constants/message';
+import {BcNhapXuatMuaBanHangDTQGService} from '../../../../services/bao-cao/BcNhapXuatMuaBanHangDTQG.service';
 
 @Component({
   selector: 'bc-ket-qua-xuat-cap-vat-tu',
@@ -26,8 +25,9 @@ export class BcKetQuaXuatCapVatTuComponent extends Base2Component implements OnI
   excelSrc: any;
   pdfBlob: any;
   excelBlob: any;
-  nameFile = "bao-cao-tien-do-nhap-gao-theo-goi-thau";
+  nameFile = "ket-qua-xuat-cap-vat-tu";
   listNam: any[] = [];
+
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -55,14 +55,14 @@ export class BcKetQuaXuatCapVatTuComponent extends Base2Component implements OnI
           text: dayjs().get('year') - i,
         });
       }
-      const listNamHt =[];
+      const listNamHt = [];
       for (let i = 2; i >= 0; i--) {
-         listNamHt.push({
+        listNamHt.push({
           value: dayjs().get('year') - i,
           text: dayjs().get('year') - i,
         });
       }
-      console.log(listNamHt,"listNamHt")
+      console.log(listNamHt, "listNamHt")
       this.formData.patchValue({
         listNam: listNamHt.map(item => item.value)
       });
@@ -73,6 +73,7 @@ export class BcKetQuaXuatCapVatTuComponent extends Base2Component implements OnI
     }
     await this.spinner.hide();
   }
+
   downloadPdf() {
     saveAs(this.pdfBlob, this.nameFile + ".pdf");
   }
@@ -83,7 +84,7 @@ export class BcKetQuaXuatCapVatTuComponent extends Base2Component implements OnI
       let body = this.formData.value;
       body.typeFile = "xlsx";
       body.fileName = this.nameFile;
-      await this.bcNhapXuatMuaBanHangDTQGService.baoCaoTienDoNhapHang(body).then(async s => {
+      await this.bcNhapXuatMuaBanHangDTQGService.ketQuaXuatCapVatTu(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
         saveAs(this.excelBlob, this.nameFile + ".xlsx");
@@ -116,7 +117,7 @@ export class BcKetQuaXuatCapVatTuComponent extends Base2Component implements OnI
       let body = this.formData.value;
       // body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc
       body.typeFile = "pdf";
-      await this.bcNhapXuatMuaBanHangDTQGService.baoCaoTienDoNhapHang(body).then(async s => {
+      await this.bcNhapXuatMuaBanHangDTQGService.ketQuaXuatCapVatTu(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
