@@ -11,6 +11,7 @@ import { ChotDieuChinhComponent } from './chot-du-lieu/chot-dieu-chinh/chot-dieu
 import { KetChuyenComponent } from './chot-du-lieu/ket-chuyen/ket-chuyen.component';
 import { QuanLyThongTinTienIchComponent } from './quan-ly-thong-tin/quan-ly-thong-tin-tien-ich/quan-ly-thong-tin-tien-ich.component';
 import { CauHinhDangNhapComponent } from './cau-hinh-dang-nhap/cau-hinh-dang-nhap.component';
+import { CauHinhKetNoiKtnbComponent } from './cau-hinh-ket-noi-ktnb/cau-hinh-ket-noi-ktnb.component';
 
 const routes: Routes = [
   {
@@ -45,6 +46,10 @@ const routes: Routes = [
       {
         path: 'cau-hinh-dang-nhap',
         component: CauHinhDangNhapComponent,
+      },
+      {
+        path: 'cau-hinh-ktnb',
+        component: CauHinhKetNoiKtnbComponent,
       },
       {
         path: 'thong-ke-truy-cap',
