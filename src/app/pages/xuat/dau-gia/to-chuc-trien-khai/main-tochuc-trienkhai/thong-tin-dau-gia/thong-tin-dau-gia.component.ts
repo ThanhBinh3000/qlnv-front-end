@@ -53,8 +53,8 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
       nam: null,
       soQdPd: null,
       soQdDc: null,
-      soQdKq: null,
       soDxuat: null,
+      soQdKq: null,
       ngayKyQdKq: null,
       slDviTsan: null,
       soDviTsanThanhCong: null,
@@ -203,17 +203,21 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
     this.showListEvent.emit();
   }
 
-  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
-    const startDate = this.formData.value[formDataKey + 'Tu'];
-    const endDate = this.formData.value[formDataKey + 'Den'];
-    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
-  };
-
   disabledNgayPduyetKqTu = (startValue: Date): boolean => {
-    return this.isInvalidDateRange(startValue, this.formData.value.ngayKyQdPdKqBdgDen, 'ngayKyQdPdKqBdg');
+    if (!startValue || !this.formData.value.ngayKyQdKqDen) {
+      return false;
+    }
+    const startDay = new Date(startValue.getFullYear(), startValue.getMonth(), startValue.getDate());
+    const endDay = new Date(this.formData.value.ngayKyQdKqDen.getFullYear(), this.formData.value.ngayKyQdKqDen.getMonth(), this.formData.value.ngayKyQdKqDen.getDate());
+    return startDay > endDay;
   };
 
   disabledNgayPduyetKqDen = (endValue: Date): boolean => {
-    return this.isInvalidDateRange(endValue, this.formData.value.ngayKyQdPdKqBdgTu, 'ngayKyQdPdKqBdg');
+    if (!endValue || !this.formData.value.ngayKyQdKqTu) {
+      return false;
+    }
+    const endDay = new Date(endValue.getFullYear(), endValue.getMonth(), endValue.getDate());
+    const startDay = new Date(this.formData.value.ngayKyQdKqTu.getFullYear(), this.formData.value.ngayKyQdKqTu.getMonth(), this.formData.value.ngayKyQdKqTu.getDate());
+    return endDay < startDay;
   };
 }

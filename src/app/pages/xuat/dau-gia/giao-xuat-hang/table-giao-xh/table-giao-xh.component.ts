@@ -175,18 +175,22 @@ export class TableGiaoXh extends Base2Component implements OnInit {
     }
   }
 
-  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
-    const startDate = this.formData.value[formDataKey + 'Tu'];
-    const endDate = this.formData.value[formDataKey + 'Den'];
-    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
-  };
-
   disabledNgayTaoTu = (startValue: Date): boolean => {
-    return this.isInvalidDateRange(startValue, this.formData.value.ngayKyDen, 'ngayKy');
+    if (!startValue || !this.formData.value.ngayKyDen) {
+      return false;
+    }
+    const startDay = new Date(startValue.getFullYear(), startValue.getMonth(), startValue.getDate());
+    const endDay = new Date(this.formData.value.ngayKyDen.getFullYear(), this.formData.value.ngayKyDen.getMonth(), this.formData.value.ngayKyDen.getDate());
+    return startDay > endDay;
   };
 
   disabledNgayTaoDen = (endValue: Date): boolean => {
-    return this.isInvalidDateRange(endValue, this.formData.value.ngayKyTu, 'ngayKy');
+    if (!endValue || !this.formData.value.ngayKyTu) {
+      return false;
+    }
+    const endDay = new Date(endValue.getFullYear(), endValue.getMonth(), endValue.getDate());
+    const startDay = new Date(this.formData.value.ngayKyTu.getFullYear(), this.formData.value.ngayKyTu.getMonth(), this.formData.value.ngayKyTu.getDate());
+    return endDay < startDay;
   };
 
   isActionAllowed(action: string, data: any): boolean {
