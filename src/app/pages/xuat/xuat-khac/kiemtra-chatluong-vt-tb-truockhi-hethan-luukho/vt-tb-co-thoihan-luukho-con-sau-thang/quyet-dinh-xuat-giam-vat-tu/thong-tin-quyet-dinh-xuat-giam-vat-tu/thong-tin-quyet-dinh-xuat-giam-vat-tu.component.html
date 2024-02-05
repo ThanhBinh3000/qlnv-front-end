@@ -10,16 +10,17 @@
         </div>
       </div>
       <div class='btn-group'>
-        <button type='button' class='btn btn-sub mr-2' (click)='goBack()'>
+        <button type='button' class='btn btn-sub ml-2' (click)='goBack()'>
           <i class='fa fa-arrow-left'></i>
           <span>Quay lại</span>
         </button>
-        <button *ngIf='idInput' type='button' class='btn btn-sub do mr-2' (click)='preview(idInput)'>
+        <button *ngIf='idInput' type='button' class='btn btn-sub do ml-2' (click)='preview(idInput)'>
           <i class='icon htvbdh_totrinh'></i>
           <span> In/Xem trước </span>
         </button>
         <button type="button" (click)="save(true)" class="btn btn-sm ml-2"
-                *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC ) && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_QDXG_THEM') ">
+                *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC ) && !isView
+                && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_QDXG_THEM') ">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Lưu và gửi duyệt</span>
         </button>
@@ -36,7 +37,7 @@
           <span>Duyệt</span>
         </button>
         <button (click)="save(false)"
-                *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC && !isView)
+                *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC ) && !isView
                  &&  userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_QDXG_THEM') "
                 class="btn btn-main btn-sm waves-effect waves-light ml-2">
           <i class="icon htvbdh_tcdt_save"></i>
