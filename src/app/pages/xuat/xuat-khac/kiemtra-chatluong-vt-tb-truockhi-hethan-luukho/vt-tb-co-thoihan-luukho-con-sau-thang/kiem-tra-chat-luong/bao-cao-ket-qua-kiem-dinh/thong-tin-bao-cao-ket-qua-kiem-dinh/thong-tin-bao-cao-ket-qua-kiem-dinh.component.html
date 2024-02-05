@@ -166,7 +166,7 @@
         <th width=''>Loại hàng DTQG</th>
         <th width=''>Chủng loại hàng DTQG</th>
         <th width=''>Điểm kho</th>
-        <th width=''>Ngăn/Lô kho</th>
+        <th width=''>Nhà/Ngăn/Lô kho</th>
         <th width=''>ĐVT</th>
         <th width=''>SL lấy mẫu đã xuất</th>
         <th width=''>Kết quả kiểm định</th>
@@ -209,7 +209,7 @@
               <td><a *ngIf='lv1.soPhieuKncl' nzType='link'
                      (click)='openPhieuKnClModal(lv1.idPhieuKncl)'>{{lv1.soPhieuKncl}}</a></td>
               <td class='text-center'>
-                <label nz-checkbox [nzDisabled] ='formData.value.trangThai == STATUS.DA_DUYET_LDC && isDisabled()' [(ngModel)]='lv1.mauBiHuy'></label>
+                <label nz-checkbox [nzDisabled] ='formData.value.trangThai == STATUS.DA_DUYET_LDC && !isDisabled()' [(ngModel)]='lv1.mauBiHuy'></label>
               </td>
               <td></td>
             </tr>

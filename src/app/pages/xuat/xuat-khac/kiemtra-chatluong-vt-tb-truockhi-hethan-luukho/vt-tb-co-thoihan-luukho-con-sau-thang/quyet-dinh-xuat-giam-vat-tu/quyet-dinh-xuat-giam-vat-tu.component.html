@@ -57,12 +57,12 @@
     <div class='group-button'>
       <h3 class='text-uppercase'>Danh sách quyết định xuất giảm vật tư</h3>
       <div class='buttons'>
-        <button type='button' class='btn btn-sub' (click)='exportData()'>
+        <button type='button' class='btn btn-sub' *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_QDXG_EXP')" (click)='exportData()'>
           <i class='icon htvbdh_chuyen-xu-ly'></i>
           <span>Xuất file</span>
         </button>
         <button type='button' class='btn btn-main' (click)='redirectDetail(0,false)'
-                *ngIf='userService.isTongCuc()'>
+                *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_QDXG_THEM') &&userService.isTongCuc()">
           <i class='icon htvbdh_tcdt_tao-qd'></i>
           <span>Tạo QĐ xuất giảm vật tư</span>
         </button>
@@ -105,17 +105,24 @@
           <td>{{ data.tenDviNhan }}</td>
           <td>{{ data.soQdGiaoNvXh }}</td>
           <td>{{ data.tenTrangThai }}</td>
-          <td class='text-left'>
-            <a *ngIf='data.trangThai ==STATUS.BAN_HANH' (click)='redirectDetail(data.id, true)'>
-              <i class='fa fa-eye' title='Xem chi tiết'></i>
+          <td class="text-left">
+            <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_QDXG_XEM') && !((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDV || data.trangThai == STATUS.TU_CHOI_LDTC) && data.nguoiTaoId == userInfo.ID)"
+               (click)="redirectDetail(data.id, true)">
+              <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a
-              *ngIf='data.trangThai ==STATUS.DU_THAO && this.userService.isTongCuc()'
-              (click)='redirectDetail(data.id, false)'>
-              <i class='fa fa-pencil' title='Sửa'></i>
+              *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_QDXG_THEM') && (data.trangThai ==STATUS.DU_THAO  ||data.trangThai ==STATUS.TU_CHOI_LDV||  data.trangThai== STATUS.TU_CHOI_LDTC)"
+              (click)="redirectDetail(data.id, false)">
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a *ngIf='data.trangThai ==STATUS.DU_THAO && this.userService.isTongCuc()' (click)='delete(data)'>
-              <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
+            <a
+              *ngIf="(userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_QDXG_DUYETLDV') && data.trangThai== STATUS.CHO_DUYET_LDV )
+              || (userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_QDXG_DUYETLDTC') && data.trangThai == STATUS.CHO_DUYET_LDTC)"
+              (click)="redirectDetail(data.id, true)">
+              <i class="icon htvbdh_tcdt_pheduyet"></i>
+            </a>
+            <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_QDXG_XOA') && data.trangThai ==STATUS.DU_THAO" (click)="delete(data)">
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>

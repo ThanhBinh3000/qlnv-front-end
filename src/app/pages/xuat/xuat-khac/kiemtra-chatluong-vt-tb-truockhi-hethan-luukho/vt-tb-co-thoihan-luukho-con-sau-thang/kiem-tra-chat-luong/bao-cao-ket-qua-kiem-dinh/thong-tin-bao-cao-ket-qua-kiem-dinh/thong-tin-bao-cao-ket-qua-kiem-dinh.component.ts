@@ -61,7 +61,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
     { value: 0, label: 'Không đạt' },
     { value: 1, label: 'Đạt' },
   ];
-  dataPhieuKncl: any;
+  dataPhieuKncl: any = { isDat: false };
   templateName = '20.Báo cáo KQ kiểm định mẫu_LK còn 6 tháng';
   maBc: string;
   constructor(
