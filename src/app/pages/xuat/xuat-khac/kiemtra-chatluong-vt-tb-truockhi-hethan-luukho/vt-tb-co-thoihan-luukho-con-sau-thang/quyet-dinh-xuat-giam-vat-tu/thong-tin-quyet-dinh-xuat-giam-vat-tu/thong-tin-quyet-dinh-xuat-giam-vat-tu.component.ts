@@ -91,6 +91,7 @@ export class ThongTinQuyetDinhXuatGiamVatTuComponent extends Base2Component impl
       soQuyetDinh: [],
       loai: ['XUAT_GIAM'],
       trichYeu: [],
+      lyDoTuChoi: [],
       soCanCu: [null, [Validators.required]],
       idCanCu: [null, [Validators.required]],
       ngayKy: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
