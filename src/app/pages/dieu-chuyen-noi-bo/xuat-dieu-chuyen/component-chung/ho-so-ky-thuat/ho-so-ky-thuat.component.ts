@@ -12,7 +12,14 @@ import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 import { NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { HoSoKyThuatXuatDieuChuyenService } from '../services/dcnb-ho-so-ky-thuat.service';
 import { PhieuKiemNghiemChatLuongDieuChuyenService } from '../services/dcnb-phieu-kiem-nghiem-chat-luong.service';
-
+export interface MA_QUYEN_HSKT {
+  XEM: string,
+  XACNHAN: string,
+  DUYET_TP: string,
+  DUYET_LDCUC: string,
+  EXP: string,
+  IN: string
+}
 @Component({
   selector: 'app-ho-so-ky-thuat-xuat-dieu-chuyen',
   templateUrl: './ho-so-ky-thuat.component.html',
@@ -23,6 +30,7 @@ export class HoSoKyThuatXuatDieuChuyenComponent extends Base2Component implement
   @ViewChild('NzTreeSelectComponent', { static: false }) nzTreeSelectComponent!: NzTreeSelectComponent;
   @Input() loaiVthh: string;
   @Input() loaiDc: string;
+  @Input() loaiMaQuyen: string;
   isDetail: boolean = false;
   selectedId: number = 0;
   isViewDetail: boolean;
@@ -31,6 +39,14 @@ export class HoSoKyThuatXuatDieuChuyenComponent extends Base2Component implement
   listLoaiHangHoa: any[] = [];
   listDiaDiemKho: any[] = [];
   selectedNode: any;
+  MA_QUYEN: MA_QUYEN_HSKT = {
+    XEM: "",
+    XACNHAN: "",
+    DUYET_TP: "",
+    DUYET_LDCUC: "",
+    EXP: "",
+    IN: ""
+  };
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -76,6 +92,34 @@ export class HoSoKyThuatXuatDieuChuyenComponent extends Base2Component implement
       soBbKtHskt: [],
       type: []
     })
+    switch (this.loaiMaQuyen) {
+      case 'DCNB_VT_KHACTK':
+        this.MA_QUYEN.XEM = 'DCNB_XUAT_NBCC_KHACTK_KTCL_VT_XEM';
+        this.MA_QUYEN.XACNHAN = 'DCNB_XUAT_NBCC_KHACTK_KTCL_VT_XACNHAN_CC';
+        this.MA_QUYEN.DUYET_TP = 'DCNB_XUAT_NBCC_KHACTK_KTCL_VT_DUYET_TP';
+        this.MA_QUYEN.DUYET_LDCUC = 'DCNB_XUAT_NBCC_KHACTK_KTCL_VT_DUYET_LDCUC';
+        this.MA_QUYEN.EXP = 'DCNB_XUAT_NBCC_KHACTK_KTCL_VT_EXP';
+        this.MA_QUYEN.IN = 'DCNB_XUAT_NBCC_KHACTK_KTCL_VT_IN';
+        break;
+      case 'CHICUC_VT':
+        this.MA_QUYEN.XEM = 'DCNB_XUAT_CUNG1CUC_KTCL_VT_XEM';
+        this.MA_QUYEN.XACNHAN = 'DCNB_XUAT_CUNG1CUC_KTCL_VT_XACNHAN_CC';
+        this.MA_QUYEN.DUYET_TP = 'DCNB_XUAT_CUNG1CUC_KTCL_VT_DUYET_TP';
+        this.MA_QUYEN.DUYET_LDCUC = 'DCNB_XUAT_CUNG1CUC_KTCL_VT_DUYET_LDCUC';
+        this.MA_QUYEN.EXP = 'DCNB_XUAT_CUNG1CUC_KTCL_VT_EXP';
+        this.MA_QUYEN.IN = 'DCNB_XUAT_CUNG1CUC_KTCL_VT_IN';
+        break;
+      case 'CUC_VT':
+        this.MA_QUYEN.XEM = 'DCNB_XUAT_2CUC_KTCL_VT_XEM';
+        this.MA_QUYEN.XACNHAN = 'DCNB_XUAT_2CUC_KTCL_VT_XACNHAN_CC';
+        this.MA_QUYEN.DUYET_TP = 'DCNB_XUAT_2CUC_KTCL_VT_DUYET_TP';
+        this.MA_QUYEN.DUYET_LDCUC = 'DCNB_XUAT_2CUC_KTCL_VT_DUYET_LDCUC';
+        this.MA_QUYEN.EXP = 'DCNB_XUAT_2CUC_KTCL_VT_EXP';
+        this.MA_QUYEN.IN = 'DCNB_XUAT_2CUC_KTCL_VT_IN';
+        break;
+      default:
+        break;
+    }
   }
 
   async ngOnInit() {
@@ -149,5 +193,8 @@ export class HoSoKyThuatXuatDieuChuyenComponent extends Base2Component implement
     this.selectedId = id;
     this.isDetail = true;
     this.isViewDetail = isView ?? false;
+  }
+  checkRoleView(): boolean {
+    return this.userService.isAccessPermisson(this.MA_QUYEN.XEM)
   }
 }

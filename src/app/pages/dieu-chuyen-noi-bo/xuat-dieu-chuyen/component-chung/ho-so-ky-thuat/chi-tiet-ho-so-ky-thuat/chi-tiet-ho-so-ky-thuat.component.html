@@ -5,7 +5,8 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button type="button" class="btn btn-sub" (click)="inBienBan(id,'DCNBX','HS')">
+      <button type="button" class="btn btn-sub" (click)="inBienBan(id,'DCNBX','HS')"
+        *ngIf="userService.isAccessPermisson(MA_QUYEN.IN)">
         <i class="icon htvbdh_totrinh"></i>
         <span> In/Xem trước </span>
       </button>
@@ -15,7 +16,8 @@
       <!--        <i class="icon htvbdh_tcdt_pheduyet"></i>-->
       <!--        <span>Xác nhận</span>-->
       <!--      </button>-->
-      <button type="button" class="btn btn-sub xanh" [disabled]="formData.value.kqKiemTra != 1" (click)="save()">
+      <button type="button" class="btn btn-sub xanh" [disabled]="formData.value.kqKiemTra != 1" (click)="save()"
+        *ngIf="userService.isAccessPermisson(MA_QUYEN.XACNHAN)">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Xác nhận</span>
       </button>

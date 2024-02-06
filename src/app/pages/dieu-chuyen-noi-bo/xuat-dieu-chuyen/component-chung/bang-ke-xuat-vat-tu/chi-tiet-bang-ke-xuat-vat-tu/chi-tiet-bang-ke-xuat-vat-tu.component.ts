@@ -28,7 +28,7 @@ import {
     DialogTableSelectionComponent
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
-import { PassDataXuatBangKeXuatVatTu } from '../bang-ke-xuat-vat-tu.component';
+import { MA_QUYEN_BKXVT, PassDataXuatBangKeXuatVatTu } from '../bang-ke-xuat-vat-tu.component';
 import { BangKeXuatVatTuDieuChuyenService } from '../../services/dcnb-bang-ke-xuat-vat-tu.service';
 import { PREVIEW } from 'src/app/constants/fileType';
 
@@ -47,6 +47,7 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
     @Input() isView: boolean;
     @Input() isViewOnModal: boolean;
     @Input() passData: PassDataXuatBangKeXuatVatTu;
+    @Input() MA_QUYEN: MA_QUYEN_BKXVT;
     @Output()
     showListEvent = new EventEmitter<any>();
     loaiVthh: string;
@@ -722,5 +723,11 @@ export class ChiTietBangKeXuatVatTuDieuChuyenComponent extends Base2Component im
                 dcnbBangKeXuatVTDtl: this.formData.value.dcnbBangKeXuatVTDtl
             })
         }
+    }
+    checkRoleDuyet(trangThai: STATUS) {
+        return trangThai === STATUS.CHO_DUYET_LDCC && this.userService.isAccessPermisson(this.MA_QUYEN.DUYET_LDCCUC)
+    }
+    checkRoleSave(trangThai: STATUS) {
+        return [STATUS.DU_THAO, STATUS.TU_CHOI_LDCC].includes(trangThai) && this.userService.isAccessPermisson(this.MA_QUYEN.THEM)
     }
 }

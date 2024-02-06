@@ -1,26 +1,26 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level1">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected (click)="selectTab(0)">
+    <li nz-menu-item nzSelected (click)="selectTab(0)" *ngIf="userService.isAccessPermisson('DCNB_XUAT_NBCC')">
       TRONG NỘI BỘ CHI CỤC
     </li>
-    <li nz-menu-item (click)="selectTab(1)">
+    <li nz-menu-item (click)="selectTab(1)" *ngIf="userService.isAccessPermisson('DCNB_XUAT_CUNG1CUC')">
       GIỮA 2 CHI CỤC TRONG CÙNG MỘT CỤC
     </li>
-    <li nz-menu-item (click)="selectTab(2)">
+    <li nz-menu-item (click)="selectTab(2)" *ngIf="userService.isAccessPermisson('DCNB_XUAT_2CUC')">
       GIỮA 2 CỤC DTNN KV
     </li>
   </ul>
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
-    <ng-container *ngIf="tabSelected == 0">
+    <ng-container *ngIf="tabSelected == 0 && userService.isAccessPermisson('DCNB_XUAT_NBCC')">
       <app-dcnb-xuat-noi-bo-chi-cuc></app-dcnb-xuat-noi-bo-chi-cuc>
     </ng-container>
-    <ng-container *ngIf="tabSelected == 1">
+    <ng-container *ngIf="tabSelected == 1 && userService.isAccessPermisson('DCNB_XUAT_CUNG1CUC')">
       <app-ghcc-thay-doi-thu-kho></app-ghcc-thay-doi-thu-kho>
       <!--      <app-xuat-cap></app-xuat-cap>-->
     </ng-container>
-    <ng-container *ngIf="tabSelected == 2">
+    <ng-container *ngIf="tabSelected == 2 && userService.isAccessPermisson('DCNB_XUAT_2CUC')">
       <app-dcnb-ghc-thay-doi-thu-kho></app-dcnb-ghc-thay-doi-thu-kho>
       <!--      <app-xuat-cap></app-xuat-cap>-->
     </ng-container>

@@ -22,7 +22,7 @@ import { Validators } from '@angular/forms';
 import { ChiTietList } from 'src/app/models/QdPheDuyetKHBanDauGia';
 import { QuyetDinhDieuChuyenCucService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service';
 import { cloneDeep } from 'lodash';
-import { PassData } from '../danh-sach-bien-ban-lay-mau.component';
+import { MA_QUYEN_BBLM, PassData } from '../danh-sach-bien-ban-lay-mau.component';
 import { formatNumber } from '@angular/common';
 import { KhCnQuyChuanKyThuat } from 'src/app/services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
 import { PREVIEW } from 'src/app/constants/fileType';
@@ -47,7 +47,8 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
   // @Input() isViewDetail: boolean;
   @Input() isAddNew: boolean;
   @Input() isViewOnModal: boolean;
-  @Input() passData: PassData
+  @Input() passData: PassData;
+  @Input() MA_QUYEN: MA_QUYEN_BBLM;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -562,6 +563,11 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
   //     this.formData.controls['ngayLayMau'].clearValidators();
   //   }
   // }
-
+  checkRoleDuyet(trangThai: STATUS): boolean {
+    return this.userService.isAccessPermisson(this.MA_QUYEN.DUYET_LDCCUC) && STATUS.CHO_DUYET_LDCC === trangThai && this.userService.isChiCuc();
+  };
+  checkRoleSave(trangThai: STATUS): boolean {
+    return this.userService.isAccessPermisson(this.MA_QUYEN.THEM) && [STATUS.DU_THAO, STATUS.TU_CHOI_LDCC].includes(trangThai) && this.userService.isChiCuc();
+  }
 }
 ;

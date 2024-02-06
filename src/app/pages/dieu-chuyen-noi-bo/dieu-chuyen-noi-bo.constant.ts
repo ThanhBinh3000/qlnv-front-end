@@ -48,7 +48,7 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
     idHover: 'xuat-dieu-chuyen',
     hasTab: false,
     caps: [1, 2, 3],
-    accessPermisson: 'DCNB_KHDC'
+    accessPermisson: 'DCNB_XUAT'
   },
   {
     icon: 'htvbdh_nhapdieuchuyen',

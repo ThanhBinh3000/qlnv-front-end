@@ -29,6 +29,15 @@ export interface PassDataPKNCL {
   soPhieuKnChatLuong: string, phieuKnChatLuongId: number, soQdinhDcc: string, qdinhDccId: number, ngayQDHieuLuc: string, soBBLayMau: string, bblayMauId: number, ngaylayMau: string, tenLoKho: string, maLoKho: string,
   tenNganKho: string, maNganKho: string, tenNhaKho: string, maNhaKho: string, tenDiemKho: string, maDiemKho: string, tenHangHoa: string, maHangHoa: string, tenChLoaiHangHoa: string, maChLoaiHangHoa: string,
   thuKhoId: number, tenThuKho: string, donViTinh: string, keHoachDcDtlId: number, ngayHieuLuc: string, ngayQdinhDc: string
+};
+export interface MA_QUYEN_PKNCL {
+  XEM: string,
+  THEM: string,
+  XOA: string,
+  DUYET_TP: string,
+  DUYET_LDCUC: string,
+  EXP: string,
+  IN: string
 }
 @Component({
   selector: 'app-quan-ly-phieu-kiem-nghiem-chat-luong',
@@ -41,6 +50,7 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
   @Input() thayDoiThuKho: boolean;
   @Input() type: string;
   @Input() typeQd: string;
+  @Input() loaiMaQuyen: string;
   toDay = new Date();
   last30Day = new Date(
     new Date().setTime(this.toDay.getTime() - 30 * 24 * 60 * 60 * 1000),
@@ -93,7 +103,15 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
     [STATUS.TU_CHOI_LDC]: "Từ chối - LĐ Cục",
     [STATUS.DA_DUYET_LDC]: "Đã duyệt - LĐ Cục"
   }
-
+  MA_QUYEN: MA_QUYEN_PKNCL = {
+    XEM: "",
+    THEM: "",
+    XOA: "",
+    DUYET_TP: "",
+    DUYET_LDCUC: "",
+    EXP: "",
+    IN: ""
+  };
   constructor(
     private httpClient: HttpClient,
     storageService: StorageService,
@@ -138,6 +156,64 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
       ngayXuatDocKho: '',
       tenTrangThai: '',
     };
+    switch (this.loaiMaQuyen) {
+      case 'DCNB_LT_KHACTK':
+        this.MA_QUYEN.XEM = 'DCNB_XUAT_NBCC_KHACTK_KTCL_LT_PKNCL_XEM';
+        this.MA_QUYEN.THEM = 'DCNB_XUAT_NBCC_KHACTK_KTCL_LT_PKNCL_THEM';
+        this.MA_QUYEN.XOA = 'DCNB_XUAT_NBCC_KHACTK_KTCL_LT_PKNCL_XOA';
+        this.MA_QUYEN.DUYET_TP = 'DCNB_XUAT_NBCC_KHACTK_KTCL_LT_PKNCL_DUYET_TP';
+        this.MA_QUYEN.DUYET_LDCUC = 'DCNB_XUAT_NBCC_KHACTK_KTCL_LT_PKNCL_DUYET_LDCUC';
+        this.MA_QUYEN.EXP = 'DCNB_XUAT_NBCC_KHACTK_KTCL_LT_PKNCL_EXP';
+        this.MA_QUYEN.IN = 'DCNB_XUAT_NBCC_KHACTK_KTCL_LT_PKNCL_IN';
+        break;
+      case 'DCNB_VT_KHACTK':
+        this.MA_QUYEN.XEM = 'DCNB_XUAT_NBCC_KHACTK_KTCL_VT_PKNCL_XEM';
+        this.MA_QUYEN.THEM = 'DCNB_XUAT_NBCC_KHACTK_KTCL_VT_PKNCL_THEM';
+        this.MA_QUYEN.XOA = 'DCNB_XUAT_NBCC_KHACTK_KTCL_VT_PKNCL_XOA';
+        this.MA_QUYEN.DUYET_TP = 'DCNB_XUAT_NBCC_KHACTK_KTCL_VT_PKNCL_DUYET_TP';
+        this.MA_QUYEN.DUYET_LDCUC = 'DCNB_XUAT_NBCC_KHACTK_KTCL_VT_PKNCL_DUYET_LDCUC';
+        this.MA_QUYEN.EXP = 'DCNB_XUAT_NBCC_KHACTK_KTCL_VT_PKNCL_EXP';
+        this.MA_QUYEN.IN = 'DCNB_XUAT_NBCC_KHACTK_KTCL_VT_PKNCL_IN';
+        break;
+      case 'CHICUC_LT':
+        this.MA_QUYEN.XEM = 'DCNB_XUAT_CUNG1CUC_KTCL_LT_PKNCL_XEM';
+        this.MA_QUYEN.THEM = 'DCNB_XUAT_CUNG1CUC_KTCL_LT_PKNCL_THEM';
+        this.MA_QUYEN.XOA = 'DCNB_XUAT_CUNG1CUC_KTCL_LT_PKNCL_XOA';
+        this.MA_QUYEN.DUYET_TP = 'DCNB_XUAT_CUNG1CUC_KTCL_LT_PKNCL_DUYET_TP';
+        this.MA_QUYEN.DUYET_LDCUC = 'DCNB_XUAT_CUNG1CUC_KTCL_LT_PKNCL_DUYET_LDCUC';
+        this.MA_QUYEN.EXP = 'DCNB_XUAT_CUNG1CUC_KTCL_LT_PKNCL_EXP';
+        this.MA_QUYEN.IN = 'DCNB_XUAT_CUNG1CUC_KTCL_LT_PKNCL_IN';
+        break;
+      case 'CHICUC_VT':
+        this.MA_QUYEN.XEM = 'DCNB_XUAT_CUNG1CUC_KTCL_VT_PKNCL_XEM';
+        this.MA_QUYEN.THEM = 'DCNB_XUAT_CUNG1CUC_KTCL_VT_PKNCL_THEM';
+        this.MA_QUYEN.XOA = 'DCNB_XUAT_CUNG1CUC_KTCL_VT_PKNCL_XOA';
+        this.MA_QUYEN.DUYET_TP = 'DCNB_XUAT_CUNG1CUC_KTCL_VT_PKNCL_DUYET_TP';
+        this.MA_QUYEN.DUYET_LDCUC = 'DCNB_XUAT_CUNG1CUC_KTCL_VT_PKNCL_DUYET_LDCUC';
+        this.MA_QUYEN.EXP = 'DCNB_XUAT_CUNG1CUC_KTCL_VT_PKNCL_EXP';
+        this.MA_QUYEN.IN = 'DCNB_XUAT_CUNG1CUC_KTCL_VT_PKNCL_IN';
+        break;
+      case 'CUC_LT':
+        this.MA_QUYEN.XEM = 'DCNB_XUAT_2CUC_KTCL_LT_PKNCL_XEM';
+        this.MA_QUYEN.THEM = 'DCNB_XUAT_2CUC_KTCL_LT_PKNCL_THEM';
+        this.MA_QUYEN.XOA = 'DCNB_XUAT_2CUC_KTCL_LT_PKNCL_XOA';
+        this.MA_QUYEN.DUYET_TP = 'DCNB_XUAT_2CUC_KTCL_LT_PKNCL_DUYET_TP';
+        this.MA_QUYEN.DUYET_LDCUC = 'DCNB_XUAT_2CUC_KTCL_LT_PKNCL_DUYET_LDCUC';
+        this.MA_QUYEN.EXP = 'DCNB_XUAT_2CUC_KTCL_LT_PKNCL_EXP';
+        this.MA_QUYEN.IN = 'DCNB_XUAT_2CUC_KTCL_LT_PKNCL_IN';
+        break;
+      case 'CUC_VT':
+        this.MA_QUYEN.XEM = 'DCNB_XUAT_2CUC_KTCL_VT_PKNCL_XEM';
+        this.MA_QUYEN.THEM = 'DCNB_XUAT_2CUC_KTCL_VT_PKNCL_THEM';
+        this.MA_QUYEN.XOA = 'DCNB_XUAT_2CUC_KTCL_VT_PKNCL_XOA';
+        this.MA_QUYEN.DUYET_TP = 'DCNB_XUAT_2CUC_KTCL_VT_PKNCL_DUYET_TP';
+        this.MA_QUYEN.DUYET_LDCUC = 'DCNB_XUAT_2CUC_KTCL_VT_PKNCL_DUYET_LDCUC';
+        this.MA_QUYEN.EXP = 'DCNB_XUAT_2CUC_KTCL_VT_PKNCL_EXP';
+        this.MA_QUYEN.IN = 'DCNB_XUAT_2CUC_KTCL_VT_PKNCL_IN';
+        break;
+      default:
+        break;
+    }
   }
 
   async ngOnInit() {
@@ -501,33 +577,34 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
     }
   }
   checkRoleAdd(trangThai: string): boolean {
-    if (this.userService.isCuc() && !trangThai) {
+    if (this.userService.isAccessPermisson(this.MA_QUYEN.THEM) && this.userService.isCuc() && !trangThai) {
       return true
     }
     return false
   }
-  checkRoleView(trangThai: string): boolean {
-    if (trangThai && !this.checkRoleAdd(trangThai) && !this.checkRoleEdit(trangThai) && !this.checkRoleApprove(trangThai)) {
+  checkRoleView(trangThai: STATUS): boolean {
+    if (this.userService.isAccessPermisson(this.MA_QUYEN.XEM) && trangThai && !this.checkRoleAdd(trangThai) && !this.checkRoleEdit(trangThai) && !this.checkRoleApprove(trangThai)) {
       return true
     }
     return false
   }
-  checkRoleEdit(trangThai: string): boolean {
-    if (this.userService.isCuc() && (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDC)) {
+  checkRoleEdit(trangThai: STATUS): boolean {
+    if (this.userService.isAccessPermisson(this.MA_QUYEN.THEM) && this.userService.isCuc() && (trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TP || trangThai == STATUS.TU_CHOI_LDC)) {
       return true
     }
     return false
   }
-  checkRoleApprove(trangThai: string): boolean {
-    if (this.userService.isCuc() && (trangThai == STATUS.CHO_DUYET_TP || trangThai == STATUS.CHO_DUYET_LDC)) {
+  checkRoleApprove(trangThai: STATUS): boolean {
+    if ((this.userService.isAccessPermisson(this.MA_QUYEN.DUYET_TP) && trangThai == STATUS.CHO_DUYET_TP || this.userService.isAccessPermisson(this.MA_QUYEN.DUYET_LDCUC) && trangThai == STATUS.CHO_DUYET_LDC) && this.userService.isCuc()) {
       return true
     }
     return false
   }
-  checkRoleDelete(trangThai: string): boolean {
-    if (this.userService.isCuc() && trangThai == STATUS.DU_THAO) {
+  checkRoleDelete(trangThai: STATUS): boolean {
+    if (this.userService.isAccessPermisson(this.MA_QUYEN.XOA) && this.userService.isCuc() && trangThai == STATUS.DU_THAO) {
       return true
-    }
+    };
+    return false
   }
 
   disabledTuNgay = (startValue: Date): boolean => {
@@ -568,5 +645,4 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
     this.idBbTinhKho = null;
     this.isViewBbTinhKho = false
   }
-
 }

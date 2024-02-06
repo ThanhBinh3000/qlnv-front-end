@@ -1,25 +1,28 @@
 <nz-affix [nzOffsetTop]="141" class="level1">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)">
+    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)"
+      *ngIf="userService.isAccessPermisson('DCNB_XUAT_NBCC_KHACTK_XK_VT_PXK')">
       Phiếu xuất kho
     </li>
-    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)">
+    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)"
+      *ngIf="userService.isAccessPermisson('DCNB_XUAT_NBCC_KHACTK_XK_VT_BKXVT')">
       Bảng kê xuất vật tư
     </li>
-    <li [nzSelected]="tabSelected==2" nz-menu-item (click)="selectTab(2)">
+    <li [nzSelected]="tabSelected==2" nz-menu-item (click)="selectTab(2)"
+      *ngIf="userService.isAccessPermisson('DCNB_XUAT_NBCC_KHACTK_XK_VT_BBTK')">
       Biên bản tịnh kho
     </li>
   </ul>
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
-    <ng-container *ngIf="tabSelected == 0">
+    <ng-container *ngIf="tabSelected == 0 && userService.isAccessPermisson('DCNB_XUAT_NBCC_KHACTK_XK_VT_PXK')">
       <app-dcnb-nbcc-tdtk-xkvt-phieu-xuat-kho></app-dcnb-nbcc-tdtk-xkvt-phieu-xuat-kho>
     </ng-container>
-    <ng-container *ngIf="tabSelected == 1">
+    <ng-container *ngIf="tabSelected == 1 && userService.isAccessPermisson('DCNB_XUAT_NBCC_KHACTK_XK_VT_BKXVT')">
       <app-nbcc-tdtk-xkvt-bang-ke-xuat-vat-tu></app-nbcc-tdtk-xkvt-bang-ke-xuat-vat-tu>
     </ng-container>
-    <ng-container *ngIf="tabSelected == 2">
+    <ng-container *ngIf="tabSelected == 2 && userService.isAccessPermisson('DCNB_XUAT_NBCC_KHACTK_XK_VT_BBTK')">
       <app-nbcc-tdtk-xkvt-bien-ban-tinh-kho></app-nbcc-tdtk-xkvt-bien-ban-tinh-kho>
     </ng-container>
   </div>

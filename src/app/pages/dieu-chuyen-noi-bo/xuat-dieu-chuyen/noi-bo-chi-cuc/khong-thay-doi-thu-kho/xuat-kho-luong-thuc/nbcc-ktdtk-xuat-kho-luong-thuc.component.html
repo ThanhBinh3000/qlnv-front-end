@@ -1,36 +1,40 @@
 <nz-affix [nzOffsetTop]="141" class="level1">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)">
+    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)"
+      *ngIf="userService.isAccessPermisson('DCNB_XUAT_NBCC_CUNGTK_XK_LT_PXK')">
       Phiếu xuất kho
     </li>
-    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)">
+    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)"
+      *ngIf="userService.isAccessPermisson('DCNB_XUAT_NBCC_CUNGTK_XK_LT_BKCH')">
       Bảng kê cân hàng
     </li>
-    <li [nzSelected]="tabSelected==2" nz-menu-item (click)="selectTab(2)">
+    <li [nzSelected]="tabSelected==2" nz-menu-item (click)="selectTab(2)"
+      *ngIf="userService.isAccessPermisson('DCNB_XUAT_NBCC_CUNGTK_XK_LT_BBTK')">
       Biên bản tịnh kho
     </li>
-    <li [nzSelected]="tabSelected==3" nz-menu-item (click)="selectTab(3)">
+    <li [nzSelected]="tabSelected==3" nz-menu-item (click)="selectTab(3)"
+      *ngIf="userService.isAccessPermisson('DCNB_XUAT_NBCC_CUNGTK_XK_LT_BBHD')">
       Biên bản hao dôi
     </li>
   </ul>
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
-    <ng-container *ngIf="tabSelected == 0">
-      <app-xuat-dcnb-phieu-xuat-kho loaiDc="DCNB" [isVatTu]="false" [thayDoiThuKho]="false"
-        type="00"></app-xuat-dcnb-phieu-xuat-kho>
+    <ng-container *ngIf="tabSelected == 0 && userService.isAccessPermisson('DCNB_XUAT_NBCC_CUNGTK_XK_LT_PXK')">
+      <app-xuat-dcnb-phieu-xuat-kho loaiDc="DCNB" [isVatTu]="false" [thayDoiThuKho]="false" type="00"
+        loaiMaQuyen="DCNB_LT_CUNGTK"></app-xuat-dcnb-phieu-xuat-kho>
     </ng-container>
-    <ng-container *ngIf="tabSelected == 1">
-      <app-xuat-dcnb-bang-ke-can loaiDc="DCNB" [isVatTu]="false" [thayDoiThuKho]="false"
-        type="00"></app-xuat-dcnb-bang-ke-can>
+    <ng-container *ngIf="tabSelected == 1 && userService.isAccessPermisson('DCNB_XUAT_NBCC_CUNGTK_XK_LT_BCKH')">
+      <app-xuat-dcnb-bang-ke-can loaiDc="DCNB" [isVatTu]="false" [thayDoiThuKho]="false" type="00"
+        loaiMaQuyen="DCNB_LT_CUNGTK"></app-xuat-dcnb-bang-ke-can>
     </ng-container>
-    <ng-container *ngIf="tabSelected == 2">
-      <app-xuat-dcnb-bien-ban-tinh-kho loaiDc="DCNB" [isVatTu]="false" [thayDoiThuKho]="false"
-        type="00"></app-xuat-dcnb-bien-ban-tinh-kho>
+    <ng-container *ngIf="tabSelected == 2 && userService.isAccessPermisson('DCNB_XUAT_NBCC_CUNGTK_XK_LT_BBTK')">
+      <app-xuat-dcnb-bien-ban-tinh-kho loaiDc="DCNB" [isVatTu]="false" [thayDoiThuKho]="false" type="00"
+        loaiMaQuyen="DCNB_LT_CUNGTK"></app-xuat-dcnb-bien-ban-tinh-kho>
     </ng-container>
-    <ng-container *ngIf="tabSelected == 3">
-      <app-xuat-dcnb-bien-ban-hao-doi loaiDc="DCNB" [isVatTu]="false" [thayDoiThuKho]="false"
-        type="00"></app-xuat-dcnb-bien-ban-hao-doi>
+    <ng-container *ngIf="tabSelected == 3 && userService.isAccessPermisson('DCNB_XUAT_NBCC_CUNGTK_XK_LT_BBHD')">
+      <app-xuat-dcnb-bien-ban-hao-doi loaiDc="DCNB" [isVatTu]="false" [thayDoiThuKho]="false" type="00"
+        loaiMaQuyen="DCNB_LT_CUNGTK"></app-xuat-dcnb-bien-ban-hao-doi>
     </ng-container>
   </div>
 </div>

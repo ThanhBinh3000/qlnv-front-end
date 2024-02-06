@@ -105,11 +105,13 @@
                     <i class="icon htvbdh_tcdt_tao-qd"></i>
                     <span>Thêm</span>
                 </button> -->
-                <button type="button" class="btn btn-sub" (click)="exportData()">
+                <button type="button" class="btn btn-sub" (click)="exportData()"
+                    *ngIf="userService.isAccessPermisson(MA_QUYEN.EXP)">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="redirectDetail(0,false, 0, true)">
+                <button type="button" class="btn btn-main" (click)="redirectDetail(0,false, 0, true)"
+                    *ngIf="userService.isAccessPermisson(MA_QUYEN.THEM)">
                     <i class="icon htvbdh_tcdt_tao-qd"></i>
                     <span>Thêm</span>
                 </button>

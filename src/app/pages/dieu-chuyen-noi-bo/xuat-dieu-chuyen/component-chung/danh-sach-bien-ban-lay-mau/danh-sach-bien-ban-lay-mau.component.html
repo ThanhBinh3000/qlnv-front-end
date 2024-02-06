@@ -55,12 +55,12 @@
     <div class="group-button">
       <h3>DANH SÁCH BIÊN BẢN LẤY MẪU/BÀN GIAO MẪU</h3>
       <div class="buttons">
-        <button *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_BBLM_EXP')" type="button" class="btn btn-sub"
+        <button *ngIf="checkPermissonExport()" type="button" class="btn btn-sub"
           (click)="exportData('Danh-sach-bien-ban-lay-mau-ban-giao-mau.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button *ngIf="userService.isChiCuc()" type="button" class="btn btn-main"
+        <button *ngIf="checkPermissonAdd()" type="button" class="btn btn-main"
           (click)="redirectToChiTiet(null, false, null, null)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
@@ -197,7 +197,7 @@
 <ng-template #templateThemmoi>
   <app-chi-tiet-danh-sach-bien-ban-lay-mau [idInput]="selectedId" [isEdit]="isEdit" [isView]="isView"
     [isAddNew]="isAddNew" [passData]="this.passData" [isVatTu]="isVatTu" [loaiDc]="loaiDc"
-    [thayDoiThuKho]="thayDoiThuKho" [type]="type"
+    [thayDoiThuKho]="thayDoiThuKho" [type]="type" [MA_QUYEN]="MA_QUYEN"
     (showListEvent)="showList()"></app-chi-tiet-danh-sach-bien-ban-lay-mau>
 </ng-template>
 
@@ -210,8 +210,8 @@
     ></app-thong-tin-quyet-dinh-dieu-chuyen>
 </ng-container> -->
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-thong-tin-quyet-dinh-dieu-chuyen-cuc [idInput]="qddccId"
-      [isViewOnModal]="true" [isView] = "true"></app-thong-tin-quyet-dinh-dieu-chuyen-cuc>
+    <app-thong-tin-quyet-dinh-dieu-chuyen-cuc [idInput]="qddccId" [isViewOnModal]="true"
+      [isView]="true"></app-thong-tin-quyet-dinh-dieu-chuyen-cuc>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeModalQdDc()" class="modal__button--cancel">

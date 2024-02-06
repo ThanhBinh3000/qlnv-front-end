@@ -1,25 +1,28 @@
 <nz-affix [nzOffsetTop]="100" class="level1">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)">
+    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)"
+      *ngIf="userService.isAccessPermisson('DCNB_XUAT_2CUC_KTCL_VT_BBLM')">
       Biên bản lấy mẫu/bàn giao mẫu
     </li>
-    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)">
+    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)"
+      *ngIf="userService.isAccessPermisson('DCNB_XUAT_2CUC_KTCL_VT_PKNCL')">
       Phiếu kiểm nghiệm chất lượng
     </li>
-    <li [nzSelected]="tabSelected==2" nz-menu-item (click)="selectTab(2)">
+    <li [nzSelected]="tabSelected==2" nz-menu-item (click)="selectTab(2)"
+      *ngIf="userService.isAccessPermisson('DCNB_XUAT_2CUC_KTCL_VT_HSKT')">
       Hồ sơ kỹ thuật
     </li>
   </ul>
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
-    <ng-container *ngIf="tabSelected == 0">
+    <ng-container *ngIf="tabSelected == 0 && userService.isAccessPermisson('DCNB_XUAT_2CUC_KTCL_VT_BBLM')">
       <app-dcnb-ghc-ktclvt-bien-ban-lay-mau-ban-giao></app-dcnb-ghc-ktclvt-bien-ban-lay-mau-ban-giao>
     </ng-container>
-    <ng-container *ngIf="tabSelected == 1">
+    <ng-container *ngIf="tabSelected == 1 && userService.isAccessPermisson('DCNB_XUAT_2CUC_KTCL_VT_PKNCL')">
       <app-dcnb-ghc-ktclvt-phieu-kiem-nghiem-chat-luong></app-dcnb-ghc-ktclvt-phieu-kiem-nghiem-chat-luong>
     </ng-container>
-    <ng-container *ngIf="tabSelected == 2">
+    <ng-container *ngIf="tabSelected == 2 && userService.isAccessPermisson('DCNB_XUAT_2CUC_KTCL_VT_HSKT')">
       <app-dcnb-ghc-ktclvt-ho-so-ky-thuat></app-dcnb-ghc-ktclvt-ho-so-ky-thuat>
     </ng-container>
   </div>

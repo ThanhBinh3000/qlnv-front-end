@@ -4,55 +4,32 @@
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
         </button>
-        <button type="button" class="btn btn-sub do ml-2" (click)="preview(previewName)">
+        <button type="button" class="btn btn-sub do ml-2" (click)="preview(previewName)"
+            *ngIf="userService.isAccessPermisson(MA_QUYEN.IN)">
             <i class="icon htvbdh_tcdt_tuchoi"></i>
             <span>In/xem trước</span>
         </button>
         <button class="btn btn-sub xanh-nhat" type="button"
-            *ngIf=" this.userService.isChiCuc() && !isDisabled() && (formData.value.trangThai===STATUS.DU_THAO|| formData.value.trangThai == STATUS.TU_CHOI_KTVBQ || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_LDCC)"
+            *ngIf="userService.isAccessPermisson(MA_QUYEN.THEM) && this.userService.isChiCuc() && !isDisabled() && (formData.value.trangThai===STATUS.DU_THAO|| formData.value.trangThai == STATUS.TU_CHOI_KTVBQ || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_LDCC)"
             (click)="save(true)">
             <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Lưu và gửi duyệt</span>
         </button>
         <button class="btn btn-sub xanh"
-            *ngIf=" this.userService.isChiCuc() && !isDisabled() && (formData.value.trangThai === STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_KTVBQ || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_LDCC)"
+            *ngIf="userService.isAccessPermisson(MA_QUYEN.THEM) &&  this.userService.isChiCuc() && !isDisabled() && (formData.value.trangThai === STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_KTVBQ || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_LDCC)"
             (click)="save(false)">
             <i class="icon  htvbdh_tcdt_save"></i>
             <span>Lưu</span>
         </button>
-        <button type="button" class="btn btn-sub do"
-            *ngIf="  this.userService.isChiCuc() && formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ"
+        <button type="button" class="btn btn-sub do" *ngIf="checkRoleDuyet(formData.value.trangThai)"
             (click)="tuChoi()">
             <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
         </button>
-        <button type="button" class="btn btn-sub do"
-            *ngIf="  this.userService.isChiCuc() && formData.value.trangThai == STATUS.CHO_DUYET_KT" (click)="tuChoi()">
-            <i class="icon htvbdh_tcdt_tuchoi do"></i>
-            <span>Từ chối</span>
-        </button>
-        <button type="button" class="btn btn-sub do"
-            *ngIf="  this.userService.isChiCuc() && formData.value.trangThai == STATUS.CHO_DUYET_LDCC"
-            (click)="tuChoi()">
-            <i class="icon htvbdh_tcdt_tuchoi do"></i>
-            <span>Từ chối</span>
-        </button>
-        <button class="btn btn-sub xanh-nhat" *ngIf="  this.userService.isChiCuc() && formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ 
-            && (formData.value.trangThai===STATUS.CHO_DUYET_KTVBQ) " (click)="pheDuyet()">
+        <button class="btn btn-sub xanh-nhat" *ngIf="checkRoleDuyet(formData.value.trangThai)" (click)="pheDuyet()">
             <i class="icon htvbdh_tcdt_pheduyet "></i>
             <span>Duyệt</span>
         </button>
-        <button class="btn btn-sub xanh-nhat" *ngIf="  this.userService.isChiCuc()  && formData.value.trangThai == STATUS.CHO_DUYET_KT
-            && (formData.value.trangThai===STATUS.CHO_DUYET_KT)" (click)="pheDuyet()">
-            <i class="icon htvbdh_tcdt_pheduyet "></i>
-            <span>Duyệt</span>
-        </button>
-        <button class="btn btn-sub xanh-nhat" *ngIf="  this.userService.isChiCuc() && formData.value.trangThai == STATUS.CHO_DUYET_LDCC
-        && (formData.value.trangThai===STATUS.CHO_DUYET_LDCC)" (click)="pheDuyet()">
-            <i class="icon htvbdh_tcdt_pheduyet "></i>
-            <span>Duyệt</span>
-        </button>
-
     </div>
 </nz-affix>
 <div class="bg-trang">

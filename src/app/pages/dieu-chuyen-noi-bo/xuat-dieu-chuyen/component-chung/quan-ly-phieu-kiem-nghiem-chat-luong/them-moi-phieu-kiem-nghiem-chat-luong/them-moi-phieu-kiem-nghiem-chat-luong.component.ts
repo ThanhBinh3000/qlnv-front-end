@@ -38,7 +38,7 @@ import { HttpClient } from '@angular/common/http';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { QuyetDinhDieuChuyenCucService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service';
 import { PhieuKiemNghiemChatLuongDieuChuyenService } from '../../services/dcnb-phieu-kiem-nghiem-chat-luong.service';
-import { PassDataPKNCL } from '../quan-ly-phieu-kiem-nghiem-chat-luong.component';
+import { MA_QUYEN_PKNCL, PassDataPKNCL } from '../quan-ly-phieu-kiem-nghiem-chat-luong.component';
 import { KhCnQuyChuanKyThuat } from 'src/app/services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
 import { PhuongPhapLayMau } from 'src/app/models/PhuongPhapLayMau';
 import { PREVIEW } from 'src/app/constants/fileType';
@@ -62,6 +62,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     donViTinh: '', maChLoaiHangHoa: '', maHangHoa: '', maDiemKho: '', maNhaKho: '', maNganKho: '', maLoKho: '',
     tenDiemKho: '', tenNhaKho: '', tenNganKho: '', tenLoKho: '', tenHangHoa: '', tenChLoaiHangHoa: '', thuKhoId: null, tenThuKho: '', keHoachDcDtlId: null, ngayHieuLuc: '', ngayQdinhDc: ''
   };
+  @Input() MA_QUYEN: MA_QUYEN_PKNCL;
   @Output()
   showListEvent = new EventEmitter<any>();
   userInfo: UserLogin;
@@ -896,5 +897,11 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     } else {
       this.formData.get('danhGiaCamQuan').setValidators([Validators.required])
     }
+  }
+  checkRoleDuyet(trangThai: STATUS): boolean {
+    return (trangThai === STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson(this.MA_QUYEN.DUYET_TP) || trangThai === STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson(this.MA_QUYEN.DUYET_LDCUC)) && this.userService.isCuc();
+  };
+  checkRoleSave(trangThai: STATUS): boolean {
+    return this.userService.isAccessPermisson(this.MA_QUYEN.THEM) && [STATUS.DU_THAO, STATUS.TU_CHOI_TP, STATUS.TU_CHOI_LDC].includes(trangThai) && this.userService.isCuc();
   }
 }
