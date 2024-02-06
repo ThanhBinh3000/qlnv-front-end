@@ -21,7 +21,20 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col nzSpan="6">
+          <div nz-col [nzSpan]="4">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Loại hàng DTQG
+              </nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-select formControlName="loaiVthh" nzAllowClear nzPlaceHolder="Chọn loại báo cáo">
+                  <nz-option nzValue="0101" nzLabel="Thóc"></nz-option>
+                  <nz-option nzValue="0102" nzLabel="Gạo"></nz-option>
+                  <nz-option nzValue="04" nzLabel="Muối"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <!--<div nz-col nzSpan="6">
               <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Ngày báo cáo
               </nz-form-label>
               <div nz-row [nzGutter]="24">
@@ -36,7 +49,7 @@
                   </nz-date-picker>
                 </div>
               </div>
-          </div>
+          </div>-->
         </div>
       </form>
     </nz-card>

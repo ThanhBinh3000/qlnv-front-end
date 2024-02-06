@@ -44,6 +44,7 @@ export class BaoCaoNhapXuatTonComponent extends Base2Component implements OnInit
         nam: [dayjs().get("year"), [Validators.required]],
         ngayBatDau:  [dayjs().startOf('year').format('YYYY-MM-DD')],
         ngayKetThuc: [dayjs().format('YYYY-MM-DD')],
+        loaiVthh:[]
       }
     );
   }
