@@ -9,27 +9,28 @@
               <nz-option *ngFor="let item of listNam" [nzValue]="item.value" [nzLabel]="item.text"></nz-option>
             </nz-select>
           </div>
-          <div nz-col [nzSpan]="4">
+          <div nz-col [nzSpan]="7">
             <label
               class="search__label"> Số QĐ giao NV xuất hàng</label>
             <input nz-input formControlName="soQdNv"/>
           </div>
-          <div nz-col [nzSpan]="4">
+          <div nz-col [nzSpan]="7">
             <label
               class="search__label"> Số BB hao dôi</label>
             <input nz-input formControlName="soBbHaoDoi"/>
           </div>
-          <div nz-col [nzSpan]="4">
+          <div nz-col [nzSpan]="7">
             <label class="search__label"> Ngày lâp BB hao dôi</label>
             <div nz-row>
-              <div nz-col nzSpan="12" class="cus-start-date">
+              <div nz-col [nzSpan]="12" class="cus-start-date">
                 <nz-date-picker [nzDisabledDate]="disabledStartNgayLapBbTu" nzFormat="dd/MM/yyyy"
                                 formControlName="ngayLapBienBanTu" nzPlaceHolder="Ngày bắt đầu">
                 </nz-date-picker>
               </div>
-              <div nz-col nzSpan="12" class="cus-end-date">
+              <div nz-col [nzSpan]="12" class="cus-end-date">
                 <nz-date-picker [nzDisabledDate]="disabledStartNgayLapBbDen" nzFormat="dd/MM/yyyy"
-                                formControlName="ngayLapBienBanDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                                formControlName="ngayLapBienBanDen" nzPlaceHolder="Ngày kết thúc">
+                </nz-date-picker>
               </div>
             </div>
           </div>
