@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Base2Component } from '../../../../components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from '../../../../services/storage.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { BcCLuongHangDTQGService } from '../../../../services/bao-cao/BcCLuongHangDTQG.service';
+import { BcNhapXuatMuaBanHangDTQGService } from '../../../../services/bao-cao/BcNhapXuatMuaBanHangDTQG.service';
 import { UserService } from '../../../../services/user.service';
 import { DonviService } from '../../../../services/donvi.service';
 import { DanhMucService } from '../../../../services/danhmuc.service';
@@ -14,20 +13,20 @@ import * as dayjs from 'dayjs';
 import {saveAs} from "file-saver";
 import { Validators } from '@angular/forms';
 import { MESSAGE } from '../../../../constants/message';
-import { BcNhapXuatMuaBanHangDTQGService } from '../../../../services/bao-cao/BcNhapXuatMuaBanHangDTQG.service';
+import { Base2Component } from '../../../../components/base2/base2.component';
 
 @Component({
-  selector: 'app-bc-ket-qua-xuat-cap-vat-tu',
-  templateUrl: './bc-ket-qua-xuat-cap-vat-tu.component.html',
-  styleUrls: ['./bc-ket-qua-xuat-cap-vat-tu.component.scss']
+  selector: 'app-bao-cao-ket-qua-ho-tro-gao',
+  templateUrl: './bao-cao-ke-hoach-ho-tro-gao.component.html',
+  styleUrls: ['./bao-cao-ke-hoach-ho-tro-gao.component.scss']
 })
-export class BcKetQuaXuatCapVatTuComponent extends Base2Component implements OnInit {
+export class BaoCaoKeHoachHoTroGaoComponent extends Base2Component implements OnInit {
   pdfSrc: any;
   excelSrc: any;
   pdfBlob: any;
   excelBlob: any;
-  nameFile = "bao-cao-tien-do-nhap-gao-theo-goi-thau";
-  listNam: any[] = [];
+  nameFile = "bao-cao-tien-do-bdg-thoc-gao-theo-nam";
+
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -41,7 +40,7 @@ export class BcKetQuaXuatCapVatTuComponent extends Base2Component implements OnI
     super(httpClient, storageService, notification, spinner, modal, bcNhapXuatMuaBanHangDTQGService);
     this.formData = this.fb.group(
       {
-        listNam: [, [Validators.required]],
+        nam: [dayjs().get("year"), [Validators.required]],
       }
     );
   }
@@ -49,23 +48,6 @@ export class BcKetQuaXuatCapVatTuComponent extends Base2Component implements OnI
   async ngOnInit() {
     await this.spinner.show();
     try {
-      for (let i = 0; i < 15; i++) {
-        this.listNam.push({
-          value: dayjs().get('year') - i,
-          text: dayjs().get('year') - i,
-        });
-      }
-      const listNamHt =[];
-      for (let i = 2; i >= 0; i--) {
-         listNamHt.push({
-          value: dayjs().get('year') - i,
-          text: dayjs().get('year') - i,
-        });
-      }
-      console.log(listNamHt,"listNamHt")
-      this.formData.patchValue({
-        listNam: listNamHt.map(item => item.value)
-      });
     } catch (e) {
       console.log("error: ", e);
       await this.spinner.hide();
@@ -82,8 +64,7 @@ export class BcKetQuaXuatCapVatTuComponent extends Base2Component implements OnI
       this.spinner.show();
       let body = this.formData.value;
       body.typeFile = "xlsx";
-      body.fileName = this.nameFile;
-      await this.bcNhapXuatMuaBanHangDTQGService.baoCaoTienDoNhapHang(body).then(async s => {
+      await this.bcNhapXuatMuaBanHangDTQGService.baoCaoTienDoBdgThocGaoTheoNam(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
         saveAs(this.excelBlob, this.nameFile + ".xlsx");
@@ -102,10 +83,6 @@ export class BcKetQuaXuatCapVatTuComponent extends Base2Component implements OnI
   }
 
   async preView() {
-    // this.formData.controls["maCuc"].clearValidators();
-    // if (this.formData.value.loaiBc == '02') {
-    //   this.formData.controls["maCuc"].setValidators(Validators.required);
-    // }
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide();
@@ -114,9 +91,8 @@ export class BcKetQuaXuatCapVatTuComponent extends Base2Component implements OnI
     try {
       this.spinner.show();
       let body = this.formData.value;
-      // body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc
       body.typeFile = "pdf";
-      await this.bcNhapXuatMuaBanHangDTQGService.baoCaoTienDoNhapHang(body).then(async s => {
+      await this.bcNhapXuatMuaBanHangDTQGService.baoCaoTienDoBdgThocGaoTheoNam(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });

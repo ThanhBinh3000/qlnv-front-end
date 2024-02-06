@@ -30,6 +30,7 @@ import {
   QuyetDinhXuatGiamVattuService,
 } from '../../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatvt/QuyetDinhXuatGiamVattu.service';
 import dayjs from 'dayjs';
+import {FileDinhKem} from "../../../../../../../models/FileDinhKem";
 
 @Component({
   selector: 'app-thong-tin-quyet-dinh-giao-nhiem-vu-xuat-hang',
@@ -81,6 +82,7 @@ export class ThongTinQuyetDinhGiaoNhiemVuXuatHangComponent extends Base2Componen
       trichYeu: [],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
+      fileDinhKemReq: [new Array<FileDinhKem>()],
       xhXkVtQdGiaonvXhDtl: [new Array<ItemXhXkVtQdGiaonvXhDtl>()],
     });
   }
@@ -340,7 +342,7 @@ export class ThongTinQuyetDinhGiaoNhiemVuXuatHangComponent extends Base2Componen
       });
     }
     if (this.listFile && this.listFile.length > 0) {
-      this.formData.value.fileDinhKems = this.listFile;
+      this.formData.value.fileDinhKemReq = this.listFile;
     }
     this.formData.value.soQuyetDinh = this.formData.value.soQuyetDinh + this.maQd;
     if (this.dataTh && this.dataThEdit) {
