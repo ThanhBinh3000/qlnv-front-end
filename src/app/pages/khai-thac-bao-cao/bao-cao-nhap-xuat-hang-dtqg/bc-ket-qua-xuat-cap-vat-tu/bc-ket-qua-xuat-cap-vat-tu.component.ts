@@ -16,7 +16,7 @@ import {MESSAGE} from '../../../../constants/message';
 import {BcNhapXuatMuaBanHangDTQGService} from '../../../../services/bao-cao/BcNhapXuatMuaBanHangDTQG.service';
 
 @Component({
-  selector: 'bc-ket-qua-xuat-cap-vat-tu',
+  selector: 'app-bc-ket-qua-xuat-cap-vat-tu',
   templateUrl: './bc-ket-qua-xuat-cap-vat-tu.component.html',
   styleUrls: ['./bc-ket-qua-xuat-cap-vat-tu.component.scss']
 })

@@ -20,7 +20,7 @@
           <span> In/Xem trước </span>
         </button>
         <button type='button' (click)='save(true)' class='btn btn-sm ml-2'
-                *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_QDGNVXH_THEM') &&(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC )">
+                *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_QDGNVXH_THEM') &&(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) && !isViewDetail">
           <i class='icon htvbdh_tcdt_guiduyet'></i>
           <span>Lưu và gửi duyệt</span>
         </button>
@@ -166,7 +166,7 @@
         <div nz-col nzSpan='24'>
           <nz-form-item>
             <nz-form-label [nzNoColon]='true'>
-              File đính kèm qđ giao nv xuất hàng đã ký
+              File đính kèm quyết định giao nhiệm vụ xuất hàng đã ký
             </nz-form-label>
             <div class='list-file'>
               <file-list [data]='listFileDinhKem' [isViewDetail]='isViewDetail'></file-list>

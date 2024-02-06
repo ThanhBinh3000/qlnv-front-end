@@ -40,6 +40,14 @@
               <span nz-icon nzType='fund'></span>
               <span>Báo cáo kết quả xuất cấp vật tư, thiết bị</span>
             </li>
+            <li nz-menu-item [nzSelected]='tabSelected==12' (click)='selectTab(12)'>
+              <span nz-icon nzType='fund'></span>
+              <span>Báo cáo kế hoạch hỗ trợ gạo cho học sinh</span>
+            </li>
+            <li nz-menu-item [nzSelected]='tabSelected==13' (click)='selectTab(13)'>
+              <span nz-icon nzType='fund'></span>
+              <span>Báo cáo kết quả hỗ trợ gạo cho học sinh</span>
+            </li>
           </ul>
         </li>
       </ul>
@@ -71,7 +79,13 @@
           <app-bao-cao-tdo-bdg-hang-theo-nam-nhap></app-bao-cao-tdo-bdg-hang-theo-nam-nhap>
         </ng-container>
         <ng-container *ngIf='tabSelected == 11'>
-          <bc-ket-qua-xuat-cap-vat-tu></bc-ket-qua-xuat-cap-vat-tu>
+          <app-bc-ket-qua-xuat-cap-vat-tu></app-bc-ket-qua-xuat-cap-vat-tu>
+        </ng-container>
+        <ng-container *ngIf='tabSelected == 12'>
+          <app-bao-cao-ke-hoach-ho-tro-gao></app-bao-cao-ke-hoach-ho-tro-gao>
+        </ng-container>
+        <ng-container *ngIf='tabSelected == 13'>
+          <app-bao-cao-ket-qua-ho-tro-gao></app-bao-cao-ket-qua-ho-tro-gao>
         </ng-container>
       </div>
     </div>
