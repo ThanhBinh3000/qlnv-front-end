@@ -309,62 +309,34 @@
     <nz-collapse nzAccordion>
       <nz-collapse-panel [nzHeader]="'KẾT QUẢ PHÂN TÍCH CHỈ TIÊU CHẤT LƯỢNG'" [nzActive]="true">
         <nz-card class="mg-t-16 flex-card p-lr16 table-card">
-          <nz-table class="pd-10" #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
+          <nz-table class="pd-10" #basicTable class="nowrap" [nzBordered] [nzFrontPagination]="false"
+                    [nzShowPagination]="false"
                     [nzData]="dataTableChiTieu">
             <thead>
             <tr>
               <th width="30px">STT</th>
-              <th>Chỉ tiêu chất lượng</th>
+              <th><span class="do">* </span>Chỉ tiêu chất lượng</th>
               <th width="60px">Chỉ số chất lượng theo QCVN 14:2020/BTC</th>
-              <th width="400px">Kết quả phân tích</th>
-              <th>Phương pháp kiểm tra chất lựợng</th>
-              <th>Đánh giá</th>
-              <th width="60px" *ngIf="! isView">
-                Hành động
-              </th>
+              <th width="400px"><span class="do">* </span>Kết quả phân tích</th>
+              <th><span class="do">* </span>Phương pháp kiểm tra chất lượng</th>
+              <th><span class="do">* </span>Đánh giá</th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let data of basicTable.data; let i = index">
-              <ng-container *ngIf="!data.edit; else editTemplate">
-                <td class="text-center">{{i + 1}}</td>
-                <td>{{data.tenChiTieu}}</td>
-                <td>{{data.chiSo}}</td>
-                <td>{{data.ketQua}}</td>
-                <td>{{data.ppKiemTra}}</td>
-                <td>{{data.danhGia ? 'Đạt': (data.danhGia===0? 'Không đạt': '')}}</td>
-                <td *ngIf="!isView">
-                  <a (click)="editRow(i)">
-                    <i class="fa fa-pencil" title="Sửa"></i>
-                  </a>
-                  <a (click)="deleteRow(data)">
-                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                  </a>
-                </td>
-              </ng-container>
-              <ng-template #editTemplate>
-                <td></td>
-                <td>{{data.tenChiTieu}}</td>
-                <td>{{data.chiSo}}</td>
-                <td>
-                  <input type="text" nz-input class="w-400" [(ngModel)]="data.ketQua" />
-                </td>
-                <td>{{data.ppKiemTra}}</td>
-                <td>
-                  <nz-select [(ngModel)]="data.danhGia" nzAllowClear>
-                    <nz-option *ngFor="let item of LIST_DANH_GIA" [nzValue]="item.value" [nzLabel]="item.label">
-                    </nz-option>
-                  </nz-select>
-                </td>
-                <td>
-                  <a (click)="saveEdit(i)" class="save">
-                    <i class="fa fa-save"></i>
-                  </a>
-                  <a (click)="cancelEdit(i)">
-                    <i class="fa fa-times do"></i>
-                  </a>
-                </td>
-              </ng-template>
+              <td>{{i + 1}}</td>
+              <td>{{data.tenChiTieu}}</td>
+              <td>{{data.chiSo}}</td>
+              <td>
+                <input type="text" nz-input class="w-400" [(ngModel)]="data.ketQua" [readOnly]="isView"/>
+              </td>
+              <td>{{data.ppKiemTra}}</td>
+              <td>
+                <nz-select [(ngModel)]="data.danhGia" [disabled]="isView">
+                  <nz-option *ngFor="let item of LIST_DANH_GIA" [nzValue]="item.value" [nzLabel]="item.label">
+                  </nz-option>
+                </nz-select>
+              </td>
             </tr>
             </tbody>
           </nz-table>

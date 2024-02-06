@@ -26,6 +26,7 @@ import {LOAI_HH_XUAT_KHAC} from "../../../../../../../constants/config";
 import {Validators} from "@angular/forms";
 import {FILETYPE} from "../../../../../../../constants/fileType";
 import {DialogTuChoiComponent} from "../../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import dayjs from "dayjs";
 
 @Component({
   selector: 'app-thong-tin-ke-hoach-xuat-hang-cua-cuc',
@@ -70,7 +71,7 @@ export class ThongTinKeHoachXuatHangCuaCucComponent extends Base2Component imple
       diaChi: [],
       loaiHinhNhapXuat: [null, [Validators.required]],
       kieuNhapXuat: [null, [Validators.required]],
-      namKeHoach: [null, [Validators.required]],
+      namKeHoach: [dayjs().get('year'), [Validators.required]],
       soToTrinh: [],
       trichYeu: [],
       ngayKeHoach: [],
@@ -195,7 +196,7 @@ export class ThongTinKeHoachXuatHangCuaCucComponent extends Base2Component imple
   }
 
   async loadKeHoachCuc() {
-    await this.spinner.show();
+    // await this.spinner.show();
     let body = {
       capDvi: "2",
       loai: this.KE_HOACH,

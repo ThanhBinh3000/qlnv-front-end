@@ -209,42 +209,76 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
     }
   }
 
-  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
-    const startDate = this.formData.value[formDataKey + 'Tu'];
-    const endDate = this.formData.value[formDataKey + 'Den'];
-    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
-  };
-
   disabledStartNgayLapBbTu = (startValue: Date): boolean => {
-    return this.isInvalidDateRange(startValue, this.formData.value.ngayLapBienBanTu, 'ngayLapBienBan');
+    if (!startValue || !this.formData.value.ngayLapBienBanDen) {
+      return false;
+    }
+    const startDay = new Date(startValue.getFullYear(), startValue.getMonth(), startValue.getDate());
+    const endDay = new Date(this.formData.value.ngayLapBienBanDen.getFullYear(), this.formData.value.ngayLapBienBanDen.getMonth(), this.formData.value.ngayLapBienBanDen.getDate());
+    return startDay > endDay;
   };
 
   disabledStartNgayLapBbDen = (endValue: Date): boolean => {
-    return this.isInvalidDateRange(endValue, this.formData.value.ngayLapBienBanDen, 'ngayLapBienBan');
+    if (!endValue || !this.formData.value.ngayLapBienBanTu) {
+      return false;
+    }
+    const endDay = new Date(endValue.getFullYear(), endValue.getMonth(), endValue.getDate());
+    const startDay = new Date(this.formData.value.ngayLapBienBanTu.getFullYear(), this.formData.value.ngayLapBienBanTu.getMonth(), this.formData.value.ngayLapBienBanTu.getDate());
+    return endDay < startDay;
   };
 
   disabledStartNgayBatDauXuatTu = (startValue: Date): boolean => {
-    return this.isInvalidDateRange(startValue, this.formData.value.ngayBatDauXuatTu, 'ngayBatDauXuat');
+    if (!startValue || !this.formData.value.ngayBatDauXuatDen) {
+      return false;
+    }
+    const startDay = new Date(startValue.getFullYear(), startValue.getMonth(), startValue.getDate());
+    const endDay = new Date(this.formData.value.ngayBatDauXuatDen.getFullYear(), this.formData.value.ngayBatDauXuatDen.getMonth(), this.formData.value.ngayBatDauXuatDen.getDate());
+    return startDay > endDay;
   };
 
   disabledStartNgayBatDauXuatDen = (endValue: Date): boolean => {
-    return this.isInvalidDateRange(endValue, this.formData.value.ngayBatDauXuatDen, 'ngayBatDauXuat');
+    if (!endValue || !this.formData.value.ngayBatDauXuatTu) {
+      return false;
+    }
+    const endDay = new Date(endValue.getFullYear(), endValue.getMonth(), endValue.getDate());
+    const startDay = new Date(this.formData.value.ngayBatDauXuatTu.getFullYear(), this.formData.value.ngayBatDauXuatTu.getMonth(), this.formData.value.ngayBatDauXuatTu.getDate());
+    return endDay < startDay;
   };
 
   disabledStartNgayKetThucXuatTu = (startValue: Date): boolean => {
-    return this.isInvalidDateRange(startValue, this.formData.value.ngayKetThucXuatTu, 'ngayKetThucXuat');
+    if (!startValue || !this.formData.value.ngayKetThucXuatDen) {
+      return false;
+    }
+    const startDay = new Date(startValue.getFullYear(), startValue.getMonth(), startValue.getDate());
+    const endDay = new Date(this.formData.value.ngayKetThucXuatDen.getFullYear(), this.formData.value.ngayKetThucXuatDen.getMonth(), this.formData.value.ngayKetThucXuatDen.getDate());
+    return startDay > endDay;
   };
 
   disabledStartNgayKetThucXuatDen = (endValue: Date): boolean => {
-    return this.isInvalidDateRange(endValue, this.formData.value.ngayKetThucXuatDen, 'ngayKetThucXuat');
+    if (!endValue || !this.formData.value.ngayKetThucXuatTu) {
+      return false;
+    }
+    const endDay = new Date(endValue.getFullYear(), endValue.getMonth(), endValue.getDate());
+    const startDay = new Date(this.formData.value.ngayKetThucXuatTu.getFullYear(), this.formData.value.ngayKetThucXuatTu.getMonth(), this.formData.value.ngayKetThucXuatTu.getDate());
+    return endDay < startDay;
   };
 
   disabledStartThoiHanXuatTu = (startValue: Date): boolean => {
-    return this.isInvalidDateRange(startValue, this.formData.value.thoiGianGiaoNhanTu, 'thoiGianGiaoNhan');
+    if (!startValue || !this.formData.value.thoiGianGiaoNhanDen) {
+      return false;
+    }
+    const startDay = new Date(startValue.getFullYear(), startValue.getMonth(), startValue.getDate());
+    const endDay = new Date(this.formData.value.thoiGianGiaoNhanDen.getFullYear(), this.formData.value.thoiGianGiaoNhanDen.getMonth(), this.formData.value.thoiGianGiaoNhanDen.getDate());
+    return startDay > endDay;
   };
 
   disabledStartThoiHanXuatTuDen = (endValue: Date): boolean => {
-    return this.isInvalidDateRange(endValue, this.formData.value.thoiGianGiaoNhanDen, 'thoiGianGiaoNhan');
+    if (!endValue || !this.formData.value.thoiGianGiaoNhanTu) {
+      return false;
+    }
+    const endDay = new Date(endValue.getFullYear(), endValue.getMonth(), endValue.getDate());
+    const startDay = new Date(this.formData.value.thoiGianGiaoNhanTu.getFullYear(), this.formData.value.thoiGianGiaoNhanTu.getMonth(), this.formData.value.thoiGianGiaoNhanTu.getDate());
+    return endDay < startDay;
   };
 
   isActionAllowed(action: string, data: any): boolean {

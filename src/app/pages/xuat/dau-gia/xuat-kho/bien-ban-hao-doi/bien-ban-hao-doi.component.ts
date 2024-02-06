@@ -216,18 +216,22 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
     }
   }
 
-  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
-    const startDate = this.formData.value[formDataKey + 'Tu'];
-    const endDate = this.formData.value[formDataKey + 'Den'];
-    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
-  };
-
   disabledStartNgayLapBbTu = (startValue: Date): boolean => {
-    return this.isInvalidDateRange(startValue, this.formData.value.ngayLapBienBanTu, 'ngayLapBienBan');
+    if (!startValue || !this.formData.value.ngayLapBienBanDen) {
+      return false;
+    }
+    const startDay = new Date(startValue.getFullYear(), startValue.getMonth(), startValue.getDate());
+    const endDay = new Date(this.formData.value.ngayLapBienBanDen.getFullYear(), this.formData.value.ngayLapBienBanDen.getMonth(), this.formData.value.ngayLapBienBanDen.getDate());
+    return startDay > endDay;
   };
 
   disabledStartNgayLapBbDen = (endValue: Date): boolean => {
-    return this.isInvalidDateRange(endValue, this.formData.value.ngayLapBienBanDen, 'ngayLapBienBan');
+    if (!endValue || !this.formData.value.ngayLapBienBanTu) {
+      return false;
+    }
+    const endDay = new Date(endValue.getFullYear(), endValue.getMonth(), endValue.getDate());
+    const startDay = new Date(this.formData.value.ngayLapBienBanTu.getFullYear(), this.formData.value.ngayLapBienBanTu.getMonth(), this.formData.value.ngayLapBienBanTu.getDate());
+    return endDay < startDay;
   };
 
   isActionAllowed(action: string, data: any): boolean {

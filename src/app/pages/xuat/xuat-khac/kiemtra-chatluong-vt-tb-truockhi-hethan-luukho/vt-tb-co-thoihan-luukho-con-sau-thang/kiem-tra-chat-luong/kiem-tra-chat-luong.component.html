@@ -18,7 +18,8 @@
         <app-xk-bien-ban-lay-mau-ban-giao-mau></app-xk-bien-ban-lay-mau-ban-giao-mau>
       </ng-container>
       <ng-container *ngIf="tabSelected == 1">
-        <app-xk-vt-phieu-kiem-nghiem-chat-luong></app-xk-vt-phieu-kiem-nghiem-chat-luong>
+        <app-xk-vt-phieu-kiem-nghiem-chat-luong
+          (tabFocus)="receivedTab($event)"></app-xk-vt-phieu-kiem-nghiem-chat-luong>
       </ng-container>
       <ng-container *ngIf="tabSelected == 2">
         <app-bao-cao-ket-qua-kiem-dinh></app-bao-cao-ket-qua-kiem-dinh>

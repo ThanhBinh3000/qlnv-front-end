@@ -249,7 +249,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       this.formData.patchValue({
         ketQua: data.ketQua.toString(),
       });
-      this.dataTable = data.children;
+      this.dataTable = data.children.filter(s => s.children && s.children.length > 0);
       if (!this.isView) {
         await this.getSoLuongDieuChinh(this.dataDetail.idQdPdDtl);
         this.formData.patchValue({
@@ -548,56 +548,72 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     if (!startValue || !this.formData.value.tgianDkyDen) {
       return false;
     }
-    return startValue.getTime() > this.formData.value.tgianDkyDen.getTime();
+    const startDay = new Date(startValue.getFullYear(), startValue.getMonth(), startValue.getDate());
+    const endDay = new Date(this.formData.value.tgianDkyDen.getFullYear(), this.formData.value.tgianDkyDen.getMonth(), this.formData.value.tgianDkyDen.getDate());
+    return startDay > endDay;
   };
 
   disabledTgianDangKyDen = (endValue: Date): boolean => {
     if (!endValue || !this.formData.value.tgianDkyTu) {
       return false;
     }
-    return endValue.getTime() <= this.formData.value.tgianDkyTu.getTime();
+    const endDay = new Date(endValue.getFullYear(), endValue.getMonth(), endValue.getDate());
+    const startDay = new Date(this.formData.value.tgianDkyTu.getFullYear(), this.formData.value.tgianDkyTu.getMonth(), this.formData.value.tgianDkyTu.getDate());
+    return endDay < startDay;
   };
 
   disabledTgianXemtaiSanTu = (startValue: Date): boolean => {
     if (!startValue || !this.formData.value.tgianXemDen) {
       return false;
     }
-    return startValue.getTime() > this.formData.value.tgianXemDen.getTime();
+    const startDay = new Date(startValue.getFullYear(), startValue.getMonth(), startValue.getDate());
+    const endDay = new Date(this.formData.value.tgianXemDen.getFullYear(), this.formData.value.tgianXemDen.getMonth(), this.formData.value.tgianXemDen.getDate());
+    return startDay > endDay;
   };
 
   disabledTgianXemtaiSanDen = (endValue: Date): boolean => {
     if (!endValue || !this.formData.value.tgianXemTu) {
       return false;
     }
-    return endValue.getTime() <= this.formData.value.tgianXemTu.getTime();
+    const endDay = new Date(endValue.getFullYear(), endValue.getMonth(), endValue.getDate());
+    const startDay = new Date(this.formData.value.tgianXemTu.getFullYear(), this.formData.value.tgianXemTu.getMonth(), this.formData.value.tgianXemTu.getDate());
+    return endDay < startDay;
   };
 
   disabledTgianNopTienTu = (startValue: Date): boolean => {
     if (!startValue || !this.formData.value.tgianNopTienDen) {
       return false;
     }
-    return startValue.getTime() > this.formData.value.tgianNopTienDen.getTime();
+    const startDay = new Date(startValue.getFullYear(), startValue.getMonth(), startValue.getDate());
+    const endDay = new Date(this.formData.value.tgianNopTienDen.getFullYear(), this.formData.value.tgianNopTienDen.getMonth(), this.formData.value.tgianNopTienDen.getDate());
+    return startDay > endDay;
   };
 
   disabledTgianNopTienDen = (endValue: Date): boolean => {
     if (!endValue || !this.formData.value.tgianNopTienTu) {
       return false;
     }
-    return endValue.getTime() <= this.formData.value.tgianNopTienTu.getTime();
+    const endDay = new Date(endValue.getFullYear(), endValue.getMonth(), endValue.getDate());
+    const startDay = new Date(this.formData.value.tgianNopTienTu.getFullYear(), this.formData.value.tgianNopTienTu.getMonth(), this.formData.value.tgianNopTienTu.getDate());
+    return endDay < startDay;
   };
 
   disabledTgianDauGiaTu = (startValue: Date): boolean => {
     if (!startValue || !this.formData.value.tgianDauGiaDen) {
       return false;
     }
-    return startValue.getTime() > this.formData.value.tgianDauGiaDen.getTime();
+    const startDay = new Date(startValue.getFullYear(), startValue.getMonth(), startValue.getDate());
+    const endDay = new Date(this.formData.value.tgianDauGiaDen.getFullYear(), this.formData.value.tgianDauGiaDen.getMonth(), this.formData.value.tgianDauGiaDen.getDate());
+    return startDay > endDay;
   };
 
   disabledTgianDauGiaDen = (endValue: Date): boolean => {
     if (!endValue || !this.formData.value.tgianDauGiaTu) {
       return false;
     }
-    return endValue.getTime() <= this.formData.value.tgianDauGiaTu.getTime();
+    const endDay = new Date(endValue.getFullYear(), endValue.getMonth(), endValue.getDate());
+    const startDay = new Date(this.formData.value.tgianDauGiaTu.getFullYear(), this.formData.value.tgianDauGiaTu.getMonth(), this.formData.value.tgianDauGiaTu.getDate());
+    return endDay < startDay;
   };
 
   setValidForm() {

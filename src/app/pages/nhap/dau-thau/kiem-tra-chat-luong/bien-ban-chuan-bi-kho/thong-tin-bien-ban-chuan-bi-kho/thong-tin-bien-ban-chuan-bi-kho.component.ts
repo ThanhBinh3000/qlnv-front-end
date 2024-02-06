@@ -42,6 +42,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
   @Input() isView: boolean;
   @Input() loaiVthh: string;
   @Input() idQdGiaoNvNh: number;
+  @Input() maNganLoKho: string;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -224,6 +225,17 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
     if (dataChiCuc.length > 0) {
       this.listDiaDiemNhap = dataChiCuc[0].children.filter(i => i.bienBanChuanBiKho == null);
     }
+    if (this.maNganLoKho != null) {
+      let dataDdiem = null;
+      if (this.maNganLoKho.length == 16) {
+        dataDdiem = this.listDiaDiemNhap.find(x => x.maLoKho == this.maNganLoKho);
+      } else if (this.maNganLoKho.length == 14) {
+        dataDdiem = this.listDiaDiemNhap.find(x => x.maNganKho == this.maNganLoKho);
+      }
+      if (dataDdiem != null) {
+        this.bindingDataDdNhap(dataDdiem);
+      }
+    }
     await this.spinner.hide();
   }
 
@@ -357,6 +369,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
           this.formData.get('tenNganLoKho').setValue(this.formData.get('tenLoKho').value ? this.formData.get('tenNganKho').value + " - " + this.formData.get('tenLoKho').value : this.formData.get('tenNganKho').value)
           this.danhSach = data.children;
           this.dsHangTH = data.children.filter(item => item.type === "TH")
+          this.viewTableTH()
           this.dsHangPD = data.children.filter(item => item.type === "PD")
           this.fileDinhKem = data.fileDinhKems;
         }

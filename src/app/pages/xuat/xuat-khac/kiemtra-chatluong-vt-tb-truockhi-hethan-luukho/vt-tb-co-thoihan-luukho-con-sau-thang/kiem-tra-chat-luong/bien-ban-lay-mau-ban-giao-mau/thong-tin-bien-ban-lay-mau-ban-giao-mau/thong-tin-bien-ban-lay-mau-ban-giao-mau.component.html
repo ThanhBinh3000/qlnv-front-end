@@ -106,12 +106,14 @@
             </div>
             <div nz-col nzSpan="3">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true">
+                <nz-form-label [nzNoColon]="true" nzRequired>
                   Ngày lấy mẫu
                 </nz-form-label>
-                <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayLayMau"
-                                [nzDisabled]="isView">
-                </nz-date-picker>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayLayMau"
+                                  [nzDisabled]="isView">
+                  </nz-date-picker>
+                </nz-form-control>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="4">
@@ -130,7 +132,7 @@
                 <nz-form-label [nzNoColon]="true" nzRequired> Số phiếu xuất kho
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-select formControlName="soPhieuXuatKho" [nzDisabled]="isView || idInput > 0"
+                  <nz-select formControlName="soPhieuXuatKho" [nzDisabled]="isView"
                              (ngModelChange)="changeValuePhieuXuatKho($event)">
                     <nz-option *ngFor="let p of listPhieuXuatKho" [nzValue]="p.soPhieu"
                                [nzLabel]="p.soPhieu">
@@ -142,7 +144,7 @@
             <div nz-col [nzSpan]="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Ngăn/Lô kho</nz-form-label>
-                <nz-form-control>
+                <nz-form-control [nzErrorTip]="error">
                   <input [readonly]="true" nz-input formControlName="tenDiaDiem" readonly/>
                 </nz-form-control>
               </nz-form-item>

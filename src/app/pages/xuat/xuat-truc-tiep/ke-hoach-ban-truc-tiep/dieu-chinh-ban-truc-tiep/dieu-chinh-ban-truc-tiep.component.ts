@@ -10,6 +10,7 @@ import {
   QuyetDinhPdKhBanTrucTiepService
 } from "../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import {tr} from "date-fns/locale";
 
 @Component({
   selector: 'app-dieu-chinh-ban-truc-tiep',
@@ -22,6 +23,7 @@ export class DieuChinhBanTrucTiepComponent extends Base2Component implements OnI
   isView = false;
   idQdPd: number = 0;
   isViewQdPd: boolean = false;
+  lanDieuChinh: boolean = false;
   listTrangThai: any = [];
 
   constructor(
@@ -48,7 +50,7 @@ export class DieuChinhBanTrucTiepComponent extends Base2Component implements OnI
       namKh: null,
       soQdDc: null,
       ngayKyDc: null,
-      soQdPd: null,
+      soQdCanDc: null,
       trichYeu: null,
       tenLoaiVthh: null,
       tenCloaiVthh: null,
@@ -106,9 +108,10 @@ export class DieuChinhBanTrucTiepComponent extends Base2Component implements OnI
     this.isView = isView;
   }
 
-  openModal(id: number) {
+  openModal(id: number, lanDieuChinh: number) {
     this.idQdPd = id;
     this.isViewQdPd = true;
+    this.lanDieuChinh = lanDieuChinh === 1;
   }
 
   closeModal() {

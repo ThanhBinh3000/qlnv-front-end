@@ -19,7 +19,7 @@
          && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_SLGTHDTQGN_DUYET')"
                 type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
-          <span>Ban hành</span>
+          <span>Ký số</span>
         </button>
         <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && !isView
         && userService.isAccessPermisson('BCBN_LAPBAOCAO_TT130_SLGTHDTQGN_LAP')"
@@ -262,25 +262,25 @@
             <td></td>
             <td></td>
             <td></td>
-            <td class="text-right">{{ data.gtriNhapTang | number : '1.0-99' : 'vi_VN'}}</td>
+            <td class="text-right">{{ data.gtriNhapTang | number : '1.2-2' : 'vi_VN'}}</td>
             <td class="text-right"></td>
-            <td class="text-right">{{ data.gtriNhapBu  | number : '1.0-99' : 'vi_VN'}}</td>
+            <td class="text-right">{{ data.gtriNhapBu  | number : '1.2-2' : 'vi_VN'}}</td>
             <td class="text-right"></td>
-            <td class="text-right">{{ data.gtriNhapBsung  | number : '1.0-99' : 'vi_VN'}}</td>
+            <td class="text-right">{{ data.gtriNhapBsung  | number : '1.2-2' : 'vi_VN'}}</td>
             <td class="text-right"></td>
-            <td class="text-right">{{ data.gtriNhapKhac  | number : '1.0-99' : 'vi_VN'}}</td>
+            <td class="text-right">{{ data.gtriNhapKhac  | number : '1.2-2' : 'vi_VN'}}</td>
             <td class="text-right"></td>
-            <td class="text-right">{{ data.gtriNhapTong | number : '1.0-99' : 'vi_VN' }}</td>
+            <td class="text-right">{{ data.gtriNhapTong | number : '1.2-2' : 'vi_VN' }}</td>
             <td class="text-right"></td>
-            <td class="text-right">{{ data.gtriLuyKeTang  | number : '1.0-99' : 'vi_VN'}}</td>
+            <td class="text-right">{{ data.gtriLuyKeTang  | number : '1.2-2' : 'vi_VN'}}</td>
             <td class="text-right"></td>
-            <td class="text-right">{{ data.gtriLuyKeBu  | number : '1.0-99' : 'vi_VN'}}</td>
+            <td class="text-right">{{ data.gtriLuyKeBu  | number : '1.2-2' : 'vi_VN'}}</td>
             <td class="text-right"></td>
-            <td class="text-right">{{ data.gtriLuyKeBsung | number : '1.0-99' : 'vi_VN'}}</td>
+            <td class="text-right">{{ data.gtriLuyKeBsung | number : '1.2-2' : 'vi_VN'}}</td>
             <td class="text-right"></td>
-            <td class="text-right">{{ data.gtriLuyKeKhac | number : '1.0-99' : 'vi_VN' }}</td>
+            <td class="text-right">{{ data.gtriLuyKeKhac | number : '1.2-2' : 'vi_VN' }}</td>
             <td class="text-right"></td>
-            <td class="text-right">{{ data.gtriLuyKeTong | number : '1.0-99' : 'vi_VN' }}</td>
+            <td class="text-right">{{ data.gtriLuyKeTong | number : '1.2-2' : 'vi_VN' }}</td>
             <td nzRight *ngIf="!isView">
               <a (click)="editRowDvi(i)">
                 <i class=" fa fa-pencil"></i>
@@ -304,25 +304,25 @@
             <td></td>
             <td></td>
             <td></td>
-            <td class="text-right">{{ data.gtriNhapTang | number : '1.0-99' : 'vi_VN' }}</td>
+            <td class="text-right">{{ data.gtriNhapTang | number : '1.2-2' : 'vi_VN' }}</td>
             <td></td>
-            <td class="text-right">{{ data.gtriNhapBu | number : '1.0-99' : 'vi_VN'}}</td>
+            <td class="text-right">{{ data.gtriNhapBu | number : '1.2-2' : 'vi_VN'}}</td>
             <td></td>
-            <td class="text-right">{{ data.gtriNhapBsung  | number : '1.0-99' : 'vi_VN'}}</td>
+            <td class="text-right">{{ data.gtriNhapBsung  | number : '1.2-2' : 'vi_VN'}}</td>
             <td class="text-right"></td>
-            <td class="text-right">{{ data.gtriNhapKhac | number : '1.0-99' : 'vi_VN' }}</td>
+            <td class="text-right">{{ data.gtriNhapKhac | number : '1.2-2' : 'vi_VN' }}</td>
             <td class="text-right"></td>
-            <td class="text-right">{{ data.gtriNhapTong  | number : '1.0-99' : 'vi_VN'}}</td>
+            <td class="text-right">{{ data.gtriNhapTong  | number : '1.2-2' : 'vi_VN'}}</td>
             <td class="text-right"></td>
-            <td class="text-right">{{ data.gtriLuyKeTang | number : '1.0-99' : 'vi_VN' }}</td>
+            <td class="text-right">{{ data.gtriLuyKeTang | number : '1.2-2' : 'vi_VN' }}</td>
             <td class="text-right"></td>
-            <td class="text-right">{{ data.gtriLuyKeBu | number : '1.0-99' : 'vi_VN' }}</td>
+            <td class="text-right">{{ data.gtriLuyKeBu | number : '1.2-2' : 'vi_VN' }}</td>
             <td class="text-right"></td>
-            <td class="text-right">{{ data.gtriLuyKeBsung | number : '1.0-99' : 'vi_VN' }}</td>
+            <td class="text-right">{{ data.gtriLuyKeBsung | number : '1.2-2' : 'vi_VN' }}</td>
             <td class="text-right"></td>
-            <td class="text-right">{{ data.gtriLuyKeKhac | number : '1.0-99' : 'vi_VN' }}</td>
+            <td class="text-right">{{ data.gtriLuyKeKhac | number : '1.2-2' : 'vi_VN' }}</td>
             <td class="text-right"></td>
-            <td class="text-right">{{ data.gtriLuyKeTong | number : '1.0-99' : 'vi_VN' }}</td>
+            <td class="text-right">{{ data.gtriLuyKeTong | number : '1.2-2' : 'vi_VN' }}</td>
             <td nzRight>
               <a (click)="saveEditRowDvi(i)">
                 <i class="icon htvbdh_tcdt_save"></i>
@@ -345,26 +345,26 @@
               <td>{{ nhomMatHang.diaDiem }}</td>
               <td>{{ nhomMatHang.tgianSx }}</td>
               <td>{{ nhomMatHang.thanLuuKho }}</td>
-              <td class="text-right">{{ nhomMatHang.slNhapTang | number : '1.0-99' : 'vi_VN' }}</td>
-              <td class="text-right">{{ nhomMatHang.gtriNhapTang | number : '1.0-99' : 'vi_VN' }}</td>
-              <td class="text-right">{{ nhomMatHang.slNhapBu | number : '1.0-99' : 'vi_VN' }}</td>
-              <td class="text-right">{{ nhomMatHang.gtriNhapBu | number : '1.0-99' : 'vi_VN' }}</td>
-              <td class="text-right">{{ nhomMatHang.slNhapBsung | number : '1.0-99' : 'vi_VN' }}</td>
-              <td class="text-right">{{ nhomMatHang.gtriNhapBsung | number : '1.0-99' : 'vi_VN' }}</td>
-              <td class="text-right">{{ nhomMatHang.slNhapKhac | number : '1.0-99' : 'vi_VN' }}</td>
-              <td class="text-right">{{ nhomMatHang.gtriNhapKhac | number : '1.0-99' : 'vi_VN' }}</td>
-              <td class="text-right">{{ nhomMatHang.slNhapTong | number : '1.0-99' : 'vi_VN' }}</td>
-              <td class="text-right">{{ nhomMatHang.gtriNhapTong | number : '1.0-99' : 'vi_VN' }}</td>
-              <td class="text-right">{{ nhomMatHang.slLuyKeTang | number : '1.0-99' : 'vi_VN' }}</td>
-              <td class="text-right">{{ nhomMatHang.gtriLuyKeTang | number : '1.0-99' : 'vi_VN' }}</td>
-              <td class="text-right">{{ nhomMatHang.slLuyKeBu | number : '1.0-99' : 'vi_VN' }}</td>
-              <td class="text-right">{{ nhomMatHang.gtriLuyKeBu | number : '1.0-99' : 'vi_VN' }}</td>
-              <td class="text-right">{{ nhomMatHang.slLuyKeBsung | number : '1.0-99' : 'vi_VN' }}</td>
-              <td class="text-right">{{ nhomMatHang.gtriLuyKeBsung | number : '1.0-99' : 'vi_VN' }}</td>
-              <td class="text-right">{{ nhomMatHang.slLuyKeKhac | number : '1.0-99' : 'vi_VN' }}</td>
-              <td class="text-right">{{ nhomMatHang.gtriLuyKeKhac | number : '1.0-99' : 'vi_VN' }}</td>
-              <td class="text-right">{{ nhomMatHang.slLuyKeTong | number : '1.0-99' : 'vi_VN' }}</td>
-              <td class="text-right">{{ nhomMatHang.gtriLuyKeTong | number : '1.0-99' : 'vi_VN' }}</td>
+              <td class="text-right">{{ nhomMatHang.slNhapTang | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ nhomMatHang.gtriNhapTang | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ nhomMatHang.slNhapBu | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ nhomMatHang.gtriNhapBu | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ nhomMatHang.slNhapBsung | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ nhomMatHang.gtriNhapBsung | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ nhomMatHang.slNhapKhac | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ nhomMatHang.gtriNhapKhac | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ nhomMatHang.slNhapTong | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ nhomMatHang.gtriNhapTong | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ nhomMatHang.slLuyKeTang | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ nhomMatHang.gtriLuyKeTang | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ nhomMatHang.slLuyKeBu | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ nhomMatHang.gtriLuyKeBu | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ nhomMatHang.slLuyKeBsung | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ nhomMatHang.gtriLuyKeBsung | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ nhomMatHang.slLuyKeKhac | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ nhomMatHang.gtriLuyKeKhac | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ nhomMatHang.slLuyKeTong | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right">{{ nhomMatHang.gtriLuyKeTong | number : '1.2-2' : 'vi_VN' }}</td>
               <td nzRight *ngIf="!isView">
                 <a *ngIf="!isView" (click)="editRowNhomMh(i, y)">
                   <i class=" fa fa-pencil"></i>
@@ -491,26 +491,26 @@
                 <td>{{ matHang.diaDiem }}</td>
                 <td>{{ matHang.tgianSx }}</td>
                 <td>{{ matHang.thanLuuKho }}</td>
-                <td class="text-right">{{ matHang.slNhapTang }}</td>
-                <td class="text-right">{{ matHang.gtriNhapTang }}</td>
-                <td class="text-right">{{ matHang.slNhapBu }}</td>
-                <td class="text-right">{{ matHang.gtriNhapBu }}</td>
-                <td class="text-right">{{ matHang.slNhapBsung }}</td>
-                <td class="text-right">{{ matHang.gtriNhapBsung }}</td>
-                <td class="text-right">{{ matHang.slNhapKhac }}</td>
-                <td class="text-right">{{ matHang.gtriNhapKhac }}</td>
-                <td class="text-right">{{ matHang.slNhapTong }}</td>
-                <td class="text-right">{{ matHang.gtriNhapTong }}</td>
-                <td class="text-right">{{ matHang.slLuyKeTang }}</td>
-                <td class="text-right">{{ matHang.gtriLuyKeTang }}</td>
-                <td class="text-right">{{ matHang.slLuyKeBu }}</td>
-                <td class="text-right">{{ matHang.gtriLuyKeBu }}</td>
-                <td class="text-right">{{ matHang.slLuyKeBsung }}</td>
-                <td class="text-right">{{ matHang.gtriLuyKeBsung }}</td>
-                <td class="text-right">{{ matHang.slLuyKeKhac }}</td>
-                <td class="text-right">{{ matHang.gtriLuyKeKhac }}</td>
-                <td class="text-right">{{ matHang.slLuyKeTong }}</td>
-                <td class="text-right">{{ matHang.gtriLuyKeTong }}</td>
+                <td class="text-right">{{ matHang.slNhapTang| number : '1.2-2' : 'vi_VN' }}</td>
+                <td class="text-right">{{ matHang.gtriNhapTang| number : '1.2-2' : 'vi_VN' }}</td>
+                <td class="text-right">{{ matHang.slNhapBu| number : '1.2-2' : 'vi_VN' }}</td>
+                <td class="text-right">{{ matHang.gtriNhapBu| number : '1.2-2' : 'vi_VN' }}</td>
+                <td class="text-right">{{ matHang.slNhapBsung| number : '1.2-2' : 'vi_VN' }}</td>
+                <td class="text-right">{{ matHang.gtriNhapBsung| number : '1.2-2' : 'vi_VN' }}</td>
+                <td class="text-right">{{ matHang.slNhapKhac| number : '1.2-2' : 'vi_VN' }}</td>
+                <td class="text-right">{{ matHang.gtriNhapKhac| number : '1.2-2' : 'vi_VN' }}</td>
+                <td class="text-right">{{ matHang.slNhapTong| number : '1.2-2' : 'vi_VN' }}</td>
+                <td class="text-right">{{ matHang.gtriNhapTong| number : '1.2-2' : 'vi_VN' }}</td>
+                <td class="text-right">{{ matHang.slLuyKeTang| number : '1.2-2' : 'vi_VN' }}</td>
+                <td class="text-right">{{ matHang.gtriLuyKeTang| number : '1.2-2' : 'vi_VN' }}</td>
+                <td class="text-right">{{ matHang.slLuyKeBu| number : '1.2-2' : 'vi_VN' }}</td>
+                <td class="text-right">{{ matHang.gtriLuyKeBu| number : '1.2-2' : 'vi_VN' }}</td>
+                <td class="text-right">{{ matHang.slLuyKeBsung| number : '1.2-2' : 'vi_VN' }}</td>
+                <td class="text-right">{{ matHang.gtriLuyKeBsung| number : '1.2-2' : 'vi_VN' }}</td>
+                <td class="text-right">{{ matHang.slLuyKeKhac| number : '1.2-2' : 'vi_VN' }}</td>
+                <td class="text-right">{{ matHang.gtriLuyKeKhac| number : '1.2-2' : 'vi_VN' }}</td>
+                <td class="text-right">{{ matHang.slLuyKeTong| number : '1.2-2' : 'vi_VN' }}</td>
+                <td class="text-right">{{ matHang.gtriLuyKeTong| number : '1.2-2' : 'vi_VN' }}</td>
                 <td nzRight *ngIf="!isView">
                   <a *ngIf="!isView" (click)="editRowMatHang(i, y, z)">
                     <i class=" fa fa-pencil"></i>
@@ -743,25 +743,25 @@
         <td class="text-center"></td>
         <td class="text-center"></td>
         <td class="text-center"></td>
-        <td class="text-right">{{calTong('gtriNhapTang') | number : '1.0-99' : 'vi_VN'}}</td>
+        <td class="text-right">{{calTong('gtriNhapTang') | number : '1.2-2' : 'vi_VN'}}</td>
         <td class="text-center"></td>
-        <td class="text-right">{{calTong('gtriNhapBu') | number : '1.0-99' : 'vi_VN'}}</td>
+        <td class="text-right">{{calTong('gtriNhapBu') | number : '1.2-2' : 'vi_VN'}}</td>
         <td class="text-center"></td>
-        <td class="text-right">{{calTong('gtriNhapBsung') | number : '1.0-99' : 'vi_VN'}}</td>
+        <td class="text-right">{{calTong('gtriNhapBsung') | number : '1.2-2' : 'vi_VN'}}</td>
         <td class="text-center"></td>
-        <td class="text-right">{{calTong('gtriNhapKhac') | number : '1.0-99' : 'vi_VN'}}</td>
+        <td class="text-right">{{calTong('gtriNhapKhac') | number : '1.2-2' : 'vi_VN'}}</td>
         <td class="text-center"></td>
-        <td class="text-right">{{calTong('gtriNhapTong') | number : '1.0-99' : 'vi_VN'}}</td>
+        <td class="text-right">{{calTong('gtriNhapTong') | number : '1.2-2' : 'vi_VN'}}</td>
         <td class="text-center"></td>
-        <td class="text-right">{{calTong('gtriLuyKeTang') | number : '1.0-99' : 'vi_VN'}}</td>
+        <td class="text-right">{{calTong('gtriLuyKeTang') | number : '1.2-2' : 'vi_VN'}}</td>
         <td class="text-center"></td>
-        <td class="text-right">{{calTong('gtriLuyKeBu') | number : '1.0-99' : 'vi_VN'}}</td>
+        <td class="text-right">{{calTong('gtriLuyKeBu') | number : '1.2-2' : 'vi_VN'}}</td>
         <td class="text-center"></td>
-        <td class="text-right">{{calTong('gtriLuyKeBsung') | number : '1.0-99' : 'vi_VN'}}</td>
+        <td class="text-right">{{calTong('gtriLuyKeBsung') | number : '1.2-2' : 'vi_VN'}}</td>
         <td class="text-center"></td>
-        <td class="text-right">{{calTong('gtriLuyKeKhac') | number : '1.0-99' : 'vi_VN'}}</td>
+        <td class="text-right">{{calTong('gtriLuyKeKhac') | number : '1.2-2' : 'vi_VN'}}</td>
         <td class="text-center"></td>
-        <td class="text-right">{{calTong('gtriLuyKeTong') | number : '1.0-99' : 'vi_VN'}}</td>
+        <td class="text-right">{{calTong('gtriLuyKeTong') | number : '1.2-2' : 'vi_VN'}}</td>
         <td nzRight class="text-center" *ngIf="!isView"></td>
       </tr>
       </tbody>

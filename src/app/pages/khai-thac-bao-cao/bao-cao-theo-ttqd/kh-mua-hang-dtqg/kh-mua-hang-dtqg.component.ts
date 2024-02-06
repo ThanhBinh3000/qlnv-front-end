@@ -61,6 +61,8 @@ export class KhMuaHangDtqgComponent extends Base2Component implements OnInit {
         loaiBc: [null, [Validators.required]],
         dviBaoCao: null,
         dviNhanBaoCao: null,
+        loaiVthh: null,
+        chungLoaiVthh: null,
       }
     );
   }
@@ -194,7 +196,7 @@ export class KhMuaHangDtqgComponent extends Base2Component implements OnInit {
     this.listVthh = [];
     let res = await this.danhMucService.danhMucChungGetAll("LOAI_HHOA");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listVthh = res.data.filter(item => item.ma != "02");
+      this.listVthh = res.data;
     }
   }
 
@@ -206,6 +208,8 @@ export class KhMuaHangDtqgComponent extends Base2Component implements OnInit {
   }
 
   async changeLoaiVthh(event) {
+    this.listCloaiVthh = [];
+    this.formData.value.chungLoaiVthh = null;
     let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
@@ -232,6 +236,8 @@ export class KhMuaHangDtqgComponent extends Base2Component implements OnInit {
       quy: null,
       maDvi: null,
       dviNhanBaoCao: null,
+      loaiVthh: null,
+      chungLoaiVthh: null,
     })
     this.maCuc = null;
     this.maChiCuc = null;

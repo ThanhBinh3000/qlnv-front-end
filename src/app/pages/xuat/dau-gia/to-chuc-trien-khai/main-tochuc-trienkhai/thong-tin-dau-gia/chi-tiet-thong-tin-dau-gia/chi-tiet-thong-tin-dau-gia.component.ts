@@ -107,7 +107,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
       }
       this.formData.patchValue({
         nam: data.nam,
-        idQdPd: data.xhQdPdKhBdg.type === 'QDDC' ? data.idQdPd : data.idHdr,
+        idQdPd: data.xhQdPdKhBdg.type === 'QDDC' ? data.xhQdPdKhBdg.idQdPd : data.idHdr,
         soQdPd: data.soQdPd,
         idQdDc: data.xhQdPdKhBdg.type === 'QDDC' ? data.idHdr : null,
         soQdDc: data.soQdDc,

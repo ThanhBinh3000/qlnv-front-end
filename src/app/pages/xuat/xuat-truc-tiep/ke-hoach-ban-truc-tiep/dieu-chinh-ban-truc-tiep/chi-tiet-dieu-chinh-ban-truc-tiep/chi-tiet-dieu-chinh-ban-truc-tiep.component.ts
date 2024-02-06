@@ -164,6 +164,8 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
         this.danhSachQdPdKeHoach = res.data.content.map(item => ({
           soQd: item.soQdDc || item.soQdPd,
           ngayKy: item.ngayKyDc || item.ngayKyQd,
+          trangThaiGia: item.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia.length > 0 ? 'Dừng thực hiện để điều chỉnh giá' : '',
+          loai: item.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia.length > 0 ? 'Điều chỉnh giá' : '',
           ...item
         }));
         const idGocSet = new Set(this.danhSachDieuChinh.map(item => item.idGoc));
@@ -181,8 +183,8 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
         nzFooter: null,
         nzComponentParams: {
           dataTable: this.danhSachQdPdKeHoach.filter(item => item.children.length > 0),
-          dataHeader: ['Số quyết định cần điều chỉnh', 'Ngày ký quyết định cần điều chỉnh', 'Loại hàng hóa'],
-          dataColumn: ['soQd', 'ngayKy', 'tenLoaiVthh']
+          dataHeader: ['Số QĐ cần điều chỉnh', 'Ngày ký QĐ', 'Loại hàng hóa', 'Trạng thái', 'Loại'],
+          dataColumn: ['soQd', 'ngayKy', 'tenLoaiVthh', 'trangThaiGia', 'loai']
         },
       });
       modalQD.afterClose.subscribe(async (data) => {
@@ -231,11 +233,13 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
       }
       data.children.forEach(item => {
         item.id = null;
-        item.children = item.children.filter(child => child.children && child.children.length > 0)
-        item.children.forEach(child => {
-          child.id = null;
-          child.children.forEach(s => s.id = null);
-        });
+        item.children = item.children
+          .filter(child => child.children && child.children.length > 0)
+          .map(child => {
+            child.id = null;
+            child.children.forEach(s => s.id = null);
+            return child;
+          });
       });
       this.dataTable = data.children
       this.dataTableAll = data.children
@@ -286,7 +290,6 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
       });
     };
     if (data) {
-      this.listDataHopDong = this.listDataHopDong.filter(item => item.soQdPd === data.soQdPd);
       data.children = filterChildren(data.children);
       data.children.forEach(item => {
         const element = this.listDataHopDong.filter(hopDong => hopDong.idChaoGia === item.id);
@@ -295,23 +298,21 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
             element1.children.forEach(element2 => {
               element2.children.forEach(element3 => {
                 item.children.forEach(child => {
-                  child.children = child.children.filter(s => s.maDviTsan !== element3.maDviTsan
-                    && s.maDiemKho !== element3.maDiemKho
-                    && s.maNhaKho !== element3.maNhaKho
-                    && s.maNganKho !== element3.maNganKho
-                    && s.maLoKho !== element3.maLoKho)
-                })
-              })
-            })
+                  child.children = child.children.filter(s => {
+                    return ![element3.maNganKho, element3.maLoKho, element3.maDviTsan]
+                      .some(prop => prop === s.maNganKho || prop === s.maLoKho || prop === s.maDviTsan);
+                  });
+                });
+              });
+            });
           }
           if (element1.xhHopDongBttDviList && element1.xhHopDongBttDviList.length > 0) {
             element1.xhHopDongBttDviList.forEach(element2 => {
               item.children.forEach(child => {
-                child.children = child.children.filter(s => s.maDviTsan !== element2.maDviTsan
-                  && s.maDiemKho !== element2.maDiemKho
-                  && s.maNhaKho !== element2.maNhaKho
-                  && s.maNganKho !== element2.maNganKho
-                  && s.maLoKho !== element2.maLoKho)
+                child.children = child.children.filter(s => {
+                  return ![element2.maNganKho, element2.maLoKho, element2.maDviTsan]
+                    .some(prop => prop === s.maNganKho || prop === s.maLoKho || prop === s.maDviTsan);
+                });
               })
             })
           }
@@ -403,6 +404,9 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
       this.dataInput = this.dataTable[findndex];
       this.dataTableAll[findndexCache].children = this.dataTableAll[findndexCache].children
         .filter(child => this.dataTable[findndex].children.some(selectedChild => selectedChild.maDvi === child.maDvi));
+      this.dataTableAll[findndexCache].children.forEach(item => {
+        item.soLuongChiCuc = item.children.reduce((prev, cur) => prev + cur.soLuongDeXuat, 0);
+      })
       let soLuongCuc = this.dataTableAll[findndexCache].children.reduce((prev, cur) => prev + cur.soLuongChiCuc, 0);
       this.dataTableAll[findndexCache].tongSoLuong = soLuongCuc || 0;
       this.dataInputCache = this.dataTableAll[findndexCache];

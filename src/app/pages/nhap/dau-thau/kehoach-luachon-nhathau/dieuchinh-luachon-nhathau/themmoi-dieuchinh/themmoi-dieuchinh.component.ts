@@ -279,6 +279,8 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
           item.soQd = item.soQdDc
         }
         item.thoiDiemKy = item.ngayQd ? formatDate(item.ngayQd, "dd/MM/yyyy", 'en-US') : ''
+        item.trangThaiGia = item.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia.length > 0 ? 'Dừng thực hiện để điều chỉnh giá' : '';
+        item.loai = item.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia.length > 0 ? 'Điều chỉnh giá' : ''
       })
     }
     this.spinner.hide();
@@ -291,8 +293,8 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listQdGoc,
-        dataHeader: ["Số QĐ cần điều chỉnh", "Ngày ký QĐ", "Trạng thái", "Ngày chốt điều chỉnh giá", "Ngày hiệu lực"],
-        dataColumn: ["soQd", "thoiDiemKy", "", "", ""]
+        dataHeader: ["Số QĐ cần điều chỉnh", "Ngày ký QĐ", 'Trạng thái', 'Loại'],
+        dataColumn: ["soQd", "thoiDiemKy", 'trangThaiGia', 'loai']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {

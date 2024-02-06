@@ -15,6 +15,7 @@ import { ThongTinDauThauMuaVtComponent } from './thong-tin-dau-thau-mua-vt/thong
 import { KquaNhapVtComponent } from './kqua-nhap-vt/kqua-nhap-vt.component';
 import { BaoCaoTdoBdgHangTheoNamNhapComponent } from './bao-cao-tdo-bdg-hang-theo-nam-nhap/bao-cao-tdo-bdg-hang-theo-nam-nhap.component';
 import { TongHopTonKhoVatTuComponent } from './tong-hop-ton-kho-vat-tu/tong-hop-ton-kho-vat-tu.component';
+import {BcKetQuaXuatCapVatTuComponent} from "./bc-ket-qua-xuat-cap-vat-tu/bc-ket-qua-xuat-cap-vat-tu.component";
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { TongHopTonKhoVatTuComponent } from './tong-hop-ton-kho-vat-tu/tong-hop-
     ThongTinDauThauMuaVtComponent,
     KquaNhapVtComponent,
     BaoCaoTdoBdgHangTheoNamNhapComponent,
-    TongHopTonKhoVatTuComponent
+    TongHopTonKhoVatTuComponent,
+    BcKetQuaXuatCapVatTuComponent
   ],
   imports: [
     CommonModule,

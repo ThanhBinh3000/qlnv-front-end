@@ -51,26 +51,26 @@
           </div>
         </div>
       </form>
-<!--      <form nzLayout="vertical" nz-form>-->
-<!--        <div nz-row [nzGutter]="24">-->
-<!--          <div nz-col [nzSpan]="6">-->
-<!--            <nz-form-item>-->
-<!--              <nz-form-label [nzXs]="7">Loại hàng hóa</nz-form-label>-->
-<!--              <nz-select (change)="changeLoaiVthh($event)">-->
-<!--                <nz-option *ngFor="let p of listVthh" [nzLabel]="p.giaTri" [nzValue]="p.ma"></nz-option>-->
-<!--              </nz-select>-->
-<!--            </nz-form-item>-->
-<!--          </div>-->
-<!--          <div nz-col [nzSpan]="18">-->
-<!--            <nz-form-item>-->
-<!--              <nz-form-label [nzXs]="7">Chủng loại hàng hóa</nz-form-label>-->
-<!--              <nz-select (change)="changeCloaiVthh($event)">-->
-<!--                <nz-option *ngFor="let p of listCloaiVthh" [nzLabel]="p.giaTri" [nzValue]="p.ma"></nz-option>-->
-<!--              </nz-select>-->
-<!--            </nz-form-item>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </form>-->
+      <form nzLayout="vertical" nz-form>
+        <div nz-row [nzGutter]="24">
+          <div nz-col [nzSpan]="6">
+            <nz-form-item>
+              <nz-form-label [nzXs]="7">Loại hàng hóa</nz-form-label>
+              <nz-select [(ngModel)]="formData.value.loaiVthh" (ngModelChange)="changeLoaiVthh($event)" [ngModelOptions]="{standalone: true}">
+                <nz-option *ngFor="let p of listVthh" [nzLabel]="p.giaTri" [nzValue]="p.ma"></nz-option>
+              </nz-select>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="18">
+            <nz-form-item>
+              <nz-form-label [nzXs]="7">Chủng loại hàng hóa</nz-form-label>
+              <nz-select [(ngModel)]="formData.value.chungLoaiVthh" (ngModelChange)="changeCloaiVthh($event)" [ngModelOptions]="{standalone: true}">
+                <nz-option *ngFor="let p of listCloaiVthh" [nzLabel]="p.ten" [nzValue]="p.ma"></nz-option>
+              </nz-select>
+            </nz-form-item>
+          </div>
+        </div>
+      </form>
     </nz-card>
     <div class="text-right">
       <button nz-button class="search__button--clear" (click)="clearFilter()">

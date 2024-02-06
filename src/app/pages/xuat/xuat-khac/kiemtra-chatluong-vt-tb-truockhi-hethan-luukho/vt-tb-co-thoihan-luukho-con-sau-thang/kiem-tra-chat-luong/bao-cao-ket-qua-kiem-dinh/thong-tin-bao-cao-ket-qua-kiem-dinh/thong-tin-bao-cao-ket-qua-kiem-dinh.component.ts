@@ -61,9 +61,9 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
     { value: 0, label: 'Không đạt' },
     { value: 1, label: 'Đạt' },
   ];
-  dataPhieuKncl: any;
-  templateName = 'xuat_khac_ktcl_vat_tu_6_thang_bc_kq_kiem_dinh_mau';
-
+  dataPhieuKncl: any = { isDat: false };
+  templateName = '20.Báo cáo KQ kiểm định mẫu_LK còn 6 tháng';
+  maBc: string;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -84,6 +84,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
       tenTrangThai: ['Dự Thảo'],
       trangThai: [STATUS.DU_THAO],
       maDviNhan: [],
+      lyDoTuChoi: [],
       tenBaoCao: [null, [Validators.required]],
       soBaoCao: [null, [Validators.required]],
       soQdGiaoNvXh: [null, [Validators.required]],
@@ -96,6 +97,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
   async ngOnInit() {
     try {
       this.spinner.show();
+      this.maBc = "/" + this.userInfo.MA_QD
       await Promise.all([
         this.loadSoQuyetDinhGiaoNvXh(),
       ]);
@@ -134,9 +136,10 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
               id: res.data.id,
               tenDvi: res.data.tenDvi,
               maDviNhan: res.data.maDviNhan,
-              soBaoCao: res.data.soBaoCao,
+              soBaoCao:  res.data.soBaoCao ?  res.data.soBaoCao.split('/')[0] : null,
               ngayBaoCao: res.data.ngayBaoCao,
               maDvi: res.data.maDvi,
+              lyDoTuChoi: res.data.lyDoTuChoi,
               tenBaoCao: res.data.tenBaoCao,
               trangThai: res.data.trangThai,
               tenTrangThai: res.data.tenTrangThai,
@@ -202,7 +205,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
     if (idsQdGiaoNvXh && idsQdGiaoNvXh.length > 0) {
       await this.phieuXuatKhoService.search({
         canCus: idsQdGiaoNvXh,
-        namKeHoach: this.formData.get('nam').value,
+        // namKeHoach: this.formData.get('nam').value,
         dvql: this.userInfo.MA_DVI,
         loai: 'XUAT_MAU',
         loaiPhieu: 'XUAT',
@@ -246,6 +249,7 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
       body.idQdGiaoNvXh = body.idQdGiaoNvXh.join(',');
     }
     body.listDetailPxk = this.children && this.children.length > 0 ? this.conVertTreeToList(this.children) : [];
+    this.formData.value.soBaoCao = this.formData.value.soBaoCao? this.formData.value.soBaoCao + this.maBc : "";
     let data = await this.createUpdate(body);
     if (data) {
       this.idInput = data.id;
@@ -272,15 +276,16 @@ export class ThongTinBaoCaoKetQuaKiemDinhComponent extends Base2Component implem
   pheDuyet() {
     let trangThai = '';
     let msg = '';
-    switch (this.formData.value.trangThai) {
+    switch (this.formData.get('trangThai').value) {
       case STATUS.TU_CHOI_LDC:
-      case STATUS.CHO_DUYET_TP: {
-        trangThai = STATUS.CHO_DUYET_LDC;
+      case STATUS.TU_CHOI_TP:
+      case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_TP;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
       }
-      case STATUS.DU_THAO: {
-        trangThai = STATUS.CHO_DUYET_TP;
+      case STATUS.CHO_DUYET_TP: {
+        trangThai = STATUS.CHO_DUYET_LDC;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
       }

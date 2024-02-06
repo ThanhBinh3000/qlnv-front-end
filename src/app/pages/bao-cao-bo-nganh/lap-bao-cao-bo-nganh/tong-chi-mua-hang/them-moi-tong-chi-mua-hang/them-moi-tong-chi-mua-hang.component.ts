@@ -307,13 +307,13 @@ export class ThemMoiTongChiMuaHangComponent extends Base2Component implements On
         this.dataNguonNgoaiNsnn[0].tongTrongKy = tongChi;
         this.dataNguonNgoaiNsnn[0].tongLuyKe = tongLuyKe;
       }
-      let sum = 0
-      this.dataNguonNgoaiNsnn.forEach(item => {
-        if (item.dmLevel == 2) {
-          sum += this.nvl(item.tongTrongKy);
-        }
-      })
-      this.dataNguonNgoaiNsnn[0].tongTrongKy = sum
+      // let sum = 0
+      // this.dataNguonNgoaiNsnn.forEach(item => {
+      //   if (item.dmLevel == 2) {
+      //     sum += this.nvl(item.tongTrongKy);
+      //   }
+      // })
+      // this.dataNguonNgoaiNsnn[0].tongTrongKy = sum
     }
   }
 

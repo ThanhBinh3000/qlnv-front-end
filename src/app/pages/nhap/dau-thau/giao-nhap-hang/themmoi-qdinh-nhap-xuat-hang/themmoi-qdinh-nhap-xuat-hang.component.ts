@@ -122,6 +122,10 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
       tenCloaiVthh: [''],
       ldoTuchoi: [''],
       trangThaiChiCuc: [],
+      tenTruongPhong: [],
+      dviCungCap: [],
+      nguoiTao: [],
+      nguoiPduyet: [],
       loaiHinhNx: 'Mua đấu thầu',
       kieuNx: 'Nhập mua'
     });
@@ -209,6 +213,7 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
             donViTinh: data.donViTinh,
             soLuong: data.soLuong,
             tgianNkho: data.tgianGiaoDuHang,
+            dviCungCap: data.tenNhaThau,
           })
           if (data.loaiVthh.startsWith('02')) {
             let dataUserLogin = data.details.filter(item => item.maDvi == this.userInfo.MA_DVI);
@@ -239,6 +244,7 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
             soLuong += i.soLuong
           })
           this.formData.get('soLuong').setValue(soLuong);
+          await this.loadDiemKho()
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg)
         }
@@ -695,17 +701,17 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
    })
    this.dataTable[i].children[y].edit = true;
    this.rowItemEdit = cloneDeep(this.dataTable[i].children[y])
-   let diemKho = this.listDiemKho.filter(x => x.key == this.rowItemEdit.maDiemKho);
+   let diemKho = this.listDiemKho[i].filter(x => x.key == this.rowItemEdit.maDiemKho);
    if (diemKho && diemKho.length > 0) {
-     this.listNhaKhoEdit = diemKho[0].children;
+     this.listNhaKhoEdit[i] = diemKho[0].children;
    }
-   let nhaKho = this.listNhaKhoEdit.filter(x => x.key == this.rowItemEdit.maNhaKho);
+   let nhaKho = this.listNhaKhoEdit[i].filter(x => x.key == this.rowItemEdit.maNhaKho);
    if (nhaKho && nhaKho.length > 0) {
-     this.listNganKhoEdit = nhaKho[0].children;
+     this.listNganKhoEdit[i] = nhaKho[0].children;
    }
-   let nganKho = this.listNganKhoEdit.filter(x => x.key == this.rowItemEdit.maNganKho);
+   let nganKho = this.listNganKhoEdit[i].filter(x => x.key == this.rowItemEdit.maNganKho);
    if (nganKho && nganKho.length > 0) {
-     this.listNganLoEdit = nganKho[0].children;
+     this.listNganLoEdit[i] = nganKho[0].children;
    }
  }
 
@@ -756,45 +762,30 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
   }
 
   async loadDiemKho() {
-    let body = {
-      maDviCha: this.userInfo.MA_DVI,
-      trangThai: '01',
-      loaiVthh: this.loaiVthh,
-      cloaiVthh: this.formData.value.cloaiVthh,
-    }
-    const res = await this.donViService.getDonViHangTree(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.length > 0) {
-        res.data.forEach(element => {
-          if (element && element.capDvi == '3' && element.children) {
-            this.listDiemKho = [
-              ...this.listDiemKho,
-              ...element.children
-            ]
-            this.listDiemKho = this.listDiemKho.filter(i => i.type != "PB");
-          }
-          if (element && element.capDvi == '2' && element.children) {
-            this.listChiCuc = [
-              ...this.listChiCuc,
-              ...element.children
-            ]
-          }
-        });
-      };
+    for (let i = 0; i < this.dataTable.length; i++) {
+      let body = {
+        maDvi: this.dataTable[i].maDvi,
+        loaiVthh: this.formData.value.loaiVthh,
+        cloaiVthh: this.formData.value.cloaiVthh,
+      }
+      const res = await this.donViService.getDonViHangTree(body);
+      if (res.msg == MESSAGE.SUCCESS && res.data) {
+        this.listDiemKho[i] = res.data.children || [];
+      }
     }
     // else {
     //   this.notification.error(MESSAGE.ERROR, res.msg);
     // }
   }
 
-  changeDiemKho(isEdit?) {
+  changeDiemKho(index, isEdit?) {
     if (isEdit) {
       this.listNhaKhoEdit = [];
       this.listNganKhoEdit = [];
       this.listNganLoEdit = [];
-      let diemKho = this.listDiemKho.filter(x => x.key == this.rowItemEdit.maDiemKho);
+      let diemKho = this.listDiemKho[index].filter(x => x.key == this.rowItemEdit.maDiemKho);
       if (diemKho && diemKho.length > 0) {
-        this.listNhaKhoEdit = diemKho[0].children;
+        this.listNhaKhoEdit[index] = diemKho[0].children;
       }
     } else {
       this.listNhaKho = [];
@@ -803,24 +794,24 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
       this.rowItem.maNhaKho = null;
       this.rowItem.maNganKho = null;
       this.rowItem.maLoKho = null;
-      let diemKho = this.listDiemKho.filter(x => x.key == this.rowItem.maDiemKho);
+      let diemKho = this.listDiemKho[index].filter(x => x.key == this.rowItem.maDiemKho);
       if (diemKho && diemKho.length > 0) {
-        this.listNhaKho = diemKho[0].children;
+        this.listNhaKho[index] = diemKho[0].children;
         this.rowItem.tenDiemKho = diemKho[0].tenDvi;
         this.rowItem.soLuongDiemKho = diemKho[0].soLuongDiemKho;
       }
     }
   }
 
-  changeNhaKho(isEdit?) {
+  changeNhaKho(index,isEdit?) {
     if (isEdit) {
       this.listNganKhoEdit = [];
       this.listNganLoEdit = [];
       this.rowItemEdit.maNganKho = null;
       this.rowItemEdit.maLoKho = null;
-      let nhaKho = this.listNhaKhoEdit.filter(x => x.key == this.rowItemEdit.maNhaKho);
+      let nhaKho = this.listNhaKhoEdit[index].filter(x => x.key == this.rowItemEdit.maNhaKho);
       if (nhaKho && nhaKho.length > 0) {
-        this.listNganKhoEdit = nhaKho[0].children;
+        this.listNganKhoEdit[index] = nhaKho[0].children;
         this.rowItemEdit.tenNhaKho = nhaKho[0].tenDvi
       }
     } else {
@@ -828,44 +819,46 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
       this.listNganLo = [];
       this.rowItem.maNganKho = null;
       this.rowItem.maLoKho = null;
-      let nhaKho = this.listNhaKho.filter(x => x.key == this.rowItem.maNhaKho);
+      let nhaKho = this.listNhaKho[index].filter(x => x.key == this.rowItem.maNhaKho);
       if (nhaKho && nhaKho.length > 0) {
-        this.listNganKho = nhaKho[0].children;
+        this.listNganKho[index] = nhaKho[0].children;
         this.rowItem.tenNhaKho = nhaKho[0].tenDvi
       }
     }
   }
 
-  changeNganKho(isEdit?) {
+  changeNganKho(index, isEdit?) {
     if (isEdit) {
       this.listNganLoEdit = [];
       this.rowItemEdit.maLoKho = null;
-      let nganKho = this.listNganKhoEdit.filter(x => x.key == this.rowItemEdit.maNganKho);
+      let nganKho = this.listNganKhoEdit[index].filter(x => x.key == this.rowItemEdit.maNganKho);
       if (nganKho && nganKho.length > 0) {
-        this.listNganLoEdit = nganKho[0].children;
+        this.listNganLoEdit[index] = nganKho[0].children;
         this.rowItemEdit.tenNganKho = nganKho[0].tenDvi
       }
     } else {
       this.listNganLo = [];
       this.rowItem.maLoKho = null;
-      let nganKho = this.listNganKho.filter(x => x.key == this.rowItem.maNganKho);
+      let nganKho = this.listNganKho[index].filter(x => x.key == this.rowItem.maNganKho);
       if (nganKho && nganKho.length > 0) {
-        this.listNganLo = nganKho[0].children;
-        this.rowItem.tenNganKho = nganKho[0].tenDvi
+        this.listNganLo[index] = nganKho[0].children;
+        this.rowItem.tenNganKho = nganKho[0].tenDvi;
+        this.rowItem.slTon = nganKho[0].slTon
       }
     }
   }
 
-  changeLoKho(isEdit?) {
+  changeLoKho(index, isEdit?) {
     if (isEdit) {
-      let loKho = this.listNganLoEdit.filter(x => x.key == this.rowItemEdit.maLoKho);
+      let loKho = this.listNganLoEdit[index].filter(x => x.key == this.rowItemEdit.maLoKho);
       if (loKho && loKho.length > 0) {
         this.rowItemEdit.tenLoKho = loKho[0].tenDvi
       }
     } else {
-      let loKho = this.listNganLo.filter(x => x.key == this.rowItem.maLoKho);
+      let loKho = this.listNganLo[index].filter(x => x.key == this.rowItem.maLoKho);
       if (loKho && loKho.length > 0) {
-        this.rowItem.tenLoKho = loKho[0].tenDvi
+        this.rowItem.tenLoKho = loKho[0].tenDvi;
+        this.rowItem.slTon = loKho[0].slTon
       }
     }
   }

@@ -127,7 +127,9 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
       soQdKq: data.soQdKq?.split('/')[0] || null,
     });
     this.dataTable = data.children;
-    await this.selectRow(this.dataTable.flatMap(item => item.children)[0]);
+    if (this.dataTable && this.dataTable.length > 0) {
+      await this.selectRow(this.dataTable.flatMap(item => item.children)[0]);
+    }
   }
 
   async save() {
@@ -173,16 +175,18 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
         loaiVthh: this.loaiVthh,
         trangThai: STATUS.DA_HOAN_THANH,
         pthucBanTrucTiep: ['01'],
+        lastest: 1,
       };
       await this.loadQdNvXuatHang();
       const res = await this.chaoGiaMuaLeUyQuyenService.search(body);
       if (res && res.msg === MESSAGE.SUCCESS) {
         const set = new Set(this.loadQuyetDinhKetQua.map(item => item.idChaoGia));
-        this.dataThongTinChaoGia = res.data.content.filter(item => !set.has(item.id));
-        this.dataThongTinChaoGia = this.dataThongTinChaoGia.map(item => {
-          item.soQd = item.soQdDc ? item.soQdDc : item.soQdPd;
-          return item;
-        });
+        this.dataThongTinChaoGia = res.data.content
+          .filter(item => !set.has(item.id))
+          .map(item => ({
+            ...item,
+            soQd: item.soQdDc || item.soQdPd
+          }));
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH THÔNG TIN CHÀO GIÁ',
@@ -260,11 +264,21 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
         tongSoLuong: data.tongSoLuong,
         tongGiaTriHdong: data.thanhTienDuocDuyet,
       });
-      this.dataTable = data.children;
-      this.dataTable.forEach((item) => {
+      data.children.forEach(item => {
+        item.id = null;
         item.isKetQua = true
-      })
-      await this.selectRow(this.dataTable.flatMap(item => item.children)[0]);
+        item.children = item.children
+          .filter(child => child.children && child.children.length > 0)
+          .map(child => {
+            child.id = null;
+            child.children.forEach(s => s.id = null);
+            return child;
+          });
+      });
+      this.dataTable = data.children.filter(item => item.children && item.children.length > 0);
+      if (this.dataTable && this.dataTable.length > 0) {
+        await this.selectRow(this.dataTable.flatMap(item => item.children)[0]);
+      }
     } catch (e) {
       console.error('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -287,7 +301,11 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
     if (!data.selected) {
       this.dataTableAll.forEach(item => item.selected = false);
       data.selected = true;
-      const findndex = this.dataTableAll.findIndex(child => child.id == data.id);
+      const findndex = this.dataTableAll.findIndex(child => child.maDviTsan === data.maDviTsan
+        && child.maDiemKho === data.maDiemKho
+        && child.maNhaKho === data.maNhaKho
+        && child.maNgankho === data.maNgankho
+        && child.maLoKho === data.maLoKho);
       this.listOfData = this.dataTableAll[findndex].children;
       this.showFromTT = true;
     }

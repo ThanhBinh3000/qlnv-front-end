@@ -30,14 +30,15 @@
           <div nz-col [nzSpan]="4">
             <label class="search__label">Ngày ký QĐ phê duyệt KQ BĐG</label>
             <div nz-row>
-              <div nz-col nzSpan="12" class="cus-start-date">
-                <nz-date-picker [nzDisabledDate]="disabledStartNgayKy" nzFormat="dd/MM/yyyy" formControlName="ngayKyTu"
-                                nzPlaceHolder="Ngày bắt đầu">
+              <div nz-col [nzSpan]="12" class="cus-start-date">
+                <nz-date-picker [nzDisabledDate]="disabledStartNgayKyTu" nzFormat="dd/MM/yyyy"
+                                formControlName="ngayKyTu" nzPlaceHolder="Ngày bắt đầu">
                 </nz-date-picker>
               </div>
-              <div nz-col nzSpan="12" class="cus-end-date">
-                <nz-date-picker [nzDisabledDate]="disabledEndNgayKy" nzFormat="dd/MM/yyyy" formControlName="ngayKyDen"
-                                nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+              <div nz-col [nzSpan]="12" class="cus-end-date">
+                <nz-date-picker [nzDisabledDate]="disabledEndNgayKyDen" nzFormat="dd/MM/yyyy"
+                                formControlName="ngayKyDen" nzPlaceHolder="Ngày kết thúc">
+                </nz-date-picker>
               </div>
             </div>
           </div>
@@ -45,7 +46,7 @@
       </form>
       <div nz-col class="cangiua group-button-search">
         <div>
-          <button nz-button class="search__button--clear" (click)="clearForm(loaiVthh)">
+          <button nz-button class="search__button--clear" (click)="clearForm({loaiVthh: loaiVthh})">
             <i class="icon  htvbdh_nhap-lai1"></i>
             Xóa điều kiện
           </button>

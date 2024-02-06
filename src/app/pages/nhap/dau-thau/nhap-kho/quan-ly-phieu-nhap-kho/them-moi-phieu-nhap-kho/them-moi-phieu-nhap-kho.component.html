@@ -331,7 +331,7 @@
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                                <input nz-input formControlName="nguoiGiaoHang" />
+                                <input nz-input [readonly]="isView" formControlName="nguoiGiaoHang" />
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
@@ -343,7 +343,7 @@
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                                <input nz-input formControlName="cmtNguoiGiaoHang" />
+                                <input nz-input [readonly]="isView" formControlName="cmtNguoiGiaoHang" />
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
@@ -355,7 +355,7 @@
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                                <input nz-input formControlName="donViGiaoHang" />
+                                <input nz-input [readonly]="isView" formControlName="donViGiaoHang" />
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
@@ -367,7 +367,7 @@
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                                <input nz-input formControlName="diaChiNguoiGiao" />
+                                <input nz-input [readonly]="isView" formControlName="diaChiNguoiGiao" />
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
@@ -378,7 +378,7 @@
                             Thời gian giao,nhận hàng
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <nz-date-picker formControlName="thoiGianGiaoNhan" nzFormat="HH:mm dd/MM/yyyy"
+                            <nz-date-picker formControlName="thoiGianGiaoNhan" nzFormat="HH:mm dd/MM/yyyy" [nzDisabled]="isView"
                                 [nzShowTime]="{ nzFormat: 'HH:mm' }">
                             </nz-date-picker>
                         </nz-form-control>
@@ -711,7 +711,7 @@
                     </nz-form-label>
                     <nz-form-control [nzErrorTip]="error">
                       <nz-input-group>
-                        <input nz-input formControlName="nguoiGiaoHang" />
+                        <input nz-input [readonly]="isView" formControlName="nguoiGiaoHang" />
                       </nz-input-group>
                     </nz-form-control>
                   </nz-form-item>
@@ -723,7 +723,7 @@
                     </nz-form-label>
                     <nz-form-control [nzErrorTip]="error">
                       <nz-input-group>
-                        <input nz-input formControlName="cmtNguoiGiaoHang" />
+                        <input nz-input [readonly]="isView" formControlName="cmtNguoiGiaoHang" />
                       </nz-input-group>
                     </nz-form-control>
                   </nz-form-item>
@@ -735,7 +735,7 @@
                     </nz-form-label>
                     <nz-form-control [nzErrorTip]="error">
                       <nz-input-group>
-                        <input nz-input formControlName="donViGiaoHang" />
+                        <input nz-input [readonly]="isView" formControlName="donViGiaoHang" />
                       </nz-input-group>
                     </nz-form-control>
                   </nz-form-item>
@@ -747,7 +747,7 @@
                     </nz-form-label>
                     <nz-form-control [nzErrorTip]="error">
                       <nz-input-group>
-                        <input nz-input formControlName="diaChiNguoiGiao" />
+                        <input nz-input [readonly]="isView" formControlName="diaChiNguoiGiao" />
                       </nz-input-group>
                     </nz-form-control>
                   </nz-form-item>

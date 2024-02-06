@@ -113,8 +113,8 @@
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdPd"
-                     (input)="filterInTable('soQdPd',filterTable.soQdPd)" size="small"/>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdCanDc"
+                     (input)="filterInTable('soQdCanDc',filterTable.soQdCanDc)" size="small"/>
             </nz-input-group>
           </th>
           <th>
@@ -165,8 +165,8 @@
           <td class="text-left">{{ data.soQdDc }}</td>
           <td class="text-left">{{ data.ngayKyDc | date: 'dd/MM/yyyy' }}</td>
           <td class="text-left">
-            <a *ngIf="data.soQdPd && data.idQdPd" (click)="openModal(data.idQdPd)"
-               style="color: blue">{{data.soQdPd}}
+            <a *ngIf="data.soQdCanDc && data.idGoc" (click)="openModal(data.idGoc, data.lanDieuChinh)"
+               style="color: blue">{{data.soQdCanDc}}
             </a>
           </td>
           <td class="text-left" style="max-width: 300px; min-width: 250px;  white-space: break-spaces;">
@@ -220,9 +220,12 @@
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [idInput]="idQdPd" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
+    <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep *ngIf="lanDieuChinh" [idInput]="idQdPd" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
                                                 [isView]="true">
     </app-them-moi-qd-phe-duyet-kh-ban-truc-tiep>
+    <app-chi-tiet-dieu-chinh-ban-truc-tiep *ngIf="!lanDieuChinh" [idInput]="idQdPd" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
+                                                [isView]="true">
+    </app-chi-tiet-dieu-chinh-ban-truc-tiep>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeModal()" class="modal__button--cancel">

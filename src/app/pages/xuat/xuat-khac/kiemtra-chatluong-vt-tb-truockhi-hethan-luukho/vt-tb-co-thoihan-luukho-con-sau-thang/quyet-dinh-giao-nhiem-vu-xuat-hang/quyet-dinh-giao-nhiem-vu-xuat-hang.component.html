@@ -59,20 +59,20 @@
     </nz-card>
     <div class='group-button'>
       <h3 class='text-uppercase'>Danh sách quyết định giao nhiệm vụ xuất hàng</h3>
-      <div class='buttons'>
-        <button
-          type='button' class='btn btn-sub btn-xoa'>
-          <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
+      <div class="buttons">
+        <button type="button" class="btn btn-do" (click)="deleteMulti()"
+                *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_QDGNVXH_XOA')">
+          <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
-        <button type='button'
-                class='btn btn-sub' (click)='exportData()'>
-          <i class='icon htvbdh_chuyen-xu-ly'></i>
+        <button *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_QDGNVXH_EXP')" type="button" class="btn btn-sub"
+                (click)="exportData()">
+          <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button (click)='themMoi(null,false)' *ngIf='userService.isCuc()'
-                type='button' class='btn btn-sub xanh'>
-          <i class='icon htvbdh_dau-cong'></i>
+        <button type="button" class="btn btn-sub xanh" (click)="themMoi(null,false)"
+                *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_QDGNVXH_THEM')">
+          <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm mới</span>
         </button>
       </div>
@@ -177,21 +177,22 @@
           <td>{{ data.tenTrangThai }}</td>
           <td>{{ data.tenTrangThaiXh }}</td>
           <td class='text-left'>
-            <a *ngIf='data.trangThai==STATUS.DA_DUYET_LDC'
-               (click)='themMoi(data.id, true)'>
-              <i class='fa fa-eye' title='Xem chi tiết'></i>
+            <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_QDGNVXH_XEM')"
+               (click)="themMoi( data.id,true)">
+              <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
-            <a *ngIf='data.trangThai == STATUS.CHO_DUYET_TP || data.trangThai == STATUS.CHO_DUYET_LDC'
-               (click)='themMoi(data.id, true)'>
-              <i class='icon htvbdh_tcdt_pheduyet'></i>
+            <a *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC ) && userService.isCuc()
+              && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_QDGNVXH_THEM')"
+               (click)="themMoi(data.id,false)">
+              <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a
-              *ngIf='data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TU_CHOI_LDC ||data.trangThai==STATUS.TU_CHOI_TP  '
-              (click)='themMoi(data.id, false)'>
-              <i class='fa fa-pencil' title='Sửa'></i>
+            <a *ngIf="(data.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_QDGNVXH_DUYETTP') || data.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_QDGNVXH_DUYETLDC') ) && userService.isCuc() "
+               (click)="themMoi( data.id,false)">
+              <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
             </a>
-            <a *ngIf='data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TU_CHOI_LDC' (click)='delete(data)'>
-              <i class='fa fa-trash-o do' title='Xóa bản ghi'></i>
+            <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc() && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_QDGNVXH_XOA')"
+               (click)="delete(data)">
+              <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
         </tr>

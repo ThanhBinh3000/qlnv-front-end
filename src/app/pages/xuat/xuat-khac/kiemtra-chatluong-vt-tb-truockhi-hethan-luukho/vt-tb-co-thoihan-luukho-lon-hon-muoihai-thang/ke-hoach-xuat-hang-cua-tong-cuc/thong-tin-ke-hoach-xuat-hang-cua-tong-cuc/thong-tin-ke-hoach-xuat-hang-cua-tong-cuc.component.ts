@@ -77,7 +77,7 @@ export class ThongTinKeHoachXuatHangCuaTongCucComponent extends Base2Component i
       diaChi: [],
       loaiHinhNhapXuat: [null, [Validators.required]],
       kieuNhapXuat: [null, [Validators.required]],
-      namKeHoach: [null, [Validators.required]],
+      namKeHoach: [dayjs().get('year'), [Validators.required]],
       soToTrinh: [null, [Validators.required]],
       trichYeu: [],
       ngayKeHoach: [dayjs().format("YYYY-MM-DD")],
@@ -254,6 +254,7 @@ export class ThongTinKeHoachXuatHangCuaTongCucComponent extends Base2Component i
     ];
     this.listMaTongHop = tongHop;
     console.log(this.listMaTongHop,3)
+    await this.spinner.hide();
   }
 
   async openDialogDsTongHop() {

@@ -91,6 +91,7 @@ export class ThongTinQuyetDinhXuatGiamVatTuComponent extends Base2Component impl
       soQuyetDinh: [],
       loai: ['XUAT_GIAM'],
       trichYeu: [],
+      lyDoTuChoi: [],
       soCanCu: [null, [Validators.required]],
       idCanCu: [null, [Validators.required]],
       ngayKy: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
@@ -275,28 +276,43 @@ export class ThongTinQuyetDinhXuatGiamVatTuComponent extends Base2Component impl
 
   pheDuyet() {
     let trangThai = '';
-    let msg = '';
-    switch (this.formData.value.trangThai) {
-      case STATUS.DU_THAO: {
+    let mess = '';
+    switch (this.formData.get('trangThai').value) {
+      case STATUS.DU_THAO:
+      case STATUS.TU_CHOI_LDV:
+      case STATUS.TU_CHOI_LDTC: {
+        trangThai = STATUS.CHO_DUYET_LDV;
+        mess = 'Bạn có muốn gửi duyệt?'
+        break;
+      }
+      case STATUS.CHO_DUYET_LDV: {
+        trangThai = STATUS.CHO_DUYET_LDTC;
+        mess = 'Bạn có chắc chắn muốn gửi duyệt ?'
+        break;
+      }
+      case STATUS.CHO_DUYET_LDTC: {
         trangThai = STATUS.BAN_HANH;
-        msg = MESSAGE.BAN_HANH_CONFIRM;
+        mess = 'Bạn có chắc chắn muốn ban hành ?'
         break;
       }
     }
-    this.approve(this.idInput, trangThai, msg);
+    this.approve(this.idInput, trangThai, mess);
   }
 
   tuChoi() {
     let trangThai = '';
     switch (this.formData.value.trangThai) {
-      case STATUS.CHO_DUYET_LDC: {
-        trangThai = STATUS.TU_CHOI_LDC;
+      case STATUS.CHO_DUYET_LDV: {
+        trangThai = STATUS.TU_CHOI_LDV;
+        break;
+      }
+      case STATUS.CHO_DUYET_LDTC: {
+        trangThai = STATUS.TU_CHOI_LDTC;
         break;
       }
     }
-    this.reject(this.idInput, trangThai);
+    this.reject(this.idInput, trangThai)
   }
-
   expandAll() {
     this.dataThTree.forEach(s => {
       this.expandSetString.add(s.idVirtual);

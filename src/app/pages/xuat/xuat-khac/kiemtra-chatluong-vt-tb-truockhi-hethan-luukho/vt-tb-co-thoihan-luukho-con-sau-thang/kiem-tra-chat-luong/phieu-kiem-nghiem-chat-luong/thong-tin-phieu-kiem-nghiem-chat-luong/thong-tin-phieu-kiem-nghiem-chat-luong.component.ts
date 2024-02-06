@@ -67,7 +67,8 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
   listFiles: any = [];
   listBbLayMau: any = [];
   dataTableChiTieu: any[] = [];
-  templateName = 'xuat-khac-phieu_khiem_nghiem_cl.docx';
+  templateName = '3.7. C84-HD_Phiếu kiểm định chất lượng_còn 6 tháng';
+  listSoPhieuKd: any;
 
   constructor(
     httpClient: HttpClient,
@@ -99,7 +100,7 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
         idBbLayMau: [null, [Validators.required]],
         soBbLayMau: [null, [Validators.required]],
         soPhieu: [null, [Validators.required]],
-        ngayLapPhieu: [null],
+        ngayLapPhieu: [dayjs().format("YYYY-MM-DD"), [Validators.required]],
         ngayKiemDinh: [null, [Validators.required]],
         ngayXuatLayMau: [null],
         dviKiemNghiem: [null, [Validators.required]],
@@ -257,6 +258,7 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
         ngayQdGiaoNvXh: data.ngayKy,
       });
       await this.getListBbLayMau(data);
+      await this.listPhieuKdMau(data)
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, e.msg);
     } finally {
@@ -271,6 +273,7 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
       let body = {
         soQdGiaoNvXh: itemQdGnvXh.soQuyetDinh,
         nam: this.formData.get('nam').value,
+        trangThai: STATUS.DA_DUYET_LDC
       };
       let res = await this.bienBanLayMauVtKtclService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -281,6 +284,27 @@ export class ThongTinPhieuKiemNghiemChatLuongComponent extends Base2Component im
     } finally {
       await this.spinner.hide();
     }
+  }
+
+  async listPhieuKdMau(itemQdGnvXh) {
+    let body = {
+      soQdGiaoNvXh:  itemQdGnvXh.soQuyetDinh,
+    }
+    let res = await this.phieuKdclVtKtclService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.listSoPhieuKd = data.content;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+      let bienBan = [
+        ...this.listBbLayMau.filter((e) => {
+          return !this.listSoPhieuKd.some((bb) => {
+            return e.soBienBan === bb.soBbLayMau;
+          });
+        }),
+      ];
+      this.listBbLayMau = bienBan;
   }
 
   async listBienBan(item) {

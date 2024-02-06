@@ -81,7 +81,7 @@
         <a (click)="danhSach()" style="color: blue">
           Xem toàn bộ danh sách
         </a>
-        <button type="button" class="btn btn-main" (click)="showModal(true)">
+        <button type="button" class="btn btn-main" (click)="showModal(true)" *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_THDS_THEM')">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Tổng hợp DS VT, TB có thời hạn lưu kho còn 6 tháng</span>
         </button>
@@ -132,10 +132,10 @@
                   <td></td>
                   <td>{{item.tenTrangThai}}</td>
                   <td class="text-left">
-                    <a (click)="showModal(true, item)">
+                    <a (click)="showModal(true, item)" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_THDS_XEM')">
                       <i class="fa fa-eye" title="Xem chi tiết"></i>
                     </a>
-                    <a *ngIf="item.trangThai==STATUS.DU_THAO" (click)="delete(item)">
+                    <a *ngIf="item.trangThai==STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_THDS_XOA')" (click)="delete(item)">
                       <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     </a>
                   </td>
@@ -219,16 +219,16 @@
   </ng-container>
   <ng-template #modalFooter>
     <ng-container>
-      <button class="btn btn-main" *ngIf="!!!this.selectedItem" (click)="handleOk()">
+      <button class="btn btn-main" *ngIf="!!!this.selectedItem && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_THDS_THEM')" (click)="handleOk()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
-      <button class="btn btn-sub" *ngIf="this.selectedItem && this.selectedItem.trangThai != STATUS.GUI_DUYET"
+      <button class="btn btn-sub" *ngIf="this.selectedItem && this.selectedItem.trangThai != STATUS.GUI_DUYET && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_THDS_EXP')"
         (click)="exportExcel()">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất excel</span>
       </button>
-      <button class="btn btn-main" *ngIf="this.selectedItem && this.selectedItem.trangThai != STATUS.GUI_DUYET"
+      <button class="btn btn-main" *ngIf="this.selectedItem && this.selectedItem.trangThai != STATUS.GUI_DUYET && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_THDS_THEM')"
         (click)="handleOk()">
         <i class="icon htvbdh_trinh"></i>
         <span>Gửi duyệt</span>
