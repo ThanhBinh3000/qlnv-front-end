@@ -10,11 +10,20 @@ import { PhieuXuatKhoBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban
 import { v4 as uuidv4 } from 'uuid';
 import { chain, groupBy } from 'lodash';
 import { PhieuXuatKhoDieuChuyenService } from '../services/dcnb-xuat-kho.service';
+import { STATUS } from 'src/app/constants/status';
 
 export interface PassDataXK {
   soQddc: string, qddcId: number, soPhieuKnChatLuong: string, phieuKnChatLuongHdrId: number, maDiemKho: string, maNganKho: string, maNhaKho: string, maLoKho: string
   tenDiemKho: string, tenNganKho: string, tenNhaKho: string, tenLoKho: string, loaiVthh: string, cloaiVthh: string, tenLoaiVthh: string, tenCloaiVthh: string, soLuongCanDc: number, donViTinh: string,
   keHoachDcDtlId: number
+}
+export interface MA_QUYEN_PXK {
+  XEM: string,
+  THEM: string,
+  XOA: string,
+  DUYET_LDCC: string,
+  EXP: string,
+  IN: string
 }
 @Component({
   selector: 'app-xuat-dcnb-phieu-xuat-kho',
@@ -27,6 +36,7 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
   @Input() thayDoiThuKho: boolean;
   @Input() type: string;
   @Input() typeQd: string;
+  @Input() loaiMaQuyen: string
   selectedId: number = 0;
   isView: boolean = false;
   isTatCa: boolean = false;
@@ -39,13 +49,20 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
   idPhieuKNCL: number;
   isViewPhieuKNCL: boolean;
   passData: PassDataXK;
-
   LIST_TRANG_THAI: { [key: string]: string } = {
-    [this.STATUS.DU_THAO]: "Dự thảo",
-    [this.STATUS.CHO_DUYET_LDCC]: "Chờ duyệt LĐ Chi Cục",
-    [this.STATUS.TU_CHOI_LDCC]: "Từ chối LĐ Chi Cục",
-    [this.STATUS.DA_DUYET_LDCC]: "Đã duyệt LĐ Chi Cục"
+    [STATUS.DU_THAO]: "Dự thảo",
+    [STATUS.CHO_DUYET_LDCC]: "Chờ duyệt LĐ Chi Cục",
+    [STATUS.TU_CHOI_LDCC]: "Từ chối LĐ Chi Cục",
+    [STATUS.DA_DUYET_LDCC]: "Đã duyệt LĐ Chi Cục"
   }
+  MA_QUYEN: MA_QUYEN_PXK = {
+    XEM: "",
+    THEM: "",
+    XOA: "",
+    DUYET_LDCC: "",
+    EXP: "",
+    IN: ""
+  };
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -84,6 +101,74 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
       tenTrangThai: '',
       tenTrangThaiXh: '',
     };
+    switch (this.loaiMaQuyen) {
+      case 'DCNB_LT_KHACTK':
+        this.MA_QUYEN.XEM = 'DCNB_XUAT_NBCC_KHACTK_XK_LT_PXK_XEM';
+        this.MA_QUYEN.THEM = 'DCNB_XUAT_NBCC_KHACTK_XK_LT_PXK_THEM';
+        this.MA_QUYEN.XOA = 'DCNB_XUAT_NBCC_KHACTK_XK_LT_PXK_XOA';
+        this.MA_QUYEN.DUYET_LDCC = 'DCNB_XUAT_NBCC_KHACTK_XK_LT_PXK_DUYET';
+        this.MA_QUYEN.EXP = 'DCNB_XUAT_NBCC_KHACTK_XK_LT_PXK_EXP';
+        this.MA_QUYEN.IN = 'DCNB_XUAT_NBCC_KHACTK_XK_LT_PXK_IN';
+        break;
+      case 'DCNB_VT_KHACTK':
+        this.MA_QUYEN.XEM = 'DCNB_XUAT_NBCC_KHACTK_XK_VT_PXK_XEM';
+        this.MA_QUYEN.THEM = 'DCNB_XUAT_NBCC_KHACTK_XK_VT_PXK_THEM';
+        this.MA_QUYEN.XOA = 'DCNB_XUAT_NBCC_KHACTK_XK_VT_PXK_XOA';
+        this.MA_QUYEN.DUYET_LDCC = 'DCNB_XUAT_NBCC_KHACTK_XK_VT_PXK_DUYET';
+        this.MA_QUYEN.EXP = 'DCNB_XUAT_NBCC_KHACTK_XK_VT_PXK_EXP';
+        this.MA_QUYEN.IN = 'DCNB_XUAT_NBCC_KHACTK_XK_VT_PXK_IN';
+        break;
+      case 'DCNB_LT_CUNGTK':
+        this.MA_QUYEN.XEM = 'DCNB_XUAT_NBCC_CUNGTK_XK_LT_PXK_XEM';
+        this.MA_QUYEN.THEM = 'DCNB_XUAT_NBCC_CUNGTK_XK_LT_PXK_THEM';
+        this.MA_QUYEN.XOA = 'DCNB_XUAT_NBCC_CUNGTK_XK_LT_PXK_XOA';
+        this.MA_QUYEN.DUYET_LDCC = 'DCNB_XUAT_NBCC_CUNGTK_XK_LT_PXK_DUYET';
+        this.MA_QUYEN.EXP = 'DCNB_XUAT_NBCC_CUNGTK_XK_LT_PXK_EXP';
+        this.MA_QUYEN.IN = 'DCNB_XUAT_NBCC_CUNGTK_XK_LT_PXK_IN';
+        break;
+      case 'DCNB_VT_CUNGTK':
+        this.MA_QUYEN.XEM = 'DCNB_XUAT_NBCC_CUNGTK_XK_VT_PXK_XEM';
+        this.MA_QUYEN.THEM = 'DCNB_XUAT_NBCC_CUNGTK_XK_VT_PXK_THEM';
+        this.MA_QUYEN.XOA = 'DCNB_XUAT_NBCC_CUNGTK_XK_VT_PXK_XOA';
+        this.MA_QUYEN.DUYET_LDCC = 'DCNB_XUAT_NBCC_CUNGTK_XK_VT_PXK_DUYET';
+        this.MA_QUYEN.EXP = 'DCNB_XUAT_NBCC_CUNGTK_XK_VT_PXK_EXP';
+        this.MA_QUYEN.IN = 'DCNB_XUAT_NBCC_CUNGTK_XK_VT_PXK_IN';
+        break;
+      case 'CHICUC_LT':
+        this.MA_QUYEN.XEM = 'DCNB_XUAT_CUNG1CUC_XK_LT_PXK_XEM';
+        this.MA_QUYEN.THEM = 'DCNB_XUAT_CUNG1CUC_XK_LT_PXK_THEM';
+        this.MA_QUYEN.XOA = 'DCNB_XUAT_CUNG1CUC_XK_LT_PXK_XOA';
+        this.MA_QUYEN.DUYET_LDCC = 'DCNB_XUAT_CUNG1CUC_XK_LT_PXK_DUYET';
+        this.MA_QUYEN.EXP = 'DCNB_XUAT_CUNG1CUC_XK_LT_PXK_EXP';
+        this.MA_QUYEN.IN = 'DCNB_XUAT_CUNG1CUC_XK_LT_PXK_IN';
+        break;
+      case 'CHICUC_VT':
+        this.MA_QUYEN.XEM = 'DCNB_XUAT_CUNG1CUC_XK_VT_PXK_XEM';
+        this.MA_QUYEN.THEM = 'DCNB_XUAT_CUNG1CUC_XK_VT_PXK_THEM';
+        this.MA_QUYEN.XOA = 'DCNB_XUAT_CUNG1CUC_XK_VT_PXK_XOA';
+        this.MA_QUYEN.DUYET_LDCC = 'DCNB_XUAT_CUNG1CUC_XK_VT_PXK_DUYET';
+        this.MA_QUYEN.EXP = 'DCNB_XUAT_CUNG1CUC_XK_VT_PXK_EXP';
+        this.MA_QUYEN.IN = 'DCNB_XUAT_CUNG1CUC_XK_VT_PXK_IN';
+        break;
+      case 'CUC_LT':
+        this.MA_QUYEN.XEM = 'DCNB_XUAT_2CUC_XK_LT_PXK_XEM';
+        this.MA_QUYEN.THEM = 'DCNB_XUAT_2CUC_XK_LT_PXK_THEM';
+        this.MA_QUYEN.XOA = 'DCNB_XUAT_2CUC_XK_LT_PXK_XOA';
+        this.MA_QUYEN.DUYET_LDCC = 'DCNB_XUAT_2CUC_XK_LT_PXK_DUYET';
+        this.MA_QUYEN.EXP = 'DCNB_XUAT_2CUC_XK_LT_PXK_EXP';
+        this.MA_QUYEN.IN = 'DCNB_XUAT_2CUC_XK_LT_PXK_IN';
+        break;
+      case 'CUC_VT':
+        this.MA_QUYEN.XEM = 'DCNB_XUAT_2CUC_XK_VT_PXK_XEM';
+        this.MA_QUYEN.THEM = 'DCNB_XUAT_2CUC_XK_VT_PXK_THEM';
+        this.MA_QUYEN.XOA = 'DCNB_XUAT_2CUC_XK_VT_PXK_XOA';
+        this.MA_QUYEN.DUYET_LDCC = 'DCNB_XUAT_2CUC_XK_VT_PXK_DUYET';
+        this.MA_QUYEN.EXP = 'DCNB_XUAT_2CUC_XK_VT_PXK_EXP';
+        this.MA_QUYEN.IN = 'DCNB_XUAT_2CUC_XK_VT_PXK_IN';
+        break;
+      default:
+        break;
+    }
   }
 
   async ngOnInit() {
@@ -244,30 +329,20 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
       keHoachDcDtlId: lv2.keHoachDcDtlId
     }
   }
-
-  checkRoleView(trangThai: string): boolean {
-    if (trangThai && !this.checkRoleEdit(trangThai) && !this.checkRoleApprove(trangThai) && !this.checkRoleDelete(trangThai)) {
-      return true
-    }
-    return false
+  checkRoleAdd(): boolean {
+    return this.userService.isAccessPermisson(this.MA_QUYEN.THEM) && this.userService.isChiCuc();
   }
-  checkRoleEdit(trangThai: string): boolean {
-    if (this.userService.isChiCuc() && (trangThai == this.STATUS.DU_THAO || trangThai == this.STATUS.TU_CHOI_LDCC)) {
-      return true
-    }
-    return false
+  checkRoleView(trangThai: STATUS): boolean {
+    return this.userService.isAccessPermisson(this.MA_QUYEN.XEM) && trangThai && !this.checkRoleEdit(trangThai) && !this.checkRoleApprove(trangThai) && !this.checkRoleDelete(trangThai) && this.userService.isChiCuc();
   }
-  checkRoleApprove(trangThai: string): boolean {
-    if (this.userService.isChiCuc() && (trangThai == this.STATUS.CHO_DUYET_LDCC)) {
-      return true
-    }
-    return false
+  checkRoleEdit(trangThai: STATUS): boolean {
+    return this.userService.isAccessPermisson(this.MA_QUYEN.THEM) && [STATUS.DU_THAO, STATUS.TU_CHOI_LDCC].includes(trangThai) && this.userService.isChiCuc()
   }
-  checkRoleDelete(trangThai: string): boolean {
-    if (this.userService.isChiCuc() && (trangThai == this.STATUS.DU_THAO)) {
-      return true
-    }
-    return false
+  checkRoleApprove(trangThai: STATUS): boolean {
+    return this.userService.isAccessPermisson(this.MA_QUYEN.DUYET_LDCC) && trangThai == STATUS.CHO_DUYET_LDCC && this.userService.isChiCuc();
+  }
+  checkRoleDelete(trangThai: STATUS): boolean {
+    return this.userService.isAccessPermisson(this.MA_QUYEN.XOA) && trangThai == STATUS.DU_THAO && this.userService.isChiCuc()
   }
   openModalPhieuXuatKho(id: number) {
     this.idPhieu = id;

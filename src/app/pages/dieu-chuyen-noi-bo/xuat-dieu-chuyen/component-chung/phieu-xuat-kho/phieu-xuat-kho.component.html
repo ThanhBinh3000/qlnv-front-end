@@ -50,11 +50,13 @@
         <div class="group-button">
             <h3>DANH SÁCH PHIẾU XUẤT KHO</h3>
             <div class="buttons">
-                <button type="button" class="btn btn-sub" (click)="exportData()">
+                <button type="button" class="btn btn-sub" (click)="exportData()"
+                    *ngIf="userService.isAccessPermisson(this.MA_QUYEN.EXP)">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
-                <button type="button" class="btn btn-main" *ngIf="userService.isChiCuc()"
+                <button type="button" class="btn btn-main"
+                    *ngIf="userService.isChiCuc() && userService.isAccessPermisson(this.MA_QUYEN.THEM)"
                     (click)="redirectToChiTiet(false, null, null)">
                     <i class="icon htvbdh_dau-cong"></i>
                     <span>Thêm</span>
@@ -150,7 +152,7 @@
                                             <td></td>
                                             <td class="text-left">
                                                 <a (click)="redirectToChiTiet(lv2, null, null)"
-                                                    *ngIf="((lv2.thayDoiThuKho &&  lv2.phieuKiemNghiemId) || !lv2.thayDoiThuKho) && userService.isChiCuc()">
+                                                    *ngIf="((lv2.thayDoiThuKho &&  lv2.phieuKiemNghiemId) || !lv2.thayDoiThuKho) && checkRoleAdd()">
                                                     <i class="fa fa-plus"></i>
                                                 </a>
                                             </td>
@@ -223,7 +225,8 @@
 </div>
 <ng-template #templateThemmoi>
     <app-xuat-dcnb-them-moi-phieu-xuat-kho [idInput]="selectedId" (showListEvent)="showList()" [isView]="isView"
-        [loaiDc]="loaiDc" [isVatTu]="isVatTu" [thayDoiThuKho]="thayDoiThuKho" [type]="type" [passData]="passData">
+        [loaiDc]="loaiDc" [isVatTu]="isVatTu" [thayDoiThuKho]="thayDoiThuKho" [type]="type" [passData]="passData"
+        [MA_QUYEN]="MA_QUYEN">
     </app-xuat-dcnb-them-moi-phieu-xuat-kho>
 </ng-template>
 

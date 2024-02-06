@@ -1,29 +1,32 @@
 <nz-affix [nzOffsetTop]="141" class="level1">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)">
+    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)"
+      *ngIf="userService.isAccessPermisson('DCNB_XUAT_NBCC_CUNGTK_XK_VT_PXK')">
       Phiếu xuất kho
     </li>
-    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)">
+    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)"
+      *ngIf="userService.isAccessPermisson('DCNB_XUAT_NBCC_CUNGTK_XK_VT_BKXVT')">
       Bảng kê xuất vật tư
     </li>
-    <li [nzSelected]="tabSelected==2" nz-menu-item (click)="selectTab(2)">
+    <li [nzSelected]="tabSelected==2" nz-menu-item (click)="selectTab(2)"
+      *ngIf="userService.isAccessPermisson('DCNB_XUAT_NBCC_CUNGTK_XK_VT_BBTK')">
       Biên bản tịnh kho
     </li>
   </ul>
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
-    <ng-container *ngIf="tabSelected == 0">
-      <app-xuat-dcnb-phieu-xuat-kho loaiDc="DCNB" [isVatTu]="true" [thayDoiThuKho]="false"
-        type="00"></app-xuat-dcnb-phieu-xuat-kho>
+    <ng-container *ngIf="tabSelected == 0 && userService.isAccessPermisson('DCNB_XUAT_NBCC_CUNGTK_XK_VT_PXK')">
+      <app-xuat-dcnb-phieu-xuat-kho loaiDc="DCNB" [isVatTu]="true" [thayDoiThuKho]="false" type="00"
+        loaiMaQuyen="DCNB_VT_CUNGTK"></app-xuat-dcnb-phieu-xuat-kho>
     </ng-container>
-    <ng-container *ngIf="tabSelected == 1">
-      <app-xuat-dcnb-bang-ke-xuat-vat-tu loaiDc="DCNB" [isVatTu]="true" [thayDoiThuKho]="false"
-        type="00"></app-xuat-dcnb-bang-ke-xuat-vat-tu>
+    <ng-container *ngIf="tabSelected == 1 && userService.isAccessPermisson('DCNB_XUAT_NBCC_CUNGTK_XK_VT_BKXVT')">
+      <app-xuat-dcnb-bang-ke-xuat-vat-tu loaiDc="DCNB" [isVatTu]="true" [thayDoiThuKho]="false" type="00"
+        loaiMaQuyen="DCNB_VT_CUNGTK"></app-xuat-dcnb-bang-ke-xuat-vat-tu>
     </ng-container>
-    <ng-container *ngIf="tabSelected == 2">
-      <app-xuat-dcnb-bien-ban-tinh-kho loaiDc="DCNB" [isVatTu]="true" [thayDoiThuKho]="false"
-        type="00"></app-xuat-dcnb-bien-ban-tinh-kho>
+    <ng-container *ngIf="tabSelected == 2 && userService.isAccessPermisson('DCNB_XUAT_NBCC_CUNGTK_XK_VT_BBTK')">
+      <app-xuat-dcnb-bien-ban-tinh-kho loaiDc="DCNB" [isVatTu]="true" [thayDoiThuKho]="false" type="00"
+        loaiMaQuyen="DCNB_VT_CUNGTK"></app-xuat-dcnb-bien-ban-tinh-kho>
     </ng-container>
   </div>
 </div>

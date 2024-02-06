@@ -18,7 +18,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HopDongBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
 import { QuyetDinhDieuChuyenCucService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service';
-import { PassDataXK } from '../phieu-xuat-kho.component';
+import { MA_QUYEN_PXK, PassDataXK } from '../phieu-xuat-kho.component';
 import { CurrencyMaskInputMode } from 'ngx-currency';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { PREVIEW } from 'src/app/constants/fileType';
@@ -37,7 +37,7 @@ export class ThemMoiPhieuXuatKhoDCNBComponent extends Base2Component implements 
   @Input() isView: boolean;
   @Input() passData: PassDataXK;
   @Input() isViewOnModal: boolean;
-
+  @Input() MA_QUYEN: MA_QUYEN_PXK;
   @Output()
   showListEvent = new EventEmitter<any>();
   loaiVthh?: string[] | string;

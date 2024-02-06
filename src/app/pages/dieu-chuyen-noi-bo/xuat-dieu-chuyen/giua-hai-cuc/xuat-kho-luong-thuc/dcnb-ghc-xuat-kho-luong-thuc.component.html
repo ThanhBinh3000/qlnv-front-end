@@ -1,31 +1,35 @@
 <nz-affix [nzOffsetTop]="100" class="level1">
     <ul nz-menu nzMode="horizontal">
-        <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)">
+        <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)"
+            *ngIf="userService.isAccessPermisson('DCNB_XUAT_2CUC_XK_LT_PXK')">
             Phiếu xuất kho
         </li>
-        <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)">
+        <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)"
+            *ngIf="userService.isAccessPermisson('DCNB_XUAT_2CUC_XK_LT_BKCH')">
             Bảng kê cân hàng
         </li>
-        <li [nzSelected]="tabSelected==2" nz-menu-item (click)="selectTab(2)">
+        <li [nzSelected]="tabSelected==2" nz-menu-item (click)="selectTab(2)"
+            *ngIf="userService.isAccessPermisson('DCNB_XUAT_2CUC_XK_LT_BBTK')">
             Biên bản tịnh kho
         </li>
-        <li [nzSelected]="tabSelected==3" nz-menu-item (click)="selectTab(3)">
+        <li [nzSelected]="tabSelected==3" nz-menu-item (click)="selectTab(3)"
+            *ngIf="userService.isAccessPermisson('DCNB_XUAT_2CUC_XK_LT_BBHD')">
             Biên bản hao dôi
         </li>
     </ul>
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">
     <div class="contentDetail">
-        <ng-container *ngIf="tabSelected == 0">
+        <ng-container *ngIf="tabSelected == 0 && userService.isAccessPermisson('DCNB_XUAT_2CUC_XK_LT_PXK')">
             <app-dcnb-ghc-xklt-phieu-xuat-kho></app-dcnb-ghc-xklt-phieu-xuat-kho>
         </ng-container>
-        <ng-container *ngIf="tabSelected == 1">
+        <ng-container *ngIf="tabSelected == 1 && userService.isAccessPermisson('DCNB_XUAT_2CUC_XK_LT_BKCH')">
             <app-dcnb-ghc-xklt-bang-ke-can-hang></app-dcnb-ghc-xklt-bang-ke-can-hang>
         </ng-container>
-        <ng-container *ngIf="tabSelected == 2">
+        <ng-container *ngIf="tabSelected == 2 && userService.isAccessPermisson('DCNB_XUAT_2CUC_XK_LT_BBTK')">
             <app-dcnb-ghc-xklt-bien-ban-tinh-kho></app-dcnb-ghc-xklt-bien-ban-tinh-kho>
         </ng-container>
-        <ng-container *ngIf="tabSelected == 3">
+        <ng-container *ngIf="tabSelected == 3 && userService.isAccessPermisson('DCNB_XUAT_2CUC_XK_LT_BBHD')">
             <app-dcnb-ghc-xklt-bien-ban-hao-doi></app-dcnb-ghc-xklt-bien-ban-hao-doi>
         </ng-container>
     </div>

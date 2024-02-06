@@ -22,7 +22,7 @@ import { QuyetDinhGiaoNvXuatHangService } from './../../../../../../services/qln
 import { BienBanTinhKhoDieuChuyenService } from '../../services/dcnb-bien-ban-tinh-kho.service';
 import { QuyetDinhDieuChuyenCucService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service';
 import { PhieuXuatKhoDieuChuyenService } from '../../services/dcnb-xuat-kho.service';
-import { PassDataBienBanTinhKho } from '../bien-ban-tinh-kho.component';
+import { MA_QUYEN_BBTK, PassDataBienBanTinhKho } from '../bien-ban-tinh-kho.component';
 import { PREVIEW } from 'src/app/constants/fileType';
 
 export const LIST_TRANG_THAI_BBTK = {
@@ -49,6 +49,7 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
   @Input() isView: boolean;
   @Input() passData: PassDataBienBanTinhKho;
   @Input() isViewOnModal: boolean;
+  @Input() MA_QUYEN: MA_QUYEN_BBTK;
   @Output()
   showListEvent = new EventEmitter<any>();
   listSoQuyetDinh: any[] = []
@@ -575,5 +576,9 @@ export class ThemMoiBienBanTinhKhoDieuChuyenComponent extends Base2Component imp
       this.formData.controls["soPhieuKnChatLuong"].clearValidators();
       this.formData.controls["phieuKnChatLuongHdrId"].clearValidators();
     }
+  }
+  checkRoleDuyet(trangThai: STATUS): boolean {
+    return (STATUS.CHO_DUYET_KTVBQ === trangThai && this.userService.isAccessPermisson(this.MA_QUYEN.DUYET_KTVBQ) || STATUS.CHO_DUYET_KT === trangThai && this.userService.isAccessPermisson(this.MA_QUYEN.DUYET_KT)
+      || STATUS.CHO_DUYET_LDCC === trangThai && this.userService.isAccessPermisson(this.MA_QUYEN.DUYET_LDCCUC)) && this.userService.isChiCuc();
   }
 }

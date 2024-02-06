@@ -18,6 +18,14 @@ export interface PassData {
     tenNhaKho: string, maDiemKho: string, tenDiemKho: string, loaiVthh: string, tenLoaiVthh: string, cloaiVthh: string, tenCloaiVthh: string, thuKho: number, tenThuKho: string, donViTinh: string,
     keHoachDcDtlId: number
 }
+export interface MA_QUYEN_BBLM {
+    XEM: string,
+    THEM: string,
+    XOA: string,
+    DUYET_LDCCUC: string,
+    EXP: string,
+    IN: string
+}
 @Component({
     selector: 'app-danh-sach-bien-ban-lay-mau',
     templateUrl: './danh-sach-bien-ban-lay-mau.component.html',
@@ -31,6 +39,7 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     @Input() thayDoiThuKho: boolean;
     @Input() type: string;
     @Input() typeQd: string;
+    @Input() loaiMaQuyen: string;
     // @Output() checkPermissonDelete = new EventEmitter<boolean>();
     // @Output() checkPermissonExport = new EventEmitter<boolean>();
     // @Output() checkPermissonAdd = new EventEmitter<boolean>();
@@ -59,7 +68,15 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
         [STATUS.CHO_DUYET_LDCC]: "Chờ duyệt LĐ Chi Cục",
         [STATUS.TU_CHOI_LDCC]: "Từ chối LĐ Chi Cục",
         [STATUS.DA_DUYET_LDCC]: "Đã duyệt LĐ Chi Cục"
-    }
+    };
+    MA_QUYEN = {
+        XEM: "",
+        THEM: "",
+        XOA: "",
+        DUYET_LDCCUC: "",
+        EXP: "",
+        IN: ""
+    };
     constructor(httpClient: HttpClient,
         storageService: StorageService,
         notification: NzNotificationService,
@@ -96,6 +113,58 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
             bbHaoDoi: '',
             trangThai: '',
         };
+        switch (this.loaiMaQuyen) {
+            case 'DCNB_LT_KHACTK':
+                this.MA_QUYEN.XEM = 'DCNB_XUAT_NBCC_KHACTK_KTCL_LT_BBLM_XEM';
+                this.MA_QUYEN.THEM = 'DCNB_XUAT_NBCC_KHACTK_KTCL_LT_BBLM_THEM';
+                this.MA_QUYEN.XOA = 'DCNB_XUAT_NBCC_KHACTK_KTCL_LT_BBLM_XOA';
+                this.MA_QUYEN.DUYET_LDCCUC = 'DCNB_XUAT_NBCC_KHACTK_KTCL_LT_BBLM_DUYET_LDCCUC';
+                this.MA_QUYEN.EXP = 'DCNB_XUAT_NBCC_KHACTK_KTCL_LT_BBLM_EXP';
+                this.MA_QUYEN.IN = 'DCNB_XUAT_NBCC_KHACTK_KTCL_LT_BBLM_IN';
+                break;
+            case 'DCNB_VT_KHACTK':
+                this.MA_QUYEN.XEM = 'DCNB_XUAT_NBCC_KHACTK_KTCL_VT_BBLM_XEM';
+                this.MA_QUYEN.THEM = 'DCNB_XUAT_NBCC_KHACTK_KTCL_VT_BBLM_THEM';
+                this.MA_QUYEN.XOA = 'DCNB_XUAT_NBCC_KHACTK_KTCL_VT_BBLM_XOA';
+                this.MA_QUYEN.DUYET_LDCCUC = 'DCNB_XUAT_NBCC_KHACTK_KTCL_VT_BBLM_DUYET_LDCCUC';
+                this.MA_QUYEN.EXP = 'DCNB_XUAT_NBCC_KHACTK_KTCL_VT_BBLM_EXP';
+                this.MA_QUYEN.IN = 'DCNB_XUAT_NBCC_KHACTK_KTCL_VT_BBLM_IN';
+                break;
+            case 'CHICUC_LT':
+                this.MA_QUYEN.XEM = 'DCNB_XUAT_CUNG1CUC_KTCL_LT_BBLM_XEM';
+                this.MA_QUYEN.THEM = 'DCNB_XUAT_CUNG1CUC_KTCL_LT_BBLM_THEM';
+                this.MA_QUYEN.XOA = 'DCNB_XUAT_CUNG1CUC_KTCL_LT_BBLM_XOA';
+                this.MA_QUYEN.DUYET_LDCCUC = 'DCNB_XUAT_CUNG1CUC_KTCL_LT_BBLM_DUYET_LDCCUC';
+                this.MA_QUYEN.EXP = 'DCNB_XUAT_CUNG1CUC_KTCL_LT_BBLM_EXP';
+                this.MA_QUYEN.IN = 'DCNB_XUAT_CUNG1CUC_KTCL_LT_BBLM_IN';
+                break;
+            case 'CHICUC_VT':
+                this.MA_QUYEN.XEM = 'DCNB_XUAT_CUNG1CUC_KTCL_VT_BBLM_XEM';
+                this.MA_QUYEN.THEM = 'DCNB_XUAT_CUNG1CUC_KTCL_VT_BBLM_THEM';
+                this.MA_QUYEN.XOA = 'DCNB_XUAT_CUNG1CUC_KTCL_VT_BBLM_XOA';
+                this.MA_QUYEN.DUYET_LDCCUC = 'DCNB_XUAT_CUNG1CUC_KTCL_VT_BBLM_DUYET_LDCCUC';
+                this.MA_QUYEN.EXP = 'DCNB_XUAT_CUNG1CUC_KTCL_VT_BBLM_EXP';
+                this.MA_QUYEN.IN = 'DCNB_XUAT_CUNG1CUC_KTCL_VT_BBLM_IN';
+                break;
+            case 'CUC_LT':
+                this.MA_QUYEN.XEM = 'DCNB_XUAT_2CUC_KTCL_LT_BBLM_XEM';
+                this.MA_QUYEN.THEM = 'DCNB_XUAT_2CUC_KTCL_LT_BBLM_THEM';
+                this.MA_QUYEN.XOA = 'DCNB_XUAT_2CUC_KTCL_LT_BBLM_XOA';
+                this.MA_QUYEN.DUYET_LDCCUC = 'DCNB_XUAT_2CUC_KTCL_LT_BBLM_DUYET_LDCCUC';
+                this.MA_QUYEN.EXP = 'DCNB_XUAT_2CUC_KTCL_LT_BBLM_EXP';
+                this.MA_QUYEN.IN = 'DCNB_XUAT_2CUC_KTCL_LT_BBLM_IN';
+                break;
+            case 'CUC_VT':
+                this.MA_QUYEN.XEM = 'DCNB_XUAT_2CUC_KTCL_VT_BBLM_XEM';
+                this.MA_QUYEN.THEM = 'DCNB_XUAT_2CUC_KTCL_VT_BBLM_THEM';
+                this.MA_QUYEN.XOA = 'DCNB_XUAT_2CUC_KTCL_VT_BBLM_XOA';
+                this.MA_QUYEN.DUYET_LDCCUC = 'DCNB_XUAT_2CUC_KTCL_VT_BBLM_DUYET_LDCCUC';
+                this.MA_QUYEN.EXP = 'DCNB_XUAT_2CUC_KTCL_VT_BBLM_EXP';
+                this.MA_QUYEN.IN = 'DCNB_XUAT_2CUC_KTCL_VT_BBLM_IN';
+                break;
+            default:
+                break;
+        }
     }
 
     async ngOnInit(): Promise<void> {
@@ -279,42 +348,28 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
         return endValue.getTime() <= this.formData.value.tuNgay.getTime();
     };
     checkPermissonAdd(): boolean {
-        return true
+        return this.userService.isAccessPermisson(this.MA_QUYEN.THEM);
     }
     checkPermissonExport(): boolean {
-        return true
+        return this.userService.isAccessPermisson(this.MA_QUYEN.EXP)
     }
     checkPermissonDelete(): boolean {
-        return true
+        return this.userService.isAccessPermisson(this.MA_QUYEN.XOA)
     }
-    checkRoleAdd(trangThai: string): boolean {
-        if (this.userService.isChiCuc() && !trangThai) {
-            return true
-        }
-        return false
+    checkRoleAdd(trangThai: STATUS): boolean {
+        return this.userService.isAccessPermisson(this.MA_QUYEN.THEM) && this.userService.isChiCuc() && !trangThai;
     }
-    checkRoleView(trangThai: string): boolean {
-        if (trangThai && !this.checkRoleAdd(trangThai) && !this.checkRoleEdit(trangThai) && !this.checkRoleApprove(trangThai)) {
-            return true
-        }
-        return false
+    checkRoleView(trangThai: STATUS): boolean {
+        return this.userService.isAccessPermisson(this.MA_QUYEN.XEM) && trangThai && !this.checkRoleAdd(trangThai) && !this.checkRoleEdit(trangThai) && !this.checkRoleApprove(trangThai);
     }
-    checkRoleEdit(trangThai: string): boolean {
-        if (this.userService.isChiCuc() && (trangThai == this.STATUS.DU_THAO || trangThai == this.STATUS.TU_CHOI_LDCC)) {
-            return true
-        }
-        return false
+    checkRoleEdit(trangThai: STATUS): boolean {
+        return this.userService.isAccessPermisson(this.MA_QUYEN.THEM) && [STATUS.DU_THAO, STATUS.TU_CHOI_LDCC].includes(trangThai) && this.userService.isChiCuc();
     }
-    checkRoleApprove(trangThai: string): boolean {
-        if (this.userService.isChiCuc() && trangThai == this.STATUS.CHO_DUYET_LDCC) {
-            return true
-        }
-        return false
+    checkRoleApprove(trangThai: STATUS): boolean {
+        return this.userService.isAccessPermisson(this.MA_QUYEN.DUYET_LDCCUC) && trangThai == this.STATUS.CHO_DUYET_LDCC && this.userService.isChiCuc();
     }
-    checkRoleDelete(trangThai: string): boolean {
-        if (this.userService.isChiCuc() && trangThai == this.STATUS.DU_THAO) {
-            return true
-        }
+    checkRoleDelete(trangThai: STATUS): boolean {
+        return this.userService.isAccessPermisson(this.MA_QUYEN.XOA) && trangThai == this.STATUS.DU_THAO && this.userService.isChiCuc();
     }
     xoaItem(item: any, roles?) {
         if (!this.checkPermission(roles)) {

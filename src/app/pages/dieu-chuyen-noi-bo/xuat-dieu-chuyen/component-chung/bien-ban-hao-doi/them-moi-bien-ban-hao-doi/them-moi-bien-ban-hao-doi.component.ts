@@ -31,7 +31,7 @@ import {
 import {
   BienBanTinhKhoService
 } from "src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/BienBanTinhKho.service";
-import { PassDataBienBanHaoDoi } from '../bien-ban-hao-doi.component';
+import { MA_QUYEN_BBHD, PassDataBienBanHaoDoi } from '../bien-ban-hao-doi.component';
 import { PREVIEW } from 'src/app/constants/fileType';
 import { PhieuKiemNghiemChatLuongDieuChuyenService } from '../../services/dcnb-phieu-kiem-nghiem-chat-luong.service';
 import { MangLuoiKhoService } from 'src/app/services/qlnv-kho/mangLuoiKho.service';
@@ -64,6 +64,7 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
   @Input() isViewOnModal: boolean;
   @Input() passData: PassDataBienBanHaoDoi;
   @Input() addChung: boolean;
+  @Input() MA_QUYEN: MA_QUYEN_BBHD;
   @Output()
   showListEvent = new EventEmitter<any>();
   listSoQuyetDinh: any[] = []
@@ -654,8 +655,9 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
       }
     }
   }
-  showDuyet() {
-    return ([STATUS.CHO_DUYET_KTVBQ, STATUS.CHO_DUYET_KT, STATUS.CHO_DUYET_LDCC].includes(this.formData.value.trangThai)) && this.userService.isChiCuc()
+  checkRoleDuyet(trangThai: STATUS): boolean {
+    return (STATUS.CHO_DUYET_KTVBQ === trangThai && this.userService.isAccessPermisson(this.MA_QUYEN.DUYET_KTVBQ) || STATUS.CHO_DUYET_KT === trangThai && this.userService.isAccessPermisson(this.MA_QUYEN.DUYET_KT)
+      || STATUS.CHO_DUYET_LDCC === trangThai && this.userService.isAccessPermisson(this.MA_QUYEN.DUYET_LDCCUC)) && this.userService.isChiCuc();
   }
   pheDuyet() {
     let trangThai = '';
@@ -692,9 +694,9 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
     }
     this.approve(this.formData.value.id, trangThai, msg, null, MSG);
   }
-  showTuChoi() {
-    return ([STATUS.CHO_DUYET_KTVBQ, STATUS.CHO_DUYET_KT, STATUS.CHO_DUYET_LDCC].includes(this.formData.value.trangThai)) && this.userService.isChiCuc()
-  }
+  // showTuChoi() {
+  //   return ([STATUS.CHO_DUYET_KTVBQ, STATUS.CHO_DUYET_KT, STATUS.CHO_DUYET_LDCC].includes(this.formData.value.trangThai)) && this.userService.isChiCuc()
+  // }
   tuChoi() {
     let trangThai = '';
     switch (this.formData.value.trangThai) {
@@ -749,5 +751,8 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
     return tree.flatMap((item) => {
       return item.childData ? this.flattenTree(item.childData) : item;
     });
+  }
+  checkRoleSave(trangThai: STATUS): boolean {
+    return this.userService.isAccessPermisson(this.MA_QUYEN.THEM) && [STATUS.DU_THAO, STATUS.TU_CHOI_KTVBQ, STATUS.TU_CHOI_KT, STATUS.TU_CHOI_LDCC].includes(trangThai) && this.userService.isChiCuc()
   }
 }

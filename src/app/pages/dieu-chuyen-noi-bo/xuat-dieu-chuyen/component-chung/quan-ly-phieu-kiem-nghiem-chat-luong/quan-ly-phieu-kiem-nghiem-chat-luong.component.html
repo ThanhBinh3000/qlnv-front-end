@@ -58,11 +58,13 @@
     <div class="group-button">
       <h3 class="text-uppercase"> DANH SÁCH PHIẾU KIỂM NGHIỆM CHẤT LƯỢNG </h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub" (click)="exportData()">
+        <button type="button" class="btn btn-sub" (click)="exportData()"
+          *ngIf="userService.isAccessPermisson(this.MA_QUYEN.EXP)">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" *ngIf="userService.isCuc()"
+        <button type="button" class="btn btn-main"
+          *ngIf="userService.isAccessPermisson(this.MA_QUYEN.THEM) && userService.isCuc()"
           (click)="redirectToChiTiet(false, null, null)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
@@ -204,7 +206,8 @@
 </div>
 <ng-template #templateThemmoi>
   <app-them-moi-phieu-kiem-nghiem-chat-luong [isVatTu]="isVatTu" [loaiDc]="loaiDc" [thayDoiThuKho]="thayDoiThuKho"
-    [type]="type" [idInput]="selectedId" [passData]="passData" [isView]="isView" (showListEvent)="showList()">
+    [type]="type" [idInput]="selectedId" [passData]="passData" [isView]="isView" (showListEvent)="showList()"
+    [MA_QUYEN]="MA_QUYEN">
   </app-them-moi-phieu-kiem-nghiem-chat-luong>
 </ng-template>
 <!-- Modal view -->
@@ -216,8 +219,8 @@
       ></app-thong-tin-quyet-dinh-dieu-chuyen>
   </ng-container> -->
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-thong-tin-quyet-dinh-dieu-chuyen-cuc [idInput]="qdinhDccId"
-      [isViewOnModal]="true" [isView] = "true"></app-thong-tin-quyet-dinh-dieu-chuyen-cuc>
+    <app-thong-tin-quyet-dinh-dieu-chuyen-cuc [idInput]="qdinhDccId" [isViewOnModal]="true"
+      [isView]="true"></app-thong-tin-quyet-dinh-dieu-chuyen-cuc>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeModalQdDc()" class="modal__button--cancel">

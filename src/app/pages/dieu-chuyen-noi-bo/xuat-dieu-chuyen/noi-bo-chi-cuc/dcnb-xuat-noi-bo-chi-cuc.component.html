@@ -1,19 +1,21 @@
 <nz-affix [nzOffsetTop]="71" class="level2-border">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)">
+    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)"
+      *ngIf="userService.isAccessPermisson('DCNB_XUAT_NBCC_KHACTK')">
       Thay đổi thủ kho
     </li>
-    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)">
+    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)"
+      *ngIf="userService.isAccessPermisson('DCNB_XUAT_NBCC_CUNGTK')">
       Không thay đổi thủ kho
     </li>
   </ul>
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
-    <ng-container *ngIf="tabSelected == 0">
+    <ng-container *ngIf="tabSelected == 0 && userService.isAccessPermisson('DCNB_XUAT_NBCC_KHACTK')">
       <app-dcnb-nbcc-thay-doi-thu-kho></app-dcnb-nbcc-thay-doi-thu-kho>
     </ng-container>
-    <ng-container *ngIf="tabSelected == 1">
+    <ng-container *ngIf="tabSelected == 1 && userService.isAccessPermisson('DCNB_XUAT_NBCC_CUNGTK')">
       <app-dcnb-nbcc-khong-thay-doi-thu-kho></app-dcnb-nbcc-khong-thay-doi-thu-kho>
     </ng-container>
   </div>

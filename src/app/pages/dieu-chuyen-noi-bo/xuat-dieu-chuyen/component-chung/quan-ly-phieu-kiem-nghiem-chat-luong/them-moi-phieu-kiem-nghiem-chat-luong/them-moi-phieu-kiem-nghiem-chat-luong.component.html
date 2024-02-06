@@ -8,27 +8,20 @@
       <i class="icon htvbdh_tcdt_tuchoi"></i>
       <span>In/xem trước</span>
     </button>
-    <button class="btn btn-sub xanh-nhat" type="button"
-      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai === STATUS.TU_CHOI_LDC) && userService.isCuc() "
+    <button class="btn btn-sub xanh-nhat" type="button" *ngIf="checkRoleSave(formData.value.trangThai)"
       (click)="save(true)">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
     </button>
-    <button type="button" class="btn btn-sub do"
-      *ngIf=" formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc()"
-      (click)="tuChoi()">
+    <button type="button" class="btn btn-sub do" *ngIf="checkRoleDuyet(formData.value.trangThai)" (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>
-    <button class="btn btn-sub xanh-nhat"
-      *ngIf=" (formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC) && userService.isCuc()"
-      (click)="pheDuyet()">
+    <button class="btn btn-sub xanh-nhat" *ngIf="checkRoleDuyet(formData.value.trangThai)" (click)="pheDuyet()">
       <i class="icon htvbdh_tcdt_pheduyet "></i>
       <span>Duyệt</span>
     </button>
-    <button class="btn btn-sub xanh"
-      *ngIf="( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai === STATUS.TU_CHOI_LDC) && userService.isCuc()"
-      (click)="save(false)">
+    <button class="btn btn-sub xanh" *ngIf="checkRoleSave(formData.value.trangThai)" (click)="save(false)">
       <i class="icon  htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>

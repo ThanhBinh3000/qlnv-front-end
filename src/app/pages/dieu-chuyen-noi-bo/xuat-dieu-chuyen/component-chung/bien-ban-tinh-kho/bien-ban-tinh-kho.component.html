@@ -84,12 +84,12 @@
             <h3 class="text-uppercase">Danh sách biên bản tịnh kho</h3>
             <div class="buttons">
                 <button type="button" class="btn btn-sub" (click)="exportData('Danh_sach_bien_ban_tinh_kho')"
-                    *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_XOA')">
+                    *ngIf="userService.isAccessPermisson(MA_QUYEN.EXP)">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
                 <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)"
-                    *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_THEM')">
+                    *ngIf="userService.isAccessPermisson(MA_QUYEN.THEM)">
                     <i class="icon htvbdh_tcdt_tao-qd"></i>
                     <span>Thêm</span>
                 </button>
@@ -260,7 +260,7 @@
 <div class="chi-tiet" *ngIf="isDetail">
     <app-xuat-dcnb-them-moi-bien-ban-tinh-kho [idInput]="selectedId" [loaiDc]="loaiDc" [isVatTu]="isVatTu"
         [thayDoiThuKho]="thayDoiThuKho" [type]="type" [isView]="isView" [passData]="passData"
-        (showListEvent)="showList()">
+        (showListEvent)="showList()" [MA_QUYEN]="MA_QUYEN">
     </app-xuat-dcnb-them-moi-bien-ban-tinh-kho>
 </div>
 <!-- && isOwner(lv2.maDvi) -->

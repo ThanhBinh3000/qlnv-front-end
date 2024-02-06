@@ -21,7 +21,7 @@ import {
 import { PREVIEW } from "src/app/constants/fileType";
 import { HoSoKyThuatXuatDieuChuyenService } from '../../services/dcnb-ho-so-ky-thuat.service';
 import { BienBanLayMauDieuChuyenService } from '../../services/dcnb-bien-ban-lay-mau.service';
-
+import { MA_QUYEN_HSKT } from '../ho-so-ky-thuat.component'
 @Component({
   selector: 'app-chi-tiet-ho-so-ky-thuat-xuat-dieu-chuyen',
   templateUrl: './chi-tiet-ho-so-ky-thuat.component.html',
@@ -35,6 +35,7 @@ export class ChiTietHoSoKyThuatXuatDieuChuyenComponent extends Base2Component im
   @Input() isViewDetail: boolean;
   @Input() loaiVthh: string;
   @Input() loaiDc: string;
+  @Input() MA_QUYEN: MA_QUYEN_HSKT;
   @Output()
   showListEvent = new EventEmitter<any>();
 

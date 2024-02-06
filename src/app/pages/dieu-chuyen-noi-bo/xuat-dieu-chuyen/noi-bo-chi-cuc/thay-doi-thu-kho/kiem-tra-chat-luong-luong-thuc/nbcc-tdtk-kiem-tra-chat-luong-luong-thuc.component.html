@@ -1,19 +1,21 @@
 <nz-affix [nzOffsetTop]="141" class="level1">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)">
+    <li nz-menu-item [nzSelected]="tabSelected==0" (click)="selectTab(0)"
+      *ngIf="userService.isAccessPermisson('DCNB_XUAT_NBCC_KHACTK_KTCL_LT_BBLM')">
       Biên bản lấy mẫu/bàn giao mẫu
     </li>
-    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)">
+    <li [nzSelected]="tabSelected==1" nz-menu-item (click)="selectTab(1)"
+      *ngIf="userService.isAccessPermisson('DCNB_XUAT_NBCC_KHACTK_KTCL_LT_PKNCL')">
       Phiếu kiểm nghiệm chất lượng
     </li>
   </ul>
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
-    <ng-container *ngIf="tabSelected == 0">
+    <ng-container *ngIf="tabSelected == 0 && userService.isAccessPermisson('DCNB_XUAT_NBCC_KHACTK_KTCL_LT_BBLM')">
       <app-nbcc-tdtk-ktcllt-bien-ban-lay-mau-ban-giao></app-nbcc-tdtk-ktcllt-bien-ban-lay-mau-ban-giao>
     </ng-container>
-    <ng-container *ngIf="tabSelected == 1">
+    <ng-container *ngIf="tabSelected == 1 && userService.isAccessPermisson('DCNB_XUAT_NBCC_KHACTK_KTCL_LT_PKNCL')">
       <app-nbcc-tdtk-ktcllt-phieu-kiem-nghiem-chat-luong></app-nbcc-tdtk-ktcllt-phieu-kiem-nghiem-chat-luong>
     </ng-container>
   </div>

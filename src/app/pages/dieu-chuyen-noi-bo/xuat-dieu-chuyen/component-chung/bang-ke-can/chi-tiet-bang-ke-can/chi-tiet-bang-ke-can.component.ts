@@ -28,7 +28,7 @@ import {
   DialogTableSelectionComponent
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { convertTienTobangChu, convertTienTobangChuThapPhan } from 'src/app/shared/commonFunction';
-import { PassDataXuatBangKeCanHang } from '../bang-ke-can.component';
+import { MA_QUYEN_BKCH, PassDataXuatBangKeCanHang } from '../bang-ke-can.component';
 import { PREVIEW } from 'src/app/constants/fileType';
 import { AMOUNT_TWO_DECIMAL } from 'src/app/Utility/utils';
 
@@ -47,6 +47,7 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
   @Input() isView: boolean;
   @Input() isViewOnModal: boolean;
   @Input() passData: PassDataXuatBangKeCanHang;
+  @Input() MA_QUYEN: MA_QUYEN_BKCH
   @Output()
   showListEvent = new EventEmitter<any>();
   loaiVthh: string;
@@ -638,5 +639,11 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
       let rs = convertTienTobangChuThapPhan(Number(tien.toFixed(1)));
       return rs.charAt(0).toUpperCase() + rs.slice(1) + (donVi ? " " + donVi : "");
     }
+  }
+  checkRoleDuyet(trangThai: STATUS): boolean {
+    return trangThai === STATUS.CHO_DUYET_LDCC && this.userService.isAccessPermisson(this.MA_QUYEN.DUYET_LDCCUC)
+  }
+  checkRoleSave(trangThai: STATUS): boolean {
+    return [STATUS.DU_THAO, STATUS.TU_CHOI_LDCC].includes(trangThai) && this.userService.isAccessPermisson(this.MA_QUYEN.THEM)
   }
 }

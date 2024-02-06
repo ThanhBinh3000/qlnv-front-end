@@ -64,17 +64,17 @@
             <h3 class="text-uppercase">{{isVatTu ? 'Bảng kê vật tư' : 'Danh sách bảng kê cân hàng'}}</h3>
             <div class="buttons">
                 <button type="button" class="btn btn-do" (click)="deleteMulti()"
-                    *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_XK_LT_BKCH_XOA')">
+                    *ngIf="userService.isAccessPermisson(MA_QUYEN.XOA)">
                     <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     <span>Xóa</span>
                 </button>
                 <button type="button" class="btn btn-sub" (click)="exportData()"
-                    *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_XK_LT_BKCH_IN')">
+                    *ngIf="userService.isAccessPermisson(MA_QUYEN.EXP)">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
                 <button type="button" class="btn btn-main" (click)="editRow(0,false)"
-                    *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_XK_LT_BKCH_THEM')">
+                    *ngIf="userService.isAccessPermisson(MA_QUYEN.THEM)">
                     <i class="icon htvbdh_tcdt_tao-qd"></i>
                     <span>Thêm</span>
                 </button>
@@ -233,7 +233,7 @@
 <div class="chi-tiet" *ngIf="isDetail">
     <app-xdcnb-chi-tiet-bang-ke-xuat-vat-tu [idInput]="selectedId" [isVatTu]="isVatTu" [loaiDc]="loaiDc"
         [isView]="isView" [thayDoiThuKho]="thayDoiThuKho" [type]="type" [passData]="passData"
-        (showListEvent)="showList()">
+        (showListEvent)="showList()" [MA_QUYEN]="MA_QUYEN">
     </app-xdcnb-chi-tiet-bang-ke-xuat-vat-tu>
 </div>
 

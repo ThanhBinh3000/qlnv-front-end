@@ -63,18 +63,15 @@
     <div class="group-button">
       <h3 class="text-uppercase">{{isVatTu ? 'Bảng kê xuất vật tư' : 'Danh sách bảng kê cân hàng'}}</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteMulti()"
-          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_XK_LT_BKCH_XOA')">
+        <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="checkRoleDeleteMulti()">
           <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
           <span>Xóa</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="exportData()"
-          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_XK_LT_BKCH_IN')">
+        <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="checkRoleExport()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="editRow(0,false)"
-          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_XK_LT_BKCH_THEM')">
+        <button type="button" class="btn btn-main" (click)="editRow(0,false)" *ngIf="checkRoleAddTong()">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Thêm</span>
         </button>
@@ -226,7 +223,8 @@
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
   <app-xdcnb-chi-tiet-bang-ke-can [idInput]="selectedId" [isVatTu]="isVatTu" [loaiDc]="loaiDc" [isView]="isView"
-    [thayDoiThuKho]="thayDoiThuKho" [type]="type" [passData]="passData" (showListEvent)="showList()">
+    [thayDoiThuKho]="thayDoiThuKho" [type]="type" [passData]="passData" (showListEvent)="showList()"
+    [MA_QUYEN]="MA_QUYEN">
   </app-xdcnb-chi-tiet-bang-ke-can>
 </div>
 
