@@ -29,8 +29,9 @@ export class CauHinhKetNoiKtnbComponent extends Base2Component implements OnInit
   ) {
     super(httpClient, storageService, notification, spinner, modal, cauHinhKetNoiKtnb);
     this.formData = this.fb.group({
-      endpoint: [null],
-      port:[null],
+      id:[null],
+      endPoint: [null],
+      portNumber:[null],
       path: [null],
     })
   }
@@ -43,7 +44,8 @@ export class CauHinhKetNoiKtnbComponent extends Base2Component implements OnInit
     try {
       let res = await this.cauHinhKetNoiKtnb.chiTiet();
       if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data.length > 0) {
+        if (res.data) {
+          this.formData.patchValue(res.data);
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -60,7 +62,7 @@ export class CauHinhKetNoiKtnbComponent extends Base2Component implements OnInit
   async save() {
     this.spinner.show();
     try {
-      let res = await this.cauHinhKetNoiKtnb.capNhat(this.formData.value);
+      let res = await this.createUpdate(this.formData.value);
       if (res.msg == MESSAGE.SUCCESS) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
         this.getData()
