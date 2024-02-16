@@ -63,11 +63,8 @@ export class CauHinhKetNoiKtnbComponent extends Base2Component implements OnInit
     this.spinner.show();
     try {
       let res = await this.createUpdate(this.formData.value);
-      if (res.msg == MESSAGE.SUCCESS) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+      if (res) {
         this.getData()
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
       }
     } catch (e) {
       console.log('error: ', e);

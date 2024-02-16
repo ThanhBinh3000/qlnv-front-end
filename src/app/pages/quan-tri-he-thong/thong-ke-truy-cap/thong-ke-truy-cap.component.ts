@@ -36,6 +36,15 @@ export class ThongKeTruyCapComponent extends Base2Component implements OnInit {
   }, {"code": "kho", "ten": "Quản lý kho"}, {"code": "luukho", "ten": "Quản lý lưu kho"}, {
     "code": "security",
     "ten": "Quản lý đăng nhập"
+  }, {
+    "code": "report",
+    "ten": "Quản lý báo cáo"
+  }, {
+    "code": "system",
+    "ten": "Quản lý hệ thống"
+  }, {
+    "code": "category",
+    "ten": "Quản lý danh mục"
   }];
   pageSize: number = 100;
   @ViewChild("chart") chart: ChartComponent;
