@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from '../../../../services/storage.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -21,6 +21,8 @@ import { Base2Component } from '../../../../components/base2/base2.component';
   styleUrls: ['./bao-cao-tdo-bdg-hang-theo-nam-nhap.component.scss']
 })
 export class BaoCaoTdoBdgHangTheoNamNhapComponent  extends Base2Component implements OnInit  {
+  @Input()
+  tabSelected: any;
   pdfSrc: any;
   excelSrc: any;
   pdfBlob: any;
@@ -93,6 +95,7 @@ export class BaoCaoTdoBdgHangTheoNamNhapComponent  extends Base2Component implem
       this.spinner.show();
       let body = this.formData.value;
       body.typeFile = "pdf";
+      body.type = this.tabSelected;
       await this.bcNhapXuatMuaBanHangDTQGService.tienDoBdgThocTheoNamNhapKho(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
