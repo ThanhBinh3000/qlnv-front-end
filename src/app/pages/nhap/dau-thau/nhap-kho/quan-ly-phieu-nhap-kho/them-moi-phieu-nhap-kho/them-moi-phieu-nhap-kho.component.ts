@@ -234,6 +234,13 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
       this.listDiaDiemNhap = dataChiCuc[0].children;
       this.listDiaDiemNhap = this.listDiaDiemNhap.filter(item => isEmpty(item.phieuNhapKho));
     }
+    if (this.loaiVthh.startsWith('02')) {
+      this.listDiaDiemNhap.forEach(item => {
+        if (item.bienBanGuiHang != null) {
+          item.soBienBanGuiHang = item.bienBanGuiHang.soBienBanGuiHang
+        }
+      })
+    }
     await this.spinner.hide();
   }
 
@@ -536,6 +543,21 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
   }
 
   openDialogSoBbGuiHang() {
-
+    const modalQD = this.modal.create({
+      nzTitle: 'Danh sách địa điểm nhập hàng',
+      nzContent: DialogTableSelectionComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: this.listDiaDiemNhap,
+        dataHeader: ['Số biên bản tạm giao, nhận hàng'],
+        dataColumn: ['soBienBanGuiHang']
+      },
+    });
+    modalQD.afterClose.subscribe(async (data) => {
+      await this.bindingDataDdNhap(data);
+    });
   }
 }
