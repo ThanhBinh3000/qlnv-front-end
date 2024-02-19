@@ -34,17 +34,21 @@
             </li>
             <li nz-menu-item [nzSelected]='tabSelected==10' (click)='selectTab(10)'>
               <span nz-icon nzType='fund'></span>
-              <span>Tiến độ bán đấu giá thóc nhập kho năm...thuộc kế hoạch năm...</span>
+              <span>Tiến độ bán đấu giá thóc nhập kho năm...thuộc kế hoạch năm...(Biểu 1)</span>
             </li>
             <li nz-menu-item [nzSelected]='tabSelected==11' (click)='selectTab(11)'>
               <span nz-icon nzType='fund'></span>
-              <span>Báo cáo kết quả xuất cấp vật tư, thiết bị</span>
+              <span>Tiến độ bán đấu giá thóc nhập kho năm...thuộc kế hoạch năm...(Biểu 2)</span>
             </li>
             <li nz-menu-item [nzSelected]='tabSelected==12' (click)='selectTab(12)'>
               <span nz-icon nzType='fund'></span>
-              <span>Báo cáo kế hoạch hỗ trợ gạo cho học sinh</span>
+              <span>Báo cáo kết quả xuất cấp vật tư, thiết bị</span>
             </li>
             <li nz-menu-item [nzSelected]='tabSelected==13' (click)='selectTab(13)'>
+              <span nz-icon nzType='fund'></span>
+              <span>Báo cáo kế hoạch hỗ trợ gạo cho học sinh</span>
+            </li>
+            <li nz-menu-item [nzSelected]='tabSelected==14' (click)='selectTab(14)'>
               <span nz-icon nzType='fund'></span>
               <span>Báo cáo kết quả hỗ trợ gạo cho học sinh</span>
             </li>
@@ -76,15 +80,18 @@
           <app-bao-cao-tien-do-bdg-thoc-gao-theo-nam></app-bao-cao-tien-do-bdg-thoc-gao-theo-nam>
         </ng-container>
         <ng-container *ngIf='tabSelected == 10'>
-          <app-bao-cao-tdo-bdg-hang-theo-nam-nhap></app-bao-cao-tdo-bdg-hang-theo-nam-nhap>
+          <app-bao-cao-tdo-bdg-hang-theo-nam-nhap [tabSelected]='tabSelected'></app-bao-cao-tdo-bdg-hang-theo-nam-nhap>
         </ng-container>
         <ng-container *ngIf='tabSelected == 11'>
-          <app-bc-ket-qua-xuat-cap-vat-tu></app-bc-ket-qua-xuat-cap-vat-tu>
+          <app-bao-cao-tdo-bdg-hang-theo-nam-nhap [tabSelected]='tabSelected'></app-bao-cao-tdo-bdg-hang-theo-nam-nhap>
         </ng-container>
         <ng-container *ngIf='tabSelected == 12'>
-          <app-bao-cao-ke-hoach-ho-tro-gao></app-bao-cao-ke-hoach-ho-tro-gao>
+          <app-bc-ket-qua-xuat-cap-vat-tu></app-bc-ket-qua-xuat-cap-vat-tu>
         </ng-container>
         <ng-container *ngIf='tabSelected == 13'>
+          <app-bao-cao-ke-hoach-ho-tro-gao></app-bao-cao-ke-hoach-ho-tro-gao>
+        </ng-container>
+        <ng-container *ngIf='tabSelected == 14'>
           <app-bao-cao-ket-qua-ho-tro-gao></app-bao-cao-ket-qua-ho-tro-gao>
         </ng-container>
       </div>

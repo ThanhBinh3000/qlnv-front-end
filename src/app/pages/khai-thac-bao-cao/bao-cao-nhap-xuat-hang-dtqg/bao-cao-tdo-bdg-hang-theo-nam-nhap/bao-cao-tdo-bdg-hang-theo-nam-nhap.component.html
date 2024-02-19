@@ -3,7 +3,7 @@
     <div class="header header-green-background mg-t-10">
       <div class="header-text">
         <div class="title-chi-tieu">
-          <span class="text-uppercase font-weight-bold">BÁO CÁO TIẾN ĐỘ XUẤT BÁN THÓC THEO NĂM NHẬP KHO VÀ NĂM KẾ HOẠCH</span>
+          <span class="text-uppercase font-weight-bold">BÁO CÁO TIẾN ĐỘ XUẤT BÁN THÓC THEO NĂM NHẬP KHO VÀ NĂM KẾ HOẠCH {{tabSelected == 10 ? '(Biểu 1)' : '(Biểu 2)'}}</span>
         </div>
       </div>
     </div>
@@ -32,59 +32,6 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <!--          <div nz-col [nzSpan]="8" >-->
-          <!--            <nz-form-item>-->
-          <!--              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Loại báo cáo-->
-          <!--              </nz-form-label>-->
-          <!--              <nz-form-control [nzErrorTip]="error">-->
-          <!--                <nz-select nzAllowClear formControlName="loaiBc" [nzDisabled]="!userService.isTongCuc()">-->
-          <!--                  <nz-option *ngFor="let p of listLoaiBc" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>-->
-          <!--                </nz-select>-->
-          <!--              </nz-form-control>-->
-          <!--            </nz-form-item>-->
-          <!--          </div>-->
-          <!--          <div nz-col [nzSpan]="6" *ngIf="formData.value.loaiBc == '02'">-->
-          <!--            <nz-form-item>-->
-          <!--              <nz-form-label>Cục DTNN KV</nz-form-label>-->
-          <!--              <nz-form-control nz-col [nzErrorTip]="error" >-->
-          <!--                <nz-select nzShowSearch formControlName="maCuc" (ngModelChange)="changeCuc($event)" nzAllowClear [nzDisabled]="!userService.isTongCuc()">-->
-          <!--                  <nz-option *ngFor="let p of dsDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>-->
-          <!--                </nz-select>-->
-          <!--              </nz-form-control>-->
-          <!--            </nz-form-item>-->
-          <!--          </div>-->
-          <!--          <div nz-col [nzSpan]="6" *ngIf="formData.value.loaiBc == '02'">-->
-          <!--            <nz-form-item>-->
-          <!--              <nz-form-label>Chi Cục DTNN</nz-form-label>-->
-          <!--              <nz-form-control nz-col >-->
-          <!--                <nz-select nzShowSearch formControlName="maChiCuc" nzAllowClear [nzDisabled]="userService.isChiCuc()">-->
-          <!--                  <nz-option *ngFor="let p of listChiCuc" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>-->
-          <!--                </nz-select>-->
-          <!--              </nz-form-control>-->
-          <!--            </nz-form-item>-->
-          <!--          </div>-->
-          <!--          <div nz-col [nzSpan]="formData.value.loaiBc == '02' ? 12 : 6" >-->
-          <!--            <nz-form-item>-->
-          <!--              <nz-form-label  nzRequired [nzNoColon]="true" class="label-color-kh"> Loại hàng DTQG-->
-          <!--              </nz-form-label>-->
-          <!--              <nz-form-control [nzErrorTip]="error">-->
-          <!--                <nz-select nzShowSearch nzAllowClear formControlName="loaiVthh" (ngModelChange)="changeLoaiVthh($event)">-->
-          <!--                  <nz-option *ngFor="let p of listVthh" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>-->
-          <!--                </nz-select>-->
-          <!--              </nz-form-control>-->
-          <!--            </nz-form-item>-->
-          <!--          </div>-->
-          <!--          <div nz-col [nzSpan]="formData.value.loaiBc == '02' ? 12 : 6">-->
-          <!--            <nz-form-item>-->
-          <!--              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Chủng loại hàng DTQG-->
-          <!--              </nz-form-label>-->
-          <!--              <nz-form-control [nzErrorTip]="error">-->
-          <!--                <nz-select nzShowSearch nzAllowClear formControlName="cloaiVthh">-->
-          <!--                  <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>-->
-          <!--                </nz-select>-->
-          <!--              </nz-form-control>-->
-          <!--            </nz-form-item>-->
-          <!--          </div>-->
         </div>
       </form>
     </nz-card>
