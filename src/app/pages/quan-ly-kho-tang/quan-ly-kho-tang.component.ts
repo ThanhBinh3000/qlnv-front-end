@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import {Router} from '@angular/router';
 import {QUAN_LY_KHO_TANG_ROUTE_LIST} from './quan-ly-kho-tang.constant';
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-quan-ly-kho-tang',
@@ -21,6 +22,7 @@ export class QuanLyKhoTangComponent implements OnInit, AfterViewInit {
 
   constructor(
     private router: Router,
+    public userService: UserService,
   ) {
   }
 

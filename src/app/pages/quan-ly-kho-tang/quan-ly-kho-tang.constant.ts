@@ -9,6 +9,7 @@ export const QUAN_LY_KHO_TANG_ROUTE_LIST: Array<ChiTietMenu> = [
     dropdown: 'mang-luoi-kho',
     idHover: 'mang-luoi-kho',
     hasTab: false,
+    accessPermisson: "QLKT_MLKT"
   },
   {
     icon: 'htvbdh_tcdt_chitieukehoachnam',
@@ -17,6 +18,7 @@ export const QUAN_LY_KHO_TANG_ROUTE_LIST: Array<ChiTietMenu> = [
     dropdown: 'ke-hoach',
     idHover: 'ke-hoach',
     hasTab: false,
+    accessPermisson: "QLKT_QHKHKT"
   },
   {
     icon: 'htvbdh_tcdt_chitieukehoachnam',
@@ -25,6 +27,7 @@ export const QUAN_LY_KHO_TANG_ROUTE_LIST: Array<ChiTietMenu> = [
     dropdown: 'tien-do',
     idHover: 'tien-do',
     hasTab: false,
+    accessPermisson: "QLKT_TDXDSCKT"
   },
   {
     icon: 'htvbdh_tcdt_tochucthuchien',
