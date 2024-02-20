@@ -194,6 +194,9 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
     } catch (error) {
       console.log("error", error)
     }
+    finally {
+      this.spinner.hide();
+    }
   }
   async loadDonVi(maDviCha: string) {
     try {
