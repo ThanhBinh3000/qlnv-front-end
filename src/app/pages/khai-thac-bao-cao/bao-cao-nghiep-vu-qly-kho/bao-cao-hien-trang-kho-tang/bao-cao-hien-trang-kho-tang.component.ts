@@ -1,4 +1,5 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import { DonviService } from './../../../../services/donvi.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   ChartComponent,
   ApexAxisChartSeries,
@@ -14,14 +15,14 @@ import {
   ApexFill,
   ApexPlotOptions,
 } from "ng-apexcharts";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "src/app/services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {BcNvQuanLyKhoTangService} from "src/app/services/bao-cao/BcNvQuanLyKhoTang.service";
-import {MESSAGE} from "src/app/constants/message";
-import {Base2Component} from "src/app/components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "src/app/services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { BcNvQuanLyKhoTangService } from "src/app/services/bao-cao/BcNvQuanLyKhoTang.service";
+import { MESSAGE } from "src/app/constants/message";
+import { Base2Component } from "src/app/components/base2/base2.component";
 
 
 export type ChartOptionsColumn = {
@@ -60,14 +61,24 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
   public tichLuongChart: Partial<ChartOptionsColumn>;
 
   // tonKhoChart: Partial<ChartOptionsLine>;
-
+  listCuc: any[] = [];
+  listChiCuc: any[] = [];
+  loaiHienTrang: number = 0;
+  tongTichLuongVt: number;
+  tongTichLuongVtDsd: number;
+  tongTichLuongVtCsd: number;
+  tongTichLuongLt: number;
+  tongTichLuongLtDsd: number;
+  tongTichLuongLtCsd: number;
+  tonKho: Array<{ cloaiVthh: "string", dvt: "string", loaiVthh: "string", tenCloaiVthh: "string", tenLoaiVthh: "string", tonKho: 0 }> = []
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private bcNvQuanLyKhoTangService: BcNvQuanLyKhoTangService
+    private bcNvQuanLyKhoTangService: BcNvQuanLyKhoTangService,
+    private donViService: DonviService
   ) {
     super(httpClient, storageService, notification, spinner, modal, bcNvQuanLyKhoTangService);
     super.ngOnInit()
@@ -83,10 +94,14 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
 
   async ngOnInit() {
     await this.spinner.show();
+    if (this.userService.isChiCuc()) {
+      this.formData.controls["maCuc"].clearValidators();
+    }
     try {
       await Promise.all([
         this.loadChartTichLuong(),
         this.loadChartTonKho(),
+        this.loadDonVi(this.userInfo.MA_DVI)
 
       ]);
     } catch (e) {
@@ -98,7 +113,6 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
     }
 
   }
-
   clearSearch() {
     this.formData.reset();
     this.search();
@@ -106,7 +120,7 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
   }
 
   async loadChartTichLuong() {
-    let res = await this.bcNvQuanLyKhoTangService.hienTrangTichLuongKho({maDvi: "010102"});
+    let res = await this.bcNvQuanLyKhoTangService.hienTrangTichLuongKho({ maDvi: "010102" });
     if (res.msg == MESSAGE.SUCCESS) {
       let responseData = res.data;
       this.tichLuongChart = {
@@ -156,5 +170,93 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
 
   async loadChartTonKho() {
 
+  }
+
+  changeLoaiHienTrang(loaiHienTrang: number) {
+    this.loaiHienTrang = loaiHienTrang;
+  }
+  async ketXuatBaoCao() {
+    try {
+      this.spinner.show();
+      this.helperService.markFormGroupTouched(this.formData);
+      if (this.formData.invalid) {
+        return;
+      }
+      let body = this.formData.value;
+      const data = await this.bcNvQuanLyKhoTangService.hienTrangKhoTang(body);
+      this.tongTichLuongVt = data.tongTichLuongVt;
+      this.tongTichLuongVtDsd = data.tongTichLuongVtDsd;
+      this.tongTichLuongVtCsd = data.tongTichLuongVtCsd;
+      this.tongTichLuongLt = data.tongTichLuongLt;
+      this.tongTichLuongLtDsd = data.tongTichLuongLtDsd;
+      this.tongTichLuongLtCsd = data.tongTichLuongLtCsd;
+      this.tonKho = Array.isArray(data.tonKho) ? data.tonKho : [];
+    } catch (error) {
+      console.log("error", error)
+    }
+  }
+  async loadDonVi(maDviCha: string) {
+    try {
+
+      let body = {
+        trangThai: "01",
+        maDviCha,
+        type: "DV"
+      }
+      if (this.userService.isTongCuc() || this.userService.isCuc()) {
+        const res = await this.donViService.getDonViTheoMaCha(body);
+        if (res.msg === MESSAGE.SUCCESS) {
+          if (this.userService.isTongCuc()) {
+            this.listCuc = res.data;
+            this.listChiCuc = [];
+          } else if (this.userService.isCuc()) {
+            this.formData.controls["maCuc"].setValue(this.userInfo.MA_DVI, { emitEvent: false })
+            this.listCuc = [{ maDvi: this.userInfo.MA_DVI, tenDvi: this.userInfo.TEN_DVI }];
+            this.listChiCuc = res.data;
+          }
+        }
+        else {
+          this.notification.error(MESSAGE.ERROR, res.msg)
+        }
+      }
+      else if (this.userService.isChiCuc()) {
+        this.formData.controls["maChiCuc"].setValue(this.userInfo.MA_DVI, { emitEvent: false })
+        this.listChiCuc = [{ maDvi: this.userInfo.MA_DVI, tenDvi: this.userInfo.TEN_DVI }];
+      }
+    } catch (error) {
+      console.log("e", error);
+    }
+  }
+  async getDsDviCon(maDvCha: string) {
+    try {
+
+      let body = {
+        trangThai: "01",
+        maDviCha: maDvCha,
+        type: "DV"
+      };
+      let res = await this.donViService.getDonViTheoMaCha(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.listChiCuc = res.data;
+        this.formData.patchValue({ maChiCuc: "" })
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    } catch (error) {
+      console.log("e", error)
+    }
+  }
+  changeCuc(val: string) {
+    this.getDsDviCon(val);
+  }
+  clearFilter() {
+    // this.formData.reset();
+    this.formData.patchValue({
+      maChiCuc: "",
+    })
+    if (this.userService.isTongCuc) {
+      this.formData.controls["maCuc"].setValue("", { emitEvent: false });
+      this.listChiCuc = []
+    }
   }
 }
