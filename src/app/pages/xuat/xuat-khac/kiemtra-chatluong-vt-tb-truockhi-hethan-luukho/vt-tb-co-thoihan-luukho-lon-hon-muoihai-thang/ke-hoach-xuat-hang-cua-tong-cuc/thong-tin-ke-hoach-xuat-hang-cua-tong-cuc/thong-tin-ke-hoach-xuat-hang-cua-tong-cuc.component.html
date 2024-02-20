@@ -28,16 +28,16 @@
         </button>
         <button type="button" class="btn btn-sub btn-xoa  ml-2"
                 *ngIf=" ((formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHTC_DUYETLDV'))
-                || (formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHTC_DUYETLCTC'))
-                || (formData.value.trangThai == STATUS.CHODUYET_BTC && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHTC_DUYETLDTC')))"
+                || (formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHTC_DUYETLDTC'))
+                || (formData.value.trangThai == STATUS.CHODUYET_BTC && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHTC_DUYET_BTC')))"
                 (click)="tuChoi()">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </button>
         <button type="button" class="btn btn-sub xanh-nhat  ml-2"
                 *ngIf=" ((formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHTC_DUYETLDV'))
-                || (formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHTC_DUYETLCTC'))
-                || (formData.value.trangThai == STATUS.CHODUYET_BTC && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHTC_DUYETLDTC')))"
+                || (formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHTC_DUYETLDTC'))
+                || (formData.value.trangThai == STATUS.CHODUYET_BTC && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHTC_DUYET_BTC')))"
                 (click)="save(true)">
           <i class="icon htvbdh_dakyduyet"></i>
           <span>Duyệt</span>
