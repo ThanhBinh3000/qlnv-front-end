@@ -10,13 +10,15 @@ import { DirectivesModule } from 'src/app/directives/directives.module';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { BaoCaoNghiepVuQlyKhoComponent } from './bao-cao-nghiep-vu-qly-kho.component';
 import { BaoCaoRaSoatTichLuongKho } from './bao-cao-ra-soat-tich-luong-kho/bao-cao-ra-soat-tich-luong-kho.component';
-
+import { BaoCaoHienTrangKhoTangComponent } from './bao-cao-hien-trang-kho-tang/bao-cao-hien-trang-kho-tang.component';
+import {NgApexchartsModule} from "ng-apexcharts";
 
 @NgModule({
   declarations: [
     BaoCaoNghiepVuQlyKhoComponent,
     ThongTinHienTrangCaiTaoSuaChuaKho,
-    BaoCaoRaSoatTichLuongKho
+    BaoCaoRaSoatTichLuongKho,
+    BaoCaoHienTrangKhoTangComponent
   ],
   imports: [
     CommonModule,
@@ -25,7 +27,8 @@ import { BaoCaoRaSoatTichLuongKho } from './bao-cao-ra-soat-tich-luong-kho/bao-c
     MainModule,
     NzTreeViewModule,
     DirectivesModule,
-    NzIconModule
+    NzIconModule,
+    NgApexchartsModule,
   ]
 })
 export class BaoCaoNghiepVuQlyKhoModule { }
