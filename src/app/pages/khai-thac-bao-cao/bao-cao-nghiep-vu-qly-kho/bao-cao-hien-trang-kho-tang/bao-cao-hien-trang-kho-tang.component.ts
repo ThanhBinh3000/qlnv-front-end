@@ -36,7 +36,7 @@ export type ChartOptionsColumn = {
   colors: string[];
   fill: ApexFill;
   legend: ApexLegend;
-};/*
+};
 export type ChartOptionsLine = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
@@ -49,7 +49,7 @@ export type ChartOptionsLine = {
   grid: ApexGrid;
   legend: ApexLegend;
   title: ApexTitleSubtitle;
-};*/
+};
 
 @Component({
   selector: 'app-bao-cao-hien-trang-kho-tang',
@@ -59,8 +59,7 @@ export type ChartOptionsLine = {
 export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements OnInit {
 
   public tichLuongChart: Partial<ChartOptionsColumn>;
-
-  // tonKhoChart: Partial<ChartOptionsLine>;
+  public tonKhoChart: Partial<ChartOptionsLine>;
   listCuc: any[] = [];
   listChiCuc: any[] = [];
   loaiHienTrang: number = 0;
@@ -88,6 +87,7 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
       maChiCuc: [''],
     });
     this.tichLuongChart = {}
+    this.tonKhoChart = {}
     /*    this.search();
         this.filterTable = {};*/
   }
@@ -127,7 +127,7 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
         series: responseData,
         chart: {
           type: "bar",
-          height: 450,
+          height: 650,
           width: "100%",
           stacked: true,
         },
@@ -150,6 +150,11 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
         },
         fill: {
           opacity: 1,
+          pattern: {
+            width: 6,
+            height: 6,
+            strokeWidth: 2,
+          },
         },
         colors: ["#2196f3", "#b0b0b0", "#ff4d4f", "#ffaa29"],
         yaxis: {
@@ -169,7 +174,77 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
   }
 
   async loadChartTonKho() {
+    let res = await this.bcNvQuanLyKhoTangService.hienTrangTonKho({ maDvi: "010102" });
+    if (res.msg == MESSAGE.SUCCESS) {
+      let responseData = res.data;
+      this.tonKhoChart = {
+        series: responseData,
+        chart: {
+          height: 350,
+          type: "line"
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          width: 5,
+          curve: "straight",
+          //dashArray: [0, 8, 5]
+        },
 
+        legend: {
+          tooltipHoverFormatter: function(val, opts) {
+            return (
+              val +
+              " - <strong>" +
+              opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] +
+              "</strong>"
+            );
+          }
+        },
+        markers: {
+          size: 0,
+          hover: {
+            sizeOffset: 6
+          }
+        },
+        xaxis: {
+          labels: {
+            trim: false
+          },
+          categories: responseData[0].label
+        },
+        tooltip: {
+          y: [
+            {
+              title: {
+                formatter: function(val) {
+                  return val + " (mins)";
+                }
+              }
+            },
+            {
+              title: {
+                formatter: function(val) {
+                  return val + " per session";
+                }
+              }
+            },
+            {
+              title: {
+                formatter: function(val) {
+                  return val;
+                }
+              }
+            }
+          ]
+        },
+        grid: {
+          borderColor: "#f1f1f1"
+        }
+      };
+      console.log(this.tonKhoChart)
+    }
   }
 
   changeLoaiHienTrang(loaiHienTrang: number) {
