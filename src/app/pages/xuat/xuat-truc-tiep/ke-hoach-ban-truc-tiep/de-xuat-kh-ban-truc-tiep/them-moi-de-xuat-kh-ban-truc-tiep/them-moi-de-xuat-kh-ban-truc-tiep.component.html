@@ -242,10 +242,11 @@
               <nz-form-item class="form-item">
                 <nz-form-label [nzNoColon]="true"> Thời gian dự kiến tổ chức bán trực tiếp</nz-form-label>
                 <nz-form-control nz-col>
-                  <div nz-row [nzGutter]="24">
+                  <div nz-row>
                     <div nz-col [nzSpan]="12" class="cus-start-date">
                       <nz-date-picker [nzDisabledDate]="disabledTgianTocChucTu" nzFormat="dd/MM/yyyy"
-                                      formControlName="tgianDkienTu" nzPlaceHolder="Ngày bắt đầu" [nzDisabled]="isView">
+                                      formControlName="tgianDkienTu" nzPlaceHolder="Ngày bắt đầu"
+                                      [nzDisabled]="isView">
                       </nz-date-picker>
                     </div>
                     <div nz-col [nzSpan]="12" class="cus-end-date">

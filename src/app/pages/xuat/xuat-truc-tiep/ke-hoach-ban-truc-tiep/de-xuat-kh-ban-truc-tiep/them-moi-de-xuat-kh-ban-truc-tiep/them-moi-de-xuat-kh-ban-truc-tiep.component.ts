@@ -565,14 +565,18 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     if (!startValue || !this.formData.value.tgianDkienDen) {
       return false;
     }
-    return startValue.getTime() > this.formData.value.tgianDkienDen.getTime();
+    const startDay = new Date(startValue.getFullYear(), startValue.getMonth(), startValue.getDate());
+    const endDay = new Date(this.formData.value.tgianDkienDen.getFullYear(), this.formData.value.tgianDkienDen.getMonth(), this.formData.value.tgianDkienDen.getDate());
+    return startDay > endDay;
   };
 
   disabledTgianTocChucDen = (endValue: Date): boolean => {
     if (!endValue || !this.formData.value.tgianDkienTu) {
       return false;
     }
-    return endValue.getTime() <= this.formData.value.tgianDkienTu.getTime();
+    const endDay = new Date(endValue.getFullYear(), endValue.getMonth(), endValue.getDate());
+    const startDay = new Date(this.formData.value.tgianDkienTu.getFullYear(), this.formData.value.tgianDkienTu.getMonth(), this.formData.value.tgianDkienTu.getDate());
+    return endDay < startDay;
   };
 
   setValidForm() {
