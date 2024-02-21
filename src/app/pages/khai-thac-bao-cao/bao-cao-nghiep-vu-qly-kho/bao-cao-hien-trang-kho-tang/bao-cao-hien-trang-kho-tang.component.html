@@ -118,11 +118,14 @@
             </div>
             <div nz-row [nzGutter]="24">
               <div nz-col nzSpan="24">
-                <apx-chart [series]="tichLuongChart.series" [chart]="tichLuongChart.chart"
-                           [stroke]="tichLuongChart.stroke" [dataLabels]="tichLuongChart.dataLabels"
-                           [plotOptions]="tichLuongChart.plotOptions" [xaxis]="tichLuongChart.xaxis"
-                           [colors]="tichLuongChart.colors" [fill]="tichLuongChart.fill" [yaxis]="tichLuongChart.yaxis"
-                           [legend]="tichLuongChart.legend"></apx-chart>
+                <ng-container *ngIf="tichLuongChart">
+                  <apx-chart [series]="tichLuongChart.series" [chart]="tichLuongChart.chart"
+                             [stroke]="tichLuongChart.stroke" [dataLabels]="tichLuongChart.dataLabels"
+                             [plotOptions]="tichLuongChart.plotOptions" [xaxis]="tichLuongChart.xaxis"
+                             [colors]="tichLuongChart.colors" [fill]="tichLuongChart.fill"
+                             [yaxis]="tichLuongChart.yaxis"
+                             [legend]="tichLuongChart.legend"></apx-chart>
+                </ng-container>
               </div>
             </div>
           </nz-card>
@@ -136,19 +139,21 @@
             </div>
             <div nz-row [nzGutter]="24">
               <div nz-col nzSpan="24">
-                <apx-chart
-                  [series]="tonKhoChart.series"
-                  [chart]="tonKhoChart.chart"
-                  [xaxis]="tonKhoChart.xaxis"
-                  [stroke]="tonKhoChart.stroke"
-                  [tooltip]="tonKhoChart.tooltip"
-                  [dataLabels]="tonKhoChart.dataLabels"
-                  [legend]="tonKhoChart.legend"
-                  [markers]="tonKhoChart.markers"
-                  [grid]="tonKhoChart.grid"
-                  [yaxis]="tonKhoChart.yaxis"
-                  [title]="tonKhoChart.title"
-                ></apx-chart>
+                <ng-container *ngIf="tonKhoChart">
+                  <apx-chart
+                    [series]="tonKhoChart.series"
+                    [chart]="tonKhoChart.chart"
+                    [xaxis]="tonKhoChart.xaxis"
+                    [stroke]="tonKhoChart.stroke"
+                    [tooltip]="tonKhoChart.tooltip"
+                    [dataLabels]="tonKhoChart.dataLabels"
+                    [legend]="tonKhoChart.legend"
+                    [markers]="tonKhoChart.markers"
+                    [grid]="tonKhoChart.grid"
+                    [yaxis]="tonKhoChart.yaxis"
+                    [title]="tonKhoChart.title"
+                  ></apx-chart>
+                </ng-container>
               </div>
             </div>
           </nz-card>
@@ -255,3 +260,17 @@
   </div>
 
 </ng-container>
+<!--modal sua noi dung-->
+<nz-modal [nzWidth]="'60%'" [(nzVisible)]="showFilterTichLuong" [nzFooter]="modalFooterSuaNoiDung" [nzClosable]="true"
+          nzTitle="CHI TIẾT PHƯƠNG ÁN CỨU TRỢ, VIỆN TRỢ">
+  <ng-container *nzModalContent>
+    <!--    <form nz-form>-->
+    <div class="modal-card">
+
+    </div>
+  </ng-container>
+  <ng-template #modalFooterSuaNoiDung>
+    <button nz-button (click)="handleCancelTichLuong()">Đóng</button>
+    <!--    <button nz-button class="btn btn-main" (click)="handleOkSuaNoiDung()">Lưu</button>-->
+  </ng-template>
+</nz-modal>
