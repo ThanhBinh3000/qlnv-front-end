@@ -176,18 +176,22 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
     }
   }
 
-  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
-    const startDate = this.formData.value[formDataKey + 'Tu'];
-    const endDate = this.formData.value[formDataKey + 'Den'];
-    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
-  };
-
   disabledNgayKyQdNvTu = (startValue: Date): boolean => {
-    return this.isInvalidDateRange(startValue, this.formData.value.ngayKyQdNvDen, 'ngayKyQdNv');
+    if (!startValue || !this.formData.value.ngayKyQdNvDen) {
+      return false;
+    }
+    const startDay = new Date(startValue.getFullYear(), startValue.getMonth(), startValue.getDate());
+    const endDay = new Date(this.formData.value.ngayKyQdNvDen.getFullYear(), this.formData.value.ngayKyQdNvDen.getMonth(), this.formData.value.ngayKyQdNvDen.getDate());
+    return startDay > endDay;
   };
 
   disabledNgayKyQdNvDen = (endValue: Date): boolean => {
-    return this.isInvalidDateRange(endValue, this.formData.value.ngayKyQdNvTu, 'ngayKyQdNv');
+    if (!endValue || !this.formData.value.ngayKyQdNvTu) {
+      return false;
+    }
+    const endDay = new Date(endValue.getFullYear(), endValue.getMonth(), endValue.getDate());
+    const startDay = new Date(this.formData.value.ngayKyQdNvTu.getFullYear(), this.formData.value.ngayKyQdNvTu.getMonth(), this.formData.value.ngayKyQdNvTu.getDate());
+    return endDay < startDay;
   };
 
   isActionAllowed(action: string, data: any): boolean {

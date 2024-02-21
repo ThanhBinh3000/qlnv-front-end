@@ -10,7 +10,6 @@ import {
   QuyetDinhPdKhBanTrucTiepService
 } from "../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
-import {tr} from "date-fns/locale";
 
 @Component({
   selector: 'app-dieu-chinh-ban-truc-tiep',
@@ -119,18 +118,22 @@ export class DieuChinhBanTrucTiepComponent extends Base2Component implements OnI
     this.isViewQdPd = false;
   }
 
-  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
-    const startDate = this.formData.value[formDataKey + 'Tu'];
-    const endDate = this.formData.value[formDataKey + 'Den'];
-    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
-  };
-
   disabledNgayKyQdDcTu = (startValue: Date): boolean => {
-    return this.isInvalidDateRange(startValue, this.formData.value.ngayKyDcDen, 'ngayKyDc');
+    if (!startValue || !this.formData.value.ngayKyDcDen) {
+      return false;
+    }
+    const startDay = new Date(startValue.getFullYear(), startValue.getMonth(), startValue.getDate());
+    const endDay = new Date(this.formData.value.ngayKyDcDen.getFullYear(), this.formData.value.ngayKyDcDen.getMonth(), this.formData.value.ngayKyDcDen.getDate());
+    return startDay > endDay;
   };
 
   disabledNgayKyQdDcDen = (endValue: Date): boolean => {
-    return this.isInvalidDateRange(endValue, this.formData.value.ngayKyDcTu, 'ngayKyDc');
+    if (!endValue || !this.formData.value.ngayKyDcTu) {
+      return false;
+    }
+    const endDay = new Date(endValue.getFullYear(), endValue.getMonth(), endValue.getDate());
+    const startDay = new Date(this.formData.value.ngayKyDcTu.getFullYear(), this.formData.value.ngayKyDcTu.getMonth(), this.formData.value.ngayKyDcTu.getDate());
+    return endDay < startDay;
   };
 
   isActionAllowed(action: string, data: any): boolean {

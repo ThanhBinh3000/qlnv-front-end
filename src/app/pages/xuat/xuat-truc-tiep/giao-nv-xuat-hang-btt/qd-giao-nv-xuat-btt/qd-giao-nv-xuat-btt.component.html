@@ -25,13 +25,13 @@
               <nz-option *ngFor="let item of listLoaiHangHoa" [nzValue]="item.ma" [nzLabel]="item.ten"></nz-option>
             </nz-select>
           </div>
-          <div nz-col [nzSpan]="10">
+          <div nz-col [nzSpan]="8">
             <label class="search__label"> Trích yếu quyết định </label>
             <input nz-input formControlName="trichYeu"/>
           </div>
-          <div nz-col [nzSpan]="4">
+          <div nz-col [nzSpan]="6">
             <label class="search__label"> Ngày quyết định </label>
-            <div nz-row [nzGutter]="24">
+            <div nz-row>
               <div nz-col [nzSpan]="12" class="cus-start-date">
                 <nz-date-picker [nzDisabledDate]="disabledNgayKyQdNvTu" nzFormat="dd/MM/yyyy"
                                 formControlName="ngayKyQdNvTu" nzPlaceHolder="Ngày bắt đầu">
@@ -39,7 +39,8 @@
               </div>
               <div nz-col [nzSpan]="12" class="cus-end-date">
                 <nz-date-picker [nzDisabledDate]="disabledNgayKyQdNvDen" nzFormat="dd/MM/yyyy"
-                                formControlName="ngayKyQdNvDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                                formControlName="ngayKyQdNvDen" nzPlaceHolder="Ngày kết thúc">
+                </nz-date-picker>
               </div>
             </div>
           </div>
@@ -47,7 +48,7 @@
       </form>
       <div nz-col class="cangiua group-button-search">
         <div>
-          <button nz-button class="search__button--clear" (click)="clearForm(loaiVthh)">
+          <button nz-button class="search__button--clear" (click)="clearForm({loaiVthh: loaiVthh})">
             <i class="icon  htvbdh_nhap-lai1"></i>
             Xóa điều kiện
           </button>

@@ -8,9 +8,9 @@
             <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
           </nz-select>
         </div>
-        <div nz-col [nzSpan]="4">
+        <div nz-col [nzSpan]="6">
           <label class="search__label"> Ngày chào giá </label>
-          <div nz-row [nzGutter]="24">
+          <div nz-row>
             <div nz-col [nzSpan]="12" class="cus-start-date">
               <nz-date-picker [nzDisabledDate]="disabledNgayChaoGiaTu" nzFormat="dd/MM/yyyy"
                               formControlName="ngayCgiaTu" nzPlaceHolder="Ngày bắt đầu">
@@ -18,14 +18,15 @@
             </div>
             <div nz-col [nzSpan]="12" class="cus-end-date">
               <nz-date-picker [nzDisabledDate]="disabledNgayChaoGiaDen" nzFormat="dd/MM/yyyy"
-                              formControlName="ngayCgiaDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                              formControlName="ngayCgiaDen" nzPlaceHolder="Ngày kết thúc">
+              </nz-date-picker>
             </div>
           </div>
         </div>
       </div>
     </form>
     <div class="cangiua group-button-search">
-      <button nz-button class="search__button--clear" (click)="clearForm(loaiVthh)">
+      <button nz-button class="search__button--clear" (click)="clearForm({loaiVthh: loaiVthh})">
         <i class="icon  htvbdh_nhap-lai1"></i>
         Xóa điều kiện
       </button>
