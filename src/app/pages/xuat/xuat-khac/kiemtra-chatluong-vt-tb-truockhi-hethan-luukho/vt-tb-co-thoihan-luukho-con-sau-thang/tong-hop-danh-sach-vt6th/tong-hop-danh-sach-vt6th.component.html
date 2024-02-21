@@ -132,7 +132,7 @@
                   <td></td>
                   <td>{{item.tenTrangThai}}</td>
                   <td class="text-left">
-                    <a (click)="showModal(true, item)" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_THDS_XEM')">
+                    <a (click)="showModal(true, item)" *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_THDS_XEM')">
                       <i class="fa fa-eye" title="Xem chi tiết"></i>
                     </a>
                     <a *ngIf="item.trangThai==STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_06THANG_THDS_XOA')" (click)="delete(item)">

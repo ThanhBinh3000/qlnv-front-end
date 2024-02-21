@@ -180,7 +180,9 @@ export class ThongTinChiTietDieuChinhComponent extends Base2Component implements
     if (!startValue || !tgianDkienDen || !(tgianDkienDen instanceof Date)) {
       return false;
     }
-    return startValue.getTime() > tgianDkienDen.getTime();
+    const startDay = new Date(startValue.getFullYear(), startValue.getMonth(), startValue.getDate());
+    const endDay = new Date(tgianDkienDen.getFullYear(), tgianDkienDen.getMonth(), tgianDkienDen.getDate());
+    return startDay > endDay;
   };
 
   disabledTgianTocChucDen = (endValue: Date): boolean => {
@@ -188,6 +190,8 @@ export class ThongTinChiTietDieuChinhComponent extends Base2Component implements
     if (!endValue || !tgianDkienTu || !(tgianDkienTu instanceof Date)) {
       return false;
     }
-    return endValue.getTime() <= tgianDkienTu.getTime();
+    const endDay = new Date(endValue.getFullYear(), endValue.getMonth(), endValue.getDate());
+    const startDay = new Date(tgianDkienTu.getFullYear(), tgianDkienTu.getMonth(), tgianDkienTu.getDate());
+    return endDay < startDay;
   };
 }

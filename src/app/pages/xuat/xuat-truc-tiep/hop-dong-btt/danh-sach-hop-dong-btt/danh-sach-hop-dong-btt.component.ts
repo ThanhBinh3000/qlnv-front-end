@@ -173,17 +173,21 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
     }
   }
 
-  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
-    const startDate = this.formData.value[formDataKey + 'Tu'];
-    const endDate = this.formData.value[formDataKey + 'Den'];
-    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
-  };
-
   disabledNgayKyHopDongTu = (startValue: Date): boolean => {
-    return this.isInvalidDateRange(startValue, this.formData.value.ngayKyHopDongDen, 'ngayKyHopDong');
+    if (!startValue || !this.formData.value.ngayKyHopDongDen) {
+      return false;
+    }
+    const startDay = new Date(startValue.getFullYear(), startValue.getMonth(), startValue.getDate());
+    const endDay = new Date(this.formData.value.ngayKyHopDongDen.getFullYear(), this.formData.value.ngayKyHopDongDen.getMonth(), this.formData.value.ngayKyHopDongDen.getDate());
+    return startDay > endDay;
   };
 
   disabledNgayKyHopDongDen = (endValue: Date): boolean => {
-    return this.isInvalidDateRange(endValue, this.formData.value.ngayKyHopDongTu, 'ngayKyHopDong');
+    if (!endValue || !this.formData.value.ngayKyHopDongTu) {
+      return false;
+    }
+    const endDay = new Date(endValue.getFullYear(), endValue.getMonth(), endValue.getDate());
+    const startDay = new Date(this.formData.value.ngayKyHopDongTu.getFullYear(), this.formData.value.ngayKyHopDongTu.getMonth(), this.formData.value.ngayKyHopDongTu.getDate());
+    return endDay < startDay;
   };
 }
