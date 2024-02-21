@@ -167,13 +167,11 @@
                 <nz-form-control [nzErrorTip]='error'>
                   <nz-form-label nzRequired [nzNoColon]='true' class='label-color-kh'> Mã tổng hợp
                   </nz-form-label>
-                  <nz-form-control [nzErrorTip]='error'>
                     <nz-input-group nzAddOnAfterIcon='folder-open'
                                     (click)="!isViewDetail  ? openDialogDsTongHop():  'javascript:;'">
                       <input class='search__input' [readonly]='true' nz-input formControlName='idCanCu'
                              readonly />
                     </nz-input-group>
-                  </nz-form-control>
                 </nz-form-control>
               </nz-form-item>
             </div>
