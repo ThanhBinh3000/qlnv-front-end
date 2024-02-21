@@ -70,6 +70,7 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
   tongTichLuongLtDsd: number;
   tongTichLuongLtCsd: number;
   tonKho: Array<{ cloaiVthh: "string", dvt: "string", loaiVthh: "string", tenCloaiVthh: "string", tenLoaiVthh: "string", tonKho: 0 }> = []
+  showFilterTichLuong: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -87,8 +88,8 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
       maCuc: [''],
       maChiCuc: [''],
     });
-    this.tichLuongChart = {}
-    this.tonKhoChart = {}
+    // this.tichLuongChart = {}
+    // this.tonKhoChart = {}
     /*    this.search();
         this.filterTable = {};*/
   }
@@ -131,6 +132,22 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
           type: "bar",
           height: 650,
           stacked: true,
+          /*toolbar: {
+            tools: {
+              customIcons: [
+                {
+                  icon: '<i class ="icon htvbdh_filter" width="16"></i>',
+                  title: 'string',
+                  // index?: number;
+                  // class?: string;
+
+                  click: function (chart, options, e) {
+                    this.showFilterTichLuong = true;
+                  }
+                }
+              ]
+            }
+          }*/
         },
         stroke: {
           width: 1,
@@ -381,5 +398,14 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
       this.formData.controls["maCuc"].setValue("", {emitEvent: false});
       this.listChiCuc = []
     }
+  }
+
+  customButton(chart, options, e) {
+    console.log(chart, options, e)
+    this.showFilterTichLuong = true;
+  }
+
+  handleCancelTichLuong() {
+    this.showFilterTichLuong = false;
   }
 }
