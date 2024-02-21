@@ -101,6 +101,7 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
       await Promise.all([
         this.loadChartTichLuong(),
         this.loadChartTonKho(),
+        this.ketXuatBaoCao(),
         this.loadDonVi(this.userInfo.MA_DVI)
 
       ]);
@@ -190,7 +191,17 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
       this.tongTichLuongLt = data.tongTichLuongLt;
       this.tongTichLuongLtDsd = data.tongTichLuongLtDsd;
       this.tongTichLuongLtCsd = data.tongTichLuongLtCsd;
-      this.tonKho = Array.isArray(data.tonKho) ? data.tonKho : [];
+      this.tonKho = Array.isArray(data.tonKho) ? data.tonKho.reduce((arr, cur) => {
+        const vthh = cur.cloaiVthh ? `${cur.cloaiVthh}-${cur.loaiVthh}` : cur.loaiVthh;
+        const findIndex = arr.findIndex(f => f.vthh === vthh);
+        if (findIndex >= 0) {
+          arr[findIndex].tonKho += cur.tonKho
+        } else {
+          arr.push({ ...cur, vthh })
+        }
+        return arr
+      }, []) : [];
+
     } catch (error) {
       console.log("error", error)
     }
