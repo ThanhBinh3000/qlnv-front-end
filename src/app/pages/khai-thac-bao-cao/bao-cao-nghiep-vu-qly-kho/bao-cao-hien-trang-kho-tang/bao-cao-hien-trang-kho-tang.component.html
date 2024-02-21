@@ -35,7 +35,9 @@
             <nz-form-item>
               <nz-form-label [nzXs]="7">Chi cục</nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select formControlName="maChiCuc" [nzDisabled]="userService.isChiCuc()">
+                <nz-select formControlName="maChiCuc"
+                           (ngModelChange)="changeChiCuc($event)"
+                           [nzDisabled]="userService.isChiCuc()">
                   <nz-option *ngFor="let p of listChiCuc" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
                 </nz-select>
               </nz-form-control>
