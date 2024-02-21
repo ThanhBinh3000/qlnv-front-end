@@ -127,8 +127,7 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
         series: responseData,
         chart: {
           type: "bar",
-          height: 650,
-          width: "100%",
+          height: 550,
           stacked: true,
         },
         stroke: {
@@ -180,7 +179,7 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
       this.tonKhoChart = {
         series: responseData,
         chart: {
-          height: 350,
+          height: 650,
           type: "line"
         },
         dataLabels: {
@@ -188,7 +187,7 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
         },
         stroke: {
           width: 5,
-          curve: "straight",
+          curve: "smooth",
           //dashArray: [0, 8, 5]
         },
 
