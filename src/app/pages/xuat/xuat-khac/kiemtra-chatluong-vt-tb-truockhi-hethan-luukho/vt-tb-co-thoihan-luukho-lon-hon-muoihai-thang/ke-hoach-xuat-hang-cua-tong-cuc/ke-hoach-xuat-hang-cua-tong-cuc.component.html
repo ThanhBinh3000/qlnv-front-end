@@ -204,7 +204,7 @@
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
             <a *ngIf=" userService.isAccessPermisson('XHDTQG_XK_KTCLVTLK_12THANG_KHXHTC_XEM')
-           && !((data.trangThai !== STATUS.DU_THAO && data.trangThai !==STATUS.TUCHOI_BTC &&  data.trangThai!==STATUS.TU_CHOI_LDV && data.trangThai!==STATUS.TU_CHOI_LDTC)
+           && !((data.trangThai == STATUS.DU_THAO || data.trangThai ==STATUS.TUCHOI_BTC ||  data.trangThai==STATUS.TU_CHOI_LDV || data.trangThai!==STATUS.TU_CHOI_LDTC)
            && data.nguoiTaoId == userInfo.ID)"
               (click)="themMoi(data.id, true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
