@@ -54,4 +54,8 @@ export class BcNhapXuatMuaBanHangDTQGService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ket-qua-xuat-cap-vat-tu`;
     return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
   }
+  bcBanThocThuocKeHoachNam(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bc-ban-thoc-thuoc-kh-nam`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
 }
