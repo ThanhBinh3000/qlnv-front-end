@@ -402,14 +402,24 @@
         <div nz-col [nzSpan]="2">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
-              Đơn vị tính
+              Ký mã hiệu, seri
             </nz-form-label>
             <nz-form-control>
-              <input nz-input formControlName="dvt" readonly />
+              <input nz-input formControlName="kyHieuSeri" [readonly]="isView" />
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="8">
+        <div nz-col [nzSpan]="2">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              Đơn vị tính
+            </nz-form-label>
+            <nz-form-control>
+              <span class="blue-text">{{formData.value.dvt}}</span>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="7">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
               Phương pháp lấy mẫu (Theo QC kỹ thuật QG)
@@ -425,7 +435,7 @@
           </nz-form-item>
         </div>
 
-        <div nz-col [nzSpan]="8">
+        <div nz-col [nzSpan]="7">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
               Các chỉ tiêu chất lượng cần kiểm tra
