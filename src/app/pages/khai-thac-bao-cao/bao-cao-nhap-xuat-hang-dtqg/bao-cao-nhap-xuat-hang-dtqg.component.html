@@ -52,6 +52,10 @@
               <span nz-icon nzType='fund'></span>
               <span>Báo cáo kết quả hỗ trợ gạo cho học sinh</span>
             </li>
+            <li nz-menu-item [nzSelected]='tabSelected==16' (click)='selectTab(16)'>
+              <span nz-icon nzType='fund'></span>
+              <span>Báo cáo bán thóc thuộc kế hoạch năm (Phụ lục 01)</span>
+            </li>
           </ul>
         </li>
       </ul>
@@ -93,6 +97,9 @@
         </ng-container>
         <ng-container *ngIf='tabSelected == 14'>
           <app-bao-cao-ket-qua-ho-tro-gao></app-bao-cao-ket-qua-ho-tro-gao>
+        </ng-container>
+        <ng-container *ngIf='tabSelected == 16'>
+          <app-bao-cao-ban-thoc-thuoc-ke-hoach-nam></app-bao-cao-ban-thoc-thuoc-ke-hoach-nam>
         </ng-container>
       </div>
     </div>

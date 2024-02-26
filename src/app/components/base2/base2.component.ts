@@ -758,7 +758,8 @@ export class Base2Component implements OnInit {
     if (this.userService.isTongCuc()) {
       return (trangThai == STATUS.CHO_DUYET_LDV && this.userService.isAccessPermisson(permisson + '_DUYETLDV')) ||
         (trangThai == STATUS.CHO_DUYET_LDTC && this.userService.isAccessPermisson(permisson + '_DUYETLDTC')) ||
-        (trangThai == STATUS.CHODUYET_BTC && this.userService.isAccessPermisson(permisson + '_DUYETBTC'));
+        (trangThai == STATUS.CHODUYET_BTC && this.userService.isAccessPermisson(permisson + '_DUYETBTC')) ||
+        (trangThai == STATUS.CHODUYET_BTC && this.userService.isAccessPermisson(permisson + '_DUYET_BTC'));
     }
 
   }

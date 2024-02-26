@@ -347,14 +347,14 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
     let trangThai = ''
     let mess = ''
     switch (this.formData.get('trangThai').value) {
-      case STATUS.TU_CHOI_TBP_KTBQ:
+      case STATUS.TUCHOI_TBP_TVQT:
       case STATUS.TU_CHOI_LDC:
       case STATUS.DU_THAO: {
-        trangThai = STATUS.CHO_DUYET_TBP_KTBQ;
+        trangThai = STATUS.CHODUYET_TBP_TVQT;
         mess = 'Bạn có muốn gửi duyệt ?'
         break;
       }
-      case STATUS.CHO_DUYET_TBP_KTBQ: {
+      case STATUS.CHODUYET_TBP_TVQT: {
         trangThai = STATUS.CHO_DUYET_LDCC;
         mess = 'Bạn có chắc chắn muốn phê duyệt ?'
         break;

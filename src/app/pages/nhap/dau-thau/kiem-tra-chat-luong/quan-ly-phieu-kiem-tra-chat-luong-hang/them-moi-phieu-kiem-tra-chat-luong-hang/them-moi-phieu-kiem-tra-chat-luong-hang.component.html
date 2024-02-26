@@ -459,7 +459,7 @@
               <tr>
                 <th nzWidth="2%">STT</th>
                 <th nzWidth="20%">Chỉ tiêu chất lượng</th>
-                <th nzWidth="20%">Chỉ số chất lượng theo QCVN 14:2020/BTC</th>
+                <th nzWidth="20%">Chỉ số chất lượng theo {{formData.value.soHieuQuyChuan}}</th>
                 <th nzWidth="20%"><span style='color: red;'>*</span> Kết quả phân tích</th>
                 <th nzWidth="20%"><span style='color: red;'>*</span> Phương pháp kiểm tra chất lượng</th>
                 <th nzWidth="13%"><span style='color: red;'>*</span> Đánh giá</th>
@@ -487,7 +487,7 @@
                   </td>
                 </ng-container>
                 <ng-template #editTemplate>
-                  <td></td>
+                  <td class="text-center">{{i + 1}}</td>
                   <td>{{data.tenTchuan}}</td>
                   <td>{{data.chiSoNhap}}</td>
                   <td>

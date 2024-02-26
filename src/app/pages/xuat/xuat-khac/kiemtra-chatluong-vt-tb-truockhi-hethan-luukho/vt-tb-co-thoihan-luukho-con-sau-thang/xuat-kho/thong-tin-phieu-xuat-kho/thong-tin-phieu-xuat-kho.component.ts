@@ -217,6 +217,7 @@ export class ThongTinPhieuXuatKhoComponent extends Base2Component implements OnI
         this.formData.patchValue({
           maDiaDiem: null,
           slTonKho: null,
+          tenNganKho: null,
           tenNhaKho: null,
           tenDiemKho: null,
           tenLoaiVthh: null,
@@ -254,6 +255,7 @@ export class ThongTinPhieuXuatKhoComponent extends Base2Component implements OnI
       if (item) {
         this.formData.patchValue({
           slTonKho: item.slTonKho,
+          tenNganKho: item.tenNganKho,
           tenNhaKho: item.tenNhaKho,
           tenDiemKho: item.tenDiemKho,
           tenLoaiVthh: item.tenLoaiVthh,

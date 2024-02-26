@@ -169,6 +169,27 @@
             </div>
             <div nz-col [nzSpan]="6">
               <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true"> Thời điểm đóng thầu</nz-form-label>
+                <div nz-row>
+                  <div nz-col nzSpan="7">
+                    <nz-time-picker [nzDisabled]="isView"
+                      nzFormat="HH:mm" formControlName="tgianDthauTime"></nz-time-picker>
+                  </div>
+                  <div nz-col nzSpan="1">
+                  </div>
+                  <div nz-col nzSpan="16">
+                    <nz-form-control [nzErrorTip]="error">
+                      <nz-date-picker formControlName="tgianDthau"
+                                      nzFormat="dd/MM/yyyy"
+                                      [nzDisabled]="isView">
+                      </nz-date-picker>
+                    </nz-form-control>
+                  </div>
+                </div>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Thời điểm mở thầu</nz-form-label>
                 <div nz-row>
                   <div nz-col nzSpan="7">
@@ -189,31 +210,10 @@
                 </div>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="6">
-              <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Thời điểm đóng thầu</nz-form-label>
-                <div nz-row>
-                  <div nz-col nzSpan="7">
-                    <nz-time-picker [nzDisabled]="isView"
-                      nzFormat="HH:mm" formControlName="tgianDthauTime"></nz-time-picker>
-                  </div>
-                  <div nz-col nzSpan="1">
-                  </div>
-                  <div nz-col nzSpan="16">
-                    <nz-form-control [nzErrorTip]="error">
-                      <nz-date-picker formControlName="tgianDthau"
-                                      nzFormat="dd/MM/yyyy"
-                                      [nzDisabled]="isView">
-                      </nz-date-picker>
-                    </nz-form-control>
-                  </div>
-                </div>
-              </nz-form-item>
-            </div>
             <div nz-col [nzSpan]="24">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Căn cứ pháp lý
+                  Tài liệu đính kèm
                 </nz-form-label>
                 <div class="list-file">
                   <file-list [data]="listCcPhapLy" [isViewDetail]="isView"></file-list>
