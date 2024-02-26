@@ -1,3 +1,4 @@
+import { MangLuoiKhoService } from './../../../../../../../services/qlnv-kho/mangLuoiKho.service';
 import { BangKeCanHangService } from './../../../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/nhapkho/BangKeCanHang.service';
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -65,7 +66,8 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     private quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
     public phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
     private phieuXuatKhoService: PhieuXuatKhoService,
-    private bangKeCanCtvtService: BangKeCanCtvtService
+    private bangKeCanCtvtService: BangKeCanCtvtService,
+    private mangLuoiKhoService: MangLuoiKhoService
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoService);
 
@@ -350,6 +352,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       const tenNganLo = data.tenLoKho ? `${data.tenLoKho}-${data.tenNganKho}` : data.tenNganKho;
       const phieuKtraClData = list.find(f => f.tenNganLo === tenNganLo) ? list.find(f => f.tenNganLo === tenNganLo) : null;
       this.bindingDataPhieuKncl(phieuKtraClData)
+      this.getDetailNganLo(data.maLoKho || data.maNganKho)
       // this.getDsDonViNhan();
     }
   }
@@ -421,6 +424,19 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       return res.data.trangThai === STATUS.DA_DUYET_LDCC
     }
     return;
+  }
+  async getDetailNganLo(maDvi) {
+    if (maDvi) {
+      const res = await this.mangLuoiKhoService.getDetailByMa({ maDvi });
+      if (res.msg === MESSAGE.SUCCESS) {
+        const { slTon, thanhTien } = res.data?.object;
+        if (!slTon) {
+          this.formData.patchValue({ dongia: null })
+        } else {
+          this.formData.patchValue({ donGia: thanhTien / slTon })
+        }
+      }
+    }
   }
   async save() {
     this.helperService.ignoreRequiredForm(this.formData, ['soQdGiaoNvXh']);

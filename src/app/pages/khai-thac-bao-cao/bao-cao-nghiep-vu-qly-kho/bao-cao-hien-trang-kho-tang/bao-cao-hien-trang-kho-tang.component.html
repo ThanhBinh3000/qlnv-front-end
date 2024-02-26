@@ -25,7 +25,7 @@
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
                 <nz-select formControlName="maCuc" [nzDisabled]="userService.isCuc()"
-                  (ngModelChange)="changeCuc($event)">
+                  (ngModelChange)="changeCuc($event)" nzAllowClear>
                   <nz-option *ngFor="let p of listCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -36,7 +36,7 @@
               <nz-form-label [nzXs]="7">Chi cục</nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
                 <nz-select formControlName="maChiCuc" (ngModelChange)="changeChiCuc($event)"
-                  [nzDisabled]="userService.isChiCuc()">
+                  [nzDisabled]="userService.isChiCuc()" nzAllowClear>
                   <nz-option *ngFor="let p of listChiCuc" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -250,16 +250,95 @@
 
 </ng-container>
 <!--modal sua noi dung-->
-<nz-modal [nzWidth]="'60%'" [(nzVisible)]="showFilterTichLuong" [nzFooter]="modalFooterSuaNoiDung" [nzClosable]="true"
-  nzTitle="CHI TIẾT PHƯƠNG ÁN CỨU TRỢ, VIỆN TRỢ">
-  <ng-container *nzModalContent>
-    <!--    <form nz-form>-->
-    <div class="modal-card">
-
-    </div>
+<nz-modal [nzWidth]="'600px'" [nzBodyStyle]="{ 'overflow-y': 'auto' }" [(nzVisible)]="showFilterTichLuong"
+  (nzOnCancel)="handleCancelTichLuong()" nzTitle="Tùy chọn">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <nz-table #configTable class="nowrap table-chi-tiet" nzBordered [nzFrontPagination]="false"
+      [nzShowPagination]="false">
+      <tbody>
+        <tr>
+          <td (nzExpandChange)="showTieuChi= !showTieuChi" [nzExpand]="showTieuChi" nzShowExpand="true">Tiêu chí</td>
+          <td></td>
+        </tr>
+        <ng-container *ngIf="showTieuChi">
+          <tr *ngFor="let data of dataConfigTable.tieuChi">
+            <td>{{data.tenTieuChi}}</td>
+            <td width="45px" class="text-center">
+              <label nz-checkbox [(ngModel)]="data.status"
+                (ngModelChange)="handleChangeStatus($event, 'tieuChi', data.maTieuChi)"></label>
+            </td>
+          </tr>
+        </ng-container>
+        <tr>
+          <td (nzExpandChange)="showTieuChi= !showTieuChi" [nzExpand]="showTieuChi" nzShowExpand="true">Tiêu chí</td>
+          <td></td>
+        </tr>
+        <ng-container *ngIf="showDonVi">
+          <tr *ngFor="let data of dataConfigTable.donVi; let i=index">
+            <td>{{data.tenTieuChi}}</td>
+            <td width="45px" class="text-center">
+              <label nz-checkbox [(ngModel)]="data.status"
+                (ngModelChange)="handleChangeStatus($event, 'donVi', data.maTieuChi)"></label>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </nz-table>
   </ng-container>
-  <ng-template #modalFooterSuaNoiDung>
-    <button nz-button (click)="handleCancelTichLuong()">Đóng</button>
-    <!--    <button nz-button class="btn btn-main" (click)="handleOkSuaNoiDung()">Lưu</button>-->
-  </ng-template>
+  <div *nzModalFooter>
+    <button nz-button (click)="handleCancelTichLuong()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+    <button nz-button (click)='apDungTichLuongKhoConfig()' class='modal__button--save'>
+      <i class='icon htvbdh_luu'></i>
+      Áp dụng
+    </button>
+  </div>
+</nz-modal>
+<nz-modal [nzWidth]="'600px'" [nzBodyStyle]="{ 'overflow-y': 'auto' }" [(nzVisible)]="showFilterTonKho"
+  (nzOnCancel)="handleCancelTonKho()" nzTitle="Tùy chọn">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <nz-table #configTable class="nowrap table-chi-tiet" nzBordered [nzFrontPagination]="false"
+      [nzShowPagination]="false">
+      <tbody>
+        <tr>
+          <td (nzExpandChange)="showTieuChi= !showTieuChi" [nzExpand]="showTieuChi" nzShowExpand="true">Tiêu chí</td>
+          <td></td>
+        </tr>
+        <ng-container *ngIf="showTieuChi">
+          <tr *ngFor="let data of dataConfigTableTonKho.tieuChi">
+            <td>{{data.tenTieuChi}}</td>
+            <td width="45px" class="text-center">
+              <label nz-checkbox [(ngModel)]="data.status"
+                (ngModelChange)="handleChangeStatusTonKho($event, 'tieuChi', data.maTieuChi)"></label>
+            </td>
+          </tr>
+        </ng-container>
+        <tr>
+          <td (nzExpandChange)="showTieuChi= !showTieuChi" [nzExpand]="showTieuChi" nzShowExpand="true">Tiêu chí</td>
+          <td></td>
+        </tr>
+        <ng-container *ngIf="showDonVi">
+          <tr *ngFor="let data of dataConfigTableTonKho.donVi; let i=index">
+            <td>{{data.tenTieuChi}}</td>
+            <td width="45px" class="text-center">
+              <label nz-checkbox [(ngModel)]="data.status"
+                (ngModelChange)="handleChangeStatusTonKho($event, 'donVi', data.maTieuChi)"></label>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </nz-table>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="handleCancelTonKho()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+    <button nz-button (click)='apDungTonKhoConfig()' class='modal__button--save'>
+      <i class='icon htvbdh_luu'></i>
+      Áp dụng
+    </button>
+  </div>
 </nz-modal>
