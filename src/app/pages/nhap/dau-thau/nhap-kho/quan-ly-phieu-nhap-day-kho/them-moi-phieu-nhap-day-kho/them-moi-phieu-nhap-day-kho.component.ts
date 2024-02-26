@@ -401,11 +401,11 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
             this.spinner.hide();
             return;
           }
-          if(this.listFileDinhKemBb.length <= 0) {
-            this.notification.error(MESSAGE.ERROR, 'File đính kèm biên bản đã ký không được để trống.');
-            this.spinner.hide();
-            return;
-          }
+          // if(this.listFileDinhKemBb.length <= 0) {
+          //   this.notification.error(MESSAGE.ERROR, 'File đính kèm biên bản đã ký không được để trống.');
+          //   this.spinner.hide();
+          //   return;
+          // }
         }
         let body = this.formData.value;
         body.chiTiets = this.dataTable;

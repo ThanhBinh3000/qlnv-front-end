@@ -553,8 +553,8 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     let tongSlChiTieu: number = 0;
     this.listOfData.forEach((item) => {
       item.children.forEach(child => {
-        tongMucDt = tongMucDt + (child.soLuong * child.donGiaTamTinh);
-        tongMucDtDx = tongMucDtDx + (child.soLuong * child.donGia);
+        tongMucDt = tongMucDt + (child.soLuong * child.donGia);
+        tongMucDtDx = tongMucDtDx + (child.soLuong * child.donGiaTamTinh);
         tongSlChiTieu += child.soLuongChiTieu
       })
     });

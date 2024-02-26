@@ -79,7 +79,7 @@
       <div nz-row [nzGutter]="24">
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Loại hình nhập xuất </nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Loại hình nhập</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="loaiHinhNx" (ngModelChange)="onChangeLhNx($event)"
                          [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView">
@@ -91,7 +91,7 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Kiểu nhập xuất </nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Kiểu nhập</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="kieuNx" [nzDisabled]="true">
                 <nz-option *ngFor="let p of listKieuNx" [nzValue]="p.ma" [nzLabel]="p.giaTri">
