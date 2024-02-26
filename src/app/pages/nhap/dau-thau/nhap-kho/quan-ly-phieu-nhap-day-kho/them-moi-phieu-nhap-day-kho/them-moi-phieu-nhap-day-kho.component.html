@@ -374,8 +374,7 @@
               Đơn giá
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-number formControlName="donGiaHd" nzDisabled nzSize="small" [nzFormatter]="globals.formatter"
-                [nzParser]="globals.parser"></nz-input-number>
+              <span class="blue-text">{{formData.value.donGiaHd | number : '1.2-2' : 'vi_VN'}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -385,15 +384,13 @@
               Thành tiền
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-number [ngModel]="calcTong() * formData.value.donGiaHd" [ngModelOptions]="{standalone: true}"
-                nzDisabled nzSize="small" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-              </nz-input-number>
+              <span class="blue-text">{{calcTong() * formData.value.donGiaHd | number : '1.2-2' : 'vi_VN'}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nzRequired> Ghi chú</nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Ghi chú</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <textarea rows="3" formControlName="ghiChu" nz-input [readonly]="isView" [disabled]="isView"></textarea>
             </nz-form-control>
@@ -409,7 +406,7 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nzRequired> KTV bảo quản</nz-form-label>
+            <nz-form-label [nzNoColon]="true"> KTV bảo quản</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <input [readonly]="true" nz-input formControlName="tenKyThuatVien" readonly />
             </nz-form-control>
@@ -433,7 +430,7 @@
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true">
+            <nz-form-label [nzNoColon]="true">
               File đính kèm biên bản đã ký
             </nz-form-label>
             <div class="list-file">
