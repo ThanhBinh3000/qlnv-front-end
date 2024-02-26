@@ -18,6 +18,7 @@ import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import {formatNumber} from "@angular/common";
+import {KhCnQuyChuanKyThuat} from "../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
 
 
 @Component({
@@ -67,6 +68,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private danhMucService: DanhMucService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
+    private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuKtraCluongService);
     this.formData = this.fb.group(
@@ -126,6 +128,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
         slKhKb: [],
         slTtKtra: [],
         hthucBquan: [],
+        soHieuQuyChuan: [],
       }
     );
   }
@@ -243,12 +246,21 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
       this.listDiaDiemNhap = dataChiCuc[0].children;
     }
     if (isSetTc) {
-      let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
+      let dmTieuChuan = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(data.cloaiVthh);
       if (dmTieuChuan.data) {
-        this.dataTableChiTieu = dmTieuChuan.data.children;
-        this.dataTableChiTieu.forEach(element => {
-          element.edit = false
+        this.dataTableChiTieu = dmTieuChuan.data;
+        this.dataTableChiTieu = this.dataTableChiTieu.map(element => {
+          return {
+            ...element,
+            edit: true,
+            tenTchuan: element.tenChiTieu,
+            chiSoNhap: element.mucYeuCauXuat,
+            ketQuaKiemTra: element.ketQuaPt,
+            phuongPhap: element.phuongPhapXd,
+            danhGia: element.danhGia
+          }
         });
+        this.formData.get('soHieuQuyChuan').setValue(this.dataTableChiTieu[0].soHieuQuyChuan)
       }
     }
     if (this.maNganLoKho != null) {
