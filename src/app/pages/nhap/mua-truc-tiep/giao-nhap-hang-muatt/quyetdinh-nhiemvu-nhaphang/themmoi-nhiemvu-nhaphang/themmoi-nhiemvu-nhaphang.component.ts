@@ -143,6 +143,7 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
     }
     this.userInfo = this.userService.getUserLogin();
     this.maQdSuffix = "/" + this.userInfo.MA_QD;
+    console.log(this.maQdSuffix, "this.maQdSuffix")
     await Promise.all([
       await this.getListHopDong(),
       await this.getListCanCuUyQuyen(),

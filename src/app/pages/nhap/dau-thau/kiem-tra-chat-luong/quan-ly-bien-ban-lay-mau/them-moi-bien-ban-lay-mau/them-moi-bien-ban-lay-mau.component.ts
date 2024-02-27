@@ -158,6 +158,7 @@ export class ThemMoiBienBanLayMauKhoComponent extends Base2Component implements 
       tenNguoiPduyet: [''],
       truongBpKtbq: [''],
       dvt: [''],
+      kyHieuSeri: [''],
     });
   }
 

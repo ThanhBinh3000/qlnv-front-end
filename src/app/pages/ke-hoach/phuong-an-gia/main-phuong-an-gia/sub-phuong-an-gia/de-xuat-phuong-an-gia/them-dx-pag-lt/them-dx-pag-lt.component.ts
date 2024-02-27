@@ -24,13 +24,10 @@ import {
   DialogTableSelectionComponent
 } from "../../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import {DonviService} from "../../../../../../../services/donvi.service";
-import {AMOUNT} from "../../../../../../../Utility/utils";
 import {
   TongHopPhuongAnGiaService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
 import {CurrencyMaskInputMode} from "ngx-currency";
-import {PREVIEW} from "../../../../../../../constants/fileType";
-import printJS from "print-js";
 
 
 @Component({
