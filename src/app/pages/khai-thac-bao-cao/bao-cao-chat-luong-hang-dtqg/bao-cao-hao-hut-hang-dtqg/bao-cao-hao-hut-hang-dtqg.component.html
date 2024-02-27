@@ -15,7 +15,7 @@
               <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Loại báo cáo
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-select nzAllowClear formControlName="loaiBc">
+                <nz-select nzAllowClear formControlName="loaiBc" [nzDisabled]="!userService.isTongCuc()">
                   <nz-option *ngFor="let p of listLoaiBc" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
                 </nz-select>
               </nz-form-control>
