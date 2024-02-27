@@ -394,12 +394,12 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
 
   async onChangeCloaiVthh(event) {
     let listQdBtc = [];
-    if (this.formData.value.namKeHoach && this.formData.value.loaiVthh && this.formData.value.cloaiVthh && this.formData.value.loaiGia) {
+    if (this.formData.value.namKeHoach && this.formData.value.loaiVthh && this.formData.value.cloaiVthh && this.formData.value.loaiGia && this.type == 'GCT') {
       let body = {
         namKeHoach: this.formData.value.namKeHoach,
         loaiVthh: this.formData.value.loaiVthh,
         cloaiVthh: this.formData.value.cloaiVthh,
-        loaiGia: this.formData.value.loaiGia,
+        loaiGia: this.formData.value.loaiGia == 'LG03' ? 'LG01' : 'LG02',
         maDvi: this.userInfo.MA_DVI,
       }
       let res = await this.quyetDinhGiaCuaBtcService.getQdGiaLastestBtc(body);
