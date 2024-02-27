@@ -1308,6 +1308,16 @@
                           </nz-form-control>
                         </nz-form-item>
                       </div>
+                      <div nz-col [nzSpan]="4">
+                        <nz-form-item>
+                          <nz-form-label>Thành tiền</nz-form-label>
+                          <nz-form-control [nzErrorTip]="error">
+                            <nz-input-number [nzSize]="'small'" formControlName="thanhTien"
+                                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
+                            </nz-input-number>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
                       <div nz-col [nzSpan]="12">
                         <nz-form-item>
                           <nz-form-label>Nhiệm vụ</nz-form-label>
@@ -1671,6 +1681,16 @@
                               <nz-date-picker formControlName="ngayNhapDay" [nzDisabled]="true"
                                               nzFormat="dd/MM/yyyy"></nz-date-picker>
                             </nz-input-group>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <div nz-col [nzSpan]="4">
+                        <nz-form-item>
+                          <nz-form-label>Thành tiền</nz-form-label>
+                          <nz-form-control [nzErrorTip]="error">
+                            <nz-input-number [nzSize]="'small'" formControlName="thanhTien"
+                                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
+                            </nz-input-number>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
