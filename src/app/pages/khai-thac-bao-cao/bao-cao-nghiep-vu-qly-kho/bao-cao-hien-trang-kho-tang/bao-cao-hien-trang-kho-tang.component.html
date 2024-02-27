@@ -21,11 +21,11 @@
         <div nz-row [nzGutter]="24">
           <div nz-col [nzSpan]="6" *ngIf="!userService.isChiCuc()">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true" class="label-color-kh" nzRequired>Cục
+              <nz-form-label [nzNoColon]="true" class="label-color-kh">Cục
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
                 <nz-select formControlName="maCuc" [nzDisabled]="userService.isCuc()"
-                           (ngModelChange)="changeCuc($event)">
+                  (ngModelChange)="changeCuc($event)" nzAllowClear>
                   <nz-option *ngFor="let p of listCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -35,9 +35,8 @@
             <nz-form-item>
               <nz-form-label [nzXs]="7">Chi cục</nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select formControlName="maChiCuc"
-                           (ngModelChange)="changeChiCuc($event)"
-                           [nzDisabled]="userService.isChiCuc()">
+                <nz-select formControlName="maChiCuc" (ngModelChange)="changeChiCuc($event)"
+                  [nzDisabled]="userService.isChiCuc()" nzAllowClear>
                   <nz-option *ngFor="let p of listChiCuc" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -48,12 +47,12 @@
     </nz-card>
     <div class="cangiua group-button-search">
       <button nz-button class="search__button--clear" (click)="clearFilter()"
-              *ngIf="!userService.isAccessPermisson('')">
+        *ngIf="!userService.isAccessPermisson('')">
         <i class="icon  htvbdh_nhap-lai1"></i>
         Xóa điều kiện
       </button>
       <button nz-button class="search__button--search" (click)="ketXuatBaoCao()"
-              *ngIf="!userService.isAccessPermisson('')">
+        *ngIf="!userService.isAccessPermisson('')">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         Kết xuất báo cáo
       </button>
@@ -120,11 +119,10 @@
               <div nz-col nzSpan="24">
                 <ng-container *ngIf="tichLuongChart">
                   <apx-chart [series]="tichLuongChart.series" [chart]="tichLuongChart.chart"
-                             [stroke]="tichLuongChart.stroke" [dataLabels]="tichLuongChart.dataLabels"
-                             [plotOptions]="tichLuongChart.plotOptions" [xaxis]="tichLuongChart.xaxis"
-                             [colors]="tichLuongChart.colors" [fill]="tichLuongChart.fill"
-                             [yaxis]="tichLuongChart.yaxis"
-                             [legend]="tichLuongChart.legend"></apx-chart>
+                    [stroke]="tichLuongChart.stroke" [dataLabels]="tichLuongChart.dataLabels"
+                    [plotOptions]="tichLuongChart.plotOptions" [xaxis]="tichLuongChart.xaxis"
+                    [colors]="tichLuongChart.colors" [fill]="tichLuongChart.fill" [yaxis]="tichLuongChart.yaxis"
+                    [legend]="tichLuongChart.legend"></apx-chart>
                 </ng-container>
               </div>
             </div>
@@ -140,19 +138,10 @@
             <div nz-row [nzGutter]="24">
               <div nz-col nzSpan="24">
                 <ng-container *ngIf="tonKhoChart">
-                  <apx-chart
-                    [series]="tonKhoChart.series"
-                    [chart]="tonKhoChart.chart"
-                    [xaxis]="tonKhoChart.xaxis"
-                    [stroke]="tonKhoChart.stroke"
-                    [tooltip]="tonKhoChart.tooltip"
-                    [dataLabels]="tonKhoChart.dataLabels"
-                    [legend]="tonKhoChart.legend"
-                    [markers]="tonKhoChart.markers"
-                    [grid]="tonKhoChart.grid"
-                    [yaxis]="tonKhoChart.yaxis"
-                    [title]="tonKhoChart.title"
-                  ></apx-chart>
+                  <apx-chart [series]="tonKhoChart.series" [chart]="tonKhoChart.chart" [xaxis]="tonKhoChart.xaxis"
+                    [stroke]="tonKhoChart.stroke" [tooltip]="tonKhoChart.tooltip" [dataLabels]="tonKhoChart.dataLabels"
+                    [legend]="tonKhoChart.legend" [markers]="tonKhoChart.markers" [grid]="tonKhoChart.grid"
+                    [yaxis]="tonKhoChart.yaxis" [title]="tonKhoChart.title"></apx-chart>
                 </ng-container>
               </div>
             </div>
@@ -246,8 +235,8 @@
                 <nz-card [nzTitle]="cttk">
                   <ng-template #cttk>
                     <h4 class="bc-htk_title bd-left"
-                        [title]="(data.tenCloaiVthh || data.tenLoaiVthh) + ' '+ '('+ data.dvt +')'">{{data.tenCloaiVthh ||
-                    data.tenLoaiVthh}} ({{data.dvt}})</h4>
+                      [title]="(data.tenCloaiVthh || data.tenLoaiVthh) + ' '+ '('+ data.dvt +')'">{{data.tenCloaiVthh ||
+                      data.tenLoaiVthh}} ({{data.dvt}})</h4>
                   </ng-template>
                   <p class="card_content">{{data.tonKho|number:globals.numberFormat:globals.locale}}</p>
                 </nz-card>
@@ -261,16 +250,95 @@
 
 </ng-container>
 <!--modal sua noi dung-->
-<nz-modal [nzWidth]="'60%'" [(nzVisible)]="showFilterTichLuong" [nzFooter]="modalFooterSuaNoiDung" [nzClosable]="true"
-          nzTitle="CHI TIẾT PHƯƠNG ÁN CỨU TRỢ, VIỆN TRỢ">
-  <ng-container *nzModalContent>
-    <!--    <form nz-form>-->
-    <div class="modal-card">
-
-    </div>
+<nz-modal [nzWidth]="'600px'" [nzBodyStyle]="{ 'overflow-y': 'auto' }" [(nzVisible)]="showFilterTichLuong"
+  (nzOnCancel)="handleCancelTichLuong()" nzTitle="Tùy chọn">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <nz-table #configTable class="nowrap table-chi-tiet" nzBordered [nzFrontPagination]="false"
+      [nzShowPagination]="false">
+      <tbody>
+        <tr>
+          <td (nzExpandChange)="showTieuChi= !showTieuChi" [nzExpand]="showTieuChi" nzShowExpand="true">Tiêu chí</td>
+          <td></td>
+        </tr>
+        <ng-container *ngIf="showTieuChi">
+          <tr *ngFor="let data of dataConfigTable.tieuChi">
+            <td>{{data.tenTieuChi}}</td>
+            <td width="45px" class="text-center">
+              <label nz-checkbox [(ngModel)]="data.status"
+                (ngModelChange)="handleChangeStatus($event, 'tieuChi', data.maTieuChi)"></label>
+            </td>
+          </tr>
+        </ng-container>
+        <tr>
+          <td (nzExpandChange)="showTieuChi= !showTieuChi" [nzExpand]="showTieuChi" nzShowExpand="true">Tiêu chí</td>
+          <td></td>
+        </tr>
+        <ng-container *ngIf="showDonVi">
+          <tr *ngFor="let data of dataConfigTable.donVi; let i=index">
+            <td>{{data.tenTieuChi}}</td>
+            <td width="45px" class="text-center">
+              <label nz-checkbox [(ngModel)]="data.status"
+                (ngModelChange)="handleChangeStatus($event, 'donVi', data.maTieuChi)"></label>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </nz-table>
   </ng-container>
-  <ng-template #modalFooterSuaNoiDung>
-    <button nz-button (click)="handleCancelTichLuong()">Đóng</button>
-    <!--    <button nz-button class="btn btn-main" (click)="handleOkSuaNoiDung()">Lưu</button>-->
-  </ng-template>
+  <div *nzModalFooter>
+    <button nz-button (click)="handleCancelTichLuong()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+    <button nz-button (click)='apDungTichLuongKhoConfig()' class='modal__button--save'>
+      <i class='icon htvbdh_luu'></i>
+      Áp dụng
+    </button>
+  </div>
+</nz-modal>
+<nz-modal [nzWidth]="'600px'" [nzBodyStyle]="{ 'overflow-y': 'auto' }" [(nzVisible)]="showFilterTonKho"
+  (nzOnCancel)="handleCancelTonKho()" nzTitle="Tùy chọn">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <nz-table #configTable class="nowrap table-chi-tiet" nzBordered [nzFrontPagination]="false"
+      [nzShowPagination]="false">
+      <tbody>
+        <tr>
+          <td (nzExpandChange)="showTieuChi= !showTieuChi" [nzExpand]="showTieuChi" nzShowExpand="true">Tiêu chí</td>
+          <td></td>
+        </tr>
+        <ng-container *ngIf="showTieuChi">
+          <tr *ngFor="let data of dataConfigTableTonKho.tieuChi">
+            <td>{{data.tenTieuChi}}</td>
+            <td width="45px" class="text-center">
+              <label nz-checkbox [(ngModel)]="data.status"
+                (ngModelChange)="handleChangeStatusTonKho($event, 'tieuChi', data.maTieuChi)"></label>
+            </td>
+          </tr>
+        </ng-container>
+        <tr>
+          <td (nzExpandChange)="showTieuChi= !showTieuChi" [nzExpand]="showTieuChi" nzShowExpand="true">Tiêu chí</td>
+          <td></td>
+        </tr>
+        <ng-container *ngIf="showDonVi">
+          <tr *ngFor="let data of dataConfigTableTonKho.donVi; let i=index">
+            <td>{{data.tenTieuChi}}</td>
+            <td width="45px" class="text-center">
+              <label nz-checkbox [(ngModel)]="data.status"
+                (ngModelChange)="handleChangeStatusTonKho($event, 'donVi', data.maTieuChi)"></label>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </nz-table>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="handleCancelTonKho()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+    <button nz-button (click)='apDungTonKhoConfig()' class='modal__button--save'>
+      <i class='icon htvbdh_luu'></i>
+      Áp dụng
+    </button>
+  </div>
 </nz-modal>
