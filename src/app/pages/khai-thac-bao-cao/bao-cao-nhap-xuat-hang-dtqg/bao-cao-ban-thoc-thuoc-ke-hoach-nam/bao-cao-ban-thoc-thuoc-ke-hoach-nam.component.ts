@@ -40,7 +40,7 @@ export class BaoCaoBanThocThuocKeHoachNamComponent  extends Base2Component imple
     super(httpClient, storageService, notification, spinner, modal, bcNhapXuatMuaBanHangDTQGService);
     this.formData = this.fb.group(
       {
-        nam: [dayjs().get("year"), [Validators.required]],
+        namKh: [dayjs().get("year"), [Validators.required]],
       }
     );
   }
