@@ -168,7 +168,8 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     this.loadDsChiCuc()
     this.getDataNX(this.formData.value.loaiDc)
     try {
-      this.maQd = 'DCNB'//this.userInfo.MA_QD;
+      console.log("this.userInfo.MA_QD;", this.userInfo.MA_QD)
+      this.maQd = this.userInfo.MA_QD;
       if (this.idInput) {
         await this.loadChiTiet(this.idInput)
       } else {

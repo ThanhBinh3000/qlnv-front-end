@@ -145,7 +145,8 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
 
     await this.spinner.show();
     try {
-      this.maQd = "DCNB"//this.userInfo.MA_QD;
+      console.log("this.userInfo.MA_QD;", this.userInfo.MA_QD)
+      this.maQd = this.userInfo.MA_QD;
       if (this.idInput) {
         await this.loadChiTiet(this.idInput)
       } else {
