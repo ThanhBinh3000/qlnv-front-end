@@ -437,7 +437,7 @@
 </ng-container>
 <ng-template #tempHopDong>
   <app-thong-tin-hop-dong-btt [idInput]="idInput" [idHopDong]="idHopDong" [loaiVthh]="loaiVthh" [isView]="isView"
-                              (showListEvent)="redirectHopDong(0, true, false)">
+                              [phanLoai]="phanLoai" (showListEvent)="redirectHopDong(0, true, false)">
   </app-thong-tin-hop-dong-btt>
 </ng-template>
 <nz-modal [nzWidth]="'75%'" [nzClosable]="false" [(nzVisible)]="showDlgPreview" nzWidth="100%"

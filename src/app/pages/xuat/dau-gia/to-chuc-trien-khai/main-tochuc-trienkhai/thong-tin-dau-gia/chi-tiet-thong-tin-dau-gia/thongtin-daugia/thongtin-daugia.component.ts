@@ -142,8 +142,8 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
 
   async initForm() {
     let idThongBao = await this.helperService.getId("XH_TC_TTIN_BDG_HDR_SEQ");
-    const newMaThongBao = idThongBao + "/" + this.dataDetail.nam + "/TB-ĐG";
-    const newSoBienBan = idThongBao + "/" + this.dataDetail.nam + "/BB-ĐG";
+    // const newMaThongBao = idThongBao + "/" + this.dataDetail.nam + "/TB-ĐG";
+    // const newSoBienBan = idThongBao + "/" + this.dataDetail.nam + "/BB-ĐG";
     this.formData.patchValue({
       nam: this.dataDetail.nam,
       idQdPd: this.dataDetail.idQdPd,
@@ -152,8 +152,8 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       soQdDc: this.dataDetail.soQdDc,
       idQdPdDtl: this.dataDetail.idQdPdDtl,
       lanDauGia: this.soLanDauGia + 1,
-      maThongBao: newMaThongBao,
-      soBienBan: newSoBienBan,
+      // maThongBao: newMaThongBao,
+      // soBienBan: newSoBienBan,
     });
     await this.onChangeQdKhBdgDtl(this.formData.value.idQdPdDtl);
   }
@@ -323,9 +323,27 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
   async saveAndSend() {
     try {
       this.setValidForm();
-      if (this.formData.value.ketQua == 1 && this.dataNguoiShow.length != 3) {
-        this.notification.error(MESSAGE.ERROR, "Vui lòng thêm các thành phần tham dự đấu giá");
-        return;
+      if (this.formData.value.ketQua == 1) {
+        let hasDGV = false;
+        let hasNTG = false;
+        this.dataNguoiShow.forEach(item => {
+          if (item.loai === "DGV" && item.dataChild.length > 0) {
+            hasDGV = true;
+          }
+          if (item.loai === "NTG" && item.dataChild.length > 0) {
+            hasNTG = true;
+          }
+        });
+        if (!hasDGV && !hasNTG) {
+          this.notification.error(MESSAGE.ERROR, "Vui lòng thêm thông tin đấu giá viên và tổ chức/cá nhân tham gia đấu giá.");
+          return;
+        } else if (!hasDGV) {
+          this.notification.error(MESSAGE.ERROR, "Vui lòng thêm thông tin đấu giá viên.");
+          return;
+        } else if (!hasNTG) {
+          this.notification.error(MESSAGE.ERROR, "Vui lòng thêm thông tin tổ chức/cá nhân tham gia đấu giá.");
+          return;
+        }
       }
       const confirmed = await this.showConfirmationDialog();
       if (!confirmed) {

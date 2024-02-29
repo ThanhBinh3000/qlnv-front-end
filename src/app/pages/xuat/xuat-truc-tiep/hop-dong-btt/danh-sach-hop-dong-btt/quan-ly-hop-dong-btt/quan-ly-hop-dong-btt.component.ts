@@ -16,6 +16,10 @@ import {
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {PREVIEW} from "../../../../../../constants/fileType";
+import {
+  QuyetDinhPdKhBanTrucTiepService
+} from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service";
+import {da} from "date-fns/locale";
 
 @Component({
   selector: 'app-quan-ly-hop-dong-btt',
@@ -25,11 +29,13 @@ import {PREVIEW} from "../../../../../../constants/fileType";
 export class QuanLyHopDongBttComponent extends Base2Component implements OnInit {
   @Input() idInput: number;
   @Input() loaiVthh: string;
+  @Input() check: boolean;
   @Output() showListEvent = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG
   TRUC_TIEP = THONG_TIN_BAN_TRUC_TIEP
   isView: boolean
   isEditHopDong: boolean
+  phanLoai: string
   loadDanhSachHdongDaKy: any[] = [];
   idQdNv: number = 0;
   isViewQdNv: boolean = false;
@@ -46,6 +52,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     private hopDongBttService: HopDongBttService,
     private qdPdKetQuaBttService: QdPdKetQuaBttService,
     private chaoGiaMuaLeUyQuyenService: ChaoGiaMuaLeUyQuyenService,
+    private quyetDinhPdKhBanTrucTiepService: QuyetDinhPdKhBanTrucTiepService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBttService);
     this.formData = this.fb.group({
@@ -70,6 +77,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
       trangThaiHd: [''],
       tenTrangThaiHd: [''],
       phuongThucBan: [''],
+      phanLoai: [''],
     });
   }
 
@@ -77,9 +85,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     if (this.idInput) {
       await this.spinner.show();
       try {
-        if (this.idInput) {
-          await this.getDetail();
-        }
+        await this.getDetail();
       } catch (e) {
         console.error('error: ', e);
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -95,42 +101,43 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
 
   async getDetailCuc() {
     try {
-      const res = await this.qdPdKetQuaBttService.getDetail(this.idInput);
-      if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-        return;
-      }
-      const data = res.data;
-      await this.loadDanhDachHopDong();
-      this.formData.patchValue({
-        namKh: data.namKh,
-        soQdPd: data.soQdPd,
-        soQdDc: data.soQdDc,
-        soQdKq: data.soQdKq,
-        tenDvi: data.tenDvi,
-        loaiVthh: data.loaiVthh,
-        tenLoaiVthh: data.tenLoaiVthh,
-        cloaiVthh: data.cloaiVthh,
-        tenCloaiVthh: data.tenCloaiVthh,
-        tenLoaiHinhNx: data.tenLoaiHinhNx,
-        tenKieuNx: data.tenKieuNx,
-        tongSlXuatBanQdKh: data.tongSoLuong,
-        tongGiaTriHdong: data.tongGiaTriHdong,
-        tongSlChuaKyHdong: data.tongSlChuaKyHdong,
-        trangThaiHd: data.trangThaiHd,
-        tenTrangThaiHd: data.tenTrangThaiHd,
-        donViTinh: data.children[0]?.donViTinh,
-        phuongThucBan: THONG_TIN_BAN_TRUC_TIEP.CHAO_GIA,
-      });
-      const filteredItems = this.loadDanhSachHdongDaKy.filter(item => item.idQdKq === data.id);
-      const tongSlDaKyHdong = filteredItems.reduce((acc, item) => acc + item.soLuong, 0);
-      const tongSlChuaKyHdong = data.tongSoLuong - tongSlDaKyHdong;
-      this.formData.patchValue({
-        tongSlDaKyHdong: tongSlDaKyHdong,
-        tongSlChuaKyHdong: tongSlChuaKyHdong,
-      });
-      this.dataTable = this.userService.isTongCuc() ? data.listHopDongBtt : data.listHopDongBtt.filter(item => item.maDvi === this.userInfo.MA_DVI);
-      if (this.dataTable && this.dataTable.length > 0) {
-        await this.selectRow(this.dataTable[0]);
+      const res = this.check ? await this.qdPdKetQuaBttService.getDetail(this.idInput) : await this.quyetDinhPdKhBanTrucTiepService.getDetail(this.idInput);
+      if (res.msg === MESSAGE.SUCCESS || res.data) {
+        const data = res.data;
+        await this.loadDanhDachHopDong();
+        this.formData.patchValue({
+          namKh: data.namKh,
+          soQdPd: data.soQdPd,
+          soQdDc: data.soQdDc,
+          soQdKq: this.check ? data.soQdKq : null,
+          tenDvi: this.check ? data.tenDvi : data.children[0].tenDvi,
+          loaiVthh: data.loaiVthh,
+          tenLoaiVthh: data.tenLoaiVthh,
+          cloaiVthh: data.cloaiVthh,
+          tenCloaiVthh: data.tenCloaiVthh,
+          tenLoaiHinhNx: data.tenLoaiHinhNx,
+          tenKieuNx: data.tenKieuNx,
+          tongSlXuatBanQdKh: this.check ? data.tongSoLuong : data.children.reduce((acc, item) => acc + item.tongSoLuong, 0),
+          tongGiaTriHdong: data.tongGiaTriHdong,
+          trangThaiHd: data.trangThaiHd,
+          tenTrangThaiHd: data.tenTrangThaiHd,
+          donViTinh: data.children[0]?.donViTinh,
+          phuongThucBan: THONG_TIN_BAN_TRUC_TIEP.CHAO_GIA,
+          phanLoai: this.check ? "QĐKQ" : "QĐKH",
+        });
+        this.phanLoai = this.check ? "QĐKQ" : "QĐKH";
+        const filteredItems = this.check ? this.loadDanhSachHdongDaKy.filter(item => item.idQdKq === data.id)
+          : this.loadDanhSachHdongDaKy.filter(item => data.type === "QDDC" ? item.idQdDc === data.id && item.idQdPd === data.idQdPd : item.idQdPd === data.id);
+        const tongSlDaKyHdong = filteredItems.reduce((acc, item) => acc + item.soLuong, 0);
+        const tongSlChuaKyHdong = this.formData.value.tongSlXuatBanQdKh - tongSlDaKyHdong;
+        this.formData.patchValue({
+          tongSlDaKyHdong: tongSlDaKyHdong,
+          tongSlChuaKyHdong: tongSlChuaKyHdong,
+        });
+        this.dataTable = this.userService.isTongCuc() ? data.listHopDongBtt : data.listHopDongBtt.filter(item => item.maDvi === this.userInfo.MA_DVI);
+        if (this.dataTable && this.dataTable.length > 0) {
+          await this.selectRow(this.dataTable[0]);
+        }
       }
     } catch (e) {
       console.log('error: ', e);
@@ -339,8 +346,8 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
               const res = await this.chaoGiaMuaLeUyQuyenService.getDetail(this.idInput);
               this.dataTableAll = res.data.listHopDongBtt.filter(item => item.maDvi === this.userInfo.MA_DVI);
             } else {
-              const res = await this.qdPdKetQuaBttService.getDetail(this.idInput);
-              this.dataTableAll = res.data.listHopDongBtt.filter(item => item.maDvi === this.userInfo.MA_DVI);
+              const res = this.formData.value.phanLoai === "QĐKQ" ? await this.qdPdKetQuaBttService.getDetail(this.idInput) : await this.quyetDinhPdKhBanTrucTiepService.getDetail(this.idInput);
+              this.dataTableAll = this.formData.value.phanLoai === "QĐKQ" ? res.data.listHopDongBtt.filter(item => item.maDvi === this.userInfo.MA_DVI) : res.data.listHopDongBtt;
             }
             if (this.dataTableAll && this.dataTableAll.length > 0) {
               this.isHopDong = true;
