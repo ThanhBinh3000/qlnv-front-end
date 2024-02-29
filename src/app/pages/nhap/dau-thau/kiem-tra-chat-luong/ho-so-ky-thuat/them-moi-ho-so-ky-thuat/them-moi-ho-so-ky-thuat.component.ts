@@ -142,6 +142,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       lanhDaoCuc: [],
       dviCungCap: [],
       idBbLayMau: [],
+      loaiVthh: [],
     });
   }
 
@@ -173,6 +174,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
           ngayKyHd: data.qdGiaoNvuNhapxuatHdr?.hopDong?.ngayKy,
           dviCungCap: data.qdGiaoNvuNhapxuatHdr?.hopDong?.tenNhaThau,
           tenLoaiVthh: data.qdGiaoNvuNhapxuatHdr?.tenLoaiVthh,
+          loaiVthh: data.qdGiaoNvuNhapxuatHdr?.loaiVthh,
           tenCloaiVthh: data.qdGiaoNvuNhapxuatHdr?.tenCloaiVthh,
           dvt: data.qdGiaoNvuNhapxuatHdr?.donViTinh,
           tenNganLoKho: data.bienBanLayMau?.tenNganLoKho,
@@ -180,6 +182,9 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
           tenDiemKho: data.bienBanLayMau?.tenDiemKho,
           tenChiCuc: data.bienBanLayMau?.tenDvi,
         })
+        if (this.formData.value.loaiVthh.startsWith('0205') || this.formData.value.loaiVthh.startsWith('0206')){
+          this.dataTableBienBan[1].tenBb = 'Biên bản hạ thủy kiểm tra sự hoạt động của xuồng';
+        }
         this.dataTable = data.children;
         if (data.listHoSoBienBan) {
           this.dataTableBienBan.forEach(item => {
@@ -419,9 +424,13 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
           soQdGiaoNvNh: dataChose.soQd,
           idQdGiaoNvNh: dataChose.id,
           tenLoaiVthh: dataChose.tenLoaiVthh,
+          loaiVthh: dataChose.loaiVthh,
           tenCloaiVthh: dataChose.tenCloaiVthh,
           dvt: dataChose.donViTinh,
         });
+        if (this.formData.value.loaiVthh.startsWith('0205') || this.formData.value.loaiVthh.startsWith('0206')){
+          this.dataTableBienBan[1].tenBb = 'Biên bản hạ thủy kiểm tra sự hoạt động của xuồng';
+        }
         this.listBanGiaoMau = dataChose.listBienBanLayMau;
       }
     });

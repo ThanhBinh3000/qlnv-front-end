@@ -1,38 +1,38 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import * as dayjs from 'dayjs';
-import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
-import { Subject } from 'rxjs';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import { QuanLyBangKeCanHangService } from 'src/app/services/quanLyBangKeCanHang.service';
+import {NzDatePickerComponent} from 'ng-zorro-antd/date-picker';
+import {Subject} from 'rxjs';
+import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import {MESSAGE} from 'src/app/constants/message';
+import {QuanLyBangKeCanHangService} from 'src/app/services/quanLyBangKeCanHang.service';
 import {
   QuanLyPhieuNhapKhoService
 } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/quanLyPhieuNhapKho.service';
 import {
   QuyetDinhGiaoNhapHangService
 } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
-import { convertTienTobangChu, thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
-import { Globals } from 'src/app/shared/globals';
-import { Validators } from "@angular/forms";
-import { STATUS } from "../../../../../../constants/status";
+import {convertTienTobangChu, thongTinTrangThaiNhap} from 'src/app/shared/commonFunction';
+import {Globals} from 'src/app/shared/globals';
+import {Validators} from "@angular/forms";
+import {STATUS} from "../../../../../../constants/status";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import { isEmpty } from 'lodash';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
+import {cloneDeep, isEmpty} from 'lodash';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
 import {
   QuanLyNghiemThuKeLotService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyNghiemThuKeLot.service";
-import {cloneDeep} from 'lodash';
 import {PREVIEW} from "../../../../../../constants/fileType";
 import {DANH_MUC_LEVEL} from "../../../../../luu-kho/luu-kho.constant";
 import {MangLuoiKhoService} from "../../../../../../services/qlnv-kho/mangLuoiKho.service";
+import {AMOUNT_TWO_DECIMAL} from "../../../../../../Utility/utils";
+
 @Component({
   selector: 'thong-tin-quan-ly-bang-ke-can-hang',
   templateUrl: './thong-tin-quan-ly-bang-ke-can-hang.component.html',
@@ -56,10 +56,17 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
   listDiaDiemNhap: any[] = [];
   listSoPhieuNhapKho: any[] = [];
   rowItem: any = {};
+  rowItemGd: any = {};
+  rowItemTb: any = {};
+  dataTableGd: any[] = [];
+  dataTableTb: any[] = [];
   listFileDinhKem: any[] = [];
   rowItemEdit: any[] = [];
+  rowItemGdEdit: any[] = [];
+  rowItemTbEdit: any[] = [];
   templateName = "9.C85-HD_Bảng kê cân hàng_nhập_LT";
   dataDdNhap: any;
+  amount = { ...AMOUNT_TWO_DECIMAL }
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -127,6 +134,8 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
       diaDiemKho: [],
       lhKho: [],
       trongLuongBaoBi: [],
+      trongLuongMotBao: [],
+      phuongPhapCan: ['GD'],
     })
   }
 
@@ -169,6 +178,8 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
             this.bindingDataPhieuNhapKho(data.soPhieuNhapKho.split("/")[0]);
           }
           this.dataTable = data.chiTiets;
+          this.dataTableGd = data.chiTietGd;
+          this.dataTableTb = data.chiTietTb;
         }
       }
       await this.spinner.hide();
@@ -390,20 +401,48 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
     return convertTienTobangChu(tien);
   }
 
-  deleteRow(i: any) {
-    this.dataTable.splice(i, 1)
+  deleteRow(i: any, type?:string) {
+    if (type != null) {
+      if(type == 'GD') {
+        this.dataTableGd.splice(i, 1)
+      } else if (type == 'TB') {
+        this.dataTableTb.splice(i, 1)
+      }
+    } else {
+      this.dataTable.splice(i, 1)
+    }
   }
 
-  editRow(i: number) {
-    this.dataTable[i].edit = true;
-    this.rowItemEdit[i] = cloneDeep(this.dataTable[i])
+  editRow(i: number, type?:string) {
+    if (type != null) {
+      if(type == 'GD') {
+        this.dataTableGd[i].edit = true;
+        this.rowItemGdEdit[i] = cloneDeep(this.dataTableGd[i])
+      } else if (type == 'TB') {
+        this.dataTableTb[i].edit = true;
+        this.rowItemTbEdit[i] = cloneDeep(this.dataTableTb[i])
+      }
+    } else {
+      this.dataTable[i].edit = true;
+      this.rowItemEdit[i] = cloneDeep(this.dataTable[i])
+    }
   }
 
-  addRow() {
-    // if (this.validateDataRow()) {
+  addRow(type?:string) {
+    if (type != null) {
+      if(type == 'GD') {
+        this.rowItemGd.phanLoai = 'GD'
+        this.dataTableGd = [...this.dataTableGd, this.rowItemGd];
+        this.rowItemGd = {};
+      } else if (type == 'TB') {
+        this.rowItemTb.phanLoai = 'TB'
+        this.dataTableTb = [...this.dataTableTb, this.rowItemTb];
+        this.rowItemTb = {};
+      }
+    } else {
       this.dataTable = [...this.dataTable, this.rowItem];
       this.rowItem = {};
-    // }
+    }
   }
 
   validateDataRow() {
@@ -420,17 +459,43 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
     }
   }
 
-  cancelEdit(i: number): void {
-    this.dataTable[i].edit = false;
+  cancelEdit(i: number, type?:string): void {
+    if (type != null) {
+      if(type == 'GD') {
+        this.dataTableGd[i].edit = false;
+      } else if (type == 'TB') {
+        this.dataTableTb[i].edit = false;
+      }
+    } else {
+      this.dataTable[i].edit = false;
+    }
   }
 
-  saveEdit(i: number): void {
-    this.dataTable[i] = cloneDeep(this.rowItemEdit[i])
-    this.dataTable[i].edit = false;
+  saveEdit(i: number, type?:string): void {
+    if (type != null) {
+      if(type == 'GD') {
+        this.dataTableGd[i] = cloneDeep(this.rowItemGdEdit[i])
+        this.dataTableGd[i].edit = false;
+      } else if (type == 'TB') {
+        this.dataTableTb[i] = cloneDeep(this.rowItemTbEdit[i])
+        this.dataTableTb[i].edit = false;
+      }
+    } else {
+      this.dataTable[i] = cloneDeep(this.rowItemEdit[i])
+      this.dataTable[i].edit = false;
+    }
   }
 
-  clearItemRow() {
-    this.rowItem = {};
+  clearItemRow(type?:string) {
+    if (type != null) {
+      if(type == 'GD') {
+        this.rowItemGd = {};
+      } else if (type == 'TB') {
+        this.rowItemTb = {};
+      }
+    } else {
+      this.rowItem = {};
+    }
   }
 
   pheDuyet() {
@@ -551,7 +616,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
           return;
         }
         let body = this.formData.value;
-        body.chiTiets = this.dataTable;
+        body.chiTiets = [...this.dataTable, ...this.dataTableGd, ...this.dataTableTb];
         body.fileDinhKems = this.listFileDinhKem;
         let res;
         if (isGuiDuyet && !this.validateSave()) {
@@ -607,13 +672,30 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
   }
 
 
-  calcTong(columnName) {
-    if (this.dataTable) {
-      const sum = this.dataTable.reduce((prev, cur) => {
-        prev += cur[columnName];
-        return prev;
-      }, 0);
-      return sum;
+  calcTong(columnName, type?:string) {
+    if (type != null) {
+      if(type == 'GD') {
+        if (this.dataTableGd) {
+          return this.dataTableGd.reduce((prev, cur) => {
+            prev += cur[columnName];
+            return prev;
+          }, 0);
+        }
+      } else if (type == 'TB') {
+        if (this.dataTableTb) {
+          return this.dataTableTb.reduce((prev, cur) => {
+            prev += cur[columnName];
+            return prev;
+          }, 0);
+        }
+      }
+    } else {
+      if (this.dataTable) {
+        return this.dataTable.reduce((prev, cur) => {
+          prev += cur[columnName];
+          return prev;
+        }, 0);
+      }
     }
   }
 

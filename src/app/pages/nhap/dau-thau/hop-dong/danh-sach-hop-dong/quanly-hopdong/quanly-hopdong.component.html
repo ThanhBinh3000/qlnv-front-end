@@ -278,14 +278,21 @@
                                 (click)="preview(data.hopDong?.id)">
                                 <i class="icon htvbdh_tcdt_tuchoi" title="Xem trước"></i>
                               </a>
-                                <a *ngIf=" data.hopDong?.trangThai == STATUS.DA_KY" (click)="redirectHopDong(true,data.hopDong.id, true)">
+                                <a *ngIf=" data.hopDong?.trangThai == STATUS.DA_KY
+                                && ((!loaiVthh.startsWith('02') && userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_XEM'))
+                                || (loaiVthh.startsWith('02') && userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_VT_HDPL_XEM')))"
+                                   (click)="redirectHopDong(true,data.hopDong.id, true)">
                                     <i class="fa fa-eye" title="Xem chi tiết"></i>
                                 </a>
-                              <a *ngIf="data.hopDong?.trangThai == STATUS.DU_THAO && formData.value.trangThaiHd != STATUS.DA_HOAN_THANH"
+                              <a *ngIf="data.hopDong?.trangThai == STATUS.DU_THAO && formData.value.trangThaiHd != STATUS.DA_HOAN_THANH
+                              && ((!loaiVthh.startsWith('02') && userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_THEM'))
+                                || (loaiVthh.startsWith('02') && userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_VT_HDPL_THEM')))"
                                  (click)="redirectHopDong(true,data.hopDong.id, false)">
                                     <i class="fa fa-pencil" title="Sửa"></i>
                                 </a>
-                                <a *ngIf="data.hopDong?.trangThai == STATUS.DU_THAO"
+                                <a *ngIf="data.hopDong?.trangThai == STATUS.DU_THAO
+                                 && ((!loaiVthh.startsWith('02') && userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_XOA'))
+                                || (loaiVthh.startsWith('02') && userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_VT_HDPL_XOA')))"
                                     (click)="deleteHopDong(data.hopDong.id)">
                                     <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                                 </a>
